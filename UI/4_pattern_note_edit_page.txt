@@ -1,0 +1,30 @@
+16 8 #bbbbbb #fcb400 #ffffff #000000 20 20 4 1 1
+6 0 0 0 1 0 0 0 1 0 0 0 1 0 f 0
+3 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 
+3 0 0 0 f 0 0 0 1 0 0 0 1 0 0 0 
+3 f 0 0 1 0 0 0 1 0 0 0 f 0 0 0 
+3 0 0 0 1 0 0 0 1 0 0 f 1 0 0 0 
+3 0 0 f 1 0 0 0 1 0 0 0 1 0 0 0 
+f 3 3 3 3 f f f f 3 3 3 3 3 3 3 
+2 2 7 2 2 0 0 0 2 7 2 0 7 2 2 2
+
+- Row 1: 1: Blinking slowly represents selected pattern. Double tap changes pattern. Single tap selects +6 notes up from root. Hold to clear.
+- Row 2: Single tap selects +5 notes up from root. Hold to clear.
+- Row 3: Single tap selects +4 notes up from root. Hold to clear.
+- Row 4: Single tap selects +3 notes up from root. Hold to clear.
+- Row 5: Single tap selects +2 notes up from root. Hold to clear.
+- Row 6: Single tap selects +1 notes up from root. Hold to clear.
+- Row 7: Single tap selects root. Hold to clear.
+- Row 8: Menu 
+	- Col 1: Channel page. 
+	- Col 2: Pattern step edit. 
+	- Col 3: Pattern note edit. 
+	- Col 4: Pattern velocity edit. 
+	- Col 5: Pattern probability edit
+	- Col 9: 1 octave down. 
+	- Col 10: home octave. 
+	- Col 11: 1 octave up
+	- Col 13: Steps 1-16, 
+	- Col 14: Steps 17-32,
+	- Col 15: Steps 33-48,
+	- Col 16: Steps 49-64.

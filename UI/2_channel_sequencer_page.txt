@@ -1,0 +1,29 @@
+16 8 #bbbbbb #fcb400 #ffffff #000000 20 20 4 1 1
+9 f 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+9 9 2 9 9 9 9 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+f f f f 4 4 4 4 4 4 4 4 4 4 4 4
+2 7 2 2 2 2 0 0 0 0 0 0 0 0 0 0
+
+Channel sequencer page. 
+
+- Row 1: Sequence 1 - 16 (blinking is playing). Double tap to queue. Hold and select to copy.
+- Row 2: Sequence 17 - 32 (blinking is playing). Double tap to queue. Hold and select to copy.
+- Row 3: Sequence 33 - 48 (blinking is playing). Double tap to queue. Hold and select to copy.
+- Row 4: Sequence 49 - 64 (blinking is playing). Double tap to queue. Hold and select to copy.
+- Row 5: Sequence 65 - 80 (blinking is playing). Double tap to queue. Hold and select to copy.
+- Row 6: Sequence 81 - 96 (blinking is playing). Double tap to queue. Hold and select to copy.
+- Row 7: Global pattern length, increments of 4 steps. 
+- Row 8: Menu 
+	- Col 1: Channel edit page. 
+	- Col 2: Channel sequencer page. 
+	- Col 3: Pattern step edit. 
+	- Col 4: Pattern note edit. 
+	- Col 5: Pattern velocity edit. 
+	- Col 6: Pattern probability edit.
+   
+
+https://tyleretters.github.io/GridStation/
