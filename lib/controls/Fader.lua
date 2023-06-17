@@ -63,6 +63,10 @@ function Fader:get_value()
   return self.value
 end
 
+function Fader:set_value(val)
+  self.value = val
+end
+
 function Fader:press_simple(val)
   self.value = val
 end

@@ -19,17 +19,25 @@ pages = {
 }
 
 function register_draw_handlers()
-  
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_pattern_select_fader:draw() end)
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_sequencer:draw() end)
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_pattern1_fader:draw() end)
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_pattern2_fader:draw() end)
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_algorithm_fader:draw() end)
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_bankmask_fader:draw() end)
 end
 
 function register_press_handlers()
-  
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) 
+    local result = _pattern_trigger_edit_page_pattern_select_fader:press(x, y) 
+    program.selected_pattern = _pattern_trigger_edit_page_pattern_select_fader:get_value()
+    return result
+  end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_sequencer:press(x, y) end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_pattern1_fader:press(x, y) end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_pattern2_fader:press(x, y) end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_algorithm_fader:press(x, y) end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_bankmask_fader:press(x, y) end)
 end
 
 function _grid.init()
@@ -43,9 +51,14 @@ function _grid.init()
     end
   end
   
+  _pattern_trigger_edit_page_pattern_select_fader = Fader:new(1, 1, 16, 16)
+  _pattern_trigger_edit_page_pattern_select_fader:set_value(program.selected_pattern)
+
   _pattern_trigger_edit_page_sequencer = Sequencer:new(4)
-  _pattern_trigger_edit_page_pattern1_fader = Fader:new(1, 2, 10, 10)
+  _pattern_trigger_edit_page_pattern1_fader = Fader:new(1, 2, 10, 100)
   _pattern_trigger_edit_page_pattern2_fader = Fader:new(1, 3, 10, 100)
+  _pattern_trigger_edit_page_algorithm_fader = Fader:new(12, 2, 5, 5)
+  _pattern_trigger_edit_page_bankmask_fader = Fader:new(12, 3, 5, 5)
   
   register_draw_handlers()
   register_press_handlers()
