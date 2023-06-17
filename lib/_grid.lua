@@ -1,7 +1,7 @@
 _grid = {}
 
-local Fader = include("sinfcommand/lib/Fader")
-local Sequencer = include("sinfcommand/lib/Sequencer")
+local Fader = include("sinfcommand/lib/controls/Fader")
+local Sequencer = include("sinfcommand/lib/controls/Sequencer")
 
 local _draw_handler = include("sinfcommand/lib/_draw_handler")
 local _press_handler = include("sinfcommand/lib/_press_handler")
