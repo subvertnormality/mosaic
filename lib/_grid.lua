@@ -45,7 +45,7 @@ function _grid.init()
   
   _pattern_trigger_edit_page_sequencer = Sequencer:new(4)
   _pattern_trigger_edit_page_pattern1_fader = Fader:new(1, 2, 10, 10)
-  _pattern_trigger_edit_page_pattern2_fader = Fader:new(1, 3, 10, 10)
+  _pattern_trigger_edit_page_pattern2_fader = Fader:new(1, 3, 10, 100)
   
   register_draw_handlers()
   register_press_handlers()

@@ -52,7 +52,6 @@ end
 
 function Sequencer:press(x, y)
   if (y >= self.y and y <= self.y + 3) then
-    print("press")
     program.sequencer_patterns[1].patterns[1].trig_values[calc_grid_count(x, y)] = 1 - program.sequencer_patterns[1].patterns[1].trig_values[calc_grid_count(x, y)] 
   end
     
