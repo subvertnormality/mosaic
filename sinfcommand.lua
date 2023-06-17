@@ -1,5 +1,5 @@
-_grid = include("sinfcontrol/lib/_grid")
-fn = include("sinfcontrol/lib/functions")
+_grid = include("sinfcommand/lib/_grid")
+fn = include("sinfcommand/lib/functions")
 
 function initialise_64_table()
   local table_64 = {}
@@ -91,6 +91,8 @@ end
 
 program = {
   selected_page = "pattern_trigger_edit_page",
+  selected_sequencer_pattern = 1,
+  selected_pattern = 1,
   current_step = 1,
   scale_type = "sinfonion",
   scales = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},

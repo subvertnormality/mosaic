@@ -1,5 +1,36 @@
 _grid = {}
+
+local Fader = include("sinfcommand/lib/Fader")
+local Sequencer = include("sinfcommand/lib/Sequencer")
+
+local _draw_handler = include("sinfcommand/lib/_draw_handler")
+local _press_handler = include("sinfcommand/lib/_press_handler")
+
+
 g = grid.connect()
+
+pages = {
+  channel_edit_page = 1,
+  channel_sequencer_page = 2,
+  pattern_trigger_edit_page = 3,
+  pattern_note_edit_page = 4,
+  pattern_velocity_edit_page = 5,
+  pattern_probability_edit_page = 6
+}
+
+function register_draw_handlers()
+  
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_sequencer:draw() end)
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_pattern1_fader:draw() end)
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_pattern2_fader:draw() end)
+end
+
+function register_press_handlers()
+  
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_sequencer:press(x, y) end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_pattern1_fader:press(x, y) end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_pattern2_fader:press(x, y) end)
+end
 
 function _grid.init()
   _grid.counter = {}
@@ -11,7 +42,17 @@ function _grid.init()
       _grid.counter[x][y] = nil
     end
   end
+  
+  _pattern_trigger_edit_page_sequencer = Sequencer:new(4)
+  _pattern_trigger_edit_page_pattern1_fader = Fader:new(1, 2, 10, 10)
+  _pattern_trigger_edit_page_pattern2_fader = Fader:new(1, 3, 10, 10)
+  
+  register_draw_handlers()
+  register_press_handlers()
+
 end
+
+
 
 -- little g
 
@@ -26,8 +67,10 @@ function g.key(x, y, z)
   end
 end
 
-function _grid:short_press(x, y)
 
+
+function _grid:short_press(x, y)
+  _press_handler:handle(program.selected_page, x, y)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
 end
@@ -44,71 +87,30 @@ function _grid:dismiss_disconnect()
   self.disconnect_dismissed = true
 end
 
-function _grid:grid_draw_menu(selected_page)
-  
-  local pages = {
-    channel_edit_page = 1,
-    channel_sequencer_page = 2,
-    pattern_trigger_edit_page = 3,
-    pattern_note_edit_page = 4,
-    pattern_velocity_edit_page = 5,
-    pattern_probability_edit_page = 6
-  }
+function grid_draw_menu(selected_page)
 
   for i = 1, 6 do
     g:led(i, 8, 2)
   end
 
   if pages[selected_page] then
-    g:led(pages[selected_page], 8, 7)
+    g:led(pages[selected_page], 8, 15)
   end
   
   fn.dirty_grid(true)
 
 end
 
-function _grid:grid_draw_sequencer_visualisation(trigs, lengths)
-
-  local length = -1
-  local grid_count = -1
-
-  for y = 4, 7 do
-    for x = 1, 16 do
-      g:led(x, y, 2)
-    end
-  end
-
-  for y = 4, 7 do
-    for x = 1, 16 do    
-      grid_count = ((y - 4) * 16) + x
-    
-      if (trigs[grid_count] > 0) then
-        g:led(x, y, 15)
-        length = lengths[grid_count]
-        
-        if (length > 1) then
-          for lx = grid_count + 1, grid_count + length - 1 do
-            if (trigs[lx] < 1 and lx < 65) then
-              g:led((lx % 16), 4 + (lx // 16), 5)
-            else
-              break
-            end
-          end
-        end
-      end
-    end
-  end
-
-  fn.dirty_grid(true)
-
+function calc_grid_count(x, y)
+  return ((y - 4) * 16) + x
 end
 
 
 function _grid:grid_redraw()
   g:all(0)
 
-  _grid:grid_draw_menu(program.selected_page)
-  _grid:grid_draw_sequencer_visualisation(program.sequencer_patterns[1].patterns[1].trig_values, program.sequencer_patterns[1].patterns[1].lengths)
+  grid_draw_menu(program.selected_page)
+  _draw_handler:handle(program.selected_page)
 
   g:refresh()
 end
