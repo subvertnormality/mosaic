@@ -27,4 +27,32 @@ function fn.dirty_screen(bool)
   return screen_dirty
 end
 
+function fn.table_to_string(tbl)
+    local result = "{"
+    for k, v in pairs(tbl) do
+        -- serialize the key
+        if type(k) == "string" then
+            result = result .. "[\"" .. k .. "\"]" .. "="
+        else
+            result = result .. "[" .. k .. "]" .. "="
+        end
+        -- serialize the value
+        if type(v) == "table" then
+            result = result .. fn.table_to_string(v) .. ","
+        else
+            if type(v) == "string" then
+            result = result .. "\"" .. v .. "\"" .. ","
+            else
+            result = result .. v .. ","
+            end
+        end
+    end
+    result = result .. "}"
+    return result
+end
+
+function fn.string_to_table(str)
+    return load("return " .. str)()
+end
+
 return fn
