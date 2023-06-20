@@ -2,9 +2,10 @@ Sequencer = {}
 Sequencer.__index = Sequencer
 
 function Sequencer:new(y)
-  local obj = setmetatable({}, self)
-  obj.y = y
-  return obj
+  local self = setmetatable({}, self)
+  self.y = y
+  
+  return self
 end
 
 

@@ -2,7 +2,10 @@ _grid = {}
 
 local Fader = include("sinfcommand/lib/controls/Fader")
 local Sequencer = include("sinfcommand/lib/controls/Sequencer")
+local Button = include("sinfcommand/lib/controls/Button")
 
+
+local drum_ops = include("sinfcommand/lib/drum_ops")
 local _draw_handler = include("sinfcommand/lib/_draw_handler")
 local _press_handler = include("sinfcommand/lib/_press_handler")
 
@@ -25,6 +28,7 @@ function register_draw_handlers()
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_pattern2_fader:draw() end)
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_algorithm_fader:draw() end)
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_bankmask_fader:draw() end)
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_paint_button:draw() end)
 end
 
 function register_press_handlers()
@@ -38,6 +42,14 @@ function register_press_handlers()
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_pattern2_fader:press(x, y) end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_algorithm_fader:press(x, y) end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_bankmask_fader:press(x, y) end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) 
+    paint_pattern = {}
+    for step = 1, 64 do
+      paint_pattern.insert(drum_ops.drum(1, 50, step))
+    end
+    
+    return _pattern_trigger_edit_page_paint_button:press(x, y)
+  end)
 end
 
 function _grid.init()
@@ -59,6 +71,7 @@ function _grid.init()
   _pattern_trigger_edit_page_pattern2_fader = Fader:new(1, 3, 10, 100)
   _pattern_trigger_edit_page_algorithm_fader = Fader:new(12, 2, 5, 5)
   _pattern_trigger_edit_page_bankmask_fader = Fader:new(12, 3, 5, 5)
+  _pattern_trigger_edit_page_paint_button = Button:new(16, 8)
   
   register_draw_handlers()
   register_press_handlers()

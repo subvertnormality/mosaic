@@ -7,7 +7,7 @@ function Fader:new(x, y, length, size)
   self.y = y
   self.length = length
   self.size = size
-  self.value = -1
+  self.value = 1
 
   return self
 end
