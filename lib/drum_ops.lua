@@ -13,13 +13,13 @@ local function wrap(k, lower_bound, upper_bound)
 end
 
 local function get_byte(a, n)
-    return a[softcut.rshift(n, 3) + 1]
+    return a[bit32.rshift(n, 3) + 1]
 end
 
 local function get_bit(a, k)
     local byte = get_byte(a, k)
     local bit_index = 7 - (k % 8)
-    return softcut.bitand(byte, softcut.lshift(1, bit_index)) ~= 0
+    return bit32.band(byte, bit32.lshift(1, bit_index)) ~= 0
 end
 
 function drum_ops.tresillo(bank, pattern1, pattern2, len, step)

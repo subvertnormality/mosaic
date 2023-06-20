@@ -1101,3 +1101,5 @@ _drum_ops_tables.table_dr_oh = {
     {fromBin('00000000'), fromBin('00000000')},
     {fromBin('00000000'), fromBin('00000000')}
 }
+
+return _drum_ops_tables

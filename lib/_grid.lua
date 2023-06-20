@@ -45,7 +45,7 @@ function register_press_handlers()
   _press_handler:register("pattern_trigger_edit_page", function(x, y) 
     paint_pattern = {}
     for step = 1, 64 do
-      paint_pattern.insert(drum_ops.drum(1, 50, step))
+      table.insert(paint_pattern, drum_ops.drum(1, 50, step))
     end
     
     return _pattern_trigger_edit_page_paint_button:press(x, y)
