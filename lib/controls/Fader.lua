@@ -8,6 +8,7 @@ function Fader:new(x, y, length, size)
   self.length = length
   self.size = size
   self.value = 1
+  self.is_disabled = false
 
   return self
 end
@@ -52,6 +53,7 @@ function Fader:draw_fine_grain()
 end
 
 function Fader:draw()
+  if self.is_disabled then return end
   if self.length < self.size and self.length > 2 then
     self:draw_fine_grain()
   else
@@ -60,11 +62,27 @@ function Fader:draw()
 end
 
 function Fader:get_value()
+  if is_disabled then return 0 end
   return self.value
 end
 
 function Fader:set_value(val)
   self.value = val
+end
+
+function Fader:set_length(length)
+  if self.value > length then
+    self.value = length
+  end
+  self.length = length
+end
+
+function Fader:disabled()
+  self.is_disabled = true
+end
+
+function Fader:enabled()
+  self.is_disabled = false
 end
 
 function Fader:press_simple(val)
@@ -91,6 +109,13 @@ function Fader:press(x, y)
     end
   end
   
+end
+
+function Fader:is_this(x, y)
+  if x >= self.x and x <= self.x + self.length - 1 and y == self.y then
+    return true
+  end
+  return false
 end
 
 return Fader

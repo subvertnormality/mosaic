@@ -31,6 +31,28 @@ function register_draw_handlers()
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_paint_button:draw() end)
 end
 
+function update_pattern_trigger_edit_page_ui()
+  local algorithm = _pattern_trigger_edit_page_algorithm_fader:get_value()
+
+  if (algorithm == 1) then
+    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
+    _pattern_trigger_edit_page_pattern2_fader:disabled()
+  elseif (algorithm == 2) then
+    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
+    _pattern_trigger_edit_page_pattern2_fader:enabled()
+  elseif (algorithm == 3) then
+    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
+    _pattern_trigger_edit_page_pattern2_fader:disabled()
+  elseif (algorithm == 4) then
+    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
+    _pattern_trigger_edit_page_pattern2_fader:disabled()
+  
+  end
+  fn.dirty_grid(true)
+end
+
+
+
 function register_press_handlers()
   _press_handler:register("pattern_trigger_edit_page", function(x, y) 
     local result = _pattern_trigger_edit_page_pattern_select_fader:press(x, y) 
@@ -40,15 +62,46 @@ function register_press_handlers()
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_sequencer:press(x, y) end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_pattern1_fader:press(x, y) end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_pattern2_fader:press(x, y) end)
-  _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_algorithm_fader:press(x, y) end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) 
+    _pattern_trigger_edit_page_algorithm_fader:press(x, y) 
+    if _pattern_trigger_edit_page_algorithm_fader:is_this(x, y) then
+      update_pattern_trigger_edit_page_ui()
+    end
+    return true
+  end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_bankmask_fader:press(x, y) end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) 
-    paint_pattern = {}
-    for step = 1, 64 do
-      table.insert(paint_pattern, drum_ops.drum(1, 50, step))
+    _pattern_trigger_edit_page_paint_button:press(x, y)
+
+    if _pattern_trigger_edit_page_paint_button:is_this(x, y) then
+      if (_pattern_trigger_edit_page_paint_button:get_state() == 2) then
+
+        paint_pattern = {}
+        local algorithm = _pattern_trigger_edit_page_algorithm_fader:get_value()
+        local pattern1 = _pattern_trigger_edit_page_pattern1_fader:get_value()
+        local pattern2 = _pattern_trigger_edit_page_pattern2_fader:get_value()
+        local bank = _pattern_trigger_edit_page_bankmask_fader:get_value()
+
+        for step = 1, 64 do
+          if (algorithm == 1) then
+            table.insert(paint_pattern, drum_ops.drum(bank, pattern1, step))
+          elseif (algorithm == 2) then
+            table.insert(paint_pattern, drum_ops.tresillo(bank, pattern1, pattern2, 8, step)) -- TODO need to make the tressilo length editable
+          elseif (algorithm == 3) then
+            -- TODO Euclid
+          elseif (algorithm == 4) then
+            -- TODO NR
+          end
+        end
+        -- for key, value in pairs(paint_pattern) do
+        --   print(key, value)
+        -- end
+        _pattern_trigger_edit_page_paint_button:blink()
+      else
+        _pattern_trigger_edit_page_paint_button:no_blink()
+      end
     end
-    
-    return _pattern_trigger_edit_page_paint_button:press(x, y)
+    return true
   end)
 end
 
@@ -71,8 +124,8 @@ function _grid.init()
   _pattern_trigger_edit_page_pattern2_fader = Fader:new(1, 3, 10, 100)
   _pattern_trigger_edit_page_algorithm_fader = Fader:new(12, 2, 5, 5)
   _pattern_trigger_edit_page_bankmask_fader = Fader:new(12, 3, 5, 5)
-  _pattern_trigger_edit_page_paint_button = Button:new(16, 8)
-  
+  _pattern_trigger_edit_page_paint_button = Button:new(16, 8, {{"Inactive", 3}, {"Save", 15}})
+  update_pattern_trigger_edit_page_ui()
   register_draw_handlers()
   register_press_handlers()
 
