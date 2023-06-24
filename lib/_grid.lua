@@ -51,7 +51,9 @@ function update_pattern_trigger_edit_page_ui()
   fn.dirty_grid(true)
 end
 
+function save_paint_pattern(p)
 
+end
 
 function register_press_handlers()
   _press_handler:register("pattern_trigger_edit_page", function(x, y) 
@@ -96,8 +98,11 @@ function register_press_handlers()
         -- for key, value in pairs(paint_pattern) do
         --   print(key, value)
         -- end
+
+        _pattern_trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
         _pattern_trigger_edit_page_paint_button:blink()
       else
+        _pattern_trigger_edit_page_sequencer:hide_unsaved_grid()
         _pattern_trigger_edit_page_paint_button:no_blink()
       end
     end
