@@ -36,26 +36,34 @@ function update_pattern_trigger_edit_page_ui()
   local algorithm = _pattern_trigger_edit_page_algorithm_fader:get_value()
 
   if (algorithm == 1) then
+    _pattern_trigger_edit_page_bankmask_fader:enabled()
     _pattern_trigger_edit_page_bankmask_fader:set_size(5)
+    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
     _pattern_trigger_edit_page_pattern1_fader:set_size(128)
     _pattern_trigger_edit_page_pattern2_fader:set_size(128)
     _pattern_trigger_edit_page_pattern2_fader:disabled()
   elseif (algorithm == 2) then
+    _pattern_trigger_edit_page_bankmask_fader:enabled()
     _pattern_trigger_edit_page_bankmask_fader:set_size(5)
+    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
     _pattern_trigger_edit_page_pattern1_fader:set_size(128)
     _pattern_trigger_edit_page_pattern2_fader:set_size(128)
     _pattern_trigger_edit_page_pattern2_fader:enabled()
   elseif (algorithm == 3) then
     _pattern_trigger_edit_page_bankmask_fader:disabled()
+    _pattern_trigger_edit_page_bankmask_fader:set_size(5)
+    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
     _pattern_trigger_edit_page_pattern2_fader:enabled()
     _pattern_trigger_edit_page_pattern1_fader:set_size(32)
     _pattern_trigger_edit_page_pattern2_fader:set_size(32)
 
   elseif (algorithm == 4) then
-    _pattern_trigger_edit_page_bankmask_fader:set_size(5)
-    _pattern_trigger_edit_page_pattern1_fader:set_size(128)
-    _pattern_trigger_edit_page_pattern2_fader:set_size(128)
-    _pattern_trigger_edit_page_pattern2_fader:disabled()
+    _pattern_trigger_edit_page_bankmask_fader:enabled()
+    _pattern_trigger_edit_page_bankmask_fader:set_size(4)
+    _pattern_trigger_edit_page_bankmask_fader:set_length(4)
+    _pattern_trigger_edit_page_pattern1_fader:set_size(32)
+    _pattern_trigger_edit_page_pattern2_fader:set_size(16)
+    _pattern_trigger_edit_page_pattern2_fader:enabled()
   
   end
   fn.dirty_grid(true)
@@ -94,10 +102,10 @@ function load_paint_pattern()
     local bank = _pattern_trigger_edit_page_bankmask_fader:get_value()
 
     if (algorithm == 3) then
-      local pattern = er.gen(pattern1, pattern2, 0)
+      local erpattern = er.gen(pattern1, pattern2, 0)
       while #paint_pattern < 64 do
-        for i = 1, #pattern do
-            table.insert(paint_pattern, pattern[i])
+        for i = 1, #erpattern do
+            table.insert(paint_pattern, erpattern[i])
             if #paint_pattern >= 64 then break end
         end
       end
@@ -108,7 +116,7 @@ function load_paint_pattern()
         elseif (algorithm == 2) then
           table.insert(paint_pattern, drum_ops.tresillo(bank, pattern1, pattern2, 24, step)) -- TODO need to make the tressilo length editable
         elseif (algorithm == 4) then
-          -- TODO NR
+          table.insert(paint_pattern, drum_ops.nr(pattern1, bank, pattern2, step))
         end
       end
     end
@@ -183,7 +191,7 @@ function _grid.init()
   _pattern_trigger_edit_page_sequencer = Sequencer:new(4)
   _pattern_trigger_edit_page_pattern1_fader = Fader:new(1, 2, 10, 100)
   _pattern_trigger_edit_page_pattern2_fader = Fader:new(1, 3, 10, 100)
-  _pattern_trigger_edit_page_algorithm_fader = Fader:new(12, 2, 5, 5)
+  _pattern_trigger_edit_page_algorithm_fader = Fader:new(12, 2, 4, 4)
   _pattern_trigger_edit_page_bankmask_fader = Fader:new(12, 3, 5, 5)
   _pattern_trigger_edit_page_paint_button = Button:new(16, 8, {{"Inactive", 3}, {"Save", 15}})
   update_pattern_trigger_edit_page_ui()

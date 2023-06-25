@@ -82,8 +82,32 @@ function drum_ops.drum(bank, pattern, step)
     end
 
     local wrapped_step = wrap(step, 1, 16)
-
+    print(get_bit(table, wrapped_step))
     return get_bit(table, wrapped_step)
+end
+
+function drum_ops.nr(prime, mask, factor, step)
+
+    if prime < 1 then prime = 32 + prime end
+    local rhythm = _drum_ops_tables.table_nr[prime] 
+    if mask < 1 then mask = 4 + mask end
+    if factor < 1 then factor = 17 + factor end
+    if step < 1 then step = 16 + step end
+    step = wrap(step, 1, 16)
+    if mask == 1 then
+        rhythm = bit32.band(rhythm, 0x0F0F)
+    elseif mask == 2 then
+        rhythm = bit32.band(rhythm, 0xF003)
+    elseif mask == 3 then
+        rhythm = bit32.band(rhythm, 0x1F0)
+    end
+    
+    local modified = rhythm * factor
+    
+    local final = bit32.bor(bit32.band(modified, 0xFFFF), bit32.rshift(modified, 16))
+    local bit_status = bit32.band(bit32.rshift(final, 16 - step), 1)
+    
+    return bit_status == 1
 end
 
 return drum_ops

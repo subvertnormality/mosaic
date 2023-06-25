@@ -77,6 +77,10 @@ function Fader:set_size(size)
   self.size = size
 end
 
+function Fader:set_length(length)
+  self.length = length
+end
+
 function Fader:disabled()
   self.is_disabled = true
 end
