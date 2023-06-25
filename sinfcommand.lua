@@ -1,4 +1,4 @@
-_grid = include("sinfcommand/lib/_grid")
+grid_controller = include("sinfcommand/lib/grid_controller")
 fn = include("sinfcommand/lib/functions")
 
 function initialise_64_table()
@@ -173,7 +173,7 @@ function init()
     end
   end
 
-  _grid.init()
-  grid_clock_id = clock.run(_grid.grid_redraw_clock)
+  grid_controller.init()
+  grid_clock_id = clock.run(grid_controller.grid_redraw_clock)
   fn.dirty_grid(true)
 end

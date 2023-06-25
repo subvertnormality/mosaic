@@ -1,20 +1,20 @@
-_drum_ops_tables = {}
+drum_ops_tables = {}
 
 
 function fromBin(b)
     return tonumber(b, 2)
 end
 
-_drum_ops_tables.table_nr = { 0x8888, 0x888A, 0x8892, 0x8894, 0x88A2, 0x88A4,
+drum_ops_tables.table_nr = { 0x8888, 0x888A, 0x8892, 0x8894, 0x88A2, 0x88A4,
              0x8912, 0x8914, 0x8922, 0x8924, 0x8A8A, 0x8AAA,
              0x9292, 0x92AA, 0x94AA, 0x952A, 0x8282, 0x828A,
              0x8292, 0x82A2, 0x8484, 0x848A, 0x8492, 0x8494,
              0x84A2, 0x84A4, 0x850A, 0x8512, 0x8514, 0x8522,
              0x8524, 0x8544 }
 
-_drum_ops_tables.drum_ops_pattern_len = 128
+drum_ops_tables.drum_ops_pattern_len = 128
 
-_drum_ops_tables.table_t_r_e = {
+drum_ops_tables.table_t_r_e = {
     {fromBin('00000000'), fromBin('00000000'), fromBin('00000000')},
     {fromBin('00100000'), fromBin('00000001'), fromBin('00000000')},
     {fromBin('01000000'), fromBin('01000000'), fromBin('00010000')},
@@ -233,7 +233,7 @@ _drum_ops_tables.table_t_r_e = {
     {fromBin('11111111'), fromBin('11111111'), fromBin('11111111')}
 }
 
-_drum_ops_tables.table_dr_bd = {
+drum_ops_tables.table_dr_bd = {
     {fromBin('10000010'), fromBin('00000000')},
     {fromBin('10000000'), fromBin('10000000')},
     {fromBin('00100010'), fromBin('00100010')},
@@ -452,7 +452,7 @@ _drum_ops_tables.table_dr_bd = {
     {fromBin('10000000'), fromBin('10000000')}
 }
 
-_drum_ops_tables.table_dr_sd = {
+drum_ops_tables.table_dr_sd = {
     {fromBin('00001000'), fromBin('00001000')},
     {fromBin('00001000'), fromBin('00001000')},
     {fromBin('00000000'), fromBin('00000000')},
@@ -671,7 +671,7 @@ _drum_ops_tables.table_dr_sd = {
     {fromBin('00001000'), fromBin('00100000')}
 }
 
-_drum_ops_tables.table_dr_ch = {
+drum_ops_tables.table_dr_ch = {
     {fromBin('00000000'), fromBin('00000000')},
     {fromBin('10101010'), fromBin('10101010')},
     {fromBin('00000000'), fromBin('00000000')},
@@ -890,7 +890,7 @@ _drum_ops_tables.table_dr_ch = {
     {fromBin('00000000'), fromBin('00000000')}
 }
 
-_drum_ops_tables.table_dr_oh = {
+drum_ops_tables.table_dr_oh = {
     {fromBin('00000000'), fromBin('00000000')},
     {fromBin('00000000'), fromBin('00000000')},
     {fromBin('00000000'), fromBin('00000000')},
@@ -1109,4 +1109,4 @@ _drum_ops_tables.table_dr_oh = {
     {fromBin('00000000'), fromBin('00000000')}
 }
 
-return _drum_ops_tables
+return drum_ops_tables

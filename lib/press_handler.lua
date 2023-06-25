@@ -1,10 +1,10 @@
-_press_handler = {}
+press_handler = {}
 
 -- Create a table for the handlers
-_press_handler.handlers = {}
+press_handler.handlers = {}
 
 -- Register a function with a page
-function _press_handler:register(page, func)
+function press_handler:register(page, func)
   -- If no functions have been registered for this page yet, create a new list
   if self.handlers[page] == nil then
     self.handlers[page] = {}
@@ -15,7 +15,7 @@ function _press_handler:register(page, func)
 end
 
 -- Call all functions registered with a page
-function _press_handler:handle(page, x, y)
+function press_handler:handle(page, x, y)
 
   -- If no functions have been registered for this page, do nothing
   if self.handlers[page] == nil then
@@ -28,4 +28,4 @@ function _press_handler:handle(page, x, y)
   end
 end
 
-return _press_handler
+return press_handler

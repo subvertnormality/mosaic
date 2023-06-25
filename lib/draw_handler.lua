@@ -1,12 +1,12 @@
 
 
-_draw_handler = {}
+draw_handler = {}
 
 -- Create a table for the handlers
-_draw_handler.handlers = {}
+draw_handler.handlers = {}
 
 -- Register a function with a page
-function _draw_handler:register(page, func)
+function draw_handler:register(page, func)
   -- If no functions have been registered for this page yet, create a new list
   if self.handlers[page] == nil then
     self.handlers[page] = {}
@@ -17,7 +17,7 @@ function _draw_handler:register(page, func)
 end
 
 -- Call all functions registered with a page
-function _draw_handler:handle(page)
+function draw_handler:handle(page)
   -- If no functions have been registered for this page, do nothing
   if self.handlers[page] == nil then
     return
@@ -29,4 +29,4 @@ function _draw_handler:handle(page)
   end
 end
 
-return _draw_handler
+return draw_handler

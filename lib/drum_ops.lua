@@ -1,4 +1,4 @@
-local _drum_ops_tables = include('sinfcommand/lib/_drum_ops_tables')
+local drum_ops_tables = include('sinfcommand/lib/drum_ops_tables')
 
 drum_ops = {}
 
@@ -26,26 +26,26 @@ function drum_ops.tresillo(bank, pattern1, pattern2, len, step)
     if bank < 1 or bank > 5 then return 1 end
     if len < 8 then return 1 end
     if step < 1 then return 1 end
-    if pattern1 > _drum_ops_tables.drum_ops_pattern_len or pattern2 > _drum_ops_tables.drum_ops_pattern_len then return 1 end
+    if pattern1 > drum_ops_tables.drum_ops_pattern_len or pattern2 > drum_ops_tables.drum_ops_pattern_len then return 1 end
 
     local table1
     local table2
 
     if bank == 1 then
-        table1 = _drum_ops_tables.table_t_r_e[pattern1]
-        table2 = _drum_ops_tables.table_t_r_e[pattern2]
+        table1 = drum_ops_tables.table_t_r_e[pattern1]
+        table2 = drum_ops_tables.table_t_r_e[pattern2]
     elseif bank == 2 then
-        table1 = _drum_ops_tables.table_dr_bd[pattern1]
-        table2 = _drum_ops_tables.table_dr_bd[pattern2]
+        table1 = drum_ops_tables.table_dr_bd[pattern1]
+        table2 = drum_ops_tables.table_dr_bd[pattern2]
     elseif bank == 3 then
-        table1 = _drum_ops_tables.table_dr_sd[pattern1]
-        table2 = _drum_ops_tables.table_dr_sd[pattern2]
+        table1 = drum_ops_tables.table_dr_sd[pattern1]
+        table2 = drum_ops_tables.table_dr_sd[pattern2]
     elseif bank == 4 then
-        table1 = _drum_ops_tables.table_dr_ch[pattern1]
-        table2 = _drum_ops_tables.table_dr_ch[pattern2]
+        table1 = drum_ops_tables.table_dr_ch[pattern1]
+        table2 = drum_ops_tables.table_dr_ch[pattern2]
     elseif bank == 5 then
-        table1 = _drum_ops_tables.table_dr_oh[pattern1]
-        table2 = _drum_ops_tables.table_dr_oh[pattern2]
+        table1 = drum_ops_tables.table_dr_oh[pattern1]
+        table2 = drum_ops_tables.table_dr_oh[pattern2]
     end
 
     local multiplier = math.floor(len / 8)
@@ -65,20 +65,20 @@ end
 function drum_ops.drum(bank, pattern, step)
     if bank < 1 or bank > 5 then return 1 end
     if step < 1 then return 1 end
-    if pattern > _drum_ops_tables.drum_ops_pattern_len then return 1 end
+    if pattern > drum_ops_tables.drum_ops_pattern_len then return 1 end
 
     local table
 
     if bank == 1 then
-        table = _drum_ops_tables.table_t_r_e[pattern]
+        table = drum_ops_tables.table_t_r_e[pattern]
     elseif bank == 2 then
-        table = _drum_ops_tables.table_dr_bd[pattern]
+        table = drum_ops_tables.table_dr_bd[pattern]
     elseif bank == 3 then
-        table = _drum_ops_tables.table_dr_sd[pattern]
+        table = drum_ops_tables.table_dr_sd[pattern]
     elseif bank == 4 then
-        table = _drum_ops_tables.table_dr_ch[pattern]
+        table = drum_ops_tables.table_dr_ch[pattern]
     elseif bank == 5 then
-        table = _drum_ops_tables.table_dr_oh[pattern]
+        table = drum_ops_tables.table_dr_oh[pattern]
     end
 
     local wrapped_step = wrap(step, 1, 16)
@@ -88,7 +88,7 @@ end
 function drum_ops.nr(prime, mask, factor, step)
 
     if prime < 1 then prime = 32 + prime end
-    local rhythm = _drum_ops_tables.table_nr[prime] 
+    local rhythm = drum_ops_tables.table_nr[prime] 
     if mask < 1 then mask = 4 + mask end
     if factor < 1 then factor = 17 + factor end
     if step < 1 then step = 16 + step end
