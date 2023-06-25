@@ -30,6 +30,11 @@ function Sequencer:new(y)
 end
 
 
+function calc_grid_count(x, y)
+  return ((y - 4) * 16) + x
+end
+
+
 function Sequencer:draw()
   
   local length = -1
