@@ -55,4 +55,18 @@ function fn.string_to_table(str)
     return load("return " .. str)()
 end
 
+function fn.shift_table_left(t)
+  local first_val = table.remove(t, 1)
+  table.insert(t, first_val)
+
+  return t
+end
+
+function fn.shift_table_right(t)
+  local last_val = table.remove(t)
+  table.insert(t, 1, last_val)
+
+  return t
+end
+
 return fn

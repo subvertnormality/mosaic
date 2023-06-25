@@ -10,6 +10,8 @@ local drum_ops = include("sinfcommand/lib/drum_ops")
 local _draw_handler = include("sinfcommand/lib/_draw_handler")
 local _press_handler = include("sinfcommand/lib/_press_handler")
 
+local paint_pattern = {}
+local shift = 0
 
 g = grid.connect()
 
@@ -30,8 +32,9 @@ function register_draw_handlers()
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_algorithm_fader:draw() end)
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_bankmask_fader:draw() end)
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_paint_button:draw() end)
-  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_paint_button:draw() end)
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_cancel_button:draw() end)
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_left_button:draw() end)
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_right_button:draw() end)
 end
 
 function update_pattern_trigger_edit_page_ui()
@@ -122,6 +125,18 @@ function load_paint_pattern()
       end
     end
 
+
+    if (shift > 0) then
+      for s = 1, shift do
+        paint_pattern = fn.shift_table_right(paint_pattern)
+      end
+    elseif (shift < 0) then
+      for s = 1, math.abs(shift) do
+        paint_pattern = fn.shift_table_left(paint_pattern)
+      end
+    end
+
+
     _pattern_trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
   end
 end
@@ -163,9 +178,13 @@ function register_press_handlers()
     if _pattern_trigger_edit_page_paint_button:is_this(x, y) then
       if (_pattern_trigger_edit_page_paint_button:get_state() == 2) then
         _pattern_trigger_edit_page_cancel_button:set_state(2)
+        _pattern_trigger_edit_page_left_button:set_state(2)
+        _pattern_trigger_edit_page_right_button:set_state(2)
         load_paint_pattern()
         _pattern_trigger_edit_page_paint_button:blink()
       else
+        _pattern_trigger_edit_page_left_button:set_state(1)
+        _pattern_trigger_edit_page_right_button:set_state(1)
         _pattern_trigger_edit_page_cancel_button:set_state(1)
         _pattern_trigger_edit_page_sequencer:hide_unsaved_grid()
         save_paint_pattern(paint_pattern)
@@ -183,8 +202,44 @@ function register_press_handlers()
         _pattern_trigger_edit_page_paint_button:set_state(1)
         _pattern_trigger_edit_page_paint_button:no_blink()
         _pattern_trigger_edit_page_cancel_button:no_blink()
+        _pattern_trigger_edit_page_left_button:set_state(1)
+        _pattern_trigger_edit_page_right_button:set_state(1)
       else
         _pattern_trigger_edit_page_cancel_button:set_state(1)
+      end
+    end
+
+    return true
+  end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) 
+    -- _pattern_trigger_edit_page_left_button:press(x, y)
+
+    if _pattern_trigger_edit_page_left_button:is_this(x, y) then
+      if (_pattern_trigger_edit_page_left_button:get_state() == 2) then
+
+        shift = shift - 1
+
+        load_paint_pattern()
+        _pattern_trigger_edit_page_left_button:set_state(2)
+      else
+        _pattern_trigger_edit_page_left_button:set_state(1)
+      end
+    end
+
+    return true
+  end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) 
+    -- _pattern_trigger_edit_page_right_button:press(x, y)
+
+    if _pattern_trigger_edit_page_right_button:is_this(x, y) then
+      if (_pattern_trigger_edit_page_right_button:get_state() == 2) then
+
+        shift = shift + 1
+
+        _pattern_trigger_edit_page_right_button:set_state(2)
+        load_paint_pattern()
+      else
+        _pattern_trigger_edit_page_right_button:set_state(1)
       end
     end
 
@@ -213,6 +268,8 @@ function _grid.init()
   _pattern_trigger_edit_page_bankmask_fader = Fader:new(12, 3, 5, 5)
   _pattern_trigger_edit_page_paint_button = Button:new(16, 8, {{"Inactive", 3}, {"Save", 15}})
   _pattern_trigger_edit_page_cancel_button = Button:new(14, 8, {{"Inactive", 3}, {"Cancel", 15}})
+  _pattern_trigger_edit_page_left_button = Button:new(11, 8, {{"Inactive", 3}, {"Shift Left", 15}})
+  _pattern_trigger_edit_page_right_button = Button:new(12, 8, {{"Inactive", 3}, {"Shift Right", 15}})
 
   update_pattern_trigger_edit_page_ui()
   register_draw_handlers()

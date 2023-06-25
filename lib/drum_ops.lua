@@ -82,7 +82,6 @@ function drum_ops.drum(bank, pattern, step)
     end
 
     local wrapped_step = wrap(step, 1, 16)
-    print(get_bit(table, wrapped_step))
     return get_bit(table, wrapped_step)
 end
 
