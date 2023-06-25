@@ -53,6 +53,25 @@ end
 
 function save_paint_pattern(p)
 
+
+  local selected_sequencer_pattern = program.selected_sequencer_pattern
+  local selected_pattern = program.selected_pattern
+  local trigs = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
+  local lengths = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
+
+  for x = 1, 64 do  
+    print (trigs[x])
+    if (trigs[x] < 1) and p[x] then
+      trigs[x] = 1 
+      lengths[x] = 1
+    elseif trigs[x] and p[x] then 
+      trigs[x] = 0
+      lengths[x] = 0
+    end
+
+  end
+  program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values = trigs
+  program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths = lengths
 end
 
 function register_press_handlers()
@@ -103,6 +122,7 @@ function register_press_handlers()
         _pattern_trigger_edit_page_paint_button:blink()
       else
         _pattern_trigger_edit_page_sequencer:hide_unsaved_grid()
+        save_paint_pattern(paint_pattern)
         _pattern_trigger_edit_page_paint_button:no_blink()
       end
     end
