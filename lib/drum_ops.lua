@@ -23,10 +23,10 @@ local function get_bit(a, k)
 end
 
 function drum_ops.tresillo(bank, pattern1, pattern2, len, step)
-    if bank < 1 or bank > 5 then return 0 end
-    if len < 8 then return 0 end
-    if step < 1 then return 0 end
-    if pattern1 > _drum_ops_tables.drum_ops_pattern_len or pattern2 > _drum_ops_tables.drum_ops_pattern_len then return 0 end
+    if bank < 1 or bank > 5 then return 1 end
+    if len < 8 then return 1 end
+    if step < 1 then return 1 end
+    if pattern1 > _drum_ops_tables.drum_ops_pattern_len or pattern2 > _drum_ops_tables.drum_ops_pattern_len then return 1 end
 
     local table1
     local table2
@@ -48,7 +48,7 @@ function drum_ops.tresillo(bank, pattern1, pattern2, len, step)
         table2 = _drum_ops_tables.table_dr_oh[pattern2]
     end
 
-    local multiplier = len / 8
+    local multiplier = math.floor(len / 8)
 
     local three = 3 * multiplier
     local wrapped_step = wrap(step, 1, multiplier * 8)
@@ -63,9 +63,9 @@ function drum_ops.tresillo(bank, pattern1, pattern2, len, step)
 end
 
 function drum_ops.drum(bank, pattern, step)
-    if bank < 1 or bank > 5 then return 0 end
-    if step < 1 then return 0 end
-    if pattern > _drum_ops_tables.drum_ops_pattern_len then return 0 end
+    if bank < 1 or bank > 5 then return 1 end
+    if step < 1 then return 1 end
+    if pattern > _drum_ops_tables.drum_ops_pattern_len then return 1 end
 
     local table
 

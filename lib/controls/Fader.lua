@@ -70,11 +70,11 @@ function Fader:set_value(val)
   self.value = val
 end
 
-function Fader:set_length(length)
-  if self.value > length then
-    self.value = length
+function Fader:set_size(size)
+  if self.value > size then
+    self.value = size
   end
-  self.length = length
+  self.size = size
 end
 
 function Fader:disabled()

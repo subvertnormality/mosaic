@@ -4,6 +4,7 @@ local Fader = include("sinfcommand/lib/controls/Fader")
 local Sequencer = include("sinfcommand/lib/controls/Sequencer")
 local Button = include("sinfcommand/lib/controls/Button")
 
+local er = require("er")
 
 local drum_ops = include("sinfcommand/lib/drum_ops")
 local _draw_handler = include("sinfcommand/lib/_draw_handler")
@@ -35,16 +36,25 @@ function update_pattern_trigger_edit_page_ui()
   local algorithm = _pattern_trigger_edit_page_algorithm_fader:get_value()
 
   if (algorithm == 1) then
-    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
+    _pattern_trigger_edit_page_bankmask_fader:set_size(5)
+    _pattern_trigger_edit_page_pattern1_fader:set_size(128)
+    _pattern_trigger_edit_page_pattern2_fader:set_size(128)
     _pattern_trigger_edit_page_pattern2_fader:disabled()
   elseif (algorithm == 2) then
-    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
+    _pattern_trigger_edit_page_bankmask_fader:set_size(5)
+    _pattern_trigger_edit_page_pattern1_fader:set_size(128)
+    _pattern_trigger_edit_page_pattern2_fader:set_size(128)
     _pattern_trigger_edit_page_pattern2_fader:enabled()
   elseif (algorithm == 3) then
-    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
-    _pattern_trigger_edit_page_pattern2_fader:disabled()
+    _pattern_trigger_edit_page_bankmask_fader:disabled()
+    _pattern_trigger_edit_page_pattern2_fader:enabled()
+    _pattern_trigger_edit_page_pattern1_fader:set_size(32)
+    _pattern_trigger_edit_page_pattern2_fader:set_size(32)
+
   elseif (algorithm == 4) then
-    _pattern_trigger_edit_page_bankmask_fader:set_length(5)
+    _pattern_trigger_edit_page_bankmask_fader:set_size(5)
+    _pattern_trigger_edit_page_pattern1_fader:set_size(128)
+    _pattern_trigger_edit_page_pattern2_fader:set_size(128)
     _pattern_trigger_edit_page_pattern2_fader:disabled()
   
   end
@@ -74,6 +84,40 @@ function save_paint_pattern(p)
   program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths = lengths
 end
 
+function load_paint_pattern()
+
+  if (_pattern_trigger_edit_page_paint_button:get_state() == 2) then
+    paint_pattern = {}
+    local algorithm = _pattern_trigger_edit_page_algorithm_fader:get_value()
+    local pattern1 = _pattern_trigger_edit_page_pattern1_fader:get_value()
+    local pattern2 = _pattern_trigger_edit_page_pattern2_fader:get_value()
+    local bank = _pattern_trigger_edit_page_bankmask_fader:get_value()
+
+    if (algorithm == 3) then
+      local pattern = er.gen(pattern1, pattern2, 0)
+      while #paint_pattern < 64 do
+        for i = 1, #pattern do
+            table.insert(paint_pattern, pattern[i])
+            if #paint_pattern >= 64 then break end
+        end
+      end
+    else
+      for step = 1, 64 do
+        if (algorithm == 1) then
+          table.insert(paint_pattern, drum_ops.drum(bank, pattern1, step))
+        elseif (algorithm == 2) then
+          table.insert(paint_pattern, drum_ops.tresillo(bank, pattern1, pattern2, 24, step)) -- TODO need to make the tressilo length editable
+        elseif (algorithm == 4) then
+          -- TODO NR
+        end
+      end
+    end
+
+    _pattern_trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
+  end
+end
+
+
 function register_press_handlers()
   _press_handler:register("pattern_trigger_edit_page", function(x, y) 
     local result = _pattern_trigger_edit_page_pattern_select_fader:press(x, y) 
@@ -81,44 +125,36 @@ function register_press_handlers()
     return result
   end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_sequencer:press(x, y) end)
-  _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_pattern1_fader:press(x, y) end)
-  _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_pattern2_fader:press(x, y) end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) 
+    load_paint_pattern()
+    _pattern_trigger_edit_page_pattern1_fader:press(x, y)
+    return true 
+  end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) 
+    load_paint_pattern()
+    _pattern_trigger_edit_page_pattern2_fader:press(x, y)
+    return true 
+  end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) 
     _pattern_trigger_edit_page_algorithm_fader:press(x, y) 
     if _pattern_trigger_edit_page_algorithm_fader:is_this(x, y) then
       update_pattern_trigger_edit_page_ui()
     end
+    load_paint_pattern()
     return true
   end)
-  _press_handler:register("pattern_trigger_edit_page", function(x, y) return _pattern_trigger_edit_page_bankmask_fader:press(x, y) end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) 
+    _pattern_trigger_edit_page_bankmask_fader:press(x, y) 
+    load_paint_pattern()
+    return true
+  end)
   _press_handler:register("pattern_trigger_edit_page", function(x, y) 
     _pattern_trigger_edit_page_paint_button:press(x, y)
 
     if _pattern_trigger_edit_page_paint_button:is_this(x, y) then
       if (_pattern_trigger_edit_page_paint_button:get_state() == 2) then
 
-        paint_pattern = {}
-        local algorithm = _pattern_trigger_edit_page_algorithm_fader:get_value()
-        local pattern1 = _pattern_trigger_edit_page_pattern1_fader:get_value()
-        local pattern2 = _pattern_trigger_edit_page_pattern2_fader:get_value()
-        local bank = _pattern_trigger_edit_page_bankmask_fader:get_value()
-
-        for step = 1, 64 do
-          if (algorithm == 1) then
-            table.insert(paint_pattern, drum_ops.drum(bank, pattern1, step))
-          elseif (algorithm == 2) then
-            table.insert(paint_pattern, drum_ops.tresillo(bank, pattern1, pattern2, 8, step)) -- TODO need to make the tressilo length editable
-          elseif (algorithm == 3) then
-            -- TODO Euclid
-          elseif (algorithm == 4) then
-            -- TODO NR
-          end
-        end
-        -- for key, value in pairs(paint_pattern) do
-        --   print(key, value)
-        -- end
-
-        _pattern_trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
+        load_paint_pattern()
         _pattern_trigger_edit_page_paint_button:blink()
       else
         _pattern_trigger_edit_page_sequencer:hide_unsaved_grid()
