@@ -30,6 +30,8 @@ function register_draw_handlers()
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_algorithm_fader:draw() end)
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_bankmask_fader:draw() end)
   _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_paint_button:draw() end)
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_paint_button:draw() end)
+  _draw_handler:register("pattern_trigger_edit_page", function() return _pattern_trigger_edit_page_cancel_button:draw() end)
 end
 
 function update_pattern_trigger_edit_page_ui()
@@ -78,7 +80,6 @@ function save_paint_pattern(p)
   local lengths = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
 
   for x = 1, 64 do  
-    print (trigs[x])
     if (trigs[x] < 1) and p[x] then
       trigs[x] = 1 
       lengths[x] = 1
@@ -161,15 +162,32 @@ function register_press_handlers()
 
     if _pattern_trigger_edit_page_paint_button:is_this(x, y) then
       if (_pattern_trigger_edit_page_paint_button:get_state() == 2) then
-
+        _pattern_trigger_edit_page_cancel_button:set_state(2)
         load_paint_pattern()
         _pattern_trigger_edit_page_paint_button:blink()
       else
+        _pattern_trigger_edit_page_cancel_button:set_state(1)
         _pattern_trigger_edit_page_sequencer:hide_unsaved_grid()
         save_paint_pattern(paint_pattern)
         _pattern_trigger_edit_page_paint_button:no_blink()
       end
     end
+    return true
+  end)
+  _press_handler:register("pattern_trigger_edit_page", function(x, y) 
+    _pattern_trigger_edit_page_cancel_button:press(x, y)
+
+    if _pattern_trigger_edit_page_cancel_button:is_this(x, y) then
+      if (_pattern_trigger_edit_page_paint_button:get_state() == 2) then
+        _pattern_trigger_edit_page_sequencer:hide_unsaved_grid()
+        _pattern_trigger_edit_page_paint_button:set_state(1)
+        _pattern_trigger_edit_page_paint_button:no_blink()
+        _pattern_trigger_edit_page_cancel_button:no_blink()
+      else
+        _pattern_trigger_edit_page_cancel_button:set_state(1)
+      end
+    end
+
     return true
   end)
 end
@@ -194,6 +212,8 @@ function _grid.init()
   _pattern_trigger_edit_page_algorithm_fader = Fader:new(12, 2, 4, 4)
   _pattern_trigger_edit_page_bankmask_fader = Fader:new(12, 3, 5, 5)
   _pattern_trigger_edit_page_paint_button = Button:new(16, 8, {{"Inactive", 3}, {"Save", 15}})
+  _pattern_trigger_edit_page_cancel_button = Button:new(14, 8, {{"Inactive", 3}, {"Cancel", 15}})
+
   update_pattern_trigger_edit_page_ui()
   register_draw_handlers()
   register_press_handlers()
