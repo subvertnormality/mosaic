@@ -89,8 +89,17 @@ function initialise_default_sequencer_patterns()
   return sequencer_patterns
 end
 
+pages = {
+  channel_edit_page = 1,
+  channel_sequencer_page = 2,
+  pattern_trigger_edit_page = 3,
+  pattern_note_edit_page = 4,
+  pattern_velocity_edit_page = 5,
+  pattern_probability_edit_page = 6
+}
+
 program = {
-  selected_page = "pattern_trigger_edit_page",
+  selected_page = pages.pattern_trigger_edit_page,
   selected_sequencer_pattern = 1,
   selected_pattern = 1,
   current_step = 1,

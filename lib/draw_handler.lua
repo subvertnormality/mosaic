@@ -1,5 +1,3 @@
-
-
 draw_handler = {}
 
 -- Create a table for the handlers
@@ -18,13 +16,14 @@ end
 
 -- Call all functions registered with a page
 function draw_handler:handle(page)
+
   -- If no functions have been registered for this page, do nothing
-  if self.handlers[page] == nil then
+  if self.handlers[fn.find_key(pages, page)] == nil then
     return
   end
 
   -- Otherwise, call all functions registered for this page
-  for _, func in ipairs(self.handlers[page]) do
+  for _, func in ipairs(self.handlers[fn.find_key(pages, page)]) do
     func()
   end
 end

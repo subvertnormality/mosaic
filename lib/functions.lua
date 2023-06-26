@@ -69,4 +69,13 @@ function fn.shift_table_right(t)
   return t
 end
 
+function fn.find_key(tbl, value)
+  for k, v in pairs(tbl) do
+    if v == value then
+      return k
+    end
+  end
+  return nil
+end
+
 return fn
