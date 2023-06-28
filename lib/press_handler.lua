@@ -17,6 +17,11 @@ end
 -- Call all functions registered with a page
 function press_handler:handle(page, x, y)
 
+  -- Call all menu press handlers
+  for _, func in ipairs(self.handlers["menu"]) do
+    func(x, y)
+  end
+
   -- If no functions have been registered for this page, do nothing
   if self.handlers[fn.find_key(pages, page)] == nil then
     return
@@ -27,10 +32,6 @@ function press_handler:handle(page, x, y)
     func(x, y)
   end
 
-  -- Call all menu press handlers
-  for _, func in ipairs(self.handlers["menu"]) do
-    func(x, y)
-  end
 end
 
 return press_handler

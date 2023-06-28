@@ -7,24 +7,25 @@ local Button = include("sinfcommand/lib/controls/Button")
 local press_handler = include("sinfcommand/lib/press_handler")
 
 local trigger_edit_page_controller = include("sinfcommand/lib/pages/trigger_edit_page_controller")
--- local velocity_edit_page_controller = include("sinfcommand/lib/pages/velocity_edit_page_controller")
+local velocity_edit_page_controller = include("sinfcommand/lib/pages/velocity_edit_page_controller")
 
 g = grid.connect()
 
 function register_draw_handlers()
   trigger_edit_page_controller:register_draw_handlers()
-  -- velocity_edit_page_controller:register_draw_handlers()
+  velocity_edit_page_controller:register_draw_handlers()
 end
 
 function register_press_handlers()
   trigger_edit_page_controller:register_press_handlers()
-  -- velocity_edit_page_controller:register_press_handlers()
+  velocity_edit_page_controller:register_press_handlers()
   press_handler:register(
   "menu",
   function(x, y)
     if (y == 8) then
       if (x < 7) then
         program.selected_page = x
+        
       end
     end
   end
@@ -43,7 +44,7 @@ function grid_controller.init()
   end
   
   trigger_edit_page_controller:init()
-  -- velocity_edit_page_controller:init()
+  velocity_edit_page_controller:init()
 
   register_draw_handlers()
   register_press_handlers()
@@ -62,6 +63,7 @@ function g.key(x, y, z)
 end
 
 function grid_controller:short_press(x, y)
+
   press_handler:handle(program.selected_page, x, y)
   fn.dirty_grid(true)
   fn.dirty_screen(true)

@@ -99,7 +99,7 @@ pages = {
 }
 
 program = {
-  selected_page = pages.pattern_trigger_edit_page,
+  selected_page = pages.pattern_velocity_edit_page,
   selected_sequencer_pattern = 1,
   selected_pattern = 1,
   current_step = 1,
