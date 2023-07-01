@@ -7,26 +7,57 @@ function VerticalFader:new(x, y, size)
   self.y = y
   self.size = size
   self.value = 0
+  self.vertical_offset = 0
+  self.horizontal_offset = 0
   return self
 end
 
 function VerticalFader:draw()
-  g:led(self.x, self.y, 2)
 
-  for i = self.y, self.size + self.y - 1 do
-    g:led(self.x, i, 2)
+  local inactive_led_brightness = 2
+  local x = self.x - self.horizontal_offset
+
+  if (x < 1 or x > 16) then
+    return
   end
-  if (self.value > 0) then
-    g:led(self.x, self.y + self.value - 1, 15)
+
+  if (((self.x - 1) % 4) == 0) then
+    inactive_led_brightness = 3
   end
+
+  if (((self.x - 1) % 16) == 0) then
+    inactive_led_brightness = 4
+  end
+
+  for i = self.y, 7 do
+    if (i == 7 - self.vertical_offset) then
+      g:led(x, i, 3)
+    elseif (self.size - i - self.vertical_offset + 1 > 0) then
+      g:led(x, i, inactive_led_brightness)
+    end
+  end
+
+  local active_led = self.y + self.value - 1 - self.vertical_offset
+  if (self.value > 0 and active_led < 8) then
+    g:led(x, active_led, 15)
+  end
+
 end
 
 function VerticalFader:press(x, y)
-  if y >= self.y and y <= self.y + self.size - 1 and x == self.x then
+  if y >= self.y and y <= self.y + self.size - 1 + self.vertical_offset and x == self.x - self.horizontal_offset then
 
-    self.value = y
+    self.value = y + self.vertical_offset
   end
   
+end
+
+function VerticalFader:set_vertical_offset(o)
+  self.vertical_offset = o
+end
+
+function VerticalFader:set_horizontal_offset(o)
+  self.horizontal_offset = o
 end
 
 return VerticalFader

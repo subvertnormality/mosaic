@@ -1,12 +1,12 @@
 16 8 #bbbbbb #fcb400 #ffffff #000000 20 20 4 1 1
-6 0 0 f 1 0 0 f 1 0 0 0 1 f f f
-3 0 f 0 f 0 f 0 f 0 0 0 f 0 0 0 
-3 f 0 0 1 f 0 0 1 f 0 f 1 0 0 0 
-f 0 0 0 1 0 0 0 1 0 f 0 1 0 0 0 
-3 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 
-3 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 
-3 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 
-2 2 2 2 7 2 0 0 0 0 0 0 7 2 2 2
+3 2 2 f 3 2 2 f 3 2 2 2 3 f f f
+3 2 f 2 f 2 f 2 f 2 2 2 f 2 2 2 
+3 f 2 2 3 f 2 2 3 f 2 f 3 2 2 2 
+f 2 2 2 3 2 2 2 3 2 f 2 3 2 2 2 
+3 2 2 2 3 2 2 2 3 2 2 2 3 2 2 2 
+3 2 2 2 3 2 2 2 3 2 2 2 3 2 2 2 
+3 3 3 3 3 2 2 2 3 2 2 2 3 2 2 2 
+2 2 2 2 7 2 0 2 0 7 2 2 2 0 7 2
 
 - Row 1: 1: Blinking slowly represents selected pattern. Double tap changes pattern. Single tap selects full velocity. Hold to clear.
 - Row 2: Single tap selects velocity. Hold to clear.
@@ -22,7 +22,10 @@ f 0 0 0 1 0 0 0 1 0 f 0 1 0 0 0
 	- Col 4: Pattern note edit. 
 	- Col 5: Pattern velocity edit. 
 	- Col 6: Pattern probability edit
-	- Col 13: Steps 1-16,
-	- Col 14: Steps 17-32, 
-	- Col 15: Steps 33-48, 
-	- Col 16: Steps 49-64.
+	- Col 8: 4x4 mode/velocity helper
+	- Col 10: Steps 1-16,
+	- Col 11: Steps 17-32, 
+	- Col 12: Steps 33-48, 
+	- Col 13: Steps 49-64.
+	- Col 15: Velocity 127 - 63
+	- Col 16: Velocity 63 - 0
