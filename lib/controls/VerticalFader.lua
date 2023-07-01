@@ -49,7 +49,6 @@ function VerticalFader:press(x, y)
   if y >= self.y and y <= 7 and x == self.x - self.horizontal_offset then
 
     self.value = y + self.vertical_offset
-    print(self.value)
   end
   
 end
