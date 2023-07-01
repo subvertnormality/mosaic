@@ -78,4 +78,8 @@ function fn.find_key(tbl, value)
   return nil
 end
 
+function fn.scale(num, old_min, old_max, new_min, new_max)
+  return ((num - old_min) / (old_max - old_min)) * (new_max - new_min) + new_min
+end
+
 return fn

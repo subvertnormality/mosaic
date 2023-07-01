@@ -14,7 +14,7 @@ end
 
 function VerticalFader:draw()
 
-  local inactive_led_brightness = 2
+  local inactive_led_brightness = 1
   local x = self.x - self.horizontal_offset
 
   if (x < 1 or x > 16) then
@@ -22,11 +22,11 @@ function VerticalFader:draw()
   end
 
   if (((self.x - 1) % 4) == 0) then
-    inactive_led_brightness = 3
+    inactive_led_brightness = 2
   end
 
   if (((self.x - 1) % 16) == 0) then
-    inactive_led_brightness = 4
+    inactive_led_brightness = 3
   end
 
   for i = self.y, 7 do
@@ -39,15 +39,17 @@ function VerticalFader:draw()
 
   local active_led = self.y + self.value - 1 - self.vertical_offset
   if (self.value > 0 and active_led < 8) then
+
     g:led(x, active_led, 15)
   end
 
 end
 
 function VerticalFader:press(x, y)
-  if y >= self.y and y <= self.y + self.size - 1 + self.vertical_offset and x == self.x - self.horizontal_offset then
+  if y >= self.y and y <= 7 and x == self.x - self.horizontal_offset then
 
     self.value = y + self.vertical_offset
+    print(self.value)
   end
   
 end

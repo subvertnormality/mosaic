@@ -13,9 +13,7 @@ function Fader:new(x, y, length, size)
   return self
 end
 
-function scale(num, old_min, old_max, new_min, new_max)
-  return ((num - old_min) / (old_max - old_min)) * (new_max - new_min) + new_min
-end
+
 
 function Fader:draw_simple()
   
@@ -44,7 +42,7 @@ function Fader:draw_fine_grain()
   if (selected_led > 0 and selected_led < self.length - 1) then
 
     local modulator = math.floor(self.value % (self.size / (self.length - 2))) + 1
-    local scaled_brightness = math.floor(scale(modulator, 1, self.size / (self.length - 2), 4, 15))
+    local scaled_brightness = math.floor(fn.scale(modulator, 1, self.size / (self.length - 2), 4, 15))
     if (self.value == self.size) then -- hacky
       scaled_brightness = 15
     end
