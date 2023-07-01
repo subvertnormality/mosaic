@@ -12,6 +12,8 @@ function reset_buttons()
   step17to32_fade_button:set_value(horizontal_offset)
   step33to48_fade_button:set_value(horizontal_offset)
   step49to64_fade_button:set_value(horizontal_offset)
+  vel1to7_fade_button:set_value(vertical_offset)
+  vel8to14_fade_button:set_value(vertical_offset)
 end
 
 function velocity_edit_page_controller:init()
@@ -24,6 +26,9 @@ function velocity_edit_page_controller:init()
   step17to32_fade_button = FadeButton:new(11, 8, 17, 32)
   step33to48_fade_button = FadeButton:new(12, 8, 33, 48)
   step49to64_fade_button = FadeButton:new(13, 8, 49, 64)
+
+  vel1to7_fade_button = FadeButton:new(15, 8, 1, 7)
+  vel8to14_fade_button = FadeButton:new(16, 8, 8, 14)
   reset_buttons()
 end
 
@@ -81,6 +86,20 @@ function velocity_edit_page_controller:register_draw_handlers()
       return step49to64_fade_button:draw()
     end
   )
+  draw_handler:register(
+    "pattern_velocity_edit_page",
+    function()
+
+      return vel1to7_fade_button:draw()
+    end
+  )
+  draw_handler:register(
+    "pattern_velocity_edit_page",
+    function()
+
+      return vel8to14_fade_button:draw()
+    end
+  )
 end
 
 function velocity_edit_page_controller:register_press_handlers()
@@ -134,6 +153,28 @@ function velocity_edit_page_controller:register_press_handlers()
       end
 
       return step49to64_fade_button:press(x, y)
+    end
+  )
+  press_handler:register(
+    "pattern_velocity_edit_page",
+    function(x, y)
+      if (vel1to7_fade_button:is_this(x, y)) then
+        vertical_offset = 0
+        reset_all_controls()
+      end
+
+      return vel1to7_fade_button:press(x, y)
+    end
+  )
+  press_handler:register(
+    "pattern_velocity_edit_page",
+    function(x, y)
+      if (vel8to14_fade_button:is_this(x, y)) then
+        vertical_offset = 7
+        reset_all_controls()
+      end
+
+      return vel8to14_fade_button:press(x, y)
     end
   )
 end
