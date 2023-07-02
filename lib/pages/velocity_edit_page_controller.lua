@@ -7,7 +7,15 @@ local faders = {}
 local vertical_offset = 0
 local horizontal_offset = 0
 
-function reset_buttons()
+local step1to16_fade_button = FadeButton:new(10, 8, 1, 16)
+local step17to32_fade_button = FadeButton:new(11, 8, 17, 32)
+local step33to48_fade_button = FadeButton:new(12, 8, 33, 48)
+local step49to64_fade_button = FadeButton:new(13, 8, 49, 64)
+
+local vel1to7_fade_button = FadeButton:new(15, 8, 1, 7)
+local vel8to14_fade_button = FadeButton:new(16, 8, 8, 14)
+
+function velocity_edit_page_controller:reset_buttons()
   step1to16_fade_button:set_value(horizontal_offset)
   step17to32_fade_button:set_value(horizontal_offset)
   step33to48_fade_button:set_value(horizontal_offset)
@@ -22,18 +30,11 @@ function velocity_edit_page_controller:init()
     faders["step"..s.."_fader"] = VerticalFader:new(s, 1, 14)
   end
 
-  step1to16_fade_button = FadeButton:new(10, 8, 1, 16)
-  step17to32_fade_button = FadeButton:new(11, 8, 17, 32)
-  step33to48_fade_button = FadeButton:new(12, 8, 33, 48)
-  step49to64_fade_button = FadeButton:new(13, 8, 49, 64)
-
-  vel1to7_fade_button = FadeButton:new(15, 8, 1, 7)
-  vel8to14_fade_button = FadeButton:new(16, 8, 8, 14)
-  reset_buttons()
+  velocity_edit_page_controller:reset_buttons()
 end
 
 
-function value_from_velocity(vel)
+function velocity_edit_page_controller:value_from_velocity(vel)
 
   if vel == -1 then return 1 end
 
@@ -51,7 +52,7 @@ function value_from_velocity(vel)
   return math.floor(outputValue)
 end
 
-function velocity_from_value(val)
+function velocity_edit_page_controller:velocity_from_value(val)
 
   if val == -1 then return 127 end
 
@@ -70,24 +71,24 @@ function velocity_from_value(val)
 end
 
 
-function reset_fader(s)
+function velocity_edit_page_controller:reset_fader(s)
   local selected_sequencer_pattern = program.selected_sequencer_pattern
   local selected_pattern = program.selected_pattern
   faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
   faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)
-  local value = value_from_velocity(program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s])
+  local value = velocity_edit_page_controller:value_from_velocity(program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s])
 
   if value then 
     faders["step"..s.."_fader"]:set_value(value) 
   end
 end
 
-function reset_all_controls()
+function velocity_edit_page_controller:reset_all_controls()
   for s = 1, 64 do  
     faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
     faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)
   end
-  reset_buttons()
+  velocity_edit_page_controller:reset_buttons()
 end
 
 function velocity_edit_page_controller:register_draw_handlers()
@@ -96,7 +97,7 @@ function velocity_edit_page_controller:register_draw_handlers()
     draw_handler:register(
       "pattern_velocity_edit_page",
       function()
-        reset_fader(s)
+        velocity_edit_page_controller:reset_fader(s)
         return faders["step"..s.."_fader"]:draw()
       end
     )
@@ -155,7 +156,7 @@ function velocity_edit_page_controller:register_press_handlers()
         if faders["step"..s.."_fader"]:is_this(x, y) then
           local selected_sequencer_pattern = program.selected_sequencer_pattern
           local selected_pattern = program.selected_pattern
-          local velocity = velocity_from_value(faders["step"..s.."_fader"]:get_value())
+          local velocity = velocity_edit_page_controller:velocity_from_value(faders["step"..s.."_fader"]:get_value())
           program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s] = velocity
         end
       end
@@ -167,7 +168,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step1to16_fade_button:is_this(x, y)) then
         horizontal_offset = 0
-        reset_all_controls()
+        velocity_edit_page_controller:reset_all_controls()
       end
       return step1to16_fade_button:press(x, y)
     end
@@ -177,7 +178,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step17to32_fade_button:is_this(x, y)) then
         horizontal_offset = 16
-        reset_all_controls()
+        velocity_edit_page_controller:reset_all_controls()
       end
 
       return step17to32_fade_button:press(x, y)
@@ -188,7 +189,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step33to48_fade_button:is_this(x, y)) then
         horizontal_offset = 32
-        reset_all_controls()
+        velocity_edit_page_controller:reset_all_controls()
       end
 
       return step33to48_fade_button:press(x, y)
@@ -199,7 +200,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step49to64_fade_button:is_this(x, y)) then
         horizontal_offset = 48
-        reset_all_controls()
+        velocity_edit_page_controller:reset_all_controls()
       end
 
       return step49to64_fade_button:press(x, y)
@@ -210,7 +211,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (vel1to7_fade_button:is_this(x, y)) then
         vertical_offset = 0
-        reset_all_controls()
+        velocity_edit_page_controller:reset_all_controls()
       end
 
       return vel1to7_fade_button:press(x, y)
@@ -221,7 +222,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (vel8to14_fade_button:is_this(x, y)) then
         vertical_offset = 7
-        reset_all_controls()
+        velocity_edit_page_controller:reset_all_controls()
       end
 
       return vel8to14_fade_button:press(x, y)

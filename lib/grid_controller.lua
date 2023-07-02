@@ -7,17 +7,37 @@ local Button = include("sinfcommand/lib/controls/Button")
 local press_handler = include("sinfcommand/lib/press_handler")
 
 local trigger_edit_page_controller = include("sinfcommand/lib/pages/trigger_edit_page_controller")
+local note_edit_page_controller = include("sinfcommand/lib/pages/note_edit_page_controller")
 local velocity_edit_page_controller = include("sinfcommand/lib/pages/velocity_edit_page_controller")
 
 g = grid.connect()
 
+function g.key(x, y, z)
+  if z == 1 then
+    grid_controller.counter[x][y] = clock.run(grid_controller.grid_long_press, g, x, y)
+  elseif z == 0 then -- otherwise, if a grid key is released...
+    if grid_controller.counter[x][y] then -- and the long press is still waiting...
+      clock.cancel(grid_controller.counter[x][y]) -- then cancel the long press clock,
+      grid_controller:short_press(x,y) -- and execute a short press instead.
+    end
+  end
+end
+
+function g.remove()
+  grid_controller:alert_disconnect()
+end
+
+
+
 function register_draw_handlers()
   trigger_edit_page_controller:register_draw_handlers()
+  note_edit_page_controller:register_draw_handlers()
   velocity_edit_page_controller:register_draw_handlers()
 end
 
 function register_press_handlers()
   trigger_edit_page_controller:register_press_handlers()
+  note_edit_page_controller:register_press_handlers()
   velocity_edit_page_controller:register_press_handlers()
   press_handler:register(
   "menu",
@@ -33,6 +53,7 @@ function register_press_handlers()
 end
 
 function grid_controller.init()
+
   grid_controller.counter = {}
   grid_controller.toggled = {}
   grid_controller.disconnect_dismissed = true
@@ -44,6 +65,7 @@ function grid_controller.init()
   end
   
   trigger_edit_page_controller:init()
+  note_edit_page_controller:init()
   velocity_edit_page_controller:init()
 
   register_draw_handlers()
@@ -51,16 +73,6 @@ function grid_controller.init()
 
 end
 
-function g.key(x, y, z)
-  if z == 1 then
-    grid_controller.counter[x][y] = clock.run(grid_controller.grid_long_press, g, x, y)
-  elseif z == 0 then -- otherwise, if a grid key is released...
-    if grid_controller.counter[x][y] then -- and the long press is still waiting...
-      clock.cancel(grid_controller.counter[x][y]) -- then cancel the long press clock,
-      grid_controller:short_press(x,y) -- and execute a short press instead.
-    end
-  end
-end
 
 function grid_controller:short_press(x, y)
 
@@ -69,9 +81,7 @@ function grid_controller:short_press(x, y)
   fn.dirty_screen(true)
 end
 
-function g.remove()
-  grid_controller:alert_disconnect()
-end
+
 
 function grid_controller:alert_disconnect()
   self.disconnect_dismissed = false

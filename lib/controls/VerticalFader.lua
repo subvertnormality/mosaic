@@ -30,8 +30,10 @@ function VerticalFader:draw()
   end
 
   for i = self.y, 7 do
-    if (i == 7 - self.vertical_offset) then
-      g:led(x, i, 3)
+    if (i == math.abs(7 - self.vertical_offset)) then
+      g:led(x, i, 3) -- mark the bottom of each page
+    elseif ((i == 7) and (math.abs(7 - self.vertical_offset) == 0)) then
+      g:led(x, i, 4) -- mark the zero line stronger
     elseif (self.size - i - self.vertical_offset + 1 > 0) then
       g:led(x, i, inactive_led_brightness)
     end
