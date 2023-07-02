@@ -64,8 +64,7 @@ function initialise_default_patterns()
       trig_values = initialise_64_table(),
       lengths = initialise_64_table(),
       note_values = initialise_64_table(),
-      velocity_values = initialise_64_table(),
-      probability_values = initialise_64_table()
+      velocity_values = initialise_64_table()
     }
   end
   
@@ -94,8 +93,7 @@ pages = {
   channel_sequencer_page = 2,
   pattern_trigger_edit_page = 3,
   pattern_note_edit_page = 4,
-  pattern_velocity_edit_page = 5,
-  pattern_probability_edit_page = 6
+  pattern_velocity_edit_page = 5
 }
 
 program = {

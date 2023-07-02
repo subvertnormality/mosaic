@@ -93,7 +93,7 @@ end
 
 function grid_draw_menu(selected_page)
 
-  for i = 1, 6 do
+  for i = 1, 5 do
     g:led(i, 8, 2)
   end
 

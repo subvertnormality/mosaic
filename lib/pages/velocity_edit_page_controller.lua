@@ -7,10 +7,10 @@ local faders = {}
 local vertical_offset = 0
 local horizontal_offset = 0
 
-local step1to16_fade_button = FadeButton:new(10, 8, 1, 16)
-local step17to32_fade_button = FadeButton:new(11, 8, 17, 32)
-local step33to48_fade_button = FadeButton:new(12, 8, 33, 48)
-local step49to64_fade_button = FadeButton:new(13, 8, 49, 64)
+local step1to16_fade_button = FadeButton:new(9, 8, 1, 16)
+local step17to32_fade_button = FadeButton:new(10, 8, 17, 32)
+local step33to48_fade_button = FadeButton:new(11, 8, 33, 48)
+local step49to64_fade_button = FadeButton:new(12, 8, 49, 64)
 
 local vel1to7_fade_button = FadeButton:new(15, 8, 1, 7)
 local vel8to14_fade_button = FadeButton:new(16, 8, 8, 14)
