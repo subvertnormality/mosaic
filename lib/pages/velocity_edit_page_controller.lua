@@ -33,10 +33,53 @@ function velocity_edit_page_controller:init()
 end
 
 
+function value_from_velocity(vel)
+
+  if vel == -1 then return 1 end
+
+  local inputStart = 0
+  local inputEnd = 127
+  local outputStart = 1
+  local outputEnd = 14
+
+  local inputRange = inputEnd - inputStart
+  local outputRange = outputEnd - outputStart
+
+  local inputValue = (inputEnd - vel) / inputRange
+  local outputValue = outputStart + (inputValue * outputRange)
+
+  return math.floor(outputValue)
+end
+
+function velocity_from_value(val)
+
+  if val == -1 then return 127 end
+
+  local inputStart = 1
+  local inputEnd = 14
+  local outputStart = 0
+  local outputEnd = 127
+
+  local inputRange = inputEnd - inputStart
+  local outputRange = outputEnd - outputStart
+
+  local inputValue = (val - inputStart) / inputRange
+  local outputValue = outputEnd - (inputValue * outputRange)
+
+  return math.floor(outputValue)
+end
+
 
 function reset_fader(s)
+  local selected_sequencer_pattern = program.selected_sequencer_pattern
+  local selected_pattern = program.selected_pattern
   faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
   faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)
+  local value = value_from_velocity(program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s])
+
+  if value then 
+    faders["step"..s.."_fader"]:set_value(value) 
+  end
 end
 
 function reset_all_controls()
@@ -102,12 +145,19 @@ function velocity_edit_page_controller:register_draw_handlers()
   )
 end
 
+
 function velocity_edit_page_controller:register_press_handlers()
   for s = 1, 64 do   
     press_handler:register(
       "pattern_velocity_edit_page",
       function(x, y)
         faders["step"..s.."_fader"]:press(x, y)
+        if faders["step"..s.."_fader"]:is_this(x, y) then
+          local selected_sequencer_pattern = program.selected_sequencer_pattern
+          local selected_pattern = program.selected_pattern
+          local velocity = velocity_from_value(faders["step"..s.."_fader"]:get_value())
+          program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s] = velocity
+        end
       end
     )
   end

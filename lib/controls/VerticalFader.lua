@@ -47,7 +47,7 @@ end
 
 function VerticalFader:press(x, y)
   if y >= self.y and y <= 7 and x == self.x - self.horizontal_offset then
-
+    
     self.value = y + self.vertical_offset
   end
   
@@ -60,5 +60,25 @@ end
 function VerticalFader:set_horizontal_offset(o)
   self.horizontal_offset = o
 end
+
+function VerticalFader:get_horizontal_offset()
+  return self.horizontal_offset
+end
+
+function VerticalFader:get_value()
+  return self.value
+end
+
+function VerticalFader:set_value(val)
+  self.value = val
+end
+
+function VerticalFader:is_this(x, y)
+  if (self.x == x + self.horizontal_offset and y <= 7) then
+    return true
+  end
+  return false
+end
+
 
 return VerticalFader
