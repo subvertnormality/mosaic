@@ -6,7 +6,7 @@
 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 f f f f 4 4 4 4 4 4 4 4 4 4 4 4
-2 7 2 2 2 2 0 0 0 0 0 0 0 0 0 0
+2 7 2 2 2 0 0 0 0 0 0 0 0 0 0 0
 
 Channel sequencer page. 
 
@@ -23,7 +23,6 @@ Channel sequencer page.
 	- Col 3: Pattern step edit. 
 	- Col 4: Pattern note edit. 
 	- Col 5: Pattern velocity edit. 
-	- Col 6: Pattern probability edit.
    
 
 https://tyleretters.github.io/GridStation/

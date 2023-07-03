@@ -20,7 +20,6 @@ f 3 3 3 3 f f f f 3 3 3 3 3 3 3
 	- Col 2: Pattern step edit. 
 	- Col 3: Pattern note edit. 
 	- Col 4: Pattern velocity edit. 
-	- Col 5: Pattern probability edit
 	- Col 9: 1 octave down. 
 	- Col 10: home octave. 
 	- Col 11: 1 octave up

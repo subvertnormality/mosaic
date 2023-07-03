@@ -9,24 +9,16 @@ function VerticalFader:new(x, y, size)
   self.value = 0
   self.vertical_offset = 0
   self.horizontal_offset = 0
+  self.led_brightness = 3
   return self
 end
 
 function VerticalFader:draw()
 
-  local inactive_led_brightness = 1
   local x = self.x - self.horizontal_offset
 
   if (x < 1 or x > 16) then
     return
-  end
-
-  if (((self.x - 1) % 4) == 0) then
-    inactive_led_brightness = 2
-  end
-
-  if (((self.x - 1) % 16) == 0) then
-    inactive_led_brightness = 3
   end
 
   for i = self.y, 7 do
@@ -35,7 +27,7 @@ function VerticalFader:draw()
     elseif ((i == 7) and (math.abs(7 - self.vertical_offset) == 0)) then
       g:led(x, i, 4) -- mark the zero line stronger
     elseif (self.size - i - self.vertical_offset + 1 > 0) then
-      g:led(x, i, inactive_led_brightness)
+      g:led(x, i, self.led_brightness)
     end
   end
 
@@ -73,6 +65,14 @@ end
 
 function VerticalFader:set_value(val)
   self.value = val
+end
+
+function VerticalFader:set_dark()
+  self.led_brightness = 1
+end
+
+function VerticalFader:set_light()
+  self.led_brightness = 3
 end
 
 function VerticalFader:is_this(x, y)

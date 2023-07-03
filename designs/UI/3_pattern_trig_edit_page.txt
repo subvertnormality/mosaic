@@ -6,7 +6,7 @@ f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 2 f 5 5 2 f 5 2 2 f 2 2 2 f 5 5
 5 5 2 f 2 2 2 f 5 2 2 f 5 5 2 f
 2 f 5 5 5 f 5 2 2 f 5 2 f 2 f f
-2 2 7 2 2 0 0 0 0 0 9 9 0 9 0 9
+2 2 7 2 0 0 0 0 0 0 9 9 0 9 0 9
 
 - Row 1: Pattern select. One selected at a time.
 - Row 2: 1 - 10 pattern 1. 12 - 16 algorithm.
@@ -20,7 +20,6 @@ f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 	- Col 2: Pattern step edit. 
 	- Col 3: Pattern note edit. 
 	- Col 4: Pattern velocity edit. 
-	- Col 5: Pattern probability edit.
 	- Col 11: Left,
 	- Col 12: Right.
 	- Col 14: Cancel.

@@ -81,6 +81,12 @@ function velocity_edit_page_controller:reset_fader(s)
   if value then 
     faders["step"..s.."_fader"]:set_value(value) 
   end
+
+  if program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values[s] < 1 then
+    faders["step"..s.."_fader"]:set_dark()
+  else
+    faders["step"..s.."_fader"]:set_light()
+  end
 end
 
 function velocity_edit_page_controller:reset_all_controls()
