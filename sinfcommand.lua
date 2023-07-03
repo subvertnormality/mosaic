@@ -1,5 +1,5 @@
-grid_controller = include("sinfcommand/lib/grid_controller")
-fn = include("sinfcommand/lib/functions")
+local grid_controller = include("sinfcommand/lib/grid_controller")
+local fn = include("sinfcommand/lib/functions")
 
 function initialise_64_table()
   local table_64 = {}

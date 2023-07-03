@@ -1,4 +1,4 @@
-velocity_edit_page_controller = {}
+local velocity_edit_page_controller = {}
 
 local VerticalFader = include("sinfcommand/lib/controls/VerticalFader")
 local FadeButton = include("sinfcommand/lib/controls/FadeButton")

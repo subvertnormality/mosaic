@@ -1,11 +1,13 @@
-grid_controller = {}
+local grid_controller = {}
 
 local Fader = include("sinfcommand/lib/controls/Fader")
 local Sequencer = include("sinfcommand/lib/controls/Sequencer")
 local Button = include("sinfcommand/lib/controls/Button")
 
-local press_handler = include("sinfcommand/lib/press_handler")
+press_handler = include("sinfcommand/lib/press_handler")
+draw_handler = include("sinfcommand/lib/draw_handler")
 
+local channel_edit_page_controller = include("sinfcommand/lib/pages/channel_edit_page_controller")
 local trigger_edit_page_controller = include("sinfcommand/lib/pages/trigger_edit_page_controller")
 local note_edit_page_controller = include("sinfcommand/lib/pages/note_edit_page_controller")
 local velocity_edit_page_controller = include("sinfcommand/lib/pages/velocity_edit_page_controller")
@@ -30,12 +32,14 @@ end
 
 
 function register_draw_handlers()
+  channel_edit_page_controller:register_draw_handlers()
   trigger_edit_page_controller:register_draw_handlers()
   note_edit_page_controller:register_draw_handlers()
   velocity_edit_page_controller:register_draw_handlers()
 end
 
 function register_press_handlers()
+  channel_edit_page_controller:register_press_handlers()
   trigger_edit_page_controller:register_press_handlers()
   note_edit_page_controller:register_press_handlers()
   velocity_edit_page_controller:register_press_handlers()
@@ -64,6 +68,7 @@ function grid_controller.init()
     end
   end
   
+  channel_edit_page_controller:init()
   trigger_edit_page_controller:init()
   note_edit_page_controller:init()
   velocity_edit_page_controller:init()

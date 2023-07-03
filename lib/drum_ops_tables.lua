@@ -1,4 +1,4 @@
-drum_ops_tables = {}
+local drum_ops_tables = {}
 
 
 function fromBin(b)

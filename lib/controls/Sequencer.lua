@@ -1,6 +1,8 @@
 Sequencer = {}
 Sequencer.__index = Sequencer
 
+local fn = include("sinfcommand/lib/functions")
+
 function Sequencer:new(y)
   local self = setmetatable({}, self)
   self.y = y

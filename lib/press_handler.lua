@@ -1,4 +1,4 @@
-press_handler = {}
+local press_handler = {}
 
 -- Create a table for the handlers
 press_handler.handlers = {}

@@ -1,4 +1,4 @@
-draw_handler = {}
+local draw_handler = {}
 
 -- Create a table for the handlers
 draw_handler.handlers = {}
