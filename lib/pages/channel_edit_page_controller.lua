@@ -38,7 +38,12 @@ function channel_edit_page_controller:register_press_handlers()
       return channel_edit_page_sequencer:press(x, y)
     end
   )
-
+  press_handler:register_dual(
+    "channel_edit_page",
+    function(x, y, x2, y2)
+      return channel_edit_page_sequencer:dual_press(x, y, x2, y2)
+    end
+  )
 end
 
 

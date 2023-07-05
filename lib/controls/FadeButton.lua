@@ -27,8 +27,6 @@ function FadeButton:draw()
     brightness = 3
   end
 
-  -- print("x: "..self.x.."y: "..self.y.."value: "..self.value)
-
   g:led(self.x, self.y, brightness)
 
 end

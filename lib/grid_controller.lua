@@ -26,7 +26,7 @@ function g.key(x, y, z)
     
     grid_controller.push.active = {x, y}
 
-    grid_controller.counter[x][y] = clock.run(grid_controller.grid_long_press, g, x, y)
+    grid_controller.counter[x][y] = clock.run(grid_controller.long_press, g, x, y)
   elseif z == 0 then -- otherwise, if a grid key is released...
 
     if grid_controller.counter[x][y] then -- and the long press is still waiting...
@@ -113,7 +113,7 @@ function grid_controller:short_press(x, y)
 end
 
 
-function grid_controller:grid_long_press(x, y)
+function grid_controller:long_press(x, y)
   clock.sleep(.5)
   grid_controller.push[x][y].state = "long_pressed"
 
@@ -122,10 +122,12 @@ end
 
 
 function grid_controller:dual_press(x, y, x2, y2)
-  grid_controller.push[x2][y2].state = "inactive"
 
-  grid_controller.push.active = false
+  press_handler:handle_dual(program.selected_page, x, y, x2, y2)
   fn.dirty_grid(true)
+  fn.dirty_screen(true)
+  grid_controller.push[x2][y2].state = "inactive"
+  grid_controller.push.active = false
 end
 
 function grid_controller:alert_disconnect()

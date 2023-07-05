@@ -53,9 +53,25 @@ function Sequencer:draw()
   local trigs = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
   local lengths = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
 
+  local start_x = program.sequencer_patterns[1].channels[1].start_trig[1]
+  local start_y = program.sequencer_patterns[1].channels[1].start_trig[2]
+
+  local end_x = program.sequencer_patterns[1].channels[1].end_trig[1]
+  local end_y = program.sequencer_patterns[1].channels[1].end_trig[2]
+
+
   for y = self.y, self.y + 3 do
     for x = 1, 16 do
-      g:led(x, y, 2)
+
+      if (self.mode == "channel") then
+        if (x >= start_x and y >= start_y and x <= end_x and y <= end_y) then
+          g:led(x, y, 2)
+
+        end
+      else
+        g:led(x, y, 2)
+      end
+      
     end
   end
 
@@ -68,9 +84,13 @@ function Sequencer:draw()
       end
 
       if (trigs[grid_count] > 0) then
-
-        g:led(x, y, 15) 
-
+        if (self.mode == "channel") then
+          if (x >= start_x and y >= start_y and x <= end_x and y <= end_y) then
+            g:led(x, y, 15) 
+          end
+        else
+          g:led(x, y, 15) 
+        end
         if (self.unsaved_grid[grid_count]) then
           g:led(x, y, 0 + self.bclock.bright_mod)
         end
@@ -99,15 +119,26 @@ function Sequencer:press(x, y)
     
     if (self.mode == "pattern") then
       program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] = 1 - program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] 
-    elseif self.mode == "channel" then
-      
     end
     
-    
-
   end
     
 end
+
+function Sequencer:dual_press(x, y, x2, y2)
+  if (y >= self.y and y <= self.y + 3 and y2 >= self.y and y2 <= self.y + 3) then
+    
+    if (self.mode == "channel") then
+      program.sequencer_patterns[1].channels[1].start_trig = {x, y}
+      program.sequencer_patterns[1].channels[1].end_trig = {x2, y2}
+    end
+    
+  end
+    
+end
+
+
+
 
 function Sequencer:show_unsaved_grid(g)
   self.unsaved_grid = g

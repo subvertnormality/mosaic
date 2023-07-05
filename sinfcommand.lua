@@ -34,8 +34,8 @@ function initialise_default_channels()
   for i=1,16 do
     channels[i] = {
       trig_lock_banks = initialise_default_trig_lock_banks(),
-      start_trig = 0,
-      end_trig = 0,
+      start_trig = {1, 4},
+      end_trig = {16, 7},
       midi_channel_location = 1,
       default_note = 60,
       merge_mode = "add",
