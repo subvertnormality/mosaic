@@ -6,7 +6,7 @@ local paint_pattern = {}
 local shift = 0
 
 local pattern_trigger_edit_page_pattern_select_fader = Fader:new(1, 1, 16, 16)
-local pattern_trigger_edit_page_sequencer = Sequencer:new(4)
+local pattern_trigger_edit_page_sequencer = Sequencer:new(4, "pattern")
 local pattern_trigger_edit_page_pattern1_fader = Fader:new(1, 2, 10, 100)
 local pattern_trigger_edit_page_pattern2_fader = Fader:new(1, 3, 10, 100)
 local pattern_trigger_edit_page_algorithm_fader = Fader:new(12, 2, 4, 4)
@@ -35,7 +35,14 @@ function trigger_edit_page_controller:register_draw_handlers()
   draw_handler:register(
   "pattern_trigger_edit_page",
   function()
-    return pattern_trigger_edit_page_sequencer:draw()
+
+    local selected_sequencer_pattern = program.selected_sequencer_pattern
+    local selected_pattern = program.selected_pattern
+    
+    local trigs = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
+    local lengths = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
+  
+    return pattern_trigger_edit_page_sequencer:draw(trigs, lengths)
   end
   )
   draw_handler:register(

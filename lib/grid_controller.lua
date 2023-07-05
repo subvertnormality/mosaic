@@ -16,11 +16,28 @@ g = grid.connect()
 
 function g.key(x, y, z)
   if z == 1 then
+    grid_controller.push[x][y].state = "pressed"
+
+    if grid_controller.push.active ~= false then
+      if grid_controller.push.active[1] ~= x or grid_controller.push.active[2] ~= y then
+        grid_controller:dual_press(grid_controller.push.active[1], grid_controller.push.active[2], x, y)
+      end
+    end
+    
+    grid_controller.push.active = {x, y}
+
     grid_controller.counter[x][y] = clock.run(grid_controller.grid_long_press, g, x, y)
   elseif z == 0 then -- otherwise, if a grid key is released...
+
     if grid_controller.counter[x][y] then -- and the long press is still waiting...
       clock.cancel(grid_controller.counter[x][y]) -- then cancel the long press clock,
-      grid_controller:short_press(x,y) -- and execute a short press instead.
+
+      if grid_controller.push[x][y].state == "long_pressed" then
+        grid_controller.push[x][y].state = "inactive"
+        grid_controller.push.active = false
+      elseif grid_controller.push[x][y].state == "pressed" then
+        grid_controller:short_press(x,y) -- and execute a short press instead.
+      end
     end
   end
 end
@@ -60,13 +77,20 @@ function grid_controller.init()
 
   grid_controller.counter = {}
   grid_controller.toggled = {}
+  grid_controller.push = {}
   grid_controller.disconnect_dismissed = true
   for x = 1, 16 do
     grid_controller.counter[x] = {}
+    grid_controller.push[x] = {}
     for y = 1, 8 do
       grid_controller.counter[x][y] = nil
+      grid_controller.push[x][y] = {}
+      grid_controller.push.active = false
+      grid_controller.push[x][y].state = "inactive"
     end
   end
+
+
   
   channel_edit_page_controller:init()
   trigger_edit_page_controller:init()
@@ -84,9 +108,25 @@ function grid_controller:short_press(x, y)
   press_handler:handle(program.selected_page, x, y)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
+  grid_controller.push[x][y].state = "inactive"
+  grid_controller.push.active = false
 end
 
 
+function grid_controller:grid_long_press(x, y)
+  clock.sleep(.5)
+  grid_controller.push[x][y].state = "long_pressed"
+
+  fn.dirty_grid(true)
+end
+
+
+function grid_controller:dual_press(x, y, x2, y2)
+  grid_controller.push[x2][y2].state = "inactive"
+
+  grid_controller.push.active = false
+  fn.dirty_grid(true)
+end
 
 function grid_controller:alert_disconnect()
   self.disconnect_dismissed = false
@@ -120,11 +160,6 @@ function grid_controller:grid_redraw()
   g:refresh()
 end
 
-function grid_controller:grid_long_press(x, y)
-  clock.sleep(.5)
-
-  fn.dirty_grid(true)
-end
 
 function grid_controller.grid_redraw_clock()
   while true do

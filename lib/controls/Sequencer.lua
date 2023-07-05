@@ -3,7 +3,7 @@ Sequencer.__index = Sequencer
 
 local fn = include("sinfcommand/lib/functions")
 
-function Sequencer:new(y)
+function Sequencer:new(y, mode)
   local self = setmetatable({}, self)
   self.y = y
   self.unsaved_grid = {}
@@ -27,6 +27,11 @@ function Sequencer:new(y)
     end
   end)
 
+  self.mode = "pattern"
+
+  if mode == "channel" then
+    self.mode = "channel"
+  end
 
   return self
 end
@@ -91,7 +96,15 @@ end
 
 function Sequencer:press(x, y)
   if (y >= self.y and y <= self.y + 3) then
-    program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] = 1 - program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] 
+    
+    if (self.mode == "pattern") then
+      program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] = 1 - program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] 
+    elseif self.mode == "channel" then
+      
+    end
+    
+    
+
   end
     
 end

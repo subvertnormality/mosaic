@@ -1,7 +1,7 @@
 local channel_edit_page_controller = {}
 
 
-local channel_edit_page_sequencer = Sequencer:new(4)
+local channel_edit_page_sequencer = Sequencer:new(4, "channel")
 
 function channel_edit_page_controller:init()
   
@@ -12,7 +12,18 @@ function channel_edit_page_controller:register_draw_handlers()
   draw_handler:register(
     "channel_edit_page",
     function()
-      return channel_edit_page_sequencer:draw()
+
+
+      -- This is temporary code. TODO: Implement pattern merging.
+      local selected_sequencer_pattern = program.selected_sequencer_pattern
+      local selected_pattern = program.selected_pattern
+      
+      local trigs = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
+      local lengths = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
+      -- End temporary code
+
+
+      return channel_edit_page_sequencer:draw(trigs, lengths)
     end
   )
 end
