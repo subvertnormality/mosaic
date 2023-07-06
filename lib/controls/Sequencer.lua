@@ -53,11 +53,11 @@ function Sequencer:draw()
   local trigs = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
   local lengths = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
 
-  local start_x = program.sequencer_patterns[1].channels[1].start_trig[1]
-  local start_y = program.sequencer_patterns[1].channels[1].start_trig[2]
+  local start_x = program.sequencer_patterns[1].channels[program.selected_channel].start_trig[1]
+  local start_y = program.sequencer_patterns[1].channels[program.selected_channel].start_trig[2]
 
-  local end_x = program.sequencer_patterns[1].channels[1].end_trig[1]
-  local end_y = program.sequencer_patterns[1].channels[1].end_trig[2]
+  local end_x = program.sequencer_patterns[1].channels[program.selected_channel].end_trig[1]
+  local end_y = program.sequencer_patterns[1].channels[program.selected_channel].end_trig[2]
 
 
   for y = self.y, self.y + 3 do
@@ -129,8 +129,8 @@ function Sequencer:dual_press(x, y, x2, y2)
   if (y >= self.y and y <= self.y + 3 and y2 >= self.y and y2 <= self.y + 3) then
     
     if (self.mode == "channel") then
-      program.sequencer_patterns[1].channels[1].start_trig = {x, y}
-      program.sequencer_patterns[1].channels[1].end_trig = {x2, y2}
+      program.sequencer_patterns[1].channels[program.selected_channel].start_trig = {x, y}
+      program.sequencer_patterns[1].channels[program.selected_channel].end_trig = {x2, y2}
     end
     
   end

@@ -2,6 +2,7 @@ local channel_edit_page_controller = {}
 
 
 local channel_edit_page_sequencer = Sequencer:new(4, "channel")
+local channel_select_fader = Fader:new(1, 1, 16, 16)
 
 function channel_edit_page_controller:init()
   
@@ -26,6 +27,16 @@ function channel_edit_page_controller:register_draw_handlers()
       return channel_edit_page_sequencer:draw(trigs, lengths)
     end
   )
+
+  draw_handler:register(
+    "channel_edit_page",
+    function()
+
+      return channel_select_fader:draw()
+
+    end
+
+  )
 end
 
 
@@ -36,6 +47,14 @@ function channel_edit_page_controller:register_press_handlers()
     "channel_edit_page",
     function(x, y)
       return channel_edit_page_sequencer:press(x, y)
+    end
+  )
+  press_handler:register(
+    "channel_edit_page",
+    function(x, y)
+      local result = channel_select_fader:press(x, y)
+      program.selected_channel = channel_select_fader:get_value()
+      return result
     end
   )
   press_handler:register_dual(

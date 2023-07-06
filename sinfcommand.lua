@@ -100,6 +100,7 @@ program = {
   selected_page = pages.pattern_note_edit_page,
   selected_sequencer_pattern = 1,
   selected_pattern = 1,
+  selected_channel = 1,
   current_step = 1,
   scale_type = "sinfonion",
   scales = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
