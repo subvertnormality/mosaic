@@ -11,7 +11,7 @@ function Button:new(x, y, states)
     self.states = states
   else
     self.states = {}
-    self.states[1] = {"off", 3}
+    self.states[1] = {"off", 2}
     self.states[2] = {"on", 15}
   end
   self.state = 1

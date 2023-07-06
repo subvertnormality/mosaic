@@ -1,27 +1,20 @@
 local grid_controller = include("sinfcommand/lib/grid_controller")
 local fn = include("sinfcommand/lib/functions")
 
-function initialise_64_table()
+function initialise_64_table(d)
   local table_64 = {}
   for i=1,64 do
-    table_64[i] = -1
+    table_64[i] = d
   end
   return table_64
 end
 
 
-function initialise_default_trig_locks()
-  local trig_locks = {}
-  for i=1,64 do
-    trig_locks[i] = -1
-  end
-  return trig_locks
-end
 
 function initialise_default_trig_lock_banks()
   local trig_lock_banks = {}
   for i=1,8 do
-    trig_lock_banks[i] = initialise_default_trig_locks()
+    trig_lock_banks[i] = initialise_64_table(-1)
   end
   return trig_lock_banks
 end
@@ -61,10 +54,10 @@ function initialise_default_patterns()
   
   for i=1,16 do
     patterns[i] = {
-      trig_values = initialise_64_table(),
-      lengths = initialise_64_table(),
-      note_values = initialise_64_table(),
-      velocity_values = initialise_64_table()
+      trig_values = initialise_64_table(0),
+      lengths = initialise_64_table(-1),
+      note_values = initialise_64_table(-1),
+      velocity_values = initialise_64_table(-1)
     }
   end
   
@@ -97,7 +90,7 @@ pages = {
 }
 
 program = {
-  selected_page = pages.pattern_note_edit_page,
+  selected_page = pages.channel_edit_page,
   selected_sequencer_pattern = 1,
   selected_pattern = 1,
   selected_channel = 1,

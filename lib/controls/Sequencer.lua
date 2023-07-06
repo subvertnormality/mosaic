@@ -42,23 +42,19 @@ function calc_grid_count(x, y)
 end
 
 
-function Sequencer:draw()
+function Sequencer:draw(trigs, lengths)
   
   local length = -1
   local grid_count = -1
   
   local selected_sequencer_pattern = program.selected_sequencer_pattern
   local selected_pattern = program.selected_pattern
-  
-  local trigs = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
-  local lengths = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
 
   local start_x = program.sequencer_patterns[1].channels[program.selected_channel].start_trig[1]
   local start_y = program.sequencer_patterns[1].channels[program.selected_channel].start_trig[2]
 
   local end_x = program.sequencer_patterns[1].channels[program.selected_channel].end_trig[1]
   local end_y = program.sequencer_patterns[1].channels[program.selected_channel].end_trig[2]
-
 
   for y = self.y, self.y + 3 do
     for x = 1, 16 do
