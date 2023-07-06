@@ -64,12 +64,12 @@ function Sequencer:draw()
     for x = 1, 16 do
 
       if (self.mode == "channel") then
-        if (x >= start_x and y >= start_y and x <= end_x and y <= end_y) then
-          g:led(x, y, 2)
 
+        if (calc_grid_count(start_x, start_y) <= calc_grid_count(x, y) and calc_grid_count(end_x, end_y) >= calc_grid_count(x, y)) then
+          g:led(x, y, 3)
         end
       else
-        g:led(x, y, 2)
+        g:led(x, y, 3)
       end
       
     end
@@ -85,7 +85,7 @@ function Sequencer:draw()
 
       if (trigs[grid_count] > 0) then
         if (self.mode == "channel") then
-          if (x >= start_x and y >= start_y and x <= end_x and y <= end_y) then
+          if (calc_grid_count(start_x, start_y) <= calc_grid_count(x, y) and calc_grid_count(end_x, end_y) >= calc_grid_count(x, y)) then
             g:led(x, y, 15) 
           end
         else
