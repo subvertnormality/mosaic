@@ -39,7 +39,7 @@ function initialise_default_channels()
       midi_channel_location = 1,
       selected_patterns = {},
       default_note = 60,
-      merge_mode = "add",
+      merge_mode = "skip",
       trig_lock_locations = {
         {midi_channel = -1, midi_cc = -1 },
         {midi_channel = -1, midi_cc = -1 },

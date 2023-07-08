@@ -72,17 +72,20 @@ function channel_edit_page_controller:register_press_handlers()
     "channel_edit_page",
     function(x, y)
       local result = channel_select_fader:press(x, y)
-      program.selected_channel = channel_select_fader:get_value()
-      pattern_controller:update_working_patterns()
-      channel_edit_page_controller:update_channel_edit_page_ui()
-      return result
+      if channel_select_fader:is_this(x, y) then
+        program.selected_channel = channel_select_fader:get_value()
+        pattern_controller:update_working_patterns()
+        channel_edit_page_controller:update_channel_edit_page_ui()
+      end
     end
   )
   press_handler:register_dual(
     "channel_edit_page",
     function(x, y, x2, y2)
       channel_edit_page_sequencer:dual_press(x, y, x2, y2)
-      pattern_controller:update_working_patterns()
+      if channel_edit_page_sequencer:is_this(x2, y2) then
+        pattern_controller:update_working_patterns()
+      end
     end
   )
   for s = 1, 16 do  
@@ -98,7 +101,9 @@ function channel_edit_page_controller:register_press_handlers()
             fn.remove_from_set(program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].selected_patterns, x)
           end
         end
-        pattern_controller:update_working_patterns()
+        if pattern_buttons["step"..s.."_pattern_button"]:is_this(x, y) then
+          pattern_controller:update_working_patterns()
+        end
       end
     )
   end

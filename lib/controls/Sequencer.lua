@@ -138,7 +138,14 @@ function Sequencer:dual_press(x, y, x2, y2)
     
 end
 
+function Sequencer:is_this(x, y)
+  if (y >= self.y and y <= self.y + 3) then
+    return true
+  end
 
+  return false
+
+end
 
 
 function Sequencer:show_unsaved_grid(g)
