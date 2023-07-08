@@ -62,10 +62,10 @@ function Sequencer:draw(trigs, lengths)
       if (self.mode == "channel") then
 
         if (calc_grid_count(start_x, start_y) <= calc_grid_count(x, y) and calc_grid_count(end_x, end_y) >= calc_grid_count(x, y)) then
-          g:led(x, y, 3)
+          g:led(x, y, 2)
         end
       else
-        g:led(x, y, 3)
+        g:led(x, y, 2)
       end
       
     end
@@ -91,17 +91,17 @@ function Sequencer:draw(trigs, lengths)
           g:led(x, y, 0 + self.bclock.bright_mod)
         end
         -- TODO: Note lengths
-        -- length = lengths[grid_count]
+        length = lengths[grid_count]
         
-        -- if (length > 1) then
-        --   for lx = grid_count + 1, grid_count + length - 1 do
-        --     if (trigs[lx] < 1 and lx < 65) then
-        --       g:led((lx % 16), 4 + (lx // 16), 5)
-        --     else
-        --       break
-        --     end
-        --   end
-        -- end
+        if (length > 1) then
+          for lx = grid_count + 1, grid_count + length - 1 do
+            if (trigs[lx] < 1 and lx < 65) then
+              g:led((lx % 16), 4 + (lx // 16), 5)
+            else
+              break
+            end
+          end
+        end
       end
     end
   end
@@ -127,6 +127,13 @@ function Sequencer:dual_press(x, y, x2, y2)
     if (self.mode == "channel") then
       program.sequencer_patterns[1].channels[program.selected_channel].start_trig = {x, y}
       program.sequencer_patterns[1].channels[program.selected_channel].end_trig = {x2, y2}
+    
+    elseif (self.mode == "pattern") then
+      print("here")
+      if (program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] == 1) then
+        print("yes")
+        program.sequencer_patterns[1].patterns[program.selected_pattern].lengths[calc_grid_count(x, y)] = calc_grid_count(x2, y2) - calc_grid_count(x, y)
+      end
     end
     
   end

@@ -288,6 +288,12 @@ function trigger_edit_page_controller:register_press_handlers()
     return true
   end
   )
+  press_handler:register_dual(
+    "pattern_trigger_edit_page",
+    function(x, y, x2, y2)
+      return pattern_trigger_edit_page_sequencer:dual_press(x, y, x2, y2)
+    end
+  )
 end
 
 function save_paint_pattern(p)
