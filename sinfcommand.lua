@@ -1,5 +1,6 @@
 local grid_controller = include("sinfcommand/lib/grid_controller")
 local fn = include("sinfcommand/lib/functions")
+pattern_controller = include("sinfcommand/lib/pattern_controller")
 
 function initialise_64_table(d)
   local table_64 = {}
@@ -27,6 +28,12 @@ function initialise_default_channels()
   for i=1,16 do
     channels[i] = {
       trig_lock_banks = initialise_default_trig_lock_banks(),
+      working_pattern = {
+        trig_values = initialise_64_table(0),
+        lengths = initialise_64_table(-1),
+        note_values = initialise_64_table(-1),
+        velocity_values = initialise_64_table(-1)
+      },
       start_trig = {1, 4},
       end_trig = {16, 7},
       midi_channel_location = 1,

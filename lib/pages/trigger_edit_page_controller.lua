@@ -149,7 +149,8 @@ function trigger_edit_page_controller:register_press_handlers()
   press_handler:register(
   "pattern_trigger_edit_page",
   function(x, y)
-    return pattern_trigger_edit_page_sequencer:press(x, y)
+    pattern_trigger_edit_page_sequencer:press(x, y)
+    pattern_controller:update_working_patterns()
   end
   )
   press_handler:register(
@@ -291,7 +292,8 @@ function trigger_edit_page_controller:register_press_handlers()
   press_handler:register_dual(
     "pattern_trigger_edit_page",
     function(x, y, x2, y2)
-      return pattern_trigger_edit_page_sequencer:dual_press(x, y, x2, y2)
+      pattern_trigger_edit_page_sequencer:dual_press(x, y, x2, y2)
+      pattern_controller:update_working_patterns()
     end
   )
 end
@@ -313,6 +315,7 @@ function save_paint_pattern(p)
   end
   program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values = trigs
   program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths = lengths
+  pattern_controller:update_working_patterns()
 end
 
 function load_paint_pattern()

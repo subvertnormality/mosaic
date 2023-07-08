@@ -129,9 +129,7 @@ function Sequencer:dual_press(x, y, x2, y2)
       program.sequencer_patterns[1].channels[program.selected_channel].end_trig = {x2, y2}
     
     elseif (self.mode == "pattern") then
-      print("here")
       if (program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] == 1) then
-        print("yes")
         program.sequencer_patterns[1].patterns[program.selected_pattern].lengths[calc_grid_count(x, y)] = calc_grid_count(x2, y2) - calc_grid_count(x, y)
       end
     end

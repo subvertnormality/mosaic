@@ -12,56 +12,6 @@ function channel_edit_page_controller:init()
 
 end
 
-function channel_edit_page_controller:merge_patterns(merged_pattern, pattern)
-
-  for s = 1, 64 do
-
-    if pattern[s] == 1 then
-      merged_pattern[s] = 1
-    end
-  end
-
-  return merged_pattern
-  
-end
-
-function channel_edit_page_controller:get_and_merge_patterns()
-
-  local selected_sequencer_pattern = program.selected_sequencer_pattern
-  local merged_pattern = initialise_64_table(0)
-
-  for pattern in pairs(program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].selected_patterns) do
-    merged_pattern = channel_edit_page_controller:merge_patterns(merged_pattern, program.sequencer_patterns[selected_sequencer_pattern].patterns[pattern].trig_values)
-  end
-  
-  return merged_pattern
-end
-
-function channel_edit_page_controller:merge_lengths(merged_lengths, lengths)
-
-  for s = 1, 64 do
-
-    if lengths[s] >= 1 then
-      merged_lengths[s] = lengths[s]
-    end
-  end
-
-  return merged_lengths
-  
-end
-
-function channel_edit_page_controller:get_and_merge_lengths()
-
-  local selected_sequencer_pattern = program.selected_sequencer_pattern
-  local merged_lengths = initialise_64_table(-1)
-
-  -- TODO: implement merge strategies
-  for pattern in pairs(program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].selected_patterns) do
-    merged_lengths = channel_edit_page_controller:merge_lengths(merged_lengths, program.sequencer_patterns[selected_sequencer_pattern].patterns[pattern].lengths)
-  end
-  
-  return merged_lengths
-end
 
 function channel_edit_page_controller:update_channel_edit_page_ui()
   local selected_sequencer_pattern = program.selected_sequencer_pattern
@@ -82,10 +32,9 @@ function channel_edit_page_controller:register_draw_handlers()
     "channel_edit_page",
     function()
 
-      local trigs = channel_edit_page_controller:get_and_merge_patterns()
-      local lengths = channel_edit_page_controller:get_and_merge_lengths()
-
-      -- TODO: Save these in the channel's working pattern
+      local selected_sequencer_pattern = program.selected_sequencer_pattern
+      local trigs = program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].working_pattern.trig_values
+      local lengths = program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].working_pattern.lengths
 
       channel_edit_page_sequencer:draw(trigs, lengths)
     end
@@ -124,6 +73,7 @@ function channel_edit_page_controller:register_press_handlers()
     function(x, y)
       local result = channel_select_fader:press(x, y)
       program.selected_channel = channel_select_fader:get_value()
+      pattern_controller:update_working_patterns()
       channel_edit_page_controller:update_channel_edit_page_ui()
       return result
     end
@@ -131,7 +81,8 @@ function channel_edit_page_controller:register_press_handlers()
   press_handler:register_dual(
     "channel_edit_page",
     function(x, y, x2, y2)
-      return channel_edit_page_sequencer:dual_press(x, y, x2, y2)
+      channel_edit_page_sequencer:dual_press(x, y, x2, y2)
+      pattern_controller:update_working_patterns()
     end
   )
   for s = 1, 16 do  
@@ -147,7 +98,7 @@ function channel_edit_page_controller:register_press_handlers()
             fn.remove_from_set(program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].selected_patterns, x)
           end
         end
-        
+        pattern_controller:update_working_patterns()
       end
     )
   end
