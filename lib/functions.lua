@@ -82,4 +82,16 @@ function fn.scale(num, old_min, old_max, new_min, new_max)
   return ((num - old_min) / (old_max - old_min)) * (new_max - new_min) + new_min
 end
 
+function fn.add_to_set(set, value)
+  set[value] = true
+end
+
+function fn.is_in_set(set, value)
+  return set[value] ~= nil
+end
+
+function fn.remove_from_set(set, value)
+  set[value] = nil
+end
+
 return fn

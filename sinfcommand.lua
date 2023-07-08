@@ -30,6 +30,7 @@ function initialise_default_channels()
       start_trig = {1, 4},
       end_trig = {16, 7},
       midi_channel_location = 1,
+      selected_patterns = {},
       default_note = 60,
       merge_mode = "add",
       trig_lock_locations = {

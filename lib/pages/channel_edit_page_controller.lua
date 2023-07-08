@@ -29,15 +29,25 @@ function channel_edit_page_controller:get_and_merge_patterns()
 
   local selected_sequencer_pattern = program.selected_sequencer_pattern
   local merged_pattern = initialise_64_table(0)
-  
-  for s = 1, 16 do
-    if pattern_buttons["step"..s.."_pattern_button"]:get_state() == 2 then
-      merged_pattern = channel_edit_page_controller:merge_patterns(merged_pattern, program.sequencer_patterns[selected_sequencer_pattern].patterns[s].trig_values)
-      
-    end
+
+  for pattern in pairs(program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].selected_patterns) do
+    merged_pattern = channel_edit_page_controller:merge_patterns(merged_pattern, program.sequencer_patterns[selected_sequencer_pattern].patterns[pattern].trig_values)
   end
   
   return merged_pattern
+end
+
+function channel_edit_page_controller:update_channel_edit_page_ui()
+  local selected_sequencer_pattern = program.selected_sequencer_pattern
+
+  for s = 1, 16 do  
+    if fn.is_in_set(program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].selected_patterns, s) then
+      pattern_buttons["step"..s.."_pattern_button"]:set_state(2)
+    else
+      pattern_buttons["step"..s.."_pattern_button"]:set_state(1)
+    end
+  end
+
 end
 
 
@@ -86,6 +96,7 @@ function channel_edit_page_controller:register_press_handlers()
     function(x, y)
       local result = channel_select_fader:press(x, y)
       program.selected_channel = channel_select_fader:get_value()
+      channel_edit_page_controller:update_channel_edit_page_ui()
       return result
     end
   )
@@ -99,7 +110,16 @@ function channel_edit_page_controller:register_press_handlers()
     press_handler:register(
       "channel_edit_page",
       function(x, y)
+        local selected_sequencer_pattern = program.selected_sequencer_pattern
         pattern_buttons["step"..s.."_pattern_button"]:press(x, y)
+        if pattern_buttons["step"..s.."_pattern_button"]:is_this(x, y) then
+          if pattern_buttons["step"..s.."_pattern_button"]:get_state() == 2 then
+            fn.add_to_set(program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].selected_patterns, x)
+          else
+            fn.remove_from_set(program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].selected_patterns, x)
+          end
+        end
+        
       end
     )
   end
