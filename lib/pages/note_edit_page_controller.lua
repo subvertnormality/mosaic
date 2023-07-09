@@ -36,23 +36,12 @@ function note_edit_page_controller:init()
 end
 
 
-function note_edit_page_controller:value_from_note(note)
-  if note == -1 then return 14 end
-  return 14 - note
-end
-
-function note_edit_page_controller:note_from_value(val)
-  if val == -1 then return 0 end
-  return 14 - val
-end
-
-
 function note_edit_page_controller:reset_fader(s)
   local selected_sequencer_pattern = program.selected_sequencer_pattern
   local selected_pattern = program.selected_pattern
   faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
   faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)
-  local value = note_edit_page_controller:value_from_note(program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].note_values[s])
+  local value = fn.value_from_note(program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].note_values[s])
 
   if value then 
     faders["step"..s.."_fader"]:set_value(value) 
@@ -145,7 +134,7 @@ function note_edit_page_controller:register_press_handlers()
         if faders["step"..s.."_fader"]:is_this(x, y) then
           local selected_sequencer_pattern = program.selected_sequencer_pattern
           local selected_pattern = program.selected_pattern
-          local note = note_edit_page_controller:note_from_value(faders["step"..s.."_fader"]:get_value())
+          local note = fn.note_from_value(faders["step"..s.."_fader"]:get_value())
           program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].note_values[s] = note
         end
       end

@@ -56,17 +56,28 @@ function initialise_default_channels()
   return channels
 end
 
+function initialise_default_pattern()
+  
+  local pattern = {}
+  
+
+  pattern = {
+    trig_values = initialise_64_table(0),
+    lengths = initialise_64_table(-1),
+    note_values = initialise_64_table(-1),
+    velocity_values = initialise_64_table(-1)
+  }
+
+  
+  return pattern
+end
+
 function initialise_default_patterns()
   
   local patterns = {}
   
   for i=1,16 do
-    patterns[i] = {
-      trig_values = initialise_64_table(0),
-      lengths = initialise_64_table(-1),
-      note_values = initialise_64_table(-1),
-      velocity_values = initialise_64_table(-1)
-    }
+    patterns[i] = initialise_default_pattern()
   end
   
   return patterns

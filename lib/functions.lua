@@ -94,4 +94,14 @@ function fn.remove_from_set(set, value)
   set[value] = nil
 end
 
+function fn.value_from_note(note)
+  if note == -1 then return 14 end
+  return 14 - note
+end
+
+function fn.note_from_value(val)
+  if val == -1 then return 0 end
+  return 14 - val
+end
+
 return fn
