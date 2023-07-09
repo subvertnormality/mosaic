@@ -201,6 +201,55 @@ function notes_should_add_up_when_using_add_merge_mode()
   end
 end
 
+function notes_should_average_when_using_average_merge_mode() 
+  
+  initialise_program()
+  program.sequencer_patterns[1].channels[1].merge_mode = "average"
+  program.sequencer_patterns[1].patterns[1].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[2].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[3].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[4].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[1].note_values[1] = 7
+  program.sequencer_patterns[1].patterns[2].note_values[1] = 4
+  program.sequencer_patterns[1].patterns[3].note_values[1] = 3
+  program.sequencer_patterns[1].patterns[4].note_values[1] = 2
+  program.sequencer_patterns[1].channels[1].selected_patterns[4] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[2] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[1] = true
+
+  if pattern_controller:get_and_merge_patterns(1, "average").note_values[1] == math.ceil((7 + 4 + 2) / 3) then
+    pass("notes_should_average_when_using_average_merge_mode")
+  else
+    fail("notes_should_average_when_using_average_merge_mode")
+  end
+
+end
+
+function notes_should_subtract_when_using_subtract_merge_mode()
+
+  initialise_program()
+  program.sequencer_patterns[1].channels[1].merge_mode = "subtract"
+  program.sequencer_patterns[1].patterns[1].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[2].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[3].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[4].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[1].note_values[1] = 7
+  program.sequencer_patterns[1].patterns[2].note_values[1] = 4
+  program.sequencer_patterns[1].patterns[3].note_values[1] = 3
+  program.sequencer_patterns[1].patterns[4].note_values[1] = 2
+  program.sequencer_patterns[1].channels[1].selected_patterns[4] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[2] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[1] = true
+
+
+  if pattern_controller:get_and_merge_patterns(1, "subtract").note_values[1] == 7 - 4 - 2 then
+    pass("notes_should_subtract_when_using_subtract_merge_mode")
+  else
+    fail("notes_should_subtract_when_using_subtract_merge_mode")
+  end
+end
+
+
 function velocity_values_should_average_the_values_when_using_add_merge_mode()
 
   initialise_program()
@@ -360,11 +409,13 @@ function init()
   pattern_number_should_use_length_value_from_chosen_pattern_number()
   pattern_number_should_note_use_note_value_from_chosen_pattern_number_if_pattern_isnt_selected()
   notes_should_add_up_when_using_add_merge_mode()
+  notes_should_subtract_when_using_subtract_merge_mode()
+  notes_should_average_when_using_average_merge_mode()
   velocity_values_should_average_the_values_when_using_add_merge_mode()
   notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mode()
   notes_should_ignore_values_from_unselected_patterns_when_using_add_merge_mode()
   lengths_should_average_the_values_when_using_add_merge_mode()
   velocity_values_should_average_the_values_when_using_add_merge_mode()
   velocity_values_should_average_the_values_when_using_subtract_merge_mode()
-  -- velocity_values_should_subtract_the_values_when_using_subtract_merge_mode()
+
 end
