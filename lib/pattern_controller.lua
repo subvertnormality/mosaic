@@ -19,13 +19,37 @@ end
 function pattern_controller:get_and_merge_patterns(channel, merge_mode)
 
   local selected_sequencer_pattern = program.selected_sequencer_pattern
-  local merged_pattern = initialise_default_pattern()
-  local skip_bits = initialise_64_table(0)
+  local merged_pattern = fn.initialise_default_pattern()
+  local skip_bits = fn.initialise_64_table(0)
 
-  for pattern_number in pairs(program.sequencer_patterns[selected_sequencer_pattern].channels[channel].selected_patterns) do
+  for _, pattern_number in pairs(program.sequencer_patterns[selected_sequencer_pattern].channels[channel].selected_patterns) do
     local pattern = program.sequencer_patterns[selected_sequencer_pattern].patterns[pattern_number]
 
     for s = 1, 64 do
+
+      if pattern.note_values[s] == -1 then
+        pattern.note_values[s] = 0
+      end
+
+      if merged_pattern.note_values[s] == -1 then
+        merged_pattern.note_values[s] = 0
+      end
+
+      if pattern.lengths[s] == -1 then
+        pattern.lengths[s] = 0
+      end
+
+      if merged_pattern.lengths[s] == -1 then
+        merged_pattern.lengths[s] = 0
+      end
+
+      if pattern.velocity_values[s] == -1 then
+        pattern.velocity_values[s] = 0
+      end
+
+      if merged_pattern.velocity_values[s] == -1 then
+        merged_pattern.velocity_values[s] = 0
+      end
 
       if merge_mode == "skip" then
         if pattern.trig_values[s] == 1 and merged_pattern.trig_values[s] < 1 and skip_bits[s] < 1 then
@@ -35,8 +59,35 @@ function pattern_controller:get_and_merge_patterns(channel, merge_mode)
           skip_bits[s] = 1
         end
       elseif merge_mode == "pattern_number_"..pattern_number then
-        if pattern.trig_values[s] == 1 and merged_pattern.trig_values[s] < 1 then
+        if pattern.trig_values[s] == 1 then
           merged_pattern = pattern_controller:sync_pattern_values(merged_pattern, pattern, s)
+        end
+      elseif merge_mode == "add" then
+
+        if pattern.trig_values[s] == 1 then
+          merged_pattern.trig_values[s] = 1
+          merged_pattern.note_values[s] = merged_pattern.note_values[s] + pattern.note_values[s]
+          merged_pattern.lengths[s] = merged_pattern.lengths[s] + pattern.lengths[s]
+          merged_pattern.velocity_values[s] = merged_pattern.velocity_values[s] + pattern.velocity_values[s]
+        end
+      elseif merge_mode == "sub" then
+
+        if pattern.trig_values[s] == 1 then
+          merged_pattern.trig_values[s] = 1
+          merged_pattern.note_values[s] = merged_pattern.note_values[s] - pattern.note_values[s]
+          merged_pattern.lengths[s] = merged_pattern.lengths[s] - pattern.lengths[s]
+          merged_pattern.velocity_values[s] = merged_pattern.velocity_values[s] - pattern.velocity_values[s]
+
+          if merged_pattern.note_values[s] < 0 then
+            merged_pattern.note_values[s] = 0
+          end
+          if merged_pattern.lengths[s] < 1 then
+            merged_pattern.lengths[s] = 1
+          end
+          if merged_pattern.velocity_values[s] < 0 then
+            merged_pattern.velocity_values[s] = 0
+          end
+
         end
       elseif not string.match(merge_mode, "pattern_number_") then
         if pattern.trig_values[s] == 1 then

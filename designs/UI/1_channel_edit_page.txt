@@ -27,8 +27,8 @@
 	- Col 10: - 2 octaves
 	- Col 12: Numbered merge mode, 
 	- Col 13: Skip merge mode,
-	- Col 14: Add merge mode, 
-	- Col 15: Sub merge mode, 
+	- Col 14: Average merge mode, 
+	- Col 15: Add merge mode, 
 	- Col 16: Round robin merge mode.
    
 

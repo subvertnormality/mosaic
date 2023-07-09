@@ -104,4 +104,100 @@ function fn.note_from_value(val)
   return 14 - val
 end
 
+
+function fn.initialise_64_table(d)
+  local table_64 = {}
+  for i=1,64 do
+    table_64[i] = d
+  end
+  return table_64
+end
+
+
+
+function fn.initialise_default_trig_lock_banks()
+  local trig_lock_banks = {}
+  for i=1,8 do
+    trig_lock_banks[i] = fn.initialise_64_table(-1)
+  end
+  return trig_lock_banks
+end
+
+
+function fn.initialise_default_channels()
+  
+  local channels = {}
+  
+  for i=1,16 do
+    channels[i] = {
+      trig_lock_banks = fn.initialise_default_trig_lock_banks(),
+      working_pattern = {
+        trig_values = fn.initialise_64_table(0),
+        lengths = fn.initialise_64_table(-1),
+        note_values = fn.initialise_64_table(-1),
+        velocity_values = fn.initialise_64_table(-1)
+      },
+      start_trig = {1, 4},
+      end_trig = {16, 7},
+      midi_channel_location = 1,
+      selected_patterns = {},
+      default_note = 60,
+      merge_mode = "skip",
+      trig_lock_locations = {
+        {midi_channel = -1, midi_cc = -1 },
+        {midi_channel = -1, midi_cc = -1 },
+        {midi_channel = -1, midi_cc = -1 },
+        {midi_channel = -1, midi_cc = -1 },
+        {midi_channel = -1, midi_cc = -1 },
+        {midi_channel = -1, midi_cc = -1 },
+        {midi_channel = -1, midi_cc = -1 },
+        {midi_channel = -1, midi_cc = -1 }
+      }
+    }
+  end
+  
+  return channels
+end
+
+function fn.initialise_default_pattern()
+  
+  return {
+    trig_values = fn.initialise_64_table(0),
+    lengths = fn.initialise_64_table(-1),
+    note_values = fn.initialise_64_table(-1),
+    velocity_values = fn.initialise_64_table(-1)
+  }
+
+end
+
+function fn.initialise_default_patterns()
+  
+  local patterns = {}
+
+  for i=1,16 do
+    patterns[i] = fn.initialise_default_pattern()
+  end
+  
+  return patterns
+end
+
+
+function fn.initialise_default_sequencer_patterns()
+  
+  local sequencer_patterns = {}
+  
+  for i=1,64 do 
+    
+    sequencer_patterns[i] = {
+      global_pattern_length = 64,
+      scale = 0,
+      patterns = fn.initialise_default_patterns(),
+      channels = fn.initialise_default_channels()
+    }
+    
+  end
+  -- print(sequencer_patterns[1].patterns)
+  return sequencer_patterns
+end
+
 return fn

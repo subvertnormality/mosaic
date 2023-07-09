@@ -2,103 +2,6 @@ local grid_controller = include("sinfcommand/lib/grid_controller")
 local fn = include("sinfcommand/lib/functions")
 pattern_controller = include("sinfcommand/lib/pattern_controller")
 
-function initialise_64_table(d)
-  local table_64 = {}
-  for i=1,64 do
-    table_64[i] = d
-  end
-  return table_64
-end
-
-
-
-function initialise_default_trig_lock_banks()
-  local trig_lock_banks = {}
-  for i=1,8 do
-    trig_lock_banks[i] = initialise_64_table(-1)
-  end
-  return trig_lock_banks
-end
-
-
-function initialise_default_channels()
-  
-  local channels = {}
-  
-  for i=1,16 do
-    channels[i] = {
-      trig_lock_banks = initialise_default_trig_lock_banks(),
-      working_pattern = {
-        trig_values = initialise_64_table(0),
-        lengths = initialise_64_table(-1),
-        note_values = initialise_64_table(-1),
-        velocity_values = initialise_64_table(-1)
-      },
-      start_trig = {1, 4},
-      end_trig = {16, 7},
-      midi_channel_location = 1,
-      selected_patterns = {},
-      default_note = 60,
-      merge_mode = "skip",
-      trig_lock_locations = {
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 }
-      }
-    }
-  end
-  
-  return channels
-end
-
-function initialise_default_pattern()
-  
-  local pattern = {}
-  
-
-  pattern = {
-    trig_values = initialise_64_table(0),
-    lengths = initialise_64_table(-1),
-    note_values = initialise_64_table(-1),
-    velocity_values = initialise_64_table(-1)
-  }
-
-  
-  return pattern
-end
-
-function initialise_default_patterns()
-  
-  local patterns = {}
-  
-  for i=1,16 do
-    patterns[i] = initialise_default_pattern()
-  end
-  
-  return patterns
-end
-
-
-function initialise_default_sequencer_patterns()
-  
-  local sequencer_patterns = {}
-  
-  for i=1,64 do 
-    sequencer_patterns[i] = {
-      global_pattern_length = 64,
-      scale = 0,
-      patterns = initialise_default_patterns(),
-      channels = initialise_default_channels()
-    }
-  end
-  
-  return sequencer_patterns
-end
 
 pages = {
   channel_edit_page = 1,
@@ -116,7 +19,7 @@ program = {
   current_step = 1,
   scale_type = "sinfonion",
   scales = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-  sequencer_patterns = initialise_default_sequencer_patterns()
+  sequencer_patterns = fn.initialise_default_sequencer_patterns()
 }
 
 function save_state(pset_number)
