@@ -23,12 +23,12 @@
 	- Col 5: Pattern velocity edit. 
 	- Col 7: + 2 octaves
 	- Col 8: + 1 octave
-	- Col 9: - 1 octave
-	- Col 10: - 2 octaves
-	- Col 12: Numbered merge mode, 
-	- Col 13: Skip merge mode,
-	- Col 14: Average merge mode, 
-	- Col 15: Add merge mode, 
+	- Col 9: 0 octave
+	- Col 10: - 1 octave
+	- Col 11: - 2 octaves
+	- Col 13: Numbered merge mode, 
+	- Col 14: Skip merge mode,
+	- Col 15: Average/Add/Subtract merge modes, 
 	- Col 16: Round robin merge mode.
    
 
