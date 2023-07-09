@@ -28,8 +28,7 @@
 	- Col 11: - 2 octaves
 	- Col 13: Numbered merge mode, 
 	- Col 14: Skip merge mode,
-	- Col 15: Average/Add/Subtract merge modes, 
-	- Col 16: Round robin merge mode.
-   
+	- Col 15: Average merge modes, 
+	- Col 16: Add/Subtract merge modes,    
 
 https://tyleretters.github.io/GridStation/
