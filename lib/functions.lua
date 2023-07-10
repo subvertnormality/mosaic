@@ -96,12 +96,14 @@ end
 
 function fn.value_from_note(note)
   if note == -1 then return 14 end
-  return 14 - note
+  if note < -1 then return 0 end
+  return program.root_note + 14 - note
 end
 
 function fn.note_from_value(val)
-  if val == -1 then return 0 end
-  return 14 - val
+  if note == -1 then return program.root_note end
+  if note < -1 then return 0 end
+  return program.root_note + 14 - val
 end
 
 
@@ -141,7 +143,6 @@ function fn.initialise_default_channels()
       end_trig = {16, 7},
       midi_channel_location = 1,
       selected_patterns = {},
-      default_note = 60,
       merge_mode = "skip",
       trig_lock_locations = {
         {midi_channel = -1, midi_cc = -1 },

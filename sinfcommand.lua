@@ -18,6 +18,7 @@ program = {
   selected_channel = 1,
   current_step = 1,
   scale_type = "sinfonion",
+  root_note = 60,
   scales = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
   sequencer_patterns = fn.initialise_default_sequencer_patterns()
 }
