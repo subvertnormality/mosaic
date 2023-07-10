@@ -144,6 +144,7 @@ function fn.initialise_default_channels()
       midi_channel_location = 1,
       selected_patterns = {},
       merge_mode = "skip",
+      octave = 0,
       trig_lock_locations = {
         {midi_channel = -1, midi_cc = -1 },
         {midi_channel = -1, midi_cc = -1 },

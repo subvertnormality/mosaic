@@ -65,6 +65,86 @@ function skip_should_set_trig_step_to_one_when_only_one_step_is_one()
   end
 end
 
+function add_should_set_trig_step_to_one_when_only_one_step_is_one()
+
+  initialise_program()
+  program.sequencer_patterns[1].channels[1].merge_mode = "add"
+  program.sequencer_patterns[1].patterns[1].trig_values[1] = 0
+  program.sequencer_patterns[1].patterns[2].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[3].trig_values[1] = 0
+  program.sequencer_patterns[1].patterns[4].trig_values[1] = 0
+  program.sequencer_patterns[1].channels[1].selected_patterns[1] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[2] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[3] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[4] = true
+
+  if pattern_controller:get_and_merge_patterns(1, "add").trig_values[1] == 1 then
+    pass("add_should_set_trig_step_to_one_when_only_one_step_is_one")
+  else
+    fail("add_should_set_trig_step_to_one_when_only_one_step_is_one")
+  end
+end
+
+function subtract_should_set_trig_step_to_one_when_only_one_step_is_one()
+
+  initialise_program()
+  program.sequencer_patterns[1].channels[1].merge_mode = "add"
+  program.sequencer_patterns[1].patterns[1].trig_values[1] = 0
+  program.sequencer_patterns[1].patterns[2].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[3].trig_values[1] = 0
+  program.sequencer_patterns[1].patterns[4].trig_values[1] = 0
+  program.sequencer_patterns[1].channels[1].selected_patterns[1] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[2] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[3] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[4] = true
+
+  if pattern_controller:get_and_merge_patterns(1, "add").trig_values[1] == 1 then
+    pass("subtract_should_set_trig_step_to_one_when_only_one_step_is_one")
+  else
+    fail("subtract_should_set_trig_step_to_one_when_only_one_step_is_one")
+  end
+end
+
+function average_should_set_trig_step_to_one_when_only_one_step_is_one()
+
+  initialise_program()
+  program.sequencer_patterns[1].channels[1].merge_mode = "average"
+  program.sequencer_patterns[1].patterns[1].trig_values[1] = 0
+  program.sequencer_patterns[1].patterns[2].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[3].trig_values[1] = 0
+  program.sequencer_patterns[1].patterns[4].trig_values[1] = 0
+  program.sequencer_patterns[1].channels[1].selected_patterns[1] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[2] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[3] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[4] = true
+
+  if pattern_controller:get_and_merge_patterns(1, "average").trig_values[1] == 1 then
+    pass("average_should_set_trig_step_to_one_when_only_one_step_is_one")
+  else
+    fail("average_should_set_trig_step_to_one_when_only_one_step_is_one")
+  end
+end
+
+function add_should_set_trig_step_to_one_when_more_than_one_step_is_one()
+
+  initialise_program()
+  program.sequencer_patterns[1].channels[1].merge_mode = "add"
+  program.sequencer_patterns[1].patterns[1].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[2].trig_values[1] = 1
+  program.sequencer_patterns[1].patterns[3].trig_values[1] = 0
+  program.sequencer_patterns[1].patterns[4].trig_values[1] = 1
+  program.sequencer_patterns[1].channels[1].selected_patterns[1] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[2] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[3] = true
+  program.sequencer_patterns[1].channels[1].selected_patterns[4] = true
+
+  if pattern_controller:get_and_merge_patterns(1, "add").trig_values[1] == 1 then
+    pass("add_should_set_trig_step_to_one_when_more_than_one_step_is_one")
+  else
+    fail("add_should_set_trig_step_to_one_when_more_than_one_step_is_one")
+  end
+end
+
 function skip_should_set_trig_step_to_zero_when_more_than_one_step_is_one()
 
   initialise_program()
@@ -468,6 +548,10 @@ end
 function init()
   skip_should_set_trig_step_to_zero_when_all_steps_are_zero()
   skip_should_set_trig_step_to_one_when_only_one_step_is_one()
+  add_should_set_trig_step_to_one_when_only_one_step_is_one()
+  subtract_should_set_trig_step_to_one_when_only_one_step_is_one()
+  average_should_set_trig_step_to_one_when_only_one_step_is_one()
+  add_should_set_trig_step_to_one_when_more_than_one_step_is_one()
   skip_should_set_trig_step_to_zero_when_more_than_one_step_is_one()
   selected_patterns_set_order_should_not_matter()
   pattern_number_should_use_note_value_from_chosen_pattern_number()
