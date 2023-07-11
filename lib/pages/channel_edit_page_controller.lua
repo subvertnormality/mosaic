@@ -207,7 +207,6 @@ function channel_edit_page_controller:register_press_handlers()
       end
     )
   end
-  -- TODO: Double press shortcut for channel pattern number merge mode
   press_handler:register(
     "channel_edit_page",
     function(x, y)
@@ -307,6 +306,22 @@ function channel_edit_page_controller:register_press_handlers()
         program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].octave = channel_octave_fader:get_value() - 3
       end
 
+    end
+  )
+  press_handler:register_dual(
+    "channel_edit_page",
+    function(x, y, x2, y2)
+      if pattern_buttons["step"..x.."_pattern_button"]:is_this(x, y) then
+        if channel_pattern_number_merge_mode_button:is_this(x2, y2) then
+          channel_pattern_number_merge_mode_button:set_state(x + 1)
+          program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].merge_mode = "pattern_number_"..x
+          pattern_controller:update_working_patterns()
+          skip_merge_mode_button:set_state(1)
+          average_merge_mode_button:set_state(1)
+          subadd_merge_mode_button:set_state(1)
+          print(program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].merge_mode)
+        end
+      end
     end
   )
 end
