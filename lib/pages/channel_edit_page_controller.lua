@@ -319,7 +319,6 @@ function channel_edit_page_controller:register_press_handlers()
           skip_merge_mode_button:set_state(1)
           average_merge_mode_button:set_state(1)
           subadd_merge_mode_button:set_state(1)
-          print(program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].merge_mode)
         end
       end
     end
