@@ -37,7 +37,7 @@ function pattern_controller:get_and_merge_patterns(channel, merge_mode)
 
 
       local pattern_note_value = pattern.note_values[s] == -1 and 0 or pattern.note_values[s]
-      local merged_pattern_note_value = merged_pattern.note_values[s] == -1 and 0 or merged_pattern.note_values[s]
+      local merged_pattern_note_value = merged_pattern.note_values[s] == 0 or merged_pattern.note_values[s]
       local pattern_length = pattern.lengths[s] == -1 and 0 or pattern.lengths[s]
       local merged_pattern_length = merged_pattern.lengths[s] == -1 and 0 or merged_pattern.lengths[s]
       local pattern_velocity_value = pattern.velocity_values[s] == -1 and 0 or pattern.velocity_values[s]

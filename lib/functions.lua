@@ -95,17 +95,12 @@ function fn.remove_from_set(set, value)
 end
 
 function fn.value_from_note(note)
-  if note == -1 then return 14 end
-  if note < -1 then return 0 end
-  return program.root_note + 14 - note
+  return 14 - note
 end
 
 function fn.note_from_value(val)
-  if note == -1 then return program.root_note end
-  if note < -1 then return 0 end
-  return program.root_note + 14 - val
+  return 14 - val
 end
-
 
 function fn.initialise_64_table(d)
   local table_64 = {}
@@ -115,8 +110,6 @@ function fn.initialise_64_table(d)
   return table_64
 end
 
-
-
 function fn.initialise_default_trig_lock_banks()
   local trig_lock_banks = {}
   for i=1,8 do
@@ -124,7 +117,6 @@ function fn.initialise_default_trig_lock_banks()
   end
   return trig_lock_banks
 end
-
 
 function fn.initialise_default_channels()
   
@@ -136,7 +128,7 @@ function fn.initialise_default_channels()
       working_pattern = {
         trig_values = fn.initialise_64_table(0),
         lengths = fn.initialise_64_table(-1),
-        note_values = fn.initialise_64_table(-1),
+        note_values = fn.initialise_64_table(0),
         velocity_values = fn.initialise_64_table(-1)
       },
       start_trig = {1, 4},
@@ -166,7 +158,7 @@ function fn.initialise_default_pattern()
   return {
     trig_values = fn.initialise_64_table(0),
     lengths = fn.initialise_64_table(-1),
-    note_values = fn.initialise_64_table(-1),
+    note_values = fn.initialise_64_table(0),
     velocity_values = fn.initialise_64_table(-1)
   }
 
