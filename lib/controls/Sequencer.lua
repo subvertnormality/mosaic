@@ -50,11 +50,11 @@ function Sequencer:draw(trigs, lengths)
   local selected_sequencer_pattern = program.selected_sequencer_pattern
   local selected_pattern = program.selected_pattern
 
-  local start_x = program.sequencer_patterns[1].channels[program.selected_channel].start_trig[1]
-  local start_y = program.sequencer_patterns[1].channels[program.selected_channel].start_trig[2]
+  local start_x = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].start_trig[1]
+  local start_y = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].start_trig[2]
 
-  local end_x = program.sequencer_patterns[1].channels[program.selected_channel].end_trig[1]
-  local end_y = program.sequencer_patterns[1].channels[program.selected_channel].end_trig[2]
+  local end_x = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].end_trig[1]
+  local end_y = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].end_trig[2]
 
   for y = self.y, self.y + 3 do
     for x = 1, 16 do
@@ -112,9 +112,10 @@ end
 
 function Sequencer:press(x, y)
   if (y >= self.y and y <= self.y + 3) then
-    
+
     if (self.mode == "pattern") then
-      program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] = 1 - program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] 
+      program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] = 1 - program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)]
+      program.sequencer_patterns[program.selected_sequencer_pattern].active = true
     end
     
   end
@@ -125,12 +126,12 @@ function Sequencer:dual_press(x, y, x2, y2)
   if (y >= self.y and y <= self.y + 3 and y2 >= self.y and y2 <= self.y + 3) then
     
     if (self.mode == "channel") then
-      program.sequencer_patterns[1].channels[program.selected_channel].start_trig = {x, y}
-      program.sequencer_patterns[1].channels[program.selected_channel].end_trig = {x2, y2}
+      program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].start_trig = {x, y}
+      program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].end_trig = {x2, y2}
     
     elseif (self.mode == "pattern") then
-      if (program.sequencer_patterns[1].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] == 1) then
-        program.sequencer_patterns[1].patterns[program.selected_pattern].lengths[calc_grid_count(x, y)] = calc_grid_count(x2, y2) - calc_grid_count(x, y)
+      if (program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].trig_values[calc_grid_count(x, y)] == 1) then
+        program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].lengths[calc_grid_count(x, y)] = calc_grid_count(x2, y2) - calc_grid_count(x, y)
       end
     end
     

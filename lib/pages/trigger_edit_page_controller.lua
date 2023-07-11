@@ -320,6 +320,7 @@ function save_paint_pattern(p)
   program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values = trigs
   program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths = lengths
   pattern_controller:update_working_patterns()
+  program.sequencer_patterns[selected_sequencer_pattern].active = true
 end
 
 function load_paint_pattern()

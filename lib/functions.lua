@@ -180,9 +180,10 @@ function fn.initialise_default_sequencer_patterns()
   
   local sequencer_patterns = {}
   
-  for i=1,64 do 
+  for i=1,96 do 
     
     sequencer_patterns[i] = {
+      active = false,
       global_pattern_length = 64,
       scale = 0,
       patterns = fn.initialise_default_patterns(),
@@ -190,7 +191,7 @@ function fn.initialise_default_sequencer_patterns()
     }
     
   end
-  -- print(sequencer_patterns[1].patterns)
+
   return sequencer_patterns
 end
 
