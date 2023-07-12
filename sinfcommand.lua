@@ -1,5 +1,6 @@
 local grid_controller = include("sinfcommand/lib/grid_controller")
 local fn = include("sinfcommand/lib/functions")
+local clock_controller = include("sinfcommand/lib/clock_controller")
 pattern_controller = include("sinfcommand/lib/pattern_controller")
 
 
@@ -16,9 +17,10 @@ program = {
   selected_sequencer_pattern = 1,
   selected_pattern = 1,
   selected_channel = 1,
-  current_step = 1,
   scale_type = "sinfonion",
   root_note = 60,
+  bpm = 120,
+  current_step = 1,
   scales = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
   sequencer_patterns = fn.initialise_default_sequencer_patterns()
 }
@@ -47,6 +49,8 @@ function load_state(pset_number)
 end
 
 function init()
+  clock_controller.init()
+  clock_controller.start()
 
   params.action_write = function(filename, name, pset_number)
     if pset_number == nil then

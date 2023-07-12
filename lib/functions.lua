@@ -137,6 +137,8 @@ function fn.initialise_default_channels()
       selected_patterns = {},
       merge_mode = "skip",
       octave = 0,
+      clock_division = 1,
+      current_step = 1,
       trig_lock_locations = {
         {midi_channel = -1, midi_cc = -1 },
         {midi_channel = -1, midi_cc = -1 },
@@ -194,5 +196,14 @@ function fn.initialise_default_sequencer_patterns()
 
   return sequencer_patterns
 end
+
+function fn.round(num) 
+  return math.floor(num + 0.5)
+end
+
+function fn.calc_grid_count(x, y)
+  return ((y - 4) * 16) + x
+end
+
 
 return fn
