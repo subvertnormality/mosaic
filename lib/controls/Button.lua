@@ -41,7 +41,7 @@ function Button:blink()
         self.bright_mod = 0
         self.bstate = false
       else
-        self.bright_mod = 5
+        self.bright_mod = 6
         self.bstate = true
       end
       fn.dirty_grid(true)

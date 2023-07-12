@@ -3,6 +3,8 @@ local fn = include 'lib/functions'
 
 local clock_controller = {}
 
+local playing = false
+
 for i = 1, 16 do
   clock_controller["channel_"..i.."_clock"] = beatclock.new()
 end
@@ -55,10 +57,31 @@ end
 
 function clock_controller:start() 
   master_clock:start()
+  playing = true
   for i = 1, 16 do
     clock_controller["channel_"..i.."_clock"]:start()
   end
 end
 
+function clock_controller:stop()
+  master_clock:stop()
+  playing = false
+  for i = 1, 16 do
+    clock_controller["channel_"..i.."_clock"]:stop()
+  end
+end
+
+function clock_controller:is_playing()
+  return playing
+end
+
+function clock_controller:reset() 
+  master_clock:reset()
+  for i = 1, 16 do
+    clock_controller["channel_"..i.."_clock"]:reset()
+    program.sequencer_patterns[program.selected_sequencer_pattern].channels[i].current_step = 1
+  end
+  program.current_step = 1
+end
 
 return clock_controller

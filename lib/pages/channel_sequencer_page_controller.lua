@@ -8,7 +8,7 @@ function channel_sequencer_page_controller:init()
   
   for s = 1, 96 do
     channel_pattern_buttons["step"..s.."_sequencer_pattern_button"] = Button:new((s-1) % 16 + 1 , math.floor((s-1) / 16) + 1, {
-      {"Sequencer pattern "..s.." off", 3},
+      {"Sequencer pattern "..s.." off", 2},
       {"Sequencer pattern "..s.." on", 7},
       {"Sequencer pattern "..s.." active", 15},
     })

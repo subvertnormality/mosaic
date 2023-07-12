@@ -1,6 +1,7 @@
 local grid_controller = include("sinfcommand/lib/grid_controller")
 local fn = include("sinfcommand/lib/functions")
-local clock_controller = include("sinfcommand/lib/clock_controller")
+
+clock_controller = include("sinfcommand/lib/clock_controller")
 pattern_controller = include("sinfcommand/lib/pattern_controller")
 
 
@@ -50,7 +51,6 @@ end
 
 function init()
   clock_controller.init()
-  clock_controller.start()
 
   params.action_write = function(filename, name, pset_number)
     if pset_number == nil then

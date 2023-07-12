@@ -3,6 +3,7 @@ local press_handler = {}
 -- Create a table for the handlers
 press_handler.handlers = {}
 press_handler.dual_handlers = {}
+press_handler.long_handlers = {}
 
 -- Register a function with a page
 function press_handler:register(page, func)
@@ -24,6 +25,17 @@ function press_handler:register_dual(page, func)
 
   -- Add the function to the list of handlers for this page
   table.insert(self.dual_handlers[page], func)
+end
+
+
+function press_handler:register_long(page, func)
+  -- If no functions have been registered for this page yet, create a new list
+  if self.long_handlers[page] == nil then
+    self.long_handlers[page] = {}
+  end
+
+  -- Add the function to the list of handlers for this page
+  table.insert(self.long_handlers[page], func)
 end
 
 
@@ -58,6 +70,26 @@ function press_handler:handle_dual(page, x, y, x2, y2)
   -- Otherwise, call all functions registered for this page
   for _, func in ipairs(self.dual_handlers[fn.find_key(pages, page)]) do
     func(x, y, x2, y2)
+  end
+
+end
+
+function press_handler:handle_long(page, x, y)
+
+
+  -- Call all menu press handlers
+  for _, func in ipairs(self.long_handlers["menu"]) do
+    func(x, y)
+  end
+
+  -- If no functions have been registered for this page, do nothing
+  if self.long_handlers[fn.find_key(pages, page)] == nil then
+    return
+  end
+
+  -- Otherwise, call all functions registered for this page
+  for _, func in ipairs(self.long_handlers[fn.find_key(pages, page)]) do
+    func(x, y)
   end
 
 end
