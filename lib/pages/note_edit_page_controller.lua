@@ -137,6 +137,7 @@ function note_edit_page_controller:register_press_handlers()
           local note = fn.note_from_value(faders["step"..s.."_fader"]:get_value())
           program.sequencer_patterns[program.selected_sequencer_pattern].active = true
           program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].note_values[s] = note
+          pattern_controller:update_working_patterns()
         end
       end
     )

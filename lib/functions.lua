@@ -127,13 +127,14 @@ function fn.initialise_default_channels()
       trig_lock_banks = fn.initialise_default_trig_lock_banks(),
       working_pattern = {
         trig_values = fn.initialise_64_table(0),
-        lengths = fn.initialise_64_table(-1),
+        lengths = fn.initialise_64_table(1),
         note_values = fn.initialise_64_table(0),
-        velocity_values = fn.initialise_64_table(-1)
+        velocity_values = fn.initialise_64_table(100)
       },
       start_trig = {1, 4},
       end_trig = {16, 7},
-      midi_channel_location = 1,
+      midi_channel = 1,
+      midi_device = 9,
       selected_patterns = {},
       merge_mode = "skip",
       octave = 0,
@@ -159,9 +160,9 @@ function fn.initialise_default_pattern()
   
   return {
     trig_values = fn.initialise_64_table(0),
-    lengths = fn.initialise_64_table(-1),
+    lengths = fn.initialise_64_table(1),
     note_values = fn.initialise_64_table(0),
-    velocity_values = fn.initialise_64_table(-1)
+    velocity_values = fn.initialise_64_table(100)
   }
 
 end

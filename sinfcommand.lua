@@ -21,6 +21,7 @@ local function load_project(pth)
   
   clock_controller:stop()
   clock_controller:reset()
+  midi_controller:kill_all_midi()
 
   if string.find(pth, '.ptn') ~= nil then
     local saved = tab.load(pth)
@@ -39,6 +40,7 @@ local function save_project(txt)
 
   clock_controller:stop()
   clock_controller:reset()
+  midi_controller:kill_all_midi()
 
   if txt then
     tab.save({ txt, program }, norns.state.data .. txt ..".ptn")
@@ -56,7 +58,7 @@ function load_new_project()
     selected_channel = 1,
     scale_type = "sinfonion",
     root_note = 60,
-    bpm = 120,
+    bpm = 40,
     current_step = 1,
     scales = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     sequencer_patterns = fn.initialise_default_sequencer_patterns()
