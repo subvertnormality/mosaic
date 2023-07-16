@@ -133,7 +133,7 @@ function fn.initialise_default_channels()
       },
       start_trig = {1, 4},
       end_trig = {16, 7},
-      midi_channel = 1,
+      midi_channel = i,
       midi_device = 9,
       selected_patterns = {},
       merge_mode = "skip",

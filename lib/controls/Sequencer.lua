@@ -100,7 +100,7 @@ function Sequencer:draw(trigs, lengths)
         if (length > 1 and in_step_length) then
           for lx = grid_count + 1, grid_count + length - 1 do
             if (trigs[lx] < 1 and lx < 65) then
-              g:led((lx % 16), 4 + (lx // 16), 5)
+              g:led((lx % 16), 4 + ((lx - 1) // 16 ), 5)
             else
               break
             end
@@ -143,7 +143,9 @@ function Sequencer:dual_press(x, y, x2, y2)
     
     elseif (self.mode == "pattern") then
       if (program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].trig_values[fn.calc_grid_count(x, y)] == 1) then
-        program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].lengths[fn.calc_grid_count(x, y)] = fn.calc_grid_count(x2, y2) - fn.calc_grid_count(x, y)
+        if (fn.calc_grid_count(x2, y2) - fn.calc_grid_count(x, y) > 0) then
+          program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].lengths[fn.calc_grid_count(x, y)] = fn.calc_grid_count(x2, y2) - fn.calc_grid_count(x, y)
+        end
       end
     end
     
