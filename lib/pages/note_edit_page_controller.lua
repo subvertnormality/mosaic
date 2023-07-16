@@ -21,9 +21,9 @@ function note_edit_page_controller:reset_buttons()
   step17to32_fade_button:set_value(horizontal_offset)
   step33to48_fade_button:set_value(horizontal_offset)
   step49to64_fade_button:set_value(horizontal_offset)
-  note1to7_fade_button:set_value(vertical_offset)
+  note1to7_fade_button:set_value(14 - vertical_offset)
   note8to14_fade_button:set_value(vertical_offset)
-  note15to21_fade_button:set_value(vertical_offset)
+  note15to21_fade_button:set_value(14 - vertical_offset)
 end
 
 function note_edit_page_controller:init()
@@ -189,12 +189,12 @@ function note_edit_page_controller:register_press_handlers()
   press_handler:register(
     "pattern_note_edit_page",
     function(x, y)
-      if (note1to7_fade_button:is_this(x, y)) then
+      if (note15to21_fade_button:is_this(x, y)) then
         vertical_offset = 0
         note_edit_page_controller:reset_all_controls()
       end
 
-      return note1to7_fade_button:press(x, y)
+      return note15to21_fade_button:press(x, y)
     end
   )
   press_handler:register(
@@ -211,12 +211,12 @@ function note_edit_page_controller:register_press_handlers()
   press_handler:register(
     "pattern_note_edit_page",
     function(x, y)
-      if (note15to21_fade_button:is_this(x, y)) then
+      if (note1to7_fade_button:is_this(x, y)) then
         vertical_offset = 14
         note_edit_page_controller:reset_all_controls()
       end
 
-      return note15to21_fade_button:press(x, y)
+      return note1to7_fade_button:press(x, y)
     end
   )
 end

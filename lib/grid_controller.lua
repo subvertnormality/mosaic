@@ -88,7 +88,7 @@ function register_press_handlers()
   "menu",
   function(x, y)
     if (y == 8) then
-      if (x < 7) then
+      if (x < 6) then
         if program.selected_page ~= x then
           program.selected_page = x
           grid_controller:set_menu_button_state()
@@ -109,7 +109,7 @@ function register_press_handlers()
     "menu",
     function(x, y)
       if (y == 8) then
-        if (x < 7) then
+        if (x < 6) then
           if program.selected_page == x then
             clock_controller:reset()
           end

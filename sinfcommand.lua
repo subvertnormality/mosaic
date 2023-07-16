@@ -2,6 +2,7 @@ local grid_controller = include("sinfcommand/lib/grid_controller")
 local fn = include("sinfcommand/lib/functions")
 local fileselect = require('fileselect')
 local textentry = require('textentry')
+local musicutil = require("musicutil")
 
 clock_controller = include("sinfcommand/lib/clock_controller")
 pattern_controller = include("sinfcommand/lib/pattern_controller")
@@ -51,13 +52,16 @@ local function save_project(txt)
 end
 
 function load_new_project()
+
+  local root_note = 60
   program = {
     selected_page = pages.channel_edit_page,
     selected_sequencer_pattern = 1,
     selected_pattern = 1,
     selected_channel = 1,
     scale_type = "sinfonion",
-    root_note = 60,
+    root_note = root_note,
+    default_scale = musicutil.generate_scale_of_length(root_note, "minor", 7),
     bpm = 40,
     current_step = 1,
     scales = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -66,6 +70,7 @@ function load_new_project()
   clock_controller.init()
   grid_clock_id = clock.run(grid_controller.grid_redraw_clock)
   fn.dirty_grid(true)
+
 end
 
 function init()

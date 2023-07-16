@@ -1,4 +1,5 @@
 local midi_controller = include("lib/midi_controller")
+local quantiser = include("lib/quantiser")
 
 local step_handler = {}
 local length_tracker = {}
@@ -14,10 +15,12 @@ function step_handler:handle(c)
   local length_value = channel.working_pattern.lengths[current_step]
   local midi_channel = channel.midi_channel
   local midi_device = channel.midi_device
+  local octave_mod = channel.octave
 
   if trig_value == 1 then
-    midi_controller:note_on(note_value + program.root_note, velocity_value, midi_channel, midi_device)
-    table.insert(length_tracker, {note = note_value + program.root_note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value})
+    local note = quantiser:process(note_value, octave_mod)
+    midi_controller:note_on(note, velocity_value, midi_channel, midi_device)
+    table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value})
   end
 
 end
