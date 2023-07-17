@@ -77,7 +77,7 @@ function channel_edit_page_controller:init()
 
   channel_edit_page_controller:update_button_states() 
   channel_octave_fader:set_value(program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].octave + 3)
-
+  channel_edit_page_controller:update_channel_edit_page_ui()
 end
 
 

@@ -57,6 +57,8 @@ function press_handler:handle(page, x, y)
     func(x, y)
   end
 
+  autosave_reset() 
+
 end
 
 -- Call all functions registered with a page
@@ -71,6 +73,8 @@ function press_handler:handle_dual(page, x, y, x2, y2)
   for _, func in ipairs(self.dual_handlers[fn.find_key(pages, page)]) do
     func(x, y, x2, y2)
   end
+
+  autosave_reset() 
 
 end
 
@@ -91,6 +95,8 @@ function press_handler:handle_long(page, x, y)
   for _, func in ipairs(self.long_handlers[fn.find_key(pages, page)]) do
     func(x, y)
   end
+
+  autosave_reset() 
 
 end
 

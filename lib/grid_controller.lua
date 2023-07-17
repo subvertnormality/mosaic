@@ -19,6 +19,8 @@ local trigger_edit_button = Button:new(3, 8)
 local note_edit_button = Button:new(4, 8)
 local velocity_edit_button = Button:new(5, 8)
 
+local splash_screen_active = false
+
 local menu_buttons = {}
 
 g = grid.connect()
@@ -117,6 +119,16 @@ function register_press_handlers()
       end
     end
     )
+end
+
+function grid_controller.splash_screen(frame) 
+  for x = 1, 16 do
+    for y = 1, 8 do
+      local brightness = 2 * math.abs((x + y + frame) % 16 - 8)
+      g:led(x, y, brightness)
+    end
+  end
+  fn.dirty_grid(true)
 end
 
 function grid_controller.init()
@@ -221,13 +233,29 @@ function grid_controller:grid_redraw()
   g:refresh()
 end
 
+function grid_controller:splash_screen_off()
+  splash_screen_active = false
+end
+
+function grid_controller:splash_screen_on()
+  splash_screen_active = true
+end
+
+local splash_screen_frame = 1
 
 function grid_controller.grid_redraw_clock()
+
   while true do
     clock.sleep(1 / 30)
-    if fn.dirty_grid() == true then
-      grid_controller:grid_redraw()
-      fn.dirty_grid(false)
+    if splash_screen_active == true then
+      grid_controller.splash_screen(splash_screen_frame)
+      splash_screen_frame = splash_screen_frame + 1
+      g:refresh()
+    else
+      if fn.dirty_grid() == true then
+        grid_controller:grid_redraw()
+        fn.dirty_grid(false)
+      end
     end
   end
 end
