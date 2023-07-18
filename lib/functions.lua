@@ -136,6 +136,8 @@ function fn.initialise_default_channels()
       midi_channel = i,
       midi_device = 1,
       selected_patterns = {},
+      default_scale = 0,
+      step_scales = fn.initialise_64_table(0),
       merge_mode = "skip",
       octave = 0,
       clock_division = 1,

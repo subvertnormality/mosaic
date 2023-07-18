@@ -29,23 +29,24 @@ function clock_controller:init()
       local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[i]
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
-
-      step_handler:handle(i)
+      local current_step = channel.current_step
 
       if channel.current_step < start_trig then
         channel.current_step = start_trig
+        current_step = start_trig
       end
 
+      step_handler:handle(i, current_step)
     
-      channel.current_step = channel.current_step + 1
+      channel.current_step = current_step + 1
 
       if channel.current_step > end_trig then
         channel.current_step = start_trig
       end
 
-      if program.selected_channel == i then
-        fn.dirty_grid(true)
-      end
+
+      fn.dirty_grid(true)
+
     end
     master_clock.on_step = function () 
 

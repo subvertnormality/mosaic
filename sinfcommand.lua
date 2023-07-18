@@ -65,10 +65,10 @@ local function load_new_project()
     selected_channel = 1,
     scale_type = "sinfonion",
     root_note = root_note,
-    default_scale = musicutil.generate_scale_of_length(root_note, "minor", 7),
-    bpm = 40,
+    default_scale = 1,
+    bpm = 10,
     current_step = 1,
-    scales = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    scales = {musicutil.generate_scale_of_length(root_note, "major", 7), {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
     sequencer_patterns = fn.initialise_default_sequencer_patterns()
   }
 

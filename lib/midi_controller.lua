@@ -15,6 +15,13 @@ function midi_controller:init()
 
 end
 
+function midi_controller:all_off(id)
+
+  for note = 0, 127 do
+    midi_devices[id]:note_off(note)
+  end
+
+end
 
 
 function midi_controller:note_off(note, velocity, channel, device)
@@ -67,6 +74,7 @@ function midi_controller:stop()
   for id = 1, #midi.vports do
     if midi_devices[id] ~= nil then
       midi_devices[id]:stop()
+      midi_controller:all_off(id)
     end
   end
 end

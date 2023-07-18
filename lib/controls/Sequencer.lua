@@ -49,14 +49,16 @@ function Sequencer:draw(trigs, lengths)
 
   local start_x = channel.start_trig[1]
   local start_y = channel.start_trig[2]
+  local start_step = fn.calc_grid_count(start_x, start_y)
 
   local end_x = channel.end_trig[1]
   local end_y = channel.end_trig[2]
+  local end_step = fn.calc_grid_count(end_x, end_y)
 
   for y = self.y, self.y + 3 do
     for x = 1, 16 do
 
-      local in_step_length = fn.calc_grid_count(start_x, start_y) <= fn.calc_grid_count(x, y) and fn.calc_grid_count(end_x, end_y) >= fn.calc_grid_count(x, y)
+      local in_step_length = start_step <= fn.calc_grid_count(x, y) and end_step >= fn.calc_grid_count(x, y)
 
       if (self.mode == "channel") then
 
@@ -70,15 +72,15 @@ function Sequencer:draw(trigs, lengths)
     end
   end
 
+  local px = 0
+  local py = self.y + 3
+
   for y = self.y, self.y + 3 do
     for x = 1, 16 do    
       local grid_count = fn.calc_grid_count(x, y)
 
-      local in_step_length = fn.calc_grid_count(start_x, start_y) <= fn.calc_grid_count(x, y) and fn.calc_grid_count(end_x, end_y) >= fn.calc_grid_count(x, y)
+      local in_step_length = start_step <= fn.calc_grid_count(x, y) and end_step >= fn.calc_grid_count(x, y)
 
-
-
-    
       if (self.unsaved_grid[grid_count]) then
         g:led(x, y, 15 - self.bclock.bright_mod)
       end
@@ -91,6 +93,7 @@ function Sequencer:draw(trigs, lengths)
         else
           g:led(x, y, 15) 
         end
+
         if (self.unsaved_grid[grid_count]) then
           g:led(x, y, 0 + self.bclock.bright_mod)
         end
@@ -111,9 +114,17 @@ function Sequencer:draw(trigs, lengths)
 
       if channel.current_step == grid_count then
         if (self.mode == "channel") then
-          g:led(x, y, 10)
+          if fn.calc_grid_count(px, py) < start_step then 
+            g:led(end_x, end_y, 10)
+          else
+            g:led(px, py, 10)
+          end
         end
       end
+
+      px = x
+      py = y
+
     end
     fn.dirty_grid(true)
   end
