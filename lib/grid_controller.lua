@@ -31,11 +31,12 @@ function g.key(x, y, z)
 
     if grid_controller.push.active ~= false then
       if grid_controller.push.active[1] ~= x or grid_controller.push.active[2] ~= y then
-        grid_controller:dual_press(grid_controller.push.active[1], grid_controller.push.active[2], x, y)
+        grid_controller.push[x][y].state = "dual_pressed"
+        grid_controller.push[grid_controller.push.active[1]][grid_controller.push.active[2]].state = "dual_pressed"
       end
+    else
+      grid_controller.push.active = {x, y}
     end
-    
-    grid_controller.push.active = {x, y}
 
     grid_controller.counter[x][y] = clock.run(grid_controller.long_press, g, x, y)
   elseif z == 0 then -- otherwise, if a grid key is released...
@@ -48,7 +49,13 @@ function g.key(x, y, z)
         grid_controller.push.active = false
 
       elseif grid_controller.push[x][y].state == "pressed" then
+        grid_controller.push[x][y].state = "inactive"
         grid_controller:short_press(x,y) -- and execute a short press instead.
+      elseif grid_controller.push[x][y].state == "dual_pressed" then
+        grid_controller:dual_press(grid_controller.push.active[1], grid_controller.push.active[2], x, y)
+        grid_controller.push[x][y].state = "inactive"
+        grid_controler.push[grid_controller.push.active[1]][grid_controller.push.active[2]].state = "inactive"
+        grid_controller.push.active = false
       end
     end
   end
@@ -198,7 +205,7 @@ end
 
 
 function grid_controller:long_press(x, y)
-  clock.sleep(.5)
+  clock.sleep(1)
   grid_controller.push[x][y].state = "long_pressed"
   press_handler:handle_long(program.selected_page, x, y)
   fn.dirty_grid(true)

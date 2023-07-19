@@ -88,7 +88,11 @@ function Sequencer:draw(trigs, lengths)
       if (trigs[grid_count] > 0) then
         if (self.mode == "channel") then
           if (in_step_length) then
-            g:led(x, y, 15) 
+              if fn.calc_grid_count(x, y) == end_step and channel.current_step == start_step then 
+                g:led(end_x, end_y, 10)
+              else
+                g:led(x, y, 15) 
+              end
           end
         else
           g:led(x, y, 15) 
@@ -114,9 +118,7 @@ function Sequencer:draw(trigs, lengths)
 
       if channel.current_step == grid_count then
         if (self.mode == "channel") then
-          if fn.calc_grid_count(px, py) < start_step then 
-            g:led(end_x, end_y, 10)
-          else
+          if fn.calc_grid_count(px, py) >= start_step then 
             g:led(px, py, 10)
           end
         end
@@ -155,8 +157,20 @@ function Sequencer:dual_press(x, y, x2, y2)
     elseif (self.mode == "pattern") then
       if (program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].trig_values[fn.calc_grid_count(x, y)] == 1) then
         if (fn.calc_grid_count(x2, y2) - fn.calc_grid_count(x, y) > 0) then
-          program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].lengths[fn.calc_grid_count(x, y)] = fn.calc_grid_count(x2, y2) - fn.calc_grid_count(x, y)
+          program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].lengths[fn.calc_grid_count(x, y)] = (fn.calc_grid_count(x2, y2) + 1) - fn.calc_grid_count(x, y)
         end
+      end
+    end
+    
+  end
+    
+end
+
+function Sequencer:long_press(x, y)
+  if (y >= self.y and y <= self.y + 3) then
+    if (self.mode == "pattern") then
+      if (program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].trig_values[fn.calc_grid_count(x, y)] == 1) then
+        program.sequencer_patterns[program.selected_sequencer_pattern].patterns[program.selected_pattern].lengths[fn.calc_grid_count(x, y)] = 1
       end
     end
     

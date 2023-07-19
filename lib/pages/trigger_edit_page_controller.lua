@@ -149,8 +149,8 @@ function trigger_edit_page_controller:register_press_handlers()
   press_handler:register(
   "pattern_trigger_edit_page",
   function(x, y)
-    pattern_trigger_edit_page_sequencer:press(x, y)
     if pattern_trigger_edit_page_sequencer:is_this(x, y) then
+      pattern_trigger_edit_page_sequencer:press(x, y)
       pattern_controller:update_working_patterns()
     end
   end
@@ -297,6 +297,17 @@ function trigger_edit_page_controller:register_press_handlers()
       pattern_trigger_edit_page_sequencer:dual_press(x, y, x2, y2)
       if pattern_trigger_edit_page_sequencer:is_this(x2, y2) then
         pattern_controller:update_working_patterns()
+      end
+    end
+  )
+  press_handler:register_long(
+    "pattern_trigger_edit_page",
+    function(x, y)
+      print("long press")
+      if pattern_trigger_edit_page_sequencer:is_this(x, y) then
+        pattern_trigger_edit_page_sequencer:long_press(x, y)
+        pattern_controller:update_working_patterns()
+        
       end
     end
   )

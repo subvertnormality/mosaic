@@ -85,7 +85,7 @@ end
 
 local function autosave_init()
 
-  autosave_timer.time = 20
+  autosave_timer.time = 60
   autosave_timer.event = function()
     if not clock_controller:is_playing() then
       grid_controller:splash_screen_on()
