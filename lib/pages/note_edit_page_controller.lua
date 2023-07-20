@@ -138,6 +138,7 @@ function note_edit_page_controller:register_press_handlers()
           program.sequencer_patterns[program.selected_sequencer_pattern].active = true
           program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].note_values[s] = note
           pattern_controller:update_working_patterns()
+          tooltip:show("Step "..s.." note set to "..note)
         end
       end
     )
@@ -149,6 +150,7 @@ function note_edit_page_controller:register_press_handlers()
       if (step1to16_fade_button:is_this(x, y)) then
         horizontal_offset = 0
         note_edit_page_controller:reset_all_controls()
+        tooltip:show("Steps 1 to 16")
       end
       return step1to16_fade_button:press(x, y)
     end
@@ -159,6 +161,7 @@ function note_edit_page_controller:register_press_handlers()
       if (step17to32_fade_button:is_this(x, y)) then
         horizontal_offset = 16
         note_edit_page_controller:reset_all_controls()
+        tooltip:show("Steps 17 to 32")
       end
 
       return step17to32_fade_button:press(x, y)
@@ -170,6 +173,7 @@ function note_edit_page_controller:register_press_handlers()
       if (step33to48_fade_button:is_this(x, y)) then
         horizontal_offset = 32
         note_edit_page_controller:reset_all_controls()
+        tooltip:show("Steps 33 to 48")
       end
 
       return step33to48_fade_button:press(x, y)
@@ -181,6 +185,7 @@ function note_edit_page_controller:register_press_handlers()
       if (step49to64_fade_button:is_this(x, y)) then
         horizontal_offset = 48
         note_edit_page_controller:reset_all_controls()
+        tooltip:show("Steps 49 to 64")
       end
 
       return step49to64_fade_button:press(x, y)
@@ -192,6 +197,7 @@ function note_edit_page_controller:register_press_handlers()
       if (note15to21_fade_button:is_this(x, y)) then
         vertical_offset = 0
         note_edit_page_controller:reset_all_controls()
+        tooltip:show("Notes +6 to +13")
       end
 
       return note15to21_fade_button:press(x, y)
@@ -203,6 +209,7 @@ function note_edit_page_controller:register_press_handlers()
       if (note8to14_fade_button:is_this(x, y)) then
         vertical_offset = 7
         note_edit_page_controller:reset_all_controls()
+        tooltip:show("Root to +6")
       end
 
       return note8to14_fade_button:press(x, y)
@@ -214,6 +221,7 @@ function note_edit_page_controller:register_press_handlers()
       if (note1to7_fade_button:is_this(x, y)) then
         vertical_offset = 14
         note_edit_page_controller:reset_all_controls()
+        tooltip:show("Notes -1 to -7")
       end
 
       return note1to7_fade_button:press(x, y)

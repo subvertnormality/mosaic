@@ -124,7 +124,7 @@ function register_press_handlers()
         if (x < 6) then
           if program.selected_page == x then
             clock_controller:reset()
-            tooltip:show("Sequence reset")
+            tooltip:show("Sequencer reset")
           end
         end
       end

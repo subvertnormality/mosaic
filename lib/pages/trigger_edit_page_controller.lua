@@ -141,9 +141,11 @@ function trigger_edit_page_controller:register_press_handlers()
   press_handler:register(
   "pattern_trigger_edit_page",
   function(x, y)
-    local result = pattern_trigger_edit_page_pattern_select_fader:press(x, y)
-    program.selected_pattern = pattern_trigger_edit_page_pattern_select_fader:get_value()
-    return result
+    if pattern_trigger_edit_page_pattern_select_fader:is_this(x, y) then
+      pattern_trigger_edit_page_pattern_select_fader:press(x, y)
+      program.selected_pattern = pattern_trigger_edit_page_pattern_select_fader:get_value()
+      tooltip:show("Pattern "..program.selected_pattern.." selected")
+    end
   end
   )
   press_handler:register(
@@ -158,17 +160,21 @@ function trigger_edit_page_controller:register_press_handlers()
   press_handler:register(
   "pattern_trigger_edit_page",
   function(x, y)
-    load_paint_pattern()
-    pattern_trigger_edit_page_pattern1_fader:press(x, y)
-    return true
+    if pattern_trigger_edit_page_pattern1_fader:is_this(x, y) then
+      load_paint_pattern()
+      pattern_trigger_edit_page_pattern1_fader:press(x, y)
+      tooltip:show("Pattern 1 - "..pattern_trigger_edit_page_pattern1_fader:get_value().." selected")
+    end
   end
   )
   press_handler:register(
   "pattern_trigger_edit_page",
   function(x, y)
-    load_paint_pattern()
-    pattern_trigger_edit_page_pattern2_fader:press(x, y)
-    return true
+    if pattern_trigger_edit_page_pattern2_fader:is_this(x, y) then
+      load_paint_pattern()
+      pattern_trigger_edit_page_pattern2_fader:press(x, y)
+      tooltip:show("Pattern 2 - "..pattern_trigger_edit_page_pattern2_fader:get_value().." selected")
+    end
   end
   )
   press_handler:register(
@@ -177,17 +183,19 @@ function trigger_edit_page_controller:register_press_handlers()
     pattern_trigger_edit_page_algorithm_fader:press(x, y)
     if pattern_trigger_edit_page_algorithm_fader:is_this(x, y) then
       trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
+      tooltip:show("Algorithm "..pattern_trigger_edit_page_algorithm_fader:get_value().." selected")
+      load_paint_pattern()
     end
-    load_paint_pattern()
-    return true
   end
   )
   press_handler:register(
   "pattern_trigger_edit_page",
   function(x, y)
-    pattern_trigger_edit_page_bankmask_fader:press(x, y)
-    load_paint_pattern()
-    return true
+    if pattern_trigger_edit_page_bankmask_fader:is_this(x, y) then
+      pattern_trigger_edit_page_bankmask_fader:press(x, y)
+      load_paint_pattern()
+      tooltip:show("Bank "..pattern_trigger_edit_page_bankmask_fader:get_value().." selected")
+    end
   end
   )
   press_handler:register(
@@ -203,6 +211,7 @@ function trigger_edit_page_controller:register_press_handlers()
         pattern_trigger_edit_page_right_button:set_state(2)
         load_paint_pattern()
         pattern_trigger_edit_page_paint_button:blink()
+        tooltip:show("Painting pattern")
       else
         pattern_trigger_edit_page_left_button:set_state(1)
         pattern_trigger_edit_page_centre_button:set_state(1)
@@ -211,9 +220,9 @@ function trigger_edit_page_controller:register_press_handlers()
         pattern_trigger_edit_page_sequencer:hide_unsaved_grid()
         save_paint_pattern(paint_pattern)
         pattern_trigger_edit_page_paint_button:no_blink()
+        tooltip:show("Pattern painted")
       end
     end
-    return true
   end
   )
   press_handler:register(
@@ -230,31 +239,27 @@ function trigger_edit_page_controller:register_press_handlers()
         pattern_trigger_edit_page_left_button:set_state(1)
         pattern_trigger_edit_page_centre_button:set_state(1)
         pattern_trigger_edit_page_right_button:set_state(1)
+        tooltip:show("Painting cancelled")
       else
         pattern_trigger_edit_page_cancel_button:set_state(1)
       end
     end
-
-    return true
   end
   )
   press_handler:register(
   "pattern_trigger_edit_page",
   function(x, y)
-    -- pattern_trigger_edit_page_left_button:press(x, y)
-
     if pattern_trigger_edit_page_left_button:is_this(x, y) then
       if (pattern_trigger_edit_page_left_button:get_state() == 2) then
         shift = shift - 1
 
         load_paint_pattern()
         pattern_trigger_edit_page_left_button:set_state(2)
+        tooltip:show("Shifting left")
       else
         pattern_trigger_edit_page_left_button:set_state(1)
       end
     end
-
-    return true
   end
   )
   press_handler:register(
@@ -265,30 +270,27 @@ function trigger_edit_page_controller:register_press_handlers()
         shift = 0
         load_paint_pattern()
         pattern_trigger_edit_page_centre_button:set_state(2)
+        tooltip:show("Shift reset")
       else
         pattern_trigger_edit_page_centre_button:set_state(1)
       end
     end
-    return true
   end
   )
   press_handler:register(
   "pattern_trigger_edit_page",
   function(x, y)
-    -- pattern_trigger_edit_page_right_button:press(x, y)
-
     if pattern_trigger_edit_page_right_button:is_this(x, y) then
       if (pattern_trigger_edit_page_right_button:get_state() == 2) then
         shift = shift + 1
 
         pattern_trigger_edit_page_right_button:set_state(2)
         load_paint_pattern()
+        tooltip:show("Shifting right")
       else
         pattern_trigger_edit_page_right_button:set_state(1)
       end
     end
-
-    return true
   end
   )
   press_handler:register_dual(
@@ -297,17 +299,17 @@ function trigger_edit_page_controller:register_press_handlers()
       pattern_trigger_edit_page_sequencer:dual_press(x, y, x2, y2)
       if pattern_trigger_edit_page_sequencer:is_this(x2, y2) then
         pattern_controller:update_working_patterns()
+        tooltip:show("Note length set")
       end
     end
   )
   press_handler:register_long(
     "pattern_trigger_edit_page",
     function(x, y)
-      print("long press")
       if pattern_trigger_edit_page_sequencer:is_this(x, y) then
         pattern_trigger_edit_page_sequencer:long_press(x, y)
         pattern_controller:update_working_patterns()
-        
+        tooltip:show("Note length reset")
       end
     end
   )

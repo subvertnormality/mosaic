@@ -59,8 +59,8 @@ end
 
 function Button:press(x, y)
   if (self.x == x and self.y == y) then
-    if self.state == #self.states
-      then self.state = 1 
+    if self.state == #self.states then 
+      self.state = 1 
     else
       self.state = self.state + 1
     end

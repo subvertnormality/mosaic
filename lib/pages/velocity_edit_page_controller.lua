@@ -166,6 +166,7 @@ function velocity_edit_page_controller:register_press_handlers()
           program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s] = velocity
           program.sequencer_patterns[program.selected_sequencer_pattern].active = true
           pattern_controller:update_working_patterns()
+          tooltip:show("Step "..s.." velocity set to "..velocity)
         end
       end
     )
@@ -177,6 +178,7 @@ function velocity_edit_page_controller:register_press_handlers()
       if (step1to16_fade_button:is_this(x, y)) then
         horizontal_offset = 0
         velocity_edit_page_controller:reset_all_controls()
+        tooltip:show("Steps 1 to 16")
       end
       return step1to16_fade_button:press(x, y)
     end
@@ -187,6 +189,7 @@ function velocity_edit_page_controller:register_press_handlers()
       if (step17to32_fade_button:is_this(x, y)) then
         horizontal_offset = 16
         velocity_edit_page_controller:reset_all_controls()
+        tooltip:show("Steps 17 to 32")
       end
 
       return step17to32_fade_button:press(x, y)
@@ -198,6 +201,7 @@ function velocity_edit_page_controller:register_press_handlers()
       if (step33to48_fade_button:is_this(x, y)) then
         horizontal_offset = 32
         velocity_edit_page_controller:reset_all_controls()
+        tooltip:show("Steps 33 to 48")
       end
 
       return step33to48_fade_button:press(x, y)
@@ -209,6 +213,7 @@ function velocity_edit_page_controller:register_press_handlers()
       if (step49to64_fade_button:is_this(x, y)) then
         horizontal_offset = 48
         velocity_edit_page_controller:reset_all_controls()
+        tooltip:show("Steps 49 to 64")
       end
 
       return step49to64_fade_button:press(x, y)
@@ -220,6 +225,7 @@ function velocity_edit_page_controller:register_press_handlers()
       if (vel1to7_fade_button:is_this(x, y)) then
         vertical_offset = 0
         velocity_edit_page_controller:reset_all_controls()
+        tooltip:show("Velocity 68 to 127")
       end
 
       return vel1to7_fade_button:press(x, y)
@@ -231,6 +237,7 @@ function velocity_edit_page_controller:register_press_handlers()
       if (vel8to14_fade_button:is_this(x, y)) then
         vertical_offset = 7
         velocity_edit_page_controller:reset_all_controls()
+        tooltip:show("Velocity 0 to 58")
       end
 
       return vel8to14_fade_button:press(x, y)
