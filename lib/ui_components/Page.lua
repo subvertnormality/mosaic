@@ -1,4 +1,4 @@
-Page = {}
+local Page = {}
 Page.__index = Page
 
 function Page:new(name, func)

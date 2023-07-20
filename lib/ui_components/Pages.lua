@@ -1,4 +1,4 @@
-Pages = {}
+local Pages = {}
 Pages.__index = Pages
 
 function Pages:new()
@@ -10,8 +10,13 @@ end
 
 
 function Pages:draw()
-  if (self.selected_page == nil) then return end
-  self.selected_page:draw()
+  if (self.selected_page == nil) then 
+    if self.pages[0] then 
+      self.pages[0]:draw()
+    end
+  else
+    self.selected_page:draw()
+  end
 end
 
 function Pages:add_page(page)

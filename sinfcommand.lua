@@ -138,7 +138,7 @@ end
 
 function redraw_clock()
   while true do
-    clock.sleep(1 / 30)
+    clock.sleep(1 / 15)
     if fn.dirty_screen() == true then
       redraw()
       fn.dirty_screen(false)
