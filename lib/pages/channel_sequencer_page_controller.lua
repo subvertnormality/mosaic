@@ -1,6 +1,5 @@
 
 local channel_sequencer_page_controller = {}
-
 local channel_pattern_buttons = {}
 
 
@@ -15,12 +14,11 @@ function channel_sequencer_page_controller:init()
   end
 
   channel_pattern_buttons["step"..program.selected_sequencer_pattern.."_sequencer_pattern_button"]:set_state(3)
-
 end
 
 function channel_sequencer_page_controller:register_draw_handlers()
   for s = 1, 96 do  
-    draw_handler:register(
+    draw_handler:register_grid(
       "channel_sequencer_page",
       function()
           channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:draw(trigs, lengths)

@@ -1,4 +1,6 @@
 grid_controller = include("sinfcommand/lib/grid_controller")
+ui_controller = include("sinfcommand/lib/ui_controller")
+
 local fn = include("sinfcommand/lib/functions")
 local fileselect = require('fileselect')
 local textentry = require('textentry')
@@ -21,6 +23,13 @@ pages = {
   pattern_velocity_edit_page = 5
 }
 
+page_names = {
+  "Channel Edit Page",
+  "Channel Sequencer Page",
+  "Pattern Trigger Edit Page",
+  "Pattern Note Edit Page",
+  "Pattern Velocity Edit Page"
+}
 
 local function load_project(pth)
   
@@ -110,15 +119,36 @@ local function post_splash_init()
 
   grid_controller:splash_screen_off()
   clock_controller.init()
+  ui_controller.init()
   grid_controller.init()
   fn.dirty_grid(true)
+  fn.dirty_screen(true)
   autosave_init()
+  ui_clock_id = clock.run(redraw_clock)
 
+end
+
+function redraw()
+  screen.clear()
+  screen.level(5)
+  screen.font_size(8)
+  ui_controller.redraw()
+  screen.update()
+end
+
+function redraw_clock()
+  while true do
+    clock.sleep(1 / 30)
+    if fn.dirty_screen() == true then
+      redraw()
+      fn.dirty_screen(false)
+    end
+  end
 end
 
 function init()
   midi_controller.init()
-  grid_clock_id = clock.run(grid_controller.grid_redraw_clock)
+  grid_clock_id = clock.run(grid_controller.grid_redraw)
 
   grid_controller:splash_screen_on()
 
@@ -133,6 +163,7 @@ function init()
 
   post_init = metro.init(post_splash_init, 2, 1)
   post_init:start()
+
 
 end
 

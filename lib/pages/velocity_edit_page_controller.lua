@@ -100,7 +100,7 @@ end
 function velocity_edit_page_controller:register_draw_handlers()
   
   for s = 1, 64 do  
-    draw_handler:register(
+    draw_handler:register_grid(
       "pattern_velocity_edit_page",
       function()
         velocity_edit_page_controller:reset_fader(s)
@@ -108,42 +108,42 @@ function velocity_edit_page_controller:register_draw_handlers()
       end
     )
   end
-  draw_handler:register(
+  draw_handler:register_grid(
     "pattern_velocity_edit_page",
     function()
 
       return step1to16_fade_button:draw()
     end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
     "pattern_velocity_edit_page",
     function()
 
       return step17to32_fade_button:draw()
     end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
     "pattern_velocity_edit_page",
     function()
 
       return step33to48_fade_button:draw()
     end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
     "pattern_velocity_edit_page",
     function()
 
       return step49to64_fade_button:draw()
     end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
     "pattern_velocity_edit_page",
     function()
 
       return vel1to7_fade_button:draw()
     end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
     "pattern_velocity_edit_page",
     function()
 

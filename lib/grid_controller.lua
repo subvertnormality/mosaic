@@ -54,7 +54,7 @@ function g.key(x, y, z)
       elseif grid_controller.push[x][y].state == "dual_pressed" then
         grid_controller:dual_press(grid_controller.push.active[1], grid_controller.push.active[2], x, y)
         grid_controller.push[x][y].state = "inactive"
-        grid_controler.push[grid_controller.push.active[1]][grid_controller.push.active[2]].state = "inactive"
+        grid_controller.push[grid_controller.push.active[1]][grid_controller.push.active[2]].state = "inactive"
         grid_controller.push.active = false
       end
     end
@@ -67,14 +67,14 @@ end
 
 
 
-function register_draw_handlers()
+local function register_draw_handlers()
   channel_edit_page_controller:register_draw_handlers()
   channel_sequencer_page_controller:register_draw_handlers()
   trigger_edit_page_controller:register_draw_handlers()
   note_edit_page_controller:register_draw_handlers()
   velocity_edit_page_controller:register_draw_handlers()
 
-  draw_handler:register(
+  draw_handler:register_grid(
     "menu",
     function()
       channel_edit_button:draw()
@@ -101,15 +101,18 @@ function register_press_handlers()
         if program.selected_page ~= x then
           program.selected_page = x
           grid_controller:set_menu_button_state()
+          tooltip:show(page_names[program.selected_page])
         else
           if (clock_controller:is_playing()) then
             clock_controller:stop()
+            tooltip:show("Stopping playback")
           else
             clock_controller:start()
+            tooltip:show("Starting playback")
           end
           grid_controller:set_menu_button_state()
         end
-
+        fn.dirty_screen(true)
       end
     end
   end
@@ -121,6 +124,7 @@ function register_press_handlers()
         if (x < 6) then
           if program.selected_page == x then
             clock_controller:reset()
+            tooltip:show("Sequence reset")
           end
         end
       end
@@ -231,11 +235,11 @@ function grid_controller:dismiss_disconnect()
 end
 
 
-function grid_controller:grid_redraw()
+function grid_controller:redraw()
   g:all(0)
 
 
-  draw_handler:handle(program.selected_page)
+  draw_handler:handle_grid(program.selected_page)
 
   g:refresh()
 end
@@ -250,7 +254,7 @@ end
 
 local splash_screen_frame = 1
 
-function grid_controller.grid_redraw_clock()
+function grid_controller.grid_redraw()
 
   while true do
     clock.sleep(1 / 30)
@@ -260,7 +264,7 @@ function grid_controller.grid_redraw_clock()
       g:refresh()
     else
       if fn.dirty_grid() == true then
-        grid_controller:grid_redraw()
+        grid_controller:redraw()
         fn.dirty_grid(false)
       end
     end

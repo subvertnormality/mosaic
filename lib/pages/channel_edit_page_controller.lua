@@ -1,5 +1,4 @@
 local channel_edit_page_controller = {}
-
 local pattern_buttons = {}
 local channel_edit_page_sequencer = Sequencer:new(4, "channel")
 local channel_select_fader = Fader:new(1, 1, 16, 16)
@@ -98,7 +97,7 @@ end
 
 
 function channel_edit_page_controller:register_draw_handlers()
-  draw_handler:register(
+  draw_handler:register_grid(
     "channel_edit_page",
     function()
 
@@ -110,7 +109,7 @@ function channel_edit_page_controller:register_draw_handlers()
     end
   )
 
-  draw_handler:register(
+  draw_handler:register_grid(
     "channel_edit_page",
     function()
 
@@ -119,38 +118,38 @@ function channel_edit_page_controller:register_draw_handlers()
     end
   )
   for s = 1, 16 do  
-    draw_handler:register(
+    draw_handler:register_grid(
       "channel_edit_page",
       function()
         pattern_buttons["step"..s.."_pattern_button"]:draw()
       end
     )
   end
-  draw_handler:register(
+  draw_handler:register_grid(
     "channel_edit_page",
     function()
       return channel_pattern_number_merge_mode_button:draw()
     end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
     "channel_edit_page",
     function()
       return skip_merge_mode_button:draw()
     end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
     "channel_edit_page",
     function()
       return average_merge_mode_button:draw()
     end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
     "channel_edit_page",
     function()
       return subadd_merge_mode_button:draw()
     end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
     "channel_edit_page",
     function()
       return channel_octave_fader:draw()

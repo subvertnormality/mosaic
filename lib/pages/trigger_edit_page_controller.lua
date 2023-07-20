@@ -26,13 +26,13 @@ function trigger_edit_page_controller:init()
 end
 
 function trigger_edit_page_controller:register_draw_handlers()
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
     return pattern_trigger_edit_page_pattern_select_fader:draw()
   end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
 
@@ -45,55 +45,55 @@ function trigger_edit_page_controller:register_draw_handlers()
     return pattern_trigger_edit_page_sequencer:draw(trigs, lengths)
   end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
     return pattern_trigger_edit_page_pattern1_fader:draw()
   end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
     return pattern_trigger_edit_page_pattern2_fader:draw()
   end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
     return pattern_trigger_edit_page_algorithm_fader:draw()
   end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
     return pattern_trigger_edit_page_bankmask_fader:draw()
   end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
     return pattern_trigger_edit_page_paint_button:draw()
   end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
     return pattern_trigger_edit_page_cancel_button:draw()
   end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
     return pattern_trigger_edit_page_left_button:draw()
   end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
     return pattern_trigger_edit_page_centre_button:draw()
   end
   )
-  draw_handler:register(
+  draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
     return pattern_trigger_edit_page_right_button:draw()
