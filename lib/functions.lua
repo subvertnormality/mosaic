@@ -136,7 +136,9 @@ function fn.initialise_default_channels()
       midi_channel = i,
       midi_device = 1,
       selected_patterns = {},
-      default_scale = 1,
+      default_scale = -1,
+      root_note = -1,
+      chord = -1,
       step_scales = fn.initialise_64_table(0),
       merge_mode = "skip",
       octave = 0,
@@ -208,5 +210,9 @@ function fn.calc_grid_count(x, y)
   return ((y - 4) * 16) + x
 end
 
+function fn.rotate_table_left(t)
+  table.insert(t, table.remove(t, 1))
+  return t
+end
 
 return fn

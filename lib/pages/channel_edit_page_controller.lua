@@ -182,12 +182,14 @@ function update_scale_state()
     channel.default_scale = scale_value
     channel_edit_page_controller:update_channel_edit_page_ui()
     program.sequencer_patterns[program.selected_sequencer_pattern].active = true
-    tooltip:show("Channel "..program.selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
+    tooltip:show("Ch. "..program.selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
     channel_edit_page_ui_controller:select_quantizer_item(number)
+    channel_edit_page_ui_controller:refresh_roman_item()
     fn.dirty_screen(true)
   else
-    tooltip:show("Channel "..program.selected_channel.." scale: default")
+    tooltip:show("Ch. "..program.selected_channel.." scale: default")
     channel_edit_page_ui_controller:select_quantizer_item(number)
+    channel_edit_page_ui:refresh_roman_item()
   end
 end
 

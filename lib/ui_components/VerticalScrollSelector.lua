@@ -22,31 +22,49 @@ function VerticalScrollSelector:set_selected_item(selected_item)
   self.selected_item = selected_item
 end
 
+function VerticalScrollSelector:set_items(items)
+  self.items = items
+end
+
 
 function VerticalScrollSelector:draw()
   if not self.items then return end
 
   screen.move(self.x, self.y)
 
-  if self.items[self.selected_item - 1] then
-    screen.level(1)
-    screen.text(self.items[self.selected_item - 1].name)
-  end
+  
+    if self.items[self.selected_item - 1] then
+      screen.level(1)
+      if self.items[self.selected_item - 1].name then 
+        screen.text(self.items[self.selected_item - 1].name)
+      else
+        screen.text(self.items[self.selected_item - 1])
+      end
+    end
 
-  screen.move(self.x + 5, self.y + 12)
+    screen.move(self.x + 5, self.y + 12)
 
-  if self.items[self.selected_item] then
-    screen.level(10)
-    screen.text(self.items[self.selected_item].name)
-  end
+    if self.items[self.selected_item] then
+      screen.level(10)
+      if self.items[self.selected_item].name then 
+        screen.text(self.items[self.selected_item].name)
+      else
+        screen.text(self.items[self.selected_item])
+      end
+    end
 
 
-  screen.move(self.x, self.y + 24)
+    screen.move(self.x, self.y + 24)
 
-  if self.items[self.selected_item + 1] then
-    screen.level(1)
-    screen.text(self.items[self.selected_item + 1].name)
-  end
+    if self.items[self.selected_item + 1] then
+      screen.level(1)
+      if self.items[self.selected_item + 1].name then 
+        screen.text(self.items[self.selected_item + 1].name) 
+      else
+        screen.text(self.items[self.selected_item + 1])
+      end
+    end
+
 end
 
 function VerticalScrollSelector:scroll_down()

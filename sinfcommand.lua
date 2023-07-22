@@ -77,12 +77,12 @@ local function load_new_project()
     scale_type = "sinfonion",
     root_note = root_note,
     default_scale = 1,
+    chord = 1,
     bpm = 120,
     current_step = 1,
     scales = {
-      {number = 2, scale = musicutil.generate_scale_of_length(0, "major", 7)}, 
-      {number = 4, scale = musicutil.generate_scale_of_length(0, "minor", 7)}, 
-      {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
+      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7)}, 
+      {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
     },
     sequencer_patterns = fn.initialise_default_sequencer_patterns()
   }
