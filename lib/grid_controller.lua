@@ -135,7 +135,7 @@ end
 function grid_controller.splash_screen(frame) 
   for x = 1, 16 do
     for y = 1, 8 do
-      local brightness = 2 * math.abs((x + y + frame) % 16 - 8)
+      local brightness = 2 * math.abs((x + frame) % 16 - 8)
       g:led(x, y, brightness)
     end
   end

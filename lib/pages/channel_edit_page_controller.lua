@@ -179,11 +179,7 @@ function update_scale_state()
   if program.scales[scale_value] and program.scales[scale_value].number then
     number = program.scales[scale_value].number
 
-    print("scale value: "..scale_value)
-    print("scale number: "..number)
-
     channel.default_scale = scale_value
-    print("scale set here to "..channel.default_scale)
     channel_edit_page_controller:update_channel_edit_page_ui()
     program.sequencer_patterns[program.selected_sequencer_pattern].active = true
     tooltip:show("Channel "..program.selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
@@ -231,12 +227,10 @@ function channel_edit_page_controller:register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_scale_fader:is_this(x, y) then
-        print("scale fader pressed")
         channel_scale_fader:press(x, y)
         if channel_scale_fader:is_this(x, y) then
           update_scale_state()
         end
-
       end
     end
   )
