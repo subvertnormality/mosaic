@@ -79,7 +79,11 @@ local function load_new_project()
     default_scale = 1,
     bpm = 120,
     current_step = 1,
-    scales = {musicutil.generate_scale_of_length(0, "major", 7), {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
+    scales = {
+      {number = 2, scale = musicutil.generate_scale_of_length(0, "major", 7)}, 
+      {number = 4, scale = musicutil.generate_scale_of_length(0, "minor", 7)}, 
+      {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
+    },
     sequencer_patterns = fn.initialise_default_sequencer_patterns()
   }
 
@@ -88,6 +92,7 @@ end
 local function do_autosave()
 
   if program ~= nil then
+    save_project("autosave")
     grid_controller:splash_screen_off()
   end
   as_metro:stop()

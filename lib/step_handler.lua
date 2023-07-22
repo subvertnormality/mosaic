@@ -29,7 +29,7 @@ function step_handler:handle(c, current_step)
   end
 
   if trig_value == 1 then
-    local note = quantiser:process(note_value, octave_mod, step_scale_number)
+    local note = quantiser:process(note_value, octave_mod, step_scale_number, channel)
     midi_controller:note_on(note, velocity_value, midi_channel, midi_device)
     table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value})
   end

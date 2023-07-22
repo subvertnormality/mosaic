@@ -1,5 +1,8 @@
 local channel_edit_page_controller = {}
 local pattern_buttons = {}
+
+local quantiser = include("sinfcommand/lib/quantiser")
+
 local channel_edit_page_sequencer = Sequencer:new(4, "channel")
 local channel_select_fader = Fader:new(1, 1, 16, 16)
 local channel_pattern_number_merge_mode_button = Button:new(13, 8, {
@@ -35,7 +38,7 @@ local subadd_merge_mode_button = Button:new(16, 8, {
   {"Add merge mode on", 15},  
 })
 local channel_octave_fader = Fader:new(7, 8, 5, 5)
-
+local channel_scale_fader = Fader:new(1, 3, 16, 16)
 
 function channel_edit_page_controller:update_button_states() 
   local merge_mode = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].merge_mode
@@ -76,22 +79,26 @@ function channel_edit_page_controller:init()
 
   channel_edit_page_controller:update_button_states() 
   channel_octave_fader:set_value(program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].octave + 3)
+  update_scale_state() 
   channel_edit_page_controller:update_channel_edit_page_ui()
 end
 
 
 function channel_edit_page_controller:update_channel_edit_page_ui()
+  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+
   local selected_sequencer_pattern = program.selected_sequencer_pattern
 
   for s = 1, 16 do  
-    if fn.is_in_set(program.sequencer_patterns[selected_sequencer_pattern].channels[program.selected_channel].selected_patterns, s) then
+    if fn.is_in_set(channel.selected_patterns, s) then
       pattern_buttons["step"..s.."_pattern_button"]:set_state(2)
     else
       pattern_buttons["step"..s.."_pattern_button"]:set_state(1)
     end
   end
 
-  channel_octave_fader:set_value(program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].octave + 3)
+  channel_scale_fader:set_value(channel.default_scale)
+  channel_octave_fader:set_value(channel.octave + 3)
   channel_edit_page_controller:update_button_states() 
 end
 
@@ -114,6 +121,14 @@ function channel_edit_page_controller:register_draw_handlers()
     function()
 
       return channel_select_fader:draw()
+
+    end
+  )
+  draw_handler:register_grid(
+    "channel_edit_page",
+    function()
+
+      return channel_scale_fader:draw()
 
     end
   )
@@ -157,7 +172,28 @@ function channel_edit_page_controller:register_draw_handlers()
   )
 end
 
+function update_scale_state() 
+  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  local scale_value = channel_scale_fader:get_value()
+  local number = program.scales[program.default_scale].number
+  if program.scales[scale_value] and program.scales[scale_value].number then
+    number = program.scales[scale_value].number
 
+    print("scale value: "..scale_value)
+    print("scale number: "..number)
+
+    channel.default_scale = scale_value
+    print("scale set here to "..channel.default_scale)
+    channel_edit_page_controller:update_channel_edit_page_ui()
+    program.sequencer_patterns[program.selected_sequencer_pattern].active = true
+    tooltip:show("Channel "..program.selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
+    channel_edit_page_ui_controller:select_quantizer_item(number)
+    fn.dirty_screen(true)
+  else
+    tooltip:show("Channel "..program.selected_channel.." scale: default")
+    channel_edit_page_ui_controller:select_quantizer_item(number)
+  end
+end
 
 function channel_edit_page_controller:register_press_handlers()
 
@@ -170,7 +206,7 @@ function channel_edit_page_controller:register_press_handlers()
   press_handler:register(
     "channel_edit_page",
     function(x, y)
-      local result = channel_select_fader:press(x, y)
+      channel_select_fader:press(x, y)
       if channel_select_fader:is_this(x, y) then
         program.selected_channel = channel_select_fader:get_value()
         pattern_controller:update_working_patterns()
@@ -188,6 +224,19 @@ function channel_edit_page_controller:register_press_handlers()
         pattern_controller:update_working_patterns()
         program.sequencer_patterns[program.selected_sequencer_pattern].active = true
         tooltip:show("Channel "..program.selected_channel.." length changed")
+      end
+    end
+  )
+  press_handler:register(
+    "channel_edit_page",
+    function(x, y)
+      if channel_scale_fader:is_this(x, y) then
+        print("scale fader pressed")
+        channel_scale_fader:press(x, y)
+        if channel_scale_fader:is_this(x, y) then
+          update_scale_state()
+        end
+
       end
     end
   )
