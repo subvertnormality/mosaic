@@ -6,7 +6,9 @@ local fileselect = require('fileselect')
 local textentry = require('textentry')
 local musicutil = require("musicutil")
 
-local autosave_timer = metro.init()
+local as_metro = metro.init(do_autosave, 1, 1)
+local autosave_timer = metro.init(prime_autosave, 20, 1)
+
 local splash_screen_clock
 local show_splash = true
 
@@ -75,9 +77,9 @@ local function load_new_project()
     scale_type = "sinfonion",
     root_note = root_note,
     default_scale = 1,
-    bpm = 10,
+    bpm = 120,
     current_step = 1,
-    scales = {musicutil.generate_scale_of_length(root_note, "major", 7), {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
+    scales = {musicutil.generate_scale_of_length(0, "major", 7), {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
     sequencer_patterns = fn.initialise_default_sequencer_patterns()
   }
 
@@ -86,28 +88,29 @@ end
 local function do_autosave()
 
   if program ~= nil then
-    save_project("autosave")
     grid_controller:splash_screen_off()
   end
-
+  as_metro:stop()
+  autosave_timer:stop()
 end
 
-local function autosave_init()
-
-  autosave_timer.time = 60
-  autosave_timer.event = function()
-    if not clock_controller:is_playing() then
-      grid_controller:splash_screen_on()
-      as_metro = metro.init(do_autosave, 1, 1)
-      as_metro:start()
-      autosave_timer:stop()
-    else
-      autosave_reset() 
-    end
-
+local function prime_autosave()
+  if as_metro.id then
+    metro.free(as_metro.id)
   end
-  autosave_timer:start()
+  if not clock_controller:is_playing() then
+    as_metro = metro.init(do_autosave, 1, 1)
+    
+    grid_controller:splash_screen_on()
+    
+    as_metro:start()
+    
+  else
+    autosave_reset() 
+  end
+
 end
+
 
 local function post_splash_init()
 
@@ -123,7 +126,6 @@ local function post_splash_init()
   grid_controller.init()
   fn.dirty_grid(true)
   fn.dirty_screen(true)
-  autosave_init()
   ui_clock_id = clock.run(redraw_clock)
 
 end
@@ -170,6 +172,9 @@ end
 
 
 function autosave_reset() 
-  autosave_timer:stop()
+  if autosave_timer.id then
+    metro.free(autosave_timer.id)
+  end
+  autosave_timer = metro.init(prime_autosave, 60, 1)
   autosave_timer:start()
 end
