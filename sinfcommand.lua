@@ -9,8 +9,7 @@ local musicutil = require("musicutil")
 local as_metro = metro.init(do_autosave, 1, 1)
 local autosave_timer = metro.init(prime_autosave, 20, 1)
 
-local splash_screen_clock
-local show_splash = true
+local ui_splash_screen_active = false
 
 clock_controller = include("sinfcommand/lib/clock_controller")
 pattern_controller = include("sinfcommand/lib/pattern_controller")
@@ -94,8 +93,10 @@ local function do_autosave()
 
   if program ~= nil then
     save_project("autosave")
-    grid_controller:splash_screen_off()
   end
+  grid_controller:splash_screen_off()
+  ui_splash_screen_active = false
+  fn.dirty_screen(true)
   as_metro:stop()
   autosave_timer:stop()
 end
@@ -108,6 +109,7 @@ local function prime_autosave()
     as_metro = metro.init(do_autosave, 1, 1)
     
     grid_controller:splash_screen_on()
+    ui_splash_screen_active = true
     
     as_metro:start()
     
@@ -127,38 +129,55 @@ local function post_splash_init()
   end
 
   grid_controller:splash_screen_off()
+  ui_splash_screen_active = false
   clock_controller.init()
   ui_controller.init()
   grid_controller.init()
   fn.dirty_grid(true)
   fn.dirty_screen(true)
-  ui_clock_id = clock.run(redraw_clock)
+  
 
 end
 
 function redraw()
+
   screen.clear()
-  screen.level(5)
-  screen.font_size(8)
-  ui_controller.redraw()
-  screen.update()
+
+  if ui_splash_screen_active then
+    screen.level(15)
+    screen.move(55, 40)
+    screen.font_face (math.random(67))
+    screen.font_size(20)
+    screen.text("P")
+    screen.font_face (1)
+    screen.update()
+    return
+  end
+
+  if fn.dirty_screen() == true then
+    screen.level(5)
+    screen.font_size(8)
+    ui_controller.redraw()
+    screen.update()
+    fn.dirty_screen(false)
+  end
+
 end
 
 function redraw_clock()
   while true do
     clock.sleep(1 / 15)
-    if fn.dirty_screen() == true then
-      redraw()
-      fn.dirty_screen(false)
-    end
+    redraw()
   end
 end
 
 function init()
   midi_controller.init()
   grid_clock_id = clock.run(grid_controller.grid_redraw)
+  ui_clock_id = clock.run(redraw_clock)
 
   grid_controller:splash_screen_on()
+  ui_splash_screen_active = true
 
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project" )
@@ -168,7 +187,7 @@ function init()
   params:add_trigger("new", "+ New" )
   params:set_action("new", function(x) load_new_project() end)
 
-
+  
   post_init = metro.init(post_splash_init, 2, 1)
   post_init:start()
 

@@ -11,21 +11,27 @@ local quantizer_vertical_scroll_selector = VerticalScrollSelector:new(30, 20, "Q
 local romans_vertical_scroll_selector = VerticalScrollSelector:new(105, 20, "Roman Analysis", quantiser.get_scales()[1].romans)
 local notes_vertical_scroll_selector = VerticalScrollSelector:new(10, 20, "Notes", quantiser.get_notes())
 
-local function quantizer_page_draw_func()
+local quantizer_page = Page:new("quantizer_page", function ()
   quantizer_vertical_scroll_selector:draw()
   romans_vertical_scroll_selector:draw()
   notes_vertical_scroll_selector:draw()
-end
+end)
+
+local channel_edit_page = Page:new("channel_edit_page", function ()
+  print("drawing channel edit page")
+end)
+
 
 function channel_edit_page_ui:change_page(subpage_name)
   pages:select_page(subpage_name)
 end
 
 function channel_edit_page_ui:register_ui_draw_handlers() 
-  local quantizer_page = Page:new("quantizer_page", quantizer_page_draw_func)
+  
 
   pages:add_page(quantizer_page)
-  pages:select_page("quantizer_page")
+  pages:add_page(channel_edit_page)
+  pages:select_page(1)
 
   draw_handler:register_ui(
     "channel_edit_page",
@@ -120,6 +126,19 @@ function channel_edit_page_ui:enc(n, d)
           notes_vertical_scroll_selector:deselect()
           romans_vertical_scroll_selector:select()
         end
+      end
+    end
+  end
+
+  if n == 1 then 
+    for i=1, math.abs(d) do
+      if d > 0 then
+        pages:next_page()
+        fn.dirty_screen(true)
+
+      else
+        pages:previous_page()
+        fn.dirty_screen(true)
       end
     end
   end

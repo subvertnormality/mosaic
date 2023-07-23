@@ -37,6 +37,10 @@ function ui_controller:redraw()
 
   if not program then return end
 
+  screen.move(122, 10)
+  screen.font_face (math.random(67))
+  screen.text("P")
+  screen.font_face (1)
   draw_handler:handle_ui(program.selected_page)
   
 end
@@ -51,7 +55,6 @@ function ui_controller:enc(n, d)
 
 
 end
-
 
 
 return ui_controller
