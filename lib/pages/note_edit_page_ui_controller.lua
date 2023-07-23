@@ -20,4 +20,8 @@ function note_edit_page_ui:register_ui_draw_handlers()
 end
 
 
+function note_edit_page_ui:enc(n, d)
+
+end
+
 return note_edit_page_ui

@@ -11,7 +11,13 @@ function VerticalScrollSelector:new(x, y, name, items)
   self.items = items
   self.selected_item = 1
 
+  self.selected = false
+
   return self
+end
+
+function VerticalScrollSelector:get_selected_index()
+  return self.selected_item
 end
 
 function VerticalScrollSelector:get_selected_item()
@@ -32,8 +38,7 @@ function VerticalScrollSelector:draw()
 
   screen.move(self.x, self.y)
 
-  
-    if self.items[self.selected_item - 1] then
+    if self.selected_item and self.items[self.selected_item - 1] then
       screen.level(1)
       if self.items[self.selected_item - 1].name then 
         screen.text(self.items[self.selected_item - 1].name)
@@ -45,7 +50,11 @@ function VerticalScrollSelector:draw()
     screen.move(self.x + 5, self.y + 12)
 
     if self.items[self.selected_item] then
-      screen.level(10)
+      if self.selected then
+        screen.level(15)
+      else
+        screen.level(5)
+      end
       if self.items[self.selected_item].name then 
         screen.text(self.items[self.selected_item].name)
       else
@@ -56,7 +65,7 @@ function VerticalScrollSelector:draw()
 
     screen.move(self.x, self.y + 24)
 
-    if self.items[self.selected_item + 1] then
+    if self.selected_item and self.items[self.selected_item + 1] then
       screen.level(1)
       if self.items[self.selected_item + 1].name then 
         screen.text(self.items[self.selected_item + 1].name) 
@@ -81,5 +90,18 @@ function VerticalScrollSelector:scroll_up()
   fn.dirty_screen(true)
 end
 
+function VerticalScrollSelector:select() 
+  self.selected = true
+  fn.dirty_screen(true)
+end
+
+function VerticalScrollSelector:deselect() 
+  self.selected = false
+  fn.dirty_screen(true)
+end
+
+function VerticalScrollSelector:is_selected()
+  return self.selected
+end
 
 return VerticalScrollSelector

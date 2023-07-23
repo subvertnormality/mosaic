@@ -176,20 +176,31 @@ function update_scale_state()
   local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
   local scale_value = channel_scale_fader:get_value()
   local number = program.scales[program.default_scale].number
+  local chord = program.scales[program.default_scale].chord
+  local root_note = program.scales[program.default_scale].root_note
+
   if program.scales[scale_value] and program.scales[scale_value].number then
     number = program.scales[scale_value].number
+    chord = program.scales[scale_value].chord
+    root_note = program.scales[scale_value].root_note
 
     channel.default_scale = scale_value
     channel_edit_page_controller:update_channel_edit_page_ui()
     program.sequencer_patterns[program.selected_sequencer_pattern].active = true
     tooltip:show("Ch. "..program.selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
     channel_edit_page_ui_controller:select_quantizer_item(number)
-    channel_edit_page_ui_controller:refresh_roman_item()
+    channel_edit_page_ui_controller:select_note_item(root_note + 1)
+    channel_edit_page_ui_controller:select_roman_item(chord)
+
     fn.dirty_screen(true)
   else
+    channel.default_scale = scale_value
     tooltip:show("Ch. "..program.selected_channel.." scale: default")
     channel_edit_page_ui_controller:select_quantizer_item(number)
-    channel_edit_page_ui:refresh_roman_item()
+    channel_edit_page_ui_controller:select_note_item(root_note + 1)
+    channel_edit_page_ui_controller:select_roman_item(chord)
+
+
   end
 end
 

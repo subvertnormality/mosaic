@@ -22,8 +22,6 @@ function channel_edit_page_ui:change_page(subpage_name)
 end
 
 function channel_edit_page_ui:register_ui_draw_handlers() 
-
-
   local quantizer_page = Page:new("quantizer_page", quantizer_page_draw_func)
 
   pages:add_page(quantizer_page)
@@ -35,14 +33,97 @@ function channel_edit_page_ui:register_ui_draw_handlers()
       pages:draw()
     end
   )
+
+end
+
+function channel_edit_page_ui:init()
+  quantizer_vertical_scroll_selector:select()
 end
 
 function channel_edit_page_ui:select_quantizer_item(selected_item)
   quantizer_vertical_scroll_selector:set_selected_item(selected_item)
 end
 
-function channel_edit_page_ui:refresh_roman_item()
-  romans_vertical_scroll_selector:set_items(quantizer_vertical_scroll_selector:get_selected_item().romans)
+function channel_edit_page_ui:select_roman_item(selected_item)
+  romans_vertical_scroll_selector:set_selected_item(selected_item)
+end
+
+function channel_edit_page_ui:select_note_item(selected_item)
+  notes_vertical_scroll_selector:set_selected_item(selected_item)
+end
+
+function channel_edit_page_ui:update_scale()
+  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  local scale = quantizer_vertical_scroll_selector:get_selected_item()
+  local chord = romans_vertical_scroll_selector:get_selected_index()
+  local root_note = notes_vertical_scroll_selector:get_selected_index() - 1
+
+  program.scales[channel.default_scale] = {
+    number = scale.number,
+    scale = scale.scale,
+    chord = chord,
+    root_note = root_note
+  }
+end
+
+
+function channel_edit_page_ui:enc(n, d)
+  if n == 3 then
+    for i=1, math.abs(d) do
+      if d > 0 then
+        if quantizer_vertical_scroll_selector:is_selected() then
+          quantizer_vertical_scroll_selector:scroll_down()
+        end
+        if romans_vertical_scroll_selector:is_selected() then
+          romans_vertical_scroll_selector:scroll_down()
+        end
+        if notes_vertical_scroll_selector:is_selected() then
+          notes_vertical_scroll_selector:scroll_down()
+        end
+        channel_edit_page_ui:update_scale()
+      else
+        if quantizer_vertical_scroll_selector:is_selected() then
+          quantizer_vertical_scroll_selector:scroll_up()
+        end
+        if romans_vertical_scroll_selector:is_selected() then
+          romans_vertical_scroll_selector:scroll_up()
+        end
+        if notes_vertical_scroll_selector:is_selected() then
+          notes_vertical_scroll_selector:scroll_up()
+        end
+        channel_edit_page_ui:update_scale()
+      end
+    end
+  end
+
+  if n == 2 then
+    for i=1, math.abs(d) do
+      if d > 0 then
+        if quantizer_vertical_scroll_selector:is_selected() then
+          quantizer_vertical_scroll_selector:deselect()
+          romans_vertical_scroll_selector:select()
+        elseif romans_vertical_scroll_selector:is_selected() then
+          romans_vertical_scroll_selector:deselect()
+          notes_vertical_scroll_selector:select()
+        elseif notes_vertical_scroll_selector:is_selected() then
+          notes_vertical_scroll_selector:deselect()
+          quantizer_vertical_scroll_selector:select()
+        end
+      else
+        if quantizer_vertical_scroll_selector:is_selected() then
+          quantizer_vertical_scroll_selector:deselect()
+          notes_vertical_scroll_selector:select()
+        elseif romans_vertical_scroll_selector:is_selected() then
+          romans_vertical_scroll_selector:deselect()
+          quantizer_vertical_scroll_selector:select()
+        elseif notes_vertical_scroll_selector:is_selected() then
+          notes_vertical_scroll_selector:deselect()
+          romans_vertical_scroll_selector:select()
+        end
+      end
+    end
+  end
+
 end
 
 return channel_edit_page_ui

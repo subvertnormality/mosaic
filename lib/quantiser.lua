@@ -3,18 +3,18 @@ local quantiser = {}
 local musicutil = require("musicutil")
 
 local scales = { 
-  {name = "Major", value = musicutil.generate_scale(0, "major", 1), romans = {"I", "ii", "iii", "IV", "V", "vi", "vii°"}},
-  {name = "Harmonic Major", value = musicutil.generate_scale(0, "harmonic_major", 1), romans = {"I", "ii", "iii", "IV", "V", "♭VI+", "vii°"}},
-  {name = "Minor", value = musicutil.generate_scale(0, "minor", 1), romans = {"i", "ii°", "♭III", "iv", "v", "♭VI", "♭VII"}},
-  {name = "Harmonic Minor", value = musicutil.generate_scale(0, "harmonic_minor", 1), romans = {"i", "ii°", "♭III+", "iv", "V", "♭VI", "vii°"}},
-  {name = "Melodic Minor", value = musicutil.generate_scale(0, "melodic_minor", 1), romans = {"i", "ii", "♭III+", "IV", "V", "vi°", "vii°"}},
-  {name = "Dorian", value = musicutil.generate_scale(0, "dorian", 1), romans = {"i", "ii", "♭III", "IV", "v", "vi°", "♭VII"}},
-  {name = "Phrygian", value = musicutil.generate_scale(0, "phrygian", 1), romans = {"i", "♭II", "♭III", "iv", "v°", "♭VI", "♭VII"}},
-  {name = "Lydian", value = musicutil.generate_scale(0, "lydian", 1), romans = {"I", "II", "iii", "#IV°", "V", "vi", "vii"}},
-  {name = "Lydian Minor", value = musicutil.generate_scale(0, "lydian_minor", 1), romans = {"I", "II", "iii", "#IV°", "v", "♭VI", "♭VII"}},
-  {name = "Mixolydian", value = musicutil.generate_scale(0, "mixolydian", 1), romans = {"I", "ii", "iii°", "IV", "v", "vi", "♭VII"}},
-  {name = "Locrian", value = musicutil.generate_scale(0, "locrian", 1), romans = {"i°", "♭II", "♭iii", "iv", "♭V", "♭VI", "♭VII"}},
-  {name = "Locrian Major", value = musicutil.generate_scale(0, "major_locrian", 1), romans = {"I", "ii°", "♭iii", "IV", "♭V", "♭VI", "♭VII"}},
+  {name = "Major", number = 1, scale = musicutil.generate_scale(0, "major", 1), romans = {"I", "ii", "iii", "IV", "V", "vi", "vii°"}},
+  {name = "Harmonic Major", number = 2, scale = musicutil.generate_scale(0, "harmonic major", 1), romans = {"I", "ii", "iii", "IV", "V", "♭VI+", "vii°"}},
+  {name = "Minor", number = 3, scale = musicutil.generate_scale(0, "minor", 1), romans = {"i", "ii°", "♭III", "iv", "v", "♭VI", "♭VII"}},
+  {name = "Harmonic Minor", number = 4, scale = musicutil.generate_scale(0, "harmonic minor", 1), romans = {"i", "ii°", "♭III+", "iv", "V", "♭VI", "vii°"}},
+  {name = "Melodic Minor", number = 5, scale = musicutil.generate_scale(0, "melodic minor", 1), romans = {"i", "ii", "♭III+", "IV", "V", "vi°", "vii°"}},
+  {name = "Dorian", number = 6, scale = musicutil.generate_scale(0, "dorian", 1), romans = {"i", "ii", "♭III", "IV", "v", "vi°", "♭VII"}},
+  {name = "Phrygian", number = 7, scale = musicutil.generate_scale(0, "phrygian", 1), romans = {"i", "♭II", "♭III", "iv", "v°", "♭VI", "♭VII"}},
+  {name = "Lydian", number = 8, scale = musicutil.generate_scale(0, "lydian", 1), romans = {"I", "II", "iii", "#IV°", "V", "vi", "vii"}},
+  {name = "Lydian Minor", number = 9, scale = musicutil.generate_scale(0, "lydian minor", 1), romans = {"I", "II", "iii", "#IV°", "v", "♭VI", "♭VII"}},
+  {name = "Mixolydian", number = 10, scale = musicutil.generate_scale(0, "mixolydian", 1), romans = {"I", "ii", "iii°", "IV", "v", "vi", "♭VII"}},
+  {name = "Locrian", number = 11, scale = musicutil.generate_scale(0, "locrian", 1), romans = {"i°", "♭II", "♭iii", "iv", "♭V", "♭VI", "♭VII"}},
+  {name = "Locrian Major", number = 12, scale = musicutil.generate_scale(0, "major locrian", 1), romans = {"I", "ii°", "♭iii", "IV", "♭V", "♭VI", "♭VII"}},
 }
 
 local notes = {
@@ -46,32 +46,34 @@ end
 
 function quantiser:process(note_number, octave_mod, scale_number, channel)
 
-  local root_note = program.root_note
-
-  if channel.root_note > -1 then
-    root_note = channel.root_note
-  end
-
+  local root_note = program.root_note + 60
   local chord_rotation = program.chord - 1
 
-  if channel.chord > -1 then
-    chord_rotation = channel.chord - 1
-  end
-  
-  local program_default_scale = program.default_scale
   local channel_default_scale = channel.default_scale
   local channel_step_scale = channel.step_scales[channel.current_step]
 
-  local scale = program.scales[program.default_scale].scale
+  local scale_container = program.scales[program.default_scale]
 
-  if channel_step_scale > 0 then
-    scale = program.scales[channel_step_scale].scale
-  elseif channel_default_scale > 0 then
-    scale = program.scales[channel_default_scale].scale
+  if channel_step_scale > 0 and program.scales[channel_step_scale].scale then
+    scale_container = program.scales[channel_step_scale]
+  elseif channel_default_scale > 0 and program.scales[channel_default_scale].scale  then
+    scale_container = program.scales[channel_default_scale]
   end
 
+  if scale_container.root_note > -1 then
+    root_note = scale_container.root_note + 60
+  end
+
+  if scale_container.chord > -1 then
+    chord_rotation = scale_container.chord - 1
+  end
+
+  local scale = scale_container.scale
+
   if chord_rotation > 0 then
-    scale = fn.rotate_table_left(scale, chord_rotation)
+    for i=1, chord_rotation do
+      scale = fn.rotate_table_left(scale)
+    end
   end
 
   if note_number >= 7 then

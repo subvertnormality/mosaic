@@ -68,7 +68,7 @@ end
 
 local function load_new_project()
 
-  local root_note = 60
+  local root_note = 0
   program = {
     selected_page = pages.channel_edit_page,
     selected_sequencer_pattern = 1,
@@ -76,12 +76,13 @@ local function load_new_project()
     selected_channel = 1,
     scale_type = "sinfonion",
     root_note = root_note,
+    chord = 1,
     default_scale = 1,
     chord = 1,
     bpm = 120,
     current_step = 1,
     scales = {
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7)}, 
+      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1}, 
       {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
     },
     sequencer_patterns = fn.initialise_default_sequencer_patterns()
@@ -174,6 +175,9 @@ function init()
 
 end
 
+function enc(n,d)
+  ui_controller:enc(n, d)
+end
 
 
 function autosave_reset() 

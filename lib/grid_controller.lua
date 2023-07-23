@@ -52,9 +52,13 @@ function g.key(x, y, z)
         grid_controller.push[x][y].state = "inactive"
         grid_controller:short_press(x,y) -- and execute a short press instead.
       elseif grid_controller.push[x][y].state == "dual_pressed" then
-        grid_controller:dual_press(grid_controller.push.active[1], grid_controller.push.active[2], x, y)
+        if grid_controller.push.active then 
+          grid_controller:dual_press(grid_controller.push.active[1], grid_controller.push.active[2], x, y)
+        end
         grid_controller.push[x][y].state = "inactive"
-        grid_controller.push[grid_controller.push.active[1]][grid_controller.push.active[2]].state = "inactive"
+        if grid_controller.push.active then 
+          grid_controller.push[grid_controller.push.active[1]][grid_controller.push.active[2]].state = "inactive"
+        end
         grid_controller.push.active = false
       end
     end

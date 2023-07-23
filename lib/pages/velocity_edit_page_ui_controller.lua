@@ -19,4 +19,8 @@ function velocity_edit_page_ui:register_ui_draw_handlers()
 end
 
 
+function velocity_edit_page_ui:enc(n, d)
+
+end
+
 return velocity_edit_page_ui

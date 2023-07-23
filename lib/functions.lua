@@ -211,8 +211,13 @@ function fn.calc_grid_count(x, y)
 end
 
 function fn.rotate_table_left(t)
-  table.insert(t, table.remove(t, 1))
-  return t
+  -- Create a new table by copying the original table
+  local new_table = {table.unpack(t)}
+  
+  -- Rotate elements of the new table
+  local first_item = table.remove(new_table, 1)
+  new_table[7] = first_item
+  return new_table
 end
 
 return fn

@@ -20,4 +20,8 @@ function trigger_edit_page_ui:register_ui_draw_handlers()
 end
 
 
+function trigger_edit_page_ui:enc(n, d)
+
+end
+
 return trigger_edit_page_ui

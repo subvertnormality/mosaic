@@ -20,4 +20,8 @@ function channel_sequencer_page_ui:register_ui_draw_handlers()
 end
 
 
+function channel_sequencer_page_ui:enc(n, d)
+
+end
+
 return channel_sequencer_page_ui

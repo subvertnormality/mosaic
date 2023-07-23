@@ -8,8 +8,8 @@ channel_sequencer_page_ui_controller = include("lib/pages/channel_sequencer_page
 
 tooltip = include("lib/ui_components/tooltip")
 
-local function register_draw_handlers()
 
+function ui_controller:init()
   draw_handler:register_ui(
     "tooltip",
     tooltip.draw
@@ -21,10 +21,7 @@ local function register_draw_handlers()
   trigger_edit_page_ui_controller:register_ui_draw_handlers()
   channel_sequencer_page_ui_controller:register_ui_draw_handlers()
 
-end
-
-function ui_controller.init()
-  register_draw_handlers()
+  channel_edit_page_ui_controller:init()
 end
 
 function ui_controller:change_page(subpage_name)
@@ -44,6 +41,16 @@ function ui_controller:redraw()
   
 end
 
+function ui_controller:enc(n, d)
+
+  channel_edit_page_ui_controller:enc(n, d)
+  velocity_edit_page_ui_controller:enc(n, d)
+  note_edit_page_ui_controller:enc(n, d)
+  trigger_edit_page_ui_controller:enc(n, d)
+  channel_sequencer_page_ui_controller:enc(n, d)
+
+
+end
 
 
 
