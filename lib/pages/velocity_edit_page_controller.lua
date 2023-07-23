@@ -15,6 +15,8 @@ local step49to64_fade_button = FadeButton:new(12, 8, 49, 64)
 local vel1to7_fade_button = FadeButton:new(15, 8, 1, 7)
 local vel8to14_fade_button = FadeButton:new(16, 8, 8, 14)
 
+local quad_dupe_button = Button:new(7, 8)
+
 function velocity_edit_page_controller:reset_buttons()
   step1to16_fade_button:set_value(horizontal_offset)
   step17to32_fade_button:set_value(horizontal_offset)
@@ -150,6 +152,13 @@ function velocity_edit_page_controller:register_draw_handlers()
       return vel8to14_fade_button:draw()
     end
   )
+  draw_handler:register_grid(
+    "pattern_velocity_edit_page",
+    function()
+
+      return quad_dupe_button:draw()
+    end
+  )
 end
 
 
@@ -163,10 +172,27 @@ function velocity_edit_page_controller:register_press_handlers()
           local selected_sequencer_pattern = program.selected_sequencer_pattern
           local selected_pattern = program.selected_pattern
           local velocity = velocity_edit_page_controller:velocity_from_value(faders["step"..s.."_fader"]:get_value())
-          program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s] = velocity
+          local seq_pattern = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern]
+          seq_pattern.velocity_values[s] = velocity
           program.sequencer_patterns[program.selected_sequencer_pattern].active = true
-          pattern_controller:update_working_patterns()
+          local steps_tip = s.." "
           tooltip:show("Step "..s.." velocity set to "..velocity)
+  
+          if quad_dupe_button:get_state() == 2 then
+            local steps = {16, 32, 48, -16, -32, -48}
+            
+            for _, step in ipairs(steps) do
+              local step_value = s + step
+              if step_value > 0 and step_value < 65 then
+                seq_pattern.velocity_values[step_value] = velocity
+                steps_tip = steps_tip..step_value.." "
+              end
+            end
+            tooltip:show("Steps "..steps_tip.."set to "..velocity)
+  
+          end
+          
+          pattern_controller:update_working_patterns()
         end
       end
     )
@@ -241,6 +267,21 @@ function velocity_edit_page_controller:register_press_handlers()
       end
 
       return vel8to14_fade_button:press(x, y)
+    end
+  )
+  press_handler:register(
+    "pattern_velocity_edit_page",
+    function(x, y)
+      quad_dupe_button:press(x, y)
+      if (quad_dupe_button:is_this(x, y)) then
+        if quad_dupe_button:get_state() == 1 then
+          tooltip:show("Quad dupe off")
+          quad_dupe_button:no_blink()
+        else
+          tooltip:show("Quad dupe on")
+          quad_dupe_button:blink()
+        end
+      end
     end
   )
 end

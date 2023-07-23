@@ -16,6 +16,8 @@ local note1to7_fade_button = FadeButton:new(14, 8, 1, 7)
 local note8to14_fade_button = FadeButton:new(15, 8, 8, 14)
 local note15to21_fade_button = FadeButton:new(16, 8, 15, 21)
 
+local quad_dupe_button = Button:new(7, 8)
+
 function note_edit_page_controller:reset_buttons()
   step1to16_fade_button:set_value(horizontal_offset)
   step17to32_fade_button:set_value(horizontal_offset)
@@ -122,6 +124,13 @@ function note_edit_page_controller:register_draw_handlers()
       return note15to21_fade_button:draw()
     end
   )
+  draw_handler:register_grid(
+    "pattern_note_edit_page",
+    function()
+
+      return quad_dupe_button:draw()
+    end
+  )
 end
 
 
@@ -130,16 +139,39 @@ function note_edit_page_controller:register_press_handlers()
     press_handler:register(
       "pattern_note_edit_page",
       function(x, y)
-        faders["step"..s.."_fader"]:press(x, y)
-        if faders["step"..s.."_fader"]:is_this(x, y) then
-          local selected_sequencer_pattern = program.selected_sequencer_pattern
-          local selected_pattern = program.selected_pattern
-          local note = fn.note_from_value(faders["step"..s.."_fader"]:get_value())
-          program.sequencer_patterns[program.selected_sequencer_pattern].active = true
-          program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].note_values[s] = note
-          pattern_controller:update_working_patterns()
-          tooltip:show("Step "..s.." note set to "..note)
+        local fader_key = "step"..s.."_fader"
+        local fader = faders[fader_key]
+        fader:press(x, y)
+        
+        if not fader:is_this(x, y) then
+          return
         end
+        
+        local selected_sequencer_pattern = program.selected_sequencer_pattern
+        local selected_pattern = program.selected_pattern
+        local note = fn.note_from_value(fader:get_value())
+        local seq_pattern = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern]
+        local steps_tip = s.." "
+
+        seq_pattern.note_values[s] = note
+        program.sequencer_patterns[selected_sequencer_pattern].active = true
+        tooltip:show("Step "..s.." note set to "..note)
+        
+        if quad_dupe_button:get_state() == 2 then
+          local steps = {16, 32, 48, -16, -32, -48}
+          
+          for _, step in ipairs(steps) do
+            local step_value = s + step
+            if step_value > 0 and step_value < 65 then
+              seq_pattern.note_values[step_value] = note
+              steps_tip = steps_tip..step_value.." "
+            end
+          end
+          tooltip:show("Steps "..steps_tip.."set to "..note)
+
+        end
+        
+        pattern_controller:update_working_patterns()
       end
     )
   end
@@ -225,6 +257,21 @@ function note_edit_page_controller:register_press_handlers()
       end
 
       return note1to7_fade_button:press(x, y)
+    end
+  )
+  press_handler:register(
+    "pattern_note_edit_page",
+    function(x, y)
+      quad_dupe_button:press(x, y)
+      if (quad_dupe_button:is_this(x, y)) then
+        if quad_dupe_button:get_state() == 1 then
+          tooltip:show("Quad dupe off")
+          quad_dupe_button:no_blink()
+        else
+          tooltip:show("Quad dupe on")
+          quad_dupe_button:blink()
+        end
+      end
     end
   )
 end
