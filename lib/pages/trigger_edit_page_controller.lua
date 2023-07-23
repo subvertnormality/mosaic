@@ -137,6 +137,38 @@ function trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
   fn.dirty_grid(true)
 end
 
+local function get_bank_name(id)
+
+  if (pattern_trigger_edit_page_algorithm_fader:get_value() == 4) then
+    return "Prime "..id
+  end
+
+  if (id == 1) then
+    return "Random bank"
+  elseif (id == 2) then
+    return "Bass drum bank"
+  elseif (id == 3) then
+    return "Snare drum bank"
+  elseif (id == 4) then
+    return "Closed hi-hat bank"
+  elseif (id == 5) then
+    return "Open hi-hat bank"
+  end
+
+end
+
+local function get_algorithm_name(id)
+  if (id == 1) then
+    return "Drum algorithm"
+  elseif (id == 2) then
+    return "Tresillo algorithm"
+  elseif (id == 3) then
+    return "Euclidean algorithm"
+  elseif (id == 4) then
+    return "Numeric repetitor"
+  end
+end
+
 function trigger_edit_page_controller:register_press_handlers()
   press_handler:register(
   "pattern_trigger_edit_page",
@@ -163,7 +195,11 @@ function trigger_edit_page_controller:register_press_handlers()
     if pattern_trigger_edit_page_pattern1_fader:is_this(x, y) then
       load_paint_pattern()
       pattern_trigger_edit_page_pattern1_fader:press(x, y)
-      tooltip:show("Pattern 1 - "..pattern_trigger_edit_page_pattern1_fader:get_value().." selected")
+      if (pattern_trigger_edit_page_algorithm_fader:get_value() == 3) then
+        tooltip:show("Fill - "..pattern_trigger_edit_page_pattern1_fader:get_value().." selected")
+      else
+        tooltip:show("Pattern 1 - "..pattern_trigger_edit_page_pattern1_fader:get_value().." selected")
+      end
     end
   end
   )
@@ -173,7 +209,11 @@ function trigger_edit_page_controller:register_press_handlers()
     if pattern_trigger_edit_page_pattern2_fader:is_this(x, y) then
       load_paint_pattern()
       pattern_trigger_edit_page_pattern2_fader:press(x, y)
-      tooltip:show("Pattern 2 - "..pattern_trigger_edit_page_pattern2_fader:get_value().." selected")
+      if (pattern_trigger_edit_page_algorithm_fader:get_value() == 3) then
+        tooltip:show("Length - "..pattern_trigger_edit_page_pattern2_fader:get_value().." selected")
+      else
+        tooltip:show("Pattern 2 - "..pattern_trigger_edit_page_pattern2_fader:get_value().." selected")
+      end
     end
   end
   )
@@ -183,7 +223,7 @@ function trigger_edit_page_controller:register_press_handlers()
     pattern_trigger_edit_page_algorithm_fader:press(x, y)
     if pattern_trigger_edit_page_algorithm_fader:is_this(x, y) then
       trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
-      tooltip:show("Algorithm "..pattern_trigger_edit_page_algorithm_fader:get_value().." selected")
+      tooltip:show(get_algorithm_name(pattern_trigger_edit_page_algorithm_fader:get_value()).." selected")
       load_paint_pattern()
     end
   end
@@ -194,7 +234,7 @@ function trigger_edit_page_controller:register_press_handlers()
     if pattern_trigger_edit_page_bankmask_fader:is_this(x, y) then
       pattern_trigger_edit_page_bankmask_fader:press(x, y)
       load_paint_pattern()
-      tooltip:show("Bank "..pattern_trigger_edit_page_bankmask_fader:get_value().." selected")
+      tooltip:show(get_bank_name(pattern_trigger_edit_page_bankmask_fader:get_value()).." selected")
     end
   end
   )
