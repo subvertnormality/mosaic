@@ -103,6 +103,9 @@ function register_press_handlers()
     if (y == 8) then
       if (x < 6) then
         if program.selected_page ~= x then
+          if x == 3 then
+            trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
+          end
           program.selected_page = x
           grid_controller:set_menu_button_state()
           tooltip:show(page_names[program.selected_page])

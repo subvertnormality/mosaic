@@ -197,7 +197,16 @@ function velocity_edit_page_controller:register_press_handlers()
       end
     )
   end
-
+  press_handler:register_long(
+    "pattern_velocity_edit_page",
+    function(x, y)
+      if (y == 1) then
+        program.selected_pattern = x
+        tooltip:show("Pattern "..x.." selected")
+        velocity_edit_page_controller:reset_all_controls()
+      end
+    end
+  )
   press_handler:register(
     "pattern_velocity_edit_page",
     function(x, y)

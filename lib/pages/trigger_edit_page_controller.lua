@@ -20,8 +20,6 @@ local pattern_trigger_edit_page_right_button = Button:new(12, 8, {{"Inactive", 3
 
 function trigger_edit_page_controller:init()
   
-  pattern_trigger_edit_page_pattern_select_fader:set_value(program.selected_pattern)
-
   trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
 end
 
@@ -103,7 +101,7 @@ end
 
 function trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
   local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
-
+  
   if (algorithm == 1) then
     pattern_trigger_edit_page_bankmask_fader:enabled()
     pattern_trigger_edit_page_bankmask_fader:set_size(5)
@@ -133,6 +131,8 @@ function trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
     pattern_trigger_edit_page_pattern2_fader:set_size(16)
     pattern_trigger_edit_page_pattern2_fader:enabled()
   end
+
+  pattern_trigger_edit_page_pattern_select_fader:set_value(program.selected_pattern)
 
   fn.dirty_grid(true)
 end

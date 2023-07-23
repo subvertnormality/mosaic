@@ -1,6 +1,21 @@
 VerticalFader = {}
 VerticalFader.__index = VerticalFader
 
+local shared_bright_mod = 0
+
+local bclock = clock.run(function()
+  while true do
+    if shared_bright_mod < 0 then
+      shared_bright_mod = 1
+    else
+      shared_bright_mod = -1
+    end
+    fn.dirty_grid(true)
+    clock.sleep(0.3)
+  end
+end)
+
+
 function VerticalFader:new(x, y, size)
   local self = setmetatable({}, VerticalFader)
   self.x = x
@@ -21,20 +36,37 @@ function VerticalFader:draw()
     return
   end
 
+  local bright_mod = 0
+
+
   for i = self.y, 7 do
+    bright_mod = 0
+    if self.x == program.selected_pattern then
+      if i == 1 then
+        bright_mod = shared_bright_mod
+      end
+    end
+
     if (i == math.abs(7 - self.vertical_offset)) then
-      g:led(x, i, 3) -- mark the bottom of each page
+      g:led(x, i, 3 + bright_mod) -- mark the bottom of each page
     elseif ((i == 7) and (math.abs(7 - self.vertical_offset) == 0)) then
-      g:led(x, i, 4) -- mark the zero line stronger
+      g:led(x, i, 4 + bright_mod) -- mark the zero line stronger
     elseif (self.size - i - self.vertical_offset + 1 > 0) then
-      g:led(x, i, self.led_brightness)
+      g:led(x, i, self.led_brightness + bright_mod)
     end
   end
+  
 
   local active_led = self.y + self.value - 1 - self.vertical_offset
   if (self.value > 0 and active_led < 8) then
-
-    g:led(x, active_led, 15)
+    if self.x == program.selected_pattern then
+      if self.y == active_led then
+        bright_mod = shared_bright_mod
+      else
+        bright_mod = 0
+      end
+    end
+    g:led(x, active_led, 12 + bright_mod)
   end
 
 end
