@@ -17,7 +17,7 @@ function Pages:draw()
   local x = 5
 
   for i = 1, fn.table_count(self.pages) do
-    screen.move(x, 5)
+    screen.move(x, 1)
     if self.selected_page == i then
       screen.level(10)
     else
@@ -44,6 +44,10 @@ end
 
 function Pages:select_page(page) 
   self.selected_page = page
+end
+
+function Pages:get_selected_page()
+  return self.selected_page
 end
 
 function Pages:next_page()

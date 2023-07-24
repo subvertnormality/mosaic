@@ -47,7 +47,7 @@ function VerticalScrollSelector:draw()
       end
     end
 
-    screen.move(self.x + 5, self.y + 12)
+    screen.move(self.x + 5, self.y + 10)
 
     if self.items[self.selected_item] then
       if self.selected then
@@ -63,7 +63,7 @@ function VerticalScrollSelector:draw()
     end
 
 
-    screen.move(self.x, self.y + 24)
+    screen.move(self.x, self.y + 20)
 
     if self.selected_item and self.items[self.selected_item + 1] then
       screen.level(1)

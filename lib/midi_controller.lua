@@ -10,9 +10,21 @@ function midi_controller:init()
       midi_device_names, -- table to insert to
       "port "..i..": "..util.trim_string_to_width(midi_devices[i].name,80) -- value to insert
     )
+  end 
+end
 
+function midi_controller:get_midi_outs()
+  local midi_outs = {}
+  for i = 1, #midi.vports do
+    if midi_devices[i] and midi_devices[i].name ~= "none" then
+      table.insert( 
+        midi_outs, 
+        {name = "OUT "..i, value = i, long_name = util.trim_string_to_width(midi_devices[i].name,80)}
+      )
+    end
   end 
 
+  return midi_outs
 end
 
 function midi_controller:all_off(id)
