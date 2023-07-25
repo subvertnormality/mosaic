@@ -51,6 +51,18 @@ function fn.table_to_string(tbl)
     return result
 end
 
+function fn.print_table(t, indent)
+  indent = indent or ''
+  for k, v in pairs(t) do
+      if type(v) == 'table' then
+          print(indent .. k .. ' :')
+          fn.print_table(v, indent .. '  ')
+      else
+          print(indent .. k .. ' : ' .. tostring(v))
+      end
+  end
+end
+
 function fn.string_to_table(str)
     return load("return " .. str)()
 end
@@ -116,12 +128,21 @@ function fn.initialise_64_table(d)
   return table_64
 end
 
-function fn.initialise_default_trig_lock_banks()
-  local trig_lock_banks = {}
-  for i=1,8 do
-    trig_lock_banks[i] = fn.initialise_64_table(-1)
+
+function fn.add_step_trig_lock(sequencer_pattern, channel, step, parameter, trig_lock)
+  local step_trig_lock_banks = program.sequencer_patterns[sequencer_pattern].channels[channel].step_trig_lock_banks
+  if step_trig_lock_banks[step] == nil then
+    step_trig_lock_banks[step] = {}
   end
-  return trig_lock_banks
+  step_trig_lock_banks[step][parameter] = trig_lock
+end
+
+function fn.get_step_trig_lock(sequencer_pattern, channel, step, parameter)
+  local step_trig_lock_banks = program.sequencer_patterns[sequencer_pattern].channels[channel].step_trig_lock_banks
+  if step_trig_lock_banks[step] == nil then
+    return nil
+  end
+  return step_trig_lock_banks[step][parameter]
 end
 
 function fn.initialise_default_channels()
@@ -130,7 +151,9 @@ function fn.initialise_default_channels()
   
   for i=1,16 do
     channels[i] = {
-      trig_lock_banks = fn.initialise_default_trig_lock_banks(),
+      trig_lock_banks = {0, 0, 0, 0, 0, 0, 0, 0},
+      trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}},
+      step_trig_lock_banks = {},
       working_pattern = {
         trig_values = fn.initialise_64_table(0),
         lengths = fn.initialise_64_table(1),
@@ -150,17 +173,7 @@ function fn.initialise_default_channels()
       octave = 0,
       clock_division = 1,
       current_step = 1,
-      midi_device_map = 1,
-      trig_lock_locations = {
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 },
-        {midi_channel = -1, midi_cc = -1 }
-      }
+      midi_device_map = 1
     }
   end
   

@@ -106,7 +106,7 @@ local function prime_autosave()
     metro.free(as_metro.id)
   end
   if not clock_controller:is_playing() then
-    as_metro = metro.init(do_autosave, 1, 1)
+    as_metro = metro.init(do_autosave, 0.5, 1)
     
     grid_controller:splash_screen_on()
     ui_splash_screen_active = true
@@ -145,9 +145,9 @@ function redraw()
 
   if ui_splash_screen_active then
     screen.level(15)
-    screen.move(55, 40)
+    screen.move(60, 38)
     screen.font_face (math.random(67))
-    screen.font_size(20)
+    screen.font_size(8)
     screen.text("P")
     screen.font_face (1)
     screen.update()
@@ -188,7 +188,7 @@ function init()
   params:set_action("new", function(x) load_new_project() end)
 
   
-  post_init = metro.init(post_splash_init, 2, 1)
+  post_init = metro.init(post_splash_init, 0.5, 1)
   post_init:start()
 
 
@@ -198,6 +198,9 @@ function enc(n,d)
   ui_controller:enc(n, d)
 end
 
+function key(n,z)
+  ui_controller:key(n, z)
+end
 
 function autosave_reset() 
   if autosave_timer.id then

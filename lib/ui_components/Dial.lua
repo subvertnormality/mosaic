@@ -16,7 +16,6 @@ end
 
 
 function Dial:draw()
-
   if self.selected then
     screen.level(15)
   else
@@ -46,5 +45,34 @@ function Dial:is_selected()
   return self.selected
 end
 
+function Dial:increment()
+  self.value = self.value + 1
+  fn.dirty_screen(true)
+end
+
+function Dial:decrement()
+  self.value = self.value - 1
+  fn.dirty_screen(true)
+end
+
+function Dial:set_value(value)
+  self.value = value
+  fn.dirty_screen(true)
+end
+
+function Dial:set_top_label(label)
+  self.top_label = label
+  fn.dirty_screen(true)
+end
+
+function Dial:set_bottom_label(label)
+  self.bottom_label = label
+  fn.dirty_screen(true)
+end
+
+function Dial:set_name()
+  self.name = name
+  fn.dirty_screen(true)
+end
 
 return Dial

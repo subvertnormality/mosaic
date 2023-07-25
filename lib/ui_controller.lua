@@ -56,5 +56,14 @@ function ui_controller:enc(n, d)
 
 end
 
+function ui_controller:key(n, z)
+  
+    channel_edit_page_ui_controller:key(n, z)
+    -- velocity_edit_page_ui_controller:key(n, z)
+    -- note_edit_page_ui_controller:key(n, z)
+    -- trigger_edit_page_ui_controller:key(n, z)
+    -- channel_sequencer_page_ui_controller:key(n, z)
+  
+  end
 
 return ui_controller

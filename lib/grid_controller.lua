@@ -69,7 +69,15 @@ function g.remove()
   grid_controller:alert_disconnect()
 end
 
+local function refresh_pages()
 
+  channel_edit_page_controller:refresh()
+  -- channel_sequencer_page_controller:refresh()
+  -- trigger_edit_page_controller:refresh()
+  -- note_edit_page_controller:refresh()
+  -- velocity_edit_page_controller:refresh()
+
+end
 
 local function register_draw_handlers()
   channel_edit_page_controller:register_draw_handlers()
@@ -107,6 +115,7 @@ function register_press_handlers()
             trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
           end
           program.selected_page = x
+          refresh_pages()
           grid_controller:set_menu_button_state()
           tooltip:show(page_names[program.selected_page])
         else

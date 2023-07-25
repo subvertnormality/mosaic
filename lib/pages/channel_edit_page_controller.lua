@@ -70,6 +70,8 @@ function channel_edit_page_controller:update_button_states()
     average_merge_mode_button:set_state(1)
     skip_merge_mode_button:set_state(1)
   end
+
+  channel_select_fader:set_value(program.selected_channel)
 end
 
 function channel_edit_page_controller:init()
@@ -80,9 +82,7 @@ function channel_edit_page_controller:init()
 
   channel_edit_page_controller:update_button_states() 
   channel_octave_fader:set_value(program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].octave + 3)
-  channel_edit_page_controller:update_scale_state() 
-  channel_edit_page_controller:update_channel_config_state()
-  channel_edit_page_controller:update_channel_edit_page_ui()
+  channel_edit_page_controller:refresh()
 end
 
 
@@ -228,9 +228,8 @@ function channel_edit_page_controller:register_press_handlers()
       if channel_select_fader:is_this(x, y) then
         program.selected_channel = channel_select_fader:get_value()
         pattern_controller:update_working_patterns()
-        channel_edit_page_controller:update_channel_edit_page_ui()
         tooltip:show("Channel "..program.selected_channel.." selected")
-        channel_edit_page_controller:update_channel_config_state()
+        channel_edit_page_controller:refresh()
       end
     end
   )
@@ -409,6 +408,13 @@ function channel_edit_page_controller:register_press_handlers()
   )
 end
 
-
+function channel_edit_page_controller:refresh()
+  channel_edit_page_controller:update_channel_edit_page_ui()
+  channel_edit_page_controller:update_channel_config_state()
+  channel_edit_page_controller:update_button_states() 
+  channel_edit_page_controller:update_scale_state() 
+  channel_edit_page_ui_controller:refresh()
+  
+end
 
 return channel_edit_page_controller

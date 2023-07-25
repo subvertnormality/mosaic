@@ -7,7 +7,7 @@ function ControlScrollSelector:new(x, y, items)
   self.y = y
   self.name = name
   self.items = items
-  self.selected_item = 0
+  self.selected_item = 1
   return self
 end
 
@@ -45,7 +45,20 @@ end
 
 function ControlScrollSelector:set_items(items)
   self.items = items
+  fn.dirty_screen(true)
 end
 
+function ControlScrollSelector:get_selected_index()
+  return self.selected_item
+end
+
+function ControlScrollSelector:get_selected_item()
+  return self.items[self.selected_item]
+end
+
+function ControlScrollSelector:set_selected_item(item)
+  self.items[self.selected_item]:select()
+  fn.dirty_screen(true)
+end
 
 return ControlScrollSelector

@@ -21,14 +21,20 @@ local midi_device_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, 
 local midi_channel_vertical_scroll_selector = VerticalScrollSelector:new(45, 25, "Midi Channel", {{name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4}, {name = "CC5", value = 5}, {name = "CC6", value = 6}, {name = "CC7", value = 7}, {name = "CC8", value = 8}, {name = "CC9", value = 9}, {name = "CC10", value = 10}, {name = "CC11", value = 11}, {name = "CC12", value = 12}, {name = "CC13", value = 13}, {name = "CC14", value = 14}, {name = "CC15", value = 15}, {name = "CC16", value = 16}})
 local midi_device_map_vertical_scroll_selector = VerticalScrollSelector:new(70, 25, "Midi Map", midi_device_map:get_midi_device_map())
 
-local param_1 = Dial:new(5, 20, "Param 1", "XXXX", "XXXX")
-local param_2 = Dial:new(25, 20, "Param 2", "XXXX", "XXXX")
-local param_3 = Dial:new(45, 20, "Param 3", "XXXX", "XXXX")
-local param_4 = Dial:new(65, 20, "Param 4", "XXXX", "XXXX")
-local param_5 = Dial:new(5, 40, "Param 5", "XXXX", "XXXX")
-local param_6 = Dial:new(25, 40, "Param 6", "XXXX", "XXXX")
-local param_7 = Dial:new(45, 40, "Param 7", "XXXX", "XXXX")
-local param_8 = Dial:new(65, 40, "Param 8", "XXXX", "XXXX")
+local param_select_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Params", {})
+
+
+
+local param_1 = Dial:new(5, 20, "Param 1", "xxxx", "xxxx")
+local param_2 = Dial:new(30, 20, "Param 2", "xxxx", "xxxx")
+local param_3 = Dial:new(55, 20, "Param 3", "xxxx", "xxxx")
+local param_4 = Dial:new(80, 20, "Param 4", "xxxx", "xxxx")
+local param_5 = Dial:new(5, 40, "Param 5", "xxxx", "xxxx")
+local param_6 = Dial:new(30, 40, "Param 6", "xxxx", "xxxx")
+local param_7 = Dial:new(55, 40, "Param 7", "xxxx", "xxxx")
+local param_8 = Dial:new(80, 40, "Param 8", "xxxx", "xxxx")
+
+local params = {param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8}
 
 local dials = ControlScrollSelector:new(0, 0, {})
 
@@ -64,11 +70,31 @@ function channel_edit_page_ui:register_ui_draw_handlers()
 
 end
 
+function channel_edit_page_ui:refresh_device_selector()
+  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+
+  local i = 1
+  local device = {}
+  for k, v in pairs(midi_device_map:get_midi_devices()) do
+    if i == channel.midi_device_map then
+      device = v
+      
+      break;
+    else
+      i = i + 1
+    end
+  end
+
+  param_select_vertical_scroll_selector:set_items(device)
+end
+
 function channel_edit_page_ui:init()
   quantizer_vertical_scroll_selector:select()
   midi_channel_vertical_scroll_selector:select()
   midi_device_vertical_scroll_selector:set_items(midi_controller:get_midi_outs())
   dials:set_items({param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8})
+
+  channel_edit_page_ui:refresh_device_selector()
 
   quantizer_page:set_sub_name_func(function ()
     return "Quantizer " .. program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].default_scale .. " "
@@ -82,12 +108,18 @@ function channel_edit_page_ui:init()
     return "Ch. " .. program.selected_channel .. " "
   end)
 
+  trig_lock_page:set_sub_page_draw_func(function ()
+    param_select_vertical_scroll_selector:draw()
+  end)
+
   pages:add_page(quantizer_page)
   pages:add_page(channel_edit_page)
   pages:add_page(trig_lock_page)
-  dials:select(1)
   pages:select_page(1)
+  
+  channel_edit_page_ui:update_trig_locks()
 
+  dials:set_selected_item(1)
 end
 
 function channel_edit_page_ui:select_quantizer_item(selected_item)
@@ -139,9 +171,29 @@ function channel_edit_page_ui:update_channel_config()
   channel.midi_device = midi_device.value
   channel.midi_channel = midi_channel.value
   channel.midi_device_map = midi_device_map.value
+
+  channel_edit_page_ui:refresh_device_selector()
+end
+
+function channel_edit_page_ui:update_trig_locks()
+ local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  for i=1,8 do
+    params[i]:set_value(channel.trig_lock_banks[i])
+    if channel.trig_lock_params[i].id ~= nil then
+      params[i]:set_name(channel.trig_lock_params[i].name)
+      params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
+      params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
+    else
+      params[i]:set_name("")
+      params[i]:set_top_label("XXXX")
+      params[i]:set_bottom_label("XXXX")
+    end
+  end
+  
 end
 
 function channel_edit_page_ui:enc(n, d)
+  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
   if n == 3 then
     for i=1, math.abs(d) do
       if d > 0 then
@@ -168,8 +220,24 @@ function channel_edit_page_ui:enc(n, d)
           end
           channel_edit_page_ui:update_channel_config()
         elseif pages:get_selected_page() == 3 then
-          dials:scroll_next()
+          if trig_lock_page:is_sub_page_enabled() then
+            param_select_vertical_scroll_selector:scroll_down()
+            channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
+            channel_edit_page_ui:update_trig_locks()
+          else
+            if channel.trig_lock_banks[dials:get_selected_index()] == nil then
+              channel.trig_lock_banks[dials:get_selected_index()] = 0
+            end
+            channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
+
+            if channel.trig_lock_banks[dials:get_selected_index()] > 127 then
+              channel.trig_lock_banks[dials:get_selected_index()] = 127
+            end
+            dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
+          end
         end
+
+
       else
         if pages:get_selected_page() == 1 then
           if quantizer_vertical_scroll_selector:is_selected() then
@@ -194,9 +262,23 @@ function channel_edit_page_ui:enc(n, d)
           end
           channel_edit_page_ui:update_channel_config()
         elseif pages:get_selected_page() == 3 then
-          dials:scroll_previous()
+          if trig_lock_page:is_sub_page_enabled() then
+            param_select_vertical_scroll_selector:scroll_up()
+            channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
+            channel_edit_page_ui:update_trig_locks()
+          else
+            if channel.trig_lock_banks[dials:get_selected_index()] == nil then
+              channel.trig_lock_banks[dials:get_selected_index()] = 0
+            end
+            channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
+            if channel.trig_lock_banks[dials:get_selected_index()] < 0 then
+              channel.trig_lock_banks[dials:get_selected_index()] = 0
+            end
+            dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
+          end
         end
       end
+
     end
   end
 
@@ -226,6 +308,8 @@ function channel_edit_page_ui:enc(n, d)
             midi_device_map_vertical_scroll_selector:deselect()
             midi_device_vertical_scroll_selector:select()
           end
+        elseif pages:get_selected_page() == 3 then
+          dials:scroll_next() 
         end
       else
         if pages:get_selected_page() == 1 then
@@ -250,6 +334,8 @@ function channel_edit_page_ui:enc(n, d)
             midi_device_map_vertical_scroll_selector:deselect()
             midi_channel_vertical_scroll_selector:select()
           end
+        elseif pages:get_selected_page() == 3 then
+          dials:scroll_previous()
         end
       end
     end
@@ -268,6 +354,21 @@ function channel_edit_page_ui:enc(n, d)
     end
   end
 
+end
+
+
+function channel_edit_page_ui:key(n, z) 
+  if n == 2 and z == 1 then
+    trig_lock_page:toggle_sub_page()
+  end
+end
+
+
+function channel_edit_page_ui:refresh()
+  channel_edit_page_ui:refresh_device_selector()
+  channel_edit_page_ui:update_scale()
+  channel_edit_page_ui:update_channel_config()
+  channel_edit_page_ui:update_trig_locks()
 end
 
 return channel_edit_page_ui
