@@ -74,17 +74,17 @@ end
 
 
 function velocity_edit_page_controller:reset_fader(s)
-  local selected_sequencer_pattern = program.selected_sequencer_pattern
-  local selected_pattern = program.selected_pattern
+  local selected_sequencer_pattern = program:get().selected_sequencer_pattern
+  local selected_pattern = program:get().selected_pattern
   faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
   faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)
-  local value = velocity_edit_page_controller:value_from_velocity(program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s])
+  local value = velocity_edit_page_controller:value_from_velocity(program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s])
 
   if value then 
     faders["step"..s.."_fader"]:set_value(value) 
   end
 
-  if program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values[s] < 1 then
+  if program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values[s] < 1 then
     faders["step"..s.."_fader"]:set_dark()
   else
     faders["step"..s.."_fader"]:set_light()
@@ -169,12 +169,12 @@ function velocity_edit_page_controller:register_press_handlers()
       function(x, y)
         faders["step"..s.."_fader"]:press(x, y)
         if faders["step"..s.."_fader"]:is_this(x, y) then
-          local selected_sequencer_pattern = program.selected_sequencer_pattern
-          local selected_pattern = program.selected_pattern
+          local selected_sequencer_pattern = program:get().selected_sequencer_pattern
+          local selected_pattern = program:get().selected_pattern
           local velocity = velocity_edit_page_controller:velocity_from_value(faders["step"..s.."_fader"]:get_value())
-          local seq_pattern = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern]
+          local seq_pattern = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern]
           seq_pattern.velocity_values[s] = velocity
-          program.sequencer_patterns[program.selected_sequencer_pattern].active = true
+          program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
           local steps_tip = s.." "
           tooltip:show("Step "..s.." velocity set to "..velocity)
   
@@ -201,7 +201,7 @@ function velocity_edit_page_controller:register_press_handlers()
     "pattern_velocity_edit_page",
     function(x, y)
       if (y == 1) then
-        program.selected_pattern = x
+        program:get().selected_pattern = x
         tooltip:show("Pattern "..x.." selected")
         velocity_edit_page_controller:reset_all_controls()
       end

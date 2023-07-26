@@ -39,17 +39,17 @@ end
 
 
 function note_edit_page_controller:reset_fader(s)
-  local selected_sequencer_pattern = program.selected_sequencer_pattern
-  local selected_pattern = program.selected_pattern
+  local selected_sequencer_pattern = program:get().selected_sequencer_pattern
+  local selected_pattern = program:get().selected_pattern
   faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
   faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)
-  local value = fn.value_from_note(program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].note_values[s])
+  local value = fn.value_from_note(program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].note_values[s])
 
   if value then 
     faders["step"..s.."_fader"]:set_value(value) 
   end
 
-  if program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values[s] < 1 then
+  if program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values[s] < 1 then
     faders["step"..s.."_fader"]:set_dark()
   else
     faders["step"..s.."_fader"]:set_light()
@@ -147,14 +147,14 @@ function note_edit_page_controller:register_press_handlers()
           return
         end
         
-        local selected_sequencer_pattern = program.selected_sequencer_pattern
-        local selected_pattern = program.selected_pattern
+        local selected_sequencer_pattern = program:get().selected_sequencer_pattern
+        local selected_pattern = program:get().selected_pattern
         local note = fn.note_from_value(fader:get_value())
-        local seq_pattern = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern]
+        local seq_pattern = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern]
         local steps_tip = s.." "
 
         seq_pattern.note_values[s] = note
-        program.sequencer_patterns[selected_sequencer_pattern].active = true
+        program:get().sequencer_patterns[selected_sequencer_pattern].active = true
         tooltip:show("Step "..s.." note set to "..note)
         
         if quad_dupe_button:get_state() == 2 then
@@ -179,7 +179,7 @@ function note_edit_page_controller:register_press_handlers()
     "pattern_note_edit_page",
     function(x, y)
       if (y == 1) then
-        program.selected_pattern = x
+        program:get().selected_pattern = x
         tooltip:show("Pattern "..x.." selected")
         note_edit_page_controller:reset_all_controls()
       end

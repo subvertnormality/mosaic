@@ -1,5 +1,6 @@
 grid_controller = include("sinfcommand/lib/grid_controller")
 ui_controller = include("sinfcommand/lib/ui_controller")
+program = include("sinfcommand/lib/program")
 
 local fn = include("sinfcommand/lib/functions")
 local fileselect = require('fileselect')
@@ -40,7 +41,7 @@ local function load_project(pth)
     print("Loading project " .. pth)
     local saved = tab.load(pth)
     if saved ~= nil then
-      program = saved[2]
+      program:set(saved[2])
       if saved[1] then params:read(norns.state.data .. saved[1] .. ".pset") end
       clock_controller:reset()
       fn.dirty_grid(true)
@@ -66,39 +67,7 @@ local function save_project(txt)
 end
 
 local function load_new_project()
-
-  local root_note = 0
-  program = {
-    selected_page = pages.channel_edit_page,
-    selected_sequencer_pattern = 1,
-    selected_pattern = 1,
-    selected_channel = 1,
-    scale_type = "sinfonion",
-    root_note = root_note,
-    chord = 1,
-    default_scale = 1,
-    chord = 1,
-    current_step = 1,
-    scales = {
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1}, 
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1}
-    },
-    sequencer_patterns = fn.initialise_default_sequencer_patterns()
-  }
+  program:init()
   grid_controller:refresh()
   ui_controller:refresh()
 end
@@ -184,6 +153,7 @@ function redraw_clock()
 end
 
 function init()
+  program:init()
   midi_controller.init()
   grid_clock_id = clock.run(grid_controller.grid_redraw)
   ui_clock_id = clock.run(redraw_clock)

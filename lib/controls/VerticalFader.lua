@@ -41,7 +41,7 @@ function VerticalFader:draw()
 
   for i = self.y, 7 do
     bright_mod = 0
-    if self.x == program.selected_pattern then
+    if self.x == program:get().selected_pattern then
       if i == 1 then
         bright_mod = shared_bright_mod
       end
@@ -59,7 +59,7 @@ function VerticalFader:draw()
 
   local active_led = self.y + self.value - 1 - self.vertical_offset
   if (self.value > 0 and active_led < 8) then
-    if self.x == program.selected_pattern then
+    if self.x == program:get().selected_pattern then
       if self.y == active_led then
         bright_mod = shared_bright_mod
       else

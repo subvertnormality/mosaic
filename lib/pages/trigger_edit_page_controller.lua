@@ -34,11 +34,11 @@ function trigger_edit_page_controller:register_draw_handlers()
   "pattern_trigger_edit_page",
   function()
 
-    local selected_sequencer_pattern = program.selected_sequencer_pattern
-    local selected_pattern = program.selected_pattern
+    local selected_sequencer_pattern = program:get().selected_sequencer_pattern
+    local selected_pattern = program:get().selected_pattern
     
-    local trigs = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
-    local lengths = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
+    local trigs = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
+    local lengths = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
   
     return pattern_trigger_edit_page_sequencer:draw(trigs, lengths)
   end
@@ -132,7 +132,7 @@ function trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
     pattern_trigger_edit_page_pattern2_fader:enabled()
   end
 
-  pattern_trigger_edit_page_pattern_select_fader:set_value(program.selected_pattern)
+  pattern_trigger_edit_page_pattern_select_fader:set_value(program:get().selected_pattern)
 
   fn.dirty_grid(true)
 end
@@ -175,8 +175,8 @@ function trigger_edit_page_controller:register_press_handlers()
   function(x, y)
     if pattern_trigger_edit_page_pattern_select_fader:is_this(x, y) then
       pattern_trigger_edit_page_pattern_select_fader:press(x, y)
-      program.selected_pattern = pattern_trigger_edit_page_pattern_select_fader:get_value()
-      tooltip:show("Pattern "..program.selected_pattern.." selected")
+      program:get().selected_pattern = pattern_trigger_edit_page_pattern_select_fader:get_value()
+      tooltip:show("Pattern "..program:get().selected_pattern.." selected")
     end
   end
   )
@@ -356,10 +356,10 @@ function trigger_edit_page_controller:register_press_handlers()
 end
 
 function save_paint_pattern(p)
-  local selected_sequencer_pattern = program.selected_sequencer_pattern
-  local selected_pattern = program.selected_pattern
-  local trigs = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
-  local lengths = program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
+  local selected_sequencer_pattern = program:get().selected_sequencer_pattern
+  local selected_pattern = program:get().selected_pattern
+  local trigs = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
+  local lengths = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
 
   for x = 1, 64 do
     if (trigs[x] < 1) and p[x] then
@@ -370,10 +370,10 @@ function save_paint_pattern(p)
       lengths[x] = 0
     end
   end
-  program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values = trigs
-  program.sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths = lengths
+  program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values = trigs
+  program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths = lengths
   pattern_controller:update_working_patterns()
-  program.sequencer_patterns[program.selected_sequencer_pattern].active = true
+  program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
 end
 
 function load_paint_pattern()

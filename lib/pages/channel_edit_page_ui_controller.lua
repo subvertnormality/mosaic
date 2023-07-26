@@ -64,15 +64,15 @@ function channel_edit_page_ui_controller:init()
   dials:set_items({param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8})
 
   quantizer_page:set_sub_name_func(function ()
-    return "Quantizer " .. program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].default_scale .. " "
+    return "Quantizer " .. program:get_selected_channel().default_scale .. " "
   end)
 
   channel_edit_page:set_sub_name_func(function ()
-    return "Ch. " .. program.selected_channel .. " "
+    return "Ch. " .. program:get().selected_channel .. " "
   end)
 
   trig_lock_page:set_sub_name_func(function ()
-    return "Ch. " .. program.selected_channel .. " "
+    return "Ch. " .. program:get().selected_channel .. " "
   end)
 
   trig_lock_page:set_sub_page_draw_func(function ()
@@ -100,12 +100,12 @@ function channel_edit_page_ui_controller:register_ui_draw_handlers()
 end
 
 function channel_edit_page_ui_controller:update_scale()
-  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  local channel = program:get_selected_channel()
   local scale = quantizer_vertical_scroll_selector:get_selected_item()
   local chord = romans_vertical_scroll_selector:get_selected_index()
   local root_note = notes_vertical_scroll_selector:get_selected_index() - 1
 
-  program.scales[channel.default_scale] = {
+  program:get().scales[channel.default_scale] = {
     number = scale.number,
     scale = scale.scale,
     chord = chord,
@@ -114,7 +114,7 @@ function channel_edit_page_ui_controller:update_scale()
 end
 
 function channel_edit_page_ui_controller:update_channel_config()
-  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  local channel = program:get_selected_channel()
   local midi_device = midi_device_vertical_scroll_selector:get_selected_item()
   local midi_channel = midi_channel_vertical_scroll_selector:get_selected_item()
   local midi_device_map = midi_device_map_vertical_scroll_selector:get_selected_item()
@@ -129,7 +129,7 @@ end
 
 
 function channel_edit_page_ui_controller:enc(n, d)
-  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  local channel = program:get_selected_channel()
   if n == 3 then
     for i=1, math.abs(d) do
       if d > 0 then
@@ -305,7 +305,7 @@ end
 
 
 function channel_edit_page_ui_controller:refresh_device_selector()
-  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  local channel = program:get_selected_channel()
 
   local i = 1
   local device = {}
@@ -324,12 +324,12 @@ end
 
 
 function channel_edit_page_ui_controller:refresh_quantiser()
-  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
-  if (program.scales[channel.default_scale]) then
-    local number = program.scales[channel.default_scale].number
-    local chord = program.scales[channel.default_scale].chord
-    local root_note = program.scales[channel.default_scale].root_note
-    program.sequencer_patterns[program.selected_sequencer_pattern].active = true
+  local channel = program:get_selected_channel()
+  if (program:get().scales[channel.default_scale]) then
+    local number = program:get().scales[channel.default_scale].number
+    local chord = program:get().scales[channel.default_scale].chord
+    local root_note = program:get().scales[channel.default_scale].root_note
+    program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
     quantizer_vertical_scroll_selector:set_selected_item(number)
     notes_vertical_scroll_selector:set_selected_item(root_note + 1)
     romans_vertical_scroll_selector:set_selected_item(chord)
@@ -340,7 +340,7 @@ end
 
 
 function channel_edit_page_ui_controller:refresh_trig_locks()
- local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+ local channel = program:get_selected_channel()
   for i=1,8 do
     params[i]:set_value(channel.trig_lock_banks[i])
     if channel.trig_lock_params[i].id ~= nil then
@@ -357,7 +357,7 @@ function channel_edit_page_ui_controller:refresh_trig_locks()
 end
 
 function channel_edit_page_ui_controller:refresh_channel_config()
-  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  local channel = program:get_selected_channel()
   midi_channel_vertical_scroll_selector:set_selected_item(channel.midi_channel)
   midi_device_vertical_scroll_selector:set_selected_item(channel.midi_device)
   midi_device_map_vertical_scroll_selector:set_selected_item(channel.midi_device_map)

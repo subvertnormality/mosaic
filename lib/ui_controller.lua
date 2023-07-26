@@ -41,7 +41,7 @@ function ui_controller:redraw()
   screen.font_face (math.random(67))
   screen.text("P")
   screen.font_face (1)
-  draw_handler:handle_ui(program.selected_page)
+  draw_handler:handle_ui(program:get().selected_page)
   
 end
 
