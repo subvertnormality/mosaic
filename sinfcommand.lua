@@ -144,7 +144,6 @@ local function post_splash_init()
 
   grid_controller:splash_screen_off()
   ui_splash_screen_active = false
-  clock_controller.init()
   ui_controller.init()
   grid_controller.init()
   fn.dirty_grid(true)
