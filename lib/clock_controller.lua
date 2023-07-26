@@ -9,6 +9,11 @@ local playing = false
 local master_clock
 local midi_transport
 
+
+
+local master_clock
+local midi_transport
+
 local function go(divisor, on_step) 
   while true do
     clock.sync(1/divisor)
@@ -35,8 +40,10 @@ end
 
 
 function clock_controller:start() 
+
   master_clock = clock.run(go, 4, master_func)
   midi_transport = clock.run(start_midi_transport, 4)
+
   for i = 1, 16 do
     local clock_division = program.sequencer_patterns[program.selected_sequencer_pattern].channels[i].clock_division
     clock_controller["channel_"..i.."_clock"] = clock.run(go, clock_division, function () 

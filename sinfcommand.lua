@@ -78,7 +78,6 @@ local function load_new_project()
     chord = 1,
     default_scale = 1,
     chord = 1,
-    bpm = 120,
     current_step = 1,
     scales = {
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1}, 
@@ -100,7 +99,8 @@ local function load_new_project()
     },
     sequencer_patterns = fn.initialise_default_sequencer_patterns()
   }
-
+  grid_controller:refresh()
+  ui_controller:refresh()
 end
 
 local function do_autosave()
@@ -148,7 +148,6 @@ local function post_splash_init()
   grid_controller.init()
   fn.dirty_grid(true)
   fn.dirty_screen(true)
-  
 
 end
 
@@ -215,10 +214,20 @@ function key(n,z)
   ui_controller:key(n, z)
 end
 
+
+
 function autosave_reset() 
   if autosave_timer.id then
     metro.free(autosave_timer.id)
   end
   autosave_timer = metro.init(prime_autosave, 60, 1)
   autosave_timer:start()
+end
+
+function clock.transport.start()
+  clock_controller:start()
+end
+
+function clock.transport.stop()
+  clock_controller:stop()
 end
