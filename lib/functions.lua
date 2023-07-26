@@ -171,7 +171,7 @@ function fn.initialise_default_channels()
       step_scales = fn.initialise_64_table(0),
       merge_mode = "skip",
       octave = 0,
-      clock_division = 1,
+      clock_division = 4,
       current_step = 1,
       midi_device_map = 1
     }

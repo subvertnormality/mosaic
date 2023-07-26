@@ -58,14 +58,6 @@ function midi_controller:cc(cc, value, channel, device)
 
 end
 
-function midi_controller:clock_send()
-  for id = 1, #midi.vports do
-    if midi_devices[id] ~= nil then
-      midi_devices[id]:clock()
-    end
-  end
-end
-
 function midi_controller:start()
   for id = 1, #midi.vports do
     if midi_devices[id] ~= nil then
