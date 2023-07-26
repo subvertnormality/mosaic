@@ -59,7 +59,7 @@ local function save_project(txt)
 
   if txt then
     print("Saving project as " .. txt)
-    tab.save({ txt, program }, norns.state.data .. txt ..".ptn")
+    tab.save({ txt, program:get() }, norns.state.data .. txt ..".ptn")
     params:write( norns.state.data .. txt .. ".pset")
   else
     print("Save cancel")

@@ -151,6 +151,10 @@ function program:get_selected_channel()
   return program_store.sequencer_patterns[program_store.selected_sequencer_pattern].channels[program_store.selected_channel]
 end
 
+function program:get_channel(x)
+  return program_store.sequencer_patterns[program_store.selected_sequencer_pattern].channels[x]
+end
+
 function program:set(p)
   program_store = p
 end
