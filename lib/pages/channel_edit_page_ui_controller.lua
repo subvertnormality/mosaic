@@ -23,16 +23,14 @@ local midi_device_map_vertical_scroll_selector = VerticalScrollSelector:new(70, 
 
 local param_select_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Params", {})
 
-
-
-local param_1 = Dial:new(5, 20, "Param 1", "xxxx", "xxxx")
-local param_2 = Dial:new(30, 20, "Param 2", "xxxx", "xxxx")
-local param_3 = Dial:new(55, 20, "Param 3", "xxxx", "xxxx")
-local param_4 = Dial:new(80, 20, "Param 4", "xxxx", "xxxx")
-local param_5 = Dial:new(5, 40, "Param 5", "xxxx", "xxxx")
-local param_6 = Dial:new(30, 40, "Param 6", "xxxx", "xxxx")
-local param_7 = Dial:new(55, 40, "Param 7", "xxxx", "xxxx")
-local param_8 = Dial:new(80, 40, "Param 8", "xxxx", "xxxx")
+local param_1 = Dial:new(5, 20, "Param 1", "X", "")
+local param_2 = Dial:new(30, 20, "Param 2", "X", "")
+local param_3 = Dial:new(55, 20, "Param 3", "X", "")
+local param_4 = Dial:new(80, 20, "Param 4", "X", "")
+local param_5 = Dial:new(5, 40, "Param 5", "X", "")
+local param_6 = Dial:new(30, 40, "Param 6", "X", "")
+local param_7 = Dial:new(55, 40, "Param 7", "X", "")
+local param_8 = Dial:new(80, 40, "Param 8", "X", "")
 
 local params = {param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8}
 
@@ -56,45 +54,14 @@ end)
 
 function channel_edit_page_ui_controller:change_page(page)
   pages:select_page(page)
-
 end
 
-function channel_edit_page_ui_controller:register_ui_draw_handlers() 
-  
-  draw_handler:register_ui(
-    "channel_edit_page",
-    function()
-      pages:draw()
-    end
-  )
-
-end
-
-function channel_edit_page_ui_controller:refresh_device_selector()
-  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
-
-  local i = 1
-  local device = {}
-  for k, v in pairs(midi_device_map:get_midi_devices()) do
-    if i == channel.midi_device_map then
-      device = v
-      
-      break;
-    else
-      i = i + 1
-    end
-  end
-
-  param_select_vertical_scroll_selector:set_items(device)
-end
 
 function channel_edit_page_ui_controller:init()
   quantizer_vertical_scroll_selector:select()
   midi_channel_vertical_scroll_selector:select()
   midi_device_vertical_scroll_selector:set_items(midi_controller:get_midi_outs())
   dials:set_items({param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8})
-
-  channel_edit_page_ui_controller:refresh_device_selector()
 
   quantizer_page:set_sub_name_func(function ()
     return "Quantizer " .. program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].default_scale .. " "
@@ -116,37 +83,20 @@ function channel_edit_page_ui_controller:init()
   pages:add_page(channel_edit_page)
   pages:add_page(trig_lock_page)
   pages:select_page(1)
-  
-  channel_edit_page_ui_controller:update_trig_locks()
-
   dials:set_selected_item(1)
+
+  channel_edit_page_ui_controller:refresh()
 end
 
-function channel_edit_page_ui_controller:select_midi_device_item(selected_item)
-  midi_device_vertical_scroll_selector:set_selected_item(selected_item)
-end
+function channel_edit_page_ui_controller:register_ui_draw_handlers() 
+  
+  draw_handler:register_ui(
+    "channel_edit_page",
+    function()
+      pages:draw()
+    end
+  )
 
-function channel_edit_page_ui_controller:select_midi_channel_item(selected_item)
-  midi_channel_vertical_scroll_selector:set_selected_item(selected_item)
-end
-
-function channel_edit_page_ui_controller:select_midi_device_map_item(selected_item)
-  midi_device_map_vertical_scroll_selector:set_selected_item(selected_item)
-end
-
-function channel_edit_page_ui_controller:update_quantiser_ui()
-  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
-  if (program.scales[channel.default_scale]) then
-    local number = program.scales[channel.default_scale].number
-    local chord = program.scales[channel.default_scale].chord
-    local root_note = program.scales[channel.default_scale].root_note
-    program.sequencer_patterns[program.selected_sequencer_pattern].active = true
-    quantizer_vertical_scroll_selector:set_selected_item(number)
-    notes_vertical_scroll_selector:set_selected_item(root_note + 1)
-    romans_vertical_scroll_selector:set_selected_item(chord)
-
-    fn.dirty_screen(true)
-  end
 end
 
 function channel_edit_page_ui_controller:update_scale()
@@ -176,22 +126,7 @@ function channel_edit_page_ui_controller:update_channel_config()
   channel_edit_page_ui_controller:refresh_device_selector()
 end
 
-function channel_edit_page_ui_controller:update_trig_locks()
- local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
-  for i=1,8 do
-    params[i]:set_value(channel.trig_lock_banks[i])
-    if channel.trig_lock_params[i].id ~= nil then
-      params[i]:set_name(channel.trig_lock_params[i].name)
-      params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
-      params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
-    else
-      params[i]:set_name("")
-      params[i]:set_top_label("XXXX")
-      params[i]:set_bottom_label("XXXX")
-    end
-  end
-  
-end
+
 
 function channel_edit_page_ui_controller:enc(n, d)
   local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
@@ -224,7 +159,7 @@ function channel_edit_page_ui_controller:enc(n, d)
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_down()
             channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
-            channel_edit_page_ui_controller:update_trig_locks()
+            channel_edit_page_ui_controller:refresh_trig_locks()
           else
             if channel.trig_lock_banks[dials:get_selected_index()] == nil then
               channel.trig_lock_banks[dials:get_selected_index()] = 0
@@ -266,7 +201,7 @@ function channel_edit_page_ui_controller:enc(n, d)
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_up()
             channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
-            channel_edit_page_ui_controller:update_trig_locks()
+            channel_edit_page_ui_controller:refresh_trig_locks()
           else
             if channel.trig_lock_banks[dials:get_selected_index()] == nil then
               channel.trig_lock_banks[dials:get_selected_index()] = 0
@@ -365,11 +300,71 @@ function channel_edit_page_ui_controller:key(n, z)
 end
 
 
+function channel_edit_page_ui_controller:refresh_device_selector()
+  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+
+  local i = 1
+  local device = {}
+  for k, v in pairs(midi_device_map:get_midi_devices()) do
+    if i == channel.midi_device_map then
+      device = v
+      
+      break;
+    else
+      i = i + 1
+    end
+  end
+
+  param_select_vertical_scroll_selector:set_items(device)
+end
+
+
+function channel_edit_page_ui_controller:refresh_quantiser()
+  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  if (program.scales[channel.default_scale]) then
+    local number = program.scales[channel.default_scale].number
+    local chord = program.scales[channel.default_scale].chord
+    local root_note = program.scales[channel.default_scale].root_note
+    program.sequencer_patterns[program.selected_sequencer_pattern].active = true
+    quantizer_vertical_scroll_selector:set_selected_item(number)
+    notes_vertical_scroll_selector:set_selected_item(root_note + 1)
+    romans_vertical_scroll_selector:set_selected_item(chord)
+
+    fn.dirty_screen(true)
+  end
+end
+
+
+function channel_edit_page_ui_controller:refresh_trig_locks()
+ local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  for i=1,8 do
+    params[i]:set_value(channel.trig_lock_banks[i])
+    if channel.trig_lock_params[i].id ~= nil then
+      params[i]:set_name(channel.trig_lock_params[i].name)
+      params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
+      params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
+    else
+      params[i]:set_name("")
+      params[i]:set_top_label("X")
+      params[i]:set_bottom_label("")
+    end
+  end
+  
+end
+
+function channel_edit_page_ui_controller:refresh_channel_config()
+  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
+  midi_channel_vertical_scroll_selector:set_selected_item(channel.midi_channel)
+  midi_device_vertical_scroll_selector:set_selected_item(channel.midi_device)
+  midi_device_map_vertical_scroll_selector:set_selected_item(channel.midi_device_map)
+end
+
+
 function channel_edit_page_ui_controller:refresh()
   channel_edit_page_ui_controller:refresh_device_selector()
-  channel_edit_page_ui_controller:update_channel_config()
-  channel_edit_page_ui_controller:update_trig_locks()
-  channel_edit_page_ui_controller:update_quantiser_ui()
+  channel_edit_page_ui_controller:refresh_channel_config()
+  channel_edit_page_ui_controller:refresh_trig_locks()
+  channel_edit_page_ui_controller:refresh_quantiser()
 end
 
 return channel_edit_page_ui_controller

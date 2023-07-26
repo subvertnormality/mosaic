@@ -47,7 +47,6 @@ function channel_edit_page_controller:init()
     pattern_buttons["step"..s.."_pattern_button"] = Button:new(s, 2)
   end
 
-  channel_edit_page_controller:update_button_states() 
   channel_octave_fader:set_value(program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].octave + 3)
   channel_edit_page_controller:refresh()
 end
@@ -164,7 +163,7 @@ function channel_edit_page_controller:register_press_handlers()
           local scale_value = channel_scale_fader:get_value()
           local number = program.scales[scale_value].number
           channel.default_scale = scale_value
-          channel_edit_page_ui_controller:update_quantiser_ui()
+          channel_edit_page_ui_controller:refresh_quantiser()
           tooltip:show("Ch. "..program.selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
         end
       end
@@ -323,7 +322,7 @@ function channel_edit_page_controller:register_press_handlers()
 end
 
 
-function channel_edit_page_controller:update_button_states() 
+function channel_edit_page_controller:refresh_buttons() 
   local merge_mode = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel].merge_mode
 
   if merge_mode == "skip" then
@@ -357,7 +356,7 @@ function channel_edit_page_controller:update_button_states()
 end
 
 
-function channel_edit_page_controller:update_channel_edit_page_ui()
+function channel_edit_page_controller:refresh_channel_edit_page()
   local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
 
   local selected_sequencer_pattern = program.selected_sequencer_pattern
@@ -372,21 +371,12 @@ function channel_edit_page_controller:update_channel_edit_page_ui()
 
   channel_scale_fader:set_value(channel.default_scale)
   channel_octave_fader:set_value(channel.octave + 3)
-  channel_edit_page_controller:update_button_states() 
-end
-
-function channel_edit_page_controller:update_channel_config_state()
-  local channel = program.sequencer_patterns[program.selected_sequencer_pattern].channels[program.selected_channel]
-  channel_edit_page_ui_controller:select_midi_channel_item(channel.midi_channel)
-  channel_edit_page_ui_controller:select_midi_device_item(channel.midi_device)
-  channel_edit_page_ui_controller:select_midi_device_map_item(channel.midi_device_map)
-
+  channel_edit_page_controller:refresh_buttons() 
 end
 
 function channel_edit_page_controller:refresh()
-  channel_edit_page_controller:update_channel_edit_page_ui()
-  channel_edit_page_controller:update_channel_config_state()
-  channel_edit_page_controller:update_button_states()
+  channel_edit_page_controller:refresh_channel_edit_page()
+  channel_edit_page_controller:refresh_buttons()
   channel_edit_page_ui_controller:refresh()
 end
 
