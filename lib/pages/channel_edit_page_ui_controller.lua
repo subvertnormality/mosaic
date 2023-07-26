@@ -245,7 +245,9 @@ function channel_edit_page_ui_controller:enc(n, d)
             midi_device_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == 3 then
-          dials:scroll_next() 
+          if not trig_lock_page:is_sub_page_enabled() then
+            dials:scroll_next() 
+          end
         end
       else
         if pages:get_selected_page() == 1 then
@@ -271,7 +273,9 @@ function channel_edit_page_ui_controller:enc(n, d)
             midi_channel_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == 3 then
-          dials:scroll_previous()
+          if not trig_lock_page:is_sub_page_enabled() then
+            dials:scroll_previous()
+          end
         end
       end
     end
