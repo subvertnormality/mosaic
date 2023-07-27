@@ -1841,7 +1841,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_chorus_chorus_depth",
-      ["name"] = "Chorus depth",
+      ["name"] = "FX Chorus depth",
       ["cc_msb"] = 3,
       ["cc_lsb"] = 35,
       ["cc_min_value"] = 0,
@@ -1855,7 +1855,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_chorus_chorus_speed",
-      ["name"] = "Chorus speed",
+      ["name"] = "FX Chorus speed",
       ["cc_msb"] = 9,
       ["cc_lsb"] = 41,
       ["cc_min_value"] = 0,
@@ -1869,7 +1869,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_chorus_chorus_high-pass",
-      ["name"] = "Chorus high-pass",
+      ["name"] = "FX Chorus high-pass",
       ["cc_msb"] = 70,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1883,7 +1883,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_chorus_chorus_width",
-      ["name"] = "Chorus width",
+      ["name"] = "FX Chorus width",
       ["cc_msb"] = 71,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1897,7 +1897,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_chorus_chorus_delay_send",
-      ["name"] = "Chorus delay send",
+      ["name"] = "FX Chorus delay send",
       ["cc_msb"] = 12,
       ["cc_lsb"] = 44,
       ["cc_min_value"] = 0,
@@ -1911,7 +1911,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_chorus_chorus_reverb_send",
-      ["name"] = "Chorus reverb send",
+      ["name"] = "FX Chorus reverb send",
       ["cc_msb"] = 13,
       ["cc_lsb"] = 45,
       ["cc_min_value"] = 0,
@@ -1925,7 +1925,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_chorus_chorus_mix_volume",
-      ["name"] = "Chorus mix volume",
+      ["name"] = "FX Chorus mix volume",
       ["cc_msb"] = 14,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1939,7 +1939,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_delay_delay_time",
-      ["name"] = "Delay time",
+      ["name"] = "FX Delay time",
       ["cc_msb"] = 15,
       ["cc_lsb"] = 47,
       ["cc_min_value"] = 0,
@@ -1953,7 +1953,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_delay_pingpoing",
-      ["name"] = "Pingpoing",
+      ["name"] = "FX Pingpoing",
       ["cc_msb"] = 16,
       ["cc_lsb"] = 48,
       ["cc_min_value"] = 0,
@@ -1967,7 +1967,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_delay_stereo_width",
-      ["name"] = "Stereo width",
+      ["name"] = "FX Stereo width",
       ["cc_msb"] = 17,
       ["cc_lsb"] = 49,
       ["cc_min_value"] = 0,
@@ -1981,7 +1981,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_delay_delay_feedback",
-      ["name"] = "Delay feedback",
+      ["name"] = "FX Delay feedback",
       ["cc_msb"] = 18,
       ["cc_lsb"] = 50,
       ["cc_min_value"] = 0,
@@ -1995,7 +1995,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_delay_delay_highpass_filter",
-      ["name"] = "Delay highpass filter",
+      ["name"] = "FX Delay highpass filter",
       ["cc_msb"] = 72,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2009,7 +2009,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_delay_delay_lowpass_filter",
-      ["name"] = "Delay lowpass filter",
+      ["name"] = "FX Delay lowpass filter",
       ["cc_msb"] = 73,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2023,7 +2023,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_delay_delay_reverb_send",
-      ["name"] = "Delay reverb send",
+      ["name"] = "FX Delay reverb send",
       ["cc_msb"] = 19,
       ["cc_lsb"] = 51,
       ["cc_min_value"] = 0,
@@ -2037,7 +2037,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_delay_delay_mix_volume",
-      ["name"] = "Delay mix volume",
+      ["name"] = "FX Delay mix volume",
       ["cc_msb"] = 20,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2051,7 +2051,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_reverb_reverb_predelay",
-      ["name"] = "Reverb predelay",
+      ["name"] = "FX Reverb predelay",
       ["cc_msb"] = 21,
       ["cc_lsb"] = 53,
       ["cc_min_value"] = 0,
@@ -2065,7 +2065,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_reverb_reverb_decay_time",
-      ["name"] = "Reverb decay time",
+      ["name"] = "FX Reverb decay time",
       ["cc_msb"] = 74,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2079,7 +2079,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_reverb_reverb_shelving_frequency",
-      ["name"] = "Reverb shelving frequency",
+      ["name"] = "FX Reverb shelving frequency",
       ["cc_msb"] = 75,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2093,7 +2093,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_reverb_reverb_shelving_gain",
-      ["name"] = "Reverb shelving gain",
+      ["name"] = "FX Reverb shelving gain",
       ["cc_msb"] = 22,
       ["cc_lsb"] = 54,
       ["cc_min_value"] = 0,
@@ -2107,7 +2107,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_reverb_reverb_highpass_filter",
-      ["name"] = "Reverb highpass filter",
+      ["name"] = "FX Reverb highpass filter",
       ["cc_msb"] = 76,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2121,7 +2121,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_reverb_reverb_lowpass_filter",
-      ["name"] = "Reverb lowpass filter",
+      ["name"] = "FX Reverb lowpass filter",
       ["cc_msb"] = 77,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2135,7 +2135,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_parameters_reverb_reverb_mix_volume",
-      ["name"] = "Reverb mix volume",
+      ["name"] = "FX Reverb mix volume",
       ["cc_msb"] = 23,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2149,7 +2149,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_master_input_l_volume",
-      ["name"] = "Input L volume",
+      ["name"] = "FX Input L volume",
       ["cc_msb"] = 24,
       ["cc_lsb"] = 56,
       ["cc_min_value"] = 0,
@@ -2163,7 +2163,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_master_input_r_volume",
-      ["name"] = "Input R volume",
+      ["name"] = "FX Input R volume",
       ["cc_msb"] = 25,
       ["cc_lsb"] = 57,
       ["cc_min_value"] = 0,
@@ -2177,7 +2177,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_master_pan_l",
-      ["name"] = "Pan L",
+      ["name"] = "FX Pan L",
       ["cc_msb"] = 78,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2191,7 +2191,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_master_pan_r",
-      ["name"] = "Pan R",
+      ["name"] = "FX Pan R",
       ["cc_msb"] = 79,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2205,7 +2205,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_master_master_chorus_send",
-      ["name"] = "Master chorus send",
+      ["name"] = "FX Master chorus send",
       ["cc_msb"] = 26,
       ["cc_lsb"] = 58,
       ["cc_min_value"] = 0,
@@ -2219,7 +2219,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_master_master_delay_send",
-      ["name"] = "Master delay send",
+      ["name"] = "FX Master delay send",
       ["cc_msb"] = 27,
       ["cc_lsb"] = 59,
       ["cc_min_value"] = 0,
@@ -2233,7 +2233,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_master_master_reverb_send",
-      ["name"] = "Master reverb send",
+      ["name"] = "FX Master reverb send",
       ["cc_msb"] = 28,
       ["cc_lsb"] = 60,
       ["cc_min_value"] = 0,
@@ -2247,7 +2247,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_master_master_overdrive",
-      ["name"] = "Master overdrive",
+      ["name"] = "FX Master overdrive",
       ["cc_msb"] = 29,
       ["cc_lsb"] = 61,
       ["cc_min_value"] = 0,
@@ -2261,7 +2261,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_master_master_pattern_volume",
-      ["name"] = "Master pattern volume",
+      ["name"] = "FX Master pattern volume",
       ["cc_msb"] = 95,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2827,7 +2827,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_1_speed",
-      ["name"] = "Speed",
+      ["name"] = "LFO 1 Speed",
       ["cc_msb"] = 102,
       ["cc_lsb"] = 60,
       ["cc_min_value"] = 0,
@@ -2841,7 +2841,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_1_multiplier",
-      ["name"] = "Multiplier",
+      ["name"] = "LFO 1 Multiplier",
       ["cc_msb"] = 103,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2855,7 +2855,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_1_fade_in_out",
-      ["name"] = "Fade in/out",
+      ["name"] = "LFO 1 Fade in/out",
       ["cc_msb"] = 104,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2869,7 +2869,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_1_destination",
-      ["name"] = "Destination",
+      ["name"] = "LFO 1 Destination",
       ["cc_msb"] = 105,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2883,7 +2883,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_1_waveform",
-      ["name"] = "Waveform",
+      ["name"] = "LFO 1 Waveform",
       ["cc_msb"] = 106,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2897,7 +2897,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_1_start_phase",
-      ["name"] = "Start phase",
+      ["name"] = "LFO 1 Start phase",
       ["cc_msb"] = 107,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2911,7 +2911,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_1_trig_mode",
-      ["name"] = "Trig mode",
+      ["name"] = "LFO 1 Trig mode",
       ["cc_msb"] = 108,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2925,7 +2925,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_1_depth",
-      ["name"] = "Depth",
+      ["name"] = "LFO 1 Depth",
       ["cc_msb"] = 109,
       ["cc_lsb"] = 61,
       ["cc_min_value"] = 0,
@@ -2939,7 +2939,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_2_speed",
-      ["name"] = "Speed",
+      ["name"] = "LFO 2 Speed",
       ["cc_msb"] = 112,
       ["cc_lsb"] = 62,
       ["cc_min_value"] = 0,
@@ -2953,7 +2953,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_2_multiplier",
-      ["name"] = "Multiplier",
+      ["name"] = "LFO 2 Multiplier",
       ["cc_msb"] = 113,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2967,7 +2967,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_2_fade_in_out",
-      ["name"] = "Fade in/out",
+      ["name"] = "LFO 2 Fade in/out",
       ["cc_msb"] = 114,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2981,7 +2981,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_2_destination",
-      ["name"] = "Destination",
+      ["name"] = "LFO 2 Destination",
       ["cc_msb"] = 115,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2995,7 +2995,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_2_waveform",
-      ["name"] = "Waveform",
+      ["name"] = "LFO 2 Waveform",
       ["cc_msb"] = 116,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3009,7 +3009,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_2_start_phase",
-      ["name"] = "Start phase",
+      ["name"] = "LFO 2 Start phase",
       ["cc_msb"] = 117,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3023,7 +3023,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_2_trig_mode",
-      ["name"] = "Trig mode",
+      ["name"] = "LFO 2 Trig mode",
       ["cc_msb"] = 118,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3037,7 +3037,7 @@ local midi_devices = {
     },
     {
       ["id"] = "lfo_2_depth",
-      ["name"] = "Depth",
+      ["name"] = "LFO 2 Depth",
       ["cc_msb"] = 119,
       ["cc_lsb"] = 63,
       ["cc_min_value"] = 0,
@@ -3051,7 +3051,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_delay_delay_time",
-      ["name"] = "Delay time",
+      ["name"] = "FX Delay time",
       ["cc_msb"] = 21,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3065,7 +3065,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_delay_pingpong",
-      ["name"] = "Pingpong",
+      ["name"] = "FX Pingpong",
       ["cc_msb"] = 22,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3079,7 +3079,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_delay_stereo_width",
-      ["name"] = "Stereo width",
+      ["name"] = "FX Stereo width",
       ["cc_msb"] = 23,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3093,7 +3093,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_delay_feedback",
-      ["name"] = "Feedback",
+      ["name"] = "FX Feedback",
       ["cc_msb"] = 24,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3107,7 +3107,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_delay_highpass_filter",
-      ["name"] = "Highpass filter",
+      ["name"] = "FX Highpass filter",
       ["cc_msb"] = 25,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3121,7 +3121,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_delay_lowpass_filter",
-      ["name"] = "Lowpass filter",
+      ["name"] = "FX Lowpass filter",
       ["cc_msb"] = 26,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3135,7 +3135,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_delay_reverb_send",
-      ["name"] = "Reverb send",
+      ["name"] = "FX Reverb send",
       ["cc_msb"] = 27,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3149,7 +3149,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_delay_mix_volume",
-      ["name"] = "Mix volume",
+      ["name"] = "FX Mix volume",
       ["cc_msb"] = 28,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3163,7 +3163,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_reverb_predelay",
-      ["name"] = "Predelay",
+      ["name"] = "FX Predelay",
       ["cc_msb"] = 29,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3177,7 +3177,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_reverb_decay_time",
-      ["name"] = "Decay time",
+      ["name"] = "FX Decay time",
       ["cc_msb"] = 30,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3191,7 +3191,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_reverb_shelving_frequency",
-      ["name"] = "Shelving frequency",
+      ["name"] = "FX Shelving frequency",
       ["cc_msb"] = 31,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3205,7 +3205,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_reverb_shelving_gain",
-      ["name"] = "Shelving gain",
+      ["name"] = "FX Shelving gain",
       ["cc_msb"] = 89,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3219,7 +3219,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_reverb_highpass_filter",
-      ["name"] = "Highpass filter",
+      ["name"] = "FX Highpass filter",
       ["cc_msb"] = 90,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3233,7 +3233,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_reverb_lowpass_filter",
-      ["name"] = "Lowpass filter",
+      ["name"] = "FX Lowpass filter",
       ["cc_msb"] = 91,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3247,7 +3247,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_reverb_mix_volume",
-      ["name"] = "Mix volume",
+      ["name"] = "FX Mix volume",
       ["cc_msb"] = 92,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3261,7 +3261,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_external_in_mixer_input_lr",
-      ["name"] = "Input LR",
+      ["name"] = "FX Input LR",
       ["cc_msb"] = 16,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3275,7 +3275,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_external_in_mixer_input_balance",
-      ["name"] = "Input balance",
+      ["name"] = "FX Input balance",
       ["cc_msb"] = 17,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3289,7 +3289,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_external_in_mixer_input_delay_send",
-      ["name"] = "Input delay send",
+      ["name"] = "FX Input delay send",
       ["cc_msb"] = 18,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3303,7 +3303,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_external_in_mixer_input_reverb_send",
-      ["name"] = "Input reverb send",
+      ["name"] = "FX Input reverb send",
       ["cc_msb"] = 18,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3317,7 +3317,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_external_in_mixer_input_fx_routing",
-      ["name"] = "Input FX routing",
+      ["name"] = "FX Input FX routing",
       ["cc_msb"] = 29,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3331,7 +3331,7 @@ local midi_devices = {
     },
     {
       ["id"] = "cc_val_midi_fltr_page_val1",
-      ["name"] = "VAL1",
+      ["name"] = "MIDI VAL1",
       ["cc_msb"] = 70,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3345,7 +3345,7 @@ local midi_devices = {
     },
     {
       ["id"] = "cc_val_midi_fltr_page_val2",
-      ["name"] = "VAL2",
+      ["name"] = "MIDI VAL2",
       ["cc_msb"] = 71,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3359,7 +3359,7 @@ local midi_devices = {
     },
     {
       ["id"] = "cc_val_midi_fltr_page_val3",
-      ["name"] = "VAL3",
+      ["name"] = "MIDI VAL3",
       ["cc_msb"] = 72,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3373,7 +3373,7 @@ local midi_devices = {
     },
     {
       ["id"] = "cc_val_midi_fltr_page_val4",
-      ["name"] = "VAL4",
+      ["name"] = "MIDI VAL4",
       ["cc_msb"] = 73,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3387,7 +3387,7 @@ local midi_devices = {
     },
     {
       ["id"] = "cc_val_midi_fltr_page_val5",
-      ["name"] = "VAL5",
+      ["name"] = "MIDI VAL5",
       ["cc_msb"] = 74,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3401,7 +3401,7 @@ local midi_devices = {
     },
     {
       ["id"] = "cc_val_midi_fltr_page_val6",
-      ["name"] = "VAL6",
+      ["name"] = "MIDI VAL6",
       ["cc_msb"] = 75,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3415,7 +3415,7 @@ local midi_devices = {
     },
     {
       ["id"] = "cc_val_midi_fltr_page_val7",
-      ["name"] = "VAL7",
+      ["name"] = "MIDI VAL7",
       ["cc_msb"] = 76,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3429,7 +3429,7 @@ local midi_devices = {
     },
     {
       ["id"] = "cc_val_midi_fltr_page_val8",
-      ["name"] = "VAL8",
+      ["name"] = "MIDI VAL8",
       ["cc_msb"] = 77,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3457,7 +3457,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_syn_drive",
-      ["name"] = "Drive",
+      ["name"] = "FX Drive",
       ["cc_msb"] = 15,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3471,7 +3471,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_fltr_filter_frequency",
-      ["name"] = "Filter frequency",
+      ["name"] = "FX Filter frequency",
       ["cc_msb"] = 70,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3485,7 +3485,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_fltr_resonance",
-      ["name"] = "Resonance",
+      ["name"] = "FX Resonance",
       ["cc_msb"] = 71,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3499,7 +3499,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_fltr_filter_type",
-      ["name"] = "Filter type",
+      ["name"] = "FX Filter type",
       ["cc_msb"] = 72,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3513,7 +3513,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_fltr_attack_time",
-      ["name"] = "Attack time",
+      ["name"] = "FX Attack time",
       ["cc_msb"] = 75,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3527,7 +3527,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_fltr_decay_time",
-      ["name"] = "Decay time",
+      ["name"] = "FX Decay time",
       ["cc_msb"] = 76,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3541,7 +3541,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_fltr_sustain_level",
-      ["name"] = "Sustain level",
+      ["name"] = "FX Sustain level",
       ["cc_msb"] = 77,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3555,7 +3555,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_fltr_release_time",
-      ["name"] = "Release time",
+      ["name"] = "FX Release time",
       ["cc_msb"] = 78,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3569,7 +3569,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_fltr_envelope_depth",
-      ["name"] = "Envelope depth",
+      ["name"] = "FX Envelope depth",
       ["cc_msb"] = 73,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3583,7 +3583,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_fltr_envelope_delay",
-      ["name"] = "Envelope delay",
+      ["name"] = "FX Envelope delay",
       ["cc_msb"] = 74,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3597,7 +3597,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_attack_time",
-      ["name"] = "Attack time",
+      ["name"] = "FX Attack time",
       ["cc_msb"] = 79,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3611,7 +3611,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_hold_time",
-      ["name"] = "Hold time",
+      ["name"] = "FX Hold time",
       ["cc_msb"] = 80,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3625,7 +3625,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_decay_time",
-      ["name"] = "Decay time",
+      ["name"] = "FX Decay time",
       ["cc_msb"] = 81,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3639,7 +3639,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_sustain_level",
-      ["name"] = "Sustain level",
+      ["name"] = "FX Sustain level",
       ["cc_msb"] = 82,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3653,7 +3653,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_release_time",
-      ["name"] = "Release time",
+      ["name"] = "FX Release time",
       ["cc_msb"] = 83,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3667,7 +3667,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_delay_send",
-      ["name"] = "Delay send",
+      ["name"] = "FX Delay send",
       ["cc_msb"] = 84,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3681,7 +3681,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_reverb_send",
-      ["name"] = "Reverb send",
+      ["name"] = "FX Reverb send",
       ["cc_msb"] = 85,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3695,7 +3695,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_pan",
-      ["name"] = "Pan",
+      ["name"] = "FX Pan",
       ["cc_msb"] = 10,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3709,7 +3709,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_volume",
-      ["name"] = "Volume",
+      ["name"] = "FX Volume",
       ["cc_msb"] = 7,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3723,7 +3723,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_envelope_depth",
-      ["name"] = "Envelope depth",
+      ["name"] = "FX Envelope depth",
       ["cc_msb"] = 86,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3737,7 +3737,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_mode",
-      ["name"] = "Mode",
+      ["name"] = "FX Mode",
       ["cc_msb"] = 87,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -3751,7 +3751,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fx_track_amp_envelope_reset",
-      ["name"] = "Envelope reset",
+      ["name"] = "FX Envelope reset",
       ["cc_msb"] = 88,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,

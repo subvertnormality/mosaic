@@ -6,6 +6,18 @@ local length_tracker = {}
 
 local step_scale_number = 0
 
+
+function step_handler.process_channel_params(c)
+  local channel = program.get_channel(c)
+  for i=1,8 do      
+    if channel.trig_lock_params[i] and channel.trig_lock_params[i].cc_msb then
+      midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_banks[i], channel.midi_channel, channel.midi_device)
+    end
+  end
+end
+
+-- channel.trig_lock_steps[i] -- this is the step level value
+
 function step_handler.handle(c, current_step) 
 
   local channel = program.get_channel(c)
@@ -28,6 +40,8 @@ function step_handler.handle(c, current_step)
     step_scale_number = program.get().default_scale
   end
 
+  step_handler.process_channel_params(c)
+  
   if trig_value == 1 then
     local note = quantiser.process(note_value, octave_mod, step_scale_number, channel)
     midi_controller.note_on(note, velocity_value, midi_channel, midi_device)

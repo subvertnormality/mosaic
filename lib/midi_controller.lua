@@ -58,6 +58,19 @@ function midi_controller.cc(cc, value, channel, device)
 
 end
 
+function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
+  -- Select NRPN (LSB and MSB)
+  midi_controller.cc(99, nrpn_msb, channel, device)
+  midi_controller.cc(98, nrpn_lsb, channel, device)
+
+  local v1 = value / 128
+  local v2 = value % 128
+
+  midi_controller.cc(6, math.floor(v1), channel, device)
+  midi_controller.cc(38, math.floor(v2), channel, device)
+
+end
+
 function midi_controller:start()
   for id = 1, #midi.vports do
     if midi_devices[id] ~= nil then
