@@ -46,18 +46,18 @@ end
 
 function quantiser:process(note_number, octave_mod, scale_number, channel)
 
-  local root_note = program:get().root_note + 60
-  local chord_rotation = program:get().chord - 1
+  local root_note = program.get().root_note + 60
+  local chord_rotation = program.get().chord - 1
 
   local channel_default_scale = channel.default_scale
   local channel_step_scale = channel.step_scales[channel.current_step]
 
-  local scale_container = program:get().scales[program:get().default_scale]
+  local scale_container = program.get().scales[program.get().default_scale]
 
-  if channel_step_scale > 0 and program:get().scales[channel_step_scale].scale then
-    scale_container = program:get().scales[channel_step_scale]
-  elseif channel_default_scale > 0 and program:get().scales[channel_default_scale].scale  then
-    scale_container = program:get().scales[channel_default_scale]
+  if channel_step_scale > 0 and program.get().scales[channel_step_scale].scale then
+    scale_container = program.get().scales[channel_step_scale]
+  elseif channel_default_scale > 0 and program.get().scales[channel_default_scale].scale  then
+    scale_container = program.get().scales[channel_default_scale]
   end
 
   if scale_container.root_note > -1 then

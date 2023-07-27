@@ -18,51 +18,16 @@ local note15to21_fade_button = FadeButton:new(16, 8, 15, 21)
 
 local quad_dupe_button = Button:new(7, 8)
 
-function note_edit_page_controller:reset_buttons()
-  step1to16_fade_button:set_value(horizontal_offset)
-  step17to32_fade_button:set_value(horizontal_offset)
-  step33to48_fade_button:set_value(horizontal_offset)
-  step49to64_fade_button:set_value(horizontal_offset)
-  note1to7_fade_button:set_value(14 - vertical_offset)
-  note8to14_fade_button:set_value(vertical_offset)
-  note15to21_fade_button:set_value(14 - vertical_offset)
-end
 
-function note_edit_page_controller:init()
+function note_edit_page_controller.init()
 
   for s = 1, 64 do
     faders["step"..s.."_fader"] = VerticalFader:new(s, 1, 21)
   end
 
-  note_edit_page_controller:reset_buttons()
+  note_edit_page_controller:refresh_buttons()
 end
 
-
-function note_edit_page_controller:reset_fader(s)
-  local selected_sequencer_pattern = program:get().selected_sequencer_pattern
-  local selected_pattern = program:get().selected_pattern
-  faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
-  faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)
-  local value = fn.value_from_note(program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].note_values[s])
-
-  if value then 
-    faders["step"..s.."_fader"]:set_value(value) 
-  end
-
-  if program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values[s] < 1 then
-    faders["step"..s.."_fader"]:set_dark()
-  else
-    faders["step"..s.."_fader"]:set_light()
-  end
-end
-
-function note_edit_page_controller:reset_all_controls()
-  for s = 1, 64 do  
-    faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
-    faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)
-  end
-  note_edit_page_controller:reset_buttons()
-end
 
 function note_edit_page_controller:register_draw_handlers()
   
@@ -70,7 +35,7 @@ function note_edit_page_controller:register_draw_handlers()
     draw_handler:register_grid(
       "pattern_note_edit_page",
       function()
-        note_edit_page_controller:reset_fader(s)
+        note_edit_page_controller:refresh_fader(s)
         return faders["step"..s.."_fader"]:draw()
       end
     )
@@ -147,14 +112,14 @@ function note_edit_page_controller:register_press_handlers()
           return
         end
         
-        local selected_sequencer_pattern = program:get().selected_sequencer_pattern
-        local selected_pattern = program:get().selected_pattern
+        local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+        local selected_pattern = program.get().selected_pattern
         local note = fn.note_from_value(fader:get_value())
-        local seq_pattern = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern]
+        local seq_pattern = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern]
         local steps_tip = s.." "
 
         seq_pattern.note_values[s] = note
-        program:get().sequencer_patterns[selected_sequencer_pattern].active = true
+        program.get().sequencer_patterns[selected_sequencer_pattern].active = true
         tooltip:show("Step "..s.." note set to "..note)
         
         if quad_dupe_button:get_state() == 2 then
@@ -179,9 +144,9 @@ function note_edit_page_controller:register_press_handlers()
     "pattern_note_edit_page",
     function(x, y)
       if (y == 1) then
-        program:get().selected_pattern = x
+        program.get().selected_pattern = x
         tooltip:show("Pattern "..x.." selected")
-        note_edit_page_controller:reset_all_controls()
+        note_edit_page_controller:refresh()
       end
     end
   )
@@ -190,7 +155,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step1to16_fade_button:is_this(x, y)) then
         horizontal_offset = 0
-        note_edit_page_controller:reset_all_controls()
+        note_edit_page_controller:refresh()
         tooltip:show("Steps 1 to 16")
       end
       return step1to16_fade_button:press(x, y)
@@ -201,7 +166,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step17to32_fade_button:is_this(x, y)) then
         horizontal_offset = 16
-        note_edit_page_controller:reset_all_controls()
+        note_edit_page_controller:refresh()
         tooltip:show("Steps 17 to 32")
       end
 
@@ -213,7 +178,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step33to48_fade_button:is_this(x, y)) then
         horizontal_offset = 32
-        note_edit_page_controller:reset_all_controls()
+        note_edit_page_controller:refresh()
         tooltip:show("Steps 33 to 48")
       end
 
@@ -225,7 +190,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step49to64_fade_button:is_this(x, y)) then
         horizontal_offset = 48
-        note_edit_page_controller:reset_all_controls()
+        note_edit_page_controller:refresh()
         tooltip:show("Steps 49 to 64")
       end
 
@@ -237,7 +202,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (note15to21_fade_button:is_this(x, y)) then
         vertical_offset = 0
-        note_edit_page_controller:reset_all_controls()
+        note_edit_page_controller:refresh()
         tooltip:show("Notes +6 to +13")
       end
 
@@ -249,7 +214,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (note8to14_fade_button:is_this(x, y)) then
         vertical_offset = 7
-        note_edit_page_controller:reset_all_controls()
+        note_edit_page_controller:refresh()
         tooltip:show("Root to +6")
       end
 
@@ -261,7 +226,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (note1to7_fade_button:is_this(x, y)) then
         vertical_offset = 14
-        note_edit_page_controller:reset_all_controls()
+        note_edit_page_controller:refresh()
         tooltip:show("Notes -1 to -7")
       end
 
@@ -284,5 +249,41 @@ function note_edit_page_controller:register_press_handlers()
     end
   )
 end
+
+function note_edit_page_controller:refresh_buttons()
+  step1to16_fade_button:set_value(horizontal_offset)
+  step17to32_fade_button:set_value(horizontal_offset)
+  step33to48_fade_button:set_value(horizontal_offset)
+  step49to64_fade_button:set_value(horizontal_offset)
+  note1to7_fade_button:set_value(14 - vertical_offset)
+  note8to14_fade_button:set_value(vertical_offset)
+  note15to21_fade_button:set_value(14 - vertical_offset)
+end
+
+function note_edit_page_controller:refresh_fader(s)
+  local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+  local selected_pattern = program.get().selected_pattern
+  faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
+  faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)
+  local value = fn.value_from_note(program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].note_values[s])
+
+  if value then 
+    faders["step"..s.."_fader"]:set_value(value) 
+  end
+
+  if program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values[s] < 1 then
+    faders["step"..s.."_fader"]:set_dark()
+  else
+    faders["step"..s.."_fader"]:set_light()
+  end
+end
+
+function note_edit_page_controller:refresh()
+  for s = 1, 64 do  
+    refresh_fader(s)
+  end
+  note_edit_page_controller:refresh_buttons()
+end
+
 
 return note_edit_page_controller

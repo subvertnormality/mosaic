@@ -9,7 +9,7 @@ channel_sequencer_page_ui_controller = include("lib/pages/channel_sequencer_page
 tooltip = include("lib/ui_components/tooltip")
 
 
-function ui_controller:init()
+function ui_controller.init()
   draw_handler:register_ui(
     "tooltip",
     tooltip.draw
@@ -21,7 +21,7 @@ function ui_controller:init()
   trigger_edit_page_ui_controller:register_ui_draw_handlers()
   channel_sequencer_page_ui_controller:register_ui_draw_handlers()
 
-  channel_edit_page_ui_controller:init()
+  channel_edit_page_ui_controller.init()
 end
 
 function ui_controller:change_page(subpage_name)
@@ -41,7 +41,7 @@ function ui_controller:redraw()
   screen.font_face (math.random(67))
   screen.text("P")
   screen.font_face (1)
-  draw_handler:handle_ui(program:get().selected_page)
+  draw_handler:handle_ui(program.get().selected_page)
   
 end
 

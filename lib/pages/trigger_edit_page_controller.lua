@@ -18,9 +18,9 @@ local pattern_trigger_edit_page_centre_button = Button:new(11, 8, {{"Inactive", 
 local pattern_trigger_edit_page_right_button = Button:new(12, 8, {{"Inactive", 3}, {"Shift Right", 15}})
 
 
-function trigger_edit_page_controller:init()
+function trigger_edit_page_controller.init()
   
-  trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
+  trigger_edit_page_controller:refresh_pattern_trigger_edit_page_ui()
 end
 
 function trigger_edit_page_controller:register_draw_handlers()
@@ -34,11 +34,11 @@ function trigger_edit_page_controller:register_draw_handlers()
   "pattern_trigger_edit_page",
   function()
 
-    local selected_sequencer_pattern = program:get().selected_sequencer_pattern
-    local selected_pattern = program:get().selected_pattern
+    local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+    local selected_pattern = program.get().selected_pattern
     
-    local trigs = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
-    local lengths = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
+    local trigs = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
+    local lengths = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
   
     return pattern_trigger_edit_page_sequencer:draw(trigs, lengths)
   end
@@ -99,43 +99,6 @@ function trigger_edit_page_controller:register_draw_handlers()
   )
 end
 
-function trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
-  local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
-  
-  if (algorithm == 1) then
-    pattern_trigger_edit_page_bankmask_fader:enabled()
-    pattern_trigger_edit_page_bankmask_fader:set_size(5)
-    pattern_trigger_edit_page_bankmask_fader:set_length(5)
-    pattern_trigger_edit_page_pattern1_fader:set_size(128)
-    pattern_trigger_edit_page_pattern2_fader:set_size(128)
-    pattern_trigger_edit_page_pattern2_fader:disabled()
-  elseif (algorithm == 2) then
-    pattern_trigger_edit_page_bankmask_fader:enabled()
-    pattern_trigger_edit_page_bankmask_fader:set_size(5)
-    pattern_trigger_edit_page_bankmask_fader:set_length(5)
-    pattern_trigger_edit_page_pattern1_fader:set_size(128)
-    pattern_trigger_edit_page_pattern2_fader:set_size(128)
-    pattern_trigger_edit_page_pattern2_fader:enabled()
-  elseif (algorithm == 3) then
-    pattern_trigger_edit_page_bankmask_fader:disabled()
-    pattern_trigger_edit_page_bankmask_fader:set_size(5)
-    pattern_trigger_edit_page_bankmask_fader:set_length(5)
-    pattern_trigger_edit_page_pattern2_fader:enabled()
-    pattern_trigger_edit_page_pattern1_fader:set_size(32)
-    pattern_trigger_edit_page_pattern2_fader:set_size(32)
-  elseif (algorithm == 4) then
-    pattern_trigger_edit_page_bankmask_fader:enabled()
-    pattern_trigger_edit_page_bankmask_fader:set_size(4)
-    pattern_trigger_edit_page_bankmask_fader:set_length(4)
-    pattern_trigger_edit_page_pattern1_fader:set_size(32)
-    pattern_trigger_edit_page_pattern2_fader:set_size(16)
-    pattern_trigger_edit_page_pattern2_fader:enabled()
-  end
-
-  pattern_trigger_edit_page_pattern_select_fader:set_value(program:get().selected_pattern)
-
-  fn.dirty_grid(true)
-end
 
 local function get_bank_name(id)
 
@@ -175,8 +138,8 @@ function trigger_edit_page_controller:register_press_handlers()
   function(x, y)
     if pattern_trigger_edit_page_pattern_select_fader:is_this(x, y) then
       pattern_trigger_edit_page_pattern_select_fader:press(x, y)
-      program:get().selected_pattern = pattern_trigger_edit_page_pattern_select_fader:get_value()
-      tooltip:show("Pattern "..program:get().selected_pattern.." selected")
+      program.get().selected_pattern = pattern_trigger_edit_page_pattern_select_fader:get_value()
+      tooltip:show("Pattern "..program.get().selected_pattern.." selected")
     end
   end
   )
@@ -222,7 +185,7 @@ function trigger_edit_page_controller:register_press_handlers()
   function(x, y)
     pattern_trigger_edit_page_algorithm_fader:press(x, y)
     if pattern_trigger_edit_page_algorithm_fader:is_this(x, y) then
-      trigger_edit_page_controller:update_pattern_trigger_edit_page_ui()
+      trigger_edit_page_controller:refresh_pattern_trigger_edit_page_ui()
       tooltip:show(get_algorithm_name(pattern_trigger_edit_page_algorithm_fader:get_value()).." selected")
       load_paint_pattern()
     end
@@ -356,10 +319,10 @@ function trigger_edit_page_controller:register_press_handlers()
 end
 
 function save_paint_pattern(p)
-  local selected_sequencer_pattern = program:get().selected_sequencer_pattern
-  local selected_pattern = program:get().selected_pattern
-  local trigs = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
-  local lengths = program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
+  local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+  local selected_pattern = program.get().selected_pattern
+  local trigs = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
+  local lengths = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
 
   for x = 1, 64 do
     if (trigs[x] < 1) and p[x] then
@@ -370,10 +333,10 @@ function save_paint_pattern(p)
       lengths[x] = 0
     end
   end
-  program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values = trigs
-  program:get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths = lengths
+  program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values = trigs
+  program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths = lengths
   pattern_controller:update_working_patterns()
-  program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
+  program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
 end
 
 function load_paint_pattern()
@@ -418,6 +381,49 @@ function load_paint_pattern()
 
     pattern_trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
   end
+end
+
+
+function trigger_edit_page_controller:refresh_pattern_trigger_edit_page_ui()
+  local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
+  
+  if (algorithm == 1) then
+    pattern_trigger_edit_page_bankmask_fader:enabled()
+    pattern_trigger_edit_page_bankmask_fader:set_size(5)
+    pattern_trigger_edit_page_bankmask_fader:set_length(5)
+    pattern_trigger_edit_page_pattern1_fader:set_size(128)
+    pattern_trigger_edit_page_pattern2_fader:set_size(128)
+    pattern_trigger_edit_page_pattern2_fader:disabled()
+  elseif (algorithm == 2) then
+    pattern_trigger_edit_page_bankmask_fader:enabled()
+    pattern_trigger_edit_page_bankmask_fader:set_size(5)
+    pattern_trigger_edit_page_bankmask_fader:set_length(5)
+    pattern_trigger_edit_page_pattern1_fader:set_size(128)
+    pattern_trigger_edit_page_pattern2_fader:set_size(128)
+    pattern_trigger_edit_page_pattern2_fader:enabled()
+  elseif (algorithm == 3) then
+    pattern_trigger_edit_page_bankmask_fader:disabled()
+    pattern_trigger_edit_page_bankmask_fader:set_size(5)
+    pattern_trigger_edit_page_bankmask_fader:set_length(5)
+    pattern_trigger_edit_page_pattern2_fader:enabled()
+    pattern_trigger_edit_page_pattern1_fader:set_size(32)
+    pattern_trigger_edit_page_pattern2_fader:set_size(32)
+  elseif (algorithm == 4) then
+    pattern_trigger_edit_page_bankmask_fader:enabled()
+    pattern_trigger_edit_page_bankmask_fader:set_size(4)
+    pattern_trigger_edit_page_bankmask_fader:set_length(4)
+    pattern_trigger_edit_page_pattern1_fader:set_size(32)
+    pattern_trigger_edit_page_pattern2_fader:set_size(16)
+    pattern_trigger_edit_page_pattern2_fader:enabled()
+  end
+
+  pattern_trigger_edit_page_pattern_select_fader:set_value(program.get().selected_pattern)
+
+  fn.dirty_grid(true)
+end
+
+function trigger_edit_page_controller:refresh()
+  trigger_edit_page_controller:refresh_pattern_trigger_edit_page_ui()
 end
 
 return trigger_edit_page_controller

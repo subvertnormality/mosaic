@@ -59,7 +59,7 @@ local function save_project(txt)
 
   if txt then
     print("Saving project as " .. txt)
-    tab.save({ txt, program:get() }, norns.state.data .. txt ..".ptn")
+    tab.save({ txt, program.get() }, norns.state.data .. txt ..".ptn")
     params:write( norns.state.data .. txt .. ".pset")
   else
     print("Save cancel")
@@ -67,7 +67,7 @@ local function save_project(txt)
 end
 
 local function load_new_project()
-  program:init()
+  program.init()
   grid_controller:refresh()
   ui_controller:refresh()
 end
@@ -153,7 +153,7 @@ function redraw_clock()
 end
 
 function init()
-  program:init()
+  program.init()
   midi_controller.init()
   grid_clock_id = clock.run(grid_controller.grid_redraw)
   ui_clock_id = clock.run(redraw_clock)

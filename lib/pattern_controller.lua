@@ -10,7 +10,7 @@ end
 
 function pattern_controller:get_and_merge_patterns(channel, merge_mode)
 
-  local selected_sequencer_pattern = program:get().selected_sequencer_pattern
+  local selected_sequencer_pattern = program.get().selected_sequencer_pattern
   local merged_pattern = program:initialise_default_pattern()
   local skip_bits = program:initialise_64_table(0)
   local average_length_accumulator = program:initialise_64_table(0)
@@ -18,8 +18,8 @@ function pattern_controller:get_and_merge_patterns(channel, merge_mode)
   local average_note_accumulator = program:initialise_64_table(0)
   local average_count = program:initialise_64_table(0)
 
-  local pattern_channel = program:get().sequencer_patterns[selected_sequencer_pattern].channels[channel]
-  local patterns = program:get().sequencer_patterns[selected_sequencer_pattern].patterns
+  local pattern_channel = program.get().sequencer_patterns[selected_sequencer_pattern].channels[channel]
+  local patterns = program.get().sequencer_patterns[selected_sequencer_pattern].patterns
 
   local sorted_note_values = {} -- Moved the sorted_note_values table inside this loop
 
@@ -84,9 +84,9 @@ function pattern_controller:get_and_merge_patterns(channel, merge_mode)
       merged_pattern.lengths[s] = math.ceil(average_length_accumulator[s] / (average_count[s] or 1))
       merged_pattern.velocity_values[s] = math.ceil(average_velocity_accumulator[s] / (average_count[s] or 1))
       if merge_mode == "add" and merged_pattern.trig_values[s] then
-        merged_pattern.note_values[s] = (sorted_note_values[1] or program:get().root_note) + average_note
+        merged_pattern.note_values[s] = (sorted_note_values[1] or program.get().root_note) + average_note
       elseif merge_mode == "subtract" and merged_pattern.trig_values[s] then
-        merged_pattern.note_values[s] = (sorted_note_values[1] or program:get().root_note) - average_note
+        merged_pattern.note_values[s] = (sorted_note_values[1] or program.get().root_note) - average_note
       elseif merge_mode == "average" then
         merged_pattern.note_values[s] = math.ceil(average_note_accumulator[s] / (average_count[s] or 1))
       end
@@ -99,8 +99,8 @@ end
 
 
 function pattern_controller:update_working_patterns()
-  local selected_sequencer_pattern = program:get().selected_sequencer_pattern
-  local sequencer_patterns = program:get().sequencer_patterns[selected_sequencer_pattern].channels
+  local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+  local sequencer_patterns = program.get().sequencer_patterns[selected_sequencer_pattern].channels
 
   for c = 1, 16 do
     local merge_mode = sequencer_patterns[c].merge_mode

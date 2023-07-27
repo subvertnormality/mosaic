@@ -30,10 +30,10 @@ local function master_func()
 
   step_handler:process_lengths()
 
-  program:get().current_step = program:get().current_step + 1
+  program.get().current_step = program.get().current_step + 1
 
-  if program:get().current_step > program:get().sequencer_patterns[program:get().selected_sequencer_pattern].global_pattern_length then
-    program:get().current_step = 1
+  if program.get().current_step > program.get().sequencer_patterns[program.get().selected_sequencer_pattern].global_pattern_length then
+    program.get().current_step = 1
   end
   fn.dirty_grid(true)
 end
@@ -45,10 +45,10 @@ function clock_controller:start()
   midi_transport = clock.run(start_midi_transport, 4)
 
   for i = 1, 16 do
-    local clock_division = program:get_channel(i).clock_division
+    local clock_division = program.get_channel(i).clock_division
     clock_controller["channel_"..i.."_clock"] = clock.run(go, clock_division, function () 
 
-      local channel = program:get_channel(i)
+      local channel = program.get_channel(i)
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
       local current_step = channel.current_step
@@ -93,9 +93,9 @@ end
 
 function clock_controller:reset() 
   for i = 1, 16 do
-    program:get_channel(i).current_step = 1
+    program.get_channel(i).current_step = 1
   end
-  program:get().current_step = 1
+  program.get().current_step = 1
 end
 
 return clock_controller

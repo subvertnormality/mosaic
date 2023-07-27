@@ -41,24 +41,24 @@ local channel_octave_fader = Fader:new(7, 8, 5, 5)
 local channel_scale_fader = Fader:new(1, 3, 16, 16)
 
 
-function channel_edit_page_controller:init()
+function channel_edit_page_controller.init()
   
   for s = 1, 16 do
     pattern_buttons["step"..s.."_pattern_button"] = Button:new(s, 2)
   end
 
-  channel_octave_fader:set_value(program:get_selected_channel().octave + 3)
-  channel_edit_page_controller:refresh()
+  channel_octave_fader:set_value(program.get_selected_channel().octave + 3)
+  channel_edit_page_controller.refresh()
 end
 
-function channel_edit_page_controller:register_draw_handlers()
+function channel_edit_page_controller.register_draw_handlers()
   draw_handler:register_grid(
     "channel_edit_page",
     function()
 
-      local selected_sequencer_pattern = program:get().selected_sequencer_pattern
-      local trigs = program:get().sequencer_patterns[selected_sequencer_pattern].channels[program:get().selected_channel].working_pattern.trig_values
-      local lengths = program:get().sequencer_patterns[selected_sequencer_pattern].channels[program:get().selected_channel].working_pattern.lengths
+      local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+      local trigs = program.get().sequencer_patterns[selected_sequencer_pattern].channels[program.get().selected_channel].working_pattern.trig_values
+      local lengths = program.get().sequencer_patterns[selected_sequencer_pattern].channels[program.get().selected_channel].working_pattern.lengths
 
       channel_edit_page_sequencer:draw(trigs, lengths)
     end
@@ -134,22 +134,22 @@ function channel_edit_page_controller:register_press_handlers()
     function(x, y)
       channel_select_fader:press(x, y)
       if channel_select_fader:is_this(x, y) then
-        program:get().selected_channel = channel_select_fader:get_value()
+        program.get().selected_channel = channel_select_fader:get_value()
         pattern_controller:update_working_patterns()
-        tooltip:show("Channel "..program:get().selected_channel.." selected")
-        channel_edit_page_controller:refresh()
+        tooltip:show("Channel "..program.get().selected_channel.." selected")
+        channel_edit_page_controller.refresh()
       end
     end
   )
   press_handler:register_dual(
     "channel_edit_page",
     function(x, y, x2, y2)
-      local selected_sequencer_pattern = program:get().selected_sequencer_pattern
+      local selected_sequencer_pattern = program.get().selected_sequencer_pattern
       channel_edit_page_sequencer:dual_press(x, y, x2, y2)
       if channel_edit_page_sequencer:is_this(x2, y2) then
         pattern_controller:update_working_patterns()
-        program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
-        tooltip:show("Channel "..program:get().selected_channel.." length changed")
+        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+        tooltip:show("Channel "..program.get().selected_channel.." length changed")
       end
     end
   )
@@ -159,12 +159,12 @@ function channel_edit_page_controller:register_press_handlers()
       if channel_scale_fader:is_this(x, y) then
         channel_scale_fader:press(x, y)
         if channel_scale_fader:is_this(x, y) then
-          local channel = program:get_selected_channel()
+          local channel = program.get_selected_channel()
           local scale_value = channel_scale_fader:get_value()
-          local number = program:get().scales[scale_value].number
+          local number = program.get().scales[scale_value].number
           channel.default_scale = scale_value
           channel_edit_page_ui_controller:refresh_quantiser()
-          tooltip:show("Ch. "..program:get().selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
+          tooltip:show("Ch. "..program.get().selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
         end
       end
     end
@@ -173,22 +173,22 @@ function channel_edit_page_controller:register_press_handlers()
     press_handler:register(
       "channel_edit_page",
       function(x, y)
-        local selected_sequencer_pattern = program:get().selected_sequencer_pattern
+        local selected_sequencer_pattern = program.get().selected_sequencer_pattern
         pattern_buttons["step"..s.."_pattern_button"]:press(x, y)
         if pattern_buttons["step"..s.."_pattern_button"]:is_this(x, y) then
           if pattern_buttons["step"..s.."_pattern_button"]:get_state() == 2 then
-            fn.add_to_set(program:get().sequencer_patterns[selected_sequencer_pattern].channels[program:get().selected_channel].selected_patterns, x)
-            program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
-            tooltip:show("Pattern "..x.." added to ch. "..program:get().selected_channel)
+            fn.add_to_set(program.get().sequencer_patterns[selected_sequencer_pattern].channels[program.get().selected_channel].selected_patterns, x)
+            program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+            tooltip:show("Pattern "..x.." added to ch. "..program.get().selected_channel)
           else
-            fn.remove_from_set(program:get().sequencer_patterns[selected_sequencer_pattern].channels[program:get().selected_channel].selected_patterns, x)
-            program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
-            tooltip:show("Pattern "..x.." removed from ch. "..program:get().selected_channel)
+            fn.remove_from_set(program.get().sequencer_patterns[selected_sequencer_pattern].channels[program.get().selected_channel].selected_patterns, x)
+            program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+            tooltip:show("Pattern "..x.." removed from ch. "..program.get().selected_channel)
           end
         end
         if pattern_buttons["step"..s.."_pattern_button"]:is_this(x, y) then
           pattern_controller:update_working_patterns()
-          program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
+          program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
         end
       end
     )
@@ -200,18 +200,18 @@ function channel_edit_page_controller:register_press_handlers()
       if channel_pattern_number_merge_mode_button:is_this(x, y) then
         channel_pattern_number_merge_mode_button:press(x, y)
 
-        local merge_mode = program:get_selected_channel().merge_mode
+        local merge_mode = program.get_selected_channel().merge_mode
         if string.match(merge_mode, "pattern_number_") and channel_pattern_number_merge_mode_button:get_state() == 1 then
           channel_pattern_number_merge_mode_button:set_state(2)
         end
 
-        program:get_selected_channel().merge_mode = "pattern_number_"..channel_pattern_number_merge_mode_button:get_state() - 1
-        program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
+        program.get_selected_channel().merge_mode = "pattern_number_"..channel_pattern_number_merge_mode_button:get_state() - 1
+        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
         pattern_controller:update_working_patterns()
         skip_merge_mode_button:set_state(1)
         average_merge_mode_button:set_state(1)
         subadd_merge_mode_button:set_state(1)
-        tooltip:show("Ch. "..program:get().selected_channel.." merge mode: pattern "..channel_pattern_number_merge_mode_button:get_state() - 1)
+        tooltip:show("Ch. "..program.get().selected_channel.." merge mode: pattern "..channel_pattern_number_merge_mode_button:get_state() - 1)
 
 
       end
@@ -223,19 +223,19 @@ function channel_edit_page_controller:register_press_handlers()
 
       if skip_merge_mode_button:is_this(x, y) then
 
-        local merge_mode = program:get_selected_channel().merge_mode
+        local merge_mode = program.get_selected_channel().merge_mode
         if merge_mode == "skip" then
           return
         end
 
-        program:get_selected_channel().merge_mode = "skip"
-        program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
+        program.get_selected_channel().merge_mode = "skip"
+        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
         pattern_controller:update_working_patterns()
         channel_pattern_number_merge_mode_button:set_state(1)
         average_merge_mode_button:set_state(1)
         subadd_merge_mode_button:set_state(1)
         skip_merge_mode_button:press(x, y)
-        tooltip:show("Ch. "..program:get().selected_channel.." merge mode: "..program:get_selected_channel().merge_mode)
+        tooltip:show("Ch. "..program.get().selected_channel.." merge mode: "..program.get_selected_channel().merge_mode)
       end
       
     end
@@ -246,19 +246,19 @@ function channel_edit_page_controller:register_press_handlers()
 
       if average_merge_mode_button:is_this(x, y) then
 
-        local merge_mode = program:get_selected_channel().merge_mode
+        local merge_mode = program.get_selected_channel().merge_mode
         if merge_mode == "average" then
           return
         end
   
-        program:get_selected_channel().merge_mode = "average"
-        program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
+        program.get_selected_channel().merge_mode = "average"
+        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
         pattern_controller:update_working_patterns()
         skip_merge_mode_button:set_state(1)
         channel_pattern_number_merge_mode_button:set_state(1)
         subadd_merge_mode_button:set_state(1)
         average_merge_mode_button:press(x, y)
-        tooltip:show("Ch. "..program:get().selected_channel.." merge mode: "..program:get_selected_channel().merge_mode)
+        tooltip:show("Ch. "..program.get().selected_channel.." merge mode: "..program.get_selected_channel().merge_mode)
       end
     end
   )
@@ -270,22 +270,22 @@ function channel_edit_page_controller:register_press_handlers()
 
         subadd_merge_mode_button:press(x, y)
 
-        local merge_mode = program:get_selected_channel().merge_mode
+        local merge_mode = program.get_selected_channel().merge_mode
         if (merge_mode == "add" or merge_mode == "subtract") and subadd_merge_mode_button:get_state() == 1 then
           subadd_merge_mode_button:set_state(2)
         end
 
         if subadd_merge_mode_button:get_state() == 3 then
-          program:get_selected_channel().merge_mode = "add"
+          program.get_selected_channel().merge_mode = "add"
         elseif subadd_merge_mode_button:get_state() == 2 then
-          program:get_selected_channel().merge_mode = "subtract"
+          program.get_selected_channel().merge_mode = "subtract"
         end
-        program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
+        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
         pattern_controller:update_working_patterns()
         skip_merge_mode_button:set_state(1)
         channel_pattern_number_merge_mode_button:set_state(1)
         average_merge_mode_button:set_state(1)
-        tooltip:show("Ch. "..program:get().selected_channel.." merge mode: "..program:get_selected_channel().merge_mode)
+        tooltip:show("Ch. "..program.get().selected_channel.." merge mode: "..program.get_selected_channel().merge_mode)
       end
     end
   )
@@ -295,9 +295,9 @@ function channel_edit_page_controller:register_press_handlers()
 
       if channel_octave_fader:is_this(x, y) then
         channel_octave_fader:press(x, y)
-        program:get_selected_channel().octave = channel_octave_fader:get_value() - 3
-        program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
-        tooltip:show("Ch. "..program:get().selected_channel.." octave: "..channel_octave_fader:get_value() - 3)
+        program.get_selected_channel().octave = channel_octave_fader:get_value() - 3
+        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+        tooltip:show("Ch. "..program.get().selected_channel.." octave: "..channel_octave_fader:get_value() - 3)
       end
 
     end
@@ -308,13 +308,13 @@ function channel_edit_page_controller:register_press_handlers()
       if pattern_buttons["step"..x.."_pattern_button"]:is_this(x, y) then
         if channel_pattern_number_merge_mode_button:is_this(x2, y2) then
           channel_pattern_number_merge_mode_button:set_state(x + 1)
-          program:get_selected_channel().merge_mode = "pattern_number_"..x
-          program:get().sequencer_patterns[program:get().selected_sequencer_pattern].active = true
+          program.get_selected_channel().merge_mode = "pattern_number_"..x
+          program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
           pattern_controller:update_working_patterns()
           skip_merge_mode_button:set_state(1)
           average_merge_mode_button:set_state(1)
           subadd_merge_mode_button:set_state(1)
-          tooltip:show("Ch. "..program:get().selected_channel.." merge mode: pattern "..channel_pattern_number_merge_mode_button:get_state() - 1)
+          tooltip:show("Ch. "..program.get().selected_channel.." merge mode: pattern "..channel_pattern_number_merge_mode_button:get_state() - 1)
         end
       end
     end
@@ -322,8 +322,8 @@ function channel_edit_page_controller:register_press_handlers()
 end
 
 
-function channel_edit_page_controller:refresh_buttons() 
-  local merge_mode = program:get_selected_channel().merge_mode
+function channel_edit_page_controller.refresh_merge_buttons() 
+  local merge_mode = program.get_selected_channel().merge_mode
 
   if merge_mode == "skip" then
     skip_merge_mode_button:set_state(2)
@@ -346,20 +346,27 @@ function channel_edit_page_controller:refresh_buttons()
     skip_merge_mode_button:set_state(1)
     channel_pattern_number_merge_mode_button:set_state(1)
   elseif string.match(merge_mode, "pattern_number_") then
-    channel_pattern_number_merge_mode_button:set_state(string.match(program:get_selected_channel().merge_mode, "(%d+)$") + 2)
+    channel_pattern_number_merge_mode_button:set_state(string.match(program.get_selected_channel().merge_mode, "(%d+)$") + 2)
     subadd_merge_mode_button:set_state(1)
     average_merge_mode_button:set_state(1)
     skip_merge_mode_button:set_state(1)
   end
 
-  channel_select_fader:set_value(program:get().selected_channel)
+  channel_select_fader:set_value(program.get().selected_channel)
 end
 
 
-function channel_edit_page_controller:refresh_channel_edit_page()
-  local channel = program:get_selected_channel()
+function channel_edit_page_controller.refresh_faders()
+  local channel = program.get_selected_channel()
 
-  local selected_sequencer_pattern = program:get().selected_sequencer_pattern
+  channel_scale_fader:set_value(channel.default_scale)
+  channel_octave_fader:set_value(channel.octave + 3)
+end
+
+function channel_edit_page_controller.refresh_step_buttons()
+  local channel = program.get_selected_channel()
+
+  local selected_sequencer_pattern = program.get().selected_sequencer_pattern
 
   for s = 1, 16 do  
     if pattern_buttons["step"..s.."_pattern_button"] then
@@ -371,14 +378,12 @@ function channel_edit_page_controller:refresh_channel_edit_page()
     end
   end
 
-  channel_scale_fader:set_value(channel.default_scale)
-  channel_octave_fader:set_value(channel.octave + 3)
-  channel_edit_page_controller:refresh_buttons() 
 end
 
-function channel_edit_page_controller:refresh()
-  channel_edit_page_controller:refresh_channel_edit_page()
-  channel_edit_page_controller:refresh_buttons()
+function channel_edit_page_controller.refresh()
+  channel_edit_page_controller.refresh_faders()
+  channel_edit_page_controller.refresh_step_buttons()
+  channel_edit_page_controller.refresh_merge_buttons()
   channel_edit_page_ui_controller:refresh()
 end
 

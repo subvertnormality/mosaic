@@ -3,7 +3,7 @@ local midi_controller = {}
 midi_devices = {}
 midi_device_names = {}
 
-function midi_controller:init()
+function midi_controller.init()
   for i = 1, #midi.vports do
     midi_devices[i] = midi.connect(i)
     table.insert( -- register its name:

@@ -5,10 +5,6 @@ local Page = include("sinfcommand/lib/ui_components/Page")
 
 local pages = Pages:new()
 
-function channel_sequencer_page_ui:change_page(subpage_name)
-  pages:select_page(subpage_name)
-end
-
 
 function channel_sequencer_page_ui:register_ui_draw_handlers() 
   draw_handler:register_ui(
@@ -17,6 +13,11 @@ function channel_sequencer_page_ui:register_ui_draw_handlers()
 
     end
   )
+end
+
+
+function channel_sequencer_page_ui:change_page(subpage_name)
+  pages:select_page(subpage_name)
 end
 
 

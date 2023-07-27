@@ -5,7 +5,7 @@ local program_store = {}
 
 
 local function add_step_trig_lock(sequencer_pattern, channel, step, parameter, trig_lock)
-  local step_trig_lock_banks = program:get().sequencer_patterns[sequencer_pattern].channels[channel].step_trig_lock_banks
+  local step_trig_lock_banks = program.get().sequencer_patterns[sequencer_pattern].channels[channel].step_trig_lock_banks
   if step_trig_lock_banks[step] == nil then
     step_trig_lock_banks[step] = {}
   end
@@ -13,7 +13,7 @@ local function add_step_trig_lock(sequencer_pattern, channel, step, parameter, t
 end
 
 local function get_step_trig_lock(sequencer_pattern, channel, step, parameter)
-  local step_trig_lock_banks = program:get().sequencer_patterns[sequencer_pattern].channels[channel].step_trig_lock_banks
+  local step_trig_lock_banks = program.get().sequencer_patterns[sequencer_pattern].channels[channel].step_trig_lock_banks
   if step_trig_lock_banks[step] == nil then
     return nil
   end
@@ -107,7 +107,7 @@ function program:initialise_64_table(d)
   return table_64
 end
 
-function program:init()
+function program.init()
   local root_note = 0
   program_store = {
     selected_page = pages.channel_edit_page,
@@ -143,15 +143,15 @@ function program:init()
 
 end
 
-function program:get()
+function program.get()
   return program_store
 end
 
-function program:get_selected_channel()
+function program.get_selected_channel()
   return program_store.sequencer_patterns[program_store.selected_sequencer_pattern].channels[program_store.selected_channel]
 end
 
-function program:get_channel(x)
+function program.get_channel(x)
   return program_store.sequencer_patterns[program_store.selected_sequencer_pattern].channels[x]
 end
 
