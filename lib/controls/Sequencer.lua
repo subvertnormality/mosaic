@@ -116,10 +116,14 @@ function Sequencer:draw(trigs, lengths)
 
       end
 
-      if channel.current_step == grid_count then
+      if channel.current_step == grid_count and (clock_controller.is_playing() and program.get().current_step ~= 1) then
         if (self.mode == "channel") then
           if fn.calc_grid_count(px, py) >= start_step then 
-            g:led(px, py, 10)
+            if (fn.calc_grid_count(px, py) > end_step) then
+              g:led(end_x, end_y, 10)
+            else
+              g:led(px, py, 10)
+            end
           end
         end
       end

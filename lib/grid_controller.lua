@@ -45,7 +45,6 @@ function g.key(x, y, z)
     else
       grid_controller.push.active = {x, y}
     end
-    print(grid_controller.push[x][y].state)
     grid_controller.counter[x][y] = clock.run(grid_controller.long_press, x, y)
   elseif z == 0 then -- otherwise, if a grid key is released...
 

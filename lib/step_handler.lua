@@ -8,7 +8,7 @@ local step_scale_number = 0
 
 function step_handler.handle(c, current_step) 
 
-  local channel = program.get().sequencer_patterns[program.get().selected_sequencer_pattern].channels[c]
+  local channel = program.get_channel(c)
   local channel_step_scale_number = channel.step_scales[current_step]
 
   local trig_value = channel.working_pattern.trig_values[current_step]
