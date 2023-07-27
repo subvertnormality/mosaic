@@ -1,6 +1,6 @@
 local pattern_controller = {}
 
-function pattern_controller:sync_pattern_values(merged_pattern, pattern, s)
+function pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
   merged_pattern.trig_values[s] = 1
   merged_pattern.lengths[s] = pattern.lengths[s]
   merged_pattern.velocity_values[s] = pattern.velocity_values[s]
@@ -8,15 +8,15 @@ function pattern_controller:sync_pattern_values(merged_pattern, pattern, s)
   return merged_pattern
 end
 
-function pattern_controller:get_and_merge_patterns(channel, merge_mode)
+function pattern_controller.get_and_merge_patterns(channel, merge_mode)
 
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-  local merged_pattern = program:initialise_default_pattern()
-  local skip_bits = program:initialise_64_table(0)
-  local average_length_accumulator = program:initialise_64_table(0)
-  local average_velocity_accumulator = program:initialise_64_table(0)
-  local average_note_accumulator = program:initialise_64_table(0)
-  local average_count = program:initialise_64_table(0)
+  local merged_pattern = program.initialise_default_pattern()
+  local skip_bits = program.initialise_64_table(0)
+  local average_length_accumulator = program.initialise_64_table(0)
+  local average_velocity_accumulator = program.initialise_64_table(0)
+  local average_note_accumulator = program.initialise_64_table(0)
+  local average_count = program.initialise_64_table(0)
 
   local pattern_channel = program.get().sequencer_patterns[selected_sequencer_pattern].channels[channel]
   local patterns = program.get().sequencer_patterns[selected_sequencer_pattern].patterns
@@ -45,7 +45,7 @@ function pattern_controller:get_and_merge_patterns(channel, merge_mode)
 
       if merge_mode == "skip" then
         if is_pattern_trig_one and merged_pattern.trig_values[s] < 1 and skip_bits[s] < 1 then
-          merged_pattern = pattern_controller:sync_pattern_values(merged_pattern, pattern, s)
+          merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
         elseif is_pattern_trig_one and merged_pattern.trig_values[s] == 1 then
           merged_pattern.trig_values[s] = 0
           skip_bits[s] = 1
@@ -98,13 +98,13 @@ end
 
 
 
-function pattern_controller:update_working_patterns()
+function pattern_controller.update_working_patterns()
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
   local sequencer_patterns = program.get().sequencer_patterns[selected_sequencer_pattern].channels
 
   for c = 1, 16 do
     local merge_mode = sequencer_patterns[c].merge_mode
-    local working_pattern = pattern_controller:get_and_merge_patterns(c, merge_mode)
+    local working_pattern = pattern_controller.get_and_merge_patterns(c, merge_mode)
     sequencer_patterns[c].working_pattern = working_pattern
   end
 

@@ -23,6 +23,14 @@ local splash_screen_active = false
 
 local menu_buttons = {}
 
+local page_names = {
+  "Channel Edit Page",
+  "Channel Sequencer Page",
+  "Pattern Trigger Edit Page",
+  "Pattern Note Edit Page",
+  "Pattern Velocity Edit Page"
+}
+
 g = grid.connect()
 
 function g.key(x, y, z)
@@ -37,23 +45,23 @@ function g.key(x, y, z)
     else
       grid_controller.push.active = {x, y}
     end
-
-    grid_controller.counter[x][y] = clock.run(grid_controller.long_press, g, x, y)
+    print(grid_controller.push[x][y].state)
+    grid_controller.counter[x][y] = clock.run(grid_controller.long_press, x, y)
   elseif z == 0 then -- otherwise, if a grid key is released...
 
     if grid_controller.counter[x][y] then -- and the long press is still waiting...
       clock.cancel(grid_controller.counter[x][y]) -- then cancel the long press clock,
 
-      if grid_controller.push[x][y].state == "long_pressed" then
+      if grid_controller.push and grid_controller.push[x][y].state == "long_pressed" then
         grid_controller.push[x][y].state = "inactive"
         grid_controller.push.active = false
 
-      elseif grid_controller.push[x][y].state == "pressed" then
+      elseif grid_controller.push and grid_controller.push[x][y].state == "pressed" then
         grid_controller.push[x][y].state = "inactive"
-        grid_controller:short_press(x,y) -- and execute a short press instead.
-      elseif grid_controller.push[x][y].state == "dual_pressed" then
+        grid_controller.short_press(x,y) -- and execute a short press instead.
+      elseif grid_controller.push and grid_controller.push[x][y].state == "dual_pressed" then
         if grid_controller.push.active then 
-          grid_controller:dual_press(grid_controller.push.active[1], grid_controller.push.active[2], x, y)
+          grid_controller.dual_press(grid_controller.push.active[1], grid_controller.push.active[2], x, y)
         end
         grid_controller.push[x][y].state = "inactive"
         if grid_controller.push.active then 
@@ -66,25 +74,25 @@ function g.key(x, y, z)
 end
 
 function g.remove()
-  grid_controller:alert_disconnect()
+  grid_controller.alert_disconnect()
 end
 
 local function refresh_pages()
 
   channel_edit_page_controller.refresh()
-  -- channel_sequencer_page_controller:refresh()
-  -- trigger_edit_page_controller:refresh()
-  -- note_edit_page_controller:refresh()
-  -- velocity_edit_page_controller:refresh()
+  -- channel_sequencer_page_controller.refresh()
+  -- trigger_edit_page_controller.refresh()
+  -- note_edit_page_controller.refresh()
+  -- velocity_edit_page_controller.refresh()
 
 end
 
 local function register_draw_handlers()
   channel_edit_page_controller.register_draw_handlers()
-  channel_sequencer_page_controller:register_draw_handlers()
-  trigger_edit_page_controller:register_draw_handlers()
-  note_edit_page_controller:register_draw_handlers()
-  velocity_edit_page_controller:register_draw_handlers()
+  channel_sequencer_page_controller.register_draw_handlers()
+  trigger_edit_page_controller.register_draw_handlers()
+  note_edit_page_controller.register_draw_handlers()
+  velocity_edit_page_controller.register_draw_handlers()
 
   draw_handler:register_grid(
     "menu",
@@ -99,11 +107,11 @@ local function register_draw_handlers()
 end
 
 function register_press_handlers()
-  channel_edit_page_controller:register_press_handlers()
-  channel_sequencer_page_controller:register_press_handlers()
-  trigger_edit_page_controller:register_press_handlers()
-  note_edit_page_controller:register_press_handlers()
-  velocity_edit_page_controller:register_press_handlers()
+  channel_edit_page_controller.register_press_handlers()
+  channel_sequencer_page_controller.register_press_handlers()
+  trigger_edit_page_controller.register_press_handlers()
+  note_edit_page_controller.register_press_handlers()
+  velocity_edit_page_controller.register_press_handlers()
 
   press_handler:register(
   "menu",
@@ -112,21 +120,21 @@ function register_press_handlers()
       if (x < 6) then
         if program.get().selected_page ~= x then
           if x == 3 then
-            trigger_edit_page_controller:refresh_pattern_trigger_edit_page_ui()
+            trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
           end
           program.get().selected_page = x
           refresh_pages()
-          grid_controller:set_menu_button_state()
+          grid_controller.set_menu_button_state()
           tooltip:show(page_names[program.get().selected_page])
         else
-          if (clock_controller:is_playing()) then
+          if (clock_controller.is_playing()) then
             clock_controller:stop()
             tooltip:show("Stopping playback")
           else
             clock_controller:start()
             tooltip:show("Starting playback")
           end
-          grid_controller:set_menu_button_state()
+          grid_controller.set_menu_button_state()
         end
         fn.dirty_screen(true)
       end
@@ -187,7 +195,7 @@ function grid_controller.init()
   note_edit_page_controller.init()
   velocity_edit_page_controller.init()
 
-  grid_controller:set_menu_button_state()
+  grid_controller.set_menu_button_state()
   
   register_draw_handlers()
   register_press_handlers()
@@ -195,7 +203,7 @@ function grid_controller.init()
 end
 
 
-function grid_controller:set_menu_button_state()
+function grid_controller.set_menu_button_state()
 
   channel_edit_button:set_state((program.get().selected_page == 1) and 2 or 1)
   channel_edit_button:no_blink()
@@ -208,13 +216,13 @@ function grid_controller:set_menu_button_state()
   velocity_edit_button:set_state((program.get().selected_page == 5) and 2 or 1)
   velocity_edit_button:no_blink()
 
-  if (clock_controller:is_playing()) then
+  if (clock_controller.is_playing()) then
     menu_buttons[program.get().selected_page]:blink()
   end
 
 end
 
-function grid_controller:short_press(x, y)
+function grid_controller.short_press(x, y)
 
   press_handler:handle(program.get().selected_page, x, y)
   fn.dirty_grid(true)
@@ -224,7 +232,7 @@ function grid_controller:short_press(x, y)
 end
 
 
-function grid_controller:long_press(x, y)
+function grid_controller.long_press(x, y)
   clock.sleep(1)
   grid_controller.push[x][y].state = "long_pressed"
   press_handler:handle_long(program.get().selected_page, x, y)
@@ -232,7 +240,7 @@ function grid_controller:long_press(x, y)
 end
 
 
-function grid_controller:dual_press(x, y, x2, y2)
+function grid_controller.dual_press(x, y, x2, y2)
 
   press_handler:handle_dual(program.get().selected_page, x, y, x2, y2)
   fn.dirty_grid(true)
@@ -241,30 +249,20 @@ function grid_controller:dual_press(x, y, x2, y2)
   grid_controller.push.active = false
 end
 
-function grid_controller:alert_disconnect()
-  self.disconnect_dismissed = false
-end
 
-
-function grid_controller:dismiss_disconnect()
-  self.disconnect_dismissed = true
-end
-
-
-function grid_controller:redraw()
+function grid_controller.redraw()
   g:all(0)
-
 
   draw_handler:handle_grid(program.get().selected_page)
 
   g:refresh()
 end
 
-function grid_controller:splash_screen_off()
+function grid_controller.splash_screen_off()
   splash_screen_active = false
 end
 
-function grid_controller:splash_screen_on()
+function grid_controller.splash_screen_on()
   splash_screen_active = true
 end
 
@@ -280,20 +278,20 @@ function grid_controller.grid_redraw()
       g:refresh()
     else
       if fn.dirty_grid() == true then
-        grid_controller:redraw()
+        grid_controller.redraw()
         fn.dirty_grid(false)
       end
     end
   end
 end
 
-function grid_controller:refresh()
+function grid_controller.refresh()
 
   channel_edit_page_controller.refresh()
-  -- channel_sequencer_page_controller:refresh()
-  trigger_edit_page_controller:refresh()
-  note_edit_page_controller:refresh()
-  velocity_edit_page_controller:refresh()
+  -- channel_sequencer_page_controller.refresh()
+  trigger_edit_page_controller.refresh()
+  note_edit_page_controller.refresh()
+  velocity_edit_page_controller.refresh()
 
 end
 

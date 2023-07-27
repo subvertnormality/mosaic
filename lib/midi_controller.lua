@@ -13,7 +13,7 @@ function midi_controller.init()
   end 
 end
 
-function midi_controller:get_midi_outs()
+function midi_controller.get_midi_outs()
   local midi_outs = {}
   for i = 1, #midi.vports do
     if midi_devices[i] and midi_devices[i].name ~= "none" then
@@ -27,33 +27,33 @@ function midi_controller:get_midi_outs()
   return midi_outs
 end
 
-function midi_controller:all_off(id)
+function midi_controller.all_off(id)
 
   for note = 0, 127 do
-    midi_devices[id]:note_off(note)
+    midi_devices[id].note_off(note)
   end
 
 end
 
 
-function midi_controller:note_off(note, velocity, channel, device)
+function midi_controller.note_off(note, velocity, channel, device)
 
   if midi_devices[device] ~= nil then
-    midi_devices[device]:note_off(note, velocity, channel)
+    midi_devices[device].note_off(note, velocity, channel)
   end
 
 end
 
-function midi_controller:note_on(note, velocity, channel, device)
+function midi_controller.note_on(note, velocity, channel, device)
   if midi_devices[device] ~= nil then
-    midi_devices[device]:note_on(note, velocity, channel)
+    midi_devices[device].note_on(note, velocity, channel)
   end
 end
 
-function midi_controller:cc(cc, value, channel, device)
+function midi_controller.cc(cc, value, channel, device)
 
   if midi_devices[device] ~= nil then
-    midi_devices[device]:cc(cc, value, channel, device)
+    midi_devices[device].cc(cc, value, channel, device)
   end
 
 end
@@ -66,10 +66,10 @@ function midi_controller:start()
   end
 end
 
-function midi_controller:continue()
+function midi_controller.continue()
   for id = 1, #midi.vports do
     if midi_devices[id] ~= nil then
-      midi_devices[id]:continue()
+      midi_devices[id].continue()
     end
   end
 end
@@ -78,7 +78,7 @@ function midi_controller:stop()
   for id = 1, #midi.vports do
     if midi_devices[id] ~= nil then
       midi_devices[id]:stop()
-      midi_controller:all_off(id)
+      midi_controller.all_off(id)
     end
   end
 end

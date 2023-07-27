@@ -1,7 +1,7 @@
 local drum_ops_tables = {}
 
 
-function fromBin(b)
+local function fromBin(b)
     return tonumber(b, 2)
 end
 

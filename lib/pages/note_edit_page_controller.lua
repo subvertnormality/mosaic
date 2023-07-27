@@ -25,17 +25,17 @@ function note_edit_page_controller.init()
     faders["step"..s.."_fader"] = VerticalFader:new(s, 1, 21)
   end
 
-  note_edit_page_controller:refresh_buttons()
+  note_edit_page_controller.refresh_buttons()
 end
 
 
-function note_edit_page_controller:register_draw_handlers()
+function note_edit_page_controller.register_draw_handlers()
   
   for s = 1, 64 do  
     draw_handler:register_grid(
       "pattern_note_edit_page",
       function()
-        note_edit_page_controller:refresh_fader(s)
+        note_edit_page_controller.refresh_fader(s)
         return faders["step"..s.."_fader"]:draw()
       end
     )
@@ -99,7 +99,7 @@ function note_edit_page_controller:register_draw_handlers()
 end
 
 
-function note_edit_page_controller:register_press_handlers()
+function note_edit_page_controller.register_press_handlers()
   for s = 1, 64 do   
     press_handler:register(
       "pattern_note_edit_page",
@@ -136,7 +136,7 @@ function note_edit_page_controller:register_press_handlers()
 
         end
         
-        pattern_controller:update_working_patterns()
+        pattern_controller.update_working_patterns()
       end
     )
   end
@@ -146,7 +146,7 @@ function note_edit_page_controller:register_press_handlers()
       if (y == 1) then
         program.get().selected_pattern = x
         tooltip:show("Pattern "..x.." selected")
-        note_edit_page_controller:refresh()
+        note_edit_page_controller.refresh()
       end
     end
   )
@@ -155,7 +155,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step1to16_fade_button:is_this(x, y)) then
         horizontal_offset = 0
-        note_edit_page_controller:refresh()
+        note_edit_page_controller.refresh()
         tooltip:show("Steps 1 to 16")
       end
       return step1to16_fade_button:press(x, y)
@@ -166,7 +166,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step17to32_fade_button:is_this(x, y)) then
         horizontal_offset = 16
-        note_edit_page_controller:refresh()
+        note_edit_page_controller.refresh()
         tooltip:show("Steps 17 to 32")
       end
 
@@ -178,7 +178,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step33to48_fade_button:is_this(x, y)) then
         horizontal_offset = 32
-        note_edit_page_controller:refresh()
+        note_edit_page_controller.refresh()
         tooltip:show("Steps 33 to 48")
       end
 
@@ -190,7 +190,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step49to64_fade_button:is_this(x, y)) then
         horizontal_offset = 48
-        note_edit_page_controller:refresh()
+        note_edit_page_controller.refresh()
         tooltip:show("Steps 49 to 64")
       end
 
@@ -202,7 +202,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (note15to21_fade_button:is_this(x, y)) then
         vertical_offset = 0
-        note_edit_page_controller:refresh()
+        note_edit_page_controller.refresh()
         tooltip:show("Notes +6 to +13")
       end
 
@@ -214,7 +214,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (note8to14_fade_button:is_this(x, y)) then
         vertical_offset = 7
-        note_edit_page_controller:refresh()
+        note_edit_page_controller.refresh()
         tooltip:show("Root to +6")
       end
 
@@ -226,7 +226,7 @@ function note_edit_page_controller:register_press_handlers()
     function(x, y)
       if (note1to7_fade_button:is_this(x, y)) then
         vertical_offset = 14
-        note_edit_page_controller:refresh()
+        note_edit_page_controller.refresh()
         tooltip:show("Notes -1 to -7")
       end
 
@@ -250,7 +250,7 @@ function note_edit_page_controller:register_press_handlers()
   )
 end
 
-function note_edit_page_controller:refresh_buttons()
+function note_edit_page_controller.refresh_buttons()
   step1to16_fade_button:set_value(horizontal_offset)
   step17to32_fade_button:set_value(horizontal_offset)
   step33to48_fade_button:set_value(horizontal_offset)
@@ -260,7 +260,7 @@ function note_edit_page_controller:refresh_buttons()
   note15to21_fade_button:set_value(14 - vertical_offset)
 end
 
-function note_edit_page_controller:refresh_fader(s)
+function note_edit_page_controller.refresh_fader(s)
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
   local selected_pattern = program.get().selected_pattern
   faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
@@ -278,11 +278,11 @@ function note_edit_page_controller:refresh_fader(s)
   end
 end
 
-function note_edit_page_controller:refresh()
+function note_edit_page_controller.refresh()
   for s = 1, 64 do  
-    refresh_fader(s)
+    note_edit_page_controller.refresh_fader(s)
   end
-  note_edit_page_controller:refresh_buttons()
+  note_edit_page_controller.refresh_buttons()
 end
 
 

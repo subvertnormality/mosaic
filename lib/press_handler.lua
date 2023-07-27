@@ -48,12 +48,12 @@ function press_handler:handle(page, x, y)
   end
 
   -- If no functions have been registered for this page, do nothing
-  if self.handlers[fn.find_key(pages, page)] == nil then
+  if self.handlers[fn.find_key(program.get_pages(), page)] == nil then
     return
   end
 
   -- Otherwise, call all functions registered for this page
-  for _, func in ipairs(self.handlers[fn.find_key(pages, page)]) do
+  for _, func in ipairs(self.handlers[fn.find_key(program.get_pages(), page)]) do
     func(x, y)
   end
 
@@ -65,12 +65,12 @@ end
 function press_handler:handle_dual(page, x, y, x2, y2)
 
   -- If no functions have been registered for this page, do nothing
-  if self.dual_handlers[fn.find_key(pages, page)] == nil then
+  if self.dual_handlers[fn.find_key(program.get_pages(), page)] == nil then
     return
   end
 
   -- Otherwise, call all functions registered for this page
-  for _, func in ipairs(self.dual_handlers[fn.find_key(pages, page)]) do
+  for _, func in ipairs(self.dual_handlers[fn.find_key(program.get_pages(), page)]) do
     func(x, y, x2, y2)
   end
 
@@ -87,12 +87,12 @@ function press_handler:handle_long(page, x, y)
   end
 
   -- If no functions have been registered for this page, do nothing
-  if self.long_handlers[fn.find_key(pages, page)] == nil then
+  if self.long_handlers[fn.find_key(program.get_pages(), page)] == nil then
     return
   end
 
   -- Otherwise, call all functions registered for this page
-  for _, func in ipairs(self.long_handlers[fn.find_key(pages, page)]) do
+  for _, func in ipairs(self.long_handlers[fn.find_key(program.get_pages(), page)]) do
     func(x, y)
   end
 

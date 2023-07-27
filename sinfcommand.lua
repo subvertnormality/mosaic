@@ -17,22 +17,6 @@ pattern_controller = include("sinfcommand/lib/pattern_controller")
 midi_controller = include("sinfcommand/lib/midi_controller")
 
 
-pages = {
-  channel_edit_page = 1,
-  channel_sequencer_page = 2,
-  pattern_trigger_edit_page = 3,
-  pattern_note_edit_page = 4,
-  pattern_velocity_edit_page = 5
-}
-
-page_names = {
-  "Channel Edit Page",
-  "Channel Sequencer Page",
-  "Pattern Trigger Edit Page",
-  "Pattern Note Edit Page",
-  "Pattern Velocity Edit Page"
-}
-
 local function load_project(pth)
   
   clock_controller:stop()
@@ -41,7 +25,7 @@ local function load_project(pth)
     print("Loading project " .. pth)
     local saved = tab.load(pth)
     if saved ~= nil then
-      program:set(saved[2])
+      program.set(saved[2])
       if saved[1] then params:read(norns.state.data .. saved[1] .. ".pset") end
       clock_controller:reset()
       fn.dirty_grid(true)
@@ -68,8 +52,8 @@ end
 
 local function load_new_project()
   program.init()
-  grid_controller:refresh()
-  ui_controller:refresh()
+  grid_controller.refresh()
+  ui_controller.refresh()
 end
 
 local function do_autosave()
@@ -77,7 +61,7 @@ local function do_autosave()
   if program ~= nil then
     save_project("autosave")
   end
-  grid_controller:splash_screen_off()
+  grid_controller.splash_screen_off()
   ui_splash_screen_active = false
   fn.dirty_screen(true)
   as_metro:stop()
@@ -88,10 +72,10 @@ local function prime_autosave()
   if as_metro.id then
     metro.free(as_metro.id)
   end
-  if not clock_controller:is_playing() then
+  if not clock_controller.is_playing() then
     as_metro = metro.init(do_autosave, 0.5, 1)
     
-    grid_controller:splash_screen_on()
+    grid_controller.splash_screen_on()
     ui_splash_screen_active = true
     
     as_metro:start()
@@ -111,7 +95,7 @@ local function post_splash_init()
     load_new_project()
   end
 
-  grid_controller:splash_screen_off()
+  grid_controller.splash_screen_off()
   ui_splash_screen_active = false
   ui_controller.init()
   grid_controller.init()
@@ -158,7 +142,7 @@ function init()
   grid_clock_id = clock.run(grid_controller.grid_redraw)
   ui_clock_id = clock.run(redraw_clock)
 
-  grid_controller:splash_screen_on()
+  grid_controller.splash_screen_on()
   ui_splash_screen_active = true
 
   params:add_separator("Pattern project management")
@@ -177,11 +161,11 @@ function init()
 end
 
 function enc(n,d)
-  ui_controller:enc(n, d)
+  ui_controller.enc(n, d)
 end
 
 function key(n,z)
-  ui_controller:key(n, z)
+  ui_controller.key(n, z)
 end
 
 
@@ -194,10 +178,10 @@ function autosave_reset()
   autosave_timer:start()
 end
 
-function clock.transport.start()
+function clock.transport:start()
   clock_controller:start()
 end
 
-function clock.transport.stop()
+function clock.transport:stop()
   clock_controller:stop()
 end

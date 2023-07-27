@@ -3776,7 +3776,7 @@ function midi_device_map:get_midi_device_map()
   return devices
 end
 
-function midi_device_map:get_midi_devices() 
+function midi_device_map.get_midi_devices() 
   return midi_devices
 end
 

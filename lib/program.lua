@@ -3,6 +3,13 @@ local musicutil = require("musicutil")
 local program = {}
 local program_store = {}
 
+local pages = {
+  channel_edit_page = 1,
+  channel_sequencer_page = 2,
+  pattern_trigger_edit_page = 3,
+  pattern_note_edit_page = 4,
+  pattern_velocity_edit_page = 5
+}
 
 local function add_step_trig_lock(sequencer_pattern, channel, step, parameter, trig_lock)
   local step_trig_lock_banks = program.get().sequencer_patterns[sequencer_pattern].channels[channel].step_trig_lock_banks
@@ -30,10 +37,10 @@ local function initialise_default_channels()
       trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}},
       step_trig_lock_banks = {},
       working_pattern = {
-        trig_values = program:initialise_64_table(0),
-        lengths = program:initialise_64_table(1),
-        note_values = program:initialise_64_table(0),
-        velocity_values = program:initialise_64_table(100)
+        trig_values = program.initialise_64_table(0),
+        lengths = program.initialise_64_table(1),
+        note_values = program.initialise_64_table(0),
+        velocity_values = program.initialise_64_table(100)
       },
       start_trig = {1, 4},
       end_trig = {16, 7},
@@ -43,7 +50,7 @@ local function initialise_default_channels()
       default_scale = 1,
       root_note = 0,
       chord = 1,
-      step_scales = program:initialise_64_table(0),
+      step_scales = program.initialise_64_table(0),
       merge_mode = "skip",
       octave = 0,
       clock_division = 4,
@@ -61,7 +68,7 @@ local function initialise_default_patterns()
   local patterns = {}
 
   for i=1,16 do
-    patterns[i] = program:initialise_default_pattern()
+    patterns[i] = program.initialise_default_pattern()
   end
   
   return patterns
@@ -88,18 +95,18 @@ local function initialise_default_sequencer_patterns()
 end
 
 
-function program:initialise_default_pattern()
+function program.initialise_default_pattern()
   
   return {
-    trig_values = program:initialise_64_table(0),
-    lengths = program:initialise_64_table(1),
-    note_values = program:initialise_64_table(0),
-    velocity_values = program:initialise_64_table(100)
+    trig_values = program.initialise_64_table(0),
+    lengths = program.initialise_64_table(1),
+    note_values = program.initialise_64_table(0),
+    velocity_values = program.initialise_64_table(100)
   }
 
 end
 
-function program:initialise_64_table(d)
+function program.initialise_64_table(d)
   local table_64 = {}
   for i=1,64 do
     table_64[i] = d
@@ -155,8 +162,12 @@ function program.get_channel(x)
   return program_store.sequencer_patterns[program_store.selected_sequencer_pattern].channels[x]
 end
 
-function program:set(p)
+function program.set(p)
   program_store = p
+end
+
+function program.get_pages()
+  return pages
 end
 
 return program

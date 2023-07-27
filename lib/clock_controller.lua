@@ -28,7 +28,7 @@ end
 
 local function master_func() 
 
-  step_handler:process_lengths()
+  step_handler.process_lengths()
 
   program.get().current_step = program.get().current_step + 1
 
@@ -58,7 +58,7 @@ function clock_controller:start()
         current_step = start_trig - 1
       end
 
-      step_handler:handle(i, current_step)
+      step_handler.handle(i, current_step)
     
       channel.current_step = current_step + 1
     
@@ -83,15 +83,15 @@ function clock_controller:stop()
       clock.cancel(clock_controller["channel_"..i.."_clock"])
     end
     playing = false
-    clock_controller:reset() 
+    clock_controller.reset() 
   end
 end
 
-function clock_controller:is_playing()
+function clock_controller.is_playing()
   return playing
 end
 
-function clock_controller:reset() 
+function clock_controller.reset() 
   for i = 1, 16 do
     program.get_channel(i).current_step = 1
   end

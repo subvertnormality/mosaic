@@ -16,7 +16,7 @@ function channel_sequencer_page_controller.init()
   channel_pattern_buttons["step"..program.get().selected_sequencer_pattern.."_sequencer_pattern_button"]:set_state(3)
 end
 
-function channel_sequencer_page_controller:register_draw_handlers()
+function channel_sequencer_page_controller.register_draw_handlers()
   for s = 1, 96 do  
     draw_handler:register_grid(
       "channel_sequencer_page",
@@ -32,7 +32,7 @@ function channel_sequencer_page_controller:register_draw_handlers()
   end
 end
 
-function channel_sequencer_page_controller:register_press_handlers()
+function channel_sequencer_page_controller.register_press_handlers()
   for s = 1, 96 do  
     press_handler:register(
       "channel_sequencer_page",

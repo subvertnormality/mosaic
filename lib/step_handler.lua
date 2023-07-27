@@ -6,7 +6,7 @@ local length_tracker = {}
 
 local step_scale_number = 0
 
-function step_handler:handle(c, current_step) 
+function step_handler.handle(c, current_step) 
 
   local channel = program.get().sequencer_patterns[program.get().selected_sequencer_pattern].channels[c]
   local channel_step_scale_number = channel.step_scales[current_step]
@@ -29,20 +29,20 @@ function step_handler:handle(c, current_step)
   end
 
   if trig_value == 1 then
-    local note = quantiser:process(note_value, octave_mod, step_scale_number, channel)
-    midi_controller:note_on(note, velocity_value, midi_channel, midi_device)
+    local note = quantiser.process(note_value, octave_mod, step_scale_number, channel)
+    midi_controller.note_on(note, velocity_value, midi_channel, midi_device)
     table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value})
   end
 
 end
 
 
-function step_handler:process_lengths() 
+function step_handler.process_lengths() 
   for i=#length_tracker, 1, -1 do
     local l = length_tracker[i]
     l.steps_remaining = l.steps_remaining - 1
     if l.steps_remaining < 1 then
-      midi_controller:note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
+      midi_controller.note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
       table.remove(length_tracker, i)
     end
   end

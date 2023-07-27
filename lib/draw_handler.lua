@@ -24,12 +24,12 @@ function draw_handler:handle_grid(page)
   end
 
   -- If no functions have been registered for this page, do nothing
-  if self.grid_handlers[fn.find_key(pages, page)] == nil then
+  if self.grid_handlers[fn.find_key(program.get_pages(), page)] == nil then
     return
   end
 
   -- Otherwise, call all functions registered for this page
-  for _, func in ipairs(self.grid_handlers[fn.find_key(pages, page)]) do
+  for _, func in ipairs(self.grid_handlers[fn.find_key(program.get_pages(), page)]) do
     func()
   end
 end
@@ -54,12 +54,12 @@ function draw_handler:handle_ui(page)
   end
 
   -- If no functions have been registered for this page, do nothing
-  if self.ui_handlers[fn.find_key(pages, page)] == nil then
+  if self.ui_handlers[fn.find_key(program.get_pages(), page)] == nil then
     return
   end
 
   -- Otherwise, call all functions registered for this page
-  for _, func in ipairs(self.ui_handlers[fn.find_key(pages, page)]) do
+  for _, func in ipairs(self.ui_handlers[fn.find_key(program.get_pages(), page)]) do
     func()
   end
 end

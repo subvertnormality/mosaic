@@ -25,16 +25,16 @@ function velocity_edit_page_controller.init()
     faders["step"..s.."_fader"] = VerticalFader:new(s, 1, 14)
   end
 
-  velocity_edit_page_controller:refresh()
+  velocity_edit_page_controller.refresh()
 end
 
-function velocity_edit_page_controller:register_draw_handlers()
+function velocity_edit_page_controller.register_draw_handlers()
   
   for s = 1, 64 do  
     draw_handler:register_grid(
       "pattern_velocity_edit_page",
       function()
-        velocity_edit_page_controller:refresh()
+        velocity_edit_page_controller.refresh()
         return faders["step"..s.."_fader"]:draw()
       end
     )
@@ -91,7 +91,7 @@ function velocity_edit_page_controller:register_draw_handlers()
 end
 
 
-function velocity_edit_page_controller:register_press_handlers()
+function velocity_edit_page_controller.register_press_handlers()
   for s = 1, 64 do   
     press_handler:register(
       "pattern_velocity_edit_page",
@@ -100,7 +100,7 @@ function velocity_edit_page_controller:register_press_handlers()
         if faders["step"..s.."_fader"]:is_this(x, y) then
           local selected_sequencer_pattern = program.get().selected_sequencer_pattern
           local selected_pattern = program.get().selected_pattern
-          local velocity = velocity_edit_page_controller:velocity_from_value(faders["step"..s.."_fader"]:get_value())
+          local velocity = velocity_edit_page_controller.value_from_velocity(faders["step"..s.."_fader"]:get_value())
           local seq_pattern = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern]
           seq_pattern.velocity_values[s] = velocity
           program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
@@ -121,7 +121,7 @@ function velocity_edit_page_controller:register_press_handlers()
   
           end
           
-          pattern_controller:update_working_patterns()
+          pattern_controller.update_working_patterns()
         end
       end
     )
@@ -132,7 +132,7 @@ function velocity_edit_page_controller:register_press_handlers()
       if (y == 1) then
         program.get().selected_pattern = x
         tooltip:show("Pattern "..x.." selected")
-        velocity_edit_page_controller:refresh()
+        velocity_edit_page_controller.refresh()
       end
     end
   )
@@ -141,7 +141,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step1to16_fade_button:is_this(x, y)) then
         horizontal_offset = 0
-        velocity_edit_page_controller:refresh()
+        velocity_edit_page_controller.refresh()
         tooltip:show("Steps 1 to 16")
       end
       return step1to16_fade_button:press(x, y)
@@ -152,7 +152,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step17to32_fade_button:is_this(x, y)) then
         horizontal_offset = 16
-        velocity_edit_page_controller:refresh()
+        velocity_edit_page_controller.refresh()
         tooltip:show("Steps 17 to 32")
       end
 
@@ -164,7 +164,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step33to48_fade_button:is_this(x, y)) then
         horizontal_offset = 32
-        velocity_edit_page_controller:refresh()
+        velocity_edit_page_controller.refresh()
         tooltip:show("Steps 33 to 48")
       end
 
@@ -176,7 +176,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (step49to64_fade_button:is_this(x, y)) then
         horizontal_offset = 48
-        velocity_edit_page_controller:refresh()
+        velocity_edit_page_controller.refresh()
         tooltip:show("Steps 49 to 64")
       end
 
@@ -188,7 +188,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (vel1to7_fade_button:is_this(x, y)) then
         vertical_offset = 0
-        velocity_edit_page_controller:refresh()
+        velocity_edit_page_controller.refresh()
         tooltip:show("Velocity 68 to 127")
       end
 
@@ -200,7 +200,7 @@ function velocity_edit_page_controller:register_press_handlers()
     function(x, y)
       if (vel8to14_fade_button:is_this(x, y)) then
         vertical_offset = 7
-        velocity_edit_page_controller:refresh()
+        velocity_edit_page_controller.refresh()
         tooltip:show("Velocity 0 to 58")
       end
 
@@ -225,7 +225,7 @@ function velocity_edit_page_controller:register_press_handlers()
 end
 
 
-function velocity_edit_page_controller:value_from_velocity(vel)
+function velocity_edit_page_controller.value_from_velocity(vel)
 
   if vel == -1 then return 1 end
 
@@ -243,7 +243,7 @@ function velocity_edit_page_controller:value_from_velocity(vel)
   return math.floor(outputValue)
 end
 
-function velocity_edit_page_controller:velocity_from_value(val)
+function velocity_edit_page_controller.value_from_velocity(val)
 
   if val == -1 then return 127 end
 
@@ -262,7 +262,7 @@ function velocity_edit_page_controller:velocity_from_value(val)
 end
 
 
-function velocity_edit_page_controller:refresh_buttons()
+function velocity_edit_page_controller.refresh_buttons()
   step1to16_fade_button:set_value(horizontal_offset)
   step17to32_fade_button:set_value(horizontal_offset)
   step33to48_fade_button:set_value(horizontal_offset)
@@ -272,12 +272,12 @@ function velocity_edit_page_controller:refresh_buttons()
 end
 
 
-function velocity_edit_page_controller:refresh_fader(s)
+function velocity_edit_page_controller.refresh_fader(s)
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
   local selected_pattern = program.get().selected_pattern
   faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
   faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)
-  local value = velocity_edit_page_controller:value_from_velocity(program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s])
+  local value = velocity_edit_page_controller.value_from_velocity(program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].velocity_values[s])
 
   if value then 
     faders["step"..s.."_fader"]:set_value(value) 
@@ -290,11 +290,11 @@ function velocity_edit_page_controller:refresh_fader(s)
   end
 end
 
-function velocity_edit_page_controller:refresh()
+function velocity_edit_page_controller.refresh()
   for s = 1, 64 do  
-    velocity_edit_page_controller:refresh_fader(s)
+    velocity_edit_page_controller.refresh_fader(s)
   end
-  velocity_edit_page_controller:refresh_buttons()
+  velocity_edit_page_controller.refresh_buttons()
 end
 
 return velocity_edit_page_controller

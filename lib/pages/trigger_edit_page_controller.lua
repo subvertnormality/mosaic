@@ -20,10 +20,10 @@ local pattern_trigger_edit_page_right_button = Button:new(12, 8, {{"Inactive", 3
 
 function trigger_edit_page_controller.init()
   
-  trigger_edit_page_controller:refresh_pattern_trigger_edit_page_ui()
+  trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
 end
 
-function trigger_edit_page_controller:register_draw_handlers()
+function trigger_edit_page_controller.register_draw_handlers()
   draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
@@ -132,7 +132,7 @@ local function get_algorithm_name(id)
   end
 end
 
-function trigger_edit_page_controller:register_press_handlers()
+function trigger_edit_page_controller.register_press_handlers()
   press_handler:register(
   "pattern_trigger_edit_page",
   function(x, y)
@@ -148,7 +148,7 @@ function trigger_edit_page_controller:register_press_handlers()
   function(x, y)
     if pattern_trigger_edit_page_sequencer:is_this(x, y) then
       pattern_trigger_edit_page_sequencer:press(x, y)
-      pattern_controller:update_working_patterns()
+      pattern_controller.update_working_patterns()
     end
   end
   )
@@ -185,7 +185,7 @@ function trigger_edit_page_controller:register_press_handlers()
   function(x, y)
     pattern_trigger_edit_page_algorithm_fader:press(x, y)
     if pattern_trigger_edit_page_algorithm_fader:is_this(x, y) then
-      trigger_edit_page_controller:refresh_pattern_trigger_edit_page_ui()
+      trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
       tooltip:show(get_algorithm_name(pattern_trigger_edit_page_algorithm_fader:get_value()).." selected")
       load_paint_pattern()
     end
@@ -301,7 +301,7 @@ function trigger_edit_page_controller:register_press_handlers()
     function(x, y, x2, y2)
       pattern_trigger_edit_page_sequencer:dual_press(x, y, x2, y2)
       if pattern_trigger_edit_page_sequencer:is_this(x2, y2) then
-        pattern_controller:update_working_patterns()
+        pattern_controller.update_working_patterns()
         tooltip:show("Note length set")
       end
     end
@@ -311,14 +311,14 @@ function trigger_edit_page_controller:register_press_handlers()
     function(x, y)
       if pattern_trigger_edit_page_sequencer:is_this(x, y) then
         pattern_trigger_edit_page_sequencer:long_press(x, y)
-        pattern_controller:update_working_patterns()
+        pattern_controller.update_working_patterns()
         tooltip:show("Note length reset")
       end
     end
   )
 end
 
-function save_paint_pattern(p)
+local function save_paint_pattern(p)
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
   local selected_pattern = program.get().selected_pattern
   local trigs = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
@@ -335,11 +335,11 @@ function save_paint_pattern(p)
   end
   program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values = trigs
   program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths = lengths
-  pattern_controller:update_working_patterns()
+  pattern_controller.update_working_patterns()
   program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
 end
 
-function load_paint_pattern()
+local function load_paint_pattern()
   if (pattern_trigger_edit_page_paint_button:get_state() == 2) then
     paint_pattern = {}
     local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
@@ -384,7 +384,7 @@ function load_paint_pattern()
 end
 
 
-function trigger_edit_page_controller:refresh_pattern_trigger_edit_page_ui()
+function trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
   local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
   
   if (algorithm == 1) then
@@ -422,8 +422,8 @@ function trigger_edit_page_controller:refresh_pattern_trigger_edit_page_ui()
   fn.dirty_grid(true)
 end
 
-function trigger_edit_page_controller:refresh()
-  trigger_edit_page_controller:refresh_pattern_trigger_edit_page_ui()
+function trigger_edit_page_controller.refresh()
+  trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
 end
 
 return trigger_edit_page_controller

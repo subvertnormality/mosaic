@@ -121,7 +121,7 @@ function channel_edit_page_controller.register_draw_handlers()
 end
 
 
-function channel_edit_page_controller:register_press_handlers()
+function channel_edit_page_controller.register_press_handlers()
 
   press_handler:register(
     "channel_edit_page",
@@ -135,7 +135,7 @@ function channel_edit_page_controller:register_press_handlers()
       channel_select_fader:press(x, y)
       if channel_select_fader:is_this(x, y) then
         program.get().selected_channel = channel_select_fader:get_value()
-        pattern_controller:update_working_patterns()
+        pattern_controller.update_working_patterns()
         tooltip:show("Channel "..program.get().selected_channel.." selected")
         channel_edit_page_controller.refresh()
       end
@@ -147,7 +147,7 @@ function channel_edit_page_controller:register_press_handlers()
       local selected_sequencer_pattern = program.get().selected_sequencer_pattern
       channel_edit_page_sequencer:dual_press(x, y, x2, y2)
       if channel_edit_page_sequencer:is_this(x2, y2) then
-        pattern_controller:update_working_patterns()
+        pattern_controller.update_working_patterns()
         program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
         tooltip:show("Channel "..program.get().selected_channel.." length changed")
       end
@@ -163,7 +163,7 @@ function channel_edit_page_controller:register_press_handlers()
           local scale_value = channel_scale_fader:get_value()
           local number = program.get().scales[scale_value].number
           channel.default_scale = scale_value
-          channel_edit_page_ui_controller:refresh_quantiser()
+          channel_edit_page_ui_controller.refresh_quantiser()
           tooltip:show("Ch. "..program.get().selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
         end
       end
@@ -187,7 +187,7 @@ function channel_edit_page_controller:register_press_handlers()
           end
         end
         if pattern_buttons["step"..s.."_pattern_button"]:is_this(x, y) then
-          pattern_controller:update_working_patterns()
+          pattern_controller.update_working_patterns()
           program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
         end
       end
@@ -207,7 +207,7 @@ function channel_edit_page_controller:register_press_handlers()
 
         program.get_selected_channel().merge_mode = "pattern_number_"..channel_pattern_number_merge_mode_button:get_state() - 1
         program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
-        pattern_controller:update_working_patterns()
+        pattern_controller.update_working_patterns()
         skip_merge_mode_button:set_state(1)
         average_merge_mode_button:set_state(1)
         subadd_merge_mode_button:set_state(1)
@@ -230,7 +230,7 @@ function channel_edit_page_controller:register_press_handlers()
 
         program.get_selected_channel().merge_mode = "skip"
         program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
-        pattern_controller:update_working_patterns()
+        pattern_controller.update_working_patterns()
         channel_pattern_number_merge_mode_button:set_state(1)
         average_merge_mode_button:set_state(1)
         subadd_merge_mode_button:set_state(1)
@@ -253,7 +253,7 @@ function channel_edit_page_controller:register_press_handlers()
   
         program.get_selected_channel().merge_mode = "average"
         program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
-        pattern_controller:update_working_patterns()
+        pattern_controller.update_working_patterns()
         skip_merge_mode_button:set_state(1)
         channel_pattern_number_merge_mode_button:set_state(1)
         subadd_merge_mode_button:set_state(1)
@@ -281,7 +281,7 @@ function channel_edit_page_controller:register_press_handlers()
           program.get_selected_channel().merge_mode = "subtract"
         end
         program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
-        pattern_controller:update_working_patterns()
+        pattern_controller.update_working_patterns()
         skip_merge_mode_button:set_state(1)
         channel_pattern_number_merge_mode_button:set_state(1)
         average_merge_mode_button:set_state(1)
@@ -310,7 +310,7 @@ function channel_edit_page_controller:register_press_handlers()
           channel_pattern_number_merge_mode_button:set_state(x + 1)
           program.get_selected_channel().merge_mode = "pattern_number_"..x
           program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
-          pattern_controller:update_working_patterns()
+          pattern_controller.update_working_patterns()
           skip_merge_mode_button:set_state(1)
           average_merge_mode_button:set_state(1)
           subadd_merge_mode_button:set_state(1)
@@ -384,7 +384,7 @@ function channel_edit_page_controller.refresh()
   channel_edit_page_controller.refresh_faders()
   channel_edit_page_controller.refresh_step_buttons()
   channel_edit_page_controller.refresh_merge_buttons()
-  channel_edit_page_ui_controller:refresh()
+  channel_edit_page_ui_controller.refresh()
 end
 
 return channel_edit_page_controller

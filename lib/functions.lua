@@ -7,7 +7,7 @@ end
 
 
 function fn.cleanup()
-  _midi:all_off()
+  _midi.all_off()
   g.cleanup()
   clock.cancel(redraw_clock_id)
   clock.cancel(grid_clock_id)
