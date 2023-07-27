@@ -143,7 +143,7 @@ function Sequencer:press(x, y)
   if (y >= self.y and y <= self.y + 3) then
 
     if (self.mode == "pattern") then
-      program.get().sequencer_patterns[program.get().selected_sequencer_pattern].patterns[program.get().selected_pattern].trig_values[fn.calc_grid_count(x, y)] = 1 - program.get().sequencer_patterns[program.get().selected_sequencer_pattern].patterns[program.get().selected_pattern].trig_values[fn.calc_grid_count(x, y)]
+      program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)] = 1 - program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)]
       program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
     end
     
@@ -159,9 +159,9 @@ function Sequencer:dual_press(x, y, x2, y2)
       program.get_selected_channel().end_trig = {x2, y2}
     
     elseif (self.mode == "pattern") then
-      if (program.get().sequencer_patterns[program.get().selected_sequencer_pattern].patterns[program.get().selected_pattern].trig_values[fn.calc_grid_count(x, y)] == 1) then
+      if (program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)] == 1) then
         if (fn.calc_grid_count(x2, y2) - fn.calc_grid_count(x, y) > 0) then
-          program.get().sequencer_patterns[program.get().selected_sequencer_pattern].patterns[program.get().selected_pattern].lengths[fn.calc_grid_count(x, y)] = (fn.calc_grid_count(x2, y2) + 1) - fn.calc_grid_count(x, y)
+          program.get_selected_pattern().lengths[fn.calc_grid_count(x, y)] = (fn.calc_grid_count(x2, y2) + 1) - fn.calc_grid_count(x, y)
         end
       end
     end
@@ -173,8 +173,8 @@ end
 function Sequencer:long_press(x, y)
   if (y >= self.y and y <= self.y + 3) then
     if (self.mode == "pattern") then
-      if (program.get().sequencer_patterns[program.get().selected_sequencer_pattern].patterns[program.get().selected_pattern].trig_values[fn.calc_grid_count(x, y)] == 1) then
-        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].patterns[program.get().selected_pattern].lengths[fn.calc_grid_count(x, y)] = 1
+      if (program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)] == 1) then
+        program.get_selected_pattern().lengths[fn.calc_grid_count(x, y)] = 1
       end
     end
     

@@ -158,6 +158,10 @@ function program.get_selected_channel()
   return program_store.sequencer_patterns[program_store.selected_sequencer_pattern].channels[program_store.selected_channel]
 end
 
+function program.get_selected_pattern()
+  return program_store.get().sequencer_patterns[program.get().selected_sequencer_pattern].patterns[program.get().selected_pattern]
+end
+
 function program.get_channel(x)
   return program_store.sequencer_patterns[program_store.selected_sequencer_pattern].channels[x]
 end
