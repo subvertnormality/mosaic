@@ -75,23 +75,22 @@ local function initialise_default_patterns()
 end
 
 
-local function initialise_default_sequencer_patterns()
+local function initialise_default_sequencer_pattern()
   
-  local sequencer_patterns = {}
+  local sequencer_pattern = {}
   
-  for i=1,96 do 
-    
-    sequencer_patterns[i] = {
-      active = false,
-      global_pattern_length = 64,
-      scale = 0,
-      patterns = initialise_default_patterns(),
-      channels = initialise_default_channels()
-    }
-    
-  end
 
-  return sequencer_patterns
+  sequencer_pattern = {
+    active = false,
+    global_pattern_length = 64,
+    scale = 0,
+    patterns = initialise_default_patterns(),
+    channels = initialise_default_channels()
+  }
+  
+
+
+  return sequencer_pattern
 end
 
 
@@ -145,16 +144,21 @@ function program.init()
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1}
     },
-    sequencer_patterns = initialise_default_sequencer_patterns()
+    sequencer_patterns = initialise_default_sequencer_pattern()
   }
 
 end
 
 function program.get_selected_sequencer_pattern()
-  return program_store.sequencer_patterns[program_store.selected_sequencer_pattern]
+  return program.get_sequencer_pattern(program_store.selected_sequencer_pattern)
 end
 
-function program.get_sequencer_pattern(p) 
+function program.get_sequencer_pattern(p)
+
+  if not program_store.sequencer_patterns[p] then
+    program_store.sequencer_patterns[p] = initialise_default_sequencer_pattern()
+  end
+
   return program_store.sequencer_patterns[p]
 end
 
@@ -163,15 +167,15 @@ function program.get()
 end
 
 function program.get_selected_channel()
-  return program_store.sequencer_patterns[program_store.selected_sequencer_pattern].channels[program_store.selected_channel]
+  return program.get_sequencer_pattern(program_store.selected_sequencer_pattern).channels[program_store.selected_channel]
 end
 
 function program.get_selected_pattern()
-  return program_store.sequencer_patterns[program.get().selected_sequencer_pattern].patterns[program.get().selected_pattern]
+  return program.get_sequencer_pattern(program.get().selected_sequencer_pattern).patterns[program.get().selected_pattern]
 end
 
 function program.get_channel(x)
-  return program_store.sequencer_patterns[program_store.selected_sequencer_pattern].channels[x]
+  return program.get_sequencer_pattern(program_store.selected_sequencer_pattern).channels[x]
 end
 
 function program.set(p)

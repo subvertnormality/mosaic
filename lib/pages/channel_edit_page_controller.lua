@@ -57,8 +57,8 @@ function channel_edit_page_controller.register_draw_handlers()
     function()
 
       local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-      local trigs = program.get_selected_sequencer_pattern().channels[program.get().selected_channel].working_pattern.trig_values
-      local lengths = program.get_selected_sequencer_pattern().channels[program.get().selected_channel].working_pattern.lengths
+      local trigs = program.get_selected_channel().working_pattern.trig_values
+      local lengths = program.get_selected_channel().working_pattern.lengths
 
       channel_edit_page_sequencer:draw(trigs, lengths)
     end
@@ -177,11 +177,11 @@ function channel_edit_page_controller.register_press_handlers()
         pattern_buttons["step"..s.."_pattern_button"]:press(x, y)
         if pattern_buttons["step"..s.."_pattern_button"]:is_this(x, y) then
           if pattern_buttons["step"..s.."_pattern_button"]:get_state() == 2 then
-            fn.add_to_set(program.get_selected_sequencer_pattern().channels[program.get().selected_channel].selected_patterns, x)
+            fn.add_to_set(program.get_selected_channel().selected_patterns, x)
             program.get_selected_sequencer_pattern().active = true
             tooltip:show("Pattern "..x.." added to ch. "..program.get().selected_channel)
           else
-            fn.remove_from_set(program.get_selected_sequencer_pattern().channels[program.get().selected_channel].selected_patterns, x)
+            fn.remove_from_set(program.get_selected_channel().selected_patterns, x)
             program.get_selected_sequencer_pattern().active = true
             tooltip:show("Pattern "..x.." removed from ch. "..program.get().selected_channel)
           end
