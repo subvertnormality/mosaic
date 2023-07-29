@@ -57,13 +57,17 @@ function Sequencer:draw(trigs, lengths)
 
   for y = self.y, self.y + 3 do
     for x = 1, 16 do
-
-      local in_step_length = start_step <= fn.calc_grid_count(x, y) and end_step >= fn.calc_grid_count(x, y)
+      local grid_count = fn.calc_grid_count(x, y)
+      local in_step_length = start_step <= grid_count and end_step >= grid_count
 
       if (self.mode == "channel") then
 
         if (in_step_length) then
-          g:led(x, y, 2)
+          if program.step_has_trig_lock(grid_count) then
+            g:led(x, y, 2 - ((self.bclock.bright_mod == 3 and 1) or (self.bclock.bright_mod == 0 and 0) or self.bclock.bright_mod))
+          else
+            g:led(x, y, 2)
+          end
         end
       else
         g:led(x, y, 2)
@@ -89,9 +93,17 @@ function Sequencer:draw(trigs, lengths)
         if (self.mode == "channel") then
           if (in_step_length) then
               if fn.calc_grid_count(x, y) == end_step and channel.current_step == start_step then 
-                g:led(end_x, end_y, 10)
+                if program.step_has_trig_lock(grid_count) then
+                  g:led(end_x, end_y, 10 - self.bclock.bright_mod)
+                else
+                  g:led(end_x, end_y, 10)
+                end
               else
-                g:led(x, y, 15) 
+                if program.step_has_trig_lock(grid_count) then
+                  g:led(x, y, 15 - self.bclock.bright_mod)
+                else
+                  g:led(x, y, 15) 
+                end
               end
           end
         else
@@ -120,9 +132,17 @@ function Sequencer:draw(trigs, lengths)
         if (self.mode == "channel") then
           if fn.calc_grid_count(px, py) >= start_step then 
             if (fn.calc_grid_count(px, py) > end_step) then
-              g:led(end_x, end_y, 10)
+              if (program.step_has_trig_lock(grid_count)) then
+                g:led(end_x, end_y, 10 - self.bclock.bright_mod)
+              else
+                g:led(end_x, end_y, 10)
+              end
             else
-              g:led(px, py, 10)
+              if program.step_has_trig_lock(grid_count) then
+                g:led(px, py, 10 - self.bclock.bright_mod)
+              else
+                g:led(px, py, 10)
+              end
             end
           end
         end
