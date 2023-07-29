@@ -41,9 +41,10 @@ end
 
 function clock_controller:start() 
 
-  master_clock = clock.run(go, 4, master_func)
+
   midi_transport = clock.run(start_midi_transport, 4)
 
+  master_clock = clock.run(go, 4, master_func)
   for i = 1, 16 do
     local clock_division = program.get_channel(i).clock_division
     clock_controller["channel_"..i.."_clock"] = clock.run(go, clock_division, function () 

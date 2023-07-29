@@ -71,7 +71,7 @@ function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
 
 end
 
-function midi_controller:start()
+function midi_controller.start()
   for id = 1, #midi.vports do
     if midi_devices[id] ~= nil then
       midi_devices[id]:start()
@@ -87,7 +87,7 @@ function midi_controller.continue()
   end
 end
 
-function midi_controller:stop()
+function midi_controller.stop()
   for id = 1, #midi.vports do
     if midi_devices[id] ~= nil then
       midi_devices[id]:stop()
