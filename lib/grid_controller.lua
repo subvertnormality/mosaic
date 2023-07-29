@@ -31,11 +31,17 @@ local page_names = {
   "Pattern Velocity Edit Page"
 }
 
+local pressed_keys = {}
+
 g = grid.connect()
 
 function g.key(x, y, z)
   if z == 1 then
     grid_controller.push[x][y].state = "pressed"
+
+    table.insert(pressed_keys, {x, y})
+
+    grid_controller.pre_press(x,y)
 
     if grid_controller.push.active ~= false then
       if grid_controller.push.active[1] ~= x or grid_controller.push.active[2] ~= y then
@@ -48,13 +54,16 @@ function g.key(x, y, z)
     grid_controller.counter[x][y] = clock.run(grid_controller.long_press, x, y)
   elseif z == 0 then -- otherwise, if a grid key is released...
 
+
+    fn.remove_table_from_table(pressed_keys, {x, y})
+
     if grid_controller.counter[x][y] then -- and the long press is still waiting...
       clock.cancel(grid_controller.counter[x][y]) -- then cancel the long press clock,
 
       if grid_controller.push and grid_controller.push[x][y].state == "long_pressed" then
         grid_controller.push[x][y].state = "inactive"
         grid_controller.push.active = false
-
+        grid_controller.post_press(x,y) -- and execute a post press instead.
       elseif grid_controller.push and grid_controller.push[x][y].state == "pressed" then
         grid_controller.push[x][y].state = "inactive"
         grid_controller.short_press(x,y) -- and execute a short press instead.
@@ -69,8 +78,14 @@ function g.key(x, y, z)
         grid_controller.push.active = false
       end
     end
+    
   end
 end
+
+function grid_controller.get_pressed_keys()
+  return pressed_keys
+end
+
 
 function g.remove()
   grid_controller.alert_disconnect()
@@ -220,6 +235,19 @@ function grid_controller.set_menu_button_state()
   end
 
 end
+
+function grid_controller.pre_press(x,y)
+  press_handler:handle_pre(program.get().selected_page, x, y)
+  fn.dirty_grid(true)
+  fn.dirty_screen(true)
+end
+
+function grid_controller.post_press(x,y)
+  press_handler:handle_post(program.get().selected_page, x, y)
+  fn.dirty_grid(true)
+  fn.dirty_screen(true)
+end
+
 
 function grid_controller.short_press(x, y)
 

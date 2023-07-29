@@ -41,6 +41,9 @@ end
 
 function clock_controller:start() 
 
+  for i = 1, 16 do
+    step_handler.process_params(i, 1)
+  end
 
   midi_transport = clock.run(start_midi_transport, 4)
 
@@ -59,7 +62,19 @@ function clock_controller:start()
         current_step = start_trig - 1
       end
 
+      local next_step = channel.current_step + 1
+
+      if next_step > end_trig then
+        next_step = start_trig
+      end
+
+      local next_trig_value = channel.working_pattern.trig_values[next_step]
+
       step_handler.handle(i, current_step)
+
+      if next_trig_value == 1 then
+        step_handler.process_params(i, next_step)
+      end
     
       channel.current_step = current_step + 1
     

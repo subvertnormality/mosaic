@@ -36,6 +36,8 @@ local params = {param_1, param_2, param_3, param_4, param_5, param_6, param_7, p
 
 local dials = ControlScrollSelector:new(0, 0, {})
 
+local page_to_index = {["Quantizer"] = 1, ["Midi Config"] = 2, ["Trig Locks"] = 3}
+
 local quantizer_page = Page:new("", function ()
   quantizer_vertical_scroll_selector:draw()
   romans_vertical_scroll_selector:draw()
@@ -131,7 +133,7 @@ function channel_edit_page_ui_controller.enc(n, d)
   if n == 3 then
     for i=1, math.abs(d) do
       if d > 0 then
-        if pages:get_selected_page() == 1 then
+        if pages:get_selected_page() == page_to_index["Quantizer"] then
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_down()
           end
@@ -142,7 +144,7 @@ function channel_edit_page_ui_controller.enc(n, d)
             notes_vertical_scroll_selector:scroll_down()
           end
           channel_edit_page_ui_controller.update_scale()
-        elseif pages:get_selected_page() == 2 then
+        elseif pages:get_selected_page() == page_to_index["Midi Config"] then
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:scroll_down()
           end
@@ -153,27 +155,36 @@ function channel_edit_page_ui_controller.enc(n, d)
             midi_device_map_vertical_scroll_selector:scroll_down()
           end
           channel_edit_page_ui_controller.update_channel_config()
-        elseif pages:get_selected_page() == 3 then
+        elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_down()
             channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
             channel_edit_page_ui_controller.refresh_trig_locks()
           else
-            if channel.trig_lock_banks[dials:get_selected_index()] == nil then
-              channel.trig_lock_banks[dials:get_selected_index()] = 0
-            end
-            channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
+            local pressed_keys = grid_controller.get_pressed_keys()
+            if #pressed_keys > 0 then
+              for i, keys in ipairs(pressed_keys) do
+                local step = fn.calc_grid_count(keys[1], keys[2])
+                program.add_step_trig_lock(step, dials:get_selected_index(), (program.get_step_trig_lock(step, dials:get_selected_index()) or 0) + d)
+                dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index()) or 0)
+              end
+            elseif channel.trig_lock_params[dials:get_selected_index()] then
+              if channel.trig_lock_banks[dials:get_selected_index()] == nil then
+                channel.trig_lock_banks[dials:get_selected_index()] = 0
+              end
+              channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
 
-            if channel.trig_lock_banks[dials:get_selected_index()] > 127 then
-              channel.trig_lock_banks[dials:get_selected_index()] = 127
+              if channel.trig_lock_banks[dials:get_selected_index()] > 127 then
+                channel.trig_lock_banks[dials:get_selected_index()] = 127
+              end
+              dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
             end
-            dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
           end
         end
 
 
       else
-        if pages:get_selected_page() == 1 then
+        if pages:get_selected_page() == page_to_index["Quantizer"] then
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_up()
           end
@@ -184,7 +195,7 @@ function channel_edit_page_ui_controller.enc(n, d)
             notes_vertical_scroll_selector:scroll_up()
           end
           channel_edit_page_ui_controller.update_scale()
-        elseif pages:get_selected_page() == 2 then
+        elseif pages:get_selected_page() == page_to_index["Midi Config"] then
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:scroll_up()
           end
@@ -195,20 +206,30 @@ function channel_edit_page_ui_controller.enc(n, d)
             midi_device_map_vertical_scroll_selector:scroll_up()
           end
           channel_edit_page_ui_controller.update_channel_config()
-        elseif pages:get_selected_page() == 3 then
+        elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_up()
             channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
             channel_edit_page_ui_controller.refresh_trig_locks()
-          else
-            if channel.trig_lock_banks[dials:get_selected_index()] == nil then
-              channel.trig_lock_banks[dials:get_selected_index()] = 0
+          elseif channel.trig_lock_params[dials:get_selected_index()] then
+            local pressed_keys = grid_controller.get_pressed_keys()
+            if #pressed_keys > 0 then
+              for i, keys in ipairs(pressed_keys) do
+                local step = fn.calc_grid_count(keys[1], keys[2])
+                program.add_step_trig_lock(step, dials:get_selected_index(), program.get_step_trig_lock(step, dials:get_selected_index() or 0) + d)
+                dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index() or 0))
+              end
+
+            else
+              if channel.trig_lock_banks[dials:get_selected_index()] == nil then
+                channel.trig_lock_banks[dials:get_selected_index()] = 0
+              end
+              channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
+              if channel.trig_lock_banks[dials:get_selected_index()] < 0 then
+                channel.trig_lock_banks[dials:get_selected_index()] = 0
+              end
+              dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
             end
-            channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
-            if channel.trig_lock_banks[dials:get_selected_index()] < 0 then
-              channel.trig_lock_banks[dials:get_selected_index()] = 0
-            end
-            dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
           end
         end
       end
@@ -220,7 +241,7 @@ function channel_edit_page_ui_controller.enc(n, d)
     for i=1, math.abs(d) do
       if d > 0 then
 
-        if pages:get_selected_page() == 1 then
+        if pages:get_selected_page() == page_to_index["Quantizer"] then
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:deselect()
             romans_vertical_scroll_selector:select()
@@ -231,7 +252,7 @@ function channel_edit_page_ui_controller.enc(n, d)
             notes_vertical_scroll_selector:deselect()
             quantizer_vertical_scroll_selector:select()
           end
-        elseif pages:get_selected_page() == 2 then
+        elseif pages:get_selected_page() == page_to_index["Midi Config"] then
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:deselect()
             midi_channel_vertical_scroll_selector:select()
@@ -242,13 +263,13 @@ function channel_edit_page_ui_controller.enc(n, d)
             midi_device_map_vertical_scroll_selector:deselect()
             midi_device_vertical_scroll_selector:select()
           end
-        elseif pages:get_selected_page() == 3 then
+        elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if not trig_lock_page:is_sub_page_enabled() then
             dials:scroll_next() 
           end
         end
       else
-        if pages:get_selected_page() == 1 then
+        if pages:get_selected_page() == page_to_index["Quantizer"] then
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:deselect()
             notes_vertical_scroll_selector:select()
@@ -259,7 +280,7 @@ function channel_edit_page_ui_controller.enc(n, d)
             notes_vertical_scroll_selector:deselect()
             romans_vertical_scroll_selector:select()
           end
-        elseif pages:get_selected_page() == 2 then
+        elseif pages:get_selected_page() == page_to_index["Midi Config"] then
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:deselect()
             midi_device_map_vertical_scroll_selector:select()
@@ -270,7 +291,7 @@ function channel_edit_page_ui_controller.enc(n, d)
             midi_device_map_vertical_scroll_selector:deselect()
             midi_channel_vertical_scroll_selector:select()
           end
-        elseif pages:get_selected_page() == 3 then
+        elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if not trig_lock_page:is_sub_page_enabled() then
             dials:scroll_previous()
           end
@@ -345,6 +366,15 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
       params[i]:set_name(channel.trig_lock_params[i].name)
       params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
       params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
+
+      local pressed_keys = grid_controller.get_pressed_keys()
+      if #pressed_keys > 0 then
+        local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+        dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index()) or 0)
+      else
+        dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
+      end
+
     else
       params[i]:set_name("")
       params[i]:set_top_label("X")

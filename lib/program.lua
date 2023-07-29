@@ -11,22 +11,6 @@ local pages = {
   pattern_velocity_edit_page = 5
 }
 
-local function add_step_trig_lock(sequencer_pattern, channel, step, parameter, trig_lock)
-  local step_trig_lock_banks = program.get_sequencer_pattern(sequencer_pattern).channels[channel].step_trig_lock_banks
-  if step_trig_lock_banks[step] == nil then
-    step_trig_lock_banks[step] = {}
-  end
-  step_trig_lock_banks[step][parameter] = trig_lock
-end
-
-local function get_step_trig_lock(sequencer_pattern, channel, step, parameter)
-  local step_trig_lock_banks = program.get_sequencer_pattern(sequencer_pattern).channels[channel].step_trig_lock_banks
-  if step_trig_lock_banks[step] == nil then
-    return nil
-  end
-  return step_trig_lock_banks[step][parameter]
-end
-
 local function initialise_default_channels()
   
   local channels = {}
@@ -193,6 +177,28 @@ end
 
 function program.get_pages()
   return pages
+end
+
+function program.add_step_trig_lock(step, parameter, trig_lock)
+  local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
+  if step_trig_lock_banks[step] == nil then
+    step_trig_lock_banks[step] = {}
+  end
+  if (trig_lock < 0) then
+    trig_lock = 0
+  end
+  if (trig_lock > 127) then
+    trig_lock = 127
+  end
+  step_trig_lock_banks[step][parameter] = trig_lock
+end
+
+function program.get_step_trig_lock(step, parameter)
+  local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
+  if step_trig_lock_banks[step] == nil then
+    return nil
+  end
+  return step_trig_lock_banks[step][parameter]
 end
 
 return program

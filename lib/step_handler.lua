@@ -6,31 +6,46 @@ local length_tracker = {}
 
 local step_scale_number = 0
 
+local do_once = true
 
-function step_handler.process_channel_params(c)
+function step_handler.process_params(c, step)
   local channel = program.get_channel(c)
-  for i=1,8 do      
+
+  for i=1,8 do
+    step_trig_lock = program.get_step_trig_lock(step, i)
     if channel.trig_lock_params[i] and channel.trig_lock_params[i].cc_msb then
-      midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_banks[i], channel.midi_channel, channel.midi_device)
+      if step_trig_lock then
+        midi_controller.cc(channel.trig_lock_params[i].cc_msb, step_trig_lock, channel.midi_channel, channel.midi_device)
+      else
+        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_banks[i], channel.midi_channel, channel.midi_device)
+      end
     end
   end
 end
 
--- channel.trig_lock_steps[i] -- this is the step level value
-
 function step_handler.handle(c, current_step) 
+
+  -- if do_once then -- process channel step locks without needing a trig one to ensure they're activated initially
+  --   step_handler.process_params(c, current_step)
+  --   do_once = false
+  -- end
 
   local channel = program.get_channel(c)
   local channel_step_scale_number = channel.step_scales[current_step]
 
   local trig_value = channel.working_pattern.trig_values[current_step]
+
+  -- if trig_value == 1 then
+  --   step_handler.process_params(c, current_step)
+  -- end
+
   local note_value = channel.working_pattern.note_values[current_step]
   local velocity_value = channel.working_pattern.velocity_values[current_step]
   local length_value = channel.working_pattern.lengths[current_step]
   local midi_channel = channel.midi_channel
   local midi_device = channel.midi_device
   local octave_mod = channel.octave
-
+  
   if (channel_step_scale_number > 0) then
     step_scale_number = channel_step_scale_number
   elseif
@@ -40,8 +55,6 @@ function step_handler.handle(c, current_step)
     step_scale_number = program.get().default_scale
   end
 
-  step_handler.process_channel_params(c)
-  
   if trig_value == 1 then
     local note = quantiser.process(note_value, octave_mod, step_scale_number, channel)
     midi_controller.note_on(note, velocity_value, midi_channel, midi_device)

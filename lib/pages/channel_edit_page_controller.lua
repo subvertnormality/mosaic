@@ -126,7 +126,18 @@ function channel_edit_page_controller.register_press_handlers()
   press_handler:register(
     "channel_edit_page",
     function(x, y)
-      return channel_edit_page_sequencer:press(x, y)
+      if channel_edit_page_sequencer:is_this(x, y) then
+        channel_edit_page_ui_controller.refresh_trig_locks()
+        channel_edit_page_sequencer:press(x, y)
+      end
+    end
+  )
+  press_handler:register_post(
+    "channel_edit_page",
+    function(x, y)
+      if channel_edit_page_sequencer:is_this(x, y) then
+        channel_edit_page_ui_controller.refresh_trig_locks()
+      end
     end
   )
   press_handler:register(
@@ -185,8 +196,6 @@ function channel_edit_page_controller.register_press_handlers()
             program.get_selected_sequencer_pattern().active = true
             tooltip:show("Pattern "..x.." removed from ch. "..program.get().selected_channel)
           end
-        end
-        if pattern_buttons["step"..s.."_pattern_button"]:is_this(x, y) then
           pattern_controller.update_working_patterns()
           program.get_selected_sequencer_pattern().active = true
         end
@@ -316,6 +325,14 @@ function channel_edit_page_controller.register_press_handlers()
           subadd_merge_mode_button:set_state(1)
           tooltip:show("Ch. "..program.get().selected_channel.." merge mode: pattern "..channel_pattern_number_merge_mode_button:get_state() - 1)
         end
+      end
+    end
+  )
+  press_handler:register_pre(
+    "channel_edit_page",
+    function(x, y)
+      if channel_edit_page_sequencer:is_this(x, y) then
+        channel_edit_page_ui_controller.refresh_trig_locks()
       end
     end
   )

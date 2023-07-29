@@ -10,6 +10,7 @@ function Dial:new(x, y, name, top_label, bottom_label)
   self.top_label = top_label
   self.bottom_label = bottom_label
   self.selected = false
+
   return self
 end
 

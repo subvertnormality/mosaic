@@ -96,6 +96,31 @@ function fn.find_key(tbl, value)
   return nil
 end
 
+function fn.tables_are_equal(t1, t2)
+  for k, v in pairs(t1) do
+      if v ~= t2[k] then
+          return false
+      end
+  end
+
+  for k, v in pairs(t2) do
+      if v ~= t1[k] then
+          return false
+      end
+  end
+
+  return true
+end
+
+function fn.remove_table_from_table(t, object)
+  for i, v in ipairs(t) do
+      if fn.tables_are_equal(v, object) then
+          table.remove(t, i)
+          return
+      end
+  end
+end
+
 function fn.scale(num, old_min, old_max, new_min, new_max)
   return ((num - old_min) / (old_max - old_min)) * (new_max - new_min) + new_min
 end

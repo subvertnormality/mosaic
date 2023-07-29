@@ -4,6 +4,8 @@ local press_handler = {}
 press_handler.handlers = {}
 press_handler.dual_handlers = {}
 press_handler.long_handlers = {}
+press_handler.pre_handlers = {}
+press_handler.post_handlers = {}
 
 -- Register a function with a page
 function press_handler:register(page, func)
@@ -36,6 +38,27 @@ function press_handler:register_long(page, func)
 
   -- Add the function to the list of handlers for this page
   table.insert(self.long_handlers[page], func)
+end
+
+
+function press_handler:register_pre(page, func)
+  -- If no functions have been registered for this page yet, create a new list
+  if self.pre_handlers[page] == nil then
+    self.pre_handlers[page] = {}
+  end
+
+  -- Add the function to the list of handlers for this page
+  table.insert(self.pre_handlers[page], func)
+end
+
+function press_handler:register_post(page, func)
+  -- If no functions have been registered for this page yet, create a new list
+  if self.post_handlers[page] == nil then
+    self.post_handlers[page] = {}
+  end
+
+  -- Add the function to the list of handlers for this page
+  table.insert(self.post_handlers[page], func)
 end
 
 
@@ -99,5 +122,36 @@ function press_handler:handle_long(page, x, y)
   autosave_reset() 
 
 end
+
+function press_handler:handle_pre(page, x, y)
+
+  -- If no functions have been registered for this page, do nothing
+  if self.pre_handlers[fn.find_key(program.get_pages(), page)] == nil then
+    return
+  end
+
+  -- Otherwise, call all functions registered for this page
+  for _, func in ipairs(self.pre_handlers[fn.find_key(program.get_pages(), page)]) do
+    func(x, y)
+  end
+
+end
+
+function press_handler:handle_post(page, x, y)
+
+
+  -- If no functions have been registered for this page, do nothing
+  if self.post_handlers[fn.find_key(program.get_pages(), page)] == nil then
+    return
+  end
+
+  -- Otherwise, call all functions registered for this page
+  for _, func in ipairs(self.post_handlers[fn.find_key(program.get_pages(), page)]) do
+    func(x, y)
+  end
+
+end
+
+
 
 return press_handler
