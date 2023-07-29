@@ -144,9 +144,18 @@ function program.init()
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1}
     },
-    sequencer_patterns = initialise_default_sequencer_pattern()
+    sequencer_patterns = {}
   }
 
+end
+
+function program.is_sequencer_pattern_active(p)
+
+  if (program_store.sequencer_patterns[p] and program_store.sequencer_patterns[p].active) then
+    return true
+  end
+
+  return false
 end
 
 function program.get_selected_sequencer_pattern()
