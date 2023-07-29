@@ -150,6 +150,9 @@ function register_press_handlers()
           end
           grid_controller.set_menu_button_state()
         end
+        if x == 1 then
+          channel_edit_page_ui_controller.refresh_trig_locks()
+        end
         fn.dirty_screen(true)
       end
     end

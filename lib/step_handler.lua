@@ -25,19 +25,10 @@ end
 
 function step_handler.handle(c, current_step) 
 
-  -- if do_once then -- process channel step locks without needing a trig one to ensure they're activated initially
-  --   step_handler.process_params(c, current_step)
-  --   do_once = false
-  -- end
-
   local channel = program.get_channel(c)
   local channel_step_scale_number = channel.step_scales[current_step]
 
   local trig_value = channel.working_pattern.trig_values[current_step]
-
-  -- if trig_value == 1 then
-  --   step_handler.process_params(c, current_step)
-  -- end
 
   local note_value = channel.working_pattern.note_values[current_step]
   local velocity_value = channel.working_pattern.velocity_values[current_step]
@@ -56,6 +47,7 @@ function step_handler.handle(c, current_step)
   end
 
   if trig_value == 1 then
+    channel_edit_page_ui_controller.refresh_trig_locks()
     local note = quantiser.process(note_value, octave_mod, step_scale_number, channel)
     midi_controller.note_on(note, velocity_value, midi_channel, midi_device)
     table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value})

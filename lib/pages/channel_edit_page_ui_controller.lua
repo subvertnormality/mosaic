@@ -359,7 +359,8 @@ end
 
 
 function channel_edit_page_ui_controller.refresh_trig_locks()
- local channel = program.get_selected_channel()
+  local channel = program.get_selected_channel()
+
   for i=1,8 do
     params[i]:set_value(channel.trig_lock_banks[i])
     if channel.trig_lock_params[i].id ~= nil then
@@ -372,7 +373,14 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
         local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
         dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index()) or 0)
       else
-        dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
+        local step = program.get_selected_channel().current_step
+        local step_trig_lock = program.get_step_trig_lock(step, i)
+
+        if (step_trig_lock and clock_controller.is_playing()) then
+          params[i]:set_value(step_trig_lock)
+        else
+          params[i]:set_value(channel.trig_lock_banks[i])
+        end
       end
 
     else
