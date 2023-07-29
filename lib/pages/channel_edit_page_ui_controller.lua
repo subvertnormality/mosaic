@@ -165,8 +165,8 @@ function channel_edit_page_ui_controller.enc(n, d)
             if #pressed_keys > 0 then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
-                program.add_step_trig_lock(step, dials:get_selected_index(), (program.get_step_trig_lock(step, dials:get_selected_index()) or 0) + d)
-                dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index()) or 0)
+                program.add_step_trig_lock(step, dials:get_selected_index(), (program.get_step_trig_lock(step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()]) + d)
+                dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()])
               end
             elseif channel.trig_lock_params[dials:get_selected_index()] then
               if channel.trig_lock_banks[dials:get_selected_index()] == nil then
@@ -216,8 +216,8 @@ function channel_edit_page_ui_controller.enc(n, d)
             if #pressed_keys > 0 then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
-                program.add_step_trig_lock(step, dials:get_selected_index(), program.get_step_trig_lock(step, dials:get_selected_index() or 0) + d)
-                dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index() or 0))
+                program.add_step_trig_lock(step, dials:get_selected_index(), program.get_step_trig_lock(step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]) + d)
+                dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]))
               end
 
             else
@@ -320,6 +320,17 @@ function channel_edit_page_ui_controller.key(n, z)
   if n == 2 and z == 1 then
     trig_lock_page:toggle_sub_page()
   end
+  if n == 3 and z == 1 then
+    local pressed_keys = grid_controller.get_pressed_keys()
+    if #pressed_keys > 0 then
+      for i, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.clear_trig_locks_for_step(step)
+        dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index()) or program.get_selected_channel().trig_lock_banks[dials:get_selected_index()])
+        channel_edit_page_ui_controller.refresh_trig_locks()
+      end
+    end
+  end
 end
 
 
@@ -371,7 +382,7 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
       local pressed_keys = grid_controller.get_pressed_keys()
       if #pressed_keys > 0 then
         local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
-        dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index()) or 0)
+        dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()])
       else
         local step = program.get_selected_channel().current_step
         local step_trig_lock = program.get_step_trig_lock(step, i)

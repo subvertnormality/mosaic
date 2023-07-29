@@ -211,4 +211,10 @@ function program.step_has_trig_lock(step)
   return true
 end
 
+
+function program.clear_trig_locks_for_step(step) 
+  local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
+  step_trig_lock_banks[step] = nil
+end
+
 return program
