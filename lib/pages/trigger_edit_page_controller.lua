@@ -37,8 +37,8 @@ function trigger_edit_page_controller.register_draw_handlers()
     local selected_sequencer_pattern = program.get().selected_sequencer_pattern
     local selected_pattern = program.get().selected_pattern
     
-    local trigs = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
-    local lengths = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
+    local trigs = program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values
+    local lengths = program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths
   
     return pattern_trigger_edit_page_sequencer:draw(trigs, lengths)
   end
@@ -321,8 +321,8 @@ end
 local function save_paint_pattern(p)
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
   local selected_pattern = program.get().selected_pattern
-  local trigs = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values
-  local lengths = program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths
+  local trigs = program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values
+  local lengths = program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths
 
   for x = 1, 64 do
     if (trigs[x] < 1) and p[x] then
@@ -333,10 +333,10 @@ local function save_paint_pattern(p)
       lengths[x] = 0
     end
   end
-  program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].trig_values = trigs
-  program.get().sequencer_patterns[selected_sequencer_pattern].patterns[selected_pattern].lengths = lengths
+  program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values = trigs
+  program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths = lengths
   pattern_controller.update_working_patterns()
-  program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+  program.get_selected_sequencer_pattern().active = true
 end
 
 local function load_paint_pattern()

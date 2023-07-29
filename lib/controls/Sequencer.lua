@@ -144,7 +144,7 @@ function Sequencer:press(x, y)
 
     if (self.mode == "pattern") then
       program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)] = 1 - program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)]
-      program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+      program.get_selected_sequencer_pattern().active = true
     end
     
   end

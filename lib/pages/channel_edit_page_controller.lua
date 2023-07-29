@@ -57,8 +57,8 @@ function channel_edit_page_controller.register_draw_handlers()
     function()
 
       local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-      local trigs = program.get().sequencer_patterns[selected_sequencer_pattern].channels[program.get().selected_channel].working_pattern.trig_values
-      local lengths = program.get().sequencer_patterns[selected_sequencer_pattern].channels[program.get().selected_channel].working_pattern.lengths
+      local trigs = program.get_selected_sequencer_pattern().channels[program.get().selected_channel].working_pattern.trig_values
+      local lengths = program.get_selected_sequencer_pattern().channels[program.get().selected_channel].working_pattern.lengths
 
       channel_edit_page_sequencer:draw(trigs, lengths)
     end
@@ -148,7 +148,7 @@ function channel_edit_page_controller.register_press_handlers()
       channel_edit_page_sequencer:dual_press(x, y, x2, y2)
       if channel_edit_page_sequencer:is_this(x2, y2) then
         pattern_controller.update_working_patterns()
-        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+        program.get_selected_sequencer_pattern().active = true
         tooltip:show("Channel "..program.get().selected_channel.." length changed")
       end
     end
@@ -177,18 +177,18 @@ function channel_edit_page_controller.register_press_handlers()
         pattern_buttons["step"..s.."_pattern_button"]:press(x, y)
         if pattern_buttons["step"..s.."_pattern_button"]:is_this(x, y) then
           if pattern_buttons["step"..s.."_pattern_button"]:get_state() == 2 then
-            fn.add_to_set(program.get().sequencer_patterns[selected_sequencer_pattern].channels[program.get().selected_channel].selected_patterns, x)
-            program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+            fn.add_to_set(program.get_selected_sequencer_pattern().channels[program.get().selected_channel].selected_patterns, x)
+            program.get_selected_sequencer_pattern().active = true
             tooltip:show("Pattern "..x.." added to ch. "..program.get().selected_channel)
           else
-            fn.remove_from_set(program.get().sequencer_patterns[selected_sequencer_pattern].channels[program.get().selected_channel].selected_patterns, x)
-            program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+            fn.remove_from_set(program.get_selected_sequencer_pattern().channels[program.get().selected_channel].selected_patterns, x)
+            program.get_selected_sequencer_pattern().active = true
             tooltip:show("Pattern "..x.." removed from ch. "..program.get().selected_channel)
           end
         end
         if pattern_buttons["step"..s.."_pattern_button"]:is_this(x, y) then
           pattern_controller.update_working_patterns()
-          program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+          program.get_selected_sequencer_pattern().active = true
         end
       end
     )
@@ -206,7 +206,7 @@ function channel_edit_page_controller.register_press_handlers()
         end
 
         program.get_selected_channel().merge_mode = "pattern_number_"..channel_pattern_number_merge_mode_button:get_state() - 1
-        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+        program.get_selected_sequencer_pattern().active = true
         pattern_controller.update_working_patterns()
         skip_merge_mode_button:set_state(1)
         average_merge_mode_button:set_state(1)
@@ -229,7 +229,7 @@ function channel_edit_page_controller.register_press_handlers()
         end
 
         program.get_selected_channel().merge_mode = "skip"
-        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+        program.get_selected_sequencer_pattern().active = true
         pattern_controller.update_working_patterns()
         channel_pattern_number_merge_mode_button:set_state(1)
         average_merge_mode_button:set_state(1)
@@ -252,7 +252,7 @@ function channel_edit_page_controller.register_press_handlers()
         end
   
         program.get_selected_channel().merge_mode = "average"
-        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+        program.get_selected_sequencer_pattern().active = true
         pattern_controller.update_working_patterns()
         skip_merge_mode_button:set_state(1)
         channel_pattern_number_merge_mode_button:set_state(1)
@@ -280,7 +280,7 @@ function channel_edit_page_controller.register_press_handlers()
         elseif subadd_merge_mode_button:get_state() == 2 then
           program.get_selected_channel().merge_mode = "subtract"
         end
-        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+        program.get_selected_sequencer_pattern().active = true
         pattern_controller.update_working_patterns()
         skip_merge_mode_button:set_state(1)
         channel_pattern_number_merge_mode_button:set_state(1)
@@ -296,7 +296,7 @@ function channel_edit_page_controller.register_press_handlers()
       if channel_octave_fader:is_this(x, y) then
         channel_octave_fader:press(x, y)
         program.get_selected_channel().octave = channel_octave_fader:get_value() - 3
-        program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+        program.get_selected_sequencer_pattern().active = true
         tooltip:show("Ch. "..program.get().selected_channel.." octave: "..channel_octave_fader:get_value() - 3)
       end
 
@@ -309,7 +309,7 @@ function channel_edit_page_controller.register_press_handlers()
         if channel_pattern_number_merge_mode_button:is_this(x2, y2) then
           channel_pattern_number_merge_mode_button:set_state(x + 1)
           program.get_selected_channel().merge_mode = "pattern_number_"..x
-          program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+          program.get_selected_sequencer_pattern().active = true
           pattern_controller.update_working_patterns()
           skip_merge_mode_button:set_state(1)
           average_merge_mode_button:set_state(1)

@@ -18,8 +18,8 @@ function pattern_controller.get_and_merge_patterns(channel, merge_mode)
   local average_note_accumulator = program.initialise_64_table(0)
   local average_count = program.initialise_64_table(0)
 
-  local pattern_channel = program.get().sequencer_patterns[selected_sequencer_pattern].channels[channel]
-  local patterns = program.get().sequencer_patterns[selected_sequencer_pattern].patterns
+  local pattern_channel = program.get_selected_sequencer_pattern().channels[channel]
+  local patterns = program.get_selected_sequencer_pattern().patterns
 
   local sorted_note_values = {} -- Moved the sorted_note_values table inside this loop
 
@@ -100,7 +100,7 @@ end
 
 function pattern_controller.update_working_patterns()
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-  local sequencer_patterns = program.get().sequencer_patterns[selected_sequencer_pattern].channels
+  local sequencer_patterns = program.get_selected_sequencer_pattern().channels
 
   for c = 1, 16 do
     local merge_mode = sequencer_patterns[c].merge_mode

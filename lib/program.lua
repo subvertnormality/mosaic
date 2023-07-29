@@ -12,7 +12,7 @@ local pages = {
 }
 
 local function add_step_trig_lock(sequencer_pattern, channel, step, parameter, trig_lock)
-  local step_trig_lock_banks = program.get().sequencer_patterns[sequencer_pattern].channels[channel].step_trig_lock_banks
+  local step_trig_lock_banks = program.get_sequencer_pattern(sequencer_pattern).channels[channel].step_trig_lock_banks
   if step_trig_lock_banks[step] == nil then
     step_trig_lock_banks[step] = {}
   end
@@ -20,7 +20,7 @@ local function add_step_trig_lock(sequencer_pattern, channel, step, parameter, t
 end
 
 local function get_step_trig_lock(sequencer_pattern, channel, step, parameter)
-  local step_trig_lock_banks = program.get().sequencer_patterns[sequencer_pattern].channels[channel].step_trig_lock_banks
+  local step_trig_lock_banks = program.get_sequencer_pattern(sequencer_pattern).channels[channel].step_trig_lock_banks
   if step_trig_lock_banks[step] == nil then
     return nil
   end
@@ -148,6 +148,14 @@ function program.init()
     sequencer_patterns = initialise_default_sequencer_patterns()
   }
 
+end
+
+function program.get_selected_sequencer_pattern()
+  return program_store.sequencer_patterns[program_store.selected_sequencer_pattern]
+end
+
+function program.get_sequencer_pattern(p) 
+  return program_store.sequencer_patterns[p]
 end
 
 function program.get()

@@ -32,7 +32,7 @@ local function master_func()
 
   program.get().current_step = program.get().current_step + 1
 
-  if program.get().current_step > program.get().sequencer_patterns[program.get().selected_sequencer_pattern].global_pattern_length then
+  if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
     program.get().current_step = 1
   end
   fn.dirty_grid(true)

@@ -327,7 +327,7 @@ function channel_edit_page_ui_controller.refresh_quantiser()
     local number = program.get().scales[channel.default_scale].number
     local chord = program.get().scales[channel.default_scale].chord
     local root_note = program.get().scales[channel.default_scale].root_note
-    program.get().sequencer_patterns[program.get().selected_sequencer_pattern].active = true
+    program.get_selected_sequencer_pattern().active = true
     quantizer_vertical_scroll_selector:set_selected_item(number)
     notes_vertical_scroll_selector:set_selected_item(root_note + 1)
     romans_vertical_scroll_selector:set_selected_item(chord)

@@ -24,7 +24,7 @@ function channel_sequencer_page_controller.register_draw_handlers()
           channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:draw(trigs, lengths)
           if program.get().selected_sequencer_pattern == s then
             channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(3)
-          elseif program.get().sequencer_patterns[s] and program.get().sequencer_patterns[s].active then
+          elseif program.get_sequencer_pattern(s) and program.get_sequencer_pattern(s).active then
             channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(2)
           end
       end
@@ -38,7 +38,7 @@ function channel_sequencer_page_controller.register_press_handlers()
       "channel_sequencer_page",
       function(x, y)
         if not channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:is_this(x, y) then
-          if not program.get().sequencer_patterns[s].active then
+          if not program.get_sequencer_pattern(s).active then
             channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(1)
           else
             channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(2)
