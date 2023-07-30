@@ -119,7 +119,7 @@ function channel_edit_page_ui_controller.update_channel_config()
 
   channel.midi_device = midi_device.value
   channel.midi_channel = midi_channel.value
-  channel.midi_device_map = midi_device_map.value
+  channel.midi_device_map = midi_device_map.name
 
   channel_edit_page_ui_controller.refresh_device_selector()
 end
@@ -158,18 +158,22 @@ function channel_edit_page_ui_controller.enc(n, d)
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_down()
-            channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
+            if param_select_vertical_scroll_selector:get_selected_item().name == "None/Not in device" then
+              channel.trig_lock_params[dials:get_selected_index()] = {}
+            else
+              channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
+            end
             channel_edit_page_ui_controller.refresh_trig_locks()
           else
             local pressed_keys = grid_controller.get_pressed_keys()
-            if #pressed_keys > 0 then
+            if #pressed_keys > 0 and channel.trig_lock_params[dials:get_selected_index()].id then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
                 program.add_step_trig_lock(step, dials:get_selected_index(), (program.get_step_trig_lock(step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()]) + d)
                 dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()])
               end
-            elseif channel.trig_lock_params[dials:get_selected_index()] then
-              if channel.trig_lock_banks[dials:get_selected_index()] == nil then
+            elseif channel.trig_lock_params[dials:get_selected_index()].id then
+              if channel.trig_lock_banks[dials:get_selected_index()] == {} then
                 channel.trig_lock_banks[dials:get_selected_index()] = 0
               end
               channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
@@ -209,18 +213,22 @@ function channel_edit_page_ui_controller.enc(n, d)
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_up()
-            channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
+            if param_select_vertical_scroll_selector:get_selected_item().name == "None/Not in device" then
+              channel.trig_lock_params[dials:get_selected_index()] = {}
+            else
+              channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
+            end
             channel_edit_page_ui_controller.refresh_trig_locks()
           elseif channel.trig_lock_params[dials:get_selected_index()] then
             local pressed_keys = grid_controller.get_pressed_keys()
-            if #pressed_keys > 0 then
+            if #pressed_keys > 0 and channel.trig_lock_params[dials:get_selected_index()].id then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
                 program.add_step_trig_lock(step, dials:get_selected_index(), program.get_step_trig_lock(step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]) + d)
                 dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]))
               end
 
-            else
+            elseif channel.trig_lock_params[dials:get_selected_index()].id then
               if channel.trig_lock_banks[dials:get_selected_index()] == nil then
                 channel.trig_lock_banks[dials:get_selected_index()] = 0
               end
@@ -318,6 +326,7 @@ end
 
 function channel_edit_page_ui_controller.key(n, z) 
   if n == 2 and z == 1 then
+    channel_edit_page_ui_controller.refresh_device_selector()
     trig_lock_page:toggle_sub_page()
   end
   if n == 3 and z == 1 then
@@ -337,19 +346,17 @@ end
 function channel_edit_page_ui_controller.refresh_device_selector()
   local channel = program.get_selected_channel()
 
-  local i = 1
-  local device = {}
-  for k, v in pairs(midi_device_map.get_midi_devices()) do
-    if i == channel.midi_device_map then
-      device = v
-      
-      break;
-    else
-      i = i + 1
-    end
-  end
+  print(midi_device_map.get_midi_devices()[channel.midi_device_map])
+  local device = midi_device_map.get_midi_devices()[channel.midi_device_map]
 
   param_select_vertical_scroll_selector:set_items(device)
+
+  local selected_item = fn.find_index_in_table_by_id(device, channel.trig_lock_params[dials:get_selected_index()])
+
+  if not selected_item then
+    selected_item = 1
+  end
+  param_select_vertical_scroll_selector:set_selected_item(selected_item) 
 end
 
 

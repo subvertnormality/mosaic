@@ -3,6 +3,12 @@ local midi_device_map = {}
 local midi_devices = {
   ["Digitakt"] = {
     {
+      ["id"] = "none",
+      ["name"] = "None/Not in device",
+      ["short_descriptor_1"] = "X",
+      ["short_descriptor_2"] = "",
+    },
+    {
       ["id"] = "track_parameters_solo",
       ["name"] = "Solo",
       ["cc_msb"] = 93,
@@ -789,6 +795,12 @@ local midi_devices = {
     
     },
     ["Digitone"] = {
+      {
+        ["id"] = "none",
+        ["name"] = "None/Not in device",
+        ["short_descriptor_1"] = "X",
+        ["short_descriptor_2"] = "",
+      },
     {
       ["id"] = "track_parameters_mute",
       ["name"] = "Mute",
@@ -2276,6 +2288,12 @@ local midi_devices = {
     
     },
     ["OP-1"] = {
+      {
+        ["id"] = "none",
+        ["name"] = "None/Not in device",
+        ["short_descriptor_1"] = "X",
+        ["short_descriptor_2"] = "",
+      },
     {
       ["id"] = "midi_lfo_synth",
       ["name"] = "Synth",
@@ -2335,6 +2353,12 @@ local midi_devices = {
     
     },
     ["Syntakt"] = {
+      {
+        ["id"] = "none",
+        ["name"] = "None/Not in device",
+        ["short_descriptor_1"] = "X",
+        ["short_descriptor_2"] = "",
+      },
     {
       ["id"] = "track_mute",
       ["name"] = "Mute",
