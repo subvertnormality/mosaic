@@ -20,6 +20,8 @@ local function initialise_default_channels()
       trig_lock_banks = {0, 0, 0, 0, 0, 0, 0, 0},
       trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}},
       step_trig_lock_banks = {},
+      step_octave_trig_lock_banks = {},
+      step_scale_trig_lock_banks = {},
       working_pattern = {
         trig_values = program.initialise_64_table(0),
         lengths = program.initialise_64_table(1),
@@ -179,7 +181,7 @@ function program.get_pages()
   return pages
 end
 
-function program.add_step_trig_lock(step, parameter, trig_lock)
+function program.add_step_param_trig_lock(step, parameter, trig_lock)
   local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
   if step_trig_lock_banks[step] == nil then
     step_trig_lock_banks[step] = {}
@@ -193,7 +195,7 @@ function program.add_step_trig_lock(step, parameter, trig_lock)
   step_trig_lock_banks[step][parameter] = trig_lock
 end
 
-function program.get_step_trig_lock(step, parameter)
+function program.get_step_param_trig_lock(step, parameter)
   local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
   if step_trig_lock_banks[step] == nil then
     return nil
@@ -201,7 +203,7 @@ function program.get_step_trig_lock(step, parameter)
   return step_trig_lock_banks[step][parameter]
 end
 
-function program.step_has_trig_lock(step)
+function program.step_has_param_trig_lock(step)
   local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
 
   if step_trig_lock_banks[step] == nil then
@@ -209,6 +211,52 @@ function program.step_has_trig_lock(step)
   end
 
   return true
+end
+
+function program.step_has_trig_lock(step)
+
+  if program.step_has_param_trig_lock(step) or program.step_octave_has_trig_lock(step) then
+    return true
+  end
+
+  return false
+end
+
+function program.add_step_octave_trig_lock(step, trig_lock)
+  local selected_channel = program.get_selected_channel()
+  if selected_channel.step_octave_trig_lock_banks == nil then
+    selected_channel.step_octave_trig_lock_banks = {}
+  end
+  local step_octave_trig_lock_banks = selected_channel.step_octave_trig_lock_banks
+  
+  if trig_lock ~= nil then
+    if (trig_lock < -2) then
+      trig_lock = -2
+    end
+    if (trig_lock > 2) then
+      trig_lock = 2
+    end
+  end
+
+  step_octave_trig_lock_banks[step] = trig_lock
+end
+
+function program.get_step_octave_trig_lock(step)
+  local step_octave_trig_lock_banks = program.get_selected_channel().step_octave_trig_lock_banks
+  if not step_octave_trig_lock_banks or step_octave_trig_lock_banks[step] == nil then
+    return nil
+  end
+  return step_octave_trig_lock_banks[step]
+end
+
+function program.step_octave_has_trig_lock(step)
+  local step_octave_trig_lock_banks = program.get_selected_channel().step_octave_trig_lock_banks
+
+  if step_octave_trig_lock_banks and step_octave_trig_lock_banks[step] then
+    return true
+  end
+
+  return false
 end
 
 

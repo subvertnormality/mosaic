@@ -137,6 +137,7 @@ function channel_edit_page_controller.register_press_handlers()
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
         channel_edit_page_ui_controller.refresh_trig_locks()
+        channel_edit_page_controller.refresh_faders()
       end
     end
   )
@@ -161,6 +162,18 @@ function channel_edit_page_controller.register_press_handlers()
         pattern_controller.update_working_patterns()
         program.get_selected_sequencer_pattern().active = true
         tooltip:show("Channel "..program.get().selected_channel.." length changed")
+      end
+      if channel_octave_fader:is_this(x2, y2) then
+        channel_octave_fader:press(x2, y2)
+        local step = fn.calc_grid_count(x, y)
+        local channel = program.get_selected_channel()
+        local octave_value = channel_octave_fader:get_value()
+        if octave_value == channel.octave + 3 then
+          program.add_step_octave_trig_lock(step, nil)
+        else     
+          program.add_step_octave_trig_lock(step, octave_value - 3)
+        end
+        channel_edit_page_controller.refresh_faders()
       end
     end
   )
@@ -333,6 +346,7 @@ function channel_edit_page_controller.register_press_handlers()
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
         channel_edit_page_ui_controller.refresh_trig_locks()
+        channel_edit_page_controller.refresh_faders()
       end
     end
   )
@@ -377,7 +391,19 @@ function channel_edit_page_controller.refresh_faders()
   local channel = program.get_selected_channel()
 
   channel_scale_fader:set_value(channel.default_scale)
-  channel_octave_fader:set_value(channel.octave + 3)
+
+  local pressed_keys = grid_controller.get_pressed_keys()
+  if #pressed_keys > 0 then
+    local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+    local step_octave_trig_lock = program.get_step_octave_trig_lock(step)
+    if step_octave_trig_lock then
+      channel_octave_fader:set_value(step_octave_trig_lock + 3)
+    else
+      channel_octave_fader:set_value(channel.octave + 3)
+    end
+  else
+    channel_octave_fader:set_value(channel.octave + 3)
+  end
 end
 
 function channel_edit_page_controller.refresh_step_buttons()

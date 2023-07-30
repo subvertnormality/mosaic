@@ -37,42 +37,41 @@ function VerticalScrollSelector:draw()
   if not self.items then return end
 
   screen.move(self.x, self.y)
-
-    if self.selected_item and self.items[self.selected_item - 1] then
-      screen.level(1)
-      if self.items[self.selected_item - 1].name then 
-        screen.text(self.items[self.selected_item - 1].name)
-      else
-        screen.text(self.items[self.selected_item - 1])
-      end
+  if self.selected_item and self.items[self.selected_item - 1] then
+    screen.level(1)
+    if self.items[self.selected_item - 1].name then 
+      screen.text(self.items[self.selected_item - 1].name)
+    else
+      screen.text(self.items[self.selected_item - 1])
     end
+  end
 
-    screen.move(self.x + 5, self.y + 10)
+  screen.move(self.x + 5, self.y + 10)
 
-    if self.items[self.selected_item] then
-      if self.selected then
-        screen.level(15)
-      else
-        screen.level(5)
-      end
-      if self.items[self.selected_item].name then 
-        screen.text(self.items[self.selected_item].name)
-      else
-        screen.text(self.items[self.selected_item])
-      end
+  if self.items[self.selected_item] then
+    if self.selected then
+      screen.level(15)
+    else
+      screen.level(5)
     end
-
-
-    screen.move(self.x, self.y + 20)
-
-    if self.selected_item and self.items[self.selected_item + 1] then
-      screen.level(1)
-      if self.items[self.selected_item + 1].name then 
-        screen.text(self.items[self.selected_item + 1].name) 
-      else
-        screen.text(self.items[self.selected_item + 1])
-      end
+    if self.items[self.selected_item].name then 
+      screen.text(self.items[self.selected_item].name)
+    else
+      screen.text(self.items[self.selected_item])
     end
+  end
+
+
+  screen.move(self.x, self.y + 20)
+
+  if self.selected_item and self.items[self.selected_item + 1] then
+    screen.level(1)
+    if self.items[self.selected_item + 1].name then 
+      screen.text(self.items[self.selected_item + 1].name) 
+    else
+      screen.text(self.items[self.selected_item + 1])
+    end
+  end
 
 end
 

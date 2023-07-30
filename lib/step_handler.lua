@@ -12,7 +12,7 @@ function step_handler.process_params(c, step)
   local channel = program.get_channel(c)
 
   for i=1,8 do
-    step_trig_lock = program.get_step_trig_lock(step, i)
+    step_trig_lock = program.get_step_param_trig_lock(step, i)
     if channel.trig_lock_params[i] and channel.trig_lock_params[i].cc_msb then
       if step_trig_lock then
         midi_controller.cc(channel.trig_lock_params[i].cc_msb, step_trig_lock, channel.midi_channel, channel.midi_device)
@@ -36,6 +36,10 @@ function step_handler.handle(c, current_step)
   local midi_channel = channel.midi_channel
   local midi_device = channel.midi_device
   local octave_mod = channel.octave
+
+  if program.get_step_octave_trig_lock(current_step) then
+    octave_mod = program.get_step_octave_trig_lock(current_step)
+  end
   
   if (channel_step_scale_number > 0) then
     step_scale_number = channel_step_scale_number

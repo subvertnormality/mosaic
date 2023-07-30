@@ -26,6 +26,12 @@ local function start_midi_transport(divisor)
   midi_controller:start()
 end
 
+
+local function delay_param_set(divisor, func)
+  clock.sync(1/divisor - 0.05)
+  func()
+end
+
 local function master_func() 
 
   step_handler.process_lengths()
@@ -73,7 +79,11 @@ function clock_controller:start()
       step_handler.handle(i, current_step)
 
       if next_trig_value == 1 then
-        step_handler.process_params(i, next_step)
+
+        clock.run(delay_param_set, clock_division, function ()
+          step_handler.process_params(i, next_step)
+        end)
+        
       end
     
       channel.current_step = current_step + 1

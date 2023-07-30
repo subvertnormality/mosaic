@@ -63,7 +63,6 @@ function g.key(x, y, z)
       if grid_controller.push and grid_controller.push[x][y].state == "long_pressed" then
         grid_controller.push[x][y].state = "inactive"
         grid_controller.push.active = false
-        grid_controller.post_press(x,y) -- and execute a post press instead.
       elseif grid_controller.push and grid_controller.push[x][y].state == "pressed" then
         grid_controller.push[x][y].state = "inactive"
         grid_controller.short_press(x,y) -- and execute a short press instead.
@@ -78,7 +77,7 @@ function g.key(x, y, z)
         grid_controller.push.active = false
       end
     end
-    
+    grid_controller.post_press(x,y)
   end
 end
 

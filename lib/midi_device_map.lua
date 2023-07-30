@@ -3804,4 +3804,21 @@ function midi_device_map.get_midi_devices()
   return midi_devices
 end
 
+function midi_device_map.get_midi_device(m)
+  local i = 1
+  local device = {}
+  for k, v in pairs(midi_devices) do
+    if i == m then
+      device = v
+  
+      break;
+    else
+      i = i + 1
+    end
+  end
+  return device
+end
+
+
+
 return midi_device_map
