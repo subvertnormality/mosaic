@@ -36,7 +36,7 @@ local params = {param_1, param_2, param_3, param_4, param_5, param_6, param_7, p
 
 local dials = ControlScrollSelector:new(0, 0, {})
 
-local page_to_index = {["Quantizer"] = 1, ["Midi Config"] = 2, ["Trig Locks"] = 3}
+local page_to_index = {["Trig Locks"] = 1, ["Quantizer"] = 2, ["Midi Config"] = 3}
 
 local quantizer_page = Page:new("", function ()
   quantizer_vertical_scroll_selector:draw()
@@ -77,9 +77,9 @@ function channel_edit_page_ui_controller.init()
     param_select_vertical_scroll_selector:draw()
   end)
 
+  pages:add_page(trig_lock_page)
   pages:add_page(quantizer_page)
   pages:add_page(channel_edit_page)
-  pages:add_page(trig_lock_page)
   pages:select_page(1)
   dials:set_selected_item(1)
 
@@ -382,7 +382,7 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
       local pressed_keys = grid_controller.get_pressed_keys()
       if #pressed_keys > 0 then
         local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
-        dials:get_selected_item():set_value(program.get_step_trig_lock(step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()])
+        params[i]:set_value(program.get_step_trig_lock(step, i) or channel.trig_lock_banks[i])
       else
         local step = program.get_selected_channel().current_step
         local step_trig_lock = program.get_step_trig_lock(step, i)
