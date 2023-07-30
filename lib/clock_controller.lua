@@ -9,7 +9,7 @@ local playing = false
 local master_clock
 local midi_transport
 
-
+local time_store = 0
 
 local master_clock
 local midi_transport
@@ -28,7 +28,12 @@ end
 
 
 local function delay_param_set(divisor, func)
-  clock.sync(1/divisor - 0.05)
+
+  local d = divisor + 1
+  local pause = (1/d)
+  clock.sync(pause)
+  pause = 1/(d*4)
+  clock.sync(pause)
   func()
 end
 
@@ -79,6 +84,7 @@ function clock_controller:start()
       step_handler.handle(i, current_step)
 
       if next_trig_value == 1 then
+        time_store = clock.get_beats()
 
         clock.run(delay_param_set, clock_division, function ()
           step_handler.process_params(i, next_step)

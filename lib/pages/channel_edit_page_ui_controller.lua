@@ -120,7 +120,6 @@ function channel_edit_page_ui_controller.update_channel_config()
   channel.midi_device = midi_device.value
   channel.midi_channel = midi_channel.value
   channel.midi_device_map = midi_device_map.value
-  print(channel.midi_device_map)
 
   channel_edit_page_ui_controller.refresh_device_selector()
 end
