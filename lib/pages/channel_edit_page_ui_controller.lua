@@ -169,8 +169,8 @@ function channel_edit_page_ui_controller.enc(n, d)
             if #pressed_keys > 0 and channel.trig_lock_params[dials:get_selected_index()].id then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
-                program.add_step_param_trig_lock(step, dials:get_selected_index(), (program.get_step_param_trig_lock(step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()]) + d)
-                dials:get_selected_item():set_value(program.get_step_param_trig_lock(step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()])
+                program.add_step_param_trig_lock(step, dials:get_selected_index(), (program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()]) + d)
+                dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()])
               end
             elseif channel.trig_lock_params[dials:get_selected_index()].id then
               if channel.trig_lock_banks[dials:get_selected_index()] == {} then
@@ -224,8 +224,8 @@ function channel_edit_page_ui_controller.enc(n, d)
             if #pressed_keys > 0 and channel.trig_lock_params[dials:get_selected_index()].id then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
-                program.add_step_param_trig_lock(step, dials:get_selected_index(), program.get_step_param_trig_lock(step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]) + d)
-                dials:get_selected_item():set_value(program.get_step_param_trig_lock(step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]))
+                program.add_step_param_trig_lock(step, dials:get_selected_index(), program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]) + d)
+                dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]))
               end
 
             elseif channel.trig_lock_params[dials:get_selected_index()].id then
@@ -335,7 +335,7 @@ function channel_edit_page_ui_controller.key(n, z)
       for i, keys in ipairs(pressed_keys) do
         local step = fn.calc_grid_count(keys[1], keys[2])
         program.clear_trig_locks_for_step(step)
-        dials:get_selected_item():set_value(program.get_step_param_trig_lock(step, dials:get_selected_index()) or program.get_selected_channel().trig_lock_banks[dials:get_selected_index()])
+        dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or program.get_selected_channel().trig_lock_banks[dials:get_selected_index()])
         channel_edit_page_ui_controller.refresh_trig_locks()
       end
     end
@@ -381,10 +381,10 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
       local pressed_keys = grid_controller.get_pressed_keys()
       if #pressed_keys > 0 then
         local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
-        params[i]:set_value(program.get_step_param_trig_lock(step, i) or channel.trig_lock_banks[i])
+        params[i]:set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, i) or channel.trig_lock_banks[i])
       else
         local step = program.get_selected_channel().current_step
-        local step_trig_lock = program.get_step_param_trig_lock(step, i)
+        local step_trig_lock = program.get_step_param_trig_lock(program.get_selected_channel(), step, i)
 
         if (step_trig_lock and clock_controller.is_playing()) then
           params[i]:set_value(step_trig_lock)

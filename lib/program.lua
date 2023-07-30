@@ -195,8 +195,8 @@ function program.add_step_param_trig_lock(step, parameter, trig_lock)
   step_trig_lock_banks[step][parameter] = trig_lock
 end
 
-function program.get_step_param_trig_lock(step, parameter)
-  local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
+function program.get_step_param_trig_lock(channel, step, parameter)
+  local step_trig_lock_banks = channel.step_trig_lock_banks
   if step_trig_lock_banks[step] == nil then
     return nil
   end

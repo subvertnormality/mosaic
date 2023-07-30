@@ -32,7 +32,7 @@ local function delay_param_set(divisor, func)
   local d = divisor + 1
   local pause = (1/d)
   clock.sync(pause)
-  pause = 1/(d*4)
+  pause = 1/(d*6)
   clock.sync(pause)
   func()
 end
