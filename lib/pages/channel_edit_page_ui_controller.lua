@@ -346,7 +346,6 @@ end
 function channel_edit_page_ui_controller.refresh_device_selector()
   local channel = program.get_selected_channel()
 
-  print(midi_device_map.get_midi_devices()[channel.midi_device_map])
   local device = midi_device_map.get_midi_devices()[channel.midi_device_map]
 
   param_select_vertical_scroll_selector:set_items(device)
