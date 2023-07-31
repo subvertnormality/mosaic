@@ -1,6 +1,32 @@
 local midi_device_map = {}
 
+
+function create_cc_device() 
+  local cc_midi_device = {}
+
+  for i = 1, 127 do
+    table.insert(cc_midi_device, {
+      ["id"] = "cc_" .. i,
+      ["name"] = "CC " .. i,
+      ["cc_msb"] = i,
+      ["cc_lsb"] = nil,
+      ["cc_min_value"] = 0,
+      ["cc_max_value"] = 127,
+      ["nrpn_msb"] = nil,
+      ["nrpn_lsb"] = nil,
+      ["nrpn_min_value"] = nil,
+      ["nrpn_max_value"] = nil,
+      ["short_descriptor_1"] = "CC",
+      ["short_descriptor_2"] = i,
+    })
+  end
+
+  return cc_midi_device
+end
+
+
 local midi_devices = {
+  ["CC Device"] = create_cc_device(),
   ["Digitakt"] = {
     {
       ["id"] = "none",
@@ -3789,7 +3815,9 @@ local midi_devices = {
     }
   }
 }
-  
+
+
+
 function midi_device_map:get_midi_device_map() 
   local devices = {}
   local i = 1
