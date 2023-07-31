@@ -66,7 +66,9 @@ function step_handler.handle(c, current_step)
   if trig_value == 1 then
     channel_edit_page_ui_controller.refresh_trig_locks()
     local note = quantiser.process(note_value, octave_mod, step_scale_number, channel)
-    midi_controller.note_on(note, velocity_value, midi_channel, midi_device)
+    if not channel.mute then
+      midi_controller.note_on(note, velocity_value, midi_channel, midi_device)
+    end
     table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value})
   end
 

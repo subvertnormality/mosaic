@@ -40,7 +40,8 @@ local function initialise_default_channels()
       octave = 0,
       clock_division = 4,
       current_step = 1,
-      midi_device_map = 1
+      midi_device_map = 1,
+      mute = false
     }
   end
   

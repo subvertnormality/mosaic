@@ -9,6 +9,11 @@ function Fader:new(x, y, length, size)
   self.size = size
   self.value = 1
   self.is_disabled = false
+  self.dimmed = {}
+
+  for i = 1, self.length do
+    self.dimmed[i] = false
+  end
 
   return self
 end
@@ -19,10 +24,18 @@ function Fader:draw_simple()
   
   g:led(self.x, self.y, 2)
   for i = self.x, self.length + self.x - 1 do
-    g:led(i, self.y, 2)
+    if self.dimmed[i] then
+      g:led(i, self.y, 0)
+    else
+      g:led(i, self.y, 2)
+    end
   end
   if (self.value > 0) then
-    g:led(self.x + self.value - 1, self.y, 15)
+    if self.dimmed[self.x + self.value - 1] then
+      g:led(self.x + self.value - 1, self.y, 7)
+    else
+      g:led(self.x + self.value - 1, self.y, 15)
+    end
   end
 end
 
@@ -118,6 +131,14 @@ function Fader:is_this(x, y)
     return true
   end
   return false
+end
+
+function Fader:dim(x) 
+  self.dimmed[x] = true
+end
+
+function Fader:light(x)
+  self.dimmed[x] = false
 end
 
 return Fader

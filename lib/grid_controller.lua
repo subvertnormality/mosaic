@@ -44,9 +44,11 @@ function g.key(x, y, z)
     grid_controller.pre_press(x,y)
 
     if grid_controller.push.active ~= false then
-      if grid_controller.push.active[1] ~= x or grid_controller.push.active[2] ~= y then
-        grid_controller.push[x][y].state = "dual_pressed"
-        grid_controller.push[grid_controller.push.active[1]][grid_controller.push.active[2]].state = "dual_pressed"
+      if (params:get("dual_press_enabled") == 1) then
+        if grid_controller.push.active[1] ~= x or grid_controller.push.active[2] ~= y then
+          grid_controller.push[x][y].state = "dual_pressed"
+          grid_controller.push[grid_controller.push.active[1]][grid_controller.push.active[2]].state = "dual_pressed"
+        end
       end
     else
       grid_controller.push.active = {x, y}

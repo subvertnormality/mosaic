@@ -153,6 +153,27 @@ function channel_edit_page_controller.register_press_handlers()
       end
     end
   )
+  press_handler:register_long(
+    "channel_edit_page",
+    function(x, y)
+      if channel_select_fader:is_this(x, y) then
+        
+        local channel = program.get_channel(x)
+
+        if (channel.mute == true) then
+          program.get_channel(x).mute = false
+          tooltip:show("Channel "..x.." unmuted")
+          channel_select_fader:light(x)
+        else
+          program.get_channel(x).mute = true
+          tooltip:show("Channel "..x.." muted")
+          channel_select_fader:dim(x)
+        end
+        channel_edit_page_controller.refresh_muted_channels()
+        fn.dirty_screen(true)
+      end
+    end
+  )
   press_handler:register_dual(
     "channel_edit_page",
     function(x, y, x2, y2)
@@ -402,11 +423,19 @@ function channel_edit_page_controller.refresh_merge_buttons()
   channel_select_fader:set_value(program.get().selected_channel)
 end
 
+function channel_edit_page_controller.refresh_muted_channels()
+  for i = 1, 16 do
+    if program.get_channel(i).mute == true then
+      channel_select_fader:dim(i)
+    else
+      channel_select_fader:light(i)
+    end
+  end
+end
+
 
 function channel_edit_page_controller.refresh_faders()
   local channel = program.get_selected_channel()
-
-  
 
   local pressed_keys = grid_controller.get_pressed_keys()
   if #pressed_keys > 0 then
@@ -451,6 +480,7 @@ function channel_edit_page_controller.refresh()
   channel_edit_page_controller.refresh_step_buttons()
   channel_edit_page_controller.refresh_merge_buttons()
   channel_edit_page_ui_controller.refresh()
+  channel_edit_page_controller.refresh_muted_channels()
 end
 
 return channel_edit_page_controller

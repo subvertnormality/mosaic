@@ -145,6 +145,8 @@ function init()
   grid_controller.splash_screen_on()
   ui_splash_screen_active = true
 
+  params:add_separator("Live mode utilities")
+  params:add_option("dual_press_enabled", "Dual pressing", {"On", "Off"}, 1)
   params:add_separator("Quantiser")
   params:add_option("quantiser_trig_lock_hold", "Hold quantiser trigs", {"On", "Off"}, 1)
   params:add_separator("Pattern project management")
