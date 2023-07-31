@@ -84,11 +84,24 @@ function pattern_controller.get_and_merge_patterns(channel, merge_mode)
       merged_pattern.lengths[s] = math.ceil(average_length_accumulator[s] / (average_count[s] or 1))
       merged_pattern.velocity_values[s] = math.ceil(average_velocity_accumulator[s] / (average_count[s] or 1))
       if merge_mode == "add" and merged_pattern.trig_values[s] then
-        merged_pattern.note_values[s] = (sorted_note_values[1] or program.get().root_note) + average_note
+        if average_count[s] > 1 then
+          merged_pattern.note_values[s] = (sorted_note_values[1] or program.get().root_note) + average_note
+        else
+          merged_pattern.note_values[s] = average_note
+        end
       elseif merge_mode == "subtract" and merged_pattern.trig_values[s] then
-        merged_pattern.note_values[s] = (sorted_note_values[1] or program.get().root_note) - average_note
+        if average_count[s] > 1 then
+          
+          merged_pattern.note_values[s] = (sorted_note_values[1] or program.get().root_note) - average_note
+        else
+          merged_pattern.note_values[s] = average_note
+        end
       elseif merge_mode == "average" then
-        merged_pattern.note_values[s] = math.ceil(average_note_accumulator[s] / (average_count[s] or 1))
+        if average_count[s] > 1 then
+          merged_pattern.note_values[s] = math.ceil(average_note_accumulator[s] / (average_count[s] or 1))
+        else
+          merged_pattern.note_values[s] = average_note
+        end
       end
     end
   end

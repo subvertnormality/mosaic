@@ -338,6 +338,30 @@ function notes_should_subtract_when_using_subtract_merge_mode()
   end
 end
 
+function notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern()
+
+  program.init()
+  program.get_sequencer_pattern(1).channels[1].merge_mode = "subtract"
+  program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
+  program.get_sequencer_pattern(1).patterns[1].trig_values[2] = 1
+  program.get_sequencer_pattern(1).patterns[1].trig_values[3] = 1
+  program.get_sequencer_pattern(1).patterns[1].trig_values[4] = 1
+  program.get_sequencer_pattern(1).patterns[1].note_values[1] = 2
+  program.get_sequencer_pattern(1).patterns[1].note_values[2] = 3
+  program.get_sequencer_pattern(1).patterns[1].note_values[3] = 4
+  program.get_sequencer_pattern(1).patterns[1].note_values[4] = 5
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
+
+  if pattern_controller.get_and_merge_patterns(1, "subtract").note_values[1] == 2 and
+  pattern_controller.get_and_merge_patterns(1, "subtract").note_values[2] == 3 and
+  pattern_controller.get_and_merge_patterns(1, "subtract").note_values[3] == 4 and
+  pattern_controller.get_and_merge_patterns(1, "subtract").note_values[4] == 5
+  then
+    pass("notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern")
+  else
+    fail("notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern")
+  end
+end
 
 function velocity_values_should_average_the_values_when_using_add_merge_mode()
 
@@ -548,6 +572,7 @@ function init()
   notes_should_add_up_when_using_add_merge_mode()
   notes_should_subtract_when_using_subtract_merge_mode()
   notes_should_average_when_using_average_merge_mode()
+  notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern()
   velocity_values_should_average_the_values_when_using_add_merge_mode()
   notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mode()
   notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_merge_mode()
