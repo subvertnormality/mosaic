@@ -36,7 +36,6 @@ local function initialise_default_channels()
       default_scale = 1,
       root_note = 0,
       chord = 1,
-      step_scales = program.initialise_64_table(0),
       merge_mode = "skip",
       octave = 0,
       clock_division = 4,
@@ -215,7 +214,7 @@ end
 
 function program.step_has_trig_lock(step)
 
-  if program.step_has_param_trig_lock(step) or program.step_octave_has_trig_lock(step) then
+  if program.step_has_param_trig_lock(step) or program.step_octave_has_trig_lock(step) or program.step_scale_has_trig_lock(step) then
     return true
   end
 
@@ -253,6 +252,44 @@ function program.step_octave_has_trig_lock(step)
   local step_octave_trig_lock_banks = program.get_selected_channel().step_octave_trig_lock_banks
 
   if step_octave_trig_lock_banks and step_octave_trig_lock_banks[step] then
+    return true
+  end
+
+  return false
+end
+
+
+function program.add_step_scale_trig_lock(step, trig_lock)
+  local selected_channel = program.get_selected_channel()
+  if selected_channel.step_scale_trig_lock_banks == nil then
+    selected_channel.step_scale_trig_lock_banks = {}
+  end
+  local step_scale_trig_lock_banks = selected_channel.step_scale_trig_lock_banks
+  
+  if trig_lock ~= nil then
+    if (trig_lock < 1) then
+      trig_lock = 1
+    end
+    if (trig_lock > 16) then
+      trig_lock = 16
+    end
+  end
+
+  step_scale_trig_lock_banks[step] = trig_lock
+end
+
+function program.get_step_scale_trig_lock(step)
+  local step_scale_trig_lock_banks = program.get_selected_channel().step_scale_trig_lock_banks
+  if not step_scale_trig_lock_banks or step_scale_trig_lock_banks[step] == nil then
+    return nil
+  end
+  return step_scale_trig_lock_banks[step]
+end
+
+function program.step_scale_has_trig_lock(step)
+  local step_scale_trig_lock_banks = program.get_selected_channel().step_scale_trig_lock_banks
+
+  if step_scale_trig_lock_banks and step_scale_trig_lock_banks[step] then
     return true
   end
 

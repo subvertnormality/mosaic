@@ -175,6 +175,24 @@ function channel_edit_page_controller.register_press_handlers()
         end
         channel_edit_page_controller.refresh_faders()
       end
+      if channel_scale_fader:is_this(x2, y2) then
+        channel_scale_fader:press(x2, y2)
+        local step = fn.calc_grid_count(x, y)
+        local channel = program.get_selected_channel()
+        local scale_value = channel_scale_fader:get_value()
+        program.add_step_scale_trig_lock(step, scale_value)
+        channel_edit_page_controller.refresh_faders()
+      end
+    end
+  )
+  press_handler:register_long(
+    "channel_edit_page",
+    function(x, y)
+      if channel_edit_page_sequencer:is_this(x, y) then
+        local step = fn.calc_grid_count(x, y)
+        program.add_step_scale_trig_lock(step, nil)
+        channel_edit_page_controller.refresh_faders()
+      end
     end
   )
   press_handler:register(
@@ -182,14 +200,12 @@ function channel_edit_page_controller.register_press_handlers()
     function(x, y)
       if channel_scale_fader:is_this(x, y) then
         channel_scale_fader:press(x, y)
-        if channel_scale_fader:is_this(x, y) then
-          local channel = program.get_selected_channel()
-          local scale_value = channel_scale_fader:get_value()
-          local number = program.get().scales[scale_value].number
-          channel.default_scale = scale_value
-          channel_edit_page_ui_controller.refresh_quantiser()
-          tooltip:show("Ch. "..program.get().selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
-        end
+        local channel = program.get_selected_channel()
+        local scale_value = channel_scale_fader:get_value()
+        local number = program.get().scales[scale_value].number
+        channel.default_scale = scale_value
+        channel_edit_page_ui_controller.refresh_quantiser()
+        tooltip:show("Ch. "..program.get().selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
       end
     end
   )
@@ -390,18 +406,25 @@ end
 function channel_edit_page_controller.refresh_faders()
   local channel = program.get_selected_channel()
 
-  channel_scale_fader:set_value(channel.default_scale)
+  
 
   local pressed_keys = grid_controller.get_pressed_keys()
   if #pressed_keys > 0 then
     local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
     local step_octave_trig_lock = program.get_step_octave_trig_lock(step)
+    local step_scale_trig_lock = program.get_step_scale_trig_lock(step)
     if step_octave_trig_lock then
       channel_octave_fader:set_value(step_octave_trig_lock + 3)
     else
       channel_octave_fader:set_value(channel.octave + 3)
     end
+    if step_scale_trig_lock then 
+      channel_scale_fader:set_value(step_scale_trig_lock)
+    else
+      channel_scale_fader:set_value(channel.default_scale)
+    end
   else
+    channel_scale_fader:set_value(channel.default_scale)
     channel_octave_fader:set_value(channel.octave + 3)
   end
 end

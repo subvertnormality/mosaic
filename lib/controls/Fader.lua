@@ -102,8 +102,8 @@ function Fader:press_fine_grain(val)
 end
 
 function Fader:press(x, y)
+  
   if x >= self.x and x <= self.x + self.length - 1 and y == self.y then
-
     if self.length < self.size then
       self:press_fine_grain(x - self.x + 1)
     else

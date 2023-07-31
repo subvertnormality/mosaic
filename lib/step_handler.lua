@@ -3,6 +3,7 @@ local quantiser = include("lib/quantiser")
 
 local step_handler = {}
 local length_tracker = {}
+local persistent_channel_step_scale_numbers = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
 
 local step_scale_number = 0
 
@@ -26,8 +27,6 @@ end
 function step_handler.handle(c, current_step) 
 
   local channel = program.get_channel(c)
-  local channel_step_scale_number = channel.step_scales[current_step]
-
   local trig_value = channel.working_pattern.trig_values[current_step]
 
   local note_value = channel.working_pattern.note_values[current_step]
@@ -36,18 +35,32 @@ function step_handler.handle(c, current_step)
   local midi_channel = channel.midi_channel
   local midi_device = channel.midi_device
   local octave_mod = channel.octave
+  
+
+  if current_step == 1 then
+    persistent_channel_step_scale_numbers[c] = nil
+  end
 
   if program.get_step_octave_trig_lock(current_step) then
     octave_mod = program.get_step_octave_trig_lock(current_step)
   end
   
-  if (channel_step_scale_number > 0) then
+  local channel_step_scale_number = program.get_step_scale_trig_lock(current_step)
+
+  local channel_default_scale = channel.default_scale
+  local step_scale_number = program.get().default_scale
+
+
+  if channel_step_scale_number and program.get().scales[channel_step_scale_number].scale then
+    if (params:get("quantiser_trig_lock_hold") == 1) then
+      persistent_channel_step_scale_numbers[c] = channel_step_scale_number
+    end
     step_scale_number = channel_step_scale_number
+  elseif (persistent_channel_step_scale_numbers[c] and program.get().scales[persistent_channel_step_scale_numbers[c]].scale) then
+    step_scale_number = persistent_channel_step_scale_numbers[c]
   elseif
-    (channel.default_scale > 0) then
-    step_scale_number = channel.default_scale
-  else
-    step_scale_number = program.get().default_scale
+    channel_default_scale and program.get().scales[channel_default_scale].scale then
+    step_scale_number = channel_default_scale
   end
 
   if trig_value == 1 then
