@@ -927,7 +927,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_1_algorithm",
-      ["name"] = "Algorithm",
+      ["name"] = "FM Syn1 Algorithm",
       ["cc_msb"] = 91,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -941,7 +941,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_1_ratio_c",
-      ["name"] = "Ratio C",
+      ["name"] = "FM Syn1 Ratio C",
       ["cc_msb"] = 92,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -955,7 +955,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_1_ratio_a",
-      ["name"] = "Ratio A",
+      ["name"] = "FM Syn1 Ratio A",
       ["cc_msb"] = 93,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -969,7 +969,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_1_ratio_b",
-      ["name"] = "Ratio B",
+      ["name"] = "FM Syn1 Ratio B",
       ["cc_msb"] = 16,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -983,7 +983,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_1_harmonics",
-      ["name"] = "Harmonics",
+      ["name"] = "FM Syn1 Harmonics",
       ["cc_msb"] = 17,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -997,7 +997,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_1_detune",
-      ["name"] = "Detune",
+      ["name"] = "FM Syn1 Detune",
       ["cc_msb"] = 18,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1011,7 +1011,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_1_feedback",
-      ["name"] = "Feedback",
+      ["name"] = "FM Syn1 Feedback",
       ["cc_msb"] = 19,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1025,7 +1025,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_1_mix",
-      ["name"] = "Mix",
+      ["name"] = "FM Syn1 Mix",
       ["cc_msb"] = 20,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1039,7 +1039,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_a_env_attack",
-      ["name"] = "A env attack",
+      ["name"] = "FM Syn2 A env attack",
       ["cc_msb"] = 75,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1053,7 +1053,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_a_env_decay",
-      ["name"] = "A env decay",
+      ["name"] = "FM Syn2 A env decay",
       ["cc_msb"] = 76,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1067,7 +1067,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_a_env_end",
-      ["name"] = "A env end",
+      ["name"] = "FM Syn2 A env end",
       ["cc_msb"] = 77,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1081,7 +1081,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_a_level",
-      ["name"] = "A level",
+      ["name"] = "FM Syn2 A level",
       ["cc_msb"] = 78,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1095,7 +1095,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_b_env_attack",
-      ["name"] = "B env attack",
+      ["name"] = "FM Syn2 B env attack",
       ["cc_msb"] = 79,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1109,7 +1109,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_b_env_decay",
-      ["name"] = "B env decay",
+      ["name"] = "FM Syn2 B env decay",
       ["cc_msb"] = 80,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1123,7 +1123,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_b_env_end",
-      ["name"] = "B env end",
+      ["name"] = "FM Syn2 B env end",
       ["cc_msb"] = 81,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1137,7 +1137,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_b_level",
-      ["name"] = "B level",
+      ["name"] = "FM Syn2 B level",
       ["cc_msb"] = 82,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1151,7 +1151,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_a_delay",
-      ["name"] = "A delay",
+      ["name"] = "FM Syn2 A delay",
       ["cc_msb"] = 83,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1165,7 +1165,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_a_trig",
-      ["name"] = "A trig",
+      ["name"] = "FM Syn2 A trig",
       ["cc_msb"] = 84,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1179,7 +1179,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_a_env_reset",
-      ["name"] = "A env reset",
+      ["name"] = "FM Syn2 A env reset",
       ["cc_msb"] = 85,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1193,7 +1193,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_b_delay",
-      ["name"] = "B delay",
+      ["name"] = "FM Syn2 B delay",
       ["cc_msb"] = 86,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1207,7 +1207,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_b_trig",
-      ["name"] = "B trig",
+      ["name"] = "FM Syn2 B trig",
       ["cc_msb"] = 87,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1221,7 +1221,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_b_env_reset",
-      ["name"] = "B env reset",
+      ["name"] = "FM Syn2 B env reset",
       ["cc_msb"] = 88,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1235,7 +1235,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_syn_2_phase_reset",
-      ["name"] = "Phase reset",
+      ["name"] = "FM Syn2 Phase reset",
       ["cc_msb"] = 89,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -1249,7 +1249,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_combined_pitch_all",
-      ["name"] = "Pitch all",
+      ["name"] = "FM Pitch all",
       ["cc_msb"] = nil,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = nil,
@@ -1263,7 +1263,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_combined_pitch_2_and_4",
-      ["name"] = "Pitch 2 and 4",
+      ["name"] = "FM Pitch 2 and 4",
       ["cc_msb"] = nil,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = nil,
@@ -1277,7 +1277,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_combined_ratio_all",
-      ["name"] = "Ratio all",
+      ["name"] = "FM Ratio all",
       ["cc_msb"] = nil,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = nil,
@@ -1291,7 +1291,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_combined_ab_level",
-      ["name"] = "AB level",
+      ["name"] = "FM AB level",
       ["cc_msb"] = nil,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = nil,
@@ -1305,7 +1305,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_combined_ab_attack",
-      ["name"] = "AB attack",
+      ["name"] = "FM AB attack",
       ["cc_msb"] = nil,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = nil,
@@ -1319,7 +1319,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_combined_ab_decay",
-      ["name"] = "AB decay",
+      ["name"] = "FM AB decay",
       ["cc_msb"] = nil,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = nil,
@@ -1333,7 +1333,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_combined_ab_end",
-      ["name"] = "AB end",
+      ["name"] = "FM AB end",
       ["cc_msb"] = nil,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = nil,
@@ -1347,7 +1347,7 @@ local midi_devices = {
     },
     {
       ["id"] = "fm_parameters_combined_ab_delay",
-      ["name"] = "AB delay",
+      ["name"] = "FM AB delay",
       ["cc_msb"] = nil,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = nil,
@@ -1375,7 +1375,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_parameters_resonance",
-      ["name"] = "Resonance",
+      ["name"] = "Filter Resonance",
       ["cc_msb"] = 24,
       ["cc_lsb"] = 56,
       ["cc_min_value"] = 0,
@@ -1473,7 +1473,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_parameters_base",
-      ["name"] = "Base",
+      ["name"] = "Filter Base",
       ["cc_msb"] = 26,
       ["cc_lsb"] = 58,
       ["cc_min_value"] = 0,
@@ -1487,7 +1487,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_parameters_width",
-      ["name"] = "Width",
+      ["name"] = "Filter Width",
       ["cc_msb"] = 27,
       ["cc_lsb"] = 59,
       ["cc_min_value"] = 0,
@@ -2611,7 +2611,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_resonance",
-      ["name"] = "Resonance",
+      ["name"] = "Filter resonance",
       ["cc_msb"] = 75,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2639,7 +2639,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_attack_time",
-      ["name"] = "Attack time",
+      ["name"] = "Filter attack time",
       ["cc_msb"] = 70,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2653,7 +2653,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_decay_time",
-      ["name"] = "Decay time",
+      ["name"] = "Filter decay time",
       ["cc_msb"] = 71,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2667,7 +2667,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_sustain_level",
-      ["name"] = "Sustain level",
+      ["name"] = "Filter sustain level",
       ["cc_msb"] = 72,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2681,7 +2681,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_release_time",
-      ["name"] = "Release time",
+      ["name"] = "Filter release time",
       ["cc_msb"] = 73,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2695,7 +2695,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_envelope_depth",
-      ["name"] = "Envelope depth",
+      ["name"] = "Filter envelope depth",
       ["cc_msb"] = 77,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2709,7 +2709,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_envelope_delay",
-      ["name"] = "Envelope delay",
+      ["name"] = "Filter envelope delay",
       ["cc_msb"] = 78,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2723,7 +2723,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_base",
-      ["name"] = "Base",
+      ["name"] = "Filter base",
       ["cc_msb"] = 26,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2737,7 +2737,7 @@ local midi_devices = {
     },
     {
       ["id"] = "filter_width",
-      ["name"] = "Width",
+      ["name"] = "Filter width",
       ["cc_msb"] = 27,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
@@ -2751,7 +2751,7 @@ local midi_devices = {
     },
     {
       ["id"] = "amp_attack_time",
-      ["name"] = "Attack time",
+      ["name"] = "Filter attack time",
       ["cc_msb"] = 79,
       ["cc_lsb"] = nil,
       ["cc_min_value"] = 0,
