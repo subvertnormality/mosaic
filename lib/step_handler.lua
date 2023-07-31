@@ -41,11 +41,11 @@ function step_handler.handle(c, current_step)
     persistent_channel_step_scale_numbers[c] = nil
   end
 
-  if program.get_step_octave_trig_lock(current_step) then
-    octave_mod = program.get_step_octave_trig_lock(current_step)
+  if program.get_step_octave_trig_lock(channel, current_step) then
+    octave_mod = program.get_step_octave_trig_lock(channel, current_step)
   end
   
-  local channel_step_scale_number = program.get_step_scale_trig_lock(current_step)
+  local channel_step_scale_number = program.get_step_scale_trig_lock(channel, current_step)
 
   local channel_default_scale = channel.default_scale
   local step_scale_number = program.get().default_scale

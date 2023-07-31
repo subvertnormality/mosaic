@@ -411,8 +411,8 @@ function channel_edit_page_controller.refresh_faders()
   local pressed_keys = grid_controller.get_pressed_keys()
   if #pressed_keys > 0 then
     local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
-    local step_octave_trig_lock = program.get_step_octave_trig_lock(step)
-    local step_scale_trig_lock = program.get_step_scale_trig_lock(step)
+    local step_octave_trig_lock = program.get_step_octave_trig_lock(channel, step)
+    local step_scale_trig_lock = program.get_step_scale_trig_lock(channel, step)
     if step_octave_trig_lock then
       channel_octave_fader:set_value(step_octave_trig_lock + 3)
     else

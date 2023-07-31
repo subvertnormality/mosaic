@@ -240,8 +240,8 @@ function program.add_step_octave_trig_lock(step, trig_lock)
   step_octave_trig_lock_banks[step] = trig_lock
 end
 
-function program.get_step_octave_trig_lock(step)
-  local step_octave_trig_lock_banks = program.get_selected_channel().step_octave_trig_lock_banks
+function program.get_step_octave_trig_lock(channel, step)
+  local step_octave_trig_lock_banks = channel.step_octave_trig_lock_banks
   if not step_octave_trig_lock_banks or step_octave_trig_lock_banks[step] == nil then
     return nil
   end
@@ -278,8 +278,8 @@ function program.add_step_scale_trig_lock(step, trig_lock)
   step_scale_trig_lock_banks[step] = trig_lock
 end
 
-function program.get_step_scale_trig_lock(step)
-  local step_scale_trig_lock_banks = program.get_selected_channel().step_scale_trig_lock_banks
+function program.get_step_scale_trig_lock(channel, step)
+  local step_scale_trig_lock_banks = channel.step_scale_trig_lock_banks
   if not step_scale_trig_lock_banks or step_scale_trig_lock_banks[step] == nil then
     return nil
   end

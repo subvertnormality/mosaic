@@ -132,6 +132,74 @@ local function get_algorithm_name(id)
   end
 end
 
+
+local function load_paint_pattern()
+  if (pattern_trigger_edit_page_paint_button:get_state() == 2) then
+    paint_pattern = {}
+    local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
+    local pattern1 = pattern_trigger_edit_page_pattern1_fader:get_value()
+    local pattern2 = pattern_trigger_edit_page_pattern2_fader:get_value()
+    local bank = pattern_trigger_edit_page_bankmask_fader:get_value()
+
+    if (algorithm == 3) then
+      local erpattern = er.gen(pattern1, pattern2, 0)
+      while #paint_pattern < 64 do
+        for i = 1, #erpattern do
+          table.insert(paint_pattern, erpattern[i])
+          if #paint_pattern >= 64 then
+            break
+          end
+        end
+      end
+    else
+      for step = 1, 64 do
+        if (algorithm == 1) then
+          table.insert(paint_pattern, drum_ops.drum(bank, pattern1, step))
+        elseif (algorithm == 2) then
+          table.insert(paint_pattern, drum_ops.tresillo(bank, pattern1, pattern2, 24, step)) -- TODO need to make the tressilo length editable
+        elseif (algorithm == 4) then
+          table.insert(paint_pattern, drum_ops.nr(pattern1, bank, pattern2, step))
+        end
+      end
+    end
+
+    if (shift > 0) then
+      for s = 1, shift do
+        paint_pattern = fn.shift_table_right(paint_pattern)
+      end
+    elseif (shift < 0) then
+      for s = 1, math.abs(shift) do
+        paint_pattern = fn.shift_table_left(paint_pattern)
+      end
+    end
+
+    pattern_trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
+  end
+end
+
+
+local function save_paint_pattern(p)
+  local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+  local selected_pattern = program.get().selected_pattern
+  local trigs = program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values
+  local lengths = program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths
+
+  for x = 1, 64 do
+    if (trigs[x] < 1) and p[x] then
+      trigs[x] = 1
+      lengths[x] = 1
+    elseif trigs[x] and p[x] then
+      trigs[x] = 0
+      lengths[x] = 0
+    end
+  end
+  program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values = trigs
+  program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths = lengths
+  pattern_controller.update_working_patterns()
+  program.get_selected_sequencer_pattern().active = true
+end
+
+
 function trigger_edit_page_controller.register_press_handlers()
   press_handler:register(
   "pattern_trigger_edit_page",
@@ -317,72 +385,6 @@ function trigger_edit_page_controller.register_press_handlers()
     end
   )
 end
-
-local function save_paint_pattern(p)
-  local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-  local selected_pattern = program.get().selected_pattern
-  local trigs = program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values
-  local lengths = program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths
-
-  for x = 1, 64 do
-    if (trigs[x] < 1) and p[x] then
-      trigs[x] = 1
-      lengths[x] = 1
-    elseif trigs[x] and p[x] then
-      trigs[x] = 0
-      lengths[x] = 0
-    end
-  end
-  program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values = trigs
-  program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths = lengths
-  pattern_controller.update_working_patterns()
-  program.get_selected_sequencer_pattern().active = true
-end
-
-local function load_paint_pattern()
-  if (pattern_trigger_edit_page_paint_button:get_state() == 2) then
-    paint_pattern = {}
-    local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
-    local pattern1 = pattern_trigger_edit_page_pattern1_fader:get_value()
-    local pattern2 = pattern_trigger_edit_page_pattern2_fader:get_value()
-    local bank = pattern_trigger_edit_page_bankmask_fader:get_value()
-
-    if (algorithm == 3) then
-      local erpattern = er.gen(pattern1, pattern2, 0)
-      while #paint_pattern < 64 do
-        for i = 1, #erpattern do
-          table.insert(paint_pattern, erpattern[i])
-          if #paint_pattern >= 64 then
-            break
-          end
-        end
-      end
-    else
-      for step = 1, 64 do
-        if (algorithm == 1) then
-          table.insert(paint_pattern, drum_ops.drum(bank, pattern1, step))
-        elseif (algorithm == 2) then
-          table.insert(paint_pattern, drum_ops.tresillo(bank, pattern1, pattern2, 24, step)) -- TODO need to make the tressilo length editable
-        elseif (algorithm == 4) then
-          table.insert(paint_pattern, drum_ops.nr(pattern1, bank, pattern2, step))
-        end
-      end
-    end
-
-    if (shift > 0) then
-      for s = 1, shift do
-        paint_pattern = fn.shift_table_right(paint_pattern)
-      end
-    elseif (shift < 0) then
-      for s = 1, math.abs(shift) do
-        paint_pattern = fn.shift_table_left(paint_pattern)
-      end
-    end
-
-    pattern_trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
-  end
-end
-
 
 function trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
   local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
