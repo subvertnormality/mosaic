@@ -96,7 +96,7 @@ function channel_edit_page_ui_controller.init()
   pages:add_page(channel_edit_page)
   pages:select_page(1)
   dials:set_selected_item(1)
-  clock_mod_list_selector:set_selected_value(20)
+  clock_mod_list_selector:set_selected_value(13)
   clock_mod_list_selector:select()
 
   channel_edit_page_ui_controller.refresh()
