@@ -93,7 +93,16 @@ function fn.find_index_in_table_by_id(table, object)
       return i
     end
   end
-  return nil -- returns nil if the device was not found
+  return nil
+end
+
+function fn.find_index_in_table_by_value(table, object)
+  for i, o in ipairs(table) do
+    if o.value == object.value then
+      return i
+    end
+  end
+  return nil 
 end
 
 function fn.find_key(tbl, value)

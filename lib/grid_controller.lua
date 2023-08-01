@@ -302,7 +302,7 @@ local splash_screen_frame = 1
 function grid_controller.grid_redraw()
 
   while true do
-    clock.sleep(1 / 30)
+    clock.sleep(1 / 256)
     if splash_screen_active == true then
       grid_controller.splash_screen(splash_screen_frame)
       splash_screen_frame = splash_screen_frame + 1

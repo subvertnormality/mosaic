@@ -8,14 +8,18 @@ local Page = include("sinfcommand/lib/ui_components/Page")
 local VerticalScrollSelector = include("sinfcommand/lib/ui_components/VerticalScrollSelector")
 local Dial = include("sinfcommand/lib/ui_components/Dial")
 local ControlScrollSelector = include("sinfcommand/lib/ui_components/ControlScrollSelector")
+local ListSelector = include("sinfcommand/lib/ui_components/ListSelector")
 
 local midi_controller = include("sinfcommand/lib/midi_controller")
+local clock_controller = include("sinfcommand/lib/clock_controller")
 
 local pages = Pages:new()
 
 local quantizer_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Quantizer", quantiser.get_scales())
 local romans_vertical_scroll_selector = VerticalScrollSelector:new(105, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
 local notes_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Notes", quantiser.get_notes())
+
+local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", clock_controller.get_clock_divisions())
 
 local midi_device_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Midi Device", {})
 local midi_channel_vertical_scroll_selector = VerticalScrollSelector:new(45, 25, "Midi Channel", {{name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4}, {name = "CC5", value = 5}, {name = "CC6", value = 6}, {name = "CC7", value = 7}, {name = "CC8", value = 8}, {name = "CC9", value = 9}, {name = "CC10", value = 10}, {name = "CC11", value = 11}, {name = "CC12", value = 12}, {name = "CC13", value = 13}, {name = "CC14", value = 14}, {name = "CC15", value = 15}, {name = "CC16", value = 16}})
@@ -36,12 +40,17 @@ local params = {param_1, param_2, param_3, param_4, param_5, param_6, param_7, p
 
 local dials = ControlScrollSelector:new(0, 0, {})
 
-local page_to_index = {["Trig Locks"] = 1, ["Quantizer"] = 2, ["Midi Config"] = 3}
+local page_to_index = {["Trig Locks"] = 1, ["Clock Mods"] = 2, ["Quantizer"] = 3, ["Midi Config"] = 4}
 
 local quantizer_page = Page:new("", function ()
   quantizer_vertical_scroll_selector:draw()
   romans_vertical_scroll_selector:draw()
   notes_vertical_scroll_selector:draw()
+end)
+
+local clock_mods_page = Page:new("Clocks and Swing", function ()
+  clock_mod_list_selector:draw()
+
 end)
 
 local channel_edit_page = Page:new("Config", function ()
@@ -69,6 +78,10 @@ function channel_edit_page_ui_controller.init()
     return "Ch. " .. program.get().selected_channel .. " "
   end)
 
+  clock_mods_page:set_sub_name_func(function ()
+    return "Ch. " .. program.get().selected_channel .. " "
+  end)
+
   trig_lock_page:set_sub_name_func(function ()
     return "Ch. " .. program.get().selected_channel .. " "
   end)
@@ -78,10 +91,13 @@ function channel_edit_page_ui_controller.init()
   end)
 
   pages:add_page(trig_lock_page)
+  pages:add_page(clock_mods_page)
   pages:add_page(quantizer_page)
   pages:add_page(channel_edit_page)
   pages:select_page(1)
   dials:set_selected_item(1)
+  clock_mod_list_selector:set_selected_value(20)
+  clock_mod_list_selector:select()
 
   channel_edit_page_ui_controller.refresh()
 end
@@ -109,6 +125,13 @@ function channel_edit_page_ui_controller.update_scale()
     chord = chord,
     root_note = root_note
   }
+end
+
+function channel_edit_page_ui_controller.update_clock_mods()
+  local channel = program.get_selected_channel()
+  local clock_mods = clock_mod_list_selector:get_selected()
+
+  channel.clock_mods = clock_mods
 end
 
 function channel_edit_page_ui_controller.update_channel_config()
@@ -144,6 +167,11 @@ function channel_edit_page_ui_controller.enc(n, d)
             notes_vertical_scroll_selector:scroll_down()
           end
           channel_edit_page_ui_controller.update_scale()
+        elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
+          if clock_mod_list_selector:is_selected() then
+            clock_mod_list_selector:decrement()
+            channel_edit_page_ui_controller.update_clock_mods()
+          end
         elseif pages:get_selected_page() == page_to_index["Midi Config"] then
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:scroll_down()
@@ -199,6 +227,11 @@ function channel_edit_page_ui_controller.enc(n, d)
             notes_vertical_scroll_selector:scroll_up()
           end
           channel_edit_page_ui_controller.update_scale()
+        elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
+            if clock_mod_list_selector:is_selected() then
+              clock_mod_list_selector:increment()
+              channel_edit_page_ui_controller.update_clock_mods()
+            end
         elseif pages:get_selected_page() == page_to_index["Midi Config"] then
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:scroll_up()
@@ -342,6 +375,13 @@ function channel_edit_page_ui_controller.key(n, z)
   end
 end
 
+function channel_edit_page_ui_controller.refresh_clock_mods()
+  local channel = program.get_selected_channel()
+  local clock_mods = channel.clock_mods
+  local i = fn.find_index_in_table_by_value(clock_controller.get_clock_divisions(), channel.clock_mods)
+  clock_mod_list_selector:set_selected_value(i)
+
+end
 
 function channel_edit_page_ui_controller.refresh_device_selector()
   local channel = program.get_selected_channel()
@@ -415,6 +455,7 @@ function channel_edit_page_ui_controller.refresh()
   channel_edit_page_ui_controller.refresh_channel_config()
   channel_edit_page_ui_controller.refresh_trig_locks()
   channel_edit_page_ui_controller.refresh_quantiser()
+  channel_edit_page_ui_controller.refresh_clock_mods()
 end
 
 return channel_edit_page_ui_controller

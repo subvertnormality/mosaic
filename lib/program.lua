@@ -38,7 +38,7 @@ local function initialise_default_channels()
       chord = 1,
       merge_mode = "skip",
       octave = 0,
-      clock_division = 4,
+      clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,
       midi_device_map = 1,
       mute = false
