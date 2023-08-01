@@ -80,6 +80,14 @@ local function initialise_default_sequencer_pattern()
 end
 
 
+function program.initialise_64_table(d)
+  local table_64 = {}
+  for i=1,64 do
+    table_64[i] = d
+  end
+  return table_64
+end
+
 function program.initialise_default_pattern()
   
   return {
@@ -89,14 +97,6 @@ function program.initialise_default_pattern()
     velocity_values = program.initialise_64_table(100)
   }
 
-end
-
-function program.initialise_64_table(d)
-  local table_64 = {}
-  for i=1,64 do
-    table_64[i] = d
-  end
-  return table_64
 end
 
 function program.init()
