@@ -70,27 +70,25 @@ local clock_divisions = {
 }
 
 
-local function go(channel, on_step) 
+local function go(channel, divisor, on_step)
+  local div = divisor
   while true do
-
-    local divisor = 4
-
     if channel then
       local clock_mod = channel.clock_mods
 
       if clock_mod.type == "clock_multiplication" then
-        divisor = 4 * clock_mod.value
+        div = 4 * clock_mod.value
       elseif clock_mod.type == "clock_division" then
-        divisor = 4 / clock_mod.value
+        div = 4 / clock_mod.value
       end
     end
 
-    clock.sync(1/divisor)
+    clock.sync(1/div)
     on_step()
   end
 end
 
-local function start_midi_transport(divisor) 
+local function start_midi_transport(divisor)
   clock.sync(1/divisor)
   midi_controller:start()
 end
@@ -138,12 +136,12 @@ function clock_controller:start()
   end
 
   midi_transport = clock.run(start_midi_transport, 4)
-
-  master_clock = clock.run(go, nil, master_func)
+  midi_clock = clock.run(go, nil, 24, function () midi_controller.clock_send() end)
+  master_clock = clock.run(go, nil, 4, master_func)
   for i = 1, 16 do
     local channel = program.get_channel(i)
 
-    clock_controller["channel_"..i.."_clock"] = clock.run(go, channel, function () 
+    clock_controller["channel_"..i.."_clock"] = clock.run(go, channel, 4, function () 
 
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
@@ -192,6 +190,7 @@ function clock_controller:stop()
   if (playing) then
     clock.cancel(master_clock)
     clock.cancel(midi_transport)
+    clock.cancel(midi_clock)
     midi_controller:stop()
     for i = 1, 16 do
       clock.cancel(clock_controller["channel_"..i.."_clock"])

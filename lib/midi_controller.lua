@@ -96,4 +96,12 @@ function midi_controller.stop()
   end
 end
 
+function midi_controller.clock_send()
+  for id = 1, #midi.vports do
+    if midi_devices[id] ~= nil then
+      midi_devices[id]:clock()
+    end
+  end
+end
+
 return midi_controller
