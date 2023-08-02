@@ -134,9 +134,7 @@ function register_press_handlers()
     if (y == 8) then
       if (x < 6) then
         if program.get().selected_page ~= x then
-          if x == 3 then
-            trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
-          end
+
           program.get().selected_page = x
           refresh_pages()
           grid_controller.set_menu_button_state()
@@ -151,9 +149,7 @@ function register_press_handlers()
           end
           grid_controller.set_menu_button_state()
         end
-        if x == 1 then
-          channel_edit_page_ui_controller.refresh_trig_locks()
-        end
+        grid_controller.refresh()
         fn.dirty_screen(true)
       end
     end
@@ -302,7 +298,7 @@ local splash_screen_frame = 1
 function grid_controller.grid_redraw()
 
   while true do
-    clock.sleep(1 / 120)
+    clock.sleep(1 / 30)
     if splash_screen_active == true then
       grid_controller.splash_screen(splash_screen_frame)
       splash_screen_frame = splash_screen_frame + 1

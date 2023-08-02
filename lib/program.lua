@@ -41,7 +41,8 @@ local function initialise_default_channels()
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,
       midi_device_map = 1,
-      mute = false
+      mute = false,
+      swing = 0
     }
   end
   

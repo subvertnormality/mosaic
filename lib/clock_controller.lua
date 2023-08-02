@@ -70,9 +70,32 @@ local clock_divisions = {
   {name = "/512", value = 512, type = "clock_division"}
 }
 
+function map_log(x)
+  local min_x = 0
+  local max_x = 50
+  local min_y = 16
+  local max_y = 2
 
-local function go(channel, divisor, on_step)
+  if x == min_x then return min_y end
+  if x == max_x then return max_y end
+
+  -- normalize x to 0-1 range, and slightly shift it to avoid log(0)
+  local norm_x = (x - min_x) / (max_x - min_x) + 0.01
+
+  -- convert to log scale, normalize to 0-1 range
+  local log_x = (math.log(norm_x) - math.log(0.01)) / (math.log(1) - math.log(0.01))
+
+  -- scale to y range
+  local y = log_x * (max_y - min_y) + min_y
+
+  return fn.round_to_decimal_places(y, 2)
+end
+
+
+
+local function channel_go(channel, divisor, on_step)
   local div = divisor
+  local swing_on = 0
   while true do
     if channel then
       local clock_mod = channel.clock_mods
@@ -84,6 +107,29 @@ local function go(channel, divisor, on_step)
       end
     end
 
+
+    local beat = 1/div
+    local processed_swing = channel.swing
+
+    if processed_swing < 0 then
+      processed_swing = 0
+    end
+
+    if processed_swing == 0 then
+      clock.sync(beat)
+    else
+      
+      local s = map_log(processed_swing)
+      clock.sync(beat, (beat/s) * swing_on)
+    end
+    on_step()
+    swing_on = swing_on ~ 1
+  end
+end
+
+local function go(divisor, on_step)
+  local div = divisor
+  while true do
     clock.sync(1/div)
     on_step()
   end
@@ -137,11 +183,11 @@ function clock_controller:start()
   end
 
   midi_transport = clock.run(start_midi_transport, 4)
-  midi_clock = clock.run(go, nil, 24, function () midi_controller.clock_send() end)
-  master_clock = clock.run(go, nil, 4, master_func)
+  midi_clock = clock.run(go, 24, function () midi_controller.clock_send() end)
+  master_clock = clock.run(go, 4, master_func)
   for i = 1, 16 do
     local channel = program.get_channel(i)
-    clock_controller["channel_"..i.."_clock"] = clock.run(go, channel, 4, function () 
+    clock_controller["channel_"..i.."_clock"] = clock.run(channel_go, channel, 4, function () 
 
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])

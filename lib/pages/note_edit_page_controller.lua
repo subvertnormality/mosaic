@@ -25,7 +25,7 @@ function note_edit_page_controller.init()
     faders["step"..s.."_fader"] = VerticalFader:new(s, 1, 21)
   end
 
-  note_edit_page_controller.refresh_buttons()
+  note_edit_page_controller.refresh()
 end
 
 
@@ -35,7 +35,6 @@ function note_edit_page_controller.register_draw_handlers()
     draw_handler:register_grid(
       "pattern_note_edit_page",
       function()
-        note_edit_page_controller.refresh_fader(s)
         return faders["step"..s.."_fader"]:draw()
       end
     )
@@ -261,7 +260,6 @@ function note_edit_page_controller.refresh_buttons()
 end
 
 function note_edit_page_controller.refresh_fader(s)
-  local selected_sequencer_pattern = program.get().selected_sequencer_pattern
   local selected_pattern = program.get().selected_pattern
   faders["step"..s.."_fader"]:set_vertical_offset(vertical_offset)
   faders["step"..s.."_fader"]:set_horizontal_offset(horizontal_offset)

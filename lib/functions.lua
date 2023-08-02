@@ -168,6 +168,12 @@ function fn.round(num)
   return math.floor(num + 0.5)
 end
 
+function fn.round_to_decimal_places(num, num_decimal_places)
+  local mult = 10^(num_decimal_places or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
+
 function fn.calc_grid_count(x, y)
   return ((y - 4) * 16) + x
 end

@@ -7,6 +7,9 @@ local faders = {}
 local vertical_offset = 0
 local horizontal_offset = 0
 
+local velocity_from_value_results = {}
+local value_from_velocity_results = {}
+
 local step1to16_fade_button = FadeButton:new(9, 8, 1, 16)
 local step17to32_fade_button = FadeButton:new(10, 8, 17, 32)
 local step33to48_fade_button = FadeButton:new(11, 8, 33, 48)
@@ -18,12 +21,44 @@ local vel8to14_fade_button = FadeButton:new(16, 8, 8, 14)
 local quad_dupe_button = Button:new(7, 8)
 
 
-
 function velocity_edit_page_controller.init()
 
   for s = 1, 64 do
     faders["step"..s.."_fader"] = VerticalFader:new(s, 1, 14)
   end
+
+  for val = 1, 14 do
+    local input_start = 1
+    local input_end = 14
+    
+    local output_start = 0
+    local output_end = 127
+  
+    local input_range = input_end - input_start
+    local output_range = output_end - output_start
+  
+    local input_value = (val - input_start) / input_range
+    local output_value = output_end - (input_value * output_range)
+  
+    velocity_from_value_results[val] = math.floor(output_value)
+  end
+  
+  for vel = 0, 127 do
+    local input_start = 0
+    local input_end = 127
+  
+    local output_start = 1
+    local output_end = 14
+  
+    local input_range = input_end - input_start
+    local output_range = output_end - output_start
+  
+    local input_value = (input_end - vel) / input_range
+    local output_value = output_start + (input_value * output_range)
+  
+    value_from_velocity_results[vel] = math.floor(output_value)
+  end
+  
 
   velocity_edit_page_controller.refresh()
 end
@@ -34,7 +69,7 @@ function velocity_edit_page_controller.register_draw_handlers()
     draw_handler:register_grid(
       "pattern_velocity_edit_page",
       function()
-        velocity_edit_page_controller.refresh()
+        -- velocity_edit_page_controller.refresh()
         return faders["step"..s.."_fader"]:draw()
       end
     )
@@ -96,8 +131,8 @@ function velocity_edit_page_controller.register_press_handlers()
     press_handler:register(
       "pattern_velocity_edit_page",
       function(x, y)
-        faders["step"..s.."_fader"]:press(x, y)
         if faders["step"..s.."_fader"]:is_this(x, y) then
+          faders["step"..s.."_fader"]:press(x, y)
           local selected_sequencer_pattern = program.get().selected_sequencer_pattern
           local selected_pattern = program.get().selected_pattern
           local velocity = velocity_edit_page_controller.velocity_from_value(faders["step"..s.."_fader"]:get_value())
@@ -228,39 +263,14 @@ end
 function velocity_edit_page_controller.value_from_velocity(vel)
 
   if vel == -1 then return 1 end
-
-  local input_start = 0
-  local input_end = 127
-
-  local output_start = 1
-  local output_end = 14
-
-  local input_range = input_end - input_start
-  local output_range = output_end - output_start
-
-  local input_value = (input_end - vel) / input_range
-  local output_value = output_start + (input_value * output_range)
-
-  return math.floor(output_value)
+  return value_from_velocity_results[vel]
 end
+
 
 function velocity_edit_page_controller.velocity_from_value(val)
 
   if val == -1 then return 100 end
-
-  local input_start = 1
-  local input_end = 14
-  
-  local output_start = 0
-  local output_end = 127
-
-  local input_range = input_end - input_start
-  local output_range = output_end - output_start
-
-  local input_value = (val - input_start) / input_range
-  local output_value = output_end - (input_value * output_range)
-
-  return math.floor(output_value)
+  return velocity_from_value_results[val]
 end
 
 
