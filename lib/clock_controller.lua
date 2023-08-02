@@ -14,6 +14,7 @@ local time_store = 0
 
 local master_clock
 local midi_transport
+local trigless_lock_active = {}
 
 local clock_divisions = {
   {name = "x16", value = 16, type = "clock_multiplication"},
@@ -140,7 +141,6 @@ function clock_controller:start()
   master_clock = clock.run(go, nil, 4, master_func)
   for i = 1, 16 do
     local channel = program.get_channel(i)
-
     clock_controller["channel_"..i.."_clock"] = clock.run(go, channel, 4, function () 
 
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
@@ -162,13 +162,20 @@ function clock_controller:start()
 
       step_handler.handle(i, current_step)
 
+
       if next_trig_value == 1 then
         time_store = clock.get_beats()
-
+        trigless_lock_active[i] = false
         clock.run(delay_param_set, channel, function ()
           step_handler.process_params(i, next_step)
         end)
         
+      elseif params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and program.step_has_param_trig_lock(channel, next_step) then
+        time_store = clock.get_beats()
+        trigless_lock_active[i] = true
+        clock.run(delay_param_set, channel, function ()
+          step_handler.process_params(i, next_step)
+        end)
       end
     
       channel.current_step = current_step + 1

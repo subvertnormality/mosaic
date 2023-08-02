@@ -203,8 +203,8 @@ function program.get_step_param_trig_lock(channel, step, parameter)
   return step_trig_lock_banks[step][parameter]
 end
 
-function program.step_has_param_trig_lock(step)
-  local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
+function program.step_has_param_trig_lock(channel, step)
+  local step_trig_lock_banks = channel.step_trig_lock_banks
 
   if step_trig_lock_banks[step] == nil then
     return false
@@ -213,9 +213,9 @@ function program.step_has_param_trig_lock(step)
   return true
 end
 
-function program.step_has_trig_lock(step)
+function program.step_has_trig_lock(channel, step)
 
-  if program.step_has_param_trig_lock(step) or program.step_octave_has_trig_lock(step) or program.step_scale_has_trig_lock(step) then
+  if program.step_has_param_trig_lock(channel, step) or program.step_octave_has_trig_lock(channel, step) or program.step_scale_has_trig_lock(channel, step) then
     return true
   end
 
@@ -249,8 +249,8 @@ function program.get_step_octave_trig_lock(channel, step)
   return step_octave_trig_lock_banks[step]
 end
 
-function program.step_octave_has_trig_lock(step)
-  local step_octave_trig_lock_banks = program.get_selected_channel().step_octave_trig_lock_banks
+function program.step_octave_has_trig_lock(channel, step)
+  local step_octave_trig_lock_banks = channel.step_octave_trig_lock_banks
 
   if step_octave_trig_lock_banks and step_octave_trig_lock_banks[step] then
     return true
@@ -287,8 +287,8 @@ function program.get_step_scale_trig_lock(channel, step)
   return step_scale_trig_lock_banks[step]
 end
 
-function program.step_scale_has_trig_lock(step)
-  local step_scale_trig_lock_banks = program.get_selected_channel().step_scale_trig_lock_banks
+function program.step_scale_has_trig_lock(channel, step)
+  local step_scale_trig_lock_banks = channel.step_scale_trig_lock_banks
 
   if step_scale_trig_lock_banks and step_scale_trig_lock_banks[step] then
     return true

@@ -63,7 +63,7 @@ function Sequencer:draw(trigs, lengths)
       if (self.mode == "channel") then
 
         if (in_step_length) then
-          if program.step_has_trig_lock(grid_count) then
+          if program.step_has_trig_lock(channel, grid_count) then
             g:led(x, y, 2 - ((self.bclock.bright_mod == 3 and 1) or (self.bclock.bright_mod == 0 and 0) or self.bclock.bright_mod))
           else
             g:led(x, y, 2)
@@ -93,13 +93,13 @@ function Sequencer:draw(trigs, lengths)
         if (self.mode == "channel") then
           if (in_step_length) then
               if fn.calc_grid_count(x, y) == end_step and channel.current_step == start_step then 
-                if program.step_has_trig_lock(grid_count) then
+                if program.step_has_trig_lock(channel, grid_count) then
                   g:led(end_x, end_y, 10 - self.bclock.bright_mod)
                 else
                   g:led(end_x, end_y, 10)
                 end
               else
-                if program.step_has_trig_lock(grid_count) then
+                if program.step_has_trig_lock(channel, grid_count) then
                   g:led(x, y, 15 - self.bclock.bright_mod)
                 else
                   g:led(x, y, 15) 
@@ -132,13 +132,13 @@ function Sequencer:draw(trigs, lengths)
         if (self.mode == "channel") then
           if fn.calc_grid_count(px, py) >= start_step then 
             if (fn.calc_grid_count(px, py) > end_step) then
-              if (program.step_has_trig_lock(grid_count)) then
+              if (program.step_has_trig_lock(channel, grid_count)) then
                 g:led(end_x, end_y, 10 - self.bclock.bright_mod)
               else
                 g:led(end_x, end_y, 10)
               end
             else
-              if program.step_has_trig_lock(grid_count) then
+              if program.step_has_trig_lock(channel, grid_count) then
                 g:led(px, py, 10 - self.bclock.bright_mod)
               else
                 g:led(px, py, 10)
