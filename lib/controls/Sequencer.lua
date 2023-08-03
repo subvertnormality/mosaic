@@ -36,6 +36,19 @@ function Sequencer:new(y, mode)
   return self
 end
 
+local function transform_current_step(current_step)
+  local mod_step = current_step - 1
+  local channel = program.get_selected_channel()
+
+  local start_step = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+  local end_step = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
+
+  if mod_step == start_step - 1 then
+    mod_step = end_step
+  end
+
+  return mod_step
+end
 
 function Sequencer:draw(trigs, lengths, draw_func)
   
@@ -54,6 +67,8 @@ function Sequencer:draw(trigs, lengths, draw_func)
   local end_x = channel.end_trig[1]
   local end_y = channel.end_trig[2]
   local end_step = fn.calc_grid_count(end_x, end_y)
+
+  local current_step = transform_current_step(channel.current_step)
 
   for y = self.y, self.y + 3 do
     for x = 1, 16 do
@@ -76,8 +91,6 @@ function Sequencer:draw(trigs, lengths, draw_func)
     end
   end
 
-  local px = 1
-  local py = self.y + 3
 
   for y = self.y, self.y + 3 do
     for x = 1, 16 do    
@@ -92,7 +105,7 @@ function Sequencer:draw(trigs, lengths, draw_func)
       if (trigs[grid_count] > 0) then
         if (self.mode == "channel") then
           if (in_step_length) then
-              if fn.calc_grid_count(x, y) == end_step and channel.current_step == start_step then 
+              if fn.calc_grid_count(x, y) == end_step and current_step == start_step then 
                 if program.step_has_trig_lock(channel, grid_count) then
                   draw_func(end_x, end_y, 10 - self.bclock.bright_mod)
                 else
@@ -128,28 +141,20 @@ function Sequencer:draw(trigs, lengths, draw_func)
 
       end
 
-      if channel.current_step == grid_count and clock_controller.is_playing() then
+      if current_step == grid_count and clock_controller.is_playing() then
         if (self.mode == "channel") then
-          if fn.calc_grid_count(px, py) >= start_step then 
-            if (fn.calc_grid_count(px, py) > end_step) then
-              if (program.step_has_trig_lock(channel, grid_count)) then
-                draw_func(end_x, end_y, 10 - self.bclock.bright_mod)
-              else
-                draw_func(end_x, end_y, 10)
-              end
-            else
+          if fn.calc_grid_count(x, y) >= start_step then 
+
               if program.step_has_trig_lock(channel, grid_count) then
-                draw_func(px, py, 10 - self.bclock.bright_mod)
+                draw_func(x, y, 10 - self.bclock.bright_mod)
               else
-                draw_func(px, py, 10)
+                draw_func(x, y, 10)
               end
-            end
+
           end
         end
       end
 
-      px = x
-      py = y
 
     end
     
