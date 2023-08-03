@@ -21,7 +21,7 @@ end
 
 
 function Button:draw()
-  g:led(self.x, self.y, self.states[self.state][2] - self.bright_mod)
+  grid_abstraction.led(self.x, self.y, self.states[self.state][2] - self.bright_mod)
 end
 
 function Button:get_state()

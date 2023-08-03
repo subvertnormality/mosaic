@@ -27,7 +27,7 @@ function FadeButton:draw()
     brightness = 3
   end
 
-  g:led(self.x, self.y, brightness)
+  grid_abstraction.led(self.x, self.y, brightness)
 
 end
 

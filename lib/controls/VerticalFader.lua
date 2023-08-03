@@ -48,11 +48,11 @@ function VerticalFader:draw()
     end
 
     if (i == math.abs(7 - self.vertical_offset)) then
-      g:led(x, i, 3 + bright_mod) -- mark the bottom of each page
+      grid_abstraction.led(x, i, 3 + bright_mod) -- mark the bottom of each page
     elseif ((i == 7) and (math.abs(7 - self.vertical_offset) == 0)) then
-      g:led(x, i, 4 + bright_mod) -- mark the zero line stronger
+      grid_abstraction.led(x, i, 4 + bright_mod) -- mark the zero line stronger
     elseif (self.size - i - self.vertical_offset + 1 > 0) then
-      g:led(x, i, self.led_brightness + bright_mod)
+      grid_abstraction.led(x, i, self.led_brightness + bright_mod)
     end
   end
   
@@ -66,7 +66,7 @@ function VerticalFader:draw()
         bright_mod = 0
       end
     end
-    g:led(x, active_led, 12 + bright_mod)
+    grid_abstraction.led(x, active_led, 12 + bright_mod)
   end
 
 end

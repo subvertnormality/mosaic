@@ -20,7 +20,7 @@ local pattern_trigger_edit_page_right_button = Button:new(12, 8, {{"Inactive", 3
 
 function trigger_edit_page_controller.init()
   
-  trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
+  trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui_controller()
 end
 
 function trigger_edit_page_controller.register_draw_handlers()
@@ -40,7 +40,7 @@ function trigger_edit_page_controller.register_draw_handlers()
     local trigs = program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values
     local lengths = program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths
   
-    return pattern_trigger_edit_page_sequencer:draw(trigs, lengths)
+    return pattern_trigger_edit_page_sequencer:draw(trigs, lengths, grid_abstraction.led)
   end
   )
   draw_handler:register_grid(
@@ -253,7 +253,7 @@ function trigger_edit_page_controller.register_press_handlers()
   function(x, y)
     pattern_trigger_edit_page_algorithm_fader:press(x, y)
     if pattern_trigger_edit_page_algorithm_fader:is_this(x, y) then
-      trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
+      trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui_controller()
       tooltip:show(get_algorithm_name(pattern_trigger_edit_page_algorithm_fader:get_value()).." selected")
       load_paint_pattern()
     end
@@ -386,7 +386,7 @@ function trigger_edit_page_controller.register_press_handlers()
   )
 end
 
-function trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
+function trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui_controller()
   local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
   
   if (algorithm == 1) then
@@ -425,7 +425,7 @@ function trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
 end
 
 function trigger_edit_page_controller.refresh()
-  trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui()
+  trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui_controller()
 end
 
 return trigger_edit_page_controller

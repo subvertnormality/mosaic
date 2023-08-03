@@ -37,7 +37,7 @@ function Sequencer:new(y, mode)
 end
 
 
-function Sequencer:draw(trigs, lengths)
+function Sequencer:draw(trigs, lengths, draw_func)
   
   local length = -1
   local grid_count = -1
@@ -64,19 +64,19 @@ function Sequencer:draw(trigs, lengths)
 
         if (in_step_length) then
           if program.step_has_trig_lock(channel, grid_count) then
-            g:led(x, y, 2 - ((self.bclock.bright_mod == 3 and 1) or (self.bclock.bright_mod == 0 and 0) or self.bclock.bright_mod))
+            draw_func(x, y, 2 - ((self.bclock.bright_mod == 3 and 1) or (self.bclock.bright_mod == 0 and 0) or self.bclock.bright_mod))
           else
-            g:led(x, y, 2)
+            draw_func(x, y, 2)
           end
         end
       else
-        g:led(x, y, 2)
+        draw_func(x, y, 2)
       end
       
     end
   end
 
-  local px = 0
+  local px = 1
   local py = self.y + 3
 
   for y = self.y, self.y + 3 do
@@ -86,7 +86,7 @@ function Sequencer:draw(trigs, lengths)
       local in_step_length = start_step <= fn.calc_grid_count(x, y) and end_step >= fn.calc_grid_count(x, y)
 
       if (self.unsaved_grid[grid_count]) then
-        g:led(x, y, 15 - self.bclock.bright_mod)
+        draw_func(x, y, 15 - self.bclock.bright_mod)
       end
 
       if (trigs[grid_count] > 0) then
@@ -94,24 +94,24 @@ function Sequencer:draw(trigs, lengths)
           if (in_step_length) then
               if fn.calc_grid_count(x, y) == end_step and channel.current_step == start_step then 
                 if program.step_has_trig_lock(channel, grid_count) then
-                  g:led(end_x, end_y, 10 - self.bclock.bright_mod)
+                  draw_func(end_x, end_y, 10 - self.bclock.bright_mod)
                 else
-                  g:led(end_x, end_y, 10)
+                  draw_func(end_x, end_y, 10)
                 end
               else
                 if program.step_has_trig_lock(channel, grid_count) then
-                  g:led(x, y, 15 - self.bclock.bright_mod)
+                  draw_func(x, y, 15 - self.bclock.bright_mod)
                 else
-                  g:led(x, y, 15) 
+                  draw_func(x, y, 15) 
                 end
               end
           end
         else
-          g:led(x, y, 15) 
+          draw_func(x, y, 15) 
         end
 
         if (self.unsaved_grid[grid_count]) then
-          g:led(x, y, 0 + self.bclock.bright_mod)
+          draw_func(x, y, 0 + self.bclock.bright_mod)
         end
 
         length = lengths[grid_count]
@@ -119,7 +119,7 @@ function Sequencer:draw(trigs, lengths)
         if (length > 1 and in_step_length) then
           for lx = grid_count + 1, grid_count + length - 1 do
             if (trigs[lx] < 1 and lx < 65) then
-              g:led((lx % 16), 4 + ((lx - 1) // 16 ), 5)
+              draw_func((lx % 16), 4 + ((lx - 1) // 16 ), 5)
             else
               break
             end
@@ -128,20 +128,20 @@ function Sequencer:draw(trigs, lengths)
 
       end
 
-      if channel.current_step == grid_count and (clock_controller.is_playing() and program.get().current_step ~= 1) then
+      if channel.current_step == grid_count and clock_controller.is_playing() then
         if (self.mode == "channel") then
           if fn.calc_grid_count(px, py) >= start_step then 
             if (fn.calc_grid_count(px, py) > end_step) then
               if (program.step_has_trig_lock(channel, grid_count)) then
-                g:led(end_x, end_y, 10 - self.bclock.bright_mod)
+                draw_func(end_x, end_y, 10 - self.bclock.bright_mod)
               else
-                g:led(end_x, end_y, 10)
+                draw_func(end_x, end_y, 10)
               end
             else
               if program.step_has_trig_lock(channel, grid_count) then
-                g:led(px, py, 10 - self.bclock.bright_mod)
+                draw_func(px, py, 10 - self.bclock.bright_mod)
               else
-                g:led(px, py, 10)
+                draw_func(px, py, 10)
               end
             end
           end
@@ -152,10 +152,10 @@ function Sequencer:draw(trigs, lengths)
       py = y
 
     end
-    fn.dirty_grid(true)
+    
   end
-
-  
+  fn.dirty_grid(true)
+  fn.dirty_screen(true)
 end
 
 

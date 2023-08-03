@@ -6,6 +6,8 @@ local Button = include("sinfcommand/lib/controls/Button")
 
 press_handler = include("sinfcommand/lib/press_handler")
 draw_handler = include("sinfcommand/lib/draw_handler")
+grid_abstraction = include("sinfcommand/lib/grid_abstraction")
+grid_abstraction.init()
 
 local channel_edit_page_controller = include("sinfcommand/lib/pages/channel_edit_page_controller")
 local channel_sequencer_page_controller = include("sinfcommand/lib/pages/channel_sequencer_page_controller")
@@ -174,7 +176,7 @@ function grid_controller.splash_screen(frame)
   for x = 1, 16 do
     for y = 1, 8 do
       local brightness = 2 * math.abs((x + frame) % 16 - 8)
-      g:led(x, y, brightness)
+      grid_abstraction.led(x, y, brightness)
     end
   end
   fn.dirty_grid(true)

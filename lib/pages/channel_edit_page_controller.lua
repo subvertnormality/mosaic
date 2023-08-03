@@ -60,7 +60,7 @@ function channel_edit_page_controller.register_draw_handlers()
       local trigs = program.get_selected_channel().working_pattern.trig_values
       local lengths = program.get_selected_channel().working_pattern.lengths
 
-      channel_edit_page_sequencer:draw(trigs, lengths)
+      channel_edit_page_sequencer:draw(trigs, lengths, grid_abstraction.led)
     end
   )
 

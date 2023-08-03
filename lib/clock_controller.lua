@@ -230,7 +230,7 @@ function clock_controller:start()
         channel.current_step = start_trig
       end
       fn.dirty_grid(true)
-
+      fn.dirty_screen(true)
     end)
   end
 

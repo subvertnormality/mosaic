@@ -22,6 +22,9 @@ function ui_controller.init()
   channel_sequencer_page_ui_controller.register_ui_draw_handlers()
 
   channel_edit_page_ui_controller.init()
+  note_edit_page_ui_controller.init()
+  velocity_edit_page_ui_controller.init()
+  trigger_edit_page_ui_controller.init()
 end
 
 function ui_controller.change_page(subpage_name)
@@ -68,7 +71,7 @@ end
 
 function ui_controller.refresh()
   channel_edit_page_ui_controller.refresh()
-  -- velocity_edit_page_ui_controller.refresh()
+  -- channel_edit_page_ui_controller.refresh()
   -- note_edit_page_ui_controller.refresh()
   -- trigger_edit_page_ui_controller.refresh()
   -- channel_sequencer_page_ui_controller.refresh()

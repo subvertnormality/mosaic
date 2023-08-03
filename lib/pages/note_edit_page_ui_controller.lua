@@ -3,22 +3,28 @@ local note_edit_page_ui = {}
 local Pages = include("sinfcommand/lib/ui_components/Pages")
 local Page = include("sinfcommand/lib/ui_components/Page")
 
-local pages = Pages:new()
+local GridViewer = include("sinfcommand/lib/ui_components/GridViewer")
 
-function note_edit_page_ui.change_page(subpage_name)
-  pages:select_page(subpage_name)
-end
+local grid_viewer = GridViewer:new(0, 0)
 
+
+local grid_viewer_page = Page:new("", function ()
+  grid_viewer:draw()
+
+end)
 
 function note_edit_page_ui.register_ui_draw_handlers() 
   draw_handler:register_ui(
     "pattern_note_edit_page",
     function()
-
+      grid_viewer_page:draw()
     end
   )
 end
 
+function note_edit_page_ui.init()
+  note_edit_page_ui.register_ui_draw_handlers()
+end
 
 function note_edit_page_ui.enc(n, d)
 

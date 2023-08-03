@@ -22,29 +22,29 @@ end
 
 function Fader:draw_simple()
   
-  g:led(self.x, self.y, 2)
+  grid_abstraction.led(self.x, self.y, 2)
   for i = self.x, self.length + self.x - 1 do
     if self.dimmed[i] then
-      g:led(i, self.y, 0)
+      grid_abstraction.led(i, self.y, 0)
     else
-      g:led(i, self.y, 2)
+      grid_abstraction.led(i, self.y, 2)
     end
   end
   if (self.value > 0) then
     if self.dimmed[self.x + self.value - 1] then
-      g:led(self.x + self.value - 1, self.y, 7)
+      grid_abstraction.led(self.x + self.value - 1, self.y, 7)
     else
-      g:led(self.x + self.value - 1, self.y, 15)
+      grid_abstraction.led(self.x + self.value - 1, self.y, 15)
     end
   end
 end
 
 
 function Fader:draw_fine_grain()
-  g:led(self.x, self.y, 7)
-  g:led(self.length + self.x - 1, self.y, 7)
+  grid_abstraction.led(self.x, self.y, 7)
+  grid_abstraction.led(self.length + self.x - 1, self.y, 7)
   for i = self.x + 1, self.length + self.x - 2 do
-    g:led(i, self.y, 2)
+    grid_abstraction.led(i, self.y, 2)
   end
   local selected_led = math.floor(self.value / (self.size / (self.length - 2))) + 1
   
@@ -59,7 +59,7 @@ function Fader:draw_fine_grain()
     if (self.value == self.size) then -- hacky
       scaled_brightness = 15
     end
-    g:led(self.x + selected_led, self.y, scaled_brightness)
+    grid_abstraction.led(self.x + selected_led, self.y, scaled_brightness)
   end
 end
 
