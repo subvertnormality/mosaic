@@ -170,6 +170,7 @@ function channel_edit_page_ui_controller.enc(n, d)
         if pages:get_selected_page() == page_to_index["Quantizer"] then
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_down()
+            channel_edit_page_ui_controller.refresh_romans() 
           end
           if romans_vertical_scroll_selector:is_selected() then
             romans_vertical_scroll_selector:scroll_down()
@@ -234,6 +235,7 @@ function channel_edit_page_ui_controller.enc(n, d)
         if pages:get_selected_page() == page_to_index["Quantizer"] then
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_up()
+            channel_edit_page_ui_controller.refresh_romans() 
           end
           if romans_vertical_scroll_selector:is_selected() then
             romans_vertical_scroll_selector:scroll_up()
@@ -432,12 +434,23 @@ function channel_edit_page_ui_controller.refresh_device_selector()
   param_select_vertical_scroll_selector:set_items(device)
 end
 
+function channel_edit_page_ui_controller.refresh_romans() 
+  local channel = program.get_selected_channel()
+  if (program.get().scales[channel.default_scale]) then
+    local number = program.get().scales[channel.default_scale].number
+    program.get_selected_sequencer_pattern().active = true
+    romans_vertical_scroll_selector:set_items(quantiser.get_scales()[number].romans)
+
+    fn.dirty_screen(true)
+  end
+end
 
 function channel_edit_page_ui_controller.refresh_quantiser()
   local channel = program.get_selected_channel()
   if (program.get().scales[channel.default_scale]) then
     local number = program.get().scales[channel.default_scale].number
     local chord = program.get().scales[channel.default_scale].chord
+    
     local root_note = program.get().scales[channel.default_scale].root_note
     program.get_selected_sequencer_pattern().active = true
     quantizer_vertical_scroll_selector:set_selected_item(number)
@@ -496,6 +509,7 @@ function channel_edit_page_ui_controller.refresh()
   channel_edit_page_ui_controller.refresh_channel_config()
   channel_edit_page_ui_controller.refresh_trig_locks()
   channel_edit_page_ui_controller.refresh_quantiser()
+  channel_edit_page_ui_controller.refresh_romans() 
   channel_edit_page_ui_controller.refresh_clock_mods()
   channel_edit_page_ui_controller.refresh_swing()
 end

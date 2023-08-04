@@ -241,12 +241,20 @@ end
 function clock_controller:stop()
 
   if (playing) then
-    clock.cancel(master_clock)
-    clock.cancel(midi_transport)
-    clock.cancel(midi_clock)
+    if (master_clock) then
+      clock.cancel(master_clock)
+    end
+    if (midi_transport) then
+      clock.cancel(midi_transport)
+    end
+    if (midi_clock) then
+      clock.cancel(midi_clock)
+    end
     midi_controller:stop()
     for i = 1, 16 do
-      clock.cancel(clock_controller["channel_"..i.."_clock"])
+      if clock_controller["channel_"..i.."_clock"] then
+        clock.cancel(clock_controller["channel_"..i.."_clock"])
+      end
     end
     playing = false
     clock_controller.reset() 

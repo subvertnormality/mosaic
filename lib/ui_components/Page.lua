@@ -36,7 +36,7 @@ function Page:set_sub_page_draw_func(func)
 end
 
 function Page:draw()
-  screen.level(1)
+  screen.level(10)
   screen.move(5, 10)
   screen.text(self.sub_name_func()..self.name)
   if self.sub_page_enabled then

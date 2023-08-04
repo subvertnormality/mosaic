@@ -33,14 +33,7 @@ function trigger_edit_page_controller.register_draw_handlers()
   draw_handler:register_grid(
   "pattern_trigger_edit_page",
   function()
-
-    local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-    local selected_pattern = program.get().selected_pattern
-    
-    local trigs = program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values
-    local lengths = program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths
-  
-    return pattern_trigger_edit_page_sequencer:draw(trigs, lengths, grid_abstraction.led)
+    return pattern_trigger_edit_page_sequencer:draw(program.get_selected_channel(), grid_abstraction.led)
   end
   )
   draw_handler:register_grid(

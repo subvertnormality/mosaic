@@ -27,7 +27,15 @@ function note_edit_page_ui.init()
 end
 
 function note_edit_page_ui.enc(n, d)
-
+  if n == 2 then
+    for i=1, math.abs(d) do
+      if d > 0 then
+        grid_viewer:next_channel()
+      else
+        grid_viewer:prev_channel()
+      end
+    end
+  end
 end
 
 return note_edit_page_ui

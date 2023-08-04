@@ -50,15 +50,16 @@ local function transform_current_step(current_step)
   return mod_step
 end
 
-function Sequencer:draw(trigs, lengths, draw_func)
+function Sequencer:draw(channel, draw_func)
   
+  local trigs = channel.working_pattern.trig_values
+  local lengths = channel.working_pattern.lengths
+
   local length = -1
   local grid_count = -1
   
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
   local selected_pattern = program.get().selected_pattern
-
-  local channel = program.get_selected_channel()
 
   local start_x = channel.start_trig[1]
   local start_y = channel.start_trig[2]
