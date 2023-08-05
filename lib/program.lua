@@ -71,6 +71,7 @@ local function initialise_default_sequencer_pattern()
     active = false,
     global_pattern_length = 64,
     scale = 0,
+    repeats = 1,
     patterns = initialise_default_patterns(),
     channels = initialise_default_channels()
   }

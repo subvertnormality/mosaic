@@ -80,7 +80,6 @@ function trigger_edit_page_ui_controller.enc(n, d)
     for i=1, math.abs(d) do
       if d > 0 then
         if pages:get_selected_page() == 2 then
-
           tresillo_mult:increment()
           trigger_edit_page_ui_controller.update_tresillo() 
 
@@ -99,7 +98,6 @@ function trigger_edit_page_ui_controller.enc(n, d)
 end
 
 function trigger_edit_page_ui_controller.update_tresillo() 
-  print(tresillo_mult:get_selected().value)
   params:set("tresillo_amount", tresillo_mult:get_selected().id)
 end
 

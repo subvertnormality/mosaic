@@ -152,7 +152,7 @@ function init()
   grid_controller.splash_screen_on()
   ui_splash_screen_active = true
 
-  params:add_group("PATTERNING", 20)
+  params:add_group("patterning", "PATTERNING", 12)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project" )
   params:set_action("save_p", function(x) textentry.enter(save_project,  "new") end)
@@ -169,7 +169,7 @@ function init()
   params:add_option("trigless_locks", "Trigless locks", {"On", "Off"}, 1)
   params:add_separator("Quantiser")
   params:add_option("quantiser_trig_lock_hold", "Hold quantiser trigs", {"On", "Off"}, 1)
-
+  params:set_action("clock_tempo", function(x) trigger_edit_page_ui_controller.refresh_tempo() end)
 
   
   post_init = metro.init(post_splash_init, 0.5, 1)

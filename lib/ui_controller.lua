@@ -22,6 +22,7 @@ function ui_controller.init()
   channel_sequencer_page_ui_controller.register_ui_draw_handlers()
 
   channel_edit_page_ui_controller.init()
+  channel_sequencer_page_ui_controller.init()
   note_edit_page_ui_controller.init()
   velocity_edit_page_ui_controller.init()
   trigger_edit_page_ui_controller.init()
