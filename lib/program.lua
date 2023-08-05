@@ -158,6 +158,10 @@ function program.get_sequencer_pattern(p)
   return program_store.sequencer_patterns[p]
 end
 
+function program.set_sequencer_pattern(p, pattern)
+  program_store.sequencer_patterns[pattern] = program.get_sequencer_pattern(p)
+end
+
 function program.get()
   return program_store
 end

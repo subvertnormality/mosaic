@@ -2,6 +2,7 @@
 local channel_sequencer_page_controller = {}
 local channel_pattern_buttons = {}
 
+local refresh_button = {}
 
 function channel_sequencer_page_controller.init()
   
@@ -11,17 +12,20 @@ function channel_sequencer_page_controller.init()
       {"Sequencer pattern "..s.." on", 7},
       {"Sequencer pattern "..s.." active", 15},
     })
+    refresh_button[s] = true
   end
 
   channel_pattern_buttons["step"..program.get().selected_sequencer_pattern.."_sequencer_pattern_button"]:set_state(3)
 end
 
 function channel_sequencer_page_controller.register_draw_handlers()
-  for s = 1, 96 do  
-    draw_handler:register_grid(
-      "channel_sequencer_page",
-      function()
-          channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:draw(trigs, lengths)
+  
+  draw_handler:register_grid(
+    "channel_sequencer_page",
+    function()
+      for s = 1, 96 do  
+        channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:draw()
+        if refresh_button[s] then
           if program.get().selected_sequencer_pattern == s then
             channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(3)
           elseif program.is_sequencer_pattern_active(s) then
@@ -29,9 +33,12 @@ function channel_sequencer_page_controller.register_draw_handlers()
           else
             channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(1)
           end
+          refresh_button[s] = false
+        end
       end
-    )
-  end
+    end
+  )
+
 end
 
 function channel_sequencer_page_controller.register_press_handlers()
@@ -51,9 +58,23 @@ function channel_sequencer_page_controller.register_press_handlers()
           channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(1)
         end
       end
+      refresh_button[previous_selected_pattern] = true
+      refresh_button[s] = true
     end
   )
-
+  press_handler:register_dual(
+    "channel_sequencer_page",
+    function(x, y, x2, y2)
+      local pattern = fn.calc_grid_count(x, y) + 48
+      local target_pattern = fn.calc_grid_count(x2, y2) + 48
+      if channel_pattern_buttons["step"..pattern.."_sequencer_pattern_button"] and channel_pattern_buttons["step"..pattern.."_sequencer_pattern_button"]:is_this(x, y) 
+      and channel_pattern_buttons["step"..target_pattern.."_sequencer_pattern_button"] and channel_pattern_buttons["step"..target_pattern.."_sequencer_pattern_button"]:is_this(x2, y2) then
+        program.set_sequencer_pattern(pattern, target_pattern)
+        refresh_button[pattern] = true
+        refresh_button[target_pattern] = true
+      end
+    end
+  )
 end
 
 return channel_sequencer_page_controller
