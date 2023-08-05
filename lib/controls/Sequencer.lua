@@ -55,11 +55,16 @@ function Sequencer:draw(channel, draw_func)
   local trigs = channel.working_pattern.trig_values
   local lengths = channel.working_pattern.lengths
 
+  local selected_pattern = program.get_selected_pattern()
+
+  if (self.mode == "pattern") then
+    trigs = selected_pattern.trig_values
+    lengths = selected_pattern.lengths
+  end
+
   local length = -1
   local grid_count = -1
   
-  local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-  local selected_pattern = program.get().selected_pattern
 
   local start_x = channel.start_trig[1]
   local start_y = channel.start_trig[2]
@@ -187,7 +192,7 @@ function Sequencer:dual_press(x, y, x2, y2)
     elseif (self.mode == "pattern") then
       if (program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)] == 1) then
         if (fn.calc_grid_count(x2, y2) - fn.calc_grid_count(x, y) > 0) then
-          program.get_selected_pattern().lengths[fn.calc_grid_count(x, y)] = (fn.calc_grid_count(x2, y2) + 1) - fn.calc_grid_count(x, y)
+          lengths[fn.calc_grid_count(x, y)] = (fn.calc_grid_count(x2, y2) + 1) - fn.calc_grid_count(x, y)
         end
       end
     end

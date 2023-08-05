@@ -1,3 +1,11 @@
+-- Patterning v0.0.1
+-- Deliberate generative rhythm sequencer
+--
+-- llllllll.co/t/patterning
+--
+
+
+
 grid_controller = include("sinfcommand/lib/grid_controller")
 ui_controller = include("sinfcommand/lib/ui_controller")
 program = include("sinfcommand/lib/program")
@@ -16,7 +24,6 @@ clock_controller = include("sinfcommand/lib/clock_controller")
 pattern_controller = include("sinfcommand/lib/pattern_controller")
 midi_controller = include("sinfcommand/lib/midi_controller")
 
-
 local function load_project(pth)
   
   clock_controller:stop()
@@ -30,7 +37,7 @@ local function load_project(pth)
       clock_controller:reset()
       fn.dirty_grid(true)
     else
-        print("No data")
+      print("No data")
     end
   end
 
@@ -145,12 +152,7 @@ function init()
   grid_controller.splash_screen_on()
   ui_splash_screen_active = true
 
-  params:add_separator("Live mode utilities")
-  params:add_option("dual_press_enabled", "Dual pressing", {"On", "Off"}, 1)
-  params:add_separator("Prameter locks")
-  params:add_option("trigless_locks", "Trigless locks", {"On", "Off"}, 1)
-  params:add_separator("Quantiser")
-  params:add_option("quantiser_trig_lock_hold", "Hold quantiser trigs", {"On", "Off"}, 1)
+  params:add_group("PATTERNING", 20)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project" )
   params:set_action("save_p", function(x) textentry.enter(save_project,  "new") end)
@@ -158,6 +160,16 @@ function init()
   params:set_action("load_p", function(x) fileselect.enter(norns.state.data, load_project) end)
   params:add_trigger("new", "+ New" )
   params:set_action("new", function(x) load_new_project() end)
+  params:add_separator("Trig Editor")
+  params:add_option("tresillo_amount", "Tresillo amount", {8, 16, 24, 32, 40, 48, 56, 64}, 3)
+  params:set_action("tresillo_amount", function(x) trigger_edit_page_ui_controller:refresh() end)
+  params:add_separator("Live mode utilities")
+  params:add_option("dual_press_enabled", "Dual pressing", {"On", "Off"}, 1)
+  params:add_separator("Prameter locks")
+  params:add_option("trigless_locks", "Trigless locks", {"On", "Off"}, 1)
+  params:add_separator("Quantiser")
+  params:add_option("quantiser_trig_lock_hold", "Hold quantiser trigs", {"On", "Off"}, 1)
+
 
   
   post_init = metro.init(post_splash_init, 0.5, 1)
