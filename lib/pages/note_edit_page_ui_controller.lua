@@ -1,9 +1,9 @@
 local note_edit_page_ui = {}
 
-local Pages = include("sinfcommand/lib/ui_components/Pages")
-local Page = include("sinfcommand/lib/ui_components/Page")
+local Pages = include("patterning/lib/ui_components/Pages")
+local Page = include("patterning/lib/ui_components/Page")
 
-local GridViewer = include("sinfcommand/lib/ui_components/GridViewer")
+local GridViewer = include("patterning/lib/ui_components/GridViewer")
 
 local grid_viewer = GridViewer:new(0, 0)
 

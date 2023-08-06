@@ -1,7 +1,7 @@
-fn = include("sinfcommand/lib/functions")
-program = include("sinfcommand/lib/program")
+fn = include("patterning/lib/functions")
+program = include("patterning/lib/program")
 
-local pattern_controller = include("sinfcommand/lib/pattern_controller")
+local pattern_controller = include("patterning/lib/pattern_controller")
 
 function pass(test_name)
   print("Test "..test_name.." PASS")

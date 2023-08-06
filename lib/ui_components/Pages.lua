@@ -1,7 +1,7 @@
 local Pages = {}
 Pages.__index = Pages
 
-local fn = require("sinfcommand/lib/functions")
+local fn = require("patterning/lib/functions")
 
 function Pages:new()
   local self = setmetatable({}, Pages)

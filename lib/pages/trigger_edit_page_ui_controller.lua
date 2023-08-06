@@ -1,9 +1,9 @@
 local trigger_edit_page_ui_controller = {}
 
-local Pages = include("sinfcommand/lib/ui_components/Pages")
-local Page = include("sinfcommand/lib/ui_components/Page")
-local GridViewer = include("sinfcommand/lib/ui_components/GridViewer")
-local ListSelector = include("sinfcommand/lib/ui_components/ListSelector")
+local Pages = include("patterning/lib/ui_components/Pages")
+local Page = include("patterning/lib/ui_components/Page")
+local GridViewer = include("patterning/lib/ui_components/GridViewer")
+local ListSelector = include("patterning/lib/ui_components/ListSelector")
 
 local pages = Pages:new()
 local grid_viewer = GridViewer:new(0, 0)

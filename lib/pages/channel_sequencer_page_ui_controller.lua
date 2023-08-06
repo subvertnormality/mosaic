@@ -1,9 +1,9 @@
 local channel_sequencer_page_ui_controller = {}
 
-local Pages = include("sinfcommand/lib/ui_components/Pages")
-local Page = include("sinfcommand/lib/ui_components/Page")
-local GridViewer = include("sinfcommand/lib/ui_components/GridViewer")
-local ValueSelector = include("sinfcommand/lib/ui_components/ValueSelector")
+local Pages = include("patterning/lib/ui_components/Pages")
+local Page = include("patterning/lib/ui_components/Page")
+local GridViewer = include("patterning/lib/ui_components/GridViewer")
+local ValueSelector = include("patterning/lib/ui_components/ValueSelector")
 local pages = Pages:new()
 local grid_viewer = GridViewer:new(0, 0)
 

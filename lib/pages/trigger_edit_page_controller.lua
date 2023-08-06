@@ -1,5 +1,5 @@
 local er = require("er")
-local drum_ops = include("sinfcommand/lib/drum_ops")
+local drum_ops = include("patterning/lib/drum_ops")
 
 local trigger_edit_page_controller = {}
 local paint_pattern = {}

@@ -1,7 +1,7 @@
 local note_edit_page_controller = {}
 
-local VerticalFader = include("sinfcommand/lib/controls/VerticalFader")
-local FadeButton = include("sinfcommand/lib/controls/FadeButton")
+local VerticalFader = include("patterning/lib/controls/VerticalFader")
+local FadeButton = include("patterning/lib/controls/FadeButton")
 
 local faders = {}
 local vertical_offset = 7

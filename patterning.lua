@@ -6,11 +6,11 @@
 
 
 
-grid_controller = include("sinfcommand/lib/grid_controller")
-ui_controller = include("sinfcommand/lib/ui_controller")
-program = include("sinfcommand/lib/program")
+grid_controller = include("patterning/lib/grid_controller")
+ui_controller = include("patterning/lib/ui_controller")
+program = include("patterning/lib/program")
 
-local fn = include("sinfcommand/lib/functions")
+local fn = include("patterning/lib/functions")
 local fileselect = require('fileselect')
 local textentry = require('textentry')
 local musicutil = require("musicutil")
@@ -20,9 +20,9 @@ local autosave_timer = metro.init(prime_autosave, 20, 1)
 
 local ui_splash_screen_active = false
 
-clock_controller = include("sinfcommand/lib/clock_controller")
-pattern_controller = include("sinfcommand/lib/pattern_controller")
-midi_controller = include("sinfcommand/lib/midi_controller")
+clock_controller = include("patterning/lib/clock_controller")
+pattern_controller = include("patterning/lib/pattern_controller")
+midi_controller = include("patterning/lib/midi_controller")
 
 local function load_project(pth)
   

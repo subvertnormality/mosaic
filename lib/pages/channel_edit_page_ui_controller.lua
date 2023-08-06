@@ -1,18 +1,18 @@
 local channel_edit_page_ui_controller = {}
 
-local midi_device_map = include("sinfcommand/lib/midi_device_map")
+local midi_device_map = include("patterning/lib/midi_device_map")
 
-local quantiser = include("sinfcommand/lib/quantiser")
-local Pages = include("sinfcommand/lib/ui_components/Pages")
-local Page = include("sinfcommand/lib/ui_components/Page")
-local VerticalScrollSelector = include("sinfcommand/lib/ui_components/VerticalScrollSelector")
-local Dial = include("sinfcommand/lib/ui_components/Dial")
-local ControlScrollSelector = include("sinfcommand/lib/ui_components/ControlScrollSelector")
-local ListSelector = include("sinfcommand/lib/ui_components/ListSelector")
-local ValueSelector = include("sinfcommand/lib/ui_components/ValueSelector")
+local quantiser = include("patterning/lib/quantiser")
+local Pages = include("patterning/lib/ui_components/Pages")
+local Page = include("patterning/lib/ui_components/Page")
+local VerticalScrollSelector = include("patterning/lib/ui_components/VerticalScrollSelector")
+local Dial = include("patterning/lib/ui_components/Dial")
+local ControlScrollSelector = include("patterning/lib/ui_components/ControlScrollSelector")
+local ListSelector = include("patterning/lib/ui_components/ListSelector")
+local ValueSelector = include("patterning/lib/ui_components/ValueSelector")
 
-local midi_controller = include("sinfcommand/lib/midi_controller")
-local clock_controller = include("sinfcommand/lib/clock_controller")
+local midi_controller = include("patterning/lib/midi_controller")
+local clock_controller = include("patterning/lib/clock_controller")
 
 local pages = Pages:new()
 
