@@ -4,9 +4,6 @@ local channel_pattern_buttons = {}
 
 local refresh_button = {}
 
-local channel_sequencer_page_ui_controller = include("patterning/lib/pages/channel_sequencer_page_ui_controller")
-
-
 function channel_sequencer_page_controller.init()
   
   for s = 1, 96 do
@@ -61,6 +58,7 @@ function channel_sequencer_page_controller.register_press_handlers()
           channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(1)
         end
       end
+
       channel_sequencer_page_controller.refresh()
       refresh_button[previous_selected_pattern] = true
       refresh_button[s] = true
@@ -85,6 +83,9 @@ end
 
 function channel_sequencer_page_controller.refresh()
   channel_sequencer_page_ui_controller.refresh()
+  for s = 1, 96 do
+    refresh_button[s] = true
+  end
 end
 
 return channel_sequencer_page_controller
