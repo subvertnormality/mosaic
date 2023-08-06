@@ -317,7 +317,7 @@ end
 function grid_controller.refresh()
 
   channel_edit_page_controller.refresh()
-  -- channel_sequencer_page_controller.refresh()
+  channel_sequencer_page_controller.refresh()
   trigger_edit_page_controller.refresh()
   note_edit_page_controller.refresh()
   velocity_edit_page_controller.refresh()

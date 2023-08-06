@@ -160,7 +160,7 @@ function program.get_sequencer_pattern(p)
 end
 
 function program.set_sequencer_pattern(p, pattern)
-  program_store.sequencer_patterns[pattern] = program.get_sequencer_pattern(p)
+  program_store.sequencer_patterns[pattern] = fn.deep_copy(program.get_sequencer_pattern(p))
 end
 
 function program.get()

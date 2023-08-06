@@ -67,6 +67,21 @@ function fn.string_to_table(str)
     return load("return " .. str)()
 end
 
+function fn.deep_copy(original)
+  local copy
+  if type(original) == 'table' then
+      copy = {}
+      for original_key, original_value in next, original, nil do
+          copy[fn.deep_copy(original_key)] = fn.deep_copy(original_value)
+      end
+      setmetatable(copy, fn.deep_copy(getmetatable(original)))
+  else -- number, string, boolean, etc
+      copy = original
+  end
+  return copy
+end
+
+
 function fn.table_count(t)
   local count = 0
   for _ in pairs(t) do count = count + 1 end

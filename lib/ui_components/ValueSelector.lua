@@ -74,8 +74,8 @@ function ValueSelector:set_name()
   fn.dirty_screen(true)
 end
 
-function ValueSelector:set_value(value)
-  self.value = value
+function ValueSelector:set_value(v)
+  self.value = v
   fn.dirty_screen(true)
 end
 
