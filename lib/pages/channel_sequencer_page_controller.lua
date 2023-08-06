@@ -49,20 +49,36 @@ function channel_sequencer_page_controller.register_press_handlers()
       local s = fn.calc_grid_count(x, y) + 48
       local previous_selected_pattern = program.get().selected_sequencer_pattern
       if channel_pattern_buttons["step"..s.."_sequencer_pattern_button"] and channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:is_this(x, y) then
-        channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(3)
-        program.get().selected_sequencer_pattern = s
-        tooltip:show("Sequencer pattern "..s.." selected")
-        if program.is_sequencer_pattern_active(previous_selected_pattern) then
-          channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(2)
-        else
-          channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(1)
+        
+        local do_func = function() 
+          channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(3)
+          program.get().selected_sequencer_pattern = s
+          tooltip:show("Sequencer pattern "..s.." selected")
+          if program.is_sequencer_pattern_active(previous_selected_pattern) then
+            channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(2)
+          else
+            channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(1)
+          end
+          channel_sequencer_page_controller.refresh()
+          refresh_button[previous_selected_pattern] = true
+          refresh_button[s] = true
         end
-      end
 
-      channel_sequencer_page_controller.refresh()
-      refresh_button[previous_selected_pattern] = true
-      refresh_button[s] = true
-      
+        local blink_cancel_func = function()
+          channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:no_blink()
+        end
+
+        if clock_controller.is_playing() then
+          step_handler.execute_blink_cancel_func()
+          step_handler.queue_switch_to_next_song_pattern_func(do_func)
+          step_handler.queue_switch_to_next_song_pattern_blink_cancel_func(blink_cancel_func)
+
+          channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:blink()
+        else
+          do_func()
+        end
+
+      end
     end
   )
   press_handler:register_dual(

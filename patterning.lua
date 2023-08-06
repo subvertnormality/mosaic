@@ -23,6 +23,7 @@ local ui_splash_screen_active = false
 clock_controller = include("patterning/lib/clock_controller")
 pattern_controller = include("patterning/lib/pattern_controller")
 midi_controller = include("patterning/lib/midi_controller")
+step_handler = include("lib/step_handler")
 
 local function load_project(pth)
   

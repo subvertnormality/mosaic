@@ -1,7 +1,6 @@
 local fn = include 'lib/functions'
 
 local midi_controller = include 'lib/midi_controller'
-local step_handler = include 'lib/step_handler'
 local ListSelector = include 'lib/ui_components/ListSelector'
 
 local clock_controller = {}

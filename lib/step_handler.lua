@@ -6,6 +6,11 @@ local length_tracker = {}
 local persistent_channel_step_scale_numbers = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
 
 local step_scale_number = 0
+local gobal_step_accumalator = 0
+
+local switch_to_next_song_pattern_func = function() end
+local switch_to_next_song_pattern_blink_cancel_func = function() end
+
 
 local do_once = true
 
@@ -94,7 +99,7 @@ function step_handler.handle(c, current_step)
 
 end
 
-local gobal_step_accumalator = 0
+
 
 function step_handler.process_song_sequencer_patterns(step)
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
@@ -108,10 +113,18 @@ function step_handler.process_song_sequencer_patterns(step)
       channel_edit_page_controller.refresh()
       channel_edit_page_ui_controller.refresh()
       gobal_step_accumalator = 0
-      step_handler.reset_sequencer_pattern(selected_sequencer_pattern) 
+      step_handler.reset_sequencer_pattern(selected_sequencer_pattern)
     end
   end
+
+  if gobal_step_accumalator % selected_sequencer_pattern.global_pattern_length == 0 then
+    switch_to_next_song_pattern_func()
+    switch_to_next_song_pattern_blink_cancel_func()
+    switch_to_next_song_pattern_func = function () end
+  end
+
   gobal_step_accumalator = gobal_step_accumalator + 1
+
 end
 
 function step_handler.process_lengths() 
@@ -125,8 +138,22 @@ function step_handler.process_lengths()
   end
 end
 
+function step_handler.queue_switch_to_next_song_pattern_func(func)
+  switch_to_next_song_pattern_func = func
+end
+
+function step_handler.queue_switch_to_next_song_pattern_blink_cancel_func(func)
+  switch_to_next_song_pattern_blink_cancel_func = func
+end
+
+function step_handler.execute_blink_cancel_func()
+  switch_to_next_song_pattern_blink_cancel_func()
+  switch_to_next_song_pattern_blink_cancel_func = function () end
+end
+
 function step_handler.reset()
   gobal_step_accumalator = 0
+  step_handler.execute_blink_cancel_func()
 end
 
 function step_handler.reset_sequencer_pattern(pattern) 
