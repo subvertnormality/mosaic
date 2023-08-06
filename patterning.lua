@@ -170,11 +170,10 @@ function init()
   params:add_option("trigless_locks", "Trigless locks", {"On", "Off"}, 1)
   params:add_separator("Quantiser")
   params:add_option("quantiser_trig_lock_hold", "Hold quantiser trigs", {"On", "Off"}, 1)
-  params:set_action("clock_tempo", function(x) 
-    channel_sequencer_page_ui_controller.refresh_tempo() 
-    params:set("clock_tempo", x)
-  end)
 
+  clock.tempo_change_handler = function(x) 
+    channel_sequencer_page_ui_controller.refresh_tempo() 
+  end
   
   post_init = metro.init(post_splash_init, 0.5, 1)
   post_init:start()
