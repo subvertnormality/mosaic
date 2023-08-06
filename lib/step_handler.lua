@@ -105,8 +105,8 @@ function step_handler.process_song_sequencer_patterns(step)
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
   local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
 
-  if gobal_step_accumalator == selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats then 
-    if params:get("sequencer_pattern_auto_advance") == 1 then
+  if gobal_step_accumalator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) == 0 then 
+    if params:get("song_mode") == 1 then
 
       program.set_selected_sequencer_pattern(step_handler.calculate_next_selected_sequencer_pattern())
       channel_sequencer_page_controller.refresh()

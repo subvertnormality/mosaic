@@ -4,11 +4,13 @@ local Pages = include("patterning/lib/ui_components/Pages")
 local Page = include("patterning/lib/ui_components/Page")
 local GridViewer = include("patterning/lib/ui_components/GridViewer")
 local ValueSelector = include("patterning/lib/ui_components/ValueSelector")
+local ListSelector = include("patterning/lib/ui_components/ListSelector")
 local pages = Pages:new()
 local grid_viewer = GridViewer:new(0, 0)
 
 local tempo_selector = ValueSelector:new(10, 30, "Tempo", 30, 300)
-local pattern_repeat_selector = ValueSelector:new(10, 30, "Repeat sequence", 1, 16)
+local pattern_repeat_selector = ValueSelector:new(10, 25, "Repeats", 1, 16)
+local song_mode_selector = ListSelector:new(70, 25, "Song mode", {{name = "On", value = 1}, {name = "Off", value = 2}})
 
 local global_settings_page = Page:new("Global settings", function ()
   tempo_selector:draw()
@@ -16,6 +18,7 @@ end)
 
 local song_progression_page = Page:new("Song progression", function ()
   pattern_repeat_selector:draw()
+  song_mode_selector:draw()
 end)
 
 local page_to_index = {
@@ -69,12 +72,48 @@ function channel_sequencer_page_ui_controller.enc(n, d)
     end
   end
 
+  if n == 2 then
+    for i=1, math.abs(d) do
+      if d > 0 then
+        if pages:get_selected_page() == 1 then
+          if song_mode_selector:is_selected() then
+            song_mode_selector:deselect()
+            pattern_repeat_selector:select()
+          elseif pattern_repeat_selector:is_selected() then
+            pattern_repeat_selector:deselect()
+            song_mode_selector:select()
+          end
+        end
+
+      else
+        if pages:get_selected_page() == 1 then
+          if song_mode_selector:is_selected() then
+            song_mode_selector:deselect()
+            pattern_repeat_selector:select()
+          elseif pattern_repeat_selector:is_selected() then
+            pattern_repeat_selector:deselect()
+            song_mode_selector:select()
+          end
+        end
+
+      end
+
+    end
+
+  end
+
   if n == 3 then
     for i=1, math.abs(d) do
       if d > 0 then
         if pages:get_selected_page() == 1 then
-          pattern_repeat_selector:increment()
-          channel_sequencer_page_ui_controller.update_pattern_repeat()
+          if song_mode_selector:is_selected() then
+            song_mode_selector:increment()
+            channel_sequencer_page_ui_controller.update_song_mode()
+          elseif pattern_repeat_selector:is_selected() then
+            pattern_repeat_selector:increment()
+            channel_sequencer_page_ui_controller.update_pattern_repeat()
+          end
+
 
         elseif pages:get_selected_page() == 2 then
 
@@ -85,9 +124,13 @@ function channel_sequencer_page_ui_controller.enc(n, d)
 
       else
         if pages:get_selected_page() == 1 then
-
-          pattern_repeat_selector:decrement()
-          channel_sequencer_page_ui_controller.update_pattern_repeat()
+          if song_mode_selector:is_selected() then
+            song_mode_selector:decrement()
+            channel_sequencer_page_ui_controller.update_song_mode()
+          elseif pattern_repeat_selector:is_selected() then
+            pattern_repeat_selector:decrement()
+            channel_sequencer_page_ui_controller.update_pattern_repeat()
+          end
 
         elseif pages:get_selected_page() == 2 then
 
@@ -110,6 +153,15 @@ function channel_sequencer_page_ui_controller.update_pattern_repeat()
   program.get_selected_sequencer_pattern().active = true
 end
 
+function channel_sequencer_page_ui_controller.update_song_mode()
+  params:set("song_mode", song_mode_selector:get_selected().value)
+end
+
+function channel_sequencer_page_ui_controller.refresh_song_mode()
+  song_mode_selector:set_selected_value(params:get("song_mode"))
+end
+
+
 function channel_sequencer_page_ui_controller.refresh_tempo() 
   tempo_selector:set_value(params:get("clock_tempo"))
 end
@@ -120,7 +172,8 @@ end
 
 function channel_sequencer_page_ui_controller.refresh() 
   channel_sequencer_page_ui_controller.refresh_pattern_repeat() 
-  channel_sequencer_page_ui_controller.refresh_tempo() 
+  channel_sequencer_page_ui_controller.refresh_tempo()
+  channel_sequencer_page_ui_controller.refresh_song_mode()
 end
 
 return channel_sequencer_page_ui_controller
