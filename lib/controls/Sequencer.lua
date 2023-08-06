@@ -51,7 +51,7 @@ local function transform_current_step(current_step)
 end
 
 function Sequencer:draw(channel, draw_func)
-  
+
   local trigs = channel.working_pattern.trig_values
   local lengths = channel.working_pattern.lengths
 

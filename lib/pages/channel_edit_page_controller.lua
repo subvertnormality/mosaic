@@ -55,7 +55,6 @@ function channel_edit_page_controller.register_draw_handlers()
   draw_handler:register_grid(
     "channel_edit_page",
     function()
-
       channel_edit_page_sequencer:draw(program.get_selected_channel(), grid_abstraction.led)
     end
   )
@@ -458,9 +457,9 @@ function channel_edit_page_controller.refresh_step_buttons()
   local channel = program.get_selected_channel()
 
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-
-  for s = 1, 16 do  
+  for s = 1, 16 do
     if pattern_buttons["step"..s.."_pattern_button"] then
+
       if fn.is_in_set(channel.selected_patterns, s) then
         pattern_buttons["step"..s.."_pattern_button"]:set_state(2)
       else

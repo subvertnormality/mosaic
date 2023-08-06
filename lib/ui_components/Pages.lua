@@ -1,7 +1,7 @@
 local Pages = {}
 Pages.__index = Pages
 
-local fn = require("patterning/lib/functions")
+local fn = include("patterning/lib/functions")
 
 function Pages:new()
   local self = setmetatable({}, Pages)

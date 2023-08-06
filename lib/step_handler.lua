@@ -1,5 +1,5 @@
-local midi_controller = include("lib/midi_controller")
-local quantiser = include("lib/quantiser")
+local midi_controller = include("patterning/lib/midi_controller")
+local quantiser = include("patterning/lib/quantiser")
 
 local step_handler = {}
 local length_tracker = {}
@@ -22,6 +22,26 @@ function step_handler.process_params(c, step)
       end
     end
   end
+end
+
+function step_handler.calculate_next_selected_sequencer_pattern()
+
+  local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
+
+  if selected_sequencer_pattern_number + 1 < 91 and program.get().sequencer_patterns[selected_sequencer_pattern_number + 1].active then
+    return selected_sequencer_pattern_number + 1
+  end
+
+  local last_active_previous_sequencer_pattern = selected_sequencer_pattern_number
+  if last_active_previous_sequencer_pattern - 1 > 0  then
+
+    while program.get().sequencer_patterns[last_active_previous_sequencer_pattern - 1] and program.get().sequencer_patterns[last_active_previous_sequencer_pattern - 1].active == true do
+      last_active_previous_sequencer_pattern = last_active_previous_sequencer_pattern - 1
+    end
+  end
+
+  return last_active_previous_sequencer_pattern
+
 end
 
 function step_handler.handle(c, current_step) 
@@ -74,6 +94,25 @@ function step_handler.handle(c, current_step)
 
 end
 
+local gobal_step_accumalator = 0
+
+function step_handler.process_song_sequencer_patterns(step)
+  local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
+  local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
+
+  if gobal_step_accumalator == selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats then 
+    if params:get("sequencer_pattern_auto_advance") == 1 then
+
+      program.set_selected_sequencer_pattern(step_handler.calculate_next_selected_sequencer_pattern())
+      channel_sequencer_page_controller.refresh()
+      channel_edit_page_controller.refresh()
+      channel_edit_page_ui_controller.refresh()
+      gobal_step_accumalator = 0
+      step_handler.reset_sequencer_pattern(selected_sequencer_pattern) 
+    end
+  end
+  gobal_step_accumalator = gobal_step_accumalator + 1
+end
 
 function step_handler.process_lengths() 
   for i=#length_tracker, 1, -1 do
@@ -83,6 +122,16 @@ function step_handler.process_lengths()
       midi_controller.note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
       table.remove(length_tracker, i)
     end
+  end
+end
+
+function step_handler.reset()
+  gobal_step_accumalator = 0
+end
+
+function step_handler.reset_sequencer_pattern(pattern) 
+  for i = 1, 16 do
+    pattern.channels[i].current_step = 1
   end
 end
 

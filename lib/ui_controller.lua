@@ -1,12 +1,12 @@
 local ui_controller = {}
 
-channel_edit_page_ui_controller = include("lib/pages/channel_edit_page_ui_controller")
-velocity_edit_page_ui_controller = include("lib/pages/velocity_edit_page_ui_controller")
-note_edit_page_ui_controller = include("lib/pages/note_edit_page_ui_controller")
-trigger_edit_page_ui_controller = include("lib/pages/trigger_edit_page_ui_controller")
-channel_sequencer_page_ui_controller = include("lib/pages/channel_sequencer_page_ui_controller")
+channel_edit_page_ui_controller = include("patterning/lib/pages/channel_edit_page_ui_controller")
+velocity_edit_page_ui_controller = include("patterning/lib/pages/velocity_edit_page_ui_controller")
+note_edit_page_ui_controller = include("patterning/lib/pages/note_edit_page_ui_controller")
+trigger_edit_page_ui_controller = include("patterning/lib/pages/trigger_edit_page_ui_controller")
+channel_sequencer_page_ui_controller = include("patterning/lib/pages/channel_sequencer_page_ui_controller")
 
-tooltip = include("lib/ui_components/tooltip")
+tooltip = include("patterning/lib/ui_components/tooltip")
 
 
 function ui_controller.init()
@@ -51,13 +51,18 @@ end
 
 function ui_controller.enc(n, d)
 
-  channel_edit_page_ui_controller.enc(n, d)
-  velocity_edit_page_ui_controller.enc(n, d)
-  note_edit_page_ui_controller.enc(n, d)
-  trigger_edit_page_ui_controller.enc(n, d)
-  channel_sequencer_page_ui_controller.enc(n, d)
-
-
+  if program.get().selected_page == 1 then
+    channel_edit_page_ui_controller.enc(n, d)
+  elseif program.get().selected_page == 2 then
+    channel_sequencer_page_ui_controller.enc(n, d)
+  elseif program.get().selected_page == 3 then
+    trigger_edit_page_ui_controller.enc(n, d)
+  elseif program.get().selected_page == 4 then
+    note_edit_page_ui_controller.enc(n, d)
+  elseif program.get().selected_page == 5 then
+    velocity_edit_page_ui_controller.enc(n, d)
+  end
+  
 end
 
 function ui_controller.key(n, z)

@@ -12,7 +12,6 @@ local ListSelector = include("patterning/lib/ui_components/ListSelector")
 local ValueSelector = include("patterning/lib/ui_components/ValueSelector")
 
 local midi_controller = include("patterning/lib/midi_controller")
-local clock_controller = include("patterning/lib/clock_controller")
 
 local pages = Pages:new()
 
@@ -20,7 +19,7 @@ local quantizer_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Q
 local romans_vertical_scroll_selector = VerticalScrollSelector:new(105, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
 local notes_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Notes", quantiser.get_notes())
 
-local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", clock_controller.get_clock_divisions())
+local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", {})
 local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 50)
 
 local midi_device_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Midi Device", {})
@@ -72,6 +71,7 @@ function channel_edit_page_ui_controller.init()
   midi_channel_vertical_scroll_selector:select()
   midi_device_vertical_scroll_selector:set_items(midi_controller.get_midi_outs())
   dials:set_items({param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8})
+  clock_mod_list_selector:set_list(clock_controller.get_clock_divisions())
 
   quantizer_page:set_sub_name_func(function ()
     return "Quantizer " .. program.get_selected_channel().default_scale .. " "

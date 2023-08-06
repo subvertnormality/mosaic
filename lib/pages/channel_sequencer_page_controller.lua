@@ -4,7 +4,7 @@ local channel_pattern_buttons = {}
 
 local refresh_button = {}
 
-local channel_sequence_page_ui_controller = include("lib/pages/channel_sequencer_page_ui_controller")
+local channel_sequencer_page_ui_controller = include("patterning/lib/pages/channel_sequencer_page_ui_controller")
 
 
 function channel_sequencer_page_controller.init()

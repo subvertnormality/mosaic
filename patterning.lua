@@ -1,5 +1,5 @@
 -- Patterning v0.0.1
--- Deliberate generative rhythm sequencer
+-- Rhythm sequencer
 --
 -- llllllll.co/t/patterning
 --
@@ -163,13 +163,14 @@ function init()
   params:add_separator("Trig Editor")
   params:add_option("tresillo_amount", "Tresillo amount", {8, 16, 24, 32, 40, 48, 56, 64}, 3)
   params:set_action("tresillo_amount", function(x) trigger_edit_page_ui_controller:refresh() end)
-  params:add_separator("Live mode utilities")
+  params:add_separator("Sequencer")
+  params:add_option("sequencer_pattern_auto_advance", "Song mode", {"On", "Off"}, 1)
   params:add_option("dual_press_enabled", "Dual pressing", {"On", "Off"}, 1)
   params:add_separator("Prameter locks")
   params:add_option("trigless_locks", "Trigless locks", {"On", "Off"}, 1)
   params:add_separator("Quantiser")
   params:add_option("quantiser_trig_lock_hold", "Hold quantiser trigs", {"On", "Off"}, 1)
-  params:set_action("clock_tempo", function(x) trigger_edit_page_ui_controller.refresh_tempo() end)
+  params:set_action("clock_tempo", function(x) channel_sequencer_page_ui_controller.refresh_tempo() end)
 
   
   post_init = metro.init(post_splash_init, 0.5, 1)

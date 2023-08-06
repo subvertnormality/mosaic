@@ -150,6 +150,10 @@ function program.get_selected_sequencer_pattern()
   return program.get_sequencer_pattern(program_store.selected_sequencer_pattern)
 end
 
+function program.set_selected_sequencer_pattern(p)
+  program_store.selected_sequencer_pattern = p
+end
+
 function program.get_sequencer_pattern(p)
 
   if not program_store.sequencer_patterns[p] then
@@ -160,7 +164,15 @@ function program.get_sequencer_pattern(p)
 end
 
 function program.set_sequencer_pattern(p, pattern)
-  program_store.sequencer_patterns[pattern] = fn.deep_copy(program.get_sequencer_pattern(p))
+
+  local sequencer_pattern = fn.deep_copy(program.get_sequencer_pattern(p))
+
+  for i = 1, 16 do
+    sequencer_pattern.channels[i].current_step = 1
+  end
+
+
+  program_store.sequencer_patterns[pattern] = sequencer_pattern
 end
 
 function program.get()
