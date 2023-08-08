@@ -4,6 +4,8 @@ local channel_pattern_buttons = {}
 
 local refresh_button = {}
 
+local global_pattern_length_fader = Fader:new(1, 7, 16, 64)
+
 function channel_sequencer_page_controller.init()
   
   for s = 1, 96 do
@@ -14,6 +16,8 @@ function channel_sequencer_page_controller.init()
     })
     refresh_button[s] = true
   end
+
+  global_pattern_length_fader:set_value(program.get_selected_sequencer_pattern().global_pattern_length)
 
   channel_pattern_buttons["step"..program.get().selected_sequencer_pattern.."_sequencer_pattern_button"]:set_state(3)
 end
@@ -36,6 +40,7 @@ function channel_sequencer_page_controller.register_draw_handlers()
           refresh_button[s] = false
         end
       end
+      global_pattern_length_fader:draw()
     end
   )
 
@@ -62,6 +67,7 @@ function channel_sequencer_page_controller.register_press_handlers()
           channel_sequencer_page_controller.refresh()
           refresh_button[previous_selected_pattern] = true
           refresh_button[s] = true
+          channel_sequencer_page_controller.refresh_faders() 
         end
 
         local blink_cancel_func = function()
@@ -81,6 +87,16 @@ function channel_sequencer_page_controller.register_press_handlers()
       end
     end
   )
+  press_handler:register(
+    "channel_sequencer_page",
+    function(x, y)
+      if global_pattern_length_fader:is_this(x, y) then
+        global_pattern_length_fader:press(x, y)
+        program.get_selected_sequencer_pattern().global_pattern_length = global_pattern_length_fader:get_value()
+        tooltip:show("Global pattern length: " .. global_pattern_length_fader:get_value())
+      end
+    end
+  )
   press_handler:register_dual(
     "channel_sequencer_page",
     function(x, y, x2, y2)
@@ -97,11 +113,16 @@ function channel_sequencer_page_controller.register_press_handlers()
   )
 end
 
+function channel_sequencer_page_controller.refresh_faders() 
+  global_pattern_length_fader:set_value(program.get_selected_sequencer_pattern().global_pattern_length)
+end
+
 function channel_sequencer_page_controller.refresh()
   channel_sequencer_page_ui_controller.refresh()
   for s = 1, 96 do
     refresh_button[s] = true
   end
+  channel_sequencer_page_controller.refresh_faders() 
 end
 
 return channel_sequencer_page_controller
