@@ -9,6 +9,7 @@ function VerticalScrollSelector:new(x, y, name, items)
   self.y = y
 
   self.items = items
+  self.meta_items = nil
   self.selected_item = 1
 
   self.selected = false
@@ -30,6 +31,14 @@ end
 
 function VerticalScrollSelector:set_items(items)
   self.items = items
+end
+
+function VerticalScrollSelector:get_meta_item()
+  return self.meta_items
+end
+
+function VerticalScrollSelector:set_meta_item(items)
+  self.meta_items = items
 end
 
 

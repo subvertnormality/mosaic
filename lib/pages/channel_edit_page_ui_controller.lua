@@ -114,7 +114,9 @@ function channel_edit_page_ui_controller.register_ui_draw_handlers()
       pages:draw()
     end
   )
-
+  if (param_select_vertical_scroll_selector:get_selected_item()) then
+  print(param_select_vertical_scroll_selector:get_selected_item().name)
+  end
 end
 
 function channel_edit_page_ui_controller.update_scale()
@@ -202,10 +204,12 @@ function channel_edit_page_ui_controller.enc(n, d)
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_down()
-            if param_select_vertical_scroll_selector:get_selected_item().name == "None/Not in device" then
+            if param_select_vertical_scroll_selector:get_selected_item().name == "None" then
               channel.trig_lock_params[dials:get_selected_index()] = {}
             else
               channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
+              channel.trig_lock_params[dials:get_selected_index()].device_name = param_select_vertical_scroll_selector:get_meta_item().device_name
+              channel.trig_lock_params[dials:get_selected_index()].type = param_select_vertical_scroll_selector:get_meta_item().type
             end
             channel_edit_page_ui_controller.refresh_trig_locks()
           else
@@ -267,10 +271,12 @@ function channel_edit_page_ui_controller.enc(n, d)
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_up()
-            if param_select_vertical_scroll_selector:get_selected_item().name == "None/Not in device" then
+            if param_select_vertical_scroll_selector:get_selected_item().name == "None" then
               channel.trig_lock_params[dials:get_selected_index()] = {}
             else
               channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
+              channel.trig_lock_params[dials:get_selected_index()].device_name = param_select_vertical_scroll_selector:get_meta_item().device_name
+              channel.trig_lock_params[dials:get_selected_index()].type = param_select_vertical_scroll_selector:get_meta_item().type
             end
             channel_edit_page_ui_controller.refresh_trig_locks()
           elseif channel.trig_lock_params[dials:get_selected_index()] then
@@ -431,7 +437,9 @@ function channel_edit_page_ui_controller.refresh_device_selector()
 
   local device = midi_device_map.get_midi_device(channel.midi_device_map)
 
-  param_select_vertical_scroll_selector:set_items(device)
+  param_select_vertical_scroll_selector:set_items(device.params)
+  param_select_vertical_scroll_selector:set_meta_item(device)
+
 end
 
 function channel_edit_page_ui_controller.refresh_romans() 
