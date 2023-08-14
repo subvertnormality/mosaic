@@ -1,5 +1,5 @@
 local midi_device_map = {}
-
+local custom_midi_device_map = include('patterning/lib/custom_midi_device_map')
 
 function create_cc_device() 
   local cc_midi_device = {}
@@ -24,16 +24,20 @@ function create_cc_device()
   return { 
     ["type"] = "midi",
     ["device_name"] = "CC Device",
+    ["fixed_note"] = nil,
+    ["map_params_automatically"] = false,
     ["params"] = cc_midi_device
   }
 end
 
 
-local midi_devices = {
+local stock_midi_device_map = {
   ["CC Device"] = create_cc_device(),
   ["Digitakt"] = {
     ["type"] = "midi",
     ["device_name"] = "Digitakt",
+    ["fixed_note"] = nil,
+    ["map_params_automatically"] = false,
     ["params"] = {
       {
         ["id"] = "none",
@@ -831,6 +835,8 @@ local midi_devices = {
   ["Digitone"] = {
     ["type"] = "midi",
     ["device_name"] = "Digitone",
+    ["fixed_note"] = nil,
+    ["map_params_automatically"] = false,
     ["params"] = {
       {
         ["id"] = "none",
@@ -2327,6 +2333,8 @@ local midi_devices = {
   ["OP-1"] = {
     ["type"] = "midi",
     ["device_name"] = "OP-1",
+    ["fixed_note"] = nil,
+    ["map_params_automatically"] = false,
     ["params"] = {
       {
         ["id"] = "none",
@@ -2395,6 +2403,8 @@ local midi_devices = {
   ["Syntakt"] = {
     ["type"] = "midi",
     ["device_name"] = "Syntakt",
+    ["fixed_note"] = nil,
+    ["map_params_automatically"] = false,
     ["params"] = {
       {
         ["id"] = "none",
@@ -3834,39 +3844,13 @@ local midi_devices = {
   }
 }
 
-
--- ["OP-1"] = {
---   ["type"] = "midi",
---   ["params"] = {
---     {
---       ["id"] = "none",
---       ["name"] = "None",
---       ["short_descriptor_1"] = "X",
---       ["short_descriptor_2"] = "",
---     },
---     {
---       ["id"] = "midi_lfo_synth",
---       ["name"] = "Synth",
---       ["cc_msb"] = 0,
---       ["cc_lsb"] = nil,
---       ["cc_min_value"] = 0,
---       ["cc_max_value"] = 127,
---       ["nrpn_msb"] = nil,
---       ["nrpn_lsb"] = nil,
---       ["nrpn_min_value"] = nil,
---       ["nrpn_max_value"] = nil,
---       ["short_descriptor_1"] = "MIDI",
---       ["short_descriptor_2"] = "LFO",
---     },
---   }
--- }
-
+local midi_devices = fn.merge_tables(custom_midi_device_map, stock_midi_device_map)
 
 function midi_device_map:get_midi_device_map() 
   local devices = {}
   local i = 1
   for key, value in pairs(midi_devices) do
-    table.insert(devices, {name = key, value = i})
+    table.insert(devices, {name = key, value = ie})
     i = i + 1
   end
   return devices
@@ -3877,15 +3861,12 @@ function midi_device_map.get_midi_devices()
 end
 
 function midi_device_map.get_midi_device(m)
-  local i = 1
   local device = {}
   for k, v in pairs(midi_devices) do
-    if i == m then
+    if k == m then
       device = v
   
       break;
-    else
-      i = i + 1
     end
   end
   return device

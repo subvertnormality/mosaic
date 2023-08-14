@@ -26,7 +26,11 @@ function Dial:draw()
   screen.font_size(8)
   screen.text(self.top_label)
   screen.move(self.x, self.y + 7)
-  screen.text(self.value)
+  if self.value == -1 then
+    screen.text("off")
+  else
+    screen.text(self.value)
+  end
   screen.move(self.x, self.y + 14)
   screen.text(self.bottom_label)
   screen.font_size(8)
@@ -57,6 +61,10 @@ function Dial:decrement()
 end
 
 function Dial:set_value(value)
+
+  if value == nil or value < -1 then
+    value = -1
+  end
   self.value = value
   fn.dirty_screen(true)
 end
@@ -74,6 +82,10 @@ end
 function Dial:set_name()
   self.name = name
   fn.dirty_screen(true)
+end
+
+function Dial:get_name()
+  return self.name
 end
 
 return Dial
