@@ -39,5 +39,4 @@ local custom_midi_device_map = {
 
 }
 
-
 return custom_midi_device_map
