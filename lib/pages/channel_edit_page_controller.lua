@@ -50,6 +50,15 @@ function channel_edit_page_controller.init()
     channel_octave_fader:set_value(program.get_selected_channel().octave + 3)
     channel_edit_page_controller.refresh()
   end
+
+
+  channel_scale_fader:set_pre_func(function(x, y, length) 
+    for i = x, length + x - 1 do
+      if i == program.get_selected_channel().step_scale_number then
+        grid_abstraction.led(i, y, 4)
+      end
+    end
+  end)
 end
 
 function channel_edit_page_controller.register_draw_handlers()
@@ -229,13 +238,15 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_scale_fader:is_this(x, y) then
-        channel_scale_fader:press(x, y)
-        local channel = program.get_selected_channel()
-        local scale_value = channel_scale_fader:get_value()
-        local number = program.get().scales[scale_value].number
-        channel.default_scale = scale_value
-        channel_edit_page_ui_controller.refresh_quantiser()
-        tooltip:show("Ch. "..program.get().selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
+        if program.get().selected_channel ~= 17 then
+          channel_scale_fader:press(x, y)
+          local channel = program.get_selected_channel()
+          local scale_value = channel_scale_fader:get_value()
+          local number = program.get().scales[scale_value].number
+          channel.default_scale = scale_value
+          channel_edit_page_ui_controller.refresh_quantiser()
+          tooltip:show("Ch. "..program.get().selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
+        end
       end
     end
   )
@@ -245,6 +256,7 @@ function channel_edit_page_controller.register_press_handlers()
       if channel_scale_fader:is_this(x, y) then
         program.get().selected_channel = 17
         channel_select_fader:set_value(0)
+        channel_edit_page_controller.refresh()
       end
     end
   )
@@ -471,7 +483,11 @@ function channel_edit_page_controller.refresh_faders()
       channel_scale_fader:set_value(channel.default_scale)
     end
   else
-    channel_scale_fader:set_value(channel.default_scale)
+    if program.get().selected_channel == 17 then
+      channel_scale_fader:set_value(0)
+    else
+      channel_scale_fader:set_value(channel.default_scale)
+    end
     channel_octave_fader:set_value(channel.octave + 3)
   end
 end

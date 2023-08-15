@@ -34,6 +34,7 @@ local function initialise_default_channels()
       midi_device = 1,
       selected_patterns = {},
       default_scale = 1,
+      step_scale_number = 1,
       root_note = 0,
       chord = 1,
       merge_mode = "skip",

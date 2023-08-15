@@ -11,6 +11,8 @@ function Fader:new(x, y, length, size)
   self.is_disabled = false
   self.dimmed = {}
 
+  self.pre_func = function() end
+
   for i = 1, self.length do
     self.dimmed[i] = false
   end
@@ -23,6 +25,8 @@ end
 function Fader:draw_simple()
   
   grid_abstraction.led(self.x, self.y, 2)
+
+
   for i = self.x, self.length + self.x - 1 do
     if self.dimmed[i] then
       grid_abstraction.led(i, self.y, 0)
@@ -30,6 +34,9 @@ function Fader:draw_simple()
       grid_abstraction.led(i, self.y, 2)
     end
   end
+
+  self.pre_func(self.x, self.y, self.length)
+
   if (self.value > 0) then
     if self.dimmed[self.x + self.value - 1] then
       grid_abstraction.led(self.x + self.value - 1, self.y, 7)
@@ -90,6 +97,10 @@ end
 
 function Fader:set_length(length)
   self.length = length
+end
+
+function Fader:set_pre_func(func)
+  self.pre_func = func
 end
 
 function Fader:disabled()

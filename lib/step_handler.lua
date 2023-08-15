@@ -77,29 +77,29 @@ function step_handler.handle(c, current_step)
   local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), current_step)
 
   local channel_default_scale = channel.default_scale
-  local step_scale_number = program.get().default_scale
+  channel.step_scale_number = program.get().default_scale
 
 
   if channel_step_scale_number and program.get().scales[channel_step_scale_number].scale then
     if (params:get("quantiser_trig_lock_hold") == 1) then
       persistent_channel_step_scale_numbers[c] = channel_step_scale_number
     end
-    step_scale_number = channel_step_scale_number
+    channel.step_scale_number = channel_step_scale_number
   elseif (persistent_channel_step_scale_numbers[c] and program.get().scales[persistent_channel_step_scale_numbers[c]].scale) then
-    step_scale_number = persistent_channel_step_scale_numbers[c]
+    channel.step_scale_number = persistent_channel_step_scale_numbers[c]
   elseif global_step_scale_number then
     persistent_global_step_scale_number = global_step_scale_number
-    step_scale_number = global_step_scale_number
+    channel.step_scale_number = global_step_scale_number
   elseif persistent_global_step_scale_number then
-    step_scale_number = persistent_global_step_scale_number
+    channel.step_scale_number = persistent_global_step_scale_number
   elseif
     channel_default_scale and program.get().scales[channel_default_scale].scale then
-    step_scale_number = channel_default_scale
+    channel.step_scale_number = channel_default_scale
   end
 
   if trig_value == 1 then
     channel_edit_page_ui_controller.refresh_trig_locks()
-    local note = quantiser.process(note_value, octave_mod, step_scale_number, channel)
+    local note = quantiser.process(note_value, octave_mod, channel.step_scale_number, channel)
 
     fixed_note_trig_lock = program.get_step_fixed_note_trig_lock(channel, current_step)
 
@@ -117,6 +117,10 @@ function step_handler.handle(c, current_step)
 
 end
 
+function step_handler.process_global_step_scale_trig_lock(current_step)
+
+  program.get_channel(17).step_scale_number = persistent_global_step_scale_number or program.get_step_scale_trig_lock(program.get_channel(17), current_step)
+end
 
 
 function step_handler.process_song_sequencer_patterns(step)
