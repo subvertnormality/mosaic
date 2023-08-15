@@ -4,6 +4,7 @@ local quantiser = include("patterning/lib/quantiser")
 local step_handler = {}
 local length_tracker = {}
 local persistent_channel_step_scale_numbers = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
+local persistent_global_step_scale_number = nil
 
 local step_scale_number = 0
 local gobal_step_accumalator = 0
@@ -64,6 +65,7 @@ function step_handler.handle(c, current_step)
 
   if current_step == 1 then
     persistent_channel_step_scale_numbers[c] = nil
+    persistent_global_step_scale_number = nil
   end
 
   if program.get_step_octave_trig_lock(channel, current_step) then
@@ -71,6 +73,8 @@ function step_handler.handle(c, current_step)
   end
   
   local channel_step_scale_number = program.get_step_scale_trig_lock(channel, current_step)
+
+  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), current_step)
 
   local channel_default_scale = channel.default_scale
   local step_scale_number = program.get().default_scale
@@ -83,6 +87,11 @@ function step_handler.handle(c, current_step)
     step_scale_number = channel_step_scale_number
   elseif (persistent_channel_step_scale_numbers[c] and program.get().scales[persistent_channel_step_scale_numbers[c]].scale) then
     step_scale_number = persistent_channel_step_scale_numbers[c]
+  elseif global_step_scale_number then
+    persistent_global_step_scale_number = global_step_scale_number
+    step_scale_number = global_step_scale_number
+  elseif persistent_global_step_scale_number then
+    step_scale_number = persistent_global_step_scale_number
   elseif
     channel_default_scale and program.get().scales[channel_default_scale].scale then
     step_scale_number = channel_default_scale

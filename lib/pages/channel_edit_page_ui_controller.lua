@@ -51,20 +51,38 @@ local quantizer_page = Page:new("", function ()
   notes_vertical_scroll_selector:draw()
 end)
 
-local clock_mods_page = Page:new("Clocks and Swing", function ()
-  clock_mod_list_selector:draw()
-  clock_swing_value_selector:draw()
 
+local function print_quant_message_to_screen()
+  screen.level(5)
+  screen.move(15, 35)
+  screen.text("Master quantiser mode")
+end
+
+local clock_mods_page = Page:new("Clocks and Swing", function ()
+  if program.get().selected_channel ~= 17 then
+    clock_mod_list_selector:draw()
+    clock_swing_value_selector:draw()
+  else
+    print_quant_message_to_screen()
+  end
 end)
 
 local channel_edit_page = Page:new("Config", function ()
-  midi_device_vertical_scroll_selector:draw()
-  midi_channel_vertical_scroll_selector:draw()
-  midi_device_map_vertical_scroll_selector:draw()
+  if program.get().selected_channel ~= 17 then
+    midi_device_vertical_scroll_selector:draw()
+    midi_channel_vertical_scroll_selector:draw()
+    midi_device_map_vertical_scroll_selector:draw()
+  else
+    print_quant_message_to_screen()
+  end
 end)
 
 local trig_lock_page = Page:new("Trig Locks", function ()
-  dials:draw()
+  if program.get().selected_channel ~= 17 then
+    dials:draw()
+  else
+    print_quant_message_to_screen()
+  end
 end)
 
 
@@ -80,15 +98,27 @@ function channel_edit_page_ui_controller.init()
   end)
 
   channel_edit_page:set_sub_name_func(function ()
-    return "Ch. " .. program.get().selected_channel .. " "
+    if program.get().selected_channel ~= 17 then
+      return "Ch. " .. program.get().selected_channel .. " "
+    else
+      return ""
+    end
   end)
 
   clock_mods_page:set_sub_name_func(function ()
-    return "Ch. " .. program.get().selected_channel .. " "
+    if program.get().selected_channel ~= 17 then
+      return "Ch. " .. program.get().selected_channel .. " "
+    else
+      return ""
+    end
   end)
 
   trig_lock_page:set_sub_name_func(function ()
-    return "Ch. " .. program.get().selected_channel .. " "
+    if program.get().selected_channel ~= 17 then
+      return "Ch. " .. program.get().selected_channel .. " "
+    else
+      return ""
+    end
   end)
 
   trig_lock_page:set_sub_page_draw_func(function ()
@@ -176,6 +206,7 @@ function channel_edit_page_ui_controller.enc(n, d)
     for i=1, math.abs(d) do
       if d > 0 then
         if pages:get_selected_page() == page_to_index["Quantizer"] then
+
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_down()
             channel_edit_page_ui_controller.refresh_romans() 
@@ -188,6 +219,9 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           channel_edit_page_ui_controller.update_scale()
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:decrement()
             channel_edit_page_ui_controller.update_clock_mods()
@@ -197,6 +231,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             channel_edit_page_ui_controller.update_swing()
           end
         elseif pages:get_selected_page() == page_to_index["Midi Config"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:scroll_down()
           end
@@ -208,6 +245,9 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           channel_edit_page_ui_controller.update_channel_config()
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_down()
             if param_select_vertical_scroll_selector:get_selected_item().name == "None" then
@@ -230,8 +270,8 @@ function channel_edit_page_ui_controller.enc(n, d)
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
 
-                program.add_step_fixed_note_trig_lock(step, (program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note) + d)
-                fixed_note:set_value(program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note)
+                program.add_step_fixed_note_trig_lock(step, (program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note or -1) + d)
+                fixed_note:set_value(program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note or -1)
               end
 
             elseif channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
@@ -272,15 +312,21 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           channel_edit_page_ui_controller.update_scale()
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
-            if clock_mod_list_selector:is_selected() then
-              clock_mod_list_selector:increment()
-              channel_edit_page_ui_controller.update_clock_mods()
-            end
-            if clock_swing_value_selector:is_selected() then
-              clock_swing_value_selector:decrement()
-              channel_edit_page_ui_controller.update_swing()
-            end
+          if program.get().selected_channel == 17 then
+            return
+          end
+          if clock_mod_list_selector:is_selected() then
+            clock_mod_list_selector:increment()
+            channel_edit_page_ui_controller.update_clock_mods()
+          end
+          if clock_swing_value_selector:is_selected() then
+            clock_swing_value_selector:decrement()
+            channel_edit_page_ui_controller.update_swing()
+          end
         elseif pages:get_selected_page() == page_to_index["Midi Config"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:scroll_up()
           end
@@ -292,6 +338,9 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           channel_edit_page_ui_controller.update_channel_config()
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_up()
             if param_select_vertical_scroll_selector:get_selected_item().name == "None" then
@@ -313,8 +362,8 @@ function channel_edit_page_ui_controller.enc(n, d)
             elseif #pressed_keys > 0 and dials:get_selected_item():get_name() == "Fixed Note" then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
-                program.add_step_fixed_note_trig_lock(step, (program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note) + d)
-                fixed_note:set_value(program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note)
+                program.add_step_fixed_note_trig_lock(step, (program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note or -1) + d)
+                fixed_note:set_value(program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note or -1)
               end
             elseif channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
               if channel.trig_lock_banks[dials:get_selected_index()] == nil then
@@ -361,6 +410,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             quantizer_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:deselect()
             clock_swing_value_selector:select()
@@ -369,6 +421,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             clock_mod_list_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Midi Config"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:deselect()
             midi_channel_vertical_scroll_selector:select()
@@ -380,6 +435,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             midi_device_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if not trig_lock_page:is_sub_page_enabled() then
             dials:scroll_next() 
           end
@@ -397,6 +455,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             romans_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:deselect()
             clock_swing_value_selector:select()
@@ -405,6 +466,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             clock_mod_list_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Midi Config"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:deselect()
             midi_device_map_vertical_scroll_selector:select()
@@ -416,6 +480,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             midi_channel_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
           if not trig_lock_page:is_sub_page_enabled() then
             dials:scroll_previous()
           end

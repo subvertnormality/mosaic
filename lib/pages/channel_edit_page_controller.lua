@@ -42,13 +42,14 @@ local channel_scale_fader = Fader:new(1, 3, 16, 16)
 
 
 function channel_edit_page_controller.init()
-  
-  for s = 1, 16 do
-    pattern_buttons["step"..s.."_pattern_button"] = Button:new(s, 2)
-  end
+  if program.get_selected_channel() ~= 17 then
+    for s = 1, 16 do
+      pattern_buttons["step"..s.."_pattern_button"] = Button:new(s, 2)
+    end
 
-  channel_octave_fader:set_value(program.get_selected_channel().octave + 3)
-  channel_edit_page_controller.refresh()
+    channel_octave_fader:set_value(program.get_selected_channel().octave + 3)
+    channel_edit_page_controller.refresh()
+  end
 end
 
 function channel_edit_page_controller.register_draw_handlers()
@@ -63,7 +64,7 @@ function channel_edit_page_controller.register_draw_handlers()
     "channel_edit_page",
     function()
 
-      return channel_select_fader:draw()
+      channel_select_fader:draw()
 
     end
   )
@@ -71,7 +72,7 @@ function channel_edit_page_controller.register_draw_handlers()
     "channel_edit_page",
     function()
 
-      return channel_scale_fader:draw()
+      channel_scale_fader:draw()
 
     end
   )
@@ -79,38 +80,50 @@ function channel_edit_page_controller.register_draw_handlers()
     draw_handler:register_grid(
       "channel_edit_page",
       function()
-        pattern_buttons["step"..s.."_pattern_button"]:draw()
+        if program.get().selected_channel ~= 17 then
+          pattern_buttons["step"..s.."_pattern_button"]:draw()
+        end
       end
     )
   end
   draw_handler:register_grid(
     "channel_edit_page",
     function()
-      return channel_pattern_number_merge_mode_button:draw()
+      if program.get().selected_channel ~= 17 then
+        channel_pattern_number_merge_mode_button:draw()
+      end
     end
   )
   draw_handler:register_grid(
     "channel_edit_page",
     function()
-      return skip_merge_mode_button:draw()
+      if program.get().selected_channel ~= 17 then
+        skip_merge_mode_button:draw()
+      end
     end
   )
   draw_handler:register_grid(
     "channel_edit_page",
     function()
-      return average_merge_mode_button:draw()
+      if program.get().selected_channel ~= 17 then
+        average_merge_mode_button:draw()
+      end
     end
   )
   draw_handler:register_grid(
     "channel_edit_page",
     function()
-      return subadd_merge_mode_button:draw()
+      if program.get().selected_channel ~= 17 then
+        subadd_merge_mode_button:draw()
+      end
     end
   )
   draw_handler:register_grid(
     "channel_edit_page",
     function()
-      return channel_octave_fader:draw()
+      if program.get().selected_channel ~= 17 then
+        channel_octave_fader:draw()
+      end
     end
   )
 end
@@ -223,6 +236,15 @@ function channel_edit_page_controller.register_press_handlers()
         channel.default_scale = scale_value
         channel_edit_page_ui_controller.refresh_quantiser()
         tooltip:show("Ch. "..program.get().selected_channel.." scale: "..quantiser.get_scale_name_from_index(number))
+      end
+    end
+  )
+  press_handler:register_long(
+    "channel_edit_page",
+    function(x, y)
+      if channel_scale_fader:is_this(x, y) then
+        program.get().selected_channel = 17
+        channel_select_fader:set_value(0)
       end
     end
   )

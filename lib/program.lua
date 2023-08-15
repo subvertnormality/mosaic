@@ -15,7 +15,7 @@ local function initialise_default_channels()
   
   local channels = {}
   
-  for i=1,16 do
+  for i=1,17 do
     channels[i] = {
       trig_lock_banks = {0, 0, 0, 0, 0, 0, 0, 0},
       trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}},
@@ -364,7 +364,13 @@ end
 
 function program.clear_trig_locks_for_step(step) 
   local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
-  step_trig_lock_banks[step] = nil
+  if (step_trig_lock_banks and step_trig_lock_banks[step]) then
+    step_trig_lock_banks[step] = nil
+  end
+  local step_fixed_note_trig_lock_banks = program.get_selected_channel().step_fixed_note_trig_lock_banks
+  if (step_fixed_note_trig_lock_banks and step_fixed_note_trig_lock_banks[step]) then
+    step_fixed_note_trig_lock_banks[step] = nil
+  end
 end
 
 return program

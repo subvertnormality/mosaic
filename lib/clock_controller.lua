@@ -168,9 +168,11 @@ local function master_func()
   step_handler.process_song_sequencer_patterns(program.get().current_step)
 
   program.get().current_step = program.get().current_step + 1
+  program.get_channel(17).current_step = program.get().current_step + 1
 
   if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
     program.get().current_step = 1
+    program.get_channel(17).current_step = 1
   end
   fn.dirty_grid(true)
 end
