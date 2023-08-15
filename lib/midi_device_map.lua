@@ -23,7 +23,7 @@ function create_cc_device()
 
   return { 
     ["type"] = "midi",
-    ["device_name"] = "CC Device",
+    ["name"] = "CC Device",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["params"] = cc_midi_device
@@ -32,10 +32,10 @@ end
 
 
 local stock_midi_device_map = {
-  ["CC Device"] = create_cc_device(),
-  ["Digitakt"] = {
+  create_cc_device(),
+  {
     ["type"] = "midi",
-    ["device_name"] = "Digitakt",
+    ["name"] = "Digitakt",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["params"] = {
@@ -832,9 +832,9 @@ local stock_midi_device_map = {
     }
     
   },
-  ["Digitone"] = {
+  {
     ["type"] = "midi",
-    ["device_name"] = "Digitone",
+    ["name"] = "Digitone",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["params"] = {
@@ -2330,9 +2330,9 @@ local stock_midi_device_map = {
       }
     }
   },
-  ["OP-1"] = {
+  {
     ["type"] = "midi",
-    ["device_name"] = "OP-1",
+    ["name"] = "OP-1",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["params"] = {
@@ -2400,9 +2400,9 @@ local stock_midi_device_map = {
       }
     }
   },
-  ["Syntakt"] = {
+  {
     ["type"] = "midi",
-    ["device_name"] = "Syntakt",
+    ["name"] = "Syntakt",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["params"] = {
@@ -3844,32 +3844,36 @@ local stock_midi_device_map = {
   }
 }
 
-local midi_devices = fn.merge_tables(custom_midi_device_map, stock_midi_device_map)
+local function merge_midi_devices() 
+  local midi_devices = fn.merge_tables(custom_midi_device_map, stock_midi_device_map)
 
-function midi_device_map:get_midi_device_map() 
-  local devices = {}
-  local i = 1
-  for key, value in pairs(midi_devices) do
-    table.insert(devices, {name = key, value = ie})
-    i = i + 1
+  for index, device in ipairs(midi_devices) do
+    device["value"] = index
   end
-  return devices
+
+  return midi_devices
 end
+
+
+local midi_devices = merge_midi_devices() 
 
 function midi_device_map.get_midi_devices() 
   return midi_devices
 end
 
-function midi_device_map.get_midi_device(m)
-  local device = {}
-  for k, v in pairs(midi_devices) do
-    if k == m then
-      device = v
-  
-      break;
+function midi_device_map.get_midi_device_by_name(name)
+
+  for _, device in ipairs(midi_devices) do
+    if device.name == name then
+        return device
     end
   end
-  return device
+  return nil
+end
+
+function midi_device_map.get_midi_device(m)
+
+  return midi_devices[m]
 end
 
 

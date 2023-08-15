@@ -24,7 +24,7 @@ local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 50)
 
 local midi_device_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Midi Device", {})
 local midi_channel_vertical_scroll_selector = VerticalScrollSelector:new(45, 25, "Midi Channel", {{name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4}, {name = "CC5", value = 5}, {name = "CC6", value = 6}, {name = "CC7", value = 7}, {name = "CC8", value = 8}, {name = "CC9", value = 9}, {name = "CC10", value = 10}, {name = "CC11", value = 11}, {name = "CC12", value = 12}, {name = "CC13", value = 13}, {name = "CC14", value = 14}, {name = "CC15", value = 15}, {name = "CC16", value = 16}})
-local midi_device_map_vertical_scroll_selector = VerticalScrollSelector:new(70, 25, "Midi Map", midi_device_map:get_midi_device_map())
+local midi_device_map_vertical_scroll_selector = VerticalScrollSelector:new(70, 25, "Midi Map", midi_device_map:get_midi_devices())
 
 local param_select_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Params", {})
 
@@ -117,9 +117,6 @@ function channel_edit_page_ui_controller.register_ui_draw_handlers()
       pages:draw()
     end
   )
-  if (param_select_vertical_scroll_selector:get_selected_item()) then
-  print(param_select_vertical_scroll_selector:get_selected_item().name)
-  end
 end
 
 function channel_edit_page_ui_controller.update_scale()
@@ -158,7 +155,7 @@ function channel_edit_page_ui_controller.update_channel_config()
 
   channel.midi_device = midi_device.value
   channel.midi_channel = midi_channel.value
-  channel.midi_device_map = midi_device_m.name
+  channel.midi_device_map = midi_device_m.value
 
   local device = midi_device_map.get_midi_device(channel.midi_device_map)
 
@@ -229,6 +226,14 @@ function channel_edit_page_ui_controller.enc(n, d)
                 program.add_step_param_trig_lock(step, dials:get_selected_index(), (program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()]) + d)
                 dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()])
               end
+            elseif #pressed_keys > 0 and dials:get_selected_item():get_name() == "Fixed Note" then
+              for i, keys in ipairs(pressed_keys) do
+                local step = fn.calc_grid_count(keys[1], keys[2])
+
+                program.add_step_fixed_note_trig_lock(step, (program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note) + d)
+                fixed_note:set_value(program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note)
+              end
+
             elseif channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
               if channel.trig_lock_banks[dials:get_selected_index()] == {} then
                 channel.trig_lock_banks[dials:get_selected_index()] = 0
@@ -305,7 +310,12 @@ function channel_edit_page_ui_controller.enc(n, d)
                 program.add_step_param_trig_lock(step, dials:get_selected_index(), program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]) + d)
                 dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]))
               end
-
+            elseif #pressed_keys > 0 and dials:get_selected_item():get_name() == "Fixed Note" then
+              for i, keys in ipairs(pressed_keys) do
+                local step = fn.calc_grid_count(keys[1], keys[2])
+                program.add_step_fixed_note_trig_lock(step, (program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note) + d)
+                fixed_note:set_value(program.get_step_fixed_note_trig_lock(program.get_selected_channel(), step) or channel.fixed_note)
+              end
             elseif channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
               if channel.trig_lock_banks[dials:get_selected_index()] == nil then
                 channel.trig_lock_banks[dials:get_selected_index()] = 0
@@ -316,6 +326,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
               dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
             elseif dials:get_selected_item():get_name() == "Fixed Note" then
+
               if channel.fixed_note == nil then
                 channel.fixed_note = -1
               end
@@ -501,6 +512,7 @@ end
 
 function channel_edit_page_ui_controller.refresh_trig_locks()
   local channel = program.get_selected_channel()
+  local pressed_keys = grid_controller.get_pressed_keys()
 
   for i=1,8 do
     params[i]:set_value(channel.trig_lock_banks[i])
@@ -509,13 +521,13 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
       params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
       params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
 
-      local pressed_keys = grid_controller.get_pressed_keys()
+      local step_trig_lock = program.get_step_param_trig_lock(program.get_selected_channel(), program.get_selected_channel().current_step, i)
+
       if #pressed_keys > 0 then
-        local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
-        params[i]:set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, i) or channel.trig_lock_banks[i])
+        step_trig_lock = program.get_step_param_trig_lock(program.get_selected_channel(), fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2]), i)
+        params[i]:set_value(step_trig_lock or channel.trig_lock_banks[i])
       else
-        local step = program.get_selected_channel().current_step
-        local step_trig_lock = program.get_step_param_trig_lock(program.get_selected_channel(), step, i)
+        
 
         if (step_trig_lock and clock_controller.is_playing()) then
           params[i]:set_value(step_trig_lock)
@@ -529,6 +541,21 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
       params[i]:set_top_label("X")
       params[i]:set_bottom_label("")
     end
+  end
+
+  local step_fixed_note = program.get_step_fixed_note_trig_lock(program.get_selected_channel(), program.get_selected_channel().current_step)
+
+  if #pressed_keys > 0 then
+    step_fixed_note = program.get_step_fixed_note_trig_lock(program.get_selected_channel(), fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2]))
+    fixed_note:set_value(step_fixed_note or channel.fixed_note)
+  else
+
+    if (step_fixed_note and clock_controller.is_playing()) then
+      fixed_note:set_value(step_fixed_note)
+    else
+      fixed_note:set_value(channel.fixed_note)
+    end
+
   end
   
 end

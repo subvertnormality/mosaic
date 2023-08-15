@@ -46,6 +46,7 @@ function VerticalScrollSelector:draw()
   if not self.items then return end
 
   screen.move(self.x, self.y)
+
   if self.selected_item and self.items[self.selected_item - 1] then
     screen.level(1)
     if self.items[self.selected_item - 1].name then 

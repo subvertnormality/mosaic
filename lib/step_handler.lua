@@ -33,7 +33,7 @@ function step_handler.calculate_next_selected_sequencer_pattern()
 
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
 
-  if selected_sequencer_pattern_number + 1 < 91 and program.get().sequencer_patterns[selected_sequencer_pattern_number + 1].active then
+  if selected_sequencer_pattern_number + 1 < 91 and program.get().sequencer_patterns[selected_sequencer_pattern_number + 1] and program.get().sequencer_patterns[selected_sequencer_pattern_number + 1].active then
     return selected_sequencer_pattern_number + 1
   end
 
@@ -92,7 +92,11 @@ function step_handler.handle(c, current_step)
     channel_edit_page_ui_controller.refresh_trig_locks()
     local note = quantiser.process(note_value, octave_mod, step_scale_number, channel)
 
-    if channel.fixed_note and channel.fixed_note > -1 then
+    fixed_note_trig_lock = program.get_step_fixed_note_trig_lock(channel, current_step)
+
+    if fixed_note_trig_lock and fixed_note_trig_lock > -1 then
+      note = fixed_note_trig_lock
+    elseif channel.fixed_note and channel.fixed_note > -1 then
       note = channel.fixed_note
     end
 
