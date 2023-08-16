@@ -29,9 +29,9 @@ Requirements:
 
 ### Pattern
 
-In patterning, the 'pattern' is a central pillar. Think of it as a sequence enriched with 64 trigs, 64 note hues, 64 dynamic velocities, and timing intricately linked to each trig. Even steps without trigs should be graced with note and velocity information. Each pattern journey spans 64 steps.
+In patterning, the 'pattern' is a central pillar. Think of it as a sequence enriched with 64 trigs, 64 notes, 64 velocities, and timing linked to each trig. Even steps without trigs should be graced with note and velocity information. Each pattern spans 64 steps.
 
-In the world of patterning, notes don't strictly adhere to a single scale. They echo their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. The pattern editor ensures you remain within the bounds of your selected scale (though there are ways to flirt with notes outside of it, which we'll delve into later).
+In the world of patterning, notes don't strictly adhere to a single scale. They echo their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. Patterning ensures you remain within the bounds of your selected scale (though there are ways to flirt with notes outside of it, which we'll delve into later).
 
 ### Channel
 
