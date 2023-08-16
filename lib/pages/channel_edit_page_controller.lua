@@ -256,7 +256,7 @@ function channel_edit_page_controller.register_press_handlers()
       if channel_scale_fader:is_this(x, y) then
         program.get().selected_channel = 17
         channel_select_fader:set_value(0)
-        channel_edit_page_controller.refresh()
+        channel_scale_fader:set_value(0)
       end
     end
   )
