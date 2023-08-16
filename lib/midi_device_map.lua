@@ -3845,13 +3845,17 @@ local stock_midi_device_map = {
 }
 
 local function merge_midi_devices() 
-  local midi_devices = fn.merge_tables(custom_midi_device_map, stock_midi_device_map)
 
-  for index, device in ipairs(midi_devices) do
+  for _, v in ipairs(stock_midi_device_map) do
+    table.insert(custom_midi_device_map, v)
+  end
+
+  for index, device in ipairs(custom_midi_device_map) do
+    print(device.name)
     device["value"] = index
   end
 
-  return midi_devices
+  return custom_midi_device_map
 end
 
 

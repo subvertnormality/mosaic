@@ -1,6 +1,5 @@
 local custom_midi_device_map = {
 
-  -- { 
     -- { 
     --   ["type"] = "midi", -- leave this as is
     --   ["name"] = "Example",
@@ -36,7 +35,6 @@ local custom_midi_device_map = {
     --       ["short_descriptor_2"] = "PARA", -- 4 caps letters
     --     } 
     --   }
-    -- }
   -- },
 
 }
