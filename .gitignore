@@ -40,3 +40,4 @@ luac.out
 *.hex
 
 lib/user_config/custom_midi_device_map.lua
+lib/user_config/*
