@@ -100,7 +100,7 @@ The left side faders adjust algorithm values. Brightly lit ends refine values, w
 
 ![Algorithm controls](/designs/Images/trig_editor_algorithm_controls.png)
 
-To see your algorithm's impact, hit the prime button. This prepares a new pattern, new steps are showcased as flashing bright steps on the sequencer. While these steps flash, they aren’t set. Any step that would be applied over an existing active step will blink dimly. By painting the new pattern, you'll override the faintly blinking steps. This approach lets you craft intricate sequences grounded in rhythmic fundamentals.
+To see your algorithm's impact, hit the prime button. This prepares a new pattern, and new steps are showcased as flashing bright steps on the sequencer. While these steps flash, they aren’t set. Any step that would be applied over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences grounded in rhythmic fundamentals.
 
 If you haven’t set the new pattern, the prime button continues to blink. Pressing it again paints your edits. Here’s a tip: Double-pressing the prime button without tweaking the algorithm or its parameters acts as an undo for the last action.
 
@@ -116,11 +116,27 @@ While previewing a new pattern, use the move controls to shift its position. The
 
 ### Note editor
 
-TODO
+Dive into the harmony and melody of your rhythmic creations with the note editor.
+
+This space displays 16 steps at a glance. Envision the notes as a journey from the root: active trigs appear as soft-glowing vertical bars while the foundational root note lies in a subtle horizontal beam. The notes you've actively chosen gleam brightly. To pick a note for any of the 16 steps, just press. The gentle flicker on the top row indicates the currently chosen pattern. If you wish to explore a different pattern, press and hold on this top row.
+
+Remember, each note you select links back to the root of the scale you're working within.
+
+![Note select](/designs/Images/note_editor_note_selector.png)
+
+Switch between the four sets of 16 steps using the dedicated buttons.
+
+![16 step selector](/designs/Images/note_editor_16_selector.png)
+
+Aim for higher pitches or dive deeper with the octave select buttons, expanding your melodic range.
+
+![16 step selector](/designs/Images/note_editor_octave_selector.png)
+
+Hint: Even if a step lacks a trig, don't hesitate to assign a note. This data might come in handy with different merge modes in play.
 
 ### Velocity editor
 
-TODO
+Venture into the velocity editor, a close kin of the note editor. It spans two vertical pages: the initial displays velocities from 127 down to 67, while the latter showcases values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence.
 
 ### Channel editor
 
@@ -129,6 +145,7 @@ TODO
 ### Song editor
 
 TODO
+
 
 # Development
 
