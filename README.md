@@ -7,7 +7,7 @@ Welcome to *Patterning*.
 At a glance, as of v0.1 patterning gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
-- 16 patterns that can be combined and mutated in different permutation to change their properties in very musical ways
+- 16 patterns that can be combined and mutated in different permutations to change their properties in very musical ways
 - Song mode with 90 sequencer patterns
 - Save, load, autosave
 - A pattern editor that allows quick creation of trigger patterns using a DrumOps port, includes euclidean, tresillo function, drum preset banks, and NE Numeric Repetitor
@@ -194,7 +194,7 @@ Want a step to hold a unique sound or scale? Press and keep it down while select
 
 Adjust a channel's octave range with:
 
-![Octave selector](/designs/Images/channel_edit_octave_select.png)
+![Octave selector](/designs/Images/channel_edit_octave_selector.png)
 
 And how do your patterns meld? Define this with the merge mode selector:
 
