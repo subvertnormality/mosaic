@@ -2,7 +2,7 @@
 
 Welcome to *Patterning*.
 
-*Patterning* is a grid-first deliberate generative sequencer that enables the quick creation of complex rhythms and tonal progressions. It uses sequencer techniques from the world of modular, Elektron, and monome together to create a powerful and unique sketching and composition workflow. A 128 grid is required.
+*Patterning* for monome norns manifests as a grid-centric, intentioned generative sequencer. Bridging the realms of modular, Elektron, and monome, it weaves intricate rhythms and melodic paths with finesse. Dive into a profound and singular tapestry of sketching and composition.
 
 At a glance, as of v0.1 patterning gives you the following:
 
@@ -18,96 +18,99 @@ At a glance, as of v0.1 patterning gives you the following:
 - Scales with root note and degree setting
 - Trig lockable octave and scale select
 
+Requirements:
+
+- Norns
+- 128 grid
+- Midi interface
+- Midi instruments
+
 ## Core concepts
 
 ### Pattern
 
-The pattern is a core entity in the world of *patterning*. It represents a sequence of 64 trigs, 64 note values, 64 velocity values, and length data associated to the trigs. Steps that do not have trigs can (and should) have note and velocity data assigned to them. Patterns are always 64 steps long.
+In patterning, the 'pattern' is a central pillar. Think of it as a sequence enriched with 64 trigs, 64 note hues, 64 dynamic velocities, and timing intricately linked to each trig. Even steps without trigs should be graced with note and velocity information. Each pattern journey spans 64 steps.
 
-Note data in patterning is decoupled from any one particular scale. Each note represents the position in the currently set scale as it's distance from the root. For example, if C major is selected, the root is C, the note one up from the root in the editor would be D, the note one down from the root is B and so on. It's not possible to select a note outside of the scale using the pattern editor (although we'll look at how accidentals are possible later).
+In the world of patterning, notes don't strictly adhere to a single scale. They echo their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. The pattern editor ensures you remain within the bounds of your selected scale (though there are ways to flirt with notes outside of it, which we'll delve into later).
 
 ### Channel
 
-A channel is another core entity. Through a channel you determine what device is to be played an precisely what is going to be played. You select the channel's midi device, which midi output to use, what midi channel to use, and the trig locks and associated destinations within a channel. You also select which patterns you want to act through a channel. Each channel can have multiple patterns associated to it. Patterns can also be reused across multiple channels. Channels are monophonic, but multiple channels can output to the same midi device.
+The 'channel' is the second crucial component in patterning. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's MIDI device, pick the MIDI output, choose the MIDI channel, and set up trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel operates in monophonic mode, several can send signals to the same MIDI device.
 
-When two or more patterns are associated to a single channel, what happens when two trigs collide on a single step is determined by the channel's merge mode. There are multiple merge modes, each giving a slightly different behaviour. For this reason, it is desirable to have patterns that collide in interesting ways.
+When two patterns overlap in one channel and their trigs coincide, the outcome depends on the channel's 'merge mode'. There are several merge modes, each with its own characteristic. This feature encourages designing patterns that, when they overlap, produce intriguing results.
 
-Channels can be clock divided and swung independently. Channels can also be set to length less than 64 steps for polyrhythmic fun.
+You can adjust the rhythm for each channel individually, allowing for different clock divisions and swings. Plus, if you're looking to mix up the rhythm, channels can be set to fewer than the standard 64 steps, opening the door to polyrhythmic experiments.
 
 ### Sequencer Pattern
 
-The sequencer pattern is the third core entity of patterning. It represents all channel and pattern data, including all trig locks, scale settings, merge mode settings, octave settings, etc for a 64 step sequence. There are 90 sequencer pattern slots in a *Patterning* scene. These slots can be chained to form a song.
-
-Sequencer patterns can be set to lengths from 1 step to 64 steps. This applies to all channels.
+The sequencer pattern stands as one of the foundational elements in Patterning. This entity encompasses all details from channels and patterns, ranging from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a Patterning scene, you're provided with 90 sequencer pattern slots, which can be seamlessly linked to craft a song. All channels can have their sequencer patterns adjusted anywhere between 1 to 64 steps.
 
 ### Scale
 
-There are 16 scale slots per sequencer pattern. Each scale slot has a root note, a scale type (Dorian, Major, etc), and a degree setting. You can set a channel's default scale independently, set scale trig locks per channel, or you can set global scale trig locks that apply to all channels if there is no channel-specific trig lock in action. In this way, you can create complex chord progressions.
+Each sequencer pattern offers 16 scale slots. A single slot can house a root note, a scale variation (like Dorian or Major), and a degree setting. Scales can be fine-tuned in various ways: setting a default scale for a channel, designating scale trig locks for specific channels, or implementing global scale trig locks influencing all channels unless a particular channel-specific trig lock takes precedence. This flexibility paves the way for intricate chord progressions.
 
 ### Device
 
-A device represents a midi device in your studio. It is made up of metadata, the most important being midi destinations, device name, CC midi destinations. There are some present device templates and trig lock destinations can be either set manually on norns, or configured via a configuration file.
+Think of a device as a representation of a MIDI device in your workspace. It's primarily defined by attributes like MIDI destinations, device name, and CC MIDI destinations. While there are some ready-made device templates to get you started, trig lock destinations can be customized either directly on the norns or through a configuration file.
 
 ## Pages
 
-Patterning is made up of 5 pages. Each page has a grid UI and a set of configuration options on the norns device. It is designed to be grid first. You use the norns to set a few basics up such as scales, midi devices and outputs, and then you stick to the grid to create the music.
+At its heart, Patterning comprises five distinct pages. Every page presents a grid interface complemented by a set of configurable options on the norns device. The design prioritizes the grid, urging users to initiate some basics via the norns—like scales and MIDI setups—and then dive deep into the grid for music creation.
 
 ### Menu
 
-The menu at the bottom of the grid allows you to select the current page using the first five buttons. These are consistent across all pages. There are also page-context sensitive functions to the right.
+The grid's lower menu facilitates page selection using its initial five buttons, a feature maintained consistently across all pages. Additionally, on the right, there are functions sensitive to the current page context.
  
 ![The menu as shown on the pattern edit page](/designs/Images/menu.png)
 
-From left to right, the buttons select the:
+From the left moving rightward, the buttons activate:
 
 * Channel editor
 * Song editor
-* Trig editor (selected here)
+* Trig editor (highlighted in this instance)
 * Note editor
 * Velocity editor
 
 ### Trig editor
 
-The trig editor is where you create your trig patterns using _Patterning_'s DrumOp tools. Here you create your patterns and assign length data to each step. The following image shows the trig editor with a complex pattern made up of trigs and length data.
+Dive into the world of rhythmic design with the trig editor in _Patterning_. Using the DrumOp tools, you can craft intricate patterns and define the duration of each step.
 
 ![Trig editor with a complex trig pattern](/designs/Images/trig_editor.png)
 
-Using the top row you select one of 16 patterns. The image shows pattern 2 as being selected.
+With the top row, pick one of the 16 patterns available. In the image, you can see pattern 2 being selected.
 
 ![Pattern select buttons](/designs/Images/trig_editor_pattern_select.png)
 
-You can tap in individual trig data on the sequencer. The brightly lit steps represent a trig. You can  enter length data by holding a trig and selecting the desired last step of the length. Length data is shown as dimly lit. Patterns are monophonic. The length of a trig will end when it encounters another trig.
+To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolize a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. Since patterns are monophonic, one trig’s duration ends upon meeting another.
 
 ![Trig sequencer](/designs/Images/trig_editor_sequencer.png)
 
-Trig patterns can be created using a number of in-built algorithms, selected using the buttons shown here.
+Craft unique rhythms using a variety of built-in algorithms.
 
 ![Algorithm select](/designs/Images/trig_editor_algorithms.png)
 
-* Button 1 selects the drum algorithm. This uses preset banks of drum patterns for traditional beats.
-* Button 2 selects the tresillo algorithm. This uses a 3/3/2 ratio to create varations on the preset drum banks.
-* Button 3 selects euclidian, a powerful mathmatic based rhythm tool.
-* Button 4 selects NE Numeric Repitor, another powerful mathmatic based ryhthm tool.
+* Button 1: The drum algorithm, drawing from a rich collection of classic drum patterns.
+* Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations.
+* Button 3: Euclidian, a rhythm tool rooted in mathematical logic.
+* Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
 
-The grid is context aware. Different algorithms have different options associated with them. These controls change the parameters of the different algorithms. You can press on a grid key and usually a tooltip will be shown on the norns screen describing it's function.
+The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the norns screen.
 
-The faders to the left select values within the algorithm. If the end buttons of the faders a brightly lit, these select fine-grain values within the fader. The dimly lit buttons select course grain values within the fader.
-
-The fader to the right generally selects banks within the algorithm.
+The left side faders adjust algorithm values. Brightly lit ends refine values, while the more subdued ones adjust them broadly. The rightmost fader typically toggles between different algorithm banks.
 
 ![Algorithm controls](/designs/Images/trig_editor_algorithm_controls.png)
 
-To view the effect of the currently selected algorithm, you must press the prime button. This primes a new pattern ready to paint onto the sequencer. The sequencer shows the new steps as bright blinking lights. Whilst the steps are blinking, they are not painted. If a step is already active, it is shown as dimly blinking. Painting the new pattern will deactive existing, dimly blinking steps. This way your patterns can be built into super complex and unusual sequences that are always rooted in established rythmic theory. 
+To see your algorithm's impact, hit the prime button. This prepares a new pattern, new steps are showcased as flashing bright steps on the sequencer. While these steps flash, they aren’t set. Any step that would be applied over an existing active step will blink dimly. By painting the new pattern, you'll override the faintly blinking steps. This approach lets you craft intricate sequences grounded in rhythmic fundamentals.
 
-Whilst the new pattern has not been painted, the prime button will blink. Press it again to apply your changes. Tip: If you press the prime button again without changing the algorithm or algoithm parameters, you can apply the changes again to undo the last paint.
+If you haven’t set the new pattern, the prime button continues to blink. Pressing it again paints your edits. Here’s a tip: Double-pressing the prime button without tweaking the algorithm or its parameters acts as an undo for the last action.
 
 ![Prime and print button](/designs/Images/trig_editor_prime_and_print.png)
 
-You can cancel a primed pattern using the cancel button.
+Opt out of a prepared pattern by using the cancel button.
 
 ![Cancel button](/designs/Images/trig_editor_cancel.png)
 
-Whilst a new pattern is primed, you can move it left or right using the move controls. The first button moves left, the third moves right, and the centre button returns the pattern to it's original position. Don't forget to paint.
+While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes.
 
 ![Left, centre, right buttons](/designs/Images/trig_editor_left_right.png)
 
