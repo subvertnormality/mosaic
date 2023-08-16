@@ -29,9 +29,9 @@ Requirements:
 
 ### Pattern
 
-In patterning, the 'pattern' is a central pillar. Think of it as a sequence enriched with 64 trigs, 64 notes, 64 velocities, and timing linked to each trig. Even steps without trigs should be graced with note and velocity information. Each pattern spans 64 steps.
+In patterning, the 'pattern' is a central pillar. Think of it as a sequence enriched with 64 trigs, 64 notes, 64 velocities, and timing linked to each trig. Each pattern spans 64 steps.
 
-In the world of patterning, notes don't strictly adhere to a single scale. They echo their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. Patterning ensures you remain within the bounds of your selected scale (though there are ways to flirt with notes outside of it, which we'll delve into later).
+In the world of patterning, notes don't strictly adhere to a single scale. They echo their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. Patterning ensures you remain within the bounds of your selected scale (though there are ways to flirt with notes outside of it, which we'll delve into later). You'll find several methods to adjust scales seamlessly as you go, which we'll delve into shortly.
 
 ### Channel
 
@@ -70,6 +70,8 @@ From the left moving rightward, the buttons activate:
 * Trig editor (highlighted in this instance)
 * Note editor
 * Velocity editor
+
+To start or halt the sequencer, simply press the active page in the menu. If it's in motion, the active page button will give off a gentle blink.
 
 ### Trig editor
 
@@ -130,7 +132,7 @@ Switch between the four sets of 16 steps using the dedicated buttons.
 
 Aim for higher pitches or dive deeper with the octave select buttons, expanding your melodic range.
 
-![16 step selector](/designs/Images/note_editor_octave_selector.png)
+![melodic range selector](/designs/Images/note_editor_octave_selector.png)
 
 Hint: Even if a step lacks a trig, don't hesitate to assign a note. This data might come in handy with different merge modes in play.
 
@@ -140,12 +142,62 @@ Venture into the velocity editor, a close kin of the note editor. It spans two v
 
 ### Channel editor
 
-TODO
+Venture into the heart of your masterpiece with the channel editor. Here, individual patterns find harmony, merging into cohesive sounds.
+
+Begin by selecting from the 16 available channels:
+
+![Channel selector](/designs/Images/channel_edit_channel_select.png)
+
+Next, lend your channel its voice by assigning patterns:
+
+![Pattern selector](/designs/Images/channel_edit_pattern_select.png)
+
+Each channel can dance to its own tune – choose a default scale. Or, apply a specific scale to certain steps using trig locks. Scales will persist until the next scale lock or the end of the pattern. You can turn this behaviour off in the params.
+
+![Scale selector](/designs/Images/channel_edit_scale_select.png)
+
+The sequencer visualizes the music: a tapestry of selected patterns, tailored by the chosen merge mode. To set a channel's length, press and hold the first and last step simultaneously. Active steps light up, guiding your symphony.
+
+Want a step to hold a unique sound or scale? Press and keep it down while selecting the desired parameter, scale, or octave. Clearing these personalized choices is a breeze:
+
+* For scale: Press and hold the step until it fades.
+* For parameters: Press and hold the step, then tap the K3 button.
+* For octave: Reset the trig lock to 0 on the octave selector.
+
+![Channel sequencer](/designs/Images/channel_edit_sequencer.png)
+
+Adjust a channel's octave range with:
+
+![Octave selector](/designs/Images/channel_edit_octave_select.png)
+
+And how do your patterns meld? Define this with the merge mode selector:
+
+![Merge mode selector](/designs/Images/channel_edit_merge_mode.png)
+
+Dive into the merge modes:
+
+* Pattern Merge: A harmonious blend, this mode combines trigs from all patterns, yet only takes note and velocity from the chosen pattern. To toggle through patterns, press repeatedly. For a quick switch, press and hold your desired pattern key, then tap the pattern merge mode key.
+* Skip Merge: A gracious dancer, this mode elegantly sidesteps any clashing trigs.
+* Average Merge: A maestro in its own right, this mode fuses clashing note values, offering fresh melodies from familiar notes.
+* Add & Subtract Merge: A duet of creativity, these modes play with note values, resulting in a myriad of melodies. Tap repeatedly to switch between the two modes.
 
 ### Song editor
 
-TODO
+Visualize the vast canvas of the song editor: a grid of 90 slots, each beckoning you to craft sequencer patterns. These patterns embody channels, rhythms, scales, and the heartbeat of your creation.
 
+* Dim buttons: Think of these as blank canvases, waiting for your touch.
+* Mid-glow buttons: These slots are already filled with your rhythms and patterns.
+* Brightly lit buttons: Active and pulsing, they're in play right now.
+
+Want to choose a pattern? A simple press will do. Looking to replicate one slot's magic to another? Press and hold the source, then the desired destination. A word of caution: this action replaces the content of the target slot. To erase a slot, simply copy an empty one over it.
+
+Now, if the "song mode" setting is toggled on, after a pattern finishes its dance a set number of times, the sequencer gracefully glides to the next slot. Should it find the next slot empty, it circles back to the first filled slot in that group. This lets you craft distinctive pattern clusters to shift between. And if you get an urge to switch up slots while the sequencer plays? No worries, it queues your request, waiting for the current sequence to finish.
+
+![Song sequencer pattern selector](/designs/Images/song_mode_sequencer_pattern_selector.png)
+
+Adjust the global sequencer pattern length with the fader located at the song editor page's lower end. For precise adjustments, use the end cap buttons. If you prefer broader changes, the central fader buttons have you covered. You have a spectrum from 1-64 to explore.
+
+![Pattern length selector](/designs/Images/song_mode_sequencer.png)
 
 # Development
 
