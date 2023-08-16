@@ -2,7 +2,7 @@
 
 Welcome to *Patterning*.
 
-*Patterning* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodic paths with finesse. Dive into a profound and singular tapestry of sketching and composition.
+*Patterning* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodies with finesse. Dive into a profound and singular tapestry of sketching and composition.
 
 At a glance, as of v0.1 patterning gives you the following:
 
@@ -30,13 +30,15 @@ Requirements:
 
 ### Pattern
 
-In _Patterning_, the 'pattern' is a central pillar. Think of it as a sequence enriched with 64 trigs, 64 notes, 64 velocities, and timing linked to each trig. Each pattern spans 64 steps.
+In _Patterning_, the 'pattern' is the central pillar. Think of it as a sequence enriched with 64 trigs, 64 notes, 64 velocities, and length data for each trig. Each pattern spans 64 steps.
 
-In the world of _Patterning_, notes don't strictly adhere to a single scale. They echo their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. _Patterning_ ensures you remain within your selected scale (though there are ways to flirt with notes outside of it, which we'll delve into later). You'll find several methods to adjust scales seamlessly as you go, which we'll cover  shortly.
+In the world of _Patterning_, notes don't strictly adhere to a single scale. Instead, they are valued by their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
+
+_Patterning_ ensures you remain within your selected scale (though there are ways to flirt with notes outside of it, which we'll delve into later). You'll find several methods to adjust scales seamlessly as you go, which we'll cover  shortly.
 
 ### Channel
 
-The 'channel' is the second crucial component in _Patterning_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's MIDI device, pick the MIDI output, choose the MIDI channel, the scale, and set up trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel operates in monophonic mode, several can send signals to the same MIDI device.
+The 'channel' is the second crucial component in _Patterning_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's MIDI device, pick the MIDI output, choose the MIDI channel, the scale, and set up trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device.
 
 When two patterns overlap in one channel and their trigs coincide, the outcome depends on the channel's 'merge mode'. There are several merge modes, each with its own characteristic. This feature encourages designing patterns that, when they overlap, produce intriguing results.
 
@@ -44,7 +46,7 @@ You can adjust the rhythm for each channel individually, allowing for different 
 
 ### Sequencer Pattern
 
-The sequencer pattern stands as the last of the three foundational elements in _Patterning_. This entity encompasses all details from channels and patterns, ranging from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be seamlessly linked to craft a song. All sequencer patterns can have their length adjusted anywhere between 1 to 64 steps.
+The sequencer pattern stands as the last of the three foundational elements in _Patterning_. This entity encompasses all details from channels and patterns, ranging from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be seamlessly linked to craft a song. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
 
 ### Scale
 
@@ -76,7 +78,7 @@ To start or halt the sequencer, simply press the active page in the menu. If the
 
 ### Trig editor
 
-Dive into the world of rhythmic design with the trig editor in _Patterning_. Using the DrumOp tools, you can craft intricate patterns and define the duration of each step.
+Dig into rhythmic design with the trig editor in _Patterning_. Using DrumOps tools, originally seen in the Teletype ecosystem but now available here, you can craft intricate patterns and define the duration of each step.
 
 ![Trig editor with a complex trig pattern](/designs/Images/trig_editor.png)
 
@@ -90,12 +92,12 @@ To set your rhythm, simply tap in steps using the sequencer. Bright steps symbol
 
 Craft unique rhythms using a variety of built-in algorithms.
 
-![Algorithm select](/designs/Images/trig_editor_algorithms.png)
-
 * Button 1: The drum algorithm, drawing from a rich collection of classic drum patterns.
-* Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations.
+* Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the norns screen for more varations.
 * Button 3: Euclidian, a rhythm tool rooted in mathematical logic.
 * Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
+
+![Algorithm select](/designs/Images/trig_editor_algorithms.png)
 
 The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the norns screen.
 
@@ -103,7 +105,7 @@ The left side faders adjust algorithm values. Brightly lit ends refine values, w
 
 ![Algorithm controls](/designs/Images/trig_editor_algorithm_controls.png)
 
-To see your algorithm's impact, hit the prime button. This prepares a new pattern, and new steps are showcased as flashing bright steps on the sequencer. While these steps flash, they aren’t set. Any step that would be applied over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences grounded in rhythmic fundamentals. You can modify algorithm parameters whilst the pattern is primed.
+To see your algorithm's impact, hit the prime button. This prepares a new pattern, and new steps are showcased as flashing bright steps on the sequencer. While these steps flash, they aren’t painted yet. Any step that would be painted over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences, grounded in rhythmic fundamentals, that don't get too busy. You can modify algorithm parameters whilst the pattern is primed.
 
 If you haven’t painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Here’s a tip: Double-pressing the prime button without tweaking the algorithm or its parameters acts as an undo for the last action.
 
@@ -128,11 +130,11 @@ On page 2 you can select trig editor options. Currently this allows you to edit 
 
 ### Note editor
 
-Dive into the harmony and melody of your rhythmic creations with the note editor.
+Set the harmony and melody of your rhythmic creations with the note editor.
 
-This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the foundational root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. The gentle flicker on the top row indicates the currently chosen pattern. If you wish to explore a different pattern, press and hold on this top row.
+This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the  root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. The gentle flicker on the top row indicates the currently chosen pattern. If you wish to explore a different pattern, press and hold on this top row.
 
-Remember, each note you select links back to the root of the scale you're working within.
+Remember, each note you select links back to the root of the scale you're working within. The scale is applied to the channel, not the pattern. You must start to think about your patterns as being disconnected from each channel. This is why we say _Patterning_ is an intentioned generative sequencer. Expect happy accidents. The channel grid viewer on the norns screen can help you here.
 
 ![Note select](/designs/Images/note_editor_note_selector.png)
 
@@ -150,13 +152,13 @@ On the norns screen you can see the channel grid visualiser. Use E2 to select th
 
 ### Velocity editor
 
-Venture into the velocity editor, a close kin of the note editor. It spans two vertical pages: the initial displays velocities from 127 down to 67, while the latter showcases values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence.
+Now let's look at the velocity editor, a close kin of the note editor. It spans two vertical pages: the initial displays velocities from 127 down to 67, while the latter showcases values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence.
 
 On the norns screen you can see the channel grid visualiser. Use E2 to select the current channel.
 
 ### Channel editor
 
-Let's create the heart of your masterpiece with the channel editor. Here, individual patterns find harmony, merging into cohesive sounds.
+Time to create the heart of your masterpiece with the channel editor. Here, individual patterns find harmony, merging into cohesive sounds.
 
 Begin by selecting from the 16 available channels:
 
@@ -168,8 +170,6 @@ Next, lend your channel its voice by assigning one or more patterns:
 
 Each channel can have a default scale. Or, apply a specific scale to certain steps using trig locks. Scales will persist until the next scale lock or the end of the pattern. You can turn this behaviour off in the params.
 
-![Scale selector](/designs/Images/channel_edit_scale_select.png)
-
 Want to harmonize the scale across all channels? Here's how with the global scale editor:
 
 To accessing the editor, press and hold any scale select button. You'll be presented with a streamlined grid offering a few clear options. On this page, you can define scale trigs which will be consistent across all channels. This is great for crafting harmonized chord sequences.
@@ -179,6 +179,8 @@ To accessing the editor, press and hold any scale select button. You'll be prese
 * Default Channel Scale: If no locks are set, the system relies on this default.
 
 Tip: When a global scale is active, its corresponding scale button will glow with a soft light.
+
+![Scale selector](/designs/Images/channel_edit_scale_select.png)
 
 The sequencer visualizes the music: a tapestry of selected patterns, tailored by the chosen merge mode. To set a channel's length, press and hold the first and last step simultaneously. Active steps light up, guiding your symphony.
 
@@ -225,13 +227,13 @@ On page 4 you can change how your channel interacts externally. To the left, fin
 
 ### Song editor
 
-Behold the vast canvas of the song editor: a grid of 90 slots, each beckoning you to craft sequencer patterns. These patterns embody patterns, channels, rhythms, scales, and all other compoenents of your rhythms, the heartbeat of your creation.
+The song editor is a grid of 90 slots, each one representing the potential of combining your patterns in unique ways. These sequencer patterns embody patterns, channels, rhythms, scales, and all other compoenents of your rhythms, the heartbeat of your creation.
 
 * Dim buttons: Think of these as blank canvases, waiting for your touch.
 * Mid-glow buttons: These slots are already filled with your rhythms and patterns.
 * Brightly lit button: this is the sequencer pattern in play right now.
 
-Want to choose a pattern? A simple press will do. Looking to replicate one slot to another? Press and hold the source, then the desired destination. Warning: this action replaces the content of the target slot. To erase a slot, simply copy an empty one over it.
+Want to choose a pattern? A simple press will do. Looking to replicate one slot to another? Press and hold the source, then the desired destination. Warning: this action replaces the content of the target slot. To erase a slot, simply copy an empty one over it. There is no undo. Be careful.
 
 Now, if the "song mode" setting is toggled on, after a pattern finishes playing it's set number of times, the sequencer gracefully changes to the next slot. Should it find the next slot empty, it circles back to the first filled slot in that group. This lets you craft distinctive pattern clusters to shift between. And if you get an urge to switch up slots while the sequencer plays? No worries, it queues your request, waiting for the current sequence to finish.
 
@@ -246,6 +248,11 @@ On page 2, whether you desire a serene lullaby or a frantic mess, you can set th
 Adjust the global sequencer pattern length with the fader located at the song editor page's lower end. For precise adjustments, use the end cap buttons. If you prefer broader changes, the central fader buttons have you covered. You have a spectrum from 1-64 to explore.
 
 ![Pattern length selector](/designs/Images/song_mode_sequencer.png)
+
+## Custom device maps
+
+You can define every device in your studio using the custom_midi_device_map.lua file in patterning/lib/user_config/. Copy the template and add your device's cc and midi information.
+
 
 # Development
 
