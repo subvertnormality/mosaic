@@ -1,4 +1,4 @@
-# This is designed to create tables of midi devices for use in patterning. The scipt takes midi definition CSVs 
+# This is designed to create tables of midi devices for use in mosaic. The scipt takes midi definition CSVs 
 # from https://github.com/usercamp/midi/ and outputs a table file. It uses chatgpt to create two four letter tokens 
 # designed to be used as identifiers for controls. The output needs to be edited manually as it's not perfect.
 

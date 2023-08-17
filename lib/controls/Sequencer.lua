@@ -1,7 +1,7 @@
 Sequencer = {}
 Sequencer.__index = Sequencer
 
-local fn = include("patterning/lib/functions")
+local fn = include("mosaic/lib/functions")
 
 function Sequencer:new(y, mode)
   local self = setmetatable({}, self)

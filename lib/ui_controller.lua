@@ -1,12 +1,12 @@
 local ui_controller = {}
 
-channel_edit_page_ui_controller = include("patterning/lib/pages/channel_edit_page_ui_controller")
-velocity_edit_page_ui_controller = include("patterning/lib/pages/velocity_edit_page_ui_controller")
-note_edit_page_ui_controller = include("patterning/lib/pages/note_edit_page_ui_controller")
-trigger_edit_page_ui_controller = include("patterning/lib/pages/trigger_edit_page_ui_controller")
-channel_sequencer_page_ui_controller = include("patterning/lib/pages/channel_sequencer_page_ui_controller")
+channel_edit_page_ui_controller = include("mosaic/lib/pages/channel_edit_page_ui_controller")
+velocity_edit_page_ui_controller = include("mosaic/lib/pages/velocity_edit_page_ui_controller")
+note_edit_page_ui_controller = include("mosaic/lib/pages/note_edit_page_ui_controller")
+trigger_edit_page_ui_controller = include("mosaic/lib/pages/trigger_edit_page_ui_controller")
+channel_sequencer_page_ui_controller = include("mosaic/lib/pages/channel_sequencer_page_ui_controller")
 
-tooltip = include("patterning/lib/ui_components/tooltip")
+tooltip = include("mosaic/lib/ui_components/tooltip")
 
 
 function ui_controller.init()
@@ -41,9 +41,9 @@ function ui_controller.redraw()
 
   if not program then return end
 
-  screen.move(122, 10)
+  screen.move(120, 10)
   screen.font_face (math.random(3,8))
-  screen.text("P")
+  screen.text("m")
   screen.font_face (1)
   draw_handler:handle_ui(program.get().selected_page)
   

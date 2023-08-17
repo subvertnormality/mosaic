@@ -1,7 +1,7 @@
 local Pages = {}
 Pages.__index = Pages
 
-local fn = include("patterning/lib/functions")
+local fn = include("mosaic/lib/functions")
 
 function Pages:new()
   local self = setmetatable({}, Pages)

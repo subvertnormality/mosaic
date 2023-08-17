@@ -1,17 +1,17 @@
 local channel_edit_page_ui_controller = {}
 
-local midi_device_map = include("patterning/lib/midi_device_map")
+local midi_device_map = include("mosaic/lib/midi_device_map")
 
-local quantiser = include("patterning/lib/quantiser")
-local Pages = include("patterning/lib/ui_components/Pages")
-local Page = include("patterning/lib/ui_components/Page")
-local VerticalScrollSelector = include("patterning/lib/ui_components/VerticalScrollSelector")
-local Dial = include("patterning/lib/ui_components/Dial")
-local ControlScrollSelector = include("patterning/lib/ui_components/ControlScrollSelector")
-local ListSelector = include("patterning/lib/ui_components/ListSelector")
-local ValueSelector = include("patterning/lib/ui_components/ValueSelector")
+local quantiser = include("mosaic/lib/quantiser")
+local Pages = include("mosaic/lib/ui_components/Pages")
+local Page = include("mosaic/lib/ui_components/Page")
+local VerticalScrollSelector = include("mosaic/lib/ui_components/VerticalScrollSelector")
+local Dial = include("mosaic/lib/ui_components/Dial")
+local ControlScrollSelector = include("mosaic/lib/ui_components/ControlScrollSelector")
+local ListSelector = include("mosaic/lib/ui_components/ListSelector")
+local ValueSelector = include("mosaic/lib/ui_components/ValueSelector")
 
-local midi_controller = include("patterning/lib/midi_controller")
+local midi_controller = include("mosaic/lib/midi_controller")
 
 local pages = Pages:new()
 

@@ -1,10 +1,10 @@
-# Patterning
+# Mosaic
 
-Welcome to *Patterning*.
+Welcome to *Mosaic*.
 
-*Patterning* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodies with finesse. Dive into a profound and singular tapestry of sketching and composition.
+*Mosaic* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodies with finesse. Dive into a profound and singular tapestry of sketching and composition.
 
-At a glance, as of v0.1 patterning gives you the following:
+At a glance, as of v0.1 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
 - 16 patterns that can be combined and mutated in different permutations to change their properties in very musical ways
@@ -30,15 +30,15 @@ Requirements:
 
 ### Pattern
 
-In _Patterning_, the 'pattern' is the central pillar. Think of it as a sequence enriched with 64 trigs, 64 notes, 64 velocities, and length data for each trig. Each pattern spans 64 steps.
+In _Mosaic_, the 'pattern' is the central pillar. Think of it as a sequence enriched with 64 trigs, 64 notes, 64 velocities, and length data for each trig. Each pattern spans 64 steps.
 
-In the world of _Patterning_, notes don't strictly adhere to a single scale. Instead, they are valued by their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
+In the world of _Mosaic_, notes don't strictly adhere to a single scale. Instead, they are valued by their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
 
-_Patterning_ ensures you remain within your selected scale (though there are ways to flirt with notes outside of it, which we'll delve into later). You'll find several methods to adjust scales seamlessly as you go, which we'll cover  shortly.
+_Mosaic_ ensures you remain within your selected scale (though there are ways to flirt with notes outside of it, which we'll delve into later). You'll find several methods to adjust scales seamlessly as you go, which we'll cover  shortly.
 
 ### Channel
 
-The 'channel' is the second crucial component in _Patterning_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's MIDI device, pick the MIDI output, choose the MIDI channel, the scale, and set up trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device.
+The 'channel' is the second crucial component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's MIDI device, pick the MIDI output, choose the MIDI channel, the scale, and set up trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device.
 
 When two patterns overlap in one channel and their trigs coincide, the outcome depends on the channel's 'merge mode'. There are several merge modes, each with its own characteristic. This feature encourages designing patterns that, when they overlap, produce intriguing results.
 
@@ -46,7 +46,7 @@ You can adjust the rhythm for each channel individually, allowing for different 
 
 ### Sequencer Pattern
 
-The sequencer pattern stands as the last of the three foundational elements in _Patterning_. This entity encompasses all details from channels and patterns, ranging from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be seamlessly linked to craft a song. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
+The sequencer pattern stands as the last of the three foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns, ranging from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be seamlessly linked to craft a song. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
 
 ### Scale
 
@@ -58,7 +58,7 @@ Think of a device as a representation of a MIDI device in your workspace. It's p
 
 ## Pages
 
-At its heart, _Patterning_ comprises five distinct pages. Every page presents a grid interface complemented by a set of configurable options on the norns device. The design prioritizes the grid, urging users to initiate some basics via the norns—like scales and MIDI setups—and then dive deep into the grid for music creation.
+At its heart, _Mosaic_ comprises five distinct pages. Every page presents a grid interface complemented by a set of configurable options on the norns device. The design prioritizes the grid, urging users to initiate some basics via the norns—like scales and MIDI setups—and then dive deep into the grid for music creation.
 
 ### Menu
 
@@ -78,7 +78,7 @@ To start or halt the sequencer, simply press the active page in the menu. If the
 
 ### Trig editor
 
-Dig into rhythmic design with the trig editor in _Patterning_. Using DrumOps tools, originally seen in the Teletype ecosystem but now available here, you can craft intricate patterns and define the duration of each step.
+Dig into rhythmic design with the trig editor in _Mosaic_. Using DrumOps tools, originally seen in the Teletype ecosystem but now available here, you can craft intricate patterns and define the duration of each step.
 
 ![Trig editor with a complex trig pattern](/designs/Images/trig_editor.png)
 
@@ -134,7 +134,7 @@ Set the harmony and melody of your rhythmic creations with the note editor.
 
 This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the  root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. The gentle flicker on the top row indicates the currently chosen pattern. If you wish to explore a different pattern, press and hold on this top row.
 
-Remember, each note you select links back to the root of the scale you're working within. The scale is applied to the channel, not the pattern. You must start to think about your patterns as being disconnected from each channel. This is why we say _Patterning_ is an intentioned generative sequencer. Expect happy accidents. The channel grid viewer on the norns screen can help you here.
+Remember, each note you select links back to the root of the scale you're working within. The scale is applied to the channel, not the pattern. You must start to think about your patterns as being disconnected from each channel. This is why we say _Mosaic_ is an intentioned generative sequencer. Expect happy accidents. The channel grid viewer on the norns screen can help you here.
 
 ![Note select](/designs/Images/note_editor_note_selector.png)
 
@@ -251,9 +251,9 @@ Adjust the global sequencer pattern length with the fader located at the song ed
 
 ## Custom device maps
 
-You can define every device in your studio using the custom_midi_device_map.lua file in patterning/lib/user_config/. Copy the template and add your device's cc and midi information.
+You can define every device in your studio using the custom_midi_device_map.lua file in Mosaic/lib/user_config/. Copy the template and add your device's cc and midi information.
 
 
 # Development
 
-See https://trello.com/b/kMZ4qEhk/patterning for backlog. Please raise bugs and issues in Github.
+See https://trello.com/b/kMZ4qEhk/Mosaic for backlog. Please raise bugs and issues in Github.

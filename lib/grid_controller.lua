@@ -1,20 +1,20 @@
 local grid_controller = {}
 
-local Fader = include("patterning/lib/controls/Fader")
-local Sequencer = include("patterning/lib/controls/Sequencer")
-local Button = include("patterning/lib/controls/Button")
+local Fader = include("mosaic/lib/controls/Fader")
+local Sequencer = include("mosaic/lib/controls/Sequencer")
+local Button = include("mosaic/lib/controls/Button")
 
-press_handler = include("patterning/lib/press_handler")
-draw_handler = include("patterning/lib/draw_handler")
-grid_abstraction = include("patterning/lib/grid_abstraction")
+press_handler = include("mosaic/lib/press_handler")
+draw_handler = include("mosaic/lib/draw_handler")
+grid_abstraction = include("mosaic/lib/grid_abstraction")
 grid_abstraction.init()
 
-channel_edit_page_controller = include("patterning/lib/pages/channel_edit_page_controller")
-channel_sequencer_page_controller = include("patterning/lib/pages/channel_sequencer_page_controller")
+channel_edit_page_controller = include("mosaic/lib/pages/channel_edit_page_controller")
+channel_sequencer_page_controller = include("mosaic/lib/pages/channel_sequencer_page_controller")
 
-local trigger_edit_page_controller = include("patterning/lib/pages/trigger_edit_page_controller")
-local note_edit_page_controller = include("patterning/lib/pages/note_edit_page_controller")
-local velocity_edit_page_controller = include("patterning/lib/pages/velocity_edit_page_controller")
+local trigger_edit_page_controller = include("mosaic/lib/pages/trigger_edit_page_controller")
+local note_edit_page_controller = include("mosaic/lib/pages/note_edit_page_controller")
+local velocity_edit_page_controller = include("mosaic/lib/pages/velocity_edit_page_controller")
 
 local channel_edit_button = Button:new(1, 8)
 local channel_sequencer_button = Button:new(2, 8)

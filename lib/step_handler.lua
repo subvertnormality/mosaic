@@ -1,5 +1,5 @@
-local midi_controller = include("patterning/lib/midi_controller")
-local quantiser = include("patterning/lib/quantiser")
+local midi_controller = include("mosaic/lib/midi_controller")
+local quantiser = include("mosaic/lib/quantiser")
 
 local step_handler = {}
 local length_tracker = {}

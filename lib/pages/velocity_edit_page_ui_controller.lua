@@ -1,6 +1,6 @@
 local velocity_edit_page_ui_controller = {}
 
-local GridViewer = include("patterning/lib/ui_components/GridViewer")
+local GridViewer = include("mosaic/lib/ui_components/GridViewer")
 
 local grid_viewer = GridViewer:new(0, 0)
 

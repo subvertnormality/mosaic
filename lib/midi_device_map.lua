@@ -1,5 +1,5 @@
 local midi_device_map = {}
-local custom_midi_device_map = include('patterning/lib/user_config/custom_midi_device_map')
+local custom_midi_device_map = include('mosaic/lib/user_config/custom_midi_device_map')
 
 function create_cc_device() 
   local cc_midi_device = {}

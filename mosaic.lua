@@ -1,16 +1,16 @@
--- Patterning v0.0.1
+-- mosaic v0.0.1
 -- Rhythm sequencer
 --
--- llllllll.co/t/patterning
+-- llllllll.co/t/mosaic
 --
 
 
 
-grid_controller = include("patterning/lib/grid_controller")
-ui_controller = include("patterning/lib/ui_controller")
-program = include("patterning/lib/program")
+grid_controller = include("mosaic/lib/grid_controller")
+ui_controller = include("mosaic/lib/ui_controller")
+program = include("mosaic/lib/program")
 
-local fn = include("patterning/lib/functions")
+local fn = include("mosaic/lib/functions")
 local fileselect = require('fileselect')
 local textentry = require('textentry')
 local musicutil = require("musicutil")
@@ -20,9 +20,9 @@ local autosave_timer = metro.init(prime_autosave, 20, 1)
 
 local ui_splash_screen_active = false
 
-clock_controller = include("patterning/lib/clock_controller")
-pattern_controller = include("patterning/lib/pattern_controller")
-midi_controller = include("patterning/lib/midi_controller")
+clock_controller = include("mosaic/lib/clock_controller")
+pattern_controller = include("mosaic/lib/pattern_controller")
+midi_controller = include("mosaic/lib/midi_controller")
 step_handler = include("lib/step_handler")
 
 local function load_project(pth)
@@ -120,8 +120,8 @@ function redraw()
     screen.level(15)
     screen.move(60, 38)
     screen.font_face (math.random(3,8))
-    screen.font_size(9)
-    screen.text("P")
+    screen.font_size(12)
+    screen.text("m°")
     screen.font_face (1)
     screen.update()
     return
@@ -153,7 +153,7 @@ function init()
   grid_controller.splash_screen_on()
   ui_splash_screen_active = true
 
-  params:add_group("patterning", "PATTERNING", 13)
+  params:add_group("mosaic", "mosaic", 13)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project" )
   params:set_action("save_p", function(x) textentry.enter(save_project,  "new") end)
