@@ -253,6 +253,12 @@ Adjust the global sequencer pattern length with the fader located at the song ed
 
 ![Pattern length selector](/designs/Images/song_mode_sequencer.png)
 
+## Save and load
+
+You can save and load your creation in the param menu. On save, you will be prompted for a name. 
+
+When the sequencer is not playing, it will autosave with the name "autosave" after 60 seconds. When autosaving, your norns will briefly display the _Mosaic_ logo and your grid will flash. When you launch _Mosaic_ the autosave will be automatically be loaded. Be careful to save into a named slot if you want to keep your creation forever!
+
 ## Custom device maps
 
 You can define every device in your studio using the custom_midi_device_map.lua file in Mosaic/lib/user_config/. Copy the template and add your device's cc and midi information.
