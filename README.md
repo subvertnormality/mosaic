@@ -148,6 +148,10 @@ Aim for higher pitches or dive deeper with the octave select buttons, expanding 
 
 Hint: Even if a step lacks a trig, don't hesitate to assign a note. This data might come in handy with different merge modes in play.
 
+You can use the four by four button to toggle a mode that lets you more quickly enter repeating notes across the four note grid pages. In four by four mode, any entered note is automatically duplicated across all 4 screens.
+
+![Four by four](/designs/Images/note_editor_four_by_four.png)
+
 On the norns screen you can see the channel grid visualiser. Use E2 to select the current channel.
 
 ### Velocity editor
