@@ -192,8 +192,13 @@ function channel_edit_page_ui_controller.update_channel_config()
 
   channel.fixed_note = device.fixed_note
 
+  if device.default_midi_channel ~= nil then
+    channel.midi_channel = device.default_midi_channel
+  end
+
   channel_edit_page_ui_controller.refresh_device_selector()
   channel_edit_page_ui_controller.refresh_fixed_note()
+  channel_edit_page_ui_controller.refresh_channel_config()
 end
 
 function channel_edit_page_ui_controller.change_page(page)
