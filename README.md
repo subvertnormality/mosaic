@@ -121,11 +121,11 @@ While previewing a new pattern, use the move controls to shift its position. The
 
 On the norns screen, you can see the selected channel's grid state on page 1. This is the merged version of the channel and is useful context for editing your pattern. Use E2 to select channels.
 
-![Channel grid viewer](/designs/Images/UI/trig_edit_grid_viewer.png | width=529)
+![Channel grid viewer](/designs/Images/UI/trig_edit_grid_viewer.png)
 
 On page 2 you can select trig editor options. Currently this allows you to edit the tresillo multiplier in use. Experiment with different values to get wildly different results with the tresillo algorithm.
 
-![Channel grid viewer](/designs/Images/UI/trig_edit_options.png | width=529)
+![Channel grid viewer](/designs/Images/UI/trig_edit_options.png)
 
 
 ### Note editor
@@ -215,19 +215,19 @@ You can view detailed configurations of your selected channel on the Norns scree
 
 On page 1 you're greeted with an array of parameters. Navigate pages with E1. Rotate E2 to highlight a parameter, and E3 to refine its value. Want a different parameter active in the selected parameter slot? Tap K2. As you change the value, the system automatically locks in your changes. As metioned above, these can be trig locked on each step by holding the step and rotating E3.
 
-![Trig lock page](/designs/Images/UI/channel_edit_param_select.png | width=529)
+![Trig lock page](/designs/Images/UI/channel_edit_param_select.png)
 
 You can define your channel's rhythmic character on page 2. Use E2 to navigate and E3 to finesse values. The channel grid keys let you specify which channel to adjust.
 
-![Channel clocks and swing page](/designs/Images/UI/channel_edit_clocks.png | width=529)
+![Channel clocks and swing page](/designs/Images/UI/channel_edit_clocks.png)
 
 On page 3 choose from the 16 quantizers. The layout is straightforward: the left indicates the root note, center introduces the scale type, and the right selects the scale's degree. Change between options with E2 and fine-tune with E3. The change the scale, use the scale grid keys.
 
-![Channel quantiser config](/designs/Images/UI/channel_edit_quantiser.png | width=529)
+![Channel quantiser config](/designs/Images/UI/channel_edit_quantiser.png)
 
 On page 4 you can change how your channel interacts externally. To the left, find the MIDI output device. The center highlights the CC value for this channel. The final section lets you select the device preset which determines the params available in the parameter selector.
 
-![Channel device config](/designs/Images/UI/channel_edit_device_config.png | width=529)
+![Channel device config](/designs/Images/UI/channel_edit_device_config.png)
 
 ### Song editor
 
@@ -243,13 +243,14 @@ Now, if the "song mode" setting is toggled on, after a pattern finishes playing 
 
 ![Song sequencer pattern selector](/designs/Images/song_mode_sequencer_pattern_selector.png)
 
+
 Adjust the global sequencer pattern length with the fader located at the song editor page's lower end. For precise adjustments, use the end cap buttons. If you prefer broader changes, the central fader buttons have you covered. You have a spectrum from 1-64 to explore.
 
 ![Pattern length selector](/designs/Images/song_mode_sequencer.png)
 
 On the norns display, you're the conductor of your song's flow. On page 1 you can dictate how many times a chosen sequencer pattern plays before gracefully transitioning to the next slot when song mode is turned on. When song mode is off, take control and manually activate slots for your song to progress.
 
-![Song progression page](/designs/Images/UI/song_progression.png | width=529)
+![Song progression page](/designs/Images/UI/song_progression.png)
 
 On page 2, whether you desire a serene lullaby or a frantic mess, you can set the tempo to your liking.
 
