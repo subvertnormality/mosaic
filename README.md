@@ -286,7 +286,7 @@ You can also override options. For example, if you want your EX Braids algorithm
   },
 ```  
 
-If you'd like, you define devices that have default paramaters defined. These parameters can also have a midi channel that differs from the device's default. Do this like so:
+If you'd like, you define devices that have default paramaters defined. These parameters can also have a midi channel that differs from the device's default. The following device has two param knobs automatically assigned on the device param page. The knobs control cc 13 and 14 respectively, on midi channel 13, even though the midi trig and note information is being sent to midi channel 14.
 
 ```
 { 
@@ -331,7 +331,22 @@ If you'd like, you define devices that have default paramaters defined. These pa
   },
 ```
 
-This device has two param knobs automatically assigned on the device param page. The knobs control cc 13 and 14 respectively, on midi channel 13, even though the midi trig and note information is being sent to midi channel 14.
+
+Some devices respond to trigs on specific note numbers. Without locking a channel to the relevant note numbers, things can get strange very quickly in the world of _Mosaic_ as merging patterns often alters the note numbers on clashing steps (by design). This is obviously not desirable for devices that require a specific midi note for a specific drum sound, for example. You can lock a device's note number using the "Fixed Note" param on the trig lock page. You can also set this in your `custom_midi_device_map.lua` file:
+
+```
+  { 
+    ["type"] = "midi", -- leave this as is
+    ["name"] = "DRM BD",
+    ["id"] = "drm-bd",
+    ["fixed_note"] = 0, -- fixed midi note number that channel will always output
+    ["map_params_automatically"] = false, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
+    ["params"] = { -- up to 8 params 
+    },
+    ["default_midi_channel"] = 15
+  },
+```
+
 
 # Development
 
