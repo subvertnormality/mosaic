@@ -24,6 +24,7 @@ function create_cc_device()
   return { 
     ["type"] = "midi",
     ["name"] = "CC Device",
+    ["id"] = "cc_device",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
@@ -37,6 +38,7 @@ local stock_midi_device_map = {
   {
     ["type"] = "midi",
     ["name"] = "Digitakt",
+    ["id"] = "digitakt",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
@@ -837,6 +839,7 @@ local stock_midi_device_map = {
   {
     ["type"] = "midi",
     ["name"] = "Digitone",
+    ["id"] = "digitone",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
@@ -2336,6 +2339,7 @@ local stock_midi_device_map = {
   {
     ["type"] = "midi",
     ["name"] = "OP-1",
+    ["id"] = "op-1",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
@@ -2407,6 +2411,7 @@ local stock_midi_device_map = {
   {
     ["type"] = "midi",
     ["name"] = "Syntakt",
+    ["id"] = "syntakt",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
@@ -3851,6 +3856,7 @@ local stock_midi_device_map = {
     
     ["type"] = "midi",
     ["name"] = "EX Braids",
+    ["id"] = "ex-braids",
     ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
@@ -4596,16 +4602,35 @@ local stock_midi_device_map = {
 
 local function merge_midi_devices() 
 
-  for _, v in ipairs(stock_midi_device_map) do
-    table.insert(custom_midi_device_map, v)
+  for _, cd in ipairs(custom_midi_device_map) do
+
+
+    for _, sd in ipairs(stock_midi_device_map) do
+      if sd.id == cd.id then
+        for k, v in pairs(cd) do
+          sd[k] = v
+        end
+      end 
+    end
+
+    if not cd.hide then
+      if not fn.id_appears_in_table(stock_midi_device_map, cd.id) then
+        table.insert(stock_midi_device_map, cd)
+      end
+    else
+      fn.remove_table_by_id(stock_midi_device_map, cd.id)
+    end
+
+
   end
 
-  for index, device in ipairs(custom_midi_device_map) do
-    print(device.name)
+  for index, device in ipairs(stock_midi_device_map) do
     device["value"] = index
   end
 
-  return custom_midi_device_map
+
+
+  return stock_midi_device_map
 end
 
 

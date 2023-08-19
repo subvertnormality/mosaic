@@ -27,6 +27,23 @@ function fn.dirty_screen(bool)
   return screen_dirty
 end
 
+function fn.remove_table_by_id(t, target_id)
+  for i=#t, 1, -1 do  -- iterate backwards to avoid indexing problems when removing
+      if t[i].id == target_id then
+          table.remove(t, i)
+      end
+  end
+end
+
+function fn.id_appears_in_table(t, target_id)
+  for i=#t, 1, -1 do  -- iterate backwards to avoid indexing problems when removing
+      if t[i].id == target_id then
+          return true
+      end
+  end
+end
+
+
 function fn.table_to_string(tbl)
     local result = "{"
     for k, v in pairs(tbl) do

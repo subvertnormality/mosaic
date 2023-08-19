@@ -177,6 +177,8 @@ function channel_edit_page_ui_controller.update_clock_mods()
   channel.clock_mods = clock_mods
 end
 
+
+
 function channel_edit_page_ui_controller.update_channel_config()
   local channel = program.get_selected_channel()
   local midi_device = midi_device_vertical_scroll_selector:get_selected_item()
