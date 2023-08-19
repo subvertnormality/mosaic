@@ -25,7 +25,6 @@ function step_handler.process_params(c, step)
       if channel.trig_lock_params[i].channel then
         midi_channel = channel.trig_lock_params[i].channel
       end
-      print("sending to midi channel "..midi_channel)
       if step_trig_lock then
         midi_controller.cc(channel.trig_lock_params[i].cc_msb, step_trig_lock, midi_channel, channel.midi_device)
       else
