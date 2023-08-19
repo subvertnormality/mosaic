@@ -177,7 +177,35 @@ function channel_edit_page_ui_controller.update_clock_mods()
   channel.clock_mods = clock_mods
 end
 
+function channel_edit_page_ui_controller.update_default_params()
+  local channel = program.get_selected_channel()
+  local midi_device_m = midi_device_map_vertical_scroll_selector:get_selected_item()
 
+  for i = 1, 8 do
+    if midi_device_m.params[i] and midi_device_m.map_params_automatically then
+      print("params found")
+      channel.trig_lock_params[i] = midi_device_m.params[i]
+      channel.trig_lock_params[i].device_name = midi_device_m.device_name
+      channel.trig_lock_params[i].type = midi_device_m.type
+    else
+      channel.trig_lock_params[i] = {}
+    end
+  end
+
+  channel_edit_page_ui_controller.refresh_trig_locks()
+
+end
+
+function channel_edit_page_ui_controller.update_params()
+  local channel = program.get_selected_channel()
+  if param_select_vertical_scroll_selector:get_selected_item().name == "None" then
+    channel.trig_lock_params[dials:get_selected_index()] = {}
+  else
+    channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
+    channel.trig_lock_params[dials:get_selected_index()].device_name = param_select_vertical_scroll_selector:get_meta_item().device_name
+    channel.trig_lock_params[dials:get_selected_index()].type = param_select_vertical_scroll_selector:get_meta_item().type
+  end
+end
 
 function channel_edit_page_ui_controller.update_channel_config()
   local channel = program.get_selected_channel()
@@ -251,19 +279,14 @@ function channel_edit_page_ui_controller.enc(n, d)
             midi_device_map_vertical_scroll_selector:scroll_down()
           end
           channel_edit_page_ui_controller.update_channel_config()
+          channel_edit_page_ui_controller.update_default_params()
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
             return
           end
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_down()
-            if param_select_vertical_scroll_selector:get_selected_item().name == "None" then
-              channel.trig_lock_params[dials:get_selected_index()] = {}
-            else
-              channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
-              channel.trig_lock_params[dials:get_selected_index()].device_name = param_select_vertical_scroll_selector:get_meta_item().device_name
-              channel.trig_lock_params[dials:get_selected_index()].type = param_select_vertical_scroll_selector:get_meta_item().type
-            end
+            channel_edit_page_ui_controller.update_params()
             channel_edit_page_ui_controller.refresh_trig_locks()
           else
             local pressed_keys = grid_controller.get_pressed_keys()
@@ -344,19 +367,14 @@ function channel_edit_page_ui_controller.enc(n, d)
             midi_device_map_vertical_scroll_selector:scroll_up()
           end
           channel_edit_page_ui_controller.update_channel_config()
+          channel_edit_page_ui_controller.update_default_params()
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
             return
           end
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_up()
-            if param_select_vertical_scroll_selector:get_selected_item().name == "None" then
-              channel.trig_lock_params[dials:get_selected_index()] = {}
-            else
-              channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
-              channel.trig_lock_params[dials:get_selected_index()].device_name = param_select_vertical_scroll_selector:get_meta_item().device_name
-              channel.trig_lock_params[dials:get_selected_index()].type = param_select_vertical_scroll_selector:get_meta_item().type
-            end
+            channel_edit_page_ui_controller.update_params()
             channel_edit_page_ui_controller.refresh_trig_locks()
           else
             local pressed_keys = grid_controller.get_pressed_keys()
