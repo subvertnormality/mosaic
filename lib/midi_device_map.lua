@@ -1,7 +1,7 @@
 local midi_device_map = {}
 local custom_midi_device_map = include('mosaic/lib/user_config/custom_midi_device_map')
 
-function create_cc_device() 
+local function create_cc_device() 
   local cc_midi_device = {}
 
   for i = 1, 127 do
@@ -32,6 +32,15 @@ function create_cc_device()
   }
 end
 
+local function get_none()
+  return {
+    ["id"] = "none",
+    ["name"] = "None",
+    ["short_descriptor_1"] = "X",
+    ["short_descriptor_2"] = "",
+  }
+end
+
 
 local stock_midi_device_map = {
   create_cc_device(),
@@ -43,12 +52,7 @@ local stock_midi_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      {
-        ["id"] = "none",
-        ["name"] = "None",
-        ["short_descriptor_1"] = "X",
-        ["short_descriptor_2"] = "",
-      },
+      get_none(),
       {
         ["id"] = "track_parameters_solo",
         ["name"] = "Solo",
@@ -844,12 +848,7 @@ local stock_midi_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      {
-        ["id"] = "none",
-        ["name"] = "None",
-        ["short_descriptor_1"] = "X",
-        ["short_descriptor_2"] = "",
-      },
+      get_none(),
       {
         ["id"] = "track_parameters_mute",
         ["name"] = "Mute",
@@ -2344,12 +2343,7 @@ local stock_midi_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      {
-        ["id"] = "none",
-        ["name"] = "None",
-        ["short_descriptor_1"] = "X",
-        ["short_descriptor_2"] = "",
-      },
+      get_none(),
       {
         ["id"] = "midi_lfo_synth",
         ["name"] = "Synth",
@@ -2416,12 +2410,7 @@ local stock_midi_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      {
-        ["id"] = "none",
-        ["name"] = "None",
-        ["short_descriptor_1"] = "X",
-        ["short_descriptor_2"] = "",
-      },
+      get_none(),
       {
         ["id"] = "track_mute",
         ["name"] = "Mute",
@@ -3861,12 +3850,7 @@ local stock_midi_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      {
-        ["id"] = "none",
-        ["name"] = "None",
-        ["short_descriptor_1"] = "X",
-        ["short_descriptor_2"] = "",
-      },
+      get_none(),
       {
         ["id"] = "model_1",
         ["name"] = "Model 1",
@@ -4615,12 +4599,12 @@ local function merge_midi_devices()
 
     if not cd.hide then
       if not fn.id_appears_in_table(stock_midi_device_map, cd.id) then
+        table.insert(cd.params, 1, get_none())
         table.insert(stock_midi_device_map, cd)
       end
     else
       fn.remove_table_by_id(stock_midi_device_map, cd.id)
     end
-
 
   end
 

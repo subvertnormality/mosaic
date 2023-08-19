@@ -182,9 +182,9 @@ function channel_edit_page_ui_controller.update_default_params()
   local midi_device_m = midi_device_map_vertical_scroll_selector:get_selected_item()
 
   for i = 1, 8 do
-    if midi_device_m.params[i] and midi_device_m.map_params_automatically then
-      print("params found")
-      channel.trig_lock_params[i] = midi_device_m.params[i]
+    if midi_device_m.params[i + 1] and midi_device_m.map_params_automatically then
+
+      channel.trig_lock_params[i] = midi_device_m.params[i + 1]
       channel.trig_lock_params[i].device_name = midi_device_m.device_name
       channel.trig_lock_params[i].type = midi_device_m.type
     else
