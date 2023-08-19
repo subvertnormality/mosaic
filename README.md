@@ -263,8 +263,75 @@ When the sequencer is not playing, it will autosave with the name "autosave" aft
 
 ## Custom device maps
 
-You can define every device in your studio using the custom_midi_device_map.lua file in Mosaic/lib/user_config/. Copy the template and add your device's cc and midi information.
+You can define every device in your studio using the `custom_midi_device_map.lua` file in `Mosaic/lib/user_config/`. Copy the template and add your device's cc and midi information. *Always include new entries at the end of the file* to ensure backwards compatability.
 
+You can hide the factory devices from the device list. To do this, add an entry to your `custom_midi_device_map.lua` file as so:
+
+```  
+{
+  ["id"] = "op-1",
+  ["hide"] = true
+},
+```
+
+Including this entry will hide the OP-1 device from your list.
+
+You can also override options. For example, if you want your EX Braids algorithm to always be set to midi channel 16, you would include the following in your `custom_midi_device_map.lua` file:
+
+```  
+  {
+    ["id"] = "ex-braids",
+    ["hide"] = false,
+    ["default_midi_channel"] = 16
+  },
+```  
+
+If you'd like, you define devices that have default paramaters defined. These parameters can also have a midi channel that differs from the device's default. Do this like so:
+
+```
+{ 
+    ["type"] = "midi",
+    ["name"] = "Euro 4",
+    ["id"] = "euro-4",
+    ["fixed_note"] = nil, 
+    ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
+    ["params"] = { -- up to 8 params 
+      {
+        ["id"] = "flame_13",
+        ["name"] = "Flame 13",
+        ["channel"] = 15,
+        ["cc_msb"] = 13, -- midi cc value
+        ["cc_lsb"] = nil, -- not currently used but could be in the future
+        ["cc_min_value"] = 0, -- bottom range of values
+        ["cc_max_value"] = 127, -- top range of values
+        ["nrpn_msb"] = 1, -- not currently used but could be in the future
+        ["nrpn_lsb"] = 102, -- not currently used but could be in the future
+        ["nrpn_min_value"] = 0, -- not currently used but could be in the future
+        ["nrpn_max_value"] = 127, -- not currently used but could be in the future
+        ["short_descriptor_1"] = "U16M", -- 4 caps letters 
+        ["short_descriptor_2"] = "13", -- 4 caps letters
+      },
+      {
+        ["id"] = "flame_14",
+        ["name"] = "Flame 14",
+        ["channel"] = 15,
+        ["cc_msb"] = 14, -- midi cc value
+        ["cc_lsb"] = nil, -- not currently used but could be in the future
+        ["cc_min_value"] = 0, -- bottom range of values
+        ["cc_max_value"] = 127, -- top range of values
+        ["nrpn_msb"] = 1, -- not currently used but could be in the future
+        ["nrpn_lsb"] = 102, -- not currently used but could be in the future
+        ["nrpn_min_value"] = 0, -- not currently used but could be in the future
+        ["nrpn_max_value"] = 127, -- not currently used but could be in the future
+        ["short_descriptor_1"] = "U16M", -- 4 caps letters 
+        ["short_descriptor_2"] = "14", -- 4 caps letters
+      },
+    },
+    ["default_midi_channel"] = 14
+  },
+```
+
+This device has two param knobs automatically assigned on the device param page. The knobs control cc 13 and 14 respectively, on midi channel 13, even though the midi trig and note information is being sent to midi channel 14.
 
 # Development
 
