@@ -69,6 +69,9 @@ function step_handler.handle(c, current_step)
 
   if current_step == 1 then
     persistent_channel_step_scale_numbers[c] = nil
+  end
+
+  if program.get().current_step == 1 then
     persistent_global_step_scale_number = nil
   end
 
@@ -78,27 +81,32 @@ function step_handler.handle(c, current_step)
   
   local channel_step_scale_number = program.get_step_scale_trig_lock(channel, current_step)
 
-  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), current_step)
+  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), program.get().current_step)
 
   local channel_default_scale = channel.default_scale
-  channel.step_scale_number = program.get().default_scale
 
+  local global_default_scale = program.get().default_scale
 
-  if channel_step_scale_number and program.get().scales[channel_step_scale_number].scale then
+  -- Precedence : channel_step_scale > global_step_scale > channel_default_scale > global_default_scale
+
+  if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
     if (params:get("quantiser_trig_lock_hold") == 1) then
       persistent_channel_step_scale_numbers[c] = channel_step_scale_number
     end
     channel.step_scale_number = channel_step_scale_number
-  elseif (persistent_channel_step_scale_numbers[c] and program.get().scales[persistent_channel_step_scale_numbers[c]].scale) then
+  elseif (persistent_channel_step_scale_numbers[c] and program.get_scale(persistent_channel_step_scale_numbers[c]).scale) then
     channel.step_scale_number = persistent_channel_step_scale_numbers[c]
-  elseif global_step_scale_number then
+  elseif global_step_scale_number and global_step_scale_number > 0 then
     persistent_global_step_scale_number = global_step_scale_number
     channel.step_scale_number = global_step_scale_number
-  elseif persistent_global_step_scale_number then
+  elseif persistent_global_step_scale_number and persistent_global_step_scale_number > 0 then
     channel.step_scale_number = persistent_global_step_scale_number
-  elseif
-    channel_default_scale and program.get().scales[channel_default_scale].scale then
+  elseif channel_default_scale and channel_default_scale > 0 and program.get_scale(channel_default_scale).scale then
     channel.step_scale_number = channel_default_scale
+  elseif global_default_scale and global_default_scale > 0 and program.get_scale(global_default_scale).scale then
+    channel.step_scale_number = global_default_scale
+  else
+    channel.step_scale_number = 0
   end
 
   if trig_value == 1 then

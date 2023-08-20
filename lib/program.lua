@@ -113,7 +113,7 @@ function program.init()
     scale_type = "sinfonion",
     root_note = root_note,
     chord = 1,
-    default_scale = 1,
+    default_scale = 0,
     chord = 1,
     current_step = 1,
     scales = {
@@ -372,6 +372,16 @@ function program.clear_trig_locks_for_step(step)
   if (step_fixed_note_trig_lock_banks and step_fixed_note_trig_lock_banks[step]) then
     step_fixed_note_trig_lock_banks[step] = nil
   end
+end
+
+function program.get_scale(s)
+
+  if s == 0 then
+    return {name = "Chromatic", number = 0, scale = musicutil.generate_scale(0, "chromatic", 1), romans = {}, root_note = 0, chord = 1}
+  end
+
+  return program_store.scales[s]
+
 end
 
 return program

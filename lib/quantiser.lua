@@ -41,6 +41,10 @@ function quantiser.get_notes()
 end
 
 function quantiser.get_scale_name_from_index(i)
+  if i == 0 then
+    return "Chromatic"
+  end
+
   return scales[i].name
 end
 
@@ -48,7 +52,7 @@ function quantiser.process(note_number, octave_mod, scale_number, channel)
 
   local root_note = program.get().root_note + 60
   local chord_rotation = program.get().chord - 1
-  local scale_container = program.get().scales[scale_number]
+  local scale_container = program.get_scale(scale_number)
 
   if scale_container.root_note > -1 then
     root_note = scale_container.root_note + 60

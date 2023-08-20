@@ -45,7 +45,25 @@ local dials = ControlScrollSelector:new(0, 0, {})
 
 local page_to_index = {["Trig Locks"] = 1, ["Clock Mods"] = 2, ["Quantizer"] = 3, ["Midi Config"] = 4}
 
+
+local function print_no_scale_selected_message_to_screen()
+  screen.level(5)
+  screen.move(15, 35)
+  screen.text("No scale selected")
+end
+
 local quantizer_page = Page:new("", function ()
+  if program.get().selected_channel ~= 17 then
+    if program.get_selected_channel().default_scale == 0 then
+      print_no_scale_selected_message_to_screen()
+      return
+    end
+  else
+    if program.get().default_scale == 0 then
+      print_no_scale_selected_message_to_screen()
+      return
+    end
+  end
   quantizer_vertical_scroll_selector:draw()
   romans_vertical_scroll_selector:draw()
   notes_vertical_scroll_selector:draw()
@@ -94,6 +112,17 @@ function channel_edit_page_ui_controller.init()
   clock_mod_list_selector:set_list(clock_controller.get_clock_divisions())
 
   quantizer_page:set_sub_name_func(function ()
+
+    if program.get().selected_channel ~= 17 then
+      if program.get_selected_channel().default_scale == 0 then
+        return "Quantizer"
+      end
+    else
+      if program.get().default_scale == 0 then
+        return "Quantizer"
+      end
+    end
+
     return "Quantizer " .. program.get_selected_channel().default_scale .. " "
   end)
 
@@ -154,6 +183,11 @@ function channel_edit_page_ui_controller.update_scale()
   local scale = quantizer_vertical_scroll_selector:get_selected_item()
   local chord = romans_vertical_scroll_selector:get_selected_index()
   local root_note = notes_vertical_scroll_selector:get_selected_index() - 1
+
+  if channel.default_scale == 0 then
+    tooltip:show("Cannot set scale.")
+    return
+  end
 
   program.get().scales[channel.default_scale] = {
     number = scale.number,
@@ -575,9 +609,15 @@ function channel_edit_page_ui_controller.refresh_device_selector()
 end
 
 function channel_edit_page_ui_controller.refresh_romans() 
+
   local channel = program.get_selected_channel()
-  if (program.get().scales[channel.default_scale]) then
-    local number = program.get().scales[channel.default_scale].number
+
+  if channel.default_scale == 0 then
+    return
+  end
+
+  if (program.get_scale(channel.default_scale)) then
+    local number = program.get_scale(channel.default_scale).number
     program.get_selected_sequencer_pattern().active = true
     romans_vertical_scroll_selector:set_items(quantiser.get_scales()[number].romans)
 
@@ -586,12 +626,18 @@ function channel_edit_page_ui_controller.refresh_romans()
 end
 
 function channel_edit_page_ui_controller.refresh_quantiser()
+
   local channel = program.get_selected_channel()
-  if (program.get().scales[channel.default_scale]) then
-    local number = program.get().scales[channel.default_scale].number
-    local chord = program.get().scales[channel.default_scale].chord
+
+  if channel.default_scale == 0 then
+    return
+  end
+
+  if (program.get_scale(channel.default_scale)) then
+    local number = program.get_scale(channel.default_scale).number
+    local chord = program.get_scale(channel.default_scale).chord
     
-    local root_note = program.get().scales[channel.default_scale].root_note
+    local root_note = program.get_scale(channel.default_scale).root_note
     program.get_selected_sequencer_pattern().active = true
     quantizer_vertical_scroll_selector:set_selected_item(number)
     notes_vertical_scroll_selector:set_selected_item(root_note + 1)
