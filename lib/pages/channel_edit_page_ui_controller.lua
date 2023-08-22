@@ -121,6 +121,7 @@ function channel_edit_page_ui_controller.init()
       if program.get().default_scale == 0 then
         return "Quantizer"
       end
+      return "Quantizer " .. program.get().default_scale .. " "
     end
 
     return "Quantizer " .. program.get_selected_channel().default_scale .. " "
@@ -633,12 +634,22 @@ function channel_edit_page_ui_controller.refresh_quantiser()
     return
   end
 
+  local number = program.get_scale(program.get().default_scale).number
+  local chord = program.get_scale(program.get().default_scale).chord
+  local root_note = program.get_scale(program.get().default_scale).root_note
+  program.get_selected_sequencer_pattern().active = true
+
+  if program.get().selected_channel == 17 then
+    quantizer_vertical_scroll_selector:set_selected_item(number)
+    notes_vertical_scroll_selector:set_selected_item(root_note + 1)
+    romans_vertical_scroll_selector:set_selected_item(chord)
+    return
+  end
+
   if (program.get_scale(channel.default_scale)) then
-    local number = program.get_scale(channel.default_scale).number
-    local chord = program.get_scale(channel.default_scale).chord
-    
-    local root_note = program.get_scale(channel.default_scale).root_note
-    program.get_selected_sequencer_pattern().active = true
+    number = program.get_scale(channel.default_scale).number
+    chord = program.get_scale(channel.default_scale).chord
+    root_note = program.get_scale(channel.default_scale).root_note
     quantizer_vertical_scroll_selector:set_selected_item(number)
     notes_vertical_scroll_selector:set_selected_item(root_note + 1)
     romans_vertical_scroll_selector:set_selected_item(chord)
