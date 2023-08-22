@@ -167,6 +167,7 @@ local function master_func()
   step_handler.process_lengths()
   step_handler.process_song_sequencer_patterns(program.get().current_step)
   step_handler.process_global_step_scale_trig_lock(program.get().current_step)
+  step_handler.sinfonian_sync(program.get().current_step)
 
   program.get().current_step = program.get().current_step + 1
   program.get_channel(17).current_step = program.get().current_step

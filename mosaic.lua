@@ -9,6 +9,7 @@
 grid_controller = include("mosaic/lib/grid_controller")
 ui_controller = include("mosaic/lib/ui_controller")
 program = include("mosaic/lib/program")
+sinfonion = require("mosaic/lib/sinfonion_harmonic_sync")
 
 local fn = include("mosaic/lib/functions")
 local fileselect = require('fileselect')
@@ -137,18 +138,39 @@ function redraw()
 
 end
 
-function redraw_clock()
-  while true do
-    clock.sleep(1 / 15)
-    redraw()
-  end
+function redraw_metro()
+  redraw()
 end
 
 function init()
   program.init()
   midi_controller.init()
-  grid_clock_id = clock.run(grid_controller.grid_redraw)
-  ui_clock_id = clock.run(redraw_clock)
+  
+
+  sinfonion.set_root_note(0)
+  sinfonion.set_degree_nr(0)
+  sinfonion.set_mode_nr(0)
+  sinfonion.set_transposition(0)
+  sinfonion.set_clock(0)
+  sinfonion.set_beat(0)
+  sinfonion.set_step(0)
+  sinfonion.set_reset(0)
+  sinfonion.set_chaotic_detune(0)
+  sinfonion.set_harmonic_shift(0)
+
+  sinfonion.init()
+
+  local grid_clock_id = metro.init()
+  grid_clock_id.event = grid_controller.grid_redraw
+  grid_clock_id.time = 1/60
+  grid_clock_id.count = -1
+  grid_clock_id:start()
+
+  local ui_clock_id = metro.init()
+  ui_clock_id.event = redraw_metro
+  ui_clock_id.time = 1/30
+  ui_clock_id.count = -1
+  ui_clock_id:start()
 
   grid_controller.splash_screen_on()
   ui_splash_screen_active = true

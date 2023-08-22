@@ -300,19 +300,18 @@ local splash_screen_frame = 1
 
 function grid_controller.grid_redraw()
 
-  while true do
-    clock.sleep(1 / 30)
-    if splash_screen_active == true then
-      grid_controller.splash_screen(splash_screen_frame)
-      splash_screen_frame = splash_screen_frame + 1
-      g:refresh()
-    else
-      if fn.dirty_grid() == true then
-        grid_controller.redraw()
-        fn.dirty_grid(false)
-      end
+
+  if splash_screen_active == true then
+    grid_controller.splash_screen(splash_screen_frame)
+    splash_screen_frame = splash_screen_frame + 1
+    g:refresh()
+  else
+    if fn.dirty_grid() == true then
+      grid_controller.redraw()
+      fn.dirty_grid(false)
     end
   end
+
 end
 
 function grid_controller.refresh()

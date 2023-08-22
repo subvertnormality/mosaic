@@ -110,8 +110,9 @@ function step_handler.handle(c, current_step)
   end
 
   if trig_value == 1 then
+    local note = quantiser.process(note_value, octave_mod, channel.step_scale_number, c)
+
     channel_edit_page_ui_controller.refresh_trig_locks()
-    local note = quantiser.process(note_value, octave_mod, channel.step_scale_number, channel)
 
     fixed_note_trig_lock = program.get_step_fixed_note_trig_lock(channel, current_step)
 
@@ -158,6 +159,39 @@ function step_handler.process_song_sequencer_patterns(step)
   end
 
   gobal_step_accumalator = gobal_step_accumalator + 1
+
+end
+
+
+function step_handler.sinfonian_sync(step)
+
+  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), step)
+  local global_default_scale = program.get().default_scale
+
+  local sinfonion_scale_number = 1
+
+  if global_step_scale_number and global_step_scale_number > 0 then
+    sinfonion_scale_number = global_step_scale_number
+  elseif persistent_global_step_scale_number and persistent_global_step_scale_number > 0 then
+    sinfonion_scale_number = persistent_global_step_scale_number
+  elseif global_default_scale and global_default_scale > 0 and program.get_scale(global_default_scale).scale then
+    sinfonion_scale_number = global_default_scale
+  end
+
+  local scale_container = program.get_scale(sinfonion_scale_number)
+  
+  sinfonion.set_root_note(scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod)
+  sinfonion.set_degree_nr(quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord])
+  sinfonion.set_mode_nr(quantiser.get_scales()[scale_container.number].sinf_mode)
+  sinfonion.set_transposition(0)
+
+  -- Could do something with these later
+  -- sinfonion.set_clock(0)
+  -- sinfonion.set_beat(0)
+  -- sinfonion.set_step(0)
+  -- sinfonion.set_reset(0)
+  -- sinfonion.set_chaotic_detune(0)
+  -- sinfonion.set_harmonic_shift(0)
 
 end
 

@@ -389,7 +389,11 @@ Click `Finish`.
 
 Reboot your norns.
 
-Next: TBC
+Now you need to install the lua dependency lua-periphery. This is a non-standard operation on norns that is _not_ supported. It is possible to compile the dependency on norns, but it will require a degree of linux knowledge to do so. If you need a step by step for this, you're probably best off not trying. It involves compiling luarocks for lua 5.3 installing the dependency using that.
+
+Now you should be all set. 
+
+NEXT: TBC
 
 # Development
 
