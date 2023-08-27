@@ -64,7 +64,6 @@ local stock_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      get_none_param(),
       {
         ["id"] = "track_parameters_solo",
         ["name"] = "Solo",
@@ -860,7 +859,6 @@ local stock_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      get_none_param(),
       {
         ["id"] = "track_parameters_mute",
         ["name"] = "Mute",
@@ -2355,7 +2353,6 @@ local stock_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      get_none_param(),
       {
         ["id"] = "midi_lfo_synth",
         ["name"] = "Synth",
@@ -2422,7 +2419,6 @@ local stock_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      get_none_param(),
       {
         ["id"] = "track_mute",
         ["name"] = "Mute",
@@ -3862,7 +3858,6 @@ local stock_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      get_none_param(),
       {
         ["id"] = "model_1",
         ["name"] = "Model 1",
@@ -4642,6 +4637,8 @@ end
 local function merge_params(device_params, stock_params)
   local merged_params = {}
 
+  table.insert(merged_params, get_none_param())
+
   -- Copy the contents of stock_params into merged_params
   for _, sp in ipairs(stock_params) do
       table.insert(merged_params, sp)
@@ -4651,7 +4648,6 @@ local function merge_params(device_params, stock_params)
   for _, dp in ipairs(device_params) do
       table.insert(merged_params, dp)
   end
-
 
   return merged_params
 end
