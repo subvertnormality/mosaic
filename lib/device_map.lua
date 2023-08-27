@@ -32,7 +32,7 @@ local function create_cc_device()
   }
 end
 
-local function get_none()
+local function get_none_param()
   return {
     ["id"] = "none",
     ["name"] = "None",
@@ -41,8 +41,20 @@ local function get_none()
   }
 end
 
+local function get_none_device()
+  return {
+    ["type"] = "none",
+    ["name"] = "None",
+    ["id"] = "none",
+    ["fixed_note"] = nil,
+    ["map_params_automatically"] = false,
+    ["default_midi_channel"] = nil,
+    ["params"] = {}
+  }
+end
 
 local stock_device_map = {
+  get_none_device(),
   create_cc_device(),
   {
     ["type"] = "midi",
@@ -52,7 +64,7 @@ local stock_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      get_none(),
+      get_none_param(),
       {
         ["id"] = "track_parameters_solo",
         ["name"] = "Solo",
@@ -848,7 +860,7 @@ local stock_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      get_none(),
+      get_none_param(),
       {
         ["id"] = "track_parameters_mute",
         ["name"] = "Mute",
@@ -2343,7 +2355,7 @@ local stock_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      get_none(),
+      get_none_param(),
       {
         ["id"] = "midi_lfo_synth",
         ["name"] = "Synth",
@@ -2410,7 +2422,7 @@ local stock_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      get_none(),
+      get_none_param(),
       {
         ["id"] = "track_mute",
         ["name"] = "Mute",
@@ -3850,7 +3862,7 @@ local stock_device_map = {
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
-      get_none(),
+      get_none_param(),
       {
         ["id"] = "model_1",
         ["name"] = "Model 1",
@@ -4599,7 +4611,7 @@ local function merge_devices()
 
     if not cd.hide then
       if not fn.id_appears_in_table(stock_device_map, cd.id) then
-        table.insert(cd.params, 1, get_none())
+        table.insert(cd.params, 1, get_none_param())
         table.insert(stock_device_map, cd)
       end
     else
@@ -4634,9 +4646,8 @@ function device_map.get_device_by_name(name)
   return nil
 end
 
-function device_map.get_device(m)
-
-  return devices[m]
+function device_map.get_device(id)
+  return fn.get_by_id(devices, id)
 end
 
 

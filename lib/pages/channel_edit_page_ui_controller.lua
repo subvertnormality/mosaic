@@ -87,8 +87,15 @@ end)
 
 local channel_edit_page = Page:new("Config", function ()
   if program.get().selected_channel ~= 17 then
-    midi_device_vertical_scroll_selector:draw()
-    midi_channel_vertical_scroll_selector:draw()
+    local channel = program.get_selected_channel()
+    if (fn.get_by_id(device_map.get_devices(), channel.device_map).type == "midi") then
+      midi_device_vertical_scroll_selector:draw()
+      midi_channel_vertical_scroll_selector:draw()
+    else
+      midi_device_vertical_scroll_selector:deselect()
+      midi_channel_vertical_scroll_selector:deselect()
+      device_map_vertical_scroll_selector:select()
+    end
     device_map_vertical_scroll_selector:draw()
   else
     print_quant_message_to_screen()
@@ -246,11 +253,11 @@ function channel_edit_page_ui_controller.update_channel_config()
   local channel = program.get_selected_channel()
   local midi_device = midi_device_vertical_scroll_selector:get_selected_item()
   local midi_channel = midi_channel_vertical_scroll_selector:get_selected_item()
-  local midi_device_m = device_map_vertical_scroll_selector:get_selected_item()
+  local device_m = device_map_vertical_scroll_selector:get_selected_item()
 
   channel.midi_device = midi_device.value
   channel.midi_channel = midi_channel.value
-  channel.device_map = midi_device_m.value
+  channel.device_map = device_m.id
 
   local device = device_map.get_device(channel.device_map)
 
@@ -721,7 +728,7 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   local channel = program.get_selected_channel()
   midi_channel_vertical_scroll_selector:set_selected_item(channel.midi_channel)
   midi_device_vertical_scroll_selector:set_selected_item(channel.midi_device)
-  device_map_vertical_scroll_selector:set_selected_item(channel.device_map)
+  device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map.get_devices(), channel.device_map))
 end
 
 

@@ -28,7 +28,7 @@ function fn.dirty_screen(bool)
 end
 
 function fn.remove_table_by_id(t, target_id)
-  for i=#t, 1, -1 do  -- iterate backwards to avoid indexing problems when removing
+  for i=#t, 1, -1 do
       if t[i].id == target_id then
           table.remove(t, i)
       end
@@ -36,9 +36,25 @@ function fn.remove_table_by_id(t, target_id)
 end
 
 function fn.id_appears_in_table(t, target_id)
-  for i=#t, 1, -1 do  -- iterate backwards to avoid indexing problems when removing
+  for i=#t, 1, -1 do
       if t[i].id == target_id then
           return true
+      end
+  end
+end
+
+function fn.get_by_id(t, target_id)
+  for i=#t, 1, -1 do 
+      if t[i].id == target_id then
+          return t[i]
+      end
+  end
+end
+
+function fn.get_index_by_id(t, target_id)
+  for i=#t, 1, -1 do 
+      if t[i].id == target_id then
+          return i
       end
   end
 end
