@@ -4596,6 +4596,16 @@ local stock_device_map = {
   }
 }
 
+
+local stock_params = {
+  {
+    ["id"] = "fixed_note",
+    ["name"] = "Fixed Note",
+    ["short_descriptor_1"] = "FIXD",
+    ["short_descriptor_2"] = "NOTE",
+  }
+}
+
 local function merge_devices() 
 
   for _, cd in ipairs(custom_device_map) do
@@ -4629,6 +4639,24 @@ local function merge_devices()
   return stock_device_map
 end
 
+local function merge_params(device_params, stock_params)
+  local merged_params = {}
+
+  -- Copy the contents of stock_params into merged_params
+  for _, sp in ipairs(stock_params) do
+      table.insert(merged_params, sp)
+  end
+
+  -- Add the contents of device_params into merged_params
+  for _, dp in ipairs(device_params) do
+      table.insert(merged_params, dp)
+  end
+
+
+  return merged_params
+end
+
+
 
 local devices = merge_devices() 
 
@@ -4648,6 +4676,14 @@ end
 
 function device_map.get_device(id)
   return fn.get_by_id(devices, id)
+end
+
+
+function device_map.get_params(device_id)
+  local device_params = fn.get_by_id(devices, device_id).params
+
+  return merge_params(device_params, stock_params)
+
 end
 
 

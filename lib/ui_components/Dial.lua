@@ -1,7 +1,7 @@
 local Dial = {}
 Dial.__index = Dial
 
-function Dial:new(x, y, name, top_label, bottom_label)
+function Dial:new(x, y, name, id, top_label, bottom_label)
   local self = setmetatable({}, Dial)
   self.x = x
   self.y = y
@@ -86,6 +86,10 @@ end
 
 function Dial:get_name()
   return self.name
+end
+
+function Dial:get_id()
+  return self.id
 end
 
 return Dial

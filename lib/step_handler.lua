@@ -7,7 +7,7 @@ local persistent_channel_step_scale_numbers = {nil, nil, nil, nil, nil, nil, nil
 local persistent_global_step_scale_number = nil
 
 local step_scale_number = 0
-local gobal_step_accumalator = 0
+local global_step_accumulator = 0
 
 local switch_to_next_song_pattern_func = function() end
 local switch_to_next_song_pattern_blink_cancel_func = function() end
@@ -15,12 +15,35 @@ local switch_to_next_song_pattern_blink_cancel_func = function() end
 
 local do_once = true
 
+
+function step_handler.process_fixed_note_params(c, step)
+  local channel = program.get_channel(c)
+
+  for i=1,10 do
+
+    if channel.trig_lock_params[i] and channel.trig_lock_params[i].id == "fixed_note" then
+      local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
+      if step_trig_lock then
+        return step_trig_lock
+      else
+        return channel.trig_lock_banks[i]
+      end
+    end
+  end
+
+  return false
+end
+
+
+
+
 function step_handler.process_params(c, step)
   local channel = program.get_channel(c)
 
-  for i=1,8 do
-    step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-    if channel.trig_lock_params[i] and channel.trig_lock_params[i].cc_msb then
+  for i=1,10 do
+
+    if channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].cc_msb then
+      local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
       local midi_channel = channel.midi_channel
       if channel.trig_lock_params[i].channel then
         midi_channel = channel.trig_lock_params[i].channel
@@ -33,6 +56,9 @@ function step_handler.process_params(c, step)
     end
   end
 end
+
+
+
 
 function step_handler.calculate_next_selected_sequencer_pattern()
 
@@ -114,12 +140,10 @@ function step_handler.handle(c, current_step)
 
     channel_edit_page_ui_controller.refresh_trig_locks()
 
-    fixed_note_trig_lock = program.get_step_fixed_note_trig_lock(channel, current_step)
+    local fixed_note = step_handler.process_fixed_note_params(c, current_step)
 
-    if fixed_note_trig_lock and fixed_note_trig_lock > -1 then
-      note = fixed_note_trig_lock
-    elseif channel.fixed_note and channel.fixed_note > -1 then
-      note = channel.fixed_note
+    if fixed_note and fixed_note > -1 then
+      note = fixed_note
     end
 
     if not channel.mute then
@@ -140,25 +164,25 @@ function step_handler.process_song_sequencer_patterns(step)
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
   local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
 
-  if gobal_step_accumalator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) == 0 then 
+  if global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) == 0 then 
     if params:get("song_mode") == 1 then
 
       program.set_selected_sequencer_pattern(step_handler.calculate_next_selected_sequencer_pattern())
       channel_sequencer_page_controller.refresh()
       channel_edit_page_controller.refresh()
       channel_edit_page_ui_controller.refresh()
-      gobal_step_accumalator = 0
+      global_step_accumulator = 0
       step_handler.reset_sequencer_pattern(selected_sequencer_pattern)
     end
   end
 
-  if gobal_step_accumalator % selected_sequencer_pattern.global_pattern_length == 0 then
+  if global_step_accumulator % selected_sequencer_pattern.global_pattern_length == 0 then
     switch_to_next_song_pattern_func()
     switch_to_next_song_pattern_blink_cancel_func()
     switch_to_next_song_pattern_func = function () end
   end
 
-  gobal_step_accumalator = gobal_step_accumalator + 1
+  global_step_accumulator = global_step_accumulator + 1
 
 end
 
@@ -220,7 +244,7 @@ function step_handler.execute_blink_cancel_func()
 end
 
 function step_handler.reset()
-  gobal_step_accumalator = 0
+  global_step_accumulator = 0
   step_handler.execute_blink_cancel_func()
 end
 

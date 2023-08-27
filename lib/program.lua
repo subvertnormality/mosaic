@@ -17,8 +17,8 @@ local function initialise_default_channels()
   
   for i=1,17 do
     channels[i] = {
-      trig_lock_banks = {0, 0, 0, 0, 0, 0, 0, 0},
-      trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}},
+      trig_lock_banks = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
       step_trig_lock_banks = {},
       step_octave_trig_lock_banks = {},
       step_scale_trig_lock_banks = {},
@@ -42,7 +42,6 @@ local function initialise_default_channels()
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,
       device_map = "none",
-      fixed_note = -1,
       mute = false,
       swing = 0
     }
@@ -237,8 +236,7 @@ function program.step_has_trig_lock(channel, step)
 
   if program.step_has_param_trig_lock(channel, step) 
     or program.step_octave_has_trig_lock(channel, step) 
-    or program.step_scale_has_trig_lock(channel, step) 
-    or program.step_fixed_note_has_trig_lock(channel, step) then
+    or program.step_scale_has_trig_lock(channel, step) then
       return true
   end
 
@@ -281,47 +279,6 @@ function program.step_octave_has_trig_lock(channel, step)
 
   return false
 end
-
-
-function program.add_step_fixed_note_trig_lock(step, trig_lock)
-  local selected_channel = program.get_selected_channel()
-  if selected_channel.step_fixed_note_trig_lock_banks == nil then
-    selected_channel.step_fixed_note_trig_lock_banks = {}
-  end
-  local step_fixed_note_trig_lock_banks = selected_channel.step_fixed_note_trig_lock_banks
-  
-  if trig_lock ~= nil then
-    if (trig_lock < -1) then
-      trig_lock = -1
-    end
-    if (trig_lock > 127) then
-      trig_lock = 127
-    end
-  end
-
-  step_fixed_note_trig_lock_banks[step] = trig_lock
-end
-
-function program.get_step_fixed_note_trig_lock(channel, step)
-
-  local step_fixed_note_trig_lock_banks = channel.step_fixed_note_trig_lock_banks
-  if not step_fixed_note_trig_lock_banks or step_fixed_note_trig_lock_banks[step] == nil then
-    return nil
-  end
-
-  return step_fixed_note_trig_lock_banks[step]
-end
-
-function program.step_fixed_note_has_trig_lock(channel, step)
-  local step_fixed_note_trig_lock_banks = channel.step_fixed_note_trig_lock_banks
-
-  if step_fixed_note_trig_lock_banks and step_fixed_note_trig_lock_banks[step] then
-    return true
-  end
-
-  return false
-end
-
 
 
 
@@ -367,10 +324,6 @@ function program.clear_trig_locks_for_step(step)
   local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
   if (step_trig_lock_banks and step_trig_lock_banks[step]) then
     step_trig_lock_banks[step] = nil
-  end
-  local step_fixed_note_trig_lock_banks = program.get_selected_channel().step_fixed_note_trig_lock_banks
-  if (step_fixed_note_trig_lock_banks and step_fixed_note_trig_lock_banks[step]) then
-    step_fixed_note_trig_lock_banks[step] = nil
   end
 end
 
