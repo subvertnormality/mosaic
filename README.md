@@ -269,9 +269,9 @@ When the sequencer is not playing, it will autosave with the name "autosave" aft
 
 ## Custom device maps
 
-You can define every device in your studio using the `custom_midi_device_map.lua` file in `Mosaic/lib/user_config/`. Copy the template and add your device's cc and midi information. *Always include new entries at the end of the file* to ensure backwards compatability.
+You can define every device in your studio using the `custom_device_map.lua` file in `Mosaic/lib/user_config/`. Copy the template and add your device's cc and midi information. *Always include new entries at the end of the file* to ensure backwards compatability.
 
-You can hide the factory devices from the device list. To do this, add an entry to your `custom_midi_device_map.lua` file as so:
+You can hide the factory devices from the device list. To do this, add an entry to your `custom_device_map.lua` file as so:
 
 ```  
 {
@@ -282,7 +282,7 @@ You can hide the factory devices from the device list. To do this, add an entry 
 
 Including this entry will hide the OP-1 device from your list.
 
-You can also override options. For example, if you want your EX Braids algorithm to always be set to midi channel 16, you would include the following in your `custom_midi_device_map.lua` file:
+You can also override options. For example, if you want your EX Braids algorithm to always be set to midi channel 16, you would include the following in your `custom_device_map.lua` file:
 
 ```  
   {
@@ -338,7 +338,7 @@ If you'd like, you define devices that have default paramaters defined. These pa
 ```
 
 
-Some devices respond to trigs on specific note numbers. Without locking a channel to the relevant note numbers, things can get strange very quickly in the world of _Mosaic_ as merging patterns often alters the note numbers on clashing steps (by design). This is obviously not desirable for devices that require a specific midi note for a specific drum sound, for example. You can lock a device's note number using the "Fixed Note" param on the trig lock page. You can also set this in your `custom_midi_device_map.lua` file:
+Some devices respond to trigs on specific note numbers. Without locking a channel to the relevant note numbers, things can get strange very quickly in the world of _Mosaic_ as merging patterns often alters the note numbers on clashing steps (by design). This is obviously not desirable for devices that require a specific midi note for a specific drum sound, for example. You can lock a device's note number using the "Fixed Note" param on the trig lock page. You can also set this in your `custom_device_map.lua` file:
 
 ```
   { 

@@ -1,5 +1,5 @@
-local midi_device_map = {}
-local custom_midi_device_map = include('mosaic/lib/user_config/custom_midi_device_map')
+local device_map = {}
+local custom_device_map = include('mosaic/lib/user_config/custom_device_map')
 
 local function create_cc_device() 
   local cc_midi_device = {}
@@ -42,7 +42,7 @@ local function get_none()
 end
 
 
-local stock_midi_device_map = {
+local stock_device_map = {
   create_cc_device(),
   {
     ["type"] = "midi",
@@ -4584,12 +4584,12 @@ local stock_midi_device_map = {
   }
 }
 
-local function merge_midi_devices() 
+local function merge_devices() 
 
-  for _, cd in ipairs(custom_midi_device_map) do
+  for _, cd in ipairs(custom_device_map) do
 
 
-    for _, sd in ipairs(stock_midi_device_map) do
+    for _, sd in ipairs(stock_device_map) do
       if sd.id == cd.id then
         for k, v in pairs(cd) do
           sd[k] = v
@@ -4598,35 +4598,35 @@ local function merge_midi_devices()
     end
 
     if not cd.hide then
-      if not fn.id_appears_in_table(stock_midi_device_map, cd.id) then
+      if not fn.id_appears_in_table(stock_device_map, cd.id) then
         table.insert(cd.params, 1, get_none())
-        table.insert(stock_midi_device_map, cd)
+        table.insert(stock_device_map, cd)
       end
     else
-      fn.remove_table_by_id(stock_midi_device_map, cd.id)
+      fn.remove_table_by_id(stock_device_map, cd.id)
     end
 
   end
 
-  for index, device in ipairs(stock_midi_device_map) do
+  for index, device in ipairs(stock_device_map) do
     device["value"] = index
   end
 
 
 
-  return stock_midi_device_map
+  return stock_device_map
 end
 
 
-local midi_devices = merge_midi_devices() 
+local devices = merge_devices() 
 
-function midi_device_map.get_midi_devices() 
-  return midi_devices
+function device_map.get_devices() 
+  return devices
 end
 
-function midi_device_map.get_midi_device_by_name(name)
+function device_map.get_device_by_name(name)
 
-  for _, device in ipairs(midi_devices) do
+  for _, device in ipairs(devices) do
     if device.name == name then
         return device
     end
@@ -4634,11 +4634,11 @@ function midi_device_map.get_midi_device_by_name(name)
   return nil
 end
 
-function midi_device_map.get_midi_device(m)
+function device_map.get_device(m)
 
-  return midi_devices[m]
+  return devices[m]
 end
 
 
 
-return midi_device_map
+return device_map

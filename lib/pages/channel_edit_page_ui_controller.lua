@@ -1,6 +1,6 @@
 local channel_edit_page_ui_controller = {}
 
-local midi_device_map = include("mosaic/lib/midi_device_map")
+local device_map = include("mosaic/lib/device_map")
 
 local quantiser = include("mosaic/lib/quantiser")
 local Pages = include("mosaic/lib/ui_components/Pages")
@@ -22,9 +22,9 @@ local notes_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Notes
 local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", {})
 local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 50)
 
-local midi_device_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Midi Device", {})
-local midi_channel_vertical_scroll_selector = VerticalScrollSelector:new(45, 25, "Midi Channel", {{name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4}, {name = "CC5", value = 5}, {name = "CC6", value = 6}, {name = "CC7", value = 7}, {name = "CC8", value = 8}, {name = "CC9", value = 9}, {name = "CC10", value = 10}, {name = "CC11", value = 11}, {name = "CC12", value = 12}, {name = "CC13", value = 13}, {name = "CC14", value = 14}, {name = "CC15", value = 15}, {name = "CC16", value = 16}})
-local midi_device_map_vertical_scroll_selector = VerticalScrollSelector:new(70, 25, "Midi Map", midi_device_map:get_midi_devices())
+local midi_device_vertical_scroll_selector = VerticalScrollSelector:new(90, 25, "Midi Device", {})
+local midi_channel_vertical_scroll_selector = VerticalScrollSelector:new(65, 25, "Midi Channel", {{name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4}, {name = "CC5", value = 5}, {name = "CC6", value = 6}, {name = "CC7", value = 7}, {name = "CC8", value = 8}, {name = "CC9", value = 9}, {name = "CC10", value = 10}, {name = "CC11", value = 11}, {name = "CC12", value = 12}, {name = "CC13", value = 13}, {name = "CC14", value = 14}, {name = "CC15", value = 15}, {name = "CC16", value = 16}})
+local device_map_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Midi Map", device_map:get_devices())
 
 local param_select_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Params", {})
 
@@ -89,7 +89,7 @@ local channel_edit_page = Page:new("Config", function ()
   if program.get().selected_channel ~= 17 then
     midi_device_vertical_scroll_selector:draw()
     midi_channel_vertical_scroll_selector:draw()
-    midi_device_map_vertical_scroll_selector:draw()
+    device_map_vertical_scroll_selector:draw()
   else
     print_quant_message_to_screen()
   end
@@ -214,7 +214,7 @@ end
 
 function channel_edit_page_ui_controller.update_default_params()
   local channel = program.get_selected_channel()
-  local midi_device_m = midi_device_map_vertical_scroll_selector:get_selected_item()
+  local midi_device_m = device_map_vertical_scroll_selector:get_selected_item()
 
   for i = 1, 8 do
     if midi_device_m.params[i + 1] and midi_device_m.map_params_automatically then
@@ -246,13 +246,13 @@ function channel_edit_page_ui_controller.update_channel_config()
   local channel = program.get_selected_channel()
   local midi_device = midi_device_vertical_scroll_selector:get_selected_item()
   local midi_channel = midi_channel_vertical_scroll_selector:get_selected_item()
-  local midi_device_m = midi_device_map_vertical_scroll_selector:get_selected_item()
+  local midi_device_m = device_map_vertical_scroll_selector:get_selected_item()
 
   channel.midi_device = midi_device.value
   channel.midi_channel = midi_channel.value
-  channel.midi_device_map = midi_device_m.value
+  channel.device_map = midi_device_m.value
 
-  local device = midi_device_map.get_midi_device(channel.midi_device_map)
+  local device = device_map.get_device(channel.device_map)
 
 
   channel.fixed_note = device.fixed_note
@@ -310,8 +310,8 @@ function channel_edit_page_ui_controller.enc(n, d)
           if midi_channel_vertical_scroll_selector:is_selected() then
             midi_channel_vertical_scroll_selector:scroll_down()
           end
-          if midi_device_map_vertical_scroll_selector:is_selected() then
-            midi_device_map_vertical_scroll_selector:scroll_down()
+          if device_map_vertical_scroll_selector:is_selected() then
+            device_map_vertical_scroll_selector:scroll_down()
           end
           channel_edit_page_ui_controller.update_channel_config()
           channel_edit_page_ui_controller.update_default_params()
@@ -398,8 +398,8 @@ function channel_edit_page_ui_controller.enc(n, d)
           if midi_channel_vertical_scroll_selector:is_selected() then
             midi_channel_vertical_scroll_selector:scroll_up()
           end
-          if midi_device_map_vertical_scroll_selector:is_selected() then
-            midi_device_map_vertical_scroll_selector:scroll_up()
+          if device_map_vertical_scroll_selector:is_selected() then
+            device_map_vertical_scroll_selector:scroll_up()
           end
           channel_edit_page_ui_controller.update_channel_config()
           channel_edit_page_ui_controller.update_default_params()
@@ -486,13 +486,13 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:deselect()
-            midi_channel_vertical_scroll_selector:select()
+            device_map_vertical_scroll_selector:select()
           elseif midi_channel_vertical_scroll_selector:is_selected() then
             midi_channel_vertical_scroll_selector:deselect()
-            midi_device_map_vertical_scroll_selector:select()
-          elseif midi_device_map_vertical_scroll_selector:is_selected() then
-            midi_device_map_vertical_scroll_selector:deselect()
             midi_device_vertical_scroll_selector:select()
+          elseif device_map_vertical_scroll_selector:is_selected() then
+            device_map_vertical_scroll_selector:deselect()
+            midi_channel_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
@@ -531,13 +531,13 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:deselect()
-            midi_device_map_vertical_scroll_selector:select()
+            midi_channel_vertical_scroll_selector:select()
           elseif midi_channel_vertical_scroll_selector:is_selected() then
             midi_channel_vertical_scroll_selector:deselect()
+            device_map_vertical_scroll_selector:select()
+          elseif device_map_vertical_scroll_selector:is_selected() then
+            device_map_vertical_scroll_selector:deselect()
             midi_device_vertical_scroll_selector:select()
-          elseif midi_device_map_vertical_scroll_selector:is_selected() then
-            midi_device_map_vertical_scroll_selector:deselect()
-            midi_channel_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
@@ -602,7 +602,7 @@ end
 function channel_edit_page_ui_controller.refresh_device_selector()
   local channel = program.get_selected_channel()
 
-  local device = midi_device_map.get_midi_device(channel.midi_device_map)
+  local device = device_map.get_device(channel.device_map)
 
   param_select_vertical_scroll_selector:set_items(device.params)
   param_select_vertical_scroll_selector:set_meta_item(device)
@@ -721,7 +721,7 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   local channel = program.get_selected_channel()
   midi_channel_vertical_scroll_selector:set_selected_item(channel.midi_channel)
   midi_device_vertical_scroll_selector:set_selected_item(channel.midi_device)
-  midi_device_map_vertical_scroll_selector:set_selected_item(channel.midi_device_map)
+  device_map_vertical_scroll_selector:set_selected_item(channel.device_map)
 end
 
 
