@@ -4598,6 +4598,16 @@ local stock_params = {
     ["name"] = "Fixed Note",
     ["short_descriptor_1"] = "FIXD",
     ["short_descriptor_2"] = "NOTE",
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 127,
+  },
+  {
+    ["id"] = "trig_probability",
+    ["name"] = "Probability",
+    ["short_descriptor_1"] = "TRIG",
+    ["short_descriptor_2"] = "PROB",
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 100,
   }
 }
 

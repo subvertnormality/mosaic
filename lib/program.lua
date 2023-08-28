@@ -202,14 +202,15 @@ end
 
 function program.add_step_param_trig_lock(step, parameter, trig_lock)
   local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
+  local trig_lock_params = program.get_selected_channel().trig_lock_params
   if step_trig_lock_banks[step] == nil then
     step_trig_lock_banks[step] = {}
   end
-  if (trig_lock < 0) then
-    trig_lock = 0
+  if (trig_lock < (trig_lock_params[parameter].cc_min_value or 0)) then
+    trig_lock = (trig_lock_params[parameter].cc_min_value or 0)
   end
-  if (trig_lock > 127) then
-    trig_lock = 127
+  if (trig_lock > (trig_lock_params[parameter].cc_max_value or 127)) then
+    trig_lock = (trig_lock_params[parameter].cc_max_value or 127)
   end
   step_trig_lock_banks[step][parameter] = trig_lock
 end

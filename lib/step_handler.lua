@@ -16,12 +16,12 @@ local switch_to_next_song_pattern_blink_cancel_func = function() end
 local do_once = true
 
 
-function step_handler.process_fixed_note_params(c, step)
+function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)
 
   for i=1,10 do
 
-    if channel.trig_lock_params[i] and channel.trig_lock_params[i].id == "fixed_note" then
+    if channel.trig_lock_params[i] and channel.trig_lock_params[i].id == type then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
       if step_trig_lock then
         return step_trig_lock
@@ -33,8 +33,6 @@ function step_handler.process_fixed_note_params(c, step)
 
   return false
 end
-
-
 
 
 function step_handler.process_params(c, step)
@@ -135,12 +133,18 @@ function step_handler.handle(c, current_step)
     channel.step_scale_number = 0
   end
 
-  if trig_value == 1 then
+  local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability")
+
+  if not trig_prob then trig_prob = 100 end
+
+  local random_val = math.random(0, 100)
+
+  if trig_value == 1 and random_val <= trig_prob then
     local note = quantiser.process(note_value, octave_mod, channel.step_scale_number, c)
 
     channel_edit_page_ui_controller.refresh_trig_locks()
 
-    local fixed_note = step_handler.process_fixed_note_params(c, current_step)
+    local fixed_note = step_handler.process_stock_params(c, current_step, "fixed_note")
 
     if fixed_note and fixed_note > -1 then
       note = fixed_note

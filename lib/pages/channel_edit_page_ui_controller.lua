@@ -344,21 +344,11 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             elseif channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
               if channel.trig_lock_banks[dials:get_selected_index()] == {} then
-                channel.trig_lock_banks[dials:get_selected_index()] = 0
+                channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
               end
               channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
-
-              if channel.trig_lock_banks[dials:get_selected_index()] > 127 then
-                channel.trig_lock_banks[dials:get_selected_index()] = 127
-              end
-              dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
-            elseif dials:get_selected_item():get_id() == "fixed_note" then
-              if channel.trig_lock_banks[dials:get_selected_index()] == nil then
-                channel.trig_lock_banks[dials:get_selected_index()] = -1
-              end
-              channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
-              if channel.trig_lock_banks[dials:get_selected_index()] > 127 then
-                channel.trig_lock_banks[dials:get_selected_index()] = 127
+              if channel.trig_lock_banks[dials:get_selected_index()] > (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127) then
+                channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127)
               end
               dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
             end
@@ -428,24 +418,12 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             elseif channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
               if channel.trig_lock_banks[dials:get_selected_index()] == nil then
-                channel.trig_lock_banks[dials:get_selected_index()] = 0
+                channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
               end
               channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
-              if channel.trig_lock_banks[dials:get_selected_index()] < 0 then
-                channel.trig_lock_banks[dials:get_selected_index()] = 0
+              if channel.trig_lock_banks[dials:get_selected_index()] < (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0) then
+                channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
               end
-              dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
-            elseif dials:get_selected_item():get_id() == "fixed_note" then
-
-              if channel.trig_lock_banks[dials:get_selected_index()] == nil then
-                channel.trig_lock_banks[dials:get_selected_index()] = -1
-              end
-
-              channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
-              if channel.trig_lock_banks[dials:get_selected_index()] < -1 then
-                channel.trig_lock_banks[dials:get_selected_index()] = -1
-              end
-              
               dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
             end
           end
