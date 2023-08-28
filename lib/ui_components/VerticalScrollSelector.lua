@@ -33,6 +33,10 @@ function VerticalScrollSelector:set_items(items)
   self.items = items
 end
 
+function VerticalScrollSelector:get_items()
+  return self.items
+end
+
 function VerticalScrollSelector:get_meta_item()
   return self.meta_items
 end

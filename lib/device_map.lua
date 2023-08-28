@@ -4629,8 +4629,6 @@ local function merge_devices()
     device["value"] = index
   end
 
-
-
   return stock_device_map
 end
 
@@ -4641,12 +4639,16 @@ local function merge_params(device_params, stock_params)
 
   -- Copy the contents of stock_params into merged_params
   for _, sp in ipairs(stock_params) do
+    if not fn.id_appears_in_table(merged_params, sp.id) then
       table.insert(merged_params, sp)
+    end
   end
 
   -- Add the contents of device_params into merged_params
   for _, dp in ipairs(device_params) do
+    if not fn.id_appears_in_table(merged_params, dp.id) then
       table.insert(merged_params, dp)
+    end
   end
 
   return merged_params

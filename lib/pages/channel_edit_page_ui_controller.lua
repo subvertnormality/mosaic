@@ -571,6 +571,7 @@ end
 function channel_edit_page_ui_controller.key(n, z) 
   if n == 2 and z == 1 then
     channel_edit_page_ui_controller.refresh_device_selector()
+    channel_edit_page_ui_controller.refresh_channel_config()
     trig_lock_page:toggle_sub_page()
   end
   if n == 3 and z == 1 then
@@ -701,7 +702,9 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   local channel = program.get_selected_channel()
   midi_channel_vertical_scroll_selector:set_selected_item(channel.midi_channel)
   midi_device_vertical_scroll_selector:set_selected_item(channel.midi_device)
-  device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map.get_devices(), channel.device_map))
+  device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), channel.device_map))
+  param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
+
 end
 
 
