@@ -185,6 +185,15 @@ function fn.tables_are_equal(t1, t2)
   return true
 end
 
+function fn.table_contains(table, value)
+  for _, v in ipairs(table) do
+      if v == value then
+          return true
+      end
+  end
+  return false
+end
+
 function fn.remove_table_from_table(t, object)
   for i, v in ipairs(t) do
       if fn.tables_are_equal(v, object) then

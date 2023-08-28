@@ -4654,8 +4654,6 @@ local function merge_params(device_params, stock_params)
   return merged_params
 end
 
-
-
 local devices = merge_devices() 
 
 function device_map.get_devices() 
@@ -4677,6 +4675,29 @@ function device_map.get_device(id)
 end
 
 
+function device_map.get_available_devices_for_channel(c)
+
+  local active_devices = {}
+  local devices_copy = fn.deep_copy(devices)
+
+  -- Populating active_devices with ids from channels 1 through 16
+  for i = 1, 16 do
+    if i ~= c and program.get_channel(i).device_map ~= "none" then
+      table.insert(active_devices, program.get_channel(i).device_map)
+    end
+  end
+
+  -- Filtering devices_copy to remove any table whose id is present in active_devices
+  local filtered_devices = {}
+  for _, inner_table in ipairs(devices_copy) do
+      if not (inner_table.id and inner_table.unique and fn.table_contains(active_devices, inner_table.id)) then
+          table.insert(filtered_devices, inner_table)
+      end
+  end
+
+  return filtered_devices
+end
+
 function device_map.get_params(device_id)
   local device_params = fn.get_by_id(devices, device_id).params
 
@@ -4684,6 +4705,31 @@ function device_map.get_params(device_id)
 
 end
 
+function device_map.get_available_params_for_channel(c, selected_param)
+
+  local channel = program.get_channel(c)
+  local active_params = {}
+  local params_copy = fn.deep_copy(device_map.get_params(channel.device_map))
+
+  -- Populating active_params with ids from channels 1 through 16
+  for i = 1, 10 do
+
+    if selected_param ~= i and channel.trig_lock_params[i].id ~= "none" then
+      table.insert(active_params, channel.trig_lock_params[i].id)
+    end
+
+  end
+
+  -- Filtering params_copy to remove any table whose id is present in active_params
+  local filtered_params = {}
+  for _, inner_table in ipairs(params_copy) do
+      if not (inner_table.id and fn.table_contains(active_params, inner_table.id)) then
+          table.insert(filtered_params, inner_table)
+      end
+  end
+
+  return filtered_params
+end
 
 
 return device_map

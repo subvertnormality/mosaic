@@ -700,6 +700,9 @@ end
 
 function channel_edit_page_ui_controller.refresh_channel_config()
   local channel = program.get_selected_channel()
+
+  device_map_vertical_scroll_selector:set_items(device_map.get_available_devices_for_channel(program.get().selected_channel))
+  param_select_vertical_scroll_selector:set_items(device_map.get_available_params_for_channel(program.get().selected_channel, dials:get_selected_index()))
   midi_channel_vertical_scroll_selector:set_selected_item(channel.midi_channel)
   midi_device_vertical_scroll_selector:set_selected_item(channel.midi_device)
   device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), channel.device_map))
