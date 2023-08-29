@@ -46,6 +46,8 @@ local dials = ControlScrollSelector:new(0, 0, {})
 
 local page_to_index = {["Trig Locks"] = 1, ["Clock Mods"] = 2, ["Quantizer"] = 3, ["Midi Config"] = 4}
 
+local refresh_timer_id = nil
+local throttle_time = 0.1
 
 local function print_no_scale_selected_message_to_screen()
   screen.level(5)
@@ -271,7 +273,7 @@ function channel_edit_page_ui_controller.update_channel_config()
   end
 
   channel_edit_page_ui_controller.refresh_device_selector()
-  channel_edit_page_ui_controller.refresh_channel_config()
+  channel_edit_page_ui_controller.throttled_refresh_channel_config()
 end
 
 function channel_edit_page_ui_controller.change_page(page)
@@ -549,8 +551,10 @@ end
 
 function channel_edit_page_ui_controller.key(n, z) 
   if n == 2 and z == 1 then
-    channel_edit_page_ui_controller.refresh_device_selector()
-    channel_edit_page_ui_controller.refresh_channel_config()
+    if not trig_lock_page:is_sub_page_enabled() then
+      channel_edit_page_ui_controller.refresh_device_selector()
+      channel_edit_page_ui_controller.refresh_param_list()
+    end
     trig_lock_page:toggle_sub_page()
   end
   if n == 3 and z == 1 then
@@ -676,12 +680,16 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
   
 end
 
+function channel_edit_page_ui_controller.refresh_param_list()
+
+  param_select_vertical_scroll_selector:set_items(device_map.get_available_params_for_channel(program.get().selected_channel, dials:get_selected_index()))
+
+end
 
 function channel_edit_page_ui_controller.refresh_channel_config()
   local channel = program.get_selected_channel()
 
   device_map_vertical_scroll_selector:set_items(device_map.get_available_devices_for_channel(program.get().selected_channel))
-  param_select_vertical_scroll_selector:set_items(device_map.get_available_params_for_channel(program.get().selected_channel, dials:get_selected_index()))
   midi_channel_vertical_scroll_selector:set_selected_item(channel.midi_channel)
   midi_device_vertical_scroll_selector:set_selected_item(channel.midi_device)
   device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), channel.device_map))
@@ -689,10 +697,30 @@ function channel_edit_page_ui_controller.refresh_channel_config()
 
 end
 
+function channel_edit_page_ui_controller.throttled_refresh_channel_config()
+  -- Cancel the existing timer if it's running
+  if refresh_timer_id then
+    clock.cancel(refresh_timer_id)
+  end
+
+  -- Set a new timer
+  refresh_timer_id = clock.run(function()
+    -- Wait for the throttle time
+    clock.sleep(throttle_time)
+
+    -- Perform the actual refresh
+    channel_edit_page_ui_controller.refresh_channel_config()
+
+    -- Reset the timer id
+    refresh_timer_id = nil
+  end)
+end
+
+
 
 function channel_edit_page_ui_controller.refresh()
   channel_edit_page_ui_controller.refresh_device_selector()
-  channel_edit_page_ui_controller.refresh_channel_config()
+  channel_edit_page_ui_controller.throttled_refresh_channel_config()
   channel_edit_page_ui_controller.refresh_trig_locks()
   channel_edit_page_ui_controller.refresh_quantiser()
   channel_edit_page_ui_controller.refresh_romans() 
