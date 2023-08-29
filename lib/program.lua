@@ -1,4 +1,5 @@
 local musicutil = require("musicutil")
+local fn = include("mosaic/lib/functions")
 
 local program = {}
 local program_store = {}

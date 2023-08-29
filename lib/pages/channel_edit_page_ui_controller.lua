@@ -1,5 +1,6 @@
 local channel_edit_page_ui_controller = {}
 
+local fn = include("mosaic/lib/functions")
 local device_map = include("mosaic/lib/device_map")
 
 local quantiser = include("mosaic/lib/quantiser")

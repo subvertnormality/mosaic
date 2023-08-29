@@ -1,19 +1,11 @@
-fn = {}
-
-function fn.init()
-  fn.id_prefix = "sinf-"
-  fn.id_counter = 1000
-end
-
+local fn = {}
 
 function fn.cleanup()
   _midi.all_off()
   g.cleanup()
   clock.cancel(redraw_clock_id)
   clock.cancel(grid_clock_id)
-
 end
-
 
 function fn.dirty_grid(bool)
   if bool == nil then return grid_dirty end
@@ -28,18 +20,20 @@ function fn.dirty_screen(bool)
 end
 
 function fn.remove_table_by_id(t, target_id)
-  for i=#t, 1, -1 do
-      if t[i].id == target_id then
-          table.remove(t, i)
-      end
+  local size = #t
+  for i = size, 1, -1 do
+    if t[i].id == target_id then
+      table.remove(t, i)
+    end
   end
 end
 
 function fn.id_appears_in_table(t, target_id)
-  for i=#t, 1, -1 do
-      if t[i].id == target_id then
-          return true
-      end
+  local size = #t
+  for i = size, 1, -1 do
+    if t[i].id == target_id then
+      return true
+    end
   end
 end
 
@@ -59,30 +53,18 @@ function fn.get_index_by_id(t, target_id)
   end
 end
 
-
 function fn.table_to_string(tbl)
-    local result = "{"
-    for k, v in pairs(tbl) do
-        -- serialize the key
-        if type(k) == "string" then
-            result = result .. "[\"" .. k .. "\"]" .. "="
-        else
-            result = result .. "[" .. k .. "]" .. "="
-        end
-        -- serialize the value
-        if type(v) == "table" then
-            result = result .. fn.table_to_string(v) .. ","
-        else
-            if type(v) == "string" then
-            result = result .. "\"" .. v .. "\"" .. ","
-            else
-            result = result .. v .. ","
-            end
-        end
-    end
-    result = result .. "}"
-    return result
+  local result = {}
+  table.insert(result, "{")
+  for k, v in pairs(tbl) do
+    table.insert(result, (type(k) == "string" and "[\""..k.."\"]=") or ("["..k.."]="))
+    table.insert(result, (type(v) == "table" and fn.table_to_string(v) or (type(v) == "string" and "\""..v.."\"" or v)))
+    table.insert(result, ",")
+  end
+  table.insert(result, "}")
+  return table.concat(result)
 end
+
 
 function fn.print_table(t, indent)
   indent = indent or ''
@@ -107,14 +89,15 @@ function fn.string_to_table(str)
     return load("return " .. str)()
 end
 
+
 function fn.deep_copy(original)
   local copy
   if type(original) == 'table' then
       copy = {}
-      for original_key, original_value in next, original, nil do
-          copy[fn.deep_copy(original_key)] = fn.deep_copy(original_value)
+      for original_key, original_value in pairs(original) do
+          copy[original_key] = fn.deep_copy(original_value)
       end
-      setmetatable(copy, fn.deep_copy(getmetatable(original)))
+      setmetatable(copy, getmetatable(original))
   else -- number, string, boolean, etc
       copy = original
   end
@@ -170,18 +153,13 @@ function fn.find_key(tbl, value)
 end
 
 function fn.tables_are_equal(t1, t2)
+  if fn.table_count(t1) ~= fn.table_count(t2) then return false end
   for k, v in pairs(t1) do
-      if v ~= t2[k] then
-          return false
-      end
+    if v ~= t2[k] then return false end
   end
-
   for k, v in pairs(t2) do
-      if v ~= t1[k] then
-          return false
-      end
+    if v ~= t1[k] then return false end
   end
-
   return true
 end
 

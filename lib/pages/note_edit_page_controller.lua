@@ -1,5 +1,6 @@
 local note_edit_page_controller = {}
 
+local fn = include("mosaic/lib/functions")
 local VerticalFader = include("mosaic/lib/controls/VerticalFader")
 local FadeButton = include("mosaic/lib/controls/FadeButton")
 

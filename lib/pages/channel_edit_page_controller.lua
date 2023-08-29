@@ -1,6 +1,7 @@
 local channel_edit_page_controller = {}
 local pattern_buttons = {}
 
+local fn = include("mosaic/lib/functions")
 local quantiser = include("mosaic/lib/quantiser")
 
 local channel_edit_page_sequencer = Sequencer:new(4, "channel")

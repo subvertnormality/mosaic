@@ -1,6 +1,8 @@
 local VerticalScrollSelector = {}
 VerticalScrollSelector.__index = VerticalScrollSelector
 
+local fn = include("mosaic/lib/functions")
+
   -- items = {{name: "name", value: {}}, {name: "name", value: {}}}
 function VerticalScrollSelector:new(x, y, name, items)
   local self = setmetatable({}, VerticalScrollSelector)

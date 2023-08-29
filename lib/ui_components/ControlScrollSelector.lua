@@ -1,6 +1,8 @@
 local ControlScrollSelector = {}
 ControlScrollSelector.__index = ControlScrollSelector
 
+local fn = include("mosaic/lib/functions")
+
 function ControlScrollSelector:new(x, y, items)
   local self = setmetatable({}, ControlScrollSelector)
   self.x = x

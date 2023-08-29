@@ -1,6 +1,8 @@
 local ListSelector = {}
 ListSelector.__index = ListSelector
 
+local fn = include("mosaic/lib/functions")
+
 function ListSelector:new(x, y, name, list)
   local self = setmetatable({}, ListSelector)
   self.x = x
@@ -12,8 +14,6 @@ function ListSelector:new(x, y, name, list)
 
   return self
 end
-
-
 
 function ListSelector:draw()
   if self.selected then

@@ -10,8 +10,6 @@ function Pages:new()
   return self
 end
 
-
-
 function Pages:draw()
 
   local x = 5

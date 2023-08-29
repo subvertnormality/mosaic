@@ -1,4 +1,5 @@
 local press_handler = {}
+local fn = include("mosaic/lib/functions")
 
 -- Create a table for the handlers
 press_handler.handlers = {}

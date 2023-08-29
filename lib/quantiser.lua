@@ -1,5 +1,6 @@
 local quantiser = {}
 
+local fn = include("mosaic/lib/functions")
 local musicutil = require("musicutil")
 
 local scales = { 

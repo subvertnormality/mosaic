@@ -1,6 +1,8 @@
 Button = {}
 Button.__index = Button
 
+local fn = include("mosaic/lib/functions")
+
 function Button:new(x, y, states)
   local self = setmetatable({}, Button)
   self.x = x

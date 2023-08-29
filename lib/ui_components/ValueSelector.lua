@@ -1,6 +1,8 @@
 local ValueSelector = {}
 ValueSelector.__index = ValueSelector
 
+local fn = include("mosaic/lib/functions")
+
 function ValueSelector:new(x, y, name, min, max)
   local self = setmetatable({}, ValueSelector)
   self.x = x
@@ -13,8 +15,6 @@ function ValueSelector:new(x, y, name, min, max)
 
   return self
 end
-
-
 
 function ValueSelector:draw()
   if self.selected then

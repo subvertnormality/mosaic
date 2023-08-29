@@ -1,7 +1,7 @@
-local fn = include 'lib/functions'
+local fn = include("mosaic/lib/functions")
 
-local midi_controller = include 'lib/midi_controller'
-local ListSelector = include 'lib/ui_components/ListSelector'
+local midi_controller = include("lib/midi_controller")
+local ListSelector = include("lib/ui_components/ListSelector")
 
 local clock_controller = {}
 

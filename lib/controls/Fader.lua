@@ -1,6 +1,8 @@
 Fader = {}
 Fader.__index = Fader
 
+local fn = include("mosaic/lib/functions")
+
 function Fader:new(x, y, length, size)
   local self = setmetatable({}, Fader)
   self.x = x
@@ -19,8 +21,6 @@ function Fader:new(x, y, length, size)
 
   return self
 end
-
-
 
 function Fader:draw_simple()
   

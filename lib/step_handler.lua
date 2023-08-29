@@ -137,9 +137,9 @@ function step_handler.handle(c, current_step)
 
   if not trig_prob then trig_prob = 100 end
 
-  local random_val = math.random(0, 100)
+  local random_val = math.random(0, 99)
 
-  if trig_value == 1 and random_val <= trig_prob then
+  if trig_value == 1 and random_val < trig_prob then
     local note = quantiser.process(note_value, octave_mod, channel.step_scale_number, c)
 
     channel_edit_page_ui_controller.refresh_trig_locks()
@@ -170,11 +170,7 @@ function step_handler.process_song_sequencer_patterns(step)
 
   if global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) == 0 then 
     if params:get("song_mode") == 1 then
-
       program.set_selected_sequencer_pattern(step_handler.calculate_next_selected_sequencer_pattern())
-      channel_sequencer_page_controller.refresh()
-      channel_edit_page_controller.refresh()
-      channel_edit_page_ui_controller.refresh()
       global_step_accumulator = 0
       step_handler.reset_sequencer_pattern(selected_sequencer_pattern)
     end
@@ -187,6 +183,13 @@ function step_handler.process_song_sequencer_patterns(step)
   end
 
   global_step_accumulator = global_step_accumulator + 1
+
+  if global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) == 0 then 
+    if params:get("song_mode") == 1 then
+      channel_sequencer_page_controller.refresh()
+      channel_edit_page_controller.refresh()
+    end
+  end
 
 end
 

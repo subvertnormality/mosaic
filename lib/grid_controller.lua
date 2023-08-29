@@ -1,4 +1,5 @@
 local grid_controller = {}
+local fn = include("mosaic/lib/functions")
 
 local Fader = include("mosaic/lib/controls/Fader")
 local Sequencer = include("mosaic/lib/controls/Sequencer")

@@ -1,6 +1,8 @@
 local Dial = {}
 Dial.__index = Dial
 
+local fn = include("mosaic/lib/functions")
+
 function Dial:new(x, y, name, id, top_label, bottom_label)
   local self = setmetatable({}, Dial)
   self.x = x
@@ -13,8 +15,6 @@ function Dial:new(x, y, name, id, top_label, bottom_label)
 
   return self
 end
-
-
 
 function Dial:draw()
   if self.selected then

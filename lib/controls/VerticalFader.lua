@@ -1,6 +1,8 @@
 VerticalFader = {}
 VerticalFader.__index = VerticalFader
 
+local fn = include("mosaic/lib/functions")
+
 local shared_bright_mod = 0
 
 local bclock = clock.run(function()

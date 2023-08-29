@@ -1,6 +1,8 @@
 local Page = {}
 Page.__index = Page
 
+local fn = include("mosaic/lib/functions")
+
 function Page:new(name, func)
   local self = setmetatable({}, Page)
   self.name = name

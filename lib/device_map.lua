@@ -1,5 +1,6 @@
 local device_map = {}
 local custom_device_map = include('mosaic/lib/user_config/custom_device_map')
+local fn = include("mosaic/lib/functions")
 
 local function create_cc_device() 
   local cc_midi_device = {}
@@ -4611,30 +4612,77 @@ local stock_params = {
   }
 }
 
+-- local function merge_devices() 
+
+--   for _, cd in ipairs(custom_device_map) do
+
+
+--     for _, sd in ipairs(stock_device_map) do
+--       if sd.id == cd.id then
+--         for k, v in pairs(cd) do
+--           sd[k] = v
+--         end
+--       end 
+--     end
+
+--     if not cd.hide then
+--       if not fn.id_appears_in_table(stock_device_map, cd.id) then
+--         table.insert(cd.params, 1, get_none_param())
+--         table.insert(stock_device_map, cd)
+--       end
+--     else
+--       fn.remove_table_by_id(stock_device_map, cd.id)
+--     end
+
+--   end
+
+--   for index, device in ipairs(stock_device_map) do
+--     device["value"] = index
+--   end
+
+--   return stock_device_map
+-- end
+
 local function merge_devices() 
-
-  for _, cd in ipairs(custom_device_map) do
-
-
-    for _, sd in ipairs(stock_device_map) do
-      if sd.id == cd.id then
-        for k, v in pairs(cd) do
-          sd[k] = v
-        end
-      end 
-    end
-
-    if not cd.hide then
-      if not fn.id_appears_in_table(stock_device_map, cd.id) then
-        table.insert(cd.params, 1, get_none_param())
-        table.insert(stock_device_map, cd)
-      end
-    else
-      fn.remove_table_by_id(stock_device_map, cd.id)
-    end
-
+  -- Create a lookup map for faster id-based access
+  local stock_map_by_id = {}
+  for _, device in ipairs(stock_device_map) do
+    stock_map_by_id[device.id] = device
   end
 
+  for _, cd in ipairs(custom_device_map) do
+    local sd = stock_map_by_id[cd.id]
+    
+    -- if sd exists, merge cd into it
+    if sd then
+      for k, v in pairs(cd) do
+        sd[k] = v
+      end
+    end
+
+    -- Handle insertion or removal based on 'hide' attribute
+    if not cd.hide then
+      if not sd then
+        table.insert(cd.params, 1, get_none_param())
+        table.insert(stock_device_map, cd)
+        -- Update the lookup map
+        stock_map_by_id[cd.id] = cd
+      end
+    else
+      if sd then
+        for index, device in ipairs(stock_device_map) do
+          if device.id == cd.id then
+            table.remove(stock_device_map, index)
+            break
+          end
+        end
+        -- Update the lookup map
+        stock_map_by_id[cd.id] = nil
+      end
+    end
+  end
+
+  -- Update the 'value' field for all devices
   for index, device in ipairs(stock_device_map) do
     device["value"] = index
   end
@@ -4642,22 +4690,27 @@ local function merge_devices()
   return stock_device_map
 end
 
+
 local function merge_params(device_params, stock_params)
   local merged_params = {}
-
+  local seen_ids = {} -- hash set for fast id lookup
+  
   table.insert(merged_params, get_none_param())
+  seen_ids[get_none_param().id] = true
 
   -- Copy the contents of stock_params into merged_params
   for _, sp in ipairs(stock_params) do
-    if not fn.id_appears_in_table(merged_params, sp.id) then
+    if not seen_ids[sp.id] then
       table.insert(merged_params, sp)
+      seen_ids[sp.id] = true
     end
   end
 
   -- Add the contents of device_params into merged_params
   for _, dp in ipairs(device_params) do
-    if not fn.id_appears_in_table(merged_params, dp.id) then
+    if not seen_ids[dp.id] then
       table.insert(merged_params, dp)
+      seen_ids[dp.id] = true
     end
   end
 
@@ -4686,23 +4739,23 @@ end
 
 
 function device_map.get_available_devices_for_channel(c)
-
-  local active_devices = {}
+  local active_devices_set = {}
   local devices_copy = fn.deep_copy(devices)
 
-  -- Populating active_devices with ids from channels 1 through 16
+  -- Populating active_devices_set with ids from channels 1 through 16
   for i = 1, 16 do
-    if i ~= c and program.get_channel(i).device_map ~= "none" then
-      table.insert(active_devices, program.get_channel(i).device_map)
+    local device_map_id = program.get_channel(i).device_map
+    if i ~= c and device_map_id ~= "none" then
+      active_devices_set[device_map_id] = true
     end
   end
 
-  -- Filtering devices_copy to remove any table whose id is present in active_devices
+  -- Filtering devices_copy to remove any table whose id is present in active_devices_set
   local filtered_devices = {}
   for _, inner_table in ipairs(devices_copy) do
-      if not (inner_table.id and inner_table.unique and fn.table_contains(active_devices, inner_table.id)) then
-          table.insert(filtered_devices, inner_table)
-      end
+    if not (inner_table.id and inner_table.unique and active_devices_set[inner_table.id]) then
+      table.insert(filtered_devices, inner_table)
+    end
   end
 
   return filtered_devices
@@ -4715,31 +4768,36 @@ function device_map.get_params(device_id)
 
 end
 
-function device_map.get_available_params_for_channel(c, selected_param)
 
+function device_map.get_available_params_for_channel(c, selected_param)
   local channel = program.get_channel(c)
   local active_params = {}
   local params_copy = fn.deep_copy(device_map.get_params(channel.device_map))
 
-  -- Populating active_params with ids from channels 1 through 16
+  -- Populating active_params with ids from channels 1 through 10
   for i = 1, 10 do
-
     if selected_param ~= i and channel.trig_lock_params[i].id ~= "none" then
       table.insert(active_params, channel.trig_lock_params[i].id)
     end
-
   end
 
-  -- Filtering params_copy to remove any table whose id is present in active_params
+  -- Convert active_params into a set for O(1) lookups
+  local active_params_set = {}
+  for _, param_id in ipairs(active_params) do
+      active_params_set[param_id] = true
+  end
+
+  -- Filtering params_copy to remove any table whose id is present in active_params_set
   local filtered_params = {}
   for _, inner_table in ipairs(params_copy) do
-      if not (inner_table.id and fn.table_contains(active_params, inner_table.id)) then
+      if not active_params_set[inner_table.id] then
           table.insert(filtered_params, inner_table)
       end
   end
 
   return filtered_params
 end
+
 
 
 return device_map

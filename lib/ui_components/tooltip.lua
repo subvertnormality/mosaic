@@ -1,5 +1,7 @@
 local tooltip = {}
 
+local fn = include("mosaic/lib/functions")
+
 tooltip.text = false
 tooltip.metros = {}
 
