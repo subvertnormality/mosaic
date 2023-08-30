@@ -27,6 +27,10 @@ Requirements:
 - Midi interface
 - Midi instruments
 
+## Install
+
+To install, simply run `;install https://github.com/subvertnormality/mosaic` in maiden. 
+
 ## Core concepts
 
 ### Pattern
