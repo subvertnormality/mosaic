@@ -30,7 +30,6 @@ local function create_cc_device()
     ["type"] = "midi",
     ["name"] = "CC Device",
     ["id"] = "cc_device",
-    ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = cc_midi_device
@@ -51,7 +50,6 @@ local function get_none_device()
     ["type"] = "none",
     ["name"] = "None",
     ["id"] = "none",
-    ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {}
@@ -65,7 +63,6 @@ local stock_device_map = {
     ["type"] = "midi",
     ["name"] = "Digitakt",
     ["id"] = "digitakt",
-    ["fixed_note"] = nil,
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
@@ -860,7 +857,7 @@ local stock_device_map = {
     ["type"] = "midi",
     ["name"] = "Digitone",
     ["id"] = "digitone",
-    ["fixed_note"] = nil,
+
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
@@ -2354,7 +2351,7 @@ local stock_device_map = {
     ["type"] = "midi",
     ["name"] = "OP-1",
     ["id"] = "op-1",
-    ["fixed_note"] = nil,
+
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
@@ -2420,7 +2417,7 @@ local stock_device_map = {
     ["type"] = "midi",
     ["name"] = "Syntakt",
     ["id"] = "syntakt",
-    ["fixed_note"] = nil,
+
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
@@ -3859,7 +3856,7 @@ local stock_device_map = {
     ["type"] = "midi",
     ["name"] = "EX Braids",
     ["id"] = "ex-braids",
-    ["fixed_note"] = nil,
+
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
     ["params"] = {
@@ -4594,6 +4591,33 @@ local stock_device_map = {
       
     }
   },
+  {
+    
+    ["type"] = "midi",
+    ["name"] = "Nord Drum",
+    ["id"] = "nord_drum",
+
+    ["map_params_automatically"] = false,
+    ["default_midi_channel"] = nil,
+    ["params"] = {
+      
+      {
+        ["id"] = "ad_root_4",
+        ["name"] = "AD Root 4",
+        ["cc_msb"] = 58,
+        ["cc_lsb"] = nil,
+        ["cc_min_value"] = 0,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "ROOT",
+        ["short_descriptor_2"] = "FOUR",
+      }
+      
+    }
+  },
   { 
     ["type"] = "midi",
     ["name"] = "DRM BD",
@@ -4606,6 +4630,8 @@ local stock_device_map = {
         ["name"] = "Fixed Note",
         ["short_descriptor_1"] = "FIXD",
         ["short_descriptor_2"] = "NOTE",
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
         ["default"] = 36
       }
     },
@@ -4623,6 +4649,8 @@ local stock_device_map = {
         ["name"] = "Fixed Note",
         ["short_descriptor_1"] = "FIXD",
         ["short_descriptor_2"] = "NOTE",
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
         ["default"] = 45
       }
     },
@@ -4640,6 +4668,8 @@ local stock_device_map = {
         ["name"] = "Fixed Note",
         ["short_descriptor_1"] = "FIXD",
         ["short_descriptor_2"] = "NOTE",
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
         ["default"] = 50
       }
     },
@@ -4657,6 +4687,8 @@ local stock_device_map = {
         ["name"] = "Fixed Note",
         ["short_descriptor_1"] = "FIXD",
         ["short_descriptor_2"] = "NOTE",
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
         ["default"] = 56
       }
     },
@@ -4674,6 +4706,8 @@ local stock_device_map = {
         ["name"] = "Fixed Note",
         ["short_descriptor_1"] = "FIXD",
         ["short_descriptor_2"] = "NOTE",
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
         ["default"] = 38
       }
     },
@@ -4691,6 +4725,8 @@ local stock_device_map = {
         ["name"] = "Fixed Note",
         ["short_descriptor_1"] = "FIXD",
         ["short_descriptor_2"] = "NOTE",
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
         ["default"] = 44
       }
     },
@@ -4708,6 +4744,8 @@ local stock_device_map = {
         ["name"] = "Fixed Note",
         ["short_descriptor_1"] = "FIXD",
         ["short_descriptor_2"] = "NOTE",
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
         ["default"] = 49
       }
     },
@@ -4725,6 +4763,8 @@ local stock_device_map = {
         ["name"] = "Fixed Note",
         ["short_descriptor_1"] = "FIXD",
         ["short_descriptor_2"] = "NOTE",
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
         ["default"] = 39
       }
     },
@@ -4739,7 +4779,7 @@ local stock_params = {
     ["name"] = "Fixed Note",
     ["short_descriptor_1"] = "FIXD",
     ["short_descriptor_2"] = "NOTE",
-    ["cc_min_value"] = 0,
+    ["cc_min_value"] = -1,
     ["cc_max_value"] = 127,
   },
   {
@@ -4816,7 +4856,7 @@ local function merge_devices()
         ["name"] = fn.title_case(index),
         ["id"] = index,
         ["unique"] = true,
-        ["fixed_note"] = nil,
+    
         ["map_params_automatically"] = false,
         ["default_midi_channel"] = nil,
         ["player"] = device,

@@ -30,7 +30,9 @@ end
 function midi_controller.all_off(id)
 
   for note = 0, 127 do
-    midi_devices[id]:note_off(note)
+    for channel = 1, 16 do 
+      midi_devices[id]:note_off(note, 0, channel)
+    end
   end
 
 end
