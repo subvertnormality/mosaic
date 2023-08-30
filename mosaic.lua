@@ -183,7 +183,7 @@ function init()
   grid_controller.splash_screen_on()
   ui_splash_screen_active = true
 
-  params:add_group("MOSAIC", "mosaic", 13)
+  params:add_group("mosaic", "MOSAIC", 13)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project" )
   params:set_action("save_p", function(x) textentry.enter(save_project,  "new") end)
