@@ -4591,6 +4591,142 @@ local stock_device_map = {
       }
       
     }
+  },
+  { 
+    ["type"] = "midi",
+    ["name"] = "DRM BD",
+    ["id"] = "drm-bd",
+    ["unique"] = true,
+    ["map_params_automatically"] = true,
+    ["params"] = {
+      {
+        ["id"] = "fixed_note",
+        ["name"] = "Fixed Note",
+        ["short_descriptor_1"] = "FIXD",
+        ["short_descriptor_2"] = "NOTE",
+        ["default"] = 36
+      }
+    },
+    ["default_midi_channel"] = 10
+  },
+  { 
+    ["type"] = "midi",
+    ["name"] = "DRM Drum 1",
+    ["id"] = "drm-drum1",
+    ["unique"] = true,
+    ["map_params_automatically"] = true,
+    ["params"] = { -- up to 8 params 
+      {
+        ["id"] = "fixed_note",
+        ["name"] = "Fixed Note",
+        ["short_descriptor_1"] = "FIXD",
+        ["short_descriptor_2"] = "NOTE",
+        ["default"] = 45
+      }
+    },
+    ["default_midi_channel"] = 10
+  },
+  { 
+    ["type"] = "midi",
+    ["name"] = "DRM Drum 2",
+    ["id"] = "drm-drum2",
+    ["unique"] = true,
+    ["map_params_automatically"] = true,
+    ["params"] = { -- up to 8 params 
+      {
+        ["id"] = "fixed_note",
+        ["name"] = "Fixed Note",
+        ["short_descriptor_1"] = "FIXD",
+        ["short_descriptor_2"] = "NOTE",
+        ["default"] = 50
+      }
+    },
+    ["default_midi_channel"] = 10
+  },
+  { 
+    ["type"] = "midi",
+    ["name"] = "DRM Multi",
+    ["id"] = "drm-multi",
+    ["unique"] = true,
+    ["map_params_automatically"] = true, 
+    ["params"] = {
+      {
+        ["id"] = "fixed_note",
+        ["name"] = "Fixed Note",
+        ["short_descriptor_1"] = "FIXD",
+        ["short_descriptor_2"] = "NOTE",
+        ["default"] = 56
+      }
+    },
+    ["default_midi_channel"] = 10
+  },
+  { 
+    ["type"] = "midi",
+    ["name"] = "DRM Snare",
+    ["id"] = "drm-sd",
+    ["unique"] = true,
+    ["map_params_automatically"] = true,
+    ["params"] = {
+      {
+        ["id"] = "fixed_note",
+        ["name"] = "Fixed Note",
+        ["short_descriptor_1"] = "FIXD",
+        ["short_descriptor_2"] = "NOTE",
+        ["default"] = 38
+      }
+    },
+    ["default_midi_channel"] = 10
+  },
+  { 
+    ["type"] = "midi",
+    ["name"] = "DRM HH 1",
+    ["id"] = "drm-hh1",
+    ["unique"] = true,
+    ["map_params_automatically"] = true,
+    ["params"] = {
+      {
+        ["id"] = "fixed_note",
+        ["name"] = "Fixed Note",
+        ["short_descriptor_1"] = "FIXD",
+        ["short_descriptor_2"] = "NOTE",
+        ["default"] = 44
+      }
+    },
+    ["default_midi_channel"] = 10
+  },
+  { 
+    ["type"] = "midi",
+    ["name"] = "DRM HH 2",
+    ["id"] = "drm-hh2",
+    ["unique"] = true,
+    ["map_params_automatically"] = true, 
+    ["params"] = {
+      {
+        ["id"] = "fixed_note",
+        ["name"] = "Fixed Note",
+        ["short_descriptor_1"] = "FIXD",
+        ["short_descriptor_2"] = "NOTE",
+        ["default"] = 49
+      }
+    },
+    ["default_midi_channel"] = 10
+  },
+  { 
+    ["type"] = "midi",
+    ["name"] = "DRM Clap",
+    ["id"] = "drm-clap",
+    ["unique"] = true,
+    ["map_params_automatically"] = true, 
+    ["params"] = { 
+      {
+        ["id"] = "fixed_note",
+        ["name"] = "Fixed Note",
+        ["short_descriptor_1"] = "FIXD",
+        ["short_descriptor_2"] = "NOTE",
+        ["default"] = 39
+      }
+    },
+    ["default_midi_channel"] = 10
   }
 }
 
@@ -4629,6 +4765,9 @@ local function merge_devices()
     if sd then
       for k, v in pairs(cd) do
         sd[k] = v
+      end
+      if sd["params"][1].id ~= "none" then
+        table.insert(sd["params"], 1, get_none_param())
       end
     end
 
