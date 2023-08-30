@@ -1,5 +1,7 @@
 local device_map = {}
 local custom_device_map = include('mosaic/lib/user_config/custom_device_map')
+local device_config = include('mosaic/lib/user_config/device_config')
+
 local fn = include("mosaic/lib/functions")
 
 local devices
@@ -4758,6 +4760,13 @@ local function merge_devices()
     stock_map_by_id[device.id] = device
   end
 
+  -- if a stock device doesn't appear in the show device list, remove it
+  for index, device in pairs(stock_device_map) do
+    if (device.id ~= "none") and (not fn.string_in_table(device_config.show_devices, device.id)) then
+      table.remove(stock_device_map, index)
+    end
+  end
+
   for _, cd in ipairs(custom_device_map) do
     local sd = stock_map_by_id[cd.id]
     
@@ -4770,6 +4779,7 @@ local function merge_devices()
         table.insert(sd["params"], 1, get_none_param())
       end
     end
+
 
     -- Handle insertion or removal based on 'hide' attribute
     if not cd.hide then
@@ -4792,6 +4802,7 @@ local function merge_devices()
       end
     end
   end
+
 
   for index, device in pairs(note_players) do
     if string.find(index, "midi", 1, true)  ~= 1 and 

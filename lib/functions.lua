@@ -37,6 +37,15 @@ function fn.id_appears_in_table(t, target_id)
   end
 end
 
+function fn.string_in_table(tbl, target)
+  for _, value in pairs(tbl) do
+    if value == target then
+      return true
+    end
+  end
+  return false
+end
+
 function fn.get_by_id(t, target_id)
   for i=#t, 1, -1 do 
       if t[i].id == target_id then

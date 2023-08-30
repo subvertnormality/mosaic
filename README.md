@@ -61,9 +61,15 @@ Each sequencer pattern offers 16 scale slots. A single slot can house a root not
 
 Think of a device as a either an internal norns sound engine powered by [n.b.](https://github.com/sixolet/nb/tree/main), or a representation of a MIDI device in your workspace. 
 
-n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engineers.
+n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engines to channels.
 
-Midi devices is primarily defined by attributes like MIDI destinations, device name, and CC MIDI destinations. While there are some ready-made device templates to get you started, trig lock destinations can be customized either directly on the norns or through a configuration file.
+Midi devices is primarily defined by attributes like MIDI destinations, device name, and CC MIDI destinations. While there are some ready-made device templates to get you started, trig lock destinations can be customized either directly on the norns or through using the `custom_device_map.lua` configuration file in the `user_config` folder.
+
+You can hide stock devices from the menu by commenting out it's entry in the `device_config.lua` file in the `user_config` folder.
+
+### Params
+
+Most devices in _Mosaic_ feature a set of params that alters either the quality of the sound or the trig in some way. These params can be trig locked. Trig locking is a powerful sequencer device seen on Elektron synthesizers. You can define a param's value per step, allowing for infinite variation of sounds. See the channel page section for details on how to assign and use params.
 
 ## Pages
 
@@ -278,18 +284,9 @@ When the sequencer is not playing, it will autosave with the name "autosave" aft
 
 ## Custom device maps
 
-You can define every device in your studio using the `custom_device_map.lua` file in `Mosaic/lib/user_config/`. Copy the template and add your device's cc and midi information. *Always include new entries at the end of the file* to ensure backwards compatability.
+You can hide factory devices from the device list. To do this, remove the device from the `device_config.lua` file:
 
-You can hide the factory devices from the device list. To do this, add an entry to your `custom_device_map.lua` file as so:
-
-```  
-{
-  ["id"] = "op-1",
-  ["hide"] = true
-},
-```
-
-Including this entry will hide the OP-1 device from your list.
+Define every device in your studio by using the `custom_device_map.lua` file in `Mosaic/lib/user_config/`. Copy the template and add your device's cc and midi information.
 
 You can also override options. For example, if you want your EX Braids algorithm to always be set to midi channel 16, you would include the following in your `custom_device_map.lua` file:
 
@@ -301,7 +298,7 @@ You can also override options. For example, if you want your EX Braids algorithm
   },
 ```  
 
-If you'd like, you define devices that have default paramaters defined. These parameters can also have a midi channel that differs from the device's default. The following device has two param knobs automatically assigned on the device param page. The knobs control cc 13 and 14 respectively, on midi channel 13, even though the midi trig and note information is being sent to midi channel 14.
+If you'd like, you can define devices that have default paramaters defined. These parameters can also have a midi channel that differs from the device's default. The following device has two param knobs automatically assigned on the device param page. The knobs control cc 13 and 14 respectively, on midi channel 13, even though the midi trig and note information is being sent to midi channel 14.
 
 ```
 { 
@@ -347,7 +344,7 @@ If you'd like, you define devices that have default paramaters defined. These pa
 ```
 
 
-Some devices respond to trigs on specific note numbers. Without locking a channel to the relevant note numbers, things can get strange very quickly in the world of _Mosaic_ as merging patterns often alters the note numbers on clashing steps (by design). This is obviously not desirable for devices that require a specific midi note for a specific drum sound, for example. You can lock a device's note number using the "Fixed Note" param on the trig lock page. You can also set this in your `custom_device_map.lua` file:
+Some devices respond to trigs on specific note numbers. Without locking a channel to the relevant note numbers, things can get strange very quickly in the world of _Mosaic_. This is because merging patterns often alters the note numbers on clashing steps. This is obviously not desirable for devices that require a certain midi note for a specific drum sound. You can lock a device's note number using the "Fixed Note" param on the trig lock page. You can also set this in your `custom_device_map.lua` file:
 
 ```
   { 
