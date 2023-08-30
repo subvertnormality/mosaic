@@ -4707,8 +4707,20 @@ local function merge_devices()
             ["quantum_modifier"] = quantum_modifier,
             ["default"] = p["controlspec"] and p["controlspec"].default or 0
           })
-
         end
+      end
+
+      if device.describe().supports_slew then
+        table.insert(new_device_params, { 
+          ["id"] = "nb_slew",
+          ["name"] = "Slew",
+          ["short_descriptor_1"] = "SLEW",
+          ["short_descriptor_2"] = "",
+          ["cc_min_value"] = -1,
+          ["cc_max_value"] = 60,
+          ["quantum_modifier"] = 60,
+          ["default"] = -1
+        })
       end
     end
   end

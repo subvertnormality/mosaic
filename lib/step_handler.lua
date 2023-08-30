@@ -37,6 +37,7 @@ end
 
 function step_handler.process_params(c, step)
   local channel = program.get_channel(c)
+  local device = device_map.get_device(channel.device_map)
 
   for i=1,10 do
 
@@ -50,6 +51,14 @@ function step_handler.process_params(c, step)
         midi_controller.cc(channel.trig_lock_params[i].cc_msb, step_trig_lock, midi_channel, channel.midi_device)
       else
         midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_banks[i], midi_channel, channel.midi_device)
+      end
+    elseif channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id == "nb_slew" then
+      local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
+
+      if step_trig_lock then
+        device.player:set_slew(step_trig_lock / channel.trig_lock_params[i].quantum_modifier)
+      else
+        device.player:set_slew(channel.trig_lock_banks[i] / channel.trig_lock_params[i].quantum_modifier)
       end
     elseif channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
