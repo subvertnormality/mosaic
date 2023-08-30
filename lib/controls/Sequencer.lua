@@ -73,6 +73,11 @@ function Sequencer:draw(channel, draw_func)
   local end_x = channel.end_trig[1]
   local end_y = channel.end_trig[2]
   local end_step = fn.calc_grid_count(end_x, end_y)
+  local global_pattern_length = program.get_selected_sequencer_pattern().global_pattern_length
+
+  if global_pattern_length < end_step then
+    end_step = global_pattern_length
+  end
 
   local current_step = transform_current_step(channel.current_step)
 
