@@ -15,13 +15,12 @@ local fn = include("mosaic/lib/functions")
 local fileselect = require('fileselect')
 local textentry = require('textentry')
 local musicutil = require("musicutil")
-local nb = require("mosaic/lib/nb/lib/nb")
-
 local as_metro = metro.init(do_autosave, 1, 1)
 local autosave_timer = metro.init(prime_autosave, 20, 1)
 
 local ui_splash_screen_active = false
 
+nb = require("mosaic/lib/nb/lib/nb")
 clock_controller = include("mosaic/lib/clock_controller")
 pattern_controller = include("mosaic/lib/pattern_controller")
 midi_controller = include("mosaic/lib/midi_controller")
@@ -148,9 +147,7 @@ function init()
   program.init()
   midi_controller.init()
   nb:init()
-
-  -- fn.print_table(note_players)
-  -- nb:add_param("voice_id", "voice") -- adds a voice selector param to your script.
+  nb:add_param("voice_id", "NB PARAMS") -- adds a voice selector param to your script.
   nb:add_player_params() -- Adds the parameters for the selected voices to your script.
 
   device_map.init()

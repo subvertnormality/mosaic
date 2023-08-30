@@ -255,14 +255,10 @@ function clock_controller:stop()
       clock.cancel(midi_clock)
     end
     midi_controller:stop()
+    nb:stop_all()
     for i = 1, 16 do
       if clock_controller["channel_"..i.."_clock"] then
         clock.cancel(clock_controller["channel_"..i.."_clock"])
-      end
-
-      local device_player = device_map.get_device(program.get_channel(i).device_map).player
-      if device_player then
-        device_player:stop_all()
       end
     end
     playing = false

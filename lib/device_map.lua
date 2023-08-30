@@ -4680,6 +4680,8 @@ local function merge_devices()
           local param_id = params.lookup[device_param_names[i]]
           local p = params:lookup_param(param_id)
 
+          params:show(param_id)
+
           local minval = 0
           local maxval = 127
           local quantum = 1
