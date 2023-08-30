@@ -259,6 +259,11 @@ function clock_controller:stop()
       if clock_controller["channel_"..i.."_clock"] then
         clock.cancel(clock_controller["channel_"..i.."_clock"])
       end
+
+      local device_player = device_map.get_device(program.get_channel(i).device_map).player
+      if device_player then
+        device_player:stop_all()
+      end
     end
     playing = false
     clock_controller.reset() 

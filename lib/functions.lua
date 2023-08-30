@@ -89,6 +89,83 @@ function fn.string_to_table(str)
     return load("return " .. str)()
 end
 
+function fn.title_case(str)
+  return (str:gsub("(%a)([%w_']*)", function(first, rest)
+    return first:upper()..rest:lower()
+  end))
+end
+
+local function split_words(str)
+  local words = {}
+  for word in str:gmatch("%w+") do
+      table.insert(words, word)
+  end
+  return words
+end
+
+function fn.snake_case(str)
+  -- Convert any uppercase letter that has a space or start-of-string before it to lowercase
+  local temp = str:gsub("(%s?)(%u)", function(space, letter)
+    return (space == " " and "_" or "") .. letter:lower()
+  end)
+  -- Replace spaces with underscores (if any still remain)
+  local snake_case = temp:gsub("%s", "_")
+  return snake_case
+end
+
+function fn.format_first_descriptor(str)
+
+  local words = split_words(str)
+  local first_word = words[1]
+
+
+  local truncated
+  -- Remove first vowel if the string has more than 4 characters
+  -- and if there is a consonant before the vowel
+  if #first_word > 4 then
+      truncated = first_word:gsub("([bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ])[aeiouAEIOU]", "%1", 1)
+  else
+      truncated = first_word
+  end
+
+  -- Take first 4 characters
+  truncated = string.sub(truncated, 1, 4)
+
+  -- Capitalize the string
+  local capitalized = string.upper(truncated)
+
+  return capitalized
+end
+
+
+
+function fn.format_second_descriptor(str)
+
+  local words = split_words(str)
+  local second_word = words[2]
+
+  if second_word == nil then
+      return ""
+  end
+
+  local truncated
+
+  -- Remove first vowel if the string has more than 4 characters
+  -- and if there is a consonant before the vowel
+  if #second_word > 4 then
+      truncated = second_word:gsub("([bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ])[aeiouAEIOU]", "%1", 1)
+  else
+      truncated = second_word
+  end
+
+  -- Take first 4 characters
+  truncated = string.sub(truncated, 1, 4)
+
+  -- Capitalize the string
+  local capitalized = string.upper(truncated)
+
+  return capitalized
+end
 
 function fn.deep_copy(original)
   local copy

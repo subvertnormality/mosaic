@@ -36,7 +36,7 @@ function midi_controller.all_off(id)
 end
 
 
-function midi_controller.note_off(note, velocity, channel, device)
+function midi_controller:note_off(note, velocity, channel, device)
 
   if midi_devices[device] ~= nil then
     midi_devices[device]:note_off(note, velocity, channel)
@@ -44,7 +44,7 @@ function midi_controller.note_off(note, velocity, channel, device)
 
 end
 
-function midi_controller.note_on(note, velocity, channel, device)
+function midi_controller:note_on(note, velocity, channel, device)
   if midi_devices[device] ~= nil then
     midi_devices[device]:note_on(note, velocity, channel)
   end

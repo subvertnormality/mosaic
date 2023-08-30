@@ -34,11 +34,11 @@ In _Mosaic_, the 'pattern' is the central pillar. Think of it as a sequence enri
 
 In the world of _Mosaic_, notes don't strictly adhere to a single scale. Instead, they are valued by their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
 
-_Mosaic_ ensures you remain within your selected scale (though there are ways to flirt with notes outside of it, which we'll delve into later). You'll find several methods to adjust scales seamlessly as you go, which we'll cover  shortly.
+_Mosaic_ ensures you remain within your selected scale (though there are ways to experiment with notes outside of it, which we'll delve into later). You'll find several methods to adjust scales seamlessly as you go, which we'll cover shortly.
 
 ### Channel
 
-The 'channel' is the second crucial component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's MIDI device, pick the MIDI output, choose the MIDI channel, the scale, and set up trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device.
+The 'channel' is the second crucial component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's internal sound device, MIDI device, pick MIDI outputs, choose MIDI channels, the scale, and set up trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device.
 
 When two patterns overlap in one channel and their trigs coincide, the outcome depends on the channel's 'merge mode'. There are several merge modes, each with its own characteristic. This feature encourages designing patterns that, when they overlap, produce intriguing results.
 
@@ -46,7 +46,7 @@ You can adjust the rhythm for each channel individually, allowing for different 
 
 ### Sequencer Pattern
 
-The sequencer pattern stands as the last of the three foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns, ranging from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be seamlessly linked to craft a song. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
+The sequencer pattern stands as the last of the three foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns, ranging from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be linked to craft a song. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
 
 ### Scale
 
@@ -54,7 +54,11 @@ Each sequencer pattern offers 16 scale slots. A single slot can house a root not
 
 ### Device
 
-Think of a device as a representation of a MIDI device in your workspace. It's primarily defined by attributes like MIDI destinations, device name, and CC MIDI destinations. While there are some ready-made device templates to get you started, trig lock destinations can be customized either directly on the norns or through a configuration file.
+Think of a device as a either an internal norns sound engine powered by [n.b.](https://github.com/sixolet/nb/tree/main), or a representation of a MIDI device in your workspace. 
+
+n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engineers.
+
+Midi devices is primarily defined by attributes like MIDI destinations, device name, and CC MIDI destinations. While there are some ready-made device templates to get you started, trig lock destinations can be customized either directly on the norns or through a configuration file.
 
 ## Pages
 
@@ -78,7 +82,7 @@ To start or halt the sequencer, simply press the active page in the menu. If the
 
 ### Trig editor
 
-Dig into rhythmic design with the trig editor in _Mosaic_. Using DrumOps tools, originally seen in the Teletype ecosystem but now available here, you can craft intricate patterns and define the duration of each step.
+The rhythm designer in _Mosaic_ is named the trig editor. Using DrumOps tools, originally seen in the Teletype ecosystem but now available here, you can craft intricate patterns. You can also set the duration of each step.
 
 ![Trig editor with a complex trig pattern](/designs/Images/trig_editor.png)
 
@@ -107,7 +111,7 @@ The left side faders adjust algorithm values. Brightly lit ends refine values, w
 
 To see your algorithm's impact, hit the prime button. This prepares a new pattern, and new steps are showcased as flashing bright steps on the sequencer. While these steps flash, they aren’t painted yet. Any step that would be painted over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences, grounded in rhythmic fundamentals, that don't get too busy. You can modify algorithm parameters whilst the pattern is primed.
 
-If you haven’t painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Here’s a tip: Double-pressing the prime button without tweaking the algorithm or its parameters acts as an undo for the last action.
+If you haven’t painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Double-pressing the prime button without tweaking the algorithm or its parameters acts as an undo for the last action.
 
 ![Prime and print button](/designs/Images/trig_editor_prime_and_print.png)
 
@@ -162,7 +166,7 @@ On the norns screen you can see the channel grid visualiser. Use E2 to select th
 
 ### Channel editor
 
-Time to create the heart of your masterpiece with the channel editor. Here, individual patterns find harmony, merging into cohesive sounds.
+Here's where it all comes together: the channel editor. Here, individual patterns find harmony, merging into cohesive sounds.
 
 Begin by selecting from the 16 available channels:
 

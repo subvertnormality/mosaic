@@ -1,7 +1,6 @@
 local channel_edit_page_ui_controller = {}
 
 local fn = include("mosaic/lib/functions")
-local device_map = include("mosaic/lib/device_map")
 
 local quantiser = include("mosaic/lib/quantiser")
 local Pages = include("mosaic/lib/ui_components/Pages")
@@ -25,7 +24,7 @@ local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 50)
 
 local midi_device_vertical_scroll_selector = VerticalScrollSelector:new(90, 25, "Midi Device", {})
 local midi_channel_vertical_scroll_selector = VerticalScrollSelector:new(65, 25, "Midi Channel", {{name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4}, {name = "CC5", value = 5}, {name = "CC6", value = 6}, {name = "CC7", value = 7}, {name = "CC8", value = 8}, {name = "CC9", value = 9}, {name = "CC10", value = 10}, {name = "CC11", value = 11}, {name = "CC12", value = 12}, {name = "CC13", value = 13}, {name = "CC14", value = 14}, {name = "CC15", value = 15}, {name = "CC16", value = 16}})
-local device_map_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Midi Map", device_map:get_devices())
+local device_map_vertical_scroll_selector
 
 local param_select_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Params", {})
 
@@ -120,6 +119,7 @@ function channel_edit_page_ui_controller.init()
   midi_device_vertical_scroll_selector:set_items(midi_controller.get_midi_outs())
   dials:set_items({param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10})
   clock_mod_list_selector:set_list(clock_controller.get_clock_divisions())
+  device_map_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Midi Map", device_map:get_devices())
 
   quantizer_page:set_sub_name_func(function ()
 

@@ -51,11 +51,17 @@ function step_handler.process_params(c, step)
       else
         midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_banks[i], midi_channel, channel.midi_device)
       end
+    elseif channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id then
+      local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
+
+      if step_trig_lock then
+        params:set(channel.trig_lock_params[i].id, step_trig_lock / channel.trig_lock_params[i].quantum_modifier)
+      else
+        params:set(channel.trig_lock_params[i].id, channel.trig_lock_banks[i] / channel.trig_lock_params[i].quantum_modifier)
+      end
     end
   end
 end
-
-
 
 
 function step_handler.calculate_next_selected_sequencer_pattern()
@@ -150,10 +156,18 @@ function step_handler.handle(c, current_step)
       note = fixed_note
     end
 
+    local device = device_map.get_device(channel.device_map)
+
     if not channel.mute then
-      midi_controller.note_on(note, velocity_value, midi_channel, midi_device)
+      if not device.player then
+        midi_controller:note_on(note, velocity_value, midi_channel, midi_device)
+        table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value, player = midi_controller})
+      else
+        device.player:note_on(note, velocity_value)
+        table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value, player = device.player})
+      
+      end
     end
-    table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value})
   end
 
 end
@@ -231,7 +245,7 @@ function step_handler.process_lengths()
     local l = length_tracker[i]
     l.steps_remaining = l.steps_remaining - 1
     if l.steps_remaining < 1 then
-      midi_controller.note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
+      l.player:note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
       table.remove(length_tracker, i)
     end
   end

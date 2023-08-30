@@ -15,6 +15,7 @@ local fn = include("mosaic/lib/functions")
 local fileselect = require('fileselect')
 local textentry = require('textentry')
 local musicutil = require("musicutil")
+local nb = require("mosaic/lib/nb/lib/nb")
 
 local as_metro = metro.init(do_autosave, 1, 1)
 local autosave_timer = metro.init(prime_autosave, 20, 1)
@@ -25,6 +26,7 @@ clock_controller = include("mosaic/lib/clock_controller")
 pattern_controller = include("mosaic/lib/pattern_controller")
 midi_controller = include("mosaic/lib/midi_controller")
 step_handler = include("lib/step_handler")
+device_map = include("mosaic/lib/device_map")
 
 local function load_project(pth)
   
@@ -145,7 +147,13 @@ end
 function init()
   program.init()
   midi_controller.init()
-  
+  nb:init()
+
+  -- fn.print_table(note_players)
+  -- nb:add_param("voice_id", "voice") -- adds a voice selector param to your script.
+  nb:add_player_params() -- Adds the parameters for the selected voices to your script.
+
+  device_map.init()
 
   sinfonion.set_root_note(0)
   sinfonion.set_degree_nr(0)
@@ -175,7 +183,7 @@ function init()
   grid_controller.splash_screen_on()
   ui_splash_screen_active = true
 
-  params:add_group("mosaic", "mosaic", 13)
+  params:add_group("MOSAIC", "mosaic", 13)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project" )
   params:set_action("save_p", function(x) textentry.enter(save_project,  "new") end)

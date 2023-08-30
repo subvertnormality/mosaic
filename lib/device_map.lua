@@ -2,6 +2,8 @@ local device_map = {}
 local custom_device_map = include('mosaic/lib/user_config/custom_device_map')
 local fn = include("mosaic/lib/functions")
 
+local devices
+
 local function create_cc_device() 
   local cc_midi_device = {}
 
@@ -4612,36 +4614,6 @@ local stock_params = {
   }
 }
 
--- local function merge_devices() 
-
---   for _, cd in ipairs(custom_device_map) do
-
-
---     for _, sd in ipairs(stock_device_map) do
---       if sd.id == cd.id then
---         for k, v in pairs(cd) do
---           sd[k] = v
---         end
---       end 
---     end
-
---     if not cd.hide then
---       if not fn.id_appears_in_table(stock_device_map, cd.id) then
---         table.insert(cd.params, 1, get_none_param())
---         table.insert(stock_device_map, cd)
---       end
---     else
---       fn.remove_table_by_id(stock_device_map, cd.id)
---     end
-
---   end
-
---   for index, device in ipairs(stock_device_map) do
---     device["value"] = index
---   end
-
---   return stock_device_map
--- end
 
 local function merge_devices() 
   -- Create a lookup map for faster id-based access
@@ -4682,9 +4654,65 @@ local function merge_devices()
     end
   end
 
+  for index, device in pairs(note_players) do
+    if string.find(index, "midi", 1, true) ~= 1 then
+
+      local new_device_params = {}
+
+      table.insert(stock_device_map, { 
+        ["type"] = "norns",
+        ["name"] = fn.title_case(index),
+        ["id"] = index,
+        ["unique"] = true,
+        ["fixed_note"] = nil,
+        ["map_params_automatically"] = false,
+        ["default_midi_channel"] = nil,
+        ["player"] = device,
+        ["params"] = new_device_params
+      })
+
+      if device.describe().params then
+        local device_param_names = device.describe().params
+        for i = 1, #device_param_names do
+
+          local param_id = params.lookup[device_param_names[i]]
+          local p = params:lookup_param(param_id)
+
+          local minval = 0
+          local maxval = 127
+          local quantum = 1
+
+          if p.count then
+            minval = 1
+            maxval = p.count
+          elseif p["controlspec"] then
+            quantum = p["controlspec"].quantum or 1
+            minval = params:get_range(param_id)[1]
+            maxval = params:get_range(param_id)[2]
+          end
+
+          local quantum_modifier = 1 / quantum
+
+          table.insert(new_device_params, { 
+            ["id"] = device_param_names[i],
+            ["name"] = fn.title_case(p.name),
+            ["short_descriptor_1"] = fn.format_first_descriptor(p.name),
+            ["short_descriptor_2"] = fn.format_second_descriptor(p.name),
+            ["cc_min_value"] = minval * quantum_modifier,
+            ["cc_max_value"] = maxval * quantum_modifier,
+            ["quantum_modifier"] = quantum_modifier,
+            ["default"] = p["controlspec"] and p["controlspec"].default or 0
+          })
+
+        end
+      end
+    end
+  end
+
   -- Update the 'value' field for all devices
   for index, device in ipairs(stock_device_map) do
     device["value"] = index
+    
   end
 
   return stock_device_map
@@ -4717,7 +4745,6 @@ local function merge_params(device_params, stock_params)
   return merged_params
 end
 
-local devices = merge_devices() 
 
 function device_map.get_devices() 
   return devices
@@ -4798,6 +4825,10 @@ function device_map.get_available_params_for_channel(c, selected_param)
   return filtered_params
 end
 
+
+function device_map.init()
+  devices = merge_devices() 
+end
 
 
 return device_map
