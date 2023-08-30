@@ -4,20 +4,21 @@ Welcome to *Mosaic*.
 
 *Mosaic* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodies with finesse. Dive into a profound and singular tapestry of sketching and composition.
 
-At a glance, as of v0.1 _Mosaic_ gives you the following:
+At a glance, as of v0.2 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
 - 16 patterns that can be combined and mutated in different permutations to change their properties in very musical ways
 - Song mode with 90 sequencer patterns
 - Save, load, autosave
 - A pattern editor that allows quick creation of trigger patterns using a DrumOps port, includes euclidean, tresillo function, drum preset banks, and NE Numeric Repetitor
-- 8 assignable trig locks per channel
+- 10 assignable trig locks per channel
 - Midi device templates including labelled trig destinations
+- Native [n.b.](https://github.com/sixolet/nb/) support
 - Per channel tempo and swing
 - Per channel pattern length
 - Channel muting
 - Scales with root note and degree setting
-- Trig lockable octave and scale select
+- Trig lockable octave, scales, probability
 
 Requirements:
 
@@ -371,7 +372,7 @@ The sinfonion expects an inverted serial signal for it's sync function. This mea
 - The sleeve connector of your TS jack connects to ground (there's a convenient ground pad on the norn's shield's PCB). 
 - Now also connect the bottom pin of your 2N3904 to ground
 
-![Inverter circuit digagram](/designs/Images/Sinfonion/inverter.png)
+![Inverter circuit diagram](/designs/Images/Sinfonion/inverter.png)
 
 That's the hardware bit done. You now need to configure your norns.
 
@@ -396,8 +397,6 @@ Reboot your norns.
 Now you need to install the lua dependency lua-periphery. This is a non-standard operation on norns that is _not_ supported. It is possible to compile the dependency on norns, but it will require a degree of linux knowledge to do so. If you need a step by step for this, you're probably best off not trying. It involves compiling luarocks for lua 5.3 installing the dependency using that.
 
 Now you should be all set. 
-
-NEXT: TBC
 
 # Development
 

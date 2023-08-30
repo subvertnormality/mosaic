@@ -331,8 +331,6 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_down()
-            channel_edit_page_ui_controller.update_params()
-            channel_edit_page_ui_controller.refresh_trig_locks()
           else
             local pressed_keys = grid_controller.get_pressed_keys()
             if #pressed_keys > 0 and channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
@@ -405,8 +403,6 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_up()
-            channel_edit_page_ui_controller.update_params()
-            channel_edit_page_ui_controller.refresh_trig_locks()
           else
             local pressed_keys = grid_controller.get_pressed_keys()
             if #pressed_keys > 0 and channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
@@ -554,6 +550,9 @@ function channel_edit_page_ui_controller.key(n, z)
     if not trig_lock_page:is_sub_page_enabled() then
       channel_edit_page_ui_controller.refresh_device_selector()
       channel_edit_page_ui_controller.refresh_param_list()
+    else
+      channel_edit_page_ui_controller.update_params()
+      channel_edit_page_ui_controller.refresh_trig_locks()
     end
     trig_lock_page:toggle_sub_page()
   end
