@@ -13,7 +13,8 @@ local device_config = {
     "drm-sd",
     "drm-hh1",
     "drm-hh2",
-    "drm-clap"
+    "drm-clap",
+    "nord_drum_2"
   }
 }
 

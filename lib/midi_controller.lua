@@ -52,10 +52,20 @@ function midi_controller:note_on(note, velocity, channel, device)
   end
 end
 
-function midi_controller.cc(cc, value, channel, device)
+function midi_controller.cc(cc_msb, cc_lsb, value, channel, device)
 
   if midi_devices[device] ~= nil then
-    midi_devices[device]:cc(cc, value, channel, device)
+
+    if cc_lsb then
+      local v1 = value / 128
+      local v2 = value % 128
+      midi_devices[device]:cc(cc_lsb, v1, channel, device)
+      midi_devices[device]:cc(cc_msb, v2, channel, device)
+    else
+      midi_devices[device]:cc(cc_msb, value, channel, device)
+    end
+
+    
   end
 
 end

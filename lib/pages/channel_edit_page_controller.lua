@@ -50,6 +50,7 @@ function channel_edit_page_controller.init()
 
     channel_octave_fader:set_value(program.get_selected_channel().octave + 3)
     channel_edit_page_controller.refresh()
+    channel_edit_page_ui_controller.refresh()
   end
 
 
@@ -168,6 +169,7 @@ function channel_edit_page_controller.register_press_handlers()
         pattern_controller.update_working_patterns()
         tooltip:show("Channel "..program.get().selected_channel.." selected")
         channel_edit_page_controller.refresh()
+        channel_edit_page_ui_controller.refresh()
       end
     end
   )
@@ -546,7 +548,6 @@ function channel_edit_page_controller.refresh()
   channel_edit_page_controller.refresh_faders()
   channel_edit_page_controller.refresh_step_buttons()
   channel_edit_page_controller.refresh_merge_buttons()
-  channel_edit_page_ui_controller.refresh()
   channel_edit_page_controller.refresh_muted_channels()
 end
 

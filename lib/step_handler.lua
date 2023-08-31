@@ -48,9 +48,9 @@ function step_handler.process_params(c, step)
         midi_channel = channel.trig_lock_params[i].channel
       end
       if step_trig_lock then
-        midi_controller.cc(channel.trig_lock_params[i].cc_msb, step_trig_lock, midi_channel, channel.midi_device)
+        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, step_trig_lock, midi_channel, channel.midi_device)
       else
-        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_banks[i], midi_channel, channel.midi_device)
+        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, channel.trig_lock_banks[i], midi_channel, channel.midi_device)
       end
     elseif channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id == "nb_slew" then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
