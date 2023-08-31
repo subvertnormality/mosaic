@@ -24,6 +24,9 @@ Requirements:
 
 - Norns
 - 128 grid
+
+Plays well with:
+
 - Midi interface
 - Midi instruments
 
