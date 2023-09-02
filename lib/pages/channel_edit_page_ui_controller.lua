@@ -199,12 +199,12 @@ function channel_edit_page_ui_controller.update_scale()
     return
   end
 
-  program.get().scales[channel.default_scale] = {
+  program.set_scale(channel.default_scale, {
     number = scale.number,
     scale = scale.scale,
     chord = chord,
     root_note = root_note
-  }
+  })
 end
 
 function channel_edit_page_ui_controller.update_swing()

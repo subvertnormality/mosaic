@@ -38,6 +38,7 @@ local function load_project(pth)
       program.set(saved[2])
       if saved[1] then params:read(norns.state.data .. saved[1] .. ".pset") end
       clock_controller:reset()
+      ui_controller.refresh()
       fn.dirty_grid(true)
     else
       print("No data")
