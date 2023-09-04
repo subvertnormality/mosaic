@@ -237,19 +237,22 @@ function step_handler.sinfonian_sync(step)
   end
 
   local scale_container = program.get_scale(sinfonion_scale_number)
-  
-  sinfonion.set_root_note(scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod)
-  sinfonion.set_degree_nr(quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord])
-  sinfonion.set_mode_nr(quantiser.get_scales()[scale_container.number].sinf_mode)
-  sinfonion.set_transposition(0)
 
-  -- Could do something with these later
-  -- sinfonion.set_clock(0)
-  -- sinfonion.set_beat(0)
-  -- sinfonion.set_step(0)
-  -- sinfonion.set_reset(0)
-  -- sinfonion.set_chaotic_detune(0)
-  -- sinfonion.set_harmonic_shift(0)
+  if scale_container and scale_container.root_note then 
+  
+    sinfonion.set_root_note(scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod)
+    sinfonion.set_degree_nr(quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord])
+    sinfonion.set_mode_nr(quantiser.get_scales()[scale_container.number].sinf_mode)
+    sinfonion.set_transposition(0)
+
+    -- Could do something with these later
+    -- sinfonion.set_clock(0)
+    -- sinfonion.set_beat(0)
+    -- sinfonion.set_step(0)
+    -- sinfonion.set_reset(0)
+    -- sinfonion.set_chaotic_detune(0)
+    -- sinfonion.set_harmonic_shift(0)
+  end
 
 end
 

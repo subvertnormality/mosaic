@@ -28,10 +28,10 @@ function channel_sequencer_page_controller.register_draw_handlers()
   draw_handler:register_grid(
     "channel_sequencer_page",
     function()
+      local sequencer_pattern = program.get().selected_sequencer_pattern
       for s = 1, 96 do  
-        channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:draw()
         if refresh_button[s] then
-          if program.get().selected_sequencer_pattern == s then
+          if sequencer_pattern == s then
             channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(3)
           elseif program.is_sequencer_pattern_active(s) then
             channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(2)
@@ -40,8 +40,17 @@ function channel_sequencer_page_controller.register_draw_handlers()
           end
           refresh_button[s] = false
         end
+        channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:draw()
       end
+    end
+  )
+
+  draw_handler:register_grid(
+    "channel_sequencer_page",
+    function()
+
       global_pattern_length_fader:draw()
+
     end
   )
 

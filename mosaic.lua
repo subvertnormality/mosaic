@@ -168,7 +168,7 @@ function init()
 
   local grid_clock_id = metro.init()
   grid_clock_id.event = grid_controller.grid_redraw
-  grid_clock_id.time = 1/60
+  grid_clock_id.time = 1/30
   grid_clock_id.count = -1
   grid_clock_id:start()
 
