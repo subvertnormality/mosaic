@@ -67,7 +67,7 @@ end
 local function initialise_default_sequencer_pattern()
   
   local sequencer_pattern = {}
-  
+  local root_note = 0
 
   sequencer_pattern = {
     active = false,

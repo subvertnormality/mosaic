@@ -53,21 +53,22 @@ function midi_controller:note_on(note, velocity, channel, device)
 end
 
 function midi_controller.cc(cc_msb, cc_lsb, value, channel, device)
-
   if midi_devices[device] ~= nil then
-
     if cc_lsb then
-      local v1 = value / 128
-      local v2 = value % 128
-      midi_devices[device]:cc(cc_lsb, v1, channel, device)
-      midi_devices[device]:cc(cc_msb, v2, channel, device)
+      local lsb_value = value % 128  -- Least Significant Byte
+      local msb_value = math.floor(value / 128)  -- Most Significant Byte
+      
+      -- According to the manual, send the LSB first
+      midi_devices[device]:cc(cc_lsb, lsb_value, channel)
+      
+      -- Then send the MSB
+      midi_devices[device]:cc(cc_msb, msb_value, channel)
+      
     else
-      midi_devices[device]:cc(cc_msb, value, channel, device)
+      -- If there's no LSB, just send the MSB
+      midi_devices[device]:cc(cc_msb, value, channel)
     end
-
-    
   end
-
 end
 
 function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
@@ -85,7 +86,7 @@ end
 
 function midi_controller.start()
   for id = 1, #midi.vports do
-    if midi_devices[id] ~= nil then
+    if midi_devices[id].device ~= nil then
       midi_devices[id]:start()
     end
   end
@@ -93,7 +94,7 @@ end
 
 function midi_controller.continue()
   for id = 1, #midi.vports do
-    if midi_devices[id] ~= nil then
+    if midi_devices[id].device ~= nil then
       midi_devices[id]:continue()
     end
   end
@@ -101,17 +102,24 @@ end
 
 function midi_controller.stop()
   for id = 1, #midi.vports do
-    if midi_devices[id] ~= nil then
+    if midi_devices[id].device ~= nil then
       midi_devices[id]:stop()
-      midi_controller.all_off(id)
     end
   end
 end
 
 function midi_controller.clock_send()
   for id = 1, #midi.vports do
-    if midi_devices[id] ~= nil then
+    if midi_devices[id].device ~= nil then
       midi_devices[id]:clock()
+    end
+  end
+end
+
+function midi_controller.panic()
+  for id = 1, #midi.vports do
+    if midi_devices[id].device ~= nil then
+      midi_controller.all_off(id)
     end
   end
 end

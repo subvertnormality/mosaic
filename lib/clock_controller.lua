@@ -244,26 +244,26 @@ end
 
 function clock_controller:stop()
 
-  if (playing) then
-    if (master_clock) then
-      clock.cancel(master_clock)
-    end
-    if (midi_transport) then
-      clock.cancel(midi_transport)
-    end
-    if (midi_clock) then
-      clock.cancel(midi_clock)
-    end
-    midi_controller:stop()
-    nb:stop_all()
-    for i = 1, 16 do
-      if clock_controller["channel_"..i.."_clock"] then
-        clock.cancel(clock_controller["channel_"..i.."_clock"])
-      end
-    end
-    playing = false
-    clock_controller.reset() 
+
+  if (master_clock) then
+    clock.cancel(master_clock)
   end
+  if (midi_transport) then
+    clock.cancel(midi_transport)
+  end
+  if (midi_clock) then
+    clock.cancel(midi_clock)
+  end
+  for i = 1, 16 do
+    if clock_controller["channel_"..i.."_clock"] then
+      clock.cancel(clock_controller["channel_"..i.."_clock"])
+    end
+  end
+  playing = false
+  midi_controller:stop()
+  nb:stop_all()
+  clock_controller.reset() 
+
 end
 
 function clock_controller.is_playing()
@@ -281,6 +281,10 @@ function clock_controller.reset()
   end
   program.get().current_step = 1
   step_handler.reset()
+end
+
+function clock_controller.panic()
+  midi_controller.panic()
 end
 
 function clock_controller.get_clock_divisions()

@@ -165,9 +165,9 @@ function register_press_handlers()
     function(x, y)
       if (y == 8) then
         if (x < 6) then
-          if program.get().selected_page == x then
-            clock_controller:reset()
-            tooltip:show("Sequencer reset")
+          if program.get().selected_page ~= x then
+            clock_controller.panic()
+            tooltip:show("Midi Panic")
           end
         end
       end

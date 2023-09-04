@@ -92,7 +92,13 @@ From the left moving rightward, the buttons activate:
 * Note editor
 * Velocity editor
 
-To start or halt the sequencer, simply press the active page in the menu. If the sequencer is in motion, the active page button will give off a gentle blink.
+## Sequencer start and stop
+
+To start or halt the sequencer, simply press the active page in the menu. If the sequencer is in motion, the active page button will give off a gentle blink. 
+
+## Midi Panic
+
+If you get stuck notes, hold any of the inactive page buttons in the menu. This will perform a midi panic. The system might slow for a short period whilst this is processing.
 
 ### Trig editor
 
