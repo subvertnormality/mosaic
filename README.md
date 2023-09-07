@@ -30,6 +30,7 @@ Encouraged:
 - Midi interface
 - Midi instruments
 - Crow, Just Friends, Ansible
+- [n.b.](https://github.com/sixolet/nb/)
 
 ## Install
 
