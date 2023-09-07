@@ -218,8 +218,8 @@ function trigger_edit_page_controller.register_press_handlers()
   "pattern_trigger_edit_page",
   function(x, y)
     if pattern_trigger_edit_page_pattern1_fader:is_this(x, y) then
-      load_paint_pattern()
       pattern_trigger_edit_page_pattern1_fader:press(x, y)
+      load_paint_pattern()
       if (pattern_trigger_edit_page_algorithm_fader:get_value() == 3) then
         tooltip:show("Fill - "..pattern_trigger_edit_page_pattern1_fader:get_value().." selected")
       else
@@ -232,8 +232,8 @@ function trigger_edit_page_controller.register_press_handlers()
   "pattern_trigger_edit_page",
   function(x, y)
     if pattern_trigger_edit_page_pattern2_fader:is_this(x, y) then
-      load_paint_pattern()
       pattern_trigger_edit_page_pattern2_fader:press(x, y)
+      load_paint_pattern()
       if (pattern_trigger_edit_page_algorithm_fader:get_value() == 3) then
         tooltip:show("Length - "..pattern_trigger_edit_page_pattern2_fader:get_value().." selected")
       else
