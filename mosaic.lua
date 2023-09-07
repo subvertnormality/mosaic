@@ -2,7 +2,6 @@
 -- Grid-centric, intentioned generative sequencer.
 --
 -- llllllll.co/t/mosaic
--- Read the manual at https://github.com/subvertnormality/mosaic/
 
 
 

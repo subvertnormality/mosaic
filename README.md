@@ -1,10 +1,34 @@
 # Mosaic
 
-Welcome to *Mosaic*.
-
 *Mosaic* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodies with finesse. Dive into a profound and singular tapestry of sketching and composition.
 
-At a glance, as of v0.2 _Mosaic_ gives you the following:
+- [Mosaic](#mosaic)
+  * [At a glance](#at-a-glance)
+  * [Install](#install)
+  * [Core concepts](#core-concepts)
+    + [Pattern](#pattern)
+    + [Channel](#channel)
+    + [Sequencer Pattern](#sequencer-pattern)
+    + [Scale](#scale)
+    + [Device](#device)
+    + [Params](#params)
+  * [Pages](#pages)
+    + [Menu](#menu)
+      - [Sequencer start and stop](#sequencer-start-and-stop)
+      - [Midi Panic](#midi-panic)
+    + [Trig editor](#trig-editor)
+    + [Note editor](#note-editor)
+    + [Velocity editor](#velocity-editor)
+    + [Channel editor](#channel-editor)
+    + [Song editor](#song-editor)
+  * [Save and load](#save-and-load)
+  * [Custom device maps](#custom-device-maps)
+- [Sinfonion connect](#sinfonion-connect)
+- [Development](#development)
+
+## At a glance
+
+As of v0.2 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
@@ -94,11 +118,11 @@ From the left moving rightward, the buttons activate:
 * Note editor
 * Velocity editor
 
-## Sequencer start and stop
+#### Sequencer start and stop
 
 To start or halt the sequencer, simply press the active page in the menu. If the sequencer is in motion, the active page button will give off a gentle blink. 
 
-## Midi Panic
+#### Midi Panic
 
 If you get stuck notes, hold any of the inactive page buttons in the menu. This will perform a midi panic. The system might slow for a short period whilst this is processing.
 
