@@ -1,7 +1,9 @@
 -- mosaic v0.2
--- Grid-centric, intentioned generative sequencer.
+-- grid-centric, intentioned 
+-- generative sequencer.
 --
--- llllllll.co/t/mosaic
+-- more: llllllll.co/t/mosaic
+-- manual: t.ly/AuiVc
 
 
 
