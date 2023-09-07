@@ -43,12 +43,12 @@ function VerticalFader:draw()
 
   for i = self.y, 7 do
     bright_mod = 0
-    if self.x == program.get().selected_pattern then
+
+    if x == program.get().selected_pattern then
       if i == 1 then
         bright_mod = shared_bright_mod
       end
     end
-
     if (i == math.abs(7 - self.vertical_offset)) then
       grid_abstraction.led(x, i, 3 + bright_mod) -- mark the bottom of each page
     elseif ((i == 7) and (math.abs(7 - self.vertical_offset) == 0)) then
