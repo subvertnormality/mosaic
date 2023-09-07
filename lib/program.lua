@@ -18,6 +18,7 @@ local function initialise_default_channels()
   
   for i=1,17 do
     channels[i] = {
+      number = i,
       trig_lock_banks = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
       trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
       step_trig_lock_banks = {},
@@ -133,6 +134,7 @@ function program.init()
     default_scale = 0,
     chord = 1,
     current_step = 1,
+    current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     sequencer_patterns = {}
   }
 
@@ -168,12 +170,21 @@ function program.set_sequencer_pattern(p, pattern)
 
   local sequencer_pattern = fn.deep_copy(program.get_sequencer_pattern(p))
 
-  for i = 1, 16 do
-    sequencer_pattern.channels[i].current_step = 1
+  if params:get("reset_on_end_of_pattern") == 1 then
+    for i = 1, 16 do
+      program.set_current_step_for_channel(i, 1)
+    end
   end
 
-
   program_store.sequencer_patterns[pattern] = sequencer_pattern
+end
+
+function program.get_current_step_for_channel(c)
+  return program_store.current_channel_step[c]
+end
+
+function program.set_current_step_for_channel(c, s)
+  program_store.current_channel_step[c] = s
 end
 
 function program.get()

@@ -199,7 +199,9 @@ function step_handler.process_song_sequencer_patterns(step)
     if params:get("song_mode") == 1 then
       program.set_selected_sequencer_pattern(step_handler.calculate_next_selected_sequencer_pattern())
       global_step_accumulator = 0
-      step_handler.reset_sequencer_pattern(selected_sequencer_pattern)
+      if params:get("reset_on_end_of_pattern") == 1 then
+        step_handler.reset_sequencer_pattern()
+      end
     end
   end
 
@@ -285,9 +287,9 @@ function step_handler.reset()
   step_handler.execute_blink_cancel_func()
 end
 
-function step_handler.reset_sequencer_pattern(pattern) 
+function step_handler.reset_sequencer_pattern() 
   for i = 1, 16 do
-    pattern.channels[i].current_step = 1
+    program.set_current_step_for_channel(i, 1)
   end
 end
 

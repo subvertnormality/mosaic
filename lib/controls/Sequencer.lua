@@ -79,7 +79,7 @@ function Sequencer:draw(channel, draw_func)
     end_step = global_pattern_length
   end
 
-  local current_step = transform_current_step(channel.current_step)
+  local current_step = transform_current_step(program.get_current_step_for_channel(channel.number))
 
   for y = self.y, self.y + 3 do
     for x = 1, 16 do

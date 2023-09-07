@@ -170,11 +170,11 @@ local function master_func()
   step_handler.sinfonian_sync(program.get().current_step)
 
   program.get().current_step = program.get().current_step + 1
-  program.get_channel(17).current_step = program.get().current_step
+  program.set_current_step_for_channel(17, program.get().current_step)
 
   if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
     program.get().current_step = 1
-    program.get_channel(17).current_step = 1
+    program.set_current_step_for_channel(17, 1)
   end
   fn.dirty_grid(true)
 end
@@ -195,14 +195,14 @@ function clock_controller:start()
 
       local start_trig = fn.calc_grid_count(program.get_channel(i).start_trig[1], program.get_channel(i).start_trig[2])
       local end_trig = fn.calc_grid_count(program.get_channel(i).end_trig[1], program.get_channel(i).end_trig[2])
-      local current_step = program.get_channel(i).current_step
+      local current_step = program.get_current_step_for_channel(i)
 
-      if program.get_channel(i).current_step < start_trig then
-        program.get_channel(i).current_step = start_trig
+      if program.get_current_step_for_channel(i) < start_trig then
+        program.set_current_step_for_channel(i, start_trig)
         current_step = start_trig - 1
       end
 
-      local next_step = program.get_channel(i).current_step + 1
+      local next_step = program.get_current_step_for_channel(i) + 1
 
       if next_step > end_trig then
         next_step = start_trig
@@ -228,10 +228,10 @@ function clock_controller:start()
         end)
       end
     
-      program.get_channel(i).current_step = current_step + 1
+      program.set_current_step_for_channel(i, current_step + 1)
     
-      if program.get_channel(i).current_step > end_trig then
-        program.get_channel(i).current_step = start_trig
+      if program.get_current_step_for_channel(i) > end_trig then
+        program.set_current_step_for_channel(i, start_trig)
       end
       fn.dirty_grid(true)
       fn.dirty_screen(true)
@@ -275,7 +275,7 @@ function clock_controller.reset()
   for x, pattern in ipairs(program.get().sequencer_patterns) do
 
     for i = 1, 16 do
-      pattern.channels[i].current_step = 1
+      program.set_current_step_for_channel(i, 1)
     end
 
   end
