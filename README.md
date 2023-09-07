@@ -7,10 +7,10 @@ Welcome to *Mosaic*.
 At a glance, as of v0.2 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
-- 16 patterns that can be combined and mutated in different permutations to change their properties in very musical ways
+- 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
 - Song mode with 90 sequencer patterns
 - Save, load, autosave
-- A pattern editor that allows quick creation of trigger patterns using a DrumOps port, includes euclidean, tresillo function, drum preset banks, and NE Numeric Repetitor
+- Pattern editor enabling quick creation of trigger patterns using DrumOps, includes euclidean, tresillo function, drum preset banks, and NE Numeric Repetitor
 - 10 assignable trig locks per channel
 - Midi device templates including labelled trig destinations
 - Native [n.b.](https://github.com/sixolet/nb/) support
@@ -25,10 +25,11 @@ Requirements:
 - Norns
 - 128 grid
 
-Plays well with:
+Encouraged:
 
 - Midi interface
 - Midi instruments
+- Crow, Just Friends, Ansible
 
 ## Install
 

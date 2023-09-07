@@ -1,8 +1,8 @@
--- mosaic v0.0.1
--- Rhythm sequencer
+-- mosaic v0.2
+-- Grid-centric, intentioned generative sequencer.
 --
 -- llllllll.co/t/mosaic
---
+-- Read the manual at https://github.com/subvertnormality/mosaic/
 
 
 
