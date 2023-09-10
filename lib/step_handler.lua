@@ -12,10 +12,6 @@ local global_step_accumulator = 0
 local switch_to_next_song_pattern_func = function() end
 local switch_to_next_song_pattern_blink_cancel_func = function() end
 
-
-local do_once = true
-
-
 function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)
 
@@ -195,7 +191,7 @@ function step_handler.process_song_sequencer_patterns(step)
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
   local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
 
-  if global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) == 0 then 
+  if (global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) == 0) then 
     if params:get("song_mode") == 1 then
       program.set_selected_sequencer_pattern(step_handler.calculate_next_selected_sequencer_pattern())
       global_step_accumulator = 0
@@ -209,16 +205,11 @@ function step_handler.process_song_sequencer_patterns(step)
     switch_to_next_song_pattern_func()
     switch_to_next_song_pattern_blink_cancel_func()
     switch_to_next_song_pattern_func = function () end
+    channel_sequencer_page_controller.refresh()
+    channel_edit_page_controller.refresh()
   end
 
   global_step_accumulator = global_step_accumulator + 1
-
-  if global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) == 0 then 
-    if params:get("song_mode") == 1 then
-      channel_sequencer_page_controller.refresh()
-      channel_edit_page_controller.refresh()
-    end
-  end
 
 end
 
@@ -269,6 +260,14 @@ function step_handler.process_lengths()
   end
 end
 
+function step_handler.flush_lengths() 
+  for i=#length_tracker, 1, -1 do
+    local l = length_tracker[i]
+    l.player:note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
+    table.remove(length_tracker, i)
+  end
+end
+
 function step_handler.queue_switch_to_next_song_pattern_func(func)
   switch_to_next_song_pattern_func = func
 end
@@ -285,6 +284,7 @@ end
 function step_handler.reset()
   global_step_accumulator = 0
   step_handler.execute_blink_cancel_func()
+  step_handler.flush_lengths() 
 end
 
 function step_handler.reset_sequencer_pattern() 

@@ -6,6 +6,7 @@ local ListSelector = include("lib/ui_components/ListSelector")
 local clock_controller = {}
 
 local playing = false
+local first_run = true
 local master_clock
 local midi_transport
 
@@ -165,7 +166,10 @@ end
 local function master_func() 
 
   step_handler.process_lengths()
-  step_handler.process_song_sequencer_patterns(program.get().current_step)
+  if first_run ~= true then
+    step_handler.process_song_sequencer_patterns(program.get().current_step)
+  end
+
   step_handler.process_global_step_scale_trig_lock(program.get().current_step)
   step_handler.sinfonian_sync(program.get().current_step)
 
@@ -175,8 +179,10 @@ local function master_func()
   if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
     program.get().current_step = 1
     program.set_current_step_for_channel(17, 1)
+    first_run = false
   end
   fn.dirty_grid(true)
+  
 end
 
 
@@ -260,6 +266,7 @@ function clock_controller:stop()
     end
   end
   playing = false
+  first_run = true
   midi_controller:stop()
   nb:stop_all()
   clock_controller.reset() 

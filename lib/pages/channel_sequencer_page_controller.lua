@@ -74,10 +74,11 @@ function channel_sequencer_page_controller.register_press_handlers()
           else
             channel_pattern_buttons["step"..s.."_sequencer_pattern_button"]:set_state(1)
           end
-          channel_sequencer_page_controller.refresh()
+
           refresh_button[previous_selected_pattern] = true
           refresh_button[s] = true
-          channel_sequencer_page_controller.refresh_faders() 
+          channel_sequencer_page_controller.refresh()
+          channel_sequencer_page_controller.refresh_faders()
         end
 
         local blink_cancel_func = function()
