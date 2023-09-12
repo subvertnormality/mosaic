@@ -171,7 +171,10 @@ local function master_func()
   end
 
   step_handler.process_global_step_scale_trig_lock(program.get().current_step)
-  step_handler.sinfonian_sync(program.get().current_step)
+
+  if sinfonion ~= true then
+    step_handler.sinfonian_sync(program.get().current_step)
+  end
 
   program.get().current_step = program.get().current_step + 1
   program.set_current_step_for_channel(17, program.get().current_step)

@@ -154,18 +154,20 @@ function init()
 
   device_map.init()
 
-  sinfonion.set_root_note(0)
-  sinfonion.set_degree_nr(0)
-  sinfonion.set_mode_nr(0)
-  sinfonion.set_transposition(0)
-  sinfonion.set_clock(0)
-  sinfonion.set_beat(0)
-  sinfonion.set_step(0)
-  sinfonion.set_reset(0)
-  sinfonion.set_chaotic_detune(0)
-  sinfonion.set_harmonic_shift(0)
+  if sinfonion ~= true then
+    sinfonion.set_root_note(0)
+    sinfonion.set_degree_nr(0)
+    sinfonion.set_mode_nr(0)
+    sinfonion.set_transposition(0)
+    sinfonion.set_clock(0)
+    sinfonion.set_beat(0)
+    sinfonion.set_step(0)
+    sinfonion.set_reset(0)
+    sinfonion.set_chaotic_detune(0)
+    sinfonion.set_harmonic_shift(0)
 
-  sinfonion.init()
+    sinfonion.init()
+  end
 
   local grid_clock_id = metro.init()
   grid_clock_id.event = grid_controller.grid_redraw

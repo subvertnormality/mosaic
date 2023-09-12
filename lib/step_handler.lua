@@ -232,7 +232,6 @@ function step_handler.sinfonian_sync(step)
   local scale_container = program.get_scale(sinfonion_scale_number)
 
   if scale_container and scale_container.root_note then 
-  
     sinfonion.set_root_note(scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod)
     sinfonion.set_degree_nr(quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord])
     sinfonion.set_mode_nr(quantiser.get_scales()[scale_container.number].sinf_mode)
