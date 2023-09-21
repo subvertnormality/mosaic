@@ -145,10 +145,7 @@ function register_press_handlers()
           grid_controller.set_menu_button_state()
           tooltip:show(page_names[program.get().selected_page])
         else
-          if (clock_controller.is_playing()) then
-            clock_controller:stop()
-            tooltip:show("Stopping playback")
-          else
+          if (not clock_controller.is_playing()) then
             clock_controller:start()
             tooltip:show("Starting playback")
           end
@@ -168,7 +165,15 @@ function register_press_handlers()
           if program.get().selected_page ~= x then
             clock_controller.panic()
             tooltip:show("Midi Panic")
+          else
+            if (clock_controller.is_playing()) then
+              clock_controller:stop()
+              tooltip:show("Stopping playback")
+            end
+            grid_controller.set_menu_button_state()
           end
+          grid_controller.refresh()
+          fn.dirty_screen(true)
         end
       end
     end

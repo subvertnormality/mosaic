@@ -1,6 +1,8 @@
 local midi_controller = include("mosaic/lib/midi_controller")
 local quantiser = include("mosaic/lib/quantiser")
 
+local fn = include("mosaic/lib/functions")
+
 local step_handler = {}
 local length_tracker = {}
 local persistent_channel_step_scale_numbers = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
@@ -37,8 +39,13 @@ function step_handler.process_params(c, step)
 
   for i=1,10 do
 
-    if channel.trig_lock_params[i] and (channel.trig_lock_params[i].id == "trig_probability" or channel.trig_lock_params[i].id == "fixed_note") then
-      return
+    if channel.trig_lock_params[i] and (
+      channel.trig_lock_params[i].id == "trig_probability" or 
+      channel.trig_lock_params[i].id == "quantised_fixed_note" or
+      channel.trig_lock_params[i].id == "bipolar_random_note" or
+      channel.trig_lock_params[i].id == "twos_random_note" or
+      channel.trig_lock_params[i].id == "fixed_note") then
+        return
     end
 
     if channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].cc_msb then
@@ -155,9 +162,18 @@ function step_handler.handle(c, current_step)
   local random_val = math.random(0, 99)
 
   if trig_value == 1 and random_val < trig_prob then
-    local note = quantiser.process(note_value, octave_mod, channel.step_scale_number, c)
 
     channel_edit_page_ui_controller.refresh_trig_locks()
+    local random_shift = fn.transform_random_note(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0) 
+    random_shift = random_shift + fn.transform_twos_random_note(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
+
+    local note = quantiser.process(note_value + random_shift, octave_mod, channel.step_scale_number, c)
+
+    local quantised_fixed_note = step_handler.process_stock_params(c, current_step, "quantised_fixed_note")
+
+    if quantised_fixed_note and quantised_fixed_note > -1 then
+      note = quantiser.process(quantised_fixed_note, octave_mod, channel.step_scale_number, c)
+    end
 
     local fixed_note = step_handler.process_stock_params(c, current_step, "fixed_note")
 
@@ -172,7 +188,7 @@ function step_handler.handle(c, current_step)
         midi_controller:note_on(note, velocity_value, midi_channel, midi_device)
         table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value, player = midi_controller})
       else
-        device.player:note_on(note, velocity_value)
+        device.player:note_on(note, velocity_value/127)
         table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value, player = device.player})
       
       end

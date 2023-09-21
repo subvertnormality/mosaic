@@ -113,6 +113,7 @@ local function post_splash_init()
   grid_controller.init()
   fn.dirty_grid(true)
   fn.dirty_screen(true)
+  crow.ii.jf.mode(1)
 
 end
 
@@ -146,6 +147,7 @@ function redraw_metro()
 end
 
 function init()
+  math.randomseed(os.time())
   program.init()
   midi_controller.init()
   nb:init()

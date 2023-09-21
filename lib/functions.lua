@@ -316,4 +316,30 @@ function fn.rotate_table_left(t)
   return new_table
 end
 
+function fn.transform_random_note(n)
+  if n < 1 then
+    return 0
+  else
+    local min, max
+    if n % 2 == 0 then  -- n is even
+      min = -n / 2
+      max = n / 2
+    else  -- n is odd
+      min = -(n - 1) / 2
+      max = (n + 1) / 2
+    end
+    return math.random(min, max)
+  end
+end
+
+function fn.transform_twos_random_note(n)
+  if n < 1 then
+      return 0
+  else
+      local min = -math.floor(n/2) * 2
+      local result = math.random(0, n) * 2 + min
+      return result
+  end
+end
+
 return fn
