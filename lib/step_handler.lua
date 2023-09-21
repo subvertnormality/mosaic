@@ -172,7 +172,7 @@ function step_handler.handle(c, current_step)
         midi_controller:note_on(note, velocity_value, midi_channel, midi_device)
         table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value, player = midi_controller})
       else
-        device.player:note_on(note, velocity_value)
+        device.player:note_on(note, velocity_value/127)
         table.insert(length_tracker, {note = note, velocity = velocity_value, midi_channel = midi_channel, midi_device = midi_device, steps_remaining = length_value, player = device.player})
       
       end
