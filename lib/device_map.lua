@@ -5278,6 +5278,22 @@ local stock_params = {
     ["cc_max_value"] = 127,
   },
   {
+    ["id"] = "bipolar_random_note",
+    ["name"] = "Random Note",
+    ["short_descriptor_1"] = "RAND",
+    ["short_descriptor_2"] = "NOTE",
+    ["cc_min_value"] = -1,
+    ["cc_max_value"] = 200,
+  },
+  {
+    ["id"] = "twos_random_note",
+    ["name"] = "Twos Random Note",
+    ["short_descriptor_1"] = "2RND",
+    ["short_descriptor_2"] = "NOTE",
+    ["cc_min_value"] = -1,
+    ["cc_max_value"] = 200,
+  },
+  {
     ["id"] = "trig_probability",
     ["name"] = "Probability",
     ["short_descriptor_1"] = "TRIG",

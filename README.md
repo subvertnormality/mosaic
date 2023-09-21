@@ -24,6 +24,8 @@
         - [Probability](#probability)
         - [Fixed note](#fixed-note)
         - [Quantised fixed note](#quantised-fixed-note)
+        - [Random note](#random-note)
+        - [Random twos note](#random-twos-note)
     + [Song editor](#song-editor)
   * [Save and load](#save-and-load)
   * [Custom device maps](#custom-device-maps)
@@ -35,7 +37,7 @@
 
 ## At a glance
 
-As of v0.3 _Mosaic_ gives you the following:
+As of v0.2.4 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
@@ -49,7 +51,7 @@ As of v0.3 _Mosaic_ gives you the following:
 - Per channel pattern length
 - Channel muting
 - Scales with root note and degree setting
-- Trig lockable octave, scales, probability
+- Trig lockable octave, scales, probability, random note modifiers
 
 Requirements:
 
@@ -115,7 +117,7 @@ At its heart, _Mosaic_ comprises five distinct pages. Every page presents a grid
 
 The grid's lower menu facilitates page selection using bottom-left five buttons, a feature maintained consistently across all pages. On the right, there are functions sensitive to the current page context.
  
-![The menu as shown on the pattern edit page](/designs/Images/menu.png)
+![The menu as shown on the pattern edit page](https://raw.githubusercontent.com/subvertnormality/mosaic/main/designs/Images/menu.png)
 
 From the left moving rightward, the buttons activate:
 
@@ -137,15 +139,15 @@ If you get stuck notes, hold any of the inactive page buttons in the menu. This 
 
 The rhythm designer in _Mosaic_ is named the trig editor. Using DrumOps tools, originally seen in the Teletype ecosystem but now available here, you can craft intricate patterns. You can also set the duration of each step.
 
-![Trig editor with a complex trig pattern](/designs/Images/trig_editor.png)
+![Trig editor with a complex trig pattern](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor.png)
 
 With the top row, pick one of the 16 patterns available. In the image, you can see pattern 2 being selected.
 
-![Pattern select buttons](/designs/Images/trig_editor_pattern_select.png)
+![Pattern select buttons](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_pattern_select.png)
 
 To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolize a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. Since patterns are monophonic, one trig’s duration ends upon meeting another.
 
-![Trig sequencer](/designs/Images/trig_editor_sequencer.png)
+![Trig sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_sequencer.png)
 
 Craft unique rhythms using a variety of built-in algorithms.
 
@@ -154,35 +156,35 @@ Craft unique rhythms using a variety of built-in algorithms.
 * Button 3: Euclidian, a rhythm tool rooted in mathematical logic.
 * Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
 
-![Algorithm select](/designs/Images/trig_editor_algorithms.png)
+![Algorithm select](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_algorithms.png)
 
 The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the norns screen.
 
 The left side faders adjust algorithm values. Brightly lit ends refine values, while the dimmer ones adjust them broadly. The rightmost fader typically toggles between different algorithm banks.
 
-![Algorithm controls](/designs/Images/trig_editor_algorithm_controls.png)
+![Algorithm controls](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_algorithm_controls.png)
 
 To see your algorithm's impact, hit the prime button. This prepares a new pattern, and new steps are showcased as flashing bright steps on the sequencer. While these steps flash, they aren’t painted yet. Any step that would be painted over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences, grounded in rhythmic fundamentals, that don't get too busy. You can modify algorithm parameters whilst the pattern is primed.
 
 If you haven’t painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Double-pressing the prime button without tweaking the algorithm or its parameters acts as an undo for the last action.
 
-![Prime and print button](/designs/Images/trig_editor_prime_and_print.png)
+![Prime and print button](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_prime_and_print.png)
 
 Opt out of a prepared pattern by using the cancel button.
 
-![Cancel button](/designs/Images/trig_editor_cancel.png)
+![Cancel button](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_cancel.png)
 
 While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes.
 
-![Left, centre, right buttons](/designs/Images/trig_editor_left_right.png)
+![Left, centre, right buttons](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_left_right.png)
 
 On the norns screen, you can see the selected channel's grid state on page 1. This is the merged version of the channel and is useful context for editing your pattern. Use E2 to select channels.
 
-![Channel grid viewer](/designs/Images/UI/trig_edit_grid_viewer.png)
+![Channel grid viewer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/trig_edit_grid_viewer.png)
 
 On page 2 you can select trig editor options. Currently this allows you to edit the tresillo multiplier in use. Experiment with different values to get wildly different results with the tresillo algorithm.
 
-![Channel grid viewer](/designs/Images/UI/trig_edit_options.png)
+![Channel grid viewer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/trig_edit_options.png)
 
 
 ### Note editor
@@ -193,21 +195,21 @@ This space displays 16 steps at a glance. Active trigs appear as soft-glowing ve
 
 Remember, each note you select links back to the root of the scale you're working within. The scale is applied to the channel, not the pattern. You must start to think about your patterns as being disconnected from each channel. This is why we say _Mosaic_ is an intentioned generative sequencer. Expect happy accidents. The channel grid viewer on the norns screen can help you here.
 
-![Note select](/designs/Images/note_editor_note_selector.png)
+![Note select](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_note_selector.png)
 
 Switch between the four sets of 16 steps using the dedicated buttons.
 
-![16 step selector](/designs/Images/note_editor_16_selector.png)
+![16 step selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_16_selector.png)
 
 Aim for higher pitches or dive deeper with the octave select buttons, expanding your melodic range.
 
-![melodic range selector](/designs/Images/note_editor_octave_selector.png)
+![melodic range selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_octave_selector.png)
 
 Hint: Even if a step lacks a trig, don't hesitate to assign a note. This data might come in handy with different merge modes in play.
 
 You can use the four by four button to toggle a mode that lets you more quickly enter repeating notes across the four note grid pages. In four by four mode, any entered note is automatically duplicated across all 4 screens.
 
-![Four by four](/designs/Images/note_editor_four_by_four.png)
+![Four by four](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_four_by_four.png)
 
 On the norns screen you can see the channel grid visualiser. Use E2 to select the current channel.
 
@@ -223,11 +225,11 @@ Here's where it all comes together: the channel editor. Here, individual pattern
 
 Begin by selecting from the 16 available channels:
 
-![Channel selector](/designs/Images/channel_edit_channel_select.png)
+![Channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_channel_select.png)
 
 Next, lend your channel its voice by assigning one or more patterns:
 
-![Pattern selector](/designs/Images/channel_edit_pattern_select.png)
+![Pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_pattern_select.png)
 
 Each channel can have a default scale. Or, apply a specific scale to certain steps using trig locks. Scales will persist until the next scale lock or the end of the pattern (you can turn this behaviour off in the params). To select a scale for your channel, simply press on the scale fader. To remove a scale and return to chromatic, simply press the currently lit scale.
 
@@ -247,7 +249,7 @@ Tip: When a trig or a global default scale is active, its corresponding scale bu
 
 The global scale runs against the master clock. This makes any channels that are running with fewer than 64 steps extra fun when combined with global scales and global scale trigs!
 
-![Scale selector](/designs/Images/channel_edit_scale_select.png)
+![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
 
 The sequencer visualizes the music: a tapestry of selected patterns, tailored by the chosen merge mode. To set a channel's length, press and hold the first and last step simultaneously. Active steps light up, guiding your symphony.
 
@@ -257,15 +259,15 @@ Want a step to hold a unique sound or scale? Press and keep it down while select
 * For parameters: Press and hold the step, then tap the K3 button.
 * For octave: Reset the trig lock to 0 on the octave selector.
 
-![Channel sequencer](/designs/Images/channel_edit_sequencer.png)
+![Channel sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_sequencer.png)
 
 Adjust a channel's octave range with:
 
-![Octave selector](/designs/Images/channel_edit_octave_selector.png)
+![Octave selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_octave_selector.png)
 
 And how do your patterns meld? Define this with the merge mode selector:
 
-![Merge mode selector](/designs/Images/channel_edit_merge_mode.png)
+![Merge mode selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_merge_mode.png)
 
 Let's get into into the merge modes:
 
@@ -278,19 +280,19 @@ You can view detailed configurations of your selected channel on the Norns scree
 
 On page 1 you're greeted with an array of parameters. Navigate pages with E1. Rotate E2 to highlight a parameter, and E3 to refine its value. Want a different parameter active in the selected parameter slot? Tap K2. As you change the value, the system automatically locks in your changes. As metioned above, these can be trig locked on each step by holding the step and rotating E3.
 
-![Trig lock page](/designs/Images/UI/channel_edit_param_select.png)
+![Trig lock page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_param_select.png)
 
 You can define your channel's rhythmic character on page 2. Use E2 to navigate and E3 to finesse values. The channel grid keys let you specify which channel to adjust.
 
-![Channel clocks and swing page](/designs/Images/UI/channel_edit_clocks.png)
+![Channel clocks and swing page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_clocks.png)
 
 On page 3 choose from the 16 quantizers. The layout is straightforward: the left indicates the root note, center introduces the scale type, and the right selects the scale's degree. Change between options with E2 and fine-tune with E3. The change the scale, use the scale grid keys.
 
-![Channel quantiser config](/designs/Images/UI/channel_edit_quantiser.png)
+![Channel quantiser config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_quantiser.png)
 
 On page 4 you can change how your channel interacts externally. To the left, find the MIDI output device. The center highlights the CC value for this channel. The final section lets you select the device preset which determines the params available in the parameter selector.
 
-![Channel device config](/designs/Images/UI/channel_edit_device_config.png)
+![Channel device config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_device_config.png)
 
 #### Stock trig locks
 
@@ -302,12 +304,19 @@ This trig lock can be used to ensure trigs play only with a certain probability.
 
 ##### Fixed note
 
-Use this trig lock to fix your channel to any midi note. The value represents a midi note number. The note is _not_ quantised. This is useful if you have a drum pattern and you don't want note data to affect the drum sound you're playing on a drum machine.
+Use this trig lock to fix your channel to any midi note. The value represents a midi note number. The note is _not_ quantised. This is useful if you have a drum pattern and you don't want note data to affect the drum sound you're playing on a drum machine. This will override any quantised fixed note values or random note values.
 
 ##### Quantised fixed note
 
-You can use this trig lock to manually select a note in the currently selected scale at any step. The value represents note number, where 0 is the root and higher numbers represent notes in the quantised scale. This overrides the note data coming in from the patterns.
+You can use this trig lock to manually select a note in the currently selected scale at any step. The value represents note number, where 0 is the root and higher numbers represent notes in the quantised scale. This overrides the note data coming in from the patterns. This will override random note values.
 
+##### Random note
+
+This trig note introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random two's note trig locks.
+
+##### Random two's note
+
+Similar to random note, this trig note introduces an element of random to your selected notes but restricts values to those divisible by two. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note two higher in the scale. A value of 2 will randomly give your existing note, the note two higher in your selected scale, or the note two lower. A value of 3 will randomly select notes -2, 0, 2 or 4. A value of 4 will randomly select notes -4, -2, 0, 2 or 4. And so on. Use trig locks to really spice things up. These can be combined with random note trig locks.
 
 ### Song editor
 
@@ -321,16 +330,16 @@ Want to choose a pattern? A simple press will do. Looking to replicate one slot 
 
 Now, if the "song mode" setting is toggled on, after a pattern finishes playing it's set number of times, the sequencer gracefully changes to the next slot. Should it find the next slot empty, it circles back to the first filled slot in that group. This lets you craft distinctive pattern clusters to shift between. And if you get an urge to switch up slots while the sequencer plays? No worries, it queues your request, waiting for the current sequence to finish.
 
-![Song sequencer pattern selector](/designs/Images/song_mode_sequencer_pattern_selector.png)
+![Song sequencer pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/song_mode_sequencer_pattern_selector.png)
 
 
 Adjust the global sequencer pattern length with the fader located at the song editor page's lower end. For precise adjustments, use the end cap buttons. If you prefer broader changes, the central fader buttons have you covered. You have a spectrum from 1-64 to explore.
 
-![Pattern length selector](/designs/Images/song_mode_sequencer.png)
+![Pattern length selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/song_mode_sequencer.png)
 
 On the norns display, you're the conductor of your song's flow. On page 1 you can dictate how many times a chosen sequencer pattern plays before gracefully transitioning to the next slot when song mode is turned on. When song mode is off, take control and manually activate slots for your song to progress.
 
-![Song progression page](/designs/Images/UI/song_progression.png)
+![Song progression page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/song_progression.png)
 
 On page 2, whether you desire a serene lullaby or a frantic mess, you can set the tempo to your liking.
 
@@ -432,7 +441,7 @@ The sinfonion expects an inverted serial signal for it's sync function. This mea
 - The sleeve connector of your TS jack connects to ground (there's a convenient ground pad on the norn's shield's PCB). 
 - Now also connect the bottom pin of your 2N3904 to ground
 
-![Inverter circuit diagram](/designs/Images/Sinfonion/inverter.png)
+![Inverter circuit diagram](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/Sinfonion/inverter.png)
 
 That's the hardware bit done. You now need to configure your norns.
 
