@@ -20,11 +20,18 @@
     + [Note editor](#note-editor)
     + [Velocity editor](#velocity-editor)
     + [Channel editor](#channel-editor)
+      - [Stock trig locks](#stock-trig-locks)
+        - [Probability](#probability)
+        - [Fixed note](#fixed-note)
+        - [Quantised fixed note](#quantised-fixed-note)
     + [Song editor](#song-editor)
   * [Save and load](#save-and-load)
   * [Custom device maps](#custom-device-maps)
 - [Sinfonion connect](#sinfonion-connect)
 - [Development](#development)
+
+
+
 
 ## At a glance
 
@@ -284,6 +291,23 @@ On page 3 choose from the 16 quantizers. The layout is straightforward: the left
 On page 4 you can change how your channel interacts externally. To the left, find the MIDI output device. The center highlights the CC value for this channel. The final section lets you select the device preset which determines the params available in the parameter selector.
 
 ![Channel device config](/designs/Images/UI/channel_edit_device_config.png)
+
+#### Stock trig locks
+
+All device types have a set of standard trig locks that affect the sequencer rather than the quality of the sound. 
+
+##### Probability
+
+This trig lock can be used to ensure trigs play only with a certain probability. When set to 100, the trig will always play. When set to 0, the trig will never play. At 50, the trig will play half the time. You can set this globally and per step.
+
+##### Fixed note
+
+Use this trig lock to fix your channel to any midi note. The value represents a midi note number. The note is _not_ quantised. This is useful if you have a drum pattern and you don't want note data to affect the drum sound you're playing on a drum machine.
+
+##### Quantised fixed note
+
+You can use this trig lock to manually select a note in the currently selected scale at any step. The value represents note number, where 0 is the root and higher numbers represent notes in the quantised scale. This overrides the note data coming in from the patterns.
+
 
 ### Song editor
 

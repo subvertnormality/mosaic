@@ -5270,6 +5270,14 @@ local stock_params = {
     ["cc_max_value"] = 127,
   },
   {
+    ["id"] = "quantised_fixed_note",
+    ["name"] = "Quantised Fixed Note",
+    ["short_descriptor_1"] = "QUAN",
+    ["short_descriptor_2"] = "NOTE",
+    ["cc_min_value"] = -1,
+    ["cc_max_value"] = 127,
+  },
+  {
     ["id"] = "trig_probability",
     ["name"] = "Probability",
     ["short_descriptor_1"] = "TRIG",

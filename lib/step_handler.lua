@@ -37,8 +37,11 @@ function step_handler.process_params(c, step)
 
   for i=1,10 do
 
-    if channel.trig_lock_params[i] and (channel.trig_lock_params[i].id == "trig_probability" or channel.trig_lock_params[i].id == "fixed_note") then
-      return
+    if channel.trig_lock_params[i] and (
+      channel.trig_lock_params[i].id == "trig_probability" or 
+      channel.trig_lock_params[i].id == "quantised_fixed_note" or
+      channel.trig_lock_params[i].id == "fixed_note") then
+        return
     end
 
     if channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].cc_msb then
@@ -163,6 +166,12 @@ function step_handler.handle(c, current_step)
 
     if fixed_note and fixed_note > -1 then
       note = fixed_note
+    end
+
+    local quantised_fixed_note = step_handler.process_stock_params(c, current_step, "quantised_fixed_note")
+
+    if quantised_fixed_note and quantised_fixed_note > -1 then
+      note = quantiser.process(quantised_fixed_note, octave_mod, channel.step_scale_number, c)
     end
 
     local device = device_map.get_device(channel.device_map)
