@@ -120,7 +120,7 @@ From the left moving rightward, the buttons activate:
 
 #### Sequencer start and stop
 
-To start or halt the sequencer, simply press the active page in the menu. If the sequencer is in motion, the active page button will give off a gentle blink. 
+To start the sequencer, simply press the active page in the menu. If the sequencer is in motion, the active page button will give off a gentle blink. To stop the sequencer, _hold_ the currently active and gently blinking page in the menu for two seconds.
 
 #### Midi Panic
 
