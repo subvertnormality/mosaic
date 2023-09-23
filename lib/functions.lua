@@ -316,7 +316,7 @@ function fn.rotate_table_left(t)
   return new_table
 end
 
-function fn.transform_random_note(n)
+function fn.transform_random_value(n)
   if n < 1 then
     return 0
   else
@@ -332,7 +332,7 @@ function fn.transform_random_note(n)
   end
 end
 
-function fn.transform_twos_random_note(n)
+function fn.transform_twos_random_value(n)
   if n < 1 then
       return 0
   else

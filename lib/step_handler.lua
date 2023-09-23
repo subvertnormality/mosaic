@@ -44,6 +44,7 @@ function step_handler.process_params(c, step)
       channel.trig_lock_params[i].id == "quantised_fixed_note" or
       channel.trig_lock_params[i].id == "bipolar_random_note" or
       channel.trig_lock_params[i].id == "twos_random_note" or
+      channel.trig_lock_params[i].id == "random_velocity" or
       channel.trig_lock_params[i].id == "fixed_note") then
         return
     end
@@ -164,10 +165,15 @@ function step_handler.handle(c, current_step)
   if trig_value == 1 and random_val < trig_prob then
 
     channel_edit_page_ui_controller.refresh_trig_locks()
-    local random_shift = fn.transform_random_note(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0) 
-    random_shift = random_shift + fn.transform_twos_random_note(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
+    local random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0) 
+    random_shift = random_shift + fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
 
     local note = quantiser.process(note_value + random_shift, octave_mod, channel.step_scale_number, c)
+
+    local velocity_random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "random_velocity") or 0) 
+    velocity_value = velocity_value + velocity_random_shift
+    if velocity_value < 0 then velocity_value = 0 end
+    if velocity_value > 127 then velocity_value = 127 end
 
     local quantised_fixed_note = step_handler.process_stock_params(c, current_step, "quantised_fixed_note")
 

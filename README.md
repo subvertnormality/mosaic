@@ -298,9 +298,6 @@ On page 4 you can change how your channel interacts externally. To the left, fin
 
 All device types have a set of standard trig locks that affect the sequencer rather than the quality of the sound. 
 
-##### Probability
-
-This trig lock can be used to ensure trigs play only with a certain probability. When set to 100, the trig will always play. When set to 0, the trig will never play. At 50, the trig will play half the time. You can set this globally and per step.
 
 ##### Fixed note
 
@@ -317,6 +314,15 @@ This trig lock introduces an element of random to your selected notes. A value o
 ##### Random two's note
 
 Similar to random note, this trig lock introduces an element of random to your selected notes. The difference here is that two's note restricts values to those divisible by two. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note two higher in the scale. A value of 2 will randomly give your existing note, the note two higher in your selected scale, or the note two lower. A value of 3 will randomly select notes -2, 0, 2 or 4. A value of 4 will randomly select notes -4, -2, 0, 2 or 4. And so on. Use trig locks to really spice things up. These can be combined with random note trig locks.
+
+##### Random velocity
+
+Add spice to the velocity of your trigs with this lock. Similar to random note, this a value of 1 will randomly give your trig's current velocity or one higher than that value. A value of 2 will give the current velocity, one lower, or one higher. And so on. This can be super useful when applied to all trigs on a channel to humanise. Or use it on a step trig lock to add random variation to the dynamics of a single hit.
+
+##### Trig Probability
+
+This trig lock can be used to ensure trigs play only with a certain probability. When set to 100, the trig will always play. When set to 0, the trig will never play. At 50, the trig will play half the time. You can set this globally and per step.
+
 
 ### Song editor
 

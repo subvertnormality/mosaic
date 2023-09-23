@@ -1,3 +1,7 @@
+# 0.2.5
+
+* Added random velocity trig lock
+
 # 0.2.4
 
 * To stop the sequencer you now need to hold down the currently active page's LED in the menu. This prevents accidental stops whilst navigating pages.
