@@ -333,6 +333,7 @@ function channel_edit_page_ui_controller.enc(n, d)
           save_confirm.set_save(function() 
             channel_edit_page_ui_controller.update_channel_config()
             channel_edit_page_ui_controller.update_default_params()
+            param_select_vertical_scroll_selector:set_selected_item(1)
           end)
           save_confirm.set_cancel(function()
             channel_edit_page_ui_controller.throttled_refresh_channel_config()
@@ -408,9 +409,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             device_map_vertical_scroll_selector:scroll_up()
           end
           save_confirm.set_save(function() 
-            print("confirmed")
             channel_edit_page_ui_controller.update_channel_config()
             channel_edit_page_ui_controller.update_default_params()
+            param_select_vertical_scroll_selector:set_selected_item(1)
           end)
           save_confirm.set_cancel(function()
             channel_edit_page_ui_controller.throttled_refresh_channel_config()
@@ -727,9 +728,8 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
 end
 
 function channel_edit_page_ui_controller.refresh_param_list()
-
+  local channel = program.get_selected_channel()
   param_select_vertical_scroll_selector:set_items(device_map.get_available_params_for_channel(program.get().selected_channel, dials:get_selected_index()))
-
 end
 
 function channel_edit_page_ui_controller.refresh_channel_config()
