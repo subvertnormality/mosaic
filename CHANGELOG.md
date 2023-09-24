@@ -1,9 +1,11 @@
+# 0.2.6
+* Destructive device changes now require confirmation before they are applied
+
 # 0.2.5
 
 * Added random velocity trig lock
 * Dual and long press logic has been improved, making the UX more reliable
 * Global transposition added to global scale page
-* Added global scale page to manual
 
 # 0.2.4
 
