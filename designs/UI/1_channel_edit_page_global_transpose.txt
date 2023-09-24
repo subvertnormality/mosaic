@@ -1,0 +1,33 @@
+16 8 #bbbbbb #fcb400 #ffffff #000000 20 20 4 1 1
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+2 f 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+7 2 2 2 2 0 0 7 2 2 2 5 2 2 2 7
+
+- Row 1: Channel select. Return to channel page
+- Row 3: Scale/chord select. Use to select global scale
+- Row 4: 64 step grid 1 - 16. Use to trig lock global scale
+- Row 5: 64 step grid 17 - 32. Use to trig lock global scale
+- Row 6: 64 step grid 33 - 28. Use to trig lock global scale
+- Row 7: 64 step grid 29 - 32. Use to trig lock global scale
+- Row 8: Menu 
+	- Col 1: Channel edit page. 
+	- Col 2: Channel sequencer page.
+	- Col 3: Pattern step edit. 
+	- Col 4: Pattern note edit. 
+	- Col 5: Pattern velocity edit. 
+	- Col 7: + 2 octaves
+	- Col 8: + 1 octave
+	- Col 9: 0 octave
+	- Col 10: - 1 octave
+	- Col 11: - 2 octaves
+	- Col 13: Numbered merge mode, 
+	- Col 14: Skip merge mode,
+	- Col 15: Average merge modes, 
+	- Col 16: Add/Subtract merge modes,    
+
+https://tyleretters.github.io/GridStation/

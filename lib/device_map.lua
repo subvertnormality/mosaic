@@ -5286,20 +5286,28 @@ local stock_params = {
     ["cc_max_value"] = 200,
   },
   {
+    ["id"] = "random_velocity",
+    ["name"] = "Random Velocity",
+    ["short_descriptor_1"] = "RAND",
+    ["short_descriptor_2"] = "VELO",
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 254,
+  },  
+  {
+    ["id"] = "trig_probability",
+    ["name"] = "Trig Probability",
+    ["short_descriptor_1"] = "TRIG",
+    ["short_descriptor_2"] = "PROB",
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 100,
+  },
+  {
     ["id"] = "twos_random_note",
     ["name"] = "Twos Random Note",
     ["short_descriptor_1"] = "2RND",
     ["short_descriptor_2"] = "NOTE",
     ["cc_min_value"] = -1,
     ["cc_max_value"] = 200,
-  },
-  {
-    ["id"] = "trig_probability",
-    ["name"] = "Probability",
-    ["short_descriptor_1"] = "TRIG",
-    ["short_descriptor_2"] = "PROB",
-    ["cc_min_value"] = 0,
-    ["cc_max_value"] = 100,
   }
 }
 

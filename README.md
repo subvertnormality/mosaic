@@ -20,6 +20,7 @@
     + [Note editor](#note-editor)
     + [Velocity editor](#velocity-editor)
     + [Channel editor](#channel-editor)
+      - [Global scale editor](#global-scale-editor)
       - [Stock trig locks](#stock-trig-locks)
         - [Probability](#probability)
         - [Fixed note](#fixed-note)
@@ -37,7 +38,7 @@
 
 ## At a glance
 
-As of v0.2.4 _Mosaic_ gives you the following:
+As of v0.2.5 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
@@ -51,12 +52,13 @@ As of v0.2.4 _Mosaic_ gives you the following:
 - Per channel pattern length
 - Channel muting
 - Scales with root note and degree setting
-- Trig lockable octave, scales, probability, random note modifiers
+- Trig lockable octave, scales, transpose, step probability, random note modifiers, random velocity modifiers
 
 Requirements:
 
 - Norns
 - 128 grid
+- At minimum, one of the encouraged sound sources
 
 Encouraged:
 
@@ -77,11 +79,11 @@ In _Mosaic_, the 'pattern' is the central pillar. Think of it as a sequence enri
 
 In the world of _Mosaic_, notes don't strictly adhere to a single scale. Instead, they are valued by their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
 
-_Mosaic_ ensures you remain within your selected scale (though there are ways to experiment with notes outside of it, which we'll delve into later). You'll find several methods to adjust scales seamlessly as you go, which we'll cover shortly.
+_Mosaic_ ensures you remain within your selected scale although there are ways to experiment with notes outside of it too. You'll find several methods to adjust scales seamlessly as you go, which we'll cover shortly.
 
 ### Channel
 
-The 'channel' is the second crucial component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's internal sound device, MIDI device, pick MIDI outputs, choose MIDI channels, the scale, and set up trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device.
+The 'channel' is the second crucial component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's internal sound device, MIDI device, pick MIDI outputs, choose MIDI channels, the scale, and set up trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device (note that this is generally only possible with midi devices).
 
 When two patterns overlap in one channel and their trigs coincide, the outcome depends on the channel's 'merge mode'. There are several merge modes, each with its own characteristic. This feature encourages designing patterns that, when they overlap, produce intriguing results.
 
@@ -89,7 +91,7 @@ You can adjust the rhythm for each channel individually, allowing for different 
 
 ### Sequencer Pattern
 
-The sequencer pattern stands as the last of the three foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns, ranging from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be linked to craft a song. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
+The sequencer pattern stands as the last of the three foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns, ranging from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be linked to craft a song in the song mode page. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
 
 ### Scale
 
@@ -111,7 +113,7 @@ Most devices in _Mosaic_ feature a set of params that alters either the quality 
 
 ## Pages
 
-At its heart, _Mosaic_ comprises five distinct pages. Every page presents a grid interface complemented by a set of configurable options on the norns device. The design prioritizes the grid, urging users to initiate some basics via the norns—like scales and MIDI setups—and then dive deep into the grid for music creation.
+At its heart, _Mosaic_ comprises five distinct pages. Every page presents a grid interface complemented by a set of configurable options on the norns device. The grid is the primary interface, with norns offering one-time configuration options. This allows you to set up your scene's configuration once and then use the grid from then on to compose.
 
 ### Menu
 
@@ -141,7 +143,7 @@ The rhythm designer in _Mosaic_ is named the trig editor. Using DrumOps tools, o
 
 ![Trig editor with a complex trig pattern](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor.png)
 
-With the top row, pick one of the 16 patterns available. In the image, you can see pattern 2 being selected.
+With the top row, pick one of the 16 patterns available. In the image, you can see pattern 2 is selected.
 
 ![Pattern select buttons](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_pattern_select.png)
 
@@ -191,7 +193,7 @@ On page 2 you can select trig editor options. Currently this allows you to edit 
 
 Set the harmony and melody of your rhythmic creations with the note editor.
 
-This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the  root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. The gentle flicker on the top row indicates the currently chosen pattern. If you wish to explore a different pattern, press and hold on this top row.
+This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. The gentle flicker on the top row indicates the currently chosen pattern. If you wish to explore a different pattern, press and hold on this top row.
 
 Remember, each note you select links back to the root of the scale you're working within. The scale is applied to the channel, not the pattern. You must start to think about your patterns as being disconnected from each channel. This is why we say _Mosaic_ is an intentioned generative sequencer. Expect happy accidents. The channel grid viewer on the norns screen can help you here.
 
@@ -215,13 +217,13 @@ On the norns screen you can see the channel grid visualiser. Use E2 to select th
 
 ### Velocity editor
 
-Now let's look at the velocity editor, a close kin of the note editor. It spans two vertical pages: the initial displays velocities from 127 down to 67, while the latter showcases values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence.
+Now let's look at the velocity editor, which functions similarly to the note page. It spans two vertical pages: the initial displays velocities from 127 down to 67, while the latter displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence.
 
 On the norns screen you can see the channel grid visualiser. Use E2 to select the current channel.
 
 ### Channel editor
 
-Here's where it all comes together: the channel editor. Here, individual patterns find harmony, merging into cohesive sounds.
+Here's where it all comes together: the channel editor. This is where patterns find harmony, merging into cohesive sounds.
 
 Begin by selecting from the 16 available channels:
 
@@ -231,23 +233,7 @@ Next, lend your channel its voice by assigning one or more patterns:
 
 ![Pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_pattern_select.png)
 
-Each channel can have a default scale. Or, apply a specific scale to certain steps using trig locks. Scales will persist until the next scale lock or the end of the pattern (you can turn this behaviour off in the params). To select a scale for your channel, simply press on the scale fader. To remove a scale and return to chromatic, simply press the currently lit scale.
-
-Want to harmonize the scale across all channels? Here's how with the global scale editor:
-
-To accessing the editor, press and hold any scale select button. You'll be presented with a streamlined grid offering a few clear options. On this page, you can define a global scale by pressing on the scale fader or global scale trigs using the trig lock technique. These will be consistent across all channels. This is great for crafting harmonized chord sequences. Again, to deactive the global scale, simply press the currently selected scale. 
-
-Scales apply in the following priority order:
-
-* Channel Scale Trig Locks: These have the highest priority. No matter your other settings, these are always honored.
-* Global Scale Trig Locks: These come next in line.
-* Default Channel Scale: If no scale locks are set, the sequencer uses the channel default.
-* Global Default Scale: If there are no scale locks and your channel doesn't have a default scale set, the sequencer uses the global scale.
-* If none of the above are set, your sequence will play chromatically.
-
-Tip: When a trig or a global default scale is active, its corresponding scale button will glow with a soft light.
-
-The global scale runs against the master clock. This makes any channels that are running with fewer than 64 steps extra fun when combined with global scales and global scale trigs!
+Each channel can have a default scale. Or, apply a specific scale to certain steps on a channel using trig locks. Scales will persist until the next scale lock or the end of the pattern (you can turn this behaviour off in the params). To select a scale for your channel, simply press on the scale fader. To remove a scale and return to chromatic, simply press the currently lit scale.
 
 ![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
 
@@ -271,10 +257,10 @@ And how do your patterns meld? Define this with the merge mode selector:
 
 Let's get into into the merge modes:
 
-* Pattern Merge: A harmonious blend, this mode combines trigs from all patterns, yet only takes note and velocity from the chosen pattern. To toggle through patterns, press repeatedly. For a quick switch, press and hold your desired pattern key, then tap the pattern merge mode key.
-* Skip Merge: A gracious dancer, this mode elegantly sidesteps any clashing trigs.
-* Average Merge: A maestro in its own right, this mode fuses clashing note values, offering fresh melodies from familiar notes.
-* Add & Subtract Merge: A duet of creativity, these modes play with note values, resulting in a myriad of melodies. Tap repeatedly to switch between the two modes.
+* Pattern Merge: This mode combines trigs from all patterns, yet only takes note and velocity from the chosen pattern. To toggle through patterns, press repeatedly. For a quick switch, press and hold your desired pattern key, then tap the pattern merge mode key.
+* Skip Merge: This mode elegantly sidesteps any clashing trigs.
+* Average Merge: This mode fuses clashing note values, offering fresh melodies from familiar notes.
+* Add & Subtract Merge: These modes play with note values, resulting in a myriad of melodies. Tap repeatedly to switch between the two modes.
 
 You can view detailed configurations of your selected channel on the Norns screen. Each page offers intuitive and interactive tools to sculpt your sonic experience.
 
@@ -294,13 +280,45 @@ On page 4 you can change how your channel interacts externally. To the left, fin
 
 ![Channel device config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_device_config.png)
 
+#### Global scale editor
+
+Want to harmonize the scale across all channels? Here's how with the global scale editor:
+
+To accessing the global scale editor, press and hold any scale select button. You'll be presented with a streamlined grid offering a few clear options. 
+
+![Global quantiser](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale.png)
+
+On this page, you can define a global scale by pressing on the scale fader or global scale trigs using the trig lock technique. These will be consistent across all channels. This is great for crafting harmonized chord sequences.
+
+![Global quantiser](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_scale_selector.png)
+
+To trig lock, simply hold a step on the sequencer and press your desired scale or transposition. Steps with existing trig locks will blink gently.
+
+![Global quantiser sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_sequencer.png)
+
+Scales apply in the following priority order:
+
+* Channel Scale Trig Locks: These have the highest priority. No matter your other settings, these are always honored.
+* Global Scale Trig Locks: These come next in line.
+* Default Channel Scale: If no scale locks are set, the sequencer uses the channel default.
+* Global Default Scale: If there are no scale locks and your channel doesn't have a default scale set, the sequencer uses the global scale.
+* If none of the above are set, your sequence will play chromatically.
+
+Tip: When a trig or a global default scale is active, its corresponding scale button will glow with a soft light.
+
+The global scale runs against the master clock. This makes any channels that are running with fewer than 64 steps extra fun when combined with global scales and global scale trigs!
+
+You can transpose your entire sequencer pattern using the global quantiser transposition fader, either globaly or by step using trig locks. Transposition applies on top of the currently selected scale. 
+
+![Global quantiser transposition fader](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_transposition.png)
+
+To return to the channel pages, select a channel using the channel select buttons.
+
+![Global quantiser channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_channel_select.png)
+
 #### Stock trig locks
 
 All device types have a set of standard trig locks that affect the sequencer rather than the quality of the sound. 
-
-##### Probability
-
-This trig lock can be used to ensure trigs play only with a certain probability. When set to 100, the trig will always play. When set to 0, the trig will never play. At 50, the trig will play half the time. You can set this globally and per step.
 
 ##### Fixed note
 
@@ -318,9 +336,17 @@ This trig lock introduces an element of random to your selected notes. A value o
 
 Similar to random note, this trig lock introduces an element of random to your selected notes. The difference here is that two's note restricts values to those divisible by two. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note two higher in the scale. A value of 2 will randomly give your existing note, the note two higher in your selected scale, or the note two lower. A value of 3 will randomly select notes -2, 0, 2 or 4. A value of 4 will randomly select notes -4, -2, 0, 2 or 4. And so on. Use trig locks to really spice things up. These can be combined with random note trig locks.
 
+##### Random velocity
+
+Add spice to the velocity of your trigs with this lock. Similar to random note, this a value of 1 will randomly give your trig's current velocity or one higher than that value. A value of 2 will give the current velocity, one lower, or one higher. And so on. This can be super useful when applied to all trigs on a channel to humanise. Or use it on a step trig lock to add random variation to the dynamics of a single hit.
+
+##### Trig Probability
+
+This trig lock can be used to ensure trigs play only with a certain probability. When set to 100, the trig will always play. When set to 0, the trig will never play. At 50, the trig will play half the time. You can set this globally and per step.
+
 ### Song editor
 
-The song editor is a grid of 90 slots, each one representing the potential of combining your patterns in unique ways. These sequencer patterns embody patterns, channels, rhythms, scales, and all other compoenents of your rhythms, the heartbeat of your creation.
+The song editor is a grid of 90 slots, each one representing the potential of combining your patterns in unique ways. These sequencer patterns embody patterns, channels, rhythms, scales, and all other compoenents of your rhythms.
 
 * Dim buttons: Think of these as blank canvases, waiting for your touch.
 * Mid-glow buttons: These slots are already filled with your rhythms and patterns.
@@ -331,7 +357,6 @@ Want to choose a pattern? A simple press will do. Looking to replicate one slot 
 Now, if the "song mode" setting is toggled on, after a pattern finishes playing it's set number of times, the sequencer gracefully changes to the next slot. Should it find the next slot empty, it circles back to the first filled slot in that group. This lets you craft distinctive pattern clusters to shift between. And if you get an urge to switch up slots while the sequencer plays? No worries, it queues your request, waiting for the current sequence to finish.
 
 ![Song sequencer pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/song_mode_sequencer_pattern_selector.png)
-
 
 Adjust the global sequencer pattern length with the fader located at the song editor page's lower end. For precise adjustments, use the end cap buttons. If you prefer broader changes, the central fader buttons have you covered. You have a spectrum from 1-64 to explore.
 
