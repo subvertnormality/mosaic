@@ -338,7 +338,7 @@ Similar to random note, this trig lock introduces an element of random to your s
 
 ##### Random velocity
 
-Add spice to the velocity of your trigs with this lock. Similar to random note, this a value of 1 will randomly give your trig's current velocity or one higher than that value. A value of 2 will give the current velocity, one lower, or one higher. And so on. This can be super useful when applied to all trigs on a channel to humanise. Or use it on a step trig lock to add random variation to the dynamics of a single hit.
+Add spice to the velocity of your trigs with this lock. Similar to random note, a value of 1 will randomly give your current trig's velocity or a velocity one higher than that value. A value of 2 will give the current velocity, one lower, or one higher. And so on. This can be super useful when applied to all trigs on a channel to humanise your dynamics. Or use it on a step trig lock to add random variation to the dynamics of a single hit.
 
 ##### Trig Probability
 
