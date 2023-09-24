@@ -342,4 +342,12 @@ function fn.transform_twos_random_value(n)
   end
 end
 
+function fn.transpose_scale(scale, transpose)
+  local transposed = {}
+  for i, note in ipairs(scale) do
+      table.insert(transposed, note + transpose)
+  end
+  return transposed
+end
+
 return fn

@@ -249,6 +249,7 @@ function program.step_has_trig_lock(channel, step)
   if program.step_has_param_trig_lock(channel, step) 
     or program.step_octave_has_trig_lock(channel, step) 
     or program.step_scale_has_trig_lock(channel, step) then
+    -- or program.step_transpose_has_trig_lock(step) then
       return true
   end
 
@@ -330,7 +331,7 @@ end
 function program.get_step_transpose_trig_lock(step)
   local channel = program.get_channel(17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
-  if not step_transpose_trig_lock_banks or step_transpose_trig_lock_banks[step] == nil then
+  if step_transpose_trig_lock_banks == nil or step_transpose_trig_lock_banks[step] == nil then
     return nil
   end
   return step_transpose_trig_lock_banks[step]
@@ -340,7 +341,8 @@ function program.step_transpose_has_trig_lock(step)
   local channel = program.get_channel(17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
 
-  if step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step] then
+  if step_transpose_trig_lock_banks ~= nil and step_transpose_trig_lock_banks[step] ~= nil then
+    print(step.." has trig lock")
     return true
   end
 
@@ -390,6 +392,8 @@ function program.clear_trig_locks_for_step(step)
   if (step_trig_lock_banks and step_trig_lock_banks[step]) then
     step_trig_lock_banks[step] = nil
   end
+  program.add_step_scale_trig_lock(step, nil)
+  print("clearing "..step)
 end
 
 function program.get_scale(s)

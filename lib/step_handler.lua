@@ -7,6 +7,7 @@ local step_handler = {}
 local length_tracker = {}
 local persistent_channel_step_scale_numbers = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
 local persistent_global_step_scale_number = nil
+local persistent_step_transpose = nil
 
 local step_scale_number = 0
 local global_step_accumulator = 0
@@ -141,6 +142,28 @@ function step_handler.calculate_step_scale_number(c, current_step)
 
 end
 
+function step_handler.calculate_step_transpose(current_step)
+
+  local step_transpose = program.get_step_transpose_trig_lock(current_step)
+  local global_tranpose = program.get_transpose()
+  local transpose = 0
+
+  if program.get().current_step == 1 then
+    persistent_step_transpose = nil
+  end
+
+  if step_transpose == nil and persistent_step_transpose ~= nil then
+    transpose = persistent_step_transpose
+  elseif step_transpose ~= nil then
+    transpose = step_transpose
+    persistent_step_transpose = step_transpose
+  else
+    transpose = global_tranpose
+  end
+
+  return transpose
+end
+
 function step_handler.handle(c, current_step) 
 
   local channel = program.get_channel(c)
@@ -160,20 +183,18 @@ function step_handler.handle(c, current_step)
   channel.step_scale_number = step_handler.calculate_step_scale_number(c, current_step)
   
   local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability")
-
   if not trig_prob then trig_prob = 100 end
 
   local random_val = math.random(0, 99)
+  local transpose = step_handler.calculate_step_transpose(current_step)
 
   if trig_value == 1 and random_val < trig_prob then
-
-    
 
     channel_edit_page_ui_controller.refresh_trig_locks()
     local random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0) 
     random_shift = random_shift + fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
 
-    local note = quantiser.process(note_value + random_shift, octave_mod, channel.step_scale_number, c)
+    local note = quantiser.process(note_value + random_shift, octave_mod, transpose, channel.step_scale_number, c)
 
     local velocity_random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "random_velocity") or 0) 
     velocity_value = velocity_value + velocity_random_shift
@@ -183,7 +204,7 @@ function step_handler.handle(c, current_step)
     local quantised_fixed_note = step_handler.process_stock_params(c, current_step, "quantised_fixed_note")
 
     if quantised_fixed_note and quantised_fixed_note > -1 then
-      note = quantiser.process(quantised_fixed_note, octave_mod, channel.step_scale_number, c)
+      note = quantiser.process(quantised_fixed_note, octave_mod, 0, channel.step_scale_number, c)
     end
 
     local fixed_note = step_handler.process_stock_params(c, current_step, "fixed_note")
@@ -257,12 +278,13 @@ function step_handler.sinfonian_sync(step)
   end
 
   local scale_container = program.get_scale(sinfonion_scale_number)
+  local transpose = step_handler.calculate_step_transpose(step)
 
   if scale_container and scale_container.root_note then 
     sinfonion.set_root_note(scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod)
     sinfonion.set_degree_nr(quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord])
     sinfonion.set_mode_nr(quantiser.get_scales()[scale_container.number].sinf_mode)
-    sinfonion.set_transposition(0)
+    sinfonion.set_transposition(transpose)
 
     -- Could do something with these later
     -- sinfonion.set_clock(0)
@@ -309,6 +331,9 @@ end
 
 function step_handler.reset()
   global_step_accumulator = 0
+  persistent_global_step_scale_number = nil
+  persistent_channel_step_scale_numbers = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
+  persistent_step_transpose = nil
   step_handler.execute_blink_cancel_func()
   step_handler.flush_lengths() 
 end
