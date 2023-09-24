@@ -13,6 +13,8 @@ local ValueSelector = include("mosaic/lib/ui_components/ValueSelector")
 
 local midi_controller = include("mosaic/lib/midi_controller")
 
+local device_param_manager = include("mosaic/lib/device_param_manager")
+
 local pages = Pages:new()
 
 local quantizer_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Quantizer", quantiser.get_scales())
@@ -281,6 +283,10 @@ function channel_edit_page_ui_controller.update_channel_config()
   end
 
   channel_edit_page_ui_controller.refresh_device_selector()
+
+  device_param_manager.add_device_params(channel.number, device_m, channel.midi_channel, channel.midi_device, true)
+
+
 end
 
 function channel_edit_page_ui_controller.change_page(page)

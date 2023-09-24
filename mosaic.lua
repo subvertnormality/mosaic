@@ -18,6 +18,7 @@ local textentry = require('textentry')
 local musicutil = require("musicutil")
 local as_metro = metro.init(do_autosave, 1, 1)
 local autosave_timer = metro.init(prime_autosave, 20, 1)
+local device_param_manager = include("mosaic/lib/device_param_manager")
 
 local ui_splash_screen_active = false
 
@@ -106,7 +107,7 @@ local function post_splash_init()
   if program == nil then
     load_new_project()
   end
-
+  params:bang()
   grid_controller.splash_screen_off()
   ui_splash_screen_active = false
   ui_controller.init()
@@ -206,6 +207,8 @@ function init()
   params:add_option("trigless_locks", "Trigless locks", {"On", "Off"}, 1)
   params:add_separator("Quantiser")
   params:add_option("quantiser_trig_lock_hold", "Hold quantiser trigs", {"On", "Off"}, 1)
+
+  device_param_manager.init()
 
   clock.tempo_change_handler = function(x) 
     channel_sequencer_page_ui_controller.refresh_tempo() 
