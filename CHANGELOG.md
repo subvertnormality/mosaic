@@ -2,6 +2,8 @@
 
 * Added random velocity trig lock
 * Dual and long press logic has been improved, making the UX more reliable
+* Global transposition added to global scale page
+* Added global scale page to manual
 
 # 0.2.4
 

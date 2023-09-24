@@ -20,6 +20,7 @@
     + [Note editor](#note-editor)
     + [Velocity editor](#velocity-editor)
     + [Channel editor](#channel-editor)
+      - [Global scale editor](#global-scale-editor)
       - [Stock trig locks](#stock-trig-locks)
         - [Probability](#probability)
         - [Fixed note](#fixed-note)
@@ -232,23 +233,7 @@ Next, lend your channel its voice by assigning one or more patterns:
 
 ![Pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_pattern_select.png)
 
-Each channel can have a default scale. Or, apply a specific scale to certain steps using trig locks. Scales will persist until the next scale lock or the end of the pattern (you can turn this behaviour off in the params). To select a scale for your channel, simply press on the scale fader. To remove a scale and return to chromatic, simply press the currently lit scale.
-
-Want to harmonize the scale across all channels? Here's how with the global scale editor:
-
-To accessing the global scale editor, press and hold any scale select button. You'll be presented with a streamlined grid offering a few clear options. On this page, you can define a global scale by pressing on the scale fader or global scale trigs using the trig lock technique. These will be consistent across all channels. This is great for crafting harmonized chord sequences. Again, to deactive the global scale, simply press the currently selected scale. 
-
-Scales apply in the following priority order:
-
-* Channel Scale Trig Locks: These have the highest priority. No matter your other settings, these are always honored.
-* Global Scale Trig Locks: These come next in line.
-* Default Channel Scale: If no scale locks are set, the sequencer uses the channel default.
-* Global Default Scale: If there are no scale locks and your channel doesn't have a default scale set, the sequencer uses the global scale.
-* If none of the above are set, your sequence will play chromatically.
-
-Tip: When a trig or a global default scale is active, its corresponding scale button will glow with a soft light.
-
-The global scale runs against the master clock. This makes any channels that are running with fewer than 64 steps extra fun when combined with global scales and global scale trigs!
+Each channel can have a default scale. Or, apply a specific scale to certain steps on a channel using trig locks. Scales will persist until the next scale lock or the end of the pattern (you can turn this behaviour off in the params). To select a scale for your channel, simply press on the scale fader. To remove a scale and return to chromatic, simply press the currently lit scale.
 
 ![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
 
@@ -294,6 +279,42 @@ On page 3 choose from the 16 quantizers. The layout is straightforward: the left
 On page 4 you can change how your channel interacts externally. To the left, find the MIDI output device. The center highlights the CC value for this channel. The final section lets you select the device preset which determines the params available in the parameter selector.
 
 ![Channel device config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_device_config.png)
+
+#### Global scale editor
+
+Want to harmonize the scale across all channels? Here's how with the global scale editor:
+
+To accessing the global scale editor, press and hold any scale select button. You'll be presented with a streamlined grid offering a few clear options. 
+
+![Global quantiser](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale.png)
+
+On this page, you can define a global scale by pressing on the scale fader or global scale trigs using the trig lock technique. These will be consistent across all channels. This is great for crafting harmonized chord sequences.
+
+![Global quantiser](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_scale_selector.png)
+
+To trig lock, simply hold a step on the sequencer and press your desired scale or transposition. Steps with existing trig locks will blink gently.
+
+![Global quantiser sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_sequencer.png)
+
+Scales apply in the following priority order:
+
+* Channel Scale Trig Locks: These have the highest priority. No matter your other settings, these are always honored.
+* Global Scale Trig Locks: These come next in line.
+* Default Channel Scale: If no scale locks are set, the sequencer uses the channel default.
+* Global Default Scale: If there are no scale locks and your channel doesn't have a default scale set, the sequencer uses the global scale.
+* If none of the above are set, your sequence will play chromatically.
+
+Tip: When a trig or a global default scale is active, its corresponding scale button will glow with a soft light.
+
+The global scale runs against the master clock. This makes any channels that are running with fewer than 64 steps extra fun when combined with global scales and global scale trigs!
+
+You can transpose your entire sequencer pattern using the global quantiser transposition fader, either globaly or by step using trig locks. Transposition applies on top of the currently selected scale. 
+
+![Global quantiser transposition fader](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_transposition.png)
+
+To return to the channel pages, select a channel using the channel select buttons.
+
+![Global quantiser channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_channel_select.png)
 
 #### Stock trig locks
 
