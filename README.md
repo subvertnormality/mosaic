@@ -266,19 +266,19 @@ You can view detailed configurations of your selected channel on the Norns scree
 
 On page 1 you're greeted with an array of parameters. Navigate pages with E1. Rotate E2 to highlight a parameter, and E3 to refine its value. Want a different parameter active in the selected parameter slot? Tap K2. As you change the value, the system automatically locks in your changes. As metioned above, these can be trig locked on each step by holding the step and rotating E3.
 
-![Trig lock page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_param_select.png)
+![Trig lock page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_param_select.png)
 
 You can define your channel's rhythmic character on page 2. Use E2 to navigate and E3 to finesse values. The channel grid keys let you specify which channel to adjust.
 
-![Channel clocks and swing page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_clocks.png)
+![Channel clocks and swing page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_clocks.png)
 
 On page 3 choose from the 16 quantizers. The layout is straightforward: the left indicates the root note, center introduces the scale type, and the right selects the scale's degree. Change between options with E2 and fine-tune with E3. The change the scale, use the scale grid keys.
 
-![Channel quantiser config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_quantiser.png)
+![Channel quantiser config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_quantiser.png)
 
 On page 4 you can change how your channel interacts externally. To the left, find the MIDI output device. The center highlights the CC value for this channel. The final section lets you select the device preset which determines the params available in the parameter selector.
 
-![Channel device config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_device_config.png)
+![Channel device config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_device_config.png)
 
 #### Global scale editor
 
@@ -286,15 +286,15 @@ Want to harmonize the scale across all channels? Here's how with the global scal
 
 To accessing the global scale editor, press and hold any scale select button. You'll be presented with a streamlined grid offering a few clear options. 
 
-![Global quantiser](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale.png)
+![Global quantiser](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_global_scale.png)
 
 On this page, you can define a global scale by pressing on the scale fader or global scale trigs using the trig lock technique. These will be consistent across all channels. This is great for crafting harmonized chord sequences.
 
-![Global quantiser](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_scale_selector.png)
+![Global quantiser](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_global_scale_scale_selector.png)
 
 To trig lock, simply hold a step on the sequencer and press your desired scale or transposition. Steps with existing trig locks will blink gently.
 
-![Global quantiser sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_sequencer.png)
+![Global quantiser sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_global_scale_sequencer.png)
 
 Scales apply in the following priority order:
 
@@ -310,11 +310,11 @@ The global scale runs against the master clock. This makes any channels that are
 
 You can transpose your entire sequencer pattern using the global quantiser transposition fader, either globaly or by step using trig locks. Transposition applies on top of the currently selected scale. 
 
-![Global quantiser transposition fader](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_transposition.png)
+![Global quantiser transposition fader](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_global_scale_transposition.png)
 
 To return to the channel pages, select a channel using the channel select buttons.
 
-![Global quantiser channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_global_scale_channel_select.png)
+![Global quantiser channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_global_scale_channel_select.png)
 
 #### Stock trig locks
 
