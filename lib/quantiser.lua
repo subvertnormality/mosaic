@@ -47,7 +47,7 @@ function quantiser.get_scale_name_from_index(i)
   return scales[i].name
 end
 
-function quantiser.process(note_number, octave_mod, scale_number, c)
+function quantiser.process(note_number, octave_mod, transpose, scale_number, c)
 
   local channel = program.get_channel(c)
 
@@ -71,6 +71,8 @@ function quantiser.process(note_number, octave_mod, scale_number, c)
       scale = fn.rotate_table_left(scale)
     end
   end
+
+  scale = fn.transpose_scale(scale, transpose)
 
   if note_number >= 7 then
 

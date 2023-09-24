@@ -316,7 +316,7 @@ function fn.rotate_table_left(t)
   return new_table
 end
 
-function fn.transform_random_note(n)
+function fn.transform_random_value(n)
   if n < 1 then
     return 0
   else
@@ -332,7 +332,7 @@ function fn.transform_random_note(n)
   end
 end
 
-function fn.transform_twos_random_note(n)
+function fn.transform_twos_random_value(n)
   if n < 1 then
       return 0
   else
@@ -340,6 +340,14 @@ function fn.transform_twos_random_note(n)
       local result = math.random(0, n) * 2 + min
       return result
   end
+end
+
+function fn.transpose_scale(scale, transpose)
+  local transposed = {}
+  for i, note in ipairs(scale) do
+      table.insert(transposed, note + transpose)
+  end
+  return transposed
 end
 
 return fn

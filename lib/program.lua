@@ -249,6 +249,7 @@ function program.step_has_trig_lock(channel, step)
   if program.step_has_param_trig_lock(channel, step) 
     or program.step_octave_has_trig_lock(channel, step) 
     or program.step_scale_has_trig_lock(channel, step) then
+    -- or program.step_transpose_has_trig_lock(step) then
       return true
   end
 
@@ -292,7 +293,61 @@ function program.step_octave_has_trig_lock(channel, step)
   return false
 end
 
+function program.add_step_transpose_trig_lock(step, trig_lock)
+  local channel = program.get_channel(17)
+  if channel.step_transpose_trig_lock_banks == nil then
+    channel.step_transpose_trig_lock_banks = {}
+  end
+  local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
+  
+  if trig_lock ~= nil then
+    if (trig_lock < -7) then
+      trig_lock = -7
+    end
+    if (trig_lock > 7) then
+      trig_lock = 7
+    end
+  end
 
+  step_transpose_trig_lock_banks[step] = trig_lock
+end
+
+function program.set_transpose(transpose)
+
+  program.get_selected_sequencer_pattern().transpose = transpose
+
+end
+
+function program.get_transpose()
+
+  if program.get_selected_sequencer_pattern().transpose == nil then 
+    return 0 
+  else
+    return program.get_selected_sequencer_pattern().transpose
+  end
+
+end
+
+function program.get_step_transpose_trig_lock(step)
+  local channel = program.get_channel(17)
+  local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
+  if step_transpose_trig_lock_banks == nil or step_transpose_trig_lock_banks[step] == nil then
+    return nil
+  end
+  return step_transpose_trig_lock_banks[step]
+end
+
+function program.step_transpose_has_trig_lock(step)
+  local channel = program.get_channel(17)
+  local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
+
+  if step_transpose_trig_lock_banks ~= nil and step_transpose_trig_lock_banks[step] ~= nil then
+    print(step.." has trig lock")
+    return true
+  end
+
+  return false
+end
 
 function program.add_step_scale_trig_lock(step, trig_lock)
   local selected_channel = program.get_selected_channel()
@@ -337,6 +392,8 @@ function program.clear_trig_locks_for_step(step)
   if (step_trig_lock_banks and step_trig_lock_banks[step]) then
     step_trig_lock_banks[step] = nil
   end
+  program.add_step_scale_trig_lock(step, nil)
+  print("clearing "..step)
 end
 
 function program.get_scale(s)
