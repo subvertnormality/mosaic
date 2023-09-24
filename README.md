@@ -52,7 +52,7 @@ As of v0.2.5 _Mosaic_ gives you the following:
 - Per channel pattern length
 - Channel muting
 - Scales with root note and degree setting
-- Trig lockable octave, scales, probability, random note modifiers, random velocity modifiers
+- Trig lockable octave, scales, transpose, step probability, random note modifiers, random velocity modifiers
 
 Requirements:
 
