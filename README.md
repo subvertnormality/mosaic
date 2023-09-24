@@ -276,7 +276,7 @@ On page 3 choose from the 16 quantizers. The layout is straightforward: the left
 
 ![Channel quantiser config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_quantiser.png)
 
-On page 4 you can change how your channel interacts externally. To the left, find the MIDI output device. The center highlights the CC value for this channel. The final section lets you select the device preset which determines the params available in the parameter selector.
+On page 4 you can change how your channel interacts externally. To the left, find the MIDI output device. The center highlights the CC value for this channel. The final section lets you select the device preset which determines the params available in the parameter selector. Different devices will have different options depending on your configuration files. Changing a device can be destructive. Scene device configurations such as params can be lose when switching devices. You must therefore press K3 to apply any selected device changes. Simply navigate away from the device config page without pressing K3 to cancel unsaved changes.
 
 ![Channel device config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_device_config.png)
 

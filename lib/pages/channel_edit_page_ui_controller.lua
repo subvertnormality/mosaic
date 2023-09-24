@@ -90,9 +90,14 @@ end)
 local channel_edit_page = Page:new("Config", function ()
   if program.get().selected_channel ~= 17 then
     local channel = program.get_selected_channel()
-    if (fn.get_by_id(device_map.get_devices(), channel.device_map).type == "midi") then
-      midi_device_vertical_scroll_selector:draw()
-      midi_channel_vertical_scroll_selector:draw()
+    local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
+    if (device.type == "midi") then
+      if (device.default_midi_device == nil) then
+        midi_device_vertical_scroll_selector:draw()
+      end
+      if (device.default_midi_channel == nil) then
+        midi_channel_vertical_scroll_selector:draw()
+      end
     else
       midi_device_vertical_scroll_selector:deselect()
       midi_channel_vertical_scroll_selector:deselect()
@@ -267,13 +272,15 @@ function channel_edit_page_ui_controller.update_channel_config()
   channel.device_map = device_m.id
 
   local device = device_map.get_device(channel.device_map)
-
   if device.default_midi_channel ~= nil then
     channel.midi_channel = device.default_midi_channel
   end
 
+  if device.default_midi_device ~= nil then
+    channel.midi_device = device.default_midi_device
+  end
+
   channel_edit_page_ui_controller.refresh_device_selector()
-  channel_edit_page_ui_controller.throttled_refresh_channel_config()
 end
 
 function channel_edit_page_ui_controller.change_page(page)
@@ -323,8 +330,13 @@ function channel_edit_page_ui_controller.enc(n, d)
           if device_map_vertical_scroll_selector:is_selected() then
             device_map_vertical_scroll_selector:scroll_down()
           end
-          channel_edit_page_ui_controller.update_channel_config()
-          channel_edit_page_ui_controller.update_default_params()
+          save_confirm.set_save(function() 
+            channel_edit_page_ui_controller.update_channel_config()
+            channel_edit_page_ui_controller.update_default_params()
+          end)
+          save_confirm.set_cancel(function()
+            channel_edit_page_ui_controller.throttled_refresh_channel_config()
+          end)
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
             return
@@ -395,8 +407,14 @@ function channel_edit_page_ui_controller.enc(n, d)
           if device_map_vertical_scroll_selector:is_selected() then
             device_map_vertical_scroll_selector:scroll_up()
           end
-          channel_edit_page_ui_controller.update_channel_config()
-          channel_edit_page_ui_controller.update_default_params()
+          save_confirm.set_save(function() 
+            print("confirmed")
+            channel_edit_page_ui_controller.update_channel_config()
+            channel_edit_page_ui_controller.update_default_params()
+          end)
+          save_confirm.set_cancel(function()
+            channel_edit_page_ui_controller.throttled_refresh_channel_config()
+          end)
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
             return
@@ -462,15 +480,28 @@ function channel_edit_page_ui_controller.enc(n, d)
           if program.get().selected_channel == 17 then
             return
           end
+          local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:deselect()
             device_map_vertical_scroll_selector:select()
           elseif midi_channel_vertical_scroll_selector:is_selected() then
             midi_channel_vertical_scroll_selector:deselect()
-            midi_device_vertical_scroll_selector:select()
+            if (device.default_midi_device == nil) then
+              midi_device_vertical_scroll_selector:select()
+            else
+              device_map_vertical_scroll_selector:select()
+            end
           elseif device_map_vertical_scroll_selector:is_selected() then
             device_map_vertical_scroll_selector:deselect()
-            midi_channel_vertical_scroll_selector:select()
+            if (device.default_midi_channel == nil) then
+              midi_channel_vertical_scroll_selector:select()
+            else
+              if (device.default_midi_device == nil) then
+                midi_device_vertical_scroll_selector:select()
+              else
+                device_map_vertical_scroll_selector:select()
+              end
+            end
           end
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
@@ -507,15 +538,28 @@ function channel_edit_page_ui_controller.enc(n, d)
           if program.get().selected_channel == 17 then
             return
           end
+          local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:deselect()
-            midi_channel_vertical_scroll_selector:select()
+            if (device.default_midi_channel == nil) then
+              midi_channel_vertical_scroll_selector:select()
+            else
+              device_map_vertical_scroll_selector:select()
+            end
           elseif midi_channel_vertical_scroll_selector:is_selected() then
             midi_channel_vertical_scroll_selector:deselect()
             device_map_vertical_scroll_selector:select()
           elseif device_map_vertical_scroll_selector:is_selected() then
             device_map_vertical_scroll_selector:deselect()
-            midi_device_vertical_scroll_selector:select()
+            if (device.default_midi_device == nil) then
+              midi_device_vertical_scroll_selector:select()
+            else
+              if (device.default_midi_channel == nil) then
+                midi_channel_vertical_scroll_selector:select()
+              else
+                device_map_vertical_scroll_selector:select()
+              end
+            end
           end
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
@@ -534,10 +578,11 @@ function channel_edit_page_ui_controller.enc(n, d)
       if d > 0 then
         pages:next_page()
         fn.dirty_screen(true)
-
+        save_confirm.cancel()
       else
         pages:previous_page()
         fn.dirty_screen(true)
+        save_confirm.cancel()
       end
     end
   end
@@ -565,6 +610,8 @@ function channel_edit_page_ui_controller.key(n, z)
         dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or program.get_selected_channel().trig_lock_banks[dials:get_selected_index()])
         channel_edit_page_ui_controller.refresh_trig_locks()
       end
+    else
+      save_confirm.confirm()
     end
   end
 end
@@ -694,6 +741,9 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), channel.device_map))
   param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
 
+  device_map_vertical_scroll_selector:select()
+  midi_channel_vertical_scroll_selector:deselect()
+  midi_device_vertical_scroll_selector:deselect()
 end
 
 function channel_edit_page_ui_controller.throttled_refresh_channel_config()
@@ -714,8 +764,6 @@ function channel_edit_page_ui_controller.throttled_refresh_channel_config()
     refresh_timer_id = nil
   end)
 end
-
-
 
 function channel_edit_page_ui_controller.refresh()
   channel_edit_page_ui_controller.refresh_device_selector()
