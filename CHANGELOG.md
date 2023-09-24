@@ -1,7 +1,7 @@
 # 0.2.5
 
 * Added random velocity trig lock
-* Dual and long press logic has been improved, making UX more reliable
+* Dual and long press logic has been improved, making the UX more reliable
 
 # 0.2.4
 

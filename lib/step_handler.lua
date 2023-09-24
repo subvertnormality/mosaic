@@ -101,6 +101,46 @@ function step_handler.calculate_next_selected_sequencer_pattern()
 
 end
 
+function step_handler.calculate_step_scale_number(c, current_step)
+
+  local channel = program.get_channel(c)
+  local channel_step_scale_number = program.get_step_scale_trig_lock(channel, current_step)
+  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), program.get().current_step)
+  local channel_default_scale = channel.default_scale
+  local global_default_scale = program.get().default_scale
+
+  if current_step == 1 then
+    persistent_channel_step_scale_numbers[c] = nil
+  end
+
+  if program.get().current_step == 1 then
+    persistent_global_step_scale_number = nil
+  end
+
+  -- Scale Precedence : channel_step_scale > global_step_scale > channel_default_scale > global_default_scale
+
+  if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
+    if (params:get("quantiser_trig_lock_hold") == 1) then
+      persistent_channel_step_scale_numbers[c] = channel_step_scale_number
+    end
+    return channel_step_scale_number
+  elseif (persistent_channel_step_scale_numbers[c] and program.get_scale(persistent_channel_step_scale_numbers[c]).scale) then
+    return persistent_channel_step_scale_numbers[c]
+  elseif global_step_scale_number and global_step_scale_number > 0 then
+    persistent_global_step_scale_number = global_step_scale_number
+    return global_step_scale_number
+  elseif persistent_global_step_scale_number and persistent_global_step_scale_number > 0 then
+    return persistent_global_step_scale_number
+  elseif channel_default_scale and channel_default_scale > 0 and program.get_scale(channel_default_scale).scale then
+    return channel_default_scale
+  elseif global_default_scale and global_default_scale > 0 and program.get_scale(global_default_scale).scale then
+    return global_default_scale
+  else
+    return 0
+  end
+
+end
+
 function step_handler.handle(c, current_step) 
 
   local channel = program.get_channel(c)
@@ -112,50 +152,13 @@ function step_handler.handle(c, current_step)
   local midi_channel = channel.midi_channel
   local midi_device = channel.midi_device
   local octave_mod = channel.octave
-  
-
-  if current_step == 1 then
-    persistent_channel_step_scale_numbers[c] = nil
-  end
-
-  if program.get().current_step == 1 then
-    persistent_global_step_scale_number = nil
-  end
 
   if program.get_step_octave_trig_lock(channel, current_step) then
     octave_mod = program.get_step_octave_trig_lock(channel, current_step)
   end
+
+  channel.step_scale_number = step_handler.calculate_step_scale_number(c, current_step)
   
-  local channel_step_scale_number = program.get_step_scale_trig_lock(channel, current_step)
-
-  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), program.get().current_step)
-
-  local channel_default_scale = channel.default_scale
-
-  local global_default_scale = program.get().default_scale
-
-  -- Precedence : channel_step_scale > global_step_scale > channel_default_scale > global_default_scale
-
-  if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
-    if (params:get("quantiser_trig_lock_hold") == 1) then
-      persistent_channel_step_scale_numbers[c] = channel_step_scale_number
-    end
-    channel.step_scale_number = channel_step_scale_number
-  elseif (persistent_channel_step_scale_numbers[c] and program.get_scale(persistent_channel_step_scale_numbers[c]).scale) then
-    channel.step_scale_number = persistent_channel_step_scale_numbers[c]
-  elseif global_step_scale_number and global_step_scale_number > 0 then
-    persistent_global_step_scale_number = global_step_scale_number
-    channel.step_scale_number = global_step_scale_number
-  elseif persistent_global_step_scale_number and persistent_global_step_scale_number > 0 then
-    channel.step_scale_number = persistent_global_step_scale_number
-  elseif channel_default_scale and channel_default_scale > 0 and program.get_scale(channel_default_scale).scale then
-    channel.step_scale_number = channel_default_scale
-  elseif global_default_scale and global_default_scale > 0 and program.get_scale(global_default_scale).scale then
-    channel.step_scale_number = global_default_scale
-  else
-    channel.step_scale_number = 0
-  end
-
   local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability")
 
   if not trig_prob then trig_prob = 100 end
@@ -163,6 +166,8 @@ function step_handler.handle(c, current_step)
   local random_val = math.random(0, 99)
 
   if trig_value == 1 and random_val < trig_prob then
+
+    
 
     channel_edit_page_ui_controller.refresh_trig_locks()
     local random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0) 
