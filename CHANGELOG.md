@@ -4,6 +4,8 @@ _Breaking update. Please backup and remove your .pset and .ptn data files from p
 
 * Destructive device changes now require confirmation before they are applied
 * Channel devices are now persistent across all sequencer patterns.
+* Custom device config files are now stored in data and are not overwritten on script update
+
 
 # 0.2.5
 
