@@ -1,6 +1,6 @@
 local device_map = {}
-local custom_device_map = include('mosaic/lib/user_config/custom_device_map')
-local device_config = include('mosaic/lib/user_config/device_config')
+local custom_device_map = require(norns.state.data..'custom_device_map')
+local device_config = require(norns.state.data..'device_config')
 
 local fn = include("mosaic/lib/functions")
 

@@ -1,4 +1,12 @@
-local custom_midi_device_map = {
+
+local util = require("lib.util")
+
+
+local create_default_config = {}
+
+
+create_default_config.default_custom_device_map_content = [[
+  local custom_midi_device_map = {
 
     -- { 
     --   ["type"] = "midi", -- leave this as is
@@ -40,3 +48,46 @@ local custom_midi_device_map = {
 }
 
 return custom_midi_device_map
+]]
+
+create_default_config.default_device_config_content = [[
+local device_config = {
+  ["show_devices"] = {
+    "cc_device",
+    "syntakt",
+    "digitakt",
+    "digitone",
+    "op-1",
+    "ex-braids",
+    "drm-bd",
+    "drm-drum1",
+    "drm-drum2",
+    "drm-multi",
+    "drm-sd",
+    "drm-hh1",
+    "drm-hh2",
+    "drm-clap",
+    "nord_drum_2"
+  }
+}
+
+return device_config
+]]
+
+function create_default_config.create_script(file_name, content)
+  if not util.file_exists(norns.state.data.."/"..file_name) then
+
+      local cmd = string.format("sudo echo '%s' > '%s'", content, norns.state.data.."/"..file_name)
+
+      -- Execute the command and capture the result (though we're not really using the output)
+      util.os_capture(cmd)
+
+      -- Since we're not capturing errors from os_capture in this context, we'll assume success.
+      print(file_name .. " created.")
+  else
+      print(file_name .. " already exists. Doing nothing.")
+  end
+end
+
+
+return create_default_config
