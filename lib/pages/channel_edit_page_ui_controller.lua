@@ -269,22 +269,22 @@ function channel_edit_page_ui_controller.update_channel_config()
   local midi_channel = midi_channel_vertical_scroll_selector:get_selected_item()
   local device_m = device_map_vertical_scroll_selector:get_selected_item()
 
-  channel.midi_device = midi_device.value
-  channel.midi_channel = midi_channel.value
-  channel.device_map = device_m.id
+  program.get().devices[channel.number].midi_device = midi_device.value
+  program.get().devices[channel.number].midi_channel = midi_channel.value
+  program.get().devices[channel.number].device_map = device_m.id
 
-  local device = device_map.get_device(channel.device_map)
+  local device = device_map.get_device(program.get().devices[channel.number].device_map)
   if device.default_midi_channel ~= nil then
-    channel.midi_channel = device.default_midi_channel
+    program.get().devices[channel.number].midi_channel = device.default_midi_channel
   end
 
   if device.default_midi_device ~= nil then
-    channel.midi_device = device.default_midi_device
+    program.get().devices[channel.number].midi_device = device.default_midi_device
   end
 
   channel_edit_page_ui_controller.refresh_device_selector()
 
-  device_param_manager.add_device_params(channel.number, device_m, channel.midi_channel, channel.midi_device, true)
+  device_param_manager.add_device_params(channel.number, device_m, program.get().devices[channel.number].midi_channel, program.get().devices[channel.number].midi_device, true)
 
 
 end
@@ -639,9 +639,8 @@ end
 
 function channel_edit_page_ui_controller.refresh_device_selector()
   local channel = program.get_selected_channel()
-
-  local device = device_map.get_device(channel.device_map)
-  local params = device_map.get_params(channel.device_map)
+  local device = device_map.get_device(program.get().devices[channel.number].device_map)
+  local params = device_map.get_params(program.get().devices[channel.number].device_map)
 
   param_select_vertical_scroll_selector:set_items(params)
   param_select_vertical_scroll_selector:set_meta_item(device)
@@ -742,9 +741,9 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   local channel = program.get_selected_channel()
 
   device_map_vertical_scroll_selector:set_items(device_map.get_available_devices_for_channel(program.get().selected_channel))
-  midi_channel_vertical_scroll_selector:set_selected_item(channel.midi_channel)
-  midi_device_vertical_scroll_selector:set_selected_item(channel.midi_device)
-  device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), channel.device_map))
+  midi_channel_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_channel)
+  midi_device_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_device)
+  device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), program.get().devices[channel.number].device_map))
   param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
 
   device_map_vertical_scroll_selector:select()

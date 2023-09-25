@@ -38,7 +38,7 @@
 
 ## At a glance
 
-As of v0.2.5 _Mosaic_ gives you the following:
+As of v0.3 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
@@ -99,7 +99,7 @@ Each sequencer pattern offers 16 scale slots. A single slot can house a root not
 
 ### Device
 
-Think of a device as a either an internal norns sound engine powered by [n.b.](https://github.com/sixolet/nb/tree/main), or a representation of a MIDI device in your workspace. 
+Think of a device as a either an internal norns sound engine powered by [n.b.](https://github.com/sixolet/nb/tree/main), or a representation of a MIDI device in your workspace. Devices are applied per scene and are consistent across all sequencer patterns.
 
 n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engines to channels.
 

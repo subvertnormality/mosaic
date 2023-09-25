@@ -32,8 +32,6 @@ local function initialise_default_channels()
       },
       start_trig = {1, 4},
       end_trig = {16, 7},
-      midi_channel = i,
-      midi_device = 1,
       selected_patterns = {},
       default_scale = 1,
       step_scale_number = 1,
@@ -43,7 +41,6 @@ local function initialise_default_channels()
       octave = 0,
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,
-      device_map = "none",
       mute = false,
       swing = 0
     }
@@ -135,7 +132,25 @@ function program.init()
     chord = 1,
     current_step = 1,
     current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    sequencer_patterns = {}
+    sequencer_patterns = {},
+    devices = {
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"}
+    }
   }
 
 end

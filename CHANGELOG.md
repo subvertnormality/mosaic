@@ -1,5 +1,9 @@
-# 0.2.6
+# 0.3
+
+_Breaking update. Please backup and remove your .pset and .ptn data files from previous versions._
+
 * Destructive device changes now require confirmation before they are applied
+* Channel devices are now persistent across all sequencer patterns.
 
 # 0.2.5
 

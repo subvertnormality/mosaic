@@ -5496,7 +5496,7 @@ function device_map.get_available_devices_for_channel(c)
 
   -- Populating active_devices_set with ids from channels 1 through 16
   for i = 1, 16 do
-    local device_map_id = program.get_channel(i).device_map
+    local device_map_id = program.get().devices[i].device_map
     if i ~= c and device_map_id ~= "none" then
       active_devices_set[device_map_id] = true
     end
@@ -5524,7 +5524,7 @@ end
 function device_map.get_available_params_for_channel(c, selected_param)
   local channel = program.get_channel(c)
   local active_params = {}
-  local params_copy = fn.deep_copy(device_map.get_params(channel.device_map))
+  local params_copy = fn.deep_copy(device_map.get_params(program.get().devices[channel.number].device_map))
 
   -- Populating active_params with ids from channels 1 through 10
   for i = 1, 10 do

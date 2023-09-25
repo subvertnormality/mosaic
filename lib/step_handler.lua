@@ -36,7 +36,7 @@ end
 
 function step_handler.process_params(c, step)
   local channel = program.get_channel(c)
-  local device = device_map.get_device(channel.device_map)
+  local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
   for i=1,10 do
 
@@ -52,14 +52,14 @@ function step_handler.process_params(c, step)
 
     if channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].cc_msb then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-      local midi_channel = channel.midi_channel
+      local midi_channel = program.get().devices[channel.number].midi_channel
       if channel.trig_lock_params[i].channel then
         midi_channel = channel.trig_lock_params[i].channel
       end
       if step_trig_lock then
-        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, step_trig_lock, midi_channel, channel.midi_device)
+        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, step_trig_lock, midi_channel, program.get().devices[channel.number].midi_device)
       else
-        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, channel.trig_lock_banks[i], midi_channel, channel.midi_device)
+        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, channel.trig_lock_banks[i], midi_channel, program.get().devices[channel.number].midi_device)
       end
     elseif channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id == "nb_slew" then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
@@ -172,8 +172,8 @@ function step_handler.handle(c, current_step)
   local note_value = channel.working_pattern.note_values[current_step]
   local velocity_value = channel.working_pattern.velocity_values[current_step]
   local length_value = channel.working_pattern.lengths[current_step]
-  local midi_channel = channel.midi_channel
-  local midi_device = channel.midi_device
+  local midi_channel = program.get().devices[channel.number].midi_channel
+  local midi_device = program.get().devices[channel.number].midi_device
   local octave_mod = channel.octave
 
   if program.get_step_octave_trig_lock(channel, current_step) then
@@ -213,7 +213,7 @@ function step_handler.handle(c, current_step)
       note = fixed_note
     end
 
-    local device = device_map.get_device(channel.device_map)
+    local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
     if not channel.mute then
       if not device.player then
