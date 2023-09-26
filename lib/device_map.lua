@@ -1,8 +1,8 @@
 local device_map = {}
-local custom_device_map = require(norns.state.data..'custom_device_map')
-local device_config = require(norns.state.data..'device_config')
 
 local fn = include("mosaic/lib/functions")
+local custom_device_map = require(norns.state.data..'custom_device_map')
+local device_config = require(norns.state.data..'device_config')
 
 local devices
 
@@ -5343,7 +5343,9 @@ local function merge_devices()
     -- Handle insertion or removal based on 'hide' attribute
     if not cd.hide then
       if not sd then
-        table.insert(cd.params, 1, get_none_param())
+        if cd["params"][1].id ~= "none" then
+          table.insert(cd.params, 1, get_none_param())
+        end
         table.insert(stock_device_map, cd)
         -- Update the lookup map
         stock_map_by_id[cd.id] = cd
@@ -5389,7 +5391,7 @@ local function merge_devices()
           local param_id = params.lookup[device_param_names[i]]
           local p = params:lookup_param(param_id)
 
-          params:show(param_id)
+          -- params:show(param_id)
 
           local minval = 0
           local maxval = 127
@@ -5448,8 +5450,11 @@ local function merge_params(device_params, stock_params)
   local merged_params = {}
   local seen_ids = {} -- hash set for fast id lookup
   
-  table.insert(merged_params, get_none_param())
-  seen_ids[get_none_param().id] = true
+  if (merged_params[1] and merged_params[1].id ~= "none") then
+    table.insert(merged_params, get_none_param())
+
+    seen_ids[get_none_param().id] = true
+  end
 
   -- Copy the contents of stock_params into merged_params
   for _, sp in ipairs(stock_params) do
@@ -5514,8 +5519,9 @@ function device_map.get_available_devices_for_channel(c)
 end
 
 function device_map.get_params(device_id)
-  local device_params = fn.get_by_id(devices, device_id).params
+  local device = fn.get_by_id(devices, device_id)
 
+  local device_params = device_params and device_params.params or {}
   return merge_params(device_params, stock_params)
 
 end

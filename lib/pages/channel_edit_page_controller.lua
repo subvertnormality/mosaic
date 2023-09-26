@@ -345,8 +345,6 @@ function channel_edit_page_controller.register_press_handlers()
           average_merge_mode_button:set_state(1)
           subadd_merge_mode_button:set_state(1)
           tooltip:show("Ch. "..program.get().selected_channel.." merge mode: pattern "..channel_pattern_number_merge_mode_button:get_state() - 1)
-
-
         end
       end
     end

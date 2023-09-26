@@ -9,19 +9,16 @@ local first_run = true
 -- TODO: Init needs to take into account the set devices and establish them as needed
 function device_param_manager.init()
 
-  if params.lookup["midi_device_params_separator"] == nil then
-    params:add_separator("midi_device_params_separator", "Mosaic Midi Device Params")
-  end
 
   for i = 1, 16 do
     if params.lookup["midi_device_params_group_channel_"..i] == nil then
-      params:add_group ("midi_device_params_group_channel_"..i, "Channel "..i, 127)
+      params:add_group ("midi_device_params_group_channel_"..i, "MOSAIC CH "..i, 127)
       params:hide("midi_device_params_group_channel_"..i)
     end
 
     for j = 1, 127 do
       if params.lookup["midi_device_params_channel_"..i.."_"..j] == nil then
-        params:add_number("midi_device_params_channel_"..i.."_"..j, "undefined", -1, -1, -1)
+        params:add_number("midi_device_params_channel_"..i.."_"..j, "undefined", -1, 10000, -1)
         params:set_action("midi_device_params_channel_"..i.."_"..j, function(x) end)
         params:hide("midi_device_params_channel_"..i.."_"..j)
       end
@@ -36,7 +33,7 @@ function device_param_manager.add_device_params(channel_id, device, channel, mid
 
   if device.type == "midi" then
 
-    params:lookup_param("midi_device_params_group_channel_"..channel_id).name = "Channel "..channel_id..": ".. device.name
+    params:lookup_param("midi_device_params_group_channel_"..channel_id).name = "MOSAIC CH "..channel_id..": ".. string.upper(device.name)
     params:show("midi_device_params_group_channel_"..channel_id)
 
     for i = 1, 127 do
@@ -49,8 +46,9 @@ function device_param_manager.add_device_params(channel_id, device, channel, mid
         end
         params:set_action("midi_device_params_channel_"..channel_id.."_"..i, function(x) 
           if x ~= -1 then
-            midi_controller.cc(device.params[i].cc_msb, device.params[i].cc_lsb, x, channel, midi_device)
+            midi_controller.cc(device.params[i].cc_msb, device.params[i].cc_lsb, x, channel, midi_device)          
           end
+          autosave_reset() 
         end)
         params:show("midi_device_params_channel_"..channel_id.."_"..i)
       else

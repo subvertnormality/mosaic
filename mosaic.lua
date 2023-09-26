@@ -105,10 +105,14 @@ end
 
 local function post_splash_init()
 
+  device_param_manager.init()
   load_project(norns.state.data.."autosave.ptn")
 
   if program == nil then
     load_new_project()
+  end
+  for i = 1, 16 do
+    device_param_manager.add_device_params(i, device_map.get_device(program.get().devices[i].device_map), program.get().devices[i].midi_channel, program.get().devices[i].midi_device, false)
   end
   params:bang()
   grid_controller.splash_screen_off()

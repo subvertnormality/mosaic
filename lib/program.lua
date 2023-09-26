@@ -357,7 +357,6 @@ function program.step_transpose_has_trig_lock(step)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
 
   if step_transpose_trig_lock_banks ~= nil and step_transpose_trig_lock_banks[step] ~= nil then
-    print(step.." has trig lock")
     return true
   end
 
@@ -408,7 +407,6 @@ function program.clear_trig_locks_for_step(step)
     step_trig_lock_banks[step] = nil
   end
   program.add_step_scale_trig_lock(step, nil)
-  print("clearing "..step)
 end
 
 function program.get_scale(s)
