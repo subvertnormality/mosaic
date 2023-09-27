@@ -50,6 +50,8 @@ local page_to_index = {["Trig Locks"] = 1, ["Clock Mods"] = 2, ["Quantizer"] = 3
 local refresh_timer_id = nil
 local throttle_time = 0.1
 
+local k2_held = false
+
 local function print_no_scale_selected_message_to_screen()
   screen.level(5)
   screen.move(15, 35)
@@ -206,12 +208,29 @@ function channel_edit_page_ui_controller.update_scale()
     return
   end
 
-  program.set_scale(channel.default_scale, {
-    number = scale.number,
-    scale = scale.scale,
-    chord = chord,
-    root_note = root_note
-  })
+  if k2_held then
+    save_confirm.set_save(function() 
+      save_confirm.set_ok_message("Scale saved to all.")
+      program.set_all_sequencer_pattern_scales(channel.default_scale, {
+        number = scale.number,
+        scale = scale.scale,
+        chord = chord,
+        root_note = root_note
+      })
+    end)
+    save_confirm.set_cancel_message("Scale not saved.")
+    save_confirm.set_cancel(function()
+      channel_edit_page_ui_controller.refresh_quantiser()
+    end)
+  else
+    program.set_scale(channel.default_scale, {
+      number = scale.number,
+      scale = scale.scale,
+      chord = chord,
+      root_note = root_note
+    })
+  end
+
 end
 
 function channel_edit_page_ui_controller.update_swing()
@@ -599,14 +618,21 @@ end
 
 function channel_edit_page_ui_controller.key(n, z) 
   if n == 2 and z == 1 then
-    if not trig_lock_page:is_sub_page_enabled() then
-      channel_edit_page_ui_controller.refresh_device_selector()
-      channel_edit_page_ui_controller.refresh_param_list()
+    if pages:get_selected_page() == page_to_index["Trig Locks"] then
+      if not trig_lock_page:is_sub_page_enabled() then
+        channel_edit_page_ui_controller.refresh_device_selector()
+        channel_edit_page_ui_controller.refresh_param_list()
+      else
+        channel_edit_page_ui_controller.update_params()
+        channel_edit_page_ui_controller.refresh_trig_locks()
+      end
+      trig_lock_page:toggle_sub_page()
     else
-      channel_edit_page_ui_controller.update_params()
-      channel_edit_page_ui_controller.refresh_trig_locks()
+      k2_held = true
     end
-    trig_lock_page:toggle_sub_page()
+  end
+  if n == 2 and z == 0 then
+    k2_held = false
   end
   if n == 3 and z == 1 then
     local pressed_keys = grid_controller.get_pressed_keys()

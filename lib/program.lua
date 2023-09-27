@@ -432,4 +432,12 @@ function program.set_scale(s, scale)
 
 end
 
+function program.set_all_sequencer_pattern_scales(s, scale)
+
+  for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
+    sequencer_pattern.scales[s] = scale
+  end
+  
+end
+
 return program

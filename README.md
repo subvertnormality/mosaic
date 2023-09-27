@@ -107,6 +107,8 @@ Midi devices is primarily defined by attributes like MIDI destinations, device n
 
 You can hide stock devices from the menu by commenting out it's entry in the `device_config.lua` file in the `user_config` folder.
 
+Midi devices can be configured to load a stored patch by configuring it via the params menu. For stock midi devices, all cc parameters are available to edit. A value of -1 against a midi parameter means the function is off. Changing the value will send the midi value to your midi device. When you load a mosiac script, the stored midi param values will be sent to your midi device, effectively loading a patch. It's possible in this way to stored all your sound's patch data with your mosaic patch. This is particularly practical for devices with less midi parameters or where the device's interface is not particularly intuitive.
+
 ### Params
 
 Most devices in _Mosaic_ feature a set of params that alters either the quality of the sound or the trig in some way. These params can be trig locked. Trig locking is a powerful sequencer device seen on Elektron synthesizers. You can define a param's value per step, allowing for infinite variation of sounds. See the channel page section for details on how to assign and use params.
@@ -233,7 +235,9 @@ Next, lend your channel its voice by assigning one or more patterns:
 
 ![Pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_pattern_select.png)
 
-Each channel can have a default scale. Or, apply a specific scale to certain steps on a channel using trig locks. Scales will persist until the next scale lock or the end of the pattern (you can turn this behaviour off in the params). To select a scale for your channel, simply press on the scale fader. To remove a scale and return to chromatic, simply press the currently lit scale.
+Each channel can have a default scale. Or, apply a specific scale to certain steps on a channel using trig locks. Scales will persist until the next scale lock or the end of the pattern (you can turn this behaviour off in the params). To select a scale for your channel, simply press on the scale fader. To remove a scale and return to chromatic, simply press the currently lit scale. Use the third page on your norns to dial in a specific scale or chord to each scale slot. 
+
+Each scale slot is unique to the current sequencer pattern. To change a scale for the selected scale slot across all sequencer patterns, hold K2 and confirm with K3. This saves you from having to manually edit a scale on every sequencer pattern in your song when you want to change the chord progression across all sections.
 
 ![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
 
@@ -272,7 +276,7 @@ You can define your channel's rhythmic character on page 2. Use E2 to navigate a
 
 ![Channel clocks and swing page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_clocks.png)
 
-On page 3 choose from the 16 quantizers. The layout is straightforward: the left indicates the root note, center introduces the scale type, and the right selects the scale's degree. Change between options with E2 and fine-tune with E3. The change the scale, use the scale grid keys.
+On page 3 assign a chord or scale to one of the 16 scale slots that are selectable on the grid. The layout on the norns screen is straightforward: the left indicates the root note, the center is the scale type, and the right selects the scale's degree. Change between options with E2 and fine-tune with E3. To change the selected scale slot, use the scale grid keys. 
 
 ![Channel quantiser config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_quantiser.png)
 

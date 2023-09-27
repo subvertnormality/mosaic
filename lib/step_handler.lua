@@ -279,11 +279,22 @@ function step_handler.sinfonian_sync(step)
 
   local scale_container = program.get_scale(sinfonion_scale_number)
   local transpose = step_handler.calculate_step_transpose(step)
+  local degree = quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord]
+  local root = scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod
+  local sinf_mode = quantiser.get_scales()[scale_container.number].sinf_mode
+
+
+  -- This is a hack to get around the "feature" of the sinfonion where the fifth degree of the minor key has a flattened note
+  if sinf_mode == 4 and degree == 7 then
+    root = root + 3
+    degree = 4
+    sinf_mode = 3
+  end
 
   if scale_container and scale_container.root_note then 
-    sinfonion.set_root_note(scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod)
-    sinfonion.set_degree_nr(quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord])
-    sinfonion.set_mode_nr(quantiser.get_scales()[scale_container.number].sinf_mode)
+    sinfonion.set_root_note(root)
+    sinfonion.set_degree_nr(degree)
+    sinfonion.set_mode_nr(sinf_mode)
     sinfonion.set_transposition(transpose)
 
     -- Could do something with these later
