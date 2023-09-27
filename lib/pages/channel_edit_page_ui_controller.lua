@@ -272,7 +272,7 @@ end
 
 function channel_edit_page_ui_controller.update_params()
   local channel = program.get_selected_channel()
-  if param_select_vertical_scroll_selector:get_selected_item().name == "None" then
+  if param_select_vertical_scroll_selector:get_selected_item().id == "none" then
     channel.trig_lock_params[dials:get_selected_index()] = {}
   else
     channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
@@ -304,7 +304,6 @@ function channel_edit_page_ui_controller.update_channel_config()
   channel_edit_page_ui_controller.refresh_device_selector()
 
   device_param_manager.add_device_params(channel.number, device_m, program.get().devices[channel.number].midi_channel, program.get().devices[channel.number].midi_device, true)
-
 
 end
 

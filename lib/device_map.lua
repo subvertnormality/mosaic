@@ -5391,7 +5391,7 @@ local function merge_devices()
           local param_id = params.lookup[device_param_names[i]]
           local p = params:lookup_param(param_id)
 
-          -- params:show(param_id)
+          params:show(param_id)
 
           local minval = 0
           local maxval = 127
@@ -5472,6 +5472,7 @@ local function merge_params(device_params, stock_params)
     end
   end
 
+
   return merged_params
 end
 
@@ -5521,7 +5522,7 @@ end
 function device_map.get_params(device_id)
   local device = fn.get_by_id(devices, device_id)
 
-  local device_params = device_params and device_params.params or {}
+  local device_params = device and device.params or {}
   return merge_params(device_params, stock_params)
 
 end
