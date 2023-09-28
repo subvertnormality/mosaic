@@ -5268,6 +5268,7 @@ local stock_params = {
     ["short_descriptor_2"] = "NOTE",
     ["cc_min_value"] = -1,
     ["cc_max_value"] = 127,
+    ["param_type"] = "stock"
   },
   {
     ["id"] = "quantised_fixed_note",
@@ -5276,6 +5277,7 @@ local stock_params = {
     ["short_descriptor_2"] = "NOTE",
     ["cc_min_value"] = -1,
     ["cc_max_value"] = 127,
+    ["param_type"] = "stock"
   },
   {
     ["id"] = "bipolar_random_note",
@@ -5284,6 +5286,7 @@ local stock_params = {
     ["short_descriptor_2"] = "NOTE",
     ["cc_min_value"] = -1,
     ["cc_max_value"] = 200,
+    ["param_type"] = "stock"
   },
   {
     ["id"] = "random_velocity",
@@ -5292,6 +5295,7 @@ local stock_params = {
     ["short_descriptor_2"] = "VELO",
     ["cc_min_value"] = 0,
     ["cc_max_value"] = 254,
+    ["param_type"] = "stock"
   },  
   {
     ["id"] = "trig_probability",
@@ -5300,6 +5304,7 @@ local stock_params = {
     ["short_descriptor_2"] = "PROB",
     ["cc_min_value"] = 0,
     ["cc_max_value"] = 100,
+    ["param_type"] = "stock"
   },
   {
     ["id"] = "twos_random_note",
@@ -5308,6 +5313,7 @@ local stock_params = {
     ["short_descriptor_2"] = "NOTE",
     ["cc_min_value"] = -1,
     ["cc_max_value"] = 200,
+    ["param_type"] = "stock"
   }
 }
 
@@ -5457,16 +5463,19 @@ local function merge_params(device_params, stock_params)
   end
 
   -- Copy the contents of stock_params into merged_params
-  for _, sp in ipairs(stock_params) do
+  for index, sp in ipairs(stock_params) do
     if not seen_ids[sp.id] then
+      sp.index = index
       table.insert(merged_params, sp)
       seen_ids[sp.id] = true
+      param_index = index + 1
     end
   end
 
   -- Add the contents of device_params into merged_params
-  for _, dp in ipairs(device_params) do
+  for index, dp in ipairs(device_params) do
     if not seen_ids[dp.id] then
+      dp.index = index
       table.insert(merged_params, dp)
       seen_ids[dp.id] = true
     end

@@ -53,11 +53,26 @@ function step_handler.process_params(c, step)
     if channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].cc_msb then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
       local midi_channel = program.get().devices[channel.number].midi_channel
+
+      local param_id = channel.trig_lock_params[i].param_id
+      local p_value = nil
+      local p = nil
+      if param_id ~= nil then
+        p = params:lookup_param(channel.trig_lock_params[i].param_id)
+        
+        if p.name ~= "undefined" then
+          p_value = p.value
+        end
+      end
+
+      
       if channel.trig_lock_params[i].channel then
         midi_channel = channel.trig_lock_params[i].channel
       end
       if step_trig_lock then
         midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, step_trig_lock, midi_channel, program.get().devices[channel.number].midi_device)
+      elseif p_value then
+        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, p_value, midi_channel, program.get().devices[channel.number].midi_device)
       else
         midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, channel.trig_lock_banks[i], midi_channel, program.get().devices[channel.number].midi_device)
       end

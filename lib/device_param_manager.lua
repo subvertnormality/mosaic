@@ -47,6 +47,7 @@ function device_param_manager.add_device_params(channel_id, device, channel, mid
         params:set_action("midi_device_params_channel_"..channel_id.."_"..i, function(x) 
           if x ~= -1 then
             midi_controller.cc(device.params[i].cc_msb, device.params[i].cc_lsb, x, channel, midi_device)          
+            channel_edit_page_ui_controller.refresh_trig_lock_values()
           end
           autosave_reset() 
         end)
@@ -59,6 +60,9 @@ function device_param_manager.add_device_params(channel_id, device, channel, mid
   else
     params:hide("midi_device_params_group_channel_"..channel_id)
     for i = 1, 127 do
+      local p = params:lookup_param("midi_device_params_channel_"..channel_id.."_"..i)
+      p.value = -1
+      p.name = "undefined"
       params:set_action("midi_device_params_channel_"..channel_id.."_"..i, function(x) end)
       params:hide("midi_device_params_channel_"..channel_id.."_"..i)
     end
