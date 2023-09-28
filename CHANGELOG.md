@@ -6,6 +6,7 @@ _Breaking update. Please backup and remove your .pset and .ptn data files from p
 * Channel devices are now persistent across all sequencer patterns
 * Custom device config files are now stored in data and are not overwritten on script update
 * Midi device init patches can now be configured and stored in the params menu
+* Midi device trig params sync up with their respective norn param values
 * Scale slots can now be saved across all sequencer patterns by holding K2 when selecting
 * Sinfonion sync now corrects for the "feature" in the Sinfonion where the minor scale's firth degree has a flattened note 
 
