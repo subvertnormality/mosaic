@@ -59,6 +59,8 @@ local device_config = {
     "digitone",
     "op-1",
     "ex-braids",
+    "ex-multi-sample",
+    "ex-matrix-mixer",
     "drm-bd",
     "drm-drum1",
     "drm-drum2",
