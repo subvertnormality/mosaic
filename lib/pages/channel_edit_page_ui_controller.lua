@@ -207,15 +207,23 @@ function channel_edit_page_ui_controller.update_scale()
     tooltip:show("Cannot set scale.")
     return
   end
+
   save_confirm.set_cancel_message("Scale not saved.")
   save_confirm.set_cancel(function()
     channel_edit_page_ui_controller.refresh_quantiser()
   end)
+
+  local channel_scale = channel.default_scale
+
+  if channel.number == 17 then
+    channel_scale = program.get().default_scale
+  end
+
   if k2_held then
     save_confirm.set_confirm_message("K2 to save across song.")
     save_confirm.set_ok_message("Scale saved to all.")
     save_confirm.set_save(function() 
-      program.set_all_sequencer_pattern_scales(channel.default_scale, {
+      program.set_all_sequencer_pattern_scales(channel_scale, {
         number = scale.number,
         scale = scale.scale,
         chord = chord,
@@ -224,7 +232,7 @@ function channel_edit_page_ui_controller.update_scale()
     end)
   else
     save_confirm.set_save(function() 
-      program.set_scale(channel.default_scale, {
+      program.set_scale(channel_scale, {
         number = scale.number,
         scale = scale.scale,
         chord = chord,
@@ -260,8 +268,8 @@ function channel_edit_page_ui_controller.update_default_params()
       channel.trig_lock_params[i].device_name = midi_device_m.device_name
       channel.trig_lock_params[i].type = midi_device_m.type
       channel.trig_lock_params[i].id = midi_device_m.params[i + 1].id
-      if (channel.trig_lock_params[i].type == "midi" and midi_device_m.params[i + 1].param_type ~= "stock") then
-        channel.trig_lock_params[i].param_id = "midi_device_params_channel_"..channel.."_"..midi_device_m.params[i + 1].index
+      if (channel.trig_lock_params[i].type == "midi" and midi_device_m.params[i + 1].param_type ~= "stock" and midi_device_m.params[i + 1].index) then
+        channel.trig_lock_params[i].param_id = "midi_device_params_channel_"..channel.number.."_"..midi_device_m.params[i + 1].index
       else
         channel.trig_lock_params[i].param_id = nil
       end
@@ -761,6 +769,9 @@ end
 
 function channel_edit_page_ui_controller.refresh_device_selector()
   local channel = program.get_selected_channel()
+  if channel.number == 17 then
+    return
+  end
   local device = device_map.get_device(program.get().devices[channel.number].device_map)
   local device_params = device_map.get_params(program.get().devices[channel.number].device_map)
 
@@ -875,6 +886,10 @@ end
 
 function channel_edit_page_ui_controller.refresh_channel_config()
   local channel = program.get_selected_channel()
+
+  if channel.number == 17 then
+    return
+  end
 
   device_map_vertical_scroll_selector:set_items(device_map.get_available_devices_for_channel(program.get().selected_channel))
   midi_channel_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_channel)
