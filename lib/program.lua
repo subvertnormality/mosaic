@@ -263,8 +263,8 @@ function program.step_has_trig_lock(channel, step)
 
   if program.step_has_param_trig_lock(channel, step) 
     or program.step_octave_has_trig_lock(channel, step) 
-    or program.step_scale_has_trig_lock(channel, step) then
-    -- or program.step_transpose_has_trig_lock(step) then
+    or program.step_scale_has_trig_lock(channel, step)
+    or program.step_transpose_has_trig_lock(step) then
       return true
   end
 
@@ -403,10 +403,15 @@ end
 
 function program.clear_trig_locks_for_step(step) 
   local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
-  if (step_trig_lock_banks and step_trig_lock_banks[step]) then
-    step_trig_lock_banks[step] = nil
+  local channel = program.get_selected_channel()
+  if channel.number ~= 17 then
+    if (step_trig_lock_banks and step_trig_lock_banks[step]) then
+      step_trig_lock_banks[step] = nil
+    end
+    program.add_step_scale_trig_lock(step, nil)
+  elseif channel.number == 17 then
+    program.add_step_transpose_trig_lock(step, nil)
   end
-  program.add_step_scale_trig_lock(step, nil)
 end
 
 function program.get_scale(s)

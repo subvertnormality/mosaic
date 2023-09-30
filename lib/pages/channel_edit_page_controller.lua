@@ -207,6 +207,7 @@ function channel_edit_page_controller.register_press_handlers()
   press_handler:register_dual(
     "channel_edit_page",
     function(x, y, x2, y2)
+      local channel = program.get_selected_channel()
       local selected_sequencer_pattern = program.get().selected_sequencer_pattern
       channel_edit_page_sequencer:dual_press(x, y, x2, y2)
       if channel_edit_page_sequencer:is_this(x2, y2) then
@@ -214,7 +215,7 @@ function channel_edit_page_controller.register_press_handlers()
         program.get_selected_sequencer_pattern().active = true
         tooltip:show("Channel "..program.get().selected_channel.." length changed")
       end
-      if channel_octave_fader:is_this(x2, y2) then
+      if channel.number ~= 17 and channel_octave_fader:is_this(x2, y2) then
         channel_octave_fader:press(x2, y2)
         local step = fn.calc_grid_count(x, y)
         local channel = program.get_selected_channel()
@@ -234,7 +235,7 @@ function channel_edit_page_controller.register_press_handlers()
         program.add_step_scale_trig_lock(step, scale_value)
         channel_edit_page_controller.refresh_faders()
       end
-      if transpose_fader:is_this(x2, y2) then
+      if channel.number == 17 and transpose_fader:is_this(x2, y2) then
         transpose_fader:press(x2, y2)
         local step = fn.calc_grid_count(x, y)
         local transpose_value = transpose_fader:get_value() - 8
