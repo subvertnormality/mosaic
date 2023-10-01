@@ -109,17 +109,32 @@ function channel_sequencer_page_ui_controller.enc(n, d)
         if pages:get_selected_page() == 1 then
           if song_mode_selector:is_selected() then
             song_mode_selector:increment()
-            channel_sequencer_page_ui_controller.update_song_mode()
+            save_confirm.set_save(function() 
+              channel_sequencer_page_ui_controller.update_song_mode()
+            end)
+            save_confirm.set_cancel(function()
+              channel_sequencer_page_ui_controller.refresh_song_mode()
+            end)
           elseif pattern_repeat_selector:is_selected() then
             pattern_repeat_selector:increment()
-            channel_sequencer_page_ui_controller.update_pattern_repeat()
+            save_confirm.set_save(function() 
+              channel_sequencer_page_ui_controller.update_pattern_repeat()
+            end)
+            save_confirm.set_cancel(function()
+              channel_sequencer_page_ui_controller.refresh_pattern_repeat() 
+            end)
           end
 
 
         elseif pages:get_selected_page() == 2 then
 
           tempo_selector:increment()
-          channel_sequencer_page_ui_controller.update_tempo() 
+          save_confirm.set_save(function() 
+            channel_sequencer_page_ui_controller.update_tempo() 
+          end)
+          save_confirm.set_cancel(function()
+            channel_sequencer_page_ui_controller.refresh_tempo()
+          end)
 
         end
 
@@ -127,16 +142,31 @@ function channel_sequencer_page_ui_controller.enc(n, d)
         if pages:get_selected_page() == 1 then
           if song_mode_selector:is_selected() then
             song_mode_selector:decrement()
-            channel_sequencer_page_ui_controller.update_song_mode()
+            save_confirm.set_save(function() 
+              channel_sequencer_page_ui_controller.update_song_mode()
+            end)
+            save_confirm.set_cancel(function()
+              channel_sequencer_page_ui_controller.refresh_song_mode()
+            end)
           elseif pattern_repeat_selector:is_selected() then
             pattern_repeat_selector:decrement()
-            channel_sequencer_page_ui_controller.update_pattern_repeat()
+            save_confirm.set_save(function() 
+              channel_sequencer_page_ui_controller.update_pattern_repeat()
+            end)
+            save_confirm.set_cancel(function()
+              channel_sequencer_page_ui_controller.refresh_pattern_repeat() 
+            end)
           end
 
         elseif pages:get_selected_page() == 2 then
 
           tempo_selector:decrement()
-          channel_sequencer_page_ui_controller.update_tempo() 
+          save_confirm.set_save(function() 
+            channel_sequencer_page_ui_controller.update_tempo() 
+          end)
+          save_confirm.set_cancel(function()
+            channel_sequencer_page_ui_controller.refresh_tempo()
+          end)
         end
       end
 

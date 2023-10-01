@@ -81,6 +81,7 @@ function press_handler:handle(page, x, y)
     func(x, y)
   end
 
+  save_confirm.cancel()
   autosave_reset() 
 
 end

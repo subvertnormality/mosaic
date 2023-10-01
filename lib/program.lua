@@ -32,8 +32,6 @@ local function initialise_default_channels()
       },
       start_trig = {1, 4},
       end_trig = {16, 7},
-      midi_channel = i,
-      midi_device = 1,
       selected_patterns = {},
       default_scale = 1,
       step_scale_number = 1,
@@ -43,7 +41,6 @@ local function initialise_default_channels()
       octave = 0,
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,
-      device_map = "none",
       mute = false,
       swing = 0
     }
@@ -135,7 +132,25 @@ function program.init()
     chord = 1,
     current_step = 1,
     current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    sequencer_patterns = {}
+    sequencer_patterns = {},
+    devices = {
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"},
+      {midi_channel = 1, midi_device = 1, device_map = "none"}
+    }
   }
 
 end
@@ -248,8 +263,8 @@ function program.step_has_trig_lock(channel, step)
 
   if program.step_has_param_trig_lock(channel, step) 
     or program.step_octave_has_trig_lock(channel, step) 
-    or program.step_scale_has_trig_lock(channel, step) then
-    -- or program.step_transpose_has_trig_lock(step) then
+    or program.step_scale_has_trig_lock(channel, step)
+    or program.step_transpose_has_trig_lock(step) then
       return true
   end
 
@@ -342,7 +357,6 @@ function program.step_transpose_has_trig_lock(step)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
 
   if step_transpose_trig_lock_banks ~= nil and step_transpose_trig_lock_banks[step] ~= nil then
-    print(step.." has trig lock")
     return true
   end
 
@@ -389,11 +403,17 @@ end
 
 function program.clear_trig_locks_for_step(step) 
   local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
-  if (step_trig_lock_banks and step_trig_lock_banks[step]) then
-    step_trig_lock_banks[step] = nil
-  end
+  local channel = program.get_selected_channel()
   program.add_step_scale_trig_lock(step, nil)
-  print("clearing "..step)
+  if channel.number ~= 17 then
+    if (step_trig_lock_banks and step_trig_lock_banks[step]) then
+      step_trig_lock_banks[step] = nil
+    end
+    
+    program.add_step_octave_trig_lock(step, nil)
+  elseif channel.number == 17 then
+    program.add_step_transpose_trig_lock(step, nil)
+  end
 end
 
 function program.get_scale(s)
@@ -417,6 +437,14 @@ function program.set_scale(s, scale)
 
   program.get_selected_sequencer_pattern().scales[s] = scale
 
+end
+
+function program.set_all_sequencer_pattern_scales(s, scale)
+
+  for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
+    sequencer_pattern.scales[s] = scale
+  end
+  
 end
 
 return program

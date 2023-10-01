@@ -1,11 +1,14 @@
--- mosaic v0.2.4
+-- mosaic v0.3
 -- grid-centric, intentioned 
 -- generative sequencer.
 --
--- more: llllllll.co/t/mosaic
+-- llllllll.co/t/mosaic-alpha-v0-3
 -- manual: t.ly/AuiVc
 
+local create_default_config = include("mosaic/lib/user_config/create_default_config")
 
+create_default_config.create_script("device_config.lua", create_default_config.default_device_config_content)
+create_default_config.create_script("custom_device_map.lua", create_default_config.default_custom_device_map_content)
 
 grid_controller = include("mosaic/lib/grid_controller")
 ui_controller = include("mosaic/lib/ui_controller")
@@ -18,6 +21,7 @@ local textentry = require('textentry')
 local musicutil = require("musicutil")
 local as_metro = metro.init(do_autosave, 1, 1)
 local autosave_timer = metro.init(prime_autosave, 20, 1)
+local device_param_manager = include("mosaic/lib/device_param_manager")
 
 local ui_splash_screen_active = false
 
@@ -101,12 +105,16 @@ end
 
 local function post_splash_init()
 
+  device_param_manager.init()
   load_project(norns.state.data.."autosave.ptn")
 
   if program == nil then
     load_new_project()
   end
-
+  for i = 1, 16 do
+    device_param_manager.add_device_params(i, device_map.get_device(program.get().devices[i].device_map), program.get().devices[i].midi_channel, program.get().devices[i].midi_device, false)
+  end
+  params:bang()
   grid_controller.splash_screen_off()
   ui_splash_screen_active = false
   ui_controller.init()
@@ -206,6 +214,8 @@ function init()
   params:add_option("trigless_locks", "Trigless locks", {"On", "Off"}, 1)
   params:add_separator("Quantiser")
   params:add_option("quantiser_trig_lock_hold", "Hold quantiser trigs", {"On", "Off"}, 1)
+
+  device_param_manager.init()
 
   clock.tempo_change_handler = function(x) 
     channel_sequencer_page_ui_controller.refresh_tempo() 

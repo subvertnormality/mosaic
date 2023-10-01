@@ -12,6 +12,7 @@
     + [Scale](#scale)
     + [Device](#device)
     + [Params](#params)
+    + [Trig Locks](#trig-locks)
   * [Pages](#pages)
     + [Menu](#menu)
       - [Sequencer start and stop](#sequencer-start-and-stop)
@@ -38,7 +39,7 @@
 
 ## At a glance
 
-As of v0.2.5 _Mosaic_ gives you the following:
+As of v0.3 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
@@ -77,13 +78,13 @@ To install, simply run `;install https://github.com/subvertnormality/mosaic` in 
 
 In _Mosaic_, the 'pattern' is the central pillar. Think of it as a sequence enriched with 64 trigs, 64 notes, 64 velocities, and length data for each trig. Each pattern spans 64 steps.
 
-In the world of _Mosaic_, notes don't strictly adhere to a single scale. Instead, they are valued by their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
+In _Mosaic_, notes aren't strictly bound to a single scale. Instead, they are valued by their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
 
 _Mosaic_ ensures you remain within your selected scale although there are ways to experiment with notes outside of it too. You'll find several methods to adjust scales seamlessly as you go, which we'll cover shortly.
 
 ### Channel
 
-The 'channel' is the second crucial component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's internal sound device, MIDI device, pick MIDI outputs, choose MIDI channels, the scale, and set up trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device (note that this is generally only possible with midi devices).
+The 'channel' represents another pivotal component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's internal sound device, MIDI device, pick MIDI outputs, choose MIDI channels, the scale, and set up param trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device (note that this is generally only possible with midi devices).
 
 When two patterns overlap in one channel and their trigs coincide, the outcome depends on the channel's 'merge mode'. There are several merge modes, each with its own characteristic. This feature encourages designing patterns that, when they overlap, produce intriguing results.
 
@@ -91,7 +92,7 @@ You can adjust the rhythm for each channel individually, allowing for different 
 
 ### Sequencer Pattern
 
-The sequencer pattern stands as the last of the three foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns, ranging from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be linked to craft a song in the song mode page. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
+The sequencer pattern rounds out the trio of foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns. This includes aspects from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be linked to craft a song in the song mode page. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
 
 ### Scale
 
@@ -99,17 +100,27 @@ Each sequencer pattern offers 16 scale slots. A single slot can house a root not
 
 ### Device
 
-Think of a device as a either an internal norns sound engine powered by [n.b.](https://github.com/sixolet/nb/tree/main), or a representation of a MIDI device in your workspace. 
+Think of a device as a either an internal norns sound engine powered by [n.b.](https://github.com/sixolet/nb/tree/main), or a representation of a MIDI device in your workspace. Devices are applied per scene and are consistent across all sequencer patterns.
 
 n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engines to channels.
 
-Midi devices is primarily defined by attributes like MIDI destinations, device name, and CC MIDI destinations. While there are some ready-made device templates to get you started, trig lock destinations can be customized either directly on the norns or through using the `custom_device_map.lua` configuration file in the `user_config` folder.
+Midi devices is primarily defined by attributes like MIDI destinations, device name, and CC MIDI destinations. While there are some ready-made device templates to get you started, param trig lock destinations can be customized either directly on the norns or through using the `custom_device_map.lua` configuration file in the `user_config` folder.
 
 You can hide stock devices from the menu by commenting out it's entry in the `device_config.lua` file in the `user_config` folder.
 
+Midi devices can be set to load a stored patch using the params menu. For stock midi devices, all cc parameters are available to edit. A value of -1 against a midi parameter means the function is off. Changing the value will send the midi value to your midi device. When you load a mosiac script, the stored midi param values will be sent to your midi device, effectively loading a patch. It's possible in this way to stored all your sound's patch data with your mosaic patch. This is particularly practical for devices with less midi parameters or where the device's interface is not particularly intuitive.
+
 ### Params
 
-Most devices in _Mosaic_ feature a set of params that alters either the quality of the sound or the trig in some way. These params can be trig locked. Trig locking is a powerful sequencer device seen on Elektron synthesizers. You can define a param's value per step, allowing for infinite variation of sounds. See the channel page section for details on how to assign and use params.
+Most devices in _Mosaic_ feature a set of params that alters either the quality of the sound or the trig in some way. These params can be trig locked. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. See the channel page section for details on how to assign and use params.
+
+### Trig Locks
+
+Param values and many grid functions can be locked to steps on the channel and global scale pages. A locked value is then applied for the duration of the step. Trig params, scales, and octave settings can be locked to a step on the channel page. Global scale and transpose settings can be locked to a step using the global scale page. 
+
+To set a trig lock, hold down the desired step on the sequencer and modify the value to be locked. 
+
+To clear a param trig lock, select the param on the norns screen, hold the step, then press K3. To clear a grid trig lock, hold the desired step and press the currently locked value. To clear all trig locks from a step, hold the step and press K2.
 
 ## Pages
 
@@ -213,11 +224,11 @@ You can use the four by four button to toggle a mode that lets you more quickly 
 
 ![Four by four](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_four_by_four.png)
 
-On the norns screen you can see the channel grid visualiser. Use E2 to select the current channel.
+On the norns screen, you'll find the channel grid visualiser. Use E2 to select the current channel.
 
 ### Velocity editor
 
-Now let's look at the velocity editor, which functions similarly to the note page. It spans two vertical pages: the initial displays velocities from 127 down to 67, while the latter displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence.
+Now let's look at the velocity editor, which functions similarly to the note page. It spans two vertical pages: the first displays velocities from 127 down to 67, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence.
 
 On the norns screen you can see the channel grid visualiser. Use E2 to select the current channel.
 
@@ -225,7 +236,7 @@ On the norns screen you can see the channel grid visualiser. Use E2 to select th
 
 Here's where it all comes together: the channel editor. This is where patterns find harmony, merging into cohesive sounds.
 
-Begin by selecting from the 16 available channels:
+Start by selecting one of the 16 available channels:
 
 ![Channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_channel_select.png)
 
@@ -233,17 +244,21 @@ Next, lend your channel its voice by assigning one or more patterns:
 
 ![Pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_pattern_select.png)
 
-Each channel can have a default scale. Or, apply a specific scale to certain steps on a channel using trig locks. Scales will persist until the next scale lock or the end of the pattern (you can turn this behaviour off in the params). To select a scale for your channel, simply press on the scale fader. To remove a scale and return to chromatic, simply press the currently lit scale.
+Each channel can have a default scale. Or, apply a specific scale to certain steps on a channel using trig locks. Scales will persist until the next scale lock or the end of the pattern (you can turn this behaviour off in the params). To select a scale for your channel, simply press on the scale fader. To remove a scale and return to chromatic, simply press the currently lit scale. Use the third page on your norns to dial in a specific scale or chord to each scale slot. 
+
+Each scale slot corresponds specifically to the current sequencer pattern. To change a scale for the selected scale slot across all sequencer patterns, hold K2 and confirm with K3. This saves you from having to manually edit a scale on every sequencer pattern in your song when you want to change the chord progression across all sections.
 
 ![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
 
-The sequencer visualizes the music: a tapestry of selected patterns, tailored by the chosen merge mode. To set a channel's length, press and hold the first and last step simultaneously. Active steps light up, guiding your symphony.
+The sequencer visualizes the music: a tapestry of selected patterns, tailored by the chosen merge mode. To set the length of a channel, simultaneously press and hold the first and last steps. Active steps illuminate, guiding the composition of your symphony.
 
 Want a step to hold a unique sound or scale? Press and keep it down while selecting the desired parameter, scale, or octave. Clearing these trig locks is a breeze:
 
-* For scale: Press and hold the step until it fades.
-* For parameters: Press and hold the step, then tap the K3 button.
-* For octave: Reset the trig lock to 0 on the octave selector.
+* For scale: Hold the step and press the currently locked scale.
+* For parameters: Select the relevant parameter, press and hold the step, then tap the K3 button.
+* For octave: Hold the step and press the currently locked octave.
+
+You can clear all locks for a step by holding the step and tapping the K2 button.
 
 ![Channel sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_sequencer.png)
 
@@ -255,7 +270,7 @@ And how do your patterns meld? Define this with the merge mode selector:
 
 ![Merge mode selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_merge_mode.png)
 
-Let's get into into the merge modes:
+Let's delve into into the merge modes:
 
 * Pattern Merge: This mode combines trigs from all patterns, yet only takes note and velocity from the chosen pattern. To toggle through patterns, press repeatedly. For a quick switch, press and hold your desired pattern key, then tap the pattern merge mode key.
 * Skip Merge: This mode elegantly sidesteps any clashing trigs.
@@ -264,19 +279,19 @@ Let's get into into the merge modes:
 
 You can view detailed configurations of your selected channel on the Norns screen. Each page offers intuitive and interactive tools to sculpt your sonic experience.
 
-On page 1 you're greeted with an array of parameters. Navigate pages with E1. Rotate E2 to highlight a parameter, and E3 to refine its value. Want a different parameter active in the selected parameter slot? Tap K2. As you change the value, the system automatically locks in your changes. As metioned above, these can be trig locked on each step by holding the step and rotating E3.
+On the first page you're greeted with an array of parameters. Navigate pages with E1. Rotate E2 to highlight a parameter, and E3 to refine its value. Want a different parameter active in the selected parameter slot? Tap K2. As you change the value, the system automatically locks in your changes. As mentioned above, these can be trig locked on each step by holding the step and rotating E3.
 
-![Trig lock page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_param_select.png)
+![Param trig lock page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_param_select.png)
 
-You can define your channel's rhythmic character on page 2. Use E2 to navigate and E3 to finesse values. The channel grid keys let you specify which channel to adjust.
+You can define your channel's rhythmic character on the second page. Use E2 to navigate and E3 to finesse values. The channel grid keys let you specify which channel to adjust.
 
 ![Channel clocks and swing page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_clocks.png)
 
-On page 3 choose from the 16 quantizers. The layout is straightforward: the left indicates the root note, center introduces the scale type, and the right selects the scale's degree. Change between options with E2 and fine-tune with E3. The change the scale, use the scale grid keys.
+On the third page, you can assign a chord or scale to one of the 16 scale slots that are selectable on the grid. The layout on the norns screen is straightforward: the left indicates the root note, the center is the scale type, and the right selects the scale's degree. Change between options with E2 and fine-tune with E3. To change the selected scale slot, use the scale grid keys. 
 
 ![Channel quantiser config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_quantiser.png)
 
-On page 4 you can change how your channel interacts externally. To the left, find the MIDI output device. The center highlights the CC value for this channel. The final section lets you select the device preset which determines the params available in the parameter selector.
+On the fourth page, you can modify how your channel interacts with external devices. To the left, find the MIDI output device. The center highlights the CC value for this channel. The final section lets you select the device preset which determines the params available in the parameter selector. Different devices will have different options depending on your configuration files. Changing a device can be destructive. Scene device configurations, such as params, can be lost when switching devices. You must therefore press K3 to apply any selected device changes. Simply navigate away from the device config page without pressing K3 to cancel unsaved changes.
 
 ![Channel device config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_device_config.png)
 
@@ -316,45 +331,45 @@ To return to the channel pages, select a channel using the channel select button
 
 ![Global quantiser channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_global_scale_channel_select.png)
 
-#### Stock trig locks
+#### Stock trig params
 
-All device types have a set of standard trig locks that affect the sequencer rather than the quality of the sound. 
+All device types have a set of standard trig orarms that affect the sequencer rather than the quality of the sound. 
 
 ##### Fixed note
 
-Use this trig lock to fix your channel to any midi note. The value represents a midi note number. The note is _not_ quantised. This is useful if you have a drum pattern and you don't want note data to affect the drum sound you're playing on a drum machine. This will override any quantised fixed note values or random note values.
+Use this trig param to fix your channel to any midi note. The value represents a midi note number. The note is _not_ quantised. This is useful if you have a drum pattern and you don't want note data to affect the drum sound you're playing on a drum machine. This will override any quantised fixed note values or random note values.
 
 ##### Quantised fixed note
 
-You can use this trig lock to manually select a note in the currently selected scale at any step. The value represents note number, where 0 is the root and higher numbers represent notes in the quantised scale. This overrides the note data coming in from the patterns. This will override random note values.
+You can use this trig param to manually select a note in the currently selected scale at any step. The value represents note number, where 0 is the root and higher numbers represent notes in the quantised scale. This overrides the note data coming in from the patterns. This will override random note values.
 
 ##### Random note
 
-This trig lock introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random two's note trig locks.
+This trig param introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random two's note trig param.
 
 ##### Random two's note
 
-Similar to random note, this trig lock introduces an element of random to your selected notes. The difference here is that two's note restricts values to those divisible by two. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note two higher in the scale. A value of 2 will randomly give your existing note, the note two higher in your selected scale, or the note two lower. A value of 3 will randomly select notes -2, 0, 2 or 4. A value of 4 will randomly select notes -4, -2, 0, 2 or 4. And so on. Use trig locks to really spice things up. These can be combined with random note trig locks.
+Similar to random note, this trig param introduces an element of random to your selected notes. The difference here is that two's note restricts values to those divisible by two. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note two higher in the scale. A value of 2 will randomly give your existing note, the note two higher in your selected scale, or the note two lower. A value of 3 will randomly select notes -2, 0, 2 or 4. A value of 4 will randomly select notes -4, -2, 0, 2 or 4. And so on. Use trig locks to really spice things up. These can be combined with random note trig params.
 
 ##### Random velocity
 
-Add spice to the velocity of your trigs with this lock. Similar to random note, this a value of 1 will randomly give your trig's current velocity or one higher than that value. A value of 2 will give the current velocity, one lower, or one higher. And so on. This can be super useful when applied to all trigs on a channel to humanise. Or use it on a step trig lock to add random variation to the dynamics of a single hit.
+Add spice to the velocity of your trigs with this param. Similar to random note, a value of 1 will randomly give your current trig's velocity or a velocity one higher than that value. A value of 2 will give the current velocity, one lower, or one higher. And so on. This can be super useful when applied to all trigs on a channel to humanise your dynamics. Or use it on a step trig lock to add random variation to the dynamics of a single hit.
 
 ##### Trig Probability
 
-This trig lock can be used to ensure trigs play only with a certain probability. When set to 100, the trig will always play. When set to 0, the trig will never play. At 50, the trig will play half the time. You can set this globally and per step.
+This trig param can be used to ensure trigs play only with a certain probability. When set to 100, the trig will always play. When set to 0, the trig will never play. At 50, the trig will play half the time. You can set this globally and per step.
 
 ### Song editor
 
-The song editor is a grid of 90 slots, each one representing the potential of combining your patterns in unique ways. These sequencer patterns embody patterns, channels, rhythms, scales, and all other compoenents of your rhythms.
+The song editor comprises a grid of 90 slots, with each slot representing the potential to combine your patterns in distinctive ways. These sequencer patterns embody patterns, channels, rhythms, scales, and all other compoenents of your rhythms.
 
 * Dim buttons: Think of these as blank canvases, waiting for your touch.
 * Mid-glow buttons: These slots are already filled with your rhythms and patterns.
-* Brightly lit button: this is the sequencer pattern in play right now.
+* Brightly lit button: This indicates the sequencer pattern currently in play.
 
 Want to choose a pattern? A simple press will do. Looking to replicate one slot to another? Press and hold the source, then the desired destination. Warning: this action replaces the content of the target slot. To erase a slot, simply copy an empty one over it. There is no undo. Be careful.
 
-Now, if the "song mode" setting is toggled on, after a pattern finishes playing it's set number of times, the sequencer gracefully changes to the next slot. Should it find the next slot empty, it circles back to the first filled slot in that group. This lets you craft distinctive pattern clusters to shift between. And if you get an urge to switch up slots while the sequencer plays? No worries, it queues your request, waiting for the current sequence to finish.
+Now, if the "song mode" setting is toggled on, after a pattern finishes playing its set number of times, the sequencer gracefully advances to the next slot. Should it find the next slot empty, it circles back to the first filled slot in that group. This lets you craft distinctive pattern clusters to shift between. And if you get an urge to switch up slots while the sequencer plays? No worries, it queues your request, waiting for the current sequence to finish.
 
 ![Song sequencer pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/song_mode_sequencer_pattern_selector.png)
 
@@ -362,7 +377,7 @@ Adjust the global sequencer pattern length with the fader located at the song ed
 
 ![Pattern length selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/song_mode_sequencer.png)
 
-On the norns display, you're the conductor of your song's flow. On page 1 you can dictate how many times a chosen sequencer pattern plays before gracefully transitioning to the next slot when song mode is turned on. When song mode is off, take control and manually activate slots for your song to progress.
+On the norns display, you can establish your song's flow. On page 1 you can dictate how many times a chosen sequencer pattern plays before gracefully transitioning to the next slot when song mode is turned on. When song mode is off, take control and manually activate slots for your song to progress.
 
 ![Song progression page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/song_progression.png)
 
@@ -377,11 +392,11 @@ When the sequencer is not playing, it will autosave with the name "autosave" aft
 
 ## Custom device maps
 
-You can hide factory devices from the device list. To do this, remove the device from the `device_config.lua` file:
+You can hide factory devices from the device list. To do this, remove the device from the `/norns/dust/data/mosaic/device_config.lua` file.
 
-Define every device in your studio by using the `custom_device_map.lua` file in `Mosaic/lib/user_config/`. Copy the template and add your device's cc and midi information.
+Define every device in your studio by using the `/norns/dust/data/mosaic/custom_device_map.lua` file. Copy the template and add your device's cc and midi information. You can see an example config file in `/norns/dust/code/mosaic/lib/user_config/example/`.
 
-You can also override options. For example, if you want your EX Braids algorithm to always be set to midi channel 16, you would include the following in your `custom_device_map.lua` file:
+You can override options in the `custom_device_map.lua` file. For example, if you want your EX Braids algorithm to always be set to midi channel 16, you would include the following in your `custom_device_map.lua` file:
 
 ```  
   {
@@ -437,17 +452,25 @@ If you'd like, you can define devices that have default paramaters defined. Thes
 ```
 
 
-Some devices respond to trigs on specific note numbers. Without locking a channel to the relevant note numbers, things can get strange very quickly in the world of _Mosaic_. This is because merging patterns often alters the note numbers on clashing steps. This is obviously not desirable for devices that require a certain midi note for a specific drum sound. You can lock a device's note number using the "Fixed Note" param on the trig lock page. You can also set this in your `custom_device_map.lua` file:
+Some devices respond to trigs on specific note numbers. Without locking a channel to the relevant note numbers, things can get strange very quickly in the world of _Mosaic_. This is because merging patterns often alters the note numbers on clashing steps. This is obviously not desirable for devices that require a certain midi note for a specific drum sound. You can lock a device's note number using the "Fixed Note" param on the trig lock page. You can also set this in your `custom_device_map.lua` file. In this example the note is fixed to midi note 16:
 
 ```
   { 
     ["type"] = "midi", -- leave this as is
     ["name"] = "DRM BD",
     ["id"] = "drm-bd",
-    ["fixed_note"] = 0, -- fixed midi note number that channel will always output
-    ["map_params_automatically"] = false, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
-    ["params"] = { -- up to 8 params 
-    },
+    ["map_params_automatically"] = true, -- map the params automatically
+     ["params"] = { -- up to 8 params
+        {
+           ["id"] = "fixed_note",
+           ["name"] = "Fixed Note",
+           ["short_descriptor_1"] = "FIXD",
+           ["short_descriptor_2"] = "NOTE",
+           ["cc_min_value"] = -1,
+           ["cc_max_value"] = 127,
+           ["default"] = 16
+        }
+     },
     ["default_midi_channel"] = 15
   },
 ```

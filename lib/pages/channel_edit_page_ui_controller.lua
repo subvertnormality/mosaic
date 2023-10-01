@@ -13,6 +13,8 @@ local ValueSelector = include("mosaic/lib/ui_components/ValueSelector")
 
 local midi_controller = include("mosaic/lib/midi_controller")
 
+local device_param_manager = include("mosaic/lib/device_param_manager")
+
 local pages = Pages:new()
 
 local quantizer_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Quantizer", quantiser.get_scales())
@@ -39,7 +41,7 @@ local param_8 = Dial:new(55, 40, "Param 8", "param_8", "X", "")
 local param_9 = Dial:new(80, 40, "Param 9", "param_9", "X", "")
 local param_10 = Dial:new(105, 40, "Param 10", "param_10", "X", "")
 
-local params = {param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10}
+local m_params = {param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10}
 
 local dials = ControlScrollSelector:new(0, 0, {})
 
@@ -47,6 +49,8 @@ local page_to_index = {["Trig Locks"] = 1, ["Clock Mods"] = 2, ["Quantizer"] = 3
 
 local refresh_timer_id = nil
 local throttle_time = 0.1
+
+local k2_held = false
 
 local function print_no_scale_selected_message_to_screen()
   screen.level(5)
@@ -90,9 +94,14 @@ end)
 local channel_edit_page = Page:new("Config", function ()
   if program.get().selected_channel ~= 17 then
     local channel = program.get_selected_channel()
-    if (fn.get_by_id(device_map.get_devices(), channel.device_map).type == "midi") then
-      midi_device_vertical_scroll_selector:draw()
-      midi_channel_vertical_scroll_selector:draw()
+    local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
+    if (device.type == "midi") then
+      if (device.default_midi_device == nil) then
+        midi_device_vertical_scroll_selector:draw()
+      end
+      if (device.default_midi_channel == nil) then
+        midi_channel_vertical_scroll_selector:draw()
+      end
     else
       midi_device_vertical_scroll_selector:deselect()
       midi_channel_vertical_scroll_selector:deselect()
@@ -199,12 +208,39 @@ function channel_edit_page_ui_controller.update_scale()
     return
   end
 
-  program.set_scale(channel.default_scale, {
-    number = scale.number,
-    scale = scale.scale,
-    chord = chord,
-    root_note = root_note
-  })
+  save_confirm.set_cancel_message("Scale not saved.")
+  save_confirm.set_cancel(function()
+    channel_edit_page_ui_controller.refresh_quantiser()
+  end)
+
+  local channel_scale = channel.default_scale
+
+  if channel.number == 17 then
+    channel_scale = program.get().default_scale
+  end
+
+  if k2_held then
+    save_confirm.set_confirm_message("K2 to save across song.")
+    save_confirm.set_ok_message("Scale saved to all.")
+    save_confirm.set_save(function() 
+      program.set_all_sequencer_pattern_scales(channel_scale, {
+        number = scale.number,
+        scale = scale.scale,
+        chord = chord,
+        root_note = root_note
+      })
+    end)
+  else
+    save_confirm.set_save(function() 
+      program.set_scale(channel_scale, {
+        number = scale.number,
+        scale = scale.scale,
+        chord = chord,
+        root_note = root_note
+      })
+    end)
+  end
+
 end
 
 function channel_edit_page_ui_controller.update_swing()
@@ -232,6 +268,11 @@ function channel_edit_page_ui_controller.update_default_params()
       channel.trig_lock_params[i].device_name = midi_device_m.device_name
       channel.trig_lock_params[i].type = midi_device_m.type
       channel.trig_lock_params[i].id = midi_device_m.params[i + 1].id
+      if (channel.trig_lock_params[i].type == "midi" and midi_device_m.params[i + 1].param_type ~= "stock" and midi_device_m.params[i + 1].index) then
+        channel.trig_lock_params[i].param_id = "midi_device_params_channel_"..channel.number.."_"..midi_device_m.params[i + 1].index
+      else
+        channel.trig_lock_params[i].param_id = nil
+      end
       if midi_device_m.params[i + 1].default then
         channel.trig_lock_banks[i] = midi_device_m.params[i + 1].default
       end
@@ -246,13 +287,19 @@ end
 
 function channel_edit_page_ui_controller.update_params()
   local channel = program.get_selected_channel()
-  if param_select_vertical_scroll_selector:get_selected_item().name == "None" then
+  if param_select_vertical_scroll_selector:get_selected_item().id == "none" then
     channel.trig_lock_params[dials:get_selected_index()] = {}
   else
     channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
     channel.trig_lock_params[dials:get_selected_index()].device_name = param_select_vertical_scroll_selector:get_meta_item().device_name
     channel.trig_lock_params[dials:get_selected_index()].type = param_select_vertical_scroll_selector:get_meta_item().type
     channel.trig_lock_params[dials:get_selected_index()].id = param_select_vertical_scroll_selector:get_selected_item().id
+
+    if (param_select_vertical_scroll_selector:get_meta_item().type == "midi" and param_select_vertical_scroll_selector:get_selected_item().param_type ~= "stock") then
+      channel.trig_lock_params[dials:get_selected_index()].param_id = "midi_device_params_channel_"..channel.number.."_"..param_select_vertical_scroll_selector:get_selected_item().index
+    else
+      channel.trig_lock_params[dials:get_selected_index()].param_id = nil
+    end
   end
 end
 
@@ -262,18 +309,23 @@ function channel_edit_page_ui_controller.update_channel_config()
   local midi_channel = midi_channel_vertical_scroll_selector:get_selected_item()
   local device_m = device_map_vertical_scroll_selector:get_selected_item()
 
-  channel.midi_device = midi_device.value
-  channel.midi_channel = midi_channel.value
-  channel.device_map = device_m.id
+  program.get().devices[channel.number].midi_device = midi_device.value
+  program.get().devices[channel.number].midi_channel = midi_channel.value
+  program.get().devices[channel.number].device_map = device_m.id
 
-  local device = device_map.get_device(channel.device_map)
-
+  local device = device_map.get_device(program.get().devices[channel.number].device_map)
   if device.default_midi_channel ~= nil then
-    channel.midi_channel = device.default_midi_channel
+    program.get().devices[channel.number].midi_channel = device.default_midi_channel
+  end
+
+  if device.default_midi_device ~= nil then
+    program.get().devices[channel.number].midi_device = device.default_midi_device
   end
 
   channel_edit_page_ui_controller.refresh_device_selector()
-  channel_edit_page_ui_controller.throttled_refresh_channel_config()
+
+  device_param_manager.add_device_params(channel.number, device_m, program.get().devices[channel.number].midi_channel, program.get().devices[channel.number].midi_device, true)
+
 end
 
 function channel_edit_page_ui_controller.change_page(page)
@@ -304,11 +356,21 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:decrement()
-            channel_edit_page_ui_controller.update_clock_mods()
+            save_confirm.set_save(function() 
+              channel_edit_page_ui_controller.update_clock_mods()
+            end)
+            save_confirm.set_cancel(function()
+              channel_edit_page_ui_controller.refresh_clock_mods()
+            end)
           end
           if clock_swing_value_selector:is_selected() then
             clock_swing_value_selector:increment()
-            channel_edit_page_ui_controller.update_swing()
+            save_confirm.set_save(function() 
+              channel_edit_page_ui_controller.update_swing()
+            end)
+            save_confirm.set_cancel(function()
+              channel_edit_page_ui_controller.refresh_swing()
+            end)
           end
         elseif pages:get_selected_page() == page_to_index["Midi Config"] then
           if program.get().selected_channel == 17 then
@@ -323,35 +385,74 @@ function channel_edit_page_ui_controller.enc(n, d)
           if device_map_vertical_scroll_selector:is_selected() then
             device_map_vertical_scroll_selector:scroll_down()
           end
-          channel_edit_page_ui_controller.update_channel_config()
-          channel_edit_page_ui_controller.update_default_params()
+          save_confirm.set_save(function() 
+            channel_edit_page_ui_controller.update_channel_config()
+            channel_edit_page_ui_controller.update_default_params()
+            param_select_vertical_scroll_selector:set_selected_item(1)
+          end)
+          save_confirm.set_cancel(function()
+            channel_edit_page_ui_controller.throttled_refresh_channel_config()
+          end)
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
             return
           end
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_down()
+            save_confirm.set_save(function() 
+              channel_edit_page_ui_controller.update_params()
+              channel_edit_page_ui_controller.refresh_trig_locks()
+            end)
+            save_confirm.set_cancel(function() end)
           else
             local pressed_keys = grid_controller.get_pressed_keys()
+
+            local param_id = channel.trig_lock_params[dials:get_selected_index()].param_id
+            local p_value = nil
+            local p = nil
+            if param_id ~= nil then
+              p = params:lookup_param(channel.trig_lock_params[dials:get_selected_index()].param_id)
+              
+              if p.name ~= "undefined" then
+                p_value = p.value
+              end
+            end
+        
             if #pressed_keys > 0 and channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
                 program.add_step_param_trig_lock(
                   step, 
                   dials:get_selected_index(), 
-                  (program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()]) + d
+                  (program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or p_value or channel.trig_lock_banks[dials:get_selected_index()]) + d
                 )
-                dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()])
+                dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or p_value or channel.trig_lock_banks[dials:get_selected_index()])
               end
             elseif channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
-              if channel.trig_lock_banks[dials:get_selected_index()] == {} then
-                channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
+              if p ~= nil and p_value ~= nil then
+                p_value = p_value + d
+                if p_value < (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0) then
+                  p_value = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
+                end
+                if p_value > (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127) then
+                  p_value = (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127)
+                end
+                p.value = p_value
+                p:bang()
+              else
+                if channel.trig_lock_banks[dials:get_selected_index()] == {} then
+                  channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
+                end
+                channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
+                if channel.trig_lock_banks[dials:get_selected_index()] > (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127) then
+                  channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127)
+                end
               end
-              channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
-              if channel.trig_lock_banks[dials:get_selected_index()] > (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127) then
-                channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127)
+              if p_value ~= nil then
+                dials:get_selected_item():set_value(p_value)
+              else
+                dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
               end
-              dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
             end
           end
         end
@@ -376,11 +477,21 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:increment()
-            channel_edit_page_ui_controller.update_clock_mods()
+            save_confirm.set_save(function() 
+              channel_edit_page_ui_controller.update_clock_mods()
+            end)
+            save_confirm.set_cancel(function()
+              channel_edit_page_ui_controller.refresh_clock_mods()
+            end)
           end
           if clock_swing_value_selector:is_selected() then
             clock_swing_value_selector:decrement()
-            channel_edit_page_ui_controller.update_swing()
+            save_confirm.set_save(function() 
+              channel_edit_page_ui_controller.update_swing()
+            end)
+            save_confirm.set_cancel(function()
+              channel_edit_page_ui_controller.refresh_swing()
+            end)
           end
         elseif pages:get_selected_page() == page_to_index["Midi Config"] then
           if program.get().selected_channel == 17 then
@@ -395,35 +506,74 @@ function channel_edit_page_ui_controller.enc(n, d)
           if device_map_vertical_scroll_selector:is_selected() then
             device_map_vertical_scroll_selector:scroll_up()
           end
-          channel_edit_page_ui_controller.update_channel_config()
-          channel_edit_page_ui_controller.update_default_params()
+          save_confirm.set_save(function() 
+            channel_edit_page_ui_controller.update_channel_config()
+            channel_edit_page_ui_controller.update_default_params()
+            param_select_vertical_scroll_selector:set_selected_item(1)
+          end)
+          save_confirm.set_cancel(function()
+            channel_edit_page_ui_controller.throttled_refresh_channel_config()
+          end)
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
             return
           end
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_up()
+            save_confirm.set_save(function() 
+              channel_edit_page_ui_controller.update_params()
+              channel_edit_page_ui_controller.refresh_trig_locks()
+            end)
+            save_confirm.set_cancel(function() end)
           else
             local pressed_keys = grid_controller.get_pressed_keys()
+
+            local param_id = channel.trig_lock_params[dials:get_selected_index()].param_id
+            local p_value = nil
+            local p = nil
+            if param_id ~= nil then
+              p = params:lookup_param(channel.trig_lock_params[dials:get_selected_index()].param_id)
+              
+              if p.name ~= "undefined" then
+                p_value = p.value
+              end
+            end
+
             if #pressed_keys > 0 and channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
                 program.add_step_param_trig_lock(
                   step, 
                   dials:get_selected_index(),
-                  (program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or channel.trig_lock_banks[dials:get_selected_index()]) + d
+                  (program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or p_value or channel.trig_lock_banks[dials:get_selected_index()]) + d
                 )
-                dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index() or channel.trig_lock_banks[dials:get_selected_index()]))
+                dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index() or p_value or channel.trig_lock_banks[dials:get_selected_index()]))
               end
             elseif channel.trig_lock_params[dials:get_selected_index()] and channel.trig_lock_params[dials:get_selected_index()].id then
-              if channel.trig_lock_banks[dials:get_selected_index()] == nil then
-                channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
+              if p ~= nil and p_value ~= nil then
+                p_value = p_value + d
+                if p_value < (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0) then
+                  p_value = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
+                end
+                if p_value > (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127) then
+                  p_value = (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127)
+                end
+                p.value = p_value
+                p:bang()
+              else
+                if channel.trig_lock_banks[dials:get_selected_index()] == nil then
+                  channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
+                end
+                channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
+                if channel.trig_lock_banks[dials:get_selected_index()] < (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0) then
+                  channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
+                end
               end
-              channel.trig_lock_banks[dials:get_selected_index()] = channel.trig_lock_banks[dials:get_selected_index()] + d
-              if channel.trig_lock_banks[dials:get_selected_index()] < (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0) then
-                channel.trig_lock_banks[dials:get_selected_index()] = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or 0)
+              if p_value ~= nil then
+                dials:get_selected_item():set_value(p_value)
+              else
+                dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
               end
-              dials:get_selected_item():set_value(channel.trig_lock_banks[dials:get_selected_index()])
             end
           end
         end
@@ -462,15 +612,28 @@ function channel_edit_page_ui_controller.enc(n, d)
           if program.get().selected_channel == 17 then
             return
           end
+          local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:deselect()
             device_map_vertical_scroll_selector:select()
           elseif midi_channel_vertical_scroll_selector:is_selected() then
             midi_channel_vertical_scroll_selector:deselect()
-            midi_device_vertical_scroll_selector:select()
+            if (device.default_midi_device == nil) then
+              midi_device_vertical_scroll_selector:select()
+            else
+              device_map_vertical_scroll_selector:select()
+            end
           elseif device_map_vertical_scroll_selector:is_selected() then
             device_map_vertical_scroll_selector:deselect()
-            midi_channel_vertical_scroll_selector:select()
+            if (device.default_midi_channel == nil) then
+              midi_channel_vertical_scroll_selector:select()
+            else
+              if (device.default_midi_device == nil) then
+                midi_device_vertical_scroll_selector:select()
+              else
+                device_map_vertical_scroll_selector:select()
+              end
+            end
           end
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
@@ -507,15 +670,28 @@ function channel_edit_page_ui_controller.enc(n, d)
           if program.get().selected_channel == 17 then
             return
           end
+          local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:deselect()
-            midi_channel_vertical_scroll_selector:select()
+            if (device.default_midi_channel == nil) then
+              midi_channel_vertical_scroll_selector:select()
+            else
+              device_map_vertical_scroll_selector:select()
+            end
           elseif midi_channel_vertical_scroll_selector:is_selected() then
             midi_channel_vertical_scroll_selector:deselect()
             device_map_vertical_scroll_selector:select()
           elseif device_map_vertical_scroll_selector:is_selected() then
             device_map_vertical_scroll_selector:deselect()
-            midi_device_vertical_scroll_selector:select()
+            if (device.default_midi_device == nil) then
+              midi_device_vertical_scroll_selector:select()
+            else
+              if (device.default_midi_channel == nil) then
+                midi_channel_vertical_scroll_selector:select()
+              else
+                device_map_vertical_scroll_selector:select()
+              end
+            end
           end
         elseif pages:get_selected_page() == page_to_index["Trig Locks"] then
           if program.get().selected_channel == 17 then
@@ -534,10 +710,11 @@ function channel_edit_page_ui_controller.enc(n, d)
       if d > 0 then
         pages:next_page()
         fn.dirty_screen(true)
-
+        save_confirm.cancel()
       else
         pages:previous_page()
         fn.dirty_screen(true)
+        save_confirm.cancel()
       end
     end
   end
@@ -547,16 +724,6 @@ end
 
 function channel_edit_page_ui_controller.key(n, z) 
   if n == 2 and z == 1 then
-    if not trig_lock_page:is_sub_page_enabled() then
-      channel_edit_page_ui_controller.refresh_device_selector()
-      channel_edit_page_ui_controller.refresh_param_list()
-    else
-      channel_edit_page_ui_controller.update_params()
-      channel_edit_page_ui_controller.refresh_trig_locks()
-    end
-    trig_lock_page:toggle_sub_page()
-  end
-  if n == 3 and z == 1 then
     local pressed_keys = grid_controller.get_pressed_keys()
     if #pressed_keys > 0 then
       for i, keys in ipairs(pressed_keys) do
@@ -564,7 +731,50 @@ function channel_edit_page_ui_controller.key(n, z)
         program.clear_trig_locks_for_step(step)
         dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or program.get_selected_channel().trig_lock_banks[dials:get_selected_index()])
         channel_edit_page_ui_controller.refresh_trig_locks()
+        tooltip:show("Trig locks for step "..step.." cleared")
       end
+    else
+      if pages:get_selected_page() == page_to_index["Trig Locks"] then
+        if not trig_lock_page:is_sub_page_enabled() then
+          channel_edit_page_ui_controller.refresh_device_selector()
+          channel_edit_page_ui_controller.refresh_param_list()
+        end
+        trig_lock_page:toggle_sub_page()
+      else
+        k2_held = true
+      end
+      save_confirm.cancel()
+    end
+  end
+  if n == 2 and z == 0 then
+    k2_held = false
+  end
+  if n == 3 and z == 1 then
+    local pressed_keys = grid_controller.get_pressed_keys()
+    if #pressed_keys > 0 then
+      for i, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
+        local channel = program.get_selected_channel()
+        if channel.number ~= 17 and step_trig_lock_banks and step_trig_lock_banks[step] then
+          local parameter = dials:get_selected_index()
+          step_trig_lock_banks[step][parameter] = nil
+          tooltip:show("Param trig lock "..parameter.." cleared")
+          local has_active_parameter = false
+          for i=1,10 do
+            if step_trig_lock_banks[step][i] ~= nil then
+              has_active_parameter = true
+            end
+          end
+          if not has_active_parameter then
+            step_trig_lock_banks[step] = nil
+          end
+        end
+        dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or program.get_selected_channel().trig_lock_banks[dials:get_selected_index()])
+        channel_edit_page_ui_controller.refresh_trig_locks()
+      end
+    else
+      save_confirm.confirm()
     end
   end
 end
@@ -585,11 +795,13 @@ end
 
 function channel_edit_page_ui_controller.refresh_device_selector()
   local channel = program.get_selected_channel()
+  if channel.number == 17 then
+    return
+  end
+  local device = device_map.get_device(program.get().devices[channel.number].device_map)
+  local device_params = device_map.get_params(program.get().devices[channel.number].device_map)
 
-  local device = device_map.get_device(channel.device_map)
-  local params = device_map.get_params(channel.device_map)
-
-  param_select_vertical_scroll_selector:set_items(params)
+  param_select_vertical_scroll_selector:set_items(device_params)
   param_select_vertical_scroll_selector:set_meta_item(device)
 
 end
@@ -597,13 +809,11 @@ end
 function channel_edit_page_ui_controller.refresh_romans() 
 
   local channel = program.get_selected_channel()
+  local scale = quantizer_vertical_scroll_selector:get_selected_item()
 
-  if channel.default_scale == 0 then
-    return
-  end
+  if (scale) then
 
-  if (program.get_scale(channel.default_scale)) then
-    local number = program.get_scale(channel.default_scale).number
+    local number = scale.number
     program.get_selected_sequencer_pattern().active = true
     romans_vertical_scroll_selector:set_items(quantiser.get_scales()[number].romans)
 
@@ -628,6 +838,7 @@ function channel_edit_page_ui_controller.refresh_quantiser()
     quantizer_vertical_scroll_selector:set_selected_item(number)
     notes_vertical_scroll_selector:set_selected_item(root_note + 1)
     romans_vertical_scroll_selector:set_selected_item(chord)
+    channel_edit_page_ui_controller.refresh_romans() 
     return
   end
 
@@ -638,62 +849,82 @@ function channel_edit_page_ui_controller.refresh_quantiser()
     quantizer_vertical_scroll_selector:set_selected_item(number)
     notes_vertical_scroll_selector:set_selected_item(root_note + 1)
     romans_vertical_scroll_selector:set_selected_item(chord)
-
+    channel_edit_page_ui_controller.refresh_romans() 
     fn.dirty_screen(true)
   end
 end
 
+function channel_edit_page_ui_controller.refresh_trig_lock_values()
+  local channel = program.get_selected_channel()
+  for i=1,10 do
+    local param_id = channel.trig_lock_params[i].param_id
+
+    local p = nil
+    if param_id ~= nil then
+      p = params:lookup_param(channel.trig_lock_params[i].param_id)
+    end
+    local p_value = nil
+    if p and p.name ~= "undefined" then
+      m_params[i]:set_value(p.value)
+    else
+      m_params[i]:set_value(channel.trig_lock_banks[i])
+    end
+  end
+end
 
 function channel_edit_page_ui_controller.refresh_trig_locks()
   local channel = program.get_selected_channel()
   local pressed_keys = grid_controller.get_pressed_keys()
-
+  channel_edit_page_ui_controller.refresh_trig_lock_values()
   for i=1,10 do
-    params[i]:set_value(channel.trig_lock_banks[i])
     if channel.trig_lock_params[i].id ~= nil then
-      params[i]:set_name(channel.trig_lock_params[i].name)
-      params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
-      params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
+      m_params[i]:set_name(channel.trig_lock_params[i].name)
+      m_params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
+      m_params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
 
       local step_trig_lock = program.get_step_param_trig_lock(program.get_selected_channel(), program.get_selected_channel().current_step, i)
 
       if #pressed_keys > 0 then
         step_trig_lock = program.get_step_param_trig_lock(program.get_selected_channel(), fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2]), i)
-        params[i]:set_value(step_trig_lock or channel.trig_lock_banks[i])
+        m_params[i]:set_value(step_trig_lock or channel.trig_lock_banks[i])
       else
         
 
         if (step_trig_lock and clock_controller.is_playing()) then
-          params[i]:set_value(step_trig_lock)
-        else
-          params[i]:set_value(channel.trig_lock_banks[i])
+          m_params[i]:set_value(step_trig_lock)
         end
       end
 
     else
-      params[i]:set_name("")
-      params[i]:set_top_label("X")
-      params[i]:set_bottom_label("")
+      m_params[i]:set_name("")
+      m_params[i]:set_top_label("X")
+      m_params[i]:set_bottom_label("")
     end
   end
   
 end
 
 function channel_edit_page_ui_controller.refresh_param_list()
-
+  local channel = program.get_selected_channel()
   param_select_vertical_scroll_selector:set_items(device_map.get_available_params_for_channel(program.get().selected_channel, dials:get_selected_index()))
-
 end
 
 function channel_edit_page_ui_controller.refresh_channel_config()
   local channel = program.get_selected_channel()
 
+  if channel.number == 17 then
+    return
+  end
+
   device_map_vertical_scroll_selector:set_items(device_map.get_available_devices_for_channel(program.get().selected_channel))
-  midi_channel_vertical_scroll_selector:set_selected_item(channel.midi_channel)
-  midi_device_vertical_scroll_selector:set_selected_item(channel.midi_device)
-  device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), channel.device_map))
+  midi_channel_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_channel)
+  midi_device_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_device)
+  device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), program.get().devices[channel.number].device_map))
   param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
 
+  device_map_vertical_scroll_selector:select()
+  midi_channel_vertical_scroll_selector:deselect()
+  midi_device_vertical_scroll_selector:deselect()
 end
 
 function channel_edit_page_ui_controller.throttled_refresh_channel_config()
@@ -714,8 +945,6 @@ function channel_edit_page_ui_controller.throttled_refresh_channel_config()
     refresh_timer_id = nil
   end)
 end
-
-
 
 function channel_edit_page_ui_controller.refresh()
   channel_edit_page_ui_controller.refresh_device_selector()

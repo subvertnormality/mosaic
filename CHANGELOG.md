@@ -1,9 +1,23 @@
+# 0.3
+
+_Breaking update. Please backup and remove your .pset and .ptn data files from previous versions._
+
+* Destructive device changes now require confirmation before they are applied
+* Channel devices are now persistent across all sequencer patterns
+* Custom device config files are now stored in data and are not overwritten on script update
+* Midi device init patches can now be configured and stored in the params menu
+* Midi device trig params sync up with their respective norn param values
+* Scale slots can now be saved across all sequencer patterns by holding K2 when selecting
+* Sinfonion sync now corrects for the "feature" in the Sinfonion where the minor scale's firth degree has a flattened note 
+* EX Multi Sample and Matrix Mixer device templates added
+* Param lock clearing and management has been improved
+* Various bug fixes
+
 # 0.2.5
 
 * Added random velocity trig lock
 * Dual and long press logic has been improved, making the UX more reliable
 * Global transposition added to global scale page
-* Added global scale page to manual
 
 # 0.2.4
 

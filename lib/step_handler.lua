@@ -36,7 +36,7 @@ end
 
 function step_handler.process_params(c, step)
   local channel = program.get_channel(c)
-  local device = device_map.get_device(channel.device_map)
+  local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
   for i=1,10 do
 
@@ -52,14 +52,29 @@ function step_handler.process_params(c, step)
 
     if channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].cc_msb then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-      local midi_channel = channel.midi_channel
+      local midi_channel = program.get().devices[channel.number].midi_channel
+
+      local param_id = channel.trig_lock_params[i].param_id
+      local p_value = nil
+      local p = nil
+      if param_id ~= nil then
+        p = params:lookup_param(channel.trig_lock_params[i].param_id)
+        
+        if p.name ~= "undefined" then
+          p_value = p.value
+        end
+      end
+
+      
       if channel.trig_lock_params[i].channel then
         midi_channel = channel.trig_lock_params[i].channel
       end
       if step_trig_lock then
-        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, step_trig_lock, midi_channel, channel.midi_device)
+        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, step_trig_lock, midi_channel, program.get().devices[channel.number].midi_device)
+      elseif p_value then
+        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, p_value, midi_channel, program.get().devices[channel.number].midi_device)
       else
-        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, channel.trig_lock_banks[i], midi_channel, channel.midi_device)
+        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, channel.trig_lock_banks[i], midi_channel, program.get().devices[channel.number].midi_device)
       end
     elseif channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id == "nb_slew" then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
@@ -172,8 +187,8 @@ function step_handler.handle(c, current_step)
   local note_value = channel.working_pattern.note_values[current_step]
   local velocity_value = channel.working_pattern.velocity_values[current_step]
   local length_value = channel.working_pattern.lengths[current_step]
-  local midi_channel = channel.midi_channel
-  local midi_device = channel.midi_device
+  local midi_channel = program.get().devices[channel.number].midi_channel
+  local midi_device = program.get().devices[channel.number].midi_device
   local octave_mod = channel.octave
 
   if program.get_step_octave_trig_lock(channel, current_step) then
@@ -213,7 +228,7 @@ function step_handler.handle(c, current_step)
       note = fixed_note
     end
 
-    local device = device_map.get_device(channel.device_map)
+    local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
     if not channel.mute then
       if not device.player then
@@ -279,11 +294,22 @@ function step_handler.sinfonian_sync(step)
 
   local scale_container = program.get_scale(sinfonion_scale_number)
   local transpose = step_handler.calculate_step_transpose(step)
+  local degree = quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord]
+  local root = scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod
+  local sinf_mode = quantiser.get_scales()[scale_container.number].sinf_mode
+
+
+  -- This is a hack to get around the "feature" of the sinfonion where the fifth degree of the minor key has a flattened note
+  if sinf_mode == 4 and degree == 7 then
+    root = root + 3
+    degree = 4
+    sinf_mode = 3
+  end
 
   if scale_container and scale_container.root_note then 
-    sinfonion.set_root_note(scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod)
-    sinfonion.set_degree_nr(quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord])
-    sinfonion.set_mode_nr(quantiser.get_scales()[scale_container.number].sinf_mode)
+    sinfonion.set_root_note(root)
+    sinfonion.set_degree_nr(degree)
+    sinfonion.set_mode_nr(sinf_mode)
     sinfonion.set_transposition(transpose)
 
     -- Could do something with these later

@@ -38,6 +38,3 @@ luac.out
 *.i*86
 *.x86_64
 *.hex
-
-lib/user_config/custom_device_map.lua
-lib/user_config/device_config.lua
