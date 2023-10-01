@@ -12,6 +12,7 @@
     + [Scale](#scale)
     + [Device](#device)
     + [Params](#params)
+    + [Trig Locks](#trig-locks)
   * [Pages](#pages)
     + [Menu](#menu)
       - [Sequencer start and stop](#sequencer-start-and-stop)
