@@ -3,7 +3,7 @@
 -- generative sequencer.
 --
 -- llllllll.co/t/mosaic-alpha-v0-3
--- manual: t.ly/AuiVc
+-- manual: t.ly/h-Wsw
 
 local create_default_config = include("mosaic/lib/user_config/create_default_config")
 

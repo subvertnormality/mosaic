@@ -1,5 +1,3 @@
-# Mosaic
-
 *Mosaic* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodies with finesse. Dive into a profound and singular tapestry of sketching and composition.
 
 - [Mosaic](#mosaic)
