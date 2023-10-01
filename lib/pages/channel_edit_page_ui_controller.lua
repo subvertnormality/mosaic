@@ -809,13 +809,11 @@ end
 function channel_edit_page_ui_controller.refresh_romans() 
 
   local channel = program.get_selected_channel()
+  local scale = quantizer_vertical_scroll_selector:get_selected_item()
 
-  if channel.default_scale == 0 then
-    return
-  end
+  if (scale) then
 
-  if (program.get_scale(channel.default_scale)) then
-    local number = program.get_scale(channel.default_scale).number
+    local number = scale.number
     program.get_selected_sequencer_pattern().active = true
     romans_vertical_scroll_selector:set_items(quantiser.get_scales()[number].romans)
 
@@ -840,6 +838,7 @@ function channel_edit_page_ui_controller.refresh_quantiser()
     quantizer_vertical_scroll_selector:set_selected_item(number)
     notes_vertical_scroll_selector:set_selected_item(root_note + 1)
     romans_vertical_scroll_selector:set_selected_item(chord)
+    channel_edit_page_ui_controller.refresh_romans() 
     return
   end
 
@@ -850,7 +849,7 @@ function channel_edit_page_ui_controller.refresh_quantiser()
     quantizer_vertical_scroll_selector:set_selected_item(number)
     notes_vertical_scroll_selector:set_selected_item(root_note + 1)
     romans_vertical_scroll_selector:set_selected_item(chord)
-
+    channel_edit_page_ui_controller.refresh_romans() 
     fn.dirty_screen(true)
   end
 end
