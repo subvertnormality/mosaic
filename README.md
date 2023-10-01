@@ -116,9 +116,11 @@ Most devices in _Mosaic_ feature a set of params that alters either the quality 
 
 ### Trig Locks
 
-Values of the params and many functions on the grid can be locked to steps using the channel and global scale pages. The locked value is applied for the duration of the step. Trig params, the current scale, and octave setting can be locked to a step on the channel page. Global scale and transpose settings can be locked to a step using the global scale page. 
+Param values and many grid functions can be locked to steps on the channel and global scale pages. A locked value is then applied for the duration of the step. Trig params, scales, and octave settings can be locked to a step on the channel page. Global scale and transpose settings can be locked to a step using the global scale page. 
 
-To set a trig lock, hold down the desired step on the sequencer and modify the value to be locked. To clear a param trig lock, select the param on the norns screen, hold the step, then press K3. To clear a grid trig lock, hold the desired step and press the currently locked value. To clear all trig locks from a step, hold the step and press K2.
+To set a trig lock, hold down the desired step on the sequencer and modify the value to be locked. 
+
+To clear a param trig lock, select the param on the norns screen, hold the step, then press K3. To clear a grid trig lock, hold the desired step and press the currently locked value. To clear all trig locks from a step, hold the step and press K2.
 
 ## Pages
 
