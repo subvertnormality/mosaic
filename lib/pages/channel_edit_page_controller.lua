@@ -220,7 +220,7 @@ function channel_edit_page_controller.register_press_handlers()
         local step = fn.calc_grid_count(x, y)
         local channel = program.get_selected_channel()
         local octave_value = channel_octave_fader:get_value()
-        if octave_value == channel.octave + 3 then
+        if program.get_step_octave_trig_lock(channel, step) and octave_value == program.get_step_octave_trig_lock(channel, step) + 3 then
           program.add_step_octave_trig_lock(step, nil)
         else     
           program.add_step_octave_trig_lock(step, octave_value - 3)
@@ -232,28 +232,22 @@ function channel_edit_page_controller.register_press_handlers()
         local step = fn.calc_grid_count(x, y)
         local channel = program.get_selected_channel()
         local scale_value = channel_scale_fader:get_value()
-        program.add_step_scale_trig_lock(step, scale_value)
+        if scale_value == program.get_step_scale_trig_lock(channel, step) then
+          program.add_step_scale_trig_lock(step, nil)
+        else
+          program.add_step_scale_trig_lock(step, scale_value)
+        end
         channel_edit_page_controller.refresh_faders()
       end
       if channel.number == 17 and transpose_fader:is_this(x2, y2) then
         transpose_fader:press(x2, y2)
         local step = fn.calc_grid_count(x, y)
         local transpose_value = transpose_fader:get_value() - 8
-        if transpose_value == 0 then
+        if transpose_value == program.get_step_transpose_trig_lock(step) then
           program.add_step_transpose_trig_lock(step, nil)
         else
           program.add_step_transpose_trig_lock(step, transpose_value)
         end
-        channel_edit_page_controller.refresh_faders()
-      end
-    end
-  )
-  press_handler:register_long(
-    "channel_edit_page",
-    function(x, y)
-      if channel_edit_page_sequencer:is_this(x, y) then
-        local step = fn.calc_grid_count(x, y)
-        program.add_step_scale_trig_lock(step, nil)
         channel_edit_page_controller.refresh_faders()
       end
     end

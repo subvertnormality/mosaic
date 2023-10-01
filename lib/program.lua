@@ -404,11 +404,13 @@ end
 function program.clear_trig_locks_for_step(step) 
   local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
   local channel = program.get_selected_channel()
+  program.add_step_scale_trig_lock(step, nil)
   if channel.number ~= 17 then
     if (step_trig_lock_banks and step_trig_lock_banks[step]) then
       step_trig_lock_banks[step] = nil
     end
-    program.add_step_scale_trig_lock(step, nil)
+    
+    program.add_step_octave_trig_lock(step, nil)
   elseif channel.number == 17 then
     program.add_step_transpose_trig_lock(step, nil)
   end

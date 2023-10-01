@@ -724,16 +724,27 @@ end
 
 function channel_edit_page_ui_controller.key(n, z) 
   if n == 2 and z == 1 then
-    if pages:get_selected_page() == page_to_index["Trig Locks"] then
-      if not trig_lock_page:is_sub_page_enabled() then
-        channel_edit_page_ui_controller.refresh_device_selector()
-        channel_edit_page_ui_controller.refresh_param_list()
+    local pressed_keys = grid_controller.get_pressed_keys()
+    if #pressed_keys > 0 then
+      for i, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.clear_trig_locks_for_step(step)
+        dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or program.get_selected_channel().trig_lock_banks[dials:get_selected_index()])
+        channel_edit_page_ui_controller.refresh_trig_locks()
+        tooltip:show("Trig locks for step "..step.." cleared")
       end
-      trig_lock_page:toggle_sub_page()
     else
-      k2_held = true
+      if pages:get_selected_page() == page_to_index["Trig Locks"] then
+        if not trig_lock_page:is_sub_page_enabled() then
+          channel_edit_page_ui_controller.refresh_device_selector()
+          channel_edit_page_ui_controller.refresh_param_list()
+        end
+        trig_lock_page:toggle_sub_page()
+      else
+        k2_held = true
+      end
+      save_confirm.cancel()
     end
-    save_confirm.cancel()
   end
   if n == 2 and z == 0 then
     k2_held = false
@@ -743,7 +754,22 @@ function channel_edit_page_ui_controller.key(n, z)
     if #pressed_keys > 0 then
       for i, keys in ipairs(pressed_keys) do
         local step = fn.calc_grid_count(keys[1], keys[2])
-        program.clear_trig_locks_for_step(step)
+        local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
+        local channel = program.get_selected_channel()
+        if channel.number ~= 17 and step_trig_lock_banks and step_trig_lock_banks[step] then
+          local parameter = dials:get_selected_index()
+          step_trig_lock_banks[step][parameter] = nil
+          tooltip:show("Param trig lock "..parameter.." cleared")
+          local has_active_parameter = false
+          for i=1,10 do
+            if step_trig_lock_banks[step][i] ~= nil then
+              has_active_parameter = true
+            end
+          end
+          if not has_active_parameter then
+            step_trig_lock_banks[step] = nil
+          end
+        end
         dials:get_selected_item():set_value(program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or program.get_selected_channel().trig_lock_banks[dials:get_selected_index()])
         channel_edit_page_ui_controller.refresh_trig_locks()
       end

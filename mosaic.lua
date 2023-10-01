@@ -1,8 +1,8 @@
--- mosaic v0.2.4
+-- mosaic v0.3
 -- grid-centric, intentioned 
 -- generative sequencer.
 --
--- more: llllllll.co/t/mosaic
+-- llllllll.co/t/mosaic-alpha-v0-3
 -- manual: t.ly/AuiVc
 
 local create_default_config = include("mosaic/lib/user_config/create_default_config")

@@ -10,6 +10,8 @@ _Breaking update. Please backup and remove your .pset and .ptn data files from p
 * Scale slots can now be saved across all sequencer patterns by holding K2 when selecting
 * Sinfonion sync now corrects for the "feature" in the Sinfonion where the minor scale's firth degree has a flattened note 
 * EX Multi Sample and Matrix Mixer device templates added
+* Param lock clearing and management has been improved
+* Various bug fixes
 
 # 0.2.5
 
