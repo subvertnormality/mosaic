@@ -35,6 +35,7 @@ end
 
 
 function step_handler.process_params(c, step)
+
   local channel = program.get_channel(c)
   local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
@@ -121,16 +122,23 @@ function step_handler.calculate_step_scale_number(c, current_step)
 
   local channel = program.get_channel(c)
   local channel_step_scale_number = program.get_step_scale_trig_lock(channel, current_step)
-  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), program.get().current_step)
+
+  if c == 17 then
+    channel_step_scale_number = nil
+    persistent_channel_step_scale_numbers[17] = nil
+  end
+
+  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), program.get_current_step_for_channel(17))
   local channel_default_scale = channel.default_scale
   local global_default_scale = program.get().default_scale
 
   if current_step == 1 then
     persistent_channel_step_scale_numbers[c] = nil
   end
-
-  if program.get().current_step == 1 then
+  
+  if program.get_current_step_for_channel(17) == 1 then
     persistent_global_step_scale_number = nil
+    
   end
 
   -- Scale Precedence : channel_step_scale > global_step_scale > channel_default_scale > global_default_scale
@@ -246,7 +254,8 @@ end
 
 function step_handler.process_global_step_scale_trig_lock(current_step)
 
-  program.get_channel(17).step_scale_number = persistent_global_step_scale_number or program.get_step_scale_trig_lock(program.get_channel(17), current_step)
+  program.get_channel(17).step_scale_number = step_handler.calculate_step_scale_number(17, current_step)
+  
 end
 
 
@@ -365,7 +374,7 @@ function step_handler.reset()
 end
 
 function step_handler.reset_sequencer_pattern() 
-  for i = 1, 16 do
+  for i = 1, 17 do
     program.set_current_step_for_channel(i, 1)
   end
 end

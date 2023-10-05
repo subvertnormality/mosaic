@@ -296,6 +296,7 @@ function channel_edit_page_controller.register_press_handlers()
         else
           channel_scale_fader:set_value(0)
         end
+        channel_edit_page_ui_controller.refresh()
       end
     end
   )

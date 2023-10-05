@@ -84,11 +84,10 @@ end
 
 local clock_mods_page = Page:new("Clocks and Swing", function ()
   if program.get().selected_channel ~= 17 then
-    clock_mod_list_selector:draw()
     clock_swing_value_selector:draw()
-  else
-    print_quant_message_to_screen()
   end
+
+  clock_mod_list_selector:draw()
 end)
 
 local channel_edit_page = Page:new("Config", function ()
@@ -184,7 +183,7 @@ function channel_edit_page_ui_controller.init()
   clock_mod_list_selector:select()
   clock_swing_value_selector:set_value(0)
 
-  channel_edit_page_ui_controller.refresh()
+  channel_edit_page_ui_controller.refresh_clock_mods()
 end
 
 function channel_edit_page_ui_controller.register_ui_draw_handlers() 
@@ -351,9 +350,7 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           channel_edit_page_ui_controller.update_scale()
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
-          if program.get().selected_channel == 17 then
-            return
-          end
+
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:decrement()
             save_confirm.set_save(function() 
@@ -362,6 +359,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             save_confirm.set_cancel(function()
               channel_edit_page_ui_controller.refresh_clock_mods()
             end)
+          end
+          if program.get().selected_channel == 17 then
+            return
           end
           if clock_swing_value_selector:is_selected() then
             clock_swing_value_selector:increment()
@@ -472,9 +472,6 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           channel_edit_page_ui_controller.update_scale()
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
-          if program.get().selected_channel == 17 then
-            return
-          end
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:increment()
             save_confirm.set_save(function() 
@@ -483,6 +480,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             save_confirm.set_cancel(function()
               channel_edit_page_ui_controller.refresh_clock_mods()
             end)
+          end
+          if program.get().selected_channel == 17 then
+            return
           end
           if clock_swing_value_selector:is_selected() then
             clock_swing_value_selector:decrement()
@@ -782,7 +782,15 @@ end
 function channel_edit_page_ui_controller.refresh_clock_mods()
   local channel = program.get_selected_channel()
   local clock_mods = channel.clock_mods
-  local i = fn.find_index_in_table_by_value(clock_controller.get_clock_divisions(), channel.clock_mods)
+
+  local divisions = fn.filter_by_type(clock_controller.get_clock_divisions(), clock_mods.type)
+
+  local i = fn.find_index_in_table_by_value(divisions, clock_mods.value)
+
+  if clock_mods.type == "clock_division" then
+    i = i + 12
+  end
+
   clock_mod_list_selector:set_selected_value(i)
 
 end

@@ -220,9 +220,9 @@ function fn.find_index_in_table_by_id(table, object)
   return nil
 end
 
-function fn.find_index_in_table_by_value(table, object)
+function fn.find_index_in_table_by_value(table, value)
   for i, o in ipairs(table) do
-    if o.value == object.value then
+    if o.value == value then
       return i
     end
   end
@@ -265,6 +265,16 @@ function fn.remove_table_from_table(t, object)
           return
       end
   end
+end
+
+function fn.filter_by_type(input_table, filter_type)
+  local filtered = {}
+  for _, item in ipairs(input_table) do
+      if item.type == filter_type then
+          table.insert(filtered, item)
+      end
+  end
+  return filtered
 end
 
 function fn.scale(num, old_min, old_max, new_min, new_max)

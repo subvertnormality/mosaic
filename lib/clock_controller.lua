@@ -106,8 +106,6 @@ local function channel_go(channel_number, divisor, on_step)
       div = 4 / clock_mod.value
     end
 
-
-
     local beat = 1/div
     local processed_swing = program.get_channel(channel_number).swing
 
@@ -170,18 +168,14 @@ local function master_func()
     step_handler.process_song_sequencer_patterns(program.get().current_step)
   end
 
-  step_handler.process_global_step_scale_trig_lock(program.get().current_step)
-
   if sinfonion ~= true then
     step_handler.sinfonian_sync(program.get().current_step)
   end
 
   program.get().current_step = program.get().current_step + 1
-  program.set_current_step_for_channel(17, program.get().current_step)
 
   if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
     program.get().current_step = 1
-    program.set_current_step_for_channel(17, 1)
     first_run = false
   end
   fn.dirty_grid(true)
@@ -198,7 +192,7 @@ function clock_controller:start()
   midi_transport = clock.run(start_midi_transport, 4)
   midi_clock = clock.run(go, 24, function () midi_controller.clock_send() end)
   master_clock = clock.run(go, 4, master_func)
-  for i = 1, 16 do
+  for i = 1, 17 do
     local channel = program.get_channel(i)
     clock_controller["channel_"..i.."_clock"] = clock.run(channel_go, i, 4, function () 
 
@@ -219,24 +213,29 @@ function clock_controller:start()
 
       local next_trig_value = program.get_channel(i).working_pattern.trig_values[next_step]
 
-      step_handler.handle(i, current_step)
-
-
-      if next_trig_value == 1 then
-        time_store = clock.get_beats()
-        trigless_lock_active[i] = false
-        clock.run(delay_param_set, program.get_channel(i), function ()
-          step_handler.process_params(i, next_step)
-        end)
-        
-      elseif params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and program.step_has_param_trig_lock(program.get_channel(i), next_step) then
-        time_store = clock.get_beats()
-        trigless_lock_active[i] = true
-        clock.run(delay_param_set, program.get_channel(i), function ()
-          step_handler.process_params(i, next_step)
-        end)
+      if i == 17 then
+        step_handler.process_global_step_scale_trig_lock(current_step)
       end
-    
+      if i ~= 17 then
+        step_handler.handle(i, current_step)
+      
+
+
+        if next_trig_value == 1 then
+          time_store = clock.get_beats()
+          trigless_lock_active[i] = false
+          clock.run(delay_param_set, program.get_channel(i), function ()
+            step_handler.process_params(i, next_step)
+          end)
+          
+        elseif params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and program.step_has_param_trig_lock(program.get_channel(i), next_step) then
+          time_store = clock.get_beats()
+          trigless_lock_active[i] = true
+          clock.run(delay_param_set, program.get_channel(i), function ()
+            step_handler.process_params(i, next_step)
+          end)
+        end
+      end
       program.set_current_step_for_channel(i, current_step + 1)
     
       if program.get_current_step_for_channel(i) > end_trig then
@@ -263,7 +262,7 @@ function clock_controller:stop()
   if (midi_clock) then
     clock.cancel(midi_clock)
   end
-  for i = 1, 16 do
+  for i = 1, 17 do
     if clock_controller["channel_"..i.."_clock"] then
       clock.cancel(clock_controller["channel_"..i.."_clock"])
     end
@@ -284,7 +283,7 @@ end
 function clock_controller.reset() 
   for x, pattern in ipairs(program.get().sequencer_patterns) do
 
-    for i = 1, 16 do
+    for i = 1, 17 do
       program.set_current_step_for_channel(i, 1)
     end
 
