@@ -129,7 +129,6 @@ function program.init()
     root_note = root_note,
     chord = 1,
     default_scale = 0,
-    chord = 1,
     current_step = 1,
     current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     sequencer_patterns = {},

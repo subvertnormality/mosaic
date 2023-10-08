@@ -10,8 +10,6 @@ local first_run = true
 local master_clock
 local midi_transport
 
-local time_store = 0
-
 local master_clock
 local midi_transport
 local trigless_lock_active = {}
@@ -96,7 +94,35 @@ end
 local function channel_go(channel_number, divisor, on_step)
   local div = divisor
   local swing_on = 0
+  local first_run = true
   while true do
+
+    local start_trig = fn.calc_grid_count(program.get_channel(channel_number).start_trig[1], program.get_channel(channel_number).start_trig[2])
+    local end_trig = fn.calc_grid_count(program.get_channel(channel_number).end_trig[1], program.get_channel(channel_number).end_trig[2])
+    local current_step = program.get_current_step_for_channel(channel_number)
+
+    if current_step < start_trig then
+      program.set_current_step_for_channel(channel_number, start_trig)
+      current_step = start_trig
+    end
+
+    if first_run ~= true then
+      program.set_current_step_for_channel(channel_number, current_step + 1)
+      current_step = current_step + 1
+    end
+  
+
+    if program.get_current_step_for_channel(channel_number) >= end_trig then
+
+      program.set_current_step_for_channel(channel_number, start_trig)
+      current_step = start_trig
+    end
+    fn.dirty_grid(true)
+    fn.dirty_screen(true)
+
+
+    on_step(current_step, start_trig, end_trig)
+
 
     local clock_mod = program.get_channel(channel_number).clock_mods
 
@@ -106,7 +132,7 @@ local function channel_go(channel_number, divisor, on_step)
       div = 4 / clock_mod.value
     end
 
-    local beat = 1/div
+    local beat = clock.get_beat_sec()/div
     local processed_swing = program.get_channel(channel_number).swing
 
     if processed_swing < 0 then
@@ -114,13 +140,21 @@ local function channel_go(channel_number, divisor, on_step)
     end
 
     if processed_swing == 0 then
-      clock.sync(beat)
+      if channel_number == 1 then
+        print("delaying "..beat)
+      end
+      clock.sleep(beat)
     else
       
       local s = map_log(processed_swing)
-      clock.sync(beat, (beat/s) * swing_on)
+      clock.sleep(beat + ((beat/s) * swing_on))
     end
-    on_step()
+
+    -- if first_run == true then
+    --   program.set_current_step_for_channel(channel_number, current_step + 1)
+    -- end
+
+    first_run = false
     swing_on = swing_on ~ 1
   end
 end
@@ -128,13 +162,13 @@ end
 local function go(divisor, on_step)
   local div = divisor
   while true do
-    clock.sync(1/div)
     on_step()
+    clock.sleep(clock.get_beat_sec()/div)
   end
 end
 
 local function start_midi_transport(divisor)
-  clock.sync(1/divisor)
+  clock.sleep(clock.get_beat_sec()/divisor)
   midi_controller:start()
 end
 
@@ -154,10 +188,10 @@ local function delay_param_set(channel, func)
   end
 
   local d = divisor + 1
-  local pause = (1/d)
-  clock.sync(pause)
-  pause = 1/(d*6)
-  clock.sync(pause)
+  local pause = (clock.get_beat_sec()/d)
+  clock.sleep(pause)
+  pause = clock.get_beat_sec()/(d*6)
+  clock.sleep(pause)
   func()
 end
 
@@ -172,6 +206,8 @@ local function master_func()
     step_handler.sinfonian_sync(program.get().current_step)
   end
 
+  print(program.get().current_step)
+
   program.get().current_step = program.get().current_step + 1
 
   if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
@@ -179,30 +215,30 @@ local function master_func()
     first_run = false
   end
   fn.dirty_grid(true)
-  
+
 end
 
 
-function clock_controller:start() 
+local function do_start()
+
+  clock_controller.set_playing()
 
   for i = 1, 16 do
     step_handler.process_params(i, 1)
   end
 
-  midi_transport = clock.run(start_midi_transport, 4)
+  start_midi_transport(4)
+  
   midi_clock = clock.run(go, 24, function () midi_controller.clock_send() end)
   master_clock = clock.run(go, 4, master_func)
   for i = 1, 17 do
     local channel = program.get_channel(i)
-    clock_controller["channel_"..i.."_clock"] = clock.run(channel_go, i, 4, function () 
+    clock_controller["channel_"..i.."_clock"] = clock.run(channel_go, i, 4, function (current_step, start_trig, end_trig) 
 
-      local start_trig = fn.calc_grid_count(program.get_channel(i).start_trig[1], program.get_channel(i).start_trig[2])
-      local end_trig = fn.calc_grid_count(program.get_channel(i).end_trig[1], program.get_channel(i).end_trig[2])
-      local current_step = program.get_current_step_for_channel(i)
+      if i == 1 then
+        print("start trig "..start_trig)
 
-      if program.get_current_step_for_channel(i) < start_trig then
-        program.set_current_step_for_channel(i, start_trig)
-        current_step = start_trig - 1
+        print("current step "..current_step)
       end
 
       local next_step = program.get_current_step_for_channel(i) + 1
@@ -213,41 +249,39 @@ function clock_controller:start()
 
       local next_trig_value = program.get_channel(i).working_pattern.trig_values[next_step]
 
+      
       if i == 17 then
         step_handler.process_global_step_scale_trig_lock(current_step)
       end
       if i ~= 17 then
+        if i == 1 then
+          print("handling "..current_step)
+        end
         step_handler.handle(i, current_step)
       
-
-
         if next_trig_value == 1 then
-          time_store = clock.get_beats()
           trigless_lock_active[i] = false
           clock.run(delay_param_set, program.get_channel(i), function ()
             step_handler.process_params(i, next_step)
           end)
           
         elseif params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and program.step_has_param_trig_lock(program.get_channel(i), next_step) then
-          time_store = clock.get_beats()
           trigless_lock_active[i] = true
           clock.run(delay_param_set, program.get_channel(i), function ()
             step_handler.process_params(i, next_step)
           end)
         end
       end
-      program.set_current_step_for_channel(i, current_step + 1)
-    
-      if program.get_current_step_for_channel(i) > end_trig then
-        program.set_current_step_for_channel(i, start_trig)
-      end
-      fn.dirty_grid(true)
-      fn.dirty_screen(true)
+
     end)
   end
 
+end
+
+function clock_controller:start() 
+
+  clock.run(do_start)
   
-  playing = true
 end
 
 function clock_controller:stop()
@@ -279,6 +313,9 @@ function clock_controller.is_playing()
   return playing
 end
 
+function clock_controller.set_playing()
+  playing = true
+end
 
 function clock_controller.reset() 
   for x, pattern in ipairs(program.get().sequencer_patterns) do
