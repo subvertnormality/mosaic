@@ -85,7 +85,6 @@ function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
 end
 
 function midi_controller.start()
-  clock.sync(0.01)
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
       midi_devices[id]:start()

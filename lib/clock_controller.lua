@@ -97,6 +97,16 @@ local function channel_go(channel_number, divisor, on_step)
     local end_trig = fn.calc_grid_count(program.get_channel(channel_number).end_trig[1], program.get_channel(channel_number).end_trig[2])
     local current_step = program.get_current_step_for_channel(channel_number)
 
+    local clock_mod = program.get_channel(channel_number).clock_mods
+
+    if clock_mod.type == "clock_multiplication" then
+      div = 4 * clock_mod.value
+    elseif clock_mod.type == "clock_division" then
+      div = 4 / clock_mod.value
+    end
+
+    local midi_sync_pause = clock.get_beat_sec() / 25
+
     if current_step < start_trig then
       program.set_current_step_for_channel(channel_number, start_trig)
       current_step = start_trig
@@ -105,6 +115,8 @@ local function channel_go(channel_number, divisor, on_step)
     if first_run ~= true then
       program.set_current_step_for_channel(channel_number, current_step + 1)
       current_step = current_step + 1
+    else
+      clock.sleep(midi_sync_pause)
     end
   
     if program.get_current_step_for_channel(channel_number) > end_trig then
@@ -115,19 +127,9 @@ local function channel_go(channel_number, divisor, on_step)
     fn.dirty_grid(true)
     fn.dirty_screen(true)
 
-
     on_step(current_step, start_trig, end_trig)
 
-
-    local clock_mod = program.get_channel(channel_number).clock_mods
-
-    if clock_mod.type == "clock_multiplication" then
-      div = 4 * clock_mod.value
-    elseif clock_mod.type == "clock_division" then
-      div = 4 / clock_mod.value
-    end
-
-    local beat = clock.get_beat_sec()/div
+    local beat = 1/div
     local processed_swing = program.get_channel(channel_number).swing
 
     if processed_swing < 0 then
@@ -139,19 +141,13 @@ local function channel_go(channel_number, divisor, on_step)
     else
       if swing_on > 0 then
         local s = map_log(processed_swing)
-        print("beat")
-        print(beat)
-        print("swing")
-        print(s)
-        last_swing = ((beat/s) * swing_on)
-        print("last swing")
-        print(last_swing)
-        clock.sync(beat - last_swing)
+        clock.sync(beat, ((beat/s)*swing_on))
       else
-        clock.sync(beat + last_swing)
+        clock.sync(beat)
       end
     end
 
+    clock.sleep(midi_sync_pause)
 
     first_run = false
     swing_on = swing_on ~ 1
@@ -213,10 +209,10 @@ end
 
 local function do_start()
 
+
+
+  clock.sync(1)
   midi_controller.start()
-
-  clock.sync(0.1)
-
   master_clock = clock.run(go, 4, master_func)
 
   clock_controller.set_playing()
@@ -225,7 +221,6 @@ local function do_start()
     step_handler.process_params(i, 1)
   end
 
-  
   for i = 1, 17 do
     local channel = program.get_channel(i)
     clock_controller["channel_"..i.."_clock"] = clock.run(channel_go, i, 4, function (current_step, start_trig, end_trig) 
