@@ -8,11 +8,9 @@ local clock_controller = {}
 local playing = false
 local first_run = true
 local master_clock
-local midi_transport
-
-local master_clock
-local midi_transport
 local trigless_lock_active = {}
+
+local master_call_count = 0
 
 local clock_divisions = {
   {name = "x16", value = 16, type = "clock_multiplication"},
@@ -140,9 +138,6 @@ local function channel_go(channel_number, divisor, on_step)
     end
 
     if processed_swing == 0 then
-      if channel_number == 1 then
-        print("delaying "..beat)
-      end
       clock.sleep(beat)
     else
       
@@ -165,11 +160,6 @@ local function go(divisor, on_step)
     on_step()
     clock.sleep(clock.get_beat_sec()/div)
   end
-end
-
-local function start_midi_transport(divisor)
-  clock.sleep(clock.get_beat_sec()/divisor)
-  midi_controller:start()
 end
 
 
@@ -197,24 +187,26 @@ end
 
 local function master_func() 
 
-  step_handler.process_lengths()
-  if first_run ~= true then
-    step_handler.process_song_sequencer_patterns(program.get().current_step)
+  master_call_count = master_call_count + 1
+
+  if master_call_count % 6 == 0 then
+    step_handler.process_lengths()
+    if first_run ~= true then
+      step_handler.process_song_sequencer_patterns(program.get().current_step)
+    end
+
+    if sinfonion ~= true then
+      step_handler.sinfonian_sync(program.get().current_step)
+    end
+
+    program.get().current_step = program.get().current_step + 1
+
+    if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
+      program.get().current_step = 1
+      first_run = false
+    end
+    fn.dirty_grid(true)
   end
-
-  if sinfonion ~= true then
-    step_handler.sinfonian_sync(program.get().current_step)
-  end
-
-  print(program.get().current_step)
-
-  program.get().current_step = program.get().current_step + 1
-
-  if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
-    program.get().current_step = 1
-    first_run = false
-  end
-  fn.dirty_grid(true)
 
 end
 
@@ -227,19 +219,12 @@ local function do_start()
     step_handler.process_params(i, 1)
   end
 
-  start_midi_transport(4)
-  
-  midi_clock = clock.run(go, 24, function () midi_controller.clock_send() end)
   master_clock = clock.run(go, 4, master_func)
+  midi_controller.start()
+  
   for i = 1, 17 do
     local channel = program.get_channel(i)
     clock_controller["channel_"..i.."_clock"] = clock.run(channel_go, i, 4, function (current_step, start_trig, end_trig) 
-
-      if i == 1 then
-        print("start trig "..start_trig)
-
-        print("current step "..current_step)
-      end
 
       local next_step = program.get_current_step_for_channel(i) + 1
 
@@ -254,9 +239,7 @@ local function do_start()
         step_handler.process_global_step_scale_trig_lock(current_step)
       end
       if i ~= 17 then
-        if i == 1 then
-          print("handling "..current_step)
-        end
+
         step_handler.handle(i, current_step)
       
         if next_trig_value == 1 then
@@ -290,21 +273,17 @@ function clock_controller:stop()
   if (master_clock) then
     clock.cancel(master_clock)
   end
-  if (midi_transport) then
-    clock.cancel(midi_transport)
-  end
-  if (midi_clock) then
-    clock.cancel(midi_clock)
-  end
+
   for i = 1, 17 do
     if clock_controller["channel_"..i.."_clock"] then
       clock.cancel(clock_controller["channel_"..i.."_clock"])
     end
   end
+
   playing = false
   first_run = true
-  midi_controller:stop()
   nb:stop_all()
+  midi_controller:stop()
   clock_controller.reset() 
 
 end
