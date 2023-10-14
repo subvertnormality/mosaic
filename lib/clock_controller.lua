@@ -10,8 +10,6 @@ local first_run = true
 local master_clock
 local trigless_lock_active = {}
 
-local master_call_count = 0
-
 local clock_divisions = {
   {name = "x16", value = 16, type = "clock_multiplication"},
   {name = "x12", value = 12, type = "clock_multiplication"},
@@ -87,12 +85,12 @@ function map_log(x)
   return fn.round_to_decimal_places(y, 2)
 end
 
-
-
 local function channel_go(channel_number, divisor, on_step)
   local div = divisor
-  local swing_on = 0
+  local swing_on = 1
   local first_run = true
+  local last_swing = 0
+
   while true do
 
     local start_trig = fn.calc_grid_count(program.get_channel(channel_number).start_trig[1], program.get_channel(channel_number).start_trig[2])
@@ -109,8 +107,7 @@ local function channel_go(channel_number, divisor, on_step)
       current_step = current_step + 1
     end
   
-
-    if program.get_current_step_for_channel(channel_number) >= end_trig then
+    if program.get_current_step_for_channel(channel_number) > end_trig then
 
       program.set_current_step_for_channel(channel_number, start_trig)
       current_step = start_trig
@@ -138,16 +135,23 @@ local function channel_go(channel_number, divisor, on_step)
     end
 
     if processed_swing == 0 then
-      clock.sleep(beat)
+      clock.sync(beat)
     else
-      
-      local s = map_log(processed_swing)
-      clock.sleep(beat + ((beat/s) * swing_on))
+      if swing_on > 0 then
+        local s = map_log(processed_swing)
+        print("beat")
+        print(beat)
+        print("swing")
+        print(s)
+        last_swing = ((beat/s) * swing_on)
+        print("last swing")
+        print(last_swing)
+        clock.sync(beat - last_swing)
+      else
+        clock.sync(beat + last_swing)
+      end
     end
 
-    -- if first_run == true then
-    --   program.set_current_step_for_channel(channel_number, current_step + 1)
-    -- end
 
     first_run = false
     swing_on = swing_on ~ 1
@@ -158,7 +162,7 @@ local function go(divisor, on_step)
   local div = divisor
   while true do
     on_step()
-    clock.sleep(clock.get_beat_sec()/div)
+    clock.sync(clock.get_beat_sec()/div)
   end
 end
 
@@ -187,31 +191,33 @@ end
 
 local function master_func() 
 
-  master_call_count = master_call_count + 1
-
-  if master_call_count % 6 == 0 then
-    step_handler.process_lengths()
-    if first_run ~= true then
-      step_handler.process_song_sequencer_patterns(program.get().current_step)
-    end
-
-    if sinfonion ~= true then
-      step_handler.sinfonian_sync(program.get().current_step)
-    end
-
-    program.get().current_step = program.get().current_step + 1
-
-    if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
-      program.get().current_step = 1
-      first_run = false
-    end
-    fn.dirty_grid(true)
+  step_handler.process_lengths()
+  if first_run ~= true then
+    step_handler.process_song_sequencer_patterns(program.get().current_step)
   end
+
+  if sinfonion ~= true then
+    step_handler.sinfonian_sync(program.get().current_step)
+  end
+
+  program.get().current_step = program.get().current_step + 1
+
+  if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
+    program.get().current_step = 1
+    first_run = false
+  end
+  fn.dirty_grid(true)
 
 end
 
 
 local function do_start()
+
+  midi_controller.start()
+
+  clock.sync(0.1)
+
+  master_clock = clock.run(go, 4, master_func)
 
   clock_controller.set_playing()
 
@@ -219,8 +225,6 @@ local function do_start()
     step_handler.process_params(i, 1)
   end
 
-  master_clock = clock.run(go, 4, master_func)
-  midi_controller.start()
   
   for i = 1, 17 do
     local channel = program.get_channel(i)

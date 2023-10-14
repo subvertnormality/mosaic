@@ -252,6 +252,7 @@ end
 function channel_edit_page_ui_controller.update_clock_mods()
   local channel = program.get_selected_channel()
   local clock_mods = clock_mod_list_selector:get_selected()
+  print("updating clock mods")
 
   channel.clock_mods = clock_mods
 end
