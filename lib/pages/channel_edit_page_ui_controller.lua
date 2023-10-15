@@ -343,7 +343,9 @@ function channel_edit_page_ui_controller.enc(n, d)
     for i=1, math.abs(d) do
       if d > 0 then
         if pages:get_selected_page() == page_to_index["Quantizer"] then
-
+          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+            return
+          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_down()
             channel_edit_page_ui_controller.refresh_romans() 
@@ -466,6 +468,9 @@ function channel_edit_page_ui_controller.enc(n, d)
 
       else
         if pages:get_selected_page() == page_to_index["Quantizer"] then
+          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+            return
+          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_up()
             channel_edit_page_ui_controller.refresh_romans() 
@@ -593,6 +598,9 @@ function channel_edit_page_ui_controller.enc(n, d)
       if d > 0 then
 
         if pages:get_selected_page() == page_to_index["Quantizer"] then
+          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+            return
+          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:deselect()
             romans_vertical_scroll_selector:select()
@@ -651,6 +659,9 @@ function channel_edit_page_ui_controller.enc(n, d)
         end
       else
         if pages:get_selected_page() == page_to_index["Quantizer"] then
+          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+            return
+          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:deselect()
             notes_vertical_scroll_selector:select()
@@ -798,6 +809,11 @@ function channel_edit_page_ui_controller.refresh_clock_mods()
   end
 
   clock_mod_list_selector:set_selected_value(i)
+
+  if channel.number == 17 then
+    clock_mod_list_selector:select()
+    clock_swing_value_selector:deselect()
+  end
 
 end
 
