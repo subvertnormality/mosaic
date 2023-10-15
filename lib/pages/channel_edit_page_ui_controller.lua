@@ -247,6 +247,9 @@ function channel_edit_page_ui_controller.update_swing()
   local swing = clock_swing_value_selector:get_value()
 
   channel.swing = swing
+
+  clock_controller.set_channel_swing(channel.number, swing)
+
 end
 
 function channel_edit_page_ui_controller.update_clock_mods()
@@ -255,6 +258,8 @@ function channel_edit_page_ui_controller.update_clock_mods()
   print("updating clock mods")
 
   channel.clock_mods = clock_mods
+
+  clock_controller.set_channel_division(channel.number, clock_controller.calculate_divisor(clock_mods))
 end
 
 function channel_edit_page_ui_controller.update_default_params()
