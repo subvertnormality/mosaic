@@ -22,7 +22,7 @@ local romans_vertical_scroll_selector = VerticalScrollSelector:new(105, 25, "Rom
 local notes_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Notes", quantiser.get_notes())
 
 local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", {})
-local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 50)
+local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 100)
 
 local midi_device_vertical_scroll_selector = VerticalScrollSelector:new(90, 25, "Midi Device", {})
 local midi_channel_vertical_scroll_selector = VerticalScrollSelector:new(65, 25, "Midi Channel", {{name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4}, {name = "CC5", value = 5}, {name = "CC6", value = 6}, {name = "CC7", value = 7}, {name = "CC8", value = 8}, {name = "CC9", value = 9}, {name = "CC10", value = 10}, {name = "CC11", value = 11}, {name = "CC12", value = 12}, {name = "CC13", value = 13}, {name = "CC14", value = 14}, {name = "CC15", value = 15}, {name = "CC16", value = 16}})
@@ -181,7 +181,7 @@ function channel_edit_page_ui_controller.init()
   dials:set_selected_item(1)
   clock_mod_list_selector:set_selected_value(13)
   clock_mod_list_selector:select()
-  clock_swing_value_selector:set_value(0)
+  clock_swing_value_selector:set_value(50)
 
   channel_edit_page_ui_controller.refresh_clock_mods()
 end
