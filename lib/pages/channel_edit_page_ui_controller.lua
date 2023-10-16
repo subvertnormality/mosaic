@@ -255,7 +255,6 @@ end
 function channel_edit_page_ui_controller.update_clock_mods()
   local channel = program.get_selected_channel()
   local clock_mods = clock_mod_list_selector:get_selected()
-  print("updating clock mods")
 
   channel.clock_mods = clock_mods
 
@@ -952,7 +951,6 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   midi_device_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_device)
   device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), program.get().devices[channel.number].device_map))
 
-  print(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
   param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
 
   device_map_vertical_scroll_selector:select()
