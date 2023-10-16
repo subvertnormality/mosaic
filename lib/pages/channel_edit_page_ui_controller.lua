@@ -756,6 +756,7 @@ function channel_edit_page_ui_controller.key(n, z)
           channel_edit_page_ui_controller.refresh_device_selector()
           channel_edit_page_ui_controller.refresh_param_list()
         end
+        channel_edit_page_ui_controller.refresh_channel_config()
         trig_lock_page:toggle_sub_page()
       else
         k2_held = true
@@ -950,6 +951,8 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   midi_channel_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_channel)
   midi_device_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_device)
   device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), program.get().devices[channel.number].device_map))
+
+  print(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
   param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
 
   device_map_vertical_scroll_selector:select()
