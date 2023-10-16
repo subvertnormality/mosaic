@@ -97,7 +97,7 @@ function Sequencer:draw(channel, draw_func)
     for x = 1, 16 do    
       local grid_count = fn.calc_grid_count(x, y)
 
-      local in_step_length = start_step <= fn.calc_grid_count(x, y) and end_step >= fn.calc_grid_count(x, y)
+      local in_step_length = start_step <= grid_count and end_step >= grid_count
 
       if (self.unsaved_grid[grid_count]) then
         draw_func(x, y, 15 - self.bclock.bright_mod)
@@ -125,7 +125,7 @@ function Sequencer:draw(channel, draw_func)
         if (length > 1 and in_step_length) then
           for lx = grid_count + 1, grid_count + length - 1 do
             if (trigs[lx] < 1 and lx < 65) then
-              draw_func((lx % 16), 4 + ((lx - 1) // 16 ), 5)
+              draw_func((lx - 1) % 16 + 1, 4 + ((lx - 1) // 16 ), 5)
             else
               break
             end
