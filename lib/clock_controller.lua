@@ -178,7 +178,7 @@ function clock_controller.init()
       end,
       division = 1/(div*4),
       swing = swing,
-      delay = 0.85,
+      delay = 0.99,
       enabled = true
     }
 
