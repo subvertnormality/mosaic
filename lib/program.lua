@@ -201,12 +201,20 @@ function program.set_current_step_for_channel(c, s)
   program_store.current_channel_step[c] = s
 end
 
+function program.set_global_step_scale_number(step_scale_number)
+
+  for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
+    sequencer_pattern.channels[17].step_scale_number = step_scale_number
+  end
+
+end
+
 function program.get()
   return program_store
 end
 
 function program.get_selected_channel()
-  return program.get_sequencer_pattern(program_store.selected_sequencer_pattern).channels[program_store.selected_channel]
+  return program.get_sequencer_pattern(program.get().selected_sequencer_pattern).channels[program.get().selected_channel]
 end
 
 function program.get_selected_pattern()
@@ -214,7 +222,7 @@ function program.get_selected_pattern()
 end
 
 function program.get_channel(x)
-  return program.get_sequencer_pattern(program_store.selected_sequencer_pattern).channels[x]
+  return program.get_sequencer_pattern(program.get().selected_sequencer_pattern).channels[x]
 end
 
 function program.set(p)

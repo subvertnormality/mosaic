@@ -138,7 +138,6 @@ function step_handler.calculate_step_scale_number(c, current_step)
   
   if program.get_current_step_for_channel(17) == 1 then
     persistent_global_step_scale_number = nil
-    
   end
 
   -- Scale Precedence : channel_step_scale > global_step_scale > channel_default_scale > global_default_scale
@@ -254,8 +253,7 @@ end
 
 function step_handler.process_global_step_scale_trig_lock(current_step)
 
-  program.get_channel(17).step_scale_number = step_handler.calculate_step_scale_number(17, current_step)
-  
+  program.set_global_step_scale_number(step_handler.calculate_step_scale_number(17, current_step))
 end
 
 
