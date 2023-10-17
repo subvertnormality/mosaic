@@ -124,6 +124,11 @@ function Sequencer:draw(channel, draw_func)
         
         if (length > 1 and in_step_length) then
           for lx = grid_count + 1, grid_count + length - 1 do
+
+            if lx > 64 then
+              lx = lx - 64
+            end
+
             if (trigs[lx] < 1 and lx < 65) then
               draw_func((lx - 1) % 16 + 1, 4 + ((lx - 1) // 16 ), 5)
             else
@@ -182,6 +187,8 @@ function Sequencer:dual_press(x, y, x2, y2)
       if (program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)] == 1) then
         if (fn.calc_grid_count(x2, y2) - fn.calc_grid_count(x, y) > 0) then
           program.get_selected_pattern().lengths[fn.calc_grid_count(x, y)] = (fn.calc_grid_count(x2, y2) + 1) - fn.calc_grid_count(x, y)
+        else
+          program.get_selected_pattern().lengths[fn.calc_grid_count(x, y)] = (64 - fn.calc_grid_count(x, y)) + ((fn.calc_grid_count(x2, y2)) + 1)
         end
       end
     end
