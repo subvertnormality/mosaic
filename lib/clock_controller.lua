@@ -136,6 +136,11 @@ function clock_controller.init()
   
         if channel_number == 17 then
           step_handler.process_global_step_scale_trig_lock(current_step)
+
+          if sinfonion ~= true then
+            step_handler.sinfonian_sync(current_step)
+          end
+        
         end
 
         if channel_number ~= 17 then
@@ -187,10 +192,6 @@ function clock_controller.init()
       step_handler.process_lengths()
       if first_run ~= true then
         step_handler.process_song_sequencer_patterns(program.get().current_step)
-      end
-    
-      if sinfonion ~= true then
-        step_handler.sinfonian_sync(program.get().current_step)
       end
     
       program.get().current_step = program.get().current_step + 1
