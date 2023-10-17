@@ -141,13 +141,14 @@ function step_handler.calculate_step_scale_number(c, current_step)
   end
 
   -- Scale Precedence : channel_step_scale > global_step_scale > channel_default_scale > global_default_scale
-
+ 
   if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
-    if (params:get("quantiser_trig_lock_hold") == 1) then
-      persistent_channel_step_scale_numbers[c] = channel_step_scale_number
-    end
+
+    persistent_channel_step_scale_numbers[c] = channel_step_scale_number
+    print("In channel step scale number")
     return channel_step_scale_number
   elseif (persistent_channel_step_scale_numbers[c] and program.get_scale(persistent_channel_step_scale_numbers[c]).scale) then
+    print("In persistent")
     return persistent_channel_step_scale_numbers[c]
   elseif global_step_scale_number and global_step_scale_number > 0 then
     persistent_global_step_scale_number = global_step_scale_number
@@ -202,12 +203,19 @@ function step_handler.handle(c, current_step)
     octave_mod = program.get_step_octave_trig_lock(channel, current_step)
   end
 
-  channel.step_scale_number = step_handler.calculate_step_scale_number(c, current_step)
-  
   local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability")
   if not trig_prob then trig_prob = 100 end
 
   local random_val = math.random(0, 99)
+
+  if trig_value == 1 and random_val < trig_prob then
+    if (params:get("quantiser_trig_lock_hold") ~= 1) then
+      persistent_channel_step_scale_numbers[c] = nil
+    end
+  end
+
+  program.set_channel_step_scale_number(c, step_handler.calculate_step_scale_number(c, current_step))
+
   local transpose = step_handler.calculate_step_transpose(current_step)
 
   if trig_value == 1 and random_val < trig_prob then

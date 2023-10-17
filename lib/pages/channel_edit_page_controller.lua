@@ -56,7 +56,6 @@ function channel_edit_page_controller.init()
 
   channel_scale_fader:set_pre_func(function(x, y, length) 
     for i = x, length + x - 1 do
-      -- print(program.get_selected_channel().step_scale_number)
       if i == program.get_selected_channel().step_scale_number then
         grid_abstraction.led(i, y, 4)
       end
