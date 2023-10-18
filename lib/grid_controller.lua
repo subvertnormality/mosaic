@@ -36,6 +36,7 @@ local page_names = {
 }
 
 local pressed_keys = {}
+local dual_in_progress = false
 
 g = grid.connect()
 
@@ -56,9 +57,16 @@ function g.key(x, y, z)
       if grid_controller.long_press_active[x][y] == true then
         grid_controller.long_press_active[x][y] = false
       elseif held_button ~= nil then
+        if grid_controller.counter[held_button[1]][held_button[2]] then
+          clock.cancel(grid_controller.counter[held_button[1]][held_button[2]])
+        end
         grid_controller.dual_press(held_button[1], held_button[2], x, y)
+        dual_in_progress = true
       else
-        grid_controller.short_press(x,y) -- and execute a short press instead.
+        if dual_in_progress ~= true then
+          grid_controller.short_press(x,y) -- and execute a short press instead.
+        end
+        dual_in_progress = false
       end
     end
     grid_controller.post_press(x,y)

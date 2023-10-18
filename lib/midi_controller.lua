@@ -92,26 +92,10 @@ function midi_controller.start()
   end
 end
 
-function midi_controller.continue()
-  for id = 1, #midi.vports do
-    if midi_devices[id].device ~= nil then
-      midi_devices[id]:continue()
-    end
-  end
-end
-
 function midi_controller.stop()
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
       midi_devices[id]:stop()
-    end
-  end
-end
-
-function midi_controller.clock_send()
-  for id = 1, #midi.vports do
-    if midi_devices[id].device ~= nil then
-      midi_devices[id]:clock()
     end
   end
 end

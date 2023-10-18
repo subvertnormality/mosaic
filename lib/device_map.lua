@@ -6106,6 +6106,7 @@ local stock_device_map = {
 
 
 local stock_params = {
+  get_none_param(),
   {
     ["id"] = "fixed_note",
     ["name"] = "Fixed Note",
@@ -6194,9 +6195,6 @@ local function merge_devices()
     -- Handle insertion or removal based on 'hide' attribute
     if not cd.hide then
       if not sd then
-        if cd["params"][1].id ~= "none" then
-          table.insert(cd.params, 1, get_none_param())
-        end
         table.insert(stock_device_map, cd)
         -- Update the lookup map
         stock_map_by_id[cd.id] = cd

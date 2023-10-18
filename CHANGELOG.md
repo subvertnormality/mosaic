@@ -1,3 +1,13 @@
+# 0.3.1
+
+_Breaking update. Please backup and remove your .pset and .ptn data files from previous versions._
+
+* It's now possible to set a clock division or multiplication for global scale, enabling slower or faster scale progressions and progressions that apply using sequences of less than 64 steps.
+* Midi clock sync logic has been improved
+* Clock logic has been entirely rewritten and is much more stable
+* Various clock and sequencer bug fixes
+
+
 # 0.3
 
 _Breaking update. Please backup and remove your .pset and .ptn data files from previous versions._

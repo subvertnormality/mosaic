@@ -36,19 +36,6 @@ function Sequencer:new(y, mode)
   return self
 end
 
-local function transform_current_step(current_step)
-  local mod_step = current_step - 1
-  local channel = program.get_selected_channel()
-
-  local start_step = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
-  local end_step = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
-
-  if mod_step == start_step - 1 then
-    mod_step = end_step
-  end
-
-  return mod_step
-end
 
 function Sequencer:draw(channel, draw_func)
 
@@ -81,9 +68,7 @@ function Sequencer:draw(channel, draw_func)
 
   local current_step = program.get().current_step
 
-  if channel.number ~= 17 then
-    current_step = transform_current_step(program.get_current_step_for_channel(channel.number))
-  end
+  current_step = program.get_current_step_for_channel(channel.number)
 
   for y = self.y, self.y + 3 do
     for x = 1, 16 do
@@ -107,11 +92,12 @@ function Sequencer:draw(channel, draw_func)
   end
 
 
+
   for y = self.y, self.y + 3 do
     for x = 1, 16 do    
       local grid_count = fn.calc_grid_count(x, y)
 
-      local in_step_length = start_step <= fn.calc_grid_count(x, y) and end_step >= fn.calc_grid_count(x, y)
+      local in_step_length = start_step <= grid_count and end_step >= grid_count
 
       if (self.unsaved_grid[grid_count]) then
         draw_func(x, y, 15 - self.bclock.bright_mod)
@@ -120,19 +106,11 @@ function Sequencer:draw(channel, draw_func)
       if (trigs[grid_count] > 0) then
         if (self.mode == "channel") then
           if (in_step_length) then
-              if fn.calc_grid_count(x, y) == end_step and current_step == start_step then 
-                if program.step_has_trig_lock(channel, grid_count) then
-                  draw_func(end_x, end_y, 10 - self.bclock.bright_mod)
-                else
-                  draw_func(end_x, end_y, 10)
-                end
-              else
-                if program.step_has_trig_lock(channel, grid_count) then
-                  draw_func(x, y, 15 - self.bclock.bright_mod)
-                else
-                  draw_func(x, y, 15) 
-                end
-              end
+            if program.step_has_trig_lock(channel, grid_count) then
+              draw_func(x, y, 15 - self.bclock.bright_mod)
+            else
+              draw_func(x, y, 15) 
+            end
           end
         else
           draw_func(x, y, 15) 
@@ -146,8 +124,16 @@ function Sequencer:draw(channel, draw_func)
         
         if (length > 1 and in_step_length) then
           for lx = grid_count + 1, grid_count + length - 1 do
+
+            if lx > 64 then
+              lx = lx - 64
+            end
+
             if (trigs[lx] < 1 and lx < 65) then
-              draw_func((lx % 16), 4 + ((lx - 1) // 16 ), 5)
+              local length_grid_count = fn.calc_grid_count((lx - 1) % 16 + 1, 4 + ((lx - 1) // 16))
+              if start_step <= length_grid_count and end_step >= length_grid_count then
+                draw_func((lx - 1) % 16 + 1, 4 + ((lx - 1) // 16 ), 5)
+              end
             else
               break
             end
@@ -156,7 +142,9 @@ function Sequencer:draw(channel, draw_func)
 
       end
 
+      
       if current_step == grid_count and clock_controller.is_playing() then
+
         if (self.mode == "channel") then
           if fn.calc_grid_count(x, y) >= start_step then 
 
@@ -202,6 +190,8 @@ function Sequencer:dual_press(x, y, x2, y2)
       if (program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)] == 1) then
         if (fn.calc_grid_count(x2, y2) - fn.calc_grid_count(x, y) > 0) then
           program.get_selected_pattern().lengths[fn.calc_grid_count(x, y)] = (fn.calc_grid_count(x2, y2) + 1) - fn.calc_grid_count(x, y)
+        else
+          program.get_selected_pattern().lengths[fn.calc_grid_count(x, y)] = (64 - fn.calc_grid_count(x, y)) + ((fn.calc_grid_count(x2, y2)) + 1)
         end
       end
     end

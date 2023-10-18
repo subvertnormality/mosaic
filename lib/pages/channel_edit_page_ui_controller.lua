@@ -22,7 +22,7 @@ local romans_vertical_scroll_selector = VerticalScrollSelector:new(105, 25, "Rom
 local notes_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Notes", quantiser.get_notes())
 
 local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", {})
-local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 50)
+local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 100)
 
 local midi_device_vertical_scroll_selector = VerticalScrollSelector:new(90, 25, "Midi Device", {})
 local midi_channel_vertical_scroll_selector = VerticalScrollSelector:new(65, 25, "Midi Channel", {{name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4}, {name = "CC5", value = 5}, {name = "CC6", value = 6}, {name = "CC7", value = 7}, {name = "CC8", value = 8}, {name = "CC9", value = 9}, {name = "CC10", value = 10}, {name = "CC11", value = 11}, {name = "CC12", value = 12}, {name = "CC13", value = 13}, {name = "CC14", value = 14}, {name = "CC15", value = 15}, {name = "CC16", value = 16}})
@@ -84,11 +84,10 @@ end
 
 local clock_mods_page = Page:new("Clocks and Swing", function ()
   if program.get().selected_channel ~= 17 then
-    clock_mod_list_selector:draw()
     clock_swing_value_selector:draw()
-  else
-    print_quant_message_to_screen()
   end
+
+  clock_mod_list_selector:draw()
 end)
 
 local channel_edit_page = Page:new("Config", function ()
@@ -182,9 +181,9 @@ function channel_edit_page_ui_controller.init()
   dials:set_selected_item(1)
   clock_mod_list_selector:set_selected_value(13)
   clock_mod_list_selector:select()
-  clock_swing_value_selector:set_value(0)
+  clock_swing_value_selector:set_value(50)
 
-  channel_edit_page_ui_controller.refresh()
+  channel_edit_page_ui_controller.refresh_clock_mods()
 end
 
 function channel_edit_page_ui_controller.register_ui_draw_handlers() 
@@ -248,6 +247,9 @@ function channel_edit_page_ui_controller.update_swing()
   local swing = clock_swing_value_selector:get_value()
 
   channel.swing = swing
+
+  clock_controller.set_channel_swing(channel.number, swing)
+
 end
 
 function channel_edit_page_ui_controller.update_clock_mods()
@@ -255,6 +257,8 @@ function channel_edit_page_ui_controller.update_clock_mods()
   local clock_mods = clock_mod_list_selector:get_selected()
 
   channel.clock_mods = clock_mods
+
+  clock_controller.set_channel_division(channel.number, clock_controller.calculate_divisor(clock_mods))
 end
 
 function channel_edit_page_ui_controller.update_default_params()
@@ -338,7 +342,9 @@ function channel_edit_page_ui_controller.enc(n, d)
     for i=1, math.abs(d) do
       if d > 0 then
         if pages:get_selected_page() == page_to_index["Quantizer"] then
-
+          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+            return
+          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_down()
             channel_edit_page_ui_controller.refresh_romans() 
@@ -351,9 +357,7 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           channel_edit_page_ui_controller.update_scale()
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
-          if program.get().selected_channel == 17 then
-            return
-          end
+
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:decrement()
             save_confirm.set_save(function() 
@@ -362,6 +366,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             save_confirm.set_cancel(function()
               channel_edit_page_ui_controller.refresh_clock_mods()
             end)
+          end
+          if program.get().selected_channel == 17 then
+            return
           end
           if clock_swing_value_selector:is_selected() then
             clock_swing_value_selector:increment()
@@ -460,6 +467,9 @@ function channel_edit_page_ui_controller.enc(n, d)
 
       else
         if pages:get_selected_page() == page_to_index["Quantizer"] then
+          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+            return
+          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_up()
             channel_edit_page_ui_controller.refresh_romans() 
@@ -472,9 +482,6 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           channel_edit_page_ui_controller.update_scale()
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
-          if program.get().selected_channel == 17 then
-            return
-          end
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:increment()
             save_confirm.set_save(function() 
@@ -483,6 +490,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             save_confirm.set_cancel(function()
               channel_edit_page_ui_controller.refresh_clock_mods()
             end)
+          end
+          if program.get().selected_channel == 17 then
+            return
           end
           if clock_swing_value_selector:is_selected() then
             clock_swing_value_selector:decrement()
@@ -587,6 +597,9 @@ function channel_edit_page_ui_controller.enc(n, d)
       if d > 0 then
 
         if pages:get_selected_page() == page_to_index["Quantizer"] then
+          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+            return
+          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:deselect()
             romans_vertical_scroll_selector:select()
@@ -645,6 +658,9 @@ function channel_edit_page_ui_controller.enc(n, d)
         end
       else
         if pages:get_selected_page() == page_to_index["Quantizer"] then
+          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+            return
+          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:deselect()
             notes_vertical_scroll_selector:select()
@@ -739,6 +755,7 @@ function channel_edit_page_ui_controller.key(n, z)
           channel_edit_page_ui_controller.refresh_device_selector()
           channel_edit_page_ui_controller.refresh_param_list()
         end
+        channel_edit_page_ui_controller.refresh_channel_config()
         trig_lock_page:toggle_sub_page()
       else
         k2_held = true
@@ -782,8 +799,21 @@ end
 function channel_edit_page_ui_controller.refresh_clock_mods()
   local channel = program.get_selected_channel()
   local clock_mods = channel.clock_mods
-  local i = fn.find_index_in_table_by_value(clock_controller.get_clock_divisions(), channel.clock_mods)
+
+  local divisions = fn.filter_by_type(clock_controller.get_clock_divisions(), clock_mods.type)
+
+  local i = fn.find_index_in_table_by_value(divisions, clock_mods.value)
+
+  if clock_mods.type == "clock_division" then
+    i = i + 12
+  end
+
   clock_mod_list_selector:set_selected_value(i)
+
+  if channel.number == 17 then
+    clock_mod_list_selector:select()
+    clock_swing_value_selector:deselect()
+  end
 
 end
 
@@ -920,6 +950,7 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   midi_channel_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_channel)
   midi_device_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_device)
   device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), program.get().devices[channel.number].device_map))
+
   param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
 
   device_map_vertical_scroll_selector:select()
