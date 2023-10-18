@@ -39,61 +39,66 @@ function step_handler.process_params(c, step)
   local channel = program.get_channel(c)
   local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
+
+
+
   for i=1,10 do
 
+
+  
     if channel.trig_lock_params[i] and (
-      channel.trig_lock_params[i].id == "trig_probability" or 
-      channel.trig_lock_params[i].id == "quantised_fixed_note" or
-      channel.trig_lock_params[i].id == "bipolar_random_note" or
-      channel.trig_lock_params[i].id == "twos_random_note" or
-      channel.trig_lock_params[i].id == "random_velocity" or
-      channel.trig_lock_params[i].id == "fixed_note") then
-        return
-    end
+      channel.trig_lock_params[i].id ~= "trig_probability" and 
+      channel.trig_lock_params[i].id ~= "quantised_fixed_note" and
+      channel.trig_lock_params[i].id ~= "bipolar_random_note" and
+      channel.trig_lock_params[i].id ~= "twos_random_note" and
+      channel.trig_lock_params[i].id ~= "random_velocity" and
+      channel.trig_lock_params[i].id ~= "fixed_note") then
 
-    if channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].cc_msb then
-      local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-      local midi_channel = program.get().devices[channel.number].midi_channel
+        if channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].cc_msb then
+          local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
+          local midi_channel = program.get().devices[channel.number].midi_channel
 
-      local param_id = channel.trig_lock_params[i].param_id
-      local p_value = nil
-      local p = nil
-      if param_id ~= nil then
-        p = params:lookup_param(channel.trig_lock_params[i].param_id)
-        
-        if p.name ~= "undefined" then
-          p_value = p.value
+          local param_id = channel.trig_lock_params[i].param_id
+          local p_value = nil
+          local p = nil
+          if param_id ~= nil then
+            p = params:lookup_param(channel.trig_lock_params[i].param_id)
+            
+            if p.name ~= "undefined" then
+              p_value = p.value
+            end
+          end
+
+          
+          if channel.trig_lock_params[i].channel then
+            midi_channel = channel.trig_lock_params[i].channel
+          end
+          if step_trig_lock then
+            midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, step_trig_lock, midi_channel, program.get().devices[channel.number].midi_device)
+          elseif p_value then
+            midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, p_value, midi_channel, program.get().devices[channel.number].midi_device)
+          else
+            midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, channel.trig_lock_banks[i], midi_channel, program.get().devices[channel.number].midi_device)
+          end
+        elseif channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id == "nb_slew" then
+          local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
+
+          if step_trig_lock then
+            device.player:set_slew(step_trig_lock / (channel.trig_lock_params[i].quantum_modifier or 1))
+          else
+            device.player:set_slew(channel.trig_lock_banks[i] / (channel.trig_lock_params[i].quantum_modifier or 1))
+          end
+        elseif channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id then
+          local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
+
+          if step_trig_lock then
+            params:set(channel.trig_lock_params[i].id, step_trig_lock / (channel.trig_lock_params[i].quantum_modifier or 1))
+          else
+            params:set(channel.trig_lock_params[i].id, channel.trig_lock_banks[i] / (channel.trig_lock_params[i].quantum_modifier or 1))
+          end
         end
-      end
-
-      
-      if channel.trig_lock_params[i].channel then
-        midi_channel = channel.trig_lock_params[i].channel
-      end
-      if step_trig_lock then
-        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, step_trig_lock, midi_channel, program.get().devices[channel.number].midi_device)
-      elseif p_value then
-        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, p_value, midi_channel, program.get().devices[channel.number].midi_device)
-      else
-        midi_controller.cc(channel.trig_lock_params[i].cc_msb, channel.trig_lock_params[i].cc_lsb, channel.trig_lock_banks[i], midi_channel, program.get().devices[channel.number].midi_device)
-      end
-    elseif channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id == "nb_slew" then
-      local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-
-      if step_trig_lock then
-        device.player:set_slew(step_trig_lock / (channel.trig_lock_params[i].quantum_modifier or 1))
-      else
-        device.player:set_slew(channel.trig_lock_banks[i] / (channel.trig_lock_params[i].quantum_modifier or 1))
-      end
-    elseif channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id then
-      local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-
-      if step_trig_lock then
-        params:set(channel.trig_lock_params[i].id, step_trig_lock / (channel.trig_lock_params[i].quantum_modifier or 1))
-      else
-        params:set(channel.trig_lock_params[i].id, channel.trig_lock_banks[i] / (channel.trig_lock_params[i].quantum_modifier or 1))
-      end
     end
+
   end
 end
 
