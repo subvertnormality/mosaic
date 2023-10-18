@@ -130,7 +130,10 @@ function Sequencer:draw(channel, draw_func)
             end
 
             if (trigs[lx] < 1 and lx < 65) then
-              draw_func((lx - 1) % 16 + 1, 4 + ((lx - 1) // 16 ), 5)
+              local length_grid_count = fn.calc_grid_count((lx - 1) % 16 + 1, 4 + ((lx - 1) // 16))
+              if start_step <= length_grid_count and end_step >= length_grid_count then
+                draw_func((lx - 1) % 16 + 1, 4 + ((lx - 1) // 16 ), 5)
+              end
             else
               break
             end
