@@ -6580,7 +6580,7 @@ local stock_params = {
   },
   {
     ["id"] = "chord",
-    ["name"] = "Chord",
+    ["name"] = "Chord Note",
     ["short_descriptor_1"] = "CHRD",
     ["short_descriptor_2"] = "NOTE",
     ["off_value"] = 0,

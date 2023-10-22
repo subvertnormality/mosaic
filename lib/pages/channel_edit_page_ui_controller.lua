@@ -1066,7 +1066,7 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
             i
           )
           local default_param = channel.trig_lock_banks[i]
-          if channel.trig_lock_params[i].type == "midi" then
+          if channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].param_id then
             default_param = params:lookup_param(channel.trig_lock_params[i].param_id).value
           end
           m_params[i]:set_value(step_trig_lock or default_param)
