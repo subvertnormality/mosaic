@@ -21,7 +21,6 @@ function Button:new(x, y, states)
   return self
 end
 
-
 function Button:draw()
   grid_abstraction.led(self.x, self.y, self.states[self.state][2] - self.bright_mod)
 end
@@ -34,22 +33,23 @@ function Button:set_state(val)
   self.state = val
 end
 
-
-
 function Button:blink()
-  self.bclock = clock.run(function()
-    while true do
-      if self.bstate then
-        self.bright_mod = 0
-        self.bstate = false
-      else
-        self.bright_mod = 6
-        self.bstate = true
+  self.bclock =
+    clock.run(
+    function()
+      while true do
+        if self.bstate then
+          self.bright_mod = 0
+          self.bstate = false
+        else
+          self.bright_mod = 6
+          self.bstate = true
+        end
+        fn.dirty_grid(true)
+        clock.sleep(0.3)
       end
-      fn.dirty_grid(true)
-      clock.sleep(0.3)
     end
-  end)
+  )
 end
 
 function Button:no_blink()
@@ -61,8 +61,8 @@ end
 
 function Button:press(x, y)
   if (self.x == x and self.y == y) then
-    if self.state == #self.states then 
-      self.state = 1 
+    if self.state == #self.states then
+      self.state = 1
     else
       self.state = self.state + 1
     end

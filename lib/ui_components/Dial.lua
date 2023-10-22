@@ -12,6 +12,7 @@ function Dial:new(x, y, name, id, top_label, bottom_label)
   self.top_label = top_label
   self.bottom_label = bottom_label
   self.selected = false
+  self.off_value = -1
 
   return self
 end
@@ -36,12 +37,12 @@ function Dial:draw()
   screen.font_size(8)
 end
 
-function Dial:select() 
+function Dial:select()
   self.selected = true
   fn.dirty_screen(true)
 end
 
-function Dial:deselect() 
+function Dial:deselect()
   self.selected = false
   fn.dirty_screen(true)
 end
@@ -61,7 +62,6 @@ function Dial:decrement()
 end
 
 function Dial:set_value(value)
-
   if value == nil or value < -1 then
     value = -1
   end
@@ -90,6 +90,10 @@ end
 
 function Dial:get_id()
   return self.id
+end
+
+function Dial:set_off_value(off_value)
+  self.off_value = off_value
 end
 
 return Dial

@@ -5,18 +5,20 @@ local fn = include("mosaic/lib/functions")
 
 local shared_bright_mod = 0
 
-local bclock = clock.run(function()
-  while true do
-    if shared_bright_mod < 0 then
-      shared_bright_mod = 1
-    else
-      shared_bright_mod = -1
+local bclock =
+  clock.run(
+  function()
+    while true do
+      if shared_bright_mod < 0 then
+        shared_bright_mod = 1
+      else
+        shared_bright_mod = -1
+      end
+      fn.dirty_grid(true)
+      clock.sleep(0.3)
     end
-    fn.dirty_grid(true)
-    clock.sleep(0.3)
   end
-end)
-
+)
 
 function VerticalFader:new(x, y, size)
   local self = setmetatable({}, VerticalFader)
@@ -31,7 +33,6 @@ function VerticalFader:new(x, y, size)
 end
 
 function VerticalFader:draw()
-
   local x = self.x - self.horizontal_offset
 
   if (x < 1 or x > 16) then
@@ -39,7 +40,6 @@ function VerticalFader:draw()
   end
 
   local bright_mod = 0
-
 
   for i = self.y, 7 do
     bright_mod = 0
@@ -57,7 +57,6 @@ function VerticalFader:draw()
       grid_abstraction.led(x, i, self.led_brightness + bright_mod)
     end
   end
-  
 
   local active_led = self.y + self.value - 1 - self.vertical_offset
   if (self.value > 0 and active_led < 8) then
@@ -70,15 +69,12 @@ function VerticalFader:draw()
     end
     grid_abstraction.led(x, active_led, 12 + bright_mod)
   end
-
 end
 
 function VerticalFader:press(x, y)
   if y >= self.y and y <= 7 and x == self.x - self.horizontal_offset then
-    
     self.value = y + self.vertical_offset
   end
-  
 end
 
 function VerticalFader:set_vertical_offset(o)
@@ -115,6 +111,5 @@ function VerticalFader:is_this(x, y)
   end
   return false
 end
-
 
 return VerticalFader

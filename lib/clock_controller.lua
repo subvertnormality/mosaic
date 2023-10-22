@@ -68,7 +68,6 @@ local clock_divisions = {
 }
 
 function clock_controller.calculate_divisor(clock_mod)
-
   local divisor = 4
 
   if clock_mod.type == "clock_multiplication" then
@@ -81,7 +80,6 @@ function clock_controller.calculate_divisor(clock_mod)
 end
 
 local function delay_param_set(channel, func)
-
   local divisor = 4
 
   if channel then
@@ -90,19 +88,17 @@ local function delay_param_set(channel, func)
   end
 
   local d = divisor + 1
-  local pause = (clock.get_beat_sec()/d)
+  local pause = (clock.get_beat_sec() / d)
   clock.sleep(pause)
-  pause = clock.get_beat_sec()/(d*6)
+  pause = clock.get_beat_sec() / (d * 6)
   clock.sleep(pause)
   func()
 end
 
 function clock_controller.init()
-
   clock_lattice = lattice:new()
 
   for channel_number = 1, 17 do
-
     local div = 1
     div = clock_controller.calculate_divisor(program.get_channel(channel_number).clock_mods)
 
@@ -110,59 +106,72 @@ function clock_controller.init()
 
     if channel_number == 17 then
       swing = 50
-    end 
+    end
 
-    clock_controller["channel_"..channel_number.."_clock"] = clock_lattice:new_sprocket{
-      action = function(t) 
-
-        local start_trig = fn.calc_grid_count(program.get_channel(channel_number).start_trig[1], program.get_channel(channel_number).start_trig[2])
-        local end_trig = fn.calc_grid_count(program.get_channel(channel_number).end_trig[1], program.get_channel(channel_number).end_trig[2])
+    clock_controller["channel_" .. channel_number .. "_clock"] =
+      clock_lattice:new_sprocket {
+      action = function(t)
+        local start_trig =
+          fn.calc_grid_count(
+          program.get_channel(channel_number).start_trig[1],
+          program.get_channel(channel_number).start_trig[2]
+        )
+        local end_trig =
+          fn.calc_grid_count(
+          program.get_channel(channel_number).end_trig[1],
+          program.get_channel(channel_number).end_trig[2]
+        )
         local current_step = program.get_current_step_for_channel(channel_number)
-    
+
         if current_step < start_trig then
           program.set_current_step_for_channel(channel_number, start_trig)
           current_step = start_trig
         end
-    
-        if clock_controller["channel_"..channel_number.."_clock"].first_run ~= true then
+
+        if clock_controller["channel_" .. channel_number .. "_clock"].first_run ~= true then
           program.set_current_step_for_channel(channel_number, current_step + 1)
           current_step = current_step + 1
         end
-      
+
         if program.get_current_step_for_channel(channel_number) > end_trig then
           program.set_current_step_for_channel(channel_number, start_trig)
           current_step = start_trig
         end
-  
+
         if channel_number == 17 then
           step_handler.process_global_step_scale_trig_lock(current_step)
 
           if sinfonion ~= true then
             step_handler.sinfonian_sync(current_step)
           end
-        
         end
 
         if channel_number ~= 17 then
           step_handler.handle(channel_number, current_step)
         end
-        
-        clock_controller["channel_"..channel_number.."_clock"].first_run = false
-        clock_controller["channel_"..channel_number.."_clock"].next_step = current_step
 
+        clock_controller["channel_" .. channel_number .. "_clock"].first_run = false
+        clock_controller["channel_" .. channel_number .. "_clock"].next_step = current_step
       end,
-      division = 1/(div*4),
+      division = 1 / (div * 4),
       swing = swing,
       enabled = true
     }
 
-
-    clock_controller["channel_"..channel_number.."_clock"].param_processor = clock_lattice:new_sprocket{
-      action = function(t) 
+    clock_controller["channel_" .. channel_number .. "_clock"].param_processor =
+      clock_lattice:new_sprocket {
+      action = function(t)
         if channel_number ~= 17 then
-
-          local start_trig = fn.calc_grid_count(program.get_channel(channel_number).start_trig[1], program.get_channel(channel_number).start_trig[2])
-          local end_trig = fn.calc_grid_count(program.get_channel(channel_number).end_trig[1], program.get_channel(channel_number).end_trig[2])
+          local start_trig =
+            fn.calc_grid_count(
+            program.get_channel(channel_number).start_trig[1],
+            program.get_channel(channel_number).start_trig[2]
+          )
+          local end_trig =
+            fn.calc_grid_count(
+            program.get_channel(channel_number).end_trig[1],
+            program.get_channel(channel_number).end_trig[2]
+          )
           local current_step = program.get_current_step_for_channel(channel_number)
           local next_step = current_step + 1
           local next_trig_value = program.get_channel(channel_number).working_pattern.trig_values[next_step]
@@ -170,57 +179,57 @@ function clock_controller.init()
           if next_trig_value == 1 then
             trigless_lock_active[channel_number] = false
             step_handler.process_params(channel_number, next_step)
-          elseif params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and program.step_has_param_trig_lock(program.get_channel(channel_number), next_step) then
+          elseif
+            params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and
+              program.step_has_param_trig_lock(program.get_channel(channel_number), next_step)
+           then
             trigless_lock_active[channel_number] = true
             step_handler.process_params(channel_number, next_step)
           end
         end
       end,
-      division = 1/(div*4),
+      division = 1 / (div * 4),
       swing = swing,
       delay = 0.99,
       enabled = true
     }
 
-    clock_controller["channel_"..channel_number.."_clock"].first_run = true
-
+    clock_controller["channel_" .. channel_number .. "_clock"].first_run = true
   end
 
-  master_clock = clock_lattice:new_sprocket{
-    action = function(t) 
-
+  master_clock =
+    clock_lattice:new_sprocket {
+    action = function(t)
       step_handler.process_lengths()
       if first_run ~= true then
         step_handler.process_song_sequencer_patterns(program.get().current_step)
       end
-    
+
       program.get().current_step = program.get().current_step + 1
-    
+
       if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
         program.get().current_step = 1
         first_run = false
       end
       fn.dirty_grid(true)
     end,
-    division = 1/32,
+    division = 1 / 32,
     swing = 50,
     enabled = true
   }
-
 end
 
 function clock_controller.set_channel_swing(channel_number, swing)
-  clock_controller["channel_"..channel_number.."_clock"]:set_swing(swing)
-  clock_controller["channel_"..channel_number.."_clock"].param_processor:set_swing(swing)
+  clock_controller["channel_" .. channel_number .. "_clock"]:set_swing(swing)
+  clock_controller["channel_" .. channel_number .. "_clock"].param_processor:set_swing(swing)
 end
 
 function clock_controller.set_channel_division(channel_number, division)
-  clock_controller["channel_"..channel_number.."_clock"]:set_division(1/(division*4))
-  clock_controller["channel_"..channel_number.."_clock"].param_processor:set_division(1/(division*4))
+  clock_controller["channel_" .. channel_number .. "_clock"]:set_division(1 / (division * 4))
+  clock_controller["channel_" .. channel_number .. "_clock"].param_processor:set_division(1 / (division * 4))
 end
 
-function clock_controller:start() 
-
+function clock_controller:start()
   first_run = true
   clock_controller.set_playing()
 
@@ -230,21 +239,19 @@ function clock_controller:start()
     step_handler.process_params(i, 1)
   end
 
-  clock_lattice:start() 
+  clock_lattice:start()
 end
 
 function clock_controller:stop()
-
-  if clock_lattice then 
-    clock_lattice:stop() 
+  if clock_lattice then
+    clock_lattice:stop()
   end
 
   playing = false
   first_run = true
   nb:stop_all()
   midi_controller:stop()
-  clock_controller.reset() 
-  
+  clock_controller.reset()
 end
 
 function clock_controller.is_playing()
@@ -255,21 +262,19 @@ function clock_controller.set_playing()
   playing = true
 end
 
-function clock_controller.reset() 
+function clock_controller.reset()
   for x, pattern in ipairs(program.get().sequencer_patterns) do
-
     for i = 1, 17 do
       program.set_current_step_for_channel(i, 1)
     end
-
   end
   program.get().current_step = 1
   step_handler.reset()
 
-  if clock_lattice then 
+  if clock_lattice then
     clock_lattice:destroy()
   end
-  
+
   clock_controller.init()
 end
 

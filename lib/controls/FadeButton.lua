@@ -12,9 +12,7 @@ function FadeButton:new(x, y, min, max)
   return self
 end
 
-
 function FadeButton:draw()
-
   local brightness = 3
 
   -- TODO: Fade logic for in-between values
@@ -23,12 +21,11 @@ function FadeButton:draw()
     brightness = 15
   end
 
-  if self.value + 1 >= self.max then 
+  if self.value + 1 >= self.max then
     brightness = 3
   end
 
   grid_abstraction.led(self.x, self.y, brightness)
-
 end
 
 function FadeButton:set_value(val)
@@ -37,7 +34,7 @@ end
 
 function FadeButton:press(x, y)
   if (self.x == x and self.y == y) then
-    -- self.value = self.min - 1
+  -- self.value = self.min - 1
   end
 end
 
@@ -47,7 +44,5 @@ function FadeButton:is_this(x, y)
   end
   return false
 end
-
-
 
 return FadeButton

@@ -13,24 +13,22 @@ function GridViewer:new(x, y)
 end
 
 function GridViewer:draw()
-
   screen_view_sequencer:draw(program.get_channel(self.selected_channel), grid_abstraction.seq)
 
-  local state = grid_abstraction.get_screen_state() 
+  local state = grid_abstraction.get_screen_state()
 
   for x = 1, 16 do
     for y = 1, 8 do
-      screen.move(self.x + (x*7), self.y + (y*7))
+      screen.move(self.x + (x * 7), self.y + (y * 7))
       screen.level(state[x][y])
       screen.font_size(35)
       screen.text(".")
-      
     end
   end
   screen.move(self.x + 7, self.y + 12)
   screen.level(10)
   screen.font_size(8)
-  screen.text("Channel "..self.selected_channel.." grid viewer")
+  screen.text("Channel " .. self.selected_channel .. " grid viewer")
 end
 
 function GridViewer:next_channel()

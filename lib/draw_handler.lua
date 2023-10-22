@@ -18,7 +18,6 @@ end
 
 -- Call all functions registered with a page
 function draw_handler:handle_grid(page)
-
   -- Call all menu press handlers
   for _, func in ipairs(self.grid_handlers["menu"]) do
     func(x, y)
@@ -48,7 +47,6 @@ end
 
 -- Call all functions registered with a page
 function draw_handler:handle_ui(page)
-
   -- Call all menu press handlers
   for _, func in ipairs(self.ui_handlers["tooltip"]) do
     func(x, y)
@@ -64,6 +62,5 @@ function draw_handler:handle_ui(page)
     func()
   end
 end
-
 
 return draw_handler

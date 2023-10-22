@@ -31,10 +31,10 @@ end
 
 function Button:press(x, y)
   if (self.x == x and self.y == y) then
-    if self.state == 1 
-      then self.state = self.state + 1
-    elseif self.state == #states
-      then self.state = 1 
+    if self.state == 1 then
+      self.state = self.state + 1
+    elseif self.state == #states then
+      self.state = 1
     end
   end
 end

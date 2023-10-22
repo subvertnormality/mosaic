@@ -37,7 +37,7 @@
 
 ## At a glance
 
-As of v0.3 _Mosaic_ gives you the following:
+As of v0.3.1 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
@@ -108,9 +108,9 @@ You can hide stock devices from the menu by commenting out it's entry in the `de
 
 Midi devices can be set to load a stored patch using the params menu. For stock midi devices, all cc parameters are available to edit. A value of -1 against a midi parameter means the function is off. Changing the value will send the midi value to your midi device. When you load a mosiac script, the stored midi param values will be sent to your midi device, effectively loading a patch. It's possible in this way to stored all your sound's patch data with your mosaic patch. This is particularly practical for devices with less midi parameters or where the device's interface is not particularly intuitive.
 
-### Params
+### Trig Params
 
-Most devices in _Mosaic_ feature a set of params that alters either the quality of the sound or the trig in some way. These params can be trig locked. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. See the channel page section for details on how to assign and use params.
+Most devices in _Mosaic_ feature a set of trig params that alters either the quality of the sound or the trig in some way. These params can be trig locked. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. See the channel page section for details on how to assign and use params.
 
 ### Trig Locks
 
@@ -277,11 +277,11 @@ Let's delve into into the merge modes:
 
 You can view detailed configurations of your selected channel on the Norns screen. Each page offers intuitive and interactive tools to sculpt your sonic experience.
 
-On the first page you're greeted with an array of parameters. Navigate pages with E1. Rotate E2 to highlight a parameter, and E3 to refine its value. Want a different parameter active in the selected parameter slot? Tap K2. As you change the value, the system automatically locks in your changes. As mentioned above, these can be trig locked on each step by holding the step and rotating E3.
+On the first page you're greeted with an array of parameters. Navigate pages with E1. Rotate E2 to highlight a parameter, and E3 to refine its value. Want a different parameter active in the selected parameter slot? Tap K2. As you change the value, the system automatically locks in your changes. As mentioned above, these can be trig locked on each step by holding the step and rotating E3. The default trig param value will be sent to your chosen device destination on steps where there isn't a trig lock. When a trig param is set to "off", _mosaic_ will not send a value to your chosen device destination. When a trig lock is set to "off" on a step, it will not send the default trig param value, and will instead keep sending the value of the last trig lock.
 
 ![Param trig lock page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_param_select.png)
 
-You can define your channel's rhythmic character on the second page. Use E2 to navigate and E3 to finesse values. The channel grid keys let you specify which channel to adjust.
+You can define your channel's rhythmic character on the second page. Use E2 to navigate and E3 to set values. The channel grid keys let you specify which channel to adjust.
 
 ![Channel clocks and swing page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_clocks.png)
 
@@ -331,7 +331,7 @@ To return to the channel pages, select a channel using the channel select button
 
 #### Stock trig params
 
-All device types have a set of standard trig orarms that affect the sequencer rather than the quality of the sound. 
+All device types have a set of standard trig params that affect the sequencer rather than the quality of the sound. 
 
 ##### Fixed note
 

@@ -3,7 +3,6 @@ VerticalScrollSelector.__index = VerticalScrollSelector
 
 local fn = include("mosaic/lib/functions")
 
-  -- items = {{name: "name", value: {}}, {name: "name", value: {}}}
 function VerticalScrollSelector:new(x, y, name, items)
   local self = setmetatable({}, VerticalScrollSelector)
   self.name = name
@@ -47,15 +46,16 @@ function VerticalScrollSelector:set_meta_item(items)
   self.meta_items = items
 end
 
-
 function VerticalScrollSelector:draw()
-  if not self.items then return end
+  if not self.items then
+    return
+  end
 
   screen.move(self.x, self.y)
 
   if self.selected_item and self.items[self.selected_item - 1] then
     screen.level(1)
-    if self.items[self.selected_item - 1].name then 
+    if self.items[self.selected_item - 1].name then
       screen.text(self.items[self.selected_item - 1].name)
     else
       screen.text(self.items[self.selected_item - 1])
@@ -70,25 +70,23 @@ function VerticalScrollSelector:draw()
     else
       screen.level(5)
     end
-    if self.items[self.selected_item].name then 
+    if self.items[self.selected_item].name then
       screen.text(self.items[self.selected_item].name)
     else
       screen.text(self.items[self.selected_item])
     end
   end
 
-
   screen.move(self.x, self.y + 20)
 
   if self.selected_item and self.items[self.selected_item + 1] then
     screen.level(1)
-    if self.items[self.selected_item + 1].name then 
-      screen.text(self.items[self.selected_item + 1].name) 
+    if self.items[self.selected_item + 1].name then
+      screen.text(self.items[self.selected_item + 1].name)
     else
       screen.text(self.items[self.selected_item + 1])
     end
   end
-
 end
 
 function VerticalScrollSelector:scroll_down()
@@ -105,12 +103,12 @@ function VerticalScrollSelector:scroll_up()
   fn.dirty_screen(true)
 end
 
-function VerticalScrollSelector:select() 
+function VerticalScrollSelector:select()
   self.selected = true
   fn.dirty_screen(true)
 end
 
-function VerticalScrollSelector:deselect() 
+function VerticalScrollSelector:deselect()
   self.selected = false
   fn.dirty_screen(true)
 end

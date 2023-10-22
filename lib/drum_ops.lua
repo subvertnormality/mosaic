@@ -1,4 +1,4 @@
-local drum_ops_tables = include('mosaic/lib/drum_ops_tables')
+local drum_ops_tables = include("mosaic/lib/drum_ops_tables")
 
 drum_ops = {}
 
@@ -13,20 +13,28 @@ local function wrap(k, lower_bound, upper_bound)
 end
 
 local function get_byte(a, n)
-    return a[bit32.rshift(n-1, 3) + 1]
+    return a[bit32.rshift(n - 1, 3) + 1]
 end
 
 local function get_bit(a, k)
     local byte = get_byte(a, k)
-    local bit_index = 7 - ((k-1) % 8)
+    local bit_index = 7 - ((k - 1) % 8)
     return bit32.band(byte, bit32.lshift(1, bit_index)) ~= 0
 end
 
 function drum_ops.tresillo(bank, pattern1, pattern2, len, step)
-    if bank < 1 or bank > 5 then return 1 end
-    if len < 8 then return 1 end
-    if step < 1 then return 1 end
-    if pattern1 > drum_ops_tables.drum_ops_pattern_len or pattern2 > drum_ops_tables.drum_ops_pattern_len then return 1 end
+    if bank < 1 or bank > 5 then
+        return 1
+    end
+    if len < 8 then
+        return 1
+    end
+    if step < 1 then
+        return 1
+    end
+    if pattern1 > drum_ops_tables.drum_ops_pattern_len or pattern2 > drum_ops_tables.drum_ops_pattern_len then
+        return 1
+    end
 
     local table1
     local table2
@@ -63,9 +71,15 @@ function drum_ops.tresillo(bank, pattern1, pattern2, len, step)
 end
 
 function drum_ops.drum(bank, pattern, step)
-    if bank < 1 or bank > 5 then return 1 end
-    if step < 1 then return 1 end
-    if pattern > drum_ops_tables.drum_ops_pattern_len then return 1 end
+    if bank < 1 or bank > 5 then
+        return 1
+    end
+    if step < 1 then
+        return 1
+    end
+    if pattern > drum_ops_tables.drum_ops_pattern_len then
+        return 1
+    end
 
     local table
 
@@ -86,12 +100,19 @@ function drum_ops.drum(bank, pattern, step)
 end
 
 function drum_ops.nr(prime, mask, factor, step)
-
-    if prime < 1 then prime = 32 + prime end
-    local rhythm = drum_ops_tables.table_nr[prime] 
-    if mask < 1 then mask = 4 + mask end
-    if factor < 1 then factor = 17 + factor end
-    if step < 1 then step = 16 + step end
+    if prime < 1 then
+        prime = 32 + prime
+    end
+    local rhythm = drum_ops_tables.table_nr[prime]
+    if mask < 1 then
+        mask = 4 + mask
+    end
+    if factor < 1 then
+        factor = 17 + factor
+    end
+    if step < 1 then
+        step = 16 + step
+    end
     step = wrap(step, 1, 16)
     if mask == 1 then
         rhythm = bit32.band(rhythm, 0x0F0F)
@@ -100,12 +121,12 @@ function drum_ops.nr(prime, mask, factor, step)
     elseif mask == 3 then
         rhythm = bit32.band(rhythm, 0x1F0)
     end
-    
+
     local modified = rhythm * factor
-    
+
     local final = bit32.bor(bit32.band(modified, 0xFFFF), bit32.rshift(modified, 16))
     local bit_status = bit32.band(bit32.rshift(final, 16 - step), 1)
-    
+
     return bit_status == 1
 end
 

@@ -12,10 +12,7 @@ tooltip = include("mosaic/lib/ui_components/tooltip")
 save_confirm = include("mosaic/lib/ui_components/save_confirm")
 
 function ui_controller.init()
-  draw_handler:register_ui(
-    "tooltip",
-    tooltip.draw
-  )
+  draw_handler:register_ui("tooltip", tooltip.draw)
 
   channel_edit_page_ui_controller.register_ui_draw_handlers()
   velocity_edit_page_ui_controller.register_ui_draw_handlers()
@@ -40,19 +37,18 @@ function ui_controller.change_page(subpage_name)
 end
 
 function ui_controller.redraw()
-
-  if not program then return end
+  if not program then
+    return
+  end
 
   screen.move(120, 10)
-  screen.font_face (math.random(3,8))
+  screen.font_face(math.random(3, 8))
   screen.text("m")
-  screen.font_face (1)
+  screen.font_face(1)
   draw_handler:handle_ui(program.get().selected_page)
-  
 end
 
 function ui_controller.enc(n, d)
-
   if program.get().selected_page == 1 then
     channel_edit_page_ui_controller.enc(n, d)
   elseif program.get().selected_page == 2 then
@@ -64,17 +60,14 @@ function ui_controller.enc(n, d)
   elseif program.get().selected_page == 5 then
     velocity_edit_page_ui_controller.enc(n, d)
   end
-  
 end
 
 function ui_controller.key(n, z)
-  
   channel_edit_page_ui_controller.key(n, z)
   -- velocity_edit_page_ui_controller.key(n, z)
   -- note_edit_page_ui_controller.key(n, z)
   -- trigger_edit_page_ui_controller.key(n, z)
   -- channel_sequencer_page_ui_controller.key(n, z)
-
 end
 
 function ui_controller.refresh()

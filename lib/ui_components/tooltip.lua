@@ -7,18 +7,16 @@ tooltip.metros = {}
 
 function tooltip:draw()
   if tooltip.text then
-    screen.move(0,60)
+    screen.move(0, 60)
     screen.text(tooltip.text)
   end
 end
 
-
-  -- Define a local remove function for this metro
-  local function remove_tip()
-    tooltip.text = false
-    fn.dirty_screen(true)
-  end
-
+-- Define a local remove function for this metro
+local function remove_tip()
+  tooltip.text = false
+  fn.dirty_screen(true)
+end
 
 function tooltip:show(text)
   -- Stop any existing metro and remove it from the table
@@ -27,7 +25,7 @@ function tooltip:show(text)
     metro.free(i)
     table.remove(tooltip.metros, i)
   end
-  
+
   tooltip.text = text
 
   -- Create a new metro
