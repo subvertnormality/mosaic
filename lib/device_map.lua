@@ -6577,6 +6577,47 @@ local stock_params = {
     ["cc_min_value"] = -1,
     ["cc_max_value"] = 200,
     ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord",
+    ["name"] = "Chord",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "NOTE",
+    ["off_value"] = 0,
+    ["cc_min_value"] = -14,
+    ["cc_max_value"] = 14,
+    ["ui_labels"] = {
+      "--ot",
+      "--2",
+      "--3",
+      "--4",
+      "--5",
+      "--6",
+      "--7",
+      "-ot",
+      "-2",
+      "-3",
+      "-4",
+      "-5",
+      "-6",
+      "-7",
+      "off",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "+ot",
+      "+2",
+      "+3",
+      "+4",
+      "+5", 
+      "+6",
+      "+7",
+      "++ot"
+    },
+    ["param_type"] = "stock"
   }
 }
 

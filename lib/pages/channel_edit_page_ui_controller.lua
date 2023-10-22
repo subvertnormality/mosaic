@@ -1050,6 +1050,9 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
       m_params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
       m_params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
       m_params[i]:set_off_value(channel.trig_lock_params[i].off_value)
+      m_params[i]:set_min_value(channel.trig_lock_params[i].cc_min_value)
+      m_params[i]:set_max_value(channel.trig_lock_params[i].cc_max_value)
+      m_params[i]:set_ui_labels(channel.trig_lock_params[i].ui_labels)
 
       local step_trig_lock =
         program.get_step_param_trig_lock(program.get_selected_channel(), program.get_selected_channel().current_step, i)
