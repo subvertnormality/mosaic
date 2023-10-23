@@ -1031,7 +1031,6 @@ function channel_edit_page_ui_controller.refresh_trig_lock_values()
     if param_id ~= nil then
       p = params:lookup_param(channel.trig_lock_params[i].param_id)
     end
-    local p_value = nil
     if p and p.name ~= "undefined" then
       m_params[i]:set_value(p.value)
     else
@@ -1043,7 +1042,7 @@ end
 function channel_edit_page_ui_controller.refresh_trig_locks()
   local channel = program.get_selected_channel()
   local pressed_keys = grid_controller.get_pressed_keys()
-  channel_edit_page_ui_controller.refresh_trig_lock_values()
+
   for i = 1, 10 do
     if channel.trig_lock_params[i].id ~= nil then
       m_params[i]:set_name(channel.trig_lock_params[i].name)
@@ -1082,6 +1081,7 @@ function channel_edit_page_ui_controller.refresh_trig_locks()
       m_params[i]:set_bottom_label("")
     end
   end
+  channel_edit_page_ui_controller.refresh_trig_lock_values()
 end
 
 function channel_edit_page_ui_controller.refresh_param_list()

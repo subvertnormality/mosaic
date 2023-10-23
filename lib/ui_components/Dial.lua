@@ -31,18 +31,18 @@ function Dial:draw()
   screen.text(self.top_label)
   screen.move(self.x, self.y + 7)
 
-  if (self.min_value and self.value < self.min_value) then
+  if (self.min_value and self.value and (self.value < self.min_value)) then
     self.value = self.off_value
   end
-  if (self.max_value and self.value > self.max_value) then
+  if (self.max_value and self.value and (self.value > self.max_value)) then
     self.value = self.off_value
   end
   
-  if self.value == self.off_value then
+  if self.value == self.off_value or not self.value then
     screen.text("off")
   else
     if self.ui_labels and self.min_value then
-      screen.text(self.ui_labels[self.value - ((self.min_value) - 1)])
+      screen.text(self.ui_labels[self.value - (self.min_value - 1)])
     else
       screen.text(self.value)
     end
