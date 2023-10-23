@@ -26,6 +26,7 @@
         - [Quantised fixed note](#quantised-fixed-note)
         - [Random note](#random-note)
         - [Random twos note](#random-twos-note)
+        - [Chord notes](#chord-notes)
     + [Song editor](#song-editor)
   * [Save and load](#save-and-load)
   * [Custom device maps](#custom-device-maps)
@@ -359,7 +360,7 @@ This trig param can be used to ensure trigs play only with a certain probability
 
 ##### Chord Notes
 
-The parameters for chord notes can be used to append an additional note to your trig, thereby forming a chord. The selected device on the channel must be polyphonic; otherwise, unusual results may occur. The additional chord notes are determined relative to the existing note of the trig, and this is done post the application of any note modifiers, such as random note. These will be quantised according to the selected scale with scale locks honoured - an enourmous amount of power. The appended note will maintain the length and velocity of the original trig. You have the capability to add up to four additional notes, allowing for the creation of chords with up to five simultaneous notes, by adding four of these param locks to a channel.
+The chord notes trig params can be used to append an additional note to your trig, thereby forming a chord. The selected device on the channel must be polyphonic; otherwise, unusual results may occur. The additional chord notes are determined relative to the existing note of the trig, and this is done post the application of any note modifiers, such as random note. These will be quantised according to the selected scale with scale locks honoured unlocking an enourmous amount of power. The appended note will maintain the length and velocity of the original trig. You have the capability to add up to four additional notes, allowing for the creation of chords with up to five simultaneous notes, by adding four of these param locks to a channel.
 
 ### Song editor
 
