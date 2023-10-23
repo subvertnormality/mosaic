@@ -80,6 +80,7 @@ end
 function midi_controller.start()
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
+
       midi_devices[id]:start()
     end
   end

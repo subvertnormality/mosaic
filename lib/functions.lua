@@ -373,4 +373,17 @@ function fn.transpose_scale(scale, transpose)
   return transposed
 end
 
+function fn.signed_inv_mod(a, b)
+  if b == 0 then
+    return 0
+  end
+  local mod = a % b
+  local inv_mod = b - mod
+  if a < 0 then
+    return -inv_mod
+  else
+    return inv_mod
+  end
+end
+
 return fn

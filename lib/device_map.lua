@@ -6516,6 +6516,38 @@ local stock_device_map = {
   }
 }
 
+local chord_ui_labels = {
+  "--oct",
+  "--2nd",
+  "--3rd",
+  "--4th",
+  "--5th",
+  "--6th",
+  "--7th",
+  "-oct",
+  "-2nd",
+  "-3rd",
+  "-4th",
+  "-5th",
+  "-6th",
+  "-7th",
+  "off",
+  "2nd",
+  "3rd",
+  "4th",
+  "5th",
+  "6th",
+  "7th",
+  "+oct",
+  "+2nd",
+  "+3rd",
+  "+4th",
+  "+5th", 
+  "+6th",
+  "+7th",
+  "++oct"
+}
+
 local stock_params = {
   get_none_param(),
   {
@@ -6579,44 +6611,47 @@ local stock_params = {
     ["param_type"] = "stock"
   },
   {
-    ["id"] = "chord",
-    ["name"] = "Chord Note",
+    ["id"] = "chord1",
+    ["name"] = "Chord Note 1",
     ["short_descriptor_1"] = "CHRD",
     ["short_descriptor_2"] = "NOTE",
     ["off_value"] = 0,
     ["cc_min_value"] = -14,
     ["cc_max_value"] = 14,
-    ["ui_labels"] = {
-      "--ot",
-      "--2",
-      "--3",
-      "--4",
-      "--5",
-      "--6",
-      "--7",
-      "-ot",
-      "-2",
-      "-3",
-      "-4",
-      "-5",
-      "-6",
-      "-7",
-      "off",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "+ot",
-      "+2",
-      "+3",
-      "+4",
-      "+5", 
-      "+6",
-      "+7",
-      "++ot"
-    },
+    ["ui_labels"] = chord_ui_labels,
+    ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord2",
+    ["name"] = "Chord Note 2",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "NOTE",
+    ["off_value"] = 0,
+    ["cc_min_value"] = -14,
+    ["cc_max_value"] = 14,
+    ["ui_labels"] = chord_ui_labels,
+    ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord3",
+    ["name"] = "Chord Note 3",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "NOTE",
+    ["off_value"] = 0,
+    ["cc_min_value"] = -14,
+    ["cc_max_value"] = 14,
+    ["ui_labels"] = chord_ui_labels,
+    ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord4",
+    ["name"] = "Chord Note 4",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "NOTE",
+    ["off_value"] = 0,
+    ["cc_min_value"] = -14,
+    ["cc_max_value"] = 14,
+    ["ui_labels"] = chord_ui_labels,
     ["param_type"] = "stock"
   }
 }

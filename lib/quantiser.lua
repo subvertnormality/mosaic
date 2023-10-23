@@ -157,9 +157,9 @@ function quantiser.process(note_number, octave_mod, transpose, scale_number, c)
     local note = note_number % 7
     return (scale[note + 1] + (12 * octave)) + root_note
   elseif note_number < 0 then
-    local octave = math.floor(note_number / 7) - octave_mod
+    local octave = math.floor(note_number / 7) + octave_mod
     local note = note_number % 7
-    return (scale[note + 1] - (12 * (octave + 2))) + root_note
+    return (scale[note + 1] + (12 * octave)) + root_note
   else
     return (scale[note_number + 1] + (octave_mod * 12)) + root_note
   end

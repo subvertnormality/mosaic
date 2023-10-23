@@ -37,7 +37,7 @@
 
 ## At a glance
 
-As of v0.3.1 _Mosaic_ gives you the following:
+As of v0.3.2 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
@@ -51,7 +51,7 @@ As of v0.3.1 _Mosaic_ gives you the following:
 - Per channel pattern length
 - Channel muting
 - Scales with root note and degree setting
-- Trig lockable octave, scales, transpose, step probability, random note modifiers, random velocity modifiers
+- Trig lockable octave, scales, chords, transpose, step probability, random note modifiers, random velocity modifiers
 
 Requirements:
 
@@ -82,7 +82,7 @@ _Mosaic_ ensures you remain within your selected scale although there are ways t
 
 ### Channel
 
-The 'channel' represents another pivotal component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's internal sound device, MIDI device, pick MIDI outputs, choose MIDI channels, the scale, and set up param trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device (note that this is generally only possible with midi devices).
+The 'channel' represents another pivotal component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's internal sound device, MIDI device, pick MIDI outputs, choose MIDI channels, the scale, and set up param trig locks and their related destinations. Additionally, you can assign various patterns to one channel. A single pattern can be linked to multiple channels.
 
 When two patterns overlap in one channel and their trigs coincide, the outcome depends on the channel's 'merge mode'. There are several merge modes, each with its own characteristic. This feature encourages designing patterns that, when they overlap, produce intriguing results.
 
@@ -156,7 +156,7 @@ With the top row, pick one of the 16 patterns available. In the image, you can s
 
 ![Pattern select buttons](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_pattern_select.png)
 
-To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolize a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. Since patterns are monophonic, one trig’s duration ends upon meeting another.
+To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolize a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. In a single pattern, one trig’s duration ends upon meeting another.
 
 ![Trig sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_sequencer.png)
 
@@ -356,6 +356,10 @@ Add spice to the velocity of your trigs with this param. Similar to random note,
 ##### Trig Probability
 
 This trig param can be used to ensure trigs play only with a certain probability. When set to 100, the trig will always play. When set to 0, the trig will never play. At 50, the trig will play half the time. You can set this globally and per step.
+
+##### Chord Notes
+
+The parameters for chord notes can be used to append an additional note to your trig, thereby forming a chord. The selected device on the channel must be polyphonic; otherwise, unusual results may occur. The additional chord notes are determined relative to the existing note of the trig, and this is done post the application of any note modifiers, such as random note. These will be quantised according to the selected scale with scale locks honoured - an enourmous amount of power. The appended note will maintain the length and velocity of the original trig. You have the capability to add up to four additional notes, allowing for the creation of chords with up to five simultaneous notes, by adding four of these param locks to a channel.
 
 ### Song editor
 

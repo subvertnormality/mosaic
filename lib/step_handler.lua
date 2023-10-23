@@ -36,17 +36,15 @@ end
 
 function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)
-  local results = {}
 
   for i = 1, 10 do
     if channel.trig_lock_params[i] and channel.trig_lock_params[i].id == type then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
       if step_trig_lock then
-        table.insert(results, step_trig_lock)
+        return step_trig_lock
       else
-        table.insert(results, channel.trig_lock_banks[i])
+        return channel.trig_lock_banks[i]
       end
-      return results
     end
   end
 
@@ -58,7 +56,6 @@ function step_handler.process_params(c, step)
   local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
   for i = 1, 10 do
-
     if
       channel.trig_lock_params[i] and
         (channel.trig_lock_params[i].id ~= "trig_probability" and
@@ -85,8 +82,6 @@ function step_handler.process_params(c, step)
             p_value = p.value
           end
         end
-
-
 
         if channel.trig_lock_params[i].channel then
           midi_channel = channel.trig_lock_params[i].channel
@@ -268,7 +263,7 @@ function step_handler.handle(c, current_step)
     octave_mod = program.get_step_octave_trig_lock(channel, current_step)
   end
 
-  local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability")[1]
+  local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability")
   if not trig_prob then
     trig_prob = 100
   end
@@ -288,15 +283,17 @@ function step_handler.handle(c, current_step)
   if trig_value == 1 and random_val < trig_prob then
     channel_edit_page_ui_controller.refresh_trig_locks()
     local random_shift =
-      fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note")[1] or 0)
+      fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0)
     random_shift =
       random_shift +
-      fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note")[1] or 0)
+      fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
 
-    local note = quantiser.process(note_value + random_shift, octave_mod, transpose, channel.step_scale_number, c)
+    note_value = note_value + random_shift
+
+    local note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number, c)
 
     local velocity_random_shift =
-      fn.transform_random_value(step_handler.process_stock_params(c, current_step, "random_velocity")[1] or 0)
+      fn.transform_random_value(step_handler.process_stock_params(c, current_step, "random_velocity") or 0)
     velocity_value = velocity_value + velocity_random_shift
     if velocity_value < 0 then
       velocity_value = 0
@@ -305,13 +302,13 @@ function step_handler.handle(c, current_step)
       velocity_value = 127
     end
 
-    local quantised_fixed_note = step_handler.process_stock_params(c, current_step, "quantised_fixed_note")[1]
+    local quantised_fixed_note = step_handler.process_stock_params(c, current_step, "quantised_fixed_note")
 
     if quantised_fixed_note and quantised_fixed_note > -1 then
       note = quantiser.process(quantised_fixed_note, octave_mod, 0, channel.step_scale_number, c)
     end
 
-    local fixed_note = step_handler.process_stock_params(c, current_step, "fixed_note")[1]
+    local fixed_note = step_handler.process_stock_params(c, current_step, "fixed_note")
 
     if fixed_note and fixed_note > -1 then
       note = fixed_note
@@ -320,8 +317,12 @@ function step_handler.handle(c, current_step)
     local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
     if not channel.mute then
+      local chord_notes = {chord_note_1, chord_note_2, chord_note_3, chord_note_4}
 
-      local chord_notes = step_handler.process_stock_params(c, current_step, "chord")
+      table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord1"))
+      table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord2"))
+      table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord3"))
+      table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord4"))
 
       if not device.player then
         midi_controller:note_on(note, velocity_value, midi_channel, midi_device)
@@ -337,35 +338,53 @@ function step_handler.handle(c, current_step)
           }
         )
         for i = 1, #chord_notes do
-          local processed_chord_note = quantiser.process(note_value + chord_notes[i], octave_mod, transpose, channel.step_scale_number, c)
-          midi_controller:note_on(processed_chord_note, velocity_value, midi_channel, midi_device)
-          table.insert(
-            length_tracker,
-            {
-              note = processed_chord_note,
-              velocity = velocity_value,
-              midi_channel = midi_channel,
-              midi_device = midi_device,
-              steps_remaining = length_value,
-              player = midi_controller
-            }
-          )
+          if (chord_notes[i]) then
+            local processed_chord_note =
+              quantiser.process(note_value + chord_notes[i], octave_mod, transpose, channel.step_scale_number, c)
+            midi_controller:note_on(processed_chord_note, velocity_value, midi_channel, midi_device)
+            table.insert(
+              length_tracker,
+              {
+                note = processed_chord_note,
+                velocity = velocity_value,
+                midi_channel = midi_channel,
+                midi_device = midi_device,
+                steps_remaining = length_value,
+                player = midi_controller
+              }
+            )
+          end
         end
       else
+        device.player:note_on(note, velocity_value / 127)
+        table.insert(
+          length_tracker,
+          {
+            note = note,
+            velocity = velocity_value,
+            midi_channel = midi_channel,
+            midi_device = midi_device,
+            steps_remaining = length_value,
+            player = device.player
+          }
+        )
         for i = 1, #chord_notes do
-          local processed_chord_note = quantiser.process(note_value + chord_notes[i], octave_mod, transpose, channel.step_scale_number, c)
-          device.player:note_on(processed_chord_note, velocity_value / 127)
-          table.insert(
-            length_tracker,
-            {
-              note = processed_chord_note,
-              velocity = velocity_value,
-              midi_channel = midi_channel,
-              midi_device = midi_device,
-              steps_remaining = length_value,
-              player = device.player
-            }
-          )
+          if (chord_notes[i]) then
+            local processed_chord_note =
+              quantiser.process(note_value + chord_notes[i], octave_mod, transpose, channel.step_scale_number, c)
+            device.player:note_on(processed_chord_note, velocity_value / 127)
+            table.insert(
+              length_tracker,
+              {
+                note = processed_chord_note,
+                velocity = velocity_value,
+                midi_channel = midi_channel,
+                midi_device = midi_device,
+                steps_remaining = length_value,
+                player = device.player
+              }
+            )
+          end
         end
       end
     end

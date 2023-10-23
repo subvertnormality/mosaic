@@ -1,4 +1,4 @@
--- mosaic v0.3.1
+-- mosaic v0.3.2
 -- grid-centric, intentioned
 -- generative sequencer.
 --

@@ -413,7 +413,7 @@ function channel_edit_page_ui_controller.enc(n, d)
     for i = 1, math.abs(d) do
       if d > 0 then
         if pages:get_selected_page() == page_to_index["Quantizer"] then
-          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+          if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
             return
           end
           if quantizer_vertical_scroll_selector:is_selected() then
@@ -570,7 +570,7 @@ function channel_edit_page_ui_controller.enc(n, d)
         end
       else
         if pages:get_selected_page() == page_to_index["Quantizer"] then
-          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+          if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
             return
           end
           if quantizer_vertical_scroll_selector:is_selected() then
@@ -735,7 +735,7 @@ function channel_edit_page_ui_controller.enc(n, d)
     for i = 1, math.abs(d) do
       if d > 0 then
         if pages:get_selected_page() == page_to_index["Quantizer"] then
-          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+          if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
             return
           end
           if quantizer_vertical_scroll_selector:is_selected() then
@@ -797,7 +797,7 @@ function channel_edit_page_ui_controller.enc(n, d)
         end
       else
         if pages:get_selected_page() == page_to_index["Quantizer"] then
-          if program.get_selected_channel().default_scale == 0 or program.get().default_scale == 0 then
+          if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
             return
           end
           if quantizer_vertical_scroll_selector:is_selected() then
