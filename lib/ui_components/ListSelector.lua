@@ -30,12 +30,12 @@ function ListSelector:draw()
   screen.font_size(8)
 end
 
-function ListSelector:select() 
+function ListSelector:select()
   self.selected = true
   fn.dirty_screen(true)
 end
 
-function ListSelector:deselect() 
+function ListSelector:deselect()
   self.selected = false
   fn.dirty_screen(true)
 end

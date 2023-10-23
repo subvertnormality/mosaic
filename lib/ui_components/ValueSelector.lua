@@ -35,12 +35,12 @@ function ValueSelector:draw()
   screen.font_size(8)
 end
 
-function ValueSelector:select() 
+function ValueSelector:select()
   self.selected = true
   fn.dirty_screen(true)
 end
 
-function ValueSelector:deselect() 
+function ValueSelector:deselect()
   self.selected = false
   fn.dirty_screen(true)
 end

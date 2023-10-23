@@ -8,33 +8,44 @@ local ListSelector = include("mosaic/lib/ui_components/ListSelector")
 
 local pages = Pages:new()
 local grid_viewer = GridViewer:new(0, 0)
-local tresillo_mult = ListSelector:new(10,30,"Tresillo mult", {
-  {id = 1, value = 8, name = "x8"}, 
-  {id = 2, value = 16, name = "x16"}, 
-  {id = 3, value = 24, name = "x24"}, 
-  {id = 4, value = 32, name = "x32"}, 
-  {id = 5, value = 40, name = "x40"}, 
-  {id = 6, value = 48, name = "x48"},
-  {id = 7, value = 56, name = "x56"}, 
-  {id = 8, value = 64, name = "x64"}
-})
+local tresillo_mult =
+  ListSelector:new(
+  10,
+  30,
+  "Tresillo mult",
+  {
+    {id = 1, value = 8, name = "x8"},
+    {id = 2, value = 16, name = "x16"},
+    {id = 3, value = 24, name = "x24"},
+    {id = 4, value = 32, name = "x32"},
+    {id = 5, value = 40, name = "x40"},
+    {id = 6, value = 48, name = "x48"},
+    {id = 7, value = 56, name = "x56"},
+    {id = 8, value = 64, name = "x64"}
+  }
+)
 
 function trigger_edit_page_ui_controller.change_page(subpage_name)
   -- pages:select_page(subpage_name)
 end
 
+local grid_viewer_page =
+  Page:new(
+  "",
+  function()
+    grid_viewer:draw()
+  end
+)
 
-local grid_viewer_page = Page:new("", function ()
-  grid_viewer:draw()
+local trig_edit_options_page =
+  Page:new(
+  "Trig editor options",
+  function()
+    tresillo_mult:draw()
+  end
+)
 
-end)
-
-local trig_edit_options_page = Page:new("Trig editor options", function ()
-  tresillo_mult:draw()
-end)
-
-
-function trigger_edit_page_ui_controller.register_ui_draw_handlers() 
+function trigger_edit_page_ui_controller.register_ui_draw_handlers()
   draw_handler:register_ui(
     "pattern_trigger_edit_page",
     function()
@@ -48,14 +59,13 @@ function trigger_edit_page_ui_controller.init()
   pages:add_page(trig_edit_options_page)
   pages:select_page(1)
   tresillo_mult:select()
-  trigger_edit_page_ui_controller.refresh_tresillo() 
+  trigger_edit_page_ui_controller.refresh_tresillo()
   trigger_edit_page_ui_controller.register_ui_draw_handlers()
 end
 
-
 function trigger_edit_page_ui_controller.enc(n, d)
   if n == 2 then
-    for i=1, math.abs(d) do
+    for i = 1, math.abs(d) do
       if d > 0 then
         grid_viewer:next_channel()
       else
@@ -64,12 +74,11 @@ function trigger_edit_page_ui_controller.enc(n, d)
     end
   end
 
-  if n == 1 then 
-    for i=1, math.abs(d) do
+  if n == 1 then
+    for i = 1, math.abs(d) do
       if d > 0 then
         pages:next_page()
         fn.dirty_screen(true)
-
       else
         pages:previous_page()
         fn.dirty_screen(true)
@@ -78,35 +87,31 @@ function trigger_edit_page_ui_controller.enc(n, d)
   end
 
   if n == 3 then
-    for i=1, math.abs(d) do
+    for i = 1, math.abs(d) do
       if d > 0 then
         if pages:get_selected_page() == 2 then
           tresillo_mult:increment()
-          trigger_edit_page_ui_controller.update_tresillo() 
-
+          trigger_edit_page_ui_controller.update_tresillo()
         end
-
       else
         if pages:get_selected_page() == 2 then
-
           tresillo_mult:decrement()
-          trigger_edit_page_ui_controller.update_tresillo() 
+          trigger_edit_page_ui_controller.update_tresillo()
         end
       end
-
     end
   end
 end
 
-function trigger_edit_page_ui_controller.update_tresillo() 
+function trigger_edit_page_ui_controller.update_tresillo()
   params:set("tresillo_amount", tresillo_mult:get_selected().id)
 end
 
-function trigger_edit_page_ui_controller.refresh_tresillo() 
+function trigger_edit_page_ui_controller.refresh_tresillo()
   tresillo_mult:set_selected_value(params:get("tresillo_amount"))
 end
 
-function trigger_edit_page_ui_controller:refresh() 
+function trigger_edit_page_ui_controller:refresh()
   trigger_edit_page_ui_controller.refresh_tresillo()
 end
 

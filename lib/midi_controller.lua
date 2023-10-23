@@ -8,42 +8,37 @@ function midi_controller.init()
     midi_devices[i] = midi.connect(i)
     table.insert( -- register its name:
       midi_device_names, -- table to insert to
-      "port "..i..": "..util.trim_string_to_width(midi_devices[i].name,80) -- value to insert
+      "port " .. i .. ": " .. util.trim_string_to_width(midi_devices[i].name, 80) -- value to insert
     )
-  end 
+  end
 end
 
 function midi_controller.get_midi_outs()
   local midi_outs = {}
   for i = 1, #midi.vports do
     if midi_devices[i] and midi_devices[i].name ~= "none" then
-      table.insert( 
-        midi_outs, 
-        {name = "OUT "..i, value = i, long_name = util.trim_string_to_width(midi_devices[i].name,80)}
+      table.insert(
+        midi_outs,
+        {name = "OUT " .. i, value = i, long_name = util.trim_string_to_width(midi_devices[i].name, 80)}
       )
     end
-  end 
+  end
 
   return midi_outs
 end
 
 function midi_controller.all_off(id)
-
   for note = 0, 127 do
-    for channel = 1, 16 do 
+    for channel = 1, 16 do
       midi_devices[id]:note_off(note, 0, channel)
     end
   end
-
 end
 
-
 function midi_controller:note_off(note, velocity, channel, device)
-
   if midi_devices[device] ~= nil then
     midi_devices[device]:note_off(note, velocity, channel)
   end
-
 end
 
 function midi_controller:note_on(note, velocity, channel, device)
@@ -55,15 +50,14 @@ end
 function midi_controller.cc(cc_msb, cc_lsb, value, channel, device)
   if midi_devices[device] ~= nil then
     if cc_lsb then
-      local lsb_value = value % 128  -- Least Significant Byte
-      local msb_value = math.floor(value / 128)  -- Most Significant Byte
-      
+      local lsb_value = value % 128 -- Least Significant Byte
+      local msb_value = math.floor(value / 128) -- Most Significant Byte
+
       -- According to the manual, send the LSB first
       midi_devices[device]:cc(cc_lsb, lsb_value, channel)
-      
+
       -- Then send the MSB
       midi_devices[device]:cc(cc_msb, msb_value, channel)
-      
     else
       -- If there's no LSB, just send the MSB
       midi_devices[device]:cc(cc_msb, value, channel)
@@ -81,12 +75,12 @@ function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
 
   midi_controller.cc(6, math.floor(v1), channel, device)
   midi_controller.cc(38, math.floor(v2), channel, device)
-
 end
 
 function midi_controller.start()
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
+
       midi_devices[id]:start()
     end
   end

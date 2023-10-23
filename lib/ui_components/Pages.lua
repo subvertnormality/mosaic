@@ -11,7 +11,6 @@ function Pages:new()
 end
 
 function Pages:draw()
-
   local x = 5
 
   for i = 1, fn.table_count(self.pages) do
@@ -25,8 +24,8 @@ function Pages:draw()
     x = x + 10
   end
 
-  if (self.selected_page == nil) then 
-    if self.pages[1] then 
+  if (self.selected_page == nil) then
+    if self.pages[1] then
       self.pages[1]:draw()
     end
   else
@@ -40,7 +39,7 @@ function Pages:add_page(page)
   table.insert(self.pages, page)
 end
 
-function Pages:select_page(page) 
+function Pages:select_page(page)
   self.selected_page = page
 end
 
@@ -49,21 +48,17 @@ function Pages:get_selected_page()
 end
 
 function Pages:next_page()
-
   self.selected_page = self.selected_page + 1
   if self.selected_page > fn.table_count(self.pages) then
     self.selected_page = fn.table_count(self.pages)
   end
-
 end
 
 function Pages:previous_page()
-
   self.selected_page = self.selected_page - 1
   if self.selected_page < 1 then
     self.selected_page = 1
   end
-
 end
 
 return Pages

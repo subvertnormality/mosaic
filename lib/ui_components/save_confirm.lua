@@ -52,5 +52,4 @@ function save_confirm.set_cancel_message(message)
   cancel_message = message
 end
 
-
 return save_confirm

@@ -16,7 +16,6 @@ function grid_abstraction.init()
   end
 end
 
-
 function grid_abstraction.led(x, y, brightness)
   if x < 1 or y < 1 or x > 16 or y > 8 then
     return
@@ -32,11 +31,11 @@ function grid_abstraction.seq(x, y, brightness)
   grid_abstraction.screen_state[x][y] = brightness
 end
 
-function grid_abstraction.get_state() 
+function grid_abstraction.get_state()
   return grid_abstraction.state
 end
 
-function grid_abstraction.get_screen_state() 
+function grid_abstraction.get_screen_state()
   return grid_abstraction.screen_state
 end
 

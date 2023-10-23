@@ -7,8 +7,11 @@ function Page:new(name, func)
   local self = setmetatable({}, Page)
   self.name = name
   self.draw_func = func
-  self.sub_page_draw_func = function () end
-  self.sub_name_func = function() return "" end
+  self.sub_page_draw_func = function()
+  end
+  self.sub_name_func = function()
+    return ""
+  end
   self.sub_page_enabled = false
   return self
 end
@@ -40,13 +43,12 @@ end
 function Page:draw()
   screen.level(10)
   screen.move(5, 10)
-  screen.text(self.sub_name_func()..self.name)
+  screen.text(self.sub_name_func() .. self.name)
   if self.sub_page_enabled then
     self.sub_page_draw_func()
   else
     self.draw_func()
   end
-  
 end
 
 function Page:toggle_sub_page()

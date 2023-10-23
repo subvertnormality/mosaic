@@ -26,6 +26,7 @@
         - [Quantised fixed note](#quantised-fixed-note)
         - [Random note](#random-note)
         - [Random twos note](#random-twos-note)
+        - [Chord notes](#chord-notes)
     + [Song editor](#song-editor)
   * [Save and load](#save-and-load)
   * [Custom device maps](#custom-device-maps)
@@ -37,9 +38,9 @@
 
 ## At a glance
 
-As of v0.3 _Mosaic_ gives you the following:
+As of v0.3.2 _Mosaic_ gives you the following:
 
-- 16 channels that can each output triggers, notes, note length, velocity and CC to a single midi device
+- 16 channels that can each output triggers, notes, note length, velocity and CC to a midi device or an n.b. voice
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
 - Song mode with 90 sequencer patterns
 - Save, load, autosave
@@ -51,7 +52,7 @@ As of v0.3 _Mosaic_ gives you the following:
 - Per channel pattern length
 - Channel muting
 - Scales with root note and degree setting
-- Trig lockable octave, scales, transpose, step probability, random note modifiers, random velocity modifiers
+- Trig lockable octave, scales, chords, transpose, step probability, random note modifiers, random velocity modifiers
 
 Requirements:
 
@@ -82,7 +83,7 @@ _Mosaic_ ensures you remain within your selected scale although there are ways t
 
 ### Channel
 
-The 'channel' represents another pivotal component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's internal sound device, MIDI device, pick MIDI outputs, choose MIDI channels, the scale, and set up param trig locks and their related destinations. Additionally, you can assign various patterns to one channel. Remember, a single pattern can be linked to multiple channels, and while each channel is monophonic, several can send signals to the same MIDI device (note that this is generally only possible with midi devices).
+The 'channel' represents another pivotal component in _Mosaic_. Through a channel, you decide the musical device to play and the specifics of its sound. You select the channel's internal sound device, MIDI device, pick MIDI outputs, choose MIDI channels, the scale, and set up param trig locks and their related destinations. Additionally, you can assign various patterns to one channel. A single pattern can be linked to multiple channels.
 
 When two patterns overlap in one channel and their trigs coincide, the outcome depends on the channel's 'merge mode'. There are several merge modes, each with its own characteristic. This feature encourages designing patterns that, when they overlap, produce intriguing results.
 
@@ -108,9 +109,9 @@ You can hide stock devices from the menu by commenting out it's entry in the `de
 
 Midi devices can be set to load a stored patch using the params menu. For stock midi devices, all cc parameters are available to edit. A value of -1 against a midi parameter means the function is off. Changing the value will send the midi value to your midi device. When you load a mosiac script, the stored midi param values will be sent to your midi device, effectively loading a patch. It's possible in this way to stored all your sound's patch data with your mosaic patch. This is particularly practical for devices with less midi parameters or where the device's interface is not particularly intuitive.
 
-### Params
+### Trig Params
 
-Most devices in _Mosaic_ feature a set of params that alters either the quality of the sound or the trig in some way. These params can be trig locked. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. See the channel page section for details on how to assign and use params.
+Most devices in _Mosaic_ feature a set of trig params that alters either the quality of the sound or the trig in some way. These params can be trig locked. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. See the channel page section for details on how to assign and use params.
 
 ### Trig Locks
 
@@ -156,7 +157,7 @@ With the top row, pick one of the 16 patterns available. In the image, you can s
 
 ![Pattern select buttons](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_pattern_select.png)
 
-To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolize a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. Since patterns are monophonic, one trig’s duration ends upon meeting another.
+To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolize a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. In a single pattern, one trig’s duration ends upon meeting another.
 
 ![Trig sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_sequencer.png)
 
@@ -277,11 +278,11 @@ Let's delve into into the merge modes:
 
 You can view detailed configurations of your selected channel on the Norns screen. Each page offers intuitive and interactive tools to sculpt your sonic experience.
 
-On the first page you're greeted with an array of parameters. Navigate pages with E1. Rotate E2 to highlight a parameter, and E3 to refine its value. Want a different parameter active in the selected parameter slot? Tap K2. As you change the value, the system automatically locks in your changes. As mentioned above, these can be trig locked on each step by holding the step and rotating E3.
+On the first page you're greeted with an array of parameters. Navigate pages with E1. Rotate E2 to highlight a parameter, and E3 to refine its value. Want a different parameter active in the selected parameter slot? Tap K2. As you change the value, the system automatically locks in your changes. As mentioned above, these can be trig locked on each step by holding the step and rotating E3. The default trig param value will be sent to your chosen device destination on steps where there isn't a trig lock. When a trig param is set to "off", _mosaic_ will not send a value to your chosen device destination. When a trig lock is set to "off" on a step, it will not send the default trig param value, and will instead keep sending the value of the last trig lock.
 
 ![Param trig lock page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_param_select.png)
 
-You can define your channel's rhythmic character on the second page. Use E2 to navigate and E3 to finesse values. The channel grid keys let you specify which channel to adjust.
+You can define your channel's rhythmic character on the second page. Use E2 to navigate and E3 to set values. The channel grid keys let you specify which channel to adjust.
 
 ![Channel clocks and swing page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_clocks.png)
 
@@ -331,7 +332,7 @@ To return to the channel pages, select a channel using the channel select button
 
 #### Stock trig params
 
-All device types have a set of standard trig orarms that affect the sequencer rather than the quality of the sound. 
+All device types have a set of standard trig params that affect the sequencer rather than the quality of the sound. 
 
 ##### Fixed note
 
@@ -356,6 +357,10 @@ Add spice to the velocity of your trigs with this param. Similar to random note,
 ##### Trig Probability
 
 This trig param can be used to ensure trigs play only with a certain probability. When set to 100, the trig will always play. When set to 0, the trig will never play. At 50, the trig will play half the time. You can set this globally and per step.
+
+##### Chord Notes
+
+The chord notes trig params can be used to append an additional note to your trig, thereby forming a chord. The selected device on the channel must be polyphonic; otherwise, unusual results may occur. The additional chord notes are determined relative to the existing note of the trig, and this is done post the application of any note modifiers, such as random note. These will be quantised according to the selected scale with scale locks honoured unlocking an enourmous amount of power. The appended note will maintain the length and velocity of the original trig. You have the capability to add up to four additional notes, allowing for the creation of chords with up to five simultaneous notes, by adding four of these param locks to a channel.
 
 ### Song editor
 

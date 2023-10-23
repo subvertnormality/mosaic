@@ -1,10 +1,8 @@
-
 local math = require("math")
 local status, periphery = pcall(require, "periphery")
 local floor = math.floor
 local format = string.format
 local insert = table.insert
-
 
 if not status then
   print("Periphery not found. Sinfonion support disabled.")
@@ -16,22 +14,22 @@ local time = os.time
 
 local sinfonion = {}
 
-local SYNC_BUFFER_SIZE = 6  -- Placeholder value
-local HARMONIC_SYNC_TX_IRQ_TIMEOUT = 1000  -- Placeholder value
+local SYNC_BUFFER_SIZE = 6 -- Placeholder value
+local HARMONIC_SYNC_TX_IRQ_TIMEOUT = 1000 -- Placeholder value
 
 local function millis()
-    return floor(time() * 1000)
+  return floor(time() * 1000)
 end
 
 local function debug(msg, ...)
-    print(format(msg, ...))
+  print(format(msg, ...))
 end
 
-local serial = Serial{device="/dev/ttyS0", baudrate=115200, databits=8, parity="none", stopbits=1}
+local serial = Serial {device = "/dev/ttyS0", baudrate = 115200, databits = 8, parity = "none", stopbits = 1}
 local last_interrupt = 0
 local buffer = {}
-for i=1, SYNC_BUFFER_SIZE do
-    buffer[i] = 0
+for i = 1, SYNC_BUFFER_SIZE do
+  buffer[i] = 0
 end
 buffer[1] = 0x80
 local index = 1
@@ -40,7 +38,6 @@ local last_clock = 0
 local last_beat = 0
 local last_step = 0
 local last_reset = 0
-
 
 local function is_alive()
   return millis() - last_interrupt < 10
@@ -164,16 +161,15 @@ function sinfonion.got_next_reset()
   return got
 end
 
-
 local function handle_rx_irq(byte)
   last_interrupt = millis()
   if byte & 0x80 ~= 0 then
-      wait_for_sync = false
-      index = 1
-      buffer[1] = byte
+    wait_for_sync = false
+    index = 1
+    buffer[1] = byte
   elseif not wait_for_sync then
-      index = index + 1
-      buffer[index] = byte
+    index = index + 1
+    buffer[index] = byte
   end
 end
 
@@ -188,7 +184,7 @@ end
 local function dump()
   local values = {}
   for _, v in ipairs(buffer) do
-      insert(values, format("%02x", v))
+    insert(values, format("%02x", v))
   end
   debug(" " .. table.concat(values, " "))
 end
@@ -199,7 +195,6 @@ local function send_next()
   last_sent_byte = buffer[index]
 end
 
-
 function sinfonion.init()
   local serial_loop = metro.init()
   serial_loop.event = send_next
@@ -207,7 +202,5 @@ function sinfonion.init()
   serial_loop.count = -1
   serial_loop:start()
 end
-
-
 
 return sinfonion

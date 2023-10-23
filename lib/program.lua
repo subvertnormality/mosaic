@@ -13,10 +13,9 @@ local pages = {
 }
 
 local function initialise_default_channels()
-  
   local channels = {}
-  
-  for i=1,17 do
+
+  for i = 1, 17 do
     channels[i] = {
       number = i,
       trig_lock_banks = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -45,25 +44,21 @@ local function initialise_default_channels()
       swing = 50
     }
   end
-  
+
   return channels
 end
 
-
 local function initialise_default_patterns()
-  
   local patterns = {}
 
-  for i=1,16 do
+  for i = 1, 16 do
     patterns[i] = program.initialise_default_pattern()
   end
-  
+
   return patterns
 end
 
-
 local function initialise_default_sequencer_pattern()
-  
   local sequencer_pattern = {}
   local root_note = 0
 
@@ -75,7 +70,7 @@ local function initialise_default_sequencer_pattern()
     patterns = initialise_default_patterns(),
     channels = initialise_default_channels(),
     scales = {
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1}, 
+      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
@@ -91,32 +86,27 @@ local function initialise_default_sequencer_pattern()
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
       {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1}
-    },
+    }
   }
-  
-
 
   return sequencer_pattern
 end
 
-
 function program.initialise_64_table(d)
   local table_64 = {}
-  for i=1,64 do
+  for i = 1, 64 do
     table_64[i] = d
   end
   return table_64
 end
 
 function program.initialise_default_pattern()
-  
   return {
     trig_values = program.initialise_64_table(0),
     lengths = program.initialise_64_table(1),
     note_values = program.initialise_64_table(0),
     velocity_values = program.initialise_64_table(100)
   }
-
 end
 
 function program.init()
@@ -151,11 +141,9 @@ function program.init()
       {midi_channel = 1, midi_device = 1, device_map = "none"}
     }
   }
-
 end
 
 function program.is_sequencer_pattern_active(p)
-
   if (program_store.sequencer_patterns[p] and program_store.sequencer_patterns[p].active) then
     return true
   end
@@ -172,7 +160,6 @@ function program.set_selected_sequencer_pattern(p)
 end
 
 function program.get_sequencer_pattern(p)
-
   if not program_store.sequencer_patterns[p] then
     program_store.sequencer_patterns[p] = initialise_default_sequencer_pattern()
   end
@@ -181,7 +168,6 @@ function program.get_sequencer_pattern(p)
 end
 
 function program.set_sequencer_pattern(p, pattern)
-
   local sequencer_pattern = fn.deep_copy(program.get_sequencer_pattern(p))
 
   if params:get("reset_on_end_of_pattern") == 1 then
@@ -202,19 +188,15 @@ function program.set_current_step_for_channel(c, s)
 end
 
 function program.set_global_step_scale_number(step_scale_number)
-
   for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
     sequencer_pattern.channels[17].step_scale_number = step_scale_number
   end
-
 end
 
 function program.set_channel_step_scale_number(c, step_scale_number)
-
   for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
     sequencer_pattern.channels[c].step_scale_number = step_scale_number
   end
-
 end
 
 function program.get()
@@ -275,12 +257,12 @@ function program.step_has_param_trig_lock(channel, step)
 end
 
 function program.step_has_trig_lock(channel, step)
-
-  if program.step_has_param_trig_lock(channel, step) 
-    or program.step_octave_has_trig_lock(channel, step) 
-    or program.step_scale_has_trig_lock(channel, step)
-    or program.step_transpose_has_trig_lock(step) then
-      return true
+  if
+    program.step_has_param_trig_lock(channel, step) or program.step_octave_has_trig_lock(channel, step) or
+      program.step_scale_has_trig_lock(channel, step) or
+      program.step_transpose_has_trig_lock(step)
+   then
+    return true
   end
 
   return false
@@ -292,7 +274,7 @@ function program.add_step_octave_trig_lock(step, trig_lock)
     selected_channel.step_octave_trig_lock_banks = {}
   end
   local step_octave_trig_lock_banks = selected_channel.step_octave_trig_lock_banks
-  
+
   if trig_lock ~= nil then
     if (trig_lock < -2) then
       trig_lock = -2
@@ -329,7 +311,7 @@ function program.add_step_transpose_trig_lock(step, trig_lock)
     channel.step_transpose_trig_lock_banks = {}
   end
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
-  
+
   if trig_lock ~= nil then
     if (trig_lock < -7) then
       trig_lock = -7
@@ -343,19 +325,15 @@ function program.add_step_transpose_trig_lock(step, trig_lock)
 end
 
 function program.set_transpose(transpose)
-
   program.get_selected_sequencer_pattern().transpose = transpose
-
 end
 
 function program.get_transpose()
-
-  if program.get_selected_sequencer_pattern().transpose == nil then 
-    return 0 
+  if program.get_selected_sequencer_pattern().transpose == nil then
+    return 0
   else
     return program.get_selected_sequencer_pattern().transpose
   end
-
 end
 
 function program.get_step_transpose_trig_lock(step)
@@ -384,7 +362,7 @@ function program.add_step_scale_trig_lock(step, trig_lock)
     selected_channel.step_scale_trig_lock_banks = {}
   end
   local step_scale_trig_lock_banks = selected_channel.step_scale_trig_lock_banks
-  
+
   if trig_lock ~= nil then
     if (trig_lock < 1) then
       trig_lock = 1
@@ -415,8 +393,7 @@ function program.step_scale_has_trig_lock(channel, step)
   return false
 end
 
-
-function program.clear_trig_locks_for_step(step) 
+function program.clear_trig_locks_for_step(step)
   local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
   local channel = program.get_selected_channel()
   program.add_step_scale_trig_lock(step, nil)
@@ -424,7 +401,7 @@ function program.clear_trig_locks_for_step(step)
     if (step_trig_lock_banks and step_trig_lock_banks[step]) then
       step_trig_lock_banks[step] = nil
     end
-    
+
     program.add_step_octave_trig_lock(step, nil)
   elseif channel.number == 17 then
     program.add_step_transpose_trig_lock(step, nil)
@@ -432,9 +409,15 @@ function program.clear_trig_locks_for_step(step)
 end
 
 function program.get_scale(s)
-
   if s == 0 then
-    return {name = "Chromatic", number = 0, scale = musicutil.generate_scale(0, "chromatic", 1), romans = {}, root_note = 0, chord = 1}
+    return {
+      name = "Chromatic",
+      number = 0,
+      scale = musicutil.generate_scale(0, "chromatic", 1),
+      romans = {},
+      root_note = 0,
+      chord = 1
+    }
   end
 
   -- Backwards compatability
@@ -445,21 +428,16 @@ function program.get_scale(s)
   end
 
   return program.get_selected_sequencer_pattern().scales[s]
-
 end
 
 function program.set_scale(s, scale)
-
   program.get_selected_sequencer_pattern().scales[s] = scale
-
 end
 
 function program.set_all_sequencer_pattern_scales(s, scale)
-
   for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
     sequencer_pattern.scales[s] = scale
   end
-  
 end
 
 return program

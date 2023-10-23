@@ -4,16 +4,14 @@ program = include("mosaic/lib/program")
 local pattern_controller = include("mosaic/lib/pattern_controller")
 
 function pass(test_name)
-  print("Test "..test_name.." PASS")
+  print("Test " .. test_name .. " PASS")
 end
 
 function fail(test_name)
-  print("Test "..test_name.." FAIL")
+  print("Test " .. test_name .. " FAIL")
 end
 
-
 function skip_should_set_trig_step_to_zero_when_all_steps_are_zero()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "skip"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -33,7 +31,6 @@ function skip_should_set_trig_step_to_zero_when_all_steps_are_zero()
 end
 
 function skip_should_set_trig_step_to_one_when_only_one_step_is_one()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "skip"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -53,7 +50,6 @@ function skip_should_set_trig_step_to_one_when_only_one_step_is_one()
 end
 
 function add_should_set_trig_step_to_one_when_only_one_step_is_one()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -73,7 +69,6 @@ function add_should_set_trig_step_to_one_when_only_one_step_is_one()
 end
 
 function subtract_should_set_trig_step_to_one_when_only_one_step_is_one()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -93,7 +88,6 @@ function subtract_should_set_trig_step_to_one_when_only_one_step_is_one()
 end
 
 function average_should_set_trig_step_to_one_when_only_one_step_is_one()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "average"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -113,7 +107,6 @@ function average_should_set_trig_step_to_one_when_only_one_step_is_one()
 end
 
 function add_should_set_trig_step_to_one_when_more_than_one_step_is_one()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -133,7 +126,6 @@ function add_should_set_trig_step_to_one_when_more_than_one_step_is_one()
 end
 
 function skip_should_set_trig_step_to_zero_when_more_than_one_step_is_one()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "skip"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -153,7 +145,6 @@ function skip_should_set_trig_step_to_zero_when_more_than_one_step_is_one()
 end
 
 function selected_patterns_set_order_should_not_matter()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "skip"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -173,7 +164,6 @@ function selected_patterns_set_order_should_not_matter()
 end
 
 function pattern_number_should_use_note_value_from_chosen_pattern_number()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "pattern_number_4"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -197,7 +187,6 @@ function pattern_number_should_use_note_value_from_chosen_pattern_number()
 end
 
 function pattern_number_should_use_note_value_from_chosen_pattern_number_even_if_trig_is_off()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "pattern_number_4"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -221,7 +210,6 @@ function pattern_number_should_use_note_value_from_chosen_pattern_number_even_if
 end
 
 function pattern_number_should_use_length_value_from_chosen_pattern_number()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "pattern_number_2"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -245,7 +233,6 @@ function pattern_number_should_use_length_value_from_chosen_pattern_number()
 end
 
 function pattern_number_should_not_use_note_value_from_chosen_pattern_number_if_pattern_isnt_selected()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "pattern_number_4"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -268,7 +255,6 @@ function pattern_number_should_not_use_note_value_from_chosen_pattern_number_if_
 end
 
 function notes_should_add_up_when_using_add_merge_mode()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -283,7 +269,6 @@ function notes_should_add_up_when_using_add_merge_mode()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-
   if pattern_controller.get_and_merge_patterns(1, "add").note_values[1] == 72 + math.ceil((72 + 45 + 28) / 3) then
     pass("notes_should_add_up_when_using_add_merge_mode")
   else
@@ -291,8 +276,7 @@ function notes_should_add_up_when_using_add_merge_mode()
   end
 end
 
-function notes_should_average_when_using_average_merge_mode() 
-  
+function notes_should_average_when_using_average_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "average"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -312,11 +296,9 @@ function notes_should_average_when_using_average_merge_mode()
   else
     fail("notes_should_average_when_using_average_merge_mode")
   end
-
 end
 
 function notes_should_subtract_when_using_subtract_merge_mode()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "subtract"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -339,7 +321,6 @@ function notes_should_subtract_when_using_subtract_merge_mode()
 end
 
 function notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "subtract"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -352,11 +333,12 @@ function notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pa
   program.get_sequencer_pattern(1).patterns[1].note_values[4] = 5
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "subtract").note_values[1] == 2 and
-  pattern_controller.get_and_merge_patterns(1, "subtract").note_values[2] == 3 and
-  pattern_controller.get_and_merge_patterns(1, "subtract").note_values[3] == 4 and
-  pattern_controller.get_and_merge_patterns(1, "subtract").note_values[4] == 5
-  then
+  if
+    pattern_controller.get_and_merge_patterns(1, "subtract").note_values[1] == 2 and
+      pattern_controller.get_and_merge_patterns(1, "subtract").note_values[2] == 3 and
+      pattern_controller.get_and_merge_patterns(1, "subtract").note_values[3] == 4 and
+      pattern_controller.get_and_merge_patterns(1, "subtract").note_values[4] == 5
+   then
     pass("notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern")
   else
     fail("notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern")
@@ -364,7 +346,6 @@ function notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pa
 end
 
 function velocity_values_should_average_the_values_when_using_add_merge_mode()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -388,7 +369,6 @@ function velocity_values_should_average_the_values_when_using_add_merge_mode()
 end
 
 function notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mode()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -403,7 +383,7 @@ function notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mo
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
-  
+
   if pattern_controller.get_and_merge_patterns(1, "add").note_values[1] == 72 + math.ceil((45 + 28) / 2) then
     pass("notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mode")
   else
@@ -411,9 +391,7 @@ function notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mo
   end
 end
 
-
 function notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_merge_mode()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "subtract"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -428,7 +406,7 @@ function notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_mer
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
-  
+
   if pattern_controller.get_and_merge_patterns(1, "subtract").note_values[1] == 72 - math.ceil((45 + 28) / 2) then
     pass("notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_merge_mode")
   else
@@ -437,7 +415,6 @@ function notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_mer
 end
 
 function notes_should_ignore_values_that_dont_have_trigs_when_using_average_merge_mode()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "average"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -452,7 +429,7 @@ function notes_should_ignore_values_that_dont_have_trigs_when_using_average_merg
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
-  
+
   if pattern_controller.get_and_merge_patterns(1, "average").note_values[1] == math.ceil((45 + 28) / 2) then
     pass("notes_should_ignore_values_that_dont_have_trigs_when_using_average_merge_mode")
   else
@@ -460,9 +437,7 @@ function notes_should_ignore_values_that_dont_have_trigs_when_using_average_merg
   end
 end
 
-
 function notes_should_ignore_values_from_unselected_patterns_when_using_add_merge_mode()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -484,9 +459,7 @@ function notes_should_ignore_values_from_unselected_patterns_when_using_add_merg
   end
 end
 
-
 function lengths_should_average_the_values_when_using_add_merge_mode()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -509,7 +482,6 @@ function lengths_should_average_the_values_when_using_add_merge_mode()
 end
 
 function velocity_values_should_average_the_values_when_using_add_merge_mode()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -531,9 +503,7 @@ function velocity_values_should_average_the_values_when_using_add_merge_mode()
   end
 end
 
-
 function velocity_values_should_average_the_values_when_using_subtract_merge_mode()
-
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "subtract"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -554,7 +524,6 @@ function velocity_values_should_average_the_values_when_using_subtract_merge_mod
     fail("velocity_values_should_average_the_values_when_using_subtract_merge_mode")
   end
 end
-
 
 function init()
   skip_should_set_trig_step_to_zero_when_all_steps_are_zero()
@@ -581,5 +550,4 @@ function init()
   lengths_should_average_the_values_when_using_add_merge_mode()
   velocity_values_should_average_the_values_when_using_add_merge_mode()
   velocity_values_should_average_the_values_when_using_subtract_merge_mode()
-
 end

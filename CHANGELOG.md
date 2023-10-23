@@ -1,3 +1,7 @@
+# 0.3.2
+
+* Chord notes trig params added. These can be used to append an additional note to trigs on a single channel, thereby forming a chord. Chords follow scales and locks.
+
 # 0.3.1
 
 _Breaking update. Please backup and remove your .pset and .ptn data files from previous versions._
