@@ -1,3 +1,7 @@
+# 0.3.3
+
+* Fixed regression that stopped trig locks from displaying in the UI
+
 # 0.3.2
 
 * Chord notes trig params added. These can be used to append an additional note to trigs on a single channel, thereby forming a chord. Chords follow scales and locks.
