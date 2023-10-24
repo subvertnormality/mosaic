@@ -40,9 +40,15 @@ function step_handler.process_stock_params(c, step, type)
   for i = 1, 10 do
     if channel.trig_lock_params[i] and channel.trig_lock_params[i].id == type then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
+      if step_trig_lock == channel.trig_lock_params[i].off_value then
+        return nil
+      end
       if step_trig_lock then
         return step_trig_lock
       else
+        if channel.trig_lock_banks[i] == channel.trig_lock_params[i].off_value then
+          return nil
+        end
         return channel.trig_lock_banks[i]
       end
     end
