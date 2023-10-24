@@ -195,6 +195,7 @@ function channel_edit_page_controller.register_press_handlers()
         tooltip:show("Channel " .. program.get().selected_channel .. " selected")
         channel_edit_page_controller.refresh()
         channel_edit_page_ui_controller.refresh()
+        channel_edit_page_ui_controller.refresh_trig_lock_values()
       end
     end
   )

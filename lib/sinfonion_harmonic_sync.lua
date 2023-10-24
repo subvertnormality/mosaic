@@ -198,7 +198,7 @@ end
 function sinfonion.init()
   local serial_loop = metro.init()
   serial_loop.event = send_next
-  serial_loop.time = 0.005
+  serial_loop.time = 0.01
   serial_loop.count = -1
   serial_loop:start()
 end
