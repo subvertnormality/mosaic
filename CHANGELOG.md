@@ -1,3 +1,7 @@
+# 0.3.4
+
+* Fixed bug that led to trig lengths not correctly following the channel's current clock division or swing
+
 # 0.3.3
 
 * Fixed regression that stopped trig locks from displaying in the UI
