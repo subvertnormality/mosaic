@@ -158,7 +158,7 @@ function clock_controller.init()
       enabled = true
     }
 
-    clock_controller["channel_" .. channel_number .. "_clock"].param_processor =
+    clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor =
       clock_lattice:new_sprocket {
       action = function(t)
         if channel_number ~= 17 then
@@ -186,6 +186,8 @@ function clock_controller.init()
             trigless_lock_active[channel_number] = true
             step_handler.process_params(channel_number, next_step)
           end
+
+          step_handler.process_lengths(channel_number)
         end
       end,
       division = 1 / (div * 4),
@@ -200,7 +202,7 @@ function clock_controller.init()
   master_clock =
     clock_lattice:new_sprocket {
     action = function(t)
-      step_handler.process_lengths()
+
       if first_run ~= true then
         step_handler.process_song_sequencer_patterns(program.get().current_step)
       end
@@ -221,12 +223,12 @@ end
 
 function clock_controller.set_channel_swing(channel_number, swing)
   clock_controller["channel_" .. channel_number .. "_clock"]:set_swing(swing)
-  clock_controller["channel_" .. channel_number .. "_clock"].param_processor:set_swing(swing)
+  clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor:set_swing(swing)
 end
 
 function clock_controller.set_channel_division(channel_number, division)
   clock_controller["channel_" .. channel_number .. "_clock"]:set_division(1 / (division * 4))
-  clock_controller["channel_" .. channel_number .. "_clock"].param_processor:set_division(1 / (division * 4))
+  clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor:set_division(1 / (division * 4))
 end
 
 function clock_controller:start()

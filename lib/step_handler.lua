@@ -345,7 +345,8 @@ function step_handler.handle(c, current_step)
             midi_channel = midi_channel,
             midi_device = midi_device,
             steps_remaining = length_value,
-            player = midi_controller
+            player = midi_controller, 
+            channel = c
           }
         )
         for i = 1, #chord_notes do
@@ -361,7 +362,8 @@ function step_handler.handle(c, current_step)
                 midi_channel = midi_channel,
                 midi_device = midi_device,
                 steps_remaining = length_value,
-                player = midi_controller
+                player = midi_controller, 
+                channel = c
               }
             )
           end
@@ -376,7 +378,8 @@ function step_handler.handle(c, current_step)
             midi_channel = midi_channel,
             midi_device = midi_device,
             steps_remaining = length_value,
-            player = device.player
+            player = device.player, 
+            channel = c
           }
         )
         for i = 1, #chord_notes do
@@ -392,7 +395,8 @@ function step_handler.handle(c, current_step)
                 midi_channel = midi_channel,
                 midi_device = midi_device,
                 steps_remaining = length_value,
-                player = device.player
+                player = device.player, 
+                channel = c
               }
             )
           end
@@ -478,13 +482,15 @@ function step_handler.sinfonian_sync(step)
   end
 end
 
-function step_handler.process_lengths()
+function step_handler.process_lengths(c)
   for i = #length_tracker, 1, -1 do
     local l = length_tracker[i]
-    l.steps_remaining = l.steps_remaining - 1
-    if l.steps_remaining < 1 then
-      l.player:note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
-      table.remove(length_tracker, i)
+    if l.channel == c then
+      l.steps_remaining = l.steps_remaining - 1
+      if l.steps_remaining < 1 then
+        l.player:note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
+        table.remove(length_tracker, i)
+      end
     end
   end
 end
