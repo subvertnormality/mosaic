@@ -1,7 +1,7 @@
 # 0.3.5
 
 * Removing a mod no longer causes problems with the channel that had the mod applied via a device
-* Devices can now be set to polyphonic and non-polyphonic. Non-polyphonic
+* Devices can now be set to polyphonic and non-polyphonic. Non-polyphonic devices stop all notes before playing the next note. This is good for devices that utilises gates. Polyphonic devices allow the device to deal with overlapping notes.
 
 # 0.3.4
 
