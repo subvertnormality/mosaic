@@ -69,6 +69,7 @@ local stock_device_map = {
     ["id"] = "digitakt",
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "track_parameters_solo",
@@ -918,6 +919,7 @@ local stock_device_map = {
     ["id"] = "digitone",
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
+    ["polyphonic"] = true,
     ["params"] = {
       {
         ["id"] = "track_parameters_mute",
@@ -2509,6 +2511,7 @@ local stock_device_map = {
     ["id"] = "op-1",
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
+    ["polyphonic"] = true,
     ["params"] = {
       {
         ["id"] = "midi_lfo_synth",
@@ -2578,6 +2581,7 @@ local stock_device_map = {
     ["id"] = "syntakt",
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "track_mute",
@@ -4117,6 +4121,7 @@ local stock_device_map = {
     ["id"] = "ex-braids",
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
+    ["polyphonic"] = true,
     ["params"] = {
       {
         ["id"] = "model_1",
@@ -4906,6 +4911,7 @@ local stock_device_map = {
     ["id"] = "ex-multi-sample",
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "folder",
@@ -5140,6 +5146,7 @@ local stock_device_map = {
     ["id"] = "ex-matrix-mixer",
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "out_offset1",
@@ -5809,6 +5816,7 @@ local stock_device_map = {
     ["id"] = "nord-drum-2",
     ["map_params_automatically"] = false,
     ["default_midi_channel"] = nil,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "level",
@@ -6358,6 +6366,7 @@ local stock_device_map = {
     ["id"] = "drm-bd",
     ["unique"] = true,
     ["map_params_automatically"] = true,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "fixed_note",
@@ -6378,6 +6387,7 @@ local stock_device_map = {
     ["id"] = "drm-drum1",
     ["unique"] = true,
     ["map_params_automatically"] = true,
+    ["polyphonic"] = false,
     ["params"] = {
       -- up to 8 params
       {
@@ -6399,6 +6409,7 @@ local stock_device_map = {
     ["id"] = "drm-drum2",
     ["unique"] = true,
     ["map_params_automatically"] = true,
+    ["polyphonic"] = false,
     ["params"] = {
       -- up to 8 params
       {
@@ -6420,6 +6431,7 @@ local stock_device_map = {
     ["id"] = "drm-multi",
     ["unique"] = true,
     ["map_params_automatically"] = true,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "fixed_note",
@@ -6440,6 +6452,7 @@ local stock_device_map = {
     ["id"] = "drm-sd",
     ["unique"] = true,
     ["map_params_automatically"] = true,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "fixed_note",
@@ -6460,6 +6473,7 @@ local stock_device_map = {
     ["id"] = "drm-hh1",
     ["unique"] = true,
     ["map_params_automatically"] = true,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "fixed_note",
@@ -6480,6 +6494,7 @@ local stock_device_map = {
     ["id"] = "drm-hh2",
     ["unique"] = true,
     ["map_params_automatically"] = true,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "fixed_note",
@@ -6500,6 +6515,7 @@ local stock_device_map = {
     ["id"] = "drm-clap",
     ["unique"] = true,
     ["map_params_automatically"] = true,
+    ["polyphonic"] = false,
     ["params"] = {
       {
         ["id"] = "fixed_note",
@@ -6513,6 +6529,676 @@ local stock_device_map = {
       }
     },
     ["default_midi_channel"] = 10
+  },
+  {
+    ["type"] = "midi",
+    ["name"] = "EX Plaits",
+    ["id"] = "ex-plaits",
+    ["map_params_automatically"] = false,
+    ["polyphonic"] = true,
+    ["default_midi_channel"] = nil,
+    ["params"] = {
+      {
+        ["id"] = "model_1",
+        ["name"] = "Model 1",
+        ["cc_msb"] = 7,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MODE",
+        ["short_descriptor_2"] = "ONE"
+      },
+      {
+        ["id"] = "coarse_tune_1",
+        ["name"] = "Coarse Tune 1",
+        ["cc_msb"] = 8,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TUNE",
+        ["short_descriptor_2"] = "ONE"
+      },
+      {
+        ["id"] = "fine_tune_1",
+        ["name"] = "Fine Tune 1",
+        ["cc_msb"] = 9,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "FTUN",
+        ["short_descriptor_2"] = "ONE"
+      },
+      {
+        ["id"] = "harmonics_1",
+        ["name"] = "Harmonics 1",
+        ["cc_msb"] = 10,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "HARM",
+        ["short_descriptor_2"] = "ONE"
+      },
+      {
+        ["id"] = "timbre_1",
+        ["name"] = "Timbre 1",
+        ["cc_msb"] = 11,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TIMB",
+        ["short_descriptor_2"] = "ONE"
+      },
+      {
+        ["id"] = "morph_1",
+        ["name"] = "Morph 1",
+        ["cc_msb"] = 12,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MRPH",
+        ["short_descriptor_2"] = "ONE"
+      },
+      {
+        ["id"] = "fm_1",
+        ["name"] = "FM 1",
+        ["cc_msb"] = 13,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "FM",
+        ["short_descriptor_2"] = "ONE"
+      },
+      {
+        ["id"] = "timbre_mod_1",
+        ["name"] = "Timbre Mod 1",
+        ["cc_msb"] = 14,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TMBR",
+        ["short_descriptor_2"] = "MOD1"
+      },
+      {
+        ["id"] = "morph_mod_1",
+        ["name"] = "Morph Mod 1",
+        ["cc_msb"] = 15,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MRPH",
+        ["short_descriptor_2"] = "MOD1"
+      },
+      {
+        ["id"] = "low_pass_1",
+        ["name"] = "Low-pass gate 1",
+        ["cc_msb"] = 16,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "LOW",
+        ["short_descriptor_2"] = "PAS1"
+      },
+      {
+        ["id"] = "time_decay_1",
+        ["name"] = "Time/Decay 1",
+        ["cc_msb"] = 17,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "DCAY",
+        ["short_descriptor_2"] = "ONE"
+      },
+      {
+        ["id"] = "model_2",
+        ["name"] = "Model 2",
+        ["cc_msb"] = 18,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MODE",
+        ["short_descriptor_2"] = "TWO"
+      },
+      {
+        ["id"] = "coarse_tune_2",
+        ["name"] = "Coarse Tune 2",
+        ["cc_msb"] = 19,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TUNE",
+        ["short_descriptor_2"] = "TWO"
+      },
+      {
+        ["id"] = "fine_tune_2",
+        ["name"] = "Fine Tune 2",
+        ["cc_msb"] = 20,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "FTUN",
+        ["short_descriptor_2"] = "TWO"
+      },
+      {
+        ["id"] = "harmonics_2",
+        ["name"] = "Harmonics 2",
+        ["cc_msb"] = 21,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "HARM",
+        ["short_descriptor_2"] = "TWO"
+      },
+      {
+        ["id"] = "timbre_2",
+        ["name"] = "Timbre 2",
+        ["cc_msb"] = 22,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TIMB",
+        ["short_descriptor_2"] = "TWO"
+      },
+      {
+        ["id"] = "morph_2",
+        ["name"] = "Morph 2",
+        ["cc_msb"] = 23,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MRPH",
+        ["short_descriptor_2"] = "TWO"
+      },
+      {
+        ["id"] = "fm_2",
+        ["name"] = "FM 2",
+        ["cc_msb"] = 24,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "FM",
+        ["short_descriptor_2"] = "TWO"
+      },
+      {
+        ["id"] = "timbre_mod_2",
+        ["name"] = "Timbre Mod 2",
+        ["cc_msb"] = 25,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TMBR",
+        ["short_descriptor_2"] = "MOD2"
+      },
+      {
+        ["id"] = "morph_mod_2",
+        ["name"] = "Morph Mod 2",
+        ["cc_msb"] = 26,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MRPH",
+        ["short_descriptor_2"] = "MOD2"
+      },
+      {
+        ["id"] = "low_pass_2",
+        ["name"] = "Low-pass gate 2",
+        ["cc_msb"] = 27,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "LOW",
+        ["short_descriptor_2"] = "PAS2"
+      },
+      {
+        ["id"] = "time_decay_2",
+        ["name"] = "Time/Decay 2",
+        ["cc_msb"] = 28,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "DCAY",
+        ["short_descriptor_2"] = "TWO"
+      },
+      {
+        ["id"] = "model_3",
+        ["name"] = "Model 3",
+        ["cc_msb"] = 29,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MODE",
+        ["short_descriptor_2"] = "THRE"
+      },
+      {
+        ["id"] = "coarse_tune_3",
+        ["name"] = "Coarse Tune 3",
+        ["cc_msb"] = 30,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TUNE",
+        ["short_descriptor_2"] = "THRE"
+      },
+      {
+        ["id"] = "fine_tune_3",
+        ["name"] = "Fine Tune 3",
+        ["cc_msb"] = 31,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "FTUN",
+        ["short_descriptor_2"] = "THRE"
+      },
+      {
+        ["id"] = "harmonics_3",
+        ["name"] = "Harmonics 3",
+        ["cc_msb"] = 32,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "HARM",
+        ["short_descriptor_2"] = "THRE"
+      },
+      {
+        ["id"] = "timbre_3",
+        ["name"] = "Timbre 3",
+        ["cc_msb"] = 33,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TIMB",
+        ["short_descriptor_2"] = "THRE"
+      },
+      {
+        ["id"] = "morph_3",
+        ["name"] = "Morph 3",
+        ["cc_msb"] = 34,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MRPH",
+        ["short_descriptor_2"] = "THRE"
+      },
+      {
+        ["id"] = "fm_3",
+        ["name"] = "FM 3",
+        ["cc_msb"] = 35,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "FM",
+        ["short_descriptor_2"] = "THRE"
+      },
+      {
+        ["id"] = "timbre_mod_3",
+        ["name"] = "Timbre Mod 3",
+        ["cc_msb"] = 36,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TMBR",
+        ["short_descriptor_2"] = "MOD3"
+      },
+      {
+        ["id"] = "morph_mod_3",
+        ["name"] = "Morph Mod 3",
+        ["cc_msb"] = 37,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MRPH",
+        ["short_descriptor_2"] = "MOD3"
+      },
+      {
+        ["id"] = "low_pass_3",
+        ["name"] = "Low-pass gate 3",
+        ["cc_msb"] = 38,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "LOW",
+        ["short_descriptor_2"] = "PAS3"
+      },
+      {
+        ["id"] = "time_decay_3",
+        ["name"] = "Time/Decay 3",
+        ["cc_msb"] = 39,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "DCAY",
+        ["short_descriptor_2"] = "THRE"
+      },
+      {
+        ["id"] = "model_4",
+        ["name"] = "Model 4",
+        ["cc_msb"] = 40,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MODE",
+        ["short_descriptor_2"] = "FOUR"
+      },
+      {
+        ["id"] = "coarse_tune_4",
+        ["name"] = "Coarse Tune 4",
+        ["cc_msb"] = 41,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TUNE",
+        ["short_descriptor_2"] = "FOUR"
+      },
+      {
+        ["id"] = "fine_tune_4",
+        ["name"] = "Fine Tune 4",
+        ["cc_msb"] = 42,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "FTUN",
+        ["short_descriptor_2"] = "FOUR"
+      },
+      {
+        ["id"] = "harmonics_4",
+        ["name"] = "Harmonics 4",
+        ["cc_msb"] = 43,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "HARM",
+        ["short_descriptor_2"] = "FOUR"
+      },
+      {
+        ["id"] = "timbre_4",
+        ["name"] = "Timbre 4",
+        ["cc_msb"] = 44,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TIMB",
+        ["short_descriptor_2"] = "FOUR"
+      },
+      {
+        ["id"] = "morph_4",
+        ["name"] = "Morph 4",
+        ["cc_msb"] = 45,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MRPH",
+        ["short_descriptor_2"] = "FOUR"
+      },
+      {
+        ["id"] = "fm_4",
+        ["name"] = "FM 4",
+        ["cc_msb"] = 46,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "FM",
+        ["short_descriptor_2"] = "FOUR"
+      },
+      {
+        ["id"] = "timbre_mod_4",
+        ["name"] = "Timbre Mod 4",
+        ["cc_msb"] = 47,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "TMBR",
+        ["short_descriptor_2"] = "FOUR"
+      },
+      {
+        ["id"] = "morph_mod_4",
+        ["name"] = "Morph Mod 4",
+        ["cc_msb"] = 48,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "MRPH",
+        ["short_descriptor_2"] = "MOD4"
+      },
+      {
+        ["id"] = "low_pass_4",
+        ["name"] = "Low-pass gate 4",
+        ["cc_msb"] = 49,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "LOW",
+        ["short_descriptor_2"] = "PAS4"
+      },
+      {
+        ["id"] = "time_decay_4",
+        ["name"] = "Time/Decay 4",
+        ["cc_msb"] = 50,
+        ["cc_lsb"] = nil,
+        ["off_value"] = -1,
+        ["cc_min_value"] = -1,
+        ["cc_max_value"] = 127,
+        ["nrpn_msb"] = nil,
+        ["nrpn_lsb"] = nil,
+        ["nrpn_min_value"] = nil,
+        ["nrpn_max_value"] = nil,
+        ["short_descriptor_1"] = "DCAY",
+        ["short_descriptor_2"] = "FOUR"
+      },
+    }
   }
 }
 
@@ -6546,6 +7232,60 @@ local chord_ui_labels = {
   "+6th",
   "+7th",
   "++oct"
+}
+
+local clock_divisions_ui_labels = {
+  "x16",
+  "x12",
+  "x8",
+  "x6",
+  "x5.3",
+  "x5",
+  "x4",
+  "x3",
+  "x2.6",
+  "x2",
+  "x1.5",
+  "x1.3",
+  "/1",
+  "/1.5",
+  "/2",
+  "/2.6",
+  "/3",
+  "/4",
+  "/5",
+  "/5.3",
+  "/6",
+  "/7",
+  "/8",
+  "/9",
+  "/10", 
+  "/11", 
+  "/12", 
+  "/13", 
+  "/14", 
+  "/15", 
+  "/16", 
+  "/17", 
+  "/19", 
+  "/21", 
+  "/23", 
+  "/24", 
+  "/25", 
+  "/27", 
+  "/29", 
+  "/32", 
+  "/40", 
+  "/48", 
+  "/56", 
+  "/64", 
+  "/96", 
+  "/101",
+  "/128",
+  "/192",
+  "/256",
+  "/384",
+  "/512" 
 }
 
 local stock_params = {
@@ -6652,6 +7392,17 @@ local stock_params = {
     ["cc_min_value"] = -14,
     ["cc_max_value"] = 14,
     ["ui_labels"] = chord_ui_labels,
+    ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord_strum",
+    ["name"] = "Chord Note Strum",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "STRM",
+    ["off_value"] = 13,
+    ["cc_min_value"] = 1,
+    ["cc_max_value"] = 51,
+    ["ui_labels"] = clock_divisions_ui_labels,
     ["param_type"] = "stock"
   }
 }
@@ -6897,6 +7648,18 @@ function device_map.get_available_params_for_channel(c, selected_param)
   end
 
   return filtered_params
+end
+
+function device_map.validate_devices()
+
+  for i = 1, 16 do
+    local device = device_map.get_device(program.get().devices[i].device_map)
+
+    if device == nil then
+      program.get().devices[i] = {midi_channel = 1, midi_device = 1, device_map = "none"}
+    end
+
+  end
 end
 
 function device_map.init()

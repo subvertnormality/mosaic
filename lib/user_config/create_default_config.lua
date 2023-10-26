@@ -11,6 +11,7 @@ create_default_config.default_custom_device_map_content =
     --   ["name"] = "Example",
     --   ["fixed_note"] = 60, -- fixed midi note number that channel will always output, or nil
     --   ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
+    --   ["polyphonic"] = true, -- allows the destination device to decide how to deal with overlapping notes
     --   ["params"] = { -- up to 8 params
     --     {
     --       ["id"] = "example",
@@ -68,7 +69,8 @@ local device_config = {
     "drm-hh1",
     "drm-hh2",
     "drm-clap",
-    "nord_drum_2"
+    "nord_drum_2",
+    "ex-plaits"
   }
 }
 

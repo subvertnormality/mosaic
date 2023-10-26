@@ -27,6 +27,7 @@
         - [Random note](#random-note)
         - [Random twos note](#random-twos-note)
         - [Chord notes](#chord-notes)
+        - [Chord strum](#chord-strum)
     + [Song editor](#song-editor)
   * [Save and load](#save-and-load)
   * [Custom device maps](#custom-device-maps)
@@ -38,7 +39,7 @@
 
 ## At a glance
 
-As of v0.3.3 _Mosaic_ gives you the following:
+As of v0.3.5 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a midi device or an n.b. voice
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
@@ -360,7 +361,11 @@ This trig param can be used to ensure trigs play only with a certain probability
 
 ##### Chord Notes
 
-The chord notes trig params can be used to append an additional note to your trig, thereby forming a chord. The selected device on the channel must be polyphonic; otherwise, unusual results may occur. The additional chord notes are determined relative to the existing note of the trig, and this is done post the application of any note modifiers, such as random note. These will be quantised according to the selected scale with scale locks honoured unlocking an enourmous amount of power. The appended note will maintain the length and velocity of the original trig. You have the capability to add up to four additional notes, allowing for the creation of chords with up to five simultaneous notes, by adding four of these param locks to a channel.
+Using Chord Notes trig params, you can enhance your music by adding up to four notes to a single trig, creating rich chords with up to five sounds. These added notes, quantized to the selected scale, respect scale locks and derive from the original trig note, post any note modifiers. They inherit the original trig’s length and velocity, ensuring consistent sound dynamics. Note that polyphonic devices are required to avoid unexpected results.
+
+##### Chord Strum
+
+The Chord Strum feature dynamically spaces chord notes using the selected clock division, ensuring they align rhythmically with the channel's settings. Notes are quantized to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration.
 
 ### Song editor
 

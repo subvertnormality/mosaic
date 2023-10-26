@@ -187,7 +187,7 @@ function clock_controller.init()
             step_handler.process_params(channel_number, next_step)
           end
 
-          step_handler.process_lengths(channel_number)
+          step_handler.process_lengths_for_channel(channel_number)
         end
       end,
       division = 1 / (div * 4),
@@ -202,7 +202,6 @@ function clock_controller.init()
   master_clock =
     clock_lattice:new_sprocket {
     action = function(t)
-
       if first_run ~= true then
         step_handler.process_song_sequencer_patterns(program.get().current_step)
       end
@@ -229,6 +228,31 @@ end
 function clock_controller.set_channel_division(channel_number, division)
   clock_controller["channel_" .. channel_number .. "_clock"]:set_division(1 / (division * 4))
   clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor:set_division(1 / (division * 4))
+end
+
+function clock_controller.delay_action(c, division_index, multiplier, func)
+
+  if division_index == 0 or division_index == nil then
+    func()
+    return
+  end
+  local first_run = true
+  local delayed
+  local sprocket_action = function(t)
+    if first_run ~= true then
+      func()
+      delayed:destroy()
+    else
+      first_run = false
+    end
+  end
+  delayed =
+    clock_lattice:new_sprocket {
+    action = sprocket_action,
+    division = (clock_controller.calculate_divisor(clock_divisions[division_index]) *
+      clock_controller["channel_" .. c .. "_clock"].division) * multiplier,
+    enabled = true
+  }
 end
 
 function clock_controller:start()
