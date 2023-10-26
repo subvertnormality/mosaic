@@ -187,7 +187,7 @@ function clock_controller.init()
             step_handler.process_params(channel_number, next_step)
           end
 
-          step_handler.process_lengths(channel_number)
+          step_handler.process_lengths_for_channel(channel_number)
         end
       end,
       division = 1 / (div * 4),

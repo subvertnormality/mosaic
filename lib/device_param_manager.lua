@@ -28,7 +28,7 @@ function device_param_manager.init()
 end
 
 function device_param_manager.add_device_params(channel_id, device, channel, midi_device, init)
-  if device.type == "midi" then
+  if device and device.type == "midi" then
     params:lookup_param("midi_device_params_group_channel_" .. channel_id).name =
       "MOSAIC CH " .. channel_id .. ": " .. string.upper(device.name)
     params:show("midi_device_params_group_channel_" .. channel_id)

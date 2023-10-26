@@ -4,6 +4,7 @@ local custom_device_map = {
       ["name"] = "Euro 1",
       ["id"] = "euro-1",
       ["unique"] = true,
+      ["polyphonic"] = false, -- setting polyphonic to false ensures gates have a distinct end
       ["map_params_automatically"] = true, -- params will be mapped to channel param knobs automatically, from 1-4, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -77,6 +78,7 @@ local custom_device_map = {
       ["id"] = "euro-2",
       ["unique"] = true,
       ["fixed_note"] = nil, -- fixed midi note number that channel will always output, or nil
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -150,6 +152,7 @@ local custom_device_map = {
       ["id"] = "euro-3",
       ["unique"] = true,
       ["fixed_note"] = nil, -- fixed midi note number that channel will always output, or nil
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -223,6 +226,7 @@ local custom_device_map = {
       ["id"] = "euro-4",
       ["unique"] = true,
       ["fixed_note"] = nil, -- fixed midi note number that channel will always output, or nil
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -295,6 +299,7 @@ local custom_device_map = {
       ["name"] = "DRM BD",
       ["id"] = "drm-bd",
       ["unique"] = true,
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -316,6 +321,7 @@ local custom_device_map = {
       ["name"] = "DRM Drum 1",
       ["id"] = "drm-drum1",
       ["unique"] = true,
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -337,6 +343,7 @@ local custom_device_map = {
       ["name"] = "DRM Drum 2",
       ["id"] = "drm-drum2",
       ["unique"] = true,
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -358,6 +365,7 @@ local custom_device_map = {
       ["name"] = "DRM Multi",
       ["id"] = "drm-multi",
       ["unique"] = true,
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -379,6 +387,7 @@ local custom_device_map = {
       ["name"] = "DRM Snare",
       ["id"] = "drm-sd",
       ["unique"] = true,
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -400,6 +409,7 @@ local custom_device_map = {
       ["name"] = "DRM HH 1",
       ["id"] = "drm-hh1",
       ["unique"] = true,
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -421,6 +431,7 @@ local custom_device_map = {
       ["name"] = "DRM HH 2",
       ["id"] = "drm-hh2",
       ["unique"] = true,
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -442,6 +453,7 @@ local custom_device_map = {
       ["name"] = "DRM Clap",
       ["id"] = "drm-clap",
       ["unique"] = true,
+      ["polyphonic"] = false,
       ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
       ["params"] = {
          -- up to 8 params
@@ -462,6 +474,7 @@ local custom_device_map = {
       ["id"] = "ex-braids",
       ["hide"] = false,
       ["unique"] = true,
+      ["polyphonic"] = true,
       ["default_midi_channel"] = 16,
       ["default_midi_device"] = 1
    },

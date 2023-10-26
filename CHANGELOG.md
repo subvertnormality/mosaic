@@ -1,3 +1,8 @@
+# 0.3.5
+
+* Removing a mod no longer causes problems with the channel that had the mod applied via a device
+* Devices can now be set to polyphonic and non-polyphonic. Non-polyphonic
+
 # 0.3.4
 
 * Fixed bug that led to trig lengths not correctly following the channel's current clock division or swing
