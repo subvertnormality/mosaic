@@ -334,6 +334,7 @@ function step_handler.handle(c, current_step)
       table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord4"))
 
 
+      local division_index = step_handler.process_stock_params(c, current_step, "chord_strum")
 
       if not device.player then
         if device.polyphonic == false then
@@ -354,24 +355,29 @@ function step_handler.handle(c, current_step)
         )
         for i = 1, #chord_notes do
           if (chord_notes[i]) then
-            local processed_chord_note =
-              quantiser.process(note_value + chord_notes[i], octave_mod, transpose, channel.step_scale_number, c)
+
             if device.polyphonic == false then
               step_handler.flush_lengths_for_channel(c)
             end
-            midi_controller:note_on(processed_chord_note, velocity_value, midi_channel, midi_device)
-            table.insert(
-              length_tracker,
-              {
-                note = processed_chord_note,
-                velocity = velocity_value,
-                midi_channel = midi_channel,
-                midi_device = midi_device,
-                steps_remaining = length_value,
-                player = midi_controller, 
-                channel = c
-              }
-            )
+
+            clock_controller.delay_action(c, division_index, i, function() 
+              local processed_chord_note =
+                quantiser.process(note_value + chord_notes[i], octave_mod, transpose, channel.step_scale_number, c)
+
+              midi_controller:note_on(processed_chord_note, velocity_value, midi_channel, midi_device)
+              table.insert(
+                length_tracker,
+                {
+                  note = processed_chord_note,
+                  velocity = velocity_value,
+                  midi_channel = midi_channel,
+                  midi_device = midi_device,
+                  steps_remaining = length_value,
+                  player = midi_controller, 
+                  channel = c
+                }
+              )
+            end)
           end
         end
       else
@@ -393,24 +399,28 @@ function step_handler.handle(c, current_step)
         )
         for i = 1, #chord_notes do
           if (chord_notes[i]) then
-            local processed_chord_note =
-              quantiser.process(note_value + chord_notes[i], octave_mod, transpose, channel.step_scale_number, c)
+
             if device.polyphonic == false then
               step_handler.flush_lengths_for_channel(c)
             end
-            device.player:note_on(processed_chord_note, velocity_value / 127)
-            table.insert(
-              length_tracker,
-              {
-                note = processed_chord_note,
-                velocity = velocity_value,
-                midi_channel = midi_channel,
-                midi_device = midi_device,
-                steps_remaining = length_value,
-                player = device.player, 
-                channel = c
-              }
-            )
+
+            clock_controller.delay_action(c, division_index, i, function()
+              local processed_chord_note =
+                quantiser.process(note_value + chord_notes[i], octave_mod, transpose, channel.step_scale_number, c)
+              device.player:note_on(processed_chord_note, velocity_value / 127)
+              table.insert(
+                length_tracker,
+                {
+                  note = processed_chord_note,
+                  velocity = velocity_value,
+                  midi_channel = midi_channel,
+                  midi_device = midi_device,
+                  steps_remaining = length_value,
+                  player = device.player, 
+                  channel = c
+                }
+              )
+            end)
           end
         end
       end
