@@ -288,7 +288,7 @@ function step_handler.handle(c, current_step)
 
   if trig_value == 1 and random_val < trig_prob then
     channel_edit_page_ui_controller.refresh_trig_locks()
-    channel_edit_page_ui_controller.refresh_trig_lock_values()
+
     local random_shift =
       fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0)
     random_shift =

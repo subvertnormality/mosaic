@@ -9,6 +9,7 @@ local clock_controller = {}
 local playing = false
 local first_run = true
 local master_clock
+local sinfonion_clock
 local trigless_lock_active = {}
 
 local clock_lattice
@@ -218,6 +219,18 @@ function clock_controller.init()
     swing = 50,
     enabled = true
   }
+
+
+  if sinfonion ~= true then
+    sinfonion_clock = clock_lattice:new_sprocket {
+      action = function(t)
+        sinfonion.send_next()
+      end,
+      division = 1 / 96,
+      swing = 50,
+      enabled = true
+    }
+  end
 end
 
 function clock_controller.set_channel_swing(channel_number, swing)

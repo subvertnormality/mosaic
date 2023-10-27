@@ -189,18 +189,14 @@ local function dump()
   debug(" " .. table.concat(values, " "))
 end
 
-local function send_next()
-  serial:write(string.char(buffer[index]))
-  index = (index % SYNC_BUFFER_SIZE) + 1
-  last_sent_byte = buffer[index]
-end
-
-function sinfonion.init()
-  local serial_loop = metro.init()
-  serial_loop.event = send_next
-  serial_loop.time = 0.01
-  serial_loop.count = -1
-  serial_loop:start()
+function sinfonion.send_next()
+  local status, err = pcall(function() serial:write(string.char(buffer[index])) end)
+  if not status then
+    print("Error sending data: " .. tostring(err)) -- Log or otherwise handle the error
+  else
+      index = (index % SYNC_BUFFER_SIZE) + 1
+      last_sent_byte = buffer[index]
+  end
 end
 
 return sinfonion
