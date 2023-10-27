@@ -39,7 +39,7 @@
 
 ## At a glance
 
-As of v0.3.5 _Mosaic_ gives you the following:
+As of v0.3.6 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a midi device or an n.b. voice
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
