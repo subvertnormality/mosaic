@@ -1,3 +1,8 @@
+# 0.3.6
+
+* Sinfonion sync is no longer as resource intensive
+* Fixed regression with trig lock values not displaying properly when the sequencer is playing
+
 # 0.3.5
 
 * Removing a mod no longer causes problems with the channel that had the mod applied via a device

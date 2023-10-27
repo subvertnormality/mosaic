@@ -1024,6 +1024,7 @@ end
 
 function channel_edit_page_ui_controller.refresh_trig_lock_values()
   local channel = program.get_selected_channel()
+
   for i = 1, 10 do
     local param_id = channel.trig_lock_params[i].param_id
 
