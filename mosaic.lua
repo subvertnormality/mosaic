@@ -172,8 +172,6 @@ function init()
     sinfonion.set_reset(0)
     sinfonion.set_chaotic_detune(0)
     sinfonion.set_harmonic_shift(0)
-
-    sinfonion.init()
   end
 
   local grid_clock_id = metro.init()
