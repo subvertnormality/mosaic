@@ -1,5 +1,9 @@
 # 0.3.7
 
+* Added chord velocity modifier trig param
+
+# 0.3.7
+
 * Stability fixes
 * Fixing a regression which was making note length resolution inconsistent with tracks using swing
 

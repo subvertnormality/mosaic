@@ -39,7 +39,7 @@
 
 ## At a glance
 
-As of v0.3.7 _Mosaic_ gives you the following:
+As of v0.4 _Mosaic_ gives you the following:
 
 - 16 channels that can each output triggers, notes, note length, velocity and CC to a midi device or an n.b. voice
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
@@ -366,6 +366,10 @@ Using Chord Notes trig params, you can enhance your music by adding up to four n
 ##### Chord Strum
 
 The Chord Strum feature dynamically spaces chord notes using the selected clock division, ensuring they align rhythmically with the channel's settings. Notes are quantized to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration.
+
+##### Chord Velocity Modifier
+
+The Chord Velocity Modifier incrementally adjusts the velocity of successive notes in a chord, starting from the chord's root note. This adjustment can either increase or decrease the velocity, thereby creating a "swell" effect for rising intensity or a "fade" effect for a diminishing feel.
 
 ### Song editor
 

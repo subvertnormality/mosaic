@@ -255,11 +255,22 @@ function step_handler.calculate_step_transpose(current_step)
   return transpose
 end
 
-local function handle_note(device, note_container, unprocessed_note_container, chord_notes, division_index, note_on_func)
+local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func)
   local c = note_container.channel
   if device.polyphonic == false then
     step_handler.flush_lengths_for_channel(c)
   end
+
+  local chord_notes = {chord_note_1, chord_note_2, chord_note_3, chord_note_4}
+
+  table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord1"))
+  table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord2"))
+  table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord3"))
+  table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord4"))
+
+  local division_index = step_handler.process_stock_params(c, current_step, "chord_strum")
+
+  local chord_velocity_mod = step_handler.process_stock_params(c, current_step, "chord_velocity_modifier")
 
   note_on_func(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
 
@@ -287,9 +298,11 @@ local function handle_note(device, note_container, unprocessed_note_container, c
             c
           )
 
+          local v = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * i))
+
           note_on_func(
             processed_chord_note,
-            note_container.velocity,
+            v,
             note_container.midi_channel,
             note_container.midi_device
           )
@@ -301,7 +314,7 @@ local function handle_note(device, note_container, unprocessed_note_container, c
               steps_remaining = note_container.steps_remaining,
               player = note_container.player,
               note = processed_chord_note,
-              velocity = note_container.velocity or 0,
+              velocity = v,
               midi_channel = note_container.midi_channel,
               midi_device = note_container.midi_device
             }
@@ -382,16 +395,6 @@ function step_handler.handle(c, current_step)
     local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
     if not channel.mute then
-      local chord_notes = {chord_note_1, chord_note_2, chord_note_3, chord_note_4}
-      local div = 1
-      local chord_division = 1
-
-      table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord1"))
-      table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord2"))
-      table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord3"))
-      table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord4"))
-
-      local division_index = step_handler.process_stock_params(c, current_step, "chord_strum")
 
       if not device.player then
         local note_container = {
@@ -405,10 +408,9 @@ function step_handler.handle(c, current_step)
         }
         handle_note(
           device,
+          current_step,
           note_container,
           {note_value = note_value, octave_mod = octave_mod, transpose = transpose},
-          chord_notes,
-          division_index,
           function(chord_note, velocity, midi_channel, midi_device)
             midi_controller:note_on(chord_note, velocity, midi_channel, midi_device)
           end
@@ -426,10 +428,9 @@ function step_handler.handle(c, current_step)
 
         handle_note(
           device,
+          current_step,
           note_container,
           {note_value = note_value, octave_mod = octave_mod, transpose = transpose},
-          chord_notes,
-          division_index,
           function(chord_note, velocity, midi_channel, midi_device)
             device.player:note_on(chord_note, velocity / 127)
           end

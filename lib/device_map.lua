@@ -7404,6 +7404,16 @@ local stock_params = {
     ["cc_max_value"] = 51,
     ["ui_labels"] = clock_divisions_ui_labels,
     ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord_velocity_modifier",
+    ["name"] = "Chord Velocity Mod",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "VEL",
+    ["off_value"] = 0,
+    ["cc_min_value"] = -40,
+    ["cc_max_value"] = 40,
+    ["param_type"] = "stock"
   }
 }
 
