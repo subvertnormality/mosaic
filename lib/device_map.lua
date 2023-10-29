@@ -7566,6 +7566,16 @@ local function merge_devices()
     device["value"] = index
   end
 
+  table.sort(stock_device_map, function(a, b) 
+    if a.name:lower() == "none" then
+      return true 
+    elseif b.name:lower() == "none" then
+        return false
+    else
+        return a.name:lower() < b.name:lower()  -- standard alphabetical comparison
+    end
+  end)
+
   return stock_device_map
 end
 
