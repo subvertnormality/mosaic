@@ -192,7 +192,7 @@ function clock_controller.init()
         end
       end,
       division = 1 / (div * 4),
-      swing = swing,
+      swing = 50,
       delay = 0.99,
       enabled = true
     }
@@ -220,9 +220,9 @@ function clock_controller.init()
     enabled = true
   }
 
-
   if sinfonion ~= true then
-    sinfonion_clock = clock_lattice:new_sprocket {
+    sinfonion_clock =
+      clock_lattice:new_sprocket {
       action = function(t)
         sinfonion.send_next()
       end,
@@ -244,7 +244,6 @@ function clock_controller.set_channel_division(channel_number, division)
 end
 
 function clock_controller.delay_action(c, division_index, multiplier, func)
-
   if division_index == 0 or division_index == nil then
     func()
     return
@@ -263,7 +262,8 @@ function clock_controller.delay_action(c, division_index, multiplier, func)
     clock_lattice:new_sprocket {
     action = sprocket_action,
     division = (clock_controller.calculate_divisor(clock_divisions[division_index]) *
-      clock_controller["channel_" .. c .. "_clock"].division) * multiplier,
+      clock_controller["channel_" .. c .. "_clock"].division) *
+      multiplier,
     enabled = true
   }
 end
