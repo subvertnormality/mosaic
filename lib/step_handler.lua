@@ -257,6 +257,8 @@ end
 
 local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func)
   local c = note_container.channel
+  local channel = program.get_channel(c)
+
   if device.polyphonic == false then
     step_handler.flush_lengths_for_channel(c)
   end
@@ -269,12 +271,16 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord4"))
 
   local division_index = step_handler.process_stock_params(c, current_step, "chord_strum")
-
   local chord_velocity_mod = step_handler.process_stock_params(c, current_step, "chord_velocity_modifier")
+  local chord_strum_pattern = step_handler.process_stock_params(c, current_step, "chord_strum_pattern")
 
-  note_on_func(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
+  local chord_start = 1
+  local chord_end = #chord_notes
 
-  table.insert(length_tracker, note_container)
+  if chord_strum_pattern == nil or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
+    note_on_func(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
+    table.insert(length_tracker, note_container)
+  end
 
   for i = 1, #chord_notes do
     if (chord_notes[i]) then
@@ -282,30 +288,44 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         step_handler.flush_lengths_for_channel(c)
       end
 
-      local channel = program.get_channel(c)
+      local chord_number = i
+      local delay_multiplier = i
+
+      if chord_strum_pattern == 2 then
+        chord_number = (#chord_notes + 1) - i
+        delay_multiplier = delay_multiplier - 1
+      elseif chord_strum_pattern == 3 then
+        if i % 2 == 1 then
+          chord_number = (i // 2) + 1
+        else
+          chord_number = #chord_notes - (i // 2) + 1
+        end
+      elseif chord_strum_pattern == 4 then
+        if i % 2 == 1 then
+          chord_number = #chord_notes - (i // 2)
+      else
+          chord_number = (i // 2)
+      end
+        delay_multiplier = delay_multiplier - 1
+      end
 
       clock_controller.delay_action(
         c,
         division_index,
-        i,
+        delay_multiplier,
         function()
           local processed_chord_note =
             quantiser.process(
-            unprocessed_note_container.note_value + chord_notes[i],
+            unprocessed_note_container.note_value + chord_notes[chord_number],
             unprocessed_note_container.octave_mod,
             unprocessed_note_container.transpose,
             channel.step_scale_number,
             c
           )
 
-          local v = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * i))
+          local v = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
 
-          note_on_func(
-            processed_chord_note,
-            v,
-            note_container.midi_channel,
-            note_container.midi_device
-          )
+          note_on_func(processed_chord_note, v, note_container.midi_channel, note_container.midi_device)
 
           table.insert(
             length_tracker,
@@ -322,6 +342,37 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
       )
     end
+  end
+
+  if chord_strum_pattern == 2 or chord_strum_pattern == 4 then
+    clock_controller.delay_action(
+      c,
+      division_index,
+      #chord_notes,
+      function()
+        local processed_note =
+          quantiser.process(
+          unprocessed_note_container.note_value,
+          unprocessed_note_container.octave_mod,
+          unprocessed_note_container.transpose,
+          channel.step_scale_number,
+          c
+        )
+        note_on_func(processed_note, note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes), note_container.midi_channel, note_container.midi_device)
+        table.insert(
+          length_tracker,
+          {
+            channel = c,
+            steps_remaining = note_container.steps_remaining,
+            player = note_container.player,
+            note = processed_note,
+            velocity = note_container.velocity,
+            midi_channel = note_container.midi_channel,
+            midi_device = note_container.midi_device
+          }
+        )
+      end
+    )
   end
 end
 
@@ -395,7 +446,6 @@ function step_handler.handle(c, current_step)
     local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
     if not channel.mute then
-
       if not device.player then
         local note_container = {
           note = note,

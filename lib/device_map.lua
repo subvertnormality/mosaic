@@ -7414,6 +7414,23 @@ local stock_params = {
     ["cc_min_value"] = -40,
     ["cc_max_value"] = 40,
     ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord_strum_pattern",
+    ["name"] = "Chord Strum Pattern",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "PTRN",
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 4,
+    ["ui_labels"] = {
+      "off",
+      "->",
+      "<-",
+      "-><-",
+      "<-->"
+    },
+    ["param_type"] = "stock"
   }
 }
 

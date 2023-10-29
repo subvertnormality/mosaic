@@ -1,6 +1,7 @@
 # 0.3.7
 
 * Added chord velocity modifier trig param
+* Added chord strum pattern trig param
 
 # 0.3.7
 
