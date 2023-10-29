@@ -1,3 +1,8 @@
+# 0.3.7
+
+* Stability fixes
+* Fixing a regression which was making note length resolution inconsistent with tracks using swing
+
 # 0.3.6
 
 * Sinfonion sync is no longer as resource intensive
