@@ -7404,6 +7404,33 @@ local stock_params = {
     ["cc_max_value"] = 51,
     ["ui_labels"] = clock_divisions_ui_labels,
     ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord_velocity_modifier",
+    ["name"] = "Chord Velocity Mod",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "VEL",
+    ["off_value"] = 0,
+    ["cc_min_value"] = -40,
+    ["cc_max_value"] = 40,
+    ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord_strum_pattern",
+    ["name"] = "Chord Strum Pattern",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "PTRN",
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 4,
+    ["ui_labels"] = {
+      "off",
+      "->",
+      "<-",
+      "-><-",
+      "<-->"
+    },
+    ["param_type"] = "stock"
   }
 }
 
@@ -7538,6 +7565,16 @@ local function merge_devices()
   for index, device in ipairs(stock_device_map) do
     device["value"] = index
   end
+
+  table.sort(stock_device_map, function(a, b) 
+    if a.name:lower() == "none" then
+      return true 
+    elseif b.name:lower() == "none" then
+        return false
+    else
+        return a.name:lower() < b.name:lower()  -- standard alphabetical comparison
+    end
+  end)
 
   return stock_device_map
 end

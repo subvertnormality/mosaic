@@ -386,4 +386,13 @@ function fn.signed_inv_mod(a, b)
   end
 end
 
+function fn.constrain(min, max, value)
+  if value < min then
+      value = min
+  elseif value > max then
+      value = max
+  end
+  return value
+end
+
 return fn
