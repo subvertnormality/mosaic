@@ -139,6 +139,21 @@ function clock_controller.init()
           current_step = start_trig
         end
 
+        if channel_number ~= 17 then
+          local next_trig_value = program.get_channel(channel_number).working_pattern.trig_values[current_step]
+
+          if next_trig_value == 1 then
+            trigless_lock_active[channel_number] = false
+            step_handler.process_params(channel_number, current_step)
+          elseif
+            params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and
+              program.step_has_param_trig_lock(program.get_channel(channel_number), current_step)
+           then
+            trigless_lock_active[channel_number] = true
+            step_handler.process_params(channel_number, current_step)
+          end
+        end
+
         if channel_number == 17 then
           step_handler.process_global_step_scale_trig_lock(current_step)
 
@@ -163,31 +178,6 @@ function clock_controller.init()
       clock_lattice:new_sprocket {
       action = function(t)
         if channel_number ~= 17 then
-          local start_trig =
-            fn.calc_grid_count(
-            program.get_channel(channel_number).start_trig[1],
-            program.get_channel(channel_number).start_trig[2]
-          )
-          local end_trig =
-            fn.calc_grid_count(
-            program.get_channel(channel_number).end_trig[1],
-            program.get_channel(channel_number).end_trig[2]
-          )
-          local current_step = program.get_current_step_for_channel(channel_number)
-          local next_step = current_step + 1
-          local next_trig_value = program.get_channel(channel_number).working_pattern.trig_values[next_step]
-
-          if next_trig_value == 1 then
-            trigless_lock_active[channel_number] = false
-            step_handler.process_params(channel_number, next_step)
-          elseif
-            params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and
-              program.step_has_param_trig_lock(program.get_channel(channel_number), next_step)
-           then
-            trigless_lock_active[channel_number] = true
-            step_handler.process_params(channel_number, next_step)
-          end
-
           step_handler.process_lengths_for_channel(channel_number)
         end
       end,
