@@ -1,6 +1,6 @@
 # 0.4.0
 
-* Sinfonion sync no longer relies on hardware or software norns mod
+* Sinfonion sync no longer relies on hardware or software norns mod and is no longer experimental
 
 # 0.3.7
 
