@@ -1,15 +1,8 @@
 local math = require("math")
-local status, periphery = pcall(require, "periphery")
 local floor = math.floor
 local format = string.format
 local insert = table.insert
 
-if not status then
-  print("Periphery not found. Sinfonion support disabled.")
-  return
-end
-
-local Serial = periphery.Serial
 local time = os.time
 
 local sinfonion = {}
@@ -25,7 +18,11 @@ local function debug(msg, ...)
   print(format(msg, ...))
 end
 
-local serial = Serial {device = "/dev/ttyS0", baudrate = 115200, databits = 8, parity = "none", stopbits = 1}
+os.execute("stty -F /dev/ttyS0 115200 cs8 -cstopb -parenb")
+
+local serial = assert(io.open("/dev/ttyS0", 'w'))
+serial:setvbuf('no')  -- disable buffering
+
 local last_interrupt = 0
 local buffer = {}
 for i = 1, SYNC_BUFFER_SIZE do
@@ -190,9 +187,12 @@ local function dump()
 end
 
 function sinfonion.send_next()
-  local status, err = pcall(function() serial:write(string.char(buffer[index])) end)
+  local status, err = pcall(function() 
+    serial:write(string.char(buffer[index]))
+    serial:flush()
+  end)
   if not status then
-    print("Error sending data: " .. tostring(err)) -- Log or otherwise handle the error
+    print("Error sending data: " .. tostring(err))
   else
       index = (index % SYNC_BUFFER_SIZE) + 1
       last_sent_byte = buffer[index]
