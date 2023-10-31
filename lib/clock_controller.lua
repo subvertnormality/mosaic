@@ -157,9 +157,9 @@ function clock_controller.init()
         if channel_number == 17 then
           step_handler.process_global_step_scale_trig_lock(current_step)
 
-          if sinfonion ~= true then
+          -- if sinfonion ~= true then
             step_handler.sinfonian_sync(current_step)
-          end
+          -- end
         end
 
         if channel_number ~= 17 then
@@ -210,17 +210,6 @@ function clock_controller.init()
     enabled = true
   }
 
-  if sinfonion ~= true then
-    sinfonion_clock =
-      clock_lattice:new_sprocket {
-      action = function(t)
-        sinfonion.send_next()
-      end,
-      division = 1 / 96,
-      swing = 50,
-      enabled = true
-    }
-  end
 end
 
 function clock_controller.set_channel_swing(channel_number, swing)

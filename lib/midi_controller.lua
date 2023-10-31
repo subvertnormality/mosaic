@@ -1,22 +1,17 @@
 local midi_controller = {}
 
 midi_devices = {}
-midi_device_names = {}
 
 function midi_controller.init()
   for i = 1, #midi.vports do
     midi_devices[i] = midi.connect(i)
-    table.insert( -- register its name:
-      midi_device_names, -- table to insert to
-      "port " .. i .. ": " .. util.trim_string_to_width(midi_devices[i].name, 80) -- value to insert
-    )
   end
 end
 
 function midi_controller.get_midi_outs()
   local midi_outs = {}
   for i = 1, #midi.vports do
-    if midi_devices[i] and midi_devices[i].name ~= "none" then
+    if midi_devices[i] and midi_devices[i].name ~= "none" and midi_devices[i].name ~= "Norns2sinfonion" then
       table.insert(
         midi_outs,
         {name = "OUT " .. i, value = i, long_name = util.trim_string_to_width(midi_devices[i].name, 80)}
@@ -25,6 +20,16 @@ function midi_controller.get_midi_outs()
   end
 
   return midi_outs
+end
+
+
+function midi_controller.send_to_sinfonion(command, value)
+  for id = 1, #midi_devices do
+
+    if midi_devices[id] and midi_devices[id].name == "Norns2sinfonion" then
+      midi_devices[id]:program_change(value, command)
+    end
+  end
 end
 
 function midi_controller.all_off(id)
@@ -80,7 +85,6 @@ end
 function midi_controller.start()
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
-
       midi_devices[id]:start()
     end
   end

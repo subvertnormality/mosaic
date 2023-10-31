@@ -1,3 +1,7 @@
+# 0.4.0
+
+* Sinfonion sync no longer relies on hardware or software norns mod
+
 # 0.3.7
 
 * Added chord velocity modifier trig param

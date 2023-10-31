@@ -489,43 +489,9 @@ Some devices respond to trigs on specific note numbers. Without locking a channe
 
 # Sinfonion connect
 
-_Experimental_
+You can sync up your eurorack Sinfonion module to mosaic using a DIY device called norns2sinfonion.
 
-You will need to mod your norns to do this. I only recommend this on a norns shield. This mod is _at your own risk_.
-
-The sinfonion expects an inverted serial signal for it's sync function. This means you'll need to wire up a simple NOT gate. Don't worry - it's not as scary as it sounds. I did this with some strip board. 
-
-- First, connect your norns Raspberry PI's UART0 TX (pin 8, there's a convenient TX pad on the norns shield PCB) first to a 1K Resister and then on to the middle pin on a 2N3904 transistor. 
-- Now connect the top pin of your 2N3904 to a 3K resistor then on to power (pin 2) on your PI.
-- Next also connect the top pin on your 2N3904 to the tip connector on a TS jack. 
-- The sleeve connector of your TS jack connects to ground (there's a convenient ground pad on the norn's shield's PCB). 
-- Now also connect the bottom pin of your 2N3904 to ground
-
-![Inverter circuit diagram](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/Sinfonion/inverter.png)
-
-That's the hardware bit done. You now need to configure your norns.
-
-SSH into your norns.
-
-- `ssh we@norns`
-- PW: `sleep`
-
-Enter the raspi-config tool:
-
-`sudo raspi-config`
-
-Scroll down to `Interface Options`, then to `Serial Port`.
-
-- Select `No` when it asks you `Would you like a login shell to be accessible over serial?`. 
-- Select `Yes` when it asks `Would you like the serial port hardware to be enabled`
-
-Click `Finish`. 
-
-Reboot your norns.
-
-Now you need to install the lua dependency lua-periphery. This is a non-standard operation on norns that is _not_ supported. It is possible to compile the dependency on norns, but it will require a degree of linux knowledge to do so. If you need a step by step for this, you're probably best off not trying. It involves compiling luarocks for lua 5.3 installing the dependency using that.
-
-Now you should be all set. 
+See https://github.com/subvertnormality/norns2sinfonion for more information.
 
 # Development
 

@@ -1,4 +1,4 @@
--- mosaic v0.3.8
+-- mosaic v0.4
 -- grid-centric, intentioned
 -- generative sequencer.
 --
@@ -13,7 +13,7 @@ create_default_config.create_script("custom_device_map.lua", create_default_conf
 grid_controller = include("mosaic/lib/grid_controller")
 ui_controller = include("mosaic/lib/ui_controller")
 program = include("mosaic/lib/program")
-sinfonion = require("mosaic/lib/sinfonion_harmonic_sync")
+sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
 
 local fn = include("mosaic/lib/functions")
 local fileselect = require("fileselect")
@@ -161,18 +161,18 @@ function init()
 
   device_map.init()
 
-  if sinfonion ~= true then
-    sinfonion.set_root_note(0)
-    sinfonion.set_degree_nr(0)
-    sinfonion.set_mode_nr(0)
-    sinfonion.set_transposition(0)
-    sinfonion.set_clock(0)
-    sinfonion.set_beat(0)
-    sinfonion.set_step(0)
-    sinfonion.set_reset(0)
-    sinfonion.set_chaotic_detune(0)
-    sinfonion.set_harmonic_shift(0)
-  end
+
+  sinfonion.set_root_note(0)
+  sinfonion.set_degree_nr(0)
+  sinfonion.set_mode_nr(0)
+  sinfonion.set_transposition(0)
+  sinfonion.set_clock(0)
+  sinfonion.set_beat(0)
+  sinfonion.set_step(0)
+  sinfonion.set_reset(0)
+  sinfonion.set_chaotic_detune(0)
+  sinfonion.set_harmonic_shift(0)
+
 
   local grid_clock_id = metro.init()
   grid_clock_id.event = grid_controller.grid_redraw
