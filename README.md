@@ -41,7 +41,7 @@
 
 As of v0.4 _Mosaic_ gives you the following:
 
-- 16 channels that can each output triggers, notes, note length, velocity and CC to a midi device or an n.b. voice
+- 16 channels that can each output triggers, notes, note length, velocity and CC to a midi or an n.b. voice
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
 - Song mode with 90 sequencer patterns
 - Save, load, autosave
@@ -49,11 +49,11 @@ As of v0.4 _Mosaic_ gives you the following:
 - 10 assignable trig locks per channel
 - Midi device templates including labelled trig destinations
 - Native [n.b.](https://github.com/sixolet/nb/) support
-- Per channel tempo and swing
-- Per channel pattern length
+- Per channel tempo, swing, and pattern length
 - Channel muting
-- Scales with root note and degree setting
-- Trig lockable octave, scales, chords, transpose, step probability, random note modifiers, random velocity modifiers
+- Scales with setable root note, degree and transpotion
+- Trig lockable octave, scales, chords, transpose, step probability, random note modifiers, random velocity modifiers, and more
+- Ability to sync to the Sinfonion eurorack quantiser for even more possibilities
 
 Requirements:
 
@@ -67,6 +67,9 @@ Encouraged:
 - Midi instruments
 - Crow, Just Friends, Ansible
 - [n.b.](https://github.com/sixolet/nb/)
+- Disting EX
+- Elektron Digitone, Syntakt, Digitakt
+- Sinfonion
 
 ## Install
 
