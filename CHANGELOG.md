@@ -1,6 +1,7 @@
 # 0.4.0
 
-* Sinfonion sync no longer relies on hardware or software norns mod and is no longer experimental
+* Sinfonion sync is no longer experimental and doesn't require modifications to norns
+* NB now doesn't crash the script if there are no mods installed
 
 # 0.3.7
 

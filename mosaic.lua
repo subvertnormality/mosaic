@@ -114,6 +114,7 @@ local function post_splash_init()
       false
     )
   end
+  device_map.validate_devices()
   params:bang()
   grid_controller.splash_screen_off()
   ui_splash_screen_active = false
@@ -155,9 +156,12 @@ function init()
   math.randomseed(os.time())
   program.init()
   midi_controller.init()
+  
   nb:init()
-  nb:add_param("voice_id", "NB PARAMS") -- adds a voice selector param to your script.
-  nb:add_player_params() -- Adds the parameters for the selected voices to your script.
+  if note_players then
+    nb:add_param("voice_id", "NB PARAMS") -- adds a voice selector param to your script.
+    nb:add_player_params() -- Adds the parameters for the selected voices to your script.
+  end
 
   device_map.init()
 
