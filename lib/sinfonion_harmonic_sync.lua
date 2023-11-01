@@ -20,22 +20,33 @@ function sinfonion.set_clock(clock)
   midi_controller.send_to_sinfonion(5, clock)
 end
 
--- Transposition
+-- Transposition takes a value of -64 to 63
 function sinfonion.set_transposition(trans)
   trans = math.max(-64, math.min(63, trans))
-  midi_controller.send_to_sinfonion(4, trans)
+  midi_controller.send_to_sinfonion(4, trans + 64)
 end
 
--- chaotic_detune
+-- chaotic_detune takes a value of -1.0 to 1.0
 function sinfonion.set_chaotic_detune(detune)
-  detune = math.max(-1.0, math.min(1.0, detune))
-  local detune_int = floor(detune * 63.0) + 63
-  midi_controller.send_to_sinfonion(9, detune_int)
+  -- Ensure the input is within the expected range
+  if detune > 1.0 then
+    detune = 1.0
+  elseif detune < -1.0 then
+    detune = -1.0
+  end
+
+  -- First, scale and offset the floatValue to the range -64 to 63
+  local adjusted_value = math.floor(detune * 64 + 0.5)
+
+  -- Now, adjust the range to 0 to 127 by adding 64
+  local midi_value = adjusted_value + 64
+
+  midi_controller.send_to_sinfonion(9, midi_value)
 end
 
--- harmonic_shift
+-- harmonic_shift takes a value of -11 to +11
 function sinfonion.set_harmonic_shift(shift)
-  midi_controller.send_to_sinfonion(10, shift)
+  midi_controller.send_to_sinfonion(10, shift + 11)
 end
 
 -- Beat
