@@ -99,6 +99,26 @@ end
 function clock_controller.init()
   clock_lattice = lattice:new()
 
+  master_clock =
+    clock_lattice:new_sprocket {
+      action = function(t)
+        if first_run ~= true then
+          step_handler.process_song_sequencer_patterns(program.get().current_step)
+        end
+
+        program.get().current_step = program.get().current_step + 1
+
+        if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
+          program.get().current_step = 1
+          first_run = false
+        end
+        fn.dirty_grid(true)
+      end,
+      division = 1 / 16,
+      swing = 50,
+      enabled = true
+    }
+
   for channel_number = 1, 17 do
     local div = 1
     div = clock_controller.calculate_divisor(program.get_channel(channel_number).clock_mods)
@@ -190,25 +210,7 @@ function clock_controller.init()
     clock_controller["channel_" .. channel_number .. "_clock"].first_run = true
   end
 
-  master_clock =
-    clock_lattice:new_sprocket {
-    action = function(t)
-      if first_run ~= true then
-        step_handler.process_song_sequencer_patterns(program.get().current_step)
-      end
 
-      program.get().current_step = program.get().current_step + 1
-
-      if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
-        program.get().current_step = 1
-        first_run = false
-      end
-      fn.dirty_grid(true)
-    end,
-    division = 1 / 32,
-    swing = 50,
-    enabled = true
-  }
 
 end
 
