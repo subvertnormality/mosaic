@@ -261,7 +261,7 @@ function autosave_reset()
   if autosave_timer.id then
     metro.free(autosave_timer.id)
   end
-  autosave_timer = metro.init(prime_autosave, 60, 1)
+  autosave_timer = metro.init(prime_autosave, 20, 1)
   autosave_timer:start()
 end
 
