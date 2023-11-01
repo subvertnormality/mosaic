@@ -107,6 +107,7 @@ function clock_controller.init()
         end
 
         program.get().current_step = program.get().current_step + 1
+        program.get().global_step_accumulator = program.get().global_step_accumulator + 1
 
         if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
           program.get().current_step = 1

@@ -27,7 +27,6 @@ local persistent_global_step_scale_number = nil
 local persistent_step_transpose = nil
 
 local step_scale_number = 0
-local global_step_accumulator = 0
 
 local switch_to_next_song_pattern_func = function()
 end
@@ -499,19 +498,18 @@ function step_handler.process_song_sequencer_patterns(step)
   local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
 
   if
-    (global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) ==
+    (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) ==
       0)
    then
     if params:get("song_mode") == 1 then
       program.set_selected_sequencer_pattern(step_handler.calculate_next_selected_sequencer_pattern())
-      global_step_accumulator = 0
       if params:get("reset_on_end_of_pattern") == 1 then
         step_handler.reset_sequencer_pattern()
       end
     end
   end
 
-  if global_step_accumulator % selected_sequencer_pattern.global_pattern_length == 0 then
+  if program.get().global_step_accumulator % selected_sequencer_pattern.global_pattern_length == 0 then
     switch_to_next_song_pattern_func()
     switch_to_next_song_pattern_blink_cancel_func()
     switch_to_next_song_pattern_func = function()
@@ -520,7 +518,6 @@ function step_handler.process_song_sequencer_patterns(step)
     channel_edit_page_controller.refresh()
   end
 
-  global_step_accumulator = global_step_accumulator + 1
 end
 
 function step_handler.sinfonian_sync(step)
@@ -612,7 +609,7 @@ function step_handler.execute_blink_cancel_func()
 end
 
 function step_handler.reset()
-  global_step_accumulator = 0
+  program.get().global_step_accumulator = 0
   persistent_global_step_scale_number = nil
   persistent_channel_step_scale_numbers = {
     nil,
