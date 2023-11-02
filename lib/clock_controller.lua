@@ -113,7 +113,6 @@ function clock_controller.init()
           program.get().current_step = 1
           first_run = false
         end
-        fn.dirty_grid(true)
       end,
       division = 1 / 16,
       swing = 50,
@@ -189,6 +188,10 @@ function clock_controller.init()
 
         clock_controller["channel_" .. channel_number .. "_clock"].first_run = false
         clock_controller["channel_" .. channel_number .. "_clock"].next_step = current_step
+
+        if program.get().selected_channel == channel_number and program.get().selected_page == program.get_pages().channel_edit_page then
+          fn.dirty_grid(true)
+        end
       end,
       division = 1 / (div * 4),
       swing = swing,

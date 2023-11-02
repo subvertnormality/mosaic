@@ -1591,7 +1591,7 @@ local stock_device_map = {
       {
         ["id"] = "filter_parameters_filter_envelope_depth",
         ["name"] = "Filter envelope depth",
-        ["cc_msb"] = 77,
+        ["cc_msb"] = 25,
         ["cc_lsb"] = nil,
         ["off_value"] = -1,
         ["cc_min_value"] = -1,

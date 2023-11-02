@@ -186,7 +186,7 @@ function init()
 
   local ui_clock_id = metro.init()
   ui_clock_id.event = redraw_metro
-  ui_clock_id.time = 1 / 30
+  ui_clock_id.time = 1 / 20
   ui_clock_id.count = -1
   ui_clock_id:start()
 

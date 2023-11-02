@@ -54,19 +54,7 @@ end
 
 function midi_controller.cc(cc_msb, cc_lsb, value, channel, device)
   if midi_devices[device] ~= nil then
-    if cc_lsb then
-      local lsb_value = value % 128 -- Least Significant Byte
-      local msb_value = math.floor(value / 128) -- Most Significant Byte
-
-      -- According to the manual, send the LSB first
-      midi_devices[device]:cc(cc_lsb, lsb_value, channel)
-
-      -- Then send the MSB
-      midi_devices[device]:cc(cc_msb, msb_value, channel)
-    else
-      -- If there's no LSB, just send the MSB
-      midi_devices[device]:cc(cc_msb, value, channel)
-    end
+    midi_devices[device]:cc(cc_msb, value, channel)
   end
 end
 
