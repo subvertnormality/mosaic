@@ -3,15 +3,7 @@ program = include("mosaic/lib/program")
 
 local pattern_controller = include("mosaic/lib/pattern_controller")
 
-function pass(test_name)
-  print("Test " .. test_name .. " PASS")
-end
-
-function fail(test_name)
-  print("Test " .. test_name .. " FAIL")
-end
-
-function skip_should_set_trig_step_to_zero_when_all_steps_are_zero()
+function test_skip_should_set_trig_step_to_zero_when_all_steps_are_zero()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "skip"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -23,14 +15,10 @@ function skip_should_set_trig_step_to_zero_when_all_steps_are_zero()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "skip").trig_values[1] == 0 then
-    pass("skip_should_set_trig_step_to_one_when_only_one_step_is_one")
-  else
-    fail("skip_should_set_trig_step_to_one_when_only_one_step_is_one")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "skip").trig_values[1], 0)
 end
 
-function skip_should_set_trig_step_to_one_when_only_one_step_is_one()
+function test_skip_should_set_trig_step_to_one_when_only_one_step_is_one()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "skip"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -42,14 +30,10 @@ function skip_should_set_trig_step_to_one_when_only_one_step_is_one()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "skip").trig_values[1] == 1 then
-    pass("skip_should_set_trig_step_to_one_when_only_one_step_is_one")
-  else
-    fail("skip_should_set_trig_step_to_one_when_only_one_step_is_one")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "skip").trig_values[1], 1)
 end
 
-function add_should_set_trig_step_to_one_when_only_one_step_is_one()
+function test_add_should_set_trig_step_to_one_when_only_one_step_is_one()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -61,14 +45,10 @@ function add_should_set_trig_step_to_one_when_only_one_step_is_one()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "add").trig_values[1] == 1 then
-    pass("add_should_set_trig_step_to_one_when_only_one_step_is_one")
-  else
-    fail("add_should_set_trig_step_to_one_when_only_one_step_is_one")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "add").trig_values[1], 1)
 end
 
-function subtract_should_set_trig_step_to_one_when_only_one_step_is_one()
+function test_subtract_should_set_trig_step_to_one_when_only_one_step_is_one()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -80,14 +60,10 @@ function subtract_should_set_trig_step_to_one_when_only_one_step_is_one()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "add").trig_values[1] == 1 then
-    pass("subtract_should_set_trig_step_to_one_when_only_one_step_is_one")
-  else
-    fail("subtract_should_set_trig_step_to_one_when_only_one_step_is_one")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "add").trig_values[1], 1)
 end
 
-function average_should_set_trig_step_to_one_when_only_one_step_is_one()
+function test_average_should_set_trig_step_to_one_when_only_one_step_is_one()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "average"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -99,14 +75,10 @@ function average_should_set_trig_step_to_one_when_only_one_step_is_one()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "average").trig_values[1] == 1 then
-    pass("average_should_set_trig_step_to_one_when_only_one_step_is_one")
-  else
-    fail("average_should_set_trig_step_to_one_when_only_one_step_is_one")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "average").trig_values[1], 1)
 end
 
-function add_should_set_trig_step_to_one_when_more_than_one_step_is_one()
+function test_add_should_set_trig_step_to_one_when_more_than_one_step_is_one()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -118,14 +90,10 @@ function add_should_set_trig_step_to_one_when_more_than_one_step_is_one()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "add").trig_values[1] == 1 then
-    pass("add_should_set_trig_step_to_one_when_more_than_one_step_is_one")
-  else
-    fail("add_should_set_trig_step_to_one_when_more_than_one_step_is_one")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "add").trig_values[1], 1)
 end
 
-function skip_should_set_trig_step_to_zero_when_more_than_one_step_is_one()
+function test_skip_should_set_trig_step_to_zero_when_more_than_one_step_is_one()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "skip"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -137,14 +105,10 @@ function skip_should_set_trig_step_to_zero_when_more_than_one_step_is_one()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "skip").trig_values[1] == 0 then
-    pass("skip_should_set_trig_step_to_zero_when_more_than_one_step_is_one")
-  else
-    fail("skip_should_set_trig_step_to_zero_when_more_than_one_step_is_one")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "skip").trig_values[1], 0)
 end
 
-function selected_patterns_set_order_should_not_matter()
+function test_selected_patterns_set_order_should_not_matter()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "skip"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -156,14 +120,10 @@ function selected_patterns_set_order_should_not_matter()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "skip").trig_values[1] == 0 then
-    pass("selected_patterns_set_order_should_not_matter")
-  else
-    fail("selected_patterns_set_order_should_not_matter")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "skip").trig_values[1], 0)
 end
 
-function pattern_number_should_use_note_value_from_chosen_pattern_number()
+function test_pattern_number_should_use_note_value_from_chosen_pattern_number()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "pattern_number_4"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -179,14 +139,10 @@ function pattern_number_should_use_note_value_from_chosen_pattern_number()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "pattern_number_4").note_values[1] == 2 then
-    pass("pattern_number_should_use_note_value_from_chosen_pattern_number")
-  else
-    fail("pattern_number_should_use_note_value_from_chosen_pattern_number")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "pattern_number_4").note_values[1], 2)
 end
 
-function pattern_number_should_use_note_value_from_chosen_pattern_number_even_if_trig_is_off()
+function test_pattern_number_should_use_note_value_from_chosen_pattern_number_even_if_trig_is_off()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "pattern_number_4"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -202,14 +158,10 @@ function pattern_number_should_use_note_value_from_chosen_pattern_number_even_if
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "pattern_number_4").note_values[1] == 2 then
-    pass("pattern_number_should_use_note_value_from_chosen_pattern_number_even_if_trig_is_off")
-  else
-    fail("pattern_number_should_use_note_value_from_chosen_pattern_number_even_if_trig_is_off")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "pattern_number_4").note_values[1], 2)
 end
 
-function pattern_number_should_use_length_value_from_chosen_pattern_number()
+function test_pattern_number_should_use_length_value_from_chosen_pattern_number()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "pattern_number_2"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -225,14 +177,10 @@ function pattern_number_should_use_length_value_from_chosen_pattern_number()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "pattern_number_2").lengths[1] == 4 then
-    pass("pattern_number_should_use_length_value_from_chosen_pattern_number")
-  else
-    fail("pattern_number_should_use_length_value_from_chosen_pattern_number")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "pattern_number_2").lengths[1], 4)
 end
 
-function pattern_number_should_not_use_note_value_from_chosen_pattern_number_if_pattern_isnt_selected()
+function test_pattern_number_should_not_use_note_value_from_chosen_pattern_number_if_pattern_isnt_selected()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "pattern_number_4"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -247,14 +195,10 @@ function pattern_number_should_not_use_note_value_from_chosen_pattern_number_if_
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "pattern_number_4").note_values[1] ~= 2 then
-    pass("pattern_number_should_not_use_note_value_from_chosen_pattern_number_if_pattern_isnt_selected")
-  else
-    fail("pattern_number_should_not_use_note_value_from_chosen_pattern_number_if_pattern_isnt_selected")
-  end
+  luaunit.assertNotEquals(pattern_controller.get_and_merge_patterns(1, "pattern_number_4").note_values[1], 2)
 end
 
-function notes_should_add_up_when_using_add_merge_mode()
+function test_notes_should_add_up_when_using_add_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -269,14 +213,10 @@ function notes_should_add_up_when_using_add_merge_mode()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "add").note_values[1] == 72 + math.ceil((72 + 45 + 28) / 3) then
-    pass("notes_should_add_up_when_using_add_merge_mode")
-  else
-    fail("notes_should_add_up_when_using_add_merge_mode")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "add").note_values[1], 72 + math.ceil((72 + 45 + 28) / 3))
 end
 
-function notes_should_average_when_using_average_merge_mode()
+function test_notes_should_average_when_using_average_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "average"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -291,14 +231,10 @@ function notes_should_average_when_using_average_merge_mode()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "average").note_values[1] == math.ceil((72 + 45 + 28) / 3) then
-    pass("notes_should_average_when_using_average_merge_mode")
-  else
-    fail("notes_should_average_when_using_average_merge_mode")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "average").note_values[1], math.ceil((72 + 45 + 28) / 3))
 end
 
-function notes_should_subtract_when_using_subtract_merge_mode()
+function test_notes_should_subtract_when_using_subtract_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "subtract"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -313,14 +249,10 @@ function notes_should_subtract_when_using_subtract_merge_mode()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "subtract").note_values[1] == 72 - math.ceil((72 + 45 + 28) / 3) then
-    pass("notes_should_subtract_when_using_subtract_merge_mode")
-  else
-    fail("notes_should_subtract_when_using_subtract_merge_mode")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "subtract").note_values[1], 72 - math.ceil((72 + 45 + 28) / 3))
 end
 
-function notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern()
+function test_notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "subtract"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -333,19 +265,14 @@ function notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pa
   program.get_sequencer_pattern(1).patterns[1].note_values[4] = 5
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if
-    pattern_controller.get_and_merge_patterns(1, "subtract").note_values[1] == 2 and
-      pattern_controller.get_and_merge_patterns(1, "subtract").note_values[2] == 3 and
-      pattern_controller.get_and_merge_patterns(1, "subtract").note_values[3] == 4 and
-      pattern_controller.get_and_merge_patterns(1, "subtract").note_values[4] == 5
-   then
-    pass("notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern")
-  else
-    fail("notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "subtract").note_values[1], 2)
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "subtract").note_values[2], 3)
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "subtract").note_values[3], 4)
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "subtract").note_values[4], 5)
+
 end
 
-function velocity_values_should_average_the_values_when_using_add_merge_mode()
+function test_velocity_values_should_average_the_values_when_using_add_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -361,14 +288,10 @@ function velocity_values_should_average_the_values_when_using_add_merge_mode()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
   -- TODO: This doesn't make sense. Perhaps use average for length and velocity, but add the notes?
-  if pattern_controller.get_and_merge_patterns(1, "add").velocity_values[1] == 90 + 67 + 102 then
-    pass("velocity_values_should_average_the_values_when_using_add_merge_mode")
-  else
-    fail("velocity_values_should_average_the_values_when_using_add_merge_mode")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "add").velocity_values[1], 90 + 67 + 102)
 end
 
-function notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mode()
+function test_notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -384,14 +307,10 @@ function notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mo
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "add").note_values[1] == 72 + math.ceil((45 + 28) / 2) then
-    pass("notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mode")
-  else
-    fail("notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mode")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "add").note_values[1], 72 + math.ceil((45 + 28) / 2))
 end
 
-function notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_merge_mode()
+function test_notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "subtract"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -407,14 +326,10 @@ function notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_mer
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "subtract").note_values[1] == 72 - math.ceil((45 + 28) / 2) then
-    pass("notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_merge_mode")
-  else
-    fail("notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_merge_mode")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "subtract").note_values[1], 72 - math.ceil((45 + 28) / 2))
 end
 
-function notes_should_ignore_values_that_dont_have_trigs_when_using_average_merge_mode()
+function test_notes_should_ignore_values_that_dont_have_trigs_when_using_average_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "average"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
@@ -430,14 +345,10 @@ function notes_should_ignore_values_that_dont_have_trigs_when_using_average_merg
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "average").note_values[1] == math.ceil((45 + 28) / 2) then
-    pass("notes_should_ignore_values_that_dont_have_trigs_when_using_average_merge_mode")
-  else
-    fail("notes_should_ignore_values_that_dont_have_trigs_when_using_average_merge_mode")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "average").note_values[1], math.ceil((45 + 28) / 2))
 end
 
-function notes_should_ignore_values_from_unselected_patterns_when_using_add_merge_mode()
+function test_notes_should_ignore_values_from_unselected_patterns_when_using_add_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -452,14 +363,10 @@ function notes_should_ignore_values_from_unselected_patterns_when_using_add_merg
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "add").note_values[1] == 72 + math.ceil((72 + 54 + 12) / 3) then
-    pass("notes_should_ignore_values_from_unselected_patterns_when_using_add_merge_mode")
-  else
-    fail("notes_should_ignore_values_from_unselected_patterns_when_using_add_merge_mode")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "add").note_values[1], 72 + math.ceil((72 + 54 + 12) / 3))
 end
 
-function lengths_should_average_the_values_when_using_add_merge_mode()
+function test_lengths_should_average_the_values_when_using_add_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -474,14 +381,10 @@ function lengths_should_average_the_values_when_using_add_merge_mode()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "add").lengths[1] == math.ceil((1 + 3 + 4) / 3) then
-    pass("lengths_should_add_the_values_when_using_add_merge_mode")
-  else
-    fail("lengths_should_add_the_values_when_using_add_merge_mode")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "add").lengths[1], math.ceil((1 + 3 + 4) / 3))
 end
 
-function velocity_values_should_average_the_values_when_using_add_merge_mode()
+function test_velocity_values_should_average_the_values_when_using_add_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -496,14 +399,10 @@ function velocity_values_should_average_the_values_when_using_add_merge_mode()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "add").velocity_values[1] == math.ceil((1 + 3 + 4) / 3) then
-    pass("velocity_values_should_average_the_values_when_using_add_merge_mode")
-  else
-    fail("velocity_values_should_average_the_values_when_using_add_merge_mode")
-  end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "add").velocity_values[1],  math.ceil((1 + 3 + 4) / 3))
 end
 
-function velocity_values_should_average_the_values_when_using_subtract_merge_mode()
+function test_velocity_values_should_average_the_values_when_using_subtract_merge_mode()
   program.init()
   program.get_sequencer_pattern(1).channels[1].merge_mode = "subtract"
   program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
@@ -518,36 +417,6 @@ function velocity_values_should_average_the_values_when_using_subtract_merge_mod
   program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
 
-  if pattern_controller.get_and_merge_patterns(1, "add").velocity_values[1] == math.ceil((1 + 3 + 4) / 3) then
-    pass("velocity_values_should_average_the_values_when_using_subtract_merge_mode")
-  else
-    fail("velocity_values_should_average_the_values_when_using_subtract_merge_mode")
-  end
-end
+  luaunit.assertEquals(pattern_controller.get_and_merge_patterns(1, "add").velocity_values[1], math.ceil((1 + 3 + 4) / 3))
 
-function init()
-  skip_should_set_trig_step_to_zero_when_all_steps_are_zero()
-  skip_should_set_trig_step_to_one_when_only_one_step_is_one()
-  add_should_set_trig_step_to_one_when_only_one_step_is_one()
-  subtract_should_set_trig_step_to_one_when_only_one_step_is_one()
-  average_should_set_trig_step_to_one_when_only_one_step_is_one()
-  add_should_set_trig_step_to_one_when_more_than_one_step_is_one()
-  skip_should_set_trig_step_to_zero_when_more_than_one_step_is_one()
-  selected_patterns_set_order_should_not_matter()
-  pattern_number_should_use_note_value_from_chosen_pattern_number()
-  pattern_number_should_use_note_value_from_chosen_pattern_number_even_if_trig_is_off()
-  pattern_number_should_use_length_value_from_chosen_pattern_number()
-  pattern_number_should_not_use_note_value_from_chosen_pattern_number_if_pattern_isnt_selected()
-  notes_should_add_up_when_using_add_merge_mode()
-  notes_should_subtract_when_using_subtract_merge_mode()
-  notes_should_average_when_using_average_merge_mode()
-  notes_should_not_change_when_using_subtract_merge_mode_with_only_one_pattern()
-  velocity_values_should_average_the_values_when_using_add_merge_mode()
-  notes_should_ignore_values_that_dont_have_trigs_when_using_add_merge_mode()
-  notes_should_ignore_values_that_dont_have_trigs_when_using_subtract_merge_mode()
-  notes_should_ignore_values_that_dont_have_trigs_when_using_average_merge_mode()
-  notes_should_ignore_values_from_unselected_patterns_when_using_add_merge_mode()
-  lengths_should_average_the_values_when_using_add_merge_mode()
-  velocity_values_should_average_the_values_when_using_add_merge_mode()
-  velocity_values_should_average_the_values_when_using_subtract_merge_mode()
 end
