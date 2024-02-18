@@ -43,6 +43,7 @@ else
 
       -- Move the contents from the top-level directory to the desired location and clean up
       if top_level_dir ~= "" then
+        os.execute("mkdir -p ./test_artefacts/norns")
           os.execute(string.format("mv ./test_artefacts/temp_norns/%s/* ./test_artefacts/norns", top_level_dir))
           os.execute("rm -rf ./test_artefacts/temp_norns")
           print("norns has been successfully downloaded and extracted to './test_artefacts/norns'.")
