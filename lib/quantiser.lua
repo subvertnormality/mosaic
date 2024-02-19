@@ -127,8 +127,7 @@ function quantiser.get_scale_name_from_index(i)
   return scales[i].name
 end
 
-function quantiser.process(note_number, octave_mod, transpose, scale_number, c)
-  local channel = program.get_channel(c)
+function quantiser.process(note_number, octave_mod, transpose, scale_number)
 
   local root_note = program.get().root_note + 60
   local chord_rotation = program.get().chord - 1

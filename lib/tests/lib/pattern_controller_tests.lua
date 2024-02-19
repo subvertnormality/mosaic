@@ -1,6 +1,3 @@
-fn = include("mosaic/lib/functions")
-program = include("mosaic/lib/program")
-
 local pattern_controller = include("mosaic/lib/pattern_controller")
 
 function test_skip_should_set_trig_step_to_zero_when_all_steps_are_zero()

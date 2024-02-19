@@ -318,8 +318,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
             unprocessed_note_container.note_value + chord_notes[chord_number],
             unprocessed_note_container.octave_mod,
             unprocessed_note_container.transpose,
-            channel.step_scale_number,
-            c
+            channel.step_scale_number
           )
 
           local v = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
@@ -354,8 +353,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           unprocessed_note_container.note_value,
           unprocessed_note_container.octave_mod,
           unprocessed_note_container.transpose,
-          channel.step_scale_number,
-          c
+          channel.step_scale_number
         )
         note_on_func(processed_note, note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes), note_container.midi_channel, note_container.midi_device)
         table.insert(

@@ -94,6 +94,9 @@ function require_all_files_in_folder(folder)
   end
 end
 
+fn = include("mosaic/lib/functions")
+program = include("mosaic/lib/program")
+
 require_all_files_in_folder('./lib')
 
 os.exit( luaunit.LuaUnit.run() )
