@@ -2,8 +2,6 @@ local fn = include("mosaic/lib/functions")
 
 local lattice = require("lattice")
 
-local midi_controller = include("lib/midi_controller")
-
 local clock_controller = {}
 
 local playing = false
@@ -80,24 +78,28 @@ function clock_controller.calculate_divisor(clock_mod)
   return divisor
 end
 
-local function delay_param_set(channel, func)
-  local divisor = 4
+-- local function delay_param_set(channel, func)
+--   local divisor = 4
 
-  if channel then
-    local clock_mod = channel.clock_mods
-    divisor = clock_controller.calculate_divisor(clock_mod)
-  end
+--   if channel then
+--     local clock_mod = channel.clock_mods
+--     divisor = clock_controller.calculate_divisor(clock_mod)
+--   end
 
-  local d = divisor + 1
-  local pause = (clock.get_beat_sec() / d)
-  clock.sleep(pause)
-  pause = clock.get_beat_sec() / (d * 6)
-  clock.sleep(pause)
-  func()
-end
+--   local d = divisor + 1
+--   local pause = (clock.get_beat_sec() / d)
+--   clock.sleep(pause)
+--   pause = clock.get_beat_sec() / (d * 6)
+--   clock.sleep(pause)
+--   func()
+-- end
 
 function clock_controller.init()
   clock_lattice = lattice:new()
+
+  if testing then
+    clock_lattice.auto = false
+  end
 
   master_clock =
     clock_lattice:new_sprocket {

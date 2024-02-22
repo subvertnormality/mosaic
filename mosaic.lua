@@ -5,6 +5,8 @@
 -- llllllll.co/t/mosaic-alpha-v0-3
 -- manual: t.ly/h-Wsw
 
+testing = false
+
 local create_default_config = include("mosaic/lib/user_config/create_default_config")
 
 create_default_config.create_script("device_config.lua", create_default_config.default_device_config_content)
@@ -14,6 +16,8 @@ grid_controller = include("mosaic/lib/grid_controller")
 ui_controller = include("mosaic/lib/ui_controller")
 program = include("mosaic/lib/program")
 sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
+midi_controller = include("mosaic/lib/midi_controller")
+
 
 local fn = include("mosaic/lib/functions")
 local fileselect = require("fileselect")

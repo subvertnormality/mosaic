@@ -11,8 +11,6 @@ local ControlScrollSelector = include("mosaic/lib/ui_components/ControlScrollSel
 local ListSelector = include("mosaic/lib/ui_components/ListSelector")
 local ValueSelector = include("mosaic/lib/ui_components/ValueSelector")
 
-local midi_controller = include("mosaic/lib/midi_controller")
-
 local device_param_manager = include("mosaic/lib/device_param_manager")
 
 local pages = Pages:new()
