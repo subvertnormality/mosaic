@@ -10,7 +10,7 @@ local master_clock
 local sinfonion_clock
 local trigless_lock_active = {}
 
-local clock_lattice
+clock_lattice = {}
 
 local clock_divisions = {
   {name = "x16", value = 16, type = "clock_multiplication"},
@@ -306,6 +306,10 @@ end
 
 function clock_controller.get_clock_divisions()
   return clock_divisions
+end
+
+function clock_controller.get_clock_lattice()
+  return clock_lattice
 end
 
 return clock_controller

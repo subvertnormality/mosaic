@@ -374,8 +374,8 @@ end
 
 function step_handler.handle(c, current_step)
   local channel = program.get_channel(c)
-  local trig_value = channel.working_pattern.trig_values[current_step]
 
+  local trig_value = channel.working_pattern.trig_values[current_step]
   local note_value = channel.working_pattern.note_values[current_step]
   local velocity_value = channel.working_pattern.velocity_values[current_step]
   local length_value = channel.working_pattern.lengths[current_step]
@@ -443,6 +443,7 @@ function step_handler.handle(c, current_step)
 
     if not channel.mute then
       if not device.player then
+
         local note_container = {
           note = note,
           velocity = velocity_value,

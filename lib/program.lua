@@ -122,6 +122,7 @@ function program.init()
     current_step = 1,
     current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     sequencer_patterns = {},
+    global_step_accumulator = 0,
     devices = {
       {midi_channel = 1, midi_device = 1, device_map = "none"},
       {midi_channel = 1, midi_device = 1, device_map = "none"},
