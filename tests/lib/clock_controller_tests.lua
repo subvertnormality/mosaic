@@ -382,8 +382,33 @@ function test_channel_17_doesnt_fire_notes()
   end
 
   local note_on_event = table.remove(midi_note_on_events)
-  
+
   -- Check there are no note on events
   luaunit.assertNil(note_on_event)
 
 end
+
+
+-- function test_clock_divisions_slow_down_the_clock()
+-- function test_clock_divisions_have_correct_end_note_bahaviour()
+
+-- function test_clock_multiplications_speed_up_the_clock()
+-- function test_clock_multiplications_have_correct_end_note_bahaviour()
+
+-- function test_clock_swing_has_correct_end_note_bahaviour()
+
+-- function test_clock_can_delay_action
+
+
+-- function test_params_are_processed_at_the_right_step
+-- function test_trigless_param_is_processed_if_trigless_locks_are_on
+-- function test_trigless_param_are_not_processed_if_trigless_locks_are_off
+
+
+-- function test_global_default_scale_setting_quantises_notes_properly
+-- function test_channel_default_scale_setting_quantises_notes_properly
+-- function test_global_step_scale_quantises_notes_properly
+-- function test_channel_step_scale_quantises_notes_properly
+
+
+
