@@ -1,4 +1,4 @@
-*Mosaic* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodies with finesse. Dive into a profound and singular tapestry of sketching and composition.
+*Mosaic* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodies with finesse. Jump into a profound and singular tapestry of sketching and composition.
 
 - [Mosaic](#mosaic)
   * [At a glance](#at-a-glance)
@@ -83,7 +83,7 @@ In _Mosaic_, the 'pattern' is the central pillar. Think of it as a sequence enri
 
 In _Mosaic_, notes aren't strictly bound to a single scale. Instead, they are valued by their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
 
-_Mosaic_ ensures you remain within your selected scale although there are ways to experiment with notes outside of it too. You'll find several methods to adjust scales seamlessly as you go, which we'll cover shortly.
+_Mosaic_ ensures you remain within your selected scale although there are ways to experiment with notes outside of it too. You'll find several methods to adjust scales as you go, which we'll cover shortly.
 
 ### Channel
 
@@ -95,11 +95,11 @@ You can adjust the rhythm for each channel individually, allowing for different 
 
 ### Sequencer Pattern
 
-The sequencer pattern rounds out the trio of foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns. This includes aspects from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be linked to craft a song in the song mode page. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
+The sequencer pattern rounds out the trio of foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns. This includes aspects from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be linked to create a full song in the song mode page. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
 
 ### Scale
 
-Each sequencer pattern offers 16 scale slots. A single slot can house a root note, a scale variation (eg Dorian or Major), and a degree setting. Scales can be selected in various ways: setting a default scale for a channel, designating scale trig locks for specific channels activated on certain steps, or setting global scale trig locks influencing all channels unless a particular channel-specific trig lock takes precedence. This flexibility paves the way for intricate chord progressions.
+Each sequencer pattern offers 16 scale slots. A single slot has a root note, a scale variation (eg Dorian, Major, etc), and a degree setting. Scales can be selected in various ways: setting a default scale for a channel, designating scale trig locks for specific channels activated on certain steps, or setting global scale trig locks influencing all channels unless a particular channel-specific trig lock takes precedence. This flexibility paves the way for intricate chord progressions and the ability to add variation to patterns.
 
 ### Device
 
