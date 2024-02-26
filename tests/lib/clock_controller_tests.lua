@@ -30,7 +30,15 @@ local function progress_clock_one_beat()
   end
 end
 
-function test_clock_processes_note_off_events()
+local function progress_clock_by_pulses(p)
+  for i = 1, p do
+    clock_lattice:pulse()
+  end
+end
+
+
+
+function test_clock_processes_note_events()
   setup()
   local sequencer_pattern = 1
   program.set_selected_sequencer_pattern(1)
@@ -463,9 +471,9 @@ function test_clock_divisions_slow_down_the_clock_div_3()
 
   clock_setup()
 
-  local div_2_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[17])
+  local div_3_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[17])
 
-  clock_controller.set_channel_division(1, div_2_clock_mod)
+  clock_controller.set_channel_division(1, div_3_clock_mod)
 
   luaunit.assertNil(note_on_event)
 
@@ -504,10 +512,95 @@ end
 
 
 
--- function test_clock_multiplications_speed_up_the_clock()
+function test_clock_multiplications_speed_up_the_clock_mul_2()
+
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  test_pattern.note_values[2] = 0
+  test_pattern.lengths[2] = 2
+  test_pattern.trig_values[2] = 1
+  test_pattern.velocity_values[2] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  local mul_2_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[10])
+
+  clock_controller.set_channel_division(1, mul_2_clock_mod)
+
+  luaunit.assertNil(note_on_event)
+
+  progress_clock_one_beat()
+
+  local note_on_event = table.remove(midi_note_on_events)
+
+  luaunit.assertEquals(note_on_event[1], 60)
+  luaunit.assertEquals(note_on_event[2], 100)
+  luaunit.assertEquals(note_on_event[3], 1)
+
+  progress_clock_one_beat()
+
+  local note_off_event = table.remove(midi_note_off_events)
+
+  luaunit.assertEquals(note_off_event[1], 60)
+  luaunit.assertEquals(note_off_event[2], 100)
+  luaunit.assertEquals(note_off_event[3], 1)
+
+end
 
 
--- function test_clock_swing_has_correct_end_note_bahaviour()
+function test_clock_multiplications_speed_up_the_clock_mul_16()
+
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  test_pattern.note_values[16] = 0
+  test_pattern.lengths[16] = 32
+  test_pattern.trig_values[16] = 1
+  test_pattern.velocity_values[16] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  local mul_16_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[1])
+
+  clock_controller.set_channel_division(1, mul_16_clock_mod)
+
+  luaunit.assertNil(note_on_event)
+
+  progress_clock_one_beat()
+
+  local note_on_event = table.remove(midi_note_on_events)
+
+  luaunit.assertEquals(note_on_event[1], 60)
+  luaunit.assertEquals(note_on_event[2], 100)
+  luaunit.assertEquals(note_on_event[3], 1)
+
+  progress_clock_one_beat()
+  progress_clock_one_beat()
+
+  local note_off_event = table.remove(midi_note_off_events)
+
+  luaunit.assertEquals(note_off_event[1], 60)
+  luaunit.assertEquals(note_off_event[2], 100)
+  luaunit.assertEquals(note_off_event[3], 1)
+
+end
 
 -- function test_clock_can_delay_action
 
