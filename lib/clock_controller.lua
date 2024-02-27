@@ -10,7 +10,7 @@ local master_clock
 local sinfonion_clock
 local trigless_lock_active = {}
 
-clock_lattice = {}
+local clock_lattice = {}
 
 local clock_divisions = {
   {name = "x16", value = 16, type = "clock_multiplication"},
@@ -238,15 +238,13 @@ function clock_controller.delay_action(c, division_index, multiplier, func)
       func()
       delayed:destroy()
     else
-      first_run = false
+       first_run = false
     end
   end
   delayed =
     clock_lattice:new_sprocket {
     action = sprocket_action,
-    division = (clock_controller.calculate_divisor(clock_divisions[division_index]) *
-      clock_controller["channel_" .. c .. "_clock"].division) *
-      multiplier,
+    division = (clock_controller.calculate_divisor(clock_divisions[division_index]) * clock_controller["channel_" .. c .. "_clock"].division) * multiplier,
     enabled = true
   }
 end

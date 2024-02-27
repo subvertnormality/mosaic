@@ -8,6 +8,7 @@ globals.reset = function()
   channel_sequencer_page_controller_refresh_events = {}
   channel_edit_page_controller_refresh_events = {}
   channel_edit_page_controller_refresh_trig_locks_events = {}
+  has_fired = nil
 end
 
 globals.reset()

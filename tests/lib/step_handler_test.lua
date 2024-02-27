@@ -31,9 +31,9 @@ function test_steps_process_note_on_events()
 
   local note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assertEquals(note_on_event[1], 60)
-  luaunit.assertEquals(note_on_event[2], 100)
-  luaunit.assertEquals(note_on_event[3], 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
 end
 
 

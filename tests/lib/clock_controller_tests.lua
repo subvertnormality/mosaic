@@ -26,17 +26,15 @@ end
 
 local function progress_clock_one_beat()
   for i = 1, 24 do
-    clock_lattice:pulse()
+    clock_controller.get_clock_lattice():pulse()
   end
 end
 
 local function progress_clock_by_pulses(p)
   for i = 1, p do
-    clock_lattice:pulse()
+    clock_controller.get_clock_lattice():pulse()
   end
 end
-
-
 
 function test_clock_processes_note_events()
   setup()
@@ -58,17 +56,17 @@ function test_clock_processes_note_events()
 
   local note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assertEquals(note_on_event[1], 60)
-  luaunit.assertEquals(note_on_event[2], 100)
-  luaunit.assertEquals(note_on_event[3], 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_one_beat()
   
   local note_off_event = table.remove(midi_note_off_events)
 
-  luaunit.assertEquals(note_off_event[1], 60)
-  luaunit.assertEquals(note_off_event[2], 100)
-  luaunit.assertEquals(note_off_event[3], 1)
+  luaunit.assert_equals(note_off_event[1], 60)
+  luaunit.assert_equals(note_off_event[2], 100)
+  luaunit.assert_equals(note_off_event[3], 1)
 
 end
 
@@ -101,9 +99,9 @@ function test_clock_processes_notes_of_various_lengths()
       local note_on_event = table.remove(midi_note_on_events)
 
       -- Check the note on event
-      luaunit.assertEquals(note_on_event[1], 60)
-      luaunit.assertEquals(note_on_event[2], 100)
-      luaunit.assertEquals(note_on_event[3], 1)
+      luaunit.assert_equals(note_on_event[1], 60)
+      luaunit.assert_equals(note_on_event[2], 100)
+      luaunit.assert_equals(note_on_event[3], 1)
 
       -- Progress the clock according to the current length being tested
       for _ = 1, length do
@@ -113,9 +111,9 @@ function test_clock_processes_notes_of_various_lengths()
       -- Check the note off event after the specified number of beats
       local note_off_event = table.remove(midi_note_off_events)
 
-      luaunit.assertEquals(note_off_event[1], 60)
-      luaunit.assertEquals(note_off_event[2], 100)
-      luaunit.assertEquals(note_off_event[3], 1)
+      luaunit.assert_equals(note_off_event[1], 60)
+      luaunit.assert_equals(note_off_event[2], 100)
+      luaunit.assert_equals(note_off_event[3], 1)
   end
 end
 
@@ -144,14 +142,14 @@ function test_clock_processes_sequence_page_change_at_end_of_song_pattern_length
         progress_clock_one_beat()
     end
 
-    luaunit.assertEquals(table.remove(channel_sequencer_page_controller_refresh_events), true)
+    luaunit.assert_equals(table.remove(channel_sequencer_page_controller_refresh_events), true)
 
     for _ = 1, length * 2 do
       progress_clock_one_beat()
     end
 
-    luaunit.assertEquals(table.remove(channel_sequencer_page_controller_refresh_events), true)
-    luaunit.assertEquals(table.remove(channel_sequencer_page_controller_refresh_events), true)
+    luaunit.assert_equals(table.remove(channel_sequencer_page_controller_refresh_events), true)
+    luaunit.assert_equals(table.remove(channel_sequencer_page_controller_refresh_events), true)
   end
 
 end
@@ -195,9 +193,9 @@ function test_clock_processes_notes_at_various_steps()
       local note_on_event = table.remove(midi_note_on_events)
 
       -- Check the note on event
-      luaunit.assertEquals(note_on_event[1], 60)
-      luaunit.assertEquals(note_on_event[2], velocity)
-      luaunit.assertEquals(note_on_event[3], 1)
+      luaunit.assert_equals(note_on_event[1], 60)
+      luaunit.assert_equals(note_on_event[2], velocity)
+      luaunit.assert_equals(note_on_event[3], 1)
 
   end
 end
@@ -281,9 +279,9 @@ function test_multiple_patterns_fire_notes_on_events_from_trigs_in_each_pattern(
 
   local note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assertEquals(note_on_event[1], 60)
-  luaunit.assertEquals(note_on_event[2], 20)
-  luaunit.assertEquals(note_on_event[3], 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 20)
+  luaunit.assert_equals(note_on_event[3], 1)
 
   for _ = 1, steps2 - steps do
     progress_clock_one_beat()
@@ -291,9 +289,9 @@ function test_multiple_patterns_fire_notes_on_events_from_trigs_in_each_pattern(
 
   note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assertEquals(note_on_event[1], 62)
-  luaunit.assertEquals(note_on_event[2], 30)
-  luaunit.assertEquals(note_on_event[3], 1)
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 30)
+  luaunit.assert_equals(note_on_event[3], 1)
 
 end
 
@@ -341,9 +339,9 @@ function test_multiple_patterns_fire_notes_on_events_from_trigs_in_each_pattern_
 
   local note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assertEquals(note_on_event[1], 60)
-  luaunit.assertEquals(note_on_event[2], 20)
-  luaunit.assertEquals(note_on_event[3], 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 20)
+  luaunit.assert_equals(note_on_event[3], 1)
 
   for _ = 1, steps2 - steps do
     progress_clock_one_beat()
@@ -351,9 +349,9 @@ function test_multiple_patterns_fire_notes_on_events_from_trigs_in_each_pattern_
 
   note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assertEquals(note_on_event[1], 62)
-  luaunit.assertEquals(note_on_event[2], 30)
-  luaunit.assertEquals(note_on_event[3], 1)
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 30)
+  luaunit.assert_equals(note_on_event[3], 1)
 
 end
 
@@ -431,9 +429,9 @@ function test_clock_divisions_slow_down_the_clock_div_2()
 
   local note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assertEquals(note_on_event[1], 60)
-  luaunit.assertEquals(note_on_event[2], 100)
-  luaunit.assertEquals(note_on_event[3], 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_one_beat()
   luaunit.assertNil(note_off_event)
@@ -445,9 +443,9 @@ function test_clock_divisions_slow_down_the_clock_div_2()
 
   local note_off_event = table.remove(midi_note_off_events)
 
-  luaunit.assertEquals(note_off_event[1], 60)
-  luaunit.assertEquals(note_off_event[2], 100)
-  luaunit.assertEquals(note_off_event[3], 1)
+  luaunit.assert_equals(note_off_event[1], 60)
+  luaunit.assert_equals(note_off_event[2], 100)
+  luaunit.assert_equals(note_off_event[3], 1)
 
 end
 
@@ -486,9 +484,9 @@ function test_clock_divisions_slow_down_the_clock_div_3()
 
   local note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assertEquals(note_on_event[1], 60)
-  luaunit.assertEquals(note_on_event[2], 100)
-  luaunit.assertEquals(note_on_event[3], 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_one_beat()
   luaunit.assertNil(note_off_event)
@@ -504,9 +502,9 @@ function test_clock_divisions_slow_down_the_clock_div_3()
   
   local note_off_event = table.remove(midi_note_off_events)
 
-  luaunit.assertEquals(note_off_event[1], 60)
-  luaunit.assertEquals(note_off_event[2], 100)
-  luaunit.assertEquals(note_off_event[3], 1)
+  luaunit.assert_equals(note_off_event[1], 60)
+  luaunit.assert_equals(note_off_event[2], 100)
+  luaunit.assert_equals(note_off_event[3], 1)
 
 end
 
@@ -542,17 +540,17 @@ function test_clock_multiplications_speed_up_the_clock_mul_2()
 
   local note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assertEquals(note_on_event[1], 60)
-  luaunit.assertEquals(note_on_event[2], 100)
-  luaunit.assertEquals(note_on_event[3], 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_one_beat()
 
   local note_off_event = table.remove(midi_note_off_events)
 
-  luaunit.assertEquals(note_off_event[1], 60)
-  luaunit.assertEquals(note_off_event[2], 100)
-  luaunit.assertEquals(note_off_event[3], 1)
+  luaunit.assert_equals(note_off_event[1], 60)
+  luaunit.assert_equals(note_off_event[2], 100)
+  luaunit.assert_equals(note_off_event[3], 1)
 
 end
 
@@ -587,22 +585,141 @@ function test_clock_multiplications_speed_up_the_clock_mul_16()
 
   local note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assertEquals(note_on_event[1], 60)
-  luaunit.assertEquals(note_on_event[2], 100)
-  luaunit.assertEquals(note_on_event[3], 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_one_beat()
   progress_clock_one_beat()
 
   local note_off_event = table.remove(midi_note_off_events)
 
-  luaunit.assertEquals(note_off_event[1], 60)
-  luaunit.assertEquals(note_off_event[2], 100)
-  luaunit.assertEquals(note_off_event[3], 1)
+  luaunit.assert_equals(note_off_event[1], 60)
+  luaunit.assert_equals(note_off_event[2], 100)
+  luaunit.assert_equals(note_off_event[3], 1)
 
 end
 
--- function test_clock_can_delay_action
+function test_clock_can_delay_action_with_no_channel_clock_division_set()
+
+  setup()
+  clock_setup()
+
+  local has_fired = false
+
+  local channel = 1
+
+  local clock_division_index = 13
+  local delay_multiplier = 1
+
+  clock_controller.delay_action(
+    channel,
+    clock_division_index,
+    delay_multiplier,
+    function()
+      has_fired = true
+    end
+  )
+
+  luaunit.assert_false(has_fired)
+
+  progress_clock_one_beat()
+  progress_clock_one_beat()
+  progress_clock_one_beat()
+  progress_clock_one_beat()
+  progress_clock_by_pulses(1)
+
+  luaunit.assert_true(has_fired)
+
+end
+
+
+function test_clock_delay_action_with_no_division_specified_executes_immediately()
+
+  setup()
+  clock_setup()
+
+  local has_fired = false
+
+  local channel = 1
+
+  local clock_division_index = 0
+  local delay_multiplier = 1
+
+  clock_controller.delay_action(
+    channel,
+    clock_division_index,
+    delay_multiplier,
+    function()
+      has_fired = true
+    end
+  )
+
+  luaunit.assert_true(has_fired)
+
+end
+
+function test_clock_delay_action_with_nil_division_executes_immediately()
+
+  setup()
+  clock_setup()
+
+  local has_fired = false
+
+  local channel = 1
+
+  local clock_division_index = nil
+  local delay_multiplier = 1
+
+  clock_controller.delay_action(
+    channel,
+    clock_division_index,
+    delay_multiplier,
+    function()
+      has_fired = true
+    end
+  )
+
+  luaunit.assert_true(has_fired)
+
+end
+
+
+function test_clock_can_delay_action_with_channel_clock_division_set()
+
+  setup()
+  clock_setup()
+  progress_clock_one_beat()
+  local mul_8_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[3])
+
+  clock_controller.set_channel_division(1, mul_8_clock_mod)
+
+
+  pattern_controller.update_working_patterns()
+
+  local has_fired = false
+
+  local channel = 1
+
+  local clock_division_index = 13
+  local delay_multiplier = 1
+
+  clock_controller.delay_action(
+    channel,
+    clock_division_index,
+    delay_multiplier,
+    function()
+      has_fired = true
+    end
+  )
+
+  luaunit.assert_false(has_fired)
+
+  progress_clock_by_pulses(13)
+
+  luaunit.assert_true(has_fired)
+
+end
 
 
 -- function test_params_are_processed_at_the_right_step
