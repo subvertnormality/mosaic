@@ -694,9 +694,6 @@ function test_clock_can_delay_action_with_channel_clock_division_set()
 
   clock_controller.set_channel_division(1, mul_8_clock_mod)
 
-
-  pattern_controller.update_working_patterns()
-
   local has_fired = false
 
   local channel = 1

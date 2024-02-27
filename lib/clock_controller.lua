@@ -11,6 +11,7 @@ local sinfonion_clock
 local trigless_lock_active = {}
 
 local clock_lattice = {}
+local delayed_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
 
 local clock_divisions = {
   {name = "x16", value = 16, type = "clock_multiplication"},
@@ -78,21 +79,17 @@ function clock_controller.calculate_divisor(clock_mod)
   return divisor
 end
 
--- local function delay_param_set(channel, func)
---   local divisor = 4
-
---   if channel then
---     local clock_mod = channel.clock_mods
---     divisor = clock_controller.calculate_divisor(clock_mod)
---   end
-
---   local d = divisor + 1
---   local pause = (clock.get_beat_sec() / d)
---   clock.sleep(pause)
---   pause = clock.get_beat_sec() / (d * 6)
---   clock.sleep(pause)
---   func()
--- end
+local function destroy_delay_sprockets()
+  for i, sprocket_table in ipairs(delayed_sprockets) do
+    if (sprocket_table) then
+      for j, item in ipairs(sprocket_table) do
+          if item then
+            item:destroy()
+          end
+      end
+    end
+  end
+end
 
 function clock_controller.init()
   clock_lattice = lattice:new()
@@ -100,6 +97,9 @@ function clock_controller.init()
   if testing then
     clock_lattice.auto = false
   end
+
+  destroy_delay_sprockets()
+  delayed_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
 
   master_clock =
     clock_lattice:new_sprocket {
@@ -241,12 +241,14 @@ function clock_controller.delay_action(c, division_index, multiplier, func)
        first_run = false
     end
   end
-  delayed =
-    clock_lattice:new_sprocket {
+
+  delayed = clock_lattice:new_sprocket {
     action = sprocket_action,
     division = (clock_controller.calculate_divisor(clock_divisions[division_index]) * clock_controller["channel_" .. c .. "_clock"].division) * multiplier,
     enabled = true
   }
+
+  table.insert(delayed_sprockets[c], delayed)
 end
 
 function clock_controller:start()
@@ -288,6 +290,7 @@ function clock_controller.reset()
       program.set_current_step_for_channel(i, 1)
     end
   end
+
   program.get().current_step = 1
   step_handler.reset()
 

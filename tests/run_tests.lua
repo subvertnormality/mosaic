@@ -67,7 +67,7 @@ function include(file)
   for _, dir in ipairs(dirs) do
     local p = dir..file..'.lua'
     if util.file_exists(p) then
-      print("including "..p)
+      -- print("including "..p)
       return dofile(p)
     end
   end
@@ -93,6 +93,20 @@ function require_all_files_in_folder(folder)
       end
   end
 end
+
+function clear_require_cache(modules)
+  if modules then
+      for _, module_name in ipairs(modules) do
+          package.loaded[module_name] = nil
+      end
+  else
+      for module_name in pairs(package.loaded) do
+          package.loaded[module_name] = nil
+      end
+  end
+end
+
+clear_require_cache()
 
 fn = include("mosaic/lib/functions")
 program = include("mosaic/lib/program")
