@@ -746,6 +746,13 @@ end
 -- function test_trigless_param_is_processed_if_trigless_locks_are_on
 -- function test_trigless_param_are_not_processed_if_trigless_locks_are_off
 
+-- function test_current_step_number_is_set_to_start_step_when_lower_than_start_trig_number
+-- 53507         if current_step < start_trig then
+--   *******0           program.set_current_step_for_channel(channel_number, start_trig)
+--   *******0           current_step = start_trig
+--               end
+
+
 
 -- function test_global_default_scale_setting_quantises_notes_properly
 -- function test_channel_default_scale_setting_quantises_notes_properly

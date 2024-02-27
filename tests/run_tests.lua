@@ -1,3 +1,5 @@
+-- require('luacov')
+
 -- Function to check if the norns directory exists with extracted files
 function directory_and_files_exist(path, sample_file_name)
   local check_command = string.format('find "%s" -type f -name "%s"', path, sample_file_name)
