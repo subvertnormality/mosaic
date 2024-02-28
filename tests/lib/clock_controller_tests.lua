@@ -952,16 +952,6 @@ function test_end_trig_functions_as_expected()
   luaunit.assert_equals(note_on_event[3], 1)
 end
 
--- program.get_channel(channel_number).start_trig[1],
--- program.get_channel(channel_number).start_trig[2]
-
-
--- 53507         if current_step < start_trig then
---   *******0           program.set_current_step_for_channel(channel_number, start_trig)
---   *******0           current_step = start_trig
---               end
-
-
 
 -- function test_global_default_scale_setting_quantises_notes_properly
 -- function test_channel_default_scale_setting_quantises_notes_properly
