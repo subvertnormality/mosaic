@@ -163,7 +163,6 @@ function clock_controller.init()
 
         if channel_number ~= 17 then
           local next_trig_value = program.get_channel(channel_number).working_pattern.trig_values[current_step]
-
           if next_trig_value == 1 then
             trigless_lock_active[channel_number] = false
             step_handler.process_params(channel_number, current_step)
