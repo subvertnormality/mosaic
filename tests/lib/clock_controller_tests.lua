@@ -902,8 +902,54 @@ function test_current_step_number_is_set_to_start_step_when_lower_than_start_tri
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
-  progress_clock_by_beats(1)
+end
 
+function test_end_trig_functions_as_expected()
+
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  local step = 1
+  local end_trig = 4
+
+  test_pattern.note_values[step] = 0
+  test_pattern.lengths[step] = 1
+  test_pattern.trig_values[step] = 1
+  test_pattern.velocity_values[step] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+
+  program.get_channel(1).end_trig[1] = end_trig
+  program.get_channel(1).end_trig[2] = 4
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  local note_on_event = table.remove(midi_note_on_events)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(4)
+
+  local note_on_event = table.remove(midi_note_on_events)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(4)
+
+  local note_on_event = table.remove(midi_note_on_events)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
 end
 
 -- program.get_channel(channel_number).start_trig[1],
