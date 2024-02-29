@@ -121,7 +121,7 @@ function clock_controller.init()
       enabled = true
     }
 
-  for channel_number = 1, 17 do
+  for channel_number = 17, 1, -1 do
     local div = 1
     div = clock_controller.calculate_divisor(program.get_channel(channel_number).clock_mods)
 

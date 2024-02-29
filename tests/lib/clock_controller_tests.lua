@@ -166,7 +166,7 @@ function test_clock_processes_notes_at_various_steps()
       program.set_selected_sequencer_pattern(1)
       test_pattern = program.initialise_default_pattern()
 
-      velocity = math.random(0, 127)
+      velocity = 99
       
       test_pattern.note_values[steps] = 0
       test_pattern.lengths[steps] = 1
@@ -966,7 +966,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     {
       number = 2,
       scale = scale.scale,
-      chord = 2,
+      chord = 1,
       root_note = 1
     }
   )
@@ -990,7 +990,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
   local note_on_event = table.remove(midi_note_on_events)
 
-  luaunit.assert_equals(note_on_event[1], 66)
+  luaunit.assert_equals(note_on_event[1], 64)
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
@@ -1010,7 +1010,7 @@ function test_channel_default_scale_setting_quantises_notes_properly()
     {
       number = 2,
       scale = scale.scale,
-      chord = 2,
+      chord = 1,
       root_note = 1
     }
   )
@@ -1041,8 +1041,119 @@ function test_channel_default_scale_setting_quantises_notes_properly()
 
 end
 
--- function test_global_step_scale_quantises_notes_properly
--- function test_channel_step_scale_quantises_notes_properly
+
+function test_step_scale_trig_lock_quantises_notes_properly()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  local channel = 2
+  local step = 2
+  local scale = quantiser.get_scales()[3]
+
+  program.set_scale(
+    2,
+    {
+      number = 2,
+      scale = scale.scale,
+      chord = 2,
+      root_note = 1
+    }
+  )
+
+  program.set_scale(
+    3,
+    {
+      number = 3,
+      scale = scale.scale,
+      chord = 4,
+      root_note = 1
+    }
+  )
+
+  program.get().default_scale = 1
+  program.get_channel(channel).default_scale = 2
+  program.get_channel(channel).step_scale_trig_lock_banks[step] = 3
+
+  test_pattern.note_values[step] = 2
+  test_pattern.lengths[step] = 1
+  test_pattern.trig_values[step] = 1
+  test_pattern.velocity_values[step] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  progress_clock_by_beats(1)
+  
+  local note_on_event = table.remove(midi_note_on_events)
+
+  luaunit.assert_equals(note_on_event[1], 69)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
+
+function test_global_step_scale_quantises_notes_properly()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+
+  program.get().selected_channel = 17
+
+  local test_pattern = program.initialise_default_pattern()
+  local channel = 2
+  local step = 4
+  local scale = quantiser.get_scales()[3]
+
+  program.set_scale(
+    2,
+    {
+      number = 2,
+      scale = scale.scale,
+      chord = 2,
+      root_note = 1
+    }
+  )
+
+  program.set_scale(
+    3,
+    {
+      number = 3,
+      scale = scale.scale,
+      chord = 4,
+      root_note = 1
+    }
+  )
+
+  program.get().default_scale = 1
+  program.get_channel(channel).default_scale = 2
+  program.add_step_scale_trig_lock(step, 3)
+
+  test_pattern.note_values[step] = 2
+  test_pattern.lengths[step] = 1
+  test_pattern.trig_values[step] = 1
+  test_pattern.velocity_values[step] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  progress_clock_by_beats(4)
+
+  local note_on_event = table.remove(midi_note_on_events)
+
+  luaunit.assert_equals(note_on_event[1], 69)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
 
 
-
+-- Song mode clock tests

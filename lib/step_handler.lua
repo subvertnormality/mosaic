@@ -198,6 +198,7 @@ function step_handler.calculate_step_scale_number(c, current_step)
 
   local global_step_scale_number =
     program.get_step_scale_trig_lock(program.get_channel(17), program.get_current_step_for_channel(17))
+
   local channel_default_scale = channel.default_scale
   local global_default_scale = program.get().default_scale
 
@@ -208,6 +209,7 @@ function step_handler.calculate_step_scale_number(c, current_step)
   if program.get_current_step_for_channel(17) == 1 then
     persistent_global_step_scale_number = nil
   end
+
   -- Scale Precedence : channel_step_scale > global_step_scale > channel_default_scale > global_default_scale
   if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
     persistent_channel_step_scale_numbers[c] = channel_step_scale_number
@@ -413,7 +415,7 @@ function step_handler.handle(c, current_step)
 
     note_value = note_value + random_shift
 
-    local note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number, c)
+    local note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number)
 
     local velocity_random_shift =
       fn.transform_random_value(step_handler.process_stock_params(c, current_step, "random_velocity") or 0)
