@@ -116,5 +116,6 @@ program = include("mosaic/lib/program")
 include("mosaic/tests/helpers/globals")
 
 require_all_files_in_folder('./lib')
+require_all_files_in_folder('./lib/integration_tests')
 
 os.exit( luaunit.LuaUnit.run() )
