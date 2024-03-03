@@ -1,5 +1,5 @@
 local quantiser = include("mosaic/lib/quantiser")
-
+local clock_controller = include("mosaic/lib/clock_controller")
 local fn = include("mosaic/lib/functions")
 
 local step_handler = {}
@@ -494,13 +494,15 @@ end
 function step_handler.process_song_sequencer_patterns(step)
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
   local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
-
   if
     (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) ==
       0)
    then
     if params:get("song_mode") == 1 then
-      program.set_selected_sequencer_pattern(step_handler.calculate_next_selected_sequencer_pattern())
+
+      local next_sequencer_pattern = step_handler.calculate_next_selected_sequencer_pattern()
+      program.set_selected_sequencer_pattern(next_sequencer_pattern)
+      pattern_controller.update_working_patterns()
       if params:get("reset_on_end_of_pattern") == 1 then
         step_handler.reset_sequencer_pattern()
       end
