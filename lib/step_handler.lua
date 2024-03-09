@@ -491,7 +491,7 @@ function step_handler.process_global_step_scale_trig_lock(current_step)
   program.set_global_step_scale_number(step_handler.calculate_step_scale_number(17, current_step))
 end
 
-function step_handler.process_song_sequencer_patterns(step)
+function step_handler.process_song_sequencer_patterns()
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
   local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
   if
@@ -502,10 +502,10 @@ function step_handler.process_song_sequencer_patterns(step)
 
       local next_sequencer_pattern = step_handler.calculate_next_selected_sequencer_pattern()
       program.set_selected_sequencer_pattern(next_sequencer_pattern)
-      pattern_controller.update_working_patterns()
       if params:get("reset_on_end_of_pattern") == 1 then
         step_handler.reset_sequencer_pattern()
       end
+      pattern_controller.update_working_patterns()
     end
   end
 
@@ -636,8 +636,10 @@ end
 
 function step_handler.reset_sequencer_pattern()
   for i = 1, 17 do
-    program.set_current_step_for_channel(i, 1)
+    program.set_current_step_for_channel(i, 99)
+    program.get().global_step_accumulator = 0
   end
+
 end
 
 return step_handler

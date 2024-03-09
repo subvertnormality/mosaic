@@ -111,6 +111,9 @@ function clock_controller.init()
         program.get().current_step = program.get().current_step + 1
         program.get().global_step_accumulator = program.get().global_step_accumulator + 1
 
+        -- print("MASTER CLOCK STEP "..program.get_current_step_for_channel(1))
+
+
         if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
           program.get().current_step = 1
           first_run = false
