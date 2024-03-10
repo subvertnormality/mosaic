@@ -24,7 +24,7 @@ local fileselect = require("fileselect")
 local textentry = require("textentry")
 local musicutil = require("musicutil")
 local as_metro = metro.init(do_autosave, 1, 1)
-local autosave_timer = metro.init(prime_autosave, 20, 1)
+local autosave_timer = metro.init(prime_autosave, 60, 1)
 local device_param_manager = include("mosaic/lib/device_param_manager")
 
 local ui_splash_screen_active = false
@@ -35,6 +35,8 @@ pattern_controller = include("mosaic/lib/pattern_controller")
 midi_controller = include("mosaic/lib/midi_controller")
 step_handler = include("lib/step_handler")
 device_map = include("mosaic/lib/device_map")
+
+g = grid.connect()
 
 local function load_project(pth)
   clock_controller:stop()
@@ -150,14 +152,12 @@ function redraw()
   end
 end
 
-function redraw_metro()
-  redraw()
-end
-
 function init()
   math.randomseed(os.time())
   program.init()
   midi_controller.init()
+  
+  grid_connected = g.device~= nil and true or false
   
   nb:init()
   if note_players then
@@ -180,17 +180,20 @@ function init()
   sinfonion.set_harmonic_shift(0)
 
 
-  local grid_clock_id = metro.init()
-  grid_clock_id.event = grid_controller.grid_redraw
-  grid_clock_id.time = 1 / 30
-  grid_clock_id.count = -1
-  grid_clock_id:start()
+  redraw_clock = clock.run(
+    function()
+      while true do
+        clock.sleep(1/15)
+        if fn.dirty_screen() then
+          redraw()
+        end
+        if fn.dirty_grid() then
+          grid_controller.grid_redraw()
+        end
+      end
+    end
+  )
 
-  local ui_clock_id = metro.init()
-  ui_clock_id.event = redraw_metro
-  ui_clock_id.time = 1 / 20
-  ui_clock_id.count = -1
-  ui_clock_id:start()
 
   ui_splash_screen_active = true
 

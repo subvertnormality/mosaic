@@ -38,47 +38,19 @@ local page_names = {
 local pressed_keys = {}
 local dual_in_progress = false
 
-g = grid.connect()
 
-function g.key(x, y, z)
-  if z == 1 then
-    table.insert(pressed_keys, {x, y})
-    grid_controller.pre_press(x, y)
-    grid_controller.counter[x][y] = clock.run(grid_controller.long_press, x, y)
-  elseif z == 0 then -- otherwise, if a grid key is released...
-    fn.remove_table_from_table(pressed_keys, {x, y})
+function grid.add(new_grid) -- must be grid.add, not g.add (this is a function of the grid class)
+  g = grid.connect(new_grid.port) -- connect script to the new grid
+  grid_connected = true -- a grid has been connected!
+  fn.grid_dirty(true) -- enable flag to redraw grid, because data has changed
 
-    local held_button = pressed_keys[1]
-
-    if grid_controller.counter[x][y] then -- and the long press is still waiting...
-      clock.cancel(grid_controller.counter[x][y]) -- then cancel the long press clock,
-
-      if grid_controller.long_press_active[x][y] == true then
-        grid_controller.long_press_active[x][y] = false
-      elseif held_button ~= nil then
-        if grid_controller.counter[held_button[1]][held_button[2]] then
-          clock.cancel(grid_controller.counter[held_button[1]][held_button[2]])
-        end
-        grid_controller.dual_press(held_button[1], held_button[2], x, y)
-        dual_in_progress = true
-      else
-        if dual_in_progress ~= true then
-          grid_controller.short_press(x, y) -- and execute a short press instead.
-        end
-        dual_in_progress = false
-      end
-    end
-    grid_controller.post_press(x, y)
-  end
 end
+
 
 function grid_controller.get_pressed_keys()
   return pressed_keys
 end
 
-function g.remove()
-  grid_controller.alert_disconnect()
-end
 
 local function refresh_pages()
   channel_edit_page_controller.refresh()
@@ -191,6 +163,44 @@ function grid_controller.init()
 
   register_draw_handlers()
   register_press_handlers()
+  
+  function g.key(x, y, z)
+    if z == 1 then
+      table.insert(pressed_keys, {x, y})
+      grid_controller.pre_press(x, y)
+      grid_controller.counter[x][y] = clock.run(grid_controller.long_press, x, y)
+    elseif z == 0 then -- otherwise, if a grid key is released...
+      fn.remove_table_from_table(pressed_keys, {x, y})
+  
+      local held_button = pressed_keys[1]
+  
+      if grid_controller.counter[x][y] then -- and the long press is still waiting...
+        clock.cancel(grid_controller.counter[x][y]) -- then cancel the long press clock,
+  
+        if grid_controller.long_press_active[x][y] == true then
+          grid_controller.long_press_active[x][y] = false
+        elseif held_button ~= nil then
+          if grid_controller.counter[held_button[1]][held_button[2]] then
+            clock.cancel(grid_controller.counter[held_button[1]][held_button[2]])
+          end
+          grid_controller.dual_press(held_button[1], held_button[2], x, y)
+          dual_in_progress = true
+        else
+          if dual_in_progress ~= true then
+            grid_controller.short_press(x, y) -- and execute a short press instead.
+          end
+          dual_in_progress = false
+        end
+      end
+      grid_controller.post_press(x, y)
+    end
+  end
+
+
+  function g.remove()
+    grid_controller.alert_disconnect()
+  end
+
 end
 
 function grid_controller.set_menu_button_state()
@@ -255,7 +265,7 @@ end
 
 
 function grid_controller.grid_redraw()
-  if splash_screen_active == false then
+  if splash_screen_active == false and grid_connected then
     if fn.dirty_grid() == true then
       grid_controller.redraw()
       fn.dirty_grid(false)
