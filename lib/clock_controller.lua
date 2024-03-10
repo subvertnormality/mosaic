@@ -111,9 +111,6 @@ function clock_controller.init()
         program.get().current_step = program.get().current_step + 1
         program.get().global_step_accumulator = program.get().global_step_accumulator + 1
 
-        -- print("MASTER CLOCK STEP "..program.get_current_step_for_channel(1))
-
-
         if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
           program.get().current_step = 1
           first_run = false
@@ -268,7 +265,7 @@ function clock_controller:start()
 end
 
 function clock_controller:stop()
-  if clock_lattice then
+  if clock_lattice and clock_lattice.stop then
     clock_lattice:stop()
   end
 
@@ -297,7 +294,7 @@ function clock_controller.reset()
   program.get().current_step = 1
   step_handler.reset()
 
-  if clock_lattice then
+  if clock_lattice and clock_lattice.destroy then
     clock_lattice:destroy()
   end
 
