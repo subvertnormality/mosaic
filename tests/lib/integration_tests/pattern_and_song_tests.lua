@@ -229,7 +229,6 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 end
 
 
-
 function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_sequence_reset_is_enabled()
 
   setup()
