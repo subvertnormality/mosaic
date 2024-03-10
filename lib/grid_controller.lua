@@ -23,6 +23,8 @@ local trigger_edit_button = Button:new(3, 8)
 local note_edit_button = Button:new(4, 8)
 local velocity_edit_button = Button:new(5, 8)
 
+local splash_screen_active = false
+
 local menu_buttons = {}
 
 local page_names = {
@@ -247,11 +249,22 @@ function grid_controller.redraw()
   g:refresh()
 end
 
+function grid_controller.splash_screen_off()
+  splash_screen_active = false
+end
+
+function grid_controller.splash_screen_on()
+  splash_screen_active = true
+end
+
+local splash_screen_frame = 1
 
 function grid_controller.grid_redraw()
-  if fn.dirty_grid() == true then
-    grid_controller.redraw()
-    fn.dirty_grid(false)
+  if splash_screen_active == false then
+    if fn.dirty_grid() == true then
+      grid_controller.redraw()
+      fn.dirty_grid(false)
+    end
   end
 end
 

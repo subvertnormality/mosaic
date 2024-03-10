@@ -79,6 +79,7 @@ local function do_autosave()
   if program ~= nil then
     save_project("autosave")
   end
+  grid_controller.splash_screen_off()
   ui_splash_screen_active = false
   fn.dirty_screen(true)
   as_metro:stop()
@@ -91,7 +92,10 @@ local function prime_autosave()
   end
   if not clock_controller.is_playing() then
     as_metro = metro.init(do_autosave, 0.5, 1)
+
+    grid_controller.splash_screen_on()
     ui_splash_screen_active = true
+
     as_metro:start()
   else
     autosave_reset()
@@ -116,6 +120,7 @@ local function post_splash_init()
   end
   device_map.validate_devices()
   params:bang()
+  grid_controller.splash_screen_off()
   ui_splash_screen_active = false
   ui_controller.init()
   grid_controller.init()
@@ -189,6 +194,7 @@ function init()
   ui_clock_id.count = -1
   ui_clock_id:start()
 
+  grid_controller.splash_screen_on()
   ui_splash_screen_active = true
 
   params:add_group("mosaic", "MOSAIC", 14)
@@ -259,7 +265,7 @@ function autosave_reset()
   if autosave_timer.id then
     metro.free(autosave_timer.id)
   end
-  autosave_timer = metro.init(prime_autosave, 60, 1)
+  autosave_timer = metro.init(prime_autosave, 20, 1)
   autosave_timer:start()
 end
 
