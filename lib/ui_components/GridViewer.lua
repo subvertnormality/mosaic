@@ -1,6 +1,8 @@
 local GridViewer = {}
 GridViewer.__index = GridViewer
 
+local fn = include("mosaic/lib/functions")
+
 local screen_view_sequencer = Sequencer:new(4, "channel")
 
 function GridViewer:new(x, y)
@@ -36,6 +38,7 @@ function GridViewer:next_channel()
   if self.selected_channel > 16 then
     self.selected_channel = 16
   end
+  fn.dirty_screen(true)
 end
 
 function GridViewer:prev_channel()
@@ -43,6 +46,7 @@ function GridViewer:prev_channel()
   if self.selected_channel < 1 then
     self.selected_channel = 1
   end
+  fn.dirty_screen(true)
 end
 
 return GridViewer

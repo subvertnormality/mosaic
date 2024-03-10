@@ -122,6 +122,7 @@ function program.init()
     current_step = 1,
     current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     sequencer_patterns = {},
+    global_step_accumulator = 0,
     devices = {
       {midi_channel = 1, midi_device = 1, device_map = "none"},
       {midi_channel = 1, midi_device = 1, device_map = "none"},
@@ -170,11 +171,12 @@ end
 function program.set_sequencer_pattern(p, pattern)
   local sequencer_pattern = fn.deep_copy(program.get_sequencer_pattern(p))
 
-  if params:get("reset_on_end_of_pattern") == 1 then
-    for i = 1, 17 do
-      program.set_current_step_for_channel(i, 1)
-    end
-  end
+  -- if params:get("reset_on_end_of_pattern") == 1 then
+  --   for i = 1, 17 do
+  --     print("here")
+  --     program.set_current_step_for_channel(i, 0)
+  --   end
+  -- end
 
   program_store.sequencer_patterns[pattern] = sequencer_pattern
 end

@@ -1,4 +1,4 @@
-*Mosaic* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodies with finesse. Dive into a profound and singular tapestry of sketching and composition.
+*Mosaic* for monome norns is a grid-centric, intentioned generative sequencer. Bridging the world of modular, Elektron, and monome, it weaves intricate rhythms and melodies with finesse. Jump into a profound and singular tapestry of sketching and composition.
 
 - [Mosaic](#mosaic)
   * [At a glance](#at-a-glance)
@@ -41,7 +41,7 @@
 
 As of v0.4 _Mosaic_ gives you the following:
 
-- 16 channels that can each output triggers, notes, note length, velocity and CC to a midi device or an n.b. voice
+- 16 channels that can each output triggers, notes, note length, velocity and CC to a midi or an n.b. voice
 - 16 patterns that can be combined and merged in different permutations to change their properties in very musical ways
 - Song mode with 90 sequencer patterns
 - Save, load, autosave
@@ -49,11 +49,11 @@ As of v0.4 _Mosaic_ gives you the following:
 - 10 assignable trig locks per channel
 - Midi device templates including labelled trig destinations
 - Native [n.b.](https://github.com/sixolet/nb/) support
-- Per channel tempo and swing
-- Per channel pattern length
+- Per channel tempo, swing, and pattern length
 - Channel muting
-- Scales with root note and degree setting
-- Trig lockable octave, scales, chords, transpose, step probability, random note modifiers, random velocity modifiers
+- Scales with setable root note, degree and transpotion
+- Trig lockable octave, scales, chords, transpose, step probability, random note modifiers, random velocity modifiers, and more
+- Ability to sync to the Sinfonion eurorack quantiser for even more possibilities
 
 Requirements:
 
@@ -67,6 +67,9 @@ Encouraged:
 - Midi instruments
 - Crow, Just Friends, Ansible
 - [n.b.](https://github.com/sixolet/nb/)
+- Disting EX
+- Elektron Digitone, Syntakt, Digitakt
+- Sinfonion
 
 ## Install
 
@@ -80,7 +83,7 @@ In _Mosaic_, the 'pattern' is the central pillar. Think of it as a sequence enri
 
 In _Mosaic_, notes aren't strictly bound to a single scale. Instead, they are valued by their position within the chosen scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
 
-_Mosaic_ ensures you remain within your selected scale although there are ways to experiment with notes outside of it too. You'll find several methods to adjust scales seamlessly as you go, which we'll cover shortly.
+_Mosaic_ ensures you remain within your selected scale although there are ways to experiment with notes outside of it too. You'll find several methods to adjust scales as you go, which we'll cover shortly.
 
 ### Channel
 
@@ -92,11 +95,11 @@ You can adjust the rhythm for each channel individually, allowing for different 
 
 ### Sequencer Pattern
 
-The sequencer pattern rounds out the trio of foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns. This includes aspects from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be linked to craft a song in the song mode page. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
+The sequencer pattern rounds out the trio of foundational elements in _Mosaic_. This entity encompasses all details from channels and patterns. This includes aspects from trig locks and scale preferences to merge modes and octave choices for a 64-step sequence. Within a scene, you're provided with 90 sequencer pattern slots, which can be linked to create a full song in the song mode page. All sequencer patterns can have their global length adjusted anywhere between 1 to 64 steps, which will apply to all channels.
 
 ### Scale
 
-Each sequencer pattern offers 16 scale slots. A single slot can house a root note, a scale variation (eg Dorian or Major), and a degree setting. Scales can be selected in various ways: setting a default scale for a channel, designating scale trig locks for specific channels activated on certain steps, or setting global scale trig locks influencing all channels unless a particular channel-specific trig lock takes precedence. This flexibility paves the way for intricate chord progressions.
+Each sequencer pattern offers 16 scale slots. A single slot has a root note, a scale variation (eg Dorian, Major, etc), and a degree setting. Scales can be selected in various ways: setting a default scale for a channel, designating scale trig locks for specific channels activated on certain steps, or setting global scale trig locks influencing all channels unless a particular channel-specific trig lock takes precedence. This flexibility paves the way for intricate chord progressions and the ability to add variation to patterns.
 
 ### Device
 
@@ -489,43 +492,9 @@ Some devices respond to trigs on specific note numbers. Without locking a channe
 
 # Sinfonion connect
 
-_Experimental_
+You can sync up your eurorack Sinfonion module to mosaic using a DIY device called norns2sinfonion.
 
-You will need to mod your norns to do this. I only recommend this on a norns shield. This mod is _at your own risk_.
-
-The sinfonion expects an inverted serial signal for it's sync function. This means you'll need to wire up a simple NOT gate. Don't worry - it's not as scary as it sounds. I did this with some strip board. 
-
-- First, connect your norns Raspberry PI's UART0 TX (pin 8, there's a convenient TX pad on the norns shield PCB) first to a 1K Resister and then on to the middle pin on a 2N3904 transistor. 
-- Now connect the top pin of your 2N3904 to a 3K resistor then on to power (pin 2) on your PI.
-- Next also connect the top pin on your 2N3904 to the tip connector on a TS jack. 
-- The sleeve connector of your TS jack connects to ground (there's a convenient ground pad on the norn's shield's PCB). 
-- Now also connect the bottom pin of your 2N3904 to ground
-
-![Inverter circuit diagram](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/Sinfonion/inverter.png)
-
-That's the hardware bit done. You now need to configure your norns.
-
-SSH into your norns.
-
-- `ssh we@norns`
-- PW: `sleep`
-
-Enter the raspi-config tool:
-
-`sudo raspi-config`
-
-Scroll down to `Interface Options`, then to `Serial Port`.
-
-- Select `No` when it asks you `Would you like a login shell to be accessible over serial?`. 
-- Select `Yes` when it asks `Would you like the serial port hardware to be enabled`
-
-Click `Finish`. 
-
-Reboot your norns.
-
-Now you need to install the lua dependency lua-periphery. This is a non-standard operation on norns that is _not_ supported. It is possible to compile the dependency on norns, but it will require a degree of linux knowledge to do so. If you need a step by step for this, you're probably best off not trying. It involves compiling luarocks for lua 5.3 installing the dependency using that.
-
-Now you should be all set. 
+See https://github.com/subvertnormality/norns2sinfonion for more information.
 
 # Development
 

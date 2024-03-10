@@ -2,8 +2,6 @@ local fn = include("mosaic/lib/functions")
 
 local lattice = require("lattice")
 
-local midi_controller = include("lib/midi_controller")
-
 local clock_controller = {}
 
 local playing = false
@@ -12,7 +10,8 @@ local master_clock
 local sinfonion_clock
 local trigless_lock_active = {}
 
-local clock_lattice
+local clock_lattice = {}
+local delayed_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
 
 local clock_divisions = {
   {name = "x16", value = 16, type = "clock_multiplication"},
@@ -80,26 +79,52 @@ function clock_controller.calculate_divisor(clock_mod)
   return divisor
 end
 
-local function delay_param_set(channel, func)
-  local divisor = 4
-
-  if channel then
-    local clock_mod = channel.clock_mods
-    divisor = clock_controller.calculate_divisor(clock_mod)
+local function destroy_delay_sprockets()
+  for i, sprocket_table in ipairs(delayed_sprockets) do
+    if (sprocket_table) then
+      for j, item in ipairs(sprocket_table) do
+          if item then
+            item:destroy()
+          end
+      end
+    end
   end
-
-  local d = divisor + 1
-  local pause = (clock.get_beat_sec() / d)
-  clock.sleep(pause)
-  pause = clock.get_beat_sec() / (d * 6)
-  clock.sleep(pause)
-  func()
 end
 
 function clock_controller.init()
   clock_lattice = lattice:new()
 
-  for channel_number = 1, 17 do
+  if testing then
+    clock_lattice.auto = false
+  end
+
+  destroy_delay_sprockets()
+  delayed_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
+
+  master_clock =
+    clock_lattice:new_sprocket {
+      action = function(t)
+        if first_run ~= true then
+          step_handler.process_song_sequencer_patterns(program.get().current_step)
+        end
+
+        program.get().current_step = program.get().current_step + 1
+        program.get().global_step_accumulator = program.get().global_step_accumulator + 1
+
+        -- print("MASTER CLOCK STEP "..program.get_current_step_for_channel(1))
+
+
+        if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
+          program.get().current_step = 1
+          first_run = false
+        end
+      end,
+      division = 1 / 16,
+      swing = 50,
+      enabled = true
+    }
+
+  for channel_number = 17, 1, -1 do
     local div = 1
     div = clock_controller.calculate_divisor(program.get_channel(channel_number).clock_mods)
 
@@ -123,6 +148,7 @@ function clock_controller.init()
           program.get_channel(channel_number).end_trig[2]
         )
         local current_step = program.get_current_step_for_channel(channel_number)
+        -- print("CURRENT STEP ".. current_step)
 
         if current_step < start_trig then
           program.set_current_step_for_channel(channel_number, start_trig)
@@ -141,7 +167,6 @@ function clock_controller.init()
 
         if channel_number ~= 17 then
           local next_trig_value = program.get_channel(channel_number).working_pattern.trig_values[current_step]
-
           if next_trig_value == 1 then
             trigless_lock_active[channel_number] = false
             step_handler.process_params(channel_number, current_step)
@@ -156,10 +181,8 @@ function clock_controller.init()
 
         if channel_number == 17 then
           step_handler.process_global_step_scale_trig_lock(current_step)
+          step_handler.sinfonian_sync(current_step)
 
-          if sinfonion ~= true then
-            step_handler.sinfonian_sync(current_step)
-          end
         end
 
         if channel_number ~= 17 then
@@ -168,6 +191,10 @@ function clock_controller.init()
 
         clock_controller["channel_" .. channel_number .. "_clock"].first_run = false
         clock_controller["channel_" .. channel_number .. "_clock"].next_step = current_step
+
+        if program.get().selected_channel == channel_number and program.get().selected_page == program.get_pages().channel_edit_page then
+          fn.dirty_grid(true)
+        end
       end,
       division = 1 / (div * 4),
       swing = swing,
@@ -190,37 +217,6 @@ function clock_controller.init()
     clock_controller["channel_" .. channel_number .. "_clock"].first_run = true
   end
 
-  master_clock =
-    clock_lattice:new_sprocket {
-    action = function(t)
-      if first_run ~= true then
-        step_handler.process_song_sequencer_patterns(program.get().current_step)
-      end
-
-      program.get().current_step = program.get().current_step + 1
-
-      if program.get().current_step > program.get_selected_sequencer_pattern().global_pattern_length then
-        program.get().current_step = 1
-        first_run = false
-      end
-      fn.dirty_grid(true)
-    end,
-    division = 1 / 32,
-    swing = 50,
-    enabled = true
-  }
-
-  if sinfonion ~= true then
-    sinfonion_clock =
-      clock_lattice:new_sprocket {
-      action = function(t)
-        sinfonion.send_next()
-      end,
-      division = 1 / 96,
-      swing = 50,
-      enabled = true
-    }
-  end
 end
 
 function clock_controller.set_channel_swing(channel_number, swing)
@@ -245,17 +241,17 @@ function clock_controller.delay_action(c, division_index, multiplier, func)
       func()
       delayed:destroy()
     else
-      first_run = false
+       first_run = false
     end
   end
-  delayed =
-    clock_lattice:new_sprocket {
+
+  delayed = clock_lattice:new_sprocket {
     action = sprocket_action,
-    division = (clock_controller.calculate_divisor(clock_divisions[division_index]) *
-      clock_controller["channel_" .. c .. "_clock"].division) *
-      multiplier,
+    division = (clock_controller.calculate_divisor(clock_divisions[division_index]) * clock_controller["channel_" .. c .. "_clock"].division) * multiplier,
     enabled = true
   }
+
+  table.insert(delayed_sprockets[c], delayed)
 end
 
 function clock_controller:start()
@@ -297,6 +293,7 @@ function clock_controller.reset()
       program.set_current_step_for_channel(i, 1)
     end
   end
+
   program.get().current_step = 1
   step_handler.reset()
 
@@ -314,5 +311,10 @@ end
 function clock_controller.get_clock_divisions()
   return clock_divisions
 end
+
+function clock_controller.get_clock_lattice()
+  return clock_lattice
+end
+
 
 return clock_controller

@@ -1,9 +1,11 @@
--- mosaic v0.3.8
+-- mosaic v0.4
 -- grid-centric, intentioned
 -- generative sequencer.
 --
 -- llllllll.co/t/mosaic-alpha-v0-3
 -- manual: t.ly/h-Wsw
+
+testing = false
 
 local create_default_config = include("mosaic/lib/user_config/create_default_config")
 
@@ -13,7 +15,9 @@ create_default_config.create_script("custom_device_map.lua", create_default_conf
 grid_controller = include("mosaic/lib/grid_controller")
 ui_controller = include("mosaic/lib/ui_controller")
 program = include("mosaic/lib/program")
-sinfonion = require("mosaic/lib/sinfonion_harmonic_sync")
+sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
+midi_controller = include("mosaic/lib/midi_controller")
+
 
 local fn = include("mosaic/lib/functions")
 local fileselect = require("fileselect")
@@ -75,7 +79,6 @@ local function do_autosave()
   if program ~= nil then
     save_project("autosave")
   end
-  grid_controller.splash_screen_off()
   ui_splash_screen_active = false
   fn.dirty_screen(true)
   as_metro:stop()
@@ -88,10 +91,7 @@ local function prime_autosave()
   end
   if not clock_controller.is_playing() then
     as_metro = metro.init(do_autosave, 0.5, 1)
-
-    grid_controller.splash_screen_on()
     ui_splash_screen_active = true
-
     as_metro:start()
   else
     autosave_reset()
@@ -114,8 +114,8 @@ local function post_splash_init()
       false
     )
   end
+  device_map.validate_devices()
   params:bang()
-  grid_controller.splash_screen_off()
   ui_splash_screen_active = false
   ui_controller.init()
   grid_controller.init()
@@ -155,24 +155,27 @@ function init()
   math.randomseed(os.time())
   program.init()
   midi_controller.init()
+  
   nb:init()
-  nb:add_param("voice_id", "NB PARAMS") -- adds a voice selector param to your script.
-  nb:add_player_params() -- Adds the parameters for the selected voices to your script.
+  if note_players then
+    nb:add_param("voice_id", "NB PARAMS") -- adds a voice selector param to your script.
+    nb:add_player_params() -- Adds the parameters for the selected voices to your script.
+  end
 
   device_map.init()
 
-  if sinfonion ~= true then
-    sinfonion.set_root_note(0)
-    sinfonion.set_degree_nr(0)
-    sinfonion.set_mode_nr(0)
-    sinfonion.set_transposition(0)
-    sinfonion.set_clock(0)
-    sinfonion.set_beat(0)
-    sinfonion.set_step(0)
-    sinfonion.set_reset(0)
-    sinfonion.set_chaotic_detune(0)
-    sinfonion.set_harmonic_shift(0)
-  end
+
+  sinfonion.set_root_note(0)
+  sinfonion.set_degree_nr(0)
+  sinfonion.set_mode_nr(0)
+  sinfonion.set_transposition(0)
+  sinfonion.set_clock(0)
+  sinfonion.set_beat(0)
+  sinfonion.set_step(0)
+  sinfonion.set_reset(0)
+  sinfonion.set_chaotic_detune(0)
+  sinfonion.set_harmonic_shift(0)
+
 
   local grid_clock_id = metro.init()
   grid_clock_id.event = grid_controller.grid_redraw
@@ -182,11 +185,10 @@ function init()
 
   local ui_clock_id = metro.init()
   ui_clock_id.event = redraw_metro
-  ui_clock_id.time = 1 / 30
+  ui_clock_id.time = 1 / 20
   ui_clock_id.count = -1
   ui_clock_id:start()
 
-  grid_controller.splash_screen_on()
   ui_splash_screen_active = true
 
   params:add_group("mosaic", "MOSAIC", 14)

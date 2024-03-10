@@ -1,3 +1,8 @@
+# 0.4.0
+
+* Sinfonion sync is no longer experimental and doesn't require modifications to norns
+* NB now doesn't crash the script if there are no mods installed
+
 # 0.3.7
 
 * Added chord velocity modifier trig param

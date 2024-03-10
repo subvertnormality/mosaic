@@ -1,4 +1,3 @@
-local midi_controller = include("mosaic/lib/midi_controller")
 local fn = include("mosaic/lib/functions")
 
 local device_param_manager = {}

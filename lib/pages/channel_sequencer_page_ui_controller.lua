@@ -93,6 +93,8 @@ function channel_sequencer_page_ui_controller.enc(n, d)
             pattern_repeat_selector:deselect()
             song_mode_selector:select()
           end
+        elseif pages:get_selected_page() == 3 then
+          grid_viewer:next_channel()
         end
       else
         if pages:get_selected_page() == 1 then
@@ -103,6 +105,8 @@ function channel_sequencer_page_ui_controller.enc(n, d)
             pattern_repeat_selector:deselect()
             song_mode_selector:select()
           end
+        elseif pages:get_selected_page() == 3 then
+          grid_viewer:prev_channel()
         end
       end
     end

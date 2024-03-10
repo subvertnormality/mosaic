@@ -1,6 +1,5 @@
-local midi_controller = include("mosaic/lib/midi_controller")
 local quantiser = include("mosaic/lib/quantiser")
-
+local clock_controller = include("mosaic/lib/clock_controller")
 local fn = include("mosaic/lib/functions")
 
 local step_handler = {}
@@ -27,7 +26,6 @@ local persistent_global_step_scale_number = nil
 local persistent_step_transpose = nil
 
 local step_scale_number = 0
-local global_step_accumulator = 0
 
 local switch_to_next_song_pattern_func = function()
 end
@@ -200,6 +198,7 @@ function step_handler.calculate_step_scale_number(c, current_step)
 
   local global_step_scale_number =
     program.get_step_scale_trig_lock(program.get_channel(17), program.get_current_step_for_channel(17))
+
   local channel_default_scale = channel.default_scale
   local global_default_scale = program.get().default_scale
 
@@ -212,7 +211,6 @@ function step_handler.calculate_step_scale_number(c, current_step)
   end
 
   -- Scale Precedence : channel_step_scale > global_step_scale > channel_default_scale > global_default_scale
-
   if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
     persistent_channel_step_scale_numbers[c] = channel_step_scale_number
     return channel_step_scale_number
@@ -319,8 +317,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
             unprocessed_note_container.note_value + chord_notes[chord_number],
             unprocessed_note_container.octave_mod,
             unprocessed_note_container.transpose,
-            channel.step_scale_number,
-            c
+            channel.step_scale_number
           )
 
           local v = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
@@ -355,8 +352,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           unprocessed_note_container.note_value,
           unprocessed_note_container.octave_mod,
           unprocessed_note_container.transpose,
-          channel.step_scale_number,
-          c
+          channel.step_scale_number
         )
         note_on_func(processed_note, note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes), note_container.midi_channel, note_container.midi_device)
         table.insert(
@@ -378,8 +374,8 @@ end
 
 function step_handler.handle(c, current_step)
   local channel = program.get_channel(c)
-  local trig_value = channel.working_pattern.trig_values[current_step]
 
+  local trig_value = channel.working_pattern.trig_values[current_step]
   local note_value = channel.working_pattern.note_values[current_step]
   local velocity_value = channel.working_pattern.velocity_values[current_step]
   local length_value = channel.working_pattern.lengths[current_step]
@@ -419,7 +415,7 @@ function step_handler.handle(c, current_step)
 
     note_value = note_value + random_shift
 
-    local note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number, c)
+    local note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number)
 
     local velocity_random_shift =
       fn.transform_random_value(step_handler.process_stock_params(c, current_step, "random_velocity") or 0)
@@ -447,6 +443,7 @@ function step_handler.handle(c, current_step)
 
     if not channel.mute then
       if not device.player then
+
         local note_container = {
           note = note,
           velocity = velocity_value,
@@ -494,24 +491,25 @@ function step_handler.process_global_step_scale_trig_lock(current_step)
   program.set_global_step_scale_number(step_handler.calculate_step_scale_number(17, current_step))
 end
 
-function step_handler.process_song_sequencer_patterns(step)
+function step_handler.process_song_sequencer_patterns()
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
   local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
-
   if
-    (global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) ==
+    (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) ==
       0)
    then
     if params:get("song_mode") == 1 then
-      program.set_selected_sequencer_pattern(step_handler.calculate_next_selected_sequencer_pattern())
-      global_step_accumulator = 0
+
+      local next_sequencer_pattern = step_handler.calculate_next_selected_sequencer_pattern()
+      program.set_selected_sequencer_pattern(next_sequencer_pattern)
       if params:get("reset_on_end_of_pattern") == 1 then
         step_handler.reset_sequencer_pattern()
       end
+      pattern_controller.update_working_patterns()
     end
   end
 
-  if global_step_accumulator % selected_sequencer_pattern.global_pattern_length == 0 then
+  if program.get().global_step_accumulator % selected_sequencer_pattern.global_pattern_length == 0 then
     switch_to_next_song_pattern_func()
     switch_to_next_song_pattern_blink_cancel_func()
     switch_to_next_song_pattern_func = function()
@@ -520,7 +518,6 @@ function step_handler.process_song_sequencer_patterns(step)
     channel_edit_page_controller.refresh()
   end
 
-  global_step_accumulator = global_step_accumulator + 1
 end
 
 function step_handler.sinfonian_sync(step)
@@ -612,7 +609,7 @@ function step_handler.execute_blink_cancel_func()
 end
 
 function step_handler.reset()
-  global_step_accumulator = 0
+  program.get().global_step_accumulator = 0
   persistent_global_step_scale_number = nil
   persistent_channel_step_scale_numbers = {
     nil,
@@ -639,8 +636,10 @@ end
 
 function step_handler.reset_sequencer_pattern()
   for i = 1, 17 do
-    program.set_current_step_for_channel(i, 1)
+    program.set_current_step_for_channel(i, 99)
+    program.get().global_step_accumulator = 0
   end
+
 end
 
 return step_handler

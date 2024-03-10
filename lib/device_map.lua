@@ -1591,7 +1591,7 @@ local stock_device_map = {
       {
         ["id"] = "filter_parameters_filter_envelope_depth",
         ["name"] = "Filter envelope depth",
-        ["cc_msb"] = 77,
+        ["cc_msb"] = 25,
         ["cc_lsb"] = nil,
         ["off_value"] = -1,
         ["cc_min_value"] = -1,
@@ -7482,81 +7482,83 @@ local function merge_devices()
     end
   end
 
-  for index, device in pairs(note_players) do
-    if
-      string.find(index, "midi", 1, true) ~= 1 and string.find(index, "jf mpe", 1, true) ~= 1 and
-        string.find(index, "jf kit", 1, true) ~= 1
-     then
-      local new_device_params = {}
+  if (note_players) then
+    for index, device in pairs(note_players) do
+      if
+        string.find(index, "midi", 1, true) ~= 1 and string.find(index, "jf mpe", 1, true) ~= 1 and
+          string.find(index, "jf kit", 1, true) ~= 1
+      then
+        local new_device_params = {}
 
-      table.insert(
-        stock_device_map,
-        {
-          ["type"] = "norns",
-          ["name"] = fn.title_case(index),
-          ["id"] = index,
-          ["unique"] = true,
-          ["map_params_automatically"] = false,
-          ["default_midi_channel"] = nil,
-          ["player"] = device,
-          ["params"] = new_device_params
-        }
-      )
+        table.insert(
+          stock_device_map,
+          {
+            ["type"] = "norns",
+            ["name"] = fn.title_case(index),
+            ["id"] = index,
+            ["unique"] = true,
+            ["map_params_automatically"] = false,
+            ["default_midi_channel"] = nil,
+            ["player"] = device,
+            ["params"] = new_device_params
+          }
+        )
 
-      if device.describe().params then
-        local device_param_names = device.describe().params
-        for i = 1, #device_param_names do
-          local param_id = params.lookup[device_param_names[i]]
-          local p = params:lookup_param(param_id)
+        if device.describe().params then
+          local device_param_names = device.describe().params
+          for i = 1, #device_param_names do
+            local param_id = params.lookup[device_param_names[i]]
+            local p = params:lookup_param(param_id)
 
-          params:show(param_id)
+            params:show(param_id)
 
-          local minval = 0
-          local maxval = 127
-          local quantum = 1
+            local minval = 0
+            local maxval = 127
+            local quantum = 1
 
-          if p.count then
-            minval = 1
-            maxval = p.count
-          elseif p["controlspec"] then
-            quantum = p["controlspec"].quantum or 1
-            minval = params:get_range(param_id)[1]
-            maxval = params:get_range(param_id)[2]
+            if p.count then
+              minval = 1
+              maxval = p.count
+            elseif p["controlspec"] then
+              quantum = p["controlspec"].quantum or 1
+              minval = params:get_range(param_id)[1]
+              maxval = params:get_range(param_id)[2]
+            end
+
+            local quantum_modifier = 1 / quantum
+
+            table.insert(
+              new_device_params,
+              {
+                ["id"] = device_param_names[i],
+                ["name"] = fn.title_case(p.name),
+                ["short_descriptor_1"] = fn.format_first_descriptor(p.name),
+                ["short_descriptor_2"] = fn.format_second_descriptor(p.name),
+                ["cc_min_value"] = minval * quantum_modifier,
+                ["cc_max_value"] = maxval * quantum_modifier,
+                ["quantum_modifier"] = quantum_modifier,
+                ["default"] = p["controlspec"] and p["controlspec"].default or 0
+              }
+            )
           end
+        end
 
-          local quantum_modifier = 1 / quantum
-
+        if device.describe().supports_slew then
           table.insert(
             new_device_params,
             {
-              ["id"] = device_param_names[i],
-              ["name"] = fn.title_case(p.name),
-              ["short_descriptor_1"] = fn.format_first_descriptor(p.name),
-              ["short_descriptor_2"] = fn.format_second_descriptor(p.name),
-              ["cc_min_value"] = minval * quantum_modifier,
-              ["cc_max_value"] = maxval * quantum_modifier,
-              ["quantum_modifier"] = quantum_modifier,
-              ["default"] = p["controlspec"] and p["controlspec"].default or 0
+              ["id"] = "nb_slew",
+              ["name"] = "Slew",
+              ["short_descriptor_1"] = "SLEW",
+              ["short_descriptor_2"] = "",
+              ["off_value"] = -1,
+              ["cc_min_value"] = -1,
+              ["cc_max_value"] = 60,
+              ["quantum_modifier"] = 60,
+              ["default"] = -1
             }
           )
         end
-      end
-
-      if device.describe().supports_slew then
-        table.insert(
-          new_device_params,
-          {
-            ["id"] = "nb_slew",
-            ["name"] = "Slew",
-            ["short_descriptor_1"] = "SLEW",
-            ["short_descriptor_2"] = "",
-            ["off_value"] = -1,
-            ["cc_min_value"] = -1,
-            ["cc_max_value"] = 60,
-            ["quantum_modifier"] = 60,
-            ["default"] = -1
-          }
-        )
       end
     end
   end

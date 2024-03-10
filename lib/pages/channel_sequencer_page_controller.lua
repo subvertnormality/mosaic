@@ -71,6 +71,15 @@ function channel_sequencer_page_controller.register_press_handlers()
           channel_pattern_buttons["step" .. s .. "_sequencer_pattern_button"]:set_state(3)
           program.get().selected_sequencer_pattern = s
           tooltip:show("Sequencer pattern " .. s .. " selected")
+          
+          for channel_number = 1, 17 do
+            local channel = program.get_channel(channel_number)
+            clock_controller.set_channel_division(channel_number, clock_controller.calculate_divisor(channel.clock_mods))
+            if channel_number ~= 17 then
+              clock_controller.set_channel_swing(channel_number, channel.swing)
+            end
+          end
+
           if program.is_sequencer_pattern_active(previous_selected_pattern) then
             channel_pattern_buttons["step" .. s .. "_sequencer_pattern_button"]:set_state(2)
           else
@@ -79,8 +88,11 @@ function channel_sequencer_page_controller.register_press_handlers()
 
           refresh_button[previous_selected_pattern] = true
           refresh_button[s] = true
+          
           channel_sequencer_page_controller.refresh()
           channel_sequencer_page_controller.refresh_faders()
+          channel_edit_page_ui_controller.refresh_clock_mods()
+          channel_edit_page_ui_controller.refresh_swing()
         end
 
         local blink_cancel_func = function()
