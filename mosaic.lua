@@ -237,6 +237,7 @@ function init()
     end
   )
   params:add_option("reset_on_end_of_pattern", "Reset when pattern ends", {"On", "Off"}, 2)
+  params:add_option("reset_on_end_of_sequencer_pattern", "Reset when sequencer pattern ends", {"On", "Off"}, 2)
   params:add_option("dual_press_enabled", "Dual pressing", {"On", "Off"}, 1)
   params:add_separator("Prameter locks")
   params:add_option("trigless_locks", "Trigless locks", {"On", "Off"}, 1)

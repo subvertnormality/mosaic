@@ -502,8 +502,12 @@ function step_handler.process_song_sequencer_patterns()
 
       local next_sequencer_pattern = step_handler.calculate_next_selected_sequencer_pattern()
       program.set_selected_sequencer_pattern(next_sequencer_pattern)
-      if params:get("reset_on_end_of_pattern") == 1 then
-        step_handler.reset_sequencer_pattern()
+      if selected_sequencer_pattern_number ~= next_sequencer_pattern and params:get("reset_on_end_of_sequencer_pattern") == 1 then
+        step_handler.reset_pattern()
+      else
+        if params:get("reset_on_end_of_pattern") == 1 then
+          step_handler.reset_pattern()
+        end
       end
       pattern_controller.update_working_patterns()
     end
@@ -634,7 +638,7 @@ function step_handler.reset()
   step_handler.flush_lengths()
 end
 
-function step_handler.reset_sequencer_pattern()
+function step_handler.reset_pattern()
   for i = 1, 17 do
     program.set_current_step_for_channel(i, 99)
     program.get().global_step_accumulator = 0
