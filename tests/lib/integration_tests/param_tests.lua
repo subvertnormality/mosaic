@@ -20,6 +20,12 @@ local function setup()
   params.reset()
 end
 
+local function mock_random()
+  random = function (min, max)
+    return max - min
+  end
+end
+
 local function clock_setup()
   clock_controller.init()
   clock_controller:start()
@@ -131,7 +137,6 @@ function test_params_trig_locks_are_processed_at_the_right_step()
   end
   
   
-  
   function test_params_triggless_locks_are_not_processed_if_trigless_param_is_off()
     setup()
     local sequencer_pattern = 1
@@ -179,6 +184,94 @@ function test_params_trig_locks_are_processed_at_the_right_step()
   end
 
 
+  function test_trig_probability_param_lock_trigs_when_probability_is_high_enough() 
+    setup()
+    mock_random()
+
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+  
+    local test_step = 8
+    local cc_msb = 2
+    local probability = 100
+    local c = 1
+  
+    test_pattern.note_values[test_step] = 0
+    test_pattern.lengths[test_step] = 1
+    test_pattern.trig_values[test_step] = 1
+    test_pattern.velocity_values[test_step] = 100
+  
+    program.get().selected_channel = c
+  
+    local channel = program.get_selected_channel()
+  
+    channel.trig_lock_params[1].id = "trig_probability"
+  
+    program.add_step_param_trig_lock(test_step, 1, probability)
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    -- Reset and set up the clock and MIDI event tracking
+    clock_setup()
+  
+    progress_clock_by_beats(test_step)
+  
+    local note_on_event = table.remove(midi_note_on_events)
+
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+  
+  end
+
+
+  function test_trig_probability_param_lock_doesnt_fire_when_probabiliyu_is_too_low() 
+    setup()
+    mock_random()
+
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+  
+    local test_step = 8
+    local cc_msb = 2
+    local probability = 99
+    local c = 1
+  
+    test_pattern.note_values[test_step] = 0
+    test_pattern.lengths[test_step] = 1
+    test_pattern.trig_values[test_step] = 1
+    test_pattern.velocity_values[test_step] = 100
+  
+    program.get().selected_channel = c
+  
+    local channel = program.get_selected_channel()
+  
+    channel.trig_lock_params[1].id = "trig_probability"
+  
+    program.add_step_param_trig_lock(test_step, 1, probability)
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    -- Reset and set up the clock and MIDI event tracking
+    clock_setup()
+  
+    progress_clock_by_beats(test_step)
+  
+    local note_on_event = table.remove(midi_note_on_events)
+
+    luaunit.assert_nil(note_on_event)
+  
+  end
+
+
   function test_trig_probability_param_lock_set_to_zero_doesnt_fire() 
     setup()
     local sequencer_pattern = 1
@@ -199,7 +292,6 @@ function test_params_trig_locks_are_processed_at_the_right_step()
   
     local channel = program.get_selected_channel()
   
-    -- channel.trig_lock_params[1].type = "trig_probability"
     channel.trig_lock_params[1].id = "trig_probability"
   
     program.add_step_param_trig_lock(test_step, 1, probability)
@@ -240,7 +332,6 @@ function test_params_trig_locks_are_processed_at_the_right_step()
   
     local channel = program.get_selected_channel()
   
-    -- channel.trig_lock_params[1].type = "trig_probability"
     channel.trig_lock_params[1].id = "trig_probability"
   
     program.add_step_param_trig_lock(test_step, 1, probability)
@@ -263,27 +354,268 @@ function test_params_trig_locks_are_processed_at_the_right_step()
   
   end
 
-  -- function test_quantised_fixed_note_param_lock()
+  function test_quantised_fixed_note_param_lock()
+    setup()
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+  
+    local test_step = 8
+    local cc_msb = 2
+    local note = 1
+    local c = 1
+  
+    test_pattern.note_values[test_step] = 0
+    test_pattern.lengths[test_step] = 1
+    test_pattern.trig_values[test_step] = 1
+    test_pattern.velocity_values[test_step] = 100
+  
+    program.get().selected_channel = c
+  
+    local channel = program.get_selected_channel()
+  
+    -- channel.trig_lock_params[1].type = "trig_probability"
+    channel.trig_lock_params[1].id = "quantised_fixed_note"
+  
+    program.add_step_param_trig_lock(test_step, 1, note)
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    -- Reset and set up the clock and MIDI event tracking
+    clock_setup()
+  
+    progress_clock_by_beats(test_step)
+  
+    local note_on_event = table.remove(midi_note_on_events)
 
-  -- end
+    luaunit.assert_equals(note_on_event[1], 62)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+  end
 
-  -- function test_bipolar_random_note_param_lock()
+  function test_bipolar_random_note_param_lock()
 
-  -- end
+    setup()
+    mock_random()
 
-  -- function test_twos_random_note_param_lock()
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+  
+    local test_step = 8
+    local cc_msb = 2
+    local note = 1
+    local c = 1
+  
+    test_pattern.note_values[test_step] = 1
+    test_pattern.lengths[test_step] = 1
+    test_pattern.trig_values[test_step] = 1
+    test_pattern.velocity_values[test_step] = 100
+  
+    program.get().selected_channel = c
+  
+    local channel = program.get_selected_channel()
+  
+    channel.trig_lock_params[1].id = "bipolar_random_note"
+  
+    program.add_step_param_trig_lock(test_step, 1, note)
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    -- Reset and set up the clock and MIDI event tracking
+    clock_setup()
+  
+    progress_clock_by_beats(test_step)
+  
+    local note_on_event = table.remove(midi_note_on_events)
 
-  -- end
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
 
-  -- function test_random_velocity_param_lock()
+  end
 
-  -- end
+  function test_twos_random_note_param_lock()
+
+    setup()
+    mock_random()
+
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+  
+    local test_step = 8
+    local cc_msb = 2
+    local note = 3
+    local c = 1
+  
+    test_pattern.note_values[test_step] = 1
+    test_pattern.lengths[test_step] = 1
+    test_pattern.trig_values[test_step] = 1
+    test_pattern.velocity_values[test_step] = 100
+  
+    program.get().selected_channel = c
+  
+    local channel = program.get_selected_channel()
+  
+    channel.trig_lock_params[1].id = "twos_random_note"
+  
+    program.add_step_param_trig_lock(test_step, 1, note)
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    -- Reset and set up the clock and MIDI event tracking
+    clock_setup()
+  
+    progress_clock_by_beats(test_step)
+  
+    local note_on_event = table.remove(midi_note_on_events)
+
+    luaunit.assert_equals(note_on_event[1], 69)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
 
 
-  -- function test_fixed_note_param_lock()
+  end
 
-  -- end
+  function test_random_velocity_param_lock()
+
+    setup()
+    mock_random()
+
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+  
+    local test_step = 8
+    local cc_msb = 2
+    local c = 1
+  
+    test_pattern.note_values[test_step] = 0
+    test_pattern.lengths[test_step] = 1
+    test_pattern.trig_values[test_step] = 1
+    test_pattern.velocity_values[test_step] = 30
+  
+    program.get().selected_channel = c
+  
+    local channel = program.get_selected_channel()
+  
+    channel.trig_lock_params[1].id = "random_velocity"
+  
+    program.add_step_param_trig_lock(test_step, 1, 10)
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    -- Reset and set up the clock and MIDI event tracking
+    clock_setup()
+  
+    progress_clock_by_beats(test_step)
+  
+    local note_on_event = table.remove(midi_note_on_events)
+
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 40)
+    luaunit.assert_equals(note_on_event[3], 1)
+  end
+
+
+  function test_fixed_note_param_lock()
+    setup()
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+  
+    local test_step = 8
+    local cc_msb = 2
+    local probability = 100
+    local c = 1
+  
+    test_pattern.note_values[test_step] = 0
+    test_pattern.lengths[test_step] = 1
+    test_pattern.trig_values[test_step] = 1
+    test_pattern.velocity_values[test_step] = 100
+  
+    program.get().selected_channel = c
+  
+    local channel = program.get_selected_channel()
+  
+    channel.trig_lock_params[1].id = "trig_probability"
+  
+    program.add_step_param_trig_lock(test_step, 1, probability)
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    -- Reset and set up the clock and MIDI event tracking
+    clock_setup()
+  
+    progress_clock_by_beats(test_step)
+  
+    local note_on_event = table.remove(midi_note_on_events)
+
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+  
+  end
+
+  function test_quantised_fixed_note_param_lock()
+    setup()
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+  
+    local test_step = 8
+    local cc_msb = 2
+    local note = 100
+    local c = 1
+  
+    test_pattern.note_values[test_step] = 0
+    test_pattern.lengths[test_step] = 1
+    test_pattern.trig_values[test_step] = 1
+    test_pattern.velocity_values[test_step] = 100
+  
+    program.get().selected_channel = c
+  
+    local channel = program.get_selected_channel()
+  
+    -- channel.trig_lock_params[1].type = "trig_probability"
+    channel.trig_lock_params[1].id = "fixed_note"
+  
+    program.add_step_param_trig_lock(test_step, 1, note)
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    -- Reset and set up the clock and MIDI event tracking
+    clock_setup()
+  
+    progress_clock_by_beats(test_step)
+  
+    local note_on_event = table.remove(midi_note_on_events)
+
+    luaunit.assert_equals(note_on_event[1], 100)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+  end
 
   -- function test_chord_with_one_extra_note_param_lock()
+
 
   -- end

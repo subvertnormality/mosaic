@@ -392,7 +392,7 @@ function step_handler.handle(c, current_step)
     trig_prob = 100
   end
 
-  local random_val = math.random(0, 99)
+  local random_val = random(0, 99)
 
   if trig_value == 1 and random_val < trig_prob then
     if (params:get("quantiser_trig_lock_hold") ~= 1) then

@@ -1,5 +1,7 @@
 local fn = {}
 
+random = math.random
+
 function fn.cleanup()
   _midi.all_off()
   g.cleanup()
@@ -351,7 +353,7 @@ function fn.transform_random_value(n)
       min = -(n - 1) / 2
       max = (n + 1) / 2
     end
-    return math.random(min, max)
+    return random(min, max)
   end
 end
 
@@ -360,7 +362,7 @@ function fn.transform_twos_random_value(n)
     return 0
   else
     local min = -math.floor(n / 2) * 2
-    local result = math.random(0, n) * 2 + min
+    local result = random(0, n) * 2 + min
     return result
   end
 end
