@@ -145,7 +145,6 @@ function clock_controller.init()
           program.get_channel(channel_number).end_trig[2]
         )
         local current_step = program.get_current_step_for_channel(channel_number)
-        -- print("CURRENT STEP ".. current_step)
 
         if current_step < start_trig then
           program.set_current_step_for_channel(channel_number, start_trig)
