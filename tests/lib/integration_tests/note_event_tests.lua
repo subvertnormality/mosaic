@@ -67,7 +67,7 @@ function test_pattern_doesnt_fire_when_sequencer_pattern_is_not_selected()
     progress_clock_by_beats(steps)
   
   
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     -- Check there are no note on events
     luaunit.assertNil(note_on_event)
@@ -113,7 +113,7 @@ function test_pattern_doesnt_fire_when_sequencer_pattern_is_not_selected()
     -- Progress the clock according to the current steps being tested
     progress_clock_by_beats(steps)
   
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     luaunit.assert_equals(note_on_event[1], 60)
     luaunit.assert_equals(note_on_event[2], 20)
@@ -167,7 +167,7 @@ function test_pattern_doesnt_fire_when_sequencer_pattern_is_not_selected()
     -- Progress the clock according to the current steps being tested
     progress_clock_by_beats(steps)
   
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     luaunit.assert_equals(note_on_event[1], 60)
     luaunit.assert_equals(note_on_event[2], 20)
@@ -218,7 +218,7 @@ function test_clock_processes_notes_at_various_steps()
         -- Progress the clock according to the current steps being tested
         progress_clock_by_beats(steps)
   
-        local note_on_event = table.remove(midi_note_on_events)
+        local note_on_event = table.remove(midi_note_on_events, 1)
   
         -- Check the note on event
         luaunit.assert_equals(note_on_event[1], 60)
@@ -248,7 +248,7 @@ function test_clock_processes_note_events()
   
     clock_setup()
   
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     luaunit.assert_equals(note_on_event[1], 60)
     luaunit.assert_equals(note_on_event[2], 100)
@@ -290,7 +290,7 @@ function test_clock_processes_note_events()
         -- Reset and set up the clock and MIDI event tracking
         clock_setup()
   
-        local note_on_event = table.remove(midi_note_on_events)
+        local note_on_event = table.remove(midi_note_on_events, 1)
   
         -- Check the note on event
         luaunit.assert_equals(note_on_event[1], 60)
@@ -335,7 +335,7 @@ function test_end_trig_functions_as_expected()
   
     clock_setup()
   
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     luaunit.assert_equals(note_on_event[1], 60)
     luaunit.assert_equals(note_on_event[2], 100)
@@ -343,7 +343,7 @@ function test_end_trig_functions_as_expected()
   
     progress_clock_by_beats(4)
   
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     luaunit.assert_equals(note_on_event[1], 60)
     luaunit.assert_equals(note_on_event[2], 100)
@@ -351,7 +351,7 @@ function test_end_trig_functions_as_expected()
   
     progress_clock_by_beats(4)
   
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     luaunit.assert_equals(note_on_event[1], 60)
     luaunit.assert_equals(note_on_event[2], 100)

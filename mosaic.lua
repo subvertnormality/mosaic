@@ -153,7 +153,7 @@ function redraw()
 end
 
 function init()
-  -- math.randomseed(os.time())
+  math.randomseed(os.time())
   program.init()
   midi_controller.init()
   

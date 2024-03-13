@@ -66,7 +66,7 @@ function test_channel_17_doesnt_fire_notes()
     -- Progress the clock according to the current steps being tested
     progress_clock_by_beats(steps)
   
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     -- Check there are no note on events
     luaunit.assertNil(note_on_event)

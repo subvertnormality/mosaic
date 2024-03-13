@@ -74,7 +74,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
     progress_clock_by_beats(1)
     
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     luaunit.assert_equals(note_on_event[1], 64)
     luaunit.assert_equals(note_on_event[2], 100)
@@ -119,7 +119,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
     progress_clock_by_beats(1)
     
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     luaunit.assert_equals(note_on_event[1], 64)
     luaunit.assert_equals(note_on_event[2], 100)
@@ -175,7 +175,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
     progress_clock_by_beats(1)
     
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     luaunit.assert_equals(note_on_event[1], 69)
     luaunit.assert_equals(note_on_event[2], 100)
@@ -233,7 +233,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
     progress_clock_by_beats(4)
   
-    local note_on_event = table.remove(midi_note_on_events)
+    local note_on_event = table.remove(midi_note_on_events, 1)
   
     luaunit.assert_equals(note_on_event[1], 69)
     luaunit.assert_equals(note_on_event[2], 100)

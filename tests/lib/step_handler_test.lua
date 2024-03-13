@@ -29,24 +29,9 @@ function test_steps_process_note_on_events()
 
   step_handler.handle(1, 1)
 
-  local note_on_event = table.remove(midi_note_on_events)
+  local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 end
-
-
--- Sequencer param tests
-
--- function test_trig_probability_causes_a_trig_to_be_fired_with_set_probability
--- function test_quantised_fixed_note_sets_a_trig_note_to_a_fixed_value_that_is_quantised
--- function test_bipolar_random_note_randomly_selects_note_in_plus_or_minus_range_around_mid_point
--- function test_twos_random_note_selects_random_note_within_multiples_of_two
--- function test_random_velocity_set_random_velocity_within_range
--- function test_fixed_note_sets_a_fixed_note_that_isnt_quantised
-
-
--- Chord tests
-
--- function test_chords ...

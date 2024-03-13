@@ -69,7 +69,7 @@ function test_clock_divisions_slow_down_the_clock_div_2()
 
   progress_clock_by_beats(1)
 
-  local note_on_event = table.remove(midi_note_on_events)
+  local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
   luaunit.assert_equals(note_on_event[2], 100)
@@ -124,7 +124,7 @@ function test_clock_divisions_slow_down_the_clock_div_3()
 
   progress_clock_by_beats(1)
 
-  local note_on_event = table.remove(midi_note_on_events)
+  local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
   luaunit.assert_equals(note_on_event[2], 100)
@@ -178,7 +178,7 @@ function test_clock_multiplications_speed_up_the_clock_mul_2()
 
   progress_clock_by_beats(1)
 
-  local note_on_event = table.remove(midi_note_on_events)
+  local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
   luaunit.assert_equals(note_on_event[2], 100)
@@ -223,7 +223,7 @@ function test_clock_multiplications_speed_up_the_clock_mul_16()
 
   progress_clock_by_beats(1)
 
-  local note_on_event = table.remove(midi_note_on_events)
+  local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
   luaunit.assert_equals(note_on_event[2], 100)
@@ -354,7 +354,3 @@ function test_clock_can_delay_action_with_channel_clock_division_set()
   luaunit.assert_true(has_fired)
 
 end
-
-
-
-  -- Song mode clock tests
