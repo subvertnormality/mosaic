@@ -2,7 +2,8 @@ local fn = include("mosaic/lib/functions")
 
 local lattice = require("lattice")
 
-local clock_controller = {}
+clock_controller = {}
+clock_lattice = {}
 
 local playing = false
 local first_run = true
@@ -10,7 +11,7 @@ local master_clock
 local sinfonion_clock
 local trigless_lock_active = {}
 
-local clock_lattice = {}
+
 local delayed_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
 
 local clock_divisions = {
@@ -226,6 +227,7 @@ function clock_controller.set_channel_division(channel_number, division)
 end
 
 function clock_controller.delay_action(c, division_index, multiplier, func)
+  
   if division_index == 0 or division_index == nil then
     func()
     return
@@ -237,7 +239,7 @@ function clock_controller.delay_action(c, division_index, multiplier, func)
       func()
       delayed:destroy()
     else
-       first_run = false
+      first_run = false
     end
   end
 
@@ -246,6 +248,8 @@ function clock_controller.delay_action(c, division_index, multiplier, func)
     division = (clock_controller.calculate_divisor(clock_divisions[division_index]) * clock_controller["channel_" .. c .. "_clock"].division) * multiplier,
     enabled = true
   }
+
+  print(delayed.division)
 
   table.insert(delayed_sprockets[c], delayed)
 end
