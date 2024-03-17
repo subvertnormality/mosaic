@@ -211,6 +211,36 @@ function test_trig_mode_all_should_set_trig_step_to_one_when_two_steps_are_one()
   luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", false, false).trig_values[1], 1)
 end
 
+function test_trig_mode_all_should_set_trig_step_to_one_when_all_steps_are_one()
+  program.init()
+  program.get_sequencer_pattern(1).channels[1].trig_merge_mode = "all"
+  program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
+  program.get_sequencer_pattern(1).patterns[2].trig_values[1] = 1
+  program.get_sequencer_pattern(1).patterns[3].trig_values[1] = 1
+  program.get_sequencer_pattern(1).patterns[4].trig_values[1] = 1
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
+
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", false, false).trig_values[1], 1)
+end
+
+function test_trig_mode_all_should_set_trig_step_to_zero_when_all_steps_are_zero()
+  program.init()
+  program.get_sequencer_pattern(1).channels[1].trig_merge_mode = "all"
+  program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[2].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[3].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[4].trig_values[1] = 0
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
+
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", false, false).trig_values[1], 0)
+end
+
 -- function test_add_should_set_trig_step_to_one_when_only_one_step_is_one()
 --   program.init()
 --   program.get_sequencer_pattern(1).channels[1].merge_mode = "add"
