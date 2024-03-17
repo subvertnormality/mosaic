@@ -8,7 +8,7 @@ function pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
   return merged_pattern
 end
 
-function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, node_merge_mode, velocity_merge_mode)
+function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode)
 
 
 
@@ -49,6 +49,21 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, nod
             merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
           end
         end
+
+
+        if note_merge_mode and string.match(note_merge_mode, "pattern_number_") then
+
+          if note_merge_mode == "pattern_number_" .. pattern_number then
+            merged_pattern.note_values[s] = patterns[pattern_number].note_values[s]
+            merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
+            
+          end
+        -- elseif note_merge_mode ==
+
+        end
+          
+
+
       end
     end
 

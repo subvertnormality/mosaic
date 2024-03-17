@@ -5,6 +5,7 @@ local pattern_controller = include("mosaic/lib/pattern_controller")
 -- Trig : Skip / Only / Any
 -- Note : Up / Down / Average / Channel
 -- Velocity : / Up / Down / Average / Channel
+-- Length : / Up / Down / Average / Channel
 
 
 function test_skip_should_set_trig_step_to_zero_when_all_steps_are_zero()
@@ -239,6 +240,27 @@ function test_trig_mode_all_should_set_trig_step_to_zero_when_all_steps_are_zero
   program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
 
   luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", false, false).trig_values[1], 0)
+end
+
+
+-- sync_pattern_values needs to be fixed before this will pass
+function test_pattern_number_should_use_note_value_from_chosen_pattern_number()
+  program.init()
+  program.get_sequencer_pattern(1).channels[1].merge_mode = "pattern_number_4"
+  program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 1
+  program.get_sequencer_pattern(1).patterns[2].trig_values[1] = 1
+  program.get_sequencer_pattern(1).patterns[3].trig_values[1] = 1
+  program.get_sequencer_pattern(1).patterns[4].trig_values[1] = 1
+  program.get_sequencer_pattern(1).patterns[1].note_values[1] = 5
+  program.get_sequencer_pattern(1).patterns[2].note_values[1] = 4
+  program.get_sequencer_pattern(1).patterns[3].note_values[1] = 3
+  program.get_sequencer_pattern(1).patterns[4].note_values[1] = 1
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
+
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", "pattern_number_3", false).note_values[1], 3)
 end
 
 -- function test_add_should_set_trig_step_to_one_when_only_one_step_is_one()
