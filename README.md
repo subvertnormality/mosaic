@@ -499,3 +499,11 @@ See https://github.com/subvertnormality/norns2sinfonion for more information.
 # Development
 
 See https://trello.com/b/kMZ4qEhk/Mosaic for backlog. Please raise bugs and issues in Github.
+
+Make sure that the tests are passing before you open a PR. 
+
+```
+./test.sh
+```
+
+Do not run this on your norns device as you'll end up pulling in the norns repository onto your device, and it'll cause a conflict. If you do this by accident, simply delete `tests/test_artefacts` to get your norns back up and running.

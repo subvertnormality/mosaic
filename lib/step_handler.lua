@@ -270,6 +270,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   local division_index = step_handler.process_stock_params(c, current_step, "chord_strum")
   local chord_velocity_mod = step_handler.process_stock_params(c, current_step, "chord_velocity_modifier")
+
   local chord_strum_pattern = step_handler.process_stock_params(c, current_step, "chord_strum_pattern")
 
   local chord_start = 1
