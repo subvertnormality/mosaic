@@ -42,8 +42,7 @@ local dual_in_progress = false
 function grid.add(new_grid) -- must be grid.add, not g.add (this is a function of the grid class)
   g = grid.connect(new_grid.port) -- connect script to the new grid
   grid_connected = true -- a grid has been connected!
-  fn.grid_dirty(true) -- enable flag to redraw grid, because data has changed
-
+  fn.dirty_grid(true) -- enable flag to redraw grid, because data has changed
 end
 
 
@@ -279,6 +278,10 @@ function grid_controller.refresh()
   trigger_edit_page_controller.refresh()
   note_edit_page_controller.refresh()
   velocity_edit_page_controller.refresh()
+end
+
+function grid_controller.alert_disconnect() 
+  print("Grid disconnected")
 end
 
 return grid_controller

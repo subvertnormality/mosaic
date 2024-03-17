@@ -240,5 +240,3 @@ function test_global_default_scale_setting_quantises_notes_properly()
     luaunit.assert_equals(note_on_event[3], 1)
   
   end
-  
-  
