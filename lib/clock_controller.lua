@@ -249,8 +249,6 @@ function clock_controller.delay_action(c, division_index, multiplier, func)
     enabled = true
   }
 
-  print(delayed.division)
-
   table.insert(delayed_sprockets[c], delayed)
 end
 
