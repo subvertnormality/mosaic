@@ -1,15 +1,13 @@
 local pattern_controller = {}
 
--- function pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
---   merged_pattern.lengths[s] = pattern.lengths[s]
---   merged_pattern.velocity_values[s] = pattern.velocity_values[s]
---   merged_pattern.note_values[s] = pattern.note_values[s]
---   return merged_pattern
--- end
+function pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
+  merged_pattern.lengths[s] = pattern.lengths[s]
+  merged_pattern.velocity_values[s] = pattern.velocity_values[s]
+  merged_pattern.note_values[s] = pattern.note_values[s]
+  return merged_pattern
+end
 
 function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
-
-
 
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
   local merged_pattern = program.initialise_default_pattern()
@@ -23,6 +21,12 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
   local lengths = program.initialise_64_table({})
   local velocities = program.initialise_64_table({})
 
+  for i = 1, 64 do
+    notes[i] = {}
+    lengths[i] = {}
+    velocities[i] = {}
+  end
+
   -- local sorted_note_values = {} -- Moved the sorted_note_values table inside this loop
 
   for pattern_number, pattern_enabled in pairs(pattern_channel.selected_patterns) do
@@ -31,13 +35,9 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
       for s = 1, 64 do
         local is_pattern_trig_one = pattern.trig_values[s] == 1
 
-        local pattern_note_value = pattern.note_values[s] == -1 and 0 or pattern.note_values[s]
-        local pattern_length_value = pattern.lengths[s] == -1 and 0 or pattern.lengths[s]
-        local pattern_velocity_value = pattern.velocity_values[s] == -1 and 0 or pattern.velocity_values[s]
-
         if trig_merge_mode == "skip" then
           if is_pattern_trig_one and merged_pattern.trig_values[s] < 1 and skip_bits[s] < 1 then
-            -- merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
+            merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
             merged_pattern.trig_values[s] = 1
           elseif is_pattern_trig_one and merged_pattern.trig_values[s] == 1 then
             merged_pattern.trig_values[s] = 0
@@ -49,7 +49,6 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
             merged_pattern.trig_values[s] = 0
           elseif is_pattern_trig_one and only_bits[s] == 1 then
             merged_pattern.trig_values[s] = 1
-            -- merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
           end
         elseif trig_merge_mode == "all" then
           if is_pattern_trig_one then
@@ -62,11 +61,12 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
         if note_merge_mode and string.match(note_merge_mode, "pattern_number_") then
 
           if note_merge_mode == "pattern_number_" .. pattern_number then
+            
             merged_pattern.note_values[s] = patterns[pattern_number].note_values[s]
             -- merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
             
           end
-        elseif note_merge_mode == "up" or note_merge_mode == "down" or note_merge_mode == "average"  then
+        elseif note_merge_mode == "up" or note_merge_mode == "down" or note_merge_mode == "average" then
           if is_pattern_trig_one then
             table.insert(notes[s], patterns[pattern_number].note_values[s])
           end
@@ -76,10 +76,10 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
         if velocity_merge_mode and string.match(velocity_merge_mode, "pattern_number_") then
 
           if velocity_merge_mode == "pattern_number_" .. pattern_number then
-            merged_pattern.note_values[s] = patterns[pattern_number].velocity_values[s]
+            merged_pattern.velocity_values[s] = patterns[pattern_number].velocity_values[s]
             -- merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
           end
-        elseif velocity_merge_mode == "up" or velocity_merge_mode == "down" or velocity_merge_mode == "average"  then
+        elseif velocity_merge_mode == "up" or velocity_merge_mode == "down" or velocity_merge_mode == "average" then
           if is_pattern_trig_one then
             table.insert(velocities[s], patterns[pattern_number].velocity_values[s])
           end
@@ -87,13 +87,13 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
 
         if length_merge_mode and string.match(length_merge_mode, "pattern_number_") then
 
-          if velocity_merge_mode == "pattern_number_" .. pattern_number then
-            merged_pattern.length_values[s] = patterns[pattern_number].length_values[s]
+          if length_merge_mode == "pattern_number_" .. pattern_number then
+            merged_pattern.lengths[s] = patterns[pattern_number].lengths[s]
             -- merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
           end
-        elseif length_merge_mode == "up" or length_merge_mode == "down" or length_merge_mode == "average"  then
+        elseif length_merge_mode == "up" or length_merge_mode == "down" or length_merge_mode == "average" then
           if is_pattern_trig_one then
-            table.insert(lengths[s], patterns[pattern_number].length_values[s])
+            table.insert(lengths[s], patterns[pattern_number].lengths[s])
           end
         end
 
@@ -107,23 +107,47 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
     table.sort(lengths[s])
     table.sort(velocities[s])
 
-    local note_average = fn.average_table_values(notes[s])
-
-    if note_merge_mode == "up" then
-      merged_pattern.note_values[s] = (fn.average_table_values(notes[s]) - notes[s][1]) + notes[s][#notes[s]]
-    elseif note_merge_mode == "down" then
-      merged_pattern.note_values[s] = notes[s][1] - ((fn.average_table_values(notes[s]) - notes[s][1]))
-    elseif note_merge_mode == "average" then
-      merged_pattern.note_values[s] = fn.average_table_values(notes[s])
+    if note_merge_mode == "up" or note_merge_mode == "down" or note_merge_mode == "average" then
+      if notes[s][1] == nil then 
+        merged_pattern.note_values[s] = 0
+      elseif fn.table_has_one_item(notes[s]) then
+        merged_pattern.note_values[s] = notes[s][1]
+      elseif note_merge_mode == "up" then
+        merged_pattern.note_values[s] = (fn.average_table_values(notes[s]) - notes[s][1]) + notes[s][#notes[s]]
+      elseif note_merge_mode == "down" then
+        merged_pattern.note_values[s] = notes[s][1] - ((fn.average_table_values(notes[s]) - notes[s][1]))
+      elseif note_merge_mode == "average" then
+        merged_pattern.note_values[s] = fn.average_table_values(notes[s])
+      end
     end
 
+    if velocity_merge_mode == "up" or velocity_merge_mode == "down" or velocity_merge_mode == "average" then
+      if velocities[s][1] == nil then
+        merged_pattern.velocity_values[s] = 0
+      elseif velocity_merge_mode == "up" then
+        merged_pattern.velocity_values[s] = (fn.average_table_values(velocities[s]) - velocities[s][1]) + velocities[s][#velocities[s]]
+      elseif velocity_merge_mode == "down" then
+        merged_pattern.velocity_values[s] = velocities[s][1] - ((fn.average_table_values(velocities[s]) - velocities[s][1]))
+      elseif velocity_merge_mode == "average" then
+        merged_pattern.velocity_values[s] = fn.average_table_values(velocities[s])
+      end
+    end
 
+    if length_merge_mode == "up" or length_merge_mode == "down" or length_merge_mode == "average" then
+      if lengths[s][1] == nil then
+        merged_pattern.lengths[s] = 0
+      elseif length_merge_mode == "up" then
+        merged_pattern.lengths[s] = (fn.average_table_values(lengths[s]) - lengths[s][1]) + lengths[s][#lengths[s]]
+      elseif length_merge_mode == "down" then
+        merged_pattern.lengths[s] = lengths[s][1] - ((fn.average_table_values(lengths[s]) - lengths[s][1]))
+      elseif length_merge_mode == "average" then
+        merged_pattern.lengths[s] = fn.average_table_values(lengths[s])
+      end
+    end
   end
-
 
   return merged_pattern
 end
-
 
 
 
