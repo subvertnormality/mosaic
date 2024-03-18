@@ -397,4 +397,21 @@ function fn.constrain(min, max, value)
   return value
 end
 
+function fn.average_table_values(tbl)
+
+  local sum = 0
+  local count = 0
+
+  for _, value in pairs(tbl) do
+      sum = sum + value
+      count = count + 1
+  end
+
+  if count == 0 then
+      return nil -- Avoid division by zero; return nil or an appropriate value
+  else
+      return math.floor((sum / count) + 0.5)
+  end
+end
+
 return fn
