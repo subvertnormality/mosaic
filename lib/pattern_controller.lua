@@ -66,6 +66,7 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
           end
         elseif trig_merge_mode == "all" then
           if is_pattern_trig_one then
+            
             merged_pattern.trig_values[s] = 1
           end
         end
@@ -117,8 +118,11 @@ function pattern_controller.update_working_patterns()
   local sequencer_patterns = program.get_selected_sequencer_pattern().channels
 
   for c = 1, 16 do
-    local merge_mode = sequencer_patterns[c].merge_mode
-    local working_pattern = pattern_controller.get_and_merge_patterns(c, merge_mode)
+    local trig_merge_mode = sequencer_patterns[c].trig_merge_mode
+    local note_merge_mode = sequencer_patterns[c].note_merge_mode
+    local velocity_merge_mode = sequencer_patterns[c].velocity_merge_mode
+    local length_merge_mode = sequencer_patterns[c].length_merge_mode
+    local working_pattern = pattern_controller.get_and_merge_patterns(c, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
     sequencer_patterns[c].working_pattern = working_pattern
   end
 end
