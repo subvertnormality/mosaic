@@ -1,4 +1,3 @@
-step_handler = include("mosaic/lib/step_handler")
 pattern_controller = include("mosaic/lib/pattern_controller")
 
 local clock_controller = include("mosaic/lib/clock_controller")
@@ -228,133 +227,131 @@ function test_clock_processes_notes_at_various_steps()
     end
   end
 
-
-
 function test_clock_processes_note_events()
-    setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
-    local test_pattern = program.initialise_default_pattern()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
   
-    test_pattern.note_values[1] = 0
-    test_pattern.lengths[1] = 1
-    test_pattern.trig_values[1] = 1
-    test_pattern.velocity_values[1] = 100
-  
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  
-    pattern_controller.update_working_patterns()
-  
-    clock_setup()
-  
-    local note_on_event = table.remove(midi_note_on_events, 1)
-  
-    luaunit.assert_equals(note_on_event[1], 60)
-    luaunit.assert_equals(note_on_event[2], 100)
-    luaunit.assert_equals(note_on_event[3], 1)
-  
-    progress_clock_by_beats(1)
-    
-    local note_off_event = table.remove(midi_note_off_events)
-  
-    luaunit.assert_equals(note_off_event[1], 60)
-    luaunit.assert_equals(note_off_event[2], 100)
-    luaunit.assert_equals(note_off_event[3], 1)
-  
+  local note_off_event = table.remove(midi_note_off_events)
+
+  luaunit.assert_equals(note_off_event[1], 60)
+  luaunit.assert_equals(note_off_event[2], 100)
+  luaunit.assert_equals(note_off_event[3], 1)
+
+end
+
+function test_clock_processes_notes_of_various_lengths()
+
+  -- Define a table of lengths to test
+  local lengths_to_test = {1, 2, 3, 4, 5, 16, 17, 24, 31, 32, 33, 47, 48, 63, 64, 65, 150, 277} -- Add more lengths as needed
+  local test_pattern
+
+  for _, length in ipairs(lengths_to_test) do
+
+      setup()
+      local sequencer_pattern = 1
+      program.set_selected_sequencer_pattern(1)
+      test_pattern = program.initialise_default_pattern()
+      
+      test_pattern.note_values[1] = 0
+      test_pattern.lengths[1] = length
+      test_pattern.trig_values[1] = 1
+      test_pattern.velocity_values[1] = 100
+
+      program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+      fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+
+      pattern_controller.update_working_patterns()
+
+      -- Reset and set up the clock and MIDI event tracking
+      clock_setup()
+
+      local note_on_event = table.remove(midi_note_on_events, 1)
+
+      -- Check the note on event
+      luaunit.assert_equals(note_on_event[1], 60)
+      luaunit.assert_equals(note_on_event[2], 100)
+      luaunit.assert_equals(note_on_event[3], 1)
+
+      -- Progress the clock according to the current length being tested
+      progress_clock_by_beats(length)
+
+      -- Check the note off event after the specified number of beats
+      local note_off_event = table.remove(midi_note_off_events)
+
+      luaunit.assert_equals(note_off_event[1], 60)
+      luaunit.assert_equals(note_off_event[2], 100)
+      luaunit.assert_equals(note_off_event[3], 1)
   end
-  
-  function test_clock_processes_notes_of_various_lengths()
-  
-    -- Define a table of lengths to test
-    local lengths_to_test = {1, 2, 3, 4, 5, 16, 17, 24, 31, 32, 33, 47, 48, 63, 64, 65, 150, 277} -- Add more lengths as needed
-    local test_pattern
-  
-    for _, length in ipairs(lengths_to_test) do
-  
-        setup()
-        local sequencer_pattern = 1
-        program.set_selected_sequencer_pattern(1)
-        test_pattern = program.initialise_default_pattern()
-        
-        test_pattern.note_values[1] = 0
-        test_pattern.lengths[1] = length
-        test_pattern.trig_values[1] = 1
-        test_pattern.velocity_values[1] = 100
-  
-        program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-        fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  
-        pattern_controller.update_working_patterns()
-  
-        -- Reset and set up the clock and MIDI event tracking
-        clock_setup()
-  
-        local note_on_event = table.remove(midi_note_on_events, 1)
-  
-        -- Check the note on event
-        luaunit.assert_equals(note_on_event[1], 60)
-        luaunit.assert_equals(note_on_event[2], 100)
-        luaunit.assert_equals(note_on_event[3], 1)
-  
-        -- Progress the clock according to the current length being tested
-        progress_clock_by_beats(length)
-  
-        -- Check the note off event after the specified number of beats
-        local note_off_event = table.remove(midi_note_off_events)
-  
-        luaunit.assert_equals(note_off_event[1], 60)
-        luaunit.assert_equals(note_off_event[2], 100)
-        luaunit.assert_equals(note_off_event[3], 1)
-    end
-  end
+end
   
 
 function test_end_trig_functions_as_expected()
 
-    setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
-    local test_pattern = program.initialise_default_pattern()
-  
-    local step = 1
-    local end_trig = 4
-  
-    test_pattern.note_values[step] = 0
-    test_pattern.lengths[step] = 1
-    test_pattern.trig_values[step] = 1
-    test_pattern.velocity_values[step] = 100
-  
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  
-    program.get_channel(1).end_trig[1] = end_trig
-    program.get_channel(1).end_trig[2] = 4
-  
-    pattern_controller.update_working_patterns()
-  
-    clock_setup()
-  
-    local note_on_event = table.remove(midi_note_on_events, 1)
-  
-    luaunit.assert_equals(note_on_event[1], 60)
-    luaunit.assert_equals(note_on_event[2], 100)
-    luaunit.assert_equals(note_on_event[3], 1)
-  
-    progress_clock_by_beats(4)
-  
-    local note_on_event = table.remove(midi_note_on_events, 1)
-  
-    luaunit.assert_equals(note_on_event[1], 60)
-    luaunit.assert_equals(note_on_event[2], 100)
-    luaunit.assert_equals(note_on_event[3], 1)
-  
-    progress_clock_by_beats(4)
-  
-    local note_on_event = table.remove(midi_note_on_events, 1)
-  
-    luaunit.assert_equals(note_on_event[1], 60)
-    luaunit.assert_equals(note_on_event[2], 100)
-    luaunit.assert_equals(note_on_event[3], 1)
-  end
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  local step = 1
+  local end_trig = 4
+
+  test_pattern.note_values[step] = 0
+  test_pattern.lengths[step] = 1
+  test_pattern.trig_values[step] = 1
+  test_pattern.velocity_values[step] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+
+  program.get_channel(1).end_trig[1] = end_trig
+  program.get_channel(1).end_trig[2] = 4
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(4)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(4)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+end
   

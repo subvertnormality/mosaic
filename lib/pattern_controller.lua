@@ -37,6 +37,8 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
       if is_pattern_trig_one then
         table.insert(pushed_values[s], values[s])
       end
+    else
+      merged_values[s] = values[s]
     end
 
   end
@@ -68,10 +70,11 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
           end
         end
 
-        do_moded_merge(pattern_number, is_pattern_trig_one, s, note_merge_mode, patterns[pattern_number].note_values, merged_pattern.note_values, notes)
-        do_moded_merge(pattern_number, is_pattern_trig_one, s, velocity_merge_mode, patterns[pattern_number].velocity_values, merged_pattern.velocity_values, velocities)
-        do_moded_merge(pattern_number, is_pattern_trig_one, s, length_merge_mode, patterns[pattern_number].lengths, merged_pattern.lengths, lengths)
-
+        if is_pattern_trig_one then
+          do_moded_merge(pattern_number, is_pattern_trig_one, s, note_merge_mode, patterns[pattern_number].note_values, merged_pattern.note_values, notes)
+          do_moded_merge(pattern_number, is_pattern_trig_one, s, velocity_merge_mode, patterns[pattern_number].velocity_values, merged_pattern.velocity_values, velocities)
+          do_moded_merge(pattern_number, is_pattern_trig_one, s, length_merge_mode, patterns[pattern_number].lengths, merged_pattern.lengths, lengths)
+        end
       end
     end
 

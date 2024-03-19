@@ -4,4 +4,4 @@
 cd "./tests/"
 
 # Run the Lua script
-lua ./run_tests.lua
+lua ./run_tests.lua -p test_$1
