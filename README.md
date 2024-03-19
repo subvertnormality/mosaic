@@ -275,10 +275,26 @@ And how do your patterns meld? Define this with the merge mode selector:
 
 Let's delve into into the merge modes:
 
-* Pattern Merge: This mode combines trigs from all patterns, yet only takes note and velocity from the chosen pattern. To toggle through patterns, press repeatedly. For a quick switch, press and hold your desired pattern key, then tap the pattern merge mode key.
-* Skip Merge: This mode elegantly sidesteps any clashing trigs.
-* Average Merge: This mode fuses clashing note values, offering fresh melodies from familiar notes.
-* Add & Subtract Merge: These modes play with note values, resulting in a myriad of melodies. Tap repeatedly to switch between the two modes.
+* Trig merge modes: These modes determine how steps trig when there are shared steps across selected patterns.
+  * All: steps that are active in any selected pattern will trig
+  * Skip: steps that appear in just one selected pattern will trig, those that appear in more than one selected pattern won't.
+  * Only: steps that appear in more than one selected pattern will trig, whereas those that only appear in one selected pattern won't.
+* Note merge modes: These modes determine how shared step note values are calculated
+  * Average: the note value of clashing steps will be calculated by averaging the note values of each selected pattern's step. The note value is then quantised.
+  * Up: the note value of clashing steps will be calculated by taking the average of each step note values, minusing the lowest note value, and adding the highest note value. The note value is then quantised.
+  * Down: the note value of clashing steps will be calculated by minusing the lowest note value in the set from the average of each step note values minus the lowest note value. The note value is then quantised.
+  * Pattern: to override note values with a specific pattern's values, hold the pattern's select button and press the note merge button.
+* Velocity merge modes: These modes determine how shared step velocity values are calculated
+  * Average: the velocity value of clashing steps will be calculated by averaging the velocity of each selected pattern's step.
+  * Up: the velocity of clashing steps will be calculated by taking the average of each step velocity, minusing the lowest velocity, and adding the highest velocity.
+  * Down: the velocity of clashing steps will be calculated by minusing the lowest velocity in the set from the average of each step velocity minus the lowest velocity.
+  * Pattern: to override velocity values with a specific pattern's values, hold the pattern's select button and press the velocity merge button.
+* Length merge modes: These modes determine how shared length is calculated
+  * Average: the length of clashing steps will be calculated by averaging the length of each selected pattern's step.
+  * Up: the length of clashing steps will be calculated by taking the average of each step length, minusing the smallest length, and adding the largest length.
+  * Down: the length of clashing steps will be calculated by minusing the smallest length in the set from the average of each step length minus the smallest length.
+  * Pattern: to override length values with a specific pattern's values, hold the pattern's select button and press the length merge button.
+
 
 You can view detailed configurations of your selected channel on the Norns screen. Each page offers intuitive and interactive tools to sculpt your sonic experience.
 
