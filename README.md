@@ -19,6 +19,7 @@
     + [Note editor](#note-editor)
     + [Velocity editor](#velocity-editor)
     + [Channel editor](#channel-editor)
+      - [Merge modes](#merge-modes)
       - [Global scale editor](#global-scale-editor)
       - [Stock trig locks](#stock-trig-locks)
         - [Probability](#probability)
@@ -269,14 +270,12 @@ Adjust a channel's octave range with:
 
 ![Octave selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_octave_selector.png)
 
-And how do your patterns meld? Define this with the merge mode selector:
-
-![Merge mode selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_merge_mode.png)
-
 
 #### Merge modes
 
-Let's delve into the merge modes:
+And how do your patterns meld? Define this with the merge mode selector:
+
+![Merge mode selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_merge_mode.png)
 
 * Trig merge modes: These modes determine how steps trig when there are shared steps across selected patterns.
   * All: steps that are active in any selected pattern will trig
