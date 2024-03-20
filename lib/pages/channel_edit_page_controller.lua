@@ -22,8 +22,8 @@ local note_merge_mode_button =
   8,
   {
     {"Average note merge mode off", 2},
-    {"Up note merge mode on", 5},
-    {"Down note merge mode on", 8},
+    {"Higher note merge mode on", 5},
+    {"Lower note merge mode on", 8},
     {"Channel note merge mode on", 15}
   }
 )
@@ -33,8 +33,8 @@ local velocity_merge_mode_button =
   8,
   {
     {"Average velocity merge mode off", 2},
-    {"Up velocity merge mode on", 5},
-    {"Down velocity merge mode on", 8},
+    {"Higher velocity merge mode on", 5},
+    {"Lower velocity merge mode on", 8},
     {"Channel velocity merge mode on", 15}
   }
 )
@@ -44,8 +44,8 @@ local length_merge_mode_button =
   8,
   {
     {"Average length merge mode off", 2},
-    {"Up length merge mode on", 5},
-    {"Down length merge mode on", 8},
+    {"Longer length merge mode on", 5},
+    {"Shorter length merge mode on", 8},
     {"Channel length merge mode on", 15}
   }
 )
@@ -459,12 +459,12 @@ function channel_edit_page_controller.register_press_handlers()
           elseif length_merge_mode_button:get_state() == 2 then
             program.get_selected_channel().length_merge_mode = "up"
             tooltip:show(
-              "Bigger length merge mode"
+              "Longer length merge mode"
             )
           elseif length_merge_mode_button:get_state() == 3 then
             program.get_selected_channel().length_merge_mode = "down"
             tooltip:show(
-              "Smaller length merge mode"
+              "Shorter length merge mode"
             )
           elseif length_merge_mode_button:get_state() == 4 then
             length_merge_mode_button:set_state(1)
