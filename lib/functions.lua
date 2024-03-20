@@ -266,6 +266,17 @@ function fn.tables_are_equal(t1, t2)
   return true
 end
 
+function fn.table_has_one_item(tbl)
+  local count = 0
+  for _ in pairs(tbl) do
+      count = count + 1
+      if count > 1 then
+          return false
+      end
+  end
+  return count == 1
+end
+
 function fn.table_contains(table, value)
   for _, v in ipairs(table) do
     if v == value then
@@ -395,6 +406,23 @@ function fn.constrain(min, max, value)
       value = max
   end
   return value
+end
+
+function fn.average_table_values(tbl)
+
+  local sum = 0
+  local count = 0
+
+  for _, value in pairs(tbl) do
+      sum = sum + value
+      count = count + 1
+  end
+
+  if count == 0 then
+      return nil -- Avoid division by zero; return nil or an appropriate value
+  else
+      return math.floor((sum / count) + 0.5)
+  end
 end
 
 return fn

@@ -197,7 +197,7 @@ function init()
 
   ui_splash_screen_active = true
 
-  params:add_group("mosaic", "MOSAIC", 14)
+  params:add_group("mosaic", "MOSAIC", 15)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(

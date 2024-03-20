@@ -6,56 +6,47 @@ local quantiser = include("mosaic/lib/quantiser")
 
 local channel_edit_page_sequencer = Sequencer:new(4, "channel")
 local channel_select_fader = Fader:new(1, 1, 16, 16)
-local channel_pattern_number_merge_mode_button =
+local trig_merge_mode_button =
   Button:new(
   13,
   8,
   {
-    {"Pattern number merge mode off", 2},
-    {"Pattern number 1 merge mode on", 3},
-    {"Pattern number 2 merge mode on", 4},
-    {"Pattern number 3 merge mode on", 5},
-    {"Pattern number 4 merge mode on", 6},
-    {"Pattern number 5 merge mode on", 7},
-    {"Pattern number 6 merge mode on", 8},
-    {"Pattern number 7 merge mode on", 9},
-    {"Pattern number 8 merge mode on", 10},
-    {"Pattern number 9 merge mode on", 11},
-    {"Pattern number 10 merge mode on", 12},
-    {"Pattern number 11 merge mode on", 13},
-    {"Pattern number 12 merge mode on", 14},
-    {"Pattern number 13 merge mode on", 15},
-    {"Pattern number 14 merge mode on", 15},
-    {"Pattern number 15 merge mode on", 15},
-    {"Pattern number 16 merge mode on", 15}
+    {"Skip trig merge mode on", 2},
+    {"Only trig merge mode on", 5},
+    {"All trig merge mode on", 8}
   }
 )
-local skip_merge_mode_button =
+local note_merge_mode_button =
   Button:new(
   14,
   8,
   {
-    {"Skip merge mode off", 2},
-    {"Skip merge mode on", 15}
+    {"Average note merge mode off", 2},
+    {"Up note merge mode on", 5},
+    {"Down note merge mode on", 8},
+    {"Channel note merge mode on", 15}
   }
 )
-local average_merge_mode_button =
+local velocity_merge_mode_button =
   Button:new(
   15,
   8,
   {
-    {"Average merge mode off", 2},
-    {"Average merge mode on", 15}
+    {"Average velocity merge mode off", 2},
+    {"Up velocity merge mode on", 5},
+    {"Down velocity merge mode on", 8},
+    {"Channel velocity merge mode on", 15}
   }
 )
-local subadd_merge_mode_button =
+local length_merge_mode_button =
   Button:new(
   16,
   8,
   {
-    {"Add/subtract merge mode off", 2},
-    {"Subtract merge mode on", 7},
-    {"Add merge mode on", 15}
+    {"Average length merge mode off", 2},
+    {"Up length merge mode on", 5},
+    {"Down length merge mode on", 8},
+    {"Channel length merge mode on", 15}
   }
 )
 local channel_octave_fader = Fader:new(7, 8, 5, 5)
@@ -120,7 +111,7 @@ function channel_edit_page_controller.register_draw_handlers()
     "channel_edit_page",
     function()
       if program.get().selected_channel ~= 17 then
-        channel_pattern_number_merge_mode_button:draw()
+        trig_merge_mode_button:draw()
       end
     end
   )
@@ -128,7 +119,7 @@ function channel_edit_page_controller.register_draw_handlers()
     "channel_edit_page",
     function()
       if program.get().selected_channel ~= 17 then
-        skip_merge_mode_button:draw()
+        note_merge_mode_button:draw()
       end
     end
   )
@@ -136,7 +127,7 @@ function channel_edit_page_controller.register_draw_handlers()
     "channel_edit_page",
     function()
       if program.get().selected_channel ~= 17 then
-        average_merge_mode_button:draw()
+        velocity_merge_mode_button:draw()
       end
     end
   )
@@ -144,7 +135,7 @@ function channel_edit_page_controller.register_draw_handlers()
     "channel_edit_page",
     function()
       if program.get().selected_channel ~= 17 then
-        subadd_merge_mode_button:draw()
+        length_merge_mode_button:draw()
       end
     end
   )
@@ -345,26 +336,34 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if program.get().selected_channel ~= 17 then
-        if channel_pattern_number_merge_mode_button:is_this(x, y) then
-          channel_pattern_number_merge_mode_button:press(x, y)
 
-          local merge_mode = program.get_selected_channel().merge_mode
-          if string.match(merge_mode, "pattern_number_") and channel_pattern_number_merge_mode_button:get_state() == 1 then
-            channel_pattern_number_merge_mode_button:set_state(2)
+        if trig_merge_mode_button:is_this(x, y) then
+          trig_merge_mode_button:press(x, y)
+
+          if trig_merge_mode_button:get_state() == 1 then
+
+            program.get_selected_channel().trig_merge_mode = "skip"
+
+            tooltip:show(
+              "Skip trig merge mode"
+            )
+          elseif trig_merge_mode_button:get_state() == 2 then
+
+            program.get_selected_channel().trig_merge_mode = "only"
+            tooltip:show(
+              "Only trig merge mode"
+            )
+          elseif trig_merge_mode_button:get_state() == 3 then
+
+            program.get_selected_channel().trig_merge_mode = "all"
+            tooltip:show(
+              "All trig merge mode"
+            )
           end
 
-          program.get_selected_channel().merge_mode =
-            "pattern_number_" .. channel_pattern_number_merge_mode_button:get_state() - 1
           program.get_selected_sequencer_pattern().active = true
           pattern_controller.update_working_patterns()
-          skip_merge_mode_button:set_state(1)
-          average_merge_mode_button:set_state(1)
-          subadd_merge_mode_button:set_state(1)
-          tooltip:show(
-            "Ch. " ..
-              program.get().selected_channel ..
-                " merge mode: pattern " .. channel_pattern_number_merge_mode_button:get_state() - 1
-          )
+
         end
       end
     end
@@ -373,22 +372,36 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if program.get().selected_channel ~= 17 then
-        if skip_merge_mode_button:is_this(x, y) then
-          local merge_mode = program.get_selected_channel().merge_mode
-          if merge_mode == "skip" then
-            return
+        if note_merge_mode_button:is_this(x, y) then
+
+          note_merge_mode_button:press(x, y)
+
+          if note_merge_mode_button:get_state() == 1 then
+            program.get_selected_channel().note_merge_mode = "average"
+            tooltip:show(
+              "Average note merge mode"
+            )
+          elseif note_merge_mode_button:get_state() == 2 then
+            program.get_selected_channel().note_merge_mode = "up"
+            tooltip:show(
+              "Higher note merge mode"
+            )
+          elseif note_merge_mode_button:get_state() == 3 then
+            program.get_selected_channel().note_merge_mode = "down"
+            tooltip:show(
+              "Lower note merge mode"
+            )
+          elseif note_merge_mode_button:get_state() == 4 then
+
+            note_merge_mode_button:set_state(1)
+            tooltip:show(
+              "Average note merge mode"
+            )
           end
 
-          program.get_selected_channel().merge_mode = "skip"
           program.get_selected_sequencer_pattern().active = true
           pattern_controller.update_working_patterns()
-          channel_pattern_number_merge_mode_button:set_state(1)
-          average_merge_mode_button:set_state(1)
-          subadd_merge_mode_button:set_state(1)
-          skip_merge_mode_button:press(x, y)
-          tooltip:show(
-            "Ch. " .. program.get().selected_channel .. " merge mode: " .. program.get_selected_channel().merge_mode
-          )
+
         end
       end
     end
@@ -397,22 +410,35 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if program.get().selected_channel ~= 17 then
-        if average_merge_mode_button:is_this(x, y) then
-          local merge_mode = program.get_selected_channel().merge_mode
-          if merge_mode == "average" then
-            return
+        if velocity_merge_mode_button:is_this(x, y) then
+
+          velocity_merge_mode_button:press(x, y)
+
+          if velocity_merge_mode_button:get_state() == 1 then
+            program.get_selected_channel().velocity_merge_mode = "average"
+            tooltip:show(
+              "Average velocity merge mode"
+            )
+          elseif velocity_merge_mode_button:get_state() == 2 then
+            program.get_selected_channel().velocity_merge_mode = "up"
+            tooltip:show(
+              "Higher velocity merge mode"
+            )
+          elseif velocity_merge_mode_button:get_state() == 3 then
+            program.get_selected_channel().velocity_merge_mode = "down"
+            tooltip:show(
+              "Lower velocity merge mode"
+            )
+          elseif velocity_merge_mode_button:get_state() == 4 then
+            velocity_merge_mode_button:set_state(1)
+            tooltip:show(
+              "Average velocity merge mode"
+            )
           end
 
-          program.get_selected_channel().merge_mode = "average"
           program.get_selected_sequencer_pattern().active = true
           pattern_controller.update_working_patterns()
-          skip_merge_mode_button:set_state(1)
-          channel_pattern_number_merge_mode_button:set_state(1)
-          subadd_merge_mode_button:set_state(1)
-          average_merge_mode_button:press(x, y)
-          tooltip:show(
-            "Ch. " .. program.get().selected_channel .. " merge mode: " .. program.get_selected_channel().merge_mode
-          )
+
         end
       end
     end
@@ -421,27 +447,34 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if program.get().selected_channel ~= 17 then
-        if subadd_merge_mode_button:is_this(x, y) then
-          subadd_merge_mode_button:press(x, y)
+        if length_merge_mode_button:is_this(x, y) then
 
-          local merge_mode = program.get_selected_channel().merge_mode
-          if (merge_mode == "add" or merge_mode == "subtract") and subadd_merge_mode_button:get_state() == 1 then
-            subadd_merge_mode_button:set_state(2)
+          length_merge_mode_button:press(x, y)
+
+          if length_merge_mode_button:get_state() == 1 then
+            program.get_selected_channel().length_merge_mode = "average"
+            tooltip:show(
+              "Average length merge mode"
+            )
+          elseif length_merge_mode_button:get_state() == 2 then
+            program.get_selected_channel().length_merge_mode = "up"
+            tooltip:show(
+              "Bigger length merge mode"
+            )
+          elseif length_merge_mode_button:get_state() == 3 then
+            program.get_selected_channel().length_merge_mode = "down"
+            tooltip:show(
+              "Smaller length merge mode"
+            )
+          elseif length_merge_mode_button:get_state() == 4 then
+            length_merge_mode_button:set_state(1)
+            tooltip:show(
+              "Average length merge mode"
+            )
           end
 
-          if subadd_merge_mode_button:get_state() == 3 then
-            program.get_selected_channel().merge_mode = "add"
-          elseif subadd_merge_mode_button:get_state() == 2 then
-            program.get_selected_channel().merge_mode = "subtract"
-          end
           program.get_selected_sequencer_pattern().active = true
           pattern_controller.update_working_patterns()
-          skip_merge_mode_button:set_state(1)
-          channel_pattern_number_merge_mode_button:set_state(1)
-          average_merge_mode_button:set_state(1)
-          tooltip:show(
-            "Ch. " .. program.get().selected_channel .. " merge mode: " .. program.get_selected_channel().merge_mode
-          )
         end
       end
     end
@@ -464,18 +497,31 @@ function channel_edit_page_controller.register_press_handlers()
     function(x, y, x2, y2)
       if program.get().selected_channel ~= 17 then
         if pattern_buttons["step" .. x .. "_pattern_button"]:is_this(x, y) then
-          if channel_pattern_number_merge_mode_button:is_this(x2, y2) then
-            channel_pattern_number_merge_mode_button:set_state(x + 1)
-            program.get_selected_channel().merge_mode = "pattern_number_" .. x
+          if note_merge_mode_button:is_this(x2, y2) then
+            program.get_selected_channel().note_merge_mode = "pattern_number_" .. x
+            note_merge_mode_button:set_state(4)
             program.get_selected_sequencer_pattern().active = true
             pattern_controller.update_working_patterns()
-            skip_merge_mode_button:set_state(1)
-            average_merge_mode_button:set_state(1)
-            subadd_merge_mode_button:set_state(1)
             tooltip:show(
-              "Ch. " ..
-                program.get().selected_channel ..
-                  " merge mode: pattern " .. channel_pattern_number_merge_mode_button:get_state() - 1
+              "Note merge mode channel " ..x
+            )
+          end
+          if velocity_merge_mode_button:is_this(x2, y2) then
+            program.get_selected_channel().velocity_merge_mode = "pattern_number_" .. x
+            velocity_merge_mode_button:set_state(4)
+            program.get_selected_sequencer_pattern().active = true
+            pattern_controller.update_working_patterns()
+            tooltip:show(
+              "Velocity merge mode channel " ..x
+            )
+          end
+          if length_merge_mode_button:is_this(x2, y2) then
+            program.get_selected_channel().length_merge_mode = "pattern_number_" .. x
+            length_merge_mode_button:set_state(4)
+            program.get_selected_sequencer_pattern().active = true
+            pattern_controller.update_working_patterns()
+            tooltip:show(
+              "Length merge mode channel " ..x
             )
           end
         end
@@ -507,35 +553,47 @@ function channel_edit_page_controller.register_press_handlers()
 end
 
 function channel_edit_page_controller.refresh_merge_buttons()
-  local merge_mode = program.get_selected_channel().merge_mode
+  local trig_merge_mode = program.get_selected_channel().trig_merge_mode
+  local note_merge_mode = program.get_selected_channel().note_merge_mode
+  local velocity_merge_mode = program.get_selected_channel().velocity_merge_mode
+  local length_merge_mode = program.get_selected_channel().length_merge_mode
 
-  if merge_mode == "skip" then
-    skip_merge_mode_button:set_state(2)
-    channel_pattern_number_merge_mode_button:set_state(1)
-    average_merge_mode_button:set_state(1)
-    subadd_merge_mode_button:set_state(1)
-  elseif merge_mode == "average" then
-    average_merge_mode_button:set_state(2)
-    skip_merge_mode_button:set_state(1)
-    channel_pattern_number_merge_mode_button:set_state(1)
-    subadd_merge_mode_button:set_state(1)
-  elseif merge_mode == "subtract" then
-    subadd_merge_mode_button:set_state(2)
-    average_merge_mode_button:set_state(1)
-    skip_merge_mode_button:set_state(1)
-    channel_pattern_number_merge_mode_button:set_state(1)
-  elseif merge_mode == "add" then
-    subadd_merge_mode_button:set_state(3)
-    average_merge_mode_button:set_state(1)
-    skip_merge_mode_button:set_state(1)
-    channel_pattern_number_merge_mode_button:set_state(1)
-  elseif string.match(merge_mode, "pattern_number_") then
-    channel_pattern_number_merge_mode_button:set_state(
-      string.match(program.get_selected_channel().merge_mode, "(%d+)$") + 2
-    )
-    subadd_merge_mode_button:set_state(1)
-    average_merge_mode_button:set_state(1)
-    skip_merge_mode_button:set_state(1)
+  if trig_merge_mode == "skip" then
+    trig_merge_mode_button:set_state(1)
+  elseif trig_merge_mode == "only" then
+    trig_merge_mode_button:set_state(2)
+  elseif trig_merge_mode == "all" then
+    trig_merge_mode_button:set_state(3)
+  end
+
+  if note_merge_mode == "average" then
+    note_merge_mode_button:set_state(1)
+  elseif note_merge_mode == "up" then
+    note_merge_mode_button:set_state(2)
+  elseif note_merge_mode == "down" then
+    note_merge_mode_button:set_state(3)
+  elseif string.match(note_merge_mode, "pattern_number_") then
+    note_merge_mode_button:set_state(4)
+  end
+
+  if velocity_merge_mode == "average" then
+    velocity_merge_mode_button:set_state(1)
+  elseif velocity_merge_mode == "up" then
+    velocity_merge_mode_button:set_state(2)
+  elseif velocity_merge_mode == "down" then
+    velocity_merge_mode_button:set_state(3)
+  elseif string.match(velocity_merge_mode, "pattern_number_") then
+    note_merge_mode_button:set_state(4)
+  end
+
+  if length_merge_mode == "average" then
+    length_merge_mode_button:set_state(1)
+  elseif length_merge_mode == "up" then
+    length_merge_mode_button:set_state(2)
+  elseif length_merge_mode == "down" then
+    length_merge_mode_button:set_state(3)
+  elseif string.match(length_merge_mode, "pattern_number_") then
+    note_merge_mode_button:set_state(4)
   end
 
   channel_select_fader:set_value(program.get().selected_channel)

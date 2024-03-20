@@ -36,7 +36,11 @@ local function initialise_default_channels()
       step_scale_number = 1,
       root_note = 0,
       chord = 1,
-      merge_mode = "skip",
+      trig_merge_mode = "skip",
+      note_merge_mode = "average",
+      velocity_merge_mode = "average",
+      length_merge_mode = "average",
+      merge_mode = "skip", -- deprecated
       octave = 0,
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,

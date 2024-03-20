@@ -248,6 +248,7 @@ end
 
 function note_edit_page_controller.refresh_fader(s)
   local selected_pattern = program.get().selected_pattern
+
   faders["step" .. s .. "_fader"]:set_vertical_offset(vertical_offset)
   faders["step" .. s .. "_fader"]:set_horizontal_offset(horizontal_offset)
   local value = fn.value_from_note(program.get_selected_sequencer_pattern().patterns[selected_pattern].note_values[s])
@@ -264,6 +265,7 @@ function note_edit_page_controller.refresh_fader(s)
 end
 
 function note_edit_page_controller.refresh()
+  
   for s = 1, 64 do
     note_edit_page_controller.refresh_fader(s)
   end
