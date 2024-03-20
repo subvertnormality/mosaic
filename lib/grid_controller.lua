@@ -278,6 +278,7 @@ function grid_controller.refresh()
   trigger_edit_page_controller.refresh()
   note_edit_page_controller.refresh()
   velocity_edit_page_controller.refresh()
+  grid_controller.set_menu_button_state()
 end
 
 function grid_controller.alert_disconnect() 

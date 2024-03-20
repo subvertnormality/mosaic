@@ -442,6 +442,10 @@ function step_handler.handle(c, current_step)
 
     local device = device_map.get_device(program.get().devices[channel.number].device_map)
 
+    if device.id == "none" then
+      return
+    end
+
     if not channel.mute then
       if not device.player then
 

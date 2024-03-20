@@ -1,4 +1,5 @@
 local pattern_controller = {}
+local fn = include("mosaic/lib/functions")
 
 function pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
   merged_pattern.lengths[s] = pattern.lengths[s]

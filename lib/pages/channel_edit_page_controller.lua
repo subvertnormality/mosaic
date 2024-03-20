@@ -11,9 +11,9 @@ local trig_merge_mode_button =
   13,
   8,
   {
-    {"All trig merge mode on", 2},
-    {"Skip trig merge mode on", 5},
-    {"Only trig merge mode on", 8}
+    {"Skip trig merge mode on", 2},
+    {"Only trig merge mode on", 5},
+    {"All trig merge mode on", 8}
   }
 )
 local note_merge_mode_button =
@@ -341,19 +341,23 @@ function channel_edit_page_controller.register_press_handlers()
           trig_merge_mode_button:press(x, y)
 
           if trig_merge_mode_button:get_state() == 1 then
-            program.get_selected_channel().trig_merge_mode = "all"
+
+            program.get_selected_channel().trig_merge_mode = "skip"
+
             tooltip:show(
-              "Trig merge mode all selected"
+              "Skip trig merge mode"
             )
           elseif trig_merge_mode_button:get_state() == 2 then
-            program.get_selected_channel().trig_merge_mode = "skip"
-            tooltip:show(
-              "Trig merge mode skip selected"
-            )
-          elseif trig_merge_mode_button:get_state() == 3 then
+
             program.get_selected_channel().trig_merge_mode = "only"
             tooltip:show(
-              "Trig merge mode only selected"
+              "Only trig merge mode"
+            )
+          elseif trig_merge_mode_button:get_state() == 3 then
+
+            program.get_selected_channel().trig_merge_mode = "all"
+            tooltip:show(
+              "All trig merge mode"
             )
           end
 
@@ -375,23 +379,23 @@ function channel_edit_page_controller.register_press_handlers()
           if note_merge_mode_button:get_state() == 1 then
             program.get_selected_channel().note_merge_mode = "average"
             tooltip:show(
-              "Note merge mode average selected"
+              "Average note merge mode"
             )
           elseif note_merge_mode_button:get_state() == 2 then
             program.get_selected_channel().note_merge_mode = "up"
             tooltip:show(
-              "Note merge mode up selected"
+              "Higher note merge mode"
             )
           elseif note_merge_mode_button:get_state() == 3 then
             program.get_selected_channel().note_merge_mode = "down"
             tooltip:show(
-              "Note merge mode down selected"
+              "Lower note merge mode"
             )
           elseif note_merge_mode_button:get_state() == 4 then
 
             note_merge_mode_button:set_state(1)
             tooltip:show(
-              "Note merge mode average selected"
+              "Average note merge mode"
             )
           end
 
@@ -413,22 +417,22 @@ function channel_edit_page_controller.register_press_handlers()
           if velocity_merge_mode_button:get_state() == 1 then
             program.get_selected_channel().velocity_merge_mode = "average"
             tooltip:show(
-              "Velocity merge mode average selected"
+              "Average velocity merge mode"
             )
           elseif velocity_merge_mode_button:get_state() == 2 then
             program.get_selected_channel().velocity_merge_mode = "up"
             tooltip:show(
-              "Velocity merge mode up selected"
+              "Higher velocity merge mode"
             )
           elseif velocity_merge_mode_button:get_state() == 3 then
             program.get_selected_channel().velocity_merge_mode = "down"
             tooltip:show(
-              "Velocity merge mode down selected"
+              "Lower velocity merge mode"
             )
           elseif velocity_merge_mode_button:get_state() == 4 then
-            note_merge_mode_button:set_state(1)
+            velocity_merge_mode_button:set_state(1)
             tooltip:show(
-              "Velocity merge mode average selected"
+              "Average velocity merge mode"
             )
           end
 
@@ -450,22 +454,22 @@ function channel_edit_page_controller.register_press_handlers()
           if length_merge_mode_button:get_state() == 1 then
             program.get_selected_channel().length_merge_mode = "average"
             tooltip:show(
-              "Length merge mode average selected"
+              "Average length merge mode"
             )
           elseif length_merge_mode_button:get_state() == 2 then
             program.get_selected_channel().length_merge_mode = "up"
             tooltip:show(
-              "Length merge mode up selected"
+              "Bigger length merge mode"
             )
           elseif length_merge_mode_button:get_state() == 3 then
             program.get_selected_channel().length_merge_mode = "down"
             tooltip:show(
-              "Length merge mode down selected"
+              "Smaller length merge mode"
             )
           elseif length_merge_mode_button:get_state() == 4 then
-            note_merge_mode_button:set_state(1)
+            length_merge_mode_button:set_state(1)
             tooltip:show(
-              "Length merge mode average selected"
+              "Average length merge mode"
             )
           end
 
@@ -554,11 +558,11 @@ function channel_edit_page_controller.refresh_merge_buttons()
   local velocity_merge_mode = program.get_selected_channel().velocity_merge_mode
   local length_merge_mode = program.get_selected_channel().length_merge_mode
 
-  if trig_merge_mode == "all" then
+  if trig_merge_mode == "skip" then
     trig_merge_mode_button:set_state(1)
-  elseif trig_merge_mode == "skip" then
-    trig_merge_mode_button:set_state(2)
   elseif trig_merge_mode == "only" then
+    trig_merge_mode_button:set_state(2)
+  elseif trig_merge_mode == "all" then
     trig_merge_mode_button:set_state(3)
   end
 

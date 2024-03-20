@@ -37,6 +37,9 @@ local function initialise_default_channels()
       root_note = 0,
       chord = 1,
       trig_merge_mode = "skip",
+      note_merge_mode = "average",
+      velocity_merge_mode = "average",
+      length_merge_mode = "average",
       merge_mode = "skip", -- deprecated
       octave = 0,
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
