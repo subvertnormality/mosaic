@@ -1,10 +1,56 @@
+local fn = include("mosaic/lib/functions")
+local step_handler = include("mosaic/lib/step_handler")
+local quantiser = include("mosaic/lib/quantiser")
+
 local midi_controller = {}
 
 midi_devices = {}
 
+local midi_note_mappings = {
+  [1] = 1, [2] = 0, [3] = 2, [4] = 0, [5] = 3,
+  [6] = 4, [7] = 0, [8] = 5, [9] = 0, [10] = 6,
+  [11] = 0, [12] = 7
+}
+
+local midi_tables = {}
+
+for i = 0, 127 do
+  local noteValue = midi_note_mappings[(i % 12) + 1] or 0
+  local octaveValue = math.floor(i / 12) - 5
+  midi_tables[i + 1] = {noteValue, octaveValue}
+end
+
+
+function handle_midi_event_data(data)
+  print(data)
+
+  local channel = program.get_selected_channel()
+  local transpose = step_handler.calculate_step_transpose(program.get().current_step)
+
+  local note = quantiser.process(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, channel.step_scale_number)
+  local device = program.get().devices[channel.number].midi_device
+  local velocity = data[3]
+
+  if data[1] == 144 then -- note
+    print("note on " .. note)
+    print("velocity "..velocity)
+    print("channel "..channel.number)
+    midi_controller:note_on(note, velocity, channel.number, device)
+
+  elseif data[1] == 128 then
+    midi_controller:note_off(note, 0, channel.number, device)
+  
+  elseif data[1] == 176 then -- modulation
+    
+
+  end 
+end
+
+
 function midi_controller.init()
   for i = 1, #midi.vports do
     midi_devices[i] = midi.connect(i)
+    midi_devices[i].event = handle_midi_event_data
   end
 end
 
