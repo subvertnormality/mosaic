@@ -13,6 +13,7 @@ local midi_note_mappings = {
 }
 
 local midi_tables = {}
+local midi_off_store = {}
 
 for i = 0, 127 do
   local noteValue = midi_note_mappings[(i % 12) + 1] or 0
@@ -20,9 +21,14 @@ for i = 0, 127 do
   midi_tables[i + 1] = {noteValue, octaveValue}
 end
 
+function flush_midi_off_store()
+  for i = 1, #midi_off_store do
+    midi_controller:note_off(midi_off_store[i].note, 0, midi_off_store[i].channel, midi_off_store[i].device)
+  end
+  midi_off_store = {}
+end
 
 function handle_midi_event_data(data)
-  print(data)
 
   local channel = program.get_selected_channel()
   local transpose = step_handler.calculate_step_transpose(program.get().current_step)
@@ -32,20 +38,17 @@ function handle_midi_event_data(data)
   local velocity = data[3]
 
   if data[1] == 144 then -- note
-    print("note on " .. note)
-    print("velocity "..velocity)
-    print("channel "..channel.number)
+    flush_midi_off_store()
     midi_controller:note_on(note, velocity, channel.number, device)
+    table.insert(midi_off_store, {note = note, channel = channel.number, device = device})
 
   elseif data[1] == 128 then
     midi_controller:note_off(note, 0, channel.number, device)
-  
+    table.insert(midi_off_store, {note = note, channel = channel.number, device = device})
   elseif data[1] == 176 then -- modulation
     
-
   end 
 end
-
 
 function midi_controller.init()
   for i = 1, #midi.vports do
