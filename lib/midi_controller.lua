@@ -31,6 +31,11 @@ end
 function handle_midi_event_data(data)
 
   local channel = program.get_selected_channel()
+
+  if channel.number == 17 then 
+    return 
+  end
+
   local transpose = step_handler.calculate_step_transpose(program.get().current_step)
 
   local note = quantiser.process(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, channel.step_scale_number)
