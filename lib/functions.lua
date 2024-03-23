@@ -348,7 +348,7 @@ function fn.rotate_table_left(t)
 
   -- Rotate elements of the new table
   local first_item = table.remove(new_table, 1)
-  new_table[7] = first_item
+  -- new_table[7] = first_item
   return new_table
 end
 

@@ -353,7 +353,7 @@ function test_note_value_is_quantised_from_0_to_d_in_c_major_with_chord_2()
 end
 
 
-function test_note_value_is_quantised_from_0_to_c_60_in_c_major_with_chord_8()
+function test_note_value_is_quantised_from_0_to_c_72_in_c_major_with_chord_8()
   program.init()
   program.get_sequencer_pattern(1).root_note = 0
 
@@ -373,7 +373,7 @@ function test_note_value_is_quantised_from_0_to_c_60_in_c_major_with_chord_8()
   local step_scale_number = 1
 
 
-  luaunit.assert_equals(quantiser.process(note_value, octave_mod, transpose, step_scale_number), 60)
+  luaunit.assert_equals(quantiser.process(note_value, octave_mod, transpose, step_scale_number), 72)
 end
 
 function test_note_value_is_quantised_from_0_to_b_71_in_c_major_with_chord_7()
@@ -538,4 +538,34 @@ function test_note_value_is_quantised_from_5_to_bsharp_70_in_d_minor_when_using_
 
 
   luaunit.assert_equals(quantiser.process(note_value, octave_mod, transpose, step_scale_number), 70)
+end
+
+
+
+function test_note_values_are_quantised_a_to_a_with_correct_ascending_octave()
+  program.init()
+  program.get_sequencer_pattern(1).root_note = 0
+
+  program.set_scale(
+    1,
+    {
+      number = 1,
+      scale = quantiser.get_scales()[1].scale,
+      chord = 6,
+      root_note = 0
+    }
+  )
+
+  local octave_mod = 0
+  local transpose = 0
+  local step_scale_number = 1
+
+
+  luaunit.assert_equals(quantiser.process(0, octave_mod, transpose, step_scale_number), 69) -- A
+  luaunit.assert_equals(quantiser.process(1, octave_mod, transpose, step_scale_number), 71) -- B
+  luaunit.assert_equals(quantiser.process(2, octave_mod, transpose, step_scale_number), 72) -- C (octave up)
+  luaunit.assert_equals(quantiser.process(3, octave_mod, transpose, step_scale_number), 74) -- D (octave up)
+  luaunit.assert_equals(quantiser.process(4, octave_mod, transpose, step_scale_number), 76) -- E (octave up)
+  luaunit.assert_equals(quantiser.process(5, octave_mod, transpose, step_scale_number), 77) -- F (octave up)
+  luaunit.assert_equals(quantiser.process(6, octave_mod, transpose, step_scale_number), 79) -- G (octave up)
 end

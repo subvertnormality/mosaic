@@ -74,22 +74,22 @@ local function initialise_default_sequencer_pattern()
     patterns = initialise_default_patterns(),
     channels = initialise_default_channels(),
     scales = {
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale_of_length(0, "major", 7), root_note = root_note, chord = 1}
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1}
     }
   }
 
