@@ -11,8 +11,8 @@ end
 
 local expected_file_name = "norns.lua" 
 
-if directory_and_files_exist("./test_artefacts/norns/lua/core", expected_file_name) then
-  print("The './test_artefacts/norns/lua/core/norns.lua' file already exists. Skipping download.")
+if directory_and_files_exist("./test_artefacts/norns_test_artefact/lua/core", expected_file_name) then
+  print("The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.")
 else
   print("Fetching latest release of norns...")
 
@@ -46,9 +46,9 @@ else
       -- Move the contents from the top-level directory to the desired location and clean up
       if top_level_dir ~= "" then
         os.execute("mkdir -p ./test_artefacts/norns")
-          os.execute(string.format("mv ./test_artefacts/temp_norns/%s/* ./test_artefacts/norns", top_level_dir))
+          os.execute(string.format("mv ./test_artefacts/temp_norns/%s/* ./test_artefacts/norns_test_artefact", top_level_dir))
           os.execute("rm -rf ./test_artefacts/temp_norns")
-          print("norns has been successfully downloaded and extracted to './test_artefacts/norns'.")
+          print("norns has been successfully downloaded and extracted to './test_artefacts/norns_test_artefact'.")
       else
           print("Failed to identify the top-level directory within the zip archive.")
       end
@@ -57,7 +57,7 @@ else
   end
 end
 
-local my_path = "./test_artefacts/norns/lua/lib/?.lua;" 
+local my_path = "./test_artefacts/norns_test_artefact/lua/lib/?.lua;" 
 package.path = my_path .. package.path
 
 util = require('util')
@@ -65,7 +65,7 @@ luaunit = require('test.luaunit')
 
 -- global include function
 function include(file)
-  local dirs = {'../../', './test_artefacts/norns/lua/extn/'}
+  local dirs = {'../../', './test_artefacts/norns_test_artefact/lua/extn/'}
   for _, dir in ipairs(dirs) do
     local p = dir..file..'.lua'
     if util.file_exists(p) then

@@ -42,3 +42,4 @@ luac.out
 tests/test_artefacts/*
 tests/luacov.report.out
 tests/luacov.stats.out
+sync.ffs_db
