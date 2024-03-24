@@ -285,17 +285,17 @@ And how do your patterns meld? Define this with the merge mode selector:
   * Average: the note value of clashing steps will be calculated by averaging the note values of each selected pattern's step. The note value is then quantised.
   * Higher: the note value of clashing steps will be calculated by taking the average of each step note values, minusing the lowest note value, and adding the highest note value. The note value is then quantised.
   * Lower: the note value of clashing steps will be calculated by minusing the lowest note value in the set from the average of each step note values minus the lowest note value. The note value is then quantised.
-  * Pattern: to override note values with a specific pattern's values, hold the pattern's select button and press the note merge button.
+  * Pattern: to override note values with a specific pattern's values, hold the note merge button and press the pattern's select button.
 * Velocity merge modes: These modes determine how shared step velocity values are calculated
   * Average: the velocity value of clashing steps will be calculated by averaging the velocity of each selected pattern's step.
   * Higher: the velocity of clashing steps will be calculated by taking the average of each step velocity, minusing the lowest velocity, and adding the highest velocity.
   * Lower: the velocity of clashing steps will be calculated by minusing the lowest velocity in the set from the average of each step velocity minus the lowest velocity.
-  * Pattern: to override velocity values with a specific pattern's values, hold the pattern's select button and press the velocity merge button.
+  * Pattern: to override velocity values with a specific pattern's values, hold the velocity merge button and press the pattern's select button.
 * Length merge modes: These modes determine how shared length is calculated
   * Average: the length of clashing steps will be calculated by averaging the length of each selected pattern's step.
   * Longer: the length of clashing steps will be calculated by taking the average of each step length, minusing the smallest length, and adding the largest length.
   * Shorter: the length of clashing steps will be calculated by minusing the smallest length in the set from the average of each step length minus the smallest length.
-  * Pattern: to override length values with a specific pattern's values, hold the pattern's select button and press the length merge button.
+  * Pattern: to override length values with a specific pattern's values, hold the length merge button and press the pattern's select button.
 
 
 You can view detailed configurations of your selected channel on the Norns screen. Each page offers intuitive and interactive tools to sculpt your sonic experience.
