@@ -206,10 +206,6 @@ function step_handler.calculate_step_scale_number(c, current_step)
     persistent_channel_step_scale_numbers[c] = nil
   end
 
-  if program.get_current_step_for_channel(17) == fn.calc_grid_count(program.get_channel(17).start_trig[1], program.get_channel(17).start_trig[2]) then
-    persistent_global_step_scale_number = nil
-  end
-
   -- Scale Precedence : channel_step_scale > global_step_scale > channel_default_scale > global_default_scale
   if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
     persistent_channel_step_scale_numbers[c] = channel_step_scale_number
@@ -386,6 +382,11 @@ function step_handler.handle(c, current_step)
 
   if program.get_step_octave_trig_lock(channel, current_step) then
     octave_mod = program.get_step_octave_trig_lock(channel, current_step)
+  end
+
+  if c == 17 and current_step == fn.calc_grid_count(program.get_channel(17).start_trig[1], program.get_channel(17).start_trig[2]) then
+    print("nulling persistent global step scale at step "..current_step)
+    persistent_global_step_scale_number = nil
   end
 
   local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability")
