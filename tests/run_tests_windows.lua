@@ -2,59 +2,64 @@
 
 -- Windows compatible function to check if the directory exists with extracted files
 function directory_and_files_exist(path, sample_file_name)
-  local check_command = string.format('powershell -Command "Get-ChildItem -Path \'%s\' -Recurse -Filter \'%s\'"', path, sample_file_name)
+  local check_command = string.format('powershell -Command "(Get-ChildItem -Path \'%s\' -Recurse -Filter \'%s\' -ErrorAction SilentlyContinue).FullName"', path, sample_file_name)
   local handle = io.popen(check_command)
   local result = handle:read("*a")
   handle:close()
-  return result ~= ""
+  return result and result ~= ""
 end
+
+
 
 local expected_file_name = "norns.lua"
 
 if directory_and_files_exist(".\\test_artefacts\\norns_test_artefact\\lua\\core", expected_file_name) then
   print("The '.\\test_artefacts\\norns_test_artefact\\lua\\core\\norns.lua' file already exists. Skipping download.")
 else
-  print("Fetching latest release of norns...")
+  
 
   -- Ensure the test_artefacts directory exists
   os.execute("if not exist .\\test_artefacts mkdir .\\test_artefacts")
 
-  -- Fetch the latest release data from GitHub and save it to a file within test_artefacts
-  os.execute("powershell -Command \"Invoke-WebRequest -Uri https://api.github.com/repos/monome/norns/releases/latest -OutFile .\\test_artefacts\\latest_release.json\"")
-
-  -- Read the file and extract the download URL
-  local file = io.open(".\\test_artefacts\\latest_release.json", "r")
-  local content = file:read("*all")
-  file:close()
-
-  -- Attempt to extract the zipball download URL using Lua pattern matching
-  local download_url = content:match('"zipball_url":%s*"([^"]+)"')
-
-  if download_url then
-    -- Download the latest release zip file into test_artefacts
-    os.execute(string.format("powershell -Command \"Invoke-WebRequest -Uri '%s' -OutFile .\\test_artefacts\\norns_latest.zip\"", download_url))
-
-    -- Extract the zip file into a temporary directory within test_artefacts
-    os.execute("powershell -Command \"Expand-Archive -Path .\\test_artefacts\\norns_latest.zip -DestinationPath .\\test_artefacts\\temp_norns\"")
-
-    -- Determine the name of the top-level directory
-    local top_level_dir_command = "powershell -Command \"Get-ChildItem -Path .\\test_artefacts\\temp_norns | Select-Object -First 1 -ExpandProperty Name\""
-    local handle = io.popen(top_level_dir_command)
-    local top_level_dir = handle:read("*a"):gsub("\r\n", "")
-    handle:close()
-
-    -- Move the contents from the top-level directory to the desired location and clean up
-    if top_level_dir ~= "" then
-      os.execute("if not exist .\\test_artefacts\\norns mkdir .\\test_artefacts\\norns")
-      os.execute(string.format("powershell -Command \"Move-Item -Path .\\test_artefacts\\temp_norns\\%s\\* -Destination .\\test_artefacts\\norns_test_artefact\"", top_level_dir))
-      os.execute("powershell -Command \"Remove-Item -Path .\\test_artefacts\\temp_norns -Recurse\"")
-      print("norns has been successfully downloaded and extracted to '.\\test_artefacts\\norns_test_artefact'.")
-    else
-      print("Failed to identify the top-level directory within the zip archive.")
-    end
+  if directory_and_files_exist(".\\test_artefacts\\", "norns_latest.zip") then
+    print("The '.\\test_artefacts\\norns_test_artefact\\norns_latest.zip' file already exists. Skipping download.")
   else
-    print("Failed to extract the download URL from the JSON response.")
+    print("Fetching latest release of norns...")
+    -- Fetch the latest release data from GitHub and save it to a file within test_artefacts
+    os.execute("powershell -Command \"Invoke-WebRequest -Uri https://api.github.com/repos/monome/norns/releases/latest -OutFile .\\test_artefacts\\latest_release.json\"")
+
+    -- Read the file and extract the download URL
+    local file = io.open(".\\test_artefacts\\latest_release.json", "r")
+    local content = file:read("*all")
+    file:close()
+
+
+
+    -- Attempt to extract the zipball download URL using Lua pattern matching
+    local download_url = content:match('"zipball_url":%s*"([^"]+)"')
+
+    if download_url then
+      -- Download the latest release zip file into test_artefacts
+      os.execute(string.format("powershell -Command \"Invoke-WebRequest -Uri '%s' -OutFile .\\test_artefacts\\norns_latest.zip\"", download_url))
+    end
   end
+
+  -- Step 1: Extract the archive to a temporary directory
+  local extract_command = "powershell -Command \"Expand-Archive -Path .\\test_artefacts\\norns_latest.zip -DestinationPath .\\test_artefacts\\temp_norns\""
+  os.execute(extract_command)
+
+-- Move with overwrite
+  local move_command = [[powershell -Command "$source = (Get-ChildItem -Path .\test_artefacts\temp_norns | Select-Object -First 1).FullName; Move-Item -Path $source\* -Destination .\test_artefacts\norns_test_artefact -Force"]]
+  os.execute(move_command)
+
+  -- Remove read-only attributes and then attempt removal
+  local prepare_remove_command = [[powershell -Command "Get-ChildItem -Path .\test_artefacts\temp_norns -Recurse | ForEach-Object { $_.Attributes = 'Normal' }"]]
+  os.execute(prepare_remove_command)
+
+  local cleanup_command = "powershell -Command \"Remove-Item -Path .\\test_artefacts\\temp_norns -Recurse -Force\""
+  os.execute(cleanup_command)
+
+
 end
 
 local my_path = ".\\test_artefacts\\norns_test_artefact\\lua\\lib\\?.lua;"
