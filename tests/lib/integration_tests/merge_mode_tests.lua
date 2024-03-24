@@ -968,20 +968,703 @@ function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_ev
 
 end
 
+function test_note_merge_modes_down()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
 
--- test_note_merge_modes_down
+  local none_merged_step_to_play = 1
+  local none_merged_step_to_play_2 = 4
+  local merged_step_to_play_3 = 11
+  local twice_merged_step_to_play_4 = 34
+  local none_merged_step_to_play_5 = 45
+  local twice_merged_step_to_play_6 = 64
+
+  test_pattern.note_values[none_merged_step_to_play] = 0
+  test_pattern.lengths[none_merged_step_to_play] = 1
+  test_pattern.trig_values[none_merged_step_to_play] = 1
+  test_pattern.velocity_values[none_merged_step_to_play] = 100
+
+  test_pattern.note_values[none_merged_step_to_play_2] = 1
+  test_pattern.lengths[none_merged_step_to_play_2] = 1
+  test_pattern.trig_values[none_merged_step_to_play_2] = 1
+  test_pattern.velocity_values[none_merged_step_to_play_2] = 100
+
+  test_pattern.note_values[merged_step_to_play_3] = 1
+  test_pattern.lengths[merged_step_to_play_3] = 1
+  test_pattern.trig_values[merged_step_to_play_3] = 1
+  test_pattern.velocity_values[merged_step_to_play_3] = 100
+
+  test_pattern.note_values[twice_merged_step_to_play_4] = 3
+  test_pattern.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern.velocity_values[twice_merged_step_to_play_4] = 100
+
+  test_pattern.note_values[none_merged_step_to_play_5] = 4
+  test_pattern.lengths[none_merged_step_to_play_5] = 1
+  test_pattern.trig_values[none_merged_step_to_play_5] = 1
+  test_pattern.velocity_values[none_merged_step_to_play_5] = 100
+
+  local test_pattern_2 = program.initialise_default_pattern()
+
+  test_pattern_2.note_values[merged_step_to_play_3] = 2
+  test_pattern_2.lengths[merged_step_to_play_3] = 1
+  test_pattern_2.trig_values[merged_step_to_play_3] = 1
+  test_pattern_2.velocity_values[merged_step_to_play_3] = 100
+
+  test_pattern_2.note_values[twice_merged_step_to_play_4] = 1
+  test_pattern_2.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern_2.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern_2.velocity_values[twice_merged_step_to_play_4] = 100
+
+  test_pattern_2.note_values[twice_merged_step_to_play_6] = 2
+  test_pattern_2.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_2.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_2.velocity_values[twice_merged_step_to_play_6] = 100
+
+
+  local test_pattern_3 = program.initialise_default_pattern()
+
+  test_pattern_3.note_values[twice_merged_step_to_play_6] = 5
+  test_pattern_3.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_3.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 100
+
+  local test_pattern_4 = program.initialise_default_pattern()
+
+  test_pattern_4.note_values[twice_merged_step_to_play_4] = 6
+  test_pattern_4.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern_4.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern_4.velocity_values[twice_merged_step_to_play_4] = 100
+
+  test_pattern_3.note_values[twice_merged_step_to_play_6] = 7
+  test_pattern_3.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_3.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 100
+
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
+  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).note_merge_mode = "down"
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(none_merged_step_to_play_2 - none_merged_step_to_play)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(merged_step_to_play_3 - none_merged_step_to_play_2)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(twice_merged_step_to_play_4 - merged_step_to_play_3)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 59)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(none_merged_step_to_play_5 - twice_merged_step_to_play_4)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  
+  luaunit.assert_equals(note_on_event[1], 67)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(twice_merged_step_to_play_6 - none_merged_step_to_play_5)
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 59)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
 
 
 -- test_note_merge_modes_average
 
--- test_velocity_merge_modes_up
+function test_note_merge_modes_average()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
 
--- test_velocity_merge_modes_down
+  local none_merged_step_to_play = 1
+  local none_merged_step_to_play_2 = 4
+  local merged_step_to_play_3 = 11
+  local twice_merged_step_to_play_4 = 34
+  local none_merged_step_to_play_5 = 45
+  local twice_merged_step_to_play_6 = 64
 
--- test_velocity_merge_modes_average
+  test_pattern.note_values[none_merged_step_to_play] = 0
+  test_pattern.lengths[none_merged_step_to_play] = 1
+  test_pattern.trig_values[none_merged_step_to_play] = 1
+  test_pattern.velocity_values[none_merged_step_to_play] = 100
 
--- test_length_merge_modes_up
+  test_pattern.note_values[none_merged_step_to_play_2] = 1
+  test_pattern.lengths[none_merged_step_to_play_2] = 1
+  test_pattern.trig_values[none_merged_step_to_play_2] = 1
+  test_pattern.velocity_values[none_merged_step_to_play_2] = 100
 
--- test_length_merge_modes_down
+  test_pattern.note_values[merged_step_to_play_3] = 1
+  test_pattern.lengths[merged_step_to_play_3] = 1
+  test_pattern.trig_values[merged_step_to_play_3] = 1
+  test_pattern.velocity_values[merged_step_to_play_3] = 100
 
--- test_length_merge_modes_average
+  test_pattern.note_values[twice_merged_step_to_play_4] = 3
+  test_pattern.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern.velocity_values[twice_merged_step_to_play_4] = 100
+
+  test_pattern.note_values[none_merged_step_to_play_5] = 4
+  test_pattern.lengths[none_merged_step_to_play_5] = 1
+  test_pattern.trig_values[none_merged_step_to_play_5] = 1
+  test_pattern.velocity_values[none_merged_step_to_play_5] = 100
+
+  local test_pattern_2 = program.initialise_default_pattern()
+
+  test_pattern_2.note_values[merged_step_to_play_3] = 2
+  test_pattern_2.lengths[merged_step_to_play_3] = 1
+  test_pattern_2.trig_values[merged_step_to_play_3] = 1
+  test_pattern_2.velocity_values[merged_step_to_play_3] = 100
+
+  test_pattern_2.note_values[twice_merged_step_to_play_4] = 1
+  test_pattern_2.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern_2.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern_2.velocity_values[twice_merged_step_to_play_4] = 100
+
+  test_pattern_2.note_values[twice_merged_step_to_play_6] = 2
+  test_pattern_2.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_2.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_2.velocity_values[twice_merged_step_to_play_6] = 100
+
+
+  local test_pattern_3 = program.initialise_default_pattern()
+
+  test_pattern_3.note_values[twice_merged_step_to_play_6] = 5
+  test_pattern_3.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_3.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 100
+
+  local test_pattern_4 = program.initialise_default_pattern()
+
+  test_pattern_4.note_values[twice_merged_step_to_play_4] = 6
+  test_pattern_4.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern_4.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern_4.velocity_values[twice_merged_step_to_play_4] = 100
+
+  test_pattern_3.note_values[twice_merged_step_to_play_6] = 7
+  test_pattern_3.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_3.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 100
+
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
+  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).note_merge_mode = "average"
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(none_merged_step_to_play_2 - none_merged_step_to_play)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(merged_step_to_play_3 - none_merged_step_to_play_2)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(twice_merged_step_to_play_4 - merged_step_to_play_3)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(none_merged_step_to_play_5 - twice_merged_step_to_play_4)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  
+  luaunit.assert_equals(note_on_event[1], 67)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(twice_merged_step_to_play_6 - none_merged_step_to_play_5)
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 69)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
+
+
+function test_velocity_merge_modes_up()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  local none_merged_step_to_play = 1
+  local none_merged_step_to_play_2 = 4
+  local merged_step_to_play_3 = 11
+  local twice_merged_step_to_play_4 = 34
+  local none_merged_step_to_play_5 = 45
+  local twice_merged_step_to_play_6 = 64
+
+  test_pattern.note_values[none_merged_step_to_play] = 0
+  test_pattern.lengths[none_merged_step_to_play] = 1
+  test_pattern.trig_values[none_merged_step_to_play] = 1
+  test_pattern.velocity_values[none_merged_step_to_play] = 50
+
+  test_pattern.note_values[none_merged_step_to_play_2] = 1
+  test_pattern.lengths[none_merged_step_to_play_2] = 1
+  test_pattern.trig_values[none_merged_step_to_play_2] = 1
+  test_pattern.velocity_values[none_merged_step_to_play_2] = 50
+
+  test_pattern.note_values[merged_step_to_play_3] = 1
+  test_pattern.lengths[merged_step_to_play_3] = 1
+  test_pattern.trig_values[merged_step_to_play_3] = 1
+  test_pattern.velocity_values[merged_step_to_play_3] = 50
+
+  test_pattern.note_values[twice_merged_step_to_play_4] = 3
+  test_pattern.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern.velocity_values[twice_merged_step_to_play_4] = 50
+
+  test_pattern.note_values[none_merged_step_to_play_5] = 4
+  test_pattern.lengths[none_merged_step_to_play_5] = 1
+  test_pattern.trig_values[none_merged_step_to_play_5] = 1
+  test_pattern.velocity_values[none_merged_step_to_play_5] = 50
+
+  local test_pattern_2 = program.initialise_default_pattern()
+
+  test_pattern_2.note_values[merged_step_to_play_3] = 2
+  test_pattern_2.lengths[merged_step_to_play_3] = 1
+  test_pattern_2.trig_values[merged_step_to_play_3] = 1
+  test_pattern_2.velocity_values[merged_step_to_play_3] = 100
+
+  test_pattern_2.note_values[twice_merged_step_to_play_4] = 1
+  test_pattern_2.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern_2.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern_2.velocity_values[twice_merged_step_to_play_4] = 100
+
+  test_pattern_2.note_values[twice_merged_step_to_play_6] = 2
+  test_pattern_2.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_2.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_2.velocity_values[twice_merged_step_to_play_6] = 100
+
+
+  local test_pattern_3 = program.initialise_default_pattern()
+
+  test_pattern_3.note_values[twice_merged_step_to_play_6] = 5
+  test_pattern_3.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_3.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 120
+
+  local test_pattern_4 = program.initialise_default_pattern()
+
+  test_pattern_4.note_values[twice_merged_step_to_play_4] = 6
+  test_pattern_4.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern_4.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern_4.velocity_values[twice_merged_step_to_play_4] = 120
+
+  test_pattern_3.note_values[twice_merged_step_to_play_6] = 7
+  test_pattern_3.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_3.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 120
+
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
+  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).velocity_merge_mode = "up"
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 50)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(none_merged_step_to_play_2 - none_merged_step_to_play)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 50)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(merged_step_to_play_3 - none_merged_step_to_play_2)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 125)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(twice_merged_step_to_play_4 - merged_step_to_play_3)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 127)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(none_merged_step_to_play_5 - twice_merged_step_to_play_4)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 67)
+  luaunit.assert_equals(note_on_event[2], 50)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(twice_merged_step_to_play_6 - none_merged_step_to_play_5)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 69)
+  luaunit.assert_equals(note_on_event[2], 127)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
+
+
+function test_velocity_merge_modes_up()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  local none_merged_step_to_play = 1
+  local none_merged_step_to_play_2 = 4
+  local merged_step_to_play_3 = 11
+  local twice_merged_step_to_play_4 = 34
+  local none_merged_step_to_play_5 = 45
+  local twice_merged_step_to_play_6 = 64
+
+  test_pattern.note_values[none_merged_step_to_play] = 0
+  test_pattern.lengths[none_merged_step_to_play] = 1
+  test_pattern.trig_values[none_merged_step_to_play] = 1
+  test_pattern.velocity_values[none_merged_step_to_play] = 50
+
+  test_pattern.note_values[none_merged_step_to_play_2] = 1
+  test_pattern.lengths[none_merged_step_to_play_2] = 1
+  test_pattern.trig_values[none_merged_step_to_play_2] = 1
+  test_pattern.velocity_values[none_merged_step_to_play_2] = 50
+
+  test_pattern.note_values[merged_step_to_play_3] = 1
+  test_pattern.lengths[merged_step_to_play_3] = 1
+  test_pattern.trig_values[merged_step_to_play_3] = 1
+  test_pattern.velocity_values[merged_step_to_play_3] = 50
+
+  test_pattern.note_values[twice_merged_step_to_play_4] = 3
+  test_pattern.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern.velocity_values[twice_merged_step_to_play_4] = 50
+
+  test_pattern.note_values[none_merged_step_to_play_5] = 4
+  test_pattern.lengths[none_merged_step_to_play_5] = 1
+  test_pattern.trig_values[none_merged_step_to_play_5] = 1
+  test_pattern.velocity_values[none_merged_step_to_play_5] = 50
+
+  local test_pattern_2 = program.initialise_default_pattern()
+
+  test_pattern_2.note_values[merged_step_to_play_3] = 2
+  test_pattern_2.lengths[merged_step_to_play_3] = 1
+  test_pattern_2.trig_values[merged_step_to_play_3] = 1
+  test_pattern_2.velocity_values[merged_step_to_play_3] = 100
+
+  test_pattern_2.note_values[twice_merged_step_to_play_4] = 1
+  test_pattern_2.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern_2.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern_2.velocity_values[twice_merged_step_to_play_4] = 100
+
+  test_pattern_2.note_values[twice_merged_step_to_play_6] = 2
+  test_pattern_2.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_2.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_2.velocity_values[twice_merged_step_to_play_6] = 100
+
+
+  local test_pattern_3 = program.initialise_default_pattern()
+
+  test_pattern_3.note_values[twice_merged_step_to_play_6] = 5
+  test_pattern_3.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_3.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 120
+
+  local test_pattern_4 = program.initialise_default_pattern()
+
+  test_pattern_4.note_values[twice_merged_step_to_play_4] = 6
+  test_pattern_4.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern_4.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern_4.velocity_values[twice_merged_step_to_play_4] = 120
+
+  test_pattern_3.note_values[twice_merged_step_to_play_6] = 7
+  test_pattern_3.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_3.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 120
+
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
+  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).velocity_merge_mode = "down"
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 50)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(none_merged_step_to_play_2 - none_merged_step_to_play)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 50)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(merged_step_to_play_3 - none_merged_step_to_play_2)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 25)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(twice_merged_step_to_play_4 - merged_step_to_play_3)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 10)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(none_merged_step_to_play_5 - twice_merged_step_to_play_4)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 67)
+  luaunit.assert_equals(note_on_event[2], 50)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(twice_merged_step_to_play_6 - none_merged_step_to_play_5)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 69)
+  luaunit.assert_equals(note_on_event[2], 90)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
+
+
+function test_velocity_merge_modes_up()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  local none_merged_step_to_play = 1
+  local none_merged_step_to_play_2 = 4
+  local merged_step_to_play_3 = 11
+  local twice_merged_step_to_play_4 = 34
+  local none_merged_step_to_play_5 = 45
+  local twice_merged_step_to_play_6 = 64
+
+  test_pattern.note_values[none_merged_step_to_play] = 0
+  test_pattern.lengths[none_merged_step_to_play] = 1
+  test_pattern.trig_values[none_merged_step_to_play] = 1
+  test_pattern.velocity_values[none_merged_step_to_play] = 50
+
+  test_pattern.note_values[none_merged_step_to_play_2] = 1
+  test_pattern.lengths[none_merged_step_to_play_2] = 1
+  test_pattern.trig_values[none_merged_step_to_play_2] = 1
+  test_pattern.velocity_values[none_merged_step_to_play_2] = 50
+
+  test_pattern.note_values[merged_step_to_play_3] = 1
+  test_pattern.lengths[merged_step_to_play_3] = 1
+  test_pattern.trig_values[merged_step_to_play_3] = 1
+  test_pattern.velocity_values[merged_step_to_play_3] = 50
+
+  test_pattern.note_values[twice_merged_step_to_play_4] = 3
+  test_pattern.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern.velocity_values[twice_merged_step_to_play_4] = 50
+
+  test_pattern.note_values[none_merged_step_to_play_5] = 4
+  test_pattern.lengths[none_merged_step_to_play_5] = 1
+  test_pattern.trig_values[none_merged_step_to_play_5] = 1
+  test_pattern.velocity_values[none_merged_step_to_play_5] = 50
+
+  local test_pattern_2 = program.initialise_default_pattern()
+
+  test_pattern_2.note_values[merged_step_to_play_3] = 2
+  test_pattern_2.lengths[merged_step_to_play_3] = 1
+  test_pattern_2.trig_values[merged_step_to_play_3] = 1
+  test_pattern_2.velocity_values[merged_step_to_play_3] = 100
+
+  test_pattern_2.note_values[twice_merged_step_to_play_4] = 1
+  test_pattern_2.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern_2.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern_2.velocity_values[twice_merged_step_to_play_4] = 100
+
+  test_pattern_2.note_values[twice_merged_step_to_play_6] = 2
+  test_pattern_2.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_2.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_2.velocity_values[twice_merged_step_to_play_6] = 100
+
+
+  local test_pattern_3 = program.initialise_default_pattern()
+
+  test_pattern_3.note_values[twice_merged_step_to_play_6] = 5
+  test_pattern_3.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_3.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 120
+
+  local test_pattern_4 = program.initialise_default_pattern()
+
+  test_pattern_4.note_values[twice_merged_step_to_play_4] = 6
+  test_pattern_4.lengths[twice_merged_step_to_play_4] = 1
+  test_pattern_4.trig_values[twice_merged_step_to_play_4] = 1
+  test_pattern_4.velocity_values[twice_merged_step_to_play_4] = 120
+
+  test_pattern_3.note_values[twice_merged_step_to_play_6] = 7
+  test_pattern_3.lengths[twice_merged_step_to_play_6] = 1
+  test_pattern_3.trig_values[twice_merged_step_to_play_6] = 1
+  test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 120
+
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
+  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).velocity_merge_mode = "average"
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 50)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(none_merged_step_to_play_2 - none_merged_step_to_play)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 50)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(merged_step_to_play_3 - none_merged_step_to_play_2)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 75)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(twice_merged_step_to_play_4 - merged_step_to_play_3)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 90)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(none_merged_step_to_play_5 - twice_merged_step_to_play_4)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 67)
+  luaunit.assert_equals(note_on_event[2], 50)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(twice_merged_step_to_play_6 - none_merged_step_to_play_5)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 69)
+  luaunit.assert_equals(note_on_event[2], 110)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
