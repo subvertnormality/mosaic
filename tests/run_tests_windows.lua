@@ -10,10 +10,7 @@ function directory_and_files_exist(path, sample_file_name)
 end
 
 
-
-local expected_file_name = "norns.lua"
-
-if directory_and_files_exist(".\\test_artefacts\\norns_test_artefact\\lua\\core", expected_file_name) then
+if directory_and_files_exist(".\\test_artefacts\\norns_test_artefact\\lua\\core", "norns.lua") then
   print("The '.\\test_artefacts\\norns_test_artefact\\lua\\core\\norns.lua' file already exists. Skipping download.")
 else
   
