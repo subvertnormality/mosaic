@@ -956,9 +956,7 @@ function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_ev
 
   local note_on_event = table.remove(midi_note_on_events, 1)
   
-  luaunit.assert_equals(note_on_event[1], 67)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
+  luaunit.assertNil(note_on_event)
 
   progress_clock_by_beats(twice_merged_step_to_play_6 - none_merged_step_to_play_5)
   
@@ -969,7 +967,10 @@ function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_ev
   luaunit.assert_equals(note_on_event[3], 1)
 
 end
+
+
 -- test_note_merge_modes_down
+
 
 -- test_note_merge_modes_average
 

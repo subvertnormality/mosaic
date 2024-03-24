@@ -42,42 +42,49 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
 
   end
 
-  for pattern_number, pattern_enabled in pairs(pattern_channel.selected_patterns) do
-    if (pattern_enabled) then
+  -- for pattern_number, pattern_enabled in pairs(pattern_channel.selected_patterns) do
+  for pattern_number = 1, 16 do
+
+    
+    local pattern_enabled = pattern_channel.selected_patterns[pattern_number]
+
+
       local pattern = patterns[pattern_number]
       for s = 1, 64 do
         local is_pattern_trig_one = pattern.trig_values[s] == 1
-
-        if trig_merge_mode == "skip" then
-          if is_pattern_trig_one and merged_pattern.trig_values[s] < 1 and skip_bits[s] < 1 then
-            merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
-            merged_pattern.trig_values[s] = 1
-          elseif is_pattern_trig_one and merged_pattern.trig_values[s] == 1 then
-            merged_pattern.trig_values[s] = 0
-            skip_bits[s] = 1
-          end
-        elseif trig_merge_mode == "only" then
-          if is_pattern_trig_one and merged_pattern.trig_values[s] < 1 and only_bits[s] == 0 then
-            only_bits[s] = 1
-            merged_pattern.trig_values[s] = 0
-          elseif is_pattern_trig_one and only_bits[s] == 1 then
-            merged_pattern.trig_values[s] = 1
-          end
-        elseif trig_merge_mode == "all" then
-          if is_pattern_trig_one then
-            
-            merged_pattern.trig_values[s] = 1
-          end
+        if (pattern_enabled) then
+          if trig_merge_mode == "skip" then
+            if is_pattern_trig_one and merged_pattern.trig_values[s] < 1 and skip_bits[s] < 1 then
+              merged_pattern = pattern_controller.sync_pattern_values(merged_pattern, pattern, s)
+              merged_pattern.trig_values[s] = 1
+            elseif is_pattern_trig_one and merged_pattern.trig_values[s] == 1 then
+              merged_pattern.trig_values[s] = 0
+              skip_bits[s] = 1
+            end
+          elseif trig_merge_mode == "only" then
+            if is_pattern_trig_one and merged_pattern.trig_values[s] < 1 and only_bits[s] == 0 then
+              only_bits[s] = 1
+              merged_pattern.trig_values[s] = 0
+            elseif is_pattern_trig_one and only_bits[s] == 1 then
+              merged_pattern.trig_values[s] = 1
+            end
+          elseif trig_merge_mode == "all" then
+            if is_pattern_trig_one then
+              
+              merged_pattern.trig_values[s] = 1
+            end
+          end 
         end
-
-        do_moded_merge(pattern_number, is_pattern_trig_one, s, note_merge_mode, patterns[pattern_number].note_values, merged_pattern.note_values, notes)
-        do_moded_merge(pattern_number, is_pattern_trig_one, s, velocity_merge_mode, patterns[pattern_number].velocity_values, merged_pattern.velocity_values, velocities)
-        do_moded_merge(pattern_number, is_pattern_trig_one, s, length_merge_mode, patterns[pattern_number].lengths, merged_pattern.lengths, lengths)
-      
-      
+        if pattern_enabled or (note_merge_mode and string.match(note_merge_mode, "pattern_number_")) then
+          do_moded_merge(pattern_number, is_pattern_trig_one, s, note_merge_mode, patterns[pattern_number].note_values, merged_pattern.note_values, notes)
+        end
+        if pattern_enabled or (velocity_merge_mode and string.match(velocity_merge_mode, "pattern_number_")) then
+          do_moded_merge(pattern_number, is_pattern_trig_one, s, velocity_merge_mode, patterns[pattern_number].velocity_values, merged_pattern.velocity_values, velocities)
+        end
+        if pattern_enabled or (length_merge_mode and string.match(length_merge_mode, "pattern_number_")) then
+          do_moded_merge(pattern_number, is_pattern_trig_one, s, length_merge_mode, patterns[pattern_number].lengths, merged_pattern.lengths, lengths)
+        end
       end
-    end
-
   end
 
   for s = 1, 64 do
