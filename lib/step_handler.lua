@@ -202,11 +202,11 @@ function step_handler.calculate_step_scale_number(c, current_step)
   local channel_default_scale = channel.default_scale
   local global_default_scale = program.get().default_scale
 
-  if current_step == 1 then
+  if current_step == fn.calc_grid_count(program.get_channel(c).start_trig[1], program.get_channel(c).start_trig[2]) then
     persistent_channel_step_scale_numbers[c] = nil
   end
 
-  if program.get_current_step_for_channel(17) == 1 then
+  if program.get_current_step_for_channel(17) == fn.calc_grid_count(program.get_channel(17).start_trig[1], program.get_channel(17).start_trig[2]) then
     persistent_global_step_scale_number = nil
   end
 
@@ -232,12 +232,12 @@ function step_handler.calculate_step_scale_number(c, current_step)
   end
 end
 
-function step_handler.calculate_step_transpose(current_step)
+function step_handler.calculate_step_transpose(current_step, c)
   local step_transpose = program.get_step_transpose_trig_lock(current_step)
   local global_tranpose = program.get_transpose()
   local transpose = 0
 
-  if program.get().current_step == 1 then
+  if program.get().current_step == fn.calc_grid_count(program.get_channel(c).start_trig[1], program.get_channel(c).start_trig[2]) then
     persistent_step_transpose = nil
   end
 
@@ -403,7 +403,7 @@ function step_handler.handle(c, current_step)
 
   program.set_channel_step_scale_number(c, step_handler.calculate_step_scale_number(c, current_step))
 
-  local transpose = step_handler.calculate_step_transpose(current_step)
+  local transpose = step_handler.calculate_step_transpose(current_step, c)
 
   if trig_value == 1 and random_val < trig_prob then
     channel_edit_page_ui_controller.refresh_trig_locks()
@@ -544,7 +544,7 @@ function step_handler.sinfonian_sync(step)
   end
 
   local scale_container = program.get_scale(sinfonion_scale_number)
-  local transpose = step_handler.calculate_step_transpose(step)
+  local transpose = step_handler.calculate_step_transpose(step, 17)
   local degree = quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord]
   local root = scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod
   local sinf_mode = quantiser.get_scales()[scale_container.number].sinf_mode

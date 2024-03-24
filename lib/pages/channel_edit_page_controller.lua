@@ -503,7 +503,7 @@ function channel_edit_page_controller.register_press_handlers()
             program.get_selected_sequencer_pattern().active = true
             pattern_controller.update_working_patterns()
             tooltip:show(
-              "Note merge mode channel " ..x
+              "Note merge mode pattern " ..x
             )
           end
           if velocity_merge_mode_button:is_this(x2, y2) then
@@ -512,7 +512,7 @@ function channel_edit_page_controller.register_press_handlers()
             program.get_selected_sequencer_pattern().active = true
             pattern_controller.update_working_patterns()
             tooltip:show(
-              "Velocity merge mode channel " ..x
+              "Velocity merge mode pattern " ..x
             )
           end
           if length_merge_mode_button:is_this(x2, y2) then
@@ -521,7 +521,7 @@ function channel_edit_page_controller.register_press_handlers()
             program.get_selected_sequencer_pattern().active = true
             pattern_controller.update_working_patterns()
             tooltip:show(
-              "Length merge mode channel " ..x
+              "Length merge mode pattern " ..x
             )
           end
         end

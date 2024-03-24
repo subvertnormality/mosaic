@@ -240,3 +240,438 @@ function test_global_default_scale_setting_quantises_notes_properly()
     luaunit.assert_equals(note_on_event[3], 1)
   
   end
+
+
+  function test_complex_step_scale_trig_lock_quantises_notes_properly_when_length_1_to_4()
+
+    setup()
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    program.get().selected_channel = 17
+    local test_pattern = program.initialise_default_pattern()
+    local scale = quantiser.get_scales()[1]
+  
+    program.set_scale(
+      1,
+      {
+        number = 1,
+        scale = scale.scale,
+        chord = 1,
+        root_note = 0
+      }
+    )
+
+    program.set_scale(
+      2,
+      {
+        number = 2,
+        scale = scale.scale,
+        chord = 3,
+        root_note = 0
+      }
+    )
+  
+    program.set_scale(
+      3,
+      {
+        number = 3,
+        scale = scale.scale,
+        chord = 5,
+        root_note = 0
+      }
+    )
+  
+    program.get().default_scale = 1
+
+    program.add_step_scale_trig_lock(1, 1)
+    program.add_step_scale_trig_lock(17, 3)
+    program.add_step_scale_trig_lock(33, 2)
+    program.add_step_scale_trig_lock(49, 3)
+    
+    program.get_channel(1).step_scale_trig_lock_banks[3] = 2
+  
+    test_pattern.note_values[1] = 0
+    test_pattern.lengths[1] = 1
+    test_pattern.trig_values[1] = 1
+    test_pattern.velocity_values[1] = 100
+  
+    test_pattern.note_values[3] = 0
+    test_pattern.lengths[3] = 1
+    test_pattern.trig_values[3] = 1
+    test_pattern.velocity_values[3] = 100
+
+    program.get_channel(1).start_trig[1] = 1
+    program.get_channel(1).start_trig[2] = 4
+  
+    program.get_channel(1).end_trig[1] = 4
+    program.get_channel(1).end_trig[2] = 4
+
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    clock_setup() -- Step 1
+  
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 3
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    
+    progress_clock_by_beats(2) -- Step 5
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 7
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 9
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 11
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 13
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 15
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+  
+    progress_clock_by_beats(2) -- Step 17
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 67)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 19
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 21
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 67)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 23
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 25
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 67)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 27
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 29
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 67)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 31
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 33
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 35
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+  end
+
+
+
+  function test_complex_step_scale_trig_lock_quantises_notes_properly_when_length_17_to_20()
+
+    setup()
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    program.get().selected_channel = 17
+    local test_pattern = program.initialise_default_pattern()
+    local scale = quantiser.get_scales()[1]
+  
+    program.set_scale(
+      1,
+      {
+        number = 1,
+        scale = scale.scale,
+        chord = 1,
+        root_note = 0
+      }
+    )
+
+    program.set_scale(
+      2,
+      {
+        number = 2,
+        scale = scale.scale,
+        chord = 3,
+        root_note = 0
+      }
+    )
+  
+    program.set_scale(
+      3,
+      {
+        number = 3,
+        scale = scale.scale,
+        chord = 5,
+        root_note = 0
+      }
+    )
+  
+    program.get().default_scale = 1
+
+    program.add_step_scale_trig_lock(1, 1)
+    program.add_step_scale_trig_lock(17, 3)
+    program.add_step_scale_trig_lock(33, 2)
+    program.add_step_scale_trig_lock(49, 3)
+    
+    program.get_channel(1).step_scale_trig_lock_banks[19] = 2
+  
+    test_pattern.note_values[17] = 0
+    test_pattern.lengths[17] = 1
+    test_pattern.trig_values[17] = 1
+    test_pattern.velocity_values[17] = 100
+  
+    test_pattern.note_values[19] = 0
+    test_pattern.lengths[19] = 1
+    test_pattern.trig_values[19] = 1
+    test_pattern.velocity_values[19] = 100
+
+    program.get_channel(1).start_trig[1] = 1
+    program.get_channel(1).start_trig[2] = 5
+  
+    program.get_channel(1).end_trig[1] = 4
+    program.get_channel(1).end_trig[2] = 5
+
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    clock_setup() -- Step 1
+  
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 3
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    
+    progress_clock_by_beats(2) -- Step 5
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 7
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 9
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 11
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 13
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 15
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+  
+    progress_clock_by_beats(2) -- Step 17
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 67)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 19
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 21
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 67)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 23
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 25
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 67)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 27
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 29
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 67)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 31
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 33
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(2) -- Step 35
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+  end
