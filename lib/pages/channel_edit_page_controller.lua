@@ -496,32 +496,32 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y, x2, y2)
       if program.get().selected_channel ~= 17 then
-        if pattern_buttons["step" .. x .. "_pattern_button"]:is_this(x, y) then
-          if note_merge_mode_button:is_this(x2, y2) then
-            program.get_selected_channel().note_merge_mode = "pattern_number_" .. x
+        if pattern_buttons["step" .. x2 .. "_pattern_button"]:is_this(x2, y2) then
+          if note_merge_mode_button:is_this(x, y) then
+            program.get_selected_channel().note_merge_mode = "pattern_number_" .. x2
             note_merge_mode_button:set_state(4)
             program.get_selected_sequencer_pattern().active = true
             pattern_controller.update_working_patterns()
             tooltip:show(
-              "Note merge mode channel " ..x
+              "Note merge mode pattern " ..x2
             )
           end
-          if velocity_merge_mode_button:is_this(x2, y2) then
-            program.get_selected_channel().velocity_merge_mode = "pattern_number_" .. x
+          if velocity_merge_mode_button:is_this(x, y) then
+            program.get_selected_channel().velocity_merge_mode = "pattern_number_" .. x2
             velocity_merge_mode_button:set_state(4)
             program.get_selected_sequencer_pattern().active = true
             pattern_controller.update_working_patterns()
             tooltip:show(
-              "Velocity merge mode channel " ..x
+              "Velocity merge mode pattern " ..x2
             )
           end
-          if length_merge_mode_button:is_this(x2, y2) then
-            program.get_selected_channel().length_merge_mode = "pattern_number_" .. x
+          if length_merge_mode_button:is_this(x, y) then
+            program.get_selected_channel().length_merge_mode = "pattern_number_" .. x2
             length_merge_mode_button:set_state(4)
             program.get_selected_sequencer_pattern().active = true
             pattern_controller.update_working_patterns()
             tooltip:show(
-              "Length merge mode channel " ..x
+              "Length merge mode pattern " ..x2
             )
           end
         end

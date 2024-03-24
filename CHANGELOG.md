@@ -1,3 +1,12 @@
+# 0.4.1
+
+* Chord rotations now ascend by default rather than wrapping unpredictably
+* Bug and performance fixes
+* Global scale mode no longer glitches when rapid channel step scale triggers are used
+* Midi keyboards now pass through on selected channel
+* Added windows unit test runner
+* Pattern merge modes now merges values from channels even if they aren't activated
+
 # 0.4.0
 
 * Sinfonion sync is no longer experimental and doesn't require modifications to norns

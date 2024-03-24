@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>norns/docs</title>
+    <link rel="stylesheet" href="../ldoc_pale.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>norns</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/arc.html">arc</a></li>
+  <li><a href="../modules/audio.html">audio</a></li>
+  <li><a href="../modules/clock.html">clock</a></li>
+  <li><a href="../modules/controlspec.html">controlspec</a></li>
+  <li><a href="../modules/crow.html">crow</a></li>
+  <li><a href="../modules/core.crow.public.html">core.crow.public</a></li>
+  <li><a href="../modules/core.crow.quote.html">core.crow.quote</a></li>
+  <li><a href="../modules/encoders.html">encoders</a></li>
+  <li><strong>engine</strong></li>
+  <li><a href="../modules/gamepad.html">gamepad</a></li>
+  <li><a href="../modules/grid.html">grid</a></li>
+  <li><a href="../modules/hid.html">hid</a></li>
+  <li><a href="../modules/keyboard.html">keyboard</a></li>
+  <li><a href="../modules/metro.html">metro</a></li>
+  <li><a href="../modules/midi.html">midi</a></li>
+  <li><a href="../modules/norns.html">norns</a></li>
+  <li><a href="../modules/osc.html">osc</a></li>
+  <li><a href="../modules/params.control.html">params.control</a></li>
+  <li><a href="../modules/paramset.html">paramset</a></li>
+  <li><a href="../modules/poll.html">poll</a></li>
+  <li><a href="../modules/screen.html">screen</a></li>
+  <li><a href="../modules/script.html">script</a></li>
+  <li><a href="../modules/softcut.html">softcut</a></li>
+  <li><a href="../modules/lib.BeatClock.html">lib.BeatClock</a></li>
+  <li><a href="../modules/lib.container.defaulttable.html">lib.container.defaulttable</a></li>
+  <li><a href="../modules/lib.container.deque.html">lib.container.deque</a></li>
+  <li><a href="../modules/lib.container.observable.html">lib.container.observable</a></li>
+  <li><a href="../modules/lib.container.watchtable.html">lib.container.watchtable</a></li>
+  <li><a href="../modules/lib.container.weaktable.html">lib.container.weaktable</a></li>
+  <li><a href="../modules/lib.elca.html">lib.elca</a></li>
+  <li><a href="../modules/lib.EnvGraph.html">lib.EnvGraph</a></li>
+  <li><a href="../modules/lib.er.html">lib.er</a></li>
+  <li><a href="../modules/lib.fileselect.html">lib.fileselect</a></li>
+  <li><a href="../modules/lib.FilterGraph.html">lib.FilterGraph</a></li>
+  <li><a href="../modules/lib.filters.html">lib.filters</a></li>
+  <li><a href="../modules/lib.formatters.html">lib.formatters</a></li>
+  <li><a href="../modules/lib.Graph.html">lib.Graph</a></li>
+  <li><a href="../modules/lib.intonation.html">lib.intonation</a></li>
+  <li><a href="../modules/Lattice.html">Lattice</a></li>
+  <li><a href="../modules/lib.lfo.html">lib.lfo</a></li>
+  <li><a href="../modules/lib.listselect.html">lib.listselect</a></li>
+  <li><a href="../modules/lib.MusicUtil.html">lib.MusicUtil</a></li>
+  <li><a href="../modules/lib.pattern.html">lib.pattern</a></li>
+  <li><a href="../modules/lib.reflection.html">lib.reflection</a></li>
+  <li><a href="../modules/lib.sequins.html">lib.sequins</a></li>
+  <li><a href="../modules/lib.tabutil.html">lib.tabutil</a></li>
+  <li><a href="../modules/lib.test.luaunit.html">lib.test.luaunit</a></li>
+  <li><a href="../modules/lib.textentry.html">lib.textentry</a></li>
+  <li><a href="../modules/lib.textentry_kbd.html">lib.textentry_kbd</a></li>
+  <li><a href="../modules/lib.timeline.html">lib.timeline</a></li>
+  <li><a href="../modules/lib.UI.html">lib.UI</a></li>
+  <li><a href="../modules/lib.util.html">lib.util</a></li>
+  <li><a href="../modules/lib.voice.html">lib.voice</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>engine</code></h1>
+<p>Engine class</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Engine.register">Engine.register (data, count)</a></td>
+	<td class="summary">register all available engines.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Engine.register_commands">Engine.register_commands (data, count)</a></td>
+	<td class="summary">populate the current engine object with available commands.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Engine.add_command">Engine.add_command (id, name, fmt)</a></td>
+	<td class="summary">add a command to the current engine.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Engine.list_commands">Engine.list_commands ()</a></td>
+	<td class="summary">print all commands reported from the engine</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Engine.load">Engine.load (name, callback)</a></td>
+	<td class="summary">load a named engine, with a callback.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Engine.__index">Engine.__index (self, idx)</a></td>
+	<td class="summary">custom getters.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Engine.register"></a>
+    <strong>Engine.register (data, count)</strong>
+    </dt>
+    <dd>
+    register all available engines.
+ called from OSC handler.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">data</span>
+         - an array of strings
+        </li>
+        <li><span class="parameter">count</span>
+         - number of names
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Engine.register_commands"></a>
+    <strong>Engine.register_commands (data, count)</strong>
+    </dt>
+    <dd>
+    populate the current engine object with available commands.
+ called from OSC handler.
+ NB: we *can* count on the order of entries to be meaningful
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">data</span>
+         - array of [name, format]
+        </li>
+        <li><span class="parameter">count</span>
+         - number of commands
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Engine.add_command"></a>
+    <strong>Engine.add_command (id, name, fmt)</strong>
+    </dt>
+    <dd>
+    add a command to the current engine.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+         - integer index
+        </li>
+        <li><span class="parameter">name</span>
+         - command name (string)
+        </li>
+        <li><span class="parameter">fmt</span>
+         - OSC format string (e.g. 'isf' for "int string float")
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Engine.list_commands"></a>
+    <strong>Engine.list_commands ()</strong>
+    </dt>
+    <dd>
+    print all commands reported from the engine
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Engine.load"></a>
+    <strong>Engine.load (name, callback)</strong>
+    </dt>
+    <dd>
+    load a named engine, with a callback.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+         - name of engine
+        </li>
+        <li><span class="parameter">callback</span>
+         - function to call on engine load. will receive command list
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        - false if an engine load is already pending (nothing happens), true otherwise
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Engine.__index"></a>
+    <strong>Engine.__index (self, idx)</strong>
+    </dt>
+    <dd>
+    custom getters.
+ [] accessor returns a command function;
+ this allows e.g. engine.hz(100)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+
+        </li>
+        <li><span class="parameter">idx</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2023-11-17 11:40:11 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

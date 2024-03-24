@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>norns/docs</title>
+    <link rel="stylesheet" href="../ldoc_pale.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>norns</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/arc.html">arc</a></li>
+  <li><a href="../modules/audio.html">audio</a></li>
+  <li><a href="../modules/clock.html">clock</a></li>
+  <li><a href="../modules/controlspec.html">controlspec</a></li>
+  <li><a href="../modules/crow.html">crow</a></li>
+  <li><a href="../modules/core.crow.public.html">core.crow.public</a></li>
+  <li><a href="../modules/core.crow.quote.html">core.crow.quote</a></li>
+  <li><a href="../modules/encoders.html">encoders</a></li>
+  <li><a href="../modules/engine.html">engine</a></li>
+  <li><a href="../modules/gamepad.html">gamepad</a></li>
+  <li><a href="../modules/grid.html">grid</a></li>
+  <li><a href="../modules/hid.html">hid</a></li>
+  <li><a href="../modules/keyboard.html">keyboard</a></li>
+  <li><a href="../modules/metro.html">metro</a></li>
+  <li><a href="../modules/midi.html">midi</a></li>
+  <li><a href="../modules/norns.html">norns</a></li>
+  <li><a href="../modules/osc.html">osc</a></li>
+  <li><a href="../modules/params.control.html">params.control</a></li>
+  <li><a href="../modules/paramset.html">paramset</a></li>
+  <li><a href="../modules/poll.html">poll</a></li>
+  <li><a href="../modules/screen.html">screen</a></li>
+  <li><a href="../modules/script.html">script</a></li>
+  <li><a href="../modules/softcut.html">softcut</a></li>
+  <li><a href="../modules/lib.BeatClock.html">lib.BeatClock</a></li>
+  <li><a href="../modules/lib.container.defaulttable.html">lib.container.defaulttable</a></li>
+  <li><a href="../modules/lib.container.deque.html">lib.container.deque</a></li>
+  <li><strong>lib.container.observable</strong></li>
+  <li><a href="../modules/lib.container.watchtable.html">lib.container.watchtable</a></li>
+  <li><a href="../modules/lib.container.weaktable.html">lib.container.weaktable</a></li>
+  <li><a href="../modules/lib.elca.html">lib.elca</a></li>
+  <li><a href="../modules/lib.EnvGraph.html">lib.EnvGraph</a></li>
+  <li><a href="../modules/lib.er.html">lib.er</a></li>
+  <li><a href="../modules/lib.fileselect.html">lib.fileselect</a></li>
+  <li><a href="../modules/lib.FilterGraph.html">lib.FilterGraph</a></li>
+  <li><a href="../modules/lib.filters.html">lib.filters</a></li>
+  <li><a href="../modules/lib.formatters.html">lib.formatters</a></li>
+  <li><a href="../modules/lib.Graph.html">lib.Graph</a></li>
+  <li><a href="../modules/lib.intonation.html">lib.intonation</a></li>
+  <li><a href="../modules/Lattice.html">Lattice</a></li>
+  <li><a href="../modules/lib.lfo.html">lib.lfo</a></li>
+  <li><a href="../modules/lib.listselect.html">lib.listselect</a></li>
+  <li><a href="../modules/lib.MusicUtil.html">lib.MusicUtil</a></li>
+  <li><a href="../modules/lib.pattern.html">lib.pattern</a></li>
+  <li><a href="../modules/lib.reflection.html">lib.reflection</a></li>
+  <li><a href="../modules/lib.sequins.html">lib.sequins</a></li>
+  <li><a href="../modules/lib.tabutil.html">lib.tabutil</a></li>
+  <li><a href="../modules/lib.test.luaunit.html">lib.test.luaunit</a></li>
+  <li><a href="../modules/lib.textentry.html">lib.textentry</a></li>
+  <li><a href="../modules/lib.textentry_kbd.html">lib.textentry_kbd</a></li>
+  <li><a href="../modules/lib.timeline.html">lib.timeline</a></li>
+  <li><a href="../modules/lib.UI.html">lib.UI</a></li>
+  <li><a href="../modules/lib.util.html">lib.util</a></li>
+  <li><a href="../modules/lib.voice.html">lib.voice</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>lib.container.observable</code></h1>
+<p>Create an Observable value (object).</p>
+<p>
+<p> An observable value notifies registered observers each time the value is set.
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Observable:set">Observable:set (value, quiet)</a></td>
+	<td class="summary">Set the value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Observable:__call">Observable:__call ()</a></td>
+	<td class="summary">Return the current value (short hand for the 'value' method)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Observable:value">Observable:value ()</a></td>
+	<td class="summary">Return the current value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Observable:register">Observable:register (observer, handler)</a></td>
+	<td class="summary">Register an observer of value changes
+<p> An observer is identified by a key which can be any type (number, string,
+ table, etc).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Observable:unregister">Observable:unregister (observer)</a></td>
+	<td class="summary">Unregister an observer of value changes</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Observable:notify_observers">Observable:notify_observers ()</a></td>
+	<td class="summary">Notify registered observers of current value (normally called by `set`).</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Observable:set"></a>
+    <strong>Observable:set (value, quiet)</strong>
+    </dt>
+    <dd>
+    Set the value
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">anything</span></span>
+         New value for observable.
+        </li>
+        <li><span class="parameter">quiet</span>
+            <span class="types"><span class="type">boolean</span></span>
+         If true, do not notify observers.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Observable:__call"></a>
+    <strong>Observable:__call ()</strong>
+    </dt>
+    <dd>
+    Return the current value (short hand for the 'value' method)
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">anything</span></span>
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Observable:value"></a>
+    <strong>Observable:value ()</strong>
+    </dt>
+    <dd>
+    Return the current value
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">anything</span></span>
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Observable:register"></a>
+    <strong>Observable:register (observer, handler)</strong>
+    </dt>
+    <dd>
+    Register an observer of value changes
+<p> An observer is identified by a key which can be any type (number, string,
+ table, etc).  Registering an observer replaces any previous registration
+ associated with that key.
+<p> The handler is a function which is passed one argument, the new value. If
+ `handler` is not provided it is assumed that the `observer` is an object with
+ a `notify` method and the `notify` method is called with the new value.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">observer</span>
+            <span class="types"><span class="type">anything</span></span>
+         Identity of observer.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><span class="type">function</span></span>
+         New value callback, optional.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Observable:unregister"></a>
+    <strong>Observable:unregister (observer)</strong>
+    </dt>
+    <dd>
+    Unregister an observer of value changes
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">observer</span>
+            <span class="types"><span class="type">anything</span></span>
+         Identity of observer.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        true if the observer was known and unregistered.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Observable:notify_observers"></a>
+    <strong>Observable:notify_observers ()</strong>
+    </dt>
+    <dd>
+    Notify registered observers of current value (normally called by `set`).
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2023-11-17 11:40:11 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
