@@ -36,20 +36,21 @@ function handle_midi_event_data(data)
     return 
   end
 
-  local transpose = step_handler.calculate_step_transpose(program.get().current_step)
+  local transpose = step_handler.calculate_step_transpose(program.get().current_step, channel.number)
 
   local note = quantiser.process(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, channel.step_scale_number)
-  local device = program.get().devices[channel.number].midi_device
+  local device = program.get().devices[channel.number]
+  local midi_channel = device.midi_channel
   local velocity = data[3]
 
   if data[1] == 144 then -- note
     flush_midi_off_store()
-    midi_controller:note_on(note, velocity, channel.number, device)
-    table.insert(midi_off_store, {note = note, channel = channel.number, device = device})
+    midi_controller:note_on(note, velocity, midi_channel, device.midi_device)
+    table.insert(midi_off_store, {note = note, channel = midi_channel, device = device.midi_device})
 
   elseif data[1] == 128 then
-    midi_controller:note_off(note, 0, channel.number, device)
-    table.insert(midi_off_store, {note = note, channel = channel.number, device = device})
+    midi_controller:note_off(note, 0, midi_channel, device.midi_device)
+    table.insert(midi_off_store, {note = note, channel = midi_channel, device = device.midi_device})
   elseif data[1] == 176 then -- modulation
     
   end 
