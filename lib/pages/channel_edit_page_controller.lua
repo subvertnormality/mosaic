@@ -496,7 +496,7 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y, x2, y2)
       if program.get().selected_channel ~= 17 then
-        if pattern_buttons["step" .. x .. "_pattern_button"]:is_this(x2, y2) then
+        if pattern_buttons["step" .. x2 .. "_pattern_button"]:is_this(x2, y2) then
           if note_merge_mode_button:is_this(x, y) then
             program.get_selected_channel().note_merge_mode = "pattern_number_" .. x2
             note_merge_mode_button:set_state(4)
