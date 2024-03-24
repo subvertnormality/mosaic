@@ -395,11 +395,12 @@ function step_handler.handle(c, current_step)
 
   local random_val = random(0, 99)
 
-  if trig_value == 1 and random_val < trig_prob then
-    if (params:get("quantiser_trig_lock_hold") ~= 1) then
-      persistent_channel_step_scale_numbers[c] = nil
-    end
-  end
+  -- if trig_value == 1 and random_val < trig_prob then
+  --   if (params:get("quantiser_trig_lock_hold") ~= 1) then
+  --     print("nulling persistent channel step scale at step "..current_step)
+  --     persistent_channel_step_scale_numbers[c] = nil
+  --   end
+  -- end
 
   program.set_channel_step_scale_number(c, step_handler.calculate_step_scale_number(c, current_step))
 
