@@ -15,10 +15,11 @@ local device_param_manager = include("mosaic/lib/device_param_manager")
 
 local pages = Pages:new()
 
-local quantizer_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Quantizer", quantiser.get_scales())
+local quantizer_vertical_scroll_selector = VerticalScrollSelector:new(20, 25, "Quantizer", quantiser.get_scales())
 local romans_vertical_scroll_selector =
-  VerticalScrollSelector:new(105, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
-local notes_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Notes", quantiser.get_notes())
+  VerticalScrollSelector:new(90, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
+local notes_vertical_scroll_selector = VerticalScrollSelector:new(5, 25, "Notes", quantiser.get_notes())
+local rotation_vertical_scroll_selector = VerticalScrollSelector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
 
 local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", {})
 local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 100)
@@ -98,6 +99,7 @@ local quantizer_page =
     quantizer_vertical_scroll_selector:draw()
     romans_vertical_scroll_selector:draw()
     notes_vertical_scroll_selector:draw()
+    rotation_vertical_scroll_selector:draw()
   end
 )
 
@@ -245,6 +247,7 @@ function channel_edit_page_ui_controller.update_scale()
   local scale = quantizer_vertical_scroll_selector:get_selected_item()
   local chord = romans_vertical_scroll_selector:get_selected_index()
   local root_note = notes_vertical_scroll_selector:get_selected_index() - 1
+  local rotation = rotation_vertical_scroll_selector:get_selected_index() - 1
 
   if channel.default_scale == 0 then
     tooltip:show("Cannot set scale.")
@@ -275,7 +278,8 @@ function channel_edit_page_ui_controller.update_scale()
             number = scale.number,
             scale = scale.scale,
             chord = chord,
-            root_note = root_note
+            root_note = root_note,
+            chord_degree_rotation = rotation
           }
         )
       end
@@ -289,7 +293,8 @@ function channel_edit_page_ui_controller.update_scale()
             number = scale.number,
             scale = scale.scale,
             chord = chord,
-            root_note = root_note
+            root_note = root_note,
+            chord_degree_rotation = rotation
           }
         )
       end
@@ -423,6 +428,9 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           if notes_vertical_scroll_selector:is_selected() then
             notes_vertical_scroll_selector:scroll_down()
+          end
+          if rotation_vertical_scroll_selector:is_selected() then
+            rotation_vertical_scroll_selector:scroll_down()
           end
           channel_edit_page_ui_controller.update_scale()
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
@@ -580,6 +588,9 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           if notes_vertical_scroll_selector:is_selected() then
             notes_vertical_scroll_selector:scroll_up()
+          end
+          if rotation_vertical_scroll_selector:is_selected() then
+            rotation_vertical_scroll_selector:scroll_up()
           end
           channel_edit_page_ui_controller.update_scale()
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
@@ -741,10 +752,13 @@ function channel_edit_page_ui_controller.enc(n, d)
             romans_vertical_scroll_selector:select()
           elseif romans_vertical_scroll_selector:is_selected() then
             romans_vertical_scroll_selector:deselect()
-            notes_vertical_scroll_selector:select()
+            rotation_vertical_scroll_selector:select()
           elseif notes_vertical_scroll_selector:is_selected() then
             notes_vertical_scroll_selector:deselect()
             quantizer_vertical_scroll_selector:select()
+          elseif rotation_vertical_scroll_selector:is_selected() then
+            rotation_vertical_scroll_selector:deselect()
+            notes_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
           if program.get().selected_channel == 17 then
@@ -806,6 +820,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             quantizer_vertical_scroll_selector:select()
           elseif notes_vertical_scroll_selector:is_selected() then
             notes_vertical_scroll_selector:deselect()
+            rotation_vertical_scroll_selector:select()
+          elseif rotation_vertical_scroll_selector:is_selected() then
+            rotation_vertical_scroll_selector:deselect()
             romans_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
@@ -998,12 +1015,14 @@ function channel_edit_page_ui_controller.refresh_quantiser()
   local number = program.get_scale(program.get().default_scale).number
   local chord = program.get_scale(program.get().default_scale).chord
   local root_note = program.get_scale(program.get().default_scale).root_note
+  local rotation = program.get_scale(program.get().default_scale).chord_degree_rotation or 0
   program.get_selected_sequencer_pattern().active = true
 
   if program.get().selected_channel == 17 then
     quantizer_vertical_scroll_selector:set_selected_item(number)
     notes_vertical_scroll_selector:set_selected_item(root_note + 1)
     romans_vertical_scroll_selector:set_selected_item(chord)
+    rotation_vertical_scroll_selector:set_selected_item((rotation or 0) + 1)
     channel_edit_page_ui_controller.refresh_romans()
     return
   end
@@ -1012,9 +1031,11 @@ function channel_edit_page_ui_controller.refresh_quantiser()
     number = program.get_scale(channel.default_scale).number
     chord = program.get_scale(channel.default_scale).chord
     root_note = program.get_scale(channel.default_scale).root_note
+    rotation = program.get_scale(channel.default_scale).chord_degree_rotation or 0
     quantizer_vertical_scroll_selector:set_selected_item(number)
     notes_vertical_scroll_selector:set_selected_item(root_note + 1)
     romans_vertical_scroll_selector:set_selected_item(chord)
+    rotation_vertical_scroll_selector:set_selected_item((rotation or 0) + 1)
     channel_edit_page_ui_controller.refresh_romans()
     fn.dirty_screen(true)
   end

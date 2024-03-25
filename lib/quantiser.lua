@@ -128,7 +128,6 @@ function quantiser.get_scale_name_from_index(i)
 end
 
 function quantiser.process(note_number, octave_mod, transpose, scale_number)
-
   local root_note = program.get().root_note + 60
   local chord_rotation = program.get().chord - 1
   local scale_container = program.get_scale(scale_number)
@@ -141,7 +140,7 @@ function quantiser.process(note_number, octave_mod, transpose, scale_number)
     chord_rotation = scale_container.chord - 1
   end
 
-  local scale = scale_container.scale
+  local scale = fn.deep_copy(scale_container.scale)
 
   if chord_rotation > 0 then
     for i = 1, chord_rotation do
@@ -149,12 +148,19 @@ function quantiser.process(note_number, octave_mod, transpose, scale_number)
     end
   end
 
+  if scale_container.chord_degree_rotation and scale_container.chord_degree_rotation > 0 then
+    for index = #scale, 1, -1 do
+      local value = scale[index]
+      for i = 1, scale_container.chord_degree_rotation do
+        if (index % 7) == 7 - i then
+          scale[index + 1] = (scale[index + 1] or 0) - 12
+        end
+      end
+    end
+  end
+
   scale = fn.transpose_scale(scale, transpose)
 
-  -- if note_number >= 7 then
-  --   local octave = math.floor(note_number / 7) + octave_mod
-  --   local note = note_number % 7
-  --   return (scale[note + 1] + (12 * octave)) + root_note
   if note_number < 0 then
     local octave = math.floor(note_number / 7) + octave_mod
     local note = note_number % 7

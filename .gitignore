@@ -39,7 +39,7 @@ luac.out
 *.x86_64
 *.hex
 
-tests/test_artefacts/*
+lib/tests/test_artefacts/*
 tests/luacov.report.out
 tests/luacov.stats.out
 sync.ffs_db
