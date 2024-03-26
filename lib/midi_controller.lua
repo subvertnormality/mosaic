@@ -18,7 +18,8 @@ local midi_off_store = {}
 for i = 0, 127 do
   local noteValue = midi_note_mappings[(i % 12) + 1] or 0
   local octaveValue = math.floor(i / 12) - 5
-  midi_tables[i + 1] = {noteValue, octaveValue}
+
+  midi_tables[i + 1] = {noteValue-1, octaveValue}
 end
 
 function flush_midi_off_store()
@@ -37,7 +38,6 @@ function handle_midi_event_data(data)
   end
 
   local transpose = step_handler.calculate_step_transpose(program.get().current_step, channel.number)
-
   local note = quantiser.process(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, channel.step_scale_number)
   local device = program.get().devices[channel.number]
   local midi_channel = device.midi_channel

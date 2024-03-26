@@ -1,3 +1,8 @@
+# 0.4.2
+
+* It's now possible to selected a manual chord degree rotation on the scale page
+* More bug fixes
+
 # 0.4.1
 
 * Chord rotations now ascend by default rather than wrapping unpredictably

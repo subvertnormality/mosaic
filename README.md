@@ -308,7 +308,7 @@ You can define your channel's rhythmic character on the second page. Use E2 to n
 
 ![Channel clocks and swing page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_clocks.png)
 
-On the third page, you can assign a chord or scale to one of the 16 scale slots that are selectable on the grid. The layout on the norns screen is straightforward: the left indicates the root note, the center is the scale type, and the right selects the scale's degree. Change between options with E2 and fine-tune with E3. To change the selected scale slot, use the scale grid keys. 
+On the third page, you can assign a chord or scale to one of the 16 scale slots that are selectable on the grid. The layout on the norns screen is straightforward: the left indicates the root note, the center left is the scale type, the center right selects the scale's degree, and the left sets the chord's rotation. The rotation moves the highest note in the scale down an octave successively. A value of 1 will shift the last note in the scale down an octave, a value of 2 will shift the last two notes down an octave, and so on all the way up to 6 which wills shift all but the root note down an octave. This setting can be useful to create chord inversions, of sorts. Change between options with E2 and fine-tune with E3. To change the selected scale slot, use the scale grid keys. 
 
 ![Channel quantiser config](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_quantiser.png)
 

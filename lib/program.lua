@@ -74,22 +74,22 @@ local function initialise_default_sequencer_pattern()
     patterns = initialise_default_patterns(),
     channels = initialise_default_channels(),
     scales = {
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1}
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = musicutil.generate_scale(0, "major", 12), root_note = root_note, chord = 1, chord_degree_rotation = 0}
     }
   }
 
@@ -150,7 +150,7 @@ end
 
 function program.is_sequencer_pattern_active(p)
   if (program_store.sequencer_patterns[p] and program_store.sequencer_patterns[p].active) then
-    return true
+    return trues
   end
 
   return false
@@ -297,7 +297,7 @@ end
 function program.step_octave_has_trig_lock(channel, step)
   local step_octave_trig_lock_banks = channel.step_octave_trig_lock_banks
 
-  if step_octave_trig_lock_banks and step_octave_trig_lock_banks[step] then
+  if step_octave_trig_lock_banks and step_octave_trig_lock_banks[step] and step_octave_trig_lock_banks[step] ~= 0 then
     return true
   end
 
@@ -348,7 +348,7 @@ function program.step_transpose_has_trig_lock(step)
   local channel = program.get_channel(17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
 
-  if step_transpose_trig_lock_banks ~= nil and step_transpose_trig_lock_banks[step] ~= nil then
+  if step_transpose_trig_lock_banks ~= nil and step_transpose_trig_lock_banks[step] and step_transpose_trig_lock_banks[step] ~= 0 then
     return true
   end
 
@@ -412,10 +412,11 @@ function program.get_scale(s)
     return {
       name = "Chromatic",
       number = 0,
-      scale = musicutil.generate_scale(0, "chromatic", 1),
+      scale = musicutil.generate_scale(0, "chromatic", 12),
       romans = {},
       root_note = 0,
-      chord = 1
+      chord = 1,
+      chord_degree_rotation = 0
     }
   end
 
@@ -437,6 +438,10 @@ function program.set_all_sequencer_pattern_scales(s, scale)
   for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
     sequencer_pattern.scales[s] = scale
   end
+end
+
+function program.set_chord_degree_rotation_for_scale(s, rotation)
+  program.get_selected_sequencer_pattern().scales[s].chord_degree_rotation = util.clamp(rotation, 0, 6)
 end
 
 return program
