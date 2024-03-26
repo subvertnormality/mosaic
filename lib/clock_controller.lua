@@ -146,6 +146,11 @@ function clock_controller.init()
     clock_controller["channel_" .. channel_number .. "_clock"] =
       clock_lattice:new_sprocket {
       action = function(t)
+        
+        if channel_number ~= 17 then
+          step_handler.process_lengths_for_channel(channel_number)
+        end
+
         local start_trig =
           fn.calc_grid_count(
           program.get_channel(channel_number).start_trig[1],
@@ -209,19 +214,6 @@ function clock_controller.init()
       enabled = true
     }
 
-    clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor =
-      clock_lattice:new_sprocket {
-      action = function(t)
-        if channel_number ~= 17 then
-          step_handler.process_lengths_for_channel(channel_number)
-        end
-      end,
-      division = 1 / (div * 4),
-      swing = 50,
-      delay = 0.99,
-      enabled = true
-    }
-
     clock_controller["channel_" .. channel_number .. "_clock"].first_run = true
   end
 
@@ -229,12 +221,10 @@ end
 
 function clock_controller.set_channel_swing(channel_number, swing)
   clock_controller["channel_" .. channel_number .. "_clock"]:set_swing(swing)
-  clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor:set_swing(swing)
 end
 
 function clock_controller.set_channel_division(channel_number, division)
   clock_controller["channel_" .. channel_number .. "_clock"]:set_division(1 / (division * 4))
-  clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor:set_division(1 / (division * 4))
 end
 
 function clock_controller.delay_action(c, division_index, multiplier, func)

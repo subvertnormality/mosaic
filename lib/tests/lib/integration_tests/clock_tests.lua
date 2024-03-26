@@ -119,6 +119,7 @@ function test_swing_maintains_lengths_across_multiple_steps()
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_beats(1)
+  progress_clock_by_pulses(1)
   
   local note_off_event = table.remove(midi_note_off_events)
 
@@ -128,26 +129,11 @@ function test_swing_maintains_lengths_across_multiple_steps()
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
-  -- Check there are no note on events
-  luaunit.assertNil(note_on_event)
-
-  progress_clock_by_pulses(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
   luaunit.assert_equals(note_on_event[1], 60)
   luaunit.assert_equals(note_on_event[2], 21)
   luaunit.assert_equals(note_on_event[3], 1)
 
-  progress_clock_by_pulses(23)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 22)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_pulses(1)
+  progress_clock_by_beats(1)
 
   local note_off_event = table.remove(midi_note_off_events)
 
@@ -155,7 +141,13 @@ function test_swing_maintains_lengths_across_multiple_steps()
   luaunit.assert_equals(note_off_event[2], 21)
   luaunit.assert_equals(note_off_event[3], 1)
 
-  progress_clock_by_pulses(23)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 22)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
 
   local note_off_event = table.remove(midi_note_off_events)
 
