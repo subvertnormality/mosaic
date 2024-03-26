@@ -583,7 +583,7 @@ function channel_edit_page_controller.refresh_merge_buttons()
   elseif velocity_merge_mode == "down" then
     velocity_merge_mode_button:set_state(3)
   elseif string.match(velocity_merge_mode, "pattern_number_") then
-    note_merge_mode_button:set_state(4)
+    velocity_merge_mode_button:set_state(4)
   end
 
   if length_merge_mode == "average" then
@@ -593,7 +593,7 @@ function channel_edit_page_controller.refresh_merge_buttons()
   elseif length_merge_mode == "down" then
     length_merge_mode_button:set_state(3)
   elseif string.match(length_merge_mode, "pattern_number_") then
-    note_merge_mode_button:set_state(4)
+    length_merge_mode_button:set_state(4)
   end
 
   channel_select_fader:set_value(program.get().selected_channel)
