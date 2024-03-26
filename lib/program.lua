@@ -150,7 +150,7 @@ end
 
 function program.is_sequencer_pattern_active(p)
   if (program_store.sequencer_patterns[p] and program_store.sequencer_patterns[p].active) then
-    return true
+    return trues
   end
 
   return false
@@ -297,7 +297,7 @@ end
 function program.step_octave_has_trig_lock(channel, step)
   local step_octave_trig_lock_banks = channel.step_octave_trig_lock_banks
 
-  if step_octave_trig_lock_banks and step_octave_trig_lock_banks[step] then
+  if step_octave_trig_lock_banks and step_octave_trig_lock_banks[step] and step_octave_trig_lock_banks[step] ~= 0 then
     return true
   end
 
@@ -348,7 +348,7 @@ function program.step_transpose_has_trig_lock(step)
   local channel = program.get_channel(17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
 
-  if step_transpose_trig_lock_banks ~= nil and step_transpose_trig_lock_banks[step] ~= nil then
+  if step_transpose_trig_lock_banks ~= nil and step_transpose_trig_lock_banks[step] and step_transpose_trig_lock_banks[step] ~= 0 then
     return true
   end
 
