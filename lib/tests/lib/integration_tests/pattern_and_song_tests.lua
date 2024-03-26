@@ -233,6 +233,73 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 end
 
 
+
+function test_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_both_pattern_resets_are_disabled()
+
+  setup()
+
+  params:set("song_mode", 1)
+  params:set("reset_on_end_of_pattern", 0)
+  params:set("reset_on_end_of_sequencer_pattern", 0)
+
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  test_pattern.note_values[4] = 0
+  test_pattern.lengths[4] = 1
+  test_pattern.trig_values[4] = 1
+  test_pattern.velocity_values[4] = 101
+
+  test_pattern.note_values[5] = 0
+  test_pattern.lengths[5] = 1
+  test_pattern.trig_values[5] = 1
+  test_pattern.velocity_values[5] = 102
+  
+  program.get_sequencer_pattern(sequencer_pattern).repeats = 1
+  program.get_sequencer_pattern(sequencer_pattern).active = true
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+
+  program.get_channel(1).start_trig[1] = 1
+  program.get_channel(1).start_trig[2] = 4
+
+  program.get_channel(1).end_trig[1] = 6
+  program.get_channel(1).end_trig[2] = 4
+
+  program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = 4
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  progress_clock_by_beats(3)
+
+  -- Fourth trig in sequencer pattern 1 fires
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 101)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  -- Fifth trig in sequencer pattern 1 doesnt fire because the sequencer pattern is shorter than the channel pattern
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assertNil(note_on_event)
+
+  progress_clock_by_beats(3)
+
+  -- Fourth trig in sequencer pattern 1 fires again
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 101)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
+
 function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_sequence_reset_is_enabled()
 
   setup()
