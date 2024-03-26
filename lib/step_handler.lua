@@ -239,7 +239,7 @@ function step_handler.calculate_step_transpose(current_step, c)
 
   if step_transpose == nil and persistent_step_transpose ~= nil then
     transpose = persistent_step_transpose
-  elseif step_transpose ~= nil then
+  elseif step_transpose ~= nil and step_transpose ~= 0 then
     transpose = step_transpose
     persistent_step_transpose = step_transpose
   else
