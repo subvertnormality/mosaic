@@ -39,8 +39,11 @@ luac.out
 *.x86_64
 *.hex
 
-lib/tests/test_artefacts/*
+lib/tests/test_artefacts
+lib/tests/test_artefacts/norns_test_artefact
 tests/luacov.report.out
 tests/luacov.stats.out
 sync.ffs_db
 lib/tests/test_artefacts/latest_release.json
+
+.DS_Store
