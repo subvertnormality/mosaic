@@ -45,6 +45,7 @@ local function load_project(pth)
     print("Loading project " .. pth)
     local saved = tab.load(pth)
     if saved ~= nil then
+
       program.set(saved[2])
 
       clock.tempo_change_handler = function(x)
@@ -60,13 +61,14 @@ local function load_project(pth)
           program.get().devices[i].midi_channel,
           program.get().devices[i].midi_device,
           false
-      )
+        )
+      end
+
 
       if saved[1] then
         params:read(norns.state.data .. saved[1] .. ".pset", true)
       end
-      
-      end
+
       clock_controller:reset()
       ui_controller.refresh()
       fn.dirty_grid(true)
@@ -130,7 +132,7 @@ local function prime_autosave()
 end
 
 local function post_splash_init()
-  
+
   load_project(norns.state.data .. "autosave.ptn")
 
   if program == nil then

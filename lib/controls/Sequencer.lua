@@ -148,6 +148,13 @@ function Sequencer:draw(channel, draw_func)
           end
         end
       end
+      if (self.mode == "channel") then
+        if program.get_step_trig_masks(channel.number) and program.get_step_trig_masks(channel.number)[grid_count] == false then
+          local b = 2 - self.bclock.bright_mod
+          if b < 0 then b = 0 end
+          draw_func(x, y, b)
+        end
+      end
 
       if current_step == grid_count and clock_controller.is_playing() then
         if (self.mode == "channel") then

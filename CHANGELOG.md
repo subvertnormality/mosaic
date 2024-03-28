@@ -1,3 +1,8 @@
+# 0.4.3
+
+* Added trig scale masks in the channel editor
+* More bug fixes
+
 # 0.4.2
 
 * It's now possible to select a manual chord degree rotation on the scale page

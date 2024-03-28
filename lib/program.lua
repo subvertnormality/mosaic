@@ -23,6 +23,7 @@ local function initialise_default_channels()
       step_trig_lock_banks = {},
       step_octave_trig_lock_banks = {},
       step_scale_trig_lock_banks = {},
+      step_trig_masks = program.initialise_64_table(true),
       working_pattern = {
         trig_values = program.initialise_64_table(0),
         lengths = program.initialise_64_table(1),
@@ -444,6 +445,41 @@ function program.set_chord_degree_rotation_for_scale(s, rotation)
   if rotation then
     program.get_selected_sequencer_pattern().scales[s].chord_degree_rotation = util.clamp(rotation, 0, 6)
   end
+end
+
+function program.get_step_trig_masks(channel) 
+  if program.get_channel(channel) == nil then return end
+
+  if program.get_channel(channel).step_trig_masks == nil then
+    program.get_channel(channel).step_trig_masks = program.initialise_64_table(true)
+  end
+  return program.get_channel(channel).step_trig_masks
+end
+
+function program.set_step_trig_mask(channel, step, mask)
+  if program.get_channel(channel).step_trig_masks == nil then
+    program.get_channel(channel).step_trig_masks = program.initialise_64_table(true)
+  end
+  program.get_channel(channel).step_trig_masks[step] = mask
+end
+
+function program.toggle_step_trig_mask(channel, step)
+  if program.get_channel(channel).step_trig_masks == nil then
+    program.get_channel(channel).step_trig_masks = program.initialise_64_table(true)
+  end
+  program.get_channel(channel).step_trig_masks[step] = not program.get_channel(channel).step_trig_masks[step]
+end
+
+function program.lock_mask_changes()
+  program.get().mask_changes_locked = true
+end
+
+function program.unlock_mask_changes()
+  program.get().mask_changes_locked = false
+end
+
+function program.are_mask_changes_locked()
+  return program.get().mask_changes_locked
 end
 
 return program
