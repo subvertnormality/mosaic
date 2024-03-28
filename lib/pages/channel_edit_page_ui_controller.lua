@@ -411,6 +411,7 @@ function channel_edit_page_ui_controller.change_page(page)
 end
 
 function channel_edit_page_ui_controller.enc(n, d)
+  program.lock_mask_changes()
   local channel = program.get_selected_channel()
   if n == 3 then
     for i = 1, math.abs(d) do
@@ -892,6 +893,7 @@ function channel_edit_page_ui_controller.enc(n, d)
 end
 
 function channel_edit_page_ui_controller.key(n, z)
+  program.lock_mask_changes()
   if n == 2 and z == 1 then
     local pressed_keys = grid_controller.get_pressed_keys()
     if #pressed_keys > 0 then

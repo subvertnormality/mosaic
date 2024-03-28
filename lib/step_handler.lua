@@ -385,7 +385,6 @@ function step_handler.handle(c, current_step)
   end
 
   if c == 17 and current_step == fn.calc_grid_count(program.get_channel(17).start_trig[1], program.get_channel(17).start_trig[2]) then
-    print("nulling persistent global step scale at step "..current_step)
     persistent_global_step_scale_number = nil
   end
 

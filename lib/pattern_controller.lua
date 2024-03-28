@@ -60,7 +60,10 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
   for pattern_number, pattern_enabled in pairs(patterns_to_process) do
     
       local pattern = patterns[pattern_number]
+      local step_trig_masks = program.get_step_trig_masks(channel)
+
       for s = 1, 64 do
+
         local is_pattern_trig_one = pattern.trig_values[s] == 1
         if (pattern_enabled) then
           if trig_merge_mode == "skip" then
@@ -84,6 +87,10 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
               merged_pattern.trig_values[s] = 1
             end
           end 
+        end
+        
+        if step_trig_masks[s] == false then
+          merged_pattern.trig_values[s] = 0
         end
 
         -- Determine whether to process each merge mode based on `is_pattern_trig_one` or the specific "pattern_number_" condition.

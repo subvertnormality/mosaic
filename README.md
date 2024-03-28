@@ -254,7 +254,9 @@ Each scale slot corresponds specifically to the current sequencer pattern. To ch
 
 ![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
 
-The sequencer visualizes the music: a tapestry of selected patterns, tailored by the chosen merge mode. To set the length of a channel, simultaneously press and hold the first and last steps. Active steps illuminate, guiding the composition of your symphony.
+The sequencer visualizes the music: a tapestry of selected patterns, tailored by the chosen merge mode. To set the length of a channel, simultaneously press and hold the first and last steps. Active steps illuminate, guiding the composition of your symphony. 
+
+To explicitly turn a step off. It will blink slightly to show the step is currently deactivated. Press again to turn the step back on.
 
 Want a step to hold a unique sound or scale? Press and keep it down while selecting the desired parameter, scale, or octave. Clearing these trig locks is a breeze:
 
