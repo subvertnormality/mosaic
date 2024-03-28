@@ -63,7 +63,12 @@ function Sequencer:draw(channel, draw_func)
   local global_pattern_length = program.get_selected_sequencer_pattern().global_pattern_length
 
   if global_pattern_length < end_step then
-    end_step = global_pattern_length
+    
+    if (start_step == 1) then
+      end_step = global_pattern_length
+    else
+      end_step = global_pattern_length + (end_step - (start_step - 1))
+    end
   end
 
   local current_step = program.get().current_step
