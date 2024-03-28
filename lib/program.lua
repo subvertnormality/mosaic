@@ -441,7 +441,9 @@ function program.set_all_sequencer_pattern_scales(s, scale)
 end
 
 function program.set_chord_degree_rotation_for_scale(s, rotation)
-  program.get_selected_sequencer_pattern().scales[s].chord_degree_rotation = util.clamp(rotation, 0, 6)
+  if rotation then
+    program.get_selected_sequencer_pattern().scales[s].chord_degree_rotation = util.clamp(rotation, 0, 6)
+  end
 end
 
 return program

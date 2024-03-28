@@ -46,8 +46,26 @@ local function load_project(pth)
     local saved = tab.load(pth)
     if saved ~= nil then
       program.set(saved[2])
+
+      clock.tempo_change_handler = function(x)
+        channel_sequencer_page_ui_controller.refresh_tempo()
+      end
+
+      device_param_manager.init()
+      
+      for i = 1, 16 do
+        device_param_manager.add_device_params(
+          i,
+          device_map.get_device(program.get().devices[i].device_map),
+          program.get().devices[i].midi_channel,
+          program.get().devices[i].midi_device,
+          false
+      )
+
       if saved[1] then
-        params:read(norns.state.data .. saved[1] .. ".pset")
+        params:read(norns.state.data .. saved[1] .. ".pset", true)
+      end
+      
       end
       clock_controller:reset()
       ui_controller.refresh()
@@ -73,6 +91,15 @@ end
 
 local function load_new_project()
   program.init()
+  for i = 1, 16 do
+    device_param_manager.add_device_params(
+      i,
+      device_map.get_device(program.get().devices[i].device_map),
+      program.get().devices[i].midi_channel,
+      program.get().devices[i].midi_device,
+      false
+    )
+  end
   grid_controller.refresh()
   ui_controller.refresh()
 end
@@ -103,21 +130,13 @@ local function prime_autosave()
 end
 
 local function post_splash_init()
-  device_param_manager.init()
+  
   load_project(norns.state.data .. "autosave.ptn")
 
   if program == nil then
     load_new_project()
   end
-  for i = 1, 16 do
-    device_param_manager.add_device_params(
-      i,
-      device_map.get_device(program.get().devices[i].device_map),
-      program.get().devices[i].midi_channel,
-      program.get().devices[i].midi_device,
-      false
-    )
-  end
+
   device_map.validate_devices()
   params:bang()
   ui_splash_screen_active = false
