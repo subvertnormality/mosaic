@@ -347,7 +347,7 @@ local function merge_devices()
     for index, device in pairs(note_players) do
       if
         string.find(index, "midi", 1, true) ~= 1 and string.find(index, "jf mpe", 1, true) ~= 1 and
-          string.find(index, "jf kit", 1, true) ~= 1
+          string.find(index, "jf kit", 1, true) ~= 1 and string.find(index, "crow para", 1, true) ~= 1
       then
         local new_device_params = {}
 
@@ -433,9 +433,9 @@ local function merge_devices()
     if a.name:lower() == "none" then
       return true 
     elseif b.name:lower() == "none" then
-        return false
+      return false
     else
-        return a.name:lower() < b.name:lower()  -- standard alphabetical comparison
+      return a.name:lower() < b.name:lower()  -- standard alphabetical comparison
     end
   end)
 

@@ -9,7 +9,14 @@ function directory_and_files_exist(path, sample_file_name)
   return result ~= ""
 end
 
-local expected_file_name = "norns.lua" 
+local expected_file_name = "norns.lua"  
+
+local my_path = "./test_artefacts/norns_test_artefact/lua/lib/?.lua;" 
+
+if directory_and_files_exist("/home/we/norns/lua/core", expected_file_name) then
+  print("Running these tests directly on norns can cause issues. Skipping.")
+  return
+end
 
 if directory_and_files_exist("./test_artefacts/norns_test_artefact/lua/core", expected_file_name) then
   print("The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.")
@@ -57,7 +64,6 @@ else
   end
 end
 
-local my_path = "./test_artefacts/norns_test_artefact/lua/lib/?.lua;" 
 package.path = my_path .. package.path
 
 util = require('util')

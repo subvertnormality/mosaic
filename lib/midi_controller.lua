@@ -33,7 +33,7 @@ function handle_midi_event_data(data)
 
   local channel = program.get_selected_channel()
 
-  if channel.number == 17 then 
+  if channel.number == 17 or midi_tables[data[2]] == nil then 
     return 
   end
 
