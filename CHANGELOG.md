@@ -1,3 +1,7 @@
+# 0.4.4
+
+* Reworked the device configuration process to be simpler and less error prone. Custom devices are now respresented by `.json` files and will appear in mosaic when included in `dust/data/mosaic/config`. See `dust/code/mosaic/lib/config` for example configuration files.
+
 # 0.4.3
 
 * Added trig scale masks in the channel editor

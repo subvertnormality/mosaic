@@ -1,0 +1,450 @@
+[{
+  "params": [
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "Model 1",
+      "short_descriptor_1": "MODE",
+      "cc_min_value": -1,
+      "cc_msb": 7,
+      "id": "model_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "Coarse Tune 1",
+      "short_descriptor_1": "TUNE",
+      "cc_min_value": -1,
+      "cc_msb": 8,
+      "id": "coarse_tune_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "Fine Tune 1",
+      "short_descriptor_1": "FTUN",
+      "cc_min_value": -1,
+      "cc_msb": 9,
+      "id": "fine_tune_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "Harmonics 1",
+      "short_descriptor_1": "HARM",
+      "cc_min_value": -1,
+      "cc_msb": 10,
+      "id": "harmonics_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "Timbre 1",
+      "short_descriptor_1": "TIMB",
+      "cc_min_value": -1,
+      "cc_msb": 11,
+      "id": "timbre_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "Morph 1",
+      "short_descriptor_1": "MRPH",
+      "cc_min_value": -1,
+      "cc_msb": 12,
+      "id": "morph_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "FM 1",
+      "short_descriptor_1": "FM",
+      "cc_min_value": -1,
+      "cc_msb": 13,
+      "id": "fm_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "MOD1",
+      "name": "Timbre Mod 1",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 14,
+      "id": "timbre_mod_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "MOD1",
+      "name": "Morph Mod 1",
+      "short_descriptor_1": "MRPH",
+      "cc_min_value": -1,
+      "cc_msb": 15,
+      "id": "morph_mod_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "PAS1",
+      "name": "Low-pass gate 1",
+      "short_descriptor_1": "LOW",
+      "cc_min_value": -1,
+      "cc_msb": 16,
+      "id": "low_pass_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "Time/Decay 1",
+      "short_descriptor_1": "DCAY",
+      "cc_min_value": -1,
+      "cc_msb": 17,
+      "id": "time_decay_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "Model 2",
+      "short_descriptor_1": "MODE",
+      "cc_min_value": -1,
+      "cc_msb": 18,
+      "id": "model_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "Coarse Tune 2",
+      "short_descriptor_1": "TUNE",
+      "cc_min_value": -1,
+      "cc_msb": 19,
+      "id": "coarse_tune_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "Fine Tune 2",
+      "short_descriptor_1": "FTUN",
+      "cc_min_value": -1,
+      "cc_msb": 20,
+      "id": "fine_tune_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "Harmonics 2",
+      "short_descriptor_1": "HARM",
+      "cc_min_value": -1,
+      "cc_msb": 21,
+      "id": "harmonics_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "Timbre 2",
+      "short_descriptor_1": "TIMB",
+      "cc_min_value": -1,
+      "cc_msb": 22,
+      "id": "timbre_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "Morph 2",
+      "short_descriptor_1": "MRPH",
+      "cc_min_value": -1,
+      "cc_msb": 23,
+      "id": "morph_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "FM 2",
+      "short_descriptor_1": "FM",
+      "cc_min_value": -1,
+      "cc_msb": 24,
+      "id": "fm_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "MOD2",
+      "name": "Timbre Mod 2",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 25,
+      "id": "timbre_mod_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "MOD2",
+      "name": "Morph Mod 2",
+      "short_descriptor_1": "MRPH",
+      "cc_min_value": -1,
+      "cc_msb": 26,
+      "id": "morph_mod_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "PAS2",
+      "name": "Low-pass gate 2",
+      "short_descriptor_1": "LOW",
+      "cc_min_value": -1,
+      "cc_msb": 27,
+      "id": "low_pass_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "Time/Decay 2",
+      "short_descriptor_1": "DCAY",
+      "cc_min_value": -1,
+      "cc_msb": 28,
+      "id": "time_decay_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "Model 3",
+      "short_descriptor_1": "MODE",
+      "cc_min_value": -1,
+      "cc_msb": 29,
+      "id": "model_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "Coarse Tune 3",
+      "short_descriptor_1": "TUNE",
+      "cc_min_value": -1,
+      "cc_msb": 30,
+      "id": "coarse_tune_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "Fine Tune 3",
+      "short_descriptor_1": "FTUN",
+      "cc_min_value": -1,
+      "cc_msb": 31,
+      "id": "fine_tune_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "Harmonics 3",
+      "short_descriptor_1": "HARM",
+      "cc_min_value": -1,
+      "cc_msb": 32,
+      "id": "harmonics_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "Timbre 3",
+      "short_descriptor_1": "TIMB",
+      "cc_min_value": -1,
+      "cc_msb": 33,
+      "id": "timbre_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "Morph 3",
+      "short_descriptor_1": "MRPH",
+      "cc_min_value": -1,
+      "cc_msb": 34,
+      "id": "morph_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "FM 3",
+      "short_descriptor_1": "FM",
+      "cc_min_value": -1,
+      "cc_msb": 35,
+      "id": "fm_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "MOD3",
+      "name": "Timbre Mod 3",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 36,
+      "id": "timbre_mod_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "MOD3",
+      "name": "Morph Mod 3",
+      "short_descriptor_1": "MRPH",
+      "cc_min_value": -1,
+      "cc_msb": 37,
+      "id": "morph_mod_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "PAS3",
+      "name": "Low-pass gate 3",
+      "short_descriptor_1": "LOW",
+      "cc_min_value": -1,
+      "cc_msb": 38,
+      "id": "low_pass_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "Time/Decay 3",
+      "short_descriptor_1": "DCAY",
+      "cc_min_value": -1,
+      "cc_msb": 39,
+      "id": "time_decay_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Model 4",
+      "short_descriptor_1": "MODE",
+      "cc_min_value": -1,
+      "cc_msb": 40,
+      "id": "model_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Coarse Tune 4",
+      "short_descriptor_1": "TUNE",
+      "cc_min_value": -1,
+      "cc_msb": 41,
+      "id": "coarse_tune_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Fine Tune 4",
+      "short_descriptor_1": "FTUN",
+      "cc_min_value": -1,
+      "cc_msb": 42,
+      "id": "fine_tune_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Harmonics 4",
+      "short_descriptor_1": "HARM",
+      "cc_min_value": -1,
+      "cc_msb": 43,
+      "id": "harmonics_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Timbre 4",
+      "short_descriptor_1": "TIMB",
+      "cc_min_value": -1,
+      "cc_msb": 44,
+      "id": "timbre_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Morph 4",
+      "short_descriptor_1": "MRPH",
+      "cc_min_value": -1,
+      "cc_msb": 45,
+      "id": "morph_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "FM 4",
+      "short_descriptor_1": "FM",
+      "cc_min_value": -1,
+      "cc_msb": 46,
+      "id": "fm_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Timbre Mod 4",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 47,
+      "id": "timbre_mod_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "MOD4",
+      "name": "Morph Mod 4",
+      "short_descriptor_1": "MRPH",
+      "cc_min_value": -1,
+      "cc_msb": 48,
+      "id": "morph_mod_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "PAS4",
+      "name": "Low-pass gate 4",
+      "short_descriptor_1": "LOW",
+      "cc_min_value": -1,
+      "cc_msb": 49,
+      "id": "low_pass_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Time/Decay 4",
+      "short_descriptor_1": "DCAY",
+      "cc_min_value": -1,
+      "cc_msb": 50,
+      "id": "time_decay_4"
+    }
+  ],
+  "name": "EX Plaits",
+  "type": "midi",
+  "value": 16,
+  "polyphonic": true,
+  "map_params_automatically": false,
+  "id": "ex-plaits"
+}]

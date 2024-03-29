@@ -1,0 +1,450 @@
+[{
+  "params": [
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "OFFS",
+      "name": "Out Offset 1",
+      "short_descriptor_1": "OUT1",
+      "cc_min_value": -1,
+      "cc_msb": 7,
+      "id": "out_offset1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "OFFS",
+      "name": "Out Offset 2",
+      "short_descriptor_1": "OUT2",
+      "cc_min_value": -1,
+      "cc_msb": 8,
+      "id": "out_offset2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "OFFS",
+      "name": "Out Offset 3",
+      "short_descriptor_1": "OUT3",
+      "cc_min_value": -1,
+      "cc_msb": 9,
+      "id": "out_offset3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "OFFS",
+      "name": "Out Offset 4",
+      "short_descriptor_1": "OUT4",
+      "cc_min_value": -1,
+      "cc_msb": 10,
+      "id": "out_offset4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TYPE",
+      "name": "Out Offset Type 1",
+      "short_descriptor_1": "OFF1",
+      "cc_min_value": -1,
+      "cc_msb": 11,
+      "id": "out_offset_type1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TYPE",
+      "name": "Out Offset Type 2",
+      "short_descriptor_1": "OFF2",
+      "cc_min_value": -1,
+      "cc_msb": 12,
+      "id": "out_offset_type2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TYPE",
+      "name": "Out Offset Type 3",
+      "short_descriptor_1": "OFF3",
+      "cc_min_value": -1,
+      "cc_msb": 13,
+      "id": "out_offset_type3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TYPE",
+      "name": "Out Offset Type 4",
+      "short_descriptor_1": "OFF4",
+      "cc_min_value": -1,
+      "cc_msb": 14,
+      "id": "out_offset_type4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "1->1",
+      "name": "Mix in 1 to out 1",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 15,
+      "id": "mix_1_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "2->1",
+      "name": "Mix in 2 to out 1",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 16,
+      "id": "mix_2_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "3->1",
+      "name": "Mix in 3 to out 1",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 17,
+      "id": "mix_3_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "4->1",
+      "name": "Mix in 4 to out 1",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 18,
+      "id": "mix_4_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "5->1",
+      "name": "Mix in 5 to out 1",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 19,
+      "id": "mix_5_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "6->1",
+      "name": "Mix in 6 to out 1",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 20,
+      "id": "mix_6_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "1->2",
+      "name": "Mix in 1 to out 2",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 21,
+      "id": "mix_1_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "2->2",
+      "name": "Mix in 2 to out 2",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 22,
+      "id": "mix_2_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "3->2",
+      "name": "Mix in 3 to out 2",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 23,
+      "id": "mix_3_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "4->2",
+      "name": "Mix in 4 to out 2",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 24,
+      "id": "mix_4_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "5->2",
+      "name": "Mix in 5 to out 2",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 25,
+      "id": "mix_5_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "6->2",
+      "name": "Mix in 6 to out 2",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 26,
+      "id": "mix_6_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "1->3",
+      "name": "Mix in 1 to out 3",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 27,
+      "id": "mix_1_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "2->3",
+      "name": "Mix in 2 to out 3",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 28,
+      "id": "mix_2_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "3->3",
+      "name": "Mix in 3 to out 3",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 29,
+      "id": "mix_3_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "4->3",
+      "name": "Mix in 4 to out 3",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 30,
+      "id": "mix_4_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "5->3",
+      "name": "Mix in 5 to out 3",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 31,
+      "id": "mix_5_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "6->3",
+      "name": "Mix in 6 to out 3",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 32,
+      "id": "mix_6_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "1->4",
+      "name": "Mix in 1 to out 4",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 33,
+      "id": "mix_1_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "2->4",
+      "name": "Mix in 2 to out 4",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 34,
+      "id": "mix_2_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "3->4",
+      "name": "Mix in 3 to out 4",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 35,
+      "id": "mix_3_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "4->4",
+      "name": "Mix in 4 to out 4",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 36,
+      "id": "mix_4_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "5->4",
+      "name": "Mix in 5 to out 4",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 37,
+      "id": "mix_5_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "6->4",
+      "name": "Mix in 6 to out 4",
+      "short_descriptor_1": "MIX",
+      "cc_min_value": -1,
+      "cc_msb": 38,
+      "id": "mix_6_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "OFFS",
+      "name": "In Offset 1",
+      "short_descriptor_1": "IN1",
+      "cc_min_value": -1,
+      "cc_msb": 39,
+      "id": "in_offset1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "OFFS",
+      "name": "In Offset 2",
+      "short_descriptor_1": "IN2",
+      "cc_min_value": -1,
+      "cc_msb": 40,
+      "id": "in_offset2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "OFFS",
+      "name": "In Offset 3",
+      "short_descriptor_1": "IN3",
+      "cc_min_value": -1,
+      "cc_msb": 41,
+      "id": "in_offset3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "OFFS",
+      "name": "In Offset 4",
+      "short_descriptor_1": "IN4",
+      "cc_min_value": -1,
+      "cc_msb": 42,
+      "id": "in_offset4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "OFFS",
+      "name": "In Offset 5",
+      "short_descriptor_1": "IN5",
+      "cc_min_value": -1,
+      "cc_msb": 43,
+      "id": "in_offset5"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "OFFS",
+      "name": "In Offset 6",
+      "short_descriptor_1": "IN6",
+      "cc_min_value": -1,
+      "cc_msb": 44,
+      "id": "in_offset6"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TYPE",
+      "name": "In Offset Type 1",
+      "short_descriptor_1": "OFF1",
+      "cc_min_value": -1,
+      "cc_msb": 45,
+      "id": "in_offset_type1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TYPE",
+      "name": "In Offset Type 2",
+      "short_descriptor_1": "OFF2",
+      "cc_min_value": -1,
+      "cc_msb": 46,
+      "id": "in_offset_type2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TYPE",
+      "name": "In Offset Type 3",
+      "short_descriptor_1": "OFF3",
+      "cc_min_value": -1,
+      "cc_msb": 47,
+      "id": "in_offset_type3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TYPE",
+      "name": "In Offset Type 4",
+      "short_descriptor_1": "OFF4",
+      "cc_min_value": -1,
+      "cc_msb": 48,
+      "id": "in_offset_type4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TYPE",
+      "name": "In Offset Type 5",
+      "short_descriptor_1": "OFF5",
+      "cc_min_value": -1,
+      "cc_msb": 49,
+      "id": "in_offset_type5"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TYPE",
+      "name": "In Offset Type 6",
+      "short_descriptor_1": "OFF6",
+      "cc_min_value": -1,
+      "cc_msb": 50,
+      "id": "in_offset_type6"
+    }
+  ],
+  "name": "EX M Mixer",
+  "type": "midi",
+  "value": 7,
+  "polyphonic": false,
+  "map_params_automatically": false,
+  "id": "ex-matrix-mixer"
+}]

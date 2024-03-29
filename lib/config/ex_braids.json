@@ -1,0 +1,540 @@
+[{
+  "params": [
+    {
+      "short_descriptor_2": "",
+      "name": "None",
+      "short_descriptor_1": "X",
+      "id": "none"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "Model 1",
+      "short_descriptor_1": "MODE",
+      "cc_min_value": -1,
+      "cc_msb": 7,
+      "id": "model_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "Timbre 1",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 8,
+      "id": "timbre_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "LFOX",
+      "name": "Colour 1",
+      "short_descriptor_1": "MIDI",
+      "cc_min_value": -1,
+      "cc_msb": 9,
+      "id": "colour_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "AD Attack 1",
+      "short_descriptor_1": "ATCK",
+      "cc_min_value": -1,
+      "cc_msb": 10,
+      "id": "ad_attack_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "AD Decay 1",
+      "short_descriptor_1": "DCAY",
+      "cc_min_value": -1,
+      "cc_msb": 11,
+      "id": "ad_decay_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "AD FM 1",
+      "short_descriptor_1": "FM",
+      "cc_min_value": -1,
+      "cc_msb": 12,
+      "id": "ad_fm_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "AD Timbre 1",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 13,
+      "id": "ad_timbre_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "AD Colour 1",
+      "short_descriptor_1": "COLR",
+      "cc_min_value": -1,
+      "cc_msb": 14,
+      "id": "ad_colour_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "AD VCA 1",
+      "short_descriptor_1": "VCA",
+      "cc_min_value": -1,
+      "cc_msb": 15,
+      "id": "ad_vca_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "AD Coarse 1",
+      "short_descriptor_1": "CRSE",
+      "cc_min_value": -1,
+      "cc_msb": 16,
+      "id": "ad_coarse_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "AD Fine 1",
+      "short_descriptor_1": "FINE",
+      "cc_min_value": -1,
+      "cc_msb": 17,
+      "id": "ad_fine_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "AD Scale 1",
+      "short_descriptor_1": "SCLE",
+      "cc_min_value": -1,
+      "cc_msb": 18,
+      "id": "ad_scale_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "ONE",
+      "name": "AD Root 1",
+      "short_descriptor_1": "ROOT",
+      "cc_min_value": -1,
+      "cc_msb": 19,
+      "id": "ad_root_1"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "Model 2",
+      "short_descriptor_1": "MODE",
+      "cc_min_value": -1,
+      "cc_msb": 20,
+      "id": "model_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "Timbre 2",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 21,
+      "id": "timbre_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "Colour 2",
+      "short_descriptor_1": "COLR",
+      "cc_min_value": -1,
+      "cc_msb": 22,
+      "id": "colour_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "AD Attack 2",
+      "short_descriptor_1": "ATCK",
+      "cc_min_value": -1,
+      "cc_msb": 23,
+      "id": "ad_attack_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "AD Decay 2",
+      "short_descriptor_1": "DCAY",
+      "cc_min_value": -1,
+      "cc_msb": 24,
+      "id": "ad_decay_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "AD FM 2",
+      "short_descriptor_1": "FM",
+      "cc_min_value": -1,
+      "cc_msb": 25,
+      "id": "ad_fm_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "AD Timbre 2",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 26,
+      "id": "ad_timbre_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "AD Colour 2",
+      "short_descriptor_1": "COLR",
+      "cc_min_value": -1,
+      "cc_msb": 27,
+      "id": "ad_colour_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "AD VCA 2",
+      "short_descriptor_1": "VCA",
+      "cc_min_value": -1,
+      "cc_msb": 28,
+      "id": "ad_vca_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "AD Coarse 2",
+      "short_descriptor_1": "CRSE",
+      "cc_min_value": -1,
+      "cc_msb": 29,
+      "id": "ad_coarse_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "AD Fine 2",
+      "short_descriptor_1": "FINE",
+      "cc_min_value": -1,
+      "cc_msb": 30,
+      "id": "ad_fine_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "AD Scale 2",
+      "short_descriptor_1": "SCLE",
+      "cc_min_value": -1,
+      "cc_msb": 31,
+      "id": "ad_scale_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TWO",
+      "name": "AD Root 2",
+      "short_descriptor_1": "ROOT",
+      "cc_min_value": -1,
+      "cc_msb": 32,
+      "id": "ad_root_2"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "Model 3",
+      "short_descriptor_1": "MODE",
+      "cc_min_value": -1,
+      "cc_msb": 33,
+      "id": "model_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "Timbre 3",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 34,
+      "id": "timbre_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "Colour 3",
+      "short_descriptor_1": "MIDI",
+      "cc_min_value": -1,
+      "cc_msb": 35,
+      "id": "colour_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "AD Attack 3",
+      "short_descriptor_1": "ATCK",
+      "cc_min_value": -1,
+      "cc_msb": 36,
+      "id": "ad_attack_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "AD Decay 3",
+      "short_descriptor_1": "DCAY",
+      "cc_min_value": -1,
+      "cc_msb": 37,
+      "id": "ad_decay_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "AD FM 3",
+      "short_descriptor_1": "FM",
+      "cc_min_value": -1,
+      "cc_msb": 38,
+      "id": "ad_fm_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "AD Timbre 3",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 39,
+      "id": "ad_timbre_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "AD Colour 3",
+      "short_descriptor_1": "COLR",
+      "cc_min_value": -1,
+      "cc_msb": 40,
+      "id": "ad_colour_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "AD VCA 3",
+      "short_descriptor_1": "VCA",
+      "cc_min_value": -1,
+      "cc_msb": 41,
+      "id": "ad_vca_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "AD Coarse 3",
+      "short_descriptor_1": "CRSE",
+      "cc_min_value": -1,
+      "cc_msb": 42,
+      "id": "ad_coarse_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "AD Fine 3",
+      "short_descriptor_1": "FINE",
+      "cc_min_value": -1,
+      "cc_msb": 43,
+      "id": "ad_fine_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "AD Scale 3",
+      "short_descriptor_1": "SCLE",
+      "cc_min_value": -1,
+      "cc_msb": 44,
+      "id": "ad_scale_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "THRE",
+      "name": "AD Root 3",
+      "short_descriptor_1": "ROOT",
+      "cc_min_value": -1,
+      "cc_msb": 45,
+      "id": "ad_root_3"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Model 4",
+      "short_descriptor_1": "MODE",
+      "cc_min_value": -1,
+      "cc_msb": 46,
+      "id": "model_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Timbre 4",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 47,
+      "id": "timbre_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "Colour 4",
+      "short_descriptor_1": "MIDI",
+      "cc_min_value": -1,
+      "cc_msb": 48,
+      "id": "colour_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "AD Attack 4",
+      "short_descriptor_1": "ATCK",
+      "cc_min_value": -1,
+      "cc_msb": 49,
+      "id": "ad_attack_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "AD Decay 4",
+      "short_descriptor_1": "DCAY",
+      "cc_min_value": -1,
+      "cc_msb": 50,
+      "id": "ad_decay_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "AD FM 4",
+      "short_descriptor_1": "FM",
+      "cc_min_value": -1,
+      "cc_msb": 51,
+      "id": "ad_fm_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "AD Timbre 4",
+      "short_descriptor_1": "TMBR",
+      "cc_min_value": -1,
+      "cc_msb": 52,
+      "id": "ad_timbre_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "AD Colour 4",
+      "short_descriptor_1": "COLR",
+      "cc_min_value": -1,
+      "cc_msb": 53,
+      "id": "ad_colour_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "AD VCA 4",
+      "short_descriptor_1": "VCA",
+      "cc_min_value": -1,
+      "cc_msb": 54,
+      "id": "ad_vca_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "AD Coarse 4",
+      "short_descriptor_1": "CRSE",
+      "cc_min_value": -1,
+      "cc_msb": 55,
+      "id": "ad_coarse_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "AD Fine 4",
+      "short_descriptor_1": "FINE",
+      "cc_min_value": -1,
+      "cc_msb": 56,
+      "id": "ad_fine_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "AD Scale 4",
+      "short_descriptor_1": "SCLE",
+      "cc_min_value": -1,
+      "cc_msb": 57,
+      "id": "ad_scale_4"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FOUR",
+      "name": "AD Root 4",
+      "short_descriptor_1": "ROOT",
+      "cc_min_value": -1,
+      "cc_msb": 58,
+      "id": "ad_root_4"
+    }
+  ],
+  "type": "midi",
+  "unique": true,
+  "hide": false,
+  "map_params_automatically": false,
+  "name": "EX Braids",
+  "value": 5,
+  "default_midi_device": 1,
+  "default_midi_channel": 16,
+  "polyphonic": true,
+  "id": "ex-braids"
+}]
