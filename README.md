@@ -74,7 +74,7 @@ Encouraged:
 
 ## Install
 
-To install, simply run `;install https://github.com/subvertnormality/mosaic` in maiden. See the [device configuration section for setting up mosaic's config files'](#Device-configuration)
+To install, simply run `;install https://github.com/subvertnormality/mosaic` in maiden. See the [device configuration section for setting up mosaic's config files](#Device-configuration)
 
 ## Core concepts
 
@@ -429,7 +429,7 @@ When the sequencer is not playing, it will autosave with the name "autosave" aft
 
 By default, you'll only see a "CC Device" in Mosaic's device configuration menu in the channel page. This device can be used to control any midi device of course, but you won't benefit from parameter labels. To get the benefit of more midi devices, you can add config files to `dust/data/mosaic/config` tailored to the specifics of your studio. There are a set of premade configuration files in `dust/code/mosaic/lib/config`. Simply copy the ones that are relevant to your studio over to `dust/data/mosaic/config`. You can edit the configuration files manualy to suit your midi device's configuration, for example, to specify a custom midi channel. Create your own `.json` configuration by following the format of the stock config files. Please also consider adding any you make to the mosaic repository for others to use! 
 
-The other way to get more devices is to install sound generators from [n.b.](https://github.com/sixolet/nb/tree/main). This will appear automatically when available.
+You can also install devices such as the execellent [emplaitress](https://github.com/sixolet/emplaitress) using [n.b.](https://github.com/sixolet/nb/tree/main). These will appear automatically when a mod is installed and active.
 
 # Sinfonion connect
 
