@@ -108,9 +108,7 @@ Think of a device as a either an internal norns sound engine powered by [n.b.](h
 
 n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engines to channels.
 
-Midi devices is primarily defined by attributes like MIDI destinations, device name, and CC MIDI destinations. While there are some ready-made device templates to get you started, param trig lock destinations can be customized either directly on the norns or through using the `custom_device_map.lua` configuration file in the `user_config` folder.
-
-You can hide stock devices from the menu by commenting out it's entry in the `device_config.lua` file in the `user_config` folder.
+Midi devices is primarily defined by attributes like MIDI destinations, device name, and CC MIDI destinations. While there are some ready-made device templates to get you started, param trig lock destinations can be customised. See the [device configuration section for setting up mosaic's config files](#Device-configuration) for information
 
 Midi devices can be set to load a stored patch using the params menu. For stock midi devices, all cc parameters are available to edit. A value of -1 against a midi parameter means the function is off. Changing the value will send the midi value to your midi device. When you load a mosiac script, the stored midi param values will be sent to your midi device, effectively loading a patch. It's possible in this way to stored all your sound's patch data with your mosaic patch. This is particularly practical for devices with less midi parameters or where the device's interface is not particularly intuitive.
 
