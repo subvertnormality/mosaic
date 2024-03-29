@@ -1,0 +1,160 @@
+[{
+  "params": [
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FLDR",
+      "name": "Folder",
+      "short_descriptor_1": "SMPL",
+      "cc_min_value": -1,
+      "cc_msb": 7,
+      "id": "folder"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TIME",
+      "name": "Attack Time",
+      "short_descriptor_1": "ATCK",
+      "cc_min_value": -1,
+      "cc_msb": 8,
+      "id": "attack_time"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TIME",
+      "name": "Decay Time",
+      "short_descriptor_1": "DCAY",
+      "cc_min_value": -1,
+      "cc_msb": 9,
+      "id": "decay_time"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TIME",
+      "name": "Sustain Time",
+      "short_descriptor_1": "SUST",
+      "cc_min_value": -1,
+      "cc_msb": 10,
+      "id": "sustain_time"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TIME",
+      "name": "Release Time",
+      "short_descriptor_1": "RELE",
+      "cc_min_value": -1,
+      "cc_msb": 11,
+      "id": "release_time"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "AVE",
+      "name": "Octave",
+      "short_descriptor_1": "OCT",
+      "cc_min_value": -1,
+      "cc_msb": 12,
+      "id": "octave"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "SPOS",
+      "name": "Transpose",
+      "short_descriptor_1": "TRAN",
+      "cc_min_value": -1,
+      "cc_msb": 13,
+      "id": "transpose"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "GAIN",
+      "name": "Gain",
+      "short_descriptor_1": "AMP",
+      "cc_min_value": -1,
+      "cc_msb": 15,
+      "id": "gain"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TION",
+      "name": "Saturation",
+      "short_descriptor_1": "STUR",
+      "cc_min_value": -1,
+      "cc_msb": 16,
+      "id": "saturation"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "MODE",
+      "name": "Delay Mode",
+      "short_descriptor_1": "DLAY",
+      "cc_min_value": -1,
+      "cc_msb": 51,
+      "id": "delay_mode"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "LVL",
+      "name": "Delay Level",
+      "short_descriptor_1": "DLAY",
+      "cc_min_value": -1,
+      "cc_msb": 52,
+      "id": "delay_level"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TIME",
+      "name": "Delay Time",
+      "short_descriptor_1": "DLAY",
+      "cc_min_value": -1,
+      "cc_msb": 53,
+      "id": "delay_time"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TIME",
+      "name": "Delay Feedback",
+      "short_descriptor_1": "DLAY",
+      "cc_min_value": -1,
+      "cc_msb": 54,
+      "id": "delay_feedback"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "BASS",
+      "name": "Tone Bass",
+      "short_descriptor_1": "TONE",
+      "cc_min_value": -1,
+      "cc_msb": 55,
+      "id": "tone_base"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TRBL",
+      "name": "Tone Treble",
+      "short_descriptor_1": "TONE",
+      "cc_min_value": -1,
+      "cc_msb": 56,
+      "id": "tone_treble"
+    }
+  ],
+  "name": "EX M Sample",
+  "type": "midi",
+  "value": 6,
+  "polyphonic": false,
+  "map_params_automatically": false,
+  "id": "ex-multi-sample"
+}]

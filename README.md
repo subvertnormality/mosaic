@@ -425,90 +425,11 @@ You can save and load your creation in the param menu. On save, you will be prom
 
 When the sequencer is not playing, it will autosave with the name "autosave" after 60 seconds. When autosaving, your norns will briefly display the _Mosaic_ logo and your grid will flash. When you launch _Mosaic_ the autosave will be automatically be loaded. Be careful to save into a named slot if you want to keep your creation forever!
 
-## Custom device maps
+## Device configuration
 
-You can hide factory devices from the device list. To do this, remove the device from the `/norns/dust/data/mosaic/device_config.lua` file.
+By default, you'll only see a "CC Device" in Mosaic's device configuration menu in the channel page. This device can be used to control any midi device of course, but you won't benefit from parameter labels. To get the benefit of more midi devices, you can add config files to `dust/data/mosaic/config` tailored to the specifics of your studio. There are a set of premade configuration files in `dust/code/mosaic/lib/config`. Simply copy the ones that are relevant to your studio over to `dust/data/mosaic/config`. You can edit the configuration files manualy to suit your midi device's configuration, for example, to specify a custom midi channel. Create your own `.json` configuration by following the format of the stock config files. Please also consider adding any you make to the mosaic repository for others to use! 
 
-Define every device in your studio by using the `/norns/dust/data/mosaic/custom_device_map.lua` file. Copy the template and add your device's cc and midi information. You can see an example config file in `/norns/dust/code/mosaic/lib/user_config/example/`.
-
-You can override options in the `custom_device_map.lua` file. For example, if you want your EX Braids algorithm to always be set to midi channel 16, you would include the following in your `custom_device_map.lua` file:
-
-```  
-  {
-    ["id"] = "ex-braids",
-    ["hide"] = false,
-    ["default_midi_channel"] = 16
-  },
-```  
-
-If you'd like, you can define devices that have default paramaters defined. These parameters can also have a midi channel that differs from the device's default. The following device has two param knobs automatically assigned on the device param page. The knobs control cc 13 and 14 respectively, on midi channel 13, even though the midi trig and note information is being sent to midi channel 14.
-
-```
-{ 
-    ["type"] = "midi",
-    ["name"] = "Euro 4",
-    ["id"] = "euro-4",
-    ["fixed_note"] = nil, 
-    ["map_params_automatically"] = true, -- if true, params will be mapped to channel param knobs automatically, from 1-8, otherwise user selects
-    ["params"] = { -- up to 8 params 
-      {
-        ["id"] = "flame_13",
-        ["name"] = "Flame 13",
-        ["channel"] = 15,
-        ["cc_msb"] = 13, -- midi cc value
-        ["cc_lsb"] = nil, -- not currently used but could be in the future
-        ["cc_min_value"] = 0, -- bottom range of values
-        ["cc_max_value"] = 127, -- top range of values
-        ["nrpn_msb"] = 1, -- not currently used but could be in the future
-        ["nrpn_lsb"] = 102, -- not currently used but could be in the future
-        ["nrpn_min_value"] = 0, -- not currently used but could be in the future
-        ["nrpn_max_value"] = 127, -- not currently used but could be in the future
-        ["short_descriptor_1"] = "U16M", -- 4 caps letters 
-        ["short_descriptor_2"] = "13", -- 4 caps letters
-      },
-      {
-        ["id"] = "flame_14",
-        ["name"] = "Flame 14",
-        ["channel"] = 15,
-        ["cc_msb"] = 14, -- midi cc value
-        ["cc_lsb"] = nil, -- not currently used but could be in the future
-        ["cc_min_value"] = 0, -- bottom range of values
-        ["cc_max_value"] = 127, -- top range of values
-        ["nrpn_msb"] = 1, -- not currently used but could be in the future
-        ["nrpn_lsb"] = 102, -- not currently used but could be in the future
-        ["nrpn_min_value"] = 0, -- not currently used but could be in the future
-        ["nrpn_max_value"] = 127, -- not currently used but could be in the future
-        ["short_descriptor_1"] = "U16M", -- 4 caps letters 
-        ["short_descriptor_2"] = "14", -- 4 caps letters
-      },
-    },
-    ["default_midi_channel"] = 14
-  },
-```
-
-
-Some devices respond to trigs on specific note numbers. Without locking a channel to the relevant note numbers, things can get strange very quickly in the world of _Mosaic_. This is because merging patterns often alters the note numbers on clashing steps. This is obviously not desirable for devices that require a certain midi note for a specific drum sound. You can lock a device's note number using the "Fixed Note" param on the trig lock page. You can also set this in your `custom_device_map.lua` file. In this example the note is fixed to midi note 16:
-
-```
-  { 
-    ["type"] = "midi", -- leave this as is
-    ["name"] = "DRM BD",
-    ["id"] = "drm-bd",
-    ["map_params_automatically"] = true, -- map the params automatically
-     ["params"] = { -- up to 8 params
-        {
-           ["id"] = "fixed_note",
-           ["name"] = "Fixed Note",
-           ["short_descriptor_1"] = "FIXD",
-           ["short_descriptor_2"] = "NOTE",
-           ["cc_min_value"] = -1,
-           ["cc_max_value"] = 127,
-           ["default"] = 16
-        }
-     },
-    ["default_midi_channel"] = 15
-  },
-```
+The other way to get more devices is to install sound generators from [n.b.](https://github.com/sixolet/nb/tree/main). This will appear automaticall when available.
 
 # Sinfonion connect
 
