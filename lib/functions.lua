@@ -83,17 +83,26 @@ function fn.table_to_string(tbl)
   return table.concat(result)
 end
 
-function fn.print_table(t, indent)
+function fn.print_table(t, indent, current_depth, max_depth)
   indent = indent or ""
+  current_depth = current_depth or 0  -- Start at depth 0
+  max_depth = max_depth or 7  -- Default maximum depth to prevent excessive recursion
+  
+  if current_depth > max_depth then
+    print(indent .. "...")
+    return  -- Stop descending further if max depth exceeded
+  end
+
   for k, v in pairs(t) do
     if type(v) == "table" then
       print(indent .. k .. " :")
-      fn.print_table(v, indent .. "  ")
+      fn.print_table(v, indent .. "  ", current_depth + 1, max_depth)
     else
       print(indent .. k .. " : " .. tostring(v))
     end
   end
 end
+
 
 function fn.merge_tables(t1, t2)
   for k, v in pairs(t2) do
@@ -186,15 +195,22 @@ function fn.format_second_descriptor(str)
   return capitalized
 end
 
-function fn.deep_copy(original)
+function fn.deep_copy(original, max_depth, current_depth)
+  max_depth = max_depth or 7  -- Default maximum depth to prevent infinite recursion
+  current_depth = current_depth or 0  -- Start at depth 0
   local copy
+  
+  if current_depth > max_depth then
+    return original  -- Return the original table if max depth exceeded
+  end
+
   if type(original) == "table" then
     copy = {}
     for original_key, original_value in pairs(original) do
-      copy[original_key] = fn.deep_copy(original_value)
+      copy[original_key] = fn.deep_copy(original_value, max_depth, current_depth + 1)
     end
     setmetatable(copy, getmetatable(original))
-  else -- number, string, boolean, etc
+  else  -- For numbers, strings, booleans, etc.
     copy = original
   end
   return copy

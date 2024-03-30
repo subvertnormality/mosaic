@@ -345,10 +345,7 @@ local function merge_devices()
 
   if (note_players) then
     for index, device in pairs(note_players) do
-      if
-        string.find(index, "midi", 1, true) ~= 1 and string.find(index, "jf mpe", 1, true) ~= 1 and
-          string.find(index, "jf kit", 1, true) ~= 1 and string.find(index, "crow para", 1, true) ~= 1
-      then
+      if string.find(index, "midi", 1, true) ~= 1 then
         local new_device_params = {}
 
         table.insert(
