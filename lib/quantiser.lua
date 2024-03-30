@@ -127,7 +127,8 @@ function quantiser.get_scale_name_from_index(i)
   return scales[i].name
 end
 
-function quantiser.process(note_number, octave_mod, transpose, scale_number)
+
+local function process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree)
   local root_note = program.get().root_note + 60
   local chord_rotation = program.get().chord - 1
   local scale_container = program.get_scale(scale_number)
@@ -142,18 +143,22 @@ function quantiser.process(note_number, octave_mod, transpose, scale_number)
 
   local scale = fn.deep_copy(scale_container.scale)
 
-  if chord_rotation > 0 then
-    for i = 1, chord_rotation do
-      scale = fn.rotate_table_left(scale)
+ if (do_degree) then
+    if chord_rotation > 0 then
+      for i = 1, chord_rotation do
+        scale = fn.rotate_table_left(scale)
+      end
     end
   end
 
-  if scale_container.chord_degree_rotation and scale_container.chord_degree_rotation > 0 then
-    for index = #scale, 1, -1 do
-      local value = scale[index]
-      for i = 1, scale_container.chord_degree_rotation do
-        if (index % 7) == 7 - i then
-          scale[index + 1] = (scale[index + 1] or 0) - 12
+  if (do_rotation) then
+    if scale_container.chord_degree_rotation and scale_container.chord_degree_rotation > 0 then
+      for index = #scale, 1, -1 do
+        local value = scale[index]
+        for i = 1, scale_container.chord_degree_rotation do
+          if (index % 7) == 7 - i then
+            scale[index + 1] = (scale[index + 1] or 0) - 12
+          end
         end
       end
     end
@@ -168,6 +173,26 @@ function quantiser.process(note_number, octave_mod, transpose, scale_number)
   else
     return (scale[note_number + 1] + (octave_mod * 12)) + root_note
   end
+end
+
+function quantiser.process(note_number, octave_mod, transpose, scale_number)
+  return process_handler(note_number, octave_mod, transpose, scale_number, true, true)
+end
+
+function quantiser.process_with_global_params(note_number, octave_mod, transpose, scale_number)
+  local do_rotation = true
+  local do_degree = true
+
+  print("midi_honour_rotation: " .. params:get("midi_honour_rotation") .. " midi_honour_degree: " .. params:get("midi_honour_degree"))
+  if params:get("midi_honour_rotation") == 2 then
+    do_rotation = false
+  end
+
+  if params:get("midi_honour_degree") == 2 then
+    do_degree = false
+  end
+
+  return process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree)
 end
 
 return quantiser
