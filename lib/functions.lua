@@ -441,4 +441,24 @@ function fn.average_table_values(tbl)
   end
 end
 
+function fn.string_trim(self)
+  return self:match("^%s*(.-)%s*$")
+end
+
+function fn.string_split(self, in_split_pattern, out_results)
+  if not out_results then
+      out_results = {}
+  end
+  local the_start = 1
+  local the_split_start, the_split_end = string.find(self, in_split_pattern, the_start)
+  while the_split_start do
+      table.insert(out_results, string.sub(self, the_start, the_split_start - 1))
+      the_start = the_split_end + 1
+      the_split_start, the_split_end = string.find(self, in_split_pattern, the_start)
+  end
+  table.insert(out_results, string.sub(self, the_start))
+  return out_results
+end
+
+
 return fn

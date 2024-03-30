@@ -3,7 +3,8 @@ local device_map = {}
 local fn = include("mosaic/lib/functions")
 local custom_device_map = require(norns.state.data .. "custom_device_map")
 local device_config = require(norns.state.data .. "device_config")
-local json = require("mosaic/lib/json") -- Assuming json.lua is in your LUA_PATH
+local json = require("mosaic/lib/json")
+local json_is_valid = require("mosaic/lib/json_validator")
 
 local function read_json_file(file_path)
   local file, err = io.open(file_path, "r")
@@ -15,10 +16,15 @@ local function read_json_file(file_path)
       file:close()
       if content == "" then
           print("Warning: File is empty -", file_path)
-          return {}
+          return nil
       else
-          print("File content read successfully:", file_path)
-          return json.decode(content)
+          if pcall(json.decode, content) then
+            print("Device config loaded successfully: ", file_path)
+            return json.decode(content)
+          else
+            print("Error: JSON is invalid:", file_path)
+            return nil
+          end
       end
   end
 end
@@ -38,7 +44,9 @@ local function combine_json_files_into_table(directory)
     local files = list_json_files_in_directory(directory)
     for _, file_path in ipairs(files) do
         local table_from_file = read_json_file(file_path)
-        table.insert(devices, table_from_file[1])
+        if table_from_file then
+          table.insert(devices, table_from_file[1])
+        end
     end
     return devices
 end
