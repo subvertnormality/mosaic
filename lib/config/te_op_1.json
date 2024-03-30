@@ -1,0 +1,49 @@
+{
+  "name": "OP-1",
+  "map_params_automatically": false,
+  "type": "midi",
+  "polyphonic": true,
+  "id": "op-1",
+  "params": [
+    {
+      "cc_msb": 0,
+      "name": "Synth",
+      "cc_max_value": 127,
+      "short_descriptor_2": "LFO",
+      "short_descriptor_1": "MIDI",
+      "id": "midi_lfo_synth",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 1,
+      "name": "Envelope",
+      "cc_max_value": 127,
+      "short_descriptor_2": "LFOE",
+      "short_descriptor_1": "MIDI",
+      "id": "midi_lfo_envelope",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 2,
+      "name": "FX",
+      "cc_max_value": 127,
+      "short_descriptor_2": "LFOX",
+      "short_descriptor_1": "MIDI",
+      "id": "midi_lfo_fx",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 3,
+      "name": "Volume",
+      "cc_max_value": 127,
+      "short_descriptor_2": "LFOV",
+      "short_descriptor_1": "MIDI",
+      "id": "midi_lfo_volume",
+      "off_value": -1,
+      "cc_min_value": -1
+    }
+  ]
+}

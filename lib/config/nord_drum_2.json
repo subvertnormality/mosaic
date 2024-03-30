@@ -1,0 +1,372 @@
+{
+  "name": "Nord Drum 2",
+  "map_params_automatically": false,
+  "type": "midi",
+  "polyphonic": false,
+  "id": "nord-drum-2",
+  "params": [
+    {
+      "cc_msb": 7,
+      "name": "Level",
+      "cc_max_value": 127,
+      "short_descriptor_2": "",
+      "short_descriptor_1": "LVEL",
+      "id": "level",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 10,
+      "name": "Pan",
+      "cc_max_value": 127,
+      "short_descriptor_2": "",
+      "short_descriptor_1": "PAN",
+      "id": "pan",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 14,
+      "name": "Noise Filter Frequency",
+      "cc_max_value": 127,
+      "short_descriptor_2": "FLTF",
+      "short_descriptor_1": "NOIS",
+      "id": "noise_filter_frequency",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 15,
+      "name": "Noise Filter Type",
+      "cc_max_value": 127,
+      "short_descriptor_2": "FTYP",
+      "short_descriptor_1": "NOIS",
+      "id": "noise_filter_type",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 16,
+      "name": "Noise Filter Envelope",
+      "cc_max_value": 127,
+      "short_descriptor_2": "ENV",
+      "short_descriptor_1": "NOIS",
+      "id": "noise_filter_envelope",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 17,
+      "name": "Noise Filter Res",
+      "cc_max_value": 127,
+      "short_descriptor_2": "FRES",
+      "short_descriptor_1": "NOIS",
+      "id": "noise_filter_resonance",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 18,
+      "name": "Noise Attack/Rate",
+      "cc_max_value": 127,
+      "short_descriptor_2": "ATKR",
+      "short_descriptor_1": "NOIS",
+      "id": "noise_attack_rate",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 19,
+      "name": "Noise Attack Mode",
+      "cc_max_value": 127,
+      "short_descriptor_2": "ATKM",
+      "short_descriptor_1": "NOIS",
+      "id": "noise_attack_mode",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 20,
+      "name": "Noise Decay Type",
+      "cc_max_value": 127,
+      "short_descriptor_2": "DCYT",
+      "short_descriptor_1": "NOIS",
+      "id": "noise_decay_type",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 21,
+      "name": "Noise Decay",
+      "cc_max_value": 127,
+      "short_descriptor_2": "DCAY",
+      "short_descriptor_1": "NOIS",
+      "id": "noise_decay",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 22,
+      "name": "Noise Decay Lo",
+      "cc_max_value": 127,
+      "short_descriptor_2": "DCYL",
+      "short_descriptor_1": "NOIS",
+      "id": "noise_decay_lo",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 23,
+      "name": "Dist Amount",
+      "cc_max_value": 127,
+      "short_descriptor_2": "AMNT",
+      "short_descriptor_1": "DIST",
+      "id": "dist_amount",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 24,
+      "name": "Dist Type",
+      "cc_max_value": 127,
+      "short_descriptor_2": "TYPE",
+      "short_descriptor_1": "DIST",
+      "id": "dist_type",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 25,
+      "name": "EQ Frequency",
+      "cc_max_value": 127,
+      "short_descriptor_2": "FREQ",
+      "short_descriptor_1": "EQ",
+      "id": "eq_freq",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 26,
+      "name": "EQ Gain",
+      "cc_max_value": 127,
+      "short_descriptor_2": "GAIN",
+      "short_descriptor_1": "EQ",
+      "id": "eq_gain",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 27,
+      "name": "Echo Feedback",
+      "cc_max_value": 127,
+      "short_descriptor_2": "FB",
+      "short_descriptor_1": "ECHO",
+      "id": "echo_feedback",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 28,
+      "name": "Echo Amount",
+      "cc_max_value": 127,
+      "short_descriptor_2": "AMNT",
+      "short_descriptor_1": "ECHO",
+      "id": "echo_amount",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 29,
+      "name": "Echo BPM",
+      "cc_max_value": 16384,
+      "cc_lsb": 61,
+      "short_descriptor_2": "BPM",
+      "short_descriptor_1": "ECHO",
+      "id": "echo_bpm",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 30,
+      "name": "Tone Spectra",
+      "cc_max_value": 127,
+      "short_descriptor_2": "SPEC",
+      "short_descriptor_1": "TONE",
+      "id": "tone_spectra",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 31,
+      "name": "Tone Pitch",
+      "cc_max_value": 16384,
+      "cc_lsb": 63,
+      "short_descriptor_2": "PTCH",
+      "short_descriptor_1": "TONE",
+      "id": "tone_pitch",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 0,
+      "name": "Bank Select",
+      "cc_max_value": 16384,
+      "cc_lsb": 32,
+      "short_descriptor_2": "SELC",
+      "short_descriptor_1": "BANK",
+      "id": "bank_select",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 46,
+      "name": "Tone Wave",
+      "cc_max_value": 127,
+      "short_descriptor_2": "WAVE",
+      "short_descriptor_1": "TONE",
+      "id": "tone_wave",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 47,
+      "name": "Tone Timbre Decay",
+      "cc_max_value": 127,
+      "short_descriptor_2": "TDCY",
+      "short_descriptor_1": "TONE",
+      "id": "tone_timbre_decay",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 48,
+      "name": "Tone Punch",
+      "cc_max_value": 127,
+      "short_descriptor_2": "PNCH",
+      "short_descriptor_1": "TONE",
+      "id": "tone_punch",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 49,
+      "name": "Tone Decay Type",
+      "cc_max_value": 127,
+      "short_descriptor_2": "DTYP",
+      "short_descriptor_1": "TONE",
+      "id": "tone_decay_type",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 50,
+      "name": "Tone Decay",
+      "cc_max_value": 127,
+      "short_descriptor_2": "DCAY",
+      "short_descriptor_1": "TONE",
+      "id": "tone_decay",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 51,
+      "name": "Tone Dec Lo",
+      "cc_max_value": 127,
+      "short_descriptor_2": "DCLO",
+      "short_descriptor_1": "TONE",
+      "id": "tone_dec_lo",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 52,
+      "name": "Tone Timbre",
+      "cc_max_value": 127,
+      "short_descriptor_2": "TMBR",
+      "short_descriptor_1": "TONE",
+      "id": "tone_timbre",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 53,
+      "name": "Tone Timbre Env",
+      "cc_max_value": 127,
+      "short_descriptor_2": "ENV",
+      "short_descriptor_1": "TONE",
+      "id": "tone_timbre_envelope",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 54,
+      "name": "Tone Bend Amount",
+      "cc_max_value": 127,
+      "short_descriptor_2": "BNDA",
+      "short_descriptor_1": "TONE",
+      "id": "tone_bend_amount",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 55,
+      "name": "Tone Bend Time",
+      "cc_max_value": 127,
+      "short_descriptor_2": "BNDT",
+      "short_descriptor_1": "TONE",
+      "id": "tone_bend_time",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 56,
+      "name": "Click Level",
+      "cc_max_value": 127,
+      "short_descriptor_2": "LVEL",
+      "short_descriptor_1": "CLIK",
+      "id": "click_level",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 57,
+      "name": "Click Type",
+      "cc_max_value": 127,
+      "short_descriptor_2": "TYPE",
+      "short_descriptor_1": "CLIK",
+      "id": "click_type",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 58,
+      "name": "Mix Balance",
+      "cc_max_value": 127,
+      "short_descriptor_2": "BAL",
+      "short_descriptor_1": "MIX",
+      "id": "mix_balance",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 59,
+      "name": "Mute Group",
+      "cc_max_value": 127,
+      "short_descriptor_2": "GRP",
+      "short_descriptor_1": "MUTE",
+      "id": "mute_group",
+      "off_value": -1,
+      "cc_min_value": -1
+    },
+    {
+      "cc_msb": 70,
+      "name": "Channel Focus",
+      "cc_max_value": 127,
+      "short_descriptor_2": "FOCS",
+      "short_descriptor_1": "CHAN",
+      "id": "channel_focus",
+      "off_value": -1,
+      "cc_min_value": -1
+    }
+  ]
+}
