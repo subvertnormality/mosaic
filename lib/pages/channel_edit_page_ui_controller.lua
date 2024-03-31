@@ -410,45 +410,33 @@ function channel_edit_page_ui_controller.change_page(page)
   pages:select_page(page)
 end
 
-function channel_edit_page_ui_controller.handle_trig_lock_param_change_up(d, channel, dial_index, target_dial)
+local function handle_trig_lock_param_change(direction, channel, dial_index, target_dial)
   local pressed_keys = grid_controller.get_pressed_keys()
-
   local param_id = channel.trig_lock_params[dial_index].param_id
   local p_value = nil
   local p = nil
   if param_id ~= nil then
-    p = params:lookup_param(channel.trig_lock_params[dial_index].param_id)
-
+    p = params:lookup_param(param_id)
     if p.name ~= "undefined" then
       p_value = p.value
     end
   end
 
-  if
-    #pressed_keys > 0 and channel.trig_lock_params[dial_index] and
-      channel.trig_lock_params[dial_index].id
-   then
-    for i, keys in ipairs(pressed_keys) do
+  if #pressed_keys > 0 and channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
+    for _, keys in ipairs(pressed_keys) do
       local step = fn.calc_grid_count(keys[1], keys[2])
       program.add_step_param_trig_lock(
         step,
         dial_index,
-        (program.get_step_param_trig_lock(channel, step, dial_index) or
-          p_value or
-          channel.trig_lock_banks[dial_index]) + d
+        (program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]) + direction
       )
       target_dial:set_value(
-        program.get_step_param_trig_lock(channel, step, dial_index) or
-          p_value or
-          channel.trig_lock_banks[dial_index]
+        program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]
       )
     end
-  elseif
-    channel.trig_lock_params[dial_index] and
-      channel.trig_lock_params[dial_index].id
-   then
+  elseif channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
     if p ~= nil and p_value ~= nil then
-      p_value = p_value + d
+      p_value = p_value + direction
       if p_value < (channel.trig_lock_params[dial_index].cc_min_value or -1) then
         p_value = (channel.trig_lock_params[dial_index].cc_min_value or -1)
       end
@@ -458,101 +446,25 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_up(d, cha
       p.value = p_value
       p:bang()
     else
-      if channel.trig_lock_banks[dial_index] == {} then
-        channel.trig_lock_banks[dial_index] =
-          (channel.trig_lock_params[dial_index].cc_min_value or -1)
-      end
-      channel.trig_lock_banks[dial_index] =
-        channel.trig_lock_banks[dial_index] + d
-      if
-        channel.trig_lock_banks[dial_index] >
-          (channel.trig_lock_params[dial_index].cc_max_value or 127)
-       then
-        channel.trig_lock_banks[dial_index] =
-          (channel.trig_lock_params[dial_index].cc_max_value or 127)
+      channel.trig_lock_banks[dial_index] = channel.trig_lock_banks[dial_index] + direction
+      if channel.trig_lock_banks[dial_index] > (channel.trig_lock_params[dial_index].cc_max_value or 127) then
+        channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_max_value or 127)
+      elseif channel.trig_lock_banks[dial_index] < (channel.trig_lock_params[dial_index].cc_min_value or -1) then
+        channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_min_value or -1)
       end
     end
-    if p_value ~= nil then
-      target_dial:set_value(p_value)
-    else
-      target_dial:set_value(channel.trig_lock_banks[dial_index])
-    end
+    target_dial:set_value(p_value or channel.trig_lock_banks[dial_index])
   end
 end
 
-
-function channel_edit_page_ui_controller.handle_trig_lock_param_change_down(d, channel, dial_index, target_dial)
-  local pressed_keys = grid_controller.get_pressed_keys()
-
-  local param_id = channel.trig_lock_params[dial_index].param_id
-  local p_value = nil
-  local p = nil
-  if param_id ~= nil then
-    p = params:lookup_param(channel.trig_lock_params[dial_index].param_id)
-
-    if p.name ~= "undefined" then
-      p_value = p.value
-    end
-  end
-
-  if
-    #pressed_keys > 0 and channel.trig_lock_params[dial_index] and
-      channel.trig_lock_params[dial_index].id
-    then
-    for i, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      program.add_step_param_trig_lock(
-        step,
-        dial_index,
-        (program.get_step_param_trig_lock(channel, step, dial_index) or
-          p_value or
-          channel.trig_lock_banks[dial_index]) + d
-      )
-      target_dial:set_value(
-        program.get_step_param_trig_lock(
-          channel,
-          step,
-          dial_index or p_value or channel.trig_lock_banks[dial_index]
-        )
-      )
-    end
-  elseif
-    channel.trig_lock_params[dials:get_selected_index()] and
-      channel.trig_lock_params[dials:get_selected_index()].id
-    then
-    if p ~= nil and p_value ~= nil then
-      p_value = p_value + d
-      if p_value < (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or -1) then
-        p_value = (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or -1)
-      end
-      if p_value > (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127) then
-        p_value = (channel.trig_lock_params[dials:get_selected_index()].cc_max_value or 127)
-      end
-      p.value = p_value
-      p:bang()
-    else
-      if channel.trig_lock_banks[dials:get_selected_index()] == nil then
-        channel.trig_lock_banks[dials:get_selected_index()] =
-          (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or -1)
-      end
-      channel.trig_lock_banks[dials:get_selected_index()] =
-        channel.trig_lock_banks[dials:get_selected_index()] + d
-      if
-        channel.trig_lock_banks[dials:get_selected_index()] <
-          (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or -1)
-        then
-        channel.trig_lock_banks[dials:get_selected_index()] =
-          (channel.trig_lock_params[dials:get_selected_index()].cc_min_value or -1)
-      end
-    end
-    if p_value ~= nil then
-      target_dial:set_value(p_value)
-    else
-      target_dial:set_value(channel.trig_lock_banks[dials:get_selected_index()])
-    end
-  end
-
+function channel_edit_page_ui_controller.handle_trig_lock_param_change_up(channel, dial_index, target_dial)
+  handle_trig_lock_param_change(1, channel, dial_index, target_dial) -- Increment value
 end
+
+function channel_edit_page_ui_controller.handle_trig_lock_param_change_down(channel, dial_index, target_dial)
+  handle_trig_lock_param_change(-1, channel, dial_index, target_dial) -- Decrement value
+end
+
 
 
 function channel_edit_page_ui_controller.enc(n, d)
@@ -651,7 +563,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             )
           else
-            channel_edit_page_ui_controller.handle_trig_lock_param_change_up(d, program.get_selected_channel(), dials:get_selected_index(), dials:get_selected_item())
+            channel_edit_page_ui_controller.handle_trig_lock_param_change_up(program.get_selected_channel(), dials:get_selected_index(), dials:get_selected_item())
           end
         end
       else
@@ -745,7 +657,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             )
           else
-            channel_edit_page_ui_controller.handle_trig_lock_param_change_down(d, program.get_selected_channel(), dials:get_selected_index(), dials:get_selected_item())
+            channel_edit_page_ui_controller.handle_trig_lock_param_change_down(program.get_selected_channel(), dials:get_selected_index(), dials:get_selected_item())
           end
         end
       end

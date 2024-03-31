@@ -170,6 +170,9 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
     local note = note_number % 7
     return (scale[note + 1] + (12 * octave)) + root_note
   else
+    if note_number > 69 then
+      note_number = 69
+    end
     return (scale[note_number + 1] + (octave_mod * 12)) + root_note
   end
 end
