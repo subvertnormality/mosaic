@@ -4,7 +4,6 @@ local fn = include("mosaic/lib/functions")
 local custom_device_map = require(norns.state.data .. "custom_device_map")
 local device_config = require(norns.state.data .. "device_config")
 local json = require("mosaic/lib/json")
-local json_is_valid = require("mosaic/lib/json_validator")
 
 local function read_json_file(file_path)
   local file, err = io.open(file_path, "r")

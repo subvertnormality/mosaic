@@ -410,7 +410,7 @@ function channel_edit_page_ui_controller.change_page(page)
   pages:select_page(page)
 end
 
-local function handle_trig_lock_param_change(direction, channel, dial_index, target_dial)
+function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
   local pressed_keys = grid_controller.get_pressed_keys()
   local param_id = channel.trig_lock_params[dial_index].param_id
   local p_value = nil
@@ -425,16 +425,17 @@ local function handle_trig_lock_param_change(direction, channel, dial_index, tar
   if #pressed_keys > 0 and channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
     for _, keys in ipairs(pressed_keys) do
       local step = fn.calc_grid_count(keys[1], keys[2])
+      m_params[dial_index]:set_value(
+        program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]
+      )
       program.add_step_param_trig_lock(
         step,
         dial_index,
         (program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]) + direction
       )
-      target_dial:set_value(
-        program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]
-      )
     end
   elseif channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
+    m_params[dial_index]:set_value(p_value or channel.trig_lock_banks[dial_index])
     if p ~= nil and p_value ~= nil then
       p_value = p_value + direction
       if p_value < (channel.trig_lock_params[dial_index].cc_min_value or -1) then
@@ -453,16 +454,15 @@ local function handle_trig_lock_param_change(direction, channel, dial_index, tar
         channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_min_value or -1)
       end
     end
-    target_dial:set_value(p_value or channel.trig_lock_banks[dial_index])
   end
 end
 
-function channel_edit_page_ui_controller.handle_trig_lock_param_change_up(channel, dial_index, target_dial)
-  handle_trig_lock_param_change(1, channel, dial_index, target_dial) -- Increment value
+function channel_edit_page_ui_controller.handle_trig_lock_param_change_up(channel, dial_index)
+  channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(1, channel, dial_index) -- Increment value
 end
 
-function channel_edit_page_ui_controller.handle_trig_lock_param_change_down(channel, dial_index, target_dial)
-  handle_trig_lock_param_change(-1, channel, dial_index, target_dial) -- Decrement value
+function channel_edit_page_ui_controller.handle_trig_lock_param_change_down(channel, dial_index)
+  channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(-1, channel, dial_index) -- Decrement value
 end
 
 
@@ -563,7 +563,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             )
           else
-            channel_edit_page_ui_controller.handle_trig_lock_param_change_up(program.get_selected_channel(), dials:get_selected_index(), dials:get_selected_item())
+            channel_edit_page_ui_controller.handle_trig_lock_param_change_up(program.get_selected_channel(), dials:get_selected_index())
           end
         end
       else
@@ -657,7 +657,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             )
           else
-            channel_edit_page_ui_controller.handle_trig_lock_param_change_down(program.get_selected_channel(), dials:get_selected_index(), dials:get_selected_item())
+            channel_edit_page_ui_controller.handle_trig_lock_param_change_down(program.get_selected_channel(), dials:get_selected_index())
           end
         end
       end
