@@ -194,7 +194,7 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   clock_setup()
 
-  -- First trig in sequencer pattern 1 fires
+  -- First trig in song sequence 1 fires
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -203,7 +203,7 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   progress_clock_by_beats(2)
 
-  -- First trig in sequencer pattern 1 fires again due to channel being half the length of sequencer pattern
+  -- First trig in song sequence 1 fires again due to channel being half the length of song sequence
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -211,10 +211,10 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
   luaunit.assert_equals(note_on_event[3], 1)
 
 
-  -- the global clock continues when the sequencer pattern changes
+  -- the global clock continues when the song sequence changes
   progress_clock_by_beats(3)
 
-  -- Step 6 of the second sequencer pattern now fires
+  -- Step 6 of the second song sequence now fires
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -223,7 +223,7 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   progress_clock_by_beats(3)
 
-  -- First trig in sequencer pattern 1 fires again
+  -- First trig in song sequence 1 fires again
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -275,7 +275,7 @@ function test_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_
 
   progress_clock_by_beats(3)
 
-  -- Fourth trig in sequencer pattern 1 fires
+  -- Fourth trig in song sequence 1 fires
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -284,14 +284,14 @@ function test_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_
 
   progress_clock_by_beats(1)
 
-  -- Fifth trig in sequencer pattern 1 doesnt fire because the sequencer pattern is shorter than the channel pattern
+  -- Fifth trig in song sequence 1 doesnt fire because the song sequence is shorter than the channel pattern
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assertNil(note_on_event)
 
   progress_clock_by_beats(3)
 
-  -- Fourth trig in sequencer pattern 1 fires again
+  -- Fourth trig in song sequence 1 fires again
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -358,7 +358,7 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   clock_setup()
 
-  -- First trig in sequencer pattern 1 fires
+  -- First trig in song sequence 1 fires
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -460,7 +460,7 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   clock_setup()
 
-  -- First trig in sequencer pattern 1 fires
+  -- First trig in song sequence 1 fires
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -469,17 +469,17 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   progress_clock_by_beats(2)
 
-  -- First trig in sequencer pattern 1 fires again due to channel being half the length of sequencer pattern
+  -- First trig in song sequence 1 fires again due to channel being half the length of song sequence
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
   luaunit.assert_equals(note_on_event[2], 101)
   luaunit.assert_equals(note_on_event[3], 1)
 
-  -- the clock resets when the sequencer pattern changes
+  -- the clock resets when the song sequence changes
   progress_clock_by_beats(7)
 
-  -- Step 6 of the second sequencer pattern now fires
+  -- Step 6 of the second song sequence now fires
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -488,7 +488,7 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   progress_clock_by_beats(3)
 
-  -- First trig in sequencer pattern 1 fires again
+  -- First trig in song sequence 1 fires again
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -558,7 +558,7 @@ function test_song_mode_functions_with_sequencer_pattern_repeats()
 
   clock_setup()
 
-  -- First trig in sequencer pattern 1 fires
+  -- First trig in song sequence 1 fires
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -567,7 +567,7 @@ function test_song_mode_functions_with_sequencer_pattern_repeats()
 
   progress_clock_by_beats(2)
 
-  -- First trig in sequencer pattern 1 fires again due to channel being half the length of sequencer pattern
+  -- First trig in song sequence 1 fires again due to channel being half the length of song sequence
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -576,7 +576,7 @@ function test_song_mode_functions_with_sequencer_pattern_repeats()
 
   progress_clock_by_beats(2)
 
-  -- First trig in sequencer pattern 1 fires again due to channel being half the length of sequencer pattern
+  -- First trig in song sequence 1 fires again due to channel being half the length of song sequence
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -585,17 +585,17 @@ function test_song_mode_functions_with_sequencer_pattern_repeats()
 
   progress_clock_by_beats(2)
 
-  -- First trig in sequencer pattern 1 fires again due to channel being half the length of sequencer pattern
+  -- First trig in song sequence 1 fires again due to channel being half the length of song sequence
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
   luaunit.assert_equals(note_on_event[2], 101)
   luaunit.assert_equals(note_on_event[3], 1)
 
-  -- the clock resets when the sequencer pattern changes
+  -- the clock resets when the song sequence changes
   progress_clock_by_beats(7)
 
-  -- Step 6 of the second sequencer pattern now fires
+  -- Step 6 of the second song sequence now fires
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -604,7 +604,7 @@ function test_song_mode_functions_with_sequencer_pattern_repeats()
 
   progress_clock_by_beats(3)
 
-  -- First trig in sequencer pattern 1 fires again
+  -- First trig in song sequence 1 fires again
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)

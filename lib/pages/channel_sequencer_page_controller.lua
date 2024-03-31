@@ -13,9 +13,9 @@ function channel_sequencer_page_controller.init()
       (s - 1) % 16 + 1,
       math.floor((s - 1) / 16) + 1,
       {
-        {"Sequencer pattern " .. s .. " off", 2},
-        {"Sequencer pattern " .. s .. " on", 7},
-        {"Sequencer pattern " .. s .. " active", 15}
+        {"Song sequence " .. s .. " off", 2},
+        {"Song sequence " .. s .. " on", 7},
+        {"Song sequence " .. s .. " active", 15}
       }
     )
     refresh_button[s] = true
@@ -70,7 +70,7 @@ function channel_sequencer_page_controller.register_press_handlers()
         local do_func = function()
           channel_pattern_buttons["step" .. s .. "_sequencer_pattern_button"]:set_state(3)
           program.get().selected_sequencer_pattern = s
-          tooltip:show("Sequencer pattern " .. s .. " selected")
+          tooltip:show("Song sequence " .. s .. " selected")
           
           for channel_number = 1, 17 do
             local channel = program.get_channel(channel_number)

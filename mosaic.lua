@@ -7,11 +7,6 @@
 
 testing = false
 
-local create_default_config = include("mosaic/lib/user_config/create_default_config")
-
-create_default_config.create_script("device_config.lua", create_default_config.default_device_config_content)
-create_default_config.create_script("custom_device_map.lua", create_default_config.default_custom_device_map_content)
-
 grid_controller = include("mosaic/lib/grid_controller")
 ui_controller = include("mosaic/lib/ui_controller")
 program = include("mosaic/lib/program")
