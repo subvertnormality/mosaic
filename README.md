@@ -71,6 +71,7 @@ Encouraged:
 - Disting EX
 - Elektron Digitone, Syntakt, Digitakt
 - Sinfonion
+- Midi controller with encoders that sends relative bin offsets (for example, intech grid en32)
 
 ## Install
 
@@ -428,6 +429,12 @@ When the sequencer is not playing, it will autosave with the name "autosave" aft
 By default, you'll only see a "CC Device" in Mosaic's device configuration menu in the channel page. This device can be used to control any midi device of course, but you won't benefit from parameter labels. To get the benefit of more midi devices, you can add config files to `dust/data/mosaic/config` tailored to the specifics of your studio. There are a set of premade configuration files in `dust/code/mosaic/lib/config`. Simply copy the ones that are relevant to your studio over to `dust/data/mosaic/config`. You can edit the configuration files manualy to suit your midi device's configuration, for example, to specify a custom midi channel. Create your own `.json` configuration by following the format of the stock config files. Please also consider adding any you make to the mosaic repository for others to use! 
 
 You can also install devices such as the execellent [emplaitress](https://github.com/sixolet/emplaitress) using [n.b.](https://github.com/sixolet/nb/tree/main). These will appear automatically when a mod is installed and active.
+
+# Midi control
+
+You can connect a midi keyboard to norns to play the device on the currently selected channel. The midi keyboard follows the selected scale at the currently playing step. You can configure whether the midi keyboard honours the degree and note wrapping options of the scale in the Norn's parameters page.
+
+Control all 10 of the trig parameters on the currently selected page independently by using a midi controller such as intech's en64 by sending a relative bin offset midi CC message to cc 15 - 24 respectively.
 
 # Sinfonion connect
 

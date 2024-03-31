@@ -83,17 +83,26 @@ function fn.table_to_string(tbl)
   return table.concat(result)
 end
 
-function fn.print_table(t, indent)
+function fn.print_table(t, indent, current_depth, max_depth)
   indent = indent or ""
+  current_depth = current_depth or 0  -- Start at depth 0
+  max_depth = max_depth or 7  -- Default maximum depth to prevent excessive recursion
+  
+  if current_depth > max_depth then
+    print(indent .. "...")
+    return  -- Stop descending further if max depth exceeded
+  end
+
   for k, v in pairs(t) do
     if type(v) == "table" then
       print(indent .. k .. " :")
-      fn.print_table(v, indent .. "  ")
+      fn.print_table(v, indent .. "  ", current_depth + 1, max_depth)
     else
       print(indent .. k .. " : " .. tostring(v))
     end
   end
 end
+
 
 function fn.merge_tables(t1, t2)
   for k, v in pairs(t2) do
@@ -186,15 +195,22 @@ function fn.format_second_descriptor(str)
   return capitalized
 end
 
-function fn.deep_copy(original)
+function fn.deep_copy(original, max_depth, current_depth)
+  max_depth = max_depth or 7  -- Default maximum depth to prevent infinite recursion
+  current_depth = current_depth or 0  -- Start at depth 0
   local copy
+  
+  if current_depth > max_depth then
+    return original  -- Return the original table if max depth exceeded
+  end
+
   if type(original) == "table" then
     copy = {}
     for original_key, original_value in pairs(original) do
-      copy[original_key] = fn.deep_copy(original_value)
+      copy[original_key] = fn.deep_copy(original_value, max_depth, current_depth + 1)
     end
     setmetatable(copy, getmetatable(original))
-  else -- number, string, boolean, etc
+  else  -- For numbers, strings, booleans, etc.
     copy = original
   end
   return copy
@@ -424,5 +440,25 @@ function fn.average_table_values(tbl)
       return math.floor((sum / count) + 0.5)
   end
 end
+
+function fn.string_trim(self)
+  return self:match("^%s*(.-)%s*$")
+end
+
+function fn.string_split(self, in_split_pattern, out_results)
+  if not out_results then
+      out_results = {}
+  end
+  local the_start = 1
+  local the_split_start, the_split_end = string.find(self, in_split_pattern, the_start)
+  while the_split_start do
+      table.insert(out_results, string.sub(self, the_start, the_split_start - 1))
+      the_start = the_split_end + 1
+      the_split_start, the_split_end = string.find(self, in_split_pattern, the_start)
+  end
+  table.insert(out_results, string.sub(self, the_start))
+  return out_results
+end
+
 
 return fn

@@ -1,6 +1,7 @@
 local fn = include("mosaic/lib/functions")
 local step_handler = include("mosaic/lib/step_handler")
 local quantiser = include("mosaic/lib/quantiser")
+local channel_edit_page_ui_controller = include("mosaic/lib/pages/channel_edit_page_ui_controller")
 
 local midi_controller = {}
 
@@ -22,44 +23,47 @@ for i = 0, 127 do
   midi_tables[i + 1] = {noteValue-1, octaveValue}
 end
 
-function flush_midi_off_store()
-  for i = 1, #midi_off_store do
-    midi_controller:note_off(midi_off_store[i].note, 0, midi_off_store[i].channel, midi_off_store[i].device)
-  end
-  midi_off_store = {}
-end
+function handle_midi_event_data(data, midi_device)
 
-function handle_midi_event_data(data)
 
   local channel = program.get_selected_channel()
 
-  if channel.number == 17 or midi_tables[data[2]] == nil then 
+  if channel.number == 17 then 
     return 
   end
 
   local transpose = step_handler.calculate_step_transpose(program.get().current_step, channel.number)
-  local note = quantiser.process(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, channel.step_scale_number)
   local device = program.get().devices[channel.number]
   local midi_channel = device.midi_channel
   local velocity = data[3]
 
-  if data[1] == 144 then -- note
-    flush_midi_off_store()
+  if data[1] == 144 then -- note on
+    if midi_tables[data[2]] == nil then
+      return
+    end
+    midi_off_store[data[2]] = channel.step_scale_number
+    local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, channel.step_scale_number)
     midi_controller:note_on(note, velocity, midi_channel, device.midi_device)
-    table.insert(midi_off_store, {note = note, channel = midi_channel, device = device.midi_device})
 
-  elseif data[1] == 128 then
+  elseif data[1] == 128 then -- note off
+    if midi_tables[data[2]] == nil then
+      return
+    end
+    local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, midi_off_store[data[2]])
     midi_controller:note_off(note, 0, midi_channel, device.midi_device)
-    table.insert(midi_off_store, {note = note, channel = midi_channel, device = device.midi_device})
-  elseif data[1] == 176 then -- modulation
-    
+  elseif data[1] == 176 then -- cc change
+    if data[2] >= 15 and (data[2] - 14) <= 10 then
+      channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(data[3] - 64, channel, data[2] - 14)
+    end
   end 
 end
 
 function midi_controller.init()
   for i = 1, #midi.vports do
     midi_devices[i] = midi.connect(i)
-    midi_devices[i].event = handle_midi_event_data
+    midi_devices[i].event = function(data) 
+      handle_midi_event_data(data, midi_devices[i])
+    end
   end
 end
 
