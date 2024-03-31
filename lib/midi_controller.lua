@@ -35,12 +35,12 @@ function handle_midi_event_data(data)
   local midi_channel = device.midi_channel
   local velocity = data[3]
 
-  if data[1] == 144 then -- note
+  if data[1] == 144 then -- note on
     midi_off_store[data[2]] = channel.step_scale_number
     local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, channel.step_scale_number)
     midi_controller:note_on(note, velocity, midi_channel, device.midi_device)
 
-  elseif data[1] == 128 then
+  elseif data[1] == 128 then -- note off
     local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, midi_off_store[data[2]])
     midi_controller:note_off(note, 0, midi_channel, device.midi_device)
   elseif data[1] == 176 then -- modulation

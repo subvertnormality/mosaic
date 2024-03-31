@@ -431,13 +431,13 @@ function step_handler.handle(c, current_step)
 
     local quantised_fixed_note = step_handler.process_stock_params(c, current_step, "quantised_fixed_note")
 
-    if quantised_fixed_note and quantised_fixed_note > -1 then
-      note = quantiser.process(quantised_fixed_note, octave_mod, 0, channel.step_scale_number, c)
+    if quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127 then
+      note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number)
     end
 
     local fixed_note = step_handler.process_stock_params(c, current_step, "fixed_note")
 
-    if fixed_note and fixed_note > -1 then
+    if fixed_note and fixed_note > -1 and fixed_note <= 127 then
       note = fixed_note
     end
 
