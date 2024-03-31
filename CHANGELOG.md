@@ -1,7 +1,7 @@
 # 0.4.5 - Candidate beta
 
 * More bug fixes
-* Basic midi control from param trig locks
+* Enabled basic midi control of param trig locks
 
 # 0.4.4
 
