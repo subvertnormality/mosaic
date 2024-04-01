@@ -265,7 +265,7 @@ Want a step to hold a unique sound or scale? Press and keep it down while select
 
 You can clear all locks for a step by holding the step and tapping the K2 button.
 
-![Channel sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_sequencer.png)
+![Song sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_sequencer.png)
 
 Adjust a channel's octave range with:
 

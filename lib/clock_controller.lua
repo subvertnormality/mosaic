@@ -147,6 +147,8 @@ function clock_controller.init()
       clock_lattice:new_sprocket {
       action = function(t)
         
+        local current_step = program.get_current_step_for_channel(channel_number)
+
         if channel_number ~= 17 then
           step_handler.process_lengths_for_channel(channel_number)
         end
@@ -161,8 +163,7 @@ function clock_controller.init()
           program.get_channel(channel_number).end_trig[1],
           program.get_channel(channel_number).end_trig[2]
         )
-        local current_step = program.get_current_step_for_channel(channel_number)
-
+        
         if current_step < start_trig then
           program.set_current_step_for_channel(channel_number, start_trig)
           current_step = start_trig
@@ -178,19 +179,6 @@ function clock_controller.init()
           current_step = start_trig
         end
 
-        if channel_number ~= 17 then
-          local next_trig_value = program.get_channel(channel_number).working_pattern.trig_values[current_step]
-          if next_trig_value == 1 then
-            trigless_lock_active[channel_number] = false
-            step_handler.process_params(channel_number, current_step)
-          elseif
-            params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and
-              program.step_has_param_trig_lock(program.get_channel(channel_number), current_step)
-           then
-            trigless_lock_active[channel_number] = true
-            step_handler.process_params(channel_number, current_step)
-          end
-        end
 
         if channel_number == 17 then
           step_handler.process_global_step_scale_trig_lock(current_step)
@@ -214,6 +202,36 @@ function clock_controller.init()
       enabled = true
     }
 
+    
+    clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor =
+      clock_lattice:new_sprocket {
+      action = function(t)
+        if channel_number ~= 17 then
+          local step = program.get_current_step_for_channel(channel_number) + 1
+
+          if step < 1 then
+            return
+          end
+
+          local next_trig_value = program.get_channel(channel_number).working_pattern.trig_values[step]
+          if next_trig_value == 1 then
+            trigless_lock_active[channel_number] = false
+            step_handler.process_params(channel_number, step)
+          elseif
+            params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and
+              program.step_has_param_trig_lock(program.get_channel(channel_number), step)
+            then
+            trigless_lock_active[channel_number] = true
+            step_handler.process_params(channel_number, step)
+          end
+        end
+      end,
+      division = 1 / (div * 4),
+      swing = 50,
+      delay = 0.95,
+      enabled = true
+    }
+
     clock_controller["channel_" .. channel_number .. "_clock"].first_run = true
   end
 
@@ -221,10 +239,12 @@ end
 
 function clock_controller.set_channel_swing(channel_number, swing)
   clock_controller["channel_" .. channel_number .. "_clock"]:set_swing(swing)
+  clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor:set_swing(swing)
 end
 
 function clock_controller.set_channel_division(channel_number, division)
   clock_controller["channel_" .. channel_number .. "_clock"]:set_division(1 / (division * 4))
+  clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor:set_division(1 / (division * 4))
 end
 
 function clock_controller.delay_action(c, division_index, multiplier, func)

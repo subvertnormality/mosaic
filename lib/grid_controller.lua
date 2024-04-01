@@ -29,7 +29,7 @@ local menu_buttons = {}
 
 local page_names = {
   "Channel Edit Page",
-  "Channel Sequencer Page",
+  "Song Sequencer Page",
   "Pattern Trigger Edit Page",
   "Pattern Note Edit Page",
   "Pattern Velocity Edit Page"
