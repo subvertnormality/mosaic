@@ -1,8 +1,6 @@
 local device_map = {}
 
 local fn = include("mosaic/lib/functions")
-local custom_device_map = require(norns.state.data .. "custom_device_map")
-local device_config = require(norns.state.data .. "device_config")
 local json = require("mosaic/lib/json")
 
 local function read_json_file(file_path)
