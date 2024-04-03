@@ -426,13 +426,13 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
   if #pressed_keys > 0 and channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
     for _, keys in ipairs(pressed_keys) do
       local step = fn.calc_grid_count(keys[1], keys[2])
-      m_params[dial_index]:set_value(
-        program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]
-      )
       program.add_step_param_trig_lock(
         step,
         dial_index,
         (program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]) + direction
+      )
+      m_params[dial_index]:set_value(
+        program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]
       )
     end
   elseif channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
@@ -454,9 +454,11 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
         channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_min_value or -1)
       end
     end
+
+    channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
+
   end
 
-  channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
 end
 
 
