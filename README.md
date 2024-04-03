@@ -255,7 +255,7 @@ Each scale slot corresponds specifically to the current Song Sequence. To change
 
 The sequencer visualises the music: a tapestry of selected patterns, tailored by the chosen merge mode. To set the length of a channel, simultaneously press and hold the first and last steps. Active steps are brighter, whilst inactive steps dim. 
 
-You can press steps to explicitly turn them off directly on the channel edit page sequencer. It will blink slightly to show the step is currently deactivated. Press again to turn the step back on.
+You can turn active steps off directly in the channel edit page sequencer by holding the K3 button and pressing the target step. It will blink slightly to show the step is currently deactivated. Hold the K3 button and press the deactivated step again to turn it back on.
 
 Want a step to hold a unique sound or scale? Press and keep it down while selecting the desired parameter, scale, or octave. Clearing these trig locks is a breeze:
 

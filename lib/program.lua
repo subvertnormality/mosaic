@@ -470,16 +470,4 @@ function program.toggle_step_trig_mask(channel, step)
   program.get_channel(channel).step_trig_masks[step] = not program.get_channel(channel).step_trig_masks[step]
 end
 
-function program.lock_mask_changes()
-  program.get().mask_changes_locked = true
-end
-
-function program.unlock_mask_changes()
-  program.get().mask_changes_locked = false
-end
-
-function program.are_mask_changes_locked()
-  return program.get().mask_changes_locked
-end
-
 return program

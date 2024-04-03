@@ -148,7 +148,7 @@ function Sequencer:draw(channel, draw_func)
           end
         end
       end
-      if (self.mode == "channel") then
+      if (self.mode == "channel" and program.get().selected_channel ~= 17) then
         if program.get_step_trig_masks(channel.number) and program.get_step_trig_masks(channel.number)[grid_count] == false then
           local b = 2 - self.bclock.bright_mod
           if b < 0 then b = 0 end

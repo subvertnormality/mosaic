@@ -11,6 +11,10 @@ channel_sequencer_page_ui_controller = include("mosaic/lib/pages/channel_sequenc
 tooltip = include("mosaic/lib/ui_components/tooltip")
 save_confirm = include("mosaic/lib/ui_components/save_confirm")
 
+is_key1_down = false
+is_key2_down = false
+is_key3_down = false
+
 function ui_controller.init()
   draw_handler:register_ui("tooltip", tooltip.draw)
 
@@ -63,6 +67,25 @@ function ui_controller.enc(n, d)
 end
 
 function ui_controller.key(n, z)
+
+  if n == 1 and z == 1 then
+    is_key1_down = true
+  elseif n == 1 and z == 0 then
+    is_key1_down = false
+  end
+
+  if n == 2 and z == 1 then
+    is_key2_down = true
+  elseif n == 2 and z == 0 then
+    ui_controller.is_key2_down = false
+  end
+
+  if n == 3 and z == 1 then
+    is_key3_down = true
+  elseif n == 3 and z == 0 then
+    is_key3_down = false
+  end
+
   channel_edit_page_ui_controller.key(n, z)
   -- velocity_edit_page_ui_controller.key(n, z)
   -- note_edit_page_ui_controller.key(n, z)
@@ -76,5 +99,6 @@ function ui_controller.refresh()
   -- trigger_edit_page_ui_controller.refresh()
   -- channel_sequencer_page_ui_controller.refresh()
 end
+
 
 return ui_controller

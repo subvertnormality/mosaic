@@ -411,6 +411,7 @@ function channel_edit_page_ui_controller.change_page(page)
 end
 
 function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
+
   local pressed_keys = grid_controller.get_pressed_keys()
   local param_id = channel.trig_lock_params[dial_index].param_id
   local p_value = nil
@@ -435,7 +436,6 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       )
     end
   elseif channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
-    m_params[dial_index]:set_value(p_value or channel.trig_lock_banks[dial_index])
     if p ~= nil and p_value ~= nil then
       p_value = p_value + direction
       if p_value < (channel.trig_lock_params[dial_index].cc_min_value or -1) then
@@ -455,20 +455,12 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       end
     end
   end
-end
 
-function channel_edit_page_ui_controller.handle_trig_lock_param_change_up(channel, dial_index)
-  channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(1, channel, dial_index) -- Increment value
+  channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
 end
-
-function channel_edit_page_ui_controller.handle_trig_lock_param_change_down(channel, dial_index)
-  channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(-1, channel, dial_index) -- Decrement value
-end
-
 
 
 function channel_edit_page_ui_controller.enc(n, d)
-  program.lock_mask_changes()
   local channel = program.get_selected_channel()
   if n == 3 then
     for i = 1, math.abs(d) do
@@ -563,7 +555,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             )
           else
-            channel_edit_page_ui_controller.handle_trig_lock_param_change_up(program.get_selected_channel(), dials:get_selected_index())
+            channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(d, program.get_selected_channel(), dials:get_selected_index())
           end
         end
       else
@@ -657,7 +649,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             )
           else
-            channel_edit_page_ui_controller.handle_trig_lock_param_change_down(program.get_selected_channel(), dials:get_selected_index())
+            channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(d, program.get_selected_channel(), dials:get_selected_index())
           end
         end
       end
@@ -816,7 +808,6 @@ function channel_edit_page_ui_controller.enc(n, d)
 end
 
 function channel_edit_page_ui_controller.key(n, z)
-  program.lock_mask_changes()
   if n == 2 and z == 1 then
     local pressed_keys = grid_controller.get_pressed_keys()
     if #pressed_keys > 0 then
@@ -966,68 +957,80 @@ function channel_edit_page_ui_controller.refresh_quantiser()
   end
 end
 
-function channel_edit_page_ui_controller.refresh_trig_lock_values()
+
+function channel_edit_page_ui_controller.refresh_trig_lock_value(i)
   local channel = program.get_selected_channel()
+  local param_id = channel.trig_lock_params[i].param_id
 
+  local p = nil
+  if param_id ~= nil then
+    p = params:lookup_param(channel.trig_lock_params[i].param_id)
+  end
+  if p and p.name ~= "undefined" then
+    m_params[i]:set_value(p.value)
+  else
+    m_params[i]:set_value(channel.trig_lock_banks[i])
+  end
+
+end
+
+
+function channel_edit_page_ui_controller.refresh_trig_lock_values()
   for i = 1, 10 do
-    local param_id = channel.trig_lock_params[i].param_id
-
-    local p = nil
-    if param_id ~= nil then
-      p = params:lookup_param(channel.trig_lock_params[i].param_id)
-    end
-    if p and p.name ~= "undefined" then
-      m_params[i]:set_value(p.value)
-    else
-      m_params[i]:set_value(channel.trig_lock_banks[i])
-    end
+    channel_edit_page_ui_controller.refresh_trig_lock_value(i)
   end
 end
 
-function channel_edit_page_ui_controller.refresh_trig_locks()
+
+function channel_edit_page_ui_controller.refresh_trig_lock(i)
   local channel = program.get_selected_channel()
   local pressed_keys = grid_controller.get_pressed_keys()
 
-  channel_edit_page_ui_controller.refresh_trig_lock_values()
-  for i = 1, 10 do
-    if channel.trig_lock_params[i].id ~= nil then
-      m_params[i]:set_name(channel.trig_lock_params[i].name)
-      m_params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
-      m_params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
-      m_params[i]:set_off_value(channel.trig_lock_params[i].off_value)
-      m_params[i]:set_min_value(channel.trig_lock_params[i].cc_min_value)
-      m_params[i]:set_max_value(channel.trig_lock_params[i].cc_max_value)
-      m_params[i]:set_ui_labels(channel.trig_lock_params[i].ui_labels)
+  channel_edit_page_ui_controller.refresh_trig_lock_value(i)
 
-      local step_trig_lock =
-        program.get_step_param_trig_lock(program.get_selected_channel(), program.get_selected_channel().current_step, i)
+  if channel.trig_lock_params[i].id ~= nil then
+    m_params[i]:set_name(channel.trig_lock_params[i].name)
+    m_params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
+    m_params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
+    m_params[i]:set_off_value(channel.trig_lock_params[i].off_value)
+    m_params[i]:set_min_value(channel.trig_lock_params[i].cc_min_value)
+    m_params[i]:set_max_value(channel.trig_lock_params[i].cc_max_value)
+    m_params[i]:set_ui_labels(channel.trig_lock_params[i].ui_labels)
 
-      if #pressed_keys > 0 then
-        if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
-          step_trig_lock =
-            program.get_step_param_trig_lock(
-            program.get_selected_channel(),
-            fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2]),
-            i
-          )
-          local default_param = channel.trig_lock_banks[i]
-          if channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].param_id then
-            default_param = params:lookup_param(channel.trig_lock_params[i].param_id).value
-          end
-          m_params[i]:set_value(step_trig_lock or default_param)
+    local step_trig_lock =
+      program.get_step_param_trig_lock(program.get_selected_channel(), program.get_selected_channel().current_step, i)
+
+    if #pressed_keys > 0 then
+      if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+        step_trig_lock =
+          program.get_step_param_trig_lock(
+          program.get_selected_channel(),
+          fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2]),
+          i
+        )
+        local default_param = channel.trig_lock_banks[i]
+        if channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].param_id then
+          default_param = params:lookup_param(channel.trig_lock_params[i].param_id).value
         end
-      else
-        if (step_trig_lock and clock_controller.is_playing()) then
-          m_params[i]:set_value(step_trig_lock)
-        end
+        m_params[i]:set_value(step_trig_lock or default_param)
       end
     else
-      m_params[i]:set_name("")
-      m_params[i]:set_top_label("X")
-      m_params[i]:set_bottom_label("")
+      if (step_trig_lock and clock_controller.is_playing()) then
+        m_params[i]:set_value(step_trig_lock)
+      end
     end
+  else
+    m_params[i]:set_name("")
+    m_params[i]:set_top_label("X")
+    m_params[i]:set_bottom_label("")
   end
+end
 
+
+function channel_edit_page_ui_controller.refresh_trig_locks()
+  for i = 1, 10 do
+    channel_edit_page_ui_controller.refresh_trig_lock(i)
+  end
 end
 
 function channel_edit_page_ui_controller.refresh_param_list()

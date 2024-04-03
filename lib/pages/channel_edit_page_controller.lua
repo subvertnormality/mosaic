@@ -158,21 +158,13 @@ function channel_edit_page_controller.register_draw_handlers()
 end
 
 function channel_edit_page_controller.register_press_handlers()
-  press_handler:register_pre(
-    "channel_edit_page",
-    function(x, y)
-      if channel_edit_page_sequencer:is_this(x, y) then
-        program.unlock_mask_changes()
-      end
-    end
-  )
   press_handler:register(
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
         channel_edit_page_ui_controller.refresh_trig_locks()
-        channel_edit_page_sequencer:press(x, y)
-        if program.are_mask_changes_locked() == false then
+        if program.get().selected_channel ~= 17 and is_key3_down then
+          channel_edit_page_sequencer:press(x, y)
           program.toggle_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
           pattern_controller.update_working_patterns()
         end
