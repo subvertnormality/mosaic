@@ -151,7 +151,7 @@ end
 
 function program.is_sequencer_pattern_active(p)
   if (program_store.sequencer_patterns[p] and program_store.sequencer_patterns[p].active) then
-    return trues
+    return true
   end
 
   return false
