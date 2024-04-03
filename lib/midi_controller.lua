@@ -1,7 +1,6 @@
 local fn = include("mosaic/lib/functions")
 local step_handler = include("mosaic/lib/step_handler")
 local quantiser = include("mosaic/lib/quantiser")
-local channel_edit_page_ui_controller = include("mosaic/lib/pages/channel_edit_page_ui_controller")
 
 local midi_controller = {}
 
