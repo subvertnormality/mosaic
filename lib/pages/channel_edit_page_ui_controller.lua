@@ -350,7 +350,7 @@ function channel_edit_page_ui_controller.update_default_params()
   channel_edit_page_ui_controller.refresh_trig_locks()
 end
 
-function channel_edit_page_ui_controller.update_params()
+function channel_edit_page_ui_controller.update_params() -- TODO: I think the step trig locks need to be cleared for the dial when the param is changed
   local channel = program.get_selected_channel()
   if param_select_vertical_scroll_selector:get_selected_item().id == "none" then
     channel.trig_lock_params[dials:get_selected_index()] = {}
@@ -446,7 +446,7 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       end
       p.value = p_value
       p:bang()
-    else
+    else -- TODO - this seems to be a bug, how are params interacting with model?
       channel.trig_lock_banks[dial_index] = channel.trig_lock_banks[dial_index] + direction
       if channel.trig_lock_banks[dial_index] > (channel.trig_lock_params[dial_index].cc_max_value or 127) then
         channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_max_value or 127)
@@ -1006,10 +1006,10 @@ function channel_edit_page_ui_controller.refresh_trig_lock(i)
       if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
         step_trig_lock =
           program.get_step_param_trig_lock(
-          program.get_selected_channel(),
-          fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2]),
-          i
-        )
+            program.get_selected_channel(),
+            fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2]),
+            i
+          )
         local default_param = channel.trig_lock_banks[i]
         if channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].param_id then
           default_param = params:lookup_param(channel.trig_lock_params[i].param_id).value
