@@ -345,6 +345,24 @@ local function merge_devices()
   local stock_device_map = combine_json_files_into_table(directory)
 
 
+
+  for _, device in pairs(stock_device_map) do
+    local has_none_id = false
+
+
+    for _, param in pairs(device.params) do
+        if param.id == "none" then
+          has_none_id = true
+            break -- Stop checking more params if we found a param with id "none"
+        end
+    end
+
+    -- Perform an action if no param with id "none" was found
+    if not has_none_id then
+      table.insert(device.params, 1, get_none_param())
+    end
+  end
+
   table.insert(stock_device_map, create_cc_device())
   table.insert(stock_device_map, get_none_device())
 
