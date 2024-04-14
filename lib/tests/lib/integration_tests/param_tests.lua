@@ -226,7 +226,7 @@ function test_trig_probability_param_lock_trigs_when_probability_is_high_enough(
 end
 
 
-function test_trig_probability_param_lock_doesnt_fire_when_probabiliyu_is_too_low() 
+function test_trig_probability_param_lock_doesnt_fire_when_probability_is_too_low() 
   setup()
   mock_random()
 
@@ -1582,5 +1582,162 @@ function test_chord_with_velocity_fade_param_lock()
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_nil(note_on_event)
+
+end
+
+
+function test_global_params_are_processed_at_all_steps()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  local test_step = 8
+  local test_step_2 = 10
+  local test_step_3 = 15
+
+  local cc_msb = 2
+  local cc_value = 111
+  local c = 1
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 1
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  test_pattern.note_values[test_step_2] = 1
+  test_pattern.lengths[test_step_2] = 1
+  test_pattern.trig_values[test_step_2] = 1
+  test_pattern.velocity_values[test_step_2] = 100
+
+  test_pattern.note_values[test_step_3] = 2
+  test_pattern.lengths[test_step_3] = 1
+  test_pattern.trig_values[test_step_3] = 1
+  test_pattern.velocity_values[test_step_3] = 100
+
+  program.get().selected_channel = c
+
+  local channel = program.get_selected_channel()
+
+  channel.trig_lock_params[1].device_name = "test"
+  channel.trig_lock_params[1].type = "midi"
+  channel.trig_lock_params[1].id = 1
+  channel.trig_lock_params[1].cc_msb = cc_msb
+  channel.trig_lock_banks[1] = cc_value
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+  local midi_cc_event = table.remove(midi_cc_events)
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value, 1}) -- CC is fired at start of pattern to reset value to default
+
+  progress_clock_by_beats(test_step - 1)
+
+  local midi_cc_event = table.remove(midi_cc_events)
+
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value, 1})
+
+  progress_clock_by_beats(test_step_2 - test_step)
+  
+  local midi_cc_event = table.remove(midi_cc_events)
+
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value, 1})
+
+  channel.trig_lock_banks[1] = cc_value + 1
+  
+  progress_clock_by_beats(test_step_3 - test_step_2)
+  
+  local midi_cc_event = table.remove(midi_cc_events)
+
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value + 1, 1})
+
+
+end
+
+
+
+
+
+function test_global_params_are_processed_with_the_correct_value_across_song_patterns()
+  setup()
+  local sequencer_pattern_1 = 1
+  local sequencer_pattern_2 = 2
+  local test_pattern = program.initialise_default_pattern()
+
+  local test_step = 8
+  local cc_msb = 2
+  local c = 1
+
+  local cc_value_1 = 111
+  local cc_value_2 = 112
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 1
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  program.get().selected_channel = c
+
+  program.get_sequencer_pattern(sequencer_pattern_1).patterns[1] = test_pattern
+
+  local channel_song_pattern_1 = program.get_sequencer_pattern(sequencer_pattern_1).channels[c]
+
+  channel_song_pattern_1.trig_lock_params[1].device_name = "test"
+  channel_song_pattern_1.trig_lock_params[1].type = "midi"
+  channel_song_pattern_1.trig_lock_params[1].id = 1
+  channel_song_pattern_1.trig_lock_params[1].cc_msb = cc_msb
+  channel_song_pattern_1.trig_lock_banks[1] = cc_value_1
+
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_1).channels[c].selected_patterns, 1)
+
+  local test_pattern_2 = program.initialise_default_pattern()
+
+  local song_pattern_2_cc_value = 112
+
+  test_pattern_2.note_values[test_step] = 0
+  test_pattern_2.lengths[test_step] = 1
+  test_pattern_2.trig_values[test_step] = 1
+  test_pattern_2.velocity_values[test_step] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern_2).patterns[1] = test_pattern_2
+
+  local channel_song_pattern_2 = program.get_sequencer_pattern(sequencer_pattern_2).channels[c]
+
+  channel_song_pattern_2.trig_lock_params[1].device_name = "test"
+  channel_song_pattern_2.trig_lock_params[1].type = "midi"
+  channel_song_pattern_2.trig_lock_params[1].id = 1
+  channel_song_pattern_2.trig_lock_params[1].cc_msb = cc_msb
+  channel_song_pattern_2.trig_lock_banks[1] = cc_value_2
+
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_2).channels[c].selected_patterns, 1)
+
+  program.set_selected_sequencer_pattern(sequencer_pattern_1)
+  pattern_controller.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+  local midi_cc_event = table.remove(midi_cc_events)
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1}) -- CC is fired at start of pattern to reset value to default
+
+  progress_clock_by_beats(test_step - 1)
+
+  local midi_cc_event = table.remove(midi_cc_events)
+
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1})
+
+  program.set_selected_sequencer_pattern(sequencer_pattern_2)
+  pattern_controller.update_working_patterns()
+
+  progress_clock_by_beats(64) -- get to next pattern
+
+  progress_clock_by_beats(test_step - 1)
+
+  local midi_cc_event = table.remove(midi_cc_events)
+
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_2, 1})
 
 end

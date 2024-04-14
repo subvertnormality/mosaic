@@ -436,23 +436,11 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       )
     end
   elseif channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
-    if p ~= nil and p_value ~= nil then
-      p_value = p_value + direction
-      if p_value < (channel.trig_lock_params[dial_index].cc_min_value or -1) then
-        p_value = (channel.trig_lock_params[dial_index].cc_min_value or -1)
-      end
-      if p_value > (channel.trig_lock_params[dial_index].cc_max_value or 127) then
-        p_value = (channel.trig_lock_params[dial_index].cc_max_value or 127)
-      end
-      p.value = p_value
-      p:bang()
-    else
-      channel.trig_lock_banks[dial_index] = channel.trig_lock_banks[dial_index] + direction
-      if channel.trig_lock_banks[dial_index] > (channel.trig_lock_params[dial_index].cc_max_value or 127) then
-        channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_max_value or 127)
-      elseif channel.trig_lock_banks[dial_index] < (channel.trig_lock_params[dial_index].cc_min_value or -1) then
-        channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_min_value or -1)
-      end
+    channel.trig_lock_banks[dial_index] = channel.trig_lock_banks[dial_index] + direction
+    if channel.trig_lock_banks[dial_index] > (channel.trig_lock_params[dial_index].cc_max_value or 127) then
+      channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_max_value or 127)
+    elseif channel.trig_lock_banks[dial_index] < (channel.trig_lock_params[dial_index].cc_min_value or -1) then
+      channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_min_value or -1)
     end
 
     channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
@@ -960,29 +948,37 @@ function channel_edit_page_ui_controller.refresh_quantiser()
 end
 
 
-function channel_edit_page_ui_controller.refresh_trig_lock_value(i)
-  local channel = program.get_selected_channel()
+function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
+
+  if not channel.trig_lock_banks[i] then
+    return
+  end
+  
   local param_id = channel.trig_lock_params[i].param_id
 
   local p = nil
   if param_id ~= nil then
     p = params:lookup_param(channel.trig_lock_params[i].param_id)
+    params:set(param_id, channel.trig_lock_banks[i])
   end
-  if p and p.name ~= "undefined" then
-    m_params[i]:set_value(p.value)
-  else
-    m_params[i]:set_value(channel.trig_lock_banks[i])
-  end
-
 end
 
+function channel_edit_page_ui_controller.refresh_trig_lock_value(i)
+  local channel = program.get_selected_channel()
+  local param_id = channel.trig_lock_params[i].param_id
+
+  channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
+
+  if channel.trig_lock_banks[i] then
+    m_params[i]:set_value(channel.trig_lock_banks[i])
+  end
+end
 
 function channel_edit_page_ui_controller.refresh_trig_lock_values()
   for i = 1, 10 do
     channel_edit_page_ui_controller.refresh_trig_lock_value(i)
   end
 end
-
 
 function channel_edit_page_ui_controller.refresh_trig_lock(i)
   local channel = program.get_selected_channel()

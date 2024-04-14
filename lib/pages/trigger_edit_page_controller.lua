@@ -147,7 +147,7 @@ local function load_paint_pattern()
           table.insert(
             paint_pattern,
             drum_ops.tresillo(bank, pattern1, pattern2, params:string("tresillo_amount"), step)
-          ) -- TODO need to make the tressilo length editable
+          )
         elseif (algorithm == 4) then
           table.insert(paint_pattern, drum_ops.nr(pattern1, bank, pattern2, step))
         end
