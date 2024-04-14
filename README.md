@@ -111,11 +111,7 @@ n.b. devices are picked up automatically. Simply install the desired mod, and pi
 
 Midi devices are primarily defined by attributes like MIDI destinations, device name, and CC MIDI destinations. While there are some ready-made device templates to get you started, param trig lock destinations can be customised. See the [device configuration section for setting up mosaic's config files](#Device-configuration) for information
 
-Midi devices can be set to load a stored patch using the params menu. For stock midi devices, all cc parameters are available to edit. A value of -1 against a midi parameter means the function is off. Changing the value will send the midi value to your midi device. When you load a Mosaic script, the stored midi param values will be sent to your midi device, effectively loading a patch. It's possible in this way to store all your sound's patch data with your mosaic patch. This is particularly practical for devices with less midi parameters or where the device's interface is not particularly intuitive.
-
-### Params
-
-When you add a device to _Mosaic_, it will appear in Norns' param menu. Each parameter of the device can be set to a value from there. These values will be set on your midi device and will persist across song patterns. This allows you to store your device's patch entirely in _Mosaic_ if you wish. Changes on your device will be overwritten by set params on load or play.
+Midi devices can be set to effectively load a stored patch using the params menu. For stock midi devices, all cc parameters are available to edit. A value of -1 against a midi parameter will ensure the setting on the device remains uneffected. Changing the value will send the midi value directly to your midi device. When you load a Mosaic script or press play, the stored midi param values will be sent to your midi device, effectively loading a patch. These values will persist across song patterns. It's possible in this way to store all your sound's patch data with your mosaic patch. This is particularly practical for devices with less midi parameters or where the device's interface is not particularly intuitive.
 
 ### Trig Params
 
