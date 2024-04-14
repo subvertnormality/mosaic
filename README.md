@@ -9,7 +9,7 @@
     + [Song Sequence](#song-sequence)
     + [Scale](#scale)
     + [Device](#device)
-    + [Params](#params)
+    + [Trig Params](#trig-params)
     + [Trig Locks](#trig-locks)
   * [Pages](#pages)
     + [Menu](#menu)
@@ -113,9 +113,13 @@ Midi devices are primarily defined by attributes like MIDI destinations, device 
 
 Midi devices can be set to load a stored patch using the params menu. For stock midi devices, all cc parameters are available to edit. A value of -1 against a midi parameter means the function is off. Changing the value will send the midi value to your midi device. When you load a Mosaic script, the stored midi param values will be sent to your midi device, effectively loading a patch. It's possible in this way to store all your sound's patch data with your mosaic patch. This is particularly practical for devices with less midi parameters or where the device's interface is not particularly intuitive.
 
+### Params
+
+When you add a device to _Mosaic_, it will appear in Norns' param menu. Each parameter of the device can be set to a value from there. These values will be set on your midi device and will persist across song patterns. This allows you to store your device's patch entirely in _Mosaic_ if you wish. Changes on your device will be overwritten by set params on load or play.
+
 ### Trig Params
 
-Most devices in _Mosaic_ feature a set of trig params that alters either the quality of the sound or the trig in some way. These params can be trig locked. Trig locking is a powerful sequencer device seen on Elektron synthesisers. Each step can be assigned a unique param value, allowing for endless sound variations. See the channel page section for details on how to assign and use params.
+Most devices in _Mosaic_ feature a set of trig params that alters either the quality of the sound or the trig in some way. Trig params are unique to a song pattern, allowing drastic transitions when moving from one section to another. Each channel can have up to 10 trig params asigned, and each trig param can be trig locked independently. Trig locking is a powerful sequencer device seen on Elektron synthesisers. Each step can be assigned a unique param value, allowing for endless sound variations. See the channel page section for details on how to assign and use trig params.
 
 ### Trig Locks
 

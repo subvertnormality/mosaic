@@ -98,6 +98,7 @@ function register_press_handlers()
             tooltip:show(page_names[program.get().selected_page])
           else
             if (not clock_controller.is_playing()) then
+              params:bang()
               clock_controller:start()
               tooltip:show("Starting playback")
             end

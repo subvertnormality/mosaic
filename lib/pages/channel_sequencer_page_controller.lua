@@ -78,6 +78,10 @@ function channel_sequencer_page_controller.register_press_handlers()
             if channel_number ~= 17 then
               clock_controller.set_channel_swing(channel_number, channel.swing)
             end
+
+            for i = 1, 10 do
+              channel_edit_page_ui_controller.sync_param_to_trig_lock(i, program.get_channel(channel_number))
+            end
           end
 
           if program.is_sequencer_pattern_active(previous_selected_pattern) then

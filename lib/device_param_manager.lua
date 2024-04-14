@@ -4,7 +4,6 @@ local device_param_manager = {}
 
 local first_run = true
 
--- TODO: Init needs to take into account the set devices and establish them as needed
 function device_param_manager.init()
   for i = 1, 16 do
     if params.lookup["midi_device_params_group_channel_" .. i] == nil then
