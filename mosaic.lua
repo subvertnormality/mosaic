@@ -20,7 +20,7 @@ local textentry = require("textentry")
 local musicutil = require("musicutil")
 local as_metro = metro.init(do_autosave, 1, 1)
 local autosave_timer = metro.init(prime_autosave, 60, 1)
-local device_param_manager = include("mosaic/lib/device_param_manager")
+local param_manager = include("mosaic/lib/param_manager")
 
 local ui_splash_screen_active = false
 
@@ -47,10 +47,10 @@ local function load_project(pth)
         channel_sequencer_page_ui_controller.refresh_tempo()
       end
 
-      device_param_manager.init()
+      param_manager.init()
       
       for i = 1, 16 do
-        device_param_manager.add_device_params(
+        param_manager.add_device_params(
           i,
           device_map.get_device(program.get().devices[i].device_map),
           program.get().devices[i].midi_channel,
@@ -89,7 +89,7 @@ end
 local function load_new_project()
   program.init()
   for i = 1, 16 do
-    device_param_manager.add_device_params(
+    param_manager.add_device_params(
       i,
       device_map.get_device(program.get().devices[i].device_map),
       program.get().devices[i].midi_channel,
@@ -263,7 +263,7 @@ function init()
   params:add_option("midi_honour_rotation", "Honour scale rotations", {"On", "Off"}, 2)
   params:add_option("midi_honour_degree", "Honour scale degree", {"On", "Off"}, 2)
 
-  device_param_manager.init()
+  param_manager.init()
 
   clock.tempo_change_handler = function(x)
     channel_sequencer_page_ui_controller.refresh_tempo()

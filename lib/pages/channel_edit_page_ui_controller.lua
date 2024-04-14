@@ -11,7 +11,7 @@ local ControlScrollSelector = include("mosaic/lib/ui_components/ControlScrollSel
 local ListSelector = include("mosaic/lib/ui_components/ListSelector")
 local ValueSelector = include("mosaic/lib/ui_components/ValueSelector")
 
-local device_param_manager = include("mosaic/lib/device_param_manager")
+local param_manager = include("mosaic/lib/param_manager")
 
 local pages = Pages:new()
 
@@ -320,62 +320,6 @@ function channel_edit_page_ui_controller.update_clock_mods()
   clock_controller.set_channel_division(channel.number, clock_controller.calculate_divisor(clock_mods))
 end
 
-function channel_edit_page_ui_controller.update_default_params()
-  local channel = program.get_selected_channel()
-  local midi_device_m = device_map_vertical_scroll_selector:get_selected_item()
-
-  for i = 1, 10 do
-    if midi_device_m.params[i + 1] and midi_device_m.map_params_automatically then
-      channel.trig_lock_params[i] = midi_device_m.params[i + 1]
-      channel.trig_lock_params[i].device_name = midi_device_m.device_name
-      channel.trig_lock_params[i].type = midi_device_m.type
-      channel.trig_lock_params[i].id = midi_device_m.params[i + 1].id
-      if
-        (channel.trig_lock_params[i].type == "midi" and midi_device_m.params[i + 1].param_type ~= "stock" and
-          midi_device_m.params[i + 1].index)
-       then
-        channel.trig_lock_params[i].param_id =
-          "midi_device_params_channel_" .. channel.number .. "_" .. midi_device_m.params[i + 1].index
-      else
-        channel.trig_lock_params[i].param_id = nil
-      end
-      if midi_device_m.params[i + 1].default then
-        channel.trig_lock_banks[i] = midi_device_m.params[i + 1].default
-      end
-    else
-      channel.trig_lock_params[i] = {}
-    end
-  end
-
-  channel_edit_page_ui_controller.refresh_trig_locks()
-end
-
-function channel_edit_page_ui_controller.update_params()
-  local channel = program.get_selected_channel()
-  if param_select_vertical_scroll_selector:get_selected_item().id == "none" then
-    channel.trig_lock_params[dials:get_selected_index()] = {}
-  else
-    channel.trig_lock_params[dials:get_selected_index()] = param_select_vertical_scroll_selector:get_selected_item()
-    channel.trig_lock_params[dials:get_selected_index()].device_name =
-      param_select_vertical_scroll_selector:get_meta_item().device_name
-    channel.trig_lock_params[dials:get_selected_index()].type =
-      param_select_vertical_scroll_selector:get_meta_item().type
-    channel.trig_lock_params[dials:get_selected_index()].id =
-      param_select_vertical_scroll_selector:get_selected_item().id
-
-    if
-      (param_select_vertical_scroll_selector:get_meta_item().type == "midi" and
-        param_select_vertical_scroll_selector:get_selected_item().param_type ~= "stock")
-     then
-      channel.trig_lock_params[dials:get_selected_index()].param_id =
-        "midi_device_params_channel_" ..
-        channel.number .. "_" .. param_select_vertical_scroll_selector:get_selected_item().index
-    else
-      channel.trig_lock_params[dials:get_selected_index()].param_id = nil
-    end
-  end
-end
-
 function channel_edit_page_ui_controller.update_channel_config()
   local channel = program.get_selected_channel()
   local midi_device = midi_device_vertical_scroll_selector:get_selected_item()
@@ -397,7 +341,7 @@ function channel_edit_page_ui_controller.update_channel_config()
 
   channel_edit_page_ui_controller.refresh_device_selector()
 
-  device_param_manager.add_device_params(
+  param_manager.add_device_params(
     channel.number,
     device_m,
     program.get().devices[channel.number].midi_channel,
@@ -519,7 +463,9 @@ function channel_edit_page_ui_controller.enc(n, d)
           save_confirm.set_save(
             function()
               channel_edit_page_ui_controller.update_channel_config()
-              channel_edit_page_ui_controller.update_default_params()
+              param_manager.update_default_params(
+                program.get_selected_channel(), device_map_vertical_scroll_selector:get_selected_item()
+              )
               param_select_vertical_scroll_selector:set_selected_item(1)
             end
           )
@@ -536,7 +482,12 @@ function channel_edit_page_ui_controller.enc(n, d)
             param_select_vertical_scroll_selector:scroll_down()
             save_confirm.set_save(
               function()
-                channel_edit_page_ui_controller.update_params()
+                param_manager.update_param(
+                  dials:get_selected_index(), 
+                  channel, 
+                  param_select_vertical_scroll_selector:get_selected_item(), 
+                  param_select_vertical_scroll_selector:get_meta_item()
+                )
                 channel_edit_page_ui_controller.refresh_trig_locks()
               end
             )
@@ -613,7 +564,9 @@ function channel_edit_page_ui_controller.enc(n, d)
           save_confirm.set_save(
             function()
               channel_edit_page_ui_controller.update_channel_config()
-              channel_edit_page_ui_controller.update_default_params()
+              param_manager.update_default_params(
+                program.get_selected_channel(), device_map_vertical_scroll_selector:get_selected_item()
+              )
               param_select_vertical_scroll_selector:set_selected_item(1)
             end
           )
@@ -630,7 +583,12 @@ function channel_edit_page_ui_controller.enc(n, d)
             param_select_vertical_scroll_selector:scroll_up()
             save_confirm.set_save(
               function()
-                channel_edit_page_ui_controller.update_params()
+                param_manager.update_param(
+                  dials:get_selected_index(), 
+                  channel, 
+                  param_select_vertical_scroll_selector:get_selected_item(), 
+                  param_select_vertical_scroll_selector:get_meta_item()
+                )                
                 channel_edit_page_ui_controller.refresh_trig_locks()
               end
             )
