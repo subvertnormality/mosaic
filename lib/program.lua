@@ -263,7 +263,8 @@ function program.step_has_trig_lock(channel, step)
   if
     program.step_has_param_trig_lock(channel, step) or program.step_octave_has_trig_lock(channel, step) or
       program.step_scale_has_trig_lock(channel, step) or
-      program.step_transpose_has_trig_lock(step)
+      program.step_transpose_has_trig_lock(step) or 
+      program.step_has_trig_mask(step)
    then
     return true
   end
@@ -353,6 +354,16 @@ function program.step_transpose_has_trig_lock(step)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
 
   if step_transpose_trig_lock_banks ~= nil and step_transpose_trig_lock_banks[step] and step_transpose_trig_lock_banks[step] ~= 0 then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_trig_mask(step)
+  local step_trig_masks = program.get_selected_channel().step_trig_masks
+
+  if step_trig_masks and step_trig_masks[step] ~= -1 then
     return true
   end
 
@@ -454,23 +465,34 @@ function program.get_step_trig_masks(channel)
   if program.get_channel(channel) == nil then return end
 
   if program.get_channel(channel).step_trig_masks == nil then
-    program.get_channel(channel).step_trig_masks = program.initialise_64_table(true)
+    program.get_channel(channel).step_trig_masks = program.initialise_64_table(-1)
   end
   return program.get_channel(channel).step_trig_masks
 end
 
 function program.set_step_trig_mask(channel, step, mask)
   if program.get_channel(channel).step_trig_masks == nil then
-    program.get_channel(channel).step_trig_masks = program.initialise_64_table(true)
+    program.get_channel(channel).step_trig_masks = program.initialise_64_table(-1)
   end
   program.get_channel(channel).step_trig_masks[step] = mask
 end
 
+
 function program.toggle_step_trig_mask(channel, step)
   if program.get_channel(channel).step_trig_masks == nil then
-    program.get_channel(channel).step_trig_masks = program.initialise_64_table(true)
+    program.get_channel(channel).step_trig_masks = program.initialise_64_table(-1)
   end
-  program.get_channel(channel).step_trig_masks[step] = not program.get_channel(channel).step_trig_masks[step]
+
+  if program.get_channel(channel).working_pattern.trig_values[step] == 0 then
+    program.get_channel(channel).step_trig_masks[step] = 1
+  elseif program.get_channel(channel).working_pattern.trig_values[step] == 1 then
+    program.get_channel(channel).step_trig_masks[step] = 0
+  end
+
+end
+
+function program.clear_step_trig_mask(channel, step)
+  program.get_channel(channel).step_trig_masks[step] = -1
 end
 
 return program

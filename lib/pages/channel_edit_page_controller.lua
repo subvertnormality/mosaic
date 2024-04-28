@@ -172,6 +172,18 @@ function channel_edit_page_controller.register_press_handlers()
       end
     end
   )
+  press_handler:register_long(
+    "channel_edit_page",
+    function(x, y)
+      if channel_edit_page_sequencer:is_this(x, y) then
+        if program.get().selected_channel ~= 17 and is_key3_down then
+          program.clear_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
+          channel_edit_page_ui_controller.refresh_notes()
+          pattern_controller.update_working_patterns()
+        end
+      end
+    end
+  )
   press_handler:register_post(
     "channel_edit_page",
     function(x, y)
@@ -179,6 +191,7 @@ function channel_edit_page_controller.register_press_handlers()
         channel_edit_page_ui_controller.refresh_trig_locks()
         channel_edit_page_ui_controller.refresh_notes()
         channel_edit_page_controller.refresh_faders()
+        pattern_controller.update_working_patterns()
       end
     end
   )

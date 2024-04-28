@@ -22,12 +22,15 @@ local romans_vertical_scroll_selector =
 local notes_vertical_scroll_selector = VerticalScrollSelector:new(5, 25, "Notes", quantiser.get_notes())
 local rotation_vertical_scroll_selector = VerticalScrollSelector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
 
-local note_value_selector = ValueSelector:new(10, 25, "Note", -1, 127)
+local note_value_selector = ValueSelector:new(10, 20, "Note", -1, 127)
 note_value_selector:set_value(-1)
-local note_velocity_selector = ValueSelector:new(50, 25, "Velocity", -1, 127)
+local note_velocity_selector = ValueSelector:new(50, 20, "Velocity", -1, 127)
 note_velocity_selector:set_value(-1)
-local note_length_selector = ValueSelector:new(90, 25, "Length", -1, 512)
+local note_length_selector = ValueSelector:new(90, 20, "Length", -1, 512)
 note_length_selector:set_value(-1)
+local note_trig_selector = ValueSelector:new(10, 50, "Trig", -1, 1)
+note_trig_selector:set_value(-1)
+
 
 local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", {})
 local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 100)
@@ -105,6 +108,7 @@ local notes_page =
       note_value_selector:draw()
       note_velocity_selector:draw()
       note_length_selector:draw()
+      note_trig_selector:draw()
     else
       print_quant_message_to_screen()
     end
@@ -132,6 +136,19 @@ end
 
 note_velocity_selector:set_view_transform_func(note_page_velocity_length_value_selector_func)
 note_length_selector:set_view_transform_func(note_page_velocity_length_value_selector_func)
+
+note_trig_selector:set_view_transform_func(function(value)
+
+
+  if value == 0 then 
+    return "N"
+  elseif value == 1 then 
+    return "Y"
+  end
+
+  return "X"
+
+end)
 
 
 local quantizer_page =
@@ -489,6 +506,13 @@ function channel_edit_page_ui_controller.enc(n, d)
                     channel.step_length_masks[step] = 512
                   end
                 end
+                if note_trig_selector:is_selected() then
+                  note_trig_selector:increment()
+                  channel.step_trig_masks[step] = note_trig_selector:get_value()
+                  if channel.step_trig_masks[step] > 1 then
+                    channel.step_trig_masks[step] = 1
+                  end
+                end
               end
             end
           end
@@ -620,6 +644,13 @@ function channel_edit_page_ui_controller.enc(n, d)
                     channel.step_length_masks[step] = -1
                   end
                 end
+                if note_trig_selector:is_selected() then
+                  note_trig_selector:decrement()
+                  channel.step_trig_masks[step] = note_trig_selector:get_value()
+                  if channel.step_trig_masks[step] < -1 then
+                    channel.step_trig_masks[step] = -1
+                  end
+                end
               end
             end
           end
@@ -742,6 +773,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             note_length_selector:select()
           elseif note_length_selector:is_selected() then
             note_length_selector:deselect()
+            note_trig_selector:select()
+          elseif note_trig_selector:is_selected() then
+            note_trig_selector:deselect()
             note_value_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Quantizer"] then
@@ -815,13 +849,16 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           if note_value_selector:is_selected() then
             note_value_selector:deselect()
-            note_length_selector:select()
+            note_trig_selector:select()
           elseif note_velocity_selector:is_selected() then
             note_velocity_selector:deselect()
             note_value_selector:select()
           elseif note_length_selector:is_selected() then
             note_length_selector:deselect()
             note_velocity_selector:select()
+          elseif note_trig_selector:is_selected() then
+            note_trig_selector:deselect()
+            note_length_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
           if program.get().selected_channel == 17 then
@@ -960,6 +997,7 @@ function channel_edit_page_ui_controller.refresh_notes()
   local note_value = -1
   local velocity_value = -1
   local length_value = -1
+  local trig_value = -1
   
   if #pressed_keys > 0 then
     if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
@@ -968,6 +1006,7 @@ function channel_edit_page_ui_controller.refresh_notes()
         note_value = channel.step_note_masks[step]
         velocity_value = channel.step_velocity_masks[step]
         length_value = channel.step_length_masks[step]
+        trig_value = channel.step_trig_masks[step]
       end
     end
   end
@@ -975,6 +1014,7 @@ function channel_edit_page_ui_controller.refresh_notes()
   note_value_selector:set_value(note_value)
   note_velocity_selector:set_value(velocity_value)
   note_length_selector:set_value(length_value)
+  note_trig_selector:set_value(trig_value)
 end
 
 function channel_edit_page_ui_controller.refresh_clock_mods()

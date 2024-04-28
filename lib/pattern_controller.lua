@@ -60,7 +60,6 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
   for pattern_number, pattern_enabled in pairs(patterns_to_process) do
     
       local pattern = patterns[pattern_number]
-      local step_trig_masks = program.get_step_trig_masks(channel)
 
       for s = 1, 64 do
 
@@ -89,10 +88,6 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
           end 
         end
         
-        if step_trig_masks[s] == false then
-          merged_pattern.trig_values[s] = 0
-        end
-
         -- Determine whether to process each merge mode based on `is_pattern_trig_one` or the specific "pattern_number_" condition.
         local should_process_note_merge_mode = is_pattern_trig_one or (note_merge_mode and string.match(note_merge_mode, "pattern_number_"))
         local should_process_velocity_merge_mode = is_pattern_trig_one or (velocity_merge_mode and string.match(velocity_merge_mode, "pattern_number_"))
@@ -144,6 +139,13 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
       do_mode_calculation(note_merge_mode, s, notes, merged_pattern.note_values, fn)
       do_mode_calculation(velocity_merge_mode, s, velocities, merged_pattern.velocity_values, fn)
       do_mode_calculation(length_merge_mode, s, lengths, merged_pattern.lengths, fn)
+
+      -- Override trig with the channel's set trig mask
+      local step_trig_masks = program.get_step_trig_masks(channel)
+      if step_trig_masks[s] ~= -1 then
+        merged_pattern.trig_values[s] = step_trig_masks[s]
+      end
+
   end
 
 
