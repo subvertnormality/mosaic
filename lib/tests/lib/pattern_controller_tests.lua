@@ -536,3 +536,37 @@ function test_trig_masks_set_to_off_doesnt_mask()
 
   luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "skip", false, false, false).trig_values[1], 1)
 end
+
+
+function test_note_masks_should_take_precedence_over_note_values()
+  program.init()
+  program.get_sequencer_pattern(1).patterns[2].trig_values[5] = 1
+  program.get_sequencer_pattern(1).patterns[2].note_values[5] = 45
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
+
+  program.get_sequencer_pattern(1).channels[1].step_note_masks[5] = 78
+
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", "up", false, false).note_values[5], 78)
+end
+
+function test_velocity_masks_should_take_precedence_over_velocity_values()
+  program.init()
+  program.get_sequencer_pattern(1).patterns[2].trig_values[5] = 1
+  program.get_sequencer_pattern(1).patterns[2].velocity_values[5] = 5
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
+
+  program.get_sequencer_pattern(1).channels[1].step_velocity_masks[5] = 79
+
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", false, "up", false).velocity_values[5], 79)
+end
+
+function test_length_masks_should_take_precedence_over_lengths()
+  program.init()
+  program.get_sequencer_pattern(1).patterns[2].trig_values[5] = 1
+  program.get_sequencer_pattern(1).patterns[2].lengths[5] = 4
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
+
+  program.get_sequencer_pattern(1).channels[1].step_length_masks[5] = 80
+
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", false, false, "up").lengths[5], 80)
+end

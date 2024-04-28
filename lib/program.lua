@@ -264,7 +264,10 @@ function program.step_has_trig_lock(channel, step)
     program.step_has_param_trig_lock(channel, step) or program.step_octave_has_trig_lock(channel, step) or
       program.step_scale_has_trig_lock(channel, step) or
       program.step_transpose_has_trig_lock(step) or 
-      program.step_has_trig_mask(step)
+      program.step_has_trig_mask(step) or
+      program.step_has_note_mask(step) or
+      program.step_has_velocity_mask(step) or
+      program.step_has_length_mask(step)
    then
     return true
   end
@@ -364,6 +367,36 @@ function program.step_has_trig_mask(step)
   local step_trig_masks = program.get_selected_channel().step_trig_masks
 
   if step_trig_masks and step_trig_masks[step] ~= -1 then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_note_mask(step)
+  local step_note_masks = program.get_selected_channel().step_note_masks
+
+  if step_note_masks and step_note_masks[step] ~= -1 then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_velocity_mask(step)
+  local step_velocity_masks = program.get_selected_channel().step_velocity_masks
+
+  if step_velocity_masks and step_velocity_masks[step] ~= -1 then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_length_mask(step)
+  local step_length_masks = program.get_selected_channel().step_length_masks
+
+  if step_length_masks and step_length_masks[step] ~= -1 then
     return true
   end
 
@@ -475,6 +508,33 @@ function program.set_step_trig_mask(channel, step, mask)
     program.get_channel(channel).step_trig_masks = program.initialise_64_table(-1)
   end
   program.get_channel(channel).step_trig_masks[step] = mask
+end
+
+function program.get_step_note_masks(channel) 
+  if program.get_channel(channel) == nil then return end
+
+  if program.get_channel(channel).step_note_masks == nil then
+    program.get_channel(channel).step_note_masks = program.initialise_64_table(-1)
+  end
+  return program.get_channel(channel).step_note_masks
+end
+
+function program.get_step_velocity_masks(channel) 
+  if program.get_channel(channel) == nil then return end
+
+  if program.get_channel(channel).step_velocity_masks == nil then
+    program.get_channel(channel).step_velocity_masks = program.initialise_64_table(-1)
+  end
+  return program.get_channel(channel).step_velocity_masks
+end
+
+function program.get_step_length_masks(channel) 
+  if program.get_channel(channel) == nil then return end
+
+  if program.get_channel(channel).step_length_masks == nil then
+    program.get_channel(channel).step_length_masks = program.initialise_64_table(-1)
+  end
+  return program.get_channel(channel).step_length_masks
 end
 
 

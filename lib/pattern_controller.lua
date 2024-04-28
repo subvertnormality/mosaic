@@ -146,6 +146,24 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
         merged_pattern.trig_values[s] = step_trig_masks[s]
       end
 
+      -- Overrite note with the channel's set note mask
+      local step_note_masks = program.get_step_note_masks(channel)
+      if step_note_masks[s] ~= -1 then
+        merged_pattern.note_values[s] = step_note_masks[s]
+      end
+
+      -- Overrite velocity with the channel's set velocity mask
+      local step_velocity_masks = program.get_step_velocity_masks(channel)
+      if step_velocity_masks[s] ~= -1 then
+        merged_pattern.velocity_values[s] = step_velocity_masks[s]
+      end
+
+      -- Overrite length with the channel's set length mask
+      local step_length_masks = program.get_step_length_masks(channel)
+      if step_length_masks[s] ~= -1 then
+        merged_pattern.lengths[s] = step_length_masks[s]
+      end
+
   end
 
 
