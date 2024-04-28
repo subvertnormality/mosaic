@@ -466,3 +466,73 @@ function test_lengths_should_average_when_using_average_merge_mode()
 
   luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", false, false, "average").lengths[1], math.floor(((56 + 45 + 33) / 3) + 0.5))
 end
+
+
+function test_trig_masks_can_trigger_steps()
+  program.init()
+  program.get_sequencer_pattern(1).channels[1].trig_merge_mode = "skip"
+  program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[2].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[3].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[4].trig_values[1] = 0
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
+
+  program.get_sequencer_pattern(1).channels[1].step_trig_masks[1] = 1
+
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "skip", false, false, false).trig_values[1], 1)
+end
+
+
+function test_trig_masks_can_mask_steps()
+  program.init()
+  program.get_sequencer_pattern(1).channels[1].trig_merge_mode = "skip"
+  program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[2].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[3].trig_values[1] = 1
+  program.get_sequencer_pattern(1).patterns[4].trig_values[1] = 0
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
+
+  program.get_sequencer_pattern(1).channels[1].step_trig_masks[1] = 0
+
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "skip", false, false, false).trig_values[1], 0)
+end
+
+function test_trig_masks_set_to_off_doesnt_trig()
+  program.init()
+  program.get_sequencer_pattern(1).channels[1].trig_merge_mode = "skip"
+  program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[2].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[3].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[4].trig_values[1] = 0
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
+
+  program.get_sequencer_pattern(1).channels[1].step_trig_masks[1] = -1
+
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "skip", false, false, false).trig_values[1], 0)
+end
+
+function test_trig_masks_set_to_off_doesnt_mask()
+  program.init()
+  program.get_sequencer_pattern(1).channels[1].trig_merge_mode = "skip"
+  program.get_sequencer_pattern(1).patterns[1].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[2].trig_values[1] = 0
+  program.get_sequencer_pattern(1).patterns[3].trig_values[1] = 1
+  program.get_sequencer_pattern(1).patterns[4].trig_values[1] = 0
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[1] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[2] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
+  program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
+
+  program.get_sequencer_pattern(1).channels[1].step_trig_masks[1] = -1
+
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "skip", false, false, false).trig_values[1], 1)
+end
