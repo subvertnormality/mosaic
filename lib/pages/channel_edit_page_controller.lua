@@ -163,6 +163,7 @@ function channel_edit_page_controller.register_press_handlers()
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
         channel_edit_page_ui_controller.refresh_trig_locks()
+        channel_edit_page_ui_controller.refresh_notes()
         if program.get().selected_channel ~= 17 and is_key3_down then
           channel_edit_page_sequencer:press(x, y)
           program.toggle_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
@@ -176,6 +177,7 @@ function channel_edit_page_controller.register_press_handlers()
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
         channel_edit_page_ui_controller.refresh_trig_locks()
+        channel_edit_page_ui_controller.refresh_notes()
         channel_edit_page_controller.refresh_faders()
       end
     end
@@ -536,6 +538,7 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
+        channel_edit_page_ui_controller.refresh_notes()
         channel_edit_page_ui_controller.refresh_trig_locks()
         channel_edit_page_controller.refresh_faders()
       end

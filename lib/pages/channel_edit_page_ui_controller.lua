@@ -111,73 +111,27 @@ local notes_page =
   end
 )
 
+
 note_value_selector:set_view_transform_func(function(value)
-  local pressed_keys = grid_controller.get_pressed_keys()
-  local channel = program.get_selected_channel()
-  local v = value
-  if #pressed_keys > 0 then
-    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
-      for i, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        v = channel.step_note_masks[step]
-      end
-    end
-  end
 
-
-  if v == -1 then 
+  if value == -1 then 
     return "X"
   end
 
-  return musicutil.note_num_to_name(v, true)
+  return musicutil.note_num_to_name(value, true)
 end)
 
-note_velocity_selector:set_view_transform_func(function(value)
-  
-  local pressed_keys = grid_controller.get_pressed_keys()
-  local channel = program.get_selected_channel()
-  local v = value
-  if #pressed_keys > 0 then
-    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
-      for i, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        v = channel.step_velocity_masks[step]
-      end
+local function note_page_velocity_length_value_selector_func(value)
 
-    end
-  end
-  
-  
-  
-  if v == -1 then 
+  if value == -1 then 
     return "X"
   end
 
   return value
-end)
+end
 
-note_length_selector:set_view_transform_func(function(value)
-  
-  local pressed_keys = grid_controller.get_pressed_keys()
-  local channel = program.get_selected_channel()
-  local v = value
-  if #pressed_keys > 0 then
-    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
-      for i, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        v = channel.step_length_masks[step]
-      end
-
-    end
-  end
-  
-  if v == -1 then 
-    return "X"
-  end
-
-  return value
-end)
-
+note_velocity_selector:set_view_transform_func(note_page_velocity_length_value_selector_func)
+note_length_selector:set_view_transform_func(note_page_velocity_length_value_selector_func)
 
 
 local quantizer_page =
@@ -783,7 +737,6 @@ function channel_edit_page_ui_controller.enc(n, d)
           if note_value_selector:is_selected() then
             note_value_selector:deselect()
             note_velocity_selector:select()
-            print("Here")
           elseif note_velocity_selector:is_selected() then
             note_velocity_selector:deselect()
             note_length_selector:select()
@@ -1001,6 +954,29 @@ function channel_edit_page_ui_controller.key(n, z)
 end
 
 
+function channel_edit_page_ui_controller.refresh_notes()
+  local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
+  local note_value = -1
+  local velocity_value = -1
+  local length_value = -1
+  
+  if #pressed_keys > 0 then
+    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+      for i, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        note_value = channel.step_note_masks[step]
+        velocity_value = channel.step_velocity_masks[step]
+        length_value = channel.step_length_masks[step]
+      end
+    end
+  end
+
+  note_value_selector:set_value(note_value)
+  note_velocity_selector:set_value(velocity_value)
+  note_length_selector:set_value(length_value)
+end
+
 function channel_edit_page_ui_controller.refresh_clock_mods()
   local channel = program.get_selected_channel()
   local clock_mods = channel.clock_mods
@@ -1088,6 +1064,14 @@ function channel_edit_page_ui_controller.refresh_quantiser()
 end
 
 function channel_edit_page_ui_controller.set_current_note(note)
+
+  local pressed_keys = grid_controller.get_pressed_keys()
+  local value = -1
+  if #pressed_keys > 0 then
+    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+      return
+    end
+  end
   note_value_selector:set_value(note.note)
   note_velocity_selector:set_value(note.velocity)
   note_length_selector:set_value(note.length)
@@ -1239,6 +1223,7 @@ end
 function channel_edit_page_ui_controller.refresh()
   channel_edit_page_ui_controller.refresh_device_selector()
   channel_edit_page_ui_controller.throttled_refresh_channel_config()
+  channel_edit_page_ui_controller.refresh_notes()
   channel_edit_page_ui_controller.refresh_trig_locks()
   channel_edit_page_ui_controller.refresh_quantiser()
   channel_edit_page_ui_controller.refresh_romans()
