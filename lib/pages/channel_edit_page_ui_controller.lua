@@ -11,6 +11,7 @@ local ControlScrollSelector = include("mosaic/lib/ui_components/ControlScrollSel
 local ListSelector = include("mosaic/lib/ui_components/ListSelector")
 local ValueSelector = include("mosaic/lib/ui_components/ValueSelector")
 
+local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/param_manager")
 
 local pages = Pages:new()
@@ -20,6 +21,13 @@ local romans_vertical_scroll_selector =
   VerticalScrollSelector:new(90, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
 local notes_vertical_scroll_selector = VerticalScrollSelector:new(5, 25, "Notes", quantiser.get_notes())
 local rotation_vertical_scroll_selector = VerticalScrollSelector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
+
+local note_value_selector = ValueSelector:new(10, 25, "Note", -1, 127)
+note_value_selector:set_value(-1)
+local note_velocity_selector = ValueSelector:new(50, 25, "Velocity", -1, 127)
+note_velocity_selector:set_value(-1)
+local note_length_selector = ValueSelector:new(90, 25, "Length", -1, 512)
+note_length_selector:set_value(-1)
 
 local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", {})
 local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 100)
@@ -68,7 +76,7 @@ local m_params = {param_1, param_2, param_3, param_4, param_5, param_6, param_7,
 
 local dials = ControlScrollSelector:new(0, 0, {})
 
-local page_to_index = {["Trig Locks"] = 1, ["Clock Mods"] = 2, ["Quantizer"] = 3, ["Midi Config"] = 4}
+local page_to_index = {["Notes"] = 1, ["Trig Locks"] = 2, ["Clock Mods"] = 3, ["Quantizer"] = 4, ["Midi Config"] = 5}
 
 local refresh_timer_id = nil
 local throttle_time = 0.1
@@ -80,6 +88,68 @@ local function print_no_scale_selected_message_to_screen()
   screen.move(15, 35)
   screen.text("No scale selected")
 end
+
+
+local function print_quant_message_to_screen()
+  screen.level(5)
+  screen.move(15, 35)
+  screen.text("Master quantiser mode")
+end
+
+
+local notes_page =
+  Page:new(
+  "Notes",
+  function()
+    if program.get().selected_channel ~= 17 then
+      note_value_selector:draw()
+      note_velocity_selector:draw()
+      note_length_selector:draw()
+    else
+      print_quant_message_to_screen()
+    end
+  end
+)
+
+note_value_selector:set_view_transform_func(function(value)
+  local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
+  local v = value
+  if #pressed_keys > 0 then
+    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+      for i, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        v = channel.step_note_masks[step]
+      end
+
+    end
+  end
+
+
+  if v == -1 then 
+    return "X"
+  end
+
+  return musicutil.note_num_to_name(v, true)
+end)
+
+note_velocity_selector:set_view_transform_func(function(value)
+  if value == -1 then 
+    return "X"
+  end
+
+  return value
+end)
+
+note_length_selector:set_view_transform_func(function(value)
+  if value == -1 then 
+    return "X"
+  end
+
+  return value
+end)
+
+
 
 local quantizer_page =
   Page:new(
@@ -102,12 +172,6 @@ local quantizer_page =
     rotation_vertical_scroll_selector:draw()
   end
 )
-
-local function print_quant_message_to_screen()
-  screen.level(5)
-  screen.move(15, 35)
-  screen.text("Master quantiser mode")
-end
 
 local clock_mods_page =
   Page:new(
@@ -167,6 +231,17 @@ function channel_edit_page_ui_controller.init()
   clock_mod_list_selector:set_list(clock_controller.get_clock_divisions())
   device_map_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Midi Map", device_map:get_devices())
 
+
+  notes_page:set_sub_name_func(
+    function()
+      if program.get().selected_channel ~= 17 then
+        return "Ch. " .. program.get().selected_channel .. " "
+      else
+        return ""
+      end
+    end
+  )
+
   quantizer_page:set_sub_name_func(
     function()
       if program.get().selected_channel ~= 17 then
@@ -220,6 +295,7 @@ function channel_edit_page_ui_controller.init()
     end
   )
 
+  pages:add_page(notes_page)
   pages:add_page(trig_lock_page)
   pages:add_page(clock_mods_page)
   pages:add_page(quantizer_page)
@@ -905,6 +981,11 @@ function channel_edit_page_ui_controller.refresh_quantiser()
   end
 end
 
+function channel_edit_page_ui_controller.set_current_note(note)
+  note_value_selector:set_value(note.note)
+  note_velocity_selector:set_value(note.velocity)
+  note_length_selector:set_value(note.length)
+end
 
 function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
 

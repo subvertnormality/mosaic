@@ -273,6 +273,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local chord_end = #chord_notes
 
   if chord_strum_pattern == nil or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
+    if (c == program.get().selected_channel) then
+      channel_edit_page_ui_controller.set_current_note(note_container)
+    end
     note_on_func(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
     table.insert(length_tracker, note_container)
   end
@@ -453,6 +456,7 @@ function step_handler.handle(c, current_step)
         local note_container = {
           note = note,
           velocity = velocity_value,
+          length = length_value,
           midi_channel = midi_channel,
           midi_device = midi_device,
           steps_remaining = length_value,
@@ -464,7 +468,7 @@ function step_handler.handle(c, current_step)
           current_step,
           note_container,
           {note_value = note_value, octave_mod = octave_mod, transpose = transpose},
-          function(chord_note, velocity, midi_channel, midi_device)
+          function(chord_note, velocity, midi_channel, midi_device)        
             midi_controller:note_on(chord_note, velocity, midi_channel, midi_device)
           end
         )
@@ -472,6 +476,7 @@ function step_handler.handle(c, current_step)
         local note_container = {
           note = note,
           velocity = velocity_value,
+          length = length_value,
           midi_channel = midi_channel,
           midi_device = midi_device,
           steps_remaining = length_value,
@@ -642,6 +647,7 @@ function step_handler.reset()
   persistent_step_transpose = nil
   step_handler.execute_blink_cancel_func()
   step_handler.flush_lengths()
+  channel_edit_page_ui_controller.set_current_note({note = -1, velocity = -1, length = -1})
 end
 
 function step_handler.reset_pattern()

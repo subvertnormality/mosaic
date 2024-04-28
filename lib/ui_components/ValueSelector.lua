@@ -12,6 +12,7 @@ function ValueSelector:new(x, y, name, min, max)
   self.max = max
   self.value = 0
   self.selected = false
+  self.view_transform_func = function(value) return value end
 
   return self
 end
@@ -28,7 +29,7 @@ function ValueSelector:draw()
   screen.move(self.x + 5, self.y + 12)
   screen.font_size(14)
   if (self.value) then
-    screen.text(self.value)
+    screen.text(self.view_transform_func(self.value))
   else
     screen.text("0")
   end
@@ -77,6 +78,10 @@ end
 function ValueSelector:set_value(v)
   self.value = v
   fn.dirty_screen(true)
+end
+
+function ValueSelector:set_view_transform_func(func)
+  self.view_transform_func = func
 end
 
 return ValueSelector
