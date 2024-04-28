@@ -1,5 +1,4 @@
 local fn = include("mosaic/lib/functions")
-local channel_edit_page_ui_controller = include("mosaic/ui/channel_edit_page_ui_controller")
 
 local param_manager = {}
 
@@ -90,7 +89,7 @@ function param_manager.update_param(index, channel, param, meta_device)
     channel.trig_lock_params[index].id = param.id
       
     if (type == "midi" and param_type ~= "stock") then
-      channel.trig_lock_params[index)].param_id =
+      channel.trig_lock_params[index].param_id =
         "midi_device_params_channel_" .. channel.number .. "_" .. meta_device.index
     else
       channel.trig_lock_params[index].param_id = nil
