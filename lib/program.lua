@@ -23,7 +23,7 @@ local function initialise_default_channels()
       step_trig_lock_banks = {},
       step_octave_trig_lock_banks = {},
       step_scale_trig_lock_banks = {},
-      step_trig_masks = program.initialise_64_table(true),
+      step_trig_masks = program.initialise_64_table(-1),
       step_note_masks = program.initialise_64_table(-1),
       step_velocity_masks = program.initialise_64_table(-1),
       step_length_masks = program.initialise_64_table(-1),

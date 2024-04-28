@@ -121,7 +121,6 @@ note_value_selector:set_view_transform_func(function(value)
         local step = fn.calc_grid_count(keys[1], keys[2])
         v = channel.step_note_masks[step]
       end
-
     end
   end
 
@@ -134,7 +133,23 @@ note_value_selector:set_view_transform_func(function(value)
 end)
 
 note_velocity_selector:set_view_transform_func(function(value)
-  if value == -1 then 
+  
+  local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
+  local v = value
+  if #pressed_keys > 0 then
+    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+      for i, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        v = channel.step_velocity_masks[step]
+      end
+
+    end
+  end
+  
+  
+  
+  if v == -1 then 
     return "X"
   end
 
@@ -142,7 +157,21 @@ note_velocity_selector:set_view_transform_func(function(value)
 end)
 
 note_length_selector:set_view_transform_func(function(value)
-  if value == -1 then 
+  
+  local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
+  local v = value
+  if #pressed_keys > 0 then
+    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+      for i, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        v = channel.step_length_masks[step]
+      end
+
+    end
+  end
+  
+  if v == -1 then 
     return "X"
   end
 
@@ -224,6 +253,7 @@ local trig_lock_page =
 )
 
 function channel_edit_page_ui_controller.init()
+  note_value_selector:select()
   quantizer_vertical_scroll_selector:select()
   midi_channel_vertical_scroll_selector:select()
   midi_device_vertical_scroll_selector:set_items(midi_controller.get_midi_outs())
@@ -475,7 +505,40 @@ function channel_edit_page_ui_controller.enc(n, d)
   if n == 3 then
     for i = 1, math.abs(d) do
       if d > 0 then
-        if pages:get_selected_page() == page_to_index["Quantizer"] then
+        if pages:get_selected_page() == page_to_index["Notes"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
+          local pressed_keys = grid_controller.get_pressed_keys()
+          if #pressed_keys > 0 then
+            if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+              for i, keys in ipairs(pressed_keys) do
+                local step = fn.calc_grid_count(keys[1], keys[2])
+                if note_value_selector:is_selected() then
+                  note_value_selector:increment()
+                  channel.step_note_masks[step] = note_value_selector:get_value()
+                  if channel.step_note_masks[step] > 127 then
+                    channel.step_note_masks[step] = 127
+                  end
+                end
+                if note_velocity_selector:is_selected() then
+                  note_velocity_selector:increment()
+                  channel.step_velocity_masks[step] = note_velocity_selector:get_value()
+                  if channel.step_velocity_masks[step] > 127 then
+                    channel.step_velocity_masks[step] = 127
+                  end
+                end
+                if note_length_selector:is_selected() then
+                  note_length_selector:increment()
+                  channel.step_length_masks[step] = note_length_selector:get_value()
+                  if channel.step_length_masks[step] > 512 then
+                    channel.step_length_masks[step] = 512
+                  end
+                end
+              end
+            end
+          end
+        elseif pages:get_selected_page() == page_to_index["Quantizer"] then
           if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
             return
           end
@@ -576,7 +639,37 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
         end
       else
-        if pages:get_selected_page() == page_to_index["Quantizer"] then
+        if pages:get_selected_page() == page_to_index["Notes"] then
+          local pressed_keys = grid_controller.get_pressed_keys()
+          if #pressed_keys > 0 then
+            if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+              for i, keys in ipairs(pressed_keys) do
+                local step = fn.calc_grid_count(keys[1], keys[2])
+                if note_value_selector:is_selected() then
+                  note_value_selector:decrement()
+                  channel.step_note_masks[step] = note_value_selector:get_value()
+                  if channel.step_note_masks[step] < -1 then
+                    channel.step_note_masks[step] = -1
+                  end
+                end
+                if note_velocity_selector:is_selected() then
+                  note_velocity_selector:decrement()
+                  channel.step_velocity_masks[step] = note_velocity_selector:get_value()
+                  if channel.step_velocity_masks[step] < -1 then
+                    channel.step_velocity_masks[step] = -1
+                  end
+                end
+                if note_length_selector:is_selected() then
+                  note_length_selector:decrement()
+                  channel.step_length_masks[step] = note_length_selector:get_value()
+                  if channel.step_length_masks[step] < -1 then
+                    channel.step_length_masks[step] = -1
+                  end
+                end
+              end
+            end
+          end
+        elseif pages:get_selected_page() == page_to_index["Quantizer"] then
           if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
             return
           end
@@ -683,7 +776,22 @@ function channel_edit_page_ui_controller.enc(n, d)
   if n == 2 then
     for i = 1, math.abs(d) do
       if d > 0 then
-        if pages:get_selected_page() == page_to_index["Quantizer"] then
+        if pages:get_selected_page() == page_to_index["Notes"] then
+          if program.get().selected_channel == 17 then
+            return
+          end
+          if note_value_selector:is_selected() then
+            note_value_selector:deselect()
+            note_velocity_selector:select()
+            print("Here")
+          elseif note_velocity_selector:is_selected() then
+            note_velocity_selector:deselect()
+            note_length_selector:select()
+          elseif note_length_selector:is_selected() then
+            note_length_selector:deselect()
+            note_value_selector:select()
+          end
+        elseif pages:get_selected_page() == page_to_index["Quantizer"] then
           if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
             return
           end
@@ -748,22 +856,19 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
         end
       else
-        if pages:get_selected_page() == page_to_index["Quantizer"] then
-          if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
+        if pages:get_selected_page() == page_to_index["Notes"] then
+          if program.get().selected_channel == 17 then
             return
           end
-          if quantizer_vertical_scroll_selector:is_selected() then
-            quantizer_vertical_scroll_selector:deselect()
-            notes_vertical_scroll_selector:select()
-          elseif romans_vertical_scroll_selector:is_selected() then
-            romans_vertical_scroll_selector:deselect()
-            quantizer_vertical_scroll_selector:select()
-          elseif notes_vertical_scroll_selector:is_selected() then
-            notes_vertical_scroll_selector:deselect()
-            rotation_vertical_scroll_selector:select()
-          elseif rotation_vertical_scroll_selector:is_selected() then
-            rotation_vertical_scroll_selector:deselect()
-            romans_vertical_scroll_selector:select()
+          if note_value_selector:is_selected() then
+            note_value_selector:deselect()
+            note_length_selector:select()
+          elseif note_velocity_selector:is_selected() then
+            note_velocity_selector:deselect()
+            note_value_selector:select()
+          elseif note_length_selector:is_selected() then
+            note_length_selector:deselect()
+            note_velocity_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
           if program.get().selected_channel == 17 then
@@ -894,6 +999,7 @@ function channel_edit_page_ui_controller.key(n, z)
     end
   end
 end
+
 
 function channel_edit_page_ui_controller.refresh_clock_mods()
   local channel = program.get_selected_channel()
