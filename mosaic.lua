@@ -213,7 +213,7 @@ function init()
 
   ui_splash_screen_active = true
 
-  params:add_group("mosaic", "MOSAIC", 18)
+  params:add_group("mosaic", "MOSAIC", 19)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -258,6 +258,7 @@ function init()
   params:add_separator("Prameter locks")
   params:add_option("trigless_locks", "Trigless locks", {"On", "Off"}, 1)
   params:add_separator("Quantiser")
+  params:add_option("quantiser_act_on_note_masks", "Quantise note masks", {"On", "Off"}, 1)
   params:add_option("quantiser_trig_lock_hold", "Hold quantiser trigs", {"On", "Off"}, 1)
   params:add_separator("Midi control")
   params:add_option("midi_honour_rotation", "Honour scale rotations", {"On", "Off"}, 2)

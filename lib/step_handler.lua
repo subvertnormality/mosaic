@@ -377,6 +377,7 @@ function step_handler.handle(c, current_step)
 
   local trig_value = channel.working_pattern.trig_values[current_step]
   local note_value = channel.working_pattern.note_values[current_step]
+  local note_mask_value = channel.working_pattern.note_mask_values[current_step]
   local velocity_value = channel.working_pattern.velocity_values[current_step]
   local length_value = channel.working_pattern.lengths[current_step]
   local midi_channel = program.get().devices[channel.number].midi_channel
@@ -418,9 +419,21 @@ function step_handler.handle(c, current_step)
       random_shift +
       fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
 
-    note_value = note_value + random_shift
 
-    local note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number)
+    local note = 0
+    
+    if note_mask_value > -1 then
+
+      if params:get("quantiser_act_on_note_masks") == 1 then
+        note = quantiser.snap_to_scale((note_mask_value + octave_mod * 12) + random_shift, channel.step_scale_number)
+      else
+        note = (note_mask_value + octave_mod * 12) + random_shift
+      end
+    else
+      note_value = note_value + random_shift
+      note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number)
+    end
+
 
     local velocity_random_shift =
       fn.transform_random_value(step_handler.process_stock_params(c, current_step, "random_velocity") or 0)

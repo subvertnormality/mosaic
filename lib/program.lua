@@ -31,7 +31,8 @@ local function initialise_default_channels()
         trig_values = program.initialise_64_table(0),
         lengths = program.initialise_64_table(1),
         note_values = program.initialise_64_table(0),
-        velocity_values = program.initialise_64_table(100)
+        velocity_values = program.initialise_64_table(100),
+        note_mask_values = program.initialise_64_table(-1),
       },
       start_trig = {1, 4},
       end_trig = {16, 7},
@@ -113,6 +114,7 @@ function program.initialise_default_pattern()
     trig_values = program.initialise_64_table(0),
     lengths = program.initialise_64_table(1),
     note_values = program.initialise_64_table(0),
+    note_mask_values = program.initialise_64_table(-1),
     velocity_values = program.initialise_64_table(100)
   }
 end

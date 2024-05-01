@@ -28,7 +28,7 @@ local note_velocity_selector = ValueSelector:new(50, 20, "Velocity", -1, 127)
 note_velocity_selector:set_value(-1)
 local note_length_selector = ValueSelector:new(90, 20, "Length", -1, 512)
 note_length_selector:set_value(-1)
-local note_trig_selector = ValueSelector:new(10, 50, "Trig", -1, 1)
+local note_trig_selector = ValueSelector:new(10, 40, "Trig", -1, 1)
 note_trig_selector:set_value(-1)
 
 
@@ -859,6 +859,23 @@ function channel_edit_page_ui_controller.enc(n, d)
           elseif note_trig_selector:is_selected() then
             note_trig_selector:deselect()
             note_length_selector:select()
+          end
+        elseif pages:get_selected_page() == page_to_index["Quantizer"] then
+          if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
+            return
+          end
+          if quantizer_vertical_scroll_selector:is_selected() then
+            quantizer_vertical_scroll_selector:deselect()
+            notes_vertical_scroll_selector:select()
+          elseif romans_vertical_scroll_selector:is_selected() then
+            romans_vertical_scroll_selector:deselect()
+            quantizer_vertical_scroll_selector:select()
+          elseif notes_vertical_scroll_selector:is_selected() then
+            notes_vertical_scroll_selector:deselect()
+            rotation_vertical_scroll_selector:select()
+          elseif rotation_vertical_scroll_selector:is_selected() then
+            rotation_vertical_scroll_selector:deselect()
+            romans_vertical_scroll_selector:select()
           end
         elseif pages:get_selected_page() == page_to_index["Clock Mods"] then
           if program.get().selected_channel == 17 then

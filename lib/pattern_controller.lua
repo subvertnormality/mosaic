@@ -1,6 +1,6 @@
 local pattern_controller = {}
 local fn = include("mosaic/lib/functions")
-
+local quantiser = include("mosaic/lib/quantiser")
 
 local notes = program.initialise_64_table({})
 local lengths = program.initialise_64_table({})
@@ -140,25 +140,26 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
       do_mode_calculation(velocity_merge_mode, s, velocities, merged_pattern.velocity_values, fn)
       do_mode_calculation(length_merge_mode, s, lengths, merged_pattern.lengths, fn)
 
+
       -- Override trig with the channel's set trig mask
       local step_trig_masks = program.get_step_trig_masks(channel)
       if step_trig_masks[s] ~= -1 then
         merged_pattern.trig_values[s] = step_trig_masks[s]
       end
 
-      -- Overrite note with the channel's set note mask
+      -- Override note with the channel's set note mask
       local step_note_masks = program.get_step_note_masks(channel)
       if step_note_masks[s] ~= -1 then
-        merged_pattern.note_values[s] = step_note_masks[s]
+        merged_pattern.note_mask_values[s] = step_note_masks[s]
       end
 
-      -- Overrite velocity with the channel's set velocity mask
+      -- Override velocity with the channel's set velocity mask
       local step_velocity_masks = program.get_step_velocity_masks(channel)
       if step_velocity_masks[s] ~= -1 then
         merged_pattern.velocity_values[s] = step_velocity_masks[s]
       end
 
-      -- Overrite length with the channel's set length mask
+      -- Override length with the channel's set length mask
       local step_length_masks = program.get_step_length_masks(channel)
       if step_length_masks[s] ~= -1 then
         merged_pattern.lengths[s] = step_length_masks[s]
