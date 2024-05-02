@@ -501,6 +501,9 @@ function channel_edit_page_ui_controller.enc(n, d)
                 end
                 if note_length_selector:is_selected() then
                   note_length_selector:increment()
+                  if note_length_selector:get_value() == 0 then 
+                    note_length_selector:set_value(1)
+                  end
                   channel.step_length_masks[step] = note_length_selector:get_value()
                   if channel.step_length_masks[step] > 512 then
                     channel.step_length_masks[step] = 512
@@ -626,29 +629,29 @@ function channel_edit_page_ui_controller.enc(n, d)
                 if note_value_selector:is_selected() then
                   note_value_selector:decrement()
                   channel.step_note_masks[step] = note_value_selector:get_value()
-                  if channel.step_note_masks[step] < -1 then
-                    channel.step_note_masks[step] = -1
+                  if channel.step_note_masks[step] < 0 then
+                    channel.step_note_masks[step] = nil
                   end
                 end
                 if note_velocity_selector:is_selected() then
                   note_velocity_selector:decrement()
                   channel.step_velocity_masks[step] = note_velocity_selector:get_value()
-                  if channel.step_velocity_masks[step] < -1 then
-                    channel.step_velocity_masks[step] = -1
+                  if channel.step_velocity_masks[step] < 0 then
+                    channel.step_velocity_masks[step] = nil
                   end
                 end
                 if note_length_selector:is_selected() then
                   note_length_selector:decrement()
-                  channel.step_length_masks[step] = note_length_selector:get_value()
-                  if channel.step_length_masks[step] < -1 then
-                    channel.step_length_masks[step] = -1
+                  if note_length_selector:get_value() < 1 then 
+                    channel.step_length_masks[step] = nil
+                    note_length_selector:set_value(-1)
                   end
                 end
                 if note_trig_selector:is_selected() then
                   note_trig_selector:decrement()
                   channel.step_trig_masks[step] = note_trig_selector:get_value()
-                  if channel.step_trig_masks[step] < -1 then
-                    channel.step_trig_masks[step] = -1
+                  if channel.step_trig_masks[step] < 0 then
+                    channel.step_trig_masks[step] = nil
                   end
                 end
               end
@@ -1020,10 +1023,10 @@ function channel_edit_page_ui_controller.refresh_notes()
     if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
       for i, keys in ipairs(pressed_keys) do
         local step = fn.calc_grid_count(keys[1], keys[2])
-        note_value = channel.step_note_masks[step]
-        velocity_value = channel.step_velocity_masks[step]
-        length_value = channel.step_length_masks[step]
-        trig_value = channel.step_trig_masks[step]
+        note_value = channel.step_note_masks[step] or -1
+        velocity_value = channel.step_velocity_masks[step] or -1
+        length_value = channel.step_length_masks[step] or -1
+        trig_value = channel.step_trig_masks[step] or -1
       end
     end
   end

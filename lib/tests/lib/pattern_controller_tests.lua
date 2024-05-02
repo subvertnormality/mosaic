@@ -515,7 +515,7 @@ function test_trig_masks_set_to_off_doesnt_trig()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
 
-  program.get_sequencer_pattern(1).channels[1].step_trig_masks[1] = -1
+  program.get_sequencer_pattern(1).channels[1].step_trig_masks[1] = nil
 
   luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "skip", false, false, false).trig_values[1], 0)
 end
@@ -532,7 +532,7 @@ function test_trig_masks_set_to_off_doesnt_mask()
   program.get_sequencer_pattern(1).channels[1].selected_patterns[3] = true
   program.get_sequencer_pattern(1).channels[1].selected_patterns[4] = true
 
-  program.get_sequencer_pattern(1).channels[1].step_trig_masks[1] = -1
+  program.get_sequencer_pattern(1).channels[1].step_trig_masks[1] = nil
 
   luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "skip", false, false, false).trig_values[1], 1)
 end

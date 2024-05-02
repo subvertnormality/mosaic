@@ -23,16 +23,16 @@ local function initialise_default_channels()
       step_trig_lock_banks = {},
       step_octave_trig_lock_banks = {},
       step_scale_trig_lock_banks = {},
-      step_trig_masks = program.initialise_64_table(-1),
-      step_note_masks = program.initialise_64_table(-1),
-      step_velocity_masks = program.initialise_64_table(-1),
-      step_length_masks = program.initialise_64_table(-1),
+      step_trig_masks = {},
+      step_note_masks = {},
+      step_velocity_masks = {},
+      step_length_masks = {},
       working_pattern = {
         trig_values = program.initialise_64_table(0),
         lengths = program.initialise_64_table(1),
         note_values = program.initialise_64_table(0),
         velocity_values = program.initialise_64_table(100),
-        note_mask_values = program.initialise_64_table(-1),
+        note_mask_values = {},
       },
       start_trig = {1, 4},
       end_trig = {16, 7},
@@ -45,7 +45,6 @@ local function initialise_default_channels()
       note_merge_mode = "average",
       velocity_merge_mode = "average",
       length_merge_mode = "average",
-      merge_mode = "skip", -- deprecated
       octave = 0,
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,
@@ -368,7 +367,7 @@ end
 function program.step_has_trig_mask(step)
   local step_trig_masks = program.get_selected_channel().step_trig_masks
 
-  if step_trig_masks and step_trig_masks[step] ~= -1 then
+  if step_trig_masks and step_trig_masks[step] then
     return true
   end
 
@@ -378,7 +377,7 @@ end
 function program.step_has_note_mask(step)
   local step_note_masks = program.get_selected_channel().step_note_masks
 
-  if step_note_masks and step_note_masks[step] ~= -1 then
+  if step_note_masks and step_note_masks[step] then
     return true
   end
 
@@ -388,7 +387,7 @@ end
 function program.step_has_velocity_mask(step)
   local step_velocity_masks = program.get_selected_channel().step_velocity_masks
 
-  if step_velocity_masks and step_velocity_masks[step] ~= -1 then
+  if step_velocity_masks and step_velocity_masks[step] then
     return true
   end
 
@@ -398,7 +397,7 @@ end
 function program.step_has_length_mask(step)
   local step_length_masks = program.get_selected_channel().step_length_masks
 
-  if step_length_masks and step_length_masks[step] ~= -1 then
+  if step_length_masks and step_length_masks[step] then
     return true
   end
 
@@ -500,14 +499,14 @@ function program.get_step_trig_masks(channel)
   if program.get_channel(channel) == nil then return end
 
   if program.get_channel(channel).step_trig_masks == nil then
-    program.get_channel(channel).step_trig_masks = program.initialise_64_table(-1)
+    program.get_channel(channel).step_trig_masks = {}
   end
   return program.get_channel(channel).step_trig_masks
 end
 
 function program.set_step_trig_mask(channel, step, mask)
   if program.get_channel(channel).step_trig_masks == nil then
-    program.get_channel(channel).step_trig_masks = program.initialise_64_table(-1)
+    program.get_channel(channel).step_trig_masks = {}
   end
   program.get_channel(channel).step_trig_masks[step] = mask
 end
@@ -516,7 +515,7 @@ function program.get_step_note_masks(channel)
   if program.get_channel(channel) == nil then return end
 
   if program.get_channel(channel).step_note_masks == nil then
-    program.get_channel(channel).step_note_masks = program.initialise_64_table(-1)
+    program.get_channel(channel).step_note_masks = {}
   end
   return program.get_channel(channel).step_note_masks
 end
@@ -525,7 +524,7 @@ function program.get_step_velocity_masks(channel)
   if program.get_channel(channel) == nil then return end
 
   if program.get_channel(channel).step_velocity_masks == nil then
-    program.get_channel(channel).step_velocity_masks = program.initialise_64_table(-1)
+    program.get_channel(channel).step_velocity_masks = {}
   end
   return program.get_channel(channel).step_velocity_masks
 end
@@ -534,7 +533,7 @@ function program.get_step_length_masks(channel)
   if program.get_channel(channel) == nil then return end
 
   if program.get_channel(channel).step_length_masks == nil then
-    program.get_channel(channel).step_length_masks = program.initialise_64_table(-1)
+    program.get_channel(channel).step_length_masks = {}
   end
   return program.get_channel(channel).step_length_masks
 end
@@ -542,7 +541,7 @@ end
 
 function program.toggle_step_trig_mask(channel, step)
   if program.get_channel(channel).step_trig_masks == nil then
-    program.get_channel(channel).step_trig_masks = program.initialise_64_table(-1)
+    program.get_channel(channel).step_trig_masks = {}
   end
 
   if program.get_channel(channel).working_pattern.trig_values[step] == 0 then
@@ -554,7 +553,7 @@ function program.toggle_step_trig_mask(channel, step)
 end
 
 function program.clear_step_trig_mask(channel, step)
-  program.get_channel(channel).step_trig_masks[step] = -1
+  program.get_channel(channel).step_trig_masks[step] = nil
 end
 
 return program
