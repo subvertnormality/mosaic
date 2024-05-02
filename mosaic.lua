@@ -102,6 +102,7 @@ local function load_new_project()
 end
 
 local function do_autosave()
+  ui_splash_screen_active = true
   if program ~= nil then
     save_project("autosave")
   end
@@ -117,9 +118,6 @@ local function prime_autosave()
   end
   if not clock_controller.is_playing() then
     as_metro = metro.init(do_autosave, 0.5, 1)
-
-    ui_splash_screen_active = true
-
     as_metro:start()
   else
     autosave_reset()
@@ -128,47 +126,36 @@ end
 
 local function post_splash_init()
 
-  load_project(norns.state.data .. "autosave.ptn")
-
-  if program == nil then
-    load_new_project()
-  end
-
-  device_map.validate_devices()
-  params:bang()
-  ui_splash_screen_active = false
-  ui_controller.init()
-  grid_controller.init()
-  grid_controller.deactivate_splash_screen()
-  fn.dirty_grid(true)
-  fn.dirty_screen(true)
-  crow.ii.jf.mode(1)
 end
 
 function redraw()
   screen.clear()
 
-  if ui_splash_screen_active then
-    screen.level(15)
-    screen.move(60, 38)
-    screen.font_face(math.random(3, 8))
-    screen.font_size(12)
-    screen.text("m°")
-    screen.font_face(1)
-    screen.update()
-    return
-  end
-
   if fn.dirty_screen() == true then
-    screen.level(5)
-    screen.font_size(8)
-    ui_controller.redraw()
-    screen.update()
+
+    if ui_splash_screen_active then
+      screen.level(15)
+      screen.move(60, 38)
+      screen.font_face(math.random(3, 8))
+      screen.font_size(12)
+      screen.text("m°")
+      screen.font_face(1)
+      screen.update()
+    
+    else
+      screen.level(5)
+      screen.font_size(8)
+      ui_controller.redraw()
+      screen.update()
+    end
+
     fn.dirty_screen(false)
+
   end
 end
 
 function init()
+  ui_splash_screen_active = true
   math.randomseed(os.time())
   program.init()
   midi_controller.init()
@@ -209,9 +196,6 @@ function init()
       end
     end
   )
-
-
-  ui_splash_screen_active = true
 
   params:add_group("mosaic", "MOSAIC", 19)
   params:add_separator("Pattern project management")
@@ -270,8 +254,23 @@ function init()
     channel_sequencer_page_ui_controller.refresh_tempo()
   end
 
-  post_init = metro.init(post_splash_init, 0.5, 1)
-  post_init:start()
+
+  load_project(norns.state.data .. "autosave.ptn")
+
+  if program == nil then
+    load_new_project()
+  end
+
+  device_map.validate_devices()
+  params:bang()
+
+  ui_controller.init()
+  grid_controller.init()
+  crow.ii.jf.mode(1)
+  ui_splash_screen_active = false
+  fn.dirty_grid(true)
+  fn.dirty_screen(true)
+
 end
 
 function enc(n, d)

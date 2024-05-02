@@ -22,14 +22,25 @@ local romans_vertical_scroll_selector =
 local notes_vertical_scroll_selector = VerticalScrollSelector:new(5, 25, "Notes", quantiser.get_notes())
 local rotation_vertical_scroll_selector = VerticalScrollSelector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
 
-local note_value_selector = ValueSelector:new(10, 20, "Note", -1, 127)
+local note_value_selector = ValueSelector:new(5, 20, "Note", -1, 127)
 note_value_selector:set_value(-1)
-local note_velocity_selector = ValueSelector:new(50, 20, "Velocity", -1, 127)
+local note_velocity_selector = ValueSelector:new(30, 20, "Vel", -1, 127)
 note_velocity_selector:set_value(-1)
-local note_length_selector = ValueSelector:new(90, 20, "Length", -1, 512)
+local note_length_selector = ValueSelector:new(55, 20, "Len", -1, 512)
 note_length_selector:set_value(-1)
-local note_trig_selector = ValueSelector:new(10, 40, "Trig", -1, 1)
+local note_micro_delay = ValueSelector:new(80, 20, "uDel", -1, 99)
+note_micro_delay:set_value(-1)
+local note_trig_selector = ValueSelector:new(5, 40, "Trig", -1, 1)
 note_trig_selector:set_value(-1)
+local note_chord_1 = ValueSelector:new(30, 40, "Chd1", -14, 14)
+note_chord_1:set_value(0)
+local note_chord_2 = ValueSelector:new(55, 40, "Chd2", -14, 14)
+note_chord_2:set_value(0)
+local note_chord_3 = ValueSelector:new(80, 40, "Chd3", -14, 14)
+note_chord_3:set_value(0)
+local note_chord_4 = ValueSelector:new(105, 40, "Chd4", -14, 14)
+note_chord_4:set_value(0)
+
 
 
 local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", {})
@@ -109,6 +120,11 @@ local notes_page =
       note_velocity_selector:draw()
       note_length_selector:draw()
       note_trig_selector:draw()
+      note_micro_delay:draw()
+      note_chord_1:draw()
+      note_chord_2:draw()
+      note_chord_3:draw()
+      note_chord_4:draw()
     else
       print_quant_message_to_screen()
     end
@@ -134,8 +150,52 @@ local function note_page_velocity_length_value_selector_func(value)
   return value
 end
 
+local function chord_value_selector_func(value)
+  
+  local chord_ui_labels = {
+    "--oct",
+    "--2nd",
+    "--3rd",
+    "--4th",
+    "--5th",
+    "--6th",
+    "--7th",
+    "-oct",
+    "-2nd",
+    "-3rd",
+    "-4th",
+    "-5th",
+    "-6th",
+    "-7th",
+    "X",
+    "2nd",
+    "3rd",
+    "4th",
+    "5th",
+    "6th",
+    "7th",
+    "+oct",
+    "+2nd",
+    "+3rd",
+    "+4th",
+    "+5th", 
+    "+6th",
+    "+7th",
+    "++oct"
+  }
+
+  screen.font_size(8)
+  return chord_ui_labels[value + 15]
+end
+
+
 note_velocity_selector:set_view_transform_func(note_page_velocity_length_value_selector_func)
 note_length_selector:set_view_transform_func(note_page_velocity_length_value_selector_func)
+note_micro_delay:set_view_transform_func(note_page_velocity_length_value_selector_func)
+note_chord_1:set_view_transform_func(chord_value_selector_func)
+note_chord_2:set_view_transform_func(chord_value_selector_func)
+note_chord_3:set_view_transform_func(chord_value_selector_func)
+note_chord_4:set_view_transform_func(chord_value_selector_func)
 
 note_trig_selector:set_view_transform_func(function(value)
 
@@ -509,11 +569,70 @@ function channel_edit_page_ui_controller.enc(n, d)
                     channel.step_length_masks[step] = 512
                   end
                 end
+                if note_micro_delay:is_selected() then
+                  note_micro_delay:increment()
+                  channel.step_micro_delay_masks[step] = note_micro_delay:get_value()
+                  if channel.step_micro_delay_masks[step] > 99 then
+                    channel.step_micro_delay_masks[step] = 99
+                  end
+                end
                 if note_trig_selector:is_selected() then
                   note_trig_selector:increment()
                   channel.step_trig_masks[step] = note_trig_selector:get_value()
                   if channel.step_trig_masks[step] > 1 then
                     channel.step_trig_masks[step] = 1
+                  end
+                end
+                if note_chord_1:is_selected() then
+                  note_chord_1:increment()
+                  if channel.step_chord_masks[step] == nil then
+                    channel.step_chord_masks[step] = {}
+                  end
+                  if note_chord_1:get_value() > 14 then
+                    channel.step_chord_masks[step][1] = 14
+                  elseif note_chord_1:get_value() == 0 then
+                    channel.step_chord_masks[step][1] = nil
+                  else
+                    channel.step_chord_masks[step][1] = note_chord_1:get_value()
+                  end
+                end
+                if note_chord_2:is_selected() then
+                  note_chord_2:increment()
+                  if channel.step_chord_masks[step] == nil then
+                    channel.step_chord_masks[step] = {}
+                  end
+                  if note_chord_2:get_value() > 14 then
+                    channel.step_chord_masks[step][2] = 14
+                  elseif note_chord_2:get_value() == 0 then
+                    channel.step_chord_masks[step][2] = nil
+                  else
+                    channel.step_chord_masks[step][2] = note_chord_2:get_value()
+                  end
+                end
+                if note_chord_3:is_selected() then
+                  note_chord_3:increment()
+                  if channel.step_chord_masks[step] == nil then
+                    channel.step_chord_masks[step] = {}
+                  end
+                  if note_chord_3:get_value() > 14 then
+                    channel.step_chord_masks[step][3] = 14
+                  elseif note_chord_3:get_value() == 0 then
+                    channel.step_chord_masks[step][3] = nil
+                  else
+                    channel.step_chord_masks[step][3] = note_chord_3:get_value()
+                  end
+                end
+                if note_chord_4:is_selected() then
+                  note_chord_4:increment()
+                  if channel.step_chord_masks[step] == nil then
+                    channel.step_chord_masks[step] = {}
+                  end
+                  if note_chord_4:get_value() > 14 then
+                    channel.step_chord_masks[step][4] = 14
+                  elseif note_chord_4:get_value() == 0  then
+                    channel.step_chord_masks[step][4] = nil
+                  else
+                    channel.step_chord_masks[step][4] = note_chord_4:get_value()
                   end
                 end
               end
@@ -647,11 +766,65 @@ function channel_edit_page_ui_controller.enc(n, d)
                     note_length_selector:set_value(-1)
                   end
                 end
+                if note_micro_delay:is_selected() then
+                  note_micro_delay:decrement()
+                  channel.step_micro_delay_masks[step] = note_micro_delay:get_value()
+                  if channel.step_micro_delay_masks[step] < 0 then
+                    channel.step_micro_delay_masks[step] = nil
+                  end
+                end
                 if note_trig_selector:is_selected() then
                   note_trig_selector:decrement()
                   channel.step_trig_masks[step] = note_trig_selector:get_value()
                   if channel.step_trig_masks[step] < 0 then
                     channel.step_trig_masks[step] = nil
+                  end
+                end
+                if note_chord_1:is_selected() then
+                  note_chord_1:decrement()
+                  if channel.step_chord_masks[step] == nil then
+                    channel.step_chord_masks[step] = {}
+                  end
+                  print(note_chord_1:get_value() )
+                  if note_chord_1:get_value() < -14 or note_chord_1:get_value() == 0 then
+                    channel.step_chord_masks[step][1] = nil
+                  else
+                    channel.step_chord_masks[step][1] = note_chord_1:get_value()
+                  end
+                end
+                if note_chord_2:is_selected() then
+                  note_chord_2:decrement()
+                  if channel.step_chord_masks[step] == nil then
+                    channel.step_chord_masks[step] = {}
+                  end
+                  if note_chord_2:get_value() < -14 or note_chord_2:get_value() == 0 then
+                    channel.step_chord_masks[step][2] = nil
+                  else
+                    channel.step_chord_masks[step][2] = note_chord_2:get_value()
+                  end
+                end
+                if note_chord_3:is_selected() then
+                  note_chord_3:decrement()
+                  if channel.step_chord_masks[step] == nil then
+                    channel.step_chord_masks[step] = {}
+                  end
+                  
+                  if note_chord_3:get_value() < -14 or note_chord_3:get_value() == 0 then
+                    channel.step_chord_masks[step][3] = nil
+                  else
+                    channel.step_chord_masks[step][3] = note_chord_3:get_value()
+                  end
+                end
+                if note_chord_4:is_selected() then
+                  note_chord_4:decrement()
+                  if channel.step_chord_masks[step] == nil then
+                    channel.step_chord_masks[step] = {}
+                  end
+                  
+                  if note_chord_4:get_value() < -14 or note_chord_4:get_value() == 0 then
+                    channel.step_chord_masks[step][4] = nil
+                  else
+                    channel.step_chord_masks[step][4] = note_chord_4:get_value()
                   end
                 end
               end
@@ -776,11 +949,27 @@ function channel_edit_page_ui_controller.enc(n, d)
             note_length_selector:select()
           elseif note_length_selector:is_selected() then
             note_length_selector:deselect()
+            note_micro_delay:select()
+          elseif note_micro_delay:is_selected() then
+            note_micro_delay:deselect()
             note_trig_selector:select()
           elseif note_trig_selector:is_selected() then
             note_trig_selector:deselect()
+            note_chord_1:select()
+          elseif note_chord_1:is_selected() then
+            note_chord_1:deselect()
+            note_chord_2:select()
+          elseif note_chord_2:is_selected() then
+            note_chord_2:deselect()
+            note_chord_3:select()
+          elseif note_chord_3:is_selected() then
+            note_chord_3:deselect()
+            note_chord_4:select()
+          elseif note_chord_4:is_selected() then
+            note_chord_4:deselect()
             note_value_selector:select()
           end
+      
         elseif pages:get_selected_page() == page_to_index["Quantizer"] then
           if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
             return
@@ -852,16 +1041,31 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
           if note_value_selector:is_selected() then
             note_value_selector:deselect()
-            note_trig_selector:select()
+            note_chord_4:select()
           elseif note_velocity_selector:is_selected() then
             note_velocity_selector:deselect()
             note_value_selector:select()
           elseif note_length_selector:is_selected() then
             note_length_selector:deselect()
             note_velocity_selector:select()
+          elseif note_micro_delay:is_selected() then
+            note_micro_delay:deselect()
+            note_length_selector:select()
           elseif note_trig_selector:is_selected() then
             note_trig_selector:deselect()
-            note_length_selector:select()
+            note_micro_delay:select()
+          elseif note_chord_1:is_selected() then
+            note_chord_1:deselect()
+            note_trig_selector:select()
+          elseif note_chord_2:is_selected() then
+            note_chord_2:deselect()
+            note_chord_1:select()
+          elseif note_chord_3:is_selected() then
+            note_chord_3:deselect()
+            note_chord_2:select()
+          elseif note_chord_4:is_selected() then
+            note_chord_4:deselect()
+            note_chord_3:select()
           end
         elseif pages:get_selected_page() == page_to_index["Quantizer"] then
           if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
@@ -952,13 +1156,16 @@ function channel_edit_page_ui_controller.key(n, z)
     if #pressed_keys > 0 then
       for i, keys in ipairs(pressed_keys) do
         local step = fn.calc_grid_count(keys[1], keys[2])
-        program.clear_trig_locks_for_step(step)
-        dials:get_selected_item():set_value(
-          program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or
-            program.get_selected_channel().trig_lock_banks[dials:get_selected_index()]
-        )
-        channel_edit_page_ui_controller.refresh_trig_locks()
-        tooltip:show("Trig locks for step " .. step .. " cleared")
+        if pages:get_selected_page() == page_to_index["Notes"] then
+          program.clear_masks_for_step(step)
+          channel_edit_page_ui_controller.refresh_notes()
+          tooltip:show("Note masks for step " .. step .. " cleared")
+        end
+        if pages:get_selected_page() == page_to_index["Trig Locks"] then
+          program.clear_trig_locks_for_step(step)
+          channel_edit_page_ui_controller.refresh_trig_locks()
+          tooltip:show("Trig locks for step " .. step .. " cleared")
+        end
       end
     else
       if pages:get_selected_page() == page_to_index["Trig Locks"] then
@@ -1017,7 +1224,13 @@ function channel_edit_page_ui_controller.refresh_notes()
   local note_value = -1
   local velocity_value = -1
   local length_value = -1
+  local micro_delay_value = -1
   local trig_value = -1
+  local chord_1_value = 0
+  local chord_2_value = 0
+  local chord_3_value = 0
+  local chord_4_value = 0
+
   
   if #pressed_keys > 0 then
     if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
@@ -1026,7 +1239,15 @@ function channel_edit_page_ui_controller.refresh_notes()
         note_value = channel.step_note_masks[step] or -1
         velocity_value = channel.step_velocity_masks[step] or -1
         length_value = channel.step_length_masks[step] or -1
+        micro_delay_value = channel.step_micro_delay_masks[step] or -1
         trig_value = channel.step_trig_masks[step] or -1
+        if channel.step_chord_masks[step] then
+          chord_1_value = channel.step_chord_masks[step][1] or 0
+          chord_2_value = channel.step_chord_masks[step][2] or 0
+          chord_3_value = channel.step_chord_masks[step][3] or 0
+          chord_4_value = channel.step_chord_masks[step][4] or 0
+          print(chord_1_value)
+        end
       end
     end
   end
@@ -1034,7 +1255,13 @@ function channel_edit_page_ui_controller.refresh_notes()
   note_value_selector:set_value(note_value)
   note_velocity_selector:set_value(velocity_value)
   note_length_selector:set_value(length_value)
+  note_micro_delay:set_value(micro_delay_value)
   note_trig_selector:set_value(trig_value)
+  note_chord_1:set_value(chord_1_value)
+  note_chord_2:set_value(chord_2_value)
+  note_chord_3:set_value(chord_3_value)
+  note_chord_4:set_value(chord_4_value)
+
 end
 
 function channel_edit_page_ui_controller.refresh_clock_mods()
