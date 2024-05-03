@@ -284,23 +284,19 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_scale_fader:is_this(x, y) then
-        channel_scale_fader:press(x, y)
-        local scale_value = channel_scale_fader:get_value()
-        local number = program.get_scale(scale_value).number
         if program.get().selected_channel ~= 17 then
-          local channel = program.get_selected_channel()
-
-          if channel.default_scale ~= scale_value then
-            channel.default_scale = scale_value
-            tooltip:show(
-              "Ch. " .. program.get().selected_channel .. " scale: " .. quantiser.get_scale_name_from_index(number)
-            )
+          program.get().selected_channel = 17
+          channel_select_fader:set_value(0)
+          if program.get().default_scale then
+            channel_scale_fader:set_value(program.get().default_scale)
           else
-            channel.default_scale = 0
             channel_scale_fader:set_value(0)
-            tooltip:show("Channel scale off")
           end
+          channel_edit_page_ui_controller.refresh()
         else
+          channel_scale_fader:press(x, y)
+          local scale_value = channel_scale_fader:get_value()
+          local number = program.get_scale(scale_value).number
           if program.get().default_scale ~= scale_value then
             program.get().default_scale = scale_value
             tooltip:show("Global scale: " .. quantiser.get_scale_name_from_index(number))
@@ -309,23 +305,8 @@ function channel_edit_page_controller.register_press_handlers()
             channel_scale_fader:set_value(0)
             tooltip:show("Global scale off")
           end
+          channel_edit_page_ui_controller.refresh_quantiser()
         end
-        channel_edit_page_ui_controller.refresh_quantiser()
-      end
-    end
-  )
-  press_handler:register_long(
-    "channel_edit_page",
-    function(x, y)
-      if channel_scale_fader:is_this(x, y) then
-        program.get().selected_channel = 17
-        channel_select_fader:set_value(0)
-        if program.get().default_scale then
-          channel_scale_fader:set_value(program.get().default_scale)
-        else
-          channel_scale_fader:set_value(0)
-        end
-        channel_edit_page_ui_controller.refresh()
       end
     end
   )
@@ -644,13 +625,10 @@ function channel_edit_page_controller.refresh_faders()
       channel_octave_fader:set_value(channel.octave + 3)
     end
     if step_scale_trig_lock then
+      print("step_scale_trig_lock", step_scale_trig_lock)
       channel_scale_fader:set_value(step_scale_trig_lock)
     elseif program.get().selected_channel ~= 17 then
-      if channel.default_scale > 0 then
-        channel_scale_fader:set_value(channel.default_scale)
-      else
-        channel_scale_fader:set_value(0)
-      end
+      channel_scale_fader:set_value(0)
     else
       if program.get().default_scale > 0 then
         channel_scale_fader:set_value(program.get().default_scale)
@@ -666,8 +644,6 @@ function channel_edit_page_controller.refresh_faders()
   else
     if program.get().selected_channel == 17 then
       channel_scale_fader:set_value(program.get().default_scale)
-    elseif channel.default_scale then
-      channel_scale_fader:set_value(channel.default_scale)
     else
       channel_scale_fader:set_value(0)
     end

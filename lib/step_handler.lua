@@ -199,14 +199,13 @@ function step_handler.calculate_step_scale_number(c, current_step)
   local global_step_scale_number =
     program.get_step_scale_trig_lock(program.get_channel(17), program.get_current_step_for_channel(17))
 
-  local channel_default_scale = channel.default_scale
   local global_default_scale = program.get().default_scale
 
   if current_step == fn.calc_grid_count(program.get_channel(c).start_trig[1], program.get_channel(c).start_trig[2]) then
     persistent_channel_step_scale_numbers[c] = nil
   end
 
-  -- Scale Precedence : channel_step_scale > global_step_scale > channel_default_scale > global_default_scale
+  -- Scale Precedence : channel_step_scale > global_step_scale > global_default_scale
   if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
     persistent_channel_step_scale_numbers[c] = channel_step_scale_number
     return channel_step_scale_number
@@ -219,8 +218,6 @@ function step_handler.calculate_step_scale_number(c, current_step)
     return global_step_scale_number
   elseif persistent_global_step_scale_number and persistent_global_step_scale_number > 0 then
     return persistent_global_step_scale_number
-  elseif channel_default_scale and channel_default_scale > 0 and program.get_scale(channel_default_scale).scale then
-    return channel_default_scale
   elseif global_default_scale and global_default_scale > 0 and program.get_scale(global_default_scale).scale then
     return global_default_scale
   else
@@ -322,7 +319,6 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
           if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
             processed_chord_note = quantiser.process_chord_note_for_mask(unprocessed_note_container.note_mask_value, chord_notes[chord_number], unprocessed_note_container.octave_mod, unprocessed_note_container.transpose, channel.step_scale_number)
-            print("process chord note "..processed_chord_note)
           end
 
           local v = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
@@ -487,10 +483,6 @@ function step_handler.handle(c, current_step)
           channel = c
         }
 
-        print("note_mask_value: ".. note_mask_value)
-        print("note_value: ".. note_value)
-        print("note container note: ".. note_container.note)
-
         handle_note(
           device,
           current_step,
@@ -514,9 +506,6 @@ function step_handler.handle(c, current_step)
           player = device.player,
           channel = c
         }
-        print("note_mask_value: ".. note_mask_value)
-        print("note_value: ".. note_value)
-        print("note container note: ".. note_container.note)
         
         handle_note(
           device,
