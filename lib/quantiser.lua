@@ -143,7 +143,7 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
 
   local scale = fn.deep_copy(scale_container.scale)
 
- if (do_degree) then
+  if (do_degree) then
     if chord_rotation > 0 then
       for i = 1, chord_rotation do
         scale = fn.rotate_table_left(scale)
@@ -165,6 +165,7 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
   end
 
   scale = fn.transpose_scale(scale, transpose)
+
   if note_number < 0 then
     local octave = math.floor(note_number / 7) + octave_mod
     local note = note_number % 7
@@ -175,10 +176,18 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
     end
     return (scale[note_number + 1] + (octave_mod * 12)) + root_note
   end
+
 end
 
 function quantiser.process(note_number, octave_mod, transpose, scale_number)
-  return process_handler(note_number, octave_mod, transpose, scale_number, true, true)
+  return process_handler(note_number, octave_mod, transpose, scale_number, true, true, true)
+end
+
+function quantiser.process_chord_note_for_mask(note_mask_value, unscaled_chord_value, octave_mod, transpose, scale_number)
+  local scale_container = program.get_scale(scale_number)
+  local scale = fn.deep_copy(scale_container.scale)
+  
+  return (note_mask_value) + (12 * octave_mod) + (scale[unscaled_chord_value + 14 + 1] - 24) + transpose
 end
 
 function quantiser.process_with_global_params(note_number, octave_mod, transpose, scale_number)

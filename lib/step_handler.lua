@@ -257,12 +257,12 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     step_handler.flush_lengths_for_channel(c)
   end
 
-  local chord_notes = {chord_note_1, chord_note_2, chord_note_3, chord_note_4}
+  local chord_note_1 = channel.step_chord_masks[current_step] and channel.step_chord_masks[current_step][1]
+  local chord_note_2 = channel.step_chord_masks[current_step] and channel.step_chord_masks[current_step][2]
+  local chord_note_3 = channel.step_chord_masks[current_step] and channel.step_chord_masks[current_step][3]
+  local chord_note_4 = channel.step_chord_masks[current_step] and channel.step_chord_masks[current_step][4]
 
-  table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord1"))
-  table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord2"))
-  table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord3"))
-  table.insert(chord_notes, step_handler.process_stock_params(c, current_step, "chord4"))
+  local chord_notes = {chord_note_1, chord_note_2, chord_note_3, chord_note_4}
 
   local division_index = step_handler.process_stock_params(c, current_step, "chord_strum")
   local chord_velocity_mod = step_handler.process_stock_params(c, current_step, "chord_velocity_modifier")
@@ -314,11 +314,16 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         function()
           local processed_chord_note =
             quantiser.process(
-            unprocessed_note_container.note_value + chord_notes[chord_number],
-            unprocessed_note_container.octave_mod,
-            unprocessed_note_container.transpose,
-            channel.step_scale_number
-          )
+              unprocessed_note_container.note_value + chord_notes[chord_number],
+              unprocessed_note_container.octave_mod,
+              unprocessed_note_container.transpose,
+              channel.step_scale_number
+           )
+
+          if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
+            processed_chord_note = quantiser.process_chord_note_for_mask(unprocessed_note_container.note_mask_value, chord_notes[chord_number], unprocessed_note_container.octave_mod, unprocessed_note_container.transpose, channel.step_scale_number)
+            print("process chord note "..processed_chord_note)
+          end
 
           local v = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
 
@@ -354,6 +359,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           unprocessed_note_container.transpose,
           channel.step_scale_number
         )
+        if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
+          processed_note = quantiser.process_chord_note_for_mask(unprocessed_note_container.note_mask_value, 0, unprocessed_note_container.octave_mod, unprocessed_note_container.transpose, channel.step_scale_number)
+        end
         note_on_func(processed_note, note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes), note_container.midi_channel, note_container.midi_device)
         table.insert(
           length_tracker,
@@ -422,12 +430,12 @@ function step_handler.handle(c, current_step)
 
     local note = 0
     
-    if note_mask_value > -1 then
+    if note_mask_value and note_mask_value > -1 then
 
       if params:get("quantiser_act_on_note_masks") == 1 then
-        note = quantiser.snap_to_scale((note_mask_value + octave_mod * 12) + random_shift, channel.step_scale_number)
+        note = quantiser.snap_to_scale((note_mask_value + octave_mod * 12) + random_shift, channel.step_scale_number) + transpose
       else
-        note = (note_mask_value + octave_mod * 12) + random_shift
+        note = (note_mask_value + octave_mod * 12) + random_shift + transpose
       end
     else
       note_value = note_value + random_shift
@@ -466,7 +474,9 @@ function step_handler.handle(c, current_step)
     if not channel.mute then
       if not device.player then
 
-        local note_container = {
+
+
+        local note_container = {  
           note = note,
           velocity = velocity_value,
           length = length_value,
@@ -476,16 +486,24 @@ function step_handler.handle(c, current_step)
           player = midi_controller,
           channel = c
         }
+
+        print("note_mask_value: ".. note_mask_value)
+        print("note_value: ".. note_value)
+        print("note container note: ".. note_container.note)
+
         handle_note(
           device,
           current_step,
           note_container,
-          {note_value = note_value, octave_mod = octave_mod, transpose = transpose},
+          {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
           function(chord_note, velocity, midi_channel, midi_device)        
             midi_controller:note_on(chord_note, velocity, midi_channel, midi_device)
           end
         )
       else
+
+
+
         local note_container = {
           note = note,
           velocity = velocity_value,
@@ -496,12 +514,15 @@ function step_handler.handle(c, current_step)
           player = device.player,
           channel = c
         }
-
+        print("note_mask_value: ".. note_mask_value)
+        print("note_value: ".. note_value)
+        print("note container note: ".. note_container.note)
+        
         handle_note(
           device,
           current_step,
           note_container,
-          {note_value = note_value, octave_mod = octave_mod, transpose = transpose},
+          {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
           function(chord_note, velocity, midi_channel, midi_device)
             device.player:note_on(chord_note, velocity / 127)
           end

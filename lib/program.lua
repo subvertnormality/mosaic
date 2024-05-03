@@ -27,7 +27,7 @@ local function initialise_default_channels()
       step_note_masks = {},
       step_velocity_masks = {},
       step_length_masks = {},
-      step_micro_delay_masks = {},
+      step_micro_time_masks = {},
       step_chord_masks = {},
       working_pattern = {
         trig_values = program.initialise_64_table(0),
@@ -271,7 +271,7 @@ function program.step_has_trig_lock(channel, step)
       program.step_has_note_mask(step) or
       program.step_has_velocity_mask(step) or
       program.step_has_length_mask(step) or
-      program.step_has_micro_delay_mask(step) or
+      program.step_has_micro_time_mask(step) or
       program.step_has_chord_1_mask(step) or
       program.step_has_chord_2_mask(step) or
       program.step_has_chord_3_mask(step) or
@@ -411,10 +411,10 @@ function program.step_has_length_mask(step)
   return false
 end
 
-function program.step_has_micro_delay_mask(step)
-  local step_micro_delay_masks = program.get_selected_channel().step_micro_delay_masks
+function program.step_has_micro_time_mask(step)
+  local step_micro_time_masks = program.get_selected_channel().step_micro_time_masks
 
-  if step_micro_delay_masks and step_micro_delay_masks[step] then
+  if step_micro_time_masks and step_micro_time_masks[step] then
     return true
   end
 
@@ -520,7 +520,7 @@ function program.clear_masks_for_step(step)
   program.clear_step_note_mask(program.get().selected_channel, step)
   program.clear_step_velocity_mask(program.get().selected_channel, step)
   program.clear_step_length_mask(program.get().selected_channel, step)
-  program.clear_step_micro_delay_mask(program.get().selected_channel, step)
+  program.clear_step_micro_time_mask(program.get().selected_channel, step)
   program.clear_step_chord_1_mask(program.get().selected_channel, step)
   program.clear_step_chord_2_mask(program.get().selected_channel, step)
   program.clear_step_chord_3_mask(program.get().selected_channel, step)
@@ -639,36 +639,45 @@ function program.clear_step_length_mask(channel, step)
   program.get_channel(channel).step_length_masks[step] = nil
 end
 
-function program.clear_step_micro_delay_mask(channel, step)
-  program.get_channel(channel).step_micro_delay_masks[step] = nil
+function program.clear_step_micro_time_mask(channel, step)
+  program.get_channel(channel).step_micro_time_masks[step] = nil
 end
 
 function program.clear_step_chord_1_mask(channel, step)
   if program.get_channel(channel).step_chord_masks == nil then
     program.get_channel(channel).step_chord_masks = {}
   end
-  program.get_channel(channel).step_chord_masks[step][1] = nil
+  if program.get_channel(channel).step_chord_masks[step] ~= nil then
+    program.get_channel(channel).step_chord_masks[step][1] = nil
+  end
 end
 
 function program.clear_step_chord_2_mask(channel, step)
   if program.get_channel(channel).step_chord_masks == nil then
     program.get_channel(channel).step_chord_masks = {}
   end
-  program.get_channel(channel).step_chord_masks[step][2] = nil
+  if program.get_channel(channel).step_chord_masks[step] ~= nil then
+    program.get_channel(channel).step_chord_masks[step][2] = nil
+  end
 end
 
 function program.clear_step_chord_3_mask(channel, step)
   if program.get_channel(channel).step_chord_masks == nil then
     program.get_channel(channel).step_chord_masks = {}
   end
-  program.get_channel(channel).step_chord_masks[step][3] = nil
+  if program.get_channel(channel).step_chord_masks[step] ~= nil then
+    program.get_channel(channel).step_chord_masks[step][3] = nil
+  end
+
 end
 
 function program.clear_step_chord_4_mask(channel, step)
   if program.get_channel(channel).step_chord_masks == nil then
     program.get_channel(channel).step_chord_masks = {}
   end
-  program.get_channel(channel).step_chord_masks[step][4] = nil
+  if program.get_channel(channel).step_chord_masks[step] ~= nil then
+    program.get_channel(channel).step_chord_masks[step][4] = nil
+  end
 end
 
 

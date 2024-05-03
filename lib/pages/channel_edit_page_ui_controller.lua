@@ -28,8 +28,8 @@ local note_velocity_selector = value_selector:new(30, 20, "Vel", -1, 127)
 note_velocity_selector:set_value(-1)
 local note_length_selector = value_selector:new(55, 20, "Len", -1, 512)
 note_length_selector:set_value(-1)
-local note_micro_delay = value_selector:new(80, 20, "uDel", -1, 99)
-note_micro_delay:set_value(-1)
+local note_micro_time = value_selector:new(80, 20, "uTime", -1, 99)
+note_micro_time:set_value(-1)
 local note_trig_selector = value_selector:new(5, 40, "Trig", -1, 1)
 note_trig_selector:set_value(-1)
 local note_chord_1 = value_selector:new(30, 40, "Chd1", -14, 14)
@@ -120,7 +120,7 @@ local notes_page =
       note_velocity_selector:draw()
       note_length_selector:draw()
       note_trig_selector:draw()
-      note_micro_delay:draw()
+      note_micro_time:draw()
       note_chord_1:draw()
       note_chord_2:draw()
       note_chord_3:draw()
@@ -191,7 +191,7 @@ end
 
 note_velocity_selector:set_view_transform_func(note_page_velocity_length_value_selector_func)
 note_length_selector:set_view_transform_func(note_page_velocity_length_value_selector_func)
-note_micro_delay:set_view_transform_func(note_page_velocity_length_value_selector_func)
+note_micro_time:set_view_transform_func(note_page_velocity_length_value_selector_func)
 note_chord_1:set_view_transform_func(chord_value_selector_func)
 note_chord_2:set_view_transform_func(chord_value_selector_func)
 note_chord_3:set_view_transform_func(chord_value_selector_func)
@@ -569,11 +569,11 @@ function channel_edit_page_ui_controller.enc(n, d)
                     channel.step_length_masks[step] = 512
                   end
                 end
-                if note_micro_delay:is_selected() then
-                  note_micro_delay:increment()
-                  channel.step_micro_delay_masks[step] = note_micro_delay:get_value()
-                  if channel.step_micro_delay_masks[step] > 99 then
-                    channel.step_micro_delay_masks[step] = 99
+                if note_micro_time:is_selected() then
+                  note_micro_time:increment()
+                  channel.step_micro_time_masks[step] = note_micro_time:get_value()
+                  if channel.step_micro_time_masks[step] > 99 then
+                    channel.step_micro_time_masks[step] = 99
                   end
                 end
                 if note_trig_selector:is_selected() then
@@ -761,16 +761,17 @@ function channel_edit_page_ui_controller.enc(n, d)
                 end
                 if note_length_selector:is_selected() then
                   note_length_selector:decrement()
+                  channel.step_length_masks[step] = note_length_selector:get_value()
                   if note_length_selector:get_value() < 1 then 
                     channel.step_length_masks[step] = nil
                     note_length_selector:set_value(-1)
                   end
                 end
-                if note_micro_delay:is_selected() then
-                  note_micro_delay:decrement()
-                  channel.step_micro_delay_masks[step] = note_micro_delay:get_value()
-                  if channel.step_micro_delay_masks[step] < 0 then
-                    channel.step_micro_delay_masks[step] = nil
+                if note_micro_time:is_selected() then
+                  note_micro_time:decrement()
+                  channel.step_micro_time_masks[step] = note_micro_time:get_value()
+                  if channel.step_micro_time_masks[step] < 0 then
+                    channel.step_micro_time_masks[step] = nil
                   end
                 end
                 if note_trig_selector:is_selected() then
@@ -949,9 +950,9 @@ function channel_edit_page_ui_controller.enc(n, d)
             note_length_selector:select()
           elseif note_length_selector:is_selected() then
             note_length_selector:deselect()
-            note_micro_delay:select()
-          elseif note_micro_delay:is_selected() then
-            note_micro_delay:deselect()
+            note_micro_time:select()
+          elseif note_micro_time:is_selected() then
+            note_micro_time:deselect()
             note_trig_selector:select()
           elseif note_trig_selector:is_selected() then
             note_trig_selector:deselect()
@@ -1048,12 +1049,12 @@ function channel_edit_page_ui_controller.enc(n, d)
           elseif note_length_selector:is_selected() then
             note_length_selector:deselect()
             note_velocity_selector:select()
-          elseif note_micro_delay:is_selected() then
-            note_micro_delay:deselect()
+          elseif note_micro_time:is_selected() then
+            note_micro_time:deselect()
             note_length_selector:select()
           elseif note_trig_selector:is_selected() then
             note_trig_selector:deselect()
-            note_micro_delay:select()
+            note_micro_time:select()
           elseif note_chord_1:is_selected() then
             note_chord_1:deselect()
             note_trig_selector:select()
@@ -1224,7 +1225,7 @@ function channel_edit_page_ui_controller.refresh_notes()
   local note_value = -1
   local velocity_value = -1
   local length_value = -1
-  local micro_delay_value = -1
+  local micro_time_value = -1
   local trig_value = -1
   local chord_1_value = 0
   local chord_2_value = 0
@@ -1239,14 +1240,13 @@ function channel_edit_page_ui_controller.refresh_notes()
         note_value = channel.step_note_masks[step] or -1
         velocity_value = channel.step_velocity_masks[step] or -1
         length_value = channel.step_length_masks[step] or -1
-        micro_delay_value = channel.step_micro_delay_masks[step] or -1
+        micro_time_value = channel.step_micro_time_masks[step] or -1
         trig_value = channel.step_trig_masks[step] or -1
         if channel.step_chord_masks[step] then
           chord_1_value = channel.step_chord_masks[step][1] or 0
           chord_2_value = channel.step_chord_masks[step][2] or 0
           chord_3_value = channel.step_chord_masks[step][3] or 0
           chord_4_value = channel.step_chord_masks[step][4] or 0
-          print(chord_1_value)
         end
       end
     end
@@ -1255,7 +1255,7 @@ function channel_edit_page_ui_controller.refresh_notes()
   note_value_selector:set_value(note_value)
   note_velocity_selector:set_value(velocity_value)
   note_length_selector:set_value(length_value)
-  note_micro_delay:set_value(micro_delay_value)
+  note_micro_time:set_value(micro_time_value)
   note_trig_selector:set_value(trig_value)
   note_chord_1:set_value(chord_1_value)
   note_chord_2:set_value(chord_2_value)
