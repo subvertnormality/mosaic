@@ -67,8 +67,7 @@ function step_handler.process_params(c, step)
           channel.trig_lock_params[i].id ~= "bipolar_random_note" and
           channel.trig_lock_params[i].id ~= "twos_random_note" and
           channel.trig_lock_params[i].id ~= "random_velocity" and
-          channel.trig_lock_params[i].id ~= "fixed_note" and
-          not string.match(channel.trig_lock_params[i].id or "", "^chord"))
+          channel.trig_lock_params[i].id ~= "fixed_note")
      then
       if
         channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "midi" and
