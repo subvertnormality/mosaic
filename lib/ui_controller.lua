@@ -45,8 +45,10 @@ function ui_controller.redraw()
     return
   end
 
-  screen.move(120, 10)
-  screen.font_face(math.random(3, 8))
+  screen.font_size(8)
+  screen.level(10)
+  screen.move(120, 9)
+  screen.font_face(math.random(3, 5))
   screen.text("m")
   screen.font_face(1)
   draw_handler:handle_ui(program.get().selected_page)

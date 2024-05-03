@@ -26,14 +26,12 @@ function value_selector:draw()
   screen.move(self.x, self.y)
   screen.font_size(8)
   screen.text(self.name)
-  screen.move(self.x + 2, self.y + 12)
-  screen.font_size(14)
+  screen.move(self.x, self.y + 8)
   if (self.value) then
     screen.text(self.view_transform_func(self.value))
   else
     screen.text("0")
   end
-  screen.font_size(8)
 end
 
 function value_selector:select()

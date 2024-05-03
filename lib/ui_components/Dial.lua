@@ -28,7 +28,7 @@ function dial:draw()
   end
   screen.move(self.x, self.y)
   screen.font_size(8)
-  screen.text(self.top_label)
+  screen.text(fn.title_case(self.top_label))
   screen.move(self.x, self.y + 7)
 
   if (self.min_value and self.value and (self.value < self.min_value)) then
@@ -48,7 +48,7 @@ function dial:draw()
     end
   end
   screen.move(self.x, self.y + 14)
-  screen.text(self.bottom_label)
+  screen.text(fn.title_case(self.bottom_label))
   screen.font_size(8)
 end
 

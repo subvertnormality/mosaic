@@ -1,16 +1,16 @@
-local Pages = {}
-Pages.__index = Pages
+local pages = {}
+pages.__index = pages
 
 local fn = include("mosaic/lib/functions")
 
-function Pages:new()
-  local self = setmetatable({}, Pages)
+function pages:new()
+  local self = setmetatable({}, pages)
   self.pages = {}
   self.selected_page = 0
   return self
 end
 
-function Pages:draw()
+function pages:draw()
   local x = 5
 
   for i = 1, fn.table_count(self.pages) do
@@ -35,30 +35,30 @@ function Pages:draw()
   end
 end
 
-function Pages:add_page(page)
+function pages:add_page(page)
   table.insert(self.pages, page)
 end
 
-function Pages:select_page(page)
+function pages:select_page(page)
   self.selected_page = page
 end
 
-function Pages:get_selected_page()
+function pages:get_selected_page()
   return self.selected_page
 end
 
-function Pages:next_page()
+function pages:next_page()
   self.selected_page = self.selected_page + 1
   if self.selected_page > fn.table_count(self.pages) then
     self.selected_page = fn.table_count(self.pages)
   end
 end
 
-function Pages:previous_page()
+function pages:previous_page()
   self.selected_page = self.selected_page - 1
   if self.selected_page < 1 then
     self.selected_page = 1
   end
 end
 
-return Pages
+return pages

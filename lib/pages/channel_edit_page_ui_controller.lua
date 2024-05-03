@@ -22,13 +22,13 @@ local romans_vertical_scroll_selector =
 local notes_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Notes", quantiser.get_notes())
 local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
 
-local note_value_selector = value_selector:new(5, 20, "Note", -1, 127)
+local note_value_selector = value_selector:new(5, 18, "Note", -1, 127)
 note_value_selector:set_value(-1)
-local note_velocity_selector = value_selector:new(30, 20, "Vel", -1, 127)
+local note_velocity_selector = value_selector:new(30, 18, "Vel", -1, 127)
 note_velocity_selector:set_value(-1)
-local note_length_selector = value_selector:new(55, 20, "Len", -1, 512)
+local note_length_selector = value_selector:new(55, 18, "Len", -1, 512)
 note_length_selector:set_value(-1)
-local note_micro_time = value_selector:new(80, 20, "uTime", -1, 99)
+local note_micro_time = value_selector:new(80, 18, "uTime", -1, 99)
 note_micro_time:set_value(-1)
 local note_trig_selector = value_selector:new(5, 40, "Trig", -1, 1)
 note_trig_selector:set_value(-1)
@@ -43,8 +43,8 @@ note_chord_4:set_value(0)
 
 
 
-local clock_mod_list_selector = list_selector:new(10, 25, "Clock Mod", {})
-local clock_swing_value_selector = value_selector:new(70, 25, "Swing", 0, 100)
+local clock_mod_list_selector = list_selector:new(5, 25, "Clock Mod", {})
+local clock_swing_value_selector = value_selector:new(55, 25, "Swing", 0, 100)
 
 local midi_device_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Midi Device", {})
 local midi_channel_vertical_scroll_selector =
@@ -75,11 +75,11 @@ local device_map_vertical_scroll_selector
 
 local param_select_vertical_scroll_selector = vertical_scroll_selector:new(30, 25, "Params", {})
 
-local param_1 = dial:new(5, 20, "Param 1", "param_1", "X", "")
-local param_2 = dial:new(30, 20, "Param 2", "param_2", "X", "")
-local param_3 = dial:new(55, 20, "Param 3", "param_3", "X", "")
-local param_4 = dial:new(80, 20, "Param 4", "param_4", "X", "")
-local param_5 = dial:new(105, 20, "Param 5", "param_5", "X", "")
+local param_1 = dial:new(5, 18, "Param 1", "param_1", "X", "")
+local param_2 = dial:new(30, 18, "Param 2", "param_2", "X", "")
+local param_3 = dial:new(55, 18, "Param 3", "param_3", "X", "")
+local param_4 = dial:new(80, 18, "Param 4", "param_4", "X", "")
+local param_5 = dial:new(105, 18, "Param 5", "param_5", "X", "")
 local param_6 = dial:new(5, 40, "Param 6", "param_6", "X", "")
 local param_7 = dial:new(30, 40, "Param 7", "param_7", "X", "")
 local param_8 = dial:new(55, 40, "Param 8", "param_8", "X", "")
@@ -184,7 +184,6 @@ local function chord_value_selector_func(value)
     "++oct"
   }
 
-  screen.font_size(8)
   return chord_ui_labels[value + 15]
 end
 
@@ -235,7 +234,7 @@ local quantizer_page =
 
 local clock_mods_page =
   page:new(
-  "Clocks and Swing",
+  "Clocks",
   function()
     if program.get().selected_channel ~= 17 then
       clock_swing_value_selector:draw()

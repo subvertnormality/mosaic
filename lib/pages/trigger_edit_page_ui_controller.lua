@@ -11,7 +11,7 @@ local grid_viewer = grid_viewer:new(0, 0)
 local tresillo_mult =
   list_selector:new(
   10,
-  30,
+  25,
   "Tresillo mult",
   {
     {id = 1, value = 8, name = "x8"},
