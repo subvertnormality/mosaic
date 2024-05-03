@@ -1,14 +1,14 @@
 local note_edit_page_ui = {}
 
-local Pages = include("mosaic/lib/ui_components/Pages")
-local Page = include("mosaic/lib/ui_components/Page")
+local pages = include("mosaic/lib/ui_components/pages")
+local page = include("mosaic/lib/ui_components/page")
 
-local GridViewer = include("mosaic/lib/ui_components/GridViewer")
+local grid_viewer = include("mosaic/lib/ui_components/grid_viewer")
 
-local grid_viewer = GridViewer:new(0, 0)
+local grid_viewer = grid_viewer:new(0, 0)
 
 local grid_viewer_page =
-  Page:new(
+  page:new(
   "",
   function()
     grid_viewer:draw()

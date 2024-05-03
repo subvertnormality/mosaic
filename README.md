@@ -11,7 +11,7 @@
     + [Device](#device)
     + [Trig Params](#trig-params)
     + [Trig Locks](#trig-locks)
-  * [Pages](#pages)
+  * [pages](#pages)
     + [Menu](#menu)
       - [Sequencer start and stop](#sequencer-start-and-stop)
       - [Midi Panic](#midi-panic)
@@ -125,7 +125,7 @@ To set a trig lock, hold down the desired step on the sequencer and modify the v
 
 To clear a param trig lock, select the param on the norns screen, hold the step, then press K3. To clear a grid trig lock, hold the desired step and press the currently locked value. To clear all trig locks from a step, hold the step and press K2.
 
-## Pages
+## pages
 
 At its heart, _Mosaic_ comprises five distinct pages. Every page presents a grid interface complemented by a set of configurable options on the norns device. The grid is the primary interface, with norns offering one-time configuration options. This allows you to set up your scene's configuration once and then use the grid from then on to compose.
 
@@ -167,10 +167,10 @@ To set your rhythm, simply tap in steps using the sequencer. Bright steps symbol
 
 Craft unique rhythms using a variety of built-in algorithms.
 
-* Button 1: The drum algorithm, drawing from a rich collection of classic drum patterns.
-* Button 2: The tresillo algorithm, utilising a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the norns screen for more variations.
-* Button 3: Euclidian, a rhythm tool rooted in mathematical logic.
-* Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
+* button 1: The drum algorithm, drawing from a rich collection of classic drum patterns.
+* button 2: The tresillo algorithm, utilising a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the norns screen for more variations.
+* button 3: Euclidian, a rhythm tool rooted in mathematical logic.
+* button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
 
 ![Algorithm select](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_algorithms.png)
 

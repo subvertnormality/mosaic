@@ -6,17 +6,17 @@ local trigger_edit_page_controller = {}
 local paint_pattern = {}
 local shift = 0
 
-local pattern_trigger_edit_page_pattern_select_fader = Fader:new(1, 1, 16, 16)
-local pattern_trigger_edit_page_sequencer = Sequencer:new(4, "pattern")
-local pattern_trigger_edit_page_pattern1_fader = Fader:new(1, 2, 10, 100)
-local pattern_trigger_edit_page_pattern2_fader = Fader:new(1, 3, 10, 100)
-local pattern_trigger_edit_page_algorithm_fader = Fader:new(12, 2, 4, 4)
-local pattern_trigger_edit_page_bankmask_fader = Fader:new(12, 3, 5, 5)
-local pattern_trigger_edit_page_paint_button = Button:new(16, 8, {{"Inactive", 3}, {"Save", 15}})
-local pattern_trigger_edit_page_cancel_button = Button:new(14, 8, {{"Inactive", 3}, {"Cancel", 15}})
-local pattern_trigger_edit_page_left_button = Button:new(10, 8, {{"Inactive", 3}, {"Shift Left", 15}})
-local pattern_trigger_edit_page_centre_button = Button:new(11, 8, {{"Inactive", 3}, {"Reset Shift", 8}})
-local pattern_trigger_edit_page_right_button = Button:new(12, 8, {{"Inactive", 3}, {"Shift Right", 15}})
+local pattern_trigger_edit_page_pattern_select_fader = fader:new(1, 1, 16, 16)
+local pattern_trigger_edit_page_sequencer = sequencer:new(4, "pattern")
+local pattern_trigger_edit_page_pattern1_fader = fader:new(1, 2, 10, 100)
+local pattern_trigger_edit_page_pattern2_fader = fader:new(1, 3, 10, 100)
+local pattern_trigger_edit_page_algorithm_fader = fader:new(12, 2, 4, 4)
+local pattern_trigger_edit_page_bankmask_fader = fader:new(12, 3, 5, 5)
+local pattern_trigger_edit_page_paint_button = button:new(16, 8, {{"Inactive", 3}, {"Save", 15}})
+local pattern_trigger_edit_page_cancel_button = button:new(14, 8, {{"Inactive", 3}, {"Cancel", 15}})
+local pattern_trigger_edit_page_left_button = button:new(10, 8, {{"Inactive", 3}, {"Shift Left", 15}})
+local pattern_trigger_edit_page_centre_button = button:new(11, 8, {{"Inactive", 3}, {"Reset Shift", 8}})
+local pattern_trigger_edit_page_right_button = button:new(12, 8, {{"Inactive", 3}, {"Shift Right", 15}})
 
 function trigger_edit_page_controller.init()
   trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui_controller()

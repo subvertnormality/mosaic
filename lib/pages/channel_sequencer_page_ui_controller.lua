@@ -1,20 +1,20 @@
 local channel_sequencer_page_ui_controller = {}
 
 local fn = include("mosaic/lib/functions")
-local Pages = include("mosaic/lib/ui_components/Pages")
-local Page = include("mosaic/lib/ui_components/Page")
-local GridViewer = include("mosaic/lib/ui_components/GridViewer")
-local ValueSelector = include("mosaic/lib/ui_components/ValueSelector")
-local ListSelector = include("mosaic/lib/ui_components/ListSelector")
-local pages = Pages:new()
-local grid_viewer = GridViewer:new(0, 0)
+local pages = include("mosaic/lib/ui_components/pages")
+local page = include("mosaic/lib/ui_components/page")
+local grid_viewer = include("mosaic/lib/ui_components/grid_viewer")
+local value_selector = include("mosaic/lib/ui_components/value_selector")
+local list_selector = include("mosaic/lib/ui_components/list_selector")
+local pages = pages:new()
+local grid_viewer = grid_viewer:new(0, 0)
 
-local tempo_selector = ValueSelector:new(10, 30, "Tempo", 30, 300)
-local pattern_repeat_selector = ValueSelector:new(10, 25, "Repeats", 1, 16)
-local song_mode_selector = ListSelector:new(70, 25, "Song mode", {{name = "On", value = 1}, {name = "Off", value = 2}})
+local tempo_selector = value_selector:new(10, 30, "Tempo", 30, 300)
+local pattern_repeat_selector = value_selector:new(10, 25, "Repeats", 1, 16)
+local song_mode_selector = list_selector:new(70, 25, "Song mode", {{name = "On", value = 1}, {name = "Off", value = 2}})
 
 local global_settings_page =
-  Page:new(
+  page:new(
   "Global settings",
   function()
     tempo_selector:draw()
@@ -22,7 +22,7 @@ local global_settings_page =
 )
 
 local song_progression_page =
-  Page:new(
+  page:new(
   "Song progression",
   function()
     pattern_repeat_selector:draw()
@@ -37,7 +37,7 @@ local page_to_index = {
 }
 
 local grid_viewer_page =
-  Page:new(
+  page:new(
   "",
   function()
     grid_viewer:draw()

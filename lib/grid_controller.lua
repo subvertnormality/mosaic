@@ -1,9 +1,9 @@
 local grid_controller = {}
 local fn = include("mosaic/lib/functions")
 
-local Fader = include("mosaic/lib/controls/Fader")
-local Sequencer = include("mosaic/lib/controls/Sequencer")
-local Button = include("mosaic/lib/controls/Button")
+local fader = include("mosaic/lib/controls/fader")
+local sequencer = include("mosaic/lib/controls/sequencer")
+local button = include("mosaic/lib/controls/button")
 
 press_handler = include("mosaic/lib/press_handler")
 draw_handler = include("mosaic/lib/draw_handler")
@@ -17,21 +17,21 @@ local trigger_edit_page_controller = include("mosaic/lib/pages/trigger_edit_page
 local note_edit_page_controller = include("mosaic/lib/pages/note_edit_page_controller")
 local velocity_edit_page_controller = include("mosaic/lib/pages/velocity_edit_page_controller")
 
-local channel_edit_button = Button:new(1, 8)
-local channel_sequencer_button = Button:new(2, 8)
-local trigger_edit_button = Button:new(3, 8)
-local note_edit_button = Button:new(4, 8)
-local velocity_edit_button = Button:new(5, 8)
+local channel_edit_button = button:new(1, 8)
+local channel_sequencer_button = button:new(2, 8)
+local trigger_edit_button = button:new(3, 8)
+local note_edit_button = button:new(4, 8)
+local velocity_edit_button = button:new(5, 8)
 
 
 local menu_buttons = {}
 
 local page_names = {
-  "Channel Edit Page",
-  "Song Sequencer Page",
-  "Pattern Trigger Edit Page",
-  "Pattern Note Edit Page",
-  "Pattern Velocity Edit Page"
+  "Channel Edit page",
+  "Song Sequencer page",
+  "Pattern Trigger Edit page",
+  "Pattern Note Edit page",
+  "Pattern Velocity Edit page"
 }
 
 local pressed_keys = {}

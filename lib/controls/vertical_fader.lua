@@ -1,5 +1,5 @@
-VerticalFader = {}
-VerticalFader.__index = VerticalFader
+vertical_fader = {}
+vertical_fader.__index = vertical_fader
 
 local fn = include("mosaic/lib/functions")
 
@@ -20,8 +20,8 @@ local bclock =
   end
 )
 
-function VerticalFader:new(x, y, size)
-  local self = setmetatable({}, VerticalFader)
+function vertical_fader:new(x, y, size)
+  local self = setmetatable({}, vertical_fader)
   self.x = x
   self.y = y
   self.size = size
@@ -32,7 +32,7 @@ function VerticalFader:new(x, y, size)
   return self
 end
 
-function VerticalFader:draw()
+function vertical_fader:draw()
   local x = self.x - self.horizontal_offset
 
   if (x < 1 or x > 16) then
@@ -71,45 +71,45 @@ function VerticalFader:draw()
   end
 end
 
-function VerticalFader:press(x, y)
+function vertical_fader:press(x, y)
   if y >= self.y and y <= 7 and x == self.x - self.horizontal_offset then
     self.value = y + self.vertical_offset
   end
 end
 
-function VerticalFader:set_vertical_offset(o)
+function vertical_fader:set_vertical_offset(o)
   self.vertical_offset = o
 end
 
-function VerticalFader:set_horizontal_offset(o)
+function vertical_fader:set_horizontal_offset(o)
   self.horizontal_offset = o
 end
 
-function VerticalFader:get_horizontal_offset()
+function vertical_fader:get_horizontal_offset()
   return self.horizontal_offset
 end
 
-function VerticalFader:get_value()
+function vertical_fader:get_value()
   return self.value
 end
 
-function VerticalFader:set_value(val)
+function vertical_fader:set_value(val)
   self.value = val
 end
 
-function VerticalFader:set_dark()
+function vertical_fader:set_dark()
   self.led_brightness = 1
 end
 
-function VerticalFader:set_light()
+function vertical_fader:set_light()
   self.led_brightness = 3
 end
 
-function VerticalFader:is_this(x, y)
+function vertical_fader:is_this(x, y)
   if (self.x == x + self.horizontal_offset and y <= 7) then
     return true
   end
   return false
 end
 
-return VerticalFader
+return vertical_fader

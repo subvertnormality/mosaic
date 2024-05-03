@@ -3,52 +3,52 @@ local channel_edit_page_ui_controller = {}
 local fn = include("mosaic/lib/functions")
 
 local quantiser = include("mosaic/lib/quantiser")
-local Pages = include("mosaic/lib/ui_components/Pages")
-local Page = include("mosaic/lib/ui_components/Page")
-local VerticalScrollSelector = include("mosaic/lib/ui_components/VerticalScrollSelector")
-local Dial = include("mosaic/lib/ui_components/Dial")
-local ControlScrollSelector = include("mosaic/lib/ui_components/ControlScrollSelector")
-local ListSelector = include("mosaic/lib/ui_components/ListSelector")
-local ValueSelector = include("mosaic/lib/ui_components/ValueSelector")
+local pages = include("mosaic/lib/ui_components/pages")
+local page = include("mosaic/lib/ui_components/page")
+local vertical_scroll_selector = include("mosaic/lib/ui_components/vertical_scroll_selector")
+local dial = include("mosaic/lib/ui_components/dial")
+local control_scroll_selector = include("mosaic/lib/ui_components/control_scroll_selector")
+local list_selector = include("mosaic/lib/ui_components/list_selector")
+local value_selector = include("mosaic/lib/ui_components/value_selector")
 
 local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/param_manager")
 
-local pages = Pages:new()
+local pages = pages:new()
 
-local quantizer_vertical_scroll_selector = VerticalScrollSelector:new(20, 25, "Quantizer", quantiser.get_scales())
+local quantizer_vertical_scroll_selector = vertical_scroll_selector:new(20, 25, "Quantizer", quantiser.get_scales())
 local romans_vertical_scroll_selector =
-  VerticalScrollSelector:new(90, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
-local notes_vertical_scroll_selector = VerticalScrollSelector:new(5, 25, "Notes", quantiser.get_notes())
-local rotation_vertical_scroll_selector = VerticalScrollSelector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
+  vertical_scroll_selector:new(90, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
+local notes_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Notes", quantiser.get_notes())
+local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
 
-local note_value_selector = ValueSelector:new(5, 20, "Note", -1, 127)
+local note_value_selector = value_selector:new(5, 20, "Note", -1, 127)
 note_value_selector:set_value(-1)
-local note_velocity_selector = ValueSelector:new(30, 20, "Vel", -1, 127)
+local note_velocity_selector = value_selector:new(30, 20, "Vel", -1, 127)
 note_velocity_selector:set_value(-1)
-local note_length_selector = ValueSelector:new(55, 20, "Len", -1, 512)
+local note_length_selector = value_selector:new(55, 20, "Len", -1, 512)
 note_length_selector:set_value(-1)
-local note_micro_delay = ValueSelector:new(80, 20, "uDel", -1, 99)
+local note_micro_delay = value_selector:new(80, 20, "uDel", -1, 99)
 note_micro_delay:set_value(-1)
-local note_trig_selector = ValueSelector:new(5, 40, "Trig", -1, 1)
+local note_trig_selector = value_selector:new(5, 40, "Trig", -1, 1)
 note_trig_selector:set_value(-1)
-local note_chord_1 = ValueSelector:new(30, 40, "Chd1", -14, 14)
+local note_chord_1 = value_selector:new(30, 40, "Chd1", -14, 14)
 note_chord_1:set_value(0)
-local note_chord_2 = ValueSelector:new(55, 40, "Chd2", -14, 14)
+local note_chord_2 = value_selector:new(55, 40, "Chd2", -14, 14)
 note_chord_2:set_value(0)
-local note_chord_3 = ValueSelector:new(80, 40, "Chd3", -14, 14)
+local note_chord_3 = value_selector:new(80, 40, "Chd3", -14, 14)
 note_chord_3:set_value(0)
-local note_chord_4 = ValueSelector:new(105, 40, "Chd4", -14, 14)
+local note_chord_4 = value_selector:new(105, 40, "Chd4", -14, 14)
 note_chord_4:set_value(0)
 
 
 
-local clock_mod_list_selector = ListSelector:new(10, 25, "Clock Mod", {})
-local clock_swing_value_selector = ValueSelector:new(70, 25, "Swing", 0, 100)
+local clock_mod_list_selector = list_selector:new(10, 25, "Clock Mod", {})
+local clock_swing_value_selector = value_selector:new(70, 25, "Swing", 0, 100)
 
-local midi_device_vertical_scroll_selector = VerticalScrollSelector:new(90, 25, "Midi Device", {})
+local midi_device_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Midi Device", {})
 local midi_channel_vertical_scroll_selector =
-  VerticalScrollSelector:new(
+  vertical_scroll_selector:new(
   65,
   25,
   "Midi Channel",
@@ -73,22 +73,22 @@ local midi_channel_vertical_scroll_selector =
 )
 local device_map_vertical_scroll_selector
 
-local param_select_vertical_scroll_selector = VerticalScrollSelector:new(30, 25, "Params", {})
+local param_select_vertical_scroll_selector = vertical_scroll_selector:new(30, 25, "Params", {})
 
-local param_1 = Dial:new(5, 20, "Param 1", "param_1", "X", "")
-local param_2 = Dial:new(30, 20, "Param 2", "param_2", "X", "")
-local param_3 = Dial:new(55, 20, "Param 3", "param_3", "X", "")
-local param_4 = Dial:new(80, 20, "Param 4", "param_4", "X", "")
-local param_5 = Dial:new(105, 20, "Param 5", "param_5", "X", "")
-local param_6 = Dial:new(5, 40, "Param 6", "param_6", "X", "")
-local param_7 = Dial:new(30, 40, "Param 7", "param_7", "X", "")
-local param_8 = Dial:new(55, 40, "Param 8", "param_8", "X", "")
-local param_9 = Dial:new(80, 40, "Param 9", "param_9", "X", "")
-local param_10 = Dial:new(105, 40, "Param 10", "param_10", "X", "")
+local param_1 = dial:new(5, 20, "Param 1", "param_1", "X", "")
+local param_2 = dial:new(30, 20, "Param 2", "param_2", "X", "")
+local param_3 = dial:new(55, 20, "Param 3", "param_3", "X", "")
+local param_4 = dial:new(80, 20, "Param 4", "param_4", "X", "")
+local param_5 = dial:new(105, 20, "Param 5", "param_5", "X", "")
+local param_6 = dial:new(5, 40, "Param 6", "param_6", "X", "")
+local param_7 = dial:new(30, 40, "Param 7", "param_7", "X", "")
+local param_8 = dial:new(55, 40, "Param 8", "param_8", "X", "")
+local param_9 = dial:new(80, 40, "Param 9", "param_9", "X", "")
+local param_10 = dial:new(105, 40, "Param 10", "param_10", "X", "")
 
 local m_params = {param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10}
 
-local dials = ControlScrollSelector:new(0, 0, {})
+local dials = control_scroll_selector:new(0, 0, {})
 
 local page_to_index = {["Notes"] = 1, ["Trig Locks"] = 2, ["Clock Mods"] = 3, ["Quantizer"] = 4, ["Midi Config"] = 5}
 
@@ -112,7 +112,7 @@ end
 
 
 local notes_page =
-  Page:new(
+  page:new(
   "Notes",
   function()
     if program.get().selected_channel ~= 17 then
@@ -212,7 +212,7 @@ end)
 
 
 local quantizer_page =
-  Page:new(
+  page:new(
   "",
   function()
     if program.get().selected_channel ~= 17 then
@@ -234,7 +234,7 @@ local quantizer_page =
 )
 
 local clock_mods_page =
-  Page:new(
+  page:new(
   "Clocks and Swing",
   function()
     if program.get().selected_channel ~= 17 then
@@ -246,7 +246,7 @@ local clock_mods_page =
 )
 
 local channel_edit_page =
-  Page:new(
+  page:new(
   "Config",
   function()
     if program.get().selected_channel ~= 17 then
@@ -272,7 +272,7 @@ local channel_edit_page =
 )
 
 local trig_lock_page =
-  Page:new(
+  page:new(
   "Trig Locks",
   function()
     if program.get().selected_channel ~= 17 then
@@ -290,7 +290,7 @@ function channel_edit_page_ui_controller.init()
   midi_device_vertical_scroll_selector:set_items(midi_controller.get_midi_outs())
   dials:set_items({param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10})
   clock_mod_list_selector:set_list(clock_controller.get_clock_divisions())
-  device_map_vertical_scroll_selector = VerticalScrollSelector:new(10, 25, "Midi Map", device_map:get_devices())
+  device_map_vertical_scroll_selector = vertical_scroll_selector:new(10, 25, "Midi Map", device_map:get_devices())
 
 
   notes_page:set_sub_name_func(

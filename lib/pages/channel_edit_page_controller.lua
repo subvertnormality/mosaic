@@ -4,10 +4,10 @@ local pattern_buttons = {}
 local fn = include("mosaic/lib/functions")
 local quantiser = include("mosaic/lib/quantiser")
 
-local channel_edit_page_sequencer = Sequencer:new(4, "channel")
-local channel_select_fader = Fader:new(1, 1, 16, 16)
+local channel_edit_page_sequencer = sequencer:new(4, "channel")
+local channel_select_fader = fader:new(1, 1, 16, 16)
 local trig_merge_mode_button =
-  Button:new(
+  button:new(
   13,
   8,
   {
@@ -17,7 +17,7 @@ local trig_merge_mode_button =
   }
 )
 local note_merge_mode_button =
-  Button:new(
+  button:new(
   14,
   8,
   {
@@ -28,7 +28,7 @@ local note_merge_mode_button =
   }
 )
 local velocity_merge_mode_button =
-  Button:new(
+  button:new(
   15,
   8,
   {
@@ -39,7 +39,7 @@ local velocity_merge_mode_button =
   }
 )
 local length_merge_mode_button =
-  Button:new(
+  button:new(
   16,
   8,
   {
@@ -49,14 +49,14 @@ local length_merge_mode_button =
     {"Channel length merge mode on", 15}
   }
 )
-local channel_octave_fader = Fader:new(7, 8, 5, 5)
-local channel_scale_fader = Fader:new(1, 3, 16, 16)
-local transpose_fader = Fader:new(8, 8, 9, 17)
+local channel_octave_fader = fader:new(7, 8, 5, 5)
+local channel_scale_fader = fader:new(1, 3, 16, 16)
+local transpose_fader = fader:new(8, 8, 9, 17)
 
 function channel_edit_page_controller.init()
   if program.get_selected_channel() ~= 17 then
     for s = 1, 16 do
-      pattern_buttons["step" .. s .. "_pattern_button"] = Button:new(s, 2)
+      pattern_buttons["step" .. s .. "_pattern_button"] = button:new(s, 2)
     end
 
     channel_octave_fader:set_value(program.get_selected_channel().octave + 3)

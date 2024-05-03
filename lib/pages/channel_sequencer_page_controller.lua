@@ -4,12 +4,12 @@ local channel_pattern_buttons = {}
 local fn = include("mosaic/lib/functions")
 local refresh_button = {}
 
-local global_pattern_length_fader = Fader:new(1, 7, 16, 64)
+local global_pattern_length_fader = fader:new(1, 7, 16, 64)
 
 function channel_sequencer_page_controller.init()
   for s = 1, 96 do
     channel_pattern_buttons["step" .. s .. "_sequencer_pattern_button"] =
-      Button:new(
+      button:new(
       (s - 1) % 16 + 1,
       math.floor((s - 1) / 16) + 1,
       {

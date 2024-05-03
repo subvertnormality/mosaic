@@ -1,7 +1,7 @@
 local velocity_edit_page_controller = {}
 
-local VerticalFader = include("mosaic/lib/controls/VerticalFader")
-local FadeButton = include("mosaic/lib/controls/FadeButton")
+local vertical_fader = include("mosaic/lib/controls/vertical_fader")
+local fade_button = include("mosaic/lib/controls/fade_button")
 
 local faders = {}
 local vertical_offset = 0
@@ -10,19 +10,19 @@ local horizontal_offset = 0
 local velocity_from_value_results = {}
 local value_from_velocity_results = {}
 
-local step1to16_fade_button = FadeButton:new(9, 8, 1, 16)
-local step17to32_fade_button = FadeButton:new(10, 8, 17, 32)
-local step33to48_fade_button = FadeButton:new(11, 8, 33, 48)
-local step49to64_fade_button = FadeButton:new(12, 8, 49, 64)
+local step1to16_fade_button = fade_button:new(9, 8, 1, 16)
+local step17to32_fade_button = fade_button:new(10, 8, 17, 32)
+local step33to48_fade_button = fade_button:new(11, 8, 33, 48)
+local step49to64_fade_button = fade_button:new(12, 8, 49, 64)
 
-local vel1to7_fade_button = FadeButton:new(15, 8, 1, 7)
-local vel8to14_fade_button = FadeButton:new(16, 8, 8, 14)
+local vel1to7_fade_button = fade_button:new(15, 8, 1, 7)
+local vel8to14_fade_button = fade_button:new(16, 8, 8, 14)
 
-local quad_dupe_button = Button:new(7, 8)
+local quad_dupe_button = button:new(7, 8)
 
 function velocity_edit_page_controller.init()
   for s = 1, 64 do
-    faders["step" .. s .. "_fader"] = VerticalFader:new(s, 1, 14)
+    faders["step" .. s .. "_fader"] = vertical_fader:new(s, 1, 14)
   end
 
   for val = 1, 14 do

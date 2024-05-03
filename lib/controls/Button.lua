@@ -1,10 +1,10 @@
-Button = {}
-Button.__index = Button
+button = {}
+button.__index = button
 
 local fn = include("mosaic/lib/functions")
 
-function Button:new(x, y, states)
-  local self = setmetatable({}, Button)
+function button:new(x, y, states)
+  local self = setmetatable({}, button)
   self.x = x
   self.y = y
   self.bclock = false
@@ -21,19 +21,19 @@ function Button:new(x, y, states)
   return self
 end
 
-function Button:draw()
+function button:draw()
   grid_abstraction.led(self.x, self.y, self.states[self.state][2] - self.bright_mod)
 end
 
-function Button:get_state()
+function button:get_state()
   return self.state
 end
 
-function Button:set_state(val)
+function button:set_state(val)
   self.state = val
 end
 
-function Button:blink()
+function button:blink()
   self.bclock =
     clock.run(
     function()
@@ -52,14 +52,14 @@ function Button:blink()
   )
 end
 
-function Button:no_blink()
+function button:no_blink()
   if self.bclock then
     self.bright_mod = 0
     clock.cancel(self.bclock)
   end
 end
 
-function Button:press(x, y)
+function button:press(x, y)
   if (self.x == x and self.y == y) then
     if self.state == #self.states then
       self.state = 1
@@ -69,11 +69,11 @@ function Button:press(x, y)
   end
 end
 
-function Button:is_this(x, y)
+function button:is_this(x, y)
   if (self.x == x and self.y == y) then
     return true
   end
   return false
 end
 
-return Button
+return button

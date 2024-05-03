@@ -1,10 +1,10 @@
-Fader = {}
-Fader.__index = Fader
+fader = {}
+fader.__index = fader
 
 local fn = include("mosaic/lib/functions")
 
-function Fader:new(x, y, length, size)
-  local self = setmetatable({}, Fader)
+function fader:new(x, y, length, size)
+  local self = setmetatable({}, fader)
   self.x = x
   self.y = y
   self.length = length
@@ -23,7 +23,7 @@ function Fader:new(x, y, length, size)
   return self
 end
 
-function Fader:draw_simple()
+function fader:draw_simple()
   grid_abstraction.led(self.x, self.y, 2)
 
   for i = self.x, self.length + self.x - 1 do
@@ -45,7 +45,7 @@ function Fader:draw_simple()
   end
 end
 
-function Fader:draw_fine_grain()
+function fader:draw_fine_grain()
   grid_abstraction.led(self.x, self.y, 7)
   grid_abstraction.led(self.length + self.x - 1, self.y, 7)
   for i = self.x + 1, self.length + self.x - 2 do
@@ -67,7 +67,7 @@ function Fader:draw_fine_grain()
   end
 end
 
-function Fader:draw()
+function fader:draw()
   if self.is_disabled then
     return
   end
@@ -78,45 +78,45 @@ function Fader:draw()
   end
 end
 
-function Fader:get_value()
+function fader:get_value()
   if is_disabled then
     return 0
   end
   return self.value
 end
 
-function Fader:set_value(val)
+function fader:set_value(val)
   self.value = val
 end
 
-function Fader:set_size(size)
+function fader:set_size(size)
   if self.value > size then
     self.value = size
   end
   self.size = size
 end
 
-function Fader:set_length(length)
+function fader:set_length(length)
   self.length = length
 end
 
-function Fader:set_pre_func(func)
+function fader:set_pre_func(func)
   self.pre_func = func
 end
 
-function Fader:disabled()
+function fader:disabled()
   self.is_disabled = true
 end
 
-function Fader:enabled()
+function fader:enabled()
   self.is_disabled = false
 end
 
-function Fader:press_simple(val)
+function fader:press_simple(val)
   self.value = val
 end
 
-function Fader:press_fine_grain(val)
+function fader:press_fine_grain(val)
   if (val == 1 and self.value > 1) then
     self.value = self.value - 1
   elseif (val == self.length and self.value < self.size) then
@@ -126,7 +126,7 @@ function Fader:press_fine_grain(val)
   end
 end
 
-function Fader:press(x, y)
+function fader:press(x, y)
   if x >= self.x and x <= self.x + self.length - 1 and y == self.y then
     if self.length < self.size then
       self:press_fine_grain(x - self.x + 1)
@@ -136,19 +136,19 @@ function Fader:press(x, y)
   end
 end
 
-function Fader:is_this(x, y)
+function fader:is_this(x, y)
   if x >= self.x and x <= self.x + self.length - 1 and y == self.y then
     return true
   end
   return false
 end
 
-function Fader:dim(x)
+function fader:dim(x)
   self.dimmed[x] = true
 end
 
-function Fader:light(x)
+function fader:light(x)
   self.dimmed[x] = false
 end
 
-return Fader
+return fader
