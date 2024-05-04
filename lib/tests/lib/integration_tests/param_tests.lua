@@ -404,7 +404,7 @@ function test_bipolar_random_note_param_lock()
 
   local test_step = 8
   local cc_msb = 2
-  local note = 1
+  local shift = 1
   local c = 1
 
   test_pattern.note_values[test_step] = 1
@@ -414,11 +414,13 @@ function test_bipolar_random_note_param_lock()
 
   program.get().selected_channel = c
 
+
   local channel = program.get_selected_channel()
+
 
   channel.trig_lock_params[1].id = "bipolar_random_note"
 
-  program.add_step_param_trig_lock(test_step, 1, note)
+  program.add_step_param_trig_lock(test_step, 1, shift)
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -636,15 +638,12 @@ function test_chord_with_four_extra_note_param_lock()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-  channel.trig_lock_params[3].id = "chord3"
-  channel.trig_lock_params[4].id = "chord4"
 
-  program.add_step_param_trig_lock(test_step, 1, chord_note_1)
-  program.add_step_param_trig_lock(test_step, 2, chord_note_2)
-  program.add_step_param_trig_lock(test_step, 3, chord_note_3)
-  program.add_step_param_trig_lock(test_step, 4, chord_note_4)
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  channel.step_chord_masks[test_step][4] = chord_note_4
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -713,9 +712,8 @@ function test_chord_with_one_extra_note_param_lock()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-
-  program.add_step_param_trig_lock(test_step, 1, chord_note_1)
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -768,11 +766,9 @@ function test_chord_with_two_extra_note_param_lock()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-
-  program.add_step_param_trig_lock(test_step, 1, chord_note_1)
-  program.add_step_param_trig_lock(test_step, 2, chord_note_2)
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -832,13 +828,10 @@ function test_chord_with_three_extra_note_param_lock()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-  channel.trig_lock_params[3].id = "chord3"
-
-  program.add_step_param_trig_lock(test_step, 1, chord_note_1)
-  program.add_step_param_trig_lock(test_step, 2, chord_note_2)
-  program.add_step_param_trig_lock(test_step, 3, chord_note_3)
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -905,16 +898,14 @@ function test_chord_strum_param_lock_with_four_extra_note_with_off_value_plays_a
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-  channel.trig_lock_params[3].id = "chord3"
-  channel.trig_lock_params[4].id = "chord4"
+
   channel.trig_lock_params[5].id = "chord_strum"
 
-  program.add_step_param_trig_lock(test_step, 1, chord_note_1)
-  program.add_step_param_trig_lock(test_step, 2, chord_note_2)
-  program.add_step_param_trig_lock(test_step, 3, chord_note_3)
-  program.add_step_param_trig_lock(test_step, 4, chord_note_4)
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  channel.step_chord_masks[test_step][4] = chord_note_4
   program.add_step_param_trig_lock(test_step, 5, 0)
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
@@ -987,16 +978,13 @@ function test_chord_strum_param_lock_with_four_extra_notes_division()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-  channel.trig_lock_params[3].id = "chord3"
-  channel.trig_lock_params[4].id = "chord4"
   channel.trig_lock_params[5].id = "chord_strum"
 
-  program.add_step_param_trig_lock(test_step, 1, chord_note_1)
-  program.add_step_param_trig_lock(test_step, 2, chord_note_2)
-  program.add_step_param_trig_lock(test_step, 3, chord_note_3)
-  program.add_step_param_trig_lock(test_step, 4, chord_note_4)
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  channel.step_chord_masks[test_step][4] = chord_note_4
   program.add_step_param_trig_lock(test_step, 5, 18) -- /4
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
@@ -1081,16 +1069,13 @@ function test_chord_strum_param_lock_with_four_extra_notes_multiplication()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-  channel.trig_lock_params[3].id = "chord3"
-  channel.trig_lock_params[4].id = "chord4"
   channel.trig_lock_params[5].id = "chord_strum"
 
-  program.add_step_param_trig_lock(test_step, 1, chord_note_1)
-  program.add_step_param_trig_lock(test_step, 2, chord_note_2)
-  program.add_step_param_trig_lock(test_step, 3, chord_note_3)
-  program.add_step_param_trig_lock(test_step, 4, chord_note_4)
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  channel.step_chord_masks[test_step][4] = chord_note_4
   program.add_step_param_trig_lock(test_step, 5, 10)  -- x2
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
@@ -1174,17 +1159,14 @@ function test_chord_strum_param_lock_with_backwards_strum_pattern()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-  channel.trig_lock_params[3].id = "chord3"
-  channel.trig_lock_params[4].id = "chord4"
   channel.trig_lock_params[5].id = "chord_strum"
   channel.trig_lock_params[6].id = "chord_strum_pattern"
 
-  program.add_step_param_trig_lock(1, 1, chord_note_1)
-  program.add_step_param_trig_lock(1, 2, chord_note_2)
-  program.add_step_param_trig_lock(1, 3, chord_note_3)
-  program.add_step_param_trig_lock(1, 4, chord_note_4)
+  channel.step_chord_masks[1] = {}
+  channel.step_chord_masks[1][1] = chord_note_1
+  channel.step_chord_masks[1][2] = chord_note_2
+  channel.step_chord_masks[1][3] = chord_note_3
+  channel.step_chord_masks[1][4] = chord_note_4
   program.add_step_param_trig_lock(1, 5, 18)  -- /4
   program.add_step_param_trig_lock(1, 6, 2) -- Backwards pattern
 
@@ -1270,17 +1252,14 @@ function test_chord_strum_param_lock_with_inside_out_strum_pattern()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-  channel.trig_lock_params[3].id = "chord3"
-  channel.trig_lock_params[4].id = "chord4"
   channel.trig_lock_params[5].id = "chord_strum"
   channel.trig_lock_params[6].id = "chord_strum_pattern"
 
-  program.add_step_param_trig_lock(1, 1, chord_note_1)
-  program.add_step_param_trig_lock(1, 2, chord_note_2)
-  program.add_step_param_trig_lock(1, 3, chord_note_3)
-  program.add_step_param_trig_lock(1, 4, chord_note_4)
+  channel.step_chord_masks[1] = {}
+  channel.step_chord_masks[1][1] = chord_note_1
+  channel.step_chord_masks[1][2] = chord_note_2
+  channel.step_chord_masks[1][3] = chord_note_3
+  channel.step_chord_masks[1][4] = chord_note_4
   program.add_step_param_trig_lock(1, 5, 18)  -- /4
   program.add_step_param_trig_lock(1, 6, 3) -- Inside out strum pattern
 
@@ -1365,17 +1344,14 @@ function test_chord_strum_param_lock_with_outside_in_strum_pattern()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-  channel.trig_lock_params[3].id = "chord3"
-  channel.trig_lock_params[4].id = "chord4"
   channel.trig_lock_params[5].id = "chord_strum"
   channel.trig_lock_params[6].id = "chord_strum_pattern"
 
-  program.add_step_param_trig_lock(1, 1, chord_note_1)
-  program.add_step_param_trig_lock(1, 2, chord_note_2)
-  program.add_step_param_trig_lock(1, 3, chord_note_3)
-  program.add_step_param_trig_lock(1, 4, chord_note_4)
+  channel.step_chord_masks[1] = {}
+  channel.step_chord_masks[1][1] = chord_note_1
+  channel.step_chord_masks[1][2] = chord_note_2
+  channel.step_chord_masks[1][3] = chord_note_3
+  channel.step_chord_masks[1][4] = chord_note_4
   program.add_step_param_trig_lock(1, 5, 18)  -- /4
   program.add_step_param_trig_lock(1, 6, 4) -- Outside in strum pattern
 
@@ -1459,15 +1435,15 @@ function test_chord_with_velocity_swell_param_lock()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-  channel.trig_lock_params[3].id = "chord3"
+
   channel.trig_lock_params[4].id = "chord_velocity_modifier"
 
-  program.add_step_param_trig_lock(test_step, 1, chord_note_1)
-  program.add_step_param_trig_lock(test_step, 2, chord_note_2)
-  program.add_step_param_trig_lock(test_step, 3, chord_note_3)
   program.add_step_param_trig_lock(test_step, 4, 10)
+
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -1534,15 +1510,14 @@ function test_chord_with_velocity_fade_param_lock()
 
   local channel = program.get_selected_channel()
 
-  channel.trig_lock_params[1].id = "chord1"
-  channel.trig_lock_params[2].id = "chord2"
-  channel.trig_lock_params[3].id = "chord3"
+
   channel.trig_lock_params[4].id = "chord_velocity_modifier"
   channel.trig_lock_params[4].cc_min_value = -40
 
-  program.add_step_param_trig_lock(test_step, 1, chord_note_1)
-  program.add_step_param_trig_lock(test_step, 2, chord_note_2)
-  program.add_step_param_trig_lock(test_step, 3, chord_note_3)
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
   program.add_step_param_trig_lock(test_step, 4, -10)
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern

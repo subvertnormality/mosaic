@@ -35,6 +35,8 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
       merged_values[s] = values[s]
     elseif mode == "up" or mode == "down" or mode == "average" then
       if is_pattern_trig_one then
+        if (s == 34) then
+        end
         table.insert(pushed_values[s], values[s])
       end
     end
@@ -62,7 +64,6 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
       local pattern = patterns[pattern_number]
 
       for s = 1, 64 do
-
         local is_pattern_trig_one = pattern.trig_values[s] == 1
         if (pattern_enabled) then
           if trig_merge_mode == "skip" then
@@ -88,20 +89,26 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
           end 
         end
         
-        -- Determine whether to process each merge mode based on `is_pattern_trig_one` or the specific "pattern_number_" condition.
-        local should_process_note_merge_mode = is_pattern_trig_one or (note_merge_mode and string.match(note_merge_mode, "pattern_number_"))
-        local should_process_velocity_merge_mode = is_pattern_trig_one or (velocity_merge_mode and string.match(velocity_merge_mode, "pattern_number_"))
-        local should_process_length_merge_mode = is_pattern_trig_one or (length_merge_mode and string.match(length_merge_mode, "pattern_number_"))
+
+        local is_positive_step_trig_mask = false
+        if program.get_step_trig_masks(channel) and program.get_step_trig_masks(channel)[s] then
+          is_positive_step_trig_mask = program.get_step_trig_masks(channel)[s] == 1
+        end
+
+        -- Determine whether to process each merge mode based on `is_pattern_trig_one` or the specific "pattern_number_" condition, or whether there's a positive trig mask.
+        local should_process_note_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (note_merge_mode and string.match(note_merge_mode, "pattern_number_"))
+        local should_process_velocity_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (velocity_merge_mode and string.match(velocity_merge_mode, "pattern_number_"))
+        local should_process_length_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (length_merge_mode and string.match(length_merge_mode, "pattern_number_"))
 
         -- Process each merge mode only if its corresponding condition is met.
         if should_process_note_merge_mode then
-            do_moded_merge(pattern_number, is_pattern_trig_one, s, note_merge_mode, patterns[pattern_number].note_values, merged_pattern.note_values, notes)
+            do_moded_merge(pattern_number, is_pattern_trig_one or is_positive_step_trig_mask, s, note_merge_mode, patterns[pattern_number].note_values, merged_pattern.note_values, notes)
         end
         if should_process_velocity_merge_mode then
-            do_moded_merge(pattern_number, is_pattern_trig_one, s, velocity_merge_mode, patterns[pattern_number].velocity_values, merged_pattern.velocity_values, velocities)
+            do_moded_merge(pattern_number, is_pattern_trig_one or is_positive_step_trig_mask, s, velocity_merge_mode, patterns[pattern_number].velocity_values, merged_pattern.velocity_values, velocities)
         end
         if should_process_length_merge_mode then
-            do_moded_merge(pattern_number, is_pattern_trig_one, s, length_merge_mode, patterns[pattern_number].lengths, merged_pattern.lengths, lengths)
+            do_moded_merge(pattern_number, is_pattern_trig_one or is_positive_step_trig_mask, s, length_merge_mode, patterns[pattern_number].lengths, merged_pattern.lengths, lengths)
         end
 
       end

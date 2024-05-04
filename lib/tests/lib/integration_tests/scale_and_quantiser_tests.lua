@@ -631,7 +631,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
 
   program.set_chord_degree_rotation_for_scale(2, 1)
 
-  program.get_channel(channel).default_scale = 2
+  program.get().default_scale = 2
 
   test_pattern.note_values[1] = 6
   test_pattern.lengths[1] = 1
@@ -676,7 +676,7 @@ function test_chord_degree_rotation_with_negative_octave_mod()
   program.set_chord_degree_rotation_for_scale(2, 1)
   program.get_sequencer_pattern(sequencer_pattern).channels[channel].octave = -1
 
-  program.get_channel(channel).default_scale = 2
+  program.get().default_scale = 2
 
   test_pattern.note_values[1] = 6
   test_pattern.lengths[1] = 1
@@ -721,7 +721,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
     }
   )
 
-  program.get_channel(channel).default_scale = 2
+  program.get().default_scale = 2
 
   test_pattern.note_values[1] = 6
   test_pattern.lengths[1] = 1
@@ -872,7 +872,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
     }
   )
 
-  program.get_channel(channel).default_scale = 2
+  program.get().default_scale = 2
 
   test_pattern.note_values[1] = 6
   test_pattern.lengths[1] = 1

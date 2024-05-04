@@ -425,8 +425,6 @@ function test_trig_merge_modes_all()
 end
 
 
-
-
 function test_trig_mask_stops_steps_trigging()
   setup()
   local sequencer_pattern = 1
@@ -440,7 +438,7 @@ function test_trig_mask_stops_steps_trigging()
   local step_to_play_5 = 45
   local step_to_play_6 = 64
 
-  program.set_step_trig_mask(1, 34, false)
+  program.set_step_trig_mask(1, 34, 0)
 
   test_pattern.note_values[step_to_play] = 0
   test_pattern.lengths[step_to_play] = 1
@@ -543,6 +541,143 @@ function test_trig_mask_stops_steps_trigging()
   luaunit.assertNil(note_on_event)
 
   progress_clock_by_beats(step_to_play_5 - step_to_play_skip_due_to_mask)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  
+  luaunit.assert_equals(note_on_event[1], 67)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(step_to_play_6 - step_to_play_5)
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 69)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
+
+
+
+function test_trig_mask_can_force_steps_trigging()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  local step_to_play = 1
+  local step_to_play_2 = 4
+  local step_to_play_3 = 11
+  local step_to_play_due_to_mask = 34
+  local step_to_play_5 = 45
+  local step_to_play_6 = 64
+
+  program.set_step_trig_mask(1, 34, 1)
+
+  test_pattern.note_values[step_to_play] = 0
+  test_pattern.lengths[step_to_play] = 1
+  test_pattern.trig_values[step_to_play] = 1
+  test_pattern.velocity_values[step_to_play] = 100
+
+  test_pattern.note_values[step_to_play_2] = 1
+  test_pattern.lengths[step_to_play_2] = 1
+  test_pattern.trig_values[step_to_play_2] = 1
+  test_pattern.velocity_values[step_to_play_2] = 100
+
+  test_pattern.note_values[step_to_play_3] = 2
+  test_pattern.lengths[step_to_play_3] = 1
+  test_pattern.trig_values[step_to_play_3] = 1
+  test_pattern.velocity_values[step_to_play_3] = 100
+
+  test_pattern.note_values[step_to_play_due_to_mask] = 3
+  test_pattern.lengths[step_to_play_due_to_mask] = 1
+  test_pattern.trig_values[step_to_play_due_to_mask] = 0
+  test_pattern.velocity_values[step_to_play_due_to_mask] = 100
+
+  test_pattern.note_values[step_to_play_5] = 4
+  test_pattern.lengths[step_to_play_5] = 1
+  test_pattern.trig_values[step_to_play_5] = 1
+  test_pattern.velocity_values[step_to_play_5] = 100
+
+  local test_pattern_2 = program.initialise_default_pattern()
+
+  test_pattern_2.note_values[step_to_play_3] = 2
+  test_pattern_2.lengths[step_to_play_3] = 1
+  test_pattern_2.trig_values[step_to_play_3] = 1
+  test_pattern_2.velocity_values[step_to_play_3] = 100
+
+  test_pattern_2.note_values[step_to_play_due_to_mask] = 3
+  test_pattern_2.lengths[step_to_play_due_to_mask] = 1
+  test_pattern_2.trig_values[step_to_play_due_to_mask] = 0
+  test_pattern_2.velocity_values[step_to_play_due_to_mask] = 100
+
+  test_pattern_2.note_values[step_to_play_6] = 5
+  test_pattern_2.lengths[step_to_play_6] = 1
+  test_pattern_2.trig_values[step_to_play_6] = 1
+  test_pattern_2.velocity_values[step_to_play_6] = 100
+
+
+  local test_pattern_3 = program.initialise_default_pattern()
+
+  test_pattern_3.note_values[step_to_play_6] = 5
+  test_pattern_3.lengths[step_to_play_6] = 1
+  test_pattern_3.trig_values[step_to_play_6] = 1
+  test_pattern_3.velocity_values[step_to_play_6] = 100
+
+  local test_pattern_4 = program.initialise_default_pattern()
+
+  test_pattern_4.note_values[step_to_play_due_to_mask] = 3
+  test_pattern_4.lengths[step_to_play_due_to_mask] = 1
+  test_pattern_4.trig_values[step_to_play_due_to_mask] = 0
+  test_pattern_4.velocity_values[step_to_play_due_to_mask] = 100
+
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
+  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+
+  program.get_channel(1).trig_merge_mode = "all"
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(step_to_play_2 - step_to_play)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(step_to_play_3 - step_to_play_2)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(step_to_play_due_to_mask - step_to_play_3)
+
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(step_to_play_5 - step_to_play_due_to_mask)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
   

@@ -422,7 +422,6 @@ function step_handler.handle(c, current_step)
       random_shift +
       fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
 
-
     local note = 0
     
     if note_mask_value and note_mask_value > -1 then

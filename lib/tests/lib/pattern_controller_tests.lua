@@ -546,7 +546,7 @@ function test_note_masks_should_take_precedence_over_note_values()
 
   program.get_sequencer_pattern(1).channels[1].step_note_masks[5] = 78
 
-  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", "up", false, false).note_values[5], 78)
+  luaunit.assert_equals(pattern_controller.get_and_merge_patterns(1, "all", "up", false, false).note_mask_values[5], 78)
 end
 
 function test_velocity_masks_should_take_precedence_over_velocity_values()
