@@ -107,11 +107,16 @@ function channel_sequencer_page_controller.register_press_handlers()
           step_handler.execute_blink_cancel_func()
           step_handler.queue_switch_to_next_song_pattern_func(do_func)
           step_handler.queue_switch_to_next_song_pattern_blink_cancel_func(blink_cancel_func)
+          step_handler.queue_next_song_pattern(s)
 
           channel_pattern_buttons["step" .. s .. "_sequencer_pattern_button"]:blink()
         else
+          if params:get("elektron_program_changes") == 1 then
+            step_handler.process_elektron_program_change(s)
+          end
           do_func()
         end
+
       end
     end
   )

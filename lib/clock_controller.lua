@@ -105,20 +105,26 @@ function clock_controller.init()
   master_clock =
     clock_lattice:new_sprocket {
       action = function(t)
+        local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
+        local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
+        if params:get("elektron_program_changes") == 1 and program.get().current_step == selected_sequencer_pattern.global_pattern_length - 1 then
+          step_handler.process_elektron_program_change(step_handler.calculate_next_selected_sequencer_pattern())
+        end
         if first_run ~= true then
           step_handler.process_song_sequencer_patterns(program.get().current_step)
           local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
           local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
           if program.get().global_step_accumulator % selected_sequencer_pattern.global_pattern_length == 0 then
             for i = 1, 17 do
-                if (((fn.calc_grid_count(program.get_channel(i).end_trig[1], program.get_channel(i).end_trig[2]) 
-                  - fn.calc_grid_count(program.get_channel(i).start_trig[1], program.get_channel(i).start_trig[2]) + 1)
-                  > selected_sequencer_pattern.global_pattern_length)) then
-                    program.set_current_step_for_channel(i, 99)
-                end
+              if (((fn.calc_grid_count(program.get_channel(i).end_trig[1], program.get_channel(i).end_trig[2]) 
+                - fn.calc_grid_count(program.get_channel(i).start_trig[1], program.get_channel(i).start_trig[2]) + 1)
+                > selected_sequencer_pattern.global_pattern_length)) then
+                  program.set_current_step_for_channel(i, 99)
               end
             end
           end
+        end
+
 
         program.get().current_step = program.get().current_step + 1
         program.get().global_step_accumulator = program.get().global_step_accumulator + 1
@@ -275,6 +281,10 @@ end
 
 function clock_controller:start()
   first_run = true
+  if params:get("elektron_program_changes") == 1 then
+    step_handler.process_elektron_program_change(program.get().selected_sequencer_pattern)
+  end
+
   clock_controller.set_playing()
 
   midi_controller.start()

@@ -31,6 +31,7 @@ local switch_to_next_song_pattern_func = function()
 end
 local switch_to_next_song_pattern_blink_cancel_func = function()
 end
+local next_song_pattern_queue = nil
 
 function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)
@@ -166,6 +167,12 @@ end
 
 function step_handler.calculate_next_selected_sequencer_pattern()
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
+
+  if next_song_pattern_queue then
+    local next = next_song_pattern_queue
+    next_song_pattern_queue = nil
+    return next
+  end
 
   if
     selected_sequencer_pattern_number + 1 < 91 and
@@ -523,6 +530,41 @@ function step_handler.process_global_step_scale_trig_lock(current_step)
   program.set_global_step_scale_number(step_handler.calculate_step_scale_number(17, current_step))
 end
 
+
+function step_handler.process_elektron_program_change(next_sequencer_pattern)
+  for i = 1, 16 do
+    local channel = program.get_channel(i)
+    local device = device_map.get_device(program.get().devices[i].device_map)
+    
+    if device.id == "digitone" or 
+      device.id == "digitakt" or 
+      device.id == "digitakt_2" or 
+      device.id == "syntakt" or 
+      device.id == "analog_rytm" or 
+      device.id == "analog_four" or 
+      device.id == "oktatrack" or
+      device.id == "analog_heat_1" or    
+      device.id == "analog_heat_2" or
+      device.id == "model_samples" or
+      device.id == "analog_cycles" 
+    then
+
+      local midi_device = program.get().devices[1].midi_device
+      local midi_channel = program.get().devices[1].midi_channel
+
+      print("sending elektron program change to "..next_sequencer_pattern)
+
+      midi_controller:program_change(next_sequencer_pattern - 1, params:get("elektron_program_change_channel"), midi_device)
+
+    end
+  end
+  
+end
+
+function step_handler.queue_next_song_pattern(s)
+  next_song_pattern_queue = s
+end
+
 function step_handler.process_song_sequencer_patterns()
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
   local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
@@ -533,6 +575,7 @@ function step_handler.process_song_sequencer_patterns()
     if params:get("song_mode") == 1 then
 
       local next_sequencer_pattern = step_handler.calculate_next_selected_sequencer_pattern()
+
       program.set_selected_sequencer_pattern(next_sequencer_pattern)
       if selected_sequencer_pattern_number ~= next_sequencer_pattern and params:get("reset_on_end_of_sequencer_pattern") == 1 then
         step_handler.reset_pattern()

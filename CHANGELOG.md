@@ -1,7 +1,11 @@
 # 0.4.5 - Candidate beta
 
 * More bug fixes
-* Basic midi control from param trig locks
+* Scale and quantiser streamlined, global scale UI simplified
+* Note Masks: It's now possible to add and remove trigs to a channel directly from the channel page, overwriting pattern values
+* Note Masks: It's possible to set notes, velocities, and lengths, directly from the channel page, overwriting pattern values
+* Note Masks: Chords promoted to dedicated page
+* It's now possible to sync elektron devices with Mosaic's song mode. Patterns will be selected based on the currently selected Mosaic song pattern
 
 # 0.4.4
 

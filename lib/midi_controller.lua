@@ -128,6 +128,12 @@ function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
   midi_controller.cc(38, math.floor(v2), channel, device)
 end
 
+function midi_controller:program_change(program_id, channel, device)
+  if midi_devices[device] ~= nil then
+    midi_devices[device]:program_change(program_id, channel)
+  end
+end
+
 function midi_controller.start()
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then

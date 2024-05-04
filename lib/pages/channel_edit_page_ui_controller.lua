@@ -91,7 +91,7 @@ local m_params = {param_1, param_2, param_3, param_4, param_5, param_6, param_7,
 
 local dials = control_scroll_selector:new(0, 0, {})
 
-local channel_page_to_index = {["Notes"] = 1, ["Trig Locks"] = 2, ["Clock Mods"] = 3, ["Quantizer"] = 4, ["Midi Config"] = 5}
+local channel_page_to_index = {["Notes"] = 1, ["Trig Locks"] = 2, ["Clock Mods"] = 3, ["Midi Config"] = 4}
 local scales_page_to_index = {["Quantizer"] = 1, ["Clock Mods"] = 2}
 
 local refresh_timer_id = nil
