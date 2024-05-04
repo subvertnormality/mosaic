@@ -127,6 +127,7 @@ function program.init()
     selected_sequencer_pattern = 1,
     selected_pattern = 1,
     selected_channel = 1,
+    selected_scale = 1,
     root_note = root_note,
     chord = 1,
     default_scale = 0,

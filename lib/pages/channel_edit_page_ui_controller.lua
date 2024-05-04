@@ -216,17 +216,6 @@ local quantizer_page =
   page:new(
   "",
   function()
-    if program.get().selected_channel ~= 17 then
-      if program.get_selected_channel().default_scale == 0 then
-        print_no_scale_selected_message_to_screen()
-        return
-      end
-    else
-      if program.get().default_scale == 0 then
-        print_no_scale_selected_message_to_screen()
-        return
-      end
-    end
     quantizer_vertical_scroll_selector:draw()
     romans_vertical_scroll_selector:draw()
     notes_vertical_scroll_selector:draw()
@@ -307,17 +296,10 @@ function channel_edit_page_ui_controller.init()
   quantizer_page:set_sub_name_func(
     function()
       if program.get().selected_channel ~= 17 then
-        if program.get_selected_channel().default_scale == 0 then
-          return "Quantizer"
-        end
+        return "Quantizer"
       else
-        if program.get().default_scale == 0 then
-          return "Quantizer"
-        end
-        return "Quantizer " .. program.get().default_scale .. " "
+        return "Quantizer " .. program.get().selected_scale .. " "
       end
-
-      return "Quantizer " .. program.get_selected_channel().default_scale .. " "
     end
   )
 
@@ -360,7 +342,6 @@ function channel_edit_page_ui_controller.init()
   channel_pages:add_page(notes_page)
   channel_pages:add_page(trig_lock_page)
   channel_pages:add_page(clock_mods_page)
-  -- channel_pages:add_page(quantizer_page)
   channel_pages:add_page(channel_edit_page)
   channel_pages:select_page(1)
 
@@ -390,16 +371,12 @@ function channel_edit_page_ui_controller.register_ui_draw_handlers()
 end
 
 function channel_edit_page_ui_controller.update_scale()
-  local channel = program.get_selected_channel()
+
   local scale = quantizer_vertical_scroll_selector:get_selected_item()
   local chord = romans_vertical_scroll_selector:get_selected_index()
   local root_note = notes_vertical_scroll_selector:get_selected_index() - 1
   local rotation = rotation_vertical_scroll_selector:get_selected_index() - 1
 
-  if channel.default_scale == 0 then
-    tooltip:show("Cannot set scale.")
-    return
-  end
 
   save_confirm.set_cancel_message("Scale not saved.")
   save_confirm.set_cancel(
@@ -408,11 +385,6 @@ function channel_edit_page_ui_controller.update_scale()
     end
   )
 
-  local channel_scale = channel.default_scale
-
-  if channel.number == 17 then
-    channel_scale = program.get().default_scale
-  end
 
   if k2_held then
     save_confirm.set_confirm_message("K2 to save across song.")
@@ -420,7 +392,7 @@ function channel_edit_page_ui_controller.update_scale()
     save_confirm.set_save(
       function()
         program.set_all_sequencer_pattern_scales(
-          channel_scale,
+          program.get().selected_scale,
           {
             number = scale.number,
             scale = scale.scale,
@@ -435,7 +407,7 @@ function channel_edit_page_ui_controller.update_scale()
     save_confirm.set_save(
       function()
         program.set_scale(
-          channel_scale,
+          program.get().selected_scale,
           {
             number = scale.number,
             scale = scale.scale,
@@ -650,10 +622,6 @@ function channel_edit_page_ui_controller.enc(n, d)
             end
           end
         elseif program.get().selected_channel == 17 and scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] then
-          print("here")
-          if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
-            return
-          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_down()
             channel_edit_page_ui_controller.refresh_romans()
@@ -838,9 +806,6 @@ function channel_edit_page_ui_controller.enc(n, d)
             end
           end
         elseif program.get().selected_channel == 17 and scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] then
-          if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
-            return
-          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_up()
             channel_edit_page_ui_controller.refresh_romans()
@@ -969,9 +934,6 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
       
         elseif program.get().selected_channel == 17 and scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] then
-          if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
-            return
-          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:deselect()
             romans_vertical_scroll_selector:select()
@@ -1054,9 +1016,6 @@ function channel_edit_page_ui_controller.enc(n, d)
             note_chord_3:select()
           end
         elseif program.get().selected_channel == 17 and scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] then
-          if program.get_selected_channel().default_scale == 0 or (program.get().selected_channel == 17 and program.get().default_scale == 0) then
-            return
-          end
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:deselect()
             notes_vertical_scroll_selector:select()
@@ -1286,7 +1245,6 @@ function channel_edit_page_ui_controller.refresh_device_selector()
 end
 
 function channel_edit_page_ui_controller.refresh_romans()
-  local channel = program.get_selected_channel()
   local scale = quantizer_vertical_scroll_selector:get_selected_item()
 
   if (scale) then
@@ -1301,37 +1259,18 @@ end
 function channel_edit_page_ui_controller.refresh_quantiser()
   local channel = program.get_selected_channel()
 
-  if channel.default_scale == 0 then
-    return
-  end
-
-  local number = program.get_scale(program.get().default_scale).number
-  local chord = program.get_scale(program.get().default_scale).chord
-  local root_note = program.get_scale(program.get().default_scale).root_note
-  local rotation = program.get_scale(program.get().default_scale).chord_degree_rotation or 0
+  local number = program.get_scale(program.get().selected_scale).number
+  local chord = program.get_scale(program.get().selected_scale).chord
+  local root_note = program.get_scale(program.get().selected_scale).root_note
+  local rotation = program.get_scale(program.get().selected_scale).chord_degree_rotation or 0
   program.get_selected_sequencer_pattern().active = true
 
-  if program.get().selected_channel == 17 then
-    quantizer_vertical_scroll_selector:set_selected_item(number)
-    notes_vertical_scroll_selector:set_selected_item(root_note + 1)
-    romans_vertical_scroll_selector:set_selected_item(chord)
-    rotation_vertical_scroll_selector:set_selected_item((rotation or 0) + 1)
-    channel_edit_page_ui_controller.refresh_romans()
-    return
-  end
+  quantizer_vertical_scroll_selector:set_selected_item(number)
+  notes_vertical_scroll_selector:set_selected_item(root_note + 1)
+  romans_vertical_scroll_selector:set_selected_item(chord)
+  rotation_vertical_scroll_selector:set_selected_item((rotation or 0) + 1)
+  channel_edit_page_ui_controller.refresh_romans()
 
-  if (program.get_scale(channel.default_scale)) then
-    number = program.get_scale(channel.default_scale).number
-    chord = program.get_scale(channel.default_scale).chord
-    root_note = program.get_scale(channel.default_scale).root_note
-    rotation = program.get_scale(channel.default_scale).chord_degree_rotation or 0
-    quantizer_vertical_scroll_selector:set_selected_item(number)
-    notes_vertical_scroll_selector:set_selected_item(root_note + 1)
-    romans_vertical_scroll_selector:set_selected_item(chord)
-    rotation_vertical_scroll_selector:set_selected_item((rotation or 0) + 1)
-    channel_edit_page_ui_controller.refresh_romans()
-    fn.dirty_screen(true)
-  end
 end
 
 function channel_edit_page_ui_controller.set_current_note(note)

@@ -646,6 +646,7 @@ function step_handler.execute_blink_cancel_func()
 end
 
 function step_handler.reset()
+  local channel = program.get_current
   program.get().global_step_accumulator = 0
   persistent_global_step_scale_number = nil
   persistent_channel_step_scale_numbers = {
@@ -670,6 +671,10 @@ function step_handler.reset()
   step_handler.execute_blink_cancel_func()
   step_handler.flush_lengths()
   channel_edit_page_ui_controller.set_current_note({note = -1, velocity = -1, length = -1})
+  local c = program.get_selected_channel().number
+  program.set_channel_step_scale_number(
+    c, step_handler.calculate_step_scale_number(c, 1)
+  )
 end
 
 function step_handler.reset_pattern()

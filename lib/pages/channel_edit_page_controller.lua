@@ -67,7 +67,9 @@ function channel_edit_page_controller.init()
   channel_scale_fader:set_pre_func(
     function(x, y, length)
       for i = x, length + x - 1 do
-        if i == program.get_selected_channel().step_scale_number then
+        if i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
+          grid_abstraction.led(i, y, 15)
+        elseif i == program.get().selected_scale and program.get_selected_channel().number == 17 then
           grid_abstraction.led(i, y, 4)
         end
       end
@@ -294,19 +296,28 @@ function channel_edit_page_controller.register_press_handlers()
           end
           channel_edit_page_ui_controller.refresh()
         else
-          channel_scale_fader:press(x, y)
-          local scale_value = channel_scale_fader:get_value()
-          local number = program.get_scale(scale_value).number
-          if program.get().default_scale ~= scale_value then
-            program.get().default_scale = scale_value
-            tooltip:show("Global scale: " .. quantiser.get_scale_name_from_index(number))
-          else
-            program.get().default_scale = 0
-            channel_scale_fader:set_value(0)
-            tooltip:show("Global scale off")
-          end
+          program.get().selected_scale = x
           channel_edit_page_ui_controller.refresh_quantiser()
         end
+      end
+    end
+  )
+  press_handler:register_long(
+    "channel_edit_page",
+    function(x, y)
+      if channel_scale_fader:is_this(x, y) then
+        channel_scale_fader:press(x, y)
+        local scale_value = channel_scale_fader:get_value()
+        local number = program.get_scale(scale_value).number
+        if program.get().default_scale ~= scale_value then
+          program.get().default_scale = scale_value
+          tooltip:show("Global scale: " .. quantiser.get_notes()[program.get_scale(scale_value).root_note + 1] .. " " .. quantiser.get_scale_name_from_index(number))
+        else
+          program.get().default_scale = 0
+          channel_scale_fader:set_value(0)
+          tooltip:show("Global scale off")
+        end
+        channel_edit_page_ui_controller.refresh_quantiser()
       end
     end
   )
@@ -625,8 +636,10 @@ function channel_edit_page_controller.refresh_faders()
       channel_octave_fader:set_value(channel.octave + 3)
     end
     if step_scale_trig_lock then
-      print("step_scale_trig_lock", step_scale_trig_lock)
       channel_scale_fader:set_value(step_scale_trig_lock)
+      if step == 1 and channel.number ~= 17 then
+        program.get().default_scale = step_scale_trig_lock
+      end
     elseif program.get().selected_channel ~= 17 then
       channel_scale_fader:set_value(0)
     else

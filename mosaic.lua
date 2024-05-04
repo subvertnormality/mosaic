@@ -186,7 +186,7 @@ function init()
   redraw_clock = clock.run(
     function()
       while true do
-        clock.sleep(1/15)
+        clock.sleep(1/20)
         if fn.dirty_screen() then
           redraw()
         end
