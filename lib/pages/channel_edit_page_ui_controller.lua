@@ -113,7 +113,7 @@ end
 
 local notes_page =
   page:new(
-  "Notes Masks",
+  "Note Masks",
   function()
     if program.get().selected_channel ~= 17 then
       note_value_selector:draw()

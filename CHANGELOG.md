@@ -10,6 +10,7 @@
 * It's now possible to create note mask locks by using a midi keyboard
 * Note mask chord locks can now be set using a midi keyboard
 * Param on/off options are now in a sensible order
+* Adding Digitakt 2 config file
 
 # 0.4.4
 
