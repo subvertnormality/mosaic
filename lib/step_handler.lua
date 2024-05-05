@@ -446,12 +446,11 @@ function step_handler.handle(c, current_step)
 
   local random_val = random(0, 99)
 
-  -- if trig_value == 1 and random_val < trig_prob then
-  --   if (params:get("quantiser_trig_lock_hold") ~= 1) then
-  --     print("nulling persistent channel step scale at step "..current_step)
-  --     persistent_channel_step_scale_numbers[c] = nil
-  --   end
-  -- end
+  if trig_value == 1 and random_val < trig_prob then
+    if (params:get("quantiser_trig_lock_hold") == 1) then
+      persistent_channel_step_scale_numbers[c] = nil
+    end
+  end
 
   program.set_channel_step_scale_number(c, step_handler.calculate_step_scale_number(c, current_step))
 
@@ -470,7 +469,7 @@ function step_handler.handle(c, current_step)
     
     if note_mask_value and note_mask_value > -1 then
 
-      if params:get("quantiser_act_on_note_masks") == 1 then
+      if params:get("quantiser_act_on_note_masks") == 2 then
         note = quantiser.snap_to_scale((note_mask_value + octave_mod * 12) + random_shift, channel.step_scale_number) + transpose
       else
         note = (note_mask_value + octave_mod * 12) + random_shift + transpose
@@ -589,8 +588,6 @@ function step_handler.process_elektron_program_change(next_sequencer_pattern)
       local midi_device = program.get().devices[1].midi_device
       local midi_channel = program.get().devices[1].midi_channel
 
-      print("sending elektron program change to "..next_sequencer_pattern)
-
       midi_controller:program_change(next_sequencer_pattern - 1, params:get("elektron_program_change_channel"), midi_device)
 
     end
@@ -609,15 +606,15 @@ function step_handler.process_song_sequencer_patterns()
     (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) ==
       0)
    then
-    if params:get("song_mode") == 1 then
+    if params:get("song_mode") == 2 then
 
       local next_sequencer_pattern = step_handler.calculate_next_selected_sequencer_pattern()
 
       program.set_selected_sequencer_pattern(next_sequencer_pattern)
-      if selected_sequencer_pattern_number ~= next_sequencer_pattern and params:get("reset_on_end_of_sequencer_pattern") == 1 then
+      if selected_sequencer_pattern_number ~= next_sequencer_pattern and params:get("reset_on_end_of_sequencer_pattern") == 2 then
         step_handler.reset_pattern()
       else
-        if params:get("reset_on_end_of_pattern") == 1 then
+        if params:get("reset_on_end_of_pattern") == 2 then
           step_handler.reset_pattern()
         end
       end

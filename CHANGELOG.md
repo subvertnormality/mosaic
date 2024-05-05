@@ -7,6 +7,9 @@
 * Note Masks: Chords promoted to dedicated page
 * It's now possible to sync elektron devices with Mosaic's song mode. Patterns will be selected based on the currently selected Mosaic song pattern
 * UI elements no long wrap when selecting horizontally
+* It's now possible to create note mask locks by using a midi keyboard
+* Note mask chord locks can now be set using a midi keyboard
+* Param on/off options are now in a sensible order
 
 # 0.4.4
 

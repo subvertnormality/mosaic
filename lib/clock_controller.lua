@@ -107,7 +107,7 @@ function clock_controller.init()
       action = function(t)
         local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
         local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
-        if params:get("elektron_program_changes") == 1 and program.get().current_step == selected_sequencer_pattern.global_pattern_length - 1 then
+        if params:get("elektron_program_changes") == 2 and program.get().current_step == selected_sequencer_pattern.global_pattern_length - 1 then
           step_handler.process_elektron_program_change(step_handler.calculate_next_selected_sequencer_pattern())
         end
         if first_run ~= true then
@@ -224,7 +224,7 @@ function clock_controller.init()
             trigless_lock_active[channel_number] = false
             step_handler.process_params(channel_number, step)
           elseif
-            params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and
+            params:get("trigless_locks") == 2 and trigless_lock_active[i] ~= true and
               program.step_has_param_trig_lock(program.get_channel(channel_number), step)
             then
             trigless_lock_active[channel_number] = true
@@ -285,7 +285,7 @@ end
 
 function clock_controller:start()
   first_run = true
-  if params:get("elektron_program_changes") == 1 then
+  if params:get("elektron_program_changes") == 2 then
     step_handler.process_elektron_program_change(program.get().selected_sequencer_pattern)
   end
 

@@ -111,7 +111,7 @@ function channel_sequencer_page_controller.register_press_handlers()
 
           channel_pattern_buttons["step" .. s .. "_sequencer_pattern_button"]:blink()
         else
-          if params:get("elektron_program_changes") == 1 then
+          if params:get("elektron_program_changes") == 2 then
             step_handler.process_elektron_program_change(s)
           end
           do_func()

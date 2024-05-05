@@ -194,11 +194,11 @@ function quantiser.process_with_global_params(note_number, octave_mod, transpose
   local do_rotation = true
   local do_degree = true
 
-  if params:get("midi_honour_rotation") == 2 then
+  if params:get("midi_honour_rotation") == 1 then
     do_rotation = false
   end
 
-  if params:get("midi_honour_degree") == 2 then
+  if params:get("midi_honour_degree") == 1 then
     do_degree = false
   end
 

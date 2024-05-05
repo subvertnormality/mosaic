@@ -256,6 +256,15 @@ function fn.find_index_in_table_by_value(table, value)
   return nil
 end
 
+function fn.find_index_by_value(table, value)
+  for i, o in ipairs(table) do
+    if o == value then
+      return i
+    end
+  end
+  return nil
+end
+
 function fn.find_key(tbl, value)
   for k, v in pairs(tbl) do
     if v == value then
