@@ -113,7 +113,7 @@ function test_params_triggless_locks_are_processed_at_the_right_step()
   channel.trig_lock_params[1].id = 1
   channel.trig_lock_params[1].cc_msb = cc_msb
 
-  params:set("trigless_locks", 1) 
+  params:set("trigless_locks", 2) 
 
   program.add_step_param_trig_lock(test_step, 1, cc_value)
 
