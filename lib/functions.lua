@@ -43,6 +43,17 @@ function fn.id_appears_in_table(t, target_id)
   end
 end
 
+function fn.appears_in_table(t, target_id)
+  local size = #t
+  for i = size, 1, -1 do
+    if t[i] == target_id then
+      return true
+    end
+  end
+  return false
+end
+
+
 function fn.string_in_table(tbl, target)
   for _, value in pairs(tbl) do
     if value == target then

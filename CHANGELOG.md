@@ -1,4 +1,6 @@
-# 0.4.5 - Candidate beta
+# 0.5 - Beta Candidate
+
+_Breaking update. Please backup and remove your .pset and .ptn data files from previous versions._
 
 * More bug fixes
 * Scale and quantiser streamlined, global scale UI simplified
@@ -10,7 +12,8 @@
 * It's now possible to create note mask locks by using a midi keyboard
 * Note mask chord locks can now be set using a midi keyboard
 * Param on/off options are now in a sensible order
-* Adding Digitakt 2 config file
+* Digitakt 2 config file added
+* N.B. note players must now be allow listed before being loaded to prevent crashes
 
 # 0.4.4
 
@@ -106,7 +109,7 @@ _Breaking update. Please backup and remove your .pset and .ptn data files from p
 
 # 0.2.4
 
-* To stop the sequencer you now need to hold down the currently active page's LED in the menu. This prevents accidental stops whilst navigating pages.
+* To stop the sequencer you now hold down the currently active page's LED in the menu. This prevents accidental stops whilst navigating pages.
 * NB devices now send proper velocities
 * Added quantised fixed note trig lock
 * Added bipolar random note trig lock

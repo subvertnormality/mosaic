@@ -3,6 +3,8 @@ local device_map = {}
 local fn = include("mosaic/lib/functions")
 local json = require("mosaic/lib/json")
 
+
+
 local function read_json_file(file_path)
   local file, err = io.open(file_path, "r")
   if not file then
@@ -261,6 +263,32 @@ local stock_params = {
   }
 }
 
+
+-- These are tested NB note players that do not break Mosaic
+local tested_note_players = {
+  "ansible 4",
+  "emplait 3",
+  "emplait 2",
+  "emplait 4",
+  "ansible 3",
+  "jf kit",
+  "jf n 1",
+  "emplait 1",
+  "jf n 2",
+  "jf poly",
+  "jf unison",
+  "jf n 5",
+  "jf mpe",
+  "crow 1/2",
+  "crow 3/4",
+  "jf n 4",
+  "jf n 3",
+  "jf n 6",
+  "ansible 1",
+  "ansible 2",
+  "crow para",
+}
+
 local function merge_devices()
 
   local stock_device_map = {}
@@ -292,7 +320,8 @@ local function merge_devices()
 
   if (note_players) then
     for index, device in pairs(note_players) do
-      if string.find(index, "midi", 1, true) ~= 1 then
+
+      if fn.appears_in_table(tested_note_players, index) and string.find(index, "midi", 1, true) ~= 1 then
         local new_device_params = {}
 
         table.insert(
