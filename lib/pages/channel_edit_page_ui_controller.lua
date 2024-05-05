@@ -23,23 +23,21 @@ local romans_vertical_scroll_selector =
 local notes_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Notes", quantiser.get_notes())
 local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
 
-local note_value_selector = value_selector:new(5, 18, "Note", -1, 127)
-note_value_selector:set_value(-1)
-local note_velocity_selector = value_selector:new(30, 18, "Vel", -1, 127)
-note_velocity_selector:set_value(-1)
-local note_length_selector = value_selector:new(55, 18, "Len", -1, 512)
-note_length_selector:set_value(-1)
-local note_micro_time = value_selector:new(80, 18, "uTime", -1, 99)
-note_micro_time:set_value(-1)
-local note_trig_selector = value_selector:new(5, 40, "Trig", -1, 1)
+local note_trig_selector = value_selector:new(5, 18, "Trig", -1, 1)
 note_trig_selector:set_value(-1)
-local note_chord_1 = value_selector:new(30, 40, "Chd1", -14, 14)
+local note_value_selector = value_selector:new(30, 18, "Note", -1, 127)
+note_value_selector:set_value(-1)
+local note_velocity_selector = value_selector:new(55, 18, "Vel", -1, 127)
+note_velocity_selector:set_value(-1)
+local note_length_selector = value_selector:new(80, 18, "Len", -1, 512)
+note_length_selector:set_value(-1)
+local note_chord_1 = value_selector:new(5, 40, "Chd1", -14, 14)
 note_chord_1:set_value(0)
-local note_chord_2 = value_selector:new(55, 40, "Chd2", -14, 14)
+local note_chord_2 = value_selector:new(30, 40, "Chd2", -14, 14)
 note_chord_2:set_value(0)
-local note_chord_3 = value_selector:new(80, 40, "Chd3", -14, 14)
+local note_chord_3 = value_selector:new(55, 40, "Chd3", -14, 14)
 note_chord_3:set_value(0)
-local note_chord_4 = value_selector:new(105, 40, "Chd4", -14, 14)
+local note_chord_4 = value_selector:new(80, 40, "Chd4", -14, 14)
 note_chord_4:set_value(0)
 
 
@@ -122,7 +120,6 @@ local notes_page =
       note_velocity_selector:draw()
       note_length_selector:draw()
       note_trig_selector:draw()
-      note_micro_time:draw()
       note_chord_1:draw()
       note_chord_2:draw()
       note_chord_3:draw()
@@ -192,7 +189,6 @@ end
 
 note_velocity_selector:set_view_transform_func(note_page_velocity_length_value_selector_func)
 note_length_selector:set_view_transform_func(note_page_velocity_length_value_selector_func)
-note_micro_time:set_view_transform_func(note_page_velocity_length_value_selector_func)
 note_chord_1:set_view_transform_func(chord_value_selector_func)
 note_chord_2:set_view_transform_func(chord_value_selector_func)
 note_chord_3:set_view_transform_func(chord_value_selector_func)
@@ -528,6 +524,13 @@ function channel_edit_page_ui_controller.enc(n, d)
             if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
+                if note_trig_selector:is_selected() then
+                  note_trig_selector:increment()
+                  channel.step_trig_masks[step] = note_trig_selector:get_value()
+                  if channel.step_trig_masks[step] > 1 then
+                    channel.step_trig_masks[step] = 1
+                  end
+                end
                 if note_value_selector:is_selected() then
                   note_value_selector:increment()
                   channel.step_note_masks[step] = note_value_selector:get_value()
@@ -550,20 +553,6 @@ function channel_edit_page_ui_controller.enc(n, d)
                   channel.step_length_masks[step] = note_length_selector:get_value()
                   if channel.step_length_masks[step] > 512 then
                     channel.step_length_masks[step] = 512
-                  end
-                end
-                if note_micro_time:is_selected() then
-                  note_micro_time:increment()
-                  channel.step_micro_time_masks[step] = note_micro_time:get_value()
-                  if channel.step_micro_time_masks[step] > 99 then
-                    channel.step_micro_time_masks[step] = 99
-                  end
-                end
-                if note_trig_selector:is_selected() then
-                  note_trig_selector:increment()
-                  channel.step_trig_masks[step] = note_trig_selector:get_value()
-                  if channel.step_trig_masks[step] > 1 then
-                    channel.step_trig_masks[step] = 1
                   end
                 end
                 if note_chord_1:is_selected() then
@@ -730,6 +719,13 @@ function channel_edit_page_ui_controller.enc(n, d)
             if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
               for i, keys in ipairs(pressed_keys) do
                 local step = fn.calc_grid_count(keys[1], keys[2])
+                if note_trig_selector:is_selected() then
+                  note_trig_selector:decrement()
+                  channel.step_trig_masks[step] = note_trig_selector:get_value()
+                  if channel.step_trig_masks[step] < 0 then
+                    channel.step_trig_masks[step] = nil
+                  end
+                end
                 if note_value_selector:is_selected() then
                   note_value_selector:decrement()
                   channel.step_note_masks[step] = note_value_selector:get_value()
@@ -750,20 +746,6 @@ function channel_edit_page_ui_controller.enc(n, d)
                   if note_length_selector:get_value() < 1 then 
                     channel.step_length_masks[step] = nil
                     note_length_selector:set_value(-1)
-                  end
-                end
-                if note_micro_time:is_selected() then
-                  note_micro_time:decrement()
-                  channel.step_micro_time_masks[step] = note_micro_time:get_value()
-                  if channel.step_micro_time_masks[step] < 0 then
-                    channel.step_micro_time_masks[step] = nil
-                  end
-                end
-                if note_trig_selector:is_selected() then
-                  note_trig_selector:decrement()
-                  channel.step_trig_masks[step] = note_trig_selector:get_value()
-                  if channel.step_trig_masks[step] < 0 then
-                    channel.step_trig_masks[step] = nil
                   end
                 end
                 if note_chord_1:is_selected() then
@@ -927,7 +909,10 @@ function channel_edit_page_ui_controller.enc(n, d)
     for i = 1, math.abs(d) do
       if d > 0 then
         if channel_pages:get_selected_page() == channel_page_to_index["Notes"] and program.get().selected_channel ~= 17 then
-          if note_value_selector:is_selected() then
+          if note_trig_selector:is_selected() then
+            note_trig_selector:deselect()
+            note_value_selector:select()
+          elseif note_value_selector:is_selected() then
             note_value_selector:deselect()
             note_velocity_selector:select()
           elseif note_velocity_selector:is_selected() then
@@ -935,12 +920,6 @@ function channel_edit_page_ui_controller.enc(n, d)
             note_length_selector:select()
           elseif note_length_selector:is_selected() then
             note_length_selector:deselect()
-            note_micro_time:select()
-          elseif note_micro_time:is_selected() then
-            note_micro_time:deselect()
-            note_trig_selector:select()
-          elseif note_trig_selector:is_selected() then
-            note_trig_selector:deselect()
             note_chord_1:select()
           elseif note_chord_1:is_selected() then
             note_chord_1:deselect()
@@ -997,21 +976,18 @@ function channel_edit_page_ui_controller.enc(n, d)
         end
       else
         if channel_pages:get_selected_page() == channel_page_to_index["Notes"] and program.get().selected_channel ~= 17 then
-          if note_velocity_selector:is_selected() then
+          if note_value_selector:is_selected() then
+            note_value_selector:deselect()
+            note_trig_selector:select()
+          elseif note_velocity_selector:is_selected() then
             note_velocity_selector:deselect()
             note_value_selector:select()
           elseif note_length_selector:is_selected() then
             note_length_selector:deselect()
             note_velocity_selector:select()
-          elseif note_micro_time:is_selected() then
-            note_micro_time:deselect()
-            note_length_selector:select()
-          elseif note_trig_selector:is_selected() then
-            note_trig_selector:deselect()
-            note_micro_time:select()
           elseif note_chord_1:is_selected() then
             note_chord_1:deselect()
-            note_trig_selector:select()
+            note_length_selector:select()
           elseif note_chord_2:is_selected() then
             note_chord_2:deselect()
             note_chord_1:select()
@@ -1191,7 +1167,6 @@ function channel_edit_page_ui_controller.refresh_notes()
   note_value_selector:set_value(note_value)
   note_velocity_selector:set_value(velocity_value)
   note_length_selector:set_value(length_value)
-  note_micro_time:set_value(micro_time_value)
   note_trig_selector:set_value(trig_value)
   note_chord_1:set_value(chord_1_value)
   note_chord_2:set_value(chord_2_value)
