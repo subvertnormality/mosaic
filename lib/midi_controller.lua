@@ -40,10 +40,26 @@ function handle_midi_event_data(data, midi_device)
     if midi_tables[data[2]] == nil then
       return
     end
-    midi_off_store[data[2]] = channel.step_scale_number
-    local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, channel.step_scale_number)
-    midi_controller:note_on(note, velocity, midi_channel, device.midi_device)
 
+
+    local step_scale_number = channel.step_scale_number
+
+    local pressed_keys = grid_controller.get_pressed_keys()
+    local channel = program.get_selected_channel()
+    if #pressed_keys > 0 then
+      if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+
+        local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+        step_scale_number = step_handler.manually_calculate_step_scale_number(channel.number, step)
+
+      end
+    end
+
+    midi_off_store[data[2]] = step_scale_number
+    
+    local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, step_scale_number)
+    midi_controller:note_on(note, velocity, midi_channel, device.midi_device)
+    channel_edit_page_controller.handle_note_on_midi_controller_message(note, velocity)
   elseif data[1] == 128 then -- note off
     if midi_tables[data[2]] == nil then
       return

@@ -253,6 +253,10 @@ function clock_controller.set_channel_division(channel_number, division)
   clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor:set_division(1 / (division * 4))
 end
 
+function clock_controller.get_channel_division(channel_number)
+  return clock_controller["channel_" .. channel_number .. "_clock"] and clock_controller["channel_" .. channel_number .. "_clock"].division or 0.4
+end
+
 function clock_controller.delay_action(c, division_index, multiplier, func)
   
   if division_index == 0 or division_index == nil then

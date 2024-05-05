@@ -564,6 +564,23 @@ function channel_edit_page_controller.register_press_handlers()
   )
 end
 
+function channel_edit_page_controller.handle_note_on_midi_controller_message(note, velocity)
+  local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
+  if #pressed_keys > 0 then
+    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+
+      local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+
+      channel.step_trig_masks[step] = 1
+      channel.step_note_masks[step] = note
+      channel.step_velocity_masks[step] = velocity
+      channel_edit_page_ui_controller.refresh_notes()
+
+    end
+  end
+end
+
 function channel_edit_page_controller.refresh_merge_buttons()
   local trig_merge_mode = program.get_selected_channel().trig_merge_mode
   local note_merge_mode = program.get_selected_channel().note_merge_mode

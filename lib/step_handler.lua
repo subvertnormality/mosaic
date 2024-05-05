@@ -193,9 +193,9 @@ function step_handler.calculate_next_selected_sequencer_pattern()
   return last_active_previous_sequencer_pattern
 end
 
-function step_handler.calculate_step_scale_number(c, current_step)
+function step_handler.calculate_step_scale_number(c, step)
   local channel = program.get_channel(c)
-  local channel_step_scale_number = program.get_step_scale_trig_lock(channel, current_step)
+  local channel_step_scale_number = program.get_step_scale_trig_lock(channel, step)
 
   if c == 17 then
     channel_step_scale_number = nil
@@ -207,7 +207,7 @@ function step_handler.calculate_step_scale_number(c, current_step)
 
   local global_default_scale = program.get().default_scale
 
-  if current_step == fn.calc_grid_count(program.get_channel(c).start_trig[1], program.get_channel(c).start_trig[2]) then
+  if step == fn.calc_grid_count(program.get_channel(c).start_trig[1], program.get_channel(c).start_trig[2]) then
     persistent_channel_step_scale_numbers[c] = nil
   end
 
@@ -230,6 +230,43 @@ function step_handler.calculate_step_scale_number(c, current_step)
     return 0
   end
 end
+
+function step_handler.manually_calculate_step_scale_number(c, step)
+
+  local channel = program.get_channel(c)
+  local channel_step_scale_number = program.get_step_scale_trig_lock(channel, step)
+
+  if c == 17 then
+    channel_step_scale_number = nil
+  end
+
+  local global_step_scale_number =
+    program.get_step_scale_trig_lock(program.get_channel(17), program.get_current_step_for_channel(17))
+
+  local global_default_scale = program.get().default_scale
+
+  for i = 1, step do
+    channel_step_scale_number = program.get_step_scale_trig_lock(channel, i) or channel_step_scale_number or nil
+  end
+
+  local global_scale_step = math.floor(step / (clock_controller.get_channel_division(17) * 4 * 4))
+
+  for i = 1, global_scale_step do
+    global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), i) or global_step_scale_number or nil
+  end
+
+  -- Scale Precedence : channel_step_scale > global_step_scale > global_default_scale
+  if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
+    return channel_step_scale_number
+  elseif global_step_scale_number and global_step_scale_number > 0 then
+    return global_step_scale_number
+  elseif global_default_scale and global_default_scale > 0 and program.get_scale(global_default_scale).scale then
+    return global_default_scale
+  else
+    return 0
+  end
+end
+
 
 function step_handler.calculate_step_transpose(current_step, c)
   local step_transpose = program.get_step_transpose_trig_lock(current_step)
