@@ -86,10 +86,7 @@ function channel_sequencer_page_ui_controller.enc(n, d)
     for i = 1, math.abs(d) do
       if d > 0 then
         if pages:get_selected_page() == 1 then
-          if song_mode_selector:is_selected() then
-            song_mode_selector:deselect()
-            pattern_repeat_selector:select()
-          elseif pattern_repeat_selector:is_selected() then
+          if pattern_repeat_selector:is_selected() then
             pattern_repeat_selector:deselect()
             song_mode_selector:select()
           end
@@ -101,9 +98,6 @@ function channel_sequencer_page_ui_controller.enc(n, d)
           if song_mode_selector:is_selected() then
             song_mode_selector:deselect()
             pattern_repeat_selector:select()
-          elseif pattern_repeat_selector:is_selected() then
-            pattern_repeat_selector:deselect()
-            song_mode_selector:select()
           end
         elseif pages:get_selected_page() == 3 then
           grid_viewer:prev_channel()

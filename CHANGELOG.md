@@ -6,6 +6,7 @@
 * Note Masks: It's possible to set notes, velocities, and lengths, directly from the channel page, overwriting pattern values
 * Note Masks: Chords promoted to dedicated page
 * It's now possible to sync elektron devices with Mosaic's song mode. Patterns will be selected based on the currently selected Mosaic song pattern
+* UI elements no long wrap when selecting horizontally
 
 # 0.4.4
 

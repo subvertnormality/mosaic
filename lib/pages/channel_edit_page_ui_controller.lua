@@ -636,7 +636,7 @@ function channel_edit_page_ui_controller.enc(n, d)
             rotation_vertical_scroll_selector:scroll_down()
           end
           channel_edit_page_ui_controller.update_scale()
-        elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] or scales_pages:get_selected_page() == scales_page_to_index["Clock Mods"] then
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] and program.get().selected_channel ~= 17 then
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:decrement()
             save_confirm.set_save(
@@ -649,9 +649,6 @@ function channel_edit_page_ui_controller.enc(n, d)
                 channel_edit_page_ui_controller.refresh_clock_mods()
               end
             )
-          end
-          if program.get().selected_channel == 17 then
-            return
           end
           if clock_swing_value_selector:is_selected() then
             clock_swing_value_selector:increment()
@@ -666,7 +663,21 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             )
           end
-        elseif program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
+        elseif scales_pages:get_selected_page() == scales_page_to_index["Clock Mods"] and program.get().selected_channel == 17 then
+          if clock_mod_list_selector:is_selected() then
+            clock_mod_list_selector:decrement()
+            save_confirm.set_save(
+              function()
+                channel_edit_page_ui_controller.update_clock_mods()
+              end
+            )
+            save_confirm.set_cancel(
+              function()
+                channel_edit_page_ui_controller.refresh_clock_mods()
+              end
+            )
+          end
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] and program.get().selected_channel ~= 17 then
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:scroll_down()
           end
@@ -690,7 +701,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               channel_edit_page_ui_controller.throttled_refresh_channel_config()
             end
           )
-        elseif program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] and program.get().selected_channel ~= 17 then
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_down()
             save_confirm.set_save(
@@ -713,7 +724,7 @@ function channel_edit_page_ui_controller.enc(n, d)
           end
         end
       else
-        if program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Notes"] then
+        if channel_pages:get_selected_page() == channel_page_to_index["Notes"] and program.get().selected_channel ~= 17 then
           local pressed_keys = grid_controller.get_pressed_keys()
           if #pressed_keys > 0 then
             if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
@@ -805,7 +816,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             end
           end
-        elseif program.get().selected_channel == 17 and scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] then
+        elseif scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] and program.get().selected_channel == 17 then
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:scroll_up()
             channel_edit_page_ui_controller.refresh_romans()
@@ -820,7 +831,7 @@ function channel_edit_page_ui_controller.enc(n, d)
             rotation_vertical_scroll_selector:scroll_up()
           end
           channel_edit_page_ui_controller.update_scale()
-        elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] or scales_pages:get_selected_page() == scales_page_to_index["Clock Mods"] then
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] and program.get().selected_channel ~= 17 then
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:increment()
             save_confirm.set_save(
@@ -833,9 +844,6 @@ function channel_edit_page_ui_controller.enc(n, d)
                 channel_edit_page_ui_controller.refresh_clock_mods()
               end
             )
-          end
-          if program.get().selected_channel == 17 then
-            return
           end
           if clock_swing_value_selector:is_selected() then
             clock_swing_value_selector:decrement()
@@ -850,7 +858,22 @@ function channel_edit_page_ui_controller.enc(n, d)
               end
             )
           end
-        elseif program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
+        elseif scales_pages:get_selected_page() == scales_page_to_index["Clock Mods"] and program.get().selected_channel == 17 then
+          if clock_mod_list_selector:is_selected() then
+            clock_mod_list_selector:increment()
+            save_confirm.set_save(
+              function()
+                channel_edit_page_ui_controller.update_clock_mods()
+              end
+            )
+            save_confirm.set_cancel(
+              function()
+                channel_edit_page_ui_controller.refresh_clock_mods()
+              end
+            )
+          end
+
+        elseif  channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] and program.get().selected_channel ~= 17 then
           if midi_device_vertical_scroll_selector:is_selected() then
             midi_device_vertical_scroll_selector:scroll_up()
           end
@@ -874,7 +897,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               channel_edit_page_ui_controller.throttled_refresh_channel_config()
             end
           )
-        elseif program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] and program.get().selected_channel ~= 17then
           if trig_lock_page:is_sub_page_enabled() then
             param_select_vertical_scroll_selector:scroll_up()
             save_confirm.set_save(
@@ -903,7 +926,7 @@ function channel_edit_page_ui_controller.enc(n, d)
   if n == 2 then
     for i = 1, math.abs(d) do
       if d > 0 then
-        if program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Notes"] then
+        if channel_pages:get_selected_page() == channel_page_to_index["Notes"] and program.get().selected_channel ~= 17 then
           if note_value_selector:is_selected() then
             note_value_selector:deselect()
             note_velocity_selector:select()
@@ -928,12 +951,9 @@ function channel_edit_page_ui_controller.enc(n, d)
           elseif note_chord_3:is_selected() then
             note_chord_3:deselect()
             note_chord_4:select()
-          elseif note_chord_4:is_selected() then
-            note_chord_4:deselect()
-            note_value_selector:select()
           end
       
-        elseif program.get().selected_channel == 17 and scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] then
+        elseif scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] and program.get().selected_channel == 17 then
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:deselect()
             romans_vertical_scroll_selector:select()
@@ -943,54 +963,41 @@ function channel_edit_page_ui_controller.enc(n, d)
           elseif notes_vertical_scroll_selector:is_selected() then
             notes_vertical_scroll_selector:deselect()
             quantizer_vertical_scroll_selector:select()
-          elseif rotation_vertical_scroll_selector:is_selected() then
-            rotation_vertical_scroll_selector:deselect()
-            notes_vertical_scroll_selector:select()
           end
-        elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] or scales_pages:get_selected_page() == scales_page_to_index["Clock Mods"] then
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] and program.get().selected_channel ~= 17 then
           if clock_mod_list_selector:is_selected() then
             clock_mod_list_selector:deselect()
             clock_swing_value_selector:select()
-          elseif clock_swing_value_selector:is_selected() then
-            clock_swing_value_selector:deselect()
-            clock_mod_list_selector:select()
           end
-        elseif program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
+        elseif scales_pages:get_selected_page() == scales_page_to_index["Clock Mods"] and program.get().selected_channel == 17 then
+          clock_mod_list_selector:select()
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] and program.get().selected_channel ~= 17 then
           local device =
             fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
-          if midi_device_vertical_scroll_selector:is_selected() then
-            midi_device_vertical_scroll_selector:deselect()
-            device_map_vertical_scroll_selector:select()
-          elseif midi_channel_vertical_scroll_selector:is_selected() then
-            midi_channel_vertical_scroll_selector:deselect()
+          if midi_channel_vertical_scroll_selector:is_selected() then
             if (device.default_midi_device == nil) then
+              midi_channel_vertical_scroll_selector:deselect()
               midi_device_vertical_scroll_selector:select()
-            else
-              device_map_vertical_scroll_selector:select()
             end
           elseif device_map_vertical_scroll_selector:is_selected() then
-            device_map_vertical_scroll_selector:deselect()
             if (device.default_midi_channel == nil) then
+              device_map_vertical_scroll_selector:deselect()
               midi_channel_vertical_scroll_selector:select()
             else
               if (device.default_midi_device == nil) then
+                device_map_vertical_scroll_selector:deselect()
                 midi_device_vertical_scroll_selector:select()
-              else
-                device_map_vertical_scroll_selector:select()
               end
             end
           end
-        elseif program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] and program.get().selected_channel ~= 17 then
           if not trig_lock_page:is_sub_page_enabled() then
             dials:scroll_next()
           end
         end
       else
-        if program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Notes"] then
-          if note_value_selector:is_selected() then
-            note_value_selector:deselect()
-            note_chord_4:select()
-          elseif note_velocity_selector:is_selected() then
+        if channel_pages:get_selected_page() == channel_page_to_index["Notes"] and program.get().selected_channel ~= 17 then
+          if note_velocity_selector:is_selected() then
             note_velocity_selector:deselect()
             note_value_selector:select()
           elseif note_length_selector:is_selected() then
@@ -1015,54 +1022,40 @@ function channel_edit_page_ui_controller.enc(n, d)
             note_chord_4:deselect()
             note_chord_3:select()
           end
-        elseif program.get().selected_channel == 17 and scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] then
+        elseif scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] and program.get().selected_channel == 17 then
           if quantizer_vertical_scroll_selector:is_selected() then
             quantizer_vertical_scroll_selector:deselect()
             notes_vertical_scroll_selector:select()
           elseif romans_vertical_scroll_selector:is_selected() then
             romans_vertical_scroll_selector:deselect()
             quantizer_vertical_scroll_selector:select()
-          elseif notes_vertical_scroll_selector:is_selected() then
-            notes_vertical_scroll_selector:deselect()
-            rotation_vertical_scroll_selector:select()
           elseif rotation_vertical_scroll_selector:is_selected() then
             rotation_vertical_scroll_selector:deselect()
             romans_vertical_scroll_selector:select()
           end
-        elseif program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
-          if clock_mod_list_selector:is_selected() then
-            clock_mod_list_selector:deselect()
-            clock_swing_value_selector:select()
-          elseif clock_swing_value_selector:is_selected() then
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] and program.get().selected_channel ~= 17 then
+          if clock_swing_value_selector:is_selected() then
             clock_swing_value_selector:deselect()
             clock_mod_list_selector:select()
           end
-        elseif program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
+        elseif scales_pages:get_selected_page() == scales_page_to_index["Clock Mods"] and program.get().selected_channel == 17 then
+          clock_mod_list_selector:select()
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] and program.get().selected_channel ~= 17 then
           local device =
             fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
           if midi_device_vertical_scroll_selector:is_selected() then
-            midi_device_vertical_scroll_selector:deselect()
             if (device.default_midi_channel == nil) then
+              midi_device_vertical_scroll_selector:deselect()
               midi_channel_vertical_scroll_selector:select()
-            else
+            elseif (device.default_midi_device == nil) then
+              midi_device_vertical_scroll_selector:deselect()
               device_map_vertical_scroll_selector:select()
             end
           elseif midi_channel_vertical_scroll_selector:is_selected() then
-            midi_channel_vertical_scroll_selector:deselect()
-            device_map_vertical_scroll_selector:select()
-          elseif device_map_vertical_scroll_selector:is_selected() then
-            device_map_vertical_scroll_selector:deselect()
-            if (device.default_midi_device == nil) then
-              midi_device_vertical_scroll_selector:select()
-            else
-              if (device.default_midi_channel == nil) then
-                midi_channel_vertical_scroll_selector:select()
-              else
-                device_map_vertical_scroll_selector:select()
-              end
-            end
+              midi_channel_vertical_scroll_selector:deselect()
+              device_map_vertical_scroll_selector:select()
           end
-        elseif program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
+        elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] and program.get().selected_channel ~= 17 then
           if not trig_lock_page:is_sub_page_enabled() then
             dials:scroll_previous()
           end
