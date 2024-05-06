@@ -23,6 +23,8 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
   local pattern_channel = program.get_selected_sequencer_pattern().channels[channel]
   local patterns = program.get_selected_sequencer_pattern().patterns
 
+  merged_pattern.merged_notes = {}
+
   for i = 1, 64 do
     notes[i] = {}
     lengths[i] = {}
@@ -117,7 +119,7 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
 
   end
 
-  local function do_mode_calculation(mode, s, values, merged_values, fn)
+  local function do_mode_calculation(mode, s, values, merged_values)
     if mode == "up" or mode == "down" or mode == "average" then
       if not values[s] or #values[s] == 0 then
         merged_values[s] = 0
@@ -129,10 +131,13 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
         local average = fn.average_table_values(values[s])
         if mode == "up" then
           merged_values[s] = average + (max_value - min_value)
+          merged_pattern.merged_notes[s] = true
         elseif mode == "down" then
           merged_values[s] = min_value - (average - min_value)
+          merged_pattern.merged_notes[s] = true
         elseif mode == "average" then
           merged_values[s] = average
+          merged_pattern.merged_notes[s] = true
         end
       end
     end
@@ -143,9 +148,9 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
       if velocity_merge_mode == "up" or velocity_merge_mode == "down" then table.sort(velocities[s]) end
       if length_merge_mode == "up" or length_merge_mode == "down" then table.sort(lengths[s]) end
   
-      do_mode_calculation(note_merge_mode, s, notes, merged_pattern.note_values, fn)
-      do_mode_calculation(velocity_merge_mode, s, velocities, merged_pattern.velocity_values, fn)
-      do_mode_calculation(length_merge_mode, s, lengths, merged_pattern.lengths, fn)
+      do_mode_calculation(note_merge_mode, s, notes, merged_pattern.note_values)
+      do_mode_calculation(velocity_merge_mode, s, velocities, merged_pattern.velocity_values)
+      do_mode_calculation(length_merge_mode, s, lengths, merged_pattern.lengths)
 
 
       -- Override trig with the channel's set trig mask

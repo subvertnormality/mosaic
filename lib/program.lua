@@ -1,5 +1,6 @@
 local musicutil = require("musicutil")
 local fn = include("mosaic/lib/functions")
+local quantiser = include("mosaic/lib/quantiser")
 
 local program = {}
 local program_store = {}
@@ -72,6 +73,8 @@ local function initialise_default_sequencer_pattern()
   local sequencer_pattern = {}
   local root_note = 0
 
+  local c_major = quantiser.get_scale(1)
+
   sequencer_pattern = {
     active = false,
     global_pattern_length = 64,
@@ -80,22 +83,22 @@ local function initialise_default_sequencer_pattern()
     patterns = initialise_default_patterns(),
     channels = initialise_default_channels(),
     scales = {
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0}
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
     }
   }
 

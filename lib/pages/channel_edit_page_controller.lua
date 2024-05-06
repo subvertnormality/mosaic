@@ -305,7 +305,7 @@ function channel_edit_page_controller.register_press_handlers()
   press_handler:register_long(
     "channel_edit_page",
     function(x, y)
-      if channel_scale_fader:is_this(x, y) then
+      if channel_scale_fader:is_this(x, y) and program.get().selected_channel == 17 then
         channel_scale_fader:press(x, y)
         local scale_value = channel_scale_fader:get_value()
         local number = program.get_scale(scale_value).number

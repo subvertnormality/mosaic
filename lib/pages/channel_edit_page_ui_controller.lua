@@ -392,6 +392,7 @@ function channel_edit_page_ui_controller.update_scale()
           {
             number = scale.number,
             scale = scale.scale,
+            pentatonic_scale = scale.pentatonic_scale,
             chord = chord,
             root_note = root_note,
             chord_degree_rotation = rotation
@@ -407,6 +408,7 @@ function channel_edit_page_ui_controller.update_scale()
           {
             number = scale.number,
             scale = scale.scale,
+            pentatonic_scale = scale.pentatonic_scale,
             chord = chord,
             root_note = root_note,
             chord_degree_rotation = rotation

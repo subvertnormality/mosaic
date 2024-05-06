@@ -476,7 +476,16 @@ function step_handler.handle(c, current_step)
       end
     else
       note_value = note_value + random_shift
-      note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number)
+
+      local do_pentatonic = false
+      print(channel.working_pattern.merged_notes[current_step])
+      if (params:get("all_scales_lock_to_pentatonic") == 2 or 
+        (params:get("merged_lock_to_pentatonic") == 2 and channel.working_pattern.merged_notes[current_step]) or
+        (params:get("random_lock_to_pentatonic") == 2 and random_shift > 0)
+      ) then
+        do_pentatonic = true
+      end
+      note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number, do_pentatonic)
     end
 
 

@@ -197,7 +197,7 @@ function init()
     end
   )
 
-  params:add_group("mosaic", "MOSAIC", 21)
+  params:add_group("mosaic", "MOSAIC", 22)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -245,6 +245,9 @@ function init()
   params:add_separator("Quantiser")
   params:add_option("quantiser_act_on_note_masks", "Quantise note masks", {"Off", "On"}, 2)
   params:add_option("quantiser_trig_lock_hold", "Scales lock until ptn end", {"Off", "On"}, 2)
+  params:add_option("all_scales_lock_to_pentatonic", "Lock all to pentatonic", {"Off", "On"}, 1)
+  params:add_option("random_lock_to_pentatonic", "Lock random to pent.", {"Off", "On"}, 2)
+  params:add_option("merged_lock_to_pentatonic", "Lock merged to pent.", {"Off", "On"}, 2)
   params:add_separator("Midi control")
   params:add_option("midi_scale_mapped_to_white_keys", "Map scale to white keys", {"Off", "On"}, 1)
   params:add_option("midi_honour_rotation", "Honour scale rotations", {"Off", "On"}, 1)
