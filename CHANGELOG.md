@@ -14,6 +14,9 @@ _Breaking update. Please backup and remove your .pset and .ptn data files from p
 * Param on/off options are now in a sensible order
 * Digitakt 2 config file added
 * N.B. note players must now be allow listed before being loaded to prevent crashes
+* Added option to lock all notes to pentatonic versions of each scale
+* Added option to lock merged notes to pentatonic versions of each scale
+* Added option to lock random notes to pentatonic versions of each scale
 
 # 0.4.4
 

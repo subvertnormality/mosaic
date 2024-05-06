@@ -440,6 +440,69 @@ function test_bipolar_random_note_param_lock()
 
 end
 
+
+function test_bipolar_random_note_param_lock_when_pentatonic_option_is_selected()
+
+  setup()
+  mock_random()
+
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  local scale = quantiser.get_scales()[1]
+
+  local test_step = 1
+  local cc_msb = 2
+  local shift = 1
+  local c = 1
+
+  test_pattern.note_values[test_step] = 2
+  test_pattern.lengths[test_step] = 1
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  program.get().selected_channel = c
+
+  program.set_scale(
+    2,
+    {
+      number = 1,
+      scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
+      chord = 1,
+      root_note = 2
+    }
+  )
+
+  program.get().default_scale = 2
+
+  local channel = program.get_selected_channel()
+
+  channel.trig_lock_params[1].id = "bipolar_random_note"
+
+  params:set("all_scales_lock_to_pentatonic", 1)
+  params:set("random_lock_to_pentatonic", 2)
+
+  program.add_step_param_trig_lock(test_step, 1, shift)
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+
+  progress_clock_by_beats(test_step - 1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 66)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
+
 function test_twos_random_note_param_lock()
 
   setup()

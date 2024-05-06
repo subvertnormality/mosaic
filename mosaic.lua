@@ -197,7 +197,7 @@ function init()
     end
   )
 
-  params:add_group("mosaic", "MOSAIC", 22)
+  params:add_group("mosaic", "MOSAIC", 24)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(

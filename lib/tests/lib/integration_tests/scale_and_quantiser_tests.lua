@@ -421,6 +421,122 @@ function test_global_default_scale_setting_quantises_notes_properly()
     luaunit.assert_equals(note_on_event[3], 1)
   end
 
+
+  function test_channel_default_scale_setting_quantises_notes_properly_when_pentatonic_merged_notes()
+    setup()
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+    local test_pattern_2 = program.initialise_default_pattern()
+    local channel = 11
+    local scale = quantiser.get_scales()[1]
+
+    params:set("all_scales_lock_to_pentatonic", 1)
+    params:set("merged_lock_to_pentatonic", 2)
+
+    program.get_channel(channel).trig_merge_mode = "all"
+    program.get_channel(channel).note_merge_mode = "down"
+  
+    program.set_scale(
+      2,
+      {
+        number = 1,
+        scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
+        chord = 1,
+        root_note = 2
+      }
+    )
+  
+    program.get().default_scale = 2
+  
+  
+    test_pattern.note_values[1] = 0
+    test_pattern.lengths[1] = 1
+    test_pattern.trig_values[1] = 1
+    test_pattern.velocity_values[1] = 100
+
+    test_pattern.note_values[2] = 1
+    test_pattern.lengths[2] = 1
+    test_pattern.trig_values[2] = 1
+    test_pattern.velocity_values[2] = 100
+
+    test_pattern.note_values[3] = 2
+    test_pattern.lengths[3] = 1
+    test_pattern.trig_values[3] = 1
+    test_pattern.velocity_values[3] = 100
+
+    test_pattern.note_values[4] = 3
+    test_pattern.lengths[4] = 1
+    test_pattern.trig_values[4] = 1
+    test_pattern.velocity_values[4] = 100
+
+
+    test_pattern_2.note_values[1] = 2
+    test_pattern_2.lengths[1] = 1
+    test_pattern_2.trig_values[1] = 1
+    test_pattern_2.velocity_values[1] = 100
+
+    test_pattern_2.note_values[2] = 3
+    test_pattern_2.lengths[2] = 1
+    test_pattern_2.trig_values[2] = 1
+    test_pattern_2.velocity_values[2] = 100
+
+    test_pattern_2.note_values[3] = 4
+    test_pattern_2.lengths[3] = 1
+    test_pattern_2.trig_values[3] = 1
+    test_pattern_2.velocity_values[3] = 100
+
+    test_pattern_2.note_values[4] = 5
+    test_pattern_2.lengths[4] = 1
+    test_pattern_2.trig_values[4] = 1
+    test_pattern_2.velocity_values[4] = 100
+
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 2)
+
+
+    pattern_controller.update_working_patterns()
+  
+    clock_setup()
+  
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 62)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 62)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 66)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+  end
+
   function test_step_scale_trig_lock_quantises_notes_properly()
     setup()
     local sequencer_pattern = 1
