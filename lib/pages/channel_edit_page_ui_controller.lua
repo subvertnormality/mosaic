@@ -755,7 +755,6 @@ function channel_edit_page_ui_controller.enc(n, d)
                   if channel.step_chord_masks[step] == nil then
                     channel.step_chord_masks[step] = {}
                   end
-                  print(note_chord_1:get_value() )
                   if note_chord_1:get_value() < -14 or note_chord_1:get_value() == 0 then
                     channel.step_chord_masks[step][1] = nil
                   else

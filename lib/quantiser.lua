@@ -190,8 +190,10 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
     chord_rotation = scale_container.chord - 1
   end
 
+
   local scale = fn.deep_copy(scale_container.scale)
   local pentatonic = fn.deep_copy(scale_container.pentatonic_scale)
+
 
   if (do_degree) then
     if chord_rotation > 0 then

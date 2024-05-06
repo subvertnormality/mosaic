@@ -52,6 +52,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 1,
         root_note = 1
       }
@@ -96,6 +97,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 1,
         root_note = 1
       }
@@ -142,6 +144,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 2,
         root_note = 1
       }
@@ -152,6 +155,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 3,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 4,
         root_note = 1
       }
@@ -200,6 +204,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 2,
         root_note = 1
       }
@@ -210,6 +215,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 3,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 4,
         root_note = 1
       }
@@ -256,6 +262,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 1,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 1,
         root_note = 0
       }
@@ -266,6 +273,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 3,
         root_note = 0
       }
@@ -276,6 +284,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 3,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 5,
         root_note = 0
       }
@@ -363,6 +372,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 1,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 1,
         root_note = 0
       }
@@ -373,6 +383,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 3,
         root_note = 0
       }
@@ -383,6 +394,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 3,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 5,
         root_note = 0
       }
@@ -472,6 +484,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 1,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 1,
         root_note = 0
       }
@@ -482,6 +495,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 3,
         root_note = 0
       }
@@ -492,6 +506,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 3,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 5,
         root_note = 0
       }
@@ -579,6 +594,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     {
       number = 2,
       scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
       chord = 1,
       root_note = 1
     }
@@ -623,6 +639,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
     {
       number = 2,
       scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
       chord = 1,
       root_note = 0, 
       chord_degree_rotation = 0
@@ -667,6 +684,7 @@ function test_chord_degree_rotation_with_negative_octave_mod()
     {
       number = 2,
       scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
       chord = 1,
       root_note = 0, 
       chord_degree_rotation = 0
@@ -715,6 +733,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
     {
       number = 2,
       scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
       chord = 1,
       root_note = 0, 
       chord_degree_rotation = 0
@@ -866,6 +885,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
     {
       number = 2,
       scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
       chord = 1,
       root_note = 0, 
       chord_degree_rotation = 0
