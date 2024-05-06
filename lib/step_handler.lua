@@ -210,6 +210,9 @@ function step_handler.calculate_step_scale_number(c, step)
   if step == fn.calc_grid_count(program.get_channel(c).start_trig[1], program.get_channel(c).start_trig[2]) then
     persistent_channel_step_scale_numbers[c] = nil
   end
+  if program.get_current_step_for_channel(17) == fn.calc_grid_count(program.get_channel(17).start_trig[1], program.get_channel(17).start_trig[2]) then
+    persistent_global_step_scale_number = nil
+  end
 
   -- Scale Precedence : channel_step_scale > global_step_scale > global_default_scale
   if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
@@ -519,8 +522,6 @@ function step_handler.handle(c, current_step)
     if not channel.mute then
       if not device.player then
 
-
-
         local note_container = {  
           note = note,
           velocity = velocity_value,
@@ -542,8 +543,6 @@ function step_handler.handle(c, current_step)
           end
         )
       else
-
-
 
         local note_container = {
           note = note,

@@ -53,6 +53,8 @@ local channel_octave_fader = fader:new(7, 8, 5, 5)
 local channel_scale_fader = fader:new(1, 3, 16, 16)
 local transpose_fader = fader:new(8, 8, 9, 17)
 
+local hide_scale_fader_leds = false
+
 function channel_edit_page_controller.init()
   if program.get_selected_channel() ~= 17 then
     for s = 1, 16 do
@@ -67,7 +69,15 @@ function channel_edit_page_controller.init()
   channel_scale_fader:set_pre_func(
     function(x, y, length)
       for i = x, length + x - 1 do
-        if i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
+        if hide_scale_fader_leds then
+          break
+        end
+        if clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
+          grid_abstraction.led(i, y, 15)
+        elseif clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number == 17 then
+          grid_abstraction.led(i, y, 15)
+          channel_scale_fader:set_value(0)
+        elseif not clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
           grid_abstraction.led(i, y, 15)
         elseif i == program.get().selected_scale and program.get_selected_channel().number == 17 then
           grid_abstraction.led(i, y, 4)
@@ -661,9 +671,7 @@ function channel_edit_page_controller.refresh_faders()
     end
     if step_scale_trig_lock then
       channel_scale_fader:set_value(step_scale_trig_lock)
-      if step == 1 and channel.number ~= 17 then
-        program.get().default_scale = step_scale_trig_lock
-      end
+      hide_scale_fader_leds = true
     elseif program.get().selected_channel ~= 17 then
       channel_scale_fader:set_value(0)
     else
@@ -686,6 +694,7 @@ function channel_edit_page_controller.refresh_faders()
     end
     channel_octave_fader:set_value(channel.octave + 3)
     transpose_fader:set_value(program.get_transpose() + 8)
+    hide_scale_fader_leds = false
   end
 end
 
