@@ -31,19 +31,19 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
     + [Song composition](#song-composition)
     + [Save and load](#save-and-load)
 - [Core concepts](#core-concepts)
-  * [Patterns](#pattern)
-  * [Channels](#channel)
-  * [Scales](#scale)
-    + [Global scales](#global-scale-editor)
-    + [Channel scales](#global-scale-editor)
-  * [Devices](#device)
+  * [Pattern](#pattern)
+  * [Channel](#channel)
+  * [Scale](#scale)
+    + [Global scale](#global-scale-editor)
+    + [Channel scale](#global-scale-editor)
+  * [Device](#device)
     + [Midi sound sources](#midi-sound-sources)
     + [Norns sound sources with n.b.](#norns-sound-sources-with-n-b)
-  * [Merge modes](#channel)
+  * [Merge mode](#channel)
   * [Song sequence](#song-sequence)
-  * [Trig parameters](#trig-params)
-  * [Trig locks](#trig-locks)
-    + [Sequencer locks](#trig-locks)
+  * [Trig parameter](#trig-params)
+  * [Trig lock](#trig-locks)
+    + [Sequencer lock](#trig-locks)
       - [Probability](#probability)
       - [Fixed note](#fixed-note)
       - [Quantised fixed note](#quantised-fixed-note)
@@ -126,7 +126,7 @@ You can customise _Mosaic_ to fit your studio set up precisely using custom devi
 
 #### Mods and software devices
 
-It is possible to use internal Norns sound sources and some devices that utilise Crow and it's related ecosystem by installing [n.b.](https://github.com/sixolet/nb/) mods. These appear in _Mosaic_'s device list when the mod is installed and enabled in the Norns setting menu. The n.b. mod must be in the allow list before it can be used with _Mosaic_. The follow mods are currently supported:
+It is possible to use internal Norns sound sources, utilise Crow and it's i2c related ecosystem such as Just Friends and Ansible by installing [n.b.](https://github.com/sixolet/nb/) mods. These appear in _Mosaic_'s device list when the mod is installed and enabled in the Norns setting menu. The n.b. mod must be in the allow list before it can be used with _Mosaic_. The follow mods are currently supported:
 
 * [nb_ansible](https://github.com/sixolet/nb_ansible) - Ansible voices.
 * [emplaitress](https://github.com/sixolet/emplaitress) - Gives four MI Plaits to use in parallel.
@@ -139,11 +139,11 @@ More to come soon!
 
 ### Getting around Mosaic
 
-TODO
-
 #### Grid menu navigation
 
-TODO
+The majority of navigation happens on the grid. The lower left five buttons at the main manu buttons. From left to right, you can navigate to the "[Channels](#channel)", "[Song sequence](#song-sequence) page", "[Pattern](#pattern) editor", "Notes page", and "Velocity page".
+
+
 
 #### Norns menu navigation
 
