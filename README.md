@@ -19,7 +19,7 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
     + [Rhythm section design](#pattern-design)
       - [Adding trigs](#adding-trigs)
       - [Adding notes](#adding-notes)
-      - [Adding velocity](#adding-notes)
+      - [Adding velocity](#adding-velocity)
     + [Harmony composition](#rhythm-and-harmony-composition)
       - [Adding patterns to channels](#adding-patterns-to-channels)
       - [Using merge modes](#using-merge-modes)
@@ -75,7 +75,7 @@ _Mosaic_ requires Monome Norns and a 128 Grid as a minimum. You can create simpl
 
 [Midi input](#midi-input) devices make the experience smoother, but aren't mandetory. A midi keyboard will make melody creation easier, and a midi controller with encoders that support relative bin offsets makes the data input process nicer.
 
-ALM [Sinfonion connect](#sinfonion-connect) is supported via a simple hardware build. This allows you to sync up _Mosaic_'s quantisation with the Sinfonion Eurorack module.
+ACL [Sinfonion connect](#sinfonion-connect) is supported via a simple hardware build. This allows you to sync up _Mosaic_'s quantisation with the Sinfonion Eurorack module.
 
 ### Midi device configuration
 
@@ -137,30 +137,42 @@ More to come soon!
 
 ## Typical workflow
 
+Were we walk you through _Mosaic_'s functionality and basic operations by describing a typical workflow for creating a song.
+
 ### Getting around Mosaic
 
 #### Grid menu navigation
 
-The majority of navigation happens on the grid. The lower left five buttons at the main manu buttons. From left to right, you can navigate to the "[Channels](#channel)", "[Song sequence](#song-sequence) page", "[Pattern](#pattern) editor", "Notes page", and "Velocity page".
+The majority of navigation happens on the grid. The lower left five buttons at the main manu buttons. From left to right, you can navigate to the "[Channels](#channel)", "[Song sequence](#song-sequence) page", "[Pattern](#pattern) editor", "[Notes](#adding-notes) page", and "[Velocity](#adding-velocity) page".
 
-
+[TODO: image of the grid outlining the navigation button section]
 
 #### Norns menu navigation
 
-TODO
+Each grid page has a set of pages represented on the Norns screen. The settings in these pages are designed to be set and forget, where possible. The pages can be navigated left and right using the [TODO] knob, and the various settings can be navigated vertically using the [TODO] knob.
+
+[TODO: image of norns device, with knobs highlighted for functionality]
 
 #### Sequencer start and stop
 
-TODO
+To start the sequencer simply hit the navigation button of the currently selected page - the lit button - in the navigation section.
+
+To stop the sequencer, hold down the currently selected page in the navigation section for a second.
 
 #### Midi panic
 
-TODO
+In the event you midi output devices get stuck, you can clear all midi-on events by holding down the currently selected page in the navigation section, whilst also pressing a non-selected page in the navigation section. This will send a stop event to all devices, on all channels, for all notes. 
 
 
 ### Sound design
 
-TODO
+The first step we typically undertake when creating a song is to create the fundamental elements of the song from a sound design basis. These initial attempts at sound design are unlikely to remain unchanged until the end of the song creation process, but they will provide a base from which to start sketching out the rhythmic, harmonic, and melodic elements of your composition.
+
+We begin by identifying the device we wish to use for certain elements. This could be an internal Norns player device, or perhaps an external drum machine, or elements of a modular patch. Whichever it may be, you need assign the device to a _Mosaic_ [channel](#channel). See the [device](#device) section for details on how to do this. You will find it helpful to group different instrumentation elements together. For example, we keep drums grouped to channels 1-6, harmonic and textural elements to channels 7-10, Melodic elements to 11-14, and reserve 15 and 16 for modulation channels. Whatever works for your specific song and music style is fine, of course.
+
+Once you have a selection of devices assigned to multiple channels, it's time to move onto the first part of the composition process.
+
+
 
 ### Harmony design
 
