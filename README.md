@@ -15,11 +15,8 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
       - [Sequencer start and stop](#sequencer-start-and-stop)
       - [Midi panic](#midi-panic)
     + [Sound design](#sound-design)
-    + [Chord progression design](#harmony-design)
-    + [Rhythm section design](#pattern-design)
-      - [Adding trigs](#adding-trigs)
-      - [Adding notes](#adding-notes)
-      - [Adding velocity](#adding-velocity)
+    + [Rhythm section design](#rhythm-section-design)
+    + [Harmony design](#harmony-design)
     + [Harmony composition](#rhythm-and-harmony-composition)
       - [Adding patterns to channels](#adding-patterns-to-channels)
       - [Using merge modes](#using-merge-modes)
@@ -32,10 +29,11 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
     + [Save and load](#save-and-load)
 - [Core concepts](#core-concepts)
   * [Pattern](#pattern)
+      - [Adding trigs](#adding-trigs)
+      - [Adding notes](#adding-notes)
+      - [Adding velocity](#adding-velocity)
   * [Channel](#channel)
   * [Scale](#scale)
-    + [Global scale](#global-scale-editor)
-    + [Channel scale](#global-scale-editor)
   * [Device](#device)
     + [Midi sound sources](#midi-sound-sources)
     + [Norns sound sources with n.b.](#norns-sound-sources-with-n-b)
@@ -137,11 +135,82 @@ We begin by identifying the device we wish to use for certain elements. This cou
 Once you have a selection of devices assigned to multiple channels, it's time to move onto the first part of the composition process.
 
 
-### Rhythm design
+### Rhythm section design
 
 Rhythm is composed using the [Pattern](#pattern) editor, accessed by pressing the third button in the main menu button cluster, bottom left of your grid. The pattern is a core concept in Mosaic. Think of it as a sequence of 64 trigs, 64 notes, 64 velocities, and length data for each trig. Each pattern spans 64 steps.
 
-The pattern editor gives you multiple tools to create complex rhythms. It's possible to manually enter trigs XOX style. Alternatively, you can select a pattern from banks of predefined bass, snare, and high hat patterns. If this isn't what you need, you can use eclidian patterns or patterns from noise engineering's Numeric Repetitor. Still not complex enough? You can mix up any of these patterns using a tresillo modifier, which utilises a 3-3-2 repeating pattern to spice up any rhythm. You can mix and match all of these types of rhythms using by selecting and "painting" them onto the grid.
+![Song sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_sequencer.png)
+
+The pattern editor gives you multiple tools to create complex rhythms. It's possible to manually enter trigs XOX style. Alternatively, you can select a pattern from banks of predefined bass, snare, and high hat patterns. If this isn't what you need, you can use eclidian patterns or patterns from noise engineering's Numeric Repetitor. Still not complex enough? You can mix up any of these patterns using a tresillo modifier, which utilises a 3-3-2 repeating pattern to spice up any rhythm. You can mix and match all of these types of rhythms using by selecting and "painting" them onto the grid. See [Adding trigs](#adding-trigs) to learn more about creating rhythms. 
+
+Once you have a pattern of trigs, you can the assign [notes](#adding-notes) and [velocity](#adding-velocity) information. These patterns will be combined and remixed to form your ryhthm and harmony sections later.
+
+### Harmony design
+
+Each project offers 16 scale slots. A single slot has a root note, a scale variation (e.g. Dorian, Major, etc), a degree setting, and a scale rotation. You can edit the scales in these slots using the scale editor. To enter the scale editor, first select the channel page by pressing the far left main menu button, then press any of the scale buttons.
+
+![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
+
+When in the scale editor, a short press of scale buttoms selects scale 1-16. The currently selected scale is dimly lit on the grid. You can then use the Norns UI to select the root, scale, degree and rotation for the selected scale. 
+
+A long press of one of the scale buttons selects the global scale when in the scale editor. The global scale is indicated by the brightly lit scale button. All [pattern](#pattern)s will default to this scale if there is no global scale trig lock or channel scale trig lock active.
+
+Since the scale editor acts as a [channel](#channel), in that it can have a separate tempo, length, and set of scale  locks. [Scale locks](#scale-locks) allow you to apply scales globally or just to one pattern, activating at your chosen step. To do this, hold a step and press the scale slot you want applied from this step onwards. When set on the scale page, this will apply globaly to all channels that do not have an active channel scale trig lock. When set on a channel's page, it will just apply to that channel. Scale locks set on a specific channel over-ride the global scale and any global scale locks. This flexibility paves the way for intricate chord progressions and the ability to add variation to patterns.
+
+To return to the channel edit page, press any of the channel buttons at the top of the grid.
+
+### Rhythm and harmony composition
+
+TODO
+
+#### Adding patterns to channels
+
+TODO
+
+#### Using merge modes
+
+TODO
+
+### Melody composition
+
+TODO
+
+#### Adding melodic notes over harmony and drums
+
+TODO
+
+#### Adding chords
+
+TODO
+
+#### Midi input
+
+TODO
+
+### Modulation, movement and interest
+
+TODO
+
+#### Sequencer trig locks
+
+TODO
+
+### Song composition
+
+TODO
+
+### Save and load
+
+TODO
+
+## Core concepts
+
+TODO
+
+### Patterns
+
+TODO
+
 
 #### Adding trigs
 
@@ -232,65 +301,6 @@ The velocity editor spans two vertical pages: the first displays velocities from
 
 On the norns screen you can see the channel grid visualiser. Use E2 to select the current channel.
 
-### Harmony design
-
-Each project offers 16 scale slots. A single slot has a root note, a scale variation (e.g. Dorian, Major, etc), a degree setting, and a scale rotation.
-
-TODO
-
-This flexibility paves the way for intricate chord progressions and the ability to add variation to patterns.
-
-### Rhythm and harmony composition
-
-TODO
-
-#### Adding patterns to channels
-
-TODO
-
-#### Using merge modes
-
-TODO
-
-### Melody composition
-
-TODO
-
-#### Adding melodic notes over harmony and drums
-
-TODO
-
-#### Adding chords
-
-TODO
-
-#### Midi input
-
-TODO
-
-### Modulation, movement and interest
-
-TODO
-
-#### Sequencer trig locks
-
-TODO
-
-### Song composition
-
-TODO
-
-### Save and load
-
-TODO
-
-## Core concepts
-
-TODO
-
-### Patterns
-
-TODO
 
 ### Channels
 
