@@ -130,7 +130,7 @@ In the event you midi output devices get stuck, you can clear all midi-on events
 
 ### Sound design
 
-The first step we typically undertake when creating a song is to create the fundamental elements of the song from a sound design basis. These initial attempts at sound design are unlikely to remain unchanged until the end of the song creation process, but they will provide a base from which to start sketching out the rhythmic, harmonic, and melodic elements of your composition.
+The first step we typically undertake is to create a few basic voices. These initial attempts at sound design are unlikely to remain unchanged until the end of the song creation process, but they will provide a base from which to start sketching out the rhythmic, harmonic, and melodic elements of your composition.
 
 We begin by identifying the device we wish to use for certain elements. This could be an internal Norns player device, or perhaps an external drum machine, or elements of a modular patch. Whichever it may be, you need assign the device to a _Mosaic_ [channel](#channel). See the [device](#device) section for details on how to do this. You will find it helpful to group different instrumentation elements together. For example, we keep drums grouped to channels 1-6, harmonic and textural elements to channels 7-10, Melodic elements to 11-14, and reserve 15 and 16 for modulation channels. Whatever works for your specific song and music style is fine, of course.
 
@@ -145,7 +145,7 @@ The pattern editor gives you multiple tools to create complex rhythms. It's poss
 
 #### Adding trigs
 
-Trigs are added in the pattern editor. You can tap directly on the sequencer to turn trigs on and off per step.
+Trigs are added in the pattern editor.
 
 ![Trig editor with a complex trig pattern](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor.png)
 
@@ -163,7 +163,6 @@ Craft unique rhythms using a variety of built-in algorithms.
 * button 2: The tresillo algorithm, utilising a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the norns screen for more variations.
 * button 3: Euclidian, a rhythm tool rooted in mathematical logic.
 * button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
-
 
 ![Algorithm select](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_algorithms.png)
 
@@ -206,7 +205,6 @@ Select the note edtior by pressing the fourth key in the main menu button cluste
 This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. The gentle flicker on the top row indicates the currently chosen pattern. If you wish to explore a different pattern, press and hold on this top row.
 
 Remember, each note you select links back to the root of the scale you're working within. The scale is applied to the channel, not the pattern. You must start to think about your patterns as being disconnected from each channel. This is why we say _Mosaic_ is an intentioned generative sequencer. Expect happy accidents. The channel grid viewer on the norns screen can help you here.
-
 
 ![Note select](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_note_selector.png)
 
