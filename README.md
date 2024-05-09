@@ -103,7 +103,8 @@ Mosaic can also use internal Norns sound sources and manage devices like Crow, J
 
 ## Typical workflow
 
-This section will guide you through Mosaic's functionality and basic operations, outlining a typical workflow for creating a song.
+This section provides an overview of Mosaic's functionality and basic operations, outlining a typical workflow for song creation. Here, we present a broad perspective without delving into the operational specifics. For more detailed information on navigating through the user interface, understanding precise functionalities, exploring options, and more, please refer to the [dig deeper](#dig-deeper) section. This should allow you to grasp the essential processes first, setting a solid foundation for more advanced exploration later.
+
 
 ### Getting around Mosaic
 
@@ -169,17 +170,21 @@ When assigning multiple patterns to a single channel, you might notice that over
 
 ### Melody composition
 
-The pattern tools empower you to create complex harmonic rhythm sections. However, you may now realise it's the [channel](#channel) editor that is the powerhouse of _Mosaic_. It allows you to not just utilise patterns, apply them to different scales, and merge them together in interesting ways, but also to augment these with melodies and interest afterwards too. Infact, it's possible to create entire songs using just the channel editor alone. This is done using [Masks](#masks). Masks let you enter trigs, notes, velocities, and chords directly onto the channel editor grid. 
+The pattern tools offer the ability to craft intricate rhythmic and harmonic sections. However, the true heart of Mosaic is the [channel editor](##channel-editor). This feature doesn't merely allow you to use patterns; it enables you to adapt them to various scales and combine them creatively. Additionally, you can enhance these patterns with melodies and other elements to further enrich your music. In fact, you can compose entire songs using just the channel editor, thanks to [Masks](#masks). Masks provide a direct method to input triggers, notes, velocities, and chords right into the channel editor grid, giving you precise control over your musical creations.
 
 
 ### Modulation, movement and interest
 
-A song with a solid chord progression, interesting rhythms, and knock-out melodies written on electronic devices can still end up sounding static and lifeless. The key, as you likely already know, is to add dynamics. movement, and interest through the use of copious but deliberate modulation. _Mosaic_ allows you to modulate your voices using [trig parameters](#trig-parameters) and trig locks. Trig locks are an Elektron term. It essentially means locking a parameter at a specific value on a step. You can lock any midi device parameter, mod parameter, the octave of a note, and the scale the note is quantised to.
+
+Even a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [trig parameters](#trig-parameters) and [Trig locks](#trig-locks). "Trig locks" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantized, offering precise manipulation over the dynamics of your music.o.
 
 
 ### Song composition
 
-TODO
+At this point, your sequence is likely "full to the brim," containing all the elements of your song in its most complex form. For those familiar with Elektron devices, this stage can feel like a precarious juncture, where it's tempting to fall into a cycle of making minor adjustments to the same pattern repeatedly. _Mosaic_ offers a solution with its [song sequencer](#song-sequencer), designed to help you break free from this procrastination loop.
+
+To access the song editor, press the second key in the global menu's Grid button cluster. You'll be greeted by a grid where the first button is dimly lit, indicating the sequence you are currently working on. The song editor allows you to take this sequence and creatively manipulate it: you can mute channels, modify scale locks, alter pattern combinations and merge modes, adjust masks, and more. This flexibility enables you to develop your composition from the base sequence upwards. As you become accustomed to this workflow, you'll find that you can construct an entire song from a single sequence, streamlining your creative process.
+
 
 ## Dig deeper
 
