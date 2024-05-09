@@ -34,30 +34,33 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
       - [Adding notes](#adding-notes)
       - [Adding velocity](#adding-velocity)
   * [Channel editor](#channel-editor)
-  * [Scale editor](#scale-editor)
-  * [Devices](#devices)
-    + [Midi sound sources](#midi-sound-sources)
-    + [Norns sound sources with n.b.](#norns-sound-sources-with-n-b)
-  * [Merge modes](#merge-modes)
-    + [Trig merge modes](#trig-merge-modes)
-    + [Note merge modes](#note-merge-modes)
-    + [Velocity merge modes](#velocity-merge-modes)
-    + [Length merge modes](#length-merge-modes)
+    + [Masks](#masks)
+    + [Merge modes](#merge-modes)
+      - [Trig merge modes](#trig-merge-modes)
+      - [Note merge modes](#note-merge-modes)
+      - [Velocity merge modes](#velocity-merge-modes)
+      - [Length merge modes](#length-merge-modes)
+    + [Clocks and swing](#trig-parameters)
+    + [Scale editor](#scale-editor)
+    + [Muting channels](#muting-channels)
+    + [Devices](#devices)
+      - [Midi sound sources](#midi-sound-sources)
+      - [Norns sound sources with n.b.](#norns-sound-sources-with-nb)
+    + [Trig parameters](#trig-parameters)
+      - [Sequencer params](#sequencer-params)
+        + [Trig probability](#trig-probability)
+        + [Fixed note](#fixed-note)
+        + [Quantised fixed note](#quantised-fixed-note)
+        + [Random note](#random-note)
+        + [Random twos note](#random-twos-note)
+        + [Chord strum](#chord-strum)
+        + [Chord Velocity Modifier](#chord-velocity-modifier)
+      - [Midi params](#trig-params)
+      - [Trig locks](#trig-locks)
+        + [Param locks](#param-locks)
+        + [Scale locks](#scale-locks)
+        + [Octave locks](#octave-locks)
   * [Song sequencer](#song-sequencer)
-  * [Trig parameters](#trig-parameters)
-    + [Sequencer params](#sequencer-params)
-      - [Trig probability](#trig-probability)
-      - [Fixed note](#fixed-note)
-      - [Quantised fixed note](#quantised-fixed-note)
-      - [Random note](#random-note)
-      - [Random twos note](#random-twos-note)
-      - [Chord strum](#chord-strum)
-      - [Chord Velocity Modifier](#chord-velocity-modifier)
-    + [Midi params](#trig-params)
-  * [Trig locks](#trig-locks)
-    + [Param locks](#param-locks)
-    + [Scale locks](#scale-locks)
-    + [Octave locks](#octave-locks)
   * [Options](#options)
     + [Elektron sync](#elektron-sync)
     + [Sinfonion connect](#sinfonion-connect)
@@ -97,14 +100,7 @@ Tailor Mosaic to fit your studio setup by configuring it for your specific devic
 
 #### Mods and software devices
 
-Mosaic can also use internal Norns sound sources and manage devices like Crow, Just Friends, and Ansible via i2c by installing [n.b.](https://github.com/sixolet/nb/) mods. These mods will appear in Mosaic's device list once installed and activated in the Norns settings menu. Ensure the n.b. mod is on the allow list to use with Mosaic. Supported mods include:
-
-* [nb_ansible](https://github.com/sixolet/nb_ansible) for Ansible voices.
-* [emplaitress](https://github.com/sixolet/emplaitress) offers four MI Plaits voices in parallel.
-* [nb_jf](https://github.com/sixolet/nb_jf) accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.
-* [nb_crow](https://github.com/sixolet/nb_crow) for Crow v/8 and envelope functions.
-
-More mods are expected to be supported soon.
+Mosaic can also use internal Norns sound sources and manage devices like Crow, Just Friends, and Ansible via i2c by installing [n.b.](https://github.com/sixolet/nb/) mods. These mods will appear in Mosaic's device list once installed and activated in the Norns settings menu. Ensure the n.b. mod is on the allow list to use with Mosaic. See [Norns sound sources with n.b.](#norns-sound-sources-with-nb) for more information.
 
 ## Typical workflow
 
@@ -114,7 +110,7 @@ This section will guide you through Mosaic's functionality and basic operations,
 
 #### Grid menu navigation
 
-Navigation within Mosaic primarily occurs via the Grid. The lower left five buttons serve as the global menu buttons. From left to right, these buttons allow access to the "[Channel](#channel) page", "[Song sequencer](#song-sequence) page", "[Pattern](#pattern) editor", "[Notes](#adding-notes) page", and "[Velocity](#adding-velocity) page".
+Navigation within Mosaic primarily occurs via the Grid. The lower left five buttons serve as the global menu buttons. From left to right, these buttons allow access to the "[Channel](#channel-editor) page", "[Song sequencer](#song-sequencer) page", "[Pattern](#pattern) editor", "[Notes](#adding-notes) page", and "[Velocity](#adding-velocity) page".
 
 ![The menu as shown on the pattern edit page](https://raw.githubusercontent.com/subvertnormality/mosaic/main/designs/Images/menu.png)
 
@@ -188,12 +184,12 @@ Experiment by assigning your various patterns to different channels. A single ch
 
 #### Using merge modes
 
-When assigning multiple patterns to a single channel, you might notice that overlapping steps in different patterns can deactivate. This occurs because the default "skip" merge mode is active. [Merge modes](#merge-mode) control the behavior of these overlaps, allowing the same pattern to be used across multiple channels while ensuring they interact in harmonically meaningful ways. Experiment with different merge modes to explore various musical interactions.
+When assigning multiple patterns to a single channel, you might notice that overlapping steps in different patterns deactivate. This occurs because the default "skip" merge mode is active. [Merge modes](#merge-mode) control the behavior of these overlaps, allowing patterns to be combined in different combinations across multiple channels whilst interacting in harmonically meaningful ways. Experiment with different merge modes to explore various musical interactions.
 
 
 ### Melody composition
 
-TODO
+The pattern tools empower you to create complex harmonic rhythm sections. However, it's the [channel](#channel) editor that is the powerhouse of _Mosaic_. It allows you to not just utilise patterns, apply them to different scales, and merge them together in interesting ways, but it's also possible to augmenting them afterwards too. Infact, it's possible to create entire songs using just the channel editor alone. This is done using [Masks](#masks). Masks let you enter trigs, notes, velocities, and chords directly onto the channel editor grid. This is especially useful for constructing melodies.
 
 #### Adding melodic notes over harmony and drums
 
@@ -229,7 +225,7 @@ TODO
 
 ### UI interaction patterns
 
-### Pattern editor
+### Pattern editing
 
 TODO
 
@@ -324,33 +320,22 @@ The velocity editor spans two vertical pages: the first displays velocities from
 On the norns screen you can see the channel grid visualiser. Use E2 to select the current channel.
 
 
-### Channel editor
+### Channel editing
 
 TODO
 
-### Scale editor
+#### Masks
 
 TODO
 
-### Devices
 
-TODO
-
-#### Midi sound sources
-
-TODO
-
-#### Norns sound sources with n.b.
-
-TODO
-
-### Merge modes
+#### Merge modes
 
 To determine how your patterns interact and meld within the composition, you'll need to use the merge mode selector. This feature enables nuanced control over how overlapping patterns in the same channel behave, impacting trigs, notes, velocity, and length.
 
 ![Merge mode selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_merge_mode.png)
 
-#### Trig merge modes
+##### Trig merge modes
 
 These modes define how trigs are activated when there are overlapping steps across selected patterns:
 
@@ -358,7 +343,7 @@ These modes define how trigs are activated when there are overlapping steps acro
 * Skip: Trigs will activate only if they appear in exactly one selected pattern. If a trig appears in multiple patterns, it won't activate.
 * Only: Trigs will activate only if they appear in more than one selected pattern, ignoring those that appear in just one.
 
-#### Note merge modes
+##### Note merge modes
 
 These modes determine how note values are handled when steps overlap:
 
@@ -369,7 +354,7 @@ These modes determine how note values are handled when steps overlap:
 
 By default, notes will snap to the pentatonic version of the currently active scale to assist with avoiding unpleasent harmonic interactions. This can be disabled in _Mosaic_'s settings.
 
-#### Velocity merge modes
+##### Velocity merge modes
 
 These settings affect how velocity values are calculated for overlapping steps:
 
@@ -378,7 +363,7 @@ These settings affect how velocity values are calculated for overlapping steps:
 * Lower: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and not adding the highest value back.
 * Pattern: To use a specific pattern’s velocity values, hold the velocity merge button and press the pattern's select button.
 
-#### Length Merge Modes
+##### Length Merge Modes
 
 These modes dictate how the duration of notes is calculated for overlapping steps:
 
@@ -387,9 +372,38 @@ These modes dictate how the duration of notes is calculated for overlapping step
 * Shorter: The length is calculated by subtracting the shortest length from the average of each step's length minus the shortest length.
 * Pattern: To apply a specific pattern’s length values, hold the length merge button and press the pattern's select button.
 
-### Song sequencer
+
+#### Clocks and swing
 
 TODO
+
+#### Scale editor
+
+TODO
+
+#### Muting channels
+
+TODO
+
+#### Devices
+
+TODO
+
+##### Midi sound sources
+
+TODO
+
+##### Norns sound sources with n.b.
+
+N.b. mods give _Mosaic_ the ability to sequence internal sound sources and device connected via Crow. Supported mods include:
+
+* [nb_ansible](https://github.com/sixolet/nb_ansible) for Ansible voices.
+* [emplaitress](https://github.com/sixolet/emplaitress) offers four MI Plaits voices in parallel.
+* [nb_jf](https://github.com/sixolet/nb_jf) accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.
+* [nb_crow](https://github.com/sixolet/nb_crow) for Crow v/8 and envelope functions.
+
+More mods are expected to be supported soon.
+
 
 ### Trig parameters
 
@@ -433,21 +447,27 @@ The Chord Velocity Modifier incrementally adjusts the velocity of successive not
 
 TODO
 
-### Trig locks
+#### Trig locks
 
 TODO
 
-#### Param locks
+##### Param locks
 
 TODO
 
-#### Scale locks
+##### Scale locks
 
 TODO
 
-#### Octave locks
+##### Octave locks
 
 TODO
+
+
+### Song sequencer
+
+TODO
+
 
 ### Options
 
