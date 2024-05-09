@@ -15,18 +15,12 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
       - [Sequencer start and stop](#sequencer-start-and-stop)
       - [Midi panic](#midi-panic)
     + [Sound design](#sound-design)
-    + [Rhythm section design](#rhythm-section-design)
+    + [Rhythm section composition](#rhythm-section-composition)
     + [Harmony design](#harmony-design)
     + [Harmony composition](#rhythm-and-harmony-composition)
-      - [Adding patterns to channels](#adding-patterns-to-channels)
-      - [Using merge modes](#using-merge-modes)
-      - [Adding chords](#adding-chords)
     + [Melody composition](#melody-composition)
-      - [Adding melodic notes over harmony and drums](#adding-melodic-notes-over-harmony-and-drums)
-      - [Midi input](#midi-input)
     + [Modulation, movement and interest](#modulation-movement-and-interest)
     + [Song composition](#song-composition)
-    + [Save and load](#save-and-load)
 - [Dig deeper](#dig-deeper)
   * [UI interaction patterns](#ui-interaction-patterns)
   * [Pattern editor](#pattern-editor)
@@ -34,7 +28,11 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
       - [Adding notes](#adding-notes)
       - [Adding velocity](#adding-velocity)
   * [Channel editor](#channel-editor)
+    + [Adding patterns to channels](#adding-patterns-to-channels)
     + [Masks](#masks)
+      - [Adding melodic notes over harmony and drums](#adding-melodic-notes-over-harmony-and-drums)
+      - [Adding chords](#adding-chords)
+      - [Midi input](#midi-input)
     + [Merge modes](#merge-modes)
       - [Trig merge modes](#trig-merge-modes)
       - [Note merge modes](#note-merge-modes)
@@ -61,6 +59,7 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
         + [Scale locks](#scale-locks)
         + [Octave locks](#octave-locks)
   * [Song sequencer](#song-sequencer)
+  * [Save and load](#save-and-load)
   * [Options](#options)
     + [Elektron sync](#elektron-sync)
     + [Sinfonion connect](#sinfonion-connect)
@@ -141,7 +140,7 @@ Start by selecting the device for each element of your composition, whether it b
 
 With your devices assigned, you're ready to begin the rhythm and harmony design process.
 
-### Rhythm section design
+### Rhythm section composition
 
 The rhythm of your track is crafted using the [Pattern editor](#pattern), accessible by pressing the third button in the global menu cluster located at the bottom left of your grid. A pattern in Mosaic is defined as a sequence composed of 64 trigs, notes, velocities, and duration data, spanning 64 steps.
 
@@ -156,31 +155,12 @@ _Mosaic_'s harmony tools enable you to compose your song's chordal progressions 
 
 Harmonic progressions can be applied globally — modulating all notes across all channels to the same key, degree, and scale rotation — or on a per-channel basis, affecting only the notes within that channel. This decoupling of patterns and notes from the active scale enables dynamic and experimental tonal modulations. For example, setting your global scale to change in a polyrhythmic pattern relative to your channel's note data can create captivating musical textures.
 
-Each project supports 16 scale slots. Each slot includes a root note, a scale type (e.g., Dorian, Major), a degree, and a scale rotation. Access the scale editor by selecting the channel page using the far left global menu button, then pressing any of the scale buttons.
-
-![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
-
-When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is dimly lit on the grid. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
-
-A long press on a scale button selects it as the global scale, indicated by a brightly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
-
-Scale locks can be set to apply a scale globally or to a single channel, activating at a designated step and persisting until the end of the pattern. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
-
-You can also adjust the rate of the global scale track and set its length independently of other channels, enabling chord progressions that extend beyond a single pattern. This feature offers substantial flexibility for crafting intricate chord progressions and varying patterns.
-
-To return to the channel edit page, press any of the channel buttons at the top of the grid.
+Each project supports 16 scale slots. Each slot includes a root note, a scale type (e.g., Dorian, Major), a degree, and a scale rotation. The [scale editor](#scale-editor) is where you craft the scales that will form your chord progressions, and you can sequence these using [scale locks](#scale-locks) either globaly from the scale editor, or per channel using the channel editor.
 
 ### Rhythm and harmony composition
 
-At this point you will have a set of sound sources attached to a number of channels, a set of patterns with notes, trigs velocities and lengths, and a set of scales that work well together - possibly assigned as either a global scale or a set of trig locks on the global scale editor. Now it's time to do some composition. You can now use _Masaic_'s channel editor to lay out your harmonic and rhythem sections. First, select the channel page by pressing the far left global menu button, and select one of the 16 available channels using the channel select row at the top of _Mosaic_'s Grid UI.
+At this point you will have a set of sound sources attached to a number of channels, a set of patterns with notes, trigs velocities and lengths, and a set of scales that work well together - possibly assigned as either a global scale or a set of trig locks on the global scale editor. Now it's time to do some composition. You can now use _Masaic_'s [channel editor](#channel-editor) to lay out your harmonic and rhythm sections by assigning patterns to channels. The first step is to [add patterns to channels](#adding-patterns-to-channels).
 
-![Channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_channel_select.png)
-
-#### Adding patterns to channels
-
-Experiment by assigning your various patterns to different channels. A single channel can accommodate multiple patterns, and likewise, a single pattern can be assigned to multiple channels. To assign patterns, use the pattern select row, located second from the top on Mosaic’s Grid UI.
-
-![Pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_pattern_select.png)
 
 #### Using merge modes
 
@@ -189,33 +169,15 @@ When assigning multiple patterns to a single channel, you might notice that over
 
 ### Melody composition
 
-The pattern tools empower you to create complex harmonic rhythm sections. However, it's the [channel](#channel) editor that is the powerhouse of _Mosaic_. It allows you to not just utilise patterns, apply them to different scales, and merge them together in interesting ways, but it's also possible to augmenting them afterwards too. Infact, it's possible to create entire songs using just the channel editor alone. This is done using [Masks](#masks). Masks let you enter trigs, notes, velocities, and chords directly onto the channel editor grid. This is especially useful for constructing melodies.
+The pattern tools empower you to create complex harmonic rhythm sections. However, you may now realise it's the [channel](#channel) editor that is the powerhouse of _Mosaic_. It allows you to not just utilise patterns, apply them to different scales, and merge them together in interesting ways, but also to augment these with melodies and interest afterwards too. Infact, it's possible to create entire songs using just the channel editor alone. This is done using [Masks](#masks). Masks let you enter trigs, notes, velocities, and chords directly onto the channel editor grid. 
 
-#### Adding melodic notes over harmony and drums
-
-TODO
-
-#### Adding chords
-
-TODO
-
-#### Midi input
-
-TODO
 
 ### Modulation, movement and interest
 
-TODO
+A song with a solid chord progression, interesting rhythms, and knock-out melodies written on electronic devices can still end up sounding static and lifeless. The key, as you likely already know, is to add dynamics. movement, and interest through the use of copious but deliberate modulation. _Mosaic_ allows you to modulate your voices using [trig parameters](#trig-parameters) and trig locks. Trig locks are an Elektron term. It essentially means locking a parameter at a specific value on a step. You can lock any midi device parameter, mod parameter, the octave of a note, and the scale the note is quantised to.
 
-#### Sequencer trig locks
-
-TODO
 
 ### Song composition
-
-TODO
-
-### Save and load
 
 TODO
 
@@ -322,12 +284,32 @@ On the norns screen you can see the channel grid visualiser. Use E2 to select th
 
 ### Channel editing
 
-TODO
+Select the channel edditor page by pressing the far left global menu button, and select one of the 16 available channels using the channel select row at the top of _Mosaic_'s Grid UI.
+
+![Channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_channel_select.png)
+
+#### Adding patterns to channels
+
+The core of your rhythm and harmony sections are formed by adding patterns to channels. To do this, first select a channel using the channel buttons. A single channel can accommodate multiple patterns, and likewise, a single pattern can be assigned to multiple channels. To assign patterns, use the pattern select row, located second from the top on Mosaic’s Grid UI.
+
+![Pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_pattern_select.png)
 
 #### Masks
 
 TODO
 
+
+#### Adding melodic notes over harmony and drums
+
+
+
+#### Adding chords
+
+TODO
+
+#### Midi input
+
+TODO
 
 #### Merge modes
 
@@ -379,7 +361,19 @@ TODO
 
 #### Scale editor
 
-TODO
+Access the scale editor by selecting the channel page using the far left global menu button, then pressing any of the scale buttons.
+
+![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
+
+When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is dimly lit on the grid. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
+
+A long press on a scale button selects it as the global scale, indicated by a brightly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
+
+Scale locks can be set to apply a scale globally or to a single channel, activating at a designated step and persisting until the end of the pattern. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
+
+You can also adjust the rate of the global scale track and set its length independently of other channels, enabling chord progressions that extend beyond a single pattern. This feature offers substantial flexibility for crafting intricate chord progressions and varying patterns.
+
+To return to the channel edit page, press any of the channel buttons at the top of the grid.
 
 #### Muting channels
 
@@ -465,6 +459,10 @@ TODO
 
 
 ### Song sequencer
+
+TODO
+
+## Save and load
 
 TODO
 
