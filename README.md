@@ -69,8 +69,25 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
     + [Navigating the Norns display](#navigating-the-norns-display)
   * [Save and load](#save-and-load)
   * [Options](#options)
-    + [Elektron sync](#elektron-sync)
-    + [Sinfonion connect](#sinfonion-connect)
+    + [Sequencer options](#sequencer-options)
+      - [Song mode](#song-mode)
+      - [Reset at sequence end](#reset-at-sequence-end)
+      - [Reset at seq pattern end](#reset-at-seq-pattern-end)
+      - [Elektron program changes](#elektron-program-changes)
+      - [Elektron program change channel][#elektron-program-change-channel]
+    + [Parameter lock options](#parameter-lock-options)
+      - [Trigless locks](#trigless-locks)
+    + [Quantiser options](#quantiser-options)
+      - [Quantise note masks](#quantise-note-masks)
+      - [Scales lock until ptn end](#scales-lock-until-ptn-end)
+      - [Lock all to pentatonic](#lock-all-to-pentatonic)
+      - [Lock random to pentatonic](#lock-random-to-pentatonic)
+      - [Lock merged to pentatonic](#lock-merged-to-pentatonic)
+    + [Midi controller options](#midi-controller-options)
+      - [Map scale to white keys](#map-scale-to-white-keys)
+      - [Honour scale rotations](#honour-scale-rotations)
+      - [Honour scale degree](#honour-scale-degree)
+  *[Sinfonion connect](#sinfonion-connect)
 - [Development](#development)
 - [Device config template](#device-config-template)
 
@@ -620,24 +637,68 @@ To ensure the longevity of your work, it's important to save your creations into
 
 Various aspects of Mosaic can be configured from the param section on your Norns, under the Mosaic section. This flexibility allows you to tailor the sequencer’s behavior to match your creative needs.
 
-* The **"Reset at sequence end"** option, which is turned on by default, ensures that the sequencer resets all channels at the end of the song sequence. This happens regardless of whether the sequencer is progressing to a new sequence, which helps maintain consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.
-* **"Reset at seq pattern end"** is set to off by default. When enabled, it resets all channels at the end of the song sequence but only if a new sequence is queued. Disabling this option allows for evolving polyrhythms.
-* **"Elektron program changes"** defaults off. Turning this on enables synchronization with Elektron devices, allowing seamless pattern changes aligned with Mosaic sequences.
-* **"Trigless locks"** is enabled by default, meaning locks on steps with no active trig are still honored.
-* **"Quantise note masks"** is also on by default. With this setting enabled, note masks are fixed to the currently selected scale and do not change with scale degree or rotation adjustments.
-* The **"Scales lock until ptn end"** option, when enabled, ensures scale locks persist until the end of the channel's length. If disabled, scale locks continue only until the next trig.
-* **"Lock all to pentatonic"** is off by default. Enabling this option forces all notes to adhere to the pentatonic version of the selected scale, useful for creating highly generative compositions.
-* **"Lock random to pent."** is on by default. It ensures that notes altered by random trig locks adhere to the pentatonic version of the selected scale, making the random notes harmonically more pleasant.
-* Similarly, **"Lock merged to pent."** is on and applies the same principle to notes modified by merge modes.
-* **"Map scale to white keys"** is off by default. When enabled, the selected scale is mapped to the white keys of a MIDI keyboard, starting at the C key.
-* **"Honour scale rotations"** and **"Honour scale degree"** are both off by default. Enabling these settings will allow scale rotations and scale degrees to be reflected in the mapping on the MIDI keyboard.
+#### Sequencer options
+
+##### Song mode
+
+Song mode is on by default. When enabled, the song sequencer will progress though sequences as dictated by the options set on the song sequencer page. When off, song sequences will only progress with manual intervention.
+
+##### Reset at sequence end
+
+The **"Reset at sequence end"** option, which is turned on by default, ensures that the sequencer resets all channels at the end of the song sequence. This happens regardless of whether the sequencer is progressing to a new sequence, which helps maintain consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.
+
+##### Reset at seq pattern end
+
+**"Reset at seq pattern end"** is set to off by default. When enabled, it resets all channels at the end of the song sequence but only if a new sequence is queued. Disabling this option allows for evolving polyrhythms.
+
+##### Elektron program changes
+
+**"Elektron program changes"** defaults off. By enabling this setting, your Elektron devices will automatically adjust their patterns to align with the corresponding song pattern in Mosaic. For instance, selecting song pattern one on Mosaic will trigger pattern one on your Elektron device, ensuring that both systems are perfectly in sync. This feature allows for a unified performance across your equipment, with each song pattern change on Mosaic mirrored by your Elektron devices.
+
+#### Parameter lock options
+
+##### Trigless locks
+
+**"Trigless locks"** is enabled by default, meaning locks on steps with no active trig are still honored.
+
+#### Quantiser options
+
+##### Quantise note masks
+
+**"Quantise note masks"** is also on by default. With this setting enabled, note masks are fixed to the currently selected scale and do not change with scale degree or rotation adjustments.
+
+##### Scales lock until ptn end
+
+The **"Scales lock until ptn end"** option, when enabled, ensures scale locks persist until the end of the channel's length. If disabled, scale locks continue only until the next trig.
+
+##### Lock all to pentatonic
+
+**"Lock all to pent."** is off by default. Enabling this option forces all notes to adhere to the pentatonic version of the selected scale, useful for creating highly generative compositions.
+
+##### Lock random to pentatonic
+
+**"Lock random to pent."** is on by default. It ensures that notes altered by random trig locks adhere to the pentatonic version of the selected scale, making the random notes harmonically more pleasant.
+
+##### Lock merged to pentatonic
+
+Similarly, **"Lock merged to pent."** is on and applies the same principle to notes modified by merge modes.
+
+#### Midi controller options
+
+##### Map scale to white keys
+
+**"Map scale to white keys"** is off by default. When enabled, the selected scale is mapped to the white keys of a MIDI keyboard, starting at the C key.
+
+##### Honour scale rotations 
+
+**"Honour scale rotations"** is off by default. Enabling this settings will allow scale rotations to be reflected in the mapping on the MIDI keyboard.
+
+##### Honour scale degree
+
+**"Honour scale degree"** is off by default. Enabling this settings will allow scale degrees to be reflected in the mapping on the MIDI keyboard.
 
 
-#### Elektron sync
-
-You can synchronise your _Mosaic_ song with your Elektron devices seamlessly. By enabling this setting, your Elektron devices will automatically adjust their patterns to align with the corresponding song pattern in Mosaic. For instance, selecting song pattern one on Mosaic will trigger pattern one on your Elektron device, ensuring that both systems are perfectly in sync. This feature allows for a unified performance across your equipment, with each song pattern change on Mosaic mirrored by your Elektron devices.
-
-#### Sinfonion connect
+### Sinfonion connect
 
 You can sync up your eurorack Sinfonion module to mosaic using a DIY device called [norns2sinfonion](https://github.com/subvertnormality/norns2sinfonion).
 
