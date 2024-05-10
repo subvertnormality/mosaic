@@ -229,6 +229,8 @@ Now that you have a grasp of the basic workflow, we'll dig into the more advance
 
 Patterns serve as the foundational elements of your harmony and rhythm sections. You start by creating a set of patterns using the pattern editor tools. Once established, these patterns can be merged and remixed within the channel editor to construct and enhance your song. This approach allows you to experiment with different combinations and sequences, giving you the flexibility to refine and evolve your musical ideas into a cohesive composition.
 
+Access the pattern editor by pressing the third key in the global menu cluster on your Grid.
+
 #### Adding trigs
 
 Trigs are added in the pattern editor.
