@@ -103,11 +103,11 @@ To install, simply run `;install https://github.com/subvertnormality/mosaic` in 
 
 ### Hardware
 
-_Mosaic_ operates with the Monome Norns and a 128 Grid at a minimum. While these two components allow you to create simple songs, incorporating external sound sources via a MIDI interface will vastly expand your sequencing capabilities. Devices with MIDI inputs are all supported, though those set up in _Mosaic_ using pre-existing or manually created configuration files are optimal. Crow, Just Friends, and Ansible are natively supported through [n.b.](https://github.com/sixolet/nb/). Additionally, you can utilize Norns to generate sounds by installing n.b. mods. A list of supported mods can be found in the [Norns sound sources with n.b.](#norns-sound-sources-with-n-b) section.
+_Mosaic_ operates with the Monome Norns and a 128 Grid at a minimum. While these two components allow you to create simple songs, incorporating external sound sources via a MIDI interface will vastly expand your sequencing capabilities. Devices with MIDI inputs are all supported, though those set up in _Mosaic_ using pre-existing or manually created configuration files are optimal. Crow, Just Friends, and Ansible are natively supported through [n.b.](https://github.com/sixolet/nb/). Additionally, you can utilize Norns to generate sounds by installing n.b. mods. A list of supported mods can be found in the [Norns sound sources with n.b.](#norns-sound-sources-with-nb) section.
 
 Using [Midi input](#midi-input) devices, while not essential, enhances the user experience. A MIDI keyboard simplifies melody creation, and a MIDI controller with encoders supporting relative bin offsets can improve the data input process.
 
-For those using a ACL [Sinfonion](#sinfonion-connect), support is available through a straightforward hardware build. This setup allows synchronisation between Mosaic's quantization and the Sinfonion Eurorack module.
+For those using a ACL Sinfonion, support is available through a straightforward [hardware build](#sinfonion-connect). This setup allows synchronisation between Mosaic's quantization and the Sinfonion Eurorack module.
 
 
 
@@ -145,7 +145,7 @@ This section provides an overview of Mosaic's functionality and basic operations
 
 #### Grid menu navigation
 
-Navigation within Mosaic primarily occurs via the Grid. The lower left five buttons serve as the global menu buttons. From left to right, these buttons allow access to the "[Channel](#channel-editor) page", "[Song sequencer](#song-sequencer) page", "[Pattern](#pattern) editor", "[Notes](#adding-notes) page", and "[Velocity](#adding-velocity) page".
+Navigation within Mosaic primarily occurs via the Grid. The lower left five buttons serve as the global menu buttons. From left to right, these buttons allow access to the "[Channel](#channel-editor) page", "[Song sequencer](#song-sequencer) page", "[Pattern](#pattern-editor) editor", "[Notes](#adding-notes) page", and "[Velocity](#adding-velocity) page".
 
 ![The menu as shown on the pattern edit page](https://raw.githubusercontent.com/subvertnormality/mosaic/main/designs/Images/menu.png)
 
@@ -172,13 +172,13 @@ Should your MIDI output devices become unresponsive, you can clear all MIDI-on e
 
 The initial stage of song creation involves setting up a few basic voices. These preliminary sound designs may evolve, but it's useful to have a basic foundation for developing the rhythmic, harmonic, and melodic aspects of your track.
 
-Start by selecting the device for each element of your composition, whether it be an internal Norns player, an external drum machine or synthesizer, or components of a modular patch. Assign each device to a Mosaic [channel](#channel) as detailed in the [device](#device) section. Organising different instruments can be helpful; for instance, group drums on channels 1-6, harmonic and textural elements on channels 7-10, melodic elements on channels 11-14, and reserve channels 15 and 16 for modulation. Adapt these assignments to suit your specific musical style and needs.
+Start by selecting the device for each element of your composition, whether it be an internal Norns player, an external drum machine or synthesizer, or components of a modular patch. Assign each device to a Mosaic [channel](#channel-editor) as detailed in the [device](#devices) section. Organising different instruments can be helpful; for instance, group drums on channels 1-6, harmonic and textural elements on channels 7-10, melodic elements on channels 11-14, and reserve channels 15 and 16 for modulation. Adapt these assignments to suit your specific musical style and needs.
 
 With your devices assigned, you're ready to begin the rhythm and harmony design process.
 
 ### Rhythm section design
 
-The rhythm of your track is crafted using the [Pattern editor](#pattern), accessible by pressing the third button in the global menu cluster located at the bottom left of your grid. A pattern in Mosaic is defined as a sequence composed of 64 trigs, notes, velocities, and duration data, spanning 64 steps. Patterns are the building blocks of your rhythm section.
+The rhythm of your track is crafted using the [Pattern editor](#pattern-editor), accessible by pressing the third button in the global menu cluster located at the bottom left of your grid. A pattern in Mosaic is defined as a sequence composed of 64 trigs, notes, velocities, and duration data, spanning 64 steps. Patterns are the building blocks of your rhythm section.
 
 The pattern editor provides multiple tools to create these building blocks. You can input trigs manually in an XOX style, or choose from predefined banks featuring bass, snare, and hi-hat patterns. For more complex needs, explore using Euclidean patterns or those from Noise Engineering's Numeric Repetitor. To add unique rhythmic variations, apply a tresillo modifier, which introduces a 3-3-2 repeating pattern. These rhythm types can be blended by selecting and "painting" them onto the grid. To learn more about this process, refer to the [adding trigs](#adding-trigs) section.
 
@@ -284,7 +284,7 @@ On page 2 you can select trig editor options. Currently this allows you to edit 
 
 In _Mosaic_, notes aren't strictly bound to a single scale. Instead, they are valued by their position within the currently active scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
 
-You'll see in the [Harmony design](#harmony-design) section that it's possible to sequence scale and degree changes, and this affects the notes your patterns will play. When adding notes to patterns, consider that they represent the harmony of your song and map to what traditionally would be called the rhythm section. It is possible to create melodies using patterns, but it is difficult to do so in a deliberate way as your scale progressions will alter the tonality of your pattern. We'll learn about the recommended way to deliberate [melodies](#melody-composition) later. 
+You've seen in the [Harmony design](#harmony-design) section that it's possible to sequence scale and degree changes, and this affects the notes your patterns will play. When adding notes to patterns, consider that they represent the harmony of your song and map to what traditionally would be called the rhythm section. It is possible to create melodies using patterns, but it is difficult to do so in a deliberate way as your scale progressions will alter the tonality of your pattern. We'll learn about the recommended way to deliberate [melodies](#masks) later. 
 
 Select the note edtior by pressing the fourth key in the global menu button cluster on the grid. 
 
@@ -346,7 +346,7 @@ To add a mask to your sequence, start by accessing the mask page on your Norns d
 
 Chords can be seamlessly integrated into your sequence using masks. You can add up to four additional voices to the root note, provided that your selected device supports polyphony. To do this, make sure you are on the masks page of your Norns. Then, hold the desired step and select each note you want to include in the chord.
 
-Additionally, take advantage of the chord trig params to enhance your musical expression. Experiment with the "[chord strum](#chord-strum)" and "[chord Velocity Modifier](#chord-velocity-modifier)" trig parameters to vary the playback dynamics and timing of each chord component. These tools allow you to create more nuanced and dynamic chord progressions, adding depth to your compositions.
+Additionally, take advantage of the chord trig params to enhance your musical expression. Experiment with the "[chord strum](#chord-strum)" and "[chord velocity modifier](#chord-velocity-modifier)" trig parameters to vary the playback dynamics and timing of each chord component. These tools allow you to create more nuanced and dynamic chord progressions, adding depth to your compositions.
 
 ##### Midi input
 
