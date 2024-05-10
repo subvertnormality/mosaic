@@ -74,7 +74,7 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
       - [Reset at sequence end](#reset-at-sequence-end)
       - [Reset at seq pattern end](#reset-at-seq-pattern-end)
       - [Elektron program changes](#elektron-program-changes)
-      - [Elektron program change channel][#elektron-program-change-channel]
+      - [Elektron program change channel](#elektron-program-change-channel)
     + [Parameter lock options](#parameter-lock-options)
       - [Trigless locks](#trigless-locks)
     + [Quantiser options](#quantiser-options)
@@ -87,7 +87,7 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
       - [Map scale to white keys](#map-scale-to-white-keys)
       - [Honour scale rotations](#honour-scale-rotations)
       - [Honour scale degree](#honour-scale-degree)
-  *[Sinfonion connect](#sinfonion-connect)
+  * [Sinfonion connect](#sinfonion-connect)
 - [Development](#development)
 - [Device config template](#device-config-template)
 
@@ -641,7 +641,7 @@ Various aspects of Mosaic can be configured from the param section on your Norns
 
 ##### Song mode
 
-Song mode is on by default. When enabled, the song sequencer will progress though sequences as dictated by the options set on the song sequencer page. When off, song sequences will only progress with manual intervention.
+**Song mode** is on by default. When enabled, the song sequencer will progress though sequences as dictated by the options set on the song sequencer page. When off, song sequences will only progress with manual intervention.
 
 ##### Reset at sequence end
 
@@ -654,6 +654,10 @@ The **"Reset at sequence end"** option, which is turned on by default, ensures t
 ##### Elektron program changes
 
 **"Elektron program changes"** defaults off. By enabling this setting, your Elektron devices will automatically adjust their patterns to align with the corresponding song pattern in Mosaic. For instance, selecting song pattern one on Mosaic will trigger pattern one on your Elektron device, ensuring that both systems are perfectly in sync. This feature allows for a unified performance across your equipment, with each song pattern change on Mosaic mirrored by your Elektron devices.
+
+##### Elektron program change channel
+
+The **Elektron program change channel** setting determines which midi channel to send program change messages to. The default is 10 - same as on most Elektron devices.
 
 #### Parameter lock options
 
