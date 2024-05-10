@@ -1,10 +1,10 @@
 Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Grid. It melds the powerful features of the Elektron sequencer with innovative generative techniques, all within the Monome ecosystem, allowing you to craft complex rhythms and harmonies with ease. Whether you are sketching or composing, Mosaic provides a unique, deep musical experience.
 
-- [Getting started](#mosaic)
+- [Getting started](#getting-started)
   * [Install](#install)
   * [Setup](#setup)
     + [Hardware](#hardware)
-    + [Device configuration](#device-configuration)
+    + [Midi device configuration](#midi-device-configuration)
       - [Stock devices](#stock-devices)
       - [Custom devices](#custom-devices)
       - [Mods and software devices](#mods-and-software-devices)
@@ -38,9 +38,10 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
       - [Note merge modes](#note-merge-modes)
       - [Velocity merge modes](#velocity-merge-modes)
       - [Length merge modes](#length-merge-modes)
-    + [Clocks and swing](#clocks-and-swing)
     + [Scale editor](#scale-editor)
       - [Transposition](#transposition)
+    + [Clocks and swing](#clocks-and-swing)
+    + [Channel length](#channel-length)
     + [Muting channels](#muting-channels)
     + [Devices](#devices)
       - [Midi sound sources](#midi-sound-sources)
@@ -54,7 +55,7 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
         + [Random twos note](#random-twos-note)
         + [Chord strum](#chord-strum)
         + [Chord Velocity Modifier](#chord-velocity-modifier)
-      - [Midi params](#trig-params)
+      - [Midi params](#midi-params)
       - [Trig locks](#trig-locks)
         + [Param locks](#param-locks)
         + [Scale locks](#scale-locks)
@@ -85,7 +86,6 @@ To install, simply run `;install https://github.com/subvertnormality/mosaic` in 
 
 ### Hardware
 
-
 _Mosaic_ operates with the Monome Norns and a 128 Grid at a minimum. While these two components allow you to create simple songs, incorporating external sound sources via a MIDI interface will vastly expand your sequencing capabilities. Devices with MIDI inputs are all supported, though those set up in _Mosaic_ using pre-existing or manually created configuration files are optimal. Crow, Just Friends, and Ansible are natively supported through [n.b.](https://github.com/sixolet/nb/). Additionally, you can utilize Norns to generate sounds by installing n.b. mods. A list of supported mods can be found in the [Norns sound sources with n.b.](#norns-sound-sources-with-n-b) section.
 
 Using [Midi input](#midi-input) devices, while not essential, enhances the user experience. A MIDI keyboard simplifies melody creation, and a MIDI controller with encoders supporting relative bin offsets can improve the data input process.
@@ -98,11 +98,22 @@ For those using a ACL [Sinfonion](#sinfonion-connect), support is available thro
 
 #### Stock devices
 
-TODO 
+Mosaic includes a range of stock devices that you can integrate into your setup, but first, they need to be configured to appear in the device selector. Here’s how to set this up using [maiden](https://monome.org/docs/norns/maiden/), the web-based editor for Norns:
+
+1. Access Configuration Files: Open Maiden and navigate to the directory path `code > mosaic > lib > config`. Here, you will find the stock device configuration files.
+2. Create a New Configuration Folder: Next, go to the directory dust > mosaic. In this location, create a new folder named config.
+3. Copy Configuration Files: Copy the device configuration files that you wish to use from `code > mosaic > lib > config` into the `dust > mosaic > config` folder you just created.
+4. Once these steps are completed, Mosaic will automatically load the device configurations you've selected, and they will be available in the device picker on the channel page. 
+
+This setup ensures that you can easily access and use your preferred stock devices within Mosaic.
+
 
 #### Custom devices
 
-Tailor Mosaic to fit your studio setup by configuring it for your specific devices. If your device is not included in the standard configuration, create a .json file named after your device. Populate this file using a [device config template](#device-config-template) that matches your device’s MIDI specifications.
+Once you've copied the stock device configuration files into the `dust > mosaic > config` folder, you can also personalize these configurations to better suit your setup. This is particularly useful for setting common defaults like the MIDI output device.
+
+You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a [device config template](#device-config-template) that matches your device’s MIDI specifications.
+
 
 #### Mods and software devices
 
@@ -125,6 +136,8 @@ Navigation within Mosaic primarily occurs via the Grid. The lower left five butt
 #### Norns menu navigation
 
 Further configuration happens on Norns. Each grid page corresponds to several grouped pages on the screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you navigate away from the page without applying, the change will be cancelled.
+
+For a detailed reference on the layout and functionality of each button and encoder on your Norns device, it's best to consult the official [Norns documentation](https://monome.org/docs/norns/). This documentation provides comprehensive information and is a reliable source for understanding how to navigate and operate your device effectively. 
 
 
 #### Sequencer start and stop
@@ -195,7 +208,7 @@ To access the song editor, press the second key in the global menu's Grid button
 
 Now that you have a grasp of the basic workflow, we'll dig into the more advanced functionalities of _Mosaic_. This section will explore the deeper capabilities and features that allow for sophisticated manipulation and fine-tuning of your music, enabling you to fully harness the potential of this powerful sequencer.
 
-### Pattern editing
+### Pattern editor
 
 Patterns serve as the foundational elements of your harmony and rhythm sections. You start by creating a set of patterns using the pattern editor tools. Once established, these patterns can be merged and remixed within the channel editor to construct and enhance your song. This approach allows you to experiment with different combinations and sequences, giving you the flexibility to refine and evolve your musical ideas into a cohesive composition.
 
@@ -289,7 +302,7 @@ The velocity editor spans two vertical pages: the first displays velocities from
 On the norns screen you can see the channel grid visualiser. Use E2 to select the current channel.
 
 
-### Channel editing
+### Channel editor
 
 Select the channel editor page by pressing the far left global menu button, and select one of the 16 available channels using the channel select row at the top of _Mosaic_'s Grid UI.
 
@@ -369,13 +382,6 @@ These modes dictate how the duration of notes is calculated for overlapping step
 * Shorter: The length is calculated by subtracting the shortest length from the average of each step's length minus the shortest length.
 * Pattern: To apply a specific pattern’s length values, hold the length merge button and press the pattern's select button.
 
-
-#### Clocks and swing
-
-You can easily adjust the tempo of your entire composition directly from the song sequencer page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels via the channel editor page in the Norns menu. This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.
-
-Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable.
-
 #### Scale editor
 
 Access the scale editor by selecting the channel page using the far left global menu button, then pressing any of the scale buttons.
@@ -391,6 +397,21 @@ Scale locks can be set to apply a scale globally or to a single channel, activat
 You can also adjust the rate of the global scale track and set its length independently of other channels, enabling chord progressions that extend beyond a single pattern. This feature offers substantial flexibility for crafting intricate chord progressions and varying patterns.
 
 To return to the channel edit page, press any of the channel buttons at the top of the grid.
+
+#### Clocks and swing
+
+You can easily adjust the tempo of your entire composition directly from the song sequencer page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels via the channel editor page in the Norns menu. This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.
+
+Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable.
+
+#### Channel length
+
+Channels in your sequencer can be customized to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
+
+To adjust the length of a channel, you need to specify the start and end points. Hold down the button corresponding to the start step in the channel editor. While holding it, press the button for the desired end step. The active range of the channel will be indicated by buttons that appear slightly brighter than the others.
+
+The behavior of the sequencer when handling patterns of different lengths can also be tailored to your needs. Navigate to the Norns param pages where you can find various [options](#options) that determine how the sequencer manages channels with differing lengths. 
+
 
 ##### Transposition
 
@@ -417,7 +438,7 @@ MIDI devices can be configured to load a stored patch through the Norns' params 
 
 ##### Norns sound sources with n.b.
 
-N.b. mods give _Mosaic_ the ability to sequence internal sound sources and device connected via Crow. Supported mods include:
+[n.b.](https://github.com/sixolet/nb/tree/main) mods give _Mosaic_ the ability to sequence internal sound sources and device connected via Crow. Supported mods include:
 
 * [nb_ansible](https://github.com/sixolet/nb_ansible) for Ansible voices.
 * [emplaitress](https://github.com/sixolet/emplaitress) offers four MI Plaits voices in parallel.
@@ -597,7 +618,20 @@ To ensure the longevity of your work, it's important to save your creations into
 
 ### Options
 
-TODO
+Various aspects of Mosaic can be configured from the param section on your Norns, under the Mosaic section. This flexibility allows you to tailor the sequencer’s behavior to match your creative needs.
+
+* The **"Reset at sequence end"** option, which is turned on by default, ensures that the sequencer resets all channels at the end of the song sequence. This happens regardless of whether the sequencer is progressing to a new sequence, which helps maintain consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.
+* **"Reset at seq pattern end"** is set to off by default. When enabled, it resets all channels at the end of the song sequence but only if a new sequence is queued. Disabling this option allows for evolving polyrhythms.
+* **"Elektron program changes"** defaults off. Turning this on enables synchronization with Elektron devices, allowing seamless pattern changes aligned with Mosaic sequences.
+* **"Trigless locks"** is enabled by default, meaning locks on steps with no active trig are still honored.
+* **"Quantise note masks"** is also on by default. With this setting enabled, note masks are fixed to the currently selected scale and do not change with scale degree or rotation adjustments.
+* The **"Scales lock until ptn end"** option, when enabled, ensures scale locks persist until the end of the channel's length. If disabled, scale locks continue only until the next trig.
+* **"Lock all to pentatonic"** is off by default. Enabling this option forces all notes to adhere to the pentatonic version of the selected scale, useful for creating highly generative compositions.
+* **"Lock random to pent."** is on by default. It ensures that notes altered by random trig locks adhere to the pentatonic version of the selected scale, making the random notes harmonically more pleasant.
+* Similarly, **"Lock merged to pent."** is on and applies the same principle to notes modified by merge modes.
+* **"Map scale to white keys"** is off by default. When enabled, the selected scale is mapped to the white keys of a MIDI keyboard, starting at the C key.
+* **"Honour scale rotations"** and **"Honour scale degree"** are both off by default. Enabling these settings will allow scale rotations and scale degrees to be reflected in the mapping on the MIDI keyboard.
+
 
 #### Elektron sync
 
