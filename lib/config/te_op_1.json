@@ -1,4 +1,4 @@
-{
+[{
   "name": "OP-1",
   "map_params_automatically": false,
   "type": "midi",
@@ -46,4 +46,4 @@
       "cc_min_value": -1
     }
   ]
-}
+}]

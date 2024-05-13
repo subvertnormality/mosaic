@@ -1,10 +1,10 @@
-local Dial = {}
-Dial.__index = Dial
+local dial = {}
+dial.__index = dial
 
 local fn = include("mosaic/lib/functions")
 
-function Dial:new(x, y, name, id, top_label, bottom_label)
-  local self = setmetatable({}, Dial)
+function dial:new(x, y, name, id, top_label, bottom_label)
+  local self = setmetatable({}, dial)
   self.x = x
   self.y = y
   self.name = name
@@ -20,7 +20,7 @@ function Dial:new(x, y, name, id, top_label, bottom_label)
   return self
 end
 
-function Dial:draw()
+function dial:draw()
   if self.selected then
     screen.level(15)
   else
@@ -28,7 +28,7 @@ function Dial:draw()
   end
   screen.move(self.x, self.y)
   screen.font_size(8)
-  screen.text(self.top_label)
+  screen.text(fn.title_case(self.top_label))
   screen.move(self.x, self.y + 7)
 
   if (self.min_value and self.value and (self.value < self.min_value)) then
@@ -48,35 +48,35 @@ function Dial:draw()
     end
   end
   screen.move(self.x, self.y + 14)
-  screen.text(self.bottom_label)
+  screen.text(fn.title_case(self.bottom_label))
   screen.font_size(8)
 end
 
-function Dial:select()
+function dial:select()
   self.selected = true
   fn.dirty_screen(true)
 end
 
-function Dial:deselect()
+function dial:deselect()
   self.selected = false
   fn.dirty_screen(true)
 end
 
-function Dial:is_selected()
+function dial:is_selected()
   return self.selected
 end
 
-function Dial:increment()
+function dial:increment()
   self.value = self.value + 1
   fn.dirty_screen(true)
 end
 
-function Dial:decrement()
+function dial:decrement()
   self.value = self.value - 1
   fn.dirty_screen(true)
 end
 
-function Dial:set_value(value)
+function dial:set_value(value)
   if value == nil or (self.min_value and value < self.min_value) or (self.max_value and value > self.max_value) then
     value = self.off_value
   end
@@ -84,44 +84,44 @@ function Dial:set_value(value)
   fn.dirty_screen(true)
 end
 
-function Dial:set_top_label(label)
+function dial:set_top_label(label)
   self.top_label = label
   fn.dirty_screen(true)
 end
 
-function Dial:set_bottom_label(label)
+function dial:set_bottom_label(label)
   self.bottom_label = label
   fn.dirty_screen(true)
 end
 
-function Dial:set_name()
+function dial:set_name()
   self.name = name
   fn.dirty_screen(true)
 end
 
-function Dial:get_name()
+function dial:get_name()
   return self.name
 end
 
-function Dial:get_id()
+function dial:get_id()
   return self.id
 end
 
-function Dial:set_off_value(off_value)
+function dial:set_off_value(off_value)
   self.off_value = off_value
 end
 
-function Dial:set_ui_labels(ui_labels)
+function dial:set_ui_labels(ui_labels)
   self.ui_labels = ui_labels
 end
 
-function Dial:set_min_value(min_value)
+function dial:set_min_value(min_value)
   self.min_value = min_value
 end
 
-function Dial:set_max_value(max_value)
+function dial:set_max_value(max_value)
   self.max_value = max_value
 end
 
 
-return Dial
+return dial

@@ -1,12 +1,12 @@
-local GridViewer = {}
-GridViewer.__index = GridViewer
+local grid_viewer = {}
+grid_viewer.__index = grid_viewer
 
 local fn = include("mosaic/lib/functions")
 
-local screen_view_sequencer = Sequencer:new(4, "channel")
+local screen_view_sequencer = sequencer:new(4, "channel")
 
-function GridViewer:new(x, y)
-  local self = setmetatable({}, GridViewer)
+function grid_viewer:new(x, y)
+  local self = setmetatable({}, grid_viewer)
   self.x = x - 1
   self.y = y - 2
   self.selected_channel = 1
@@ -14,7 +14,7 @@ function GridViewer:new(x, y)
   return self
 end
 
-function GridViewer:draw()
+function grid_viewer:draw()
   screen_view_sequencer:draw(program.get_channel(self.selected_channel), grid_abstraction.seq)
 
   local state = grid_abstraction.get_screen_state()
@@ -33,7 +33,7 @@ function GridViewer:draw()
   screen.text("Channel " .. self.selected_channel .. " grid viewer")
 end
 
-function GridViewer:next_channel()
+function grid_viewer:next_channel()
   self.selected_channel = self.selected_channel + 1
   if self.selected_channel > 16 then
     self.selected_channel = 16
@@ -41,7 +41,7 @@ function GridViewer:next_channel()
   fn.dirty_screen(true)
 end
 
-function GridViewer:prev_channel()
+function grid_viewer:prev_channel()
   self.selected_channel = self.selected_channel - 1
   if self.selected_channel < 1 then
     self.selected_channel = 1
@@ -49,4 +49,4 @@ function GridViewer:prev_channel()
   fn.dirty_screen(true)
 end
 
-return GridViewer
+return grid_viewer

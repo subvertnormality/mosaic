@@ -138,7 +138,7 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   setup()
 
-  params:set("song_mode", 1)
+  params:set("song_mode", 2) 
   params:set("reset_on_end_of_pattern", 0)
   params:set("reset_on_end_of_sequencer_pattern", 0)
 
@@ -238,7 +238,7 @@ function test_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_
 
   setup()
 
-  params:set("song_mode", 1)
+  params:set("song_mode", 2) 
   params:set("reset_on_end_of_pattern", 0)
   params:set("reset_on_end_of_sequencer_pattern", 0)
 
@@ -300,11 +300,11 @@ function test_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_
 
 end
 
-function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_sequence_reset_is_enabled()
+function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_pattern_reset_is_enabled()
 
   setup()
-  params:set("song_mode", 1) 
-  params:set("reset_on_end_of_pattern", 1)
+  params:set("song_mode", 2) 
+  params:set("reset_on_end_of_pattern", 2)
 
   local sequencer_pattern = 1
   program.set_selected_sequencer_pattern(1)
@@ -404,8 +404,8 @@ end
 function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_seq_pattern_reset_is_enabled()
 
   setup()
-  params:set("song_mode", 1)
-  params:set("reset_on_end_of_sequencer_pattern", 1)
+  params:set("song_mode", 2) 
+  params:set("reset_on_end_of_sequencer_pattern", 2) 
   params:set("reset_on_end_of_pattern", 0) 
 
   local sequencer_pattern = 1
@@ -502,8 +502,8 @@ end
 function test_song_mode_functions_with_sequencer_pattern_repeats()
 
   setup()
-  params:set("song_mode", 1)
-  params:set("reset_on_end_of_sequencer_pattern", 1)
+  params:set("song_mode", 2) 
+  params:set("reset_on_end_of_sequencer_pattern", 2) 
   params:set("reset_on_end_of_pattern", 0) 
 
   local sequencer_pattern = 1

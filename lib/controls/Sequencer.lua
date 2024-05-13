@@ -1,9 +1,9 @@
-Sequencer = {}
-Sequencer.__index = Sequencer
+sequencer = {}
+sequencer.__index = sequencer
 
 local fn = include("mosaic/lib/functions")
 
-function Sequencer:new(y, mode)
+function sequencer:new(y, mode)
   local self = setmetatable({}, self)
   self.y = y
   self.unsaved_grid = {}
@@ -39,7 +39,7 @@ function Sequencer:new(y, mode)
   return self
 end
 
-function Sequencer:draw(channel, draw_func)
+function sequencer:draw(channel, draw_func)
   local trigs = channel.working_pattern.trig_values
   local lengths = channel.working_pattern.lengths
 
@@ -127,7 +127,7 @@ function Sequencer:draw(channel, draw_func)
 
         length = lengths[grid_count]
 
-        if (length > 1 and in_step_length) then
+        if (length > 1) then
           for lx = grid_count + 1, grid_count + length - 1 do
             if lx > 64 then
               lx = lx - 64
@@ -135,7 +135,7 @@ function Sequencer:draw(channel, draw_func)
 
             if (trigs[lx] < 1 and lx < 65) then
               local length_grid_count = fn.calc_grid_count((lx - 1) % 16 + 1, 4 + ((lx - 1) // 16))
-              if start_step <= length_grid_count and end_step >= length_grid_count then
+              if not (self.mode == "channel" and not (end_step >= length_grid_count and in_step_length)) and (start_step <= length_grid_count) then
                 if program.step_has_trig_lock(channel, lx) then
                   draw_func((lx - 1) % 16 + 1, 4 + ((lx - 1) // 16), 5 - ((self.bclock.bright_mod == 3 and 1) or (self.bclock.bright_mod == 0 and 0) or self.bclock.bright_mod))
                 else
@@ -146,13 +146,6 @@ function Sequencer:draw(channel, draw_func)
               break
             end
           end
-        end
-      end
-      if (self.mode == "channel" and program.get().selected_channel ~= 17) then
-        if program.get_step_trig_masks(channel.number) and program.get_step_trig_masks(channel.number)[grid_count] == false then
-          local b = 2 - self.bclock.bright_mod
-          if b < 0 then b = 0 end
-          draw_func(x, y, b)
         end
       end
 
@@ -173,7 +166,7 @@ function Sequencer:draw(channel, draw_func)
   fn.dirty_screen(true)
 end
 
-function Sequencer:press(x, y)
+function sequencer:press(x, y)
   if (y >= self.y and y <= self.y + 3) then
     if (self.mode == "pattern") then
       program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)] =
@@ -183,7 +176,7 @@ function Sequencer:press(x, y)
   end
 end
 
-function Sequencer:dual_press(x, y, x2, y2)
+function sequencer:dual_press(x, y, x2, y2)
   if (y >= self.y and y <= self.y + 3 and y2 >= self.y and y2 <= self.y + 3) then
     if (self.mode == "channel") then
       program.get_selected_channel().start_trig = {x, y}
@@ -202,7 +195,7 @@ function Sequencer:dual_press(x, y, x2, y2)
   end
 end
 
-function Sequencer:long_press(x, y)
+function sequencer:long_press(x, y)
   if (y >= self.y and y <= self.y + 3) then
     if (self.mode == "pattern") then
       if (program.get_selected_pattern().trig_values[fn.calc_grid_count(x, y)] == 1) then
@@ -212,7 +205,7 @@ function Sequencer:long_press(x, y)
   end
 end
 
-function Sequencer:is_this(x, y)
+function sequencer:is_this(x, y)
   if (y >= self.y and y <= self.y + 3) then
     return true
   end
@@ -220,12 +213,12 @@ function Sequencer:is_this(x, y)
   return false
 end
 
-function Sequencer:show_unsaved_grid(g)
+function sequencer:show_unsaved_grid(g)
   self.unsaved_grid = g
 end
 
-function Sequencer:hide_unsaved_grid(g)
+function sequencer:hide_unsaved_grid(g)
   self.unsaved_grid = {}
 end
 
-return Sequencer
+return sequencer

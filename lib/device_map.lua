@@ -3,6 +3,8 @@ local device_map = {}
 local fn = include("mosaic/lib/functions")
 local json = require("mosaic/lib/json")
 
+
+
 local function read_json_file(file_path)
   local file, err = io.open(file_path, "r")
   if not file then
@@ -104,38 +106,6 @@ local function get_none_device()
 end
 
 local devices
-
-local chord_ui_labels = {
-  "--oct",
-  "--2nd",
-  "--3rd",
-  "--4th",
-  "--5th",
-  "--6th",
-  "--7th",
-  "-oct",
-  "-2nd",
-  "-3rd",
-  "-4th",
-  "-5th",
-  "-6th",
-  "-7th",
-  "off",
-  "2nd",
-  "3rd",
-  "4th",
-  "5th",
-  "6th",
-  "7th",
-  "+oct",
-  "+2nd",
-  "+3rd",
-  "+4th",
-  "+5th", 
-  "+6th",
-  "+7th",
-  "++oct"
-}
 
 local clock_divisions_ui_labels = {
   "x16",
@@ -254,50 +224,6 @@ local stock_params = {
     ["param_type"] = "stock"
   },
   {
-    ["id"] = "chord1",
-    ["name"] = "Chord Note 1",
-    ["short_descriptor_1"] = "CHRD",
-    ["short_descriptor_2"] = "NOTE",
-    ["off_value"] = 0,
-    ["cc_min_value"] = -14,
-    ["cc_max_value"] = 14,
-    ["ui_labels"] = chord_ui_labels,
-    ["param_type"] = "stock"
-  },
-  {
-    ["id"] = "chord2",
-    ["name"] = "Chord Note 2",
-    ["short_descriptor_1"] = "CHRD",
-    ["short_descriptor_2"] = "NOTE",
-    ["off_value"] = 0,
-    ["cc_min_value"] = -14,
-    ["cc_max_value"] = 14,
-    ["ui_labels"] = chord_ui_labels,
-    ["param_type"] = "stock"
-  },
-  {
-    ["id"] = "chord3",
-    ["name"] = "Chord Note 3",
-    ["short_descriptor_1"] = "CHRD",
-    ["short_descriptor_2"] = "NOTE",
-    ["off_value"] = 0,
-    ["cc_min_value"] = -14,
-    ["cc_max_value"] = 14,
-    ["ui_labels"] = chord_ui_labels,
-    ["param_type"] = "stock"
-  },
-  {
-    ["id"] = "chord4",
-    ["name"] = "Chord Note 4",
-    ["short_descriptor_1"] = "CHRD",
-    ["short_descriptor_2"] = "NOTE",
-    ["off_value"] = 0,
-    ["cc_min_value"] = -14,
-    ["cc_max_value"] = 14,
-    ["ui_labels"] = chord_ui_labels,
-    ["param_type"] = "stock"
-  },
-  {
     ["id"] = "chord_strum",
     ["name"] = "Chord Note Strum",
     ["short_descriptor_1"] = "CHRD",
@@ -337,6 +263,32 @@ local stock_params = {
   }
 }
 
+
+-- These are tested NB note players that do not break Mosaic
+local tested_note_players = {
+  "ansible 4",
+  "emplait 3",
+  "emplait 2",
+  "emplait 4",
+  "ansible 3",
+  "jf kit",
+  "jf n 1",
+  "emplait 1",
+  "jf n 2",
+  "jf poly",
+  "jf unison",
+  "jf n 5",
+  "jf mpe",
+  "crow 1/2",
+  "crow 3/4",
+  "jf n 4",
+  "jf n 3",
+  "jf n 6",
+  "ansible 1",
+  "ansible 2",
+  "crow para",
+}
+
 local function merge_devices()
 
   local stock_device_map = {}
@@ -368,7 +320,8 @@ local function merge_devices()
 
   if (note_players) then
     for index, device in pairs(note_players) do
-      if string.find(index, "midi", 1, true) ~= 1 then
+
+      if fn.appears_in_table(tested_note_players, index) and string.find(index, "midi", 1, true) ~= 1 then
         local new_device_params = {}
 
         table.insert(

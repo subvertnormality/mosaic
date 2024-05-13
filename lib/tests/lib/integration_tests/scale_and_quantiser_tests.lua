@@ -52,6 +52,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 1,
         root_note = 1
       }
@@ -96,6 +97,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 1,
         root_note = 1
       }
@@ -128,6 +130,413 @@ function test_global_default_scale_setting_quantises_notes_properly()
   end
   
   
+  function test_channel_default_scale_setting_quantises_notes_properly_when_global_pentatonic_is_set_c_major()
+    setup()
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+    local channel = 2
+    local scale = quantiser.get_scales()[1]
+
+    params:set("all_scales_lock_to_pentatonic", 2)
+
+  
+    program.set_scale(
+      2,
+      {
+        number = 1,
+        scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
+        chord = 1,
+        root_note = 0
+      }
+    )
+  
+    program.get().default_scale = 2
+  
+  
+    test_pattern.note_values[1] = 0
+    test_pattern.lengths[1] = 1
+    test_pattern.trig_values[1] = 1
+    test_pattern.velocity_values[1] = 100
+
+    test_pattern.note_values[2] = 1
+    test_pattern.lengths[2] = 1
+    test_pattern.trig_values[2] = 1
+    test_pattern.velocity_values[2] = 100
+
+    test_pattern.note_values[3] = 2
+    test_pattern.lengths[3] = 1
+    test_pattern.trig_values[3] = 1
+    test_pattern.velocity_values[3] = 100
+
+    test_pattern.note_values[4] = 3
+    test_pattern.lengths[4] = 1
+    test_pattern.trig_values[4] = 1
+    test_pattern.velocity_values[4] = 100
+
+    test_pattern.note_values[5] = 4
+    test_pattern.lengths[5] = 1
+    test_pattern.trig_values[5] = 1
+    test_pattern.velocity_values[5] = 100
+
+    test_pattern.note_values[6] = 5
+    test_pattern.lengths[6] = 1
+    test_pattern.trig_values[6] = 1
+    test_pattern.velocity_values[6] = 100
+
+    test_pattern.note_values[7] = 6
+    test_pattern.lengths[7] = 1
+    test_pattern.trig_values[7] = 1
+    test_pattern.velocity_values[7] = 100
+
+    test_pattern.note_values[8] = 7
+    test_pattern.lengths[8] = 1
+    test_pattern.trig_values[8] = 1
+    test_pattern.velocity_values[8] = 100
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    clock_setup()
+  
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 62)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64) -- snap to pentatonic scale
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 67)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 69)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 72)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+  
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 72) -- snap to pentatonic scale
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+  end
+
+
+  function test_channel_default_scale_setting_quantises_notes_properly_when_global_pentatonic_is_set_d_major()
+    setup()
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+    local channel = 2
+    local scale = quantiser.get_scales()[1]
+
+    params:set("all_scales_lock_to_pentatonic", 2)
+
+  
+    program.set_scale(
+      2,
+      {
+        number = 1,
+        scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
+        chord = 1,
+        root_note = 2
+      }
+    )
+  
+    program.get().default_scale = 2
+  
+  
+    test_pattern.note_values[1] = 0
+    test_pattern.lengths[1] = 1
+    test_pattern.trig_values[1] = 1
+    test_pattern.velocity_values[1] = 100
+
+    test_pattern.note_values[2] = 1
+    test_pattern.lengths[2] = 1
+    test_pattern.trig_values[2] = 1
+    test_pattern.velocity_values[2] = 100
+
+    test_pattern.note_values[3] = 2
+    test_pattern.lengths[3] = 1
+    test_pattern.trig_values[3] = 1
+    test_pattern.velocity_values[3] = 100
+
+    test_pattern.note_values[4] = 3
+    test_pattern.lengths[4] = 1
+    test_pattern.trig_values[4] = 1
+    test_pattern.velocity_values[4] = 100
+
+    test_pattern.note_values[5] = 4
+    test_pattern.lengths[5] = 1
+    test_pattern.trig_values[5] = 1
+    test_pattern.velocity_values[5] = 100
+
+    test_pattern.note_values[6] = 5
+    test_pattern.lengths[6] = 1
+    test_pattern.trig_values[6] = 1
+    test_pattern.velocity_values[6] = 100
+
+    test_pattern.note_values[7] = 6
+    test_pattern.lengths[7] = 1
+    test_pattern.trig_values[7] = 1
+    test_pattern.velocity_values[7] = 100
+
+    test_pattern.note_values[8] = 7
+    test_pattern.lengths[8] = 1
+    test_pattern.trig_values[8] = 1
+    test_pattern.velocity_values[8] = 100
+
+    test_pattern.note_values[9] = 8
+    test_pattern.lengths[9] = 1
+    test_pattern.trig_values[9] = 1
+    test_pattern.velocity_values[9] = 100
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  
+    pattern_controller.update_working_patterns()
+  
+    clock_setup()
+  
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 62)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 66)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 66) -- snap to pentatonic scale
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 69)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 71)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 74) -- snap to pentatonic scale
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+  
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 74) 
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 76)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+  end
+
+
+  function test_channel_default_scale_setting_quantises_notes_properly_when_pentatonic_merged_notes()
+    setup()
+    local sequencer_pattern = 1
+    program.set_selected_sequencer_pattern(1)
+    local test_pattern = program.initialise_default_pattern()
+    local test_pattern_2 = program.initialise_default_pattern()
+    local channel = 11
+    local scale = quantiser.get_scales()[1]
+
+    params:set("all_scales_lock_to_pentatonic", 1)
+    params:set("merged_lock_to_pentatonic", 2)
+
+    program.get_channel(channel).trig_merge_mode = "all"
+    program.get_channel(channel).note_merge_mode = "down"
+  
+    program.set_scale(
+      2,
+      {
+        number = 1,
+        scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
+        chord = 1,
+        root_note = 2
+      }
+    )
+  
+    program.get().default_scale = 2
+  
+  
+    test_pattern.note_values[1] = 0
+    test_pattern.lengths[1] = 1
+    test_pattern.trig_values[1] = 1
+    test_pattern.velocity_values[1] = 100
+
+    test_pattern.note_values[2] = 1
+    test_pattern.lengths[2] = 1
+    test_pattern.trig_values[2] = 1
+    test_pattern.velocity_values[2] = 100
+
+    test_pattern.note_values[3] = 2
+    test_pattern.lengths[3] = 1
+    test_pattern.trig_values[3] = 1
+    test_pattern.velocity_values[3] = 100
+
+    test_pattern.note_values[4] = 3
+    test_pattern.lengths[4] = 1
+    test_pattern.trig_values[4] = 1
+    test_pattern.velocity_values[4] = 100
+
+
+    test_pattern_2.note_values[1] = 2
+    test_pattern_2.lengths[1] = 1
+    test_pattern_2.trig_values[1] = 1
+    test_pattern_2.velocity_values[1] = 100
+
+    test_pattern_2.note_values[2] = 3
+    test_pattern_2.lengths[2] = 1
+    test_pattern_2.trig_values[2] = 1
+    test_pattern_2.velocity_values[2] = 100
+
+    test_pattern_2.note_values[3] = 4
+    test_pattern_2.lengths[3] = 1
+    test_pattern_2.trig_values[3] = 1
+    test_pattern_2.velocity_values[3] = 100
+
+    test_pattern_2.note_values[4] = 5
+    test_pattern_2.lengths[4] = 1
+    test_pattern_2.trig_values[4] = 1
+    test_pattern_2.velocity_values[4] = 100
+
+  
+    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 2)
+
+
+    pattern_controller.update_working_patterns()
+  
+    clock_setup()
+  
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 62)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 62)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_beats(1)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+  
+    luaunit.assert_equals(note_on_event[1], 66)
+    luaunit.assert_equals(note_on_event[2], 100)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+  end
+
   function test_step_scale_trig_lock_quantises_notes_properly()
     setup()
     local sequencer_pattern = 1
@@ -142,6 +551,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 2,
         root_note = 1
       }
@@ -152,6 +562,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 3,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 4,
         root_note = 1
       }
@@ -200,6 +611,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 2,
         root_note = 1
       }
@@ -210,6 +622,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 3,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 4,
         root_note = 1
       }
@@ -256,6 +669,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 1,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 1,
         root_note = 0
       }
@@ -266,6 +680,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 3,
         root_note = 0
       }
@@ -276,6 +691,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 3,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 5,
         root_note = 0
       }
@@ -363,6 +779,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 1,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 1,
         root_note = 0
       }
@@ -373,6 +790,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 3,
         root_note = 0
       }
@@ -383,6 +801,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 3,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 5,
         root_note = 0
       }
@@ -472,6 +891,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 1,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 1,
         root_note = 0
       }
@@ -482,6 +902,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 2,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 3,
         root_note = 0
       }
@@ -492,6 +913,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
       {
         number = 3,
         scale = scale.scale,
+        pentatonic_scale = scale.pentatonic_scale,
         chord = 5,
         root_note = 0
       }
@@ -579,6 +1001,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     {
       number = 2,
       scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
       chord = 1,
       root_note = 1
     }
@@ -623,6 +1046,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
     {
       number = 2,
       scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
       chord = 1,
       root_note = 0, 
       chord_degree_rotation = 0
@@ -631,7 +1055,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
 
   program.set_chord_degree_rotation_for_scale(2, 1)
 
-  program.get_channel(channel).default_scale = 2
+  program.get().default_scale = 2
 
   test_pattern.note_values[1] = 6
   test_pattern.lengths[1] = 1
@@ -667,6 +1091,7 @@ function test_chord_degree_rotation_with_negative_octave_mod()
     {
       number = 2,
       scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
       chord = 1,
       root_note = 0, 
       chord_degree_rotation = 0
@@ -676,7 +1101,7 @@ function test_chord_degree_rotation_with_negative_octave_mod()
   program.set_chord_degree_rotation_for_scale(2, 1)
   program.get_sequencer_pattern(sequencer_pattern).channels[channel].octave = -1
 
-  program.get_channel(channel).default_scale = 2
+  program.get().default_scale = 2
 
   test_pattern.note_values[1] = 6
   test_pattern.lengths[1] = 1
@@ -715,13 +1140,14 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
     {
       number = 2,
       scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
       chord = 1,
       root_note = 0, 
       chord_degree_rotation = 0
     }
   )
 
-  program.get_channel(channel).default_scale = 2
+  program.get().default_scale = 2
 
   test_pattern.note_values[1] = 6
   test_pattern.lengths[1] = 1
@@ -866,13 +1292,14 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
     {
       number = 2,
       scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
       chord = 1,
       root_note = 0, 
       chord_degree_rotation = 0
     }
   )
 
-  program.get_channel(channel).default_scale = 2
+  program.get().default_scale = 2
 
   test_pattern.note_values[1] = 6
   test_pattern.lengths[1] = 1

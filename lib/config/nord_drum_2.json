@@ -1,4 +1,4 @@
-{
+[{
   "name": "Nord Drum 2",
   "map_params_automatically": false,
   "type": "midi",
@@ -369,4 +369,4 @@
       "cc_min_value": -1
     }
   ]
-}
+}]

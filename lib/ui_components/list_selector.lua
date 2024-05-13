@@ -1,10 +1,10 @@
-local ListSelector = {}
-ListSelector.__index = ListSelector
+local list_selector = {}
+list_selector.__index = list_selector
 
 local fn = include("mosaic/lib/functions")
 
-function ListSelector:new(x, y, name, list)
-  local self = setmetatable({}, ListSelector)
+function list_selector:new(x, y, name, list)
+  local self = setmetatable({}, list_selector)
   self.x = x
   self.y = y
   self.name = name
@@ -15,7 +15,7 @@ function ListSelector:new(x, y, name, list)
   return self
 end
 
-function ListSelector:draw()
+function list_selector:draw()
   if self.selected then
     screen.level(15)
   else
@@ -24,27 +24,26 @@ function ListSelector:draw()
   screen.move(self.x, self.y)
   screen.font_size(8)
   screen.text(self.name)
-  screen.move(self.x + 5, self.y + 12)
-  screen.font_size(14)
+  screen.move(self.x, self.y + 8)
   screen.text(self.list[self.selected_value].name)
   screen.font_size(8)
 end
 
-function ListSelector:select()
+function list_selector:select()
   self.selected = true
   fn.dirty_screen(true)
 end
 
-function ListSelector:deselect()
+function list_selector:deselect()
   self.selected = false
   fn.dirty_screen(true)
 end
 
-function ListSelector:is_selected()
+function list_selector:is_selected()
   return self.selected
 end
 
-function ListSelector:increment()
+function list_selector:increment()
   self.selected_value = self.selected_value + 1
   if self.selected_value > #self.list then
     self.selected_value = #self.list
@@ -52,7 +51,7 @@ function ListSelector:increment()
   fn.dirty_screen(true)
 end
 
-function ListSelector:decrement()
+function list_selector:decrement()
   self.selected_value = self.selected_value - 1
   if self.selected_value < 1 then
     self.selected_value = 1
@@ -60,23 +59,23 @@ function ListSelector:decrement()
   fn.dirty_screen(true)
 end
 
-function ListSelector:set_selected_value(selected_value)
+function list_selector:set_selected_value(selected_value)
   self.selected_value = selected_value
   fn.dirty_screen(true)
 end
 
-function ListSelector:get_selected()
+function list_selector:get_selected()
   return self.list[self.selected_value]
 end
 
-function ListSelector:set_name()
+function list_selector:set_name()
   self.name = name
   fn.dirty_screen(true)
 end
 
-function ListSelector:set_list(list)
+function list_selector:set_list(list)
   self.list = list
   fn.dirty_screen(true)
 end
 
-return ListSelector
+return list_selector

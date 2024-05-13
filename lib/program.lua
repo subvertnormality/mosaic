@@ -1,5 +1,6 @@
 local musicutil = require("musicutil")
 local fn = include("mosaic/lib/functions")
+local quantiser = include("mosaic/lib/quantiser")
 
 local program = {}
 local program_store = {}
@@ -23,12 +24,18 @@ local function initialise_default_channels()
       step_trig_lock_banks = {},
       step_octave_trig_lock_banks = {},
       step_scale_trig_lock_banks = {},
-      step_trig_masks = program.initialise_64_table(true),
+      step_trig_masks = {},
+      step_note_masks = {},
+      step_velocity_masks = {},
+      step_length_masks = {},
+      step_micro_time_masks = {},
+      step_chord_masks = {},
       working_pattern = {
         trig_values = program.initialise_64_table(0),
         lengths = program.initialise_64_table(1),
         note_values = program.initialise_64_table(0),
-        velocity_values = program.initialise_64_table(100)
+        velocity_values = program.initialise_64_table(100),
+        note_mask_values = {},
       },
       start_trig = {1, 4},
       end_trig = {16, 7},
@@ -41,7 +48,6 @@ local function initialise_default_channels()
       note_merge_mode = "average",
       velocity_merge_mode = "average",
       length_merge_mode = "average",
-      merge_mode = "skip", -- deprecated
       octave = 0,
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,
@@ -67,6 +73,8 @@ local function initialise_default_sequencer_pattern()
   local sequencer_pattern = {}
   local root_note = 0
 
+  local c_major = quantiser.get_scale(1)
+
   sequencer_pattern = {
     active = false,
     global_pattern_length = 64,
@@ -75,22 +83,22 @@ local function initialise_default_sequencer_pattern()
     patterns = initialise_default_patterns(),
     channels = initialise_default_channels(),
     scales = {
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0},
-      {number = 1, scale = musicutil.generate_scale(0, "major", 20), root_note = root_note, chord = 1, chord_degree_rotation = 0}
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
+      {number = 1, scale = c_major.scale, pentatonic_scale = c_major.pentatonic_scale, root_note = root_note, chord = 1, chord_degree_rotation = 0},
     }
   }
 
@@ -110,6 +118,7 @@ function program.initialise_default_pattern()
     trig_values = program.initialise_64_table(0),
     lengths = program.initialise_64_table(1),
     note_values = program.initialise_64_table(0),
+    note_mask_values = program.initialise_64_table(-1),
     velocity_values = program.initialise_64_table(100)
   }
 end
@@ -121,9 +130,10 @@ function program.init()
     selected_sequencer_pattern = 1,
     selected_pattern = 1,
     selected_channel = 1,
+    selected_scale = 1,
     root_note = root_note,
     chord = 1,
-    default_scale = 0,
+    default_scale = 1,
     current_step = 1,
     current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     sequencer_patterns = {},
@@ -260,7 +270,16 @@ function program.step_has_trig_lock(channel, step)
   if
     program.step_has_param_trig_lock(channel, step) or program.step_octave_has_trig_lock(channel, step) or
       program.step_scale_has_trig_lock(channel, step) or
-      program.step_transpose_has_trig_lock(step)
+      program.step_transpose_has_trig_lock(step) or 
+      program.step_has_trig_mask(step) or
+      program.step_has_note_mask(step) or
+      program.step_has_velocity_mask(step) or
+      program.step_has_length_mask(step) or
+      program.step_has_micro_time_mask(step) or
+      program.step_has_chord_1_mask(step) or
+      program.step_has_chord_2_mask(step) or
+      program.step_has_chord_3_mask(step) or
+      program.step_has_chord_4_mask(step)
    then
     return true
   end
@@ -356,6 +375,98 @@ function program.step_transpose_has_trig_lock(step)
   return false
 end
 
+function program.step_has_trig_mask(step)
+  local step_trig_masks = program.get_selected_channel().step_trig_masks
+
+  if step_trig_masks and step_trig_masks[step] then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_note_mask(step)
+  local step_note_masks = program.get_selected_channel().step_note_masks
+
+  if step_note_masks and step_note_masks[step] then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_velocity_mask(step)
+  local step_velocity_masks = program.get_selected_channel().step_velocity_masks
+
+  if step_velocity_masks and step_velocity_masks[step] then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_length_mask(step)
+  local step_length_masks = program.get_selected_channel().step_length_masks
+
+  if step_length_masks and step_length_masks[step] then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_micro_time_mask(step)
+  local step_micro_time_masks = program.get_selected_channel().step_micro_time_masks
+
+  if step_micro_time_masks and step_micro_time_masks[step] then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_chord_1_mask(step)
+  local step_chord_masks = program.get_selected_channel().step_chord_masks
+
+  if step_chord_masks and step_chord_masks[step] and step_chord_masks[step][1] then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_chord_2_mask(step)
+  local step_chord_masks = program.get_selected_channel().step_chord_masks
+
+  if step_chord_masks and step_chord_masks[step] and step_chord_masks[step][2] then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_chord_3_mask(step)
+  local step_chord_masks = program.get_selected_channel().step_chord_masks
+
+  if step_chord_masks and step_chord_masks[step] and step_chord_masks[step][3] then
+    return true
+  end
+
+  return false
+end
+
+function program.step_has_chord_4_mask(step)
+  local step_chord_masks = program.get_selected_channel().step_chord_masks
+
+  if step_chord_masks and step_chord_masks[step] and step_chord_masks[step][4] then
+    return true
+  end
+
+  return false
+end
+
+
+
 function program.add_step_scale_trig_lock(step, trig_lock)
   local selected_channel = program.get_selected_channel()
   if selected_channel.step_scale_trig_lock_banks == nil then
@@ -394,8 +505,8 @@ function program.step_scale_has_trig_lock(channel, step)
 end
 
 function program.clear_trig_locks_for_step(step)
-  local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
   local channel = program.get_selected_channel()
+  local step_trig_lock_banks = channel.step_trig_lock_banks
   program.add_step_scale_trig_lock(step, nil)
   if channel.number ~= 17 then
     if (step_trig_lock_banks and step_trig_lock_banks[step]) then
@@ -406,6 +517,18 @@ function program.clear_trig_locks_for_step(step)
   elseif channel.number == 17 then
     program.add_step_transpose_trig_lock(step, nil)
   end
+end
+
+function program.clear_masks_for_step(step)
+  program.clear_step_trig_mask(program.get().selected_channel, step)
+  program.clear_step_note_mask(program.get().selected_channel, step)
+  program.clear_step_velocity_mask(program.get().selected_channel, step)
+  program.clear_step_length_mask(program.get().selected_channel, step)
+  program.clear_step_micro_time_mask(program.get().selected_channel, step)
+  program.clear_step_chord_1_mask(program.get().selected_channel, step)
+  program.clear_step_chord_2_mask(program.get().selected_channel, step)
+  program.clear_step_chord_3_mask(program.get().selected_channel, step)
+  program.clear_step_chord_4_mask(program.get().selected_channel, step)
 end
 
 function program.get_scale(s)
@@ -451,23 +574,116 @@ function program.get_step_trig_masks(channel)
   if program.get_channel(channel) == nil then return end
 
   if program.get_channel(channel).step_trig_masks == nil then
-    program.get_channel(channel).step_trig_masks = program.initialise_64_table(true)
+    program.get_channel(channel).step_trig_masks = {}
   end
   return program.get_channel(channel).step_trig_masks
 end
 
 function program.set_step_trig_mask(channel, step, mask)
   if program.get_channel(channel).step_trig_masks == nil then
-    program.get_channel(channel).step_trig_masks = program.initialise_64_table(true)
+    program.get_channel(channel).step_trig_masks = {}
   end
   program.get_channel(channel).step_trig_masks[step] = mask
 end
 
+function program.get_step_note_masks(channel) 
+  if program.get_channel(channel) == nil then return end
+
+  if program.get_channel(channel).step_note_masks == nil then
+    program.get_channel(channel).step_note_masks = {}
+  end
+  return program.get_channel(channel).step_note_masks
+end
+
+function program.get_step_velocity_masks(channel) 
+  if program.get_channel(channel) == nil then return end
+
+  if program.get_channel(channel).step_velocity_masks == nil then
+    program.get_channel(channel).step_velocity_masks = {}
+  end
+  return program.get_channel(channel).step_velocity_masks
+end
+
+function program.get_step_length_masks(channel) 
+  if program.get_channel(channel) == nil then return end
+
+  if program.get_channel(channel).step_length_masks == nil then
+    program.get_channel(channel).step_length_masks = {}
+  end
+  return program.get_channel(channel).step_length_masks
+end
+
+
 function program.toggle_step_trig_mask(channel, step)
   if program.get_channel(channel).step_trig_masks == nil then
-    program.get_channel(channel).step_trig_masks = program.initialise_64_table(true)
+    program.get_channel(channel).step_trig_masks = {}
   end
-  program.get_channel(channel).step_trig_masks[step] = not program.get_channel(channel).step_trig_masks[step]
+
+  if program.get_channel(channel).working_pattern.trig_values[step] == 0 then
+    program.get_channel(channel).step_trig_masks[step] = 1
+  elseif program.get_channel(channel).working_pattern.trig_values[step] == 1 then
+    program.get_channel(channel).step_trig_masks[step] = 0
+  end
+
 end
+
+function program.clear_step_trig_mask(channel, step)
+  program.get_channel(channel).step_trig_masks[step] = nil
+end
+
+function program.clear_step_note_mask(channel, step)
+  program.get_channel(channel).step_note_masks[step] = nil
+end
+
+function program.clear_step_velocity_mask(channel, step)
+  program.get_channel(channel).step_velocity_masks[step] = nil
+end
+
+function program.clear_step_length_mask(channel, step)
+  program.get_channel(channel).step_length_masks[step] = nil
+end
+
+function program.clear_step_micro_time_mask(channel, step)
+  program.get_channel(channel).step_micro_time_masks[step] = nil
+end
+
+function program.clear_step_chord_1_mask(channel, step)
+  if program.get_channel(channel).step_chord_masks == nil then
+    program.get_channel(channel).step_chord_masks = {}
+  end
+  if program.get_channel(channel).step_chord_masks[step] ~= nil then
+    program.get_channel(channel).step_chord_masks[step][1] = nil
+  end
+end
+
+function program.clear_step_chord_2_mask(channel, step)
+  if program.get_channel(channel).step_chord_masks == nil then
+    program.get_channel(channel).step_chord_masks = {}
+  end
+  if program.get_channel(channel).step_chord_masks[step] ~= nil then
+    program.get_channel(channel).step_chord_masks[step][2] = nil
+  end
+end
+
+function program.clear_step_chord_3_mask(channel, step)
+  if program.get_channel(channel).step_chord_masks == nil then
+    program.get_channel(channel).step_chord_masks = {}
+  end
+  if program.get_channel(channel).step_chord_masks[step] ~= nil then
+    program.get_channel(channel).step_chord_masks[step][3] = nil
+  end
+
+end
+
+function program.clear_step_chord_4_mask(channel, step)
+  if program.get_channel(channel).step_chord_masks == nil then
+    program.get_channel(channel).step_chord_masks = {}
+  end
+  if program.get_channel(channel).step_chord_masks[step] ~= nil then
+    program.get_channel(channel).step_chord_masks[step][4] = nil
+  end
+end
+
+
 
 return program

@@ -1,7 +1,22 @@
-# 0.4.5 - Candidate beta
+# 0.5 - Beta
+
+_Breaking update. Please backup and remove your .pset and .ptn data files from previous versions._
 
 * More bug fixes
-* Basic midi control from param trig locks
+* New improved manual
+* Scale and quantiser have been streamlined, global scale UI simplified
+* Note Masks: It's now possible to add and remove trigs to a channel directly from the channel page, overwriting pattern values
+* Note Masks: It's possible to set notes, velocities, and lengths, directly from the channel page, overwriting pattern values
+* Note Masks: Chords are now editable directly in the channel editor
+* Note Masks: Create note mask locks by using a midi keyboard
+* It's now possible to sync elektron devices with Mosaic's song mode. Patterns will be selected based on the currently selected Mosaic song pattern
+* UI elements no long wrap when selecting horizontally
+* Param on/off options are now in a sensible order
+* Digitakt 2 config file added
+* N.B. note players must now be allow-listed before being loaded to prevent crashes
+* Added option to lock all notes to pentatonic versions of each scale
+* Added option to lock merged notes to pentatonic versions of each scale - on by default
+* Added option to lock random notes to pentatonic versions of each scale - on by default
 
 # 0.4.4
 
@@ -97,7 +112,7 @@ _Breaking update. Please backup and remove your .pset and .ptn data files from p
 
 # 0.2.4
 
-* To stop the sequencer you now need to hold down the currently active page's LED in the menu. This prevents accidental stops whilst navigating pages.
+* To stop the sequencer you now hold down the currently active page's LED in the menu. This prevents accidental stops whilst navigating pages.
 * NB devices now send proper velocities
 * Added quantised fixed note trig lock
 * Added bipolar random note trig lock

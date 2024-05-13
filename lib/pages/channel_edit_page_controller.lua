@@ -4,10 +4,10 @@ local pattern_buttons = {}
 local fn = include("mosaic/lib/functions")
 local quantiser = include("mosaic/lib/quantiser")
 
-local channel_edit_page_sequencer = Sequencer:new(4, "channel")
-local channel_select_fader = Fader:new(1, 1, 16, 16)
+local channel_edit_page_sequencer = sequencer:new(4, "channel")
+local channel_select_fader = fader:new(1, 1, 16, 16)
 local trig_merge_mode_button =
-  Button:new(
+  button:new(
   13,
   8,
   {
@@ -17,7 +17,7 @@ local trig_merge_mode_button =
   }
 )
 local note_merge_mode_button =
-  Button:new(
+  button:new(
   14,
   8,
   {
@@ -28,7 +28,7 @@ local note_merge_mode_button =
   }
 )
 local velocity_merge_mode_button =
-  Button:new(
+  button:new(
   15,
   8,
   {
@@ -39,7 +39,7 @@ local velocity_merge_mode_button =
   }
 )
 local length_merge_mode_button =
-  Button:new(
+  button:new(
   16,
   8,
   {
@@ -49,14 +49,16 @@ local length_merge_mode_button =
     {"Channel length merge mode on", 15}
   }
 )
-local channel_octave_fader = Fader:new(7, 8, 5, 5)
-local channel_scale_fader = Fader:new(1, 3, 16, 16)
-local transpose_fader = Fader:new(8, 8, 9, 17)
+local channel_octave_fader = fader:new(7, 8, 5, 5)
+local channel_scale_fader = fader:new(1, 3, 16, 16)
+local transpose_fader = fader:new(8, 8, 9, 17)
+
+local hide_scale_fader_leds = false
 
 function channel_edit_page_controller.init()
   if program.get_selected_channel() ~= 17 then
     for s = 1, 16 do
-      pattern_buttons["step" .. s .. "_pattern_button"] = Button:new(s, 2)
+      pattern_buttons["step" .. s .. "_pattern_button"] = button:new(s, 2)
     end
 
     channel_octave_fader:set_value(program.get_selected_channel().octave + 3)
@@ -67,7 +69,17 @@ function channel_edit_page_controller.init()
   channel_scale_fader:set_pre_func(
     function(x, y, length)
       for i = x, length + x - 1 do
-        if i == program.get_selected_channel().step_scale_number then
+        if hide_scale_fader_leds then
+          break
+        end
+        if clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
+          grid_abstraction.led(i, y, 15)
+        elseif clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number == 17 then
+          grid_abstraction.led(i, y, 15)
+          channel_scale_fader:set_value(0)
+        elseif not clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
+          grid_abstraction.led(i, y, 15)
+        elseif i == program.get().selected_scale and program.get_selected_channel().number == 17 then
           grid_abstraction.led(i, y, 4)
         end
       end
@@ -163,9 +175,22 @@ function channel_edit_page_controller.register_press_handlers()
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
         channel_edit_page_ui_controller.refresh_trig_locks()
+        channel_edit_page_ui_controller.refresh_notes()
         if program.get().selected_channel ~= 17 and is_key3_down then
           channel_edit_page_sequencer:press(x, y)
           program.toggle_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
+          pattern_controller.update_working_patterns()
+        end
+      end
+    end
+  )
+  press_handler:register_long(
+    "channel_edit_page",
+    function(x, y)
+      if channel_edit_page_sequencer:is_this(x, y) then
+        if program.get().selected_channel ~= 17 and is_key3_down then
+          program.clear_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
+          channel_edit_page_ui_controller.refresh_notes()
           pattern_controller.update_working_patterns()
         end
       end
@@ -176,7 +201,9 @@ function channel_edit_page_controller.register_press_handlers()
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
         channel_edit_page_ui_controller.refresh_trig_locks()
+        channel_edit_page_ui_controller.refresh_notes()
         channel_edit_page_controller.refresh_faders()
+        pattern_controller.update_working_patterns()
       end
     end
   )
@@ -269,48 +296,38 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_scale_fader:is_this(x, y) then
-        channel_scale_fader:press(x, y)
-        local scale_value = channel_scale_fader:get_value()
-        local number = program.get_scale(scale_value).number
         if program.get().selected_channel ~= 17 then
-          local channel = program.get_selected_channel()
-
-          if channel.default_scale ~= scale_value then
-            channel.default_scale = scale_value
-            tooltip:show(
-              "Ch. " .. program.get().selected_channel .. " scale: " .. quantiser.get_scale_name_from_index(number)
-            )
+          program.get().selected_channel = 17
+          channel_select_fader:set_value(0)
+          if program.get().default_scale then
+            channel_scale_fader:set_value(program.get().default_scale)
           else
-            channel.default_scale = 0
             channel_scale_fader:set_value(0)
-            tooltip:show("Channel scale off")
           end
+          channel_edit_page_ui_controller.refresh()
         else
-          if program.get().default_scale ~= scale_value then
-            program.get().default_scale = scale_value
-            tooltip:show("Global scale: " .. quantiser.get_scale_name_from_index(number))
-          else
-            program.get().default_scale = 0
-            channel_scale_fader:set_value(0)
-            tooltip:show("Global scale off")
-          end
+          program.get().selected_scale = x
+          channel_edit_page_ui_controller.refresh_quantiser()
         end
-        channel_edit_page_ui_controller.refresh_quantiser()
       end
     end
   )
   press_handler:register_long(
     "channel_edit_page",
     function(x, y)
-      if channel_scale_fader:is_this(x, y) then
-        program.get().selected_channel = 17
-        channel_select_fader:set_value(0)
-        if program.get().default_scale then
-          channel_scale_fader:set_value(program.get().default_scale)
+      if channel_scale_fader:is_this(x, y) and program.get().selected_channel == 17 then
+        channel_scale_fader:press(x, y)
+        local scale_value = channel_scale_fader:get_value()
+        local number = program.get_scale(scale_value).number
+        if program.get().default_scale ~= scale_value then
+          program.get().default_scale = scale_value
+          tooltip:show("Global scale: " .. quantiser.get_notes()[program.get_scale(scale_value).root_note + 1] .. " " .. quantiser.get_scale_name_from_index(number))
         else
+          program.get().default_scale = 0
           channel_scale_fader:set_value(0)
+          tooltip:show("Global scale off")
         end
-        channel_edit_page_ui_controller.refresh()
+        channel_edit_page_ui_controller.refresh_quantiser()
       end
     end
   )
@@ -536,6 +553,7 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
+        channel_edit_page_ui_controller.refresh_notes()
         channel_edit_page_ui_controller.refresh_trig_locks()
         channel_edit_page_controller.refresh_faders()
       end
@@ -555,6 +573,30 @@ function channel_edit_page_controller.register_press_handlers()
     end
   )
 end
+
+function channel_edit_page_controller.handle_note_on_midi_controller_message(note, velocity, chord_number, chord_degree)
+  local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
+  if #pressed_keys > 0 then
+    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+
+      local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+
+      if chord_number == 1 then
+        channel.step_trig_masks[step] = 1
+        channel.step_note_masks[step] = note
+        channel.step_velocity_masks[step] = velocity
+        channel.step_chord_masks[step] = {}
+      elseif (chord_degree) then
+        channel.step_chord_masks[step][chord_number - 1] = chord_degree 
+      end
+
+      channel_edit_page_ui_controller.refresh_notes()
+
+    end
+  end
+end
+
 
 function channel_edit_page_controller.refresh_merge_buttons()
   local trig_merge_mode = program.get_selected_channel().trig_merge_mode
@@ -629,12 +671,9 @@ function channel_edit_page_controller.refresh_faders()
     end
     if step_scale_trig_lock then
       channel_scale_fader:set_value(step_scale_trig_lock)
+      hide_scale_fader_leds = true
     elseif program.get().selected_channel ~= 17 then
-      if channel.default_scale > 0 then
-        channel_scale_fader:set_value(channel.default_scale)
-      else
-        channel_scale_fader:set_value(0)
-      end
+      channel_scale_fader:set_value(0)
     else
       if program.get().default_scale > 0 then
         channel_scale_fader:set_value(program.get().default_scale)
@@ -650,13 +689,12 @@ function channel_edit_page_controller.refresh_faders()
   else
     if program.get().selected_channel == 17 then
       channel_scale_fader:set_value(program.get().default_scale)
-    elseif channel.default_scale then
-      channel_scale_fader:set_value(channel.default_scale)
     else
       channel_scale_fader:set_value(0)
     end
     channel_octave_fader:set_value(channel.octave + 3)
     transpose_fader:set_value(program.get_transpose() + 8)
+    hide_scale_fader_leds = false
   end
 end
 

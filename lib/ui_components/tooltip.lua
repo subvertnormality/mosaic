@@ -7,7 +7,8 @@ tooltip.metros = {}
 
 function tooltip:draw()
   if tooltip.text then
-    screen.move(0, 60)
+    screen.move(0, 62)
+    screen.font_size(8)
     screen.text(tooltip.text)
   end
 end

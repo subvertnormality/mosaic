@@ -1,10 +1,10 @@
-local VerticalScrollSelector = {}
-VerticalScrollSelector.__index = VerticalScrollSelector
+local vertical_scroll_selector = {}
+vertical_scroll_selector.__index = vertical_scroll_selector
 
 local fn = include("mosaic/lib/functions")
 
-function VerticalScrollSelector:new(x, y, name, items)
-  local self = setmetatable({}, VerticalScrollSelector)
+function vertical_scroll_selector:new(x, y, name, items)
+  local self = setmetatable({}, vertical_scroll_selector)
   self.name = name
   self.x = x
   self.y = y
@@ -18,35 +18,35 @@ function VerticalScrollSelector:new(x, y, name, items)
   return self
 end
 
-function VerticalScrollSelector:get_selected_index()
+function vertical_scroll_selector:get_selected_index()
   return self.selected_item
 end
 
-function VerticalScrollSelector:get_selected_item()
+function vertical_scroll_selector:get_selected_item()
   return self.items[self.selected_item]
 end
 
-function VerticalScrollSelector:set_selected_item(selected_item)
+function vertical_scroll_selector:set_selected_item(selected_item)
   self.selected_item = selected_item
 end
 
-function VerticalScrollSelector:set_items(items)
+function vertical_scroll_selector:set_items(items)
   self.items = items
 end
 
-function VerticalScrollSelector:get_items()
+function vertical_scroll_selector:get_items()
   return self.items
 end
 
-function VerticalScrollSelector:get_meta_item()
+function vertical_scroll_selector:get_meta_item()
   return self.meta_items
 end
 
-function VerticalScrollSelector:set_meta_item(items)
+function vertical_scroll_selector:set_meta_item(items)
   self.meta_items = items
 end
 
-function VerticalScrollSelector:draw()
+function vertical_scroll_selector:draw()
   if not self.items then
     return
   end
@@ -89,32 +89,32 @@ function VerticalScrollSelector:draw()
   end
 end
 
-function VerticalScrollSelector:scroll_down()
+function vertical_scroll_selector:scroll_down()
   if self.selected_item < #self.items then
     self.selected_item = self.selected_item + 1
   end
   fn.dirty_screen(true)
 end
 
-function VerticalScrollSelector:scroll_up()
+function vertical_scroll_selector:scroll_up()
   if self.selected_item > 1 then
     self.selected_item = self.selected_item - 1
   end
   fn.dirty_screen(true)
 end
 
-function VerticalScrollSelector:select()
+function vertical_scroll_selector:select()
   self.selected = true
   fn.dirty_screen(true)
 end
 
-function VerticalScrollSelector:deselect()
+function vertical_scroll_selector:deselect()
   self.selected = false
   fn.dirty_screen(true)
 end
 
-function VerticalScrollSelector:is_selected()
+function vertical_scroll_selector:is_selected()
   return self.selected
 end
 
-return VerticalScrollSelector
+return vertical_scroll_selector

@@ -1,10 +1,10 @@
-local ControlScrollSelector = {}
-ControlScrollSelector.__index = ControlScrollSelector
+local control_scroll_selector = {}
+control_scroll_selector.__index = control_scroll_selector
 
 local fn = include("mosaic/lib/functions")
 
-function ControlScrollSelector:new(x, y, items)
-  local self = setmetatable({}, ControlScrollSelector)
+function control_scroll_selector:new(x, y, items)
+  local self = setmetatable({}, control_scroll_selector)
   self.x = x
   self.y = y
   self.name = name
@@ -13,17 +13,17 @@ function ControlScrollSelector:new(x, y, items)
   return self
 end
 
-function ControlScrollSelector:select(x)
+function control_scroll_selector:select(x)
   self.items[x]:select()
 end
 
-function ControlScrollSelector:draw()
+function control_scroll_selector:draw()
   for i = 1, #self.items do
     self.items[i]:draw()
   end
 end
 
-function ControlScrollSelector:scroll_next()
+function control_scroll_selector:scroll_next()
   if self.selected_item < #self.items then
     self.selected_item = self.selected_item + 1
   end
@@ -34,7 +34,7 @@ function ControlScrollSelector:scroll_next()
   fn.dirty_screen(true)
 end
 
-function ControlScrollSelector:scroll_previous()
+function control_scroll_selector:scroll_previous()
   if self.selected_item > 1 then
     self.selected_item = self.selected_item - 1
   end
@@ -45,22 +45,22 @@ function ControlScrollSelector:scroll_previous()
   fn.dirty_screen(true)
 end
 
-function ControlScrollSelector:set_items(items)
+function control_scroll_selector:set_items(items)
   self.items = items
   fn.dirty_screen(true)
 end
 
-function ControlScrollSelector:get_selected_index()
+function control_scroll_selector:get_selected_index()
   return self.selected_item
 end
 
-function ControlScrollSelector:get_selected_item()
+function control_scroll_selector:get_selected_item()
   return self.items[self.selected_item]
 end
 
-function ControlScrollSelector:set_selected_item(item)
+function control_scroll_selector:set_selected_item(item)
   self.items[self.selected_item]:select()
   fn.dirty_screen(true)
 end
 
-return ControlScrollSelector
+return control_scroll_selector

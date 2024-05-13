@@ -9,6 +9,7 @@ function test_note_value_is_quantised_from_0_to_c_in_c_major()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -32,6 +33,7 @@ function test_note_value_is_quantised_from_1_to_d_in_c_major()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -56,6 +58,7 @@ function test_note_value_is_quantised_from_2_to_e_in_c_major()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -80,6 +83,7 @@ function test_note_value_is_quantised_from_3_to_f_in_c_major()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -104,6 +108,7 @@ function test_note_value_is_quantised_from_4_to_g_in_c_major()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -127,6 +132,7 @@ function test_note_value_is_quantised_from_5_to_a_in_c_major()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -151,6 +157,7 @@ function test_note_value_is_quantised_from_6_to_b_in_c_major()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -175,6 +182,7 @@ function test_note_value_is_quantised_from_7_to_c_in_c_major()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -198,6 +206,7 @@ function test_note_value_is_quantised_from_0_to_c_72_with_step_octave_mod_1_in_c
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -221,6 +230,7 @@ function test_note_value_is_quantised_from_3_to_f_77_with_step_octave_mod_1_in_c
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -245,6 +255,7 @@ function test_note_value_is_quantised_from_3_to_fsharp_with_transpose_1_in_c_maj
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -268,6 +279,7 @@ function test_note_value_is_quantised_from_3_to_g_with_transpose_2_in_c_major()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -292,6 +304,7 @@ function test_note_value_is_quantised_from_3_to_e_with_transpose_minus1_in_c_maj
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -315,6 +328,7 @@ function test_note_value_is_quantised_from_3_to_e_with_transpose_minus5_in_c_maj
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -338,6 +352,7 @@ function test_note_value_is_quantised_from_0_to_d_in_c_major_with_chord_2()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 2,
       root_note = 0
     }
@@ -362,6 +377,7 @@ function test_note_value_is_quantised_from_0_to_c_72_in_c_major_with_chord_8()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 8,
       root_note = 0
     }
@@ -385,6 +401,7 @@ function test_note_value_is_quantised_from_0_to_b_71_in_c_major_with_chord_7()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 7,
       root_note = 0
     }
@@ -408,6 +425,7 @@ function test_note_value_is_quantised_from_0_to_b_83_in_c_major_with_chord_7_oct
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 7,
       root_note = 0
     }
@@ -431,6 +449,7 @@ function test_note_value_is_quantised_from_0_to_c_84_in_c_major_with_chord_7_oct
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 7,
       root_note = 0
     }
@@ -454,6 +473,7 @@ function test_note_value_is_quantised_from_0_to_csharp_85_in_csharp_major_with_c
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 7,
       root_note = 1
     }
@@ -478,6 +498,7 @@ function test_note_value_is_quantised_from_0_to_d_in_d_major()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 2
     }
@@ -502,6 +523,7 @@ function test_note_value_is_quantised_from_5_to_bsharp_70_in_d_minor()
     {
       number = 1,
       scale = quantiser.get_scales()[2].scale,
+      pentatonic_scale = quantiser.get_scales()[2].pentatonic_scale,
       chord = 1,
       root_note = 2
     }
@@ -526,6 +548,7 @@ function test_note_value_is_quantised_from_5_to_bsharp_70_in_d_minor_when_using_
     {
       number = 2,
       scale = quantiser.get_scales()[2].scale,
+      pentatonic_scale = quantiser.get_scales()[2].pentatonic_scale,
       chord = 1,
       root_note = 2
     }
@@ -551,6 +574,7 @@ function test_note_values_are_quantised_a_to_a_with_correct_ascending_octave()
     {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 6,
       root_note = 0
     }

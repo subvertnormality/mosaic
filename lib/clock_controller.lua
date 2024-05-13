@@ -105,20 +105,26 @@ function clock_controller.init()
   master_clock =
     clock_lattice:new_sprocket {
       action = function(t)
+        local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
+        local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
+        if params:get("elektron_program_changes") == 2 and program.get().current_step == selected_sequencer_pattern.global_pattern_length - 1 then
+          step_handler.process_elektron_program_change(step_handler.calculate_next_selected_sequencer_pattern())
+        end
         if first_run ~= true then
           step_handler.process_song_sequencer_patterns(program.get().current_step)
           local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
           local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
           if program.get().global_step_accumulator % selected_sequencer_pattern.global_pattern_length == 0 then
             for i = 1, 17 do
-                if (((fn.calc_grid_count(program.get_channel(i).end_trig[1], program.get_channel(i).end_trig[2]) 
-                  - fn.calc_grid_count(program.get_channel(i).start_trig[1], program.get_channel(i).start_trig[2]) + 1)
-                  > selected_sequencer_pattern.global_pattern_length)) then
-                    program.set_current_step_for_channel(i, 99)
-                end
+              if (((fn.calc_grid_count(program.get_channel(i).end_trig[1], program.get_channel(i).end_trig[2]) 
+                - fn.calc_grid_count(program.get_channel(i).start_trig[1], program.get_channel(i).start_trig[2]) + 1)
+                > selected_sequencer_pattern.global_pattern_length)) then
+                  program.set_current_step_for_channel(i, 99)
               end
             end
           end
+        end
+
 
         program.get().current_step = program.get().current_step + 1
         program.get().global_step_accumulator = program.get().global_step_accumulator + 1
@@ -218,7 +224,7 @@ function clock_controller.init()
             trigless_lock_active[channel_number] = false
             step_handler.process_params(channel_number, step)
           elseif
-            params:get("trigless_locks") == 1 and trigless_lock_active[i] ~= true and
+            params:get("trigless_locks") == 2 and trigless_lock_active[i] ~= true and
               program.step_has_param_trig_lock(program.get_channel(channel_number), step)
             then
             trigless_lock_active[channel_number] = true
@@ -245,6 +251,10 @@ end
 function clock_controller.set_channel_division(channel_number, division)
   clock_controller["channel_" .. channel_number .. "_clock"]:set_division(1 / (division * 4))
   clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor:set_division(1 / (division * 4))
+end
+
+function clock_controller.get_channel_division(channel_number)
+  return clock_controller["channel_" .. channel_number .. "_clock"] and clock_controller["channel_" .. channel_number .. "_clock"].division or 0.4
 end
 
 function clock_controller.delay_action(c, division_index, multiplier, func)
@@ -275,6 +285,10 @@ end
 
 function clock_controller:start()
   first_run = true
+  if params:get("elektron_program_changes") == 2 then
+    step_handler.process_elektron_program_change(program.get().selected_sequencer_pattern)
+  end
+
   clock_controller.set_playing()
 
   midi_controller.start()

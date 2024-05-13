@@ -14,6 +14,8 @@ local midi_note_mappings = {
 
 local midi_tables = {}
 local midi_off_store = {}
+local chord_number = 0
+local chord_one_note = nil
 
 for i = 0, 127 do
   local noteValue = midi_note_mappings[(i % 12) + 1] or 0
@@ -40,16 +42,50 @@ function handle_midi_event_data(data, midi_device)
     if midi_tables[data[2]] == nil then
       return
     end
-    midi_off_store[data[2]] = channel.step_scale_number
-    local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, channel.step_scale_number)
-    midi_controller:note_on(note, velocity, midi_channel, device.midi_device)
 
+
+    local step_scale_number = channel.step_scale_number
+
+    local pressed_keys = grid_controller.get_pressed_keys()
+    local channel = program.get_selected_channel()
+    if #pressed_keys > 0 then
+      if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+        local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+        step_scale_number = step_handler.manually_calculate_step_scale_number(channel.number, step)
+      end
+    end
+
+    midi_off_store[data[2]] = step_scale_number
+    
+    local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, step_scale_number)
+    if params:get("midi_scale_mapped_to_white_keys") == 1 then
+      note = data[2]
+    end
+    midi_controller:note_on(note, velocity, midi_channel, device.midi_device)
+    if chord_number == 0 then 
+      chord_one_note = note 
+    end
+    chord_number = chord_number + 1
+
+    local chord_degree = nil
+
+    chord_degree = fn.find_index_by_value(program.get_scale(step_scale_number).scale, quantiser.snap_to_scale(note, step_scale_number)) - fn.find_index_by_value(program.get_scale(step_scale_number).scale, quantiser.snap_to_scale(chord_one_note, step_scale_number))
+
+    if chord_degree < -14 then
+      chord_degree = nil
+    end
+
+    channel_edit_page_controller.handle_note_on_midi_controller_message(note, velocity, chord_number, chord_degree)
   elseif data[1] == 128 then -- note off
     if midi_tables[data[2]] == nil then
       return
     end
     local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, midi_off_store[data[2]])
     midi_controller:note_off(note, 0, midi_channel, device.midi_device)
+    chord_number = chord_number - 1
+    if chord_number == 0 then 
+      chord_one_note = nil 
+    end
   elseif data[1] == 176 then -- cc change
     if data[2] >= 15 and (data[2] - 14) <= 10 then
       channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(data[3] - 64, channel, data[2] - 14)
@@ -96,6 +132,7 @@ function midi_controller.all_off(id)
       midi_devices[id]:note_off(note, 0, channel)
     end
   end
+  chord_number = 0
 end
 
 function midi_controller:note_off(note, velocity, channel, device)
@@ -128,6 +165,12 @@ function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
   midi_controller.cc(38, math.floor(v2), channel, device)
 end
 
+function midi_controller:program_change(program_id, channel, device)
+  if midi_devices[device] ~= nil then
+    midi_devices[device]:program_change(program_id, channel)
+  end
+end
+
 function midi_controller.start()
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
@@ -142,6 +185,7 @@ function midi_controller.stop()
       midi_devices[id]:stop()
     end
   end
+  chord_number = 0
 end
 
 function midi_controller.panic()
@@ -150,6 +194,7 @@ function midi_controller.panic()
       midi_controller.all_off(id)
     end
   end
+  chord_number = 0
 end
 
 return midi_controller
