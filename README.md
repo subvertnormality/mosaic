@@ -1,4 +1,4 @@
-Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Grid. It melds the powerful features of the Elektron sequencer with innovative generative techniques, all within the Monome ecosystem, allowing you to craft complex rhythms and harmonies with ease. Whether you are sketching or composing, Mosaic provides a unique, deep musical experience.
+Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Grid. It melds the powerful features of the Elektron sequencer with innovative generative techniques, all within the Monome ecosystem, and allows you to craft complex rhythms and harmonies with ease. Whether you are sketching or composing, Mosaic provides a unique, deep musical experience.
 
 - [Getting started](#getting-started)
   * [Install](#install)
@@ -12,6 +12,7 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
     + [Getting around Mosaic](#getting-around-mosaic)
       - [Grid menu navigation](#grid-menu-navigation)
       - [Norns menu navigation](#norns-menu-navigation)
+      - [Tooltips](#tooltips)
       - [Sequencer start and stop](#sequencer-start-and-stop)
       - [Midi panic](#midi-panic)
     + [Sound design](#sound-design)
@@ -93,7 +94,9 @@ Welcome to Mosaic, an intuitive XoX-style midi sequencer for Monome Norns and Gr
 
 
 
-# Getting started
+# Getting Started
+
+Welcome to Mosaic! Follow these steps to install and set up your Mosaic system for the first time.
 
 ## Install
 
@@ -103,7 +106,7 @@ To install, simply run `;install https://github.com/subvertnormality/mosaic` in 
 
 ### Hardware
 
-_Mosaic_ operates with the Monome Norns and a 128 Grid at a minimum. While these two components allow you to create simple songs, incorporating external sound sources via a MIDI interface will vastly expand your sequencing capabilities. Devices with MIDI inputs are all supported, though those set up in _Mosaic_ using pre-existing or manually created configuration files are optimal. Crow, Just Friends, and Ansible are natively supported through [n.b.](https://github.com/sixolet/nb/). Additionally, you can utilize Norns to generate sounds by installing n.b. mods. A list of supported mods can be found in the [Norns sound sources with n.b.](#norns-sound-sources-with-nb) section.
+_Mosaic_ operates with the Monome Norns and a 128 Grid at a minimum. These two components alone will allow you to create simple songs, but incorporating external sound sources via a MIDI interface will vastly expand your sequencing capabilities. Devices with MIDI in are all supported, although those set up in _Mosaic_ using pre-existing or manually created configuration files are optimal. Crow, Just Friends, and Ansible are natively supported using [n.b.](https://github.com/sixolet/nb/). 
 
 Using [Midi input](#midi-input) devices, while not essential, enhances the user experience. A MIDI keyboard simplifies melody creation, and a MIDI controller with encoders supporting relative bin offsets can improve the data input process.
 
@@ -115,11 +118,11 @@ For those using a ACL Sinfonion, support is available through a straightforward 
 
 #### Stock devices
 
-Mosaic includes a range of stock devices that you can integrate into your setup, but first, they need to be configured to appear in the device selector. Here’s how to set this up using [maiden](https://monome.org/docs/norns/maiden/), the web-based editor for Norns:
+Mosaic includes a range of stock devices that you can integrate into your setup, but first, they need to be configured to appear in the device selector. Here’s how to set this up using [maiden](https://monome.org/docs/norns/maiden/):
 
 1. Access Configuration Files: Open Maiden and navigate to the directory path `code > mosaic > lib > config`. Here, you will find the stock device configuration files.
-2. Create a New Configuration Folder: Next, go to the directory dust > mosaic. In this location, create a new folder named config.
-3. Copy Configuration Files: Copy the device configuration files that you wish to use from `code > mosaic > lib > config` into the `dust > mosaic > config` folder you just created.
+2. Create a New Configuration Folder: Next, go to the directory `data > mosaic`. In this location, create a new folder named config.
+3. Copy Configuration Files: Copy the device configuration files that you wish to use from `code > mosaic > lib > config` into the `data > mosaic > config` folder you just created.
 4. Once these steps are completed, Mosaic will automatically load the device configurations you've selected, and they will be available in the device picker on the channel page. 
 
 This setup ensures that you can easily access and use your preferred stock devices within Mosaic.
@@ -127,7 +130,7 @@ This setup ensures that you can easily access and use your preferred stock devic
 
 #### Custom devices
 
-Once you've copied the stock device configuration files into the `dust > mosaic > config` folder, you can also personalize these configurations to better suit your setup. This is particularly useful for setting common defaults like the MIDI output device.
+Once you've copied the stock device configuration files into the `data > mosaic > config` folder, you can also personalise these configurations to better suit your setup. This is particularly useful for setting common defaults like the MIDI output device.
 
 You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a [device config template](#device-config-template) that matches your device’s MIDI specifications.
 
@@ -149,12 +152,15 @@ Navigation within Mosaic primarily occurs via the Grid. The lower left five butt
 
 ![The menu as shown on the pattern edit page](https://raw.githubusercontent.com/subvertnormality/mosaic/main/designs/Images/menu.png)
 
-
 #### Norns menu navigation
 
 Further configuration happens on Norns. Each grid page corresponds to several grouped pages on the screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you navigate away from the page without applying, the change will be cancelled.
 
-For a detailed reference on the layout and functionality of each button and encoder on your Norns device, it's best to consult the official [Norns documentation](https://monome.org/docs/norns/). This documentation provides comprehensive information and is a reliable source for understanding how to navigate and operate your device effectively. 
+For a detailed reference on the layout of your Norns device, consult the official [Norns documentation](https://monome.org/docs/norns/). 
+
+#### Tooltips
+
+Most _Mosaic_ functions are described by tooltips that appear at the bottom of the Norns screen when activated. If you're not sure what a button does, try pressing it and watching out for the tooltip.
 
 
 #### Sequencer start and stop
@@ -170,32 +176,33 @@ Should your MIDI output devices become unresponsive, you can clear all MIDI-on e
 
 ### Sound design
 
-The initial stage of song creation involves setting up a few basic voices. These preliminary sound designs may evolve, but it's useful to have a basic foundation for developing the rhythmic, harmonic, and melodic aspects of your track.
+The initial stage of song creation with _Mosaic_ involves setting up a few basic voices. These preliminary sound designs may evolve, but it's useful to have a basic foundation for developing the rhythmic, harmonic, and melodic aspects of your track.
 
-Start by selecting the device for each element of your composition, whether it be an internal Norns player, an external drum machine or synthesizer, or components of a modular patch. Assign each device to a Mosaic [channel](#channel-editor) as detailed in the [device](#devices) section. Organising different instruments can be helpful; for instance, group drums on channels 1-6, harmonic and textural elements on channels 7-10, melodic elements on channels 11-14, and reserve channels 15 and 16 for modulation. Adapt these assignments to suit your specific musical style and needs.
+Start by selecting the device for each element of your composition, whether it be an internal Norns player, an external drum machine or synthesizer, or components of a modular patch. To do this, assign each device to a Mosaic [channel](#channel-editor) as detailed in the [device](#devices) section. Organising different instruments can be helpful; for instance, group drums on channels 1-6, harmonic and textural elements on channels 7-10, melodic elements on channels 11-14, and reserve channels 15 and 16 for modulation. Adapt these assignments to suit your specific musical style and needs.
 
 With your devices assigned, you're ready to begin the rhythm and harmony design process.
 
 ### Rhythm section design
 
-The rhythm of your track is crafted using the [Pattern editor](#pattern-editor), accessible by pressing the third button in the global menu cluster located at the bottom left of your grid. A pattern in Mosaic is defined as a sequence composed of 64 trigs, notes, velocities, and duration data, spanning 64 steps. Patterns are the building blocks of your rhythm section.
+The rhythm of your track is crafted using the [Pattern editor](#pattern-editor), accessible by pressing the third button in the global menu cluster located at the bottom left of your grid. A pattern in Mosaic is defined as a sequence composed of 64 trigs, notes, velocities, and duration data, always spanning 64 steps. Patterns are the building blocks of your rhythm section.
 
-The pattern editor provides multiple tools to create these building blocks. You can input trigs manually in an XOX style, or choose from predefined banks featuring bass, snare, and hi-hat patterns. For more complex needs, explore using Euclidean patterns or those from Noise Engineering's Numeric Repetitor. To add unique rhythmic variations, apply a tresillo modifier, which introduces a 3-3-2 repeating pattern. These rhythm types can be blended by selecting and "painting" them onto the grid. To learn more about this process, refer to the [adding trigs](#adding-trigs) section.
+The pattern editor provides multiple tools to create these building blocks. You can input trigs manually in an XOX style, or choose from predefined banks featuring bass, snare, and hi-hat patterns. For more complex needs, explore using Euclidean patterns or patterns from Noise Engineering's Numeric Repetitor. To add unique rhythmic variations, apply a tresillo modifier, which introduces a 3-3-2 repeating pattern. These rhythm types can be blended by selecting and "painting" them onto the grid. It's possible to paint more than one pattern at a time, and then edit further to taste XOX style. To learn more about this process, refer to the [adding trigs](#adding-trigs) section.
 
-After establishing a pattern of trigs, assign [note](#adding-notes) and [velocity](#adding-velocity) data. These patterns will later be merged and remixed to form your rhythm and harmony sections.
+After establishing a pattern of trigs, assign relative [notes](#adding-notes) and [velocity](#adding-velocity) data. These patterns will later be merged and remixed to form your rhythm and harmony sections. 
 
 
 ### Harmony design
 
-_Mosaic_'s harmony tools enable you to compose your song's chordal progressions with ease. These progressions can dynamically modulate your patterns, allowing for the creation of complex harmonic sequences with minimal music theory knowledge.
+_Mosaic_'s harmony tools enable you to compose your song's chordal progressions. These progressions can dynamically modulate your patterns, allowing for the creation of complex harmonic sequences with minimal music theory knowledge.
 
 Harmonic progressions can be applied globally — modulating all notes across all channels to the same key, degree, and scale rotation — or on a per-channel basis, affecting only the notes within that channel. This decoupling of patterns and notes from the active scale enables dynamic and experimental tonal modulations. For example, setting your global scale to change in a polyrhythmic pattern relative to your channel's note data can create captivating musical textures.
 
 Each project supports 16 scale slots. Each slot includes a root note, a scale type (e.g., Dorian, Major), a degree, and a scale rotation. The [scale editor](#scale-editor) is where you craft the scales that will form your chord progressions, and you can sequence these using [scale locks](#scale-locks) either globaly from the scale editor, or per channel using the channel editor.
 
+
 ### Sequence composition
 
-At this point you will have a set of sound sources attached to a number of channels, a set of patterns with notes, trigs velocities and lengths, and a set of scales that work well together - possibly assigned as either a global scale or a set of trig locks on the global scale editor. Now it's time to compose your first sequence. You can now use _Masaic_'s [channel editor](#channel-editor) to lay out your harmonic and rhythm sections by assigning patterns to channels. The first step is to [add patterns to channels](#adding-patterns-to-channels).
+At this point you will have a set of sound sources attached to a number of channels, a set of patterns with relative notes, trigs velocities and lengths, and a set of scales that work well together - possibly assigned as either a global scale or a set of trig locks on the global scale editor. Now it's time to compose your first sequence. The pattern tools offer the ability to craft intricate rhythmic and harmonic sections. However, the true heart of Mosaic is the [channel editor](##channel-editor). The channel editor is used to lay out your harmonic and rhythm sections by [adding patterns to channels](#adding-patterns-to-channels).
 
 
 #### Using merge modes
@@ -205,13 +212,13 @@ When assigning multiple patterns to a single channel, you might notice that over
 
 #### Melody composition
 
-The pattern tools offer the ability to craft intricate rhythmic and harmonic sections. However, the true heart of Mosaic is the [channel editor](##channel-editor). This feature doesn't merely allow you to use patterns; it enables you to adapt them to various scales and combine them creatively. Additionally, you can enhance these patterns with melodies and other elements to further enrich your music. In fact, you can compose entire songs using just the channel editor, thanks to [Masks](#masks). Masks provide a direct method to input triggers, notes, velocities, and chords right into the channel editor grid, giving you precise control over your musical creations.
+ The [channel editor](##channel-editor) doesn't merely allow you to add, merge and apply scales to patterns; it enables you to enhance them with melodies and other elements to further enrich your music. In fact, you could compose entire songs using just the channel editor if you wanted to, thanks to [Masks](#masks). Masks provide a direct method to input triggers, notes, velocities, and chords right into the channel editor grid, giving you precise control over your musical creations. You can overwrite pattern values or create entirely new steps.
 
 
 ### Modulation, movement and interest
 
 
-Even a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [trig parameters](#trig-parameters) and [Trig locks](#trig-locks). "Trig locks" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantized, offering precise manipulation over the dynamics of your music.o.
+Even a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [trig parameters](#trig-parameters) and [Trig locks](#trig-locks). "Trig lock" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantized, at each step, offering precise manipulation over the quality and dynamics of your music.
 
 
 ### Song composition
@@ -237,7 +244,7 @@ Trigs are added in the pattern editor.
 
 ![Trig editor with a complex trig pattern](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor.png)
 
-With the top row, pick one of the 16 patterns available. In the image, you can see pattern 2 is selected.
+Using the top row, pick one of the 16 patterns available. In the image, you can see pattern 2 is selected.
 
 ![Pattern select buttons](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_pattern_select.png)
 
@@ -245,24 +252,24 @@ To set your rhythm, simply tap in steps using the sequencer. Bright steps symbol
 
 ![Trig sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_sequencer.png)
 
-Craft unique rhythms using a variety of built-in algorithms.
+Craft unique rhythms using a variety of built-in algorithms. The algorithm is selected using the four algorithm select buttons. From left to right:
 
-* button 1: The drum algorithm, drawing from a rich collection of classic drum patterns.
-* button 2: The tresillo algorithm, utilising a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the norns screen for more variations.
-* button 3: Euclidian, a rhythm tool rooted in mathematical logic.
-* button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
+* Button 1: The drum algorithm, drawing from a rich collection of classic drum patterns.
+* Button 2: The tresillo algorithm, utilising a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the norns screen for more variations.
+* Button 3: Euclidian, a rhythm tool rooted in mathematical logic.
+* Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
 
 ![Algorithm select](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_algorithms.png)
 
 The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the norns screen.
 
-The left side faders adjust algorithm values. Brightly lit ends refine values, while the dimmer ones adjust them broadly. The rightmost fader typically toggles between different algorithm banks.
+The left side faders adjust algorithm values. Brightly lit end buttons refine values, with the furthest left hand button incrementing downwards and the furthest right hand button incrementing upwards. The dimmer ones in the middle of the faders adjust values broadly. The rightmost fader typically toggles between different banks in the selected algorithm.
 
 ![Algorithm controls](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_algorithm_controls.png)
 
-To see your algorithm's impact, hit the prime button. This prepares a new pattern, and new steps are showcased as flashing bright steps on the sequencer. While these steps flash, they aren’t painted yet. Any step that would be painted over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences, grounded in rhythmic fundamentals, that don't get too busy. You can modify algorithm parameters whilst the pattern is primed.
+To see your algorithm's impact, hit the prime button. This primes the currently selected algorithm's pattern. Potential new steps are shown as flashing bright steps on the sequencer. While these steps flash, they aren’t painted yet. Any step that would be painted over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences, grounded in rhythmic fundamentals, that don't get too busy. You can modify algorithm parameters whilst the pattern is primed.
 
-If you haven’t painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Double-pressing the prime button without tweaking the algorithm or its parameters acts as an undo for the last action.
+If you haven’t painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Pressing the prime button again without tweaking the algorithm or its parameters effectively acts as an undo for the last action.
 
 ![Prime and print button](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_prime_and_print.png)
 
@@ -284,7 +291,7 @@ On page 2 you can select trig editor options. Currently this allows you to edit 
 
 #### Adding notes
 
-In _Mosaic_, notes aren't strictly bound to a single scale. Instead, they are valued by their position within the currently active scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
+In _Mosaic_, pattern notes aren't strictly bound to a single scale. Instead, they are valued by their position within the currently active scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D. 
 
 You've seen in the [Harmony design](#harmony-design) section that it's possible to sequence scale and degree changes, and this affects the notes your patterns will play. When adding notes to patterns, consider that they represent the harmony of your song and map to what traditionally would be called the rhythm section. It is possible to create melodies using patterns, but it is difficult to do so in a deliberate way as your scale progressions will alter the tonality of your pattern. We'll learn about the recommended way to deliberate [melodies](#masks) later. 
 
@@ -357,6 +364,8 @@ You can input notes, velocity, and chords using a MIDI keyboard. However, settin
 To preview notes before committing them to your sequence, simply press the keys on your keyboard without holding down a step. This method ensures that changes are only made when you explicitly hold down a step, preventing accidental inputs.
 
 By default, the keyboard maps the steps to the currently selected scale on the white keys, with the root note of your selected scale starting from C. You can adjust this mapping in the settings of Mosaic to better suit your musical preferences or project requirements.
+
+You are also able to control all 10 of the trig parameters on the currently selected page independently using a midi controller such as intech's en64 by sending a relative bin offset midi CC message to cc 15 - 24 respectively.
 
 #### Merge modes
 
@@ -643,65 +652,65 @@ Various aspects of Mosaic can be configured from the param section on your Norns
 
 ##### Song mode
 
-**Song mode** is on by default. When enabled, the song sequencer will progress though sequences as dictated by the options set on the song sequencer page. When off, song sequences will only progress with manual intervention.
+"Song mode" is on by default. When enabled, the song sequencer will progress though sequences as dictated by the options set on the song sequencer page. When off, song sequences will only progress with manual intervention.
 
 ##### Reset at sequence end
 
-The **"Reset at sequence end"** option, which is turned on by default, ensures that the sequencer resets all channels at the end of the song sequence. This happens regardless of whether the sequencer is progressing to a new sequence, which helps maintain consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.
+The "Reset at sequence end" option, which is turned on by default, ensures that the sequencer resets all channels at the end of the song sequence. This happens regardless of whether the sequencer is progressing to a new sequence, which helps maintain consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.
 
 ##### Reset at seq pattern end
 
-**"Reset at seq pattern end"** is set to off by default. When enabled, it resets all channels at the end of the song sequence but only if a new sequence is queued. Disabling this option allows for evolving polyrhythms.
+"Reset at seq pattern end" is set to off by default. When enabled, it resets all channels at the end of the song sequence but only if a new sequence is queued. Disabling this option allows for evolving polyrhythms.
 
 ##### Elektron program changes
 
-**"Elektron program changes"** defaults off. By enabling this setting, your Elektron devices will automatically adjust their patterns to align with the corresponding song pattern in Mosaic. For instance, selecting song pattern one on Mosaic will trigger pattern one on your Elektron device, ensuring that both systems are perfectly in sync. This feature allows for a unified performance across your equipment, with each song pattern change on Mosaic mirrored by your Elektron devices.
+"Elektron program changes" defaults off. By enabling this setting, your Elektron devices will automatically adjust their patterns to align with the corresponding song pattern in Mosaic. For instance, selecting song pattern one on Mosaic will trigger pattern one on your Elektron device, ensuring that both systems are perfectly in sync. This feature allows for a unified performance across your equipment, with each song pattern change on Mosaic mirrored by your Elektron devices.
 
 ##### Elektron program change channel
 
-The **Elektron program change channel** setting determines which midi channel to send program change messages to. The default is 10 - same as on most Elektron devices.
+The "Elektron program change channel" setting determines which midi channel to send program change messages to. The default is 10 - same as on most Elektron devices.
 
 #### Parameter lock options
 
 ##### Trigless locks
 
-**"Trigless locks"** is enabled by default, meaning locks on steps with no active trig are still honored.
+"Trigless locks" is enabled by default, meaning locks on steps with no active trig are still honored.
 
 #### Quantiser options
 
 ##### Quantise note masks
 
-**"Quantise note masks"** is also on by default. With this setting enabled, note masks are fixed to the currently selected scale and do not change with scale degree or rotation adjustments.
+"Quantise note masks" is also on by default. With this setting enabled, note masks snap to the currently selected scale, but are not altered by scale degree or rotation adjustments.
 
-##### Scales lock until ptn end
+##### Scales lock until pattern end
 
-The **"Scales lock until ptn end"** option, when enabled, ensures scale locks persist until the end of the channel's length. If disabled, scale locks continue only until the next trig.
+The "Scales lock until ptn end" option, when enabled, ensures scale locks persist until the end of the channel's length. If disabled, scale locks continue only until the next trig.
 
 ##### Lock all to pentatonic
 
-**"Lock all to pent."** is off by default. Enabling this option forces all notes to adhere to the pentatonic version of the selected scale, useful for creating highly generative compositions.
+"Lock all to pent." is off by default. Enabling this option forces all notes to adhere to the pentatonic version of the selected scale, useful for creating highly generative compositions.
 
 ##### Lock random to pentatonic
 
-**"Lock random to pent."** is on by default. It ensures that notes altered by random trig locks adhere to the pentatonic version of the selected scale, making the random notes harmonically more pleasant.
+"Lock random to pent." is on by default. It ensures that notes altered by random trig locks adhere to the pentatonic version of the selected scale, making the random notes harmonically more pleasant.
 
 ##### Lock merged to pentatonic
 
-Similarly, **"Lock merged to pent."** is on and applies the same principle to notes modified by merge modes.
+Similarly, "Lock merged to pent." is on by default and ensures notes modified by merge modes stick to the pentatonic version of the currently selected scale.
 
 #### Midi controller options
 
 ##### Map scale to white keys
 
-**"Map scale to white keys"** is off by default. When enabled, the selected scale is mapped to the white keys of a MIDI keyboard, starting at the C key.
+"Map scale to white keys" is off by default. When enabled, the selected scale is mapped to the white keys of a MIDI keyboard, starting at the C key. The mapping will automatically change when the currently selected scale changes.
 
 ##### Honour scale rotations 
 
-**"Honour scale rotations"** is off by default. Enabling this settings will allow scale rotations to be reflected in the mapping on the MIDI keyboard.
+"Honour scale rotations" is off by default. Enabling this settings will allow the currently selected scale's rotation ssetting to affect the MIDI keyboard mapping.
 
 ##### Honour scale degree
 
-**"Honour scale degree"** is off by default. Enabling this settings will allow scale degrees to be reflected in the mapping on the MIDI keyboard.
+"Honour scale degree" is off by default. Enabling this settings means the current scale's degree option will affect the MIDI keyboard mapping.
 
 
 ### Sinfonion connect
