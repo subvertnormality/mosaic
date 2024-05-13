@@ -1,4 +1,4 @@
--- mosaic v0.4
+-- mosaic v0.5 Beta
 -- grid-centric, intentioned
 -- generative sequencer.
 --
