@@ -1304,13 +1304,13 @@ function channel_edit_page_ui_controller.refresh_trig_lock(i)
     m_params[i]:set_ui_labels(channel.trig_lock_params[i].ui_labels)
 
     local step_trig_lock =
-      program.get_step_param_trig_lock(program.get_selected_channel(), program.get_selected_channel().current_step, i)
+      program.get_step_param_trig_lock(channel, program.get_current_step_for_channel(channel.number), i)
 
     if #pressed_keys > 0 then
       if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
         step_trig_lock =
           program.get_step_param_trig_lock(
-          program.get_selected_channel(),
+            channel,
           fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2]),
           i
         )
@@ -1319,10 +1319,6 @@ function channel_edit_page_ui_controller.refresh_trig_lock(i)
           default_param = params:lookup_param(channel.trig_lock_params[i].param_id).value
         end
         m_params[i]:set_value(step_trig_lock or default_param)
-      end
-    else
-      if (step_trig_lock and clock_controller.is_playing()) then
-        m_params[i]:set_value(step_trig_lock)
       end
     end
   else

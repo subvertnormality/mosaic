@@ -49,6 +49,7 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
     + [Devices](#devices)
       - [MIDI Sound Sources](#midi-sound-sources)
       - [Norns Sound Sources with n.b.](#norns-sound-sources-with-nb)
+      - [Device Parameters](#device-parameters)
     + [Trig Parameters](#trig-parameters)
       - [Sequencer Params](#sequencer-params)
         + [Trig Probability](#trig-probability)
@@ -58,9 +59,8 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
         + [Random Twos Note](#random-twos-note)
         + [Chord Strum](#chord-strum)
         + [Chord Velocity Modifier](#chord-velocity-modifier)
-      - [MIDI Params](#midi-params)
-      - [Trig Locks](#trig-locks)
-        + [Param Locks](#param-locks)
+      - [Locks](#locks)
+        + [Trig Param Locks](#trig-param-locks)
         + [Scale Locks](#scale-locks)
         + [Transposition Locks](#transposition-locks)
         + [Octave Locks](#octave-locks)
@@ -175,7 +175,7 @@ With your devices assigned, you're ready to begin the rhythm and harmony design 
 
 ### Rhythm Section Design
 
-The rhythm of your track is crafted using the [Pattern editor](#pattern-editor), accessible by pressing the third button in the global menu cluster located at the bottom left of your grid. A pattern in Mosaic is defined as a sequence composed of 64 trigs, notes, velocities, and duration data, always spanning 64 steps. Patterns are the building blocks of your rhythm section.
+The rhythm of your track is crafted using the [pattern editor](#pattern-editor), accessible by pressing the third button in the global menu cluster located at the bottom left of your grid. A pattern in Mosaic is defined as a sequence composed of 64 steps with trigs, notes, velocities, and duration data. Patterns are the building blocks of your rhythm section.
 
 The pattern editor provides multiple tools to create these building blocks. You can input trigs manually in an XOX style, or choose from predefined banks featuring bass, snare, and hi-hat patterns. For more complex needs, explore using Euclidean patterns or patterns from Noise Engineering's Numeric Repetitor. To add unique rhythmic variations, apply a tresillo modifier, which introduces a 3-3-2 repeating pattern. These rhythm types can be blended by selecting and "painting" them onto the grid. It's possible to paint more than one pattern at a time, and then edit further to taste XOX style. To learn more about this process, refer to the [Adding Trigs](#adding-trigs) section.
 
@@ -326,13 +326,13 @@ The core of your rhythm and harmony sections are formed by adding patterns to ch
 
 Masks in _Mosaic_ allow you to precisely control trig values, notes, velocities, lengths, and chords for specific steps within the channel page's sequencer. Ideal for crafting intentional melodies, masks can superimpose these elements onto your existing harmonic and rhythmic foundation. You can apply masks to override pattern values either individually or all at once—a process aptly named "masking."
 
-With masking, you have the flexibility to modify individual attributes of a pattern. For instance, you could increase the velocity of a note without changing other settings, add additional chord tones, or completely silence a note. Masks also enable you to assign values to steps that are currently void of any pattern influence. By default, notes added this way will align with the selected musical scale. However, they will not conform to specific scale degrees or rotations. If you wish to incorporate accidentals or embrace a more dis
-
-sonant sound, this default behavior can be disabled in the _Mosaic_ settings.
+With masking, you have the flexibility to modify individual attributes of a pattern. For instance, you could increase the velocity of a note without changing other settings, add additional chord tones, or completely silence a note. Masks also enable you to assign values to steps that are currently void of any pattern influence. By default, notes added this way will align with the selected musical scale. However, they will not conform to specific scale degrees or rotations. If you wish to incorporate accidentals or embrace a more dissonant sound, this default behavior can be disabled in the _Mosaic_ settings.
 
 ##### Adding Melodic Notes over Harmony and Drums
 
 To add a mask to your sequence, start by accessing the mask page on your Norns device. Once there, press and hold the step you wish to modify, then input the desired value as a trig lock. Alternatively, you can hold the step while pressing a corresponding key on your MIDI keyboard to set the value. This method allows you to easily and intuitively assign specific musical attributes to any step in your sequence.
+
+The currently playing note, velocity, and length is displayed on the Norns screen on active steps. Unlike trig params, it's not possible to set a default mask for all steps. Each mask must be applied directly to a step as a lock.
 
 ##### Adding Chords
 
@@ -441,11 +441,7 @@ For _Mosaic_ to do anything, you must have a device assigned to a channel. Devic
 
 In Mosaic, a device can be either an internal Norns sound engine powered by [n.b.](https://github.com/sixolet/nb/tree/main), or a representation of a MIDI device within your workspace. Devices are assigned per scene and maintain their settings consistently across all song sequences.
 
-If your device has an associated configuration file, such as those available for Elektron -takt devices, the device's name will be displayed, allowing you to select parameters directly without needing to know the MIDI CC numbers. If no such configuration exists
-
-, you can still use the CC device, but you will need to manually look up and input CC numbers.
-
-MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to a value of -1 ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly.
+If your device has an associated configuration file, such as those available for Elektron -takt devices, the device's name will be displayed, allowing you to select parameters directly without needing to know the MIDI CC numbers. If no such configuration exists, you can still use the CC device, but you will need to manually look up and input CC numbers.
 
 ##### Norns Sound Sources with n.b.
 
@@ -460,9 +456,13 @@ n.b. devices are picked up automatically. Simply install the desired mod, and pi
 
 More mods are expected to be supported soon.
 
+#### Device Parameters
+
+MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to a value of -1 ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly.
+
 ### Trig Parameters
 
-Most devices in _Mosaic_ feature a set of trig params that alters either the quality of the sound or the trig in some way. Trig params are unique to a song pattern, allowing drastic transitions when moving from one section to another. Each channel can have up to 10 trig params assigned, and each trig param can be trig locked independently. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. See the channel page section for details on how to assign and use trig params.
+Most devices in _Mosaic_ feature a set of trig params that alters either the quality of the sound or the trig in some way. Trig params are unique to a song pattern, allowing drastic transitions when moving from one section to another. Each channel can have up to 10 trig params assigned, and each trig param can be [trig locked](#locks) independently. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. 
 
 In the second user interface page of the channel editor on the Norns screen, you will encounter a variety of parameters. Here's how to navigate and manipulate these settings:
 
@@ -473,9 +473,9 @@ In the second user interface page of the channel editor on the Norns screen, you
 * **Default Parameter Values**: By default, a pre-set parameter value is transmitted to your selected device on steps without a trig lock. If a parameter's trig lock is set to "off," the mosaic will not send any value to your device for that parameter.
 * **Handling Off Settings**: If you set a trig lock to "off" on a step, the system will continue to send the last trig locked value instead of reverting to the default parameter value.
 
-These controls offer flexibility and precision in shaping the behavior of each sequence, ensuring that your musical creativity can be fully realized through the Norns system.
-
 ![Param trig lock page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_param_select.png)
+
+These controls offer flexibility and precision in shaping the behavior of each sequence, ensuring that your musical creativity can be fully realized through the Norns system.
 
 #### Sequencer Params
 
@@ -509,13 +509,9 @@ The Chord Strum feature dynamically spaces chord notes using the selected clock 
 
 The Chord Velocity Modifier incrementally adjusts the velocity of successive notes in a chord, starting from the chord's root note. This adjustment can either increase or decrease the velocity, thereby creating a "swell" effect for rising intensity or a "fade" effect for a diminishing feel.
 
-#### MIDI Params
+#### Locks
 
-MIDI params are determined by your currently selected device. These map to your device's functions via CC messages.
-
-#### Trig Locks
-
-Param values and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. When a value is locked to a step, it applies for the duration of that step. This includes trig params, scales, and octave settings on the channel page, as well as global scale and transpose settings on the global scale page. Locks are set on the channel page.
+Trig param values and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. When a value is locked to a step, it applies for the duration of that step. This includes trig params, scales, and octave settings on the channel page, as well as global scale and transpose settings on the global scale page. Locks are set on the channel page.
 
 To clear a grid trig lock:
 
@@ -529,7 +525,7 @@ To clear all trig locks from a step:
 
 Trig locks enhance your control over the sequencing process, allowing for precise adjustments and modifications at any step of your sequence.
 
-##### Param Locks
+##### Trig Param Locks
 
 Device parameters can be locked on a per-step basis. To set a param trig lock:
 
@@ -707,7 +703,7 @@ Make sure that the tests are passing before you open a PR.
 ./test.sh
 ```
 
-Do not run this on your Norns device as you'll end up pulling in the Norns repository onto your device, and it'll cause a conflict. If you do this by accident, simply delete `tests/test_artefacts` to get your Norns back up and running.
+Do not run the tests on your Norns device as you'll end up pulling in the Norns repository onto your device and it'll cause a conflict. If you do this by accident, simply delete `/code/mosaic/lib/tests/test_artefacts` to get your Norns back up and running.
 
 ## Device Config Template
 

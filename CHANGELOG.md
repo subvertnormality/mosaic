@@ -1,22 +1,22 @@
-# 0.5 - Beta Candidate
+# 0.5 - Beta
 
 _Breaking update. Please backup and remove your .pset and .ptn data files from previous versions._
 
 * More bug fixes
-* Scale and quantiser streamlined, global scale UI simplified
+* New improved manual
+* Scale and quantiser have been streamlined, global scale UI simplified
 * Note Masks: It's now possible to add and remove trigs to a channel directly from the channel page, overwriting pattern values
 * Note Masks: It's possible to set notes, velocities, and lengths, directly from the channel page, overwriting pattern values
-* Note Masks: Chords promoted to dedicated page
+* Note Masks: Chords are now editable directly in the channel editor
+* Note Masks: Create note mask locks by using a midi keyboard
 * It's now possible to sync elektron devices with Mosaic's song mode. Patterns will be selected based on the currently selected Mosaic song pattern
 * UI elements no long wrap when selecting horizontally
-* It's now possible to create note mask locks by using a midi keyboard
-* Note mask chord locks can now be set using a midi keyboard
 * Param on/off options are now in a sensible order
 * Digitakt 2 config file added
-* N.B. note players must now be allow listed before being loaded to prevent crashes
+* N.B. note players must now be allow-listed before being loaded to prevent crashes
 * Added option to lock all notes to pentatonic versions of each scale
-* Added option to lock merged notes to pentatonic versions of each scale
-* Added option to lock random notes to pentatonic versions of each scale
+* Added option to lock merged notes to pentatonic versions of each scale - on by default
+* Added option to lock random notes to pentatonic versions of each scale - on by default
 
 # 0.4.4
 
