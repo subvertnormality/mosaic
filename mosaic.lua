@@ -2,7 +2,7 @@
 -- grid-centric, intentioned
 -- generative sequencer.
 --
--- llllllll.co/t/mosaic-alpha-v0-3
+-- llllllll.co/t/mosaic-beta-v0-5
 -- manual: t.ly/h-Wsw
 
 testing = false
