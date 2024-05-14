@@ -197,4 +197,13 @@ function midi_controller.panic()
   chord_number = 0
 end
 
+function midi_controller.midi_devices_connected() 
+  for id = 1, #midi.vports do
+    if midi_devices[id].device ~= nil then
+      return true
+    end
+  end
+  return false
+end
+
 return midi_controller

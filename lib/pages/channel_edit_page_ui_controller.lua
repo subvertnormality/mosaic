@@ -10,6 +10,7 @@ local dial = include("mosaic/lib/ui_components/dial")
 local control_scroll_selector = include("mosaic/lib/ui_components/control_scroll_selector")
 local list_selector = include("mosaic/lib/ui_components/list_selector")
 local value_selector = include("mosaic/lib/ui_components/value_selector")
+local midi_controller = include("mosaic/lib/midi_controller")
 
 local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/param_manager")
@@ -239,7 +240,7 @@ local channel_edit_page =
       local channel = program.get_selected_channel()
       local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
       if (device.type == "midi") then
-        if (device.default_midi_device == nil) then
+        if (device.default_midi_device == nil and midi_controller.midi_devices_connected()) then
           midi_device_vertical_scroll_selector:draw()
         end
         if (device.default_midi_channel == nil) then
@@ -443,9 +444,16 @@ function channel_edit_page_ui_controller.update_channel_config()
   local midi_channel = midi_channel_vertical_scroll_selector:get_selected_item()
   local device_m = device_map_vertical_scroll_selector:get_selected_item()
 
-  program.get().devices[channel.number].midi_device = midi_device.value
-  program.get().devices[channel.number].midi_channel = midi_channel.value
-  program.get().devices[channel.number].device_map = device_m.id
+  if midi_device == nil then
+    if device_m.type == "midi" then
+      tooltip:error("No midi devices connected")
+      return
+    end
+  end
+
+  program.get().devices[channel.number].midi_device = midi_device and midi_device.value or nil
+  program.get().devices[channel.number].midi_channel = midi_device and midi_channel.value or nil
+  program.get().devices[channel.number].device_map = device_m and device_m.id or nil
 
   local device = device_map.get_device(program.get().devices[channel.number].device_map)
   if device.default_midi_channel ~= nil then
@@ -955,7 +963,7 @@ function channel_edit_page_ui_controller.enc(n, d)
           local device =
             fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
           if midi_channel_vertical_scroll_selector:is_selected() then
-            if (device.default_midi_device == nil) then
+            if (device.default_midi_device == nil and midi_controller.midi_devices_connected()) then
               midi_channel_vertical_scroll_selector:deselect()
               midi_device_vertical_scroll_selector:select()
             end
@@ -964,7 +972,7 @@ function channel_edit_page_ui_controller.enc(n, d)
               device_map_vertical_scroll_selector:deselect()
               midi_channel_vertical_scroll_selector:select()
             else
-              if (device.default_midi_device == nil) then
+              if (device.default_midi_device == nil and midi_controller.midi_devices_connected()) then
                 device_map_vertical_scroll_selector:deselect()
                 midi_device_vertical_scroll_selector:select()
               end
@@ -1021,10 +1029,10 @@ function channel_edit_page_ui_controller.enc(n, d)
           local device =
             fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
           if midi_device_vertical_scroll_selector:is_selected() then
-            if (device.default_midi_channel == nil) then
+            if (device.default_midi_channel == nil and midi_controller.midi_devices_connected()) then
               midi_device_vertical_scroll_selector:deselect()
               midi_channel_vertical_scroll_selector:select()
-            elseif (device.default_midi_device == nil) then
+            elseif (device.default_midi_device == nil and midi_controller.midi_devices_connected()) then
               midi_device_vertical_scroll_selector:deselect()
               device_map_vertical_scroll_selector:select()
             end

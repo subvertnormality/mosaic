@@ -1,4 +1,9 @@
-# 0.5 - Beta
+# 0.5.1
+
+* Fixing issue where certain files would not initialise properly on fresh install
+* Fixing issue when assigning midi devices when no midi output devices are configured in Norns
+
+# 0.5.0 - Beta
 
 _Breaking update. Please backup and remove your .pset and .ptn data files from previous versions._
 
