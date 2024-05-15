@@ -1,3 +1,8 @@
+
+# 0.5.2
+
+* Fixing some minor issues with chord masks
+
 # 0.5.1
 
 * Fixing issue where certain files would not initialise properly on fresh install
