@@ -249,8 +249,25 @@ end
 function quantiser.process_chord_note_for_mask(note_mask_value, unscaled_chord_value, octave_mod, transpose, scale_number)
   local scale_container = program.get_scale(scale_number)
   local scale = fn.deep_copy(scale_container.scale)
+  local root_note = program.get().root_note
   
-  return (note_mask_value) + (12 * octave_mod) + (scale[unscaled_chord_value + 14 + 1] - 24) + transpose
+  if scale_container.root_note > -1 then
+    root_note = scale_container.root_note
+  end
+  
+  scale = fn.transpose_scale(scale, root_note)
+  scale = fn.transpose_scale(scale, transpose)
+  
+  
+  local offset_in_scale = fn.find_index_by_value(scale, musicutil.snap_note_to_array(note_mask_value, scale))
+  
+  local chord_note = scale[unscaled_chord_value + (offset_in_scale or 0)]
+  
+  if chord_note == nil then
+    return nil
+  end
+  
+  return chord_note + (octave_mod * 12)
 end
 
 function quantiser.process_with_global_params(note_number, octave_mod, transpose, scale_number)
@@ -268,9 +285,23 @@ function quantiser.process_with_global_params(note_number, octave_mod, transpose
   return process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree)
 end
 
-function quantiser.snap_to_scale(note_num, scale_number)
+function quantiser.snap_to_scale(note_num, scale_number, transpose)
+
   local scale_container = program.get_scale(scale_number)
-  return musicutil.snap_note_to_array(note_num, scale_container.scale)
+  local scale = fn.deep_copy(scale_container.scale)
+  local root_note = program.get().root_note
+  
+  if scale_container.root_note > -1 then
+    root_note = scale_container.root_note
+  end
+
+  scale = fn.transpose_scale(scale, root_note)
+  
+  if transpose then
+    scale = fn.transpose_scale(scale, transpose)
+  end
+  
+  return musicutil.snap_note_to_array(note_num, scale)
 end
 
 function quantiser.process_to_pentatonic_scale(note_num, scale_number)
@@ -278,5 +309,18 @@ function quantiser.process_to_pentatonic_scale(note_num, scale_number)
   return musicutil.snap_note_to_array(note_num, scale_container.pentatonic_scale)
 end
 
+function quantiser.get_chord_degree(note, chord_one_note, scale_number)
+  local scale_container = program.get_scale(scale_number)
+  local scale = fn.deep_copy(scale_container.scale)
+  local root_note = program.get().root_note
+  
+  if scale_container.root_note > -1 then
+    root_note = scale_container.root_note
+  end
+  
+  scale = fn.transpose_scale(scale, root_note)
+  
+  return fn.find_index_by_value(scale, quantiser.snap_to_scale(note, scale_number)) - fn.find_index_by_value(scale, quantiser.snap_to_scale(chord_one_note, scale_number))
+end
 
 return quantiser

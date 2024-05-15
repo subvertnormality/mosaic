@@ -69,7 +69,7 @@ function handle_midi_event_data(data, midi_device)
 
     local chord_degree = nil
 
-    chord_degree = fn.find_index_by_value(program.get_scale(step_scale_number).scale, quantiser.snap_to_scale(note, step_scale_number)) - fn.find_index_by_value(program.get_scale(step_scale_number).scale, quantiser.snap_to_scale(chord_one_note, step_scale_number))
+    chord_degree = quantiser.get_chord_degree(note, chord_one_note, step_scale_number)
 
     if chord_degree < -14 then
       chord_degree = nil

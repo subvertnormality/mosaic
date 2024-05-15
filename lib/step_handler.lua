@@ -369,20 +369,22 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
           local v = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
 
-          note_on_func(processed_chord_note, v, note_container.midi_channel, note_container.midi_device)
-
-          table.insert(
-            length_tracker,
-            {
-              channel = c,
-              steps_remaining = note_container.steps_remaining,
-              player = note_container.player,
-              note = processed_chord_note,
-              velocity = v,
-              midi_channel = note_container.midi_channel,
-              midi_device = note_container.midi_device
-            }
-          )
+          if processed_chord_note then
+            note_on_func(processed_chord_note, v, note_container.midi_channel, note_container.midi_device)
+  
+            table.insert(
+              length_tracker,
+              {
+                channel = c,
+                steps_remaining = note_container.steps_remaining,
+                player = note_container.player,
+                note = processed_chord_note,
+                velocity = v,
+                midi_channel = note_container.midi_channel,
+                midi_device = note_container.midi_device
+              }
+            )
+          end
         end
       )
     end
@@ -404,19 +406,21 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
           processed_note = quantiser.process_chord_note_for_mask(unprocessed_note_container.note_mask_value, 0, unprocessed_note_container.octave_mod, unprocessed_note_container.transpose, channel.step_scale_number)
         end
-        note_on_func(processed_note, note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes), note_container.midi_channel, note_container.midi_device)
-        table.insert(
-          length_tracker,
-          {
-            channel = c,
-            steps_remaining = note_container.steps_remaining,
-            player = note_container.player,
-            note = processed_note,
-            velocity = note_container.velocity,
-            midi_channel = note_container.midi_channel,
-            midi_device = note_container.midi_device
-          }
-        )
+        if (processed_note) then
+          note_on_func(processed_note, note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes), note_container.midi_channel, note_container.midi_device)
+          table.insert(
+            length_tracker,
+            {
+              channel = c,
+              steps_remaining = note_container.steps_remaining,
+              player = note_container.player,
+              note = processed_note,
+              velocity = note_container.velocity,
+              midi_channel = note_container.midi_channel,
+              midi_device = note_container.midi_device
+            }
+          )
+        end
       end
     )
   end
@@ -473,7 +477,7 @@ function step_handler.handle(c, current_step)
     if note_mask_value and note_mask_value > -1 then
 
       if params:get("quantiser_act_on_note_masks") == 2 then
-        note = quantiser.snap_to_scale((note_mask_value + octave_mod * 12) + random_shift, channel.step_scale_number) + transpose
+        note = quantiser.snap_to_scale((note_mask_value + octave_mod * 12) + random_shift, channel.step_scale_number, transpose)
       else
         note = (note_mask_value + octave_mod * 12) + random_shift + transpose
       end
