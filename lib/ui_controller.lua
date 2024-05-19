@@ -2,7 +2,7 @@ local ui_controller = {}
 
 local fn = include("mosaic/lib/functions")
 
-channel_edit_page_ui_controller = include("mosaic/lib/pages/channel_edit_page_ui_controller")
+channel_edit_page_ui_controller = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller")
 velocity_edit_page_ui_controller = include("mosaic/lib/pages/velocity_edit_page_ui_controller")
 note_edit_page_ui_controller = include("mosaic/lib/pages/note_edit_page_ui_controller")
 trigger_edit_page_ui_controller = include("mosaic/lib/pages/trigger_edit_page_ui_controller")

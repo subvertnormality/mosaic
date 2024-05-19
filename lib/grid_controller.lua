@@ -10,7 +10,7 @@ draw_handler = include("mosaic/lib/draw_handler")
 grid_abstraction = include("mosaic/lib/grid_abstraction")
 grid_abstraction.init()
 
-channel_edit_page_controller = include("mosaic/lib/pages/channel_edit_page_controller")
+channel_edit_page_controller = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_controller")
 channel_sequencer_page_controller = include("mosaic/lib/pages/channel_sequencer_page_controller")
 
 local trigger_edit_page_controller = include("mosaic/lib/pages/trigger_edit_page_controller")
