@@ -14,7 +14,7 @@ local value_selector = include("mosaic/lib/ui_components/value_selector")
 local midi_controller = include("mosaic/lib/midi_controller")
 local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/param_manager")
-local channel_edit_page_ui_helpers = include("mosaic/lib/channel_edit_page_ui_helpers")
+local channel_edit_page_ui_helpers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_helpers")
 local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
 local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 
@@ -27,7 +27,7 @@ local notes_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Note
 local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
 
 -- Value selectors with initial values
-local note_selectors = {
+local mask_selectors = {
   trig = value_selector:new(5, 18, "Trig", -1, 1),
   note = value_selector:new(30, 18, "Note", -1, 127),
   velocity = value_selector:new(55, 18, "Vel", -1, 127),
@@ -111,26 +111,29 @@ local function configure_note_trig_selector(selector)
 end
 
 -- Configuring selectors
-configure_note_value_selector(note_selectors.note)
-configure_note_page_velocity_length_value_selector(note_selectors.velocity)
-configure_note_page_velocity_length_value_selector(note_selectors.length)
-for _, chord_selector in ipairs(note_selectors.chords) do
+configure_note_value_selector(mask_selectors.note)
+configure_note_page_velocity_length_value_selector(mask_selectors.velocity)
+configure_note_page_velocity_length_value_selector(mask_selectors.length)
+for _, chord_selector in ipairs(mask_selectors.chords) do
   configure_chord_value_selector(chord_selector)
 end
-configure_note_trig_selector(note_selectors.trig)
+configure_note_trig_selector(mask_selectors.trig)
 
 -- Page definitions
 local notes_page = page:new("Note Masks", function()
   if program.get().selected_channel ~= 17 then
-    for _, selector in pairs(note_selectors) do
+    for _, selector in pairs(mask_selectors) do
       if type(selector) == "table" then
         for _, chord_selector in ipairs(selector) do
           chord_selector:draw()
         end
-      else
-        selector:draw()
       end
     end
+    mask_selectors.trig:draw()
+    mask_selectors.note:draw()
+    mask_selectors.velocity:draw()
+    mask_selectors.length:draw()
+    
   else
     print_quant_message_to_screen()
   end
@@ -182,7 +185,7 @@ end)
 
 -- Initialization function
 function channel_edit_page_ui_controller.init()
-  note_selectors.note:select()
+  mask_selectors.note:select()
   quantizer_vertical_scroll_selector:select()
   midi_channel_vertical_scroll_selector:select()
   midi_device_vertical_scroll_selector:set_items(midi_controller.get_midi_outs())
@@ -409,9 +412,9 @@ function channel_edit_page_ui_controller.enc(n, d)
   elseif n == 2 then
     for _ = 1, math.abs(d) do
       if d > 0 then
-        channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
+        channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
       else
-        channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
+        channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
       end
     end
   elseif n == 1 then
@@ -437,7 +440,7 @@ end
 
 -- Refresh functions
 function channel_edit_page_ui_controller.refresh_notes()
-  channel_edit_page_ui_refreshers.refresh_notes(note_selectors, program, grid_controller, fn)
+  channel_edit_page_ui_refreshers.refresh_notes(mask_selectors, program, grid_controller, fn)
 end
 
 function channel_edit_page_ui_controller.refresh_clock_mods()
@@ -518,23 +521,23 @@ function channel_edit_page_ui_controller.handle_note_page_increment()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     for _, keys in ipairs(pressed_keys) do
       local step = fn.calc_grid_count(keys[1], keys[2])
-      if note_selectors.trig:is_selected() then
-        note_selectors.trig:increment()
-        program.get_selected_channel().step_trig_masks[step] = note_selectors.trig:get_value()
+      if mask_selectors.trig:is_selected() then
+        mask_selectors.trig:increment()
+        program.get_selected_channel().step_trig_masks[step] = mask_selectors.trig:get_value()
       end
-      if note_selectors.note:is_selected() then
-        note_selectors.note:increment()
-        program.get_selected_channel().step_note_masks[step] = note_selectors.note:get_value()
+      if mask_selectors.note:is_selected() then
+        mask_selectors.note:increment()
+        program.get_selected_channel().step_note_masks[step] = mask_selectors.note:get_value()
       end
-      if note_selectors.velocity:is_selected() then
-        note_selectors.velocity:increment()
-        program.get_selected_channel().step_velocity_masks[step] = note_selectors.velocity:get_value()
+      if mask_selectors.velocity:is_selected() then
+        mask_selectors.velocity:increment()
+        program.get_selected_channel().step_velocity_masks[step] = mask_selectors.velocity:get_value()
       end
-      if note_selectors.length:is_selected() then
-        note_selectors.length:increment()
-        program.get_selected_channel().step_length_masks[step] = note_selectors.length:get_value()
+      if mask_selectors.length:is_selected() then
+        mask_selectors.length:increment()
+        program.get_selected_channel().step_length_masks[step] = mask_selectors.length:get_value()
       end
-      for i, chord_selector in ipairs(note_selectors.chords) do
+      for i, chord_selector in ipairs(mask_selectors.chords) do
         if chord_selector:is_selected() then
           chord_selector:increment()
           program.get_selected_channel().step_chord_masks[step][i] = chord_selector:get_value()
@@ -549,28 +552,28 @@ function channel_edit_page_ui_controller.handle_note_page_decrement()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     for _, keys in ipairs(pressed_keys) do
       local step = fn.calc_grid_count(keys[1], keys[2])
-      if note_selectors.trig:is_selected() then
-        note_selectors.trig:decrement()
-        local value = note_selectors.trig:get_value()
+      if mask_selectors.trig:is_selected() then
+        mask_selectors.trig:decrement()
+        local value = mask_selectors.trig:get_value()
         program.get_selected_channel().step_trig_masks[step] = value == -1 and nil or value
       end
-      if note_selectors.note:is_selected() then
-        note_selectors.note:decrement()
-        local value = note_selectors.note:get_value()
+      if mask_selectors.note:is_selected() then
+        mask_selectors.note:decrement()
+        local value = mask_selectors.note:get_value()
         program.get_selected_channel().step_note_masks[step] = value == -1 and nil or value
       end
-      if note_selectors.velocity:is_selected() then
-        note_selectors.velocity:decrement()
-        local value = note_selectors.velocity:get_value()
+      if mask_selectors.velocity:is_selected() then
+        mask_selectors.velocity:decrement()
+        local value = mask_selectors.velocity:get_value()
         program.get_selected_channel().step_velocity_masks[step] = value == -1 and nil or value
       end
-      if note_selectors.length:is_selected() then
-        note_selectors.length:decrement()
-        local value = note_selectors.length:get_value()
+      if mask_selectors.length:is_selected() then
+        mask_selectors.length:decrement()
+        local value = mask_selectors.length:get_value()
         program.get_selected_channel().step_length_masks[step] = value < 1 and nil or value
-        note_selectors.length:set_value(value < 1 and -1 or value)
+        mask_selectors.length:set_value(value < 1 and -1 or value)
       end
-      for i, chord_selector in ipairs(note_selectors.chords) do
+      for i, chord_selector in ipairs(mask_selectors.chords) do
         if chord_selector:is_selected() then
           chord_selector:decrement()
           local value = chord_selector:get_value()
@@ -708,15 +711,15 @@ function channel_edit_page_ui_controller.handle_trig_locks_page_increment(d)
 end
 
 function channel_edit_page_ui_controller.handle_trig_locks_page_decrement(d)
-  channel_edit_page_ui_helpers.handle_trig_locks_page_change(-d, trig_lock_page, param_select_vertical_scroll_selector, save_confirm, param_manager, dials, channel_edit_page_ui_controller)
+  channel_edit_page_ui_helpers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, save_confirm, param_manager, dials, channel_edit_page_ui_controller)
 end
 
 function channel_edit_page_ui_controller.handle_encoder_two_positive()
-  channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
+  channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
 end
 
 function channel_edit_page_ui_controller.handle_encoder_two_negative()
-  channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
+  channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
 end
 
 function channel_edit_page_ui_controller.handle_encoder_one_positive()
@@ -801,5 +804,33 @@ function channel_edit_page_ui_controller.handle_key_three_pressed()
     save_confirm.confirm()
   end
 end
+
+function channel_edit_page_ui_controller.set_current_note(note)
+  local pressed_keys = grid_controller.get_pressed_keys()
+  if #pressed_keys > 0 then
+    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+      return
+    end
+  end
+  mask_selectors.note:set_value(note.note)
+  mask_selectors.velocity:set_value(note.velocity)
+  mask_selectors.length:set_value(note.length)
+end
+
+function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
+
+  if not channel.trig_lock_banks[i] then
+    return
+  end
+  
+  local param_id = channel.trig_lock_params[i].param_id
+
+  local p = nil
+  if param_id ~= nil then
+    p = params:lookup_param(channel.trig_lock_params[i].param_id)
+    params:set(param_id, channel.trig_lock_banks[i])
+  end
+end
+
 
 return channel_edit_page_ui_controller
