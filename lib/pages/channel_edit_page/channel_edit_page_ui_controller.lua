@@ -67,7 +67,6 @@ local scales_page_to_index = {["Quantizer"] = 1, ["Clock Mods"] = 2}
 -- Helper variables
 local refresh_timer_id = nil
 local throttle_time = 0.1
-local k2_held = false
 
 -- Utility functions
 local function print_no_scale_selected_message_to_screen()
@@ -133,7 +132,7 @@ local notes_page = page:new("Note Masks", function()
     mask_selectors.note:draw()
     mask_selectors.velocity:draw()
     mask_selectors.length:draw()
-    
+
   else
     print_quant_message_to_screen()
   end
@@ -158,10 +157,10 @@ local channel_edit_page = page:new("Device Config", function()
     local channel = program.get_selected_channel()
     local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
     if device.type == "midi" then
-      if not device.default_midi_device and midi_controller.midi_devices_connected() then
+      if device.default_midi_device == nil and midi_controller.midi_devices_connected() then
         midi_device_vertical_scroll_selector:draw()
       end
-      if not device.default_midi_channel then
+      if device.default_midi_channel == nil then
         midi_channel_vertical_scroll_selector:draw()
       end
     else
@@ -260,7 +259,7 @@ function channel_edit_page_ui_controller.update_scale()
   save_confirm.set_cancel_message("Scale not saved.")
   save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_quantiser)
 
-  if k2_held then
+  if is_key2_down then
     save_confirm.set_confirm_message("K2 to save across song.")
     save_confirm.set_ok_message("Scale saved to all.")
     save_confirm.set_save(function()
@@ -431,8 +430,6 @@ end
 function channel_edit_page_ui_controller.key(n, z)
   if n == 2 and z == 1 then
     channel_edit_page_ui_controller.handle_key_two_pressed()
-  elseif n == 2 and z == 0 then
-    k2_held = false
   elseif n == 3 and z == 1 then
     channel_edit_page_ui_controller.handle_key_three_pressed()
   end
@@ -766,8 +763,6 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
       end
       channel_edit_page_ui_controller.refresh_channel_config()
       trig_lock_page:toggle_sub_page()
-    else
-      k2_held = true
     end
     save_confirm.cancel()
   end

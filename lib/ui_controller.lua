@@ -79,7 +79,7 @@ function ui_controller.key(n, z)
   if n == 2 and z == 1 then
     is_key2_down = true
   elseif n == 2 and z == 0 then
-    ui_controller.is_key2_down = false
+    is_key2_down = false
   end
 
   if n == 3 and z == 1 then
