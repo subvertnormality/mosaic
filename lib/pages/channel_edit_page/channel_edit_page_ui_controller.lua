@@ -369,6 +369,7 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_min_value or -1)
     end
 
+    channel_edit_page_ui_controller.sync_param_to_trig_lock(dial_index, channel)
     channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
   end
 end
@@ -411,9 +412,9 @@ function channel_edit_page_ui_controller.enc(n, d)
   elseif n == 2 then
     for _ = 1, math.abs(d) do
       if d > 0 then
-        channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
+        channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
       else
-        channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
+        channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
       end
     end
   elseif n == 1 then
@@ -437,39 +438,45 @@ end
 
 -- Refresh functions
 function channel_edit_page_ui_controller.refresh_notes()
-  channel_edit_page_ui_refreshers.refresh_notes(mask_selectors, program, grid_controller, fn)
+  channel_edit_page_ui_refreshers.refresh_notes(mask_selectors)
 end
 
 function channel_edit_page_ui_controller.refresh_clock_mods()
-  channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector, program, clock_controller, fn)
+  channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector)
 end
 
 function channel_edit_page_ui_controller.refresh_swing()
-  channel_edit_page_ui_refreshers.refresh_swing(clock_swing_value_selector, program)
+  channel_edit_page_ui_refreshers.refresh_swing(clock_swing_value_selector)
 end
 
 function channel_edit_page_ui_controller.refresh_device_selector()
-  channel_edit_page_ui_refreshers.refresh_device_selector(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector, program, device_map)
+  channel_edit_page_ui_refreshers.refresh_device_selector(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
 end
 
 function channel_edit_page_ui_controller.refresh_romans()
-  channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, quantiser, fn)
+  channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector)
 end
 
 function channel_edit_page_ui_controller.refresh_quantiser()
-  channel_edit_page_ui_refreshers.refresh_quantiser(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, rotation_vertical_scroll_selector, program, quantiser, fn)
+  channel_edit_page_ui_refreshers.refresh_quantiser(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, rotation_vertical_scroll_selector)
 end
 
 function channel_edit_page_ui_controller.refresh_trig_lock_value(i)
-  channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params, program, params, channel_edit_page_ui_controller)
+  channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
+end
+
+function channel_edit_page_ui_controller.refresh_trig_lock_values()
+  for i = 1, 10 do
+    channel_edit_page_ui_controller.refresh_trig_lock_value(i)
+  end
 end
 
 function channel_edit_page_ui_controller.refresh_trig_lock(i)
-  channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, program, grid_controller, fn, channel_edit_page_ui_controller, params)
+  channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params)
 end
 
 function channel_edit_page_ui_controller.refresh_trig_locks()
-  channel_edit_page_ui_refreshers.refresh_trig_locks(m_params, program, grid_controller, fn, channel_edit_page_ui_controller, params)
+  channel_edit_page_ui_refreshers.refresh_trig_locks(m_params)
 end
 
 function channel_edit_page_ui_controller.refresh_param_list()
@@ -675,6 +682,7 @@ function channel_edit_page_ui_controller.handle_midi_config_page_increment()
   end
   save_confirm.set_save(function()
     channel_edit_page_ui_controller.update_channel_config()
+    
     param_manager.update_default_params(program.get_selected_channel(), device_map_vertical_scroll_selector:get_selected_item())
     param_select_vertical_scroll_selector:set_selected_item(1)
   end)
@@ -704,19 +712,19 @@ function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
 end
 
 function channel_edit_page_ui_controller.handle_trig_locks_page_increment(d)
-  channel_edit_page_ui_helpers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, save_confirm, param_manager, dials, channel_edit_page_ui_controller)
+  channel_edit_page_ui_helpers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
 end
 
 function channel_edit_page_ui_controller.handle_trig_locks_page_decrement(d)
-  channel_edit_page_ui_helpers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, save_confirm, param_manager, dials, channel_edit_page_ui_controller)
+  channel_edit_page_ui_helpers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
 end
 
 function channel_edit_page_ui_controller.handle_encoder_two_positive()
-  channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
+  channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
 end
 
 function channel_edit_page_ui_controller.handle_encoder_two_negative()
-  channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
+  channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
 end
 
 function channel_edit_page_ui_controller.handle_encoder_one_positive()
@@ -819,6 +827,7 @@ function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
   end
   
   local param_id = channel.trig_lock_params[i].param_id
+
 
   local p = nil
   if param_id ~= nil then

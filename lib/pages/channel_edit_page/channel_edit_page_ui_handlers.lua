@@ -1,7 +1,8 @@
 -- channel_edit_page_ui_handlers.lua
 local channel_edit_page_ui_handlers = {}
+local fn = include("lib/functions")
 
-function channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
+function channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
   if channel_pages:get_selected_page() == channel_page_to_index["Notes"] and program.get().selected_channel ~= 17 then
     if note_selectors.trig:is_selected() then
       note_selectors.trig:deselect()
@@ -68,7 +69,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages
   end
 end
 
-function channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, program, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, fn, midi_controller, dials, trig_lock_page)
+function channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
   if channel_pages:get_selected_page() == channel_page_to_index["Notes"] and program.get().selected_channel ~= 17 then
     if note_selectors.note:is_selected() then
       note_selectors.note:deselect()

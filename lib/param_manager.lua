@@ -81,16 +81,17 @@ function param_manager.update_param(index, channel, param, meta_device)
   if id == "none" then
     channel.trig_lock_params[index] = {}
   else
-    -- param_select_vertical_scroll_selector:get_selected_item()
+
     channel.trig_lock_params[index] = param
     -- param_select_vertical_scroll_selector:get_meta_item().device_name
     channel.trig_lock_params[index].device_name = meta_device.device_name
     channel.trig_lock_params[index].type = meta_device.type
     channel.trig_lock_params[index].id = param.id
       
-    if (type == "midi" and param_type ~= "stock") then
+    if (meta_device.type == "midi" and meta_device.param_type ~= "stock") then
+      fn.print_table(param)
       channel.trig_lock_params[index].param_id =
-        "midi_device_params_channel_" .. channel.number .. "_" .. meta_device.index
+        "midi_device_params_channel_" .. channel.number .. "_" .. param.index
     else
       channel.trig_lock_params[index].param_id = nil
     end
@@ -125,7 +126,7 @@ function param_manager.update_default_params(channel, meta_device)
     end
   end
 
-  channel_edit_page_ui_controller.refresh_trig_locks()
+  channel_edit_page_ui_controller.refresh_trig_lock_values()
 end
 
 return param_manager

@@ -1,8 +1,9 @@
 -- channel_edit_page_ui_helpers.lua
 local channel_edit_page_ui_helpers = {}
+local param_manager = include("mosaic/lib/param_manager")
 
 -- Abstracting common increment/decrement logic for trig locks
-function channel_edit_page_ui_helpers.handle_trig_locks_page_change(direction, trig_lock_page, param_select_vertical_scroll_selector, save_confirm, param_manager, dials, channel_edit_page_ui_controller)
+function channel_edit_page_ui_helpers.handle_trig_locks_page_change(direction, trig_lock_page, param_select_vertical_scroll_selector, dials)
   if trig_lock_page:is_sub_page_enabled() then
     param_select_vertical_scroll_selector:scroll(direction)
     save_confirm.set_save(function()

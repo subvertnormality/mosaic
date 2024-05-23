@@ -1,7 +1,9 @@
 -- channel_edit_page_ui_refreshers.lua
 local channel_edit_page_ui_refreshers = {}
+local quantiser = include("lib/quantiser")
+local fn = include("lib/functions")
 
-function channel_edit_page_ui_refreshers.refresh_notes(note_selectors, program, grid_controller, fn)
+function channel_edit_page_ui_refreshers.refresh_notes(note_selectors)
   local pressed_keys = grid_controller.get_pressed_keys()
   local channel = program.get_selected_channel()
   local values = {
@@ -36,7 +38,7 @@ function channel_edit_page_ui_refreshers.refresh_notes(note_selectors, program, 
   end
 end
 
-function channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector, program, clock_controller, fn)
+function channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector)
   local channel = program.get_selected_channel()
   local clock_mods = channel.clock_mods
   local divisions = fn.filter_by_type(clock_controller.get_clock_divisions(), clock_mods.type)
@@ -51,12 +53,12 @@ function channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selec
   end
 end
 
-function channel_edit_page_ui_refreshers.refresh_swing(clock_swing_value_selector, program)
+function channel_edit_page_ui_refreshers.refresh_swing(clock_swing_value_selector)
   local channel = program.get_selected_channel()
   clock_swing_value_selector:set_value(channel.swing)
 end
 
-function channel_edit_page_ui_refreshers.refresh_device_selector(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector, program, device_map)
+function channel_edit_page_ui_refreshers.refresh_device_selector(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
   local channel = program.get_selected_channel()
   if channel.number == 17 then return end
   local device = device_map.get_device(program.get().devices[channel.number].device_map)
@@ -65,7 +67,7 @@ function channel_edit_page_ui_refreshers.refresh_device_selector(device_map_vert
   param_select_vertical_scroll_selector:set_meta_item(device)
 end
 
-function channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, quantiser, fn)
+function channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector)
   local scale = quantizer_vertical_scroll_selector:get_selected_item()
   if scale then
     local number = scale.number
@@ -75,7 +77,7 @@ function channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scrol
   end
 end
 
-function channel_edit_page_ui_refreshers.refresh_quantiser(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, rotation_vertical_scroll_selector, program, quantiser, fn)
+function channel_edit_page_ui_refreshers.refresh_quantiser(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, rotation_vertical_scroll_selector, m_params)
   local channel = program.get_selected_channel()
   local scale = program.get_scale(program.get().selected_scale)
   program.get_selected_sequencer_pattern().active = true
@@ -86,21 +88,20 @@ function channel_edit_page_ui_refreshers.refresh_quantiser(quantizer_vertical_sc
   channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, quantiser, fn)
 end
 
-function channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params, program, params, channel_edit_page_ui_controller)
+function channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
   local channel = program.get_selected_channel()
   local param_id = channel.trig_lock_params[i].param_id
-  channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
 
   if channel.trig_lock_banks[i] then
     m_params[i]:set_value(channel.trig_lock_banks[i])
   end
 end
 
-function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, program, grid_controller, fn, channel_edit_page_ui_controller, params)
+function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params)
   local channel = program.get_selected_channel()
   local pressed_keys = grid_controller.get_pressed_keys()
 
-  channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params, program, params, channel_edit_page_ui_controller)
+  channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
 
   if channel.trig_lock_params[i].id then
     m_params[i]:set_name(channel.trig_lock_params[i].name)
@@ -129,9 +130,9 @@ function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, program,
   end
 end
 
-function channel_edit_page_ui_refreshers.refresh_trig_locks(m_params, program, grid_controller, fn, channel_edit_page_ui_controller, params)
+function channel_edit_page_ui_refreshers.refresh_trig_locks(m_params)
   for i = 1, 10 do
-    channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, program, grid_controller, fn, channel_edit_page_ui_controller, params)
+    channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params)
   end
 end
 
