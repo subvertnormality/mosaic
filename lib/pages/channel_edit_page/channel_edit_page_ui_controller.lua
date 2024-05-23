@@ -15,6 +15,7 @@ local midi_controller = include("mosaic/lib/midi_controller")
 local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/param_manager")
 local channel_edit_page_ui_helpers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_helpers")
+local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
 local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 
 -- UI components
@@ -411,9 +412,9 @@ function channel_edit_page_ui_controller.enc(n, d)
   elseif n == 2 then
     for _ = 1, math.abs(d) do
       if d > 0 then
-        channel_edit_page_ui_helpers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
+        channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
       else
-        channel_edit_page_ui_helpers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
+        channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
       end
     end
   elseif n == 1 then
@@ -719,11 +720,11 @@ function channel_edit_page_ui_controller.handle_trig_locks_page_decrement(d)
 end
 
 function channel_edit_page_ui_controller.handle_encoder_two_positive()
-  channel_edit_page_ui_helpers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
+  channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
 end
 
 function channel_edit_page_ui_controller.handle_encoder_two_negative()
-  channel_edit_page_ui_helpers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
+  channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
 end
 
 function channel_edit_page_ui_controller.handle_encoder_one_positive()

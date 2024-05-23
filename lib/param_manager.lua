@@ -89,6 +89,7 @@ function param_manager.update_param(index, channel, param, meta_device)
     channel.trig_lock_params[index].id = param.id
       
     if (meta_device.type == "midi" and meta_device.param_type ~= "stock") then
+      fn.print_table(param)
       channel.trig_lock_params[index].param_id =
         "midi_device_params_channel_" .. channel.number .. "_" .. param.index
     else

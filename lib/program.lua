@@ -224,14 +224,6 @@ function program.add_step_param_trig_lock(step, parameter, trig_lock)
   step_trig_lock_banks[step][parameter] = trig_lock
 end
 
-function program.is_step_param_trig_locked(channel, parameter)
-  if channel.trig_lock_params[parameter].locked then
-    return true
-  end
-
-  return false
-end
-
 function program.get_step_param_trig_lock(channel, step, parameter)
   local step_trig_lock_banks = channel.step_trig_lock_banks
   return step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] or nil

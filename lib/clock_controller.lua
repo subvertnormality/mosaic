@@ -133,8 +133,6 @@ function clock_controller.init()
           program.get().current_step = 1
           first_run = false
         end
-
-        channel_edit_page_ui_controller.refresh_trig_lock_values()
       end,
       division = 1 / 16,
       swing = 50,

@@ -87,19 +87,14 @@ function step_handler.process_params(c, step)
             p_value = p.value
           end
         end
-        print("here - outside")
+
         if channel.trig_lock_params[i].channel then
           midi_channel = channel.trig_lock_params[i].channel
         end
         if step_trig_lock then
-          print("here - step lock")
-
           if step_trig_lock == channel.trig_lock_params[i].off_value then
             break
           end
-
-          channel.trig_lock_params[i].locked = true
-
           midi_controller.cc(
             channel.trig_lock_params[i].cc_msb,
             channel.trig_lock_params[i].cc_lsb,
@@ -107,13 +102,10 @@ function step_handler.process_params(c, step)
             midi_channel,
             program.get().devices[channel.number].midi_device
           )
-        elseif p_value > -1 then
-          print("here - pvalue")
+        elseif p_value then
           if p_value == channel.trig_lock_params[i].off_value then
             break
           end
-
-          channel.trig_lock_params[i].locked = false
           midi_controller.cc(
             channel.trig_lock_params[i].cc_msb,
             channel.trig_lock_params[i].cc_lsb,
@@ -122,13 +114,9 @@ function step_handler.process_params(c, step)
             program.get().devices[channel.number].midi_device
           )
         else
-          print("here - bank")
-          
           if channel.trig_lock_banks[i] == channel.trig_lock_params[i].off_value then
             break
           end
-
-          channel.trig_lock_params[i].locked = false
           midi_controller.cc(
             channel.trig_lock_params[i].cc_msb,
             channel.trig_lock_params[i].cc_lsb,
@@ -706,7 +694,6 @@ function step_handler.process_lengths_for_channel(c)
       l.steps_remaining = l.steps_remaining - 1
       if l.steps_remaining < 1 then
         l.player:note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
-        step_handler.process_params(c, program.get_current_step_for_channel(c))
         table.remove(length_tracker, i)
       end
     end
