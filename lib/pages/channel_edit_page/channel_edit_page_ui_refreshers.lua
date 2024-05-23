@@ -91,9 +91,19 @@ end
 function channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
   local channel = program.get_selected_channel()
   local param_id = channel.trig_lock_params[i].param_id
+  local step = program.get_current_step_for_channel(channel.number)
+  local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
 
-  if channel.trig_lock_banks[i] then
-    m_params[i]:set_value(channel.trig_lock_banks[i])
+  print(program.is_step_param_trig_locked(channel, i))
+  
+  if step_trig_lock and program.is_step_param_trig_locked(channel, i) then
+    m_params[i]:set_lock_mode(true)
+    m_params[i]:set_value(step_trig_lock)
+  elseif channel.trig_lock_banks[i] and not program.is_step_param_trig_locked(channel, i) then
+    if channel.trig_lock_banks[i] ~= channel.trig_lock_params[i].off_value then
+      m_params[i]:set_lock_mode(false)
+      m_params[i]:set_value(channel.trig_lock_banks[i])
+    end
   end
 end
 

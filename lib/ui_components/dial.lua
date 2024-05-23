@@ -16,6 +16,7 @@ function dial:new(x, y, name, id, top_label, bottom_label)
   self.max_value = nil
   self.off_value = -1
   self.ui_labels = nil
+  self.lock_mode = false
 
   return self
 end
@@ -37,14 +38,20 @@ function dial:draw()
   if (self.max_value and self.value and (self.value > self.max_value)) then
     self.value = self.off_value
   end
+
+  local lock_mode_prefix = ""
+
+  if self.lock_mode then
+    lock_mode_prefix = ":"
+  end
   
   if self.value == self.off_value or not self.value then
-    screen.text("off")
+    screen.text(lock_mode_prefix.."off")
   else
     if self.ui_labels and self.min_value then
-      screen.text(self.ui_labels[self.value - (self.min_value - 1)])
+      screen.text(lock_mode_prefix..self.ui_labels[self.value - (self.min_value - 1)])
     else
-      screen.text(self.value)
+      screen.text(lock_mode_prefix..self.value)
     end
   end
   screen.move(self.x, self.y + 14)
@@ -82,6 +89,10 @@ function dial:set_value(value)
   end
   self.value = value
   fn.dirty_screen(true)
+end
+
+function dial:set_lock_mode(lock_mode)
+  self.lock_mode = lock_mode
 end
 
 function dial:set_top_label(label)
