@@ -6,6 +6,11 @@ local notes = program.initialise_64_table({})
 local lengths = program.initialise_64_table({})
 local velocities = program.initialise_64_table({})
 
+-- Helper variables
+local refresh_timer_id = nil
+local throttle_time = 0.2
+
+
 local function sync_pattern_values(merged_pattern, pattern, s)
   merged_pattern.lengths[s] = pattern.lengths[s]
   merged_pattern.velocity_values[s] = pattern.velocity_values[s]
@@ -156,20 +161,28 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
 end
 
 function pattern_controller.update_working_patterns()
-  local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
-  local sequencer_patterns = selected_sequencer_pattern.channels
-
-  for c = 1, 16 do
-    local channel_pattern = sequencer_patterns[c]
-    local working_pattern = pattern_controller.get_and_merge_patterns(
-      c,
-      channel_pattern.trig_merge_mode,
-      channel_pattern.note_merge_mode,
-      channel_pattern.velocity_merge_mode,
-      channel_pattern.length_merge_mode
-    )
-    channel_pattern.working_pattern = working_pattern
+  -- Must throttle to stop multiple quick inputs from slowing the sequencer down
+  if refresh_timer_id then
+    clock.cancel(refresh_timer_id)
   end
+  refresh_timer_id = clock.run(function()
+    clock.sleep(throttle_time)
+    local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
+    local sequencer_patterns = selected_sequencer_pattern.channels
+    for c = 1, 16 do
+      local channel_pattern = sequencer_patterns[c]
+      local working_pattern = pattern_controller.get_and_merge_patterns(
+        c,
+        channel_pattern.trig_merge_mode,
+        channel_pattern.note_merge_mode,
+        channel_pattern.velocity_merge_mode,
+        channel_pattern.length_merge_mode
+      )
+      channel_pattern.working_pattern = working_pattern
+    end
+    clock.cancel(refresh_timer_id)
+    refresh_timer_id = nil
+  end)
 end
 
 return pattern_controller
