@@ -442,7 +442,7 @@ function channel_edit_page_ui_controller.refresh_notes()
 end
 
 function channel_edit_page_ui_controller.refresh_clock_mods()
-  channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector)
+  channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector, clock_swing_value_selector)
 end
 
 function channel_edit_page_ui_controller.refresh_swing()

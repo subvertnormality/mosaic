@@ -38,7 +38,7 @@ function channel_edit_page_ui_refreshers.refresh_notes(note_selectors)
   end
 end
 
-function channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector)
+function channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector, clock_swing_value_selector)
   local channel = program.get_selected_channel()
   local clock_mods = channel.clock_mods
   local divisions = fn.filter_by_type(clock_controller.get_clock_divisions(), clock_mods.type)
