@@ -14,7 +14,7 @@ local value_selector = include("mosaic/lib/ui_components/value_selector")
 local midi_controller = include("mosaic/lib/midi_controller")
 local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/param_manager")
-local channel_edit_page_ui_helpers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_helpers")
+local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
 local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
 local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 
@@ -712,11 +712,11 @@ function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
 end
 
 function channel_edit_page_ui_controller.handle_trig_locks_page_increment(d)
-  channel_edit_page_ui_helpers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
+  channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
 end
 
 function channel_edit_page_ui_controller.handle_trig_locks_page_decrement(d)
-  channel_edit_page_ui_helpers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
+  channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
 end
 
 function channel_edit_page_ui_controller.handle_encoder_two_positive()

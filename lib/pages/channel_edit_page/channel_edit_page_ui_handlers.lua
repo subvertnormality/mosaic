@@ -1,6 +1,7 @@
 -- channel_edit_page_ui_handlers.lua
 local channel_edit_page_ui_handlers = {}
 local fn = include("lib/functions")
+local param_manager = include("mosaic/lib/param_manager")
 
 function channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
   if channel_pages:get_selected_page() == channel_page_to_index["Notes"] and program.get().selected_channel ~= 17 then
@@ -129,6 +130,25 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages
     if not trig_lock_page:is_sub_page_enabled() then
       dials:scroll_previous()
     end
+  end
+end
+
+
+function channel_edit_page_ui_handlers.handle_trig_locks_page_change(direction, trig_lock_page, param_select_vertical_scroll_selector, dials)
+  if trig_lock_page:is_sub_page_enabled() then
+    param_select_vertical_scroll_selector:scroll(direction)
+    save_confirm.set_save(function()
+      param_manager.update_param(
+        dials:get_selected_index(),
+        program.get_selected_channel(),
+        param_select_vertical_scroll_selector:get_selected_item(),
+        param_select_vertical_scroll_selector:get_meta_item()
+      )
+      channel_edit_page_ui_controller.refresh_trig_locks()
+    end)
+    save_confirm.set_cancel(function() end)
+  else
+    channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(direction, program.get_selected_channel(), dials:get_selected_index())
   end
 end
 
