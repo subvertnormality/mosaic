@@ -11,7 +11,7 @@ local grid_viewer = grid_viewer:new(0, 0)
 
 local tempo_selector = value_selector:new(10, 25, "Tempo", 30, 300)
 local pattern_repeat_selector = value_selector:new(10, 25, "Repeats", 1, 16)
-local song_mode_selector = list_selector:new(70, 25, "Song mode", {{name = "On", value = 1}, {name = "Off", value = 2}})
+local song_mode_selector = list_selector:new(70, 25, "Song mode", {{name = "Off", value = 1}, {name = "On", value = 2}})
 
 local global_settings_page =
   page:new(
