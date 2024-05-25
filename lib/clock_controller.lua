@@ -168,6 +168,7 @@ function clock_controller.init()
         step_handler.sinfonian_sync(current_step)
       else
         step_handler.handle(channel_number, current_step)
+
       end
 
       clock_controller["channel_" .. channel_number .. "_clock"].first_run = false

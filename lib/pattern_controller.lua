@@ -8,7 +8,8 @@ local velocities = program.initialise_64_table({})
 
 -- Helper variables
 local update_timer_id = nil
-local throttle_time = 0.2
+local throttle_time = 0.05
+local long_throttle_time = 0.2
 
 
 local function sync_pattern_values(merged_pattern, pattern, s)
@@ -28,9 +29,15 @@ end
 
 function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
-  local merged_pattern = program.initialise_default_pattern()
-  local skip_bits = program.initialise_64_table(0)
-  local only_bits = program.initialise_64_table(0)
+  local merged_pattern = {
+    trig_values = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    lengths = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+    note_values = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    note_mask_values = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+    velocity_values = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100},
+  }
+  local skip_bits = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+  local only_bits = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 
   local pattern_channel = selected_sequencer_pattern.channels[channel]
   local patterns = selected_sequencer_pattern.patterns
@@ -171,31 +178,54 @@ end
 function pattern_controller.throttled_update_working_patterns()
   -- Must throttle to stop multiple quick inputs from slowing the sequencer down
   if update_timer_id then
-    clock.cancel(refresh_timer_id)
+    clock.cancel(update_timer_id)
   end
   update_timer_id = clock.run(function()
     clock.sleep(throttle_time)
-    pattern_controller.update_working_patterns()
-    clock.cancel(refresh_timer_id)
+    for c = 1, 16 do
+      pattern_controller.update_working_pattern(c)
+      clock.sleep(throttle_time)
+    end
+    clock.cancel(update_timer_id)
     update_timer_id = nil
   end)
 end
 
+function pattern_controller.ui_throttled_update_working_patterns()
+  -- Must throttle to stop multiple quick inputs from slowing the sequencer down
+  if update_timer_id then
+    clock.cancel(update_timer_id)
+  end
+  update_timer_id = clock.run(function()
+    clock.sleep(long_throttle_time)
+    for c = 1, 16 do
+      pattern_controller.update_working_pattern(c)
+      clock.sleep(throttle_time)
+    end
+    clock.cancel(update_timer_id)
+    update_timer_id = nil
+  end)
+end
+
+
 function pattern_controller.update_working_patterns()
+  for c = 1, 16 do
+    pattern_controller.update_working_pattern(c)
+  end
+end
+
+function pattern_controller.update_working_pattern(c)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
   local sequencer_patterns = selected_sequencer_pattern.channels
-  for c = 1, 16 do
-    local channel_pattern = sequencer_patterns[c]
-    local working_pattern = pattern_controller.get_and_merge_patterns(
-      c,
-      channel_pattern.trig_merge_mode,
-      channel_pattern.note_merge_mode,
-      channel_pattern.velocity_merge_mode,
-      channel_pattern.length_merge_mode
-    )
-    channel_pattern.working_pattern = working_pattern
-  end
-
+  local channel_pattern = sequencer_patterns[c]
+  local working_pattern = pattern_controller.get_and_merge_patterns(
+    c,
+    channel_pattern.trig_merge_mode,
+    channel_pattern.note_merge_mode,
+    channel_pattern.velocity_merge_mode,
+    channel_pattern.length_merge_mode
+  )
+  channel_pattern.working_pattern = working_pattern
 end
 
 return pattern_controller
