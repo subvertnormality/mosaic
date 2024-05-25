@@ -138,10 +138,6 @@ function clock_controller.init()
     local sprocket_action = function(t)
       local current_step = program.get_current_step_for_channel(channel_number)
 
-      if channel_number ~= 17 then
-        step_handler.process_lengths_for_channel(channel_number)
-      end
-
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
 
@@ -165,7 +161,6 @@ function clock_controller.init()
         step_handler.sinfonian_sync(current_step)
       else
         step_handler.handle(channel_number, current_step)
-
       end
 
       clock_controller["channel_" .. channel_number .. "_clock"].first_run = false
@@ -195,6 +190,10 @@ function clock_controller.init()
         elseif params:get("trigless_locks") == 2 and not trigless_lock_active[channel_number] and program.step_has_param_trig_lock(channel, step) then
           trigless_lock_active[channel_number] = true
           step_handler.process_params(channel_number, step)
+        end
+
+        if channel_number ~= 17 then
+          step_handler.process_lengths_for_channel(channel_number)
         end
       end
     end
