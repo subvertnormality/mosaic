@@ -18,6 +18,14 @@ local function sync_pattern_values(merged_pattern, pattern, s)
   return merged_pattern
 end
 
+local function extract_pattern_number(merge_mode)
+  local prefix = "pattern_number_"
+  if merge_mode:sub(1, #prefix) == prefix then
+    return tonumber(merge_mode:sub(#prefix + 1))
+  end
+  return nil
+end
+
 function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
   local merged_pattern = program.initialise_default_pattern()
@@ -45,11 +53,11 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
     end
   end
 
-  local patterns_to_process = fn.deep_copy(pattern_channel.selected_patterns)
+  local patterns_to_process = pattern_channel.selected_patterns
 
   local function process_merge_mode(merge_mode)
-    if merge_mode and string.match(merge_mode, "pattern_number_") then
-      local pattern_number = tonumber(string.match(merge_mode, "pattern_number_(%d+)"))
+    if merge_mode and extract_pattern_number(merge_mode) then
+      local pattern_number = extract_pattern_number(merge_mode)
       if patterns_to_process[pattern_number] == nil then
         patterns_to_process[pattern_number] = false
       end
@@ -90,9 +98,9 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
 
       
       local is_positive_step_trig_mask = program.get_step_trig_masks(channel) and program.get_step_trig_masks(channel)[s] == 1
-      local should_process_note_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (note_merge_mode and string.match(note_merge_mode, "pattern_number_"))
-      local should_process_velocity_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (velocity_merge_mode and string.match(velocity_merge_mode, "pattern_number_"))
-      local should_process_length_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (length_merge_mode and string.match(length_merge_mode, "pattern_number_"))
+      local should_process_note_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (note_merge_mode and extract_pattern_number(note_merge_mode))
+      local should_process_velocity_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (velocity_merge_mode and extract_pattern_number(velocity_merge_mode))
+      local should_process_length_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (length_merge_mode and extract_pattern_number(length_merge_mode))
 
       if should_process_note_merge_mode then
         do_moded_merge(pattern_number, true, s, note_merge_mode, pattern.note_values, merged_pattern.note_values, notes)
