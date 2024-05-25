@@ -181,6 +181,13 @@ function clock_controller.init()
         local step = program.get_current_step_for_channel(channel_number) + 1
         if step < 1 then return end
 
+        local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+        local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
+
+        if step > end_trig then
+          step = start_trig
+        end
+
         local next_trig_value = channel.working_pattern.trig_values[step]
         if next_trig_value == 1 then
           trigless_lock_active[channel_number] = false
