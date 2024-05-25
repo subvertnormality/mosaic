@@ -172,11 +172,14 @@ function midi_controller:program_change(program_id, channel, device)
 end
 
 function midi_controller.start()
-  for id = 1, #midi.vports do
-    if midi_devices[id].device ~= nil then
-      midi_devices[id]:start()
+  clock.run(function()
+    clock.sleep(0.0075)
+    for id = 1, #midi.vports do
+      if midi_devices[id].device ~= nil then
+        midi_devices[id]:start()
+      end
     end
-  end
+  end)
 end
 
 function midi_controller.stop()
