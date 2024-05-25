@@ -144,7 +144,7 @@ function velocity_edit_page_controller.register_press_handlers()
             tooltip:show("Steps " .. steps_tip .. "set to " .. velocity)
           end
 
-          pattern_controller.update_working_patterns()
+          pattern_controller.throttled_update_working_patterns()
         end
       end
     )

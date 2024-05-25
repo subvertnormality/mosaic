@@ -185,7 +185,7 @@ local function save_paint_pattern(p)
   end
   program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values = trigs
   program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths = lengths
-  pattern_controller.update_working_patterns()
+  pattern_controller.throttled_update_working_patterns()
   program.get_selected_sequencer_pattern().active = true
 end
 
@@ -205,7 +205,7 @@ function trigger_edit_page_controller.register_press_handlers()
     function(x, y)
       if pattern_trigger_edit_page_sequencer:is_this(x, y) then
         pattern_trigger_edit_page_sequencer:press(x, y)
-        pattern_controller.update_working_patterns()
+        pattern_controller.throttled_update_working_patterns()
       end
     end
   )
@@ -358,7 +358,7 @@ function trigger_edit_page_controller.register_press_handlers()
     function(x, y, x2, y2)
       pattern_trigger_edit_page_sequencer:dual_press(x, y, x2, y2)
       if pattern_trigger_edit_page_sequencer:is_this(x2, y2) then
-        pattern_controller.update_working_patterns()
+        pattern_controller.throttled_update_working_patterns()
         tooltip:show("Note length set")
       end
     end
@@ -368,7 +368,7 @@ function trigger_edit_page_controller.register_press_handlers()
     function(x, y)
       if pattern_trigger_edit_page_sequencer:is_this(x, y) then
         pattern_trigger_edit_page_sequencer:long_press(x, y)
-        pattern_controller.update_working_patterns()
+        pattern_controller.throttled_update_working_patterns()
         tooltip:show("Note length reset")
       end
     end
