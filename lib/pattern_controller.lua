@@ -1,6 +1,7 @@
 local pattern_controller = {}
 local fn = include("mosaic/lib/functions")
 local quantiser = include("mosaic/lib/quantiser")
+local clock_controller = include("mosaic/lib/clock_controller")
 
 local notes = program.initialise_64_table({})
 local lengths = program.initialise_64_table({})
@@ -9,7 +10,7 @@ local velocities = program.initialise_64_table({})
 -- Helper variables
 local update_timer_id = nil
 local throttle_time = 0.05
-local long_throttle_time = 0.2
+local long_throttle_time = 0.1
 
 
 local function sync_pattern_values(merged_pattern, pattern, s)
@@ -197,7 +198,9 @@ function pattern_controller.ui_throttled_update_working_patterns()
     clock.cancel(update_timer_id)
   end
   update_timer_id = clock.run(function()
-    clock.sleep(long_throttle_time)
+    if clock_controller.is_playing() then
+      clock.sleep(long_throttle_time)
+    end
     for c = 1, 16 do
       pattern_controller.update_working_pattern(c)
       clock.sleep(throttle_time)
