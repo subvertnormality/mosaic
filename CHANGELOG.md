@@ -1,4 +1,8 @@
 
+# 0.5.3
+
+* Performance and bug fixes
+
 # 0.5.2
 
 * Fixing some minor issues with chord masks
