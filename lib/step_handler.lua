@@ -112,11 +112,10 @@ function step_handler.process_params(c, step)
       elseif param.type == "norns" and param.id == "nb_slew" then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
 
-        if step_trig_lock == param.off_value then
-          break
-        end
-
         if step_trig_lock then
+          if step_trig_lock == param.off_value then
+            break
+          end
           device.player:set_slew(step_trig_lock / (param.quantum_modifier or 1))
         else
           device.player:set_slew(trig_lock_banks[i] / (param.quantum_modifier or 1))
@@ -124,11 +123,12 @@ function step_handler.process_params(c, step)
       elseif param.type == "norns" and param.id then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
 
-        if step_trig_lock == param.off_value then
-          break
-        end
-
         if step_trig_lock then
+
+          if step_trig_lock == param.off_value then
+            break
+          end
+
           params:set(param.id, step_trig_lock / (param.quantum_modifier or 1))
         else
           params:set(param.id, trig_lock_banks[i] / (param.quantum_modifier or 1))
@@ -514,7 +514,12 @@ function step_handler.handle(c, current_step)
         note_container,
         {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
         function(chord_note, velocity, midi_channel, midi_device)
-          (device.player or midi_controller):note_on(chord_note, velocity, midi_channel, midi_device)
+
+          if device.player then
+            device.player:note_on(chord_note, velocity)
+          elseif midi_controller then
+            midi_controller:note_on(chord_note, velocity, midi_channel, midi_device)
+          end
         end
       )
     end
