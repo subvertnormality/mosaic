@@ -68,21 +68,26 @@ function channel_edit_page_controller.init()
 
   channel_scale_fader:set_pre_func(
     function(x, y, length)
-      for i = x, length + x - 1 do
-        if hide_scale_fader_leds then
-          break
+      clock.run(
+        function()
+          for i = x, length + x - 1 do
+            if hide_scale_fader_leds then
+              break
+            end
+            if clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
+              grid_abstraction.led(i, y, 15)
+            elseif clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number == 17 then
+              grid_abstraction.led(i, y, 15)
+              channel_scale_fader:set_value(0)
+            elseif not clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
+              grid_abstraction.led(i, y, 15)
+            elseif i == program.get().selected_scale and program.get_selected_channel().number == 17 then
+              grid_abstraction.led(i, y, 4)
+            end
+            clock.sleep(0.0001)
+          end
         end
-        if clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
-          grid_abstraction.led(i, y, 15)
-        elseif clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number == 17 then
-          grid_abstraction.led(i, y, 15)
-          channel_scale_fader:set_value(0)
-        elseif not clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
-          grid_abstraction.led(i, y, 15)
-        elseif i == program.get().selected_scale and program.get_selected_channel().number == 17 then
-          grid_abstraction.led(i, y, 4)
-        end
-      end
+      )
     end
   )
 
@@ -210,14 +215,13 @@ function channel_edit_page_controller.register_press_handlers()
   press_handler:register(
     "channel_edit_page",
     function(x, y)
-      channel_select_fader:press(x, y)
       if channel_select_fader:is_this(x, y) then
+        channel_select_fader:press(x, y)
         program.get().selected_channel = channel_select_fader:get_value()
         pattern_controller.ui_throttled_update_working_patterns()
         tooltip:show("Channel " .. program.get().selected_channel .. " selected")
         channel_edit_page_controller.refresh()
         channel_edit_page_ui_controller.refresh()
-        channel_edit_page_ui_controller.refresh_trig_lock_values()
       end
     end
   )
@@ -335,9 +339,9 @@ function channel_edit_page_controller.register_press_handlers()
     press_handler:register(
       "channel_edit_page",
       function(x, y)
-        local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-        pattern_buttons["step" .. s .. "_pattern_button"]:press(x, y)
         if pattern_buttons["step" .. s .. "_pattern_button"]:is_this(x, y) then
+          local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+          pattern_buttons["step" .. s .. "_pattern_button"]:press(x, y)
           if pattern_buttons["step" .. s .. "_pattern_button"]:get_state() == 2 then
             fn.add_to_set(program.get_selected_channel().selected_patterns, x)
             program.get_selected_sequencer_pattern().active = true
