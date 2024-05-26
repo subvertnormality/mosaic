@@ -144,7 +144,7 @@ function velocity_edit_page_controller.register_press_handlers()
             tooltip:show("Steps " .. steps_tip .. "set to " .. velocity)
           end
 
-          pattern_controller.ui_throttled_update_working_patterns()
+          pattern_controller.update_working_patterns()
         end
       end
     )
@@ -289,15 +289,13 @@ function velocity_edit_page_controller.refresh_fader(s)
 end
 
 function velocity_edit_page_controller.refresh()
-  clock.run(
-    function()
-      for s = 1, 64 do
-        velocity_edit_page_controller.refresh_fader(s)
-        clock.sleep(0.0001)
-      end
-      velocity_edit_page_controller.refresh_buttons()
-    end
-  )
+
+  for s = 1, 64 do
+    velocity_edit_page_controller.refresh_fader(s)
+
+  end
+  velocity_edit_page_controller.refresh_buttons()
+
 end
 
 return velocity_edit_page_controller

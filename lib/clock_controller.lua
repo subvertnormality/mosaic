@@ -267,13 +267,19 @@ function clock_controller:start()
   end
 
   clock_controller.set_playing()
-  midi_controller.start()
 
   for i = 1, 16 do
     step_handler.process_params(i, 1)
   end
 
   clock_lattice:start()
+  
+  clock.run(function()
+    clock.sync(1/32)
+    midi_controller.start()   
+  end)
+       
+
 end
 
 function clock_controller:stop()

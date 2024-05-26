@@ -10,7 +10,7 @@ local velocities = program.initialise_64_table({})
 -- Helper variables
 local update_timer_id = nil
 local throttle_time = 0.0005
-local long_throttle_time = 0.1
+local currently_processing = false
 
 
 local function sync_pattern_values(merged_pattern, pattern, s)
@@ -120,7 +120,6 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
         do_moded_merge(pattern_number, true, s, length_merge_mode, pattern.lengths, merged_pattern.lengths, lengths)
       end
     end
-    clock.sleep(throttle_time)
   end
 
   local function do_mode_calculation(mode, s, values, merged_values)
@@ -172,28 +171,9 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
     if step_length_masks[s] then
       merged_pattern.lengths[s] = step_length_masks[s]
     end
-    clock.sleep(throttle_time)
   end
 
   return merged_pattern
-end
-
-
-function pattern_controller.ui_throttled_update_working_patterns()
-  -- Must throttle to stop multiple quick inputs from slowing the sequencer down
-  if update_timer_id then
-    clock.cancel(update_timer_id)
-  end
-  update_timer_id = clock.run(function()
-    if clock_controller.is_playing() then
-      clock.sleep(long_throttle_time)
-    end
-    for c = 1, 16 do
-      pattern_controller.update_working_pattern(c)
-    end
-    clock.cancel(update_timer_id)
-    update_timer_id = nil
-  end)
 end
 
 
@@ -203,13 +183,20 @@ function pattern_controller.update_working_patterns()
     clock.cancel(update_timer_id)
   end
   update_timer_id = clock.run(function()
-    for c = 1, 16 do
-      pattern_controller.update_working_pattern(c)
+    while currently_processing do
+      clock.sleep(throttle_time)
     end
-    clock.cancel(update_timer_id)
-    update_timer_id = nil
+    currently_processing = true
+    clock.run(function()
+      for c = 1, 16 do
+        pattern_controller.update_working_pattern(c)
+        clock.sleep(throttle_time)
+      end
+      currently_processing = false
+    end) 
   end)
 end
+
 
 function pattern_controller.update_working_pattern(c)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()

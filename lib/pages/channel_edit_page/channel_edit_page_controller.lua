@@ -68,26 +68,22 @@ function channel_edit_page_controller.init()
 
   channel_scale_fader:set_pre_func(
     function(x, y, length)
-      clock.run(
-        function()
-          for i = x, length + x - 1 do
-            if hide_scale_fader_leds then
-              break
-            end
-            if clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
-              grid_abstraction.led(i, y, 15)
-            elseif clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number == 17 then
-              grid_abstraction.led(i, y, 15)
-              channel_scale_fader:set_value(0)
-            elseif not clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
-              grid_abstraction.led(i, y, 15)
-            elseif i == program.get().selected_scale and program.get_selected_channel().number == 17 then
-              grid_abstraction.led(i, y, 4)
-            end
-            clock.sleep(0.0001)
-          end
+      for i = x, length + x - 1 do
+        if hide_scale_fader_leds then
+          break
         end
-      )
+        if clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
+          grid_abstraction.led(i, y, 15)
+        elseif clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number == 17 then
+          grid_abstraction.led(i, y, 15)
+          channel_scale_fader:set_value(0)
+        elseif not clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
+          grid_abstraction.led(i, y, 15)
+        elseif i == program.get().selected_scale and program.get_selected_channel().number == 17 then
+          grid_abstraction.led(i, y, 4)
+        end
+
+      end
     end
   )
 
@@ -184,7 +180,6 @@ function channel_edit_page_controller.register_press_handlers()
         if program.get().selected_channel ~= 17 and is_key3_down then
           channel_edit_page_sequencer:press(x, y)
           program.toggle_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
-          pattern_controller.ui_throttled_update_working_patterns()
         end
       end
     end
@@ -196,7 +191,6 @@ function channel_edit_page_controller.register_press_handlers()
         if program.get().selected_channel ~= 17 and is_key3_down then
           program.clear_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
           channel_edit_page_ui_controller.refresh_notes()
-          pattern_controller.ui_throttled_update_working_patterns()
         end
       end
     end
@@ -208,7 +202,7 @@ function channel_edit_page_controller.register_press_handlers()
         channel_edit_page_ui_controller.refresh_trig_locks()
         channel_edit_page_ui_controller.refresh_notes()
         channel_edit_page_controller.refresh_faders()
-        pattern_controller.ui_throttled_update_working_patterns()
+        pattern_controller.update_working_patterns()
       end
     end
   )
@@ -218,7 +212,6 @@ function channel_edit_page_controller.register_press_handlers()
       if channel_select_fader:is_this(x, y) then
         channel_select_fader:press(x, y)
         program.get().selected_channel = channel_select_fader:get_value()
-        pattern_controller.ui_throttled_update_working_patterns()
         tooltip:show("Channel " .. program.get().selected_channel .. " selected")
         channel_edit_page_controller.refresh()
         channel_edit_page_ui_controller.refresh()
@@ -252,7 +245,6 @@ function channel_edit_page_controller.register_press_handlers()
       local selected_sequencer_pattern = program.get().selected_sequencer_pattern
       channel_edit_page_sequencer:dual_press(x, y, x2, y2)
       if channel_edit_page_sequencer:is_this(x2, y2) then
-        pattern_controller.ui_throttled_update_working_patterns()
         program.get_selected_sequencer_pattern().active = true
         tooltip:show("Channel " .. program.get().selected_channel .. " length changed")
       end
@@ -351,7 +343,7 @@ function channel_edit_page_controller.register_press_handlers()
             program.get_selected_sequencer_pattern().active = true
             tooltip:show("Pattern " .. x .. " removed from ch. " .. program.get().selected_channel)
           end
-          pattern_controller.ui_throttled_update_working_patterns()
+          pattern_controller.update_working_patterns()
           program.get_selected_sequencer_pattern().active = true
         end
       end
@@ -387,7 +379,7 @@ function channel_edit_page_controller.register_press_handlers()
           end
 
           program.get_selected_sequencer_pattern().active = true
-          pattern_controller.ui_throttled_update_working_patterns()
+          pattern_controller.update_working_patterns()
 
         end
       end
@@ -425,7 +417,7 @@ function channel_edit_page_controller.register_press_handlers()
           end
 
           program.get_selected_sequencer_pattern().active = true
-          pattern_controller.ui_throttled_update_working_patterns()
+          pattern_controller.update_working_patterns()
 
         end
       end
@@ -462,7 +454,7 @@ function channel_edit_page_controller.register_press_handlers()
           end
 
           program.get_selected_sequencer_pattern().active = true
-          pattern_controller.ui_throttled_update_working_patterns()
+          pattern_controller.update_working_patterns()
 
         end
       end
@@ -499,7 +491,7 @@ function channel_edit_page_controller.register_press_handlers()
           end
 
           program.get_selected_sequencer_pattern().active = true
-          pattern_controller.ui_throttled_update_working_patterns()
+          pattern_controller.update_working_patterns()
         end
       end
     end
@@ -526,7 +518,7 @@ function channel_edit_page_controller.register_press_handlers()
             program.get_selected_channel().note_merge_mode = "pattern_number_" .. x2
             note_merge_mode_button:set_state(4)
             program.get_selected_sequencer_pattern().active = true
-            pattern_controller.ui_throttled_update_working_patterns()
+            pattern_controller.update_working_patterns()
             tooltip:show(
               "Note merge mode pattern " ..x2
             )
@@ -535,7 +527,7 @@ function channel_edit_page_controller.register_press_handlers()
             program.get_selected_channel().velocity_merge_mode = "pattern_number_" .. x2
             velocity_merge_mode_button:set_state(4)
             program.get_selected_sequencer_pattern().active = true
-            pattern_controller.ui_throttled_update_working_patterns()
+            pattern_controller.update_working_patterns()
             tooltip:show(
               "Velocity merge mode pattern " ..x2
             )
@@ -544,7 +536,7 @@ function channel_edit_page_controller.register_press_handlers()
             program.get_selected_channel().length_merge_mode = "pattern_number_" .. x2
             length_merge_mode_button:set_state(4)
             program.get_selected_sequencer_pattern().active = true
-            pattern_controller.ui_throttled_update_working_patterns()
+            pattern_controller.update_working_patterns()
             tooltip:show(
               "Length merge mode pattern " ..x2
             )

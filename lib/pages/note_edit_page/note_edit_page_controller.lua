@@ -122,7 +122,7 @@ function note_edit_page_controller.register_press_handlers()
           tooltip:show("Steps " .. steps_tip .. "set to " .. note)
         end
 
-        pattern_controller.ui_throttled_update_working_patterns()
+        pattern_controller.update_working_patterns()
       end
     )
   end
@@ -265,15 +265,13 @@ function note_edit_page_controller.refresh_fader(s)
 end
 
 function note_edit_page_controller.refresh()
-  clock.run(
-    function()
-      for s = 1, 64 do
-        note_edit_page_controller.refresh_fader(s)
-        clock.sleep(0.0001)
-      end
-      note_edit_page_controller.refresh_buttons()
-    end
-  )
+
+
+  for s = 1, 64 do
+    note_edit_page_controller.refresh_fader(s)
+  end
+  note_edit_page_controller.refresh_buttons()
+
 end
 
 return note_edit_page_controller
