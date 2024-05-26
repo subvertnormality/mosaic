@@ -162,8 +162,6 @@ function sequencer:draw(channel, draw_func)
       end
     end
   end
-  fn.dirty_grid(true)
-  fn.dirty_screen(true)
 end
 
 function sequencer:press(x, y)

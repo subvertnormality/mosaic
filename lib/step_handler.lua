@@ -583,7 +583,7 @@ function step_handler.process_song_sequencer_patterns()
           step_handler.reset_pattern()
         end
       end
-      pattern_controller.throttled_update_working_patterns()
+      pattern_controller.update_working_patterns()
     end
   end
 

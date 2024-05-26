@@ -45,6 +45,7 @@ function channel_sequencer_page_controller.register_draw_handlers()
           refresh_button[s] = false
         end
         channel_pattern_buttons["step" .. s .. "_sequencer_pattern_button"]:draw()
+        clock.sleep(0.0001)
       end
     end
   )
