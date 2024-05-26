@@ -3,7 +3,7 @@ local device_map = {}
 local fn = include("mosaic/lib/functions")
 local json = require("mosaic/lib/json")
 
-
+local device_map_keyed_by_id = {}
 
 local function read_json_file(file_path)
   local file, err = io.open(file_path, "r")
@@ -461,7 +461,7 @@ function device_map.get_device_by_name(name)
 end
 
 function device_map.get_device(id)
-  return fn.get_by_id(devices, id)
+  return device_map_keyed_by_id[id]
 end
 
 function device_map.get_available_devices_for_channel(c)
@@ -535,8 +535,17 @@ function device_map.validate_devices()
   end
 end
 
+local function create_device_map_keyed_by_id(devices)
+  local device_map_keyed_by_id = {}
+  for _, device in ipairs(devices) do
+    device_map_keyed_by_id[device.id] = device
+  end
+  return device_map_keyed_by_id
+end
+
 function device_map.init()
   devices = merge_devices()
+  device_map_keyed_by_id = create_device_map_keyed_by_id(devices)
 end
 
 return device_map

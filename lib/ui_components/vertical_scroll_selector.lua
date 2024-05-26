@@ -103,6 +103,14 @@ function vertical_scroll_selector:scroll_up()
   fn.dirty_screen(true)
 end
 
+function vertical_scroll_selector:scroll(direction) -- 1 for down, -1 for up
+  if direction == 1 then
+    self:scroll_down()
+  elseif direction == -1 then
+    self:scroll_up()
+  end
+end
+
 function vertical_scroll_selector:select()
   self.selected = true
   fn.dirty_screen(true)

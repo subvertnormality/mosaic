@@ -26,8 +26,7 @@ function fn.dirty_screen(bool)
 end
 
 function fn.remove_table_by_id(t, target_id)
-  local size = #t
-  for i = size, 1, -1 do
+  for i = #t, 1, -1 do
     if t[i].id == target_id then
       table.remove(t, i)
     end
@@ -35,24 +34,22 @@ function fn.remove_table_by_id(t, target_id)
 end
 
 function fn.id_appears_in_table(t, target_id)
-  local size = #t
-  for i = size, 1, -1 do
+  for i = #t, 1, -1 do
     if t[i].id == target_id then
-      return true
-    end
-  end
-end
-
-function fn.appears_in_table(t, target_id)
-  local size = #t
-  for i = size, 1, -1 do
-    if t[i] == target_id then
       return true
     end
   end
   return false
 end
 
+function fn.appears_in_table(t, target_id)
+  for i = #t, 1, -1 do
+    if t[i] == target_id then
+      return true
+    end
+  end
+  return false
+end
 
 function fn.string_in_table(tbl, target)
   for _, value in pairs(tbl) do
@@ -83,11 +80,8 @@ function fn.table_to_string(tbl)
   local result = {}
   table.insert(result, "{")
   for k, v in pairs(tbl) do
-    table.insert(result, (type(k) == "string" and '["' .. k .. '"]=') or ("[" .. k .. "]="))
-    table.insert(
-      result,
-      (type(v) == "table" and fn.table_to_string(v) or (type(v) == "string" and '"' .. v .. '"' or v))
-    )
+    table.insert(result, (type(k) == "string" and '["' .. k .. '"]=' or "[" .. k .. "]="))
+    table.insert(result, (type(v) == "table" and fn.table_to_string(v) or (type(v) == "string" and '"' .. v .. '"' or v)))
     table.insert(result, ",")
   end
   table.insert(result, "}")
@@ -96,12 +90,12 @@ end
 
 function fn.print_table(t, indent, current_depth, max_depth)
   indent = indent or ""
-  current_depth = current_depth or 0  -- Start at depth 0
-  max_depth = max_depth or 7  -- Default maximum depth to prevent excessive recursion
-  
+  current_depth = current_depth or 0
+  max_depth = max_depth or 7
+
   if current_depth > max_depth then
     print(indent .. "...")
-    return  -- Stop descending further if max depth exceeded
+    return
   end
 
   for k, v in pairs(t) do
@@ -113,7 +107,6 @@ function fn.print_table(t, indent, current_depth, max_depth)
     end
   end
 end
-
 
 function fn.merge_tables(t1, t2)
   for k, v in pairs(t2) do
@@ -127,12 +120,7 @@ function fn.string_to_table(str)
 end
 
 function fn.title_case(str)
-  return (str:gsub(
-    "(%a)([%w_']*)",
-    function(first, rest)
-      return first:upper() .. rest:lower()
-    end
-  ))
+  return (str:gsub("(%a)([%w_']*)", function(first, rest) return first:upper() .. rest:lower() end))
 end
 
 local function split_words(str)
@@ -144,87 +132,46 @@ local function split_words(str)
 end
 
 function fn.snake_case(str)
-  -- Convert any uppercase letter that has a space or start-of-string before it to lowercase
-  local temp =
-    str:gsub(
-    "(%s?)(%u)",
-    function(space, letter)
-      return (space == " " and "_" or "") .. letter:lower()
-    end
-  )
-  -- Replace spaces with underscores (if any still remain)
-  local snake_case = temp:gsub("%s", "_")
-  return snake_case
+  return str:gsub("(%s?)(%u)", function(space, letter) return (space == " " and "_" or "") .. letter:lower() end):gsub("%s", "_")
+end
+
+local function truncate_word(word)
+  if #word > 4 then
+    return word:gsub("([bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ])[aeiouAEIOU]", "%1", 1):sub(1, 4):upper()
+  end
+  return word:sub(1, 4):upper()
 end
 
 function fn.format_first_descriptor(str)
   local words = split_words(str)
-  local first_word = words[1]
-
-  local truncated
-  -- Remove first vowel if the string has more than 4 characters
-  -- and if there is a consonant before the vowel
-  if #first_word > 4 then
-    truncated = first_word:gsub("([bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ])[aeiouAEIOU]", "%1", 1)
-  else
-    truncated = first_word
-  end
-
-  -- Take first 4 characters
-  truncated = string.sub(truncated, 1, 4)
-
-  -- Capitalize the string
-  local capitalized = string.upper(truncated)
-
-  return capitalized
+  return truncate_word(words[1])
 end
 
 function fn.format_second_descriptor(str)
   local words = split_words(str)
-  local second_word = words[2]
-
-  if second_word == nil then
-    return ""
+  if words[2] then
+    return truncate_word(words[2])
   end
-
-  local truncated
-
-  -- Remove first vowel if the string has more than 4 characters
-  -- and if there is a consonant before the vowel
-  if #second_word > 4 then
-    truncated = second_word:gsub("([bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ])[aeiouAEIOU]", "%1", 1)
-  else
-    truncated = second_word
-  end
-
-  -- Take first 4 characters
-  truncated = string.sub(truncated, 1, 4)
-
-  -- Capitalize the string
-  local capitalized = string.upper(truncated)
-
-  return capitalized
+  return ""
 end
 
 function fn.deep_copy(original, max_depth, current_depth)
-  max_depth = max_depth or 7  -- Default maximum depth to prevent infinite recursion
-  current_depth = current_depth or 0  -- Start at depth 0
-  local copy
-  
+  max_depth = max_depth or 7
+  current_depth = current_depth or 0
+
   if current_depth > max_depth then
-    return original  -- Return the original table if max depth exceeded
+    return original
   end
 
   if type(original) == "table" then
-    copy = {}
+    local copy = {}
     for original_key, original_value in pairs(original) do
       copy[original_key] = fn.deep_copy(original_value, max_depth, current_depth + 1)
     end
     setmetatable(copy, getmetatable(original))
-  else  -- For numbers, strings, booleans, etc.
-    copy = original
+    return copy
   end
-  return copy
+  return original
 end
 
 function fn.table_count(t)
@@ -238,14 +185,12 @@ end
 function fn.shift_table_left(t)
   local first_val = table.remove(t, 1)
   table.insert(t, first_val)
-
   return t
 end
 
 function fn.shift_table_right(t)
   local last_val = table.remove(t)
   table.insert(t, 1, last_val)
-
   return t
 end
 
@@ -305,10 +250,10 @@ end
 function fn.table_has_one_item(tbl)
   local count = 0
   for _ in pairs(tbl) do
-      count = count + 1
-      if count > 1 then
-          return false
-      end
+    count = count + 1
+    if count > 1 then
+      return false
+    end
   end
   return count == 1
 end
@@ -379,12 +324,9 @@ function fn.calc_grid_count(x, y)
 end
 
 function fn.rotate_table_left(t)
-  -- Create a new table by copying the original table
+  local first_item = table.remove(t, 1)
   local new_table = {table.unpack(t)}
-
-  -- Rotate elements of the new table
-  local first_item = table.remove(new_table, 1)
-  -- new_table[7] = first_item
+  table.insert(new_table, first_item)
   return new_table
 end
 
@@ -393,10 +335,10 @@ function fn.transform_random_value(n)
     return 0
   else
     local min, max
-    if n % 2 == 0 then -- n is even
+    if n % 2 == 0 then
       min = -n / 2
       max = n / 2
-    else -- n is odd
+    else
       min = -(n - 1) / 2
       max = (n + 1) / 2
     end
@@ -409,8 +351,7 @@ function fn.transform_twos_random_value(n)
     return 0
   else
     local min = -math.floor(n / 2) * 2
-    local result = random(0, n) * 2 + min
-    return result
+    return random(0, n) * 2 + min
   end
 end
 
@@ -437,27 +378,23 @@ end
 
 function fn.constrain(min, max, value)
   if value < min then
-      value = min
+    value = min
   elseif value > max then
-      value = max
+    value = max
   end
   return value
 end
 
 function fn.average_table_values(tbl)
-
-  local sum = 0
-  local count = 0
-
+  local sum, count = 0, 0
   for _, value in pairs(tbl) do
-      sum = sum + value
-      count = count + 1
+    sum = sum + value
+    count = count + 1
   end
-
   if count == 0 then
-      return nil -- Avoid division by zero; return nil or an appropriate value
+    return nil
   else
-      return math.floor((sum / count) + 0.5)
+    return math.floor((sum / count) + 0.5)
   end
 end
 
@@ -467,18 +404,17 @@ end
 
 function fn.string_split(self, in_split_pattern, out_results)
   if not out_results then
-      out_results = {}
+    out_results = {}
   end
   local the_start = 1
   local the_split_start, the_split_end = string.find(self, in_split_pattern, the_start)
   while the_split_start do
-      table.insert(out_results, string.sub(self, the_start, the_split_start - 1))
-      the_start = the_split_end + 1
-      the_split_start, the_split_end = string.find(self, in_split_pattern, the_start)
+    table.insert(out_results, string.sub(self, the_start, the_split_start - 1))
+    the_start = the_split_end + 1
+    the_split_start, the_split_end = string.find(self, in_split_pattern, the_start)
   end
   table.insert(out_results, string.sub(self, the_start))
   return out_results
 end
-
 
 return fn

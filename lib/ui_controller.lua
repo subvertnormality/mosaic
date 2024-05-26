@@ -2,11 +2,11 @@ local ui_controller = {}
 
 local fn = include("mosaic/lib/functions")
 
-channel_edit_page_ui_controller = include("mosaic/lib/pages/channel_edit_page_ui_controller")
-velocity_edit_page_ui_controller = include("mosaic/lib/pages/velocity_edit_page_ui_controller")
-note_edit_page_ui_controller = include("mosaic/lib/pages/note_edit_page_ui_controller")
-trigger_edit_page_ui_controller = include("mosaic/lib/pages/trigger_edit_page_ui_controller")
-channel_sequencer_page_ui_controller = include("mosaic/lib/pages/channel_sequencer_page_ui_controller")
+channel_edit_page_ui_controller = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller")
+velocity_edit_page_ui_controller = include("mosaic/lib/pages/velocity_edit_page/velocity_edit_page_ui_controller")
+note_edit_page_ui_controller = include("mosaic/lib/pages/note_edit_page/note_edit_page_ui_controller")
+trigger_edit_page_ui_controller = include("mosaic/lib/pages/trigger_edit_page/trigger_edit_page_ui_controller")
+channel_sequencer_page_ui_controller = include("mosaic/lib/pages/channel_sequencer_page/channel_sequencer_page_ui_controller")
 
 tooltip = include("mosaic/lib/ui_components/tooltip")
 save_confirm = include("mosaic/lib/ui_components/save_confirm")
@@ -79,7 +79,7 @@ function ui_controller.key(n, z)
   if n == 2 and z == 1 then
     is_key2_down = true
   elseif n == 2 and z == 0 then
-    ui_controller.is_key2_down = false
+    is_key2_down = false
   end
 
   if n == 3 and z == 1 then

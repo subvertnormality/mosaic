@@ -35,138 +35,114 @@ local next_song_pattern_queue = nil
 
 function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)
+  local trig_lock_params = channel.trig_lock_params
+  local trig_lock_banks = channel.trig_lock_banks
 
   for i = 1, 10 do
-    if channel.trig_lock_params[i] and channel.trig_lock_params[i].id == type then
+    local param = trig_lock_params[i]
+    if param and param.id == type then
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-      if step_trig_lock == channel.trig_lock_params[i].off_value then
+      if step_trig_lock == param.off_value then
         return nil
       end
       if step_trig_lock then
         return step_trig_lock
       else
-        if channel.trig_lock_banks[i] == channel.trig_lock_params[i].off_value then
+        if trig_lock_banks[i] == param.off_value then
           return nil
         end
-        return channel.trig_lock_banks[i]
+        return trig_lock_banks[i]
       end
     end
   end
 
-  return results
+  return nil
 end
+
 
 function step_handler.process_params(c, step)
   local channel = program.get_channel(c)
   local device = device_map.get_device(program.get().devices[channel.number].device_map)
+  local trig_lock_params = channel.trig_lock_params
+  local trig_lock_banks = channel.trig_lock_banks
+  local devices = program.get().devices
 
   for i = 1, 10 do
-    if
-      channel.trig_lock_params[i] and
-        (channel.trig_lock_params[i].id ~= "trig_probability" and
-          channel.trig_lock_params[i].id ~= "quantised_fixed_note" and
-          channel.trig_lock_params[i].id ~= "bipolar_random_note" and
-          channel.trig_lock_params[i].id ~= "twos_random_note" and
-          channel.trig_lock_params[i].id ~= "random_velocity" and
-          channel.trig_lock_params[i].id ~= "fixed_note")
+    local param = trig_lock_params[i]
+    if param and
+       (param.id ~= "trig_probability" and
+        param.id ~= "quantised_fixed_note" and
+        param.id ~= "bipolar_random_note" and
+        param.id ~= "twos_random_note" and
+        param.id ~= "random_velocity" and
+        param.id ~= "fixed_note")
      then
-      if
-        channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "midi" and
-          channel.trig_lock_params[i].cc_msb
-       then
+      if param.type == "midi" and param.cc_msb then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-        local midi_channel = program.get().devices[channel.number].midi_channel
+        local midi_channel = devices[channel.number].midi_channel
 
-        local param_id = channel.trig_lock_params[i].param_id
+        local param_id = param.param_id
         local p_value = nil
-        local p = nil
-        if param_id ~= nil then
-          p = params:lookup_param(channel.trig_lock_params[i].param_id)
-
+        if param_id then
+          local p = params:lookup_param(param_id)
           if p.name ~= "undefined" then
             p_value = p.value
           end
         end
 
-        if channel.trig_lock_params[i].channel then
-          midi_channel = channel.trig_lock_params[i].channel
+        if param.channel then
+          midi_channel = param.channel
         end
         if step_trig_lock then
-          if step_trig_lock == channel.trig_lock_params[i].off_value then
+          if step_trig_lock == param.off_value then
             break
           end
-          midi_controller.cc(
-            channel.trig_lock_params[i].cc_msb,
-            channel.trig_lock_params[i].cc_lsb,
-            step_trig_lock,
-            midi_channel,
-            program.get().devices[channel.number].midi_device
-          )
+          midi_controller.cc(param.cc_msb, param.cc_lsb, step_trig_lock, midi_channel, devices[channel.number].midi_device)
         elseif p_value then
-          if p_value == channel.trig_lock_params[i].off_value then
+          if p_value == param.off_value then
             break
           end
-          midi_controller.cc(
-            channel.trig_lock_params[i].cc_msb,
-            channel.trig_lock_params[i].cc_lsb,
-            p_value,
-            midi_channel,
-            program.get().devices[channel.number].midi_device
-          )
+          midi_controller.cc(param.cc_msb, param.cc_lsb, p_value, midi_channel, devices[channel.number].midi_device)
         else
-          if channel.trig_lock_banks[i] == channel.trig_lock_params[i].off_value then
+          if trig_lock_banks[i] == param.off_value then
             break
           end
-          midi_controller.cc(
-            channel.trig_lock_params[i].cc_msb,
-            channel.trig_lock_params[i].cc_lsb,
-            channel.trig_lock_banks[i],
-            midi_channel,
-            program.get().devices[channel.number].midi_device
-          )
+          midi_controller.cc(param.cc_msb, param.cc_lsb, trig_lock_banks[i], midi_channel, devices[channel.number].midi_device)
         end
-      elseif
-        channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and
-          channel.trig_lock_params[i].id == "nb_slew"
-       then
+      elseif param.type == "norns" and param.id == "nb_slew" then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
 
-        if step_trig_lock == channel.trig_lock_params[i].off_value then
-          break
-        end
-
         if step_trig_lock then
-          device.player:set_slew(step_trig_lock / (channel.trig_lock_params[i].quantum_modifier or 1))
+          if step_trig_lock == param.off_value then
+            break
+          end
+          device.player:set_slew(step_trig_lock / (param.quantum_modifier or 1))
         else
-          device.player:set_slew(channel.trig_lock_banks[i] / (channel.trig_lock_params[i].quantum_modifier or 1))
+          device.player:set_slew(trig_lock_banks[i] / (param.quantum_modifier or 1))
         end
-      elseif
-        channel.trig_lock_params[i] and channel.trig_lock_params[i].type == "norns" and channel.trig_lock_params[i].id
-       then
+      elseif param.type == "norns" and param.id then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
 
-        if step_trig_lock == channel.trig_lock_params[i].off_value then
-          break
-        end
-
         if step_trig_lock then
-          params:set(
-            channel.trig_lock_params[i].id,
-            step_trig_lock / (channel.trig_lock_params[i].quantum_modifier or 1)
-          )
+
+          if step_trig_lock == param.off_value then
+            break
+          end
+
+          params:set(param.id, step_trig_lock / (param.quantum_modifier or 1))
         else
-          params:set(
-            channel.trig_lock_params[i].id,
-            channel.trig_lock_banks[i] / (channel.trig_lock_params[i].quantum_modifier or 1)
-          )
+          params:set(param.id, trig_lock_banks[i] / (param.quantum_modifier or 1))
         end
       end
     end
   end
 end
 
+
 function step_handler.calculate_next_selected_sequencer_pattern()
-  local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
+  local program_data = program.get()  -- Store the result of program.get() in a local variable
+  local selected_sequencer_pattern_number = program_data.selected_sequencer_pattern
+  local sequencer_patterns = program_data.sequencer_patterns
 
   if next_song_pattern_queue then
     local next = next_song_pattern_queue
@@ -174,91 +150,95 @@ function step_handler.calculate_next_selected_sequencer_pattern()
     return next
   end
 
-  if
-    selected_sequencer_pattern_number + 1 < 91 and
-      program.get().sequencer_patterns[selected_sequencer_pattern_number + 1] and
-      program.get().sequencer_patterns[selected_sequencer_pattern_number + 1].active
-   then
-    return selected_sequencer_pattern_number + 1
+  local next_pattern_number = selected_sequencer_pattern_number + 1
+  if next_pattern_number < 91 and sequencer_patterns[next_pattern_number] and sequencer_patterns[next_pattern_number].active then
+    return next_pattern_number
   end
 
   local last_active_previous_sequencer_pattern = selected_sequencer_pattern_number
-  if last_active_previous_sequencer_pattern - 1 > 0 then
-    while program.get().sequencer_patterns[last_active_previous_sequencer_pattern - 1] and
-      program.get().sequencer_patterns[last_active_previous_sequencer_pattern - 1].active == true do
-      last_active_previous_sequencer_pattern = last_active_previous_sequencer_pattern - 1
-    end
+  while last_active_previous_sequencer_pattern > 1 and sequencer_patterns[last_active_previous_sequencer_pattern - 1] and sequencer_patterns[last_active_previous_sequencer_pattern - 1].active do
+    last_active_previous_sequencer_pattern = last_active_previous_sequencer_pattern - 1
   end
 
   return last_active_previous_sequencer_pattern
 end
 
+
 function step_handler.calculate_step_scale_number(c, step)
+  local program_data = program.get()
   local channel = program.get_channel(c)
   local channel_step_scale_number = program.get_step_scale_trig_lock(channel, step)
+  local persistent_numbers = persistent_channel_step_scale_numbers
 
   if c == 17 then
     channel_step_scale_number = nil
-    persistent_channel_step_scale_numbers[17] = nil
+    persistent_numbers[17] = nil
   end
 
-  local global_step_scale_number =
-    program.get_step_scale_trig_lock(program.get_channel(17), program.get_current_step_for_channel(17))
+  local current_step_17 = program.get_current_step_for_channel(17)
+  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), current_step_17)
+  local global_default_scale = program_data.default_scale
 
-  local global_default_scale = program.get().default_scale
-
-  if step == fn.calc_grid_count(program.get_channel(c).start_trig[1], program.get_channel(c).start_trig[2]) then
-    persistent_channel_step_scale_numbers[c] = nil
+  local start_trig_c = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+  if step == start_trig_c then
+    persistent_numbers[c] = nil
   end
-  if program.get_current_step_for_channel(17) == fn.calc_grid_count(program.get_channel(17).start_trig[1], program.get_channel(17).start_trig[2]) then
+
+  local start_trig_17 = fn.calc_grid_count(program.get_channel(17).start_trig[1], program.get_channel(17).start_trig[2])
+  if current_step_17 == start_trig_17 then
     persistent_global_step_scale_number = nil
   end
 
   -- Scale Precedence : channel_step_scale > global_step_scale > global_default_scale
   if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
-    persistent_channel_step_scale_numbers[c] = channel_step_scale_number
+    persistent_numbers[c] = channel_step_scale_number
     return channel_step_scale_number
-  elseif
-    (persistent_channel_step_scale_numbers[c] and program.get_scale(persistent_channel_step_scale_numbers[c]).scale)
-   then
-    return persistent_channel_step_scale_numbers[c]
-  elseif global_step_scale_number and global_step_scale_number > 0 then
+  end
+
+  local persistent_channel_scale = persistent_numbers[c]
+  if persistent_channel_scale and program.get_scale(persistent_channel_scale).scale then
+    return persistent_channel_scale
+  end
+
+  if global_step_scale_number and global_step_scale_number > 0 then
     persistent_global_step_scale_number = global_step_scale_number
     return global_step_scale_number
-  elseif persistent_global_step_scale_number and persistent_global_step_scale_number > 0 then
-    return persistent_global_step_scale_number
-  elseif global_default_scale and global_default_scale > 0 and program.get_scale(global_default_scale).scale then
-    return global_default_scale
-  else
-    return 0
   end
+
+  if persistent_global_step_scale_number and persistent_global_step_scale_number > 0 then
+    return persistent_global_step_scale_number
+  end
+
+  if global_default_scale and global_default_scale > 0 and program.get_scale(global_default_scale).scale then
+    return global_default_scale
+  end
+
+  return 0
 end
 
 function step_handler.manually_calculate_step_scale_number(c, step)
-
+  local program_data = program.get()
   local channel = program.get_channel(c)
-  local channel_step_scale_number = program.get_step_scale_trig_lock(channel, step)
+  local current_step_17 = program.get_current_step_for_channel(17)
+  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), current_step_17)
+  local global_default_scale = program_data.default_scale
+  local clock_division_17 = clock_controller.get_channel_division(17)
 
-  if c == 17 then
-    channel_step_scale_number = nil
+  -- Calculate channel_step_scale_number
+  local channel_step_scale_number = nil
+  if c ~= 17 then
+    for i = 1, step do
+      channel_step_scale_number = program.get_step_scale_trig_lock(channel, i) or channel_step_scale_number
+    end
   end
 
-  local global_step_scale_number =
-    program.get_step_scale_trig_lock(program.get_channel(17), program.get_current_step_for_channel(17))
-
-  local global_default_scale = program.get().default_scale
-
-  for i = 1, step do
-    channel_step_scale_number = program.get_step_scale_trig_lock(channel, i) or channel_step_scale_number or nil
-  end
-
-  local global_scale_step = math.floor(step / (clock_controller.get_channel_division(17) * 4 * 4))
-
+  -- Calculate global_step_scale_number for global scale steps
+  local global_scale_step = math.floor(step / (clock_division_17 * 4 * 4))
   for i = 1, global_scale_step do
-    global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), i) or global_step_scale_number or nil
+    global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), i) or global_step_scale_number
   end
 
-  -- Scale Precedence : channel_step_scale > global_step_scale > global_default_scale
+  -- Scale Precedence: channel_step_scale > global_step_scale > global_default_scale
   if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
     return channel_step_scale_number
   elseif global_step_scale_number and global_step_scale_number > 0 then
@@ -272,21 +252,33 @@ end
 
 
 function step_handler.calculate_step_transpose(current_step, c)
+  local program_data = program.get()
   local step_transpose = program.get_step_transpose_trig_lock(current_step)
-  local global_tranpose = program.get_transpose()
+  local global_transpose = program.get_transpose()
   local transpose = 0
-
-  if program.get().current_step == fn.calc_grid_count(program.get_channel(c).start_trig[1], program.get_channel(c).start_trig[2]) then
+  local channel = program.get_channel(c)
+  local start_trig_1, start_trig_2 = channel.start_trig[1], channel.start_trig[2]
+  local current_channel_step = fn.calc_grid_count(start_trig_1, start_trig_2)
+  
+  if program_data.current_step == current_channel_step then
     persistent_step_transpose = nil
   end
 
-  if step_transpose == nil and persistent_step_transpose ~= nil then
-    transpose = persistent_step_transpose
-  elseif step_transpose ~= nil and step_transpose ~= 0 then
-    transpose = step_transpose
-    persistent_step_transpose = step_transpose
+  if step_transpose then
+    if step_transpose ~= 0 then
+      transpose = step_transpose
+      persistent_step_transpose = step_transpose
+    elseif persistent_step_transpose then
+      transpose = persistent_step_transpose
+    else
+      transpose = global_transpose
+    end
   else
-    transpose = global_tranpose
+    if persistent_step_transpose then
+      transpose = persistent_step_transpose
+    else
+      transpose = global_transpose
+    end
   end
 
   return transpose
@@ -295,45 +287,42 @@ end
 local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func)
   local c = note_container.channel
   local channel = program.get_channel(c)
+  local step_chord_masks = channel.step_chord_masks[current_step]
 
-  if device.polyphonic == false then
+  if not device.polyphonic then
     step_handler.flush_lengths_for_channel(c)
   end
 
-  local chord_note_1 = channel.step_chord_masks[current_step] and channel.step_chord_masks[current_step][1]
-  local chord_note_2 = channel.step_chord_masks[current_step] and channel.step_chord_masks[current_step][2]
-  local chord_note_3 = channel.step_chord_masks[current_step] and channel.step_chord_masks[current_step][3]
-  local chord_note_4 = channel.step_chord_masks[current_step] and channel.step_chord_masks[current_step][4]
-
-  local chord_notes = {chord_note_1, chord_note_2, chord_note_3, chord_note_4}
+  local chord_notes = {
+    step_chord_masks and step_chord_masks[1],
+    step_chord_masks and step_chord_masks[2],
+    step_chord_masks and step_chord_masks[3],
+    step_chord_masks and step_chord_masks[4]
+  }
 
   local division_index = step_handler.process_stock_params(c, current_step, "chord_strum")
   local chord_velocity_mod = step_handler.process_stock_params(c, current_step, "chord_velocity_modifier")
-
   local chord_strum_pattern = step_handler.process_stock_params(c, current_step, "chord_strum_pattern")
 
-  local chord_start = 1
-  local chord_end = #chord_notes
-
-  if chord_strum_pattern == nil or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
-    if (c == program.get().selected_channel) then
+  local selected_channel = program.get().selected_channel
+  if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
+    if c == selected_channel then
       channel_edit_page_ui_controller.set_current_note(note_container)
     end
     note_on_func(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
     table.insert(length_tracker, note_container)
   end
 
-  for i = 1, #chord_notes do
-    if (chord_notes[i]) then
-      if device.polyphonic == false then
+  for i, chord_note in ipairs(chord_notes) do
+    if chord_note then
+      if not device.polyphonic then
         step_handler.flush_lengths_for_channel(c)
       end
 
-      local chord_number = i
-      local delay_multiplier = i
+      local chord_number, delay_multiplier = i, i
 
       if chord_strum_pattern == 2 then
-        chord_number = (#chord_notes + 1) - i
+        chord_number = #chord_notes + 1 - i
         delay_multiplier = delay_multiplier - 1
       elseif chord_strum_pattern == 3 then
         if i % 2 == 1 then
@@ -344,9 +333,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
       elseif chord_strum_pattern == 4 then
         if i % 2 == 1 then
           chord_number = #chord_notes - (i // 2)
-      else
+        else
           chord_number = (i // 2)
-      end
+        end
         delay_multiplier = delay_multiplier - 1
       end
 
@@ -355,35 +344,37 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         division_index,
         delay_multiplier,
         function()
-          local processed_chord_note =
-            quantiser.process(
-              unprocessed_note_container.note_value + chord_notes[chord_number],
+          local note_value = unprocessed_note_container.note_value + chord_notes[chord_number]
+          local processed_chord_note = quantiser.process(
+            note_value,
+            unprocessed_note_container.octave_mod,
+            unprocessed_note_container.transpose,
+            channel.step_scale_number
+          )
+
+          if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
+            processed_chord_note = quantiser.process_chord_note_for_mask(
+              unprocessed_note_container.note_mask_value,
+              chord_notes[chord_number],
               unprocessed_note_container.octave_mod,
               unprocessed_note_container.transpose,
               channel.step_scale_number
-           )
-
-          if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
-            processed_chord_note = quantiser.process_chord_note_for_mask(unprocessed_note_container.note_mask_value, chord_notes[chord_number], unprocessed_note_container.octave_mod, unprocessed_note_container.transpose, channel.step_scale_number)
+            )
           end
 
-          local v = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
+          local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
 
           if processed_chord_note then
-            note_on_func(processed_chord_note, v, note_container.midi_channel, note_container.midi_device)
-  
-            table.insert(
-              length_tracker,
-              {
-                channel = c,
-                steps_remaining = note_container.steps_remaining,
-                player = note_container.player,
-                note = processed_chord_note,
-                velocity = v,
-                midi_channel = note_container.midi_channel,
-                midi_device = note_container.midi_device
-              }
-            )
+            note_on_func(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
+            table.insert(length_tracker, {
+              channel = c,
+              steps_remaining = note_container.steps_remaining,
+              player = note_container.player,
+              note = processed_chord_note,
+              velocity = velocity,
+              midi_channel = note_container.midi_channel,
+              midi_device = note_container.midi_device
+            })
           end
         end
       )
@@ -396,30 +387,33 @@ local function handle_note(device, current_step, note_container, unprocessed_not
       division_index,
       #chord_notes,
       function()
-        local processed_note =
-          quantiser.process(
+        local processed_note = quantiser.process(
           unprocessed_note_container.note_value,
           unprocessed_note_container.octave_mod,
           unprocessed_note_container.transpose,
           channel.step_scale_number
         )
         if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
-          processed_note = quantiser.process_chord_note_for_mask(unprocessed_note_container.note_mask_value, 0, unprocessed_note_container.octave_mod, unprocessed_note_container.transpose, channel.step_scale_number)
-        end
-        if (processed_note) then
-          note_on_func(processed_note, note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes), note_container.midi_channel, note_container.midi_device)
-          table.insert(
-            length_tracker,
-            {
-              channel = c,
-              steps_remaining = note_container.steps_remaining,
-              player = note_container.player,
-              note = processed_note,
-              velocity = note_container.velocity,
-              midi_channel = note_container.midi_channel,
-              midi_device = note_container.midi_device
-            }
+          processed_note = quantiser.process_chord_note_for_mask(
+            unprocessed_note_container.note_mask_value,
+            0,
+            unprocessed_note_container.octave_mod,
+            unprocessed_note_container.transpose,
+            channel.step_scale_number
           )
+        end
+        if processed_note then
+          local velocity = note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes)
+          note_on_func(processed_note, velocity, note_container.midi_channel, note_container.midi_device)
+          table.insert(length_tracker, {
+            channel = c,
+            steps_remaining = note_container.steps_remaining,
+            player = note_container.player,
+            note = processed_note,
+            velocity = note_container.velocity,
+            midi_channel = note_container.midi_channel,
+            midi_device = note_container.midi_device
+          })
         end
       end
     )
@@ -427,34 +421,34 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 end
 
 function step_handler.handle(c, current_step)
+  local program_data = program.get()
   local channel = program.get_channel(c)
+  local working_pattern = channel.working_pattern
+  local devices = program_data.devices[channel.number]
 
-  local trig_value = channel.working_pattern.trig_values[current_step]
-  local note_value = channel.working_pattern.note_values[current_step]
-  local note_mask_value = channel.working_pattern.note_mask_values[current_step]
-  local velocity_value = channel.working_pattern.velocity_values[current_step]
-  local length_value = channel.working_pattern.lengths[current_step]
-  local midi_channel = program.get().devices[channel.number].midi_channel
-  local midi_device = program.get().devices[channel.number].midi_device
+  local trig_value = working_pattern.trig_values[current_step]
+  local note_value = working_pattern.note_values[current_step]
+  local note_mask_value = working_pattern.note_mask_values[current_step]
+  local velocity_value = working_pattern.velocity_values[current_step]
+  local length_value = working_pattern.lengths[current_step]
+  local midi_channel = devices.midi_channel
+  local midi_device = devices.midi_device
   local octave_mod = channel.octave
 
-  if program.get_step_octave_trig_lock(channel, current_step) then
-    octave_mod = program.get_step_octave_trig_lock(channel, current_step)
+  local step_octave_trig_lock = program.get_step_octave_trig_lock(channel, current_step)
+  if step_octave_trig_lock then
+    octave_mod = step_octave_trig_lock
   end
 
   if c == 17 and current_step == fn.calc_grid_count(program.get_channel(17).start_trig[1], program.get_channel(17).start_trig[2]) then
     persistent_global_step_scale_number = nil
   end
 
-  local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability")
-  if not trig_prob then
-    trig_prob = 100
-  end
-
+  local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability") or 100
   local random_val = random(0, 99)
 
   if trig_value == 1 and random_val < trig_prob then
-    if (params:get("quantiser_trig_lock_hold") == 1) then
+    if params:get("quantiser_trig_lock_hold") == 1 then
       persistent_channel_step_scale_numbers[c] = nil
     end
   end
@@ -466,112 +460,72 @@ function step_handler.handle(c, current_step)
   if trig_value == 1 and random_val < trig_prob then
     channel_edit_page_ui_controller.refresh_trig_locks()
 
-    local random_shift =
-      fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0)
-    random_shift =
-      random_shift +
-      fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
+    local random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0) +
+                         fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
 
-    local note = 0
-    
+    local note
     if note_mask_value and note_mask_value > -1 then
-
       if params:get("quantiser_act_on_note_masks") == 2 then
-        note = quantiser.snap_to_scale((note_mask_value + octave_mod * 12) + random_shift, channel.step_scale_number, transpose)
+        note = quantiser.snap_to_scale(note_mask_value + octave_mod * 12 + random_shift, channel.step_scale_number, transpose)
       else
-        note = (note_mask_value + octave_mod * 12) + random_shift + transpose
+        note = note_mask_value + octave_mod * 12 + random_shift + transpose
       end
     else
       note_value = note_value + random_shift
-
-      local do_pentatonic = false
-      if (params:get("all_scales_lock_to_pentatonic") == 2 or 
-        (params:get("merged_lock_to_pentatonic") == 2 and channel.working_pattern.merged_notes[current_step]) or
-        (params:get("random_lock_to_pentatonic") == 2 and random_shift > 0)
-      ) then
-        do_pentatonic = true
-      end
+      local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
+                            (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
+                            (params:get("random_lock_to_pentatonic") == 2 and random_shift > 0)
       note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number, do_pentatonic)
     end
 
-
-    local velocity_random_shift =
-      fn.transform_random_value(step_handler.process_stock_params(c, current_step, "random_velocity") or 0)
-    velocity_value = velocity_value + velocity_random_shift
-    if velocity_value < 0 then
-      velocity_value = 0
-    end
-    if velocity_value > 127 then
-      velocity_value = 127
-    end
+    local velocity_random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "random_velocity") or 0)
+    velocity_value = fn.constrain(0, 127, velocity_value + velocity_random_shift)
 
     local quantised_fixed_note = step_handler.process_stock_params(c, current_step, "quantised_fixed_note")
-
     if quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127 then
       note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number)
     end
 
     local fixed_note = step_handler.process_stock_params(c, current_step, "fixed_note")
-
     if fixed_note and fixed_note > -1 and fixed_note <= 127 then
       note = fixed_note
     end
 
-    local device = device_map.get_device(program.get().devices[channel.number].device_map)
-
+    local device = device_map.get_device(devices.device_map)
     if device.id == "none" then
       return
     end
 
     if not channel.mute then
-      if not device.player then
+      local note_container = {
+        note = note,
+        velocity = velocity_value,
+        length = length_value,
+        midi_channel = midi_channel,
+        midi_device = midi_device,
+        steps_remaining = length_value,
+        player = device.player or midi_controller,
+        channel = c
+      }
 
-        local note_container = {  
-          note = note,
-          velocity = velocity_value,
-          length = length_value,
-          midi_channel = midi_channel,
-          midi_device = midi_device,
-          steps_remaining = length_value,
-          player = midi_controller,
-          channel = c
-        }
+      handle_note(
+        device,
+        current_step,
+        note_container,
+        {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
+        function(chord_note, velocity, midi_channel, midi_device)
 
-        handle_note(
-          device,
-          current_step,
-          note_container,
-          {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
-          function(chord_note, velocity, midi_channel, midi_device)        
+          if device.player then
+            device.player:note_on(chord_note, velocity)
+          elseif midi_controller then
             midi_controller:note_on(chord_note, velocity, midi_channel, midi_device)
           end
-        )
-      else
-
-        local note_container = {
-          note = note,
-          velocity = velocity_value,
-          length = length_value,
-          midi_channel = midi_channel,
-          midi_device = midi_device,
-          steps_remaining = length_value,
-          player = device.player,
-          channel = c
-        }
-        
-        handle_note(
-          device,
-          current_step,
-          note_container,
-          {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
-          function(chord_note, velocity, midi_channel, midi_device)
-            device.player:note_on(chord_note, velocity / 127)
-          end
-        )
-      end
+        end
+      )
     end
   end
 end
+
 
 function step_handler.process_global_step_scale_trig_lock(current_step)
   program.set_global_step_scale_number(step_handler.calculate_step_scale_number(17, current_step))
@@ -629,7 +583,7 @@ function step_handler.process_song_sequencer_patterns()
           step_handler.reset_pattern()
         end
       end
-      pattern_controller.update_working_patterns()
+      pattern_controller.throttled_update_working_patterns()
     end
   end
 
@@ -686,9 +640,9 @@ function step_handler.sinfonian_sync(step)
   -- sinfonion.set_harmonic_shift(0)
   end
 end
-
 function step_handler.process_lengths_for_channel(c)
-  for i = #length_tracker, 1, -1 do
+  local i = #length_tracker
+  while i > 0 do
     local l = length_tracker[i]
     if l.channel == c then
       l.steps_remaining = l.steps_remaining - 1
@@ -697,6 +651,7 @@ function step_handler.process_lengths_for_channel(c)
         table.remove(length_tracker, i)
       end
     end
+    i = i - 1
   end
 end
 
@@ -709,14 +664,17 @@ function step_handler.flush_lengths()
 end
 
 function step_handler.flush_lengths_for_channel(c)
-  for i = #length_tracker, 1, -1 do
+  local i = #length_tracker
+  while i > 0 do
     local l = length_tracker[i]
     if l.channel == c then
       l.player:note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
       table.remove(length_tracker, i)
     end
+    i = i - 1
   end
 end
+
 
 function step_handler.queue_switch_to_next_song_pattern_func(func)
   switch_to_next_song_pattern_func = func
