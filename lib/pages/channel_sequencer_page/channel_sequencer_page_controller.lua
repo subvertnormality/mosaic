@@ -45,7 +45,6 @@ function channel_sequencer_page_controller.register_draw_handlers()
           refresh_button[s] = false
         end
         channel_pattern_buttons["step" .. s .. "_sequencer_pattern_button"]:draw()
-        clock.sleep(0.0001)
       end
     end
   )
@@ -157,9 +156,20 @@ end
 
 function channel_sequencer_page_controller.refresh()
   channel_sequencer_page_ui_controller.refresh()
-  for s = 1, 96 do
-    refresh_button[s] = true
-  end
+
+  refresh_button = {
+    true, true, true, true, true, true, true, true, true, true, 
+    true, true, true, true, true, true, true, true, true, true, 
+    true, true, true, true, true, true, true, true, true, true,
+    true, true, true, true, true, true, true, true, true, true, 
+    true, true, true, true, true, true, true, true, true, true,
+    true, true, true, true, true, true, true, true, true, true,
+    true, true, true, true, true, true, true, true, true, true,
+    true, true, true, true, true, true, true, true, true, true,
+    true, true, true, true, true, true, true, true, true, true,
+    true, true, true, true, true, true
+  }
+
   channel_sequencer_page_controller.refresh_faders()
 end
 

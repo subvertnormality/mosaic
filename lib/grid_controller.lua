@@ -51,12 +51,18 @@ end
 
 
 local function refresh_pages()
-  channel_edit_page_controller.refresh()
-  channel_sequencer_page_controller.refresh()
-  channel_edit_page_ui_controller.refresh()
-  -- trigger_edit_page_controller.refresh()
-  -- note_edit_page_controller.refresh()
-  -- velocity_edit_page_controller.refresh()
+  if (program.get().selected_page == 1) then
+    channel_edit_page_controller.refresh()
+    channel_edit_page_ui_controller.refresh()
+  elseif (program.get().selected_page == 2) then
+    channel_sequencer_page_controller.refresh()
+  elseif (program.get().selected_page == 3) then
+    trigger_edit_page_controller.refresh()
+  elseif (program.get().selected_page == 4) then
+    -- note_edit_page_controller.refresh()
+  elseif (program.get().selected_page == 5) then
+    -- velocity_edit_page_controller.refresh()
+  end
 end
 
 local function register_draw_handlers()
