@@ -87,8 +87,38 @@ function handle_midi_event_data(data, midi_device)
       chord_one_note = nil 
     end
   elseif data[1] == 176 then -- cc change
-    if data[2] >= 15 and (data[2] - 14) <= 10 then
-      channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(data[3] - 64, channel, data[2] - 14)
+
+    if data[2] >= 11 and data[2] <= 20 then
+      channel_edit_page_ui_controller.select_trig_page()
+      channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(data[3] - 64, channel, data[2] - 10)
+    elseif data[2] == 1 then
+      channel_edit_page_ui_controller.select_mask_page()
+      channel_edit_page_ui_controller.handle_trig_mask_change(data[3] - 64)
+    elseif data[2] == 2 then
+      channel_edit_page_ui_controller.select_mask_page()
+      channel_edit_page_ui_controller.handle_note_mask_change(data[3] - 64)
+    elseif data[2] == 3 then
+      channel_edit_page_ui_controller.select_mask_page()
+      channel_edit_page_ui_controller.handle_velocity_mask_change(data[3] - 64)
+    elseif data[2] == 4 then
+      channel_edit_page_ui_controller.select_mask_page()
+      channel_edit_page_ui_controller.handle_length_mask_change(data[3] - 64)
+    elseif data[2] == 5 then
+      -- reserved
+    elseif data[2] == 6 then
+      channel_edit_page_ui_controller.select_mask_page()
+      channel_edit_page_ui_controller.handle_chord_mask_one_change(data[3] - 64)
+    elseif data[2] == 7 then
+      channel_edit_page_ui_controller.select_mask_page()
+      channel_edit_page_ui_controller.handle_chord_mask_two_change(data[3] - 64)
+    elseif data[2] == 8 then
+      channel_edit_page_ui_controller.select_mask_page()
+      channel_edit_page_ui_controller.handle_chord_mask_three_change(data[3] - 64)
+    elseif data[2] == 9 then
+      channel_edit_page_ui_controller.select_mask_page()
+      channel_edit_page_ui_controller.handle_chord_mask_four_change(data[3] - 64)
+    elseif data[2] == 10 then
+      -- reserved
     end
   end 
 end

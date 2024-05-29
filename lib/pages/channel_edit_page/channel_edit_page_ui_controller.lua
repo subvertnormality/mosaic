@@ -379,10 +379,11 @@ function channel_edit_page_ui_controller.enc(n, d)
   local channel = program.get_selected_channel()
   if n == 3 then
     for _ = 1, math.abs(d) do
+      if program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Notes"] then
+        channel_edit_page_ui_controller.handle_note_page_change(d)
+      end
       if d > 0 then
-        if program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Notes"] then
-          channel_edit_page_ui_controller.handle_note_page_increment()
-        elseif program.get().selected_channel == 17 and scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] then
+        if program.get().selected_channel == 17 and scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] then
           channel_edit_page_ui_controller.handle_quantizer_page_increment()
         elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] and program.get().selected_channel ~= 17 then
           channel_edit_page_ui_controller.handle_clock_mods_page_increment()
@@ -394,9 +395,7 @@ function channel_edit_page_ui_controller.enc(n, d)
           channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
         end
       else
-        if channel_pages:get_selected_page() == channel_page_to_index["Notes"] and program.get().selected_channel ~= 17 then
-          channel_edit_page_ui_controller.handle_note_page_decrement()
-        elseif scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] and program.get().selected_channel == 17 then
+        if scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] and program.get().selected_channel == 17 then
           channel_edit_page_ui_controller.handle_quantizer_page_decrement()
         elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] and program.get().selected_channel ~= 17 then
           channel_edit_page_ui_controller.handle_clock_mods_page_decrement()
@@ -515,76 +514,163 @@ function channel_edit_page_ui_controller.refresh()
   channel_edit_page_ui_controller.refresh_swing()
 end
 
--- Handlers for specific actions
-function channel_edit_page_ui_controller.handle_note_page_increment()
+
+function channel_edit_page_ui_controller.handle_trig_mask_change(direction)
   local pressed_keys = grid_controller.get_pressed_keys()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     for _, keys in ipairs(pressed_keys) do
       local step = fn.calc_grid_count(keys[1], keys[2])
-      if mask_selectors.trig:is_selected() then
+      if direction > 0 then
         mask_selectors.trig:increment()
         program.get_selected_channel().step_trig_masks[step] = mask_selectors.trig:get_value()
+      else
+        mask_selectors.trig:decrement()
+        program.get_selected_channel().step_trig_masks[step] = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
       end
-      if mask_selectors.note:is_selected() then
+
+    end
+  end
+end
+
+
+function channel_edit_page_ui_controller.handle_note_mask_change(direction)
+  local pressed_keys = grid_controller.get_pressed_keys()
+  if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
+    for _, keys in ipairs(pressed_keys) do
+      local step = fn.calc_grid_count(keys[1], keys[2])
+      if direction > 0 then
         mask_selectors.note:increment()
         program.get_selected_channel().step_note_masks[step] = mask_selectors.note:get_value()
-      end
-      if mask_selectors.velocity:is_selected() then
-        mask_selectors.velocity:increment()
-        program.get_selected_channel().step_velocity_masks[step] = mask_selectors.velocity:get_value()
-      end
-      if mask_selectors.length:is_selected() then
-        mask_selectors.length:increment()
-        program.get_selected_channel().step_length_masks[step] = mask_selectors.length:get_value()
-      end
-      for i, chord_selector in ipairs(mask_selectors.chords) do
-        if chord_selector:is_selected() then
-          chord_selector:increment()
-          program.get_selected_channel().step_chord_masks[step][i] = chord_selector:get_value()
-        end
+      else
+        mask_selectors.note:decrement()
+        program.get_selected_channel().step_note_masks[step] = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
       end
     end
   end
 end
 
-function channel_edit_page_ui_controller.handle_note_page_decrement()
+function channel_edit_page_ui_controller.handle_velocity_mask_change(direction)
   local pressed_keys = grid_controller.get_pressed_keys()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     for _, keys in ipairs(pressed_keys) do
       local step = fn.calc_grid_count(keys[1], keys[2])
-      if mask_selectors.trig:is_selected() then
-        mask_selectors.trig:decrement()
-        local value = mask_selectors.trig:get_value()
-        program.get_selected_channel().step_trig_masks[step] = value == -1 and nil or value
-      end
-      if mask_selectors.note:is_selected() then
-        mask_selectors.note:decrement()
-        local value = mask_selectors.note:get_value()
-        program.get_selected_channel().step_note_masks[step] = value == -1 and nil or value
-      end
-      if mask_selectors.velocity:is_selected() then
+      if direction > 0 then
+        mask_selectors.velocity:increment()
+        program.get_selected_channel().step_velocity_masks[step] = mask_selectors.velocity:get_value()
+      else
         mask_selectors.velocity:decrement()
-        local value = mask_selectors.velocity:get_value()
-        program.get_selected_channel().step_velocity_masks[step] = value == -1 and nil or value
-      end
-      if mask_selectors.length:is_selected() then
-        mask_selectors.length:decrement()
-        local value = mask_selectors.length:get_value()
-        program.get_selected_channel().step_length_masks[step] = value < 1 and nil or value
-        mask_selectors.length:set_value(value < 1 and -1 or value)
-      end
-      for i, chord_selector in ipairs(mask_selectors.chords) do
-        if chord_selector:is_selected() then
-          chord_selector:decrement()
-          local value = chord_selector:get_value()
-          if not program.get_selected_channel().step_chord_masks[step] then
-            program.get_selected_channel().step_chord_masks[step] = {}
-          end
-          program.get_selected_channel().step_chord_masks[step][i] = value < -14 or value == 0 and nil or value
-        end
+        program.get_selected_channel().step_velocity_masks[step] = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
       end
     end
   end
+end
+
+function channel_edit_page_ui_controller.handle_length_mask_change(direction)
+  local pressed_keys = grid_controller.get_pressed_keys()
+  if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
+    for _, keys in ipairs(pressed_keys) do
+      local step = fn.calc_grid_count(keys[1], keys[2])
+      if direction > 0 then
+        mask_selectors.length:increment()
+        program.get_selected_channel().step_length_masks[step] = mask_selectors.length:get_value()
+      else
+        mask_selectors.length:decrement()
+        program.get_selected_channel().step_length_masks[step] = mask_selectors.length:get_value() < 1 and nil or mask_selectors.length:get_value()
+      end
+    end
+  end
+end
+
+function channel_edit_page_ui_controller.handle_chord_mask_one_change(direction)
+  local pressed_keys = grid_controller.get_pressed_keys()
+  if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
+    for _, keys in ipairs(pressed_keys) do
+      local step = fn.calc_grid_count(keys[1], keys[2])
+      if direction > 0 then
+        mask_selectors.chords[1]:increment()
+        program.get_selected_channel().step_chord_masks[step][1] = mask_selectors.chords[1]:get_value()
+      else
+        mask_selectors.chords[1]:decrement()
+        program.get_selected_channel().step_chord_masks[step][1] = mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value()
+      end
+    end
+  end
+end
+
+function channel_edit_page_ui_controller.handle_chord_mask_two_change(direction)
+  local pressed_keys = grid_controller.get_pressed_keys()
+  if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
+    for _, keys in ipairs(pressed_keys) do
+      local step = fn.calc_grid_count(keys[1], keys[2])
+      if direction > 0 then
+        mask_selectors.chords[2]:increment()
+        program.get_selected_channel().step_chord_masks[step][2] = mask_selectors.chords[2]:get_value()
+      else
+        mask_selectors.chords[2]:decrement()
+        program.get_selected_channel().step_chord_masks[step][2] = mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value()
+      end
+    end
+  end
+end
+
+function channel_edit_page_ui_controller.handle_chord_mask_three_change(direction)
+  local pressed_keys = grid_controller.get_pressed_keys()
+  if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
+    for _, keys in ipairs(pressed_keys) do
+      local step = fn.calc_grid_count(keys[1], keys[2])
+      if direction > 0 then
+        mask_selectors.chords[3]:increment()
+        program.get_selected_channel().step_chord_masks[step][3] = mask_selectors.chords[3]:get_value()
+      else
+        mask_selectors.chords[3]:decrement()
+        program.get_selected_channel().step_chord_masks[step][3] = mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value()
+      end
+    end
+  end
+end
+
+function channel_edit_page_ui_controller.handle_chord_mask_four_change(direction)
+  local pressed_keys = grid_controller.get_pressed_keys()
+  if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
+    for _, keys in ipairs(pressed_keys) do
+      local step = fn.calc_grid_count(keys[1], keys[2])
+      if direction > 0 then
+        mask_selectors.chords[4]:increment()
+        program.get_selected_channel().step_chord_masks[step][4] = mask_selectors.chords[4]:get_value()
+      else
+        mask_selectors.chords[4]:decrement()
+        program.get_selected_channel().step_chord_masks[step][4] = mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value()
+      end
+    end
+  end
+end
+
+-- Handlers for specific actions
+function channel_edit_page_ui_controller.handle_note_page_change(direction)
+    if mask_selectors.trig:is_selected() then
+      channel_edit_page_ui_controller.handle_trig_mask_change(direction)
+    end
+    if mask_selectors.note:is_selected() then
+      channel_edit_page_ui_controller.handle_note_mask_change(direction)
+    end
+    if mask_selectors.velocity:is_selected() then
+      channel_edit_page_ui_controller.handle_velocity_mask_change(direction)
+    end
+    if mask_selectors.length:is_selected() then
+      channel_edit_page_ui_controller.handle_length_mask_change(direction)
+    end
+    if mask_selectors.chords[1]:is_selected() then
+      channel_edit_page_ui_controller.handle_chord_mask_one_change(direction)
+    end
+    if mask_selectors.chords[2]:is_selected() then
+      channel_edit_page_ui_controller.handle_chord_mask_two_change(direction)
+    end
+    if mask_selectors.chords[3]:is_selected() then
+      channel_edit_page_ui_controller.handle_chord_mask_three_change(direction)
+    end
+    if mask_selectors.chords[4]:is_selected() then
+      channel_edit_page_ui_controller.handle_chord_mask_four_change(direction)
+    end
 end
 
 function channel_edit_page_ui_controller.handle_quantizer_page_increment()
@@ -814,6 +900,15 @@ function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
     p = params:lookup_param(channel.trig_lock_params[i].param_id)
     params:set(param_id, channel.trig_lock_banks[i])
   end
+end
+
+function channel_edit_page_ui_controller.select_mask_page()
+  channel_pages:select_page(channel_page_to_index["Notes"])
+  fn.dirty_screen(true)
+end
+
+function channel_edit_page_ui_controller.select_trig_page()
+  channel_pages:select_page(channel_page_to_index["Trig Locks"])
 end
 
 
