@@ -8,7 +8,7 @@ function dial:new(x, y, name, id, top_label, bottom_label)
   self.x = x
   self.y = y
   self.name = name
-  self.value = 0
+  self.value = -1
   self.top_label = top_label
   self.bottom_label = bottom_label
   self.selected = false
@@ -39,7 +39,7 @@ function dial:draw()
   end
   
   if self.value == self.off_value or not self.value then
-    screen.text("off")
+    screen.text("X")
   else
     if self.ui_labels and self.min_value then
       screen.text(self.ui_labels[self.value - (self.min_value - 1)])

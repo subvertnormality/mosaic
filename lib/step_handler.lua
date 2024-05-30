@@ -294,10 +294,10 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   end
 
   local chord_notes = {
-    step_chord_masks and step_chord_masks[1],
-    step_chord_masks and step_chord_masks[2],
-    step_chord_masks and step_chord_masks[3],
-    step_chord_masks and step_chord_masks[4]
+    step_chord_masks and step_chord_masks[1] or channel.chord_one_mask,
+    step_chord_masks and step_chord_masks[2] or channel.chord_two_mask,
+    step_chord_masks and step_chord_masks[3] or channel.chord_three_mask,
+    step_chord_masks and step_chord_masks[4] or channel.chord_four_mask
   }
 
   local division_index = step_handler.process_stock_params(c, current_step, "chord_strum")
@@ -306,9 +306,6 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   local selected_channel = program.get().selected_channel
   if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
-    if c == selected_channel then
-      channel_edit_page_ui_controller.set_current_note(note_container)
-    end
     note_on_func(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
     table.insert(length_tracker, note_container)
   end
@@ -691,7 +688,6 @@ function step_handler.execute_blink_cancel_func()
 end
 
 function step_handler.reset()
-  local channel = program.get_current
   program.get().global_step_accumulator = 0
   persistent_global_step_scale_number = nil
   persistent_channel_step_scale_numbers = {
@@ -715,7 +711,6 @@ function step_handler.reset()
   persistent_step_transpose = nil
   step_handler.execute_blink_cancel_func()
   step_handler.flush_lengths()
-  channel_edit_page_ui_controller.set_current_note({note = -1, velocity = -1, length = -1})
   local c = program.get_selected_channel().number
   program.set_channel_step_scale_number(
     c, step_handler.calculate_step_scale_number(c, 1)

@@ -89,7 +89,7 @@ local function get_none_param()
   return {
     ["id"] = "none",
     ["name"] = "None",
-    ["short_descriptor_1"] = "X",
+    ["short_descriptor_1"] = "None",
     ["short_descriptor_2"] = ""
   }
 end

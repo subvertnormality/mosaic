@@ -3,7 +3,7 @@ local channel_edit_page_ui_refreshers = {}
 local quantiser = include("lib/quantiser")
 local fn = include("lib/functions")
 
-function channel_edit_page_ui_refreshers.refresh_notes(note_selectors)
+function channel_edit_page_ui_refreshers.refresh_masks(note_selectors)
   local pressed_keys = grid_controller.get_pressed_keys()
   local channel = program.get_selected_channel()
   local values = {
@@ -15,26 +15,39 @@ function channel_edit_page_ui_refreshers.refresh_notes(note_selectors)
     if pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
       for _, keys in ipairs(pressed_keys) do
         local step = fn.calc_grid_count(keys[1], keys[2])
-        values.note = channel.step_note_masks[step] or -1
-        values.velocity = channel.step_velocity_masks[step] or -1
-        values.length = channel.step_length_masks[step] or -1
-        values.trig = channel.step_trig_masks[step] or -1
-        if channel.step_chord_masks[step] then
-          values.chords[1] = channel.step_chord_masks[step][1] or 0
-          values.chords[2] = channel.step_chord_masks[step][2] or 0
-          values.chords[3] = channel.step_chord_masks[step][3] or 0
-          values.chords[4] = channel.step_chord_masks[step][4] or 0
+        note_selectors.note:set_value(channel.step_note_masks[step] or channel.note_mask or -1)
+        note_selectors.velocity:set_value(channel.step_velocity_masks[step] or channel.velocity_mask or -1)
+        note_selectors.length:set_value(channel.step_length_masks[step] or channel.length_mask or -1)
+        note_selectors.trig:set_value(channel.step_trig_masks[step] or channel.trig_mask or -1) 
+        for i, chord_selector in ipairs(note_selectors.chords) do
+          if i == 1 then
+            chord_selector:set_value(channel.step_chord_masks[step] and channel.step_chord_masks[step][1] or channel.chord_one_mask or 0)
+          elseif i == 2 then
+              chord_selector:set_value(channel.step_chord_masks[step] and channel.step_chord_masks[step][2] or channel.chord_two_mask or 0)
+          elseif i == 3 then
+              chord_selector:set_value(channel.step_chord_masks[step] and channel.step_chord_masks[step][3] or channel.chord_three_mask or 0)
+          elseif i == 4 then
+              chord_selector:set_value(channel.step_chord_masks[step] and channel.step_chord_masks[step][4] or channel.chord_four_mask or 0)
+          end
         end
       end
     end
-  end
-
-  note_selectors.note:set_value(values.note)
-  note_selectors.velocity:set_value(values.velocity)
-  note_selectors.length:set_value(values.length)
-  note_selectors.trig:set_value(values.trig)
-  for i, chord_selector in ipairs(note_selectors.chords) do
-    chord_selector:set_value(values.chords[i])
+  else
+    note_selectors.note:set_value(channel.note_mask or -1)
+    note_selectors.velocity:set_value(channel.velocity_mask or -1)
+    note_selectors.length:set_value(channel.length_mask or -1)
+    note_selectors.trig:set_value(channel.trig_mask or -1)
+    for i, chord_selector in ipairs(note_selectors.chords) do
+      if i == 1 then
+          chord_selector:set_value(channel.chord_one_mask or 0)
+      elseif i == 2 then
+          chord_selector:set_value(channel.chord_two_mask or 0)
+      elseif i == 3 then
+          chord_selector:set_value(channel.chord_three_mask or 0)
+      elseif i == 4 then
+          chord_selector:set_value(channel.chord_four_mask or 0)
+      end
+    end
   end
 end
 
@@ -111,6 +124,7 @@ function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params)
     m_params[i]:set_min_value(channel.trig_lock_params[i].cc_min_value)
     m_params[i]:set_max_value(channel.trig_lock_params[i].cc_max_value)
     m_params[i]:set_ui_labels(channel.trig_lock_params[i].ui_labels)
+    m_params[i]:set_value(channel.trig_lock_banks[i] or channel.trig_lock_params[i].off_value)
 
     local step_trig_lock = program.get_step_param_trig_lock(channel, program.get_current_step_for_channel(channel.number), i)
     if #pressed_keys > 0 then
@@ -125,7 +139,7 @@ function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params)
     end
   else
     m_params[i]:set_name("")
-    m_params[i]:set_top_label("X")
+    m_params[i]:set_top_label("None")
     m_params[i]:set_bottom_label("")
   end
 end

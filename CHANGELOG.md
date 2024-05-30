@@ -1,4 +1,8 @@
 
+# 0.5.4
+
+* Masks can now be applied as a default affecting all trigs in a channel
+
 # 0.5.3
 
 * Performance and bug fixes

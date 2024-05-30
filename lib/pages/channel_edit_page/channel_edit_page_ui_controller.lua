@@ -57,7 +57,7 @@ local param_select_vertical_scroll_selector = vertical_scroll_selector:new(30, 2
 local dials = control_scroll_selector:new(0, 0, {})
 local m_params = {}
 for i = 1, 10 do
-  table.insert(m_params, dial:new(5 + (i - 1) % 5 * 25, 18 + math.floor((i - 1) / 5) * 22, "Param " .. i, "param_" .. i, "X", ""))
+  table.insert(m_params, dial:new(5 + (i - 1) % 5 * 25, 18 + math.floor((i - 1) / 5) * 22, "Param " .. i, "param_" .. i, "None", "X"))
 end
 
 -- Page indices
@@ -436,8 +436,8 @@ function channel_edit_page_ui_controller.key(n, z)
 end
 
 -- Refresh functions
-function channel_edit_page_ui_controller.refresh_notes()
-  channel_edit_page_ui_refreshers.refresh_notes(mask_selectors)
+function channel_edit_page_ui_controller.refresh_masks()
+  channel_edit_page_ui_refreshers.refresh_masks(mask_selectors)
 end
 
 function channel_edit_page_ui_controller.refresh_clock_mods()
@@ -506,7 +506,7 @@ end
 function channel_edit_page_ui_controller.refresh()
   channel_edit_page_ui_controller.refresh_device_selector()
   channel_edit_page_ui_controller.throttled_refresh_channel_config()
-  channel_edit_page_ui_controller.refresh_notes()
+  channel_edit_page_ui_controller.refresh_masks()
   channel_edit_page_ui_controller.refresh_trig_locks()
   channel_edit_page_ui_controller.refresh_quantiser()
   channel_edit_page_ui_controller.refresh_romans()
@@ -517,130 +517,237 @@ end
 
 function channel_edit_page_ui_controller.handle_trig_mask_change(direction)
   local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
-    for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      if direction > 0 then
-        mask_selectors.trig:increment()
-        program.get_selected_channel().step_trig_masks[step] = mask_selectors.trig:get_value()
-      else
-        mask_selectors.trig:decrement()
-        program.get_selected_channel().step_trig_masks[step] = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
+    if direction > 0 then
+      mask_selectors.trig:increment()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_trig_masks[step] = mask_selectors.trig:get_value()
       end
-
+    else
+      mask_selectors.trig:decrement()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_trig_masks[step] = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
+      end
     end
+  else
+    mask_selectors.trig:set_value(channel.trig_mask or -1)
+    if direction > 0 then
+      mask_selectors.trig:increment()
+      program.set_trig_mask(channel, mask_selectors.trig:get_value())
+    else
+      mask_selectors.trig:decrement()
+      program.set_trig_mask(channel, mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value())
+    end
+    pattern_controller.throttled_update_working_pattern(channel.number)
   end
 end
 
 
 function channel_edit_page_ui_controller.handle_note_mask_change(direction)
   local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
-    for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      if direction > 0 then
-        mask_selectors.note:increment()
-        program.get_selected_channel().step_note_masks[step] = mask_selectors.note:get_value()
-      else
-        mask_selectors.note:decrement()
-        program.get_selected_channel().step_note_masks[step] = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
+    if direction > 0 then
+      mask_selectors.note:increment()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_note_masks[step] = mask_selectors.note:get_value()
+      end
+    else
+      mask_selectors.note:decrement()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_note_masks[step] = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
       end
     end
+  else
+    mask_selectors.note:set_value(channel.note_mask or -1)
+    if direction > 0 then
+      mask_selectors.note:increment()
+      program.set_note_mask(channel, mask_selectors.note:get_value())
+    else
+      mask_selectors.note:decrement()
+      program.set_note_mask(channel, mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value())
+    end
+    pattern_controller.throttled_update_working_pattern(channel.number)
   end
 end
 
 function channel_edit_page_ui_controller.handle_velocity_mask_change(direction)
   local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
-    for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      if direction > 0 then
-        mask_selectors.velocity:increment()
-        program.get_selected_channel().step_velocity_masks[step] = mask_selectors.velocity:get_value()
-      else
-        mask_selectors.velocity:decrement()
-        program.get_selected_channel().step_velocity_masks[step] = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
+    if direction > 0 then
+      mask_selectors.velocity:increment()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_velocity_masks[step] = mask_selectors.velocity:get_value()
+      end
+    else
+      mask_selectors.velocity:decrement()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_velocity_masks[step] = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
       end
     end
+  else
+    mask_selectors.velocity:set_value(channel.velocity_mask or -1)
+    if direction > 0 then
+      mask_selectors.velocity:increment()
+      program.set_velocity_mask(channel, mask_selectors.velocity:get_value())
+    else
+      mask_selectors.velocity:decrement()
+      program.set_velocity_mask(channel, mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value())
+    end
+    pattern_controller.throttled_update_working_pattern(channel.number)
   end
 end
 
 function channel_edit_page_ui_controller.handle_length_mask_change(direction)
   local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
-    for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      if direction > 0 then
-        mask_selectors.length:increment()
-        program.get_selected_channel().step_length_masks[step] = mask_selectors.length:get_value()
-      else
-        mask_selectors.length:decrement()
-        program.get_selected_channel().step_length_masks[step] = mask_selectors.length:get_value() < 1 and nil or mask_selectors.length:get_value()
+    if direction > 0 then
+      mask_selectors.length:increment()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_length_masks[step] = mask_selectors.length:get_value()
+      end
+    else
+      mask_selectors.length:decrement()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_length_masks[step] = mask_selectors.length:get_value() == -1 and nil or mask_selectors.length:get_value()
       end
     end
+  else
+    mask_selectors.length:set_value(channel.length_mask or -1)
+    if direction > 0 then
+      mask_selectors.length:increment()
+      program.set_length_mask(channel, mask_selectors.length:get_value())
+    else
+      mask_selectors.length:decrement()
+      program.set_length_mask(channel, mask_selectors.length:get_value() == -1 and nil or mask_selectors.length:get_value())
+    end
+    pattern_controller.throttled_update_working_pattern(channel.number)
   end
 end
 
 function channel_edit_page_ui_controller.handle_chord_mask_one_change(direction)
   local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
-    for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      if direction > 0 then
-        mask_selectors.chords[1]:increment()
-        program.get_selected_channel().step_chord_masks[step][1] = mask_selectors.chords[1]:get_value()
-      else
-        mask_selectors.chords[1]:decrement()
-        program.get_selected_channel().step_chord_masks[step][1] = mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value()
+    if direction > 0 then
+      mask_selectors.chords[1]:increment()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 1, step, mask_selectors.chords[1]:get_value())
       end
+    else
+      mask_selectors.chords[1]:decrement()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 1, step, mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value())
+      end
+    end
+  else
+    mask_selectors.chords[1]:set_value(channel.chord_one_mask or -1)
+    if direction > 0 then
+      mask_selectors.chords[1]:increment()
+      program.set_chord_one_mask(channel, mask_selectors.chords[1]:get_value())
+    else
+      mask_selectors.chords[1]:decrement()
+      program.set_chord_one_mask(channel, mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value())
     end
   end
 end
 
 function channel_edit_page_ui_controller.handle_chord_mask_two_change(direction)
   local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
-    for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      if direction > 0 then
-        mask_selectors.chords[2]:increment()
-        program.get_selected_channel().step_chord_masks[step][2] = mask_selectors.chords[2]:get_value()
-      else
-        mask_selectors.chords[2]:decrement()
-        program.get_selected_channel().step_chord_masks[step][2] = mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value()
+    if direction > 0 then
+      mask_selectors.chords[2]:increment()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 2, step, mask_selectors.chords[2]:get_value())
       end
+    else
+      mask_selectors.chords[2]:decrement()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 2, step, mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value())
+      end
+    end
+  else
+    mask_selectors.chords[2]:set_value(channel.chord_two_mask or -1)
+    if direction > 0 then
+      mask_selectors.chords[2]:increment()
+      program.set_chord_two_mask(channel, mask_selectors.chords[2]:get_value())
+    else
+      mask_selectors.chords[2]:decrement()
+      program.set_chord_two_mask(channel, mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value())
     end
   end
 end
 
 function channel_edit_page_ui_controller.handle_chord_mask_three_change(direction)
   local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
-    for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      if direction > 0 then
-        mask_selectors.chords[3]:increment()
-        program.get_selected_channel().step_chord_masks[step][3] = mask_selectors.chords[3]:get_value()
-      else
-        mask_selectors.chords[3]:decrement()
-        program.get_selected_channel().step_chord_masks[step][3] = mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value()
+    if direction > 0 then
+      mask_selectors.chords[3]:increment()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 3, step, mask_selectors.chords[3]:get_value())
       end
+    else
+      mask_selectors.chords[3]:decrement()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 3, step, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value())
+      end
+    end
+  else
+    mask_selectors.chords[3]:set_value(channel.chord_three_mask or -1)
+    if direction > 0 then
+      mask_selectors.chords[3]:increment()
+      program.set_chord_three_mask(channel, mask_selectors.chords[3]:get_value())
+    else
+      mask_selectors.chords[3]:decrement()
+      program.set_chord_three_mask(channel, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value())
     end
   end
 end
 
 function channel_edit_page_ui_controller.handle_chord_mask_four_change(direction)
   local pressed_keys = grid_controller.get_pressed_keys()
+  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
-    for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      if direction > 0 then
-        mask_selectors.chords[4]:increment()
-        program.get_selected_channel().step_chord_masks[step][4] = mask_selectors.chords[4]:get_value()
-      else
-        mask_selectors.chords[4]:decrement()
-        program.get_selected_channel().step_chord_masks[step][4] = mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value()
+    if direction > 0 then
+      mask_selectors.chords[4]:increment()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 4, step, mask_selectors.chords[4]:get_value())
       end
+    else
+      mask_selectors.chords[4]:decrement()
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 4, step, mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value())
+      end
+    end
+  else
+    mask_selectors.chords[4]:set_value(channel.chord_four_mask or -1)
+    if direction > 0 then
+      mask_selectors.chords[4]:increment()
+      program.set_chord_four_mask(channel, mask_selectors.chords[4]:get_value())
+    else
+      mask_selectors.chords[4]:decrement()
+      program.set_chord_four_mask(channel, mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value())
     end
   end
 end
@@ -820,7 +927,7 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
       local step = fn.calc_grid_count(keys[1], keys[2])
       if channel_pages:get_selected_page() == channel_page_to_index["Notes"] then
         program.clear_masks_for_step(step)
-        channel_edit_page_ui_controller.refresh_notes()
+        channel_edit_page_ui_controller.refresh_masks()
         tooltip:show("Note masks for step " .. step .. " cleared")
       end
       if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
@@ -872,18 +979,6 @@ function channel_edit_page_ui_controller.handle_key_three_pressed()
   else
     save_confirm.confirm()
   end
-end
-
-function channel_edit_page_ui_controller.set_current_note(note)
-  local pressed_keys = grid_controller.get_pressed_keys()
-  if #pressed_keys > 0 then
-    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
-      return
-    end
-  end
-  mask_selectors.note:set_value(note.note)
-  mask_selectors.velocity:set_value(note.velocity)
-  mask_selectors.length:set_value(note.length)
 end
 
 function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)

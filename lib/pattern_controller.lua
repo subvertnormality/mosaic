@@ -9,6 +9,7 @@ local velocities = program.initialise_64_table({})
 
 -- Helper variables
 local update_timer_id = nil
+local update_timer_id_2 = nil
 local throttle_time = 0.0005
 local currently_processing = false
 
@@ -155,21 +156,29 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
     local step_trig_masks = program.get_step_trig_masks(channel)
     if step_trig_masks[s] then
       merged_pattern.trig_values[s] = step_trig_masks[s]
+    elseif program.get_channel(channel).trig_mask and program.get_channel(channel).trig_mask ~= -1 then
+      merged_pattern.trig_values[s] = program.get_channel(channel).trig_mask
     end
 
     local step_note_masks = program.get_step_note_masks(channel)
     if step_note_masks[s] then
       merged_pattern.note_mask_values[s] = step_note_masks[s]
+    elseif program.get_channel(channel).note_mask then
+      merged_pattern.note_mask_values[s] = program.get_channel(channel).note_mask
     end
 
     local step_velocity_masks = program.get_step_velocity_masks(channel)
     if step_velocity_masks[s] then
       merged_pattern.velocity_values[s] = step_velocity_masks[s]
+    elseif program.get_channel(channel).velocity_mask then
+      merged_pattern.velocity_values[s] = program.get_channel(channel).velocity_mask
     end
 
     local step_length_masks = program.get_step_length_masks(channel)
     if step_length_masks[s] then
       merged_pattern.lengths[s] = step_length_masks[s]
+    elseif program.get_channel(channel).length_mask then
+      merged_pattern.lengths[s] = program.get_channel(channel).length_mask
     end
   end
 
@@ -210,6 +219,23 @@ function pattern_controller.update_working_pattern(c)
     channel_pattern.length_merge_mode
   )
   channel_pattern.working_pattern = working_pattern
+end
+
+function pattern_controller.throttled_update_working_pattern(c)
+  -- Must throttle to stop multiple quick inputs from slowing the sequencer down
+  if update_timer_id_2 then
+    clock.cancel(update_timer_id_2)
+  end
+  update_timer_id_2 = clock.run(function()
+    while currently_processing do
+      clock.sleep(throttle_time)
+    end
+    currently_processing = true
+    clock.run(function()
+      pattern_controller.update_working_pattern(c)
+      currently_processing = false
+    end) 
+  end)
 end
 
 return pattern_controller

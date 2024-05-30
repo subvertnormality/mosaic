@@ -330,7 +330,7 @@ With masking, you have the flexibility to modify individual attributes of a patt
 
 To add a mask to your sequence, start by accessing the mask page on your Norns device. Once there, press and hold the step you wish to modify, then input the desired value as a trig lock. Alternatively, you can hold the step while pressing a corresponding key on your MIDI keyboard to set the value. This method allows you to easily and intuitively assign specific musical attributes to any step in your sequence.
 
-The currently playing note, velocity, and length is displayed on the Norns screen on active steps. Unlike trig params, it's not possible to set a default mask for all steps. Each mask must be applied directly to a step as a lock.
+You can apply masks to all steps in a channel by setting the mask value without holding down a step. It's possible, for example, to add a chord note to every trigger, or set a fixed velocity for every trigger, or even turn on or off every trigger. The default mask value will apply to all steps that don't have a specific mask lock set.
 
 ##### Adding Chords
 
@@ -346,7 +346,7 @@ To preview notes before committing them to your sequence, simply press the keys 
 
 By default, the keyboard maps the steps to the currently selected scale on the white keys, with the root note of your selected scale starting from C. You can adjust this mapping in the settings of Mosaic to better suit your musical preferences or project requirements.
 
-You are also able to control all 10 of the trig parameters on the currently selected page independently using a MIDI controller such as Intech's en64 by sending a relative bin offset MIDI CC message to cc 11 - 20 respectively. The mask parameters can be controlled using cc 1 - 10.
+You are also able to control all 10 of the trig parameters on the currently selected page independently using a MIDI controller such as Intech's en64 by sending a relative bin offset MIDI CC message to cc 15 - 24 respectively.
 
 #### Merge Modes
 

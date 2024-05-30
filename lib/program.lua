@@ -434,6 +434,7 @@ local function ensure_step_masks(channel)
   end
 end
 
+
 function program.get_step_trig_masks(channel)
   ensure_step_masks(channel)
   return program.get_channel(channel).step_trig_masks
@@ -444,9 +445,17 @@ function program.set_step_trig_mask(channel, step, mask)
   program.get_channel(channel).step_trig_masks[step] = mask
 end
 
+function program.set_trig_mask(channel, mask) 
+  channel.trig_mask = mask
+end
+
 function program.get_step_note_masks(channel)
   ensure_step_masks(channel)
   return program.get_channel(channel).step_note_masks
+end
+
+function program.set_note_mask(channel, mask) 
+  channel.note_mask = mask
 end
 
 function program.get_step_velocity_masks(channel)
@@ -454,9 +463,33 @@ function program.get_step_velocity_masks(channel)
   return program.get_channel(channel).step_velocity_masks
 end
 
+function program.set_velocity_mask(channel, mask) 
+  channel.velocity_mask = mask
+end
+
 function program.get_step_length_masks(channel)
   ensure_step_masks(channel)
   return program.get_channel(channel).step_length_masks
+end
+
+function program.set_length_mask(channel, mask) 
+  channel.length_mask = mask
+end
+
+function program.set_chord_one_mask(channel, mask) 
+  channel.chord_one_mask = mask
+end
+
+function program.set_chord_two_mask(channel, mask) 
+  channel.chord_two_mask = mask
+end
+
+function program.set_chord_three_mask(channel, mask) 
+  channel.chord_three_mask = mask
+end
+
+function program.set_chord_four_mask(channel, mask) 
+  channel.chord_four_mask = mask
 end
 
 function program.toggle_step_trig_mask(channel, step)
@@ -516,6 +549,14 @@ function program.clear_step_chord_4_mask(channel, step)
   if step_chord_masks and step_chord_masks[step] then
     step_chord_masks[step][4] = nil
   end
+end
+
+function program.set_step_chord_mask(channel, i, step, mask)
+  local step_chord_masks = program.get_channel(channel).step_chord_masks
+  if not step_chord_masks[step] then
+    step_chord_masks[step] = {}
+  end
+  step_chord_masks[step][i] = mask
 end
 
 return program
