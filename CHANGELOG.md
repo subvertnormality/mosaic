@@ -2,6 +2,7 @@
 # 0.5.4
 
 * Masks can now be applied as a default affecting all trigs in a channel
+* The last played notes, velocity, length and chords can be seen for the selected channel on the new notes dashboard page
 
 # 0.5.3
 

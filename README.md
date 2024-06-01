@@ -41,6 +41,7 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
       - [Length Merge Modes](#length-merge-modes)
     + [Scale Editor](#scale-editor)
       - [Transposition](#transposition)
+    + [Note Dashboard](#note-dashboard)
     + [Clocks and Swing](#clocks-and-swing)
     + [Channel Length](#channel-length)
     + [Muting Channels](#muting-channels)
@@ -406,6 +407,10 @@ Scale locks can be set to apply a scale globally or to a single channel, activat
 You can also adjust the rate of the global scale track and set its length independently of other channels, enabling chord progressions that extend beyond a single pattern. This feature offers substantial flexibility for crafting intricate chord progressions and varying patterns.
 
 To return to the channel edit page, press any of the channel buttons at the top of the grid.
+
+#### Scale Editor
+
+On the Norns first page in the channel mode you can see the last played notes on the currently selected channel.
 
 #### Clocks and Swing
 
