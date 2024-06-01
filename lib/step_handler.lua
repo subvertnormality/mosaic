@@ -289,6 +289,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local channel = program.get_channel(c)
   local step_chord_masks = channel.step_chord_masks[current_step]
 
+  local note_dashboard_values = {}
+
   if not device.polyphonic then
     step_handler.flush_lengths_for_channel(c)
   end
@@ -306,6 +308,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   local selected_channel = program.get().selected_channel
   if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
+    note_dashboard_values.note = note_container.note
+    note_dashboard_values.velocity = note_container.velocity
+    note_dashboard_values.length = note_container.length
     note_on_func(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
     table.insert(length_tracker, note_container)
   end
@@ -362,10 +367,17 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
 
           if processed_chord_note then
+            if c == program.get().selected_channel then
+              local chord = {}
+              chord[chord_number] = processed_chord_note
+              channel_edit_page_ui_controller.set_note_dashboard_values({
+                chords = chord
+              })
+            end
             note_on_func(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
             table.insert(length_tracker, {
               channel = c,
-              steps_remaining = note_container.steps_remaining,
+              steps_remaining = note_container.length,
               player = note_container.player,
               note = processed_chord_note,
               velocity = velocity,
@@ -401,19 +413,28 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
         if processed_note then
           local velocity = note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes)
+          if c == program.get().selected_channel then
+            note_dashboard_values.note = processed_note
+            note_dashboard_values.velocity = velocity
+            note_dashboard_values.length = note_container.length
+          end
           note_on_func(processed_note, velocity, note_container.midi_channel, note_container.midi_device)
           table.insert(length_tracker, {
             channel = c,
-            steps_remaining = note_container.steps_remaining,
+            steps_remaining = note_container.length,
             player = note_container.player,
             note = processed_note,
-            velocity = note_container.velocity,
+            velocity = velocity,
             midi_channel = note_container.midi_channel,
             midi_device = note_container.midi_device
           })
         end
       end
     )
+  end
+
+  if c == program.get().selected_channel then
+    channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
   end
 end
 
@@ -637,6 +658,7 @@ function step_handler.sinfonian_sync(step)
   -- sinfonion.set_harmonic_shift(0)
   end
 end
+
 function step_handler.process_lengths_for_channel(c)
   local i = #length_tracker
   while i > 0 do

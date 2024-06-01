@@ -40,6 +40,18 @@ local mask_selectors = {
   }
 }
 
+local note_displays = {
+  note = value_selector:new(5, 18, "Note", -1, 1),
+  velocity = value_selector:new(30, 18, "Vel", -1, 127),
+  length = value_selector:new(55, 18, "Len", -1, 127),
+  chords = {
+    value_selector:new(5, 40, "Chd1", -1, 1),
+    value_selector:new(30, 40, "Chd2", -1, 1),
+    value_selector:new(55, 40, "Chd3", -1, 1),
+    value_selector:new(80, 40, "Chd4", -1, 1)
+  }
+}
+
 -- Clock and MIDI selectors
 local clock_mod_list_selector = list_selector:new(5, 25, "Clock Mod", {})
 local clock_swing_value_selector = value_selector:new(55, 25, "Swing", 0, 100)
@@ -61,7 +73,7 @@ for i = 1, 10 do
 end
 
 -- Page indices
-local channel_page_to_index = {["Notes"] = 1, ["Trig Locks"] = 2, ["Clock Mods"] = 3, ["Midi Config"] = 4}
+local channel_page_to_index = {["Note dashboard"] = 1, ["Masks"] = 2, ["Trig Locks"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5}
 local scales_page_to_index = {["Quantizer"] = 1, ["Clock Mods"] = 2}
 
 -- Helper variables
@@ -110,6 +122,11 @@ local function configure_note_trig_selector(selector)
 end
 
 -- Configuring selectors
+configure_note_value_selector(note_displays.note)
+configure_note_value_selector(note_displays.chords[1])
+configure_note_value_selector(note_displays.chords[2])
+configure_note_value_selector(note_displays.chords[3])
+configure_note_value_selector(note_displays.chords[4])
 configure_note_value_selector(mask_selectors.note)
 configure_note_page_velocity_length_value_selector(mask_selectors.velocity)
 configure_note_page_velocity_length_value_selector(mask_selectors.length)
@@ -119,7 +136,23 @@ end
 configure_note_trig_selector(mask_selectors.trig)
 
 -- Page definitions
-local notes_page = page:new("Note Masks", function()
+local notes_page = page:new("Note Dashboard", function()
+  if program.get().selected_channel ~= 17 then
+    for _, selector in pairs(note_displays) do
+      if type(selector) == "table" then
+        for _, chord_selector in ipairs(selector) do
+          chord_selector:draw()
+        end
+      end
+    end
+    note_displays.note:draw()
+    note_displays.velocity:draw()
+    note_displays.length:draw()
+  end
+end)
+
+
+local mask_page = page:new("Note Masks", function()
   if program.get().selected_channel ~= 17 then
     for _, selector in pairs(mask_selectors) do
       if type(selector) == "table" then
@@ -196,7 +229,12 @@ function channel_edit_page_ui_controller.init()
     page:set_sub_name_func(func)
   end
 
+
   set_sub_name_func(notes_page, function()
+    return program.get().selected_channel ~= 17 and "Ch. " .. program.get().selected_channel .. " " or ""
+  end)
+
+  set_sub_name_func(mask_page, function()
     return program.get().selected_channel ~= 17 and "Ch. " .. program.get().selected_channel .. " " or ""
   end)
 
@@ -221,6 +259,7 @@ function channel_edit_page_ui_controller.init()
   end)
 
   channel_pages:add_page(notes_page)
+  channel_pages:add_page(mask_page)
   channel_pages:add_page(trig_lock_page)
   channel_pages:add_page(clock_mods_page)
   channel_pages:add_page(channel_edit_page)
@@ -379,8 +418,8 @@ function channel_edit_page_ui_controller.enc(n, d)
   local channel = program.get_selected_channel()
   if n == 3 then
     for _ = 1, math.abs(d) do
-      if program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Notes"] then
-        channel_edit_page_ui_controller.handle_note_page_change(d)
+      if program.get().selected_channel ~= 17 and channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
+        channel_edit_page_ui_controller.handle_mask_page_change(d)
       end
       if d > 0 then
         if program.get().selected_channel == 17 and scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] then
@@ -753,7 +792,7 @@ function channel_edit_page_ui_controller.handle_chord_mask_four_change(direction
 end
 
 -- Handlers for specific actions
-function channel_edit_page_ui_controller.handle_note_page_change(direction)
+function channel_edit_page_ui_controller.handle_mask_page_change(direction)
     if mask_selectors.trig:is_selected() then
       channel_edit_page_ui_controller.handle_trig_mask_change(direction)
     end
@@ -925,7 +964,7 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
   if #pressed_keys > 0 then
     for _, keys in ipairs(pressed_keys) do
       local step = fn.calc_grid_count(keys[1], keys[2])
-      if channel_pages:get_selected_page() == channel_page_to_index["Notes"] then
+      if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
         program.clear_masks_for_step(step)
         channel_edit_page_ui_controller.refresh_masks()
         tooltip:show("Note masks for step " .. step .. " cleared")
@@ -998,7 +1037,7 @@ function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
 end
 
 function channel_edit_page_ui_controller.select_mask_page()
-  channel_pages:select_page(channel_page_to_index["Notes"])
+  channel_pages:select_page(channel_page_to_index["Masks"])
   fn.dirty_screen(true)
 end
 
@@ -1006,5 +1045,24 @@ function channel_edit_page_ui_controller.select_trig_page()
   channel_pages:select_page(channel_page_to_index["Trig Locks"])
 end
 
+function channel_edit_page_ui_controller.set_note_dashboard_values(values)
+  if values.note then
+    note_displays.note:set_value(values.note)
+  end
+  if values.velocity then
+    note_displays.velocity:set_value(values.velocity)
+  end
+  if values.length then
+    note_displays.length:set_value(values.length)
+  end
+  if values.trig then
+    note_displays.trig:set_value(values.trig)
+  end
+  for i = 1, 4 do
+    if values.chords and values.chords[i] then
+      note_displays.chords[i]:set_value(values.chords[i])
+    end
+  end
+end
 
 return channel_edit_page_ui_controller
