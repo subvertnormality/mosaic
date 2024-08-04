@@ -163,21 +163,21 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
     local step_note_masks = program.get_step_note_masks(channel)
     if step_note_masks[s] then
       merged_pattern.note_mask_values[s] = step_note_masks[s]
-    elseif program.get_channel(channel).note_mask then
+    elseif program.get_channel(channel).note_mask > -1 then
       merged_pattern.note_mask_values[s] = program.get_channel(channel).note_mask
     end
 
     local step_velocity_masks = program.get_step_velocity_masks(channel)
     if step_velocity_masks[s] then
       merged_pattern.velocity_values[s] = step_velocity_masks[s]
-    elseif program.get_channel(channel).velocity_mask then
+    elseif program.get_channel(channel).velocity_mask > -1 then
       merged_pattern.velocity_values[s] = program.get_channel(channel).velocity_mask
     end
 
     local step_length_masks = program.get_step_length_masks(channel)
     if step_length_masks[s] then
       merged_pattern.lengths[s] = step_length_masks[s]
-    elseif program.get_channel(channel).length_mask then
+    elseif program.get_channel(channel).length_mask > -1 then
       merged_pattern.lengths[s] = program.get_channel(channel).length_mask
     end
   end
