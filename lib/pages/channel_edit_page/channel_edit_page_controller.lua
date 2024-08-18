@@ -700,7 +700,7 @@ function channel_edit_page_controller.refresh_step_buttons()
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
   for s = 1, 16 do
     if pattern_buttons["step" .. s .. "_pattern_button"] then
-      if fn.is_in_set(channel.selected_patterns, s) then
+      if channel.selected_patterns[s] ~= nil then
         pattern_buttons["step" .. s .. "_pattern_button"]:set_state(2)
       else
         pattern_buttons["step" .. s .. "_pattern_button"]:set_state(1)

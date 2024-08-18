@@ -180,16 +180,26 @@ function midi_controller.cc(cc_msb, cc_lsb, value, channel, device)
 end
 
 function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
+  -- Ensure value is within valid NRPN range (0-16383)
+  if value < 0 or value > 16383 then
+    error("Value out of range (0-16383): " .. tostring(value))
+  end
+
   -- Select NRPN (LSB and MSB)
-  midi_controller.cc(99, nrpn_msb, channel, device)
-  midi_controller.cc(98, nrpn_lsb, channel, device)
+  midi_controller.cc(99, nil, nrpn_msb, channel, device)
+  midi_controller.cc(98, nil, nrpn_lsb, channel, device)
 
-  local v1 = value / 128
-  local v2 = value % 128
 
-  midi_controller.cc(6, math.floor(v1), channel, device)
-  midi_controller.cc(38, math.floor(v2), channel, device)
+  -- Calculate MSB and LSB from value
+  local msb_value = math.floor(value / 128) -- MSB
+  local lsb_value = value % 128  -- LSB
+
+  -- Send MSB and LSB values
+  midi_controller.cc(6, nil, msb_value, channel, device)
+  midi_controller.cc(38, nil, lsb_value/2, channel, device)
+
 end
+
 
 function midi_controller:program_change(program_id, channel, device)
   if midi_devices[device] ~= nil then

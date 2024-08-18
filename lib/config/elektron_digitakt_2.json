@@ -143,6 +143,20 @@
       "cc_min_value": -1,
       "off_value": -1
     },
+   {
+      "cc_max_value": 127,
+      "nrpn_min_value": 0,
+      "nrpn_lsb": 0,
+      "id": "src_sample_select",
+      "cc_msb": 19,
+      "name": "Source sample select",
+      "short_descriptor_1": "SRC",
+      "nrpn_max_value": 127,
+      "short_descriptor_2": "SMPL",
+      "nrpn_msb": 1,
+      "cc_min_value": -1,
+      "off_value": -1
+    },
     {
       "cc_max_value": 127,
       "nrpn_min_value": 0,
