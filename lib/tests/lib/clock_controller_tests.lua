@@ -256,6 +256,7 @@ function test_clock_can_delay_action_with_no_channel_clock_division_set()
     channel,
     clock_division_index,
     delay_multiplier,
+    false,
     function()
       has_fired = true
     end
@@ -287,6 +288,7 @@ function test_clock_delay_action_with_no_division_specified_executes_immediately
     channel,
     clock_division_index,
     delay_multiplier,
+    false,
     function()
       has_fired = true
     end
@@ -312,6 +314,7 @@ function test_clock_delay_action_with_nil_division_executes_immediately()
     channel,
     clock_division_index,
     delay_multiplier,
+    false,
     function()
       has_fired = true
     end
@@ -342,6 +345,7 @@ function test_clock_can_delay_action_with_channel_clock_division_set()
     channel,
     clock_division_index,
     delay_multiplier,
+    false,
     function()
       has_fired = true
     end

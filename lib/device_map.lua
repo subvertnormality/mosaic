@@ -161,6 +161,51 @@ local clock_divisions_ui_labels = {
   "/512" 
 }
 
+local clock_divisions_note_lengths = {
+  "x",
+  "1/32",
+  "1/28",
+  "1/24",
+  "1/20",
+  "1/16",
+  "1/15",
+  "1/14",
+  "1/13",
+  "1/12",
+  "1/11",
+  "1/10",
+  "1/9",
+  "1/8",
+  "1/7",
+  "1/6",
+  "1/5",
+  "1/4",
+  "1/3",
+  "1/2",
+  "1",
+  "1.5",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "24",
+  "32",
+  "64"
+}
+
+
+
 local stock_params = {
   get_none_param(),
   {
@@ -228,10 +273,21 @@ local stock_params = {
     ["name"] = "Chord Note Strum",
     ["short_descriptor_1"] = "CHRD",
     ["short_descriptor_2"] = "STRM",
-    ["off_value"] = 13,
-    ["cc_min_value"] = 1,
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
     ["cc_max_value"] = 51,
-    ["ui_labels"] = clock_divisions_ui_labels,
+    ["ui_labels"] = clock_divisions_note_lengths,
+    ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord_arp",
+    ["name"] = "Chord Note Arpeggio",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "ARP",
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 40,
+    ["ui_labels"] = clock_divisions_note_lengths,
     ["param_type"] = "stock"
   },
   {

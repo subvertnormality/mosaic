@@ -30,9 +30,9 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
     params:lookup_param("midi_device_params_group_channel_" .. channel_id).name =
       "MOSAIC CH " .. channel_id .. ": " .. string.upper(device.name)
     params:show("midi_device_params_group_channel_" .. channel_id)
-
     for i = 1, 127 do
-      if device.params[i] ~= nil and device.params[i].id ~= "none" then
+      
+      if device.params[i] ~= nil and device.params[i].id ~= "none" and device.params[i].param_type ~= "stock" then
         local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
         p.max = device.params[i].cc_max_value
         p.name = device.params[i].name
@@ -89,7 +89,7 @@ function param_manager.update_param(index, channel, param, meta_device)
     channel.trig_lock_params[index].id = param.id
     channel.trig_lock_banks[index] = param.off_value
       
-    if (meta_device.type == "midi" and meta_device.param_type ~= "stock") then
+    if (meta_device.type == "midi" and param.param_type ~= "stock") then
       channel.trig_lock_params[index].param_id =
         "midi_device_params_channel_" .. channel.number .. "_" .. param.index
     else
