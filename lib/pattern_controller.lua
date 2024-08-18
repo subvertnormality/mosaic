@@ -10,8 +10,9 @@ local velocities = program.initialise_64_table({})
 -- Helper variables
 local update_timer_id = nil
 local update_timer_id_2 = nil
-local throttle_time = 0.0005
+local throttle_time = 0.001
 local currently_processing = false
+local currently_processing_2 = false
 
 
 local function sync_pattern_values(merged_pattern, pattern, s)
@@ -227,13 +228,13 @@ function pattern_controller.throttled_update_working_pattern(c)
     clock.cancel(update_timer_id_2)
   end
   update_timer_id_2 = clock.run(function()
-    while currently_processing do
+    while currently_processing_2 do
       clock.sleep(throttle_time)
     end
-    currently_processing = true
+    currently_processing_2 = true
     clock.run(function()
       pattern_controller.update_working_pattern(c)
-      currently_processing = false
+      currently_processing_2 = false
     end) 
   end)
 end
