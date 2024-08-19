@@ -290,7 +290,6 @@ function clock_controller.new_arp_sprocket(c, division, length, func)
       arp:destroy()
     end
   end
-
   arp = clock_lattice:new_sprocket {
     action = function()
       sprocket_action()
