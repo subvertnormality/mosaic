@@ -3,7 +3,6 @@ local clock_controller = include("mosaic/lib/clock_controller")
 local fn = include("mosaic/lib/functions")
 
 local step_handler = {}
-local length_tracker = {}
 local persistent_channel_step_scale_numbers = {
   nil,
   nil,
@@ -34,6 +33,39 @@ end
 local switch_to_next_song_pattern_blink_cancel_func = function()
 end
 local next_song_pattern_queue = nil
+
+
+function generate_note_divisions()
+  local note_divisions = {}
+
+  -- Add clock_division entries
+  for i = 32, 2, -1 do
+      table.insert(note_divisions, {
+          name = "1/" .. i,
+          value = 1 / i
+      })
+  end
+
+  -- Add custom clock_division entries for non-standard divisions
+
+  table.insert(note_divisions, {
+      name = "0.75",
+      value = 0.75
+  })
+
+
+  -- Add clock_multiplication entries
+  for i = 1, 128 do
+      table.insert(note_divisions, {
+          name = tostring(i),
+          value = i
+      })
+  end
+
+  return note_divisions
+end
+
+local note_divisions = generate_note_divisions()
 
 function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)
@@ -90,12 +122,6 @@ function step_handler.process_params(c, step)
 
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
         local midi_channel = devices[channel.number].midi_channel
-
-
-        if midi_channel == 14 then
-          print("doing some midi")
-          print(param.id)
-        end
 
         local param_id = param.param_id
         local p_value = nil
@@ -300,7 +326,7 @@ function step_handler.calculate_step_transpose(current_step, c)
   return transpose
 end
 
-local function play_first_arp_note(note_container, velocity, arp_division_index, note_on_func)
+local function play_first_arp_note(note_container, velocity, arp_division, note_on_func)
   local c = note_container.channel
   local channel = program.get_channel(c)
   local note_dashboard_values = {}
@@ -309,7 +335,7 @@ local function play_first_arp_note(note_container, velocity, arp_division_index,
   note_dashboard_values.length = note_container.length
   note_on_func(note_container.note, velocity, note_container.midi_channel, note_container.midi_device)
   arp_note[c] = 1
-  clock_controller.delay_action(c, arp_division_index, 1, true, function()
+  clock_controller.delay_action(c, arp_division, 1, true, function()
     note_container.player:note_off(note_container.note, velocity, note_container.midi_channel, note_container.midi_device)
   end)
   if c == program.get().selected_channel then
@@ -317,18 +343,18 @@ local function play_first_arp_note(note_container, velocity, arp_division_index,
   end
 end
 
-local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division_index, chord_strum_pattern, chord_velocity_mod, note_on_func)
+local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, note_on_func)
   local c = note_container.channel
   local channel = program.get_channel(c)
 
   if not program.get_channel(c).mute then
-    play_first_arp_note(note_container, note_container.velocity, arp_division_index, note_on_func)
+    play_first_arp_note(note_container, note_container.velocity, arp_division, note_on_func)
     arp_note[c] = -1
   end
 
   local number_of_executions = 1
 
-  clock_controller.new_arp_sprocket(c, arp_division_index, note_container.length, function()
+  clock_controller.new_arp_sprocket(c, arp_division, note_container.length, function()
     local note_dashboard_values = {}
 
     if arp_note[c] == -1 then
@@ -344,7 +370,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
         arp_note[c] = 0
       end
       if arp_note[c] == 0 then
-        play_first_arp_note(note_container, velocity, arp_division_index, note_on_func)
+        play_first_arp_note(note_container, velocity, arp_division, note_on_func)
       elseif chord_notes[arp_note[c]] then
         local chord_note = chord_notes[arp_note[c]]
         
@@ -381,7 +407,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
           note_dashboard_values.velocity = velocity
           note_dashboard_values.length = note_container.length
           note_container.player:note_on(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
-          clock_controller.delay_action(c, arp_division_index, 1, true, function()
+          clock_controller.delay_action(c, arp_division, 1, true, function()
             note_container.player:note_off(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
           end)
           if c == program.get().selected_channel then
@@ -405,10 +431,6 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   local note_dashboard_values = {}
 
-  if not device.polyphonic then
-    step_handler.flush_lengths_for_channel(c)
-  end
-
   local chord_notes = {
     step_chord_masks and step_chord_masks[1] or channel.chord_one_mask,
     step_chord_masks and step_chord_masks[2] or channel.chord_two_mask,
@@ -416,14 +438,14 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     step_chord_masks and step_chord_masks[4] or channel.chord_four_mask
   }
 
-  local division_index = step_handler.process_stock_params(c, current_step, "chord_strum")
+  local chord_division = note_divisions[step_handler.process_stock_params(c, current_step, "chord_strum")] and note_divisions[step_handler.process_stock_params(c, current_step, "chord_strum")].value
   local chord_velocity_mod = step_handler.process_stock_params(c, current_step, "chord_velocity_modifier")
   local chord_strum_pattern = step_handler.process_stock_params(c, current_step, "chord_strum_pattern")
 
-  local arp_division_index = step_handler.process_stock_params(c, current_step, "chord_arp")
+  local arp_division = note_divisions[step_handler.process_stock_params(c, current_step, "chord_arp")] and note_divisions[step_handler.process_stock_params(c, current_step, "chord_arp")].value
 
-  if arp_division_index then
-    handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division_index, chord_strum_pattern, chord_velocity_mod, note_on_func)
+  if arp_division then
+    handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, note_on_func)
     return
   end
 
@@ -433,14 +455,13 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     note_dashboard_values.velocity = note_container.velocity
     note_dashboard_values.length = note_container.length
     note_on_func(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
-    table.insert(length_tracker, note_container)
+    clock_controller.delay_action(c, note_container.length, 1, true, function()
+      note_container.player:note_off(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
+    end)
   end
 
   for i, chord_note in ipairs(chord_notes) do
-    if chord_note then
-      if not device.polyphonic then
-        step_handler.flush_lengths_for_channel(c)
-      end
+    if chord_note and chord_note ~= 0 then
 
       local chord_number, delay_multiplier = i, i
 
@@ -464,7 +485,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
       clock_controller.delay_action(
         c,
-        division_index,
+        chord_division,
         delay_multiplier,
         false,
         function()
@@ -497,15 +518,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
               })
             end
             note_on_func(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
-            table.insert(length_tracker, {
-              channel = c,
-              steps_remaining = note_container.length,
-              player = note_container.player,
-              note = processed_chord_note,
-              velocity = velocity,
-              midi_channel = note_container.midi_channel,
-              midi_device = note_container.midi_device
-            })
+            clock_controller.delay_action(c, note_container.length, 1, true, function()
+              note_container.player:note_off(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
+            end)
           end
         end
       )
@@ -515,7 +530,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   if chord_strum_pattern == 2 or chord_strum_pattern == 4 then
     clock_controller.delay_action(
       c,
-      division_index,
+      chord_division,
       #chord_notes,
       false,
       function()
@@ -542,15 +557,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
             note_dashboard_values.length = note_container.length
           end
           note_on_func(processed_note, velocity, note_container.midi_channel, note_container.midi_device)
-          table.insert(length_tracker, {
-            channel = c,
-            steps_remaining = note_container.length,
-            player = note_container.player,
-            note = processed_note,
-            velocity = velocity,
-            midi_channel = note_container.midi_channel,
-            midi_device = note_container.midi_device
-          })
+          clock_controller.delay_action(c, note_container.length, 1, true, function()
+            note_container.player:note_off(processed_note, velocity, note_container.midi_channel, note_container.midi_device)
+          end)
         end
       end
     )
@@ -782,41 +791,6 @@ function step_handler.sinfonian_sync(step)
   end
 end
 
-function step_handler.process_lengths_for_channel(c)
-  local i = #length_tracker
-  while i > 0 do
-    local l = length_tracker[i]
-    if l.channel == c then
-      l.steps_remaining = l.steps_remaining - 1
-      if l.steps_remaining < 1 then
-        l.player:note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
-        table.remove(length_tracker, i)
-      end
-    end
-    i = i - 1
-  end
-end
-
-function step_handler.flush_lengths()
-  for i = #length_tracker, 1, -1 do
-    local l = length_tracker[i]
-    l.player:note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
-    table.remove(length_tracker, i)
-  end
-end
-
-function step_handler.flush_lengths_for_channel(c)
-  local i = #length_tracker
-  while i > 0 do
-    local l = length_tracker[i]
-    if l.channel == c then
-      l.player:note_off(l.note, l.velocity, l.midi_channel, l.midi_device)
-      table.remove(length_tracker, i)
-    end
-    i = i - 1
-  end
-end
-
 
 function step_handler.queue_switch_to_next_song_pattern_func(func)
   switch_to_next_song_pattern_func = func
@@ -856,7 +830,6 @@ function step_handler.reset()
   arp_note = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
   persistent_step_transpose = nil
   step_handler.execute_blink_cancel_func()
-  step_handler.flush_lengths()
   local c = program.get_selected_channel().number
   program.set_channel_step_scale_number(
     c, step_handler.calculate_step_scale_number(c, 1)

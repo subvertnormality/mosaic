@@ -68,48 +68,6 @@ local clock_divisions = {
   {name = "/512", value = 512, type = "clock_division"}
 }
 
-local note_divisions = {
-  {name = "1/32", value = 1/32, type = "clock_division"},
-  {name = "1/28", value = 1/28, type = "clock_division"},
-  {name = "1/24", value = 1/24, type = "clock_division"},
-  {name = "1/20", value = 1/20, type = "clock_division"},
-  {name = "1/16", value = 1/16, type = "clock_division"},
-  {name = "1/15", value = 1/15, type = "clock_division"},
-  {name = "1/14", value = 1/14, type = "clock_division"},
-  {name = "1/13", value = 1/13, type = "clock_division"},
-  {name = "1/12", value = 1/12, type = "clock_division"},
-  {name = "1/11", value = 1/11, type = "clock_division"},
-  {name = "1/10", value = 1/10, type = "clock_division"},
-  {name = "1/9", value = 1/9, type = "clock_division"},
-  {name = "1/8", value = 1/8, type = "clock_division"},
-  {name = "1/7", value = 1/7, type = "clock_division"},
-  {name = "1/6", value = 1/6, type = "clock_division"},
-  {name = "1/5", value = 1/5, type = "clock_division"},
-  {name = "1/4", value = 1/4, type = "clock_division"},
-  {name = "1/3", value = 1/3, type = "clock_division"},
-  {name = "1/2", value = 1/2, type = "clock_division"},
-  {name = "1", value = 1, type = "clock_multiplication"},
-  {name = "1.5", value = 1.5, type = "clock_multiplication"},
-  {name = "2", value = 2, type = "clock_multiplication"},
-  {name = "3", value = 3, type = "clock_multiplication"},
-  {name = "4", value = 4, type = "clock_multiplication"},
-  {name = "5", value = 5, type = "clock_multiplication"},
-  {name = "6", value = 6, type = "clock_multiplication"},
-  {name = "7", value = 7, type = "clock_multiplication"},
-  {name = "8", value = 8, type = "clock_multiplication"},
-  {name = "9", value = 9, type = "clock_multiplication"},
-  {name = "10", value = 10, type = "clock_multiplication"},
-  {name = "11", value = 11, type = "clock_multiplication"},
-  {name = "12", value = 12, type = "clock_multiplication"},
-  {name = "13", value = 13, type = "clock_multiplication"},
-  {name = "14", value = 14, type = "clock_multiplication"},
-  {name = "15", value = 15, type = "clock_multiplication"},
-  {name = "16", value = 16, type = "clock_multiplication"},
-  {name = "24", value = 24, type = "clock_multiplication"},
-  {name = "32", value = 32, type = "clock_multiplication"},
-  {name = "64", value = 64, type = "clock_multiplication"}
-}
-
 function clock_controller.calculate_divisor(clock_mod)
   if clock_mod.type == "clock_multiplication" then
     return 4 * clock_mod.value
@@ -246,9 +204,6 @@ function clock_controller.init()
           step_handler.process_params(channel_number, step)
         end
 
-        if channel_number ~= 17 then
-          step_handler.process_lengths_for_channel(channel_number)
-        end
       end
     end
 
@@ -289,8 +244,8 @@ function clock_controller.get_channel_division(channel_number)
   return clock and clock.division or 0.4
 end
 
-function clock_controller.delay_action(c, division_index, multiplier, must_execute, func)
-  if division_index == 0 or division_index == nil then
+function clock_controller.delay_action(c, note_division, multiplier, must_execute, func)
+  if note_division == 0 or note_division == nil then
     func()
     return
   end
@@ -300,12 +255,12 @@ function clock_controller.delay_action(c, division_index, multiplier, must_execu
     delayed:destroy()
   end
 
-  local division = note_divisions[division_index].value * clock_controller["channel_" .. c .. "_clock"].division * multiplier
+  local division = note_division * clock_controller["channel_" .. c .. "_clock"].division * multiplier
   delayed = clock_lattice:new_sprocket {
     action = sprocket_action,
     division = division,
     enabled = true,
-    delay = 0.90
+    delay = 0.95
   }
 
   if must_execute then
@@ -315,8 +270,8 @@ function clock_controller.delay_action(c, division_index, multiplier, must_execu
   end
 end
 
-function clock_controller.new_arp_sprocket(c, division_index, length, func)
-  if division_index == 0 or division_index == nil then
+function clock_controller.new_arp_sprocket(c, division, length, func)
+  if division == 0 or division == nil then
     return
   end
 
@@ -328,7 +283,7 @@ function clock_controller.new_arp_sprocket(c, division_index, length, func)
 
   local arp
   local runs = 0
-  local total_runs = length / note_divisions[division_index].value
+  local total_runs = length / division
   local sprocket_action = function(t)
       func()
     if length == 0 then
@@ -344,7 +299,7 @@ function clock_controller.new_arp_sprocket(c, division_index, length, func)
         arp:destroy()
       end
     end,
-    division = note_divisions[division_index].value * clock_controller["channel_" .. c .. "_clock"].division,
+    division = division * clock_controller["channel_" .. c .. "_clock"].division,
     enabled = true
   }
 

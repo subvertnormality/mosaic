@@ -249,12 +249,12 @@ function test_clock_can_delay_action_with_no_channel_clock_division_set()
 
   local channel = 1
 
-  local clock_division_index = 13
+  local clock_division = 1
   local delay_multiplier = 1
 
   clock_controller.delay_action(
     channel,
-    clock_division_index,
+    clock_division,
     delay_multiplier,
     false,
     function()
@@ -338,12 +338,12 @@ function test_clock_can_delay_action_with_channel_clock_division_set()
 
   local channel = 1
 
-  local clock_division_index = 13
+  local division = 1
   local delay_multiplier = 1
 
   clock_controller.delay_action(
     channel,
-    clock_division_index,
+    division,
     delay_multiplier,
     false,
     function()

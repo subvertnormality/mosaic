@@ -161,50 +161,28 @@ local clock_divisions_ui_labels = {
   "/512" 
 }
 
-local clock_divisions_note_lengths = {
-  "x",
-  "1/32",
-  "1/28",
-  "1/24",
-  "1/20",
-  "1/16",
-  "1/15",
-  "1/14",
-  "1/13",
-  "1/12",
-  "1/11",
-  "1/10",
-  "1/9",
-  "1/8",
-  "1/7",
-  "1/6",
-  "1/5",
-  "1/4",
-  "1/3",
-  "1/2",
-  "1",
-  "1.5",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "11",
-  "12",
-  "13",
-  "14",
-  "15",
-  "16",
-  "24",
-  "32",
-  "64"
-}
 
+function generate_note_divisions()
+  local clock_divisions_note_lengths = {}
 
+  table.insert(clock_divisions_note_lengths, "X")
+
+  -- Add clock_division entries
+  for i = 32, 2, -1 do
+      table.insert(clock_divisions_note_lengths, "1/" .. i)
+  end
+
+  table.insert(clock_divisions_note_lengths, "0.75")
+
+  -- Add clock_multiplication entries
+  for i = 1, 128 do
+      table.insert(clock_divisions_note_lengths, tostring(i))
+  end
+
+  return clock_divisions_note_lengths
+end
+
+local clock_divisions_note_lengths = generate_note_divisions()
 
 local stock_params = {
   get_none_param(),
