@@ -249,6 +249,7 @@ function clock_controller.delay_action(c, note_division, multiplier, must_execut
     func()
     return
   end
+  local channel = program.get_channel(c)
   local delayed
   local sprocket_action = function(t)
     func()
@@ -260,7 +261,8 @@ function clock_controller.delay_action(c, note_division, multiplier, must_execut
     action = sprocket_action,
     division = division,
     enabled = true,
-    delay = 0.95
+    delay = 0.95,
+    swing = channel.swing or 50
   }
 
   if must_execute then
@@ -274,6 +276,8 @@ function clock_controller.new_arp_sprocket(c, division, length, func)
   if division == 0 or division == nil then
     return
   end
+
+  local channel = program.get_channel(c)
 
   if (arp_sprockets[c]) then
     for i, sprocket in ipairs(arp_sprockets[c]) do
@@ -299,7 +303,8 @@ function clock_controller.new_arp_sprocket(c, division, length, func)
       end
     end,
     division = division * clock_controller["channel_" .. c .. "_clock"].division,
-    enabled = true
+    enabled = true,
+    swing = channel.swing or 50
   }
 
   table.insert(arp_sprockets[c], arp)
