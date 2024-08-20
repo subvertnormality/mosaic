@@ -349,7 +349,27 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
 
   local processed_chord_notes = {}
   
-  for i, chord_note in ipairs(chord_notes) do
+  for i, cn in ipairs(chord_notes) do
+
+    local chord_number = i
+    
+    if chord_strum_pattern == 2 then
+      chord_number = #chord_notes + 1 - i
+    elseif chord_strum_pattern == 3 then
+      if i % 2 == 1 then
+        chord_number = (i // 2) + 1
+      else
+        chord_number = #chord_notes - (i // 2) + 1
+      end
+    elseif chord_strum_pattern == 4 then
+      if i % 2 == 1 then
+        chord_number = #chord_notes - (i // 2)
+      else
+        chord_number = (i // 2)
+      end
+    end
+
+    local chord_note = chord_notes[chord_number]
 
     if not chord_note or chord_note == 0 then
       processed_chord_notes[i] = false
@@ -376,13 +396,18 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
 
   end
 
+
   if c == program.get().selected_channel then
     channel_edit_page_ui_controller.set_note_dashboard_values({
       chords = processed_chord_notes
     })
   end
 
-  table.insert(processed_chord_notes, 1, note_container.note)
+  if not chord_strum_pattern or chord_strum_pattern == 1 then
+    table.insert(processed_chord_notes, 1, note_container.note)
+  elseif chord_strum_pattern == 2 then
+    table.insert(processed_chord_notes, note_container.note)
+  end
   
   play_note(processed_chord_notes[1], note_container, note_container.velocity, arp_division, note_on_func)
   arp_note[c] = 2
