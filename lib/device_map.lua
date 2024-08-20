@@ -280,7 +280,7 @@ local stock_params = {
   },
   {
     ["id"] = "chord_strum_pattern",
-    ["name"] = "Chord Strum Pattern",
+    ["name"] = "Chord Pattern",
     ["short_descriptor_1"] = "CHRD",
     ["short_descriptor_2"] = "PTRN",
     ["off_value"] = 0,

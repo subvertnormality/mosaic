@@ -2024,7 +2024,6 @@ function test_arp_param_lock_with_four_extra_notes_but_one_blank_rests_for_that_
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_beats(1)
-  progress_clock_by_pulses(1)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -2098,3 +2097,384 @@ function test_arp_param_lock_with_four_extra_notes_but_one_blank_rests_for_that_
 
   luaunit.assert_nil(note_on_event)
 end
+
+
+
+function test_arp_with_velocity_swell_param_lock()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  local test_step = 8
+  local cc_msb = 2
+
+  local chord_note_1 = 1
+  local chord_note_2 = 3
+  local chord_note_3 = 5
+  local c = 1
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 5
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 80
+
+  program.get().selected_channel = c
+
+  local channel = program.get_selected_channel()
+
+
+  channel.trig_lock_params[4].id = "chord_velocity_modifier"
+  channel.trig_lock_params[5].id = "chord_arp"
+
+  program.add_step_param_trig_lock(test_step, 4, 10)
+  program.add_step_param_trig_lock(test_step, 5, 33) -- 1
+
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+
+  progress_clock_by_beats(test_step - 1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 80)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+  progress_clock_by_pulses(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 90)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 69)
+  luaunit.assert_equals(note_on_event[2], 110)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 120)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+end
+
+
+
+function test_arp_param_lock_with_backwards_strum_pattern()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+
+  local cc_msb = 2
+
+  local chord_note_1 = 1
+  local chord_note_2 = 2
+  local chord_note_3 = 3
+  local chord_note_4 = 4
+  local c = 1
+
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 6
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  program.get().selected_channel = c
+
+  local channel = program.get_selected_channel()
+
+  channel.trig_lock_params[5].id = "chord_arp"
+  channel.trig_lock_params[6].id = "chord_strum_pattern"
+
+  channel.step_chord_masks[1] = {}
+  channel.step_chord_masks[1][1] = chord_note_1
+  channel.step_chord_masks[1][2] = chord_note_2
+  channel.step_chord_masks[1][3] = chord_note_3
+  channel.step_chord_masks[1][4] = chord_note_4
+  program.add_step_param_trig_lock(1, 5, 33)  -- 1
+  program.add_step_param_trig_lock(1, 6, 2) -- Backwards pattern
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+
+  progress_clock_by_pulses(2) -- This is not ideal, reversed strums are even more slightly off time
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 67)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 67)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+end
+
+
+-- function test_chord_strum_param_lock_with_inside_out_strum_pattern()
+--   setup()
+--   local sequencer_pattern = 1
+--   program.set_selected_sequencer_pattern(1)
+--   local test_pattern = program.initialise_default_pattern()
+
+
+--   local cc_msb = 2
+
+--   local chord_note_1 = 1
+--   local chord_note_2 = 2
+--   local chord_note_3 = 3
+--   local chord_note_4 = 4
+--   local c = 1
+
+--   test_pattern.note_values[1] = 0
+--   test_pattern.lengths[1] = 1
+--   test_pattern.trig_values[1] = 1
+--   test_pattern.velocity_values[1] = 100
+
+--   program.get().selected_channel = c
+
+--   local channel = program.get_selected_channel()
+
+--   channel.trig_lock_params[5].id = "chord_strum"
+--   channel.trig_lock_params[6].id = "chord_strum_pattern"
+
+--   channel.step_chord_masks[1] = {}
+--   channel.step_chord_masks[1][1] = chord_note_1
+--   channel.step_chord_masks[1][2] = chord_note_2
+--   channel.step_chord_masks[1][3] = chord_note_3
+--   channel.step_chord_masks[1][4] = chord_note_4
+--   program.add_step_param_trig_lock(1, 5, 33)  -- 1
+--   program.add_step_param_trig_lock(1, 6, 3) -- Inside out strum pattern
+
+--   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+--   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+
+--   pattern_controller.update_working_patterns()
+
+--   -- Reset and set up the clock and MIDI event tracking
+--   clock_setup()
+
+--   progress_clock_by_pulses(2) -- This is not ideal, reversed strums are even more slightly off time
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_equals(note_on_event[1], 60)
+--   luaunit.assert_equals(note_on_event[2], 100)
+--   luaunit.assert_equals(note_on_event[3], 1)
+
+--   progress_clock_by_beats(1)
+
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_equals(note_on_event[1], 62)
+--   luaunit.assert_equals(note_on_event[2], 100)
+--   luaunit.assert_equals(note_on_event[3], 1)
+
+--   progress_clock_by_beats(1)
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_equals(note_on_event[1], 67)
+--   luaunit.assert_equals(note_on_event[2], 100)
+--   luaunit.assert_equals(note_on_event[3], 1)
+
+--   progress_clock_by_beats(1)
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_equals(note_on_event[1], 64)
+--   luaunit.assert_equals(note_on_event[2], 100)
+--   luaunit.assert_equals(note_on_event[3], 1)
+
+--   progress_clock_by_beats(1)
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_equals(note_on_event[1], 65)
+--   luaunit.assert_equals(note_on_event[2], 100)
+--   luaunit.assert_equals(note_on_event[3], 1)
+
+--   progress_clock_by_beats(1)
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_nil(note_on_event)
+
+-- end
+
+-- function test_chord_strum_param_lock_with_outside_in_strum_pattern()
+--   setup()
+--   local sequencer_pattern = 1
+--   program.set_selected_sequencer_pattern(1)
+--   local test_pattern = program.initialise_default_pattern()
+
+
+--   local cc_msb = 2
+
+--   local chord_note_1 = 1
+--   local chord_note_2 = 2
+--   local chord_note_3 = 3
+--   local chord_note_4 = 4
+--   local c = 1
+
+--   test_pattern.note_values[1] = 0
+--   test_pattern.lengths[1] = 1
+--   test_pattern.trig_values[1] = 1
+--   test_pattern.velocity_values[1] = 100
+
+--   program.get().selected_channel = c
+
+--   local channel = program.get_selected_channel()
+
+--   channel.trig_lock_params[5].id = "chord_strum"
+--   channel.trig_lock_params[6].id = "chord_strum_pattern"
+
+--   channel.step_chord_masks[1] = {}
+--   channel.step_chord_masks[1][1] = chord_note_1
+--   channel.step_chord_masks[1][2] = chord_note_2
+--   channel.step_chord_masks[1][3] = chord_note_3
+--   channel.step_chord_masks[1][4] = chord_note_4
+--   program.add_step_param_trig_lock(1, 5, 33)  -- 1
+--   program.add_step_param_trig_lock(1, 6, 4) -- Outside in strum pattern
+
+--   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+--   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+
+--   pattern_controller.update_working_patterns()
+
+--   -- Reset and set up the clock and MIDI event tracking
+--   clock_setup()
+
+--   progress_clock_by_pulses(2) -- This is not ideal, reversed strums are even more slightly off time
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_equals(note_on_event[1], 67)
+--   luaunit.assert_equals(note_on_event[2], 100)
+--   luaunit.assert_equals(note_on_event[3], 1)
+
+--   progress_clock_by_beats(1)
+
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_equals(note_on_event[1], 62)
+--   luaunit.assert_equals(note_on_event[2], 100)
+--   luaunit.assert_equals(note_on_event[3], 1)
+
+--   progress_clock_by_beats(1)
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_equals(note_on_event[1], 65)
+--   luaunit.assert_equals(note_on_event[2], 100)
+--   luaunit.assert_equals(note_on_event[3], 1)
+
+--   progress_clock_by_beats(1)
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_equals(note_on_event[1], 64)
+--   luaunit.assert_equals(note_on_event[2], 100)
+--   luaunit.assert_equals(note_on_event[3], 1)
+
+--   progress_clock_by_beats(1)
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_equals(note_on_event[1], 60)
+--   luaunit.assert_equals(note_on_event[2], 100)
+--   luaunit.assert_equals(note_on_event[3], 1)
+
+--   progress_clock_by_beats(1)
+
+--   local note_on_event = table.remove(midi_note_on_events, 1)
+
+--   luaunit.assert_nil(note_on_event)
+
+-- end

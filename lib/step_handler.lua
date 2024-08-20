@@ -326,7 +326,7 @@ function step_handler.calculate_step_transpose(current_step, c)
   return transpose
 end
 
-local function play_arp_note(note_container, velocity, arp_division, note_on_func)
+local function play_note(note, note_container, velocity, division, note_on_func)
   local c = note_container.channel
   local channel = program.get_channel(c)
   local note_dashboard_values = {}
@@ -334,8 +334,8 @@ local function play_arp_note(note_container, velocity, arp_division, note_on_fun
   note_dashboard_values.velocity = velocity
   note_dashboard_values.length = note_container.length
 
-  note_on_func(note_container.note, velocity, note_container.midi_channel, note_container.midi_device)
-  clock_controller.delay_action(c, arp_division, 1, true, function()
+  note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
+  clock_controller.delay_action(c, division, 1, true, function()
     note_container.player:note_off(note_container.note, velocity, note_container.midi_channel, note_container.midi_device)
   end)
   if c == program.get().selected_channel then
@@ -348,11 +348,11 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   local channel = program.get_channel(c)
 
   local processed_chord_notes = {}
-
+  
   for i, chord_note in ipairs(chord_notes) do
 
     if not chord_note or chord_note == 0 then
-      processed_chord_notes[i] = nil
+      processed_chord_notes[i] = false
     else
       local processed_chord_note = quantiser.process(
         unprocessed_note_container.note_value + chord_note,
@@ -382,45 +382,25 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     })
   end
 
+  table.insert(processed_chord_notes, 1, note_container.note)
   
-  play_arp_note(note_container, note_container.velocity, arp_division, note_on_func)
-  arp_note[c] = -1
+  play_note(processed_chord_notes[1], note_container, note_container.velocity, arp_division, note_on_func)
+  arp_note[c] = 2
 
   local number_of_executions = 1
 
   clock_controller.new_arp_sprocket(c, arp_division, note_container.length, function()
     local note_dashboard_values = {}
 
-    if arp_note[c] == -1 then
-      arp_note[c] = 1
-      return
-    end
-
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
 
-    if arp_note[c] == 0 then
-      play_arp_note(note_container, velocity, arp_division, note_on_func)
-    elseif not processed_chord_notes[arp_note[c]] then
-      -- Skip
-    elseif processed_chord_notes[arp_note[c]] then
-      local processed_chord_note = processed_chord_notes[arp_note[c]]
-
-      if processed_chord_note then
-        note_dashboard_values.note = processed_chord_note
-        note_dashboard_values.velocity = velocity
-        note_dashboard_values.length = note_container.length
-        note_container.player:note_on(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
-        clock_controller.delay_action(c, arp_division, 1, true, function()
-          note_container.player:note_off(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
-        end)
-        if c == program.get().selected_channel then
-          channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
-        end
-      end
+    if processed_chord_notes[arp_note[c]] and processed_chord_notes[arp_note[c]] ~= 0  then
+      play_note(processed_chord_notes[arp_note[c]], note_container, velocity, arp_division, note_on_func)
     end
+  
     arp_note[c] = arp_note[c] + 1
     if arp_note[c] > #processed_chord_notes then
-      arp_note[c] = 0
+      arp_note[c] = 1
     end
     number_of_executions = number_of_executions + 1
 
@@ -455,13 +435,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   local selected_channel = program.get().selected_channel
   if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
-    note_dashboard_values.note = note_container.note
-    note_dashboard_values.velocity = note_container.velocity
-    note_dashboard_values.length = note_container.length
-    note_on_func(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
-    clock_controller.delay_action(c, note_container.length, 1, true, function()
-      note_container.player:note_off(note_container.note, note_container.velocity, note_container.midi_channel, note_container.midi_device)
-    end)
+    play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
   end
 
   for i, chord_note in ipairs(chord_notes) do
@@ -521,10 +495,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
                 chords = chord
               })
             end
-            note_on_func(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
-            clock_controller.delay_action(c, note_container.length, 1, true, function()
-              note_container.player:note_off(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
-            end)
+            play_note(processed_chord_note, note_container, velocity, note_container.length, note_on_func)
           end
         end
       )
@@ -555,15 +526,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
         if processed_note then
           local velocity = note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes)
-          if c == program.get().selected_channel then
-            note_dashboard_values.note = processed_note
-            note_dashboard_values.velocity = velocity
-            note_dashboard_values.length = note_container.length
-          end
-          note_on_func(processed_note, velocity, note_container.midi_channel, note_container.midi_device)
-          clock_controller.delay_action(c, note_container.length, 1, true, function()
-            note_container.player:note_off(processed_note, velocity, note_container.midi_channel, note_container.midi_device)
-          end)
+          play_note(processed_note, note_container, velocity, note_container.length, note_on_func)
         end
       end
     )

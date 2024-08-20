@@ -298,7 +298,7 @@ function clock_controller.new_arp_sprocket(c, division, length, func)
     action = function()
       sprocket_action()
       runs = runs + 1
-      if runs > total_runs then
+      if runs >= total_runs then
         arp:destroy()
       end
     end,
