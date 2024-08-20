@@ -3,6 +3,8 @@
 
 * Masks can now be applied as a default affecting all trigs in a channel
 * The last played notes, velocity, length and chords can be seen for the selected channel on the new notes dashboard page
+* Arpeggiator param lock added
+* Performance and bug fixes
 
 # 0.5.3
 
