@@ -1058,9 +1058,16 @@ function channel_edit_page_ui_controller.set_note_dashboard_values(values)
   if values.trig then
     note_displays.trig:set_value(values.trig)
   end
-  for i = 1, 4 do
-    if values.chords and values.chords[i] then
-      note_displays.chords[i]:set_value(values.chords[i])
+
+  if (values.chords) then
+
+    for i = 1, 4 do
+      
+      if values.chords[i] and values.chords[i] ~= 0 then
+        note_displays.chords[i]:set_value(values.chords[i])
+      else
+        note_displays.chords[i]:set_value(-1)
+      end
     end
   end
 end

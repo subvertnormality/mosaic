@@ -286,10 +286,10 @@ function clock_controller.new_arp_sprocket(c, division, length, func)
   end
 
   local arp
-  local runs = 0
+  local runs = 1
   local total_runs = length / division
   local sprocket_action = function(t)
-      func()
+    func()
     if length == 0 then
       arp:destroy()
     end
@@ -298,7 +298,7 @@ function clock_controller.new_arp_sprocket(c, division, length, func)
     action = function()
       sprocket_action()
       runs = runs + 1
-      if runs >= total_runs then
+      if runs > total_runs then
         arp:destroy()
       end
     end,

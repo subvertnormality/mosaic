@@ -326,15 +326,15 @@ function step_handler.calculate_step_transpose(current_step, c)
   return transpose
 end
 
-local function play_first_arp_note(note_container, velocity, arp_division, note_on_func)
+local function play_arp_note(note_container, velocity, arp_division, note_on_func)
   local c = note_container.channel
   local channel = program.get_channel(c)
   local note_dashboard_values = {}
   note_dashboard_values.note = note_container.note
   note_dashboard_values.velocity = velocity
   note_dashboard_values.length = note_container.length
+
   note_on_func(note_container.note, velocity, note_container.midi_channel, note_container.midi_device)
-  arp_note[c] = 1
   clock_controller.delay_action(c, arp_division, 1, true, function()
     note_container.player:note_off(note_container.note, velocity, note_container.midi_channel, note_container.midi_device)
   end)
@@ -347,10 +347,44 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   local c = note_container.channel
   local channel = program.get_channel(c)
 
-  if not program.get_channel(c).mute then
-    play_first_arp_note(note_container, note_container.velocity, arp_division, note_on_func)
-    arp_note[c] = -1
+  local processed_chord_notes = {}
+
+  for i, chord_note in ipairs(chord_notes) do
+
+    if not chord_note or chord_note == 0 then
+      processed_chord_notes[i] = nil
+    else
+      local processed_chord_note = quantiser.process(
+        unprocessed_note_container.note_value + chord_note,
+        unprocessed_note_container.octave_mod,
+        unprocessed_note_container.transpose,
+        channel.step_scale_number
+      )
+  
+      if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
+        processed_chord_note = quantiser.process_chord_note_for_mask(
+          unprocessed_note_container.note_mask_value,
+          chord_note,
+          unprocessed_note_container.octave_mod,
+          unprocessed_note_container.transpose,
+          channel.step_scale_number
+        )
+      end
+  
+      processed_chord_notes[i] = processed_chord_note
+    end
+
   end
+
+  if c == program.get().selected_channel then
+    channel_edit_page_ui_controller.set_note_dashboard_values({
+      chords = processed_chord_notes
+    })
+  end
+
+  
+  play_arp_note(note_container, note_container.velocity, arp_division, note_on_func)
+  arp_note[c] = -1
 
   local number_of_executions = 1
 
@@ -362,64 +396,34 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
       return
     end
 
-    if not program.get_channel(c).mute then
+    local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
 
-      local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
+    if arp_note[c] == 0 then
+      play_arp_note(note_container, velocity, arp_division, note_on_func)
+    elseif not processed_chord_notes[arp_note[c]] then
+      -- Skip
+    elseif processed_chord_notes[arp_note[c]] then
+      local processed_chord_note = processed_chord_notes[arp_note[c]]
 
-      if arp_note[c] ~= 0 and not chord_notes[arp_note[c]] or chord_notes[arp_note[c]] == 0 then
-        arp_note[c] = 0
-      end
-      if arp_note[c] == 0 then
-        play_first_arp_note(note_container, velocity, arp_division, note_on_func)
-      elseif chord_notes[arp_note[c]] then
-        local chord_note = chord_notes[arp_note[c]]
-        
-        local chord_number = arp_note[c]
-        local processed_chord_note = quantiser.process(
-          unprocessed_note_container.note_value + chord_notes[chord_number],
-          unprocessed_note_container.octave_mod,
-          unprocessed_note_container.transpose,
-          channel.step_scale_number
-        )
-
-        if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
-          processed_chord_note = quantiser.process_chord_note_for_mask(
-            unprocessed_note_container.note_mask_value,
-            chord_notes[chord_number],
-            unprocessed_note_container.octave_mod,
-            unprocessed_note_container.transpose,
-            channel.step_scale_number
-          )
+      if processed_chord_note then
+        note_dashboard_values.note = processed_chord_note
+        note_dashboard_values.velocity = velocity
+        note_dashboard_values.length = note_container.length
+        note_container.player:note_on(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
+        clock_controller.delay_action(c, arp_division, 1, true, function()
+          note_container.player:note_off(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
+        end)
+        if c == program.get().selected_channel then
+          channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
         end
-
-
-        -- local velocity = note_container.velocity
-
-        if processed_chord_note then
-          if c == program.get().selected_channel then
-            local chord = {}
-            chord[chord_number] = processed_chord_note
-            channel_edit_page_ui_controller.set_note_dashboard_values({
-              chords = chord
-            })
-          end
-          note_dashboard_values.note = processed_chord_note
-          note_dashboard_values.velocity = velocity
-          note_dashboard_values.length = note_container.length
-          note_container.player:note_on(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
-          clock_controller.delay_action(c, arp_division, 1, true, function()
-            note_container.player:note_off(processed_chord_note, velocity, note_container.midi_channel, note_container.midi_device)
-          end)
-          if c == program.get().selected_channel then
-            channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
-          end
-        end
-        arp_note[c] = arp_note[c] + 1
       end
-
     end
-
+    arp_note[c] = arp_note[c] + 1
+    if arp_note[c] > #processed_chord_notes then
+      arp_note[c] = 0
+    end
     number_of_executions = number_of_executions + 1
+
   end)
 
 end

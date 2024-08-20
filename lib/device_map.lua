@@ -253,7 +253,7 @@ local stock_params = {
     ["short_descriptor_2"] = "STRM",
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
-    ["cc_max_value"] = 51,
+    ["cc_max_value"] = 160,
     ["ui_labels"] = clock_divisions_note_lengths,
     ["param_type"] = "stock"
   },
@@ -264,7 +264,7 @@ local stock_params = {
     ["short_descriptor_2"] = "ARP",
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
-    ["cc_max_value"] = 40,
+    ["cc_max_value"] = 160,
     ["ui_labels"] = clock_divisions_note_lengths,
     ["param_type"] = "stock"
   },
