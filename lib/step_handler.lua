@@ -403,9 +403,9 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     })
   end
 
-  if not chord_strum_pattern or chord_strum_pattern == 1 then
+  if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
     table.insert(processed_chord_notes, 1, note_container.note)
-  elseif chord_strum_pattern == 2 then
+  elseif chord_strum_pattern == 2 or chord_strum_pattern == 4 then
     table.insert(processed_chord_notes, note_container.note)
   end
   
