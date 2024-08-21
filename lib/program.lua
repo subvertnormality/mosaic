@@ -476,6 +476,14 @@ function program.set_length_mask(channel, mask)
   channel.length_mask = mask
 end
 
+function program.get_length_mask(channel) 
+  return channel.length_mask
+end
+
+function program.set_step_length_mask(channel, step, mask)
+  channel.step_length_masks[step] = mask
+end
+
 function program.set_chord_one_mask(channel, mask) 
   channel.chord_one_mask = mask
 end

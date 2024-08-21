@@ -34,38 +34,7 @@ local switch_to_next_song_pattern_blink_cancel_func = function()
 end
 local next_song_pattern_queue = nil
 
-
-function generate_note_divisions()
-  local note_divisions = {}
-
-  -- Add clock_division entries
-  for i = 32, 2, -1 do
-      table.insert(note_divisions, {
-          name = "1/" .. i,
-          value = 1 / i
-      })
-  end
-
-  -- Add custom clock_division entries for non-standard divisions
-
-  table.insert(note_divisions, {
-      name = "0.75",
-      value = 0.75
-  })
-
-
-  -- Add clock_multiplication entries
-  for i = 1, 128 do
-      table.insert(note_divisions, {
-          name = tostring(i),
-          value = i
-      })
-  end
-
-  return note_divisions
-end
-
-local note_divisions = generate_note_divisions()
+local note_divisions = include("mosaic/lib/divisions").note_divisions
 
 function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)

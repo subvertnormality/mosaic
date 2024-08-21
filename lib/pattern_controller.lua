@@ -2,6 +2,7 @@ local pattern_controller = {}
 local fn = include("mosaic/lib/functions")
 local quantiser = include("mosaic/lib/quantiser")
 local clock_controller = include("mosaic/lib/clock_controller")
+local divisions = include("mosaic/lib/divisions")
 
 local notes = program.initialise_64_table({})
 local lengths = program.initialise_64_table({})
@@ -179,7 +180,7 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
     if step_length_masks[s] then
       merged_pattern.lengths[s] = step_length_masks[s]
     elseif program.get_channel(channel).length_mask and program.get_channel(channel).lengths_mask ~= -1 then
-      merged_pattern.lengths[s] = program.get_channel(channel).length_mask
+      merged_pattern.lengths[s] = program.get_length_mask(program.get_channel(channel)) 
     end
   end
 

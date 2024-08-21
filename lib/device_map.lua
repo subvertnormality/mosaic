@@ -107,82 +107,7 @@ end
 
 local devices
 
-local clock_divisions_ui_labels = {
-  "x16",
-  "x12",
-  "x8",
-  "x6",
-  "x5.3",
-  "x5",
-  "x4",
-  "x3",
-  "x2.6",
-  "x2",
-  "x1.5",
-  "x1.3",
-  "/1",
-  "/1.5",
-  "/2",
-  "/2.6",
-  "/3",
-  "/4",
-  "/5",
-  "/5.3",
-  "/6",
-  "/7",
-  "/8",
-  "/9",
-  "/10", 
-  "/11", 
-  "/12", 
-  "/13", 
-  "/14", 
-  "/15", 
-  "/16", 
-  "/17", 
-  "/19", 
-  "/21", 
-  "/23", 
-  "/24", 
-  "/25", 
-  "/27", 
-  "/29", 
-  "/32", 
-  "/40", 
-  "/48", 
-  "/56", 
-  "/64", 
-  "/96", 
-  "/101",
-  "/128",
-  "/192",
-  "/256",
-  "/384",
-  "/512" 
-}
-
-
-function generate_note_divisions()
-  local clock_divisions_note_lengths = {}
-
-  table.insert(clock_divisions_note_lengths, "X")
-
-  -- Add clock_division entries
-  for i = 32, 2, -1 do
-      table.insert(clock_divisions_note_lengths, "1/" .. i)
-  end
-
-  table.insert(clock_divisions_note_lengths, "0.75")
-
-  -- Add clock_multiplication entries
-  for i = 1, 128 do
-      table.insert(clock_divisions_note_lengths, tostring(i))
-  end
-
-  return clock_divisions_note_lengths
-end
-
-local clock_divisions_note_lengths = generate_note_divisions()
+local note_division_labels = include("mosaic/lib/divisions").note_division_labels
 
 local stock_params = {
   get_none_param(),
@@ -254,7 +179,7 @@ local stock_params = {
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
     ["cc_max_value"] = 160,
-    ["ui_labels"] = clock_divisions_note_lengths,
+    ["ui_labels"] = note_division_labels,
     ["param_type"] = "stock"
   },
   {
@@ -265,7 +190,7 @@ local stock_params = {
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
     ["cc_max_value"] = 160,
-    ["ui_labels"] = clock_divisions_note_lengths,
+    ["ui_labels"] = note_division_labels,
     ["param_type"] = "stock"
   },
   {

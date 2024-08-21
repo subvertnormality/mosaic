@@ -2,6 +2,7 @@
 local channel_edit_page_ui_refreshers = {}
 local quantiser = include("lib/quantiser")
 local fn = include("lib/functions")
+local divisions = include("lib/divisions")
 
 function channel_edit_page_ui_refreshers.refresh_masks(note_selectors)
   local pressed_keys = grid_controller.get_pressed_keys()
@@ -17,7 +18,7 @@ function channel_edit_page_ui_refreshers.refresh_masks(note_selectors)
         local step = fn.calc_grid_count(keys[1], keys[2])
         note_selectors.note:set_value(channel.step_note_masks[step] or channel.note_mask or -1)
         note_selectors.velocity:set_value(channel.step_velocity_masks[step] or channel.velocity_mask or -1)
-        note_selectors.length:set_value(channel.step_length_masks[step] or channel.length_mask or -1)
+        note_selectors.length:set_value(divisions.note_division_indexes[channel.step_length_masks[step]] or divisions.note_division_indexes[channel.length_mask] or 0)
         note_selectors.trig:set_value(channel.step_trig_masks[step] or channel.trig_mask or -1) 
         for i, chord_selector in ipairs(note_selectors.chords) do
           if i == 1 then
@@ -35,7 +36,7 @@ function channel_edit_page_ui_refreshers.refresh_masks(note_selectors)
   else
     note_selectors.note:set_value(channel.note_mask or -1)
     note_selectors.velocity:set_value(channel.velocity_mask or -1)
-    note_selectors.length:set_value(channel.length_mask or -1)
+    note_selectors.length:set_value(divisions.note_division_indexes[channel.length_mask] or 0)
     note_selectors.trig:set_value(channel.trig_mask or -1)
     for i, chord_selector in ipairs(note_selectors.chords) do
       if i == 1 then

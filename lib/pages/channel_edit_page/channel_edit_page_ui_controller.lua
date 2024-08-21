@@ -14,6 +14,7 @@ local value_selector = include("mosaic/lib/ui_components/value_selector")
 local midi_controller = include("mosaic/lib/midi_controller")
 local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/param_manager")
+local divisions = include("mosaic/lib/divisions")
 local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
 local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
 local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
@@ -31,7 +32,7 @@ local mask_selectors = {
   trig = value_selector:new(5, 18, "Trig", -1, 1),
   note = value_selector:new(30, 18, "Note", -1, 127),
   velocity = value_selector:new(55, 18, "Vel", -1, 127),
-  length = value_selector:new(80, 18, "Len", -1, 512),
+  length = value_selector:new(80, 18, "Len", -1, 92),
   chords = {
     value_selector:new(5, 40, "Chd1", -14, 14),
     value_selector:new(30, 40, "Chd2", -14, 14),
@@ -105,6 +106,12 @@ local function configure_note_page_velocity_length_value_selector(selector)
   end)
 end
 
+local function configure_mask_length_selector(selector)
+  mask_selectors.length:set_view_transform_func(function(value)
+    return value == 0 and "X" or divisions.note_divisions[value].name
+  end)
+end
+
 local function configure_chord_value_selector(selector)
   local chord_ui_labels = {
     "--oct", "--2nd", "--3rd", "--4th", "--5th", "--6th", "--7th", "-oct", "-2nd", "-3rd", "-4th", "-5th", "-6th", "-7th", "X",
@@ -123,13 +130,14 @@ end
 
 -- Configuring selectors
 configure_note_value_selector(note_displays.note)
+configure_mask_length_selector(note_displays.length)
 configure_note_value_selector(note_displays.chords[1])
 configure_note_value_selector(note_displays.chords[2])
 configure_note_value_selector(note_displays.chords[3])
 configure_note_value_selector(note_displays.chords[4])
 configure_note_value_selector(mask_selectors.note)
 configure_note_page_velocity_length_value_selector(mask_selectors.velocity)
-configure_note_page_velocity_length_value_selector(mask_selectors.length)
+configure_mask_length_selector(mask_selectors.length)
 for _, chord_selector in ipairs(mask_selectors.chords) do
   configure_chord_value_selector(chord_selector)
 end
@@ -653,23 +661,36 @@ function channel_edit_page_ui_controller.handle_length_mask_change(direction)
       mask_selectors.length:increment()
       for _, keys in ipairs(pressed_keys) do
         local step = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_length_masks[step] = mask_selectors.length:get_value()
+        program.set_step_length_mask(channel, step, divisions.note_division_values[mask_selectors.length:get_value()])
       end
     else
-      mask_selectors.length:decrement()
-      for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_length_masks[step] = mask_selectors.length:get_value() == -1 and nil or mask_selectors.length:get_value()
+      if mask_selectors.length:get_value() ~= 0 then
+        mask_selectors.length:decrement()
+        for _, keys in ipairs(pressed_keys) do
+          local step = fn.calc_grid_count(keys[1], keys[2])
+          program.set_step_length_mask(channel, step, divisions.note_division_values[mask_selectors.length:get_value()])
+        end
+      else
+        for _, keys in ipairs(pressed_keys) do
+          local step = fn.calc_grid_count(keys[1], keys[2])
+          program.set_step_length_mask(channel, step, 0)
+          mask_selectors.length:set_value(0)
+        end
       end
     end
   else
-    mask_selectors.length:set_value(channel.length_mask or -1)
+    mask_selectors.length:set_value(divisions.note_division_indexes[channel.length_mask] or 0)
     if direction > 0 then
       mask_selectors.length:increment()
-      program.set_length_mask(channel, mask_selectors.length:get_value())
+      program.set_length_mask(channel, divisions.note_division_values[mask_selectors.length:get_value()])
     else
-      mask_selectors.length:decrement()
-      program.set_length_mask(channel, mask_selectors.length:get_value() == -1 and nil or mask_selectors.length:get_value())
+      if mask_selectors.length:get_value() ~= 0 then
+        mask_selectors.length:decrement()
+        program.set_length_mask(channel, divisions.note_division_values[mask_selectors.length:get_value()])
+      else
+        mask_selectors.length:set_value(0)
+        program.set_length_mask(channel, 0)
+      end
     end
     pattern_controller.throttled_update_working_pattern(channel.number)
   end
@@ -1036,6 +1057,11 @@ function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
   end
 end
 
+function channel_edit_page_ui_controller.select_page(page) 
+    channel_pages:select_page(page)
+    fn.dirty_screen(true)
+end
+
 function channel_edit_page_ui_controller.select_mask_page()
   channel_pages:select_page(channel_page_to_index["Masks"])
   fn.dirty_screen(true)
@@ -1053,7 +1079,7 @@ function channel_edit_page_ui_controller.set_note_dashboard_values(values)
     note_displays.velocity:set_value(values.velocity)
   end
   if values.length then
-    note_displays.length:set_value(values.length)
+    note_displays.length:set_value(divisions.note_divisions[divisions.note_division_indexes[values.length]].name)
   end
   if values.trig then
     note_displays.trig:set_value(values.trig)

@@ -1048,7 +1048,7 @@ function test_chord_strum_param_lock_with_four_extra_notes_division()
   channel.step_chord_masks[test_step][2] = chord_note_2
   channel.step_chord_masks[test_step][3] = chord_note_3
   channel.step_chord_masks[test_step][4] = chord_note_4
-  program.add_step_param_trig_lock(test_step, 5, 33) -- 1
+  program.add_step_param_trig_lock(test_step, 5, 17) -- 1
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -1139,7 +1139,7 @@ function test_chord_strum_param_lock_with_four_extra_notes_multiplication()
   channel.step_chord_masks[test_step][2] = chord_note_2
   channel.step_chord_masks[test_step][3] = chord_note_3
   channel.step_chord_masks[test_step][4] = chord_note_4
-  program.add_step_param_trig_lock(test_step, 5, 40)  -- 1/16
+  program.add_step_param_trig_lock(test_step, 5, 2)  -- 1/16
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -1230,7 +1230,7 @@ function test_chord_strum_param_lock_with_backwards_strum_pattern()
   channel.step_chord_masks[1][2] = chord_note_2
   channel.step_chord_masks[1][3] = chord_note_3
   channel.step_chord_masks[1][4] = chord_note_4
-  program.add_step_param_trig_lock(1, 5, 33)  -- 1
+  program.add_step_param_trig_lock(1, 5, 17)  -- 1
   program.add_step_param_trig_lock(1, 6, 2) -- Backwards pattern
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
@@ -1323,7 +1323,7 @@ function test_chord_strum_param_lock_with_inside_out_strum_pattern()
   channel.step_chord_masks[1][2] = chord_note_2
   channel.step_chord_masks[1][3] = chord_note_3
   channel.step_chord_masks[1][4] = chord_note_4
-  program.add_step_param_trig_lock(1, 5, 33)  -- 1
+  program.add_step_param_trig_lock(1, 5, 17)  -- 1
   program.add_step_param_trig_lock(1, 6, 3) -- Inside out strum pattern
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
@@ -1415,7 +1415,7 @@ function test_chord_strum_param_lock_with_outside_in_strum_pattern()
   channel.step_chord_masks[1][2] = chord_note_2
   channel.step_chord_masks[1][3] = chord_note_3
   channel.step_chord_masks[1][4] = chord_note_4
-  program.add_step_param_trig_lock(1, 5, 33)  -- 1
+  program.add_step_param_trig_lock(1, 5, 17)  -- 1
   program.add_step_param_trig_lock(1, 6, 4) -- Outside in strum pattern
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
@@ -1811,7 +1811,7 @@ function test_arp_param_lock_with_four_extra_notes()
   channel.step_chord_masks[test_step][2] = chord_note_2
   channel.step_chord_masks[test_step][3] = chord_note_3
   channel.step_chord_masks[test_step][4] = chord_note_4
-  program.add_step_param_trig_lock(test_step, 5, 33) -- 1
+  program.add_step_param_trig_lock(test_step, 5, 17) -- 1
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -1922,7 +1922,7 @@ function test_arp_param_lock_with_four_extra_notes_divison()
   channel.step_chord_masks[test_step][2] = chord_note_2
   channel.step_chord_masks[test_step][3] = chord_note_3
   channel.step_chord_masks[test_step][4] = chord_note_4
-  program.add_step_param_trig_lock(test_step, 5, 34) -- 2
+  program.add_step_param_trig_lock(test_step, 5, 21) -- 2
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -2003,7 +2003,7 @@ function test_arp_param_lock_with_four_extra_notes_but_one_blank_rests_for_that_
   channel.step_chord_masks[test_step][2] = chord_note_2
   channel.step_chord_masks[test_step][3] = 0
   channel.step_chord_masks[test_step][4] = chord_note_4
-  program.add_step_param_trig_lock(test_step, 5, 33) -- 1
+  program.add_step_param_trig_lock(test_step, 5, 17) -- 1
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -2126,7 +2126,7 @@ function test_arp_with_velocity_swell_param_lock()
   channel.trig_lock_params[5].id = "chord_arp"
 
   program.add_step_param_trig_lock(test_step, 4, 10)
-  program.add_step_param_trig_lock(test_step, 5, 33) -- 1
+  program.add_step_param_trig_lock(test_step, 5, 17) -- 1
 
   channel.step_chord_masks[test_step] = {}
   channel.step_chord_masks[test_step][1] = chord_note_1
@@ -2223,7 +2223,7 @@ function test_arp_param_lock_with_backwards_strum_pattern()
   channel.step_chord_masks[1][2] = chord_note_2
   channel.step_chord_masks[1][3] = chord_note_3
   channel.step_chord_masks[1][4] = chord_note_4
-  program.add_step_param_trig_lock(1, 5, 33)  -- 1
+  program.add_step_param_trig_lock(1, 5, 17)  -- 1
   program.add_step_param_trig_lock(1, 6, 2) -- Backwards pattern
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
@@ -2322,7 +2322,7 @@ function test_arp_param_lock_with_inside_out_strum_pattern()
   channel.step_chord_masks[1][2] = chord_note_2
   channel.step_chord_masks[1][3] = chord_note_3
   channel.step_chord_masks[1][4] = chord_note_4
-  program.add_step_param_trig_lock(1, 5, 33)  -- 1
+  program.add_step_param_trig_lock(1, 5, 17)  -- 1
   program.add_step_param_trig_lock(1, 6, 3) -- Inside out strum pattern
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
@@ -2419,7 +2419,7 @@ function test_chord_arp_param_lock_with_outside_in_strum_pattern()
   channel.step_chord_masks[1][2] = chord_note_2
   channel.step_chord_masks[1][3] = chord_note_3
   channel.step_chord_masks[1][4] = chord_note_4
-  program.add_step_param_trig_lock(1, 5, 33)  -- 1
+  program.add_step_param_trig_lock(1, 5, 17)  -- 1
   program.add_step_param_trig_lock(1, 6, 4) -- Outside in strum pattern
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
@@ -2517,7 +2517,7 @@ function test_chord_arp_param_lock_with_outside_in_strum_pattern_and_rests()
   channel.step_chord_masks[1][2] = chord_note_2
   channel.step_chord_masks[1][3] = chord_note_3
   channel.step_chord_masks[1][4] = chord_note_4
-  program.add_step_param_trig_lock(1, 5, 33)  -- 1
+  program.add_step_param_trig_lock(1, 5, 17)  -- 1
   program.add_step_param_trig_lock(1, 6, 4) -- Outside in strum pattern
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern

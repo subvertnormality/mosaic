@@ -17,6 +17,9 @@ local midi_off_store = {}
 local chord_number = 0
 local chord_one_note = nil
 
+local page_change_clock = nil
+local previous_page = nil
+
 for i = 0, 127 do
   local noteValue = midi_note_mappings[(i % 12) + 1] or 0
   local octaveValue = math.floor(i / 12) - 5
@@ -88,8 +91,25 @@ function handle_midi_event_data(data, midi_device)
     end
   elseif data[1] == 176 then -- cc change
     if data[2] >= 1 and data[2] <= 20 then
-      channel_edit_page_ui_controller.select_trig_page()
+
+      if not previous_page then
+        previous_page = program.get().selected_page
+      end
+      if (page_change_clock) then
+        clock.cancel(page_change_clock)
+      end
+      page_change_clock = clock.run(function()
+        clock.sleep(2)
+        if previous_page then
+          channel_edit_page_ui_controller.select_page(previous_page)
+          previous_page = nil
+          page_change_clock = nil
+        end
+      end)
+
+
       if data[2] >= 11 and data[2] <= 20 then
+        channel_edit_page_ui_controller.select_trig_page()
         channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(data[3] - 64, channel, data[2] - 10)
       elseif data[2] >= 1 and data[2] <= 10 then
         channel_edit_page_ui_controller.select_mask_page()
