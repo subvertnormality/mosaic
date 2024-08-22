@@ -1062,6 +1062,10 @@ function channel_edit_page_ui_controller.select_page(page)
     fn.dirty_screen(true)
 end
 
+function channel_edit_page_ui_controller.get_selected_page() 
+    return channel_pages:get_selected_page()
+end
+
 function channel_edit_page_ui_controller.select_mask_page()
   channel_pages:select_page(channel_page_to_index["Masks"])
   fn.dirty_screen(true)

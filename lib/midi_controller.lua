@@ -92,20 +92,23 @@ function handle_midi_event_data(data, midi_device)
   elseif data[1] == 176 then -- cc change
     if data[2] >= 1 and data[2] <= 20 then
 
-      if not previous_page then
-        previous_page = program.get().selected_page
-      end
-      if (page_change_clock) then
-        clock.cancel(page_change_clock)
-      end
-      page_change_clock = clock.run(function()
-        clock.sleep(2)
-        if previous_page then
-          channel_edit_page_ui_controller.select_page(previous_page)
-          previous_page = nil
-          page_change_clock = nil
+      if (program.get().selected_page == 1) then
+        if not previous_page then
+          previous_page = channel_edit_page_ui_controller.get_selected_page()
         end
-      end)
+        if (page_change_clock) then
+          clock.cancel(page_change_clock)
+        end
+        page_change_clock = clock.run(function()
+          clock.sleep(2)
+          if previous_page then
+            channel_edit_page_ui_controller.select_page(previous_page)
+            previous_page = nil
+            page_change_clock = nil
+          end
+        end)
+      end
+
 
 
       if data[2] >= 11 and data[2] <= 20 then

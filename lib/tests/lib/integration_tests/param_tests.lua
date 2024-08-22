@@ -32,7 +32,6 @@ local function clock_setup()
 end
 
 local function progress_clock_by_beats(b)
-  print("pulsing by .." .. (24 * b))
   for i = 1, (24 * b) do
     clock_controller.get_clock_lattice():pulse()
   end
@@ -1427,7 +1426,7 @@ function test_chord_strum_param_lock_with_outside_in_strum_pattern()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
-  progress_clock_by_pulses(2) -- This is not ideal, reversed strums are even more slightly off time
+  progress_clock_by_pulses(1) -- This is not ideal, reversed strums are slightly off time
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -1822,6 +1821,8 @@ function test_arp_param_lock_with_four_extra_notes()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
+  progress_clock_by_pulses(1)
+
   progress_clock_by_beats(test_step - 1)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1933,6 +1934,8 @@ function test_arp_param_lock_with_four_extra_notes_divison()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
+  progress_clock_by_pulses(1)
+
   progress_clock_by_beats(test_step - 1)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -2013,6 +2016,8 @@ function test_arp_param_lock_with_four_extra_notes_but_one_blank_rests_for_that_
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
+
+  progress_clock_by_pulses(1)
 
   progress_clock_by_beats(test_step - 1)
 
@@ -2142,6 +2147,8 @@ function test_arp_with_velocity_swell_param_lock()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
+  progress_clock_by_pulses(1)
+
   progress_clock_by_beats(test_step - 1)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -2234,6 +2241,8 @@ function test_arp_param_lock_with_backwards_strum_pattern()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
+
+  progress_clock_by_pulses(1)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -2334,6 +2343,8 @@ function test_arp_param_lock_with_inside_out_strum_pattern()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
+  progress_clock_by_pulses(1)
+
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
@@ -2430,6 +2441,8 @@ function test_chord_arp_param_lock_with_outside_in_strum_pattern()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
+
+  progress_clock_by_pulses(1)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -2529,6 +2542,8 @@ function test_chord_arp_param_lock_with_outside_in_strum_pattern_and_rests()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
+  progress_clock_by_pulses(1)
+
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 67)
@@ -2626,73 +2641,64 @@ function test_chord_strum_param_lock_with_acceleration()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
+  progress_clock_by_pulses(1)
+
   local note_on_event = table.remove(midi_note_on_events, 1)
 
-  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[1], 60) -- 0
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
-  progress_clock_by_beats(1)
+  progress_clock_by_beats(1) -- 1
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_nil(note_on_event)
 
-  progress_clock_by_beats(1/4)
+  progress_clock_by_beats(1/4) -- 1.25
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
-  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[1], 62) -- 1.25
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
-  progress_clock_by_beats(1)
+  progress_clock_by_beats(1) -- 2.25
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event) -- 2.25
+
+  progress_clock_by_beats(0.25) -- 2.5
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64) -- 2.5
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1) -- 3.5
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)  -- 3.5
+
+  progress_clock_by_beats(1/4) -- 3.75
+
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)  -- 3.75
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)  -- 4.75
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_nil(note_on_event)
 
-  progress_clock_by_beats(1/4)
-  progress_clock_by_beats(1/4)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 64)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1/4)
-  progress_clock_by_beats(1/4)
-  progress_clock_by_beats(1/4)
-
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 65)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1/4)
-  progress_clock_by_beats(1/4)
-  progress_clock_by_beats(1/4)
-  progress_clock_by_beats(1/4)
-
-  progress_clock_by_beats(1/4)
-  progress_clock_by_beats(1/4)
-  progress_clock_by_beats(1/4)
-
+  progress_clock_by_beats(1/4)  -- 5
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -2702,6 +2708,184 @@ function test_chord_strum_param_lock_with_acceleration()
   
 
   progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+  progress_clock_by_beats(1.25)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+end
+
+
+
+function test_chord_arp_param_lock_with_acceleration()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  local test_step = 1
+  local cc_msb = 2
+
+  local chord_note_1 = 1
+  local chord_note_2 = 2
+  local chord_note_3 = 3
+  local chord_note_4 = 4
+  local c = 1
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 8
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  program.get().selected_channel = c
+
+  local channel = program.get_selected_channel()
+
+  channel.trig_lock_params[5].id = "chord_arp"
+  channel.trig_lock_params[6].id = "chord_acceleration"
+
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  channel.step_chord_masks[test_step][4] = chord_note_4
+  program.add_step_param_trig_lock(test_step, 5, 17) -- 1
+  program.add_step_param_trig_lock(test_step, 6, 5) -- 1/4
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+
+  progress_clock_by_pulses(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60) -- 0
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1) -- 1
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+  progress_clock_by_beats(1/4) -- 1.25
+  progress_clock_by_pulses(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62) -- 1.25
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1) -- 2.25
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event) -- 2.25
+
+  progress_clock_by_beats(0.25) -- 2.5
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64) -- 2.5
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1) -- 3.5
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)  -- 3.5
+
+  progress_clock_by_beats(1/4) -- 3.75
+
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)  -- 3.75
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)  -- 4.75
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+  progress_clock_by_beats(1/4)  -- 5
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 67)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+  
+
+  progress_clock_by_beats(1) -- 6
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+  progress_clock_by_beats(1/4)  -- 6.25
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+
+  
+  progress_clock_by_beats(1) -- 7.25
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+  progress_clock_by_beats(1/4)  -- 7.5
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+
+  
+  progress_clock_by_beats(1) -- 7.5
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+  progress_clock_by_beats(1/4)  -- 7.75
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1) -- 8.75
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+  progress_clock_by_beats(1/4)  -- 9
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 

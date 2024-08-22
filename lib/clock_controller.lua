@@ -12,6 +12,7 @@ local trigless_lock_active = {}
 
 local delayed_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
 local delayed_sprockets_must_execute = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
+local arp_delay_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
 local arp_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
 
 local clock_divisions = include("mosaic/lib/divisions").clock_divisions
@@ -182,30 +183,33 @@ function clock_controller.get_channel_division(channel_number)
   return clock and clock.division or 0.4
 end
 
-function clock_controller.delay_action(c, note_division, multiplier, must_execute, func)
+function clock_controller.delay_action(c, note_division, multiplier, acceleration, delay, type, func)
   if note_division == 0 or note_division == nil then
     func()
     return
   end
   local channel = program.get_channel(c)
   local delayed
+
+  local division = ((note_division * multiplier) + acceleration) * clock_controller["channel_" .. c .. "_clock"].division
+
   local sprocket_action = function(t)
     func()
     delayed:destroy()
   end
 
-  local division = note_division * clock_controller["channel_" .. c .. "_clock"].division * multiplier
-
   delayed = clock_lattice:new_sprocket {
     action = sprocket_action,
     division = division,
     enabled = true,
-    delay = 1,
+    delay = delay,
     swing = channel.swing or 50
   }
 
-  if must_execute then
+  if type == "must_execute" then
     table.insert(delayed_sprockets_must_execute[c], delayed)
+  elseif type == "destroy_at_note_end" then
+    table.insert(arp_delay_sprockets[c], delayed)
   else
     table.insert(delayed_sprockets[c], delayed)
   end
@@ -239,11 +243,13 @@ function clock_controller.new_arp_sprocket(c, division, length, func)
       runs = runs + 1
       if runs >= total_runs then
         arp:destroy()
+        kill_arp_delay_sprockets(c)
       end
     end,
     division = division * clock_controller["channel_" .. c .. "_clock"].division,
     enabled = true,
-    swing = channel.swing or 50
+    swing = channel.swing or 50,
+    delay = division
   }
 
   table.insert(arp_sprockets[c], arp)
@@ -256,6 +262,14 @@ function execute_delayed_sprockets()
       if item then
         item:action()
       end
+    end
+  end
+end
+
+function kill_arp_delay_sprockets(c)
+  for i, item in ipairs(arp_delay_sprockets[c]) do
+    if item then
+      item:destroy()
     end
   end
 end

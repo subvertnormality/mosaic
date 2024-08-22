@@ -304,7 +304,7 @@ local function play_note(note, note_container, velocity, division, note_on_func)
   note_dashboard_values.length = note_container.length
 
   note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
-  clock_controller.delay_action(c, division, 1, true, function()
+  clock_controller.delay_action(c, division, 1, 0, 0.95, "must_execute", function()
     note_container.player:note_off(note_container.note, velocity, note_container.midi_channel, note_container.midi_device)
   end)
   if c == program.get().selected_channel then
@@ -312,7 +312,7 @@ local function play_note(note, note_container, velocity, division, note_on_func)
   end
 end
 
-local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, note_on_func)
+local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_acceleration, note_on_func)
   local c = note_container.channel
   local channel = program.get_channel(c)
 
@@ -377,19 +377,25 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   elseif chord_strum_pattern == 2 or chord_strum_pattern == 4 then
     table.insert(processed_chord_notes, note_container.note)
   end
-  
   play_note(processed_chord_notes[1], note_container, note_container.velocity, arp_division, note_on_func)
   arp_note[c] = 2
 
   local number_of_executions = 1
-
   clock_controller.new_arp_sprocket(c, arp_division, note_container.length, function()
     local note_dashboard_values = {}
 
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
 
     if processed_chord_notes[arp_note[c]] and processed_chord_notes[arp_note[c]] ~= 0  then
-      play_note(processed_chord_notes[arp_note[c]], note_container, velocity, arp_division, note_on_func)
+      if chord_acceleration == 0 then
+        play_note(processed_chord_notes[arp_note[c]], note_container, velocity, arp_division, note_on_func)
+      else
+        local note_to_play = processed_chord_notes[arp_note[c]]
+        clock_controller.delay_action(c, chord_acceleration * number_of_executions, 1, 0, 1, "destroy_at_note_end", function()
+            play_note(note_to_play, note_container, velocity, arp_division, note_on_func)
+          end
+        )
+      end
     end
   
     arp_note[c] = arp_note[c] + 1
@@ -427,7 +433,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   end
 
   if arp_division then
-    handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, note_on_func)
+    handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_acceleration, note_on_func)
     return
   end
 
@@ -460,12 +466,14 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
         delay_multiplier = delay_multiplier - 1
       end
-      print("chord division ", chord_division)
-      print("chord accellerarion ", chord_acceleration)
+      
+
       clock_controller.delay_action(
         c,
-        (chord_division or 0) + (chord_acceleration * delay_multiplier),
+        (chord_division or 0),
         delay_multiplier,
+        chord_acceleration * delay_multiplier,
+        1,
         false,
         function()
           local note_value = unprocessed_note_container.note_value + chord_notes[chord_number]
@@ -504,12 +512,13 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   end
 
   if chord_strum_pattern == 2 or chord_strum_pattern == 4 then
-    print("chord division ", chord_division)
-    print("chord accellerarion ", chord_acceleration)
+
     clock_controller.delay_action(
       c,
-      (chord_division or 0) + (chord_acceleration * delay_multiplier),
+      (chord_division or 0),
       #chord_notes,
+      chord_acceleration * delay_multiplier,
+      1,
       false,
       function()
         local processed_note = quantiser.process(
