@@ -1,6 +1,7 @@
 local quantiser = include("mosaic/lib/quantiser")
 local clock_controller = include("mosaic/lib/clock_controller")
 local fn = include("mosaic/lib/functions")
+local divisions = include("mosaic/lib/divisions")
 
 local step_handler = {}
 local persistent_channel_step_scale_numbers = {
@@ -81,11 +82,10 @@ function step_handler.process_params(c, step)
         param.id ~= "chord_strum" and
         param.id ~= "chord_arp" and
         param.id ~= "chord_velocity_modifier" and
+        param.id ~= "chord_acceleration" and
         param.id ~= "chord_strum_pattern" and
         param.id ~= "fixed_note")
      then
-
-
 
       if param.type == "midi" and param.cc_msb then
 
@@ -419,8 +419,12 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local chord_division = note_divisions[step_handler.process_stock_params(c, current_step, "chord_strum")] and note_divisions[step_handler.process_stock_params(c, current_step, "chord_strum")].value
   local chord_velocity_mod = step_handler.process_stock_params(c, current_step, "chord_velocity_modifier")
   local chord_strum_pattern = step_handler.process_stock_params(c, current_step, "chord_strum_pattern")
-
+  local chord_acceleration = step_handler.process_stock_params(c, current_step, "chord_acceleration") or 0
   local arp_division = note_divisions[step_handler.process_stock_params(c, current_step, "chord_arp")] and note_divisions[step_handler.process_stock_params(c, current_step, "chord_arp")].value
+
+  if chord_acceleration ~= 0 then
+    chord_acceleration = divisions.note_division_values[chord_acceleration]
+  end
 
   if arp_division then
     handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, note_on_func)
@@ -431,6 +435,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
     play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
   end
+
+  local delay_multiplier = 0
 
   for i, chord_note in ipairs(chord_notes) do
     if chord_note and chord_note ~= 0 then
@@ -454,10 +460,11 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
         delay_multiplier = delay_multiplier - 1
       end
-
+      print("chord division ", chord_division)
+      print("chord accellerarion ", chord_acceleration)
       clock_controller.delay_action(
         c,
-        chord_division,
+        (chord_division or 0) + (chord_acceleration * delay_multiplier),
         delay_multiplier,
         false,
         function()
@@ -497,9 +504,11 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   end
 
   if chord_strum_pattern == 2 or chord_strum_pattern == 4 then
+    print("chord division ", chord_division)
+    print("chord accellerarion ", chord_acceleration)
     clock_controller.delay_action(
       c,
-      chord_division,
+      (chord_division or 0) + (chord_acceleration * delay_multiplier),
       #chord_notes,
       false,
       function()

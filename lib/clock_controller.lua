@@ -195,11 +195,12 @@ function clock_controller.delay_action(c, note_division, multiplier, must_execut
   end
 
   local division = note_division * clock_controller["channel_" .. c .. "_clock"].division * multiplier
+
   delayed = clock_lattice:new_sprocket {
     action = sprocket_action,
     division = division,
     enabled = true,
-    delay = 0.95,
+    delay = 1,
     swing = channel.swing or 50
   }
 

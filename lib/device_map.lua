@@ -178,7 +178,7 @@ local stock_params = {
     ["short_descriptor_2"] = "STRM",
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
-    ["cc_max_value"] = 160,
+    ["cc_max_value"] = 92,
     ["ui_labels"] = note_division_labels,
     ["param_type"] = "stock"
   },
@@ -189,10 +189,31 @@ local stock_params = {
     ["short_descriptor_2"] = "ARP",
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
-    ["cc_max_value"] = 160,
+    ["cc_max_value"] = 92,
     ["ui_labels"] = note_division_labels,
     ["param_type"] = "stock"
   },
+  {
+    ["id"] = "chord_acceleration",
+    ["name"] = "Chord Acceleration",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "ACCL",
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 92,
+    ["ui_labels"] = note_division_labels,
+    ["param_type"] = "stock"
+  },
+  -- {
+  --   ["id"] = "chord_gravity_mod",
+  --   ["name"] = "Chord Gravity Mod",
+  --   ["short_descriptor_1"] = "CHRD",
+  --   ["short_descriptor_2"] = "GRVT",
+  --   ["off_value"] = 0,
+  --   ["cc_min_value"] = -40,
+  --   ["cc_max_value"] = 40,
+  --   ["param_type"] = "stock"
+  -- },
   {
     ["id"] = "chord_velocity_modifier",
     ["name"] = "Chord Velocity Mod",
