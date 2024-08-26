@@ -317,6 +317,8 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   local channel = program.get_channel(c)
 
   local processed_chord_notes = {}
+
+  local acceleration_accumulator = 0
   
   for i, cn in ipairs(chord_notes) do
 
@@ -391,7 +393,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
         play_note(processed_chord_notes[arp_note[c]], note_container, velocity, arp_division, note_on_func)
       else
         local note_to_play = processed_chord_notes[arp_note[c]]
-        clock_controller.delay_action(c, chord_acceleration * number_of_executions, 1, 0, 1, "destroy_at_note_end", function()
+        clock_controller.delay_action(c, (chord_acceleration * number_of_executions), 1, acceleration_accumulator, 1, "destroy_at_note_end", function()
             play_note(note_to_play, note_container, velocity, arp_division, note_on_func)
           end
         )
@@ -402,7 +404,9 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     if arp_note[c] > #processed_chord_notes then
       arp_note[c] = 1
     end
+    
     number_of_executions = number_of_executions + 1
+    acceleration_accumulator = acceleration_accumulator + ((chord_acceleration * (number_of_executions - 1)))
 
   end)
 
