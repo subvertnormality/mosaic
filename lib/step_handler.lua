@@ -443,6 +443,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   end
 
   local delay_multiplier = 0
+  local acceleration_accumulator = 0
 
   for i, chord_note in ipairs(chord_notes) do
     if chord_note and chord_note ~= 0 then
@@ -467,12 +468,11 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         delay_multiplier = delay_multiplier - 1
       end
       
-
       clock_controller.delay_action(
         c,
         (chord_division or 0),
         delay_multiplier,
-        chord_acceleration * delay_multiplier,
+        (chord_acceleration * delay_multiplier) + acceleration_accumulator,
         1,
         false,
         function()
@@ -508,6 +508,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           end
         end
       )
+
+      acceleration_accumulator = acceleration_accumulator + (chord_acceleration * delay_multiplier)
+
     end
   end
 
@@ -517,7 +520,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
       c,
       (chord_division or 0),
       #chord_notes,
-      chord_acceleration * delay_multiplier,
+      (chord_acceleration * delay_multiplier) + acceleration_accumulator,
       1,
       false,
       function()
@@ -542,7 +545,12 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
       end
     )
+
+    acceleration_accumulator = acceleration_accumulator + (chord_acceleration * delay_multiplier)
+
+
   end
+
 
   if c == program.get().selected_channel then
     channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
