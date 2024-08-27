@@ -312,7 +312,7 @@ local function play_note(note, note_container, velocity, division, note_on_func)
   end
 end
 
-local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, note_on_func)
+local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
   local c = note_container.channel
   local channel = program.get_channel(c)
 
@@ -385,7 +385,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   arp_division = arp_division
 
   local number_of_executions = 1
-  clock_controller.new_arp_sprocket(c, arp_division, chord_spread, note_container.length, function()
+  clock_controller.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function()
     local note_dashboard_values = {}
 
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
@@ -424,6 +424,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local chord_velocity_mod = step_handler.process_stock_params(c, current_step, "chord_velocity_modifier")
   local chord_strum_pattern = step_handler.process_stock_params(c, current_step, "chord_strum_pattern")
   local chord_spread = step_handler.process_stock_params(c, current_step, "chord_spread") or 0
+  local chord_acceleration = step_handler.process_stock_params(c, current_step, "chord_acceleration") or 1
   local arp_division = note_divisions[step_handler.process_stock_params(c, current_step, "chord_arp")] and note_divisions[step_handler.process_stock_params(c, current_step, "chord_arp")].value
 
   if chord_spread ~= 0 then
@@ -431,7 +432,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   end
 
   if arp_division then
-    handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, note_on_func)
+    handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
     return
   end
 
@@ -465,12 +466,12 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
         delay_multiplier = delay_multiplier - 1
       end
-      
+
       clock_controller.delay_action(
         c,
         (chord_division or 0),
         delay_multiplier,
-        (chord_spread * delay_multiplier) + acceleration_accumulator,
+        ((chord_spread * delay_multiplier) + (acceleration_accumulator)) * chord_acceleration,
         1,
         false,
         function()
@@ -518,7 +519,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
       c,
       (chord_division or 0),
       #chord_notes,
-      (chord_spread * delay_multiplier) + acceleration_accumulator,
+      ((chord_spread * delay_multiplier) + (acceleration_accumulator)) * chord_acceleration,
       1,
       false,
       function()

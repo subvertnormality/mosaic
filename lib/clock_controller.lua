@@ -215,7 +215,7 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
   end
 end
 
-function clock_controller.new_arp_sprocket(c, division, chord_spread, length, func)
+function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acceleration, length, func)
   if division == 0 or division == nil then
     return
   end
@@ -245,7 +245,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, length, fu
       sprocket_action()
 
       runs = runs + 1
-      arp:set_division((division + ((chord_spread * (runs - 1))) + acceleration_accumulator) * clock_controller["channel_" .. c .. "_clock"].division)
+      arp:set_division((division + ((chord_spread * (runs - 1))) + (acceleration_accumulator * chord_acceleration)) * clock_controller["channel_" .. c .. "_clock"].division)
 
       if runs >= total_runs then
         arp:destroy()
