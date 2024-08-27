@@ -382,7 +382,6 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   play_note(processed_chord_notes[1], note_container, note_container.velocity, arp_division, note_on_func)
   arp_note[c] = 2
 
-  arp_division = arp_division
 
   local number_of_executions = 1
   clock_controller.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function()

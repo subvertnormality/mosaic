@@ -233,7 +233,6 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
   local total_runs = length / division
   local acceleration_accumulator = 0
 
-
   local sprocket_action = function(t)
     func()
     if length == 0 then
@@ -245,20 +244,29 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
       sprocket_action()
 
       runs = runs + 1
-      arp:set_division((division + ((chord_spread * (runs - 1))) + (acceleration_accumulator * chord_acceleration)) * clock_controller["channel_" .. c .. "_clock"].division)
+      local div = (division + ((chord_spread * chord_acceleration * (runs - 1))) + (acceleration_accumulator * chord_acceleration))
 
-      if runs >= total_runs then
+      if div <= 0 then
+
         arp:destroy()
-        kill_arp_delay_sprockets(c)
+        clock_controller.kill_arp_delay_sprockets(c)
       end
+
+      arp:set_division(div * clock_controller["channel_" .. c .. "_clock"].division)
+
     end,
-    division = (division + chord_spread) * clock_controller["channel_" .. c .. "_clock"].division,
+    division = (division + (chord_spread * chord_acceleration)) * clock_controller["channel_" .. c .. "_clock"].division,
     enabled = true,
     swing = channel.swing or 50,
     delay = division + chord_spread
   }
 
   acceleration_accumulator = acceleration_accumulator + chord_spread
+
+  clock_controller.delay_action(c, length, 1, 0, 0.95, "must_execute", function()
+    arp:destroy()
+    clock_controller.kill_arp_delay_sprockets(c)
+  end)
 
   table.insert(arp_sprockets[c], arp)
 end
@@ -274,7 +282,7 @@ function execute_delayed_sprockets()
   end
 end
 
-function kill_arp_delay_sprockets(c)
+function clock_controller.kill_arp_delay_sprockets(c)
   for i, item in ipairs(arp_delay_sprockets[c]) do
     if item then
       item:destroy()
