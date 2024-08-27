@@ -194,10 +194,10 @@ local stock_params = {
     ["param_type"] = "stock"
   },
   {
-    ["id"] = "chord_acceleration",
-    ["name"] = "Chord Acceleration",
+    ["id"] = "chord_spread",
+    ["name"] = "Chord Spread",
     ["short_descriptor_1"] = "CHRD",
-    ["short_descriptor_2"] = "ACCL",
+    ["short_descriptor_2"] = "SPRD",
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
     ["cc_max_value"] = 92,
@@ -205,13 +205,13 @@ local stock_params = {
     ["param_type"] = "stock"
   },
   -- {
-  --   ["id"] = "chord_gravity_mod",
-  --   ["name"] = "Chord Gravity Mod",
+  --   ["id"] = "chord_acceleration",
+  --   ["name"] = "Chord Accel Mod",
   --   ["short_descriptor_1"] = "CHRD",
-  --   ["short_descriptor_2"] = "GRVT",
+  --   ["short_descriptor_2"] = "ACCL",
   --   ["off_value"] = 0,
-  --   ["cc_min_value"] = -40,
-  --   ["cc_max_value"] = 40,
+  --   ["cc_min_value"] = -5,
+  --   ["cc_max_value"] = 5,
   --   ["param_type"] = "stock"
   -- },
   {

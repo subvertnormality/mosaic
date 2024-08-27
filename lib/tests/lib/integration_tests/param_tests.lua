@@ -2623,7 +2623,7 @@ function test_chord_strum_param_lock_with_acceleration()
   local channel = program.get_selected_channel()
 
   channel.trig_lock_params[5].id = "chord_strum"
-  channel.trig_lock_params[6].id = "chord_acceleration"
+  channel.trig_lock_params[6].id = "chord_spread"
 
   channel.step_chord_masks[test_step] = {}
   channel.step_chord_masks[test_step][1] = chord_note_1
@@ -2753,7 +2753,7 @@ function test_chord_arp_param_lock_with_acceleration()
   local channel = program.get_selected_channel()
 
   channel.trig_lock_params[5].id = "chord_arp"
-  channel.trig_lock_params[6].id = "chord_acceleration"
+  channel.trig_lock_params[6].id = "chord_spread"
 
   channel.step_chord_masks[test_step] = {}
   channel.step_chord_masks[test_step][1] = chord_note_1
@@ -2803,7 +2803,7 @@ function test_chord_arp_param_lock_with_acceleration()
 
   progress_clock_by_beats(1/4) -- 2.5
   progress_clock_by_beats(1/4) -- 2.75
-  
+
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 64) -- 2.75!
@@ -2819,8 +2819,6 @@ function test_chord_arp_param_lock_with_acceleration()
   progress_clock_by_beats(1/4) -- 3.75
   progress_clock_by_beats(1/4) -- 4
   progress_clock_by_beats(1/4) -- 4.25
-
-
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 

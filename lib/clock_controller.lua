@@ -215,7 +215,7 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
   end
 end
 
-function clock_controller.new_arp_sprocket(c, division, length, func)
+function clock_controller.new_arp_sprocket(c, division, chord_spread, length, func)
   if division == 0 or division == nil then
     return
   end
@@ -231,6 +231,9 @@ function clock_controller.new_arp_sprocket(c, division, length, func)
   local arp
   local runs = 1
   local total_runs = length / division
+  local acceleration_accumulator = 0
+
+
   local sprocket_action = function(t)
     func()
     if length == 0 then
@@ -240,17 +243,22 @@ function clock_controller.new_arp_sprocket(c, division, length, func)
   arp = clock_lattice:new_sprocket {
     action = function()
       sprocket_action()
+
       runs = runs + 1
+      arp:set_division((division + ((chord_spread * (runs - 1))) + acceleration_accumulator) * clock_controller["channel_" .. c .. "_clock"].division)
+
       if runs >= total_runs then
         arp:destroy()
         kill_arp_delay_sprockets(c)
       end
     end,
-    division = division * clock_controller["channel_" .. c .. "_clock"].division,
+    division = (division + chord_spread) * clock_controller["channel_" .. c .. "_clock"].division,
     enabled = true,
     swing = channel.swing or 50,
-    delay = division
+    delay = division + chord_spread
   }
+
+  acceleration_accumulator = acceleration_accumulator + chord_spread
 
   table.insert(arp_sprockets[c], arp)
 end
