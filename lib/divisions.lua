@@ -206,6 +206,7 @@ divisions.note_divisions = {
 }
 
 divisions.note_division_labels = {
+  "X",
   "1/32",
   "1/16",
   "1/8",
