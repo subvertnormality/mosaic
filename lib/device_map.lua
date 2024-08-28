@@ -209,6 +209,7 @@ local stock_params = {
     ["name"] = "Chord Accel Mod",
     ["short_descriptor_1"] = "CHRD",
     ["short_descriptor_2"] = "ACCL",
+    ["off_value"] = 0,
     ["cc_min_value"] = -5,
     ["cc_max_value"] = 5,
     ["param_type"] = "stock"
