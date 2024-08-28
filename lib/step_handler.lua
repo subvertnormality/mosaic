@@ -379,28 +379,46 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   elseif chord_strum_pattern == 2 or chord_strum_pattern == 4 then
     table.insert(processed_chord_notes, note_container.note)
   end
+
   play_note(processed_chord_notes[1], note_container, note_container.velocity, arp_division, note_on_func)
   arp_note[c] = 2
 
-
   local number_of_executions = 1
-  clock_controller.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function()
+  clock_controller.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div)
     local note_dashboard_values = {}
-
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
+    local length = div
 
-    if processed_chord_notes[arp_note[c]] and processed_chord_notes[arp_note[c]] ~= 0  then
-      local note_to_play = processed_chord_notes[arp_note[c]]
-      play_note(note_to_play, note_container, velocity, arp_division, note_on_func)
+    local note_to_play = processed_chord_notes[arp_note[c]]
+
+    if not note_to_play or note_to_play == nil or note_to_play == 0 then
+        if arp_note[c] == #processed_chord_notes then
+            arp_note[c] = 1
+            note_to_play = processed_chord_notes[arp_note[c]]
+        else
+            arp_note[c] = arp_note[c] + 1
+            if arp_note[c] > #processed_chord_notes then
+                arp_note[c] = 1
+            end
+            return
+        end
     end
-  
-    arp_note[c] = arp_note[c] + 1
+
+    if note_to_play and note_to_play ~= 0 then
+        play_note(note_to_play, note_container, velocity, div, note_on_func)
+        arp_note[c] = arp_note[c] + 1
+    else
+        arp_note[c] = arp_note[c] + 1
+        if arp_note[c] > #processed_chord_notes then
+            arp_note[c] = 1
+        end
+    end
+
     if arp_note[c] > #processed_chord_notes then
-      arp_note[c] = 1
+        arp_note[c] = 1
     end
     
     number_of_executions = number_of_executions + 1
-
   end)
 
 end
@@ -425,7 +443,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local chord_spread = step_handler.process_stock_params(c, current_step, "chord_spread") or 0
   local chord_acceleration = step_handler.process_stock_params(c, current_step, "chord_acceleration") or 1
   local arp_division = note_divisions[step_handler.process_stock_params(c, current_step, "chord_arp")] and note_divisions[step_handler.process_stock_params(c, current_step, "chord_arp")].value
-
+  
   if chord_spread ~= 0 then
     chord_spread = divisions.note_division_values[chord_spread]
   end

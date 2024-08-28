@@ -233,18 +233,19 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
   local total_runs = length / division
   local acceleration_accumulator = 0
 
-  local sprocket_action = function(t)
-    func()
+  local sprocket_action = function(div)
+    func(div)
     if length == 0 then
       arp:destroy()
     end
   end
   arp = clock_lattice:new_sprocket {
     action = function()
-      sprocket_action()
-
+      
       runs = runs + 1
       local div = (division + ((chord_spread * chord_acceleration * (runs - 1))) + (acceleration_accumulator * chord_acceleration))
+
+      sprocket_action(div)
 
       if div <= 0 then
 
