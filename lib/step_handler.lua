@@ -390,31 +390,49 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     local length = div
 
     local note_to_play = processed_chord_notes[arp_note[c]]
+    local total_notes = #processed_chord_notes  -- Cache the length of the processed_chord_notes table
+    
+    -- Function to check for a playable note later in the table
+    local function check_for_later_note(start)
+        local next_note = start + 1
 
-    if not note_to_play or note_to_play == nil or note_to_play == 0 then
-        if arp_note[c] == #processed_chord_notes then
-            arp_note[c] = 1
-            note_to_play = processed_chord_notes[arp_note[c]]
-        else
-            arp_note[c] = arp_note[c] + 1
-            if arp_note[c] > #processed_chord_notes then
-                arp_note[c] = 1
+        while next_note <= total_notes do
+            local potential_note = processed_chord_notes[next_note]
+            if potential_note and potential_note ~= 0 then
+                return true  -- Found a valid note
             end
-            return
+            next_note = next_note + 1
+        end
+        
+        return false  -- No valid notes found
+    end
+
+    -- Function to find the next playable note
+    local function find_next_note()
+        while true do
+            if not note_to_play or note_to_play == 0 then
+                -- Currently at a rest
+                if check_for_later_note(arp_note[c]) then
+                    return nil  -- There is a valid note later, rest now
+                else
+                    arp_note[c] = 1  -- Loop back to the start
+                    note_to_play = processed_chord_notes[arp_note[c]]
+                end
+            else
+                return note_to_play  -- Found a note to play
+            end
         end
     end
 
-    if note_to_play and note_to_play ~= 0 then
+    note_to_play = find_next_note()
+
+    if note_to_play then
         play_note(note_to_play, note_container, velocity, div, note_on_func)
-        arp_note[c] = arp_note[c] + 1
-    else
-        arp_note[c] = arp_note[c] + 1
-        if arp_note[c] > #processed_chord_notes then
-            arp_note[c] = 1
-        end
     end
 
-    if arp_note[c] > #processed_chord_notes then
+    arp_note[c] = arp_note[c] + 1
+
+    if arp_note[c] > total_notes then
         arp_note[c] = 1
     end
     
