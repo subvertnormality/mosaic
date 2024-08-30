@@ -451,7 +451,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     note_to_play = find_next_note()
 
     if note_to_play then
-      if note_to_play.chord_note then
+      if note_to_play.chord_note and note_to_play.note_mask_value then
         play_note(quantiser.process_chord_note_for_mask(
           note_to_play.note_mask_value,
           note_to_play.chord_note,
