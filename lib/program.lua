@@ -52,7 +52,7 @@ local function initialise_default_channels()
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,
       mute = false,
-      swing = 50
+      swing = 0
     }
   end
 

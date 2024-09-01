@@ -77,14 +77,14 @@ function clock_controller.init()
         end
       end,
       division = 1 / 16,
-      swing = 50,
+      swing = 0,
       enabled = true
     }
 
   for channel_number = 17, 1, -1 do
     local channel = program.get_channel(channel_number)
     local div = clock_controller.calculate_divisor(channel.clock_mods)
-    local swing = channel_number == 17 and 50 or channel.swing
+    local swing = channel_number == 17 and 0 or channel.swing
 
     local sprocket_action = function(t)
       local current_step = program.get_current_step_for_channel(channel_number)
@@ -156,7 +156,7 @@ function clock_controller.init()
     clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor = clock_lattice:new_sprocket {
       action = end_of_clock_action,
       division = 1 / (div * 4),
-      swing = 50,
+      swing = 0,
       delay = 0.95,
       enabled = true
     }
@@ -203,7 +203,7 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
     division = division,
     enabled = true,
     delay = delay,
-    swing = channel.swing or 50
+    swing = channel.swing or 0
   }
 
   if type == "must_execute" then
@@ -258,7 +258,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
     end,
     division = (division + (chord_spread * chord_acceleration)) * clock_controller["channel_" .. c .. "_clock"].division,
     enabled = true,
-    swing = channel.swing or 50,
+    swing = channel.swing or 0,
     delay = division + chord_spread
   }
 

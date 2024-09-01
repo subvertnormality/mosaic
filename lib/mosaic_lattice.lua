@@ -7,6 +7,51 @@ local Lattice, Sprocket = {}, {}
 
 local fn = include("mosaic/lib/functions")
 
+
+local drunk_map = {
+  {2/9, 3/9, 2/9, 2/9, 2/9, 3/9, 2/9, 2/9},
+  {2/7, 2/7, 2/7, 1/7, 2/7, 2/7, 2/7, 1/7},
+  {1/5, 2/5, 1/5, 1/5, 1/5, 2/5, 1/5, 1/5},
+  {1/6, 3/6, 1/6, 1/6, 1/6, 3/6, 1/6, 1/6},
+  {1/8, 4/8, 2/8, 1/8, 1/8, 4/8, 2/8, 1/8},
+  {1/9, 5/9, 2/9, 1/9, 1/9, 5/9, 2/9, 1/9},
+}
+
+local smooth_map = {
+  {5/18, 5/18, 4/18, 4/18, 5/18, 5/18, 4/18, 4/18},
+  {4/14, 4/14, 3/14, 3/14, 4/14, 4/14, 3/14, 3/14},
+  {3/10, 3/10, 2/10, 2/10, 3/10, 3/10, 2/10, 2/10},
+  {2/6, 2/6, 1/6, 1/6, 2/6, 2/6, 1/6, 1/6},
+  {5/16, 5/16, 3/16, 3/16, 5/16, 5/16, 3/16, 3/16},
+  {6/18, 7/18, 3/18, 2/18, 6/18, 7/18, 3/18, 2/18},
+}
+
+local heavy_map = {
+  {4/9, 2/9, 2/9, 1/9, 4/9, 2/9, 2/9, 1/9},
+  {3/7, 1/7, 2/7, 1/7, 3/7, 1/7, 2/7, 1/7},
+  {2/5, 1/5, 1/5, 1/5, 2/5, 1/5, 1/5, 1/5},
+  {3/6, 1/6, 1/6, 1/6, 3/6, 1/6, 1/6, 1/6},
+  {4/8, 1/8, 2/8, 1/8, 4/8, 1/8, 2/8, 1/8},
+  {5/9, 1/9, 2/9, 1/9, 5/9, 1/9, 2/9, 1/9},
+}
+
+local clave_map = {
+  {2/9, 3/9, 2/9, 2/9, 3/9, 2/9, 2/9, 2/9},
+  {2/7, 2/7, 1/7, 2/7, 2/7, 1/7, 2/7, 2/7},
+  {1/5, 2/5, 1/5, 1/5, 2/5, 1/5, 1/5, 1/5},
+  {3/12, 4/12, 2/12, 3/12, 4/12, 2/12, 3/12, 3/12},
+  {3/16, 6/16, 3/16, 4/16, 5/16, 3/16, 4/16, 4/16},
+  {4/18, 7/18, 3/18, 4/18, 7/18, 2/18, 5/18, 4/18},
+}
+
+local shuffle_feels = {
+  drunk_map,
+  smooth_map,
+  heavy_map,
+  clave_map
+}
+
+
 --- instantiate a new lattice
 -- @tparam[opt] table args optional named attributes are:
 -- - "auto" (boolean) turn off "auto" pulses from the norns clock, defaults to true
@@ -185,6 +230,8 @@ function Sprocket:new(args)
   p.delay = args.delay
   p.phase = args.phase * (1-args.delay)
   p.ppqn = args.ppqn or 96
+  p.swing_mode = args.swing_mode or "simple"
+  p.shuffle_basis = args.shuffle_basis or 1
 
   return p
 end
@@ -230,17 +277,59 @@ end
 
 function Sprocket:set_swing(swing)
   -- swing is expected to be a value between 0 (no swing) and 100 (maximum swing)
-  self.swing = util.clamp(swing or 0, 0, 100)
+  self.swing = util.clamp(swing or 0, -100, 100)
   self:update_swing()
 end
+
+local function convert_basis_to_swing(basis_fraction)
+  -- Convert basis fraction (like 5/9 for a 9-tuplet feel) to a swing value between 0 and 1
+  local base_swing = ((basis_fraction - 0.5) * 2) 
+  return util.clamp(base_swing, 0, 1) -- Ensure it stays within the valid range
+end
+
+-- Update basis_to_swing_amt to use your swing model values
+local basis_to_swing_amt = {
+  1.00, -- No swing (straight)
+  convert_basis_to_swing(5/9),  -- Swing for 9-tuplets
+  convert_basis_to_swing(4/7),  -- Swing for 7-tuplets
+  convert_basis_to_swing(3/5),  -- Swing for 5-tuplets
+  convert_basis_to_swing(4/6),  -- Swing for 6-tuplets
+  convert_basis_to_swing(5/8),  -- Swing for "Weird 8s"
+  convert_basis_to_swing(6/9),  -- Swing for "Weird 9s"
+}
 
 
 function Sprocket:update_swing()
   local swing_factor = self.swing / 100
-  self.even_swing = 1 + swing_factor
-  self.odd_swing = 1 - swing_factor
+
+  if self.shuffle_basis > 1 and self.shuffle_basis < 8 then 
+    swing_factor = basis_to_swing_amt[self.shuffle_basis]
+  end
+
+  -- Process different shuffle feels
+  if self.swing_mode == "drunk" then
+      self:apply_shuffle_feel(drunk_map)
+  elseif self.swing_mode == "smooth" then
+      self:apply_shuffle_feel(smooth_map)
+  elseif self.swing_mode == "heavy" then
+      self:apply_shuffle_feel(heavy_map)
+  elseif self.swing_mode == "clave" then
+      self:apply_shuffle_feel(clave_map)
+  else
+    self.even_swing = 1 + swing_factor
+    self.odd_swing = 1 - swing_factor
+  end
+
+  print("Even",self.even_swing)
+  print("Odd", self.odd_swing)
+
 end
 
+function Sprocket:apply_shuffle_feel(map)
+  local swing_factor = self.swing / 100
+  self.even_swing = map[math.ceil(swing_factor * #map)][1]
+  self.odd_swing = map[math.ceil(swing_factor * #map)][2]
+end
 
 
 return Lattice
