@@ -144,7 +144,14 @@ function Lattice:pulse()
       for _, id in ipairs(self.sprocket_ordering[i]) do
         local sprocket = self.sprockets[id]
         if sprocket.enabled then
+
+          if sprocket.shuffle_feel > 0 then
+            sprocket:update_shuffle_feel(shuffle_feels[sprocket.shuffle_feel], self.transport)
+
+          end
+
           local swing_val = (self.transport % 2 == 0) and (sprocket.even_swing) or (sprocket.odd_swing)
+         
           sprocket.phase = sprocket.phase + 1
 
           if sprocket.phase > sprocket.division * ppc * swing_val then
@@ -190,6 +197,9 @@ function Lattice:new_sprocket(args)
   args.phase = args.division * self.ppqn * 4 -- "4" because in music a "quarter note" == "1/4"
   args.delay = args.delay == nil and 0 or util.clamp(args.delay,0,1)
   args.swing = args.swing == nil and 100 or util.clamp(args.swing,0,100)
+  args.shuffle_basis = args.shuffle_basis or 3
+  args.shuffle_feel = args.shuffle_feel or 3
+  
   args.ppqn = self.ppqn or 96
   local sprocket = Sprocket:new(args)
   sprocket:update_swing()
@@ -231,8 +241,8 @@ function Sprocket:new(args)
   p.phase = args.phase * (1-args.delay)
   p.ppqn = args.ppqn or 96
   p.swing_mode = args.swing_mode or "simple"
-  p.shuffle_basis = args.shuffle_basis or 1
-
+  p.shuffle_basis = args.shuffle_basis
+  p.shuffle_feel = args.shuffle_feel
   return p
 end
 
@@ -289,7 +299,7 @@ end
 
 -- Update basis_to_swing_amt to use your swing model values
 local basis_to_swing_amt = {
-  1.00, -- No swing (straight)
+  0, -- No swing (straight)
   convert_basis_to_swing(5/9),  -- Swing for 9-tuplets
   convert_basis_to_swing(4/7),  -- Swing for 7-tuplets
   convert_basis_to_swing(3/5),  -- Swing for 5-tuplets
@@ -302,34 +312,36 @@ local basis_to_swing_amt = {
 function Sprocket:update_swing()
   local swing_factor = self.swing / 100
 
-  if self.shuffle_basis > 1 and self.shuffle_basis < 8 then 
+  if self.shuffle_basis > 0 and self.shuffle_basis < 8 then 
     swing_factor = basis_to_swing_amt[self.shuffle_basis]
   end
 
-  -- Process different shuffle feels
-  if self.swing_mode == "drunk" then
-      self:apply_shuffle_feel(drunk_map)
-  elseif self.swing_mode == "smooth" then
-      self:apply_shuffle_feel(smooth_map)
-  elseif self.swing_mode == "heavy" then
-      self:apply_shuffle_feel(heavy_map)
-  elseif self.swing_mode == "clave" then
-      self:apply_shuffle_feel(clave_map)
-  else
-    self.even_swing = 1 + swing_factor
-    self.odd_swing = 1 - swing_factor
-  end
 
-  print("Even",self.even_swing)
-  print("Odd", self.odd_swing)
+  self.even_swing = 1 + swing_factor
+  self.odd_swing = 1 - swing_factor
+
 
 end
 
-function Sprocket:apply_shuffle_feel(map)
+function Sprocket:update_shuffle_feel(feel_map, transport)
   local swing_factor = self.swing / 100
-  self.even_swing = map[math.ceil(swing_factor * #map)][1]
-  self.odd_swing = map[math.ceil(swing_factor * #map)][2]
-end
 
+  -- Determine if we are on an "even" or "odd" beat
+  local transport_mod = (transport % 8) + 1
+
+  if feel_map and self.shuffle_basis > 0 and self.shuffle_basis < 8 then
+    -- Select the correct row in the shuffle map based on the swing factor
+    local map_entry = feel_map[self.shuffle_basis]
+
+    -- Apply shuffle feel based on even/odd transport
+      self.even_swing = 1 + map_entry[transport_mod]
+      self.odd_swing = 1 - map_entry[transport_mod]
+
+  else
+    -- Reset swing values if no map entry found
+    self.even_swing = 1
+    self.odd_swing = 1
+  end
+end
 
 return Lattice
