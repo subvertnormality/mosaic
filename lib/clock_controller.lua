@@ -1,5 +1,5 @@
 local fn = include("mosaic/lib/functions")
-local lattice = require("lattice")
+local lattice = include("mosaic/lib/mosaic_lattice")
 
 clock_controller = {}
 clock_lattice = {}

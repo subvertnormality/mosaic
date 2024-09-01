@@ -1076,20 +1076,22 @@ function channel_edit_page_ui_controller.select_trig_page()
 end
 
 function channel_edit_page_ui_controller.set_note_dashboard_values(values)
-  if values.note then
+  if values and values.note then
     note_displays.note:set_value(values.note)
   end
-  if values.velocity then
+  if values and values.velocity then
     note_displays.velocity:set_value(values.velocity)
   end
-  if values.length then
-    note_displays.length:set_value(divisions.note_divisions[divisions.note_division_indexes[values.length]].name)
+  if values and values.length then
+    note_displays.length:set_value(
+      values.length
+    )
   end
-  if values.trig then
+  if values and values.trig then
     note_displays.trig:set_value(values.trig)
   end
 
-  if (values.chords) then
+  if (values and values.chords) then
 
     for i = 1, 4 do
       
