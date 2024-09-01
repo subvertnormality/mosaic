@@ -55,7 +55,7 @@ local note_displays = {
 
 -- Clock and MIDI selectors
 local clock_mod_list_selector = list_selector:new(5, 25, "Clock Mod", {})
-local clock_swing_value_selector = value_selector:new(55, 25, "Swing", -100, 100)
+local clock_swing_value_selector = value_selector:new(55, 25, "Swing", -50, 50)
 local midi_device_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Midi Device", {})
 local midi_channel_vertical_scroll_selector = vertical_scroll_selector:new(65, 25, "Midi Channel", {
   {name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4},

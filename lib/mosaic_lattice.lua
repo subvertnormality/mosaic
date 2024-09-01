@@ -143,15 +143,16 @@ function Lattice:pulse()
     for i = 1, 5 do
       for _, id in ipairs(self.sprocket_ordering[i]) do
         local sprocket = self.sprockets[id]
+        sprocket.step = sprocket.step or 1
         if sprocket.enabled then
 
           if sprocket.shuffle_feel > 0 then
             sprocket:update_shuffle_feel(shuffle_feels[sprocket.shuffle_feel], self.transport)
-
           end
 
-          local swing_val = (self.transport % 2 == 0) and (sprocket.even_swing) or (sprocket.odd_swing)
-         
+          local swing_val = (sprocket.step % 2 == 0) and (sprocket.even_swing) or (sprocket.odd_swing)
+
+
           sprocket.phase = sprocket.phase + 1
 
           if sprocket.phase > sprocket.division * ppc * swing_val then
@@ -161,6 +162,7 @@ function Lattice:pulse()
               sprocket.delay = sprocket.delay_new
               sprocket.delay_new = nil
             end
+            sprocket.step = sprocket.step + 1
             sprocket.action(self.transport)
           end
         elseif sprocket.flag then
@@ -183,7 +185,7 @@ end
 -- - "division" (number) the division of the sprocket, defaults to 1/4
 -- - "enabled" (boolean) is this sprocket enabled, defaults to true
 -- - "delay" (number) specifies amount of delay, as fraction of division (0.0 - 1.0), defaults to 0
--- - "swing" (number) specifies amount of swing, as percentage of division (0 - 100), defaults to 0
+-- - "swing" (number) specifies amount of swing, as percentage of division (-50 - 50), defaults to 0
 -- - "order" (number) specifies the place in line this lattice occupies from 1 to 5, lower first, defaults to 3
 -- @treturn table a new sprocket
 function Lattice:new_sprocket(args)
@@ -196,9 +198,9 @@ function Lattice:new_sprocket(args)
   args.enabled = args.enabled == nil and true or args.enabled
   args.phase = args.division * self.ppqn * 4 -- "4" because in music a "quarter note" == "1/4"
   args.delay = args.delay == nil and 0 or util.clamp(args.delay,0,1)
-  args.swing = args.swing == nil and 100 or util.clamp(args.swing,0,100)
-  args.shuffle_basis = args.shuffle_basis or 3
-  args.shuffle_feel = args.shuffle_feel or 3
+  args.swing = args.swing == nil and 0 or util.clamp(args.swing,-50,50)
+  args.shuffle_basis = args.shuffle_basis or 0
+  args.shuffle_feel = args.shuffle_feel or 0
   
   args.ppqn = self.ppqn or 96
   local sprocket = Sprocket:new(args)
