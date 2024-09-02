@@ -304,7 +304,9 @@ local function play_note(note, note_container, velocity, division, note_on_func)
   note_dashboard_values.length = note_container.length
 
   note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
-  clock_controller.delay_action(c, division, 1, 0, 0.95, "must_execute", function()
+  print("Note on  ", note, velocity, note_container.midi_channel, note_container.midi_device)
+  clock_controller.delay_action(c, division, 1, 0, 0.99, "must_execute", function()
+    print("Note off ", note, velocity, note_container.midi_channel, note_container.midi_device)
     note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
   end)
   if c == program.get().selected_channel then
