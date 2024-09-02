@@ -147,10 +147,12 @@ function Lattice:pulse()
         if sprocket.enabled then
 
           if sprocket.shuffle_feel > 0 then
-            sprocket:update_shuffle_feel(shuffle_feels[sprocket.shuffle_feel], self.transport)
+            sprocket:update_shuffle_feel(shuffle_feels[sprocket.shuffle_feel], sprocket.step)
           end
 
-          local swing_val = (sprocket.step % 2 == 0) and (sprocket.even_swing) or (sprocket.odd_swing)
+          local swing_val = (sprocket.step % 2 == 0) and 
+            (sprocket.even_shuffle or sprocket.even_swing) or 
+            (sprocket.even_shuffle or sprocket.odd_swing)
 
 
           sprocket.phase = sprocket.phase + 1
@@ -293,35 +295,12 @@ function Sprocket:set_swing(swing)
   self:update_swing()
 end
 
-local function convert_basis_to_swing(basis_fraction)
-  -- Convert basis fraction (like 5/9 for a 9-tuplet feel) to a swing value between 0 and 1
-  local base_swing = ((basis_fraction - 0.5) * 2) 
-  return util.clamp(base_swing, 0, 1) -- Ensure it stays within the valid range
-end
-
--- Update basis_to_swing_amt to use your swing model values
-local basis_to_swing_amt = {
-  0, -- No swing (straight)
-  convert_basis_to_swing(5/9),  -- Swing for 9-tuplets
-  convert_basis_to_swing(4/7),  -- Swing for 7-tuplets
-  convert_basis_to_swing(3/5),  -- Swing for 5-tuplets
-  convert_basis_to_swing(4/6),  -- Swing for 6-tuplets
-  convert_basis_to_swing(5/8),  -- Swing for "Weird 8s"
-  convert_basis_to_swing(6/9),  -- Swing for "Weird 9s"
-}
-
 
 function Sprocket:update_swing()
   local swing_factor = self.swing / 100
 
-  if self.shuffle_basis > 0 and self.shuffle_basis < 8 then 
-    swing_factor = basis_to_swing_amt[self.shuffle_basis]
-  end
-
-
   self.even_swing = 1 + swing_factor
   self.odd_swing = 1 - swing_factor
-
 
 end
 
@@ -336,13 +315,13 @@ function Sprocket:update_shuffle_feel(feel_map, transport)
     local map_entry = feel_map[self.shuffle_basis]
 
     -- Apply shuffle feel based on even/odd transport
-      self.even_swing = 1 + map_entry[transport_mod]
-      self.odd_swing = 1 - map_entry[transport_mod]
+      self.even_shuffle = 1 + map_entry[transport_mod]
+      self.odd_shuffle = 1 - map_entry[transport_mod]
 
   else
     -- Reset swing values if no map entry found
-    self.even_swing = 1
-    self.odd_swing = 1
+    self.even_shuffle = nil
+    self.odd_shuffle = nil
   end
 end
 
