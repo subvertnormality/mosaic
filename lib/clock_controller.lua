@@ -156,7 +156,7 @@ function clock_controller.init()
     clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor = clock_lattice:new_sprocket {
       action = end_of_clock_action,
       division = 1 / (div * 4),
-      swing = 0,
+      swing = swing,
       delay = 0.95,
       enabled = true
     }

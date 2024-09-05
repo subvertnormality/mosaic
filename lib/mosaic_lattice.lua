@@ -143,7 +143,7 @@ function Lattice:pulse()
     for i = 1, 5 do
       for _, id in ipairs(self.sprocket_ordering[i]) do
         local sprocket = self.sprockets[id]
-        sprocket.step = sprocket.step or 1
+        sprocket.step = sprocket.step or 0
         if sprocket.enabled then
 
           if sprocket.shuffle_feel > 0 then
@@ -152,20 +152,21 @@ function Lattice:pulse()
 
           local swing_val = (sprocket.step % 2 == 0) and 
             (sprocket.even_shuffle or sprocket.even_swing) or 
-            (sprocket.even_shuffle or sprocket.odd_swing)
-
+            (sprocket.odd_shuffle or sprocket.odd_swing)
 
           sprocket.phase = sprocket.phase + 1
 
           if sprocket.phase > sprocket.division * ppc * swing_val then
             sprocket.phase = sprocket.phase - (sprocket.division * ppc)
-            if sprocket.delay_new ~= nil then
+            if sprocket.delay_new ~= nil and sprocket.step > 0 then
               sprocket.phase = sprocket.phase - (sprocket.division * ppc) * (1 - (sprocket.delay - sprocket.delay_new))
               sprocket.delay = sprocket.delay_new
               sprocket.delay_new = nil
             end
             sprocket.step = sprocket.step + 1
-            sprocket.action(self.transport)
+            if sprocket.step > 0 then
+              sprocket.action(self.transport)
+            end
           end
         elseif sprocket.flag then
           self.sprockets[sprocket.id] = nil
@@ -199,6 +200,7 @@ function Lattice:new_sprocket(args)
   args.division = args.division == nil and 1/4 or args.division
   args.enabled = args.enabled == nil and true or args.enabled
   args.phase = args.division * self.ppqn * 4 -- "4" because in music a "quarter note" == "1/4"
+
   args.delay = args.delay == nil and 0 or util.clamp(args.delay,0,1)
   args.swing = args.swing == nil and 0 or util.clamp(args.swing,-50,50)
   args.shuffle_basis = args.shuffle_basis or 0
@@ -291,7 +293,7 @@ end
 
 function Sprocket:set_swing(swing)
   -- swing is expected to be a value between 0 (no swing) and 100 (maximum swing)
-  self.swing = util.clamp(swing or 0, -100, 100)
+  self.swing = util.clamp(swing or 0, -50, 50)
   self:update_swing()
 end
 
