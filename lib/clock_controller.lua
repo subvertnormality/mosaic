@@ -305,12 +305,8 @@ function clock_controller:start()
 
   clock_lattice:start()
   
-  clock.run(function()
-    clock.sync(1/32)
-    midi_controller.start()   
-  end)
+  clock_lattice:set_start_synced_action(midi_controller.start)
        
-
 end
 
 function clock_controller:stop()
