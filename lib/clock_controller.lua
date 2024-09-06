@@ -48,9 +48,25 @@ function clock_controller.init()
   destroy_delay_sprockets()
   delayed_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
 
+  local midi_clock_init = nil
+
+  midi_clock_init = clock_lattice:new_sprocket {
+    action = function(t)
+      midi_controller.start()
+      midi_clock_init:destroy()
+    end,
+    division = 0,
+    swing = 0,
+    order = 4,
+    delay = 0,
+    enabled = true
+  }
+
   master_clock =
     clock_lattice:new_sprocket {
       action = function(t)
+
+
         local selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
         if params:get("elektron_program_changes") == 2 and program_data.current_step == selected_sequencer_pattern.global_pattern_length - 1 then
           step_handler.process_elektron_program_change(step_handler.calculate_next_selected_sequencer_pattern())
@@ -78,6 +94,7 @@ function clock_controller.init()
       end,
       division = 1 / 16,
       swing = 0,
+      order = 1,
       enabled = true
     }
 
@@ -304,8 +321,6 @@ function clock_controller:start()
   end
 
   clock_lattice:start()
-  
-  clock_lattice:set_start_synced_action(midi_controller.start)
        
 end
 

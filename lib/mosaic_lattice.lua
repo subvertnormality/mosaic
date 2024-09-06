@@ -68,7 +68,6 @@ function Lattice:new(args)
   l.sprocket_id_counter = 100
   l.sprockets = {}
   l.sprocket_ordering = {{}, {}, {}, {}, {}}
-  l.start_synced_action = function() end
   return l
 end
 
@@ -104,6 +103,7 @@ end
 --- stop the lattice
 function Lattice:stop()
   self.enabled = false
+  self.start_synced_actioned = false
 end
 
 --- toggle the lattice
@@ -136,11 +136,6 @@ function Lattice.auto_pulse(s)
   end
 end
 
-function Lattice:set_start_synced_action(fn)
-  self.start_synced_action = fn
-end
-
-
 function Lattice:pulse()
   if self.enabled then
     local ppc = self.ppqn * 4 -- pulses per cycle
@@ -149,9 +144,6 @@ function Lattice:pulse()
       for _, id in ipairs(self.sprocket_ordering[i]) do
         local sprocket = self.sprockets[id]
         sprocket.step = sprocket.step or 0
-        if sprocket.step == 1 then
-          self.start_synced_action()
-        end
         if sprocket.enabled then
 
           if sprocket.shuffle_feel > 0 then
