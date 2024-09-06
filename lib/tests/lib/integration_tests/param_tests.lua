@@ -2995,7 +2995,7 @@ function test_rests_dont_apply_when_in_last_chord_slots_multiple_slots()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
-  progress_clock_by_pulses(1)
+  -- progress_clock_by_pulses(1)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -3004,6 +3004,7 @@ function test_rests_dont_apply_when_in_last_chord_slots_multiple_slots()
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_beats(1)
+  progress_clock_by_pulses(12)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 

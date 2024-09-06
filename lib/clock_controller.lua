@@ -59,6 +59,8 @@ function clock_controller.init()
     swing = 0,
     order = 4,
     delay = 0,
+    shuffle_basis = 0,
+    shuffle_feel = 0,
     enabled = true
   }
 
@@ -94,6 +96,8 @@ function clock_controller.init()
       end,
       division = 1 / 16,
       swing = 0,
+      shuffle_basis = 0,
+      shuffle_feel = 0,
       order = 1,
       enabled = true
     }
@@ -102,6 +106,8 @@ function clock_controller.init()
     local channel = program.get_channel(channel_number)
     local div = clock_controller.calculate_divisor(channel.clock_mods)
     local swing = channel_number == 17 and 0 or channel.swing
+    local shuffle_basis = channel_number == 17 and 0 or channel.shuffle_basis
+    local shuffle_feel = channel_number == 17 and 0 or channel.shuffle_feel
 
     local sprocket_action = function(t)
       local current_step = program.get_current_step_for_channel(channel_number)
@@ -167,6 +173,8 @@ function clock_controller.init()
       action = sprocket_action,
       division = 1 / (div * 4),
       swing = swing,
+      shuffle_basis = shuffle_basis,
+      shuffle_feel = shuffle_feel,
       enabled = true
     }
 
@@ -174,6 +182,8 @@ function clock_controller.init()
       action = end_of_clock_action,
       division = 1 / (div * 4),
       swing = swing,
+      shuffle_basis = shuffle_basis,
+      shuffle_feel = shuffle_feel,
       delay = 0.95,
       enabled = true
     }
@@ -220,7 +230,9 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
     division = division,
     enabled = true,
     delay = delay,
-    swing = channel.swing or 0
+    swing = channel.swing or 0,
+    shuffle_basis = channel.shuffle_basis or 0,
+    shuffle_feel = channel.shuffle_feel or 0
   }
 
   if type == "must_execute" then
@@ -276,6 +288,8 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
     division = (division + (chord_spread * chord_acceleration)) * clock_controller["channel_" .. c .. "_clock"].division,
     enabled = true,
     swing = channel.swing or 0,
+    shuffle_basis = channel.shuffle_basis or 0,
+    shuffle_feel = channel.shuffle_feel or 0,
     delay = division + chord_spread
   }
 
