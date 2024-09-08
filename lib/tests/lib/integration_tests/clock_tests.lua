@@ -52,9 +52,9 @@ local swing_to_pulses = {
   {swing = -9, even_pulses = 26, odd_pulses = 22},
   {swing = -5, even_pulses = 25, odd_pulses = 23},
   {swing = -1, even_pulses = 24, odd_pulses = 24},
-  -- -- -- Zero swing (no change)
+  -- -- -- -- Zero swing (no change)
   {swing = 0, even_pulses = 24, odd_pulses = 24},
-  -- -- -- Positive swing values
+  -- -- -- -- Positive swing values
   {swing = 1, even_pulses = 24, odd_pulses = 24},
   {swing = 5, even_pulses = 23, odd_pulses = 25},
   {swing = 9, even_pulses = 22, odd_pulses = 26},

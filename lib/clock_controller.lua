@@ -252,7 +252,8 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
   local delayed
 
   local division = clock_controller["channel_" .. c .. "_clock"].division
-
+  local ppqn = clock_lattice.ppqn  -- Pulses per quarter note
+  
   local note_division_mod = (note_division * multiplier) + acceleration
 
   local count = 1

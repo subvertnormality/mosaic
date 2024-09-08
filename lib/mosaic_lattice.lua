@@ -158,9 +158,6 @@ function Lattice:pulse()
         local sprocket = self.sprockets[id]
         if sprocket.enabled then
           sprocket:update_shuffle(sprocket.step, sprocket.id)
-          if sprocket.id == 138 and sprocket.step < 4 then
-          -- print("SRPOCKET PHASE",sprocket.phase)
-          end
           if sprocket.phase >= 1 and sprocket.phase < 2 then
             sprocket.action(self.transport)
           end
@@ -345,7 +342,8 @@ function Sprocket:update_shuffle(step, id)
     self.ppqn_error = exact_ppqn + self.ppqn_error - rounded_ppqn
     self.current_ppqn = rounded_ppqn
   else
-    self.current_ppqn = math.floor((self.division * self.ppqn * 4) * (step % 2 == 1 and self.even_swing or self.odd_swing) + 0.5)
+    local ppc = self.ppqn * 4
+    self.current_ppqn = math.floor((self.division * ppc) * (step % 2 == 1 and self.even_swing or self.odd_swing) - 0.01 + 0.5)
   end
 end
 
