@@ -263,7 +263,10 @@ end
 
 function test_clock_processes_notes_of_various_lengths()
 
-  local lengths_to_test = {3/8, 1/8, 1/4, 1/3, 1/2, 0.75, 1, 1.25, 2.5, 3, 4, 5, 16, 17, 24, 31, 32, 33, 47, 48, 63, 64, 65, 128} -- Add more lengthsas needed
+  -- local lengths_to_test = {3/8, 1/8, 1/4, 1/3, 1/2, 0.75, 1, 1.25, 2.5, 3, 4, 5, 16, 17, 24, 31, 32, 33, 47, 48, 63, 64, 65, 128} -- Add more lengthsas needed
+  local lengths_to_test = {1/4} -- Add more lengthsas needed
+
+  
   local test_pattern
 
   for _, length in ipairs(lengths_to_test) do

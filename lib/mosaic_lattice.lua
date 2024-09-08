@@ -1,8 +1,8 @@
----- module for creating a lattice of sprockets based on a single fast "superclock"
---
--- @module Lattice
--- @release v2.0
--- @author tyleretters & ezra & zack & rylee
+-- @module Mosaic Lattice++
+-- @release v2.1
+-- @author byzero
+-- @lattice_by tyleretters & ezra & zack & rylee
+-- @shuffle_by 21echos and sixolet https://github.com/21echoes/cyrene
 local Lattice, Sprocket = {}, {}
 
 local fn = include("mosaic/lib/functions")
@@ -71,8 +71,9 @@ function Lattice:new(args)
   args = args == nil and {} or args
   l.auto = args.auto == nil and true or args.auto
   l.ppqn = args.ppqn == nil and 96 or args.ppqn
+  l.step = 1
   l.enabled = false
-  l.transport = 0
+  l.transport = 1
   l.superclock_id = nil
   l.sprocket_id_counter = 100
   l.sprockets = {}
@@ -97,8 +98,12 @@ function Lattice:reset()
     self.superclock_id = nil
   end
   for i, sprocket in pairs(self.sprockets) do
-    sprocket.phase = sprocket.division * self.ppqn * 4 * (1 - sprocket.delay) -- "4" because in music a "quarter note" == "1/4"
+    -- sprocket.phase = sprocket.division * self.ppqn * 4 * (1 - sprocket.delay) -- "4" because in music a "quarter note" == "1/4"
+    sprocket.phase = 1 - (sprocket.current_ppqn * (sprocket.delay - sprocket.delay_new))
   end
+
+
+
   self.transport = 1
   params:set("clock_reset", 1)
 end
@@ -152,33 +157,25 @@ function Lattice:pulse()
       for _, id in ipairs(self.sprocket_ordering[i]) do
         local sprocket = self.sprockets[id]
         if sprocket.enabled then
-          sprocket:update_shuffle(sprocket.step)
+          sprocket:update_shuffle(sprocket.step, sprocket.id)
+          if sprocket.id == 138 and sprocket.step < 4 then
+          -- print("SRPOCKET PHASE",sprocket.phase)
+          end
+          if sprocket.phase >= 1 and sprocket.phase < 2 then
+            sprocket.action(self.transport)
+          end
 
-          -- if sprocket.id == 135 then
-          --   print("_______")
-          --   print("step: " .. sprocket.step)
-          --   print("transport: " .. self.transport)
-          --   print("current ppqn: " .. sprocket.current_ppqn)
-          --   print("ppqn error: " .. sprocket.ppqn_error)
-          --   print("shuffle basis: " .. sprocket.shuffle_basis)
-          --   print("shuffle feel: " .. sprocket.shuffle_feel)
-          --   print("sprocket.phase: " .. sprocket.phase)
-          -- end
-
-          
           sprocket.phase = sprocket.phase + 1
           if sprocket.phase > sprocket.current_ppqn then
-            sprocket.phase = sprocket.phase - sprocket.current_ppqn
+            sprocket.phase = 1
             if sprocket.delay_new ~= nil then
-              sprocket.phase = sprocket.phase - sprocket.current_ppqn * (1 - (sprocket.delay - sprocket.delay_new))
+              sprocket.phase = sprocket.phase - (sprocket.current_ppqn * (sprocket.delay - sprocket.delay_new))
               sprocket.delay = sprocket.delay_new
               sprocket.delay_new = nil
             end
             sprocket.step = sprocket.step + 1
-            if sprocket.step > 0 then
-              sprocket.action(self.transport)
-            end
           end
+          
         elseif sprocket.flag then
           self.sprockets[sprocket.id] = nil
           flagged = true
@@ -189,6 +186,9 @@ function Lattice:pulse()
       self:order_sprockets()
     end
     self.transport = self.transport + 1
+    if self.transport % (self.ppqn / 4) == 0 then
+      self.step = self.step + 1
+    end
   end
 end
 
@@ -210,14 +210,17 @@ function Lattice:new_sprocket(args)
   args.action = args.action == nil and function(t) return end or args.action
   args.division = args.division == nil and 1/4 or args.division
   args.enabled = args.enabled == nil and true or args.enabled
-  args.phase = args.division * self.ppqn * 4
+  args.phase = 1
   args.delay = args.delay == nil and 0 or util.clamp(args.delay,0,1)
   args.swing = args.swing == nil and 0 or util.clamp(args.swing,-50,50)
   args.shuffle_basis = args.shuffle_basis or 0
   args.shuffle_feel = args.shuffle_feel or 0
   args.ppqn = self.ppqn
+  args.step = self.step
   local sprocket = Sprocket:new(args)
   sprocket:update_swing()
+  sprocket:update_shuffle(self.step, 1)
+  sprocket.phase = (args.phase) - ((sprocket.current_ppqn) * (args.delay)) - (args.delay_offset or 0)
   self.sprockets[self.sprocket_id_counter] = sprocket
   self:order_sprockets()
   return sprocket
@@ -253,13 +256,13 @@ function Sprocket:new(args)
   p.flag = false
   p.swing = args.swing
   p.delay = args.delay
-  p.phase = args.phase * (1-args.delay)
+  p.phase = args.phase or 1
   p.ppqn = args.ppqn
   p.shuffle_basis = args.shuffle_basis
   p.shuffle_feel = args.shuffle_feel
   p.current_ppqn = args.ppqn
-  p.ppqn_error = 0
-  p.step = 0
+  p.ppqn_error = 0.5
+  p.step = args.step or 1
   return p
 end
 
@@ -311,16 +314,24 @@ end
 
 function Sprocket:update_swing()
   if self.shuffle_basis == 0 then
-    local swing_factor = self.swing / 100
-    self.even_swing = 1 + swing_factor
-    self.odd_swing = 1 - swing_factor
+    -- local swing_factor = self.swing / 100
+    -- self.even_swing = 1 + swing_factor
+    -- self.odd_swing = 1 - swing_factor
+    local swing_factor = math.abs(self.swing) / 100
+    if self.swing >= 0 then
+      self.even_swing = 1 + swing_factor
+      self.odd_swing = 1 - swing_factor
+    else
+      self.even_swing = 1 - swing_factor
+      self.odd_swing = 1 + swing_factor
+    end
   else
     self.swing = basis_to_swing_amt[self.shuffle_basis + 1]
   end
 end
 
 
-function Sprocket:update_shuffle(step)
+function Sprocket:update_shuffle(step, id)
   if self.shuffle_basis > 0 and self.shuffle_feel > 0 then
     local feel_map = shuffle_feels[self.shuffle_feel]
     local playpos_per_shuffle_cell = 2  -- Adjust if needed based on grid resolution
@@ -334,7 +345,7 @@ function Sprocket:update_shuffle(step)
     self.ppqn_error = exact_ppqn + self.ppqn_error - rounded_ppqn
     self.current_ppqn = rounded_ppqn
   else
-    self.current_ppqn = math.floor((self.division * self.ppqn * 4) * (step % 2 == 0 and self.even_swing or self.odd_swing) + 0.5)
+    self.current_ppqn = math.floor((self.division * self.ppqn * 4) * (step % 2 == 1 and self.even_swing or self.odd_swing) + 0.5)
   end
 end
 

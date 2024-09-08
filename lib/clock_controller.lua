@@ -210,15 +210,12 @@ function clock_controller.get_channel_division(channel_number)
   return clock and clock.division or 0.4
 end
 
-function clock_controller.delay_action(c, note_division, multiplier, acceleration, delay, type, func)
-  if note_division == 0 or note_division == nil then
-    func()
-    return
-  end
+
+
+local function meta_delay_action(c, division, delay, type, func)
+
   local channel = program.get_channel(c)
   local delayed
-
-  local division = ((note_division * multiplier) + acceleration) * clock_controller["channel_" .. c .. "_clock"].division
 
   local sprocket_action = function(t)
     func()
@@ -232,8 +229,10 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
     delay = delay,
     swing = channel.swing or 0,
     shuffle_basis = channel.shuffle_basis or 0,
-    shuffle_feel = channel.shuffle_feel or 0
+    shuffle_feel = channel.shuffle_feel or 0,
+    delay_offset = -2
   }
+
 
   if type == "must_execute" then
     table.insert(delayed_sprockets_must_execute[c], delayed)
@@ -242,6 +241,47 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
   else
     table.insert(delayed_sprockets[c], delayed)
   end
+end
+
+function clock_controller.delay_action(c, note_division, multiplier, acceleration, delay, type, func)
+  if note_division == 0 or note_division == nil then
+    func()
+    return
+  end
+  local channel = program.get_channel(c)
+  local delayed
+
+  local division = clock_controller["channel_" .. c .. "_clock"].division
+
+  local note_division_mod = (note_division * multiplier) + acceleration
+
+  local count = 1
+  local sprocket_action = function(t)
+    count = count + 1
+    if count > note_division_mod then
+      if (delay == 0) then
+        func()
+      else
+        if note_division < 1 then
+          meta_delay_action(c, note_division_mod * clock_controller["channel_" .. c .. "_clock"].division, delay, type, func)
+        else
+          meta_delay_action(c, clock_controller["channel_" .. c .. "_clock"].division + (acceleration < 1 and acceleration or 0), delay, type, func)
+        end
+      end
+      delayed:destroy()
+    end
+  end
+
+  delayed = clock_lattice:new_sprocket {
+    action = sprocket_action,
+    division = division,
+    enabled = true,
+    delay = 0,
+    swing = channel.swing or 0,
+    shuffle_basis = channel.shuffle_basis or 0,
+    shuffle_feel = channel.shuffle_feel or 0
+  }
+
 end
 
 function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acceleration, length, func)
@@ -304,7 +344,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
 end
 
 
-function execute_delayed_sprockets()
+local function execute_delayed_sprockets()
   for i, sprocket_table in ipairs(delayed_sprockets_must_execute) do
     for j, item in ipairs(sprocket_table) do
       if item then

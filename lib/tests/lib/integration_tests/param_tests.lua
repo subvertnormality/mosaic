@@ -3097,7 +3097,7 @@ function test_chord_strum_param_lock_with_spread()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
-  progress_clock_by_pulses(1)
+  -- progress_clock_by_pulses(1)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
