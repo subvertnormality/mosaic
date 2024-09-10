@@ -254,19 +254,20 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
   local division = clock_controller["channel_" .. c .. "_clock"].division
   local ppqn = clock_lattice.ppqn  -- Pulses per quarter note
   
-  local note_division_mod = (note_division * multiplier) + acceleration
+  local note_division_mod = ((note_division * multiplier) + acceleration) * division
+  -- local division = ((note_division * multiplier) + acceleration) * clock_controller["channel_" .. c .. "_clock"].division
 
-  local count = 1
+  local count = division
   local sprocket_action = function(t)
-    count = count + 1
+    count = count + division
     if count > note_division_mod then
       if (delay == 0) then
         func()
       else
-        if note_division < 1 then
-          meta_delay_action(c, note_division_mod * clock_controller["channel_" .. c .. "_clock"].division, delay, type, func)
+        if note_division_mod < division then
+          meta_delay_action(c, note_division_mod, delay, type, func)
         else
-          meta_delay_action(c, clock_controller["channel_" .. c .. "_clock"].division + (acceleration < 1 and acceleration or 0), delay, type, func)
+          meta_delay_action(c, division + (note_division_mod - (count - division)), delay, type, func)
         end
       end
       delayed:destroy()
