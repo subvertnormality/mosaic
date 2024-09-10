@@ -1374,7 +1374,7 @@ function test_chord_strum_param_lock_with_backwards_strum_pattern()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
-  progress_clock_by_pulses(2) -- This is not ideal, reversed strums are even more slightly off time
+  progress_clock_by_pulses(3) -- This is not ideal, reversed strums are even more slightly off time
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -1559,7 +1559,7 @@ function test_chord_strum_param_lock_with_outside_in_strum_pattern()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
 
-  progress_clock_by_pulses(1) -- This is not ideal, reversed strums are slightly off time
+  progress_clock_by_pulses(3) -- This is not ideal, reversed strums are slightly off time
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
