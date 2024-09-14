@@ -3,7 +3,7 @@ local channel_edit_page_ui_handlers = {}
 local fn = include("lib/functions")
 local param_manager = include("mosaic/lib/param_manager")
 
-function channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
+function channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page, swing_shuffle_type_selector, swing_selector, shuffle_feel_selector, shuffle_basis_selector)
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] and program.get().selected_channel ~= 17 then
     if note_selectors.trig:is_selected() then
       note_selectors.trig:deselect()
@@ -39,9 +39,39 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages
       quantizer_vertical_scroll_selector:select()
     end
   elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] and program.get().selected_channel ~= 17 then
-    if clock_mod_list_selector:is_selected() then
-      clock_mod_list_selector:deselect()
-      clock_swing_value_selector:select()
+    -- Adjusted navigation for Clock Mods page
+    local function get_visible_clock_mod_selectors()
+      local selectors = {clock_mod_list_selector, swing_shuffle_type_selector}
+      local value = swing_shuffle_type_selector:get_selected().value
+      if value == 1 then 
+        value = params:get("global_swing_shuffle_type") + 1
+      end
+      if value == 2 then
+        table.insert(selectors, swing_selector)
+      elseif value == 3 then
+        table.insert(selectors, shuffle_feel_selector)
+        table.insert(selectors, shuffle_basis_selector)
+      end
+      return selectors
+    end
+
+    local selectors = get_visible_clock_mod_selectors()
+    local current_index = nil
+    for idx, selector in ipairs(selectors) do
+      if selector:is_selected() then
+        current_index = idx
+        break
+      end
+    end
+
+    if current_index then
+      if current_index < #selectors then
+        selectors[current_index]:deselect()
+        selectors[current_index + 1]:select()
+      end
+    else
+      -- No selector is currently selected, select the first one
+      selectors[1]:select()
     end
   elseif scales_pages:get_selected_page() == scales_page_to_index["Clock Mods"] and program.get().selected_channel == 17 then
     clock_mod_list_selector:select()
@@ -70,7 +100,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages
   end
 end
 
-function channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
+function channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page, swing_shuffle_type_selector, swing_selector, shuffle_feel_selector, shuffle_basis_selector)
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] and program.get().selected_channel ~= 17 then
     if note_selectors.note:is_selected() then
       note_selectors.note:deselect()
@@ -106,9 +136,39 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages
       romans_vertical_scroll_selector:select()
     end
   elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] and program.get().selected_channel ~= 17 then
-    if clock_swing_value_selector:is_selected() then
-      clock_swing_value_selector:deselect()
-      clock_mod_list_selector:select()
+    -- Adjusted navigation for Clock Mods page
+    local function get_visible_clock_mod_selectors()
+      local selectors = {clock_mod_list_selector, swing_shuffle_type_selector}
+      local value = swing_shuffle_type_selector:get_selected().value
+      if value == 1 then 
+        value = params:get("global_swing_shuffle_type") + 1
+      end
+      if value == 2 then
+        table.insert(selectors, swing_selector)
+      elseif value == 3 then
+        table.insert(selectors, shuffle_feel_selector)
+        table.insert(selectors, shuffle_basis_selector)
+      end
+      return selectors
+    end
+
+    local selectors = get_visible_clock_mod_selectors()
+    local current_index = nil
+    for idx, selector in ipairs(selectors) do
+      if selector:is_selected() then
+        current_index = idx
+        break
+      end
+    end
+
+    if current_index then
+      if current_index > 1 then
+        selectors[current_index]:deselect()
+        selectors[current_index - 1]:select()
+      end
+    else
+      -- No selector is currently selected, select the last one
+      selectors[#selectors]:select()
     end
   elseif scales_pages:get_selected_page() == scales_page_to_index["Clock Mods"] and program.get().selected_channel == 17 then
     clock_mod_list_selector:select()

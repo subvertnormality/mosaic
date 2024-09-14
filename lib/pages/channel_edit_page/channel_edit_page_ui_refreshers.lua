@@ -69,8 +69,32 @@ end
 
 function channel_edit_page_ui_refreshers.refresh_swing(clock_swing_value_selector)
   local channel = program.get_selected_channel()
-  clock_swing_value_selector:set_value(channel.swing)
+  local value = channel.swing 
+  if value == nil then
+    value = -51
+  end
+  clock_swing_value_selector:set_value(value)
 end
+
+function channel_edit_page_ui_refreshers.refresh_swing_shuffle_type(swing_shuffle_type_selector)
+  local channel = program.get_selected_channel()
+  local value = channel.swing_shuffle_type or 1
+  swing_shuffle_type_selector:set_selected_value(value)
+end
+
+
+function channel_edit_page_ui_refreshers.refresh_shuffle_feel(shuffle_feel_selector)
+  local channel = program.get_selected_channel()
+  local value = channel.shuffle_feel or 1
+  shuffle_feel_selector:set_selected_value(value)
+end
+
+function channel_edit_page_ui_refreshers.refresh_shuffle_basis(shuffle_basis_selector)
+  local channel = program.get_selected_channel()
+  local value = channel.shuffle_basis or 1
+  shuffle_basis_selector:set_selected_value(value)
+end
+
 
 function channel_edit_page_ui_refreshers.refresh_device_selector(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
   local channel = program.get_selected_channel()

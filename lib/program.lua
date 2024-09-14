@@ -52,7 +52,10 @@ local function initialise_default_channels()
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,
       mute = false,
-      swing = 0
+      swing_shuffle_type = nil, -- 1 for Swing, 2 for Shuffle, nil to use global
+      swing = nil,              -- -50 to 50, nil to use global
+      shuffle_feel = nil,       -- 1 to 4, nil to use global
+      shuffle_basis = nil,      -- 1 to 6, nil to use global
     }
   end
 
@@ -499,6 +502,39 @@ end
 function program.set_chord_four_mask(channel, mask) 
   channel.chord_four_mask = mask
 end
+
+function program.get_effective_swing_shuffle_type(channel)
+  if channel.swing_shuffle_type ~= nil then
+    return channel.swing_shuffle_type
+  else
+    return params:get("global_swing_shuffle_type")
+  end
+end
+
+function program.get_effective_swing(channel)
+  if channel.swing ~= nil then
+    return channel.swing
+  else
+    return params:get("global_swing")
+  end
+end
+
+function program.get_effective_shuffle_feel(channel)
+  if channel.shuffle_feel ~= nil then
+    return channel.shuffle_feel
+  else
+    return params:get("global_shuffle_feel")
+  end
+end
+
+function program.get_effective_shuffle_basis(channel)
+  if channel.shuffle_basis ~= nil then
+    return channel.shuffle_basis
+  else
+    return params:get("global_shuffle_basis")
+  end
+end
+
 
 function program.toggle_step_trig_mask(channel, step)
   ensure_step_masks(channel)

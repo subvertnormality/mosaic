@@ -197,7 +197,7 @@ function init()
     end
   )
 
-  params:add_group("mosaic", "MOSAIC", 24)
+  params:add_group("mosaic", "MOSAIC", 29)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -220,14 +220,41 @@ function init()
       load_new_project()
     end
   )
-  params:add_separator("Trig Editor")
-  params:add_option("tresillo_amount", "Tresillo amount", {8, 16, 24, 32, 40, 48, 56, 64}, 3)
+  params:add_separator("Swing and Shuffle")
+  params:add_option("global_swing_shuffle_type", "Global swing type", {"Swing", "Shuffle"}, 1)
   params:set_action(
-    "tresillo_amount",
+    "global_swing_shuffle_type",
     function(x)
-      trigger_edit_page_ui_controller:refresh()
+      channel_sequencer_page_ui_controller.refresh_swing_shuffle_type()
+      channel_edit_page_ui_controller.refresh_swing_shuffle_type()
     end
   )
+
+  params:add_number("global_swing", "Global swing", -50, 50, 0, nil, false)
+  params:set_action(
+    "global_swing",
+    function(x)
+      channel_sequencer_page_ui_controller.refresh_swing()
+    end
+  )
+
+  params:add_option("global_shuffle_feel", "Global shuffle feel", {"Drunk", "Smooth", "Heavy", "Clave"}, 1)
+  params:set_action(
+    "global_shuffle_feel",
+    function(x)
+      channel_sequencer_page_ui_controller.refresh_shuffle_feel()
+    end
+  )
+
+  params:add_option("global_shuffle_basis", "Global shuffle basis", {"9", "7", "5", "6", "8??", "9??"}, 1)
+  params:set_action(
+    "global_shuffle_basis",
+    function(x)
+      channel_sequencer_page_ui_controller.refresh_shuffle_basis()
+    end
+  )
+
+
   params:add_separator("Sequencer")
   params:add_option("song_mode", "Song mode", {"Off", "On"}, 2)
   params:set_action(
@@ -248,6 +275,14 @@ function init()
   params:add_option("all_scales_lock_to_pentatonic", "Lock all to pentatonic", {"Off", "On"}, 1)
   params:add_option("random_lock_to_pentatonic", "Lock random to pent.", {"Off", "On"}, 2)
   params:add_option("merged_lock_to_pentatonic", "Lock merged to pent.", {"Off", "On"}, 2)
+  params:add_separator("Trig Editor")
+  params:add_option("tresillo_amount", "Tresillo amount", {8, 16, 24, 32, 40, 48, 56, 64}, 3)
+  params:set_action(
+    "tresillo_amount",
+    function(x)
+      trigger_edit_page_ui_controller:refresh()
+    end
+  )
   params:add_separator("Midi control")
   params:add_option("midi_scale_mapped_to_white_keys", "Map scale to white keys", {"Off", "On"}, 1)
   params:add_option("midi_honour_rotation", "Honour scale rotations", {"Off", "On"}, 1)

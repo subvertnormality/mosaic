@@ -26,6 +26,10 @@ local quantizer_vertical_scroll_selector = vertical_scroll_selector:new(20, 25, 
 local romans_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
 local notes_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Notes", quantiser.get_notes())
 local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
+local swing_shuffle_type_selector = list_selector:new(70, 25, "Swing Type", {{name = "X", value = 1}, {name = "Swing", value = 2}, {name = "Shuffle", value = 3}})
+local swing_selector = value_selector:new(5, 45, "Swing", -51, 50)
+local shuffle_feel_selector = list_selector:new(5, 45, "Shuffle Feel", {{name = "X", value = 1}, {name = "Drunk", value = 2}, {name = "Smooth", value = 3}, {name = "Heavy", value = 4}, {name = "Clave", value = 5}})
+local shuffle_basis_selector = list_selector:new(70, 45, "Shuffle Basis", {{name = "X", value = 1}, {name = "9", value = 2}, {name = "7", value = 3}, {name = "5", value = 4}, {name = "6", value = 5}, {name = "8??", value = 6}, {name = "9??", value = 7}})
 
 -- Value selectors with initial values
 local mask_selectors = {
@@ -55,7 +59,6 @@ local note_displays = {
 
 -- Clock and MIDI selectors
 local clock_mod_list_selector = list_selector:new(5, 25, "Clock Mod", {})
-local clock_swing_value_selector = value_selector:new(55, 25, "Swing", -50, 50)
 local midi_device_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Midi Device", {})
 local midi_channel_vertical_scroll_selector = vertical_scroll_selector:new(65, 25, "Midi Channel", {
   {name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4},
@@ -112,6 +115,12 @@ local function configure_mask_length_selector(selector)
   end)
 end
 
+local function configure_swing_selector(selector)
+  selector:set_view_transform_func(function(value)
+    return value == -51 and "X" or value
+  end)
+end
+
 local function configure_chord_value_selector(selector)
   local chord_ui_labels = {
     "--oct", "--2nd", "--3rd", "--4th", "--5th", "--6th", "--7th", "-oct", "-2nd", "-3rd", "-4th", "-5th", "-6th", "-7th", "X",
@@ -142,6 +151,7 @@ for _, chord_selector in ipairs(mask_selectors.chords) do
   configure_chord_value_selector(chord_selector)
 end
 configure_note_trig_selector(mask_selectors.trig)
+configure_swing_selector(swing_selector)
 
 -- Page definitions
 local notes_page = page:new("Note Dashboard", function()
@@ -188,7 +198,17 @@ end)
 
 local clock_mods_page = page:new("Clocks", function()
   if program.get().selected_channel ~= 17 then
-    clock_swing_value_selector:draw()
+    swing_shuffle_type_selector:draw()
+    local value = swing_shuffle_type_selector:get_selected().value
+    if value == 1 then 
+      value = params:get("global_swing_shuffle_type") + 1
+    end
+    if value == 2 then
+      swing_selector:draw()
+    elseif value == 3 then
+      shuffle_feel_selector:draw()
+      shuffle_basis_selector:draw()
+    end
   end
   clock_mod_list_selector:draw()
 end)
@@ -280,7 +300,12 @@ function channel_edit_page_ui_controller.init()
   dials:set_selected_item(1)
   clock_mod_list_selector:set_selected_value(13)
   clock_mod_list_selector:select()
-  clock_swing_value_selector:set_value(0)
+  swing_selector:set_value(0)
+
+  swing_shuffle_type_selector:set_selected_value(params:get("global_swing_shuffle_type"))
+  swing_selector:set_value(params:get("global_swing"))
+  shuffle_feel_selector:set_selected_value(params:get("global_shuffle_feel"))
+  shuffle_basis_selector:set_selected_value(params:get("global_shuffle_basis"))
 
   channel_edit_page_ui_controller.refresh_clock_mods()
 end
@@ -325,11 +350,32 @@ function channel_edit_page_ui_controller.update_scale()
   end
 end
 
+function channel_edit_page_ui_controller.update_swing_shuffle_type()
+  local channel = program.get_selected_channel()
+  channel.swing_shuffle_type = swing_shuffle_type_selector:get_selected().value
+  -- set channel shuffle type
+end
+
 function channel_edit_page_ui_controller.update_swing()
   local channel = program.get_selected_channel()
-  local swing = clock_swing_value_selector:get_value()
-  channel.swing = swing
-  clock_controller.set_channel_swing(channel.number, swing)
+  local value = swing_selector:get_value()
+  if value == -51 then
+    value = nil
+  end
+  channel.swing = value
+  clock_controller.set_channel_swing(channel.number or params:get("global_swing"), swing)
+end
+
+function channel_edit_page_ui_controller.update_shuffle_feel()
+  local channel = program.get_selected_channel()
+  channel.shuffle_feel = shuffle_feel_selector:get_selected().value
+  -- TODO update shuffle_feel params:get("global_shuffle_feel")
+end
+
+function channel_edit_page_ui_controller.update_shuffle_basis()
+  local channel = program.get_selected_channel()
+  channel.shuffle_basis = shuffle_basis_selector:get_selected().value
+  -- TODO update params:get("global_shuffle_basis")
 end
 
 function channel_edit_page_ui_controller.update_clock_mods()
@@ -458,9 +504,9 @@ function channel_edit_page_ui_controller.enc(n, d)
   elseif n == 2 then
     for _ = 1, math.abs(d) do
       if d > 0 then
-        channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
+        channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, swing_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page, swing_shuffle_type_selector, swing_selector, shuffle_feel_selector, shuffle_basis_selector)
       else
-        channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page)
+        channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, swing_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page, swing_shuffle_type_selector, swing_selector, shuffle_feel_selector, shuffle_basis_selector)
       end
     end
   elseif n == 1 then
@@ -488,11 +534,23 @@ function channel_edit_page_ui_controller.refresh_masks()
 end
 
 function channel_edit_page_ui_controller.refresh_clock_mods()
-  channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector, clock_swing_value_selector)
+  channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector, swing_selector)
 end
 
 function channel_edit_page_ui_controller.refresh_swing()
-  channel_edit_page_ui_refreshers.refresh_swing(clock_swing_value_selector)
+  channel_edit_page_ui_refreshers.refresh_swing(swing_selector)
+end
+
+function channel_edit_page_ui_controller.refresh_swing_shuffle_type()
+  channel_edit_page_ui_refreshers.refresh_swing_shuffle_type(swing_shuffle_type_selector)
+end
+
+function channel_edit_page_ui_controller.refresh_shuffle_feel()
+  channel_edit_page_ui_refreshers.refresh_shuffle_feel(shuffle_feel_selector)
+end
+
+function channel_edit_page_ui_controller.refresh_shuffle_basis()
+  channel_edit_page_ui_refreshers.refresh_shuffle_basis(shuffle_basis_selector)
 end
 
 function channel_edit_page_ui_controller.refresh_device_selector()
@@ -539,6 +597,9 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   midi_device_vertical_scroll_selector:deselect()
 end
 
+
+
+
 function channel_edit_page_ui_controller.throttled_refresh_channel_config()
   if refresh_timer_id then
     clock.cancel(refresh_timer_id)
@@ -559,6 +620,9 @@ function channel_edit_page_ui_controller.refresh()
   channel_edit_page_ui_controller.refresh_romans()
   channel_edit_page_ui_controller.refresh_clock_mods()
   channel_edit_page_ui_controller.refresh_swing()
+  channel_edit_page_ui_controller.refresh_swing_shuffle_type()
+  channel_edit_page_ui_controller.refresh_shuffle_feel()
+  channel_edit_page_ui_controller.refresh_shuffle_basis()
 end
 
 
@@ -870,34 +934,51 @@ end
 
 
 function channel_edit_page_ui_controller.handle_clock_mods_page_increment()
-  if clock_mod_list_selector:is_selected() then
+  if swing_shuffle_type_selector:is_selected() then
+    swing_shuffle_type_selector:increment()
+    save_confirm.set_save(channel_edit_page_ui_controller.update_swing_shuffle_type)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing_shuffle_type)
+    fn.dirty_screen(true)
+  elseif swing_selector:is_selected() then
+    swing_selector:increment()
+    save_confirm.set_save(channel_edit_page_ui_controller.update_swing)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing)
+  elseif shuffle_feel_selector:is_selected() then
+    shuffle_feel_selector:increment()
+    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_feel)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_feel)
+  elseif shuffle_basis_selector:is_selected() then
+    shuffle_basis_selector:increment()
+    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_basis)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_basis)
+  elseif clock_mod_list_selector:is_selected() then
     clock_mod_list_selector:decrement()
     save_confirm.set_save(channel_edit_page_ui_controller.update_clock_mods)
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_clock_mods)
-  elseif clock_swing_value_selector:is_selected() then
-    clock_swing_value_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_swing)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing)
   end
 end
 
 function channel_edit_page_ui_controller.handle_clock_mods_page_decrement()
-  if clock_mod_list_selector:is_selected() then
+  if swing_shuffle_type_selector:is_selected() then
+    swing_shuffle_type_selector:decrement()
+    save_confirm.set_save(channel_edit_page_ui_controller.update_swing_shuffle_type)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing_shuffle_type)
+  elseif swing_selector:is_selected() then
+    swing_selector:decrement()
+    save_confirm.set_save(channel_edit_page_ui_controller.update_swing)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing)
+  elseif shuffle_feel_selector:is_selected() then
+    shuffle_feel_selector:decrement()
+    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_feel)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_feel)
+  elseif shuffle_basis_selector:is_selected() then
+    shuffle_basis_selector:decrement()
+    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_basis)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_basis)
+  elseif clock_mod_list_selector:is_selected() then
     clock_mod_list_selector:increment()
-    save_confirm.set_save(function()
-      channel_edit_page_ui_controller.update_clock_mods()
-    end)
-    save_confirm.set_cancel(function()
-      channel_edit_page_ui_controller.refresh_clock_mods()
-    end)
-  elseif clock_swing_value_selector:is_selected() then
-    clock_swing_value_selector:decrement()
-    save_confirm.set_save(function()
-      channel_edit_page_ui_controller.update_swing()
-    end)
-    save_confirm.set_cancel(function()
-      channel_edit_page_ui_controller.refresh_swing()
-    end)
+    save_confirm.set_save(channel_edit_page_ui_controller.update_clock_mods)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_clock_mods)
   end
 end
 
