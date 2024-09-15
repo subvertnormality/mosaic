@@ -2,7 +2,7 @@ local velocity_edit_page_ui_controller = {}
 
 local grid_viewer = include("mosaic/lib/ui_components/grid_viewer")
 
-local grid_viewer = grid_viewer:new(0, 0)
+local grid_viewer = grid_viewer:new(0, 3)
 
 function velocity_edit_page_ui_controller.change_page(subpage_name)
 end

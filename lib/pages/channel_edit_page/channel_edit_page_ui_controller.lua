@@ -22,14 +22,14 @@ local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_p
 -- UI components
 local channel_pages = pages:new()
 local scales_pages = pages:new()
-local quantizer_vertical_scroll_selector = vertical_scroll_selector:new(20, 25, "Quantizer", quantiser.get_scales())
-local romans_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
-local notes_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Notes", quantiser.get_notes())
-local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
-local swing_shuffle_type_selector = list_selector:new(70, 25, "Swing Type", {{name = "X", value = 1}, {name = "Swing", value = 2}, {name = "Shuffle", value = 3}})
-local swing_selector = value_selector:new(5, 45, "Swing", -51, 50)
-local shuffle_feel_selector = list_selector:new(5, 45, "Shuffle Feel", {{name = "X", value = 1}, {name = "Drunk", value = 2}, {name = "Smooth", value = 3}, {name = "Heavy", value = 4}, {name = "Clave", value = 5}})
-local shuffle_basis_selector = list_selector:new(70, 45, "Shuffle Basis", {{name = "X", value = 1}, {name = "9", value = 2}, {name = "7", value = 3}, {name = "5", value = 4}, {name = "6", value = 5}, {name = "8??", value = 6}, {name = "9??", value = 7}})
+local quantizer_vertical_scroll_selector = vertical_scroll_selector:new(20, 18, "Quantizer", quantiser.get_scales())
+local romans_vertical_scroll_selector = vertical_scroll_selector:new(90, 18, "Roman Analysis", quantiser.get_scales()[1].romans)
+local notes_vertical_scroll_selector = vertical_scroll_selector:new(5, 18, "Notes", quantiser.get_notes())
+local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 18, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
+local swing_shuffle_type_selector = list_selector:new(70, 18, "Swing Type", {{name = "X", value = 1}, {name = "Swing", value = 2}, {name = "Shuffle", value = 3}})
+local swing_selector = value_selector:new(5, 40, "Swing", -51, 50)
+local shuffle_feel_selector = list_selector:new(5, 40, "Shuffle Feel", {{name = "X", value = 1}, {name = "Drunk", value = 2}, {name = "Smooth", value = 3}, {name = "Heavy", value = 4}, {name = "Clave", value = 5}})
+local shuffle_basis_selector = list_selector:new(70, 40, "Shuffle Basis", {{name = "X", value = 1}, {name = "9", value = 2}, {name = "7", value = 3}, {name = "5", value = 4}, {name = "6", value = 5}, {name = "8??", value = 6}, {name = "9??", value = 7}})
 
 -- Value selectors with initial values
 local mask_selectors = {
@@ -58,16 +58,16 @@ local note_displays = {
 }
 
 -- Clock and MIDI selectors
-local clock_mod_list_selector = list_selector:new(5, 25, "Clock Mod", {})
-local midi_device_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Midi Device", {})
-local midi_channel_vertical_scroll_selector = vertical_scroll_selector:new(65, 25, "Midi Channel", {
+local clock_mod_list_selector = list_selector:new(5, 18, "Clock Mod", {})
+local midi_device_vertical_scroll_selector = vertical_scroll_selector:new(90, 18, "Midi Device", {})
+local midi_channel_vertical_scroll_selector = vertical_scroll_selector:new(65, 18, "Midi Channel", {
   {name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4},
   {name = "CC5", value = 5}, {name = "CC6", value = 6}, {name = "CC7", value = 7}, {name = "CC8", value = 8},
   {name = "CC9", value = 9}, {name = "CC10", value = 10}, {name = "CC11", value = 11}, {name = "CC12", value = 12},
   {name = "CC13", value = 13}, {name = "CC14", value = 14}, {name = "CC15", value = 15}, {name = "CC16", value = 16}
 })
 local device_map_vertical_scroll_selector = nil
-local param_select_vertical_scroll_selector = vertical_scroll_selector:new(30, 25, "Params", {})
+local param_select_vertical_scroll_selector = vertical_scroll_selector:new(30, 18, "Params", {})
 
 -- Dials
 local dials = control_scroll_selector:new(0, 0, {})
@@ -350,32 +350,91 @@ function channel_edit_page_ui_controller.update_scale()
   end
 end
 
+
 function channel_edit_page_ui_controller.update_swing_shuffle_type()
   local channel = program.get_selected_channel()
-  channel.swing_shuffle_type = swing_shuffle_type_selector:get_selected().value
-  -- set channel shuffle type
+  local value = swing_shuffle_type_selector:get_selected().value
+  channel.swing_shuffle_type = value
+
+  if value == 1 or nil then
+    value = params:get("global_swing_shuffle_type") + 1 or 1
+  end
+
+  clock_controller.set_swing_shuffle_type(channel.number, value)
 end
+
+function channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(c)
+  local channel = program.get_channel(c)
+  local channel_value = channel.swing_shuffle_type
+  local value = channel_value
+  if channel_value == 1 or nil then
+    value = params:get("global_swing_shuffle_type") + 1 or 1
+  end
+  clock_controller.set_swing_shuffle_type(channel.number, value)
+end
+
 
 function channel_edit_page_ui_controller.update_swing()
   local channel = program.get_selected_channel()
   local value = swing_selector:get_value()
-  if value == -51 then
-    value = nil
-  end
   channel.swing = value
-  clock_controller.set_channel_swing(channel.number or params:get("global_swing"), swing)
+  if value == -51 or nil then
+    value = params:get("global_swing") 
+  end
+  clock_controller.set_channel_swing(channel.number, value)
+end
+
+function channel_edit_page_ui_controller.align_global_and_local_swing_values(c)
+  local channel = program.get_channel(c)
+  local channel_value = channel.swing
+  local value = channel_value
+  if channel_value == -51 or nil then
+    value = params:get("global_swing") 
+  end
+  clock_controller.set_channel_swing(channel.number, value)
 end
 
 function channel_edit_page_ui_controller.update_shuffle_feel()
   local channel = program.get_selected_channel()
-  channel.shuffle_feel = shuffle_feel_selector:get_selected().value
-  -- TODO update shuffle_feel params:get("global_shuffle_feel")
+  local shuffle_feel = shuffle_feel_selector:get_selected().value
+  channel.shuffle_feel = shuffle_feel
+  if shuffle_feel == 1 or nil then
+    shuffle_feel = params:get("global_shuffle_feel") + 1 or 0
+  end
+
+  clock_controller.set_channel_shuffle_feel(channel.number, shuffle_feel)
+end
+
+function channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(c)
+  local channel = program.get_channel(c)
+  local channel_value = channel.shuffle_feel
+  local value = channel_value
+  if channel_value == 1 or nil then
+    value = params:get("global_shuffle_feel") + 1 or 0
+  end
+  clock_controller.set_channel_shuffle_feel(channel.number, value)
 end
 
 function channel_edit_page_ui_controller.update_shuffle_basis()
   local channel = program.get_selected_channel()
-  channel.shuffle_basis = shuffle_basis_selector:get_selected().value
-  -- TODO update params:get("global_shuffle_basis")
+
+  local shuffle_basis = shuffle_basis_selector:get_selected().value
+  channel.shuffle_basis = shuffle_basis
+
+  if shuffle_basis == 1 or nil then
+    shuffle_basis = params:get("global_shuffle_basis") + 1 or 0
+  end
+  clock_controller.set_channel_shuffle_basis(channel.number, shuffle_basis)
+end
+
+function channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(c)
+  local channel = program.get_channel(c)
+  local channel_value = channel.shuffle_basis
+  local value = channel_value
+  if channel_value == 1 or nil then
+    value = params:get("global_shuffle_basis") + 1 or 0
+  end
+  clock_controller.set_channel_shuffle_basis(channel.number, value)
 end
 
 function channel_edit_page_ui_controller.update_clock_mods()
@@ -937,7 +996,13 @@ function channel_edit_page_ui_controller.handle_clock_mods_page_increment()
   if swing_shuffle_type_selector:is_selected() then
     swing_shuffle_type_selector:increment()
     save_confirm.set_save(channel_edit_page_ui_controller.update_swing_shuffle_type)
+    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_feel)
+    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_basis)
+    save_confirm.set_save(channel_edit_page_ui_controller.update_swing)
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing_shuffle_type)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_feel)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_basis)
     fn.dirty_screen(true)
   elseif swing_selector:is_selected() then
     swing_selector:increment()

@@ -37,6 +37,52 @@ local function destroy_delay_sprockets()
   end
 end
 
+local function get_shuffle_values(channel)
+  local shuffle_values = {}
+
+  local swing_value = params:get("global_swing")
+  if channel.swing ~= -51 then
+    swing_value = channel.swing
+  end
+  if channel.number == 17 then
+    swing_value = 0
+  end
+  shuffle_values.swing = swing_value
+
+  local swing_or_shuffle_value = params:get("global_swing_shuffle_type")
+  if channel.swing_shuffle_type and channel.swing_shuffle_type > 1 then
+    swing_or_shuffle_value = channel.swing_shuffle_type - 1
+  end
+  if channel.number == 17 then
+    swing_or_shuffle_value = 1
+  end
+
+  shuffle_values.swing_or_shuffle = swing_or_shuffle_value
+
+  local shuffle_basis_value = params:get("global_shuffle_basis")
+  if channel.shuffle_basis and channel.shuffle_basis > 1 then
+    shuffle_basis_value = channel.shuffle_basis - 1
+  end
+  if channel.number == 17 then
+    shuffle_basis_value = 0
+  end
+
+  shuffle_values.shuffle_basis = shuffle_basis_value
+
+  local shuffle_feel_value = params:get("global_shuffle_feel")
+  if channel.shuffle_feel and channel.shuffle_feel > 1 then
+    shuffle_feel_value = channel.shuffle_feel - 1
+  end
+  if channel.number == 17 then
+    shuffle_feel_value = 0
+  end
+
+  shuffle_values.shuffle_feel = shuffle_feel_value
+
+  return shuffle_values
+  
+end
+
 function clock_controller.init()
   local program_data = program.get()
   clock_lattice = lattice:new()
@@ -59,6 +105,7 @@ function clock_controller.init()
     swing = 0,
     order = 4,
     delay = 0,
+    swing_or_shuffle = 1,
     shuffle_basis = 0,
     shuffle_feel = 0,
     enabled = true
@@ -96,6 +143,7 @@ function clock_controller.init()
       end,
       division = 1 / 16,
       swing = 0,
+      swing_or_shuffle = 1,
       shuffle_basis = 0,
       shuffle_feel = 0,
       order = 1,
@@ -105,9 +153,7 @@ function clock_controller.init()
   for channel_number = 17, 1, -1 do
     local channel = program.get_channel(channel_number)
     local div = clock_controller.calculate_divisor(channel.clock_mods)
-    local swing = channel_number == 17 and 0 or channel.swing
-    local shuffle_basis = channel_number == 17 and 0 or channel.shuffle_basis
-    local shuffle_feel = channel_number == 17 and 0 or channel.shuffle_feel
+
 
     local sprocket_action = function(t)
       local current_step = program.get_current_step_for_channel(channel_number)
@@ -169,21 +215,25 @@ function clock_controller.init()
       end
     end
 
+    local shuffle_values = get_shuffle_values(channel)
+
     clock_controller["channel_" .. channel_number .. "_clock"] = clock_lattice:new_sprocket {
       action = sprocket_action,
       division = 1 / (div * 4),
-      swing = swing,
-      shuffle_basis = shuffle_basis,
-      shuffle_feel = shuffle_feel,
+      swing = shuffle_values.swing,
+      swing_or_shuffle = shuffle_values.swing_or_shuffle,
+      shuffle_basis = shuffle_values.shuffle_basis,
+      shuffle_feel = shuffle_values.shuffle_feel,
       enabled = true
     }
 
     clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor = clock_lattice:new_sprocket {
       action = end_of_clock_action,
       division = 1 / (div * 4),
-      swing = swing,
-      shuffle_basis = shuffle_basis,
-      shuffle_feel = shuffle_feel,
+      swing = shuffle_values.swing,
+      swing_or_shuffle = shuffle_values.swing_or_shuffle,
+      shuffle_basis = shuffle_values.shuffle_basis,
+      shuffle_feel = shuffle_values.shuffle_feel,
       delay = 0.95,
       enabled = true
     }
@@ -192,10 +242,28 @@ function clock_controller.init()
   end
 end
 
+function clock_controller.set_swing_shuffle_type(channel_number, swing_or_shuffle)
+  local clock = clock_controller["channel_" .. channel_number .. "_clock"]
+  clock:set_swing_or_shuffle(swing_or_shuffle - 1)
+  clock.end_of_clock_processor:set_swing_or_shuffle(swing_or_shuffle - 1)
+end
+
 function clock_controller.set_channel_swing(channel_number, swing)
   local clock = clock_controller["channel_" .. channel_number .. "_clock"]
   clock:set_swing(swing)
   clock.end_of_clock_processor:set_swing(swing)
+end
+
+function clock_controller.set_channel_shuffle_feel(channel_number, shuffle_feel)
+  local clock = clock_controller["channel_" .. channel_number .. "_clock"]
+  clock:set_shuffle_feel(shuffle_feel - 1)
+  clock.end_of_clock_processor:set_shuffle_feel(shuffle_feel - 1)
+end
+
+function clock_controller.set_channel_shuffle_basis(channel_number, shuffle_basis)
+  local clock = clock_controller["channel_" .. channel_number .. "_clock"]
+  clock:set_shuffle_basis(shuffle_basis - 1)
+  clock.end_of_clock_processor:set_shuffle_basis(shuffle_basis - 1)
 end
 
 function clock_controller.set_channel_division(channel_number, division)
@@ -222,14 +290,17 @@ local function meta_delay_action(c, division, delay, type, func)
     delayed:destroy()
   end
 
+  local shuffle_values = get_shuffle_values(channel)
+
   delayed = clock_lattice:new_sprocket {
     action = sprocket_action,
     division = division,
     enabled = true,
     delay = delay,
-    swing = channel.swing or 0,
-    shuffle_basis = channel.shuffle_basis or 0,
-    shuffle_feel = channel.shuffle_feel or 0,
+    swing = shuffle_values.swing,
+    swing_or_shuffle = shuffle_values.swing_or_shuffle,
+    shuffle_basis = shuffle_values.shuffle_basis,
+    shuffle_feel = shuffle_values.shuffle_feel,
     delay_offset = -2
   }
 
@@ -274,14 +345,17 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
     end
   end
 
+  local shuffle_values = get_shuffle_values(channel)
+
   delayed = clock_lattice:new_sprocket {
     action = sprocket_action,
     division = division,
     enabled = true,
     delay = 0,
-    swing = channel.swing or 0,
-    shuffle_basis = channel.shuffle_basis or 0,
-    shuffle_feel = channel.shuffle_feel or 0
+    swing = shuffle_values.swing,
+    swing_or_shuffle = shuffle_values.swing_or_shuffle,
+    shuffle_basis = shuffle_values.shuffle_basis,
+    shuffle_feel = shuffle_values.shuffle_feel,
   }
 
 end
@@ -310,6 +384,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
       arp:destroy()
     end
   end
+  local shuffle_values = get_shuffle_values(channel)
   arp = clock_lattice:new_sprocket {
     action = function()
       
@@ -329,9 +404,10 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
     end,
     division = (division + (chord_spread * chord_acceleration)) * clock_controller["channel_" .. c .. "_clock"].division,
     enabled = true,
-    swing = channel.swing or 0,
-    shuffle_basis = channel.shuffle_basis or 0,
-    shuffle_feel = channel.shuffle_feel or 0,
+    swing = shuffle_values.swing,
+    swing_or_shuffle = shuffle_values.swing_or_shuffle,
+    shuffle_basis = shuffle_values.shuffle_basis,
+    shuffle_feel = shuffle_values.shuffle_feel,
     delay = division + chord_spread
   }
 

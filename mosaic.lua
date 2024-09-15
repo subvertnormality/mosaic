@@ -5,6 +5,8 @@
 -- llllllll.co/t/mosaic-beta-v0-5
 -- manual: t.ly/h-Wsw
 
+-- Copyright Andrew Hillel 2024. See the included GNU licence for more information on terms of use.
+
 testing = false
 
 grid_controller = include("mosaic/lib/grid_controller")
@@ -225,6 +227,12 @@ function init()
   params:set_action(
     "global_swing_shuffle_type",
     function(x)
+      for i = 1, 16 do
+        channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(i)
+        channel_edit_page_ui_controller.align_global_and_local_swing_values(i)
+        channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(i)
+        channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(i)
+      end
       channel_sequencer_page_ui_controller.refresh_swing_shuffle_type()
       channel_edit_page_ui_controller.refresh_swing_shuffle_type()
     end
@@ -234,6 +242,9 @@ function init()
   params:set_action(
     "global_swing",
     function(x)
+      for i = 1, 16 do
+        channel_edit_page_ui_controller.align_global_and_local_swing_values(i)
+      end
       channel_sequencer_page_ui_controller.refresh_swing()
     end
   )
@@ -242,7 +253,11 @@ function init()
   params:set_action(
     "global_shuffle_feel",
     function(x)
+      for i = 1, 16 do
+        channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(i)
+      end
       channel_sequencer_page_ui_controller.refresh_shuffle_feel()
+
     end
   )
 
@@ -250,7 +265,11 @@ function init()
   params:set_action(
     "global_shuffle_basis",
     function(x)
+      for i = 1, 16 do
+        channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(i)
+      end
       channel_sequencer_page_ui_controller.refresh_shuffle_basis()
+
     end
   )
 

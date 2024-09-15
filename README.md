@@ -1,4 +1,4 @@
-Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Grid. It melds the powerful features of the Elektron sequencer with innovative generative techniques, all within the Monome ecosystem, and allows you to craft complex rhythms and harmonies with ease. Whether you are sketching or composing, Mosaic provides a unique, deep musical experience.
+Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Grid. It melds the powerful features of the Elektron sequencer with innovative generative techniques, all within the Monome ecosystem, and allows you to craft complex rhythms and harmonies with ease. Whether you are sketching or composing, Mosaic provides a unique, deep musical experience. 
 
 - [Getting Started](#getting-started)
   * [Install](#install)
@@ -757,3 +757,7 @@ If copying the below code, you must exclude all text appearing after "//"
   "id": "a-unique-id" // mandatory: the ID used to identify the device in _Mosaic_. Must be unique.
 }]
 ```
+
+
+
+This program is released under the GNU license. Copyright Andrew Hillel 2024.

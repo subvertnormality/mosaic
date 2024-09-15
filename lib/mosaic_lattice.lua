@@ -3,6 +3,7 @@
 -- @author byzero
 -- @lattice_by tyleretters & ezra & zack & rylee
 -- @shuffle_by 21echos and sixolet https://github.com/21echoes/cyrene
+
 local Lattice, Sprocket = {}, {}
 
 local fn = include("mosaic/lib/functions")
@@ -51,15 +52,6 @@ local shuffle_feels = {
   clave_map
 }
 
-local basis_to_swing_amt = {
-  0,
-  100 / (96*0.75) * (((2 * 96) * (5/9)) - 96),
-  100 / (96*0.75) * (((2 * 96) * (4/7)) - 96),
-  100 / (96*0.75) * (((2 * 96) * (3/5)) - 96),
-  100 / (96*0.75) * (((2 * 96) * (4/6)) - 96),
-  100 / (96*0.75) * (((2 * 96) * (5/8)) - 96),
-  100 / (96*0.75) * (((2 * 96) * (6/9)) - 96),
-}
 
 --- instantiate a new lattice
 -- @tparam[opt] table args optional named attributes are:
@@ -150,6 +142,7 @@ function Lattice.auto_pulse(s)
   end
 end
 
+
 function Lattice:pulse()
   if self.enabled then
     local flagged = false
@@ -157,7 +150,10 @@ function Lattice:pulse()
       for _, id in ipairs(self.sprocket_ordering[i]) do
         local sprocket = self.sprockets[id]
         if sprocket.enabled then
-          sprocket:update_shuffle(sprocket.step, sprocket.id)
+          if not sprocket.shuffle_updated then
+            sprocket:update_shuffle(sprocket.step, sprocket.id)
+            sprocket.shuffle_updated = true
+          end
           if sprocket.phase >= 1 and sprocket.phase < 2 then
             sprocket.action(self.transport)
           end
@@ -165,6 +161,7 @@ function Lattice:pulse()
           sprocket.phase = sprocket.phase + 1
           if sprocket.phase > sprocket.current_ppqn then
             sprocket.phase = 1
+            sprocket.shuffle_updated = false
             if sprocket.delay_new ~= nil then
               sprocket.phase = sprocket.phase - (sprocket.current_ppqn * (sprocket.delay - sprocket.delay_new))
               sprocket.delay = sprocket.delay_new
@@ -210,10 +207,11 @@ function Lattice:new_sprocket(args)
   args.phase = 1
   args.delay = args.delay == nil and 0 or util.clamp(args.delay,0,1)
   args.swing = args.swing == nil and 0 or util.clamp(args.swing,-50,50)
-  args.shuffle_basis = args.shuffle_basis or 0
-  args.shuffle_feel = args.shuffle_feel or 0
+  args.swing_or_shuffle = args.swing_or_shuffle == nil and 1 or util.clamp(args.swing_or_shuffle,1,2)
+  args.shuffle_basis = args.shuffle_basis and util.clamp(args.shuffle_basis, 0, 6) or 0
+  args.shuffle_feel = args.shuffle_feel and util.clamp(args.shuffle_feel, 0, 3) or 0
   args.ppqn = self.ppqn
-  args.step = self.step
+  args.step = self.step or 1
   local sprocket = Sprocket:new(args)
   sprocket:update_swing()
   sprocket:update_shuffle(self.step, 1)
@@ -255,8 +253,9 @@ function Sprocket:new(args)
   p.delay = args.delay
   p.phase = args.phase or 1
   p.ppqn = args.ppqn
-  p.shuffle_basis = args.shuffle_basis
-  p.shuffle_feel = args.shuffle_feel
+  p.swing_or_shuffle = args.swing_or_shuffle
+  p.shuffle_basis = util.clamp(args.shuffle_basis, 0, 6)
+  p.shuffle_feel = util.clamp(args.shuffle_feel, 0, 3)
   p.current_ppqn = args.ppqn
   p.ppqn_error = 0.5
   p.step = args.step or 1
@@ -302,71 +301,63 @@ function Sprocket:set_delay(delay)
   self.delay_new = util.clamp(delay,0,1)
 end
 
+function Sprocket:set_swing_or_shuffle(swing_or_shuffle)
+  self.swing_or_shuffle = util.clamp(swing_or_shuffle, 1, 2)
+  self:update_swing()
+  self:update_shuffle(self.step)
+end
+
 function Sprocket:set_swing(swing)
   -- swing is expected to be a value between 0 (no swing) and 100 (maximum swing)
   self.swing = util.clamp(swing or 0, -50, 50)
   self:update_swing()
 end
 
+function Sprocket:set_shuffle_basis(basis)
+  self.shuffle_basis = util.clamp(basis, 0, 6)
+  self:update_shuffle(self.step)
+end
+
+function Sprocket:set_shuffle_feel(feel)
+  self.shuffle_feel = util.clamp(feel, 0, 3)
+  self:update_shuffle(self.step)
+end
+
+function Sprocket:set_shuffle_or_swing(swing_or_shuffle)
+  self.swing_or_shuffle = util.clamp(swing_or_shuffle, 1, 2)
+  self:update_swing()
+  self:update_shuffle(self.step)
+end
 
 function Sprocket:update_swing()
-  if self.shuffle_basis == 0 then
-    -- local swing_factor = self.swing / 100
-    -- self.even_swing = 1 + swing_factor
-    -- self.odd_swing = 1 - swing_factor
-    local swing_factor = math.abs(self.swing) / 100
-    if self.swing >= 0 then
-      self.even_swing = 1 + swing_factor
-      self.odd_swing = 1 - swing_factor
-    else
-      self.even_swing = 1 - swing_factor
-      self.odd_swing = 1 + swing_factor
-    end
+  local swing_factor = math.abs(self.swing) / 100
+  if self.swing >= 0 then
+    self.even_swing = 1 + swing_factor
+    self.odd_swing = 1 - swing_factor
   else
-    self.swing = basis_to_swing_amt[self.shuffle_basis + 1]
+    self.even_swing = 1 - swing_factor
+    self.odd_swing = 1 + swing_factor
   end
 end
 
 
 function Sprocket:update_shuffle(step, id)
-  if self.shuffle_basis > 0 and self.shuffle_feel > 0 then
+  local ppc = self.ppqn * 4
+
+  if self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and  self.shuffle_basis > 0 then
     local feel_map = shuffle_feels[self.shuffle_feel]
-    local playpos_per_shuffle_cell = 2  -- Adjust if needed based on grid resolution
-    local playpos_per_shuffle_row = 8
-    local playpos_mod = step % (playpos_per_shuffle_cell * playpos_per_shuffle_row)
-    local shuffle_beat_index = math.floor(playpos_mod / playpos_per_shuffle_cell) + 1
+    local playpos_mod = (step % 8) + 1
+    local shuffle_beat_index = playpos_mod
     local multiplier = feel_map[self.shuffle_basis][shuffle_beat_index]
-    
-    local exact_ppqn = self.ppqn * multiplier
-    local rounded_ppqn = math.floor(exact_ppqn + self.ppqn_error + 0.5)
-    self.ppqn_error = exact_ppqn + self.ppqn_error - rounded_ppqn
+    local exact_ppqn = (self.division * ppc * 4) * (multiplier)
+    local rounded_ppqn = math.floor(exact_ppqn + self.ppqn_error)
+    self.ppqn_error = (exact_ppqn + self.ppqn_error) - rounded_ppqn
     self.current_ppqn = rounded_ppqn
   else
-    local ppc = self.ppqn * 4
     self.current_ppqn = math.floor((self.division * ppc) * (step % 2 == 1 and self.even_swing or self.odd_swing) - 0.01 + 0.5)
   end
+  
 end
 
-
-function Sprocket:update_shuffle_feel(feel_map, step)
-  local swing_factor = self.swing / 100
-
-  -- Determine if we are on an "even" or "odd" beat
-  local step_mod = (step % 8) + 1
-
-  if feel_map and self.shuffle_basis > 0 and self.shuffle_basis < 8 then
-    -- Select the correct row in the shuffle map based on the swing factor
-    local map_entry = feel_map[self.shuffle_basis]
-
-    -- Apply shuffle feel based on even/odd step
-      self.even_shuffle = 1 + map_entry[step_mod]
-      self.odd_shuffle = 1 - map_entry[step_mod]
-
-  else
-    -- Reset swing values if no map entry found
-    self.even_shuffle = nil
-    self.odd_shuffle = nil
-  end
-end
 
 return Lattice

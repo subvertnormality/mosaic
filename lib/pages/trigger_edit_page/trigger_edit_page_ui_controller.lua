@@ -7,11 +7,11 @@ local grid_viewer = include("mosaic/lib/ui_components/grid_viewer")
 local list_selector = include("mosaic/lib/ui_components/list_selector")
 
 local pages = pages:new()
-local grid_viewer = grid_viewer:new(0, 0)
+local grid_viewer = grid_viewer:new(0, 3)
 local tresillo_mult =
   list_selector:new(
-  10,
-  25,
+  5,
+  29,
   "Tresillo mult",
   {
     {id = 1, value = 8, name = "x8"},

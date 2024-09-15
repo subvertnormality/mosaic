@@ -7,8 +7,8 @@ local screen_view_sequencer = sequencer:new(4, "channel")
 
 function grid_viewer:new(x, y)
   local self = setmetatable({}, grid_viewer)
-  self.x = x - 1
-  self.y = y - 2
+  self.x = x
+  self.y = y
   self.selected_channel = 1
 
   return self
@@ -21,13 +21,13 @@ function grid_viewer:draw()
 
   for x = 1, 16 do
     for y = 1, 8 do
-      screen.move(self.x + (x * 7), self.y + (y * 7))
+      screen.move(self.x - 3 + (x * 7), self.y - 5 + (y * 7))
       screen.level(state[x][y])
       screen.font_size(35)
       screen.text(".")
     end
   end
-  screen.move(self.x + 7, self.y + 12)
+  screen.move(self.x + 5, self.y + 6)
   screen.level(10)
   screen.font_size(8)
   screen.text("Channel " .. self.selected_channel .. " grid viewer")
