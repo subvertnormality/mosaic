@@ -141,6 +141,8 @@ function Lattice.auto_pulse(s)
     clock.sync(1/s.ppqn)
   end
 end
+
+
 function Lattice:pulse()
   if self.enabled then
     local flagged = false
@@ -148,49 +150,26 @@ function Lattice:pulse()
       for _, id in ipairs(self.sprocket_ordering[i]) do
         local sprocket = self.sprockets[id]
         if sprocket.enabled then
-          -- Store old ppqn and phase
-          local old_ppqn = sprocket.current_ppqn
-          local old_phase = sprocket.phase
-          
-          -- Update shuffle (which may change current_ppqn)
-          sprocket:update_shuffle(sprocket.step, sprocket.id)
-
-          -- Adjust phase if current_ppqn has changed
-          if sprocket.current_ppqn ~= old_ppqn then
-            local cycle_progress = (old_phase - 1) / old_ppqn
-            local new_phase = cycle_progress * sprocket.current_ppqn + 1
-            sprocket.phase = math.max(1, math.min(sprocket.current_ppqn, math.floor(new_phase + 0.5)))
+          if not sprocket.shuffle_updated then
+            sprocket:update_shuffle(sprocket.step, sprocket.id)
+            sprocket.shuffle_updated = true
           end
-
-          -- Trigger action if phase is within range
           if sprocket.phase >= 1 and sprocket.phase < 2 then
             sprocket.action(self.transport)
           end
 
-          -- Increment phase
           sprocket.phase = sprocket.phase + 1
-
-          -- Handle phase wrap-around
           if sprocket.phase > sprocket.current_ppqn then
-            sprocket.phase = sprocket.phase - sprocket.current_ppqn
-            sprocket.step = sprocket.step + 1
-
-            -- Adjust for delay changes after phase wrap-around
+            sprocket.phase = 1
+            sprocket.shuffle_updated = false
             if sprocket.delay_new ~= nil then
               sprocket.phase = sprocket.phase - (sprocket.current_ppqn * (sprocket.delay - sprocket.delay_new))
               sprocket.delay = sprocket.delay_new
               sprocket.delay_new = nil
-              -- Ensure phase stays within valid bounds
-              if sprocket.phase < 1 then
-                sprocket.phase = sprocket.phase + sprocket.current_ppqn
-                sprocket.step = sprocket.step - 1
-              elseif sprocket.phase > sprocket.current_ppqn then
-                sprocket.phase = sprocket.phase - sprocket.current_ppqn
-                sprocket.step = sprocket.step + 1
-              end
             end
+            sprocket.step = sprocket.step + 1
           end
-
+          sprocket.transport = sprocket.transport + 1
         elseif sprocket.flag then
           self.sprockets[sprocket.id] = nil
           flagged = true
@@ -206,7 +185,6 @@ function Lattice:pulse()
     end
   end
 end
-
 
 
 --- factory method to add a new sprocket to this lattice
@@ -281,6 +259,7 @@ function Sprocket:new(args)
   p.current_ppqn = args.ppqn
   p.ppqn_error = 0.5
   p.step = args.step or 1
+  p.transport = 1
   return p
 end
 
@@ -310,9 +289,11 @@ end
 function Sprocket:set_division(n)
   local old_ppqn = self.current_ppqn
   local old_phase = self.phase
+
   self.division = n
   self:update_swing()
   self:update_shuffle(self.step)
+
   -- Adjust phase proportionally
   if self.current_ppqn ~= old_ppqn then
     local cycle_progress = (old_phase - 1) / old_ppqn
@@ -320,8 +301,6 @@ function Sprocket:set_division(n)
     self.phase = math.max(1, math.min(self.current_ppqn, math.floor(new_phase + 0.5)))
   end
 end
-
-
 
 --- set the action for this sprocket
 -- @tparam function the action
@@ -376,11 +355,11 @@ end
 
 
 function Sprocket:update_shuffle(step, id)
+  local ppc = self.ppqn * 4
   local old_ppqn = self.current_ppqn
   local old_phase = self.phase
-  local ppc = self.ppqn * 4
 
-  if self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and self.shuffle_basis > 0 then
+  if self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and  self.shuffle_basis > 0 then
     local feel_map = shuffle_feels[self.shuffle_feel]
     local playpos_mod = (step % 8) + 1
     local shuffle_beat_index = playpos_mod
@@ -405,7 +384,6 @@ function Sprocket:update_shuffle(step, id)
     end
   end
 end
-
 
 
 return Lattice
