@@ -794,6 +794,29 @@ function step_handler.process_song_sequencer_patterns()
         end
       end
       pattern_controller.update_working_patterns()
+
+      if selected_sequencer_pattern_number ~= next_sequencer_pattern then
+        for channel_number = 1, 17 do
+          local channel = program.get_channel(channel_number)
+          clock_controller.set_channel_division(channel_number, clock_controller.calculate_divisor(channel.clock_mods))
+          if channel_number ~= 17 then
+            channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(channel_number)
+            channel_edit_page_ui_controller.align_global_and_local_swing_values(channel_number)
+            channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(channel_number)
+            channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(channel_number)
+          end
+      
+          for i = 1, 10 do
+            channel_edit_page_ui_controller.sync_param_to_trig_lock(i, program.get_channel(channel_number))
+          end
+        end
+      
+        channel_edit_page_ui_controller.refresh_clock_mods()
+        channel_edit_page_ui_controller.refresh_swing()
+        channel_edit_page_ui_controller.refresh_swing_shuffle_type()
+        channel_edit_page_ui_controller.refresh_shuffle_feel()
+        channel_edit_page_ui_controller.refresh_shuffle_basis()
+      end
     end
   end
 

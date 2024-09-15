@@ -457,16 +457,18 @@ function clock_controller:start()
 end
 
 function clock_controller:stop()
-  if clock_lattice and clock_lattice.stop then
-    clock_lattice:stop()
-  end
-
-  execute_delayed_sprockets()
 
   playing = false
   first_run = true
   nb:stop_all()
   midi_controller:stop()
+
+  execute_delayed_sprockets()
+
+  if clock_lattice and clock_lattice.stop then
+    clock_lattice:stop()
+  end
+
   clock_controller.reset()
 end
 

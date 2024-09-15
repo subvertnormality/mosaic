@@ -76,7 +76,10 @@ function channel_sequencer_page_controller.register_press_handlers()
             local channel = program.get_channel(channel_number)
             clock_controller.set_channel_division(channel_number, clock_controller.calculate_divisor(channel.clock_mods))
             if channel_number ~= 17 then
-              clock_controller.set_channel_swing(channel_number, channel.swing)
+              channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(channel_number)
+              channel_edit_page_ui_controller.align_global_and_local_swing_values(channel_number)
+              channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(channel_number)
+              channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(channel_number)
             end
 
             for i = 1, 10 do
@@ -97,6 +100,10 @@ function channel_sequencer_page_controller.register_press_handlers()
           channel_sequencer_page_controller.refresh_faders()
           channel_edit_page_ui_controller.refresh_clock_mods()
           channel_edit_page_ui_controller.refresh_swing()
+          channel_edit_page_ui_controller.refresh_swing_shuffle_type()
+          channel_edit_page_ui_controller.refresh_shuffle_feel()
+          channel_edit_page_ui_controller.refresh_shuffle_basis()
+          
         end
 
         local blink_cancel_func = function()
