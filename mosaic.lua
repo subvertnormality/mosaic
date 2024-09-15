@@ -199,7 +199,7 @@ function init()
     end
   )
 
-  params:add_group("mosaic", "MOSAIC", 29)
+  params:add_group("mosaic", "MOSAIC", 28)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -222,56 +222,42 @@ function init()
       load_new_project()
     end
   )
-  params:add_separator("Swing and Shuffle")
   params:add_option("global_swing_shuffle_type", "Global swing type", {"Swing", "Shuffle"}, 1)
   params:set_action(
     "global_swing_shuffle_type",
     function(x)
-      for i = 1, 16 do
-        channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(i)
-        channel_edit_page_ui_controller.align_global_and_local_swing_values(i)
-        channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(i)
-        channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(i)
-      end
       channel_sequencer_page_ui_controller.refresh_swing_shuffle_type()
       channel_edit_page_ui_controller.refresh_swing_shuffle_type()
     end
   )
+  params:hide("global_swing_shuffle_type")
 
   params:add_number("global_swing", "Global swing", -50, 50, 0, nil, false)
   params:set_action(
     "global_swing",
     function(x)
-      for i = 1, 16 do
-        channel_edit_page_ui_controller.align_global_and_local_swing_values(i)
-      end
       channel_sequencer_page_ui_controller.refresh_swing()
     end
   )
+  params:hide("global_swing")
 
   params:add_option("global_shuffle_feel", "Global shuffle feel", {"Drunk", "Smooth", "Heavy", "Clave"}, 1)
   params:set_action(
     "global_shuffle_feel",
     function(x)
-      for i = 1, 16 do
-        channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(i)
-      end
       channel_sequencer_page_ui_controller.refresh_shuffle_feel()
-
     end
   )
+  params:hide("global_shuffle_feel")
 
   params:add_option("global_shuffle_basis", "Global shuffle basis", {"9", "7", "5", "6", "8??", "9??"}, 1)
   params:set_action(
     "global_shuffle_basis",
     function(x)
-      for i = 1, 16 do
-        channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(i)
-      end
       channel_sequencer_page_ui_controller.refresh_shuffle_basis()
-
     end
   )
+  params:hide("global_shuffle_basis")
 
 
   params:add_separator("Sequencer")

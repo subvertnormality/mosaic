@@ -34,6 +34,7 @@ end
 local switch_to_next_song_pattern_blink_cancel_func = function()
 end
 local next_song_pattern_queue = nil
+local pattern_change_queue = {}
 
 local note_divisions = include("mosaic/lib/divisions").note_divisions
 
@@ -774,6 +775,10 @@ function step_handler.queue_next_song_pattern(s)
   next_song_pattern_queue = s
 end
 
+function step_handler.queue_for_pattern_change(func)
+  table.insert(pattern_change_queue, func)
+end
+
 function step_handler.process_song_sequencer_patterns()
   local selected_sequencer_pattern_number = program.get().selected_sequencer_pattern
   local selected_sequencer_pattern = program.get().sequencer_patterns[selected_sequencer_pattern_number]
@@ -816,6 +821,8 @@ function step_handler.process_song_sequencer_patterns()
         channel_edit_page_ui_controller.refresh_swing_shuffle_type()
         channel_edit_page_ui_controller.refresh_shuffle_feel()
         channel_edit_page_ui_controller.refresh_shuffle_basis()
+        channel_sequencer_page_controller.refresh()
+        channel_edit_page_controller.refresh()
       end
     end
   end
@@ -825,8 +832,16 @@ function step_handler.process_song_sequencer_patterns()
     switch_to_next_song_pattern_blink_cancel_func()
     switch_to_next_song_pattern_func = function()
     end
-    channel_sequencer_page_controller.refresh()
-    channel_edit_page_controller.refresh()
+    for i, func in ipairs(pattern_change_queue) do
+      func()
+    end
+    for channel_number = 1, 16 do
+      channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(channel_number)
+      channel_edit_page_ui_controller.align_global_and_local_swing_values(channel_number)
+      channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(channel_number)
+      channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(channel_number)
+    end
+    pattern_change_queue = {}
   end
 
 end

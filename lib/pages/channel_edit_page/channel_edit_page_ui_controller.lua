@@ -360,7 +360,16 @@ function channel_edit_page_ui_controller.update_swing_shuffle_type()
     value = params:get("global_swing_shuffle_type") + 1 or 1
   end
 
-  clock_controller.set_swing_shuffle_type(channel.number, value)
+  if clock_controller.is_playing() then
+    step_handler.queue_for_pattern_change(function() 
+      local c = channel.number 
+      local val = value
+      clock_controller.set_swing_shuffle_type(c, val) 
+    end)
+  else
+    clock_controller.set_swing_shuffle_type(channel.number, value)
+  end
+
 end
 
 function channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(c)
@@ -370,7 +379,9 @@ function channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_ty
   if channel_value == 1 or nil then
     value = params:get("global_swing_shuffle_type") + 1 or 1
   end
+
   clock_controller.set_swing_shuffle_type(channel.number, value)
+
 end
 
 
@@ -381,7 +392,16 @@ function channel_edit_page_ui_controller.update_swing()
   if value == -51 or nil then
     value = params:get("global_swing") 
   end
-  clock_controller.set_channel_swing(channel.number, value)
+  
+  if clock_controller.is_playing() then
+    step_handler.queue_for_pattern_change(function() 
+      local c = channel.number 
+      local val = value
+      clock_controller.set_channel_swing(c, val) 
+    end)
+  else
+    clock_controller.set_channel_swing(channel.number, value)
+  end
 end
 
 function channel_edit_page_ui_controller.align_global_and_local_swing_values(c)
@@ -391,7 +411,9 @@ function channel_edit_page_ui_controller.align_global_and_local_swing_values(c)
   if channel_value == -51 or nil then
     value = params:get("global_swing") 
   end
+
   clock_controller.set_channel_swing(channel.number, value)
+
 end
 
 function channel_edit_page_ui_controller.update_shuffle_feel()
@@ -402,7 +424,15 @@ function channel_edit_page_ui_controller.update_shuffle_feel()
     shuffle_feel = params:get("global_shuffle_feel") + 1 or 0
   end
 
-  clock_controller.set_channel_shuffle_feel(channel.number, shuffle_feel)
+  if clock_controller.is_playing() then
+    step_handler.queue_for_pattern_change(function() 
+      local c = channel.number 
+      local sf = shuffle_feel
+      clock_controller.set_channel_shuffle_feel(c, sf) 
+    end)
+  else
+    clock_controller.set_channel_shuffle_feel(channel.number, shuffle_feel)
+  end
 end
 
 function channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(c)
@@ -412,7 +442,9 @@ function channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_val
   if channel_value == 1 or nil then
     value = params:get("global_shuffle_feel") + 1 or 0
   end
+  
   clock_controller.set_channel_shuffle_feel(channel.number, value)
+
 end
 
 function channel_edit_page_ui_controller.update_shuffle_basis()
@@ -424,7 +456,16 @@ function channel_edit_page_ui_controller.update_shuffle_basis()
   if shuffle_basis == 1 or nil then
     shuffle_basis = params:get("global_shuffle_basis") + 1 or 0
   end
-  clock_controller.set_channel_shuffle_basis(channel.number, shuffle_basis)
+
+  if clock_controller.is_playing() then
+    step_handler.queue_for_pattern_change(function() 
+      local c = channel.number 
+      local sb = shuffle_basis
+      clock_controller.set_channel_shuffle_basis(c, sb) 
+    end)
+  else
+    clock_controller.set_channel_shuffle_basis(channel.number, shuffle_basis)
+  end
 end
 
 function channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(c)
@@ -434,14 +475,26 @@ function channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_va
   if channel_value == 1 or nil then
     value = params:get("global_shuffle_basis") + 1 or 0
   end
+  
   clock_controller.set_channel_shuffle_basis(channel.number, value)
+
 end
 
 function channel_edit_page_ui_controller.update_clock_mods()
   local channel = program.get_selected_channel()
   local clock_mods = clock_mod_list_selector:get_selected()
   channel.clock_mods = clock_mods
-  clock_controller.set_channel_division(channel.number, clock_controller.calculate_divisor(clock_mods))
+
+  if clock_controller.is_playing() then
+    step_handler.queue_for_pattern_change(function() 
+      local c = channel.number 
+      local div = clock_controller.calculate_divisor(clock_mods)
+      clock_controller.set_channel_division(c, div) 
+    end)
+  else
+    clock_controller.set_channel_division(channel.number, clock_controller.calculate_divisor(clock_mods))
+  end
+  
 end
 
 function channel_edit_page_ui_controller.update_channel_config()
