@@ -287,6 +287,8 @@ end
 -- @tparam number n the division of the sprocket
 function Sprocket:set_division(n)
    self.division = n
+   self:update_swing()
+   self:update_shuffle(self.step)
 end
 
 --- set the action for this sprocket

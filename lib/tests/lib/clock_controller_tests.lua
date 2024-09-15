@@ -222,6 +222,7 @@ function test_clock_multiplications_speed_up_the_clock_mul_4()
   luaunit.assertNil(note_on_event)
 
   progress_clock_by_beats(4)
+  -- progress_clock_by_pulses(12)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -317,7 +318,7 @@ function test_clock_multiplications_speed_up_the_clock_mul_16()
   luaunit.assertNil(note_on_event)
 
   progress_clock_by_beats(1)
-  -- progress_clock_by_pulses(22) -- incorrect TODO: fix this
+  -- progress_clock_by_pulses(14) -- incorrect TODO: fix this
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 

@@ -3702,6 +3702,7 @@ function test_chord_arp_param_lock_with_minus_one_acceleration()
 
   progress_clock_by_beats(1/4)
 
+
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 65)

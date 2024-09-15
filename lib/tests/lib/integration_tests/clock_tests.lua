@@ -411,7 +411,7 @@ function test_drunk_shuffle()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
 
-    program.get_channel(1).swing = test_case.swing
+    program.get_channel(1).swing = 0
 
     program.get_channel(1).swing_shuffle_type = 2
     program.get_channel(1).shuffle_basis = 1
@@ -427,7 +427,7 @@ function test_drunk_shuffle()
     luaunit.assert_equals(note_on_event[2], 20)
     luaunit.assert_equals(note_on_event[3], 1)
 
-    progress_clock_by_pulses(24)
+    progress_clock_by_pulses(36)
 
     local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -436,7 +436,7 @@ function test_drunk_shuffle()
     luaunit.assert_equals(note_on_event[3], 1)
 
     
-    progress_clock_by_pulses(30)
+    progress_clock_by_pulses(12)
 
     local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -444,7 +444,7 @@ function test_drunk_shuffle()
     luaunit.assert_equals(note_on_event[2], 22)
     luaunit.assert_equals(note_on_event[3], 1)
 
-    progress_clock_by_pulses(32)
+    progress_clock_by_pulses(36)
     
     local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -452,7 +452,7 @@ function test_drunk_shuffle()
     luaunit.assert_equals(note_on_event[2], 23)
     luaunit.assert_equals(note_on_event[3], 1)
 
-    progress_clock_by_pulses(21)
+    progress_clock_by_pulses(12)
     
     local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -460,12 +460,37 @@ function test_drunk_shuffle()
     luaunit.assert_equals(note_on_event[2], 24)
     luaunit.assert_equals(note_on_event[3], 1)
 
-    progress_clock_by_pulses(21)
+    progress_clock_by_pulses(24)
     
     local note_on_event = table.remove(midi_note_on_events, 1)
 
     luaunit.assert_equals(note_on_event[1], 62)
     luaunit.assert_equals(note_on_event[2], 25)
     luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_pulses(24)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+
+    luaunit.assert_equals(note_on_event[1], 64)
+    luaunit.assert_equals(note_on_event[2], 26)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_pulses(24)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+
+    luaunit.assert_equals(note_on_event[1], 65)
+    luaunit.assert_equals(note_on_event[2], 27)
+    luaunit.assert_equals(note_on_event[3], 1)
+
+    progress_clock_by_pulses(24)
+    
+    local note_on_event = table.remove(midi_note_on_events, 1)
+
+    luaunit.assert_equals(note_on_event[1], 60)
+    luaunit.assert_equals(note_on_event[2], 28)
+    luaunit.assert_equals(note_on_event[3], 1)
+
   end
 end
