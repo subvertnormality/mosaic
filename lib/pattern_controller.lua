@@ -15,6 +15,12 @@ local throttle_time = 0.001
 local currently_processing = false
 local currently_processing_2 = false
 
+-- Pre-allocate tables
+local default_trig_values = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+local default_lengths = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+local default_note_values = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+local default_note_mask_values = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
+local default_velocity_values = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100}
 
 local function sync_pattern_values(merged_pattern, pattern, s)
   merged_pattern.lengths[s] = pattern.lengths[s]
@@ -34,19 +40,18 @@ end
 function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
   local merged_pattern = {
-    trig_values = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    lengths = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-    note_values = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    note_mask_values = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-    velocity_values = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100},
+    trig_values = {table.unpack(default_trig_values)},
+    lengths = {table.unpack(default_lengths)},
+    note_values = {table.unpack(default_note_values)},
+    note_mask_values = {table.unpack(default_note_mask_values)},
+    velocity_values = {table.unpack(default_velocity_values)},
+    merged_notes = {}
   }
-  local skip_bits = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-  local only_bits = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+  local skip_bits = {table.unpack(default_trig_values)}
+  local only_bits = {table.unpack(default_trig_values)}
 
   local pattern_channel = selected_sequencer_pattern.channels[channel]
   local patterns = selected_sequencer_pattern.patterns
-
-  merged_pattern.merged_notes = {}
 
   for i = 1, 64 do
     notes[i] = {}
@@ -67,9 +72,9 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
   local patterns_to_process = pattern_channel.selected_patterns
 
   local function process_merge_mode(merge_mode)
-    if merge_mode and extract_pattern_number(merge_mode) then
+    if merge_mode then
       local pattern_number = extract_pattern_number(merge_mode)
-      if patterns_to_process[pattern_number] == nil then
+      if pattern_number and patterns_to_process[pattern_number] == nil then
         patterns_to_process[pattern_number] = false
       end
     end
@@ -100,14 +105,11 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
           elseif is_pattern_trig_one and only_bits[s] == 1 then
             merged_pattern.trig_values[s] = 1
           end
-        elseif trig_merge_mode == "all" then
-          if is_pattern_trig_one then
-            merged_pattern.trig_values[s] = 1
-          end
+        elseif trig_merge_mode == "all" and is_pattern_trig_one then
+          merged_pattern.trig_values[s] = 1
         end
       end
 
-      
       local is_positive_step_trig_mask = program.get_step_trig_masks(channel) and program.get_step_trig_masks(channel)[s] == 1
       local should_process_note_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (note_merge_mode and extract_pattern_number(note_merge_mode))
       local should_process_velocity_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (velocity_merge_mode and extract_pattern_number(velocity_merge_mode))
@@ -138,58 +140,56 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
         local average = fn.average_table_values(values[s])
         if mode == "up" then
           merged_values[s] = average + (max_value - min_value)
-          merged_pattern.merged_notes[s] = true
         elseif mode == "down" then
           merged_values[s] = min_value - (average - min_value)
-          merged_pattern.merged_notes[s] = true
-        elseif mode == "average" then
+        else
           merged_values[s] = average
-          merged_pattern.merged_notes[s] = true
         end
+        merged_pattern.merged_notes[s] = true
       end
     end
   end
+
+  local step_trig_masks = program.get_step_trig_masks(channel)
+  local step_note_masks = program.get_step_note_masks(channel)
+  local step_velocity_masks = program.get_step_velocity_masks(channel)
+  local step_length_masks = program.get_step_length_masks(channel)
+  local channel_data = program.get_channel(channel)
 
   for s = 1, 64 do
     do_mode_calculation(note_merge_mode, s, notes, merged_pattern.note_values)
     do_mode_calculation(velocity_merge_mode, s, velocities, merged_pattern.velocity_values)
     do_mode_calculation(length_merge_mode, s, lengths, merged_pattern.lengths)
 
-    local step_trig_masks = program.get_step_trig_masks(channel)
     if step_trig_masks[s] then
       merged_pattern.trig_values[s] = step_trig_masks[s]
-    elseif program.get_channel(channel).trig_mask and program.get_channel(channel).trig_mask ~= -1 then
-      merged_pattern.trig_values[s] = program.get_channel(channel).trig_mask
+    elseif channel_data.trig_mask and channel_data.trig_mask ~= -1 then
+      merged_pattern.trig_values[s] = channel_data.trig_mask
     end
 
-    local step_note_masks = program.get_step_note_masks(channel)
     if step_note_masks[s] then
       merged_pattern.note_mask_values[s] = step_note_masks[s]
-    elseif program.get_channel(channel).note_mask and program.get_channel(channel).note_mask ~= -1 then
-      merged_pattern.note_mask_values[s] = program.get_channel(channel).note_mask
+    elseif channel_data.note_mask and channel_data.note_mask ~= -1 then
+      merged_pattern.note_mask_values[s] = channel_data.note_mask
     end
 
-    local step_velocity_masks = program.get_step_velocity_masks(channel)
     if step_velocity_masks[s] then
       merged_pattern.velocity_values[s] = step_velocity_masks[s]
-    elseif program.get_channel(channel).velocity_mask and program.get_channel(channel).velocity_mask ~= -1 then
-      merged_pattern.velocity_values[s] = program.get_channel(channel).velocity_mask
+    elseif channel_data.velocity_mask and channel_data.velocity_mask ~= -1 then
+      merged_pattern.velocity_values[s] = channel_data.velocity_mask
     end
 
-    local step_length_masks = program.get_step_length_masks(channel)
     if step_length_masks[s] then
       merged_pattern.lengths[s] = step_length_masks[s]
-    elseif program.get_channel(channel).length_mask and program.get_channel(channel).lengths_mask ~= -1 then
-      merged_pattern.lengths[s] = program.get_length_mask(program.get_channel(channel)) 
+    elseif channel_data.length_mask and channel_data.lengths_mask ~= -1 then
+      merged_pattern.lengths[s] = program.get_length_mask(channel_data)
     end
   end
 
   return merged_pattern
 end
 
-
 function pattern_controller.update_working_patterns()
-  -- Must throttle to stop multiple quick inputs from slowing the sequencer down
   if update_timer_id then
     clock.cancel(update_timer_id)
   end
@@ -208,23 +208,19 @@ function pattern_controller.update_working_patterns()
   end)
 end
 
-
 function pattern_controller.update_working_pattern(c)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
-  local sequencer_patterns = selected_sequencer_pattern.channels
-  local channel_pattern = sequencer_patterns[c]
-  local working_pattern = pattern_controller.get_and_merge_patterns(
+  local channel_pattern = selected_sequencer_pattern.channels[c]
+  channel_pattern.working_pattern = pattern_controller.get_and_merge_patterns(
     c,
     channel_pattern.trig_merge_mode,
     channel_pattern.note_merge_mode,
     channel_pattern.velocity_merge_mode,
     channel_pattern.length_merge_mode
   )
-  channel_pattern.working_pattern = working_pattern
 end
 
 function pattern_controller.throttled_update_working_pattern(c)
-  -- Must throttle to stop multiple quick inputs from slowing the sequencer down
   if update_timer_id_2 then
     clock.cancel(update_timer_id_2)
   end
