@@ -6,17 +6,23 @@ clock_lattice = {}
 
 local playing = false
 local master_clock
-local sinfonion_clock
 local trigless_lock_active = {}
 
-local delayed_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
-local delayed_sprockets_must_execute = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
-local arp_delay_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
-local arp_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
+local delayed_sprockets = {[0] = {}}
+for i = 1, 16 do delayed_sprockets[i] = {} end
+
+local delayed_sprockets_must_execute = {[0] = {}}
+for i = 1, 16 do delayed_sprockets_must_execute[i] = {} end
+
+local arp_delay_sprockets = {[0] = {}}
+for i = 1, 16 do arp_delay_sprockets[i] = {} end
+
+local arp_sprockets = {[0] = {}}
+for i = 1, 16 do arp_sprockets[i] = {} end
 
 local clock_divisions = include("mosaic/lib/divisions").clock_divisions
 
-function clock_controller.calculate_divisor(clock_mod)
+local function calculate_divisor(clock_mod)
   if clock_mod.type == "clock_multiplication" then
     return 4 * clock_mod.value
   elseif clock_mod.type == "clock_division" then
@@ -26,60 +32,32 @@ function clock_controller.calculate_divisor(clock_mod)
   end
 end
 
+clock_controller.calculate_divisor = calculate_divisor
+
 local function destroy_delay_sprockets()
-  for i, sprocket_table in ipairs(delayed_sprockets) do
-    for j, item in ipairs(sprocket_table) do
-      if item then
-        item:destroy()
-      end
+  for _, sprocket_table in ipairs(delayed_sprockets) do
+    for _, item in ipairs(sprocket_table) do
+      if item then item:destroy() end
     end
   end
 end
 
 local function get_shuffle_values(channel)
-  local shuffle_values = {}
-
-  local swing_value = params:get("global_swing")
-  if channel.swing ~= -51 then
-    swing_value = channel.swing
-  end
-  if channel.number == 17 then
-    swing_value = 0
-  end
-  shuffle_values.swing = swing_value
-
-  local swing_or_shuffle_value = params:get("global_swing_shuffle_type")
-  if channel.swing_shuffle_type and channel.swing_shuffle_type > 1 then
-    swing_or_shuffle_value = channel.swing_shuffle_type - 1
-  end
-  if channel.number == 17 then
-    swing_or_shuffle_value = 1
-  end
-
-  shuffle_values.swing_or_shuffle = swing_or_shuffle_value
-
-  local shuffle_basis_value = params:get("global_shuffle_basis")
-  if channel.shuffle_basis and channel.shuffle_basis > 1 then
-    shuffle_basis_value = channel.shuffle_basis - 1
-  end
-  if channel.number == 17 then
-    shuffle_basis_value = 0
-  end
-
-  shuffle_values.shuffle_basis = shuffle_basis_value
-
-  local shuffle_feel_value = params:get("global_shuffle_feel")
-  if channel.shuffle_feel and channel.shuffle_feel > 1 then
-    shuffle_feel_value = channel.shuffle_feel - 1
-  end
-  if channel.number == 17 then
-    shuffle_feel_value = 0
-  end
-
-  shuffle_values.shuffle_feel = shuffle_feel_value
-
-  return shuffle_values
+  local shuffle_values = {
+    swing = (channel.swing ~= -51) and channel.swing or params:get("global_swing"),
+    swing_or_shuffle = (channel.swing_shuffle_type and channel.swing_shuffle_type > 1) and (channel.swing_shuffle_type - 1) or params:get("global_swing_shuffle_type"),
+    shuffle_basis = (channel.shuffle_basis and channel.shuffle_basis > 1) and (channel.shuffle_basis - 1) or params:get("global_shuffle_basis"),
+    shuffle_feel = (channel.shuffle_feel and channel.shuffle_feel > 1) and (channel.shuffle_feel - 1) or params:get("global_shuffle_feel")
+  }
   
+  if channel.number == 17 then
+    shuffle_values.swing = 0
+    shuffle_values.swing_or_shuffle = 1
+    shuffle_values.shuffle_basis = 0
+    shuffle_values.shuffle_feel = 0
+  end
+  
+  return shuffle_values
 end
 
 function clock_controller.init()
@@ -115,7 +93,6 @@ function clock_controller.init()
   master_clock =
     clock_lattice:new_sprocket {
       action = function(t)
-        local selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
         if params:get("elektron_program_changes") == 2 and program_data.current_step == selected_sequencer_pattern.global_pattern_length - 1 then
           step_handler.process_elektron_program_change(step_handler.calculate_next_selected_sequencer_pattern())
         end
@@ -155,7 +132,7 @@ function clock_controller.init()
   local channel_edit_page = program.get_pages().channel_edit_page
   for channel_number = 17, 1, -1 do
     local channel = program.get_channel(channel_number)
-    local div = clock_controller.calculate_divisor(channel.clock_mods)
+    local div = calculate_divisor(channel.clock_mods)
 
     local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
     local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
@@ -376,7 +353,6 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
 
   local arp
   local runs = 1
-  local total_runs = length / division
   local acceleration_accumulator = 0
 
   local sprocket_action = function(div)
