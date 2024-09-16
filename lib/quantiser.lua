@@ -3,40 +3,45 @@ local quantiser = {}
 local fn = include("mosaic/lib/functions")
 local musicutil = require("musicutil")
 
+-- Pre-compute patterns for pentatonic scales
+local pentatonic_patterns = {
+    major = {1, 2, 3, 5, 6},
+    minor = {1, 3, 4, 5, 7},
+    harmonic_major = {1, 2, 3, 5, 6},
+    harmonic_minor = {1, 3, 4, 5, 7},
+    melodic_minor = {1, 3, 4, 5, 7},
+    dorian = {1, 2, 4, 5, 7},
+    phrygian = {1, 3, 4, 6, 7},
+    lydian = {2, 3, 5, 6, 7},
+    mixolydian = {1, 2, 4, 5, 6},
+    locrian = {2, 3, 4, 6, 7}
+}
+
+-- Memoization cache
+local memoize = {}
+setmetatable(memoize, {__mode = "k"})  -- weak keys
+
 function quantiser.filter_pentatonic_scale(scale, scale_type)
-  -- Define interval patterns for pentatonic versions of various scales
-  local patterns = {
-      major = {1, 2, 3, 5, 6},
-      minor = {1, 3, 4, 5, 7},
-      harmonic_major = {1, 2, 3, 5, 6},
-      harmonic_minor = {1, 3, 4, 5, 7},
-      melodic_minor = {1, 3, 4, 5, 7},
-      dorian = {1, 2, 4, 5, 7},
-      phrygian = {1, 3, 4, 6, 7},
-      lydian = {2, 3, 5, 6, 7},
-      mixolydian = {1, 2, 4, 5, 6},
-      locrian = {2, 3, 4, 6, 7}
-  }
+    local key = tostring(scale) .. "_" .. scale_type
+    if memoize[key] then return memoize[key] end
 
-  -- Default to major if the scale type is not specified or not in the patterns
-  local pattern = patterns[scale_type] or patterns.major
+    local pattern = pentatonic_patterns[scale_type] or pentatonic_patterns.major
+    local pentatonic = {}
+    local scale_length = 7
+    local pentatonic_index = 1
 
-  local pentatonic = {}
-  local scale_length = 7  -- Base diatonic scale length
-  local pentatonic_index = 1
+    for octave = 0, (#scale // scale_length - 1) do
+        for _, interval in ipairs(pattern) do
+            local position = octave * scale_length + interval
+            if scale[position] then
+                pentatonic[pentatonic_index] = scale[position]
+                pentatonic_index = pentatonic_index + 1
+            end
+        end
+    end
 
-  -- Extract pentatonic scale based on the pattern
-  for octave = 0, (math.floor(#scale / scale_length) - 1) do
-      for _, interval in ipairs(pattern) do
-          local position = octave * scale_length + interval
-          if scale[position] then
-              pentatonic[pentatonic_index] = scale[position]
-              pentatonic_index = pentatonic_index + 1
-          end
-      end
-  end
-
-  return pentatonic
+    memoize[key] = pentatonic
+    return pentatonic
 end
 
 local scales = {
@@ -142,19 +147,9 @@ local scales = {
   }
 }
 
+
 local notes = {
-  "C",
-  "D♭",
-  "D",
-  "E♭",
-  "E",
-  "F",
-  "G♭",
-  "G",
-  "A♭",
-  "A",
-  "B♭",
-  "B"
+    "C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"
 }
 
 function quantiser.get_scales()
@@ -171,75 +166,74 @@ end
 
 function quantiser.get_scale_name_from_index(i)
   if i == 0 then
-    return "Chromatic"
+      return "Chromatic"
   end
-
   return scales[i].name
 end
 
 local function process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree, do_pentatonic)
+
   local root_note = program.get().root_note + 60
   local chord_rotation = program.get().chord - 1
   local scale_container = program.get_scale(scale_number)
 
+  local key = string.format("%d_%d_%d_%d_%d_%d_%s_%s_%s_%s", root_note, chord_rotation, note_number, octave_mod, transpose, scale_number, tostring(do_rotation), tostring(do_degree), tostring(do_pentatonic), tostring(scale_container))
+    
+  -- Check if result is already memoized
+  if memoize[key] then 
+      return memoize[key] 
+  end
+
   if scale_container.root_note > -1 then
-    root_note = scale_container.root_note + 60
+      root_note = scale_container.root_note + 60
   end
 
   if scale_container.chord > -1 then
-    chord_rotation = scale_container.chord - 1
+      chord_rotation = scale_container.chord - 1
   end
-
 
   local scale = fn.deep_copy(scale_container.scale)
   local pentatonic = fn.deep_copy(scale_container.pentatonic_scale)
 
-
-  if (do_degree) then
-    if chord_rotation > 0 then
-      for i = 1, chord_rotation do
-        scale = fn.rotate_table_left(scale)
+  if do_degree and chord_rotation > 0 then
+      for _ = 1, chord_rotation do
+          scale = fn.rotate_table_left(scale)
       end
-    end
   end
 
-  if (do_rotation) then
-    if scale_container.chord_degree_rotation and scale_container.chord_degree_rotation > 0 then
+  if do_rotation and scale_container.chord_degree_rotation and scale_container.chord_degree_rotation > 0 then
       for index = #scale, 1, -1 do
-        local value = scale[index]
-        for i = 1, scale_container.chord_degree_rotation do
-          if (index % 7) == 7 - i then
-            scale[index + 1] = (scale[index + 1] or 0) - 12
+          for i = 1, scale_container.chord_degree_rotation do
+              if (index % 7) == 7 - i then
+                  scale[index + 1] = (scale[index + 1] or 0) - 12
+              end
           end
-        end
       end
-    end
   end
 
   scale = fn.transpose_scale(scale, transpose)
   pentatonic = fn.transpose_scale(pentatonic, transpose)
 
   if note_number < 0 then
-    local octave = math.floor(note_number / 7) + octave_mod
-    local note = note_number % 7
+      local octave = (note_number // 7) + octave_mod
+      local note = note_number % 7
 
-    if (do_pentatonic) then
-      return musicutil.snap_note_to_array(scale[note + 1], pentatonic) + (12 * octave) + root_note
-    end
-
-    return (scale[note + 1] + (12 * octave)) + root_note
+      if do_pentatonic then
+        result = musicutil.snap_note_to_array(scale[note + 1], pentatonic) + (12 * octave) + root_note
+      else
+        result = (scale[note + 1] + (12 * octave)) + root_note
+      end
   else
-    if note_number > 69 then
-      note_number = 69
-    end
+      note_number = math.min(note_number, 69)
 
-    if (do_pentatonic) then
-      return musicutil.snap_note_to_array(scale[note_number + 1], pentatonic) + (octave_mod * 12) + root_note
-    end
-
-    return (scale[note_number + 1] + (octave_mod * 12)) + root_note
+      if do_pentatonic then
+        result =  musicutil.snap_note_to_array(scale[note_number + 1], pentatonic) + (octave_mod * 12) + root_note
+      else
+        result = (scale[note_number + 1] + (octave_mod * 12)) + root_note
+      end
   end
 
+  return result
 end
 
 function quantiser.process(note_number, octave_mod, transpose, scale_number, do_pentatonic)
@@ -249,57 +243,30 @@ end
 function quantiser.process_chord_note_for_mask(note_mask_value, unscaled_chord_value, octave_mod, transpose, scale_number)
   local scale_container = program.get_scale(scale_number)
   local scale = fn.deep_copy(scale_container.scale)
-  local root_note = program.get().root_note
+  local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
   
-  if scale_container.root_note > -1 then
-    root_note = scale_container.root_note
-  end
-  
-  scale = fn.transpose_scale(scale, root_note)
-  scale = fn.transpose_scale(scale, transpose)
-  
+  scale = fn.transpose_scale(scale, root_note + transpose)
   
   local offset_in_scale = fn.find_index_by_value(scale, musicutil.snap_note_to_array(note_mask_value, scale))
   
   local chord_note = scale[unscaled_chord_value + (offset_in_scale or 0)]
   
-  if chord_note == nil then
-    return nil
-  end
-  
-  return chord_note + (octave_mod * 12)
+  return chord_note and (chord_note + (octave_mod * 12)) or nil
 end
 
 function quantiser.process_with_global_params(note_number, octave_mod, transpose, scale_number)
-  local do_rotation = true
-  local do_degree = true
-
-  if params:get("midi_honour_rotation") == 1 then
-    do_rotation = false
-  end
-
-  if params:get("midi_honour_degree") == 1 then
-    do_degree = false
-  end
+  local do_rotation = params:get("midi_honour_rotation") ~= 1
+  local do_degree = params:get("midi_honour_degree") ~= 1
 
   return process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree)
 end
 
 function quantiser.snap_to_scale(note_num, scale_number, transpose)
-
   local scale_container = program.get_scale(scale_number)
   local scale = fn.deep_copy(scale_container.scale)
-  local root_note = program.get().root_note
-  
-  if scale_container.root_note > -1 then
-    root_note = scale_container.root_note
-  end
+  local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
 
-  scale = fn.transpose_scale(scale, root_note)
-  
-  if transpose then
-    scale = fn.transpose_scale(scale, transpose)
-  end
+  scale = fn.transpose_scale(scale, root_note + (transpose or 0))
   
   return musicutil.snap_note_to_array(note_num, scale)
 end
@@ -312,11 +279,7 @@ end
 function quantiser.get_chord_degree(note, chord_one_note, scale_number)
   local scale_container = program.get_scale(scale_number)
   local scale = fn.deep_copy(scale_container.scale)
-  local root_note = program.get().root_note
-  
-  if scale_container.root_note > -1 then
-    root_note = scale_container.root_note
-  end
+  local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
   
   scale = fn.transpose_scale(scale, root_note)
   

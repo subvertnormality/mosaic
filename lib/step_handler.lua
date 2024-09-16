@@ -5,38 +5,22 @@ local divisions = include("mosaic/lib/divisions")
 
 local step_handler = {}
 local persistent_channel_step_scale_numbers = {
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil,
-  nil
+    nil, nil, nil, nil, nil, nil, nil, nil,
+    nil, nil, nil, nil, nil, nil, nil, nil
 }
 local persistent_global_step_scale_number = nil
 local persistent_step_transpose = nil
 
-local arp_note = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+local arp_note = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 local step_scale_number = 0
 
-local switch_to_next_song_pattern_func = function()
-end
-local switch_to_next_song_pattern_blink_cancel_func = function()
-end
+local switch_to_next_song_pattern_func = function() end
+local switch_to_next_song_pattern_blink_cancel_func = function() end
 local next_song_pattern_queue = nil
 local pattern_change_queue = {}
 
-local note_divisions = include("mosaic/lib/divisions").note_divisions
+local note_divisions = divisions.note_divisions
 
 function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)
@@ -44,25 +28,23 @@ function step_handler.process_stock_params(c, step, type)
   local trig_lock_banks = channel.trig_lock_banks
 
   for i = 1, 10 do
-    local param = trig_lock_params[i]
-    if param and param.id == type then
-      local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-      if step_trig_lock == param.off_value then
-        return nil
+      local param = trig_lock_params[i]
+      if param and param.id == type then
+          local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
+          if step_trig_lock == param.off_value then
+              return nil
+          end
+          if step_trig_lock then
+              return step_trig_lock
+          else
+              return trig_lock_banks[i] ~= param.off_value and trig_lock_banks[i] or nil
+          end
       end
-      if step_trig_lock then
-        return step_trig_lock
-      else
-        if trig_lock_banks[i] == param.off_value then
-          return nil
-        end
-        return trig_lock_banks[i]
-      end
-    end
   end
 
   return nil
 end
+
 
 
 function step_handler.process_params(c, step)
