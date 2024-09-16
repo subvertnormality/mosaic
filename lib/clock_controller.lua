@@ -34,10 +34,39 @@ end
 
 clock_controller.calculate_divisor = calculate_divisor
 
+
 local function destroy_delay_sprockets()
-  for _, sprocket_table in ipairs(delayed_sprockets) do
-    for _, item in ipairs(sprocket_table) do
-      if item then item:destroy() end
+  for i, sprocket_table in ipairs(delayed_sprockets) do
+    for j, sprocket in ipairs(sprocket_table) do
+      if sprocket then sprocket:destroy() end
+      table.remove(sprocket_table, j)
+    end
+  end
+end
+
+local function destroy_arp_sprockets()
+  for i, sprocket_table in ipairs(arp_sprockets) do
+    for j, sprocket in ipairs(sprocket_table) do
+      if sprocket then sprocket:destroy() end
+      table.remove(sprocket_table, j)
+    end
+  end
+end
+
+local function destroy_arp_delay_sprockets()
+  for i, sprocket_table in ipairs(arp_delay_sprockets) do
+    for j, sprocket in ipairs(sprocket_table) do
+      if sprocket then sprocket:destroy() end
+      table.remove(sprocket_table, j)
+    end
+  end
+end
+
+local function destroy_delayed_sprockets_must_execute() 
+  for i, sprocket_table in ipairs(delayed_sprockets_must_execute) do
+    for j, sprocket in ipairs(sprocket_table) do
+      if sprocket then sprocket:destroy() end
+      table.remove(sprocket_table, j)
     end
   end
 end
@@ -71,7 +100,16 @@ function clock_controller.init()
   end
 
   destroy_delay_sprockets()
-  delayed_sprockets = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
+  destroy_arp_sprockets()
+  destroy_arp_delay_sprockets()
+  destroy_delayed_sprockets_must_execute()
+  
+  for i = 1, 16 do 
+    delayed_sprockets[i] = {} 
+    delayed_sprockets_must_execute[i] = {}
+    arp_delay_sprockets[i] = {}
+    arp_sprockets[i] = {}
+  end
 
   local midi_clock_init = nil
 
@@ -404,6 +442,8 @@ local function execute_delayed_sprockets()
     for j, item in ipairs(sprocket_table) do
       if item then
         item:action()
+        item:destroy()
+        table.remove(sprocket_table, j)
       end
     end
   end
@@ -413,6 +453,7 @@ function clock_controller.kill_arp_delay_sprockets(c)
   for i, item in ipairs(arp_delay_sprockets[c]) do
     if item then
       item:destroy()
+      table.remove(arp_delay_sprockets[c], i)
     end
   end
 end
