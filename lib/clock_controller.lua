@@ -5,7 +5,6 @@ clock_controller = {}
 clock_lattice = {}
 
 local playing = false
-local first_run = true
 local master_clock
 local sinfonion_clock
 local trigless_lock_active = {}
@@ -87,6 +86,8 @@ function clock_controller.init()
   local program_data = program.get()
   clock_lattice = lattice:new()
 
+  local first_run = true
+
   if testing then
     clock_lattice.auto = false
   end
@@ -114,8 +115,6 @@ function clock_controller.init()
   master_clock =
     clock_lattice:new_sprocket {
       action = function(t)
-
-
         local selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
         if params:get("elektron_program_changes") == 2 and program_data.current_step == selected_sequencer_pattern.global_pattern_length - 1 then
           step_handler.process_elektron_program_change(step_handler.calculate_next_selected_sequencer_pattern())
@@ -126,6 +125,8 @@ function clock_controller.init()
           if program_data.global_step_accumulator % selected_sequencer_pattern.global_pattern_length == 0 then
             for i = 1, 17 do
               local channel = program.get_channel(i)
+              local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+              local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
               if (fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2]) - fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2]) + 1) > selected_sequencer_pattern.global_pattern_length then
                 program.set_current_step_for_channel(i, 99)
               end
@@ -150,16 +151,17 @@ function clock_controller.init()
       enabled = true
     }
 
+
+  local channel_edit_page = program.get_pages().channel_edit_page
   for channel_number = 17, 1, -1 do
     local channel = program.get_channel(channel_number)
     local div = clock_controller.calculate_divisor(channel.clock_mods)
 
+    local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+    local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
 
     local sprocket_action = function(t)
       local current_step = program.get_current_step_for_channel(channel_number)
-
-      local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
-      local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
 
       if current_step < start_trig then
         program.set_current_step_for_channel(channel_number, start_trig)
@@ -186,7 +188,7 @@ function clock_controller.init()
       clock_controller["channel_" .. channel_number .. "_clock"].first_run = false
       clock_controller["channel_" .. channel_number .. "_clock"].next_step = current_step
 
-      if program_data.selected_channel == channel_number and program_data.selected_page == program.get_pages().channel_edit_page then
+      if program_data.selected_channel == channel_number and program_data.selected_page == channel_edit_page then
         fn.dirty_grid(true)
       end
     end
@@ -326,7 +328,6 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
   local ppqn = clock_lattice.ppqn  -- Pulses per quarter note
   
   local note_division_mod = ((note_division * multiplier) + acceleration) * division
-  -- local division = ((note_division * multiplier) + acceleration) * clock_controller["channel_" .. c .. "_clock"].division
 
   local count = division
   local sprocket_action = function(t)

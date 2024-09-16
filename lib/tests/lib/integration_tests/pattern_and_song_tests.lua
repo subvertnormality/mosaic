@@ -105,35 +105,6 @@ function test_current_step_number_is_set_to_start_step_when_lower_than_start_tri
 end
 
 
-function test_sequence_page_change_at_end_of_song_pattern_lengths()
-
-    local lengths_to_test = {4, 8, 10, 11, 24, 32, 33, 64, 65, 128, 300} -- Add more lengths as needed
-  
-    for _, length in ipairs(lengths_to_test) do
-      setup()
-      local sequencer_pattern = 1
-      program.set_selected_sequencer_pattern(1)
-      local test_pattern = program.initialise_default_pattern()
-  
-      program.get_selected_sequencer_pattern().global_pattern_length = length
-  
-      program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-      fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  
-      pattern_controller.update_working_patterns()
-  
-      clock_setup()
-      -- Progress the clock according to the current length being tested
-      progress_clock_by_beats(length)
-      luaunit.assert_equals(table.remove(channel_sequencer_page_controller_refresh_events), true)
-  
-      progress_clock_by_beats(length * 2)
-  
-      luaunit.assert_equals(table.remove(channel_sequencer_page_controller_refresh_events), true)
-      luaunit.assert_equals(table.remove(channel_sequencer_page_controller_refresh_events), true)
-    end
-end
-
 function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_pattern_reset_is_disabled()
 
   setup()

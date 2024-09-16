@@ -66,11 +66,12 @@ end
 
 
 function step_handler.process_params(c, step)
+  local program_data = program.get()
   local channel = program.get_channel(c)
-  local device = device_map.get_device(program.get().devices[channel.number].device_map)
+  local device = device_map.get_device(program_data.devices[channel.number].device_map)
   local trig_lock_params = channel.trig_lock_params
   local trig_lock_banks = channel.trig_lock_banks
-  local devices = program.get().devices
+  local devices = program_data.devices
 
   for i = 1, 10 do
     local param = trig_lock_params[i]
@@ -409,13 +410,14 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   arp_note[c] = 2
 
   local number_of_executions = 1
+  local total_notes = #sequenced_chord_notes  -- Cache the length of the processed_chord_notes table
+
   clock_controller.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div)
     local note_dashboard_values = {}
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
     local length = div
 
     local note_to_play = sequenced_chord_notes[arp_note[c]]
-    local total_notes = #sequenced_chord_notes  -- Cache the length of the processed_chord_notes table
     
     -- Function to check for a playable note later in the table
     local function check_for_later_note(start)
@@ -524,20 +526,22 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
       local chord_number, delay_multiplier = i, i
 
+      local half_i = i // 2
+
       if chord_strum_pattern == 2 then
         chord_number = #chord_notes + 1 - i
         delay_multiplier = delay_multiplier - 1
       elseif chord_strum_pattern == 3 then
         if i % 2 == 1 then
-          chord_number = (i // 2) + 1
+          chord_number = half_i + 1
         else
-          chord_number = #chord_notes - (i // 2) + 1
+          chord_number = #chord_notes - half_i + 1
         end
       elseif chord_strum_pattern == 4 then
         if i % 2 == 1 then
-          chord_number = #chord_notes - (i // 2)
+          chord_number = #chord_notes - half_i
         else
-          chord_number = (i // 2)
+          chord_number = half_i
         end
         delay_multiplier = delay_multiplier - 1
       end
