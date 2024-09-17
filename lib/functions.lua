@@ -1,6 +1,10 @@
 local fn = {}
 
-random = math.random
+-- Localize functions for performance
+local floor = math.floor
+local insert, remove, concat = table.insert, table.remove, table.concat
+local string_find, string_gsub, string_match, string_sub, string_upper, string_lower = 
+    string.find, string.gsub, string.match, string.sub, string.upper, string.lower
 
 function fn.cleanup()
   _midi.all_off()
@@ -26,15 +30,17 @@ function fn.dirty_screen(bool)
 end
 
 function fn.remove_table_by_id(t, target_id)
-  for i = #t, 1, -1 do
+  local n = #t
+  for i = n, 1, -1 do
     if t[i].id == target_id then
-      table.remove(t, i)
+      remove(t, i)
     end
   end
 end
 
 function fn.id_appears_in_table(t, target_id)
-  for i = #t, 1, -1 do
+  local n = #t
+  for i = n, 1, -1 do
     if t[i].id == target_id then
       return true
     end
@@ -43,7 +49,8 @@ function fn.id_appears_in_table(t, target_id)
 end
 
 function fn.appears_in_table(t, target_id)
-  for i = #t, 1, -1 do
+  local n = #t
+  for i = n, 1, -1 do
     if t[i] == target_id then
       return true
     end
@@ -52,7 +59,7 @@ function fn.appears_in_table(t, target_id)
 end
 
 function fn.string_in_table(tbl, target)
-  for _, value in pairs(tbl) do
+  for _, value in ipairs(tbl) do
     if value == target then
       return true
     end
@@ -61,7 +68,8 @@ function fn.string_in_table(tbl, target)
 end
 
 function fn.get_by_id(t, target_id)
-  for i = #t, 1, -1 do
+  local n = #t
+  for i = n, 1, -1 do
     if t[i].id == target_id then
       return t[i]
     end
@@ -69,7 +77,8 @@ function fn.get_by_id(t, target_id)
 end
 
 function fn.get_index_by_id(t, target_id)
-  for i = #t, 1, -1 do
+  local n = #t
+  for i = n, 1, -1 do
     if t[i].id == target_id then
       return i
     end
@@ -78,14 +87,14 @@ end
 
 function fn.table_to_string(tbl)
   local result = {}
-  table.insert(result, "{")
+  insert(result, "{")
   for k, v in pairs(tbl) do
-    table.insert(result, (type(k) == "string" and '["' .. k .. '"]=' or "[" .. k .. "]="))
-    table.insert(result, (type(v) == "table" and fn.table_to_string(v) or (type(v) == "string" and '"' .. v .. '"' or v)))
-    table.insert(result, ",")
+    insert(result, (type(k) == "string" and '["' .. k .. '"]=' or "[" .. k .. "]="))
+    insert(result, (type(v) == "table" and fn.table_to_string(v) or (type(v) == "string" and '"' .. v .. '"' or v)))
+    insert(result, ",")
   end
-  table.insert(result, "}")
-  return table.concat(result)
+  insert(result, "}")
+  return concat(result)
 end
 
 function fn.print_table(t, indent, current_depth, max_depth)
@@ -120,26 +129,26 @@ function fn.string_to_table(str)
 end
 
 function fn.title_case(str)
-  return (str:gsub("(%a)([%w_']*)", function(first, rest) return first:upper() .. rest:lower() end))
+  return string_gsub(str, "(%a)([%w_']*)", function(first, rest) return string_upper(first) .. string_lower(rest) end)
 end
 
 local function split_words(str)
   local words = {}
   for word in str:gmatch("%w+") do
-    table.insert(words, word)
+    insert(words, word)
   end
   return words
 end
 
 function fn.snake_case(str)
-  return str:gsub("(%s?)(%u)", function(space, letter) return (space == " " and "_" or "") .. letter:lower() end):gsub("%s", "_")
+  return string_gsub(str, "(%s?)(%u)", function(space, letter) return (space == " " and "_" or "") .. string_lower(letter) end):gsub("%s", "_")
 end
 
 local function truncate_word(word)
   if #word > 4 then
-    return word:gsub("([bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ])[aeiouAEIOU]", "%1", 1):sub(1, 4):upper()
+    return string_gsub(word, "([bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ])[aeiouAEIOU]", "%1", 1):sub(1, 4):upper()
   end
-  return word:sub(1, 4):upper()
+  return string_sub(word, 1, 4):upper()
 end
 
 function fn.format_first_descriptor(str)
@@ -183,19 +192,19 @@ function fn.table_count(t)
 end
 
 function fn.shift_table_left(t)
-  local first_val = table.remove(t, 1)
-  table.insert(t, first_val)
+  local first_val = remove(t, 1)
+  insert(t, first_val)
   return t
 end
 
 function fn.shift_table_right(t)
-  local last_val = table.remove(t)
-  table.insert(t, 1, last_val)
+  local last_val = remove(t)
+  insert(t, 1, last_val)
   return t
 end
 
-function fn.find_index_in_table_by_id(table, object)
-  for i, o in ipairs(table) do
+function fn.find_index_in_table_by_id(t, object)
+  for i, o in ipairs(t) do
     if o.id == object.id then
       return i
     end
@@ -203,8 +212,8 @@ function fn.find_index_in_table_by_id(table, object)
   return nil
 end
 
-function fn.find_index_in_table_by_value(table, value)
-  for i, o in ipairs(table) do
+function fn.find_index_in_table_by_value(t, value)
+  for i, o in ipairs(t) do
     if o.value == value then
       return i
     end
@@ -212,8 +221,8 @@ function fn.find_index_in_table_by_value(table, value)
   return nil
 end
 
-function fn.find_index_by_value(table, value)
-  for i, o in ipairs(table) do
+function fn.find_index_by_value(t, value)
+  for i, o in ipairs(t) do
     if o == value then
       return i
     end
@@ -258,8 +267,8 @@ function fn.table_has_one_item(tbl)
   return count == 1
 end
 
-function fn.table_contains(table, value)
-  for _, v in ipairs(table) do
+function fn.table_contains(t, value)
+  for _, v in ipairs(t) do
     if v == value then
       return true
     end
@@ -270,7 +279,7 @@ end
 function fn.remove_table_from_table(t, object)
   for i, v in ipairs(t) do
     if fn.tables_are_equal(v, object) then
-      table.remove(t, i)
+      remove(t, i)
       return
     end
   end
@@ -280,7 +289,7 @@ function fn.filter_by_type(input_table, filter_type)
   local filtered = {}
   for _, item in ipairs(input_table) do
     if item.type == filter_type then
-      table.insert(filtered, item)
+      insert(filtered, item)
     end
   end
   return filtered
@@ -311,12 +320,12 @@ function fn.note_from_value(val)
 end
 
 function fn.round(num)
-  return math.floor(num + 0.5)
+  return floor(num + 0.5)
 end
 
 function fn.round_to_decimal_places(num, num_decimal_places)
   local mult = 10 ^ (num_decimal_places or 0)
-  return math.floor(num * mult + 0.5) / mult
+  return floor(num * mult + 0.5) / mult
 end
 
 function fn.calc_grid_count(x, y)
@@ -324,9 +333,9 @@ function fn.calc_grid_count(x, y)
 end
 
 function fn.rotate_table_left(t)
-  local first_item = table.remove(t, 1)
+  local first_item = remove(t, 1)
   local new_table = {table.unpack(t)}
-  table.insert(new_table, first_item)
+  insert(new_table, first_item)
   return new_table
 end
 
@@ -350,7 +359,7 @@ function fn.transform_twos_random_value(n)
   if n < 1 then
     return 0
   else
-    local min = -math.floor(n / 2) * 2
+    local min = -floor(n / 2) * 2
     return random(0, n) * 2 + min
   end
 end
@@ -358,7 +367,7 @@ end
 function fn.transpose_scale(scale, transpose)
   local transposed = {}
   for i, note in ipairs(scale) do
-    table.insert(transposed, note + transpose)
+    insert(transposed, note + transpose)
   end
   return transposed
 end
@@ -394,12 +403,12 @@ function fn.average_table_values(tbl)
   if count == 0 then
     return nil
   else
-    return math.floor((sum / count) + 0.5)
+    return floor((sum / count) + 0.5)
   end
 end
 
 function fn.string_trim(self)
-  return self:match("^%s*(.-)%s*$")
+  return string_match(self, "^%s*(.-)%s*$")
 end
 
 function fn.string_split(self, in_split_pattern, out_results)
@@ -407,16 +416,14 @@ function fn.string_split(self, in_split_pattern, out_results)
     out_results = {}
   end
   local the_start = 1
-  local the_split_start, the_split_end = string.find(self, in_split_pattern, the_start)
+  local the_split_start, the_split_end = string_find(self, in_split_pattern, the_start)
   while the_split_start do
-    table.insert(out_results, string.sub(self, the_start, the_split_start - 1))
+    insert(out_results, string_sub(self, the_start, the_split_start - 1))
     the_start = the_split_end + 1
-    the_split_start, the_split_end = string.find(self, in_split_pattern, the_start)
+    the_split_start, the_split_end = string_find(self, in_split_pattern, the_start)
   end
-  table.insert(out_results, string.sub(self, the_start))
+  insert(out_results, string_sub(self, the_start))
   return out_results
 end
-
-
 
 return fn

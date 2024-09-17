@@ -4,6 +4,8 @@ local quantiser = include("mosaic/lib/quantiser")
 local clock_controller = include("mosaic/lib/clock_controller")
 local divisions = include("mosaic/lib/divisions")
 
+local program = program
+
 local notes = program.initialise_64_table({})
 local lengths = program.initialise_64_table({})
 local velocities = program.initialise_64_table({})
@@ -14,6 +16,11 @@ local update_timer_id_2 = nil
 local throttle_time = 0.001
 local currently_processing = false
 local currently_processing_2 = false
+
+local unpack = table.unpack
+local insert = table.insert
+local sort = table.sort
+local pairs = pairs
 
 -- Pre-allocate tables
 local default_trig_values = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
@@ -40,15 +47,15 @@ end
 function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
   local merged_pattern = {
-    trig_values = {table.unpack(default_trig_values)},
-    lengths = {table.unpack(default_lengths)},
-    note_values = {table.unpack(default_note_values)},
-    note_mask_values = {table.unpack(default_note_mask_values)},
-    velocity_values = {table.unpack(default_velocity_values)},
+    trig_values = {unpack(default_trig_values)},
+    lengths = {unpack(default_lengths)},
+    note_values = {unpack(default_note_values)},
+    note_mask_values = {unpack(default_note_mask_values)},
+    velocity_values = {unpack(default_velocity_values)},
     merged_notes = {}
   }
-  local skip_bits = {table.unpack(default_trig_values)}
-  local only_bits = {table.unpack(default_trig_values)}
+  local skip_bits = {unpack(default_trig_values)}
+  local only_bits = {unpack(default_trig_values)}
 
   local pattern_channel = selected_sequencer_pattern.channels[channel]
   local patterns = selected_sequencer_pattern.patterns
@@ -64,7 +71,7 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
       merged_values[s] = values[s]
     elseif mode == "up" or mode == "down" or mode == "average" then
       if is_pattern_trig_one then
-        table.insert(pushed_values[s], values[s])
+        insert(pushed_values[s], values[s])
       end
     end
   end
@@ -134,7 +141,7 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
       elseif #values[s] == 1 then
         merged_values[s] = values[s][1]
       else
-        table.sort(values[s])
+        sort(values[s])
         local min_value = values[s][1]
         local max_value = values[s][#values[s]]
         local average = fn.average_table_values(values[s])

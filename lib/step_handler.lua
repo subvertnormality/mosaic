@@ -22,6 +22,13 @@ local pattern_change_queue = {}
 
 local note_divisions = divisions.note_divisions
 
+random = math.random
+
+-- performance optimisation
+local program = program
+local ipairs = ipairs
+local table = table
+
 function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)
   local trig_lock_params = channel.trig_lock_params
@@ -350,7 +357,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
 
   if c == program.get().selected_channel then
     channel_edit_page_ui_controller.set_note_dashboard_values({
-      chords = processed_chord_notes
+      chords = sequenced_chord_notes
     })
   end
 

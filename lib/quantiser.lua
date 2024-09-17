@@ -3,6 +3,11 @@ local quantiser = {}
 local fn = include("mosaic/lib/functions")
 local musicutil = require("musicutil")
 
+local program = program
+local params = params
+local string = string
+local tostring = tostring
+
 -- Pre-compute patterns for pentatonic scales
 local pentatonic_patterns = {
     major = {1, 2, 3, 5, 6},
@@ -214,6 +219,7 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
   scale = fn.transpose_scale(scale, transpose)
   pentatonic = fn.transpose_scale(pentatonic, transpose)
 
+  local result = nil
   if note_number < 0 then
       local octave = (note_number // 7) + octave_mod
       local note = note_number % 7
