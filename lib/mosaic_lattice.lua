@@ -202,7 +202,7 @@ function Lattice:new_sprocket(args)
   args.id = self.sprocket_id_counter
   args.order = args.order == nil and 3 or util.clamp(args.order, 1, 5)
   args.action = args.action == nil and function(t) return end or args.action
-  args.division = args.division == nil and 1/4 or args.division
+  args.division = args.division == nil and 1/4 or math.max(args.division, 1 / (clock_lattice.ppqn * 4))
   args.enabled = args.enabled == nil and true or args.enabled
   args.phase = 1
   args.delay = args.delay == nil and 0 or util.clamp(args.delay,0,1)

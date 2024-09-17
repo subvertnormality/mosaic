@@ -35,6 +35,9 @@ device_map = include("mosaic/lib/device_map")
 
 g = grid.connect()
 
+collectgarbage("setpause", 150)
+collectgarbage("setstepmul", 2000)
+
 local function load_project(pth)
   clock_controller:stop()
 
@@ -195,6 +198,7 @@ function init()
         if fn.dirty_grid() then
           grid_controller.grid_redraw()
         end
+        collectgarbage("step", 2)
       end
     end
   )

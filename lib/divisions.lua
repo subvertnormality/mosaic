@@ -47,11 +47,7 @@ divisions.clock_divisions = {
   {name = "/64", value = 64, type = "clock_division"},
   {name = "/96", value = 96, type = "clock_division"},
   {name = "/101", value = 101, type = "clock_division"},
-  {name = "/128", value = 128, type = "clock_division"},
-  {name = "/192", value = 192, type = "clock_division"},
-  {name = "/256", value = 256, type = "clock_division"},
-  {name = "/384", value = 384, type = "clock_division"},
-  {name = "/512", value = 512, type = "clock_division"}
+  {name = "/128", value = 128, type = "clock_division"}
 }
 
 
@@ -102,11 +98,7 @@ divisions.clock_divisions_labels = {
   "/64", 
   "/96", 
   "/101",
-  "/128",
-  "/192",
-  "/256",
-  "/384",
-  "/512" 
+  "/128"
 }
 
 

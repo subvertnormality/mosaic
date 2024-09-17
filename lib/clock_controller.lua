@@ -36,40 +36,66 @@ clock_controller.calculate_divisor = calculate_divisor
 
 
 local function destroy_delay_sprockets()
-  for i, sprocket_table in ipairs(delayed_sprockets) do
-    for j, sprocket in ipairs(sprocket_table) do
-      if sprocket then sprocket:destroy() end
-      table.remove(sprocket_table, j)
+  for _, sprocket_table in ipairs(delayed_sprockets) do
+    for j = #sprocket_table, 1, -1 do
+      local sprocket = sprocket_table[j]
+      if sprocket then 
+        sprocket:destroy() 
+        table.remove(sprocket_table, j)
+      end
     end
   end
 end
 
 local function destroy_arp_sprockets()
-  for i, sprocket_table in ipairs(arp_sprockets) do
-    for j, sprocket in ipairs(sprocket_table) do
-      if sprocket then sprocket:destroy() end
-      table.remove(sprocket_table, j)
+  for _, sprocket_table in ipairs(arp_sprockets) do
+    for j = #sprocket_table, 1, -1 do
+      local sprocket = sprocket_table[j]
+      if sprocket then 
+        sprocket:destroy() 
+        table.remove(sprocket_table, j)
+      end
     end
   end
 end
 
 local function destroy_arp_delay_sprockets()
-  for i, sprocket_table in ipairs(arp_delay_sprockets) do
-    for j, sprocket in ipairs(sprocket_table) do
-      if sprocket then sprocket:destroy() end
-      table.remove(sprocket_table, j)
+  for _, sprocket_table in ipairs(arp_delay_sprockets) do
+    for j = #sprocket_table, 1, -1 do
+      local sprocket = sprocket_table[j]
+      if sprocket then 
+        sprocket:destroy() 
+        table.remove(sprocket_table, j)
+      end
     end
   end
 end
 
-local function destroy_delayed_sprockets_must_execute() 
-  for i, sprocket_table in ipairs(delayed_sprockets_must_execute) do
-    for j, sprocket in ipairs(sprocket_table) do
-      if sprocket then sprocket:destroy() end
-      table.remove(sprocket_table, j)
+local function destroy_delayed_sprockets_must_execute()
+  for _, sprocket_table in ipairs(delayed_sprockets_must_execute) do
+    for j = #sprocket_table, 1, -1 do
+      local sprocket = sprocket_table[j]
+      if sprocket then 
+        sprocket:destroy() 
+        table.remove(sprocket_table, j)
+      end
     end
   end
 end
+
+local function execute_delayed_sprockets()
+  for _, sprocket_table in ipairs(delayed_sprockets_must_execute) do
+    for j = #sprocket_table, 1, -1 do
+      local item = sprocket_table[j]
+      if item then
+        item:action()
+        item:destroy()
+        table.remove(sprocket_table, j)
+      end
+    end
+  end
+end
+
 
 local function get_shuffle_values(channel)
   local shuffle_values = {
@@ -103,7 +129,7 @@ function clock_controller.init()
   destroy_arp_sprockets()
   destroy_arp_delay_sprockets()
   destroy_delayed_sprockets_must_execute()
-  
+
   for i = 1, 16 do 
     delayed_sprockets[i] = {} 
     delayed_sprockets_must_execute[i] = {}
@@ -358,6 +384,7 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
         end
       end
       delayed:destroy()
+      delayed = nil
     end
   end
 
@@ -397,6 +424,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
     func(div)
     if length == 0 then
       arp:destroy()
+      arp = nil
     end
   end
   local shuffle_values = get_shuffle_values(channel)
@@ -430,6 +458,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
 
   clock_controller.delay_action(c, length, 1, 0, 0.95, "must_execute", function()
     arp:destroy()
+    arp = nil
     clock_controller.kill_arp_delay_sprockets(c)
   end)
 
@@ -488,6 +517,8 @@ function clock_controller:stop()
   end
 
   clock_controller.reset()
+
+  collectgarbage("collect")
 end
 
 function clock_controller.is_playing()
@@ -511,6 +542,7 @@ function clock_controller.reset()
 
   if clock_lattice and clock_lattice.destroy then
     clock_lattice:destroy()
+    clock_lattice = nil
   end
 
   clock_controller.init()
