@@ -22,10 +22,10 @@ local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_p
 -- UI components
 local channel_pages = pages:new()
 local scales_pages = pages:new()
-local quantizer_vertical_scroll_selector = vertical_scroll_selector:new(20, 18, "Quantizer", quantiser.get_scales())
-local romans_vertical_scroll_selector = vertical_scroll_selector:new(90, 18, "Roman Analysis", quantiser.get_scales()[1].romans)
-local notes_vertical_scroll_selector = vertical_scroll_selector:new(5, 18, "Notes", quantiser.get_notes())
-local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 18, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
+local quantizer_vertical_scroll_selector = vertical_scroll_selector:new(20, 25, "Quantizer", quantiser.get_scales())
+local romans_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
+local notes_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Notes", quantiser.get_notes())
+local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
 local swing_shuffle_type_selector = list_selector:new(70, 18, "Swing Type", {{name = "X", value = 1}, {name = "Swing", value = 2}, {name = "Shuffle", value = 3}})
 local swing_selector = value_selector:new(5, 40, "Swing", -51, 50)
 local shuffle_feel_selector = list_selector:new(5, 40, "Shuffle Feel", {{name = "X", value = 1}, {name = "Drunk", value = 2}, {name = "Smooth", value = 3}, {name = "Heavy", value = 4}, {name = "Clave", value = 5}})
@@ -59,15 +59,15 @@ local note_displays = {
 
 -- Clock and MIDI selectors
 local clock_mod_list_selector = list_selector:new(5, 18, "Clock Mod", {})
-local midi_device_vertical_scroll_selector = vertical_scroll_selector:new(90, 18, "Midi Device", {})
-local midi_channel_vertical_scroll_selector = vertical_scroll_selector:new(65, 18, "Midi Channel", {
+local midi_device_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Midi Device", {})
+local midi_channel_vertical_scroll_selector = vertical_scroll_selector:new(65, 25, "Midi Channel", {
   {name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4},
   {name = "CC5", value = 5}, {name = "CC6", value = 6}, {name = "CC7", value = 7}, {name = "CC8", value = 8},
   {name = "CC9", value = 9}, {name = "CC10", value = 10}, {name = "CC11", value = 11}, {name = "CC12", value = 12},
   {name = "CC13", value = 13}, {name = "CC14", value = 14}, {name = "CC15", value = 15}, {name = "CC16", value = 16}
 })
 local device_map_vertical_scroll_selector = nil
-local param_select_vertical_scroll_selector = vertical_scroll_selector:new(30, 18, "Params", {})
+local param_select_vertical_scroll_selector = vertical_scroll_selector:new(30, 25, "Params", {})
 
 -- Dials
 local dials = control_scroll_selector:new(0, 0, {})
