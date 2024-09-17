@@ -42,7 +42,7 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
     + [Scale Editor](#scale-editor)
       - [Transposition](#transposition)
     + [Note Dashboard](#note-dashboard)
-    + [Clocks and Swing](#clocks-and-swing)
+    + [Clocks, Swing and Shuffle](#clocks-swing-and-shuffle)
     + [Channel Length](#channel-length)
     + [Muting Channels](#muting-channels)
     + [Devices](#devices)
@@ -58,6 +58,8 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
         + [Random Twos Note](#random-twos-note)
         + [Chord Strum](#chord-strum)
         + [Chord Arpeggio](#chord-arpeggio)
+        + [Chord Acceleration](#chord-acceleration)
+        + [Chord Spread](#chord-spread)
         + [Chord Velocity Modifier](#chord-velocity-modifier)
         + [Chord Shape Modifier](#chord-shape-modifier)
       - [Locks](#locks)
@@ -414,11 +416,15 @@ To return to the channel edit page, press any of the channel buttons at the top 
 
 On the Norns first page in the channel mode you can see the last played notes on the currently selected channel.
 
-#### Clocks and Swing
+#### Clocks, Swing and Shuffle
 
 You can easily adjust the tempo of your entire composition directly from the song sequencer page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels via the channel editor page in the Norns menu. This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.
 
-Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable.
+Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable. There are two modes to choose from: swing, which moves notes closer or further apart depending on the value which ranges from -50 to 50. Shuffle uses more complex patterns and can be set to a "feel" and a "basis". Each channel can have an independent setting, giving endless possibilities. If a channel's swing/shuffle settings are not set, they will take the global setting which can be set on the song sequencer page global settings page.
+
+Clock, swing and shuffle settings apply when the sequencer resets if the sequencer is currently playing.
+
+Note: Shuffle only works if the global pattern length is set to a multiple of 8, otherwise the sequencer will fall back to swing.
 
 #### Channel Length
 
@@ -512,7 +518,15 @@ The Chord Strum feature dynamically spaces selected chord masks using the select
 
 ##### Chord Arpeggio
 
-The Chord Arp feature is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantized to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param.
+The Chord Arp feature is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantized to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.
+
+##### Chord Acceleration
+
+TODO
+
+##### Chord Spread
+
+TODO
 
 ##### Chord Velocity Modifier
 
