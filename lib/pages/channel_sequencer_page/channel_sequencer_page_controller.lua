@@ -75,6 +75,7 @@ function channel_sequencer_page_controller.register_press_handlers()
           for channel_number = 1, 17 do
             local channel = program.get_channel(channel_number)
             clock_controller.set_channel_division(channel_number, clock_controller.calculate_divisor(channel.clock_mods))
+            clock_controller.get_clock_lattice().global_pattern_length = program.get_selected_sequencer_pattern().global_pattern_length
             if channel_number ~= 17 then
               channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(channel_number)
               channel_edit_page_ui_controller.align_global_and_local_swing_values(channel_number)
@@ -132,8 +133,18 @@ function channel_sequencer_page_controller.register_press_handlers()
     function(x, y)
       if global_pattern_length_fader:is_this(x, y) then
         global_pattern_length_fader:press(x, y)
-        program.get_selected_sequencer_pattern().global_pattern_length = global_pattern_length_fader:get_value()
-        tooltip:show("Global pattern length: " .. global_pattern_length_fader:get_value())
+        local new_pattern_length = global_pattern_length_fader:get_value()
+        if clock_controller.is_playing() then
+          tooltip:show("Q'd: Global pattern length: " .. new_pattern_length)
+          step_handler.queue_for_pattern_change(function()
+            program.get_selected_sequencer_pattern().global_pattern_length = new_pattern_length
+            clock_controller.get_clock_lattice().pattern_length = new_pattern_length
+          end)
+        else
+          program.get_selected_sequencer_pattern().global_pattern_length = new_pattern_length
+          clock_controller.get_clock_lattice().pattern_length = new_pattern_length
+          tooltip:show("Global pattern length: " .. new_pattern_length)
+        end
       end
     end
   )

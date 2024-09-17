@@ -70,7 +70,12 @@ function Lattice:new(args)
   l.sprocket_id_counter = 100
   l.sprockets = {}
   l.sprocket_ordering = {{}, {}, {}, {}, {}}
+  l.pattern_length = args.pattern_length or 64
   return l
+end
+
+function Lattice:set_pattern_length(pattern_length) 
+  self.pattern_length = pattern_length
 end
 
 --- start running the lattice
@@ -212,6 +217,7 @@ function Lattice:new_sprocket(args)
   args.shuffle_feel = args.shuffle_feel and util.clamp(args.shuffle_feel, 0, 3) or 0
   args.ppqn = self.ppqn
   args.step = self.step or 1
+  args.lattice = self
   local sprocket = Sprocket:new(args)
   sprocket:update_swing()
   sprocket:update_shuffle(self.step, 1)
@@ -260,6 +266,7 @@ function Sprocket:new(args)
   p.ppqn_error = 0.5
   p.step = args.step or 1
   p.transport = 1
+  p.lattice = args.lattice
   return p
 end
 
@@ -358,8 +365,12 @@ function Sprocket:update_shuffle(step, id)
   local ppc = self.ppqn * 4
   local old_ppqn = self.current_ppqn
   local old_phase = self.phase
+  local pattern_length = self.lattice.pattern_length
 
-  if self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and  self.shuffle_basis > 0 then
+  local use_shuffle = pattern_length % 8 == 0 and pattern_length >= 8
+
+  -- Shuffle is only allowed when pattern lengths are multiples of 8, otherwise we fall back to swing
+  if use_shuffle and self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and  self.shuffle_basis > 0 then
     local feel_map = shuffle_feels[self.shuffle_feel]
     local playpos_mod = (step % 8) + 1
     local shuffle_beat_index = playpos_mod

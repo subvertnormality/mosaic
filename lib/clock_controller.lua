@@ -125,6 +125,8 @@ function clock_controller.init()
     clock_lattice.auto = false
   end
 
+  clock_lattice.pattern_length = program.get_selected_sequencer_pattern().global_pattern_length
+
   destroy_delay_sprockets()
   destroy_arp_sprockets()
   destroy_arp_delay_sprockets()
