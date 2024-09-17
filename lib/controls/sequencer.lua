@@ -67,7 +67,7 @@ function sequencer:draw(channel, draw_func)
     if (start_step == 1) then
       end_step = global_pattern_length
     else
-      end_step = global_pattern_length + (end_step - (start_step - 1))
+      end_step = start_step + math.min(end_step-start_step, global_pattern_length-1)
     end
   end
 

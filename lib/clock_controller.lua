@@ -7,6 +7,7 @@ clock_lattice = {}
 local playing = false
 local master_clock
 local trigless_lock_active = {}
+local first_run = true
 
 local delayed_sprockets = {[0] = {}}
 for i = 1, 16 do delayed_sprockets[i] = {} end
@@ -119,8 +120,6 @@ function clock_controller.init()
   local program_data = program.get()
   clock_lattice = lattice:new()
 
-  local first_run = true
-
   if testing then
     clock_lattice.auto = false
   end
@@ -168,8 +167,6 @@ function clock_controller.init()
           if program_data.global_step_accumulator % selected_sequencer_pattern.global_pattern_length == 0 then
             for i = 1, 17 do
               local channel = program.get_channel(i)
-              local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
-              local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
               if (fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2]) - fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2]) + 1) > selected_sequencer_pattern.global_pattern_length then
                 program.set_current_step_for_channel(i, 99)
               end
@@ -200,11 +197,12 @@ function clock_controller.init()
     local channel = program.get_channel(channel_number)
     local div = calculate_divisor(channel.clock_mods)
 
-    local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
-    local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
 
     local sprocket_action = function(t)
       local current_step = program.get_current_step_for_channel(channel_number)
+
+      local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+      local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
 
       if current_step < start_trig then
         program.set_current_step_for_channel(channel_number, start_trig)

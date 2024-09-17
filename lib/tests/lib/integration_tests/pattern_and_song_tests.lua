@@ -104,7 +104,6 @@ function test_current_step_number_is_set_to_start_step_when_lower_than_start_tri
 
 end
 
-
 function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_pattern_reset_is_disabled()
 
   setup()
