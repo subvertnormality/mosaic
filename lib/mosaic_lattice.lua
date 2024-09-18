@@ -207,7 +207,8 @@ function Lattice:new_sprocket(args)
   args.id = self.sprocket_id_counter
   args.order = args.order == nil and 3 or util.clamp(args.order, 1, 5)
   args.action = args.action == nil and function(t) return end or args.action
-  args.division = args.division == nil and 1/4 or math.max(args.division, 1 / (clock_lattice.ppqn * 4))
+  args.ppqn = self.ppqn
+  args.division = args.division == nil and 1/4 or math.max(args.division, 1 / (self.ppqn * 4))
   args.enabled = args.enabled == nil and true or args.enabled
   args.phase = 1
   args.delay = args.delay == nil and 0 or util.clamp(args.delay,0,1)
@@ -215,7 +216,6 @@ function Lattice:new_sprocket(args)
   args.swing_or_shuffle = args.swing_or_shuffle == nil and 1 or util.clamp(args.swing_or_shuffle,1,2)
   args.shuffle_basis = args.shuffle_basis and util.clamp(args.shuffle_basis, 0, 6) or 0
   args.shuffle_feel = args.shuffle_feel and util.clamp(args.shuffle_feel, 0, 3) or 0
-  args.ppqn = self.ppqn
   args.step = self.step or 1
   args.lattice = self
   local sprocket = Sprocket:new(args)
@@ -368,11 +368,12 @@ function Sprocket:update_shuffle(step, id)
   local pattern_length = self.lattice.pattern_length
 
   local use_shuffle = pattern_length % 8 == 0 and pattern_length >= 8
+  local step_mod = ((step - 1) % pattern_length) + 1
 
   -- Shuffle is only allowed when pattern lengths are multiples of 8, otherwise we fall back to swing
   if use_shuffle and self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and  self.shuffle_basis > 0 then
     local feel_map = shuffle_feels[self.shuffle_feel]
-    local playpos_mod = (step % 8) + 1
+    local playpos_mod = (step_mod % 8) + 1
     local shuffle_beat_index = playpos_mod
     local multiplier = feel_map[self.shuffle_basis][shuffle_beat_index]
     local exact_ppqn = (self.division * ppc * 4) * (multiplier)
@@ -380,11 +381,11 @@ function Sprocket:update_shuffle(step, id)
     self.ppqn_error = (exact_ppqn + self.ppqn_error) - rounded_ppqn
     self.current_ppqn = rounded_ppqn
   else
-    if (pattern_length % 2 == 1) and step % pattern_length == 0 then
-    -- if we're on an odd end step for swing, simply return a whole PPQN so we don't get out of phase
+    if (pattern_length % 2 == 1) and step_mod % pattern_length == 0 then
+    -- if we're on an odd end step for swing, return a divison's PPQN so we don't get out of phase
       self.current_ppqn = self.division * ppc
     else
-      self.current_ppqn = math.floor((self.division * ppc) * (step % 2 == 1 and self.even_swing or self.odd_swing) - 0.01 + 0.5)
+      self.current_ppqn = math.floor((self.division * ppc) * (step_mod % 2 == 1 and self.even_swing or self.odd_swing) - 0.01 + 0.5)
     end
   end
 

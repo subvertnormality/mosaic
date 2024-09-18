@@ -7,6 +7,7 @@ local lattice
 local function setup()
   lattice = l:new()
   lattice:toggle()
+  lattice.pattern_length = 64
 end
 
 
@@ -570,4 +571,78 @@ function test_cumulative_ppqn_error_over_time()
 
   -- Allow for small floating-point inaccuracies
   luaunit.assertAlmostEquals(total_pulses, expected_total_pulses, 1e-6)
+end
+
+
+function test_ppqn_swing_stability_over_time()
+  setup()
+  local sprocket = create_sprocket({
+    division = 1/4,
+    swing_or_shuffle = 1, -- Swing mode
+    swing = 25
+  })
+  
+  local expected_ppqn = 96 * 2 -- Default PPQN for 1/4 division over two steps
+  local total_steps = 1000 -- Run for 1000 steps
+  local expected_pulses = 1000 * 96
+  local accum = 1
+  local total = 0
+
+  for i = 1, total_steps do
+    progress_lattice_pulse(sprocket.current_ppqn)
+    sprocket:update_swing()
+    sprocket:update_shuffle(sprocket.step)
+    
+    total = total + sprocket.current_ppqn
+    if accum % 2 == 0 then
+      accum = 1
+      luaunit.assertAlmostEquals(total, expected_ppqn * (i / 2), 1)
+    else
+      accum = accum + 1
+    end
+  end
+  
+  -- Verify no significant drift in total pulses
+  local actual_pulses = sprocket.transport - 1
+  luaunit.assertAlmostEquals(actual_pulses, expected_pulses, expected_pulses * 0.001) -- Allow 0.1% tolerance
+end
+
+
+function test_ppqn_swing_stability_over_time_odd_pattern_length()
+  setup()
+
+  lattice:set_pattern_length(63)
+
+
+  local sprocket = create_sprocket({
+    division = 1/4,
+    swing_or_shuffle = 1, -- Swing mode
+    swing = 25
+  })
+  
+  local expected_ppqn = 96 * 2 -- Default PPQN for 1/4 division over two steps
+  local total_steps = 252 -- Run for 100 steps
+  local expected_pulses = 252 * 96
+
+  local total = 0
+
+  for i = 1, total_steps do
+    progress_lattice_pulse(1)
+    progress_lattice_pulse(sprocket.current_ppqn - 1)
+
+    total = total + sprocket.current_ppqn
+
+    local step_mod = (sprocket.step % sprocket.lattice.pattern_length) + 1
+    if sprocket.step < sprocket.lattice.pattern_length then
+      step_mod = sprocket.step + 1
+    end
+
+    if sprocket.step % sprocket.lattice.pattern_length + 1 == 0 then
+      luaunit.assertAlmostEquals((total / 96) % 63, 0, 1)
+    end
+  end
+  
+  -- Verify no significant drift in total pulses
+  local actual_pulses = sprocket.transport - 1
+  luaunit.assertAlmostEquals(actual_pulses, expected_pulses, expected_pulses * 0.001) -- Allow 0.1% tolerance
 end
