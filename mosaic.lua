@@ -35,11 +35,6 @@ device_map = include("mosaic/lib/device_map")
 
 g = grid.connect()
 
-local grid_controller = grid_controller
-local collectgarbage = collectgarbage
-local redraw = redraw
-local clock = clock
-
 collectgarbage("setpause", 150)
 collectgarbage("setstepmul", 2000)
 

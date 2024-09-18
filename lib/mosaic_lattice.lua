@@ -380,7 +380,12 @@ function Sprocket:update_shuffle(step, id)
     self.ppqn_error = (exact_ppqn + self.ppqn_error) - rounded_ppqn
     self.current_ppqn = rounded_ppqn
   else
-    self.current_ppqn = math.floor((self.division * ppc) * (step % 2 == 1 and self.even_swing or self.odd_swing) - 0.01 + 0.5)
+    if (pattern_length % 2 == 1) and step % pattern_length == 0 then
+    -- if we're on an odd end step for swing, simply return a whole PPQN so we don't get out of phase
+      self.current_ppqn = self.division * ppc
+    else
+      self.current_ppqn = math.floor((self.division * ppc) * (step % 2 == 1 and self.even_swing or self.odd_swing) - 0.01 + 0.5)
+    end
   end
 
   if self.current_ppqn ~= old_ppqn then
