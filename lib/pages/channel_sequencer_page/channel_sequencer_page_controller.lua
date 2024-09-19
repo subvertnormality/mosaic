@@ -139,6 +139,7 @@ function channel_sequencer_page_controller.register_press_handlers()
           step_handler.queue_for_pattern_change(function()
             program.get_selected_sequencer_pattern().global_pattern_length = new_pattern_length
             clock_controller.get_clock_lattice().pattern_length = new_pattern_length
+            program.get().global_step_accumulator = 0
           end)
         else
           program.get_selected_sequencer_pattern().global_pattern_length = new_pattern_length

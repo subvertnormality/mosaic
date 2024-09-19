@@ -186,6 +186,7 @@ function grid_controller.init()
   register_press_handlers()
   
   function g.key(x, y, z)
+
     if z == 1 then
       table.insert(pressed_keys, {x, y})
       grid_controller.pre_press(x, y)
@@ -195,7 +196,11 @@ function grid_controller.init()
   
       local held_button = pressed_keys[1]
   
-      if grid_controller.counter[x][y] then -- and the long press is still waiting...
+      if is_key2_down then
+        clock.cancel(grid_controller.counter[x][y]) -- cancel the long press clock,
+        press_handler:handle_long(program.get().selected_page, x, y) -- shortcut into a long press
+        print("doing long press")
+      elseif grid_controller.counter[x][y] then -- and the long press is still waiting...
         clock.cancel(grid_controller.counter[x][y]) -- then cancel the long press clock,
   
         if grid_controller.long_press_active[x][y] == true then

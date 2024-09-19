@@ -14,6 +14,7 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
       - [Norns Menu Navigation](#norns-menu-navigation)
       - [Tooltips](#tooltips)
       - [Sequencer Start and Stop](#sequencer-start-and-stop)
+      - [Long Press Shortcut](#long-press-shortct)
       - [MIDI Panic](#midi-panic)
     + [Sound Design](#sound-design)
     + [Rhythm Section Design](#rhythm-section-design)
@@ -163,6 +164,10 @@ Most _Mosaic_ functions are described by tooltips that appear at the bottom of t
 To start the sequencer, press the global menu button of the currently selected page — the illuminated button — in the navigation section.
 
 To stop the sequencer, hold down the global menu button of the currently selected page for around a second.
+
+#### Long Press Shortcut
+
+Hold K2 whilst performing grid functions to turn long press functions into a single press. For example, you can stop the sequencer immediately by holding K2 and pressing the navigation button of the currently selected page. You can mute an unmute tracks straight away by holding K2 and pressing a channel button.
 
 #### MIDI Panic
 

@@ -9,6 +9,7 @@
 * Notes can now be fractional in length
 * Swing system totally reworked to be more fluid
 * Shuffles added
+* Hold K2 to quick perform long presses, for example, to stop the sequencer or to mute/unmute channels immediately 
 
 # 0.5.3
 

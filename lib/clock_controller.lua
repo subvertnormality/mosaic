@@ -140,8 +140,8 @@ function clock_controller.init()
       if not first_run then
         step_handler.process_song_sequencer_patterns(program_data.current_step)
         local selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
-        if program_data.global_step_accumulator % selected_sequencer_pattern.global_pattern_length == 0 then
-          for i = 1, 17 do
+        for i = 1, 17 do
+          if ((program.get_current_step_for_channel(i) - 1) % selected_sequencer_pattern.global_pattern_length) + 1 == selected_sequencer_pattern.global_pattern_length then
             local channel = program.get_channel(i)
             if (fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2]) - fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2]) + 1) > selected_sequencer_pattern.global_pattern_length then
               program.set_current_step_for_channel(i, 99)
