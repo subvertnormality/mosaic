@@ -303,6 +303,23 @@ local function meta_delay_action(c, division, delay, type, func)
   local sprocket_action = function(t)
     func()
     delayed:destroy()
+
+    -- Remove the sprocket from the appropriate table
+    local table_to_remove_from
+    if type == "must_execute" then
+      table_to_remove_from = delayed_sprockets_must_execute[c]
+    elseif type == "destroy_at_note_end" then
+      table_to_remove_from = arp_delay_sprockets[c]
+    else
+      table_to_remove_from = delayed_sprockets[c]
+    end
+
+    for i = #table_to_remove_from, 1, -1 do
+      if table_to_remove_from[i] == delayed then
+        table.remove(table_to_remove_from, i)
+        break
+      end
+    end
   end
 
   local shuffle_values = get_shuffle_values(channel)
@@ -386,6 +403,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
     for i, sprocket in ipairs(arp_sprockets[c]) do
       sprocket:destroy()
     end
+    arp_sprockets[c] = {}  -- Clear the table after destroying sprockets
   end
 
   local arp
@@ -396,6 +414,13 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
     func(div)
     if length == 0 then
       arp:destroy()
+      -- Remove the sprocket from arp_sprockets[c]
+      for i = #arp_sprockets[c], 1, -1 do
+        if arp_sprockets[c][i] == arp then
+          table.remove(arp_sprockets[c], i)
+          break
+        end
+      end
       arp = nil
     end
   end
@@ -451,7 +476,8 @@ local function execute_delayed_sprockets()
 end
 
 function clock_controller.kill_arp_delay_sprockets(c)
-  for i, item in ipairs(arp_delay_sprockets[c]) do
+  for i = #arp_delay_sprockets[c], 1, -1 do
+    local item = arp_delay_sprockets[c][i]
     if item then
       item:destroy()
       table.remove(arp_delay_sprockets[c], i)
