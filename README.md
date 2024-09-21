@@ -96,6 +96,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Honor Scale Rotations](#honor-scale-rotations)
       - [Honor Scale Degree](#honor-scale-degree)
   * [Sinfonion Connect](#sinfonion-connect)
+  * [LFOs and Modulation](#lfos-and-modulation)
 - [Development](#development)
 - [Device Config Template](#device-config-template)
 
@@ -422,7 +423,7 @@ On the Norns first page in the channel mode you can see the last played notes on
 
 You can easily adjust the tempo of your entire composition directly from the song sequencer page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels via the channel editor page in the Norns menu. This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.
 
-Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable. There are two modes to choose from: swing, which moves notes closer or further apart depending on the value which ranges from -50 to 50. Shuffle uses more complex patterns and can be set to a "feel" and a "basis". Each channel can have an independent setting, giving endless possibilities. If a channel's swing/shuffle settings are not set, they will take the global setting which can be set on the song sequencer page global settings page.
+Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable. There are two modes to choose from: swing, which moves notes closer or further apart depending on the value which ranges from -50 to 50. Shuffle is based on 21echo's excellent [Cyrene](https://github.com/21echoes/cyrene) and uses more complex patterns and can be set to a "feel" and a "basis". Each channel can have an independent setting, giving endless possibilities. If a channel's swing/shuffle settings are not set, they will take the global setting which can be set on the song sequencer page global settings page.
 
 Clock, swing and shuffle settings apply when the sequencer resets if the sequencer is currently playing.
 
@@ -723,6 +724,10 @@ Similarly, "Lock merged to pent." is on by default and ensures notes modified by
 ### Sinfonion Connect
 
 You can sync up your Eurorack Sinfonion module to Mosaic using a DIY device called [norns2sinfonion](https://github.com/subvertnormality/norns2sinfonion).
+
+### LFOs and Modulation
+
+_Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit](https://github.com/sixolet/toolkit). You can add LFOs and other rhythmic modulators to any device parameter.
 
 ## Development
 

@@ -34,7 +34,12 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
       
       if device.params[i] ~= nil and device.params[i].id ~= "none" and device.params[i].param_type ~= "stock" then
         local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
-        p.max = device.params[i].cc_max_value
+
+        if device.params[i].nrpn_max_value and device.params[i].nrpn_lsb and device.params[i].nrpn_msb then
+          p.max = device.params[i].nrpn_max_value
+        else
+          p.max = device.params[i].cc_max_value
+        end
         p.name = device.params[i].name
         if init == true then
           p.value = -1
@@ -43,7 +48,19 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
           "midi_device_params_channel_" .. channel_id .. "_" .. i,
           function(x)
             if x ~= -1 then
-              midi_controller.cc(device.params[i].cc_msb, device.params[i].cc_lsb, x, channel, midi_device)
+
+              if device.params[i].nrpn_max_value and device.params[i].nrpn_lsb and device.params[i].nrpn_msb then
+                midi_controller.nrpn(
+                  device.params[i].nrpn_msb,
+                  device.params[i].nrpn_lsb,
+                  x,
+                  channel,
+                  midi_device
+                )
+              else
+                midi_controller.cc(device.params[i].cc_msb, device.params[i].cc_lsb, x, channel, midi_device)
+              end
+
               channel_edit_page_ui_controller.refresh_trig_lock_values()
             end
             autosave_reset()

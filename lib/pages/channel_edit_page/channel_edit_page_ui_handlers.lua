@@ -198,6 +198,7 @@ function channel_edit_page_ui_handlers.handle_trig_locks_page_change(direction, 
   if trig_lock_page:is_sub_page_enabled() then
     param_select_vertical_scroll_selector:scroll(direction)
     save_confirm.set_save(function()
+
       param_manager.update_param(
         dials:get_selected_index(),
         program.get_selected_channel(),

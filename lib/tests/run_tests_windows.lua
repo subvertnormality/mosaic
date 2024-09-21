@@ -71,7 +71,6 @@ function include(file)
   for _, dir in ipairs(dirs) do
     local p = dir..file..'.lua'
     if util.file_exists(p) then
-      -- print("including "..p)
       return dofile(p)
     end
   end

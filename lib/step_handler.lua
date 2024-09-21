@@ -76,8 +76,7 @@ function step_handler.process_params(c, step)
         param.id ~= "fixed_note")
      then
 
-      if param.type == "midi" and param.cc_msb then
-
+      if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
         local midi_channel = devices[channel.number].midi_channel
 
@@ -97,17 +96,48 @@ function step_handler.process_params(c, step)
           if step_trig_lock == param.off_value then
             break
           end
-          midi_controller.cc(param.cc_msb, param.cc_lsb, step_trig_lock, midi_channel, devices[channel.number].midi_device)
+
+          if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
+            midi_controller.nrpn(
+              param.nrpn_msb,
+              param.nrpn_lsb,
+              step_trig_lock * 129,
+              midi_channel,
+              devices[channel.number].midi_device
+            )
+          elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
+            midi_controller.cc(param.cc_msb, param.cc_lsb, step_trig_lock, midi_channel, devices[channel.number].midi_device)
+          end
         elseif p_value then
           if p_value == param.off_value then
             break
           end
-          midi_controller.cc(param.cc_msb, param.cc_lsb, p_value, midi_channel, devices[channel.number].midi_device)
+          if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
+            midi_controller.nrpn(
+              param.nrpn_msb,
+              param.nrpn_lsb,
+              p_value,
+              midi_channel,
+              devices[channel.number].midi_device
+            )
+          elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
+            midi_controller.cc(param.cc_msb, param.cc_lsb, p_value, midi_channel, devices[channel.number].midi_device)
+          end
         else
           if trig_lock_banks[i] == param.off_value then
             break
           end
-          midi_controller.cc(param.cc_msb, param.cc_lsb, trig_lock_banks[i], midi_channel, devices[channel.number].midi_device)
+          if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
+            midi_controller.nrpn(
+              param.nrpn_msb,
+              param.nrpn_lsb,
+              trig_lock_banks[i],
+              midi_channel,
+              devices[channel.number].midi_device
+            )
+          elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
+            midi_controller.cc(param.cc_msb, param.cc_lsb, trig_lock_banks[i], midi_channel, devices[channel.number].midi_device)
+          end
         end
       elseif param.type == "norns" and param.id == "nb_slew" then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)

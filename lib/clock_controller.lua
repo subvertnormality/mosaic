@@ -221,6 +221,7 @@ function clock_controller.init()
         end
 
         local next_trig_value = channel.working_pattern.trig_values[step]
+
         if next_trig_value == 1 then
           trigless_lock_active[channel_number] = false
           step_handler.process_params(channel_number, step)
@@ -250,7 +251,7 @@ function clock_controller.init()
       swing_or_shuffle = shuffle_values.swing_or_shuffle,
       shuffle_basis = shuffle_values.shuffle_basis,
       shuffle_feel = shuffle_values.shuffle_feel,
-      delay = 0.95,
+      delay = 1,
       enabled = true
     }
 

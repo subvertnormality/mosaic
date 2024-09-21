@@ -567,12 +567,21 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       )
     end
   elseif channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
-    channel.trig_lock_banks[dial_index] = channel.trig_lock_banks[dial_index] + direction
-    if channel.trig_lock_banks[dial_index] > (channel.trig_lock_params[dial_index].cc_max_value or 127) then
-      channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_max_value or 127)
-    elseif channel.trig_lock_banks[dial_index] < (channel.trig_lock_params[dial_index].cc_min_value or -1) then
-      channel.trig_lock_banks[dial_index] = (channel.trig_lock_params[dial_index].cc_min_value or -1)
+
+    local max_value = channel.trig_lock_params[dial_index].cc_max_value or 127
+    local min_value = channel.trig_lock_params[dial_index].cc_min_value or -1
+
+    if channel.trig_lock_params[dial_index].nrpn_min_value and channel.trig_lock_params[dial_index].nrpn_max_value and channel.trig_lock_params[dial_index].nrpn_lsb and channel.trig_lock_params[dial_index].nrpn_msb then
+      max_value = math.floor(channel.trig_lock_params[dial_index].nrpn_max_value / 129)
+      min_value = channel.trig_lock_params[dial_index].nrpn_min_value == -1 and -1 or math.floor(channel.trig_lock_params[dial_index].nrpn_min_value / 129)
     end
+    channel.trig_lock_banks[dial_index] = channel.trig_lock_banks[dial_index] + direction
+    if channel.trig_lock_banks[dial_index] > (max_value) then
+      channel.trig_lock_banks[dial_index] = (max_value)
+    elseif channel.trig_lock_banks[dial_index] < (min_value) then
+      channel.trig_lock_banks[dial_index] = (min_value)
+    end
+
 
     channel_edit_page_ui_controller.sync_param_to_trig_lock(dial_index, channel)
     channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
@@ -1248,11 +1257,17 @@ function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
   
   local param_id = channel.trig_lock_params[i].param_id
 
-
   local p = nil
   if param_id ~= nil then
     p = params:lookup_param(channel.trig_lock_params[i].param_id)
-    params:set(param_id, channel.trig_lock_banks[i])
+
+    local value = channel.trig_lock_banks[i]
+
+    if channel.trig_lock_params[i].nrpn_min_value and channel.trig_lock_params[i].nrpn_max_value and channel.trig_lock_params[i].nrpn_lsb and channel.trig_lock_params[i].nrpn_msb then
+      value = value * 129
+    end
+
+    params:set(param_id, value)
   end
 end
 

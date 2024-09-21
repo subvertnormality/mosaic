@@ -7,9 +7,9 @@
 * Chord acceleration and spread added
 * Performance and bug fixes
 * Notes can now be fractional in length
-* Swing system totally reworked to be more fluid
-* Shuffles added
+* Swing system totally reworked and shuffles based on 21echo's Cyrene added
 * Hold K2 to quick perform long presses, for example, to stop the sequencer or to mute/unmute channels immediately 
+* NPRN values are used by default, when available for a particular param. This means matrix mod and toolkit now works.
 
 # 0.5.3
 
