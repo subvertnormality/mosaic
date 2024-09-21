@@ -122,6 +122,9 @@ function register_press_handlers()
               params:bang()
               clock_controller:start()
               tooltip:show("Starting playback")
+            elseif is_key2_down == true then
+              clock_controller:stop()
+              tooltip:show("Stopping playback")
             end
             grid_controller.set_menu_button_state()
           end
@@ -196,11 +199,8 @@ function grid_controller.init()
   
       local held_button = pressed_keys[1]
   
-      if is_key2_down then
-        clock.cancel(grid_controller.counter[x][y]) -- cancel the long press clock,
-        press_handler:handle_long(program.get().selected_page, x, y) -- shortcut into a long press
-        print("doing long press")
-      elseif grid_controller.counter[x][y] then -- and the long press is still waiting...
+
+      if grid_controller.counter[x][y] then -- and the long press is still waiting...
         clock.cancel(grid_controller.counter[x][y]) -- then cancel the long press clock,
   
         if grid_controller.long_press_active[x][y] == true then

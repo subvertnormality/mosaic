@@ -177,7 +177,7 @@ function channel_edit_page_controller.register_press_handlers()
       if channel_edit_page_sequencer:is_this(x, y) then
         channel_edit_page_ui_controller.refresh_trig_locks()
         channel_edit_page_ui_controller.refresh_masks()
-        if program.get().selected_channel ~= 17 and is_key3_down then
+        if program.get().selected_channel ~= 17 and is_key2_down then
           channel_edit_page_sequencer:press(x, y)
           program.toggle_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
         end
@@ -188,7 +188,7 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
-        if program.get().selected_channel ~= 17 and is_key3_down then
+        if program.get().selected_channel ~= 17 and is_key2_down then
           program.clear_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
           channel_edit_page_ui_controller.refresh_masks()
         end
@@ -210,11 +210,27 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_select_fader:is_this(x, y) then
-        channel_select_fader:press(x, y)
-        program.get().selected_channel = channel_select_fader:get_value()
-        tooltip:show("Channel " .. program.get().selected_channel .. " selected")
-        channel_edit_page_controller.refresh()
-        channel_edit_page_ui_controller.refresh()
+        local channel = program.get_channel(x)
+
+        if is_key2_down == true then
+          if (channel.mute == true) then
+            channel.mute = false
+            tooltip:show("Channel " .. x .. " unmuted")
+            channel_select_fader:light(x)
+          else
+            channel.mute = true
+            tooltip:show("Channel " .. x .. " muted")
+            channel_select_fader:dim(x)
+          end
+          channel_edit_page_controller.refresh_muted_channels()
+          fn.dirty_screen(true)
+        else
+          channel_select_fader:press(x, y)
+          program.get().selected_channel = x
+          tooltip:show("Channel " .. x .. " selected")
+          channel_edit_page_controller.refresh()
+          channel_edit_page_ui_controller.refresh()
+        end
       end
     end
   )
@@ -225,11 +241,11 @@ function channel_edit_page_controller.register_press_handlers()
         local channel = program.get_channel(x)
 
         if (channel.mute == true) then
-          program.get_channel(x).mute = false
+          channel.mute = false
           tooltip:show("Channel " .. x .. " unmuted")
           channel_select_fader:light(x)
         else
-          program.get_channel(x).mute = true
+          channel.mute = true
           tooltip:show("Channel " .. x .. " muted")
           channel_select_fader:dim(x)
         end

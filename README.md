@@ -1,4 +1,5 @@
-Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Grid. It melds the powerful features of the Elektron sequencer with innovative generative techniques, all within the Monome ecosystem, and allows you to craft complex rhythms and harmonies with ease. Whether you are sketching or composing, Mosaic provides a unique, deep musical experience. 
+Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed to unify control over your entire studio. It combines the advanced features of Elektron and Cirklon sequencers with generative and modular techniques, enabling you to craft complex rhythms and harmonies effortlessly. Whether you're sketching ideas or composing full tracks, Mosaic offers a deep and unique musical experience. This manual will help you quickly navigate _Mosaic_ and start creating funky tunes in no time.
+
 
 - [Getting Started](#getting-started)
   * [Install](#install)
@@ -14,7 +15,6 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
       - [Norns Menu Navigation](#norns-menu-navigation)
       - [Tooltips](#tooltips)
       - [Sequencer Start and Stop](#sequencer-start-and-stop)
-      - [Long Press Shortcut](#long-press-shortct)
       - [MIDI Panic](#midi-panic)
     + [Sound Design](#sound-design)
     + [Rhythm Section Design](#rhythm-section-design)
@@ -65,6 +65,7 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
         + [Chord Shape Modifier](#chord-shape-modifier)
       - [Locks](#locks)
         + [Trig Param Locks](#trig-param-locks)
+        + [Mask Locks](#mask-locks)
         + [Scale Locks](#scale-locks)
         + [Transposition Locks](#transposition-locks)
         + [Octave Locks](#octave-locks)
@@ -108,7 +109,7 @@ To install, simply run `;install https://github.com/subvertnormality/mosaic` in 
 
 #### Hardware
 
-_Mosaic_ operates with the Monome Norns and a 128 Grid at a minimum. These two components alone will allow you to create simple songs, but incorporating external sound sources via a MIDI interface will vastly expand your sequencing capabilities. Devices with MIDI in are all supported, although those set up in _Mosaic_ using pre-existing or manually created configuration files are optimal. Crow, Just Friends, and Ansible are natively supported using [n.b.](https://github.com/sixolet/nb/).
+_Mosaic_ requires a Norns and a 128 Grid at a minimum. With these you will be able to create simple songs, but _Mosaic_ is really designed to unify control of your entire studio over MIDI. All devices with MIDI in are all supported, although those set up in _Mosaic_ using pre-existing or manually created configuration files are optimal. Crow, Just Friends, and Ansible are natively supported using [n.b.](https://github.com/sixolet/nb/).
 
 Using [MIDI input](#midi-input) devices, while not essential, enhances the user experience. A MIDI keyboard simplifies melody creation, and a MIDI controller with encoders supporting relative bin offsets can improve the data input process.
 
@@ -163,11 +164,7 @@ Most _Mosaic_ functions are described by tooltips that appear at the bottom of t
 
 To start the sequencer, press the global menu button of the currently selected page — the illuminated button — in the navigation section.
 
-To stop the sequencer, hold down the global menu button of the currently selected page for around a second.
-
-#### Long Press Shortcut
-
-Hold K2 whilst performing grid functions to turn long press functions into a single press. For example, you can stop the sequencer immediately by holding K2 and pressing the navigation button of the currently selected page. You can mute an unmute tracks straight away by holding K2 and pressing a channel button.
+To stop the sequencer, hold down the global menu button of the currently selected page for around a second. You can also hold K2 and press the global menu button of the currently selected page to stop the sequencer immediately.
 
 #### MIDI Panic
 
@@ -332,7 +329,7 @@ The core of your rhythm and harmony sections are formed by adding patterns to ch
 
 #### Masks
 
-Masks in _Mosaic_ allow you to precisely control trig values, notes, velocities, lengths, and chords for specific steps within the channel page's sequencer. Ideal for crafting intentional melodies, masks can superimpose these elements onto your existing harmonic and rhythmic foundation. You can apply masks to override pattern values either individually or all at once—a process aptly named "masking."
+Masks in _Mosaic_ allow you to precisely control trig values, notes, velocities, lengths, and chords for specific steps within the channel page's sequencer. Ideal for crafting intentional melodies, masks can superimpose these elements onto your existing harmonic and rhythmic foundation. You can apply masks to override pattern values either individually using step locks or all at once by setting the global value — this process named "masking."
 
 With masking, you have the flexibility to modify individual attributes of a pattern. For instance, you could increase the velocity of a note without changing other settings, add additional chord tones, or completely silence a note. Masks also enable you to assign values to steps that are currently void of any pattern influence. By default, notes added this way will align with the selected musical scale. However, they will not conform to specific scale degrees or rotations. If you wish to incorporate accidentals or embrace a more dissonant sound, this default behavior can be disabled in the _Mosaic_ settings.
 
@@ -447,7 +444,7 @@ You can transpose your entire Song Sequence using the global quantizer transposi
 
 #### Muting Channels
 
-To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
+To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also hold K2 and press the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
 
 #### Devices
 
@@ -519,19 +516,19 @@ Similar to random note, this trig param introduces an element of random to your 
 
 ##### Chord Strum
 
-The Chord Strum feature dynamically spaces selected chord masks using the selected step division, ensuring they align rhythmically with the channel's settings. Notes are quantized to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration. Each chord note is played once.
+The Chord Strum param dynamically spaces selected chord masks using the selected step division, ensuring they align rhythmically with the channel's settings. Notes are quantized to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration. Each chord note is played once.
 
 ##### Chord Arpeggio
 
-The Chord Arp feature is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantized to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.
+The Chord Arp param is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantized to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.
 
 ##### Chord Acceleration
 
-TODO
+The Chord Acceleration param is a modifier for the Chord Strum and Chord Arpeggio params, to be used alongside the Chord Spread param, and it doesn't function on it's own. When set, the chord spread alters in the direction of the acceleration over time. With a positive value of acceleration, the spread value will increase by multiples of the acceleration value for each note of the chord or arp. With a negative value, the spread value will decrease by multiples of the acceleration value. With this, you can create flams and bouncing ball type effects. 
 
 ##### Chord Spread
 
-TODO
+The Chord Spread param is a modifier for the Chord Strum and Chord Arpeggio params. It alters the spacing between notes in these functions by the value of the param.
 
 ##### Chord Velocity Modifier
 
@@ -543,32 +540,36 @@ The Chord Shape Modifiers alters the order of the chord masks that are played us
 
 #### Locks
 
-Trig param values and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. When a value is locked to a step, it applies for the duration of that step. This includes trig params, scales, and octave settings on the channel page, as well as global scale and transpose settings on the global scale page. Locks are set on the channel page.
-
-To clear a grid trig lock:
-
-1. Hold the step with the locked value.
-2. Press the value that is currently locked to unlock it.
+Trig param values, masks, and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. When a value is locked to a step, it applies for the duration of that step. This includes trig params, scales, and octave settings on the channel page, as well as global scale and transpose settings on the global scale page. Locks are set on the channel edit page. Trig locks enhance your control over the sequencing process, allowing for precise adjustments and modifications at any step of your sequence.
 
 To clear all trig locks from a step:
 
-1. Hold the step you want to clear.
+1. Hold the step you want to clear all locks from.
 2. Press K2.
-
-Trig locks enhance your control over the sequencing process, allowing for precise adjustments and modifications at any step of your sequence.
 
 ##### Trig Param Locks
 
 Device parameters can be locked on a per-step basis. To set a param trig lock:
 
 1. Hold down the step you want to modify on the channel page sequencer.
-2. Adjust the value that you want to lock to this step.
+2. Adjust the param value that you want to lock to this step.
 
-To clear a param trig lock:
+To clear a specific param trig lock:
 
-On the Norns screen, select the parameter you want to unlock.
+1. On the Norns screen, select the parameter you want to unlock.
+2. Hold the step where the param is locked and press K3.
 
-1. Hold the step where the param is locked and press K3.
+##### Mask Locks
+
+Masks can also be locked on a per-step basis. To set a mask trig lock:
+
+1. Hold down the step you want to modify on the channel page sequencer.
+2. Adjust the mask value that you want to lock to this step.
+
+To clear a specific mask trig lock:
+
+1. On the Norns screen, select the mask you want to unlock.
+2. Hold the step where the mask is locked and press K3.
 
 ##### Scale Locks
 
@@ -596,9 +597,7 @@ To clear a transposition lock:
 
 ##### Octave Locks
 
-A step's current
-
- octave can be altered using trig locks. To lock a step's octave:
+A step's current octave can be altered using trig locks. To lock a step's octave:
 
 1. Hold down the step you want to modify on the channel page sequencer.
 2. Press the desired octave using the octave buttons at the bottom of the channel page.
