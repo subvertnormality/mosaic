@@ -132,6 +132,7 @@ function channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
 
   if channel.trig_lock_banks[i] then
     m_params[i]:set_value(channel.trig_lock_banks[i])
+    channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
   end
 end
 

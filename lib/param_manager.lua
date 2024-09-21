@@ -35,7 +35,7 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
       if device.params[i] ~= nil and device.params[i].id ~= "none" and device.params[i].param_type ~= "stock" then
         local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
 
-        if device.params[i].nrpn_max_value and device.params[i].nrpn_lsb and device.params[i].nrpn_msb then
+        if device.params[i].nrpn_min_value and device.params[i].nrpn_max_value and device.params[i].nrpn_lsb and device.params[i].nrpn_msb then
           p.max = device.params[i].nrpn_max_value
         else
           p.max = device.params[i].cc_max_value

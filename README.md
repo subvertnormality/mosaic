@@ -543,10 +543,6 @@ The Chord Shape Modifiers alters the order of the chord masks that are played us
 
 Trig param values, masks, and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. When a value is locked to a step, it applies for the duration of that step. This includes trig params, scales, and octave settings on the channel page, as well as global scale and transpose settings on the global scale page. Locks are set on the channel edit page. Trig locks enhance your control over the sequencing process, allowing for precise adjustments and modifications at any step of your sequence.
 
-To clear all trig locks from a step:
-
-1. Hold the step you want to clear all locks from.
-2. Press K2.
 
 ##### Trig Param Locks
 
@@ -560,6 +556,12 @@ To clear a specific param trig lock:
 1. On the Norns screen, select the parameter you want to unlock.
 2. Hold the step where the param is locked and press K3.
 
+To clear all param trig locks from a step:
+
+1. Ensure you are on the trig param page on your norns device.
+2. Hold the step you want to clear all param trig locks from.
+3. Press K2.
+
 ##### Mask Locks
 
 Masks can also be locked on a per-step basis. To set a mask trig lock:
@@ -571,6 +573,12 @@ To clear a specific mask trig lock:
 
 1. On the Norns screen, select the mask you want to unlock.
 2. Hold the step where the mask is locked and press K3.
+
+To clear all mask trig locks from a step:
+
+1. Ensure you are on the Mask page on your norns device.
+2. Hold the step you want to clear all mask locks from.
+3. Press K2.
 
 ##### Scale Locks
 

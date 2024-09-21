@@ -291,7 +291,7 @@ function step_handler.calculate_step_transpose()
   local end_trig_1, end_trig_2 = channel.end_trig[1], channel.end_trig[2]
   local scale_channel_end_step = fn.calc_grid_count(end_trig_1, end_trig_2)
   
-  if current_step % scale_channel_end_step == 1 then
+  if current_step and current_step % scale_channel_end_step == 1 then
     persistent_step_transpose = nil
   end
 

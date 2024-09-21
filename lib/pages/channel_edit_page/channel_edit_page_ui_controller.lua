@@ -1264,7 +1264,7 @@ function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
     local value = channel.trig_lock_banks[i]
 
     if channel.trig_lock_params[i].nrpn_min_value and channel.trig_lock_params[i].nrpn_max_value and channel.trig_lock_params[i].nrpn_lsb and channel.trig_lock_params[i].nrpn_msb then
-      value = value * 129
+      value = channel.trig_lock_banks[i] * 129
     end
 
     params:set(param_id, value)
