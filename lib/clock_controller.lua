@@ -169,10 +169,10 @@ function clock_controller.init()
 
   local channel_edit_page = program.get_pages().channel_edit_page
   for channel_number = 17, 1, -1 do
-    local channel = program.get_channel(channel_number)
-    local div = calculate_divisor(channel.clock_mods)
+    local div = calculate_divisor(program.get_channel(channel_number).clock_mods)
 
     local sprocket_action = function(t)
+      local channel = program.get_channel(channel_number)
       local current_step = program.get_current_step_for_channel(channel_number)
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
@@ -209,6 +209,7 @@ function clock_controller.init()
     end
 
     local end_of_clock_action = function(t)
+      local channel = program.get_channel(channel_number)
       if channel_number ~= 17 then
         local step = program.get_current_step_for_channel(channel_number) + 1
         if step < 1 then return end
@@ -232,7 +233,7 @@ function clock_controller.init()
       end
     end
 
-    local shuffle_values = get_shuffle_values(channel)
+    local shuffle_values = get_shuffle_values(program.get_channel(channel_number))
 
     clock_controller["channel_" .. channel_number .. "_clock"] = clock_lattice:new_sprocket {
       action = sprocket_action,

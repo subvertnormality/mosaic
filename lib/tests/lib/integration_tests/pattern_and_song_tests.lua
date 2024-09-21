@@ -582,3 +582,106 @@ function test_song_mode_functions_with_sequencer_pattern_repeats()
   luaunit.assert_equals(note_on_event[3], 1)
 end
   
+
+
+
+function test_song_mode_short_channel_pattern_lengths_transitions_correctly_to_longer_pattern_lengths_across_sequencer_patterns()
+
+  setup()
+  params:set("song_mode", 2) 
+  params:set("reset_on_end_of_pattern", 2)
+  params:set("reset_on_end_of_sequencer_pattern", 1)
+
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  test_pattern.note_values[3] = 0
+  test_pattern.lengths[3] = 1
+  test_pattern.trig_values[3] = 1
+  test_pattern.velocity_values[3] = 101
+
+  
+  program.get_sequencer_pattern(sequencer_pattern).repeats = 1
+  program.get_sequencer_pattern(sequencer_pattern).active = true
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+
+  program.get_channel(1).start_trig[1] = 3
+  program.get_channel(1).start_trig[2] = 4
+
+  program.get_channel(1).end_trig[1] = 4
+  program.get_channel(1).end_trig[2] = 4
+
+  program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = 4
+
+  local sequencer_pattern_2 = 2
+  program.set_selected_sequencer_pattern(2)
+  
+  local test_pattern_2 = program.initialise_default_pattern()
+
+  test_pattern_2.note_values[6] = 0
+  test_pattern_2.lengths[6] = 1
+  test_pattern_2.trig_values[6] = 1
+  test_pattern_2.velocity_values[6] = 126
+
+  program.get_sequencer_pattern(sequencer_pattern_2).repeats = 1
+  program.get_sequencer_pattern(sequencer_pattern_2).active = true
+  program.get_sequencer_pattern(sequencer_pattern_2).patterns[1] = test_pattern_2
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_2).channels[1].selected_patterns, 1)
+
+  program.get_channel(1).start_trig[1] = 1
+  program.get_channel(1).start_trig[2] = 4
+
+  program.get_channel(1).end_trig[1] = 8
+  program.get_channel(1).end_trig[2] = 4
+
+  program.get_sequencer_pattern(sequencer_pattern_2).global_pattern_length = 16
+
+  program.set_selected_sequencer_pattern(1)
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  -- First trig in song sequence 1 fires
+  local note_on_event = table.remove(midi_note_on_events, 1) -- 1
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 101)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(2) -- 2, 1
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 101)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(2) -- 2, 1
+  progress_clock_by_beats(5) -- 2, 3, 4, 5, 6
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 126)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(8) -- 7, 8, 1, 2, 3, 4, 5, 6
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 126)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(3)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 101)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
