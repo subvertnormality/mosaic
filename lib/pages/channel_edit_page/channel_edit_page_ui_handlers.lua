@@ -3,7 +3,27 @@ local channel_edit_page_ui_handlers = {}
 local fn = include("lib/functions")
 local param_manager = include("mosaic/lib/param_manager")
 
-function channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page, swing_shuffle_type_selector, swing_selector, shuffle_feel_selector, shuffle_basis_selector)
+function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page)
+  local channel_pages = pages.channel_pages
+  local channel_page_to_index = pages.channel_page_to_index
+  local scales_pages = pages.scales_pages
+  local scales_page_to_index = pages.scales_page_to_index
+
+  local note_selectors = selectors.note_selectors
+  local quantizer_vertical_scroll_selector = selectors.quantizer_vertical_scroll_selector
+  local romans_vertical_scroll_selector = selectors.romans_vertical_scroll_selector
+  local notes_vertical_scroll_selector = selectors.notes_vertical_scroll_selector
+  local rotation_vertical_scroll_selector = selectors.rotation_vertical_scroll_selector
+  local clock_mod_list_selector = selectors.clock_mod_list_selector
+  local clock_swing_value_selector = selectors.clock_swing_value_selector
+  local midi_device_vertical_scroll_selector = selectors.midi_device_vertical_scroll_selector
+  local midi_channel_vertical_scroll_selector = selectors.midi_channel_vertical_scroll_selector
+  local device_map_vertical_scroll_selector = selectors.device_map_vertical_scroll_selector
+  local swing_shuffle_type_selector = selectors.swing_shuffle_type_selector
+  local swing_selector = selectors.swing_selector
+  local shuffle_feel_selector = selectors.shuffle_feel_selector
+  local shuffle_basis_selector = selectors.shuffle_basis_selector
+  
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] and program.get().selected_channel ~= 17 then
     if note_selectors.trig:is_selected() then
       note_selectors.trig:deselect()
@@ -100,7 +120,28 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages
   end
 end
 
-function channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, note_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, clock_swing_value_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page, swing_shuffle_type_selector, swing_selector, shuffle_feel_selector, shuffle_basis_selector)
+function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page)
+  local channel_pages = pages.channel_pages
+  local channel_page_to_index = pages.channel_page_to_index
+  local scales_pages = pages.scales_pages
+  local scales_page_to_index = pages.scales_page_to_index
+
+  local note_selectors = selectors.note_selectors
+  local quantizer_vertical_scroll_selector = selectors.quantizer_vertical_scroll_selector
+  local romans_vertical_scroll_selector = selectors.romans_vertical_scroll_selector
+  local notes_vertical_scroll_selector = selectors.notes_vertical_scroll_selector
+  local rotation_vertical_scroll_selector = selectors.rotation_vertical_scroll_selector
+  local clock_mod_list_selector = selectors.clock_mod_list_selector
+  local clock_swing_value_selector = selectors.clock_swing_value_selector
+  local midi_device_vertical_scroll_selector = selectors.midi_device_vertical_scroll_selector
+  local midi_channel_vertical_scroll_selector = selectors.midi_channel_vertical_scroll_selector
+  local device_map_vertical_scroll_selector = selectors.device_map_vertical_scroll_selector
+  local swing_shuffle_type_selector = selectors.swing_shuffle_type_selector
+  local swing_selector = selectors.swing_selector
+  local shuffle_feel_selector = selectors.shuffle_feel_selector
+  local shuffle_basis_selector = selectors.shuffle_basis_selector
+
+
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] and program.get().selected_channel ~= 17 then
     if note_selectors.note:is_selected() then
       note_selectors.note:deselect()

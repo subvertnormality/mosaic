@@ -624,10 +624,28 @@ function channel_edit_page_ui_controller.enc(n, d)
     end
   elseif n == 2 then
     for _ = 1, math.abs(d) do
+      
+      local selectors = {
+        note_selectors = note_selectors,
+        quantizer_vertical_scroll_selector = quantizer_vertical_scroll_selector,
+        romans_vertical_scroll_selector = romans_vertical_scroll_selector,
+        notes_vertical_scroll_selector = notes_vertical_scroll_selector,
+        rotation_vertical_scroll_selector = rotation_vertical_scroll_selector,
+        clock_mod_list_selector = clock_mod_list_selector,
+        clock_swing_value_selector = clock_swing_value_selector,
+        midi_device_vertical_scroll_selector = midi_device_vertical_scroll_selector,
+        midi_channel_vertical_scroll_selector = midi_channel_vertical_scroll_selector,
+        device_map_vertical_scroll_selector = device_map_vertical_scroll_selector,
+        swing_shuffle_type_selector = swing_shuffle_type_selector,
+        swing_selector = swing_selector,
+        shuffle_feel_selector = shuffle_feel_selector,
+        shuffle_basis_selector = shuffle_basis_selector,
+      }
+
       if d > 0 then
-        channel_edit_page_ui_handlers.handle_encoder_two_positive(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, swing_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page, swing_shuffle_type_selector, swing_selector, shuffle_feel_selector, shuffle_basis_selector)
+        channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page)
       else
-        channel_edit_page_ui_handlers.handle_encoder_two_negative(channel_pages, channel_page_to_index, scales_pages, scales_page_to_index, mask_selectors, quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, notes_vertical_scroll_selector, rotation_vertical_scroll_selector, clock_mod_list_selector, swing_selector, midi_device_vertical_scroll_selector, midi_channel_vertical_scroll_selector, device_map_vertical_scroll_selector, dials, trig_lock_page, swing_shuffle_type_selector, swing_selector, shuffle_feel_selector, shuffle_basis_selector)
+        channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page)
       end
     end
   elseif n == 1 then
