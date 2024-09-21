@@ -67,6 +67,8 @@ function test_params_trig_locks_are_processed_at_the_right_step()
     channel.trig_lock_params[1].type = "midi"
     channel.trig_lock_params[1].id = 1
     channel.trig_lock_params[1].cc_msb = cc_msb
+    channel.trig_lock_params[1].cc_min_value = -1 
+    channel.trig_lock_params[1].cc_max_value = 127
   
     program.add_step_param_trig_lock(test_step, 1, cc_value)
   
@@ -112,6 +114,8 @@ function test_params_triggless_locks_are_processed_at_the_right_step()
   channel.trig_lock_params[1].type = "midi"
   channel.trig_lock_params[1].id = 1
   channel.trig_lock_params[1].cc_msb = cc_msb
+  channel.trig_lock_params[1].cc_min_value = -1 
+  channel.trig_lock_params[1].cc_max_value = 127
 
   params:set("trigless_locks", 2) 
 
@@ -159,6 +163,8 @@ function test_params_triggless_locks_are_not_processed_if_trigless_param_is_off(
   channel.trig_lock_params[1].type = "midi"
   channel.trig_lock_params[1].id = 1
   channel.trig_lock_params[1].cc_msb = cc_msb
+  channel.trig_lock_params[1].cc_min_value = -1 
+  channel.trig_lock_params[1].cc_max_value = 127
 
   params:set("trigless_locks", 0) 
 
@@ -1794,6 +1800,8 @@ function test_global_params_are_processed_at_all_steps()
   channel.trig_lock_params[1].type = "midi"
   channel.trig_lock_params[1].id = 1
   channel.trig_lock_params[1].cc_msb = cc_msb
+  channel.trig_lock_params[1].cc_min_value = -1 
+  channel.trig_lock_params[1].cc_max_value = 127
   channel.trig_lock_banks[1] = cc_value
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
@@ -1861,6 +1869,8 @@ function test_global_params_are_processed_with_the_correct_value_across_song_pat
   channel_song_pattern_1.trig_lock_params[1].type = "midi"
   channel_song_pattern_1.trig_lock_params[1].id = 1
   channel_song_pattern_1.trig_lock_params[1].cc_msb = cc_msb
+  channel_song_pattern_1.trig_lock_params[1].cc_min_value = -1 
+  channel_song_pattern_1.trig_lock_params[1].cc_max_value = 127
   channel_song_pattern_1.trig_lock_banks[1] = cc_value_1
 
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_1).channels[c].selected_patterns, 1)
@@ -1882,7 +1892,10 @@ function test_global_params_are_processed_with_the_correct_value_across_song_pat
   channel_song_pattern_2.trig_lock_params[1].type = "midi"
   channel_song_pattern_2.trig_lock_params[1].id = 1
   channel_song_pattern_2.trig_lock_params[1].cc_msb = cc_msb
+  channel_song_pattern_2.trig_lock_params[1].cc_min_value = -1 
+  channel_song_pattern_2.trig_lock_params[1].cc_max_value = 127
   channel_song_pattern_2.trig_lock_banks[1] = cc_value_2
+  
 
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_2).channels[c].selected_patterns, 1)
 
