@@ -52,8 +52,6 @@ function step_handler.process_stock_params(c, step, type)
   return nil
 end
 
-
-
 function step_handler.process_params(c, step)
   local program_data = program.get()
   local channel = program.get_channel(c)
@@ -153,7 +151,7 @@ function step_handler.calculate_next_selected_sequencer_pattern()
   end
 
   local next_pattern_number = selected_sequencer_pattern_number + 1
-  if next_pattern_number < 91 and sequencer_patterns[next_pattern_number] and sequencer_patterns[next_pattern_number].active then
+  if next_pattern_number < 97 and sequencer_patterns[next_pattern_number] and sequencer_patterns[next_pattern_number].active then
     return next_pattern_number
   end
 
@@ -253,16 +251,17 @@ function step_handler.manually_calculate_step_scale_number(c, step)
 end
 
 
-function step_handler.calculate_step_transpose(current_step, c)
+function step_handler.calculate_step_transpose()
   local program_data = program.get()
+  local current_step = program_data.current_scale_channel_step 
   local step_transpose = program.get_step_transpose_trig_lock(current_step)
   local global_transpose = program.get_transpose()
   local transpose = 0
-  local channel = program.get_channel(c)
-  local start_trig_1, start_trig_2 = channel.start_trig[1], channel.start_trig[2]
-  local current_channel_step = fn.calc_grid_count(start_trig_1, start_trig_2)
+  local channel = program.get_channel(17)
+  local end_trig_1, end_trig_2 = channel.end_trig[1], channel.end_trig[2]
+  local scale_channel_end_step = fn.calc_grid_count(end_trig_1, end_trig_2)
   
-  if program_data.current_step == current_channel_step then
+  if current_step % scale_channel_end_step == 1 then
     persistent_step_transpose = nil
   end
 
@@ -659,11 +658,11 @@ function step_handler.handle(c, current_step)
 
   program.set_channel_step_scale_number(c, step_handler.calculate_step_scale_number(c, current_step))
 
-  local transpose = step_handler.calculate_step_transpose(current_step, c)
+  local transpose = step_handler.calculate_step_transpose()
 
   if trig_value == 1 and random_val < trig_prob then
     channel_edit_page_ui_controller.refresh_trig_locks()
-
+    
     local random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0) +
                          fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
 
@@ -672,7 +671,7 @@ function step_handler.handle(c, current_step)
       if params:get("quantiser_act_on_note_masks") == 2 then
         note = quantiser.snap_to_scale(note_mask_value + octave_mod * 12 + random_shift, channel.step_scale_number, transpose)
       else
-        note = note_mask_value + octave_mod * 12 + random_shift + transpose
+        note = note_mask_value + octave_mod * 12 + random_shift
       end
     else
       note_value = note_value + random_shift

@@ -193,6 +193,7 @@ function clock_controller.init()
       end
 
       if channel_number == 17 then
+        program_data.current_scale_channel_step = current_step
         step_handler.process_global_step_scale_trig_lock(current_step)
         step_handler.sinfonian_sync(current_step)
       else
