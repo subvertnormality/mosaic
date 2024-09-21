@@ -625,6 +625,13 @@ function channel_edit_page_ui_controller.enc(n, d)
   elseif n == 2 then
     for _ = 1, math.abs(d) do
       
+      local pages = {
+        channel_pages = channel_pages,
+        channel_page_to_index = channel_page_to_index,
+        scales_pages = scales_pages,
+        scales_page_to_index = scales_page_to_index,
+      }
+
       local selectors = {
         note_selectors = note_selectors,
         quantizer_vertical_scroll_selector = quantizer_vertical_scroll_selector,

@@ -1,11 +1,11 @@
--- mosaic v0.6 Beta
--- grid-centric, intentioned
--- generative sequencer.
+-- mosaic v1.0
+-- grid-centric rythm and 
+-- harmony sequencer.
 --
 -- llllllll.co/t/mosaic-beta-v0-5
 -- manual: t.ly/h-Wsw
 
--- Copyright Andrew Hillel 2024. See the included GNU licence for more information on terms of use.
+-- Copyright Andrew Hillel 2024. See the included GNU licence for more information.
 
 testing = false
 

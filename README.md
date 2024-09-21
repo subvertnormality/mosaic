@@ -427,8 +427,6 @@ Additionally, adding swing to each channel allows you to shift notes off the gri
 
 Clock, swing and shuffle settings apply when the sequencer resets if the sequencer is currently playing.
 
-Note: Shuffle only works if the global pattern length is set to a multiple of 8, otherwise the sequencer will fall back to swing.
-
 #### Channel Length
 
 Channels in your sequencer can be customized to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
@@ -640,13 +638,9 @@ When "song mode" is activated, the sequencer automatically progresses to the nex
 
 #### Adjusting Song Sequence Length
 
-The song sequence's length can be adjusted using the fader located at the lower end of the song editor page.
+The song sequence's length can be adjusted using the fader located at the lower left of the song editor page.
 
-* For precise control, utilize the end cap buttons.
-* For broader adjustments, use the central fader buttons.
-* The length can be set anywhere from 1 to 64, offering a wide range of possibilities.
-
-![Pattern length selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/song_mode_sequencer.png)
+* The length can be set in multiples of 8, offering a wide range of possibilities.
 
 #### Navigating the Norns Display
 

@@ -134,12 +134,12 @@ function clock_controller.init()
 
   master_clock = clock_lattice:new_sprocket {
     action = function(t)
+      local selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
       if params:get("elektron_program_changes") == 2 and program_data.current_step == selected_sequencer_pattern.global_pattern_length - 1 then
         step_handler.process_elektron_program_change(step_handler.calculate_next_selected_sequencer_pattern())
       end
       if not first_run then
         step_handler.process_song_sequencer_patterns(program_data.current_step)
-        local selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
         for i = 1, 17 do
           if ((program.get_current_step_for_channel(i) - 1) % selected_sequencer_pattern.global_pattern_length) + 1 == selected_sequencer_pattern.global_pattern_length then
             local channel = program.get_channel(i)

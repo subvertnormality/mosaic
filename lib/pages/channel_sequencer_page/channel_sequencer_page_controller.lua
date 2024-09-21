@@ -4,7 +4,7 @@ local channel_pattern_buttons = {}
 local fn = include("mosaic/lib/functions")
 local refresh_button = {}
 
-local global_pattern_length_fader = fader:new(1, 7, 16, 64)
+local global_pattern_length_fader = fader:new(1, 7, 8, 8)
 
 function channel_sequencer_page_controller.init()
   for s = 1, 96 do
@@ -133,16 +133,18 @@ function channel_sequencer_page_controller.register_press_handlers()
     function(x, y)
       if global_pattern_length_fader:is_this(x, y) then
         global_pattern_length_fader:press(x, y)
-        local new_pattern_length = global_pattern_length_fader:get_value()
+
+        local sequencer_pattern = program.get().selected_sequencer_pattern
+        local new_pattern_length = global_pattern_length_fader:get_value() * 8
         if clock_controller.is_playing() then
           tooltip:show("Q'd: Global pattern length: " .. new_pattern_length)
           step_handler.queue_for_pattern_change(function()
-            program.get_selected_sequencer_pattern().global_pattern_length = new_pattern_length
+            program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = new_pattern_length
             clock_controller.get_clock_lattice().pattern_length = new_pattern_length
             program.get().global_step_accumulator = 0
           end)
         else
-          program.get_selected_sequencer_pattern().global_pattern_length = new_pattern_length
+          program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = new_pattern_length
           clock_controller.get_clock_lattice().pattern_length = new_pattern_length
           tooltip:show("Global pattern length: " .. new_pattern_length)
         end
