@@ -140,6 +140,7 @@ function clock_controller.init()
       end
       if not first_run then
         step_handler.process_song_sequencer_patterns(program_data.current_step)
+
         for i = 1, 17 do
           if ((program.get_current_step_for_channel(i) - 1) % selected_sequencer_pattern.global_pattern_length) + 1 == selected_sequencer_pattern.global_pattern_length then
             local channel = program.get_channel(i)
@@ -242,6 +243,7 @@ function clock_controller.init()
       swing_or_shuffle = shuffle_values.swing_or_shuffle,
       shuffle_basis = shuffle_values.shuffle_basis,
       shuffle_feel = shuffle_values.shuffle_feel,
+      order = 2,
       enabled = true
     }
 
@@ -253,6 +255,7 @@ function clock_controller.init()
       shuffle_basis = shuffle_values.shuffle_basis,
       shuffle_feel = shuffle_values.shuffle_feel,
       delay = 1,
+      order = 2,
       enabled = true
     }
 
@@ -336,7 +339,8 @@ local function meta_delay_action(c, division, delay, type, func)
     swing_or_shuffle = shuffle_values.swing_or_shuffle,
     shuffle_basis = shuffle_values.shuffle_basis,
     shuffle_feel = shuffle_values.shuffle_feel,
-    delay_offset = -2
+    delay_offset = -2,
+    order = 3,
   }
 
 
@@ -391,6 +395,7 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
     swing_or_shuffle = shuffle_values.swing_or_shuffle,
     shuffle_basis = shuffle_values.shuffle_basis,
     shuffle_feel = shuffle_values.shuffle_feel,
+    order = 3,
   }
 
 end
@@ -451,7 +456,8 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
     swing_or_shuffle = shuffle_values.swing_or_shuffle,
     shuffle_basis = shuffle_values.shuffle_basis,
     shuffle_feel = shuffle_values.shuffle_feel,
-    delay = division + chord_spread
+    delay = division + chord_spread,
+    order = 3,
   }
 
   acceleration_accumulator = acceleration_accumulator + chord_spread
@@ -486,6 +492,10 @@ function clock_controller.kill_arp_delay_sprockets(c)
       table.remove(arp_delay_sprockets[c], i)
     end
   end
+end
+
+function clock_controller.realign_sprockets()
+  clock_lattice:realign_sprockets_in_group(2) -- Realign the channel clocks only
 end
 
 function clock_controller:start()

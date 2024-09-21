@@ -172,7 +172,7 @@ function channel_sequencer_page_controller.register_press_handlers()
 end
 
 function channel_sequencer_page_controller.refresh_faders()
-  global_pattern_length_fader:set_value(program.get_selected_sequencer_pattern().global_pattern_length)
+  global_pattern_length_fader:set_value(program.get_selected_sequencer_pattern().global_pattern_length / 8)
 end
 
 function channel_sequencer_page_controller.refresh()

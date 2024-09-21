@@ -808,6 +808,8 @@ function step_handler.process_song_sequencer_patterns()
     (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) ==
       0)
    then
+    clock_controller.realign_sprockets()
+    
     if params:get("song_mode") == 2 then
 
       local next_sequencer_pattern = step_handler.calculate_next_selected_sequencer_pattern()

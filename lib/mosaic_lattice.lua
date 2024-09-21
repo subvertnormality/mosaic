@@ -403,4 +403,18 @@ function Sprocket:update_shuffle(step, id)
 end
 
 
+function Lattice:realign_sprockets_in_group(group_id)
+
+  for _, id in ipairs(self.sprocket_ordering[group_id]) do
+    local sprocket = self.sprockets[id]
+    sprocket.ppqn_error = 0.5
+    sprocket.phase = 1
+    sprocket.step = 1
+    sprocket.transport = 1
+    sprocket:update_swing()
+    sprocket:update_shuffle(1)  -- Passing 1 as we've reset to step 1
+    sprocket.current_ppqn = sprocket.division * self.ppqn * 4
+  end
+end
+
 return Lattice
