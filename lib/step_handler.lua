@@ -147,8 +147,8 @@ function step_handler.process_params(c, step)
             break
           end
           device.player:set_slew(step_trig_lock / (param.quantum_modifier or 1))
-        else
-          device.player:set_slew(trig_lock_banks[i] / (param.quantum_modifier or 1))
+        elseif trig_lock_banks[i] then
+            device.player:set_slew(trig_lock_banks[i] / (param.quantum_modifier or 1))
         end
       elseif param.type == "norns" and param.id then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
@@ -160,7 +160,7 @@ function step_handler.process_params(c, step)
           end
 
           params:set(param.id, step_trig_lock / (param.quantum_modifier or 1))
-        else
+        elseif trig_lock_banks[i] then
           params:set(param.id, trig_lock_banks[i] / (param.quantum_modifier or 1))
         end
       end
