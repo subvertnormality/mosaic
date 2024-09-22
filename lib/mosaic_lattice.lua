@@ -218,6 +218,7 @@ function Lattice:new_sprocket(args)
   args.shuffle_feel = args.shuffle_feel and util.clamp(args.shuffle_feel, 0, 3) or 0
   args.step = self.step or 1
   args.lattice = self
+  args.realign = args.realign or false
   local sprocket = Sprocket:new(args)
   sprocket:update_swing()
   sprocket:update_shuffle(self.step, 1)
@@ -267,6 +268,7 @@ function Sprocket:new(args)
   p.step = args.step or 1
   p.transport = 1
   p.lattice = args.lattice
+  p.realign = args.realign
   return p
 end
 
@@ -403,17 +405,21 @@ function Sprocket:update_shuffle(step, id)
 end
 
 
-function Lattice:realign_sprockets_in_group(group_id)
+function Lattice:realign_eligable_sprockets()
 
-  for _, id in ipairs(self.sprocket_ordering[group_id]) do
-    local sprocket = self.sprockets[id]
-    sprocket.ppqn_error = 0.5
-    sprocket.phase = 1
-    sprocket.step = 1
-    sprocket.transport = 1
-    sprocket:update_swing()
-    sprocket:update_shuffle(1)  -- Passing 1 as we've reset to step 1
-    sprocket.current_ppqn = sprocket.division * self.ppqn * 4
+  for i = 1, 5 do
+    for _, id in ipairs(self.sprocket_ordering[i]) do
+      local sprocket = self.sprockets[id]
+      if sprocket.realign then
+        sprocket.ppqn_error = 0.5
+        sprocket.phase = 1
+        sprocket.step = 1
+        sprocket.transport = 1
+        sprocket:update_swing()
+        sprocket:update_shuffle(1)  -- Passing 1 as we've reset to step 1
+        sprocket.current_ppqn = sprocket.division * self.ppqn * 4
+      end
+    end
   end
 end
 
