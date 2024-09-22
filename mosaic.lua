@@ -311,6 +311,7 @@ function init()
 
   ui_controller.init()
   grid_controller.init()
+  clock_controller.init()
   crow.ii.jf.mode(1)
   ui_splash_screen_active = false
   fn.dirty_grid(true)

@@ -6,6 +6,7 @@ clock_lattice = {}
 
 local playing = false
 local master_clock
+local midi_clock_init
 local trigless_lock_active = {}
 local first_run = true
 
@@ -95,7 +96,9 @@ end
 
 function clock_controller.init()
   local program_data = program.get()
-  clock_lattice = lattice:new()
+  clock_lattice = lattice:new({
+    enabled = false
+  })
 
   if testing then
     clock_lattice.auto = false
@@ -114,22 +117,21 @@ function clock_controller.init()
     arp_delay_sprockets[i] = {}
     arp_sprockets[i] = {}
   end
-
-  local midi_clock_init
   
   midi_clock_init = clock_lattice:new_sprocket {
     action = function(t)
       midi_controller.start()
       midi_clock_init:destroy()
+      midi_clock_init = nil
     end,
     division = 0,
     swing = 0,
-    order = 4,
-    delay = 0,
+    order = 5,
+    delay = 1,
     swing_or_shuffle = 1,
     shuffle_basis = 0,
     shuffle_feel = 0,
-    enabled = true
+    realign = false
   }
 
   master_clock = clock_lattice:new_sprocket {
@@ -212,6 +214,7 @@ function clock_controller.init()
       if program_data.selected_channel == channel_number and program_data.selected_page == channel_edit_page then
         fn.dirty_grid(true)
       end
+
     end
 
     local end_of_clock_action = function(t)
@@ -516,12 +519,11 @@ function clock_controller:start()
   end
 
   clock_controller.set_playing()
+  clock_lattice:start()
 
   for i = 1, 16 do
     step_handler.process_params(i, 1)
   end
-
-  clock_lattice:start()
        
 end
 
