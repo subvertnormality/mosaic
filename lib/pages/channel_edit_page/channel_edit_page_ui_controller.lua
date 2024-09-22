@@ -545,7 +545,8 @@ end
 -- Trig lock functions
 function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
   local pressed_keys = grid_controller.get_pressed_keys()
-  local param_id = channel.trig_lock_params[dial_index].param_id
+  local trig_lock_param = channel.trig_lock_params[dial_index]
+  local param_id = trig_lock_param.param_id
   local p_value = nil
   if param_id then
     local p = params:lookup_param(param_id)
@@ -554,26 +555,29 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
     end
   end
 
-  if #pressed_keys > 0 and channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
+  if #pressed_keys > 0 and trig_lock_param and trig_lock_param.id then
     for _, keys in ipairs(pressed_keys) do
       local step = fn.calc_grid_count(keys[1], keys[2])
+      local val = program.get_step_param_trig_lock(channel, step, dial_index) or 
+        (((trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msbp_value) and (p_value / 129)) or p_value) or 
+        channel.trig_lock_banks[dial_index]
+
       program.add_step_param_trig_lock(
         step,
         dial_index,
-        (program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]) + direction
+        val + direction
       )
-      m_params[dial_index]:set_value(
-        program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]
-      )
+      
+      m_params[dial_index]:set_value(val)
     end
-  elseif channel.trig_lock_banks[dial_index] and channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
+  elseif channel.trig_lock_banks[dial_index] and trig_lock_param and trig_lock_param.id then
 
-    local max_value = channel.trig_lock_params[dial_index].cc_max_value or 127
-    local min_value = channel.trig_lock_params[dial_index].cc_min_value or -1
+    local max_value = trig_lock_param.cc_max_value or 127
+    local min_value = trig_lock_param.cc_min_value or -1
 
-    if channel.trig_lock_params[dial_index].nrpn_min_value and channel.trig_lock_params[dial_index].nrpn_max_value and channel.trig_lock_params[dial_index].nrpn_lsb and channel.trig_lock_params[dial_index].nrpn_msb then
-      max_value = math.floor(channel.trig_lock_params[dial_index].nrpn_max_value / 129)
-      min_value = channel.trig_lock_params[dial_index].nrpn_min_value == -1 and -1 or math.floor(channel.trig_lock_params[dial_index].nrpn_min_value / 129)
+    if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
+      max_value = math.floor(trig_lock_param.nrpn_max_value / 129)
+      min_value = trig_lock_param.nrpn_min_value == -1 and -1 or math.floor(trig_lock_param.nrpn_min_value / 129)
     end
     channel.trig_lock_banks[dial_index] = channel.trig_lock_banks[dial_index] + direction
     if channel.trig_lock_banks[dial_index] > (max_value) then
