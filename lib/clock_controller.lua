@@ -247,7 +247,7 @@ function clock_controller.init()
       swing_or_shuffle = shuffle_values.swing_or_shuffle,
       shuffle_basis = shuffle_values.shuffle_basis,
       shuffle_feel = shuffle_values.shuffle_feel,
-      order = 2,
+      order = 3,
       enabled = true
     }
 
@@ -259,7 +259,7 @@ function clock_controller.init()
       shuffle_basis = shuffle_values.shuffle_basis,
       shuffle_feel = shuffle_values.shuffle_feel,
       delay = 1,
-      order = 2,
+      order = 3,
       enabled = true
     }
 
@@ -344,7 +344,7 @@ local function meta_delay_action(c, division, delay, type, func)
     shuffle_basis = shuffle_values.shuffle_basis,
     shuffle_feel = shuffle_values.shuffle_feel,
     delay_offset = -2,
-    order = 3,
+    order = 2,
   }
 
 
@@ -399,7 +399,7 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
     swing_or_shuffle = shuffle_values.swing_or_shuffle,
     shuffle_basis = shuffle_values.shuffle_basis,
     shuffle_feel = shuffle_values.shuffle_feel,
-    order = 3,
+    order = 2,
   }
 
 end
@@ -461,7 +461,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
     shuffle_basis = shuffle_values.shuffle_basis,
     shuffle_feel = shuffle_values.shuffle_feel,
     delay = division + chord_spread,
-    order = 3,
+    order = 2,
   }
 
   acceleration_accumulator = acceleration_accumulator + chord_spread
@@ -499,7 +499,7 @@ function clock_controller.kill_arp_delay_sprockets(c)
 end
 
 function clock_controller.realign_sprockets()
-  clock_lattice:realign_sprockets_in_group(2) -- Realign the channel clocks only
+  clock_lattice:realign_sprockets_in_group(3) -- Realign the channel clocks only
 end
 
 function clock_controller:start()
