@@ -566,7 +566,7 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
         program.get_step_param_trig_lock(channel, step, dial_index) or p_value or channel.trig_lock_banks[dial_index]
       )
     end
-  elseif channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
+  elseif channel.trig_lock_banks[dial_index] and channel.trig_lock_params[dial_index] and channel.trig_lock_params[dial_index].id then
 
     local max_value = channel.trig_lock_params[dial_index].cc_max_value or 127
     local min_value = channel.trig_lock_params[dial_index].cc_min_value or -1

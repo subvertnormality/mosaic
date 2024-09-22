@@ -704,11 +704,12 @@ function step_handler.handle(c, current_step)
         note = note_mask_value + octave_mod * 12 + random_shift
       end
     else
-      note_value = note_value + random_shift
+      local shifted_note_val = note_value + random_shift
+
       local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
                             (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
                             (params:get("random_lock_to_pentatonic") == 2 and random_shift > 0)
-      note = quantiser.process(note_value, octave_mod, transpose, channel.step_scale_number, do_pentatonic)
+      note = quantiser.process(shifted_note_val, octave_mod, transpose, channel.step_scale_number, do_pentatonic)
     end
 
     local velocity_random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "random_velocity") or 0)
@@ -729,7 +730,7 @@ function step_handler.handle(c, current_step)
       return
     end
 
-    if not channel.mute then
+    if not channel.mute and note then
       local note_container = {
         note = note,
         velocity = velocity_value,
@@ -815,10 +816,10 @@ function step_handler.process_song_sequencer_patterns()
       local next_sequencer_pattern = step_handler.calculate_next_selected_sequencer_pattern()
 
       program.set_selected_sequencer_pattern(next_sequencer_pattern)
-      if selected_sequencer_pattern_number ~= next_sequencer_pattern and params:get("reset_on_end_of_sequencer_pattern") == 2 then
+      if selected_sequencer_pattern_number ~= next_sequencer_pattern and params:get("reset_on_sequencer_pattern_transition") == 2 then
         step_handler.reset_pattern()
       else
-        if params:get("reset_on_end_of_pattern") == 2 then
+        if params:get("reset_on_end_of_pattern_repeat") == 2 then
           step_handler.reset_pattern()
         end
       end

@@ -665,13 +665,13 @@ Various aspects of Mosaic can be configured from the param section on your Norns
 
 "Song mode" is on by default. When enabled, the song sequencer will progress through sequences as dictated by the options set on the song sequencer page. When off, song sequences will only progress with manual intervention.
 
-##### Reset at Sequence End
+##### Reset at Song Sequencer Pattern Change
 
-The "Reset at sequence end" option, which is turned on by default, ensures that the sequencer resets all channels at the end of the song sequence. This happens regardless of whether the sequencer is progressing to a new sequence, which helps maintain consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.
+The "Reset at Song Sequence Change" option, which is turned on by default, ensures that the sequencer resets all channels when transitioning from one song sequencer pattern to the next. This helps maintain rhythmic consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.
 
-##### Reset at Seq Pattern End
+##### Reset at Pattern Repeat
 
-"Reset at seq pattern end" is set to off by default. When enabled, it resets all channels at the end of the song sequence but only if a new sequence is queued. Disabling this option allows for evolving polyrhythms.
+"Reset at Pattern Repeat" is set to off by default. When enabled, it resets all channels at the end of a song sequence when repeating the same song sequencer pattern. This ensures all channels with a custom length will reset back to that channel's starting step at every start of the pattern. Disabling this option allows for evolving polyrhythms.
 
 ##### Elektron Program Changes
 

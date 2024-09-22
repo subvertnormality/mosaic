@@ -178,6 +178,10 @@ function clock_controller.init()
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
 
+      if end_trig > program.get_selected_sequencer_pattern().global_pattern_length then
+        end_trig = program.get_selected_sequencer_pattern().global_pattern_length
+      end
+
       if current_step < start_trig then
         program.set_current_step_for_channel(channel_number, start_trig)
         current_step = start_trig
@@ -188,7 +192,7 @@ function clock_controller.init()
         current_step = current_step + 1
       end
 
-      if program.get_current_step_for_channel(channel_number) > end_trig then
+      if current_step > end_trig then
         program.set_current_step_for_channel(channel_number, start_trig)
         current_step = start_trig
       end

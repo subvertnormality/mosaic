@@ -273,12 +273,17 @@ function quantiser.snap_to_scale(note_num, scale_number, transpose)
   local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
 
   scale = fn.transpose_scale(scale, root_note + (transpose or 0))
-  
+
+  if type(note_num) ~= "number" then return nil end
+
   return musicutil.snap_note_to_array(note_num, scale)
 end
 
 function quantiser.process_to_pentatonic_scale(note_num, scale_number)
   local scale_container = program.get_scale(scale_number)
+
+  if type(note_num) ~= "number" then return nil end
+
   return musicutil.snap_note_to_array(note_num, scale_container.pentatonic_scale)
 end
 
