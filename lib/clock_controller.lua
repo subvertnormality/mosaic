@@ -140,7 +140,7 @@ function clock_controller.init()
       end
       if not first_run then
         step_handler.process_song_sequencer_patterns(program_data.current_step)
-
+        selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
         for i = 1, 17 do
           if ((program.get_current_step_for_channel(i) - 1) % selected_sequencer_pattern.global_pattern_length) + 1 == selected_sequencer_pattern.global_pattern_length then
             local channel = program.get_channel(i)
