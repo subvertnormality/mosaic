@@ -546,10 +546,11 @@ end
 function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
   local pressed_keys = grid_controller.get_pressed_keys()
   local trig_lock_param = channel.trig_lock_params[dial_index]
+
   local param_id = trig_lock_param.param_id
   local p_value = nil
   local quantum = 1
-  if param_id then
+  if param_id and (trig_lock_param.param_type == "midi" or trig_lock_param.param_type == "norns") then
     local p = params:lookup_param(param_id)
     if p.name ~= "undefined" then
       p_value = p.value
@@ -1295,7 +1296,7 @@ function channel_edit_page_ui_controller.sync_trig_lock_to_midi_param(i, channel
     return
   end
 
-  if channel.trig_lock_params[i].type ~= "midi" then
+  if channel.trig_lock_params[i].param_type ~= "midi" then
     return
   end
 
@@ -1319,7 +1320,7 @@ function channel_edit_page_ui_controller.sync_trig_lock_to_norns_param(i, channe
     return
   end
 
-  if channel.trig_lock_params[i].type ~= "norns" then
+  if channel.trig_lock_params[i].param_type ~= "norns" then
     return
   end
 
