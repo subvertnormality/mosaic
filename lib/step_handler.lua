@@ -515,6 +515,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     step_chord_masks and step_chord_masks[4] or channel.chord_four_mask
   }
 
+  note_dashboard_values.chords = {}
+
   local chord_division = note_divisions[step_handler.process_stock_params(c, current_step, "chord_strum")] and note_divisions[step_handler.process_stock_params(c, current_step, "chord_strum")].value
   local chord_velocity_mod = step_handler.process_stock_params(c, current_step, "chord_velocity_modifier")
   local chord_strum_pattern = step_handler.process_stock_params(c, current_step, "chord_strum_pattern")
@@ -593,14 +595,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
 
           if processed_chord_note then
-            if c == program.get().selected_channel then
-              local chord = {}
-              chord[chord_number] = processed_chord_note
-              channel_edit_page_ui_controller.set_note_dashboard_values({
-                chords = chord
-              })
-            end
             play_note(processed_chord_note, note_container, velocity, note_container.length, note_on_func)
+            note_dashboard_values.chords[chord_number] = processed_chord_note
           end
         end
       )
