@@ -9,13 +9,12 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
   local scales_pages = pages.scales_pages
   local scales_page_to_index = pages.scales_page_to_index
 
-  local note_selectors = selectors.note_selectors
+  local mask_selectors = selectors.mask_selectors
   local quantizer_vertical_scroll_selector = selectors.quantizer_vertical_scroll_selector
   local romans_vertical_scroll_selector = selectors.romans_vertical_scroll_selector
   local notes_vertical_scroll_selector = selectors.notes_vertical_scroll_selector
   local rotation_vertical_scroll_selector = selectors.rotation_vertical_scroll_selector
   local clock_mod_list_selector = selectors.clock_mod_list_selector
-  local clock_swing_value_selector = selectors.clock_swing_value_selector
   local midi_device_vertical_scroll_selector = selectors.midi_device_vertical_scroll_selector
   local midi_channel_vertical_scroll_selector = selectors.midi_channel_vertical_scroll_selector
   local device_map_vertical_scroll_selector = selectors.device_map_vertical_scroll_selector
@@ -25,27 +24,27 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
   local shuffle_basis_selector = selectors.shuffle_basis_selector
   
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] and program.get().selected_channel ~= 17 then
-    if note_selectors.trig:is_selected() then
-      note_selectors.trig:deselect()
-      note_selectors.note:select()
-    elseif note_selectors.note:is_selected() then
-      note_selectors.note:deselect()
-      note_selectors.velocity:select()
-    elseif note_selectors.velocity:is_selected() then
-      note_selectors.velocity:deselect()
-      note_selectors.length:select()
-    elseif note_selectors.length:is_selected() then
-      note_selectors.length:deselect()
-      note_selectors.chords[1]:select()
-    elseif note_selectors.chords[1]:is_selected() then
-      note_selectors.chords[1]:deselect()
-      note_selectors.chords[2]:select()
-    elseif note_selectors.chords[2]:is_selected() then
-      note_selectors.chords[2]:deselect()
-      note_selectors.chords[3]:select()
-    elseif note_selectors.chords[3]:is_selected() then
-      note_selectors.chords[3]:deselect()
-      note_selectors.chords[4]:select()
+    if mask_selectors.trig:is_selected() then
+      mask_selectors.trig:deselect()
+      mask_selectors.note:select()
+    elseif mask_selectors.note:is_selected() then
+      mask_selectors.note:deselect()
+      mask_selectors.velocity:select()
+    elseif mask_selectors.velocity:is_selected() then
+      mask_selectors.velocity:deselect()
+      mask_selectors.length:select()
+    elseif mask_selectors.length:is_selected() then
+      mask_selectors.length:deselect()
+      mask_selectors.chords[1]:select()
+    elseif mask_selectors.chords[1]:is_selected() then
+      mask_selectors.chords[1]:deselect()
+      mask_selectors.chords[2]:select()
+    elseif mask_selectors.chords[2]:is_selected() then
+      mask_selectors.chords[2]:deselect()
+      mask_selectors.chords[3]:select()
+    elseif mask_selectors.chords[3]:is_selected() then
+      mask_selectors.chords[3]:deselect()
+      mask_selectors.chords[4]:select()
     end
   elseif scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] and program.get().selected_channel == 17 then
     if quantizer_vertical_scroll_selector:is_selected() then
@@ -126,13 +125,12 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
   local scales_pages = pages.scales_pages
   local scales_page_to_index = pages.scales_page_to_index
 
-  local note_selectors = selectors.note_selectors
+  local mask_selectors = selectors.mask_selectors
   local quantizer_vertical_scroll_selector = selectors.quantizer_vertical_scroll_selector
   local romans_vertical_scroll_selector = selectors.romans_vertical_scroll_selector
   local notes_vertical_scroll_selector = selectors.notes_vertical_scroll_selector
   local rotation_vertical_scroll_selector = selectors.rotation_vertical_scroll_selector
   local clock_mod_list_selector = selectors.clock_mod_list_selector
-  local clock_swing_value_selector = selectors.clock_swing_value_selector
   local midi_device_vertical_scroll_selector = selectors.midi_device_vertical_scroll_selector
   local midi_channel_vertical_scroll_selector = selectors.midi_channel_vertical_scroll_selector
   local device_map_vertical_scroll_selector = selectors.device_map_vertical_scroll_selector
@@ -143,27 +141,27 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
 
 
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] and program.get().selected_channel ~= 17 then
-    if note_selectors.note:is_selected() then
-      note_selectors.note:deselect()
-      note_selectors.trig:select()
-    elseif note_selectors.velocity:is_selected() then
-      note_selectors.velocity:deselect()
-      note_selectors.note:select()
-    elseif note_selectors.length:is_selected() then
-      note_selectors.length:deselect()
-      note_selectors.velocity:select()
-    elseif note_selectors.chords[1]:is_selected() then
-      note_selectors.chords[1]:deselect()
-      note_selectors.length:select()
-    elseif note_selectors.chords[2]:is_selected() then
-      note_selectors.chords[2]:deselect()
-      note_selectors.chords[1]:select()
-    elseif note_selectors.chords[3]:is_selected() then
-      note_selectors.chords[3]:deselect()
-      note_selectors.chords[2]:select()
-    elseif note_selectors.chords[4]:is_selected() then
-      note_selectors.chords[4]:deselect()
-      note_selectors.chords[3]:select()
+    if mask_selectors.note:is_selected() then
+      mask_selectors.note:deselect()
+      mask_selectors.trig:select()
+    elseif mask_selectors.velocity:is_selected() then
+      mask_selectors.velocity:deselect()
+      mask_selectors.note:select()
+    elseif mask_selectors.length:is_selected() then
+      mask_selectors.length:deselect()
+      mask_selectors.velocity:select()
+    elseif mask_selectors.chords[1]:is_selected() then
+      mask_selectors.chords[1]:deselect()
+      mask_selectors.length:select()
+    elseif mask_selectors.chords[2]:is_selected() then
+      mask_selectors.chords[2]:deselect()
+      mask_selectors.chords[1]:select()
+    elseif mask_selectors.chords[3]:is_selected() then
+      mask_selectors.chords[3]:deselect()
+      mask_selectors.chords[2]:select()
+    elseif mask_selectors.chords[4]:is_selected() then
+      mask_selectors.chords[4]:deselect()
+      mask_selectors.chords[3]:select()
     end
   elseif scales_pages:get_selected_page() == scales_page_to_index["Quantizer"] and program.get().selected_channel == 17 then
     if quantizer_vertical_scroll_selector:is_selected() then

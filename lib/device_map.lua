@@ -339,21 +339,23 @@ local function merge_devices()
               maxval = params:get_range(param_id)[2]
             end
 
-            local quantum_modifier = 1 / quantum
+            local quantum_modifier = quantum
 
             table.insert(
               new_device_params,
               {
                 ["id"] = device_param_names[i],
+                ["param_id"] = param_id,
                 ["name"] = fn.title_case(p.name),
                 ["short_descriptor_1"] = fn.format_first_descriptor(p.name),
                 ["short_descriptor_2"] = fn.format_second_descriptor(p.name),
-                ["cc_min_value"] = minval * quantum_modifier,
-                ["cc_max_value"] = maxval * quantum_modifier,
+                ["cc_min_value"] = minval,
+                ["cc_max_value"] = maxval,
                 ["quantum_modifier"] = quantum_modifier,
                 ["default"] = p["controlspec"] and p["controlspec"].default or 0
               }
             )
+
           end
         end
 

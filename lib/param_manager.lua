@@ -95,7 +95,7 @@ end
 
 
 function param_manager.update_param(index, channel, param, meta_device)
-  if id == "none" then
+  if param.id == "none" then
     channel.trig_lock_params[index] = {}
   else
 
@@ -104,13 +104,12 @@ function param_manager.update_param(index, channel, param, meta_device)
     channel.trig_lock_params[index].device_name = meta_device.device_name
     channel.trig_lock_params[index].type = meta_device.type
     channel.trig_lock_params[index].id = param.id
-    channel.trig_lock_banks[index] = param.off_value
+    channel.trig_lock_params[index].param_id = param.id
+    channel.trig_lock_banks[index] = param.off_value or -1
       
     if (meta_device.type == "midi" and param.param_type ~= "stock") then
       channel.trig_lock_params[index].param_id =
         "midi_device_params_channel_" .. channel.number .. "_" .. param.index
-    else
-      channel.trig_lock_params[index].param_id = nil
     end
   end
 end

@@ -548,11 +548,16 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
   local trig_lock_param = channel.trig_lock_params[dial_index]
   local param_id = trig_lock_param.param_id
   local p_value = nil
+  local quantum = 1
   if param_id then
     local p = params:lookup_param(param_id)
     if p.name ~= "undefined" then
       p_value = p.value
     end
+  end
+
+  if trig_lock_param.quantum_modifier then
+    quantum = trig_lock_param.quantum_modifier
   end
 
   if #pressed_keys > 0 and trig_lock_param and trig_lock_param.id then
@@ -565,7 +570,7 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       program.add_step_param_trig_lock(
         step,
         dial_index,
-        val + direction
+        val + (direction * quantum)
       )
       
       m_params[dial_index]:set_value(val)
@@ -579,15 +584,22 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       max_value = math.floor(trig_lock_param.nrpn_max_value / 129)
       min_value = trig_lock_param.nrpn_min_value == -1 and -1 or math.floor(trig_lock_param.nrpn_min_value / 129)
     end
-    channel.trig_lock_banks[dial_index] = channel.trig_lock_banks[dial_index] + direction
+
+    channel.trig_lock_banks[dial_index] = math.floor((channel.trig_lock_banks[dial_index] + (direction * quantum)) * 100 + 0.5) / 100
+
+    -- Adjust for floating-point errors near zero
+    if math.abs(channel.trig_lock_banks[dial_index]) < 1e-6 and math.abs(channel.trig_lock_banks[dial_index]) > -1e-6  then
+      channel.trig_lock_banks[dial_index] = 0
+    end
+
     if channel.trig_lock_banks[dial_index] > (max_value) then
       channel.trig_lock_banks[dial_index] = (max_value)
     elseif channel.trig_lock_banks[dial_index] < (min_value) then
       channel.trig_lock_banks[dial_index] = (min_value)
     end
 
-
-    channel_edit_page_ui_controller.sync_param_to_trig_lock(dial_index, channel)
+    channel_edit_page_ui_controller.sync_trig_lock_to_midi_param(dial_index, channel)
+    channel_edit_page_ui_controller.sync_trig_lock_to_norns_param(dial_index, channel)
     channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
   end
 end
@@ -637,13 +649,12 @@ function channel_edit_page_ui_controller.enc(n, d)
       }
 
       local selectors = {
-        note_selectors = note_selectors,
+        mask_selectors = mask_selectors,
         quantizer_vertical_scroll_selector = quantizer_vertical_scroll_selector,
         romans_vertical_scroll_selector = romans_vertical_scroll_selector,
         notes_vertical_scroll_selector = notes_vertical_scroll_selector,
         rotation_vertical_scroll_selector = rotation_vertical_scroll_selector,
         clock_mod_list_selector = clock_mod_list_selector,
-        clock_swing_value_selector = clock_swing_value_selector,
         midi_device_vertical_scroll_selector = midi_device_vertical_scroll_selector,
         midi_channel_vertical_scroll_selector = midi_channel_vertical_scroll_selector,
         device_map_vertical_scroll_selector = device_map_vertical_scroll_selector,
@@ -1278,17 +1289,19 @@ function channel_edit_page_ui_controller.handle_key_three_pressed()
   end
 end
 
-function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
+function channel_edit_page_ui_controller.sync_trig_lock_to_midi_param(i, channel)
 
   if not channel.trig_lock_banks[i] then
     return
   end
-  
+
+  if channel.trig_lock_params[i].type ~= "midi" then
+    return
+  end
+
   local param_id = channel.trig_lock_params[i].param_id
 
-  local p = nil
   if param_id ~= nil then
-    p = params:lookup_param(channel.trig_lock_params[i].param_id)
 
     local value = channel.trig_lock_banks[i]
 
@@ -1299,6 +1312,25 @@ function channel_edit_page_ui_controller.sync_param_to_trig_lock(i, channel)
     params:set(param_id, value)
   end
 end
+
+function channel_edit_page_ui_controller.sync_trig_lock_to_norns_param(i, channel)
+
+  if not channel.trig_lock_banks[i] then
+    return
+  end
+
+  if channel.trig_lock_params[i].type ~= "norns" then
+    return
+  end
+
+  local param_id = channel.trig_lock_params[i].param_id
+
+  if param_id ~= nil then
+    local value = channel.trig_lock_banks[i]
+    params:set(param_id, value)
+  end
+end
+
 
 function channel_edit_page_ui_controller.select_page(page) 
     channel_pages:select_page(page)

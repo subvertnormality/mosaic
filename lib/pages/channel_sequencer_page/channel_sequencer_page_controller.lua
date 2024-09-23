@@ -84,7 +84,7 @@ function channel_sequencer_page_controller.register_press_handlers()
             end
 
             for i = 1, 10 do
-              channel_edit_page_ui_controller.sync_param_to_trig_lock(i, program.get_channel(channel_number))
+              channel_edit_page_ui_controller.sync_trig_lock_to_midi_param(i, program.get_channel(channel_number))
             end
           end
 

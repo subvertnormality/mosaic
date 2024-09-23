@@ -75,7 +75,7 @@ function step_handler.process_params(c, step)
         param.id ~= "chord_strum_pattern" and
         param.id ~= "fixed_note")
      then
-
+      
       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
         local midi_channel = devices[channel.number].midi_channel
@@ -108,10 +108,11 @@ function step_handler.process_params(c, step)
           elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
             midi_controller.cc(param.cc_msb, param.cc_lsb, step_trig_lock, midi_channel, devices[channel.number].midi_device)
           end
-        elseif p_value then
+        elseif p_value and param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
           if p_value == param.off_value then
             break
           end
+
           if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
             midi_controller.nrpn(
               param.nrpn_msb,
@@ -146,9 +147,9 @@ function step_handler.process_params(c, step)
           if step_trig_lock == param.off_value then
             break
           end
-          device.player:set_slew(step_trig_lock / (param.quantum_modifier or 1))
+          device.player:set_slew(step_trig_lock)
         elseif trig_lock_banks[i] then
-            device.player:set_slew(trig_lock_banks[i] / (param.quantum_modifier or 1))
+            device.player:set_slew(trig_lock_banks[i])
         end
       elseif param.type == "norns" and param.id then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
@@ -158,10 +159,9 @@ function step_handler.process_params(c, step)
           if step_trig_lock == param.off_value then
             break
           end
-
-          params:set(param.id, step_trig_lock / (param.quantum_modifier or 1))
+          params:set(param.id, step_trig_lock)
         elseif trig_lock_banks[i] then
-          params:set(param.id, trig_lock_banks[i] / (param.quantum_modifier or 1))
+          params:set(param.id, trig_lock_banks[i])
         end
       end
     end
@@ -837,7 +837,8 @@ function step_handler.process_song_sequencer_patterns()
           end
       
           for i = 1, 10 do
-            channel_edit_page_ui_controller.sync_param_to_trig_lock(i, program.get_channel(channel_number))
+            channel_edit_page_ui_controller.sync_trig_lock_to_midi_param(i, program.get_channel(channel_number))
+            channel_edit_page_ui_controller.sync_trig_lock_to_norns_param(i, program.get_channel(channel_number))
           end
         end
       
