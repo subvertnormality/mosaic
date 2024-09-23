@@ -267,6 +267,16 @@ local tested_note_players = {
   "ansible 1",
   "ansible 2",
   "crow para",
+  "drumcrow 1",
+  "drumcrow 2",
+  "drumcrow 3",
+  "drumcrow 4",
+  "rudiments 1",
+  "rudiments 2",
+  "rudiments 3",
+  "rudiments 4",
+  "polyperc 1",
+  "doubledecker"
 }
 
 local function merge_devices()
@@ -375,6 +385,8 @@ local function merge_devices()
             }
           )
         end
+      else
+        print("Skipping untested device: ", index)
       end
     end
   end

@@ -525,6 +525,20 @@ function channel_edit_page_ui_controller.update_channel_config()
 
   channel_edit_page_ui_controller.refresh_device_selector()
 
+  if device_m.id == "jf kit" or
+    device_m.id == "jf n 1" or
+    device_m.id == "jf n 2" or
+    device_m.id == "jf poly" or
+    device_m.id == "jf unison" or
+    device_m.id == "jf n 5" or
+    device_m.id == "jf mpe" or
+    device_m.id == "jf n 4" or
+    device_m.id == "jf n 3" or
+    device_m.id == "jf n 6"
+  then
+    crow.ii.jf.mode(1)
+  end
+
   param_manager.add_device_params(
     channel.number,
     device_m,

@@ -463,6 +463,11 @@ If your device has an associated configuration file, such as those available for
 * [emplaitress](https://github.com/subvertnormality/emplaitress/) offers four MI Plaits voices in parallel. Note this fork allows Emplatress's params to be locked in _Mosaic_.
 * [nb_jf](https://github.com/sixolet/nb_jf) accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.
 * [nb_crow](https://github.com/sixolet/nb_crow) for Crow v/8 and envelope functions.
+* [nb_drum_crow](https://github.com/entzmingerc/nb_drumcrow) turns a monome crow into a synthesizer.
+* [nb_polyperc](https://github.com/dstroud/nb_polyperc) poly perc.
+* [nb_rudiments](https://github.com/entzmingerc/nb_rudiments) percussion synth.
+* [nb_doubledecker](https://github.com/sixolet/doubledecker) 2-layer synth.
+
 
 n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engines to channels.
 

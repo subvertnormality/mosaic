@@ -10,6 +10,7 @@
 * Swing system totally reworked and shuffles based on 21echo's Cyrene added
 * Hold K2 to quick perform long presses, for example, to stop the sequencer or to mute/unmute channels immediately 
 * NPRN values are used by default, when available for a particular param. This means matrix mod and toolkit now works.
+* Support for more nb mods
 
 # 0.5.3
 
