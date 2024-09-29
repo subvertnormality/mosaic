@@ -93,6 +93,7 @@ function ui_controller.key(n, z)
   -- note_edit_page_ui_controller.key(n, z)
   -- trigger_edit_page_ui_controller.key(n, z)
   -- channel_sequencer_page_ui_controller.key(n, z)
+
 end
 
 function ui_controller.refresh()
@@ -100,6 +101,7 @@ function ui_controller.refresh()
   -- note_edit_page_ui_controller.refresh()
   -- trigger_edit_page_ui_controller.refresh()
   -- channel_sequencer_page_ui_controller.refresh()
+
 end
 
 

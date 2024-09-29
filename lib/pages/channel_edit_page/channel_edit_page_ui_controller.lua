@@ -546,6 +546,12 @@ function channel_edit_page_ui_controller.update_channel_config()
     program.get().devices[channel.number].midi_device,
     true
   )
+  for i = 1, 10 do
+    program.increment_trig_lock_calculator_id(channel, i)
+  end
+
+  channel_edit_page_ui_controller.refresh_trig_locks()
+  
 end
 
 function channel_edit_page_ui_controller.change_page(page)
@@ -561,60 +567,74 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
   local pressed_keys = grid_controller.get_pressed_keys()
   local trig_lock_param = channel.trig_lock_params[dial_index]
 
-  local param_id = trig_lock_param.param_id
-  local p_value = nil
-  local quantum = 1
-  if param_id and (trig_lock_param.param_type == "midi" or trig_lock_param.param_type == "norns") then
-    local p = params:lookup_param(param_id)
-    if p.name ~= "undefined" then
-      p_value = p.value
-    end
+  if not trig_lock_param then
+    return
   end
 
-  if trig_lock_param.quantum_modifier then
-    quantum = trig_lock_param.quantum_modifier
+
+  local max_value = trig_lock_param.cc_max_value or 127
+
+  if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
+    max_value = math.floor(trig_lock_param.nrpn_max_value)
   end
+
+  local direction_modifier = math.floor(max_value / 127)
+  if direction_modifier < 1 then direction_modifier = 1 end
+
+  local param_id = trig_lock_param.param_id
+
+  local p, p_index
+
+  if param_id then
+    p = params:lookup_param(param_id)
+    p_index = params.lookup[param_id]
+  else
+    return
+  end
+
+  if not p then
+    return
+  end
+
+  local p_value = params:get(param_id)
 
   if #pressed_keys > 0 and trig_lock_param and trig_lock_param.id then
     for _, keys in ipairs(pressed_keys) do
       local step = fn.calc_grid_count(keys[1], keys[2])
-      local val = program.get_step_param_trig_lock(channel, step, dial_index) or 
-        (((trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msbp_value) and (p_value / 129)) or p_value) or 
-        channel.trig_lock_banks[dial_index]
+      local param_args = {}
 
-      program.add_step_param_trig_lock(
-        step,
-        dial_index,
-        val + (direction * quantum)
-      )
+      for key, arg in pairs(p) do
+        param_args[key] = arg
+      end
+
+      local handler_param_id = channel.number .. "_lock_calculator_" .. dial_index .. "_" .. program.get_trig_lock_calculator_id(channel, dial_index)
+
+      param_args.id = handler_param_id
+      param_args.type = fn.get_param_type_from_id(params:t(p_index))
+
+      local handler_param_id_index = params.lookup[handler_param_id]
+
+      if not handler_param_id_index then
+        params:add(param_args)
+        handler_param_id_index = params.lookup[handler_param_id]
+        params:hide(handler_param_id_index)
+        params:set_action(handler_param_id_index, function() end)
+        params:set(handler_param_id_index, p_value, true)
+      end
+
       
-      m_params[dial_index]:set_value(val)
+      params:delta(handler_param_id_index, direction * direction_modifier)
+
+      local value = params:get(handler_param_id_index)
+
+      program.add_step_param_trig_lock(step, dial_index, value)
+      m_params[dial_index]:set_value(value)
+
     end
-  elseif channel.trig_lock_banks[dial_index] and trig_lock_param and trig_lock_param.id then
+  elseif p_value and trig_lock_param and trig_lock_param.id then
 
-    local max_value = trig_lock_param.cc_max_value or 127
-    local min_value = trig_lock_param.cc_min_value or -1
+    p:delta(direction * direction_modifier)
 
-    if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
-      max_value = math.floor(trig_lock_param.nrpn_max_value / 129)
-      min_value = trig_lock_param.nrpn_min_value == -1 and -1 or math.floor(trig_lock_param.nrpn_min_value / 129)
-    end
-
-    channel.trig_lock_banks[dial_index] = math.floor((channel.trig_lock_banks[dial_index] + (direction * quantum)) * 100 + 0.5) / 100
-
-    -- Adjust for floating-point errors near zero
-    if math.abs(channel.trig_lock_banks[dial_index]) < 1e-6 and math.abs(channel.trig_lock_banks[dial_index]) > -1e-6  then
-      channel.trig_lock_banks[dial_index] = 0
-    end
-
-    if channel.trig_lock_banks[dial_index] > (max_value) then
-      channel.trig_lock_banks[dial_index] = (max_value)
-    elseif channel.trig_lock_banks[dial_index] < (min_value) then
-      channel.trig_lock_banks[dial_index] = (min_value)
-    end
-
-    channel_edit_page_ui_controller.sync_trig_lock_to_midi_param(dial_index, channel)
-    channel_edit_page_ui_controller.sync_trig_lock_to_norns_param(dial_index, channel)
     channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
   end
 end
@@ -1197,6 +1217,7 @@ function channel_edit_page_ui_controller.handle_midi_config_page_increment()
     
     param_manager.update_default_params(program.get_selected_channel(), device_map_vertical_scroll_selector:get_selected_item())
     param_select_vertical_scroll_selector:set_selected_item(1)
+    channel_edit_page_ui_controller.refresh_trig_locks()
   end)
   save_confirm.set_cancel(channel_edit_page_ui_controller.throttled_refresh_channel_config)
 end
@@ -1216,6 +1237,7 @@ function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
     channel_edit_page_ui_controller.update_channel_config()
     param_manager.update_default_params(program.get_selected_channel(), device_map_vertical_scroll_selector:get_selected_item())
     param_select_vertical_scroll_selector:set_selected_item(1)
+    channel_edit_page_ui_controller.refresh_trig_locks()
   end)
 
   save_confirm.set_cancel(function()
@@ -1295,54 +1317,12 @@ function channel_edit_page_ui_controller.handle_key_three_pressed()
       end
       dials:get_selected_item():set_value(
         program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or
-        program.get_selected_channel().trig_lock_banks[dials:get_selected_index()]
+        params:get(channel.trig_lock_params[i].param_id)
       )
       channel_edit_page_ui_controller.refresh_trig_locks()
     end
   else
     save_confirm.confirm()
-  end
-end
-
-function channel_edit_page_ui_controller.sync_trig_lock_to_midi_param(i, channel)
-
-  if not channel.trig_lock_banks[i] then
-    return
-  end
-
-  if channel.trig_lock_params[i].param_type ~= "midi" then
-    return
-  end
-
-  local param_id = channel.trig_lock_params[i].param_id
-
-  if param_id ~= nil then
-
-    local value = channel.trig_lock_banks[i]
-
-    if channel.trig_lock_params[i].nrpn_min_value and channel.trig_lock_params[i].nrpn_max_value and channel.trig_lock_params[i].nrpn_lsb and channel.trig_lock_params[i].nrpn_msb then
-      value = channel.trig_lock_banks[i] * 129
-    end
-
-    params:set(param_id, value)
-  end
-end
-
-function channel_edit_page_ui_controller.sync_trig_lock_to_norns_param(i, channel)
-
-  if not channel.trig_lock_banks[i] then
-    return
-  end
-
-  if channel.trig_lock_params[i].param_type ~= "norns" then
-    return
-  end
-
-  local param_id = channel.trig_lock_params[i].param_id
-
-  if param_id ~= nil then
-    local value = channel.trig_lock_banks[i]
-    params:set(param_id, value)
   end
 end
 

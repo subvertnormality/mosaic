@@ -83,9 +83,6 @@ function channel_sequencer_page_controller.register_press_handlers()
               channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(channel_number)
             end
 
-            for i = 1, 10 do
-              channel_edit_page_ui_controller.sync_trig_lock_to_midi_param(i, program.get_channel(channel_number))
-            end
           end
 
           if program.is_sequencer_pattern_active(previous_selected_pattern) then

@@ -59,6 +59,7 @@ local function create_cc_device()
       cc_midi_device,
       {
         ["id"] = "cc_" .. i,
+        ["param_id"] = "cc_" .. i,
         ["name"] = "CC " .. i,
         ["cc_msb"] = i,
         ["cc_lsb"] = nil,
@@ -88,6 +89,7 @@ end
 local function get_none_param()
   return {
     ["id"] = "none",
+    ["param_id"] = "none",
     ["name"] = "None",
     ["short_descriptor_1"] = "None",
     ["short_descriptor_2"] = ""
@@ -276,7 +278,11 @@ local tested_note_players = {
   "rudiments 3",
   "rudiments 4",
   "polyperc 1",
-  "doubledecker"
+  "doubledecker",
+  "Oilcan 1",
+  "Oilcan 2",
+  "Oilcan 3",
+  "Oilcan 4"
 }
 
 local function merge_devices()
@@ -321,10 +327,11 @@ local function merge_devices()
             ["name"] = fn.title_case(index),
             ["id"] = index,
             ["unique"] = true,
-            ["map_params_automatically"] = false,
+            ["map_params_automatically"] = true,
             ["default_midi_channel"] = nil,
             ["player"] = device,
-            ["params"] = new_device_params
+            ["params"] = new_device_params,
+            ["supports_slew"] = device.describe().supports_slew
           }
         )
 
@@ -336,20 +343,24 @@ local function merge_devices()
 
             params:show(param_id)
 
-            local minval = 0
-            local maxval = 127
-            local quantum = 1
 
-            if p.count then
-              minval = 1
-              maxval = p.count
-            elseif p["controlspec"] then
-              quantum = p["controlspec"].quantum or 1
-              minval = params:get_range(param_id)[1]
-              maxval = params:get_range(param_id)[2]
+            local quantum = 0.01
+            local step = 0
+            local minval = params:get_range(param_id)[1]
+            local maxval = params:get_range(param_id)[2]
+            local warp = "lin"
+
+            if p["controlspec"] then
+              quantum = p["controlspec"].quantum or 0.01
+              quantum = p["controlspec"].step or 0
+              warp = p["controlspec"].warp or "lin"
             end
-
-            local quantum_modifier = quantum
+            if p.min then
+              minval = p.min
+            end
+            if p.max then
+              maxval = p.max
+            end
 
             table.insert(
               new_device_params,
@@ -357,11 +368,13 @@ local function merge_devices()
                 ["id"] = device_param_names[i],
                 ["param_id"] = param_id,
                 ["name"] = fn.title_case(p.name),
+                ["unique"] = true,
                 ["short_descriptor_1"] = fn.format_first_descriptor(p.name),
                 ["short_descriptor_2"] = fn.format_second_descriptor(p.name),
                 ["cc_min_value"] = minval,
                 ["cc_max_value"] = maxval,
-                ["quantum_modifier"] = quantum_modifier,
+                ["quantum"] = quantum,
+                ["step"] = step,
                 ["default"] = p["controlspec"] and p["controlspec"].default or 0
               }
             )
@@ -380,7 +393,7 @@ local function merge_devices()
               ["off_value"] = -1,
               ["cc_min_value"] = -1,
               ["cc_max_value"] = 60,
-              ["quantum_modifier"] = 60,
+              ["quantum"] = 1,
               ["default"] = -1
             }
           )
@@ -413,6 +426,8 @@ local function merge_params(device_params, stock_params)
   local merged_params = {}
   local seen_ids = {} -- hash set for fast id lookup
 
+  local index_accumulator = 1
+
   if (merged_params[1] and merged_params[1].id ~= "none") then
     table.insert(merged_params, get_none_param())
 
@@ -427,12 +442,13 @@ local function merge_params(device_params, stock_params)
       seen_ids[sp.id] = true
       param_index = index + 1
     end
+    index_accumulator = index
   end
 
   -- Add the contents of device_params into merged_params
   for index, dp in ipairs(device_params) do
     if not seen_ids[dp.id] then
-      dp.index = index
+      dp.index = index + index_accumulator
       table.insert(merged_params, dp)
       seen_ids[dp.id] = true
     end
@@ -527,6 +543,10 @@ function device_map.validate_devices()
     end
 
   end
+end
+
+function device_map.get_stock_params()
+  return stock_params
 end
 
 local function create_device_map_keyed_by_id(devices)

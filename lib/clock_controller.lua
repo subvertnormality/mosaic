@@ -275,26 +275,26 @@ end
 
 function clock_controller.set_swing_shuffle_type(channel_number, swing_or_shuffle)
   local clock = clock_controller["channel_" .. channel_number .. "_clock"]
-  clock:set_swing_or_shuffle(swing_or_shuffle - 1)
-  clock.end_of_clock_processor:set_swing_or_shuffle(swing_or_shuffle - 1)
+  clock:set_swing_or_shuffle((swing_or_shuffle or 2) - 1)
+  clock.end_of_clock_processor:set_swing_or_shuffle((swing_or_shuffle or 2) - 1)
 end
 
 function clock_controller.set_channel_swing(channel_number, swing)
   local clock = clock_controller["channel_" .. channel_number .. "_clock"]
-  clock:set_swing(swing)
-  clock.end_of_clock_processor:set_swing(swing)
+  clock:set_swing(swing or 0)
+  clock.end_of_clock_processor:set_swing(swing or 0)
 end
 
 function clock_controller.set_channel_shuffle_feel(channel_number, shuffle_feel)
   local clock = clock_controller["channel_" .. channel_number .. "_clock"]
-  clock:set_shuffle_feel(shuffle_feel - 1)
-  clock.end_of_clock_processor:set_shuffle_feel(shuffle_feel - 1)
+  clock:set_shuffle_feel((shuffle_feel or 2) - 1)
+  clock.end_of_clock_processor:set_shuffle_feel((shuffle_feel or 2) - 1)
 end
 
 function clock_controller.set_channel_shuffle_basis(channel_number, shuffle_basis)
   local clock = clock_controller["channel_" .. channel_number .. "_clock"]
-  clock:set_shuffle_basis(shuffle_basis - 1)
-  clock.end_of_clock_processor:set_shuffle_basis(shuffle_basis - 1)
+  clock:set_shuffle_basis((shuffle_basis or 2) - 1)
+  clock.end_of_clock_processor:set_shuffle_basis((shuffle_basis or 2) - 1)
 end
 
 function clock_controller.set_channel_division(channel_number, division)

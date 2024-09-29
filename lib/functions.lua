@@ -426,4 +426,30 @@ function fn.string_split(self, in_split_pattern, out_results)
   return out_results
 end
 
+
+local param_types = {
+  "number",
+  "option",
+  "control",
+  "file",
+  "taper",
+  "trigger",
+  "group",
+  "text",
+  "binary"
+}
+
+function fn.get_param_type_from_id(type_id)
+  return param_types[type_id]
+end
+
+function fn.clean_number(num)
+  -- Check if the number is a whole number
+  if num == math.floor(num) then
+    return math.floor(num)  -- Return as integer if no decimal places
+  else
+    return num  -- Return the original number if it has decimal places
+  end
+end
+
 return fn

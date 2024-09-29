@@ -32,7 +32,6 @@ local table = table
 function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)
   local trig_lock_params = channel.trig_lock_params
-  local trig_lock_banks = channel.trig_lock_banks
 
   for i = 1, 10 do
       local param = trig_lock_params[i]
@@ -44,7 +43,7 @@ function step_handler.process_stock_params(c, step, type)
           if step_trig_lock then
               return step_trig_lock
           else
-              return trig_lock_banks[i] ~= param.off_value and trig_lock_banks[i] or nil
+              return params:get(trig_lock_params[i].param_id) or nil
           end
       end
   end
@@ -57,10 +56,11 @@ function step_handler.process_params(c, step)
   local channel = program.get_channel(c)
   local device = device_map.get_device(program_data.devices[channel.number].device_map)
   local trig_lock_params = channel.trig_lock_params
-  local trig_lock_banks = channel.trig_lock_banks
+  local value
   local devices = program_data.devices
 
   for i = 1, 10 do
+
     local param = trig_lock_params[i]
     if param and
        (param.id ~= "trig_probability" and
@@ -75,6 +75,12 @@ function step_handler.process_params(c, step)
         param.id ~= "chord_strum_pattern" and
         param.id ~= "fixed_note")
      then
+
+      if not param.param_id then
+        break
+      end
+
+      value = params:get(trig_lock_params[i].param_id)
       
       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
@@ -101,7 +107,7 @@ function step_handler.process_params(c, step)
             midi_controller.nrpn(
               param.nrpn_msb,
               param.nrpn_lsb,
-              step_trig_lock * 129,
+              step_trig_lock,
               midi_channel,
               devices[channel.number].midi_device
             )
@@ -125,19 +131,19 @@ function step_handler.process_params(c, step)
             midi_controller.cc(param.cc_msb, param.cc_lsb, p_value, midi_channel, devices[channel.number].midi_device)
           end
         else
-          if trig_lock_banks[i] == param.off_value then
+          if value == param.off_value then
             break
           end
           if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
             midi_controller.nrpn(
               param.nrpn_msb,
               param.nrpn_lsb,
-              trig_lock_banks[i],
+              value,
               midi_channel,
               devices[channel.number].midi_device
             )
           elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
-            midi_controller.cc(param.cc_msb, param.cc_lsb, trig_lock_banks[i], midi_channel, devices[channel.number].midi_device)
+            midi_controller.cc(param.cc_msb, param.cc_lsb, value, midi_channel, devices[channel.number].midi_device)
           end
         end
       elseif param.type == "norns" and param.id == "nb_slew" then
@@ -148,8 +154,8 @@ function step_handler.process_params(c, step)
             break
           end
           device.player:set_slew(step_trig_lock)
-        elseif trig_lock_banks[i] then
-            device.player:set_slew(trig_lock_banks[i])
+        elseif value then
+            device.player:set_slew(value)
         end
       elseif param.type == "norns" and param.id then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
@@ -160,8 +166,8 @@ function step_handler.process_params(c, step)
             break
           end
           params:set(param.id, step_trig_lock)
-        elseif trig_lock_banks[i] then
-          params:set(param.id, trig_lock_banks[i])
+        elseif value then
+          params:set(param.id, value)
         end
       end
     end
@@ -832,10 +838,6 @@ function step_handler.process_song_sequencer_patterns()
             channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(channel_number)
           end
       
-          for i = 1, 10 do
-            channel_edit_page_ui_controller.sync_trig_lock_to_midi_param(i, program.get_channel(channel_number))
-            channel_edit_page_ui_controller.sync_trig_lock_to_norns_param(i, program.get_channel(channel_number))
-          end
         end
       
         channel_edit_page_ui_controller.refresh_clock_mods()

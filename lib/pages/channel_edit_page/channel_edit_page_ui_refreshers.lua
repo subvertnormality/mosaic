@@ -130,10 +130,24 @@ function channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
   local channel = program.get_selected_channel()
   local param_id = channel.trig_lock_params[i].param_id
 
-  if channel.trig_lock_banks[i] then
-    m_params[i]:set_value(channel.trig_lock_banks[i])
-    channel_edit_page_ui_controller.sync_trig_lock_to_midi_param(i, channel)
+  if not param_id then
+    m_params[i]:set_value(-1)
+    return
   end
+
+  local val = params:get(param_id)
+
+
+  -- Round to 3 decimal places
+  val = math.floor(val * 1000 + 0.5) / 1000
+
+  -- Adjust for floating-point errors near zero
+  if math.abs(val) < 1e-6 and math.abs(val) > -1e-6  then
+    val = 0
+  end
+
+  m_params[i]:set_value(fn.clean_number(val))
+
 end
 
 
@@ -143,24 +157,21 @@ function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params)
 
   channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
 
-  if channel.trig_lock_params[i].id then
+  if channel.trig_lock_params[i].param_id then
     m_params[i]:set_name(channel.trig_lock_params[i].name)
     m_params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
     m_params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
     m_params[i]:set_off_value(channel.trig_lock_params[i].off_value)
-    m_params[i]:set_min_value(channel.trig_lock_params[i].cc_min_value)
-    m_params[i]:set_max_value(channel.trig_lock_params[i].cc_max_value)
+    m_params[i]:set_min_value(channel.trig_lock_params[i].nrpn_min_value or channel.trig_lock_params[i].cc_min_value)
+    m_params[i]:set_max_value(channel.trig_lock_params[i].nrpn_max_value or channel.trig_lock_params[i].cc_max_value)
     m_params[i]:set_ui_labels(channel.trig_lock_params[i].ui_labels)
-    m_params[i]:set_value(channel.trig_lock_banks[i] or channel.trig_lock_params[i].off_value)
+    m_params[i]:set_value(params:get(channel.trig_lock_params[i].param_id) or channel.trig_lock_params[i].off_value)
 
     local step_trig_lock = program.get_step_param_trig_lock(channel, program.get_current_step_for_channel(channel.number), i)
     if #pressed_keys > 0 then
       if pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
         step_trig_lock = program.get_step_param_trig_lock(channel, fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2]), i)
-        local default_param = channel.trig_lock_banks[i]
-        if channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].param_id then
-          default_param = params:lookup_param(channel.trig_lock_params[i].param_id).value
-        end
+        local default_param = params:get(channel.trig_lock_params[i].param_id)
         m_params[i]:set_value(step_trig_lock or default_param)
       end
     end

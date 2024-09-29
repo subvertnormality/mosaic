@@ -19,8 +19,8 @@ local function initialise_default_channels()
   for i = 1, 17 do
     channels[i] = {
       number = i,
-      trig_lock_banks = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
       trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
+      trig_lock_calculator_ids = {},
       step_trig_lock_banks = {},
       step_octave_trig_lock_banks = {},
       step_scale_trig_lock_banks = {},
@@ -221,11 +221,12 @@ function program.add_step_param_trig_lock(step, parameter, trig_lock)
     step_trig_lock_banks[step] = {}
   end
 
-  trig_lock = math.max(trig_lock, trig_lock_params[parameter].cc_min_value or 0)
-  trig_lock = math.min(trig_lock, trig_lock_params[parameter].cc_max_value or 127)
+  trig_lock = math.max(trig_lock, trig_lock_params[parameter].nrpn_min_value or trig_lock_params[parameter].cc_min_value or 0)
+  trig_lock = math.min(trig_lock, trig_lock_params[parameter].nrpn_max_value or trig_lock_params[parameter].cc_max_value or 127)
 
   step_trig_lock_banks[step][parameter] = trig_lock
 end
+
 
 function program.get_step_param_trig_lock(channel, step, parameter)
   local step_trig_lock_banks = channel.step_trig_lock_banks
@@ -366,6 +367,22 @@ end
 function program.step_scale_has_trig_lock(channel, step)
   local step_scale_trig_lock_banks = channel.step_scale_trig_lock_banks
   return step_scale_trig_lock_banks and step_scale_trig_lock_banks[step]
+end
+
+
+function program.increment_trig_lock_calculator_id(channel, parameter)
+  if not channel.trig_lock_calculator_ids then
+    channel.trig_lock_calculator_ids = {}
+  end
+  channel.trig_lock_calculator_ids[parameter] = (channel.trig_lock_calculator_ids[parameter] or 0) + 1
+end
+
+function program.get_trig_lock_calculator_id(channel, parameter)
+  if not channel.trig_lock_calculator_ids then
+    channel.trig_lock_calculator_ids = {}
+    channel.trig_lock_calculator_ids[parameter] = 0
+  end
+  return channel.trig_lock_calculator_ids[parameter]
 end
 
 function program.clear_trig_locks_for_step(step)

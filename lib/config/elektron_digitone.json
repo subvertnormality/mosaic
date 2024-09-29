@@ -105,16 +105,12 @@
     },
     {
       "cc_max_value": 127,
-      "nrpn_min_value": -1,
       "index": 8,
       "off_value": -1,
       "short_descriptor_1": "SYN1",
       "short_descriptor_2": "ALGO",
       "name": "FM Syn1 Algorithm",
-      "nrpn_msb": 1,
-      "nrpn_max_value": 16383,
       "cc_min_value": -1,
-      "nrpn_lsb": 0,
       "cc_msb": 91,
       "id": "fm_parameters_syn_1_algorithm"
     },

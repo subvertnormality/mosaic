@@ -2,6 +2,7 @@
 local channel_edit_page_ui_handlers = {}
 local fn = include("lib/functions")
 local param_manager = include("mosaic/lib/param_manager")
+local channel_edit_page_ui_refreshers = include("lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 
 function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page)
   local channel_pages = pages.channel_pages
@@ -245,6 +246,7 @@ function channel_edit_page_ui_handlers.handle_trig_locks_page_change(direction, 
         param_select_vertical_scroll_selector:get_meta_item()
       )
       channel_edit_page_ui_controller.refresh_trig_locks()
+      program.increment_trig_lock_calculator_id(program.get_selected_channel(), dials:get_selected_index())
     end)
     save_confirm.set_cancel(function() end)
   else
