@@ -331,7 +331,7 @@ function channel_edit_page_ui_controller.update_scale()
   save_confirm.set_cancel_message("Scale not saved.")
   save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_quantiser)
 
-  if is_key2_down then
+  if is_key3_down then
     save_confirm.set_confirm_message("K2 to save across song.")
     save_confirm.set_ok_message("Scale saved to all.")
     save_confirm.set_save(function()

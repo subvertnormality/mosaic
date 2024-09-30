@@ -173,9 +173,6 @@ function param_manager.update_param(index, channel, param, meta_device)
   if param.id == "none" then
     channel.trig_lock_params[index] = {}
   else
-
-    print("updating param ", param.id)
-
     channel.trig_lock_params[index] = param
     -- param_select_vertical_scroll_selector:get_meta_item().device_name
     channel.trig_lock_params[index].device_name = meta_device.device_name
@@ -197,26 +194,29 @@ function param_manager.update_default_params(channel, meta_device)
   -- local midi_device_m = device_map_vertical_scroll_selector:get_selected_item()
   for i = 1, 10 do
     if meta_device.params[i + 1] and meta_device.map_params_automatically then
-
-      print("updating default params for ", meta_device.id , " ", meta_device.params[i + 1].id)
       channel.trig_lock_params[i] = meta_device.params[i + 1]
       channel.trig_lock_params[i].device_name = meta_device.device_name
       channel.trig_lock_params[i].type = meta_device.type
       channel.trig_lock_params[i].id = meta_device.params[i + 1].id
+
       if
-        (channel.trig_lock_params[i].type == "midi" and meta_device.params[i + 1].param_type ~= "stock" and meta_device.params[i + 1].index)
+        (channel.trig_lock_params[i].type == "midi" and meta_device.params[i + 1].index)
        then
         channel.trig_lock_params[i].param_id =
           "midi_device_params_channel_" .. channel.number .. "_" .. meta_device.params[i + 1].index
-      elseif (channel.trig_lock_params[i].type == "norns" and meta_device.params[i + 1].param_type ~= "stock" and meta_device.params[i + 1].index) then
+      elseif (channel.trig_lock_params[i].type == "norns" and meta_device.params[i + 1].index) then
           channel.trig_lock_params[i].param_id = meta_device.params[i + 1].param_id
       else
-        -- channel.trig_lock_params[i].param_id = nil
+        channel.trig_lock_params[i] = {}
       end
 
     else
       channel.trig_lock_params[i] = {}
     end
+  end
+
+  if meta_device.fixed_note then
+    params:set("midi_device_params_channel_" .. channel.number .. "_2", meta_device.fixed_note)  -- TODO: fix this magic number
   end
 
   channel_edit_page_ui_controller.refresh_trig_lock_values()

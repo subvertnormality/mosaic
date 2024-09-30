@@ -1,22 +1,5 @@
 [{
-  "params": [
-    {
-      "short_descriptor_2": "",
-      "name": "None",
-      "short_descriptor_1": "None",
-      "id": "none"
-    },
-    {
-      "short_descriptor_2": "NOTE",
-      "name": "Fixed Note",
-      "cc_max_value": 127,
-      "default": 39,
-      "cc_min_value": -1,
-      "short_descriptor_1": "FIXD",
-      "off_value": -1,
-      "id": "fixed_note"
-    }
-  ],
+  "params": [],
   "type": "midi",
   "unique": true,
   "map_params_automatically": true,
@@ -25,5 +8,6 @@
   "default_midi_device": 1,
   "default_midi_channel": 10,
   "name": "DRM Clap",
-  "id": "drm-clap"
+  "id": "drm-clap",
+  "fixed_note": 39
 }]

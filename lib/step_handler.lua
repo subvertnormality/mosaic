@@ -718,11 +718,21 @@ function step_handler.handle(c, current_step)
     velocity_value = fn.constrain(0, 127, velocity_value + velocity_random_shift)
 
     local quantised_fixed_note = step_handler.process_stock_params(c, current_step, "quantised_fixed_note")
+
+    if not quantised_fixed_note then
+      quantised_fixed_note = params:get("midi_device_params_channel_" .. channel.number .. "_3") -- TODO: fix this magic number
+    end
+
     if quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127 then
       note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number)
     end
 
     local fixed_note = step_handler.process_stock_params(c, current_step, "fixed_note")
+
+    if not fixed_note then
+      fixed_note = params:get("midi_device_params_channel_" .. channel.number .. "_2") -- TODO: fix this magic number
+    end
+
     if fixed_note and fixed_note > -1 and fixed_note <= 127 then
       note = fixed_note
     end

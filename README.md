@@ -32,6 +32,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
   * [Channel Editor](#channel-editor)
     + [Adding Patterns to Channels](#adding-patterns-to-channels)
     + [Masks](#masks)
+      - [Adding Trig Masks](#adding-trig-masks)
       - [Adding Melodic Notes over Harmony and Drums](#adding-melodic-notes-over-harmony-and-drums)
       - [Adding Chords](#adding-chords)
       - [MIDI Input](#midi-input)
@@ -165,7 +166,7 @@ Most _Mosaic_ functions are described by tooltips that appear at the bottom of t
 
 To start the sequencer, press the global menu button of the currently selected page — the illuminated button — in the navigation section.
 
-To stop the sequencer, hold down the global menu button of the currently selected page for around a second. You can also hold K2 and press the global menu button of the currently selected page to stop the sequencer immediately.
+To stop the sequencer, hold down the global menu button of the currently selected page for around a second. You can also hold K3 and press the global menu button of the currently selected page to stop the sequencer immediately.
 
 #### MIDI Panic
 
@@ -334,6 +335,10 @@ Masks in _Mosaic_ allow you to precisely control trig values, notes, velocities,
 
 With masking, you have the flexibility to modify individual attributes of a pattern. For instance, you could increase the velocity of a note without changing other settings, add additional chord tones, or completely silence a note. Masks also enable you to assign values to steps that are currently void of any pattern influence. By default, notes added this way will align with the selected musical scale. However, they will not conform to specific scale degrees or rotations. If you wish to incorporate accidentals or embrace a more dissonant sound, this default behavior can be disabled in the _Mosaic_ settings.
 
+##### Adding Trig Masks
+
+You can quickly add trig masks to your sequence by holding K3 and pressing the desired step on the sequenver on the channel edit page. Remember to asign a note mask, velocity mask and length mask to hear your desired note!
+
 ##### Adding Melodic Notes over Harmony and Drums
 
 To add a mask to your sequence, start by accessing the mask page on your Norns device. Once there, press and hold the step you wish to modify, then input the desired value as a trig lock. Alternatively, you can hold the step while pressing a corresponding key on your MIDI keyboard to set the value. This method allows you to easily and intuitively assign specific musical attributes to any step in your sequence.
@@ -443,7 +448,7 @@ You can transpose your entire Song Sequence using the global quantizer transposi
 
 #### Muting Channels
 
-To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also hold K2 and press the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
+To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also hold K3 and press the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
 
 #### Devices
 

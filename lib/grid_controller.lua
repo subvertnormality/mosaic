@@ -122,7 +122,7 @@ function register_press_handlers()
               params:bang()
               clock_controller:start()
               tooltip:show("Starting playback")
-            elseif is_key2_down == true then
+            elseif is_key3_down == true then
               clock_controller:stop()
               tooltip:show("Stopping playback")
             end
