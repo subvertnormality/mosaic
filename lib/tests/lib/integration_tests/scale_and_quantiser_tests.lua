@@ -139,7 +139,6 @@ function test_global_default_scale_setting_quantises_notes_properly()
     local scale = quantiser.get_scales()[1]
 
     params:set("all_scales_lock_to_pentatonic", 2)
-
   
     program.set_scale(
       2,

@@ -23,11 +23,11 @@ end
 function param_manager.init()
   for i = 1, 16 do
     if params.lookup["midi_device_params_group_channel_" .. i] == nil then
-      params:add_group("midi_device_params_group_channel_" .. i, "MOSAIC CH " .. i, 160)
+      params:add_group("midi_device_params_group_channel_" .. i, "MOSAIC CH " .. i, 180)
       params:hide("midi_device_params_group_channel_" .. i)
     end
 
-    for j = 1, 160 do
+    for j = 1, 180 do
       if params.lookup["midi_device_params_channel_" .. i .. "_" .. j] == nil then
         params:add_number("midi_device_params_channel_" .. i .. "_" .. j, "undefined", -1, 10000, -1)
 
@@ -86,7 +86,7 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
       end
     end
 
-    local oob_accumulator = accumulator
+    local oob_accumulator = 40 -- ensure we have room to add more stock params without breaking changes
 
     if device.type == "norns" and device.supports_slew then
       local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. oob_accumulator)
@@ -151,14 +151,14 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
     end
 
     -- Hide remaining parameters
-    for j = oob_accumulator, 160 do
+    for j = oob_accumulator, 180 do
       params:set_action("midi_device_params_channel_" .. channel_id .. "_" .. j, function(x) end)
       params:hide("midi_device_params_channel_" .. channel_id .. "_" .. j)
     end
   else
     -- Hide group parameter and reset individual parameters
     params:hide("midi_device_params_group_channel_" .. channel_id)
-    for i = 1, 160 do
+    for i = 1, 180 do
       local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
       p.value = -1
       p.name = "undefined"
