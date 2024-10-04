@@ -3,7 +3,18 @@
   "type": "midi",
   "value": 4,
   "polyphonic": false,
-  "map_params_automatically": false,
+  "map_params_automatically": [
+    "syn_data_entry_knob_b",
+    "syn_data_entry_knob_c",
+    "syn_data_entry_knob_d",
+    "syn_data_entry_knob_e",
+    "syn_data_entry_knob_f",
+    "syn_data_entry_knob_g",
+    "syn_data_entry_knob_h",
+    "filter_filter_frequency",
+    "lfo_1_depth",
+    "lfo_2_depth"
+  ],
   "id": "syntakt",
   "params": [
     {
@@ -202,7 +213,7 @@
       "cc_max_value": 127,
       "nrpn_min_value": -1,
       "off_value": -1,
-      "short_descriptor_1": "SYND",
+      "short_descriptor_1": "DATA",
       "short_descriptor_2": "H",
       "name": "Data entry knob H",
       "nrpn_msb": 1,

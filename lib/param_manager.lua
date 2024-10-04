@@ -191,27 +191,44 @@ end
 
 
 function param_manager.update_default_params(channel, meta_device)
-  -- local midi_device_m = device_map_vertical_scroll_selector:get_selected_item()
   for i = 1, 10 do
-    if meta_device.params[i + 1] and meta_device.map_params_automatically then
-      channel.trig_lock_params[i] = meta_device.params[i + 1]
-      channel.trig_lock_params[i].device_name = meta_device.device_name
-      channel.trig_lock_params[i].type = meta_device.type
-      channel.trig_lock_params[i].id = meta_device.params[i + 1].id
-
-      if
-        (channel.trig_lock_params[i].type == "midi" and meta_device.params[i + 1].index)
-       then
-        channel.trig_lock_params[i].param_id =
-          "midi_device_params_channel_" .. channel.number .. "_" .. meta_device.params[i + 1].index
-      elseif (channel.trig_lock_params[i].type == "norns" and meta_device.params[i + 1].index) then
-          channel.trig_lock_params[i].param_id = meta_device.params[i + 1].param_id
-      else
-        channel.trig_lock_params[i] = {}
+    channel.trig_lock_params[i] = {}
+    if type(meta_device.map_params_automatically) == "table" then
+      local id = meta_device.map_params_automatically[i]
+      print("is table, id: ", id)
+      if id and type(id) == "string" then
+        print("is string ", id)
+        local param = fn.find_in_table_by_id(meta_device.params, id)
+        if param then
+          print("found param ", param)
+          channel.trig_lock_params[i] = param
+          channel.trig_lock_params[i].device_name = meta_device.device_name
+          channel.trig_lock_params[i].type = meta_device.type
+          channel.trig_lock_params[i].id = param.id
+          if (channel.trig_lock_params[i].type == "midi" and param.index) then
+            channel.trig_lock_params[i].param_id =
+              "midi_device_params_channel_" .. channel.number .. "_" .. param.index
+          elseif (channel.trig_lock_params[i].type == "norns" and param.index) then
+              channel.trig_lock_params[i].param_id = param.param_id
+          end
+        end
       end
-
-    else
-      channel.trig_lock_params[i] = {}
+    elseif meta_device.map_params_automatically == true then
+      
+      if meta_device.params[i + 1] then
+        channel.trig_lock_params[i] = meta_device.params[i + 1]
+        channel.trig_lock_params[i].device_name = meta_device.device_name
+        channel.trig_lock_params[i].type = meta_device.type
+        channel.trig_lock_params[i].id = meta_device.params[i + 1].id
+        if
+          (channel.trig_lock_params[i].type == "midi" and meta_device.params[i + 1].index)
+         then
+          channel.trig_lock_params[i].param_id =
+            "midi_device_params_channel_" .. channel.number .. "_" .. meta_device.params[i + 1].index
+        elseif (channel.trig_lock_params[i].type == "norns" and meta_device.params[i + 1].index) then
+            channel.trig_lock_params[i].param_id = meta_device.params[i + 1].param_id
+        end
+      end
     end
   end
 

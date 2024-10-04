@@ -1,7 +1,18 @@
 [{
   "name": "Digitakt 2",
   "type": "midi",
-  "map_params_automatically": false,
+  "map_params_automatically": [
+    "src_sample_select",
+    "source_parameters_source_play_mode",
+    "source_parameters_source_tune",
+    "filter_parameters_filter_frequency",
+    "fx_parameters_bit_reduction",
+    "fx_parameters_overdrive",
+    "fx_parameters_sample_rate_reduction",
+    "lfo_parameters_lfo_depth",
+    "lfo2_parameters_lfo2_depth",
+    "lfo3_parameters_lfo3_depth"
+  ],
   "polyphonic": false,
   "id": "digitakt_2",
   "params": [

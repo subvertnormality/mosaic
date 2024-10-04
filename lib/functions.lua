@@ -203,10 +203,10 @@ function fn.shift_table_right(t)
   return t
 end
 
-function fn.find_index_in_table_by_id(t, object)
+function fn.find_in_table_by_id(t, id)
   for i, o in ipairs(t) do
-    if o.id == object.id then
-      return i
+    if o.id == id then
+      return o
     end
   end
   return nil

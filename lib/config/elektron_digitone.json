@@ -3,7 +3,18 @@
   "type": "midi",
   "value": 3,
   "polyphonic": true,
-  "map_params_automatically": false,
+  "map_params_automatically": [
+    "fm_parameters_syn_1_ratio_a",
+    "fm_parameters_syn_1_ratio_b",
+    "fm_parameters_syn_1_ratio_c",
+    "fm_parameters_syn_1_mix",
+    "fm_parameters_syn_2_a_level",
+    "fm_parameters_syn_2_b_level",
+    "filter_parameters_filter_frequency",
+    "filter_parameters_resonance",
+    "lfo_parameters_lfo_1_depth",
+    "lfo_parameters_lfo_2_depth"
+  ],
   "id": "digitone",
   "params": [
     {

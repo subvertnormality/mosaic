@@ -1,5 +1,5 @@
 
-# 0.6
+# 0.6.0
 
 * Masks can now be applied as a default affecting all trigs in a channel
 * The last played notes, velocity, length and chords can be seen for the selected channel on the new notes dashboard page
@@ -8,8 +8,10 @@
 * Performance and bug fixes
 * Notes can now be fractional in length
 * Swing system totally reworked and shuffles based on 21echo's Cyrene added
-* Hold K2 to quick perform long presses, for example, to stop the sequencer or to mute/unmute channels immediately 
-* NPRN values are used by default, when available for a particular param. This means matrix mod and toolkit now works.
+* Hold K3 to quick perform long presses, for example, to stop the sequencer or to mute/unmute channels immediately 
+* NPRN values are used by default when available for a particular param. 
+* Matrix mod and toolkit now work as expected.
+* It's now possible to define which trig locks auto populate in the config files
 
 # 0.5.3
 
