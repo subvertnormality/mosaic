@@ -111,7 +111,7 @@ function channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scrol
     local number = scale.number
     program.get_selected_sequencer_pattern().active = true
     romans_vertical_scroll_selector:set_items(quantiser.get_scales()[number].romans)
-    fn.dirty_screen(true)
+    
   end
 end
 

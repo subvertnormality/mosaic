@@ -54,12 +54,12 @@ end
 
 function dial:select()
   self.selected = true
-  fn.dirty_screen(true)
+  
 end
 
 function dial:deselect()
   self.selected = false
-  fn.dirty_screen(true)
+  
 end
 
 function dial:is_selected()
@@ -68,12 +68,12 @@ end
 
 function dial:increment()
   self.value = self.value + 1
-  fn.dirty_screen(true)
+  
 end
 
 function dial:decrement()
   self.value = self.value - 1
-  fn.dirty_screen(true)
+  
 end
 
 function dial:set_value(value)
@@ -81,22 +81,22 @@ function dial:set_value(value)
     value = self.off_value
   end
   self.value = value
-  fn.dirty_screen(true)
+  
 end
 
 function dial:set_top_label(label)
   self.top_label = label
-  fn.dirty_screen(true)
+  
 end
 
 function dial:set_bottom_label(label)
   self.bottom_label = label
-  fn.dirty_screen(true)
+  
 end
 
 function dial:set_name()
   self.name = name
-  fn.dirty_screen(true)
+  
 end
 
 function dial:get_name()

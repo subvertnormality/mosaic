@@ -93,14 +93,14 @@ function vertical_scroll_selector:scroll_down()
   if self.selected_item < #self.items then
     self.selected_item = self.selected_item + 1
   end
-  fn.dirty_screen(true)
+  
 end
 
 function vertical_scroll_selector:scroll_up()
   if self.selected_item > 1 then
     self.selected_item = self.selected_item - 1
   end
-  fn.dirty_screen(true)
+  
 end
 
 function vertical_scroll_selector:scroll(direction) -- 1 for down, -1 for up
@@ -117,12 +117,12 @@ end
 
 function vertical_scroll_selector:select()
   self.selected = true
-  fn.dirty_screen(true)
+  
 end
 
 function vertical_scroll_selector:deselect()
   self.selected = false
-  fn.dirty_screen(true)
+  
 end
 
 function vertical_scroll_selector:is_selected()

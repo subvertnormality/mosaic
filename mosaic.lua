@@ -109,7 +109,6 @@ local function do_autosave()
     save_project("autosave")
   end
   ui_splash_screen_active = false
-  fn.dirty_screen(true)
   as_metro:stop()
   autosave_timer:stop()
 end
@@ -133,26 +132,28 @@ end
 function redraw()
   screen.clear()
 
-  if fn.dirty_screen() == true then
+  if ui_splash_screen_active then
+    screen.level(15)
+    screen.move(60, 38)
+    screen.font_face(math.random(3, 8))
+    screen.font_size(12)
+    screen.text("m°")
+    screen.font_face(1)
+    screen.update()
+  
+  else
+    screen.level(5)
+    screen.font_size(8)
+    ui_controller.redraw()
+    screen.update()
+  end
 
-    if ui_splash_screen_active then
-      screen.level(15)
-      screen.move(60, 38)
-      screen.font_face(math.random(3, 8))
-      screen.font_size(12)
-      screen.text("m°")
-      screen.font_face(1)
-      screen.update()
-    
-    else
-      screen.level(5)
-      screen.font_size(8)
-      ui_controller.redraw()
-      screen.update()
-    end
+end
 
-    fn.dirty_screen(false)
-
+function refresh()
+  redraw()
+  if fn.dirty_grid() then
+    grid_controller.grid_redraw()
   end
 end
 
@@ -184,20 +185,6 @@ function init()
   sinfonion.set_chaotic_detune(0)
   sinfonion.set_harmonic_shift(0)
 
-
-  redraw_clock = clock.run(
-    function()
-      while true do
-        clock.sleep(1/30)
-        if fn.dirty_screen() then
-          redraw()
-        end
-        if fn.dirty_grid() then
-          grid_controller.grid_redraw()
-        end
-      end
-    end
-  )
 
   params:add_group("mosaic", "MOSAIC", 28)
   params:add_separator("Pattern project management")
@@ -314,8 +301,6 @@ function init()
   clock_controller.init()
   ui_splash_screen_active = false
   fn.dirty_grid(true)
-  fn.dirty_screen(true)
-
 end
 
 function enc(n, d)

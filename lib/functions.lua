@@ -21,14 +21,6 @@ function fn.dirty_grid(bool)
   return grid_dirty
 end
 
-function fn.dirty_screen(bool)
-  if bool == nil then
-    return screen_dirty
-  end
-  screen_dirty = bool
-  return screen_dirty
-end
-
 function fn.remove_table_by_id(t, target_id)
   local n = #t
   for i = n, 1, -1 do

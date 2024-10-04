@@ -1140,7 +1140,7 @@ function channel_edit_page_ui_controller.handle_clock_mods_page_increment()
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing)
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_feel)
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_basis)
-    fn.dirty_screen(true)
+    
   elseif swing_selector:is_selected() then
     swing_selector:increment()
     save_confirm.set_save(channel_edit_page_ui_controller.update_swing)
@@ -1251,7 +1251,7 @@ function channel_edit_page_ui_controller.handle_encoder_one_positive()
   else
     scales_pages:next_page()
   end
-  fn.dirty_screen(true)
+  
   save_confirm.cancel()
 end
 
@@ -1261,7 +1261,7 @@ function channel_edit_page_ui_controller.handle_encoder_one_negative()
   else
     scales_pages:previous_page()
   end
-  fn.dirty_screen(true)
+  
   save_confirm.cancel()
 end
 
@@ -1329,7 +1329,7 @@ end
 
 function channel_edit_page_ui_controller.select_page(page) 
     channel_pages:select_page(page)
-    fn.dirty_screen(true)
+    
 end
 
 function channel_edit_page_ui_controller.get_selected_page() 
@@ -1338,7 +1338,7 @@ end
 
 function channel_edit_page_ui_controller.select_mask_page()
   channel_pages:select_page(channel_page_to_index["Masks"])
-  fn.dirty_screen(true)
+  
 end
 
 function channel_edit_page_ui_controller.select_trig_page()

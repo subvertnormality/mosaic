@@ -97,10 +97,10 @@ function channel_sequencer_page_ui_controller.enc(n, d)
     for i = 1, math.abs(d) do
       if d > 0 then
         pages:next_page()
-        fn.dirty_screen(true)
+        
       else
         pages:previous_page()
-        fn.dirty_screen(true)
+        
       end
     end
   end
@@ -248,7 +248,7 @@ function channel_sequencer_page_ui_controller.enc(n, d)
                 end
               )
               -- After changing swing type, refresh the screen but keep selection
-              fn.dirty_screen(true)
+              
             elseif selector == swing_selector then
               save_confirm.set_save(
                 function()
@@ -318,12 +318,12 @@ end
 
 function channel_sequencer_page_ui_controller.update_swing_shuffle_type()
   params:set("global_swing_shuffle_type", swing_shuffle_type:get_selected().value)
-  fn.dirty_screen(true)
+  
 end
 
 function channel_sequencer_page_ui_controller.refresh_swing_shuffle_type()
   swing_shuffle_type:set_selected_value(params:get("global_swing_shuffle_type"))
-  fn.dirty_screen(true)
+  
 end
 
 function channel_sequencer_page_ui_controller.update_swing()
