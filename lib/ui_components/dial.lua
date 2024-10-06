@@ -46,7 +46,7 @@ function dial:draw()
     screen.text("X")
   elseif self.ui_labels and self.min_value then
     screen.move(self.x, bar_y)
-    screen.text(self.ui_labels[self.value - (self.min_value - 1)])
+    screen.text(self.ui_labels[self.value - (self.min_value - 1)] or "")
   else
     -- Define bar dimensions and segments
     local bar_width = 20  -- Total width of the bar

@@ -5,17 +5,17 @@ local param_manager = {}
 local first_run = true
 
 
-local function construct_off_value_formatter(off_value)
+local function construct_value_formatter(off_value, ui_labels)
   local off_val = off_value
   return function(param)
     local value = param:get()
     if not off_value then
-      return value
+      return ui_labels and ui_labels[value + 1] or value
     end
     if value == off_val then
       return "X"
     else
-      return value
+      return ui_labels and ui_labels[value + 1] or value
     end
   end
 end
@@ -40,7 +40,7 @@ function param_manager.init()
         local p = params:lookup_param("midi_device_params_channel_" .. i .. "_" .. j)
         p.controlspec.default = -1
         p:set(-1)
-        p.formatter = construct_off_value_formatter(-1)
+        p.formatter = construct_value_formatter(-1)
 
       end
     end
@@ -78,7 +78,7 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
         if init == true then
           p:set(val.off_value or -1)
         end
-        p.formatter = construct_off_value_formatter(val.off_value or -1)
+        p.formatter = construct_value_formatter(val.off_value or -1, val.ui_labels)
         params:set_action(
           "midi_device_params_channel_" .. channel_id .. "_" .. i,
           function(x)
@@ -111,7 +111,7 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
       if init == true then
         p:set(0)
       end
-      p.formatter = construct_off_value_formatter(-1)
+      p.formatter = construct_value_formatter(-1)
       params:set_action(
         "midi_device_params_channel_" .. channel_id .. "_" .. oob_accumulator,
         function(x)
@@ -151,7 +151,7 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
           if init == true then
             p:set(val.off_value)
           end
-          p.formatter = construct_off_value_formatter(val.off_value)
+          p.formatter = construct_value_formatter(val.off_value, val.ui_labels)
           params:set_action(
             "midi_device_params_channel_" .. channel_id .. "_" .. i,
             function(x)

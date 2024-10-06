@@ -27,6 +27,7 @@ local param_manager = include("mosaic/lib/param_manager")
 local ui_splash_screen_active = false
 
 local redraw_clock = nil
+local redraw_keep_alive_lock = nil
 
 nb = require("mosaic/lib/nb/lib/nb")
 clock_controller = include("mosaic/lib/clock_controller")
@@ -156,18 +157,6 @@ function redraw()
   end
 end
 
-
-local grid_redraw_clock = clock.run(
-  function()
-    while true do
-      clock.sleep(1/30)
-      if fn.dirty_grid() then
-        grid_controller.grid_redraw()
-      end
-    end
-  end
-)
-
 function init()
 
   ui_splash_screen_active = true
@@ -212,7 +201,16 @@ function init()
     end
   )
 
-  params:add_group("mosaic", "MOSAIC", 28)
+  redraw_keep_alive_lock = clock.run(
+    function()
+      while true do
+        clock.sleep(1)
+        fn.dirty_screen(true)
+      end
+    end
+  )
+
+  params:add_group("mosaic", "MOSAIC", 29)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
