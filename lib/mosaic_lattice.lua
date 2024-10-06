@@ -425,6 +425,8 @@ function Lattice:realign_eligable_sprockets()
         sprocket.phase = 1
         sprocket.step = 1
         sprocket.transport = 1
+        sprocket:update_swing()
+        sprocket:update_shuffle(1)  -- Passing 1 as we've reset to step 1
         sprocket.current_ppqn = sprocket.division * self.ppqn * 4
       end
     end
