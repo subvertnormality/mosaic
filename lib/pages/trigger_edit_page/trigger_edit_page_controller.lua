@@ -251,7 +251,8 @@ function trigger_edit_page_controller.register_press_handlers()
   press_handler:register(
     "pattern_trigger_edit_page",
     function(x, y)
-      if pattern_trigger_edit_page_bankmask_fader:is_this(x, y) then
+      local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
+      if pattern_trigger_edit_page_bankmask_fader:is_this(x, y) and algorithm ~= 3 then
         pattern_trigger_edit_page_bankmask_fader:press(x, y)
         load_paint_pattern()
         tooltip:show(get_bank_name(pattern_trigger_edit_page_bankmask_fader:get_value()) .. " selected")
