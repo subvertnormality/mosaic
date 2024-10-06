@@ -19,7 +19,7 @@ local pattern_trigger_edit_page_centre_button = button:new(11, 8, {{"Inactive", 
 local pattern_trigger_edit_page_right_button = button:new(12, 8, {{"Inactive", 3}, {"Shift Right", 15}})
 
 local load_timer = nil
-local throttle_time = 0.3
+local throttle_time = 0.1
 
 function trigger_edit_page_controller.init()
   trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui_controller()
@@ -147,14 +147,9 @@ local function load_paint_pattern()
 
     if (algorithm == 3) then
       local erpattern = er.gen(pattern1, pattern2, 0)
-      while #paint_pattern < 64 do
-        local er_len = #erpattern
-        for i = 1, #erpattern do
-          paint_pattern[i] = erpattern[(i - 1) % er_len + 1]
-          if #paint_pattern >= 64 then
-            break
-          end
-        end
+      local er_len = #erpattern
+      for i = 1, 64 do
+        paint_pattern[i] = erpattern[(i - 1) % er_len + 1]
       end
     else
       for step = 1, len do

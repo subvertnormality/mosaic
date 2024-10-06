@@ -136,7 +136,6 @@ function redraw()
   screen.clear()
 
   if fn.dirty_screen() == true then
-
     if ui_splash_screen_active then
       screen.level(15)
       screen.move(60, 38)
@@ -154,7 +153,6 @@ function redraw()
     end
 
     fn.dirty_screen(false)
-
   end
 end
 
