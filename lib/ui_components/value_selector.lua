@@ -36,12 +36,12 @@ end
 
 function value_selector:select()
   self.selected = true
-  
+  fn.dirty_screen(true)
 end
 
 function value_selector:deselect()
   self.selected = false
-  
+  fn.dirty_screen(true)
 end
 
 function value_selector:is_selected()
@@ -53,7 +53,7 @@ function value_selector:increment()
   if self.value > self.max then
     self.value = self.max
   end
-  
+  fn.dirty_screen(true)
 end
 
 function value_selector:decrement()
@@ -61,7 +61,7 @@ function value_selector:decrement()
   if self.value < self.min then
     self.value = self.min
   end
-  
+  fn.dirty_screen(true)
 end
 
 function value_selector:get_value()
@@ -70,12 +70,12 @@ end
 
 function value_selector:set_name()
   self.name = name
-  
+  fn.dirty_screen(true)
 end
 
 function value_selector:set_value(v)
   self.value = v
-  
+  fn.dirty_screen(true)
 end
 
 function value_selector:set_view_transform_func(func)

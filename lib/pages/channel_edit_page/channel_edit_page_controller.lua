@@ -223,7 +223,7 @@ function channel_edit_page_controller.register_press_handlers()
             channel_select_fader:dim(x)
           end
           channel_edit_page_controller.refresh_muted_channels()
-          
+          fn.dirty_screen(true)
         else
           channel_select_fader:press(x, y)
           program.get().selected_channel = x
@@ -250,7 +250,7 @@ function channel_edit_page_controller.register_press_handlers()
           channel_select_fader:dim(x)
         end
         channel_edit_page_controller.refresh_muted_channels()
-        
+        fn.dirty_screen(true)
       end
     end
   )

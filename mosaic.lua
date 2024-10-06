@@ -26,6 +26,8 @@ local param_manager = include("mosaic/lib/param_manager")
 
 local ui_splash_screen_active = false
 
+local redraw_clock = nil
+
 nb = require("mosaic/lib/nb/lib/nb")
 clock_controller = include("mosaic/lib/clock_controller")
 pattern_controller = include("mosaic/lib/pattern_controller")
@@ -109,6 +111,7 @@ local function do_autosave()
     save_project("autosave")
   end
   ui_splash_screen_active = false
+  fn.dirty_screen(true)
   as_metro:stop()
   autosave_timer:stop()
 end
@@ -132,20 +135,27 @@ end
 function redraw()
   screen.clear()
 
-  if ui_splash_screen_active then
-    screen.level(15)
-    screen.move(60, 38)
-    screen.text("m°")
-    screen.update()
-  else
-    ui_controller.redraw()
-    screen.update()
+  if fn.dirty_screen() == true then
+
+    if ui_splash_screen_active then
+      screen.level(15)
+      screen.move(60, 38)
+      screen.font_face(math.random(3, 8))
+      screen.font_size(12)
+      screen.text("m°")
+      screen.font_face(1)
+      screen.update()
+    
+    else
+      screen.level(5)
+      screen.font_size(8)
+      ui_controller.redraw()
+      screen.update()
+    end
+
+    fn.dirty_screen(false)
+
   end
-
-end
-
-function refresh()
-  redraw()
 end
 
 
@@ -190,7 +200,21 @@ function init()
   sinfonion.set_harmonic_shift(0)
 
 
-  params:add_group("mosaic", "MOSAIC", 29)
+  redraw_clock = clock.run(
+    function()
+      while true do
+        clock.sleep(1/30)
+        if fn.dirty_screen() then
+          redraw()
+        end
+        if fn.dirty_grid() then
+          grid_controller.grid_redraw()
+        end
+      end
+    end
+  )
+
+  params:add_group("mosaic", "MOSAIC", 28)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -313,6 +337,8 @@ function init()
   clock_controller.init()
   ui_splash_screen_active = false
   fn.dirty_grid(true)
+  fn.dirty_screen(true)
+
 end
 
 function enc(n, d)

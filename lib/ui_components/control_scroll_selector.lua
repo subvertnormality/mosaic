@@ -31,7 +31,7 @@ function control_scroll_selector:scroll_next()
     self.items[i]:deselect()
   end
   self.items[self.selected_item]:select()
-  
+  fn.dirty_screen(true)
 end
 
 function control_scroll_selector:scroll_previous()
@@ -42,12 +42,12 @@ function control_scroll_selector:scroll_previous()
     self.items[i]:deselect()
   end
   self.items[self.selected_item]:select()
-  
+  fn.dirty_screen(true)
 end
 
 function control_scroll_selector:set_items(items)
   self.items = items
-  
+  fn.dirty_screen(true)
 end
 
 function control_scroll_selector:get_selected_index()
@@ -60,7 +60,7 @@ end
 
 function control_scroll_selector:set_selected_item(item)
   self.items[self.selected_item]:select()
-  
+  fn.dirty_screen(true)
 end
 
 return control_scroll_selector

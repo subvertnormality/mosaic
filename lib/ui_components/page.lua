@@ -54,7 +54,7 @@ end
 
 function page:toggle_sub_page()
   self.sub_page_enabled = not self.sub_page_enabled
-  
+  fn.dirty_screen(true)
 end
 
 function page:is_sub_page_enabled()

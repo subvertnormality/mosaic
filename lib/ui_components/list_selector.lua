@@ -31,12 +31,12 @@ end
 
 function list_selector:select()
   self.selected = true
-  
+  fn.dirty_screen(true)
 end
 
 function list_selector:deselect()
   self.selected = false
-  
+  fn.dirty_screen(true)
 end
 
 function list_selector:is_selected()
@@ -48,7 +48,7 @@ function list_selector:increment()
   if self.selected_value > #self.list then
     self.selected_value = #self.list
   end
-  
+  fn.dirty_screen(true)
 end
 
 function list_selector:decrement()
@@ -56,12 +56,12 @@ function list_selector:decrement()
   if self.selected_value < 1 then
     self.selected_value = 1
   end
-  
+  fn.dirty_screen(true)
 end
 
 function list_selector:set_selected_value(selected_value)
   self.selected_value = selected_value
-  
+  fn.dirty_screen(true)
 end
 
 function list_selector:get_selected()
@@ -70,12 +70,12 @@ end
 
 function list_selector:set_name()
   self.name = name
-  
+  fn.dirty_screen(true)
 end
 
 function list_selector:set_list(list)
   self.list = list
-  
+  fn.dirty_screen(true)
 end
 
 return list_selector

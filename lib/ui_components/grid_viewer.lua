@@ -38,7 +38,7 @@ function grid_viewer:next_channel()
   if self.selected_channel > 16 then
     self.selected_channel = 16
   end
-  
+  fn.dirty_screen(true)
 end
 
 function grid_viewer:prev_channel()
@@ -46,7 +46,7 @@ function grid_viewer:prev_channel()
   if self.selected_channel < 1 then
     self.selected_channel = 1
   end
-  
+  fn.dirty_screen(true)
 end
 
 return grid_viewer

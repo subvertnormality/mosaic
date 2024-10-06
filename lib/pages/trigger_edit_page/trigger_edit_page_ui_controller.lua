@@ -78,10 +78,10 @@ function trigger_edit_page_ui_controller.enc(n, d)
     for i = 1, math.abs(d) do
       if d > 0 then
         pages:next_page()
-        
+        fn.dirty_screen(true)
       else
         pages:previous_page()
-        
+        fn.dirty_screen(true)
       end
     end
   end

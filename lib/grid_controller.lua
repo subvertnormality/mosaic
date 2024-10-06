@@ -129,6 +129,7 @@ function register_press_handlers()
             grid_controller.set_menu_button_state()
           end
           grid_controller.refresh()
+          fn.dirty_screen(true)
         end
       end
     end
@@ -149,6 +150,7 @@ function register_press_handlers()
             grid_controller.set_menu_button_state()
           end
           grid_controller.refresh()
+          fn.dirty_screen(true)
         end
       end
     end
@@ -247,19 +249,19 @@ end
 function grid_controller.pre_press(x, y)
   press_handler:handle_pre(program.get().selected_page, x, y)
   fn.dirty_grid(true)
-  
+  fn.dirty_screen(true)
 end
 
 function grid_controller.post_press(x, y)
   press_handler:handle_post(program.get().selected_page, x, y)
   fn.dirty_grid(true)
-  
+  fn.dirty_screen(true)
 end
 
 function grid_controller.short_press(x, y)
   press_handler:handle(program.get().selected_page, x, y)
   fn.dirty_grid(true)
-  
+  fn.dirty_screen(true)
 end
 
 function grid_controller.long_press(x, y)
@@ -272,7 +274,7 @@ end
 function grid_controller.dual_press(x, y, x2, y2)
   press_handler:handle_dual(program.get().selected_page, x, y, x2, y2)
   fn.dirty_grid(true)
-  
+  fn.dirty_screen(true)
 end
 
 function grid_controller.redraw()

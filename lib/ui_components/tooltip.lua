@@ -17,7 +17,7 @@ end
 -- Define a local remove function for this metro
 local function remove_tip()
   tooltip.text = false
-  
+  fn.dirty_screen(true)
   tooltip.error_flag = false
 end
 
@@ -30,7 +30,7 @@ function tooltip:do_tip(text)
   end
 
   tooltip.text = text
-  
+  fn.dirty_screen(true)
 
   -- Create a new metro
   local m = metro.init(remove_tip, 3, 1)
