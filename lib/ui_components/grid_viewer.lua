@@ -27,7 +27,7 @@ function grid_viewer:draw()
       screen.text(".")
     end
   end
-  screen.move(self.x + 5, self.y + 6)
+  screen.move(self.x, self.y + 6)
   screen.level(10)
   screen.font_size(8)
   screen.text("Channel " .. self.selected_channel .. " grid viewer")

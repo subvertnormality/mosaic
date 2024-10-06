@@ -12,6 +12,7 @@
 * NPRN values are used by default when available for a particular param. 
 * Matrix mod and toolkit now work as expected.
 * It's now possible to define which trig locks auto populate in the config files
+* UI improvements
 
 # 0.5.3
 

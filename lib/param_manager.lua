@@ -29,14 +29,19 @@ function param_manager.init()
 
     for j = 1, 180 do
       if params.lookup["midi_device_params_channel_" .. i .. "_" .. j] == nil then
-        params:add_number("midi_device_params_channel_" .. i .. "_" .. j, "undefined", -1, 10000, -1)
-
+        -- params:add_number("midi_device_params_channel_" .. i .. "_" .. j, "undefined", -1, 10000, -1)
+        params:add_control("midi_device_params_channel_" .. i .. "_" .. j, "undefined", controlspec.new(0, 0, 'lin', 0, -1, '', 0))
         params:set_action(
           "midi_device_params_channel_" .. i .. "_" .. j,
           function(x)
           end
         )
         params:show("midi_device_params_channel_" .. i .. "_" .. j)
+        local p = params:lookup_param("midi_device_params_channel_" .. i .. "_" .. j)
+        p.controlspec.default = -1
+        p:set(-1)
+        p.formatter = construct_off_value_formatter(-1)
+
       end
     end
   end
@@ -55,22 +60,25 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
 
     -- Process stock parameters
     for i, val in pairs(stock_params) do
-      if val then
+      if val and val.id ~= "none" then
+
         local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
 
-        if val.nrpn_min_value and val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
-          p.min = val.nrpn_min_value or -1
-          p.max = val.nrpn_max_value or 16383
-        else
-          p.min = val.cc_min_value or -1
-          p.max = val.cc_max_value or 127
-        end
+        p.default = val.off_value or -1
+        p.controlspec.minval = val.cc_min_value or -1
+        p.controlspec.maxval = val.cc_max_value or 127
+        p.min = val.cc_min_value or -1
+        p.max = val.cc_max_value or 127
+        p.controlspec.step = 1
+        p.controlspec.quantum = 1/((val.cc_max_value - val.cc_min_value) or 127)
+        p.controlspec.default = val.off_value or -1
 
         p.name = val.name
+
         if init == true then
-          p.value = val.off_value or -1
+          p:set(val.off_value or -1)
         end
-        p.formatter = construct_off_value_formatter(val.off_value)
+        p.formatter = construct_off_value_formatter(val.off_value or -1)
         params:set_action(
           "midi_device_params_channel_" .. channel_id .. "_" .. i,
           function(x)
@@ -79,10 +87,10 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
           end
         )
         params:show("midi_device_params_channel_" .. channel_id .. "_" .. i)
-        accumulator = accumulator + 1
-        if val.id == "none" then
-          params:hide("midi_device_params_channel_" .. channel_id .. "_" .. i)
-        end
+      end
+      accumulator = accumulator + 1
+      if val.id == "none" then
+        params:hide("midi_device_params_channel_" .. channel_id .. "_" .. i)
       end
     end
 
@@ -90,11 +98,18 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
 
     if device.type == "norns" and device.supports_slew then
       local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. oob_accumulator)
-      p.min = -1
+
+      p.default = -1
+      p.controlspec.minval = 0
+      p.controlspec.maxval = 60
+      p.min = 0
       p.max = 60
+      p.controlspec.step = 1
+      p.controlspec.quantum = 1/60
+      p.controlspec.default = 0
       p.name = "Slew"
       if init == true then
-        p.value = -1
+        p:set(0)
       end
       p.formatter = construct_off_value_formatter(-1)
       params:set_action(
@@ -116,15 +131,25 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
           local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
 
           if val.nrpn_min_value and val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
+            p.controlspec.minval = val.nrpn_min_value or -1
+            p.controlspec.maxval = val.nrpn_max_value or 16383
             p.min = val.nrpn_min_value or -1
             p.max = val.nrpn_max_value or 16383
+            p.controlspec.step = 1
+            p.controlspec.quantum = 1/(((val.nrpn_max_value - val.nrpn_min_value) or 16383) / 60)
+            p.controlspec.default = val.off_value or -1
           else
+            p.controlspec.minval = val.cc_min_value or -1
+            p.controlspec.maxval = val.cc_max_value or 127
             p.min = val.cc_min_value or -1
             p.max = val.cc_max_value or 127
+            p.controlspec.step = 1
+            p.controlspec.quantum = 1/(val.cc_max_value - val.cc_min_value) or 127
+            p.controlspec.default = val.off_value or -1
           end
           p.name = val.name
           if init == true then
-            p.value = val.off_value or -1
+            p:set(val.off_value)
           end
           p.formatter = construct_off_value_formatter(val.off_value)
           params:set_action(
@@ -160,7 +185,7 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
     params:hide("midi_device_params_group_channel_" .. channel_id)
     for i = 1, 180 do
       local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
-      p.value = -1
+      p:set(-1)
       p.name = "undefined"
       params:set_action("midi_device_params_channel_" .. channel_id .. "_" .. i, function(x) end)
       params:hide("midi_device_params_channel_" .. channel_id .. "_" .. i)
@@ -174,7 +199,6 @@ function param_manager.update_param(index, channel, param, meta_device)
     channel.trig_lock_params[index] = {}
   else
     channel.trig_lock_params[index] = param
-    -- param_select_vertical_scroll_selector:get_meta_item().device_name
     channel.trig_lock_params[index].device_name = meta_device.device_name
     channel.trig_lock_params[index].type = meta_device.type
     channel.trig_lock_params[index].id = param.id
@@ -183,60 +207,53 @@ function param_manager.update_param(index, channel, param, meta_device)
     if meta_device.type == "norns" then
       channel.trig_lock_params[index].param_id = param.param_id
     else
-      channel.trig_lock_params[index].param_id = "midi_device_params_channel_" .. channel.number .. "_" .. param.index
+      channel.trig_lock_params[index].param_id = string.format("midi_device_params_channel_%d_%d", channel.number, param.index)
     end
 
   end
 end
 
+-- TODO why dont params appear automatically sometimes?
+
+local function safe_set_param(channel, index, param, meta_device)
+  if not channel.trig_lock_params then channel.trig_lock_params = {} end
+  channel.trig_lock_params[index] = param or {}
+  if param and param.index then
+    channel.trig_lock_params[index].device_name = meta_device.device_name or ""
+    channel.trig_lock_params[index].type = meta_device.type or ""
+    channel.trig_lock_params[index].id = param.id or ""
+    if channel.trig_lock_params[index].type == "midi" and param.index then
+      channel.trig_lock_params[index].param_id = string.format("midi_device_params_channel_%d_%d", channel.number, param.index)
+    elseif channel.trig_lock_params[index].type == "norns" and param.param_id then
+      channel.trig_lock_params[index].param_id = param.param_id
+    end
+  end
+end
 
 function param_manager.update_default_params(channel, meta_device)
+
   for i = 1, 10 do
-    channel.trig_lock_params[i] = {}
     if type(meta_device.map_params_automatically) == "table" then
       local id = meta_device.map_params_automatically[i]
-      print("is table, id: ", id)
-      if id and type(id) == "string" then
-        print("is string ", id)
-        local param = fn.find_in_table_by_id(meta_device.params, id)
-        if param then
-          print("found param ", param)
-          channel.trig_lock_params[i] = param
-          channel.trig_lock_params[i].device_name = meta_device.device_name
-          channel.trig_lock_params[i].type = meta_device.type
-          channel.trig_lock_params[i].id = param.id
-          if (channel.trig_lock_params[i].type == "midi" and param.index) then
-            channel.trig_lock_params[i].param_id =
-              "midi_device_params_channel_" .. channel.number .. "_" .. param.index
-          elseif (channel.trig_lock_params[i].type == "norns" and param.index) then
-              channel.trig_lock_params[i].param_id = param.param_id
-          end
-        end
+      if type(id) == "string" then
+        local param = fn.find_in_table_by_id(meta_device.params or {}, id)
+        safe_set_param(channel, i, param, meta_device)
       end
     elseif meta_device.map_params_automatically == true then
-      
-      if meta_device.params[i + 1] then
-        channel.trig_lock_params[i] = meta_device.params[i + 1]
-        channel.trig_lock_params[i].device_name = meta_device.device_name
-        channel.trig_lock_params[i].type = meta_device.type
-        channel.trig_lock_params[i].id = meta_device.params[i + 1].id
-        if
-          (channel.trig_lock_params[i].type == "midi" and meta_device.params[i + 1].index)
-         then
-          channel.trig_lock_params[i].param_id =
-            "midi_device_params_channel_" .. channel.number .. "_" .. meta_device.params[i + 1].index
-        elseif (channel.trig_lock_params[i].type == "norns" and meta_device.params[i + 1].index) then
-            channel.trig_lock_params[i].param_id = meta_device.params[i + 1].param_id
-        end
+      if type(meta_device.params) == "table" and meta_device.params[i + 1] then
+        safe_set_param(channel, i, meta_device.params[i + 1], meta_device)
       end
     end
   end
 
   if meta_device.fixed_note then
-    params:set("midi_device_params_channel_" .. channel.number .. "_2", meta_device.fixed_note)  -- TODO: fix this magic number
+    params:set(string.format("midi_device_params_channel_%d_2", channel.number or 0), meta_device.fixed_note)
   end
 
   channel_edit_page_ui_controller.refresh_trig_lock_values()
+
 end
+
+
 
 return param_manager

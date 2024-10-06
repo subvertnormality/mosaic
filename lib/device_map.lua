@@ -70,8 +70,8 @@ local function create_cc_device()
         ["nrpn_lsb"] = nil,
         ["nrpn_min_value"] = nil,
         ["nrpn_max_value"] = nil,
-        ["short_descriptor_1"] = "CC",
-        ["short_descriptor_2"] = i
+        ["short_descriptor_1"] = "CC"..i,
+        ["short_descriptor_2"] = ""
       }
     )
   end
@@ -440,9 +440,8 @@ local function merge_params(device_params, stock_params)
       sp.index = index
       table.insert(merged_params, sp)
       seen_ids[sp.id] = true
-      param_index = index + 1
+      index_accumulator = index
     end
-    index_accumulator = index
   end
 
   -- Add the contents of device_params into merged_params

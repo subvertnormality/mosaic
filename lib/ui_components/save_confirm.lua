@@ -57,4 +57,12 @@ function save_confirm.set_cancel_message(message)
   cancel_message = message
 end
 
+function save_confirm.clear()
+  save_funcs = {}
+  cancel_funcs = {}
+  confirm_message = default_confirm_message
+  ok_message = default_ok_message
+  cancel_message = default_cancel_message
+end
+
 return save_confirm

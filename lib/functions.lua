@@ -50,6 +50,14 @@ function fn.appears_in_table(t, target_id)
   return false
 end
 
+function fn.limit_string(str, max_length)
+  if #str > max_length then
+    return string.sub(str, 1, max_length)
+  else
+    return str
+  end
+end
+
 function fn.string_in_table(tbl, target)
   for _, value in ipairs(tbl) do
     if value == target then
@@ -440,7 +448,7 @@ function fn.clean_number(num)
   if num == math.floor(num) then
     return math.floor(num)  -- Return as integer if no decimal places
   else
-    return num  -- Return the original number if it has decimal places
+    return math.floor(num * 1000 + 0.5) / 1000  -- Return the original rounded to 0.001
   end
 end
 

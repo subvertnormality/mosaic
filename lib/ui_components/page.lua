@@ -43,7 +43,7 @@ end
 function page:draw()
   screen.font_size(8)
   screen.level(10)
-  screen.move(5, 9)
+  screen.move(0, 9)
   screen.text(self.sub_name_func() .. self.name)
   if self.sub_page_enabled then
     self.sub_page_draw_func()

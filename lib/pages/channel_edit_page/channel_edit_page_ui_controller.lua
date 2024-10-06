@@ -24,41 +24,41 @@ local channel_pages = pages:new()
 local scales_pages = pages:new()
 local quantizer_vertical_scroll_selector = vertical_scroll_selector:new(20, 25, "Quantizer", quantiser.get_scales())
 local romans_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
-local notes_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Notes", quantiser.get_notes())
+local notes_vertical_scroll_selector = vertical_scroll_selector:new(0, 25, "Notes", quantiser.get_notes())
 local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
 local swing_shuffle_type_selector = list_selector:new(70, 18, "Swing Type", {{name = "X", value = 1}, {name = "Swing", value = 2}, {name = "Shuffle", value = 3}})
-local swing_selector = value_selector:new(5, 40, "Swing", -51, 50)
-local shuffle_feel_selector = list_selector:new(5, 40, "Shuffle Feel", {{name = "X", value = 1}, {name = "Drunk", value = 2}, {name = "Smooth", value = 3}, {name = "Heavy", value = 4}, {name = "Clave", value = 5}})
+local swing_selector = value_selector:new(0, 40, "Swing", -51, 50)
+local shuffle_feel_selector = list_selector:new(0, 40, "Shuffle Feel", {{name = "X", value = 1}, {name = "Drunk", value = 2}, {name = "Smooth", value = 3}, {name = "Heavy", value = 4}, {name = "Clave", value = 5}})
 local shuffle_basis_selector = list_selector:new(70, 40, "Shuffle Basis", {{name = "X", value = 1}, {name = "9", value = 2}, {name = "7", value = 3}, {name = "5", value = 4}, {name = "6", value = 5}, {name = "8??", value = 6}, {name = "9??", value = 7}})
 
 -- Value selectors with initial values
 local mask_selectors = {
-  trig = value_selector:new(5, 18, "Trig", -1, 1),
-  note = value_selector:new(30, 18, "Note", -1, 127),
-  velocity = value_selector:new(55, 18, "Vel", -1, 127),
-  length = value_selector:new(80, 18, "Len", -1, 92),
+  trig = value_selector:new(0 + (1 - 1) % 5 * 25, 18 + math.floor((1 - 1) / 5) * 22, "Trig", -1, 1),
+  note = value_selector:new(0 + (2 - 1) % 5 * 25, 18 + math.floor((2 - 1) / 5) * 22, "Note", -1, 127),
+  velocity = value_selector:new(0 + (3 - 1) % 5 * 25, 18 + math.floor((3 - 1) / 5) * 22, "Vel", -1, 127),
+  length = value_selector:new(0 + (4 - 1) % 5 * 25, 18 + math.floor((4 - 1) / 5) * 22, "Len", -1, 92),
   chords = {
-    value_selector:new(5, 40, "Chd1", -14, 14),
-    value_selector:new(30, 40, "Chd2", -14, 14),
-    value_selector:new(55, 40, "Chd3", -14, 14),
-    value_selector:new(80, 40, "Chd4", -14, 14)
+    value_selector:new(0 + (6 - 1) % 5 * 25, 18 + math.floor((6 - 1) / 5) * 22, "Chd1", -14, 14),
+    value_selector:new(0 + (7 - 1) % 5 * 25, 18 + math.floor((7 - 1) / 5) * 22, "Chd2", -14, 14),
+    value_selector:new(0 + (8 - 1) % 5 * 25, 18 + math.floor((8 - 1) / 5) * 22, "Chd3", -14, 14),
+    value_selector:new(0 + (9 - 1) % 5 * 25, 18 + math.floor((9 - 1) / 5) * 22, "Chd4", -14, 14)
   }
 }
 
 local note_displays = {
-  note = value_selector:new(5, 18, "Note", -1, 1),
-  velocity = value_selector:new(30, 18, "Vel", -1, 127),
-  length = value_selector:new(55, 18, "Len", -1, 127),
+  note = value_selector:new(0 + (1 - 1) % 5 * 25, 18 + math.floor((1 - 1) / 5) * 22, "Note", -1, 1),
+  velocity = value_selector:new(0 + (2 - 1) % 5 * 25, 18 + math.floor((2 - 1) / 5) * 22, "Vel", -1, 127),
+  length = value_selector:new(0 + (3 - 1) % 5 * 25, 18 + math.floor((3 - 1) / 5) * 22, "Len", -1, 127),
   chords = {
-    value_selector:new(5, 40, "Chd1", -1, 1),
-    value_selector:new(30, 40, "Chd2", -1, 1),
-    value_selector:new(55, 40, "Chd3", -1, 1),
-    value_selector:new(80, 40, "Chd4", -1, 1)
+    value_selector:new(0 + (6 - 1) % 5 * 25, 18 + math.floor((6 - 1) / 5) * 22, "Chd1", -1, 1),
+    value_selector:new(0 + (7 - 1) % 5 * 25, 18 + math.floor((7 - 1) / 5) * 22, "Chd2", -1, 1),
+    value_selector:new(0 + (8 - 1) % 5 * 25, 18 + math.floor((8 - 1) / 5) * 22, "Chd3", -1, 1),
+    value_selector:new(0 + (9 - 1) % 5 * 25, 18 + math.floor((9 - 1) / 5) * 22, "Chd4", -1, 1)
   }
 }
 
 -- Clock and MIDI selectors
-local clock_mod_list_selector = list_selector:new(5, 18, "Clock Mod", {})
+local clock_mod_list_selector = list_selector:new(0, 18, "Clock Mod", {})
 local midi_device_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Midi Device", {})
 local midi_channel_vertical_scroll_selector = vertical_scroll_selector:new(65, 25, "Midi Channel", {
   {name = "CC1", value = 1}, {name = "CC2", value = 2}, {name = "CC3", value = 3}, {name = "CC4", value = 4},
@@ -73,7 +73,7 @@ local param_select_vertical_scroll_selector = vertical_scroll_selector:new(30, 2
 local dials = control_scroll_selector:new(0, 0, {})
 local m_params = {}
 for i = 1, 10 do
-  table.insert(m_params, dial:new(5 + (i - 1) % 5 * 25, 18 + math.floor((i - 1) / 5) * 22, "Param " .. i, "param_" .. i, "None", "X"))
+  table.insert(m_params, dial:new(0 + (i - 1) % 5 * 25, 18 + math.floor((i - 1) / 5) * 22, "Param " .. i, "param_" .. i, "None", "X"))
 end
 
 -- Page indices
@@ -251,7 +251,7 @@ function channel_edit_page_ui_controller.init()
   midi_device_vertical_scroll_selector:set_items(midi_controller.get_midi_outs())
   dials:set_items(m_params)
   clock_mod_list_selector:set_list(clock_controller.get_clock_divisions())
-  device_map_vertical_scroll_selector = vertical_scroll_selector:new(10, 25, "Midi Map", device_map:get_devices())
+  device_map_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Midi Map", device_map:get_devices())
 
   local function set_sub_name_func(page, func)
     page:set_sub_name_func(func)
@@ -564,6 +564,7 @@ end
 
 -- Trig lock functions
 function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
+
   local pressed_keys = grid_controller.get_pressed_keys()
   local trig_lock_param = channel.trig_lock_params[dial_index]
 
@@ -571,20 +572,9 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
     return
   end
 
-
-  local max_value = trig_lock_param.cc_max_value or 127
-
-  if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
-    max_value = math.floor(trig_lock_param.nrpn_max_value)
-  end
-
-  local direction_modifier = math.floor(max_value / 127)
-  if direction_modifier < 1 then direction_modifier = 1 end
-
   local param_id = trig_lock_param.param_id
 
   local p, p_index
-
   if param_id then
     p = params:lookup_param(param_id)
     p_index = params.lookup[param_id]
@@ -597,6 +587,49 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
   end
 
   local p_value = params:get(param_id)
+  local old_quantum = p.controlspec.quantum
+
+  local total_range = ((p.controlspec.maxval - p.controlspec.minval) / p.controlspec.quantum)
+
+  if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
+    p.controlspec.quantum = 1 / (trig_lock_param.nrpn_max_value - trig_lock_param.nrpn_min_value) 
+    total_range = p.controlspec.maxval - p.controlspec.minval
+  elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value then
+    p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
+    total_range = p.controlspec.maxval - p.controlspec.minval
+  end
+
+  local d = direction
+ 
+  if total_range > 126 and is_key3_down == false then
+    if math.abs(direction) > 0 then
+      d = direction * math.floor(total_range / 127) or 1
+    end
+
+    if math.abs(direction) > 2 then
+      d = direction * math.floor(total_range / 64) or 1
+    end
+
+    if math.abs(direction) > 5 then
+      d = direction * math.floor(total_range / 32) or 1
+    end
+
+    if math.abs(direction) > 8 then
+      d = direction * math.floor(total_range / 16) or 1
+    end
+
+    if math.abs(direction) > 10 then
+      d = direction * math.floor(total_range / 8) or 1
+    end
+
+    if math.abs(direction) > 13 then
+      d = direction * math.floor(total_range / 4) or 1
+    end
+
+    if math.abs(direction) > 15 then
+      d = direction * math.floor(total_range / 2) or 1
+    end
+  end
 
   if #pressed_keys > 0 and trig_lock_param and trig_lock_param.id then
     for _, keys in ipairs(pressed_keys) do
@@ -611,6 +644,7 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
 
       param_args.id = handler_param_id
       param_args.type = fn.get_param_type_from_id(params:t(p_index))
+      param_args.controlspec = p.controlspec
 
       local handler_param_id_index = params.lookup[handler_param_id]
 
@@ -623,20 +657,23 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       end
 
       
-      params:delta(handler_param_id_index, direction * direction_modifier)
+      params:delta(handler_param_id_index, d)
 
       local value = params:get(handler_param_id_index)
 
       program.add_step_param_trig_lock(step, dial_index, value)
       m_params[dial_index]:set_value(value)
-
     end
   elseif p_value and trig_lock_param and trig_lock_param.id then
 
-    p:delta(direction * direction_modifier)
+    p:delta(d)
 
     channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
   end
+
+  m_params[dial_index]:temp_display_value()
+
+  p.controlspec.quantum = old_quantum
 end
 
 -- Encoder and key handling
@@ -1212,10 +1249,15 @@ function channel_edit_page_ui_controller.handle_midi_config_page_increment()
   elseif device_map_vertical_scroll_selector:is_selected() then
     device_map_vertical_scroll_selector:scroll_down()
   end
+
+  local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
+
+  save_confirm.clear()
+
   save_confirm.set_save(function()
     channel_edit_page_ui_controller.update_channel_config()
     
-    param_manager.update_default_params(program.get_selected_channel(), device_map_vertical_scroll_selector:get_selected_item())
+    param_manager.update_default_params(program.get_selected_channel(), device)
     param_select_vertical_scroll_selector:set_selected_item(1)
     channel_edit_page_ui_controller.refresh_trig_locks()
   end)
@@ -1223,8 +1265,6 @@ function channel_edit_page_ui_controller.handle_midi_config_page_increment()
 end
 
 function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
-  local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
-  
   if midi_device_vertical_scroll_selector:is_selected() then
     midi_device_vertical_scroll_selector:scroll_up()
   elseif midi_channel_vertical_scroll_selector:is_selected() then
@@ -1233,9 +1273,13 @@ function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
     device_map_vertical_scroll_selector:scroll_up()
   end
 
+  local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
+
+  save_confirm.clear()
+
   save_confirm.set_save(function()
     channel_edit_page_ui_controller.update_channel_config()
-    param_manager.update_default_params(program.get_selected_channel(), device_map_vertical_scroll_selector:get_selected_item())
+    param_manager.update_default_params(program.get_selected_channel(), device)
     param_select_vertical_scroll_selector:set_selected_item(1)
     channel_edit_page_ui_controller.refresh_trig_locks()
   end)

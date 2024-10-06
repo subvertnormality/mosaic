@@ -56,9 +56,9 @@ function vertical_scroll_selector:draw()
   if self.selected_item and self.items[self.selected_item - 1] then
     screen.level(1)
     if self.items[self.selected_item - 1].name then
-      screen.text(self.items[self.selected_item - 1].name)
+      screen.text(self.items[self.selected_item - 1].name, 12)
     else
-      screen.text(self.items[self.selected_item - 1])
+      screen.text(self.items[self.selected_item - 1], 12)
     end
   end
 
@@ -71,9 +71,9 @@ function vertical_scroll_selector:draw()
       screen.level(5)
     end
     if self.items[self.selected_item].name then
-      screen.text(self.items[self.selected_item].name)
+      screen.text(self.items[self.selected_item].name, 12)
     else
-      screen.text(self.items[self.selected_item])
+      screen.text(self.items[self.selected_item], 12)
     end
   end
 
@@ -82,9 +82,9 @@ function vertical_scroll_selector:draw()
   if self.selected_item and self.items[self.selected_item + 1] then
     screen.level(1)
     if self.items[self.selected_item + 1].name then
-      screen.text(self.items[self.selected_item + 1].name)
+      screen.text(self.items[self.selected_item + 1].name, 12)
     else
-      screen.text(self.items[self.selected_item + 1])
+      screen.text(self.items[self.selected_item + 1], 12)
     end
   end
 end

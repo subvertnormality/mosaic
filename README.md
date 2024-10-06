@@ -489,7 +489,7 @@ Most devices in _Mosaic_ feature a set of trig params that alters either the qua
 In the second user interface page of the channel editor on the Norns screen, you will encounter a variety of parameters. Here's how to navigate and manipulate these settings:
 
 * **Page Navigation**: Use E1 to switch between pages.
-* **Selecting Parameters**: To select a parameter, turn E2. Once highlighted, adjust the parameter's value by rotating E3.
+* **Changing Parameters**: To select a parameter, turn E2. Once highlighted, adjust the parameter's value by rotating E3. To fine tune, rotate E3 whilst holding K3.
 * **Activating Parameters**: To activate a different parameter within the same slot, press K2.
 * **Locking Changes**: As you adjust values, the system automatically saves your changes. You can also create "trig locks" on specific steps by holding down the step and turning E3. This allows you to set values that will override the default parameter for that step.
 * **Default Parameter Values**: By default, a pre-set parameter value is transmitted to your selected device on steps without a trig lock. If a parameter's trig lock is set to "off," the mosaic will not send any value to your device for that parameter.

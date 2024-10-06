@@ -3,19 +3,19 @@ local channel_sequencer_page_ui_controller = {}
 local fn = include("mosaic/lib/functions")
 local pages = include("mosaic/lib/ui_components/pages")
 local page = include("mosaic/lib/ui_components/page")
-local grid_viewer = include("mosaic/lib/ui_components/grid_viewer")
+local gv = include("mosaic/lib/ui_components/grid_viewer")
 local value_selector = include("mosaic/lib/ui_components/value_selector")
 local list_selector = include("mosaic/lib/ui_components/list_selector")
 local pages = pages:new()
-local grid_viewer = grid_viewer:new(0, 3)
+local grid_viewer = gv:new(0, 3)
 
-local tempo_selector = value_selector:new(5, 18, "Tempo", 30, 300)
-local pattern_repeat_selector = value_selector:new(5, 29, "Repeats", 1, 16)
+local tempo_selector = value_selector:new(0, 18, "Tempo", 30, 300)
+local pattern_repeat_selector = value_selector:new(0, 29, "Repeats", 1, 16)
 local song_mode_selector = list_selector:new(70, 29, "Song mode", {{name = "Off", value = 1}, {name = "On", value = 2}})
 
 local swing_shuffle_type = list_selector:new(70, 18, "Swing type", {{name = "Swing", value = 1}, {name = "Shuffle", value = 2}})
-local swing_selector = value_selector:new(5, 40, "Swing", -50, 50)
-local shuffle_feel_selector = list_selector:new(5, 40, "Shuffle feel", {{name = "Drunk", value = 1}, {name = "Smooth", value = 2}, {name = "Heavy", value = 3}, {name = "Clave", value = 4}})
+local swing_selector = value_selector:new(0, 40, "Swing", -50, 50)
+local shuffle_feel_selector = list_selector:new(0, 40, "Shuffle feel", {{name = "Drunk", value = 1}, {name = "Smooth", value = 2}, {name = "Heavy", value = 3}, {name = "Clave", value = 4}})
 local shuffle_basis_selector = list_selector:new(70, 40, "Shuffle basis", {{name = "9", value = 1}, {name = "7", value = 2}, {name = "5", value = 3}, {name = "6", value = 4}, {name = "8??", value = 5}, {name = "9??", value = 6}})
 
 local global_settings_page =

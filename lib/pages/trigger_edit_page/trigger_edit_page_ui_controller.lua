@@ -10,7 +10,7 @@ local pages = pages:new()
 local grid_viewer = grid_viewer:new(0, 3)
 local tresillo_mult =
   list_selector:new(
-  5,
+  0,
   29,
   "Tresillo mult",
   {

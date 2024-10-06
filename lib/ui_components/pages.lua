@@ -11,7 +11,7 @@ function pages:new()
 end
 
 function pages:draw()
-  local x = 5
+  local x = 0
 
   for i = 1, fn.table_count(self.pages) do
     screen.move(x, 1)

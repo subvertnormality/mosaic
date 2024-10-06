@@ -56,12 +56,12 @@ function step_handler.process_params(c, step)
   local channel = program.get_channel(c)
   local device = device_map.get_device(program_data.devices[channel.number].device_map)
   local trig_lock_params = channel.trig_lock_params
+
   local value
   local devices = program_data.devices
 
-  for i = 1, 10 do
+  for i, param in ipairs(trig_lock_params) do
 
-    local param = trig_lock_params[i]
     if param and
        (param.id ~= "trig_probability" and
         param.id ~= "quantised_fixed_note" and
@@ -76,11 +76,14 @@ function step_handler.process_params(c, step)
         param.id ~= "fixed_note")
      then
 
+
+
       if not param.param_id then
-        break
+        goto continue
       end
 
       value = params:get(trig_lock_params[i].param_id)
+
       
       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
@@ -88,11 +91,10 @@ function step_handler.process_params(c, step)
 
         local param_id = param.param_id
         local p_value = nil
+        local p = nil
         if param_id then
-          local p = params:lookup_param(param_id)
-          if p.name ~= "undefined" then
-            p_value = p.value
-          end
+          p = params:lookup_param(param_id)
+          p_value = params:get(param_id)
         end
 
         if param.channel then
@@ -100,7 +102,7 @@ function step_handler.process_params(c, step)
         end
         if step_trig_lock then
           if step_trig_lock == param.off_value then
-            break
+            goto continue
           end
 
           if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
@@ -116,7 +118,7 @@ function step_handler.process_params(c, step)
           end
         elseif p_value and param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
           if p_value == param.off_value then
-            break
+            goto continue
           end
 
           if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
@@ -132,7 +134,7 @@ function step_handler.process_params(c, step)
           end
         else
           if value == param.off_value then
-            break
+            goto continue
           end
           if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
             midi_controller.nrpn(
@@ -151,7 +153,7 @@ function step_handler.process_params(c, step)
 
         if step_trig_lock then
           if step_trig_lock == param.off_value then
-            break
+            goto continue
           end
           device.player:set_slew(step_trig_lock)
         elseif value then
@@ -163,7 +165,7 @@ function step_handler.process_params(c, step)
         if step_trig_lock then
 
           if step_trig_lock == param.off_value then
-            break
+            goto continue
           end
           params:set(param.id, step_trig_lock)
         elseif value then
@@ -171,6 +173,8 @@ function step_handler.process_params(c, step)
         end
       end
     end
+
+    ::continue::
   end
 end
 

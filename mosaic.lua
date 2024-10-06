@@ -96,7 +96,7 @@ local function load_new_project()
       device_map.get_device(program.get().devices[i].device_map),
       program.get().devices[i].midi_channel,
       program.get().devices[i].midi_device,
-      false
+      true
     )
   end
   grid_controller.refresh()
@@ -135,15 +135,9 @@ function redraw()
   if ui_splash_screen_active then
     screen.level(15)
     screen.move(60, 38)
-    screen.font_face(math.random(3, 8))
-    screen.font_size(12)
     screen.text("m°")
-    screen.font_face(1)
     screen.update()
-  
   else
-    screen.level(5)
-    screen.font_size(8)
     ui_controller.redraw()
     screen.update()
   end
@@ -152,12 +146,22 @@ end
 
 function refresh()
   redraw()
-  if fn.dirty_grid() then
-    grid_controller.grid_redraw()
-  end
 end
 
+
+local grid_redraw_clock = clock.run(
+  function()
+    while true do
+      clock.sleep(1/30)
+      if fn.dirty_grid() then
+        grid_controller.grid_redraw()
+      end
+    end
+  end
+)
+
 function init()
+
   ui_splash_screen_active = true
   math.randomseed(os.time())
   program.init()
