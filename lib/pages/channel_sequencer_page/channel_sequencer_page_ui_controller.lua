@@ -15,8 +15,11 @@ local song_mode_selector = list_selector:new(70, 29, "Song mode", {{name = "Off"
 
 local swing_shuffle_type = list_selector:new(70, 18, "Swing type", {{name = "Swing", value = 1}, {name = "Shuffle", value = 2}})
 local swing_selector = value_selector:new(0, 40, "Swing", -50, 50)
-local shuffle_feel_selector = list_selector:new(0, 40, "Shuffle feel", {{name = "Drunk", value = 1}, {name = "Smooth", value = 2}, {name = "Heavy", value = 3}, {name = "Clave", value = 4}})
-local shuffle_basis_selector = list_selector:new(70, 40, "Shuffle basis", {{name = "9", value = 1}, {name = "7", value = 2}, {name = "5", value = 3}, {name = "6", value = 4}, {name = "8??", value = 5}, {name = "9??", value = 6}})
+local shuffle_feel_selector = list_selector:new(0, 40, "Feel", {{name = "Drunk", value = 1}, {name = "Smooth", value = 2}, {name = "Heavy", value = 3}, {name = "Clave", value = 4}})
+local shuffle_basis_selector = list_selector:new(40, 40, "Basis", {{name = "9", value = 1}, {name = "7", value = 2}, {name = "5", value = 3}, {name = "6", value = 4}, {name = "8??", value = 5}, {name = "9??", value = 6}})
+local shuffle_amount_selector = value_selector:new(70, 40, "Amount", 0, 100)
+
+
 
 local global_settings_page =
   page:new(
@@ -29,6 +32,7 @@ local global_settings_page =
     else
       shuffle_feel_selector:draw()
       shuffle_basis_selector:draw()
+      shuffle_amount_selector:draw()
     end
   end
 )
@@ -88,6 +92,7 @@ local function get_visible_selectors()
   else
     table.insert(selectors, shuffle_feel_selector)
     table.insert(selectors, shuffle_basis_selector)
+    table.insert(selectors, shuffle_amount_selector)
   end
   return selectors
 end
@@ -282,6 +287,17 @@ function channel_sequencer_page_ui_controller.enc(n, d)
                   channel_sequencer_page_ui_controller.refresh_shuffle_basis()
                 end
               )
+            elseif selector == shuffle_amount_selector then
+              save_confirm.set_save(
+                function()
+                  channel_sequencer_page_ui_controller.update_shuffle_amount()
+                end
+              )
+              save_confirm.set_cancel(
+                function()
+                  channel_sequencer_page_ui_controller.refresh_shuffle_amount()
+                end
+              )
             end
             break -- Exit after handling the selected parameter
           end
@@ -348,6 +364,14 @@ end
 
 function channel_sequencer_page_ui_controller.refresh_shuffle_basis()
   shuffle_basis_selector:set_selected_value(params:get("global_shuffle_basis"))
+end
+
+function channel_sequencer_page_ui_controller.update_shuffle_amount()
+  params:set("global_shuffle_amount", shuffle_amount_selector:get_value())
+end
+
+function channel_sequencer_page_ui_controller.refresh_shuffle_amount()
+  shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
 end
 
 function channel_sequencer_page_ui_controller.refresh()

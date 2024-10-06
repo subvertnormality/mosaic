@@ -23,6 +23,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
   local swing_selector = selectors.swing_selector
   local shuffle_feel_selector = selectors.shuffle_feel_selector
   local shuffle_basis_selector = selectors.shuffle_basis_selector
+  local shuffle_amount_selector = selectors.shuffle_amount_selector
   
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] and program.get().selected_channel ~= 17 then
     if mask_selectors.trig:is_selected() then
@@ -71,6 +72,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
       elseif value == 3 then
         table.insert(selectors, shuffle_feel_selector)
         table.insert(selectors, shuffle_basis_selector)
+        table.insert(selectors, shuffle_amount_selector)
       end
       return selectors
     end
@@ -139,6 +141,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
   local swing_selector = selectors.swing_selector
   local shuffle_feel_selector = selectors.shuffle_feel_selector
   local shuffle_basis_selector = selectors.shuffle_basis_selector
+  local shuffle_amount_selector = selectors.shuffle_amount_selector
 
 
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] and program.get().selected_channel ~= 17 then
@@ -188,6 +191,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
       elseif value == 3 then
         table.insert(selectors, shuffle_feel_selector)
         table.insert(selectors, shuffle_basis_selector)
+        table.insert(selectors, shuffle_amount_selector)
       end
       return selectors
     end

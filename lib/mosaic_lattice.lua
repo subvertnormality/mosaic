@@ -216,6 +216,7 @@ function Lattice:new_sprocket(args)
   args.swing_or_shuffle = args.swing_or_shuffle == nil and 1 or util.clamp(args.swing_or_shuffle,1,2)
   args.shuffle_basis = args.shuffle_basis and util.clamp(args.shuffle_basis, 0, 6) or 0
   args.shuffle_feel = args.shuffle_feel and util.clamp(args.shuffle_feel, 0, 3) or 0
+  args.shuffle_amount = args.shuffle_amount and util.clamp(args.shuffle_amount, 0, 100) or 0
   args.step = self.step or 1
   args.lattice = self
   args.realign = args.realign or false
@@ -263,6 +264,7 @@ function Sprocket:new(args)
   p.swing_or_shuffle = args.swing_or_shuffle
   p.shuffle_basis = util.clamp(args.shuffle_basis, 0, 6)
   p.shuffle_feel = util.clamp(args.shuffle_feel, 0, 3)
+  p.shuffle_amount = (args.shuffle_amount == nil) and 1.0 or util.clamp(args.shuffle_amount, 0, 100) / 100
   p.current_ppqn = args.ppqn
   p.ppqn_error = 0.5
   p.step = args.step or 1
@@ -335,6 +337,10 @@ function Sprocket:set_swing(swing)
   self:update_swing()
 end
 
+function Sprocket:set_shuffle_amount(shuffle_amount)
+  self.shuffle_amount = util.clamp(shuffle_amount, 0, 100) / 100
+end
+
 function Sprocket:set_shuffle_basis(basis)
   self.shuffle_basis = util.clamp(basis, 0, 6)
   self:update_shuffle(self.step)
@@ -362,8 +368,7 @@ function Sprocket:update_swing()
   end
 end
 
-
-function Sprocket:update_shuffle(step, id)
+function Sprocket:update_shuffle(step)
   local ppc = self.ppqn * 4
   local old_ppqn = self.current_ppqn
   local old_phase = self.phase
@@ -373,34 +378,39 @@ function Sprocket:update_shuffle(step, id)
   local step_mod = ((step - 1) % pattern_length) + 1
 
   -- Shuffle is only allowed when pattern lengths are multiples of 8, otherwise we fall back to swing
-  if use_shuffle and self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and  self.shuffle_basis > 0 then
-    local feel_map = shuffle_feels[self.shuffle_feel]
-    local playpos_mod = (step_mod % 8) + 1
-    local shuffle_beat_index = playpos_mod
-    local multiplier = feel_map[self.shuffle_basis][shuffle_beat_index]
-    local exact_ppqn = (self.division * ppc * 4) * (multiplier)
-    local rounded_ppqn = math.floor(exact_ppqn + self.ppqn_error)
-    self.ppqn_error = (exact_ppqn + self.ppqn_error) - rounded_ppqn
-    self.current_ppqn = rounded_ppqn
+  if use_shuffle and self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and self.shuffle_basis > 0 then
+      local feel_map = shuffle_feels[self.shuffle_feel]
+      local playpos_mod = (step_mod % 8) + 1
+      local shuffle_beat_index = playpos_mod
+      
+      local base_multiplier = 0.25  -- Assuming 8 beats per 2 units of time
+      local multiplier = feel_map[self.shuffle_basis][shuffle_beat_index]
+      
+      -- Scale the shuffle amount directly
+      local adjusted_multiplier = base_multiplier + self.shuffle_amount * (multiplier - base_multiplier)
+      
+      local exact_ppqn = (self.division * ppc * 4) * adjusted_multiplier
+      local rounded_ppqn = math.floor(exact_ppqn + self.ppqn_error)
+      self.ppqn_error = (exact_ppqn + self.ppqn_error) - rounded_ppqn
+      self.current_ppqn = rounded_ppqn
   else
-    if (pattern_length % 2 == 1) and step_mod % pattern_length == 0 then
-    -- if we're on an odd end step for swing, return a divison's PPQN so we don't get out of phase
-      self.current_ppqn = self.division * ppc
-    else
-      self.current_ppqn = math.floor((self.division * ppc) * (step_mod % 2 == 1 and self.even_swing or self.odd_swing) - 0.01 + 0.5)
-    end
+      -- Existing swing logic remains unchanged
+      if (pattern_length % 2 == 1) and step_mod % pattern_length == 0 then
+          self.current_ppqn = self.division * ppc
+      else
+          self.current_ppqn = math.floor((self.division * ppc) * (step_mod % 2 == 1 and self.even_swing or self.odd_swing) - 0.01 + 0.5)
+      end
   end
 
+  -- Phase adjustment logic remains unchanged
   if self.current_ppqn ~= old_ppqn then
-    -- Adjust the phase proportionally
-    local cycle_progress = (old_phase - 1) / old_ppqn
-    self.phase = math.floor(cycle_progress * self.current_ppqn + 1)
-    -- Ensure phase stays within valid bounds
-    if self.phase < 1 then
-      self.phase = 1
-    elseif self.phase > self.current_ppqn then
-      self.phase = self.current_ppqn
-    end
+      local cycle_progress = (old_phase - 1) / old_ppqn
+      self.phase = math.floor(cycle_progress * self.current_ppqn + 1)
+      if self.phase < 1 then
+          self.phase = 1
+      elseif self.phase > self.current_ppqn then
+          self.phase = self.current_ppqn
+      end
   end
 end
 
@@ -415,8 +425,6 @@ function Lattice:realign_eligable_sprockets()
         sprocket.phase = 1
         sprocket.step = 1
         sprocket.transport = 1
-        sprocket:update_swing()
-        sprocket:update_shuffle(1)  -- Passing 1 as we've reset to step 1
         sprocket.current_ppqn = sprocket.division * self.ppqn * 4
       end
     end

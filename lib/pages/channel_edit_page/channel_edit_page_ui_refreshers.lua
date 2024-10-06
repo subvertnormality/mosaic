@@ -95,6 +95,11 @@ function channel_edit_page_ui_refreshers.refresh_shuffle_basis(shuffle_basis_sel
   shuffle_basis_selector:set_selected_value(value)
 end
 
+function channel_edit_page_ui_refreshers.refresh_shuffle_amount(shuffle_amount_selector)
+  local channel = program.get_selected_channel()
+  local value = channel.shuffle_amount or 0
+  shuffle_amount_selector:set_value(value)
+end
 
 function channel_edit_page_ui_refreshers.refresh_device_selector(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
   local channel = program.get_selected_channel()

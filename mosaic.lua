@@ -190,7 +190,7 @@ function init()
   sinfonion.set_harmonic_shift(0)
 
 
-  params:add_group("mosaic", "MOSAIC", 28)
+  params:add_group("mosaic", "MOSAIC", 29)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -250,6 +250,14 @@ function init()
   )
   params:hide("global_shuffle_basis")
 
+  params:add_number("global_shuffle_amount", "Global shuffle amount", 0, 100, 0, nil, false)
+  params:set_action(
+    "global_shuffle_amount",
+    function(x)
+      channel_sequencer_page_ui_controller.refresh_shuffle_amount()
+    end
+  )
+  params:hide("global_shuffle_amount")
 
   params:add_separator("Sequencer")
   params:add_option("song_mode", "Song mode", {"Off", "On"}, 2)

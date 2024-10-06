@@ -56,6 +56,7 @@ local function initialise_default_channels()
       swing = nil,              -- -50 to 50, nil to use global
       shuffle_feel = nil,       -- 1 to 4, nil to use global
       shuffle_basis = nil,      -- 1 to 6, nil to use global
+      shuffle_amount = nil
     }
   end
 
@@ -555,6 +556,13 @@ function program.get_effective_shuffle_basis(channel)
   end
 end
 
+function program.get_effective_shuffle_amount(channel)
+  if channel.shuffle_amount ~= nil then
+    return channel.shuffle_amount
+  else
+    return params:get("global_shuffle_amount")
+  end
+end
 
 function program.toggle_step_trig_mask(channel, step)
   ensure_step_masks(channel)

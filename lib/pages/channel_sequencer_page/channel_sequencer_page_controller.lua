@@ -81,6 +81,7 @@ function channel_sequencer_page_controller.register_press_handlers()
               channel_edit_page_ui_controller.align_global_and_local_swing_values(channel_number)
               channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(channel_number)
               channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(channel_number)
+              channel_edit_page_ui_controller.align_global_and_local_shuffle_amount_values(channel_number)
             end
 
           end
@@ -101,6 +102,7 @@ function channel_sequencer_page_controller.register_press_handlers()
           channel_edit_page_ui_controller.refresh_swing_shuffle_type()
           channel_edit_page_ui_controller.refresh_shuffle_feel()
           channel_edit_page_ui_controller.refresh_shuffle_basis()
+          channel_edit_page_ui_controller.refresh_shuffle_amount()
           
         end
 

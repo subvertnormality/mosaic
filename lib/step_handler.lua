@@ -850,6 +850,7 @@ function step_handler.process_song_sequencer_patterns()
             channel_edit_page_ui_controller.align_global_and_local_swing_values(channel_number)
             channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(channel_number)
             channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(channel_number)
+            channel_edit_page_ui_controller.align_global_and_local_shuffle_amount_values(channel_number)
           end
       
         end
@@ -859,6 +860,7 @@ function step_handler.process_song_sequencer_patterns()
         channel_edit_page_ui_controller.refresh_swing_shuffle_type()
         channel_edit_page_ui_controller.refresh_shuffle_feel()
         channel_edit_page_ui_controller.refresh_shuffle_basis()
+        channel_edit_page_ui_controller.refresh_shuffle_amount()
         channel_sequencer_page_controller.refresh()
         channel_edit_page_controller.refresh()
       end
@@ -878,6 +880,7 @@ function step_handler.process_song_sequencer_patterns()
       channel_edit_page_ui_controller.align_global_and_local_swing_values(channel_number)
       channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(channel_number)
       channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(channel_number)
+      channel_edit_page_ui_controller.align_global_and_local_shuffle_amount_values(channel_number)
     end
     pattern_change_queue = {}
   end

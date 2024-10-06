@@ -28,8 +28,11 @@ local notes_vertical_scroll_selector = vertical_scroll_selector:new(0, 25, "Note
 local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
 local swing_shuffle_type_selector = list_selector:new(70, 18, "Swing Type", {{name = "X", value = 1}, {name = "Swing", value = 2}, {name = "Shuffle", value = 3}})
 local swing_selector = value_selector:new(0, 40, "Swing", -51, 50)
-local shuffle_feel_selector = list_selector:new(0, 40, "Shuffle Feel", {{name = "X", value = 1}, {name = "Drunk", value = 2}, {name = "Smooth", value = 3}, {name = "Heavy", value = 4}, {name = "Clave", value = 5}})
-local shuffle_basis_selector = list_selector:new(70, 40, "Shuffle Basis", {{name = "X", value = 1}, {name = "9", value = 2}, {name = "7", value = 3}, {name = "5", value = 4}, {name = "6", value = 5}, {name = "8??", value = 6}, {name = "9??", value = 7}})
+local shuffle_feel_selector = list_selector:new(0, 40, "Feel", {{name = "X", value = 1}, {name = "Drunk", value = 2}, {name = "Smooth", value = 3}, {name = "Heavy", value = 4}, {name = "Clave", value = 5}})
+local shuffle_basis_selector = list_selector:new(40, 40, "Basis", {{name = "X", value = 1}, {name = "9", value = 2}, {name = "7", value = 3}, {name = "5", value = 4}, {name = "6", value = 5}, {name = "8??", value = 6}, {name = "9??", value = 7}})
+local shuffle_amount_selector = value_selector:new(70, 40, "Amount", 0, 100)
+
+
 
 -- Value selectors with initial values
 local mask_selectors = {
@@ -208,6 +211,7 @@ local clock_mods_page = page:new("Clocks", function()
     elseif value == 3 then
       shuffle_feel_selector:draw()
       shuffle_basis_selector:draw()
+      shuffle_amount_selector:draw()
     end
   end
   clock_mod_list_selector:draw()
@@ -306,6 +310,7 @@ function channel_edit_page_ui_controller.init()
   swing_selector:set_value(params:get("global_swing"))
   shuffle_feel_selector:set_selected_value(params:get("global_shuffle_feel"))
   shuffle_basis_selector:set_selected_value(params:get("global_shuffle_basis"))
+  shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
 
   channel_edit_page_ui_controller.refresh_clock_mods()
 end
@@ -477,6 +482,38 @@ function channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_va
   end
   
   clock_controller.set_channel_shuffle_basis(channel.number, value)
+
+end
+
+function channel_edit_page_ui_controller.update_shuffle_amount()
+  local channel = program.get_selected_channel()
+  local shuffle_amount = shuffle_amount_selector:get_value()
+  channel.shuffle_amount = shuffle_amount
+
+  if shuffle_amount == 0 or nil then
+    shuffle_amount = params:get("global_shuffle_amount") or 0
+  end
+
+  if clock_controller.is_playing() then
+    step_handler.queue_for_pattern_change(function() 
+      local c = channel.number 
+      local sa = shuffle_amount
+      clock_controller.set_channel_shuffle_amount(c, sa) 
+    end)
+  else
+    clock_controller.set_channel_shuffle_amount(channel.number, shuffle_amount)
+  end
+end
+
+function channel_edit_page_ui_controller.align_global_and_local_shuffle_amount_values(c)
+  local channel = program.get_channel(c)
+  local channel_value = channel.shuffle_amount
+  local value = channel_value
+  if channel_value == 0 or nil then
+    value = params:get("global_shuffle_amount") or 0
+  end
+  
+  clock_controller.set_channel_shuffle_amount(channel.number, value)
 
 end
 
@@ -734,6 +771,7 @@ function channel_edit_page_ui_controller.enc(n, d)
         swing_selector = swing_selector,
         shuffle_feel_selector = shuffle_feel_selector,
         shuffle_basis_selector = shuffle_basis_selector,
+        shuffle_amount_selector = shuffle_amount_selector,
       }
 
       if d > 0 then
@@ -784,6 +822,10 @@ end
 
 function channel_edit_page_ui_controller.refresh_shuffle_basis()
   channel_edit_page_ui_refreshers.refresh_shuffle_basis(shuffle_basis_selector)
+end
+
+function channel_edit_page_ui_controller.refresh_shuffle_amount()
+  channel_edit_page_ui_refreshers.refresh_shuffle_amount(shuffle_amount_selector)
 end
 
 function channel_edit_page_ui_controller.refresh_device_selector()
@@ -856,6 +898,7 @@ function channel_edit_page_ui_controller.refresh()
   channel_edit_page_ui_controller.refresh_swing_shuffle_type()
   channel_edit_page_ui_controller.refresh_shuffle_feel()
   channel_edit_page_ui_controller.refresh_shuffle_basis()
+  channel_edit_page_ui_controller.refresh_shuffle_amount()
 end
 
 
@@ -1172,11 +1215,13 @@ function channel_edit_page_ui_controller.handle_clock_mods_page_increment()
     save_confirm.set_save(channel_edit_page_ui_controller.update_swing_shuffle_type)
     save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_feel)
     save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_basis)
+    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_amount)
     save_confirm.set_save(channel_edit_page_ui_controller.update_swing)
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing_shuffle_type)
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing)
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_feel)
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_basis)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_amount)
     
   elseif swing_selector:is_selected() then
     swing_selector:increment()
@@ -1190,6 +1235,10 @@ function channel_edit_page_ui_controller.handle_clock_mods_page_increment()
     shuffle_basis_selector:increment()
     save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_basis)
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_basis)
+  elseif shuffle_amount_selector:is_selected() then
+    shuffle_amount_selector:increment()
+    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_amount)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_amount)
   elseif clock_mod_list_selector:is_selected() then
     clock_mod_list_selector:decrement()
     save_confirm.set_save(channel_edit_page_ui_controller.update_clock_mods)
@@ -1214,6 +1263,10 @@ function channel_edit_page_ui_controller.handle_clock_mods_page_decrement()
     shuffle_basis_selector:decrement()
     save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_basis)
     save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_basis)
+  elseif shuffle_amount_selector:is_selected() then
+    shuffle_amount_selector:decrement()
+    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_amount)
+    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_amount)
   elseif clock_mod_list_selector:is_selected() then
     clock_mod_list_selector:increment()
     save_confirm.set_save(channel_edit_page_ui_controller.update_clock_mods)

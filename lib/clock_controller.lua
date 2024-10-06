@@ -81,7 +81,8 @@ local function get_shuffle_values(channel)
     swing = (channel.swing ~= -51) and channel.swing or params:get("global_swing") or 0,
     swing_or_shuffle = (channel.swing_shuffle_type and channel.swing_shuffle_type > 1) and (channel.swing_shuffle_type - 1) or params:get("global_swing_shuffle_type"),
     shuffle_basis = (channel.shuffle_basis and channel.shuffle_basis > 1) and (channel.shuffle_basis - 1) or params:get("global_shuffle_basis"),
-    shuffle_feel = (channel.shuffle_feel and channel.shuffle_feel > 1) and (channel.shuffle_feel - 1) or params:get("global_shuffle_feel")
+    shuffle_feel = (channel.shuffle_feel and channel.shuffle_feel > 1) and (channel.shuffle_feel - 1) or params:get("global_shuffle_feel"),
+    shuffle_amount = channel.shuffle_feel or params:get("global_shuffle_amount")
   }
   
   if channel.number == 17 then
@@ -89,6 +90,7 @@ local function get_shuffle_values(channel)
     shuffle_values.swing_or_shuffle = 1
     shuffle_values.shuffle_basis = 0
     shuffle_values.shuffle_feel = 0
+    shuffle_values.shuffle_amount = 0
   end
   
   return shuffle_values
@@ -131,6 +133,7 @@ function clock_controller.init()
     swing_or_shuffle = 1,
     shuffle_basis = 0,
     shuffle_feel = 0,
+    shuffle_amount = 0,
     realign = false
   }
 
@@ -166,6 +169,7 @@ function clock_controller.init()
     swing_or_shuffle = 1,
     shuffle_basis = 0,
     shuffle_feel = 0,
+    shuffle_amount = 0,
     order = 1,
     realign = false,
     enabled = true
@@ -251,6 +255,7 @@ function clock_controller.init()
       swing_or_shuffle = shuffle_values.swing_or_shuffle,
       shuffle_basis = shuffle_values.shuffle_basis,
       shuffle_feel = shuffle_values.shuffle_feel,
+      shuffle_amount = shuffle_values.shuffle_amount,
       order = 2,
       realign = true,
       enabled = true
@@ -263,6 +268,7 @@ function clock_controller.init()
       swing_or_shuffle = shuffle_values.swing_or_shuffle,
       shuffle_basis = shuffle_values.shuffle_basis,
       shuffle_feel = shuffle_values.shuffle_feel,
+      shuffle_amount = shuffle_values.shuffle_amount,
       delay = 1,
       order = 3,
       realign = true,
@@ -295,6 +301,12 @@ function clock_controller.set_channel_shuffle_basis(channel_number, shuffle_basi
   local clock = clock_controller["channel_" .. channel_number .. "_clock"]
   clock:set_shuffle_basis((shuffle_basis or 2) - 1)
   clock.end_of_clock_processor:set_shuffle_basis((shuffle_basis or 2) - 1)
+end
+
+function clock_controller.set_channel_shuffle_amount(channel_number, shuffle_amount)
+  local clock = clock_controller["channel_" .. channel_number .. "_clock"]
+  clock:set_shuffle_amount(shuffle_amount or 0)
+  clock.end_of_clock_processor:set_shuffle_amount(shuffle_amount or 0)
 end
 
 function clock_controller.set_channel_division(channel_number, division)
@@ -349,6 +361,7 @@ local function meta_delay_action(c, division, delay, type, func)
     swing_or_shuffle = shuffle_values.swing_or_shuffle,
     shuffle_basis = shuffle_values.shuffle_basis,
     shuffle_feel = shuffle_values.shuffle_feel,
+    shuffle_amount = shuffle_values.shuffle_amount,
     delay_offset = -2,
     realign = false,
     order = 2,
@@ -406,6 +419,7 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
     swing_or_shuffle = shuffle_values.swing_or_shuffle,
     shuffle_basis = shuffle_values.shuffle_basis,
     shuffle_feel = shuffle_values.shuffle_feel,
+    shuffle_amount = shuffle_values.shuffle_amount,
     realign = false,
     order = 2,
   }
@@ -468,6 +482,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
     swing_or_shuffle = shuffle_values.swing_or_shuffle,
     shuffle_basis = shuffle_values.shuffle_basis,
     shuffle_feel = shuffle_values.shuffle_feel,
+    shuffle_amount = shuffle_values.shuffle_amount,
     delay = division + chord_spread,
     realign = false,
     order = 2,
