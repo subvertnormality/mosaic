@@ -199,10 +199,11 @@ end
 function midi_controller.cc(cc_msb, cc_lsb, value, channel, device)
   if midi_devices[device] ~= nil then
     -- Send MSB
-    midi_devices[device]:cc(cc_msb, math.floor(value / 128), channel)
-    
+    local cc_msb_value = cc_lsb and math.floor(value / 128) or value
+    midi_devices[device]:cc(cc_msb, cc_msb_value, channel)
+
     -- Send LSB
-    if cc_lsb then
+    if cc_lsb ~= nil then
       midi_devices[device]:cc(cc_lsb, value % 128, channel)
     end
   end
