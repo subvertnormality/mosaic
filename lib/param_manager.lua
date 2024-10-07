@@ -136,7 +136,7 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
             p.min = val.nrpn_min_value or -1
             p.max = val.nrpn_max_value or 16383
             p.controlspec.step = 1
-            p.controlspec.quantum = 1/(((val.nrpn_max_value - val.nrpn_min_value) or 16383) / 60)
+            p.controlspec.quantum = 1/(((val.nrpn_max_value - val.nrpn_min_value) or 16383) / 127)
             p.controlspec.default = val.off_value or -1
           else
             p.controlspec.minval = val.cc_min_value or -1
