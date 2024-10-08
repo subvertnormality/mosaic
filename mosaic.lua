@@ -1,5 +1,5 @@
 -- mosaic v1.0
--- grid-centric rythm and 
+-- grid-first rhythm and 
 -- harmony sequencer.
 --
 -- llllllll.co/t/mosaic-beta-v0-5

@@ -333,6 +333,22 @@ local function merge_devices()
       if fn.appears_in_table(tested_note_players, index) and string.find(index, "midi", 1, true) ~= 1 then
         local new_device_params = {}
 
+        local map_params_automatically = true
+        if fn.starts_with(index, "emplait") then 
+          map_params_automatically = {
+            "plaits_model_" .. fn.get_last_char(index),
+            "plaits_harmonics_" .. fn.get_last_char(index),
+            "plaits_timbre_" .. fn.get_last_char(index),
+            "plaits_morph_" .. fn.get_last_char(index),
+            "plaits_fm_mod_" .. fn.get_last_char(index),
+            "plaits_timb_mod_" .. fn.get_last_char(index),
+            "plaits_morph_mod_" .. fn.get_last_char(index),
+            "plaits_aux_" .. fn.get_last_char(index),
+            "plaits_send_a_" .. fn.get_last_char(index),
+            "plaits_send_b_" .. fn.get_last_char(index)
+          }
+        end
+
         table.insert(
           stock_device_map,
           {
@@ -340,7 +356,7 @@ local function merge_devices()
             ["name"] = fn.title_case(index),
             ["id"] = index,
             ["unique"] = true,
-            ["map_params_automatically"] = true,
+            ["map_params_automatically"] = map_params_automatically,
             ["default_midi_channel"] = nil,
             ["player"] = device,
             ["params"] = new_device_params,
@@ -391,6 +407,11 @@ local function merge_devices()
                 ["default"] = p["controlspec"] and p["controlspec"].default or 0
               }
             )
+
+            if fn.starts_with(index, "emplait") then 
+              print(device_param_names[i])
+
+            end
 
           end
         end

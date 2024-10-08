@@ -213,8 +213,6 @@ function param_manager.update_param(index, channel, param, meta_device)
   end
 end
 
--- TODO why dont params appear automatically sometimes?
-
 local function safe_set_param(channel, index, param, meta_device)
   if not channel.trig_lock_params then channel.trig_lock_params = {} end
   channel.trig_lock_params[index] = param or {}

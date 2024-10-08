@@ -56,15 +56,15 @@ function dial:draw()
     local center_x = bar_x + (bar_width / 2)
 
     -- Determine if the range includes negative values
-    local is_negative_range = self.min_value < self.off_value
+    local is_negative_range = self.min_value < (self.off_value or self.min_value)
 
     if is_negative_range then
       -- Negative and positive values
-      local total_negative_range = self.off_value - self.min_value
-      local total_positive_range = self.max_value - self.off_value
+      local total_negative_range = (self.off_value or self.min_value) - self.min_value
+      local total_positive_range = self.max_value - (self.off_value or self.min_value)
       local half_num_segments = num_segments / 2
 
-      if self.value >= self.off_value then
+      if self.value >= self.off_value or self.min_value then
         -- Positive values: fill from center to right
         local value_fraction = (self.value - self.off_value) / total_positive_range
         local filled_segments = math.floor(value_fraction * half_num_segments)
@@ -86,7 +86,7 @@ function dial:draw()
         end
       else
         -- Negative values: fill from center to left
-        local value_fraction = (self.off_value - self.value) / total_negative_range
+        local value_fraction = ((self.off_value or self.min_value) - self.value) / total_negative_range
         local filled_segments = math.floor(value_fraction * half_num_segments)
         local partial_fill = (value_fraction * half_num_segments) - filled_segments
 

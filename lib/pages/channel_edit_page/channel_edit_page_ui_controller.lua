@@ -624,20 +624,36 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
   end
 
   local p_value = params:get(param_id)
-  local old_quantum = p.controlspec.quantum
 
-  local total_range = ((p.controlspec.maxval - p.controlspec.minval) / p.controlspec.quantum)
+  local total_range = 0
+  local old_quantum = 1
 
-  if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
-    p.controlspec.quantum = 1 / (trig_lock_param.nrpn_max_value - trig_lock_param.nrpn_min_value) 
-    total_range = p.controlspec.maxval - p.controlspec.minval
-  elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value then
-    p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
-    total_range = p.controlspec.maxval - p.controlspec.minval
+  if p.controlspec then 
+
+    if p.controlspec.quantum then
+      old_quantum = p.controlspec.quantum
+    end
+
+    total_range = ((p.controlspec.maxval - p.controlspec.minval) / p.controlspec.quantum)
+
+    if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
+      p.controlspec.quantum = 1 / (trig_lock_param.nrpn_max_value - trig_lock_param.nrpn_min_value) 
+      total_range = p.controlspec.maxval - p.controlspec.minval
+
+    elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.cc_msb then
+      p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
+      total_range = p.controlspec.maxval - p.controlspec.minval
+    end
+  elseif p.count then
+    total_range = p.count
+  elseif p.maxval and p.minval then
+    total_range = p.maxval - p.minval
+  else
+    total_range = 127
   end
 
   local d = direction
- 
+
   if total_range > 126 and is_key3_down == false then
     if math.abs(direction) > 0 then
       d = direction * math.floor(total_range / 127) or 1
@@ -680,7 +696,7 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       local handler_param_id = channel.number .. "_lock_calculator_" .. dial_index .. "_" .. program.get_trig_lock_calculator_id(channel, dial_index)
 
       param_args.id = handler_param_id
-      param_args.type = fn.get_param_type_from_id(params:t(p_index))
+      param_args.type = fn.get_param_type_from_id(params:t(param_id))
       param_args.controlspec = p.controlspec
 
       local handler_param_id_index = params.lookup[handler_param_id]
@@ -702,15 +718,15 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       m_params[dial_index]:set_value(value)
     end
   elseif p_value and trig_lock_param and trig_lock_param.id then
-
     p:delta(d)
 
     channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
   end
 
   m_params[dial_index]:temp_display_value()
-
-  p.controlspec.quantum = old_quantum
+  if p.controlspec and p.controlspec.quantum then
+    p.controlspec.quantum = old_quantum
+  end
 end
 
 -- Encoder and key handling

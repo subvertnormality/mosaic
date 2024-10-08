@@ -434,6 +434,13 @@ function fn.string_split(self, in_split_pattern, out_results)
   return out_results
 end
 
+function fn.starts_with(str, start)
+  return string.sub(str, 1, string.len(start)) == start
+end
+
+function fn.get_last_char(str)
+  return string.sub(str, -1)
+end
 
 local param_types = {
   "number",
@@ -456,7 +463,7 @@ function fn.clean_number(num)
   if num == math.floor(num) then
     return math.floor(num)  -- Return as integer if no decimal places
   else
-    return math.floor(num * 1000 + 0.5) / 1000  -- Return the original rounded to 0.001
+    return math.floor(num * 100 + 0.5) / 100  -- Return the original rounded to 0.001
   end
 end
 
