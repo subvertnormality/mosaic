@@ -38,12 +38,12 @@ function step_handler.process_stock_params(c, step, type)
       if param and param.id == type then
           local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
           if step_trig_lock == param.off_value then
-              return nil
+            return nil
           end
           if step_trig_lock then
-              return step_trig_lock
+            return step_trig_lock
           else
-              return params:get(trig_lock_params[i].param_id) or nil
+            return params:get(trig_lock_params[i].param_id) or nil
           end
       end
   end

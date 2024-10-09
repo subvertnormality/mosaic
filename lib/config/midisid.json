@@ -1,0 +1,331 @@
+[{
+  "name": "MidiSid",
+  "type": "midi",
+  "map_params_automatically": [
+    "sound_waveform",
+    "sound_attack",
+    "sound_release",
+    "filter_type",
+    "filter_cutoff_frequency",
+    "filter_resonance",
+    "vibrato_speed",
+    "vibrato_depth",
+    "portamento_speed",
+    "arpeggiation_on_off"
+  ],
+  "polyphonic": true,
+  "id": "midisid",
+  "params": [
+    {
+      "cc_max_value": 127,
+      "id": "sound_waveform",
+      "cc_msb": 70,
+      "name": "Waveform",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "WAVE",
+      "cc_min_value": 7,
+      "off_value": 7,
+      "ui_labels": [
+        "X", 
+        "TRI", "TRI", "TRI", "TRI", "TRI", "TRI", "TRI", "TRI",
+        "SAW", "SAW", "SAW", "SAW", "SAW", "SAW", "SAW", "SAW",
+        "S+T", "S+T", "S+T", "S+T", "S+T", "S+T", "S+T", "S+T",
+        "PUL", "PUL", "PUL", "PUL", "PUL", "PUL", "PUL", "PUL",
+        "P+T", "P+T", "P+T", "P+T", "P+T", "P+T", "P+T", "P+T",
+        "S+P", "S+P", "S+P", "S+P", "S+P", "S+P", "S+P", "S+P",
+        "S+P", "S+P", "S+P", "S+P", "S+P", "S+P", "S+P", "S+P",
+        "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS",
+        "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS",
+        "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS",
+        "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS",
+        "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS",
+        "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS",
+        "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS",
+        "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS", "NOIS"
+      ]
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sound_attack",
+      "cc_msb": 73,
+      "name": "Attack",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "ATCK",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sound_decay",
+      "cc_msb": 75,
+      "name": "Decay",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "DCAY",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sound_sustain",
+      "cc_msb": 76,
+      "name": "Sustain",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "SUST",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sound_release",
+      "cc_msb": 72,
+      "name": "Release",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "RELE",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sound_pulse_width_coarse",
+      "cc_msb": 20,
+      "name": "Pulse Width Coarse",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "PWCO",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sound_pulse_width_fine",
+      "cc_msb": 52,
+      "name": "Pulse Width Fine",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "PWFN",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sound_pwm_speed_coarse",
+      "cc_msb": 21,
+      "name": "PWM Speed Coarse",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "PSCO",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sound_pwm_speed_fine",
+      "cc_msb": 53,
+      "name": "PWM Speed Fine",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "PSFN",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sound_pwm_depth_coarse",
+      "cc_msb": 22,
+      "name": "PWM Depth Coarse",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "PDCO",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sound_pwm_depth_fine",
+      "cc_msb": 54,
+      "name": "PWM Depth Fine",
+      "short_descriptor_1": "SND",
+      "short_descriptor_2": "PDFN",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "filter_type",
+      "cc_msb": 23,
+      "name": "Filter Type",
+      "short_descriptor_1": "FLT",
+      "short_descriptor_2": "TYPE",
+      "cc_min_value": -1,
+      "off_value": -1,
+      "ui_labels": [
+        "X", 
+        "None", "None", "None", "None", "None", "None", "None", "None",
+        "None", "None", "None", "None", "None", "None", "None", "None",
+        "LP", "LP", "LP", "LP", "LP", "LP", "LP", "LP",
+        "LP", "LP", "LP", "LP", "LP", "LP", "LP", "LP",
+        "HP", "HP", "HP", "HP", "HP", "HP", "HP", "HP",
+        "HP", "HP", "HP", "HP", "HP", "HP", "HP", "HP",
+        "BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP",
+        "BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP",
+        "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH",
+        "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH",
+        "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH",
+        "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH",
+        "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH",
+        "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH",
+        "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH",
+        "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH", "NTCH"
+      ]
+    },
+    {
+      "cc_max_value": 127,
+      "id": "filter_cutoff_frequency",
+      "cc_msb": 74,
+      "name": "Cutoff Frequency",
+      "short_descriptor_1": "FLT",
+      "short_descriptor_2": "CUT",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "filter_resonance",
+      "cc_msb": 71,
+      "name": "Resonance",
+      "short_descriptor_1": "FLT",
+      "short_descriptor_2": "RESO",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sweep_time",
+      "cc_msb": 24,
+      "name": "Sweep Time",
+      "short_descriptor_1": "SWP",
+      "short_descriptor_2": "TIME",
+      "cc_min_value": -1,
+      "off_value": 0
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sweep_cutoff_start_coarse",
+      "cc_msb": 25,
+      "name": "Sweep Cutoff Start Coarse",
+      "short_descriptor_1": "SWP",
+      "short_descriptor_2": "STCO",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sweep_cutoff_start_fine",
+      "cc_msb": 57,
+      "name": "Sweep Cutoff Start Fine",
+      "short_descriptor_1": "SWP",
+      "short_descriptor_2": "STFN",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sweep_cutoff_end_coarse",
+      "cc_msb": 26,
+      "name": "Sweep Cutoff End Coarse",
+      "short_descriptor_1": "SWP",
+      "short_descriptor_2": "ENCO",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "sweep_cutoff_end_fine",
+      "cc_msb": 58,
+      "name": "Sweep Cutoff End Fine",
+      "short_descriptor_1": "SWP",
+      "short_descriptor_2": "ENFN",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "vibrato_delay",
+      "cc_msb": 27,
+      "name": "Vibrato Delay",
+      "short_descriptor_1": "VIB",
+      "short_descriptor_2": "DLY",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "vibrato_speed",
+      "cc_msb": 28,
+      "name": "Vibrato Speed",
+      "short_descriptor_1": "VIB",
+      "short_descriptor_2": "SPD",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "vibrato_depth",
+      "cc_msb": 29,
+      "name": "Vibrato Depth",
+      "short_descriptor_1": "VIB",
+      "short_descriptor_2": "DPT",
+      "cc_min_value": -1,
+      "off_value": -1
+    },
+    {
+      "cc_max_value": 127,
+      "id": "portamento_on_off",
+      "cc_msb": 65,
+      "name": "Portamento On/Off",
+      "short_descriptor_1": "PRT",
+      "short_descriptor_2": "ONOF",
+      "cc_min_value": -1,
+      "off_value": 0,
+      "on_value": 64
+    },
+    {
+      "cc_max_value": 127,
+      "id": "portamento_speed",
+      "cc_msb": 5,
+      "name": "Portamento Speed",
+      "short_descriptor_1": "PRT",
+      "short_descriptor_2": "SPD",
+      "cc_min_value": -1,
+      "off_value": -1,
+      "ui_labels": [
+        "X",
+        "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off",
+        "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off",
+        "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off",
+        "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off",
+        "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On",
+        "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On",
+        "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On",
+        "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On"
+      ]
+    },
+    {
+      "cc_max_value": 127,
+      "id": "arpeggiation_on_off",
+      "cc_msb": 14,
+      "name": "Arpeggiation On/Off",
+      "short_descriptor_1": "ARP",
+      "short_descriptor_2": "ONOF",
+      "cc_min_value": -1,
+      "off_value": 0,
+      "on_value": 64,
+      "ui_labels": [
+        "X",
+        "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off",
+        "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off",
+        "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off",
+        "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off",
+        "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On",
+        "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On",
+        "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On",
+        "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On", "On"
+      ]
+    }
+  ]
+}]

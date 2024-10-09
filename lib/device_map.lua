@@ -408,11 +408,6 @@ local function merge_devices()
               }
             )
 
-            if fn.starts_with(index, "emplait") then 
-              print(device_param_names[i])
-
-            end
-
           end
         end
 
