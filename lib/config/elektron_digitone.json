@@ -844,7 +844,7 @@
       "id": "lfo_parameters_lfo_1_speed"
     },
     {
-      "cc_max_value": 11,
+      "cc_max_value": 23,
       "off_value": -1,
       "short_descriptor_1": "LFO1",
       "short_descriptor_2": "MULT",
@@ -853,7 +853,7 @@
       "cc_msb": 108,
       "id": "lfo_parameters_lfo_1_multiplier",
       "ui_labels" : [
-        "X", "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1K", "2K"
+        "X", "BPM1", "BPM2", "BPM4", "BPM8", "B16", "B32", "B64", "B128", "B256", "B512", "B1K", "B2K", "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1K", "2K"
       ]
     },
     {
@@ -947,7 +947,7 @@
       "id": "lfo_parameters_lfo_2_speed"
     },
     {
-      "cc_max_value": 11,
+      "cc_max_value": 23,
       "off_value": -1,
       "short_descriptor_1": "LFO2",
       "short_descriptor_2": "MULT",
@@ -956,7 +956,7 @@
       "cc_msb": 114,
       "id": "lfo_parameters_lfo_2_multiplier",
       "ui_labels" : [
-        "X", "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1K", "2K"
+        "X", "BPM1", "BPM2", "BPM4", "BPM8", "B16", "B32", "B64", "B128", "B256", "B512", "B1K", "B2K", "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1K", "2K"
       ]
     },
     {
