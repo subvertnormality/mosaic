@@ -467,4 +467,23 @@ function fn.clean_number(num)
   end
 end
 
+local stock_id_to_param_id = {
+  fixed_note = "midi_device_params_channel_%d_2",
+  quantised_fixed_note = "midi_device_params_channel_%d_3",
+  bipolar_random_note = "midi_device_params_channel_%d_4",
+  random_velocity = "midi_device_params_channel_%d_5",
+  trig_probability = "midi_device_params_channel_%d_6",
+  twos_random_note = "midi_device_params_channel_%d_7",
+  chord_strum = "midi_device_params_channel_%d_8",
+  chord_arp = "midi_device_params_channel_%d_9",
+  chord_spread = "midi_device_params_channel_%d_10",
+  chord_acceleration = "midi_device_params_channel_%d_11",
+  chord_velocity_modifier = "midi_device_params_channel_%d_12",
+  chord_strum_pattern = "midi_device_params_channel_%d_13",
+}
+
+function fn.get_param_id_from_stock_id(stock_id, channel_number)
+  return string.format(stock_id_to_param_id[stock_id], channel_number)
+end
+
 return fn
