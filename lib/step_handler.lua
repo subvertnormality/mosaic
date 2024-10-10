@@ -50,8 +50,10 @@ function step_handler.process_stock_params(c, step, type)
 
   local stock_param_id = fn.get_param_id_from_stock_id(type, c)
   if stock_param_id then
-    local param_value = params:get(string.format(stock_param_id, c))
-    if param_value and param_value ~= -1 then
+    local param_id = string.format(stock_param_id, c)
+    local param_value = params:get(param_id)
+    local p = params:lookup_param(param_id)
+    if param_value and param_value ~= p.default then
       return param_value
     end
   end
@@ -566,6 +568,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   if chord_spread ~= 0 then
     chord_spread = divisions.note_division_values[chord_spread]
   end
+
 
   if arp_division then
     handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
