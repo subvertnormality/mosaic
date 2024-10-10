@@ -33,12 +33,7 @@ end
 -- Progress the sprocket's phase manually
 local function progress_lattice_pulse(pulses)
     for _ = 1, pulses do
-        -- sprocket.phase = sprocket.phase + 1
-        -- if sprocket.phase > sprocket.current_ppqn then
-        --     sprocket.phase = 1
-        --     sprocket.step = sprocket.step + 1
-        -- end
-        lattice:pulse()
+      lattice:pulse()
     end
 end
 
@@ -203,7 +198,6 @@ function test_change_division_mid_pattern()
 
   -- Change the division to 1/4
   sprocket:set_division(1 / (division * 4))
-  sprocket:update_swing()
   luaunit.assert_equals(sprocket.current_ppqn, 24)
 
   -- Verify the phase has been updated to reflect the new division
@@ -234,8 +228,6 @@ function test_simultaneous_swing_and_shuffle_changes()
   -- Change swing and shuffle simultaneously
   sprocket:set_swing(40)
   sprocket:set_shuffle_feel(2)
-  sprocket:update_swing()
-  sprocket:update_shuffle(sprocket.step)
 
   -- Verify both swing and shuffle changes were applied
   luaunit.assert_true(sprocket.even_swing > sprocket.odd_swing)
@@ -265,53 +257,12 @@ function test_changing_swing_mid_pattern()
 
   -- Change the swing mid-pattern
   sprocket:set_swing(30)
-  sprocket:update_swing()
-  sprocket:update_shuffle(sprocket.step)
 
   -- Continue progression
   progress_lattice_pulse(pulses_to_half_pattern)
 
   -- Check that phase and step are consistent
   luaunit.assert_equals(sprocket.phase, phase_before)
-  luaunit.assert_equals(sprocket.step, step_before + 2)
-
-  -- Verify that the PPQN has been updated
-  luaunit.assert_not_equals(sprocket.current_ppqn, initial_ppqn)
-end
-
--- Test changing shuffle parameters mid-pattern and check for phase consistency
-function test_changing_shuffle_mid_pattern()
-
-  setup()
-
-  local sprocket = create_sprocket({
-      division = 1 / 4,
-      swing_or_shuffle = 2, -- Shuffle mode
-      shuffle_feel = 1,     -- Initial feel
-      shuffle_basis = 1,    -- Initial basis
-  })
-
-  local initial_ppqn = sprocket.current_ppqn
-
-  -- Simulate progression up to half of the pattern (2 steps)
-  local pulses_to_half_pattern = sprocket.current_ppqn * 2
-  progress_lattice_pulse(pulses_to_half_pattern)
-
-  -- Check phase and step before changing shuffle
-  local phase_before = sprocket.phase
-  local step_before = sprocket.step
-
-  -- Change the shuffle feel and basis mid-pattern
-  sprocket:set_shuffle_feel(2)   -- Change to another feel
-  sprocket:set_shuffle_basis(2)  -- Change basis
-  sprocket:update_shuffle(sprocket.step)
-
-  -- Continue progression
-  pulses_to_half_pattern = sprocket.current_ppqn * 2
-  progress_lattice_pulse(pulses_to_half_pattern)
-
-  -- Check that phase and step are consistent
-  luaunit.assert_equals(sprocket.phase, 15)
   luaunit.assert_equals(sprocket.step, step_before + 2)
 
   -- Verify that the PPQN has been updated

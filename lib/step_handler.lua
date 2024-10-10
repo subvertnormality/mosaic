@@ -29,6 +29,21 @@ local program = program
 local ipairs = ipairs
 local table = table
 
+local stock_id_to_param_id = {
+  fixed_note = "midi_device_params_channel_%d_2",
+  quantised_fixed_note = "midi_device_params_channel_%d_3",
+  bipolar_random_note = "midi_device_params_channel_%d_4",
+  random_velocity = "midi_device_params_channel_%d_5",
+  trig_probability = "midi_device_params_channel_%d_6",
+  twos_random_note = "midi_device_params_channel_%d_7",
+  chord_strum = "midi_device_params_channel_%d_8",
+  chord_arp = "midi_device_params_channel_%d_9",
+  chord_spread = "midi_device_params_channel_%d_10",
+  chord_acceleration = "midi_device_params_channel_%d_11",
+  chord_velocity_modifier = "midi_device_params_channel_%d_12",
+  chord_strum_pattern = "midi_device_params_channel_%d_13",
+}
+
 function step_handler.process_stock_params(c, step, type)
   local channel = program.get_channel(c)
   local trig_lock_params = channel.trig_lock_params
@@ -46,6 +61,14 @@ function step_handler.process_stock_params(c, step, type)
             return params:get(trig_lock_params[i].param_id) or nil
           end
       end
+  end
+
+  local stock_param_id = stock_id_to_param_id[type]
+  if stock_param_id then
+    local param_value = params:get(string.format(stock_param_id, c))
+    if param_value and param_value ~= -1 then
+      return param_value
+    end
   end
 
   return nil
