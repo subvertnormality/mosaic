@@ -461,7 +461,6 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
   local shuffle_values = get_shuffle_values(channel)
   arp = clock_lattice:new_sprocket {
     action = function()
-      
       runs = runs + 1
       local div = (division + ((chord_spread * chord_acceleration * (runs - 1))) + (acceleration_accumulator * chord_acceleration))
 

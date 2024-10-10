@@ -252,10 +252,16 @@ function quantiser.process_chord_note_for_mask(note_mask_value, unscaled_chord_v
   local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
   
   scale = fn.transpose_scale(scale, root_note + transpose)
-  
+
   local offset_in_scale = fn.find_index_by_value(scale, musicutil.snap_note_to_array(note_mask_value, scale))
   
-  local chord_note = scale[unscaled_chord_value + (offset_in_scale or 0)]
+  local chord_note
+  
+  if unscaled_chord_value then
+    chord_note = scale[unscaled_chord_value + (offset_in_scale or 0)]
+  else
+    chord_note = scale[offset_in_scale or 0]
+  end
   
   return chord_note and (chord_note + (octave_mod * 12)) or nil
 end

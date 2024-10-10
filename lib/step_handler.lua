@@ -97,9 +97,7 @@ function step_handler.process_params(c, step)
         param.id ~= "chord_spread" and
         param.id ~= "chord_strum_pattern" and
         param.id ~= "fixed_note")
-     then
-
-
+      then
 
       if not param.param_id then
         goto continue
@@ -401,7 +399,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   
       if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
         sequenced_chord_notes[i] = {
-          note_value = unprocessed_note_container.note_mask_value,
+          note_mask_value = unprocessed_note_container.note_mask_value,
           chord_note = chord_note,
           octave_mod = unprocessed_note_container.octave_mod,
           transpose = unprocessed_note_container.transpose
@@ -424,27 +422,49 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   end
 
   if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
-    table.insert(sequenced_chord_notes, 1, 
-      {
-        note_value = unprocessed_note_container.note_value,
-        octave_mod = unprocessed_note_container.octave_mod,
-        transpose = unprocessed_note_container.transpose
-      }
-    )
+    if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
+        table.insert(sequenced_chord_notes, 1, 
+        {
+          note_mask_value = unprocessed_note_container.note_mask_value,
+          octave_mod = unprocessed_note_container.octave_mod,
+          transpose = unprocessed_note_container.transpose
+        }
+      )
+    else
+
+      table.insert(sequenced_chord_notes, 1, 
+        {
+          note_value = unprocessed_note_container.note_value,
+          octave_mod = unprocessed_note_container.octave_mod,
+          transpose = unprocessed_note_container.transpose
+        }
+      )
+    end
   elseif chord_strum_pattern == 2 or chord_strum_pattern == 4 then
-    table.insert(sequenced_chord_notes,      
-      {
-        note_value = unprocessed_note_container.note_value,
-        octave_mod = unprocessed_note_container.octave_mod,
-        transpose = unprocessed_note_container.transpose
-      }
-    )
+    if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
+        table.insert(sequenced_chord_notes,  
+        {
+          note_mask_value = unprocessed_note_container.note_mask_value,
+          chord_note = chord_note,
+          octave_mod = unprocessed_note_container.octave_mod,
+          transpose = unprocessed_note_container.transpose
+        }
+      )
+    else
+      table.insert(sequenced_chord_notes,  
+        {
+          note_value = unprocessed_note_container.note_value,
+          octave_mod = unprocessed_note_container.octave_mod,
+          transpose = unprocessed_note_container.transpose
+        }
+      )
+    end
   end
 
-  if sequenced_chord_notes[1] and sequenced_chord_notes[1].chord_note and sequenced_chord_notes[1].note_mask_value then
+  if sequenced_chord_notes[1] and sequenced_chord_notes[1].note_mask_value then
     play_note(quantiser.process_chord_note_for_mask(
       sequenced_chord_notes[1].note_mask_value,
-      sequenced_chord_notes[1].chord_note,
+      sequenced_chord_notes[1].chord_note or nil,
       sequenced_chord_notes[1].octave_mod,
       sequenced_chord_notes[1].transpose,
       channel.step_scale_number
@@ -464,6 +484,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   local total_notes = #sequenced_chord_notes  -- Cache the length of the processed_chord_notes table
 
   clock_controller.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div)
+    
     local note_dashboard_values = {}
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
     local length = div
@@ -505,10 +526,10 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     note_to_play = find_next_note()
 
     if note_to_play then
-      if note_to_play.chord_note and note_to_play.note_mask_value then
+      if note_to_play and note_to_play.note_mask_value then
         play_note(quantiser.process_chord_note_for_mask(
           note_to_play.note_mask_value,
-          note_to_play.chord_note,
+          note_to_play.chord_note or nil,
           note_to_play.octave_mod,
           note_to_play.transpose,
           channel.step_scale_number

@@ -2149,10 +2149,10 @@ function test_arp_param_lock_on_note_mask_with_four_extra_notes()
 
   local channel = program.get_selected_channel()
 
-  program.get_sequencer_pattern(sequencer_pattern).channels[c].step_note_masks[test_step] = 78
+  program.get_sequencer_pattern(sequencer_pattern).channels[c].step_note_masks[test_step] = 77
   program.get_sequencer_pattern(sequencer_pattern).channels[c].step_trig_masks[test_step] = 1
   program.get_sequencer_pattern(sequencer_pattern).channels[c].step_velocity_masks[test_step] = 100
-  program.get_sequencer_pattern(sequencer_pattern).channels[c].step_length_masks[test_step] = 1
+  program.get_sequencer_pattern(sequencer_pattern).channels[c].step_length_masks[test_step] = 8
 
   channel.trig_lock_params[5].id = "chord_arp"
 
@@ -2174,7 +2174,7 @@ function test_arp_param_lock_on_note_mask_with_four_extra_notes()
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
-  luaunit.assert_equals(note_on_event[1], 78)
+  luaunit.assert_equals(note_on_event[1], 77)
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
@@ -2182,7 +2182,7 @@ function test_arp_param_lock_on_note_mask_with_four_extra_notes()
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
-  luaunit.assert_equals(note_on_event[1], 80)
+  luaunit.assert_equals(note_on_event[1], 79)
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
@@ -2190,7 +2190,7 @@ function test_arp_param_lock_on_note_mask_with_four_extra_notes()
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
-  luaunit.assert_equals(note_on_event[1], 82)
+  luaunit.assert_equals(note_on_event[1], 81)
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
@@ -2206,7 +2206,7 @@ function test_arp_param_lock_on_note_mask_with_four_extra_notes()
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
-  luaunit.assert_equals(note_on_event[1], 85)
+  luaunit.assert_equals(note_on_event[1], 84)
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
@@ -2214,7 +2214,7 @@ function test_arp_param_lock_on_note_mask_with_four_extra_notes()
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
-  luaunit.assert_equals(note_on_event[1], 78)
+  luaunit.assert_equals(note_on_event[1], 77)
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
@@ -2222,7 +2222,7 @@ function test_arp_param_lock_on_note_mask_with_four_extra_notes()
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
-  luaunit.assert_equals(note_on_event[1], 80)
+  luaunit.assert_equals(note_on_event[1], 79)
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
@@ -2230,7 +2230,7 @@ function test_arp_param_lock_on_note_mask_with_four_extra_notes()
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
-  luaunit.assert_equals(note_on_event[1], 82)
+  luaunit.assert_equals(note_on_event[1], 81)
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
