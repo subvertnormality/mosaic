@@ -121,7 +121,9 @@ For those using an ACL Sinfonion, support is available through a straightforward
 
 ##### Stock Devices
 
-Mosaic includes a range of stock devices that you can integrate into your setup, but first, they need to be configured to appear in the device selector. Here’s how to set this up using [maiden](https://monome.org/docs/norns/maiden/):
+Mosaic includes a range of stock devices that you can integrate into your setup. Elektron Digitone, Digitakt 2, Syntakt, and the Nord Drum 2 are first class citizens with fully tailored mappings.
+
+First, they need to be configured to appear in the device selector. Here’s how to set this up using [maiden](https://monome.org/docs/norns/maiden/):
 
 1. **Access Configuration Files**: Open Maiden and navigate to the directory path `code > mosaic > lib > config`. Here, you will find the stock device configuration files.
 2. **Create a New Configuration Folder**: Next, go to the directory `data > mosaic`. In this location, create a new folder named `config`.

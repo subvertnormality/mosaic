@@ -21,15 +21,18 @@ function dial:new(x, y, name, id, top_label, bottom_label)
 
   return self
 end
-
-
 function dial:draw()
   -- Set screen level based on selection
   screen.level(self.selected and 15 or 1)
   
   -- Draw the top label
   screen.move(self.x, self.y)
-  screen.text(fn.title_case(self.top_label))
+
+  if self.display_value == false or self.value == self.off_value then
+    screen.text(fn.title_case(self.top_label))
+  else
+    screen.text(self.value and fn.clean_number(self.value) or "X")
+  end
 
   -- Position for drawing the bar
   local bar_x = self.x
@@ -56,17 +59,19 @@ function dial:draw()
     local center_x = bar_x + (bar_width / 2)
 
     -- Determine if the range includes negative values
-    local is_negative_range = self.min_value < (self.off_value or self.min_value)
+    local off_value = self.off_value or 0  -- Default to 0 if not set
+    local is_negative_range = self.min_value < off_value
 
     if is_negative_range then
       -- Negative and positive values
-      local total_negative_range = (self.off_value or self.min_value) - self.min_value
-      local total_positive_range = self.max_value - (self.off_value or self.min_value)
+      local total_negative_range = off_value - self.min_value
+      local total_positive_range = self.max_value - off_value
       local half_num_segments = num_segments / 2
 
-      if self.value >= self.off_value or self.min_value then
+      if self.value >= off_value then
         -- Positive values: fill from center to right
-        local value_fraction = (self.value - self.off_value) / total_positive_range
+        local value_fraction = (self.value - off_value) / total_positive_range
+        if total_positive_range == 0 then value_fraction = 0 end  -- Prevent division by zero
         local filled_segments = math.floor(value_fraction * half_num_segments)
         local partial_fill = (value_fraction * half_num_segments) - filled_segments
 
@@ -86,7 +91,8 @@ function dial:draw()
         end
       else
         -- Negative values: fill from center to left
-        local value_fraction = ((self.off_value or self.min_value) - self.value) / total_negative_range
+        local value_fraction = (off_value - self.value) / total_negative_range
+        if total_negative_range == 0 then value_fraction = 0 end  -- Prevent division by zero
         local filled_segments = math.floor(value_fraction * half_num_segments)
         local partial_fill = (value_fraction * half_num_segments) - filled_segments
 
@@ -109,6 +115,7 @@ function dial:draw()
       -- Positive-only values: fill from left edge to right
       local total_range = self.max_value - self.min_value
       local value_fraction = (self.value - self.min_value) / total_range
+      if total_range == 0 then value_fraction = 0 end  -- Prevent division by zero
       local filled_segments = math.floor(value_fraction * num_segments)
       local partial_fill = (value_fraction * num_segments) - filled_segments
 
@@ -129,13 +136,10 @@ function dial:draw()
     end
   end
 
-  -- Draw the bottom label or value
+
   screen.move(self.x, self.y + 14)
-  if self.display_value == false or self.value == self.off_value then
-    screen.text(fn.title_case(self.bottom_label))
-  else
-    screen.text(self.value and fn.clean_number(self.value) or "X")
-  end
+  screen.text(fn.title_case(self.bottom_label))
+
 end
 
 
@@ -164,11 +168,16 @@ function dial:decrement()
 end
 
 function dial:set_value(value)
-  if value == nil or (self.min_value and value < self.min_value) or (self.max_value and value > self.max_value) then
+  local epsilon = 1e-10
+  if value == nil or (self.min_value and value < (self.min_value - epsilon)) or (self.max_value and value > (self.max_value + epsilon)) then
     value = self.off_value
   end
   self.value = value
   fn.dirty_screen(true)
+end
+
+function dial:get_value()
+  return self.value
 end
 
 function dial:set_top_label(label)

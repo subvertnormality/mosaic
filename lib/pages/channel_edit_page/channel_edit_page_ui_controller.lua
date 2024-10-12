@@ -643,6 +643,9 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
     elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.cc_msb then
       p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
       total_range = p.controlspec.maxval - p.controlspec.minval
+    elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.type == "norns" then
+      p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
+      total_range = p.controlspec.maxval - p.controlspec.minval
     end
   elseif p.count then
     total_range = p.count

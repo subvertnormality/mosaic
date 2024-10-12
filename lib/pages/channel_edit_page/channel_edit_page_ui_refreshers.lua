@@ -185,6 +185,7 @@ function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params)
     m_params[i]:set_top_label("None")
     m_params[i]:set_bottom_label("")
   end
+
 end
 
 function channel_edit_page_ui_refreshers.refresh_trig_locks(m_params)
