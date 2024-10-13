@@ -1,6 +1,6 @@
 local trigger_edit_page_ui_controller = {}
 
-local fn = include("mosaic/lib/functions")
+
 local pages = include("mosaic/lib/ui_components/pages")
 local page = include("mosaic/lib/ui_components/page")
 local grid_viewer = include("mosaic/lib/ui_components/grid_viewer")

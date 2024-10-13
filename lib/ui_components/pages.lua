@@ -1,7 +1,7 @@
 local pages = {}
 pages.__index = pages
 
-local fn = include("mosaic/lib/functions")
+
 
 function pages:new()
   local self = setmetatable({}, pages)

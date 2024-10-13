@@ -1,4 +1,4 @@
-local fn = include("mosaic/lib/functions")
+
 local step_handler = include("mosaic/lib/step_handler")
 local quantiser = include("mosaic/lib/quantiser")
 

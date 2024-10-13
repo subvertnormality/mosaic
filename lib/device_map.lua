@@ -1,6 +1,6 @@
 local device_map = {}
+device_map.params_cache = {}
 
-local fn = include("mosaic/lib/functions")
 local json = require("mosaic/lib/json")
 
 local device_map_keyed_by_id = {}
@@ -453,32 +453,50 @@ end
 
 local function merge_params(device_params, stock_params)
   local merged_params = {}
-  local seen_ids = {} -- hash set for fast id lookup
+  local seen_ids = {}
+  local insert_index = 1
 
-  local index_accumulator = 1
+  -- Cache get_none_param() result
+  local none_param = get_none_param()
 
-  if (merged_params[1] and merged_params[1].id ~= "none") then
-    table.insert(merged_params, get_none_param())
-
-    seen_ids[get_none_param().id] = true
+  -- Check if 'none' param should be added
+  if not (stock_params[1] and stock_params[1].id == "none") then
+    merged_params[insert_index] = none_param
+    seen_ids[none_param.id] = true
+    insert_index = insert_index + 1
   end
 
-  -- Copy the contents of stock_params into merged_params
-  for index, sp in ipairs(stock_params) do
-    if not seen_ids[sp.id] then
-      sp.index = index
-      table.insert(merged_params, sp)
-      seen_ids[sp.id] = true
-      index_accumulator = index
+  -- Function to copy all necessary fields
+  local function copy_param_fields(source_param)
+    local new_param = {}
+    for key, value in pairs(source_param) do
+      new_param[key] = value
+    end
+    new_param.index = insert_index
+    return new_param
+  end
+
+  -- Merge stock_params
+  for i = 1, #stock_params do
+    local sp = stock_params[i]
+    local sp_id = sp.id
+    if not seen_ids[sp_id] then
+      local new_param = copy_param_fields(sp)
+      merged_params[insert_index] = new_param
+      seen_ids[sp_id] = true
+      insert_index = insert_index + 1
     end
   end
 
-  -- Add the contents of device_params into merged_params
-  for index, dp in ipairs(device_params) do
-    if not seen_ids[dp.id] then
-      dp.index = index + index_accumulator
-      table.insert(merged_params, dp)
-      seen_ids[dp.id] = true
+  -- Merge device_params
+  for i = 1, #device_params do
+    local dp = device_params[i]
+    local dp_id = dp.id
+    if not seen_ids[dp_id] then
+      local new_param = copy_param_fields(dp)
+      merged_params[insert_index] = new_param
+      seen_ids[dp_id] = true
+      insert_index = insert_index + 1
     end
   end
 
@@ -503,33 +521,55 @@ function device_map.get_device(id)
 end
 
 function device_map.get_available_devices_for_channel(c)
+  -- Build a set of device IDs that are currently used by other channels
   local active_devices_set = {}
-  local devices_copy = fn.deep_copy(devices)
+  local prog = program.get()
+  local prog_devices = prog.devices
 
-  -- Populating active_devices_set with ids from channels 1 through 16
   for i = 1, 16 do
-    local device_map_id = program.get().devices[i].device_map
-    if i ~= c and device_map_id ~= "none" then
-      active_devices_set[device_map_id] = true
+    if i ~= c then
+      local device_map_id = prog_devices[i].device_map
+      if device_map_id ~= "none" then
+        active_devices_set[device_map_id] = true
+      end
     end
   end
 
-  -- Filtering devices_copy to remove any table whose id is present in active_devices_set
-  local filtered_devices = {}
-  for _, inner_table in ipairs(devices_copy) do
-    if not (inner_table.id and inner_table.unique and active_devices_set[inner_table.id]) then
-      table.insert(filtered_devices, inner_table)
+  -- Build a list of available devices
+  local available_devices = {}
+  for _, device in ipairs(devices) do
+    local device_id = device.id
+    if not (device.unique and active_devices_set[device_id]) then
+      table.insert(available_devices, device)
     end
   end
 
-  return filtered_devices
+  return available_devices
 end
 
 function device_map.get_params(device_id)
-  local device = fn.get_by_id(devices, device_id)
+  -- Check if the merged parameters for this device_id are cached
+  if device_map.params_cache[device_id] then
+    return device_map.params_cache[device_id]
+  end
 
+  -- Retrieve the device and its parameters
+  local device = fn.get_by_id(devices, device_id)
   local device_params = device and device.params or {}
-  return merge_params(device_params, stock_params)
+
+  -- Call merge_params and cache the result
+  local merged_params = merge_params(device_params, stock_params)
+  device_map.params_cache[device_id] = merged_params
+
+  return merged_params
+end
+
+function device_map.invalidate_params_cache(device_id)
+  device_map.params_cache[device_id] = nil
+end
+
+function device_map.invalidate_all_params_cache()
+  device_map.params_cache = {}
 end
 
 function device_map.get_available_params_for_channel(c, selected_param)

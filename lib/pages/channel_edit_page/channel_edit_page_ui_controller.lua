@@ -2,7 +2,7 @@
 local channel_edit_page_ui_controller = {}
 
 -- Include necessary modules
-local fn = include("mosaic/lib/functions")
+
 local quantiser = include("mosaic/lib/quantiser")
 local pages = include("mosaic/lib/ui_components/pages")
 local page = include("mosaic/lib/ui_components/page")
@@ -80,8 +80,10 @@ for i = 1, 10 do
 end
 
 -- Page indices
-local channel_page_to_index = {["Note dashboard"] = 1, ["Masks"] = 2, ["Trig Locks"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5}
+local channel_page_to_index = {["Note Dashboard"] = 1, ["Masks"] = 2, ["Trig Locks"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5}
+local index_to_channel_page = {"Note Dashboard", "Masks", "Trig Locks", "Clock Mods", "Midi Config"}
 local scales_page_to_index = {["Quantizer"] = 1, ["Clock Mods"] = 2}
+local index_to_scales_page = {"Quantizer", "Clock Mods"}
 
 -- Helper variables
 local refresh_timer_id = nil
@@ -295,11 +297,12 @@ function channel_edit_page_ui_controller.init()
   channel_pages:add_page(trig_lock_page)
   channel_pages:add_page(clock_mods_page)
   channel_pages:add_page(channel_edit_page)
-  channel_pages:select_page(1)
+
+  channel_edit_page_ui_controller.select_note_dashboard_page()
 
   scales_pages:add_page(quantizer_page)
   scales_pages:add_page(clock_mods_page)
-  scales_pages:select_page(1)
+  channel_edit_page_ui_controller.select_scales_quantizer_page()
 
   dials:set_selected_item(1)
   clock_mod_list_selector:set_selected_value(13)
@@ -589,14 +592,6 @@ function channel_edit_page_ui_controller.update_channel_config()
 
   channel_edit_page_ui_controller.refresh_trig_locks()
   
-end
-
-function channel_edit_page_ui_controller.change_page(page)
-  if program.get().selected_channel ~= 17 then
-    channel_pages:select_page(page)
-  else
-    scales_pages:select_page(page)
-  end
 end
 
 -- Trig lock functions
@@ -906,18 +901,11 @@ function channel_edit_page_ui_controller.throttled_refresh_channel_config()
 end
 
 function channel_edit_page_ui_controller.refresh()
-  channel_edit_page_ui_controller.refresh_device_selector()
-  channel_edit_page_ui_controller.throttled_refresh_channel_config()
-  channel_edit_page_ui_controller.refresh_masks()
-  channel_edit_page_ui_controller.refresh_trig_locks()
-  channel_edit_page_ui_controller.refresh_quantiser()
-  channel_edit_page_ui_controller.refresh_romans()
-  channel_edit_page_ui_controller.refresh_clock_mods()
-  channel_edit_page_ui_controller.refresh_swing()
-  channel_edit_page_ui_controller.refresh_swing_shuffle_type()
-  channel_edit_page_ui_controller.refresh_shuffle_feel()
-  channel_edit_page_ui_controller.refresh_shuffle_basis()
-  channel_edit_page_ui_controller.refresh_shuffle_amount()
+  if program.get().selected_channel ~= 17 then
+    channel_edit_page_ui_controller.select_channel_page_by_index(channel_pages:get_selected_page())
+  else
+    channel_edit_page_ui_controller.select_scale_page_by_index(scales_pages:get_selected_page())
+  end
 end
 
 
@@ -947,7 +935,7 @@ function channel_edit_page_ui_controller.handle_trig_mask_change(direction)
       mask_selectors.trig:decrement()
       program.set_trig_mask(channel, mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value())
     end
-    pattern_controller.throttled_update_working_pattern(channel.number)
+    pattern_controller.update_working_pattern(channel.number)
   end
 end
 
@@ -978,7 +966,7 @@ function channel_edit_page_ui_controller.handle_note_mask_change(direction)
       mask_selectors.note:decrement()
       program.set_note_mask(channel, mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value())
     end
-    pattern_controller.throttled_update_working_pattern(channel.number)
+    pattern_controller.update_working_pattern(channel.number)
   end
 end
 
@@ -1008,7 +996,7 @@ function channel_edit_page_ui_controller.handle_velocity_mask_change(direction)
       mask_selectors.velocity:decrement()
       program.set_velocity_mask(channel, mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value())
     end
-    pattern_controller.throttled_update_working_pattern(channel.number)
+    pattern_controller.update_working_pattern(channel.number)
   end
 end
 
@@ -1051,7 +1039,7 @@ function channel_edit_page_ui_controller.handle_length_mask_change(direction)
         program.set_length_mask(channel, 0)
       end
     end
-    pattern_controller.throttled_update_working_pattern(channel.number)
+    pattern_controller.update_working_pattern(channel.number)
   end
 end
 
@@ -1364,9 +1352,11 @@ end
 
 function channel_edit_page_ui_controller.handle_encoder_one_positive()
   if program.get().selected_channel ~= 17 then
-    channel_pages:next_page()
+    local selected_channel_page = channel_pages:get_selected_page()
+    channel_edit_page_ui_controller.select_channel_page_by_index(selected_channel_page + 1)
   else
-    scales_pages:next_page()
+    local selected_scale_page = scales_pages:get_selected_page()
+    channel_edit_page_ui_controller.select_scale_page_by_index(selected_scale_page + 1)
   end
   fn.dirty_screen(true)
   save_confirm.cancel()
@@ -1374,9 +1364,19 @@ end
 
 function channel_edit_page_ui_controller.handle_encoder_one_negative()
   if program.get().selected_channel ~= 17 then
-    channel_pages:previous_page()
+    local selected_channel_page = channel_pages:get_selected_page()
+    local previous_page
+
+    channel_edit_page_ui_controller.select_channel_page_by_index(selected_channel_page - 1)
+
   else
-    scales_pages:previous_page()
+    local selected_scale_page = scales_pages:get_selected_page()
+    local previous
+
+    if selected_scale_page - 1 == 1 then
+      channel_edit_page_ui_controller.select_scales_quantizer_page()
+    end
+
   end
   fn.dirty_screen(true)
   save_confirm.cancel()
@@ -1454,12 +1454,84 @@ function channel_edit_page_ui_controller.get_selected_page()
 end
 
 function channel_edit_page_ui_controller.select_mask_page()
+  channel_edit_page_ui_controller.refresh_masks()
   channel_pages:select_page(channel_page_to_index["Masks"])
   fn.dirty_screen(true)
 end
 
 function channel_edit_page_ui_controller.select_trig_page()
+  channel_edit_page_ui_controller.refresh_trig_locks()
   channel_pages:select_page(channel_page_to_index["Trig Locks"])
+end
+
+function channel_edit_page_ui_controller.select_scales_page()
+  channel_edit_page_ui_controller.refresh_quantiser()
+  channel_edit_page_ui_controller.refresh_romans()
+  channel_pages:select_page(channel_page_to_index["Scales"])
+end
+
+function channel_edit_page_ui_controller.select_clock_mods_page()
+  channel_edit_page_ui_controller.refresh_clock_mods()
+  channel_edit_page_ui_controller.refresh_swing()
+  channel_edit_page_ui_controller.refresh_swing_shuffle_type()
+  channel_edit_page_ui_controller.refresh_shuffle_feel()
+  channel_edit_page_ui_controller.refresh_shuffle_basis()
+  channel_edit_page_ui_controller.refresh_shuffle_amount()
+  channel_pages:select_page(channel_page_to_index["Clock Mods"])
+end
+
+function channel_edit_page_ui_controller.select_midi_config_page()
+  channel_edit_page_ui_controller.throttled_refresh_channel_config()
+  channel_pages:select_page(channel_page_to_index["Midi Config"])
+end
+
+function channel_edit_page_ui_controller.select_quantizer_page()
+  channel_edit_page_ui_controller.refresh_quantiser()
+  channel_edit_page_ui_controller.refresh_romans()
+  channel_pages:select_page(channel_page_to_index["Quantizer"])
+end
+
+function channel_edit_page_ui_controller.select_note_dashboard_page()
+  channel_pages:select_page(channel_page_to_index["Note Dashboard"])
+end
+
+
+function channel_edit_page_ui_controller.select_scales_quantizer_page()
+  channel_edit_page_ui_controller.refresh_quantiser()
+  channel_edit_page_ui_controller.refresh_romans()
+  scales_pages:select_page(channel_page_to_index["Quantizer"])
+end
+
+function channel_edit_page_ui_controller.select_scales_clock_mods_page()
+  channel_edit_page_ui_controller.refresh_clock_mods()
+  channel_edit_page_ui_controller.refresh_swing()
+  channel_edit_page_ui_controller.refresh_swing_shuffle_type()
+  channel_edit_page_ui_controller.refresh_shuffle_feel()
+  channel_edit_page_ui_controller.refresh_shuffle_basis()
+  channel_edit_page_ui_controller.refresh_shuffle_amount()
+  scales_pages:select_page(channel_page_to_index["Clock Mods"])
+end
+
+function channel_edit_page_ui_controller.select_channel_page_by_index(index)
+  if index == 1 then
+    channel_edit_page_ui_controller.select_note_dashboard_page()
+  elseif index == 2 then
+    channel_edit_page_ui_controller.select_mask_page()
+  elseif index == 3 then
+    channel_edit_page_ui_controller.select_trig_page()
+  elseif index == 4 then
+    channel_edit_page_ui_controller.select_clock_mods_page()
+  elseif index == 5 then
+    channel_edit_page_ui_controller.select_midi_config_page()
+  end
+end
+
+function channel_edit_page_ui_controller.select_scale_page_by_index(index)
+  if index == 1 then
+    channel_edit_page_ui_controller.select_scales_quantizer_page()
+  elseif index == 2 then
+    channel_edit_page_ui_controller.select_scales_clock_mods_page()
+  end
 end
 
 function channel_edit_page_ui_controller.set_note_dashboard_values(values)

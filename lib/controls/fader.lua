@@ -1,7 +1,7 @@
 fader = {}
 fader.__index = fader
 
-local fn = include("mosaic/lib/functions")
+
 
 function fader:new(x, y, length, size)
   local self = setmetatable({}, fader)

@@ -1,6 +1,6 @@
 local ui_controller = {}
 
-local fn = include("mosaic/lib/functions")
+
 
 channel_edit_page_ui_controller = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller")
 velocity_edit_page_ui_controller = include("mosaic/lib/pages/velocity_edit_page/velocity_edit_page_ui_controller")
@@ -31,14 +31,14 @@ function ui_controller.init()
   trigger_edit_page_ui_controller.init()
 end
 
-function ui_controller.change_page(subpage_name)
-  channel_edit_page_ui_controller.change_page(subpage_name)
-  velocity_edit_page_ui_controller.change_page(subpage_name)
-  note_edit_page_ui_controller.change_page(subpage_name)
-  trigger_edit_page_ui_controller.change_page(subpage_name)
-  channel_sequencer_page_ui_controller.change_page(subpage_name)
-  fn.dirty_screen(true)
-end
+-- function ui_controller.change_page(subpage_name)
+--   channel_edit_page_ui_controller.change_page(subpage_name)
+--   velocity_edit_page_ui_controller.change_page(subpage_name)
+--   note_edit_page_ui_controller.change_page(subpage_name)
+--   trigger_edit_page_ui_controller.change_page(subpage_name)
+--   channel_sequencer_page_ui_controller.change_page(subpage_name)
+--   fn.dirty_screen(true)
+-- end
 
 function ui_controller.redraw()
   if not program then

@@ -1,7 +1,7 @@
 local list_selector = {}
 list_selector.__index = list_selector
 
-local fn = include("mosaic/lib/functions")
+
 
 function list_selector:new(x, y, name, list)
   local self = setmetatable({}, list_selector)

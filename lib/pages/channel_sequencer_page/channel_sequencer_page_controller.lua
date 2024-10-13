@@ -1,7 +1,7 @@
 local channel_sequencer_page_controller = {}
 local channel_pattern_buttons = {}
 
-local fn = include("mosaic/lib/functions")
+
 local refresh_button = {}
 
 local global_pattern_length_fader = fader:new(1, 7, 8, 8)

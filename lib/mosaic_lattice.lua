@@ -6,7 +6,7 @@
 
 local Lattice, Sprocket = {}, {}
 
-local fn = include("mosaic/lib/functions")
+
 
 
 local drunk_map = {

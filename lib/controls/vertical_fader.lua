@@ -1,7 +1,7 @@
 vertical_fader = {}
 vertical_fader.__index = vertical_fader
 
-local fn = include("mosaic/lib/functions")
+
 
 local shared_bright_mod = 0
 

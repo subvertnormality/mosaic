@@ -1,7 +1,7 @@
 local dial = {}
 dial.__index = dial
 
-local fn = include("mosaic/lib/functions")
+
 
 function dial:new(x, y, name, id, top_label, bottom_label)
   local self = setmetatable({}, dial)

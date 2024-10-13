@@ -1,6 +1,6 @@
 local channel_sequencer_page_ui_controller = {}
 
-local fn = include("mosaic/lib/functions")
+
 local pages = include("mosaic/lib/ui_components/pages")
 local page = include("mosaic/lib/ui_components/page")
 local gv = include("mosaic/lib/ui_components/grid_viewer")

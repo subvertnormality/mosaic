@@ -1,5 +1,5 @@
 local musicutil = require("musicutil")
-local fn = include("mosaic/lib/functions")
+
 local quantiser = include("mosaic/lib/quantiser")
 
 local program = {}

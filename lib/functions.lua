@@ -2,9 +2,13 @@ local fn = {}
 
 -- Localize functions for performance
 local floor = math.floor
+local abs = math.abs
 local insert, remove, concat = table.insert, table.remove, table.concat
 local string_find, string_gsub, string_match, string_sub, string_upper, string_lower = 
     string.find, string.gsub, string.match, string.sub, string.upper, string.lower
+
+local screen_dirty
+local grid_dirty
 
 function fn.cleanup()
   _midi.all_off()
@@ -463,7 +467,11 @@ function fn.clean_number(num)
   if num == math.floor(num) then
     return math.floor(num)  -- Return as integer if no decimal places
   else
-    return math.floor(num * 100 + 0.5) / 100  -- Return the original rounded to 0.001
+    local result = math.floor(num * 100 + 0.5) / 100
+    if result < 1e-6 and result > -1e-6  then
+      result = 0
+    end
+    return result  -- Return the original rounded to 0.001
   end
 end
 
@@ -484,6 +492,36 @@ local stock_id_to_param_id = {
 
 function fn.get_param_id_from_stock_id(stock_id, channel_number)
   return string.format(stock_id_to_param_id[stock_id], channel_number)
+end
+
+local blink_state = false
+
+local function blink()
+  blink_state = not blink_state
+  fn.dirty_grid(true)
+  clock.run(function() clock.sleep(0.3); blink() end)
+end
+
+blink()
+
+function fn.get_blink_state()
+  return blink_state
+end
+
+
+function fn.debounce(func, delay)
+  local timer_id = nil
+  return function(...)
+    local args = { ... }
+    if timer_id then
+      clock.cancel(timer_id)
+    end
+    timer_id = clock.run(function()
+      clock.sleep(delay)
+      func(table.unpack(args))
+      timer_id = nil
+    end)
+  end
 end
 
 return fn

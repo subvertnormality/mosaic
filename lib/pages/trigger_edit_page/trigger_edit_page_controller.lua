@@ -1,7 +1,7 @@
 local er = require("er")
 local drum_ops = include("mosaic/lib/drum_ops")
 
-local fn = include("mosaic/lib/functions")
+
 local trigger_edit_page_controller = {}
 local paint_pattern = {}
 local shift = 0

@@ -1,6 +1,6 @@
 local save_confirm = {}
 
-local fn = include("mosaic/lib/functions")
+
 local save_funcs = {}
 local cancel_funcs = {}
 local default_confirm_message = "Press K3 to confirm"

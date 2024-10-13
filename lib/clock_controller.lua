@@ -1,4 +1,4 @@
-local fn = include("mosaic/lib/functions")
+
 local lattice = include("mosaic/lib/mosaic_lattice")
 
 clock_controller = {}

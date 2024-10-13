@@ -1,7 +1,7 @@
 sequencer = {}
 sequencer.__index = sequencer
 
-local fn = include("mosaic/lib/functions")
+
 local setmetatable = setmetatable
 local clock_run = clock.run
 local clock_sleep = clock.sleep

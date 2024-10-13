@@ -1,6 +1,6 @@
 local quantiser = include("mosaic/lib/quantiser")
 local clock_controller = include("mosaic/lib/clock_controller")
-local fn = include("mosaic/lib/functions")
+
 local divisions = include("mosaic/lib/divisions")
 
 local step_handler = {}
@@ -729,7 +729,7 @@ function step_handler.handle(c, current_step)
   local transpose = step_handler.calculate_step_transpose()
 
   if trig_value == 1 and random_val < trig_prob then
-    channel_edit_page_ui_controller.refresh_trig_locks()
+    -- channel_edit_page_ui_controller.refresh_trig_locks()
     
     local random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0) +
                          fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)

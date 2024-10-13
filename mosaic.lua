@@ -9,14 +9,17 @@
 
 testing = false
 
+fn = include("mosaic/lib/functions")
 grid_controller = include("mosaic/lib/grid_controller")
 ui_controller = include("mosaic/lib/ui_controller")
 program = include("mosaic/lib/program")
 sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
 midi_controller = include("mosaic/lib/midi_controller")
 
+profiler = include("mosaic/profiler")
 
-local fn = include("mosaic/lib/functions")
+p = newProfiler()
+
 local fileselect = require("fileselect")
 local textentry = require("textentry")
 local musicutil = require("musicutil")
@@ -359,4 +362,40 @@ end
 
 function clock.transport:stop()
   clock_controller:stop()
+end
+
+-- At the top level of your script
+local outfile
+local p
+
+function start_profiler()
+  -- Determine the script's directory
+  local script_path = debug.getinfo(1, "S").source:match("^@(.*/)")
+  if not script_path then
+    script_path = "./"
+  end
+
+  -- Attempt to open the output file
+  outfile, err = io.open(script_path .. "profile.txt", "w+")
+  if not outfile then
+    error("Failed to open output file for profiling: " .. err)
+  end
+
+  -- Start the profiler
+  p = newProfiler()
+  p:start()
+end
+
+function stop_profiler()
+  if not p then
+    print("Profiler has not been started.")
+    return
+  end
+  p:stop()
+  if not outfile then
+    print("Output file is not available.")
+    return
+  end
+  p:report(outfile)
+  outfile:close()
 end

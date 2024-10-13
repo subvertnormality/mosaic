@@ -1,7 +1,7 @@
 local value_selector = {}
 value_selector.__index = value_selector
 
-local fn = include("mosaic/lib/functions")
+
 
 function value_selector:new(x, y, name, min, max)
   local self = setmetatable({}, value_selector)

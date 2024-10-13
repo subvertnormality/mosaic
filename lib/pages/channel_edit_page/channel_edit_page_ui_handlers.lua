@@ -1,6 +1,5 @@
 -- channel_edit_page_ui_handlers.lua
 local channel_edit_page_ui_handlers = {}
-local fn = include("lib/functions")
 local param_manager = include("mosaic/lib/param_manager")
 local channel_edit_page_ui_refreshers = include("lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 

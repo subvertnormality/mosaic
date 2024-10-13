@@ -1,5 +1,5 @@
 local pattern_controller = {}
-local fn = include("mosaic/lib/functions")
+
 local quantiser = include("mosaic/lib/quantiser")
 local clock_controller = include("mosaic/lib/clock_controller")
 local divisions = include("mosaic/lib/divisions")
@@ -12,10 +12,8 @@ local velocities = program.initialise_64_table({})
 
 -- Helper variables
 local update_timer_id = nil
-local update_timer_id_2 = nil
 local throttle_time = 0.001
 local currently_processing = false
-local currently_processing_2 = false
 
 local unpack = table.unpack
 local insert = table.insert
@@ -215,7 +213,7 @@ function pattern_controller.update_working_patterns()
   end)
 end
 
-function pattern_controller.update_working_pattern(c)
+pattern_controller.update_working_pattern = fn.debounce(function(c)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
   local channel_pattern = selected_sequencer_pattern.channels[c]
   channel_pattern.working_pattern = pattern_controller.get_and_merge_patterns(
@@ -225,22 +223,6 @@ function pattern_controller.update_working_pattern(c)
     channel_pattern.velocity_merge_mode,
     channel_pattern.length_merge_mode
   )
-end
-
-function pattern_controller.throttled_update_working_pattern(c)
-  if update_timer_id_2 then
-    clock.cancel(update_timer_id_2)
-  end
-  update_timer_id_2 = clock.run(function()
-    while currently_processing_2 do
-      clock.sleep(throttle_time)
-    end
-    currently_processing_2 = true
-    clock.run(function()
-      pattern_controller.update_working_pattern(c)
-      currently_processing_2 = false
-    end) 
-  end)
-end
+end, throttle_time)
 
 return pattern_controller

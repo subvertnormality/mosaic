@@ -1,5 +1,5 @@
 local draw_handler = {}
-local fn = include("mosaic/lib/functions")
+
 
 local table_insert = table.insert
 local ipairs = ipairs
