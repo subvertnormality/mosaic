@@ -224,7 +224,7 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
       local octave = (note_number // 7) + octave_mod
       local note = note_number % 7
 
-      if do_pentatonic then
+      if do_pentatonic and type(scale[note + 1]) == "number" then
         result = musicutil.snap_note_to_array(scale[note + 1], pentatonic) + (12 * octave) + root_note
       else
         result = (scale[note + 1] + (12 * octave)) + root_note
@@ -232,7 +232,7 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
   else
       note_number = math.min(note_number, 69)
 
-      if do_pentatonic then
+      if do_pentatonic and type(scale[note_number + 1]) == "number" then
         result =  musicutil.snap_note_to_array(scale[note_number + 1], pentatonic) + (octave_mod * 12) + root_note
       else
         result = (scale[note_number + 1] + (octave_mod * 12)) + root_note
@@ -252,6 +252,8 @@ function quantiser.process_chord_note_for_mask(note_mask_value, unscaled_chord_v
   local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
   
   scale = fn.transpose_scale(scale, root_note + transpose)
+
+  if type(note_mask_value) ~= "number" then return nil end
 
   local offset_in_scale = fn.find_index_by_value(scale, musicutil.snap_note_to_array(note_mask_value, scale))
   
@@ -286,6 +288,7 @@ function quantiser.snap_to_scale(note_num, scale_number, transpose)
 end
 
 function quantiser.process_to_pentatonic_scale(note_num, scale_number)
+
   local scale_container = program.get_scale(scale_number)
 
   if type(note_num) ~= "number" then return nil end

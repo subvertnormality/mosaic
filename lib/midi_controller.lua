@@ -5,6 +5,9 @@ local quantiser = include("mosaic/lib/quantiser")
 local midi_controller = {}
 
 midi_devices = {}
+midi_controller.note_counts = {}  -- Initialize note counts table
+
+midi_devices = {}
 
 local midi_note_mappings = {
   [1] = 1, [2] = 0, [3] = 2, [4] = 0, [5] = 3,
@@ -184,15 +187,51 @@ function midi_controller.all_off(id)
   chord_number = 0
 end
 
-function midi_controller:note_off(note, velocity, channel, device)
-  if midi_devices[device] ~= nil then
-    midi_devices[device]:note_off(note, velocity, channel)
+function midi_controller:reset_note_counts()
+  for device = 1, #midi_devices do
+    self.note_counts[device] = nil
   end
 end
 
+
 function midi_controller:note_on(note, velocity, channel, device)
   if midi_devices[device] ~= nil then
+    -- Initialize tables if necessary
+    if not self.note_counts[device] then
+      self.note_counts[device] = {}
+    end
+    if not self.note_counts[device][channel] then
+      self.note_counts[device][channel] = {}
+    end
+    if not self.note_counts[device][channel][note] then
+      self.note_counts[device][channel][note] = 0
+    end
+
+    -- Increment the note count
+    self.note_counts[device][channel][note] = self.note_counts[device][channel][note] + 1
+
+    -- Send the Note On message
     midi_devices[device]:note_on(note, velocity, channel)
+  end
+end
+
+function midi_controller:note_off(note, velocity, channel, device)
+  if midi_devices[device] ~= nil then
+    -- Check if the note is currently on
+    if self.note_counts[device] and self.note_counts[device][channel] and self.note_counts[device][channel][note] then
+      -- Decrement the note count
+      self.note_counts[device][channel][note] = self.note_counts[device][channel][note] - 1
+      if self.note_counts[device][channel][note] <= 0 then
+        -- Send Note Off only when count reaches zero
+        midi_devices[device]:note_off(note, velocity, channel)
+        -- Remove the note from the table
+        self.note_counts[device][channel][note] = nil
+      end
+    else
+      -- Note is not currently on, but we received a Note Off.
+      -- For safety, send Note Off anyway
+      midi_devices[device]:note_off(note, velocity, channel)
+    end
   end
 end
 
@@ -253,6 +292,18 @@ function midi_controller.stop()
       midi_devices[id]:stop()
     end
   end
+  midi_controller:reset_note_counts()
+  chord_number = 0
+end
+
+function midi_controller.all_off(id)
+  for note = 0, 127 do
+    for channel = 1, 16 do
+      midi_devices[id]:note_off(note, 0, channel)
+    end
+  end
+  -- Reset note counts for this device
+  midi_controller.note_counts[id] = nil
   chord_number = 0
 end
 
@@ -262,6 +313,8 @@ function midi_controller.panic()
       midi_controller.all_off(id)
     end
   end
+  -- Clear all note counts
+  midi_controller.note_counts = {}
   chord_number = 0
 end
 

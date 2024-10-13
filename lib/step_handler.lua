@@ -333,21 +333,36 @@ function step_handler.calculate_step_transpose()
   return transpose
 end
 
-local function play_note(note, note_container, velocity, division, note_on_func)
+
+local function play_note_internal(note, note_container, velocity, division, note_on_func, action_flag)
   local c = note_container.channel
   local channel = program.get_channel(c)
-  local note_dashboard_values = {}
-  note_dashboard_values.note = note_container.note
-  note_dashboard_values.velocity = velocity
-  note_dashboard_values.length = note_container.length
+  
+  local note_dashboard_values = {
+    note = note_container.note,
+    velocity = velocity,
+    length = note_container.length
+  }
 
   note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
-  clock_controller.delay_action(c, division, 1, 0, 0.95, "must_execute", function()
+
+  clock_controller.delay_action(c, division, 1, 0, 0.95, action_flag, function()
     note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
   end)
+
   if c == program.get().selected_channel then
     channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
   end
+end
+
+-- Redefine play_note to use the helper function
+local function play_note(note, note_container, velocity, division, note_on_func)
+  play_note_internal(note, note_container, velocity, division, note_on_func, "must_execute")
+end
+
+-- Redefine play_arp_note to use the helper function
+local function play_arp_note(note, note_container, velocity, division, note_on_func)
+  play_note_internal(note, note_container, velocity, division, note_on_func, "execute_at_note_end")
 end
 
 local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
@@ -449,7 +464,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   end
 
   if sequenced_chord_notes[1] and sequenced_chord_notes[1].note_mask_value then
-    play_note(quantiser.process_chord_note_for_mask(
+    play_arp_note(quantiser.process_chord_note_for_mask(
       sequenced_chord_notes[1].note_mask_value,
       sequenced_chord_notes[1].chord_note or nil,
       sequenced_chord_notes[1].octave_mod,
@@ -457,7 +472,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
       channel.step_scale_number
     ), note_container, note_container.velocity, arp_division, note_on_func)
   elseif sequenced_chord_notes[1] and sequenced_chord_notes[1].note_value then
-    play_note(quantiser.process(
+    play_arp_note(quantiser.process(
       sequenced_chord_notes[1].note_value + (sequenced_chord_notes[1].chord_note or 0),
       sequenced_chord_notes[1].octave_mod,
       sequenced_chord_notes[1].transpose,
@@ -513,8 +528,10 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     note_to_play = find_next_note()
 
     if note_to_play then
-      if note_to_play and note_to_play.note_mask_value then
-        play_note(quantiser.process_chord_note_for_mask(
+      if note_to_play and note_to_play.note_mask_value and type(note_to_play.note_mask_value) == "number" then
+
+        -- TODO whats causing the crash?
+        play_arp_note(quantiser.process_chord_note_for_mask(
           note_to_play.note_mask_value,
           note_to_play.chord_note or nil,
           note_to_play.octave_mod,
@@ -522,7 +539,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
           channel.step_scale_number
         ), note_container, velocity, arp_division, note_on_func)
       else
-        play_note(quantiser.process(
+        play_arp_note(quantiser.process(
           note_to_play.note_value + (note_to_play.chord_note or 0),
           note_to_play.octave_mod,
           note_to_play.transpose,
@@ -624,7 +641,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
             channel.step_scale_number
           )
 
-          if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
+          if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 and type(unprocessed_note_container.note_mask_value) == "number" then
             processed_chord_note = quantiser.process_chord_note_for_mask(
               unprocessed_note_container.note_mask_value,
               chord_notes[chord_number],

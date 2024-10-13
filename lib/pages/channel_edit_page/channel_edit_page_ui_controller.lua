@@ -104,7 +104,11 @@ end
 
 local function configure_note_value_selector(note_value_selector)
   note_value_selector:set_view_transform_func(function(value)
-    return value == -1 and "X" or musicutil.note_num_to_name(value, true)
+    local named_note = musicutil.note_num_to_name(value, true)
+    if type(named_note) ~= "number" then
+      return "X"
+    end
+    return value == -1 and "X" or named_note
   end)
 end
 
@@ -638,6 +642,9 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
     elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.cc_msb then
       p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
       total_range = p.controlspec.maxval - p.controlspec.minval
+    elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.type == "midi" then
+      p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
+      total_range = p.controlspec.maxval - p.controlspec.minval
     elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.type == "norns" then
       p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
       total_range = p.controlspec.maxval - p.controlspec.minval
@@ -879,9 +886,13 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   device_map_vertical_scroll_selector:set_items(device_map.get_available_devices_for_channel(program.get().selected_channel))
   midi_channel_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_channel)
   midi_device_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_device)
-  device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), program.get().devices[channel.number].device_map))
-  param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
-  device_map_vertical_scroll_selector:select()
+  fn.debounce(function() 
+    device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), program.get().devices[channel.number].device_map))
+  end, 0.01)()
+  fn.debounce(function()
+    param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
+  end, 0.01)()
+    device_map_vertical_scroll_selector:select()
   midi_channel_vertical_scroll_selector:deselect()
   midi_device_vertical_scroll_selector:deselect()
 end

@@ -22,6 +22,9 @@ for i = 1, 16 do arp_delay_sprockets[i] = {} end
 local arp_sprockets = {[0] = {}}
 for i = 1, 16 do arp_sprockets[i] = {} end
 
+local execute_at_note_end_sprockets = {[0] = {}}
+for i = 1, 16 do execute_at_note_end_sprockets[i] = {} end
+
 local clock_divisions = include("mosaic/lib/divisions").clock_divisions
 
 -- Localizing math and table functions for performance
@@ -73,8 +76,6 @@ local function execute_sprockets(sprocket_tables)
   end
 end
 
-local execute_delayed_sprockets = function() execute_sprockets(delayed_sprockets_must_execute) end
-
 local function get_shuffle_values(channel)
 
   local shuffle_values = {
@@ -117,6 +118,7 @@ function clock_controller.init()
     delayed_sprockets[i] = {} 
     delayed_sprockets_must_execute[i] = {}
     arp_delay_sprockets[i] = {}
+    execute_at_note_end_sprockets[i] = {}
     arp_sprockets[i] = {}
   end
   
@@ -338,6 +340,8 @@ local function meta_delay_action(c, division, delay, type, func)
       table_to_remove_from = delayed_sprockets_must_execute[c]
     elseif type == "destroy_at_note_end" then
       table_to_remove_from = arp_delay_sprockets[c]
+    elseif type == "execute_at_note_end" then
+      table_to_remove_from = execute_at_note_end_sprockets[c]
     else
       table_to_remove_from = delayed_sprockets[c]
     end
@@ -372,6 +376,8 @@ local function meta_delay_action(c, division, delay, type, func)
     table.insert(delayed_sprockets_must_execute[c], delayed)
   elseif type == "destroy_at_note_end" then
     table.insert(arp_delay_sprockets[c], delayed)
+  elseif type == "execute_at_note_end" then
+    table.insert(execute_at_note_end_sprockets[c], delayed)
   else
     table.insert(delayed_sprockets[c], delayed)
   end
@@ -433,11 +439,12 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
 
   local channel = program.get_channel(c)
 
-  if (arp_sprockets[c]) then
+  -- Clear existing arp sprockets for the channel
+  if arp_sprockets[c] then
     for i, sprocket in ipairs(arp_sprockets[c]) do
       sprocket:destroy()
     end
-    arp_sprockets[c] = {}  -- Clear the table after destroying sprockets
+    arp_sprockets[c] = {}
   end
 
   local arp
@@ -446,18 +453,32 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
 
   local sprocket_action = function(div)
     func(div)
+
+    -- Check if the arp should stop
     if length == 0 then
-      arp:destroy()
-      -- Remove the sprocket from arp_sprockets[c]
+      if arp then
+        arp:destroy()
+        arp = nil
+      end
+
+      -- Execute pending note-off sprockets
+      if execute_at_note_end_sprockets[c] then
+        execute_sprockets({execute_at_note_end_sprockets[c]})
+      end
+
+      -- Clean up the sprocket from arp_sprockets[c]
       for i = #arp_sprockets[c], 1, -1 do
         if arp_sprockets[c][i] == arp then
           table.remove(arp_sprockets[c], i)
           break
         end
       end
-      arp = nil
+
+      -- Kill any remaining arp delay sprockets
+      clock_controller.kill_arp_delay_sprockets(c)
     end
   end
+
   local shuffle_values = get_shuffle_values(channel)
   arp = clock_lattice:new_sprocket {
     action = function()
@@ -467,13 +488,14 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
       sprocket_action(div)
 
       if div <= 0 then
-
-        arp:destroy()
+        if arp then
+          arp:destroy()
+          arp = nil
+        end
         clock_controller.kill_arp_delay_sprockets(c)
+      else
+        arp:set_division(div * clock_controller["channel_" .. c .. "_clock"].division)
       end
-
-      arp:set_division(div * clock_controller["channel_" .. c .. "_clock"].division)
-
     end,
     division = (division + (chord_spread * chord_acceleration)) * clock_controller["channel_" .. c .. "_clock"].division,
     enabled = true,
@@ -489,9 +511,19 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
 
   acceleration_accumulator = acceleration_accumulator + chord_spread
 
-  clock_controller.delay_action(c, length, 1, 0, 0.95, "must_execute", function()
-    arp:destroy()
-    arp = nil
+  -- Schedule the arp to stop after 'length'
+  clock_controller.delay_action(c, length, 1, 0, 1, "must_execute", function()
+    if arp then
+      arp:destroy()
+      arp = nil
+    end
+
+    -- Execute pending note-off sprockets
+    if execute_at_note_end_sprockets[c] then
+      execute_sprockets({execute_at_note_end_sprockets[c]})
+    end
+
+    -- Kill any remaining arp delay sprockets
     clock_controller.kill_arp_delay_sprockets(c)
   end)
 
@@ -499,17 +531,6 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
 end
 
 
-local function execute_delayed_sprockets()
-  for i, sprocket_table in ipairs(delayed_sprockets_must_execute) do
-    for j, item in ipairs(sprocket_table) do
-      if item then
-        item:action()
-        item:destroy()
-        table.remove(sprocket_table, j)
-      end
-    end
-  end
-end
 
 function clock_controller.kill_arp_delay_sprockets(c)
   for i = #arp_delay_sprockets[c], 1, -1 do
@@ -522,7 +543,6 @@ function clock_controller.kill_arp_delay_sprockets(c)
 end
 
 function clock_controller.realign_sprockets()
-
   clock_lattice:realign_eligable_sprockets()
 end
 
@@ -545,10 +565,18 @@ function clock_controller:stop()
 
   playing = false
   first_run = true
+
+  execute_sprockets(delayed_sprockets_must_execute)
+
+  for c = 1, 16 do
+    if execute_at_note_end_sprockets[c] then
+      execute_sprockets({execute_at_note_end_sprockets[c]})
+      execute_at_note_end_sprockets[c] = {}
+    end
+  end
+
   nb:stop_all()
   midi_controller:stop()
-
-  execute_delayed_sprockets()
 
   if clock_lattice and clock_lattice.stop then
     clock_lattice:stop()

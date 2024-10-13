@@ -22,7 +22,6 @@ p = newProfiler()
 
 local fileselect = require("fileselect")
 local textentry = require("textentry")
-local musicutil = require("musicutil")
 local as_metro = metro.init(do_autosave, 1, 1)
 local autosave_timer = metro.init(prime_autosave, 60, 1)
 local param_manager = include("mosaic/lib/param_manager")
