@@ -400,6 +400,13 @@ function program.clear_trig_locks_for_step(step)
   end
 end
 
+function program.clear_trig_locks_for_channel(channel)
+  channel.step_trig_lock_banks = {}
+  channel.step_octave_trig_lock_banks = {}
+  channel.step_scale_trig_lock_banks = {}
+  channel.step_transpose_trig_lock_banks = {}
+end
+
 function program.clear_masks_for_step(step)
   local channel = program.get().selected_channel
   program.clear_step_trig_mask(channel, step)
@@ -411,6 +418,16 @@ function program.clear_masks_for_step(step)
   program.clear_step_chord_2_mask(channel, step)
   program.clear_step_chord_3_mask(channel, step)
   program.clear_step_chord_4_mask(channel, step)
+end
+
+
+function program.clear_masks_for_channel(channel)
+  channel.step_trig_masks = {}
+  channel.step_note_masks = {}
+  channel.step_velocity_masks = {}
+  channel.step_length_masks = {}
+  channel.step_micro_time_masks = {}
+  channel.step_chord_masks = {}
 end
 
 function program.get_scale(s)

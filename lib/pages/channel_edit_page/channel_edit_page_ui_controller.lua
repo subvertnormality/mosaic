@@ -104,11 +104,12 @@ end
 
 local function configure_note_value_selector(note_value_selector)
   note_value_selector:set_view_transform_func(function(value)
-    local named_note = musicutil.note_num_to_name(value, true)
-    if type(named_note) ~= "number" then
-      return "X"
+    local v = value
+    if type(value) == "table" then
+      v = value.note_value
     end
-    return value == -1 and "X" or named_note
+    local named_note = musicutil.note_num_to_name(v, true)
+    return v == -1 and "X" or named_note
   end)
 end
 
@@ -1400,23 +1401,35 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
       local step = fn.calc_grid_count(keys[1], keys[2])
       if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
         program.clear_masks_for_step(step)
+        tooltip:show("Note masks for ch " .. program.get_selected_channel() .. " cleared")
         channel_edit_page_ui_controller.refresh_masks()
-        tooltip:show("Note masks for step " .. step .. " cleared")
       end
       if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
         program.clear_trig_locks_for_step(step)
-        channel_edit_page_ui_controller.refresh_trig_locks()
         tooltip:show("Trig locks for step " .. step .. " cleared")
+        channel_edit_page_ui_controller.refresh_trig_locks()
       end
     end
   else
     if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-      if not trig_lock_page:is_sub_page_enabled() then
-        channel_edit_page_ui_controller.refresh_device_selector()
-        channel_edit_page_ui_controller.refresh_param_list()
+      if is_key3_down then
+        program.clear_trig_locks_for_channel(program.get_selected_channel())
+        tooltip:show("Trig locks for ch " .. program.get_selected_channel().number .. " cleared")
+        channel_edit_page_ui_controller.refresh_trig_locks()
+      else
+        if not trig_lock_page:is_sub_page_enabled() then
+          channel_edit_page_ui_controller.refresh_device_selector()
+          channel_edit_page_ui_controller.refresh_param_list()
+        end
+        channel_edit_page_ui_controller.refresh_channel_config()
+        trig_lock_page:toggle_sub_page()
       end
-      channel_edit_page_ui_controller.refresh_channel_config()
-      trig_lock_page:toggle_sub_page()
+    elseif channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
+      if is_key3_down then
+        program.clear_masks_for_channel(program.get_selected_channel())
+        tooltip:show("Note masks for ch " .. program.get_selected_channel().number .. " cleared")
+        channel_edit_page_ui_controller.refresh_masks()
+      end
     end
     save_confirm.cancel()
   end
@@ -1424,36 +1437,10 @@ end
 
 function channel_edit_page_ui_controller.handle_key_three_pressed()
   local pressed_keys = grid_controller.get_pressed_keys()
-  if #pressed_keys > 0 then
-    for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      local step_trig_lock_banks = program.get_selected_channel().step_trig_lock_banks
-      local channel = program.get_selected_channel()
-      if channel.number ~= 17 and step_trig_lock_banks and step_trig_lock_banks[step] then
-        local parameter = dials:get_selected_index()
-        step_trig_lock_banks[step][parameter] = nil
-        tooltip:show("Param trig lock " .. parameter .. " cleared")
-        local has_active_parameter = false
-        for i = 1, 10 do
-          if step_trig_lock_banks[step][i] then
-            has_active_parameter = true
-          end
-        end
-        if not has_active_parameter then
-          step_trig_lock_banks[step] = nil
-        end
-      end
-      dials:get_selected_item():set_value(
-        program.get_step_param_trig_lock(program.get_selected_channel(), step, dials:get_selected_index()) or
-        params:get(channel.trig_lock_params[i].param_id)
-      )
-      channel_edit_page_ui_controller.refresh_trig_locks()
-    end
-  else
+  if #pressed_keys < 1 then
     save_confirm.confirm()
   end
 end
-
 
 function channel_edit_page_ui_controller.select_page(page) 
     channel_pages:select_page(page)

@@ -3,7 +3,7 @@ local channel_edit_page_ui_refreshers = {}
 local quantiser = include("lib/quantiser")
 local divisions = include("lib/divisions")
 
-local throttle_time = 0.02
+local throttle_time = 0.01
 
 channel_edit_page_ui_refreshers.refresh_masks = fn.debounce(function(note_selectors)
   local pressed_keys = grid_controller.get_pressed_keys()

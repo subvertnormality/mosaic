@@ -91,38 +91,45 @@ function note_edit_page_controller.register_press_handlers()
     press_handler:register(
       "pattern_note_edit_page",
       function(x, y)
-        local fader_key = "step" .. s .. "_fader"
-        local fader = faders[fader_key]
-        fader:press(x, y)
-
-        if not fader:is_this(x, y) then
+        if y == 1 and is_key3_down then
+          program.get().selected_pattern = x
+          tooltip:show("Pattern " .. x .. " selected")
+          note_edit_page_controller.refresh()
           return
-        end
+        else
+          local fader_key = "step" .. s .. "_fader"
+          local fader = faders[fader_key]
+          fader:press(x, y)
 
-        local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-        local selected_pattern = program.get().selected_pattern
-        local note = fn.note_from_value(fader:get_value())
-        local seq_pattern = program.get_selected_sequencer_pattern().patterns[selected_pattern]
-        local steps_tip = s .. " "
-
-        seq_pattern.note_values[s] = note
-        program.get_selected_sequencer_pattern().active = true
-        tooltip:show("Step " .. s .. " note set to " .. note)
-
-        if quad_dupe_button:get_state() == 2 then
-          local steps = {16, 32, 48, -16, -32, -48}
-
-          for _, step in ipairs(steps) do
-            local step_value = s + step
-            if step_value > 0 and step_value < 65 then
-              seq_pattern.note_values[step_value] = note
-              steps_tip = steps_tip .. step_value .. " "
-            end
+          if not fader:is_this(x, y) then
+            return
           end
-          tooltip:show("Steps " .. steps_tip .. "set to " .. note)
-        end
 
-        pattern_controller.update_working_patterns()
+          local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+          local selected_pattern = program.get().selected_pattern
+          local note = fn.note_from_value(fader:get_value())
+          local seq_pattern = program.get_selected_sequencer_pattern().patterns[selected_pattern]
+          local steps_tip = s .. " "
+
+          seq_pattern.note_values[s] = note
+          program.get_selected_sequencer_pattern().active = true
+          tooltip:show("Step " .. s .. " note set to " .. note)
+
+          if quad_dupe_button:get_state() == 2 then
+            local steps = {16, 32, 48, -16, -32, -48}
+
+            for _, step in ipairs(steps) do
+              local step_value = s + step
+              if step_value > 0 and step_value < 65 then
+                seq_pattern.note_values[step_value] = note
+                steps_tip = steps_tip .. step_value .. " "
+              end
+            end
+            tooltip:show("Steps " .. steps_tip .. "set to " .. note)
+          end
+
+          pattern_controller.update_working_patterns()
+        end
       end
     )
   end
@@ -264,14 +271,15 @@ function note_edit_page_controller.refresh_fader(s)
   end
 end
 
-function note_edit_page_controller.refresh()
+note_edit_page_controller.refresh = fn.debounce(function()
 
 
   for s = 1, 64 do
     note_edit_page_controller.refresh_fader(s)
   end
   note_edit_page_controller.refresh_buttons()
+  fn.grid_dirty = true
 
-end
+end, 0.01)
 
 return note_edit_page_controller

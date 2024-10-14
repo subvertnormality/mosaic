@@ -184,6 +184,8 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
 
   local key = string.format("%d_%d_%d_%d_%d_%d_%s_%s_%s_%s", root_note, chord_rotation, note_number, octave_mod, transpose, scale_number, tostring(do_rotation), tostring(do_degree), tostring(do_pentatonic), tostring(scale_container))
     
+
+
   -- Check if result is already memoized
   if memoize[key] then 
       return memoize[key] 
@@ -303,6 +305,9 @@ function quantiser.get_chord_degree(note, chord_one_note, scale_number)
   
   scale = fn.transpose_scale(scale, root_note)
   
+  if type(note) ~= "number" then return nil end
+  if type(chord_one_note) ~= "number" then return nil end
+
   return fn.find_index_by_value(scale, quantiser.snap_to_scale(note, scale_number)) - fn.find_index_by_value(scale, quantiser.snap_to_scale(chord_one_note, scale_number))
 end
 

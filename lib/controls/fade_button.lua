@@ -32,6 +32,10 @@ function fade_button:set_value(val)
   self.value = val
 end
 
+function fade_button:get_value()
+  return self.value
+end
+
 function fade_button:press(x, y)
   if (self.x == x and self.y == y) then
   -- self.value = self.min - 1

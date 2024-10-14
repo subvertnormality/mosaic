@@ -642,6 +642,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           )
 
           if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 and type(unprocessed_note_container.note_mask_value) == "number" then
+
             processed_chord_note = quantiser.process_chord_note_for_mask(
               unprocessed_note_container.note_mask_value,
               chord_notes[chord_number],

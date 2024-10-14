@@ -81,6 +81,10 @@ function vertical_fader:set_vertical_offset(o)
   self.vertical_offset = o
 end
 
+function vertical_fader:get_vertical_offset()
+  return self.vertical_offset
+end
+
 function vertical_fader:set_horizontal_offset(o)
   self.horizontal_offset = o
 end

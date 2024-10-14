@@ -178,15 +178,6 @@ function midi_controller.send_to_sinfonion(command, value)
   end
 end
 
-function midi_controller.all_off(id)
-  for note = 0, 127 do
-    for channel = 1, 16 do
-      midi_devices[id]:note_off(note, 0, channel)
-    end
-  end
-  chord_number = 0
-end
-
 function midi_controller:reset_note_counts()
   for device = 1, #midi_devices do
     self.note_counts[device] = nil
@@ -286,15 +277,48 @@ function midi_controller.start()
 
 end
 
+function midi_controller:all_notes_off()
+  for device, channels in pairs(self.note_counts) do
+    if midi_devices[device] ~= nil then
+      for channel, notes in pairs(channels) do
+        for note, count in pairs(notes) do
+          if count > 0 then
+            -- Send Note Off for the active note
+            midi_devices[device]:note_off(note, 0, channel)
+            -- Reset the note count for this note
+            self.note_counts[device][channel][note] = nil
+          end
+        end
+        -- Clean up empty channel tables
+        if next(self.note_counts[device][channel]) == nil then
+          self.note_counts[device][channel] = nil
+        end
+      end
+      -- Clean up empty device tables
+      if next(self.note_counts[device]) == nil then
+        self.note_counts[device] = nil
+      end
+    end
+  end
+end
+
+-- Modify the stop function
 function midi_controller.stop()
+  -- Turn off all active notes
+  midi_controller:all_notes_off()
+
+  -- Stop MIDI devices
   for id = 1, #midi.vports do
-    if midi_devices[id].device ~= nil then
+    if midi_devices[id] and midi_devices[id].device ~= nil then
       midi_devices[id]:stop()
     end
   end
-  midi_controller:reset_note_counts()
+
+  -- Reset note counts
+  midi_controller.note_counts = {}
   chord_number = 0
 end
+
 
 function midi_controller.all_off(id)
   for note = 0, 127 do

@@ -352,7 +352,7 @@ function test_swing_maintains_lengths_across_multiple_steps_all_swings()
   end
 end
 
-
+-- TODO test 75 amount drunk 7 for note lengths
 
 function test_drunk_shuffle()
   for _, test_case in ipairs(swing_to_pulses) do

@@ -168,7 +168,7 @@ Most _Mosaic_ functions are described by tooltips that appear at the bottom of t
 
 To start the sequencer, press the global menu button of the currently selected page — the illuminated button — in the navigation section.
 
-To stop the sequencer, hold down the global menu button of the currently selected page for around a second. You can also hold K3 and press the global menu button of the currently selected page to stop the sequencer immediately.
+To stop the sequencer, hold down the global menu button of the currently selected page for around a second. You can shift press (hold K3) the global menu button of the currently selected page to stop the sequencer immediately.
 
 #### MIDI Panic
 
@@ -289,7 +289,7 @@ You've seen in the [Harmony Design](#harmony-design) section that it's possible 
 
 Select the note editor by pressing the fourth key in the global menu button cluster on the grid.
 
-This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. The gentle flicker on the top row indicates the currently chosen pattern. If you wish to explore a different pattern, press and hold on this top row.
+This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. The gentle flicker on the top row indicates the currently chosen pattern. If you wish to explore a different pattern, press and hold or shift press (holding K3) on this top row.
 
 Remember, each note you select links back to the root of the scale you're working within. The scale is applied to the channel, not the pattern. You must start to think about your patterns as being disconnected from each channel. This is why we say _Mosaic_ is an intentioned generative sequencer. Expect happy accidents. The channel grid viewer on the Norns screen can help you here.
 
@@ -339,7 +339,7 @@ With masking, you have the flexibility to modify individual attributes of a patt
 
 ##### Adding Trig Masks
 
-You can quickly add trig masks to your sequence by holding K3 and pressing the desired step on the sequenver on the channel edit page. Remember to asign a note mask, velocity mask and length mask to hear your desired note!
+You can quickly add trig masks to your sequence by shift pressing (hold K3) the desired step on the sequencer on the channel edit page. Remember to asign a note mask, velocity mask and length mask to hear your desired note!
 
 ##### Adding Melodic Notes over Harmony and Drums
 
@@ -414,7 +414,7 @@ Access the scale editor by selecting the channel page using the far left global 
 
 When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is dimly lit on the grid. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
 
-A long press on a scale button selects it as the global scale, indicated by a brightly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
+A long or shift press (hold K3) on a scale button selects it as the global scale, indicated by a brightly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
 
 Scale locks can be set to apply a scale globally or to a single channel, activating at a designated step and persisting until the end of the pattern. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
 
@@ -450,7 +450,7 @@ You can transpose your entire Song Sequence using the global quantizer transposi
 
 #### Muting Channels
 
-To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also hold K3 and press the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
+To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also shift press (hold K3) the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
 
 #### Devices
 

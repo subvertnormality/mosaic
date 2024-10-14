@@ -119,32 +119,38 @@ function velocity_edit_page_controller.register_press_handlers()
     press_handler:register(
       "pattern_velocity_edit_page",
       function(x, y)
-        if faders["step" .. s .. "_fader"]:is_this(x, y) then
-          faders["step" .. s .. "_fader"]:press(x, y)
-          local selected_sequencer_pattern = program.get().selected_sequencer_pattern
-          local selected_pattern = program.get().selected_pattern
-          local velocity =
-            velocity_edit_page_controller.velocity_from_value(faders["step" .. s .. "_fader"]:get_value())
-          local seq_pattern = program.get_selected_sequencer_pattern().patterns[selected_pattern]
-          seq_pattern.velocity_values[s] = velocity
-          program.get_selected_sequencer_pattern().active = true
-          local steps_tip = s .. " "
-          tooltip:show("Step " .. s .. " velocity set to " .. velocity)
+        if (y == 1) and is_key3_down then
+          program.get().selected_pattern = x
+          tooltip:show("Pattern " .. x .. " selected")
+          velocity_edit_page_controller.refresh()
+        else
+          if faders["step" .. s .. "_fader"]:is_this(x, y) then
+            faders["step" .. s .. "_fader"]:press(x, y)
+            local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+            local selected_pattern = program.get().selected_pattern
+            local velocity =
+              velocity_edit_page_controller.velocity_from_value(faders["step" .. s .. "_fader"]:get_value())
+            local seq_pattern = program.get_selected_sequencer_pattern().patterns[selected_pattern]
+            seq_pattern.velocity_values[s] = velocity
+            program.get_selected_sequencer_pattern().active = true
+            local steps_tip = s .. " "
+            tooltip:show("Step " .. s .. " velocity set to " .. velocity)
 
-          if quad_dupe_button:get_state() == 2 then
-            local steps = {16, 32, 48, -16, -32, -48}
+            if quad_dupe_button:get_state() == 2 then
+              local steps = {16, 32, 48, -16, -32, -48}
 
-            for _, step in ipairs(steps) do
-              local step_value = s + step
-              if step_value > 0 and step_value < 65 then
-                seq_pattern.velocity_values[step_value] = velocity
-                steps_tip = steps_tip .. step_value .. " "
+              for _, step in ipairs(steps) do
+                local step_value = s + step
+                if step_value > 0 and step_value < 65 then
+                  seq_pattern.velocity_values[step_value] = velocity
+                  steps_tip = steps_tip .. step_value .. " "
+                end
               end
+              tooltip:show("Steps " .. steps_tip .. "set to " .. velocity)
             end
-            tooltip:show("Steps " .. steps_tip .. "set to " .. velocity)
-          end
 
-          pattern_controller.update_working_patterns()
+            pattern_controller.update_working_patterns()
+          end
         end
       end
     )
@@ -288,14 +294,14 @@ function velocity_edit_page_controller.refresh_fader(s)
   end
 end
 
-function velocity_edit_page_controller.refresh()
+velocity_edit_page_controller.refresh = fn.debounce(function()
 
   for s = 1, 64 do
     velocity_edit_page_controller.refresh_fader(s)
 
   end
   velocity_edit_page_controller.refresh_buttons()
-
-end
+  fn.grid_dirty = true
+end, 0.01)
 
 return velocity_edit_page_controller
