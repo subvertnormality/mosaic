@@ -436,6 +436,7 @@ function program.get_scale(s)
       name = "Chromatic",
       number = 0,
       scale = musicutil.generate_scale(0, "chromatic", 12),
+      pentatonic_scale = musicutil.generate_scale(0, "chromatic", 12),
       romans = {},
       root_note = 0,
       chord = 1,

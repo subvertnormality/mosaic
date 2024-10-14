@@ -332,7 +332,7 @@ function channel_edit_page_controller.register_press_handlers()
             end
             channel_edit_page_ui_controller.refresh_quantiser()
           else
-            program.get().selected_channel = x
+            program.get().selected_scale = x
             channel_edit_page_ui_controller.refresh()
           end
         end

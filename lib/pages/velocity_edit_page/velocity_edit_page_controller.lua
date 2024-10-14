@@ -298,10 +298,11 @@ velocity_edit_page_controller.refresh = fn.debounce(function()
 
   for s = 1, 64 do
     velocity_edit_page_controller.refresh_fader(s)
-
   end
+
   velocity_edit_page_controller.refresh_buttons()
   fn.grid_dirty = true
+  
 end, 0.01)
 
 return velocity_edit_page_controller
