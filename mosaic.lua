@@ -159,6 +159,13 @@ function redraw()
   end
 end
 
+
+local function blink()
+  fn.set_blink_state(not blink_state)
+  fn.dirty_grid(true)
+  clock.run(function() clock.sleep(0.3); blink() end)
+end
+
 function init()
 
   ui_splash_screen_active = true
@@ -211,6 +218,8 @@ function init()
       end
     end
   )
+  
+  blink()
 
   params:add_group("mosaic", "MOSAIC", 29)
   params:add_separator("Pattern project management")

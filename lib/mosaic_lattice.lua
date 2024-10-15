@@ -377,13 +377,12 @@ function Sprocket:update_shuffle(step)
   local use_shuffle = pattern_length % 8 == 0 and pattern_length >= 8
   local step_mod = ((step - 1) % pattern_length) + 1
 
-  -- Shuffle is only allowed when pattern lengths are multiples of 8, otherwise we fall back to swing
   if use_shuffle and self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and self.shuffle_basis > 0 then
       local feel_map = shuffle_feels[self.shuffle_feel]
       local playpos_mod = (step_mod % 8) + 1
       local shuffle_beat_index = playpos_mod
       
-      local base_multiplier = 0.25  -- Assuming 8 beats per 2 units of time
+      local base_multiplier = 0.25 
       local multiplier = feel_map[self.shuffle_basis][shuffle_beat_index]
       
       -- Scale the shuffle amount directly

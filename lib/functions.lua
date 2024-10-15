@@ -496,18 +496,13 @@ end
 
 local blink_state = false
 
-local function blink()
-  blink_state = not blink_state
-  fn.dirty_grid(true)
-  clock.run(function() clock.sleep(0.3); blink() end)
+function fn.set_blink_state(state)
+  blink_state = state
 end
-
-blink()
 
 function fn.get_blink_state()
   return blink_state
 end
-
 
 function fn.debounce(func, delay)
   local timer_id = nil

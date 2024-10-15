@@ -80,9 +80,9 @@ local function get_shuffle_values(channel)
 
   local shuffle_values = {
     swing = (channel.swing ~= -51) and channel.swing or params:get("global_swing") or 0,
-    swing_or_shuffle = (channel.swing_shuffle_type and channel.swing_shuffle_type > 1) and (channel.swing_shuffle_type - 1) or params:get("global_swing_shuffle_type"),
-    shuffle_basis = (channel.shuffle_basis and channel.shuffle_basis > 1) and (channel.shuffle_basis - 1) or params:get("global_shuffle_basis"),
-    shuffle_feel = (channel.shuffle_feel and channel.shuffle_feel > 1) and (channel.shuffle_feel - 1) or params:get("global_shuffle_feel"),
+    swing_or_shuffle = (channel.swing_shuffle_type and channel.swing_shuffle_type > 0) and (channel.swing_shuffle_type) or params:get("global_swing_shuffle_type"),
+    shuffle_basis = (channel.shuffle_basis and channel.shuffle_basis > 0) and (channel.shuffle_basis) or params:get("global_shuffle_basis"),
+    shuffle_feel = (channel.shuffle_feel and channel.shuffle_feel > 0) and (channel.shuffle_feel) or params:get("global_shuffle_feel"),
     shuffle_amount = channel.shuffle_amount or params:get("global_shuffle_amount")
   }
   

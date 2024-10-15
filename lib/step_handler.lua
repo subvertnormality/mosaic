@@ -530,7 +530,6 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     if note_to_play then
       if note_to_play and note_to_play.note_mask_value and type(note_to_play.note_mask_value) == "number" then
 
-        -- TODO whats causing the crash?
         play_arp_note(quantiser.process_chord_note_for_mask(
           note_to_play.note_mask_value,
           note_to_play.chord_note or nil,
