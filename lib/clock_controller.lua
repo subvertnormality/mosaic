@@ -121,23 +121,7 @@ function clock_controller.init()
     execute_at_note_end_sprockets[i] = {}
     arp_sprockets[i] = {}
   end
-  
-  midi_clock_init = clock_lattice:new_sprocket {
-    action = function(t)
-      midi_controller.start()
-      midi_clock_init:destroy()
-      midi_clock_init = nil
-    end,
-    division = 0,
-    swing = 0,
-    order = 5,
-    delay = 1,
-    swing_or_shuffle = 1,
-    shuffle_basis = 0,
-    shuffle_feel = 0,
-    shuffle_amount = 0,
-    realign = false
-  }
+
 
   master_clock = clock_lattice:new_sprocket {
     action = function(t)
@@ -554,9 +538,10 @@ function clock_controller:start()
   if params:get("elektron_program_changes") == 2 then
     step_handler.process_elektron_program_change(program.get().selected_sequencer_pattern)
   end
-
+  
   clock_controller.set_playing()
   clock_lattice:start()
+  midi_controller.start()
 
   for i = 1, 16 do
     step_handler.process_params(i, 1)
