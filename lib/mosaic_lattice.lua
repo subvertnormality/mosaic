@@ -295,6 +295,10 @@ function Sprocket:destroy()
   self.flag = true
 end
 
+function Sprocket:get_step()
+  return self.step
+end
+
 --- set the division of the sprocket
 -- @tparam number n the division of the sprocket
 function Sprocket:set_division(n)

@@ -369,6 +369,7 @@ local function meta_delay_action(c, division, delay, type, func)
     delay_offset = -2,
     realign = false,
     order = 2,
+    step = clock_controller["channel_" .. c .. "_clock"]:get_step()
   }
 
 
@@ -428,6 +429,7 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
     shuffle_amount = shuffle_values.shuffle_amount,
     realign = false,
     order = 2,
+    step = clock_controller["channel_" .. c .. "_clock"]:get_step()
   }
 
 end
@@ -507,6 +509,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
     delay = division + chord_spread,
     realign = false,
     order = 2,
+    step = clock_controller["channel_" .. c .. "_clock"]:get_step()
   }
 
   acceleration_accumulator = acceleration_accumulator + chord_spread

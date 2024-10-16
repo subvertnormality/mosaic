@@ -320,29 +320,27 @@ function midi_controller.stop()
 end
 
 
-midi_controller.all_off = fn.debounce(function(id)
+function midi_controller.all_off(id)
   for note = 0, 127 do
     for channel = 1, 16 do
       midi_devices[id]:note_off(note, 0, channel)
-      clock.sleep(0.00001)
     end
   end
   -- Reset note counts for this device
   midi_controller.note_counts[id] = nil
   chord_number = 0
-end)
+end
 
-midi_controller.panic = fn.debounce(function()
+function midi_controller.panic()
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
       midi_controller.all_off(id)
-      clock.sleep(0.00001)
     end
   end
   -- Clear all note counts
   midi_controller.note_counts = {}
   chord_number = 0
-end)
+end
 
 function midi_controller.midi_devices_connected() 
   for id = 1, #midi.vports do
