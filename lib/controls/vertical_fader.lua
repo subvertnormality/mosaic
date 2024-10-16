@@ -2,24 +2,6 @@ vertical_fader = {}
 vertical_fader.__index = vertical_fader
 
 
-
-local shared_bright_mod = 0
-
-local bclock =
-  clock.run(
-  function()
-    while true do
-      if shared_bright_mod < 0 then
-        shared_bright_mod = 1
-      else
-        shared_bright_mod = -1
-      end
-      fn.dirty_grid(true)
-      clock.sleep(0.3)
-    end
-  end
-)
-
 function vertical_fader:new(x, y, size)
   local self = setmetatable({}, vertical_fader)
   self.x = x
@@ -40,6 +22,14 @@ function vertical_fader:draw()
   end
 
   local bright_mod = 0
+  local shared_bright_mod = -1
+
+  if program.get_blink_state() then
+    shared_bright_mod = 1
+  else
+    shared_bright_mod = -1
+  end
+
 
   for i = self.y, 7 do
     bright_mod = 0

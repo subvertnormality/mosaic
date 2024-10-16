@@ -494,16 +494,6 @@ function fn.get_param_id_from_stock_id(stock_id, channel_number)
   return string.format(stock_id_to_param_id[stock_id], channel_number)
 end
 
-local blink_state = false
-
-function fn.set_blink_state(state)
-  blink_state = state
-end
-
-function fn.get_blink_state()
-  return blink_state
-end
-
 function fn.debounce(func, delay)
   local timer_id = nil
   return function(...)
@@ -512,7 +502,9 @@ function fn.debounce(func, delay)
       clock.cancel(timer_id)
     end
     timer_id = clock.run(function()
-      clock.sleep(delay)
+      if delay then
+        clock.sleep(delay)
+      end
       func(table.unpack(args))
       timer_id = nil
     end)

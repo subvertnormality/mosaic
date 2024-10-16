@@ -298,6 +298,7 @@ velocity_edit_page_controller.refresh = fn.debounce(function()
 
   for s = 1, 64 do
     velocity_edit_page_controller.refresh_fader(s)
+    clock.sleep(0.00001)
   end
 
   velocity_edit_page_controller.refresh_buttons()

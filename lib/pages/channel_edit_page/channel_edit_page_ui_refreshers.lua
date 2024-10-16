@@ -214,6 +214,7 @@ channel_edit_page_ui_refreshers.refresh_trig_locks = fn.debounce(function(m_para
 
   for i = 1, 10 do
     channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, channel, pressed_keys, current_step)
+    clock.sleep(0.00001)
   end
 end, throttle_time)
 

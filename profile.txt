@@ -1,111 +1,182 @@
-Lua Profile output created by profiler.lua. Copyright Pepperfish 2002+------------------- L:<function: 0x4a96c0>@@/home/we/norns/lua/core/clock.lua:55 -------------------
+Lua Profile output created by profiler.lua. Copyright Pepperfish 2002+------------------- L:resume@@/home/we/norns/lua/core/clock.lua:55 -------------------
+Sample count:            3
+Time spend total:       2.771s
+Time spent in children: 0.000s
+Time spent in self:     2.771s
+Time spent per sample:  0.92380s/sample
+Time spent in self per sample: 0.92380s/sample
+
+------------------- L:bang@@/home/we/norns/lua/core/params/control.lua:112 -------------------
+Sample count:            4
+Time spend total:       0.231s
+Time spent in children: 0.121s
+Time spent in self:     0.110s
+Time spent per sample:  0.05772s/sample
+Time spent in self per sample: 0.02749s/sample
+
+Child L:action@@/home/we/dust/code/mosaic/lib/param_manager.lua:84 sampled      3 times. Took 0.12s
+
+------------------- L:run@@/home/we/norns/lua/core/clock.lua:20 -------------------
 Sample count:            2
-Time spend total:       3.283s
+Time spend total:       0.081s
+Time spent in children: 0.038s
+Time spent in self:     0.043s
+Time spent per sample:  0.04031s/sample
+Time spent in self per sample: 0.02154s/sample
+
+Child L:resume@@/home/we/norns/lua/core/clock.lua:55 sampled      1 times. Took 0.04s
+
+------------------- L:refresh_trig_lock_value@@/home/we/dust/code/mosaic/lib/functions.lua:509 -------------------
+Sample count:            3
+Time spend total:       0.121s
+Time spent in children: 0.081s
+Time spent in self:     0.040s
+Time spent per sample:  0.04031s/sample
+Time spent in self per sample: 0.01343s/sample
+
+Child L:run@@/home/we/norns/lua/core/clock.lua:20 sampled      2 times. Took 0.08s
+
+------------------- L:lookup_param@@/home/we/norns/lua/core/paramset.lua:479 -------------------
+Sample count:            1
+Time spend total:       0.028s
 Time spent in children: 0.000s
-Time spent in self:     3.283s
-Time spent per sample:  1.64150s/sample
-Time spent in self per sample: 1.64150s/sample
+Time spent in self:     0.028s
+Time spent per sample:  0.02783s/sample
+Time spent in self per sample: 0.02783s/sample
 
-------------------- L:get_by_id@@/home/we/dust/code/mosaic/lib/functions.lua:82 -------------------
-Sample count:            1
-Time spend total:       1.495s
-Time spent in children: 0.000s
-Time spent in self:     1.495s
-Time spent per sample:  1.49524s/sample
-Time spent in self per sample: 1.49524s/sample
-
-------------------- L:refresh@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller.lua:908 -------------------
-Sample count:            1
-Time spend total:       1.495s
-Time spent in children: 1.495s
+------------------- L:refresh_trig_lock_value@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller.lua:865 -------------------
+Sample count:            3
+Time spend total:       0.121s
+Time spent in children: 0.121s
 Time spent in self:     0.000s
-Time spent per sample:  1.49524s/sample
+Time spent per sample:  0.04031s/sample
 Time spent in self per sample: 0.00000s/sample
 
-Child L:refresh_device_selector@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller.lua:850 sampled      1 times. Took 1.50s
+Child L:refresh_trig_lock_value@@/home/we/dust/code/mosaic/lib/functions.lua:509 sampled      3 times. Took 0.12s
 
-------------------- L:func@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_controller.lua:211 -------------------
-Sample count:            1
-Time spend total:       1.495s
-Time spent in children: 1.495s
+------------------- L:<function: 0x462728>@@/home/we/norns/lua/core/grid.lua:207 -------------------
+Sample count:            5
+Time spend total:       0.259s
+Time spent in children: 0.259s
 Time spent in self:     0.000s
-Time spent per sample:  1.49524s/sample
+Time spent per sample:  0.05174s/sample
 Time spent in self per sample: 0.00000s/sample
 
-Child L:refresh@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller.lua:908 sampled      1 times. Took 1.50s
+Child L:key@@/home/we/dust/code/mosaic/lib/grid_controller.lua:191 sampled      5 times. Took 0.26s
 
-------------------- L:handle@@/home/we/dust/code/mosaic/lib/press_handler.lua:64 -------------------
-Sample count:            1
-Time spend total:       1.495s
-Time spent in children: 1.495s
+------------------- L:action@@/home/we/dust/code/mosaic/lib/param_manager.lua:84 -------------------
+Sample count:            3
+Time spend total:       0.121s
+Time spent in children: 0.121s
 Time spent in self:     0.000s
-Time spent per sample:  1.49524s/sample
+Time spent per sample:  0.04031s/sample
 Time spent in self per sample: 0.00000s/sample
 
-Child L:func@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_controller.lua:211 sampled      1 times. Took 1.50s
+Child L:refresh_trig_lock_values@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller.lua:869 sampled      3 times. Took 0.12s
 
-------------------- L:short_press@@/home/we/dust/code/mosaic/lib/grid_controller.lua:261 -------------------
+------------------- L:bang@@/home/we/norns/lua/core/params/text.lua:39 -------------------
 Sample count:            1
-Time spend total:       1.495s
-Time spent in children: 1.495s
+Time spend total:       0.028s
+Time spent in children: 0.028s
 Time spent in self:     0.000s
-Time spent per sample:  1.49524s/sample
+Time spent per sample:  0.02783s/sample
 Time spent in self per sample: 0.00000s/sample
 
-Child L:handle@@/home/we/dust/code/mosaic/lib/press_handler.lua:64 sampled      1 times. Took 1.50s
+Child L:action@@/home/we/dust/code/matrix/lib/matrix.lua:398 sampled      1 times. Took 0.03s
 
-------------------- L:refresh_device_selector@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller.lua:850 -------------------
-Sample count:            1
-Time spend total:       1.495s
-Time spent in children: 1.495s
+------------------- L:refresh_trig_lock_values@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller.lua:869 -------------------
+Sample count:            3
+Time spend total:       0.121s
+Time spent in children: 0.121s
 Time spent in self:     0.000s
-Time spent per sample:  1.49524s/sample
+Time spent per sample:  0.04031s/sample
 Time spent in self per sample: 0.00000s/sample
 
-Child L:refresh_device_selector@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers.lua:119 sampled      1 times. Took 1.50s
+Child L:refresh_trig_lock_value@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller.lua:865 sampled      3 times. Took 0.12s
 
-------------------- L:get_params@@/home/we/dust/code/mosaic/lib/device_map.lua:528 -------------------
+------------------- L:rebuild_active_depth_params@@/home/we/dust/code/matrix/lib/matrix.lua:372 -------------------
 Sample count:            1
-Time spend total:       1.495s
-Time spent in children: 1.495s
+Time spend total:       0.028s
+Time spent in children: 0.028s
 Time spent in self:     0.000s
-Time spent per sample:  1.49524s/sample
+Time spent per sample:  0.02783s/sample
 Time spent in self per sample: 0.00000s/sample
 
-Child L:get_by_id@@/home/we/dust/code/mosaic/lib/functions.lua:82 sampled      1 times. Took 1.50s
+Child L:get@@/home/we/norns/lua/core/paramset.lua:371 sampled      1 times. Took 0.03s
 
-------------------- L:refresh_device_selector@@/home/we/dust/code/mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers.lua:119 -------------------
+------------------- L:action@@/home/we/dust/code/matrix/lib/matrix.lua:398 -------------------
 Sample count:            1
-Time spend total:       1.495s
-Time spent in children: 1.495s
+Time spend total:       0.028s
+Time spent in children: 0.028s
 Time spent in self:     0.000s
-Time spent per sample:  1.49524s/sample
+Time spent per sample:  0.02783s/sample
 Time spent in self per sample: 0.00000s/sample
 
-Child L:get_params@@/home/we/dust/code/mosaic/lib/device_map.lua:528 sampled      1 times. Took 1.50s
+Child L:rebuild_active_depth_params@@/home/we/dust/code/matrix/lib/matrix.lua:372 sampled      1 times. Took 0.03s
 
-------------------- L:<function: 0x4624a8>@@/home/we/norns/lua/core/grid.lua:207 -------------------
+------------------- L:get@@/home/we/norns/lua/core/paramset.lua:371 -------------------
 Sample count:            1
-Time spend total:       1.495s
-Time spent in children: 1.495s
+Time spend total:       0.028s
+Time spent in children: 0.028s
 Time spent in self:     0.000s
-Time spent per sample:  1.49524s/sample
+Time spent per sample:  0.02783s/sample
 Time spent in self per sample: 0.00000s/sample
 
-Child L:key@@/home/we/dust/code/mosaic/lib/grid_controller.lua:191 sampled      1 times. Took 1.50s
+Child L:lookup_param@@/home/we/norns/lua/core/paramset.lua:479 sampled      1 times. Took 0.03s
+
+------------------- L:bang@@/home/we/norns/lua/core/paramset.lua:597 -------------------
+Sample count:            5
+Time spend total:       0.259s
+Time spent in children: 0.259s
+Time spent in self:     0.000s
+Time spent per sample:  0.05174s/sample
+Time spent in self per sample: 0.00000s/sample
+
+Child L:bang@@/home/we/norns/lua/core/params/control.lua:112 sampled      4 times. Took 0.23s
+Child L:bang@@/home/we/norns/lua/core/params/text.lua:39 sampled      1 times. Took 0.03s
 
 ------------------- L:key@@/home/we/dust/code/mosaic/lib/grid_controller.lua:191 -------------------
-Sample count:            1
-Time spend total:       1.495s
-Time spent in children: 1.495s
+Sample count:            5
+Time spend total:       0.259s
+Time spent in children: 0.259s
 Time spent in self:     0.000s
-Time spent per sample:  1.49524s/sample
+Time spent per sample:  0.05174s/sample
 Time spent in self per sample: 0.00000s/sample
 
-Child L:short_press@@/home/we/dust/code/mosaic/lib/grid_controller.lua:261 sampled      1 times. Took 1.50s
+Child L:short_press@@/home/we/dust/code/mosaic/lib/grid_controller.lua:261 sampled      5 times. Took 0.26s
+
+------------------- L:func@@/home/we/dust/code/mosaic/lib/grid_controller.lua:112 -------------------
+Sample count:            5
+Time spend total:       0.259s
+Time spent in children: 0.259s
+Time spent in self:     0.000s
+Time spent per sample:  0.05174s/sample
+Time spent in self per sample: 0.00000s/sample
+
+Child L:bang@@/home/we/norns/lua/core/paramset.lua:597 sampled      5 times. Took 0.26s
+
+------------------- L:handle@@/home/we/dust/code/mosaic/lib/press_handler.lua:64 -------------------
+Sample count:            5
+Time spend total:       0.259s
+Time spent in children: 0.259s
+Time spent in self:     0.000s
+Time spent per sample:  0.05174s/sample
+Time spent in self per sample: 0.00000s/sample
+
+Child L:func@@/home/we/dust/code/mosaic/lib/grid_controller.lua:112 sampled      5 times. Took 0.26s
+
+------------------- L:short_press@@/home/we/dust/code/mosaic/lib/grid_controller.lua:261 -------------------
+Sample count:            5
+Time spend total:       0.259s
+Time spent in children: 0.259s
+Time spent in self:     0.000s
+Time spent per sample:  0.05174s/sample
+Time spent in self per sample: 0.00000s/sample
+
+Child L:handle@@/home/we/dust/code/mosaic/lib/press_handler.lua:64 sampled      5 times. Took 0.26s
 
 
 
-Total time spent in profiled functions:  4.78s
+Total time spent in profiled functions:  2.99s
 
 END

@@ -161,9 +161,9 @@ end
 
 
 local function blink()
-  fn.set_blink_state(not blink_state)
+  program.toggle_blink_state()
   fn.dirty_grid(true)
-  clock.run(function() clock.sleep(0.3); blink() end)
+  clock.run(function() clock.sleep(0.4); blink() end)
 end
 
 function init()
@@ -206,15 +206,6 @@ function init()
         if fn.dirty_grid() then
           grid_controller.grid_redraw()
         end
-      end
-    end
-  )
-
-  redraw_keep_alive_lock = clock.run(
-    function()
-      while true do
-        clock.sleep(1)
-        fn.dirty_screen(true)
       end
     end
   )

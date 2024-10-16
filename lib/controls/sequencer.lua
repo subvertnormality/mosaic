@@ -11,34 +11,22 @@ function sequencer:new(y, mode)
   local self = setmetatable({}, self)
   self.y = y
   self.unsaved_grid = {}
-
-  self.bclock = {}
-
-  self.bclock.state = false
-  self.bclock.bright_mod = 0
-  self.bclock.clock = clock_run(function()
-    while true do
-      if self.bclock.state then
-        self.bclock.bright_mod = 0
-        self.bclock.state = false
-      else
-        self.bclock.bright_mod = 3
-        self.bclock.state = true
-      end
-
-      fn.dirty_grid(true)
-      clock_sleep(0.3)
-    end
-  end)
-
   self.mode = mode == "channel" and "channel" or "pattern"
 
   return self
 end
 
 function sequencer:draw(channel, draw_func)
+
+  local bright_mod = 0
+
+  if program.get_blink_state() then
+    bright_mod = 0
+  else
+    bright_mod = 3
+  end
+
   local mode = self.mode
-  local bright_mod = self.bclock.bright_mod
   local bright_mod_15 = 15 - bright_mod
   local bright_mod_2 = 2 - ((bright_mod == 3 and 1) or (bright_mod == 0 and 0) or bright_mod)
   local unsaved_grid = self.unsaved_grid

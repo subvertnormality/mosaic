@@ -275,6 +275,7 @@ note_edit_page_controller.refresh = fn.debounce(function()
 
   for s = 1, 64 do
     note_edit_page_controller.refresh_fader(s)
+    clock.sleep(0.00001)
   end
 
   note_edit_page_controller.refresh_buttons()

@@ -19,7 +19,7 @@ function button:new(x, y, states)
 end
 
 function button:draw()
-  if self.blink_active and fn.get_blink_state() then
+  if self.blink_active and program.get_blink_state() then
     grid_abstraction.led(self.x, self.y, self.states[self.state][2] - self.bright_mod)
   else
     grid_abstraction.led(self.x, self.y, self.states[self.state][2])

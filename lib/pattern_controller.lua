@@ -194,26 +194,14 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
   return merged_pattern
 end
 
-function pattern_controller.update_working_patterns()
-  if update_timer_id then
-    clock.cancel(update_timer_id)
+pattern_controller.update_working_patterns = fn.debounce(function()
+  for c = 1, 16 do
+    pattern_controller.update_working_pattern(c)
+    clock.sleep(0.00001)
   end
-  update_timer_id = clock.run(function()
-    while currently_processing do
-      clock.sleep(throttle_time)
-    end
-    currently_processing = true
-    clock.run(function()
-      for c = 1, 16 do
-        pattern_controller.update_working_pattern(c)
-        clock.sleep(throttle_time)
-      end
-      currently_processing = false
-    end) 
-  end)
-end
+end, throttle_time)
 
-pattern_controller.update_working_pattern = fn.debounce(function(c)
+function pattern_controller.update_working_pattern(c)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
   local channel_pattern = selected_sequencer_pattern.channels[c]
   channel_pattern.working_pattern = pattern_controller.get_and_merge_patterns(
@@ -223,6 +211,6 @@ pattern_controller.update_working_pattern = fn.debounce(function(c)
     channel_pattern.velocity_merge_mode,
     channel_pattern.length_merge_mode
   )
-end, throttle_time)
+end
 
 return pattern_controller

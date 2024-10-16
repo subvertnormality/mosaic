@@ -138,7 +138,8 @@ function program.init()
     current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     sequencer_patterns = {},
     global_step_accumulator = 0,
-    devices = {}
+    devices = {},
+    blink_state = false
   }
 
   for i = 1, 16 do
@@ -647,6 +648,14 @@ function program.set_step_chord_mask(channel, i, step, mask)
     step_chord_masks[step] = {}
   end
   step_chord_masks[step][i] = mask
+end
+
+function program.get_blink_state()
+  return program.get().blink_state
+end
+
+function program.toggle_blink_state()
+  program.get().blink_state = not program.get().blink_state
 end
 
 return program

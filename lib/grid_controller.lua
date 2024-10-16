@@ -23,9 +23,7 @@ local trigger_edit_button = button:new(3, 8)
 local note_edit_button = button:new(4, 8)
 local velocity_edit_button = button:new(5, 8)
 
-local update_timer_id = nil
 local throttle_time = 0.1
-local currently_processing = false
 
 local menu_buttons = {}
 
@@ -53,33 +51,26 @@ function grid_controller.get_pressed_keys()
 end
 
 
-local function refresh_pages()
+local refresh_pages = fn.debounce(function()
 
-  if update_timer_id then
-    clock.cancel(update_timer_id)
-  end
-
-  update_timer_id = clock.run(function()
-    while currently_processing do
-      clock.sleep(throttle_time)
-    end
-    currently_processing = true
     if (program.get().selected_page == 1) then
       channel_edit_page_controller.refresh()
+      clock.sleep(0.0001)
       channel_edit_page_ui_controller.refresh()
+      clock.sleep(0.0001)
     elseif (program.get().selected_page == 2) then
       channel_sequencer_page_controller.refresh()
+      clock.sleep(0.0001)
     elseif (program.get().selected_page == 3) then
       trigger_edit_page_controller.refresh()
+      clock.sleep(0.0001)
     elseif (program.get().selected_page == 4) then
       -- note_edit_page_controller.refresh()
     elseif (program.get().selected_page == 5) then
       -- velocity_edit_page_controller.refresh()
     end
-    currently_processing = false
-  end)
 
-end
+end, throttle_time)
 
 local function register_draw_handlers()
   channel_edit_page_controller.register_draw_handlers()

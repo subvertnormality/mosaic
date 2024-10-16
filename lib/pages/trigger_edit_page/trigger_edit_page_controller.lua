@@ -136,7 +136,6 @@ local function shift_table(tbl, n)
 end
 
 local function load_paint_pattern()
-  print("loading")
   if (pattern_trigger_edit_page_paint_button:get_state() == 2) then
     local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
     local pattern1 = pattern_trigger_edit_page_pattern1_fader:get_value()
