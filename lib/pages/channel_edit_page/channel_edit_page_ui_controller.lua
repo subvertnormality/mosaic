@@ -889,10 +889,10 @@ function channel_edit_page_ui_controller.refresh_channel_config()
   midi_device_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_device)
   fn.debounce(function() 
     device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), program.get().devices[channel.number].device_map))
-  end, 0.01)()
+  end, 0.001)()
   fn.debounce(function()
     param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
-  end, 0.01)()
+  end, 0.001)()
     device_map_vertical_scroll_selector:select()
   midi_channel_vertical_scroll_selector:deselect()
   midi_device_vertical_scroll_selector:deselect()
@@ -914,9 +914,9 @@ end
 
 function channel_edit_page_ui_controller.refresh()
   if program.get().selected_channel ~= 17 then
-    channel_edit_page_ui_controller.select_channel_page_by_index(channel_pages:get_selected_page())
+    channel_edit_page_ui_controller.select_channel_page_by_index(channel_pages:get_selected_page() or 1)
   else
-    channel_edit_page_ui_controller.select_scale_page_by_index(scales_pages:get_selected_page())
+    channel_edit_page_ui_controller.select_scale_page_by_index(scales_pages:get_selected_page() or 1)
   end
 end
 
@@ -1048,7 +1048,7 @@ function channel_edit_page_ui_controller.handle_length_mask_change(direction)
         program.set_length_mask(channel, divisions.note_division_values[mask_selectors.length:get_value()])
       else
         mask_selectors.length:set_value(0)
-        program.set_length_mask(channel, 0)
+        program.set_length_mask(channel, nil)
       end
     end
     pattern_controller.update_working_pattern(channel.number)
@@ -1364,11 +1364,9 @@ end
 
 function channel_edit_page_ui_controller.handle_encoder_one_positive()
   if program.get().selected_channel ~= 17 then
-    local selected_channel_page = channel_pages:get_selected_page()
-    channel_edit_page_ui_controller.select_channel_page_by_index(selected_channel_page + 1)
+    channel_edit_page_ui_controller.select_channel_page_by_index((channel_pages:get_selected_page() or 1) + 1)
   else
-    local selected_scale_page = scales_pages:get_selected_page()
-    channel_edit_page_ui_controller.select_scale_page_by_index(selected_scale_page + 1)
+    channel_edit_page_ui_controller.select_scale_page_by_index((scales_pages:get_selected_page() or 1) + 1)
   end
   fn.dirty_screen(true)
   save_confirm.cancel()
@@ -1376,19 +1374,10 @@ end
 
 function channel_edit_page_ui_controller.handle_encoder_one_negative()
   if program.get().selected_channel ~= 17 then
-    local selected_channel_page = channel_pages:get_selected_page()
-    local previous_page
-
-    channel_edit_page_ui_controller.select_channel_page_by_index(selected_channel_page - 1)
+    channel_edit_page_ui_controller.select_channel_page_by_index((channel_pages:get_selected_page() or 1) - 1)
 
   else
-    local selected_scale_page = scales_pages:get_selected_page()
-    local previous
-
-    if selected_scale_page - 1 == 1 then
-      channel_edit_page_ui_controller.select_scales_quantizer_page()
-    end
-
+    channel_edit_page_ui_controller.select_scale_page_by_index((scales_pages:get_selected_page() or 1) - 1)
   end
   fn.dirty_screen(true)
   save_confirm.cancel()
@@ -1497,7 +1486,7 @@ end
 function channel_edit_page_ui_controller.select_scales_quantizer_page()
   channel_edit_page_ui_controller.refresh_quantiser()
   channel_edit_page_ui_controller.refresh_romans()
-  scales_pages:select_page(channel_page_to_index["Quantizer"])
+  scales_pages:select_page(scales_page_to_index["Quantizer"])
 end
 
 function channel_edit_page_ui_controller.select_scales_clock_mods_page()
@@ -1507,7 +1496,7 @@ function channel_edit_page_ui_controller.select_scales_clock_mods_page()
   channel_edit_page_ui_controller.refresh_shuffle_feel()
   channel_edit_page_ui_controller.refresh_shuffle_basis()
   channel_edit_page_ui_controller.refresh_shuffle_amount()
-  scales_pages:select_page(channel_page_to_index["Clock Mods"])
+  scales_pages:select_page(scales_page_to_index["Clock Mods"])
 end
 
 function channel_edit_page_ui_controller.select_channel_page_by_index(index)
