@@ -241,6 +241,7 @@ function program.step_has_param_trig_lock(channel, step)
 end
 
 function program.step_has_trig_lock(channel, step)
+
   return program.step_has_param_trig_lock(channel, step) or 
          program.step_octave_has_trig_lock(channel, step) or 
          program.step_scale_has_trig_lock(channel, step) or 
@@ -304,6 +305,7 @@ function program.get_step_transpose_trig_lock(step)
 end
 
 function program.step_transpose_has_trig_lock(step)
+  if program.get_selected_channel().number ~= 17 then return false end
   local channel = program.get_channel(17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
   return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step]
