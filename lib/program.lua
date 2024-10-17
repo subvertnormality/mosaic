@@ -278,7 +278,9 @@ end
 function program.add_step_transpose_trig_lock(step, trig_lock)
   local channel = program.get_channel(17)
 
-  trig_lock = trig_lock and math.max(math.min(trig_lock, 7), -7) or nil
+  if trig_lock ~= nil then
+    trig_lock = math.max(math.min(trig_lock, 7), -7) or nil
+  end
 
   if not channel.step_transpose_trig_lock_banks then 
     channel.step_transpose_trig_lock_banks = {}
@@ -298,13 +300,13 @@ end
 function program.get_step_transpose_trig_lock(step)
   local channel = program.get_channel(17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
-  return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step] or 0
+  return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step]
 end
 
 function program.step_transpose_has_trig_lock(step)
   local channel = program.get_channel(17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
-  return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step] and step_transpose_trig_lock_banks[step] ~= 0
+  return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step]
 end
 
 function program.step_has_trig_mask(step)

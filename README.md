@@ -613,7 +613,7 @@ The transposition of your song can be set on a per-step basis from the scale pag
 To clear a transposition lock:
 
 1. Hold the step with the locked value.
-2. Press the zero value on the transposition fader.
+2. Select the currently selected lock value.
 
 ##### Octave Locks
 
