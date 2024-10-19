@@ -349,11 +349,10 @@ function test_clock_can_delay_action_with_no_channel_clock_division_set()
   local clock_division = 1
   local delay_multiplier = 1
 
+
   clock_controller.delay_action(
     channel,
-    clock_division,
-    delay_multiplier,
-    0,
+    ((clock_division * delay_multiplier)),
     0.99,
     false,
     function()
@@ -384,9 +383,7 @@ function test_clock_delay_action_with_no_division_specified_executes_immediately
 
   clock_controller.delay_action(
     channel,
-    clock_division_index,
-    delay_multiplier,
-    0,
+    (clock_division_index * delay_multiplier),
     false,
     0.99,
     function()
@@ -412,10 +409,8 @@ function test_clock_delay_action_with_nil_division_executes_immediately()
 
   clock_controller.delay_action(
     channel,
-    clock_division_index,
-    delay_multiplier,
-    0,
-    0.99,
+    nil,
+    1,
     false,
     function()
       has_fired = true
@@ -445,10 +440,8 @@ function test_clock_can_delay_action_with_channel_clock_division_set()
 
   clock_controller.delay_action(
     channel,
-    division,
-    delay_multiplier,
-    0,
-    0.95,
+    (division * delay_multiplier),
+    1,
     false,
     function()
       has_fired = true
@@ -478,9 +471,7 @@ function test_delay_action_with_no_delay_fires_immediately()
 
   clock_controller.delay_action(
     channel,
-    clock_division,
-    delay_multiplier,
-    0,
+    (clock_division * delay_multiplier),
     0,
     false,
     function()
@@ -508,10 +499,8 @@ function test_delay_action_with_full_delay_fires_as_expected()
 
   clock_controller.delay_action(
     channel,
-    clock_division,
+    (clock_division * delay_multiplier),
     delay_multiplier,
-    0,
-    1,
     false,
     function()
       has_fired = true
@@ -539,9 +528,7 @@ function test_delay_action_with_fractional_delay_fires_as_expected()
 
   clock_controller.delay_action(
     channel,
-    clock_division,
-    delay_multiplier,
-    0,
+    (clock_division * delay_multiplier),
     0.5,
     false,
     function()

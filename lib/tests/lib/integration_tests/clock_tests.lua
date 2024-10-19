@@ -447,7 +447,7 @@ function test_drunk_shuffle_amount_100()
   luaunit.assert_equals(note_on_event[3], 1)
 
   
-  progress_clock_by_pulses(24)
+  progress_clock_by_pulses(21)
 
   local note_off_event = table.remove(midi_note_off_events, 1)
 
@@ -461,7 +461,7 @@ function test_drunk_shuffle_amount_100()
   luaunit.assert_equals(note_on_event[2], 22)
   luaunit.assert_equals(note_on_event[3], 1)
 
-  progress_clock_by_pulses(19)
+  progress_clock_by_pulses(22)
 
   local note_off_event = table.remove(midi_note_off_events, 1)
 

@@ -368,7 +368,7 @@ local function meta_delay_action(c, division, delay, type, func)
   end
 end
 
-function clock_controller.delay_action(c, note_division, multiplier, acceleration, delay, type, func)
+function clock_controller.delay_action(c, note_division, delay, type, func)
   if note_division == 0 or note_division == nil then
     func()
     return
@@ -379,7 +379,7 @@ function clock_controller.delay_action(c, note_division, multiplier, acceleratio
   local division = clock_controller["channel_" .. c .. "_clock"].division
   local ppqn = clock_lattice.ppqn  -- Pulses per quarter note
   
-  local note_division_mod = ((note_division * multiplier) + acceleration) * division
+  local note_division_mod = note_division * division
 
   local count = division
   local sprocket_action = function(t)
@@ -499,7 +499,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
   acceleration_accumulator = acceleration_accumulator + chord_spread
 
   -- Schedule the arp to stop after 'length'
-  clock_controller.delay_action(c, length, 1, 0, 1, "must_execute", function()
+  clock_controller.delay_action(c, length, 1, "must_execute", function()
     if arp then
       arp:destroy()
       arp = nil
