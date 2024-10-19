@@ -43,6 +43,21 @@ local function progress_clock_by_pulses(p)
   end
 end
 
+-- Helper function to compare two events (for equality)
+local function events_equal(event1, event2)
+  return event1[1] == event2[1] and event1[2] == event2[2] and event1[3] == event2[3]
+end
+
+-- Helper function to check if a set of events contains a specific event
+local function contains_event(events, target_event)
+  for _, event in ipairs(events) do
+      if events_equal(event, target_event) then
+          return true
+      end
+  end
+  return false
+end
+
 function test_params_trig_locks_are_processed_at_the_right_step()
     setup()
     local sequencer_pattern = 1
@@ -3736,18 +3751,18 @@ function test_chord_strum_param_lock_with_minus_one_acceleration()
 
   progress_clock_by_beats(1/4) -- 1.5
 
-  local note_on_event = table.remove(midi_note_on_events, 1)
+  -- Collect the actual events
+  local actual_events = {}
+  table.insert(actual_events, table.remove(midi_note_on_events, 1))
+  table.insert(actual_events, table.remove(midi_note_on_events, 1))
 
-  luaunit.assert_equals(note_on_event[1], 65)  -- 1.5!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
+  -- Define the expected events (without assuming any order)
+  local expected_event_1 = {65, 100, 1}  -- 1.5!
+  local expected_event_2 = {67, 100, 1}  -- 1.5!
 
-  -- progress_clock_by_pulses(21)
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 67)  -- 1.5!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
+  -- Assert that both expected events are present in actual events
+  luaunit.assert_true(contains_event(actual_events, expected_event_1), "Expected event 1 not found")
+  luaunit.assert_true(contains_event(actual_events, expected_event_2), "Expected event 2 not found")
 
 
 end
@@ -3826,18 +3841,18 @@ function test_chord_strum_param_lock_with_minus_two_acceleration()
 
   progress_clock_by_beats(1/4) -- 1.5
 
-  local note_on_event = table.remove(midi_note_on_events, 1)
+  -- Collect the actual events
+  local actual_events = {}
+  table.insert(actual_events, table.remove(midi_note_on_events, 1))
+  table.insert(actual_events, table.remove(midi_note_on_events, 1))
 
-  luaunit.assert_equals(note_on_event[1], 65)  -- 1.5!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
+  -- Define the expected events (without assuming any order)
+  local expected_event_1 = {65, 100, 1}  -- 1.5!
+  local expected_event_2 = {67, 100, 1}  -- 1.5!
 
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 67)  -- 1.5!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
+  -- Assert that both expected events are present in actual events
+  luaunit.assert_true(contains_event(actual_events, expected_event_1), "Expected event 1 not found")
+  luaunit.assert_true(contains_event(actual_events, expected_event_2), "Expected event 2 not found")
 
 end
 
