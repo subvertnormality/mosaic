@@ -165,18 +165,24 @@ function Lattice:pulse()
 
           sprocket.phase = sprocket.phase + 1
 
-          for i, delayed_action in pairs(sprocket.delayed_actions) do
-            if delayed_action.length == 0 then
-              delayed_action.action()
-              table.remove(sprocket.delayed_actions, i)
-            elseif delayed_action.length < 1 then
-              if sprocket.phase >= sprocket.current_ppqn * delayed_action.length then
-                delayed_action.action()
-                table.remove(sprocket.delayed_actions, i)
+          local to_remove = {}
+    
+          for id, delayed_action in pairs(sprocket.delayed_actions) do
+              if delayed_action.length == 0 then
+                  delayed_action.action()
+                  table.insert(to_remove, id)
+              elseif delayed_action.length < 1 then
+                  if sprocket.phase >= sprocket.current_ppqn * delayed_action.length then
+                      delayed_action.action()
+                      table.insert(to_remove, id)
+                  end
+              elseif sprocket.phase > sprocket.current_ppqn then
+                  delayed_action.length = delayed_action.length - 1
               end
-            elseif sprocket.phase > sprocket.current_ppqn then
-              delayed_action.length = delayed_action.length - 1
-            end
+          end
+          
+          for _, id in ipairs(to_remove) do
+              sprocket.delayed_actions[id] = nil
           end
 
           if sprocket.phase > sprocket.current_ppqn then
@@ -341,7 +347,9 @@ function Sprocket:set_action(fn)
 end
 
 function Sprocket:set_delayed_action(length, action)
-  table.insert(self.delayed_actions, {length = length, action = action})
+  local id = fn.generate_id()
+  self.delayed_actions[id] = {length = length, action = action}
+  return id
 end
 
 --- set the delay for this sprocket
