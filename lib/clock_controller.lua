@@ -58,7 +58,10 @@ end
 local destroy_arp_sprockets = function() destroy_sprockets(arp_sprockets) end
 
 local function execute_ids(c, id)
-  if id and clock_controller["channel_" .. c .. "_clock"].delayed_actions and clock_controller["channel_" .. c .. "_clock"].delayed_actions.id then
+  local clock = clock_controller["channel_" .. c .. "_clock"]
+
+
+  if id and clock and clock.delayed_actions and clock.delayed_actions.id then
     clock_controller["channel_" .. c .. "_clock"].delayed_actions.id.action()
     table.remove(clock_controller["channel_" .. c .. "_clock"].delayed_actions, id)
   end
@@ -311,6 +314,8 @@ function clock_controller.delay_action(c, length, type, func)
 
 end
 
+
+-- TODO arps are broken under the new system
 function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acceleration, length, func)
   if division == 0 or division == nil then
     return
