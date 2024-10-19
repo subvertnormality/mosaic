@@ -368,53 +368,59 @@ local function meta_delay_action(c, division, delay, type, func)
   end
 end
 
-function clock_controller.delay_action(c, note_division, delay, type, func)
-  if note_division == 0 or note_division == nil then
+function clock_controller.delay_action(c, length, type, func)
+  if length == 0 or length == nil then
     func()
     return
   end
-  local channel = program.get_channel(c)
-  local delayed
 
-  local division = clock_controller["channel_" .. c .. "_clock"].division
-  local ppqn = clock_lattice.ppqn  -- Pulses per quarter note
+
+  clock_controller["channel_" .. c .. "_clock"]:set_delayed_action(length, func)
+
+
+
+  -- local channel = program.get_channel(c)
+  -- local delayed
+
+  -- local division = clock_controller["channel_" .. c .. "_clock"].division
+  -- local ppqn = clock_lattice.ppqn  -- Pulses per quarter note
   
-  local note_division_mod = note_division * division
+  -- local note_division_mod = note_division * division
 
-  local count = division
-  local sprocket_action = function(t)
-    count = count + division
-    if count > note_division_mod then
-      if (delay == 0) then
-        func()
-      else
-        if note_division_mod < division then
-          meta_delay_action(c, note_division_mod, delay, type, func)
-        else
-          meta_delay_action(c, division + (note_division_mod - (count - division)), delay, type, func)
-        end
-      end
-      delayed:destroy()
-      delayed = nil
-    end
-  end
+  -- local count = division
+  -- local sprocket_action = function(t)
+  --   count = count + division
+  --   if count > note_division_mod then
+  --     if (delay == 0) then
+  --       func()
+  --     else
+  --       if note_division_mod < division then
+  --         meta_delay_action(c, note_division_mod, delay, type, func)
+  --       else
+  --         meta_delay_action(c, division + (note_division_mod - (count - division)), delay, type, func)
+  --       end
+  --     end
+  --     delayed:destroy()
+  --     delayed = nil
+  --   end
+  -- end
 
-  local shuffle_values = get_shuffle_values(channel)
+  -- local shuffle_values = get_shuffle_values(channel)
 
-  delayed = clock_lattice:new_sprocket {
-    action = sprocket_action,
-    division = division,
-    enabled = true,
-    delay = 0,
-    swing = shuffle_values.swing,
-    swing_or_shuffle = shuffle_values.swing_or_shuffle,
-    shuffle_basis = shuffle_values.shuffle_basis,
-    shuffle_feel = shuffle_values.shuffle_feel,
-    shuffle_amount = shuffle_values.shuffle_amount,
-    realign = false,
-    order = 2,
-    step = clock_controller["channel_" .. c .. "_clock"]:get_step()
-  }
+  -- delayed = clock_lattice:new_sprocket {
+  --   action = sprocket_action,
+  --   division = division,
+  --   enabled = true,
+  --   delay = 0,
+  --   swing = shuffle_values.swing,
+  --   swing_or_shuffle = shuffle_values.swing_or_shuffle,
+  --   shuffle_basis = shuffle_values.shuffle_basis,
+  --   shuffle_feel = shuffle_values.shuffle_feel,
+  --   shuffle_amount = shuffle_values.shuffle_amount,
+  --   realign = false,
+  --   order = 2,
+  --   step = clock_controller["channel_" .. c .. "_clock"]:get_step()
+  -- }
 
 end
 
@@ -499,7 +505,7 @@ function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acce
   acceleration_accumulator = acceleration_accumulator + chord_spread
 
   -- Schedule the arp to stop after 'length'
-  clock_controller.delay_action(c, length, 1, "must_execute", function()
+  clock_controller.delay_action(c, length, "must_execute", function()
     if arp then
       arp:destroy()
       arp = nil

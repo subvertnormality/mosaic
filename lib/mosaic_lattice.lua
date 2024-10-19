@@ -164,6 +164,21 @@ function Lattice:pulse()
           end
 
           sprocket.phase = sprocket.phase + 1
+
+          for i, delayed_action in pairs(sprocket.delayed_actions) do
+            if delayed_action.length == 0 then
+              delayed_action.action()
+              table.remove(sprocket.delayed_actions, i)
+            elseif delayed_action.length < 1 then
+              if sprocket.phase >= sprocket.current_ppqn * delayed_action.length then
+                delayed_action.action()
+                table.remove(sprocket.delayed_actions, i)
+              end
+            elseif sprocket.phase > sprocket.current_ppqn then
+              delayed_action.length = delayed_action.length - 1
+            end
+          end
+
           if sprocket.phase > sprocket.current_ppqn then
             sprocket.phase = 1
             sprocket.shuffle_updated = false
@@ -220,6 +235,7 @@ function Lattice:new_sprocket(args)
   args.step = self.step or 1
   args.lattice = self
   args.realign = args.realign or false
+  args.delayed_actions = {}
   local sprocket = Sprocket:new(args)
   sprocket:update_swing()
   sprocket:update_shuffle(self.step, 1)
@@ -271,6 +287,7 @@ function Sprocket:new(args)
   p.transport = 1
   p.lattice = args.lattice
   p.realign = args.realign
+  p.delayed_actions = args.delayed_actions
   return p
 end
 
@@ -321,6 +338,10 @@ end
 -- @tparam function the action
 function Sprocket:set_action(fn)
   self.action = fn
+end
+
+function Sprocket:set_delayed_action(length, action)
+  table.insert(self.delayed_actions, {length = length, action = action})
 end
 
 --- set the delay for this sprocket

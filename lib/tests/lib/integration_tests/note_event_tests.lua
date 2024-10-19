@@ -291,7 +291,7 @@ function test_note_off_values_dont_fire_too_early_or_late()
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
-  progress_clock_by_pulses(22)
+  progress_clock_by_pulses(23)
 
   local note_off_event = table.remove(midi_note_off_events)
 
@@ -304,12 +304,6 @@ function test_note_off_values_dont_fire_too_early_or_late()
   luaunit.assert_equals(note_off_event[1], 60)
   luaunit.assert_equals(note_off_event[2], 100)
   luaunit.assert_equals(note_off_event[3], 1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_pulses(1)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 

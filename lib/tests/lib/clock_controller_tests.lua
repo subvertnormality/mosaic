@@ -353,7 +353,6 @@ function test_clock_can_delay_action_with_no_channel_clock_division_set()
   clock_controller.delay_action(
     channel,
     ((clock_division * delay_multiplier)),
-    0.99,
     false,
     function()
       has_fired = true
@@ -385,7 +384,6 @@ function test_clock_delay_action_with_no_division_specified_executes_immediately
     channel,
     (clock_division_index * delay_multiplier),
     false,
-    0.99,
     function()
       has_fired = true
     end
@@ -410,7 +408,6 @@ function test_clock_delay_action_with_nil_division_executes_immediately()
   clock_controller.delay_action(
     channel,
     nil,
-    1,
     false,
     function()
       has_fired = true
@@ -441,7 +438,6 @@ function test_clock_can_delay_action_with_channel_clock_division_set()
   clock_controller.delay_action(
     channel,
     (division * delay_multiplier),
-    1,
     false,
     function()
       has_fired = true
@@ -456,34 +452,6 @@ function test_clock_can_delay_action_with_channel_clock_division_set()
 
 end
 
-
-function test_delay_action_with_no_delay_fires_immediately()
-
-  setup()
-  clock_setup()
-
-  local has_fired = false
-
-  local channel = 1
-
-  local clock_division = 1
-  local delay_multiplier = 1
-
-  clock_controller.delay_action(
-    channel,
-    (clock_division * delay_multiplier),
-    0,
-    false,
-    function()
-      has_fired = true
-    end
-  )
-
-  progress_clock_by_pulses(1) -- we need at least one pulse to trigger the action
-
-  luaunit.assert_true(has_fired)
-
-end
 
 function test_delay_action_with_full_delay_fires_as_expected()
 
@@ -500,7 +468,6 @@ function test_delay_action_with_full_delay_fires_as_expected()
   clock_controller.delay_action(
     channel,
     (clock_division * delay_multiplier),
-    delay_multiplier,
     false,
     function()
       has_fired = true
@@ -509,34 +476,6 @@ function test_delay_action_with_full_delay_fires_as_expected()
 
   progress_clock_by_pulses(24)
   progress_clock_by_pulses(2) -- we need at least one pulse to trigger the meta action and one for the action
-
-  luaunit.assert_true(has_fired)
-
-end
-
-function test_delay_action_with_fractional_delay_fires_as_expected()
-
-  setup()
-  clock_setup()
-
-  local has_fired = false
-
-  local channel = 1
-
-  local clock_division = 0.5
-  local delay_multiplier = 1
-
-  clock_controller.delay_action(
-    channel,
-    (clock_division * delay_multiplier),
-    0.5,
-    false,
-    function()
-      has_fired = true
-    end
-  )
-
-  progress_clock_by_pulses(6)
 
   luaunit.assert_true(has_fired)
 

@@ -1350,7 +1350,7 @@ function test_chord_strum_param_lock_with_four_extra_notes_multiplication()
   channel.step_chord_masks[test_step][2] = chord_note_2
   channel.step_chord_masks[test_step][3] = chord_note_3
   channel.step_chord_masks[test_step][4] = chord_note_4
-  program.add_step_param_trig_lock(test_step, 5, 2)  -- 1/16
+  program.add_step_param_trig_lock(test_step, 5, 37)  -- 8
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
@@ -3742,6 +3742,7 @@ function test_chord_strum_param_lock_with_minus_one_acceleration()
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
+  -- progress_clock_by_pulses(21)
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 67)  -- 1.5!

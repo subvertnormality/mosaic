@@ -511,4 +511,9 @@ function fn.debounce(func, delay)
   end
 end
 
+function fn.generate_id()
+    return tostring({}):match('table: (.+)')
+end
+
+
 return fn
