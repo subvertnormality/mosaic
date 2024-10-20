@@ -2,7 +2,7 @@
   "name": "Syntakt",
   "type": "midi",
   "value": 4,
-  "polyphonic": false,
+  "polyphonic": true,
   "map_params_automatically": [
     "syn_data_entry_knob_b",
     "syn_data_entry_knob_c",
@@ -145,7 +145,7 @@
       "short_descriptor_2": "B",
       "name": "Data entry knob B",
       "cc_min_value": -1,
-      "cc_msb": 18,
+      "cc_msb": 19,
       "id": "syn_data_entry_knob_b"
     },
     {
@@ -155,7 +155,7 @@
       "short_descriptor_2": "C",
       "name": "Data entry knob C",
       "cc_min_value": -1,
-      "cc_msb": 19,
+      "cc_msb": 20,
       "id": "syn_data_entry_knob_c"
     },
     {
@@ -165,7 +165,7 @@
       "short_descriptor_2": "D",
       "name": "Data entry knob D",
       "cc_min_value": -1,
-      "cc_msb": 20,
+      "cc_msb": 18,
       "id": "syn_data_entry_knob_d"
     },
     {

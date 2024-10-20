@@ -216,6 +216,7 @@ end
 local function safe_set_param(channel, index, param, meta_device)
   if not channel.trig_lock_params then channel.trig_lock_params = {} end
   channel.trig_lock_params[index] = param or {}
+
   if param and param.index then
     channel.trig_lock_params[index].device_name = meta_device.device_name or ""
     channel.trig_lock_params[index].type = meta_device.type or ""
@@ -229,17 +230,19 @@ local function safe_set_param(channel, index, param, meta_device)
 end
 
 function param_manager.update_default_params(channel, meta_device)
-
+  -- Use the merged parameters with index keys
+  local device_params = device_map.get_params(meta_device.id)
+  
   for i = 1, 10 do
     if type(meta_device.map_params_automatically) == "table" then
       local id = meta_device.map_params_automatically[i]
       if type(id) == "string" then
-        local param = fn.find_in_table_by_id(meta_device.params or {}, id)
+        local param = fn.find_in_table_by_id(device_params or {}, id)
         safe_set_param(channel, i, param, meta_device)
       end
     elseif meta_device.map_params_automatically == true then
-      if type(meta_device.params) == "table" and meta_device.params[i + 1] then
-        safe_set_param(channel, i, meta_device.params[i + 1], meta_device)
+      if type(device_params) == "table" and device_params[i] then
+        safe_set_param(channel, i, device_params[i], meta_device)
       end
     end
   end
@@ -249,7 +252,6 @@ function param_manager.update_default_params(channel, meta_device)
   end
 
   channel_edit_page_ui_controller.refresh_trig_lock_values()
-
 end
 
 
