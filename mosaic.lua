@@ -114,6 +114,7 @@ local function do_autosave()
     save_project("autosave")
   end
   ui_splash_screen_active = false
+  tooltip:show("Autosaved")
   fn.dirty_screen(true)
   as_metro:stop()
   autosave_timer:stop()

@@ -1391,8 +1391,9 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
       local step = fn.calc_grid_count(keys[1], keys[2])
       if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
         program.clear_masks_for_step(step)
-        tooltip:show("Note masks for ch " .. program.get_selected_channel() .. " cleared")
+        tooltip:show("Masks for ch " .. program.get_selected_channel() .. " cleared")
         channel_edit_page_ui_controller.refresh_masks()
+        pattern_controller.update_working_pattern(program.get_selected_channel().number)
       end
       if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
         program.clear_trig_locks_for_step(step)
@@ -1417,8 +1418,9 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
     elseif channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
       if is_key3_down then
         program.clear_masks_for_channel(program.get_selected_channel())
-        tooltip:show("Note masks for ch " .. program.get_selected_channel().number .. " cleared")
+        tooltip:show("Masks for ch " .. program.get_selected_channel().number .. " cleared")
         channel_edit_page_ui_controller.refresh_masks()
+        pattern_controller.update_working_pattern(program.get_selected_channel().number)
       end
     end
     save_confirm.cancel()
