@@ -115,7 +115,6 @@ function register_press_handlers()
             elseif is_key3_down == true then
               clock.transport:stop()
               tooltip:show("Stopping playback")
-              params:bang()
             end
             grid_controller.set_menu_button_state()
           end

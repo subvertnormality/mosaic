@@ -108,6 +108,7 @@ local function configure_note_value_selector(note_value_selector)
     if type(value) == "table" then
       v = value.note_value
     end
+    if not v then return "X" end
     local named_note = musicutil.note_num_to_name(v, true)
     return v == -1 and "X" or named_note
   end)

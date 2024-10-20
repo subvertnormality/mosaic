@@ -171,10 +171,16 @@ function Lattice:pulse()
               if delayed_action.length == 0 then
                   delayed_action.action()
                   table.insert(to_remove, id)
+                  if sprocket.cleanup_delayed_action then
+                    sprocket.cleanup_delayed_action(id)
+                  end
               elseif delayed_action.length < 1 then
                   if sprocket.phase >= sprocket.current_ppqn * delayed_action.length then
                       delayed_action.action()
                       table.insert(to_remove, id)
+                      if sprocket.cleanup_delayed_action then
+                        sprocket.cleanup_delayed_action(id)
+                      end
                   end
               elseif sprocket.phase > sprocket.current_ppqn then
                   delayed_action.length = delayed_action.length - 1
@@ -242,6 +248,7 @@ function Lattice:new_sprocket(args)
   args.lattice = self
   args.realign = args.realign or false
   args.delayed_actions = {}
+  args.cleanup_delayed_action = args.cleanup_delayed_action or nil
   local sprocket = Sprocket:new(args)
   sprocket:update_swing()
   sprocket:update_shuffle(self.step, 1)
@@ -294,6 +301,7 @@ function Sprocket:new(args)
   p.lattice = args.lattice
   p.realign = args.realign
   p.delayed_actions = args.delayed_actions
+  p.cleanup_delayed_action = args.cleanup_delayed_action
   return p
 end
 

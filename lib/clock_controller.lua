@@ -57,13 +57,39 @@ end
 
 local destroy_arp_sprockets = function() destroy_sprockets(arp_sprockets) end
 
-local function execute_ids(c, id)
+local function execute_ids(c, ids)
   local clock = clock_controller["channel_" .. c .. "_clock"]
+  
+  for i = #ids, 1, -1 do
+    local id = ids[i]
+    if clock and clock.delayed_actions and clock.delayed_actions[id] then
+      local action = clock.delayed_actions[id].action
+      if type(action) == "function" then
+        action()
+      end
+      clock.delayed_actions[id] = nil  -- Remove the action after execution
+      table.remove(ids, i)  -- Remove the ID from the list
+    end
+  end
+end
 
+local function construct_remove_id_from_all_lists_for_channel(chan)
+  local c = chan
+  return function(id)
+    local lists = {
+      delayed_ids_must_execute,
+      destroy_at_note_end_ids,
+      execute_at_note_end_ids
+    }
 
-  if id and clock and clock.delayed_actions and clock.delayed_actions.id then
-    clock_controller["channel_" .. c .. "_clock"].delayed_actions.id.action()
-    table.remove(clock_controller["channel_" .. c .. "_clock"].delayed_actions, id)
+    for _, list in ipairs(lists) do
+      for i = #list[c], 1, -1 do
+        if list[c][i] == id then
+          table.remove(list[c], i)
+          break
+        end
+      end
+    end
   end
 end
 
@@ -231,7 +257,8 @@ function clock_controller.init()
       shuffle_amount = shuffle_values.shuffle_amount,
       order = 2,
       realign = true,
-      enabled = true
+      enabled = true,
+      cleanup_delayed_action = construct_remove_id_from_all_lists_for_channel(channel_number)
     }
 
     clock_controller["channel_" .. channel_number .. "_clock"].end_of_clock_processor = clock_lattice:new_sprocket {
@@ -315,7 +342,6 @@ function clock_controller.delay_action(c, length, type, func)
 end
 
 
--- TODO arps are broken under the new system
 function clock_controller.new_arp_sprocket(c, division, chord_spread, chord_acceleration, length, func)
   if division == 0 or division == nil then
     return
@@ -418,15 +444,12 @@ end
 
 
 function clock_controller.destroy_at_note_end_ids(c)
-  local channel_clock = clock_controller["channel_" .. c .. "_clock"]
+  local clock = clock_controller["channel_" .. c .. "_clock"]
   
   for i = #destroy_at_note_end_ids[c], 1, -1 do
     local id = destroy_at_note_end_ids[c][i]
-    if id and channel_clock.delayed_actions[id] then
-      -- Remove the delayed action using the string ID
-      channel_clock.delayed_actions[id] = nil
-      
-      -- Remove this ID from the destroy_at_note_end_ids list
+    if clock and clock.delayed_actions and clock.delayed_actions[id] then
+      clock.delayed_actions[id] = nil
       table.remove(destroy_at_note_end_ids[c], i)
     end
   end
