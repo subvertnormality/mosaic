@@ -117,6 +117,7 @@ function sequencer:draw(channel, draw_func)
         length = lengths[grid_count]
 
         if length > 1 then
+          
           for lx = grid_count + 1, grid_count + length - 1 do
             if lx > 64 then
               lx = lx - 64
