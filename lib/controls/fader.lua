@@ -35,8 +35,8 @@ function fader:draw_simple()
   end
 
   self.pre_func(self.x, self.y, self.length)
-
-  if (self.value > 0) then
+  
+  if (self.value ~= nil and self.value > 0) then
     if self.dimmed[self.x + self.value - 1] then
       grid_abstraction.led(self.x + self.value - 1, self.y, 7)
     else
@@ -46,24 +46,34 @@ function fader:draw_simple()
 end
 
 function fader:draw_fine_grain()
+  -- Draw the fader ends
   grid_abstraction.led(self.x, self.y, 7)
   grid_abstraction.led(self.length + self.x - 1, self.y, 7)
+  
+  -- Draw the fader background
   for i = self.x + 1, self.length + self.x - 2 do
     grid_abstraction.led(i, self.y, 2)
   end
-  local selected_led = math.floor(self.value / (self.size / (self.length - 2))) + 1
-
-  if (self.value == self.size) then
-    selected_led = self.length - 2
+  
+  if self.value == nil then return end
+  
+  -- Calculate the position and brightness of the lit LEDs
+  local total_steps = self.size
+  local num_leds = self.length - 2
+  local step_size = total_steps / num_leds
+  local current_led = math.floor(self.value / step_size)
+  local remainder = self.value % step_size
+  
+  -- Handle the case when the value is at maximum
+  if self.value == self.size then
+    grid_abstraction.led(self.length + self.x - 2, self.y, 15)
+    return
   end
-
-  if (selected_led > 0 and selected_led < self.length - 1) then
-    local modulator = math.floor(self.value % (self.size / (self.length - 2))) + 1
-    local scaled_brightness = math.floor(fn.scale(modulator, 1, self.size / (self.length - 2), 4, 15))
-    if (self.value == self.size) then -- hacky
-      scaled_brightness = 15
-    end
-    grid_abstraction.led(self.x + selected_led, self.y, scaled_brightness)
+  
+  -- Handle the transitioning LED
+  if remainder > 0 and current_led < num_leds then
+    local brightness = math.floor(fn.scale(remainder, 0, step_size, 4, 15))
+    grid_abstraction.led(self.x + current_led + 1, self.y, brightness)
   end
 end
 

@@ -314,20 +314,12 @@ function step_handler.calculate_step_transpose()
   end
 
   if step_transpose then
-    if step_transpose ~= 0 then
-      transpose = step_transpose
-      persistent_step_transpose = step_transpose
-    elseif persistent_step_transpose then
-      transpose = persistent_step_transpose
-    else
-      transpose = global_transpose
-    end
+    transpose = step_transpose
+    persistent_step_transpose = step_transpose
+  elseif persistent_step_transpose then
+    transpose = persistent_step_transpose
   else
-    if persistent_step_transpose then
-      transpose = persistent_step_transpose
-    else
-      transpose = global_transpose
-    end
+    transpose = global_transpose
   end
 
   return transpose

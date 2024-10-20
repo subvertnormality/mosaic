@@ -51,7 +51,7 @@ local length_merge_mode_button =
 )
 local channel_octave_fader = fader:new(7, 8, 5, 5)
 local channel_scale_fader = fader:new(1, 3, 16, 16)
-local transpose_fader = fader:new(8, 8, 9, 17)
+local transpose_fader = fader:new(8, 8, 9, 25)
 
 local hide_scale_fader_leds = false
 
@@ -87,7 +87,7 @@ function channel_edit_page_controller.init()
     end
   )
 
-  transpose_fader:set_value(8)
+  transpose_fader:set_value(13)
 end
 
 function channel_edit_page_controller.register_draw_handlers()
@@ -294,7 +294,7 @@ function channel_edit_page_controller.register_press_handlers()
       if channel.number == 17 and transpose_fader:is_this(x2, y2) then
         transpose_fader:press(x2, y2)
         local step = fn.calc_grid_count(x, y)
-        local transpose_value = transpose_fader:get_value() - 8
+        local transpose_value = transpose_fader:get_value() - 13
         if transpose_value == program.get_step_transpose_trig_lock(step) then
           program.add_step_transpose_trig_lock(step, nil)
         else
@@ -592,9 +592,9 @@ function channel_edit_page_controller.register_press_handlers()
       if program.get().selected_channel == 17 then
         if transpose_fader:is_this(x, y) then
           transpose_fader:press(x, y)
-          program.set_transpose(transpose_fader:get_value() - 8)
+          program.set_transpose(transpose_fader:get_value() - 13)
           program.get_selected_sequencer_pattern().active = true
-          tooltip:show("Transpose: " .. transpose_fader:get_value() - 8)
+          tooltip:show("Transpose: " .. transpose_fader:get_value() - 13)
         end
       end
     end
@@ -709,9 +709,9 @@ function channel_edit_page_controller.refresh_faders()
       end
     end
     if step_transpose_trig_lock then
-      transpose_fader:set_value(step_transpose_trig_lock + 8)
+      transpose_fader:set_value(step_transpose_trig_lock + 13)
     else
-      transpose_fader:set_value(program.get_transpose() + 8)
+      transpose_fader:set_value(nil)
     end
   else
     if program.get().selected_channel == 17 then
@@ -720,7 +720,7 @@ function channel_edit_page_controller.refresh_faders()
       channel_scale_fader:set_value(0)
     end
     channel_octave_fader:set_value(channel.octave + 3)
-    transpose_fader:set_value(program.get_transpose() + 8)
+    transpose_fader:set_value(program.get_transpose() + 13)
     hide_scale_fader_leds = false
   end
 end
