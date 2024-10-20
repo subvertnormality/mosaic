@@ -1,18 +1,20 @@
 
-# 0.6.0
+# 1.0.0
+
+_Breaking update. Please backup and remove your .pset and .ptn data files from previous versions._
 
 * Masks can now be applied as a default affecting all trigs in a channel
 * The last played notes, velocity, length and chords can be seen for the selected channel on the new notes dashboard page
 * Arpeggiator param lock added
 * Chord acceleration and spread added
-* Performance and bug fixes
 * Notes can now be fractional in length
-* Swing system totally reworked and shuffles based on 21echo's Cyrene added
+* Swing system totally reworked now featuring shuffles based on 21echo's Cyrene
 * Hold K3 to quick perform long presses, for example, to stop the sequencer or to mute/unmute channels immediately 
 * NPRN values are used by default when available for a particular param. 
 * Matrix mod and toolkit now work as expected.
 * It's now possible to define which trig locks auto populate in the config files
-* UI improvements
+* General UI improvements
+* Many performance and bug fixes
 
 # 0.5.3
 
