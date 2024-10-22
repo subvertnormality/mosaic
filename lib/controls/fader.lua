@@ -1,8 +1,6 @@
 fader = {}
 fader.__index = fader
 
-
-
 function fader:new(x, y, length, size)
   local self = setmetatable({}, fader)
   self.x = x
@@ -21,6 +19,17 @@ function fader:new(x, y, length, size)
   end
 
   return self
+end
+
+function fader:get_middle_button_position()
+  -- For odd length, return the middle position
+  -- For even length, return the lower of the two middle positions
+  return math.floor((self.length + 1) / 2)
+end
+
+function fader:get_middle_value()
+  -- Returns the middle value of the size range
+  return math.floor((self.size + 1) / 2)
 end
 
 function fader:draw_simple()
@@ -47,8 +56,8 @@ end
 
 function fader:draw_fine_grain()
   -- Draw the fader ends
-  grid_abstraction.led(self.x, self.y, 7)
-  grid_abstraction.led(self.length + self.x - 1, self.y, 7)
+  grid_abstraction.led(self.x, self.y, 7)  -- Decrement button
+  grid_abstraction.led(self.length + self.x - 1, self.y, 7)  -- Increment button
   
   -- Draw the fader background
   for i = self.x + 1, self.length + self.x - 2 do
@@ -61,19 +70,29 @@ function fader:draw_fine_grain()
   local total_steps = self.size
   local num_leds = self.length - 2
   local step_size = total_steps / num_leds
-  local current_led = math.floor(self.value / step_size)
-  local remainder = self.value % step_size
-  
+  local current_led = math.floor((self.value - 1) / step_size)
+  local remainder = (self.value - 1) - current_led * step_size
+
+  -- Ensure current_led is within bounds
+  if current_led >= num_leds then
+    current_led = num_leds - 1
+    remainder = step_size
+  end
+
   -- Handle the case when the value is at maximum
   if self.value == self.size then
     grid_abstraction.led(self.length + self.x - 2, self.y, 15)
     return
   end
-  
-  -- Handle the transitioning LED
-  if remainder > 0 and current_led < num_leds then
-    local brightness = math.floor(fn.scale(remainder, 0, step_size, 4, 15))
-    grid_abstraction.led(self.x + current_led + 1, self.y, brightness)
+
+  -- Calculate brightness
+  local brightness = math.max(5, math.floor((remainder / step_size) * (15 - 5) + 5))
+  grid_abstraction.led(self.x + current_led + 1, self.y, brightness)
+
+  -- Ensure the middle button is highlighted when the middle value is selected
+  local middle_button = self:get_middle_button_position()
+  if self.value == self:get_middle_value() then
+    grid_abstraction.led(self.x + middle_button - 1, self.y, 15)
   end
 end
 
@@ -88,8 +107,45 @@ function fader:draw()
   end
 end
 
+function fader:press_simple(val)
+  self.value = val
+end
+
+function fader:press_fine_grain(val)
+  local relative_pos = val - 1  -- Convert to 0-based position
+  local middle_button = self:get_middle_button_position() - 1  -- Convert to 0-based position
+  
+  if relative_pos == 0 and self.value > 1 then
+    -- First button: decrease value
+    self.value = self.value - 1
+  elseif relative_pos == self.length - 1 and self.value < self.size then
+    -- Last button: increase value
+    self.value = self.value + 1
+  elseif relative_pos == middle_button then
+    -- Middle button: jump to middle value
+    self.value = self:get_middle_value()
+  elseif relative_pos ~= 0 and relative_pos ~= self.length - 1 then
+    -- Other positions: calculate proportional value
+    local num_positions = self.length - 2
+    local position = relative_pos - 1
+    local value = math.floor((position / (num_positions - 1)) * (self.size - 1)) + 1
+    self.value = value
+  end
+end
+
+function fader:press(x, y)
+  if x >= self.x and x <= self.x + self.length - 1 and y == self.y then
+    if self.length < self.size then
+      self:press_fine_grain(x - self.x + 1)
+    else
+      self:press_simple(x - self.x + 1)
+    end
+  end
+end
+
+-- [Rest of the methods remain unchanged]
 function fader:get_value()
-  if is_disabled then
+  if self.is_disabled then
     return 0
   end
   return self.value
@@ -120,30 +176,6 @@ end
 
 function fader:enabled()
   self.is_disabled = false
-end
-
-function fader:press_simple(val)
-  self.value = val
-end
-
-function fader:press_fine_grain(val)
-  if (val == 1 and self.value > 1) then
-    self.value = self.value - 1
-  elseif (val == self.length and self.value < self.size) then
-    self.value = self.value + 1
-  elseif (val ~= 1 and val ~= self.length) then
-    self.value = math.floor((self.size / (self.length - 2)) * (val - 2)) + 1
-  end
-end
-
-function fader:press(x, y)
-  if x >= self.x and x <= self.x + self.length - 1 and y == self.y then
-    if self.length < self.size then
-      self:press_fine_grain(x - self.x + 1)
-    else
-      self:press_simple(x - self.x + 1)
-    end
-  end
 end
 
 function fader:is_this(x, y)
