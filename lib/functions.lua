@@ -494,23 +494,6 @@ function fn.get_param_id_from_stock_id(stock_id, channel_number)
   return string.format(stock_id_to_param_id[stock_id], channel_number)
 end
 
-function fn.debounce(func, delay)
-  local timer_id = nil
-  return function(...)
-    local args = { ... }
-    if timer_id then
-      clock.cancel(timer_id)
-    end
-    timer_id = clock.run(function()
-      if delay then
-        clock.sleep(delay)
-      end
-      func(table.unpack(args))
-      timer_id = nil
-    end)
-  end
-end
-
 function fn.generate_id()
     return tostring({}):match('table: (.+)')
 end

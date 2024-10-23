@@ -882,36 +882,52 @@ function channel_edit_page_ui_controller.refresh_param_list()
   param_select_vertical_scroll_selector:set_items(device_map.get_available_params_for_channel(program.get().selected_channel, dials:get_selected_index()))
 end
 
-function channel_edit_page_ui_controller.refresh_channel_config()
+channel_edit_page_ui_controller.refresh_channel_config = ui_scheduler.debounce(function()
+  -- Initial checks
   local channel = program.get_selected_channel()
   if channel.number == 17 then return end
-  device_map_vertical_scroll_selector:set_items(device_map.get_available_devices_for_channel(program.get().selected_channel))
-  midi_channel_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_channel)
-  midi_device_vertical_scroll_selector:set_selected_item(program.get().devices[channel.number].midi_device)
-  fn.debounce(function() 
-    device_map_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(device_map_vertical_scroll_selector:get_items(), program.get().devices[channel.number].device_map))
-  end, 0.001)()
-  fn.debounce(function()
-    param_select_vertical_scroll_selector:set_selected_item(fn.get_index_by_id(param_select_vertical_scroll_selector:get_items(), channel.trig_lock_params[dials:get_selected_index()].id) or 1)
-  end, 0.001)()
-    device_map_vertical_scroll_selector:select()
+  
+  -- Cache program data to avoid repeated lookups
+  local program_data = program.get()
+  local channel_device = program_data.devices[channel.number]
+  
+  -- First batch: Basic device setup
+  device_map_vertical_scroll_selector:set_items(
+    device_map.get_available_devices_for_channel(program_data.selected_channel)
+  )
+  midi_channel_vertical_scroll_selector:set_selected_item(
+    channel_device.midi_channel
+  )
+  midi_device_vertical_scroll_selector:set_selected_item(
+    channel_device.midi_device
+  )
+  coroutine.yield()
+
+  -- Second batch: Complex device map lookup and setting
+  device_map_vertical_scroll_selector:set_selected_item(
+    fn.get_index_by_id(
+      device_map_vertical_scroll_selector:get_items(), 
+      channel_device.device_map
+    )
+  )
+  coroutine.yield()
+
+  -- Third batch: Complex param selection
+  param_select_vertical_scroll_selector:set_selected_item(
+    fn.get_index_by_id(
+      param_select_vertical_scroll_selector:get_items(),
+      channel.trig_lock_params[dials:get_selected_index()].id
+    ) or 1
+  )
+  coroutine.yield()
+
+  -- Final batch: Selection states
+  device_map_vertical_scroll_selector:select()
   midi_channel_vertical_scroll_selector:deselect()
   midi_device_vertical_scroll_selector:deselect()
-end
+end)
 
 
-
-
-function channel_edit_page_ui_controller.throttled_refresh_channel_config()
-  if refresh_timer_id then
-    clock.cancel(refresh_timer_id)
-  end
-  refresh_timer_id = clock.run(function()
-    clock.sleep(throttle_time)
-    channel_edit_page_ui_controller.refresh_channel_config()
-    refresh_timer_id = nil
-  end)
-end
 
 function channel_edit_page_ui_controller.refresh()
   if program.get().selected_channel ~= 17 then
@@ -1335,7 +1351,7 @@ function channel_edit_page_ui_controller.handle_midi_config_page_increment()
     param_select_vertical_scroll_selector:set_selected_item(1)
     channel_edit_page_ui_controller.refresh_trig_locks()
   end)
-  save_confirm.set_cancel(channel_edit_page_ui_controller.throttled_refresh_channel_config)
+  save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_channel_config)
 end
 
 function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
@@ -1359,7 +1375,7 @@ function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
   end)
 
   save_confirm.set_cancel(function()
-    channel_edit_page_ui_controller.throttled_refresh_channel_config()
+    channel_edit_page_ui_controller.refresh_channel_config()
   end)
 end
 
@@ -1471,7 +1487,7 @@ function channel_edit_page_ui_controller.select_clock_mods_page()
 end
 
 function channel_edit_page_ui_controller.select_midi_config_page()
-  channel_edit_page_ui_controller.throttled_refresh_channel_config()
+  channel_edit_page_ui_controller.refresh_channel_config()
   channel_pages:select_page(channel_page_to_index["Midi Config"])
 end
 

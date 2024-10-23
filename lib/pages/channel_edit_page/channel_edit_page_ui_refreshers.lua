@@ -5,7 +5,7 @@ local divisions = include("lib/divisions")
 
 local throttle_time = 0.01
 
-channel_edit_page_ui_refreshers.refresh_masks = fn.debounce(function(note_selectors)
+channel_edit_page_ui_refreshers.refresh_masks = ui_scheduler.debounce(function(note_selectors)
   local pressed_keys = grid_controller.get_pressed_keys()
   local channel = program.get_selected_channel()
 
@@ -65,7 +65,7 @@ channel_edit_page_ui_refreshers.refresh_masks = fn.debounce(function(note_select
   end
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_clock_mods = fn.debounce(function(clock_mod_list_selector, clock_swing_value_selector)
+channel_edit_page_ui_refreshers.refresh_clock_mods = ui_scheduler.debounce(function(clock_mod_list_selector, clock_swing_value_selector)
   local channel = program.get_selected_channel()
   local clock_mods = channel.clock_mods
   local divisions = fn.filter_by_type(clock_controller.get_clock_divisions(), clock_mods.type)
@@ -80,7 +80,7 @@ channel_edit_page_ui_refreshers.refresh_clock_mods = fn.debounce(function(clock_
   end
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_swing = fn.debounce(function(clock_swing_value_selector)
+channel_edit_page_ui_refreshers.refresh_swing = ui_scheduler.debounce(function(clock_swing_value_selector)
   local channel = program.get_selected_channel()
   local value = channel.swing 
   if value == nil then
@@ -89,32 +89,32 @@ channel_edit_page_ui_refreshers.refresh_swing = fn.debounce(function(clock_swing
   clock_swing_value_selector:set_value(value)
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_swing_shuffle_type = fn.debounce(function(swing_shuffle_type_selector)
+channel_edit_page_ui_refreshers.refresh_swing_shuffle_type = ui_scheduler.debounce(function(swing_shuffle_type_selector)
   local channel = program.get_selected_channel()
   local value = channel.swing_shuffle_type or 1
   swing_shuffle_type_selector:set_selected_value(value)
 end, throttle_time)
 
 
-channel_edit_page_ui_refreshers.refresh_shuffle_feel = fn.debounce(function(shuffle_feel_selector)
+channel_edit_page_ui_refreshers.refresh_shuffle_feel = ui_scheduler.debounce(function(shuffle_feel_selector)
   local channel = program.get_selected_channel()
   local value = channel.shuffle_feel or 1
   shuffle_feel_selector:set_selected_value(value)
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_shuffle_basis = fn.debounce(function(shuffle_basis_selector)
+channel_edit_page_ui_refreshers.refresh_shuffle_basis = ui_scheduler.debounce(function(shuffle_basis_selector)
   local channel = program.get_selected_channel()
   local value = channel.shuffle_basis or 1
   shuffle_basis_selector:set_selected_value(value)
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_shuffle_amount = fn.debounce(function(shuffle_amount_selector)
+channel_edit_page_ui_refreshers.refresh_shuffle_amount = ui_scheduler.debounce(function(shuffle_amount_selector)
   local channel = program.get_selected_channel()
   local value = channel.shuffle_amount or 0
   shuffle_amount_selector:set_value(value)
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_device_selector = fn.debounce(function(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
+channel_edit_page_ui_refreshers.refresh_device_selector = ui_scheduler.debounce(function(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
   local channel = program.get_selected_channel()
   if channel.number == 17 then return end
   local device = device_map.get_device(program.get().devices[channel.number].device_map)
@@ -123,7 +123,7 @@ channel_edit_page_ui_refreshers.refresh_device_selector = fn.debounce(function(d
   param_select_vertical_scroll_selector:set_meta_item(device)
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_romans= fn.debounce(function(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector)
+channel_edit_page_ui_refreshers.refresh_romans= ui_scheduler.debounce(function(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector)
   local scale = quantizer_vertical_scroll_selector:get_selected_item()
   if scale then
     local number = scale.number
@@ -133,7 +133,7 @@ channel_edit_page_ui_refreshers.refresh_romans= fn.debounce(function(quantizer_v
   end
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_quantiser= fn.debounce(function(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, rotation_vertical_scroll_selector, m_params)
+channel_edit_page_ui_refreshers.refresh_quantiser= ui_scheduler.debounce(function(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, rotation_vertical_scroll_selector, m_params)
   local channel = program.get_selected_channel()
   local scale = program.get_scale(program.get().selected_scale)
   program.get_selected_sequencer_pattern().active = true
@@ -145,7 +145,7 @@ channel_edit_page_ui_refreshers.refresh_quantiser= fn.debounce(function(quantize
 end, throttle_time)
 
 
-channel_edit_page_ui_refreshers.refresh_trig_lock_value= fn.debounce(function(i, m_params)
+channel_edit_page_ui_refreshers.refresh_trig_lock_value= ui_scheduler.debounce(function(i, m_params)
   local channel = program.get_selected_channel()
   local param_id = channel.trig_lock_params[i].param_id
 
@@ -206,7 +206,7 @@ function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, channel,
 end
 
 
-channel_edit_page_ui_refreshers.refresh_trig_locks = fn.debounce(function(m_params)
+channel_edit_page_ui_refreshers.refresh_trig_locks = ui_scheduler.debounce(function(m_params)
   
   local channel = program.get_selected_channel()
   local pressed_keys = grid_controller.get_pressed_keys()
@@ -214,7 +214,7 @@ channel_edit_page_ui_refreshers.refresh_trig_locks = fn.debounce(function(m_para
 
   for i = 1, 10 do
     channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, channel, pressed_keys, current_step)
-    clock.sleep(0.00001)
+    continue.yield()
   end
 end, throttle_time)
 

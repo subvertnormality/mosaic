@@ -271,16 +271,23 @@ function note_edit_page_controller.refresh_fader(s)
   end
 end
 
-note_edit_page_controller.refresh = fn.debounce(function()
-
-  for s = 1, 64 do
-    note_edit_page_controller.refresh_fader(s)
-    clock.sleep(0.00001)
-  end
+note_edit_page_controller.refresh = ui_scheduler.debounce(function()
 
   note_edit_page_controller.refresh_buttons()
-  fn.grid_dirty = true
 
-end, 0.01)
+  -- Process faders in batches of 4
+  for s = 1, 64, 4 do
+    -- Update batch of 4 faders
+    for i = 0, 3 do
+      local index = s + i
+      if index <= 64 then  -- Prevent going over bounds
+        note_edit_page_controller.refresh_fader(index)
+      end
+    end
+    coroutine.yield()  -- Yield after each batch of 4
+  end
+ 
+  fn.grid_dirty = true
+ end, 0.01)
 
 return note_edit_page_controller

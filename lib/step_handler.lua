@@ -652,6 +652,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
       acceleration_accumulator = acceleration_accumulator + (chord_spread * delay_multiplier)
 
     end
+
   end
 
   if chord_strum_pattern == 2 or chord_strum_pattern == 4 then

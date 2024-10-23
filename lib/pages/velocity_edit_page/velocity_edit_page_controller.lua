@@ -294,16 +294,22 @@ function velocity_edit_page_controller.refresh_fader(s)
   end
 end
 
-velocity_edit_page_controller.refresh = fn.debounce(function()
-
-  for s = 1, 64 do
-    velocity_edit_page_controller.refresh_fader(s)
-    clock.sleep(0.00001)
-  end
+velocity_edit_page_controller.refresh = ui_scheduler.debounce(function()
 
   velocity_edit_page_controller.refresh_buttons()
+
+  for s = 1, 64, 4 do
+    -- Process 4 faders per batch
+    for i = 0, 3 do
+      local index = s + i
+      if index <= 64 then
+        velocity_edit_page_controller.refresh_fader(index)
+      end
+    end
+    coroutine.yield()  -- Yield after each batch of 4
+  end
+ 
   fn.grid_dirty = true
-  
-end, 0.01)
+ end)
 
 return velocity_edit_page_controller

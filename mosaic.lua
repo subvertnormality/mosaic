@@ -10,6 +10,7 @@
 testing = false
 
 fn = include("mosaic/lib/functions")
+ui_scheduler = include("mosaic/lib/scheduler")
 grid_controller = include("mosaic/lib/grid_controller")
 ui_controller = include("mosaic/lib/ui_controller")
 program = include("mosaic/lib/program")
@@ -29,7 +30,7 @@ local param_manager = include("mosaic/lib/param_manager")
 local ui_splash_screen_active = false
 
 local redraw_clock = nil
-local redraw_keep_alive_lock = nil
+local scheduler_clock = nil
 
 nb = require("mosaic/lib/nb/lib/nb")
 clock_controller = include("mosaic/lib/clock_controller")
@@ -138,7 +139,6 @@ end
 
 function redraw()
   screen.clear()
-
   if fn.dirty_screen() == true then
     if ui_splash_screen_active then
       screen.level(15)
@@ -195,6 +195,16 @@ function init()
   sinfonion.set_reset(0)
   sinfonion.set_chaotic_detune(0)
   sinfonion.set_harmonic_shift(0)
+
+
+  scheduler_clock = clock.run(
+    function()
+      while true do
+        clock.sleep(1/300)
+        ui_scheduler.update()
+      end
+    end
+  )
 
 
   redraw_clock = clock.run(

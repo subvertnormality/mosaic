@@ -51,19 +51,19 @@ function grid_controller.get_pressed_keys()
 end
 
 
-local refresh_pages = fn.debounce(function()
+local refresh_pages = ui_scheduler.debounce(function()
 
     if (program.get().selected_page == 1) then
       channel_edit_page_controller.refresh()
-      clock.sleep(0.0001)
+      coroutine.yield()
       channel_edit_page_ui_controller.refresh()
-      clock.sleep(0.0001)
+      coroutine.yield()
     elseif (program.get().selected_page == 2) then
       channel_sequencer_page_controller.refresh()
-      clock.sleep(0.0001)
+      coroutine.yield()
     elseif (program.get().selected_page == 3) then
       trigger_edit_page_controller.refresh()
-      clock.sleep(0.0001)
+      coroutine.yield()
     elseif (program.get().selected_page == 4) then
       -- note_edit_page_controller.refresh()
     elseif (program.get().selected_page == 5) then
