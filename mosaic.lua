@@ -10,7 +10,7 @@
 testing = false
 
 fn = include("mosaic/lib/functions")
-ui_scheduler = include("mosaic/lib/scheduler")
+scheduler = include("mosaic/lib/scheduler")
 grid_controller = include("mosaic/lib/grid_controller")
 ui_controller = include("mosaic/lib/ui_controller")
 program = include("mosaic/lib/program")
@@ -201,7 +201,7 @@ function init()
     function()
       while true do
         clock.sleep(1/300)
-        ui_scheduler.update()
+        scheduler.update()
       end
     end
   )

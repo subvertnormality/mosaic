@@ -194,7 +194,7 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
   return merged_pattern
 end
 
-pattern_controller.update_working_patterns = ui_scheduler.debounce(function()
+pattern_controller.update_working_patterns = scheduler.debounce(function()
   for c = 1, 16 do
     pattern_controller.update_working_pattern(c)
     coroutine.yield()

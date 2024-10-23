@@ -51,7 +51,7 @@ function grid_controller.get_pressed_keys()
 end
 
 
-local refresh_pages = ui_scheduler.debounce(function()
+local refresh_pages = scheduler.debounce(function()
 
     if (program.get().selected_page == 1) then
       channel_edit_page_controller.refresh()

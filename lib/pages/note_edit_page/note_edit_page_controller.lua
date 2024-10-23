@@ -271,7 +271,7 @@ function note_edit_page_controller.refresh_fader(s)
   end
 end
 
-note_edit_page_controller.refresh = ui_scheduler.debounce(function()
+note_edit_page_controller.refresh = scheduler.debounce(function()
 
   note_edit_page_controller.refresh_buttons()
 

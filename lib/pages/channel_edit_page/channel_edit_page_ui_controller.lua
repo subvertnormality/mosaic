@@ -882,7 +882,7 @@ function channel_edit_page_ui_controller.refresh_param_list()
   param_select_vertical_scroll_selector:set_items(device_map.get_available_params_for_channel(program.get().selected_channel, dials:get_selected_index()))
 end
 
-channel_edit_page_ui_controller.refresh_channel_config = ui_scheduler.debounce(function()
+channel_edit_page_ui_controller.refresh_channel_config = scheduler.debounce(function()
   -- Initial checks
   local channel = program.get_selected_channel()
   if channel.number == 17 then return end

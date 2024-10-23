@@ -294,7 +294,7 @@ function velocity_edit_page_controller.refresh_fader(s)
   end
 end
 
-velocity_edit_page_controller.refresh = ui_scheduler.debounce(function()
+velocity_edit_page_controller.refresh = scheduler.debounce(function()
 
   velocity_edit_page_controller.refresh_buttons()
 
