@@ -214,7 +214,7 @@ channel_edit_page_ui_refreshers.refresh_trig_locks = scheduler.debounce(function
 
   for i = 1, 10 do
     channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, channel, pressed_keys, current_step)
-    continue.yield()
+    coroutine.yield()
   end
 end, throttle_time)
 

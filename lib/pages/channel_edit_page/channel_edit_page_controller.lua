@@ -319,9 +319,13 @@ function channel_edit_page_controller.register_press_handlers()
           channel_edit_page_ui_controller.refresh()
         else
           if is_key3_down then
+            program.get().selected_scale = x
+            channel_edit_page_ui_controller.refresh()
+          else
             channel_scale_fader:press(x, y)
             local scale_value = channel_scale_fader:get_value()
             local number = program.get_scale(scale_value).number
+            program.get().selected_scale = x
             if program.get().default_scale ~= scale_value then
               program.get().default_scale = scale_value
               tooltip:show("Global scale: " .. quantiser.get_notes()[program.get_scale(scale_value).root_note + 1] .. " " .. quantiser.get_scale_name_from_index(number))
@@ -331,9 +335,6 @@ function channel_edit_page_controller.register_press_handlers()
               tooltip:show("Global scale off")
             end
             channel_edit_page_ui_controller.refresh_quantiser()
-          else
-            program.get().selected_scale = x
-            channel_edit_page_ui_controller.refresh()
           end
         end
       end
@@ -343,18 +344,8 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_scale_fader:is_this(x, y) and program.get().selected_channel == 17 then
-        channel_scale_fader:press(x, y)
-        local scale_value = channel_scale_fader:get_value()
-        local number = program.get_scale(scale_value).number
-        if program.get().default_scale ~= scale_value then
-          program.get().default_scale = scale_value
-          tooltip:show("Global scale: " .. quantiser.get_notes()[program.get_scale(scale_value).root_note + 1] .. " " .. quantiser.get_scale_name_from_index(number))
-        else
-          program.get().default_scale = 0
-          channel_scale_fader:set_value(0)
-          tooltip:show("Global scale off")
-        end
-        channel_edit_page_ui_controller.refresh_quantiser()
+        program.get().selected_scale = x
+        channel_edit_page_ui_controller.refresh()
       end
     end
   )

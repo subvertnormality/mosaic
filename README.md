@@ -412,9 +412,9 @@ Access the scale editor by selecting the channel page using the far left global 
 
 ![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
 
-When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is dimly lit on the grid. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
+When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
 
-A long or shift press (hold K3) on a scale button selects it as the global scale, indicated by a brightly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
+A long or shift press (hold K3) on a scale button selects a scale for editing without applying it to the currently playing pattern, indicated by a dimly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
 
 Scale locks can be set to apply a scale globally or to a single channel, activating at a designated step and persisting until the end of the pattern. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
 
