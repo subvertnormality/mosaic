@@ -660,6 +660,10 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
           if processed_chord_note then
             play_note(processed_chord_note, note_container, velocity, note_container.length, note_on_func)
+
+            if not note_dashboard_values.chords then
+              note_dashboard_values.chords = {}
+            end
             chord_note_dashboard_values.chords[chord_number] = processed_chord_note
 
             if c == program.get().selected_channel then
@@ -700,6 +704,10 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         if processed_note then
           local velocity = note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes)
           play_note(processed_note, note_container, velocity, note_container.length, note_on_func)
+
+          if not note_dashboard_values.chords then
+            note_dashboard_values.chords = {}
+          end
           table.insert(note_dashboard_values.chords, processed_note)
 
           if c == program.get().selected_channel then
