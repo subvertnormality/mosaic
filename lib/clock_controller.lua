@@ -188,14 +188,14 @@ function clock_controller.init()
         end_trig = program.get_selected_sequencer_pattern().global_pattern_length
       end
 
-      if current_step < start_trig then
-        program.set_current_step_for_channel(channel_number, start_trig)
-        current_step = start_trig
-      end
-
       if not clock_controller["channel_" .. channel_number .. "_clock"].first_run then
         program.set_current_step_for_channel(channel_number, current_step + 1)
         current_step = current_step + 1
+      end
+
+      if current_step < start_trig then
+        program.set_current_step_for_channel(channel_number, start_trig)
+        current_step = start_trig
       end
 
       if current_step > end_trig then

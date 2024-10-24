@@ -104,6 +104,68 @@ function test_current_step_number_is_set_to_start_step_when_lower_than_start_tri
 
 end
 
+
+function test_step_continues_at_new_start_step_when_pattern_size_changes()
+
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  test_pattern.note_values[17] = 1
+  test_pattern.lengths[17] = 1
+  test_pattern.trig_values[17] = 1
+  test_pattern.velocity_values[17] = 101
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+
+  program.get_channel(1).start_trig[1] = 1
+  program.get_channel(1).start_trig[2] = 4
+
+  program.get_channel(1).end_trig[1] = 4
+  program.get_channel(1).end_trig[2] = 4
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(4)
+
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  program.get_channel(1).start_trig[1] = 1
+  program.get_channel(1).start_trig[2] = 5
+
+  program.get_channel(1).end_trig[1] = 4
+  program.get_channel(1).end_trig[2] = 5
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 101)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+end
+
 function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_pattern_reset_is_disabled()
 
   setup()
