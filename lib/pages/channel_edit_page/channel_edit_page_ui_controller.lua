@@ -1562,6 +1562,8 @@ function channel_edit_page_ui_controller.set_note_dashboard_values(values)
       
       if values.chords[i] and values.chords[i] ~= 0 then
         note_displays.chords[i]:set_value(values.chords[i])
+      elseif note_displays.chords[i]:get_value() ~= -1 then
+        note_displays.chords[i]:set_value(note_displays.chords[i]:get_value())
       else
         note_displays.chords[i]:set_value(-1)
       end

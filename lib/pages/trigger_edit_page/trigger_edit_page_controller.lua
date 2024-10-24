@@ -135,50 +135,65 @@ local function shift_table(tbl, n)
   return res
 end
 
-local function load_paint_pattern()
-  if (pattern_trigger_edit_page_paint_button:get_state() == 2) then
-    local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
-    local pattern1 = pattern_trigger_edit_page_pattern1_fader:get_value()
-    local pattern2 = pattern_trigger_edit_page_pattern2_fader:get_value()
-    local bank = pattern_trigger_edit_page_bankmask_fader:get_value()
-    local len = 64
-    paint_pattern = {}
-
-    if (algorithm == 3) then
-      local erpattern = er.gen(pattern1, pattern2, 0)
-      local er_len = #erpattern
-      for i = 1, 64 do
-        paint_pattern[i] = erpattern[(i - 1) % er_len + 1]
-      end
-    else
-      for step = 1, len do
-        if (algorithm == 1) then
-          paint_pattern[step] = drum_ops.drum(bank, pattern1, step)
-        elseif (algorithm == 2) then
-          paint_pattern[step] = drum_ops.tresillo(bank, pattern1, pattern2, params:string("tresillo_amount"), step)
-        elseif (algorithm == 4) then
-          paint_pattern[step] = drum_ops.nr(pattern1, bank, pattern2, step)
+local load_paint_pattern = scheduler.debounce(function()
+  if (pattern_trigger_edit_page_paint_button:get_state() ~= 2) then
+    return
+  end
+ 
+  -- Get all values up front
+  local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
+  local pattern1 = pattern_trigger_edit_page_pattern1_fader:get_value()
+  local pattern2 = pattern_trigger_edit_page_pattern2_fader:get_value() 
+  local bank = pattern_trigger_edit_page_bankmask_fader:get_value()
+  local len = 64
+  paint_pattern = {}
+  
+  coroutine.yield() -- Yield after getting values
+  
+  -- Handle Euclidean rhythm case
+  if (algorithm == 3) then
+    local erpattern = er.gen(pattern1, pattern2, 0)
+    local er_len = #erpattern
+    
+    -- Process in batches of 4
+    for i = 1, len, 4 do
+      for j = 0, 3 do
+        local index = i + j
+        if index <= len then
+          paint_pattern[index] = erpattern[(index - 1) % er_len + 1]
         end
       end
+      coroutine.yield() -- Yield after each batch of 4
     end
-
-    if shift ~= 0 then
-      paint_pattern = shift_table(paint_pattern, shift)
+  
+  -- Handle other algorithms
+  else
+    -- Process in batches of 4
+    for step = 1, len, 4 do
+      for j = 0, 3 do
+        local current_step = step + j
+        if current_step <= len then
+          if (algorithm == 1) then
+            paint_pattern[current_step] = drum_ops.drum(bank, pattern1, current_step)
+          elseif (algorithm == 2) then
+            paint_pattern[current_step] = drum_ops.tresillo(bank, pattern1, pattern2, params:string("tresillo_amount"), current_step)
+          elseif (algorithm == 4) then
+            paint_pattern[current_step] = drum_ops.nr(pattern1, bank, pattern2, current_step)
+          end
+        end
+      end
+      coroutine.yield() -- Yield after each batch of 4
     end
-
-    pattern_trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
   end
-end
-
-local function throttled_load_paint_pattern()
-  if load_timer then
-    clock.cancel(load_timer)
+ 
+  coroutine.yield() -- Yield before shift operation
+  
+  if shift ~= 0 then
+    paint_pattern = shift_table(paint_pattern, shift)
   end
-  load_timer = clock.run(function()
-    clock.sleep(throttle_time)
-    load_paint_pattern()
-  end)
-end
+ 
+  pattern_trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
+ end, throttle_time)
 
 local function save_paint_pattern(p)
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
@@ -226,7 +241,7 @@ function trigger_edit_page_controller.register_press_handlers()
     function(x, y)
       if pattern_trigger_edit_page_pattern1_fader:is_this(x, y) then
         pattern_trigger_edit_page_pattern1_fader:press(x, y)
-        throttled_load_paint_pattern()
+        load_paint_pattern()
         if (pattern_trigger_edit_page_algorithm_fader:get_value() == 3) then
           tooltip:show("Fill - " .. pattern_trigger_edit_page_pattern1_fader:get_value() .. " selected")
         else
@@ -240,7 +255,7 @@ function trigger_edit_page_controller.register_press_handlers()
     function(x, y)
       if pattern_trigger_edit_page_pattern2_fader:is_this(x, y) then
         pattern_trigger_edit_page_pattern2_fader:press(x, y)
-        throttled_load_paint_pattern()
+        load_paint_pattern()
         if (pattern_trigger_edit_page_algorithm_fader:get_value() == 3) then
           tooltip:show("Length - " .. pattern_trigger_edit_page_pattern2_fader:get_value() .. " selected")
         else
@@ -256,7 +271,7 @@ function trigger_edit_page_controller.register_press_handlers()
       if pattern_trigger_edit_page_algorithm_fader:is_this(x, y) then
         trigger_edit_page_controller.refresh_pattern_trigger_edit_page_ui_controller()
         tooltip:show(get_algorithm_name(pattern_trigger_edit_page_algorithm_fader:get_value()) .. " selected")
-        throttled_load_paint_pattern()
+        load_paint_pattern()
       end
     end
   )
@@ -266,7 +281,7 @@ function trigger_edit_page_controller.register_press_handlers()
       local algorithm = pattern_trigger_edit_page_algorithm_fader:get_value()
       if pattern_trigger_edit_page_bankmask_fader:is_this(x, y) and algorithm ~= 3 then
         pattern_trigger_edit_page_bankmask_fader:press(x, y)
-        throttled_load_paint_pattern()
+        load_paint_pattern()
         tooltip:show(get_bank_name(pattern_trigger_edit_page_bankmask_fader:get_value()) .. " selected")
       end
     end
@@ -282,7 +297,7 @@ function trigger_edit_page_controller.register_press_handlers()
           pattern_trigger_edit_page_left_button:set_state(2)
           pattern_trigger_edit_page_centre_button:set_state(2)
           pattern_trigger_edit_page_right_button:set_state(2)
-          throttled_load_paint_pattern()
+          load_paint_pattern()
           pattern_trigger_edit_page_paint_button:blink()
           tooltip:show("Painting pattern")
         else
@@ -326,7 +341,7 @@ function trigger_edit_page_controller.register_press_handlers()
         if (pattern_trigger_edit_page_left_button:get_state() == 2) then
           shift = shift - 1
 
-          throttled_load_paint_pattern()
+          load_paint_pattern()
           pattern_trigger_edit_page_left_button:set_state(2)
           tooltip:show("Shifting left")
         else
@@ -341,7 +356,7 @@ function trigger_edit_page_controller.register_press_handlers()
       if pattern_trigger_edit_page_centre_button:is_this(x, y) then
         if (pattern_trigger_edit_page_centre_button:get_state() == 2) then
           shift = 0
-          throttled_load_paint_pattern()
+          load_paint_pattern()
           pattern_trigger_edit_page_centre_button:set_state(2)
           tooltip:show("Shift reset")
         else
@@ -358,7 +373,7 @@ function trigger_edit_page_controller.register_press_handlers()
           shift = shift + 1
 
           pattern_trigger_edit_page_right_button:set_state(2)
-          throttled_load_paint_pattern()
+          load_paint_pattern()
           tooltip:show("Shifting right")
         else
           pattern_trigger_edit_page_right_button:set_state(1)

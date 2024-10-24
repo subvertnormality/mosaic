@@ -330,21 +330,12 @@ local function play_note_internal(note, note_container, velocity, division, note
   local c = note_container.channel
   local channel = program.get_channel(c)
   
-  local note_dashboard_values = {
-    note = note_container.note,
-    velocity = velocity,
-    length = note_container.length
-  }
-
   note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
 
   clock_controller.delay_action(c, division, action_flag, function()
     note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
   end)
 
-  if c == program.get().selected_channel then
-    channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
-  end
 end
 
 -- Redefine play_note to use the helper function
@@ -360,6 +351,9 @@ end
 local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
   local c = note_container.channel
   local channel = program.get_channel(c)
+
+  local note_dashboard_values = {}
+  note_dashboard_values.chords = {}
 
   local sequenced_chord_notes = {}
 
@@ -409,11 +403,6 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
 
   end
 
-  if c == program.get().selected_channel then
-    channel_edit_page_ui_controller.set_note_dashboard_values({
-      chords = sequenced_chord_notes
-    })
-  end
 
   if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
     if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
@@ -456,20 +445,28 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   end
 
   if sequenced_chord_notes[1] and sequenced_chord_notes[1].note_mask_value then
-    play_arp_note(quantiser.process_chord_note_for_mask(
+    local note = quantiser.process_chord_note_for_mask(
       sequenced_chord_notes[1].note_mask_value,
       sequenced_chord_notes[1].chord_note or nil,
       sequenced_chord_notes[1].octave_mod,
       sequenced_chord_notes[1].transpose,
       channel.step_scale_number
-    ), note_container, note_container.velocity, arp_division, note_on_func)
+    )
+    play_arp_note(note, note_container, note_container.velocity, arp_division, note_on_func)
+    note_dashboard_values.note = note
+    note_dashboard_values.velocity = note_container.velocity
+    note_dashboard_values.length = arp_division
   elseif sequenced_chord_notes[1] and sequenced_chord_notes[1].note_value then
-    play_arp_note(quantiser.process(
+    local note = quantiser.process(
       sequenced_chord_notes[1].note_value + (sequenced_chord_notes[1].chord_note or 0),
       sequenced_chord_notes[1].octave_mod,
       sequenced_chord_notes[1].transpose,
       channel.step_scale_number
-    ), note_container, note_container.velocity, arp_division, note_on_func)
+    )
+    play_arp_note(note, note_container, note_container.velocity, arp_division, note_on_func)
+    note_dashboard_values.note = note
+    note_dashboard_values.velocity = note_container.velocity
+    note_dashboard_values.length = arp_division
   end
 
   arp_note[c] = 2
@@ -477,9 +474,12 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   local number_of_executions = 1
   local total_notes = #sequenced_chord_notes  -- Cache the length of the processed_chord_notes table
 
+  if c == program.get().selected_channel then
+    channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
+  end
+
   clock_controller.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div)
     
-    local note_dashboard_values = {}
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
     local length = div
 
@@ -521,21 +521,24 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
 
     if note_to_play then
       if note_to_play and note_to_play.note_mask_value and type(note_to_play.note_mask_value) == "number" then
-
-        play_arp_note(quantiser.process_chord_note_for_mask(
+        local note = quantiser.process_chord_note_for_mask(
           note_to_play.note_mask_value,
           note_to_play.chord_note or nil,
           note_to_play.octave_mod,
           note_to_play.transpose,
           channel.step_scale_number
-        ), note_container, velocity, arp_division, note_on_func)
+        )
+        play_arp_note(note, note_container, velocity, arp_division, note_on_func)
+        table.insert(note_dashboard_values.chords, note)
       else
-        play_arp_note(quantiser.process(
+        local note = quantiser.process(
           note_to_play.note_value + (note_to_play.chord_note or 0),
           note_to_play.octave_mod,
           note_to_play.transpose,
           channel.step_scale_number
-        ), note_container, velocity, arp_division, note_on_func)
+        )
+        play_arp_note(note, note_container, velocity, arp_division, note_on_func)
+        table.insert(note_dashboard_values.chords, note)
       end
     end
 
@@ -546,6 +549,10 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     end
     
     number_of_executions = number_of_executions + 1
+
+    if c == program.get().selected_channel then
+      channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
+    end
   end)
 
 end
@@ -563,8 +570,6 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     step_chord_masks and step_chord_masks[3] or channel.chord_three_mask,
     step_chord_masks and step_chord_masks[4] or channel.chord_four_mask
   }
-
-  note_dashboard_values.chords = {}
 
   local chord_division = note_divisions[step_handler.process_stock_params(c, current_step, "chord_strum")] and note_divisions[step_handler.process_stock_params(c, current_step, "chord_strum")].value
   local chord_velocity_mod = step_handler.process_stock_params(c, current_step, "chord_velocity_modifier")
@@ -586,10 +591,19 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local selected_channel = program.get().selected_channel
   if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
     play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
+    note_dashboard_values.note = note_container.note
+    note_dashboard_values.velocity = note_container.velocity
+    note_dashboard_values.length = note_container.length
+    if c == program.get().selected_channel then
+      channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
+    end
   end
 
   local delay_multiplier = 0
   local acceleration_accumulator = 0
+
+  local chord_note_dashboard_values = {}
+  chord_note_dashboard_values.chords = {}
 
   for i, chord_note in ipairs(chord_notes) do
     if chord_note and chord_note ~= 0 then
@@ -615,6 +629,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
         delay_multiplier = delay_multiplier - 1
       end
+
+      
 
       clock_controller.delay_action(
         c,
@@ -644,7 +660,11 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
           if processed_chord_note then
             play_note(processed_chord_note, note_container, velocity, note_container.length, note_on_func)
-            note_dashboard_values.chords[chord_number] = processed_chord_note
+            chord_note_dashboard_values.chords[chord_number] = processed_chord_note
+
+            if c == program.get().selected_channel then
+              channel_edit_page_ui_controller.set_note_dashboard_values(chord_note_dashboard_values)
+            end
           end
         end
       )
@@ -680,6 +700,11 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         if processed_note then
           local velocity = note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes)
           play_note(processed_note, note_container, velocity, note_container.length, note_on_func)
+          table.insert(note_dashboard_values.chords, processed_note)
+
+          if c == program.get().selected_channel then
+            channel_edit_page_ui_controller.set_note_dashboard_values(chord_note_dashboard_values)
+          end
         end
       end
     )
@@ -689,10 +714,6 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   end
 
-
-  if c == program.get().selected_channel then
-    channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
-  end
 end
 
 function step_handler.handle(c, current_step)
