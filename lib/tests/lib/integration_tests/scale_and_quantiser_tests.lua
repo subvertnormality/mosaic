@@ -1426,3 +1426,296 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 end
+
+
+function test_global_transpose_applies_to_notes()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  local channel = 2
+  local scale = quantiser.get_scales()[1] -- Major scale
+
+  -- Set up a basic scale
+  program.set_scale(
+    2,
+    {
+      number = 1,
+      scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
+      chord = 1,
+      root_note = 0
+    }
+  )
+
+  program.get().default_scale = 2
+  program.set_transpose(2) -- Transpose up 2 semitones
+
+  -- Set up a simple note
+  test_pattern.note_values[1] = 0  -- C
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+  clock_setup()
+  progress_clock_by_beats(1)
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  -- C (60) + 2 semitones = D (62)
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+end
+
+
+function test_step_transpose_overrides_global_transpose()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  local channel = 2
+  local scale = quantiser.get_scales()[1]
+
+  program.set_scale(
+    2,
+    {
+      number = 1,
+      scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
+      chord = 1,
+      root_note = 0
+    }
+  )
+
+  program.get().default_scale = 2
+  program.set_transpose(2) -- Global transpose +2
+  
+  -- Add a step transpose that should override the global transpose
+  local current_step = 1
+  program.add_step_transpose_trig_lock(current_step, 4) -- Step transpose +4
+
+  test_pattern.note_values[1] = 0  -- C
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+  clock_setup()
+  progress_clock_by_beats(1)
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  -- C (60) + 4 semitones = E (64)
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+end
+
+function test_negative_transpose_values()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  local channel = 2
+  local scale = quantiser.get_scales()[1]
+
+  program.set_scale(
+    2,
+    {
+      number = 1,
+      scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
+      chord = 1,
+      root_note = 0
+    }
+  )
+
+  program.get().default_scale = 2
+  program.set_transpose(-3) -- Transpose down 3 semitones
+
+  test_pattern.note_values[1] = 0  -- C
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+  clock_setup()
+  progress_clock_by_beats(1)
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  -- C (60) - 3 semitones = A (57)
+  luaunit.assert_equals(note_on_event[1], 57)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+end
+
+
+function test_transpose_persistance_across_steps()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  local channel = 2
+  local scale = quantiser.get_scales()[1]
+
+  program.set_scale(
+    2,
+    {
+      number = 1,
+      scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
+      chord = 1,
+      root_note = 0
+    }
+  )
+
+  program.get().default_scale = 2
+  
+  -- Set step transpose for first step
+  program.add_step_transpose_trig_lock(1, 2)
+
+  -- Set up multiple notes
+  test_pattern.note_values[1] = 0  -- C
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  test_pattern.note_values[2] = 2  -- E
+  test_pattern.lengths[2] = 1
+  test_pattern.trig_values[2] = 1
+  test_pattern.velocity_values[2] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+  clock_setup()
+  
+  -- First step
+  progress_clock_by_beats(1)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  -- C (60) + 2 semitones = D (62)
+  luaunit.assert_equals(note_on_event[1], 62)
+  
+  -- Second step should not maintain the transpose from step 1
+  -- E (64) + 2 semitones = F# (66)
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 66)
+end
+
+function test_transpose_resets_at_pattern_start()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  local channel = 2
+  local scale = quantiser.get_scales()[1]
+
+  program.set_scale(
+    2,
+    {
+      number = 1,
+      scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
+      chord = 1,
+      root_note = 0
+    }
+  )
+
+  program.get().default_scale = 2
+  program.set_transpose(0) -- No global transpose
+  
+  -- Set step transpose
+  program.add_step_transpose_trig_lock(2, 2)
+
+  test_pattern.note_values[1] = 0  -- C
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  test_pattern.note_values[2] = 0  -- C
+  test_pattern.lengths[2] = 1
+  test_pattern.trig_values[2] = 1
+  test_pattern.velocity_values[2] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+  clock_setup()
+  
+  -- First pattern
+  progress_clock_by_beats(1)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60) -- C + 2
+
+  progress_clock_by_beats(1)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62) -- C + 2
+
+  -- Play to reset
+  progress_clock_by_beats(62)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60) -- Should be back to C
+
+  progress_clock_by_beats(1)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62) -- C + 2
+end
+
+
+function test_transpose_with_octave_modification()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  local channel = 2
+  local scale = quantiser.get_scales()[1]
+
+  program.set_scale(
+    2,
+    {
+      number = 1,
+      scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
+      chord = 1,
+      root_note = 0
+    }
+  )
+
+  program.get().default_scale = 2
+  program.set_transpose(2) -- Transpose up 2 semitones
+  program.get_channel(channel).octave = 1 -- Up one octave
+
+  test_pattern.note_values[1] = 0  -- C
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+  clock_setup()
+  progress_clock_by_beats(1)
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  -- C (60) + 2 semitones + 12 semitones = D5 (74)
+  luaunit.assert_equals(note_on_event[1], 74)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+end
