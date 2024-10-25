@@ -196,7 +196,7 @@ _Mosaic_'s harmony tools enable you to compose your song's chordal progressions.
 
 Harmonic progressions can be applied globally — modulating all notes across all channels to the same key, degree, and scale rotation — or on a per-channel basis, affecting only the notes within that channel. This decoupling of patterns and notes from the active scale enables dynamic and experimental tonal modulations. For example, setting your global scale to change in a polyrhythmic pattern relative to your channel's note data can create captivating musical textures.
 
-Each project supports 16 scale slots. Each slot includes a root note, a scale type (e.g., Dorian, Major), a degree, and a scale rotation. The [Scale Editor](#scale-editor) is where you craft the scales that will form your chord progressions, and you can sequence these using [Scale Locks](#scale-locks) either globally from the scale editor, or per channel using the channel editor.
+Each project supports 16 scale slots. Each slot includes a root note, a scale type (e.g., Dorian, Major), a degree, transposition, and a scale rotation. The [Scale Editor](#scale-editor) is where you craft the scales that will form your chord progressions, and you can sequence these using [Scale Locks](#scale-locks) either globally from the scale editor, or per channel using the channel editor.
 
 ### Sequence Composition
 
@@ -444,7 +444,7 @@ The behavior of the sequencer when handling patterns of different lengths can al
 
 ##### Transposition
 
-You can transpose your entire Song Sequence using the global quantizer transposition fader, either globally or by step using trig locks. Transposition applies on top of the currently selected scale.
+You can transpose your entire Song Sequence using the global quantizer transposition fader, either globally or by step using trig locks. Global and trig transposition applies on top of the currently selected scale's transposition value.
 
 ![Global quantizer transposition fader](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_global_scale_transposition.png)
 
@@ -605,7 +605,9 @@ To clear a grid trig lock:
 
 ##### Transposition Locks
 
-The transposition of your song can be set on a per-step basis from the scale page accessed in the channel editor. To set a transposition lock:
+The transposition of your song can be set on a per-step basis from the scale page accessed in the channel editor. Transposition locks are applies on top of scale transposition values. 
+
+To set a transposition lock:
 
 1. Hold down the step you want to modify on the channel page sequencer.
 2. Press the desired transposition value.

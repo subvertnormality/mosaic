@@ -133,15 +133,16 @@ channel_edit_page_ui_refreshers.refresh_romans= scheduler.debounce(function(quan
   end
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_quantiser= scheduler.debounce(function(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, rotation_vertical_scroll_selector, m_params)
+channel_edit_page_ui_refreshers.refresh_quantiser= scheduler.debounce(function(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, transpose_vertical_scroll_selector, rotation_vertical_scroll_selector, m_params)
   local channel = program.get_selected_channel()
   local scale = program.get_scale(program.get().selected_scale)
   program.get_selected_sequencer_pattern().active = true
   quantizer_vertical_scroll_selector:set_selected_item(scale.number)
   notes_vertical_scroll_selector:set_selected_item(scale.root_note + 1)
   romans_vertical_scroll_selector:set_selected_item(scale.chord)
+  transpose_vertical_scroll_selector:set_selected_item((scale.transpose or 0) + 13)
   rotation_vertical_scroll_selector:set_selected_item((scale.chord_degree_rotation or 0) + 1)
-  channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, quantiser, fn)
+  channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, quantiser)
 end, throttle_time)
 
 

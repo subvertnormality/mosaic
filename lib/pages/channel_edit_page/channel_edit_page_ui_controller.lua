@@ -22,10 +22,11 @@ local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_p
 -- UI components
 local channel_pages = pages:new()
 local scales_pages = pages:new()
-local quantizer_vertical_scroll_selector = vertical_scroll_selector:new(20, 25, "Quantizer", quantiser.get_scales())
-local romans_vertical_scroll_selector = vertical_scroll_selector:new(90, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
+local quantizer_vertical_scroll_selector = vertical_scroll_selector:new(13, 25, "Quantizer", quantiser.get_scales())
+local romans_vertical_scroll_selector = vertical_scroll_selector:new(80, 25, "Roman Analysis", quantiser.get_scales()[1].romans)
 local notes_vertical_scroll_selector = vertical_scroll_selector:new(0, 25, "Notes", quantiser.get_notes())
-local rotation_vertical_scroll_selector = vertical_scroll_selector:new(110, 25, "Rotation", {"0", "1", "2", "3", "4", "5", "6"})
+local transpose_vertical_scroll_selector = vertical_scroll_selector:new(103, 25, "Transpose", {"-12", "-11", "-10", "-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1", "0", "+1", "+2", "+3", "+4", "+5", "+6", "+7", "+8", "+9", "+10", "+11", "+12"})
+local rotation_vertical_scroll_selector = vertical_scroll_selector:new(115, 25, "Rotation", {"r0", "r1", "r2", "r3", "r4", "r5", "r6"})
 local swing_shuffle_type_selector = list_selector:new(70, 18, "Swing Type", {{name = "X", value = 1}, {name = "Swing", value = 2}, {name = "Shuffle", value = 3}})
 local swing_selector = value_selector:new(0, 40, "Swing", -51, 50)
 local shuffle_feel_selector = list_selector:new(0, 40, "Feel", {{name = "X", value = 1}, {name = "Drunk", value = 2}, {name = "Smooth", value = 3}, {name = "Heavy", value = 4}, {name = "Clave", value = 5}})
@@ -204,6 +205,7 @@ local quantizer_page = page:new("", function()
   quantizer_vertical_scroll_selector:draw()
   romans_vertical_scroll_selector:draw()
   notes_vertical_scroll_selector:draw()
+  transpose_vertical_scroll_selector:draw()
   rotation_vertical_scroll_selector:draw()
 end)
 
@@ -340,6 +342,7 @@ function channel_edit_page_ui_controller.update_scale()
   local scale = quantizer_vertical_scroll_selector:get_selected_item()
   local chord = romans_vertical_scroll_selector:get_selected_index()
   local root_note = notes_vertical_scroll_selector:get_selected_index() - 1
+  local transpose = transpose_vertical_scroll_selector:get_selected_index() - 13
   local rotation = rotation_vertical_scroll_selector:get_selected_index() - 1
 
   save_confirm.set_cancel_message("Scale not saved.")
@@ -351,14 +354,14 @@ function channel_edit_page_ui_controller.update_scale()
     save_confirm.set_save(function()
       program.set_all_sequencer_pattern_scales(
         program.get().selected_scale,
-        {number = scale.number, scale = scale.scale, pentatonic_scale = scale.pentatonic_scale, chord = chord, root_note = root_note, chord_degree_rotation = rotation}
+        {number = scale.number, scale = scale.scale, pentatonic_scale = scale.pentatonic_scale, chord = chord, root_note = root_note, chord_degree_rotation = rotation, transpose = transpose}
       )
     end)
   else
     save_confirm.set_save(function()
       program.set_scale(
         program.get().selected_scale,
-        {number = scale.number, scale = scale.scale, pentatonic_scale = scale.pentatonic_scale, chord = chord, root_note = root_note, chord_degree_rotation = rotation}
+        {number = scale.number, scale = scale.scale, pentatonic_scale = scale.pentatonic_scale, chord = chord, root_note = root_note, chord_degree_rotation = rotation, transpose = transpose}
       )
     end)
   end
@@ -785,6 +788,7 @@ function channel_edit_page_ui_controller.enc(n, d)
         quantizer_vertical_scroll_selector = quantizer_vertical_scroll_selector,
         romans_vertical_scroll_selector = romans_vertical_scroll_selector,
         notes_vertical_scroll_selector = notes_vertical_scroll_selector,
+        transpose_vertical_scroll_selector = transpose_vertical_scroll_selector,
         rotation_vertical_scroll_selector = rotation_vertical_scroll_selector,
         clock_mod_list_selector = clock_mod_list_selector,
         midi_device_vertical_scroll_selector = midi_device_vertical_scroll_selector,
@@ -860,7 +864,7 @@ function channel_edit_page_ui_controller.refresh_romans()
 end
 
 function channel_edit_page_ui_controller.refresh_quantiser()
-  channel_edit_page_ui_refreshers.refresh_quantiser(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, rotation_vertical_scroll_selector)
+  channel_edit_page_ui_refreshers.refresh_quantiser(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, transpose_vertical_scroll_selector, rotation_vertical_scroll_selector)
 end
 
 function channel_edit_page_ui_controller.refresh_trig_lock_value(i)
@@ -1224,6 +1228,8 @@ function channel_edit_page_ui_controller.handle_quantizer_page_increment()
     romans_vertical_scroll_selector:scroll_down()
   elseif notes_vertical_scroll_selector:is_selected() then
     notes_vertical_scroll_selector:scroll_down()
+  elseif transpose_vertical_scroll_selector:is_selected() then
+    transpose_vertical_scroll_selector:scroll_down()
   elseif rotation_vertical_scroll_selector:is_selected() then
     rotation_vertical_scroll_selector:scroll_down()
   end
@@ -1238,6 +1244,8 @@ function channel_edit_page_ui_controller.handle_quantizer_page_decrement()
     romans_vertical_scroll_selector:scroll_up()
   elseif notes_vertical_scroll_selector:is_selected() then
     notes_vertical_scroll_selector:scroll_up()
+  elseif transpose_vertical_scroll_selector:is_selected() then
+    transpose_vertical_scroll_selector:scroll_up()
   elseif rotation_vertical_scroll_selector:is_selected() then
     rotation_vertical_scroll_selector:scroll_up()
   end

@@ -13,6 +13,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
   local quantizer_vertical_scroll_selector = selectors.quantizer_vertical_scroll_selector
   local romans_vertical_scroll_selector = selectors.romans_vertical_scroll_selector
   local notes_vertical_scroll_selector = selectors.notes_vertical_scroll_selector
+  local transpose_vertical_scroll_selector = selectors.transpose_vertical_scroll_selector
   local rotation_vertical_scroll_selector = selectors.rotation_vertical_scroll_selector
   local clock_mod_list_selector = selectors.clock_mod_list_selector
   local midi_device_vertical_scroll_selector = selectors.midi_device_vertical_scroll_selector
@@ -53,6 +54,9 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
       romans_vertical_scroll_selector:select()
     elseif romans_vertical_scroll_selector:is_selected() then
       romans_vertical_scroll_selector:deselect()
+      transpose_vertical_scroll_selector:select()
+    elseif transpose_vertical_scroll_selector:is_selected() then
+      transpose_vertical_scroll_selector:deselect()
       rotation_vertical_scroll_selector:select()
     elseif notes_vertical_scroll_selector:is_selected() then
       notes_vertical_scroll_selector:deselect()
@@ -131,6 +135,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
   local quantizer_vertical_scroll_selector = selectors.quantizer_vertical_scroll_selector
   local romans_vertical_scroll_selector = selectors.romans_vertical_scroll_selector
   local notes_vertical_scroll_selector = selectors.notes_vertical_scroll_selector
+  local transpose_vertical_scroll_selector = selectors.transpose_vertical_scroll_selector
   local rotation_vertical_scroll_selector = selectors.rotation_vertical_scroll_selector
   local clock_mod_list_selector = selectors.clock_mod_list_selector
   local midi_device_vertical_scroll_selector = selectors.midi_device_vertical_scroll_selector
@@ -172,9 +177,12 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
     elseif romans_vertical_scroll_selector:is_selected() then
       romans_vertical_scroll_selector:deselect()
       quantizer_vertical_scroll_selector:select()
+    elseif transpose_vertical_scroll_selector:is_selected() then
+      transpose_vertical_scroll_selector:deselect()
+      romans_vertical_scroll_selector:select()
     elseif rotation_vertical_scroll_selector:is_selected() then
       rotation_vertical_scroll_selector:deselect()
-      romans_vertical_scroll_selector:select()
+      transpose_vertical_scroll_selector:select()
     end
   elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] and program.get().selected_channel ~= 17 then
     -- Adjusted navigation for Clock Mods page

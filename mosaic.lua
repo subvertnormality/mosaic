@@ -220,7 +220,7 @@ function init()
       end
     end
   )
-  
+
   blink()
 
   params:add_group("mosaic", "MOSAIC", 29)

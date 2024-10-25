@@ -190,6 +190,10 @@ function program.set_channel_step_scale_number(c, step_scale_number)
   end
 end
 
+function program.get_channel_step_scale_number(c)
+  return program.get_selected_sequencer_pattern().channels[c].step_scale_number
+end
+
 function program.get()
   return program_store
 end
@@ -292,6 +296,12 @@ end
 
 function program.set_transpose(transpose)
   program.get_selected_sequencer_pattern().transpose = transpose or 0
+end
+
+function program.set_scale_transpose(scale, transpose)
+  
+  local s = program.get_scale(scale)
+  s.transpose = transpose
 end
 
 function program.get_transpose()
