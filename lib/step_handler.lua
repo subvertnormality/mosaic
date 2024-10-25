@@ -9,6 +9,7 @@ local persistent_channel_step_scale_numbers = {
     nil, nil, nil, nil, nil, nil, nil, nil
 }
 local persistent_global_step_scale_number = nil
+local persistent_step_transpose = nil
 
 local arp_note = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
@@ -305,22 +306,36 @@ function step_handler.calculate_step_transpose()
   local current_step = program.get_current_step_for_channel(17)
   local step_transpose = program.get_step_transpose_trig_lock(current_step)
   local global_transpose = program.get_transpose()
-  local scale_transpose = scale.transpose
+  local scale_transpose = scale.transpose or 0
 
   local transpose = 0
   local end_trig_1, end_trig_2 = channel.end_trig[1], channel.end_trig[2]
   local scale_channel_end_step = fn.calc_grid_count(end_trig_1, end_trig_2)
-
-  if step_transpose then
-    transpose = step_transpose + (scale_transpose or 0)
-  elseif global_transpose then
-    transpose = global_transpose + (scale_transpose or 0)
-  elseif scale_transpose then
-    transpose = scale_transpose
+  
+  if current_step and current_step % scale_channel_end_step == 1 then
+    persistent_step_transpose = nil
   end
+
+  if program.get_step_scale_trig_lock(channel, current_step) then
+    persistent_step_transpose = nil
+  end
+
+  -- First determine base transpose from step/persistent/global
+  if step_transpose then
+    transpose = step_transpose
+    persistent_step_transpose = step_transpose
+  elseif persistent_step_transpose then
+    transpose = persistent_step_transpose
+  else
+    transpose = global_transpose or 0
+  end
+
+  -- Add scale transpose to whatever base transpose was selected
+  transpose = transpose + (scale_transpose or 0)
 
   return transpose
 end
+
 
 
 local function play_note_internal(note, note_container, velocity, division, note_on_func, action_flag)

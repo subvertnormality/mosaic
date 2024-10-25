@@ -1810,7 +1810,7 @@ function test_transpose_hierarchy_scale_transpose_adds_to_global()
   luaunit.assert_equals(note_on_event[1], 65)
 end
 
-function test_transpose_hierarchy_should_fall_back_to_global_on_new_step()
+function test_transpose_hierarchy_should_fall_back_to_global_on_new_scale_step()
   setup()
   local sequencer_pattern = 1
   program.set_selected_sequencer_pattern(1)
@@ -1843,7 +1843,14 @@ function test_transpose_hierarchy_should_fall_back_to_global_on_new_step()
   test_pattern.trig_values[2] = 1
   test_pattern.velocity_values[2] = 100
 
+  test_pattern.note_values[3] = 0  -- C
+  test_pattern.lengths[3] = 1
+  test_pattern.trig_values[3] = 1
+  test_pattern.velocity_values[3] = 100
+
   program.add_step_transpose_trig_lock(1, 4) -- Step transpose +4 for first step
+  program.get().selected_channel = 17
+  program.add_step_scale_trig_lock(3, 1) -- New scale for second step
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
@@ -1856,7 +1863,12 @@ function test_transpose_hierarchy_should_fall_back_to_global_on_new_step()
   local note_on_event = table.remove(midi_note_on_events, 1)
   luaunit.assert_equals(note_on_event[1], 64) -- C (60) + 4 = E (64)
   
-  -- Second step - should use global transpose
+  -- Second step - should use step transpose
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 64)
+
+  -- Third step - should use global
   progress_clock_by_beats(1)
   note_on_event = table.remove(midi_note_on_events, 1)
   luaunit.assert_equals(note_on_event[1], 61) -- Should use global
@@ -1931,7 +1943,7 @@ function test_transpose_hierarchy_uses_scale_transpose()
   
   progress_clock_by_beats(1)
   note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 64) -- Back to scale transpose + global
+  luaunit.assert_equals(note_on_event[1], 67) -- Step transpose (4) added to scale transpose (3)
   
   progress_clock_by_beats(1)
   -- Next pattern - persistent transpose should be reset
@@ -1944,7 +1956,7 @@ function test_transpose_hierarchy_uses_scale_transpose()
   
   progress_clock_by_beats(1)
   note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 64) -- Back to scale transpose + global
+  luaunit.assert_equals(note_on_event[1], 67) -- Step transpose (4) added to scale transpose (3)
 end
 
 function test_transpose_hierarchy_fallback_to_global()
@@ -2034,4 +2046,84 @@ function test_multiple_scale_transpose_changes()
   progress_clock_by_beats(1)
   note_on_event = table.remove(midi_note_on_events, 1)
   luaunit.assert_equals(note_on_event[1], 66) -- C (60) + 5 + 1
+end
+
+
+function test_transpose_persistence_across_steps_until_next_scale_trig_lock()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  local channel = 2
+  local scale = quantiser.get_scales()[1]
+
+  program.set_scale(
+    2,
+    {
+      number = 1,
+      scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
+      chord = 1,
+      root_note = 0
+    }
+  )
+
+  program.get().default_scale = 2
+  
+  -- Set step transpose for first step
+  program.add_step_transpose_trig_lock(1, 2)
+
+  -- Set step transpose for fourth step
+  program.add_step_transpose_trig_lock(4, 0)
+
+
+  -- Set up multiple notes
+  test_pattern.note_values[1] = 0  -- C
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  test_pattern.note_values[2] = 0  -- C
+  test_pattern.lengths[2] = 1
+  test_pattern.trig_values[2] = 1
+  test_pattern.velocity_values[2] = 100
+
+  test_pattern.note_values[3] = 0  -- C
+  test_pattern.lengths[3] = 1
+  test_pattern.trig_values[3] = 1
+  test_pattern.velocity_values[3] = 100
+
+  test_pattern.note_values[4] = 0  -- D
+  test_pattern.lengths[4] = 1
+  test_pattern.trig_values[4] = 1
+  test_pattern.velocity_values[4] = 100
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+  clock_setup()
+  
+  -- First step
+  progress_clock_by_beats(1)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  -- C (60) + 2 semitones = D (62)
+  luaunit.assert_equals(note_on_event[1], 62)
+  
+  -- Second step should maintain the transpose from step 1
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  -- D (62) + 2 semitones = E (64)
+  luaunit.assert_equals(note_on_event[1], 62)
+
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  -- D (62) + 2 semitones = E (64)
+  luaunit.assert_equals(note_on_event[1], 62)
+
+  -- should not have the step transpose
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  -- D (62) + 2 semitones = E (64)
+  luaunit.assert_equals(note_on_event[1], 60)
 end
