@@ -302,6 +302,32 @@ function channel_edit_page_controller.register_press_handlers()
         end
         channel_edit_page_controller.refresh_faders()
       end
+      if channel_select_fader:is_this(x, y) and channel_select_fader:is_this(x2, y2) then
+        
+        local channel1 = program.get_channel(x)
+        local channel2 = program.get_channel(x2)
+
+        if is_key3_down == true then
+
+          if channel1.mute == true then
+            channel1.mute = false
+            channel_select_fader:light(x)
+          else
+            channel1.mute = true
+            channel_select_fader:dim(x)
+          end
+          if channel2.mute == true then
+            channel2.mute = false
+            channel_select_fader:light(x2)
+          else
+            channel2.mute = true
+            channel_select_fader:dim(x2)
+          end
+          tooltip:show("Channel mutes toggled")
+          channel_edit_page_controller.refresh_muted_channels()
+          fn.dirty_screen(true)
+        end
+      end
     end
   )
   press_handler:register(
