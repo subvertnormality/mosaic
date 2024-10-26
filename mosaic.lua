@@ -31,6 +31,7 @@ local ui_splash_screen_active = false
 
 local redraw_clock = nil
 local scheduler_clock = nil
+local screen_keep_alive = nil
 
 nb = require("mosaic/lib/nb/lib/nb")
 clock_controller = include("mosaic/lib/clock_controller")
@@ -217,6 +218,15 @@ function init()
         if fn.dirty_grid() then
           grid_controller.grid_redraw()
         end
+      end
+    end
+  )
+
+  screen_keep_alive = clock.run(
+    function()
+      while true do
+        clock.sleep(1)
+        fn.dirty_screen(true)
       end
     end
   )

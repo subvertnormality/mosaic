@@ -267,35 +267,46 @@ end
 function step_handler.manually_calculate_step_scale_number(c, step)
   local program_data = program.get()
   local channel = program.get_channel(c)
-  local current_step_17 = program.get_current_step_for_channel(17)
-  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), current_step_17)
-  local global_default_scale = program_data.default_scale
   local clock_division_17 = clock_controller.get_channel_division(17)
+  local channel_division = clock_controller.get_channel_division(c)
+  
+  -- Calculate the relative speed between the two sequencers
+  local speed_ratio = channel_division / clock_division_17
+  
+  -- Calculate what step channel 17 would be on
+  local global_scale_step
 
-  -- Calculate channel_step_scale_number
-  local channel_step_scale_number = nil
-  if c ~= 17 then
-    for i = 1, step do
-      channel_step_scale_number = program.get_step_scale_trig_lock(channel, i) or channel_step_scale_number
-    end
-  end
-
-  -- Calculate global_step_scale_number for global scale steps
-  local global_scale_step = math.floor(step / (clock_division_17 * 4 * 4))
-  for i = 1, global_scale_step do
-    global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), i) or global_step_scale_number
-  end
-
-  -- Scale Precedence: channel_step_scale > global_step_scale > global_default_scale
-  if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then
-    return channel_step_scale_number
-  elseif global_step_scale_number and global_step_scale_number > 0 then
-    return global_step_scale_number
-  elseif global_default_scale and global_default_scale > 0 and program.get_scale(global_default_scale).scale then
-    return global_default_scale
+  if step == 1 then
+    global_scale_step = 1
+  elseif speed_ratio > 16 then
+    global_scale_step = 1 
   else
-    return 0
+    global_scale_step = math.ceil(step * speed_ratio)
   end
+  
+  local global_default_scale = program_data.default_scale      
+  
+  local global_step_scale_number = nil   
+  for i = 1, global_scale_step do     
+    global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), i) or global_step_scale_number   
+  end    
+  
+  local channel_step_scale_number = nil   
+  if c ~= 17 then     
+    for i = 1, step do       
+      channel_step_scale_number = program.get_step_scale_trig_lock(channel, i) or channel_step_scale_number     
+    end   
+  end    
+  
+  if channel_step_scale_number and channel_step_scale_number > 0 and program.get_scale(channel_step_scale_number).scale then     
+    return channel_step_scale_number   
+  elseif global_step_scale_number and global_step_scale_number > 0 then     
+    return global_step_scale_number   
+  elseif global_default_scale and global_default_scale > 0 and program.get_scale(global_default_scale).scale then     
+    return global_default_scale   
+  else     
+    return 0   
+  end 
 end
 
 

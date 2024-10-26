@@ -228,6 +228,12 @@ function channel_edit_page_controller.register_press_handlers()
           channel_select_fader:press(x, y)
           program.get().selected_channel = x
           tooltip:show("Channel " .. x .. " selected")
+          channel_edit_page_ui_controller.set_note_dashboard_values({
+            note = -1,
+            velocity = -1,
+            length = -1,
+            chords = {-1, -1, -1, -1}
+          })
           channel_edit_page_controller.refresh()
           channel_edit_page_ui_controller.refresh()
         end
@@ -630,6 +636,7 @@ function channel_edit_page_controller.handle_note_on_midi_controller_message(not
         channel.step_trig_masks[step] = 1
         channel.step_note_masks[step] = note
         channel.step_velocity_masks[step] = velocity
+        channel.step_length_masks[step] = 1
         channel.step_chord_masks[step] = {}
       elseif (chord_degree) then
         channel.step_chord_masks[step][chord_number - 1] = chord_degree 

@@ -1560,9 +1560,6 @@ function channel_edit_page_ui_controller.set_note_dashboard_values(values)
       values.length
     )
   end
-  if values and values.trig then
-    note_displays.trig:set_value(values.trig)
-  end
 
   if (values and values.chords) then
 
@@ -1578,5 +1575,6 @@ function channel_edit_page_ui_controller.set_note_dashboard_values(values)
     end
   end
 end
+
 
 return channel_edit_page_ui_controller

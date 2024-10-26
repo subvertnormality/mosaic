@@ -61,12 +61,11 @@ function handle_midi_event_data(data, midi_device)
       end
     end
 
-    midi_off_store[data[2]] = step_scale_number
-    
     local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, step_scale_number)
     if params:get("midi_scale_mapped_to_white_keys") == 1 then
       note = data[2]
     end
+    midi_off_store[data[2]] = note
     midi_controller:note_on(note, velocity, midi_channel, device.midi_device)
     if chord_number == 0 then 
       chord_one_note = note 
@@ -83,11 +82,11 @@ function handle_midi_event_data(data, midi_device)
 
     channel_edit_page_controller.handle_note_on_midi_controller_message(note, velocity, chord_number, chord_degree)
   elseif data[1] == 128 then -- note off
-    if midi_tables[data[2]] == nil then
+    local stored_note = midi_off_store[data[2]]
+    if stored_note == nil then
       return
     end
-    local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, midi_off_store[data[2]])
-    midi_controller:note_off(note, 0, midi_channel, device.midi_device)
+    midi_controller:note_off(stored_note, 0, midi_channel, device.midi_device)
     chord_number = chord_number - 1
     if chord_number == 0 then 
       chord_one_note = nil 
