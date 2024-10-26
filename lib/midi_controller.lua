@@ -239,11 +239,6 @@ function midi_controller.cc(cc_msb, cc_lsb, value, channel, device)
 end
 
 function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
-  -- Ensure value is within valid NRPN range (0-16383)
-  if value < 0 or value > 16383 then
-    error("Value out of range (0-16383): " .. tostring(value))
-  end
-
   -- Select NRPN (LSB and MSB)
   midi_controller.cc(99, nil, nrpn_msb, channel, device)
   midi_controller.cc(98, nil, nrpn_lsb, channel, device)

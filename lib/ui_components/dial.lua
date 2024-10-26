@@ -44,7 +44,7 @@ function dial:draw()
   end
 
   -- Handle special cases for displaying value
-  if self.value == self.off_value or not self.value then
+  if self.value == self.off_value or not self.value or not self.min_value or not self.max_value then
     screen.move(self.x, bar_y)
     screen.text("X")
   elseif self.ui_labels and self.min_value then
@@ -60,11 +60,12 @@ function dial:draw()
 
     -- Determine if the range includes negative values
     local off_value = self.off_value or 0  -- Default to 0 if not set
-    local is_negative_range = self.min_value < off_value
+    local min_value = self.min_value or 0  -- Default to 0 if not set
+    local is_negative_range = min_value < off_value
 
     if is_negative_range then
       -- Negative and positive values
-      local total_negative_range = off_value - self.min_value
+      local total_negative_range = off_value - min_value
       local total_positive_range = self.max_value - off_value
       local half_num_segments = num_segments / 2
 

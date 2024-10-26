@@ -2,7 +2,7 @@
 -- grid-first rhythm and 
 -- harmony sequencer.
 --
--- llllllll.co/t/mosaic-beta-v0-5
+-- llllllll.co/t/mosaic
 -- manual: t.ly/h-Wsw
 
 -- Copyright Andrew Hillel 2024. See the included GNU licence for more information.

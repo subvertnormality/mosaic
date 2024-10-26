@@ -212,13 +212,13 @@ The [Channel Editor](##channel-editor) doesn't merely allow you to add, merge, a
 
 ### Modulation, Movement, and Interest
 
-Even a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [Trig Parameters](#trig-parameters) and [Trig Locks](#trig-locks). "Trig lock" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantized, at each step, offering precise manipulation over the quality and dynamics of your music.
+Even a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [Trig Parameters](#trig-parameters) and [Trig Locks](#trig-locks). "Trig lock" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantized, at each step, offering precise manipulation over the quality and dynamics of your music. 
 
 ### Song Composition
 
 At this point, your sequence is likely "full to the brim," containing all the elements of your song in its most complex form. For those familiar with Elektron devices, this stage can feel like a precarious juncture, where it's tempting to fall into a cycle of making minor adjustments to the same pattern repeatedly. _Mosaic_ offers a solution with its [Song Sequencer](#song-sequencer), designed to help you break free from this procrastination loop.
 
-To access the song editor, press the second key in the global menu's Grid button cluster. You'll be greeted by a grid where the first button is dimly lit, indicating the sequence you are currently working on. The song editor allows you to take this sequence and creatively manipulate it: you can mute channels, modify scale locks, alter pattern combinations and merge modes, adjust masks, and more. This flexibility enables you to develop your composition from the base sequence upwards. As you become accustomed to this workflow, you'll find that you can construct an entire song from a single sequence, streamlining your creative process.
+To access the song editor, press the second key in the global menu's Grid button cluster. You'll be greeted by a grid where the first button is dimly lit, indicating the sequence you are currently working on. The song editor allows you to take this sequence, copy it, and creatively manipulate the copy: you can mute channels, modify scale locks, alter pattern combinations and merge modes, adjust masks, and more. You can then chain multiple sequences together. This flexibility enables you to develop your composition from the base sequence upwards. As you become accustomed to this workflow, you'll find that you can construct an entire song from a single sequence, streamlining your creative process.
 
 ## Dig Deeper
 
@@ -788,7 +788,18 @@ If copying the below code, you must exclude all text appearing after "//"
   ],
   "type": "midi", // mandatory: leave as MIDI for custom devices.
   "unique": true, // mandatory: true if you only allow one instance of this device in use at one time, false allows multiple instances.
-  "map_params_automatically": true, // mandatory: when true, the first 10 params are mapped and assigned on the device's channel trig parameters.
+  "map_params_automatically": [
+    "source_parameters_source_tune",
+    "source_parameters_source_play_mode",
+    "fx_parameters_sample_rate_reduction",
+    "src_sample_select",
+    "source_parameters_data_E",
+    "filter_parameters_filter_frequency",
+    "filter_parameters_filter_env_depth",
+    "lfo1_parameters_lfo_depth",
+    "lfo1_parameters_lfo_speed",
+    "amp_parameters_amp_pan"
+  ], // optional: params matching the contained IDs are mapped and assigned on the device's channel trig parameters.
   "polyphonic": false, // mandatory: true if more than one note can be played at once on the device.
   "value": 8, // mandatory: arbitrary value, choose any number.
   "default_midi_device": 1, // optional: use this to set a default MIDI output device. When in use it will no longer be possible to change the output device in _Mosaic_.

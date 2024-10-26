@@ -1353,8 +1353,8 @@ function channel_edit_page_ui_controller.handle_midi_config_page_increment()
   save_confirm.clear()
 
   save_confirm.set_save(function()
+
     channel_edit_page_ui_controller.update_channel_config()
-    
     param_manager.update_default_params(program.get_selected_channel(), device)
     param_select_vertical_scroll_selector:set_selected_item(1)
     channel_edit_page_ui_controller.refresh_trig_locks()
@@ -1376,6 +1376,7 @@ function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
   save_confirm.clear()
 
   save_confirm.set_save(function()
+
     channel_edit_page_ui_controller.update_channel_config()
     param_manager.update_default_params(program.get_selected_channel(), device)
     param_select_vertical_scroll_selector:set_selected_item(1)
@@ -1415,7 +1416,7 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
       local step = fn.calc_grid_count(keys[1], keys[2])
       if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
         program.clear_masks_for_step(step)
-        tooltip:show("Masks for ch " .. program.get_selected_channel() .. " cleared")
+        tooltip:show("Masks for ch " .. program.get_selected_channel().number .. " cleared")
         channel_edit_page_ui_controller.refresh_masks()
         pattern_controller.update_working_pattern(program.get_selected_channel().number)
       end
