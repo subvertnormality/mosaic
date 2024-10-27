@@ -380,7 +380,7 @@ local function merge_devices()
                 ["name"] = fn.title_case(p.name),
                 ["unique"] = true,
                 ["short_descriptor_1"] = fn.format_first_descriptor(p.name),
-                ["short_descriptor_2"] = fn.format_second_descriptor(p.name),
+                ["short_descriptor_2"] = fn.format_last_descriptor(p.name),
                 ["cc_min_value"] = minval,
                 ["cc_max_value"] = maxval,
                 ["quantum"] = quantum,

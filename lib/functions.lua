@@ -168,10 +168,10 @@ function fn.format_first_descriptor(str)
   return truncate_word(words[1])
 end
 
-function fn.format_second_descriptor(str)
+function fn.format_last_descriptor(str)
   local words = split_words(str)
-  if words[2] then
-    return truncate_word(words[2])
+  if #words > 0 then
+    return truncate_word(words[#words]) -- Get the last word
   end
   return ""
 end
