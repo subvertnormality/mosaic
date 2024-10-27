@@ -474,7 +474,7 @@ If your device has an associated configuration file, such as those available for
 * [nb_polyperc](https://github.com/dstroud/nb_polyperc) poly perc.
 * [nb_rudiments](https://github.com/entzmingerc/nb_rudiments) percussion synth.
 * [nb_doubledecker](https://github.com/sixolet/doubledecker) 2-layer synth.
-* [nb_oilcan](https://github.com/subvertnormality/oilcan) percussion sync. This fork allows Oilcan's params to be locked in _Mosaic_.
+* [nb_oilcan](https://github.com/zjb-s/oilcan) percussion sync. Oilcan's params to be locked in _Mosaic_.
 
 
 n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engines to channels.
