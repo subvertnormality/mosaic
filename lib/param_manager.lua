@@ -123,57 +123,57 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
       oob_accumulator = oob_accumulator + 1
     end
 
-    if device.type == "midi" then
-      -- Process device-specific parameters
-      for k, val in pairs(device.params) do
-        local i = k + accumulator - 1
-        if val and val.id ~= "none" and val.param_type ~= "stock" then
-          local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
 
-          if val.nrpn_min_value and val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
-            p.controlspec.minval = val.nrpn_min_value or -1
-            p.controlspec.maxval = val.nrpn_max_value or 16383
-            p.min = val.nrpn_min_value or -1
-            p.max = val.nrpn_max_value or 16383
-            p.controlspec.step = 1
-            p.controlspec.quantum = 1/(((val.nrpn_max_value - val.nrpn_min_value) or 16383) / 127)
-            p.controlspec.default = val.off_value or -1
-          else
-            p.controlspec.minval = val.cc_min_value or -1
-            p.controlspec.maxval = val.cc_max_value or 127
-            p.min = val.cc_min_value or -1
-            p.max = val.cc_max_value or 127
-            p.controlspec.step = 1
-            p.controlspec.quantum = 1/(val.cc_max_value - val.cc_min_value) or 127
-            p.controlspec.default = val.off_value or -1
-          end
-          p.name = val.name
-          if init == true then
-            p:set(val.off_value or 0)
-          end
-          p.formatter = construct_value_formatter(val.off_value, val.ui_labels)
-          params:set_action(
-            "midi_device_params_channel_" .. channel_id .. "_" .. i,
-            function(x)
-              if x ~= val.off_value then
-                if val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
-                  midi_controller.nrpn(val.nrpn_msb, val.nrpn_lsb, x, channel, midi_device)
-                elseif val.cc_msb and val.cc_max_value then
-                  midi_controller.cc(val.cc_msb, val.cc_lsb or nil, x, channel, midi_device)
-                end
-                channel_edit_page_ui_controller.refresh_trig_lock_values()
-              end
-              autosave_reset()
-            end
-          )
-          params:show("midi_device_params_channel_" .. channel_id .. "_" .. i)
+    -- Process device-specific parameters
+    for k, val in pairs(device.params) do
+      local i = k + accumulator - 1
+      if device.type == "midi" and val and val.id ~= "none" and val.param_type ~= "stock" then
+        local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
+
+        if val.nrpn_min_value and val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
+          p.controlspec.minval = val.nrpn_min_value or -1
+          p.controlspec.maxval = val.nrpn_max_value or 16383
+          p.min = val.nrpn_min_value or -1
+          p.max = val.nrpn_max_value or 16383
+          p.controlspec.step = 1
+          p.controlspec.quantum = 1/(((val.nrpn_max_value - val.nrpn_min_value) or 16383) / 127)
+          p.controlspec.default = val.off_value or -1
         else
-          params:set_action("midi_device_params_channel_" .. channel_id .. "_" .. i, function(x) end)
-          params:hide("midi_device_params_channel_" .. channel_id .. "_" .. i)
+          p.controlspec.minval = val.cc_min_value or -1
+          p.controlspec.maxval = val.cc_max_value or 127
+          p.min = val.cc_min_value or -1
+          p.max = val.cc_max_value or 127
+          p.controlspec.step = 1
+          p.controlspec.quantum = 1/(val.cc_max_value - val.cc_min_value) or 127
+          p.controlspec.default = val.off_value or -1
         end
-        oob_accumulator = i + 1
+        p.name = val.name
+        if init == true then
+          p:set(val.off_value or 0)
+        end
+        p.formatter = construct_value_formatter(val.off_value, val.ui_labels)
+        params:set_action(
+          "midi_device_params_channel_" .. channel_id .. "_" .. i,
+          function(x)
+            if x ~= val.off_value then
+              if val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
+                midi_controller.nrpn(val.nrpn_msb, val.nrpn_lsb, x, channel, midi_device)
+              elseif val.cc_msb and val.cc_max_value then
+                midi_controller.cc(val.cc_msb, val.cc_lsb or nil, x, channel, midi_device)
+              end
+              channel_edit_page_ui_controller.refresh_trig_lock_values()
+            end
+            autosave_reset()
+          end
+        )
+        params:show("midi_device_params_channel_" .. channel_id .. "_" .. i)
+      else
+        params:set_action("midi_device_params_channel_" .. channel_id .. "_" .. i, function(x) end)
+        params:hide("midi_device_params_channel_" .. channel_id .. "_" .. i)
       end
+      oob_accumulator = i + 1
     end
+
 
     -- Hide remaining parameters
     for j = oob_accumulator, 180 do
@@ -191,6 +191,7 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
       params:hide("midi_device_params_channel_" .. channel_id .. "_" .. i)
     end
   end
+  _menu.rebuild_params()
 end
 
 
