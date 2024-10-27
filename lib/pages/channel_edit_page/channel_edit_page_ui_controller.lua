@@ -651,7 +651,6 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
       total_range = p.controlspec.maxval - p.controlspec.minval
     elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.type == "norns" then
-      p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
       total_range = p.controlspec.maxval - p.controlspec.minval
     end
   elseif p.count then
@@ -728,6 +727,7 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       m_params[dial_index]:set_value(value)
     end
   elseif p_value and trig_lock_param and trig_lock_param.id then
+
     p:delta(d)
 
     channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
