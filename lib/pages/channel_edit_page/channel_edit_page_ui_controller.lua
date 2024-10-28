@@ -731,8 +731,20 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
     end
   elseif p_value and trig_lock_param and trig_lock_param.id then
 
-    p:delta(d)
-
+  
+    if (norns_param_state_handler.get_original_param_state(channel.number, dial_index).value) then
+      local original_val = norns_param_state_handler.get_original_param_state(channel.number, dial_index).value
+      local quant = old_quantum
+      if p.controlspec and p.controlspec.quantum then
+        quant = p.controlspec.quantum
+      end
+      local new_val = original_val + (quant * d)
+      norns_param_state_handler.set_original_param_state(channel.number, dial_index, new_val)
+      m_params[dial_index]:set_value(new_val)
+    else
+      p:delta(d)
+    end
+  
     channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
   end
 

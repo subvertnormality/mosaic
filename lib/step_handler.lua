@@ -61,6 +61,7 @@ function step_handler.process_stock_params(c, step, type)
   return nil
 end
 
+
 function step_handler.process_params(c, step)
   local program_data = program.get()
   local channel = program.get_channel(c)
@@ -175,9 +176,19 @@ function step_handler.process_params(c, step)
           if step_trig_lock == param.off_value then
             goto continue
           end
+
+          if not norns_param_state_handler.get_original_param_state(c, i).value then
+            norns_param_state_handler.set_original_param_state(c, i, value, param.id)
+
+          end
           params:set(param.id, step_trig_lock)
-        elseif value then
-          params:set(param.id, value)
+        elseif program.step_has_trig(channel, step) then
+          if (norns_param_state_handler.get_original_param_state(c, i)) then
+          end
+          if norns_param_state_handler.get_original_param_state(c, i).value then 
+            params:set(param.id, norns_param_state_handler.get_original_param_state(c, i).value)
+            norns_param_state_handler.clear_original_param_state(c, i)
+          end
         end
       end
     end
@@ -1061,6 +1072,7 @@ function step_handler.reset()
   program.set_channel_step_scale_number(
     c, step_handler.calculate_step_scale_number(c, 1)
   )
+  norns_param_state_handler.flush_norns_original_param_trig_lock_store()
 end
 
 function step_handler.reset_pattern()

@@ -123,7 +123,7 @@ channel_edit_page_ui_refreshers.refresh_device_selector = scheduler.debounce(fun
   param_select_vertical_scroll_selector:set_meta_item(device)
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_romans= scheduler.debounce(function(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector)
+channel_edit_page_ui_refreshers.refresh_romans = scheduler.debounce(function(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector)
   local scale = quantizer_vertical_scroll_selector:get_selected_item()
   if scale then
     local number = scale.number
@@ -133,7 +133,7 @@ channel_edit_page_ui_refreshers.refresh_romans= scheduler.debounce(function(quan
   end
 end, throttle_time)
 
-channel_edit_page_ui_refreshers.refresh_quantiser= scheduler.debounce(function(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, transpose_vertical_scroll_selector, rotation_vertical_scroll_selector, m_params)
+channel_edit_page_ui_refreshers.refresh_quantiser = scheduler.debounce(function(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, transpose_vertical_scroll_selector, rotation_vertical_scroll_selector, m_params)
   local channel = program.get_selected_channel()
   local scale = program.get_scale(program.get().selected_scale)
   program.get_selected_sequencer_pattern().active = true
@@ -146,7 +146,7 @@ channel_edit_page_ui_refreshers.refresh_quantiser= scheduler.debounce(function(q
 end, throttle_time)
 
 
-channel_edit_page_ui_refreshers.refresh_trig_lock_value= scheduler.debounce(function(i, m_params)
+channel_edit_page_ui_refreshers.refresh_trig_lock_value = scheduler.debounce(function(i, m_params)
   local channel = program.get_selected_channel()
   local param_id = channel.trig_lock_params[i].param_id
 
@@ -155,26 +155,59 @@ channel_edit_page_ui_refreshers.refresh_trig_lock_value= scheduler.debounce(func
     return
   end
 
-  local val = params:get(param_id)
+  local val = fn.clean_number(params:get(param_id))
 
-  m_params[i]:set_value(fn.clean_number(val))
+  if (norns_param_state_handler.get_original_param_state(channel.number, i).value) then
+    val = norns_param_state_handler.get_original_param_state(channel.number, i).value
+  end
+
+  m_params[i]:set_value(val)
 
 end, throttle_time)
 
 
-function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, channel, pressed_keys, current_step)
-  -- Cache m_params[i] to avoid multiple table lookups
-  local m_param = m_params[i]
+channel_edit_page_ui_refreshers.refresh_trig_locks = scheduler.debounce(function(m_params)
+  local channel = program.get_selected_channel()
+  local pressed_keys = grid_controller.get_pressed_keys()
+  local current_step = program.get_current_step_for_channel(channel.number)
 
-  -- Pass 'channel' to avoid calling 'program.get_selected_channel()' again
-  channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
-
-  -- Cache 'trig_lock_param' to avoid multiple table accesses
-  local trig_lock_param = channel.trig_lock_params[i]
-
-  if trig_lock_param and trig_lock_param.param_id then
-    local param_id = trig_lock_param.param_id
-
+  -- Process all updates in a single batch
+  local updates = {}
+  
+  for i = 1, 10 do
+    -- Gather all the updates first
+    local m_param = m_params[i]
+    local trig_lock_param = channel.trig_lock_params[i]
+    
+    if trig_lock_param and trig_lock_param.param_id then
+      local param_id = trig_lock_param.param_id
+      local param_value = params:get(param_id) or trig_lock_param.off_value
+      local default_param = norns_param_state_handler.get_original_param_state(channel.number, i).value
+      
+      -- Store the update info
+      updates[i] = {
+        param = m_param,
+        value = default_param or param_value,
+        trig_lock_param = trig_lock_param
+      }
+      
+      -- Handle pressed keys
+      if #pressed_keys > 0 then
+        local pressed_key = pressed_keys[1]
+        if pressed_key[2] > 3 and pressed_key[2] < 8 then
+          local grid_count = fn.calc_grid_count(pressed_key[1], pressed_key[2])
+          local step_trig_lock = program.get_step_param_trig_lock(channel, grid_count, i)
+          updates[i].value = step_trig_lock or params:get(param_id)
+        end
+      end
+    end
+  end
+  
+  -- Apply all updates in a single pass
+  for i, update in pairs(updates) do
+    local m_param = update.param
+    local trig_lock_param = update.trig_lock_param
+    
     m_param:set_name(trig_lock_param.name)
     m_param:set_top_label(trig_lock_param.short_descriptor_1)
     m_param:set_bottom_label(trig_lock_param.short_descriptor_2)
@@ -182,41 +215,11 @@ function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, channel,
     m_param:set_min_value(trig_lock_param.nrpn_min_value or trig_lock_param.cc_min_value)
     m_param:set_max_value(trig_lock_param.nrpn_max_value or trig_lock_param.cc_max_value)
     m_param:set_ui_labels(trig_lock_param.ui_labels)
-
-    -- Cache the parameter value
-    local param_value = params:get(param_id) or trig_lock_param.off_value
-    m_param:set_value(param_value)
-
-    -- Get the step trigger lock
-    local step_trig_lock = program.get_step_param_trig_lock(channel, current_step, i)
-
-    if #pressed_keys > 0 then
-      local pressed_key = pressed_keys[1]
-      if pressed_key[2] > 3 and pressed_key[2] < 8 then
-        local grid_count = fn.calc_grid_count(pressed_key[1], pressed_key[2])
-        step_trig_lock = program.get_step_param_trig_lock(channel, grid_count, i)
-        local default_param = params:get(param_id)
-        m_param:set_value(step_trig_lock or default_param)
-      end
-    end
-  else
-    m_param:set_name("")
-    m_param:set_top_label("None")
-    m_param:set_bottom_label("")
+    m_param:set_value(update.value)
   end
-end
 
-
-channel_edit_page_ui_refreshers.refresh_trig_locks = scheduler.debounce(function(m_params)
-  
-  local channel = program.get_selected_channel()
-  local pressed_keys = grid_controller.get_pressed_keys()
-  local current_step = program.get_current_step_for_channel(channel.number)
-
-  for i = 1, 10 do
-    channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params, channel, pressed_keys, current_step)
-    coroutine.yield()
-  end
+  -- Request a single UI refresh after all updates are complete
+  fn.dirty_screen(true)
 end, throttle_time)
 
 return channel_edit_page_ui_refreshers

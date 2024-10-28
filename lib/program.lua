@@ -385,6 +385,10 @@ function program.step_scale_has_trig_lock(channel, step)
   return step_scale_trig_lock_banks and step_scale_trig_lock_banks[step]
 end
 
+function program.step_has_trig(channel, step)
+  return channel.working_pattern.trig_values[step] == 1
+end
+
 
 function program.increment_trig_lock_calculator_id(channel, parameter)
   if not channel.trig_lock_calculator_ids then

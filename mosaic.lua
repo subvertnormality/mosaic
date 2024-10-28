@@ -39,6 +39,7 @@ pattern_controller = include("mosaic/lib/pattern_controller")
 midi_controller = include("mosaic/lib/midi_controller")
 step_handler = include("lib/step_handler")
 device_map = include("mosaic/lib/device_map")
+norns_param_state_handler = include("mosaic/lib/norns_param_state_handler")
 
 g = grid.connect()
 
