@@ -4,7 +4,7 @@ local channel_pattern_buttons = {}
 
 local refresh_button = {}
 
-local global_pattern_length_fader = fader:new(1, 7, 8, 8)
+local global_pattern_length_fader = fader:new(1, 7, 8, 64)
 
 function channel_sequencer_page_controller.init()
   for s = 1, 96 do
@@ -134,7 +134,7 @@ function channel_sequencer_page_controller.register_press_handlers()
         global_pattern_length_fader:press(x, y)
 
         local sequencer_pattern = program.get().selected_sequencer_pattern
-        local new_pattern_length = global_pattern_length_fader:get_value() * 8
+        local new_pattern_length = global_pattern_length_fader:get_value()
         if clock_controller.is_playing() then
           tooltip:show("Q'd: Global pattern length: " .. new_pattern_length)
           step_handler.queue_for_pattern_change(function()
@@ -171,7 +171,7 @@ function channel_sequencer_page_controller.register_press_handlers()
 end
 
 function channel_sequencer_page_controller.refresh_faders()
-  global_pattern_length_fader:set_value(program.get_selected_sequencer_pattern().global_pattern_length / 8)
+  global_pattern_length_fader:set_value(program.get_selected_sequencer_pattern().global_pattern_length)
 end
 
 function channel_sequencer_page_controller.refresh()

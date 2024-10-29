@@ -656,7 +656,8 @@ When "song mode" is activated, the sequencer automatically progresses to the nex
 
 The song sequence's length can be adjusted using the fader located at the lower left of the song editor page.
 
-* The length can be set in multiples of 8, offering a wide range of possibilities.
+* The global length can be set anywhere from 1 step to 64 step, offering a wide range of possibilities.
+* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length.
 
 #### Navigating the Norns Display
 

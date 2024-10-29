@@ -747,3 +747,167 @@ function test_song_mode_short_channel_pattern_lengths_transitions_correctly_to_l
   luaunit.assert_equals(note_on_event[3], 1)
 
 end
+
+
+function test_channel_steps_beyond_global_pattern_length()
+  setup()
+  
+  -- Set up a shorter global pattern length
+  local global_pattern_length = 42
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  -- Place notes beyond the global pattern length
+  test_pattern.note_values[45] = 0
+  test_pattern.lengths[45] = 1
+  test_pattern.trig_values[45] = 1
+  test_pattern.velocity_values[45] = 100
+
+  test_pattern.note_values[50] = 1
+  test_pattern.lengths[50] = 1
+  test_pattern.trig_values[50] = 1
+  test_pattern.velocity_values[50] = 101
+
+  -- Set up the sequencer pattern
+  local seq_pattern = program.get_sequencer_pattern(sequencer_pattern)
+  if not seq_pattern then
+    return
+  end
+  seq_pattern.patterns[1] = test_pattern
+
+  -- Add pattern to channel
+  if not seq_pattern.channels[1] then
+    return
+  end
+  fn.add_to_set(seq_pattern.channels[1].selected_patterns, 1)
+
+  -- Set channel start/end trigs
+  local channel = program.get_channel(1)
+  if not channel then
+    return
+  end
+
+  channel.start_trig[1] = 13  -- Step 45
+  channel.start_trig[2] = 6
+  channel.end_trig[1] = 7    -- Step 55
+  channel.end_trig[2] = 7
+
+  -- Set global pattern length
+  seq_pattern.global_pattern_length = global_pattern_length
+
+  -- Update and setup clock
+  pattern_controller.update_working_patterns()
+  clock_setup()
+
+  -- Track notes that fire
+  local fired_notes = {}
+  local steps_fired = {}
+
+  -- Run sequence
+  for i = 1, global_pattern_length * 3 do
+
+    local note_on_event = table.remove(midi_note_on_events, 1)
+    if note_on_event then
+      local current_step = program.get_current_step_for_channel(1)
+
+      table.insert(fired_notes, {
+        note = note_on_event[1],
+        velocity = note_on_event[2],
+        channel = note_on_event[3],
+        step = current_step
+      })
+      table.insert(steps_fired, current_step)
+    end
+
+    progress_clock_by_pulses(24)
+  end
+
+  -- Basic assertions that something happened
+  luaunit.assert_not_equals(#fired_notes, 0, "Should have fired at least one note")
+  
+  if #fired_notes > 0 then
+    -- Verify first note if we have one
+    luaunit.assert_equals(fired_notes[1].note, 60, "First note should be correct")
+    luaunit.assert_equals(fired_notes[1].velocity, 100, "First velocity should be correct")
+    luaunit.assert_equals(fired_notes[1].channel, 1, "First channel should be correct")
+    luaunit.assert_equals(fired_notes[1].step, 45, "First step should be correct")
+    luaunit.assert_equals(fired_notes[2].note, 62, "Second note should be correct")
+    luaunit.assert_equals(fired_notes[2].velocity, 101, "Second velocity should be correct")
+    luaunit.assert_equals(fired_notes[2].channel, 1, "Second channel should be correct")
+    luaunit.assert_equals(fired_notes[2].step, 50, "Second step should be correct")
+    luaunit.assert_equals(fired_notes[3].note, 60, "Third note should be correct")
+    luaunit.assert_equals(fired_notes[3].velocity, 100, "Third velocity should be correct")
+    luaunit.assert_equals(fired_notes[3].channel, 1, "Third channel should be correct")
+    luaunit.assert_equals(fired_notes[3].step, 45, "Third step should be correct")
+    luaunit.assert_equals(fired_notes[4].note, 62, "Fourth note should be correct")
+    luaunit.assert_equals(fired_notes[4].velocity, 101, "Fourth velocity should be correct")
+    luaunit.assert_equals(fired_notes[4].channel, 1, "Fourth channel should be correct")
+    luaunit.assert_equals(fired_notes[4].step, 50, "Fourth step should be correct")
+  end
+end
+
+
+function test_channel_with_pattern_longer_than_global_length()
+  setup()
+  
+  -- Set up global pattern length shorter than channel pattern length
+  local global_pattern_length = 16
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(sequencer_pattern)
+  local test_pattern = program.initialise_default_pattern()
+  
+  -- Place notes beyond the global pattern length
+  test_pattern.note_values[20] = 0 -- Note at step 20
+  test_pattern.lengths[20] = 1
+  test_pattern.trig_values[20] = 1
+  test_pattern.velocity_values[20] = 100
+
+  test_pattern.note_values[25] = 1 -- Note at step 25
+  test_pattern.lengths[25] = 1
+  test_pattern.trig_values[25] = 1
+  test_pattern.velocity_values[25] = 101
+
+  -- Set up the sequencer pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  
+  -- Set channel start and end trigs to cover steps beyond global pattern length
+  program.get_channel(1).start_trig[1] = 1
+  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(1).end_trig[1] = 9
+  program.get_channel(1).end_trig[2] = 5
+
+  -- Set global pattern length
+  program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = global_pattern_length
+  
+  -- Update and setup clock
+  pattern_controller.update_working_patterns()
+  clock_setup()
+  
+  -- Run the sequence for multiple global pattern lengths
+  local fired_notes = {}
+  for i = 1, global_pattern_length * 3 do
+
+    local note_on_event = table.remove(midi_note_on_events, 1)
+    if note_on_event then
+      local current_step = program.get_current_step_for_channel(1)
+      table.insert(fired_notes, {
+        note = note_on_event[1],
+        velocity = note_on_event[2],
+        channel = note_on_event[3],
+        step = current_step
+      })
+    end
+
+    progress_clock_by_pulses(24) -- Progress by one beat (assuming 24 PPQN)
+  end
+
+  -- Expected steps where notes should fire
+  local actual_steps = {}
+  for _, event in ipairs(fired_notes) do
+    table.insert(actual_steps, event.step)
+  end
+  
+  luaunit.assert_equals(#fired_notes, 0)
+end

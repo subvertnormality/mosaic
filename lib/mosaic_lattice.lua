@@ -200,6 +200,9 @@ function Lattice:pulse()
               sprocket.delay_new = nil
             end
             sprocket.step = sprocket.step + 1
+            if sprocket.step > sprocket.lattice.pattern_length then
+              sprocket.step = 1
+            end
           end
           sprocket.transport = sprocket.transport + 1
         elseif sprocket.flag then
@@ -244,14 +247,14 @@ function Lattice:new_sprocket(args)
   args.shuffle_basis = args.shuffle_basis and util.clamp(args.shuffle_basis, 0, 6) or 0
   args.shuffle_feel = args.shuffle_feel and util.clamp(args.shuffle_feel, 0, 3) or 0
   args.shuffle_amount = args.shuffle_amount and util.clamp(args.shuffle_amount, 0, 100) or 0
-  args.step = self.step or 1
+  args.step = 1
   args.lattice = self
   args.realign = args.realign or false
   args.delayed_actions = {}
   args.cleanup_delayed_action = args.cleanup_delayed_action or nil
   local sprocket = Sprocket:new(args)
   sprocket:update_swing()
-  sprocket:update_shuffle(self.step, 1)
+  sprocket:update_shuffle(1, 1)
   sprocket.phase = (args.phase) - ((sprocket.current_ppqn) * (args.delay)) - (args.delay_offset or 0)
   self.sprockets[self.sprocket_id_counter] = sprocket
   self:order_sprockets()
@@ -296,7 +299,7 @@ function Sprocket:new(args)
   p.shuffle_amount = (args.shuffle_amount == nil) and 1.0 or util.clamp(args.shuffle_amount, 0, 100) / 100
   p.current_ppqn = args.ppqn
   p.ppqn_error = 0.5
-  p.step = args.step or 1
+  p.step = 1
   p.transport = 1
   p.lattice = args.lattice
   p.realign = args.realign
@@ -415,10 +418,10 @@ function Sprocket:update_shuffle(step)
   local old_phase = self.phase
   local pattern_length = self.lattice.pattern_length
 
-  local use_shuffle = pattern_length % 8 == 0 and pattern_length >= 8
+  -- Ensure step wraps correctly
   local step_mod = ((step - 1) % pattern_length) + 1
 
-  if use_shuffle and self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and self.shuffle_basis > 0 then
+  if self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and self.shuffle_basis > 0 then
       local feel_map = shuffle_feels[self.shuffle_feel]
       local playpos_mod = (step_mod % 8) + 1
       local shuffle_beat_index = playpos_mod
@@ -429,7 +432,7 @@ function Sprocket:update_shuffle(step)
       -- Scale the shuffle amount directly
       local adjusted_multiplier = base_multiplier + self.shuffle_amount * (multiplier - base_multiplier)
       
-      local exact_ppqn = (self.division * ppc * 4) * adjusted_multiplier
+      local exact_ppqn = ((self.division * 4) * ppc) * adjusted_multiplier
       local rounded_ppqn = math.floor(exact_ppqn + self.ppqn_error)
       self.ppqn_error = (exact_ppqn + self.ppqn_error) - rounded_ppqn
       self.current_ppqn = rounded_ppqn

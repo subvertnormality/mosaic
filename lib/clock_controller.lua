@@ -184,8 +184,10 @@ function clock_controller.init()
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
 
-      if end_trig > program.get_selected_sequencer_pattern().global_pattern_length then
-        end_trig = program.get_selected_sequencer_pattern().global_pattern_length
+      local channel_length = end_trig - start_trig + 1
+
+      if channel_length > program.get_selected_sequencer_pattern().global_pattern_length then
+        end_trig = start_trig + program.get_selected_sequencer_pattern().global_pattern_length - 1
       end
 
       if not clock_controller["channel_" .. channel_number .. "_clock"].first_run then

@@ -71,25 +71,6 @@ function test_swing_update()
   luaunit.assert_equals(sprocket.odd_swing, 1.3)
 end
 
-
-function test_swing_update()
-
-  setup()
-
-  local sprocket = create_sprocket({
-      swing = 20, -- 20% swing
-  })
-
-  sprocket:update_swing()
-  luaunit.assert_equals(sprocket.even_swing, 1.2) -- 20% increase
-  luaunit.assert_equals(sprocket.odd_swing, 0.8)  -- 20% decrease
-
-  -- Test for negative swing
-  sprocket:set_swing(-30)
-  luaunit.assert_equals(sprocket.even_swing, 0.7)
-  luaunit.assert_equals(sprocket.odd_swing, 1.3)
-end
-
 function test_shuffle_update()
 
   setup()
@@ -596,4 +577,428 @@ function test_ppqn_swing_stability_over_time_odd_pattern_length()
   -- Verify no significant drift in total pulses
   local actual_pulses = sprocket.transport - 1
   luaunit.assertAlmostEquals(actual_pulses, expected_pulses, expected_pulses * 0.001) -- Allow 0.1% tolerance
+end
+
+
+
+function test_ppqn_shuffle_stability_over_time_odd_pattern_length()
+  setup()
+
+  lattice:set_pattern_length(63)
+
+
+  local sprocket = create_sprocket({
+    division = 1/4,
+    swing_or_shuffle = 2, -- Swing mode
+    shuffle_feel = 1, -- Smooth
+    shuffle_basis = 2, -- Moderate shuffle basis
+    shuffle_amount = 100
+  })
+  
+  local expected_ppqn = 96 * 2 -- Default PPQN for 1/4 division over two steps
+  local total_steps = 2520
+  local expected_pulses = 2520 * 96
+
+  local total = 0
+
+  for i = 1, total_steps do
+    progress_lattice_pulse(1)
+    progress_lattice_pulse(sprocket.current_ppqn - 1)
+
+    total = total + sprocket.current_ppqn
+
+    local step_mod = (sprocket.step % sprocket.lattice.pattern_length) + 1
+    if sprocket.step < sprocket.lattice.pattern_length then
+      step_mod = sprocket.step + 1
+    end
+
+    if sprocket.step % sprocket.lattice.pattern_length + 1 == 0 then
+      luaunit.assertAlmostEquals((total / 96) % 63, 0, 1)
+    end
+  end
+  
+  -- Verify no significant drift in total pulses
+  local actual_pulses = sprocket.transport - 1
+  luaunit.assertAlmostEquals(actual_pulses, expected_pulses, expected_pulses * 0.001) -- Allow 0.1% tolerance
+end
+
+function test_shuffle_pattern_reset_at_pattern_boundaries()
+  setup()
+  
+  local sprocket = create_sprocket({
+    division = 1/4,
+    swing_or_shuffle = 2,
+    shuffle_feel = 1,
+    shuffle_basis = 2,
+    shuffle_amount = 100
+  })
+  
+  -- Store initial timing pattern
+  local initial_timings = {}
+  for i = 1, 8 do
+    initial_timings[i] = sprocket.current_ppqn
+    progress_lattice_pulse(sprocket.current_ppqn)
+  end
+  
+  -- Progress to next pattern and compare
+  local second_pattern_timings = {}
+  for i = 1, 8 do
+    second_pattern_timings[i] = sprocket.current_ppqn
+    progress_lattice_pulse(sprocket.current_ppqn)
+  end
+  
+  -- Verify pattern resets correctly
+  for i = 1, 8 do
+    luaunit.assert_equals(initial_timings[i], second_pattern_timings[i])
+  end
+end
+
+function test_shuffle_at_extreme_divisions()
+  setup()
+  
+  local test_divisions = {1/32, 1/16, 1/8, 1/4, 1/2, 1, 2}
+  
+  for _, div in ipairs(test_divisions) do
+    local sprocket = create_sprocket({
+      division = div / 4,
+      swing_or_shuffle = 2,
+      shuffle_feel = 1,
+      shuffle_basis = 2,
+      shuffle_amount = 100
+    })
+    
+    local total_pulses = 0
+    local expected_pulses = sprocket.ppqn * 4 * div
+    
+    -- Run one pattern
+    for i = 1, 4 do
+      progress_lattice_pulse(sprocket.current_ppqn)
+      total_pulses = total_pulses + sprocket.current_ppqn
+    end
+    
+    luaunit.assertAlmostEquals(total_pulses, expected_pulses, 1)
+  end
+end
+
+function test_shuffle_with_delayed_actions()
+  setup()
+  
+  local action_log = {}
+  local sprocket = create_sprocket({
+    division = 1/4,
+    swing_or_shuffle = 2,
+    shuffle_feel = 1,
+    shuffle_basis = 2,
+    shuffle_amount = 100,
+    delay = 0.25
+  })
+  
+  sprocket.action = function()
+    table.insert(action_log, sprocket.transport)
+  end
+  
+  -- Run multiple patterns and verify delayed actions
+  for i = 1, 16 do
+    progress_lattice_pulse(sprocket.current_ppqn)
+    
+    if #action_log > 0 then
+      local last_action = action_log[#action_log]
+      -- Verify action happened after delay
+      luaunit.assert_true(last_action >= sprocket.current_ppqn * sprocket.delay)
+    end
+  end
+end
+
+function test_shuffle_with_pattern_length_changes()
+  setup()
+  
+  local sprocket = create_sprocket({
+    division = 1/4,
+    swing_or_shuffle = 2,
+    shuffle_feel = 1,
+    shuffle_basis = 2,
+    shuffle_amount = 100
+  })
+  
+  local test_lengths = {4, 8, 12, 16, 32}
+  
+  for _, length in ipairs(test_lengths) do
+    lattice:set_pattern_length(length)
+    
+    local total_pulses = 0
+    local expected_per_step = sprocket.ppqn
+    
+    -- Run one full pattern
+    for step = 1, length do
+      progress_lattice_pulse(sprocket.current_ppqn)
+      total_pulses = total_pulses + sprocket.current_ppqn
+    end
+    
+    -- Verify total timing for pattern
+    luaunit.assertAlmostEquals(total_pulses, expected_per_step * length, 1)
+  end
+end
+
+function test_shuffle_maintains_timing_across_short_patterns()
+  setup()
+  
+  local test_lengths = {6, 7, 10, 12, 14, 15}
+  
+  for _, pattern_length in ipairs(test_lengths) do
+    lattice:set_pattern_length(pattern_length)
+    
+    local sprocket = create_sprocket({
+      division = 1/4,
+      swing_or_shuffle = 2,
+      shuffle_feel = 1,
+      shuffle_basis = 2,
+      shuffle_amount = 100
+    })
+    
+    local patterns_data = {}
+    
+    for pattern = 1, 4 do
+      local pattern_data = {
+        steps = {},
+        total_pulses = 0,
+        shuffle_positions = {}
+      }
+      
+      for step = 1, pattern_length do
+        sprocket:update_shuffle(step)
+        local step_data = {
+          ppqn = sprocket.current_ppqn,
+          shuffle_position = ((step - 1) % 8) + 1,
+          actual_step = sprocket.step
+        }
+        table.insert(pattern_data.steps, step_data)
+        pattern_data.total_pulses = pattern_data.total_pulses + step_data.ppqn
+        table.insert(pattern_data.shuffle_positions, step_data.shuffle_position)
+        
+        progress_lattice_pulse(step_data.ppqn)
+      end
+      
+      table.insert(patterns_data, pattern_data)
+      
+      -- Verify each step in pattern follows correct shuffle map
+      for step = 1, pattern_length do
+        local step_data = pattern_data.steps[step]
+        local feel_map = {4/14, 4/14, 3/14, 3/14, 4/14, 4/14, 3/14, 3/14} -- Smooth feel, basis 2
+        local expected_multiplier = feel_map[step_data.shuffle_position]
+        local base_multiplier = 0.25
+        
+        -- Match the exact calculation from update_shuffle()
+        local adjusted_multiplier = base_multiplier + sprocket.shuffle_amount * (expected_multiplier - base_multiplier)
+        local ppc = sprocket.ppqn * 4
+        local exact_ppqn = ((sprocket.division * 4) * ppc) * adjusted_multiplier
+        local expected_ppqn = math.floor(exact_ppqn + 0.5) -- Round to nearest integer
+        
+        luaunit.assertAlmostEquals(
+          step_data.ppqn,
+          expected_ppqn,
+          1,
+          string.format(
+            "Pattern %d, Step %d shuffle timing incorrect (length %d, shuffle pos %d)\nExpected multiplier: %f\nGot ppqn: %d, Expected: %d",
+            pattern, step, pattern_length, step_data.shuffle_position,
+            expected_multiplier, step_data.ppqn, expected_ppqn
+          )
+        )
+      end
+    end
+  end
+end
+
+function test_shuffle_pattern_boundaries_with_short_lengths()
+  setup()
+  
+  local test_lengths = {5, 7, 10, 14}
+  
+  for _, pattern_length in ipairs(test_lengths) do
+    lattice:set_pattern_length(pattern_length)
+    
+    local sprocket = create_sprocket({
+      division = 1/4,
+      swing_or_shuffle = 2,
+      shuffle_feel = 1,
+      shuffle_basis = 2,
+      shuffle_amount = 100
+    })
+    
+    -- Run exactly one pattern plus one step
+    local step_timings = {}
+    local total_pulses = 0
+    
+    -- Collect timings for full pattern
+    for step = 1, pattern_length do
+      sprocket:update_shuffle(step)
+      step_timings[step] = sprocket.current_ppqn
+      progress_lattice_pulse(sprocket.current_ppqn)
+      total_pulses = total_pulses + sprocket.current_ppqn
+    end
+    
+    -- Check first step of next pattern
+    sprocket:update_shuffle(pattern_length + 1)
+    luaunit.assert_equals(sprocket.current_ppqn, step_timings[1],
+      string.format("First step timing mismatch after pattern boundary with length %d",
+                   pattern_length))
+  end
+end
+
+function test_shuffle_timing_consistency_with_short_patterns()
+  setup()
+  
+  local test_lengths = {6, 10, 14}
+  
+  for _, pattern_length in ipairs(test_lengths) do
+    lattice:set_pattern_length(pattern_length)
+    
+    -- Test multiple shuffle feels and bases
+    for feel = 1, 4 do
+      for basis = 1, 6 do
+        local sprocket = create_sprocket({
+          division = 1/4,
+          swing_or_shuffle = 2,
+          shuffle_feel = feel,
+          shuffle_basis = basis,
+          shuffle_amount = 100
+        })
+        
+        local total_pulses = 0
+        local total_patterns = 3
+        
+        -- Run and verify multiple complete patterns
+        for pattern = 1, total_patterns do
+          local pattern_pulses = 0
+          
+          for step = 1, pattern_length do
+            sprocket:update_shuffle(step)
+            pattern_pulses = pattern_pulses + sprocket.current_ppqn
+            progress_lattice_pulse(sprocket.current_ppqn)
+          end
+          
+          -- Each pattern should have consistent total length
+          luaunit.assertAlmostEquals(pattern_pulses, sprocket.ppqn * pattern_length, 1,
+            string.format("Pattern %d timing inconsistent with length %d, feel %d, basis %d",
+                       pattern, pattern_length, feel, basis))
+          
+          total_pulses = total_pulses + pattern_pulses
+        end
+      end
+    end
+  end
+end
+
+function test_shuffle_step_transitions_short_patterns()
+  setup()
+  
+  local test_lengths = {5, 7, 10}
+  
+  for _, pattern_length in ipairs(test_lengths) do
+    lattice:set_pattern_length(pattern_length)
+    
+    local sprocket = create_sprocket({
+      division = 1/4,
+      swing_or_shuffle = 2,
+      shuffle_feel = 1,
+      shuffle_basis = 2,
+      shuffle_amount = 100
+    })
+
+    -- Run 3 complete patterns checking step transitions
+    local total_steps = pattern_length * 3
+    
+    -- Check initial state
+    luaunit.assert_equals(sprocket.step, 1, "Initial step should be 1")
+    
+    for i = 1, total_steps do
+      local current_step = ((sprocket.step - 1) % pattern_length) + 1
+      local expected_step = ((i - 1) % pattern_length) + 1
+      
+      -- Verify current step before pulse
+      luaunit.assert_equals(
+        current_step, 
+        expected_step,
+        string.format("\nPattern length: %d\nStep: %d\nExpected step: %d\nActual step: %d\nCurrent PPQN: %d",
+          pattern_length,
+          i,
+          expected_step,
+          current_step,
+          sprocket.current_ppqn
+        )
+      )
+      
+      -- Store current ppqn
+      local current_ppqn = sprocket.current_ppqn
+      
+      -- Progress the lattice
+      progress_lattice_pulse(current_ppqn)
+    end
+  end
+end
+
+function test_basic_step_increment()
+  setup()
+  
+  local pattern_length = 5
+  lattice:set_pattern_length(pattern_length)
+  
+  local sprocket = create_sprocket({
+    division = 1/4,
+    swing_or_shuffle = 2,
+    shuffle_feel = 1,
+    shuffle_basis = 2,
+    shuffle_amount = 100
+  })
+  
+  -- Debug array to track steps
+  local steps = {sprocket.step}
+  
+  -- Test first few steps explicitly
+  luaunit.assert_equals(sprocket.step, 1, "Initial step should be 1")
+  
+  progress_lattice_pulse(sprocket.current_ppqn)
+  table.insert(steps, sprocket.step)
+  luaunit.assert_equals(sprocket.step, 2, "Step should increment to 2")
+  
+  progress_lattice_pulse(sprocket.current_ppqn)
+  table.insert(steps, sprocket.step)
+  luaunit.assert_equals(sprocket.step, 3, "Step should increment to 3")
+  
+  -- Step just to the pattern boundary (need 2 more steps to get to 5)
+  for i = 1, 2 do
+    progress_lattice_pulse(sprocket.current_ppqn)
+    table.insert(steps, sprocket.step)
+  end
+  
+  -- One more step to wrap
+  progress_lattice_pulse(sprocket.current_ppqn)
+  table.insert(steps, sprocket.step)
+  
+  luaunit.assert_equals(
+    ((sprocket.step - 1) % pattern_length) + 1, 
+    1, 
+    string.format("Step should wrap to 1 after pattern length (got %d)", sprocket.step)
+  )
+end
+
+function test_step_wrapping_simple()
+  setup()
+  
+  local pattern_length = 4
+  lattice:set_pattern_length(pattern_length)
+  
+  local sprocket = create_sprocket({
+    division = 1/4,
+  })
+
+  -- Track steps through exactly one pattern
+  local steps = {}
+  
+  for i = 1, pattern_length + 1 do
+    table.insert(steps, sprocket.step)
+    progress_lattice_pulse(sprocket.current_ppqn)
+  end
+  
+  luaunit.assert_equals(steps[1], 1, "Should start at 1")
+  luaunit.assert_equals(steps[pattern_length + 1], 1, "Should wrap back to 1")
 end
