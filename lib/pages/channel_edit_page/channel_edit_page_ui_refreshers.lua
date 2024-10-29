@@ -178,7 +178,6 @@ channel_edit_page_ui_refreshers.refresh_trig_locks = scheduler.debounce(function
     -- Gather all the updates first
     local m_param = m_params[i]
     local trig_lock_param = channel.trig_lock_params[i]
-    
     if trig_lock_param and trig_lock_param.param_id then
       local param_id = trig_lock_param.param_id
       local param_value = params:get(param_id) or trig_lock_param.off_value
@@ -200,21 +199,33 @@ channel_edit_page_ui_refreshers.refresh_trig_locks = scheduler.debounce(function
           updates[i].value = step_trig_lock or params:get(param_id)
         end
       end
+    else
+      updates[i] = {
+        param = m_param,
+        value = -1,
+        trig_lock_param = {
+          name = "",
+          short_descriptor_1 = "None",
+          short_descriptor_2 = "",
+          off_value = -1,
+          value = -1
+        }
+      }
     end
   end
   
   -- Apply all updates in a single pass
   for i, update in pairs(updates) do
     local m_param = update.param
-    local trig_lock_param = update.trig_lock_param
+    local u_trig_lock_param = update.trig_lock_param
     
-    m_param:set_name(trig_lock_param.name)
-    m_param:set_top_label(trig_lock_param.short_descriptor_1)
-    m_param:set_bottom_label(trig_lock_param.short_descriptor_2)
-    m_param:set_off_value(trig_lock_param.off_value)
-    m_param:set_min_value(trig_lock_param.nrpn_min_value or trig_lock_param.cc_min_value)
-    m_param:set_max_value(trig_lock_param.nrpn_max_value or trig_lock_param.cc_max_value)
-    m_param:set_ui_labels(trig_lock_param.ui_labels)
+    m_param:set_name(u_trig_lock_param.name)
+    m_param:set_top_label(u_trig_lock_param.short_descriptor_1)
+    m_param:set_bottom_label(u_trig_lock_param.short_descriptor_2)
+    m_param:set_off_value(u_trig_lock_param.off_value)
+    m_param:set_min_value(u_trig_lock_param.nrpn_min_value or u_trig_lock_param.cc_min_value)
+    m_param:set_max_value(u_trig_lock_param.nrpn_max_value or u_trig_lock_param.cc_max_value)
+    m_param:set_ui_labels(u_trig_lock_param.ui_labels)
     m_param:set_value(update.value)
   end
 

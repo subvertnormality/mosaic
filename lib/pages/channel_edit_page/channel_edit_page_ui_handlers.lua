@@ -245,22 +245,25 @@ end
 
 
 function channel_edit_page_ui_handlers.handle_trig_locks_page_change(direction, trig_lock_page, param_select_vertical_scroll_selector, dials)
+  local channel = program.get_selected_channel()
+  local dial_index = dials:get_selected_index()
+
   if trig_lock_page:is_sub_page_enabled() then
     param_select_vertical_scroll_selector:scroll(direction)
     save_confirm.set_save(function()
-
+      norns_param_state_handler.clear_original_param_state(channel.number, dial_index)
       param_manager.update_param(
-        dials:get_selected_index(),
-        program.get_selected_channel(),
+        dial_index,
+        channel,
         param_select_vertical_scroll_selector:get_selected_item(),
         param_select_vertical_scroll_selector:get_meta_item()
       )
       channel_edit_page_ui_controller.refresh_trig_locks()
-      program.increment_trig_lock_calculator_id(program.get_selected_channel(), dials:get_selected_index())
+      program.increment_trig_lock_calculator_id(channel, dial_index)
     end)
     save_confirm.set_cancel(function() end)
   else
-    channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(direction, program.get_selected_channel(), dials:get_selected_index())
+    channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
   end
 end
 

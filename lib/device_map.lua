@@ -151,8 +151,8 @@ local stock_params = {
     ["name"] = "Random Note",
     ["short_descriptor_1"] = "RAND",
     ["short_descriptor_2"] = "NOTE",
-    ["off_value"] = -1,
-    ["cc_min_value"] = -1,
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
     ["cc_max_value"] = 200,
     ["param_type"] = "stock"
   },
@@ -161,8 +161,8 @@ local stock_params = {
     ["name"] = "Random Velocity",
     ["short_descriptor_1"] = "RAND",
     ["short_descriptor_2"] = "VELO",
-    ["off_value"] = -1,
-    ["cc_min_value"] = -1,
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
     ["cc_max_value"] = 254,
     ["param_type"] = "stock"
   },
@@ -181,8 +181,8 @@ local stock_params = {
     ["name"] = "Twos Random Note",
     ["short_descriptor_1"] = "2RND",
     ["short_descriptor_2"] = "NOTE",
-    ["off_value"] = -1,
-    ["cc_min_value"] = -1,
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
     ["cc_max_value"] = 200,
     ["param_type"] = "stock"
   },

@@ -65,9 +65,11 @@ local refresh_pages = scheduler.debounce(function()
       trigger_edit_page_controller.refresh()
       coroutine.yield()
     elseif (program.get().selected_page == 4) then
-      -- note_edit_page_controller.refresh()
+      note_edit_page_controller.refresh()
+      coroutine.yield()
     elseif (program.get().selected_page == 5) then
-      -- velocity_edit_page_controller.refresh()
+      velocity_edit_page_controller.refresh()
+      coroutine.yield()
     end
 
 end, throttle_time)

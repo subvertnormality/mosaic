@@ -364,12 +364,7 @@ local function play_note_internal(note, note_container, velocity, division, note
   local c = note_container.channel
   local channel = program.get_channel(c)
   
-  note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
-
-  clock_controller.delay_action(c, division, action_flag, function()
-    note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
-  end)
-
+  note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device, action_flag)
 end
 
 -- Redefine play_note to use the helper function
@@ -796,11 +791,9 @@ function step_handler.handle(c, current_step)
   local transpose = step_handler.calculate_step_transpose()
 
   if trig_value == 1 and random_val < trig_prob then
-    -- channel_edit_page_ui_controller.refresh_trig_locks()
-    
+
     local random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0) +
                          fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
-
     local note
     if note_mask_value and note_mask_value > -1 then
       if params:get("quantiser_act_on_note_masks") == 2 then
@@ -862,12 +855,15 @@ function step_handler.handle(c, current_step)
         current_step,
         note_container,
         {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
-        function(chord_note, velocity, midi_channel, midi_device)
+        function(chord_note, velocity, midi_channel, midi_device, action_flag)
 
           if device.player then
-            device.player:note_on(chord_note, velocity)
+            device.player:play_note(chord_note, velocity, (note_container.length or 1)/4)
           elseif midi_controller then
             midi_controller:note_on(chord_note, velocity, midi_channel, midi_device)
+            clock_controller.delay_action(c, note_container.length, action_flag, function()
+              note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
+            end)
           end
         end
       )

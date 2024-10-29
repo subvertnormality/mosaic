@@ -298,18 +298,18 @@ velocity_edit_page_controller.refresh = scheduler.debounce(function()
 
   velocity_edit_page_controller.refresh_buttons()
 
-  for s = 1, 64, 4 do
-    -- Process 4 faders per batch
-    for i = 0, 3 do
+  for s = 1, 64, 8 do
+    -- Process 8 faders per batch
+    for i = 0, 7 do
       local index = s + i
       if index <= 64 then
         velocity_edit_page_controller.refresh_fader(index)
       end
     end
-    coroutine.yield()  -- Yield after each batch of 4
+    coroutine.yield()  -- Yield after each batch of 8
   end
  
   fn.grid_dirty = true
- end)
+ end, 0.01)
 
 return velocity_edit_page_controller

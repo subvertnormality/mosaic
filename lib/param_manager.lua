@@ -239,13 +239,14 @@ function param_manager.update_default_params(channel, meta_device)
   local device_params = device_map.get_params(meta_device.id)
 
   for i = 1, 10 do
-    if meta_device.map_params_automatically and type(meta_device.map_params_automatically) == "table" then
+    if meta_device.map_params_automatically and type(meta_device.map_params_automatically) == "table" and meta_device.map_params_automatically[i] then
       local id = meta_device.map_params_automatically[i]
       if type(id) == "string" then
         local param = fn.find_in_table_by_id(device_params or {}, id)
         safe_set_param(channel, i, param, meta_device)
       end
     else
+      print("No map_params_automatically table found for device " .. meta_device.id)
       safe_set_param(channel, i, nil, meta_device)
     end
   end

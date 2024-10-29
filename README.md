@@ -1,4 +1,4 @@
-Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed to unify control over your entire studio. It combines the advanced features of Elektron and Cirklon sequencers with generative and modular techniques, enabling you to craft complex rhythms and harmonies effortlessly. Whether you're sketching ideas or composing full tracks, Mosaic offers a deep and unique musical experience. This manual will help you quickly navigate _Mosaic_ and start creating funky tunes in no time.
+Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed to unify control over your entire studio. It combines the advanced features of Elektron and Cirklon sequencers with generative and modular techniques, enabling you to craft complex rhythms and harmonies effortlessly. Whether you're sketching ideas or composing full tracks, Mosaic offers a deep and unique musical experience. This manual will help you quickly navigate _Mosaic_ and start creating tunes in no time.
 
 
 - [Getting Started](#getting-started)
@@ -30,6 +30,10 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Adding Notes](#adding-notes)
       - [Adding Velocity](#adding-velocity)
   * [Channel Editor](#channel-editor)
+    + [Devices](#devices)
+      - [MIDI Sound Sources](#midi-sound-sources)
+      - [Norns Sound Sources with n.b.](#norns-sound-sources-with-nb)
+      - [Device Parameters](#device-parameters)
     + [Adding Patterns to Channels](#adding-patterns-to-channels)
     + [Masks](#masks)
       - [Adding Trig Masks](#adding-trig-masks)
@@ -47,10 +51,6 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
     + [Clocks, Swing and Shuffle](#clocks-swing-and-shuffle)
     + [Channel Length](#channel-length)
     + [Muting Channels](#muting-channels)
-    + [Devices](#devices)
-      - [MIDI Sound Sources](#midi-sound-sources)
-      - [Norns Sound Sources with n.b.](#norns-sound-sources-with-nb)
-      - [Device Parameters](#device-parameters)
     + [Trig Parameters](#trig-parameters)
       - [Sequencer Params](#sequencer-params)
         + [Trig Probability](#trig-probability)
@@ -325,6 +325,40 @@ Select the channel editor page by pressing the far left global menu button, and 
 
 ![Channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_channel_select.png)
 
+
+#### Devices
+
+For _Mosaic_ to do anything, you must have a device assigned to a channel. Devices represent a hardware device in your studio, perhaps a software device on your computer, or a software device in Norns itself.
+
+##### MIDI Sound Sources
+
+In Mosaic, a device can be either an internal Norns sound engine powered by [n.b.](https://github.com/sixolet/nb/tree/main), or a representation of a MIDI device within your workspace. Devices are assigned per scene and maintain their settings consistently across all song sequences. To utilise MIDI sound sources, you must have a MIDI output device configured in Norns.
+
+If your device has an associated configuration file, such as those available for Elektron -takt devices, the device's name will be displayed, allowing you to select parameters directly without needing to know the MIDI CC numbers. If no such configuration exists, you can still use the CC device, but you will need to manually look up and input CC numbers.
+
+##### Norns Sound Sources with n.b.
+
+[n.b.](https://github.com/sixolet/nb/tree/main) mods give _Mosaic_ the ability to sequence internal sound sources and device connected via Crow. Supported mods include:
+
+* [nb_ansible](https://github.com/sixolet/nb_ansible) for Ansible voices.
+* [emplaitress](https://github.com/subvertnormality/emplaitress/) offers four MI Plaits voices in parallel. Note this fork allows Emplatress's params to be locked in _Mosaic_.
+* [nb_jf](https://github.com/sixolet/nb_jf) accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.
+* [nb_crow](https://github.com/sixolet/nb_crow) for Crow v/8 and envelope functions.
+* [nb_drum_crow](https://github.com/entzmingerc/nb_drumcrow) turns a monome crow into a synthesizer.
+* [nb_polyperc](https://github.com/dstroud/nb_polyperc) poly perc.
+* [nb_rudiments](https://github.com/entzmingerc/nb_rudiments) percussion synth.
+* [nb_doubledecker](https://github.com/sixolet/doubledecker) 2-layer synth.
+* [nb_oilcan](https://github.com/zjb-s/oilcan) percussion sync. Oilcan's params to be locked in _Mosaic_.
+
+
+n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engines to channels.
+
+More mods are expected to be supported soon.
+
+#### Device Parameters
+
+MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to a value of -1 ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly.
+
 #### Adding Patterns to Channels
 
 The core of your rhythm and harmony sections are formed by adding patterns to channels. To do this, first select a channel using the channel buttons. A single channel can accommodate multiple patterns, and likewise, a single pattern can be assigned to multiple channels. To assign patterns, use the pattern select row, located second from the top on Mosaic’s Grid UI.
@@ -451,39 +485,6 @@ You can transpose your entire Song Sequence using the global quantizer transposi
 #### Muting Channels
 
 To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also shift press (hold K3) the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
-
-#### Devices
-
-For _Mosaic_ to do anything, you must have a device assigned to a channel. Devices represent a hardware device in your studio, perhaps a software device on your computer, or a software device in Norns itself.
-
-##### MIDI Sound Sources
-
-In Mosaic, a device can be either an internal Norns sound engine powered by [n.b.](https://github.com/sixolet/nb/tree/main), or a representation of a MIDI device within your workspace. Devices are assigned per scene and maintain their settings consistently across all song sequences. To utilise MIDI sound sources, you must have a MIDI output device configured in Norns.
-
-If your device has an associated configuration file, such as those available for Elektron -takt devices, the device's name will be displayed, allowing you to select parameters directly without needing to know the MIDI CC numbers. If no such configuration exists, you can still use the CC device, but you will need to manually look up and input CC numbers.
-
-##### Norns Sound Sources with n.b.
-
-[n.b.](https://github.com/sixolet/nb/tree/main) mods give _Mosaic_ the ability to sequence internal sound sources and device connected via Crow. Supported mods include:
-
-* [nb_ansible](https://github.com/sixolet/nb_ansible) for Ansible voices.
-* [emplaitress](https://github.com/subvertnormality/emplaitress/) offers four MI Plaits voices in parallel. Note this fork allows Emplatress's params to be locked in _Mosaic_.
-* [nb_jf](https://github.com/sixolet/nb_jf) accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.
-* [nb_crow](https://github.com/sixolet/nb_crow) for Crow v/8 and envelope functions.
-* [nb_drum_crow](https://github.com/entzmingerc/nb_drumcrow) turns a monome crow into a synthesizer.
-* [nb_polyperc](https://github.com/dstroud/nb_polyperc) poly perc.
-* [nb_rudiments](https://github.com/entzmingerc/nb_rudiments) percussion synth.
-* [nb_doubledecker](https://github.com/sixolet/doubledecker) 2-layer synth.
-* [nb_oilcan](https://github.com/zjb-s/oilcan) percussion sync. Oilcan's params to be locked in _Mosaic_.
-
-
-n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engines to channels.
-
-More mods are expected to be supported soon.
-
-#### Device Parameters
-
-MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to a value of -1 ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly.
 
 ### Trig Parameters
 

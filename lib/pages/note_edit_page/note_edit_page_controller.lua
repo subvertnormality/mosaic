@@ -275,16 +275,16 @@ note_edit_page_controller.refresh = scheduler.debounce(function()
 
   note_edit_page_controller.refresh_buttons()
 
-  -- Process faders in batches of 4
-  for s = 1, 64, 4 do
-    -- Update batch of 4 faders
-    for i = 0, 3 do
+  -- Process faders in batches of 8
+  for s = 1, 64, 8 do
+    -- Update batch of 8 faders
+    for i = 0, 7 do
       local index = s + i
       if index <= 64 then  -- Prevent going over bounds
         note_edit_page_controller.refresh_fader(index)
       end
     end
-    coroutine.yield()  -- Yield after each batch of 4
+    coroutine.yield()  -- Yield after each batch of 8
   end
  
   fn.grid_dirty = true
