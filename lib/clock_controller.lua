@@ -208,7 +208,11 @@ function clock_controller.init()
         step_handler.process_global_step_scale_trig_lock(current_step)
         step_handler.sinfonian_sync(current_step)
       else
-        step_handler.handle(channel_number, current_step)
+        program.set_channel_step_scale_number(channel_number, step_handler.calculate_step_scale_number(channel_number, current_step))
+        
+        if channel.working_pattern.trig_values[current_step] == 1 then
+          step_handler.handle(channel_number, current_step)
+        end
       end
 
       clock_controller["channel_" .. channel_number .. "_clock"].first_run = false

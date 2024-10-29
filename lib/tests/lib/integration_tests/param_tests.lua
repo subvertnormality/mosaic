@@ -2483,7 +2483,7 @@ function test_arp_param_lock_with_four_extra_notes_fraction()
   local note_off_event = table.remove(midi_note_off_events, 1)
 
   luaunit.assert_nil(note_off_event)
-
+  -- TODO figure out why this isn't working any more
   progress_clock_by_pulses(3)
 
   local note_off_event = table.remove(midi_note_off_events, 1)

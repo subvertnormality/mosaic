@@ -179,15 +179,17 @@ function program.set_current_step_for_channel(c, s)
 end
 
 function program.set_global_step_scale_number(step_scale_number)
-  for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
-    sequencer_pattern.channels[17].step_scale_number = step_scale_number
-  end
+  -- TODO check why this was being applied across all sequencer patterns
+  -- for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
+    program.get_selected_sequencer_pattern().channels[17].step_scale_number = step_scale_number
+  -- end
 end
 
 function program.set_channel_step_scale_number(c, step_scale_number)
-  for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
-    sequencer_pattern.channels[c].step_scale_number = step_scale_number
-  end
+  -- TODO check why this was being applied across all sequencer patterns
+  -- for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
+    program.get_selected_sequencer_pattern().channels[c].step_scale_number = step_scale_number
+  -- end
 end
 
 function program.get_channel_step_scale_number(c)
@@ -199,15 +201,15 @@ function program.get()
 end
 
 function program.get_selected_channel()
-  return program.get_sequencer_pattern(program.get().selected_sequencer_pattern).channels[program.get().selected_channel]
+  return program.get_selected_sequencer_pattern().channels[program.get().selected_channel]
 end
 
 function program.get_selected_pattern()
-  return program.get_sequencer_pattern(program.get().selected_sequencer_pattern).patterns[program.get().selected_pattern]
+  return program.get_selected_sequencer_pattern().patterns[program.get().selected_pattern]
 end
 
 function program.get_channel(x)
-  return program.get_sequencer_pattern(program.get().selected_sequencer_pattern).channels[x]
+  return program.get_selected_sequencer_pattern().channels[x]
 end
 
 function program.set(p)

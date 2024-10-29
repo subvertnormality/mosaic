@@ -22,9 +22,22 @@ local pentatonic_patterns = {
     locrian = {2, 3, 4, 6, 7}
 }
 
+local scale_transpose_cache = {}
+local note_snap_cache = {}
+
 -- Memoization cache
 local memoize = {}
 setmetatable(memoize, {__mode = "k"})  -- weak keys
+
+local function cached_transpose_scale(scale, transpose)
+  local cache_key = tostring(scale) .. "_" .. transpose
+  if scale_transpose_cache[cache_key] then
+      return scale_transpose_cache[cache_key]
+  end
+  local result = fn.transpose_scale(scale, transpose)
+  scale_transpose_cache[cache_key] = result
+  return result
+end
 
 function quantiser.filter_pentatonic_scale(scale, scale_type)
     local key = tostring(scale) .. "_" .. scale_type
@@ -278,6 +291,12 @@ function quantiser.process_with_global_params(note_number, octave_mod, transpose
 end
 
 function quantiser.snap_to_scale(note_num, scale_number, transpose)
+
+  local cache_key = note_num .. "_" .. scale_number .. "_" .. (transpose or 0)
+  if note_snap_cache[cache_key] then
+      return note_snap_cache[cache_key]
+  end
+
   local scale_container = program.get_scale(scale_number)
   local scale = fn.deep_copy(scale_container.scale)
   local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
@@ -286,7 +305,10 @@ function quantiser.snap_to_scale(note_num, scale_number, transpose)
 
   if type(note_num) ~= "number" then return nil end
 
-  return musicutil.snap_note_to_array(note_num, scale)
+  local result = musicutil.snap_note_to_array(note_num, scale)
+
+  note_snap_cache[cache_key] = result
+  return result
 end
 
 function quantiser.process_to_pentatonic_scale(note_num, scale_number)

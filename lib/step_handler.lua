@@ -61,6 +61,52 @@ function step_handler.process_stock_params(c, step, type)
   return nil
 end
 
+local function should_process_param(param)
+  local skip_params = {
+      "trig_probability",
+      "quantised_fixed_note", 
+      "bipolar_random_note",
+      "twos_random_note",
+      "random_velocity",
+      "chord_strum",
+      "chord_arp",
+      "chord_velocity_modifier",
+      "chord_spread",
+      "chord_strum_pattern",
+      "fixed_note"
+  }
+  
+  if not param then return false end
+  
+  for _, skip_param in ipairs(skip_params) do
+      if param.id == skip_param then 
+          return false
+      end
+  end
+  
+  return true
+end
+
+local function process_midi_param(param, step_trig_lock, midi_channel, midi_device)
+
+  if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
+      midi_controller.nrpn(
+          param.nrpn_msb,
+          param.nrpn_lsb, 
+          step_trig_lock or value,
+          midi_channel,
+          midi_device
+      )
+  elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
+      midi_controller.cc(
+          param.cc_msb,
+          param.cc_lsb,
+          step_trig_lock or value, 
+          midi_channel,
+          midi_device
+      )
+  end
+end
 
 function step_handler.process_params(c, step)
   local program_data = program.get()
@@ -73,19 +119,7 @@ function step_handler.process_params(c, step)
 
   for i, param in ipairs(trig_lock_params) do
 
-    if param and
-       (param.id ~= "trig_probability" and
-        param.id ~= "quantised_fixed_note" and
-        param.id ~= "bipolar_random_note" and
-        param.id ~= "twos_random_note" and
-        param.id ~= "random_velocity" and
-        param.id ~= "chord_strum" and
-        param.id ~= "chord_arp" and
-        param.id ~= "chord_velocity_modifier" and
-        param.id ~= "chord_spread" and
-        param.id ~= "chord_strum_pattern" and
-        param.id ~= "fixed_note")
-      then
+    if should_process_param(param) then
 
       if not param.param_id then
         goto continue
@@ -114,48 +148,22 @@ function step_handler.process_params(c, step)
             goto continue
           end
 
-          if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
-            midi_controller.nrpn(
-              param.nrpn_msb,
-              param.nrpn_lsb,
-              step_trig_lock,
-              midi_channel,
-              devices[channel.number].midi_device
-            )
-          elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
-            midi_controller.cc(param.cc_msb, param.cc_lsb, step_trig_lock, midi_channel, devices[channel.number].midi_device)
-          end
+          process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device)
+
         elseif p_value and param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
           if p_value == param.off_value then
             goto continue
           end
 
-          if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
-            midi_controller.nrpn(
-              param.nrpn_msb,
-              param.nrpn_lsb,
-              p_value,
-              midi_channel,
-              devices[channel.number].midi_device
-            )
-          elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
-            midi_controller.cc(param.cc_msb, param.cc_lsb, p_value, midi_channel, devices[channel.number].midi_device)
-          end
+          process_midi_param(param, p_value, midi_channel, devices[channel.number].midi_device)
+
         else
           if value == param.off_value then
             goto continue
           end
-          if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
-            midi_controller.nrpn(
-              param.nrpn_msb,
-              param.nrpn_lsb,
-              value,
-              midi_channel,
-              devices[channel.number].midi_device
-            )
-          elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
-            midi_controller.cc(param.cc_msb, param.cc_lsb, value, midi_channel, devices[channel.number].midi_device)
-          end
+
+          process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
+
         end
       elseif param.type == "norns" and param.id == "nb_slew" then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
@@ -364,7 +372,14 @@ local function play_note_internal(note, note_container, velocity, division, note
   local c = note_container.channel
   local channel = program.get_channel(c)
   
-  note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device, action_flag)
+  note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
+
+  if not note_container.player.play_note then
+    clock_controller.delay_action(c, division, action_flag, function()
+      note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
+    end)
+  end
+
 end
 
 -- Redefine play_note to use the helper function
@@ -375,6 +390,24 @@ end
 -- Redefine play_arp_note to use the helper function
 local function play_arp_note(note, note_container, velocity, division, note_on_func)
   play_note_internal(note, note_container, velocity, division, note_on_func, "execute_at_note_end")
+end
+
+local function get_chord_number(i, total_notes, chord_strum_pattern)
+  if chord_strum_pattern == 2 then
+      return total_notes + 1 - i
+  end
+  
+  if chord_strum_pattern == 3 then
+      local half_i = i // 2
+      return i % 2 == 1 and (half_i + 1) or (total_notes - half_i + 1)
+  end
+  
+  if chord_strum_pattern == 4 then
+      local half_i = i // 2
+      return i % 2 == 1 and (total_notes - half_i) or half_i
+  end
+  
+  return i -- Default case (pattern 1 or nil)
 end
 
 local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
@@ -390,25 +423,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   
   for i, cn in ipairs(chord_notes) do
 
-    local chord_number = i
-    
-    if chord_strum_pattern == 2 then
-      chord_number = #chord_notes + 1 - i
-    elseif chord_strum_pattern == 3 then
-      if i % 2 == 1 then
-        chord_number = (i // 2) + 1
-      else
-        chord_number = #chord_notes - (i // 2) + 1
-      end
-    elseif chord_strum_pattern == 4 then
-      if i % 2 == 1 then
-        chord_number = #chord_notes - (i // 2)
-      else
-        chord_number = (i // 2)
-      end
-    end
-
-    local chord_note = chord_notes[chord_number]
+    local chord_note = chord_notes[get_chord_number(i, #chord_notes, chord_strum_pattern)]
 
     if not chord_note or chord_note == 0 then
       sequenced_chord_notes[i] = false
@@ -759,7 +774,6 @@ function step_handler.handle(c, current_step)
   local working_pattern = channel.working_pattern
   local devices = program_data.devices[channel.number]
 
-  local trig_value = working_pattern.trig_values[current_step]
   local note_value = working_pattern.note_values[current_step]
   local note_mask_value = working_pattern.note_mask_values[current_step]
   local velocity_value = working_pattern.velocity_values[current_step]
@@ -778,9 +792,13 @@ function step_handler.handle(c, current_step)
   end
 
   local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability") or 100
-  local random_val = random(0, 99)
 
-  if trig_value == 1 and random_val < trig_prob then
+  local random_outcome = true
+  if trig_prob < 100 then
+    random_outcome = random(0, 99) < trig_prob
+  end
+
+  if random_outcome then
     if params:get("quantiser_trig_lock_hold") == 1 then
       persistent_channel_step_scale_numbers[c] = nil
     end
@@ -790,7 +808,7 @@ function step_handler.handle(c, current_step)
 
   local transpose = step_handler.calculate_step_transpose()
 
-  if trig_value == 1 and random_val < trig_prob then
+  if random_outcome then
 
     local random_shift = fn.transform_random_value(step_handler.process_stock_params(c, current_step, "bipolar_random_note") or 0) +
                          fn.transform_twos_random_value(step_handler.process_stock_params(c, current_step, "twos_random_note") or 0)
@@ -855,15 +873,12 @@ function step_handler.handle(c, current_step)
         current_step,
         note_container,
         {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
-        function(chord_note, velocity, midi_channel, midi_device, action_flag)
+        function(chord_note, velocity, midi_channel, midi_device)
 
           if device.player then
             device.player:play_note(chord_note, velocity, (note_container.length or 1)/4)
           elseif midi_controller then
             midi_controller:note_on(chord_note, velocity, midi_channel, midi_device)
-            clock_controller.delay_action(c, note_container.length, action_flag, function()
-              note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
-            end)
           end
         end
       )

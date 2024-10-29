@@ -346,6 +346,7 @@ local function merge_devices()
         )
 
         if device.describe().params then
+
           local device_param_names = device.describe().params
           for i = 1, #device_param_names do
             local param_id = params.lookup[device_param_names[i]]
