@@ -791,7 +791,7 @@ function step_handler.handle(c, current_step)
     persistent_global_step_scale_number = nil
   end
 
-  local trig_prob = step_handler.process_stock_params(c, current_step, "trig_probability") or 100
+  local trig_prob = (step_handler.process_stock_params(c, current_step, "trig_probability") == -1) and 100 or (step_handler.process_stock_params(c, current_step, "trig_probability") or 100)
 
   local random_outcome = true
   if trig_prob < 100 then
