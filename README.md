@@ -341,14 +341,14 @@ If your device has an associated configuration file, such as those available for
 [n.b.](https://github.com/sixolet/nb/tree/main) mods give _Mosaic_ the ability to sequence internal sound sources and device connected via Crow. Supported mods include:
 
 * [nb_ansible](https://github.com/sixolet/nb_ansible) for Ansible voices.
-* [emplaitress](https://github.com/subvertnormality/emplaitress/) offers four MI Plaits voices in parallel. Note this fork allows Emplatress's params to be locked in _Mosaic_.
+* [emplaitress](https://github.com/sixolet/emplaitress/) offers four MI Plaits voices in parallel. Emplatress's params can be locked in _Mosaic_.
 * [nb_jf](https://github.com/sixolet/nb_jf) accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.
 * [nb_crow](https://github.com/sixolet/nb_crow) for Crow v/8 and envelope functions.
 * [nb_drum_crow](https://github.com/entzmingerc/nb_drumcrow) turns a monome crow into a synthesizer.
-* [nb_polyperc](https://github.com/dstroud/nb_polyperc) poly perc.
+* [nb_polyperc](https://github.com/dstroud/nb_polyperc) poly perc. Poly perc's params can be locked in _Mosaic_.
 * [nb_rudiments](https://github.com/entzmingerc/nb_rudiments) percussion synth.
-* [nb_doubledecker](https://github.com/sixolet/doubledecker) 2-layer synth.
-* [nb_oilcan](https://github.com/zjb-s/oilcan) percussion sync. Oilcan's params to be locked in _Mosaic_.
+* [nb_doubledecker](https://github.com/sixolet/doubledecker) 2-layer synth. Doubledecker's params can be locked in _Mosaic_.
+* [nb_oilcan](https://github.com/zjb-s/oilcan) percussion sync. Oilcan's params can be locked in _Mosaic_.
 
 
 n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engines to channels.

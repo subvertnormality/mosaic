@@ -428,6 +428,10 @@ function program.clear_trig_locks_for_channel(channel)
   channel.step_transpose_trig_lock_banks = {}
 end
 
+function program.clear_device_trig_locks_for_channel(channel)
+  channel.step_trig_lock_banks = {}
+end
+
 function program.clear_masks_for_step(step)
   local channel = program.get().selected_channel
   program.clear_step_trig_mask(channel, step)

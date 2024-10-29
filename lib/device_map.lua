@@ -2,6 +2,7 @@ local device_map = {}
 device_map.params_cache = {}
 
 local json = require("mosaic/lib/json")
+local nb_device_param_maps = include("mosaic/lib/nb_device_param_maps")
 
 local device_map_keyed_by_id = {}
 
@@ -314,22 +315,6 @@ local function merge_devices()
       if fn.appears_in_table(tested_note_players, index) and string.find(index, "midi", 1, true) ~= 1 then
         local new_device_params = {}
 
-        local map_params_automatically = true
-        if fn.starts_with(index, "emplait") then 
-          map_params_automatically = {
-            "plaits_model_" .. fn.get_last_char(index),
-            "plaits_harmonics_" .. fn.get_last_char(index),
-            "plaits_timbre_" .. fn.get_last_char(index),
-            "plaits_morph_" .. fn.get_last_char(index),
-            "plaits_fm_mod_" .. fn.get_last_char(index),
-            "plaits_timb_mod_" .. fn.get_last_char(index),
-            "plaits_morph_mod_" .. fn.get_last_char(index),
-            "plaits_aux_" .. fn.get_last_char(index),
-            "plaits_send_a_" .. fn.get_last_char(index),
-            "plaits_send_b_" .. fn.get_last_char(index)
-          }
-        end
-
         table.insert(
           stock_device_map,
           {
@@ -337,7 +322,7 @@ local function merge_devices()
             ["name"] = fn.title_case(index),
             ["id"] = index,
             ["unique"] = true,
-            ["map_params_automatically"] = map_params_automatically,
+            ["map_params_automatically"] = nb_device_param_maps.get_default_params_for_device(index),
             ["default_midi_channel"] = nil,
             ["player"] = device,
             ["params"] = new_device_params,
@@ -345,10 +330,12 @@ local function merge_devices()
           }
         )
 
-        if device.describe().params then
+        local device_param_names = device.describe().params or nb_device_param_maps.get_params_for_device(index)
 
-          local device_param_names = device.describe().params
+        if type(device_param_names) == "table" and next(device_param_names) then
+
           for i = 1, #device_param_names do
+
             local param_id = params.lookup[device_param_names[i]]
             local p = params:lookup_param(param_id)
 

@@ -246,7 +246,6 @@ function param_manager.update_default_params(channel, meta_device)
         safe_set_param(channel, i, param, meta_device)
       end
     else
-      print("No map_params_automatically table found for device " .. meta_device.id)
       safe_set_param(channel, i, nil, meta_device)
     end
   end

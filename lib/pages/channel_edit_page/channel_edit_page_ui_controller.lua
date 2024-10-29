@@ -643,17 +643,11 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
     if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
       p.controlspec.quantum = 1 / (trig_lock_param.nrpn_max_value - trig_lock_param.nrpn_min_value) 
       total_range = p.controlspec.maxval - p.controlspec.minval
-
     elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.cc_msb then
       p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
       total_range = p.controlspec.maxval - p.controlspec.minval
     elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.type == "midi" then
       p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
-      total_range = p.controlspec.maxval - p.controlspec.minval
-    elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.type == "norns" then
-      if not p.controlspec.quantum then 
-        p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
-      end
       total_range = p.controlspec.maxval - p.controlspec.minval
     end
   elseif p.count then
@@ -666,33 +660,35 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
 
   local d = direction
 
-  if total_range > 126 and is_key3_down == false then
-    if math.abs(direction) > 0 then
-      d = direction * math.floor(total_range / 127) or 1
-    end
+  if trig_lock_param.type ~= "norns" then
+    if total_range > 126 and is_key3_down == false then
+      if math.abs(direction) > 0 then
+        d = direction * math.floor(total_range / 127) or 1
+      end
 
-    if math.abs(direction) > 2 then
-      d = direction * math.floor(total_range / 64) or 1
-    end
+      if math.abs(direction) > 2 then
+        d = direction * math.floor(total_range / 64) or 1
+      end
 
-    if math.abs(direction) > 5 then
-      d = direction * math.floor(total_range / 32) or 1
-    end
+      if math.abs(direction) > 5 then
+        d = direction * math.floor(total_range / 32) or 1
+      end
 
-    if math.abs(direction) > 8 then
-      d = direction * math.floor(total_range / 16) or 1
-    end
+      if math.abs(direction) > 8 then
+        d = direction * math.floor(total_range / 16) or 1
+      end
 
-    if math.abs(direction) > 10 then
-      d = direction * math.floor(total_range / 8) or 1
-    end
+      if math.abs(direction) > 10 then
+        d = direction * math.floor(total_range / 8) or 1
+      end
 
-    if math.abs(direction) > 13 then
-      d = direction * math.floor(total_range / 4) or 1
-    end
+      if math.abs(direction) > 13 then
+        d = direction * math.floor(total_range / 4) or 1
+      end
 
-    if math.abs(direction) > 15 then
-      d = direction * math.floor(total_range / 2) or 1
+      if math.abs(direction) > 15 then
+        d = direction * math.floor(total_range / 2) or 1
+      end
     end
   end
 
@@ -1367,10 +1363,12 @@ function channel_edit_page_ui_controller.handle_midi_config_page_increment()
 
   save_confirm.clear()
 
-  save_confirm.set_save(function()
+  local channel = program.get_selected_channel()
 
+  save_confirm.set_save(function()
     channel_edit_page_ui_controller.update_channel_config()
-    param_manager.update_default_params(program.get_selected_channel(), device)
+    program.clear_device_trig_locks_for_channel(channel)
+    param_manager.update_default_params(channel, device)
     param_select_vertical_scroll_selector:set_selected_item(1)
     channel_edit_page_ui_controller.refresh_trig_locks()
   end)
@@ -1390,10 +1388,12 @@ function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
 
   save_confirm.clear()
 
-  save_confirm.set_save(function()
+  local channel = program.get_selected_channel()
 
+  save_confirm.set_save(function()
     channel_edit_page_ui_controller.update_channel_config()
-    param_manager.update_default_params(program.get_selected_channel(), device)
+    program.clear_device_trig_locks_for_channel(channel)
+    param_manager.update_default_params(channel, device)
     param_select_vertical_scroll_selector:set_selected_item(1)
     channel_edit_page_ui_controller.refresh_trig_locks()
   end)

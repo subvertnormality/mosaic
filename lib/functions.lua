@@ -170,7 +170,7 @@ end
 
 function fn.format_last_descriptor(str)
   local words = split_words(str)
-  if #words > 0 then
+  if #words > 1 then
     return truncate_word(words[#words]) -- Get the last word
   end
   return ""
