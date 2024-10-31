@@ -374,7 +374,7 @@ local function play_note_internal(note, note_container, velocity, division, note
   
   note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
 
-  clock_controller.delay_action(c, division * 0.95, action_flag, function()
+  clock_controller.delay_action(c, division, action_flag, function()
     note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
   end)
 
