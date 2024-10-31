@@ -18,8 +18,6 @@ local step49to64_fade_button = fade_button:new(12, 8, 49, 64)
 local vel1to7_fade_button = fade_button:new(15, 8, 1, 7)
 local vel8to14_fade_button = fade_button:new(16, 8, 8, 14)
 
-local quad_dupe_button = button:new(7, 8)
-
 function velocity_edit_page_controller.init()
   for s = 1, 64 do
     faders["step" .. s .. "_fader"] = vertical_fader:new(s, 1, 14)
@@ -63,7 +61,7 @@ end
 function velocity_edit_page_controller.register_draw_handlers()
   for s = 1, 64 do
     draw_handler:register_grid(
-      "pattern_velocity_edit_page",
+      "velocity_edit_page",
       function()
         -- velocity_edit_page_controller.refresh()
         return faders["step" .. s .. "_fader"]:draw()
@@ -71,45 +69,39 @@ function velocity_edit_page_controller.register_draw_handlers()
     )
   end
   draw_handler:register_grid(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function()
       return step1to16_fade_button:draw()
     end
   )
   draw_handler:register_grid(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function()
       return step17to32_fade_button:draw()
     end
   )
   draw_handler:register_grid(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function()
       return step33to48_fade_button:draw()
     end
   )
   draw_handler:register_grid(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function()
       return step49to64_fade_button:draw()
     end
   )
   draw_handler:register_grid(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function()
       return vel1to7_fade_button:draw()
     end
   )
   draw_handler:register_grid(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function()
       return vel8to14_fade_button:draw()
-    end
-  )
-  draw_handler:register_grid(
-    "pattern_velocity_edit_page",
-    function()
-      return quad_dupe_button:draw()
     end
   )
 end
@@ -117,7 +109,7 @@ end
 function velocity_edit_page_controller.register_press_handlers()
   for s = 1, 64 do
     press_handler:register(
-      "pattern_velocity_edit_page",
+      "velocity_edit_page",
       function(x, y)
         if (y == 1) and is_key3_down then
           program.get().selected_pattern = x
@@ -136,7 +128,7 @@ function velocity_edit_page_controller.register_press_handlers()
             local steps_tip = s .. " "
             tooltip:show("Step " .. s .. " velocity set to " .. velocity)
 
-            if quad_dupe_button:get_state() == 2 then
+            if is_key3_down then
               local steps = {16, 32, 48, -16, -32, -48}
 
               for _, step in ipairs(steps) do
@@ -156,7 +148,7 @@ function velocity_edit_page_controller.register_press_handlers()
     )
   end
   press_handler:register_long(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function(x, y)
       if (y == 1) then
         program.get().selected_pattern = x
@@ -166,7 +158,7 @@ function velocity_edit_page_controller.register_press_handlers()
     end
   )
   press_handler:register(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function(x, y)
       if (step1to16_fade_button:is_this(x, y)) then
         horizontal_offset = 0
@@ -177,7 +169,7 @@ function velocity_edit_page_controller.register_press_handlers()
     end
   )
   press_handler:register(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function(x, y)
       if (step17to32_fade_button:is_this(x, y)) then
         horizontal_offset = 16
@@ -189,7 +181,7 @@ function velocity_edit_page_controller.register_press_handlers()
     end
   )
   press_handler:register(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function(x, y)
       if (step33to48_fade_button:is_this(x, y)) then
         horizontal_offset = 32
@@ -201,7 +193,7 @@ function velocity_edit_page_controller.register_press_handlers()
     end
   )
   press_handler:register(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function(x, y)
       if (step49to64_fade_button:is_this(x, y)) then
         horizontal_offset = 48
@@ -213,7 +205,7 @@ function velocity_edit_page_controller.register_press_handlers()
     end
   )
   press_handler:register(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function(x, y)
       if (vel1to7_fade_button:is_this(x, y)) then
         vertical_offset = 0
@@ -225,7 +217,7 @@ function velocity_edit_page_controller.register_press_handlers()
     end
   )
   press_handler:register(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function(x, y)
       if (vel8to14_fade_button:is_this(x, y)) then
         vertical_offset = 7
@@ -234,21 +226,6 @@ function velocity_edit_page_controller.register_press_handlers()
       end
 
       return vel8to14_fade_button:press(x, y)
-    end
-  )
-  press_handler:register(
-    "pattern_velocity_edit_page",
-    function(x, y)
-      quad_dupe_button:press(x, y)
-      if (quad_dupe_button:is_this(x, y)) then
-        if quad_dupe_button:get_state() == 1 then
-          tooltip:show("Quad dupe off")
-          quad_dupe_button:no_blink()
-        else
-          tooltip:show("Quad dupe on")
-          quad_dupe_button:blink()
-        end
-      end
     end
   )
 end

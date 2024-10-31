@@ -74,10 +74,6 @@ channel_edit_page_ui_refreshers.refresh_clock_mods = scheduler.debounce(function
     i = i + 12
   end
   clock_mod_list_selector:set_selected_value(i)
-  if channel.number == 17 then
-    clock_mod_list_selector:select()
-    clock_swing_value_selector:deselect()
-  end
 end, throttle_time)
 
 channel_edit_page_ui_refreshers.refresh_swing = scheduler.debounce(function(clock_swing_value_selector)
@@ -116,35 +112,11 @@ end, throttle_time)
 
 channel_edit_page_ui_refreshers.refresh_device_selector = scheduler.debounce(function(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
   local channel = program.get_selected_channel()
-  if channel.number == 17 then return end
   local device = device_map.get_device(program.get().devices[channel.number].device_map)
   local device_params = device_map.get_params(program.get().devices[channel.number].device_map)
   param_select_vertical_scroll_selector:set_items(device_params)
   param_select_vertical_scroll_selector:set_meta_item(device)
 end, throttle_time)
-
-channel_edit_page_ui_refreshers.refresh_romans = scheduler.debounce(function(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector)
-  local scale = quantizer_vertical_scroll_selector:get_selected_item()
-  if scale then
-    local number = scale.number
-    program.get_selected_sequencer_pattern().active = true
-    romans_vertical_scroll_selector:set_items(quantiser.get_scales()[number].romans)
-    fn.dirty_screen(true)
-  end
-end, throttle_time)
-
-channel_edit_page_ui_refreshers.refresh_quantiser = scheduler.debounce(function(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, transpose_vertical_scroll_selector, rotation_vertical_scroll_selector, m_params)
-  local channel = program.get_selected_channel()
-  local scale = program.get_scale(program.get().selected_scale)
-  program.get_selected_sequencer_pattern().active = true
-  quantizer_vertical_scroll_selector:set_selected_item(scale.number)
-  notes_vertical_scroll_selector:set_selected_item(scale.root_note + 1)
-  romans_vertical_scroll_selector:set_selected_item(scale.chord)
-  transpose_vertical_scroll_selector:set_selected_item((scale.transpose or 0) + 13)
-  rotation_vertical_scroll_selector:set_selected_item((scale.chord_degree_rotation or 0) + 1)
-  channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, quantiser)
-end, throttle_time)
-
 
 channel_edit_page_ui_refreshers.refresh_trig_lock_value = scheduler.debounce(function(i, m_params)
   local channel = program.get_selected_channel()

@@ -9,7 +9,7 @@ end
 
 function velocity_edit_page_ui_controller.register_ui_draw_handlers()
   draw_handler:register_ui(
-    "pattern_velocity_edit_page",
+    "velocity_edit_page",
     function()
       grid_viewer:draw()
     end
@@ -17,7 +17,6 @@ function velocity_edit_page_ui_controller.register_ui_draw_handlers()
 end
 
 function velocity_edit_page_ui_controller.init()
-  velocity_edit_page_ui_controller.register_ui_draw_handlers()
 end
 
 function velocity_edit_page_ui_controller.enc(n, d)

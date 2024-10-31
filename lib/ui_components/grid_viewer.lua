@@ -1,8 +1,6 @@
 local grid_viewer = {}
 grid_viewer.__index = grid_viewer
 
-
-
 local screen_view_sequencer = sequencer:new(4, "channel")
 
 function grid_viewer:new(x, y)

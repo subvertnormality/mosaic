@@ -25,9 +25,6 @@ local tresillo_mult =
   }
 )
 
-function trigger_edit_page_ui_controller.change_page(subpage_name)
-  -- pages:select_page(subpage_name)
-end
 
 local grid_viewer_page =
   page:new(
@@ -47,7 +44,7 @@ local trig_edit_options_page =
 
 function trigger_edit_page_ui_controller.register_ui_draw_handlers()
   draw_handler:register_ui(
-    "pattern_trigger_edit_page",
+    "trigger_edit_page",
     function()
       pages:draw()
     end
@@ -60,7 +57,6 @@ function trigger_edit_page_ui_controller.init()
   pages:select_page(1)
   tresillo_mult:select()
   trigger_edit_page_ui_controller.refresh_tresillo()
-  trigger_edit_page_ui_controller.register_ui_draw_handlers()
 end
 
 function trigger_edit_page_ui_controller.enc(n, d)

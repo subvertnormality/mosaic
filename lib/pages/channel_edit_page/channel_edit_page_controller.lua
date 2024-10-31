@@ -4,11 +4,13 @@ local pattern_buttons = {}
 
 local quantiser = include("mosaic/lib/quantiser")
 
+local hide_scale_fader_leds = false
+
 local channel_edit_page_sequencer = sequencer:new(4, "channel")
 local channel_select_fader = fader:new(1, 1, 16, 16)
 local trig_merge_mode_button =
   button:new(
-  13,
+  14,
   8,
   {
     {"Skip trig merge mode on", 2},
@@ -18,7 +20,7 @@ local trig_merge_mode_button =
 )
 local note_merge_mode_button =
   button:new(
-  14,
+  15,
   8,
   {
     {"Average note merge mode off", 2},
@@ -29,7 +31,7 @@ local note_merge_mode_button =
 )
 local velocity_merge_mode_button =
   button:new(
-  15,
+  16,
   8,
   {
     {"Average velocity merge mode off", 2},
@@ -49,45 +51,34 @@ local length_merge_mode_button =
     {"Channel length merge mode on", 15}
   }
 )
-local channel_octave_fader = fader:new(7, 8, 5, 5)
+local channel_octave_fader = fader:new(8, 8, 5, 5)
 local channel_scale_fader = fader:new(1, 3, 16, 16)
-local transpose_fader = fader:new(8, 8, 9, 25)
-
-local hide_scale_fader_leds = false
 
 function channel_edit_page_controller.init()
-  if program.get_selected_channel() ~= 17 then
-    for s = 1, 16 do
-      pattern_buttons["step" .. s .. "_pattern_button"] = button:new(s, 2)
-    end
 
-    channel_octave_fader:set_value(program.get_selected_channel().octave + 3)
-    channel_edit_page_controller.refresh()
-    channel_edit_page_ui_controller.refresh()
+  for s = 1, 16 do
+    pattern_buttons["step" .. s .. "_pattern_button"] = button:new(s, 2)
   end
+
+  channel_octave_fader:set_value(program.get_selected_channel().octave + 3)
+  channel_edit_page_controller.refresh()
+  channel_edit_page_ui_controller.refresh()
 
   channel_scale_fader:set_pre_func(
     function(x, y, length)
+      local channel = program.get_selected_channel()
       for i = x, length + x - 1 do
         if hide_scale_fader_leds then
           break
         end
-        if clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
-          grid_abstraction.led(i, y, 15)
-        elseif clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number == 17 then
+        if clock_controller.is_playing() and i == channel.step_scale_number then
           grid_abstraction.led(i, y, 15)
           channel_scale_fader:set_value(0)
-        elseif not clock_controller.is_playing() and i == program.get_selected_channel().step_scale_number and program.get_selected_channel().number ~= 17 then
-          grid_abstraction.led(i, y, 15)
-        elseif i == program.get().selected_scale and program.get_selected_channel().number == 17 then
-          grid_abstraction.led(i, y, 4)
         end
-
       end
     end
   )
 
-  transpose_fader:set_value(13)
 end
 
 function channel_edit_page_controller.register_draw_handlers()
@@ -114,32 +105,28 @@ function channel_edit_page_controller.register_draw_handlers()
     draw_handler:register_grid(
       "channel_edit_page",
       function()
-        if program.get().selected_channel ~= 17 then
-          pattern_buttons["step" .. s .. "_pattern_button"]:draw()
-        end
+        pattern_buttons["step" .. s .. "_pattern_button"]:draw()
       end
     )
   end
   draw_handler:register_grid(
     "channel_edit_page",
     function()
-      if program.get().selected_channel ~= 17 then
-        trig_merge_mode_button:draw()
-      end
+      trig_merge_mode_button:draw()
     end
   )
   draw_handler:register_grid(
     "channel_edit_page",
     function()
-      if program.get().selected_channel ~= 17 then
-        note_merge_mode_button:draw()
-      end
+      note_merge_mode_button:draw()
     end
   )
   draw_handler:register_grid(
     "channel_edit_page",
     function()
-      if program.get().selected_channel ~= 17 then
+      if is_key3_down then
+        length_merge_mode_button:draw()
+      else
         velocity_merge_mode_button:draw()
       end
     end
@@ -147,25 +134,7 @@ function channel_edit_page_controller.register_draw_handlers()
   draw_handler:register_grid(
     "channel_edit_page",
     function()
-      if program.get().selected_channel ~= 17 then
-        length_merge_mode_button:draw()
-      end
-    end
-  )
-  draw_handler:register_grid(
-    "channel_edit_page",
-    function()
-      if program.get().selected_channel ~= 17 then
-        channel_octave_fader:draw()
-      end
-    end
-  )
-  draw_handler:register_grid(
-    "channel_edit_page",
-    function()
-      if program.get().selected_channel == 17 then
-        transpose_fader:draw()
-      end
+      channel_octave_fader:draw()
     end
   )
 end
@@ -175,9 +144,7 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
-        -- channel_edit_page_ui_controller.refresh_trig_locks()
-        -- channel_edit_page_ui_controller.refresh_masks()
-        if program.get().selected_channel ~= 17 and is_key3_down then
+        if is_key3_down then
           channel_edit_page_sequencer:press(x, y)
           program.toggle_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
         end
@@ -188,7 +155,7 @@ function channel_edit_page_controller.register_press_handlers()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
-        if program.get().selected_channel ~= 17 and is_key3_down then
+        if is_key3_down then
           program.clear_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
           channel_edit_page_ui_controller.refresh_masks()
         end
@@ -270,7 +237,7 @@ function channel_edit_page_controller.register_press_handlers()
         program.get_selected_sequencer_pattern().active = true
         tooltip:show("Channel " .. program.get().selected_channel .. " length changed")
       end
-      if channel.number ~= 17 and channel_octave_fader:is_this(x2, y2) then
+      if channel_octave_fader:is_this(x2, y2) then
         channel_octave_fader:press(x2, y2)
         local step = fn.calc_grid_count(x, y)
         local channel = program.get_selected_channel()
@@ -294,17 +261,6 @@ function channel_edit_page_controller.register_press_handlers()
           program.add_step_scale_trig_lock(step, nil)
         else
           program.add_step_scale_trig_lock(step, scale_value)
-        end
-        channel_edit_page_controller.refresh_faders()
-      end
-      if channel.number == 17 and transpose_fader:is_this(x2, y2) then
-        transpose_fader:press(x2, y2)
-        local step = fn.calc_grid_count(x, y)
-        local transpose_value = transpose_fader:get_value() - 13
-        if transpose_value == program.get_step_transpose_trig_lock(step) then
-          program.add_step_transpose_trig_lock(step, nil)
-        else
-          program.add_step_transpose_trig_lock(step, transpose_value)
         end
         channel_edit_page_controller.refresh_faders()
       end
@@ -336,51 +292,6 @@ function channel_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
-    "channel_edit_page",
-    function(x, y)
-      if channel_scale_fader:is_this(x, y) then
-        if program.get().selected_channel ~= 17 then
-          program.get().selected_channel = 17
-          channel_select_fader:set_value(0)
-          if program.get().default_scale then
-            channel_scale_fader:set_value(program.get().default_scale)
-          else
-            channel_scale_fader:set_value(0)
-          end
-          channel_edit_page_ui_controller.refresh()
-        else
-          if is_key3_down then
-            program.get().selected_scale = x
-            channel_edit_page_ui_controller.refresh()
-          else
-            channel_scale_fader:press(x, y)
-            local scale_value = channel_scale_fader:get_value()
-            local number = program.get_scale(scale_value).number
-            program.get().selected_scale = x
-            if program.get().default_scale ~= scale_value then
-              program.get().default_scale = scale_value
-              tooltip:show("Global scale: " .. quantiser.get_notes()[program.get_scale(scale_value).root_note + 1] .. " " .. quantiser.get_scale_name_from_index(number))
-            else
-              program.get().default_scale = 0
-              channel_scale_fader:set_value(0)
-              tooltip:show("Global scale off")
-            end
-            channel_edit_page_ui_controller.refresh_quantiser()
-          end
-        end
-      end
-    end
-  )
-  press_handler:register_long(
-    "channel_edit_page",
-    function(x, y)
-      if channel_scale_fader:is_this(x, y) and program.get().selected_channel == 17 then
-        program.get().selected_scale = x
-        channel_edit_page_ui_controller.refresh()
-      end
-    end
-  )
   for s = 1, 16 do
     press_handler:register(
       "channel_edit_page",
@@ -406,195 +317,183 @@ function channel_edit_page_controller.register_press_handlers()
   press_handler:register(
     "channel_edit_page",
     function(x, y)
-      if program.get().selected_channel ~= 17 then
+      if trig_merge_mode_button:is_this(x, y) then
+        trig_merge_mode_button:press(x, y)
 
-        if trig_merge_mode_button:is_this(x, y) then
-          trig_merge_mode_button:press(x, y)
+        if trig_merge_mode_button:get_state() == 1 then
 
-          if trig_merge_mode_button:get_state() == 1 then
+          program.get_selected_channel().trig_merge_mode = "skip"
 
-            program.get_selected_channel().trig_merge_mode = "skip"
+          tooltip:show(
+            "Skip trig merge mode"
+          )
+        elseif trig_merge_mode_button:get_state() == 2 then
 
-            tooltip:show(
-              "Skip trig merge mode"
-            )
-          elseif trig_merge_mode_button:get_state() == 2 then
+          program.get_selected_channel().trig_merge_mode = "only"
+          tooltip:show(
+            "Only trig merge mode"
+          )
+        elseif trig_merge_mode_button:get_state() == 3 then
 
-            program.get_selected_channel().trig_merge_mode = "only"
-            tooltip:show(
-              "Only trig merge mode"
-            )
-          elseif trig_merge_mode_button:get_state() == 3 then
-
-            program.get_selected_channel().trig_merge_mode = "all"
-            tooltip:show(
-              "All trig merge mode"
-            )
-          end
-
-          program.get_selected_sequencer_pattern().active = true
-          pattern_controller.update_working_patterns()
-
+          program.get_selected_channel().trig_merge_mode = "all"
+          tooltip:show(
+            "All trig merge mode"
+          )
         end
+
+        program.get_selected_sequencer_pattern().active = true
+        pattern_controller.update_working_patterns()
+
       end
     end
   )
   press_handler:register(
     "channel_edit_page",
     function(x, y)
-      if program.get().selected_channel ~= 17 then
-        if note_merge_mode_button:is_this(x, y) then
+      if note_merge_mode_button:is_this(x, y) then
 
-          note_merge_mode_button:press(x, y)
+        note_merge_mode_button:press(x, y)
 
-          if note_merge_mode_button:get_state() == 1 then
-            program.get_selected_channel().note_merge_mode = "average"
-            tooltip:show(
-              "Average note merge mode"
-            )
-          elseif note_merge_mode_button:get_state() == 2 then
-            program.get_selected_channel().note_merge_mode = "up"
-            tooltip:show(
-              "Higher note merge mode"
-            )
-          elseif note_merge_mode_button:get_state() == 3 then
-            program.get_selected_channel().note_merge_mode = "down"
-            tooltip:show(
-              "Lower note merge mode"
-            )
-          elseif note_merge_mode_button:get_state() == 4 then
+        if note_merge_mode_button:get_state() == 1 then
+          program.get_selected_channel().note_merge_mode = "average"
+          tooltip:show(
+            "Average note merge mode"
+          )
+        elseif note_merge_mode_button:get_state() == 2 then
+          program.get_selected_channel().note_merge_mode = "up"
+          tooltip:show(
+            "Higher note merge mode"
+          )
+        elseif note_merge_mode_button:get_state() == 3 then
+          program.get_selected_channel().note_merge_mode = "down"
+          tooltip:show(
+            "Lower note merge mode"
+          )
+        elseif note_merge_mode_button:get_state() == 4 then
 
-            note_merge_mode_button:set_state(1)
-            tooltip:show(
-              "Average note merge mode"
-            )
-          end
-
-          program.get_selected_sequencer_pattern().active = true
-          pattern_controller.update_working_patterns()
-
+          note_merge_mode_button:set_state(1)
+          tooltip:show(
+            "Average note merge mode"
+          )
         end
+
+        program.get_selected_sequencer_pattern().active = true
+        pattern_controller.update_working_patterns()
+
       end
     end
   )
   press_handler:register(
     "channel_edit_page",
     function(x, y)
-      if program.get().selected_channel ~= 17 then
-        if velocity_merge_mode_button:is_this(x, y) then
+      if velocity_merge_mode_button:is_this(x, y) and not is_key3_down then
 
-          velocity_merge_mode_button:press(x, y)
+        velocity_merge_mode_button:press(x, y)
 
-          if velocity_merge_mode_button:get_state() == 1 then
-            program.get_selected_channel().velocity_merge_mode = "average"
-            tooltip:show(
-              "Average velocity merge mode"
-            )
-          elseif velocity_merge_mode_button:get_state() == 2 then
-            program.get_selected_channel().velocity_merge_mode = "up"
-            tooltip:show(
-              "Higher velocity merge mode"
-            )
-          elseif velocity_merge_mode_button:get_state() == 3 then
-            program.get_selected_channel().velocity_merge_mode = "down"
-            tooltip:show(
-              "Lower velocity merge mode"
-            )
-          elseif velocity_merge_mode_button:get_state() == 4 then
-            velocity_merge_mode_button:set_state(1)
-            tooltip:show(
-              "Average velocity merge mode"
-            )
-          end
-
-          program.get_selected_sequencer_pattern().active = true
-          pattern_controller.update_working_patterns()
-
+        if velocity_merge_mode_button:get_state() == 1 then
+          program.get_selected_channel().velocity_merge_mode = "average"
+          tooltip:show(
+            "Average velocity merge mode"
+          )
+        elseif velocity_merge_mode_button:get_state() == 2 then
+          program.get_selected_channel().velocity_merge_mode = "up"
+          tooltip:show(
+            "Higher velocity merge mode"
+          )
+        elseif velocity_merge_mode_button:get_state() == 3 then
+          program.get_selected_channel().velocity_merge_mode = "down"
+          tooltip:show(
+            "Lower velocity merge mode"
+          )
+        elseif velocity_merge_mode_button:get_state() == 4 then
+          velocity_merge_mode_button:set_state(1)
+          tooltip:show(
+            "Average velocity merge mode"
+          )
         end
+
+        program.get_selected_sequencer_pattern().active = true
+        pattern_controller.update_working_patterns()
+
+      end
+    end
+
+  )
+  press_handler:register(
+    "channel_edit_page",
+    function(x, y)
+      if length_merge_mode_button:is_this(x, y) and is_key3_down then
+
+        length_merge_mode_button:press(x, y)
+
+        if length_merge_mode_button:get_state() == 1 then
+          program.get_selected_channel().length_merge_mode = "average"
+          tooltip:show(
+            "Average length merge mode"
+          )
+        elseif length_merge_mode_button:get_state() == 2 then
+          program.get_selected_channel().length_merge_mode = "up"
+          tooltip:show(
+            "Longer length merge mode"
+          )
+        elseif length_merge_mode_button:get_state() == 3 then
+          program.get_selected_channel().length_merge_mode = "down"
+          tooltip:show(
+            "Shorter length merge mode"
+          )
+        elseif length_merge_mode_button:get_state() == 4 then
+          length_merge_mode_button:set_state(1)
+          tooltip:show(
+            "Average length merge mode"
+          )
+        end
+
+        program.get_selected_sequencer_pattern().active = true
+        pattern_controller.update_working_patterns()
       end
     end
   )
   press_handler:register(
     "channel_edit_page",
     function(x, y)
-      if program.get().selected_channel ~= 17 then
-        if length_merge_mode_button:is_this(x, y) then
-
-          length_merge_mode_button:press(x, y)
-
-          if length_merge_mode_button:get_state() == 1 then
-            program.get_selected_channel().length_merge_mode = "average"
-            tooltip:show(
-              "Average length merge mode"
-            )
-          elseif length_merge_mode_button:get_state() == 2 then
-            program.get_selected_channel().length_merge_mode = "up"
-            tooltip:show(
-              "Longer length merge mode"
-            )
-          elseif length_merge_mode_button:get_state() == 3 then
-            program.get_selected_channel().length_merge_mode = "down"
-            tooltip:show(
-              "Shorter length merge mode"
-            )
-          elseif length_merge_mode_button:get_state() == 4 then
-            length_merge_mode_button:set_state(1)
-            tooltip:show(
-              "Average length merge mode"
-            )
-          end
-
-          program.get_selected_sequencer_pattern().active = true
-          pattern_controller.update_working_patterns()
-        end
-      end
-    end
-  )
-  press_handler:register(
-    "channel_edit_page",
-    function(x, y)
-      if program.get().selected_channel ~= 17 then
-        if channel_octave_fader:is_this(x, y) then
-          channel_octave_fader:press(x, y)
-          program.get_selected_channel().octave = channel_octave_fader:get_value() - 3
-          program.get_selected_sequencer_pattern().active = true
-          tooltip:show("Ch. " .. program.get().selected_channel .. " octave: " .. channel_octave_fader:get_value() - 3)
-        end
+      if channel_octave_fader:is_this(x, y) then
+        channel_octave_fader:press(x, y)
+        program.get_selected_channel().octave = channel_octave_fader:get_value() - 3
+        program.get_selected_sequencer_pattern().active = true
+        tooltip:show("Ch. " .. program.get().selected_channel .. " octave: " .. channel_octave_fader:get_value() - 3)
       end
     end
   )
   press_handler:register_dual(
     "channel_edit_page",
     function(x, y, x2, y2)
-      if program.get().selected_channel ~= 17 then
-        if pattern_buttons["step" .. x2 .. "_pattern_button"]:is_this(x2, y2) then
-          if note_merge_mode_button:is_this(x, y) then
-            program.get_selected_channel().note_merge_mode = "pattern_number_" .. x2
-            note_merge_mode_button:set_state(4)
-            program.get_selected_sequencer_pattern().active = true
-            pattern_controller.update_working_patterns()
-            tooltip:show(
-              "Note merge mode pattern " ..x2
-            )
-          end
-          if velocity_merge_mode_button:is_this(x, y) then
-            program.get_selected_channel().velocity_merge_mode = "pattern_number_" .. x2
-            velocity_merge_mode_button:set_state(4)
-            program.get_selected_sequencer_pattern().active = true
-            pattern_controller.update_working_patterns()
-            tooltip:show(
-              "Velocity merge mode pattern " ..x2
-            )
-          end
-          if length_merge_mode_button:is_this(x, y) then
-            program.get_selected_channel().length_merge_mode = "pattern_number_" .. x2
-            length_merge_mode_button:set_state(4)
-            program.get_selected_sequencer_pattern().active = true
-            pattern_controller.update_working_patterns()
-            tooltip:show(
-              "Length merge mode pattern " ..x2
-            )
-          end
+      if pattern_buttons["step" .. x2 .. "_pattern_button"]:is_this(x2, y2) then
+        if note_merge_mode_button:is_this(x, y) then
+          program.get_selected_channel().note_merge_mode = "pattern_number_" .. x2
+          note_merge_mode_button:set_state(4)
+          program.get_selected_sequencer_pattern().active = true
+          pattern_controller.update_working_patterns()
+          tooltip:show(
+            "Note merge mode pattern " ..x2
+          )
+        end
+        if velocity_merge_mode_button:is_this(x, y) then
+          program.get_selected_channel().velocity_merge_mode = "pattern_number_" .. x2
+          velocity_merge_mode_button:set_state(4)
+          program.get_selected_sequencer_pattern().active = true
+          pattern_controller.update_working_patterns()
+          tooltip:show(
+            "Velocity merge mode pattern " ..x2
+          )
+        end
+        if length_merge_mode_button:is_this(x, y) then
+          program.get_selected_channel().length_merge_mode = "pattern_number_" .. x2
+          length_merge_mode_button:set_state(4)
+          program.get_selected_sequencer_pattern().active = true
+          pattern_controller.update_working_patterns()
+          tooltip:show(
+            "Length merge mode pattern " ..x2
+          )
         end
       end
     end
@@ -606,19 +505,6 @@ function channel_edit_page_controller.register_press_handlers()
         channel_edit_page_ui_controller.refresh_masks()
         channel_edit_page_ui_controller.refresh_trig_locks()
         channel_edit_page_controller.refresh_faders()
-      end
-    end
-  )
-  press_handler:register(
-    "channel_edit_page",
-    function(x, y)
-      if program.get().selected_channel == 17 then
-        if transpose_fader:is_this(x, y) then
-          transpose_fader:press(x, y)
-          program.set_transpose(transpose_fader:get_value() - 13)
-          program.get_selected_sequencer_pattern().active = true
-          tooltip:show("Transpose: " .. transpose_fader:get_value() - 13)
-        end
       end
     end
   )
@@ -708,23 +594,15 @@ end
 
 function channel_edit_page_controller.refresh_faders()
   local channel = program.get_selected_channel()
-
+  channel_select_fader:set_value(program.get().selected_channel)
   local pressed_keys = grid_controller.get_pressed_keys()
   if #pressed_keys > 0 then
     local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
-    local step_octave_trig_lock = program.get_step_octave_trig_lock(channel, step)
     local step_scale_trig_lock = program.get_step_scale_trig_lock(channel, step)
-    local step_transpose_trig_lock = program.get_step_transpose_trig_lock(step)
-    if step_octave_trig_lock then
-      channel_octave_fader:set_value(step_octave_trig_lock + 3)
-    else
-      channel_octave_fader:set_value(channel.octave + 3)
-    end
+    local step_octave_trig_lock = program.get_step_octave_trig_lock(channel, step)
     if step_scale_trig_lock then
       channel_scale_fader:set_value(step_scale_trig_lock)
       hide_scale_fader_leds = true
-    elseif program.get().selected_channel ~= 17 then
-      channel_scale_fader:set_value(0)
     else
       if program.get().default_scale > 0 then
         channel_scale_fader:set_value(program.get().default_scale)
@@ -732,19 +610,14 @@ function channel_edit_page_controller.refresh_faders()
         channel_scale_fader:set_value(0)
       end
     end
-    if step_transpose_trig_lock then
-      transpose_fader:set_value(step_transpose_trig_lock + 13)
+    if step_octave_trig_lock then
+      channel_octave_fader:set_value(step_octave_trig_lock + 3)
     else
-      transpose_fader:set_value(nil)
+      channel_octave_fader:set_value(channel.octave + 3)
     end
   else
-    if program.get().selected_channel == 17 then
-      channel_scale_fader:set_value(program.get().default_scale)
-    else
-      channel_scale_fader:set_value(0)
-    end
+    channel_scale_fader:set_value(program.get().default_scale)
     channel_octave_fader:set_value(channel.octave + 3)
-    transpose_fader:set_value(program.get_transpose() + 13)
     hide_scale_fader_leds = false
   end
 end

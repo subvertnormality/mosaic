@@ -17,7 +17,7 @@ local grid_viewer_page =
 
 function note_edit_page_ui.register_ui_draw_handlers()
   draw_handler:register_ui(
-    "pattern_note_edit_page",
+    "note_edit_page",
     function()
       grid_viewer_page:draw()
     end
@@ -25,7 +25,6 @@ function note_edit_page_ui.register_ui_draw_handlers()
 end
 
 function note_edit_page_ui.init()
-  note_edit_page_ui.register_ui_draw_handlers()
 end
 
 function note_edit_page_ui.enc(n, d)

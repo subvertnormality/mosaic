@@ -162,6 +162,9 @@ function clock_controller.init()
         program_data.current_step = 1
         first_run = false
       end
+      
+      fn.dirty_screen(true)
+      
     end,
     division = 1 / 16,
     swing = 0,
@@ -174,7 +177,8 @@ function clock_controller.init()
     enabled = true
   }
 
-  local channel_edit_page = program.get_pages().channel_edit_page
+  local channel_edit_page = program.pages.channel_edit_page
+  local scale_edit_page = program.pages.scale_edit_page
   for channel_number = 17, 1, -1 do
     local div = calculate_divisor(program.get_channel(channel_number).clock_mods)
 
@@ -220,7 +224,7 @@ function clock_controller.init()
       clock_controller["channel_" .. channel_number .. "_clock"].first_run = false
       clock_controller["channel_" .. channel_number .. "_clock"].next_step = current_step
 
-      if program_data.selected_channel == channel_number and program_data.selected_page == channel_edit_page then
+      if program_data.selected_channel == channel_number and (program_data.selected_page == channel_edit_page or program_data.selected_page == scale_edit_page)  then
         fn.dirty_grid(true)
       end
 

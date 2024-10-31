@@ -374,11 +374,9 @@ local function play_note_internal(note, note_container, velocity, division, note
   
   note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
 
-  if not note_container.player.play_note then
-    clock_controller.delay_action(c, division, action_flag, function()
-      note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
-    end)
-  end
+  clock_controller.delay_action(c, division * 0.95, action_flag, function()
+    note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
+  end)
 
 end
 
@@ -874,9 +872,8 @@ function step_handler.handle(c, current_step)
         note_container,
         {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
         function(chord_note, velocity, midi_channel, midi_device)
-
           if device.player then
-            device.player:play_note(chord_note, velocity, (note_container.length or 1)/4)
+            device.player:note_on(chord_note, velocity)
           elseif midi_controller then
             midi_controller:note_on(chord_note, velocity, midi_channel, midi_device)
           end
@@ -971,7 +968,7 @@ function step_handler.process_song_sequencer_patterns()
         channel_edit_page_ui_controller.refresh_shuffle_feel()
         channel_edit_page_ui_controller.refresh_shuffle_basis()
         channel_edit_page_ui_controller.refresh_shuffle_amount()
-        channel_sequencer_page_controller.refresh()
+        song_edit_page_controller.refresh()
         channel_edit_page_controller.refresh()
       end
     end

@@ -1,4 +1,4 @@
-local channel_sequencer_page_controller = {}
+local song_edit_page_controller = {}
 local channel_pattern_buttons = {}
 
 
@@ -6,7 +6,7 @@ local refresh_button = {}
 
 local global_pattern_length_fader = fader:new(1, 7, 8, 64)
 
-function channel_sequencer_page_controller.init()
+function song_edit_page_controller.init()
   for s = 1, 96 do
     channel_pattern_buttons["step" .. s .. "_sequencer_pattern_button"] =
       button:new(
@@ -28,9 +28,9 @@ function channel_sequencer_page_controller.init()
   )
 end
 
-function channel_sequencer_page_controller.register_draw_handlers()
+function song_edit_page_controller.register_draw_handlers()
   draw_handler:register_grid(
-    "channel_sequencer_page",
+    "song_edit_page",
     function()
       local sequencer_pattern = program.get().selected_sequencer_pattern
       for s = 1, 96 do
@@ -50,16 +50,16 @@ function channel_sequencer_page_controller.register_draw_handlers()
   )
 
   draw_handler:register_grid(
-    "channel_sequencer_page",
+    "song_edit_page",
     function()
       global_pattern_length_fader:draw()
     end
   )
 end
 
-function channel_sequencer_page_controller.register_press_handlers()
+function song_edit_page_controller.register_press_handlers()
   press_handler:register(
-    "channel_sequencer_page",
+    "song_edit_page",
     function(x, y)
       local s = fn.calc_grid_count(x, y) + 48
       local previous_selected_pattern = program.get().selected_sequencer_pattern
@@ -95,8 +95,8 @@ function channel_sequencer_page_controller.register_press_handlers()
           refresh_button[previous_selected_pattern] = true
           refresh_button[s] = true
           
-          channel_sequencer_page_controller.refresh()
-          channel_sequencer_page_controller.refresh_faders()
+          song_edit_page_controller.refresh()
+          song_edit_page_controller.refresh_faders()
           channel_edit_page_ui_controller.refresh_clock_mods()
           channel_edit_page_ui_controller.refresh_swing()
           channel_edit_page_ui_controller.refresh_swing_shuffle_type()
@@ -128,7 +128,7 @@ function channel_sequencer_page_controller.register_press_handlers()
     end
   )
   press_handler:register(
-    "channel_sequencer_page",
+    "song_edit_page",
     function(x, y)
       if global_pattern_length_fader:is_this(x, y) then
         global_pattern_length_fader:press(x, y)
@@ -151,7 +151,7 @@ function channel_sequencer_page_controller.register_press_handlers()
     end
   )
   press_handler:register_dual(
-    "channel_sequencer_page",
+    "song_edit_page",
     function(x, y, x2, y2)
       local pattern = fn.calc_grid_count(x, y) + 48
       local target_pattern = fn.calc_grid_count(x2, y2) + 48
@@ -165,17 +165,17 @@ function channel_sequencer_page_controller.register_press_handlers()
         refresh_button[pattern] = true
         refresh_button[target_pattern] = true
       end
-      channel_sequencer_page_controller.refresh()
+      song_edit_page_controller.refresh()
     end
   )
 end
 
-function channel_sequencer_page_controller.refresh_faders()
+function song_edit_page_controller.refresh_faders()
   global_pattern_length_fader:set_value(program.get_selected_sequencer_pattern().global_pattern_length)
 end
 
-function channel_sequencer_page_controller.refresh()
-  channel_sequencer_page_ui_controller.refresh()
+function song_edit_page_controller.refresh()
+  song_edit_page_ui_controller.refresh()
 
   refresh_button = {
     true, true, true, true, true, true, true, true, true, true, 
@@ -190,7 +190,7 @@ function channel_sequencer_page_controller.refresh()
     true, true, true, true, true, true
   }
 
-  channel_sequencer_page_controller.refresh_faders()
+  song_edit_page_controller.refresh_faders()
 end
 
-return channel_sequencer_page_controller
+return song_edit_page_controller

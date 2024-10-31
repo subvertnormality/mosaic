@@ -3,10 +3,11 @@ local ui_controller = {}
 
 
 channel_edit_page_ui_controller = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_controller")
+scale_edit_page_ui_controller = include("mosaic/lib/pages/scale_edit_page/scale_edit_page_ui_controller")
 velocity_edit_page_ui_controller = include("mosaic/lib/pages/velocity_edit_page/velocity_edit_page_ui_controller")
 note_edit_page_ui_controller = include("mosaic/lib/pages/note_edit_page/note_edit_page_ui_controller")
 trigger_edit_page_ui_controller = include("mosaic/lib/pages/trigger_edit_page/trigger_edit_page_ui_controller")
-channel_sequencer_page_ui_controller = include("mosaic/lib/pages/channel_sequencer_page/channel_sequencer_page_ui_controller")
+song_edit_page_ui_controller = include("mosaic/lib/pages/song_edit_page/song_edit_page_ui_controller")
 
 tooltip = include("mosaic/lib/ui_components/tooltip")
 save_confirm = include("mosaic/lib/ui_components/save_confirm")
@@ -19,26 +20,19 @@ function ui_controller.init()
   draw_handler:register_ui("tooltip", tooltip.draw)
 
   channel_edit_page_ui_controller.register_ui_draw_handlers()
+  scale_edit_page_ui_controller.register_ui_draw_handlers()
   velocity_edit_page_ui_controller.register_ui_draw_handlers()
   note_edit_page_ui_controller.register_ui_draw_handlers()
   trigger_edit_page_ui_controller.register_ui_draw_handlers()
-  channel_sequencer_page_ui_controller.register_ui_draw_handlers()
+  song_edit_page_ui_controller.register_ui_draw_handlers()
 
   channel_edit_page_ui_controller.init()
-  channel_sequencer_page_ui_controller.init()
+  scale_edit_page_ui_controller.init()
   note_edit_page_ui_controller.init()
   velocity_edit_page_ui_controller.init()
   trigger_edit_page_ui_controller.init()
+  song_edit_page_ui_controller.init()
 end
-
--- function ui_controller.change_page(subpage_name)
---   channel_edit_page_ui_controller.change_page(subpage_name)
---   velocity_edit_page_ui_controller.change_page(subpage_name)
---   note_edit_page_ui_controller.change_page(subpage_name)
---   trigger_edit_page_ui_controller.change_page(subpage_name)
---   channel_sequencer_page_ui_controller.change_page(subpage_name)
---   fn.dirty_screen(true)
--- end
 
 function ui_controller.redraw()
   if not program then
@@ -50,20 +44,22 @@ function ui_controller.redraw()
   screen.level(10)
   screen.move(120, 9)
   screen.text("m")
-  draw_handler:handle_ui(program.get().selected_page)
+  draw_handler:handle_ui(program.get_selected_page())
 end
 
 function ui_controller.enc(n, d)
-  if program.get().selected_page == 1 then
+  if program.get_selected_page() == program.pages.channel_edit_page then
     channel_edit_page_ui_controller.enc(n, d)
-  elseif program.get().selected_page == 2 then
-    channel_sequencer_page_ui_controller.enc(n, d)
-  elseif program.get().selected_page == 3 then
+  elseif program.get_selected_page() == program.pages.scale_edit_page then
+    scale_edit_page_ui_controller.enc(n, d)
+  elseif program.get_selected_page() == program.pages.trigger_edit_page then
     trigger_edit_page_ui_controller.enc(n, d)
-  elseif program.get().selected_page == 4 then
+  elseif program.get_selected_page() == program.pages.note_edit_page then
     note_edit_page_ui_controller.enc(n, d)
-  elseif program.get().selected_page == 5 then
+  elseif program.get_selected_page() == program.pages.velocity_edit_page then
     velocity_edit_page_ui_controller.enc(n, d)
+  elseif program.get_selected_page() == program.pages.song_edit_page then
+    song_edit_page_ui_controller.enc(n, d)
   end
 end
 
@@ -88,10 +84,11 @@ function ui_controller.key(n, z)
   end
 
   channel_edit_page_ui_controller.key(n, z)
+  scale_edit_page_ui_controller.key(n, z)
   -- velocity_edit_page_ui_controller.key(n, z)
   -- note_edit_page_ui_controller.key(n, z)
   -- trigger_edit_page_ui_controller.key(n, z)
-  -- channel_sequencer_page_ui_controller.key(n, z)
+  -- song_edit_page_ui_controller.key(n, z)
 
 end
 
@@ -99,7 +96,7 @@ function ui_controller.refresh()
   channel_edit_page_ui_controller.refresh()
   -- note_edit_page_ui_controller.refresh()
   -- trigger_edit_page_ui_controller.refresh()
-  -- channel_sequencer_page_ui_controller.refresh()
+  -- song_edit_page_ui_controller.refresh()
 
 end
 

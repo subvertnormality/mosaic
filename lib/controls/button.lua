@@ -15,6 +15,8 @@ function button:new(x, y, states)
   end
   self.state = 1
   self.bright_mod = 6
+  self.pre_func = function() end
+  self.post_func = function() end
   return self
 end
 

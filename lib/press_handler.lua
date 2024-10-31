@@ -63,7 +63,7 @@ end
 -- Call all functions registered with a page
 function press_handler:handle(page, x, y)
 
-  local found_page = fn.find_key(program.get_pages(), page)
+  local found_page = fn.find_key(program.pages, page)
   
   -- Call all menu press handlers
   for _, func in ipairs(self.handlers["menu"]) do
@@ -87,7 +87,7 @@ end
 -- Call all functions registered with a page
 function press_handler:handle_dual(page, x, y, x2, y2)
 
-  local found_page = fn.find_key(program.get_pages(), page)
+  local found_page = fn.find_key(program.pages, page)
 
   -- If no functions have been registered for this page, do nothing
   if self.dual_handlers[found_page] == nil then
@@ -104,7 +104,7 @@ end
 
 function press_handler:handle_long(page, x, y)
 
-  local found_page = fn.find_key(program.get_pages(), page)
+  local found_page = fn.find_key(program.pages, page)
 
   -- Call all menu press handlers
   for _, func in ipairs(self.long_handlers["menu"]) do
@@ -126,7 +126,7 @@ end
 
 function press_handler:handle_pre(page, x, y)
 
-  local found_page = fn.find_key(program.get_pages(), page)
+  local found_page = fn.find_key(program.pages, page)
 
   -- If no functions have been registered for this page, do nothing
   if self.pre_handlers[found_page] == nil then
@@ -134,14 +134,14 @@ function press_handler:handle_pre(page, x, y)
   end
 
   -- Otherwise, call all functions registered for this page
-  for _, func in ipairs(self.pre_handlers[fn.find_key(program.get_pages(), page)]) do
+  for _, func in ipairs(self.pre_handlers[fn.find_key(program.pages, page)]) do
     func(x, y)
   end
 end
 
 function press_handler:handle_post(page, x, y)
 
-  local found_page = fn.find_key(program.get_pages(), page)
+  local found_page = fn.find_key(program.pages, page)
 
   -- If no functions have been registered for this page, do nothing
   if self.post_handlers[found_page] == nil then

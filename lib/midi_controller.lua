@@ -94,7 +94,7 @@ function handle_midi_event_data(data, midi_device)
   elseif data[1] == 176 then -- cc change
     if data[2] >= 1 and data[2] <= 20 then
 
-      if (program.get().selected_page == 1) then
+      if (program.get_selected_page() == 2) then
         if not previous_page then
           previous_page = channel_edit_page_ui_controller.get_selected_page()
         end
@@ -314,16 +314,17 @@ function midi_controller.stop()
 end
 
 
-function midi_controller.all_off(id)
+midi_controller.all_off = scheduler.debounce(function (id)
   for note = 0, 127 do
     for channel = 1, 16 do
       midi_devices[id]:note_off(note, 0, channel)
     end
+    coroutine.yield()
   end
   -- Reset note counts for this device
   midi_controller.note_counts[id] = nil
   chord_number = 0
-end
+end)
 
 function midi_controller.panic()
   for id = 1, #midi.vports do

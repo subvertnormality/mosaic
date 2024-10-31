@@ -9,11 +9,11 @@
 
 testing = false
 
+program = include("mosaic/lib/program")
 fn = include("mosaic/lib/functions")
 scheduler = include("mosaic/lib/scheduler")
 grid_controller = include("mosaic/lib/grid_controller")
 ui_controller = include("mosaic/lib/ui_controller")
-program = include("mosaic/lib/program")
 sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
 midi_controller = include("mosaic/lib/midi_controller")
 
@@ -55,7 +55,7 @@ local function load_project(pth)
       program.set(saved[2])
 
       clock.tempo_change_handler = function(x)
-        channel_sequencer_page_ui_controller.refresh_tempo()
+        song_edit_page_ui_controller.refresh_tempo()
       end
 
       param_manager.init()
@@ -235,7 +235,7 @@ function init()
 
   blink()
 
-  params:add_group("mosaic", "MOSAIC", 29)
+  params:add_group("mosaic", "MOSAIC", 30)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -262,7 +262,7 @@ function init()
   params:set_action(
     "global_swing_shuffle_type",
     function(x)
-      channel_sequencer_page_ui_controller.refresh_swing_shuffle_type()
+      song_edit_page_ui_controller.refresh_swing_shuffle_type()
       channel_edit_page_ui_controller.refresh_swing_shuffle_type()
     end
   )
@@ -272,7 +272,7 @@ function init()
   params:set_action(
     "global_swing",
     function(x)
-      channel_sequencer_page_ui_controller.refresh_swing()
+      song_edit_page_ui_controller.refresh_swing()
     end
   )
   params:hide("global_swing")
@@ -281,7 +281,7 @@ function init()
   params:set_action(
     "global_shuffle_feel",
     function(x)
-      channel_sequencer_page_ui_controller.refresh_shuffle_feel()
+      song_edit_page_ui_controller.refresh_shuffle_feel()
     end
   )
   params:hide("global_shuffle_feel")
@@ -290,7 +290,7 @@ function init()
   params:set_action(
     "global_shuffle_basis",
     function(x)
-      channel_sequencer_page_ui_controller.refresh_shuffle_basis()
+      song_edit_page_ui_controller.refresh_shuffle_basis()
     end
   )
   params:hide("global_shuffle_basis")
@@ -299,17 +299,18 @@ function init()
   params:set_action(
     "global_shuffle_amount",
     function(x)
-      channel_sequencer_page_ui_controller.refresh_shuffle_amount()
+      song_edit_page_ui_controller.refresh_shuffle_amount()
     end
   )
   params:hide("global_shuffle_amount")
 
   params:add_separator("Sequencer")
+  params:add_option("stop_safety", "Shift press to stop", {"Off", "On"}, 1)
   params:add_option("song_mode", "Song mode", {"Off", "On"}, 2)
   params:set_action(
     "song_mode",
     function(x)
-      channel_sequencer_page_ui_controller:refresh()
+      song_edit_page_ui_controller:refresh()
     end
   )
   params:add_option("reset_on_end_of_pattern_repeat", "Reset on pattern repeat", {"Off", "On"}, 1)
@@ -340,7 +341,7 @@ function init()
   param_manager.init()
 
   clock.tempo_change_handler = function(x)
-    channel_sequencer_page_ui_controller.refresh_tempo()
+    song_edit_page_ui_controller.refresh_tempo()
   end
 
 
