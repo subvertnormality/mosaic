@@ -338,7 +338,7 @@ If your device has an associated configuration file, such as those available for
 [n.b.](https://github.com/sixolet/nb/tree/main) mods give _Mosaic_ the ability to sequence internal sound sources and device connected via Crow. Supported mods include:
 
 * [nb_ansible](https://github.com/sixolet/nb_ansible) for Ansible voices.
-* [emplaitress](https://github.com/sixolet/emplaitress/) offers four MI Plaits voices in parallel. Emplatress's params can be locked in _Mosaic_.
+* [emplaitress](https://github.com/sixolet/emplaitress/) offers four MI Plaits voices in parallel. Emplatress's params can be locked in _Mosaic_. Note: emplaitress is sensitive to quick firing notes. Be careful when using arpeggios, chords, and small clock divisions.
 * [nb_jf](https://github.com/sixolet/nb_jf) accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.
 * [nb_crow](https://github.com/sixolet/nb_crow) for Crow v/8 and envelope functions.
 * [nb_drum_crow](https://github.com/entzmingerc/nb_drumcrow) turns a monome crow into a synthesizer.
