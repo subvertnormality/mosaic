@@ -2,7 +2,6 @@
   "params": [],
   "type": "midi",
   "unique": true,
-  "map_params_automatically": true,
   "polyphonic": false,
   "value": 8,
   "default_midi_device": 1,
