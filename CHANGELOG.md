@@ -59,6 +59,9 @@
 - Improved device configuration documentation
 - Added new examples and usage scenarios
 
+### Documentation
+- New config file creator lets you create config json file in a web based editor
+
 ### Migration Guide
 1. Backup your existing `.pset` and `.ptn` files
 2. Remove these files from your Norns

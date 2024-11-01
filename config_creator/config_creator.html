@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mosaic Device Configuration Creator</title>
+    <script src="js/feather.min.js"></script>
+    <script src="js/tailwind.js"></script>
+    <style>
+        :root {
+            --brand-primary: #1f232b; 
+            --brand-secondary: #6c757d;
+            --brand-background: #f8fafc;
+            --brand-accent: #38b2ac;
+        }
+        body {
+            font-family: 'Helvetica Neue', 'Roboto', 'Inter', Arial, sans-serif;
+            background-color: var(--brand-background);
+        }
+        .header {
+            background-color: var(--brand-primary);
+            padding: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header h1 {
+            margin-left: 1rem;
+            font-size: 1.75rem;
+            font-weight: bold;
+        }
+        .logo {
+            width: 120px;
+            height: auto;
+        }
+        .required:after {
+            content: " *";
+            color: var(--brand-accent);
+        }
+        .btn-primary {
+            background-color: var(--brand-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #4a5568; 
+        }
+        .header-buttons {
+            gap: 0.5rem; /* Adjust spacing between buttons */
+        }
+        .btn-secondary {
+            background-color: var(--brand-accent);
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #2c7a7b;
+        }
+        .input {
+            border: 1px solid var(--brand-secondary);
+            border-radius: 0.375rem;
+        }
+        input[type="text"], input[type="number"] {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            padding-top: 0.2rem;
+            padding-bottom: 0.2rem;
+        }
+
+        .error-message {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        .success-message {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header with Logo and Title -->
+    <header class="header">
+        <img src="logo.svg" alt="Mosaic Logo" class="logo">
+        <h1>Device Configuration Creator</h1>
+    </header>
+    <div id="app" class="max-w-4xl mx-auto p-6 space-y-6">
+        <div class="bg-white shadow-lg rounded-lg p-6 space-y-6">
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-sm text-gray-500">
+                    Fields marked with * are required
+                </div>
+                <div class="flex space-x-2">
+                    <input 
+                        type="file" 
+                        id="config-file" 
+                        accept=".json"
+                        class="hidden"
+                        onchange="loadConfigFile(event)"
+                    />
+                    <button
+                        onclick="document.getElementById('config-file').click()"
+                        class="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 btn-primary"
+                    >
+                        <i data-feather="upload" class="w-4 h-4 mr-1"></i>
+                        Load Config File
+                    </button>
+                    <button
+                        onclick="clearForm()"
+                        class="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 btn-primary"
+                    >
+                        <i data-feather="trash-2" class="w-4 h-4 mr-1"></i>
+                        Clear Form
+                    </button>
+                </div>
+            </div>
+        
+
+            <div id="error" class="hidden">
+                <div class="bg-red-50 p-4 rounded-md">
+                    <div class="text-sm text-red-700" id="error-message"></div>
+                </div>
+            </div>
+
+            <!-- Basic Configuration -->
+            <div class="space-y-4">
+                <h2 class="text-lg font-semibold text-gray-900">Basic Configuration</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 required">Device Name</label>
+                        <input
+                            type="text"
+                            id="device-name"
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="Your Device Name"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 required">Device ID</label>
+                        <input
+                            type="text"
+                            id="device-id"
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="unique-device-id"
+                        />
+                        <p class="mt-1 text-sm text-gray-500">Use kebab-case (e.g., my-device-name)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Default MIDI Device</label>
+                        <input
+                            type="number"
+                            id="default-midi-device"
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="1-16"
+                            min="1"
+                            max="16"
+                        />
+                        <p class="mt-1 text-sm text-gray-500">Optional: Sets fixed MIDI output device</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Default MIDI Channel</label>
+                        <input
+                            type="number"
+                            id="default-midi-channel"
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="1-16"
+                            min="1"
+                            max="16"
+                        />
+                        <p class="mt-1 text-sm text-gray-500">Optional: Sets fixed MIDI channel</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Fixed Note</label>
+                        <input
+                            type="number"
+                            id="fixed-note"
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="0-127"
+                            min="0"
+                            max="127"
+                        />
+                        <p class="mt-1 text-sm text-gray-500">Optional: Fixed note value (0-127)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="unique"
+                                checked
+                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                            <span class="text-sm font-medium text-gray-700">Unique Instance</span>
+                        </label>
+                        <p class="mt-1 text-sm text-gray-500">Only allow one instance of this device</p>
+                    </div>
+                    <div>
+                        <label class="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="polyphonic"
+                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                            <span class="text-sm font-medium text-gray-700">Polyphonic</span>
+                        </label>
+                        <p class="mt-1 text-sm text-gray-500">Allow multiple notes to be played at once</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto-mapped Parameters -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-900">Auto-mapped Parameters</h2>
+                        <p class="text-sm text-gray-500">Optional: Maximum 10 parameters automatically assigned to trig page</p>
+                    </div>
+                    <button
+                        onclick="addAutoMapParam()"
+                        class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                    >
+                        <i data-feather="plus" class="w-4 h-4 mr-1"></i>
+                        Add Parameter
+                    </button>
+                </div>
+                
+                <div id="auto-map-params" class="space-y-2">
+                    <!-- Auto-mapped parameters will be added here -->
+                </div>
+            </div>
+
+            <!-- Parameters -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-lg font-semibold text-gray-900">Parameters</h2>
+                    <button
+                        onclick="addParam()"
+                        class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                    >
+                        <i data-feather="plus" class="w-4 h-4 mr-1"></i>
+                        Add Parameter
+                    </button>
+                </div>
+
+                <div id="params" class="space-y-4">
+                    <!-- Parameters will be added here -->
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex space-x-4">
+                <button
+                    onclick="downloadConfig()"
+                    class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                >
+                    <i data-feather="download" class="w-5 h-5 mr-2"></i>
+                    Download Configuration
+                </button>
+                <button
+                    onclick="copyToClipboard()"
+                    class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+                >
+                    <i data-feather="copy" class="w-5 h-5 mr-2"></i>
+                    Copy to Clipboard
+                </button>
+            </div>
+            <div id="bottom-error" class="hidden">
+              <div class="bg-red-50 p-4 rounded-md">
+                  <div class="text-sm text-red-700" id="bottom-error-message"></div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Feather icons
+        feather.replace()
+
+        let config = {
+            name: '',
+            type: 'midi',
+            polyphonic: false,
+            id: '',
+            default_midi_device: '',
+            default_midi_channel: '',
+            fixed_note: '',
+            map_params_automatically: [],
+            params: []
+        }
+
+        const defaultParam = {
+            cc_msb: '',
+            cc_lsb: '',
+            name: '',
+            cc_max_value: 127,
+            short_descriptor_1: '',
+            id: '',
+            off_value: -1,
+            cc_min_value: -1,
+            nrpn_min_value: '',
+            nrpn_max_value: '',
+            nrpn_lsb: '',
+            nrpn_msb: '',
+            ui_labels: []
+        }
+
+        const exampleConfig = {
+            type: 'midi',
+            unique: true,
+            map_params_automatically: [
+                'source_parameters_source_tune',
+                'source_parameters_source_play_mode',
+                'fx_parameters_sample_rate_reduction',
+                'src_sample_select'
+            ],
+            polyphonic: false,
+            name: 'Example Device',
+            id: 'example-device',
+            params: [
+                {
+                    cc_msb: 7,
+                    name: 'Level',
+                    cc_max_value: 127,
+                    short_descriptor_1: 'AMP',
+                    short_descriptor_2: 'LVL',
+                    id: 'level',
+                    off_value: -1,
+                    cc_min_value: -1,
+                    ui_labels: ['X', 'None', 'LP', 'HP', 'BP']
+                },
+                {
+                    cc_msb: 10,
+                    name: 'Pan',
+                    cc_max_value: 127,
+                    short_descriptor_1: 'PAN',
+                    short_descriptor_2: 'POS',
+                    id: 'pan',
+                    off_value: -1,
+                    cc_min_value: -1
+                }
+            ]
+        }
+
+
+        function clearForm() {
+            config = {
+                name: '',
+                type: 'midi',
+                polyphonic: false,
+                id: '',
+                default_midi_device: '',
+                default_midi_channel: '',
+                fixed_note: '',
+                map_params_automatically: [],
+                params: []
+            }
+            updateFormFromConfig()
+            renderAutoMapParams()
+            renderParams()
+            showSuccess('Form cleared')
+        }
+
+        function updateFormFromConfig() {
+            document.getElementById('device-name').value = config.name || ''
+            document.getElementById('device-id').value = config.id || ''
+            document.getElementById('default-midi-device').value = config.default_midi_device || ''
+            document.getElementById('default-midi-channel').value = config.default_midi_channel || ''
+            document.getElementById('fixed-note').value = config.fixed_note || ''
+            // Only set the 'unique' checkbox if 'unique' exists in config
+            if (config.hasOwnProperty('unique')) {
+                document.getElementById('unique').checked = config.unique;
+            } else {
+                document.getElementById('unique').checked = false;
+            }
+            document.getElementById('polyphonic').checked = config.polyphonic ?? false
+        }
+
+        async function loadConfigFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const text = await file.text();
+                const jsonConfig = JSON.parse(text);
+                const configData = Array.isArray(jsonConfig) ? jsonConfig[0] : jsonConfig;
+
+                // Basic validation
+                if (!configData || typeof configData !== 'object') {
+                    throw new Error('Invalid configuration format');
+                }
+
+                // Initialize with defaults
+                const baseConfig = {
+                    name: '',
+                    type: 'midi',
+                    polyphonic: false,
+                    id: '',
+                    default_midi_device: '',
+                    default_midi_channel: '',
+                    fixed_note: '',
+                    map_params_automatically: [],
+                    params: []
+                };
+
+                // Only set 'unique' if it's defined in the configData, otherwise omit it
+                config = {
+                    ...baseConfig,
+                    ...configData,
+                    ...(configData.hasOwnProperty('unique') && { unique: configData.unique }),
+                    params: (configData.params || []).map(param => ({
+                        ...defaultParam,
+                        ...param,
+                        ui_labels: param.ui_labels || []
+                    })),
+                    map_params_automatically: configData.map_params_automatically || []
+                };
+
+                updateFormFromConfig();
+                renderAutoMapParams();
+                renderParams();
+
+                // Expand all parameter sections
+                if (config.params) {
+                    config.params.forEach((_, index) => {
+                        setTimeout(() => {
+                            toggleParam(index);
+                        }, 100);
+                    });
+                }
+
+                showSuccess('Configuration loaded successfully');
+            } catch (error) {
+                console.error('Load config error:', error);
+                showError('Failed to load configuration: ' + error.message);
+            }
+
+            // Reset the file input
+            event.target.value = ''
+        }
+
+        // Set up event listeners for basic config
+        document.getElementById('device-name').addEventListener('input', e => {
+            config.name = e.target.value
+        })
+        document.getElementById('device-id').addEventListener('input', e => {
+            config.id = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-')
+            e.target.value = config.id
+        })
+        document.getElementById('default-midi-device').addEventListener('input', e => {
+            config.default_midi_device = e.target.value ? parseInt(e.target.value) : ''
+        })
+        document.getElementById('default-midi-channel').addEventListener('input', e => {
+            config.default_midi_channel = e.target.value ? parseInt(e.target.value) : ''
+        })
+        document.getElementById('fixed-note').addEventListener('input', e => {
+            config.fixed_note = e.target.value ? parseInt(e.target.value) : ''
+        })
+        document.getElementById('unique').addEventListener('change', e => {
+            config.unique = e.target.checked
+        })
+        document.getElementById('polyphonic').addEventListener('change', e => {
+            config.polyphonic = e.target.checked
+        })
+
+        function showMessage(message, isError = true) {
+            const topErrorDiv = document.getElementById('error');
+            const topErrorMessage = document.getElementById('error-message');
+            const bottomErrorDiv = document.getElementById('bottom-error');
+            const bottomErrorMessage = document.getElementById('bottom-error-message');
+
+            topErrorMessage.textContent = message;
+            bottomErrorMessage.textContent = message;
+
+            [topErrorDiv, bottomErrorDiv].forEach(div => div.classList.remove('hidden'));
+
+            if (isError) {
+                [topErrorDiv, bottomErrorDiv].forEach(div => {
+                    div.firstElementChild.classList.remove('bg-green-50');
+                    div.firstElementChild.classList.add('bg-red-50');
+                });
+                [topErrorMessage, bottomErrorMessage].forEach(msg => {
+                    msg.classList.remove('text-green-700');
+                    msg.classList.add('text-red-700');
+                });
+            } else {
+                [topErrorDiv, bottomErrorDiv].forEach(div => {
+                    div.firstElementChild.classList.remove('bg-red-50');
+                    div.firstElementChild.classList.add('bg-green-50');
+                });
+                [topErrorMessage, bottomErrorMessage].forEach(msg => {
+                    msg.classList.remove('text-red-700');
+                    msg.classList.add('text-green-700');
+                });
+            }
+
+            setTimeout(() => {
+                [topErrorDiv, bottomErrorDiv].forEach(div => div.classList.add('hidden'));
+            }, 5000);
+        }
+
+        function showError(message) {
+            showMessage(message, true)
+        }
+
+
+function showSuccess(message) {
+            showMessage(message, false)
+        }
+
+        function addAutoMapParam() {
+            if (config.map_params_automatically.length >= 10) {
+                showError('Maximum 10 auto-mapped parameters allowed')
+                return
+            }
+
+            const container = document.getElementById('auto-map-params')
+            const index = config.map_params_automatically.length
+            config.map_params_automatically.push('')
+
+            const div = document.createElement('div')
+            div.className = 'flex items-center space-x-2'
+            div.innerHTML = `
+                <input
+                    type="text"
+                    class="flex-1 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="Parameter ID"
+                    onchange="updateAutoMapParam(${index}, this.value)"
+                />
+                <button
+                    onclick="removeAutoMapParam(${index})"
+                    class="p-1 text-red-600 hover:text-red-700"
+                >
+                    <i data-feather="minus-circle" class="w-5 h-5"></i>
+                </button>
+            `
+            container.appendChild(div)
+            feather.replace()
+        }
+
+        function updateAutoMapParam(index, value) {
+            config.map_params_automatically[index] = value
+        }
+
+        function removeAutoMapParam(index) {
+            config.map_params_automatically = config.map_params_automatically.filter((_, i) => i !== index)
+            renderAutoMapParams()
+        }
+
+        function renderAutoMapParams() {
+            const container = document.getElementById('auto-map-params')
+            container.innerHTML = ''
+            config.map_params_automatically.forEach((param, index) => {
+                const div = document.createElement('div')
+                div.className = 'flex items-center space-x-2'
+                div.innerHTML = `
+                    <input
+                        type="text"
+                        class="flex-1 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        value="${param}"
+                        placeholder="Parameter ID"
+                        onchange="updateAutoMapParam(${index}, this.value)"
+                    />
+                    <button
+                        onclick="removeAutoMapParam(${index})"
+                        class="p-1 text-red-600 hover:text-red-700"
+                    >
+                        <i data-feather="minus-circle" class="w-5 h-5"></i>
+                    </button>
+                `
+                container.appendChild(div)
+            })
+            feather.replace()
+        }
+        function addParam() {
+            const newParam = { ...defaultParam }
+            config.params.push(newParam)
+            renderParams()
+        }
+
+        function updateParam(index, field, value) {
+            if (!config.params[index]) return
+
+            if (field === 'ui_labels') {
+                value = value.split(',').map(label => label.trim()).filter(Boolean)
+            } else if (['cc_msb', 'cc_lsb', 'cc_max_value', 'off_value', 'cc_min_value', 'nrpn_min_value', 'nrpn_max_value', 'nrpn_lsb', 'nrpn_msb'].includes(field)) {
+                // Handle empty string and parse integers, allowing zero
+                value = value === '' ? '' : parseInt(value)
+                // If parsing results in NaN, set to empty string
+                if (isNaN(value)) value = ''
+            }
+
+            config.params[index][field] = value
+
+            if (field === 'name') {
+                const paramHeader = document.querySelector(`#param-${index} .param-name`)
+                if (paramHeader) {
+                    paramHeader.textContent = value || `Parameter ${index + 1}`
+                }
+            }
+        }
+
+        function removeParam(index) {
+            config.params = config.params.filter((_, i) => i !== index)
+            renderParams()
+        }
+
+
+        // Updated toggleParam function to handle both show/hide and initialization
+        function toggleParam(index) {
+            const content = document.querySelector(`#param-${index} .param-content`)
+            const icon = document.querySelector(`#param-${index} .toggle-icon`)
+            
+            if (content && icon) {
+                content.classList.toggle('hidden')
+                icon.classList.toggle('expanded-icon')
+            }
+        }
+
+        function renderParams() {
+            const container = document.getElementById('params')
+            container.innerHTML = ''
+            
+            if (!Array.isArray(config.params)) {
+                config.params = []
+                return
+            }
+
+            config.params.forEach((param, index) => {
+                // Create div first
+                const div = document.createElement('div')
+                div.id = `param-${index}`
+                div.className = 'border rounded-lg p-4 bg-gray-50'
+                
+                // Ensure param has all required fields with defaults
+                const safeParam = {
+                    ...defaultParam,
+                    ...param,
+                    ui_labels: param.ui_labels || []
+                }
+
+                // Use nullish coalescing for numeric fields to preserve zero
+                const getParamValue = (value) => {
+                    return value ?? ''
+                }
+
+                // Rest of your renderParams HTML...
+                div.innerHTML = `
+                    <!-- Header section -->
+                    <div class="param-header flex justify-between items-center mb-4" onclick="toggleParam(${index})">
+                        <div class="flex items-center text-gray-700 hover:text-gray-900">
+                            <i class="toggle-icon w-5 h-5 mr-2" data-feather="chevron-down"></i>
+                            <span class="font-medium param-name">${safeParam.name || `Parameter ${index + 1}`}</span>
+                        </div>
+                        <button
+                            onclick="event.stopPropagation(); removeParam(${index})"
+                            class="text-red-600 hover:text-red-700"
+                        >
+                            <i data-feather="minus-circle" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <div class="param-content hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Required Fields -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 required">Name</label>
+                            <input
+                                type="text"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.name || ''}"
+                                onchange="updateParam(${index}, 'name', this.value)"
+                                placeholder="Parameter Name"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 required">ID</label>
+                            <input
+                                type="text"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.id || ''}"
+                                onchange="updateParam(${index}, 'id', this.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))"
+                                placeholder="unique-parameter-id"
+                            />
+                        </div>
+
+                        <!-- CC MSB and CC LSB fields -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 required">CC MSB</label>
+                            <input
+                                type="number"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${getParamValue(safeParam.cc_msb)}"
+                                onchange="updateParam(${index}, 'cc_msb', this.value)"
+                                placeholder="MIDI CC number"
+                                min="0"
+                                max="127"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">CC LSB</label>
+                            <input
+                                type="number"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.cc_lsb || ''}"
+                                onchange="updateParam(${index}, 'cc_lsb', this.value)"
+                                placeholder="Optional"
+                                min="0"
+                                max="127"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 required">CC Max Value</label>
+                            <input
+                                type="number"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.cc_max_value || ''}"
+                                onchange="updateParam(${index}, 'cc_max_value', this.value)"
+                                placeholder="Usually 127"
+                                min="-1"
+                                max="127"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 required">Short Descriptor 1</label>
+                            <input
+                                type="text"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.short_descriptor_1 || ''}"
+                                onchange="updateParam(${index}, 'short_descriptor_1', this.value)"
+                                placeholder="Top label (e.g., AMP)"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Short Descriptor 2</label>
+                            <input
+                                type="text"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.short_descriptor_2 || ''}"
+                                onchange="updateParam(${index}, 'short_descriptor_2', this.value)"
+                                placeholder="Bottom label (e.g., LVL)"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Off Value</label>
+                            <input
+                                type="number"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.off_value || ''}"
+                                onchange="updateParam(${index}, 'off_value', this.value)"
+                                placeholder="Usually -1"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">CC Min Value</label>
+                            <input
+                                type="number"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.cc_min_value || ''}"
+                                onchange="updateParam(${index}, 'cc_min_value', this.value)"
+                                placeholder="Usually -1"
+                            />
+                        </div>
+
+                        <!-- Optional Fields -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">NRPN LSB</label>
+                            <input
+                                type="number"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.nrpn_lsb || ''}"
+                                onchange="updateParam(${index}, 'nrpn_lsb', this.value)"
+                                placeholder="Optional"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">NRPN MSB</label>
+                            <input
+                                type="number"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.nrpn_msb || ''}"
+                                onchange="updateParam(${index}, 'nrpn_msb', this.value)"
+                                placeholder="Optional"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">NRPN Min Value</label>
+                            <input
+                                type="number"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.nrpn_min_value || ''}"
+                                onchange="updateParam(${index}, 'nrpn_min_value', this.value)"
+                                placeholder="Optional"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">NRPN Max Value</label>
+                            <input
+                                type="number"
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                value="${safeParam.nrpn_max_value || ''}"
+                                onchange="updateParam(${index}, 'nrpn_max_value', this.value)"
+                                placeholder="Optional"
+                            />
+                        </div>
+
+                        <!-- UI Labels -->
+                        <div class="col-span-2">
+                            <label class="block text-sm font-medium text-gray-700">UI Labels</label>
+                            <textarea
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                rows="3"
+                                placeholder="Optional: Enter labels separated by commas (e.g., X, None, LP, HP, BP)"
+                                onchange="updateParam(${index}, 'ui_labels', this.value)"
+                            >${safeParam.ui_labels.join(', ') || ''}</textarea>
+                            <p class="mt-1 text-sm text-gray-500">Enter labels separated by commas. First label is for off value.</p>
+                        </div>
+                    </div>
+                `
+                container.appendChild(div)
+            })
+            feather.replace()
+        }
+
+        function validateConfig() {
+            if (!config.name) {
+                showError('Device Name is required')
+                return false
+            }
+            if (!config.id) {
+                showError('Device ID is required')
+                return false
+            }
+
+            // Validate parameters
+            const invalidParams = config.params.filter(param => {
+                return !param.name || !param.id || 
+                    (param.cc_msb === undefined || param.cc_msb === null || param.cc_msb === '') || 
+                    !param.short_descriptor_1; // Remove check for `short_descriptor_2`
+            });
+
+            if (invalidParams.length > 0) {
+                showError('All parameters must have Name, ID, CC MSB, and Short Descriptor 1');
+                return false;
+            }
+
+            return true
+        }
+
+
+
+        // Function to download the configuration file
+        function downloadConfig() {
+            if (!validateConfig()) {
+                return;
+            }
+
+            try {
+                // Clean and prepare the configuration
+                const cleanedConfig = cleanConfig();
+                const configArray = [cleanedConfig]; // Wrap in array
+                const jsonString = JSON.stringify(configArray, null, 2);
+                
+                // Create download link
+                const element = document.createElement('a');
+                element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(jsonString));
+                element.setAttribute('download', `${config.id || 'device'}-config.json`);
+                element.style.display = 'none';
+                
+                // Trigger download
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+                
+                showSuccess('Configuration downloaded successfully');
+            } catch (error) {
+                console.error('Download error:', error);
+                showError('Failed to download configuration');
+            }
+        }
+
+        // Function to copy configuration to clipboard
+        async function copyToClipboard() {
+            if (!validateConfig()) {
+                return;
+            }
+
+            try {
+                // Clean and prepare the configuration
+                const cleanedConfig = cleanConfig();
+                const configArray = [cleanedConfig]; // Wrap in array
+                const jsonString = JSON.stringify(configArray, null, 2);
+
+                // Try the modern clipboard API first
+                if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(jsonString);
+                    showSuccess('Configuration copied to clipboard');
+                    return;
+                }
+
+                // Fallback to older method
+                const textarea = document.createElement('textarea');
+                textarea.value = jsonString;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                
+                // Attempt to copy
+                const success = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                if (success) {
+                    showSuccess('Configuration copied to clipboard');
+                } else {
+                    throw new Error('Copy command failed');
+                }
+            } catch (error) {
+                console.error('Copy error:', error);
+                showError('Failed to copy configuration');
+            }
+        }
+
+    
+        // Enhanced load example function
+        function loadExample() {
+            try {
+                // Deep clone the example config to avoid reference issues
+                config = JSON.parse(JSON.stringify(exampleConfig))
+                
+                // Update all form elements
+                updateFormFromConfig()
+                renderAutoMapParams()
+                renderParams()
+                
+                // Expand all parameter sections for better visibility
+                config.params.forEach((_, index) => {
+                    setTimeout(() => {
+                        const content = document.querySelector(`#param-${index} .param-content`)
+                        const icon = document.querySelector(`#param-${index} .toggle-icon`)
+                        if (content && icon) {
+                            content.classList.remove('hidden')
+                            icon.classList.add('expanded-icon')
+                        }
+                    }, 100) // Small delay to ensure DOM is ready
+                })
+                
+                showSuccess('Example configuration loaded')
+            } catch (error) {
+                console.error('Load example error:', error)
+                showError('Failed to load example configuration')
+            }
+        }
+
+        // Enhanced clean config function
+        function cleanConfig() {
+            const cleanedConfig = { ...config };
+            
+            // Ensure required fields
+            cleanedConfig.type = 'midi';
+            
+            // Clean optional fields
+            ['default_midi_device', 'default_midi_channel', 'fixed_note'].forEach(field => {
+                if (cleanedConfig[field] === '' || cleanedConfig[field] === null || cleanedConfig[field] === undefined) {
+                    delete cleanedConfig[field];
+                }
+            });
+
+            // Handle arrays
+            cleanedConfig.map_params_automatically = cleanedConfig.map_params_automatically.filter(param => param);
+            if (cleanedConfig.map_params_automatically.length === 0) {
+                delete cleanedConfig.map_params_automatically;
+            }
+
+            // Clean parameters
+            if (cleanedConfig.params?.length) {
+                cleanedConfig.params = cleanedConfig.params.map(param => {
+                    const cleanParam = { ...param };
+                    
+                    // Clean optional numeric fields
+                    ['cc_lsb', 'nrpn_min_value', 'nrpn_max_value', 'nrpn_lsb', 'nrpn_msb'].forEach(field => {
+                        if (cleanParam[field] === '' || cleanParam[field] === null || cleanParam[field] === undefined) {
+                            delete cleanParam[field];
+                        }
+                    });
+
+                    // Clean arrays
+                    if (!cleanParam.ui_labels?.length) {
+                        delete cleanParam.ui_labels;
+                    }
+
+                    return cleanParam;
+                });
+            }
+
+            return cleanedConfig;
+        }
+
+        // Call initial renders
+        renderAutoMapParams()
+        renderParams()
+    </script>
+</body>
+</html>
