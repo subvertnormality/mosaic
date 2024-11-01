@@ -9,6 +9,7 @@
 
 testing = false
 
+pages = include("mosaic/lib/pages/pages")
 program = include("mosaic/lib/program")
 fn = include("mosaic/lib/functions")
 scheduler = include("mosaic/lib/scheduler")

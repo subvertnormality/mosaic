@@ -1,6 +1,4 @@
 local draw_handler = {}
-
-
 local table_insert = table.insert
 local ipairs = ipairs
 
@@ -22,7 +20,7 @@ end
 -- Call all functions registered with a page
 function draw_handler:handle_grid(page)
 
-  local found_page = fn.find_key(program.pages, page)
+  local found_page = fn.find_key(pages.pages, page)
   
   -- Call all menu press handlers
   for _, func in ipairs(self.grid_handlers["menu"]) do
@@ -54,7 +52,7 @@ end
 -- Call all functions registered with a page
 function draw_handler:handle_ui(page)
 
-  local found_page = fn.find_key(program.pages, page)
+  local found_page = fn.find_key(pages.pages, page)
 
   -- Call all menu press handlers
   for _, func in ipairs(self.ui_handlers["tooltip"]) do

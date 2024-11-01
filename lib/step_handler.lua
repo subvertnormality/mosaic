@@ -873,7 +873,7 @@ function step_handler.handle(c, current_step)
         {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
         function(chord_note, velocity, midi_channel, midi_device)
           if device.player then
-            device.player:note_on(chord_note, velocity)
+            device.player:note_on(chord_note, (127 > 1) and ((velocity - 1) / 126) or 0)
           elseif midi_controller then
             midi_controller:note_on(chord_note, velocity, midi_channel, midi_device)
           end

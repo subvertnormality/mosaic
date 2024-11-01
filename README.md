@@ -153,7 +153,7 @@ To start the sequencer, press the lowest left hand button on the grid. To stop t
 
 #### Grid Menu Navigation
 
-The four buttons starting from the third column on the lowest row serve as the global menu buttons. From left to right, these buttons allow access to the "[Pattern Editors](#pattern-editor)", "[Channel Editor](#channel-editor)", "[Scale Editor](#scale-editor)", [Song Editor](#song-editor)". 
+The four buttons starting from the third column on the lowest row serve as the global menu buttons. From left to right, these buttons allow access to the "[Channel Editor](#channel-editor)", "[Scale Editor](#scale-editor)", [Pattern Editors](#pattern-editor)", [Song Editor](#song-editor)". 
 
 The pattern editor button cycles through three pages, accessible by pressing the button repeatedly. These are the [Pattern Trig Editor](#adding-trigs), the [Pattern Note Editor](#adding-notes), and the [Pattern Velocity Editor](#adding-velocity).
 

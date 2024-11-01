@@ -48,17 +48,17 @@ function ui_controller.redraw()
 end
 
 function ui_controller.enc(n, d)
-  if program.get_selected_page() == program.pages.channel_edit_page then
+  if program.get_selected_page() == pages.pages.channel_edit_page then
     channel_edit_page_ui_controller.enc(n, d)
-  elseif program.get_selected_page() == program.pages.scale_edit_page then
+  elseif program.get_selected_page() == pages.pages.scale_edit_page then
     scale_edit_page_ui_controller.enc(n, d)
-  elseif program.get_selected_page() == program.pages.trigger_edit_page then
+  elseif program.get_selected_page() == pages.pages.trigger_edit_page then
     trigger_edit_page_ui_controller.enc(n, d)
-  elseif program.get_selected_page() == program.pages.note_edit_page then
+  elseif program.get_selected_page() == pages.pages.note_edit_page then
     note_edit_page_ui_controller.enc(n, d)
-  elseif program.get_selected_page() == program.pages.velocity_edit_page then
+  elseif program.get_selected_page() == pages.pages.velocity_edit_page then
     velocity_edit_page_ui_controller.enc(n, d)
-  elseif program.get_selected_page() == program.pages.song_edit_page then
+  elseif program.get_selected_page() == pages.pages.song_edit_page then
     song_edit_page_ui_controller.enc(n, d)
   end
 end

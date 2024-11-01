@@ -26,9 +26,11 @@
 ### Interface Improvements
 
 #### Enhanced Controls
-- Quick actions now available by holding K3 (shift):
 - Play/stop button is now separated from menu buttons for improved ergonomics
-- New trig dial UI
+- Global menu buttons have been reworked 
+- The Scale menu is now accessible via Global menu
+- New Trig Dial UI
+- Quick actions now available by holding K3 (shift):
 
 #### Device Enhancements
 - NRPN values are now used by default when available for parameters

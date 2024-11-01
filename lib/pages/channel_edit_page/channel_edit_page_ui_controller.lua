@@ -1367,7 +1367,7 @@ function channel_edit_page_ui_controller.set_note_dashboard_values(values)
   end
   if values and values.length then
     note_displays.length:set_value(
-      values.length
+      math.floor(values.length * 100 + 0.5) / 100
     )
   end
 

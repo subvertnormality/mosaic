@@ -18,13 +18,13 @@ velocity_edit_page_controller = include("mosaic/lib/pages/velocity_edit_page/vel
 
 local play_stop_button = button:new(1, 8)
 local pattern_edit_button = button:new(
-  program.pages_to_grid_menu_button_mappings.trigger_edit_page, 
+  pages.pages_to_grid_menu_button_mappings.trigger_edit_page, 
   8, 
   {{"off", 2}, {"trig", 5}, {"note", 10}, {"velocity", 15}}
 )
-local channel_edit_button = button:new(program.pages_to_grid_menu_button_mappings.channel_edit_page, 8)
-local scale_edit_button = button:new(program.pages_to_grid_menu_button_mappings.scale_edit_page, 8)
-local song_edit_button = button:new(program.pages_to_grid_menu_button_mappings.song_edit_page, 8)
+local channel_edit_button = button:new(pages.pages_to_grid_menu_button_mappings.channel_edit_page, 8)
+local scale_edit_button = button:new(pages.pages_to_grid_menu_button_mappings.scale_edit_page, 8)
+local song_edit_button = button:new(pages.pages_to_grid_menu_button_mappings.song_edit_page, 8)
 
 local throttle_time = 0.1
 
@@ -38,7 +38,7 @@ local function sync_current_channel_state()
   if program.get().previous_channel == 17 then
     program.get().previous_channel = 1
   end
-  if (program.get_selected_page() == program.pages.scale_edit_page) then
+  if (program.get_selected_page() == pages.pages.scale_edit_page) then
     if program.get().selected_channel ~= 17 then 
       program.get().previous_channel = program.get().selected_channel
     end
@@ -95,33 +95,30 @@ local function register_press_handlers()
     function(x, y)
       if (y == 8) then
         if 
-          x >= program.pages_to_grid_menu_button_mappings.trigger_edit_page and 
-          x <= program.pages_to_grid_menu_button_mappings.song_edit_page 
+          x >= pages.pages_to_grid_menu_button_mappings.channel_edit_page and 
+          x <= pages.pages_to_grid_menu_button_mappings.song_edit_page 
         then
-          if (x ~= program.pages_to_grid_menu_button_mappings.trigger_edit_page) then
-            if program.get_selected_page() ~= program.grid_menu_to_page_mappings[x] then
-              program.set_selected_page(program.grid_menu_to_page_mappings[x])
+          if (x ~= pages.pages_to_grid_menu_button_mappings.trigger_edit_page) then
+            if program.get_selected_page() ~= pages.grid_menu_to_page_mappings[x] then
+              program.set_selected_page(pages.grid_menu_to_page_mappings[x])
             end
-          elseif (x == program.pages_to_grid_menu_button_mappings.trigger_edit_page) then
-            if program.get_selected_page() == program.pages.trigger_edit_page then
-              program.set_selected_page(program.pages.note_edit_page)
-            elseif program.get_selected_page() == program.pages.note_edit_page then
-              program.set_selected_page(program.pages.velocity_edit_page)
-            elseif program.get_selected_page() == program.pages.velocity_edit_page then
-              program.set_selected_page(program.pages.trigger_edit_page)
+          elseif (x == pages.pages_to_grid_menu_button_mappings.trigger_edit_page) then
+            if program.get_selected_page() == pages.pages.trigger_edit_page then
+              program.set_selected_page(pages.pages.note_edit_page)
+            elseif program.get_selected_page() == pages.pages.note_edit_page then
+              program.set_selected_page(pages.pages.velocity_edit_page)
+            elseif program.get_selected_page() == pages.pages.velocity_edit_page then
+              program.set_selected_page(pages.pages.trigger_edit_page)
             else
-              program.set_selected_page(program.pages.trigger_edit_page)
+              program.set_selected_page(pages.pages.trigger_edit_page)
             end
           end
 
           sync_current_channel_state()
-          program.grid_menu_buttons_to_controller_mappings[
-            program.pages_to_grid_menu_button_mappings[
-              program.page_numbers_to_ids[program.get_selected_page()]
-            ]
-          ].refresh()
+
+          pages.page_to_controller_mappings[program.get_selected_page()].refresh()
           grid_controller.set_menu_button_state()
-          tooltip:show(program.page_names[program.get_selected_page()])
+          tooltip:show(pages.page_names[program.get_selected_page()])
           fn.dirty_screen(true)
           fn.dirty_grid(true)
         end
@@ -168,10 +165,10 @@ local function register_press_handlers()
     function(x, y)
       if (y == 8) then
         if 
-          x >= program.pages_to_grid_menu_button_mappings.trigger_edit_page and 
-          x <= program.pages_to_grid_menu_button_mappings.song_edit_page 
+          x >= pages.pages_to_grid_menu_button_mappings.trigger_edit_page and 
+          x <= pages.pages_to_grid_menu_button_mappings.song_edit_page 
         then
-          if program.pages_to_grid_menu_button_mappings[program.page_numbers_to_ids[program.get_selected_page()]] ~= x then
+          if pages.pages_to_grid_menu_button_mappings[pages.page_numbers_to_ids[program.get_selected_page()]] ~= x then
             tooltip:show("Midi Panic")
             clock_controller.panic()
           end
@@ -182,7 +179,7 @@ local function register_press_handlers()
 end
 
 function grid_controller.init()
-  program.initialise_grid_menu_buttons_to_controller_mappings()
+  pages.initialise_page_controller_mappings()
   grid_controller.counter = {}
   grid_controller.toggled = {}
   grid_controller.long_press_active = {}
@@ -260,19 +257,19 @@ end
 
 function grid_controller.set_menu_button_state()
   local selected_page = program.get_selected_page()
-  channel_edit_button:set_state(selected_page == program.pages.channel_edit_page and 2 or 1)
-  scale_edit_button:set_state(selected_page == program.pages.scale_edit_page and 2 or 1)
-  if selected_page >= program.pages.trigger_edit_page and selected_page <= program.pages.velocity_edit_page then
+  channel_edit_button:set_state(selected_page == pages.pages.channel_edit_page and 2 or 1)
+  scale_edit_button:set_state(selected_page == pages.pages.scale_edit_page and 2 or 1)
+  if selected_page >= pages.pages.trigger_edit_page and selected_page <= pages.pages.velocity_edit_page then
     pattern_edit_button:set_state(
-      selected_page == program.pages.trigger_edit_page and 2 or 
-      selected_page == program.pages.note_edit_page and 3 or 
-      selected_page == program.pages.velocity_edit_page and 4
+      selected_page == pages.pages.trigger_edit_page and 2 or 
+      selected_page == pages.pages.note_edit_page and 3 or 
+      selected_page == pages.pages.velocity_edit_page and 4
     )
   else
     pattern_edit_button:set_state(1)
   end
 
-  song_edit_button:set_state(selected_page == program.pages.song_edit_page and 2 or 1)
+  song_edit_button:set_state(selected_page == pages.pages.song_edit_page and 2 or 1)
 
   if (clock_controller.is_playing()) then
     menu_buttons[1]:blink()

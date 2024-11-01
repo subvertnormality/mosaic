@@ -5,62 +5,6 @@ local quantiser = include("mosaic/lib/quantiser")
 local program = {}
 local program_store = {}
 
-program.pages = {
-  trigger_edit_page = 2,
-  note_edit_page = 3,
-  velocity_edit_page = 4,
-  channel_edit_page = 5,
-  scale_edit_page = 6,
-  song_edit_page = 7,
-}
-
-program.page_numbers_to_ids = {
-  [2] = "trigger_edit_page",
-  [3] = "note_edit_page",
-  [4] = "velocity_edit_page",
-  [5] = "channel_edit_page",
-  [6] = "scale_edit_page",
-  [7] = "song_edit_page",
-}
-
-program.page_names = {
-  "Recorder",
-  "Pattern Trig Editor",
-  "Pattern Note Editor",
-  "Pattern Velocity Editor",
-  "Channel Editor",
-  "Scale Editor",
-  "Song Editor"
-}
-
-program.grid_menu_to_page_mappings = {
-  [3] = 2,
-  [4] = 5,
-  [5] = 6,
-  [6] = 7
-}
-
-program.pages_to_grid_menu_button_mappings = {
-  trigger_edit_page = 3,
-  note_edit_page = 3,
-  velocity_edit_page = 3,
-  channel_edit_page = 4,
-  scale_edit_page = 5,
-  song_edit_page = 6,
-}
-
-program.grid_menu_buttons_to_controller_mappings = {}
-
-program.initialise_grid_menu_buttons_to_controller_mappings = function()
-  program.grid_menu_buttons_to_controller_mappings = {
-    [1] = trigger_edit_page_controller, -- recorder will go here, default to channel edit page for now
-    [2] = trigger_edit_page_controller, -- blank
-    [3] = trigger_edit_page_controller,
-    [4] = channel_edit_page_controller,
-    [5] = scale_edit_page_controller,
-    [6] = song_edit_page_controller
-  }
-end
 
 local function initialise_default_channels()
   local channels = {}
@@ -175,7 +119,7 @@ end
 function program.init()
   local root_note = 0
   program_store = {
-    selected_page = program.pages.channel_edit_page,
+    selected_page = pages.pages.channel_edit_page,
     selected_sequencer_pattern = 1,
     selected_pattern = 1,
     selected_channel = 1,

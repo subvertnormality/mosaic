@@ -177,8 +177,8 @@ function clock_controller.init()
     enabled = true
   }
 
-  local channel_edit_page = program.pages.channel_edit_page
-  local scale_edit_page = program.pages.scale_edit_page
+  local channel_edit_page = pages.pages.channel_edit_page
+  local scale_edit_page = pages.pages.scale_edit_page
   for channel_number = 17, 1, -1 do
     local div = calculate_divisor(program.get_channel(channel_number).clock_mods)
 
