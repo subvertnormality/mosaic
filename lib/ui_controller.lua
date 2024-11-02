@@ -83,12 +83,19 @@ function ui_controller.key(n, z)
     is_key3_down = false
   end
 
-  channel_edit_page_ui_controller.key(n, z)
-  scale_edit_page_ui_controller.key(n, z)
-  -- velocity_edit_page_ui_controller.key(n, z)
-  -- note_edit_page_ui_controller.key(n, z)
-  -- trigger_edit_page_ui_controller.key(n, z)
-  -- song_edit_page_ui_controller.key(n, z)
+  if pages.pages.channel_edit_page == program.get_selected_page() then
+    channel_edit_page_ui_controller.key(n, z)
+  elseif pages.pages.scale_edit_page == program.get_selected_page() then
+    scale_edit_page_ui_controller.key(n, z)
+  elseif pages.pages.velocity_edit_page == program.get_selected_page() then
+    -- velocity_edit_page_ui_controller.key(n, z)
+  elseif pages.pages.note_edit_page == program.get_selected_page() then
+    -- note_edit_page_ui_controller.key(n, z)
+  elseif pages.pages.trigger_edit_page == program.get_selected_page() then
+    -- trigger_edit_page_ui_controller.key(n, z)
+  elseif pages.pages.song_edit_page == program.get_selected_page() then
+    -- song_edit_page_ui_controller.key(n, z)
+  end
 
 end
 
