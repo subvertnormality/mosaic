@@ -8,10 +8,10 @@ local faders = {}
 local vertical_offset = 7
 local horizontal_offset = 0
 
-local step1to16_fade_button = fade_button:new(9, 8, 1, 16)
-local step17to32_fade_button = fade_button:new(10, 8, 17, 32)
-local step33to48_fade_button = fade_button:new(11, 8, 33, 48)
-local step49to64_fade_button = fade_button:new(12, 8, 49, 64)
+local step1to16_button = button:new(9, 8, {{"Inactive", 3}, {"Page 1-16", 15}})
+local step17to32_button = button:new(10, 8, {{"Inactive", 3}, {"Page 17-32", 15}})
+local step33to48_button = button:new(11, 8, {{"Inactive", 3}, {"Page 33-48", 15}})
+local step49to64_button = button:new(12, 8, {{"Inactive", 3}, {"Page 49-64", 15}})
 
 local note1to7_fade_button = fade_button:new(16, 8, 0, 14, "up")      -- Bottom button moves up
 local note8to14_fade_button = fade_button:new(15, 8, 0, 14, "center") -- Middle button centers
@@ -39,25 +39,25 @@ function note_edit_page_controller.register_draw_handlers()
   draw_handler:register_grid(
     "note_edit_page",
     function()
-      return step1to16_fade_button:draw()
+      return step1to16_button:draw()
     end
   )
   draw_handler:register_grid(
     "note_edit_page",
     function()
-      return step17to32_fade_button:draw()
+      return step17to32_button:draw()
     end
   )
   draw_handler:register_grid(
     "note_edit_page",
     function()
-      return step33to48_fade_button:draw()
+      return step33to48_button:draw()
     end
   )
   draw_handler:register_grid(
     "note_edit_page",
     function()
-      return step49to64_fade_button:draw()
+      return step49to64_button:draw()
     end
   )
   draw_handler:register_grid(
@@ -140,49 +140,61 @@ function note_edit_page_controller.register_press_handlers()
   press_handler:register(
     "note_edit_page",
     function(x, y)
-      if (step1to16_fade_button:is_this(x, y)) then
-        horizontal_offset = 0
-        note_edit_page_controller.refresh()
-        tooltip:show("Steps 1 to 16")
-      end
-      return step1to16_fade_button:press(x, y)
+        if step1to16_button:is_this(x, y) then
+            horizontal_offset = 0
+            step1to16_button:set_state(2)
+            step17to32_button:set_state(1)
+            step33to48_button:set_state(1)
+            step49to64_button:set_state(1)
+            note_edit_page_controller.refresh()
+            tooltip:show("Steps 1 to 16")
+        end
     end
   )
-  press_handler:register(
-    "note_edit_page",
-    function(x, y)
-      if (step17to32_fade_button:is_this(x, y)) then
-        horizontal_offset = 16
-        note_edit_page_controller.refresh()
-        tooltip:show("Steps 17 to 32")
-      end
 
-      return step17to32_fade_button:press(x, y)
-    end
+  press_handler:register(
+      "note_edit_page",
+      function(x, y)
+          if step17to32_button:is_this(x, y) then
+              horizontal_offset = 16
+              step1to16_button:set_state(1)
+              step17to32_button:set_state(2)
+              step33to48_button:set_state(1)
+              step49to64_button:set_state(1)
+              note_edit_page_controller.refresh()
+              tooltip:show("Steps 17 to 32")
+          end
+      end
   )
-  press_handler:register(
-    "note_edit_page",
-    function(x, y)
-      if (step33to48_fade_button:is_this(x, y)) then
-        horizontal_offset = 32
-        note_edit_page_controller.refresh()
-        tooltip:show("Steps 33 to 48")
-      end
 
-      return step33to48_fade_button:press(x, y)
-    end
+  press_handler:register(
+      "note_edit_page",
+      function(x, y)
+          if step33to48_button:is_this(x, y) then
+              horizontal_offset = 32
+              step1to16_button:set_state(1)
+              step17to32_button:set_state(1)
+              step33to48_button:set_state(2)
+              step49to64_button:set_state(1)
+              note_edit_page_controller.refresh()
+              tooltip:show("Steps 33 to 48")
+          end
+      end
   )
-  press_handler:register(
-    "note_edit_page",
-    function(x, y)
-      if (step49to64_fade_button:is_this(x, y)) then
-        horizontal_offset = 48
-        note_edit_page_controller.refresh()
-        tooltip:show("Steps 49 to 64")
-      end
 
-      return step49to64_fade_button:press(x, y)
-    end
+  press_handler:register(
+      "note_edit_page",
+      function(x, y)
+          if step49to64_button:is_this(x, y) then
+              horizontal_offset = 48
+              step1to16_button:set_state(1)
+              step17to32_button:set_state(1)
+              step33to48_button:set_state(1)
+              step49to64_button:set_state(2)
+              note_edit_page_controller.refresh()
+              tooltip:show("Steps 49 to 64")
+          end
+      end
   )
   press_handler:register(
     "note_edit_page",
@@ -281,10 +293,10 @@ function note_edit_page_controller.register_press_handlers()
 end
 
 function note_edit_page_controller.refresh_buttons()
-  step1to16_fade_button:set_value(horizontal_offset)
-  step17to32_fade_button:set_value(horizontal_offset)
-  step33to48_fade_button:set_value(horizontal_offset)
-  step49to64_fade_button:set_value(horizontal_offset)
+  step1to16_button:set_state(horizontal_offset == 0 and 2 or 1)
+  step17to32_button:set_state(horizontal_offset == 16 and 2 or 1)
+  step33to48_button:set_state(horizontal_offset == 32 and 2 or 1)
+  step49to64_button:set_state(horizontal_offset == 48 and 2 or 1)
   note1to7_fade_button:set_value(14 - vertical_offset)
   note8to14_fade_button:set_value(vertical_offset)
   note15to21_fade_button:set_value(14 - vertical_offset)
