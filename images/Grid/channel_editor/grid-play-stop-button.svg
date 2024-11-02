@@ -7,7 +7,7 @@
    width="510"
    height="280"
    viewBox="0 0 510 280"
-   sodipodi:docname="grid-template.svg"
+   sodipodi:docname="grid-play-stop-button.svg"
    inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -25,7 +25,7 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="1.21"
-     inkscape:cx="165.70248"
+     inkscape:cx="166.1157"
      inkscape:cy="125.61983"
      inkscape:window-width="1432"
      inkscape:window-height="791"
@@ -65,7 +65,7 @@
        x="23.140497"
        y="226.44629" />
     <rect
-       style="fill:#f9f9f9;fill-opacity:1;stroke:#cccccc"
+       style="fill:#ececec;fill-opacity:1;stroke:#cccccc"
        id="rect1034-1"
        width="30.578512"
        height="32.231403"
@@ -74,21 +74,42 @@
        inkscape:transform-center-x="-33.884298"
        inkscape:transform-center-y="-62.809917" />
     <rect
-       style="fill:#f9f9f9;fill-opacity:1;stroke:#cccccc"
+       style="fill:#ffffff;stroke:#cccccc;stroke-opacity:0.019305"
+       id="rect1"
+       width="30.578512"
+       height="30.578512"
+       x="53.698349"
+       y="226.37604" />
+    <rect
+       style="fill:#ffffff;stroke:#cccccc;stroke-opacity:0.019305"
+       id="rect2"
+       width="29.752066"
+       height="30.578512"
+       x="197.5"
+       y="227.20248" />
+    <rect
+       style="fill:#ffffff;stroke:#cccccc;stroke-opacity:0.019305"
+       id="rect3"
+       width="27.272728"
+       height="33.884296"
+       x="371.05371"
+       y="226.37604" />
+    <rect
+       style="fill:#ececec;fill-opacity:1;stroke:#cccccc"
        id="rect1038"
        width="88.429749"
        height="33.05785"
        x="398.34711"
        y="224.7934" />
     <rect
-       style="fill:#f9f9f9;fill-opacity:1;stroke:#cccccc"
+       style="fill:#ececec;fill-opacity:1;stroke:#cccccc"
        id="rect1039"
        width="144.6281"
        height="28.099174"
        x="224.7934"
        y="226.44627" />
     <rect
-       style="fill:#f9f9f9;fill-opacity:1;stroke:#cccccc"
+       style="fill:#ececec;fill-opacity:1;stroke:#cccccc"
        id="rect1040"
        width="466.11569"
        height="26.446276"
@@ -96,21 +117,21 @@
        y="198.34711"
        ry="8.2644625" />
     <rect
-       style="fill:#f9f9f9;fill-opacity:1;stroke:#cccccc"
+       style="fill:#ececec;fill-opacity:1;stroke:#cccccc"
        id="rect1035"
        width="59.504131"
        height="30.578512"
        x="107.43802"
        y="226.44627" />
     <rect
-       style="fill:#f9f9f9;fill-opacity:1;stroke:#cccccc"
+       style="fill:#ececec;fill-opacity:1;stroke:#cccccc"
        id="rect1036"
        width="28.099169"
        height="33.057846"
        x="169.42149"
        y="227.27272" />
     <rect
-       style="fill:#f9f9f9;fill-opacity:1;stroke:#cccccc"
+       style="fill:#ececec;fill-opacity:1;stroke:#cccccc"
        id="rect1037"
        width="476.03305"
        height="180.16528"
