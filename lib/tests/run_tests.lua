@@ -116,6 +116,7 @@ end
 clear_require_cache()
 
 fn = include("mosaic/lib/functions")
+pages = include("mosaic/lib/pages/pages")
 scheduler = include("mosaic/lib/tests/helpers/mocks/scheduler_mock")
 program = include("mosaic/lib/program")
 
