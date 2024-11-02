@@ -373,6 +373,31 @@ function song_edit_page_ui_controller.refresh_shuffle_amount()
   shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
 end
 
+
+function song_edit_page_ui_controller.handle_key_two_pressed()
+  local pressed_keys = grid_controller.get_pressed_keys()
+  if #pressed_keys < 1 then
+    save_confirm.cancel()
+  end
+end
+
+
+function song_edit_page_ui_controller.handle_key_three_pressed()
+  local pressed_keys = grid_controller.get_pressed_keys()
+  if #pressed_keys < 1 then
+    save_confirm.confirm()
+  end
+end
+
+function song_edit_page_ui_controller.key(n, z)
+  if n == 2 and z == 1 then
+    song_edit_page_ui_controller.handle_key_two_pressed()
+  elseif n == 3 and z == 1 then
+    song_edit_page_ui_controller.handle_key_three_pressed()
+  end
+end
+
+
 function song_edit_page_ui_controller.refresh()
   song_edit_page_ui_controller.refresh_pattern_repeat()
   song_edit_page_ui_controller.refresh_tempo()

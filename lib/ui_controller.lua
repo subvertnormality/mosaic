@@ -94,7 +94,7 @@ function ui_controller.key(n, z)
   elseif pages.pages.trigger_edit_page == program.get_selected_page() then
     -- trigger_edit_page_ui_controller.key(n, z)
   elseif pages.pages.song_edit_page == program.get_selected_page() then
-    -- song_edit_page_ui_controller.key(n, z)
+    song_edit_page_ui_controller.key(n, z)
   end
 
 end
