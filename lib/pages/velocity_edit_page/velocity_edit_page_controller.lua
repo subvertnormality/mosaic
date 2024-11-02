@@ -15,8 +15,8 @@ local step17to32_fade_button = fade_button:new(10, 8, 17, 32)
 local step33to48_fade_button = fade_button:new(11, 8, 33, 48)
 local step49to64_fade_button = fade_button:new(12, 8, 49, 64)
 
-local vel1to7_fade_button = fade_button:new(15, 8, 1, 7)
-local vel8to14_fade_button = fade_button:new(16, 8, 8, 14)
+local vel8to14_fade_button = fade_button:new(15, 8, 0, 7, "up")
+local vel1to7_fade_button = fade_button:new(16, 8, 0, 7, "down")
 
 function velocity_edit_page_controller.init()
   for s = 1, 64 do
@@ -207,26 +207,64 @@ function velocity_edit_page_controller.register_press_handlers()
   press_handler:register(
     "velocity_edit_page",
     function(x, y)
-      if (vel1to7_fade_button:is_this(x, y)) then
-        vertical_offset = 0
-        velocity_edit_page_controller.refresh()
-        tooltip:show("Velocity 68 to 127")
-      end
-
-      return vel1to7_fade_button:press(x, y)
+        if (vel1to7_fade_button:is_this(x, y)) then
+            local new_offset = vel1to7_fade_button:press(x, y)
+            if new_offset ~= false then
+                vertical_offset = new_offset
+                velocity_edit_page_controller.refresh()
+                -- Calculate value range for current offset page
+                local high_value = new_offset + 1
+                local low_value = math.max(1, high_value + 6)  -- Use 6 to show 7 values total
+                -- Convert to velocities and swap them since the mapping is inverted
+                local high_vel = velocity_edit_page_controller.velocity_from_value(high_value)
+                local low_vel = velocity_edit_page_controller.velocity_from_value(low_value)
+                tooltip:show("Velocity " .. low_vel .. " to " .. high_vel)
+            end
+        end
+        return vel1to7_fade_button:press(x, y)
     end
   )
-  press_handler:register(
+  press_handler:register_long(
     "velocity_edit_page",
     function(x, y)
-      if (vel8to14_fade_button:is_this(x, y)) then
-        vertical_offset = 7
-        velocity_edit_page_controller.refresh()
-        tooltip:show("Velocity 0 to 58")
-      end
-
-      return vel8to14_fade_button:press(x, y)
+        if (vel1to7_fade_button:is_this(x, y)) then
+            vertical_offset = 7  -- Go to full high velocity (0)
+            velocity_edit_page_controller.refresh()
+            local high_value = 8
+            local low_value = 14
+            local high_vel = velocity_edit_page_controller.velocity_from_value(high_value)
+            local low_vel = velocity_edit_page_controller.velocity_from_value(low_value)
+            tooltip:show("Velocity " .. low_vel .. " to " .. high_vel)
+        elseif (vel8to14_fade_button:is_this(x, y)) then
+            vertical_offset = 0  -- Go to full low velocity (127)
+            velocity_edit_page_controller.refresh()
+            local high_value = 1
+            local low_value = 7
+            local high_vel = velocity_edit_page_controller.velocity_from_value(high_value)
+            local low_vel = velocity_edit_page_controller.velocity_from_value(low_value)
+            tooltip:show("Velocity " .. low_vel .. " to " .. high_vel)
+        end
     end
+)
+  press_handler:register(
+      "velocity_edit_page",
+      function(x, y)
+          if (vel8to14_fade_button:is_this(x, y)) then
+              local new_offset = vel8to14_fade_button:press(x, y)
+              if new_offset ~= false then
+                  vertical_offset = new_offset
+                  velocity_edit_page_controller.refresh()
+                  -- Calculate value range for current offset page
+                  local high_value = new_offset + 1
+                  local low_value = math.max(1, high_value + 6)  -- Use 6 to show 7 values total
+                  -- Convert to velocities and swap them since the mapping is inverted
+                  local high_vel = velocity_edit_page_controller.velocity_from_value(high_value)
+                  local low_vel = velocity_edit_page_controller.velocity_from_value(low_value)
+                  tooltip:show("Velocity " .. low_vel .. " to " .. high_vel)
+              end
+          end
+          return vel8to14_fade_button:press(x, y)
+      end
   )
 end
 

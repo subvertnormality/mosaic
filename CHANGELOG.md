@@ -23,15 +23,6 @@
   - Independent settings per channel
   - Global default settings
 
-### Interface Improvements
-
-#### Enhanced Controls
-- Play/stop button is now separated from menu buttons for improved ergonomics
-- Global menu buttons have been reworked 
-- The Scale menu is now accessible via Global menu
-- New Trig Dial UI
-- Quick actions now available by holding K3 (shift):
-
 #### Device Enhancements
 - NRPN values are now used by default when available for parameters
 - Improved device parameter mapping:
@@ -39,9 +30,15 @@
   - Better support for custom MIDI implementations
 - More N.B. devices can be parameter locked
 
-#### Integration Updates
-- Full compatibility with matrix mod and toolkit
-- Improved modulation routing and parameter control
+### Interface Improvements
+
+#### Enhanced Controls
+- Play/stop button is now separated from menu buttons for improved ergonomics
+- Global menu buttons have been reworked 
+- The Scale menu is now accessible via Global menu
+- New Trig dial UI
+- Quick actions now available by holding K3 (shift)
+- Vertical value pages when selecting pattern notes and velocities can be navigated per step, making visualisation of values easier
 
 ### Technical Improvements
 
@@ -60,6 +57,10 @@
 - Comprehensive new manual with detailed workflow explanations
 - Improved device configuration documentation
 - Added new examples and usage scenarios
+
+#### Integration Updates
+- Full compatibility with matrix mod and toolkit
+- Improved modulation routing and parameter control
 
 ### Documentation
 - New config file creator lets you create config json file in a web based editor

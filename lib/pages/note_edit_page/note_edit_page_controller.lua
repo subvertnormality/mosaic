@@ -13,9 +13,11 @@ local step17to32_fade_button = fade_button:new(10, 8, 17, 32)
 local step33to48_fade_button = fade_button:new(11, 8, 33, 48)
 local step49to64_fade_button = fade_button:new(12, 8, 49, 64)
 
-local note1to7_fade_button = fade_button:new(14, 8, 1, 7)
-local note8to14_fade_button = fade_button:new(15, 8, 8, 14)
-local note15to21_fade_button = fade_button:new(16, 8, 15, 21)
+local note1to7_fade_button = fade_button:new(16, 8, 0, 14, "up")      -- Bottom button moves up
+local note8to14_fade_button = fade_button:new(15, 8, 0, 14, "center") -- Middle button centers
+local note15to21_fade_button = fade_button:new(14, 8, 0, 14, "down")  -- Top button moves down
+
+
 
 function note_edit_page_controller.init()
   for s = 1, 64 do
@@ -185,37 +187,95 @@ function note_edit_page_controller.register_press_handlers()
   press_handler:register(
     "note_edit_page",
     function(x, y)
-      if (note15to21_fade_button:is_this(x, y)) then
-        vertical_offset = 0
-        note_edit_page_controller.refresh()
-        tooltip:show("Notes +6 to +13")
-      end
-
-      return note15to21_fade_button:press(x, y)
+        if (note15to21_fade_button:is_this(x, y)) then
+            local new_offset = note15to21_fade_button:press(x, y)
+            if new_offset ~= false then
+                vertical_offset = 14 - new_offset  -- Convert button value to offset
+                note_edit_page_controller.refresh()
+                local low_value = vertical_offset + 1
+                local high_value = math.min(21, low_value + 6)
+                local low_note = fn.note_from_value(low_value)
+                local high_note = fn.note_from_value(high_value)
+                if low_note == 0 then low_note = "Root" end
+                if high_note == 0 then high_note = "Root" end
+                tooltip:show("Notes " .. high_note .. " to " .. low_note)
+            end
+        end
+        return note15to21_fade_button:press(x, y)
     end
   )
-  press_handler:register(
-    "note_edit_page",
-    function(x, y)
-      if (note8to14_fade_button:is_this(x, y)) then
-        vertical_offset = 7
-        note_edit_page_controller.refresh()
-        tooltip:show("Root to +6")
-      end
 
-      return note8to14_fade_button:press(x, y)
-    end
+  press_handler:register(
+      "note_edit_page",
+      function(x, y)
+          if (note8to14_fade_button:is_this(x, y)) then
+              local new_offset = note8to14_fade_button:press(x, y)
+              if new_offset ~= false then
+                  vertical_offset = 7  -- Center position
+                  note_edit_page_controller.refresh()
+                  tooltip:show("Root to 6")
+              end
+          end
+          return note8to14_fade_button:press(x, y)
+      end
   )
+
   press_handler:register(
+      "note_edit_page",
+      function(x, y)
+          if (note1to7_fade_button:is_this(x, y)) then
+              local new_offset = note1to7_fade_button:press(x, y)
+              if new_offset ~= false then
+                  vertical_offset = 14 - new_offset  -- Convert button value to offset
+                  note_edit_page_controller.refresh()
+                  local low_value = vertical_offset + 1
+                  local high_value = math.min(21, low_value + 6)
+                  local low_note = fn.note_from_value(low_value)
+                  local high_note = fn.note_from_value(high_value)
+                  if low_note == 0 then low_note = "Root" end
+                  if high_note == 0 then high_note = "Root" end
+                  tooltip:show("Notes " .. high_note .. " to " .. low_note)
+              end
+          end
+          return note1to7_fade_button:press(x, y)
+      end
+  )
+
+  press_handler:register_long(
     "note_edit_page",
     function(x, y)
-      if (note1to7_fade_button:is_this(x, y)) then
-        vertical_offset = 14
-        note_edit_page_controller.refresh()
-        tooltip:show("Notes -1 to -7")
-      end
-
-      return note1to7_fade_button:press(x, y)
+        if (y == 1) then
+            program.get().selected_pattern = x
+            tooltip:show("Pattern " .. x .. " selected")
+            note_edit_page_controller.refresh()
+        elseif (note15to21_fade_button:is_this(x, y)) then
+            -- Top button - jump to highest notes
+            vertical_offset = 0
+            note_edit_page_controller.refresh()
+            local low_value = 1
+            local high_value = 7
+            local low_note = fn.note_from_value(low_value)
+            local high_note = fn.note_from_value(high_value)
+            if low_note == 0 then low_note = "Root" end
+            if high_note == 0 then high_note = "Root" end
+            tooltip:show("Notes " .. high_note .. " to " .. low_note)
+        elseif (note8to14_fade_button:is_this(x, y)) then
+            -- Middle button - jump to root notes
+            vertical_offset = 7
+            note_edit_page_controller.refresh()
+            tooltip:show("Root to 6")
+        elseif (note1to7_fade_button:is_this(x, y)) then
+            -- Bottom button - jump to lowest notes
+            vertical_offset = 14
+            note_edit_page_controller.refresh()
+            local low_value = 15
+            local high_value = 21
+            local low_note = fn.note_from_value(low_value)
+            local high_note = fn.note_from_value(high_value)
+            if low_note == 0 then low_note = "Root" end
+            if high_note == 0 then high_note = "Root" end
+            tooltip:show("Notes " .. high_note .. " to " .. low_note)
+        end
     end
   )
 end

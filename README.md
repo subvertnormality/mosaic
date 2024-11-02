@@ -298,7 +298,7 @@ Switch between the four sets of 16 steps using the dedicated buttons.
 
 <!-- ![16 step selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_16_selector.png) -->
 
-Aim for higher pitches or dive deeper with the octave select buttons, expanding your melodic range.
+Aim for higher or lower pitches with the octave select buttons, expanding your melodic range. A single press of the end buttons in this trio steps up and down by one step. Long press these to quickly navigate to the pages at the extremes. A single press of the middle button gets you back to the page with the root note on the bottom row.
 
 <!-- ![Melodic range selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_octave_selector.png) -->
 
@@ -312,7 +312,7 @@ On the Norns screen, you'll find the channel grid visualizer. Use E2 to select t
 
 Now let's look at the velocity editor, which functions similarly to the note page. Access it by pressing the fifth button in the global menu cluster.
 
-The velocity editor spans two vertical pages: the first displays velocities from 127 down to 67, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence.
+The velocity editor spans two vertical pages: the first displays velocities from 127 down to 67, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.
 
 On the Norns screen, you can see the channel grid visualizer. Use E2 to select the current channel.
 

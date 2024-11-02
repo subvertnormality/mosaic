@@ -18,46 +18,54 @@ function vertical_fader:draw()
   local x = self.x - self.horizontal_offset
 
   if (x < 1 or x > 16) then
-    return
+      return
   end
 
   local bright_mod = 0
   local shared_bright_mod = -1
 
   if program.get_blink_state() then
-    shared_bright_mod = 1
+      shared_bright_mod = 1
   else
-    shared_bright_mod = -1
+      shared_bright_mod = -1
   end
 
-
   for i = self.y, 7 do
-    bright_mod = 0
+      bright_mod = 0
 
-    if x == program.get().selected_pattern then
-      if i == 1 then
-        bright_mod = shared_bright_mod
+      if x == program.get().selected_pattern then
+          if i == 1 then
+              bright_mod = shared_bright_mod
+          end
       end
-    end
-    if (i == math.abs(7 - self.vertical_offset)) then
-      grid_abstraction.led(x, i, 3 + bright_mod) -- mark the bottom of each page
-    elseif ((i == 7) and (math.abs(7 - self.vertical_offset) == 0)) then
-      grid_abstraction.led(x, i, 4 + bright_mod) -- mark the zero line stronger
-    elseif (self.size - i - self.vertical_offset + 1 > 0) then
-      grid_abstraction.led(x, i, self.led_brightness + bright_mod)
-    end
+
+      -- Calculate reference line position based on whether we're in positive or negative notes
+      local reference_line
+      if self.vertical_offset <= 7 then
+          reference_line = math.abs(7 - self.vertical_offset)
+      else -- this is imperfect as it's hard coded for our two usecases, but it works for now
+          reference_line = self.vertical_offset % 7 == 0 and 7 or nil
+      end
+
+      if (i == reference_line) then
+          grid_abstraction.led(x, i, 3 + bright_mod) -- mark the bottom of each page
+      elseif ((i == 7) and (self.vertical_offset == 7)) then
+          grid_abstraction.led(x, i, 4 + bright_mod) -- mark the zero line stronger
+      elseif (self.size - i - self.vertical_offset + 1 > 0) then
+          grid_abstraction.led(x, i, self.led_brightness + bright_mod)
+      end
   end
 
   local active_led = self.y + self.value - 1 - self.vertical_offset
   if (self.value > 0 and active_led < 8) then
-    if self.x == program.get().selected_pattern then
-      if self.y == active_led then
-        bright_mod = shared_bright_mod
-      else
-        bright_mod = 0
+      if self.x == program.get().selected_pattern then
+          if self.y == active_led then
+              bright_mod = shared_bright_mod
+          else
+              bright_mod = 0
+          end
       end
-    end
-    grid_abstraction.led(x, active_led, 12 + bright_mod)
+      grid_abstraction.led(x, active_led, 12 + bright_mod)
   end
 end
 
