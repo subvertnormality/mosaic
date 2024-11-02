@@ -38,6 +38,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Adding Trig Masks](#adding-trig-masks)
       - [Adding Melodic Notes over Harmony and Drums](#adding-melodic-notes-over-harmony-and-drums)
       - [Adding Chords](#adding-chords)
+      - [Removing Masks](#removing-masks)
       - [MIDI Input](#midi-input)
     + [Merge Modes](#merge-modes)
       - [Trig Merge Modes](#trig-merge-modes)
@@ -98,7 +99,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
   * [Sinfonion Connect](#sinfonion-connect)
   * [LFOs and Modulation](#lfos-and-modulation)
 - [Development](#development)
-- [Device Config Template](#device-config-template)
+- [Device Config Creator](#device-config-creator)
 
 ## Getting Started
 
@@ -135,7 +136,7 @@ This allows you to easily access and use only your preferred devices within Mosa
 
 Once you've copied the stock device configuration files into the `data > mosaic > config` folder, you can also personalize these configurations to better suit your setup. This is particularly useful for setting common defaults like the MIDI output device.
 
-You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a [device config template](#device-config-template) customised to match your device’s MIDI specifications.
+You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device’s MIDI specifications. You can use the [config file creator](#device-config-creator) to assist you with this.
 
 ##### Mods and Software Devices
 
@@ -370,7 +371,7 @@ With masking, you have the flexibility to modify individual attributes of a patt
 
 ##### Adding Trig Masks
 
-You can quickly add trig masks to your sequence by shift pressing (hold K3) the desired step on the sequencer on the channel edit page. Remember to asign a note mask, velocity mask and length mask to hear your desired note!
+You can quickly add trig masks to your sequence by shift pressing (hold K3) the desired step on the sequencer on the channel edit page. Remember to asign a note mask, velocity mask and length mask to hear your desired note! You can also quickly remove notes this way.
 
 ##### Adding Melodic Notes over Harmony and Drums
 
@@ -383,6 +384,10 @@ You can apply masks to all steps in a channel by setting the mask value without 
 Chords can be seamlessly integrated into your sequence using masks. You can add up to four additional voices to the root note, provided that your selected device supports polyphony. To do this, make sure you are on the masks page of your Norns. Then, hold the desired step and select each note you want to include in the chord.
 
 Additionally, take advantage of the chord trig params to enhance your musical expression. Experiment with the "[chord strum](#chord-strum)" and "[chord velocity modifier](#chord-velocity-modifier)" trig parameters to vary the playback dynamics and timing of each chord component. These tools allow you to create more nuanced and dynamic chord progressions, adding depth to your compositions.
+
+##### Removing Masks
+
+To remove a mask from a step, navigate to the mask page in the channel editor with your desired channel selected, hold down the step with the mask-to-be-removed, and press K2. To remove all masks on a channel, hold shift (K3) and press K2.
 
 ##### MIDI Input
 
@@ -595,15 +600,15 @@ Device parameters can be locked on a per-step basis. To set a param trig lock:
 1. Hold down the step you want to modify on the channel page sequencer.
 2. Adjust the param value that you want to lock to this step.
 
-To clear a specific param trig lock:
+To clear parameter trig locks from a specific step:
 
-1. On the Norns screen, select the parameter you want to unlock.
-2. Hold the step where the param is locked and press K3.
+1. On the channel editor, navigate to the trig lock page on the Norns screen.
+2. Hold the step with trig locks and press K2.
 
-To clear all param trig locks from a step:
+To clear all parameter trig locks from a channel:
 
-1. Ensure you are on the trig param page on your norns device.
-2. Hold the step you want to clear all param trig locks from.
+1. Ensure you are on the trig lock page on your norns device.
+2. Hold K3.
 3. Press K2.
 
 ### Mask Locks
@@ -613,15 +618,15 @@ Masks can also be locked on a per-step basis. To set a mask trig lock:
 1. Hold down the step you want to modify on the channel page sequencer.
 2. Adjust the mask value that you want to lock to this step.
 
-To clear a specific mask trig lock:
+To clear mask locks from a specific step:
 
-1. On the Norns screen, select the mask you want to unlock.
-2. Hold the step where the mask is locked and press K3.
+1. On the channel editor, navigate to the Masks page on the Norns screen..
+2. Hold the step with mask locks and press K2.
 
-To clear all mask trig locks from a step:
+To clear all mask trig locks from a channel:
 
 1. Ensure you are on the Mask page on your norns device.
-2. Hold the step you want to clear all mask locks from.
+2. Hold K3.
 3. Press K2.
 
 ### Scale Locks
@@ -634,7 +639,7 @@ Scales can be set on a per-step basis. They can be set globally across all chann
 To clear a grid trig lock:
 
 1. Hold the step with the locked value.
-2. Press the value that is currently locked to unlock it.
+2. Press K2.
 
 ### Transposition Locks
 
@@ -648,7 +653,7 @@ To set a transposition lock:
 To clear a transposition lock:
 
 1. Hold the step with the locked value.
-2. Select the currently selected lock value.
+2. Press K2.
 
 ### Octave Locks
 
@@ -660,7 +665,7 @@ A step's current octave can be altered using trig locks. To lock a step's octave
 To clear an octave trig lock:
 
 1. Hold the step with the locked value.
-2. Press the value that is currently locked to unlock it.
+2. Press K2.
 
 ## Save and Load
 
@@ -762,55 +767,9 @@ Make sure that the tests are passing before you open a PR.
 
 Do not run the tests on your Norns device as you'll end up pulling in the Norns repository onto your device and it'll cause a conflict. If you do this by accident, simply delete `/code/mosaic/lib/tests/test_artefacts` to get your Norns back up and running.
 
-## Device Config Template
+## Device Config Creator
 
-If copying the below code, you must exclude all text appearing after "//"
-
-```javascript
-[{
-  "params": [
-    {
-      "cc_msb": 7, // the MIDI CC number to send the command on.
-      "name": "Level", // the name representing this param.
-      "cc_max_value": 127, // the maximum value that can be sent over MIDI.
-      "short_descriptor_1": "AMP", // the label that identifies the trigger param in _Mosaic_ at the top of the dial.
-      "short_descriptor_2": "LVL", // the label that identifies the trigger param in _Mosaic_ at the bottom of the dial.
-      "id": "level", // the unique ID of the param.
-      "off_value": -1, // the value that determines when the param is off, usually -1.
-      "cc_min_value": -1 // the lower value of the MIDI param, usually -1.
-    },
-    { // here a specially sequencer param "fixed note" is used to lock the note to a certain MIDI note value, which is useful for some drum devices in combination with "maps_params_automatically".
-      "short_descriptor_2": "NOTE",
-      "name": "Fixed Note",
-      "cc_max_value": 127,
-      "default": 36, // the MIDI device will only send out the value 36, regardless of note assignment.
-      "cc_min_value": -1,
-      "short_descriptor_1": "FIXD",
-      "off_value": -1,
-      "id": "fixed_note" // this identifies the param as a special "fixed note" sequencer trig param.
-    }
-  ],
-  "type": "midi", // mandatory: leave as MIDI for custom devices.
-  "unique": true, // mandatory: true if you only allow one instance of this device in use at one time, false allows multiple instances.
-  "map_params_automatically": [
-    "source_parameters_source_tune",
-    "source_parameters_source_play_mode",
-    "fx_parameters_sample_rate_reduction",
-    "src_sample_select",
-    "source_parameters_data_E",
-    "filter_parameters_filter_frequency",
-    "filter_parameters_filter_env_depth",
-    "lfo1_parameters_lfo_depth",
-    "lfo1_parameters_lfo_speed",
-    "amp_parameters_amp_pan"
-  ], // optional: params matching the contained IDs are mapped and assigned on the device's channel trig parameters.
-  "polyphonic": false, // mandatory: true if more than one note can be played at once on the device.
-  "value": 8, // mandatory: arbitrary value, choose any number.
-  "default_midi_device": 1, // optional: use this to set a default MIDI output device. When in use it will no longer be possible to change the output device in _Mosaic_.
-  "default_midi_channel": 10, // optional: use this to set a default MIDI output channel. When in use it will no longer be possible to change the output channel in _Mosaic_.
-  "name": "Your device", // mandatory: the name used to identify the device in _Mosaic_.
-  "id": "a-unique-id" // mandatory: the ID used to identify the device in _Mosaic_. Must be unique.
-}]
+You can create, load and edit midi device config files using the Mosaic Config Creator [TODO: Add link].
 ```
 
 
