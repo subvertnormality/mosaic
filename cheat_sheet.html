@@ -1,3 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      font-size: 11px;
+      line-height: 1.3;
+    }
+    h1 { 
+      font-size: 18px;
+      margin: 15px 0;
+      text-align: center;
+    }
+    h2 {
+      font-size: 13px;
+      margin: 10px 0 5px 0;
+      color: #444;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 3px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .section {
+      border: 1px solid #ddd;
+      padding: 8px;
+      border-radius: 4px;
+    }
+    .command {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .command img {
+      margin-right: 8px;
+      flex-shrink: 0;
+      width: 80px;
+    }
+    .command-text {
+      flex: 1;
+      min-width: 0;
+    }
+    .merge-modes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px;
+      font-size: 10px;
+      margin-top: 8px;
+    }
+    .merge-mode {
+      padding: 3px;
+      background: #f5f5f5;
+      border-radius: 2px;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 15px;
+      background: #1f232b;
+      padding: 20px;
+      border-radius: 4px;
+    }
+    .logo svg {
+      height: auto;
+      width: 180px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 9px;
+      color: #666;
+      margin-top: 10px;
+      border-top: 1px solid #eee;
+      padding-top: 5px;
+    }
+    .masks-section {
+      grid-column: span 2;
+      margin-top: 15px;
+    }
+    .masks-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 10px;
+    }
+    .mask-type {
+      background: #f5f5f5;
+      padding: 4px 8px;
+      border-radius: 3px;
+      margin-bottom: 5px;
+    }
+    ul {
+      margin: 5px 0;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <svg viewBox="0 0 707.08154 569.32043" width="200">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    width="707.08154"
@@ -617,3 +725,199 @@
      fill="#1f232b"
      id="path277" />
 </svg>
+
+    </svg>
+  </div>
+  <div class="grid">
+    <div class="section">
+      <h2>Global Navigation</h2>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-play-stop-button.svg" width="80" />
+        <div class="command-text">Start/Stop: Bottom-left button (hold/shift for stop)</div>
+      </div>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-channel-editor-select-button.svg" width="80" />
+        <div class="command-text">Channel Editor: First menu button</div>
+      </div>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-scale-editor-select-button.svg" width="80" />
+        <div class="command-text">Scale Editor: Second menu button</div>
+      </div>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-pattern-editor-select-button.svg" width="80" />
+        <div class="command-text">Pattern Editor: Third button (press to cycle views)</div>
+      </div>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-song-editor-select-button.svg" width="80" />
+        <div class="command-text">Song Editor: Fourth menu button</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Channel Editor Controls</h2>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-select-buttons.svg" width="80" />
+        <div class="command-text">Select Channel: Top row (hold/shift-press to mute)</div>
+      </div>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/pattern-assign-buttons.svg" width="80" />
+        <div class="command-text">Assign Pattern: Second row buttons</div>
+      </div>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-sequencer-step-buttons.svg" width="80" />
+        <div class="command-text">Set Length: Hold start step, press end step</div>
+      </div>
+      <h2>Merge Modes</h2>
+      <div class="merge-modes">
+        <div class="merge-mode">Trig: All/Skip/Only</div>
+        <div class="merge-mode">Note: Avg/High/Low/Pattern</div>
+        <div class="merge-mode">Velocity: Avg/High/Low/Pattern</div>
+        <div class="merge-mode">Length: Avg/Long/Short/Pattern</div>
+      </div>
+    </div>
+  </div>
+
+<div class="section">
+  <h2>Pattern Editor</h2>
+  <div class="command">
+    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-select-buttons.svg" width="80" />
+    <div class="command-text">Pattern Select: Top row buttons (1-16)</div>
+  </div>
+  <div class="command">
+    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="80" />
+    <div class="command-text">Algorithm Select: Drums, Tresillo, Euclidean, NE</div>
+  </div>
+  <div class="command">
+    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/arm-paint-button.svg" width="80" />
+    <div class="command-text">Prime/Paint: Preview then commit changes</div>
+  </div>
+  <div class="command">
+    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-select-fader.svg" width="80" />
+    <div class="command-text">Pattern Select: Fine/coarse control for algorithm</div>
+  </div>
+  <div class="command">
+    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-2-select-fader.svg" width="80" />
+    <div class="command-text">Pattern Param: Secondary algorithm parameter</div>
+  </div>
+  <div class="command">
+    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg" width="80" />
+    <div class="command-text">Bank Select: Choose pattern bank/variation</div>
+  </div>
+  <div class="command">
+    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg" width="80" />
+    <div class="command-text">Move: Shift pattern left/right, reset position</div>
+  </div>
+  <div class="command">
+    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg" width="80" />
+    <div class="command-text">Cancel: Discard primed changes</div>
+  </div>
+</div>
+
+    <div class="section">
+      <h2>Scale Editor</h2>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg" width="80" />
+        <div class="command-text">Scale Select: Quick press to apply, hold to edit</div>
+      </div>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg" width="80" />
+        <div class="command-text">Scale Lock: Hold step + press scale button</div>
+      </div>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/transposition-fader.svg" width="80" />
+        <div class="command-text">Transpose: Global or per-step using locks</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="section">
+      <h2>Song Editor</h2>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-pattern-slot-button.svg" width="80" />
+        <div class="command-text">Slots: Press to select, hold source + press target to copy</div>
+      </div>
+      <div class="command">
+        <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-slot-pattern-length-fader.svg" width="80" />
+        <div class="command-text">Length: Adjust sequence length (1-64 steps)</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Essential Shortcuts</h2>
+      <ul>
+        <li><strong>Norns Controls:</strong>
+          <ul>
+            <li>E1: Navigate pages</li>
+            <li>E2: Select parameters</li>
+            <li>E3: Adjust values (hold K3 for fine control)</li>
+            <li>K2 + step: Clear locks on step</li>
+            <li>K3 + K2: Clear all locks on channel</li>
+          </ul>
+        </li>
+        <li><strong>Trig Locks:</strong>
+          <ul>
+            <li>Hold step + turn E3: Create parameter lock</li>
+            <li>Hold step + press scale: Create scale lock</li>
+            <li>Hold step + press transpose: Create transpose lock</li>
+		<li>Hold step + press octave: Create octave lock</li>
+          </ul>
+        </li>
+        <li><strong>Masks:</strong>
+          <ul>
+            <li>Hold K3 + press step: Add/remove trig mask</li>
+            <li>Hold step on mask page: Set note/velocity/length</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="masks-section">
+    <div class="section">
+      <h2>Complete Masks Reference</h2>
+      <div class="masks-grid">
+        <div>
+          <strong>Quick Operations</strong>
+          <ul>
+            <li>Add/Remove Trig: Hold K3 + press step</li>
+            <li>Clear Step: Hold step + K2</li>
+            <li>Clear All: Hold K3 + K2</li>
+            <li>Global Set: Press without holding step</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Mask Types</strong>
+          <div class="mask-type">Trig: Enable/disable steps</div>
+          <div class="mask-type">Note: Override pattern notes</div>
+          <div class="mask-type">Velocity: Set specific velocities</div>
+          <div class="mask-type">Length: Control note duration</div>
+        </div>
+        <div>
+          <strong>Chord Operations</strong>
+          <ul>
+            <li>Add Chord: Hold step + select up to 4 notes</li>
+            <li>Strum Control: Use with Chord Strum param</li>
+            <li>Velocity: Use Chord Velocity modifier</li>
+            <li>Shape: Use Chord Shape modifier</li>
+          </ul>
+        </div>
+        <div>
+          <strong>MIDI Integration</strong>
+          <ul>
+            <li>Set Note: Hold step + press MIDI key</li>
+            <li>Preview: Play without holding step</li>
+            <li>Scale Map: White keys follow current scale</li>
+            <li>Real-time: Input during playback</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    MIDI Panic: Hold unused navigation button • Hold buttons to see tooltips on Norns • Song Mode: Auto-advances through filled slots • Autosave occurs after 60s when not playing
+  </div>
+
+</body>
+</html>
