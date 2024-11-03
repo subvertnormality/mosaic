@@ -47,14 +47,16 @@
       flex: 1;
       min-width: 0;
     }
-    .merge-modes {
+
+    .merge-modes, .locks {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 5px;
       font-size: 10px;
       margin-top: 8px;
     }
-    .merge-mode {
+
+    .merge-mode, .lock {
       padding: 3px;
       background: #f5f5f5;
       border-radius: 2px;
@@ -101,9 +103,64 @@
     li {
       margin-bottom: 3px;
     }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+    }
+
+    .modal-content svg {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 80vh;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #1f232b;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .command img {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .command img:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
+   <div id="imageModal" class="modal">
+      <div class="modal-content">
+        <button class="close-button">X</button>
+        <div id="modalImage"></div>
+      </div>
+    </div>
   <div class="logo">
     <svg viewBox="0 0 707.08154 569.32043" width="200">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -733,7 +790,7 @@
       <h2>Global Navigation</h2>
       <div class="command">
         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-play-stop-button.svg" width="80" />
-        <div class="command-text">Start/Stop: Bottom-left button (hold/shift for stop)</div>
+        <div class="command-text">Start/Stop: Bottom-left button. Press to play. Press again to stop.</div>
       </div>
       <div class="command">
         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-channel-editor-select-button.svg" width="80" />
@@ -761,8 +818,12 @@
       </div>
       <div class="command">
         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/pattern-assign-buttons.svg" width="80" />
-        <div class="command-text">Assign Pattern: Second row buttons</div>
+        <div class="command-text">Assign Pattern: Second row buttons. Multiple patterns can be assigned to one or more channels.</div>
       </div>
+      <div class="command">
+         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/active-scale-slot-visualiser.svg" width="80" />
+         <div class="command-text">Scale slots: Displays currently active scale slot.</div>
+       </div>
       <div class="command">
         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-sequencer-step-buttons.svg" width="80" />
         <div class="command-text">Set Length: Hold start step, press end step</div>
@@ -774,11 +835,19 @@
         <div class="merge-mode">Velocity: Avg/High/Low/Pattern</div>
         <div class="merge-mode">Length: Avg/Long/Short/Pattern</div>
       </div>
+      <h2>Locks</h2>
+      <div class="locks">
+        <div class="lock">Trig Locks: Hold step, modify desired trig param</div>
+        <div class="lock">Mask Lock: Hold step, modify desired mask</div>
+        <div class="lock">Octave Lock: Hold step, press desired octave</div>
+        <div class="lock">Channel Scale Lock: Hold step, press desired scale slot. Scale is applied to this channel only on selected step.</div>
+      </div>
     </div>
   </div>
-
+  <div class="grid">
 <div class="section">
   <h2>Pattern Editor</h2>
+  
   <div class="command">
     <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-select-buttons.svg" width="80" />
     <div class="command-text">Pattern Select: Top row buttons (1-16)</div>
@@ -788,9 +857,10 @@
     <div class="command-text">Algorithm Select: Drums, Tresillo, Euclidean, NE</div>
   </div>
   <div class="command">
-    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/arm-paint-button.svg" width="80" />
-    <div class="command-text">Prime/Paint: Preview then commit changes</div>
-  </div>
+   <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg" width="80" />
+   <div class="command-text">Bank Select: Choose pattern bank/variation</div>
+ </div>
+
   <div class="command">
     <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-select-fader.svg" width="80" />
     <div class="command-text">Pattern Select: Fine/coarse control for algorithm</div>
@@ -800,24 +870,25 @@
     <div class="command-text">Pattern Param: Secondary algorithm parameter</div>
   </div>
   <div class="command">
-    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg" width="80" />
-    <div class="command-text">Bank Select: Choose pattern bank/variation</div>
-  </div>
+   <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/arm-paint-button.svg" width="80" />
+   <div class="command-text">Prime/Paint: Preview then commit changes</div>
+ </div>
+ <div class="command">
+  <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg" width="80" />
+  <div class="command-text">Cancel: Discard primed changes</div>
+</div>
   <div class="command">
     <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg" width="80" />
     <div class="command-text">Move: Shift pattern left/right, reset position</div>
   </div>
-  <div class="command">
-    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg" width="80" />
-    <div class="command-text">Cancel: Discard primed changes</div>
-  </div>
+
 </div>
 
     <div class="section">
       <h2>Scale Editor</h2>
       <div class="command">
         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg" width="80" />
-        <div class="command-text">Scale Select: Quick press to apply, hold to edit</div>
+        <div class="command-text">Scale Select: Quick press to apply global scale, hold to edit without applying scale</div>
       </div>
       <div class="command">
         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg" width="80" />
@@ -827,8 +898,18 @@
         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/transposition-fader.svg" width="80" />
         <div class="command-text">Transpose: Global or per-step using locks</div>
       </div>
-    </div>
+      <h2>Locks</h2>
+      <div class="locks">
+         <div class="lock">Scale Lock: Hold step, press desired scale slot. Lock applies globally on this step.</div>
+         <div class="lock">Transposition Lock: Hold step, select desired transposition using the transposition fader. Applies transposition on top of current scale values.</div>  
+       </div>
+       
+      <h2>Scale precedence</h2>
+      Scale locks applied per channel in the channel editor > Scale locks applied globally in the scale editor > Global scale selection
+
+   </div>
   </div>
+</div>
 
   <div class="grid">
     <div class="section">
@@ -851,8 +932,8 @@
             <li>E1: Navigate pages</li>
             <li>E2: Select parameters</li>
             <li>E3: Adjust values (hold K3 for fine control)</li>
-            <li>K2 + step: Clear locks on step</li>
-            <li>K3 + K2: Clear all locks on channel</li>
+            <li>K2 + step: Clear locks of type based on currently selected page on step</li>
+            <li>K3 + K2: Clear all locks of type based on currently selected page on channel</li>
           </ul>
         </li>
         <li><strong>Trig Locks:</strong>
@@ -860,7 +941,7 @@
             <li>Hold step + turn E3: Create parameter lock</li>
             <li>Hold step + press scale: Create scale lock</li>
             <li>Hold step + press transpose: Create transpose lock</li>
-		<li>Hold step + press octave: Create octave lock</li>
+		      <li>Hold step + press octave: Create octave lock</li>
           </ul>
         </li>
         <li><strong>Masks:</strong>
@@ -875,15 +956,18 @@
 
   <div class="masks-section">
     <div class="section">
-      <h2>Complete Masks Reference</h2>
+      <h2Further Reference</h2>
       <div class="masks-grid">
         <div>
           <strong>Quick Operations</strong>
           <ul>
             <li>Add/Remove Trig: Hold K3 + press step</li>
-            <li>Clear Step: Hold step + K2</li>
+            <li>Clear Lock: Hold step + K2</li>
             <li>Clear All: Hold K3 + K2</li>
             <li>Global Set: Press without holding step</li>
+            <li>Change param on trig lock page: select param and press K2 to view param list.</li>
+            <li>Save action: K3</li>
+            <li>Cancel action: K2</li>
           </ul>
         </div>
         <div>
@@ -892,14 +976,18 @@
           <div class="mask-type">Note: Override pattern notes</div>
           <div class="mask-type">Velocity: Set specific velocities</div>
           <div class="mask-type">Length: Control note duration</div>
+          <div class="mask-type">Chord: Add a chord note to trig relative to current scale</div>
         </div>
         <div>
           <strong>Chord Operations</strong>
           <ul>
             <li>Add Chord: Hold step + select up to 4 notes</li>
             <li>Strum Control: Use with Chord Strum param</li>
-            <li>Velocity: Use Chord Velocity modifier</li>
-            <li>Shape: Use Chord Shape modifier</li>
+            <li>Velocity: Use Chord Velocity modifier param</li>
+            <li>Shape: Use Chord Shape modifier param</li>
+            <li>Spread: Use spread param to space chord notes</li>
+            <li>Acceleration: Use acceleration param with spread param to create irregular spacing between chords</li>
+            <li>Arpeggio: Use chord arpeggio param to create arpeggios across the length of the current trig</li>
           </ul>
         </div>
         <div>
@@ -919,5 +1007,57 @@
     MIDI Panic: Hold unused navigation button / Autosave occurs after 60s when not playing
   </div>
 
+  <script>
+   // Make all command images clickable
+   document.querySelectorAll('.command img').forEach(img => {
+     img.addEventListener('click', function() {
+       showModal(this.src);
+     });
+   });
+
+   // Modal functionality
+   const modal = document.getElementById('imageModal');
+   const modalImage = document.getElementById('modalImage');
+   const closeBtn = document.querySelector('.close-button');
+
+   function showModal(imgSrc) {
+     // Fetch the SVG content
+     fetch(imgSrc)
+       .then(response => response.text())
+       .then(svgContent => {
+         modalImage.innerHTML = svgContent;
+         modal.style.display = 'flex';
+         
+         // Ensure the SVG in modal is larger
+         const modalSvg = modalImage.querySelector('svg');
+         if (modalSvg) {
+           modalSvg.style.width = '400px'; // Larger size in modal
+           modalSvg.style.height = 'auto';
+         }
+       })
+       .catch(error => {
+         console.error('Error loading SVG:', error);
+       });
+   }
+
+   // Close modal when clicking close button
+   closeBtn.addEventListener('click', () => {
+     modal.style.display = 'none';
+   });
+
+   // Close modal when clicking outside
+   window.addEventListener('click', (event) => {
+     if (event.target === modal) {
+       modal.style.display = 'none';
+     }
+   });
+
+   // Close modal with Escape key
+   document.addEventListener('keydown', (event) => {
+     if (event.key === 'Escape') {
+       modal.style.display = 'none';
+     }
+   });
+ </script>
 </body>
 </html>

@@ -413,7 +413,7 @@ To remove a mask from a step, navigate to the mask page in the channel editor wi
 
 You can input notes, velocity, and chords using a MIDI keyboard. However, setting the length of these inputs requires manual selection. To do this, ensure you have your desired channel selected on _Mosaic_. Then, while holding the desired step, press the corresponding key on your keyboard. If you are on the mask page of your Norns, the values you input will display as trig locks.
 
-To preview notes before committing them to your sequence, simply press the keys on your keyboard without holding down a step. This method ensures that changes are only made when you explicitly hold down a step, preventing accidental inputs.
+To preview notes before committing them to your sequence, simply press the keys on your keyboard without holding down a step.
 
 By default, the keyboard maps the steps to the currently selected scale on the white keys, with the root note of your selected scale starting from C. You can adjust this mapping in the settings of Mosaic to better suit your musical preferences or project requirements.
 
@@ -442,7 +442,7 @@ These modes determine how note values are handled when steps overlap:
 * **Average**: The note value for overlapping steps is the average of those steps' values in each pattern, subsequently quantized.
 * **Higher**: The highest note value from overlapping steps is used after calculating the average and adjusting by subtracting the lowest and adding the highest note value, followed by quantization.
 * **Lower**: The lowest note value is used after calculating the average and subtracting the lowest note value from the average, followed by quantization.
-* **Pattern**: To prioritize a specific pattern's note values during conflicts, hold the note merge button and select the desired pattern.
+* **Pattern**: To prioritize a specific pattern's note values during conflicts, hold the note merge button and select the desired pattern. You can even select patterns that aren't current asigned to the active channel.
 
 By default, notes will snap to the pentatonic version of the currently active scale to assist with avoiding unpleasant harmonic interactions. This can be disabled in _Mosaic_'s settings.
 
