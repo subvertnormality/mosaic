@@ -8,13 +8,14 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Stock Devices](#stock-devices)
       - [Custom Devices](#custom-devices)
       - [Mods and Software Devices](#mods-and-software-devices)
+  * [Getting Around Mosaic](#getting-around-mosaic)
+    + [Sequencer Start and Stop](#sequencer-start-and-stop)
+    + [Grid Menu Navigation](#grid-menu-navigation)
+    + [Norns Menu Navigation](#norns-menu-navigation)
+    + [Tooltips](#tooltips)
+    + [MIDI Panic](#midi-panic)
+        + [Cheat Sheet](#cheat-sheet)
   * [Typical Workflow](#typical-workflow)
-    + [Getting Around Mosaic](#getting-around-mosaic)
-      - [Sequencer Start and Stop](#sequencer-start-and-stop)
-      - [Grid Menu Navigation](#grid-menu-navigation)
-      - [Norns Menu Navigation](#norns-menu-navigation)
-      - [Tooltips](#tooltips)
-      - [MIDI Panic](#midi-panic)
     + [Sound Design](#sound-design)
     + [Rhythm Section Design](#rhythm-section-design)
     + [Harmony Design](#harmony-design)
@@ -142,19 +143,16 @@ You can customize Mosaic to perfectly align with your studio setup by configurin
 
 Mosaic can also use internal Norns sound sources and manage devices like Crow, Just Friends, and Ansible via i2c by installing [n.b.](https://github.com/sixolet/nb/) mods. These mods will appear in Mosaic's device list once installed and activated in the Norns settings menu. Ensure the n.b. mod is on the allow list to use with Mosaic. See [Norns sound sources with n.b.](#norns-sound-sources-with-nb) for more information.
 
-## Typical Workflow
 
-This section provides an overview of Mosaic's functionality and basic operations, outlining a typical workflow for song creation. Here, we present a broad perspective without going into the operational specifics. For more detailed information on navigating through the user interface, understanding precise functionalities, exploring options, and more, please refer to the [Dig Deeper](#dig-deeper) section. This should allow you to grasp the essential processes first, setting a solid foundation for more advanced exploration later.
+## Getting Around Mosaic
 
-### Getting Around Mosaic
-
-#### Sequencer Start and Stop
+### Sequencer Start and Stop
 
 To start the sequencer, press the lowest left hand button on the grid. To stop the sequencer, press the button again.
 
 <img alt="Mosaic grid start-stop button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-play-stop-button.svg" width="300" />
 
-#### Grid Menu Navigation
+### Grid Menu Navigation
 
 The four buttons starting from the third column on the lowest row serve as the global menu buttons. From left to right, these buttons allow access to the [Channel Editor](#channel-editor) and [Scale Editor](#scale-editor):
 
@@ -175,19 +173,27 @@ The pattern editor button cycles through three pages, accessible by pressing the
 
 
 
-#### Norns Menu Navigation
+### Norns Menu Navigation
 
 Further configuration happens on Norns. Each _Mosaic_ grid page has a group of pages on the Norns screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you navigate away from the page without applying, the change will be cancelled.
 
 For a detailed reference on the layout of your Norns device, consult the official [Norns documentation](https://monome.org/docs/norns/).
 
-#### Tooltips
+### Tooltips
 
 Most _Mosaic_ functions are described by tooltips that appear at the bottom of the Norns screen when activated. If you're not sure what a button does, try pressing it and watching out for the tooltip.
 
-#### MIDI Panic
+### MIDI Panic
 
 Should your MIDI output devices become unresponsive, you can clear all MIDI-on events by holding down the navigation button of a non-selected page. This action will send a stop signal to all devices, on all channels, for all notes.
+
+### Cheat Sheet
+
+A quick reference of the grid buttons and common commands and shortcuts can be found in the [Mosaic Cheat Sheet]() TODO: add link.
+
+## Typical Workflow
+
+This section provides an overview of Mosaic's functionality and basic operations, outlining a typical workflow for song creation. Here, we present a broad perspective without going into the operational specifics. For more detailed information on navigating through the user interface, understanding precise functionalities, exploring options, and more, please refer to the [Dig Deeper](#dig-deeper) section. This should allow you to grasp the essential processes first, setting a solid foundation for more advanced exploration later.
 
 ### Sound Design
 
