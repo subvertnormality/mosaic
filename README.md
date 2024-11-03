@@ -6,7 +6,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
     + [Hardware](#hardware)
     + [MIDI Device Configuration](#midi-device-configuration)
       - [Stock Devices](#stock-devices)
-      - [Custom Devices](#custom-devices)
+      - [Adding Custom Devices](#adding-custom-devices)
       - [Mods and Software Devices](#mods-and-software-devices)
   * [Getting Around Mosaic](#getting-around-mosaic)
     + [Sequencer Start and Stop](#sequencer-start-and-stop)
@@ -14,7 +14,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
     + [Norns Menu Navigation](#norns-menu-navigation)
     + [Tooltips](#tooltips)
     + [MIDI Panic](#midi-panic)
-        + [Cheat Sheet](#cheat-sheet)
+    + [Cheat Sheet](#cheat-sheet)
   * [Typical Workflow](#typical-workflow)
     + [Sound Design](#sound-design)
     + [Rhythm Section Design](#rhythm-section-design)
@@ -122,7 +122,7 @@ For those using an ACL Sinfonion, support is available through a straightforward
 
 ##### Stock Devices
 
-Mosaic includes a range of stock devices that you can integrate into your setup. Elektron Digitone, Digitakt 2, Syntakt, and the Nord Drum 2 are first class citizens with fully tailored mappings.
+Mosaic includes a range of stock midi devices that you can integrate into your setup. Elektron Digitone, Digitakt 2, Syntakt, and the Nord Drum 2 are first class citizens with fully tailored mappings.
 
 First, they need to be configured to appear in the device selector. Here’s how to set this up using [maiden](https://monome.org/docs/norns/maiden/):
 
@@ -133,11 +133,11 @@ First, they need to be configured to appear in the device selector. Here’s how
 
 This allows you to easily access and use only your preferred devices within Mosaic.
 
-##### Custom Devices
+##### Adding Custom Devices
 
 Once you've copied the stock device configuration files into the `data > mosaic > config` folder, you can also personalize these configurations to better suit your setup. This is particularly useful for setting common defaults like the MIDI output device.
 
-You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device’s MIDI specifications. You can use the [config file creator](#device-config-creator) to assist you with this.
+You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device’s MIDI specifications. You can create, load and edit midi device config files using the [Mosaic Config Creator](https://subvertnormality.github.io/mosaic/config_creator.html).
 
 ##### Mods and Software Devices
 
@@ -189,7 +189,7 @@ Should your MIDI output devices become unresponsive, you can clear all MIDI-on e
 
 ### Cheat Sheet
 
-A quick reference of the grid buttons and common commands and shortcuts can be found in the [Mosaic Cheat Sheet]() TODO: add link.
+A quick reference of the grid buttons and common commands and shortcuts can be found in the [Mosaic Cheat Sheet](https://subvertnormality.github.io/mosaic/cheat_sheet.html).
 
 ## Typical Workflow
 
@@ -793,12 +793,6 @@ Make sure that the tests are passing before you open a PR.
 ```
 
 Do not run the tests on your Norns device as you'll end up pulling in the Norns repository onto your device and it'll cause a conflict. If you do this by accident, simply delete `/code/mosaic/lib/tests/test_artefacts` to get your Norns back up and running.
-
-## Device Config Creator
-
-You can create, load and edit midi device config files using the Mosaic Config Creator [TODO: Add link].
-```
-
 
 
 This program is released under the GNU license. Copyright Andrew Hillel 2024.
