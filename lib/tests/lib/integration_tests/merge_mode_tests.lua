@@ -1939,3 +1939,411 @@ function test_velocity_merge_modes_up()
   luaunit.assert_equals(note_on_event[3], 1)
 
 end
+
+function test_trig_merge_modes_with_inactive_patterns()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  
+  -- Set up patterns with different trigs
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.trig_values[1] = 1
+  test_pattern.trig_values[4] = 1
+  test_pattern.trig_values[7] = 1
+  
+  local test_pattern_2 = program.initialise_default_pattern()
+  test_pattern_2.trig_values[1] = 1
+  test_pattern_2.trig_values[7] = 1
+  
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  
+  -- Test with only pattern 1 active
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_channel(1).trig_merge_mode = "skip"
+  pattern_controller.update_working_patterns()
+  
+  clock_setup()
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60)  -- First trig should play
+  
+  progress_clock_by_beats(3)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60)  -- Second trig should play
+  
+  -- Enable second pattern and verify behavior changes
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  pattern_controller.update_working_patterns()
+  
+  progress_clock_by_beats(3)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assertNil(note_on_event)  -- Overlapping trig should be skipped
+end
+
+function test_note_merge_modes_with_octave_shifts()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  
+  -- Create patterns with notes in different octaves
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.trig_values[1] = 1
+  test_pattern.note_values[1] = 0  -- Middle C
+  
+  local test_pattern_2 = program.initialise_default_pattern()
+  test_pattern_2.trig_values[1] = 1
+  test_pattern_2.note_values[1] = 6  -- C one octave up
+  
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  
+  -- Test average mode
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).note_merge_mode = "average"
+  pattern_controller.update_working_patterns()
+  
+  clock_setup()
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65)  -- Should be halfway between 60 and 72
+end
+
+function test_velocity_merge_with_extreme_values()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  
+  -- Create patterns with extreme velocity values
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 127
+  
+  local test_pattern_2 = program.initialise_default_pattern()
+  test_pattern_2.trig_values[1] = 1
+  test_pattern_2.velocity_values[1] = 0
+  
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  
+  -- Test different velocity merge modes with extreme values
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).velocity_merge_mode = "average"
+  pattern_controller.update_working_patterns()
+  
+  clock_setup()
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[2], 64)  -- Should be average of 0 and 127
+end
+
+function test_length_merge_with_multiple_patterns()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  
+  -- Create multiple patterns with different lengths
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.trig_values[1] = 1
+  test_pattern.lengths[1] = 1
+  
+  local test_pattern_2 = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern_2.trig_values[1] = 1
+  test_pattern_2.lengths[1] = 2
+  
+  local test_pattern_3 = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern_3.trig_values[1] = 1
+  test_pattern_3.lengths[1] = 4
+  
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
+  
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
+  
+  -- Test average length merge mode
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).length_merge_mode = "average"
+  pattern_controller.update_working_patterns()
+  
+  clock_setup()
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+
+  progress_clock_by_beats(1)
+
+  local note_off_event = table.remove(midi_note_off_events, 1)
+  luaunit.assert_nil(note_off_event)
+
+  progress_clock_by_beats(1)
+
+  local note_off_event = table.remove(midi_note_off_events, 1)
+  luaunit.assert_equals(note_off_event[1], 60)
+end
+
+function test_combined_merge_modes_integration()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  
+  -- Create patterns with various combinations
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.trig_values[1] = 1
+  test_pattern.note_values[1] = 0
+  test_pattern.velocity_values[1] = 100
+  test_pattern.lengths[1] = 1
+  
+  local test_pattern_2 = program.initialise_default_pattern()
+  test_pattern_2.trig_values[1] = 1
+  test_pattern_2.note_values[1] = 7
+  test_pattern_2.velocity_values[1] = 80
+  test_pattern_2.lengths[1] = 3
+  
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  
+  -- Set different merge modes for each parameter
+  program.get_channel(1).trig_merge_mode = "only"
+  program.get_channel(1).note_merge_mode = "up"
+  program.get_channel(1).velocity_merge_mode = "down"
+  program.get_channel(1).length_merge_mode = "average"
+  
+  pattern_controller.update_working_patterns()
+
+
+  clock_setup()
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 79)  -- Higher note due to up merge
+  luaunit.assert_equals(note_on_event[2], 70)  -- Lower velocity due to down merge
+
+  progress_clock_by_beats(1)
+
+  local note_off_event = table.remove(midi_note_off_events, 1)
+  luaunit.assert_nil(note_off_event)  -- Should be no note off event
+
+  progress_clock_by_beats(1)
+
+  local note_off_event = table.remove(midi_note_off_events, 1)
+  luaunit.assert_equals(note_off_event[1], 79)  -- Should be note off for the higher note
+
+end
+
+function test_pattern_specific_merge_modes()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  
+  -- Create patterns with different values
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.trig_values[1] = 1
+  test_pattern.note_values[1] = 0
+  test_pattern.velocity_values[1] = 100
+  test_pattern.lengths[1] = 1
+  
+  local test_pattern_2 = program.initialise_default_pattern()
+  test_pattern_2.trig_values[1] = 1
+  test_pattern_2.note_values[1] = 7
+  test_pattern_2.velocity_values[1] = 80
+  test_pattern_2.lengths[1] = 2
+  
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  
+  -- Test pattern-specific merging
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).note_merge_mode = "pattern_number_1"
+  program.get_channel(1).velocity_merge_mode = "pattern_number_2"
+  
+  pattern_controller.update_working_patterns()
+  clock_setup()
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60)  -- Should use note from pattern 1
+  luaunit.assert_equals(note_on_event[2], 80)  -- Should use velocity from pattern 2
+end
+
+function test_merge_modes_with_rests()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  
+  -- Create patterns with strategic rests
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.trig_values[1] = 1
+  test_pattern.trig_values[2] = 0  -- Rest
+  test_pattern.trig_values[3] = 1
+  test_pattern.note_values[1] = 0  -- C (60)
+  test_pattern.note_values[3] = 1  -- D (62)
+  
+  local test_pattern_2 = program.initialise_default_pattern()
+  test_pattern_2.trig_values[1] = 0  -- Rest
+  test_pattern_2.trig_values[2] = 1
+  test_pattern_2.trig_values[3] = 1
+  test_pattern_2.note_values[2] = 4  -- G (67)
+  test_pattern_2.note_values[3] = 5  -- A (69)
+  
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).note_merge_mode = "average"
+  pattern_controller.update_working_patterns()
+  
+  clock_setup()
+  
+  -- Check first step (pattern 1 only)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60)  -- C
+  
+  -- Check second step (pattern 2 only)
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 67)  -- G
+  
+  -- Check third step (both patterns)
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  -- Average of note values 1 and 5 = 3, which should play as F (65)
+  luaunit.assert_equals(note_on_event[1], 65)
+end
+
+
+
+function test_note_merge_modes_calculation()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  
+
+
+  -- Create patterns with specific note values
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.trig_values[1] = 1
+  test_pattern.note_values[1] = 0  -- C (60)
+  
+  local test_pattern_2 = program.initialise_default_pattern()
+  test_pattern_2.trig_values[1] = 1
+  test_pattern_2.note_values[1] = 4  -- G (67)
+  
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+
+  local channel = program.get_channel(1)
+
+  -- Set length to 1
+
+  channel.start_trig[1] = 1 
+  channel.start_trig[2] = 4
+  channel.end_trig[1] = 1 
+  channel.end_trig[2] = 4
+
+  
+  -- Test average mode
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).note_merge_mode = "average"
+  pattern_controller.update_working_patterns()
+  
+  clock_setup()
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  -- Average of 0 and 4 = 2, which should play as E (64)
+  luaunit.assert_equals(note_on_event[1], 64)
+  
+  -- Test up mode
+  program.get_channel(1).note_merge_mode = "up"
+  pattern_controller.update_working_patterns()
+  
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  -- average(0,4) + (max(0,4) - min(0,4)) = 2 + (4 - 0) = 6, which should play as B (71)
+  luaunit.assert_equals(note_on_event[1], 71)
+  
+  -- Test down mode
+  program.get_channel(1).note_merge_mode = "down"
+  pattern_controller.update_working_patterns()
+  
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 57)
+end
+
+function test_merge_modes_at_pattern_boundaries()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  
+  -- Create patterns with different lengths
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.trig_values[63] = 1
+  test_pattern.trig_values[64] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.note_values[63] = 0  -- C (60)
+  test_pattern.note_values[64] = 1  -- D (62)
+  test_pattern.note_values[1] = 2   -- E (64)
+  
+  local test_pattern_2 = program.initialise_default_pattern()
+  test_pattern_2.trig_values[64] = 1
+  test_pattern_2.trig_values[1] = 1
+  test_pattern_2.trig_values[2] = 1
+  test_pattern_2.note_values[64] = 4  -- G (67)
+  test_pattern_2.note_values[1] = 5   -- A (69)
+  test_pattern_2.note_values[2] = 6   -- B (71)
+  
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  
+  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(1).note_merge_mode = "average"
+  pattern_controller.update_working_patterns()
+  
+  -- Move to pattern boundary
+  program.set_current_step_for_channel(1, 63)
+  clock_setup()
+  
+  -- Check step 63 (pattern 1 only)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60)  -- C
+  
+  -- Check step 64 (both patterns)
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  -- Average of note values 1 and 4 = 2.5, rounded to 3, which should play as E (64)
+  luaunit.assert_equals(note_on_event[1], 65)
+  
+  -- Check step 1 (both patterns)
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  -- Average of note values 2 and 5 = 3.5, rounded to 4, which should play as F (65)
+  luaunit.assert_equals(note_on_event[1], 67)
+end
+

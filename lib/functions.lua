@@ -412,6 +412,7 @@ function fn.average_table_values(tbl)
     sum = sum + value
     count = count + 1
   end
+
   if count == 0 then
     return nil
   else

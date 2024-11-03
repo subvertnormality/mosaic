@@ -197,8 +197,6 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
 
   local key = string.format("%d_%d_%d_%d_%d_%d_%s_%s_%s_%s", root_note, chord_rotation, note_number, octave_mod, transpose, scale_number, tostring(do_rotation), tostring(do_degree), tostring(do_pentatonic), tostring(scale_container))
     
-
-
   -- Check if result is already memoized
   if memoize[key] then 
       return memoize[key] 
@@ -235,6 +233,7 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
   pentatonic = fn.transpose_scale(pentatonic, transpose)
 
   local result = nil
+
   if note_number < 0 then
       local octave = (note_number // 7) + octave_mod
       local note = note_number % 7
@@ -246,7 +245,6 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
       end
   else
       note_number = math.min(note_number, 69)
-
       if do_pentatonic and type(scale[note_number + 1]) == "number" then
         result =  musicutil.snap_note_to_array(scale[note_number + 1], pentatonic) + (octave_mod * 12) + root_note
       else
@@ -254,6 +252,8 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
       end
   end
 
+  -- Cache the result
+  -- memoize[key] = result
   return result
 end
 

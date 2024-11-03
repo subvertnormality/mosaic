@@ -823,6 +823,7 @@ function step_handler.handle(c, current_step)
       local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
                             (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
                             (params:get("random_lock_to_pentatonic") == 2 and random_shift > 0)
+
       note = quantiser.process(shifted_note_val, octave_mod, transpose, channel.step_scale_number, do_pentatonic)
     end
 
@@ -865,6 +866,7 @@ function step_handler.handle(c, current_step)
         player = device.player or midi_controller,
         channel = c
       }
+
 
       handle_note(
         device,
