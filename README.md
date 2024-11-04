@@ -399,7 +399,7 @@ On the Norns screen, you'll find the channel grid visualizer. Use E2 to select t
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
     <use href="#video-icon" />
   </svg>
-  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1120s">Pattern editor note page demo</a>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1121s">Pattern editor note page demo</a>
 </p>
 
 
@@ -533,7 +533,7 @@ To remove a mask from a step, navigate to the mask page in the channel editor wi
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
     <use href="#video-icon" />
   </svg>
-  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1825s">Removing masks demo</a>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1823s">Removing masks demo</a>
 </p>
 
 
@@ -592,7 +592,7 @@ These settings affect how velocity values are calculated for overlapping steps:
 * **Lower**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and not adding the highest value back.
 * **Pattern**: To use a specific pattern’s velocity values, hold the velocity merge button and press the pattern's select button.
 
-<img alt="Channel editor velocity merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-marge-mode-select-button.svg" width="300" />
+<img alt="Channel editor velocity merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/swing_and_shuffle_rework/images/Grid/channel_editor/velocity-length-marge-mode-select-button.svg" width="300" />
 
 ##### Length Merge Modes
 
@@ -605,7 +605,7 @@ These modes dictate how the duration of notes is calculated for overlapping step
 
 Length merge modes are set by holding shift (K3) and pressing the velocity merge mode button.
 
-<img alt="Channel editor length merge mode button (with shift key held)" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-marge-mode-select-button.svg" width="300" />
+<img alt="Channel editor length merge mode button (with shift key held)" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/swing_and_shuffle_rework/images/Grid/channel_editor/velocity-length-marge-mode-select-button.svg" width="300" />
 
 #### Note Dashboard
 
