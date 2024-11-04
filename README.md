@@ -364,7 +364,7 @@ On the Norns screen, you can see the selected channel's grid state on page 1. Th
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
     <use href="#video-icon" />
   </svg>
-  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=760s">Pattern editor trig page demo</a>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=668s">Pattern editor trig page demo</a>
 </p>
 
 #### Adding Notes
