@@ -1,7 +1,7 @@
 local control_scroll_selector = {}
 control_scroll_selector.__index = control_scroll_selector
 
-local fn = include("mosaic/lib/functions")
+
 
 function control_scroll_selector:new(x, y, items)
   local self = setmetatable({}, control_scroll_selector)

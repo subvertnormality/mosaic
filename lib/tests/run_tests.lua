@@ -75,7 +75,6 @@ function include(file)
   for _, dir in ipairs(dirs) do
     local p = dir..file..'.lua'
     if util.file_exists(p) then
-      -- print("including "..p)
       return dofile(p)
     end
   end
@@ -117,6 +116,8 @@ end
 clear_require_cache()
 
 fn = include("mosaic/lib/functions")
+pages = include("mosaic/lib/pages/pages")
+scheduler = include("mosaic/lib/tests/helpers/mocks/scheduler_mock")
 program = include("mosaic/lib/program")
 
 include("mosaic/lib/tests/helpers/globals")

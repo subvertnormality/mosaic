@@ -1,4 +1,38 @@
-Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Grid. It melds the powerful features of the Elektron sequencer with innovative generative techniques, all within the Monome ecosystem, and allows you to craft complex rhythms and harmonies with ease. Whether you are sketching or composing, Mosaic provides a unique, deep musical experience.
+
+
+<svg display="none" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+     xml:space="preserve"  width="25px" height="25px" viewbox="0 0 500 500">
+     <symbol id="video-icon">
+<g>
+	<g>
+		<g>
+			<path d="M370.001,26.35H18.5C8.282,26.35,0,34.633,0,44.85v289.477c0,10.218,8.282,18.5,18.5,18.5h262.662l-20.326-23.571
+				h-48.548v-29.603h25.435l-0.183-0.224c-6.49-7.407-10.784-15.061-12.85-22.429H44.4V102.175h299.7V277h-40.213
+				c6.104,6.485,12.491,13.053,17.853,18.368c3.759-3.521,8.191-7.416,13.159-11.314c16.925-13.288,33.388-21.414,48.932-24.151
+				c1.562-0.274,3.121-0.479,4.672-0.647V44.85C388.501,34.633,380.219,26.35,370.001,26.35z M129.038,299.653h47.175v29.601
+				h-47.175V299.653z M45.787,299.653h47.176v29.601H45.787V299.653z M92.963,79.521H45.787v-29.6h47.176V79.521z M176.213,79.521
+				h-47.175v-29.6h47.175V79.521z M259.463,79.521h-47.175v-29.6h47.175V79.521z M342.713,79.521h-47.175v-29.6h47.175V79.521z"/>
+			<path d="M464.662,354.325c-4.595-24.766-20.357-47.662-29.344-59.11c-12.191-15.53-27.666-21.767-45.99-18.538
+				c-13.086,2.305-27.307,9.429-42.271,21.177c-10.572,8.303-18.558,16.611-22.088,20.479c-8.874-7.644-33.651-33.175-45.816-47.571
+				c-6.109-7.229-21.865-22.604-33.621-11.991c-12.654,12.301,5.882,32.396,6.362,32.979l74.362,91.024
+				c-0.301,0.402-0.637,0.752-1.021,1.055c-7.133,5.601-27.943-4.69-36.344-10.245c-7.68-5.076-20.609-5.037-27.137,0.086
+				c-2.612,2.053-4.06,4.842-4.075,7.854c-0.021,4.338,2.815,8.82,8.422,13.313c0.063,0.051,0.177,0.149,0.339,0.289
+				c8.286,7.1,30.764,24.782,60.445,35.668c19.027,6.979,37.564,9.854,55.104,8.551c21.754-1.621,42.023-9.693,60.246-24
+				C461.781,399.991,469.327,379.461,464.662,354.325z"/>
+			<path d="M175.976,127.423c-2.845-2.387-6.815-2.905-10.183-1.335c-3.365,1.57-5.517,4.948-5.517,8.662v100.833
+				c0,3.715,2.151,7.092,5.517,8.661c1.291,0.604,2.671,0.897,4.042,0.897c2.204,0,4.386-0.763,6.141-2.233l60.163-50.416
+				c2.168-1.817,3.42-4.501,3.42-7.328s-1.252-5.511-3.42-7.327L175.976,127.423z"/>
+        </g>
+        </g>
+        </g>
+        </symbol>
+</svg>
+
+<img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/logo.svg" alt="Mosaic Logo" width="200" />
+
+--- 
+
+Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed to unify control over your entire studio. It combines the advanced features of Elektron and Cirklon sequencers with generative and modular techniques, enabling you to craft complex rhythms and harmonies effortlessly. Whether you're sketching ideas or composing full tracks, Mosaic offers a deep and unique musical experience. This manual will help you quickly navigate _Mosaic_ and start creating tunes in no time.
 
 - [Getting Started](#getting-started)
   * [Install](#install)
@@ -6,15 +40,16 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
     + [Hardware](#hardware)
     + [MIDI Device Configuration](#midi-device-configuration)
       - [Stock Devices](#stock-devices)
-      - [Custom Devices](#custom-devices)
+      - [Adding Custom Devices](#adding-custom-devices)
       - [Mods and Software Devices](#mods-and-software-devices)
+  * [Getting Around Mosaic](#getting-around-mosaic)
+    + [Sequencer Start and Stop](#sequencer-start-and-stop)
+    + [Grid Menu Navigation](#grid-menu-navigation)
+    + [Norns Menu Navigation](#norns-menu-navigation)
+    + [Tooltips](#tooltips)
+    + [MIDI Panic](#midi-panic)
+    + [Cheat Sheet](#cheat-sheet)
   * [Typical Workflow](#typical-workflow)
-    + [Getting Around Mosaic](#getting-around-mosaic)
-      - [Grid Menu Navigation](#grid-menu-navigation)
-      - [Norns Menu Navigation](#norns-menu-navigation)
-      - [Tooltips](#tooltips)
-      - [Sequencer Start and Stop](#sequencer-start-and-stop)
-      - [MIDI Panic](#midi-panic)
     + [Sound Design](#sound-design)
     + [Rhythm Section Design](#rhythm-section-design)
     + [Harmony Design](#harmony-design)
@@ -29,25 +64,26 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
       - [Adding Notes](#adding-notes)
       - [Adding Velocity](#adding-velocity)
   * [Channel Editor](#channel-editor)
+    + [Devices](#devices)
+      - [MIDI Sound Sources](#midi-sound-sources)
+      - [Norns Sound Sources with n.b.](#norns-sound-sources-with-nb)
+      - [Device Parameters](#device-parameters)
     + [Adding Patterns to Channels](#adding-patterns-to-channels)
     + [Masks](#masks)
+      - [Adding Trig Masks](#adding-trig-masks)
       - [Adding Melodic Notes over Harmony and Drums](#adding-melodic-notes-over-harmony-and-drums)
       - [Adding Chords](#adding-chords)
+      - [Removing Masks](#removing-masks)
       - [MIDI Input](#midi-input)
     + [Merge Modes](#merge-modes)
       - [Trig Merge Modes](#trig-merge-modes)
       - [Note Merge Modes](#note-merge-modes)
       - [Velocity Merge Modes](#velocity-merge-modes)
       - [Length Merge Modes](#length-merge-modes)
-    + [Scale Editor](#scale-editor)
-      - [Transposition](#transposition)
-    + [Clocks and Swing](#clocks-and-swing)
+    + [Note Dashboard](#note-dashboard)
+    + [Clocks, Swing and Shuffle](#clocks-swing-and-shuffle)
     + [Channel Length](#channel-length)
     + [Muting Channels](#muting-channels)
-    + [Devices](#devices)
-      - [MIDI Sound Sources](#midi-sound-sources)
-      - [Norns Sound Sources with n.b.](#norns-sound-sources-with-nb)
-      - [Device Parameters](#device-parameters)
     + [Trig Parameters](#trig-parameters)
       - [Sequencer Params](#sequencer-params)
         + [Trig Probability](#trig-probability)
@@ -56,18 +92,25 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
         + [Random Note](#random-note)
         + [Random Twos Note](#random-twos-note)
         + [Chord Strum](#chord-strum)
+        + [Chord Arpeggio](#chord-arpeggio)
+        + [Chord Acceleration](#chord-acceleration)
+        + [Chord Spread](#chord-spread)
         + [Chord Velocity Modifier](#chord-velocity-modifier)
-      - [Locks](#locks)
-        + [Trig Param Locks](#trig-param-locks)
-        + [Scale Locks](#scale-locks)
-        + [Transposition Locks](#transposition-locks)
-        + [Octave Locks](#octave-locks)
-  * [Song Sequencer](#song-sequencer)
+        + [Chord Shape Modifier](#chord-shape-modifier)
+  * [Scale Editor](#scale-editor)
+    + [Transposition](#transposition)
+  * [Song Editor](#song-editor)
     + [Button Indicators](#button-indicators)
     + [Interacting with Slots](#interacting-with-slots)
     + [Song Mode Operations](#song-mode-operations)
     + [Adjusting Song Sequence Length](#adjusting-song-sequence-length)
     + [Navigating the Norns Display](#navigating-the-norns-display)
+  * [Locks](#locks)
+    + [Trig Param Locks](#trig-param-locks)
+    + [Mask Locks](#mask-locks)
+    + [Scale Locks](#scale-locks)
+    + [Transposition Locks](#transposition-locks)
+    + [Octave Locks](#octave-locks)
   * [Save and Load](#save-and-load)
   * [Options](#options)
     + [Sequencer Options](#sequencer-options)
@@ -89,8 +132,9 @@ Welcome to Mosaic, an intuitive XoX-style MIDI sequencer for Monome Norns and Gr
       - [Honor Scale Rotations](#honor-scale-rotations)
       - [Honor Scale Degree](#honor-scale-degree)
   * [Sinfonion Connect](#sinfonion-connect)
+  * [LFOs and Modulation](#lfos-and-modulation)
 - [Development](#development)
-- [Device Config Template](#device-config-template)
+- [Device Config Creator](#device-config-creator)
 
 ## Getting Started
 
@@ -102,7 +146,7 @@ To install, simply run `;install https://github.com/subvertnormality/mosaic` in 
 
 #### Hardware
 
-_Mosaic_ operates with the Monome Norns and a 128 Grid at a minimum. These two components alone will allow you to create simple songs, but incorporating external sound sources via a MIDI interface will vastly expand your sequencing capabilities. Devices with MIDI in are all supported, although those set up in _Mosaic_ using pre-existing or manually created configuration files are optimal. Crow, Just Friends, and Ansible are natively supported using [n.b.](https://github.com/sixolet/nb/).
+_Mosaic_ requires a Norns and a 128 Grid at a minimum. With these you will be able to create simple songs using [n.b. devices](#norns-sound-sources-with-nb), but _Mosaic_ is really designed to unify control of your entire studio over MIDI. All devices with MIDI in are all supported, although those set up in _Mosaic_ using pre-existing or manually created configuration files are optimal. Crow, Just Friends, and Ansible are natively supported using [n.b.](#norns-sound-sources-with-nb).
 
 Using [MIDI input](#midi-input) devices, while not essential, enhances the user experience. A MIDI keyboard simplifies melody creation, and a MIDI controller with encoders supporting relative bin offsets can improve the data input process.
 
@@ -112,56 +156,97 @@ For those using an ACL Sinfonion, support is available through a straightforward
 
 ##### Stock Devices
 
-Mosaic includes a range of stock devices that you can integrate into your setup, but first, they need to be configured to appear in the device selector. Here’s how to set this up using [maiden](https://monome.org/docs/norns/maiden/):
+Mosaic includes a range of stock midi devices that you can integrate into your setup. Elektron Digitone, Digitakt 2, Syntakt, and the Nord Drum 2 are first class citizens with fully tailored mappings.
+
+First, they need to be configured to appear in the device selector. Here’s how to set this up using [maiden](https://monome.org/docs/norns/maiden/):
 
 1. **Access Configuration Files**: Open Maiden and navigate to the directory path `code > mosaic > lib > config`. Here, you will find the stock device configuration files.
 2. **Create a New Configuration Folder**: Next, go to the directory `data > mosaic`. In this location, create a new folder named `config`.
 3. **Copy Configuration Files**: Copy the device configuration files that you wish to use from `code > mosaic > lib > config` into the `data > mosaic > config` folder you just created.
 4. Once these steps are completed, Mosaic will automatically load the device configurations you've selected, and they will be available in the device picker on the channel page.
 
-This setup ensures that you can easily access and use your preferred stock devices within Mosaic.
+This allows you to easily access and use only your preferred devices within Mosaic.
 
-##### Custom Devices
+##### Adding Custom Devices
 
 Once you've copied the stock device configuration files into the `data > mosaic > config` folder, you can also personalize these configurations to better suit your setup. This is particularly useful for setting common defaults like the MIDI output device.
 
-You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a [device config template](#device-config-template) that matches your device’s MIDI specifications.
+You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device’s MIDI specifications. You can create, load and edit midi device config files using the [Mosaic Config Creator](https://subvertnormality.github.io/mosaic/config_creator.html).
 
 ##### Mods and Software Devices
 
 Mosaic can also use internal Norns sound sources and manage devices like Crow, Just Friends, and Ansible via i2c by installing [n.b.](https://github.com/sixolet/nb/) mods. These mods will appear in Mosaic's device list once installed and activated in the Norns settings menu. Ensure the n.b. mod is on the allow list to use with Mosaic. See [Norns sound sources with n.b.](#norns-sound-sources-with-nb) for more information.
 
-## Typical Workflow
 
-This section provides an overview of Mosaic's functionality and basic operations, outlining a typical workflow for song creation. Here, we present a broad perspective without going into the operational specifics. For more detailed information on navigating through the user interface, understanding precise functionalities, exploring options, and more, please refer to the [Dig Deeper](#dig-deeper) section. This should allow you to grasp the essential processes first, setting a solid foundation for more advanced exploration later.
+## Getting Around Mosaic
 
-### Getting Around Mosaic
+### Sequencer Start and Stop
 
-#### Grid Menu Navigation
+To start the sequencer, press the lowest left hand button on the grid. To stop the sequencer, press the button again.
 
-Navigation within Mosaic primarily occurs via the Grid. The lower left five buttons serve as the global menu buttons. From left to right, these buttons allow access to the "[Channel](#channel-editor) page", "[Song Sequencer](#song-sequencer) page", "[Pattern](#pattern-editor) editor", "[Notes](#adding-notes) page", and "[Velocity](#adding-velocity) page".
+<img alt="Mosaic grid start-stop button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-play-stop-button.svg" width="300" />
 
-![The menu as shown on the pattern edit page](https://raw.githubusercontent.com/subvertnormality/mosaic/main/designs/Images/menu.png)
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=632s">Start and stop functionality demo</a>
+</p>
 
-#### Norns Menu Navigation
+### Grid Menu Navigation
 
-Further configuration happens on Norns. Each grid page corresponds to several grouped pages on the screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you navigate away from the page without applying, the change will be cancelled.
+The four buttons starting from the third column on the lowest row serve as the global menu buttons. From left to right, these buttons allow access to the [Channel Editor](#channel-editor) and [Scale Editor](#scale-editor):
+
+
+<p float="left">
+  <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-channel-editor-select-button.svg" alt="Channel editor global menu button" width="300" />
+  <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-scale-editor-select-button.svg" alt="Scale editor global menu button" width="300" /> 
+</p>
+
+As well as the [Pattern Editors](#pattern-editor) and [Song Editor](#song-editor):
+
+<p float="left">
+  <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-pattern-editor-select-button.svg" alt="Pattern editors global menu button" width="300" />
+  <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-song-editor-select-button.svg" alt="Song editor global menu button" width="300" />
+</p>
+
+The pattern editor button cycles through three pages, accessible by pressing the button repeatedly. These are the [Pattern Trig Editor](#adding-trigs), the [Pattern Note Editor](#adding-notes), and the [Pattern Velocity Editor](#adding-velocity).
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=330s">Global navigation demo</a>
+</p>
+
+### Norns Menu Navigation
+
+Further configuration happens on Norns. Each _Mosaic_ grid page has a group of pages on the Norns screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you navigate away from the page without applying, the change will be cancelled.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=490s">Norns navigation demo</a>
+</p>
 
 For a detailed reference on the layout of your Norns device, consult the official [Norns documentation](https://monome.org/docs/norns/).
 
-#### Tooltips
+### Tooltips
 
 Most _Mosaic_ functions are described by tooltips that appear at the bottom of the Norns screen when activated. If you're not sure what a button does, try pressing it and watching out for the tooltip.
 
-#### Sequencer Start and Stop
+### MIDI Panic
 
-To start the sequencer, press the global menu button of the currently selected page — the illuminated button — in the navigation section.
+Should your MIDI output devices become unresponsive, you can clear all MIDI-on events by holding down the navigation button of a non-selected page. This action will send a stop signal to all devices, on all channels, for all notes.
 
-To stop the sequencer, hold down the global menu button of the currently selected page for around a second.
+### Cheat Sheet
 
-#### MIDI Panic
+A quick reference of the grid buttons and common commands and shortcuts can be found in the [Mosaic Cheat Sheet](https://subvertnormality.github.io/mosaic/cheat_sheet.html).
 
-Should your MIDI output devices become unresponsive, you can clear all MIDI-on events by holding down the navigation button of the currently selected page while pressing a non-selected navigation button. This action will send a stop signal to all devices, on all channels, for all notes.
+## Typical Workflow
+
+This section provides an overview of Mosaic's functionality and basic operations, outlining a typical workflow for song creation. Here, we present a broad perspective without going into the operational specifics. For more detailed information on navigating through the user interface, understanding precise functionalities, exploring options, and more, please refer to the [Dig Deeper](#dig-deeper) section. This should allow you to grasp the essential processes first, setting a solid foundation for more advanced exploration later.
 
 ### Sound Design
 
@@ -185,7 +270,7 @@ _Mosaic_'s harmony tools enable you to compose your song's chordal progressions.
 
 Harmonic progressions can be applied globally — modulating all notes across all channels to the same key, degree, and scale rotation — or on a per-channel basis, affecting only the notes within that channel. This decoupling of patterns and notes from the active scale enables dynamic and experimental tonal modulations. For example, setting your global scale to change in a polyrhythmic pattern relative to your channel's note data can create captivating musical textures.
 
-Each project supports 16 scale slots. Each slot includes a root note, a scale type (e.g., Dorian, Major), a degree, and a scale rotation. The [Scale Editor](#scale-editor) is where you craft the scales that will form your chord progressions, and you can sequence these using [Scale Locks](#scale-locks) either globally from the scale editor, or per channel using the channel editor.
+Each project supports 16 scale slots. Each slot includes a root note, a scale type (e.g., Dorian, Major), a degree, transposition, and a scale rotation. The [Scale Editor](#scale-editor) is where you craft the scales that will form your chord progressions, and you can sequence these using [Scale Locks](#scale-locks) either globally from the scale editor, or per channel using the channel editor.
 
 ### Sequence Composition
 
@@ -201,13 +286,13 @@ The [Channel Editor](##channel-editor) doesn't merely allow you to add, merge, a
 
 ### Modulation, Movement, and Interest
 
-Even a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [Trig Parameters](#trig-parameters) and [Trig Locks](#trig-locks). "Trig lock" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantized, at each step, offering precise manipulation over the quality and dynamics of your music.
+Even a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [Trig Parameters](#trig-parameters) and [Trig Locks](#trig-locks). "Trig lock" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantized, at each step, offering precise manipulation over the quality and dynamics of your music. 
 
 ### Song Composition
 
-At this point, your sequence is likely "full to the brim," containing all the elements of your song in its most complex form. For those familiar with Elektron devices, this stage can feel like a precarious juncture, where it's tempting to fall into a cycle of making minor adjustments to the same pattern repeatedly. _Mosaic_ offers a solution with its [Song Sequencer](#song-sequencer), designed to help you break free from this procrastination loop.
+At this point, your sequence is likely "full to the brim," containing all the elements of your song in its most complex form. For those familiar with Elektron devices, this stage can feel like a precarious juncture, where it's tempting to fall into a cycle of making minor adjustments to the same pattern repeatedly. _Mosaic_ offers a solution with its [Song Editor](#song-editor), designed to help you break free from this procrastination loop.
 
-To access the song editor, press the second key in the global menu's Grid button cluster. You'll be greeted by a grid where the first button is dimly lit, indicating the sequence you are currently working on. The song editor allows you to take this sequence and creatively manipulate it: you can mute channels, modify scale locks, alter pattern combinations and merge modes, adjust masks, and more. This flexibility enables you to develop your composition from the base sequence upwards. As you become accustomed to this workflow, you'll find that you can construct an entire song from a single sequence, streamlining your creative process.
+To access the song editor, press the second key in the global menu's Grid button cluster. You'll be greeted by a grid where the first button is dimly lit, indicating the sequence you are currently working on. The song editor allows you to take this sequence, copy it, and creatively manipulate the copy: you can mute channels, modify scale locks, alter pattern combinations and merge modes, adjust masks, and more. You can then chain multiple sequences together. This flexibility enables you to develop your composition from the base sequence upwards. As you become accustomed to this workflow, you'll find that you can construct an entire song from a single sequence, streamlining your creative process.
 
 ## Dig Deeper
 
@@ -219,19 +304,23 @@ Patterns serve as the foundational elements of your harmony and rhythm sections.
 
 Access the pattern editor by pressing the third key in the global menu cluster on your Grid.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=660s">Pattern editor demo</a>
+</p>
+
 #### Adding Trigs
 
-Trigs are added in the pattern editor.
+Trigs are added in the pattern editor. Using the top row, pick one of the 16 available patterns.
 
-![Trig editor with a complex trig pattern](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor.png)
-
-Using the top row, pick one of the 16 patterns available. In the image, you can see pattern 2 is selected.
-
-![Pattern select buttons](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_pattern_select.png)
+<img alt="Pattern editor pattern select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-select-buttons.svg" width="300" />
 
 To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolize a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. In a single pattern, one trig’s duration ends upon meeting another.
 
-![Trig sequencer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_sequencer.png)
+<img alt="Pattern editor step edit buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-step-trigger-edit-buttons.svg" width="300" />
+
 
 Craft unique rhythms using a variety of built-in algorithms. The algorithm is selected using the four algorithm select buttons. From left to right:
 
@@ -240,35 +329,43 @@ Craft unique rhythms using a variety of built-in algorithms. The algorithm is se
 * Button 3: Euclidean, a rhythm tool rooted in mathematical logic.
 * Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
 
-![Algorithm select](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_algorithms.png)
+<img alt="Pattern editor algorithm select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="300" />
 
 The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the Norns screen.
 
-The left side faders adjust algorithm values. Brightly lit end buttons refine values, with the furthest left-hand button incrementing downwards and the furthest right-hand button incrementing upwards. The dimmer ones in the middle of the faders adjust values broadly. The rightmost fader typically toggles between different banks in the selected algorithm.
+The left side faders adjust algorithm values. Brightly lit end buttons refine values, with the furthest left-hand button incrementing downwards and the furthest right-hand button incrementing upwards. The dimmer ones in the middle of the faders adjust values broadly. 
 
-![Algorithm controls](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_algorithm_controls.png)
+<p float="left">
+<img alt="Pattern editor pattern 1 select fader" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-select-fader.svg" width="300" />
+<img alt="Pattern editor pattern 2 select fader" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-2-select-fader.svg" width="300" />
+</p>
+
+The rightmost fader typically toggles between different banks in the selected algorithm.
+
+<img alt="Pattern editor bank select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg" width="300" />
 
 To see your algorithm's impact, hit the prime button. This primes the currently selected algorithm's pattern. Potential new steps are shown as flashing bright steps on the sequencer. While these steps flash, they aren’t painted yet. Any step that would be painted over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences, grounded in rhythmic fundamentals, that don't get too busy. You can modify algorithm parameters while the pattern is primed.
 
+<img alt="Pattern editor prime and paint button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/arm-paint-button.svg" width="300" />
+
 If you haven’t painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Pressing the prime button again without tweaking the algorithm or its parameters effectively acts as an undo for the last action.
 
-![Prime and print button](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_prime_and_print.png)
+Opt out of a prepared pattern by using the cancel button:
 
-Opt out of a prepared pattern by using the cancel button.
-
-![Cancel button](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_cancel.png)
+<img alt="Pattern editor prime and paint cancel button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg" width="300" />
 
 While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes.
 
-![Left, center, right buttons](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/trig_editor_left_right.png)
+<img alt="Pattern editor move buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg" width="300" />
 
-On the Norns screen, you can see the selected channel's grid state on page 1. This is the merged version of the channel and is a useful context for editing your pattern. Use E2 to select channels.
+On the Norns screen, you can see the selected channel's grid state on page 1. This is the merged version of the channel and is a useful context for editing your pattern. Use E2 to select channels. On page 2 you can select trig editor options. Currently, this allows you to edit the tresillo multiplier in use. Experiment with different values to get wildly different results with the tresillo algorithm.
 
-![Channel grid viewer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/trig_edit_grid_viewer.png)
-
-On page 2 you can select trig editor options. Currently, this allows you to edit the tresillo multiplier in use. Experiment with different values to get wildly different results with the tresillo algorithm.
-
-![Channel grid viewer](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/trig_edit_options.png)
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=668s">Pattern editor trig page demo</a>
+</p>
 
 #### Adding Notes
 
@@ -278,162 +375,72 @@ You've seen in the [Harmony Design](#harmony-design) section that it's possible 
 
 Select the note editor by pressing the fourth key in the global menu button cluster on the grid.
 
-This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. The gentle flicker on the top row indicates the currently chosen pattern. If you wish to explore a different pattern, press and hold on this top row.
+This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. Whilst holding shift (K3), any entered note is automatically duplicated across all 4 step screens. 
+
+<img alt="Pattern editor note select faders" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-select-faders.svg" width="300" />
 
 Remember, each note you select links back to the root of the scale you're working within. The scale is applied to the channel, not the pattern. You must start to think about your patterns as being disconnected from each channel. This is why we say _Mosaic_ is an intentioned generative sequencer. Expect happy accidents. The channel grid viewer on the Norns screen can help you here.
 
-![Note select](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_note_selector.png)
-
 Switch between the four sets of 16 steps using the dedicated buttons.
 
-![16 step selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_16_selector.png)
+<img alt="Pattern editor note step range buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-step-select-buttons.svg" width="300" />
 
-Aim for higher pitches or dive deeper with the octave select buttons, expanding your melodic range.
+Aim for higher or lower pitches with the octave select buttons, expanding your melodic range. A single press of the end buttons in this trio steps up and down by one step. Long press these to quickly navigate to the pages at the extremes. A single press of the middle button gets you back to the page with the root note on the bottom row.
 
-![Melodic range selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_octave_selector.png)
+<img alt="Pattern editor note value range buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-value-range-select-faders.svg" width="300" />
 
 Hint: Even if a step lacks a trig, don't hesitate to assign a note. This data might come in handy with different merge modes in play.
 
-You can use the four by four button to toggle a mode that lets you more quickly enter repeating notes across the four note grid pages. In four by four mode, any entered note is automatically duplicated across all 4 screens.
-
-![Four by four](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/note_editor_four_by_four.png)
+The gentle flicker on the top row indicates the currently chosen pattern.  If you wish to explore a different pattern, press and hold or shift press (holding K3) on the top row.
 
 On the Norns screen, you'll find the channel grid visualizer. Use E2 to select the current channel.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1121s">Pattern editor note page demo</a>
+</p>
+
 
 #### Adding Velocity
 
 Now let's look at the velocity editor, which functions similarly to the note page. Access it by pressing the fifth button in the global menu cluster.
 
-The velocity editor spans two vertical pages: the first displays velocities from 127 down to 67, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence.
+The velocity editor spans two vertical pages: the first displays velocities from 127 down to 67, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.
 
 On the Norns screen, you can see the channel grid visualizer. Use E2 to select the current channel.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1229s">Pattern editor velocity page demo</a>
+</p>
 
 ### Channel Editor
 
 Select the channel editor page by pressing the far left global menu button, and select one of the 16 available channels using the channel select row at the top of _Mosaic_'s Grid UI.
 
-![Channel selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_channel_select.png)
+<img alt="Channel editor channel select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-select-buttons.svg" width="300" />
 
-#### Adding Patterns to Channels
-
-The core of your rhythm and harmony sections are formed by adding patterns to channels. To do this, first select a channel using the channel buttons. A single channel can accommodate multiple patterns, and likewise, a single pattern can be assigned to multiple channels. To assign patterns, use the pattern select row, located second from the top on Mosaic’s Grid UI.
-
-![Pattern selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_pattern_select.png)
-
-#### Masks
-
-Masks in _Mosaic_ allow you to precisely control trig values, notes, velocities, lengths, and chords for specific steps within the channel page's sequencer. Ideal for crafting intentional melodies, masks can superimpose these elements onto your existing harmonic and rhythmic foundation. You can apply masks to override pattern values either individually or all at once—a process aptly named "masking."
-
-With masking, you have the flexibility to modify individual attributes of a pattern. For instance, you could increase the velocity of a note without changing other settings, add additional chord tones, or completely silence a note. Masks also enable you to assign values to steps that are currently void of any pattern influence. By default, notes added this way will align with the selected musical scale. However, they will not conform to specific scale degrees or rotations. If you wish to incorporate accidentals or embrace a more dissonant sound, this default behavior can be disabled in the _Mosaic_ settings.
-
-##### Adding Melodic Notes over Harmony and Drums
-
-To add a mask to your sequence, start by accessing the mask page on your Norns device. Once there, press and hold the step you wish to modify, then input the desired value as a trig lock. Alternatively, you can hold the step while pressing a corresponding key on your MIDI keyboard to set the value. This method allows you to easily and intuitively assign specific musical attributes to any step in your sequence.
-
-The currently playing note, velocity, and length is displayed on the Norns screen on active steps. Unlike trig params, it's not possible to set a default mask for all steps. Each mask must be applied directly to a step as a lock.
-
-##### Adding Chords
-
-Chords can be seamlessly integrated into your sequence using masks. You can add up to four additional voices to the root note, provided that your selected device supports polyphony. To do this, make sure you are on the masks page of your Norns. Then, hold the desired step and select each note you want to include in the chord.
-
-Additionally, take advantage of the chord trig params to enhance your musical expression. Experiment with the "[chord strum](#chord-strum)" and "[chord velocity modifier](#chord-velocity-modifier)" trig parameters to vary the playback dynamics and timing of each chord component. These tools allow you to create more nuanced and dynamic chord progressions, adding depth to your compositions.
-
-##### MIDI Input
-
-You can input notes, velocity, and chords using a MIDI keyboard. However, setting the length of these inputs requires manual selection. To do this, ensure you have your desired channel selected on _Mosaic_. Then, while holding the desired step, press the corresponding key on your keyboard. If you are on the mask page of your Norns, the values you input will display as trig locks.
-
-To preview notes before committing them to your sequence, simply press the keys on your keyboard without holding down a step. This method ensures that changes are only made when you explicitly hold down a step, preventing accidental inputs.
-
-By default, the keyboard maps the steps to the currently selected scale on the white keys, with the root note of your selected scale starting from C. You can adjust this mapping in the settings of Mosaic to better suit your musical preferences or project requirements.
-
-You are also able to control all 10 of the trig parameters on the currently selected page independently using a MIDI controller such as Intech's en64 by sending a relative bin offset MIDI CC message to cc 15 - 24 respectively.
-
-#### Merge Modes
-
-To determine how your patterns interact and meld within the composition, you'll need to use the merge mode selector. This feature enables nuanced control over how overlapping patterns in the same channel behave, impacting trigs, notes, velocity, and length.
-
-![Merge mode selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_merge_mode.png)
-
-##### Trig Merge Modes
-
-These modes define how trigs are activated when there are overlapping steps across selected patterns:
-
-* **All**: Trigs will activate if they appear in any selected pattern.
-* **Skip**: Trigs will activate only if they appear in exactly one selected pattern. If a trig appears in multiple patterns, it won't activate.
-* **Only**: Trigs will activate only if they appear in more than one selected pattern, ignoring those that appear in just one.
-
-##### Note Merge Modes
-
-These modes determine how note values are handled when steps overlap:
-
-* **Average**: The note value for overlapping steps is the average of those steps' values in each pattern, subsequently quantized.
-* **Higher**: The highest note value from overlapping steps is used after calculating the average and adjusting by subtracting the lowest and adding the highest note value, followed by quantization.
-* **Lower**: The lowest note value is used after calculating the average and subtracting the lowest note value from the average, followed by quantization.
-* **Pattern**: To prioritize a specific pattern's note values during conflicts, hold the note merge button and select the desired pattern.
-
-By default, notes will snap to the pentatonic version of the currently active scale to assist with avoiding unpleasant harmonic interactions. This can be disabled in _Mosaic_'s settings.
-
-##### Velocity Merge Modes
-
-These settings affect how velocity values are calculated for overlapping steps:
-
-* **Average**: The velocity is the average of the velocities from overlapping steps in each pattern.
-* **Higher**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and adding the highest velocity.
-* **Lower**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and not adding the highest value back.
-* **Pattern**: To use a specific pattern’s velocity values, hold the velocity merge button and press the pattern's select button.
-
-##### Length Merge Modes
-
-These modes dictate how the duration of notes is calculated for overlapping steps:
-
-* **Average**: The length is the average of the lengths from overlapping steps in each pattern.
-* **Longer**: The length is determined by taking the average length, subtracting the shortest length, and adding the longest length.
-* **Shorter**: The length is calculated by subtracting the shortest length from the average of each step's length minus the shortest length.
-* **Pattern**: To apply a specific pattern’s length values, hold the length merge button and press the pattern's select button.
-
-#### Scale Editor
-
-Access the scale editor by selecting the channel page using the far left global menu button, then pressing any of the scale buttons.
-
-![Scale selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_scale_select.png)
-
-When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is dimly lit on the grid. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
-
-A long press on a scale button selects it as the global scale, indicated by a brightly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
-
-Scale locks can be set to apply a scale globally or to a single channel, activating at a designated step and persisting until the end of the pattern. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
-
-You can also adjust the rate of the global scale track and set its length independently of other channels, enabling chord progressions that extend beyond a single pattern. This feature offers substantial flexibility for crafting intricate chord progressions and varying patterns.
-
-To return to the channel edit page, press any of the channel buttons at the top of the grid.
-
-#### Clocks and Swing
-
-You can easily adjust the tempo of your entire composition directly from the song sequencer page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels via the channel editor page in the Norns menu. This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.
-
-Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable.
-
-#### Channel Length
-
-Channels in your sequencer can be customized to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
-
-To adjust the length of a channel, you need to specify the start and end points. Hold down the button corresponding to the start step in the channel editor. While holding it, press the button for the desired end step. The active range of the channel will be indicated by buttons that appear slightly brighter than the others.
-
-The behavior of the sequencer when handling patterns of different lengths can also be tailored to your needs. Navigate to the Norns param pages where you can find various [options](#options) that determine how the sequencer manages channels with differing lengths.
-
-##### Transposition
-
-You can transpose your entire Song Sequence using the global quantizer transposition fader, either globally or by step using trig locks. Transposition applies on top of the currently selected scale.
-
-![Global quantizer transposition fader](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/channel_edit_global_scale_transposition.png)
-
-#### Muting Channels
-
-To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1357s">Channel editor demo</a>
+</p>
 
 #### Devices
 
 For _Mosaic_ to do anything, you must have a device assigned to a channel. Devices represent a hardware device in your studio, perhaps a software device on your computer, or a software device in Norns itself.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1358s">Devices demo</a>
+</p>
 
 ##### MIDI Sound Sources
 
@@ -446,17 +453,209 @@ If your device has an associated configuration file, such as those available for
 [n.b.](https://github.com/sixolet/nb/tree/main) mods give _Mosaic_ the ability to sequence internal sound sources and device connected via Crow. Supported mods include:
 
 * [nb_ansible](https://github.com/sixolet/nb_ansible) for Ansible voices.
-* [emplaitress](https://github.com/subvertnormality/emplaitress/) offers four MI Plaits voices in parallel. Note this fork allows Emplatress's params to be locked in _Mosaic_.
+* [emplaitress](https://github.com/sixolet/emplaitress/) offers four MI Plaits voices in parallel. Emplatress's params can be locked in _Mosaic_. Note: emplaitress is sensitive to quick firing notes. Be careful when using arpeggios, chords, and small clock divisions.
 * [nb_jf](https://github.com/sixolet/nb_jf) accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.
 * [nb_crow](https://github.com/sixolet/nb_crow) for Crow v/8 and envelope functions.
+* [nb_drum_crow](https://github.com/entzmingerc/nb_drumcrow) turns a monome crow into a synthesizer.
+* [nb_polyperc](https://github.com/dstroud/nb_polyperc) poly perc. Poly perc's params can be locked in _Mosaic_.
+* [nb_rudiments](https://github.com/entzmingerc/nb_rudiments) percussion synth.
+* [nb_doubledecker](https://github.com/sixolet/doubledecker) 2-layer synth. Doubledecker's params can be locked in _Mosaic_.
+* [nb_oilcan](https://github.com/zjb-s/oilcan) percussion sync. Oilcan's params can be locked in _Mosaic_.
 
 n.b. devices are picked up automatically. Simply install the desired mod, and pick from the device picker menu. Be careful not to overwhelm your norns by adding too many internal sound engines to channels.
-
-More mods are expected to be supported soon.
 
 #### Device Parameters
 
 MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to a value of -1 ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1454s">Devices parameters demo</a>
+</p>
+
+#### Adding Patterns to Channels
+
+The core of your rhythm and harmony sections are formed by adding patterns to channels. To do this, first select a channel using the channel buttons. A single channel can accommodate multiple patterns, and likewise, a single pattern can be assigned to multiple channels. To assign patterns, use the pattern select row, located second from the top on Mosaic’s Grid UI.
+
+<img alt="Channel editor pattern assign buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/pattern-assign-buttons.svg" width="300" />
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1568s">Applying patterns to channels demo</a>
+</p>
+
+#### Masks
+
+Masks in _Mosaic_ allow you to precisely control trig values, notes, velocities, lengths, and chords for specific steps within the channel page's sequencer. Ideal for crafting intentional melodies, masks can superimpose these elements onto your existing harmonic and rhythmic foundation. You can apply masks to override pattern values either individually using step locks or all at once by setting the global value — this process named "masking."
+
+With masking, you have the flexibility to modify individual attributes of a pattern. For instance, you could increase the velocity of a note without changing other settings, add additional chord tones, or completely silence a note. Masks also enable you to assign values to steps that are currently void of any pattern influence. By default, notes added this way will align with the selected musical scale. However, they will not conform to specific scale degrees or rotations. If you wish to incorporate accidentals or embrace a more dissonant sound, this default behavior can be disabled in the _Mosaic_ settings.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1740s">Masks demo</a>
+</p>
+
+##### Adding Trig Masks
+
+You can quickly add trig masks to your sequence by shift pressing (hold K3) the desired step on the sequencer on the channel edit page. Remember to asign a note mask, velocity mask and length mask to hear your desired note! You can also quickly remove notes this way.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1780s">Mask trig lock demo</a>
+</p>
+
+
+##### Adding Melodic Notes over Harmony and Drums
+
+To add a mask to your sequence, start by accessing the mask page on your Norns device. Once there, press and hold the step you wish to modify, then input the desired value as a trig lock. Alternatively, you can hold the step while pressing a corresponding key on your MIDI keyboard to set the value. This method allows you to easily and intuitively assign specific musical attributes to any step in your sequence.
+
+You can apply masks to all steps in a channel by setting the mask value without holding down a step. It's possible, for example, to add a chord note to every trigger, or set a fixed velocity for every trigger, or even turn on or off every trigger. The default mask value will apply to all steps that don't have a specific mask lock set.
+
+##### Adding Chords
+
+Chords can be seamlessly integrated into your sequence using masks. You can add up to four additional voices to the root note, provided that your selected device supports polyphony. To do this, make sure you are on the masks page of your Norns. Then, hold the desired step and select each note you want to include in the chord.
+
+Additionally, take advantage of the chord trig params to enhance your musical expression. Experiment with the "[chord strum](#chord-strum)" and "[chord velocity modifier](#chord-velocity-modifier)" trig parameters to vary the playback dynamics and timing of each chord component. These tools allow you to create more nuanced and dynamic chord progressions, adding depth to your compositions.
+
+##### Removing Masks
+
+To remove a mask from a step, navigate to the mask page in the channel editor with your desired channel selected, hold down the step with the mask-to-be-removed, and press K2. To remove all masks on a channel, hold shift (K3) and press K2.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1823s">Removing masks demo</a>
+</p>
+
+
+##### MIDI Input
+
+You can input notes, velocity, and chords using a MIDI keyboard. However, setting the length of these inputs requires manual selection. To do this, ensure you have your desired channel selected on _Mosaic_. Then, while holding the desired step, press the corresponding key on your keyboard. If you are on the mask page of your Norns, the values you input will display as trig locks.
+
+To preview notes before committing them to your sequence, simply press the keys on your keyboard without holding down a step.
+
+By default, the keyboard maps the steps to the currently selected scale on the white keys, with the root note of your selected scale starting from C. You can adjust this mapping in the settings of Mosaic to better suit your musical preferences or project requirements.
+
+You are also able to control all 10 of the trig parameters on the currently selected page independently using a MIDI controller such as Intech's en64 by sending a relative bin offset MIDI CC message to cc 15 - 24 respectively.
+
+#### Merge Modes
+
+To determine how your patterns interact and meld within the composition, you'll need to use the merge mode selector. This feature allows for nuanced control over how overlapping steps on patterns in the same channel behave, impacting trigs, notes, velocity, and length.
+
+<img alt="Channel editor pattern assign buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/pattern-assign-buttons.svg" width="300" />
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2065s">Marge modes demo</a>
+</p>
+
+##### Trig Merge Modes
+
+These modes define how trigs are applied when there are overlapping steps across selected patterns:
+
+* **All**: Trigs will apply if they appear on a step in any selected pattern.
+* **Skip**: Trigs will apply only if they appear on a step in exactly one selected pattern. If a trig appears on a step in multiple patterns, it won't activate.
+* **Only**: Trigs will apply only if they appear on a step in more than one selected pattern, ignoring those that appear in just one.
+
+<img alt="Channel editor trigger merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/trigger-marge-mode-select-button.svg" width="300" />
+
+##### Note Merge Modes
+
+These modes determine how note values are handled when steps overlap:
+
+* **Average**: The note value for overlapping steps is the average of those steps' values in each pattern, subsequently quantized.
+* **Higher**: The highest note value from overlapping steps is used after calculating the average and adjusting by subtracting the lowest and adding the highest note value, followed by quantization.
+* **Lower**: The lowest note value is used after calculating the average and subtracting the lowest note value from the average, followed by quantization.
+* **Pattern**: To prioritize a specific pattern's note values during conflicts, hold the note merge button and select the desired pattern. You can even select patterns that aren't current asigned to the active channel.
+
+By default, notes will snap to the pentatonic version of the currently active scale to assist with avoiding unpleasant harmonic interactions. This can be disabled in _Mosaic_'s settings.
+
+<img alt="Channel editor note merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/note-marge-mode-select-button.svg" width="300" />
+
+##### Velocity Merge Modes
+
+These settings affect how velocity values are calculated for overlapping steps:
+
+* **Average**: The velocity is the average of the velocities from overlapping steps in each pattern.
+* **Higher**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and adding the highest velocity.
+* **Lower**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and not adding the highest value back.
+* **Pattern**: To use a specific pattern’s velocity values, hold the velocity merge button and press the pattern's select button.
+
+<img alt="Channel editor velocity merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/swing_and_shuffle_rework/images/Grid/channel_editor/velocity-length-marge-mode-select-button.svg" width="300" />
+
+##### Length Merge Modes
+
+These modes dictate how the duration of notes is calculated for overlapping steps:
+
+* **Average**: The length is the average of the lengths from overlapping steps in each pattern.
+* **Longer**: The length is determined by taking the average length, subtracting the shortest length, and adding the longest length.
+* **Shorter**: The length is calculated by subtracting the shortest length from the average of each step's length minus the shortest length.
+* **Pattern**: To apply a specific pattern’s length values, hold the length merge button and press the pattern's select button.
+
+Length merge modes are set by holding shift (K3) and pressing the velocity merge mode button.
+
+<img alt="Channel editor length merge mode button (with shift key held)" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/swing_and_shuffle_rework/images/Grid/channel_editor/velocity-length-marge-mode-select-button.svg" width="300" />
+
+#### Note Dashboard
+
+On the Norns first page in the channel mode you can see the last played notes on the currently selected channel.
+
+#### Clocks, Swing and Shuffle
+
+You can easily adjust the tempo of your entire composition directly from the song editor page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels via the channel editor page in the Norns menu. This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.
+
+Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable. There are two modes to choose from: swing, which moves notes closer or further apart depending on the value which ranges from -50 to 50. Shuffle is based on 21echoes' excellent [Cyrene](https://github.com/21echoes/cyrene) and uses more complex patterns and can be set to a "feel" and a "basis". Each channel can have an independent setting, giving endless possibilities. 
+
+Note: If a channel's swing/shuffle settings are not set ("X"), they will take the global setting which is set on the song editor page global settings page. Clock, swing and shuffle settings apply when the sequencer resets if the sequencer is currently playing.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2623s">Clocks, swings and shuffle demo</a>
+</p>
+
+#### Channel Length
+
+Channels in your sequencer can be customized to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
+
+To adjust the length of a channel, you need to specify the start and end points. Hold down the button corresponding to the start step in the channel editor. While holding it, press the button for the desired end step. The active range of the channel will be indicated by buttons that appear slightly brighter than the others.
+
+<img alt="Channel editor step and length selector buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-sequencer-step-buttons.svg" width="300" />
+
+The behavior of the sequencer when handling patterns of different lengths can also be tailored to your needs. Navigate to the Norns param pages where you can find various [options](#options) that determine how the sequencer manages channels with differing lengths.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2470s">Channel length demo</a>
+</p>
+
+
+#### Muting Channels
+
+To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also shift press (hold K3) the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
+
+<img alt="Channel editor channel select buttons - hold or shift press to mute" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-select-buttons.svg" width="300" />
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2687s">Muting channels demo</a>
+</p>
 
 ### Trig Parameters
 
@@ -465,15 +664,20 @@ Most devices in _Mosaic_ feature a set of trig params that alters either the qua
 In the second user interface page of the channel editor on the Norns screen, you will encounter a variety of parameters. Here's how to navigate and manipulate these settings:
 
 * **Page Navigation**: Use E1 to switch between pages.
-* **Selecting Parameters**: To select a parameter, turn E2. Once highlighted, adjust the parameter's value by rotating E3.
+* **Changing Parameters**: To select a parameter, turn E2. Once highlighted, adjust the parameter's value by rotating E3. To fine tune, rotate E3 whilst holding K3.
 * **Activating Parameters**: To activate a different parameter within the same slot, press K2.
 * **Locking Changes**: As you adjust values, the system automatically saves your changes. You can also create "trig locks" on specific steps by holding down the step and turning E3. This allows you to set values that will override the default parameter for that step.
 * **Default Parameter Values**: By default, a pre-set parameter value is transmitted to your selected device on steps without a trig lock. If a parameter's trig lock is set to "off," the mosaic will not send any value to your device for that parameter.
 * **Handling Off Settings**: If you set a trig lock to "off" on a step, the system will continue to send the last trig locked value instead of reverting to the default parameter value.
 
-![Param trig lock page](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/UI/channel_edit_param_select.png)
-
 These controls offer flexibility and precision in shaping the behavior of each sequence, ensuring that your musical creativity can be fully realized through the Norns system.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2235s">Params and trig locks demo</a>
+</p>
 
 #### Sequencer Params
 
@@ -501,82 +705,75 @@ Similar to random note, this trig param introduces an element of random to your 
 
 ##### Chord Strum
 
-The Chord Strum feature dynamically spaces chord notes using the selected clock division, ensuring they align rhythmically with the channel's settings. Notes are quantized to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration.
+The Chord Strum param dynamically spaces selected chord masks using the selected step division, ensuring they align rhythmically with the channel's settings. Notes are quantized to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration. Each chord note is played once.
+
+##### Chord Arpeggio
+
+The Chord Arp param is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantized to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.
+
+##### Chord Acceleration
+
+The Chord Acceleration param is a modifier for the Chord Strum and Chord Arpeggio params, to be used alongside the Chord Spread param, and it doesn't function on it's own. When set, the chord spread alters in the direction of the acceleration over time. With a positive value of acceleration, the spread value will increase by multiples of the acceleration value for each note of the chord or arp. With a negative value, the spread value will decrease by multiples of the acceleration value. With this, you can create flams and bouncing ball type effects. 
+
+##### Chord Spread
+
+The Chord Spread param is a modifier for the Chord Strum and Chord Arpeggio params. It alters the spacing between notes in these functions by the value of the param.
 
 ##### Chord Velocity Modifier
 
 The Chord Velocity Modifier incrementally adjusts the velocity of successive notes in a chord, starting from the chord's root note. This adjustment can either increase or decrease the velocity, thereby creating a "swell" effect for rising intensity or a "fade" effect for a diminishing feel.
 
-#### Locks
+##### Chord Shape Modifier
 
-Trig param values and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. When a value is locked to a step, it applies for the duration of that step. This includes trig params, scales, and octave settings on the channel page, as well as global scale and transpose settings on the global scale page. Locks are set on the channel page.
+The Chord Shape Modifiers alters the order of the chord masks that are played using the Chord Strum and Chord Arpeggio params. 
 
-To clear a grid trig lock:
+### Scale Editor
 
-1. Hold the step with the locked value.
-2. Press the value that is currently locked to unlock it.
+Access the scale editor by pressing the second global menu button.
 
-To clear all trig locks from a step:
+When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
 
-1. Hold the step you want to clear.
-2. Press K2.
+<img alt="Scale editor scale slot select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg" width="300" />
 
-Trig locks enhance your control over the sequencing process, allowing for precise adjustments and modifications at any step of your sequence.
+A long or shift press (hold K3) on a scale button selects a scale for editing without applying it to the currently playing pattern, indicated by a dimly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
 
-##### Trig Param Locks
+[Scale locks](#scale-locks) can be set to apply a scale globally or to a single channel, activating at a designated step and persisting until the end of the pattern. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
 
-Device parameters can be locked on a per-step basis. To set a param trig lock:
+<img alt="Scale editor step select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg" width="300" />
 
-1. Hold down the step you want to modify on the channel page sequencer.
-2. Adjust the value that you want to lock to this step.
+You can also adjust the rate of the global scale track and set its length independently of other channels, enabling chord progressions that extend beyond a single pattern. This feature offers substantial flexibility for crafting intricate chord progressions and varying patterns.
 
-To clear a param trig lock:
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2741s">Scale editor demo</a>
+</p>
 
-On the Norns screen, select the parameter you want to unlock.
+#### Transposition
 
-1. Hold the step where the param is locked and press K3.
+As well as setting a transposition value per scale, you can transpose your entire Song Sequence using the global quantizer transposition fader, either globally or by step using [transposition locks](#transposition-locks). Global and trig transposition applies on top of the currently selected scale's transposition value.
 
-##### Scale Locks
+<img alt="Scale editor transposition fader" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/transposition-fader.svg" width="300" />
 
-Scales can be set on a per-step basis. Scales persist until the end of the pattern unless another scale lock is encountered. To set a scale lock:
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2913s">Global transposition demo</a>
+</p>
 
-1. Hold down the step you want to modify on the channel page sequencer.
-2. Press the desired scale slot.
-
-To clear a grid trig lock:
-
-1. Hold the step with the locked value.
-2. Press the value that is currently locked to unlock it.
-
-##### Transposition Locks
-
-The transposition of your song can be set on a per-step basis from the scale page accessed in the channel editor. To set a transposition lock:
-
-1. Hold down the step you want to modify on the channel page sequencer.
-2. Press the desired transposition value.
-
-To clear a transposition lock:
-
-1. Hold the step with the locked value.
-2. Press the zero value on the transposition fader.
-
-##### Octave Locks
-
-A step's current
-
- octave can be altered using trig locks. To lock a step's octave:
-
-1. Hold down the step you want to modify on the channel page sequencer.
-2. Press the desired octave using the octave buttons at the bottom of the channel page.
-
-To clear an octave trig lock:
-
-1. Hold the step with the locked value.
-2. Press the value that is currently locked to unlock it.
-
-### Song Sequencer
+### Song Editor
 
 The Song Editor features a grid layout consisting of 90 slots. Each slot represents a unique opportunity to blend patterns, channels, rhythms, scales, and other elements into your compositions, making each Song Sequence a distinct musical creation.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2972s">Song editor demo</a>
+</p>
+
 
 #### Button Indicators
 
@@ -590,7 +787,7 @@ The Song Editor features a grid layout consisting of 90 slots. Each slot represe
 * **Copying Slots**: To copy one slot to another, press and hold the source slot, then the destination slot. Note: This action will overwrite the content in the target slot.
 * **Erasing a Slot**: To clear a slot, copy an empty slot over it. Remember, there is no undo option, so proceed with caution.
 
-![Song sequence selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/song_mode_sequencer_pattern_selector.png)
+<img alt="Song editor slot buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-pattern-slot-button.svg" width="300" />
 
 #### Song Mode Operations
 
@@ -598,18 +795,123 @@ When "song mode" is activated, the sequencer automatically progresses to the nex
 
 #### Adjusting Song Sequence Length
 
-The song sequence's length can be adjusted using the fader located at the lower end of the song editor page.
+The song sequence's length can be adjusted using the fader located at the lower left of the song editor page.
 
-* For precise control, utilize the end cap buttons.
-* For broader adjustments, use the central fader buttons.
-* The length can be set anywhere from 1 to 64, offering a wide range of possibilities.
+* The global length can be set anywhere from 1 step to 64 step, offering a wide range of possibilities.
+* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length.
 
-![Pattern length selector](https://github.com/subvertnormality/mosaic/raw/main/designs/Images/song_mode_sequencer.png)
+<img alt="Song editor global length select fader" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-slot-pattern-length-fader.svg" width="300" />
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=3160s">Global pattern length demo</a>
+</p>
 
 #### Navigating the Norns Display
 
 **Page 1**: Here, you can set the number of repetitions for each Song Sequence. This setting dictates how sequences transition in song mode. When song mode is off, you manually control slot activation, allowing you to dictate the flow of your song.
 **Page 2**: Set the tempo to match the mood you want, from a soothing lullaby to a fast-paced track.
+
+## Locks
+
+Trig param values, masks, and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. When a value is locked to a step, it applies for the duration of that step. This includes trig params, scales, and octave settings on the channel page, as well as global scale and transpose settings on the global scale page. Locks are set on the channel edit page. Trig locks enhance your control over the sequencing process, allowing for precise adjustments and modifications at any step of your sequence.
+
+### Trig Param Locks
+
+Device parameters can be locked on a per-step basis. To set a param trig lock:
+
+1. Hold down the step you want to modify on the channel page sequencer.
+2. Adjust the param value that you want to lock to this step.
+
+To clear parameter trig locks from a specific step:
+
+1. On the channel editor, navigate to the trig lock page on the Norns screen.
+2. Hold the step with trig locks and press K2.
+
+To clear all parameter trig locks from a channel:
+
+1. Ensure you are on the trig lock page on your norns device.
+2. Hold K3.
+3. Press K2.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2235s">Trig locks demo</a>
+</p>
+
+### Mask Locks
+
+Masks can also be locked on a per-step basis. To set a mask trig lock:
+
+1. Hold down the step you want to modify on the channel page sequencer.
+2. Adjust the mask value that you want to lock to this step.
+
+To clear mask locks from a specific step:
+
+1. On the channel editor, navigate to the Masks page on the Norns screen..
+2. Hold the step with mask locks and press K2.
+
+To clear all mask trig locks from a channel:
+
+1. Ensure you are on the Mask page on your norns device.
+2. Hold K3.
+3. Press K2.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1780s">Mask locks demo</a>
+</p>
+
+### Scale Locks
+
+Scales can be set on a per-step basis. They can be set globally across all channels on the Scale Editor, or per channel oin the Channel Editor. Scale locks on set on steps in the Channel Editor take prescedence over global scale locks. Scales persist until the end of the pattern unless another scale lock is encountered. To set a scale lock:
+
+1. Hold down the step you want to modify on the channel page sequencer.
+2. Press the desired scale slot.
+
+To clear a grid trig lock:
+
+1. Hold the step with the locked value.
+2. Press K2.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2854s">Scale locks demo</a>
+</p>
+
+### Transposition Locks
+
+The transposition of your song can be set on a per-step basis from the scale page accessed in the channel editor. Transposition locks are applies on top of scale transposition values. 
+
+To set a transposition lock:
+
+1. Hold down the step you want to modify on the channel page sequencer.
+2. Press the desired transposition value.
+
+To clear a transposition lock:
+
+1. Hold the step with the locked value.
+2. Press K2.
+
+### Octave Locks
+
+A step's current octave can be altered using trig locks. To lock a step's octave:
+
+1. Hold down the step you want to modify on the channel page sequencer.
+2. Press the desired octave using the octave buttons at the bottom of the channel page.
+
+To clear an octave trig lock:
+
+1. Hold the step with the locked value.
+2. Press K2.
 
 ## Save and Load
 
@@ -625,17 +927,21 @@ Various aspects of Mosaic can be configured from the param section on your Norns
 
 #### Sequencer Options
 
+##### Shift press stop
+
+When enabled, the play/stop button will only stop with a long press or when shift (K3) is held. This feature is intended to prevent accidental stops of the sequencer, especially during live performances.
+
 ##### Song Mode
 
-"Song mode" is on by default. When enabled, the song sequencer will progress through sequences as dictated by the options set on the song sequencer page. When off, song sequences will only progress with manual intervention.
+"Song mode" is on by default. When enabled, the song editor will progress through sequences as dictated by the options set on the song editor page. When off, song sequences will only progress with manual intervention.
 
-##### Reset at Sequence End
+##### Reset at Song Editor Pattern Change
 
-The "Reset at sequence end" option, which is turned on by default, ensures that the sequencer resets all channels at the end of the song sequence. This happens regardless of whether the sequencer is progressing to a new sequence, which helps maintain consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.
+The "Reset at Song Sequence Change" option, which is turned on by default, ensures that the sequencer resets all channels when transitioning from one song editor pattern to the next. This helps maintain rhythmic consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.
 
-##### Reset at Seq Pattern End
+##### Reset at Pattern Repeat
 
-"Reset at seq pattern end" is set to off by default. When enabled, it resets all channels at the end of the song sequence but only if a new sequence is queued. Disabling this option allows for evolving polyrhythms.
+"Reset at Pattern Repeat" is set to off by default. When enabled, it resets all channels at the end of a song sequence when repeating the same song editor pattern. This ensures all channels with a custom length will reset back to that channel's starting step at every start of the pattern. Disabling this option allows for evolving polyrhythms.
 
 ##### Elektron Program Changes
 
@@ -691,6 +997,10 @@ Similarly, "Lock merged to pent." is on by default and ensures notes modified by
 
 You can sync up your Eurorack Sinfonion module to Mosaic using a DIY device called [norns2sinfonion](https://github.com/subvertnormality/norns2sinfonion).
 
+### LFOs and Modulation
+
+_Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit](https://github.com/sixolet/toolkit). You can add LFOs and other rhythmic modulators to any device parameter.
+
 ## Development
 
 See https://trello.com/b/kMZ4qEhk/Mosaic for backlog. Please raise bugs and issues on Github.
@@ -703,42 +1013,5 @@ Make sure that the tests are passing before you open a PR.
 
 Do not run the tests on your Norns device as you'll end up pulling in the Norns repository onto your device and it'll cause a conflict. If you do this by accident, simply delete `/code/mosaic/lib/tests/test_artefacts` to get your Norns back up and running.
 
-## Device Config Template
-
-If copying the below code, you must exclude all text appearing after "//"
-
-```javascript
-[{
-  "params": [
-    {
-      "cc_msb": 7, // the MIDI CC number to send the command on.
-      "name": "Level", // the name representing this param.
-      "cc_max_value": 127, // the maximum value that can be sent over MIDI.
-      "short_descriptor_1": "AMP", // the label that identifies the trigger param in _Mosaic_ at the top of the dial.
-      "short_descriptor_2": "LVL", // the label that identifies the trigger param in _Mosaic_ at the bottom of the dial.
-      "id": "level", // the unique ID of the param.
-      "off_value": -1, // the value that determines when the param is off, usually -1.
-      "cc_min_value": -1 // the lower value of the MIDI param, usually -1.
-    },
-    { // here a specially sequencer param "fixed note" is used to lock the note to a certain MIDI note value, which is useful for some drum devices in combination with "maps_params_automatically".
-      "short_descriptor_2": "NOTE",
-      "name": "Fixed Note",
-      "cc_max_value": 127,
-      "default": 36, // the MIDI device will only send out the value 36, regardless of note assignment.
-      "cc_min_value": -1,
-      "short_descriptor_1": "FIXD",
-      "off_value": -1,
-      "id": "fixed_note" // this identifies the param as a special "fixed note" sequencer trig param.
-    }
-  ],
-  "type": "midi", // mandatory: leave as MIDI for custom devices.
-  "unique": true, // mandatory: true if you only allow one instance of this device in use at one time, false allows multiple instances.
-  "map_params_automatically": true, // mandatory: when true, the first 10 params are mapped and assigned on the device's channel trig parameters.
-  "polyphonic": false, // mandatory: true if more than one note can be played at once on the device.
-  "value": 8, // mandatory: arbitrary value, choose any number.
-  "default_midi_device": 1, // optional: use this to set a default MIDI output device. When in use it will no longer be possible to change the output device in _Mosaic_.
-  "default_midi_channel": 10, // optional: use this to set a default MIDI output channel. When in use it will no longer be possible to change the output channel in _Mosaic_.
-  "name": "Your device", // mandatory: the name used to identify the device in _Mosaic_.
-  "id": "a-unique-id" // mandatory: the ID used to identify the device in _Mosaic_. Must be unique.
-}]
-```
+---
+This program is released under the GNU license. Copyright Andrew Hillel 2024.

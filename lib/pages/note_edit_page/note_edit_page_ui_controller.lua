@@ -5,7 +5,7 @@ local page = include("mosaic/lib/ui_components/page")
 
 local grid_viewer = include("mosaic/lib/ui_components/grid_viewer")
 
-local grid_viewer = grid_viewer:new(0, 0)
+local grid_viewer = grid_viewer:new(0, 3)
 
 local grid_viewer_page =
   page:new(
@@ -17,7 +17,7 @@ local grid_viewer_page =
 
 function note_edit_page_ui.register_ui_draw_handlers()
   draw_handler:register_ui(
-    "pattern_note_edit_page",
+    "note_edit_page",
     function()
       grid_viewer_page:draw()
     end
@@ -25,7 +25,6 @@ function note_edit_page_ui.register_ui_draw_handlers()
 end
 
 function note_edit_page_ui.init()
-  note_edit_page_ui.register_ui_draw_handlers()
 end
 
 function note_edit_page_ui.enc(n, d)

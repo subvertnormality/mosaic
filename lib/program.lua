@@ -1,17 +1,10 @@
 local musicutil = require("musicutil")
-local fn = include("mosaic/lib/functions")
+
 local quantiser = include("mosaic/lib/quantiser")
 
 local program = {}
 local program_store = {}
 
-local pages = {
-  channel_edit_page = 1,
-  channel_sequencer_page = 2,
-  pattern_trigger_edit_page = 3,
-  pattern_note_edit_page = 4,
-  pattern_velocity_edit_page = 5
-}
 
 local function initialise_default_channels()
   local channels = {}
@@ -19,8 +12,8 @@ local function initialise_default_channels()
   for i = 1, 17 do
     channels[i] = {
       number = i,
-      trig_lock_banks = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
       trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
+      trig_lock_calculator_ids = {},
       step_trig_lock_banks = {},
       step_octave_trig_lock_banks = {},
       step_scale_trig_lock_banks = {},
@@ -52,7 +45,11 @@ local function initialise_default_channels()
       clock_mods = {name = "/1", value = 1, type = "clock_division"},
       current_step = 1,
       mute = false,
-      swing = 50
+      swing_shuffle_type = nil, -- 1 for Swing, 2 for Shuffle, nil to use global
+      swing = nil,              -- -50 to 50, nil to use global
+      shuffle_feel = nil,       -- 1 to 4, nil to use global
+      shuffle_basis = nil,      -- 1 to 6, nil to use global
+      shuffle_amount = nil
     }
   end
 
@@ -122,7 +119,7 @@ end
 function program.init()
   local root_note = 0
   program_store = {
-    selected_page = pages.channel_edit_page,
+    selected_page = pages.pages.channel_edit_page,
     selected_sequencer_pattern = 1,
     selected_pattern = 1,
     selected_channel = 1,
@@ -134,7 +131,8 @@ function program.init()
     current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     sequencer_patterns = {},
     global_step_accumulator = 0,
-    devices = {}
+    devices = {},
+    blink_state = false
   }
 
   for i = 1, 16 do
@@ -152,6 +150,14 @@ end
 
 function program.set_selected_sequencer_pattern(p)
   program_store.selected_sequencer_pattern = p
+end
+
+function program.set_selected_page(p)
+  program_store.selected_page = p
+end
+
+function program.get_selected_page()
+  return program_store.selected_page
 end
 
 function program.get_sequencer_pattern(p)
@@ -174,15 +180,21 @@ function program.set_current_step_for_channel(c, s)
 end
 
 function program.set_global_step_scale_number(step_scale_number)
-  for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
-    sequencer_pattern.channels[17].step_scale_number = step_scale_number
-  end
+  -- TODO check why this was being applied across all sequencer patterns
+  -- for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
+    program.get_selected_sequencer_pattern().channels[17].step_scale_number = step_scale_number
+  -- end
 end
 
 function program.set_channel_step_scale_number(c, step_scale_number)
-  for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
-    sequencer_pattern.channels[c].step_scale_number = step_scale_number
-  end
+  -- TODO check why this was being applied across all sequencer patterns
+  -- for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
+    program.get_selected_sequencer_pattern().channels[c].step_scale_number = step_scale_number
+  -- end
+end
+
+function program.get_channel_step_scale_number(c)
+  return program.get_selected_sequencer_pattern().channels[c].step_scale_number
 end
 
 function program.get()
@@ -190,23 +202,19 @@ function program.get()
 end
 
 function program.get_selected_channel()
-  return program.get_sequencer_pattern(program.get().selected_sequencer_pattern).channels[program.get().selected_channel]
+  return program.get_selected_sequencer_pattern().channels[program.get().selected_channel]
 end
 
 function program.get_selected_pattern()
-  return program.get_sequencer_pattern(program.get().selected_sequencer_pattern).patterns[program.get().selected_pattern]
+  return program.get_selected_sequencer_pattern().patterns[program.get().selected_pattern]
 end
 
 function program.get_channel(x)
-  return program.get_sequencer_pattern(program.get().selected_sequencer_pattern).channels[x]
+  return program.get_selected_sequencer_pattern().channels[x]
 end
 
 function program.set(p)
   program_store = p
-end
-
-function program.get_pages()
-  return pages
 end
 
 function program.add_step_param_trig_lock(step, parameter, trig_lock)
@@ -218,11 +226,12 @@ function program.add_step_param_trig_lock(step, parameter, trig_lock)
     step_trig_lock_banks[step] = {}
   end
 
-  trig_lock = math.max(trig_lock, trig_lock_params[parameter].cc_min_value or 0)
-  trig_lock = math.min(trig_lock, trig_lock_params[parameter].cc_max_value or 127)
+  trig_lock = math.max(trig_lock, trig_lock_params[parameter].nrpn_min_value or trig_lock_params[parameter].cc_min_value or 0)
+  trig_lock = math.min(trig_lock, trig_lock_params[parameter].nrpn_max_value or trig_lock_params[parameter].cc_max_value or 127)
 
   step_trig_lock_banks[step][parameter] = trig_lock
 end
+
 
 function program.get_step_param_trig_lock(channel, step, parameter)
   local step_trig_lock_banks = channel.step_trig_lock_banks
@@ -235,6 +244,7 @@ function program.step_has_param_trig_lock(channel, step)
 end
 
 function program.step_has_trig_lock(channel, step)
+
   return program.step_has_param_trig_lock(channel, step) or 
          program.step_octave_has_trig_lock(channel, step) or 
          program.step_scale_has_trig_lock(channel, step) or 
@@ -271,15 +281,26 @@ end
 
 function program.add_step_transpose_trig_lock(step, trig_lock)
   local channel = program.get_channel(17)
-  local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
 
-  trig_lock = trig_lock and math.max(math.min(trig_lock, 7), -7) or nil
+  if trig_lock ~= nil then
+    trig_lock = math.max(math.min(trig_lock, 7), -7) or nil
+  end
 
-  step_transpose_trig_lock_banks[step] = trig_lock
+  if not channel.step_transpose_trig_lock_banks then 
+    channel.step_transpose_trig_lock_banks = {}
+  end
+
+  channel.step_transpose_trig_lock_banks[step] = trig_lock
 end
 
 function program.set_transpose(transpose)
-  program.get_selected_sequencer_pattern().transpose = transpose
+  program.get_selected_sequencer_pattern().transpose = transpose or 0
+end
+
+function program.set_scale_transpose(scale, transpose)
+  
+  local s = program.get_scale(scale)
+  s.transpose = transpose
 end
 
 function program.get_transpose()
@@ -289,13 +310,14 @@ end
 function program.get_step_transpose_trig_lock(step)
   local channel = program.get_channel(17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
-  return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step] or nil
+  return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step]
 end
 
 function program.step_transpose_has_trig_lock(step)
+  if program.get_selected_channel().number ~= 17 then return false end
   local channel = program.get_channel(17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
-  return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step] and step_transpose_trig_lock_banks[step] ~= 0
+  return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step]
 end
 
 function program.step_has_trig_mask(step)
@@ -362,6 +384,26 @@ function program.step_scale_has_trig_lock(channel, step)
   return step_scale_trig_lock_banks and step_scale_trig_lock_banks[step]
 end
 
+function program.step_has_trig(channel, step)
+  return channel.working_pattern.trig_values[step] == 1
+end
+
+
+function program.increment_trig_lock_calculator_id(channel, parameter)
+  if not channel.trig_lock_calculator_ids then
+    channel.trig_lock_calculator_ids = {}
+  end
+  channel.trig_lock_calculator_ids[parameter] = (channel.trig_lock_calculator_ids[parameter] or 0) + 1
+end
+
+function program.get_trig_lock_calculator_id(channel, parameter)
+  if not channel.trig_lock_calculator_ids then
+    channel.trig_lock_calculator_ids = {}
+    channel.trig_lock_calculator_ids[parameter] = 0
+  end
+  return channel.trig_lock_calculator_ids[parameter]
+end
+
 function program.clear_trig_locks_for_step(step)
   local channel = program.get_selected_channel()
   program.add_step_scale_trig_lock(step, nil)
@@ -374,6 +416,17 @@ function program.clear_trig_locks_for_step(step)
   else
     program.add_step_transpose_trig_lock(step, nil)
   end
+end
+
+function program.clear_trig_locks_for_channel(channel)
+  channel.step_trig_lock_banks = {}
+  channel.step_octave_trig_lock_banks = {}
+  channel.step_scale_trig_lock_banks = {}
+  channel.step_transpose_trig_lock_banks = {}
+end
+
+function program.clear_device_trig_locks_for_channel(channel)
+  channel.step_trig_lock_banks = {}
 end
 
 function program.clear_masks_for_step(step)
@@ -389,12 +442,23 @@ function program.clear_masks_for_step(step)
   program.clear_step_chord_4_mask(channel, step)
 end
 
+
+function program.clear_masks_for_channel(channel)
+  channel.step_trig_masks = {}
+  channel.step_note_masks = {}
+  channel.step_velocity_masks = {}
+  channel.step_length_masks = {}
+  channel.step_micro_time_masks = {}
+  channel.step_chord_masks = {}
+end
+
 function program.get_scale(s)
   if s == 0 then
     return {
       name = "Chromatic",
       number = 0,
       scale = musicutil.generate_scale(0, "chromatic", 12),
+      pentatonic_scale = musicutil.generate_scale(0, "chromatic", 12),
       romans = {},
       root_note = 0,
       chord = 1,
@@ -434,6 +498,7 @@ local function ensure_step_masks(channel)
   end
 end
 
+
 function program.get_step_trig_masks(channel)
   ensure_step_masks(channel)
   return program.get_channel(channel).step_trig_masks
@@ -444,9 +509,17 @@ function program.set_step_trig_mask(channel, step, mask)
   program.get_channel(channel).step_trig_masks[step] = mask
 end
 
+function program.set_trig_mask(channel, mask) 
+  channel.trig_mask = mask
+end
+
 function program.get_step_note_masks(channel)
   ensure_step_masks(channel)
   return program.get_channel(channel).step_note_masks
+end
+
+function program.set_note_mask(channel, mask) 
+  channel.note_mask = mask
 end
 
 function program.get_step_velocity_masks(channel)
@@ -454,9 +527,81 @@ function program.get_step_velocity_masks(channel)
   return program.get_channel(channel).step_velocity_masks
 end
 
+function program.set_velocity_mask(channel, mask) 
+  channel.velocity_mask = mask
+end
+
 function program.get_step_length_masks(channel)
   ensure_step_masks(channel)
   return program.get_channel(channel).step_length_masks
+end
+
+function program.set_length_mask(channel, mask) 
+  channel.length_mask = mask
+end
+
+function program.get_length_mask(channel) 
+  return channel.length_mask
+end
+
+function program.set_step_length_mask(channel, step, mask)
+  channel.step_length_masks[step] = mask
+end
+
+function program.set_chord_one_mask(channel, mask) 
+  channel.chord_one_mask = mask
+end
+
+function program.set_chord_two_mask(channel, mask) 
+  channel.chord_two_mask = mask
+end
+
+function program.set_chord_three_mask(channel, mask) 
+  channel.chord_three_mask = mask
+end
+
+function program.set_chord_four_mask(channel, mask) 
+  channel.chord_four_mask = mask
+end
+
+function program.get_effective_swing_shuffle_type(channel)
+  if channel.swing_shuffle_type ~= nil then
+    return channel.swing_shuffle_type
+  else
+    return params:get("global_swing_shuffle_type")
+  end
+end
+
+function program.get_effective_swing(channel)
+  if channel.swing ~= nil then
+    return channel.swing
+  else
+    return params:get("global_swing")
+  end
+end
+
+function program.get_effective_shuffle_feel(channel)
+  if channel.shuffle_feel ~= nil then
+    return channel.shuffle_feel
+  else
+    return params:get("global_shuffle_feel")
+  end
+end
+
+function program.get_effective_shuffle_basis(channel)
+  if channel.shuffle_basis ~= nil then
+    return channel.shuffle_basis
+  else
+    return params:get("global_shuffle_basis")
+  end
+end
+
+function program.get_effective_shuffle_amount(channel)
+  if channel.shuffle_amount ~= nil then
+    return channel.shuffle_amount
+  else
+    return params:get("global_shuffle_amount")
+  end
 end
 
 function program.toggle_step_trig_mask(channel, step)
@@ -516,6 +661,22 @@ function program.clear_step_chord_4_mask(channel, step)
   if step_chord_masks and step_chord_masks[step] then
     step_chord_masks[step][4] = nil
   end
+end
+
+function program.set_step_chord_mask(channel, i, step, mask)
+  local step_chord_masks = program.get_channel(channel).step_chord_masks
+  if not step_chord_masks[step] then
+    step_chord_masks[step] = {}
+  end
+  step_chord_masks[step][i] = mask
+end
+
+function program.get_blink_state()
+  return program.get().blink_state
+end
+
+function program.toggle_blink_state()
+  program.get().blink_state = not program.get().blink_state
 end
 
 return program

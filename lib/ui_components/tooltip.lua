@@ -1,6 +1,6 @@
 local tooltip = {}
 
-local fn = include("mosaic/lib/functions")
+
 
 tooltip.text = false
 tooltip.metros = {}
@@ -30,6 +30,7 @@ function tooltip:do_tip(text)
   end
 
   tooltip.text = text
+  fn.dirty_screen(true)
 
   -- Create a new metro
   local m = metro.init(remove_tip, 3, 1)
@@ -55,5 +56,6 @@ function tooltip:show(text)
   tooltip:do_tip(text)
 
 end
+
 
 return tooltip

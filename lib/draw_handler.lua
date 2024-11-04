@@ -1,5 +1,6 @@
 local draw_handler = {}
-local fn = include("mosaic/lib/functions")
+local table_insert = table.insert
+local ipairs = ipairs
 
 -- Create a table for the handlers
 draw_handler.grid_handlers = {}
@@ -13,23 +14,26 @@ function draw_handler:register_grid(page, func)
   end
 
   -- Add the function to the list of handlers for this page
-  table.insert(self.grid_handlers[page], func)
+  table_insert(self.grid_handlers[page], func)
 end
 
 -- Call all functions registered with a page
 function draw_handler:handle_grid(page)
+
+  local found_page = fn.find_key(pages.pages, page)
+  
   -- Call all menu press handlers
   for _, func in ipairs(self.grid_handlers["menu"]) do
     func(x, y)
   end
 
   -- If no functions have been registered for this page, do nothing
-  if self.grid_handlers[fn.find_key(program.get_pages(), page)] == nil then
+  if self.grid_handlers[found_page] == nil then
     return
   end
 
   -- Otherwise, call all functions registered for this page
-  for _, func in ipairs(self.grid_handlers[fn.find_key(program.get_pages(), page)]) do
+  for _, func in ipairs(self.grid_handlers[found_page]) do
     func()
   end
 end
@@ -42,23 +46,26 @@ function draw_handler:register_ui(page, func)
   end
 
   -- Add the function to the list of ui_handlers for this page
-  table.insert(self.ui_handlers[page], func)
+  table_insert(self.ui_handlers[page], func)
 end
 
 -- Call all functions registered with a page
 function draw_handler:handle_ui(page)
+
+  local found_page = fn.find_key(pages.pages, page)
+
   -- Call all menu press handlers
   for _, func in ipairs(self.ui_handlers["tooltip"]) do
     func(x, y)
   end
 
   -- If no functions have been registered for this page, do nothing
-  if self.ui_handlers[fn.find_key(program.get_pages(), page)] == nil then
+  if self.ui_handlers[found_page] == nil then
     return
   end
 
   -- Otherwise, call all functions registered for this page
-  for _, func in ipairs(self.ui_handlers[fn.find_key(program.get_pages(), page)]) do
+  for _, func in ipairs(self.ui_handlers[found_page]) do
     func()
   end
 end

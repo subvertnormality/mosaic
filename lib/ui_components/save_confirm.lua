@@ -1,8 +1,8 @@
 local save_confirm = {}
 
-local fn = include("mosaic/lib/functions")
-local save_func = nil
-local cancel_func = nil
+
+local save_funcs = {}
+local cancel_funcs = {}
 local default_confirm_message = "Press K3 to confirm"
 local default_ok_message = "OK"
 local default_cancel_message = "Action cancelled"
@@ -11,32 +11,37 @@ local ok_message = default_ok_message
 local cancel_message = default_cancel_message
 
 function save_confirm.set_save(func)
-  save_func = func
+  table.insert(save_funcs, func)
   tooltip:show(confirm_message)
   confirm_message = default_confirm_message
 end
 
 function save_confirm.set_cancel(func)
-  cancel_func = func
+  table.insert(cancel_funcs, func)
 end
 
 function save_confirm.confirm()
-  if save_func ~= nil then
-    save_func()
+  if #save_funcs > 0 then
+    for _, func in ipairs(save_funcs) do
+      func()
+    end
+
     tooltip:show(ok_message)
   end
-  save_func = nil
-  cancel_func = nil
+  save_funcs = {}
+  cancel_funcs = {}
   ok_message = default_ok_message
 end
 
 function save_confirm.cancel()
-  if cancel_func ~= nil then
-    cancel_func()
+  if #cancel_funcs > 0 then
+    for _, func in ipairs(cancel_funcs) do
+      func()
+    end
     tooltip:show(cancel_message)
   end
-  save_func = nil
-  cancel_func = nil
+  save_funcs = {}
+  cancel_funcs = {}
   cancel_message = default_cancel_message
 end
 
@@ -50,6 +55,14 @@ end
 
 function save_confirm.set_cancel_message(message)
   cancel_message = message
+end
+
+function save_confirm.clear()
+  save_funcs = {}
+  cancel_funcs = {}
+  confirm_message = default_confirm_message
+  ok_message = default_ok_message
+  cancel_message = default_cancel_message
 end
 
 return save_confirm

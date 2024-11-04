@@ -1,7 +1,8 @@
 local device_map = {}
+device_map.params_cache = {}
 
-local fn = include("mosaic/lib/functions")
 local json = require("mosaic/lib/json")
+local nb_device_param_maps = include("mosaic/lib/nb_device_param_maps")
 
 local device_map_keyed_by_id = {}
 
@@ -59,6 +60,7 @@ local function create_cc_device()
       cc_midi_device,
       {
         ["id"] = "cc_" .. i,
+        ["param_id"] = "cc_" .. i,
         ["name"] = "CC " .. i,
         ["cc_msb"] = i,
         ["cc_lsb"] = nil,
@@ -69,8 +71,8 @@ local function create_cc_device()
         ["nrpn_lsb"] = nil,
         ["nrpn_min_value"] = nil,
         ["nrpn_max_value"] = nil,
-        ["short_descriptor_1"] = "CC",
-        ["short_descriptor_2"] = i
+        ["short_descriptor_1"] = "CC"..i,
+        ["short_descriptor_2"] = ""
       }
     )
   end
@@ -88,8 +90,9 @@ end
 local function get_none_param()
   return {
     ["id"] = "none",
+    ["param_id"] = "none",
     ["name"] = "None",
-    ["short_descriptor_1"] = "X",
+    ["short_descriptor_1"] = "None",
     ["short_descriptor_2"] = ""
   }
 end
@@ -107,59 +110,7 @@ end
 
 local devices
 
-local clock_divisions_ui_labels = {
-  "x16",
-  "x12",
-  "x8",
-  "x6",
-  "x5.3",
-  "x5",
-  "x4",
-  "x3",
-  "x2.6",
-  "x2",
-  "x1.5",
-  "x1.3",
-  "/1",
-  "/1.5",
-  "/2",
-  "/2.6",
-  "/3",
-  "/4",
-  "/5",
-  "/5.3",
-  "/6",
-  "/7",
-  "/8",
-  "/9",
-  "/10", 
-  "/11", 
-  "/12", 
-  "/13", 
-  "/14", 
-  "/15", 
-  "/16", 
-  "/17", 
-  "/19", 
-  "/21", 
-  "/23", 
-  "/24", 
-  "/25", 
-  "/27", 
-  "/29", 
-  "/32", 
-  "/40", 
-  "/48", 
-  "/56", 
-  "/64", 
-  "/96", 
-  "/101",
-  "/128",
-  "/192",
-  "/256",
-  "/384",
-  "/512" 
-}
+local note_division_labels = include("mosaic/lib/divisions").note_division_labels
 
 local stock_params = {
   get_none_param(),
@@ -171,7 +122,20 @@ local stock_params = {
     ["off_value"] = -1,
     ["cc_min_value"] = -1,
     ["cc_max_value"] = 127,
-    ["param_type"] = "stock"
+    ["param_type"] = "stock",
+    ["ui_labels"] = {
+      "X", "C0", "C#0", "D0", "D#0", "E0", "F0", "F#0", "G0", "G#0", "A0", "A#0", "B0",
+      "C1", "C#1", "D1", "D#1", "E1", "F1", "F#1", "G1", "G#1", "A1", "A#1", "B1",
+      "C2", "C#2", "D2", "D#2", "E2", "F2", "F#2", "G2", "G#2", "A2", "A#2", "B2",
+      "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3",
+      "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4",
+      "C5", "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5", "A5", "A#5", "B5",
+      "C6", "C#6", "D6", "D#6", "E6", "F6", "F#6", "G6", "G#6", "A6", "A#6", "B6",
+      "C7", "C#7", "D7", "D#7", "E7", "F7", "F#7", "G7", "G#7", "A7", "A#7", "B7",
+      "C8", "C#8", "D8", "D#8", "E8", "F8", "F#8", "G8", "G#8", "A8", "A#8", "B8",
+      "C9", "C#9", "D9", "D#9", "E9", "F9", "F#9", "G9", "G#9", "A9", "A#9", "B9",
+      "C10", "C#10", "D10", "D#10", "E10", "F10", "F#10", "G10"
+    }
   },
   {
     ["id"] = "quantised_fixed_note",
@@ -188,8 +152,8 @@ local stock_params = {
     ["name"] = "Random Note",
     ["short_descriptor_1"] = "RAND",
     ["short_descriptor_2"] = "NOTE",
-    ["off_value"] = -1,
-    ["cc_min_value"] = -1,
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
     ["cc_max_value"] = 200,
     ["param_type"] = "stock"
   },
@@ -198,8 +162,8 @@ local stock_params = {
     ["name"] = "Random Velocity",
     ["short_descriptor_1"] = "RAND",
     ["short_descriptor_2"] = "VELO",
-    ["off_value"] = -1,
-    ["cc_min_value"] = -1,
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
     ["cc_max_value"] = 254,
     ["param_type"] = "stock"
   },
@@ -218,8 +182,8 @@ local stock_params = {
     ["name"] = "Twos Random Note",
     ["short_descriptor_1"] = "2RND",
     ["short_descriptor_2"] = "NOTE",
-    ["off_value"] = -1,
-    ["cc_min_value"] = -1,
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
     ["cc_max_value"] = 200,
     ["param_type"] = "stock"
   },
@@ -228,10 +192,42 @@ local stock_params = {
     ["name"] = "Chord Note Strum",
     ["short_descriptor_1"] = "CHRD",
     ["short_descriptor_2"] = "STRM",
-    ["off_value"] = 13,
-    ["cc_min_value"] = 1,
-    ["cc_max_value"] = 51,
-    ["ui_labels"] = clock_divisions_ui_labels,
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 92,
+    ["ui_labels"] = note_division_labels,
+    ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord_arp",
+    ["name"] = "Chord Note Arpeggio",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "ARP",
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 92,
+    ["ui_labels"] = note_division_labels,
+    ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord_spread",
+    ["name"] = "Chord Spread",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "SPRD",
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 92,
+    ["ui_labels"] = note_division_labels,
+    ["param_type"] = "stock"
+  },
+  {
+    ["id"] = "chord_acceleration",
+    ["name"] = "Chord Accel Mod",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "ACCL",
+    ["off_value"] = 0,
+    ["cc_min_value"] = -5,
+    ["cc_max_value"] = 5,
     ["param_type"] = "stock"
   },
   {
@@ -246,14 +242,14 @@ local stock_params = {
   },
   {
     ["id"] = "chord_strum_pattern",
-    ["name"] = "Chord Strum Pattern",
+    ["name"] = "Chord Pattern",
     ["short_descriptor_1"] = "CHRD",
     ["short_descriptor_2"] = "PTRN",
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
     ["cc_max_value"] = 4,
     ["ui_labels"] = {
-      "off",
+      "X",
       "->",
       "<-",
       "-><-",
@@ -287,6 +283,20 @@ local tested_note_players = {
   "ansible 1",
   "ansible 2",
   "crow para",
+  "drumcrow 1",
+  "drumcrow 2",
+  "drumcrow 3",
+  "drumcrow 4",
+  "rudiments 1",
+  "rudiments 2",
+  "rudiments 3",
+  "rudiments 4",
+  "polyperc 1",
+  "doubledecker",
+  "Oilcan 1",
+  "Oilcan 2",
+  "Oilcan 3",
+  "Oilcan 4"
 }
 
 local function merge_devices()
@@ -295,25 +305,6 @@ local function merge_devices()
  
   local directory = norns.state.data .. "config"
   local stock_device_map = combine_json_files_into_table(directory)
-
-
-
-  for _, device in pairs(stock_device_map) do
-    local has_none_id = false
-
-
-    for _, param in pairs(device.params) do
-        if param.id == "none" then
-          has_none_id = true
-            break -- Stop checking more params if we found a param with id "none"
-        end
-    end
-
-    -- Perform an action if no param with id "none" was found
-    if not has_none_id then
-      table.insert(device.params, 1, get_none_param())
-    end
-  end
 
   table.insert(stock_device_map, create_cc_device())
   table.insert(stock_device_map, get_none_device())
@@ -331,49 +322,61 @@ local function merge_devices()
             ["name"] = fn.title_case(index),
             ["id"] = index,
             ["unique"] = true,
-            ["map_params_automatically"] = false,
+            ["map_params_automatically"] = nb_device_param_maps.get_default_params_for_device(index),
             ["default_midi_channel"] = nil,
             ["player"] = device,
-            ["params"] = new_device_params
+            ["params"] = new_device_params,
+            ["supports_slew"] = device.describe().supports_slew
           }
         )
 
-        if device.describe().params then
-          local device_param_names = device.describe().params
+        local device_param_names = device.describe().params or nb_device_param_maps.get_params_for_device(index)
+
+        if type(device_param_names) == "table" and next(device_param_names) then
+
           for i = 1, #device_param_names do
+
             local param_id = params.lookup[device_param_names[i]]
             local p = params:lookup_param(param_id)
 
             params:show(param_id)
 
-            local minval = 0
-            local maxval = 127
-            local quantum = 1
 
-            if p.count then
-              minval = 1
-              maxval = p.count
-            elseif p["controlspec"] then
-              quantum = p["controlspec"].quantum or 1
-              minval = params:get_range(param_id)[1]
-              maxval = params:get_range(param_id)[2]
+            local quantum = 0.01
+            local step = 0
+            local minval = params:get_range(param_id)[1]
+            local maxval = params:get_range(param_id)[2]
+            local warp = "lin"
+
+            if p["controlspec"] then
+              quantum = p["controlspec"].quantum or 0.01
+              quantum = p["controlspec"].step or 0
+              warp = p["controlspec"].warp or "lin"
             end
-
-            local quantum_modifier = 1 / quantum
+            if p.min then
+              minval = p.min
+            end
+            if p.max then
+              maxval = p.max
+            end
 
             table.insert(
               new_device_params,
               {
                 ["id"] = device_param_names[i],
+                ["param_id"] = param_id,
                 ["name"] = fn.title_case(p.name),
+                ["unique"] = true,
                 ["short_descriptor_1"] = fn.format_first_descriptor(p.name),
-                ["short_descriptor_2"] = fn.format_second_descriptor(p.name),
-                ["cc_min_value"] = minval * quantum_modifier,
-                ["cc_max_value"] = maxval * quantum_modifier,
-                ["quantum_modifier"] = quantum_modifier,
+                ["short_descriptor_2"] = fn.format_last_descriptor(p.name),
+                ["cc_min_value"] = minval,
+                ["cc_max_value"] = maxval,
+                ["quantum"] = quantum,
+                ["step"] = step,
                 ["default"] = p["controlspec"] and p["controlspec"].default or 0
               }
             )
+
           end
         end
 
@@ -388,11 +391,13 @@ local function merge_devices()
               ["off_value"] = -1,
               ["cc_min_value"] = -1,
               ["cc_max_value"] = 60,
-              ["quantum_modifier"] = 60,
+              ["quantum"] = 1,
               ["default"] = -1
             }
           )
         end
+      else
+        print("Skipping untested device: ", index)
       end
     end
   end
@@ -417,30 +422,50 @@ end
 
 local function merge_params(device_params, stock_params)
   local merged_params = {}
-  local seen_ids = {} -- hash set for fast id lookup
+  local seen_ids = {}
+  local insert_index = 1
 
-  if (merged_params[1] and merged_params[1].id ~= "none") then
-    table.insert(merged_params, get_none_param())
+  -- Cache get_none_param() result
+  local none_param = get_none_param()
 
-    seen_ids[get_none_param().id] = true
+  -- Check if 'none' param should be added
+  if not (stock_params[1] and stock_params[1].id == "none") then
+    merged_params[insert_index] = none_param
+    seen_ids[none_param.id] = true
+    insert_index = insert_index + 1
   end
 
-  -- Copy the contents of stock_params into merged_params
-  for index, sp in ipairs(stock_params) do
-    if not seen_ids[sp.id] then
-      sp.index = index
-      table.insert(merged_params, sp)
-      seen_ids[sp.id] = true
-      param_index = index + 1
+  -- Function to copy all necessary fields
+  local function copy_param_fields(source_param)
+    local new_param = {}
+    for key, value in pairs(source_param) do
+      new_param[key] = value
+    end
+    new_param.index = insert_index
+    return new_param
+  end
+
+  -- Merge stock_params
+  for i = 1, #stock_params do
+    local sp = stock_params[i]
+    local sp_id = sp.id
+    if not seen_ids[sp_id] then
+      local new_param = copy_param_fields(sp)
+      merged_params[insert_index] = new_param
+      seen_ids[sp_id] = true
+      insert_index = insert_index + 1
     end
   end
 
-  -- Add the contents of device_params into merged_params
-  for index, dp in ipairs(device_params) do
-    if not seen_ids[dp.id] then
-      dp.index = index
-      table.insert(merged_params, dp)
-      seen_ids[dp.id] = true
+  -- Merge device_params
+  for i = 1, #device_params do
+    local dp = device_params[i]
+    local dp_id = dp.id
+    if not seen_ids[dp_id] then
+      local new_param = copy_param_fields(dp)
+      merged_params[insert_index] = new_param
+      seen_ids[dp_id] = true
+      insert_index = insert_index + 1
     end
   end
 
@@ -465,33 +490,55 @@ function device_map.get_device(id)
 end
 
 function device_map.get_available_devices_for_channel(c)
+  -- Build a set of device IDs that are currently used by other channels
   local active_devices_set = {}
-  local devices_copy = fn.deep_copy(devices)
+  local prog = program.get()
+  local prog_devices = prog.devices
 
-  -- Populating active_devices_set with ids from channels 1 through 16
   for i = 1, 16 do
-    local device_map_id = program.get().devices[i].device_map
-    if i ~= c and device_map_id ~= "none" then
-      active_devices_set[device_map_id] = true
+    if i ~= c then
+      local device_map_id = prog_devices[i].device_map
+      if device_map_id ~= "none" then
+        active_devices_set[device_map_id] = true
+      end
     end
   end
 
-  -- Filtering devices_copy to remove any table whose id is present in active_devices_set
-  local filtered_devices = {}
-  for _, inner_table in ipairs(devices_copy) do
-    if not (inner_table.id and inner_table.unique and active_devices_set[inner_table.id]) then
-      table.insert(filtered_devices, inner_table)
+  -- Build a list of available devices
+  local available_devices = {}
+  for _, device in ipairs(devices) do
+    local device_id = device.id
+    if not (device.unique and active_devices_set[device_id]) then
+      table.insert(available_devices, device)
     end
   end
 
-  return filtered_devices
+  return available_devices
 end
 
 function device_map.get_params(device_id)
-  local device = fn.get_by_id(devices, device_id)
+  -- Check if the merged parameters for this device_id are cached
+  if device_map.params_cache[device_id] then
+    return device_map.params_cache[device_id]
+  end
 
+  -- Retrieve the device and its parameters
+  local device = fn.get_by_id(devices, device_id)
   local device_params = device and device.params or {}
-  return merge_params(device_params, stock_params)
+
+  -- Call merge_params and cache the result
+  local merged_params = merge_params(device_params, stock_params)
+  device_map.params_cache[device_id] = merged_params
+
+  return merged_params
+end
+
+function device_map.invalidate_params_cache(device_id)
+  device_map.params_cache[device_id] = nil
+end
+
+function device_map.invalidate_all_params_cache()
+  device_map.params_cache = {}
 end
 
 function device_map.get_available_params_for_channel(c, selected_param)
@@ -533,6 +580,10 @@ function device_map.validate_devices()
     end
 
   end
+end
+
+function device_map.get_stock_params()
+  return stock_params
 end
 
 local function create_device_map_keyed_by_id(devices)

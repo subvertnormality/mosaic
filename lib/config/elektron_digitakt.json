@@ -1,10 +1,20 @@
 [{
   "name": "Digitakt",
   "type": "midi",
-  "map_params_automatically": false,
+  "map_params_automatically": [
+    "source_parameters_source_tune",
+    "source_parameters_source_play_mode",
+    "source_parameters_source_bit_reduction",
+    "source_parameters_source_loop_position",
+    "filter_parameters_filter_frequency",
+    "filter_parameters_resonance",
+    "lfo_parameters_lfo_depth",
+    "amp_parameters_amp_overdrive",
+    "amp_parameters_amp_pan"
+  ],
   "polyphonic": false,
   "id": "digitakt",
-  "params": [
+"params": [
     {
       "cc_max_value": 127,
       "nrpn_min_value": 0,

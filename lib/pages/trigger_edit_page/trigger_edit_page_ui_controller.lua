@@ -1,17 +1,17 @@
 local trigger_edit_page_ui_controller = {}
 
-local fn = include("mosaic/lib/functions")
+
 local pages = include("mosaic/lib/ui_components/pages")
 local page = include("mosaic/lib/ui_components/page")
 local grid_viewer = include("mosaic/lib/ui_components/grid_viewer")
 local list_selector = include("mosaic/lib/ui_components/list_selector")
 
 local pages = pages:new()
-local grid_viewer = grid_viewer:new(0, 0)
+local grid_viewer = grid_viewer:new(0, 3)
 local tresillo_mult =
   list_selector:new(
-  10,
-  25,
+  0,
+  29,
   "Tresillo mult",
   {
     {id = 1, value = 8, name = "x8"},
@@ -25,9 +25,6 @@ local tresillo_mult =
   }
 )
 
-function trigger_edit_page_ui_controller.change_page(subpage_name)
-  -- pages:select_page(subpage_name)
-end
 
 local grid_viewer_page =
   page:new(
@@ -47,7 +44,7 @@ local trig_edit_options_page =
 
 function trigger_edit_page_ui_controller.register_ui_draw_handlers()
   draw_handler:register_ui(
-    "pattern_trigger_edit_page",
+    "trigger_edit_page",
     function()
       pages:draw()
     end
@@ -60,7 +57,6 @@ function trigger_edit_page_ui_controller.init()
   pages:select_page(1)
   tresillo_mult:select()
   trigger_edit_page_ui_controller.refresh_tresillo()
-  trigger_edit_page_ui_controller.register_ui_draw_handlers()
 end
 
 function trigger_edit_page_ui_controller.enc(n, d)

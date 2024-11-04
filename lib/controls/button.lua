@@ -1,14 +1,11 @@
 button = {}
 button.__index = button
 
-local fn = include("mosaic/lib/functions")
-
 function button:new(x, y, states)
   local self = setmetatable({}, button)
   self.x = x
   self.y = y
-  self.bclock = false
-  self.bstate = true
+  self.blink_active = false
   if (states) then
     self.states = states
   else
@@ -17,12 +14,18 @@ function button:new(x, y, states)
     self.states[2] = {"on", 15}
   end
   self.state = 1
-  self.bright_mod = 0
+  self.bright_mod = 6
+  self.pre_func = function() end
+  self.post_func = function() end
   return self
 end
 
 function button:draw()
-  grid_abstraction.led(self.x, self.y, self.states[self.state][2] - self.bright_mod)
+  if self.blink_active and program.get_blink_state() then
+    grid_abstraction.led(self.x, self.y, self.states[self.state][2] - self.bright_mod)
+  else
+    grid_abstraction.led(self.x, self.y, self.states[self.state][2])
+  end
 end
 
 function button:get_state()
@@ -34,29 +37,11 @@ function button:set_state(val)
 end
 
 function button:blink()
-  self.bclock =
-    clock.run(
-    function()
-      while true do
-        if self.bstate then
-          self.bright_mod = 0
-          self.bstate = false
-        else
-          self.bright_mod = 6
-          self.bstate = true
-        end
-        fn.dirty_grid(true)
-        clock.sleep(0.3)
-      end
-    end
-  )
+  self.blink_active = true
 end
 
 function button:no_blink()
-  if self.bclock then
-    self.bright_mod = 0
-    clock.cancel(self.bclock)
-  end
+  self.blink_active = false
 end
 
 function button:press(x, y)

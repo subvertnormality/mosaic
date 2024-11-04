@@ -1,44 +1,71 @@
 -- channel_edit_page_ui_refreshers.lua
 local channel_edit_page_ui_refreshers = {}
 local quantiser = include("lib/quantiser")
-local fn = include("lib/functions")
+local divisions = include("lib/divisions")
 
-function channel_edit_page_ui_refreshers.refresh_notes(note_selectors)
+local throttle_time = 0.01
+
+channel_edit_page_ui_refreshers.refresh_masks = scheduler.debounce(function(note_selectors)
   local pressed_keys = grid_controller.get_pressed_keys()
   local channel = program.get_selected_channel()
-  local values = {
-    note = -1, velocity = -1, length = -1, trig = -1,
-    chords = {0, 0, 0, 0}
+
+  -- Cache frequently accessed selectors
+  local note_selector = note_selectors.note
+  local velocity_selector = note_selectors.velocity
+  local length_selector = note_selectors.length
+  local trig_selector = note_selectors.trig
+  local chord_selectors = note_selectors.chords
+
+  -- Cache channel properties
+  local note_mask = channel.note_mask or -1
+  local velocity_mask = channel.velocity_mask or -1
+  local length_mask_index = divisions.note_division_indexes[channel.length_mask] or 0
+  local trig_mask = channel.trig_mask or -1
+  local chord_masks = {
+    channel.chord_one_mask or 0,
+    channel.chord_two_mask or 0,
+    channel.chord_three_mask or 0,
+    channel.chord_four_mask or 0
   }
 
-  if #pressed_keys > 0 then
-    if pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
-      for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        values.note = channel.step_note_masks[step] or -1
-        values.velocity = channel.step_velocity_masks[step] or -1
-        values.length = channel.step_length_masks[step] or -1
-        values.trig = channel.step_trig_masks[step] or -1
-        if channel.step_chord_masks[step] then
-          values.chords[1] = channel.step_chord_masks[step][1] or 0
-          values.chords[2] = channel.step_chord_masks[step][2] or 0
-          values.chords[3] = channel.step_chord_masks[step][3] or 0
-          values.chords[4] = channel.step_chord_masks[step][4] or 0
-        end
+  if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
+    -- Cache step masks for efficiency
+    local step_note_masks = channel.step_note_masks
+    local step_velocity_masks = channel.step_velocity_masks
+    local step_length_masks = channel.step_length_masks
+    local step_trig_masks = channel.step_trig_masks
+    local step_chord_masks = channel.step_chord_masks
+
+    for _, keys in ipairs(pressed_keys) do
+      local step = fn.calc_grid_count(keys[1], keys[2])
+
+      -- Set note selector values using cached masks
+      note_selector:set_value(step_note_masks[step] or note_mask)
+      velocity_selector:set_value(step_velocity_masks[step] or velocity_mask)
+      length_selector:set_value(divisions.note_division_indexes[step_length_masks[step]] or length_mask_index)
+      trig_selector:set_value(step_trig_masks[step] or trig_mask)
+
+      -- Get step chord masks or default chord masks
+      local step_chords = step_chord_masks[step] or chord_masks
+
+      for i, chord_selector in ipairs(chord_selectors) do
+        chord_selector:set_value(step_chords[i] or chord_masks[i])
       end
     end
-  end
+  else
+    -- Set selectors to channel-level masks
+    note_selector:set_value(note_mask)
+    velocity_selector:set_value(velocity_mask)
+    length_selector:set_value(length_mask_index)
+    trig_selector:set_value(trig_mask)
 
-  note_selectors.note:set_value(values.note)
-  note_selectors.velocity:set_value(values.velocity)
-  note_selectors.length:set_value(values.length)
-  note_selectors.trig:set_value(values.trig)
-  for i, chord_selector in ipairs(note_selectors.chords) do
-    chord_selector:set_value(values.chords[i])
+    for i, chord_selector in ipairs(chord_selectors) do
+      chord_selector:set_value(chord_masks[i])
+    end
   end
-end
+end, throttle_time)
 
-function channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector, clock_swing_value_selector)
+channel_edit_page_ui_refreshers.refresh_clock_mods = scheduler.debounce(function(clock_mod_list_selector, clock_swing_value_selector)
   local channel = program.get_selected_channel()
   local clock_mods = channel.clock_mods
   local divisions = fn.filter_by_type(clock_controller.get_clock_divisions(), clock_mods.type)
@@ -47,93 +74,135 @@ function channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selec
     i = i + 12
   end
   clock_mod_list_selector:set_selected_value(i)
-  if channel.number == 17 then
-    clock_mod_list_selector:select()
-    clock_swing_value_selector:deselect()
+end, throttle_time)
+
+channel_edit_page_ui_refreshers.refresh_swing = scheduler.debounce(function(clock_swing_value_selector)
+  local channel = program.get_selected_channel()
+  local value = channel.swing 
+  if value == nil then
+    value = -51
   end
-end
+  clock_swing_value_selector:set_value(value)
+end, throttle_time)
 
-function channel_edit_page_ui_refreshers.refresh_swing(clock_swing_value_selector)
+channel_edit_page_ui_refreshers.refresh_swing_shuffle_type = scheduler.debounce(function(swing_shuffle_type_selector)
   local channel = program.get_selected_channel()
-  clock_swing_value_selector:set_value(channel.swing)
-end
+  local value = channel.swing_shuffle_type or 1
+  swing_shuffle_type_selector:set_selected_value(value)
+end, throttle_time)
 
-function channel_edit_page_ui_refreshers.refresh_device_selector(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
+
+channel_edit_page_ui_refreshers.refresh_shuffle_feel = scheduler.debounce(function(shuffle_feel_selector)
   local channel = program.get_selected_channel()
-  if channel.number == 17 then return end
+  local value = channel.shuffle_feel or 1
+  shuffle_feel_selector:set_selected_value(value)
+end, throttle_time)
+
+channel_edit_page_ui_refreshers.refresh_shuffle_basis = scheduler.debounce(function(shuffle_basis_selector)
+  local channel = program.get_selected_channel()
+  local value = channel.shuffle_basis or 1
+  shuffle_basis_selector:set_selected_value(value)
+end, throttle_time)
+
+channel_edit_page_ui_refreshers.refresh_shuffle_amount = scheduler.debounce(function(shuffle_amount_selector)
+  local channel = program.get_selected_channel()
+  local value = channel.shuffle_amount or 0
+  shuffle_amount_selector:set_value(value)
+end, throttle_time)
+
+channel_edit_page_ui_refreshers.refresh_device_selector = scheduler.debounce(function(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
+  local channel = program.get_selected_channel()
   local device = device_map.get_device(program.get().devices[channel.number].device_map)
   local device_params = device_map.get_params(program.get().devices[channel.number].device_map)
   param_select_vertical_scroll_selector:set_items(device_params)
   param_select_vertical_scroll_selector:set_meta_item(device)
-end
+end, throttle_time)
 
-function channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector)
-  local scale = quantizer_vertical_scroll_selector:get_selected_item()
-  if scale then
-    local number = scale.number
-    program.get_selected_sequencer_pattern().active = true
-    romans_vertical_scroll_selector:set_items(quantiser.get_scales()[number].romans)
-    fn.dirty_screen(true)
-  end
-end
-
-function channel_edit_page_ui_refreshers.refresh_quantiser(quantizer_vertical_scroll_selector, notes_vertical_scroll_selector, romans_vertical_scroll_selector, rotation_vertical_scroll_selector, m_params)
-  local channel = program.get_selected_channel()
-  local scale = program.get_scale(program.get().selected_scale)
-  program.get_selected_sequencer_pattern().active = true
-  quantizer_vertical_scroll_selector:set_selected_item(scale.number)
-  notes_vertical_scroll_selector:set_selected_item(scale.root_note + 1)
-  romans_vertical_scroll_selector:set_selected_item(scale.chord)
-  rotation_vertical_scroll_selector:set_selected_item((scale.chord_degree_rotation or 0) + 1)
-  channel_edit_page_ui_refreshers.refresh_romans(quantizer_vertical_scroll_selector, romans_vertical_scroll_selector, quantiser, fn)
-end
-
-function channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
+channel_edit_page_ui_refreshers.refresh_trig_lock_value = scheduler.debounce(function(i, m_params)
   local channel = program.get_selected_channel()
   local param_id = channel.trig_lock_params[i].param_id
 
-  if channel.trig_lock_banks[i] then
-    m_params[i]:set_value(channel.trig_lock_banks[i])
+  if not param_id then
+    m_params[i]:set_value(-1)
+    return
   end
-end
 
-function channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params)
+  local val = fn.clean_number(params:get(param_id))
+
+  if (norns_param_state_handler.get_original_param_state(channel.number, i).value) then
+    val = norns_param_state_handler.get_original_param_state(channel.number, i).value
+  end
+
+  m_params[i]:set_value(val)
+
+end, throttle_time)
+
+
+channel_edit_page_ui_refreshers.refresh_trig_locks = scheduler.debounce(function(m_params)
   local channel = program.get_selected_channel()
   local pressed_keys = grid_controller.get_pressed_keys()
+  local current_step = program.get_current_step_for_channel(channel.number)
 
-  channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
-
-  if channel.trig_lock_params[i].id then
-    m_params[i]:set_name(channel.trig_lock_params[i].name)
-    m_params[i]:set_top_label(channel.trig_lock_params[i].short_descriptor_1)
-    m_params[i]:set_bottom_label(channel.trig_lock_params[i].short_descriptor_2)
-    m_params[i]:set_off_value(channel.trig_lock_params[i].off_value)
-    m_params[i]:set_min_value(channel.trig_lock_params[i].cc_min_value)
-    m_params[i]:set_max_value(channel.trig_lock_params[i].cc_max_value)
-    m_params[i]:set_ui_labels(channel.trig_lock_params[i].ui_labels)
-
-    local step_trig_lock = program.get_step_param_trig_lock(channel, program.get_current_step_for_channel(channel.number), i)
-    if #pressed_keys > 0 then
-      if pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
-        step_trig_lock = program.get_step_param_trig_lock(channel, fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2]), i)
-        local default_param = channel.trig_lock_banks[i]
-        if channel.trig_lock_params[i].type == "midi" and channel.trig_lock_params[i].param_id then
-          default_param = params:lookup_param(channel.trig_lock_params[i].param_id).value
-        end
-        m_params[i]:set_value(step_trig_lock or default_param)
-      end
-    end
-  else
-    m_params[i]:set_name("")
-    m_params[i]:set_top_label("X")
-    m_params[i]:set_bottom_label("")
-  end
-end
-
-function channel_edit_page_ui_refreshers.refresh_trig_locks(m_params)
+  -- Process all updates in a single batch
+  local updates = {}
+  
   for i = 1, 10 do
-    channel_edit_page_ui_refreshers.refresh_trig_lock(i, m_params)
+    -- Gather all the updates first
+    local m_param = m_params[i]
+    local trig_lock_param = channel.trig_lock_params[i]
+    if trig_lock_param and trig_lock_param.param_id then
+      local param_id = trig_lock_param.param_id
+      local param_value = params:get(param_id) or trig_lock_param.off_value
+      local default_param = norns_param_state_handler.get_original_param_state(channel.number, i).value
+      
+      -- Store the update info
+      updates[i] = {
+        param = m_param,
+        value = default_param or param_value,
+        trig_lock_param = trig_lock_param
+      }
+      
+      -- Handle pressed keys
+      if #pressed_keys > 0 then
+        local pressed_key = pressed_keys[1]
+        if pressed_key[2] > 3 and pressed_key[2] < 8 then
+          local grid_count = fn.calc_grid_count(pressed_key[1], pressed_key[2])
+          local step_trig_lock = program.get_step_param_trig_lock(channel, grid_count, i)
+          updates[i].value = step_trig_lock or params:get(param_id)
+        end
+      end
+    else
+      updates[i] = {
+        param = m_param,
+        value = -1,
+        trig_lock_param = {
+          name = "",
+          short_descriptor_1 = "None",
+          short_descriptor_2 = "",
+          off_value = -1,
+          value = -1
+        }
+      }
+    end
   end
-end
+  
+  -- Apply all updates in a single pass
+  for i, update in pairs(updates) do
+    local m_param = update.param
+    local u_trig_lock_param = update.trig_lock_param
+    
+    m_param:set_name(u_trig_lock_param.name)
+    m_param:set_top_label(u_trig_lock_param.short_descriptor_1)
+    m_param:set_bottom_label(u_trig_lock_param.short_descriptor_2)
+    m_param:set_off_value(u_trig_lock_param.off_value)
+    m_param:set_min_value(u_trig_lock_param.nrpn_min_value or u_trig_lock_param.cc_min_value)
+    m_param:set_max_value(u_trig_lock_param.nrpn_max_value or u_trig_lock_param.cc_max_value)
+    m_param:set_ui_labels(u_trig_lock_param.ui_labels)
+    m_param:set_value(update.value)
+  end
+
+  -- Request a single UI refresh after all updates are complete
+  fn.dirty_screen(true)
+end, throttle_time)
 
 return channel_edit_page_ui_refreshers

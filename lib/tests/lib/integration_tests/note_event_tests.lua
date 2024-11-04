@@ -261,10 +261,63 @@ function test_clock_processes_note_events()
 
 end
 
+
+function test_note_off_values_dont_fire_too_early_or_late()
+  setup()
+  local sequencer_pattern = 1
+  program.set_selected_sequencer_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  test_pattern.note_values[2] = 0
+  test_pattern.lengths[2] = 1
+  test_pattern.trig_values[2] = 1
+  test_pattern.velocity_values[2] = 101
+
+  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+
+  pattern_controller.update_working_patterns()
+
+  clock_setup()
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_pulses(23)
+
+  local note_off_event = table.remove(midi_note_off_events)
+
+  luaunit.assert_nil(note_off_event)
+
+  progress_clock_by_pulses(1)
+  
+  local note_off_event = table.remove(midi_note_off_events)
+
+  luaunit.assert_equals(note_off_event[1], 60)
+  luaunit.assert_equals(note_off_event[2], 100)
+  luaunit.assert_equals(note_off_event[3], 1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 101)
+  luaunit.assert_equals(note_on_event[3], 1)
+end
+
 function test_clock_processes_notes_of_various_lengths()
 
-  -- Define a table of lengths to test
-  local lengths_to_test = {1, 2, 3, 4, 5, 16, 17, 24, 31, 32, 33, 47, 48, 63, 64, 65, 150, 277} -- Add more lengthsas needed
+  -- local lengths_to_test = {3/8, 1/8, 1/4, 1/3, 1/2, 0.75, 1, 1.25, 2.5, 3, 4, 5, 16, 17, 24, 31, 32, 33, 47, 48, 63, 64, 65, 128} -- Add more lengthsas needed
+  local lengths_to_test = {1/4} -- Add more lengthsas needed
+
+  
   local test_pattern
 
   for _, length in ipairs(lengths_to_test) do

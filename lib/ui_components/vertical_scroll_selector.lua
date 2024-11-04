@@ -1,7 +1,7 @@
 local vertical_scroll_selector = {}
 vertical_scroll_selector.__index = vertical_scroll_selector
 
-local fn = include("mosaic/lib/functions")
+
 
 function vertical_scroll_selector:new(x, y, name, items)
   local self = setmetatable({}, vertical_scroll_selector)
@@ -56,9 +56,9 @@ function vertical_scroll_selector:draw()
   if self.selected_item and self.items[self.selected_item - 1] then
     screen.level(1)
     if self.items[self.selected_item - 1].name then
-      screen.text(self.items[self.selected_item - 1].name)
+      screen.text(self.items[self.selected_item - 1].name, 12)
     else
-      screen.text(self.items[self.selected_item - 1])
+      screen.text(self.items[self.selected_item - 1], 12)
     end
   end
 
@@ -71,9 +71,9 @@ function vertical_scroll_selector:draw()
       screen.level(5)
     end
     if self.items[self.selected_item].name then
-      screen.text(self.items[self.selected_item].name)
+      screen.text(self.items[self.selected_item].name, 12)
     else
-      screen.text(self.items[self.selected_item])
+      screen.text(self.items[self.selected_item], 12)
     end
   end
 
@@ -82,9 +82,9 @@ function vertical_scroll_selector:draw()
   if self.selected_item and self.items[self.selected_item + 1] then
     screen.level(1)
     if self.items[self.selected_item + 1].name then
-      screen.text(self.items[self.selected_item + 1].name)
+      screen.text(self.items[self.selected_item + 1].name, 12)
     else
-      screen.text(self.items[self.selected_item + 1])
+      screen.text(self.items[self.selected_item + 1], 12)
     end
   end
 end
@@ -104,10 +104,14 @@ function vertical_scroll_selector:scroll_up()
 end
 
 function vertical_scroll_selector:scroll(direction) -- 1 for down, -1 for up
-  if direction == 1 then
-    self:scroll_down()
-  elseif direction == -1 then
-    self:scroll_up()
+  if direction > 0 then
+    for i = 1, direction do
+      self:scroll_down()
+    end
+  elseif direction < 0 then
+    for i = 1, math.abs(direction) do
+      self:scroll_up()
+    end
   end
 end
 
