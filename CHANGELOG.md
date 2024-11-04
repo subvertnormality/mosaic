@@ -54,16 +54,16 @@
 - Improved error handling
 
 ### Documentation
-- Comprehensive new manual with detailed workflow explanations
+- Comprehensive new manual with detailed workflow explanation
+- New cheat sheet
+- Nee video manual
 - Improved device configuration documentation
 - Added new examples and usage scenarios
+- New config file creator lets you create config json file in a web based editor
 
 #### Integration Updates
 - Full compatibility with matrix mod and toolkit
 - Improved modulation routing and parameter control
-
-### Documentation
-- New config file creator lets you create config json file in a web based editor
 
 ### Migration Guide
 1. Backup your existing `.pset` and `.ptn` files
