@@ -2,7 +2,7 @@
 -- @release v2.1
 -- @author byzero
 -- @lattice_by tyleretters & ezra & zack & rylee
--- @shuffle_by 21echos and sixolet https://github.com/21echoes/cyrene
+-- @shuffle_by 21echoes and sixolet https://github.com/21echoes/cyrene
 
 local Lattice, Sprocket = {}, {}
 
