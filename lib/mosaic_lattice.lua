@@ -1,7 +1,7 @@
 -- @module Mosaic Lattice++
 -- @release v2.1
 -- @author byzero
--- @lattice_by tyleretters & ezra & zack & rylee
+-- @lattice_by tyleretters & ezra & zack & robbie
 -- @shuffle_by 21echoes and sixolet https://github.com/21echoes/cyrene
 
 local Lattice, Sprocket = {}, {}

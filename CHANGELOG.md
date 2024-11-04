@@ -19,7 +19,7 @@
 #### Improved Rhythm Control
 - Completely redesigned clock and swing system featuring:
   - Improved traditional swing implementation with values from -50 to 50
-  - New shuffle patterns based on 21echo's Cyrene
+  - New shuffle patterns based on 21echoes' Cyrene
   - Independent settings per channel
   - Global default settings
 
