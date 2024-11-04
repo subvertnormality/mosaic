@@ -1003,8 +1003,6 @@ _Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit
 
 ## Development
 
-See https://trello.com/b/kMZ4qEhk/Mosaic for backlog. Please raise bugs and issues on Github.
-
 Make sure that the tests are passing before you open a PR.
 
 ```
@@ -1012,6 +1010,14 @@ Make sure that the tests are passing before you open a PR.
 ```
 
 Do not run the tests on your Norns device as you'll end up pulling in the Norns repository onto your device and it'll cause a conflict. If you do this by accident, simply delete `/code/mosaic/lib/tests/test_artefacts` to get your Norns back up and running.
+
+### Roadmap
+
+* Live trig lock and note recorder
+
+### Interesting Components for Norns Script Developers
+
+Mosaic has a unit testing framework that allows developers to develop and test their scripts away from their Norns hardware. The test harness pulls the Norns repo and uses the local copy, along side some mocks and shims, to enable luaunit tests to be run successfully. Check the ```/lib/tests``` folder for the harness and example tests.
 
 ---
 This program is released under the GNU license. Copyright Andrew Hillel 2024.
