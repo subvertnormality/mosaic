@@ -1,4 +1,33 @@
 
+
+<svg display="none" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+     xml:space="preserve"  width="25px" height="25px" viewbox="0 0 500 500">
+     <symbol id="video-icon">
+<g>
+	<g>
+		<g>
+			<path d="M370.001,26.35H18.5C8.282,26.35,0,34.633,0,44.85v289.477c0,10.218,8.282,18.5,18.5,18.5h262.662l-20.326-23.571
+				h-48.548v-29.603h25.435l-0.183-0.224c-6.49-7.407-10.784-15.061-12.85-22.429H44.4V102.175h299.7V277h-40.213
+				c6.104,6.485,12.491,13.053,17.853,18.368c3.759-3.521,8.191-7.416,13.159-11.314c16.925-13.288,33.388-21.414,48.932-24.151
+				c1.562-0.274,3.121-0.479,4.672-0.647V44.85C388.501,34.633,380.219,26.35,370.001,26.35z M129.038,299.653h47.175v29.601
+				h-47.175V299.653z M45.787,299.653h47.176v29.601H45.787V299.653z M92.963,79.521H45.787v-29.6h47.176V79.521z M176.213,79.521
+				h-47.175v-29.6h47.175V79.521z M259.463,79.521h-47.175v-29.6h47.175V79.521z M342.713,79.521h-47.175v-29.6h47.175V79.521z"/>
+			<path d="M464.662,354.325c-4.595-24.766-20.357-47.662-29.344-59.11c-12.191-15.53-27.666-21.767-45.99-18.538
+				c-13.086,2.305-27.307,9.429-42.271,21.177c-10.572,8.303-18.558,16.611-22.088,20.479c-8.874-7.644-33.651-33.175-45.816-47.571
+				c-6.109-7.229-21.865-22.604-33.621-11.991c-12.654,12.301,5.882,32.396,6.362,32.979l74.362,91.024
+				c-0.301,0.402-0.637,0.752-1.021,1.055c-7.133,5.601-27.943-4.69-36.344-10.245c-7.68-5.076-20.609-5.037-27.137,0.086
+				c-2.612,2.053-4.06,4.842-4.075,7.854c-0.021,4.338,2.815,8.82,8.422,13.313c0.063,0.051,0.177,0.149,0.339,0.289
+				c8.286,7.1,30.764,24.782,60.445,35.668c19.027,6.979,37.564,9.854,55.104,8.551c21.754-1.621,42.023-9.693,60.246-24
+				C461.781,399.991,469.327,379.461,464.662,354.325z"/>
+			<path d="M175.976,127.423c-2.845-2.387-6.815-2.905-10.183-1.335c-3.365,1.57-5.517,4.948-5.517,8.662v100.833
+				c0,3.715,2.151,7.092,5.517,8.661c1.291,0.604,2.671,0.897,4.042,0.897c2.204,0,4.386-0.763,6.141-2.233l60.163-50.416
+				c2.168-1.817,3.42-4.501,3.42-7.328s-1.252-5.511-3.42-7.327L175.976,127.423z"/>
+        </g>
+        </g>
+        </g>
+        </symbol>
+</svg>
+
 <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/logo.svg" alt="Mosaic Logo" width="200" />
 
 --- 
@@ -157,6 +186,13 @@ To start the sequencer, press the lowest left hand button on the grid. To stop t
 
 <img alt="Mosaic grid start-stop button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-play-stop-button.svg" width="300" />
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=632s">Start and stop functionality demo</a>
+</p>
+
 ### Grid Menu Navigation
 
 The four buttons starting from the third column on the lowest row serve as the global menu buttons. From left to right, these buttons allow access to the [Channel Editor](#channel-editor) and [Scale Editor](#scale-editor):
@@ -176,11 +212,23 @@ As well as the [Pattern Editors](#pattern-editor) and [Song Editor](#song-editor
 
 The pattern editor button cycles through three pages, accessible by pressing the button repeatedly. These are the [Pattern Trig Editor](#adding-trigs), the [Pattern Note Editor](#adding-notes), and the [Pattern Velocity Editor](#adding-velocity).
 
-
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=330s">Global navigation demo</a>
+</p>
 
 ### Norns Menu Navigation
 
 Further configuration happens on Norns. Each _Mosaic_ grid page has a group of pages on the Norns screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you navigate away from the page without applying, the change will be cancelled.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=490s">Norns navigation demo</a>
+</p>
 
 For a detailed reference on the layout of your Norns device, consult the official [Norns documentation](https://monome.org/docs/norns/).
 
@@ -256,6 +304,13 @@ Patterns serve as the foundational elements of your harmony and rhythm sections.
 
 Access the pattern editor by pressing the third key in the global menu cluster on your Grid.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=660s">Pattern editor demo</a>
+</p>
+
 #### Adding Trigs
 
 Trigs are added in the pattern editor. Using the top row, pick one of the 16 available patterns.
@@ -305,6 +360,13 @@ While previewing a new pattern, use the move controls to shift its position. The
 
 On the Norns screen, you can see the selected channel's grid state on page 1. This is the merged version of the channel and is a useful context for editing your pattern. Use E2 to select channels. On page 2 you can select trig editor options. Currently, this allows you to edit the tresillo multiplier in use. Experiment with different values to get wildly different results with the tresillo algorithm.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=760s">Pattern editor trig page demo</a>
+</p>
+
 #### Adding Notes
 
 In _Mosaic_, pattern notes aren't strictly bound to a single scale. Instead, they are valued by their position within the currently active scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D.
@@ -333,6 +395,14 @@ The gentle flicker on the top row indicates the currently chosen pattern.  If yo
 
 On the Norns screen, you'll find the channel grid visualizer. Use E2 to select the current channel.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1120s">Pattern editor note page demo</a>
+</p>
+
+
 #### Adding Velocity
 
 Now let's look at the velocity editor, which functions similarly to the note page. Access it by pressing the fifth button in the global menu cluster.
@@ -341,15 +411,36 @@ The velocity editor spans two vertical pages: the first displays velocities from
 
 On the Norns screen, you can see the channel grid visualizer. Use E2 to select the current channel.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1229s">Pattern editor velocity page demo</a>
+</p>
+
 ### Channel Editor
 
 Select the channel editor page by pressing the far left global menu button, and select one of the 16 available channels using the channel select row at the top of _Mosaic_'s Grid UI.
 
 <img alt="Channel editor channel select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-select-buttons.svg" width="300" />
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1357s">Channel editor demo</a>
+</p>
+
 #### Devices
 
 For _Mosaic_ to do anything, you must have a device assigned to a channel. Devices represent a hardware device in your studio, perhaps a software device on your computer, or a software device in Norns itself.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1358s">Devices demo</a>
+</p>
 
 ##### MIDI Sound Sources
 
@@ -377,11 +468,25 @@ n.b. devices are picked up automatically. Simply install the desired mod, and pi
 
 MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to a value of -1 ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1454s">Devices parameters demo</a>
+</p>
+
 #### Adding Patterns to Channels
 
 The core of your rhythm and harmony sections are formed by adding patterns to channels. To do this, first select a channel using the channel buttons. A single channel can accommodate multiple patterns, and likewise, a single pattern can be assigned to multiple channels. To assign patterns, use the pattern select row, located second from the top on Mosaic’s Grid UI.
 
 <img alt="Channel editor pattern assign buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/pattern-assign-buttons.svg" width="300" />
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1568s">Applying patterns to channels demo</a>
+</p>
 
 #### Masks
 
@@ -389,9 +494,24 @@ Masks in _Mosaic_ allow you to precisely control trig values, notes, velocities,
 
 With masking, you have the flexibility to modify individual attributes of a pattern. For instance, you could increase the velocity of a note without changing other settings, add additional chord tones, or completely silence a note. Masks also enable you to assign values to steps that are currently void of any pattern influence. By default, notes added this way will align with the selected musical scale. However, they will not conform to specific scale degrees or rotations. If you wish to incorporate accidentals or embrace a more dissonant sound, this default behavior can be disabled in the _Mosaic_ settings.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1740s">Masks demo</a>
+</p>
+
 ##### Adding Trig Masks
 
 You can quickly add trig masks to your sequence by shift pressing (hold K3) the desired step on the sequencer on the channel edit page. Remember to asign a note mask, velocity mask and length mask to hear your desired note! You can also quickly remove notes this way.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1780s">Mask trig lock demo</a>
+</p>
+
 
 ##### Adding Melodic Notes over Harmony and Drums
 
@@ -409,6 +529,14 @@ Additionally, take advantage of the chord trig params to enhance your musical ex
 
 To remove a mask from a step, navigate to the mask page in the channel editor with your desired channel selected, hold down the step with the mask-to-be-removed, and press K2. To remove all masks on a channel, hold shift (K3) and press K2.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1825s">Removing masks demo</a>
+</p>
+
+
 ##### MIDI Input
 
 You can input notes, velocity, and chords using a MIDI keyboard. However, setting the length of these inputs requires manual selection. To do this, ensure you have your desired channel selected on _Mosaic_. Then, while holding the desired step, press the corresponding key on your keyboard. If you are on the mask page of your Norns, the values you input will display as trig locks.
@@ -424,6 +552,13 @@ You are also able to control all 10 of the trig parameters on the currently sele
 To determine how your patterns interact and meld within the composition, you'll need to use the merge mode selector. This feature allows for nuanced control over how overlapping steps on patterns in the same channel behave, impacting trigs, notes, velocity, and length.
 
 <img alt="Channel editor pattern assign buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/pattern-assign-buttons.svg" width="300" />
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2065s">Marge modes demo</a>
+</p>
 
 ##### Trig Merge Modes
 
@@ -484,6 +619,13 @@ Additionally, adding swing to each channel allows you to shift notes off the gri
 
 Clock, swing and shuffle settings apply when the sequencer resets if the sequencer is currently playing.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2623s">Clocks, swings and shuffle demo</a>
+</p>
+
 #### Channel Length
 
 Channels in your sequencer can be customized to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
@@ -494,11 +636,26 @@ To adjust the length of a channel, you need to specify the start and end points.
 
 The behavior of the sequencer when handling patterns of different lengths can also be tailored to your needs. Navigate to the Norns param pages where you can find various [options](#options) that determine how the sequencer manages channels with differing lengths.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2470s">Channel length demo</a>
+</p>
+
+
 #### Muting Channels
 
 To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also shift press (hold K3) the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
 
 <img alt="Channel editor channel select buttons - hold or shift press to mute" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-select-buttons.svg" width="300" />
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2687s">Muting channels demo</a>
+</p>
 
 ### Trig Parameters
 
@@ -514,6 +671,13 @@ In the second user interface page of the channel editor on the Norns screen, you
 * **Handling Off Settings**: If you set a trig lock to "off" on a step, the system will continue to send the last trig locked value instead of reverting to the default parameter value.
 
 These controls offer flexibility and precision in shaping the behavior of each sequence, ensuring that your musical creativity can be fully realized through the Norns system.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2235s">Params and trig locks demo</a>
+</p>
 
 #### Sequencer Params
 
@@ -579,15 +743,37 @@ A long or shift press (hold K3) on a scale button selects a scale for editing wi
 
 You can also adjust the rate of the global scale track and set its length independently of other channels, enabling chord progressions that extend beyond a single pattern. This feature offers substantial flexibility for crafting intricate chord progressions and varying patterns.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2741s">Scale editor demo</a>
+</p>
+
 #### Transposition
 
 As well as setting a transposition value per scale, you can transpose your entire Song Sequence using the global quantizer transposition fader, either globally or by step using [transposition locks](#transposition-locks). Global and trig transposition applies on top of the currently selected scale's transposition value.
 
 <img alt="Scale editor transposition fader" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/transposition-fader.svg" width="300" />
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2913s">Global transposition demo</a>
+</p>
+
 ### Song Editor
 
 The Song Editor features a grid layout consisting of 90 slots. Each slot represents a unique opportunity to blend patterns, channels, rhythms, scales, and other elements into your compositions, making each Song Sequence a distinct musical creation.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2972s">Song editor demo</a>
+</p>
+
 
 #### Button Indicators
 
@@ -616,6 +802,13 @@ The song sequence's length can be adjusted using the fader located at the lower 
 
 <img alt="Song editor global length select fader" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-slot-pattern-length-fader.svg" width="300" />
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=3160s">Global pattern length demo</a>
+</p>
+
 #### Navigating the Norns Display
 
 **Page 1**: Here, you can set the number of repetitions for each Song Sequence. This setting dictates how sequences transition in song mode. When song mode is off, you manually control slot activation, allowing you to dictate the flow of your song.
@@ -643,6 +836,13 @@ To clear all parameter trig locks from a channel:
 2. Hold K3.
 3. Press K2.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2235s">Trig locks demo</a>
+</p>
+
 ### Mask Locks
 
 Masks can also be locked on a per-step basis. To set a mask trig lock:
@@ -661,6 +861,13 @@ To clear all mask trig locks from a channel:
 2. Hold K3.
 3. Press K2.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1780s">Mask locks demo</a>
+</p>
+
 ### Scale Locks
 
 Scales can be set on a per-step basis. They can be set globally across all channels on the Scale Editor, or per channel oin the Channel Editor. Scale locks on set on steps in the Channel Editor take prescedence over global scale locks. Scales persist until the end of the pattern unless another scale lock is encountered. To set a scale lock:
@@ -672,6 +879,13 @@ To clear a grid trig lock:
 
 1. Hold the step with the locked value.
 2. Press K2.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2854s">Scale locks demo</a>
+</p>
 
 ### Transposition Locks
 
@@ -799,5 +1013,5 @@ Make sure that the tests are passing before you open a PR.
 
 Do not run the tests on your Norns device as you'll end up pulling in the Norns repository onto your device and it'll cause a conflict. If you do this by accident, simply delete `/code/mosaic/lib/tests/test_artefacts` to get your Norns back up and running.
 
-
+---
 This program is released under the GNU license. Copyright Andrew Hillel 2024.
