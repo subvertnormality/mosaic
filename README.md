@@ -134,6 +134,8 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
   * [Sinfonion Connect](#sinfonion-connect)
   * [LFOs and Modulation](#lfos-and-modulation)
 - [Development](#development)
+  * [Roadmap](#roadmap)
+  * [Interesting Components for Norns Script Developers](#interesting-components-for-norns-script-developers)
 - [Device Config Creator](#device-config-creator)
 
 ## Getting Started
