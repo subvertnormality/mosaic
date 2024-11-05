@@ -142,7 +142,9 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
 
 ### Install
 
-To install, simply run `;install https://github.com/subvertnormality/mosaic` in maiden.
+Install using the Norns community catalogue or simply run `;install https://github.com/subvertnormality/mosaic` in maiden.
+
+Note: please remove alpha or beta versions of Mosaic if installed, including the data/mosaic
 
 ### Setup
 
