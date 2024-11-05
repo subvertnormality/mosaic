@@ -764,7 +764,7 @@ As well as setting a transposition value per scale, you can transpose your entir
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
     <use href="#video-icon" />
   </svg>
-  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2913s">Global transposition demo</a>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2905s">Global transposition demo</a>
 </p>
 
 ### Song Editor
