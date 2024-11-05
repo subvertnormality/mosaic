@@ -1,8 +1,8 @@
--- mosaic v1.0
+-- mosaic v1.0.0
 -- grid-first rhythm and 
 -- harmony sequencer.
 --
--- llllllll.co/t/mosaic
+-- llllllll.co/t/mosaic-v1-0-0
 -- manual: t.ly/h-Wsw
 
 -- Copyright Andrew Hillel 2024. See the included GNU licence for more information.
