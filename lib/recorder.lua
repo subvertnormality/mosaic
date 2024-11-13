@@ -48,9 +48,13 @@ function recorder.init()
   }
 end
 
-function recorder.add_note(channel, step, note, velocity)
-  -- Capture original state if this is the first modification to this step
-  local step_key = string.format("%d_%d", channel.number, step)
+function recorder.add_note(channel, step, note, velocity, song_pattern)
+  -- Use current selected pattern if none specified
+  song_pattern = song_pattern or program.get().selected_sequencer_pattern
+  
+  -- Create key that includes song pattern
+  local step_key = string.format("%d_%d_%d", song_pattern, channel.number, step)
+  
   if not state.original_states[step_key] then
     state.original_states[step_key] = capture_step_state(channel, step)
   end
@@ -63,6 +67,7 @@ function recorder.add_note(channel, step, note, velocity)
     type = EVENT_TYPES.NOTE_ADDED,
     data = {
       channel_number = channel.number,
+      song_pattern = song_pattern,
       step = step,
       note = note,
       velocity = velocity,
@@ -81,9 +86,12 @@ function recorder.add_note(channel, step, note, velocity)
   state.current_event_index = state.current_event_index + 1
 end
 
-function recorder.add_chord(channel, step, notes, velocities, chord_degrees)
+function recorder.add_chord(channel, step, notes, velocities, chord_degrees, song_pattern)
+  -- Use current selected pattern if none specified
+  song_pattern = song_pattern or program.get().selected_sequencer_pattern
+  
   -- Capture original state if this is the first modification to this step
-  local step_key = string.format("%d_%d", channel.number, step)
+  local step_key = string.format("%d_%d_%d", song_pattern, channel.number, step)
   if not state.original_states[step_key] then
     state.original_states[step_key] = capture_step_state(channel, step)
   end
@@ -96,6 +104,7 @@ function recorder.add_chord(channel, step, notes, velocities, chord_degrees)
     type = EVENT_TYPES.CHORD_ADDED,
     data = {
       channel_number = channel.number,
+      song_pattern = song_pattern,
       step = step,
       notes = notes,
       velocities = velocities,
@@ -127,13 +136,15 @@ end
 function recorder.undo()
   if state.current_event_index > 0 then
     local event = state.event_history[state.current_event_index]
-    local channel = program.get_channel(1, event.data.channel_number)
+    -- Use the song pattern from the event data
+    local channel = program.get_channel(event.data.song_pattern, event.data.channel_number)
     local step = event.data.step
     
     -- Find the most recent previous event for this step, if any
     local prev_event = nil
     for i = state.current_event_index - 1, 1, -1 do
       if state.event_history[i].data.channel_number == event.data.channel_number and 
+         state.event_history[i].data.song_pattern == event.data.song_pattern and  -- Add pattern check
          state.event_history[i].data.step == step then
         prev_event = state.event_history[i]
         break
@@ -175,7 +186,8 @@ function recorder.redo()
   if state.current_event_index < #state.event_history then
     state.current_event_index = state.current_event_index + 1
     local event = state.event_history[state.current_event_index]
-    local channel = program.get_channel(1, event.data.channel_number)
+    -- Use the song pattern from the event data
+    local channel = program.get_channel(event.data.song_pattern, event.data.channel_number)
     
     if event.type == EVENT_TYPES.NOTE_ADDED then
       channel.step_trig_masks[event.data.step] = 1

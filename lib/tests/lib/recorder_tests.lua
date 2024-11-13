@@ -612,3 +612,211 @@ function test_recorder_should_preserve_original_state_across_multiple_edits()
   luaunit.assert_equals(original_chord[2], 4)
   luaunit.assert_equals(original_chord[3], 7)
 end
+
+function test_recorder_should_preserve_states_across_patterns()
+  recorder.init()
+  program.init()
+  
+  -- Set up channels in different patterns
+  program.set_selected_sequencer_pattern(1)
+  local channel_pattern1 = program.get_channel(1, 1)
+  channel_pattern1.step_trig_masks[1] = 1
+  channel_pattern1.step_note_masks[1] = 48
+  channel_pattern1.step_velocity_masks[1] = 70
+  
+  program.set_selected_sequencer_pattern(2)
+  local channel_pattern2 = program.get_channel(2, 1)
+  channel_pattern2.step_trig_masks[1] = 1
+  channel_pattern2.step_note_masks[1] = 48
+  channel_pattern2.step_velocity_masks[1] = 70
+  
+  -- Make edits specifying different patterns
+  recorder.add_note(channel_pattern1, 1, 60, 100, 1)  -- Pattern 1
+  recorder.add_note(channel_pattern2, 1, 62, 90, 2)   -- Pattern 2
+  
+  -- Verify each pattern tracked separately
+  recorder.undo()  -- Undo pattern 2 edit
+  luaunit.assert_equals(channel_pattern2.step_note_masks[1], 48)  -- Pattern 2 back to original
+  luaunit.assert_equals(channel_pattern1.step_note_masks[1], 60)  -- Pattern 1 unchanged
+  
+  recorder.undo()  -- Undo pattern 1 edit
+  luaunit.assert_equals(channel_pattern1.step_note_masks[1], 48)  -- Pattern 1 back to original
+end
+
+function test_recorder_should_undo_redo_in_correct_pattern()
+  recorder.init()
+  program.init()
+  
+  -- Set up two patterns
+  program.set_selected_sequencer_pattern(1)
+  local channel1_pattern1 = program.get_channel(1, 1)
+  channel1_pattern1.step_note_masks[1] = 48
+  
+  program.set_selected_sequencer_pattern(2)
+  local channel1_pattern2 = program.get_channel(2, 1)
+  channel1_pattern2.step_note_masks[1] = 50
+  
+  -- Add notes to both patterns, explicitly passing song pattern
+  recorder.add_note(channel1_pattern1, 1, 60, 100, 1)  -- Pattern 1
+  recorder.add_note(channel1_pattern2, 1, 62, 90, 2)   -- Pattern 2
+  
+  -- Undo should restore correct pattern
+  recorder.undo()  -- Should affect pattern 2
+  luaunit.assert_equals(channel1_pattern2.step_note_masks[1], 50)  -- Back to original
+  luaunit.assert_equals(channel1_pattern1.step_note_masks[1], 60)  -- Pattern 1 unchanged
+  
+  recorder.undo()  -- Should affect pattern 1
+  luaunit.assert_equals(channel1_pattern1.step_note_masks[1], 48)  -- Back to original
+  
+  -- Redo should also respect patterns
+  recorder.redo()  -- Should affect pattern 1
+  luaunit.assert_equals(channel1_pattern1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1_pattern2.step_note_masks[1], 50)
+  
+  recorder.redo()  -- Should affect pattern 2
+  luaunit.assert_equals(channel1_pattern2.step_note_masks[1], 62)
+  luaunit.assert_equals(channel1_pattern1.step_note_masks[1], 60)
+end
+
+function test_recorder_should_find_previous_events_in_same_pattern()
+  recorder.init()
+  program.init()
+  
+  -- Set up two patterns
+  program.set_selected_sequencer_pattern(1)
+  local channel1_pattern1 = program.get_channel(1, 1)
+  
+  program.set_selected_sequencer_pattern(2)
+  local channel1_pattern2 = program.get_channel(2, 1)
+  
+  -- Create sequence of events across patterns
+  recorder.add_note(channel1_pattern1, 1, 60, 100, 1)  -- Pattern 1
+  recorder.add_note(channel1_pattern2, 1, 62, 90, 2)   -- Pattern 2
+  recorder.add_note(channel1_pattern1, 1, 64, 80, 1)   -- Pattern 1
+  
+  -- Undo should find previous event in same pattern
+  recorder.undo()  -- Undo last note in pattern 1
+  luaunit.assert_equals(channel1_pattern1.step_note_masks[1], 60)  -- Back to first note
+  luaunit.assert_equals(channel1_pattern2.step_note_masks[1], 62)  -- Pattern 2 unchanged
+end
+
+function test_recorder_should_not_modify_step_key_when_same_channel_number_in_different_patterns()
+  recorder.init()
+  program.init()
+  
+  -- Set up two channels with same number but in different patterns
+  program.set_selected_sequencer_pattern(1)
+  local channel1_pattern1 = program.get_channel(1, 1)
+  channel1_pattern1.step_note_masks[1] = 48
+  
+  program.set_selected_sequencer_pattern(2)
+  local channel1_pattern2 = program.get_channel(2, 1)  -- Same channel number (1)
+  channel1_pattern2.step_note_masks[1] = 50
+  
+  -- Add note to first pattern
+  recorder.add_note(channel1_pattern1, 1, 60, 100, 1)
+  
+  -- State should include original state for pattern 1
+  local state = recorder.get_state()
+  local step_key = "1_1_1"  -- pattern_channel_step
+  luaunit.assert_equals(state.original_states[step_key].note_mask, 48)
+  
+  -- Add note to second pattern
+  recorder.add_note(channel1_pattern2, 1, 62, 90, 2)
+  
+  -- Should create new original state for pattern 2
+  step_key = "2_1_1"
+  luaunit.assert_equals(state.original_states[step_key].note_mask, 50)
+end
+
+function test_recorder_should_store_deep_copies_of_chord_masks()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set up initial chord
+  if not channel.step_chord_masks then channel.step_chord_masks = {} end
+  channel.step_chord_masks[1] = {1, 3, 5}
+  
+  -- Add new chord
+  recorder.add_chord(channel, 1, {60, 64, 67}, {100, 90, 80}, {2, 4, 6})
+  
+  -- Modify original chord array
+  channel.step_chord_masks[1][1] = 7
+  
+  -- Undo should restore original values, not modified ones
+  recorder.undo()
+  
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 1)
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 3)
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5)
+end
+
+function test_recorder_should_handle_default_pattern_correctly()
+  recorder.init()
+  program.init()
+  
+  program.set_selected_sequencer_pattern(2)  -- Set current pattern to 2
+  local channel = program.get_channel(2, 1)
+  channel.step_note_masks[1] = 48
+  
+  -- Don't specify pattern (should use selected pattern 2)
+  recorder.add_note(channel, 1, 60, 100)
+  
+  -- Check that it used pattern 2
+  local state = recorder.get_state()
+  luaunit.assert_equals(state.event_history[1].data.song_pattern, 2)
+  
+  -- Original state should be stored under correct key
+  local step_key = "2_1_1"  -- pattern_channel_step
+  luaunit.assert_equals(state.original_states[step_key].note_mask, 48)
+end
+
+function test_recorder_should_preserve_event_order_during_undo()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  recorder.add_note(channel, 1, 60, 100)
+  recorder.add_note(channel, 2, 62, 90)
+  recorder.add_note(channel, 3, 64, 80)
+  
+  -- Get initial event order
+  local state = recorder.get_state()
+  local initial_events = {}
+  for i, event in ipairs(state.event_history) do
+    initial_events[i] = event.data.note
+  end
+  
+  -- Undo everything
+  recorder.undo()
+  recorder.undo()
+  recorder.undo()
+  
+  -- Redo everything
+  recorder.redo()
+  recorder.redo()
+  recorder.redo()
+  
+  -- Check event order is preserved
+  state = recorder.get_state()
+  for i, event in ipairs(state.event_history) do
+    luaunit.assert_equals(event.data.note, initial_events[i])
+  end
+end
+
+function test_recorder_should_handle_nil_chord_degrees_correctly()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  recorder.add_chord(channel, 1, {60, 64}, {100, 90}, nil)
+  
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 100)
+  luaunit.assert_equals(channel.step_chord_masks[1], nil)
+  
+  recorder.add_chord(channel, 1, {62, 65}, {95, 85}, {})
+  
+  luaunit.assert_equals(channel.step_chord_masks[1], nil)
+end

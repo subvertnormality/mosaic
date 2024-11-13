@@ -510,7 +510,7 @@ function channel_edit_page.register_presss()
   )
 end
 
-function channel_edit_page.handle_note_on_m_midi_message(note, velocity, chord_number, chord_degree)
+function channel_edit_page.handle_note_on_midi_message(note, velocity, chord_number, chord_degree)
   local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 then

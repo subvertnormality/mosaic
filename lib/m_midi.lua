@@ -80,7 +80,7 @@ function handle_midi_event_data(data, midi_device)
       chord_degree = nil
     end
 
-    channel_edit_page.handle_note_on_m_midi_message(note, velocity, chord_number, chord_degree)
+    channel_edit_page.handle_note_on_midi_message(note, velocity, chord_number, chord_degree)
   elseif data[1] == 128 then -- note off
     local stored_note = midi_off_store[data[2]]
     if stored_note == nil then
