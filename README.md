@@ -555,13 +555,13 @@ You are also able to control all 10 of the trig parameters on the currently sele
 
 To determine how your patterns interact and meld within the composition, you'll need to use the merge mode selector. This feature allows for nuanced control over how overlapping steps on patterns in the same channel behave, impacting trigs, notes, velocity, and length.
 
-<img alt="Channel editor pattern assign buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/pattern-assign-buttons.svg" width="300" />
+<img alt="Channel editor pattern assign buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/merge-mode-buttons.svg" width="300" />
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
     <use href="#video-icon" />
   </svg>
-  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2065s">Marge modes demo</a>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2065s">merge modes demo</a>
 </p>
 
 ##### Trig Merge Modes
@@ -572,7 +572,7 @@ These modes define how trigs are applied when there are overlapping steps across
 * **Skip**: Trigs will apply only if they appear on a step in exactly one selected pattern. If a trig appears on a step in multiple patterns, it won't activate.
 * **Only**: Trigs will apply only if they appear on a step in more than one selected pattern, ignoring those that appear in just one.
 
-<img alt="Channel editor trigger merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/trigger-marge-mode-select-button.svg" width="300" />
+<img alt="Channel editor trigger merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/trigger-merge-mode-select-button.svg" width="300" />
 
 ##### Note Merge Modes
 
@@ -585,7 +585,7 @@ These modes determine how note values are handled when steps overlap:
 
 By default, notes will snap to the pentatonic version of the currently active scale to assist with avoiding unpleasant harmonic interactions. This can be disabled in _Mosaic_'s settings.
 
-<img alt="Channel editor note merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/note-marge-mode-select-button.svg" width="300" />
+<img alt="Channel editor note merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/note-merge-mode-select-button.svg" width="300" />
 
 ##### Velocity Merge Modes
 
