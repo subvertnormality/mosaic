@@ -116,8 +116,6 @@ fn = include("mosaic\\lib\\helpers\\functions")
 pages = include("mosaic\\lib\\pages\\pages")
 scheduler = include("mosaic\\lib\\tests\\helpers\\mocks\\scheduler_mock")
 program = include("mosaic\\lib\\models\\program")
-record = include("mosaic\\lib\\models\\record")
-
 
 include("mosaic\\lib\\tests\\helpers\\globals")
 

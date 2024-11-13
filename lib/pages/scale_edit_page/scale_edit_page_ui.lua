@@ -118,7 +118,7 @@ function scale_edit_page_ui.update_clock_mods()
 end
 
 function scale_edit_page_ui.enc(n, d)
-  local channel = program.get_channel(scales_channel)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, scales_channel)
   if n == 3 then
     for _ = 1, math.abs(d) do
       if d > 0 then
@@ -164,7 +164,7 @@ function scale_edit_page_ui.key(n, z)
 end
 
 scale_edit_page_ui.refresh_clock_mods = scheduler.debounce(function()
-  local channel = program.get_channel(scales_channel)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, scales_channel)
   local clock_mods = channel.clock_mods
   local divisions = fn.filter_by_type(m_clock.get_clock_divisions(), clock_mods.type)
   local i = fn.find_index_in_table_by_value(divisions, clock_mods.value)
@@ -187,7 +187,7 @@ scale_edit_page_ui.refresh_romans = scheduler.debounce(function()
 end, throttle_time)
 
 scale_edit_page_ui.refresh_quantiser = scheduler.debounce(function()
-  local channel = program.get_channel(scales_channel)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, scales_channel)
   local scale = program.get_scale(program.get().selected_scale)
   program.get_selected_sequencer_pattern().active = true
   quantizer_vertical_scroll_selector:set_selected_item(scale.number)

@@ -189,7 +189,7 @@ function test_manually_calculate_step_scale_number_channel_with_override()
   program.add_step_scale_trig_lock(1, 2)
   
   -- Add channel-specific override
-  program.get_channel(channel).step_scale_trig_lock_banks[1] = 5
+  program.get_channel(program.get().selected_sequencer_pattern, channel).step_scale_trig_lock_banks[1] = 5
   
   -- Channel override should take precedence regardless of speeds
   luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 5)

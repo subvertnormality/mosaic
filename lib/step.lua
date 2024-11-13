@@ -30,7 +30,7 @@ local ipairs = ipairs
 local table = table
 
 function step.process_stock_params(c, step, type)
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local trig_lock_params = channel.trig_lock_params
 
   for i = 1, 10 do
@@ -110,7 +110,7 @@ end
 
 function step.process_params(c, step)
   local program_data = program.get()
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local device = device_map.get_device(program_data.devices[channel.number].device_map)
   local trig_lock_params = channel.trig_lock_params
 
@@ -233,7 +233,7 @@ end
 
 function step.calculate_step_scale_number(c, s)
   local program_data = program.get()
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local channel_step_scale_number = program.get_step_scale_trig_lock(channel, s)
   local persistent_numbers = persistent_channel_step_scale_numbers
 
@@ -243,7 +243,7 @@ function step.calculate_step_scale_number(c, s)
   end
 
   local current_step_17 = program.get_current_step_for_channel(17)
-  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), current_step_17)
+  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(program.get().selected_sequencer_pattern, 17), current_step_17)
   local global_default_scale = program_data.default_scale
 
   local start_trig_c = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
@@ -251,7 +251,7 @@ function step.calculate_step_scale_number(c, s)
     persistent_numbers[c] = nil
   end
 
-  local start_trig_17 = fn.calc_grid_count(program.get_channel(17).start_trig[1], program.get_channel(17).start_trig[2])
+  local start_trig_17 = fn.calc_grid_count(program.get_channel(program.get().selected_sequencer_pattern, 17).start_trig[1], program.get_channel(program.get().selected_sequencer_pattern, 17).start_trig[2])
   if current_step_17 == start_trig_17 then
     persistent_global_step_scale_number = nil
   end
@@ -285,7 +285,7 @@ end
 
 function step.manually_calculate_step_scale_number(c, step)
   local program_data = program.get()
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local clock_division_17 = m_clock.get_channel_division(17)
   local channel_division = m_clock.get_channel_division(c)
   
@@ -307,7 +307,7 @@ function step.manually_calculate_step_scale_number(c, step)
   
   local global_step_scale_number = nil   
   for i = 1, global_scale_step do     
-    global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), i) or global_step_scale_number   
+    global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(program.get().selected_sequencer_pattern, 17), i) or global_step_scale_number   
   end    
   
   local channel_step_scale_number = nil   
@@ -330,7 +330,7 @@ end
 
 
 function step.calculate_step_transpose()
-  local channel = program.get_channel(17)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, 17)
   local current_scale_number = program.get_channel_step_scale_number(17)
   local scale = program.get_scale(current_scale_number)
   local current_step = program.get_current_step_for_channel(17)
@@ -370,7 +370,7 @@ end
 
 local function play_note_internal(note, note_container, velocity, division, note_on_func, action_flag)
   local c = note_container.channel
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   
   note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
 
@@ -410,7 +410,7 @@ end
 
 local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
   local c = note_container.channel
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
 
   local note_dashboard_values = {}
   note_dashboard_values.chords = {}
@@ -601,7 +601,7 @@ end
 
 local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func)
   local c = note_container.channel
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local step_chord_masks = channel.step_chord_masks[current_step]
 
   local note_dashboard_values = {}
@@ -768,7 +768,7 @@ end
 
 function step.handle(c, current_step)
   local program_data = program.get()
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local working_pattern = channel.working_pattern
   local devices = program_data.devices[channel.number]
 
@@ -785,7 +785,7 @@ function step.handle(c, current_step)
     octave_mod = step_octave_trig_lock
   end
 
-  if c == 17 and current_step == fn.calc_grid_count(program.get_channel(17).start_trig[1], program.get_channel(17).start_trig[2]) then
+  if c == 17 and current_step == fn.calc_grid_count(program.get_channel(program.get().selected_sequencer_pattern, 17).start_trig[1], program.get_channel(program.get().selected_sequencer_pattern, 17).start_trig[2]) then
     persistent_global_step_scale_number = nil
   end
 
@@ -893,7 +893,7 @@ end
 
 function step.process_elektron_program_change(next_sequencer_pattern)
   for i = 1, 16 do
-    local channel = program.get_channel(i)
+    local channel = program.get_channel(program.get().selected_sequencer_pattern, i)
     local device = device_map.get_device(program.get().devices[i].device_map)
     
     if device.id == "digitone" or 
@@ -952,7 +952,7 @@ function step.process_song_sequencer_patterns()
 
       if selected_sequencer_pattern_number ~= next_sequencer_pattern then
         for channel_number = 1, 17 do
-          local channel = program.get_channel(channel_number)
+          local channel = program.get_channel(program.get().selected_sequencer_pattern, channel_number)
           m_clock.set_channel_division(channel_number, m_clock.calculate_divisor(channel.clock_mods))
           if channel_number ~= 17 then
             channel_edit_page_ui.align_global_and_local_shuffle_feel_values(channel_number)
@@ -997,7 +997,7 @@ function step.process_song_sequencer_patterns()
 end
 
 function step.sinfonian_sync(s)
-  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(17), step)
+  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(program.get().selected_sequencer_pattern, 17), step)
   local global_default_scale = program.get().default_scale
 
   local sinfonion_scale_number = 1

@@ -115,7 +115,7 @@ function test_trig_merge_modes_skip()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "skip"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "skip"
 
   pattern.update_working_patterns()
 
@@ -241,7 +241,7 @@ function test_trig_merge_modes_only()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "only"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "only"
 
   pattern.update_working_patterns()
 
@@ -370,7 +370,7 @@ function test_trig_merge_modes_all()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
 
   pattern.update_working_patterns()
 
@@ -506,7 +506,7 @@ function test_trig_mask_stops_steps_trigging()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
 
   pattern.update_working_patterns()
 
@@ -641,7 +641,7 @@ function test_trig_mask_can_force_steps_trigging()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
 
   pattern.update_working_patterns()
 
@@ -780,8 +780,8 @@ function test_note_merge_modes_up()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "up"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "up"
 
   pattern.update_working_patterns()
 
@@ -919,8 +919,8 @@ function test_note_merge_modes_pattern_number_1()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "pattern_number_1"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "pattern_number_1"
 
   pattern.update_working_patterns()
 
@@ -1059,8 +1059,8 @@ function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_ev
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "pattern_number_1"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "pattern_number_1"
 
   pattern.update_working_patterns()
 
@@ -1199,8 +1199,8 @@ function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_ev
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "pattern_number_1"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "pattern_number_1"
 
   pattern.update_working_patterns()
 
@@ -1324,8 +1324,8 @@ function test_note_merge_modes_down()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "down"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "down"
 
   pattern.update_working_patterns()
 
@@ -1466,8 +1466,8 @@ function test_note_merge_modes_average()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "average"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "average"
 
   pattern.update_working_patterns()
 
@@ -1606,8 +1606,8 @@ function test_velocity_merge_modes_up()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).velocity_merge_mode = "up"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).velocity_merge_mode = "up"
 
   pattern.update_working_patterns()
 
@@ -1746,8 +1746,8 @@ function test_velocity_merge_modes_up()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).velocity_merge_mode = "down"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).velocity_merge_mode = "down"
 
   pattern.update_working_patterns()
 
@@ -1886,8 +1886,8 @@ function test_velocity_merge_modes_up()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).velocity_merge_mode = "average"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).velocity_merge_mode = "average"
 
   pattern.update_working_patterns()
 
@@ -1960,7 +1960,7 @@ function test_trig_merge_modes_with_inactive_patterns()
   
   -- Test with only pattern 1 active
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  program.get_channel(1).trig_merge_mode = "skip"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "skip"
   pattern.update_working_patterns()
   
   clock_setup()
@@ -2002,8 +2002,8 @@ function test_note_merge_modes_with_octave_shifts()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   
   -- Test average mode
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "average"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "average"
   pattern.update_working_patterns()
   
   clock_setup()
@@ -2033,8 +2033,8 @@ function test_velocity_merge_with_extreme_values()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   
   -- Test different velocity merge modes with extreme values
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).velocity_merge_mode = "average"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).velocity_merge_mode = "average"
   pattern.update_working_patterns()
   
   clock_setup()
@@ -2073,8 +2073,8 @@ function test_length_merge_with_multiple_patterns()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
   
   -- Test average length merge mode
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).length_merge_mode = "average"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).length_merge_mode = "average"
   pattern.update_working_patterns()
   
   clock_setup()
@@ -2118,10 +2118,10 @@ function test_combined_merge_modes_integration()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   
   -- Set different merge modes for each parameter
-  program.get_channel(1).trig_merge_mode = "only"
-  program.get_channel(1).note_merge_mode = "up"
-  program.get_channel(1).velocity_merge_mode = "down"
-  program.get_channel(1).length_merge_mode = "average"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "only"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "up"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).velocity_merge_mode = "down"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).length_merge_mode = "average"
   
   pattern.update_working_patterns()
 
@@ -2170,9 +2170,9 @@ function test_pattern_specific_merge_modes()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   
   -- Test pattern-specific merging
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "pattern_number_1"
-  program.get_channel(1).velocity_merge_mode = "pattern_number_2"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "pattern_number_1"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).velocity_merge_mode = "pattern_number_2"
   
   pattern.update_working_patterns()
   clock_setup()
@@ -2208,8 +2208,8 @@ function test_merge_modes_with_rests()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "average"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "average"
   pattern.update_working_patterns()
   
   clock_setup()
@@ -2254,7 +2254,7 @@ function test_note_merge_modes_calculation()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
 
-  local channel = program.get_channel(1)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, 1)
 
   -- Set length to 1
 
@@ -2265,8 +2265,8 @@ function test_note_merge_modes_calculation()
 
   
   -- Test average mode
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "average"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "average"
   pattern.update_working_patterns()
   
   clock_setup()
@@ -2276,7 +2276,7 @@ function test_note_merge_modes_calculation()
   luaunit.assert_equals(note_on_event[1], 64)
   
   -- Test up mode
-  program.get_channel(1).note_merge_mode = "up"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "up"
   pattern.update_working_patterns()
   
   progress_clock_by_beats(1)
@@ -2285,7 +2285,7 @@ function test_note_merge_modes_calculation()
   luaunit.assert_equals(note_on_event[1], 71)
   
   -- Test down mode
-  program.get_channel(1).note_merge_mode = "down"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "down"
   pattern.update_working_patterns()
   
   progress_clock_by_beats(1)
@@ -2322,8 +2322,8 @@ function test_merge_modes_at_pattern_boundaries()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
   
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "average"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_sequencer_pattern, 1).note_merge_mode = "average"
   pattern.update_working_patterns()
   
   -- Move to pattern boundary

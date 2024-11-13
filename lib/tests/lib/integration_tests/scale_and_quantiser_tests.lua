@@ -59,7 +59,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     )
   
     program.get().default_scale = 2
-    program.get_channel(1).default_scale = 0
+    program.get_channel(program.get().selected_sequencer_pattern, 1).default_scale = 0
   
     test_pattern.note_values[2] = 2
     test_pattern.lengths[2] = 1
@@ -105,7 +105,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
     program.get().default_scale = 2
   
-    program.get_channel(channel).default_scale = 1
+    program.get_channel(program.get().selected_sequencer_pattern, channel).default_scale = 1
   
     test_pattern.note_values[2] = 2
     test_pattern.lengths[2] = 1
@@ -433,8 +433,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
     params:set("all_scales_lock_to_pentatonic", 1)
     params:set("merged_lock_to_pentatonic", 2)
 
-    program.get_channel(channel).trig_merge_mode = "all"
-    program.get_channel(channel).note_merge_mode = "down"
+    program.get_channel(program.get().selected_sequencer_pattern, channel).trig_merge_mode = "all"
+    program.get_channel(program.get().selected_sequencer_pattern, channel).note_merge_mode = "down"
   
     program.set_scale(
       2,
@@ -568,8 +568,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
     )
   
     program.get().default_scale = 1
-    program.get_channel(channel).default_scale = 2
-    program.get_channel(channel).step_scale_trig_lock_banks[step] = 3
+    program.get_channel(program.get().selected_sequencer_pattern, channel).default_scale = 2
+    program.get_channel(program.get().selected_sequencer_pattern, channel).step_scale_trig_lock_banks[step] = 3
   
     test_pattern.note_values[step] = 2
     test_pattern.lengths[step] = 1
@@ -628,7 +628,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     )
   
     program.get().default_scale = 1
-    program.get_channel(channel).default_scale = 2
+    program.get_channel(program.get().selected_sequencer_pattern, channel).default_scale = 2
     program.add_step_scale_trig_lock(step, 3)
   
     test_pattern.note_values[step] = 2
@@ -703,7 +703,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.add_step_scale_trig_lock(33, 2)
     program.add_step_scale_trig_lock(49, 3)
     
-    program.get_channel(1).step_scale_trig_lock_banks[3] = 2
+    program.get_channel(program.get().selected_sequencer_pattern, 1).step_scale_trig_lock_banks[3] = 2
   
     test_pattern.note_values[1] = 0
     test_pattern.lengths[1] = 1
@@ -715,11 +715,11 @@ function test_global_default_scale_setting_quantises_notes_properly()
     test_pattern.trig_values[3] = 1
     test_pattern.velocity_values[3] = 100
 
-    program.get_channel(1).start_trig[1] = 1
-    program.get_channel(1).start_trig[2] = 4
+    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[1] = 1
+    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[2] = 4
   
-    program.get_channel(1).end_trig[1] = 4
-    program.get_channel(1).end_trig[2] = 4
+    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[1] = 4
+    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[2] = 4
 
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
@@ -813,7 +813,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.add_step_scale_trig_lock(33, 2)
     program.add_step_scale_trig_lock(49, 3)
     
-    program.get_channel(1).step_scale_trig_lock_banks[19] = 2
+    program.get_channel(program.get().selected_sequencer_pattern, 1).step_scale_trig_lock_banks[19] = 2
   
     test_pattern.note_values[17] = 0
     test_pattern.lengths[17] = 1
@@ -825,11 +825,11 @@ function test_global_default_scale_setting_quantises_notes_properly()
     test_pattern.trig_values[19] = 1
     test_pattern.velocity_values[19] = 100
 
-    program.get_channel(1).start_trig[1] = 1
-    program.get_channel(1).start_trig[2] = 5
+    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[1] = 1
+    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[2] = 5
   
-    program.get_channel(1).end_trig[1] = 4
-    program.get_channel(1).end_trig[2] = 5
+    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[1] = 4
+    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[2] = 5
 
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
@@ -925,7 +925,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.add_step_scale_trig_lock(33, 2)
     program.add_step_scale_trig_lock(49, 3)
     
-    program.get_channel(1).step_scale_trig_lock_banks[18] = 2
+    program.get_channel(program.get().selected_sequencer_pattern, 1).step_scale_trig_lock_banks[18] = 2
   
     test_pattern.note_values[17] = 0
     test_pattern.lengths[17] = 1
@@ -937,11 +937,11 @@ function test_global_default_scale_setting_quantises_notes_properly()
     test_pattern.trig_values[19] = 1
     test_pattern.velocity_values[19] = 100
 
-    program.get_channel(1).start_trig[1] = 1
-    program.get_channel(1).start_trig[2] = 5
+    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[1] = 1
+    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[2] = 5
   
-    program.get_channel(1).end_trig[1] = 4
-    program.get_channel(1).end_trig[2] = 5
+    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[1] = 4
+    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[2] = 5
 
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
@@ -1007,7 +1007,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
   )
 
   program.get().default_scale = 2
-  program.get_channel(1).default_scale = 0
+  program.get_channel(program.get().selected_sequencer_pattern, 1).default_scale = 0
 
   test_pattern.note_values[2] = 2
   test_pattern.lengths[2] = 1
@@ -1653,7 +1653,7 @@ function test_transpose_with_octave_modification()
 
   program.get().default_scale = 2
   program.set_transpose(2) -- Transpose up 2 semitones
-  program.get_channel(channel).octave = 1 -- Up one octave
+  program.get_channel(program.get().selected_sequencer_pattern, channel).octave = 1 -- Up one octave
 
   test_pattern.note_values[1] = 0  -- C
   test_pattern.lengths[1] = 1
@@ -1899,11 +1899,11 @@ function test_transpose_hierarchy_uses_scale_transpose()
   program.set_transpose(1) -- Global transpose +1
 
   -- Set pattern length to 3 steps
-  local channel_17 = program.get_channel(17)
+  local channel_17 = program.get_channel(program.get().selected_sequencer_pattern, 17)
   channel_17.end_trig[1] = 3
   channel_17.end_trig[2] = 4
 
-  local channel_2 = program.get_channel(2)
+  local channel_2 = program.get_channel(program.get().selected_sequencer_pattern, 2)
   channel_2.end_trig[1] = 3
   channel_2.end_trig[2] = 4
   

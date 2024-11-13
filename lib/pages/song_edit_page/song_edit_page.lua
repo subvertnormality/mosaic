@@ -73,7 +73,7 @@ function song_edit_page.register_presss()
           tooltip:show("Song sequence " .. s .. " selected")
           
           for channel_number = 1, 17 do
-            local channel = program.get_channel(channel_number)
+            local channel = program.get_channel(program.get().selected_sequencer_pattern, channel_number)
             m_clock.set_channel_division(channel_number, m_clock.calculate_divisor(channel.clock_mods))
             m_clock.get_clock_lattice().global_pattern_length = program.get_selected_sequencer_pattern().global_pattern_length
             if channel_number ~= 17 then

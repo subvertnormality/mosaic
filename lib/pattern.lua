@@ -159,7 +159,7 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   local step_note_masks = program.get_step_note_masks(channel)
   local step_velocity_masks = program.get_step_velocity_masks(channel)
   local step_length_masks = program.get_step_length_masks(channel)
-  local channel_data = program.get_channel(channel)
+  local channel_data = program.get_channel(program.get().selected_sequencer_pattern, channel)
 
   for s = 1, 64 do
     do_mode_calculation(note_merge_mode, s, notes, merged_pattern.note_values)

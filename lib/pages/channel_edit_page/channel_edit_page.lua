@@ -177,7 +177,7 @@ function channel_edit_page.register_presss()
     "channel_edit_page",
     function(x, y)
       if channel_select_fader:is_this(x, y) then
-        local channel = program.get_channel(x)
+        local channel = program.get_channel(program.get().selected_sequencer_pattern, x)
 
         if is_key3_down == true then
           if (channel.mute == true) then
@@ -211,7 +211,7 @@ function channel_edit_page.register_presss()
     "channel_edit_page",
     function(x, y)
       if channel_select_fader:is_this(x, y) then
-        local channel = program.get_channel(x)
+        local channel = program.get_channel(program.get().selected_sequencer_pattern, x)
 
         if (channel.mute == true) then
           channel.mute = false
@@ -266,8 +266,8 @@ function channel_edit_page.register_presss()
       end
       if channel_select_fader:is_this(x, y) and channel_select_fader:is_this(x2, y2) then
         
-        local channel1 = program.get_channel(x)
-        local channel2 = program.get_channel(x2)
+        local channel1 = program.get_channel(program.get().selected_sequencer_pattern, x)
+        local channel2 = program.get_channel(program.get().selected_sequencer_pattern, x2)
 
         if is_key3_down == true then
 
@@ -584,7 +584,7 @@ end
 
 function channel_edit_page.refresh_muted_channels()
   for i = 1, 16 do
-    if program.get_channel(i).mute == true then
+    if program.get_channel(program.get().selected_sequencer_pattern, i).mute == true then
       channel_select_fader:dim(i)
     else
       channel_select_fader:light(i)

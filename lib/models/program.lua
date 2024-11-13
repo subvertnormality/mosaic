@@ -209,8 +209,8 @@ function program.get_selected_pattern()
   return program.get_selected_sequencer_pattern().patterns[program.get().selected_pattern]
 end
 
-function program.get_channel(x)
-  return program.get_selected_sequencer_pattern().channels[x]
+function program.get_channel(song_pattern, x)
+  return program.get_sequencer_pattern(song_pattern).channels[x]
 end
 
 function program.set(p)
@@ -280,7 +280,7 @@ function program.step_octave_has_trig_lock(channel, step)
 end
 
 function program.add_step_transpose_trig_lock(step, trig_lock)
-  local channel = program.get_channel(17)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, 17)
 
   if trig_lock ~= nil then
     trig_lock = math.max(math.min(trig_lock, 7), -7) or nil
@@ -308,14 +308,14 @@ function program.get_transpose()
 end
 
 function program.get_step_transpose_trig_lock(step)
-  local channel = program.get_channel(17)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, 17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
   return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step]
 end
 
 function program.step_transpose_has_trig_lock(step)
   if program.get_selected_channel().number ~= 17 then return false end
-  local channel = program.get_channel(17)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, 17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
   return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step]
 end
@@ -493,20 +493,20 @@ function program.set_chord_degree_rotation_for_scale(s, rotation)
 end
 
 local function ensure_step_masks(channel)
-  if not program.get_channel(channel).step_trig_masks then
-    program.get_channel(channel).step_trig_masks = {}
+  if not program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks then
+    program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks = {}
   end
 end
 
 
 function program.get_step_trig_masks(channel)
   ensure_step_masks(channel)
-  return program.get_channel(channel).step_trig_masks
+  return program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks
 end
 
 function program.set_step_trig_mask(channel, step, mask)
   ensure_step_masks(channel)
-  program.get_channel(channel).step_trig_masks[step] = mask
+  program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks[step] = mask
 end
 
 function program.set_trig_mask(channel, mask) 
@@ -515,7 +515,11 @@ end
 
 function program.get_step_note_masks(channel)
   ensure_step_masks(channel)
-  return program.get_channel(channel).step_note_masks
+  return program.get_channel(program.get().selected_sequencer_pattern, channel).step_note_masks
+end
+
+function program.set_step_note_mask(channel, step, mask)
+  channel.step_note_masks[step] = mask
 end
 
 function program.set_note_mask(channel, mask) 
@@ -524,7 +528,7 @@ end
 
 function program.get_step_velocity_masks(channel)
   ensure_step_masks(channel)
-  return program.get_channel(channel).step_velocity_masks
+  return program.get_channel(program.get().selected_sequencer_pattern, channel).step_velocity_masks
 end
 
 function program.set_velocity_mask(channel, mask) 
@@ -533,7 +537,7 @@ end
 
 function program.get_step_length_masks(channel)
   ensure_step_masks(channel)
-  return program.get_channel(channel).step_length_masks
+  return program.get_channel(program.get().selected_sequencer_pattern, channel).step_length_masks
 end
 
 function program.set_length_mask(channel, mask) 
@@ -607,64 +611,64 @@ end
 function program.toggle_step_trig_mask(channel, step)
   ensure_step_masks(channel)
 
-  local trig_values = program.get_channel(channel).working_pattern.trig_values
+  local trig_values = program.get_channel(program.get().selected_sequencer_pattern, channel).working_pattern.trig_values
   if trig_values[step] == 0 then
-    program.get_channel(channel).step_trig_masks[step] = 1
+    program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks[step] = 1
   elseif trig_values[step] == 1 then
-    program.get_channel(channel).step_trig_masks[step] = 0
+    program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks[step] = 0
   end
 end
 
 function program.clear_step_trig_mask(channel, step)
-  program.get_channel(channel).step_trig_masks[step] = nil
+  program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks[step] = nil
 end
 
 function program.clear_step_note_mask(channel, step)
-  program.get_channel(channel).step_note_masks[step] = nil
+  program.get_channel(program.get().selected_sequencer_pattern, channel).step_note_masks[step] = nil
 end
 
 function program.clear_step_velocity_mask(channel, step)
-  program.get_channel(channel).step_velocity_masks[step] = nil
+  program.get_channel(program.get().selected_sequencer_pattern, channel).step_velocity_masks[step] = nil
 end
 
 function program.clear_step_length_mask(channel, step)
-  program.get_channel(channel).step_length_masks[step] = nil
+  program.get_channel(program.get().selected_sequencer_pattern, channel).step_length_masks[step] = nil
 end
 
 function program.clear_step_micro_time_mask(channel, step)
-  program.get_channel(channel).step_micro_time_masks[step] = nil
+  program.get_channel(program.get().selected_sequencer_pattern, channel).step_micro_time_masks[step] = nil
 end
 
 function program.clear_step_chord_1_mask(channel, step)
-  local step_chord_masks = program.get_channel(channel).step_chord_masks
+  local step_chord_masks = program.get_channel(program.get().selected_sequencer_pattern, channel).step_chord_masks
   if step_chord_masks and step_chord_masks[step] then
     step_chord_masks[step][1] = nil
   end
 end
 
 function program.clear_step_chord_2_mask(channel, step)
-  local step_chord_masks = program.get_channel(channel).step_chord_masks
+  local step_chord_masks = program.get_channel(program.get().selected_sequencer_pattern, channel).step_chord_masks
   if step_chord_masks and step_chord_masks[step] then
     step_chord_masks[step][2] = nil
   end
 end
 
 function program.clear_step_chord_3_mask(channel, step)
-  local step_chord_masks = program.get_channel(channel).step_chord_masks
+  local step_chord_masks = program.get_channel(program.get().selected_sequencer_pattern, channel).step_chord_masks
   if step_chord_masks and step_chord_masks[step] then
     step_chord_masks[step][3] = nil
   end
 end
 
 function program.clear_step_chord_4_mask(channel, step)
-  local step_chord_masks = program.get_channel(channel).step_chord_masks
+  local step_chord_masks = program.get_channel(program.get().selected_sequencer_pattern, channel).step_chord_masks
   if step_chord_masks and step_chord_masks[step] then
     step_chord_masks[step][4] = nil
   end
 end
 
 function program.set_step_chord_mask(channel, i, step, mask)
-  local step_chord_masks = program.get_channel(channel).step_chord_masks
+  local step_chord_masks = program.get_channel(program.get().selected_sequencer_pattern, channel).step_chord_masks
   if not step_chord_masks[step] then
     step_chord_masks[step] = {}
   end

@@ -147,7 +147,7 @@ function m_clock.init()
         selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
         for i = 1, 17 do
           if ((program.get_current_step_for_channel(i) - 1) % selected_sequencer_pattern.global_pattern_length) + 1 == selected_sequencer_pattern.global_pattern_length then
-            local channel = program.get_channel(i)
+            local channel = program.get_channel(program.get().selected_sequencer_pattern, i)
             if (fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2]) - fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2]) + 1) > selected_sequencer_pattern.global_pattern_length then
               program.set_current_step_for_channel(i, 99)
             end
@@ -180,10 +180,10 @@ function m_clock.init()
   local channel_edit_page = pages.pages.channel_edit_page
   local scale_edit_page = pages.pages.scale_edit_page
   for channel_number = 17, 1, -1 do
-    local div = calculate_divisor(program.get_channel(channel_number).clock_mods)
+    local div = calculate_divisor(program.get_channel(program.get().selected_sequencer_pattern, channel_number).clock_mods)
 
     local sprocket_action = function(t)
-      local channel = program.get_channel(channel_number)
+      local channel = program.get_channel(program.get().selected_sequencer_pattern, channel_number)
       local current_step = program.get_current_step_for_channel(channel_number)
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
@@ -231,7 +231,7 @@ function m_clock.init()
     end
 
     local end_of_clock_action = function(t)
-      local channel = program.get_channel(channel_number)
+      local channel = program.get_channel(program.get().selected_sequencer_pattern, channel_number)
       if channel_number ~= 17 then
         local s = program.get_current_step_for_channel(channel_number) + 1
         if s < 1 then return end
@@ -255,7 +255,7 @@ function m_clock.init()
       end
     end
 
-    local shuffle_values = get_shuffle_values(program.get_channel(channel_number))
+    local shuffle_values = get_shuffle_values(program.get_channel(program.get().selected_sequencer_pattern, channel_number))
 
     m_clock["channel_" .. channel_number .. "_clock"] = clock_lattice:new_sprocket {
       action = sprocket_action,
@@ -357,7 +357,7 @@ function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration,
     return
   end
 
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
 
   -- Clear existing arp sprockets for the channel
   if arp_sprockets[c] then

@@ -304,7 +304,7 @@ function channel_edit_page_ui.update_swing_shuffle_type()
 end
 
 function channel_edit_page_ui.align_global_and_local_swing_shuffle_type_values(c)
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local channel_value = channel.swing_shuffle_type
   local value = channel_value
   if channel_value == 1 or nil then
@@ -336,7 +336,7 @@ function channel_edit_page_ui.update_swing()
 end
 
 function channel_edit_page_ui.align_global_and_local_swing_values(c)
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local channel_value = channel.swing
   local value = channel_value
   if channel_value == -51 or nil then
@@ -367,7 +367,7 @@ function channel_edit_page_ui.update_shuffle_feel()
 end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_feel_values(c)
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local channel_value = channel.shuffle_feel
   local value = channel_value
   if channel_value == 1 or nil then
@@ -400,7 +400,7 @@ function channel_edit_page_ui.update_shuffle_basis()
 end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_basis_values(c)
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local channel_value = channel.shuffle_basis
   local value = channel_value
   if channel_value == 1 or nil then
@@ -432,7 +432,7 @@ function channel_edit_page_ui.update_shuffle_amount()
 end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_amount_values(c)
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local channel_value = channel.shuffle_amount
   local value = channel_value
   if channel_value == 0 or nil then

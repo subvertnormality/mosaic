@@ -5,53 +5,56 @@ local EVENT_TYPES = {
   CHORD_ADDED = "chord_added"
 }
 
--- State
 local state = {
   event_history = {},
-  current_event_index = 0
+  current_event_index = 0,
+  original_states = {} -- Will store original state of modified steps
 }
+
+local function capture_step_state(channel, step)
+  return {
+    channel_number = channel.number,
+    step = step,
+    trig_mask = channel.step_trig_masks[step],
+    note_mask = channel.step_note_masks[step],
+    velocity_mask = channel.step_velocity_masks[step],
+    length_mask = channel.step_length_masks[step],
+    chord_mask = channel.step_chord_masks and channel.step_chord_masks[step]
+  }
+end
+
+local function restore_step_state(channel, saved_state)
+  channel.step_trig_masks[saved_state.step] = saved_state.trig_mask
+  channel.step_note_masks[saved_state.step] = saved_state.note_mask
+  channel.step_velocity_masks[saved_state.step] = saved_state.velocity_mask
+  channel.step_length_masks[saved_state.step] = saved_state.length_mask
+  if saved_state.chord_mask then
+    if not channel.step_chord_masks then
+      channel.step_chord_masks = {}
+    end
+    channel.step_chord_masks[saved_state.step] = saved_state.chord_mask
+  else
+    if channel.step_chord_masks then
+      channel.step_chord_masks[saved_state.step] = nil
+    end
+  end
+end
 
 function recorder.init()
   state = {
     event_history = {},
-    current_event_index = 0
+    current_event_index = 0,
+    original_states = {}
   }
 end
 
-function recorder.add_chord(song_pattern, channel, step, notes, velocities, chord_degrees)
-  while #state.event_history > state.current_event_index do
-    table.remove(state.event_history)
+function recorder.add_note(channel, step, note, velocity)
+  -- Capture original state if this is the first modification to this step
+  local step_key = string.format("%d_%d", channel.number, step)
+  if not state.original_states[step_key] then
+    state.original_states[step_key] = capture_step_state(channel, step)
   end
   
-  local event = {
-    type = EVENT_TYPES.CHORD_ADDED,
-    data = {
-      song_pattern = song_pattern,
-      channel = channel,
-      step = step,
-      notes = notes,
-      velocities = velocities,
-      chord_degrees = chord_degrees
-    }
-  }
-  
-  -- Apply change directly
-  record.set_step_trig_mask(song_pattern, channel, step, 1)
-  record.set_step_note_mask(song_pattern, channel, step, notes[1])
-  record.set_step_velocity_mask(song_pattern, channel, step, velocities[1])
-  record.set_step_length_mask(song_pattern, channel, step, 1)
-  -- Only set chord mask if there are chord degrees
-  if chord_degrees and #chord_degrees > 0 then
-    record.set_step_chord_mask(song_pattern, channel, step, chord_degrees)
-  else
-    record.set_step_chord_mask(song_pattern, channel, step, nil)
-  end
-  
-  table.insert(state.event_history, event)
-  state.current_event_index = state.current_event_index + 1
-end
-
-function recorder.add_note(song_pattern, channel, step, note, velocity)
   while #state.event_history > state.current_event_index do
     table.remove(state.event_history)
   end
@@ -59,21 +62,63 @@ function recorder.add_note(song_pattern, channel, step, note, velocity)
   local event = {
     type = EVENT_TYPES.NOTE_ADDED,
     data = {
-      song_pattern = song_pattern,
-      channel = channel,
+      channel_number = channel.number,
       step = step,
       note = note,
-      velocity = velocity
+      velocity = velocity,
+      original_state = state.original_states[step_key]
     }
   }
   
   -- Apply change directly
-  record.set_step_trig_mask(song_pattern, channel, step, 1)
-  record.set_step_note_mask(song_pattern, channel, step, note)
-  record.set_step_velocity_mask(song_pattern, channel, step, velocity)
-  record.set_step_length_mask(song_pattern, channel, step, 1)
-  -- Explicitly clear any chord mask when adding a single note
-  record.set_step_chord_mask(song_pattern, channel, step, nil)
+  channel.step_trig_masks[step] = 1
+  channel.step_note_masks[step] = note
+  channel.step_velocity_masks[step] = velocity
+  channel.step_length_masks[step] = 1
+  channel.step_chord_masks[step] = nil
+  
+  table.insert(state.event_history, event)
+  state.current_event_index = state.current_event_index + 1
+end
+
+function recorder.add_chord(channel, step, notes, velocities, chord_degrees)
+  -- Capture original state if this is the first modification to this step
+  local step_key = string.format("%d_%d", channel.number, step)
+  if not state.original_states[step_key] then
+    state.original_states[step_key] = capture_step_state(channel, step)
+  end
+  
+  while #state.event_history > state.current_event_index do
+    table.remove(state.event_history)
+  end
+  
+  local event = {
+    type = EVENT_TYPES.CHORD_ADDED,
+    data = {
+      channel_number = channel.number,
+      step = step,
+      notes = notes,
+      velocities = velocities,
+      chord_degrees = chord_degrees,
+      original_state = state.original_states[step_key]
+    }
+  }
+  
+  -- Apply change directly
+  channel.step_trig_masks[step] = 1
+  channel.step_note_masks[step] = notes[1]
+  channel.step_velocity_masks[step] = velocities[1]
+  channel.step_length_masks[step] = 1
+  if chord_degrees and #chord_degrees > 0 then
+    if not channel.step_chord_masks then
+      channel.step_chord_masks = {}
+    end
+    channel.step_chord_masks[step] = chord_degrees
+  else
+    if channel.step_chord_masks then
+      channel.step_chord_masks[step] = nil
+    end
+  end
   
   table.insert(state.event_history, event)
   state.current_event_index = state.current_event_index + 1
@@ -81,30 +126,45 @@ end
 
 function recorder.undo()
   if state.current_event_index > 0 then
-    -- Get the event we're undoing
     local event = state.event_history[state.current_event_index]
-    local data = event.data
+    local channel = program.get_channel(1, event.data.channel_number)
+    local step = event.data.step
     
-    -- Clear just this step
-    record.set_step_trig_mask(data.song_pattern, data.channel, data.step, nil)
-    record.set_step_note_mask(data.song_pattern, data.channel, data.step, nil)
-    record.set_step_velocity_mask(data.song_pattern, data.channel, data.step, nil)
-    record.set_step_length_mask(data.song_pattern, data.channel, data.step, nil)
-    if event.type == EVENT_TYPES.CHORD_ADDED then
-      record.set_step_chord_mask(data.song_pattern, data.channel, data.step, nil)
+    -- Find the most recent previous event for this step, if any
+    local prev_event = nil
+    for i = state.current_event_index - 1, 1, -1 do
+      if state.event_history[i].data.channel_number == event.data.channel_number and 
+         state.event_history[i].data.step == step then
+        prev_event = state.event_history[i]
+        break
+      end
     end
     
-    -- If there's a previous event for this step, reapply it
-    if state.current_event_index > 1 then
-      for i = state.current_event_index - 1, 1, -1 do
-        local prev_event = state.event_history[i]
-        if prev_event.data.song_pattern == data.song_pattern and 
-           prev_event.data.channel == data.channel and 
-           prev_event.data.step == data.step then
-          recorder.apply_event(prev_event)
-          break
+    if prev_event then
+      -- Apply the previous event
+      if prev_event.type == EVENT_TYPES.NOTE_ADDED then
+        channel.step_trig_masks[step] = 1
+        channel.step_note_masks[step] = prev_event.data.note
+        channel.step_velocity_masks[step] = prev_event.data.velocity
+        channel.step_length_masks[step] = 1
+        if channel.step_chord_masks then
+          channel.step_chord_masks[step] = nil
+        end
+      elseif prev_event.type == EVENT_TYPES.CHORD_ADDED then
+        channel.step_trig_masks[step] = 1
+        channel.step_note_masks[step] = prev_event.data.notes[1]
+        channel.step_velocity_masks[step] = prev_event.data.velocities[1]
+        channel.step_length_masks[step] = 1
+        if prev_event.data.chord_degrees and #prev_event.data.chord_degrees > 0 then
+          if not channel.step_chord_masks then
+            channel.step_chord_masks = {}
+          end
+          channel.step_chord_masks[step] = prev_event.data.chord_degrees
         end
       end
+    else
+      -- No previous event, restore original state
+      restore_step_state(channel, event.data.original_state)
     end
     
     state.current_event_index = state.current_event_index - 1
@@ -114,24 +174,29 @@ end
 function recorder.redo()
   if state.current_event_index < #state.event_history then
     state.current_event_index = state.current_event_index + 1
-    recorder.apply_event(state.event_history[state.current_event_index])
-  end
-end
-
-function recorder.apply_event(event)
-  if event.type == EVENT_TYPES.NOTE_ADDED then
-    local data = event.data
-    record.set_step_trig_mask(data.song_pattern, data.channel, data.step, 1)
-    record.set_step_note_mask(data.song_pattern, data.channel, data.step, data.note)
-    record.set_step_velocity_mask(data.song_pattern, data.channel, data.step, data.velocity)
-    record.set_step_length_mask(data.song_pattern, data.channel, data.step, 1)
-  elseif event.type == EVENT_TYPES.CHORD_ADDED then
-    local data = event.data
-    record.set_step_trig_mask(data.song_pattern, data.channel, data.step, 1)
-    record.set_step_note_mask(data.song_pattern, data.channel, data.step, data.notes[1])
-    record.set_step_velocity_mask(data.song_pattern, data.channel, data.step, data.velocities[1])
-    record.set_step_length_mask(data.song_pattern, data.channel, data.step, 1)
-    record.set_step_chord_mask(data.song_pattern, data.channel, data.step, data.chord_degrees)
+    local event = state.event_history[state.current_event_index]
+    local channel = program.get_channel(1, event.data.channel_number)
+    
+    if event.type == EVENT_TYPES.NOTE_ADDED then
+      channel.step_trig_masks[event.data.step] = 1
+      channel.step_note_masks[event.data.step] = event.data.note
+      channel.step_velocity_masks[event.data.step] = event.data.velocity
+      channel.step_length_masks[event.data.step] = 1
+      if channel.step_chord_masks then
+        channel.step_chord_masks[event.data.step] = nil
+      end
+    elseif event.type == EVENT_TYPES.CHORD_ADDED then
+      channel.step_trig_masks[event.data.step] = 1
+      channel.step_note_masks[event.data.step] = event.data.notes[1]
+      channel.step_velocity_masks[event.data.step] = event.data.velocities[1]
+      channel.step_length_masks[event.data.step] = 1
+      if event.data.chord_degrees and #event.data.chord_degrees > 0 then
+        if not channel.step_chord_masks then
+          channel.step_chord_masks = {}
+        end
+        channel.step_chord_masks[event.data.step] = event.data.chord_degrees
+      end
+    end
   end
 end
 

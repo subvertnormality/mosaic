@@ -87,7 +87,7 @@ function test_swing_maintains_lengths_step_two()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
 
-    program.get_channel(1).swing = test_case.swing
+    program.get_channel(program.get().selected_sequencer_pattern, 1).swing = test_case.swing
 
     pattern.update_working_patterns()
 
@@ -199,7 +199,7 @@ function test_swing_maintains_lengths_across_multiple_steps_all_swings()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
 
-    program.get_channel(1).swing = test_case.swing
+    program.get_channel(program.get().selected_sequencer_pattern, 1).swing = test_case.swing
 
     pattern.update_working_patterns()
 
@@ -415,12 +415,12 @@ function test_drunk_shuffle_amount_100()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).swing = 0
+  program.get_channel(program.get().selected_sequencer_pattern, 1).swing = 0
 
-  program.get_channel(1).swing_shuffle_type = 2
-  program.get_channel(1).shuffle_basis = 1
-  program.get_channel(1).shuffle_feel = 1
-  program.get_channel(1).shuffle_amount = 100
+  program.get_channel(program.get().selected_sequencer_pattern, 1).swing_shuffle_type = 2
+  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_basis = 1
+  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_feel = 1
+  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_amount = 100
 
   pattern.update_working_patterns()
 
@@ -608,12 +608,12 @@ function test_drunk_shuffle_amount_0()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).swing = 0
+  program.get_channel(program.get().selected_sequencer_pattern, 1).swing = 0
 
-  program.get_channel(1).swing_shuffle_type = 2
-  program.get_channel(1).shuffle_basis = 1
-  program.get_channel(1).shuffle_feel = 1
-  program.get_channel(1).shuffle_amount = 0
+  program.get_channel(program.get().selected_sequencer_pattern, 1).swing_shuffle_type = 2
+  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_basis = 1
+  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_feel = 1
+  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_amount = 0
 
   pattern.update_working_patterns()
 
@@ -763,12 +763,12 @@ function test_drunk_shuffle_amount_75()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).swing = 0
+  program.get_channel(program.get().selected_sequencer_pattern, 1).swing = 0
 
-  program.get_channel(1).swing_shuffle_type = 2
-  program.get_channel(1).shuffle_basis = 1
-  program.get_channel(1).shuffle_feel = 1
-  program.get_channel(1).shuffle_amount = 75
+  program.get_channel(program.get().selected_sequencer_pattern, 1).swing_shuffle_type = 2
+  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_basis = 1
+  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_feel = 1
+  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_amount = 75
 
   pattern.update_working_patterns()
 

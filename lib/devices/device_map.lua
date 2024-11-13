@@ -542,7 +542,7 @@ function device_map.invalidate_all_params_cache()
 end
 
 function device_map.get_available_params_for_channel(c, selected_param)
-  local channel = program.get_channel(c)
+  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
   local active_params = {}
   local params_copy = fn.deep_copy(device_map.get_params(program.get().devices[channel.number].device_map))
 

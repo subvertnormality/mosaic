@@ -378,8 +378,8 @@ function test_end_trig_functions_as_expected()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).end_trig[1] = end_trig
-  program.get_channel(1).end_trig[2] = 4
+  program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[1] = end_trig
+  program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[2] = 4
 
   pattern.update_working_patterns()
 
