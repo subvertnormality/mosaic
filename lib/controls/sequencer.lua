@@ -38,7 +38,7 @@ function sequencer:draw(channel, draw_func)
   local program_get_selected_sequencer_pattern = program.get_selected_sequencer_pattern
   local program_get_current_step_for_channel = program.get_current_step_for_channel
   local program_step_has_trig_lock = program.step_has_trig_lock
-  local clock_controller_is_playing = clock_controller.is_playing
+  local m_clock_is_playing = m_clock.is_playing
   local fn_calc_grid_count = fn.calc_grid_count
   local math_floor = math.floor
 
@@ -141,7 +141,7 @@ function sequencer:draw(channel, draw_func)
         end
       end
 
-      if current_step == grid_count and clock_controller_is_playing() then
+      if current_step == grid_count and m_clock_is_playing() then
         if mode == "channel" then
           if grid_count >= start_step then
             if program_step_has_trig_lock(channel, grid_count) then

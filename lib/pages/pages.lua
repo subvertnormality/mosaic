@@ -7,42 +7,42 @@ local PAGE_DEFINITIONS = {
     number = 2,
     name = "Channel Editor",
     grid_button = 3,
-    controller = "channel_edit_page_controller"
+    controller = "channel_edit_page"
   },
   {
     id = "scale_edit_page",
     number = 3,
     name = "Scale Editor",
     grid_button = 4,
-    controller = "scale_edit_page_controller"
+    controller = "scale_edit_page"
   },
   {
     id = "trigger_edit_page",
     number = 4,
     name = "Pattern Trig Editor",
     grid_button = 5,
-    controller = "trigger_edit_page_controller"
+    controller = "trigger_edit_page"
   },
   {
     id = "note_edit_page",
     number = 5,
     name = "Pattern Note Editor", 
     grid_button = 5,
-    controller = "note_edit_page_controller"
+    controller = "note_edit_page"
   },
   {
     id = "velocity_edit_page",
     number = 6,
     name = "Pattern Velocity Editor",
     grid_button = 5,
-    controller = "velocity_edit_page_controller"
+    controller = "velocity_edit_page"
   },
   {
     id = "song_edit_page",
     number = 7,
     name = "Song Editor",
     grid_button = 6,
-    controller = "song_edit_page_controller"
+    controller = "song_edit_page"
   }
 }
 
@@ -76,8 +76,8 @@ function pages.initialise_page_controller_mappings()
 
   -- Initialize controller mappings
   pages.grid_menu_buttons_to_controller_mappings = {
-    [1] = trigger_edit_page_controller, -- recorder placeholder
-    [2] = trigger_edit_page_controller  -- blank
+    [1] = trigger_edit_page, -- recorder placeholder
+    [2] = trigger_edit_page  -- blank
   }
   for _, page in ipairs(PAGE_DEFINITIONS) do
     pages.grid_menu_buttons_to_controller_mappings[page.grid_button] = _G[page.controller]

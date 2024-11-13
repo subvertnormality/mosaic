@@ -1,4 +1,4 @@
-local scale_edit_page_controller = {}
+local scale_edit_page = {}
 
 local quantiser = include("mosaic/lib/quantiser")
 
@@ -8,9 +8,9 @@ local transpose_fader = fader:new(8, 8, 9, 25)
 
 local hide_scale_fader_leds = false
 
-function scale_edit_page_controller.init()
-  scale_edit_page_controller.refresh()
-  scale_edit_page_ui_controller.refresh()
+function scale_edit_page.init()
+  scale_edit_page.refresh()
+  scale_edit_page_ui.refresh()
 
   scale_fader:set_pre_func(
     function(x, y, length)
@@ -19,7 +19,7 @@ function scale_edit_page_controller.init()
         if hide_scale_fader_leds then
           break
         end
-        if clock_controller.is_playing() and i == channel.step_scale_number then
+        if m_clock.is_playing() and i == channel.step_scale_number then
           grid_abstraction.led(i, y, 15)
           scale_fader:set_value(0)
         elseif i == program.get().selected_scale then
@@ -32,7 +32,7 @@ function scale_edit_page_controller.init()
   transpose_fader:set_value(13)
 end
 
-function scale_edit_page_controller.register_draws()
+function scale_edit_page.register_draws()
   draw:register_grid(
     "scale_edit_page",
     function()
@@ -53,7 +53,7 @@ function scale_edit_page_controller.register_draws()
   )
 end
 
-function scale_edit_page_controller.register_presss()
+function scale_edit_page.register_presss()
   press:register_dual(
     "scale_edit_page",
     function(x, y, x2, y2)
@@ -73,7 +73,7 @@ function scale_edit_page_controller.register_presss()
         else
           program.add_step_scale_trig_lock(s, scale_value)
         end
-        scale_edit_page_controller.refresh_faders()
+        scale_edit_page.refresh_faders()
       end
       if transpose_fader:is_this(x2, y2) then
         transpose_fader:press(x2, y2)
@@ -84,7 +84,7 @@ function scale_edit_page_controller.register_presss()
         else
           program.add_step_transpose_trig_lock(s, transpose_value)
         end
-        scale_edit_page_controller.refresh_faders()
+        scale_edit_page.refresh_faders()
       end
     end
   )
@@ -94,7 +94,7 @@ function scale_edit_page_controller.register_presss()
       if scale_fader:is_this(x, y) then
         if is_key3_down then
           program.get().selected_scale = x
-          scale_edit_page_ui_controller.refresh()
+          scale_edit_page_ui.refresh()
         else
           scale_fader:press(x, y)
           local scale_value = scale_fader:get_value()
@@ -108,7 +108,7 @@ function scale_edit_page_controller.register_presss()
             scale_fader:set_value(0)
             tooltip:show("Global scale off")
           end
-          scale_edit_page_ui_controller.refresh_quantiser()
+          scale_edit_page_ui.refresh_quantiser()
         end
       end
     end
@@ -125,7 +125,7 @@ function scale_edit_page_controller.register_presss()
         else
           program.get().selected_scale = x
         end
-        scale_edit_page_ui_controller.refresh()
+        scale_edit_page_ui.refresh()
       end
     end
   )
@@ -133,7 +133,7 @@ function scale_edit_page_controller.register_presss()
     "scale_edit_page",
     function(x, y)
       if scale_edit_page_sequencer:is_this(x, y) then
-        scale_edit_page_controller.refresh_faders()
+        scale_edit_page.refresh_faders()
       end
     end
   )
@@ -141,7 +141,7 @@ function scale_edit_page_controller.register_presss()
     "scale_edit_page",
     function(x, y)
       if scale_edit_page_sequencer:is_this(x, y) then
-        scale_edit_page_controller.refresh_faders()
+        scale_edit_page.refresh_faders()
       end
     end
   )
@@ -159,9 +159,9 @@ function scale_edit_page_controller.register_presss()
 end
 
 
-function scale_edit_page_controller.refresh_faders()
+function scale_edit_page.refresh_faders()
   local channel = program.get_channel(17)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+  local pressed_keys = m_grid.get_pressed_keys()
   if #pressed_keys > 0 then
     local s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
     local step_scale_trig_lock = program.get_step_scale_trig_lock(channel, s)
@@ -188,8 +188,8 @@ function scale_edit_page_controller.refresh_faders()
   end
 end
 
-scale_edit_page_controller.refresh = scheduler.debounce(function()
-  scale_edit_page_controller.refresh_faders()
+scale_edit_page.refresh = scheduler.debounce(function()
+  scale_edit_page.refresh_faders()
 end, 0.01)
 
-return scale_edit_page_controller
+return scale_edit_page

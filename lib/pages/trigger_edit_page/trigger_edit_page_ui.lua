@@ -1,4 +1,4 @@
-local trigger_edit_page_ui_controller = {}
+local trigger_edit_page_ui = {}
 
 
 local pages = include("mosaic/lib/ui_components/pages")
@@ -42,7 +42,7 @@ local trig_edit_options_page =
   end
 )
 
-function trigger_edit_page_ui_controller.register_ui_draws()
+function trigger_edit_page_ui.register_ui_draws()
   draw:register_ui(
     "trigger_edit_page",
     function()
@@ -51,15 +51,15 @@ function trigger_edit_page_ui_controller.register_ui_draws()
   )
 end
 
-function trigger_edit_page_ui_controller.init()
+function trigger_edit_page_ui.init()
   pages:add_page(grid_viewer_page)
   pages:add_page(trig_edit_options_page)
   pages:select_page(1)
   tresillo_mult:select()
-  trigger_edit_page_ui_controller.refresh_tresillo()
+  trigger_edit_page_ui.refresh_tresillo()
 end
 
-function trigger_edit_page_ui_controller.enc(n, d)
+function trigger_edit_page_ui.enc(n, d)
   if n == 2 then
     for i = 1, math.abs(d) do
       if d > 0 then
@@ -87,28 +87,28 @@ function trigger_edit_page_ui_controller.enc(n, d)
       if d > 0 then
         if pages:get_selected_page() == 2 then
           tresillo_mult:increment()
-          trigger_edit_page_ui_controller.update_tresillo()
+          trigger_edit_page_ui.update_tresillo()
         end
       else
         if pages:get_selected_page() == 2 then
           tresillo_mult:decrement()
-          trigger_edit_page_ui_controller.update_tresillo()
+          trigger_edit_page_ui.update_tresillo()
         end
       end
     end
   end
 end
 
-function trigger_edit_page_ui_controller.update_tresillo()
+function trigger_edit_page_ui.update_tresillo()
   params:set("tresillo_amount", tresillo_mult:get_selected().id)
 end
 
-function trigger_edit_page_ui_controller.refresh_tresillo()
+function trigger_edit_page_ui.refresh_tresillo()
   tresillo_mult:set_selected_value(params:get("tresillo_amount"))
 end
 
-function trigger_edit_page_ui_controller:refresh()
-  trigger_edit_page_ui_controller.refresh_tresillo()
+function trigger_edit_page_ui:refresh()
+  trigger_edit_page_ui.refresh_tresillo()
 end
 
-return trigger_edit_page_ui_controller
+return trigger_edit_page_ui

@@ -1,4 +1,4 @@
-local channel_edit_page_controller = {}
+local channel_edit_page = {}
 local pattern_buttons = {}
 
 
@@ -54,15 +54,15 @@ local length_merge_mode_button =
 local channel_octave_fader = fader:new(8, 8, 5, 5)
 local channel_scale_fader = fader:new(1, 3, 16, 16)
 
-function channel_edit_page_controller.init()
+function channel_edit_page.init()
 
   for s = 1, 16 do
     pattern_buttons["step" .. s .. "_pattern_button"] = button:new(s, 2)
   end
 
   channel_octave_fader:set_value(program.get_selected_channel().octave + 3)
-  channel_edit_page_controller.refresh()
-  channel_edit_page_ui_controller.refresh()
+  channel_edit_page.refresh()
+  channel_edit_page_ui.refresh()
 
   channel_scale_fader:set_pre_func(
     function(x, y, length)
@@ -71,7 +71,7 @@ function channel_edit_page_controller.init()
         if hide_scale_fader_leds then
           break
         end
-        if clock_controller.is_playing() and i == channel.step_scale_number then
+        if m_clock.is_playing() and i == channel.step_scale_number then
           grid_abstraction.led(i, y, 15)
           channel_scale_fader:set_value(0)
         end
@@ -81,7 +81,7 @@ function channel_edit_page_controller.init()
 
 end
 
-function channel_edit_page_controller.register_draws()
+function channel_edit_page.register_draws()
   draw:register_grid(
     "channel_edit_page",
     function()
@@ -139,7 +139,7 @@ function channel_edit_page_controller.register_draws()
   )
 end
 
-function channel_edit_page_controller.register_presss()
+function channel_edit_page.register_presss()
   press:register(
     "channel_edit_page",
     function(x, y)
@@ -157,7 +157,7 @@ function channel_edit_page_controller.register_presss()
       if channel_edit_page_sequencer:is_this(x, y) then
         if is_key3_down then
           program.clear_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
-          channel_edit_page_ui_controller.refresh_masks()
+          channel_edit_page_ui.refresh_masks()
         end
       end
     end
@@ -166,9 +166,9 @@ function channel_edit_page_controller.register_presss()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
-        channel_edit_page_ui_controller.refresh_trig_locks()
-        channel_edit_page_ui_controller.refresh_masks()
-        channel_edit_page_controller.refresh_faders()
+        channel_edit_page_ui.refresh_trig_locks()
+        channel_edit_page_ui.refresh_masks()
+        channel_edit_page.refresh_faders()
         pattern.update_working_patterns()
       end
     end
@@ -189,20 +189,20 @@ function channel_edit_page_controller.register_presss()
             tooltip:show("Channel " .. x .. " muted")
             channel_select_fader:dim(x)
           end
-          channel_edit_page_controller.refresh_muted_channels()
+          channel_edit_page.refresh_muted_channels()
           fn.dirty_screen(true)
         else
           channel_select_fader:press(x, y)
           program.get().selected_channel = x
           tooltip:show("Channel " .. x .. " selected")
-          channel_edit_page_ui_controller.set_note_dashboard_values({
+          channel_edit_page_ui.set_note_dashboard_values({
             note = -1,
             velocity = -1,
             length = -1,
             chords = {-1, -1, -1, -1}
           })
-          channel_edit_page_controller.refresh()
-          channel_edit_page_ui_controller.refresh()
+          channel_edit_page.refresh()
+          channel_edit_page_ui.refresh()
         end
       end
     end
@@ -222,7 +222,7 @@ function channel_edit_page_controller.register_presss()
           tooltip:show("Channel " .. x .. " muted")
           channel_select_fader:dim(x)
         end
-        channel_edit_page_controller.refresh_muted_channels()
+        channel_edit_page.refresh_muted_channels()
         fn.dirty_screen(true)
       end
     end
@@ -250,7 +250,7 @@ function channel_edit_page_controller.register_presss()
         else
           program.add_step_octave_trig_lock(s, octave_value - 3)
         end
-        channel_edit_page_controller.refresh_faders()
+        channel_edit_page.refresh_faders()
       end
       if channel_scale_fader:is_this(x2, y2) then
         channel_scale_fader:press(x2, y2)
@@ -262,7 +262,7 @@ function channel_edit_page_controller.register_presss()
         else
           program.add_step_scale_trig_lock(s, scale_value)
         end
-        channel_edit_page_controller.refresh_faders()
+        channel_edit_page.refresh_faders()
       end
       if channel_select_fader:is_this(x, y) and channel_select_fader:is_this(x2, y2) then
         
@@ -286,7 +286,7 @@ function channel_edit_page_controller.register_presss()
             channel_select_fader:dim(x2)
           end
           tooltip:show("Channel mutes toggled")
-          channel_edit_page_controller.refresh_muted_channels()
+          channel_edit_page.refresh_muted_channels()
           fn.dirty_screen(true)
         end
       end
@@ -502,16 +502,16 @@ function channel_edit_page_controller.register_presss()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
-        channel_edit_page_ui_controller.refresh_masks()
-        channel_edit_page_ui_controller.refresh_trig_locks()
-        channel_edit_page_controller.refresh_faders()
+        channel_edit_page_ui.refresh_masks()
+        channel_edit_page_ui.refresh_trig_locks()
+        channel_edit_page.refresh_faders()
       end
     end
   )
 end
 
-function channel_edit_page_controller.handle_note_on_mosaic_midi_message(note, velocity, chord_number, chord_degree)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page.handle_note_on_m_midi_message(note, velocity, chord_number, chord_degree)
+  local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 then
     if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
@@ -528,14 +528,14 @@ function channel_edit_page_controller.handle_note_on_mosaic_midi_message(note, v
         channel.step_chord_masks[s][chord_number - 1] = chord_degree 
       end
 
-      channel_edit_page_ui_controller.refresh_masks()
+      channel_edit_page_ui.refresh_masks()
 
     end
   end
 end
 
 
-function channel_edit_page_controller.refresh_merge_buttons()
+function channel_edit_page.refresh_merge_buttons()
   local trig_merge_mode = program.get_selected_channel().trig_merge_mode
   local note_merge_mode = program.get_selected_channel().note_merge_mode
   local velocity_merge_mode = program.get_selected_channel().velocity_merge_mode
@@ -582,7 +582,7 @@ function channel_edit_page_controller.refresh_merge_buttons()
   channel_select_fader:set_value(program.get().selected_channel)
 end
 
-function channel_edit_page_controller.refresh_muted_channels()
+function channel_edit_page.refresh_muted_channels()
   for i = 1, 16 do
     if program.get_channel(i).mute == true then
       channel_select_fader:dim(i)
@@ -592,10 +592,10 @@ function channel_edit_page_controller.refresh_muted_channels()
   end
 end
 
-function channel_edit_page_controller.refresh_faders()
+function channel_edit_page.refresh_faders()
   local channel = program.get_selected_channel()
   channel_select_fader:set_value(program.get().selected_channel)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+  local pressed_keys = m_grid.get_pressed_keys()
   if #pressed_keys > 0 then
     local s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
     local step_scale_trig_lock = program.get_step_scale_trig_lock(channel, s)
@@ -622,7 +622,7 @@ function channel_edit_page_controller.refresh_faders()
   end
 end
 
-function channel_edit_page_controller.refresh_step_buttons()
+function channel_edit_page.refresh_step_buttons()
   local channel = program.get_selected_channel()
 
   local selected_sequencer_pattern = program.get().selected_sequencer_pattern
@@ -637,11 +637,11 @@ function channel_edit_page_controller.refresh_step_buttons()
   end
 end
 
-function channel_edit_page_controller.refresh()
-  channel_edit_page_controller.refresh_faders()
-  channel_edit_page_controller.refresh_step_buttons()
-  channel_edit_page_controller.refresh_merge_buttons()
-  channel_edit_page_controller.refresh_muted_channels()
+function channel_edit_page.refresh()
+  channel_edit_page.refresh_faders()
+  channel_edit_page.refresh_step_buttons()
+  channel_edit_page.refresh_merge_buttons()
+  channel_edit_page.refresh_muted_channels()
 end
 
-return channel_edit_page_controller
+return channel_edit_page

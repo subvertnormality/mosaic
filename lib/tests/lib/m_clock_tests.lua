@@ -1,18 +1,18 @@
 step = include("mosaic/lib/step")
 pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock/clock_controller")
+local m_clock = include("mosaic/lib/clock/m_clock")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/mosaic_midi_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/m_midi_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_mock")
 
 local function setup()
   program.init()
@@ -21,19 +21,19 @@ local function setup()
 end
 
 local function clock_setup()
-  clock_controller.init()
-  clock_controller:start()
+  m_clock.init()
+  m_clock:start()
 end
 
 local function progress_clock_by_beats(b)
   for i = 1, (24 * b) do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
 local function progress_clock_by_pulses(p)
   for i = 1, p do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
@@ -57,9 +57,9 @@ function test_clock_divisions_slow_down_the_clock_div_2()
 
   clock_setup()
 
-  local div_2_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[15])
+  local div_2_clock_mod = m_clock.calculate_divisor(m_clock.get_clock_divisions()[15])
 
-  clock_controller.set_channel_division(1, div_2_clock_mod)
+  m_clock.set_channel_division(1, div_2_clock_mod)
 
   luaunit.assertNil(note_on_event)
 
@@ -111,9 +111,9 @@ function test_clock_divisions_slow_down_the_clock_div_3()
 
   clock_setup()
 
-  local div_3_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[17])
+  local div_3_clock_mod = m_clock.calculate_divisor(m_clock.get_clock_divisions()[17])
 
-  clock_controller.set_channel_division(1, div_3_clock_mod)
+  m_clock.set_channel_division(1, div_3_clock_mod)
 
   luaunit.assertNil(note_on_event)
 
@@ -170,9 +170,9 @@ function test_clock_multiplications_speed_up_the_clock_mul_2()
 
   clock_setup()
 
-  local mul_2_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[10])
+  local mul_2_clock_mod = m_clock.calculate_divisor(m_clock.get_clock_divisions()[10])
 
-  clock_controller.set_channel_division(1, mul_2_clock_mod)
+  m_clock.set_channel_division(1, mul_2_clock_mod)
 
   luaunit.assertNil(note_on_event)
 
@@ -215,9 +215,9 @@ function test_clock_multiplications_speed_up_the_clock_mul_4()
 
   clock_setup()
 
-  local mul_8_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[7])
+  local mul_8_clock_mod = m_clock.calculate_divisor(m_clock.get_clock_divisions()[7])
 
-  clock_controller.set_channel_division(1, mul_8_clock_mod)
+  m_clock.set_channel_division(1, mul_8_clock_mod)
 
   luaunit.assertNil(note_on_event)
 
@@ -261,9 +261,9 @@ function test_clock_multiplications_speed_up_the_clock_mul_8()
 
   clock_setup()
 
-  local mul_8_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[3])
+  local mul_8_clock_mod = m_clock.calculate_divisor(m_clock.get_clock_divisions()[3])
 
-  clock_controller.set_channel_division(1, mul_8_clock_mod)
+  m_clock.set_channel_division(1, mul_8_clock_mod)
 
   luaunit.assertNil(note_on_event)
 
@@ -311,9 +311,9 @@ function test_clock_multiplications_speed_up_the_clock_mul_16()
 
   clock_setup()
 
-  local mul_16_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[1])
+  local mul_16_clock_mod = m_clock.calculate_divisor(m_clock.get_clock_divisions()[1])
 
-  clock_controller.set_channel_division(1, mul_16_clock_mod)
+  m_clock.set_channel_division(1, mul_16_clock_mod)
 
   luaunit.assertNil(note_on_event)
 
@@ -350,7 +350,7 @@ function test_clock_can_delay_action_with_no_channel_clock_division_set()
   local delay_multiplier = 1
 
 
-  clock_controller.delay_action(
+  m_clock.delay_action(
     channel,
     ((clock_division * delay_multiplier)),
     false,
@@ -380,7 +380,7 @@ function test_clock_delay_action_with_no_division_specified_executes_immediately
   local clock_division_index = 0
   local delay_multiplier = 1
 
-  clock_controller.delay_action(
+  m_clock.delay_action(
     channel,
     (clock_division_index * delay_multiplier),
     false,
@@ -405,7 +405,7 @@ function test_clock_delay_action_with_nil_division_executes_immediately()
   local clock_division_index = nil
   local delay_multiplier = 1
 
-  clock_controller.delay_action(
+  m_clock.delay_action(
     channel,
     nil,
     false,
@@ -424,9 +424,9 @@ function test_clock_can_delay_action_with_channel_clock_division_set()
   setup()
   clock_setup()
   progress_clock_by_beats(1)
-  local mul_8_clock_mod = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[3])
+  local mul_8_clock_mod = m_clock.calculate_divisor(m_clock.get_clock_divisions()[3])
 
-  clock_controller.set_channel_division(1, mul_8_clock_mod)
+  m_clock.set_channel_division(1, mul_8_clock_mod)
 
   local has_fired = false
 
@@ -435,7 +435,7 @@ function test_clock_can_delay_action_with_channel_clock_division_set()
   local division = 1
   local delay_multiplier = 1
 
-  clock_controller.delay_action(
+  m_clock.delay_action(
     channel,
     (division * delay_multiplier),
     false,
@@ -465,7 +465,7 @@ function test_delay_action_with_full_delay_fires_as_expected()
   local clock_division = 1
   local delay_multiplier = 1
 
-  clock_controller.delay_action(
+  m_clock.delay_action(
     channel,
     (clock_division * delay_multiplier),
     false,

@@ -1,4 +1,4 @@
-local velocity_edit_page_controller = {}
+local velocity_edit_page = {}
 
 local vertical_fader = include("mosaic/lib/controls/vertical_fader")
 local fade_button = include("mosaic/lib/controls/fade_button")
@@ -18,7 +18,7 @@ local step49to64_button = button:new(12, 8, {{"Inactive", 3}, {"Page 49-64", 15}
 local vel8to14_fade_button = fade_button:new(15, 8, 0, 7, "up")
 local vel1to7_fade_button = fade_button:new(16, 8, 0, 7, "down")
 
-function velocity_edit_page_controller.init()
+function velocity_edit_page.init()
   for s = 1, 64 do
     faders["step" .. s .. "_fader"] = vertical_fader:new(s, 1, 14)
   end
@@ -55,15 +55,15 @@ function velocity_edit_page_controller.init()
     value_from_velocity_results[vel] = math.floor(output_value)
   end
 
-  velocity_edit_page_controller.refresh()
+  velocity_edit_page.refresh()
 end
 
-function velocity_edit_page_controller.register_draws()
+function velocity_edit_page.register_draws()
   for s = 1, 64 do
     draw:register_grid(
       "velocity_edit_page",
       function()
-        -- velocity_edit_page_controller.refresh()
+        -- velocity_edit_page.refresh()
         return faders["step" .. s .. "_fader"]:draw()
       end
     )
@@ -109,7 +109,7 @@ function velocity_edit_page_controller.register_draws()
   )
 end
 
-function velocity_edit_page_controller.register_presss()
+function velocity_edit_page.register_presss()
   for s = 1, 64 do
     press:register(
       "velocity_edit_page",
@@ -117,14 +117,14 @@ function velocity_edit_page_controller.register_presss()
         if (y == 1) and is_key3_down then
           program.get().selected_pattern = x
           tooltip:show("Pattern " .. x .. " selected")
-          velocity_edit_page_controller.refresh()
+          velocity_edit_page.refresh()
         else
           if faders["step" .. s .. "_fader"]:is_this(x, y) then
             faders["step" .. s .. "_fader"]:press(x, y)
             local selected_sequencer_pattern = program.get().selected_sequencer_pattern
             local selected_pattern = program.get().selected_pattern
             local velocity =
-              velocity_edit_page_controller.velocity_from_value(faders["step" .. s .. "_fader"]:get_value())
+              velocity_edit_page.velocity_from_value(faders["step" .. s .. "_fader"]:get_value())
             local seq_pattern = program.get_selected_sequencer_pattern().patterns[selected_pattern]
             seq_pattern.velocity_values[s] = velocity
             program.get_selected_sequencer_pattern().active = true
@@ -156,7 +156,7 @@ function velocity_edit_page_controller.register_presss()
       if (y == 1) then
         program.get().selected_pattern = x
         tooltip:show("Pattern " .. x .. " selected")
-        velocity_edit_page_controller.refresh()
+        velocity_edit_page.refresh()
       end
     end
   )
@@ -169,7 +169,7 @@ function velocity_edit_page_controller.register_presss()
             step17to32_button:set_state(1)
             step33to48_button:set_state(1)
             step49to64_button:set_state(1)
-            velocity_edit_page_controller.refresh()
+            velocity_edit_page.refresh()
             tooltip:show("Steps 1 to 16")
         end
     end
@@ -184,7 +184,7 @@ function velocity_edit_page_controller.register_presss()
               step17to32_button:set_state(2)
               step33to48_button:set_state(1)
               step49to64_button:set_state(1)
-              velocity_edit_page_controller.refresh()
+              velocity_edit_page.refresh()
               tooltip:show("Steps 17 to 32")
           end
       end
@@ -199,7 +199,7 @@ function velocity_edit_page_controller.register_presss()
               step17to32_button:set_state(1)
               step33to48_button:set_state(2)
               step49to64_button:set_state(1)
-              velocity_edit_page_controller.refresh()
+              velocity_edit_page.refresh()
               tooltip:show("Steps 33 to 48")
           end
       end
@@ -214,7 +214,7 @@ function velocity_edit_page_controller.register_presss()
               step17to32_button:set_state(1)
               step33to48_button:set_state(1)
               step49to64_button:set_state(2)
-              velocity_edit_page_controller.refresh()
+              velocity_edit_page.refresh()
               tooltip:show("Steps 49 to 64")
           end
       end
@@ -226,13 +226,13 @@ function velocity_edit_page_controller.register_presss()
             local new_offset = vel1to7_fade_button:press(x, y)
             if new_offset ~= false then
                 vertical_offset = new_offset
-                velocity_edit_page_controller.refresh()
+                velocity_edit_page.refresh()
                 -- Calculate value range for current offset page
                 local high_value = new_offset + 1
                 local low_value = math.max(1, high_value + 6)  -- Use 6 to show 7 values total
                 -- Convert to velocities and swap them since the mapping is inverted
-                local high_vel = velocity_edit_page_controller.velocity_from_value(high_value)
-                local low_vel = velocity_edit_page_controller.velocity_from_value(low_value)
+                local high_vel = velocity_edit_page.velocity_from_value(high_value)
+                local low_vel = velocity_edit_page.velocity_from_value(low_value)
                 tooltip:show("Velocity " .. low_vel .. " to " .. high_vel)
             end
         end
@@ -244,19 +244,19 @@ function velocity_edit_page_controller.register_presss()
     function(x, y)
         if (vel1to7_fade_button:is_this(x, y)) then
             vertical_offset = 7  -- Go to full high velocity (0)
-            velocity_edit_page_controller.refresh()
+            velocity_edit_page.refresh()
             local high_value = 8
             local low_value = 14
-            local high_vel = velocity_edit_page_controller.velocity_from_value(high_value)
-            local low_vel = velocity_edit_page_controller.velocity_from_value(low_value)
+            local high_vel = velocity_edit_page.velocity_from_value(high_value)
+            local low_vel = velocity_edit_page.velocity_from_value(low_value)
             tooltip:show("Velocity " .. low_vel .. " to " .. high_vel)
         elseif (vel8to14_fade_button:is_this(x, y)) then
             vertical_offset = 0  -- Go to full low velocity (127)
-            velocity_edit_page_controller.refresh()
+            velocity_edit_page.refresh()
             local high_value = 1
             local low_value = 7
-            local high_vel = velocity_edit_page_controller.velocity_from_value(high_value)
-            local low_vel = velocity_edit_page_controller.velocity_from_value(low_value)
+            local high_vel = velocity_edit_page.velocity_from_value(high_value)
+            local low_vel = velocity_edit_page.velocity_from_value(low_value)
             tooltip:show("Velocity " .. low_vel .. " to " .. high_vel)
         end
     end
@@ -268,13 +268,13 @@ function velocity_edit_page_controller.register_presss()
               local new_offset = vel8to14_fade_button:press(x, y)
               if new_offset ~= false then
                   vertical_offset = new_offset
-                  velocity_edit_page_controller.refresh()
+                  velocity_edit_page.refresh()
                   -- Calculate value range for current offset page
                   local high_value = new_offset + 1
                   local low_value = math.max(1, high_value + 6)  -- Use 6 to show 7 values total
                   -- Convert to velocities and swap them since the mapping is inverted
-                  local high_vel = velocity_edit_page_controller.velocity_from_value(high_value)
-                  local low_vel = velocity_edit_page_controller.velocity_from_value(low_value)
+                  local high_vel = velocity_edit_page.velocity_from_value(high_value)
+                  local low_vel = velocity_edit_page.velocity_from_value(low_value)
                   tooltip:show("Velocity " .. low_vel .. " to " .. high_vel)
               end
           end
@@ -283,21 +283,21 @@ function velocity_edit_page_controller.register_presss()
   )
 end
 
-function velocity_edit_page_controller.value_from_velocity(vel)
+function velocity_edit_page.value_from_velocity(vel)
   if vel == -1 then
     return 1
   end
   return value_from_velocity_results[vel]
 end
 
-function velocity_edit_page_controller.velocity_from_value(val)
+function velocity_edit_page.velocity_from_value(val)
   if val == -1 then
     return 100
   end
   return velocity_from_value_results[val]
 end
 
-function velocity_edit_page_controller.refresh_buttons()
+function velocity_edit_page.refresh_buttons()
   step1to16_button:set_state(horizontal_offset == 0 and 2 or 1)
   step17to32_button:set_state(horizontal_offset == 16 and 2 or 1)
   step33to48_button:set_state(horizontal_offset == 32 and 2 or 1)
@@ -306,12 +306,12 @@ function velocity_edit_page_controller.refresh_buttons()
   vel8to14_fade_button:set_value(vertical_offset)
 end
 
-function velocity_edit_page_controller.refresh_fader(s)
+function velocity_edit_page.refresh_fader(s)
   local selected_pattern = program.get_selected_pattern()
   faders["step" .. s .. "_fader"]:set_vertical_offset(vertical_offset)
   faders["step" .. s .. "_fader"]:set_horizontal_offset(horizontal_offset)
 
-  local value = velocity_edit_page_controller.value_from_velocity(selected_pattern.velocity_values[s])
+  local value = velocity_edit_page.value_from_velocity(selected_pattern.velocity_values[s])
 
   if value then
     faders["step" .. s .. "_fader"]:set_value(value)
@@ -324,16 +324,16 @@ function velocity_edit_page_controller.refresh_fader(s)
   end
 end
 
-velocity_edit_page_controller.refresh = scheduler.debounce(function()
+velocity_edit_page.refresh = scheduler.debounce(function()
 
-  velocity_edit_page_controller.refresh_buttons()
+  velocity_edit_page.refresh_buttons()
 
   for s = 1, 64, 8 do
     -- Process 8 faders per batch
     for i = 0, 7 do
       local index = s + i
       if index <= 64 then
-        velocity_edit_page_controller.refresh_fader(index)
+        velocity_edit_page.refresh_fader(index)
       end
     end
     coroutine.yield()  -- Yield after each batch of 8
@@ -342,4 +342,4 @@ velocity_edit_page_controller.refresh = scheduler.debounce(function()
   fn.grid_dirty = true
  end, 0.01)
 
-return velocity_edit_page_controller
+return velocity_edit_page

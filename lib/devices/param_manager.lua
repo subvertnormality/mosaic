@@ -82,7 +82,7 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
         params:set_action(
           "midi_device_params_channel_" .. channel_id .. "_" .. i,
           function(x)
-            channel_edit_page_ui_controller.refresh_trig_lock_values()
+            channel_edit_page_ui.refresh_trig_lock_values()
             autosave_reset()
           end
         )
@@ -115,7 +115,7 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
       params:set_action(
         "midi_device_params_channel_" .. channel_id .. "_" .. oob_accumulator,
         function(x)
-          channel_edit_page_ui_controller.refresh_trig_lock_values()
+          channel_edit_page_ui.refresh_trig_lock_values()
           autosave_reset()
         end
       )
@@ -157,11 +157,11 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
           function(x)
             if x ~= val.off_value then
               if val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
-                mosaic_midi.nrpn(val.nrpn_msb, val.nrpn_lsb, x, channel, midi_device)
+                m_midi.nrpn(val.nrpn_msb, val.nrpn_lsb, x, channel, midi_device)
               elseif val.cc_msb and val.cc_max_value then
-                mosaic_midi.cc(val.cc_msb, val.cc_lsb or nil, x, channel, midi_device)
+                m_midi.cc(val.cc_msb, val.cc_lsb or nil, x, channel, midi_device)
               end
-              channel_edit_page_ui_controller.refresh_trig_lock_values()
+              channel_edit_page_ui.refresh_trig_lock_values()
             end
             autosave_reset()
           end
@@ -253,7 +253,7 @@ function param_manager.update_default_params(channel, meta_device)
     params:set(string.format("midi_device_params_channel_%d_2", channel.number or 0), meta_device.fixed_note)
   end
 
-  channel_edit_page_ui_controller.refresh_trig_lock_values()
+  channel_edit_page_ui.refresh_trig_lock_values()
 end
 
 

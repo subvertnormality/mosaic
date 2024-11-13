@@ -1,5 +1,5 @@
 local quantiser = include("mosaic/lib/quantiser")
-local clock_controller = include("mosaic/lib/clock/clock_controller")
+local m_clock = include("mosaic/lib/clock/m_clock")
 
 local divisions = include("mosaic/lib/clock/divisions")
 
@@ -90,7 +90,7 @@ end
 local function process_midi_param(param, step_trig_lock, midi_channel, midi_device)
 
   if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
-      mosaic_midi.nrpn(
+      m_midi.nrpn(
           param.nrpn_msb,
           param.nrpn_lsb, 
           step_trig_lock or value,
@@ -98,7 +98,7 @@ local function process_midi_param(param, step_trig_lock, midi_channel, midi_devi
           midi_device
       )
   elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
-      mosaic_midi.cc(
+      m_midi.cc(
           param.cc_msb,
           param.cc_lsb,
           step_trig_lock or value, 
@@ -286,8 +286,8 @@ end
 function step.manually_calculate_step_scale_number(c, step)
   local program_data = program.get()
   local channel = program.get_channel(c)
-  local clock_division_17 = clock_controller.get_channel_division(17)
-  local channel_division = clock_controller.get_channel_division(c)
+  local clock_division_17 = m_clock.get_channel_division(17)
+  local channel_division = m_clock.get_channel_division(c)
   
   -- Calculate the relative speed between the two sequencers
   local speed_ratio = channel_division / clock_division_17
@@ -374,7 +374,7 @@ local function play_note_internal(note, note_container, velocity, division, note
   
   note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
 
-  clock_controller.delay_action(c, division, action_flag, function()
+  m_clock.delay_action(c, division, action_flag, function()
     note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
   end)
 
@@ -517,10 +517,10 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   local total_notes = #sequenced_chord_notes  -- Cache the length of the processed_chord_notes table
 
   if c == program.get().selected_channel then
-    channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
+    channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
   end
 
-  clock_controller.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div)
+  m_clock.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div)
     
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
     local length = div
@@ -593,7 +593,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     number_of_executions = number_of_executions + 1
 
     if c == program.get().selected_channel then
-      channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
+      channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
     end
   end)
 
@@ -637,7 +637,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     note_dashboard_values.velocity = note_container.velocity
     note_dashboard_values.length = note_container.length
     if c == program.get().selected_channel then
-      channel_edit_page_ui_controller.set_note_dashboard_values(note_dashboard_values)
+      channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
     end
   end
 
@@ -674,7 +674,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
       
 
-      clock_controller.delay_action(
+      m_clock.delay_action(
         c,
         (((chord_division or 0) * delay_multiplier) + ((chord_spread * delay_multiplier) + (acceleration_accumulator)) * chord_acceleration),
         false,
@@ -709,7 +709,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
             chord_note_dashboard_values.chords[chord_number] = processed_chord_note
 
             if c == program.get().selected_channel then
-              channel_edit_page_ui_controller.set_note_dashboard_values(chord_note_dashboard_values)
+              channel_edit_page_ui.set_note_dashboard_values(chord_note_dashboard_values)
             end
           end
         end
@@ -723,7 +723,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   if chord_strum_pattern == 2 or chord_strum_pattern == 4 then
 
-    clock_controller.delay_action(
+    m_clock.delay_action(
       c,
       (((chord_division or 0) * #chord_notes) + (((chord_spread * delay_multiplier) + (acceleration_accumulator)) * chord_acceleration)),
       false,
@@ -753,7 +753,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           table.insert(note_dashboard_values.chords, processed_note)
 
           if c == program.get().selected_channel then
-            channel_edit_page_ui_controller.set_note_dashboard_values(chord_note_dashboard_values)
+            channel_edit_page_ui.set_note_dashboard_values(chord_note_dashboard_values)
           end
         end
       end
@@ -863,7 +863,7 @@ function step.handle(c, current_step)
         midi_channel = midi_channel,
         midi_device = midi_device,
         steps_remaining = length_value,
-        player = device.player or mosaic_midi,
+        player = device.player or m_midi,
         channel = c
       }
 
@@ -876,8 +876,8 @@ function step.handle(c, current_step)
         function(chord_note, velocity, midi_channel, midi_device)
           if device.player then
             device.player:note_on(chord_note, (127 > 1) and ((velocity - 1) / 126) or 0)
-          elseif mosaic_midi then
-            mosaic_midi:note_on(chord_note, velocity, midi_channel, midi_device)
+          elseif m_midi then
+            m_midi:note_on(chord_note, velocity, midi_channel, midi_device)
           end
         end
       )
@@ -912,7 +912,7 @@ function step.process_elektron_program_change(next_sequencer_pattern)
       local midi_device = program.get().devices[1].midi_device
       local midi_channel = program.get().devices[1].midi_channel
 
-      mosaic_midi:program_change(next_sequencer_pattern - 1, params:get("elektron_program_change_channel"), midi_device)
+      m_midi:program_change(next_sequencer_pattern - 1, params:get("elektron_program_change_channel"), midi_device)
 
     end
   end
@@ -934,7 +934,7 @@ function step.process_song_sequencer_patterns()
     (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (selected_sequencer_pattern.global_pattern_length * selected_sequencer_pattern.repeats) ==
       0)
    then
-    clock_controller.realign_sprockets()
+    m_clock.realign_sprockets()
     
     if params:get("song_mode") == 2 then
 
@@ -953,25 +953,25 @@ function step.process_song_sequencer_patterns()
       if selected_sequencer_pattern_number ~= next_sequencer_pattern then
         for channel_number = 1, 17 do
           local channel = program.get_channel(channel_number)
-          clock_controller.set_channel_division(channel_number, clock_controller.calculate_divisor(channel.clock_mods))
+          m_clock.set_channel_division(channel_number, m_clock.calculate_divisor(channel.clock_mods))
           if channel_number ~= 17 then
-            channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(channel_number)
-            channel_edit_page_ui_controller.align_global_and_local_swing_values(channel_number)
-            channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(channel_number)
-            channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(channel_number)
-            channel_edit_page_ui_controller.align_global_and_local_shuffle_amount_values(channel_number)
+            channel_edit_page_ui.align_global_and_local_shuffle_feel_values(channel_number)
+            channel_edit_page_ui.align_global_and_local_swing_values(channel_number)
+            channel_edit_page_ui.align_global_and_local_swing_shuffle_type_values(channel_number)
+            channel_edit_page_ui.align_global_and_local_shuffle_basis_values(channel_number)
+            channel_edit_page_ui.align_global_and_local_shuffle_amount_values(channel_number)
           end
       
         end
       
-        channel_edit_page_ui_controller.refresh_clock_mods()
-        channel_edit_page_ui_controller.refresh_swing()
-        channel_edit_page_ui_controller.refresh_swing_shuffle_type()
-        channel_edit_page_ui_controller.refresh_shuffle_feel()
-        channel_edit_page_ui_controller.refresh_shuffle_basis()
-        channel_edit_page_ui_controller.refresh_shuffle_amount()
-        song_edit_page_controller.refresh()
-        channel_edit_page_controller.refresh()
+        channel_edit_page_ui.refresh_clock_mods()
+        channel_edit_page_ui.refresh_swing()
+        channel_edit_page_ui.refresh_swing_shuffle_type()
+        channel_edit_page_ui.refresh_shuffle_feel()
+        channel_edit_page_ui.refresh_shuffle_basis()
+        channel_edit_page_ui.refresh_shuffle_amount()
+        song_edit_page.refresh()
+        channel_edit_page.refresh()
       end
     end
   end
@@ -985,11 +985,11 @@ function step.process_song_sequencer_patterns()
       func()
     end
     for channel_number = 1, 16 do
-      channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(channel_number)
-      channel_edit_page_ui_controller.align_global_and_local_swing_values(channel_number)
-      channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(channel_number)
-      channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(channel_number)
-      channel_edit_page_ui_controller.align_global_and_local_shuffle_amount_values(channel_number)
+      channel_edit_page_ui.align_global_and_local_swing_shuffle_type_values(channel_number)
+      channel_edit_page_ui.align_global_and_local_swing_values(channel_number)
+      channel_edit_page_ui.align_global_and_local_shuffle_feel_values(channel_number)
+      channel_edit_page_ui.align_global_and_local_shuffle_basis_values(channel_number)
+      channel_edit_page_ui.align_global_and_local_shuffle_amount_values(channel_number)
     end
     pattern_change_queue = {}
   end

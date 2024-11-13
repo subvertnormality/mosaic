@@ -1,18 +1,18 @@
 step = include("mosaic/lib/step")
 pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock/clock_controller")
+local m_clock = include("mosaic/lib/clock/m_clock")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/mosaic_midi_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/m_midi_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_mock")
 
 local function setup()
   program.init()
@@ -27,19 +27,19 @@ local function mock_random()
 end
 
 local function clock_setup()
-  clock_controller.init()
-  clock_controller:start()
+  m_clock.init()
+  m_clock:start()
 end
 
 local function progress_clock_by_beats(b)
   for i = 1, (24 * b) do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
 local function progress_clock_by_pulses(p)
   for i = 1, p do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 

@@ -1,5 +1,5 @@
--- channel_edit_page_ui_controller.lua
-local channel_edit_page_ui_controller = {}
+-- channel_edit_page_ui.lua
+local channel_edit_page_ui = {}
 
 -- Include necessary modules
 
@@ -11,7 +11,7 @@ local dial = include("mosaic/lib/ui_components/dial")
 local control_scroll_selector = include("mosaic/lib/ui_components/control_scroll_selector")
 local list_selector = include("mosaic/lib/ui_components/list_selector")
 local value_selector = include("mosaic/lib/ui_components/value_selector")
-local mosaic_midi = include("mosaic/lib/mosaic_midi")
+local m_midi = include("mosaic/lib/m_midi")
 local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/devices/param_manager")
 local divisions = include("mosaic/lib/clock/divisions")
@@ -196,7 +196,7 @@ local channel_edit_page = page:new("Device Config", function()
   local channel = program.get_selected_channel()
   local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
   if device.type == "midi" then
-    if device.default_midi_device == nil and mosaic_midi.midi_devices_connected() then
+    if device.default_midi_device == nil and m_midi.midi_devices_connected() then
       midi_device_vertical_scroll_selector:draw()
     end
     if device.default_midi_channel == nil then
@@ -215,12 +215,12 @@ local trig_lock_page = page:new("Trig Locks", function()
 end)
 
 -- Initialization function
-function channel_edit_page_ui_controller.init()
+function channel_edit_page_ui.init()
   mask_selectors.note:select()
   midi_channel_vertical_scroll_selector:select()
-  midi_device_vertical_scroll_selector:set_items(mosaic_midi.get_midi_outs())
+  midi_device_vertical_scroll_selector:set_items(m_midi.get_midi_outs())
   dials:set_items(m_params)
-  clock_mod_list_selector:set_list(clock_controller.get_clock_divisions())
+  clock_mod_list_selector:set_list(m_clock.get_clock_divisions())
   device_map_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Midi Map", device_map:get_devices())
 
   local function set_sub_name_func(page, func)
@@ -258,7 +258,7 @@ function channel_edit_page_ui_controller.init()
   channel_pages:add_page(clock_mods_page)
   channel_pages:add_page(channel_edit_page)
 
-  channel_edit_page_ui_controller.select_note_dashboard_page()
+  channel_edit_page_ui.select_note_dashboard_page()
 
   dials:set_selected_item(1)
   clock_mod_list_selector:set_selected_value(13)
@@ -271,18 +271,18 @@ function channel_edit_page_ui_controller.init()
   shuffle_basis_selector:set_selected_value(params:get("global_shuffle_basis"))
   shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
 
-  channel_edit_page_ui_controller.refresh_clock_mods()
+  channel_edit_page_ui.refresh_clock_mods()
 end
 
 -- Register UI draw handlers
-function channel_edit_page_ui_controller.register_ui_draws()
+function channel_edit_page_ui.register_ui_draws()
   draw:register_ui("channel_edit_page", function()
     channel_pages:draw()
   end)
 end
 
 -- Update functions
-function channel_edit_page_ui_controller.update_swing_shuffle_type()
+function channel_edit_page_ui.update_swing_shuffle_type()
   local channel = program.get_selected_channel()
   local value = swing_shuffle_type_selector:get_selected().value
   channel.swing_shuffle_type = value
@@ -291,19 +291,19 @@ function channel_edit_page_ui_controller.update_swing_shuffle_type()
     value = params:get("global_swing_shuffle_type") + 1 or 1
   end
 
-  if clock_controller.is_playing() then
+  if m_clock.is_playing() then
     step.queue_for_pattern_change(function() 
       local c = channel.number 
       local val = value
-      clock_controller.set_swing_shuffle_type(c, val) 
+      m_clock.set_swing_shuffle_type(c, val) 
     end)
   else
-    clock_controller.set_swing_shuffle_type(channel.number, value)
+    m_clock.set_swing_shuffle_type(channel.number, value)
   end
 
 end
 
-function channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_type_values(c)
+function channel_edit_page_ui.align_global_and_local_swing_shuffle_type_values(c)
   local channel = program.get_channel(c)
   local channel_value = channel.swing_shuffle_type
   local value = channel_value
@@ -311,12 +311,12 @@ function channel_edit_page_ui_controller.align_global_and_local_swing_shuffle_ty
     value = params:get("global_swing_shuffle_type") + 1 or 1
   end
 
-  clock_controller.set_swing_shuffle_type(channel.number, value)
+  m_clock.set_swing_shuffle_type(channel.number, value)
 
 end
 
 
-function channel_edit_page_ui_controller.update_swing()
+function channel_edit_page_ui.update_swing()
   local channel = program.get_selected_channel()
   local value = swing_selector:get_value()
   channel.swing = value
@@ -324,18 +324,18 @@ function channel_edit_page_ui_controller.update_swing()
     value = params:get("global_swing") 
   end
   
-  if clock_controller.is_playing() then
+  if m_clock.is_playing() then
     step.queue_for_pattern_change(function() 
       local c = channel.number 
       local val = value
-      clock_controller.set_channel_swing(c, val) 
+      m_clock.set_channel_swing(c, val) 
     end)
   else
-    clock_controller.set_channel_swing(channel.number, value)
+    m_clock.set_channel_swing(channel.number, value)
   end
 end
 
-function channel_edit_page_ui_controller.align_global_and_local_swing_values(c)
+function channel_edit_page_ui.align_global_and_local_swing_values(c)
   local channel = program.get_channel(c)
   local channel_value = channel.swing
   local value = channel_value
@@ -343,11 +343,11 @@ function channel_edit_page_ui_controller.align_global_and_local_swing_values(c)
     value = params:get("global_swing") 
   end
 
-  clock_controller.set_channel_swing(channel.number, value)
+  m_clock.set_channel_swing(channel.number, value)
 
 end
 
-function channel_edit_page_ui_controller.update_shuffle_feel()
+function channel_edit_page_ui.update_shuffle_feel()
   local channel = program.get_selected_channel()
   local shuffle_feel = shuffle_feel_selector:get_selected().value
   channel.shuffle_feel = shuffle_feel
@@ -355,18 +355,18 @@ function channel_edit_page_ui_controller.update_shuffle_feel()
     shuffle_feel = params:get("global_shuffle_feel") + 1 or 0
   end
 
-  if clock_controller.is_playing() then
+  if m_clock.is_playing() then
     step.queue_for_pattern_change(function() 
       local c = channel.number 
       local sf = shuffle_feel
-      clock_controller.set_channel_shuffle_feel(c, sf) 
+      m_clock.set_channel_shuffle_feel(c, sf) 
     end)
   else
-    clock_controller.set_channel_shuffle_feel(channel.number, shuffle_feel)
+    m_clock.set_channel_shuffle_feel(channel.number, shuffle_feel)
   end
 end
 
-function channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_values(c)
+function channel_edit_page_ui.align_global_and_local_shuffle_feel_values(c)
   local channel = program.get_channel(c)
   local channel_value = channel.shuffle_feel
   local value = channel_value
@@ -374,11 +374,11 @@ function channel_edit_page_ui_controller.align_global_and_local_shuffle_feel_val
     value = params:get("global_shuffle_feel") + 1 or 0
   end
   
-  clock_controller.set_channel_shuffle_feel(channel.number, value)
+  m_clock.set_channel_shuffle_feel(channel.number, value)
 
 end
 
-function channel_edit_page_ui_controller.update_shuffle_basis()
+function channel_edit_page_ui.update_shuffle_basis()
   local channel = program.get_selected_channel()
 
   local shuffle_basis = shuffle_basis_selector:get_selected().value
@@ -388,18 +388,18 @@ function channel_edit_page_ui_controller.update_shuffle_basis()
     shuffle_basis = params:get("global_shuffle_basis") + 1 or 0
   end
 
-  if clock_controller.is_playing() then
+  if m_clock.is_playing() then
     step.queue_for_pattern_change(function() 
       local c = channel.number 
       local sb = shuffle_basis
-      clock_controller.set_channel_shuffle_basis(c, sb) 
+      m_clock.set_channel_shuffle_basis(c, sb) 
     end)
   else
-    clock_controller.set_channel_shuffle_basis(channel.number, shuffle_basis)
+    m_clock.set_channel_shuffle_basis(channel.number, shuffle_basis)
   end
 end
 
-function channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_values(c)
+function channel_edit_page_ui.align_global_and_local_shuffle_basis_values(c)
   local channel = program.get_channel(c)
   local channel_value = channel.shuffle_basis
   local value = channel_value
@@ -407,11 +407,11 @@ function channel_edit_page_ui_controller.align_global_and_local_shuffle_basis_va
     value = params:get("global_shuffle_basis") + 1 or 0
   end
   
-  clock_controller.set_channel_shuffle_basis(channel.number, value)
+  m_clock.set_channel_shuffle_basis(channel.number, value)
 
 end
 
-function channel_edit_page_ui_controller.update_shuffle_amount()
+function channel_edit_page_ui.update_shuffle_amount()
   local channel = program.get_selected_channel()
   local shuffle_amount = shuffle_amount_selector:get_value()
   channel.shuffle_amount = shuffle_amount
@@ -420,18 +420,18 @@ function channel_edit_page_ui_controller.update_shuffle_amount()
     shuffle_amount = params:get("global_shuffle_amount") or 0
   end
 
-  if clock_controller.is_playing() then
+  if m_clock.is_playing() then
     step.queue_for_pattern_change(function() 
       local c = channel.number 
       local sa = shuffle_amount
-      clock_controller.set_channel_shuffle_amount(c, sa) 
+      m_clock.set_channel_shuffle_amount(c, sa) 
     end)
   else
-    clock_controller.set_channel_shuffle_amount(channel.number, shuffle_amount)
+    m_clock.set_channel_shuffle_amount(channel.number, shuffle_amount)
   end
 end
 
-function channel_edit_page_ui_controller.align_global_and_local_shuffle_amount_values(c)
+function channel_edit_page_ui.align_global_and_local_shuffle_amount_values(c)
   local channel = program.get_channel(c)
   local channel_value = channel.shuffle_amount
   local value = channel_value
@@ -439,28 +439,28 @@ function channel_edit_page_ui_controller.align_global_and_local_shuffle_amount_v
     value = params:get("global_shuffle_amount") or 0
   end
   
-  clock_controller.set_channel_shuffle_amount(channel.number, value)
+  m_clock.set_channel_shuffle_amount(channel.number, value)
 
 end
 
-function channel_edit_page_ui_controller.update_clock_mods()
+function channel_edit_page_ui.update_clock_mods()
   local channel = program.get_selected_channel()
   local clock_mods = clock_mod_list_selector:get_selected()
   channel.clock_mods = clock_mods
 
-  if clock_controller.is_playing() then
+  if m_clock.is_playing() then
     step.queue_for_pattern_change(function() 
       local c = channel.number 
-      local div = clock_controller.calculate_divisor(clock_mods)
-      clock_controller.set_channel_division(c, div) 
+      local div = m_clock.calculate_divisor(clock_mods)
+      m_clock.set_channel_division(c, div) 
     end)
   else
-    clock_controller.set_channel_division(channel.number, clock_controller.calculate_divisor(clock_mods))
+    m_clock.set_channel_division(channel.number, m_clock.calculate_divisor(clock_mods))
   end
   
 end
 
-function channel_edit_page_ui_controller.update_channel_config()
+function channel_edit_page_ui.update_channel_config()
   local channel = program.get_selected_channel()
   local midi_device = midi_device_vertical_scroll_selector:get_selected_item()
   local midi_channel = midi_channel_vertical_scroll_selector:get_selected_item()
@@ -486,7 +486,7 @@ function channel_edit_page_ui_controller.update_channel_config()
     program.get().devices[channel.number].midi_device = device.default_midi_device
   end
 
-  channel_edit_page_ui_controller.refresh_device_selector()
+  channel_edit_page_ui.refresh_device_selector()
 
   if device_m.id == "jf kit" or
     device_m.id == "jf n 1" or
@@ -513,14 +513,14 @@ function channel_edit_page_ui_controller.update_channel_config()
     program.increment_trig_lock_calculator_id(channel, i)
   end
 
-  channel_edit_page_ui_controller.refresh_trig_locks()
+  channel_edit_page_ui.refresh_trig_locks()
   
 end
 
 -- Trig lock functions
-function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
+function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
 
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+  local pressed_keys = m_grid.get_pressed_keys()
   local trig_lock_param = channel.trig_lock_params[dial_index]
 
   if not trig_lock_param then
@@ -655,7 +655,7 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
       p:delta(d)
     end
   
-    channel_edit_page_ui_controller.refresh_trig_lock_value(dial_index)
+    channel_edit_page_ui.refresh_trig_lock_value(dial_index)
   end
 
   m_params[dial_index]:temp_display_value()
@@ -665,26 +665,26 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
 end
 
 -- Encoder and key handling
-function channel_edit_page_ui_controller.enc(n, d)
+function channel_edit_page_ui.enc(n, d)
   local channel = program.get_selected_channel()
   if n == 3 then
     for _ = 1, math.abs(d) do
       if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
-        channel_edit_page_ui_controller.handle_mask_page_change(d)
+        channel_edit_page_ui.handle_mask_page_change(d)
       end
       if d > 0 then
         if channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
-          channel_edit_page_ui_controller.handle_clock_mods_page_increment()
+          channel_edit_page_ui.handle_clock_mods_page_increment()
         elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
-          channel_edit_page_ui_controller.handle_midi_config_page_increment()
+          channel_edit_page_ui.handle_midi_config_page_increment()
         elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
           channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
         end
       else
         if channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
-          channel_edit_page_ui_controller.handle_clock_mods_page_decrement()
+          channel_edit_page_ui.handle_clock_mods_page_decrement()
         elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
-          channel_edit_page_ui_controller.handle_midi_config_page_decrement()
+          channel_edit_page_ui.handle_midi_config_page_decrement()
         elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
           channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
         end
@@ -720,75 +720,75 @@ function channel_edit_page_ui_controller.enc(n, d)
   elseif n == 1 then
     for _ = 1, math.abs(d) do
       if d > 0 then
-        channel_edit_page_ui_controller.handle_encoder_one_positive()
+        channel_edit_page_ui.handle_encoder_one_positive()
       else
-        channel_edit_page_ui_controller.handle_encoder_one_negative()
+        channel_edit_page_ui.handle_encoder_one_negative()
       end
     end
   end
 end
 
-function channel_edit_page_ui_controller.key(n, z)
+function channel_edit_page_ui.key(n, z)
   if n == 2 and z == 1 then
-    channel_edit_page_ui_controller.handle_key_two_pressed()
+    channel_edit_page_ui.handle_key_two_pressed()
   elseif n == 3 and z == 1 then
-    channel_edit_page_ui_controller.handle_key_three_pressed()
+    channel_edit_page_ui.handle_key_three_pressed()
   end
 end
 
 -- Refresh functions
-function channel_edit_page_ui_controller.refresh_masks()
+function channel_edit_page_ui.refresh_masks()
   channel_edit_page_ui_refreshers.refresh_masks(mask_selectors)
 end
 
-function channel_edit_page_ui_controller.refresh_clock_mods()
+function channel_edit_page_ui.refresh_clock_mods()
   channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector, swing_selector)
 end
 
-function channel_edit_page_ui_controller.refresh_swing()
+function channel_edit_page_ui.refresh_swing()
   channel_edit_page_ui_refreshers.refresh_swing(swing_selector)
 end
 
-function channel_edit_page_ui_controller.refresh_swing_shuffle_type()
+function channel_edit_page_ui.refresh_swing_shuffle_type()
   channel_edit_page_ui_refreshers.refresh_swing_shuffle_type(swing_shuffle_type_selector)
 end
 
-function channel_edit_page_ui_controller.refresh_shuffle_feel()
+function channel_edit_page_ui.refresh_shuffle_feel()
   channel_edit_page_ui_refreshers.refresh_shuffle_feel(shuffle_feel_selector)
 end
 
-function channel_edit_page_ui_controller.refresh_shuffle_basis()
+function channel_edit_page_ui.refresh_shuffle_basis()
   channel_edit_page_ui_refreshers.refresh_shuffle_basis(shuffle_basis_selector)
 end
 
-function channel_edit_page_ui_controller.refresh_shuffle_amount()
+function channel_edit_page_ui.refresh_shuffle_amount()
   channel_edit_page_ui_refreshers.refresh_shuffle_amount(shuffle_amount_selector)
 end
 
-function channel_edit_page_ui_controller.refresh_device_selector()
+function channel_edit_page_ui.refresh_device_selector()
   channel_edit_page_ui_refreshers.refresh_device_selector(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
 end
 
-function channel_edit_page_ui_controller.refresh_trig_lock_value(i)
+function channel_edit_page_ui.refresh_trig_lock_value(i)
   channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
 end
 
-function channel_edit_page_ui_controller.refresh_trig_lock_values()
+function channel_edit_page_ui.refresh_trig_lock_values()
   for i = 1, 10 do
-    channel_edit_page_ui_controller.refresh_trig_lock_value(i)
+    channel_edit_page_ui.refresh_trig_lock_value(i)
   end
 end
 
-function channel_edit_page_ui_controller.refresh_trig_locks()
+function channel_edit_page_ui.refresh_trig_locks()
   channel_edit_page_ui_refreshers.refresh_trig_locks(m_params)
 end
 
-function channel_edit_page_ui_controller.refresh_param_list()
+function channel_edit_page_ui.refresh_param_list()
   local channel = program.get_selected_channel()
   param_select_vertical_scroll_selector:set_items(device_map.get_available_params_for_channel(program.get().selected_channel, dials:get_selected_index()))
 end
 
-channel_edit_page_ui_controller.refresh_channel_config = scheduler.debounce(function()
+channel_edit_page_ui.refresh_channel_config = scheduler.debounce(function()
   -- Initial checks
   local channel = program.get_selected_channel()
   
@@ -834,13 +834,13 @@ end)
 
 
 
-function channel_edit_page_ui_controller.refresh()
-  channel_edit_page_ui_controller.select_channel_page_by_index(channel_pages:get_selected_page() or 1)
+function channel_edit_page_ui.refresh()
+  channel_edit_page_ui.select_channel_page_by_index(channel_pages:get_selected_page() or 1)
 end
 
 
-function channel_edit_page_ui_controller.handle_trig_mask_change(direction)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page_ui.handle_trig_mask_change(direction)
+  local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
@@ -870,8 +870,8 @@ function channel_edit_page_ui_controller.handle_trig_mask_change(direction)
 end
 
 
-function channel_edit_page_ui_controller.handle_note_mask_change(direction)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page_ui.handle_note_mask_change(direction)
+  local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
@@ -900,8 +900,8 @@ function channel_edit_page_ui_controller.handle_note_mask_change(direction)
   end
 end
 
-function channel_edit_page_ui_controller.handle_velocity_mask_change(direction)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page_ui.handle_velocity_mask_change(direction)
+  local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
@@ -930,8 +930,8 @@ function channel_edit_page_ui_controller.handle_velocity_mask_change(direction)
   end
 end
 
-function channel_edit_page_ui_controller.handle_length_mask_change(direction)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page_ui.handle_length_mask_change(direction)
+  local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
@@ -973,8 +973,8 @@ function channel_edit_page_ui_controller.handle_length_mask_change(direction)
   end
 end
 
-function channel_edit_page_ui_controller.handle_chord_mask_one_change(direction)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page_ui.handle_chord_mask_one_change(direction)
+  local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
@@ -1002,8 +1002,8 @@ function channel_edit_page_ui_controller.handle_chord_mask_one_change(direction)
   end
 end
 
-function channel_edit_page_ui_controller.handle_chord_mask_two_change(direction)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page_ui.handle_chord_mask_two_change(direction)
+  local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
@@ -1031,8 +1031,8 @@ function channel_edit_page_ui_controller.handle_chord_mask_two_change(direction)
   end
 end
 
-function channel_edit_page_ui_controller.handle_chord_mask_three_change(direction)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page_ui.handle_chord_mask_three_change(direction)
+  local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
@@ -1060,8 +1060,8 @@ function channel_edit_page_ui_controller.handle_chord_mask_three_change(directio
   end
 end
 
-function channel_edit_page_ui_controller.handle_chord_mask_four_change(direction)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page_ui.handle_chord_mask_four_change(direction)
+  local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
@@ -1090,100 +1090,100 @@ function channel_edit_page_ui_controller.handle_chord_mask_four_change(direction
 end
 
 -- Handlers for specific actions
-function channel_edit_page_ui_controller.handle_mask_page_change(direction)
+function channel_edit_page_ui.handle_mask_page_change(direction)
     if mask_selectors.trig:is_selected() then
-      channel_edit_page_ui_controller.handle_trig_mask_change(direction)
+      channel_edit_page_ui.handle_trig_mask_change(direction)
     end
     if mask_selectors.note:is_selected() then
-      channel_edit_page_ui_controller.handle_note_mask_change(direction)
+      channel_edit_page_ui.handle_note_mask_change(direction)
     end
     if mask_selectors.velocity:is_selected() then
-      channel_edit_page_ui_controller.handle_velocity_mask_change(direction)
+      channel_edit_page_ui.handle_velocity_mask_change(direction)
     end
     if mask_selectors.length:is_selected() then
-      channel_edit_page_ui_controller.handle_length_mask_change(direction)
+      channel_edit_page_ui.handle_length_mask_change(direction)
     end
     if mask_selectors.chords[1]:is_selected() then
-      channel_edit_page_ui_controller.handle_chord_mask_one_change(direction)
+      channel_edit_page_ui.handle_chord_mask_one_change(direction)
     end
     if mask_selectors.chords[2]:is_selected() then
-      channel_edit_page_ui_controller.handle_chord_mask_two_change(direction)
+      channel_edit_page_ui.handle_chord_mask_two_change(direction)
     end
     if mask_selectors.chords[3]:is_selected() then
-      channel_edit_page_ui_controller.handle_chord_mask_three_change(direction)
+      channel_edit_page_ui.handle_chord_mask_three_change(direction)
     end
     if mask_selectors.chords[4]:is_selected() then
-      channel_edit_page_ui_controller.handle_chord_mask_four_change(direction)
+      channel_edit_page_ui.handle_chord_mask_four_change(direction)
     end
 end
 
-function channel_edit_page_ui_controller.handle_clock_mods_page_increment()
+function channel_edit_page_ui.handle_clock_mods_page_increment()
   if swing_shuffle_type_selector:is_selected() then
     swing_shuffle_type_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_swing_shuffle_type)
-    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_feel)
-    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_basis)
-    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_amount)
-    save_confirm.set_save(channel_edit_page_ui_controller.update_swing)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing_shuffle_type)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_feel)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_basis)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_amount)
+    save_confirm.set_save(channel_edit_page_ui.update_swing_shuffle_type)
+    save_confirm.set_save(channel_edit_page_ui.update_shuffle_feel)
+    save_confirm.set_save(channel_edit_page_ui.update_shuffle_basis)
+    save_confirm.set_save(channel_edit_page_ui.update_shuffle_amount)
+    save_confirm.set_save(channel_edit_page_ui.update_swing)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_swing_shuffle_type)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_swing)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_feel)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_basis)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_amount)
     
     fn.dirty_screen(true)
   elseif swing_selector:is_selected() then
     swing_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_swing)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing)
+    save_confirm.set_save(channel_edit_page_ui.update_swing)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_swing)
   elseif shuffle_feel_selector:is_selected() then
     shuffle_feel_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_feel)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_feel)
+    save_confirm.set_save(channel_edit_page_ui.update_shuffle_feel)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_feel)
   elseif shuffle_basis_selector:is_selected() then
     shuffle_basis_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_basis)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_basis)
+    save_confirm.set_save(channel_edit_page_ui.update_shuffle_basis)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_basis)
   elseif shuffle_amount_selector:is_selected() then
     shuffle_amount_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_amount)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_amount)
+    save_confirm.set_save(channel_edit_page_ui.update_shuffle_amount)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_amount)
   elseif clock_mod_list_selector:is_selected() then
     clock_mod_list_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_clock_mods)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_clock_mods)
+    save_confirm.set_save(channel_edit_page_ui.update_clock_mods)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_clock_mods)
   end
 end
 
-function channel_edit_page_ui_controller.handle_clock_mods_page_decrement()
+function channel_edit_page_ui.handle_clock_mods_page_decrement()
   if swing_shuffle_type_selector:is_selected() then
     swing_shuffle_type_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_swing_shuffle_type)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing_shuffle_type)
+    save_confirm.set_save(channel_edit_page_ui.update_swing_shuffle_type)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_swing_shuffle_type)
   elseif swing_selector:is_selected() then
     swing_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_swing)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_swing)
+    save_confirm.set_save(channel_edit_page_ui.update_swing)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_swing)
   elseif shuffle_feel_selector:is_selected() then
     shuffle_feel_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_feel)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_feel)
+    save_confirm.set_save(channel_edit_page_ui.update_shuffle_feel)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_feel)
   elseif shuffle_basis_selector:is_selected() then
     shuffle_basis_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_basis)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_basis)
+    save_confirm.set_save(channel_edit_page_ui.update_shuffle_basis)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_basis)
   elseif shuffle_amount_selector:is_selected() then
     shuffle_amount_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_shuffle_amount)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_shuffle_amount)
+    save_confirm.set_save(channel_edit_page_ui.update_shuffle_amount)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_amount)
   elseif clock_mod_list_selector:is_selected() then
     clock_mod_list_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui_controller.update_clock_mods)
-    save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_clock_mods)
+    save_confirm.set_save(channel_edit_page_ui.update_clock_mods)
+    save_confirm.set_cancel(channel_edit_page_ui.refresh_clock_mods)
   end
 end
 
-function channel_edit_page_ui_controller.handle_midi_config_page_increment()
+function channel_edit_page_ui.handle_midi_config_page_increment()
   if midi_device_vertical_scroll_selector:is_selected() then
     midi_device_vertical_scroll_selector:scroll_down()
   elseif midi_channel_vertical_scroll_selector:is_selected() then
@@ -1199,16 +1199,16 @@ function channel_edit_page_ui_controller.handle_midi_config_page_increment()
   local channel = program.get_selected_channel()
 
   save_confirm.set_save(function()
-    channel_edit_page_ui_controller.update_channel_config()
+    channel_edit_page_ui.update_channel_config()
     program.clear_device_trig_locks_for_channel(channel)
     param_manager.update_default_params(channel, device)
     param_select_vertical_scroll_selector:set_selected_item(1)
-    channel_edit_page_ui_controller.refresh_trig_locks()
+    channel_edit_page_ui.refresh_trig_locks()
   end)
-  save_confirm.set_cancel(channel_edit_page_ui_controller.refresh_channel_config)
+  save_confirm.set_cancel(channel_edit_page_ui.refresh_channel_config)
 end
 
-function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
+function channel_edit_page_ui.handle_midi_config_page_decrement()
   if midi_device_vertical_scroll_selector:is_selected() then
     midi_device_vertical_scroll_selector:scroll_up()
   elseif midi_channel_vertical_scroll_selector:is_selected() then
@@ -1224,45 +1224,45 @@ function channel_edit_page_ui_controller.handle_midi_config_page_decrement()
   local channel = program.get_selected_channel()
 
   save_confirm.set_save(function()
-    channel_edit_page_ui_controller.update_channel_config()
+    channel_edit_page_ui.update_channel_config()
     program.clear_device_trig_locks_for_channel(channel)
     param_manager.update_default_params(channel, device)
     param_select_vertical_scroll_selector:set_selected_item(1)
-    channel_edit_page_ui_controller.refresh_trig_locks()
+    channel_edit_page_ui.refresh_trig_locks()
   end)
 
   save_confirm.set_cancel(function()
-    channel_edit_page_ui_controller.refresh_channel_config()
+    channel_edit_page_ui.refresh_channel_config()
   end)
 end
 
-function channel_edit_page_ui_controller.handle_encoder_one_positive()
-  channel_edit_page_ui_controller.select_channel_page_by_index((channel_pages:get_selected_page() or 1) + 1)
+function channel_edit_page_ui.handle_encoder_one_positive()
+  channel_edit_page_ui.select_channel_page_by_index((channel_pages:get_selected_page() or 1) + 1)
   fn.dirty_screen(true)
   save_confirm.cancel()
 end
 
-function channel_edit_page_ui_controller.handle_encoder_one_negative()
-  channel_edit_page_ui_controller.select_channel_page_by_index((channel_pages:get_selected_page() or 1) - 1)
+function channel_edit_page_ui.handle_encoder_one_negative()
+  channel_edit_page_ui.select_channel_page_by_index((channel_pages:get_selected_page() or 1) - 1)
   fn.dirty_screen(true)
   save_confirm.cancel()
 end
 
-function channel_edit_page_ui_controller.handle_key_two_pressed()
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page_ui.handle_key_two_pressed()
+  local pressed_keys = m_grid.get_pressed_keys()
   if #pressed_keys > 0 then
     for _, keys in ipairs(pressed_keys) do
       local s = fn.calc_grid_count(keys[1], keys[2])
       if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
         program.clear_masks_for_step(s)
         tooltip:show("Masks for step " .. s .. " cleared")
-        channel_edit_page_ui_controller.refresh_masks()
+        channel_edit_page_ui.refresh_masks()
         pattern.update_working_pattern(program.get_selected_channel().number)
       end
       if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
         program.clear_trig_locks_for_step(s)
         tooltip:show("Trig locks for step " .. s .. " cleared")
-        channel_edit_page_ui_controller.refresh_trig_locks()
+        channel_edit_page_ui.refresh_trig_locks()
       end
     end
   else
@@ -1270,20 +1270,20 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
       if is_key3_down then
         program.clear_trig_locks_for_channel(program.get_selected_channel())
         tooltip:show("Trig locks for ch " .. program.get_selected_channel().number .. " cleared")
-        channel_edit_page_ui_controller.refresh_trig_locks()
+        channel_edit_page_ui.refresh_trig_locks()
       else
         if not trig_lock_page:is_sub_page_enabled() then
-          channel_edit_page_ui_controller.refresh_device_selector()
-          channel_edit_page_ui_controller.refresh_param_list()
+          channel_edit_page_ui.refresh_device_selector()
+          channel_edit_page_ui.refresh_param_list()
         end
-        channel_edit_page_ui_controller.refresh_channel_config()
+        channel_edit_page_ui.refresh_channel_config()
         trig_lock_page:toggle_sub_page()
       end
     elseif channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
       if is_key3_down then
         program.clear_masks_for_channel(program.get_selected_channel())
         tooltip:show("Masks for ch " .. program.get_selected_channel().number .. " cleared")
-        channel_edit_page_ui_controller.refresh_masks()
+        channel_edit_page_ui.refresh_masks()
         pattern.update_working_pattern(program.get_selected_channel().number)
       end
     end
@@ -1291,74 +1291,74 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
   end
 end
 
-function channel_edit_page_ui_controller.handle_key_three_pressed()
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function channel_edit_page_ui.handle_key_three_pressed()
+  local pressed_keys = m_grid.get_pressed_keys()
   if #pressed_keys < 1 then
     save_confirm.confirm()
   end
 end
 
-function channel_edit_page_ui_controller.select_page(page) 
+function channel_edit_page_ui.select_page(page) 
     channel_pages:select_page(page)
     fn.dirty_screen(true)
 end
 
-function channel_edit_page_ui_controller.get_selected_page() 
+function channel_edit_page_ui.get_selected_page() 
     return channel_pages:get_selected_page()
 end
 
-function channel_edit_page_ui_controller.select_mask_page()
-  channel_edit_page_ui_controller.refresh_masks()
+function channel_edit_page_ui.select_mask_page()
+  channel_edit_page_ui.refresh_masks()
   channel_pages:select_page(channel_page_to_index["Masks"])
   fn.dirty_screen(true)
 end
 
-function channel_edit_page_ui_controller.select_trig_page()
-  channel_edit_page_ui_controller.refresh_trig_locks()
+function channel_edit_page_ui.select_trig_page()
+  channel_edit_page_ui.refresh_trig_locks()
   channel_pages:select_page(channel_page_to_index["Trig Locks"])
 end
 
-function channel_edit_page_ui_controller.select_clock_mods_page()
-  channel_edit_page_ui_controller.refresh_clock_mods()
-  channel_edit_page_ui_controller.refresh_swing()
-  channel_edit_page_ui_controller.refresh_swing_shuffle_type()
-  channel_edit_page_ui_controller.refresh_shuffle_feel()
-  channel_edit_page_ui_controller.refresh_shuffle_basis()
-  channel_edit_page_ui_controller.refresh_shuffle_amount()
+function channel_edit_page_ui.select_clock_mods_page()
+  channel_edit_page_ui.refresh_clock_mods()
+  channel_edit_page_ui.refresh_swing()
+  channel_edit_page_ui.refresh_swing_shuffle_type()
+  channel_edit_page_ui.refresh_shuffle_feel()
+  channel_edit_page_ui.refresh_shuffle_basis()
+  channel_edit_page_ui.refresh_shuffle_amount()
   channel_pages:select_page(channel_page_to_index["Clock Mods"])
 end
 
-function channel_edit_page_ui_controller.select_midi_config_page()
-  channel_edit_page_ui_controller.refresh_channel_config()
+function channel_edit_page_ui.select_midi_config_page()
+  channel_edit_page_ui.refresh_channel_config()
   channel_pages:select_page(channel_page_to_index["Midi Config"])
 end
 
-function channel_edit_page_ui_controller.select_note_dashboard_page()
+function channel_edit_page_ui.select_note_dashboard_page()
   channel_pages:select_page(channel_page_to_index["Note Dashboard"])
 end
 
 
-function channel_edit_page_ui_controller.select_scales_quantizer_page()
-  channel_edit_page_ui_controller.refresh_quantiser()
-  channel_edit_page_ui_controller.refresh_romans()
+function channel_edit_page_ui.select_scales_quantizer_page()
+  channel_edit_page_ui.refresh_quantiser()
+  channel_edit_page_ui.refresh_romans()
   scales_pages:select_page(scales_page_to_index["Quantizer"])
 end
 
-function channel_edit_page_ui_controller.select_channel_page_by_index(index)
+function channel_edit_page_ui.select_channel_page_by_index(index)
   if index == 1 then
-    channel_edit_page_ui_controller.select_note_dashboard_page()
+    channel_edit_page_ui.select_note_dashboard_page()
   elseif index == 2 then
-    channel_edit_page_ui_controller.select_mask_page()
+    channel_edit_page_ui.select_mask_page()
   elseif index == 3 then
-    channel_edit_page_ui_controller.select_trig_page()
+    channel_edit_page_ui.select_trig_page()
   elseif index == 4 then
-    channel_edit_page_ui_controller.select_clock_mods_page()
+    channel_edit_page_ui.select_clock_mods_page()
   elseif index == 5 then
-    channel_edit_page_ui_controller.select_midi_config_page()
+    channel_edit_page_ui.select_midi_config_page()
   end
 end
 
-function channel_edit_page_ui_controller.set_note_dashboard_values(values)
+function channel_edit_page_ui.set_note_dashboard_values(values)
   if values and values.note then
     note_displays.note:set_value(values.note)
   end
@@ -1387,4 +1387,4 @@ function channel_edit_page_ui_controller.set_note_dashboard_values(values)
 end
 
 
-return channel_edit_page_ui_controller
+return channel_edit_page_ui

@@ -1,7 +1,7 @@
 local pattern = {}
 
 local quantiser = include("mosaic/lib/quantiser")
-local clock_controller = include("mosaic/lib/clock/clock_controller")
+local m_clock = include("mosaic/lib/clock/m_clock")
 local divisions = include("mosaic/lib/clock/divisions")
 
 local program = program

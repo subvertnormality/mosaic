@@ -1,6 +1,6 @@
-local l = include("mosaic/lib/clock/mosaic_lattice")
+local l = include("mosaic/lib/clock/m_lattice")
 
-local clock_controller = include("mosaic/lib/clock/clock_controller")
+local m_clock = include("mosaic/lib/clock/m_clock")
 
 local lattice
 
@@ -92,7 +92,7 @@ function test_phase_and_step_progression()
 
   setup()
 
-  local division = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[13])
+  local division = m_clock.calculate_divisor(m_clock.get_clock_divisions()[13])
 
   local sprocket = create_sprocket({
       division = 1 / (division * 4),
@@ -112,7 +112,7 @@ function test_delay_handling()
 
   setup()
 
-  local division = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[13])
+  local division = m_clock.calculate_divisor(m_clock.get_clock_divisions()[13])
 
 
   local sprocket = create_sprocket({
@@ -165,8 +165,8 @@ function test_change_division_mid_pattern()
 
   setup()
 
-  local division_div_2 = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[15])
-  local division = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[13])
+  local division_div_2 = m_clock.calculate_divisor(m_clock.get_clock_divisions()[15])
+  local division = m_clock.calculate_divisor(m_clock.get_clock_divisions()[13])
   
   local sprocket = create_sprocket({
       division = 1 / (division_div_2 * 4),
@@ -193,7 +193,7 @@ function test_simultaneous_swing_and_shuffle_changes()
 
   setup()
 
-  local division = clock_controller.calculate_divisor(clock_controller.get_clock_divisions()[13])
+  local division = m_clock.calculate_divisor(m_clock.get_clock_divisions()[13])
 
   local sprocket = create_sprocket({
       division = 1 / (division * 4),

@@ -2,7 +2,7 @@ local er = require("er")
 local drum_ops = include("mosaic/lib/helpers/drum_ops")
 
 
-local trigger_edit_page_controller = {}
+local trigger_edit_page = {}
 local paint_pattern = {}
 local shift = 0
 
@@ -21,11 +21,11 @@ local trigger_edit_page_right_button = button:new(12, 8, {{"Inactive", 3}, {"Shi
 local load_timer = nil
 local throttle_time = 0.1
 
-function trigger_edit_page_controller.init()
-  trigger_edit_page_controller.refresh_trigger_edit_page_ui_controller()
+function trigger_edit_page.init()
+  trigger_edit_page.refresh_trigger_edit_page_ui()
 end
 
-function trigger_edit_page_controller.register_draws()
+function trigger_edit_page.register_draws()
   draw:register_grid(
     "trigger_edit_page",
     function()
@@ -216,7 +216,7 @@ local function save_paint_pattern(p)
   program.get_selected_sequencer_pattern().active = true
 end
 
-function trigger_edit_page_controller.register_presss()
+function trigger_edit_page.register_presss()
   press:register(
     "trigger_edit_page",
     function(x, y)
@@ -269,7 +269,7 @@ function trigger_edit_page_controller.register_presss()
     function(x, y)
       trigger_edit_page_algorithm_fader:press(x, y)
       if trigger_edit_page_algorithm_fader:is_this(x, y) then
-        trigger_edit_page_controller.refresh_trigger_edit_page_ui_controller()
+        trigger_edit_page.refresh_trigger_edit_page_ui()
         tooltip:show(get_algorithm_name(trigger_edit_page_algorithm_fader:get_value()) .. " selected")
         load_paint_pattern()
       end
@@ -403,7 +403,7 @@ function trigger_edit_page_controller.register_presss()
   )
 end
 
-function trigger_edit_page_controller.refresh_trigger_edit_page_ui_controller()
+function trigger_edit_page.refresh_trigger_edit_page_ui()
   local algorithm = trigger_edit_page_algorithm_fader:get_value()
 
   if (algorithm == 1) then
@@ -441,8 +441,8 @@ function trigger_edit_page_controller.refresh_trigger_edit_page_ui_controller()
   fn.dirty_grid(true)
 end
 
-function trigger_edit_page_controller.refresh()
-  trigger_edit_page_controller.refresh_trigger_edit_page_ui_controller()
+function trigger_edit_page.refresh()
+  trigger_edit_page.refresh_trigger_edit_page_ui()
 end
 
-return trigger_edit_page_controller
+return trigger_edit_page

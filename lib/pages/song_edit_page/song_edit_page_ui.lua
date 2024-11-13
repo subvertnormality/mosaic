@@ -1,4 +1,4 @@
-local song_edit_page_ui_controller = {}
+local song_edit_page_ui = {}
 
 
 local pages = include("mosaic/lib/ui_components/pages")
@@ -60,17 +60,17 @@ local grid_viewer_page =
   end
 )
 
-function song_edit_page_ui_controller.init()
+function song_edit_page_ui.init()
   pages:add_page(song_progression_page)
   pages:add_page(global_settings_page)
   pages:add_page(grid_viewer_page)
   pages:select_page(1)
   pattern_repeat_selector:select()
   tempo_selector:select()
-  song_edit_page_ui_controller.refresh()
+  song_edit_page_ui.refresh()
 end
 
-function song_edit_page_ui_controller.register_ui_draws()
+function song_edit_page_ui.register_ui_draws()
   draw:register_ui(
     "song_edit_page",
     function()
@@ -79,7 +79,7 @@ function song_edit_page_ui_controller.register_ui_draws()
   )
 end
 
-function song_edit_page_ui_controller.change_page(subpage_name)
+function song_edit_page_ui.change_page(subpage_name)
   pages:select_page(subpage_name)
 end
 
@@ -96,7 +96,7 @@ local function get_visible_selectors()
   return selectors
 end
 
-function song_edit_page_ui_controller.enc(n, d)
+function song_edit_page_ui.enc(n, d)
   if n == 1 then
     for i = 1, math.abs(d) do
       if d > 0 then
@@ -170,24 +170,24 @@ function song_edit_page_ui_controller.enc(n, d)
             song_mode_selector:increment()
             save_confirm.set_save(
               function()
-                song_edit_page_ui_controller.update_song_mode()
+                song_edit_page_ui.update_song_mode()
               end
             )
             save_confirm.set_cancel(
               function()
-                song_edit_page_ui_controller.refresh_song_mode()
+                song_edit_page_ui.refresh_song_mode()
               end
             )
           elseif pattern_repeat_selector:is_selected() then
             pattern_repeat_selector:increment()
             save_confirm.set_save(
               function()
-                song_edit_page_ui_controller.update_pattern_repeat()
+                song_edit_page_ui.update_pattern_repeat()
               end
             )
             save_confirm.set_cancel(
               function()
-                song_edit_page_ui_controller.refresh_pattern_repeat()
+                song_edit_page_ui.refresh_pattern_repeat()
               end
             )
           end
@@ -196,24 +196,24 @@ function song_edit_page_ui_controller.enc(n, d)
             song_mode_selector:decrement()
             save_confirm.set_save(
               function()
-                song_edit_page_ui_controller.update_song_mode()
+                song_edit_page_ui.update_song_mode()
               end
             )
             save_confirm.set_cancel(
               function()
-                song_edit_page_ui_controller.refresh_song_mode()
+                song_edit_page_ui.refresh_song_mode()
               end
             )
           elseif pattern_repeat_selector:is_selected() then
             pattern_repeat_selector:decrement()
             save_confirm.set_save(
               function()
-                song_edit_page_ui_controller.update_pattern_repeat()
+                song_edit_page_ui.update_pattern_repeat()
               end
             )
             save_confirm.set_cancel(
               function()
-                song_edit_page_ui_controller.refresh_pattern_repeat()
+                song_edit_page_ui.refresh_pattern_repeat()
               end
             )
           end
@@ -232,23 +232,23 @@ function song_edit_page_ui_controller.enc(n, d)
             if selector == tempo_selector then
               save_confirm.set_save(
                 function()
-                  song_edit_page_ui_controller.update_tempo()
+                  song_edit_page_ui.update_tempo()
                 end
               )
               save_confirm.set_cancel(
                 function()
-                  song_edit_page_ui_controller.refresh_tempo()
+                  song_edit_page_ui.refresh_tempo()
                 end
               )
             elseif selector == swing_shuffle_type then
               save_confirm.set_save(
                 function()
-                  song_edit_page_ui_controller.update_swing_shuffle_type()
+                  song_edit_page_ui.update_swing_shuffle_type()
                 end
               )
               save_confirm.set_cancel(
                 function()
-                  song_edit_page_ui_controller.refresh_swing_shuffle_type()
+                  song_edit_page_ui.refresh_swing_shuffle_type()
                 end
               )
               -- After changing swing type, refresh the screen but keep selection
@@ -256,45 +256,45 @@ function song_edit_page_ui_controller.enc(n, d)
             elseif selector == swing_selector then
               save_confirm.set_save(
                 function()
-                  song_edit_page_ui_controller.update_swing()
+                  song_edit_page_ui.update_swing()
                 end
               )
               save_confirm.set_cancel(
                 function()
-                  song_edit_page_ui_controller.refresh_swing()
+                  song_edit_page_ui.refresh_swing()
                 end
               )
             elseif selector == shuffle_feel_selector then
               save_confirm.set_save(
                 function()
-                  song_edit_page_ui_controller.update_shuffle_feel()
+                  song_edit_page_ui.update_shuffle_feel()
                 end
               )
               save_confirm.set_cancel(
                 function()
-                  song_edit_page_ui_controller.refresh_shuffle_feel()
+                  song_edit_page_ui.refresh_shuffle_feel()
                 end
               )
             elseif selector == shuffle_basis_selector then
               save_confirm.set_save(
                 function()
-                  song_edit_page_ui_controller.update_shuffle_basis()
+                  song_edit_page_ui.update_shuffle_basis()
                 end
               )
               save_confirm.set_cancel(
                 function()
-                  song_edit_page_ui_controller.refresh_shuffle_basis()
+                  song_edit_page_ui.refresh_shuffle_basis()
                 end
               )
             elseif selector == shuffle_amount_selector then
               save_confirm.set_save(
                 function()
-                  song_edit_page_ui_controller.update_shuffle_amount()
+                  song_edit_page_ui.update_shuffle_amount()
                 end
               )
               save_confirm.set_cancel(
                 function()
-                  song_edit_page_ui_controller.refresh_shuffle_amount()
+                  song_edit_page_ui.refresh_shuffle_amount()
                 end
               )
             end
@@ -306,106 +306,106 @@ function song_edit_page_ui_controller.enc(n, d)
   end
 end
 
-function song_edit_page_ui_controller.update_tempo()
+function song_edit_page_ui.update_tempo()
   params:set("clock_tempo", tempo_selector:get_value())
 end
 
-function song_edit_page_ui_controller.update_pattern_repeat()
+function song_edit_page_ui.update_pattern_repeat()
   program.get_selected_sequencer_pattern().repeats = pattern_repeat_selector:get_value()
   program.get_selected_sequencer_pattern().active = true
 end
 
-function song_edit_page_ui_controller.update_song_mode()
+function song_edit_page_ui.update_song_mode()
   params:set("song_mode", song_mode_selector:get_selected().value)
 end
 
-function song_edit_page_ui_controller.refresh_song_mode()
+function song_edit_page_ui.refresh_song_mode()
   song_mode_selector:set_selected_value(params:get("song_mode"))
 end
 
-function song_edit_page_ui_controller.refresh_tempo()
+function song_edit_page_ui.refresh_tempo()
   tempo_selector:set_value(params:get("clock_tempo"))
 end
 
-function song_edit_page_ui_controller.refresh_pattern_repeat()
+function song_edit_page_ui.refresh_pattern_repeat()
   pattern_repeat_selector:set_value(program.get_selected_sequencer_pattern().repeats)
 end
 
-function song_edit_page_ui_controller.update_swing_shuffle_type()
+function song_edit_page_ui.update_swing_shuffle_type()
   params:set("global_swing_shuffle_type", swing_shuffle_type:get_selected().value)
   fn.dirty_screen(true)
 end
 
-function song_edit_page_ui_controller.refresh_swing_shuffle_type()
+function song_edit_page_ui.refresh_swing_shuffle_type()
   swing_shuffle_type:set_selected_value(params:get("global_swing_shuffle_type"))
   fn.dirty_screen(true)
 end
 
-function song_edit_page_ui_controller.update_swing()
+function song_edit_page_ui.update_swing()
   params:set("global_swing", swing_selector:get_value())
 end
 
-function song_edit_page_ui_controller.refresh_swing()
+function song_edit_page_ui.refresh_swing()
   swing_selector:set_value(params:get("global_swing"))
 end
 
-function song_edit_page_ui_controller.update_shuffle_feel()
+function song_edit_page_ui.update_shuffle_feel()
   params:set("global_shuffle_feel", shuffle_feel_selector:get_selected().value)
 end
 
-function song_edit_page_ui_controller.refresh_shuffle_feel()
+function song_edit_page_ui.refresh_shuffle_feel()
   shuffle_feel_selector:set_selected_value(params:get("global_shuffle_feel"))
 end
 
-function song_edit_page_ui_controller.update_shuffle_basis()
+function song_edit_page_ui.update_shuffle_basis()
   params:set("global_shuffle_basis", shuffle_basis_selector:get_selected().value)
 end
 
-function song_edit_page_ui_controller.refresh_shuffle_basis()
+function song_edit_page_ui.refresh_shuffle_basis()
   shuffle_basis_selector:set_selected_value(params:get("global_shuffle_basis"))
 end
 
-function song_edit_page_ui_controller.update_shuffle_amount()
+function song_edit_page_ui.update_shuffle_amount()
   params:set("global_shuffle_amount", shuffle_amount_selector:get_value())
 end
 
-function song_edit_page_ui_controller.refresh_shuffle_amount()
+function song_edit_page_ui.refresh_shuffle_amount()
   shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
 end
 
 
-function song_edit_page_ui_controller.handle_key_two_pressed()
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function song_edit_page_ui.handle_key_two_pressed()
+  local pressed_keys = m_grid.get_pressed_keys()
   if #pressed_keys < 1 then
     save_confirm.cancel()
   end
 end
 
 
-function song_edit_page_ui_controller.handle_key_three_pressed()
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+function song_edit_page_ui.handle_key_three_pressed()
+  local pressed_keys = m_grid.get_pressed_keys()
   if #pressed_keys < 1 then
     save_confirm.confirm()
   end
 end
 
-function song_edit_page_ui_controller.key(n, z)
+function song_edit_page_ui.key(n, z)
   if n == 2 and z == 1 then
-    song_edit_page_ui_controller.handle_key_two_pressed()
+    song_edit_page_ui.handle_key_two_pressed()
   elseif n == 3 and z == 1 then
-    song_edit_page_ui_controller.handle_key_three_pressed()
+    song_edit_page_ui.handle_key_three_pressed()
   end
 end
 
 
-function song_edit_page_ui_controller.refresh()
-  song_edit_page_ui_controller.refresh_pattern_repeat()
-  song_edit_page_ui_controller.refresh_tempo()
-  song_edit_page_ui_controller.refresh_song_mode()
-  song_edit_page_ui_controller.refresh_swing_shuffle_type()
-  song_edit_page_ui_controller.refresh_swing()
-  song_edit_page_ui_controller.refresh_shuffle_feel()
-  song_edit_page_ui_controller.refresh_shuffle_basis()
+function song_edit_page_ui.refresh()
+  song_edit_page_ui.refresh_pattern_repeat()
+  song_edit_page_ui.refresh_tempo()
+  song_edit_page_ui.refresh_song_mode()
+  song_edit_page_ui.refresh_swing_shuffle_type()
+  song_edit_page_ui.refresh_swing()
+  song_edit_page_ui.refresh_shuffle_feel()
+  song_edit_page_ui.refresh_shuffle_basis()
 end
 
-return song_edit_page_ui_controller
+return song_edit_page_ui

@@ -6,7 +6,7 @@ local divisions = include("lib/divisions")
 local throttle_time = 0.01
 
 channel_edit_page_ui_refreshers.refresh_masks = scheduler.debounce(function(note_selectors)
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+  local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
 
   -- Cache frequently accessed selectors
@@ -68,7 +68,7 @@ end, throttle_time)
 channel_edit_page_ui_refreshers.refresh_clock_mods = scheduler.debounce(function(clock_mod_list_selector, clock_swing_value_selector)
   local channel = program.get_selected_channel()
   local clock_mods = channel.clock_mods
-  local divisions = fn.filter_by_type(clock_controller.get_clock_divisions(), clock_mods.type)
+  local divisions = fn.filter_by_type(m_clock.get_clock_divisions(), clock_mods.type)
   local i = fn.find_index_in_table_by_value(divisions, clock_mods.value)
   if clock_mods.type == "clock_division" then
     i = i + 12
@@ -140,7 +140,7 @@ end, throttle_time)
 
 channel_edit_page_ui_refreshers.refresh_trig_locks = scheduler.debounce(function(m_params)
   local channel = program.get_selected_channel()
-  local pressed_keys = mosaic_grid.get_pressed_keys()
+  local pressed_keys = m_grid.get_pressed_keys()
   local current_step = program.get_current_step_for_channel(channel.number)
 
   -- Process all updates in a single batch
