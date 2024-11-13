@@ -561,7 +561,7 @@ To determine how your patterns interact and meld within the composition, you'll 
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
     <use href="#video-icon" />
   </svg>
-  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2065s">merge modes demo</a>
+  <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2065s">Merge modes demo</a>
 </p>
 
 ##### Trig Merge Modes
