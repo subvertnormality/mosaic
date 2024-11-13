@@ -1,13 +1,13 @@
-step_handler = include("mosaic/lib/step_handler")
-pattern_controller = include("mosaic/lib/pattern_controller")
+step = include("mosaic/lib/step")
+pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock_controller")
+local clock_controller = include("mosaic/lib/clock/clock_controller")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/midi_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/mosaic_midi_mock")
 include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
@@ -89,7 +89,7 @@ function test_swing_maintains_lengths_step_two()
 
     program.get_channel(1).swing = test_case.swing
 
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
 
     clock_setup()
 
@@ -201,7 +201,7 @@ function test_swing_maintains_lengths_across_multiple_steps_all_swings()
 
     program.get_channel(1).swing = test_case.swing
 
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
 
     clock_setup()
 
@@ -422,7 +422,7 @@ function test_drunk_shuffle_amount_100()
   program.get_channel(1).shuffle_feel = 1
   program.get_channel(1).shuffle_amount = 100
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -615,7 +615,7 @@ function test_drunk_shuffle_amount_0()
   program.get_channel(1).shuffle_feel = 1
   program.get_channel(1).shuffle_amount = 0
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -770,7 +770,7 @@ function test_drunk_shuffle_amount_75()
   program.get_channel(1).shuffle_feel = 1
   program.get_channel(1).shuffle_amount = 75
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 

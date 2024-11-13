@@ -1,4 +1,4 @@
-local drum_ops_tables = include("mosaic/lib/drum_ops_tables")
+local drum_ops_tables = include("mosaic/lib/helpers/drum_ops_tables")
 
 drum_ops = {}
 

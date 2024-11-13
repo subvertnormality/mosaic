@@ -17,14 +17,14 @@ is_key2_down = false
 is_key3_down = false
 
 function ui_controller.init()
-  draw_handler:register_ui("tooltip", tooltip.draw)
+  draw:register_ui("tooltip", tooltip.draw)
 
-  channel_edit_page_ui_controller.register_ui_draw_handlers()
-  scale_edit_page_ui_controller.register_ui_draw_handlers()
-  velocity_edit_page_ui_controller.register_ui_draw_handlers()
-  note_edit_page_ui_controller.register_ui_draw_handlers()
-  trigger_edit_page_ui_controller.register_ui_draw_handlers()
-  song_edit_page_ui_controller.register_ui_draw_handlers()
+  channel_edit_page_ui_controller.register_ui_draws()
+  scale_edit_page_ui_controller.register_ui_draws()
+  velocity_edit_page_ui_controller.register_ui_draws()
+  note_edit_page_ui_controller.register_ui_draws()
+  trigger_edit_page_ui_controller.register_ui_draws()
+  song_edit_page_ui_controller.register_ui_draws()
 
   channel_edit_page_ui_controller.init()
   scale_edit_page_ui_controller.init()
@@ -44,7 +44,7 @@ function ui_controller.redraw()
   screen.level(10)
   screen.move(120, 9)
   screen.text("m")
-  draw_handler:handle_ui(program.get_selected_page())
+  draw:handle_ui(program.get_selected_page())
 end
 
 function ui_controller.enc(n, d)

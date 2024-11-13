@@ -41,8 +41,8 @@ local grid_viewer_page = page:new("", function()
   grid_viewer:draw()
 end)
 
-function scale_edit_page_ui_controller.register_ui_draw_handlers()
-  draw_handler:register_ui(
+function scale_edit_page_ui_controller.register_ui_draws()
+  draw:register_ui(
     "scale_edit_page",
     function()
       scales_pages:draw()
@@ -106,7 +106,7 @@ function scale_edit_page_ui_controller.update_clock_mods()
   channel.clock_mods = clock_mods
 
   if clock_controller.is_playing() then
-    step_handler.queue_for_pattern_change(function() 
+    step.queue_for_pattern_change(function() 
       local c = channel.number 
       local div = clock_controller.calculate_divisor(clock_mods)
       clock_controller.set_channel_division(c, div) 
@@ -316,21 +316,21 @@ function scale_edit_page_ui_controller.handle_encoder_two_negative(pages, select
 end
 
 function scale_edit_page_ui_controller.handle_key_two_pressed()
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   if #pressed_keys < 1 then
     save_confirm.cancel()
   elseif #pressed_keys > 0 then
     for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
-      program.clear_trig_locks_for_step(step)
-      tooltip:show("Scale locks for step " .. step .. " cleared")
+      local s = fn.calc_grid_count(keys[1], keys[2])
+      program.clear_trig_locks_for_step(s)
+      tooltip:show("Scale locks for step " .. s .. " cleared")
     end
   end
 end
 
 
 function scale_edit_page_ui_controller.handle_key_three_pressed()
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   if #pressed_keys < 1 then
     save_confirm.confirm()
   end

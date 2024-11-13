@@ -1,8 +1,8 @@
 local device_map = {}
 device_map.params_cache = {}
 
-local json = require("mosaic/lib/json")
-local nb_device_param_maps = include("mosaic/lib/nb_device_param_maps")
+local json = require("mosaic/lib/helpers/json")
+local nb_device_param_maps = include("mosaic/lib/devices/nb_device_param_maps")
 
 local device_map_keyed_by_id = {}
 
@@ -110,7 +110,7 @@ end
 
 local devices
 
-local note_division_labels = include("mosaic/lib/divisions").note_division_labels
+local note_division_labels = include("mosaic/lib/clock/divisions").note_division_labels
 
 local stock_params = {
   get_none_param(),
@@ -343,7 +343,7 @@ local function merge_devices()
 
 
             local quantum = 0.01
-            local step = 0
+            local s = 0
             local minval = params:get_range(param_id)[1]
             local maxval = params:get_range(param_id)[2]
             local warp = "lin"
@@ -372,7 +372,7 @@ local function merge_devices()
                 ["cc_min_value"] = minval,
                 ["cc_max_value"] = maxval,
                 ["quantum"] = quantum,
-                ["step"] = step,
+                ["step"] = s,
                 ["default"] = p["controlspec"] and p["controlspec"].default or 0
               }
             )

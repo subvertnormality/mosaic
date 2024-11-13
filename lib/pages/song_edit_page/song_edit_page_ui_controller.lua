@@ -70,8 +70,8 @@ function song_edit_page_ui_controller.init()
   song_edit_page_ui_controller.refresh()
 end
 
-function song_edit_page_ui_controller.register_ui_draw_handlers()
-  draw_handler:register_ui(
+function song_edit_page_ui_controller.register_ui_draws()
+  draw:register_ui(
     "song_edit_page",
     function()
       pages:draw()
@@ -375,7 +375,7 @@ end
 
 
 function song_edit_page_ui_controller.handle_key_two_pressed()
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   if #pressed_keys < 1 then
     save_confirm.cancel()
   end
@@ -383,7 +383,7 @@ end
 
 
 function song_edit_page_ui_controller.handle_key_three_pressed()
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   if #pressed_keys < 1 then
     save_confirm.confirm()
   end

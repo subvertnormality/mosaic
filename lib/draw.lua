@@ -1,13 +1,13 @@
-local draw_handler = {}
+local draw = {}
 local table_insert = table.insert
 local ipairs = ipairs
 
 -- Create a table for the handlers
-draw_handler.grid_handlers = {}
-draw_handler.ui_handlers = {}
+draw.grid_handlers = {}
+draw.ui_handlers = {}
 
 -- Register a function with a page
-function draw_handler:register_grid(page, func)
+function draw:register_grid(page, func)
   -- If no functions have been registered for this page yet, create a new list
   if self.grid_handlers[page] == nil then
     self.grid_handlers[page] = {}
@@ -18,7 +18,7 @@ function draw_handler:register_grid(page, func)
 end
 
 -- Call all functions registered with a page
-function draw_handler:handle_grid(page)
+function draw:handle_grid(page)
 
   local found_page = fn.find_key(pages.pages, page)
   
@@ -39,7 +39,7 @@ function draw_handler:handle_grid(page)
 end
 
 -- Register a function with a page
-function draw_handler:register_ui(page, func)
+function draw:register_ui(page, func)
   -- If no functions have been registered for this page yet, create a new list
   if self.ui_handlers[page] == nil then
     self.ui_handlers[page] = {}
@@ -50,7 +50,7 @@ function draw_handler:register_ui(page, func)
 end
 
 -- Call all functions registered with a page
-function draw_handler:handle_ui(page)
+function draw:handle_ui(page)
 
   local found_page = fn.find_key(pages.pages, page)
 
@@ -70,4 +70,4 @@ function draw_handler:handle_ui(page)
   end
 end
 
-return draw_handler
+return draw

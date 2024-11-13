@@ -1,13 +1,13 @@
-step_handler = include("mosaic/lib/step_handler")
-pattern_controller = include("mosaic/lib/pattern_controller")
+step = include("mosaic/lib/step")
+pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock_controller")
+local clock_controller = include("mosaic/lib/clock/clock_controller")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/midi_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/mosaic_midi_mock")
 include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
@@ -57,7 +57,7 @@ function test_current_step_number_is_set_to_start_step_when_lower_than_start_tri
   program.get_channel(1).start_trig[2] = 4
 
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -78,21 +78,21 @@ function test_current_step_number_is_set_to_start_step_when_lower_than_start_tri
   program.set_selected_sequencer_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
-  local step = 3
+  local s = 3
 
-  test_pattern.note_values[step] = 0
-  test_pattern.lengths[step] = 1
-  test_pattern.trig_values[step] = 1
-  test_pattern.velocity_values[step] = 100
+  test_pattern.note_values[s] = 0
+  test_pattern.lengths[s] = 1
+  test_pattern.trig_values[s] = 1
+  test_pattern.velocity_values[s] = 100
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = step
+  program.get_channel(1).start_trig[1] = s
   program.get_channel(1).start_trig[2] = 4
 
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -131,7 +131,7 @@ function test_step_continues_at_new_start_step_when_pattern_size_changes()
   program.get_channel(1).end_trig[1] = 4
   program.get_channel(1).end_trig[2] = 4
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -222,7 +222,7 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   program.set_selected_sequencer_pattern(1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -301,7 +301,7 @@ function test_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_
 
   program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = 4
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -386,7 +386,7 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   program.set_selected_sequencer_pattern(1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -488,7 +488,7 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
 
   program.set_selected_sequencer_pattern(1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -586,7 +586,7 @@ function test_song_mode_functions_with_sequencer_pattern_repeats()
 
   program.set_selected_sequencer_pattern(1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -702,7 +702,7 @@ function test_song_mode_short_channel_pattern_lengths_transitions_correctly_to_l
 
   program.set_selected_sequencer_pattern(1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -797,7 +797,7 @@ function test_channel_steps_beyond_global_pattern_length()
   seq_pattern.global_pattern_length = global_pattern_length
 
   -- Update and setup clock
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
 
   -- Track notes that fire
@@ -882,7 +882,7 @@ function test_channel_with_pattern_longer_than_global_length()
   program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = global_pattern_length
   
   -- Update and setup clock
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   
   -- Run the sequence for multiple global pattern lengths

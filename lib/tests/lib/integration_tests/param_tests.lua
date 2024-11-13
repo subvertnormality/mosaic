@@ -1,13 +1,13 @@
-step_handler = include("mosaic/lib/step_handler")
-pattern_controller = include("mosaic/lib/pattern_controller")
+step = include("mosaic/lib/step")
+pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock_controller")
+local clock_controller = include("mosaic/lib/clock/clock_controller")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/midi_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/mosaic_midi_mock")
 include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
@@ -98,7 +98,7 @@ function test_params_trig_locks_are_processed_at_the_right_step()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     -- Reset and set up the clock and MIDI event tracking
     clock_setup()
@@ -155,7 +155,7 @@ function test_params_triggless_locks_are_processed_at_the_right_step()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -212,7 +212,7 @@ function test_params_triggless_locks_are_not_processed_if_trigless_param_is_off(
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -255,7 +255,7 @@ function test_trig_probability_param_lock_trigs_when_probability_is_high_enough(
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -300,7 +300,7 @@ function test_trig_probability_param_lock_doesnt_fire_when_probability_is_too_lo
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -341,7 +341,7 @@ function test_trig_probability_param_lock_set_to_zero_doesnt_fire()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -381,7 +381,7 @@ function test_trig_probability_param_lock_set_to_one_hundred_fires()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -424,7 +424,7 @@ function test_quantised_fixed_note_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -470,7 +470,7 @@ function test_bipolar_random_note_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -519,7 +519,7 @@ function test_bipolar_random_note_param_lock_channel_16_slot_10()
   program.get_sequencer_pattern(sequencer_pattern).patterns[16] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 16)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -574,7 +574,7 @@ function test_param_trig_locks_for_channel_16_slot_10()
   program.get_sequencer_pattern(sequencer_pattern).patterns[16] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 16)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -626,7 +626,7 @@ function test_param_trig_locks_for_channel_15_slot_9()
   program.get_sequencer_pattern(sequencer_pattern).patterns[15] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 15)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -669,7 +669,7 @@ function test_bipolar_random_note_param_lock_using_norns_param_rather_than_trig_
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -710,7 +710,7 @@ function test_trig_probability_param_lock_channel_16()
   program.get_sequencer_pattern(sequencer_pattern).patterns[16] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 16)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -752,7 +752,7 @@ function test_random_velocity_param_lock_channel_14_slot_8()
   program.get_sequencer_pattern(sequencer_pattern).patterns[14] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 14)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -818,7 +818,7 @@ function test_bipolar_random_note_param_lock_when_pentatonic_option_is_selected(
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -863,7 +863,7 @@ function test_twos_random_note_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -908,7 +908,7 @@ function test_random_velocity_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -950,7 +950,7 @@ function test_fixed_note_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -993,7 +993,7 @@ function test_quantised_fixed_note_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1041,7 +1041,7 @@ function test_chord_with_four_extra_note_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1111,7 +1111,7 @@ function test_chord_with_one_extra_note_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1166,7 +1166,7 @@ function test_chord_with_two_extra_note_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1229,7 +1229,7 @@ function test_chord_with_three_extra_note_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1304,7 +1304,7 @@ function test_chord_strum_param_lock_with_four_extra_note_with_off_value_plays_a
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1383,7 +1383,7 @@ function test_chord_strum_param_lock_with_four_extra_notes_division()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1517,7 +1517,7 @@ function test_chord_strum_param_lock_notes_adhere_to_scale_changes()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1607,7 +1607,7 @@ function test_chord_strum_param_lock_with_four_extra_notes_multiplication()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1699,7 +1699,7 @@ function test_chord_strum_param_lock_with_backwards_strum_pattern()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1791,7 +1791,7 @@ function test_chord_strum_param_lock_with_inside_out_strum_pattern_with_note_mas
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1884,7 +1884,7 @@ function test_chord_strum_param_lock_with_inside_out_strum_pattern()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -1976,7 +1976,7 @@ function test_chord_strum_param_lock_with_outside_in_strum_pattern()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -2066,7 +2066,7 @@ function test_chord_with_velocity_swell_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -2141,7 +2141,7 @@ function test_chord_with_velocity_fade_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -2230,7 +2230,7 @@ function test_global_params_are_processed_at_all_steps()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -2333,7 +2333,7 @@ function test_global_params_are_processed_with_the_correct_value_across_song_pat
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_2).channels[c].selected_patterns, 1)
 
   program.set_selected_sequencer_pattern(sequencer_pattern_1)
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -2347,7 +2347,7 @@ function test_global_params_are_processed_with_the_correct_value_across_song_pat
   luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1})
 
   program.set_selected_sequencer_pattern(sequencer_pattern_2)
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   progress_clock_by_beats(64) -- get to next pattern
 
@@ -2395,7 +2395,7 @@ function test_arp_param_lock_with_four_extra_notes()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -2507,7 +2507,7 @@ function test_arp_param_lock_on_note_mask_with_four_extra_notes()
   channel.step_chord_masks[test_step][4] = chord_note_4
   program.add_step_param_trig_lock(test_step, 5, 14) -- 1
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -2620,7 +2620,7 @@ function test_arp_param_lock_with_four_extra_notes_divison()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -2704,7 +2704,7 @@ function test_arp_param_lock_with_four_extra_notes_fraction()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -2871,7 +2871,7 @@ function test_arp_param_lock_adheres_to_scale_changes()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -2954,7 +2954,7 @@ function test_arp_param_lock_with_four_extra_notes_but_one_blank_rests_for_that_
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -3084,7 +3084,7 @@ function test_arp_with_velocity_swell_param_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -3179,7 +3179,7 @@ function test_arp_param_lock_with_backwards_strum_pattern()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -3280,7 +3280,7 @@ function test_arp_param_lock_with_inside_out_strum_pattern()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -3379,7 +3379,7 @@ function test_chord_arp_param_lock_with_outside_in_strum_pattern()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -3479,7 +3479,7 @@ function test_chord_arp_param_lock_with_outside_in_strum_pattern_and_rests()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -3574,7 +3574,7 @@ function test_rests_dont_apply_when_in_last_chord_slots()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -3670,7 +3670,7 @@ function test_rests_dont_apply_when_in_last_chord_slots_multiple_slots()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -3772,7 +3772,7 @@ function test_chord_strum_param_lock_with_spread()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -3902,7 +3902,7 @@ function test_chord_arp_param_lock_with_spread()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -4079,7 +4079,7 @@ function test_chord_strum_param_lock_with_minus_one_acceleration()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -4169,7 +4169,7 @@ function test_chord_strum_param_lock_with_minus_two_acceleration()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -4260,7 +4260,7 @@ function test_chord_strum_param_lock_with_four_acceleration()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -4353,7 +4353,7 @@ function test_chord_arp_param_lock_with_minus_one_acceleration()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
@@ -4443,7 +4443,7 @@ function test_chord_arp_param_lock_with_two_acceleration()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[c].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()

@@ -58,9 +58,9 @@ function velocity_edit_page_controller.init()
   velocity_edit_page_controller.refresh()
 end
 
-function velocity_edit_page_controller.register_draw_handlers()
+function velocity_edit_page_controller.register_draws()
   for s = 1, 64 do
-    draw_handler:register_grid(
+    draw:register_grid(
       "velocity_edit_page",
       function()
         -- velocity_edit_page_controller.refresh()
@@ -68,40 +68,40 @@ function velocity_edit_page_controller.register_draw_handlers()
       end
     )
   end
-  draw_handler:register_grid(
+  draw:register_grid(
     "velocity_edit_page",
     function()
         return step1to16_button:draw()
     end
   )
 
-  draw_handler:register_grid(
+  draw:register_grid(
       "velocity_edit_page",
       function()
           return step17to32_button:draw()
       end
   )
 
-  draw_handler:register_grid(
+  draw:register_grid(
       "velocity_edit_page",
       function()
           return step33to48_button:draw()
       end
   )
 
-  draw_handler:register_grid(
+  draw:register_grid(
       "velocity_edit_page",
       function()
           return step49to64_button:draw()
       end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "velocity_edit_page",
     function()
       return vel1to7_fade_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "velocity_edit_page",
     function()
       return vel8to14_fade_button:draw()
@@ -109,9 +109,9 @@ function velocity_edit_page_controller.register_draw_handlers()
   )
 end
 
-function velocity_edit_page_controller.register_press_handlers()
+function velocity_edit_page_controller.register_presss()
   for s = 1, 64 do
-    press_handler:register(
+    press:register(
       "velocity_edit_page",
       function(x, y)
         if (y == 1) and is_key3_down then
@@ -144,13 +144,13 @@ function velocity_edit_page_controller.register_press_handlers()
               tooltip:show("Steps " .. steps_tip .. "set to " .. velocity)
             end
 
-            pattern_controller.update_working_patterns()
+            pattern.update_working_patterns()
           end
         end
       end
     )
   end
-  press_handler:register_long(
+  press:register_long(
     "velocity_edit_page",
     function(x, y)
       if (y == 1) then
@@ -160,7 +160,7 @@ function velocity_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "velocity_edit_page",
     function(x, y)
         if step1to16_button:is_this(x, y) then
@@ -175,7 +175,7 @@ function velocity_edit_page_controller.register_press_handlers()
     end
   )
 
-  press_handler:register(
+  press:register(
       "velocity_edit_page",
       function(x, y)
           if step17to32_button:is_this(x, y) then
@@ -190,7 +190,7 @@ function velocity_edit_page_controller.register_press_handlers()
       end
   )
 
-  press_handler:register(
+  press:register(
       "velocity_edit_page",
       function(x, y)
           if step33to48_button:is_this(x, y) then
@@ -205,7 +205,7 @@ function velocity_edit_page_controller.register_press_handlers()
       end
   )
 
-  press_handler:register(
+  press:register(
       "velocity_edit_page",
       function(x, y)
           if step49to64_button:is_this(x, y) then
@@ -219,7 +219,7 @@ function velocity_edit_page_controller.register_press_handlers()
           end
       end
   )
-  press_handler:register(
+  press:register(
     "velocity_edit_page",
     function(x, y)
         if (vel1to7_fade_button:is_this(x, y)) then
@@ -239,7 +239,7 @@ function velocity_edit_page_controller.register_press_handlers()
         return vel1to7_fade_button:press(x, y)
     end
   )
-  press_handler:register_long(
+  press:register_long(
     "velocity_edit_page",
     function(x, y)
         if (vel1to7_fade_button:is_this(x, y)) then
@@ -261,7 +261,7 @@ function velocity_edit_page_controller.register_press_handlers()
         end
     end
 )
-  press_handler:register(
+  press:register(
       "velocity_edit_page",
       function(x, y)
           if (vel8to14_fade_button:is_this(x, y)) then

@@ -27,52 +27,52 @@ function note_edit_page_controller.init()
   note_edit_page_controller.refresh()
 end
 
-function note_edit_page_controller.register_draw_handlers()
+function note_edit_page_controller.register_draws()
   for s = 1, 64 do
-    draw_handler:register_grid(
+    draw:register_grid(
       "note_edit_page",
       function()
         return faders["step" .. s .. "_fader"]:draw()
       end
     )
   end
-  draw_handler:register_grid(
+  draw:register_grid(
     "note_edit_page",
     function()
       return step1to16_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "note_edit_page",
     function()
       return step17to32_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "note_edit_page",
     function()
       return step33to48_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "note_edit_page",
     function()
       return step49to64_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "note_edit_page",
     function()
       return note1to7_fade_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "note_edit_page",
     function()
       return note8to14_fade_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "note_edit_page",
     function()
       return note15to21_fade_button:draw()
@@ -80,9 +80,9 @@ function note_edit_page_controller.register_draw_handlers()
   )
 end
 
-function note_edit_page_controller.register_press_handlers()
+function note_edit_page_controller.register_presss()
   for s = 1, 64 do
-    press_handler:register(
+    press:register(
       "note_edit_page",
       function(x, y)
         if y == 1 and is_key3_down then
@@ -122,12 +122,12 @@ function note_edit_page_controller.register_press_handlers()
             tooltip:show("Steps " .. steps_tip .. "set to " .. note)
           end
 
-          pattern_controller.update_working_patterns()
+          pattern.update_working_patterns()
         end
       end
     )
   end
-  press_handler:register_long(
+  press:register_long(
     "note_edit_page",
     function(x, y)
       if (y == 1) then
@@ -137,7 +137,7 @@ function note_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "note_edit_page",
     function(x, y)
         if step1to16_button:is_this(x, y) then
@@ -152,7 +152,7 @@ function note_edit_page_controller.register_press_handlers()
     end
   )
 
-  press_handler:register(
+  press:register(
       "note_edit_page",
       function(x, y)
           if step17to32_button:is_this(x, y) then
@@ -167,7 +167,7 @@ function note_edit_page_controller.register_press_handlers()
       end
   )
 
-  press_handler:register(
+  press:register(
       "note_edit_page",
       function(x, y)
           if step33to48_button:is_this(x, y) then
@@ -182,7 +182,7 @@ function note_edit_page_controller.register_press_handlers()
       end
   )
 
-  press_handler:register(
+  press:register(
       "note_edit_page",
       function(x, y)
           if step49to64_button:is_this(x, y) then
@@ -196,7 +196,7 @@ function note_edit_page_controller.register_press_handlers()
           end
       end
   )
-  press_handler:register(
+  press:register(
     "note_edit_page",
     function(x, y)
         if (note15to21_fade_button:is_this(x, y)) then
@@ -217,7 +217,7 @@ function note_edit_page_controller.register_press_handlers()
     end
   )
 
-  press_handler:register(
+  press:register(
       "note_edit_page",
       function(x, y)
           if (note8to14_fade_button:is_this(x, y)) then
@@ -232,7 +232,7 @@ function note_edit_page_controller.register_press_handlers()
       end
   )
 
-  press_handler:register(
+  press:register(
       "note_edit_page",
       function(x, y)
           if (note1to7_fade_button:is_this(x, y)) then
@@ -253,7 +253,7 @@ function note_edit_page_controller.register_press_handlers()
       end
   )
 
-  press_handler:register_long(
+  press:register_long(
     "note_edit_page",
     function(x, y)
         if (y == 1) then

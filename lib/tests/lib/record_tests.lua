@@ -1,4 +1,4 @@
-local record = include("mosaic/lib/record")
+local record = include("mosaic/lib/models/record")
 
 function test_record_init_should_create_empty_store()
   record.init()

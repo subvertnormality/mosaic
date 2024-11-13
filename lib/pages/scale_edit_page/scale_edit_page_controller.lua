@@ -32,20 +32,20 @@ function scale_edit_page_controller.init()
   transpose_fader:set_value(13)
 end
 
-function scale_edit_page_controller.register_draw_handlers()
-  draw_handler:register_grid(
+function scale_edit_page_controller.register_draws()
+  draw:register_grid(
     "scale_edit_page",
     function()
       scale_edit_page_sequencer:draw(program.get_channel(17), grid_abstraction.led)
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "scale_edit_page",
     function()
       scale_fader:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "scale_edit_page",
     function()
       transpose_fader:draw()
@@ -53,8 +53,8 @@ function scale_edit_page_controller.register_draw_handlers()
   )
 end
 
-function scale_edit_page_controller.register_press_handlers()
-  press_handler:register_dual(
+function scale_edit_page_controller.register_presss()
+  press:register_dual(
     "scale_edit_page",
     function(x, y, x2, y2)
       local channel = program.get_channel(17)
@@ -66,29 +66,29 @@ function scale_edit_page_controller.register_press_handlers()
       end
       if scale_fader:is_this(x2, y2) then
         scale_fader:press(x2, y2)
-        local step = fn.calc_grid_count(x, y)
+        local s = fn.calc_grid_count(x, y)
         local scale_value = scale_fader:get_value()
-        if scale_value == program.get_step_scale_trig_lock(channel, step) then
-          program.add_step_scale_trig_lock(step, nil)
+        if scale_value == program.get_step_scale_trig_lock(channel, s) then
+          program.add_step_scale_trig_lock(s, nil)
         else
-          program.add_step_scale_trig_lock(step, scale_value)
+          program.add_step_scale_trig_lock(s, scale_value)
         end
         scale_edit_page_controller.refresh_faders()
       end
       if transpose_fader:is_this(x2, y2) then
         transpose_fader:press(x2, y2)
-        local step = fn.calc_grid_count(x, y)
+        local s = fn.calc_grid_count(x, y)
         local transpose_value = transpose_fader:get_value() - 13
-        if transpose_value == program.get_step_transpose_trig_lock(step) then
-          program.add_step_transpose_trig_lock(step, nil)
+        if transpose_value == program.get_step_transpose_trig_lock(s) then
+          program.add_step_transpose_trig_lock(s, nil)
         else
-          program.add_step_transpose_trig_lock(step, transpose_value)
+          program.add_step_transpose_trig_lock(s, transpose_value)
         end
         scale_edit_page_controller.refresh_faders()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "scale_edit_page",
     function(x, y)
       if scale_fader:is_this(x, y) then
@@ -113,7 +113,7 @@ function scale_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_long(
+  press:register_long(
     "scale_edit_page",
     function(x, y)
       if scale_fader:is_this(x, y) then
@@ -129,7 +129,7 @@ function scale_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_pre(
+  press:register_pre(
     "scale_edit_page",
     function(x, y)
       if scale_edit_page_sequencer:is_this(x, y) then
@@ -137,7 +137,7 @@ function scale_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_post(
+  press:register_post(
     "scale_edit_page",
     function(x, y)
       if scale_edit_page_sequencer:is_this(x, y) then
@@ -145,7 +145,7 @@ function scale_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "scale_edit_page",
     function(x, y)
       if transpose_fader:is_this(x, y) then
@@ -161,11 +161,11 @@ end
 
 function scale_edit_page_controller.refresh_faders()
   local channel = program.get_channel(17)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   if #pressed_keys > 0 then
-    local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
-    local step_scale_trig_lock = program.get_step_scale_trig_lock(channel, step)
-    local step_transpose_trig_lock = program.get_step_transpose_trig_lock(step)
+    local s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+    local step_scale_trig_lock = program.get_step_scale_trig_lock(channel, s)
+    local step_transpose_trig_lock = program.get_step_transpose_trig_lock(s)
     if step_scale_trig_lock then
       scale_fader:set_value(step_scale_trig_lock)
       hide_scale_fader_leds = true

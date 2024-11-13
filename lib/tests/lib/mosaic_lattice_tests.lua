@@ -1,6 +1,6 @@
-local l = include("mosaic/lib/mosaic_lattice")
+local l = include("mosaic/lib/clock/mosaic_lattice")
 
-local clock_controller = include("mosaic/lib/clock_controller")
+local clock_controller = include("mosaic/lib/clock/clock_controller")
 
 local lattice
 

@@ -1,5 +1,5 @@
 
-local lattice = include("mosaic/lib/mosaic_lattice")
+local lattice = include("mosaic/lib/clock/mosaic_lattice")
 
 clock_controller = {}
 clock_lattice = {}
@@ -22,7 +22,7 @@ for i = 1, 16 do arp_sprockets[i] = {} end
 local execute_at_note_end_ids = {[0] = {}}
 for i = 1, 16 do execute_at_note_end_ids[i] = {} end
 
-local clock_divisions = include("mosaic/lib/divisions").clock_divisions
+local clock_divisions = include("mosaic/lib/clock/divisions").clock_divisions
 
 -- Localizing math and table functions for performance
 local remove = table.remove
@@ -140,10 +140,10 @@ function clock_controller.init()
     action = function(t)
       local selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
       if params:get("elektron_program_changes") == 2 and program_data.current_step == selected_sequencer_pattern.global_pattern_length - 1 then
-        step_handler.process_elektron_program_change(step_handler.calculate_next_selected_sequencer_pattern())
+        step.process_elektron_program_change(step.calculate_next_selected_sequencer_pattern())
       end
       if not first_run then
-        step_handler.process_song_sequencer_patterns(program_data.current_step)
+        step.process_song_sequencer_patterns(program_data.current_step)
         selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
         for i = 1, 17 do
           if ((program.get_current_step_for_channel(i) - 1) % selected_sequencer_pattern.global_pattern_length) + 1 == selected_sequencer_pattern.global_pattern_length then
@@ -211,13 +211,13 @@ function clock_controller.init()
 
       if channel_number == 17 then
         program_data.current_scale_channel_step = current_step
-        step_handler.process_global_step_scale_trig_lock(current_step)
-        step_handler.sinfonian_sync(current_step)
+        step.process_global_step_scale_trig_lock(current_step)
+        step.sinfonian_sync(current_step)
       else
-        program.set_channel_step_scale_number(channel_number, step_handler.calculate_step_scale_number(channel_number, current_step))
+        program.set_channel_step_scale_number(channel_number, step.calculate_step_scale_number(channel_number, current_step))
         
         if channel.working_pattern.trig_values[current_step] == 1 then
-          step_handler.handle(channel_number, current_step)
+          step.handle(channel_number, current_step)
         end
       end
 
@@ -233,24 +233,24 @@ function clock_controller.init()
     local end_of_clock_action = function(t)
       local channel = program.get_channel(channel_number)
       if channel_number ~= 17 then
-        local step = program.get_current_step_for_channel(channel_number) + 1
-        if step < 1 then return end
+        local s = program.get_current_step_for_channel(channel_number) + 1
+        if s < 1 then return end
 
         local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
         local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
 
-        if step > end_trig then
-          step = start_trig
+        if s > end_trig then
+          s = start_trig
         end
 
-        local next_trig_value = channel.working_pattern.trig_values[step]
+        local next_trig_value = channel.working_pattern.trig_values[s]
 
         if next_trig_value == 1 then
           trigless_lock_active[channel_number] = false
-          step_handler.process_params(channel_number, step)
-        elseif params:get("trigless_locks") == 2 and not trigless_lock_active[channel_number] and program.step_has_param_trig_lock(channel, step) then
+          step.process_params(channel_number, s)
+        elseif params:get("trigless_locks") == 2 and not trigless_lock_active[channel_number] and program.step_has_param_trig_lock(channel, s) then
           trigless_lock_active[channel_number] = true
-          step_handler.process_params(channel_number, step)
+          step.process_params(channel_number, s)
         end
       end
     end
@@ -472,15 +472,15 @@ end
 function clock_controller:start()
   first_run = true
   if params:get("elektron_program_changes") == 2 then
-    step_handler.process_elektron_program_change(program.get().selected_sequencer_pattern)
+    step.process_elektron_program_change(program.get().selected_sequencer_pattern)
   end
   
   clock_controller.set_playing()
   clock_lattice:start()
-  midi_controller.start()
+  mosaic_midi.start()
 
   for i = 1, 16 do
-    step_handler.process_params(i, 1)
+    step.process_params(i, 1)
   end
        
 end
@@ -499,7 +499,7 @@ function clock_controller:stop()
   end
 
   nb:stop_all()
-  midi_controller:stop()
+  mosaic_midi:stop()
 
   if clock_lattice and clock_lattice.stop then
     clock_lattice:stop()
@@ -527,7 +527,7 @@ function clock_controller.reset()
   end
 
   program_data.current_step = 1
-  step_handler.reset()
+  step.reset()
 
   if clock_lattice and clock_lattice.destroy then
     clock_lattice:destroy()
@@ -538,7 +538,7 @@ function clock_controller.reset()
 end
 
 function clock_controller.panic()
-  midi_controller.panic()
+  mosaic_midi.panic()
 end
 
 function clock_controller.get_clock_divisions()

@@ -81,47 +81,47 @@ function channel_edit_page_controller.init()
 
 end
 
-function channel_edit_page_controller.register_draw_handlers()
-  draw_handler:register_grid(
+function channel_edit_page_controller.register_draws()
+  draw:register_grid(
     "channel_edit_page",
     function()
       channel_edit_page_sequencer:draw(program.get_selected_channel(), grid_abstraction.led)
     end
   )
 
-  draw_handler:register_grid(
+  draw:register_grid(
     "channel_edit_page",
     function()
       channel_select_fader:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "channel_edit_page",
     function()
       channel_scale_fader:draw()
     end
   )
   for s = 1, 16 do
-    draw_handler:register_grid(
+    draw:register_grid(
       "channel_edit_page",
       function()
         pattern_buttons["step" .. s .. "_pattern_button"]:draw()
       end
     )
   end
-  draw_handler:register_grid(
+  draw:register_grid(
     "channel_edit_page",
     function()
       trig_merge_mode_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "channel_edit_page",
     function()
       note_merge_mode_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "channel_edit_page",
     function()
       if is_key3_down then
@@ -131,7 +131,7 @@ function channel_edit_page_controller.register_draw_handlers()
       end
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "channel_edit_page",
     function()
       channel_octave_fader:draw()
@@ -139,8 +139,8 @@ function channel_edit_page_controller.register_draw_handlers()
   )
 end
 
-function channel_edit_page_controller.register_press_handlers()
-  press_handler:register(
+function channel_edit_page_controller.register_presss()
+  press:register(
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
@@ -151,7 +151,7 @@ function channel_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_long(
+  press:register_long(
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
@@ -162,18 +162,18 @@ function channel_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_post(
+  press:register_post(
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
         channel_edit_page_ui_controller.refresh_trig_locks()
         channel_edit_page_ui_controller.refresh_masks()
         channel_edit_page_controller.refresh_faders()
-        pattern_controller.update_working_patterns()
+        pattern.update_working_patterns()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "channel_edit_page",
     function(x, y)
       if channel_select_fader:is_this(x, y) then
@@ -207,7 +207,7 @@ function channel_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_long(
+  press:register_long(
     "channel_edit_page",
     function(x, y)
       if channel_select_fader:is_this(x, y) then
@@ -227,7 +227,7 @@ function channel_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_dual(
+  press:register_dual(
     "channel_edit_page",
     function(x, y, x2, y2)
       local channel = program.get_selected_channel()
@@ -239,28 +239,28 @@ function channel_edit_page_controller.register_press_handlers()
       end
       if channel_octave_fader:is_this(x2, y2) then
         channel_octave_fader:press(x2, y2)
-        local step = fn.calc_grid_count(x, y)
+        local s = fn.calc_grid_count(x, y)
         local channel = program.get_selected_channel()
         local octave_value = channel_octave_fader:get_value()
         if
-          program.get_step_octave_trig_lock(channel, step) and
-            octave_value == program.get_step_octave_trig_lock(channel, step) + 3
+          program.get_step_octave_trig_lock(channel, s) and
+            octave_value == program.get_step_octave_trig_lock(channel, s) + 3
          then
-          program.add_step_octave_trig_lock(step, nil)
+          program.add_step_octave_trig_lock(s, nil)
         else
-          program.add_step_octave_trig_lock(step, octave_value - 3)
+          program.add_step_octave_trig_lock(s, octave_value - 3)
         end
         channel_edit_page_controller.refresh_faders()
       end
       if channel_scale_fader:is_this(x2, y2) then
         channel_scale_fader:press(x2, y2)
-        local step = fn.calc_grid_count(x, y)
+        local s = fn.calc_grid_count(x, y)
         local channel = program.get_selected_channel()
         local scale_value = channel_scale_fader:get_value()
-        if scale_value == program.get_step_scale_trig_lock(channel, step) then
-          program.add_step_scale_trig_lock(step, nil)
+        if scale_value == program.get_step_scale_trig_lock(channel, s) then
+          program.add_step_scale_trig_lock(s, nil)
         else
-          program.add_step_scale_trig_lock(step, scale_value)
+          program.add_step_scale_trig_lock(s, scale_value)
         end
         channel_edit_page_controller.refresh_faders()
       end
@@ -293,7 +293,7 @@ function channel_edit_page_controller.register_press_handlers()
     end
   )
   for s = 1, 16 do
-    press_handler:register(
+    press:register(
       "channel_edit_page",
       function(x, y)
         if pattern_buttons["step" .. s .. "_pattern_button"]:is_this(x, y) then
@@ -308,13 +308,13 @@ function channel_edit_page_controller.register_press_handlers()
             program.get_selected_sequencer_pattern().active = true
             tooltip:show("Pattern " .. x .. " removed from ch. " .. program.get().selected_channel)
           end
-          pattern_controller.update_working_patterns()
+          pattern.update_working_patterns()
           program.get_selected_sequencer_pattern().active = true
         end
       end
     )
   end
-  press_handler:register(
+  press:register(
     "channel_edit_page",
     function(x, y)
       if trig_merge_mode_button:is_this(x, y) then
@@ -342,12 +342,12 @@ function channel_edit_page_controller.register_press_handlers()
         end
 
         program.get_selected_sequencer_pattern().active = true
-        pattern_controller.update_working_patterns()
+        pattern.update_working_patterns()
 
       end
     end
   )
-  press_handler:register(
+  press:register(
     "channel_edit_page",
     function(x, y)
       if note_merge_mode_button:is_this(x, y) then
@@ -378,12 +378,12 @@ function channel_edit_page_controller.register_press_handlers()
         end
 
         program.get_selected_sequencer_pattern().active = true
-        pattern_controller.update_working_patterns()
+        pattern.update_working_patterns()
 
       end
     end
   )
-  press_handler:register(
+  press:register(
     "channel_edit_page",
     function(x, y)
       if velocity_merge_mode_button:is_this(x, y) and not is_key3_down then
@@ -413,13 +413,13 @@ function channel_edit_page_controller.register_press_handlers()
         end
 
         program.get_selected_sequencer_pattern().active = true
-        pattern_controller.update_working_patterns()
+        pattern.update_working_patterns()
 
       end
     end
 
   )
-  press_handler:register(
+  press:register(
     "channel_edit_page",
     function(x, y)
       if length_merge_mode_button:is_this(x, y) and is_key3_down then
@@ -449,11 +449,11 @@ function channel_edit_page_controller.register_press_handlers()
         end
 
         program.get_selected_sequencer_pattern().active = true
-        pattern_controller.update_working_patterns()
+        pattern.update_working_patterns()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "channel_edit_page",
     function(x, y)
       if channel_octave_fader:is_this(x, y) then
@@ -464,7 +464,7 @@ function channel_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_dual(
+  press:register_dual(
     "channel_edit_page",
     function(x, y, x2, y2)
       if pattern_buttons["step" .. x2 .. "_pattern_button"]:is_this(x2, y2) then
@@ -472,7 +472,7 @@ function channel_edit_page_controller.register_press_handlers()
           program.get_selected_channel().note_merge_mode = "pattern_number_" .. x2
           note_merge_mode_button:set_state(4)
           program.get_selected_sequencer_pattern().active = true
-          pattern_controller.update_working_patterns()
+          pattern.update_working_patterns()
           tooltip:show(
             "Note merge mode pattern " ..x2
           )
@@ -481,7 +481,7 @@ function channel_edit_page_controller.register_press_handlers()
           program.get_selected_channel().velocity_merge_mode = "pattern_number_" .. x2
           velocity_merge_mode_button:set_state(4)
           program.get_selected_sequencer_pattern().active = true
-          pattern_controller.update_working_patterns()
+          pattern.update_working_patterns()
           tooltip:show(
             "Velocity merge mode pattern " ..x2
           )
@@ -490,7 +490,7 @@ function channel_edit_page_controller.register_press_handlers()
           program.get_selected_channel().length_merge_mode = "pattern_number_" .. x2
           length_merge_mode_button:set_state(4)
           program.get_selected_sequencer_pattern().active = true
-          pattern_controller.update_working_patterns()
+          pattern.update_working_patterns()
           tooltip:show(
             "Length merge mode pattern " ..x2
           )
@@ -498,7 +498,7 @@ function channel_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_pre(
+  press:register_pre(
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
@@ -510,22 +510,22 @@ function channel_edit_page_controller.register_press_handlers()
   )
 end
 
-function channel_edit_page_controller.handle_note_on_midi_controller_message(note, velocity, chord_number, chord_degree)
-  local pressed_keys = grid_controller.get_pressed_keys()
+function channel_edit_page_controller.handle_note_on_mosaic_midi_message(note, velocity, chord_number, chord_degree)
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 then
     if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
 
-      local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+      local s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
 
       if chord_number == 1 then
-        channel.step_trig_masks[step] = 1
-        channel.step_note_masks[step] = note
-        channel.step_velocity_masks[step] = velocity
-        channel.step_length_masks[step] = 1
-        channel.step_chord_masks[step] = {}
+        channel.step_trig_masks[s] = 1
+        channel.step_note_masks[s] = note
+        channel.step_velocity_masks[s] = velocity
+        channel.step_length_masks[s] = 1
+        channel.step_chord_masks[s] = {}
       elseif (chord_degree) then
-        channel.step_chord_masks[step][chord_number - 1] = chord_degree 
+        channel.step_chord_masks[s][chord_number - 1] = chord_degree 
       end
 
       channel_edit_page_ui_controller.refresh_masks()
@@ -595,11 +595,11 @@ end
 function channel_edit_page_controller.refresh_faders()
   local channel = program.get_selected_channel()
   channel_select_fader:set_value(program.get().selected_channel)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   if #pressed_keys > 0 then
-    local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
-    local step_scale_trig_lock = program.get_step_scale_trig_lock(channel, step)
-    local step_octave_trig_lock = program.get_step_octave_trig_lock(channel, step)
+    local s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+    local step_scale_trig_lock = program.get_step_scale_trig_lock(channel, s)
+    local step_octave_trig_lock = program.get_step_octave_trig_lock(channel, s)
     if step_scale_trig_lock then
       channel_scale_fader:set_value(step_scale_trig_lock)
       hide_scale_fader_leds = true

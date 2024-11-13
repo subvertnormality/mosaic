@@ -1,5 +1,5 @@
 local er = require("er")
-local drum_ops = include("mosaic/lib/drum_ops")
+local drum_ops = include("mosaic/lib/helpers/drum_ops")
 
 
 local trigger_edit_page_controller = {}
@@ -25,68 +25,68 @@ function trigger_edit_page_controller.init()
   trigger_edit_page_controller.refresh_trigger_edit_page_ui_controller()
 end
 
-function trigger_edit_page_controller.register_draw_handlers()
-  draw_handler:register_grid(
+function trigger_edit_page_controller.register_draws()
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_pattern_select_fader:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_sequencer:draw(program.get_selected_channel(), grid_abstraction.led)
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_pattern1_fader:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_pattern2_fader:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_algorithm_fader:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_bankmask_fader:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_paint_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_cancel_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_left_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_centre_button:draw()
     end
   )
-  draw_handler:register_grid(
+  draw:register_grid(
     "trigger_edit_page",
     function()
       return trigger_edit_page_right_button:draw()
@@ -212,12 +212,12 @@ local function save_paint_pattern(p)
   end
   program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values = trigs
   program.get_selected_sequencer_pattern().patterns[selected_pattern].lengths = lengths
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   program.get_selected_sequencer_pattern().active = true
 end
 
-function trigger_edit_page_controller.register_press_handlers()
-  press_handler:register(
+function trigger_edit_page_controller.register_presss()
+  press:register(
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_pattern_select_fader:is_this(x, y) then
@@ -227,16 +227,16 @@ function trigger_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_sequencer:is_this(x, y) then
         trigger_edit_page_sequencer:press(x, y)
-        pattern_controller.update_working_patterns()
+        pattern.update_working_patterns()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_pattern1_fader:is_this(x, y) then
@@ -250,7 +250,7 @@ function trigger_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_pattern2_fader:is_this(x, y) then
@@ -264,7 +264,7 @@ function trigger_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "trigger_edit_page",
     function(x, y)
       trigger_edit_page_algorithm_fader:press(x, y)
@@ -275,7 +275,7 @@ function trigger_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "trigger_edit_page",
     function(x, y)
       local algorithm = trigger_edit_page_algorithm_fader:get_value()
@@ -286,7 +286,7 @@ function trigger_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "trigger_edit_page",
     function(x, y)
       trigger_edit_page_paint_button:press(x, y)
@@ -313,7 +313,7 @@ function trigger_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "trigger_edit_page",
     function(x, y)
       trigger_edit_page_cancel_button:press(x, y)
@@ -334,7 +334,7 @@ function trigger_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_left_button:is_this(x, y) then
@@ -350,7 +350,7 @@ function trigger_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_centre_button:is_this(x, y) then
@@ -365,7 +365,7 @@ function trigger_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_right_button:is_this(x, y) then
@@ -381,22 +381,22 @@ function trigger_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_dual(
+  press:register_dual(
     "trigger_edit_page",
     function(x, y, x2, y2)
       trigger_edit_page_sequencer:dual_press(x, y, x2, y2)
       if trigger_edit_page_sequencer:is_this(x2, y2) then
-        pattern_controller.update_working_patterns()
+        pattern.update_working_patterns()
         tooltip:show("Note length set")
       end
     end
   )
-  press_handler:register_long(
+  press:register_long(
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_sequencer:is_this(x, y) then
         trigger_edit_page_sequencer:long_press(x, y)
-        pattern_controller.update_working_patterns()
+        pattern.update_working_patterns()
         tooltip:show("Note length reset")
       end
     end

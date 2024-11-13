@@ -10,16 +10,16 @@
 testing = false
 
 pages = include("mosaic/lib/pages/pages")
-program = include("mosaic/lib/program")
-fn = include("mosaic/lib/functions")
+program = include("mosaic/lib/models/program")
+fn = include("mosaic/lib/helpers/functions")
 scheduler = include("mosaic/lib/scheduler")
-grid_controller = include("mosaic/lib/grid_controller")
+mosaic_grid = include("mosaic/lib/mosaic_grid")
 ui_controller = include("mosaic/lib/ui_controller")
 sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
-midi_controller = include("mosaic/lib/midi_controller")
+mosaic_midi = include("mosaic/lib/mosaic_midi")
 
 -- Debug
--- profiler = include("mosaic/lib/profiler")
+-- profiler = include("mosaic/lib/helpers/profiler")
 
 -- p = newProfiler()
 
@@ -27,7 +27,7 @@ local fileselect = require("fileselect")
 local textentry = require("textentry")
 local as_metro = metro.init(do_autosave, 1, 1)
 local autosave_timer = metro.init(prime_autosave, 60, 1)
-local param_manager = include("mosaic/lib/param_manager")
+local param_manager = include("mosaic/lib/devices/param_manager")
 
 local ui_splash_screen_active = false
 
@@ -36,12 +36,12 @@ local scheduler_clock = nil
 local screen_keep_alive = nil
 
 nb = require("mosaic/lib/nb/lib/nb")
-clock_controller = include("mosaic/lib/clock_controller")
-pattern_controller = include("mosaic/lib/pattern_controller")
-midi_controller = include("mosaic/lib/midi_controller")
-step_handler = include("lib/step_handler")
-device_map = include("mosaic/lib/device_map")
-norns_param_state_handler = include("mosaic/lib/norns_param_state_handler")
+clock_controller = include("mosaic/lib/clock/clock_controller")
+pattern = include("mosaic/lib/pattern")
+mosaic_midi = include("mosaic/lib/mosaic_midi")
+step = include("lib/step")
+device_map = include("mosaic/lib/devices/device_map")
+norns_param_state_handler = include("mosaic/lib/devices/norns_param_state_handler")
 
 g = grid.connect()
 
@@ -109,7 +109,7 @@ local function load_new_project()
       true
     )
   end
-  grid_controller.refresh()
+  mosaic_grid.refresh()
   ui_controller.refresh()
 end
 
@@ -176,7 +176,7 @@ function init()
   ui_splash_screen_active = true
   math.randomseed(os.time())
   program.init()
-  midi_controller.init()
+  mosaic_midi.init()
   
   grid_connected = g.device~= nil and true or false
   
@@ -219,7 +219,7 @@ function init()
           redraw()
         end
         if fn.dirty_grid() then
-          grid_controller.grid_redraw()
+          mosaic_grid.grid_redraw()
         end
       end
     end
@@ -356,7 +356,7 @@ function init()
   params:bang()
 
   ui_controller.init()
-  grid_controller.init()
+  mosaic_grid.init()
   clock_controller.init()
   ui_splash_screen_active = false
   fn.dirty_grid(true)

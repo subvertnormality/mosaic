@@ -1,11 +1,11 @@
-local step_handler = include("mosaic/lib/step_handler")
-pattern_controller = include("mosaic/lib/pattern_controller")
+local step = include("mosaic/lib/step")
+pattern = include("mosaic/lib/pattern")
 
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/midi_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/mosaic_midi_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-local clock_controller = include("mosaic/lib/clock_controller")
+local clock_controller = include("mosaic/lib/clock/clock_controller")
 
 local function setup()
   program.init()
@@ -29,9 +29,9 @@ function test_steps_process_note_on_events()
 
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
-  step_handler.handle(1, 1)
+  step.handle(1, 1)
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -58,8 +58,8 @@ function test_manually_calculate_step_scale_number_standard_speeds()
   program.add_step_scale_trig_lock(2, 3)
   
   -- At standard speeds, steps should map 1:1
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 1), 2)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 2), 3)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 2), 3)
 end
 
 function test_manually_calculate_step_scale_number_channel_half_speed()
@@ -80,9 +80,9 @@ function test_manually_calculate_step_scale_number_channel_half_speed()
   program.add_step_scale_trig_lock(3, 4)
   
   -- At half speed, one channel step spans multiple global steps
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 1), 2)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 2), 4)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 3), 4)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 2), 4)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 3), 4)
 end
 
 function test_manually_calculate_step_scale_number_channel_double_speed()
@@ -102,9 +102,9 @@ function test_manually_calculate_step_scale_number_channel_double_speed()
   program.add_step_scale_trig_lock(2, 3)
   
   -- At double speed, multiple channel steps map to one global step
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 1), 2)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 2), 2)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 3), 3)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 2), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 3), 3)
 end
 
 function test_manually_calculate_step_scale_number_scale_channel_double_speed()
@@ -125,8 +125,8 @@ function test_manually_calculate_step_scale_number_scale_channel_double_speed()
   program.add_step_scale_trig_lock(3, 4)
   
   -- With scale channel at double speed, fewer channel steps needed to advance global step
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 1), 2)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 2), 4)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 2), 4)
 end
 
 function test_manually_calculate_step_scale_number_both_channels_double_speed()
@@ -146,8 +146,8 @@ function test_manually_calculate_step_scale_number_both_channels_double_speed()
   program.add_step_scale_trig_lock(2, 3)
   
   -- When both at same speed (even if not standard), should map 1:1
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 1), 2)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 2), 3)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 2), 3)
 end
 
 function test_manually_calculate_step_scale_number_very_fast_vs_very_slow()
@@ -168,9 +168,9 @@ function test_manually_calculate_step_scale_number_very_fast_vs_very_slow()
   
   -- Many channel steps should map to single global step
   for i = 1, 16 do
-    luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, i), 2)
+    luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, i), 2)
   end
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 17), 3)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 17), 3)
 end
 
 function test_manually_calculate_step_scale_number_channel_with_override()
@@ -192,7 +192,7 @@ function test_manually_calculate_step_scale_number_channel_with_override()
   program.get_channel(channel).step_scale_trig_lock_banks[1] = 5
   
   -- Channel override should take precedence regardless of speeds
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 1), 5)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 5)
 end
 
 
@@ -214,9 +214,9 @@ function test_manually_calculate_step_scale_number_extreme_speed_differences()
   
   -- Many channel steps should map to first global step due to extreme speed difference
   for i = 1, 64 do
-    luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, i), 2)
+    luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, i), 2)
   end
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 65), 3)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 65), 3)
 end
 
 
@@ -238,7 +238,7 @@ function test_manually_calculate_step_scale_number_extreme_speed_differences_inv
   
   -- For very mismatched speeds, we want to stay on the first scale for many steps
   for i = 1, 64 do
-    luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, i), 2)
+    luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, i), 2)
   end
 end
 
@@ -261,9 +261,9 @@ function test_manually_calculate_step_scale_number_with_scale_gaps()
   program.add_step_scale_trig_lock(3, 4)
   
   -- Should handle gaps by keeping previous scale
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 1), 2)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 2), 2)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 3), 4)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 2), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 3), 4)
 end
 
 
@@ -284,8 +284,8 @@ function test_manually_calculate_step_scale_number_with_very_large_steps()
   program.add_step_scale_trig_lock(2, 3)
   
   -- Should handle very large steps 
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 1000), 3)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 9999), 3)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1000), 3)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 9999), 3)
 end
 
 
@@ -303,7 +303,7 @@ function test_speed_ratio_over_16()
   program.add_step_scale_trig_lock(1, 2)
   program.add_step_scale_trig_lock(2, 3)
 
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 1), 2)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 32), 2)
-  luaunit.assert_equals(step_handler.manually_calculate_step_scale_number(channel, 33), 3)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 32), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 33), 3)
 end

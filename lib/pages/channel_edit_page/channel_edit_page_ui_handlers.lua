@@ -1,6 +1,6 @@
 -- channel_edit_page_ui_handlers.lua
 local channel_edit_page_ui_handlers = {}
-local param_manager = include("mosaic/lib/param_manager")
+local param_manager = include("mosaic/lib/devices/param_manager")
 local channel_edit_page_ui_refreshers = include("lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 
 function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page)
@@ -82,7 +82,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
   elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
     local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
     if midi_channel_vertical_scroll_selector:is_selected() then
-      if not device.default_midi_device and midi_controller.midi_devices_connected() then
+      if not device.default_midi_device and mosaic_midi.midi_devices_connected() then
         midi_channel_vertical_scroll_selector:deselect()
         midi_device_vertical_scroll_selector:select()
       end
@@ -91,7 +91,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
         device_map_vertical_scroll_selector:deselect()
         midi_channel_vertical_scroll_selector:select()
       else
-        if not device.default_midi_device and midi_controller.midi_devices_connected() then
+        if not device.default_midi_device and mosaic_midi.midi_devices_connected() then
           device_map_vertical_scroll_selector:deselect()
           midi_device_vertical_scroll_selector:select()
         end
@@ -183,10 +183,10 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
   elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
     local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
     if midi_device_vertical_scroll_selector:is_selected() then
-      if device.default_midi_channel == nil and midi_controller.midi_devices_connected() then
+      if device.default_midi_channel == nil and mosaic_midi.midi_devices_connected() then
         midi_device_vertical_scroll_selector:deselect()
         midi_channel_vertical_scroll_selector:select()
-      elseif device.default_midi_device == nil and midi_controller.midi_devices_connected() then
+      elseif device.default_midi_device == nil and mosaic_midi.midi_devices_connected() then
         midi_device_vertical_scroll_selector:deselect()
         device_map_vertical_scroll_selector:select()
       end

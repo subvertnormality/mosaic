@@ -5,25 +5,25 @@ local sinfonion = {}
 
 
 function sinfonion.set_root_note(root)
-  midi_controller.send_to_sinfonion(1, root)
+  mosaic_midi.send_to_sinfonion(1, root)
 end
 
 function sinfonion.set_degree_nr(degree_nr)
-  midi_controller.send_to_sinfonion(2, degree_nr)
+  mosaic_midi.send_to_sinfonion(2, degree_nr)
 end
 
 function sinfonion.set_mode_nr(mode_nr)
-  midi_controller.send_to_sinfonion(3, mode_nr)
+  mosaic_midi.send_to_sinfonion(3, mode_nr)
 end
 
 function sinfonion.set_clock(clock)
-  midi_controller.send_to_sinfonion(5, clock)
+  mosaic_midi.send_to_sinfonion(5, clock)
 end
 
 -- Transposition takes a value of -64 to 63
 function sinfonion.set_transposition(trans)
   trans = math.max(-64, math.min(63, trans))
-  midi_controller.send_to_sinfonion(4, trans + 64)
+  mosaic_midi.send_to_sinfonion(4, trans + 64)
 end
 
 -- chaotic_detune takes a value of -1.0 to 1.0
@@ -41,27 +41,27 @@ function sinfonion.set_chaotic_detune(detune)
   -- Now, adjust the range to 0 to 127 by adding 64
   local midi_value = adjusted_value + 64
 
-  midi_controller.send_to_sinfonion(9, midi_value)
+  mosaic_midi.send_to_sinfonion(9, midi_value)
 end
 
 -- harmonic_shift takes a value of -11 to +11
 function sinfonion.set_harmonic_shift(shift)
-  midi_controller.send_to_sinfonion(10, shift + 11)
+  mosaic_midi.send_to_sinfonion(10, shift + 11)
 end
 
 -- Beat
 function sinfonion.set_beat(beat)
-  midi_controller.send_to_sinfonion(6, beat)
+  mosaic_midi.send_to_sinfonion(6, beat)
 end
 
 -- Step
 function sinfonion.set_step(step)
-  midi_controller.send_to_sinfonion(7, step)
+  mosaic_midi.send_to_sinfonion(7, step)
 end
 
 -- Reset
 function sinfonion.set_reset(reset_value)
-  midi_controller.send_to_sinfonion(8, reset_value)
+  mosaic_midi.send_to_sinfonion(8, reset_value)
 end
 
 return sinfonion

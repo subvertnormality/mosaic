@@ -157,9 +157,9 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
           function(x)
             if x ~= val.off_value then
               if val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
-                midi_controller.nrpn(val.nrpn_msb, val.nrpn_lsb, x, channel, midi_device)
+                mosaic_midi.nrpn(val.nrpn_msb, val.nrpn_lsb, x, channel, midi_device)
               elseif val.cc_msb and val.cc_max_value then
-                midi_controller.cc(val.cc_msb, val.cc_lsb or nil, x, channel, midi_device)
+                mosaic_midi.cc(val.cc_msb, val.cc_lsb or nil, x, channel, midi_device)
               end
               channel_edit_page_ui_controller.refresh_trig_lock_values()
             end

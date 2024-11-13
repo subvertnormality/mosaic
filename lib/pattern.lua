@@ -1,8 +1,8 @@
-local pattern_controller = {}
+local pattern = {}
 
 local quantiser = include("mosaic/lib/quantiser")
-local clock_controller = include("mosaic/lib/clock_controller")
-local divisions = include("mosaic/lib/divisions")
+local clock_controller = include("mosaic/lib/clock/clock_controller")
+local divisions = include("mosaic/lib/clock/divisions")
 
 local program = program
 
@@ -42,7 +42,7 @@ local function extract_pattern_number(merge_mode)
   return nil
 end
 
-function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
+function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
   local merged_pattern = {
     trig_values = {unpack(default_trig_values)},
@@ -194,17 +194,17 @@ function pattern_controller.get_and_merge_patterns(channel, trig_merge_mode, not
   return merged_pattern
 end
 
-pattern_controller.update_working_patterns = scheduler.debounce(function()
+pattern.update_working_patterns = scheduler.debounce(function()
   for c = 1, 16 do
-    pattern_controller.update_working_pattern(c)
+    pattern.update_working_pattern(c)
     coroutine.yield()
   end
 end, throttle_time)
 
-function pattern_controller.update_working_pattern(c)
+function pattern.update_working_pattern(c)
   local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
   local channel_pattern = selected_sequencer_pattern.channels[c]
-  channel_pattern.working_pattern = pattern_controller.get_and_merge_patterns(
+  channel_pattern.working_pattern = pattern.get_and_merge_patterns(
     c,
     channel_pattern.trig_merge_mode,
     channel_pattern.note_merge_mode,
@@ -217,4 +217,4 @@ function pattern_controller.update_working_pattern(c)
   end
 end
 
-return pattern_controller
+return pattern

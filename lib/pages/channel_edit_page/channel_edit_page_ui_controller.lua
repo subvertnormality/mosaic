@@ -11,10 +11,10 @@ local dial = include("mosaic/lib/ui_components/dial")
 local control_scroll_selector = include("mosaic/lib/ui_components/control_scroll_selector")
 local list_selector = include("mosaic/lib/ui_components/list_selector")
 local value_selector = include("mosaic/lib/ui_components/value_selector")
-local midi_controller = include("mosaic/lib/midi_controller")
+local mosaic_midi = include("mosaic/lib/mosaic_midi")
 local musicutil = require("musicutil")
-local param_manager = include("mosaic/lib/param_manager")
-local divisions = include("mosaic/lib/divisions")
+local param_manager = include("mosaic/lib/devices/param_manager")
+local divisions = include("mosaic/lib/clock/divisions")
 local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
 local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
 local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
@@ -196,7 +196,7 @@ local channel_edit_page = page:new("Device Config", function()
   local channel = program.get_selected_channel()
   local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
   if device.type == "midi" then
-    if device.default_midi_device == nil and midi_controller.midi_devices_connected() then
+    if device.default_midi_device == nil and mosaic_midi.midi_devices_connected() then
       midi_device_vertical_scroll_selector:draw()
     end
     if device.default_midi_channel == nil then
@@ -218,7 +218,7 @@ end)
 function channel_edit_page_ui_controller.init()
   mask_selectors.note:select()
   midi_channel_vertical_scroll_selector:select()
-  midi_device_vertical_scroll_selector:set_items(midi_controller.get_midi_outs())
+  midi_device_vertical_scroll_selector:set_items(mosaic_midi.get_midi_outs())
   dials:set_items(m_params)
   clock_mod_list_selector:set_list(clock_controller.get_clock_divisions())
   device_map_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Midi Map", device_map:get_devices())
@@ -275,8 +275,8 @@ function channel_edit_page_ui_controller.init()
 end
 
 -- Register UI draw handlers
-function channel_edit_page_ui_controller.register_ui_draw_handlers()
-  draw_handler:register_ui("channel_edit_page", function()
+function channel_edit_page_ui_controller.register_ui_draws()
+  draw:register_ui("channel_edit_page", function()
     channel_pages:draw()
   end)
 end
@@ -292,7 +292,7 @@ function channel_edit_page_ui_controller.update_swing_shuffle_type()
   end
 
   if clock_controller.is_playing() then
-    step_handler.queue_for_pattern_change(function() 
+    step.queue_for_pattern_change(function() 
       local c = channel.number 
       local val = value
       clock_controller.set_swing_shuffle_type(c, val) 
@@ -325,7 +325,7 @@ function channel_edit_page_ui_controller.update_swing()
   end
   
   if clock_controller.is_playing() then
-    step_handler.queue_for_pattern_change(function() 
+    step.queue_for_pattern_change(function() 
       local c = channel.number 
       local val = value
       clock_controller.set_channel_swing(c, val) 
@@ -356,7 +356,7 @@ function channel_edit_page_ui_controller.update_shuffle_feel()
   end
 
   if clock_controller.is_playing() then
-    step_handler.queue_for_pattern_change(function() 
+    step.queue_for_pattern_change(function() 
       local c = channel.number 
       local sf = shuffle_feel
       clock_controller.set_channel_shuffle_feel(c, sf) 
@@ -389,7 +389,7 @@ function channel_edit_page_ui_controller.update_shuffle_basis()
   end
 
   if clock_controller.is_playing() then
-    step_handler.queue_for_pattern_change(function() 
+    step.queue_for_pattern_change(function() 
       local c = channel.number 
       local sb = shuffle_basis
       clock_controller.set_channel_shuffle_basis(c, sb) 
@@ -421,7 +421,7 @@ function channel_edit_page_ui_controller.update_shuffle_amount()
   end
 
   if clock_controller.is_playing() then
-    step_handler.queue_for_pattern_change(function() 
+    step.queue_for_pattern_change(function() 
       local c = channel.number 
       local sa = shuffle_amount
       clock_controller.set_channel_shuffle_amount(c, sa) 
@@ -449,7 +449,7 @@ function channel_edit_page_ui_controller.update_clock_mods()
   channel.clock_mods = clock_mods
 
   if clock_controller.is_playing() then
-    step_handler.queue_for_pattern_change(function() 
+    step.queue_for_pattern_change(function() 
       local c = channel.number 
       local div = clock_controller.calculate_divisor(clock_mods)
       clock_controller.set_channel_division(c, div) 
@@ -520,7 +520,7 @@ end
 -- Trig lock functions
 function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
 
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local trig_lock_param = channel.trig_lock_params[dial_index]
 
   if not trig_lock_param then
@@ -608,7 +608,7 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
 
   if #pressed_keys > 0 and trig_lock_param and trig_lock_param.id then
     for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
+      local s = fn.calc_grid_count(keys[1], keys[2])
       local param_args = {}
 
       for key, arg in pairs(p) do
@@ -636,7 +636,7 @@ function channel_edit_page_ui_controller.handle_trig_lock_param_change_by_direct
 
       local value = params:get(handler_param_id_index)
 
-      program.add_step_param_trig_lock(step, dial_index, value)
+      program.add_step_param_trig_lock(s, dial_index, value)
       m_params[dial_index]:set_value(value)
     end
   elseif p_value and trig_lock_param and trig_lock_param.id then
@@ -840,20 +840,20 @@ end
 
 
 function channel_edit_page_ui_controller.handle_trig_mask_change(direction)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.trig:increment()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_trig_masks[step] = mask_selectors.trig:get_value()
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_trig_masks[s] = mask_selectors.trig:get_value()
       end
     else
       mask_selectors.trig:decrement()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_trig_masks[step] = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_trig_masks[s] = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
       end
     end
   else
@@ -865,26 +865,26 @@ function channel_edit_page_ui_controller.handle_trig_mask_change(direction)
       mask_selectors.trig:decrement()
       program.set_trig_mask(channel, mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value())
     end
-    pattern_controller.update_working_pattern(channel.number)
+    pattern.update_working_pattern(channel.number)
   end
 end
 
 
 function channel_edit_page_ui_controller.handle_note_mask_change(direction)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.note:increment()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_note_masks[step] = mask_selectors.note:get_value()
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_note_masks[s] = mask_selectors.note:get_value()
       end
     else
       mask_selectors.note:decrement()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_note_masks[step] = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_note_masks[s] = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
       end
     end
   else
@@ -896,25 +896,25 @@ function channel_edit_page_ui_controller.handle_note_mask_change(direction)
       mask_selectors.note:decrement()
       program.set_note_mask(channel, mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value())
     end
-    pattern_controller.update_working_pattern(channel.number)
+    pattern.update_working_pattern(channel.number)
   end
 end
 
 function channel_edit_page_ui_controller.handle_velocity_mask_change(direction)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.velocity:increment()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_velocity_masks[step] = mask_selectors.velocity:get_value()
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_velocity_masks[s] = mask_selectors.velocity:get_value()
       end
     else
       mask_selectors.velocity:decrement()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_velocity_masks[step] = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        channel.step_velocity_masks[s] = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
       end
     end
   else
@@ -926,31 +926,31 @@ function channel_edit_page_ui_controller.handle_velocity_mask_change(direction)
       mask_selectors.velocity:decrement()
       program.set_velocity_mask(channel, mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value())
     end
-    pattern_controller.update_working_pattern(channel.number)
+    pattern.update_working_pattern(channel.number)
   end
 end
 
 function channel_edit_page_ui_controller.handle_length_mask_change(direction)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.length:increment()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_length_mask(channel, step, divisions.note_division_values[mask_selectors.length:get_value()])
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_length_mask(channel, s, divisions.note_division_values[mask_selectors.length:get_value()])
       end
     else
       if mask_selectors.length:get_value() ~= 0 then
         mask_selectors.length:decrement()
         for _, keys in ipairs(pressed_keys) do
-          local step = fn.calc_grid_count(keys[1], keys[2])
-          program.set_step_length_mask(channel, step, divisions.note_division_values[mask_selectors.length:get_value()])
+          local s = fn.calc_grid_count(keys[1], keys[2])
+          program.set_step_length_mask(channel, s, divisions.note_division_values[mask_selectors.length:get_value()])
         end
       else
         for _, keys in ipairs(pressed_keys) do
-          local step = fn.calc_grid_count(keys[1], keys[2])
-          program.set_step_length_mask(channel, step, 0)
+          local s = fn.calc_grid_count(keys[1], keys[2])
+          program.set_step_length_mask(channel, s, 0)
           mask_selectors.length:set_value(0)
         end
       end
@@ -969,25 +969,25 @@ function channel_edit_page_ui_controller.handle_length_mask_change(direction)
         program.set_length_mask(channel, nil)
       end
     end
-    pattern_controller.update_working_pattern(channel.number)
+    pattern.update_working_pattern(channel.number)
   end
 end
 
 function channel_edit_page_ui_controller.handle_chord_mask_one_change(direction)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.chords[1]:increment()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 1, step, mask_selectors.chords[1]:get_value())
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 1, s, mask_selectors.chords[1]:get_value())
       end
     else
       mask_selectors.chords[1]:decrement()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 1, step, mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value())
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 1, s, mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value())
       end
     end
   else
@@ -1003,20 +1003,20 @@ function channel_edit_page_ui_controller.handle_chord_mask_one_change(direction)
 end
 
 function channel_edit_page_ui_controller.handle_chord_mask_two_change(direction)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.chords[2]:increment()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 2, step, mask_selectors.chords[2]:get_value())
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 2, s, mask_selectors.chords[2]:get_value())
       end
     else
       mask_selectors.chords[2]:decrement()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 2, step, mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value())
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 2, s, mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value())
       end
     end
   else
@@ -1032,20 +1032,20 @@ function channel_edit_page_ui_controller.handle_chord_mask_two_change(direction)
 end
 
 function channel_edit_page_ui_controller.handle_chord_mask_three_change(direction)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.chords[3]:increment()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 3, step, mask_selectors.chords[3]:get_value())
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 3, s, mask_selectors.chords[3]:get_value())
       end
     else
       mask_selectors.chords[3]:decrement()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 3, step, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value())
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 3, s, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value())
       end
     end
   else
@@ -1061,20 +1061,20 @@ function channel_edit_page_ui_controller.handle_chord_mask_three_change(directio
 end
 
 function channel_edit_page_ui_controller.handle_chord_mask_four_change(direction)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.chords[4]:increment()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 4, step, mask_selectors.chords[4]:get_value())
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 4, s, mask_selectors.chords[4]:get_value())
       end
     else
       mask_selectors.chords[4]:decrement()
       for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 4, step, mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value())
+        local s = fn.calc_grid_count(keys[1], keys[2])
+        program.set_step_chord_mask(channel.number, 4, s, mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value())
       end
     end
   else
@@ -1249,19 +1249,19 @@ function channel_edit_page_ui_controller.handle_encoder_one_negative()
 end
 
 function channel_edit_page_ui_controller.handle_key_two_pressed()
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   if #pressed_keys > 0 then
     for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
+      local s = fn.calc_grid_count(keys[1], keys[2])
       if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
-        program.clear_masks_for_step(step)
-        tooltip:show("Masks for step " .. step .. " cleared")
+        program.clear_masks_for_step(s)
+        tooltip:show("Masks for step " .. s .. " cleared")
         channel_edit_page_ui_controller.refresh_masks()
-        pattern_controller.update_working_pattern(program.get_selected_channel().number)
+        pattern.update_working_pattern(program.get_selected_channel().number)
       end
       if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-        program.clear_trig_locks_for_step(step)
-        tooltip:show("Trig locks for step " .. step .. " cleared")
+        program.clear_trig_locks_for_step(s)
+        tooltip:show("Trig locks for step " .. s .. " cleared")
         channel_edit_page_ui_controller.refresh_trig_locks()
       end
     end
@@ -1284,7 +1284,7 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
         program.clear_masks_for_channel(program.get_selected_channel())
         tooltip:show("Masks for ch " .. program.get_selected_channel().number .. " cleared")
         channel_edit_page_ui_controller.refresh_masks()
-        pattern_controller.update_working_pattern(program.get_selected_channel().number)
+        pattern.update_working_pattern(program.get_selected_channel().number)
       end
     end
     save_confirm.cancel()
@@ -1292,7 +1292,7 @@ function channel_edit_page_ui_controller.handle_key_two_pressed()
 end
 
 function channel_edit_page_ui_controller.handle_key_three_pressed()
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   if #pressed_keys < 1 then
     save_confirm.confirm()
   end

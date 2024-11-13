@@ -1,11 +1,11 @@
-local grid_controller = {}
+local mosaic_grid = {}
 
 local fader = include("mosaic/lib/controls/fader")
 local sequencer = include("mosaic/lib/controls/sequencer")
 local button = include("mosaic/lib/controls/button")
 
-press_handler = include("mosaic/lib/press_handler")
-draw_handler = include("mosaic/lib/draw_handler")
+press = include("mosaic/lib/press")
+draw = include("mosaic/lib/draw")
 grid_abstraction = include("mosaic/lib/grid_abstraction")
 grid_abstraction.init()
 
@@ -56,20 +56,20 @@ function grid.add(new_grid) -- must be grid.add, not g.add (this is a function o
   fn.dirty_grid(true) -- enable flag to redraw grid, because data has changed
 end
 
-function grid_controller.get_pressed_keys()
+function mosaic_grid.get_pressed_keys()
   return pressed_keys
 end
 
-local function register_draw_handlers()
-  trigger_edit_page_controller.register_draw_handlers()
-  note_edit_page_controller.register_draw_handlers()
-  velocity_edit_page_controller.register_draw_handlers()
-  channel_edit_page_controller.register_draw_handlers()
-  scale_edit_page_controller.register_draw_handlers()
-  song_edit_page_controller.register_draw_handlers()
+local function register_draws()
+  trigger_edit_page_controller.register_draws()
+  note_edit_page_controller.register_draws()
+  velocity_edit_page_controller.register_draws()
+  channel_edit_page_controller.register_draws()
+  scale_edit_page_controller.register_draws()
+  song_edit_page_controller.register_draws()
 
 
-  draw_handler:register_grid(
+  draw:register_grid(
     "menu",
     function()
       play_stop_button:draw()
@@ -82,15 +82,15 @@ local function register_draw_handlers()
 end
 
 
-local function register_press_handlers()
-  channel_edit_page_controller.register_press_handlers()
-  scale_edit_page_controller.register_press_handlers()
-  trigger_edit_page_controller.register_press_handlers()
-  note_edit_page_controller.register_press_handlers()
-  velocity_edit_page_controller.register_press_handlers()
-  song_edit_page_controller.register_press_handlers()
+local function register_presss()
+  channel_edit_page_controller.register_presss()
+  scale_edit_page_controller.register_presss()
+  trigger_edit_page_controller.register_presss()
+  note_edit_page_controller.register_presss()
+  velocity_edit_page_controller.register_presss()
+  song_edit_page_controller.register_presss()
 
-  press_handler:register(
+  press:register(
     "menu",
     function(x, y)
       if (y == 8) then
@@ -117,7 +117,7 @@ local function register_press_handlers()
           sync_current_channel_state()
 
           pages.page_to_controller_mappings[program.get_selected_page()].refresh()
-          grid_controller.set_menu_button_state()
+          mosaic_grid.set_menu_button_state()
           tooltip:show(pages.page_names[program.get_selected_page()])
           fn.dirty_screen(true)
           fn.dirty_grid(true)
@@ -125,7 +125,7 @@ local function register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "menu",
     function(x, y)
       if (y == 8) then
@@ -140,13 +140,13 @@ local function register_press_handlers()
               tooltip:show("Stopping playback")
             end
           end
-          grid_controller.set_menu_button_state()
+          mosaic_grid.set_menu_button_state()
           channel_edit_page_controller.refresh_faders()
         end
       end
     end
   )
-  press_handler:register_long(
+  press:register_long(
     "menu",
     function(x, y)
       if (y == 8) then
@@ -154,13 +154,13 @@ local function register_press_handlers()
           if params:get("stop_safety") == 2 then
             clock.transport:stop()
             tooltip:show("Stopping playback")
-            grid_controller.set_menu_button_state()
+            mosaic_grid.set_menu_button_state()
           end
         end
       end
     end
   )
-  press_handler:register_long(
+  press:register_long(
     "menu",
     function(x, y)
       if (y == 8) then
@@ -178,18 +178,18 @@ local function register_press_handlers()
   )
 end
 
-function grid_controller.init()
+function mosaic_grid.init()
   pages.initialise_page_controller_mappings()
-  grid_controller.counter = {}
-  grid_controller.toggled = {}
-  grid_controller.long_press_active = {}
-  grid_controller.disconnect_dismissed = true
+  mosaic_grid.counter = {}
+  mosaic_grid.toggled = {}
+  mosaic_grid.long_press_active = {}
+  mosaic_grid.disconnect_dismissed = true
   for x = 1, 16 do
-    grid_controller.counter[x] = {}
-    grid_controller.long_press_active[x] = {}
+    mosaic_grid.counter[x] = {}
+    mosaic_grid.long_press_active[x] = {}
     for y = 1, 8 do
-      grid_controller.counter[x][y] = nil
-      grid_controller.long_press_active[x][y] = {}
+      mosaic_grid.counter[x][y] = nil
+      mosaic_grid.long_press_active[x][y] = {}
     end
   end
 
@@ -209,53 +209,53 @@ function grid_controller.init()
   velocity_edit_page_controller.init()
   song_edit_page_controller.init()
 
-  grid_controller.set_menu_button_state()
+  mosaic_grid.set_menu_button_state()
 
-  register_draw_handlers()
-  register_press_handlers()
+  register_draws()
+  register_presss()
   
   function g.key(x, y, z)
 
     if z == 1 then
       table.insert(pressed_keys, {x, y})
-      grid_controller.pre_press(x, y)
-      grid_controller.counter[x][y] = clock.run(grid_controller.long_press, x, y)
+      mosaic_grid.pre_press(x, y)
+      mosaic_grid.counter[x][y] = clock.run(mosaic_grid.long_press, x, y)
     elseif z == 0 then -- otherwise, if a grid key is released...
       fn.remove_table_from_table(pressed_keys, {x, y})
   
       local held_button = pressed_keys[1]
   
 
-      if grid_controller.counter[x][y] then -- and the long press is still waiting...
-        clock.cancel(grid_controller.counter[x][y]) -- then cancel the long press clock,
+      if mosaic_grid.counter[x][y] then -- and the long press is still waiting...
+        clock.cancel(mosaic_grid.counter[x][y]) -- then cancel the long press clock,
   
-        if grid_controller.long_press_active[x][y] == true then
-          grid_controller.long_press_active[x][y] = false
+        if mosaic_grid.long_press_active[x][y] == true then
+          mosaic_grid.long_press_active[x][y] = false
         elseif held_button ~= nil then
-          if grid_controller.counter[held_button[1]][held_button[2]] then
-            clock.cancel(grid_controller.counter[held_button[1]][held_button[2]])
+          if mosaic_grid.counter[held_button[1]][held_button[2]] then
+            clock.cancel(mosaic_grid.counter[held_button[1]][held_button[2]])
           end
-          grid_controller.dual_press(held_button[1], held_button[2], x, y)
+          mosaic_grid.dual_press(held_button[1], held_button[2], x, y)
           dual_in_progress = true
         else
           if dual_in_progress ~= true then
-            grid_controller.short_press(x, y) -- and execute a short press instead.
+            mosaic_grid.short_press(x, y) -- and execute a short press instead.
           end
           dual_in_progress = false
         end
       end
-      grid_controller.post_press(x, y)
+      mosaic_grid.post_press(x, y)
     end
   end
 
 
   function g.remove()
-    grid_controller.alert_disconnect()
+    mosaic_grid.alert_disconnect()
   end
 
 end
 
-function grid_controller.set_menu_button_state()
+function mosaic_grid.set_menu_button_state()
   local selected_page = program.get_selected_page()
   channel_edit_button:set_state(selected_page == pages.pages.channel_edit_page and 2 or 1)
   scale_edit_button:set_state(selected_page == pages.pages.scale_edit_page and 2 or 1)
@@ -278,66 +278,66 @@ function grid_controller.set_menu_button_state()
   end
 end
 
-function grid_controller.pre_press(x, y)
-  press_handler:handle_pre(program.get_selected_page(), x, y)
+function mosaic_grid.pre_press(x, y)
+  press:handle_pre(program.get_selected_page(), x, y)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
 end
 
-function grid_controller.post_press(x, y)
-  press_handler:handle_post(program.get_selected_page(), x, y)
+function mosaic_grid.post_press(x, y)
+  press:handle_post(program.get_selected_page(), x, y)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
 end
 
-function grid_controller.short_press(x, y)
-  press_handler:handle(program.get_selected_page(), x, y)
+function mosaic_grid.short_press(x, y)
+  press:handle(program.get_selected_page(), x, y)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
 end
 
-function grid_controller.long_press(x, y)
+function mosaic_grid.long_press(x, y)
   clock.sleep(1)
-  grid_controller.long_press_active[x][y] = true
-  press_handler:handle_long(program.get_selected_page(), x, y)
+  mosaic_grid.long_press_active[x][y] = true
+  press:handle_long(program.get_selected_page(), x, y)
   fn.dirty_grid(true)
 end
 
-function grid_controller.dual_press(x, y, x2, y2)
-  press_handler:handle_dual(program.get_selected_page(), x, y, x2, y2)
+function mosaic_grid.dual_press(x, y, x2, y2)
+  press:handle_dual(program.get_selected_page(), x, y, x2, y2)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
 end
 
-function grid_controller.redraw()
+function mosaic_grid.redraw()
   g:all(0)
 
-  draw_handler:handle_grid(program.get_selected_page())
+  draw:handle_grid(program.get_selected_page())
 
   g:refresh()
 end
 
 
-function grid_controller.grid_redraw()
+function mosaic_grid.grid_redraw()
   if grid_connected then
     if fn.dirty_grid() == true then
-      grid_controller.redraw()
+      mosaic_grid.redraw()
       fn.dirty_grid(false)
     end
   end
 end
 
-function grid_controller.refresh()
+function mosaic_grid.refresh()
   channel_edit_page_controller.refresh()
   song_edit_page_controller.refresh()
   trigger_edit_page_controller.refresh()
   note_edit_page_controller.refresh()
   velocity_edit_page_controller.refresh()
-  grid_controller.set_menu_button_state()
+  mosaic_grid.set_menu_button_state()
 end
 
-function grid_controller.alert_disconnect() 
+function mosaic_grid.alert_disconnect() 
   print("Grid disconnected")
 end
 
-return grid_controller
+return mosaic_grid

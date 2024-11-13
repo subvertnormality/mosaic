@@ -42,8 +42,8 @@ local trig_edit_options_page =
   end
 )
 
-function trigger_edit_page_ui_controller.register_ui_draw_handlers()
-  draw_handler:register_ui(
+function trigger_edit_page_ui_controller.register_ui_draws()
+  draw:register_ui(
     "trigger_edit_page",
     function()
       pages:draw()

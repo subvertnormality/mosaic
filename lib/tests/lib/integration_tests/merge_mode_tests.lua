@@ -1,12 +1,12 @@
-pattern_controller = include("mosaic/lib/pattern_controller")
+pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock_controller")
+local clock_controller = include("mosaic/lib/clock/clock_controller")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/midi_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/mosaic_midi_mock")
 include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
@@ -117,7 +117,7 @@ function test_trig_merge_modes_skip()
 
   program.get_channel(1).trig_merge_mode = "skip"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -243,7 +243,7 @@ function test_trig_merge_modes_only()
 
   program.get_channel(1).trig_merge_mode = "only"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -372,7 +372,7 @@ function test_trig_merge_modes_all()
 
   program.get_channel(1).trig_merge_mode = "all"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -508,7 +508,7 @@ function test_trig_mask_stops_steps_trigging()
 
   program.get_channel(1).trig_merge_mode = "all"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -643,7 +643,7 @@ function test_trig_mask_can_force_steps_trigging()
 
   program.get_channel(1).trig_merge_mode = "all"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -783,7 +783,7 @@ function test_note_merge_modes_up()
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).note_merge_mode = "up"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -922,7 +922,7 @@ function test_note_merge_modes_pattern_number_1()
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).note_merge_mode = "pattern_number_1"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1062,7 +1062,7 @@ function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_ev
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).note_merge_mode = "pattern_number_1"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1202,7 +1202,7 @@ function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_ev
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).note_merge_mode = "pattern_number_1"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -1327,7 +1327,7 @@ function test_note_merge_modes_down()
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).note_merge_mode = "down"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1469,7 +1469,7 @@ function test_note_merge_modes_average()
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).note_merge_mode = "average"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1609,7 +1609,7 @@ function test_velocity_merge_modes_up()
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).velocity_merge_mode = "up"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1749,7 +1749,7 @@ function test_velocity_merge_modes_up()
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).velocity_merge_mode = "down"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1889,7 +1889,7 @@ function test_velocity_merge_modes_up()
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).velocity_merge_mode = "average"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1961,7 +1961,7 @@ function test_trig_merge_modes_with_inactive_patterns()
   -- Test with only pattern 1 active
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
   program.get_channel(1).trig_merge_mode = "skip"
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -1974,7 +1974,7 @@ function test_trig_merge_modes_with_inactive_patterns()
   
   -- Enable second pattern and verify behavior changes
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   
   progress_clock_by_beats(3)
   note_on_event = table.remove(midi_note_on_events, 1)
@@ -2004,7 +2004,7 @@ function test_note_merge_modes_with_octave_shifts()
   -- Test average mode
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).note_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -2035,7 +2035,7 @@ function test_velocity_merge_with_extreme_values()
   -- Test different velocity merge modes with extreme values
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).velocity_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -2075,7 +2075,7 @@ function test_length_merge_with_multiple_patterns()
   -- Test average length merge mode
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).length_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -2123,7 +2123,7 @@ function test_combined_merge_modes_integration()
   program.get_channel(1).velocity_merge_mode = "down"
   program.get_channel(1).length_merge_mode = "average"
   
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
 
   clock_setup()
@@ -2174,7 +2174,7 @@ function test_pattern_specific_merge_modes()
   program.get_channel(1).note_merge_mode = "pattern_number_1"
   program.get_channel(1).velocity_merge_mode = "pattern_number_2"
   
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -2210,7 +2210,7 @@ function test_merge_modes_with_rests()
   
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).note_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -2267,7 +2267,7 @@ function test_note_merge_modes_calculation()
   -- Test average mode
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).note_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -2277,7 +2277,7 @@ function test_note_merge_modes_calculation()
   
   -- Test up mode
   program.get_channel(1).note_merge_mode = "up"
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   
   progress_clock_by_beats(1)
   note_on_event = table.remove(midi_note_on_events, 1)
@@ -2286,7 +2286,7 @@ function test_note_merge_modes_calculation()
   
   -- Test down mode
   program.get_channel(1).note_merge_mode = "down"
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   
   progress_clock_by_beats(1)
   note_on_event = table.remove(midi_note_on_events, 1)
@@ -2324,7 +2324,7 @@ function test_merge_modes_at_pattern_boundaries()
   
   program.get_channel(1).trig_merge_mode = "all"
   program.get_channel(1).note_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   
   -- Move to pattern boundary
   program.set_current_step_for_channel(1, 63)

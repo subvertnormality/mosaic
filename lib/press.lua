@@ -1,15 +1,15 @@
-local press_handler = {}
+local press = {}
 
 
 -- Create a table for the handlers
-press_handler.handlers = {}
-press_handler.dual_handlers = {}
-press_handler.long_handlers = {}
-press_handler.pre_handlers = {}
-press_handler.post_handlers = {}
+press.handlers = {}
+press.dual_handlers = {}
+press.long_handlers = {}
+press.pre_handlers = {}
+press.post_handlers = {}
 
 -- Register a function with a page
-function press_handler:register(page, func)
+function press:register(page, func)
   -- If no functions have been registered for this page yet, create a new list
   if self.handlers[page] == nil then
     self.handlers[page] = {}
@@ -20,7 +20,7 @@ function press_handler:register(page, func)
 end
 
 -- Register a function with a page
-function press_handler:register_dual(page, func)
+function press:register_dual(page, func)
   -- If no functions have been registered for this page yet, create a new list
   if self.dual_handlers[page] == nil then
     self.dual_handlers[page] = {}
@@ -30,7 +30,7 @@ function press_handler:register_dual(page, func)
   table.insert(self.dual_handlers[page], func)
 end
 
-function press_handler:register_long(page, func)
+function press:register_long(page, func)
   -- If no functions have been registered for this page yet, create a new list
   if self.long_handlers[page] == nil then
     self.long_handlers[page] = {}
@@ -40,7 +40,7 @@ function press_handler:register_long(page, func)
   table.insert(self.long_handlers[page], func)
 end
 
-function press_handler:register_pre(page, func)
+function press:register_pre(page, func)
   -- If no functions have been registered for this page yet, create a new list
   if self.pre_handlers[page] == nil then
     self.pre_handlers[page] = {}
@@ -50,7 +50,7 @@ function press_handler:register_pre(page, func)
   table.insert(self.pre_handlers[page], func)
 end
 
-function press_handler:register_post(page, func)
+function press:register_post(page, func)
   -- If no functions have been registered for this page yet, create a new list
   if self.post_handlers[page] == nil then
     self.post_handlers[page] = {}
@@ -61,7 +61,7 @@ function press_handler:register_post(page, func)
 end
 
 -- Call all functions registered with a page
-function press_handler:handle(page, x, y)
+function press:handle(page, x, y)
 
   local found_page = fn.find_key(pages.pages, page)
   
@@ -85,7 +85,7 @@ function press_handler:handle(page, x, y)
 end
 
 -- Call all functions registered with a page
-function press_handler:handle_dual(page, x, y, x2, y2)
+function press:handle_dual(page, x, y, x2, y2)
 
   local found_page = fn.find_key(pages.pages, page)
 
@@ -102,7 +102,7 @@ function press_handler:handle_dual(page, x, y, x2, y2)
   autosave_reset()
 end
 
-function press_handler:handle_long(page, x, y)
+function press:handle_long(page, x, y)
 
   local found_page = fn.find_key(pages.pages, page)
 
@@ -124,7 +124,7 @@ function press_handler:handle_long(page, x, y)
   autosave_reset()
 end
 
-function press_handler:handle_pre(page, x, y)
+function press:handle_pre(page, x, y)
 
   local found_page = fn.find_key(pages.pages, page)
 
@@ -139,7 +139,7 @@ function press_handler:handle_pre(page, x, y)
   end
 end
 
-function press_handler:handle_post(page, x, y)
+function press:handle_post(page, x, y)
 
   local found_page = fn.find_key(pages.pages, page)
 
@@ -154,4 +154,4 @@ function press_handler:handle_post(page, x, y)
   end
 end
 
-return press_handler
+return press

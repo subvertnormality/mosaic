@@ -28,8 +28,8 @@ function song_edit_page_controller.init()
   )
 end
 
-function song_edit_page_controller.register_draw_handlers()
-  draw_handler:register_grid(
+function song_edit_page_controller.register_draws()
+  draw:register_grid(
     "song_edit_page",
     function()
       local sequencer_pattern = program.get().selected_sequencer_pattern
@@ -49,7 +49,7 @@ function song_edit_page_controller.register_draw_handlers()
     end
   )
 
-  draw_handler:register_grid(
+  draw:register_grid(
     "song_edit_page",
     function()
       global_pattern_length_fader:draw()
@@ -57,8 +57,8 @@ function song_edit_page_controller.register_draw_handlers()
   )
 end
 
-function song_edit_page_controller.register_press_handlers()
-  press_handler:register(
+function song_edit_page_controller.register_presss()
+  press:register(
     "song_edit_page",
     function(x, y)
       local s = fn.calc_grid_count(x, y) + 48
@@ -111,15 +111,15 @@ function song_edit_page_controller.register_press_handlers()
         end
 
         if clock_controller.is_playing() then
-          step_handler.execute_blink_cancel_func()
-          step_handler.queue_switch_to_next_song_pattern_func(do_func)
-          step_handler.queue_switch_to_next_song_pattern_blink_cancel_func(blink_cancel_func)
-          step_handler.queue_next_song_pattern(s)
+          step.execute_blink_cancel_func()
+          step.queue_switch_to_next_song_pattern_func(do_func)
+          step.queue_switch_to_next_song_pattern_blink_cancel_func(blink_cancel_func)
+          step.queue_next_song_pattern(s)
 
           channel_pattern_buttons["step" .. s .. "_sequencer_pattern_button"]:blink()
         else
           if params:get("elektron_program_changes") == 2 then
-            step_handler.process_elektron_program_change(s)
+            step.process_elektron_program_change(s)
           end
           do_func()
         end
@@ -127,7 +127,7 @@ function song_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register(
+  press:register(
     "song_edit_page",
     function(x, y)
       if global_pattern_length_fader:is_this(x, y) then
@@ -137,7 +137,7 @@ function song_edit_page_controller.register_press_handlers()
         local new_pattern_length = global_pattern_length_fader:get_value()
         if clock_controller.is_playing() then
           tooltip:show("Q'd: Global pattern length: " .. new_pattern_length)
-          step_handler.queue_for_pattern_change(function()
+          step.queue_for_pattern_change(function()
             program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = new_pattern_length
             clock_controller.get_clock_lattice().pattern_length = new_pattern_length
             program.get().global_step_accumulator = 0
@@ -150,7 +150,7 @@ function song_edit_page_controller.register_press_handlers()
       end
     end
   )
-  press_handler:register_dual(
+  press:register_dual(
     "song_edit_page",
     function(x, y, x2, y2)
       local pattern = fn.calc_grid_count(x, y) + 48

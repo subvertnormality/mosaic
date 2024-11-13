@@ -7,8 +7,8 @@ local grid_viewer = grid_viewer:new(0, 3)
 function velocity_edit_page_ui_controller.change_page(subpage_name)
 end
 
-function velocity_edit_page_ui_controller.register_ui_draw_handlers()
-  draw_handler:register_ui(
+function velocity_edit_page_ui_controller.register_ui_draws()
+  draw:register_ui(
     "velocity_edit_page",
     function()
       grid_viewer:draw()

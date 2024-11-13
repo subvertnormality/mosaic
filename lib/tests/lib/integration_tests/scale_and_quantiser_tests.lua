@@ -1,13 +1,13 @@
-step_handler = include("mosaic/lib/step_handler")
-pattern_controller = include("mosaic/lib/pattern_controller")
+step = include("mosaic/lib/step")
+pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock_controller")
+local clock_controller = include("mosaic/lib/clock/clock_controller")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/midi_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/mosaic_midi_mock")
 include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
@@ -69,7 +69,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     clock_setup()
   
@@ -115,7 +115,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     clock_setup()
   
@@ -197,7 +197,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     clock_setup()
   
@@ -341,7 +341,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     clock_setup()
   
@@ -498,7 +498,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 2)
 
 
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     clock_setup()
   
@@ -579,7 +579,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     clock_setup()
   
@@ -639,7 +639,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     clock_setup()
   
@@ -724,7 +724,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     local correct_note_values = {
       60, 0, 64, 0, 60, 0, 64, 0, 
@@ -834,7 +834,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
 
     local correct_note_values = {
       60, 0, 64, 0, 60, 0, 64, 0, 
@@ -946,7 +946,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
     fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
 
     local correct_note_values = {
       60, 0, 64, 0, 60, 0, 64, 0, 
@@ -1017,7 +1017,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -1065,7 +1065,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   
@@ -1111,7 +1111,7 @@ function test_chord_degree_rotation_with_negative_octave_mod()
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   
@@ -1200,7 +1200,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   
@@ -1352,7 +1352,7 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   
@@ -1462,7 +1462,7 @@ function test_global_transpose_applies_to_notes()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   progress_clock_by_beats(1)
   
@@ -1511,7 +1511,7 @@ function test_step_transpose_overrides_global_transpose()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   progress_clock_by_beats(1)
   
@@ -1555,7 +1555,7 @@ function test_negative_transpose_values()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   progress_clock_by_beats(1)
   
@@ -1607,7 +1607,7 @@ function test_transpose_resets_at_pattern_start()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   
   -- First pattern
@@ -1663,7 +1663,7 @@ function test_transpose_with_octave_modification()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   progress_clock_by_beats(1)
   
@@ -1711,7 +1711,7 @@ function test_scale_transpose_applies_to_notes()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   progress_clock_by_beats(1)
   
@@ -1759,7 +1759,7 @@ function test_transpose_hierarchy_step_transpose_adds_to_scale_transpose()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   progress_clock_by_beats(1)
   
@@ -1800,7 +1800,7 @@ function test_transpose_hierarchy_scale_transpose_adds_to_global()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   progress_clock_by_beats(1)
   
@@ -1855,7 +1855,7 @@ function test_transpose_hierarchy_should_fall_back_to_global_on_new_scale_step()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   
   -- First step - should use step transpose
@@ -1930,7 +1930,7 @@ function test_transpose_hierarchy_uses_scale_transpose()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   
   -- First pattern
@@ -1990,7 +1990,7 @@ function test_transpose_hierarchy_fallback_to_global()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   progress_clock_by_beats(1)
   
@@ -2034,7 +2034,7 @@ function test_multiple_scale_transpose_changes()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   
   -- First note - uses scale 2's transpose + global
@@ -2101,7 +2101,7 @@ function test_transpose_persistence_across_steps_until_next_scale_trig_lock()
   program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
   fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   
   -- First step

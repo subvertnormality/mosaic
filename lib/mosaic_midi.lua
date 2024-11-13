@@ -1,11 +1,11 @@
 
-local step_handler = include("mosaic/lib/step_handler")
+local step = include("mosaic/lib/step")
 local quantiser = include("mosaic/lib/quantiser")
 
-local midi_controller = {}
+local mosaic_midi = {}
 
 midi_devices = {}
-midi_controller.note_counts = {}  -- Initialize note counts table
+mosaic_midi.note_counts = {}  -- Initialize note counts table
 
 midi_devices = {}
 
@@ -39,7 +39,7 @@ function handle_midi_event_data(data, midi_device)
     return 
   end
 
-  local transpose = step_handler.calculate_step_transpose(program.get().current_step, channel.number)
+  local transpose = step.calculate_step_transpose(program.get().current_step, channel.number)
   local device = program.get().devices[channel.number]
   local midi_channel = device.midi_channel
   local velocity = data[3]
@@ -52,12 +52,12 @@ function handle_midi_event_data(data, midi_device)
 
     local step_scale_number = channel.step_scale_number
 
-    local pressed_keys = grid_controller.get_pressed_keys()
+    local pressed_keys = mosaic_grid.get_pressed_keys()
     local channel = program.get_selected_channel()
     if #pressed_keys > 0 then
       if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
-        local step = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
-        step_scale_number = step_handler.manually_calculate_step_scale_number(channel.number, step)
+        local s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+        step_scale_number = step.manually_calculate_step_scale_number(channel.number, s)
       end
     end
 
@@ -66,7 +66,7 @@ function handle_midi_event_data(data, midi_device)
       note = data[2]
     end
     midi_off_store[data[2]] = note
-    midi_controller:note_on(note, velocity, midi_channel, device.midi_device)
+    mosaic_midi:note_on(note, velocity, midi_channel, device.midi_device)
     if chord_number == 0 then 
       chord_one_note = note 
     end
@@ -80,13 +80,13 @@ function handle_midi_event_data(data, midi_device)
       chord_degree = nil
     end
 
-    channel_edit_page_controller.handle_note_on_midi_controller_message(note, velocity, chord_number, chord_degree)
+    channel_edit_page_controller.handle_note_on_mosaic_midi_message(note, velocity, chord_number, chord_degree)
   elseif data[1] == 128 then -- note off
     local stored_note = midi_off_store[data[2]]
     if stored_note == nil then
       return
     end
-    midi_controller:note_off(stored_note, 0, midi_channel, device.midi_device)
+    mosaic_midi:note_off(stored_note, 0, midi_channel, device.midi_device)
     chord_number = chord_number - 1
     if chord_number == 0 then 
       chord_one_note = nil 
@@ -144,7 +144,7 @@ function handle_midi_event_data(data, midi_device)
   end 
 end
 
-function midi_controller.init()
+function mosaic_midi.init()
   for i = 1, #midi.vports do
     midi_devices[i] = midi.connect(i)
     midi_devices[i].event = function(data) 
@@ -153,7 +153,7 @@ function midi_controller.init()
   end
 end
 
-function midi_controller.get_midi_outs()
+function mosaic_midi.get_midi_outs()
   local midi_outs = {}
   for i = 1, #midi.vports do
     if midi_devices[i] and midi_devices[i].name ~= "none" and midi_devices[i].name ~= "Norns2sinfonion" then
@@ -168,7 +168,7 @@ function midi_controller.get_midi_outs()
 end
 
 
-function midi_controller.send_to_sinfonion(command, value)
+function mosaic_midi.send_to_sinfonion(command, value)
   for id = 1, #midi_devices do
 
     if midi_devices[id] and midi_devices[id].name == "Norns2sinfonion" then
@@ -177,14 +177,14 @@ function midi_controller.send_to_sinfonion(command, value)
   end
 end
 
-function midi_controller:reset_note_counts()
+function mosaic_midi:reset_note_counts()
   for device = 1, #midi_devices do
     self.note_counts[device] = nil
   end
 end
 
 
-function midi_controller:note_on(note, velocity, channel, device)
+function mosaic_midi:note_on(note, velocity, channel, device)
   if midi_devices[device] ~= nil then
     -- Initialize tables if necessary
     if not self.note_counts[device] then
@@ -205,7 +205,7 @@ function midi_controller:note_on(note, velocity, channel, device)
   end
 end
 
-function midi_controller:note_off(note, velocity, channel, device)
+function mosaic_midi:note_off(note, velocity, channel, device)
   if midi_devices[device] ~= nil then
     -- Check if the note is currently on
     if self.note_counts[device] and self.note_counts[device][channel] and self.note_counts[device][channel][note] then
@@ -225,7 +225,7 @@ function midi_controller:note_off(note, velocity, channel, device)
   end
 end
 
-function midi_controller.cc(cc_msb, cc_lsb, value, channel, device)
+function mosaic_midi.cc(cc_msb, cc_lsb, value, channel, device)
   if midi_devices[device] ~= nil then
     -- Send MSB
     local cc_msb_value = cc_lsb and math.floor(value / 128) or value
@@ -238,10 +238,10 @@ function midi_controller.cc(cc_msb, cc_lsb, value, channel, device)
   end
 end
 
-function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
+function mosaic_midi.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
   -- Select NRPN (LSB and MSB)
-  midi_controller.cc(99, nil, nrpn_msb, channel, device)
-  midi_controller.cc(98, nil, nrpn_lsb, channel, device)
+  mosaic_midi.cc(99, nil, nrpn_msb, channel, device)
+  mosaic_midi.cc(98, nil, nrpn_lsb, channel, device)
 
 
   -- Calculate MSB and LSB from value
@@ -249,19 +249,19 @@ function midi_controller.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
   local lsb_value = value % 128  -- LSB
 
   -- Send MSB and LSB values
-  midi_controller.cc(6, nil, msb_value, channel, device)
-  midi_controller.cc(38, nil, lsb_value/2, channel, device)
+  mosaic_midi.cc(6, nil, msb_value, channel, device)
+  mosaic_midi.cc(38, nil, lsb_value/2, channel, device)
 
 end
 
 
-function midi_controller:program_change(program_id, channel, device)
+function mosaic_midi:program_change(program_id, channel, device)
   if midi_devices[device] ~= nil then
     midi_devices[device]:program_change(program_id, channel)
   end
 end
 
-function midi_controller.start()
+function mosaic_midi.start()
 
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
@@ -271,7 +271,7 @@ function midi_controller.start()
 
 end
 
-function midi_controller:all_notes_off()
+function mosaic_midi:all_notes_off()
   for device, channels in pairs(self.note_counts) do
     if midi_devices[device] ~= nil then
       for channel, notes in pairs(channels) do
@@ -297,9 +297,9 @@ function midi_controller:all_notes_off()
 end
 
 -- Modify the stop function
-function midi_controller.stop()
+function mosaic_midi.stop()
   -- Turn off all active notes
-  midi_controller:all_notes_off()
+  mosaic_midi:all_notes_off()
 
   -- Stop MIDI devices
   for id = 1, #midi.vports do
@@ -309,12 +309,12 @@ function midi_controller.stop()
   end
 
   -- Reset note counts
-  midi_controller.note_counts = {}
+  mosaic_midi.note_counts = {}
   chord_number = 0
 end
 
 
-midi_controller.all_off = scheduler.debounce(function (id)
+mosaic_midi.all_off = scheduler.debounce(function (id)
   for note = 0, 127 do
     for channel = 1, 16 do
       midi_devices[id]:note_off(note, 0, channel)
@@ -322,22 +322,22 @@ midi_controller.all_off = scheduler.debounce(function (id)
     coroutine.yield()
   end
   -- Reset note counts for this device
-  midi_controller.note_counts[id] = nil
+  mosaic_midi.note_counts[id] = nil
   chord_number = 0
 end)
 
-function midi_controller.panic()
+function mosaic_midi.panic()
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
-      midi_controller.all_off(id)
+      mosaic_midi.all_off(id)
     end
   end
   -- Clear all note counts
-  midi_controller.note_counts = {}
+  mosaic_midi.note_counts = {}
   chord_number = 0
 end
 
-function midi_controller.midi_devices_connected() 
+function mosaic_midi.midi_devices_connected() 
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
       return true
@@ -346,4 +346,4 @@ function midi_controller.midi_devices_connected()
   return false
 end
 
-return midi_controller
+return mosaic_midi

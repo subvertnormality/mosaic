@@ -6,7 +6,7 @@ local divisions = include("lib/divisions")
 local throttle_time = 0.01
 
 channel_edit_page_ui_refreshers.refresh_masks = scheduler.debounce(function(note_selectors)
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
 
   -- Cache frequently accessed selectors
@@ -37,16 +37,16 @@ channel_edit_page_ui_refreshers.refresh_masks = scheduler.debounce(function(note
     local step_chord_masks = channel.step_chord_masks
 
     for _, keys in ipairs(pressed_keys) do
-      local step = fn.calc_grid_count(keys[1], keys[2])
+      local s = fn.calc_grid_count(keys[1], keys[2])
 
       -- Set note selector values using cached masks
-      note_selector:set_value(step_note_masks[step] or note_mask)
-      velocity_selector:set_value(step_velocity_masks[step] or velocity_mask)
-      length_selector:set_value(divisions.note_division_indexes[step_length_masks[step]] or length_mask_index)
-      trig_selector:set_value(step_trig_masks[step] or trig_mask)
+      note_selector:set_value(step_note_masks[s] or note_mask)
+      velocity_selector:set_value(step_velocity_masks[s] or velocity_mask)
+      length_selector:set_value(divisions.note_division_indexes[step_length_masks[s]] or length_mask_index)
+      trig_selector:set_value(step_trig_masks[s] or trig_mask)
 
       -- Get step chord masks or default chord masks
-      local step_chords = step_chord_masks[step] or chord_masks
+      local step_chords = step_chord_masks[s] or chord_masks
 
       for i, chord_selector in ipairs(chord_selectors) do
         chord_selector:set_value(step_chords[i] or chord_masks[i])
@@ -140,7 +140,7 @@ end, throttle_time)
 
 channel_edit_page_ui_refreshers.refresh_trig_locks = scheduler.debounce(function(m_params)
   local channel = program.get_selected_channel()
-  local pressed_keys = grid_controller.get_pressed_keys()
+  local pressed_keys = mosaic_grid.get_pressed_keys()
   local current_step = program.get_current_step_for_channel(channel.number)
 
   -- Process all updates in a single batch
