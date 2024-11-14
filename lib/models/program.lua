@@ -683,4 +683,43 @@ function program.toggle_blink_state()
   program.get().blink_state = not program.get().blink_state
 end
 
+function program.update_working_pattern_for_step(channel, step, note, velocity, length)
+  if not channel.working_pattern then
+    channel.working_pattern = program.initialise_default_pattern()
+  end
+  
+  if note then
+    channel.working_pattern.note_values[step] = note
+  end
+  
+  if velocity then
+    channel.working_pattern.velocity_values[step] = velocity
+  end
+  
+  if length then
+    channel.working_pattern.lengths[step] = length
+  end
+  
+  -- Set trig value to 1 when a note is added
+  if note or velocity or length then
+    channel.working_pattern.trig_values[step] = 1
+  end
+end
+
+function program.update_working_pattern_trig(channel, step, value)
+  if not channel.working_pattern then
+    channel.working_pattern = program.initialise_default_pattern()
+  end
+  channel.working_pattern.trig_values[step] = value
+end
+
+function program.clear_working_pattern_for_step(channel, step)
+  if not channel.working_pattern then return end
+  
+  channel.working_pattern.trig_values[step] = 0
+  channel.working_pattern.note_values[step] = 0
+  channel.working_pattern.velocity_values[step] = 100 -- Default velocity
+  channel.working_pattern.lengths[step] = 1 -- Default length
+end
+
 return program
