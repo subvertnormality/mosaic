@@ -110,6 +110,10 @@ local function validate_velocity(velocity)
   return type(velocity) == "number" and velocity >= 0 and velocity <= 127
 end
 
+local function validate_length(length)
+  return type(length) == "number" and length > 0
+end
+
 local function validate_chord_degrees(degrees)
   if not degrees then return true end
   if type(degrees) ~= "table" then return false end
@@ -139,13 +143,15 @@ function recorder.init()
   state.global_index = create_step_index()
 end
 
-function recorder.add_step(channel, step, note, velocity, chord_degrees, song_pattern)
+function recorder.add_step(channel, step, note, velocity, length, chord_degrees, song_pattern)
   -- Fast validation
   if not (channel and validate_step(step) and validate_note(note) and 
-          validate_velocity(velocity) and validate_chord_degrees(chord_degrees)) then
+          validate_velocity(velocity) and validate_length(length or 1) and 
+          validate_chord_degrees(chord_degrees)) then
     return
   end
 
+  length = length or 1
   song_pattern = song_pattern or program.get().selected_sequencer_pattern
   
   local pc_key = song_pattern .. "_" .. channel.number
@@ -189,6 +195,7 @@ function recorder.add_step(channel, step, note, velocity, chord_degrees, song_pa
       step = step,
       note = note,
       velocity = velocity,
+      length = length,
       chord_degrees = chord_degrees and #chord_degrees > 0 
         and table_move(chord_degrees, 1, #chord_degrees, 1, {}) 
         or nil,
@@ -208,7 +215,7 @@ function recorder.add_step(channel, step, note, velocity, chord_degrees, song_pa
   channel.step_trig_masks[step] = 1
   channel.step_note_masks[step] = note
   channel.step_velocity_masks[step] = velocity
-  channel.step_length_masks[step] = 1
+  channel.step_length_masks[step] = length
 
   -- Update chord state
   if chord_degrees and #chord_degrees > 0 then
@@ -218,7 +225,7 @@ function recorder.add_step(channel, step, note, velocity, chord_degrees, song_pa
     channel.step_chord_masks[step] = nil
   end
 
-  program.update_working_pattern_for_step(channel, step, note, velocity, 1)
+  program.update_working_pattern_for_step(channel, step, note, velocity, length)
 end
 
 function recorder.undo(sequencer_pattern, channel_number)
@@ -238,7 +245,7 @@ function recorder.undo(sequencer_pattern, channel_number)
         channel.step_trig_masks[step] = 1
         channel.step_note_masks[step] = prev_event.data.note
         channel.step_velocity_masks[step] = prev_event.data.velocity
-        channel.step_length_masks[step] = 1
+        channel.step_length_masks[step] = prev_event.data.length
 
         if prev_event.data.chord_degrees then
           if not channel.step_chord_masks then channel.step_chord_masks = {} end
@@ -258,7 +265,7 @@ function recorder.undo(sequencer_pattern, channel_number)
           step,
           prev_event.data.note,
           prev_event.data.velocity,
-          1
+          prev_event.data.length
         )
       else
         restore_step_state(channel, event.data.original_state)
@@ -293,7 +300,7 @@ function recorder.redo(sequencer_pattern, channel_number)
       channel.step_trig_masks[step] = 1
       channel.step_note_masks[step] = event.data.note
       channel.step_velocity_masks[step] = event.data.velocity
-      channel.step_length_masks[step] = 1
+      channel.step_length_masks[step] = event.data.length
 
       if event.data.chord_degrees then
         if not channel.step_chord_masks then channel.step_chord_masks = {} end
@@ -313,7 +320,7 @@ function recorder.redo(sequencer_pattern, channel_number)
         step,
         event.data.note,
         event.data.velocity,
-        1
+        event.data.length
       )
 
       if state.event_history[state.current_event_index + 1] == event then
