@@ -1,5 +1,61 @@
 local recorder = {}
 
+local MAX_HISTORY_SIZE = 1000
+
+local function create_ring_buffer(max_size)
+  local buffer = {
+    buffer = {},
+    start = 1,
+    size = 0,
+    max_size = max_size,
+    total_size = 0,  -- Changed from total_added to total_size
+    
+    push = function(self, event)
+      local index
+      if self.size < self.max_size then
+        self.size = self.size + 1
+        index = self.size
+      else
+        index = self.start
+        self.start = (self.start % self.max_size) + 1
+      end
+    
+      self.buffer[index] = event
+      self.total_size = self.total_size + 1
+      return self.size
+    end,
+    
+    get = function(self, position)
+      if position and position > 0 and position <= self.size then
+        local actual_pos = ((self.start + position - 2) % self.max_size) + 1
+        return self.buffer[actual_pos]
+      end
+      return nil
+    end,
+    
+    get_size = function(self)
+      return self.size
+    end,
+    
+    truncate = function(self, position)
+      if position < self.size then
+        self.size = position
+        self.total_size = position
+      end
+    end
+  }
+  return buffer
+end
+
+
+local function reset_step_indices(pc_state)
+  pc_state.step_indices = create_step_index()
+  for i = 1, pc_state.event_history.size do
+    local event = pc_state.event_history:get(i)
+    update_step_index(pc_state.step_indices, event.data.step, i)
+  end
+end
+
 -- Pre-allocate common tables
 local empty_table = {}
 local default_working_pattern = {
@@ -130,14 +186,14 @@ end
 -- Main state table with optimized indexing
 local state = {
   pattern_channels = {},
-  event_history = {},
+  event_history = create_ring_buffer(MAX_HISTORY_SIZE),
   current_event_index = 0,
   global_index = create_step_index()
 }
 
 function recorder.init()
   state.pattern_channels = {}
-  state.event_history = {}
+  state.event_history = create_ring_buffer(MAX_HISTORY_SIZE)
   state.current_event_index = 0
   state.global_index = create_step_index()
 end
@@ -152,12 +208,12 @@ function recorder.add_step(channel, step, note, velocity, length, chord_degrees,
 
   song_pattern = song_pattern or program.get().selected_sequencer_pattern
   
-  local pc_key = song_pattern .. "_" .. channel.number
+  local pc_key = string.format("%d_%d", song_pattern, channel.number)
   local pc_state = state.pattern_channels[pc_key]
   
   if not pc_state then
     pc_state = {
-      event_history = {},
+      event_history = create_ring_buffer(MAX_HISTORY_SIZE),
       current_index = 0,
       step_indices = create_step_index(),
       original_states = {}
@@ -171,19 +227,10 @@ function recorder.add_step(channel, step, note, velocity, length, chord_degrees,
   end
 
   -- Truncate future events
-  if #state.event_history > state.current_event_index then
-    for i = state.current_event_index + 1, #state.event_history do
-      state.event_history[i] = nil
-    end
-  end
-  
-  if #pc_state.event_history > pc_state.current_index then
-    for i = pc_state.current_index + 1, #pc_state.event_history do
-      pc_state.event_history[i] = nil  
-    end
-  end
+  state.event_history:truncate(state.current_event_index)
+  pc_state.event_history:truncate(pc_state.current_index)
 
-  -- Create event with minimal copying
+  -- Create and add event
   local event = {
     data = {
       channel_number = channel.number,
@@ -194,21 +241,40 @@ function recorder.add_step(channel, step, note, velocity, length, chord_degrees,
       length = length,
       chord_degrees = chord_degrees and #chord_degrees > 0 
         and table_move(chord_degrees, 1, #chord_degrees, 1, {}) 
-        or chord_degrees,  -- preserve nil vs {} distinction
+        or chord_degrees,
       original_state = pc_state.original_states[step_key]
     }
   }
 
-  pc_state.current_index = pc_state.current_index + 1
-  pc_state.event_history[pc_state.current_index] = event
-  state.event_history[state.current_event_index + 1] = event
-  state.current_event_index = state.current_event_index + 1
+  -- Add to histories and check for buffer wraps
+  local new_size, did_wrap = state.event_history:push(event)
+  state.current_event_index = new_size
+  
+  local pc_new_size, pc_did_wrap = pc_state.event_history:push(event)
+  pc_state.current_index = pc_new_size
 
-  -- Update indices
-  update_step_index(pc_state.step_indices, step, pc_state.current_index)
-  update_step_index(state.global_index, step, state.current_event_index)
+  -- Reset indices if buffers wrapped
+  if did_wrap then
+    state.global_index = create_step_index()
+    for i = 1, state.event_history.size do
+      local hist_event = state.event_history:get(i)
+      update_step_index(state.global_index, hist_event.data.step, i)
+    end
+  end
+  
+  if pc_did_wrap then
+    pc_state.step_indices = create_step_index()
+    for i = 1, pc_state.event_history.size do
+      local hist_event = pc_state.event_history:get(i)
+      update_step_index(pc_state.step_indices, hist_event.data.step, i)
+    end
+  else
+    -- Only update indices if no wrap occurred
+    update_step_index(pc_state.step_indices, step, pc_state.current_index)
+    update_step_index(state.global_index, step, state.current_event_index)
+  end
 
-  -- Only update channel state for non-nil values
+  -- Update channel state
   channel.step_trig_masks[step] = 1
   if note ~= nil then channel.step_note_masks[step] = note end
   if velocity ~= nil then channel.step_velocity_masks[step] = velocity end
@@ -226,7 +292,7 @@ function recorder.add_step(channel, step, note, velocity, length, chord_degrees,
     end
   end
 
-  -- Use existing values for nil parameters in working pattern update
+  -- Update working pattern
   local working_note = note or channel.step_note_masks[step] or 0
   local working_velocity = velocity or channel.step_velocity_masks[step] or 100
   local working_length = length or channel.step_length_masks[step] or 1
@@ -239,14 +305,14 @@ function recorder.undo(sequencer_pattern, channel_number)
     local pc_state = state.pattern_channels[pc_key]
     
     if pc_state and pc_state.current_index > 0 then
-      local event = pc_state.event_history[pc_state.current_index]
+      local event = pc_state.event_history:get(pc_state.current_index)
       local channel = program.get_channel(sequencer_pattern, channel_number)
       local step = event.data.step
 
       local prev_index = find_previous_event(pc_state.step_indices, step, pc_state.current_index)
 
       if prev_index then
-        local prev_event = pc_state.event_history[prev_index]
+        local prev_event = pc_state.event_history:get(prev_index)
         channel.step_trig_masks[step] = 1
         channel.step_note_masks[step] = prev_event.data.note or channel.step_note_masks[step]
         channel.step_velocity_masks[step] = prev_event.data.velocity or channel.step_velocity_masks[step]
@@ -277,7 +343,7 @@ function recorder.undo(sequencer_pattern, channel_number)
       end
 
       pc_state.current_index = pc_state.current_index - 1
-      if state.event_history[state.current_event_index] == event then
+      if state.event_history:get(state.current_event_index) == event then
         state.current_event_index = state.current_event_index - 1
       end
     end
@@ -285,7 +351,7 @@ function recorder.undo(sequencer_pattern, channel_number)
   end
 
   if state.current_event_index > 0 then
-    local event = state.event_history[state.current_event_index]
+    local event = state.event_history:get(state.current_event_index)
     state.current_event_index = state.current_event_index - 1
     recorder.undo(event.data.song_pattern, event.data.channel_number)
   end
@@ -296,45 +362,50 @@ function recorder.redo(sequencer_pattern, channel_number)
     local pc_key = sequencer_pattern .. "_" .. channel_number
     local pc_state = state.pattern_channels[pc_key]
     
-    if pc_state and pc_state.current_index < #pc_state.event_history then
+    if pc_state and pc_state.current_index < pc_state.event_history.total_size then
       pc_state.current_index = pc_state.current_index + 1
-      local event = pc_state.event_history[pc_state.current_index]
-      local channel = program.get_channel(sequencer_pattern, channel_number)
-      local step = event.data.step
+      local event = pc_state.event_history:get(pc_state.current_index)
+      if event then  -- Add nil check
+        local channel = program.get_channel(sequencer_pattern, channel_number)
+        local step = event.data.step
 
-      channel.step_trig_masks[step] = 1
-      channel.step_note_masks[step] = event.data.note or channel.step_note_masks[step]
-      channel.step_velocity_masks[step] = event.data.velocity or channel.step_velocity_masks[step]
-      channel.step_length_masks[step] = event.data.length or channel.step_length_masks[step]
+        channel.step_trig_masks[step] = 1
+        channel.step_note_masks[step] = event.data.note or channel.step_note_masks[step]
+        channel.step_velocity_masks[step] = event.data.velocity or channel.step_velocity_masks[step]
+        channel.step_length_masks[step] = event.data.length or channel.step_length_masks[step]
 
-      if event.data.chord_degrees then
-        if not channel.step_chord_masks then channel.step_chord_masks = {} end
-        if not channel.step_chord_masks[step] then channel.step_chord_masks[step] = {} end
-        channel.step_chord_masks[step][1] = event.data.chord_degrees[1] or channel.step_chord_masks[step][1]
-        channel.step_chord_masks[step][2] = event.data.chord_degrees[2] or channel.step_chord_masks[step][2]
-        channel.step_chord_masks[step][3] = event.data.chord_degrees[3] or channel.step_chord_masks[step][3]
-        channel.step_chord_masks[step][4] = event.data.chord_degrees[4] or channel.step_chord_masks[step][4]
-      end
+        if event.data.chord_degrees then
+          if not channel.step_chord_masks then channel.step_chord_masks = {} end
+          if not channel.step_chord_masks[step] then channel.step_chord_masks[step] = {} end
+          channel.step_chord_masks[step][1] = event.data.chord_degrees[1] or channel.step_chord_masks[step][1]
+          channel.step_chord_masks[step][2] = event.data.chord_degrees[2] or channel.step_chord_masks[step][2]
+          channel.step_chord_masks[step][3] = event.data.chord_degrees[3] or channel.step_chord_masks[step][3]
+          channel.step_chord_masks[step][4] = event.data.chord_degrees[4] or channel.step_chord_masks[step][4]
+        end
 
-      program.update_working_pattern_for_step(
-        channel,
-        step,
-        event.data.note or channel.step_note_masks[step],
-        event.data.velocity or channel.step_velocity_masks[step],
-        event.data.length or channel.step_length_masks[step]
-      )
+        program.update_working_pattern_for_step(
+          channel,
+          step,
+          event.data.note or channel.step_note_masks[step],
+          event.data.velocity or channel.step_velocity_masks[step],
+          event.data.length or channel.step_length_masks[step]
+        )
 
-      if state.event_history[state.current_event_index + 1] == event then
-        state.current_event_index = state.current_event_index + 1
+        -- Check against total_size instead of size
+        if state.event_history:get(state.current_event_index + 1) == event then
+          state.current_event_index = state.current_event_index + 1
+        end
       end
     end
     return
   end
 
-  if state.current_event_index < #state.event_history then
+  if state.current_event_index < state.event_history.total_size then
     state.current_event_index = state.current_event_index + 1
-    local event = state.event_history[state.current_event_index]
-    recorder.redo(event.data.song_pattern, event.data.channel_number)
+    local event = state.event_history:get(state.current_event_index)
+    if event then  -- Add nil check
+      recorder.redo(event.data.song_pattern, event.data.channel_number)
+    end
   end
 end
 
@@ -350,7 +421,12 @@ function recorder.get_event_count(sequencer_pattern, channel_number)
 end
 
 function recorder.get_state()
-  return state
+  return {
+    pattern_channels = state.pattern_channels,
+    current_event_index = state.current_event_index,
+    global_index = state.global_index,
+    event_history = state.event_history 
+  }
 end
 
 return recorder

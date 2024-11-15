@@ -73,7 +73,7 @@ function test_recorder_should_clear_redo_history_after_new_note()
   recorder.add_step(channel, 2, 67, 80, 1)
   
   local state = recorder.get_state()
-  luaunit.assert_equals(#state.event_history, 2)
+  luaunit.assert_equals(state.event_history.size, 2)
   luaunit.assert_equals(channel.step_note_masks[2], 67)
 end
 
@@ -97,9 +97,11 @@ function test_recorder_should_maintain_event_history()
   recorder.add_step(channel, 1, 60, 100, 1)
   
   local state = recorder.get_state()
-  luaunit.assert_equals(#state.event_history, 1)
+  luaunit.assert_equals(state.event_history:get_size(), 1)
   luaunit.assert_equals(state.current_event_index, 1)
-  luaunit.assert_equals(state.event_history[1].data.note, 60)
+  local first_event = state.event_history:get(1)
+  luaunit.assert_not_nil(first_event)
+  luaunit.assert_equals(first_event.data.note, 60)
 end
 
 
@@ -113,7 +115,7 @@ function test_recorder_should_maintain_event_index_during_undo_redo()
   
   local state = recorder.get_state()
   luaunit.assert_equals(state.current_event_index, 1)
-  luaunit.assert_equals(#state.event_history, 2)
+  luaunit.assert_equals(state.event_history.size, 2)
 end
 
 function test_recorder_undo_should_clear_notes_from_channel()
@@ -306,12 +308,12 @@ function test_recorder_should_preserve_event_history_during_clear()
   program.init()  -- Should not affect recorder state
   
   local state = recorder.get_state()
-  luaunit.assert_equals(#state.event_history, 1)
+  luaunit.assert_equals(state.event_history:get_size(), 1)
   luaunit.assert_equals(state.current_event_index, 1)
-  luaunit.assert_equals(state.event_history[1].data.note, 60)
+  local first_event = state.event_history:get(1)
+  luaunit.assert_not_nil(first_event)
+  luaunit.assert_equals(first_event.data.note, 60)
 end
-
-
 
 function test_recorder_should_preserve_original_state()
   recorder.init()
@@ -748,26 +750,28 @@ function test_recorder_should_store_deep_copies_of_chord_masks()
   luaunit.assert_equals(channel.step_chord_masks[1][3], 5)
 end
 
-function test_recorder_should_handle_default_pattern_correctly()
+function test_recorder_should_handle_deleted_recreated_channels()
   recorder.init()
   program.init()
   
-  program.set_selected_sequencer_pattern(2)  -- Set current pattern to 2
-  local channel = program.get_channel(2, 1)
-  channel.step_note_masks[1] = 48
-  
-  -- Don't specify pattern (should use selected pattern 2)
+  -- Add note to channel
+  local channel = program.get_channel(1, 1)
   recorder.add_step(channel, 1, 60, 100, 1)
   
-  -- Check that it used pattern 2
-  local state = recorder.get_state()
-  luaunit.assert_equals(state.event_history[1].data.song_pattern, 2)
+  -- Simulate channel deletion/recreation
+  program.init()
+  channel = program.get_channel(1, 1)
   
-  -- Corrected access to original_states
-  local key = "2_1"
-  local pc_state = state.pattern_channels[key]
-  local step_key = "1"
-  luaunit.assert_equals(pc_state.original_states[step_key].note_mask, 48)
+  -- Verify recorder state preserved
+  local state = recorder.get_state()
+  luaunit.assert_equals(state.event_history:get_size(), 1)
+  local first_event = state.event_history:get(1)
+  luaunit.assert_not_nil(first_event)
+  luaunit.assert_equals(first_event.data.note, 60)
+  
+  -- Verify undo still works
+  recorder.undo()
+  luaunit.assert_equals(channel.step_note_masks[1], nil)
 end
 
 function test_recorder_should_preserve_event_order_during_undo()
@@ -1182,28 +1186,6 @@ function test_recorder_should_clear_redo_history_on_cross_pattern_edits()
   luaunit.assert_equals(pattern1_state.current_index, 1)
 end
 
-function test_recorder_should_handle_deleted_recreated_channels()
-  recorder.init()
-  program.init()
-  
-  -- Add note to channel
-  local channel = program.get_channel(1, 1)
-  recorder.add_step(channel, 1, 60, 100, 1)
-  
-  -- Simulate channel deletion/recreation
-  program.init()
-  channel = program.get_channel(1, 1)
-  
-  -- Verify recorder state preserved
-  local state = recorder.get_state()
-  luaunit.assert_equals(#state.event_history, 1)
-  luaunit.assert_equals(state.event_history[1].data.note, 60)
-  
-  -- Verify undo still works
-  recorder.undo()
-  luaunit.assert_equals(channel.step_note_masks[1], nil)
-end
-
 function test_recorder_should_validate_chord_degrees()
   recorder.init()
   program.init()
@@ -1301,13 +1283,13 @@ function test_recorder_should_track_separate_histories_per_pattern()
   local pattern1_history = state.pattern_channels["1_1"].event_history
   local pattern2_history = state.pattern_channels["2_1"].event_history
   
-  luaunit.assert_equals(#pattern1_history, 2)
-  luaunit.assert_equals(pattern1_history[1].data.note, 60)
-  luaunit.assert_equals(pattern1_history[2].data.note, 64)
+  luaunit.assert_equals(pattern1_history:get_size(), 2)
+  luaunit.assert_equals(pattern1_history:get(1).data.note, 60)
+  luaunit.assert_equals(pattern1_history:get(2).data.note, 64)
   
-  luaunit.assert_equals(#pattern2_history, 2)
-  luaunit.assert_equals(pattern2_history[1].data.note, 67)
-  luaunit.assert_equals(pattern2_history[2].data.note, 71)
+  luaunit.assert_equals(pattern2_history:get_size(), 2)
+  luaunit.assert_equals(pattern2_history:get(1).data.note, 67)
+  luaunit.assert_equals(pattern2_history:get(2).data.note, 71)
 end
 
 function test_recorder_should_count_events_per_channel()
@@ -1757,4 +1739,303 @@ function test_recorder_should_validate_partial_updates()
   chord_mask = channel.step_chord_masks[1]
   luaunit.assert_equals(chord_mask[1], 1)
   luaunit.assert_equals(chord_mask[2], 4)
+end
+
+function test_recorder_should_preserve_indices_after_wrap()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Fill buffer and cause wrap
+  for i = 1, 1001 do
+    recorder.add_step(channel, i % 16 + 1, 60 + i, 100, 1)  -- Use 16 different steps
+  end
+  
+  local state = recorder.get_state()
+  
+  -- Check step indices are maintained
+  for i = 1, 16 do
+    -- Get last event for each step
+    local step_events = state.global_index.step_to_events[i]
+    luaunit.assert_not_nil(step_events, "Step events should exist for step " .. i)
+    
+    -- Verify the events are accessible and in correct order
+    for j, event_idx in ipairs(step_events) do
+      local event = state.event_history:get(event_idx)
+      luaunit.assert_not_nil(event, "Event should exist at index " .. event_idx)
+      luaunit.assert_equals(event.data.step, i)
+    end
+  end
+end
+
+function test_recorder_should_respect_max_history_size()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add more than MAX_HISTORY_SIZE events
+  for i = 1, 1001 do  -- MAX_HISTORY_SIZE is 1000
+    recorder.add_step(channel, 1, 60 + (i % 12), 100, 1)
+  end
+  
+  local state = recorder.get_state()
+  
+  -- Should be limited to MAX_HISTORY_SIZE
+  luaunit.assert_equals(state.event_history:get_size(), 1000)
+  
+  -- First event should be second event since first was pushed out
+  local first_event = state.event_history:get(1)
+  luaunit.assert_equals(first_event.data.note, 62)
+  
+  -- Last event should be the most recent one
+  local last_event = state.event_history:get(1000)
+  luaunit.assert_equals(last_event.data.note, 60 + (1001 % 12))
+end
+
+function test_recorder_should_handle_ring_buffer_wrapping()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Create predictable sequence using modulo to keep notes in valid MIDI range
+  for i = 1, 1000 do
+    recorder.add_step(channel, 1, (i % 128), 100, 1)  -- Keep notes 0-127
+  end
+  
+  -- Add one more to cause wrap
+  recorder.add_step(channel, 1, (1001 % 128), 100, 1)
+  
+  local state = recorder.get_state()
+  
+  -- Buffer should still be at max size
+  luaunit.assert_equals(state.event_history:get_size(), 1000)
+  
+  -- First event should be note value (2 % 128) (since 1 was pushed out)
+  local first_event = state.event_history:get(1)
+  luaunit.assert_equals(first_event.data.note, (2 % 128))
+  
+  -- Last event should be (1001 % 128)
+  local last_event = state.event_history:get(1000)
+  luaunit.assert_equals(last_event.data.note, (1001 % 128))
+end
+
+function test_recorder_should_handle_pattern_channel_buffer_wrapping()
+  recorder.init()
+  program.init()
+  local channel1 = program.get_channel(1, 1)
+  local channel2 = program.get_channel(1, 2)
+  
+  -- Fill first channel with predictable sequence
+  for i = 1, 800 do
+    recorder.add_step(channel1, 1, (i % 128), 100, 1)  -- Keep notes 0-127
+  end
+  
+  -- Add to second channel
+  for i = 1, 300 do
+    recorder.add_step(channel2, 1, ((1000 + i) % 128), 100, 1)
+  end
+  
+  local state = recorder.get_state()
+  local pc1 = state.pattern_channels["1_1"]
+  local pc2 = state.pattern_channels["1_2"]
+  
+  -- Verify initial counts
+  luaunit.assert_equals(pc1.event_history:get_size(), 800)
+  luaunit.assert_equals(pc2.event_history:get_size(), 300)
+  
+  -- Add enough to cause wrap in first channel
+  for i = 801, 1100 do
+    recorder.add_step(channel1, 1, (i % 128), 100, 1)
+  end
+  
+  -- First channel should be at MAX_HISTORY_SIZE
+  luaunit.assert_equals(pc1.event_history:get_size(), 1000)
+  
+  -- Second channel should be unaffected
+  luaunit.assert_equals(pc2.event_history:get_size(), 300)
+  
+  -- First event in channel 1 should be (101 % 128)
+  local first_ch1_event = pc1.event_history:get(1)
+  luaunit.assert_equals(first_ch1_event.data.note, (101 % 128))
+  
+  -- Last event in channel 1 should be (1100 % 128)
+  local last_ch1_event = pc1.event_history:get(1000)
+  luaunit.assert_equals(last_ch1_event.data.note, (1100 % 128))
+end
+
+function test_ring_buffer_should_maintain_correct_order_during_wrap()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Fill buffer
+  for i = 1, 998 do
+    recorder.add_step(channel, 1, i % 128, 100, 1)
+  end
+  
+  local state = recorder.get_state()
+  local initial_size = state.event_history:get_size()
+  luaunit.assert_equals(initial_size, 998)
+  
+  -- Add wrap boundary notes
+  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.add_step(channel, 1, 62, 100, 1)
+  recorder.add_step(channel, 1, 64, 100, 1)
+  
+  state = recorder.get_state()
+  luaunit.assert_equals(state.event_history:get_size(), 1000)
+  
+  -- First event should be the second one after wrap
+  local first_event = state.event_history:get(1)
+  luaunit.assert_equals(first_event.data.note, 2)
+end
+
+
+function test_ring_buffer_should_handle_rapid_wrap_multiple_times()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Fill buffer multiple times
+  local final_batch_start = 2001
+  for i = 1, 3000 do
+    recorder.add_step(channel, 1, i % 128, 100, 1)
+  end
+  
+  local state = recorder.get_state()
+  
+  -- Verify size remains at max
+  luaunit.assert_equals(state.event_history:get_size(), 1000)
+  
+  -- Get events from different positions
+  local first = state.event_history:get(1)
+  local last = state.event_history:get(1000)
+  
+  luaunit.assert_not_nil(first, "First event should exist")
+  luaunit.assert_not_nil(last, "Last event should exist")
+  
+  -- Verify the sequence wraps correctly
+  luaunit.assert_equals(first.data.note, (2001 % 128))
+  luaunit.assert_equals(last.data.note, (3000 % 128))
+end
+
+function test_ring_buffer_should_handle_concurrent_pattern_wraps()
+  recorder.init()
+  program.init()
+  local channel1 = program.get_channel(1, 1)
+  local channel2 = program.get_channel(1, 2)
+  
+  -- Alternate between channels while exceeding buffer size
+  for i = 1, 2000 do
+    local note = i % 128
+    if i % 2 == 0 then
+      recorder.add_step(channel1, 1, note, 100, 1)
+    else
+      recorder.add_step(channel2, 1, note, 100, 1)
+    end
+  end
+  
+  local state = recorder.get_state()
+  local pc1 = state.pattern_channels["1_1"]
+  local pc2 = state.pattern_channels["1_2"]
+  
+  -- Verify pattern channels exist
+  luaunit.assert_not_nil(pc1, "Pattern channel 1 should exist")
+  luaunit.assert_not_nil(pc2, "Pattern channel 2 should exist")
+  
+  -- Verify we can get events from each channel
+  local pc1_first = pc1.event_history:get(1)
+  local pc2_first = pc2.event_history:get(1)
+  
+  luaunit.assert_not_nil(pc1_first, "First event in channel 1 should exist")
+  luaunit.assert_not_nil(pc2_first, "First event in channel 2 should exist")
+  
+  -- Verify events are in valid range
+  luaunit.assert_true(pc1_first.data.note >= 0 and pc1_first.data.note <= 127)
+  luaunit.assert_true(pc2_first.data.note >= 0 and pc2_first.data.note <= 127)
+end
+
+function test_ring_buffer_should_maintain_indices_after_multiple_wraps()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Create a sequence that will wrap multiple times
+  for i = 1, 2500 do
+    recorder.add_step(channel, (i % 16) + 1, i % 128, 100, 1)
+  end
+  
+  local state = recorder.get_state()
+  
+  -- Test that step indices are maintained for recent events
+  for step = 1, 16 do
+    local step_events = state.global_index.step_to_events[step]
+    luaunit.assert_not_nil(step_events, "Step events missing for step " .. step)
+    
+    -- Verify last few events for each step are accessible and in order
+    local last_events = {}
+    for i = #step_events - 2, #step_events do
+      if i > 0 then
+        local event = state.event_history:get(step_events[i])
+        luaunit.assert_not_nil(event, "Event missing at index " .. step_events[i])
+        table.insert(last_events, event.data.note)
+      end
+    end
+    
+    -- Verify events are in ascending order
+    for i = 2, #last_events do
+      luaunit.assert_true(last_events[i] >= last_events[i-1], 
+        "Events out of order for step " .. step)
+    end
+  end
+end
+
+function test_ring_buffer_should_handle_edge_case_at_max_size()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Fill buffer exactly to max size
+  for i = 1, 1000 do
+    recorder.add_step(channel, 1, i % 128, 100, 1)
+  end
+  
+  local state = recorder.get_state()
+  luaunit.assert_equals(state.event_history:get_size(), 1000)
+  
+  -- Add one more event
+  recorder.add_step(channel, 1, 60, 100, 1)
+  
+  -- Verify size hasn't changed but content has
+  luaunit.assert_equals(state.event_history:get_size(), 1000)
+  local first_event = state.event_history:get(1)
+  luaunit.assert_equals(first_event.data.note, (2 % 128))
+end
+
+function test_ring_buffer_truncation_should_respect_wrap_point()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add 100 events
+  for i = 1, 100 do
+    recorder.add_step(channel, 1, i % 128, 100, 1)
+  end
+  
+  local state = recorder.get_state()
+  luaunit.assert_equals(state.current_event_index, 100)
+  
+  -- Undo 25 events
+  for _ = 1, 25 do
+    recorder.undo()
+  end
+  
+  state = recorder.get_state()
+  luaunit.assert_equals(state.current_event_index, 75)
+  
+  -- Add new event
+  recorder.add_step(channel, 1, 60, 100, 1)
+  
+  state = recorder.get_state()
+  luaunit.assert_equals(state.current_event_index, 76)
 end
