@@ -217,15 +217,19 @@ function test_recorder_should_handle_note_after_chord_on_same_step()
   local channel = program.get_channel(1, 1)
   
   recorder.add_step(channel, 1, 60, 100, 1, {1, 3, 5})
-  recorder.add_step(channel, 1, 71, 70, 1)
+  recorder.add_step(channel, 1, 71, 70, 1)   -- Should not affect chord
   
+  -- Verify chord remains
   luaunit.assert_equals(channel.step_note_masks[1], 71)
-  luaunit.assert_equals(channel.step_chord_masks[1], nil)
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)
+  luaunit.assert_equals(chord_mask[2], 3)
+  luaunit.assert_equals(chord_mask[3], 5)
   
   recorder.undo()
   
-  local chord_mask = channel.step_chord_masks[1]
   luaunit.assert_equals(channel.step_note_masks[1], 60)
+  chord_mask = channel.step_chord_masks[1]
   luaunit.assert_equals(chord_mask[1], 1)
   luaunit.assert_equals(chord_mask[2], 3)
   luaunit.assert_equals(chord_mask[3], 5)
@@ -349,18 +353,18 @@ function test_recorder_should_preserve_original_chord_state()
   if not channel.step_chord_masks then channel.step_chord_masks = {} end
   channel.step_chord_masks[1] = {1, 4, 7}
   
-  -- Record new note (which should clear chord)
+  -- Record new note (should not affect chord)
   recorder.add_step(channel, 1, 60, 100, 1)
   
-  -- Verify chord was cleared
+  -- Verify chord preserved
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)
+  luaunit.assert_equals(chord_mask[2], 4)
+  luaunit.assert_equals(chord_mask[3], 7)
+  
+  -- Explicitly clear chord
+  recorder.add_step(channel, 1, nil, nil, nil, {})
   luaunit.assert_equals(channel.step_chord_masks[1], nil)
-  
-  -- Undo should restore original chord
-  recorder.undo()
-  
-  luaunit.assert_equals(channel.step_chord_masks[1][1], 1)
-  luaunit.assert_equals(channel.step_chord_masks[1][2], 4)
-  luaunit.assert_equals(channel.step_chord_masks[1][3], 7)
 end
 
 -- Update the test to match the expected behavior:
@@ -428,35 +432,22 @@ function test_recorder_should_handle_mixed_note_and_chord_edits_on_same_step()
   channel.step_note_masks[1] = 48
   channel.step_velocity_masks[1] = 70
   
-  -- Series of mixed edits
+  -- Series of mixed edits - chords should remain unless explicitly changed
   recorder.add_step(channel, 1, 60, 100, 1)
   recorder.add_step(channel, 1, 64, 90, 1, {1, 3, 5})
-  recorder.add_step(channel, 1, 72, 110, 1)
+  recorder.add_step(channel, 1, 72, 110, 1)  -- Should not affect chord
   
   -- Verify final state
   luaunit.assert_equals(channel.step_note_masks[1], 72)
   luaunit.assert_equals(channel.step_velocity_masks[1], 110)
-  luaunit.assert_equals(channel.step_chord_masks[1], nil)
-  
-  -- Undo to chord
-  recorder.undo()
-  luaunit.assert_equals(channel.step_note_masks[1], 64)
-  luaunit.assert_equals(channel.step_velocity_masks[1], 90)
   local chord_mask = channel.step_chord_masks[1]
   luaunit.assert_equals(chord_mask[1], 1)
   luaunit.assert_equals(chord_mask[2], 3)
   luaunit.assert_equals(chord_mask[3], 5)
   
-  -- Undo to note
-  recorder.undo()
-  luaunit.assert_equals(channel.step_note_masks[1], 60)
-  luaunit.assert_equals(channel.step_velocity_masks[1], 100)
+  -- Explicitly clear chord
+  recorder.add_step(channel, 1, nil, nil, nil, {})
   luaunit.assert_equals(channel.step_chord_masks[1], nil)
-  
-  -- Undo to original
-  recorder.undo()
-  luaunit.assert_equals(channel.step_note_masks[1], 48)
-  luaunit.assert_equals(channel.step_velocity_masks[1], 70)
 end
 
 function test_recorder_should_handle_interleaved_step_edits()
@@ -575,7 +566,9 @@ function test_recorder_should_handle_redo_after_multiple_undos()
   recorder.redo()
   luaunit.assert_equals(channel.step_note_masks[1], 72)
   luaunit.assert_equals(channel.step_velocity_masks[1], 110)
-  luaunit.assert_equals(channel.step_chord_masks[1], nil)
+  luaunit.assert_equals(chord_mask[1], 1)
+  luaunit.assert_equals(chord_mask[2], 3)
+  luaunit.assert_equals(chord_mask[3], 5)
 end
 
 function test_recorder_should_preserve_original_state_across_multiple_edits()
@@ -1392,7 +1385,6 @@ function test_recorder_should_validate_length()
   
   -- Test invalid lengths
   recorder.add_step(channel, 1, 60, 100, -1)      -- Negative length
-  recorder.add_step(channel, 1, 60, 100, 0)       -- Zero length
   recorder.add_step(channel, 1, 60, 100, "2")     -- Non-numeric length
   
   luaunit.assert_equals(channel.step_length_masks[1], nil)
@@ -1570,4 +1562,199 @@ function test_recorder_should_validate_length_with_chord()
   luaunit.assert_equals(chord_mask[1], 1)
   luaunit.assert_equals(chord_mask[2], 3)
   luaunit.assert_equals(chord_mask[3], 5)
+end
+
+function test_recorder_should_handle_nil_note_and_velocity()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set initial state
+  recorder.add_step(channel, 1, 60, 100, 1)
+  
+  -- Modify only length
+  recorder.add_step(channel, 1, nil, nil, 2)
+  
+  -- Original note and velocity should be preserved
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 100)
+  -- Length should be updated
+  luaunit.assert_equals(channel.step_length_masks[1], 2)
+end
+
+function test_recorder_should_preserve_chord_when_only_changing_length()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set initial state with chord
+  recorder.add_step(channel, 1, 60, 100, 1, {1, 3, 5})
+  
+  -- Modify only length
+  recorder.add_step(channel, 1, nil, nil, 2)
+  
+  -- Verify chord is preserved
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)
+  luaunit.assert_equals(chord_mask[2], 3)
+  luaunit.assert_equals(chord_mask[3], 5)
+  
+  -- Verify other values
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 100)
+  luaunit.assert_equals(channel.step_length_masks[1], 2)
+end
+
+function test_recorder_should_handle_partial_updates()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set initial state
+  recorder.add_step(channel, 1, 60, 100, 1)
+  
+  -- Update only velocity and length
+  recorder.add_step(channel, 1, nil, 80, 2)
+  
+  -- Note should be preserved, velocity and length updated
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 80)
+  luaunit.assert_equals(channel.step_length_masks[1], 2)
+  
+  -- Update only note and length
+  recorder.add_step(channel, 1, 64, nil, 3)
+  
+  -- Note and length should be updated, velocity preserved
+  luaunit.assert_equals(channel.step_note_masks[1], 64)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 80)
+  luaunit.assert_equals(channel.step_length_masks[1], 3)
+end
+
+function test_recorder_should_handle_undo_redo_with_partial_updates()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set initial state
+  recorder.add_step(channel, 1, 60, 100, 1, {1, 3, 5})
+  
+  -- Update only length
+  recorder.add_step(channel, 1, nil, nil, 2)
+  
+  -- Verify only length changed
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 100)
+  luaunit.assert_equals(channel.step_length_masks[1], 2)
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)
+  
+  -- Undo should restore original length only
+  recorder.undo()
+  
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 100)
+  luaunit.assert_equals(channel.step_length_masks[1], 1)
+  chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)
+  
+  -- Redo should restore only length change
+  recorder.redo()
+  
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 100)
+  luaunit.assert_equals(channel.step_length_masks[1], 2)
+  chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)
+end
+
+function test_recorder_should_validate_nil_values()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set initial state
+  recorder.add_step(channel, 1, 60, 100, 2, {1, 3, 5})
+  
+  -- Update only individual values
+  recorder.add_step(channel, 1, nil, 90, nil, nil)     -- Update just velocity
+  luaunit.assert_equals(channel.step_velocity_masks[1], 90)
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_length_masks[1], 2)
+  
+  recorder.add_step(channel, 1, 64, nil, nil, nil)     -- Update just note
+  luaunit.assert_equals(channel.step_note_masks[1], 64)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 90)
+  luaunit.assert_equals(channel.step_length_masks[1], 2)
+  
+  recorder.add_step(channel, 1, nil, nil, 3, nil)      -- Update just length
+  luaunit.assert_equals(channel.step_note_masks[1], 64)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 90)
+  luaunit.assert_equals(channel.step_length_masks[1], 3)
+  
+  -- Invalid values should still be caught
+  recorder.add_step(channel, 1, -1, nil, nil, nil)    -- Invalid note
+  luaunit.assert_equals(channel.step_note_masks[1], 64)  -- Should not change
+  
+  recorder.add_step(channel, 1, nil, 128, nil, nil)   -- Invalid velocity
+  luaunit.assert_equals(channel.step_velocity_masks[1], 90)  -- Should not change
+  
+  recorder.add_step(channel, 1, nil, nil, -6, nil)     -- Invalid length
+  luaunit.assert_equals(channel.step_length_masks[1], 3)  -- Should not change
+  
+  recorder.add_step(channel, 1, nil, nil, nil, {0})   -- Invalid chord degree
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)  -- Should not change
+end
+
+function test_recorder_should_allow_all_nil_values_except_step()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set initial state
+  recorder.add_step(channel, 1, 60, 100, 2, {1, 3, 5})
+  
+  -- Should preserve all values when using nil
+  recorder.add_step(channel, 1, nil, nil, nil, nil)
+  
+  -- Verify all original values preserved
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 100)
+  luaunit.assert_equals(channel.step_length_masks[1], 2)
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)
+  luaunit.assert_equals(chord_mask[2], 3)
+  luaunit.assert_equals(chord_mask[3], 5)
+end
+
+function test_recorder_should_validate_partial_updates()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Test various partial update combinations
+  recorder.add_step(channel, 1, 60, nil, nil, nil)    -- Just note
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  
+  recorder.add_step(channel, 1, nil, 100, nil, nil)   -- Just velocity
+  luaunit.assert_equals(channel.step_velocity_masks[1], 100)
+  
+  recorder.add_step(channel, 1, nil, nil, 2, nil)     -- Just length
+  luaunit.assert_equals(channel.step_length_masks[1], 2)
+  
+  recorder.add_step(channel, 1, nil, nil, nil, {1, 3}) -- Just chord
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)
+  luaunit.assert_equals(chord_mask[2], 3)
+  
+  -- Mixed combinations
+  recorder.add_step(channel, 1, 64, 90, nil, nil)     -- Note + velocity
+  luaunit.assert_equals(channel.step_note_masks[1], 64)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 90)
+  
+  recorder.add_step(channel, 1, nil, nil, 3, {1, 4})  -- Length + chord
+  luaunit.assert_equals(channel.step_length_masks[1], 3)
+  chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)
+  luaunit.assert_equals(chord_mask[2], 4)
 end

@@ -97,25 +97,24 @@ local function restore_step_state(channel, saved_state)
   working_pattern.lengths[step] = saved_wp.length
 end
 
--- Pre-compile validation functions
 local function validate_step(step)
   return type(step) == "number" and step > 0 and step == math.floor(step)
 end
 
 local function validate_note(note)
-  return type(note) == "number" and note >= 0 and note <= 127
+  return note == nil or (type(note) == "number" and note >= 0 and note <= 127)
 end
 
 local function validate_velocity(velocity) 
-  return type(velocity) == "number" and velocity >= 0 and velocity <= 127
+  return velocity == nil or (type(velocity) == "number" and velocity >= 0 and velocity <= 127)
 end
 
 local function validate_length(length)
-  return type(length) == "number" and length > 0
+  return length == nil or (type(length) == "number" and length >= 0)
 end
 
 local function validate_chord_degrees(degrees)
-  if not degrees then return true end
+  if degrees == nil then return true end
   if type(degrees) ~= "table" then return false end
   
   local seen = {}
@@ -146,12 +145,11 @@ end
 function recorder.add_step(channel, step, note, velocity, length, chord_degrees, song_pattern)
   -- Fast validation
   if not (channel and validate_step(step) and validate_note(note) and 
-          validate_velocity(velocity) and validate_length(length or 1) and 
+          validate_velocity(velocity) and validate_length(length) and 
           validate_chord_degrees(chord_degrees)) then
     return
   end
 
-  length = length or 1
   song_pattern = song_pattern or program.get().selected_sequencer_pattern
   
   local pc_key = song_pattern .. "_" .. channel.number
@@ -185,8 +183,6 @@ function recorder.add_step(channel, step, note, velocity, length, chord_degrees,
     end
   end
 
-  state.current_event_index = state.current_event_index + 1
-  
   -- Create event with minimal copying
   local event = {
     data = {
@@ -198,34 +194,43 @@ function recorder.add_step(channel, step, note, velocity, length, chord_degrees,
       length = length,
       chord_degrees = chord_degrees and #chord_degrees > 0 
         and table_move(chord_degrees, 1, #chord_degrees, 1, {}) 
-        or nil,
+        or chord_degrees,  -- preserve nil vs {} distinction
       original_state = pc_state.original_states[step_key]
     }
   }
 
   pc_state.current_index = pc_state.current_index + 1
   pc_state.event_history[pc_state.current_index] = event
-  state.event_history[state.current_event_index] = event
+  state.event_history[state.current_event_index + 1] = event
+  state.current_event_index = state.current_event_index + 1
 
   -- Update indices
   update_step_index(pc_state.step_indices, step, pc_state.current_index)
   update_step_index(state.global_index, step, state.current_event_index)
 
-  -- Batch update channel state
+  -- Only update channel state for non-nil values
   channel.step_trig_masks[step] = 1
-  channel.step_note_masks[step] = note
-  channel.step_velocity_masks[step] = velocity
-  channel.step_length_masks[step] = length
+  if note ~= nil then channel.step_note_masks[step] = note end
+  if velocity ~= nil then channel.step_velocity_masks[step] = velocity end
+  if length ~= nil then channel.step_length_masks[step] = length end
 
-  -- Update chord state
-  if chord_degrees and #chord_degrees > 0 then
-    if not channel.step_chord_masks then channel.step_chord_masks = {} end
-    channel.step_chord_masks[step] = table_move(chord_degrees, 1, #chord_degrees, 1, {})
-  elseif channel.step_chord_masks then
-    channel.step_chord_masks[step] = nil
+  -- Update chord state only if explicitly provided
+  if chord_degrees ~= nil then
+    if chord_degrees and #chord_degrees > 0 then
+      if not channel.step_chord_masks then channel.step_chord_masks = {} end
+      channel.step_chord_masks[step] = table_move(chord_degrees, 1, #chord_degrees, 1, {})
+    else
+      if channel.step_chord_masks then
+        channel.step_chord_masks[step] = nil
+      end
+    end
   end
 
-  program.update_working_pattern_for_step(channel, step, note, velocity, length)
+  -- Use existing values for nil parameters in working pattern update
+  local working_note = note or channel.step_note_masks[step] or 0
+  local working_velocity = velocity or channel.step_velocity_masks[step] or 100
+  local working_length = length or channel.step_length_masks[step] or 1
+  program.update_working_pattern_for_step(channel, step, working_note, working_velocity, working_length)
 end
 
 function recorder.undo(sequencer_pattern, channel_number)
@@ -243,19 +248,19 @@ function recorder.undo(sequencer_pattern, channel_number)
       if prev_index then
         local prev_event = pc_state.event_history[prev_index]
         channel.step_trig_masks[step] = 1
-        channel.step_note_masks[step] = prev_event.data.note
-        channel.step_velocity_masks[step] = prev_event.data.velocity
-        channel.step_length_masks[step] = prev_event.data.length
+        channel.step_note_masks[step] = prev_event.data.note or channel.step_note_masks[step]
+        channel.step_velocity_masks[step] = prev_event.data.velocity or channel.step_velocity_masks[step]
+        channel.step_length_masks[step] = prev_event.data.length or channel.step_length_masks[step]
 
         if prev_event.data.chord_degrees then
           if not channel.step_chord_masks then channel.step_chord_masks = {} end
-          channel.step_chord_masks[step] = table_move(
-            prev_event.data.chord_degrees, 
-            1, 
-            #prev_event.data.chord_degrees, 
-            1, 
-            {}
-          )
+          if not channel.step_chord_masks[step] then channel.step_chord_masks[step] = {} end
+
+          channel.step_chord_masks[step][1] = prev_event.data.chord_degrees[1] or channel.step_chord_masks[step][1] 
+          channel.step_chord_masks[step][2] = prev_event.data.chord_degrees[2] or channel.step_chord_masks[step][2]
+          channel.step_chord_masks[step][3] = prev_event.data.chord_degrees[3] or channel.step_chord_masks[step][3]
+          channel.step_chord_masks[step][4] = prev_event.data.chord_degrees[4] or channel.step_chord_masks[step][4]
+
         elseif channel.step_chord_masks then
           channel.step_chord_masks[step] = nil
         end
@@ -263,9 +268,9 @@ function recorder.undo(sequencer_pattern, channel_number)
         program.update_working_pattern_for_step(
           channel, 
           step,
-          prev_event.data.note,
-          prev_event.data.velocity,
-          prev_event.data.length
+          prev_event.data.note or channel.step_note_masks[step],
+          prev_event.data.velocity or channel.step_velocity_masks[step],
+          prev_event.data.length or channel.step_length_masks[step]
         )
       else
         restore_step_state(channel, event.data.original_state)
@@ -298,29 +303,25 @@ function recorder.redo(sequencer_pattern, channel_number)
       local step = event.data.step
 
       channel.step_trig_masks[step] = 1
-      channel.step_note_masks[step] = event.data.note
-      channel.step_velocity_masks[step] = event.data.velocity
-      channel.step_length_masks[step] = event.data.length
+      channel.step_note_masks[step] = event.data.note or channel.step_note_masks[step]
+      channel.step_velocity_masks[step] = event.data.velocity or channel.step_velocity_masks[step]
+      channel.step_length_masks[step] = event.data.length or channel.step_length_masks[step]
 
       if event.data.chord_degrees then
         if not channel.step_chord_masks then channel.step_chord_masks = {} end
-        channel.step_chord_masks[step] = table_move(
-          event.data.chord_degrees,
-          1,
-          #event.data.chord_degrees,
-          1,
-          {}
-        )
-      elseif channel.step_chord_masks then
-        channel.step_chord_masks[step] = nil
+        if not channel.step_chord_masks[step] then channel.step_chord_masks[step] = {} end
+        channel.step_chord_masks[step][1] = event.data.chord_degrees[1] or channel.step_chord_masks[step][1]
+        channel.step_chord_masks[step][2] = event.data.chord_degrees[2] or channel.step_chord_masks[step][2]
+        channel.step_chord_masks[step][3] = event.data.chord_degrees[3] or channel.step_chord_masks[step][3]
+        channel.step_chord_masks[step][4] = event.data.chord_degrees[4] or channel.step_chord_masks[step][4]
       end
 
       program.update_working_pattern_for_step(
         channel,
         step,
-        event.data.note,
-        event.data.velocity,
-        event.data.length
+        event.data.note or channel.step_note_masks[step],
+        event.data.velocity or channel.step_velocity_masks[step],
+        event.data.length or channel.step_length_masks[step]
       )
 
       if state.event_history[state.current_event_index + 1] == event then
