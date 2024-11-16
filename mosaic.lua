@@ -17,6 +17,7 @@ m_grid = include("mosaic/lib/m_grid")
 ui = include("mosaic/lib/ui")
 sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
 m_midi = include("mosaic/lib/m_midi")
+recorder = include("mosaic/lib/recorder")
 
 -- Debug
 -- profiler = include("mosaic/lib/helpers/profiler")

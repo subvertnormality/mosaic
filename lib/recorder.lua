@@ -26,10 +26,13 @@ local function validate_chord_degrees(degrees)
   
   local seen = {}
   for _, degree in ipairs(degrees) do
-    if type(degree) ~= "number" or degree < 1 or degree > 7 or seen[degree] then
-      return false
+    -- Allow nil values
+    if degree ~= nil then
+      if type(degree) ~= "number" or degree < 1 or degree > 7 or seen[degree] then
+        return false
+      end
+      seen[degree] = true
     end
-    seen[degree] = true
   end
   return true
 end
@@ -59,12 +62,18 @@ local event_handlers = {
       -- Validate chord degrees if provided
       if data.chord_degrees ~= nil then
         if type(data.chord_degrees) ~= "table" then return false end
-        local seen = {}
+        
+        -- Empty array means clear the chord
+        if #data.chord_degrees == 0 then return true end
+        
+        -- Check each degree is valid
         for _, degree in ipairs(data.chord_degrees) do
-          if type(degree) ~= "number" or degree < 1 or degree > 7 or seen[degree] then
-            return false
+          -- Allow nil for partial updates
+          if degree ~= nil then
+            if type(degree) ~= "number" or degree < 1 or degree > 7 then
+              return false 
+            end
           end
-          seen[degree] = true
         end
       end
 
@@ -134,15 +143,43 @@ local event_handlers = {
       if data.velocity ~= nil then channel.step_velocity_masks[step] = data.velocity end
       if data.length ~= nil then channel.step_length_masks[step] = data.length end
 
-      -- Handle chord degrees explicitly
+      -- Handle chord degrees with partial updates
       if data.chord_degrees ~= nil then
-        if #data.chord_degrees > 0 then
-          if not channel.step_chord_masks then channel.step_chord_masks = {} end
-          channel.step_chord_masks[step] = table_move(data.chord_degrees, 1, #data.chord_degrees, 1, {})
-        else
-          if channel.step_chord_masks then
+
+        if fn.table_count(data.chord_degrees) > 0 then
+          -- Initialize chord masks table if needed
+          if not channel.step_chord_masks then 
+            channel.step_chord_masks = {}
+          end
+          
+          -- Initialize or preserve existing chord mask for this step
+          if not channel.step_chord_masks[step] then
+            channel.step_chord_masks[step] = {nil, nil, nil, nil}
+          end
+          
+          -- Update only non-nil values while preserving others
+          for i, degree in pairs(data.chord_degrees) do
+            if degree ~= nil then
+              channel.step_chord_masks[step][i] = degree
+            end
+          end
+          
+          -- Check if all values are nil
+          local all_nil = true
+          for _, v in pairs(channel.step_chord_masks[step]) do
+            if v ~= nil then 
+              all_nil = false
+              break
+            end
+          end
+          
+          -- Clear chord if all values are nil
+          if all_nil then
             channel.step_chord_masks[step] = nil
           end
+        else
+          -- Empty array means clear the chord
+          channel.step_chord_masks[step] = nil
         end
       elseif channel.step_chord_masks and apply_type == "undo" then
         channel.step_chord_masks[step] = nil

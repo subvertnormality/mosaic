@@ -847,13 +847,19 @@ function channel_edit_page_ui.handle_trig_mask_change(direction)
       mask_selectors.trig:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_trig_masks[s] = mask_selectors.trig:get_value()
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          trig = mask_selectors.trig:get_value()
+        })
       end
     else
       mask_selectors.trig:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_trig_masks[s] = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          trig = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
+        })
       end
     end
   else
@@ -878,13 +884,19 @@ function channel_edit_page_ui.handle_note_mask_change(direction)
       mask_selectors.note:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_note_masks[s] = mask_selectors.note:get_value()
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          note = mask_selectors.note:get_value()
+        })
       end
     else
       mask_selectors.note:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_note_masks[s] = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          note = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
+        })
       end
     end
   else
@@ -909,12 +921,19 @@ function channel_edit_page_ui.handle_velocity_mask_change(direction)
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
         channel.step_velocity_masks[s] = mask_selectors.velocity:get_value()
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          velocity = mask_selectors.velocity:get_value()
+        })
       end
     else
       mask_selectors.velocity:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_velocity_masks[s] = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          velocity = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
+        })
       end
     end
   else
@@ -938,20 +957,29 @@ function channel_edit_page_ui.handle_length_mask_change(direction)
       mask_selectors.length:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_length_mask(channel, s, divisions.note_division_values[mask_selectors.length:get_value()])
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          length = divisions.note_division_values[mask_selectors.length:get_value()]
+        })
       end
     else
       if mask_selectors.length:get_value() ~= 0 then
         mask_selectors.length:decrement()
         for _, keys in ipairs(pressed_keys) do
           local s = fn.calc_grid_count(keys[1], keys[2])
-          program.set_step_length_mask(channel, s, divisions.note_division_values[mask_selectors.length:get_value()])
+          recorder.record_event(channel, "note_mask", {
+            step = s,
+            length = divisions.note_division_values[mask_selectors.length:get_value()]
+          })
         end
       else
         for _, keys in ipairs(pressed_keys) do
           local s = fn.calc_grid_count(keys[1], keys[2])
-          program.set_step_length_mask(channel, s, 0)
           mask_selectors.length:set_value(0)
+          recorder.record_event(channel, "note_mask", {
+            step = s,
+            length = 0
+          })
         end
       end
     end
@@ -981,13 +1009,19 @@ function channel_edit_page_ui.handle_chord_mask_one_change(direction)
       mask_selectors.chords[1]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 1, s, mask_selectors.chords[1]:get_value())
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          chord_degrees = {mask_selectors.chords[1]:get_value(), nil, nil, nil}
+        })
       end
     else
       mask_selectors.chords[1]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 1, s, mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value())
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          chord_degrees = {mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value(), nil, nil, nil}
+        })
       end
     end
   else
@@ -1010,13 +1044,19 @@ function channel_edit_page_ui.handle_chord_mask_two_change(direction)
       mask_selectors.chords[2]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 2, s, mask_selectors.chords[2]:get_value())
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          chord_degrees = {nil, mask_selectors.chords[2]:get_value(), nil, nil}
+        })
       end
     else
       mask_selectors.chords[2]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 2, s, mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value())
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          chord_degrees = {nil, mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value(), nil, nil}
+        })
       end
     end
   else
@@ -1039,23 +1079,33 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
       mask_selectors.chords[3]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 3, s, mask_selectors.chords[3]:get_value())
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
+        })
       end
     else
       mask_selectors.chords[3]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 3, s, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value())
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
+        })
       end
     end
   else
     mask_selectors.chords[3]:set_value(channel.chord_three_mask or -1)
     if direction > 0 then
       mask_selectors.chords[3]:increment()
-      program.set_chord_three_mask(channel, mask_selectors.chords[3]:get_value())
+      recorder.record_event(channel, "note_mask", {
+        chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
+      })
     else
       mask_selectors.chords[3]:decrement()
-      program.set_chord_three_mask(channel, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value())
+      recorder.record_event(channel, "note_mask", {
+        chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
+      })
     end
   end
 end
@@ -1068,13 +1118,19 @@ function channel_edit_page_ui.handle_chord_mask_four_change(direction)
       mask_selectors.chords[4]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 4, s, mask_selectors.chords[4]:get_value())
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          chord_degrees = {nil, nil, nil, mask_selectors.chords[4]:get_value()}
+        })
       end
     else
       mask_selectors.chords[4]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        program.set_step_chord_mask(channel.number, 4, s, mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value())
+        recorder.record_event(channel, "note_mask", {
+          step = s,
+          chord_degrees = {nil, nil, nil, mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value()}
+        })
       end
     end
   else

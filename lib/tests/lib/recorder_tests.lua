@@ -1848,14 +1848,6 @@ function test_recorder_should_validate_chord_degrees()
     chord_degrees = {"1", "3", "5"}
   })
 
-  recorder.record_event(channel, "note_mask", {
-    step = 1,
-    note = 60,
-    velocity = 100,
-    length = 1,
-    chord_degrees = {1, 1, 1}
-  })
-  
   -- Verify invalid chords weren't recorded
   luaunit.assert_equals(channel.step_chord_masks[1], nil)
   
@@ -4026,4 +4018,150 @@ function test_recorder_should_handle_trig_only_note_mask()
   luaunit.assert_equals(channel.working_pattern.note_mask_values[1], 0)  -- Default note value
   luaunit.assert_equals(channel.working_pattern.velocity_values[1], 100)  -- Default velocity
   luaunit.assert_equals(channel.working_pattern.lengths[1], 1)  -- Default length
+end
+
+
+function test_recorder_should_support_partial_chord_updates()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set up initial chord state
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {1, 3, 5}
+  })
+  
+  -- Verify initial state
+  luaunit.assert_not_nil(channel.step_chord_masks, "Chord masks table should exist")
+  luaunit.assert_not_nil(channel.step_chord_masks[1], "Initial chord should be set")
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 1)
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 3)
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5)
+  
+  -- Update just the middle degree
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    chord_degrees = {nil, 4, nil}
+  })
+  
+  -- Verify only the middle degree changed
+  luaunit.assert_not_nil(channel.step_chord_masks, "Chord masks table should still exist")
+  luaunit.assert_not_nil(channel.step_chord_masks[1], "Chord mask should still exist after partial update")
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 1, "First degree should remain unchanged")
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 4, "Second degree should be updated")
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5, "Third degree should remain unchanged")
+  
+  -- Update just the first degree
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    chord_degrees = {2, nil, nil}
+  })
+  
+  -- Verify only first degree changed
+  luaunit.assert_not_nil(channel.step_chord_masks[1], "Chord mask should still exist after second update")
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 2, "First degree should be updated")
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 4, "Second degree should remain from previous update")
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5, "Third degree should remain from initial state")
+end
+
+function test_recorder_should_handle_undo_redo_with_partial_chord_updates()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Initial chord
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    chord_degrees = {1, 3, 5}
+  })
+  
+  -- Partial update
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    chord_degrees = {2, nil, nil}
+  })
+  
+  -- Verify state before undo
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 2)
+  luaunit.assert_equals(chord_mask[2], 3)
+  luaunit.assert_equals(chord_mask[3], 5)
+  
+  -- Undo partial update
+  recorder.undo()
+  
+  -- Verify original state restored
+  chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 1)
+  luaunit.assert_equals(chord_mask[2], 3)
+  luaunit.assert_equals(chord_mask[3], 5)
+  
+  -- Redo partial update
+  recorder.redo()
+  
+  -- Verify partial update reapplied
+  chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 2)
+  luaunit.assert_equals(chord_mask[2], 3)
+  luaunit.assert_equals(chord_mask[3], 5)
+end
+
+function test_recorder_should_handle_clearing_individual_chord_degrees()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set up initial chord
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    chord_degrees = {1, 3, 5}
+  })
+  
+  -- Clear middle degree by setting to nil
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    chord_degrees = {nil, nil, nil}
+  })
+  
+  -- Verify chord was cleared since all degrees nil
+  luaunit.assert_equals(channel.step_chord_masks[1], nil)
+end
+
+function test_recorder_should_preserve_partial_chord_updates_after_reset()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Initial chord
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    chord_degrees = {1, 3, 5}
+  })
+  
+  -- Partial update
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    chord_degrees = {2, nil, nil}
+  })
+  
+  -- Reset recorder
+  recorder.reset()
+  
+  -- Record new partial update 
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    chord_degrees = {nil, 4, nil}
+  })
+  
+  -- Undo should restore state at reset time
+  recorder.undo()
+  
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 2)
+  luaunit.assert_equals(chord_mask[2], 3)
+  luaunit.assert_equals(chord_mask[3], 5)
 end
