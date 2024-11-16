@@ -493,6 +493,83 @@ function recorder.redo(sequencer_pattern, channel_number)
   end
 end
 
+function recorder.undo_all(sequencer_pattern, channel_number)
+  if sequencer_pattern and channel_number then
+    local pc_key = get_pattern_key(sequencer_pattern, channel_number)
+    local pc_state = state.pattern_channels[pc_key]
+    
+    if pc_state then
+      local channel = program.get_channel(sequencer_pattern, channel_number)
+      
+      -- Get handler from first event (they should all be same type)
+      local event = pc_state.event_history:get(1)
+      if event then
+        local handler = event_handlers[event.type]
+        -- Restore to original state for each modified step
+        for step_key, original_state in pairs(pc_state.original_states) do
+          handler.restore_state(channel, step_key, original_state)
+        end
+      end
+      
+      -- Reset current index
+      pc_state.current_index = 0
+      
+      -- Update global index if needed
+      if state.current_event_index > 0 then
+        state.current_event_index = 0
+      end
+    end
+    return
+  end
+
+  -- If no pattern/channel specified, undo all patterns
+  state.current_event_index = 0
+  for pc_key, pc_state in pairs(state.pattern_channels) do
+    local pattern, channel = pc_key:match("(%d+)_(%d+)")
+    recorder.undo_all(tonumber(pattern), tonumber(channel))
+  end
+end
+
+function recorder.redo_all(sequencer_pattern, channel_number)
+  if sequencer_pattern and channel_number then
+    local pc_key = get_pattern_key(sequencer_pattern, channel_number)
+    local pc_state = state.pattern_channels[pc_key]
+    
+    if pc_state and pc_state.event_history.total_size > 0 then
+      local channel = program.get_channel(sequencer_pattern, channel_number)
+      local handler = event_handlers["note_mask"]
+      
+      -- Find latest event for each step from current_index to total_size
+      local step_latest_events = {}
+      for i = pc_state.current_index + 1, pc_state.event_history.total_size do
+        local event = pc_state.event_history:get(i)
+        step_latest_events[event.data.step] = event
+      end
+      
+      -- Apply latest events
+      for _, event in pairs(step_latest_events) do
+        handler.apply_event(channel, event.data.step, event.data.event_data, "redo")
+      end
+      
+      -- Update indices
+      pc_state.current_index = pc_state.event_history.total_size
+      
+      -- Update global index if needed
+      local final_event = pc_state.event_history:get(pc_state.event_history.total_size)
+      if final_event and state.event_history:get(state.current_event_index + 1) == final_event then
+        state.current_event_index = state.event_history.total_size
+      end
+    end
+    return
+  end
+
+  -- If no pattern/channel specified, redo all patterns
+  for pc_key, pc_state in pairs(state.pattern_channels) do
+    local pattern, channel = pc_key:match("(%d+)_(%d+)")
+    recorder.redo_all(tonumber(pattern), tonumber(channel))
+  end
+end
+
 function recorder.get_event_count(song_pattern, channel_number)
   local pc_key = get_pattern_key(song_pattern, channel_number)
   local pc_state = state.pattern_channels[pc_key]
