@@ -12,17 +12,20 @@ local function create_ring_buffer(max_size)
     
     push = function(self, event)
       local index
+      local did_wrap = false
+      
       if self.size < self.max_size then
         self.size = self.size + 1
         index = self.size
       else
+        did_wrap = true
         index = self.start
         self.start = (self.start % self.max_size) + 1
       end
     
       self.buffer[index] = event
       self.total_size = self.total_size + 1
-      return self.size
+      return self.size, did_wrap
     end,
     
     get = function(self, position)
@@ -77,10 +80,21 @@ local function create_step_index()
   }
 end
 
-local function update_step_index(index, step, event_idx)
+local function update_step_index(index, step, event_idx, is_wrap)
+  if is_wrap then
+    -- On wrap, only remove the oldest event for this step
+    local step_events = index.step_to_events[step]
+    if step_events and #step_events > 0 then
+      table.remove(step_events, 1)
+    end
+  end
+  
+  -- Initialize step events table if needed
   if not index.step_to_events[step] then
     index.step_to_events[step] = {}
   end
+  
+  -- Add new event index
   table.insert(index.step_to_events[step], event_idx)
   index.event_to_step[event_idx] = step
   index.last_event[step] = event_idx
@@ -246,33 +260,13 @@ function recorder.add_step(channel, step, note, velocity, length, chord_degrees,
     }
   }
 
-  -- Add to histories and check for buffer wraps
   local new_size, did_wrap = state.event_history:push(event)
   state.current_event_index = new_size
-  
+  update_step_index(state.global_index, step, state.current_event_index, did_wrap)
+
   local pc_new_size, pc_did_wrap = pc_state.event_history:push(event)
   pc_state.current_index = pc_new_size
-
-  -- Reset indices if buffers wrapped
-  if did_wrap then
-    state.global_index = create_step_index()
-    for i = 1, state.event_history.size do
-      local hist_event = state.event_history:get(i)
-      update_step_index(state.global_index, hist_event.data.step, i)
-    end
-  end
-  
-  if pc_did_wrap then
-    pc_state.step_indices = create_step_index()
-    for i = 1, pc_state.event_history.size do
-      local hist_event = pc_state.event_history:get(i)
-      update_step_index(pc_state.step_indices, hist_event.data.step, i)
-    end
-  else
-    -- Only update indices if no wrap occurred
-    update_step_index(pc_state.step_indices, step, pc_state.current_index)
-    update_step_index(state.global_index, step, state.current_event_index)
-  end
+  update_step_index(pc_state.step_indices, step, pc_state.current_index, pc_did_wrap)
 
   -- Update channel state
   channel.step_trig_masks[step] = 1
