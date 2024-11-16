@@ -71,6 +71,19 @@ local default_working_pattern = {
 -- Cache table functions
 local table_move = table.move
 
+local pattern_key_cache = {}
+local pattern_key_format = "%d_%d"
+
+local function get_pattern_key(song_pattern, channel_number)
+  local cache_key = song_pattern * 1000 + channel_number  -- Assumes max 999 channels
+  local key = pattern_key_cache[cache_key]
+  if not key then
+    key = string.format(pattern_key_format, song_pattern, channel_number)
+    pattern_key_cache[cache_key] = key
+  end
+  return key
+end
+
 -- Index structures to optimize traversal
 local function create_step_index()
   return {
@@ -104,9 +117,17 @@ local function find_previous_event(index, step, current_idx)
   local step_events = index.step_to_events[step]
   if not step_events then return nil end
   
-  for i = #step_events, 1, -1 do
-    if step_events[i] < current_idx then
-      return step_events[i]
+  -- Binary search for the insertion point of current_idx
+  local left, right = 1, #step_events
+  while left <= right do
+    local mid = math.floor((left + right) / 2)
+    if step_events[mid] < current_idx then
+      if mid == #step_events or step_events[mid + 1] >= current_idx then
+        return step_events[mid]
+      end
+      left = mid + 1
+    else
+      right = mid - 1
     end
   end
   return nil
@@ -167,6 +188,18 @@ local function restore_step_state(channel, saved_state)
   working_pattern.lengths[step] = saved_wp.length
 end
 
+local function update_chord_mask(dest_chord, src_chord)
+  if not src_chord then 
+    return nil
+  end
+  if not dest_chord then
+    dest_chord = {}
+  end
+  
+  -- Use table.move for bulk array copy
+  return table_move(src_chord, 1, #src_chord, 1, dest_chord)
+end
+
 local function validate_step(step)
   return type(step) == "number" and step > 0 and step == math.floor(step)
 end
@@ -222,7 +255,7 @@ function recorder.add_step(channel, step, note, velocity, length, chord_degrees,
 
   song_pattern = song_pattern or program.get().selected_sequencer_pattern
   
-  local pc_key = string.format("%d_%d", song_pattern, channel.number)
+  local pc_key = get_pattern_key(song_pattern, channel.number)
   local pc_state = state.pattern_channels[pc_key]
   
   if not pc_state then
@@ -295,7 +328,7 @@ end
 
 function recorder.undo(sequencer_pattern, channel_number)
   if sequencer_pattern and channel_number then
-    local pc_key = sequencer_pattern .. "_" .. channel_number
+    local pc_key = get_pattern_key(sequencer_pattern, channel_number)
     local pc_state = state.pattern_channels[pc_key]
     
     if pc_state and pc_state.current_index > 0 then
@@ -314,13 +347,7 @@ function recorder.undo(sequencer_pattern, channel_number)
 
         if prev_event.data.chord_degrees then
           if not channel.step_chord_masks then channel.step_chord_masks = {} end
-          if not channel.step_chord_masks[step] then channel.step_chord_masks[step] = {} end
-
-          channel.step_chord_masks[step][1] = prev_event.data.chord_degrees[1] or channel.step_chord_masks[step][1] 
-          channel.step_chord_masks[step][2] = prev_event.data.chord_degrees[2] or channel.step_chord_masks[step][2]
-          channel.step_chord_masks[step][3] = prev_event.data.chord_degrees[3] or channel.step_chord_masks[step][3]
-          channel.step_chord_masks[step][4] = prev_event.data.chord_degrees[4] or channel.step_chord_masks[step][4]
-
+          channel.step_chord_masks[step] = update_chord_mask(channel.step_chord_masks[step], prev_event.data.chord_degrees)
         elseif channel.step_chord_masks then
           channel.step_chord_masks[step] = nil
         end
@@ -353,7 +380,7 @@ end
 
 function recorder.redo(sequencer_pattern, channel_number)
   if sequencer_pattern and channel_number then
-    local pc_key = sequencer_pattern .. "_" .. channel_number
+    local pc_key = get_pattern_key(sequencer_pattern, channel_number)
     local pc_state = state.pattern_channels[pc_key]
     
     if pc_state and pc_state.current_index < pc_state.event_history.total_size then
@@ -370,11 +397,7 @@ function recorder.redo(sequencer_pattern, channel_number)
 
         if event.data.chord_degrees then
           if not channel.step_chord_masks then channel.step_chord_masks = {} end
-          if not channel.step_chord_masks[step] then channel.step_chord_masks[step] = {} end
-          channel.step_chord_masks[step][1] = event.data.chord_degrees[1] or channel.step_chord_masks[step][1]
-          channel.step_chord_masks[step][2] = event.data.chord_degrees[2] or channel.step_chord_masks[step][2]
-          channel.step_chord_masks[step][3] = event.data.chord_degrees[3] or channel.step_chord_masks[step][3]
-          channel.step_chord_masks[step][4] = event.data.chord_degrees[4] or channel.step_chord_masks[step][4]
+          channel.step_chord_masks[step] = update_chord_mask(channel.step_chord_masks[step], event.data.chord_degrees)
         end
 
         program.update_working_pattern_for_step(
@@ -404,7 +427,7 @@ function recorder.redo(sequencer_pattern, channel_number)
 end
 
 function recorder.get_event_count(sequencer_pattern, channel_number)
-  local pc_key = sequencer_pattern .. "_" .. channel_number
+  local pc_key = get_pattern_key(sequencer_pattern, channel_number)
   local pc_state = state.pattern_channels[pc_key]
   
   if not pc_state then
