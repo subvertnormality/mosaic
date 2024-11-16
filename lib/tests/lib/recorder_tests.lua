@@ -13,7 +13,13 @@ function test_recorder_should_add_single_note()
   recorder.init()
   program.init()
   local channel = program.get_channel(1, 1)
-  recorder.add_step(channel, 1, 60, 100, 1)
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   luaunit.assert_equals(channel.step_trig_masks[1], 1)
   luaunit.assert_equals(channel.step_note_masks[1], 60)
@@ -21,12 +27,19 @@ function test_recorder_should_add_single_note()
   luaunit.assert_equals(channel.step_length_masks[1], 1)
 end
 
-function test_recorder_should_add_step()
+function test_recorder_should_add_note_mask()
   recorder.init()
   program.init()
   local channel = program.get_channel(1, 1)
-  recorder.add_step(channel, 1, 60, 100, 1, {1, 3, 5})
-  
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {1, 3, 5}
+  })
+
   luaunit.assert_equals(channel.step_trig_masks[1], 1)
   luaunit.assert_equals(channel.step_note_masks[1], 60)
   luaunit.assert_equals(channel.step_velocity_masks[1], 100)
@@ -42,8 +55,21 @@ function test_recorder_should_undo_last_note()
   recorder.init()
   program.init()
   local channel = program.get_channel(1, 1)
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 2, 64, 90, 1)
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
   recorder.undo()
   
   luaunit.assert_equals(channel.step_note_masks[1], 60)
@@ -54,8 +80,21 @@ function test_recorder_should_redo_undone_note()
   recorder.init()
   program.init()
   local channel = program.get_channel(1, 1)
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 2, 64, 90, 1)
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
   recorder.undo()
   recorder.redo()
   
@@ -67,10 +106,28 @@ function test_recorder_should_clear_redo_history_after_new_note()
   recorder.init()
   program.init()
   local channel = program.get_channel(1, 1)
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 2, 64, 90, 1)
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
   recorder.undo()
-  recorder.add_step(channel, 2, 67, 80, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
   
   local state = recorder.get_state()
   luaunit.assert_equals(state.event_history.size, 2)
@@ -83,8 +140,19 @@ function test_recorder_should_maintain_separate_channels()
   local channel1 = program.get_channel(1, 1)
   local channel2 = program.get_channel(1, 2)
   
-  recorder.add_step(channel1, 1, 60, 100, 1)
-  recorder.add_step(channel2, 1, 64, 90, 1)
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   luaunit.assert_equals(channel1.step_note_masks[1], 60)
   luaunit.assert_equals(channel2.step_note_masks[1], 64)
@@ -94,14 +162,20 @@ function test_recorder_should_maintain_event_history()
   recorder.init()
   program.init()
   local channel = program.get_channel(1, 1)
-  recorder.add_step(channel, 1, 60, 100, 1)
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   local state = recorder.get_state()
   luaunit.assert_equals(state.event_history:get_size(), 1)
   luaunit.assert_equals(state.current_event_index, 1)
   local first_event = state.event_history:get(1)
   luaunit.assert_not_nil(first_event)
-  luaunit.assert_equals(first_event.data.note, 60)
+  luaunit.assert_equals(first_event.data.event_data.note, 60)
 end
 
 
@@ -109,8 +183,21 @@ function test_recorder_should_maintain_event_index_during_undo_redo()
   recorder.init()
   program.init()
   local channel = program.get_channel(1, 1)
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 2, 64, 90, 1)
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
   recorder.undo()
   
   local state = recorder.get_state()
@@ -124,8 +211,19 @@ function test_recorder_undo_should_clear_notes_from_channel()
   local channel = program.get_channel(1, 1)
   
   -- Add two notes
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 2, 64, 90, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   -- Verify both notes are present
   luaunit.assert_equals(channel.step_trig_masks[1], 1)
@@ -181,8 +279,19 @@ function test_recorder_should_handle_multiple_notes_on_same_step()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 64, 90, 1)  -- Overwrites previous note
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   luaunit.assert_equals(channel.step_note_masks[1], 64)
   luaunit.assert_equals(channel.step_velocity_masks[1], 90)
@@ -198,8 +307,20 @@ function test_recorder_should_handle_chord_after_note_on_same_step()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 64, 90, 1, {1, 3, 5})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    chord_degrees = {1, 3, 5}
+  })
   
   local chord_mask = channel.step_chord_masks[1]
   luaunit.assert_equals(channel.step_note_masks[1], 64)
@@ -218,8 +339,20 @@ function test_recorder_should_handle_note_after_chord_on_same_step()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 1, {1, 3, 5})
-  recorder.add_step(channel, 1, 71, 70, 1)   -- Should not affect chord
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {1, 3, 5}
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 71,
+    velocity = 70,
+    length = 1
+  })
   
   -- Verify chord remains
   luaunit.assert_equals(channel.step_note_masks[1], 71)
@@ -248,8 +381,20 @@ function test_recorder_should_handle_undo_redo_at_boundaries()
   luaunit.assert_equals(state.current_event_index, 0)
   
   -- Add and undo all notes
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 2, 64, 90, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
   recorder.undo()
   recorder.undo()
   
@@ -273,8 +418,19 @@ function test_recorder_should_maintain_correct_velocities_during_undo_redo()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 60, 80, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 80,
+    length = 1
+  })
   
   luaunit.assert_equals(channel.step_velocity_masks[1], 80)
   
@@ -292,7 +448,13 @@ function test_recorder_should_handle_empty_chord_degrees()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 1, {})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {}
+  })
   
   luaunit.assert_equals(channel.step_note_masks[1], 60)
   luaunit.assert_equals(channel.step_velocity_masks[1], 100)
@@ -304,7 +466,13 @@ function test_recorder_should_preserve_event_history_during_clear()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
   program.init()  -- Should not affect recorder state
   
   local state = recorder.get_state()
@@ -312,7 +480,7 @@ function test_recorder_should_preserve_event_history_during_clear()
   luaunit.assert_equals(state.current_event_index, 1)
   local first_event = state.event_history:get(1)
   luaunit.assert_not_nil(first_event)
-  luaunit.assert_equals(first_event.data.note, 60)
+  luaunit.assert_equals(first_event.data.event_data.note, 60)
 end
 
 function test_recorder_should_preserve_original_state()
@@ -327,7 +495,12 @@ function test_recorder_should_preserve_original_state()
   channel.step_length_masks[1] = 2
   
   -- Record new note
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   -- Verify state changed
   luaunit.assert_equals(channel.step_note_masks[1], 60)
@@ -356,7 +529,12 @@ function test_recorder_should_preserve_original_chord_state()
   channel.step_chord_masks[1] = {1, 4, 7}
   
   -- Record new note (should not affect chord)
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   -- Verify chord preserved
   local chord_mask = channel.step_chord_masks[1]
@@ -365,7 +543,13 @@ function test_recorder_should_preserve_original_chord_state()
   luaunit.assert_equals(chord_mask[3], 7)
   
   -- Explicitly clear chord
-  recorder.add_step(channel, 1, nil, nil, nil, {})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = nil,
+    chord_degrees = {}
+  })
   luaunit.assert_equals(channel.step_chord_masks[1], nil)
 end
 
@@ -381,9 +565,26 @@ function test_recorder_should_handle_multiple_edits_to_same_step()
   channel.step_velocity_masks[1] = 70
   
   -- Make multiple edits
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 64, 90, 1)
-  recorder.add_step(channel, 1, 67, 80, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
   
   -- Verify final state
   luaunit.assert_equals(channel.step_note_masks[1], 67)
@@ -409,7 +610,12 @@ function test_recorder_should_preserve_nil_states()
   local channel = program.get_channel(1, 1)
   
   -- Record new note in empty step
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   -- Verify note was added
   luaunit.assert_equals(channel.step_note_masks[1], 60)
@@ -435,9 +641,27 @@ function test_recorder_should_handle_mixed_note_and_chord_edits_on_same_step()
   channel.step_velocity_masks[1] = 70
   
   -- Series of mixed edits - chords should remain unless explicitly changed
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 64, 90, 1, {1, 3, 5})
-  recorder.add_step(channel, 1, 72, 110, 1)  -- Should not affect chord
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    chord_degrees = {1, 3, 5}
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 72,
+    velocity = 110,
+    length = 1
+  })
   
   -- Verify final state
   luaunit.assert_equals(channel.step_note_masks[1], 72)
@@ -448,7 +672,14 @@ function test_recorder_should_handle_mixed_note_and_chord_edits_on_same_step()
   luaunit.assert_equals(chord_mask[3], 5)
   
   -- Explicitly clear chord
-  recorder.add_step(channel, 1, nil, nil, nil, {})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = nil,
+    chord_degrees = {}
+  })
+
   luaunit.assert_equals(channel.step_chord_masks[1], nil)
 end
 
@@ -464,10 +695,33 @@ function test_recorder_should_handle_interleaved_step_edits()
   channel.step_note_masks[2] = 50
   
   -- Interleaved edits
-  recorder.add_step(channel, 1, 60, 100, 1)  -- Edit step 1
-  recorder.add_step(channel, 2, 62, 90, 1)   -- Edit step 2
-  recorder.add_step(channel, 1, 64, 110, 1)  -- Edit step 1 again
-  recorder.add_step(channel, 2, 65, 95, 1)   -- Edit step 2 again
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 62,
+    velocity = 90,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 110,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 65,
+    velocity = 95,
+    length = 1
+  })
   
   -- Verify final state
   luaunit.assert_equals(channel.step_note_masks[1], 64)
@@ -501,9 +755,26 @@ function test_recorder_should_handle_partial_undo_with_new_edits()
   channel.step_note_masks[1] = 48
   
   -- First series of edits
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 64, 90, 1)
-  recorder.add_step(channel, 1, 67, 80, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
   
   -- Partial undo
   recorder.undo()
@@ -513,8 +784,19 @@ function test_recorder_should_handle_partial_undo_with_new_edits()
   luaunit.assert_equals(channel.step_note_masks[1], 60)
   
   -- Add new edits
-  recorder.add_step(channel, 1, 72, 110, 1)
-  recorder.add_step(channel, 1, 74, 115, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 72,
+    velocity = 110,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 74,
+    velocity = 115,
+    length = 1
+  })
   
   -- Verify new state
   luaunit.assert_equals(channel.step_note_masks[1], 74)
@@ -541,9 +823,27 @@ function test_recorder_should_handle_redo_after_multiple_undos()
   channel.step_note_masks[1] = 48
   
   -- Build up history
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 64, 90, 1, {1, 3, 5})
-  recorder.add_step(channel, 1, 72, 110, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    chord_degrees = {1, 3, 5}
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 72,
+    velocity = 110,
+    length = 1
+  })
   
   -- Undo everything
   recorder.undo()
@@ -586,10 +886,35 @@ function test_recorder_should_preserve_original_state_across_multiple_edits()
   channel.step_chord_masks[1] = {1, 4, 7}
   
   -- Multiple edits of different types
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 64, 90, 1, {1, 3, 5})
-  recorder.add_step(channel, 1, 72, 110, 1)
-  recorder.add_step(channel, 1, 76, 95, 1, {1, 3, 5})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    chord_degrees = {1, 3, 5}
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 72,
+    velocity = 110,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 76,
+    velocity = 95,
+    length = 1,
+    chord_degrees = {1, 3, 5}
+  })
   
   -- Undo all the way back
   recorder.undo()
@@ -625,8 +950,21 @@ function test_recorder_should_preserve_states_across_patterns()
   channel_pattern2.step_velocity_masks[1] = 70
   
   -- Make edits specifying different patterns
-  recorder.add_step(channel_pattern1, 1, 60, 100, 1, {}, 1)  -- Pattern 1
-  recorder.add_step(channel_pattern2, 1, 62, 90, 1, {}, 2)   -- Pattern 2
+  recorder.record_event(channel_pattern1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel_pattern2, "note_mask", {
+    step = 1,
+    note = 62,
+    velocity = 90,
+    length = 1,
+    song_pattern = 2
+  })
   
   -- Verify each pattern tracked separately
   recorder.undo()  -- Undo pattern 2 edit
@@ -651,8 +989,21 @@ function test_recorder_should_undo_redo_in_correct_pattern()
   channel1_pattern2.step_note_masks[1] = 50
   
   -- Add notes to both patterns, explicitly passing song pattern
-  recorder.add_step(channel1_pattern1, 1, 60, 100, 1, {}, 1)  -- Pattern 1
-  recorder.add_step(channel1_pattern2, 1, 62, 90, 1, {}, 2)   -- Pattern 2
+  recorder.record_event(channel1_pattern1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel1_pattern2, "note_mask", {
+    step = 1,
+    note = 62,
+    velocity = 90,
+    length = 1,
+    song_pattern = 2
+  })
   
   -- Undo should restore correct pattern
   recorder.undo()  -- Should affect pattern 2
@@ -684,9 +1035,29 @@ function test_recorder_should_find_previous_events_in_same_pattern()
   local channel1_pattern2 = program.get_channel(2, 1)
   
   -- Create sequence of events across patterns
-  recorder.add_step(channel1_pattern1, 1, 60, 100, 1, {}, 1)  -- Pattern 1
-  recorder.add_step(channel1_pattern2, 1, 62, 90, 1, {}, 2)   -- Pattern 2
-  recorder.add_step(channel1_pattern1, 1, 64, 80, 1, {}, 1)   -- Pattern 1
+  recorder.record_event(channel1_pattern1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel1_pattern2, "note_mask", {
+    step = 1,
+    note = 62,
+    velocity = 90,
+    length = 1,
+    song_pattern = 2
+  })
+
+  recorder.record_event(channel1_pattern1, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 80,
+    length = 1,
+    song_pattern = 1
+  })
   
   -- Undo should find previous event in same pattern
   recorder.undo()  -- Undo last note in pattern 1
@@ -708,7 +1079,13 @@ function test_recorder_should_not_modify_step_key_when_same_channel_number_in_di
   channel1_pattern2.step_note_masks[1] = 50
 
   -- Add note to first pattern
-  recorder.add_step(channel1_pattern1, 1, 60, 100, 1, {}, 1)
+  recorder.record_event(channel1_pattern1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
 
   -- Access pc_state1 after adding step to pattern 1
   local state = recorder.get_state()
@@ -718,7 +1095,13 @@ function test_recorder_should_not_modify_step_key_when_same_channel_number_in_di
   luaunit.assert_equals(pc_state1.original_states[step_key].note_mask, 48)
 
   -- Add note to second pattern
-  recorder.add_step(channel1_pattern2, 1, 62, 90, 1, {}, 2)
+  recorder.record_event(channel1_pattern2, "note_mask", {
+    step = 1,
+    note = 62,
+    velocity = 90,
+    length = 1,
+    song_pattern = 2
+  })
 
   -- Access pc_state2 after adding step to pattern 2
   local key2 = "2_1"
@@ -737,7 +1120,13 @@ function test_recorder_should_store_deep_copies_of_chord_masks()
   channel.step_chord_masks[1] = {1, 3, 5}
   
   -- Add new chord
-  recorder.add_step(channel, 1, 60, 100, 1, {2, 4, 6})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {2, 4, 6}
+  })
   
   -- Modify original chord array
   channel.step_chord_masks[1][1] = 7
@@ -756,7 +1145,12 @@ function test_recorder_should_handle_deleted_recreated_channels()
   
   -- Add note to channel
   local channel = program.get_channel(1, 1)
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   -- Simulate channel deletion/recreation
   program.init()
@@ -767,7 +1161,7 @@ function test_recorder_should_handle_deleted_recreated_channels()
   luaunit.assert_equals(state.event_history:get_size(), 1)
   local first_event = state.event_history:get(1)
   luaunit.assert_not_nil(first_event)
-  luaunit.assert_equals(first_event.data.note, 60)
+  luaunit.assert_equals(first_event.data.event_data.note, 60)
   
   -- Verify undo still works
   recorder.undo()
@@ -779,15 +1173,32 @@ function test_recorder_should_preserve_event_order_during_undo()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 2, 62, 90, 1)
-  recorder.add_step(channel, 3, 64, 80, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 62,
+    velocity = 90,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 3,
+    note = 64,
+    velocity = 80,
+    length = 1
+  })
   
   -- Get initial event order
   local state = recorder.get_state()
   local initial_events = {}
   for i, event in ipairs(state.event_history) do
-    initial_events[i] = event.data.note
+    initial_events[i] = event.data.event_data.note
   end
   
   -- Undo everything
@@ -803,7 +1214,7 @@ function test_recorder_should_preserve_event_order_during_undo()
   -- Check event order is preserved
   state = recorder.get_state()
   for i, event in ipairs(state.event_history) do
-    luaunit.assert_equals(event.data.note, initial_events[i])
+    luaunit.assert_equals(event.data.event_data.note, initial_events[i])
   end
 end
 
@@ -812,13 +1223,25 @@ function test_recorder_should_handle_nil_chord_degrees_correctly()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 1, nil)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = nil
+  })
   
   luaunit.assert_equals(channel.step_note_masks[1], 60)
   luaunit.assert_equals(channel.step_velocity_masks[1], 100)
   luaunit.assert_equals(channel.step_chord_masks[1], nil)
   
-  recorder.add_step(channel, 1, 62, 95, 1, {})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 62,
+    velocity = 95,
+    length = 1,
+    chord_degrees = {}
+  })
   
   luaunit.assert_equals(channel.step_chord_masks[1], nil)
 end
@@ -829,7 +1252,12 @@ function test_recorder_should_update_working_pattern()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   -- Check masks are set
   luaunit.assert_equals(channel.step_note_masks[1], 60)
@@ -848,8 +1276,19 @@ function test_recorder_should_restore_working_pattern_on_undo()
   local channel = program.get_channel(1, 1)
   
   -- Add two steps
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 64, 90, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   -- Undo last step
   recorder.undo()
@@ -865,7 +1304,13 @@ function test_recorder_should_clear_working_pattern_on_full_undo()
   local channel = program.get_channel(1, 1)
   
   -- Add and undo a step
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
   recorder.undo()
   
   -- Check working pattern is cleared
@@ -882,8 +1327,19 @@ function test_recorder_should_handle_multiple_patterns_working_pattern()
   local channel2 = program.get_channel(2, 1)
   
   -- Add notes to different patterns
-  recorder.add_step(channel1, 1, 60, 100, 1)
-  recorder.add_step(channel2, 1, 64, 90, 1)
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   -- Check working patterns are independent
   luaunit.assert_equals(channel1.working_pattern.note_mask_values[1], 60)
@@ -903,7 +1359,12 @@ function test_recorder_should_preserve_working_pattern_original_state()
   channel.working_pattern.lengths[1] = 2
   
   -- Add new note
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   -- Verify working pattern changed
   luaunit.assert_equals(channel.working_pattern.note_mask_values[1], 60)
@@ -924,9 +1385,26 @@ function test_recorder_should_handle_working_pattern_multiple_edits()
   local channel = program.get_channel(1, 1)
   
   -- Add series of edits
-  recorder.add_step(channel, 1, 60, 100, 1)  -- First edit
-  recorder.add_step(channel, 1, 64, 90, 1)   -- Second edit
-  recorder.add_step(channel, 1, 67, 80, 1)   -- Third edit
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
   
   -- Verify final working pattern state
   luaunit.assert_equals(channel.working_pattern.note_mask_values[1], 67)
@@ -952,8 +1430,20 @@ function test_recorder_should_preserve_working_pattern_during_redo()
   local channel = program.get_channel(1, 1)
   
   -- Add and undo some steps
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 64, 90, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
   recorder.undo()
   recorder.undo()
   
@@ -977,8 +1467,19 @@ function test_recorder_should_handle_working_pattern_across_different_steps()
   local channel = program.get_channel(1, 1)
   
   -- Add notes to different steps
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 2, 64, 90, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   -- Verify both steps in working pattern
   luaunit.assert_equals(channel.working_pattern.note_mask_values[1], 60)
@@ -999,14 +1500,25 @@ function test_recorder_should_handle_working_pattern_with_chords()
   local channel = program.get_channel(1, 1)
   
   -- Add chord
-  recorder.add_step(channel, 1, 60, 100, 1, {1, 3, 5})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {1, 3, 5}
+  })
   
   -- Verify working pattern values
   luaunit.assert_equals(channel.working_pattern.note_mask_values[1], 60)
   luaunit.assert_equals(channel.working_pattern.velocity_values[1], 100)
   
   -- Add normal note (clearing chord)
-  recorder.add_step(channel, 1, 64, 90, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   -- Verify working pattern updated
   luaunit.assert_equals(channel.working_pattern.note_mask_values[1], 64)
@@ -1025,15 +1537,32 @@ function test_recorder_should_preserve_working_pattern_when_clearing_redo_histor
   local channel = program.get_channel(1, 1)
   
   -- Create some history
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 64, 90, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
   recorder.undo()
   
   -- Working pattern should show first note
   luaunit.assert_equals(channel.working_pattern.note_mask_values[1], 60)
   
   -- Add new note (clearing redo history)
-  recorder.add_step(channel, 1, 67, 80, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
   
   -- Working pattern should show new note
   luaunit.assert_equals(channel.working_pattern.note_mask_values[1], 67)
@@ -1058,8 +1587,22 @@ function test_recorder_should_maintain_working_pattern_across_multiple_patterns(
   local channel2 = program.get_channel(2, 1)
   
   -- Add notes to different patterns
-  recorder.add_step(channel1, 1, 60, 100, 1, {}, 1)
-  recorder.add_step(channel2, 1, 64, 90, 1, {}, 2)
+
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    song_pattern = 2
+  })
   
   -- Verify working patterns are independent
   luaunit.assert_equals(channel1.working_pattern.note_mask_values[1], 60)
@@ -1079,7 +1622,12 @@ function test_recorder_should_handle_nil_channel()
   program.init()
   
   -- Attempt to add step with nil channel
-  recorder.add_step(nil, 1, 60, 100, 1)
+  recorder.record_event(nil, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   local state = recorder.get_state()
   luaunit.assert_equals(#state.event_history, 0)
@@ -1092,15 +1640,32 @@ function test_recorder_should_handle_invalid_step_numbers()
   local channel = program.get_channel(1, 1)
   
   -- Test negative step
-  recorder.add_step(channel, -1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = -1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
   luaunit.assert_equals(channel.step_note_masks[-1], nil)
   
   -- Test zero step
-  recorder.add_step(channel, 0, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 0,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
   luaunit.assert_equals(channel.step_note_masks[0], nil)
   
   -- Test non-numeric step
-  recorder.add_step(channel, "invalid", 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = "invalid",
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   luaunit.assert_equals(channel.step_note_masks["invalid"], nil)
   
   local state = recorder.get_state()
@@ -1113,14 +1678,47 @@ function test_recorder_should_handle_invalid_note_velocity_values()
   local channel = program.get_channel(1, 1)
   
   -- Test invalid note values
-  recorder.add_step(channel, 1, -1, 100, 1)  -- Negative note
-  recorder.add_step(channel, 1, 128, 100, 1) -- Note too high
-  recorder.add_step(channel, 1, "C4", 100, 1) -- Non-numeric note
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = -1,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 128,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = "C4",
+    velocity = 100,
+    length = 1
+  })
   
-  -- Test invalid velocity values  
-  recorder.add_step(channel, 1, 60, -1, 1)    -- Negative velocity
-  recorder.add_step(channel, 1, 60, 128, 1)   -- Velocity too high
-  recorder.add_step(channel, 1, 60, "ff", 1)  -- Non-numeric velocity
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = -1,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 128,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = "ff",
+    length = 1
+  })
   
   local state = recorder.get_state()
   luaunit.assert_equals(#state.event_history, 0)
@@ -1134,12 +1732,23 @@ function test_recorder_should_persist_state_across_pattern_switches()
   -- Add notes to pattern 1
   program.set_selected_sequencer_pattern(1)
   local channel1 = program.get_channel(1, 1)
-  recorder.add_step(channel1, 1, 60, 100, 1)
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   -- Switch to pattern 2 and add notes
   program.set_selected_sequencer_pattern(2)
   local channel2 = program.get_channel(2, 1)
-  recorder.add_step(channel2, 1, 64, 90, 1)
+
+  recorder.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   -- Switch back to pattern 1 and verify state
   program.set_selected_sequencer_pattern(1)
@@ -1165,14 +1774,32 @@ function test_recorder_should_clear_redo_history_on_cross_pattern_edits()
   -- Build up history in pattern 1
   program.set_selected_sequencer_pattern(1)
   local channel1 = program.get_channel(1, 1)
-  recorder.add_step(channel1, 1, 60, 100, 1)
-  recorder.add_step(channel1, 1, 64, 90, 1)
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
   recorder.undo()
   
   -- Add note in pattern 2 
   program.set_selected_sequencer_pattern(2)
   local channel2 = program.get_channel(2, 1)
-  recorder.add_step(channel2, 1, 67, 80, 1)
+
+  recorder.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
   
   -- Try to redo pattern 1 edit
   program.set_selected_sequencer_pattern(1)
@@ -1192,10 +1819,37 @@ function test_recorder_should_validate_chord_degrees()
   local channel = program.get_channel(1, 1)
   
   -- Test invalid chord degrees
-  recorder.add_step(channel, 1, 60, 100, 1, {-1, 3, 5})     -- Negative degree
-  recorder.add_step(channel, 1, 60, 100, 1, {1, 8, 5})      -- Degree too high
-  recorder.add_step(channel, 1, 60, 100, 1, {"1", "3", "5"}) -- Non-numeric degrees
-  recorder.add_step(channel, 1, 60, 100, 1, {1, 1, 1})      -- Duplicate degrees
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {-1, 3, 5}
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {1, 8, 5}
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {"1", "3", "5"}
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {1, 1, 1}
+  })
   
   -- Verify invalid chords weren't recorded
   luaunit.assert_equals(channel.step_chord_masks[1], nil)
@@ -1211,13 +1865,35 @@ function test_recorder_undo_should_be_isolated_to_pattern()
   -- Add notes to two patterns
   program.set_selected_sequencer_pattern(1)
   local channel1 = program.get_channel(1, 1)
-  recorder.add_step(channel1, 1, 60, 100, 1)
-  recorder.add_step(channel1, 2, 64, 90, 1)
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel1, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   program.set_selected_sequencer_pattern(2)
   local channel2 = program.get_channel(2, 1)
-  recorder.add_step(channel2, 1, 67, 80, 1)
-  recorder.add_step(channel2, 2, 71, 70, 1)
+  recorder.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
+
+  recorder.record_event(channel2, "note_mask", {
+    step = 2,
+    note = 71,
+    velocity = 70,
+    length = 1
+  })
   
   -- Undo in pattern 2
   recorder.undo(2, 1)
@@ -1238,14 +1914,40 @@ function test_recorder_redo_should_be_isolated_to_pattern()
   -- Add and undo notes in two patterns
   program.set_selected_sequencer_pattern(1)
   local channel1 = program.get_channel(1, 1)
-  recorder.add_step(channel1, 1, 60, 100, 1)
-  recorder.add_step(channel1, 2, 64, 90, 1)
+
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel1, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+
   recorder.undo(1, 1)
   
   program.set_selected_sequencer_pattern(2)
   local channel2 = program.get_channel(2, 1)
-  recorder.add_step(channel2, 1, 67, 80, 1)
-  recorder.add_step(channel2, 2, 71, 70, 1)
+
+  recorder.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
+
+  recorder.record_event(channel2, "note_mask", {
+    step = 2,
+    note = 71,
+    velocity = 70,
+    length = 1
+  })
+
   recorder.undo(2, 1)
   
   -- Redo in pattern 2
@@ -1266,17 +1968,39 @@ function test_recorder_should_track_separate_histories_per_pattern()
   -- Add notes alternating between patterns
   program.set_selected_sequencer_pattern(1)
   local channel1 = program.get_channel(1, 1)
-  recorder.add_step(channel1, 1, 60, 100, 1)
+
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   program.set_selected_sequencer_pattern(2)
   local channel2 = program.get_channel(2, 1)
-  recorder.add_step(channel2, 1, 67, 80, 1)
+
+  recorder.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
   
   program.set_selected_sequencer_pattern(1)
-  recorder.add_step(channel1, 2, 64, 90, 1)
+  recorder.record_event(channel1, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   program.set_selected_sequencer_pattern(2)
-  recorder.add_step(channel2, 2, 71, 70, 1)
+  recorder.record_event(channel2, "note_mask", {
+    step = 2,
+    note = 71,
+    velocity = 70,
+    length = 1
+  })
   
   -- Verify separate histories tracked
   local state = recorder.get_state()
@@ -1284,12 +2008,12 @@ function test_recorder_should_track_separate_histories_per_pattern()
   local pattern2_history = state.pattern_channels["2_1"].event_history
   
   luaunit.assert_equals(pattern1_history:get_size(), 2)
-  luaunit.assert_equals(pattern1_history:get(1).data.note, 60)
-  luaunit.assert_equals(pattern1_history:get(2).data.note, 64)
+  luaunit.assert_equals(pattern1_history:get(1).data.event_data.note, 60)
+  luaunit.assert_equals(pattern1_history:get(2).data.event_data.note, 64)
   
   luaunit.assert_equals(pattern2_history:get_size(), 2)
-  luaunit.assert_equals(pattern2_history:get(1).data.note, 67)
-  luaunit.assert_equals(pattern2_history:get(2).data.note, 71)
+  luaunit.assert_equals(pattern2_history:get(1).data.event_data.note, 67)
+  luaunit.assert_equals(pattern2_history:get(2).data.event_data.note, 71)
 end
 
 function test_recorder_should_count_events_per_channel()
@@ -1298,11 +2022,27 @@ function test_recorder_should_count_events_per_channel()
   
   -- Add notes to different patterns/channels
   local channel1 = program.get_channel(1, 1) 
-  recorder.add_step(channel1, 1, 60, 100, 1)
-  recorder.add_step(channel1, 2, 64, 90, 1)
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel1, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   local channel2 = program.get_channel(1, 2)
-  recorder.add_step(channel2, 1, 67, 80, 1)
+  recorder.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
   
   luaunit.assert_equals(recorder.get_event_count(1, 1), 2)
   luaunit.assert_equals(recorder.get_event_count(1, 2), 1)
@@ -1323,15 +2063,43 @@ function test_recorder_should_count_events_across_patterns()
   program.set_selected_sequencer_pattern(1)
   local channel1_p1 = program.get_channel(1, 1)
   local channel2_p1 = program.get_channel(1, 2)
-  recorder.add_step(channel1_p1, 1, 60, 100, 1)
-  recorder.add_step(channel2_p1, 1, 64, 90, 1)
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel2_p1, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
   
   program.set_selected_sequencer_pattern(2)
   local channel1_p2 = program.get_channel(2, 1)
   local channel2_p2 = program.get_channel(2, 2)
-  recorder.add_step(channel1_p2, 1, 67, 80, 1)
-  recorder.add_step(channel2_p2, 1, 71, 70, 1)
-  recorder.add_step(channel1_p2, 2, 72, 85, 1)
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1
+  })
+
+  recorder.record_event(channel2_p2, "note_mask", {
+    step = 1,
+    note = 71,
+    velocity = 70,
+    length = 1
+  })
+
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 2,
+    note = 72,
+    velocity = 85,
+    length = 1
+  })
   
   -- Check counts across patterns and channels
   luaunit.assert_equals(recorder.get_event_count(1, 1), 1)
@@ -1354,7 +2122,12 @@ function test_recorder_should_handle_custom_length()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 2)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2
+  })
   
   luaunit.assert_equals(channel.step_length_masks[1], 2)
   luaunit.assert_equals(channel.working_pattern.lengths[1], 2)
@@ -1366,8 +2139,19 @@ function test_recorder_should_validate_length()
   local channel = program.get_channel(1, 1)
   
   -- Test invalid lengths
-  recorder.add_step(channel, 1, 60, 100, -1)      -- Negative length
-  recorder.add_step(channel, 1, 60, 100, "2")     -- Non-numeric length
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 0
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = "2"
+  })
   
   luaunit.assert_equals(channel.step_length_masks[1], nil)
   
@@ -1380,8 +2164,19 @@ function test_recorder_should_preserve_length_during_undo_redo()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 2)
-  recorder.add_step(channel, 1, 64, 90, 3)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 3
+  })
   
   luaunit.assert_equals(channel.step_length_masks[1], 3)
   
@@ -1398,9 +2193,26 @@ function test_recorder_should_handle_multiple_length_edits_to_same_step()
   local channel = program.get_channel(1, 1)
   
   -- Series of length edits
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 60, 100, 2)
-  recorder.add_step(channel, 1, 60, 100, 4)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 4
+  })
   
   luaunit.assert_equals(channel.step_length_masks[1], 4)
   
@@ -1419,11 +2231,22 @@ function test_recorder_should_preserve_length_across_patterns()
   -- Set up channels in different patterns
   program.set_selected_sequencer_pattern(1)
   local channel1 = program.get_channel(1, 1)
-  recorder.add_step(channel1, 1, 60, 100, 2)
+  recorder.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2
+  })
   
   program.set_selected_sequencer_pattern(2)
   local channel2 = program.get_channel(2, 1)
-  recorder.add_step(channel2, 1, 64, 90, 3)
+
+  recorder.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 3
+  })
   
   -- Verify lengths are independent
   luaunit.assert_equals(channel1.step_length_masks[1], 2)
@@ -1440,7 +2263,12 @@ function test_recorder_should_maintain_length_in_working_pattern()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  recorder.add_step(channel, 1, 60, 100, 3)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 3
+  })
   
   -- Verify length in both masks and working pattern
   luaunit.assert_equals(channel.step_length_masks[1], 3)
@@ -1459,9 +2287,26 @@ function test_recorder_should_handle_interleaved_length_edits()
   local channel = program.get_channel(1, 1)
   
   -- Add steps with different lengths
-  recorder.add_step(channel, 1, 60, 100, 2)
-  recorder.add_step(channel, 2, 64, 90, 3)
-  recorder.add_step(channel, 1, 60, 100, 4)  -- Change step 1 length
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 64,
+    velocity = 90,
+    length = 3
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 4
+  })
   
   -- Verify final state
   luaunit.assert_equals(channel.step_length_masks[1], 4)
@@ -1486,7 +2331,12 @@ function test_recorder_should_preserve_original_length_state()
   channel.working_pattern.lengths[1] = 4
   
   -- Record new note with different length
-  recorder.add_step(channel, 1, 60, 100, 2)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2
+  })
   
   -- Verify state changed
   luaunit.assert_equals(channel.step_length_masks[1], 2)
@@ -1504,9 +2354,27 @@ function test_recorder_should_persist_length_through_redo()
   local channel = program.get_channel(1, 1)
   
   -- Add and undo a series of edits
-  recorder.add_step(channel, 1, 60, 100, 2)
-  recorder.add_step(channel, 1, 60, 100, 3)
-  recorder.add_step(channel, 1, 60, 100, 4)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 3
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 4
+  })
+
   recorder.undo()
   recorder.undo()
   recorder.undo()
@@ -1531,13 +2399,25 @@ function test_recorder_should_validate_length_with_chord()
   local channel = program.get_channel(1, 1)
   
   -- Test invalid length with chord
-  recorder.add_step(channel, 1, 60, 100, -1, {1, 3, 5})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = -1,
+    chord_degrees = {1, 3, 5}
+  })
   
   luaunit.assert_equals(channel.step_length_masks[1], nil)
   luaunit.assert_equals(channel.step_chord_masks[1], nil)
   
   -- Test valid length with chord
-  recorder.add_step(channel, 1, 60, 100, 2, {1, 3, 5})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2,
+    chord_degrees = {1, 3, 5}
+  })
   
   luaunit.assert_equals(channel.step_length_masks[1], 2)
   local chord_mask = channel.step_chord_masks[1]
@@ -1552,16 +2432,26 @@ function test_recorder_should_handle_nil_note_and_velocity()
   local channel = program.get_channel(1, 1)
   
   -- Set initial state
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   -- Modify only length
-  recorder.add_step(channel, 1, nil, nil, 2)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = 3
+  })
   
   -- Original note and velocity should be preserved
   luaunit.assert_equals(channel.step_note_masks[1], 60)
   luaunit.assert_equals(channel.step_velocity_masks[1], 100)
   -- Length should be updated
-  luaunit.assert_equals(channel.step_length_masks[1], 2)
+  luaunit.assert_equals(channel.step_length_masks[1], 3)
 end
 
 function test_recorder_should_preserve_chord_when_only_changing_length()
@@ -1570,10 +2460,22 @@ function test_recorder_should_preserve_chord_when_only_changing_length()
   local channel = program.get_channel(1, 1)
   
   -- Set initial state with chord
-  recorder.add_step(channel, 1, 60, 100, 1, {1, 3, 5})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2,
+    chord_degrees = {1, 3, 5}
+  })
   
   -- Modify only length
-  recorder.add_step(channel, 1, nil, nil, 2)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = 3,
+    chord_degrees = nil
+  })
   
   -- Verify chord is preserved
   local chord_mask = channel.step_chord_masks[1]
@@ -1584,7 +2486,7 @@ function test_recorder_should_preserve_chord_when_only_changing_length()
   -- Verify other values
   luaunit.assert_equals(channel.step_note_masks[1], 60)
   luaunit.assert_equals(channel.step_velocity_masks[1], 100)
-  luaunit.assert_equals(channel.step_length_masks[1], 2)
+  luaunit.assert_equals(channel.step_length_masks[1], 3)
 end
 
 function test_recorder_should_handle_partial_updates()
@@ -1593,10 +2495,20 @@ function test_recorder_should_handle_partial_updates()
   local channel = program.get_channel(1, 1)
   
   -- Set initial state
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   -- Update only velocity and length
-  recorder.add_step(channel, 1, nil, 80, 2)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = 80,
+    length = 2
+  })
   
   -- Note should be preserved, velocity and length updated
   luaunit.assert_equals(channel.step_note_masks[1], 60)
@@ -1604,7 +2516,12 @@ function test_recorder_should_handle_partial_updates()
   luaunit.assert_equals(channel.step_length_masks[1], 2)
   
   -- Update only note and length
-  recorder.add_step(channel, 1, 64, nil, 3)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = nil,
+    length = 3
+  })
   
   -- Note and length should be updated, velocity preserved
   luaunit.assert_equals(channel.step_note_masks[1], 64)
@@ -1618,10 +2535,21 @@ function test_recorder_should_handle_undo_redo_with_partial_updates()
   local channel = program.get_channel(1, 1)
   
   -- Set initial state
-  recorder.add_step(channel, 1, 60, 100, 1, {1, 3, 5})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {1, 3, 5}
+  })
   
   -- Update only length
-  recorder.add_step(channel, 1, nil, nil, 2)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = 2
+  })
   
   -- Verify only length changed
   luaunit.assert_equals(channel.step_note_masks[1], 60)
@@ -1655,35 +2583,90 @@ function test_recorder_should_validate_nil_values()
   local channel = program.get_channel(1, 1)
   
   -- Set initial state
-  recorder.add_step(channel, 1, 60, 100, 2, {1, 3, 5})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2,
+    chord_degrees = {1, 3, 5}
+  })
   
   -- Update only individual values
-  recorder.add_step(channel, 1, nil, 90, nil, nil)     -- Update just velocity
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = 90,
+    length = nil,
+    chord_degrees = nil
+  })
+
   luaunit.assert_equals(channel.step_velocity_masks[1], 90)
   luaunit.assert_equals(channel.step_note_masks[1], 60)
   luaunit.assert_equals(channel.step_length_masks[1], 2)
   
-  recorder.add_step(channel, 1, 64, nil, nil, nil)     -- Update just note
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = nil,
+    length = nil,
+    chord_degrees = nil
+  })
+
   luaunit.assert_equals(channel.step_note_masks[1], 64)
   luaunit.assert_equals(channel.step_velocity_masks[1], 90)
   luaunit.assert_equals(channel.step_length_masks[1], 2)
   
-  recorder.add_step(channel, 1, nil, nil, 3, nil)      -- Update just length
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = 3,
+    chord_degrees = nil
+  })
+
   luaunit.assert_equals(channel.step_note_masks[1], 64)
   luaunit.assert_equals(channel.step_velocity_masks[1], 90)
   luaunit.assert_equals(channel.step_length_masks[1], 3)
   
   -- Invalid values should still be caught
-  recorder.add_step(channel, 1, -1, nil, nil, nil)    -- Invalid note
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = -1,
+    velocity = nil,
+    length = nil,
+    chord_degrees = nil
+  })
+
   luaunit.assert_equals(channel.step_note_masks[1], 64)  -- Should not change
   
-  recorder.add_step(channel, 1, nil, 128, nil, nil)   -- Invalid velocity
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = 128,
+    length = nil,
+    chord_degrees = nil
+  })
+
   luaunit.assert_equals(channel.step_velocity_masks[1], 90)  -- Should not change
   
-  recorder.add_step(channel, 1, nil, nil, -6, nil)     -- Invalid length
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = -6,
+    chord_degrees = nil
+  })
+
   luaunit.assert_equals(channel.step_length_masks[1], 3)  -- Should not change
   
-  recorder.add_step(channel, 1, nil, nil, nil, {0})   -- Invalid chord degree
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = nil,
+    chord_degrees = {0}
+  })
+
   local chord_mask = channel.step_chord_masks[1]
   luaunit.assert_equals(chord_mask[1], 1)  -- Should not change
 end
@@ -1694,10 +2677,22 @@ function test_recorder_should_allow_all_nil_values_except_step()
   local channel = program.get_channel(1, 1)
   
   -- Set initial state
-  recorder.add_step(channel, 1, 60, 100, 2, {1, 3, 5})
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 2,
+    chord_degrees = {1, 3, 5}
+  })
   
   -- Should preserve all values when using nil
-  recorder.add_step(channel, 1, nil, nil, nil, nil)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = nil,
+    chord_degrees = nil
+  })
   
   -- Verify all original values preserved
   luaunit.assert_equals(channel.step_note_masks[1], 60)
@@ -1715,26 +2710,62 @@ function test_recorder_should_validate_partial_updates()
   local channel = program.get_channel(1, 1)
   
   -- Test various partial update combinations
-  recorder.add_step(channel, 1, 60, nil, nil, nil)    -- Just note
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = nil,
+    length = nil,
+    chord_degrees = nil
+  })
   luaunit.assert_equals(channel.step_note_masks[1], 60)
   
-  recorder.add_step(channel, 1, nil, 100, nil, nil)   -- Just velocity
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = 100,
+    length = nil,
+    chord_degrees = nil
+  })
   luaunit.assert_equals(channel.step_velocity_masks[1], 100)
   
-  recorder.add_step(channel, 1, nil, nil, 2, nil)     -- Just length
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = 2,
+    chord_degrees = nil
+  })
   luaunit.assert_equals(channel.step_length_masks[1], 2)
   
-  recorder.add_step(channel, 1, nil, nil, nil, {1, 3}) -- Just chord
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = nil,
+    chord_degrees = {1, 3}
+  })
   local chord_mask = channel.step_chord_masks[1]
   luaunit.assert_equals(chord_mask[1], 1)
   luaunit.assert_equals(chord_mask[2], 3)
   
   -- Mixed combinations
-  recorder.add_step(channel, 1, 64, 90, nil, nil)     -- Note + velocity
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = nil,
+    chord_degrees = nil
+  })
   luaunit.assert_equals(channel.step_note_masks[1], 64)
   luaunit.assert_equals(channel.step_velocity_masks[1], 90)
   
-  recorder.add_step(channel, 1, nil, nil, 3, {1, 4})  -- Length + chord
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = nil,
+    velocity = nil,
+    length = 3,
+    chord_degrees = {1, 4}
+  })
   luaunit.assert_equals(channel.step_length_masks[1], 3)
   chord_mask = channel.step_chord_masks[1]
   luaunit.assert_equals(chord_mask[1], 1)
@@ -1748,7 +2779,12 @@ function test_recorder_should_preserve_indices_after_wrap()
   
   -- Fill buffer and cause wrap
   for i = 1, 1001 do
-    recorder.add_step(channel, i % 16 + 1, 60 + i, 100, 1)  -- Use 16 different steps
+    recorder.record_event(channel, "note_mask", {
+      step = i % 16 + 1,
+      note = 60 + i,
+      velocity = 100,
+      length = 1
+    })
   end
   
   local state = recorder.get_state()
@@ -1775,7 +2811,12 @@ function test_recorder_should_respect_max_history_size()
   
   -- Add more than MAX_HISTORY_SIZE events
   for i = 1, 1001 do  -- MAX_HISTORY_SIZE is 1000
-    recorder.add_step(channel, 1, 60 + (i % 12), 100, 1)
+    recorder.record_event(channel, "note_mask", {
+      step = i % 16 + 1,
+      note = 60 + (i % 12),
+      velocity = 100,
+      length = 1
+    })
   end
   
   local state = recorder.get_state()
@@ -1785,11 +2826,11 @@ function test_recorder_should_respect_max_history_size()
   
   -- First event should be second event since first was pushed out
   local first_event = state.event_history:get(1)
-  luaunit.assert_equals(first_event.data.note, 62)
+  luaunit.assert_equals(first_event.data.event_data.note, 62)
   
   -- Last event should be the most recent one
   local last_event = state.event_history:get(1000)
-  luaunit.assert_equals(last_event.data.note, 60 + (1001 % 12))
+  luaunit.assert_equals(last_event.data.event_data.note, 60 + (1001 % 12))
 end
 
 function test_recorder_should_handle_ring_buffer_wrapping()
@@ -1799,11 +2840,21 @@ function test_recorder_should_handle_ring_buffer_wrapping()
   
   -- Create predictable sequence using modulo to keep notes in valid MIDI range
   for i = 1, 1000 do
-    recorder.add_step(channel, 1, (i % 128), 100, 1)  -- Keep notes 0-127
+    recorder.record_event(channel, "note_mask", {
+      step = i % 16 + 1,
+      note = i % 128,
+      velocity = 100,
+      length = 1
+    })
   end
   
   -- Add one more to cause wrap
-  recorder.add_step(channel, 1, (1001 % 128), 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = (1001 % 128),
+    velocity = 100,
+    length = 1
+  })
   
   local state = recorder.get_state()
   
@@ -1812,11 +2863,11 @@ function test_recorder_should_handle_ring_buffer_wrapping()
   
   -- First event should be note value (2 % 128) (since 1 was pushed out)
   local first_event = state.event_history:get(1)
-  luaunit.assert_equals(first_event.data.note, (2 % 128))
+  luaunit.assert_equals(first_event.data.event_data.note, (2 % 128))
   
   -- Last event should be (1001 % 128)
   local last_event = state.event_history:get(1000)
-  luaunit.assert_equals(last_event.data.note, (1001 % 128))
+  luaunit.assert_equals(last_event.data.event_data.note, (1001 % 128))
 end
 
 function test_recorder_should_handle_pattern_channel_buffer_wrapping()
@@ -1827,12 +2878,22 @@ function test_recorder_should_handle_pattern_channel_buffer_wrapping()
   
   -- Fill first channel with predictable sequence
   for i = 1, 800 do
-    recorder.add_step(channel1, 1, (i % 128), 100, 1)  -- Keep notes 0-127
+    recorder.record_event(channel1, "note_mask", {
+      step = 1,
+      note = i % 128,
+      velocity = 100,
+      length = 1
+    })
   end
   
   -- Add to second channel
   for i = 1, 300 do
-    recorder.add_step(channel2, 1, ((1000 + i) % 128), 100, 1)
+    recorder.record_event(channel2, "note_mask", {
+      step = 1,
+      note = (1000 + i) % 128,
+      velocity = 100,
+      length = 1
+    })
   end
   
   local state = recorder.get_state()
@@ -1845,7 +2906,12 @@ function test_recorder_should_handle_pattern_channel_buffer_wrapping()
   
   -- Add enough to cause wrap in first channel
   for i = 801, 1100 do
-    recorder.add_step(channel1, 1, (i % 128), 100, 1)
+    recorder.record_event(channel1, "note_mask", {
+      step = 1,
+      note = (i % 128),
+      velocity = 100,
+      length = 1
+    })
   end
   
   -- First channel should be at MAX_HISTORY_SIZE
@@ -1856,11 +2922,11 @@ function test_recorder_should_handle_pattern_channel_buffer_wrapping()
   
   -- First event in channel 1 should be (101 % 128)
   local first_ch1_event = pc1.event_history:get(1)
-  luaunit.assert_equals(first_ch1_event.data.note, (101 % 128))
+  luaunit.assert_equals(first_ch1_event.data.event_data.note, (101 % 128))
   
   -- Last event in channel 1 should be (1100 % 128)
   local last_ch1_event = pc1.event_history:get(1000)
-  luaunit.assert_equals(last_ch1_event.data.note, (1100 % 128))
+  luaunit.assert_equals(last_ch1_event.data.event_data.note, (1100 % 128))
 end
 
 function test_ring_buffer_should_maintain_correct_order_during_wrap()
@@ -1870,7 +2936,12 @@ function test_ring_buffer_should_maintain_correct_order_during_wrap()
   
   -- Fill buffer
   for i = 1, 998 do
-    recorder.add_step(channel, 1, i % 128, 100, 1)
+    recorder.record_event(channel, "note_mask", {
+      step = 1,
+      note = i % 128,
+      velocity = 100,
+      length = 1
+    })
   end
   
   local state = recorder.get_state()
@@ -1878,16 +2949,33 @@ function test_ring_buffer_should_maintain_correct_order_during_wrap()
   luaunit.assert_equals(initial_size, 998)
   
   -- Add wrap boundary notes
-  recorder.add_step(channel, 1, 60, 100, 1)
-  recorder.add_step(channel, 1, 62, 100, 1)
-  recorder.add_step(channel, 1, 64, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 62,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 100,
+    length = 1
+  })
   
   state = recorder.get_state()
   luaunit.assert_equals(state.event_history:get_size(), 1000)
   
   -- First event should be the second one after wrap
   local first_event = state.event_history:get(1)
-  luaunit.assert_equals(first_event.data.note, 2)
+  luaunit.assert_equals(first_event.data.event_data.note, 2)
 end
 
 
@@ -1899,7 +2987,12 @@ function test_ring_buffer_should_handle_rapid_wrap_multiple_times()
   -- Fill buffer multiple times
   local final_batch_start = 2001
   for i = 1, 3000 do
-    recorder.add_step(channel, 1, i % 128, 100, 1)
+    recorder.record_event(channel, "note_mask", {
+      step = 1,
+      note = i % 128,
+      velocity = 100,
+      length = 1
+    })
   end
   
   local state = recorder.get_state()
@@ -1915,8 +3008,8 @@ function test_ring_buffer_should_handle_rapid_wrap_multiple_times()
   luaunit.assert_not_nil(last, "Last event should exist")
   
   -- Verify the sequence wraps correctly
-  luaunit.assert_equals(first.data.note, (2001 % 128))
-  luaunit.assert_equals(last.data.note, (3000 % 128))
+  luaunit.assert_equals(first.data.event_data.note, (2001 % 128))
+  luaunit.assert_equals(last.data.event_data.note, (3000 % 128))
 end
 
 function test_ring_buffer_should_handle_concurrent_pattern_wraps()
@@ -1929,9 +3022,19 @@ function test_ring_buffer_should_handle_concurrent_pattern_wraps()
   for i = 1, 2000 do
     local note = i % 128
     if i % 2 == 0 then
-      recorder.add_step(channel1, 1, note, 100, 1)
+      recorder.record_event(channel1, "note_mask", {
+        step = 1,
+        note = note,
+        velocity = 100,
+        length = 1
+      })
     else
-      recorder.add_step(channel2, 1, note, 100, 1)
+      recorder.record_event(channel2, "note_mask", {
+        step = 1,
+        note = note,
+        velocity = 100,
+        length = 1
+      })
     end
   end
   
@@ -1951,8 +3054,8 @@ function test_ring_buffer_should_handle_concurrent_pattern_wraps()
   luaunit.assert_not_nil(pc2_first, "First event in channel 2 should exist")
   
   -- Verify events are in valid range
-  luaunit.assert_true(pc1_first.data.note >= 0 and pc1_first.data.note <= 127)
-  luaunit.assert_true(pc2_first.data.note >= 0 and pc2_first.data.note <= 127)
+  luaunit.assert_true(pc1_first.data.event_data.note >= 0 and pc1_first.data.event_data.note <= 127)
+  luaunit.assert_true(pc2_first.data.event_data.note >= 0 and pc2_first.data.event_data.note <= 127)
 end
 
 function test_ring_buffer_should_maintain_indices_after_multiple_wraps()
@@ -1962,7 +3065,12 @@ function test_ring_buffer_should_maintain_indices_after_multiple_wraps()
   
   -- Create a sequence that will wrap multiple times
   for i = 1, 2500 do
-    recorder.add_step(channel, (i % 16) + 1, i % 128, 100, 1)
+    recorder.record_event(channel, "note_mask", {
+      step = (i % 16) + 1,
+      note = i % 128,
+      velocity = 100,
+      length = 1
+    })
   end
   
   local state = recorder.get_state()
@@ -1978,7 +3086,7 @@ function test_ring_buffer_should_maintain_indices_after_multiple_wraps()
       if i > 0 then
         local event = state.event_history:get(step_events[i])
         luaunit.assert_not_nil(event, "Event missing at index " .. step_events[i])
-        table.insert(last_events, event.data.note)
+        table.insert(last_events, event.data.event_data.note)
       end
     end
     
@@ -1997,19 +3105,29 @@ function test_ring_buffer_should_handle_edge_case_at_max_size()
   
   -- Fill buffer exactly to max size
   for i = 1, 1000 do
-    recorder.add_step(channel, 1, i % 128, 100, 1)
+    recorder.record_event(channel, "note_mask", {
+      step = 1,
+      note = i % 128,
+      velocity = 100,
+      length = 1
+    })
   end
   
   local state = recorder.get_state()
   luaunit.assert_equals(state.event_history:get_size(), 1000)
   
   -- Add one more event
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   -- Verify size hasn't changed but content has
   luaunit.assert_equals(state.event_history:get_size(), 1000)
   local first_event = state.event_history:get(1)
-  luaunit.assert_equals(first_event.data.note, (2 % 128))
+  luaunit.assert_equals(first_event.data.event_data.note, (2 % 128))
 end
 
 function test_ring_buffer_truncation_should_respect_wrap_point()
@@ -2019,7 +3137,12 @@ function test_ring_buffer_truncation_should_respect_wrap_point()
   
   -- Add 100 events
   for i = 1, 100 do
-    recorder.add_step(channel, 1, i % 128, 100, 1)
+    recorder.record_event(channel, "note_mask", {
+      step = 1,
+      note = i % 128,
+      velocity = 100,
+      length = 1
+    })
   end
   
   local state = recorder.get_state()
@@ -2034,7 +3157,12 @@ function test_ring_buffer_truncation_should_respect_wrap_point()
   luaunit.assert_equals(state.current_event_index, 75)
   
   -- Add new event
-  recorder.add_step(channel, 1, 60, 100, 1)
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
   
   state = recorder.get_state()
   luaunit.assert_equals(state.current_event_index, 76)
