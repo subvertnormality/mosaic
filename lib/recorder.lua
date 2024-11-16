@@ -1,6 +1,6 @@
 local recorder = {}
 
-local MAX_HISTORY_SIZE = 1000
+local MAX_HISTORY_SIZE = 50000
 
 -- Cache table functions
 local table_move = table.move
@@ -567,6 +567,23 @@ function recorder.redo_all(sequencer_pattern, channel_number)
   for pc_key, pc_state in pairs(state.pattern_channels) do
     local pattern, channel = pc_key:match("(%d+)_(%d+)")
     recorder.redo_all(tonumber(pattern), tonumber(channel))
+  end
+end
+
+function recorder.reset()
+  -- Clear event histories and indices
+  state.event_history = create_ring_buffer(MAX_HISTORY_SIZE)
+  state.current_event_index = 0
+  state.global_index = create_step_index()
+  
+  -- Clear pattern channel histories but maintain pattern/channel structure
+  for pattern_key, pc_state in pairs(state.pattern_channels) do
+    pc_state.event_history = create_ring_buffer(MAX_HISTORY_SIZE)
+    pc_state.current_index = 0
+    pc_state.step_indices = create_step_index()
+    
+    -- Current state becomes the new original state
+    pc_state.original_states = {}
   end
 end
 
