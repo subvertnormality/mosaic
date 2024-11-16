@@ -15,6 +15,7 @@ function test_recorder_should_add_single_note()
   local channel = program.get_channel(1, 1)
 
   recorder.record_event(channel, "note_mask", {
+    trig = 1,
     step = 1,
     note = 60,
     velocity = 100,
@@ -33,6 +34,7 @@ function test_recorder_should_add_note_mask()
   local channel = program.get_channel(1, 1)
 
   recorder.record_event(channel, "note_mask", {
+    trig = 1,
     step = 1,
     note = 60,
     velocity = 100,
@@ -212,6 +214,7 @@ function test_recorder_undo_should_clear_notes_from_channel()
   
   -- Add two notes
   recorder.record_event(channel, "note_mask", {
+    trig = 1,
     step = 1,
     note = 60,
     velocity = 100,
@@ -219,6 +222,7 @@ function test_recorder_undo_should_clear_notes_from_channel()
   })
 
   recorder.record_event(channel, "note_mask", {
+    trig = 1,
     step = 2,
     note = 64,
     velocity = 90,
@@ -1253,6 +1257,7 @@ function test_recorder_should_update_working_pattern()
   local channel = program.get_channel(1, 1)
   
   recorder.record_event(channel, "note_mask", {
+    trig = 1,
     step = 1,
     note = 60,
     velocity = 100,
@@ -2806,6 +2811,9 @@ end
 
 function test_recorder_should_respect_max_history_size()
   recorder.init()
+
+  recorder.max_history_size = 1000
+
   program.init()
   local channel = program.get_channel(1, 1)
   
@@ -2835,6 +2843,9 @@ end
 
 function test_recorder_should_handle_ring_buffer_wrapping()
   recorder.init()
+
+  recorder.max_history_size = 1000
+
   program.init()
   local channel = program.get_channel(1, 1)
   
@@ -2872,6 +2883,9 @@ end
 
 function test_recorder_should_handle_pattern_channel_buffer_wrapping()
   recorder.init()
+
+  recorder.max_history_size = 1000
+
   program.init()
   local channel1 = program.get_channel(1, 1)
   local channel2 = program.get_channel(1, 2)
@@ -2931,6 +2945,9 @@ end
 
 function test_ring_buffer_should_maintain_correct_order_during_wrap()
   recorder.init()
+
+  recorder.max_history_size = 1000
+
   program.init()
   local channel = program.get_channel(1, 1)
   
@@ -2981,6 +2998,9 @@ end
 
 function test_ring_buffer_should_handle_rapid_wrap_multiple_times()
   recorder.init()
+
+  recorder.max_history_size = 1000
+
   program.init()
   local channel = program.get_channel(1, 1)
   
@@ -3100,6 +3120,9 @@ end
 
 function test_ring_buffer_should_handle_edge_case_at_max_size()
   recorder.init()
+
+  recorder.max_history_size = 1000
+
   program.init()
   local channel = program.get_channel(1, 1)
   
@@ -3976,4 +3999,31 @@ function test_recorder_reset_should_keep_chord_state()
   luaunit.assert_equals(chord[1], 1)
   luaunit.assert_equals(chord[2], 4)
   luaunit.assert_equals(chord[3], 5)
+end
+
+
+function test_recorder_should_handle_trig_only_note_mask()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Record event with only step and trig
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    trig = 1
+    -- No note, velocity, or length specified
+  })
+  
+  -- Verify trig was set but other values remain default/nil
+  luaunit.assert_equals(channel.step_trig_masks[1], 1)  -- Default trig value should be 1
+  luaunit.assert_equals(channel.step_note_masks[1], nil)
+  luaunit.assert_equals(channel.step_velocity_masks[1], nil)
+  luaunit.assert_equals(channel.step_length_masks[1], nil)
+  luaunit.assert_equals(channel.step_chord_masks, {})
+  
+  -- Verify working pattern reflects trig-only state
+  luaunit.assert_equals(channel.working_pattern.trig_values[1], 1)
+  luaunit.assert_equals(channel.working_pattern.note_mask_values[1], 0)  -- Default note value
+  luaunit.assert_equals(channel.working_pattern.velocity_values[1], 100)  -- Default velocity
+  luaunit.assert_equals(channel.working_pattern.lengths[1], 1)  -- Default length
 end

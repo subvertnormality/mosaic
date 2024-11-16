@@ -1,6 +1,5 @@
 local recorder = {}
-
-local MAX_HISTORY_SIZE = 50000
+recorder.max_history_size = 50000
 
 -- Cache table functions
 local table_move = table.move
@@ -128,10 +127,9 @@ local event_handlers = {
     end,
     
     apply_event = function(channel, step, data, apply_type)
-      -- Always set trig mask
-      channel.step_trig_masks[step] = 1
-      
+
       -- Update provided values only
+      if data.trig ~= nil then channel.step_trig_masks[step] = data.trig end
       if data.note ~= nil then channel.step_note_masks[step] = data.note end
       if data.velocity ~= nil then channel.step_velocity_masks[step] = data.velocity end
       if data.length ~= nil then channel.step_length_masks[step] = data.length end
@@ -151,10 +149,11 @@ local event_handlers = {
       end
       
       -- Update working pattern with current values
+      local working_trig = data.trig or channel.step_trig_masks[step] or 0
       local working_note = data.note or channel.step_note_masks[step] or 0
       local working_velocity = data.velocity or channel.step_velocity_masks[step] or 100
       local working_length = data.length or channel.step_length_masks[step] or 1
-      program.update_working_pattern_for_step(channel, step, working_note, working_velocity, working_length)
+      program.update_working_pattern_for_step(channel, step, working_trig, working_note, working_velocity, working_length)
     end
   }
 }
@@ -353,14 +352,14 @@ end
 -- Main state table with optimized indexing
 local state = {
   pattern_channels = {},
-  event_history = create_ring_buffer(MAX_HISTORY_SIZE),
+  event_history = create_ring_buffer(recorder.max_history_size),
   current_event_index = 0,
   global_index = create_step_index()
 }
 
 function recorder.init()
   state.pattern_channels = {}
-  state.event_history = create_ring_buffer(MAX_HISTORY_SIZE)
+  state.event_history = create_ring_buffer(recorder.max_history_size)
   state.current_event_index = 0
   state.global_index = create_step_index()
 end
@@ -381,7 +380,7 @@ function recorder.record_event(channel, event_type, data)
   
   if not pc_state then
     pc_state = {
-      event_history = create_ring_buffer(MAX_HISTORY_SIZE),
+      event_history = create_ring_buffer(recorder.max_history_size),
       current_index = 0,
       step_indices = create_step_index(),
       original_states = {}
@@ -572,13 +571,13 @@ end
 
 function recorder.reset()
   -- Clear event histories and indices
-  state.event_history = create_ring_buffer(MAX_HISTORY_SIZE)
+  state.event_history = create_ring_buffer(recorder.max_history_size)
   state.current_event_index = 0
   state.global_index = create_step_index()
   
   -- Clear pattern channel histories but maintain pattern/channel structure
   for pattern_key, pc_state in pairs(state.pattern_channels) do
-    pc_state.event_history = create_ring_buffer(MAX_HISTORY_SIZE)
+    pc_state.event_history = create_ring_buffer(recorder.max_history_size)
     pc_state.current_index = 0
     pc_state.step_indices = create_step_index()
     
