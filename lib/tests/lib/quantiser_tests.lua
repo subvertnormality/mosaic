@@ -1,7 +1,15 @@
 local quantiser = include("mosaic/lib/quantiser")
+local musicutil = require("musicutil")
+
+local function setup() 
+  quantiser._scale_cache = {}
+  quantiser._scale_cache_size = 0
+  quantiser._scale_cache_max_size = 100
+  program.init()
+end
 
 function test_note_value_is_quantised_from_0_to_c_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -25,7 +33,7 @@ function test_note_value_is_quantised_from_0_to_c_in_c_major()
 end
 
 function test_note_value_is_quantised_from_1_to_d_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -50,7 +58,7 @@ end
 
 
 function test_note_value_is_quantised_from_2_to_e_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -75,7 +83,7 @@ end
 
 
 function test_note_value_is_quantised_from_3_to_f_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -100,7 +108,7 @@ end
 
 
 function test_note_value_is_quantised_from_4_to_g_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -124,7 +132,7 @@ function test_note_value_is_quantised_from_4_to_g_in_c_major()
 end
 
 function test_note_value_is_quantised_from_5_to_a_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -149,7 +157,7 @@ end
 
 
 function test_note_value_is_quantised_from_6_to_b_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -174,7 +182,7 @@ end
 
 
 function test_note_value_is_quantised_from_7_to_c_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -198,7 +206,7 @@ function test_note_value_is_quantised_from_7_to_c_in_c_major()
 end
 
 function test_note_value_is_quantised_from_0_to_c_72_with_step_octave_mod_1_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -222,7 +230,7 @@ function test_note_value_is_quantised_from_0_to_c_72_with_step_octave_mod_1_in_c
 end
 
 function test_note_value_is_quantised_from_3_to_f_77_with_step_octave_mod_1_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -247,7 +255,7 @@ end
 
 
 function test_note_value_is_quantised_from_3_to_fsharp_with_transpose_1_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -271,7 +279,7 @@ function test_note_value_is_quantised_from_3_to_fsharp_with_transpose_1_in_c_maj
 end
 
 function test_note_value_is_quantised_from_3_to_g_with_transpose_2_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -296,7 +304,7 @@ end
 
 
 function test_note_value_is_quantised_from_3_to_e_with_transpose_minus1_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -320,7 +328,7 @@ function test_note_value_is_quantised_from_3_to_e_with_transpose_minus1_in_c_maj
 end
 
 function test_note_value_is_quantised_from_3_to_e_with_transpose_minus5_in_c_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -344,7 +352,7 @@ function test_note_value_is_quantised_from_3_to_e_with_transpose_minus5_in_c_maj
 end
 
 function test_note_value_is_quantised_from_0_to_d_in_c_major_with_chord_2()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -369,7 +377,7 @@ end
 
 
 function test_note_value_is_quantised_from_0_to_c_72_in_c_major_with_chord_8()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -393,7 +401,7 @@ function test_note_value_is_quantised_from_0_to_c_72_in_c_major_with_chord_8()
 end
 
 function test_note_value_is_quantised_from_0_to_b_71_in_c_major_with_chord_7()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -417,7 +425,7 @@ function test_note_value_is_quantised_from_0_to_b_71_in_c_major_with_chord_7()
 end
 
 function test_note_value_is_quantised_from_0_to_b_83_in_c_major_with_chord_7_octave_mod_1()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -441,7 +449,7 @@ function test_note_value_is_quantised_from_0_to_b_83_in_c_major_with_chord_7_oct
 end
 
 function test_note_value_is_quantised_from_0_to_c_84_in_c_major_with_chord_7_octave_mod_1_transpose_1()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -465,7 +473,7 @@ function test_note_value_is_quantised_from_0_to_c_84_in_c_major_with_chord_7_oct
 end
 
 function test_note_value_is_quantised_from_0_to_csharp_85_in_csharp_major_with_chord_7_octave_mod_1_transpose_1_root_note_1()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -490,7 +498,7 @@ end
 
 
 function test_note_value_is_quantised_from_0_to_d_in_d_major()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -515,7 +523,7 @@ end
 
 
 function test_note_value_is_quantised_from_5_to_bsharp_70_in_d_minor()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -540,7 +548,7 @@ end
 
 
 function test_note_value_is_quantised_from_5_to_bsharp_70_in_d_minor_when_using_scale_2()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -566,7 +574,7 @@ end
 
 
 function test_note_values_are_quantised_a_to_a_with_correct_ascending_octave()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -596,7 +604,7 @@ end
 
 
 function test_get_chord_degree_in_c_major_one_octave()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   -- Set up C major scale
@@ -622,7 +630,7 @@ function test_get_chord_degree_in_c_major_one_octave()
 end
 
 function test_get_chord_degree_in_c_major_across_octaves()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -644,7 +652,7 @@ function test_get_chord_degree_in_c_major_across_octaves()
 end
 
 function test_get_chord_degree_basics()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   -- Set up C major scale
@@ -673,7 +681,7 @@ function test_get_chord_degree_basics()
 end
 
 function test_get_chord_degree_octaves()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -695,7 +703,7 @@ function test_get_chord_degree_octaves()
 end
 
 function test_get_chord_degree_with_different_root()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   -- Set up D major 
@@ -717,7 +725,7 @@ function test_get_chord_degree_with_different_root()
 end
 
 function test_get_chord_degree_snapping()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -740,7 +748,7 @@ function test_get_chord_degree_snapping()
 end
 
 function test_get_chord_degree_intervals()
-  program.init()
+  setup()
   program.get_sequencer_pattern(1).root_note = 0
 
   program.set_scale(
@@ -764,7 +772,7 @@ end
 
 -- Scale type variations
 function test_get_chord_degree_in_melodic_minor()
-  program.init()
+  setup()
   program.set_scale(1, {
       number = 1,
       scale = quantiser.get_scales()[5].scale,  -- Melodic Minor
@@ -778,7 +786,7 @@ end
 
 -- Extreme octave tests
 function test_get_chord_degree_extreme_octaves()
-  program.init()
+  setup()
   program.set_scale(1, {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
@@ -792,7 +800,7 @@ end
 
 -- Invalid input handling
 function test_get_chord_degree_invalid_input()
-  program.init()
+  setup()
   program.set_scale(1, {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
@@ -807,7 +815,7 @@ end
 
 -- Multiple octave spans
 function test_get_chord_degree_multiple_octaves()
-  program.init()
+  setup()
   program.set_scale(1, {
       number = 1,
       scale = quantiser.get_scales()[1].scale,
@@ -817,4 +825,173 @@ function test_get_chord_degree_multiple_octaves()
   
   luaunit.assert_equals(quantiser.get_chord_degree(84, 60, 1), -14)  -- C+2 octaves to C
   luaunit.assert_equals(quantiser.get_chord_degree(36, 60, 1), 14)   -- C-2 octaves to C
+end
+
+
+function test_major_pentatonic_scale_generation()
+  setup()
+  local major_scale = musicutil.generate_scale(0, "major", 20)
+  local pentatonic = quantiser.filter_pentatonic_scale(major_scale, "major")
+  
+  -- C major pentatonic should contain C(0), D(2), E(4), G(7), A(9) pattern
+  -- Testing first octave
+  luaunit.assert_equals(pentatonic[1], 0)  -- C
+  luaunit.assert_equals(pentatonic[2], 2)  -- D
+  luaunit.assert_equals(pentatonic[3], 4)  -- E
+  luaunit.assert_equals(pentatonic[4], 7)  -- G
+  luaunit.assert_equals(pentatonic[5], 9)  -- A
+  
+  -- Test second octave notes exist and follow pattern
+  luaunit.assert_equals(pentatonic[6], 12)  -- C
+  luaunit.assert_equals(pentatonic[7], 14)  -- D
+  luaunit.assert_equals(pentatonic[8], 16)  -- E
+  luaunit.assert_equals(pentatonic[9], 19)  -- G
+end
+
+function test_minor_pentatonic_scale_generation()
+  setup()
+  local minor_scale = musicutil.generate_scale(0, "minor", 20)
+  local pentatonic = quantiser.filter_pentatonic_scale(minor_scale, "minor")
+  
+  -- C minor pentatonic should contain C(0), E♭(3), F(5), G(7), B♭(10) pattern
+  -- Testing first octave
+  luaunit.assert_equals(pentatonic[1], 0)   -- C
+  luaunit.assert_equals(pentatonic[2], 3)   -- E♭
+  luaunit.assert_equals(pentatonic[3], 5)   -- F
+  luaunit.assert_equals(pentatonic[4], 7)   -- G
+  luaunit.assert_equals(pentatonic[5], 10)  -- B♭
+  
+  -- Test second octave notes exist and follow pattern
+  luaunit.assert_equals(pentatonic[6], 12)  -- C
+  luaunit.assert_equals(pentatonic[7], 15)  -- E♭
+  luaunit.assert_equals(pentatonic[8], 17)  -- F
+end
+
+function test_dorian_pentatonic_scale_generation()
+  setup()
+  local dorian_scale = musicutil.generate_scale(0, "dorian", 20)
+  local pentatonic = quantiser.filter_pentatonic_scale(dorian_scale, "dorian")
+  
+  -- C dorian pentatonic should contain C(0), D(2), F(5), G(7), B♭(10) pattern
+  luaunit.assert_equals(pentatonic[1], 0)   -- C
+  luaunit.assert_equals(pentatonic[2], 2)   -- D
+  luaunit.assert_equals(pentatonic[3], 5)   -- F
+  luaunit.assert_equals(pentatonic[4], 7)   -- G
+  luaunit.assert_equals(pentatonic[5], 10)  -- B♭
+end
+
+function test_pentatonic_with_invalid_scale_type()
+  setup()
+  local major_scale = musicutil.generate_scale(0, "major", 20)
+  local pentatonic = quantiser.filter_pentatonic_scale(major_scale, "nonexistent_scale")
+  
+  -- Should default to major pentatonic pattern
+  luaunit.assert_equals(pentatonic[1], 0)  -- C
+  luaunit.assert_equals(pentatonic[2], 2)  -- D
+  luaunit.assert_equals(pentatonic[3], 4)  -- E
+  luaunit.assert_equals(pentatonic[4], 7)  -- G
+  luaunit.assert_equals(pentatonic[5], 9)  -- A
+end
+
+function test_pentatonic_scale_generation_full_midi_range()
+  setup()
+  -- Generate scales for the full MIDI range (0-127)
+  local full_major_scale = musicutil.generate_scale(0, "major", 128)
+  
+  -- Test major pentatonic
+  local major_pentatonic = quantiser.filter_pentatonic_scale(full_major_scale, "major")
+  
+  -- Expected notes for the major pentatonic scale starting from MIDI note 0 (C-1)
+  local expected_notes = {}
+  local pentatonic_intervals = {0, 2, 4, 7, 9}  -- Intervals in semitones
+  
+  -- Generate expected notes
+  for octave = -1, 9 do  -- MIDI octaves from C-1 to C9
+    local base_note = (octave + 1) * 12  -- Adjust for octave numbering
+    for _, interval in ipairs(pentatonic_intervals) do
+      local note = base_note + interval
+      if note >= 0 and note <= 127 then
+        table.insert(expected_notes, note)
+      end
+    end
+  end
+  
+  -- Now compare the generated pentatonic scale with the expected notes
+  luaunit.assert_equals(major_pentatonic, expected_notes)
+end
+
+function test_pentatonic_scale_size_full_midi_range()
+  setup()
+  -- Generate full range scales
+  local scales = {
+      major = musicutil.generate_scale(0, "major", 128),
+      minor = musicutil.generate_scale(0, "minor", 128),
+      dorian = musicutil.generate_scale(0, "dorian", 128),
+      phrygian = musicutil.generate_scale(0, "phrygian", 128),
+      lydian = musicutil.generate_scale(0, "lydian", 128),
+      mixolydian = musicutil.generate_scale(0, "mixolydian", 128),
+      locrian = musicutil.generate_scale(0, "locrian", 128)
+  }
+  
+  for scale_type, scale in pairs(scales) do
+      local pentatonic = quantiser.filter_pentatonic_scale(scale, scale_type)
+      
+      -- Calculate expected size:
+      -- MIDI range is 128 notes (0-127)
+      -- Each octave has 5 pentatonic notes
+      -- Expected size should be (number of complete octaves * 5) + remaining notes
+      local complete_octaves = math.floor(128 / 12)
+      local expected_min_size = complete_octaves * 5
+      local expected_max_size = expected_min_size + 5  -- Allow for partial final octave
+      
+      luaunit.assert_true(#pentatonic >= expected_min_size,
+          string.format("%s pentatonic scale size %d should be >= %d", 
+                       scale_type, #pentatonic, expected_min_size))
+      luaunit.assert_true(#pentatonic <= expected_max_size,
+          string.format("%s pentatonic scale size %d should be <= %d", 
+                       scale_type, #pentatonic, expected_max_size))
+  end
+end
+
+function test_pentatonic_intervals_consistent_across_all_octaves()
+  setup()
+  local full_major_scale = musicutil.generate_scale(0, "major", 128)
+  local major_pentatonic = quantiser.filter_pentatonic_scale(full_major_scale, "major")
+  
+  -- Test that intervals between consecutive notes are consistent across all octaves
+  local expected_intervals = {
+      2,  -- C to D
+      2,  -- D to E
+      3,  -- E to G
+      2,  -- G to A
+      3   -- A to C (next octave)
+  }
+  
+  local notes_per_octave = 5
+  local num_complete_octaves = math.floor(#major_pentatonic / notes_per_octave)
+  
+  for octave = 0, num_complete_octaves - 1 do
+      local octave_start_idx = (octave * notes_per_octave) + 1
+      
+      for i = 0, notes_per_octave - 2 do
+          local current_note = major_pentatonic[octave_start_idx + i]
+          local next_note = major_pentatonic[octave_start_idx + i + 1]
+          local interval = next_note - current_note
+          
+          luaunit.assert_equals(interval, expected_intervals[i + 1],
+              string.format("Wrong interval at octave %d, position %d: expected %d, got %d",
+                          octave, i, expected_intervals[i + 1], interval))
+      end
+      
+      -- Check interval to first note of next octave if not in last octave
+      if octave < num_complete_octaves - 1 then
+          local last_note = major_pentatonic[octave_start_idx + notes_per_octave - 1]
+          local first_note_next_octave = major_pentatonic[octave_start_idx + notes_per_octave]
+          local interval = first_note_next_octave - last_note
+          
+          luaunit.assert_equals(interval, expected_intervals[5],
+              string.format("Wrong interval between octaves %d and %d: expected %d, got %d",
+                          octave, octave + 1, expected_intervals[5], interval))
+      end
+  end
 end

@@ -77,7 +77,8 @@ local function initialise_default_sequencer_pattern()
       pentatonic_scale = c_major.pentatonic_scale,
       root_note = root_note,
       chord = 1,
-      chord_degree_rotation = 0
+      chord_degree_rotation = 0,
+      version = 1
     }
   end
 
@@ -477,11 +478,13 @@ function program.get_scale(s)
 end
 
 function program.set_scale(s, scale)
+  scale.version = (program.get_selected_sequencer_pattern().scales[s].version or 0) + 1
   program.get_selected_sequencer_pattern().scales[s] = scale
 end
 
 function program.set_all_sequencer_pattern_scales(s, scale)
   for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
+    scale.version = (sequencer_pattern.scales[s].version or 0) + 1
     sequencer_pattern.scales[s] = scale
   end
 end
