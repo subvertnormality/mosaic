@@ -1,7 +1,7 @@
 -- channel_edit_page_ui_refreshers.lua
 local channel_edit_page_ui_refreshers = {}
 local quantiser = include("lib/quantiser")
-local divisions = include("lib/divisions")
+local divisions = include("lib/clock/divisions")
 
 local throttle_time = 0.01
 

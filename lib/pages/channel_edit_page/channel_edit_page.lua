@@ -166,6 +166,7 @@ function channel_edit_page.register_presss()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
+        channel_edit_page_ui.record_note_mask_event(program.get_selected_channel(), fn.calc_grid_count(x, y))
         channel_edit_page_ui.refresh_trig_locks()
         channel_edit_page_ui.refresh_masks()
         channel_edit_page.refresh_faders()
