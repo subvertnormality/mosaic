@@ -22,19 +22,37 @@ local pentatonic_patterns = {
     locrian = {2, 3, 4, 6, 7}
 }
 
-local pentatonic_positions = {}
-for mode, pattern in pairs(pentatonic_patterns) do
-    pentatonic_positions[mode] = {}
-    for octave = 0, 10 do  -- Assuming 20 notes (about 3 octaves)
+local pentatonic_positions_cache = {}
+
+local function calculate_pentatonic_positions(mode, max_notes)
+    -- Get pattern or default to major if invalid
+    local pattern = pentatonic_patterns[mode] or pentatonic_patterns.major
+    
+    local positions = {}
+    local max_octaves = math.ceil(max_notes / 7)
+    
+    for octave = 0, max_octaves do
         for _, interval in ipairs(pattern) do
             local position = octave * 7 + interval
-            table.insert(pentatonic_positions[mode], position)
+            if position <= max_notes then
+                table.insert(positions, position)
+            end
         end
     end
+    
+    return positions
+end
+
+local function get_pentatonic_positions(mode, scale_length)
+    local cache_key = mode .. "_" .. scale_length
+    if not pentatonic_positions_cache[cache_key] then
+        pentatonic_positions_cache[cache_key] = calculate_pentatonic_positions(mode, scale_length)
+    end
+    return pentatonic_positions_cache[cache_key]
 end
 
 function quantiser.filter_pentatonic_scale(scale, scale_type)
-  local positions = pentatonic_positions[scale_type] or pentatonic_positions.major
+  local positions = get_pentatonic_positions(scale_type, #scale)
   local pentatonic = {}
   
   for i, position in ipairs(positions) do
@@ -310,7 +328,6 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
   return result
 end
 
-
 function quantiser.process(note_number, octave_mod, transpose, scale_number, do_pentatonic)
   return process_handler(note_number, octave_mod, transpose, scale_number, true, true, do_pentatonic)
 end
@@ -367,26 +384,32 @@ function quantiser.process_to_pentatonic_scale(note_num, scale_number)
 end
 
 function quantiser.get_chord_degree(note, chord_one_note, scale_number)
+  -- Early return for invalid inputs
+  if type(note) ~= "number" or type(chord_one_note) ~= "number" then return nil end
+
+  -- Get and prepare scale
   local scale_container = program.get_scale(scale_number)
   local scale = fn.deep_copy(scale_container.scale)
   local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
   scale = fn.transpose_scale(scale, root_note)
 
-  if type(note) ~= "number" or type(chord_one_note) ~= "number" then return nil end
-  
+  -- Create lookup table for faster degree finding
+  local degree_lookup = {}
+  for i, scale_note in ipairs(scale) do
+    degree_lookup[scale_note] = i - 1
+  end
+
   -- Get scale positions within an octave (0-based index)
   local function get_scale_degree(note_num)
     local normalized = note_num % 12
-    for i, scale_note in ipairs(scale) do
-      if scale_note == normalized then
-        return i - 1
-      end
-    end
-    return 0
+    -- First snap to scale, then lookup degree
+    local snapped = musicutil.snap_note_to_array(normalized, scale)
+    return degree_lookup[snapped]
   end
 
-  local snapped_note = quantiser.snap_to_scale(note % 12, scale_number) + ((math.floor(note / 12) * 12))
-  local snapped_chord_one_note = quantiser.snap_to_scale(chord_one_note % 12, scale_number) + ((math.floor(chord_one_note / 12) * 12))
+  -- Snap notes to scale while preserving octave information
+  local snapped_note = quantiser.snap_to_scale(note % 12, scale_number) + (math.floor(note / 12) * 12)
+  local snapped_chord_one_note = quantiser.snap_to_scale(chord_one_note % 12, scale_number) + (math.floor(chord_one_note / 12) * 12)
 
   -- Calculate octave difference
   local note_octave = math.floor(snapped_note / 12)
