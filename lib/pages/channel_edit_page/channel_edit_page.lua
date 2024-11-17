@@ -525,11 +525,22 @@ function channel_edit_page.handle_note_on_midi_message(note, velocity, chord_num
         channel.step_velocity_masks[s] = velocity
         channel.step_length_masks[s] = 1
         channel.step_chord_masks[s] = {}
-      elseif (chord_degree) then
-        channel.step_chord_masks[s][chord_number - 1] = chord_degree 
-      end
 
-      channel_edit_page_ui.refresh_masks()
+        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
+          trig = 1,
+          note = note,
+          velocity = velocity,
+          length = 1,
+          chord_degrees = {nil, nil, nil, nil}
+        })
+      elseif (chord_degree) then
+        local chord = {}
+        chord[chord_number - 1] = chord_degree 
+        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
+          step = s,
+          chord_degrees = chord
+        })
+      end
 
     end
   end

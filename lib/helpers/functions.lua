@@ -136,6 +136,20 @@ function fn.merge_tables(t1, t2)
   return t1
 end
 
+function fn.deep_merge_tables(t1, t2)
+  for k, v in pairs(t2) do
+    if type(v) == "table" then
+      if t1[k] == nil then
+        t1[k] = {}
+      end
+      fn.deep_merge_tables(t1[k], v)
+    else
+      t1[k] = v
+    end
+  end
+  return t1
+end
+
 function fn.string_to_table(str)
   return load("return " .. str)()
 end

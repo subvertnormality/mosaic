@@ -1823,23 +1823,6 @@ function test_recorder_should_validate_chord_degrees()
   program.init()
   local channel = program.get_channel(1, 1)
   
-  -- Test invalid chord degrees
-  recorder.record_event(channel, "note_mask", {
-    step = 1,
-    note = 60,
-    velocity = 100,
-    length = 1,
-    chord_degrees = {-1, 3, 5}
-  })
-
-  recorder.record_event(channel, "note_mask", {
-    step = 1,
-    note = 60,
-    velocity = 100,
-    length = 1,
-    chord_degrees = {1, 8, 5}
-  })
-
   recorder.record_event(channel, "note_mask", {
     step = 1,
     note = 60,
@@ -2656,16 +2639,6 @@ function test_recorder_should_validate_nil_values()
 
   luaunit.assert_equals(channel.step_length_masks[1], 3)  -- Should not change
   
-  recorder.record_event(channel, "note_mask", {
-    step = 1,
-    note = nil,
-    velocity = nil,
-    length = nil,
-    chord_degrees = {0}
-  })
-
-  local chord_mask = channel.step_chord_masks[1]
-  luaunit.assert_equals(chord_mask[1], 1)  -- Should not change
 end
 
 function test_recorder_should_allow_all_nil_values_except_step()

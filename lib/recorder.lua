@@ -64,13 +64,13 @@ local event_handlers = {
         if type(data.chord_degrees) ~= "table" then return false end
         
         -- Empty array means clear the chord
-        if #data.chord_degrees == 0 then return true end
+        if fn.table_count(data.chord_degrees) == 0 then return true end
         
         -- Check each degree is valid
         for _, degree in ipairs(data.chord_degrees) do
           -- Allow nil for partial updates
           if degree ~= nil then
-            if type(degree) ~= "number" or degree < 1 or degree > 7 then
+            if type(degree) ~= "number" then
               return false 
             end
           end
