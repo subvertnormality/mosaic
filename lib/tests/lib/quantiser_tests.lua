@@ -621,12 +621,12 @@ function test_get_chord_degree_in_c_major_one_octave()
 
   -- Test all degrees in C major scale (C=60 is reference)
   luaunit.assert_equals(quantiser.get_chord_degree(60, 60, 1), 0)  -- C to C = 0
-  luaunit.assert_equals(quantiser.get_chord_degree(62, 60, 1), -1)  -- D to C = 1
-  luaunit.assert_equals(quantiser.get_chord_degree(64, 60, 1), -2)  -- E to C = 2
-  luaunit.assert_equals(quantiser.get_chord_degree(65, 60, 1), -3)  -- F to C = 3
-  luaunit.assert_equals(quantiser.get_chord_degree(67, 60, 1), -4)  -- G to C = 4
-  luaunit.assert_equals(quantiser.get_chord_degree(69, 60, 1), -5)  -- A to C = 5
-  luaunit.assert_equals(quantiser.get_chord_degree(71, 60, 1), -6)  -- B to C = 6
+  luaunit.assert_equals(quantiser.get_chord_degree(62, 60, 1), 1)  -- D to C = 1
+  luaunit.assert_equals(quantiser.get_chord_degree(64, 60, 1), 2)  -- E to C = 2
+  luaunit.assert_equals(quantiser.get_chord_degree(65, 60, 1), 3)  -- F to C = 3
+  luaunit.assert_equals(quantiser.get_chord_degree(67, 60, 1), 4)  -- G to C = 4
+  luaunit.assert_equals(quantiser.get_chord_degree(69, 60, 1), 5)  -- A to C = 5
+  luaunit.assert_equals(quantiser.get_chord_degree(71, 60, 1), 6)  -- B to C = 6
 end
 
 function test_get_chord_degree_in_c_major_across_octaves()
@@ -645,10 +645,10 @@ function test_get_chord_degree_in_c_major_across_octaves()
   )
 
   -- Test notes in different octaves
-  luaunit.assert_equals(quantiser.get_chord_degree(72, 60, 1), -7)   -- C+1 octave to C = 7
-  luaunit.assert_equals(quantiser.get_chord_degree(74, 60, 1), -8)   -- D+1 octave to C = 8
-  luaunit.assert_equals(quantiser.get_chord_degree(48, 60, 1), 7)  -- C-1 octave to C = -7
-  luaunit.assert_equals(quantiser.get_chord_degree(50, 60, 1), 6)  -- D-1 octave to C = -6
+  luaunit.assert_equals(quantiser.get_chord_degree(72, 60, 1), 7)   -- C+1 octave to C = 7
+  luaunit.assert_equals(quantiser.get_chord_degree(74, 60, 1), 8)   -- D+1 octave to C = 8
+  luaunit.assert_equals(quantiser.get_chord_degree(48, 60, 1), -7)  -- C-1 octave to C = -7
+  luaunit.assert_equals(quantiser.get_chord_degree(50, 60, 1), -6)  -- D-1 octave to C = -6
 end
 
 function test_get_chord_degree_basics()
@@ -660,8 +660,8 @@ function test_get_chord_degree_basics()
     1,
     {
       number = 1,
-      scale = {0, 2, 4, 5, 7, 9, 11}, -- C D E F G A B
-      pentatonic_scale = {0, 2, 4, 7, 9}, -- C D E G A
+      scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -670,14 +670,14 @@ function test_get_chord_degree_basics()
   -- Test basic degree calculations (no snapping needed)
   -- C major scale: C(60), D(62), E(64), F(65), G(67), A(69), B(71)
   
-  luaunit.assert_equals(quantiser.get_chord_degree(62, 60, 1), -1)  -- D to C = 1
-  luaunit.assert_equals(quantiser.get_chord_degree(64, 60, 1), -2)  -- E to C = 2
-  luaunit.assert_equals(quantiser.get_chord_degree(65, 60, 1), -3)  -- F to C = 3
-  luaunit.assert_equals(quantiser.get_chord_degree(67, 60, 1), -4)  -- G to C = 4
+  luaunit.assert_equals(quantiser.get_chord_degree(62, 60, 1), 1)  -- D to C = 1
+  luaunit.assert_equals(quantiser.get_chord_degree(64, 60, 1), 2)  -- E to C = 2
+  luaunit.assert_equals(quantiser.get_chord_degree(65, 60, 1), 3)  -- F to C = 3
+  luaunit.assert_equals(quantiser.get_chord_degree(67, 60, 1), 4)  -- G to C = 4
   
-  luaunit.assert_equals(quantiser.get_chord_degree(65, 67, 1), 1)  -- F to G = -1
-  luaunit.assert_equals(quantiser.get_chord_degree(64, 67, 1), 2)  -- E to G = -2
-  luaunit.assert_equals(quantiser.get_chord_degree(62, 67, 1), 3)  -- D to G = -3
+  luaunit.assert_equals(quantiser.get_chord_degree(65, 67, 1), -1)  -- F to G = -1
+  luaunit.assert_equals(quantiser.get_chord_degree(64, 67, 1), -2)  -- E to G = -2
+  luaunit.assert_equals(quantiser.get_chord_degree(62, 67, 1), -3)  -- D to G = -3
 end
 
 function test_get_chord_degree_octaves()
@@ -688,18 +688,18 @@ function test_get_chord_degree_octaves()
     1,
     {
       number = 1,
-      scale = {0, 2, 4, 5, 7, 9, 11},
-      pentatonic_scale = {0, 2, 4, 7, 9},
+      scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
   )
 
   -- Test crossing octave boundaries
-  luaunit.assert_equals(quantiser.get_chord_degree(72, 67, 1), -3)
-  luaunit.assert_equals(quantiser.get_chord_degree(74, 67, 1), -4)
-  luaunit.assert_equals(quantiser.get_chord_degree(60, 67, 1), 4)
-  luaunit.assert_equals(quantiser.get_chord_degree(48, 60, 1), 7)
+  luaunit.assert_equals(quantiser.get_chord_degree(72, 67, 1), 3)
+  luaunit.assert_equals(quantiser.get_chord_degree(74, 67, 1), 4)
+  luaunit.assert_equals(quantiser.get_chord_degree(60, 67, 1), -4)
+  luaunit.assert_equals(quantiser.get_chord_degree(48, 60, 1), -7)
 end
 
 function test_get_chord_degree_with_different_root()
@@ -711,17 +711,17 @@ function test_get_chord_degree_with_different_root()
     1,
     {
       number = 1,
-      scale = {0, 2, 4, 5, 7, 9, 11},
-      pentatonic_scale = {0, 2, 4, 7, 9},
+      scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 2  -- D
     }
   )
 
   -- D major scale: D(62), E(64), F#(66), G(67), A(69), B(71), C#(73)
-  luaunit.assert_equals(quantiser.get_chord_degree(62, 64, 1), 1)   -- E to D = 1
-  luaunit.assert_equals(quantiser.get_chord_degree(66, 62, 1), -2)   -- F# to D = 2
-  luaunit.assert_equals(quantiser.get_chord_degree(62, 67, 1), 3)  -- D to G = -3
+  luaunit.assert_equals(quantiser.get_chord_degree(62, 64, 1), -1)   -- E to D = 1
+  luaunit.assert_equals(quantiser.get_chord_degree(66, 62, 1), 2)   -- F# to D = 2
+  luaunit.assert_equals(quantiser.get_chord_degree(62, 67, 1), -3)  -- D to G = -3
 end
 
 function test_get_chord_degree_snapping()
@@ -732,8 +732,8 @@ function test_get_chord_degree_snapping()
     1,
     {
       number = 1,
-      scale = {0, 2, 4, 5, 7, 9, 11},
-      pentatonic_scale = {0, 2, 4, 7, 9},
+      scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
@@ -742,9 +742,9 @@ function test_get_chord_degree_snapping()
   -- Test notes that need snapping
   -- C major scale: C(60), D(62), E(64), F(65), G(67), A(69), B(71)
   luaunit.assert_equals(quantiser.get_chord_degree(60, 61, 1), 0)
-  luaunit.assert_equals(quantiser.get_chord_degree(60, 63, 1), 1)
-  luaunit.assert_equals(quantiser.get_chord_degree(67, 66, 1), -1)
-  luaunit.assert_equals(quantiser.get_chord_degree(69, 68, 1), -1)
+  luaunit.assert_equals(quantiser.get_chord_degree(60, 63, 1), -1)
+  luaunit.assert_equals(quantiser.get_chord_degree(67, 66, 1), 1)
+  luaunit.assert_equals(quantiser.get_chord_degree(69, 68, 1), 1)
 end
 
 function test_get_chord_degree_intervals()
@@ -755,18 +755,18 @@ function test_get_chord_degree_intervals()
     1,
     {
       number = 1,
-      scale = {0, 2, 4, 5, 7, 9, 11},
-      pentatonic_scale = {0, 2, 4, 7, 9},
+      scale = quantiser.get_scales()[1].scale,
+      pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale,
       chord = 1,
       root_note = 0
     }
   )
 
   -- Test cases where we need to pick shortest path
-  luaunit.assert_equals(quantiser.get_chord_degree(65, 69, 1), 2)
-  luaunit.assert_equals(quantiser.get_chord_degree(71, 65, 1), -3)
-  luaunit.assert_equals(quantiser.get_chord_degree(60, 71, 1), 6)
-  luaunit.assert_equals(quantiser.get_chord_degree(67, 60, 1), -4)
+  luaunit.assert_equals(quantiser.get_chord_degree(65, 69, 1), -2)
+  luaunit.assert_equals(quantiser.get_chord_degree(71, 65, 1), 3)
+  luaunit.assert_equals(quantiser.get_chord_degree(60, 71, 1), -6)
+  luaunit.assert_equals(quantiser.get_chord_degree(67, 60, 1), 4)
 end
 
 
@@ -780,8 +780,8 @@ function test_get_chord_degree_in_melodic_minor()
       root_note = 0
   })
   
-  luaunit.assert_equals(quantiser.get_chord_degree(63, 60, 1), -2)  -- E♭ to C
-  luaunit.assert_equals(quantiser.get_chord_degree(67, 60, 1), -4)  -- G to C
+  luaunit.assert_equals(quantiser.get_chord_degree(63, 60, 1), 2)  -- E♭ to C
+  luaunit.assert_equals(quantiser.get_chord_degree(67, 60, 1), 4)  -- G to C
 end
 
 -- Extreme octave tests
@@ -794,8 +794,8 @@ function test_get_chord_degree_extreme_octaves()
       root_note = 0
   })
   
-  luaunit.assert_equals(quantiser.get_chord_degree(0, 60, 1), 35)   -- Very low C
-  luaunit.assert_equals(quantiser.get_chord_degree(127, 60, 1), -39)  -- Very high G
+  luaunit.assert_equals(quantiser.get_chord_degree(0, 60, 1), -35)   -- Very low C
+  luaunit.assert_equals(quantiser.get_chord_degree(127, 60, 1), 39)  -- Very high G
 end
 
 -- Invalid input handling
@@ -823,14 +823,14 @@ function test_get_chord_degree_multiple_octaves()
       root_note = 0
   })
   
-  luaunit.assert_equals(quantiser.get_chord_degree(84, 60, 1), -14)  -- C+2 octaves to C
-  luaunit.assert_equals(quantiser.get_chord_degree(36, 60, 1), 14)   -- C-2 octaves to C
+  luaunit.assert_equals(quantiser.get_chord_degree(84, 60, 1), 14)  -- C+2 octaves to C
+  luaunit.assert_equals(quantiser.get_chord_degree(36, 60, 1), -14)   -- C-2 octaves to C
 end
 
 
 function test_major_pentatonic_scale_generation()
   setup()
-  local major_scale = musicutil.generate_scale(0, "major", 20)
+  local major_scale = musicutil.generate_scale(0, "major", 128)
   local pentatonic = quantiser.filter_pentatonic_scale(major_scale, "major")
   
   -- C major pentatonic should contain C(0), D(2), E(4), G(7), A(9) pattern
@@ -850,7 +850,7 @@ end
 
 function test_minor_pentatonic_scale_generation()
   setup()
-  local minor_scale = musicutil.generate_scale(0, "minor", 20)
+  local minor_scale = musicutil.generate_scale(0, "minor", 128)
   local pentatonic = quantiser.filter_pentatonic_scale(minor_scale, "minor")
   
   -- C minor pentatonic should contain C(0), E♭(3), F(5), G(7), B♭(10) pattern
@@ -869,7 +869,7 @@ end
 
 function test_dorian_pentatonic_scale_generation()
   setup()
-  local dorian_scale = musicutil.generate_scale(0, "dorian", 20)
+  local dorian_scale = musicutil.generate_scale(0, "dorian", 128)
   local pentatonic = quantiser.filter_pentatonic_scale(dorian_scale, "dorian")
   
   -- C dorian pentatonic should contain C(0), D(2), F(5), G(7), B♭(10) pattern
@@ -882,7 +882,7 @@ end
 
 function test_pentatonic_with_invalid_scale_type()
   setup()
-  local major_scale = musicutil.generate_scale(0, "major", 20)
+  local major_scale = musicutil.generate_scale(0, "major", 128)
   local pentatonic = quantiser.filter_pentatonic_scale(major_scale, "nonexistent_scale")
   
   -- Should default to major pentatonic pattern

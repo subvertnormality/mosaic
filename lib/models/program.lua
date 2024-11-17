@@ -458,8 +458,8 @@ function program.get_scale(s)
     return {
       name = "Chromatic",
       number = 0,
-      scale = musicutil.generate_scale(0, "chromatic", 12),
-      pentatonic_scale = musicutil.generate_scale(0, "chromatic", 12),
+      scale = musicutil.generate_scale(0, "chromatic", 20),
+      pentatonic_scale = musicutil.generate_scale(0, "chromatic", 20),
       romans = {},
       root_note = 0,
       chord = 1,
