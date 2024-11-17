@@ -211,10 +211,6 @@ function pattern.update_working_pattern(c)
     channel_pattern.velocity_merge_mode,
     channel_pattern.length_merge_mode
   )
-
-  if c == 1 then 
-    -- fn.print_table(channel_pattern.working_pattern)
-  end
 end
 
 return pattern

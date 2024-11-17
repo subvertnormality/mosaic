@@ -856,7 +856,6 @@ function channel_edit_page_ui.record_note_mask_event(channel, step)
   if mask_events and mask_events[c] and mask_events[c][step] then
     local event = mask_events[c][step]
     recorder.record_event(channel, "note_mask", event)
-    fn.print_table(event)
     mask_events[c][step] = nil
   end
 end
