@@ -233,25 +233,36 @@ function m_clock.init()
     local end_of_clock_action = function(t)
       local channel = program.get_channel(program.get().selected_sequencer_pattern, channel_number)
       if channel_number ~= 17 then
-        local s = program.get_current_step_for_channel(channel_number) + 1
-        if s < 1 then return end
 
         local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
         local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
 
-        if s > end_trig then
-          s = start_trig
+        local last_step = program.get_current_step_for_channel(channel_number) - 1
+        if last_step < 1 then
+          last_step = end_trig
         end
 
-        local next_trig_value = channel.working_pattern.trig_values[s]
+        if params:get("record") == 2 and program.get_selected_channel() == channel then
+          step.record_mask_event(channel, last_step)
+        end
+
+        local next_step = program.get_current_step_for_channel(channel_number) + 1
+        if next_step < 1 then return end
+
+        if next_step > end_trig then
+          next_step = start_trig
+        end
+
+        local next_trig_value = channel.working_pattern.trig_values[next_step]
 
         if next_trig_value == 1 then
           trigless_lock_active[channel_number] = false
-          step.process_params(channel_number, s)
-        elseif params:get("trigless_locks") == 2 and not trigless_lock_active[channel_number] and program.step_has_param_trig_lock(channel, s) then
+          step.process_params(channel_number, next_step)
+        elseif params:get("trigless_locks") == 2 and not trigless_lock_active[channel_number] and program.step_has_param_trig_lock(channel, next_step) then
           trigless_lock_active[channel_number] = true
-          step.process_params(channel_number, s)
+          step.process_params(channel_number, next_step)
         end
+
       end
     end
 

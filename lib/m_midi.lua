@@ -10,9 +10,9 @@ m_midi.note_counts = {}  -- Initialize note counts table
 midi_devices = {}
 
 local midi_note_mappings = {
-  [1] = 1, [2] = 0, [3] = 2, [4] = 0, [5] = 3,
-  [6] = 4, [7] = 0, [8] = 5, [9] = 0, [10] = 6,
-  [11] = 0, [12] = 7
+  [1] = 1, [2] = 2, [3] = 2, [4] = 3, [5] = 3,
+  [6] = 4, [7] = 5, [8] = 5, [9] = 6, [10] = 6,
+  [11] = 7, [12] = 7
 }
 
 local midi_tables = {}
@@ -24,10 +24,10 @@ local page_change_clock = nil
 local previous_page = nil
 
 for i = 0, 127 do
-  local noteValue = midi_note_mappings[(i % 12) + 1] or 0
-  local octaveValue = math.floor(i / 12) - 5
+  local note_value = midi_note_mappings[(i % 12) + 1] or 0
+  local octave_value = math.floor(i / 12) - 5
 
-  midi_tables[i + 1] = {noteValue-1, octaveValue}
+  midi_tables[i + 1] = {note_value-1, octave_value}
 end
 
 function handle_midi_event_data(data, midi_device)
@@ -73,10 +73,9 @@ function handle_midi_event_data(data, midi_device)
     chord_number = chord_number + 1
 
     local chord_degree = nil
-
     chord_degree = quantiser.get_chord_degree(note, chord_one_note, step_scale_number)
 
-    if chord_degree < -14 then
+    if chord_degree < -14 or chord_degree > 14 then
       chord_degree = nil
     end
 

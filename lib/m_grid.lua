@@ -17,6 +17,7 @@ note_edit_page = include("mosaic/lib/pages/note_edit_page/note_edit_page")
 velocity_edit_page = include("mosaic/lib/pages/velocity_edit_page/velocity_edit_page")
 
 local play_stop_button = button:new(1, 8)
+local record_button = button:new(2, 8)
 local pattern_edit_button = button:new(
   pages.pages_to_grid_menu_button_mappings.trigger_edit_page, 
   8, 
@@ -73,6 +74,7 @@ local function register_draws()
     "menu",
     function()
       play_stop_button:draw()
+      record_button:draw()
       pattern_edit_button:draw()
       channel_edit_button:draw()
       scale_edit_button:draw()
@@ -142,6 +144,15 @@ local function register_presss()
           end
           m_grid.set_menu_button_state()
           channel_edit_page.refresh_faders()
+        elseif (x == 2) then
+          if params:get("record") == 2 then
+            params:set("record", 1)
+            tooltip:show("Recording stopped")
+          else
+            params:set("record", 2)
+            tooltip:show("Recording started")
+          end
+          m_grid.set_menu_button_state()
         end
       end
     end
@@ -194,10 +205,11 @@ function m_grid.init()
   end
 
   menu_buttons[1] = play_stop_button
-  menu_buttons[2] = pattern_edit_button
-  menu_buttons[3] = channel_edit_button
-  menu_buttons[4] = scale_edit_button
-  menu_buttons[5] = song_edit_button
+  menu_buttons[2] = record_button
+  menu_buttons[3] = pattern_edit_button
+  menu_buttons[4] = channel_edit_button
+  menu_buttons[5] = scale_edit_button
+  menu_buttons[6] = song_edit_button
 
 
   sync_current_channel_state()
@@ -275,6 +287,12 @@ function m_grid.set_menu_button_state()
     menu_buttons[1]:blink()
   else
     menu_buttons[1]:no_blink()
+  end
+
+  if params:get("record") == 2 then
+    menu_buttons[2]:blink()
+  else
+    menu_buttons[2]:no_blink()
   end
 end
 

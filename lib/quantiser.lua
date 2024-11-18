@@ -358,6 +358,7 @@ function quantiser.process_with_global_params(note_number, octave_mod, transpose
   local do_rotation = params:get("midi_honour_rotation") ~= 1
   local do_degree = params:get("midi_honour_degree") ~= 1
 
+
   return process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree)
 end
 

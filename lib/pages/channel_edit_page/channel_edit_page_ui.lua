@@ -855,7 +855,10 @@ function channel_edit_page_ui.record_note_mask_event(channel, step)
   local c = channel.number
   if mask_events and mask_events[c] and mask_events[c][step] then
     local event = mask_events[c][step]
-    recorder.record_event(channel, "note_mask", event)
+    local event_channel = program.get_channel(event.sequencer_pattern, c)
+
+    recorder.record_event(event_channel, "note_mask", event.data)
+
     mask_events[c][step] = nil
   end
 end
@@ -868,19 +871,33 @@ function channel_edit_page_ui.handle_trig_mask_change(direction)
       mask_selectors.trig:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          trig = mask_selectors.trig:get_value()
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              trig = mask_selectors.trig:get_value()
+            }
+          }
+      )
       end
     else
       mask_selectors.trig:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          trig = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+            step = s,
+            trig = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
+            }
+          }
+        )
       end
     end
   else
@@ -905,19 +922,33 @@ function channel_edit_page_ui.handle_note_mask_change(direction)
       mask_selectors.note:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          note = mask_selectors.note:get_value()
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              note = mask_selectors.note:get_value()
+            }
+          }
+        )
       end
     else
       mask_selectors.note:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          note = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              note = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
+            }
+          }
+        )
       end
     end
   else
@@ -942,19 +973,33 @@ function channel_edit_page_ui.handle_velocity_mask_change(direction)
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
         channel.step_velocity_masks[s] = mask_selectors.velocity:get_value()
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          velocity = mask_selectors.velocity:get_value()
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              velocity = mask_selectors.velocity:get_value()
+            }
+          }
+        )
       end
     else
       mask_selectors.velocity:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          velocity = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              velocity = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
+            }
+          }
+        )
       end
     end
   else
@@ -978,29 +1023,50 @@ function channel_edit_page_ui.handle_length_mask_change(direction)
       mask_selectors.length:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          length = divisions.note_division_values[mask_selectors.length:get_value()]
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              length = divisions.note_division_values[mask_selectors.length:get_value()]
+            }
+          }
+        )
       end
     else
       if mask_selectors.length:get_value() ~= 0 then
         mask_selectors.length:decrement()
         for _, keys in ipairs(pressed_keys) do
           local s = fn.calc_grid_count(keys[1], keys[2])
-          channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-            step = s,
-            length = divisions.note_division_values[mask_selectors.length:get_value()]
-          })
+          channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+                step = s,
+                length = divisions.note_division_values[mask_selectors.length:get_value()]
+              }
+            }
+          )
         end
       else
         for _, keys in ipairs(pressed_keys) do
           local s = fn.calc_grid_count(keys[1], keys[2])
           mask_selectors.length:set_value(0)
-          channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-            step = s,
-            length = 0
-          })
+          channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+                step = s,
+                length = 0
+              }
+            }
+          )
         end
       end
     end
@@ -1030,19 +1096,33 @@ function channel_edit_page_ui.handle_chord_mask_one_change(direction)
       mask_selectors.chords[1]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          chord_degrees = {mask_selectors.chords[1]:get_value(), nil, nil, nil}
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              chord_degrees = {mask_selectors.chords[1]:get_value(), nil, nil, nil}
+            }
+          }
+        )
       end
     else
       mask_selectors.chords[1]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          chord_degrees = {mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value(), nil, nil, nil}
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              chord_degrees = {mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value(), nil, nil, nil}
+            }
+          }
+        )
       end
     end
   else
@@ -1065,19 +1145,33 @@ function channel_edit_page_ui.handle_chord_mask_two_change(direction)
       mask_selectors.chords[2]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          chord_degrees = {nil, mask_selectors.chords[2]:get_value(), nil, nil}
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              chord_degrees = {nil, mask_selectors.chords[2]:get_value(), nil, nil}
+            }
+          }
+        )
       end
     else
       mask_selectors.chords[2]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          chord_degrees = {nil, mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value(), nil, nil}
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              chord_degrees = {nil, mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value(), nil, nil}
+            }
+          }
+        )
       end
     end
   else
@@ -1100,10 +1194,17 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
       mask_selectors.chords[3]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
+            }
+          }
+        )
       end
     else
       mask_selectors.chords[3]:decrement()
@@ -1119,16 +1220,30 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
     mask_selectors.chords[3]:set_value(channel.chord_three_mask or -1)
     if direction > 0 then
       mask_selectors.chords[3]:increment()
-      channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-        step = s,
-        chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
-      })
+      channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+            step = s,
+            chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
+          }
+        }
+      )
     else
       mask_selectors.chords[3]:decrement()
-      channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-        step = s,
-        chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
-      })
+      channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+            step = s,
+            chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
+          }
+        }
+      )
     end
   end
 end
@@ -1141,19 +1256,33 @@ function channel_edit_page_ui.handle_chord_mask_four_change(direction)
       mask_selectors.chords[4]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          chord_degrees = {nil, nil, nil, mask_selectors.chords[4]:get_value()}
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              chord_degrees = {nil, nil, nil, mask_selectors.chords[4]:get_value()}
+            }
+          }
+        )
       end
     else
       mask_selectors.chords[4]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(channel, s, {
-          step = s,
-          chord_degrees = {nil, nil, nil, mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value()}
-        })
+        channel_edit_page_ui.add_note_mask_event_portion(
+          channel, 
+          s, 
+          {
+            sequencer_pattern = program.get().selected_sequencer_pattern,
+            data = {
+              step = s,
+              chord_degrees = {nil, nil, nil, mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value()}
+            }
+          }
+        )
       end
     end
   else

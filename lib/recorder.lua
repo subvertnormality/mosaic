@@ -65,7 +65,7 @@ local event_handlers = {
         
         -- Empty array means clear the chord
         if fn.table_count(data.chord_degrees) == 0 then return true end
-        
+
         -- Check each degree is valid
         for _, degree in ipairs(data.chord_degrees) do
           -- Allow nil for partial updates
@@ -136,7 +136,6 @@ local event_handlers = {
     end,
     
     apply_event = function(channel, step, data, apply_type)
-
       -- Update provided values only
       if data.trig ~= nil then channel.step_trig_masks[step] = data.trig end
       if data.note ~= nil then channel.step_note_masks[step] = data.note end
@@ -190,6 +189,7 @@ local event_handlers = {
       local working_note = data.note or channel.step_note_masks[step] or 0
       local working_velocity = data.velocity or channel.step_velocity_masks[step] or 100
       local working_length = data.length or channel.step_length_masks[step] or 1
+
       program.update_working_pattern_for_step(channel, step, working_trig, working_note, working_velocity, working_length)
     end
   }

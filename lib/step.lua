@@ -883,8 +883,12 @@ function step.handle(c, current_step)
       )
     end
   end
+
 end
 
+function step.record_mask_event(channel, current_step) 
+  channel_edit_page_ui.record_note_mask_event(channel, current_step)
+end
 
 function step.process_global_step_scale_trig_lock(current_step)
   program.set_global_step_scale_number(step.calculate_step_scale_number(17, current_step))
