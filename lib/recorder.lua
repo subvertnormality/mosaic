@@ -724,6 +724,67 @@ function recorder.get_event_count(song_pattern, channel_number)
   return pc_state and pc_state.current_index or 0
  end
 
+ function recorder.get_recent_events(sequencer_pattern, channel_number, count)
+  count = count or 5
+  local events = {}
+  
+  -- If both specified, use pattern-channel specific history
+  if sequencer_pattern and channel_number then
+    local pc_key = get_pattern_key(sequencer_pattern, channel_number)
+    local pc_state = state.pattern_channels[pc_key]
+    
+    if pc_state then
+      local idx = pc_state.current_index
+      while idx > 0 and #events < count do
+        local event = pc_state.event_history:get(idx)
+        if event then
+          table.insert(events, event)
+        end
+        idx = idx - 1
+      end
+    end
+    return events
+  end
+  
+  -- For channel-only filtering
+  if channel_number then
+    local idx = state.current_event_index
+    while idx > 0 and #events < count do
+      local event = state.event_history:get(idx)
+      if event and event.data.channel_number == channel_number then
+        table.insert(events, event)
+      end
+      idx = idx - 1
+    end
+    return events
+  end
+  
+  -- For pattern-only filtering
+  if sequencer_pattern then
+    local idx = state.current_event_index
+    while idx > 0 and #events < count do
+      local event = state.event_history:get(idx)
+      if event and event.data.song_pattern == sequencer_pattern then
+        table.insert(events, event)
+      end
+      idx = idx - 1
+    end
+    return events
+  end
+  
+  -- No filtering, return most recent global events
+  local idx = state.current_event_index
+  while idx > 0 and #events < count do
+    local event = state.event_history:get(idx)
+    if event then
+      table.insert(events, event)
+    end
+    idx = idx - 1
+  end
+  
+  return events
+end
+
 function recorder.get_state()
   return {
     pattern_channels = state.pattern_channels,

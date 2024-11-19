@@ -4573,3 +4573,492 @@ end
   luaunit.assert_equals(recorder.get_event_count(nil, 3), 0, "Should handle non-existent channel")
   luaunit.assert_equals(recorder.get_event_count(3, 3), 0, "Should handle non-existent pattern-channel")
 end
+
+
+function test_recorder_get_recent_events_should_return_most_recent_global_events()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add a series of events
+  for i = 1, 7 do
+    recorder.record_event(channel, "note_mask", {
+      step = i,
+      note = 60 + i,
+      velocity = 100,
+      length = 1
+    })
+  end
+  
+  -- Get recent events with default count
+  local events = recorder.get_recent_events()
+  
+  -- Should return 5 most recent events by default
+  luaunit.assert_equals(#events, 5)
+  
+  -- Events should be in reverse chronological order
+  for i = 1, 5 do
+    luaunit.assert_equals(events[i].data.event_data.note, 67 - (i - 1))
+  end
+end
+
+function test_recorder_get_recent_events_should_handle_specific_count()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add events
+  for i = 1, 5 do
+    recorder.record_event(channel, "note_mask", {
+      step = i,
+      note = 60 + i,
+      velocity = 100,
+      length = 1
+    })
+  end
+  
+  -- Request specific counts
+  local events_3 = recorder.get_recent_events(nil, nil, 3)
+  luaunit.assert_equals(#events_3, 3)
+  
+  local events_all = recorder.get_recent_events(nil, nil, 10)
+  luaunit.assert_equals(#events_all, 5)  -- Only 5 exist
+end
+
+function test_recorder_get_recent_events_should_return_channel_specific_events()
+  recorder.init()
+  program.init()
+  local channel1 = program.get_channel(1, 1)
+  local channel2 = program.get_channel(1, 2)
+  
+  -- Add events alternating between channels
+  recorder.record_event(channel1, "note_mask", {
+    step = 1, 
+    note = 60,
+    song_pattern = 1,
+    channel_number = 1  -- Explicitly set channel number
+  })
+  recorder.record_event(channel2, "note_mask", {
+    step = 1, 
+    note = 62,
+    song_pattern = 1,
+    channel_number = 2
+  })
+  recorder.record_event(channel1, "note_mask", {
+    step = 2, 
+    note = 64,
+    song_pattern = 1,
+    channel_number = 1
+  })
+  recorder.record_event(channel2, "note_mask", {
+    step = 2, 
+    note = 66,
+    song_pattern = 1,
+    channel_number = 2
+  })
+  
+  -- Get events for channel 1
+  local events = recorder.get_recent_events(nil, 1, 2)  -- Explicitly request 2 events
+  
+  -- Should only include channel 1 events
+  luaunit.assert_equals(#events, 2)
+  luaunit.assert_equals(events[1].data.event_data.note, 64)
+  luaunit.assert_equals(events[2].data.event_data.note, 60)
+end
+
+function test_recorder_get_recent_events_should_return_pattern_specific_events()
+  recorder.init()
+  program.init()
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  
+  -- Add events in different patterns
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1, 
+    note = 60,
+    song_pattern = 1,
+    channel_number = 1
+  })
+  
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1, 
+    note = 62,
+    song_pattern = 2,
+    channel_number = 1
+  })
+  
+  -- Get events for pattern 1, specify count of 1
+  local events = recorder.get_recent_events(1, nil, 1)
+  
+  -- Should only include pattern 1 events
+  luaunit.assert_equals(#events, 1)
+  luaunit.assert_equals(events[1].data.event_data.note, 60)
+end
+
+function test_recorder_get_recent_events_should_return_pattern_and_channel_specific_events()
+  recorder.init()
+  program.init()
+  
+  -- Set up channels in different patterns
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel2_p1 = program.get_channel(1, 2)
+  local channel1_p2 = program.get_channel(2, 1)
+  
+  -- Add events across patterns and channels
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1, 
+    note = 60,
+    song_pattern = 1
+  })
+  
+  recorder.record_event(channel2_p1, "note_mask", {
+    step = 1, 
+    note = 62,
+    song_pattern = 1
+  })
+  
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1, 
+    note = 64,
+    song_pattern = 2
+  })
+  
+  -- Get events for pattern 1, channel 1
+  local events = recorder.get_recent_events(1, 1)
+  
+  -- Should only include events for specified pattern and channel
+  luaunit.assert_equals(#events, 1)
+  luaunit.assert_equals(events[1].data.event_data.note, 60)
+end
+
+function test_recorder_get_recent_events_should_handle_empty_history()
+  recorder.init()
+  program.init()
+  
+  -- Test all query types with empty history
+  local global_events = recorder.get_recent_events()
+  luaunit.assert_equals(#global_events, 0)
+  
+  local channel_events = recorder.get_recent_events(nil, 1)
+  luaunit.assert_equals(#channel_events, 0)
+  
+  local pattern_events = recorder.get_recent_events(1)
+  luaunit.assert_equals(#pattern_events, 0)
+  
+  local specific_events = recorder.get_recent_events(1, 1)
+  luaunit.assert_equals(#specific_events, 0)
+end
+
+function test_recorder_get_recent_events_should_maintain_order_after_undo()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add events
+  for i = 1, 5 do
+    recorder.record_event(channel, "note_mask", {
+      step = i,
+      note = 60 + i,
+      velocity = 100,
+      length = 1
+    })
+  end
+  
+  -- Undo last event
+  recorder.undo()
+  
+  -- Get recent events
+  local events = recorder.get_recent_events()
+  
+  -- Should return 4 events in correct order
+  luaunit.assert_equals(#events, 4)
+  -- Most recent event should be note 64 (60 + 4), then counting down
+  for i = 1, 4 do
+    luaunit.assert_equals(events[i].data.event_data.note, 64 - (i - 1))
+  end
+end
+
+function test_recorder_get_recent_events_should_maintain_context_after_reset()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add events and reset
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60
+  })
+  
+  recorder.reset()
+  
+  -- Add new event
+  recorder.record_event(channel, "note_mask", {
+    step = 2,
+    note = 62
+  })
+  
+  -- Get recent events
+  local events = recorder.get_recent_events()
+  
+  -- Should only include post-reset events
+  luaunit.assert_equals(#events, 1)
+  luaunit.assert_equals(events[1].data.event_data.note, 62)
+end
+
+function test_recorder_get_recent_events_should_respect_current_event_index()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add events
+  for i = 1, 3 do
+    recorder.record_event(channel, "note_mask", {
+      step = i,
+      note = 60 + i,
+      velocity = 100,
+      length = 1
+    })
+  end
+  
+  -- Save events at current state
+  local original_events = recorder.get_recent_events()
+  
+  -- Add more events and undo
+  recorder.record_event(channel, "note_mask", {
+    step = 4,
+    note = 64
+  })
+  
+  recorder.undo()
+  
+  -- Get events again
+  local current_events = recorder.get_recent_events()
+  
+  -- Should match original events
+  luaunit.assert_equals(#current_events, #original_events)
+  for i = 1, #original_events do
+    luaunit.assert_equals(
+      current_events[i].data.event_data.note,
+      original_events[i].data.event_data.note
+    )
+  end
+end
+
+function test_recorder_get_recent_events_should_handle_cross_pattern_events()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  
+  -- Add events alternating between patterns
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    song_pattern = 1
+  })
+  
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 62,
+    song_pattern = 2
+  })
+  
+  -- Get events for channel 1 across patterns
+  local events = recorder.get_recent_events(nil, 1)
+  
+  -- Should include both events in reverse chronological order
+  luaunit.assert_equals(#events, 2)
+  luaunit.assert_equals(events[1].data.event_data.note, 62)
+  luaunit.assert_equals(events[2].data.event_data.note, 60)
+end
+
+function test_recorder_get_recent_events_should_handle_large_history()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add 1000 events
+  for i = 1, 1000 do
+    recorder.record_event(channel, "note_mask", {
+      step = i % 16 + 1,
+      note = 60 + (i % 12),
+      velocity = 100,
+      length = 1
+    })
+  end
+  
+  -- Get recent events with different counts
+  local events_5 = recorder.get_recent_events(nil, nil, 5)
+  luaunit.assert_equals(#events_5, 5)
+  for i = 1, 5 do
+    -- Verify reverse chronological order
+    luaunit.assert_equals(events_5[i].data.event_data.note, 60 + ((1000 - i + 1) % 12))
+  end
+  
+  local events_100 = recorder.get_recent_events(nil, nil, 100)
+  luaunit.assert_equals(#events_100, 100)
+end
+
+function test_recorder_get_recent_events_should_handle_invalid_inputs()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add some events
+  recorder.record_event(channel, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+  
+  -- Test with invalid pattern/channel numbers
+  local events_invalid_pattern = recorder.get_recent_events(999, nil)
+  luaunit.assert_equals(#events_invalid_pattern, 0)
+  
+  local events_invalid_channel = recorder.get_recent_events(nil, 999)
+  luaunit.assert_equals(#events_invalid_channel, 0)
+  
+  -- Test with negative count
+  local events_negative_count = recorder.get_recent_events(nil, nil, -1)
+  luaunit.assert_equals(#events_negative_count, 0)
+  
+  -- Test with zero count
+  local events_zero_count = recorder.get_recent_events(nil, nil, 0)
+  luaunit.assert_equals(#events_zero_count, 0)
+end
+
+function test_recorder_get_recent_events_should_handle_mixed_pattern_channel_combinations()
+  recorder.init()
+  program.init()
+  
+  -- Set up channels in different patterns
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel2_p1 = program.get_channel(1, 2)
+  local channel1_p2 = program.get_channel(2, 1)
+  local channel2_p2 = program.get_channel(2, 2)
+  
+  -- Add events in specific order
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+  
+  recorder.record_event(channel2_p1, "note_mask", {
+    step = 1,
+    note = 62,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+  
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 100,
+    length = 1,
+    song_pattern = 2
+  })
+  
+  recorder.record_event(channel2_p2, "note_mask", {
+    step = 1,
+    note = 66,
+    velocity = 100,
+    length = 1,
+    song_pattern = 2
+  })
+  
+  -- Test various combinations
+  -- All events for channel 1 across patterns
+  local channel1_events = recorder.get_recent_events(nil, 1, 2)
+  luaunit.assert_equals(#channel1_events, 2)
+  luaunit.assert_equals(channel1_events[1].data.event_data.note, 64)
+  luaunit.assert_equals(channel1_events[2].data.event_data.note, 60)
+  
+  -- All events for pattern 1 across channels
+  local pattern1_events = recorder.get_recent_events(1, nil, 2)
+  luaunit.assert_equals(#pattern1_events, 2)
+  luaunit.assert_equals(pattern1_events[1].data.event_data.note, 62)
+  luaunit.assert_equals(pattern1_events[2].data.event_data.note, 60)
+  
+  -- Events for specific pattern/channel combination
+  local specific_events = recorder.get_recent_events(2, 2, 1)
+  luaunit.assert_equals(#specific_events, 1)
+  luaunit.assert_equals(specific_events[1].data.event_data.note, 66)
+end
+
+function test_recorder_get_recent_events_should_handle_undo_redo()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add series of events
+  for i = 1, 5 do
+    recorder.record_event(channel, "note_mask", {
+      step = i,
+      note = 60 + i,
+      velocity = 100,
+      length = 1
+    })
+  end
+  
+  -- Get initial events
+  local initial_events = recorder.get_recent_events()
+  luaunit.assert_equals(#initial_events, 5)
+  luaunit.assert_equals(initial_events[1].data.event_data.note, 65)
+  
+  -- Undo some events
+  recorder.undo()
+  recorder.undo()
+  
+  -- Get events after undo
+  local after_undo = recorder.get_recent_events()
+  luaunit.assert_equals(#after_undo, 3)
+  luaunit.assert_equals(after_undo[1].data.event_data.note, 63)
+  
+  -- Redo events
+  recorder.redo()
+  
+  -- Get events after redo
+  local after_redo = recorder.get_recent_events()
+  luaunit.assert_equals(#after_redo, 4)
+  luaunit.assert_equals(after_redo[1].data.event_data.note, 64)
+end
+
+function test_recorder_get_recent_events_should_preserve_order_after_reset()
+  recorder.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add initial events
+  for i = 1, 3 do
+    recorder.record_event(channel, "note_mask", {
+      step = i,
+      note = 60 + i,
+      velocity = 100,
+      length = 1
+    })
+  end
+  
+  recorder.reset()
+  
+  -- Add new events
+  for i = 1, 2 do
+    recorder.record_event(channel, "note_mask", {
+      step = i,
+      note = 70 + i,
+      velocity = 100,
+      length = 1
+    })
+  end
+  
+  -- Verify only post-reset events are returned in correct order
+  local events = recorder.get_recent_events()
+  luaunit.assert_equals(#events, 2)
+  luaunit.assert_equals(events[1].data.event_data.note, 72)
+  luaunit.assert_equals(events[2].data.event_data.note, 71)
+end

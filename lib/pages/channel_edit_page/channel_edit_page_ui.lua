@@ -11,6 +11,7 @@ local dial = include("mosaic/lib/ui_components/dial")
 local control_scroll_selector = include("mosaic/lib/ui_components/control_scroll_selector")
 local list_selector = include("mosaic/lib/ui_components/list_selector")
 local value_selector = include("mosaic/lib/ui_components/value_selector")
+local recorder_history_navigator = include("mosaic/lib/ui_components/recorder_history_navigator")
 local m_midi = include("mosaic/lib/m_midi")
 local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/devices/param_manager")
@@ -69,16 +70,23 @@ local midi_channel_vertical_scroll_selector = vertical_scroll_selector:new(65, 2
 local device_map_vertical_scroll_selector = nil
 local param_select_vertical_scroll_selector = vertical_scroll_selector:new(30, 25, "Params", {})
 
--- Dials
+-- Trig Dials
 local dials = control_scroll_selector:new(0, 0, {})
 local m_params = {}
 for i = 1, 10 do
   table.insert(m_params, dial:new(0 + (i - 1) % 5 * 25, 18 + math.floor((i - 1) / 5) * 22, "Param " .. i, "param_" .. i, "None", "X"))
 end
 
+-- Recorder controls
+local recorder_controls = {
+  record_mode = value_selector:new(0 + (1 - 1) % 5 * 25, 18 + math.floor((1 - 1) / 5) * 22, "Rec mode", 1, 1),
+  history_type = value_selector:new(0 + (6 - 1) % 5 * 25, 18 + math.floor((6 - 1) / 5) * 22, "Memory", 1, 3),
+  navigator = recorder_history_navigator:new(0 + (3 - 1) % 5 * 25, 18 + math.floor((3 - 1) / 5) * 22, "History")
+}
+
 -- Page indices
-local channel_page_to_index = {["Note Dashboard"] = 1, ["Masks"] = 2, ["Trig Locks"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5}
-local index_to_channel_page = {"Note Dashboard", "Masks", "Trig Locks", "Clock Mods", "Midi Config"}
+local channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Recorder"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6}
+local index_to_channel_page = {"Masks", "Trig Locks", "Recorder", "Clock Mods", "Midi Config", "Note Dashboard"}
 
 -- Helper variables
 local refresh_timer_id = nil
@@ -147,6 +155,14 @@ end
 configure_note_trig_selector(mask_selectors.trig)
 configure_swing_selector(swing_selector)
 
+recorder_controls.record_mode:set_view_transform_func(function(value)
+  return value == 1 and "Overdub" or ""
+end)
+
+recorder_controls.history_type:set_view_transform_func(function(value)
+  return value == 1 and "Channel" or value == 2 and "Song ptn ch" or value == 3 and "All"
+end)
+
 -- Page definitions
 local notes_page = page:new("Note Dashboard", function()
   for _, selector in pairs(note_displays) do
@@ -161,6 +177,12 @@ local notes_page = page:new("Note Dashboard", function()
   note_displays.length:draw()
 end)
 
+
+local recorder_page = page:new("Recorder", function()
+  recorder_controls.record_mode:draw()
+  recorder_controls.history_type:draw()
+  recorder_controls.navigator:draw()
+end)
 
 local mask_page = page:new("Note Masks", function()
   for _, selector in pairs(mask_selectors) do
@@ -233,6 +255,10 @@ function channel_edit_page_ui.init()
     return "Ch. " .. program.get().selected_channel .. " " or ""
   end)
 
+  set_sub_name_func(recorder_page, function()
+    return "Ch. " .. program.get().selected_channel .. " " or ""
+  end)
+
   set_sub_name_func(mask_page, function()
     return "Ch. " .. program.get().selected_channel .. " " or ""
   end)
@@ -253,13 +279,15 @@ function channel_edit_page_ui.init()
     param_select_vertical_scroll_selector:draw()
   end)
 
-  channel_pages:add_page(notes_page)
   channel_pages:add_page(mask_page)
   channel_pages:add_page(trig_lock_page)
+  channel_pages:add_page(recorder_page)
   channel_pages:add_page(clock_mods_page)
   channel_pages:add_page(channel_edit_page)
+  channel_pages:add_page(notes_page)
 
-  channel_edit_page_ui.select_note_dashboard_page()
+
+  channel_edit_page_ui.select_mask_page()
 
   dials:set_selected_item(1)
   clock_mod_list_selector:set_selected_value(13)
@@ -271,6 +299,9 @@ function channel_edit_page_ui.init()
   shuffle_feel_selector:set_selected_value(params:get("global_shuffle_feel"))
   shuffle_basis_selector:set_selected_value(params:get("global_shuffle_basis"))
   shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
+
+  recorder_controls.record_mode:set_value(params:get("record_mode"))
+  recorder_controls.history_type:set_value(params:get("record_history_type"))
 
   channel_edit_page_ui.refresh_clock_mods()
 end
@@ -1445,6 +1476,9 @@ function channel_edit_page_ui.handle_midi_config_page_decrement()
 end
 
 function channel_edit_page_ui.handle_encoder_one_positive()
+
+
+
   channel_edit_page_ui.select_channel_page_by_index((channel_pages:get_selected_page() or 1) + 1)
   fn.dirty_screen(true)
   save_confirm.cancel()
@@ -1526,6 +1560,10 @@ function channel_edit_page_ui.select_trig_page()
   channel_pages:select_page(channel_page_to_index["Trig Locks"])
 end
 
+function channel_edit_page_ui.select_recorder_page()
+  channel_pages:select_page(channel_page_to_index["Recorder"])
+end
+
 function channel_edit_page_ui.select_clock_mods_page()
   channel_edit_page_ui.refresh_clock_mods()
   channel_edit_page_ui.refresh_swing()
@@ -1554,15 +1592,17 @@ end
 
 function channel_edit_page_ui.select_channel_page_by_index(index)
   if index == 1 then
-    channel_edit_page_ui.select_note_dashboard_page()
-  elseif index == 2 then
     channel_edit_page_ui.select_mask_page()
-  elseif index == 3 then
+  elseif index == 2 then
     channel_edit_page_ui.select_trig_page()
+  elseif index == 3 then
+    channel_edit_page_ui.select_recorder_page()
   elseif index == 4 then
     channel_edit_page_ui.select_clock_mods_page()
   elseif index == 5 then
     channel_edit_page_ui.select_midi_config_page()
+  elseif index == 6 then
+    channel_edit_page_ui.select_note_dashboard_page()
   end
 end
 
