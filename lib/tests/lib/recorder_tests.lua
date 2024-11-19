@@ -4138,3 +4138,438 @@ function test_recorder_should_preserve_partial_chord_updates_after_reset()
   luaunit.assert_equals(chord_mask[2], 3)
   luaunit.assert_equals(chord_mask[3], 5)
 end
+
+function test_recorder_should_undo_most_recent_event_across_patterns()
+  recorder.init()
+  program.init()
+  
+  -- Set up channels in different patterns
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  
+  -- Add events in chronological order
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    song_pattern = 2
+  })
+  
+  -- Undo most recent event for channel 1
+  recorder.undo(nil, 1)
+  
+  -- Pattern 2 event should be undone, Pattern 1 unchanged
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], nil)
+end
+
+function test_recorder_should_redo_earliest_available_event_across_patterns()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  
+  -- Add and undo events
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    song_pattern = 2
+  })
+  
+  recorder.undo_all(nil, 1)
+  
+  -- Verify undone state
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], nil)
+  
+  -- Redo earliest event
+  recorder.redo(nil, 1)
+  
+  -- Pattern 1 event should be redone first
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], nil)
+end
+
+function test_recorder_should_undo_all_events_across_patterns_for_channel()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  local channel2_p1 = program.get_channel(1, 2)  -- Different channel
+  
+  -- Add events to multiple patterns/channels
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    song_pattern = 2
+  })
+
+  recorder.record_event(channel2_p1, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1,
+    song_pattern = 1
+  })
+  
+  -- Undo all events for channel 1
+  recorder.undo_all(nil, 1)
+  
+  -- Channel 1 events should be undone in all patterns
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], nil)
+  
+  -- Channel 2 should be unaffected
+  luaunit.assert_equals(channel2_p1.step_note_masks[1], 67)
+end
+
+function test_recorder_should_redo_all_events_across_patterns_for_channel()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  local channel2_p1 = program.get_channel(1, 2)
+  
+  -- Add and undo events
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    song_pattern = 2
+  })
+
+  recorder.record_event(channel2_p1, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 80,
+    length = 1,
+    song_pattern = 1
+  })
+  
+  recorder.undo_all()
+  
+  -- Redo all events for channel 1 only
+  recorder.redo_all(nil, 1)
+  
+  -- Channel 1 events should be redone in all patterns
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], 64)
+  
+  -- Channel 2 should remain undone
+  luaunit.assert_equals(channel2_p1.step_note_masks[1], nil)
+end
+
+function test_recorder_should_handle_empty_channel_undo_redo()
+  recorder.init()
+  program.init()
+  
+  -- Attempt operations on empty state
+  recorder.undo(nil, 1)
+  recorder.redo(nil, 1)
+  recorder.undo_all(nil, 1)
+  recorder.redo_all(nil, 1)
+  
+  -- Should not error and state should remain empty
+  local state = recorder.get_state()
+  luaunit.assert_equals(state.current_event_index, 0)
+  luaunit.assert_equals(next(state.pattern_channels), nil)
+end
+
+function test_recorder_should_maintain_channel_independence()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel2_p1 = program.get_channel(1, 2)
+  
+  -- Add events to different channels
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  recorder.record_event(channel2_p1, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+  
+  -- Undo channel 1 events
+  recorder.undo(nil, 1)
+  
+  -- Channel 1 should be undone, Channel 2 unchanged
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  luaunit.assert_equals(channel2_p1.step_note_masks[1], 64)
+  
+  -- Redo channel 1 events
+  recorder.redo(nil, 1)
+  
+  -- Both channels should have their events
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel2_p1.step_note_masks[1], 64)
+end
+
+function test_recorder_should_preserve_working_pattern_across_patterns()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    song_pattern = 2  
+  })
+
+  recorder.undo(nil, 1)
+  
+  -- Verify working pattern state maintained independently
+  luaunit.assert_equals(channel1_p1.working_pattern.note_mask_values[1], 60)
+  luaunit.assert_equals(channel1_p2.working_pattern.note_mask_values[1], 0)
+end
+
+function test_recorder_should_preserve_chord_state_across_patterns()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    chord_degrees = {1, 3, 5},
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    chord_degrees = {1, 4, 5},
+    song_pattern = 2
+  })
+
+  recorder.undo(nil, 1) -- Undo most recent event for channel 1
+  
+  -- Verify chord state maintained independently
+  luaunit.assert_equals(channel1_p1.step_chord_masks[1][1], 1)
+  luaunit.assert_equals(channel1_p1.step_chord_masks[1][2], 3)
+  luaunit.assert_equals(channel1_p2.step_chord_masks[1], nil)
+end
+
+function test_recorder_should_handle_multiple_undo_redo_cycles_across_patterns()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  
+  -- Add events in different order
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    song_pattern = 2
+  })
+
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+  
+  -- Multiple undo/redo cycles
+  recorder.undo(nil, 1)  -- Should undo pattern 1
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], 64)
+  
+  recorder.undo(nil, 1)  -- Should undo pattern 2
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], nil)
+  
+  recorder.redo(nil, 1)  -- Should redo pattern 2 first (earliest)
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], 64)
+  
+  recorder.redo(nil, 1)  -- Should redo pattern 1
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], 64)
+end
+
+function test_recorder_should_handle_interleaved_channel_events_across_patterns()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  local channel2_p1 = program.get_channel(1, 2)
+  
+  -- Interleaved events across channels and patterns
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel2_p1, "note_mask", {
+    step = 1,
+    note = 62,
+    song_pattern = 1
+  })
+
+  recorder.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 64,
+    song_pattern = 2
+  })
+  
+  -- Undo channel 1 events
+  recorder.undo(nil, 1)  -- Most recent channel 1 event (pattern 2)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], nil)
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel2_p1.step_note_masks[1], 62)
+  
+  recorder.undo(nil, 1)  -- Earlier channel 1 event (pattern 1)
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], nil)
+  luaunit.assert_equals(channel2_p1.step_note_masks[1], 62)
+end
+
+function test_recorder_should_handle_edge_cases_in_cross_pattern_operations()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  
+  -- Edge case: Pattern with no events
+  recorder.undo(nil, 1)
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  
+  -- Edge case: Single event
+  recorder.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    song_pattern = 1
+  })
+  
+  recorder.undo(nil, 1)
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  
+  recorder.redo(nil, 1)
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], 60)
+  
+  -- Edge case: Multiple undo beyond available events
+  recorder.undo(nil, 1)
+  recorder.undo(nil, 1)
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  
+  -- Edge case: Multiple redo beyond available events
+  recorder.redo(nil, 1)
+  recorder.redo(nil, 1)
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], 60)
+end
+
+ function test_recorder_should_count_events()
+  recorder.init()
+  program.init()
+  
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel2_p1 = program.get_channel(1, 2)
+  local channel1_p2 = program.get_channel(2, 1)
+  local channel2_p2 = program.get_channel(2, 2)
+
+  -- Test empty state
+  luaunit.assert_equals(recorder.get_event_count(), 0)
+  luaunit.assert_equals(recorder.get_event_count(1), 0)
+  luaunit.assert_equals(recorder.get_event_count(nil, 1), 0)
+  luaunit.assert_equals(recorder.get_event_count(1, 1), 0)
+
+  -- Add events across patterns and channels
+  recorder.record_event(channel1_p1, "note_mask", {step = 1, note = 60, song_pattern = 1})
+  recorder.record_event(channel2_p1, "note_mask", {step = 1, note = 62, song_pattern = 1})
+  recorder.record_event(channel1_p2, "note_mask", {step = 1, note = 64, song_pattern = 2})
+  recorder.record_event(channel2_p2, "note_mask", {step = 1, note = 66, song_pattern = 2})
+
+  -- Test total counts
+  luaunit.assert_equals(recorder.get_event_count(), 4, "Should count all events")
+  
+  -- Test pattern-specific counts
+  luaunit.assert_equals(recorder.get_event_count(1), 2, "Should count pattern 1 events")
+  luaunit.assert_equals(recorder.get_event_count(2), 2, "Should count pattern 2 events")
+  
+  -- Test channel-specific counts
+  luaunit.assert_equals(recorder.get_event_count(nil, 1), 2, "Should count channel 1 events")
+  luaunit.assert_equals(recorder.get_event_count(nil, 2), 2, "Should count channel 2 events")
+  
+  -- Test pattern-channel specific counts
+  luaunit.assert_equals(recorder.get_event_count(1, 1), 1, "Should count pattern 1 channel 1")
+  luaunit.assert_equals(recorder.get_event_count(1, 2), 1, "Should count pattern 1 channel 2")
+  luaunit.assert_equals(recorder.get_event_count(2, 1), 1, "Should count pattern 2 channel 1")
+  luaunit.assert_equals(recorder.get_event_count(2, 2), 1, "Should count pattern 2 channel 2")
+
+  -- Test after undo
+  recorder.undo()
+  luaunit.assert_equals(recorder.get_event_count(), 3, "Should count after undo")
+  luaunit.assert_equals(recorder.get_event_count(2), 1, "Should count pattern after undo")
+  luaunit.assert_equals(recorder.get_event_count(nil, 2), 1, "Should count channel after undo")
+  
+  -- Test non-existent pattern/channel
+  luaunit.assert_equals(recorder.get_event_count(3), 0, "Should handle non-existent pattern")
+  luaunit.assert_equals(recorder.get_event_count(nil, 3), 0, "Should handle non-existent channel")
+  luaunit.assert_equals(recorder.get_event_count(3, 3), 0, "Should handle non-existent pattern-channel")
+end

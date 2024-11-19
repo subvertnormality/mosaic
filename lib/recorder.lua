@@ -459,7 +459,38 @@ function recorder.record_event(channel, event_type, data)
 end
 
 function recorder.undo(sequencer_pattern, channel_number)
+  if channel_number and not sequencer_pattern then
+    -- Find most recent event in global history
+    local idx = state.current_event_index
+    while idx > 0 do
+      local event = state.event_history:get(idx)
+      if event.data.channel_number == channel_number then
+        -- Found most recent event, undo it
+        state.current_event_index = idx - 1
+        local pc_key = get_pattern_key(event.data.song_pattern, channel_number)
+        local pc_state = state.pattern_channels[pc_key]
+        if pc_state then
+          local handler = event_handlers[event.type]
+          if handler then
+            local channel = program.get_channel(event.data.song_pattern, channel_number)
+            local prev_index = find_previous_event(pc_state.step_indices, event.data.step, pc_state.current_index)
+            if prev_index then
+              local prev_event = pc_state.event_history:get(prev_index)
+              handler.apply_event(channel, event.data.step, prev_event.data.event_data, "undo")
+            else
+              handler.restore_state(channel, event.data.step, event.data.original_state)
+            end
+            pc_state.current_index = pc_state.current_index - 1
+          end
+        end
+        return
+      end
+      idx = idx - 1
+    end
+    return
+  end
 
+  -- Original pattern/channel-specific logic remains unchanged
   if sequencer_pattern and channel_number then
     local pc_key = get_pattern_key(sequencer_pattern, channel_number)
     local pc_state = state.pattern_channels[pc_key]
@@ -496,6 +527,22 @@ function recorder.undo(sequencer_pattern, channel_number)
 end
 
 function recorder.redo(sequencer_pattern, channel_number)
+  -- If only channel_number provided, redo earliest available event for that channel
+  if channel_number and not sequencer_pattern then
+    local next_idx = state.current_event_index + 1
+    while next_idx <= state.event_history.total_size do
+      local event = state.event_history:get(next_idx)
+      if event.data.channel_number == channel_number then
+        state.current_event_index = next_idx
+        recorder.redo(event.data.song_pattern, channel_number)
+        return
+      end
+      next_idx = next_idx + 1
+    end
+    return
+  end
+
+  -- Original pattern/channel-specific logic remains unchanged
   if sequencer_pattern and channel_number then
     local pc_key = get_pattern_key(sequencer_pattern, channel_number)
     local pc_state = state.pattern_channels[pc_key]
@@ -530,6 +577,17 @@ function recorder.redo(sequencer_pattern, channel_number)
 end
 
 function recorder.undo_all(sequencer_pattern, channel_number)
+  -- If only channel_number provided, undo all events for that channel across patterns
+  if channel_number and not sequencer_pattern then
+    for pc_key, pc_state in pairs(state.pattern_channels) do
+      local pattern, channel = pc_key:match("(%d+)_(%d+)")
+      if tonumber(channel) == channel_number then
+        recorder.undo_all(tonumber(pattern), channel_number)
+      end
+    end
+    return
+  end
+
   if sequencer_pattern and channel_number then
     local pc_key = get_pattern_key(sequencer_pattern, channel_number)
     local pc_state = state.pattern_channels[pc_key]
@@ -567,6 +625,17 @@ function recorder.undo_all(sequencer_pattern, channel_number)
 end
 
 function recorder.redo_all(sequencer_pattern, channel_number)
+  -- If only channel_number provided, redo all events for that channel across patterns
+  if channel_number and not sequencer_pattern then
+    for pc_key, pc_state in pairs(state.pattern_channels) do
+      local pattern, channel = pc_key:match("(%d+)_(%d+)")
+      if tonumber(channel) == channel_number then
+        recorder.redo_all(tonumber(pattern), channel_number)
+      end
+    end
+    return
+  end
+
   if sequencer_pattern and channel_number then
     local pc_key = get_pattern_key(sequencer_pattern, channel_number)
     local pc_state = state.pattern_channels[pc_key]
@@ -624,14 +693,36 @@ function recorder.reset()
 end
 
 function recorder.get_event_count(song_pattern, channel_number)
+  if not song_pattern and not channel_number then
+    return state.current_event_index
+  end
+  
+  if song_pattern and not channel_number then
+    local count = 0
+    for pc_key, pc_state in pairs(state.pattern_channels) do
+      local pattern, _ = pc_key:match("(%d+)_(%d+)")
+      if tonumber(pattern) == song_pattern then
+        count = count + pc_state.current_index
+      end
+    end
+    return count
+  end
+ 
+  if not song_pattern and channel_number then
+    local count = 0
+    for pc_key, pc_state in pairs(state.pattern_channels) do
+      local _, channel = pc_key:match("(%d+)_(%d+)")
+      if tonumber(channel) == channel_number then
+        count = count + pc_state.current_index
+      end
+    end
+    return count
+  end
+ 
   local pc_key = get_pattern_key(song_pattern, channel_number)
   local pc_state = state.pattern_channels[pc_key]
-  
-  if pc_state then
-    return pc_state.current_index
-  end
-  return 0
-end
+  return pc_state and pc_state.current_index or 0
+ end
 
 function recorder.get_state()
   return {
