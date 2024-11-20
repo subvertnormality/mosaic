@@ -9,7 +9,7 @@ function recorder_history_navigator:new(x, y, name)
   self.y = y
   self.name = name
   self.value = 0
-  -- self.max = max
+  self.event_state = nil
   self.selected = false
   return self
 end
@@ -24,7 +24,28 @@ function recorder_history_navigator:draw()
   screen.move(self.x, self.y + 8)
   screen.font_size(10)
   screen.text(recorder.get_state().current_event_index)
-  -- recorder.get_state().event_history.buffer[4].type
+  if self.event_state.events then
+    for i, event in ipairs(self.event_state.events) do
+      if event.type == "note_mask" then
+        local note = event.data and event.data.event_data and event.data.event_data.note
+        local length = event.data and event.data.event_data and event.data.event_data.length
+        local velocity = event.data and event.data.event_data and event.data.event_data.velocity or 120
+        local chord_degrees = event.data and event.data.event_data and event.data.event_data.chord_degrees
+        screen.level(math.floor(velocity / 10) + 3)
+        screen.move(self.x + 70 - (i * 5), self.y + 40 - ((note or 50) / 3))
+        if note and note > -1 then
+          screen.font_size(5)
+          screen.font_face(60)
+          screen.text("\u{286}")
+          screen.font_face(1)
+        elseif chord_degrees and fn.table_count(chord_degrees) > 0 then
+          screen.text("'")
+        elseif length then
+          screen.text("l")
+        end
+      end
+    end
+  end
 end
 
 function recorder_history_navigator:select()
@@ -41,29 +62,8 @@ function recorder_history_navigator:is_selected()
   return self.selected
 end
 
-function recorder_history_navigator:increment()
-  self.value = self.value + 1
-  if self.value > self.max then
-    self.value = self.max
-  end
-  fn.dirty_screen(true)
-end
-
-function recorder_history_navigator:decrement()
-  self.value = self.value - 1
-  if self.value < self.min then
-    self.value = self.min
-  end
-  fn.dirty_screen(true)
-end
-
 function recorder_history_navigator:get_value()
   return self.value
-end
-
-function recorder_history_navigator:set_name()
-  self.name = name
-  fn.dirty_screen(true)
 end
 
 function recorder_history_navigator:set_value(v)
@@ -71,9 +71,8 @@ function recorder_history_navigator:set_value(v)
   fn.dirty_screen(true)
 end
 
-function recorder_history_navigator:set_max(v)
-  self.max = v
-  fn.dirty_screen(true)
+function recorder_history_navigator:set_event_state(event_state)
+  self.event_state = event_state
 end
 
 return recorder_history_navigator

@@ -32,6 +32,10 @@ local shuffle_amount_selector = value_selector:new(70, 40, "Amount", 0, 100)
 -- Stores portions of mask events for consolidation
 local mask_events = {}
 
+local recorder_recent_events = {
+  events = {}
+}
+
 -- Value selectors with initial values
 local mask_selectors = {
   trig = value_selector:new(0 + (1 - 1) % 5 * 25, 18 + math.floor((1 - 1) / 5) * 22, "Trig", -1, 1),
@@ -302,6 +306,9 @@ function channel_edit_page_ui.init()
 
   recorder_controls.record_mode:set_value(params:get("record_mode"))
   recorder_controls.history_type:set_value(params:get("record_history_type"))
+  
+  recorder_controls.navigator:set_event_state(recorder_recent_events)
+  recorder_controls.navigator:select()
 
   channel_edit_page_ui.refresh_clock_mods()
 end
@@ -703,6 +710,8 @@ function channel_edit_page_ui.enc(n, d)
     for _ = 1, math.abs(d) do
       if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
         channel_edit_page_ui.handle_mask_page_change(d)
+      elseif channel_pages:get_selected_page() == channel_page_to_index["Recorder"] then
+        channel_edit_page_ui.handle_recorder_page_change(d)
       end
       if d > 0 then
         if channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
@@ -741,6 +750,7 @@ function channel_edit_page_ui.enc(n, d)
         shuffle_feel_selector = shuffle_feel_selector,
         shuffle_basis_selector = shuffle_basis_selector,
         shuffle_amount_selector = shuffle_amount_selector,
+        recorder_controls = recorder_controls,
       }
 
       if d > 0 then
@@ -870,6 +880,17 @@ function channel_edit_page_ui.refresh()
   channel_edit_page_ui.select_channel_page_by_index(channel_pages:get_selected_page() or 1)
 end
 
+function channel_edit_page_ui.handle_recorder_navigator(d)
+  if d > 0 then
+    -- TODO memory type
+    recorder.redo()
+    recorder_recent_events.events = recorder.get_recent_events(nil, nil, 10)
+  else
+    recorder.undo()
+    recorder_recent_events.events = recorder.get_recent_events(nil, nil, 10)
+  end
+end
+
 function channel_edit_page_ui.add_note_mask_event_portion(channel, step, event_portion)
   if not mask_events[channel.number] then
     mask_events[channel.number] = {}
@@ -889,6 +910,14 @@ function channel_edit_page_ui.record_note_mask_event(channel, step)
     local event_channel = program.get_channel(event.sequencer_pattern, c)
 
     recorder.record_event(event_channel, "note_mask", event.data)
+
+    if params:get("record_history_type") == 1 then
+      recorder_recent_events.events = recorder.get_recent_events(nil, c, 10)
+    elseif params:get("record_history_type") == 2 then
+      recorder_recent_events.events = recorder.get_recent_events(event.sequencer_pattern, c, 10)
+    elseif params:get("record_history_type") == 3 then
+      recorder_recent_events.events = recorder.get_recent_events(nil, nil, 10)
+    end
 
     mask_events[c][step] = nil
   end
@@ -1354,6 +1383,24 @@ function channel_edit_page_ui.handle_mask_page_change(direction)
     if mask_selectors.chords[4]:is_selected() then
       channel_edit_page_ui.handle_chord_mask_four_change(direction)
     end
+end
+
+function channel_edit_page_ui.handle_recorder_page_change(d)
+  if recorder_controls.history_type:is_selected() then
+    if d > 0 then
+      recorder_controls.history_type:increment()
+    else
+      recorder_controls.history_type:decrement()
+    end
+  elseif recorder_controls.record_mode:is_selected() then
+    if d > 0 then
+      recorder_controls.record_mode:increment()
+    else
+      recorder_controls.record_mode:decrement()
+    end
+  elseif recorder_controls.navigator:is_selected() then
+    channel_edit_page_ui.handle_recorder_navigator(d)
+  end
 end
 
 function channel_edit_page_ui.handle_clock_mods_page_increment()
