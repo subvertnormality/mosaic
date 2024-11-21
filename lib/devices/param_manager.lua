@@ -48,7 +48,7 @@ function param_manager.init()
 end
 
 
-function param_manager.add_device_params(channel_id, device, channel, midi_device, init)
+function param_manager.add_device_params(channel_id, device, c, midi_device, init)
   if device and (device.type == "midi" or device.type == "norns") then
     -- Set group parameter name and show it
     params:lookup_param("midi_device_params_group_channel_" .. channel_id).name =
@@ -157,9 +157,9 @@ function param_manager.add_device_params(channel_id, device, channel, midi_devic
           function(x)
             if x ~= val.off_value then
               if val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
-                m_midi.nrpn(val.nrpn_msb, val.nrpn_lsb, x, channel, midi_device)
+                m_midi.nrpn(val.nrpn_msb, val.nrpn_lsb, x, c, midi_device)
               elseif val.cc_msb and val.cc_max_value then
-                m_midi.cc(val.cc_msb, val.cc_lsb or nil, x, channel, midi_device)
+                m_midi.cc(val.cc_msb, val.cc_lsb or nil, x, c, midi_device)
               end
               channel_edit_page_ui.refresh_trig_lock_values()
             end
@@ -200,7 +200,7 @@ function param_manager.update_param(index, channel, param, meta_device)
     channel.trig_lock_params[index] = {}
   else
     channel.trig_lock_params[index] = {}
-    channel.trig_lock_params[index] = param
+    channel.trig_lock_params[index] = fn.deep_copy(param)
     channel.trig_lock_params[index].device_name = meta_device.device_name
     channel.trig_lock_params[index].type = meta_device.type
     channel.trig_lock_params[index].id = param.id
@@ -218,19 +218,31 @@ function param_manager.update_param(index, channel, param, meta_device)
 end
 
 local function safe_set_param(channel, index, param, meta_device)
-  if not channel.trig_lock_params then channel.trig_lock_params = {} end
-  channel.trig_lock_params[index] = param or {}
-
-  if param and param.index then
-    channel.trig_lock_params[index].device_name = meta_device.device_name or ""
-    channel.trig_lock_params[index].type = meta_device.type or ""
-    channel.trig_lock_params[index].id = param.id or ""
-    if channel.trig_lock_params[index].type == "midi" and param.index then
-      channel.trig_lock_params[index].param_id = string.format("midi_device_params_channel_%d_%d", channel.number, param.index)
-    elseif channel.trig_lock_params[index].type == "norns" and param.param_id then
-      channel.trig_lock_params[index].param_id = param.param_id
-    end
+  if not channel.trig_lock_params then 
+    channel.trig_lock_params = {} 
   end
+  
+  -- If param is nil or empty, just set empty table
+  if not param or not next(param) then
+    channel.trig_lock_params[index] = {}
+    return
+  end
+  
+  -- Create a deep clone of the param
+  local param_copy = fn.deep_copy(param)
+  
+  -- Set the channel-specific fields
+  param_copy.device_name = meta_device and meta_device.device_name or ""
+  param_copy.type = meta_device and meta_device.type or ""
+  param_copy.id = param.id or ""
+  
+  -- Always ensure param_id is channel-specific
+  if param_copy.type == "midi" and param_copy.index then
+    param_copy.param_id = string.format("midi_device_params_channel_%d_%d", channel.number, param_copy.index)
+  end
+  
+  -- Assign the cloned and modified param
+  channel.trig_lock_params[index] = param_copy
 end
 
 function param_manager.update_default_params(channel, meta_device)
