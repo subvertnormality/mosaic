@@ -1,6 +1,7 @@
 
 local step = include("mosaic/lib/step")
 local quantiser = include("mosaic/lib/quantiser")
+local divisions = include("mosaic/lib/clock/divisions")
 
 local m_midi = {}
 
@@ -19,6 +20,7 @@ local midi_tables = {}
 local midi_off_store = {}
 local chord_number = 0
 local chord_one_note = nil
+local chord_states = {}
 
 local page_change_clock = nil
 local previous_page = nil
@@ -51,7 +53,11 @@ function handle_midi_event_data(data, midi_device)
 
     local step_scale_number = channel.step_scale_number
     local pressed_keys = m_grid.get_pressed_keys()
-    local s = program.get().current_step
+
+    local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+    local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
+
+    local s = program.get_current_step_for_channel(channel.number)
 
     if #pressed_keys > 0 then
       if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
@@ -65,52 +71,126 @@ function handle_midi_event_data(data, midi_device)
       note = data[2]
     end
 
+    if not chord_states[s] then
+      chord_states[s] = {
+        chord_one_note = nil,
+        chord_number = 0,
+        notes = {},
+        length_recorded = false
+      }
+    end
+
+    local chord_state = chord_states[s]
+
     midi_off_store[data[2]] = {
       note = note,
-      step = s
+      step = s,
+      start_time = util.time()
     }
 
     m_midi:note_on(note, velocity, midi_channel, device.midi_device)
 
-    -- Only set new chord root if:
-    -- 1. No current chord (chord_number == 0)
-    -- 2. We're at a different step than the current chord root
-    -- 3. Current chord root note has been released
-    if chord_number == 0 or 
-       (chord_one_note and midi_off_store[chord_one_note] and midi_off_store[chord_one_note].step ~= s) or
-       (chord_one_note and not midi_off_store[chord_one_note]) then
-      chord_one_note = data[2]
-      chord_number = 1
+    -- Handle chord state for this step
+    if chord_state.chord_number == 0 then
+      chord_state.chord_one_note = data[2]
+      chord_state.chord_number = 1
+      chord_state.length_recorded = false
     else
-      chord_number = chord_number + 1
+        if midi_off_store[chord_state.chord_one_note] and 
+          midi_off_store[chord_state.chord_one_note].step == s then
+            chord_state.chord_number = chord_state.chord_number + 1
+        else
+            -- New step or root note released, start new chord
+            chord_state.chord_one_note = data[2]
+            chord_state.chord_number = 1
+            chord_state.length_recorded = false
+        end
     end
+    
+    -- Store this note
+    chord_state.notes[data[2]] = true
 
     local chord_degree = nil
-    if chord_one_note and midi_off_store[chord_one_note] and midi_off_store[chord_one_note].step == s then
-      chord_degree = quantiser.get_chord_degree(note, midi_off_store[chord_one_note].note, step_scale_number)
-      if chord_degree < -14 or chord_degree > 14 then
-        chord_degree = nil
-      end
+    if chord_state.chord_one_note and 
+      midi_off_store[chord_state.chord_one_note] and 
+      midi_off_store[chord_state.chord_one_note].step == s then
+        chord_degree = quantiser.get_chord_degree(note, midi_off_store[chord_state.chord_one_note].note, step_scale_number)
+        if chord_degree < -14 or chord_degree > 14 then
+            chord_degree = nil
+        end
     end
 
     -- If we're on same step as chord root, send as part of chord
     -- Otherwise send as new note
-    if chord_one_note and midi_off_store[chord_one_note] and midi_off_store[chord_one_note].step == s then
-      channel_edit_page.handle_note_midi_message(note, velocity, chord_number, chord_degree)
+    if chord_state.chord_one_note and midi_off_store[chord_state.chord_one_note] and midi_off_store[chord_state.chord_one_note].step == s then
+      channel_edit_page.handle_note_midi_message(note, velocity, chord_state.chord_number, chord_degree)
     else
       channel_edit_page.handle_note_midi_message(note, velocity, 1, nil)
     end
   elseif data[1] == 128 then -- note off
-    local stored_note = midi_off_store[data[2]] and midi_off_store[data[2]].note
-    if stored_note == nil then
-      return
+    local stored = midi_off_store[data[2]]
+    if stored == nil then return end
+  
+    local chord_state = chord_states[stored.step]
+    if chord_state then
+      chord_state.notes[data[2]] = nil
+      chord_state.chord_number = chord_state.chord_number - 1
+          
+      -- If root note released or no more notes, clear chord state
+      if data[2] == chord_state.chord_one_note or chord_state.chord_number <= 0 then
+        chord_state.chord_one_note = nil
+        chord_state.chord_number = 0
+      end
+  
+      -- Only process the length when we're on the last note of the chord
+      if chord_state.chord_number <= 0 and not chord_state.length_recorded then
+        chord_state.length_recorded = true
+        local duration = util.time() - stored.start_time
+        local beats_per_second = clock.get_tempo() / 60
+  
+        local channel = program.get_selected_channel()
+        local clock_mods = channel.clock_mods
+        local channel_divisor = m_clock.calculate_divisor(clock_mods)
+        local channel_division = 1 / (channel_divisor)
+        local duration_in_beats = (duration * beats_per_second) / channel_division
+  
+        -- Find closest note division value
+        local closest_division = divisions.note_division_values[1]
+        local smallest_diff = math.abs(duration_in_beats - closest_division)
+              
+        for _, div in ipairs(divisions.note_division_values) do
+          local diff = math.abs(duration_in_beats - div)
+          if diff < smallest_diff then
+            smallest_diff = diff
+            closest_division = div
+          end
+        end
+  
+        -- Add length and record event only on final note
+        if stored.step then
+          channel_edit_page_ui.add_note_mask_event_portion(
+            channel,
+            stored.step,
+            {
+              sequencer_pattern = program.get().selected_sequencer_pattern,
+              data = {
+                step = stored.step,
+                length = closest_division
+              }
+            }
+          )
+          channel_edit_page_ui.record_note_mask_event(channel, stored.step)
+        end
+      end
+  
+      -- Clean up if no more notes
+      if next(chord_state.notes) == nil then
+        chord_states[stored.step] = nil
+      end
     end
-    m_midi:note_off(stored_note, 0, midi_channel, device.midi_device)
+  
+    m_midi:note_off(stored.note, 0, midi_channel, device.midi_device)
     midi_off_store[data[2]] = nil
-    chord_number = chord_number - 1
-    if chord_number == 0 then 
-      chord_one_note = nil 
-    end
   elseif data[1] == 176 then -- cc change
     if data[2] >= 1 and data[2] <= 20 then
 

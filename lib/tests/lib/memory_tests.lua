@@ -5249,3 +5249,316 @@ function test_memory_get_total_event_count_should_handle_large_histories()
   luaunit.assert_equals(memory.get_total_event_count(), 1000)
   luaunit.assert_equals(memory.get_total_event_count(1, 1), 1000)
 end
+
+-- Add these new tests to your existing test suite:
+
+function test_memory_should_preserve_channel_histories_during_interleaved_operations()
+  memory.init()
+  program.init()
+  
+  -- Set up channels
+  local channel1 = program.get_channel(1, 1)
+  local channel2 = program.get_channel(1, 2)
+  
+  -- Add events alternating between channels
+  memory.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+  
+  memory.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+  
+  memory.record_event(channel1, "note_mask", {
+    step = 2,
+    note = 62,
+    velocity = 95,
+    length = 1
+  })
+  
+  -- Verify initial state
+  luaunit.assert_equals(channel1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1.step_note_masks[2], 62)
+  luaunit.assert_equals(channel2.step_note_masks[1], 64)
+  
+  -- Undo last event from channel 1
+  memory.undo(nil, 1)
+  
+  -- Channel 1's second note should be undone, but channel 2 unchanged
+  luaunit.assert_equals(channel1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1.step_note_masks[2], nil)
+  luaunit.assert_equals(channel2.step_note_masks[1], 64)
+  
+  -- Add new event to channel 1
+  memory.record_event(channel1, "note_mask", {
+    step = 2,
+    note = 67,
+    velocity = 85,
+    length = 1
+  })
+  
+  -- Channel 2's history should still be intact
+  luaunit.assert_equals(channel1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1.step_note_masks[2], 67)
+  luaunit.assert_equals(channel2.step_note_masks[1], 64)
+  
+  -- Undo channel 2's event
+  memory.undo(nil, 2)
+  
+  -- Only channel 2's event should be undone
+  luaunit.assert_equals(channel1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1.step_note_masks[2], 67)
+  luaunit.assert_equals(channel2.step_note_masks[1], nil)
+  
+  -- Redo channel 2's event
+  memory.redo(nil, 2)
+  
+  -- Channel 2's event should be restored
+  luaunit.assert_equals(channel2.step_note_masks[1], 64)
+  
+  -- Both channels should maintain correct event counts
+  luaunit.assert_equals(memory.get_event_count(nil, 1), 2)
+  luaunit.assert_equals(memory.get_event_count(nil, 2), 1)
+end
+
+function test_memory_should_handle_channel_specific_redo_after_new_events()
+  memory.init()
+  program.init()
+  
+  local channel1 = program.get_channel(1, 1)
+  local channel2 = program.get_channel(1, 2)
+  
+  -- Add and undo events in both channels
+  memory.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+  
+  memory.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+  
+  memory.undo(nil, 1)
+  memory.undo(nil, 2)
+  
+  -- Add new event to channel 1
+  memory.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 85,
+    length = 1
+  })
+  
+  -- Channel 2 should still be able to redo its event
+  memory.redo(nil, 2)
+  
+  luaunit.assert_equals(channel1.step_note_masks[1], 67)
+  luaunit.assert_equals(channel2.step_note_masks[1], 64)
+end
+
+function test_memory_should_maintain_correct_event_order_per_channel()
+  memory.init()
+  program.init()
+  
+  local channel1 = program.get_channel(1, 1)
+  local channel2 = program.get_channel(1, 2)
+  
+  -- Add events in specific order
+  memory.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+  
+  memory.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+  
+  memory.record_event(channel1, "note_mask", {
+    step = 2,
+    note = 62,
+    velocity = 95,
+    length = 1
+  })
+  
+  -- Undo all events from channel 1
+  memory.undo(nil, 1)
+  memory.undo(nil, 1)
+  
+  -- Redo channel 1 events - should maintain original order
+  memory.redo(nil, 1)
+  luaunit.assert_equals(channel1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel2.step_note_masks[1], 64)
+  
+  memory.redo(nil, 1)
+  luaunit.assert_equals(channel1.step_note_masks[2], 62)
+end
+
+function test_memory_should_handle_pattern_and_channel_specific_operations()
+  memory.init()
+  program.init()
+  
+  -- Set up channels in different patterns
+  local channel1_p1 = program.get_channel(1, 1)
+  local channel1_p2 = program.get_channel(2, 1)
+  local channel2_p1 = program.get_channel(1, 2)
+  
+  -- Add events across patterns and channels
+  memory.record_event(channel1_p1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+  
+  memory.record_event(channel2_p1, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1,
+    song_pattern = 1
+  })
+  
+  memory.record_event(channel1_p2, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 85,
+    length = 1,
+    song_pattern = 2
+  })
+  
+  -- Undo channel 1 events across all patterns
+  memory.undo(nil, 1)
+  
+  -- Should undo most recent channel 1 event (in pattern 2)
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], nil)
+  luaunit.assert_equals(channel2_p1.step_note_masks[1], 64)
+  
+  memory.undo(nil, 1)
+  
+  -- Should undo channel 1 pattern 1 event
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], nil)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], nil)
+  luaunit.assert_equals(channel2_p1.step_note_masks[1], 64)
+  
+  -- Redo should maintain pattern-specific state
+  memory.redo(nil, 1)
+  luaunit.assert_equals(channel1_p1.step_note_masks[1], 60)
+  luaunit.assert_equals(channel1_p2.step_note_masks[1], nil)
+end
+
+function test_memory_should_clear_redo_history_per_channel()
+  memory.init()
+  program.init()
+  
+  local channel1 = program.get_channel(1, 1)
+  local channel2 = program.get_channel(1, 2)
+  
+  -- Add initial events
+  memory.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+  
+  memory.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+  
+  -- Undo both channels
+  memory.undo(nil, 1)
+  memory.undo(nil, 2)
+  
+  -- Add new event to channel 1
+  memory.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 67,
+    velocity = 85,
+    length = 1
+  })
+  
+  -- Channel 1 redo should not be possible
+  memory.redo(nil, 1)
+  luaunit.assert_equals(channel1.step_note_masks[1], 67)
+  
+  -- Channel 2 redo should still work
+  memory.redo(nil, 2)
+  luaunit.assert_equals(channel2.step_note_masks[1], 64)
+end
+
+
+function test_channel_history_should_remain_intact_when_another_channel_history_is_wiped_after_new_event_added_in_middle_of_history()
+  memory.init()
+  program.init()
+  
+  local channel1 = program.get_channel(1, 1)
+  local channel2 = program.get_channel(1, 2)
+  
+  -- Add events in specific order
+  memory.record_event(channel1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1
+  })
+
+  memory.record_event(channel1, "note_mask", {
+    step = 2,
+    note = 61,
+    velocity = 100,
+    length = 1
+  })
+  
+  
+  memory.record_event(channel2, "note_mask", {
+    step = 1,
+    note = 64,
+    velocity = 90,
+    length = 1
+  })
+  
+  memory.record_event(channel2, "note_mask", {
+    step = 2,
+    note = 66,
+    velocity = 90,
+    length = 1
+  })
+
+  print(#memory.get_recent_events(nil, 2, 25))
+
+  memory.undo(nil, 1)
+
+  print(#memory.get_recent_events(nil, 2, 25))
+
+  memory.record_event(channel1, "note_mask", {
+    step = 2,
+    note = 61,
+    velocity = 100,
+    length = 1
+  })
+  
+
+  luaunit.assert_equals(memory.get_event_count(nil, 2), 2)
+  luaunit.assert_equals(#memory.get_recent_events(nil, 2, 25), 2)
+end

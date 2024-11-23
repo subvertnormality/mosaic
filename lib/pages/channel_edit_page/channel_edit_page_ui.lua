@@ -820,7 +820,7 @@ end
 
 function channel_edit_page_ui.refresh_memory()
   local c = program.get_selected_channel().number
-  memory_state.events = memory.get_recent_events(nil, c, 15)
+  memory_state.events = memory.get_recent_events(nil, c, 25)
   memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
   memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
 end
@@ -880,12 +880,12 @@ function channel_edit_page_ui.handle_memory_navigator(d)
   if d > 0 then
     
     memory.redo(nil, c)
-    memory_state.events = memory.get_recent_events(nil, c, 15)
+    memory_state.events = memory.get_recent_events(nil, c, 25)
     memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
     memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
   else
     memory.undo(nil, c)
-    memory_state.events = memory.get_recent_events(nil, c, 15)
+    memory_state.events = memory.get_recent_events(nil, c, 25)
     memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
     memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
   end

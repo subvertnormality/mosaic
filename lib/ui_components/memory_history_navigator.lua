@@ -21,28 +21,62 @@ function memory_history_navigator:draw()
   else
     screen.level(1)
   end
-  screen.move(self.x, self.y)
-  screen.move(self.x, self.y + 8)
+  screen.move(self.x, self.y + 5)
   screen.font_size(10)
-  screen.text(self.current_index .. "/" .. self.max_index)
+  screen.text(self.current_index)
+  screen.move(self.x, self.y + 17)
+  screen.font_size(8)
+  screen.text("of")
+  screen.move(self.x, self.y + 31)
+  screen.font_size(10)
+  screen.text(self.max_index)
+  
   if self.event_state.events then
+    -- Initialize an array to store fixed y positions
+    local fixed_y_positions = {}
+    local last_valid_y_pos = 60  -- Default value if no valid note is found
+    
+    -- First pass: determine fixed y positions for all events
+    for i = #self.event_state.events, 1, -1 do  -- Scan backwards
+      local event = self.event_state.events[i]
+      if event.type == "note_mask" then
+        local note = event.data and event.data.event_data and event.data.event_data.note
+        if note and note > -1 then
+          fixed_y_positions[i] = note
+          last_valid_y_pos = note
+        else
+          fixed_y_positions[i] = last_valid_y_pos
+        end
+      end
+    end
+    
+    -- Second pass: draw using fixed positions
     for i, event in ipairs(self.event_state.events) do
+      if i > 15 then
+        break
+      end
       if event.type == "note_mask" then
         local note = event.data and event.data.event_data and event.data.event_data.note
         local length = event.data and event.data.event_data and event.data.event_data.length
         local velocity = event.data and event.data.event_data and event.data.event_data.velocity or 120
         local chord_degrees = event.data and event.data.event_data and event.data.event_data.chord_degrees
-        screen.level(math.floor(velocity / 10) + 3)
-        screen.move(self.x + 120 - (i * 5), self.y + 40 - ((note or 50) / 3))
-        if note and note > -1 then
-          screen.font_size(5)
-          screen.font_face(60)
-          screen.text("\u{286}")
-          screen.font_face(1)
-        elseif chord_degrees and fn.table_count(chord_degrees) > 0 then
-          screen.text("'")
-        elseif length then
-          screen.text("l")
+        
+        local y_pos = fixed_y_positions[i] or last_valid_y_pos  -- Fallback to last_valid_y_pos if nil
+
+        if y_pos then  -- Safety check
+            screen.level(math.floor(velocity / 10) + 3)
+            screen.move(self.x + 120 - (i * 5), self.y + 40 - (y_pos / 3))
+            
+            if note and note > -1 then
+              screen.font_size(5)
+              screen.font_face(60)
+              screen.text("\u{286}")
+              screen.font_face(1)
+            elseif chord_degrees and fn.table_count(chord_degrees) > 0 then
+              screen.text("'")
+            elseif length then
+              screen.text(".")
+            end
         end
       end
     end

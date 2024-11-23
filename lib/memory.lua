@@ -430,17 +430,28 @@ function memory.record_event(channel, event_type, data)
     pc_state.original_states[step_key] = handler.capture_state(channel, data.step)
   end
 
-  -- Truncate future events
-  state.event_history:truncate(state.current_event_index)
+  -- Truncate future events for this channel in this pattern
+  local curr_idx = state.current_event_index
+  while curr_idx < state.event_history.total_size do
+    local next_event = state.event_history:get(curr_idx + 1)
+    if next_event and 
+       next_event.data.channel_number == channel.number and
+       next_event.data.song_pattern == song_pattern then
+      state.event_history:truncate(curr_idx)
+      break
+    end
+    curr_idx = curr_idx + 1
+  end
+
   pc_state.event_history:truncate(pc_state.current_index)
 
-  -- Create and add event
   local event = {
     type = event_type,
     data = {
       channel_number = channel.number,
       song_pattern = song_pattern,
       step = data.step,
+      step_key = step_key,
       event_data = data,
       original_state = pc_state.original_states[step_key]
     }
@@ -454,38 +465,81 @@ function memory.record_event(channel, event_type, data)
   pc_state.current_index = pc_new_size
   update_step_index(pc_state.step_indices, data.step, pc_state.current_index, pc_did_wrap)
 
-  -- Apply the event
   handler.apply_event(channel, data.step, data, "record")
+end
+
+local function find_previous_channel_event(index, channel_number, current_idx)
+  -- This goes backwards from current_idx in the global history looking for the previous event for this channel
+  local idx = current_idx
+  while idx > 0 do
+    local event = state.event_history:get(idx)
+    if event and event.data.channel_number == channel_number then
+      if idx < current_idx then
+        return idx
+      end
+    end
+    idx = idx - 1
+  end
+  return nil
+end
+
+local function find_channel_pattern_events(channel_number, pattern)
+  local events = {}
+  for i = 1, state.current_event_index do
+    local event = state.event_history:get(i)
+    if event and 
+       event.data.channel_number == channel_number and
+       (pattern == nil or event.data.song_pattern == pattern) then
+      table.insert(events, event)
+    end
+  end
+  return events
 end
 
 function memory.undo(sequencer_pattern, channel_number)
   if channel_number and not sequencer_pattern then
-    -- Find most recent event in global history
-    local idx = state.current_event_index
-    while idx > 0 do
-      local event = state.event_history:get(idx)
-      if event.data.channel_number == channel_number then
-        -- Found most recent event, undo it
-        state.current_event_index = idx - 1
-        local pc_key = get_pattern_key(event.data.song_pattern, channel_number)
-        local pc_state = state.pattern_channels[pc_key]
-        if pc_state then
-          local handler = event_handlers[event.type]
-          if handler then
-            local channel = program.get_channel(event.data.song_pattern, channel_number)
-            local prev_index = find_previous_event(pc_state.step_indices, event.data.step, pc_state.current_index)
-            if prev_index then
-              local prev_event = pc_state.event_history:get(prev_index)
-              handler.apply_event(channel, event.data.step, prev_event.data.event_data, "undo")
-            else
-              handler.restore_state(channel, event.data.step, event.data.original_state)
-            end
-            pc_state.current_index = pc_state.current_index - 1
+    -- Get all events for this channel
+    local channel_events = find_channel_pattern_events(channel_number)
+    if #channel_events == 0 then return end
+    
+    -- Find the most recent event
+    local latest_event = channel_events[#channel_events]
+    local event_pattern = latest_event.data.song_pattern
+    local pc_key = get_pattern_key(event_pattern, channel_number)
+    local pc_state = state.pattern_channels[pc_key]
+    
+    if pc_state then
+      local handler = event_handlers[latest_event.type]
+      if handler then
+        local channel = program.get_channel(event_pattern, channel_number)
+        
+        -- Find previous event in same pattern and step
+        local prev_event = nil
+        for i = #channel_events - 1, 1, -1 do
+          if channel_events[i].data.song_pattern == event_pattern and
+              channel_events[i].data.step == latest_event.data.step then
+            prev_event = channel_events[i]
+            break
           end
         end
-        return
+        
+        if prev_event then
+          handler.apply_event(channel, latest_event.data.step, prev_event.data.event_data, "undo")
+        else
+          handler.restore_state(channel, latest_event.data.step_key, latest_event.data.original_state)
+        end
+        
+        pc_state.current_index = pc_state.current_index - 1
       end
-      idx = idx - 1
+    end
+    
+    -- Find index of latest event in global history
+    for i = state.current_event_index, 1, -1 do
+      local event = state.event_history:get(i)
+      if event == latest_event then
+        state.current_event_index = i - 1
+        break
+      end
     end
     return
   end
@@ -527,14 +581,24 @@ function memory.undo(sequencer_pattern, channel_number)
 end
 
 function memory.redo(sequencer_pattern, channel_number)
-  -- If only channel_number provided, redo earliest available event for that channel
   if channel_number and not sequencer_pattern then
+    -- Look for next undone event for this channel
     local next_idx = state.current_event_index + 1
     while next_idx <= state.event_history.total_size do
       local event = state.event_history:get(next_idx)
-      if event.data.channel_number == channel_number then
+      if event and event.data.channel_number == channel_number then
+        local pc_key = get_pattern_key(event.data.song_pattern, channel_number)
+        local pc_state = state.pattern_channels[pc_key]
+        
+        if pc_state then
+          local handler = event_handlers[event.type]
+          if handler then
+            local channel = program.get_channel(event.data.song_pattern, channel_number)
+            handler.apply_event(channel, event.data.step, event.data.event_data, "redo")
+            pc_state.current_index = pc_state.current_index + 1
+          end
+        end
         state.current_event_index = next_idx
-        memory.redo(event.data.song_pattern, channel_number)
         return
       end
       next_idx = next_idx + 1
