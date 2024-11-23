@@ -1,5 +1,5 @@
-local recorder = {}
-recorder.max_history_size = 50000
+local memory = {}
+memory.max_history_size = 50000
 
 -- Cache table functions
 local table_move = table.move
@@ -389,19 +389,19 @@ end
 -- Main state table with optimized indexing
 local state = {
   pattern_channels = {},
-  event_history = create_ring_buffer(recorder.max_history_size),
+  event_history = create_ring_buffer(memory.max_history_size),
   current_event_index = 0,
   global_index = create_step_index()
 }
 
-function recorder.init()
+function memory.init()
   state.pattern_channels = {}
-  state.event_history = create_ring_buffer(recorder.max_history_size)
+  state.event_history = create_ring_buffer(memory.max_history_size)
   state.current_event_index = 0
   state.global_index = create_step_index()
 end
 
-function recorder.record_event(channel, event_type, data)
+function memory.record_event(channel, event_type, data)
   if not (channel and event_type and event_handlers[event_type]) then
     return
   end
@@ -417,7 +417,7 @@ function recorder.record_event(channel, event_type, data)
   
   if not pc_state then
     pc_state = {
-      event_history = create_ring_buffer(recorder.max_history_size),
+      event_history = create_ring_buffer(memory.max_history_size),
       current_index = 0,
       step_indices = create_step_index(),
       original_states = {}
@@ -458,7 +458,7 @@ function recorder.record_event(channel, event_type, data)
   handler.apply_event(channel, data.step, data, "record")
 end
 
-function recorder.undo(sequencer_pattern, channel_number)
+function memory.undo(sequencer_pattern, channel_number)
   if channel_number and not sequencer_pattern then
     -- Find most recent event in global history
     local idx = state.current_event_index
@@ -522,11 +522,11 @@ function recorder.undo(sequencer_pattern, channel_number)
   if state.current_event_index > 0 then
     local event = state.event_history:get(state.current_event_index)
     state.current_event_index = state.current_event_index - 1
-    recorder.undo(event.data.song_pattern, event.data.channel_number)
+    memory.undo(event.data.song_pattern, event.data.channel_number)
   end
 end
 
-function recorder.redo(sequencer_pattern, channel_number)
+function memory.redo(sequencer_pattern, channel_number)
   -- If only channel_number provided, redo earliest available event for that channel
   if channel_number and not sequencer_pattern then
     local next_idx = state.current_event_index + 1
@@ -534,7 +534,7 @@ function recorder.redo(sequencer_pattern, channel_number)
       local event = state.event_history:get(next_idx)
       if event.data.channel_number == channel_number then
         state.current_event_index = next_idx
-        recorder.redo(event.data.song_pattern, channel_number)
+        memory.redo(event.data.song_pattern, channel_number)
         return
       end
       next_idx = next_idx + 1
@@ -571,18 +571,18 @@ function recorder.redo(sequencer_pattern, channel_number)
     state.current_event_index = state.current_event_index + 1
     local event = state.event_history:get(state.current_event_index)
     if event then
-      recorder.redo(event.data.song_pattern, event.data.channel_number)
+      memory.redo(event.data.song_pattern, event.data.channel_number)
     end
   end
 end
 
-function recorder.undo_all(sequencer_pattern, channel_number)
+function memory.undo_all(sequencer_pattern, channel_number)
   -- If only channel_number provided, undo all events for that channel across patterns
   if channel_number and not sequencer_pattern then
     for pc_key, pc_state in pairs(state.pattern_channels) do
       local pattern, channel = pc_key:match("(%d+)_(%d+)")
       if tonumber(channel) == channel_number then
-        recorder.undo_all(tonumber(pattern), channel_number)
+        memory.undo_all(tonumber(pattern), channel_number)
       end
     end
     return
@@ -620,17 +620,17 @@ function recorder.undo_all(sequencer_pattern, channel_number)
   state.current_event_index = 0
   for pc_key, pc_state in pairs(state.pattern_channels) do
     local pattern, channel = pc_key:match("(%d+)_(%d+)")
-    recorder.undo_all(tonumber(pattern), tonumber(channel))
+    memory.undo_all(tonumber(pattern), tonumber(channel))
   end
 end
 
-function recorder.redo_all(sequencer_pattern, channel_number)
+function memory.redo_all(sequencer_pattern, channel_number)
   -- If only channel_number provided, redo all events for that channel across patterns
   if channel_number and not sequencer_pattern then
     for pc_key, pc_state in pairs(state.pattern_channels) do
       local pattern, channel = pc_key:match("(%d+)_(%d+)")
       if tonumber(channel) == channel_number then
-        recorder.redo_all(tonumber(pattern), channel_number)
+        memory.redo_all(tonumber(pattern), channel_number)
       end
     end
     return
@@ -671,19 +671,19 @@ function recorder.redo_all(sequencer_pattern, channel_number)
   -- If no pattern/channel specified, redo all patterns
   for pc_key, pc_state in pairs(state.pattern_channels) do
     local pattern, channel = pc_key:match("(%d+)_(%d+)")
-    recorder.redo_all(tonumber(pattern), tonumber(channel))
+    memory.redo_all(tonumber(pattern), tonumber(channel))
   end
 end
 
-function recorder.reset()
+function memory.reset()
   -- Clear event histories and indices
-  state.event_history = create_ring_buffer(recorder.max_history_size)
+  state.event_history = create_ring_buffer(memory.max_history_size)
   state.current_event_index = 0
   state.global_index = create_step_index()
   
   -- Clear pattern channel histories but maintain pattern/channel structure
   for pattern_key, pc_state in pairs(state.pattern_channels) do
-    pc_state.event_history = create_ring_buffer(recorder.max_history_size)
+    pc_state.event_history = create_ring_buffer(memory.max_history_size)
     pc_state.current_index = 0
     pc_state.step_indices = create_step_index()
     
@@ -692,7 +692,7 @@ function recorder.reset()
   end
 end
 
-function recorder.get_event_count(song_pattern, channel_number)
+function memory.get_event_count(song_pattern, channel_number)
   if not song_pattern and not channel_number then
     return state.current_event_index
   end
@@ -724,7 +724,46 @@ function recorder.get_event_count(song_pattern, channel_number)
   return pc_state and pc_state.current_index or 0
  end
 
- function recorder.get_recent_events(sequencer_pattern, channel_number, count)
+ function memory.get_total_event_count(song_pattern, channel_number)
+  local state = memory.get_state()
+  
+  -- Fast path for all events
+  if not song_pattern and not channel_number then
+    return state.event_history.total_size
+  end
+  
+  -- Fast path for single pattern/channel
+  if song_pattern and channel_number then
+    local pc_state = state.pattern_channels[get_pattern_key(song_pattern, channel_number)]
+    return pc_state and pc_state.event_history.total_size or 0
+  end
+  
+  -- Channel-only path
+  if channel_number then
+    local total = 0
+    local pattern_key_prefix = '_' .. channel_number
+    for pc_key, pc_state in pairs(state.pattern_channels) do
+      -- Fast string suffix check
+      if pc_key:sub(-#pattern_key_prefix) == pattern_key_prefix then
+        total = total + pc_state.event_history.total_size
+      end
+    end
+    return total
+  end
+  
+  -- Pattern-only path
+  local total = 0
+  local pattern_key_prefix = song_pattern .. '_'
+  for pc_key, pc_state in pairs(state.pattern_channels) do
+    -- Fast string prefix check
+    if pc_key:sub(1, #pattern_key_prefix) == pattern_key_prefix then
+      total = total + pc_state.event_history.total_size
+    end
+  end
+  return total
+end
+ 
+function memory.get_recent_events(sequencer_pattern, channel_number, count)
   count = count or 5
   local events = {}
   
@@ -785,7 +824,7 @@ function recorder.get_event_count(song_pattern, channel_number)
   return events
 end
 
-function recorder.get_state()
+function memory.get_state()
   return {
     pattern_channels = state.pattern_channels,
     current_event_index = state.current_event_index,
@@ -794,4 +833,4 @@ function recorder.get_state()
   }
 end
 
-return recorder
+return memory

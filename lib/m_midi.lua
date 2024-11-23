@@ -49,14 +49,13 @@ function handle_midi_event_data(data, midi_device)
       return
     end
 
-
     local step_scale_number = channel.step_scale_number
-
     local pressed_keys = m_grid.get_pressed_keys()
-    local channel = program.get_selected_channel()
+    local s = program.get().current_step
+
     if #pressed_keys > 0 then
       if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
-        local s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
+        s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
         step_scale_number = step.manually_calculate_step_scale_number(channel.number, s)
       end
     end
@@ -65,27 +64,49 @@ function handle_midi_event_data(data, midi_device)
     if params:get("midi_scale_mapped_to_white_keys") == 1 then
       note = data[2]
     end
-    midi_off_store[data[2]] = note
+
+    midi_off_store[data[2]] = {
+      note = note,
+      step = s
+    }
+
     m_midi:note_on(note, velocity, midi_channel, device.midi_device)
-    if chord_number == 0 then 
-      chord_one_note = note 
+
+    -- Only set new chord root if:
+    -- 1. No current chord (chord_number == 0)
+    -- 2. We're at a different step than the current chord root
+    -- 3. Current chord root note has been released
+    if chord_number == 0 or 
+       (chord_one_note and midi_off_store[chord_one_note] and midi_off_store[chord_one_note].step ~= s) or
+       (chord_one_note and not midi_off_store[chord_one_note]) then
+      chord_one_note = data[2]
+      chord_number = 1
+    else
+      chord_number = chord_number + 1
     end
-    chord_number = chord_number + 1
 
     local chord_degree = nil
-    chord_degree = quantiser.get_chord_degree(note, chord_one_note, step_scale_number)
-
-    if chord_degree < -14 or chord_degree > 14 then
-      chord_degree = nil
+    if chord_one_note and midi_off_store[chord_one_note] and midi_off_store[chord_one_note].step == s then
+      chord_degree = quantiser.get_chord_degree(note, midi_off_store[chord_one_note].note, step_scale_number)
+      if chord_degree < -14 or chord_degree > 14 then
+        chord_degree = nil
+      end
     end
 
-    channel_edit_page.handle_note_on_midi_message(note, velocity, chord_number, chord_degree)
+    -- If we're on same step as chord root, send as part of chord
+    -- Otherwise send as new note
+    if chord_one_note and midi_off_store[chord_one_note] and midi_off_store[chord_one_note].step == s then
+      channel_edit_page.handle_note_midi_message(note, velocity, chord_number, chord_degree)
+    else
+      channel_edit_page.handle_note_midi_message(note, velocity, 1, nil)
+    end
   elseif data[1] == 128 then -- note off
-    local stored_note = midi_off_store[data[2]]
+    local stored_note = midi_off_store[data[2]] and midi_off_store[data[2]].note
     if stored_note == nil then
       return
     end
     m_midi:note_off(stored_note, 0, midi_channel, device.midi_device)
+    midi_off_store[data[2]] = nil
     chord_number = chord_number - 1
     if chord_number == 0 then 
       chord_one_note = nil 

@@ -11,7 +11,7 @@ local dial = include("mosaic/lib/ui_components/dial")
 local control_scroll_selector = include("mosaic/lib/ui_components/control_scroll_selector")
 local list_selector = include("mosaic/lib/ui_components/list_selector")
 local value_selector = include("mosaic/lib/ui_components/value_selector")
-local recorder_history_navigator = include("mosaic/lib/ui_components/recorder_history_navigator")
+local memory_history_navigator = include("mosaic/lib/ui_components/memory_history_navigator")
 local m_midi = include("mosaic/lib/m_midi")
 local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/devices/param_manager")
@@ -32,7 +32,7 @@ local shuffle_amount_selector = value_selector:new(70, 40, "Amount", 0, 100)
 -- Stores portions of mask events for consolidation
 local mask_events = {}
 
-local recorder_recent_events = {
+local memory_state = {
   events = {}
 }
 
@@ -81,16 +81,14 @@ for i = 1, 10 do
   table.insert(m_params, dial:new(0 + (i - 1) % 5 * 25, 18 + math.floor((i - 1) / 5) * 22, "Param " .. i, "param_" .. i, "None", "X"))
 end
 
--- Recorder controls
-local recorder_controls = {
-  record_mode = value_selector:new(0 + (1 - 1) % 5 * 25, 18 + math.floor((1 - 1) / 5) * 22, "Rec mode", 1, 1),
-  history_type = value_selector:new(0 + (6 - 1) % 5 * 25, 18 + math.floor((6 - 1) / 5) * 22, "Memory", 1, 3),
-  navigator = recorder_history_navigator:new(0 + (3 - 1) % 5 * 25, 18 + math.floor((3 - 1) / 5) * 22, "History")
+-- Memory controls
+local memory_controls = {
+  navigator = memory_history_navigator:new(0 + (1 - 1) % 5 * 25, 18 + math.floor((3 - 1) / 5) * 22, "History")
 }
 
 -- Page indices
-local channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Recorder"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6}
-local index_to_channel_page = {"Masks", "Trig Locks", "Recorder", "Clock Mods", "Midi Config", "Note Dashboard"}
+local channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Memory"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6}
+local index_to_channel_page = {"Masks", "Trig Locks", "Memory", "Clock Mods", "Midi Config", "Note Dashboard"}
 
 -- Helper variables
 local refresh_timer_id = nil
@@ -159,14 +157,6 @@ end
 configure_note_trig_selector(mask_selectors.trig)
 configure_swing_selector(swing_selector)
 
-recorder_controls.record_mode:set_view_transform_func(function(value)
-  return value == 1 and "Overdub" or ""
-end)
-
-recorder_controls.history_type:set_view_transform_func(function(value)
-  return value == 1 and "Channel" or value == 2 and "Song ptn ch" or value == 3 and "All"
-end)
-
 -- Page definitions
 local notes_page = page:new("Note Dashboard", function()
   for _, selector in pairs(note_displays) do
@@ -182,10 +172,8 @@ local notes_page = page:new("Note Dashboard", function()
 end)
 
 
-local recorder_page = page:new("Recorder", function()
-  recorder_controls.record_mode:draw()
-  recorder_controls.history_type:draw()
-  recorder_controls.navigator:draw()
+local memory_page = page:new("Memory", function()
+  memory_controls.navigator:draw()
 end)
 
 local mask_page = page:new("Note Masks", function()
@@ -254,29 +242,30 @@ function channel_edit_page_ui.init()
     page:set_sub_name_func(func)
   end
 
+  local c = program.get().selected_channel
 
   set_sub_name_func(notes_page, function()
-    return "Ch. " .. program.get().selected_channel .. " " or ""
+    return "Ch. " .. c .. " " or ""
   end)
 
-  set_sub_name_func(recorder_page, function()
-    return "Ch. " .. program.get().selected_channel .. " " or ""
+  set_sub_name_func(memory_page, function()
+    return "Ch. " .. c .. " " or ""
   end)
 
   set_sub_name_func(mask_page, function()
-    return "Ch. " .. program.get().selected_channel .. " " or ""
+    return "Ch. " .. c .. " " or ""
   end)
 
   set_sub_name_func(channel_edit_page, function()
-    return "Ch. " .. program.get().selected_channel .. " " or ""
+    return "Ch. " .. c .. " " or ""
   end)
 
   set_sub_name_func(clock_mods_page, function()
-    return "Ch. " .. program.get().selected_channel .. " " or ""
+    return "Ch. " .. c .. " " or ""
   end)
 
   set_sub_name_func(trig_lock_page, function()
-    return "Ch. " .. program.get().selected_channel .. " " or ""
+    return "Ch. " .. c .. " " or ""
   end)
 
   trig_lock_page:set_sub_page_draw_func(function()
@@ -285,7 +274,7 @@ function channel_edit_page_ui.init()
 
   channel_pages:add_page(mask_page)
   channel_pages:add_page(trig_lock_page)
-  channel_pages:add_page(recorder_page)
+  channel_pages:add_page(memory_page)
   channel_pages:add_page(clock_mods_page)
   channel_pages:add_page(channel_edit_page)
   channel_pages:add_page(notes_page)
@@ -304,11 +293,10 @@ function channel_edit_page_ui.init()
   shuffle_basis_selector:set_selected_value(params:get("global_shuffle_basis"))
   shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
 
-  recorder_controls.record_mode:set_value(params:get("record_mode"))
-  recorder_controls.history_type:set_value(params:get("record_history_type"))
-  
-  recorder_controls.navigator:set_event_state(recorder_recent_events)
-  recorder_controls.navigator:select()
+  memory_controls.navigator:set_event_state(memory_state)
+  memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
+  memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
+  memory_controls.navigator:select()
 
   channel_edit_page_ui.refresh_clock_mods()
 end
@@ -710,8 +698,8 @@ function channel_edit_page_ui.enc(n, d)
     for _ = 1, math.abs(d) do
       if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
         channel_edit_page_ui.handle_mask_page_change(d)
-      elseif channel_pages:get_selected_page() == channel_page_to_index["Recorder"] then
-        channel_edit_page_ui.handle_recorder_page_change(d)
+      elseif channel_pages:get_selected_page() == channel_page_to_index["Memory"] then
+        channel_edit_page_ui.handle_memory_page_change(d)
       end
       if d > 0 then
         if channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
@@ -750,7 +738,7 @@ function channel_edit_page_ui.enc(n, d)
         shuffle_feel_selector = shuffle_feel_selector,
         shuffle_basis_selector = shuffle_basis_selector,
         shuffle_amount_selector = shuffle_amount_selector,
-        recorder_controls = recorder_controls,
+        memory_controls = memory_controls,
       }
 
       if d > 0 then
@@ -830,6 +818,13 @@ function channel_edit_page_ui.refresh_param_list()
   param_select_vertical_scroll_selector:set_items(device_map.get_available_params_for_channel(program.get().selected_channel, dials:get_selected_index()))
 end
 
+function channel_edit_page_ui.refresh_memory()
+  local c = program.get_selected_channel().number
+  memory_state.events = memory.get_recent_events(nil, c, 15)
+  memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
+  memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
+end
+
 channel_edit_page_ui.refresh_channel_config = scheduler.debounce(function()
   -- Initial checks
   local channel = program.get_selected_channel()
@@ -880,14 +875,19 @@ function channel_edit_page_ui.refresh()
   channel_edit_page_ui.select_channel_page_by_index(channel_pages:get_selected_page() or 1)
 end
 
-function channel_edit_page_ui.handle_recorder_navigator(d)
+function channel_edit_page_ui.handle_memory_navigator(d)
+  local c = program.get_selected_channel().number
   if d > 0 then
-    -- TODO memory type
-    recorder.redo()
-    recorder_recent_events.events = recorder.get_recent_events(nil, nil, 10)
+    
+    memory.redo(nil, c)
+    memory_state.events = memory.get_recent_events(nil, c, 15)
+    memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
+    memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
   else
-    recorder.undo()
-    recorder_recent_events.events = recorder.get_recent_events(nil, nil, 10)
+    memory.undo(nil, c)
+    memory_state.events = memory.get_recent_events(nil, c, 15)
+    memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
+    memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
   end
 end
 
@@ -909,15 +909,10 @@ function channel_edit_page_ui.record_note_mask_event(channel, step)
     local event = mask_events[c][step]
     local event_channel = program.get_channel(event.sequencer_pattern, c)
 
-    recorder.record_event(event_channel, "note_mask", event.data)
+    memory.record_event(event_channel, "note_mask", event.data)
 
-    if params:get("record_history_type") == 1 then
-      recorder_recent_events.events = recorder.get_recent_events(nil, c, 10)
-    elseif params:get("record_history_type") == 2 then
-      recorder_recent_events.events = recorder.get_recent_events(event.sequencer_pattern, c, 10)
-    elseif params:get("record_history_type") == 3 then
-      recorder_recent_events.events = recorder.get_recent_events(nil, nil, 10)
-    end
+    memory_state.events = memory.get_recent_events(nil, c, 10)
+    channel_edit_page_ui.refresh_memory()
 
     mask_events[c][step] = nil
   end
@@ -1270,7 +1265,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
       mask_selectors.chords[3]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        recorder.record_event(channel, "note_mask", {
+        memory.record_event(channel, "note_mask", {
           step = s,
           chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
         })
@@ -1385,21 +1380,9 @@ function channel_edit_page_ui.handle_mask_page_change(direction)
     end
 end
 
-function channel_edit_page_ui.handle_recorder_page_change(d)
-  if recorder_controls.history_type:is_selected() then
-    if d > 0 then
-      recorder_controls.history_type:increment()
-    else
-      recorder_controls.history_type:decrement()
-    end
-  elseif recorder_controls.record_mode:is_selected() then
-    if d > 0 then
-      recorder_controls.record_mode:increment()
-    else
-      recorder_controls.record_mode:decrement()
-    end
-  elseif recorder_controls.navigator:is_selected() then
-    channel_edit_page_ui.handle_recorder_navigator(d)
+function channel_edit_page_ui.handle_memory_page_change(d)
+  if memory_controls.navigator:is_selected() then
+    channel_edit_page_ui.handle_memory_navigator(d)
   end
 end
 
@@ -1524,8 +1507,6 @@ end
 
 function channel_edit_page_ui.handle_encoder_one_positive()
 
-
-
   channel_edit_page_ui.select_channel_page_by_index((channel_pages:get_selected_page() or 1) + 1)
   fn.dirty_screen(true)
   save_confirm.cancel()
@@ -1607,8 +1588,9 @@ function channel_edit_page_ui.select_trig_page()
   channel_pages:select_page(channel_page_to_index["Trig Locks"])
 end
 
-function channel_edit_page_ui.select_recorder_page()
-  channel_pages:select_page(channel_page_to_index["Recorder"])
+function channel_edit_page_ui.select_memory_page()
+  channel_edit_page_ui.refresh_memory()
+  channel_pages:select_page(channel_page_to_index["Memory"])
 end
 
 function channel_edit_page_ui.select_clock_mods_page()
@@ -1643,7 +1625,7 @@ function channel_edit_page_ui.select_channel_page_by_index(index)
   elseif index == 2 then
     channel_edit_page_ui.select_trig_page()
   elseif index == 3 then
-    channel_edit_page_ui.select_recorder_page()
+    channel_edit_page_ui.select_memory_page()
   elseif index == 4 then
     channel_edit_page_ui.select_clock_mods_page()
   elseif index == 5 then

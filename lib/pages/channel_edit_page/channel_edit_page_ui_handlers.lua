@@ -19,7 +19,6 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
   local shuffle_feel_selector = selectors.shuffle_feel_selector
   local shuffle_basis_selector = selectors.shuffle_basis_selector
   local shuffle_amount_selector = selectors.shuffle_amount_selector
-  local recorder_controls = selectors.recorder_controls
   
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
     if mask_selectors.trig:is_selected() then
@@ -102,14 +101,6 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
     if not trig_lock_page:is_sub_page_enabled() then
       dials:scroll_next()
     end
-  elseif channel_pages:get_selected_page() == channel_page_to_index["Recorder"] then
-    if recorder_controls.record_mode:is_selected() then
-      recorder_controls.record_mode:deselect()
-      recorder_controls.history_type:select()
-    elseif recorder_controls.history_type:is_selected() then
-      recorder_controls.history_type:deselect()
-      recorder_controls.navigator:select()
-    end
   end
 end
 
@@ -129,7 +120,6 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
   local shuffle_feel_selector = selectors.shuffle_feel_selector
   local shuffle_basis_selector = selectors.shuffle_basis_selector
   local shuffle_amount_selector = selectors.shuffle_amount_selector
-  local recorder_controls = selectors.recorder_controls
 
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
     if mask_selectors.note:is_selected() then
@@ -207,14 +197,6 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
   elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
     if not trig_lock_page:is_sub_page_enabled() then
       dials:scroll_previous()
-    end
-  elseif channel_pages:get_selected_page() == channel_page_to_index["Recorder"] then
-    if recorder_controls.navigator:is_selected() then
-      recorder_controls.navigator:deselect()
-      recorder_controls.history_type:select()
-    elseif recorder_controls.history_type:is_selected() then
-      recorder_controls.history_type:deselect()
-      recorder_controls.record_mode:select()
     end
   end
 end

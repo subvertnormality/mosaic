@@ -1,20 +1,21 @@
-local recorder_history_navigator = {}
-recorder_history_navigator.__index = recorder_history_navigator
+local memory_history_navigator = {}
+memory_history_navigator.__index = memory_history_navigator
 
 
 
-function recorder_history_navigator:new(x, y, name)
-  local self = setmetatable({}, recorder_history_navigator)
+function memory_history_navigator:new(x, y, name)
+  local self = setmetatable({}, memory_history_navigator)
   self.x = x
   self.y = y
   self.name = name
-  self.value = 0
+  self.current_index = 0
+  self.max_index = 0
   self.event_state = nil
   self.selected = false
   return self
 end
 
-function recorder_history_navigator:draw()
+function memory_history_navigator:draw()
   if self.selected then
     screen.level(15)
   else
@@ -23,7 +24,7 @@ function recorder_history_navigator:draw()
   screen.move(self.x, self.y)
   screen.move(self.x, self.y + 8)
   screen.font_size(10)
-  screen.text(recorder.get_state().current_event_index)
+  screen.text(self.current_index .. "/" .. self.max_index)
   if self.event_state.events then
     for i, event in ipairs(self.event_state.events) do
       if event.type == "note_mask" then
@@ -32,7 +33,7 @@ function recorder_history_navigator:draw()
         local velocity = event.data and event.data.event_data and event.data.event_data.velocity or 120
         local chord_degrees = event.data and event.data.event_data and event.data.event_data.chord_degrees
         screen.level(math.floor(velocity / 10) + 3)
-        screen.move(self.x + 70 - (i * 5), self.y + 40 - ((note or 50) / 3))
+        screen.move(self.x + 120 - (i * 5), self.y + 40 - ((note or 50) / 3))
         if note and note > -1 then
           screen.font_size(5)
           screen.font_face(60)
@@ -48,31 +49,40 @@ function recorder_history_navigator:draw()
   end
 end
 
-function recorder_history_navigator:select()
+function memory_history_navigator:select()
   self.selected = true
   fn.dirty_screen(true)
 end
 
-function recorder_history_navigator:deselect()
+function memory_history_navigator:deselect()
   self.selected = false
   fn.dirty_screen(true)
 end
 
-function recorder_history_navigator:is_selected()
+function memory_history_navigator:is_selected()
   return self.selected
 end
 
-function recorder_history_navigator:get_value()
-  return self.value
+function memory_history_navigator:get_current_index()
+  return self.current_index
 end
 
-function recorder_history_navigator:set_value(v)
-  self.value = v
+function memory_history_navigator:set_current_index(v)
+  self.current_index = v or 0
   fn.dirty_screen(true)
 end
 
-function recorder_history_navigator:set_event_state(event_state)
+function memory_history_navigator:get_max_index()
+  return self.max_index
+end
+
+function memory_history_navigator:set_max_index(v)
+  self.max_index = v or 0
+  fn.dirty_screen(true)
+end
+
+function memory_history_navigator:set_event_state(event_state)
   self.event_state = event_state
 end
 
-return recorder_history_navigator
+return memory_history_navigator

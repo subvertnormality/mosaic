@@ -59,7 +59,7 @@ for _, page in ipairs(PAGE_DEFINITIONS) do
 end
 
 -- Initialize page names
-pages.page_names = {"Recorder"} -- First page is special case
+pages.page_names = {"Memory"} -- First page is special case
 for _, page in ipairs(PAGE_DEFINITIONS) do
   pages.page_names[page.number] = page.name
 end
@@ -76,7 +76,7 @@ function pages.initialise_page_controller_mappings()
 
   -- Initialize controller mappings
   pages.grid_menu_buttons_to_controller_mappings = {
-    [1] = trigger_edit_page, -- recorder placeholder
+    [1] = trigger_edit_page, -- memory placeholder
     [2] = trigger_edit_page  -- blank
   }
   for _, page in ipairs(PAGE_DEFINITIONS) do

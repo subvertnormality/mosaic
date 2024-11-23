@@ -17,7 +17,7 @@ m_grid = include("mosaic/lib/m_grid")
 ui = include("mosaic/lib/ui")
 sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
 m_midi = include("mosaic/lib/m_midi")
-recorder = include("mosaic/lib/recorder")
+memory = include("mosaic/lib/memory")
 
 -- Debug
 -- profiler = include("mosaic/lib/helpers/profiler")
@@ -237,7 +237,7 @@ function init()
 
   blink()
 
-  params:add_group("mosaic", "MOSAIC", 34)
+  params:add_group("mosaic", "MOSAIC", 31)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -306,12 +306,8 @@ function init()
   )
   params:hide("global_shuffle_amount")
 
-  params:add_separator("Recorder")
-  params:add_option("record", "Record", {"Off", "On"}, 1)
-  params:add_option("record_mode", "Record mode", {"Overdub"}, 1)
-  params:add_option("record_history_type", "History type", {"Channel", "Song pattern ch", "All"}, 1)
-
   params:add_separator("Sequencer")
+  params:add_option("record", "Record", {"Off", "On"}, 1)
   params:add_option("stop_safety", "Shift press to stop", {"Off", "On"}, 1)
   params:add_option("song_mode", "Song mode", {"Off", "On"}, 2)
   params:set_action(

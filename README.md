@@ -1017,7 +1017,7 @@ Do not run the tests on your Norns device as you'll end up pulling in the Norns 
 
 ### Roadmap
 
-* Live trig lock and note recorder
+* Live trig lock and note memory
 
 ### Interesting Components for Norns Script Developers
 
