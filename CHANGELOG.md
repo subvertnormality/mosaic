@@ -1,4 +1,6 @@
+## 1.0.1
 
+Fixed issue where default midi device assignments were referencing the wrong IDs causing unexpected behaviour in certain combinations.
 
 ## Mosaic 1.0.0 Release Notes
 
