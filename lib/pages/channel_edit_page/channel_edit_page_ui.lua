@@ -29,8 +29,6 @@ local shuffle_feel_selector = list_selector:new(0, 40, "Feel", {{name = "X", val
 local shuffle_basis_selector = list_selector:new(40, 40, "Basis", {{name = "X", value = 1}, {name = "9", value = 2}, {name = "7", value = 3}, {name = "5", value = 4}, {name = "6", value = 5}, {name = "8??", value = 6}, {name = "9??", value = 7}})
 local shuffle_amount_selector = value_selector:new(70, 40, "Amount", 0, 100)
 
--- Stores portions of mask events for consolidation
-local mask_events = {}
 
 local memory_state = {
   events = {}
@@ -678,8 +676,10 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
       local new_val = original_val + (quant * d)
       norns_param_state_handler.set_original_param_state(channel.number, dial_index, new_val)
       m_params[dial_index]:set_value(new_val)
+      recorder.set_trig_lock_dirty(channel.number, dial_index, new_val)
     else
       p:delta(d)
+      recorder.set_trig_lock_dirty(channel.number, dial_index, p:get())
     end
   
     channel_edit_page_ui.refresh_trig_lock_value(dial_index)
@@ -891,33 +891,6 @@ function channel_edit_page_ui.handle_memory_navigator(d)
   end
 end
 
-function channel_edit_page_ui.add_note_mask_event_portion(channel, step, event_portion)
-  if not mask_events[channel.number] then
-    mask_events[channel.number] = {}
-  end
-  if not mask_events[channel.number][step] then
-    mask_events[channel.number][step] = {}
-  end
-
-  mask_events[channel.number][step] = fn.deep_merge_tables(mask_events[channel.number][step], event_portion)
-
-end
-
-function channel_edit_page_ui.record_note_mask_event(channel, step)
-  local c = channel.number
-  if mask_events and mask_events[c] and mask_events[c][step] then
-    local event = mask_events[c][step]
-
-    memory.record_event(c, "note_mask", event.data)
-    mask_events[c][step] = nil
-
-    scheduler.debounce(function()
-      memory_state.events = memory.get_recent_events(c, 25)
-      channel_edit_page_ui.refresh_memory()
-    end)()
-
-  end
-end
 
 function channel_edit_page_ui.handle_trig_mask_change(direction)
   local pressed_keys = m_grid.get_pressed_keys()
@@ -927,8 +900,8 @@ function channel_edit_page_ui.handle_trig_mask_change(direction)
       mask_selectors.trig:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -943,8 +916,8 @@ function channel_edit_page_ui.handle_trig_mask_change(direction)
       mask_selectors.trig:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -978,8 +951,8 @@ function channel_edit_page_ui.handle_note_mask_change(direction)
       mask_selectors.note:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -994,8 +967,8 @@ function channel_edit_page_ui.handle_note_mask_change(direction)
       mask_selectors.note:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1029,8 +1002,8 @@ function channel_edit_page_ui.handle_velocity_mask_change(direction)
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
         channel.step_velocity_masks[s] = mask_selectors.velocity:get_value()
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1045,8 +1018,8 @@ function channel_edit_page_ui.handle_velocity_mask_change(direction)
       mask_selectors.velocity:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1079,8 +1052,8 @@ function channel_edit_page_ui.handle_length_mask_change(direction)
       mask_selectors.length:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1096,8 +1069,8 @@ function channel_edit_page_ui.handle_length_mask_change(direction)
         mask_selectors.length:decrement()
         for _, keys in ipairs(pressed_keys) do
           local s = fn.calc_grid_count(keys[1], keys[2])
-          channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+          recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1112,8 +1085,8 @@ function channel_edit_page_ui.handle_length_mask_change(direction)
         for _, keys in ipairs(pressed_keys) do
           local s = fn.calc_grid_count(keys[1], keys[2])
           mask_selectors.length:set_value(0)
-          channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+          recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1152,8 +1125,8 @@ function channel_edit_page_ui.handle_chord_mask_one_change(direction)
       mask_selectors.chords[1]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1168,8 +1141,8 @@ function channel_edit_page_ui.handle_chord_mask_one_change(direction)
       mask_selectors.chords[1]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1201,8 +1174,8 @@ function channel_edit_page_ui.handle_chord_mask_two_change(direction)
       mask_selectors.chords[2]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1217,8 +1190,8 @@ function channel_edit_page_ui.handle_chord_mask_two_change(direction)
       mask_selectors.chords[2]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1250,8 +1223,8 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
       mask_selectors.chords[3]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1276,8 +1249,8 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
     mask_selectors.chords[3]:set_value(channel.chord_three_mask or -1)
     if direction > 0 then
       mask_selectors.chords[3]:increment()
-      channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+      recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1289,8 +1262,8 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
       )
     else
       mask_selectors.chords[3]:decrement()
-      channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+      recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1312,8 +1285,8 @@ function channel_edit_page_ui.handle_chord_mask_four_change(direction)
       mask_selectors.chords[4]:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1328,8 +1301,8 @@ function channel_edit_page_ui.handle_chord_mask_four_change(direction)
       mask_selectors.chords[4]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel_edit_page_ui.add_note_mask_event_portion(
-          channel, 
+        recorder.add_note_mask_event_portion(
+          channel.number, 
           s, 
           {
             song_pattern = program.get().selected_song_pattern,
@@ -1563,8 +1536,8 @@ function channel_edit_page_ui.handle_key_two_pressed()
         memory.clear(program.get_selected_channel().number)
         tooltip:show("Memory applied and forgotten")
       else
-        memory.redo_all(program.get_selected_channel().number)
-        tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory applied")
+        memory.undo_all(program.get_selected_channel().number)
+        tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory undone")
       end
       channel_edit_page_ui.refresh_memory()
     end
@@ -1580,8 +1553,8 @@ function channel_edit_page_ui.handle_key_three_pressed()
       memory.clear(program.get_selected_channel().number)
       tooltip:show("Memory undone and forgotten")
     else
-      memory.undo_all(program.get_selected_channel().number)
-      tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory undone")
+      memory.redo_all(program.get_selected_channel().number)
+      tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory applied")
     end
   elseif #pressed_keys < 1 then
     save_confirm.confirm()

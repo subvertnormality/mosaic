@@ -1,5 +1,5 @@
 local memory = {}
-memory.max_history_size = 50000
+memory.max_history_size = 5000
 
 -- Cache table functions
 local table_move = table.move
@@ -49,7 +49,8 @@ local event_handlers = {
       return true
     end,
     
-    capture_state = function(channel, step)
+    capture_state = function(channel, data)
+      local step = data.step
       local working_pattern = channel.working_pattern
       local captured = {
         step = step,
@@ -73,7 +74,9 @@ local event_handlers = {
       return captured
     end,
     
-    restore_state = function(channel, step, saved_state)
+    restore_state = function(channel, data, saved_state)
+
+      local step = data.step
       if not saved_state then return end
       
       local working_pattern = channel.working_pattern
@@ -164,6 +167,44 @@ local event_handlers = {
       program.update_working_pattern_for_step(channel, step, working_trig, working_note, working_velocity, working_length)
     end
 
+  },
+  trig_lock = {
+    validate = function(data)
+      if not validate_step(data.step) then return false end
+      if data.parameter == nil then return false end
+      if data.value == nil then return false end
+      return true
+    end,
+    
+    capture_state = function(channel, data)
+      local step = data.step
+      local parameter = data.parameter
+      return {
+        value = program.get_step_param_trig_lock(channel, step, parameter),
+        parameter = parameter,
+        step = step
+      }
+    end,
+    
+    restore_state = function(channel, data, saved_state)
+      local step = data.step
+
+      if not saved_state then return end
+
+      if not saved_state.value then
+        program.clear_trig_locks_for_step_for_channel(channel, step)
+      else
+        program.add_step_param_trig_lock_to_channel(channel, step, saved_state.parameter, saved_state.value)
+      end
+    end,
+    
+    apply_event = function(channel, step, data, apply_type)
+      if apply_type == "undo" and not data.value then
+        program.clear_trig_locks_for_step_for_channel(channel, step)
+      else
+        program.add_step_param_trig_lock_to_channel(channel, step, data.parameter, data.value)
+      end
+    end
   }
 }
 
@@ -266,6 +307,7 @@ local function get_channel_and_state(song_pattern, channel_number)
 end
 
 function memory.record_event(channel_number, event_type, data)
+
   if not channel_number or not event_type or not event_handlers[event_type] then
     return
   end
@@ -274,13 +316,14 @@ function memory.record_event(channel_number, event_type, data)
   if not handler.validate(data) then
     return
   end
-  
+
   -- Initialize channel state
   if not state.channels[channel_number] then
     state.channels[channel_number] = create_ring_buffer(memory.max_history_size)
     state.current_indices[channel_number] = 0
     state.original_states[channel_number] = {}
   end
+
   
   local song_pattern = data.song_pattern or program.get().selected_song_pattern
   local channel = program.get_channel(song_pattern, channel_number)
@@ -290,7 +333,7 @@ function memory.record_event(channel_number, event_type, data)
   
   -- Capture original state if not already captured
   if not state.original_states[channel_number][step_key] then
-    state.original_states[channel_number][step_key] = handler.capture_state(channel, data.step)
+    state.original_states[channel_number][step_key] = handler.capture_state(channel, data)
   end
   
   -- Create event
@@ -342,7 +385,7 @@ function memory.undo(channel_number)
     if prev_event then
       handler.apply_event(channel, event.data.step, prev_event.data.event_data, "undo")
     else
-      handler.restore_state(channel, event.data.step, event.data.original_state)
+      handler.restore_state(channel, event.data, event.data.original_state)
     end
     
     state.current_indices[channel_number] = current_index - 1
@@ -382,10 +425,10 @@ function memory.undo_all(channel_number)
         local original_state = event.data.original_state
         
         if original_state then
-          event_handlers.note_mask.restore_state(channel, event.data.step, original_state)
+          event_handlers.note_mask.restore_state(channel, event.data, original_state)
         else
-          -- If no original state, clear the step
-          event_handlers.note_mask.restore_state(channel, event.data.step, {
+          -- TODO this is note mask specific and needs to be made generic
+          event_handlers.note_mask.restore_state(channel, event.data, {
             trig_mask = nil,
             note_mask = nil,
             velocity_mask = nil,

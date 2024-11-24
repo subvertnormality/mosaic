@@ -121,9 +121,9 @@ function handle_midi_event_data(data, midi_device)
     -- If we're on same step as chord root, send as part of chord
     -- Otherwise send as new note
     if chord_state.chord_one_note and midi_off_store[chord_state.chord_one_note] and midi_off_store[chord_state.chord_one_note].step == s then
-      channel_edit_page.handle_note_midi_message(note, velocity, chord_state.chord_number, chord_degree)
+      recorder.handle_note_midi_message(note, velocity, chord_state.chord_number, chord_degree)
     else
-      channel_edit_page.handle_note_midi_message(note, velocity, 1, nil)
+      recorder.handle_note_midi_message(note, velocity, 1, nil)
     end
   elseif data[1] == 128 then -- note off
     local stored = midi_off_store[data[2]]
@@ -165,8 +165,8 @@ function handle_midi_event_data(data, midi_device)
         end
   
         if stored.step then
-          channel_edit_page_ui.add_note_mask_event_portion(
-            channel,
+          recorder.add_note_mask_event_portion(
+            channel.number,
             stored.step,
             {
               song_pattern = program.get().selected_song_pattern,
@@ -176,7 +176,7 @@ function handle_midi_event_data(data, midi_device)
               }
             }
           )
-          channel_edit_page_ui.record_note_mask_event(channel, stored.step)
+          recorder.record_note_mask_event(channel.number, stored.step)
         end
       end
   

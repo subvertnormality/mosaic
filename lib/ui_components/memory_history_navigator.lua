@@ -55,30 +55,37 @@ function memory_history_navigator:draw()
       if i > 15 then
         break
       end
+      local y_pos = fixed_y_positions[i] or last_valid_y_pos  -- Fallback to last_valid_y_pos if nil
+      screen.font_size(5)
+      screen.font_face(60)
+
       if event.type == "note_mask" then
         local note = event.data and event.data.event_data and event.data.event_data.note
         local length = event.data and event.data.event_data and event.data.event_data.length
         local velocity = event.data and event.data.event_data and event.data.event_data.velocity or 120
         local chord_degrees = event.data and event.data.event_data and event.data.event_data.chord_degrees
         
-        local y_pos = fixed_y_positions[i] or last_valid_y_pos  -- Fallback to last_valid_y_pos if nil
-
         if y_pos then  -- Safety check
-            screen.level(math.floor(velocity / 10) + 3)
-            screen.move(self.x + 120 - (i * 5), self.y + 40 - (y_pos / 3))
-            
-            if note and note > -1 then
-              screen.font_size(5)
-              screen.font_face(60)
-              screen.text("\u{286}")
-              screen.font_face(1)
-            elseif chord_degrees and fn.table_count(chord_degrees) > 0 then
-              screen.text("'")
-            elseif length then
-              screen.text(".")
-            end
+          screen.level(math.floor(velocity / 10) + 3)
+          screen.move(self.x + 120 - (i * 5), self.y + 40 - (y_pos / 3))
+          if note and note > -1 then
+            screen.text("\u{286}")
+          elseif chord_degrees and fn.table_count(chord_degrees) > 0 then
+            screen.text("'")
+          elseif length then
+            screen.text(".")
+          end
+        end
+      elseif event.type == "trig_lock" then
+        local y_pos = fixed_y_positions[i] or last_valid_y_pos  -- Fallback to last_valid_y_pos if nil
+        if y_pos then
+          screen.level(15)
+          screen.move(self.x + 120 - (i * 5), self.y + 40 - (y_pos / 3))
+          screen.text("T")
         end
       end
+      screen.font_face(1)
+      screen.font_size(8)
     end
   end
 end

@@ -272,6 +272,19 @@ function program.add_step_param_trig_lock(step, parameter, trig_lock)
   step_trig_lock_banks[step][parameter] = trig_lock
 end
 
+function program.add_step_param_trig_lock_to_channel(channel, step, parameter, trig_lock)
+  local step_trig_lock_banks = channel.step_trig_lock_banks
+  local trig_lock_params = channel.trig_lock_params
+
+  if not step_trig_lock_banks[step] then
+    step_trig_lock_banks[step] = {}
+  end
+
+  trig_lock = math.max(trig_lock, trig_lock_params[parameter].nrpn_min_value or trig_lock_params[parameter].cc_min_value or 0)
+  trig_lock = math.min(trig_lock, trig_lock_params[parameter].nrpn_max_value or trig_lock_params[parameter].cc_max_value or 127)
+
+  step_trig_lock_banks[step][parameter] = trig_lock
+end
 
 function program.get_step_param_trig_lock(channel, step, parameter)
   local step_trig_lock_banks = channel.step_trig_lock_banks
@@ -446,6 +459,19 @@ end
 
 function program.clear_trig_locks_for_step(step)
   local channel = program.get_selected_channel()
+  program.add_step_scale_trig_lock(step, nil)
+
+  if channel.number ~= 17 then
+    if channel.step_trig_lock_banks and channel.step_trig_lock_banks[step] then
+      channel.step_trig_lock_banks[step] = nil
+    end
+    program.add_step_octave_trig_lock(step, nil)
+  else
+    program.add_step_transpose_trig_lock(step, nil)
+  end
+end
+
+function program.clear_trig_locks_for_step_for_channel(channel, step)
   program.add_step_scale_trig_lock(step, nil)
 
   if channel.number ~= 17 then

@@ -207,6 +207,12 @@ function m_clock.init()
       if current_step > end_trig then
         program.set_current_step_for_channel(channel_number, start_trig)
         current_step = start_trig
+        
+        if params:get("record") == 2 and program.get_selected_channel() == channel then
+          for i = 1, 10 do
+            recorder.clear_trig_lock_dirty(channel_number, i)
+          end
+        end
       end
 
       if channel_number == 17 then
@@ -218,6 +224,15 @@ function m_clock.init()
         
         if channel.working_pattern.trig_values[current_step] == 1 then
           step.handle(channel_number, current_step)
+        end
+
+        -- ocurrent trig is 1 or trigless locks
+        if channel.working_pattern.trig_values[current_step] == 1 or params:get("trigless_locks") == 2 then
+          if params:get("record") == 2 and program.get_selected_channel() == channel then
+            for i = 1, 10 do
+              recorder.record_trig_event(channel_number, current_step, i)
+            end
+          end
         end
       end
 
@@ -243,7 +258,7 @@ function m_clock.init()
         end
 
         if params:get("record") == 2 and program.get_selected_channel() == channel then
-          step.record_mask_event(channel, last_step)
+          recorder.record_note_mask_event(channel_number, last_step)
         end
 
         local next_step = program.get_current_step_for_channel(channel_number) + 1
