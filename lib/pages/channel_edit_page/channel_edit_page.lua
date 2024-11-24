@@ -178,7 +178,7 @@ function channel_edit_page.register_presss()
     "channel_edit_page",
     function(x, y)
       if channel_select_fader:is_this(x, y) then
-        local channel = program.get_channel(program.get().selected_sequencer_pattern, x)
+        local channel = program.get_channel(program.get().selected_song_pattern, x)
 
         if is_key3_down == true then
           if (channel.mute == true) then
@@ -212,7 +212,7 @@ function channel_edit_page.register_presss()
     "channel_edit_page",
     function(x, y)
       if channel_select_fader:is_this(x, y) then
-        local channel = program.get_channel(program.get().selected_sequencer_pattern, x)
+        local channel = program.get_channel(program.get().selected_song_pattern, x)
 
         if (channel.mute == true) then
           channel.mute = false
@@ -232,10 +232,10 @@ function channel_edit_page.register_presss()
     "channel_edit_page",
     function(x, y, x2, y2)
       local channel = program.get_selected_channel()
-      local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+      local selected_song_pattern = program.get().selected_song_pattern
       channel_edit_page_sequencer:dual_press(x, y, x2, y2)
       if channel_edit_page_sequencer:is_this(x2, y2) then
-        program.get_selected_sequencer_pattern().active = true
+        program.get_selected_song_pattern().active = true
         tooltip:show("Channel " .. program.get().selected_channel .. " length changed")
       end
       if channel_octave_fader:is_this(x2, y2) then
@@ -267,8 +267,8 @@ function channel_edit_page.register_presss()
       end
       if channel_select_fader:is_this(x, y) and channel_select_fader:is_this(x2, y2) then
         
-        local channel1 = program.get_channel(program.get().selected_sequencer_pattern, x)
-        local channel2 = program.get_channel(program.get().selected_sequencer_pattern, x2)
+        local channel1 = program.get_channel(program.get().selected_song_pattern, x)
+        local channel2 = program.get_channel(program.get().selected_song_pattern, x2)
 
         if is_key3_down == true then
 
@@ -298,19 +298,19 @@ function channel_edit_page.register_presss()
       "channel_edit_page",
       function(x, y)
         if pattern_buttons["step" .. s .. "_pattern_button"]:is_this(x, y) then
-          local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+          local selected_song_pattern = program.get().selected_song_pattern
           pattern_buttons["step" .. s .. "_pattern_button"]:press(x, y)
           if pattern_buttons["step" .. s .. "_pattern_button"]:get_state() == 2 then
             fn.add_to_set(program.get_selected_channel().selected_patterns, x)
-            program.get_selected_sequencer_pattern().active = true
+            program.get_selected_song_pattern().active = true
             tooltip:show("Pattern " .. x .. " added to ch. " .. program.get().selected_channel)
           else
             fn.remove_from_set(program.get_selected_channel().selected_patterns, x)
-            program.get_selected_sequencer_pattern().active = true
+            program.get_selected_song_pattern().active = true
             tooltip:show("Pattern " .. x .. " removed from ch. " .. program.get().selected_channel)
           end
           pattern.update_working_patterns()
-          program.get_selected_sequencer_pattern().active = true
+          program.get_selected_song_pattern().active = true
         end
       end
     )
@@ -342,7 +342,7 @@ function channel_edit_page.register_presss()
           )
         end
 
-        program.get_selected_sequencer_pattern().active = true
+        program.get_selected_song_pattern().active = true
         pattern.update_working_patterns()
 
       end
@@ -378,7 +378,7 @@ function channel_edit_page.register_presss()
           )
         end
 
-        program.get_selected_sequencer_pattern().active = true
+        program.get_selected_song_pattern().active = true
         pattern.update_working_patterns()
 
       end
@@ -413,7 +413,7 @@ function channel_edit_page.register_presss()
           )
         end
 
-        program.get_selected_sequencer_pattern().active = true
+        program.get_selected_song_pattern().active = true
         pattern.update_working_patterns()
 
       end
@@ -449,7 +449,7 @@ function channel_edit_page.register_presss()
           )
         end
 
-        program.get_selected_sequencer_pattern().active = true
+        program.get_selected_song_pattern().active = true
         pattern.update_working_patterns()
       end
     end
@@ -460,7 +460,7 @@ function channel_edit_page.register_presss()
       if channel_octave_fader:is_this(x, y) then
         channel_octave_fader:press(x, y)
         program.get_selected_channel().octave = channel_octave_fader:get_value() - 3
-        program.get_selected_sequencer_pattern().active = true
+        program.get_selected_song_pattern().active = true
         tooltip:show("Ch. " .. program.get().selected_channel .. " octave: " .. channel_octave_fader:get_value() - 3)
       end
     end
@@ -472,7 +472,7 @@ function channel_edit_page.register_presss()
         if note_merge_mode_button:is_this(x, y) then
           program.get_selected_channel().note_merge_mode = "pattern_number_" .. x2
           note_merge_mode_button:set_state(4)
-          program.get_selected_sequencer_pattern().active = true
+          program.get_selected_song_pattern().active = true
           pattern.update_working_patterns()
           tooltip:show(
             "Note merge mode pattern " ..x2
@@ -481,7 +481,7 @@ function channel_edit_page.register_presss()
         if velocity_merge_mode_button:is_this(x, y) then
           program.get_selected_channel().velocity_merge_mode = "pattern_number_" .. x2
           velocity_merge_mode_button:set_state(4)
-          program.get_selected_sequencer_pattern().active = true
+          program.get_selected_song_pattern().active = true
           pattern.update_working_patterns()
           tooltip:show(
             "Velocity merge mode pattern " ..x2
@@ -490,7 +490,7 @@ function channel_edit_page.register_presss()
         if length_merge_mode_button:is_this(x, y) then
           program.get_selected_channel().length_merge_mode = "pattern_number_" .. x2
           length_merge_mode_button:set_state(4)
-          program.get_selected_sequencer_pattern().active = true
+          program.get_selected_song_pattern().active = true
           pattern.update_working_patterns()
           tooltip:show(
             "Length merge mode pattern " ..x2
@@ -523,7 +523,7 @@ function channel_edit_page.handle_note_midi_message(note, velocity, chord_number
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               trig = 1,
               note = note,
@@ -541,7 +541,7 @@ function channel_edit_page.handle_note_midi_message(note, velocity, chord_number
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               chord_degrees = chord
@@ -558,7 +558,7 @@ function channel_edit_page.handle_note_midi_message(note, velocity, chord_number
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               trig = 1,
               note = note,
@@ -576,7 +576,7 @@ function channel_edit_page.handle_note_midi_message(note, velocity, chord_number
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               chord_degrees = chord
@@ -637,7 +637,7 @@ end
 
 function channel_edit_page.refresh_muted_channels()
   for i = 1, 16 do
-    if program.get_channel(program.get().selected_sequencer_pattern, i).mute == true then
+    if program.get_channel(program.get().selected_song_pattern, i).mute == true then
       channel_select_fader:dim(i)
     else
       channel_select_fader:light(i)
@@ -678,7 +678,7 @@ end
 function channel_edit_page.refresh_step_buttons()
   local channel = program.get_selected_channel()
 
-  local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+  local selected_song_pattern = program.get().selected_song_pattern
   for s = 1, 16 do
     if pattern_buttons["step" .. s .. "_pattern_button"] then
       if channel.selected_patterns[s] ~= nil then

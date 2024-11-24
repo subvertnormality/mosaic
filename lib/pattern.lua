@@ -43,7 +43,7 @@ local function extract_pattern_number(merge_mode)
 end
 
 function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
-  local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
+  local selected_song_pattern = program.get_selected_song_pattern()
   local merged_pattern = {
     trig_values = {unpack(default_trig_values)},
     lengths = {unpack(default_lengths)},
@@ -55,8 +55,8 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   local skip_bits = {unpack(default_trig_values)}
   local only_bits = {unpack(default_trig_values)}
 
-  local pattern_channel = selected_sequencer_pattern.channels[channel]
-  local patterns = selected_sequencer_pattern.patterns
+  local pattern_channel = selected_song_pattern.channels[channel]
+  local patterns = selected_song_pattern.patterns
 
   for i = 1, 64 do
     notes[i] = {}
@@ -159,7 +159,7 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   local step_note_masks = program.get_step_note_masks(channel)
   local step_velocity_masks = program.get_step_velocity_masks(channel)
   local step_length_masks = program.get_step_length_masks(channel)
-  local channel_data = program.get_channel(program.get().selected_sequencer_pattern, channel)
+  local channel_data = program.get_channel(program.get().selected_song_pattern, channel)
 
   for s = 1, 64 do
     do_mode_calculation(note_merge_mode, s, notes, merged_pattern.note_values)
@@ -202,8 +202,8 @@ pattern.update_working_patterns = scheduler.debounce(function()
 end, throttle_time)
 
 function pattern.update_working_pattern(c)
-  local selected_sequencer_pattern = program.get_selected_sequencer_pattern()
-  local channel_pattern = selected_sequencer_pattern.channels[c]
+  local selected_song_pattern = program.get_selected_song_pattern()
+  local channel_pattern = selected_song_pattern.channels[c]
   channel_pattern.working_pattern = pattern.get_and_merge_patterns(
     c,
     channel_pattern.trig_merge_mode,

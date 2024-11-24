@@ -75,8 +75,8 @@ function test_swing_maintains_lengths_step_two()
     local test_pattern
     
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     test_pattern = program.initialise_default_pattern()
 
     test_pattern.note_values[2] = 0
@@ -84,10 +84,10 @@ function test_swing_maintains_lengths_step_two()
     test_pattern.trig_values[2] = 1
     test_pattern.velocity_values[2] = 20
 
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-    program.get_channel(program.get().selected_sequencer_pattern, 1).swing = test_case.swing
+    program.get_channel(program.get().selected_song_pattern, 1).swing = test_case.swing
 
     pattern.update_working_patterns()
 
@@ -132,8 +132,8 @@ function test_swing_maintains_lengths_across_multiple_steps_all_swings()
     local test_pattern
     
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     test_pattern = program.initialise_default_pattern()
 
     test_pattern.note_values[1] = 0
@@ -196,10 +196,10 @@ function test_swing_maintains_lengths_across_multiple_steps_all_swings()
     test_pattern.trig_values[12] = 1
     test_pattern.velocity_values[12] = 31
 
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-    program.get_channel(program.get().selected_sequencer_pattern, 1).swing = test_case.swing
+    program.get_channel(program.get().selected_song_pattern, 1).swing = test_case.swing
 
     pattern.update_working_patterns()
 
@@ -357,8 +357,8 @@ function test_drunk_shuffle_amount_100()
   local test_pattern
   
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[1] = 0
@@ -412,15 +412,15 @@ function test_drunk_shuffle_amount_100()
   test_pattern.trig_values[10] = 1
   test_pattern.velocity_values[10] = 29
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(program.get().selected_sequencer_pattern, 1).swing = 0
+  program.get_channel(program.get().selected_song_pattern, 1).swing = 0
 
-  program.get_channel(program.get().selected_sequencer_pattern, 1).swing_shuffle_type = 2
-  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_basis = 1
-  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_feel = 1
-  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_amount = 100
+  program.get_channel(program.get().selected_song_pattern, 1).swing_shuffle_type = 2
+  program.get_channel(program.get().selected_song_pattern, 1).shuffle_basis = 1
+  program.get_channel(program.get().selected_song_pattern, 1).shuffle_feel = 1
+  program.get_channel(program.get().selected_song_pattern, 1).shuffle_amount = 100
 
   pattern.update_working_patterns()
 
@@ -550,8 +550,8 @@ function test_drunk_shuffle_amount_0()
   local test_pattern
   
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[1] = 0
@@ -605,15 +605,15 @@ function test_drunk_shuffle_amount_0()
   test_pattern.trig_values[10] = 1
   test_pattern.velocity_values[10] = 29
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(program.get().selected_sequencer_pattern, 1).swing = 0
+  program.get_channel(program.get().selected_song_pattern, 1).swing = 0
 
-  program.get_channel(program.get().selected_sequencer_pattern, 1).swing_shuffle_type = 2
-  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_basis = 1
-  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_feel = 1
-  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_amount = 0
+  program.get_channel(program.get().selected_song_pattern, 1).swing_shuffle_type = 2
+  program.get_channel(program.get().selected_song_pattern, 1).shuffle_basis = 1
+  program.get_channel(program.get().selected_song_pattern, 1).shuffle_feel = 1
+  program.get_channel(program.get().selected_song_pattern, 1).shuffle_amount = 0
 
   pattern.update_working_patterns()
 
@@ -711,8 +711,8 @@ function test_drunk_shuffle_amount_75()
   local test_pattern
   
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[1] = 0
@@ -760,15 +760,15 @@ function test_drunk_shuffle_amount_75()
   test_pattern.trig_values[9] = 1
   test_pattern.velocity_values[9] = 28
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(program.get().selected_sequencer_pattern, 1).swing = 0
+  program.get_channel(program.get().selected_song_pattern, 1).swing = 0
 
-  program.get_channel(program.get().selected_sequencer_pattern, 1).swing_shuffle_type = 2
-  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_basis = 1
-  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_feel = 1
-  program.get_channel(program.get().selected_sequencer_pattern, 1).shuffle_amount = 75
+  program.get_channel(program.get().selected_song_pattern, 1).swing_shuffle_type = 2
+  program.get_channel(program.get().selected_song_pattern, 1).shuffle_basis = 1
+  program.get_channel(program.get().selected_song_pattern, 1).shuffle_feel = 1
+  program.get_channel(program.get().selected_song_pattern, 1).shuffle_amount = 75
 
   pattern.update_working_patterns()
 

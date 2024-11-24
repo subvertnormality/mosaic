@@ -311,8 +311,8 @@ function song_edit_page_ui.update_tempo()
 end
 
 function song_edit_page_ui.update_pattern_repeat()
-  program.get_selected_sequencer_pattern().repeats = pattern_repeat_selector:get_value()
-  program.get_selected_sequencer_pattern().active = true
+  program.get_selected_song_pattern().repeats = pattern_repeat_selector:get_value()
+  program.get_selected_song_pattern().active = true
 end
 
 function song_edit_page_ui.update_song_mode()
@@ -328,7 +328,7 @@ function song_edit_page_ui.refresh_tempo()
 end
 
 function song_edit_page_ui.refresh_pattern_repeat()
-  pattern_repeat_selector:set_value(program.get_selected_sequencer_pattern().repeats)
+  pattern_repeat_selector:set_value(program.get_selected_song_pattern().repeats)
 end
 
 function song_edit_page_ui.update_swing_shuffle_type()

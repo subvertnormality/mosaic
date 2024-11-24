@@ -331,7 +331,7 @@ function channel_edit_page_ui.update_swing_shuffle_type()
 end
 
 function channel_edit_page_ui.align_global_and_local_swing_shuffle_type_values(c)
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
+  local channel = program.get_channel(program.get().selected_song_pattern, c)
   local channel_value = channel.swing_shuffle_type
   local value = channel_value
   if channel_value == 1 or nil then
@@ -363,7 +363,7 @@ function channel_edit_page_ui.update_swing()
 end
 
 function channel_edit_page_ui.align_global_and_local_swing_values(c)
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
+  local channel = program.get_channel(program.get().selected_song_pattern, c)
   local channel_value = channel.swing
   local value = channel_value
   if channel_value == -51 or nil then
@@ -394,7 +394,7 @@ function channel_edit_page_ui.update_shuffle_feel()
 end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_feel_values(c)
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
+  local channel = program.get_channel(program.get().selected_song_pattern, c)
   local channel_value = channel.shuffle_feel
   local value = channel_value
   if channel_value == 1 or nil then
@@ -427,7 +427,7 @@ function channel_edit_page_ui.update_shuffle_basis()
 end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_basis_values(c)
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
+  local channel = program.get_channel(program.get().selected_song_pattern, c)
   local channel_value = channel.shuffle_basis
   local value = channel_value
   if channel_value == 1 or nil then
@@ -459,7 +459,7 @@ function channel_edit_page_ui.update_shuffle_amount()
 end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_amount_values(c)
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
+  local channel = program.get_channel(program.get().selected_song_pattern, c)
   local channel_value = channel.shuffle_amount
   local value = channel_value
   if channel_value == 0 or nil then
@@ -907,7 +907,7 @@ function channel_edit_page_ui.record_note_mask_event(channel, step)
   local c = channel.number
   if mask_events and mask_events[c] and mask_events[c][step] then
     local event = mask_events[c][step]
-    local event_channel = program.get_channel(event.sequencer_pattern, c)
+    local event_channel = program.get_channel(event.song_pattern, c)
 
     memory.record_event(event_channel, "note_mask", event.data)
 
@@ -930,7 +930,7 @@ function channel_edit_page_ui.handle_trig_mask_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               trig = mask_selectors.trig:get_value()
@@ -946,7 +946,7 @@ function channel_edit_page_ui.handle_trig_mask_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
             step = s,
             trig = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
@@ -981,7 +981,7 @@ function channel_edit_page_ui.handle_note_mask_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               note = mask_selectors.note:get_value()
@@ -997,7 +997,7 @@ function channel_edit_page_ui.handle_note_mask_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               note = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
@@ -1032,7 +1032,7 @@ function channel_edit_page_ui.handle_velocity_mask_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               velocity = mask_selectors.velocity:get_value()
@@ -1048,7 +1048,7 @@ function channel_edit_page_ui.handle_velocity_mask_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               velocity = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
@@ -1082,7 +1082,7 @@ function channel_edit_page_ui.handle_length_mask_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               length = divisions.note_division_values[mask_selectors.length:get_value()]
@@ -1099,7 +1099,7 @@ function channel_edit_page_ui.handle_length_mask_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
                 step = s,
                 length = divisions.note_division_values[mask_selectors.length:get_value()]
@@ -1115,7 +1115,7 @@ function channel_edit_page_ui.handle_length_mask_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
                 step = s,
                 length = 0
@@ -1155,7 +1155,7 @@ function channel_edit_page_ui.handle_chord_mask_one_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               chord_degrees = {mask_selectors.chords[1]:get_value(), nil, nil, nil}
@@ -1171,7 +1171,7 @@ function channel_edit_page_ui.handle_chord_mask_one_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               chord_degrees = {mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value(), nil, nil, nil}
@@ -1204,7 +1204,7 @@ function channel_edit_page_ui.handle_chord_mask_two_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               chord_degrees = {nil, mask_selectors.chords[2]:get_value(), nil, nil}
@@ -1220,7 +1220,7 @@ function channel_edit_page_ui.handle_chord_mask_two_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               chord_degrees = {nil, mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value(), nil, nil}
@@ -1253,7 +1253,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
@@ -1279,7 +1279,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
             step = s,
             chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
@@ -1292,7 +1292,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
             step = s,
             chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
@@ -1315,7 +1315,7 @@ function channel_edit_page_ui.handle_chord_mask_four_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               chord_degrees = {nil, nil, nil, mask_selectors.chords[4]:get_value()}
@@ -1331,7 +1331,7 @@ function channel_edit_page_ui.handle_chord_mask_four_change(direction)
           channel, 
           s, 
           {
-            sequencer_pattern = program.get().selected_sequencer_pattern,
+            song_pattern = program.get().selected_song_pattern,
             data = {
               step = s,
               chord_degrees = {nil, nil, nil, mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value()}

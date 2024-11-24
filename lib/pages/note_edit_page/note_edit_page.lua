@@ -99,14 +99,14 @@ function note_edit_page.register_presss()
             return
           end
 
-          local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+          local selected_song_pattern = program.get().selected_song_pattern
           local selected_pattern = program.get().selected_pattern
           local note = fn.note_from_value(fader:get_value())
-          local seq_pattern = program.get_selected_sequencer_pattern().patterns[selected_pattern]
+          local seq_pattern = program.get_selected_song_pattern().patterns[selected_pattern]
           local steps_tip = s .. " "
 
           seq_pattern.note_values[s] = note
-          program.get_selected_sequencer_pattern().active = true
+          program.get_selected_song_pattern().active = true
           tooltip:show("Step " .. s .. " note set to " .. note)
 
           if is_key3_down then
@@ -307,13 +307,13 @@ function note_edit_page.refresh_fader(s)
 
   faders["step" .. s .. "_fader"]:set_vertical_offset(vertical_offset)
   faders["step" .. s .. "_fader"]:set_horizontal_offset(horizontal_offset)
-  local value = fn.value_from_note(program.get_selected_sequencer_pattern().patterns[selected_pattern].note_values[s])
+  local value = fn.value_from_note(program.get_selected_song_pattern().patterns[selected_pattern].note_values[s])
 
   if value then
     faders["step" .. s .. "_fader"]:set_value(value)
   end
 
-  if program.get_selected_sequencer_pattern().patterns[selected_pattern].trig_values[s] < 1 then
+  if program.get_selected_song_pattern().patterns[selected_pattern].trig_values[s] < 1 then
     faders["step" .. s .. "_fader"]:set_dark()
   else
     faders["step" .. s .. "_fader"]:set_light()

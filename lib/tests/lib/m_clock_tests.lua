@@ -40,8 +40,8 @@ end
 function test_clock_divisions_slow_down_the_clock_div_2()
 
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[2] = 0
@@ -49,9 +49,9 @@ function test_clock_divisions_slow_down_the_clock_div_2()
   test_pattern.trig_values[2] = 1
   test_pattern.velocity_values[2] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
 
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
   pattern.update_working_patterns()
 
@@ -94,8 +94,8 @@ end
 function test_clock_divisions_slow_down_the_clock_div_3()
 
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[2] = 0
@@ -103,9 +103,9 @@ function test_clock_divisions_slow_down_the_clock_div_3()
   test_pattern.trig_values[2] = 1
   test_pattern.velocity_values[2] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
 
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
   pattern.update_working_patterns()
 
@@ -153,8 +153,8 @@ end
 function test_clock_multiplications_speed_up_the_clock_mul_2()
 
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[2] = 0
@@ -162,9 +162,9 @@ function test_clock_multiplications_speed_up_the_clock_mul_2()
   test_pattern.trig_values[2] = 1
   test_pattern.velocity_values[2] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
 
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
   pattern.update_working_patterns()
 
@@ -198,8 +198,8 @@ end
 function test_clock_multiplications_speed_up_the_clock_mul_4()
 
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[16] = 0
@@ -207,9 +207,9 @@ function test_clock_multiplications_speed_up_the_clock_mul_4()
   test_pattern.trig_values[16] = 1
   test_pattern.velocity_values[16] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
 
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
   pattern.update_working_patterns()
 
@@ -244,8 +244,8 @@ end
 function test_clock_multiplications_speed_up_the_clock_mul_8()
 
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[16] = 0
@@ -253,9 +253,9 @@ function test_clock_multiplications_speed_up_the_clock_mul_8()
   test_pattern.trig_values[16] = 1
   test_pattern.velocity_values[16] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
 
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
   pattern.update_working_patterns()
 
@@ -294,8 +294,8 @@ end
 function test_clock_multiplications_speed_up_the_clock_mul_16()
 
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[16] = 0
@@ -303,9 +303,9 @@ function test_clock_multiplications_speed_up_the_clock_mul_16()
   test_pattern.trig_values[16] = 1
   test_pattern.velocity_values[16] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
 
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
   pattern.update_working_patterns()
 

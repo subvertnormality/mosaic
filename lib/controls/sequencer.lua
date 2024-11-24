@@ -35,7 +35,7 @@ function sequencer:draw(channel, draw_func)
   local lengths = channel.working_pattern.lengths
 
   local selected_pattern = program.get_selected_pattern()
-  local program_get_selected_sequencer_pattern = program.get_selected_sequencer_pattern
+  local program_get_selected_song_pattern = program.get_selected_song_pattern
   local program_get_current_step_for_channel = program.get_current_step_for_channel
   local program_step_has_trig_lock = program.step_has_trig_lock
   local m_clock_is_playing = m_clock.is_playing
@@ -57,7 +57,7 @@ function sequencer:draw(channel, draw_func)
   local end_x = channel.end_trig[1]
   local end_y = channel.end_trig[2]
   local end_step = fn_calc_grid_count(end_x, end_y)
-  local global_pattern_length = program_get_selected_sequencer_pattern().global_pattern_length
+  local global_pattern_length = program_get_selected_song_pattern().global_pattern_length
 
   if global_pattern_length < end_step then
     if start_step == 1 then
@@ -162,7 +162,7 @@ function sequencer:press(x, y)
       local grid_count = fn.calc_grid_count(x, y)
       local selected_pattern = program.get_selected_pattern()
       selected_pattern.trig_values[grid_count] = 1 - selected_pattern.trig_values[grid_count]
-      program.get_selected_sequencer_pattern().active = true
+      program.get_selected_song_pattern().active = true
     end
   end
 end

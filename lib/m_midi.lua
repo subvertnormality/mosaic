@@ -172,7 +172,7 @@ function handle_midi_event_data(data, midi_device)
             channel,
             stored.step,
             {
-              sequencer_pattern = program.get().selected_sequencer_pattern,
+              song_pattern = program.get().selected_song_pattern,
               data = {
                 step = stored.step,
                 length = closest_division

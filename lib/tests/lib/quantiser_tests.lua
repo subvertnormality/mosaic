@@ -10,7 +10,7 @@ end
 
 function test_note_value_is_quantised_from_0_to_c_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -34,7 +34,7 @@ end
 
 function test_note_value_is_quantised_from_1_to_d_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -59,7 +59,7 @@ end
 
 function test_note_value_is_quantised_from_2_to_e_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -84,7 +84,7 @@ end
 
 function test_note_value_is_quantised_from_3_to_f_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -109,7 +109,7 @@ end
 
 function test_note_value_is_quantised_from_4_to_g_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -133,7 +133,7 @@ end
 
 function test_note_value_is_quantised_from_5_to_a_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -158,7 +158,7 @@ end
 
 function test_note_value_is_quantised_from_6_to_b_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -183,7 +183,7 @@ end
 
 function test_note_value_is_quantised_from_7_to_c_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -207,7 +207,7 @@ end
 
 function test_note_value_is_quantised_from_0_to_c_72_with_step_octave_mod_1_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -231,7 +231,7 @@ end
 
 function test_note_value_is_quantised_from_3_to_f_77_with_step_octave_mod_1_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -256,7 +256,7 @@ end
 
 function test_note_value_is_quantised_from_3_to_fsharp_with_transpose_1_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -280,7 +280,7 @@ end
 
 function test_note_value_is_quantised_from_3_to_g_with_transpose_2_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -305,7 +305,7 @@ end
 
 function test_note_value_is_quantised_from_3_to_e_with_transpose_minus1_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -329,7 +329,7 @@ end
 
 function test_note_value_is_quantised_from_3_to_e_with_transpose_minus5_in_c_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -353,7 +353,7 @@ end
 
 function test_note_value_is_quantised_from_0_to_d_in_c_major_with_chord_2()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -378,7 +378,7 @@ end
 
 function test_note_value_is_quantised_from_0_to_c_72_in_c_major_with_chord_8()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -402,7 +402,7 @@ end
 
 function test_note_value_is_quantised_from_0_to_b_71_in_c_major_with_chord_7()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -426,7 +426,7 @@ end
 
 function test_note_value_is_quantised_from_0_to_b_83_in_c_major_with_chord_7_octave_mod_1()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -450,7 +450,7 @@ end
 
 function test_note_value_is_quantised_from_0_to_c_84_in_c_major_with_chord_7_octave_mod_1_transpose_1()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -474,7 +474,7 @@ end
 
 function test_note_value_is_quantised_from_0_to_csharp_85_in_csharp_major_with_chord_7_octave_mod_1_transpose_1_root_note_1()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -499,7 +499,7 @@ end
 
 function test_note_value_is_quantised_from_0_to_d_in_d_major()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -524,7 +524,7 @@ end
 
 function test_note_value_is_quantised_from_5_to_bsharp_70_in_d_minor()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -549,7 +549,7 @@ end
 
 function test_note_value_is_quantised_from_5_to_bsharp_70_in_d_minor_when_using_scale_2()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     2,
@@ -575,7 +575,7 @@ end
 
 function test_note_values_are_quantised_a_to_a_with_correct_ascending_octave()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -605,7 +605,7 @@ end
 
 function test_get_chord_degree_in_c_major_one_octave()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   -- Set up C major scale
   program.set_scale(
@@ -631,7 +631,7 @@ end
 
 function test_get_chord_degree_in_c_major_across_octaves()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -653,7 +653,7 @@ end
 
 function test_get_chord_degree_basics()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   -- Set up C major scale
   program.set_scale(
@@ -682,7 +682,7 @@ end
 
 function test_get_chord_degree_octaves()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -704,7 +704,7 @@ end
 
 function test_get_chord_degree_with_different_root()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   -- Set up D major 
   program.set_scale(
@@ -726,7 +726,7 @@ end
 
 function test_get_chord_degree_snapping()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,
@@ -749,7 +749,7 @@ end
 
 function test_get_chord_degree_intervals()
   setup()
-  program.get_sequencer_pattern(1).root_note = 0
+  program.get_song_pattern(1).root_note = 0
 
   program.set_scale(
     1,

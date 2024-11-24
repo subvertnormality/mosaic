@@ -14,7 +14,7 @@ function scale_edit_page.init()
 
   scale_fader:set_pre_func(
     function(x, y, length)
-      local channel = program.get_channel(program.get().selected_sequencer_pattern, 17)
+      local channel = program.get_channel(program.get().selected_song_pattern, 17)
       for i = x, length + x - 1 do
         if hide_scale_fader_leds then
           break
@@ -36,7 +36,7 @@ function scale_edit_page.register_draws()
   draw:register_grid(
     "scale_edit_page",
     function()
-      scale_edit_page_sequencer:draw(program.get_channel(program.get().selected_sequencer_pattern, 17), grid_abstraction.led)
+      scale_edit_page_sequencer:draw(program.get_channel(program.get().selected_song_pattern, 17), grid_abstraction.led)
     end
   )
   draw:register_grid(
@@ -57,11 +57,11 @@ function scale_edit_page.register_presss()
   press:register_dual(
     "scale_edit_page",
     function(x, y, x2, y2)
-      local channel = program.get_channel(program.get().selected_sequencer_pattern, 17)
-      local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+      local channel = program.get_channel(program.get().selected_song_pattern, 17)
+      local selected_song_pattern = program.get().selected_song_pattern
       scale_edit_page_sequencer:dual_press(x, y, x2, y2)
       if scale_edit_page_sequencer:is_this(x2, y2) then
-        program.get_selected_sequencer_pattern().active = true
+        program.get_selected_song_pattern().active = true
         tooltip:show("Channel 17 length changed")
       end
       if scale_fader:is_this(x2, y2) then
@@ -151,7 +151,7 @@ function scale_edit_page.register_presss()
       if transpose_fader:is_this(x, y) then
         transpose_fader:press(x, y)
         program.set_transpose(transpose_fader:get_value() - 13)
-        program.get_selected_sequencer_pattern().active = true
+        program.get_selected_song_pattern().active = true
         tooltip:show("Transpose: " .. transpose_fader:get_value() - 13)
       end
     end
@@ -160,7 +160,7 @@ end
 
 
 function scale_edit_page.refresh_faders()
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, 17)
+  local channel = program.get_channel(program.get().selected_song_pattern, 17)
   local pressed_keys = m_grid.get_pressed_keys()
   if #pressed_keys > 0 then
     local s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])

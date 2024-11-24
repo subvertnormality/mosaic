@@ -64,8 +64,8 @@ local function initialise_default_patterns()
   return patterns
 end
 
-local function initialise_default_sequencer_pattern()
-  local sequencer_pattern = {}
+local function initialise_default_song_pattern()
+  local song_pattern = {}
   local root_note = 0
 
   local c_major = quantiser.get_scale(1)
@@ -82,7 +82,7 @@ local function initialise_default_sequencer_pattern()
     }
   end
 
-  sequencer_pattern = {
+  song_pattern = {
     active = false,
     global_pattern_length = 64,
     scale = 0,
@@ -93,10 +93,10 @@ local function initialise_default_sequencer_pattern()
   }
 
   for i = 1, 16 do
-    table.insert(sequencer_pattern.scales, create_scale())
+    table.insert(song_pattern.scales, create_scale())
   end
 
-  return sequencer_pattern
+  return song_pattern
 end
 
 function program.initialise_64_table(d)
@@ -121,7 +121,7 @@ function program.init()
   local root_note = 0
   program_store = {
     selected_page = pages.pages.channel_edit_page,
-    selected_sequencer_pattern = 1,
+    selected_song_pattern = 1,
     selected_pattern = 1,
     selected_channel = 1,
     selected_scale = 1,
@@ -130,7 +130,7 @@ function program.init()
     default_scale = 1,
     current_step = 1,
     current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    sequencer_patterns = {},
+    song_patterns = {},
     global_step_accumulator = 0,
     devices = {},
     blink_state = false
@@ -141,16 +141,16 @@ function program.init()
   end
 end
 
-function program.is_sequencer_pattern_active(p)
-  return program_store.sequencer_patterns[p] and program_store.sequencer_patterns[p].active or false
+function program.is_song_pattern_active(p)
+  return program_store.song_patterns[p] and program_store.song_patterns[p].active or false
 end
 
-function program.get_selected_sequencer_pattern()
-  return program.get_sequencer_pattern(program_store.selected_sequencer_pattern)
+function program.get_selected_song_pattern()
+  return program.get_song_pattern(program_store.selected_song_pattern)
 end
 
-function program.set_selected_sequencer_pattern(p)
-  program_store.selected_sequencer_pattern = p
+function program.set_selected_song_pattern(p)
+  program_store.selected_song_pattern = p
 end
 
 function program.set_selected_page(p)
@@ -161,15 +161,15 @@ function program.get_selected_page()
   return program_store.selected_page
 end
 
-function program.get_sequencer_pattern(p)
-  if not program_store.sequencer_patterns[p] then
-    program_store.sequencer_patterns[p] = initialise_default_sequencer_pattern()
+function program.get_song_pattern(p)
+  if not program_store.song_patterns[p] then
+    program_store.song_patterns[p] = initialise_default_song_pattern()
   end
-  return program_store.sequencer_patterns[p]
+  return program_store.song_patterns[p]
 end
 
-function program.set_sequencer_pattern(p, pattern)
-  program_store.sequencer_patterns[pattern] = fn.deep_copy(program.get_sequencer_pattern(p))
+function program.set_song_pattern(p, pattern)
+  program_store.song_patterns[pattern] = fn.deep_copy(program.get_song_pattern(p))
 end
 
 function program.get_current_step_for_channel(c)
@@ -181,21 +181,21 @@ function program.set_current_step_for_channel(c, s)
 end
 
 function program.set_global_step_scale_number(step_scale_number)
-  -- TODO check why this was being applied across all sequencer patterns
-  -- for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
-    program.get_selected_sequencer_pattern().channels[17].step_scale_number = step_scale_number
+  -- TODO check why this was being applied across all song patterns
+  -- for _, song_pattern in pairs(program_store.song_patterns) do
+    program.get_selected_song_pattern().channels[17].step_scale_number = step_scale_number
   -- end
 end
 
 function program.set_channel_step_scale_number(c, step_scale_number)
-  -- TODO check why this was being applied across all sequencer patterns
-  -- for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
-    program.get_selected_sequencer_pattern().channels[c].step_scale_number = step_scale_number
+  -- TODO check why this was being applied across all song patterns
+  -- for _, song_pattern in pairs(program_store.song_patterns) do
+    program.get_selected_song_pattern().channels[c].step_scale_number = step_scale_number
   -- end
 end
 
 function program.get_channel_step_scale_number(c)
-  return program.get_selected_sequencer_pattern().channels[c].step_scale_number
+  return program.get_selected_song_pattern().channels[c].step_scale_number
 end
 
 function program.get()
@@ -203,15 +203,15 @@ function program.get()
 end
 
 function program.get_selected_channel()
-  return program.get_selected_sequencer_pattern().channels[program.get().selected_channel]
+  return program.get_selected_song_pattern().channels[program.get().selected_channel]
 end
 
 function program.get_selected_pattern()
-  return program.get_selected_sequencer_pattern().patterns[program.get().selected_pattern]
+  return program.get_selected_song_pattern().patterns[program.get().selected_pattern]
 end
 
 function program.get_channel(song_pattern, x)
-  return program.get_sequencer_pattern(song_pattern).channels[x]
+  return program.get_song_pattern(song_pattern).channels[x]
 end
 
 function program.set(p)
@@ -281,7 +281,7 @@ function program.step_octave_has_trig_lock(channel, step)
 end
 
 function program.add_step_transpose_trig_lock(step, trig_lock)
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, 17)
+  local channel = program.get_channel(program.get().selected_song_pattern, 17)
 
   if trig_lock ~= nil then
     trig_lock = math.max(math.min(trig_lock, 7), -7) or nil
@@ -295,7 +295,7 @@ function program.add_step_transpose_trig_lock(step, trig_lock)
 end
 
 function program.set_transpose(transpose)
-  program.get_selected_sequencer_pattern().transpose = transpose or 0
+  program.get_selected_song_pattern().transpose = transpose or 0
 end
 
 function program.set_scale_transpose(scale, transpose)
@@ -305,18 +305,18 @@ function program.set_scale_transpose(scale, transpose)
 end
 
 function program.get_transpose()
-  return program.get_selected_sequencer_pattern().transpose or 0
+  return program.get_selected_song_pattern().transpose or 0
 end
 
 function program.get_step_transpose_trig_lock(step)
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, 17)
+  local channel = program.get_channel(program.get().selected_song_pattern, 17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
   return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step]
 end
 
 function program.step_transpose_has_trig_lock(step)
   if program.get_selected_channel().number ~= 17 then return false end
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, 17)
+  local channel = program.get_channel(program.get().selected_song_pattern, 17)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
   return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step]
 end
@@ -468,48 +468,48 @@ function program.get_scale(s)
   end
 
   -- Backwards compatibility
-  if not program.get_selected_sequencer_pattern().scales then
+  if not program.get_selected_song_pattern().scales then
     if program_store.scales then
-      program.get_selected_sequencer_pattern().scales = fn.deep_copy(program_store.scales)
+      program.get_selected_song_pattern().scales = fn.deep_copy(program_store.scales)
     end
   end
 
-  return program.get_selected_sequencer_pattern().scales[s]
+  return program.get_selected_song_pattern().scales[s]
 end
 
 function program.set_scale(s, scale)
-  scale.version = (program.get_selected_sequencer_pattern().scales[s].version or 0) + 1
-  program.get_selected_sequencer_pattern().scales[s] = scale
+  scale.version = (program.get_selected_song_pattern().scales[s].version or 0) + 1
+  program.get_selected_song_pattern().scales[s] = scale
 end
 
-function program.set_all_sequencer_pattern_scales(s, scale)
-  for _, sequencer_pattern in pairs(program_store.sequencer_patterns) do
-    scale.version = (sequencer_pattern.scales[s].version or 0) + 1
-    sequencer_pattern.scales[s] = scale
+function program.set_all_song_pattern_scales(s, scale)
+  for _, song_pattern in pairs(program_store.song_patterns) do
+    scale.version = (song_pattern.scales[s].version or 0) + 1
+    song_pattern.scales[s] = scale
   end
 end
 
 function program.set_chord_degree_rotation_for_scale(s, rotation)
   if rotation then
-    program.get_selected_sequencer_pattern().scales[s].chord_degree_rotation = util.clamp(rotation, 0, 6)
+    program.get_selected_song_pattern().scales[s].chord_degree_rotation = util.clamp(rotation, 0, 6)
   end
 end
 
 local function ensure_step_masks(channel)
-  if not program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks then
-    program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks = {}
+  if not program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks then
+    program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks = {}
   end
 end
 
 
 function program.get_step_trig_masks(channel)
   ensure_step_masks(channel)
-  return program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks
+  return program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks
 end
 
 function program.set_step_trig_mask(channel, step, mask)
   ensure_step_masks(channel)
-  program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks[step] = mask
+  program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks[step] = mask
 end
 
 function program.set_trig_mask(channel, mask) 
@@ -518,7 +518,7 @@ end
 
 function program.get_step_note_masks(channel)
   ensure_step_masks(channel)
-  return program.get_channel(program.get().selected_sequencer_pattern, channel).step_note_masks
+  return program.get_channel(program.get().selected_song_pattern, channel).step_note_masks
 end
 
 function program.set_step_note_mask(channel, step, mask)
@@ -531,7 +531,7 @@ end
 
 function program.get_step_velocity_masks(channel)
   ensure_step_masks(channel)
-  return program.get_channel(program.get().selected_sequencer_pattern, channel).step_velocity_masks
+  return program.get_channel(program.get().selected_song_pattern, channel).step_velocity_masks
 end
 
 function program.set_velocity_mask(channel, mask) 
@@ -540,7 +540,7 @@ end
 
 function program.get_step_length_masks(channel)
   ensure_step_masks(channel)
-  return program.get_channel(program.get().selected_sequencer_pattern, channel).step_length_masks
+  return program.get_channel(program.get().selected_song_pattern, channel).step_length_masks
 end
 
 function program.set_length_mask(channel, mask) 
@@ -614,64 +614,64 @@ end
 function program.toggle_step_trig_mask(channel, step)
   ensure_step_masks(channel)
 
-  local trig_values = program.get_channel(program.get().selected_sequencer_pattern, channel).working_pattern.trig_values
+  local trig_values = program.get_channel(program.get().selected_song_pattern, channel).working_pattern.trig_values
   if trig_values[step] == 0 then
-    program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks[step] = 1
+    program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks[step] = 1
   elseif trig_values[step] == 1 then
-    program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks[step] = 0
+    program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks[step] = 0
   end
 end
 
 function program.clear_step_trig_mask(channel, step)
-  program.get_channel(program.get().selected_sequencer_pattern, channel).step_trig_masks[step] = nil
+  program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks[step] = nil
 end
 
 function program.clear_step_note_mask(channel, step)
-  program.get_channel(program.get().selected_sequencer_pattern, channel).step_note_masks[step] = nil
+  program.get_channel(program.get().selected_song_pattern, channel).step_note_masks[step] = nil
 end
 
 function program.clear_step_velocity_mask(channel, step)
-  program.get_channel(program.get().selected_sequencer_pattern, channel).step_velocity_masks[step] = nil
+  program.get_channel(program.get().selected_song_pattern, channel).step_velocity_masks[step] = nil
 end
 
 function program.clear_step_length_mask(channel, step)
-  program.get_channel(program.get().selected_sequencer_pattern, channel).step_length_masks[step] = nil
+  program.get_channel(program.get().selected_song_pattern, channel).step_length_masks[step] = nil
 end
 
 function program.clear_step_micro_time_mask(channel, step)
-  program.get_channel(program.get().selected_sequencer_pattern, channel).step_micro_time_masks[step] = nil
+  program.get_channel(program.get().selected_song_pattern, channel).step_micro_time_masks[step] = nil
 end
 
 function program.clear_step_chord_1_mask(channel, step)
-  local step_chord_masks = program.get_channel(program.get().selected_sequencer_pattern, channel).step_chord_masks
+  local step_chord_masks = program.get_channel(program.get().selected_song_pattern, channel).step_chord_masks
   if step_chord_masks and step_chord_masks[step] then
     step_chord_masks[step][1] = nil
   end
 end
 
 function program.clear_step_chord_2_mask(channel, step)
-  local step_chord_masks = program.get_channel(program.get().selected_sequencer_pattern, channel).step_chord_masks
+  local step_chord_masks = program.get_channel(program.get().selected_song_pattern, channel).step_chord_masks
   if step_chord_masks and step_chord_masks[step] then
     step_chord_masks[step][2] = nil
   end
 end
 
 function program.clear_step_chord_3_mask(channel, step)
-  local step_chord_masks = program.get_channel(program.get().selected_sequencer_pattern, channel).step_chord_masks
+  local step_chord_masks = program.get_channel(program.get().selected_song_pattern, channel).step_chord_masks
   if step_chord_masks and step_chord_masks[step] then
     step_chord_masks[step][3] = nil
   end
 end
 
 function program.clear_step_chord_4_mask(channel, step)
-  local step_chord_masks = program.get_channel(program.get().selected_sequencer_pattern, channel).step_chord_masks
+  local step_chord_masks = program.get_channel(program.get().selected_song_pattern, channel).step_chord_masks
   if step_chord_masks and step_chord_masks[step] then
     step_chord_masks[step][4] = nil
   end
 end
 
 function program.set_step_chord_mask(channel, i, step, mask)
-  local step_chord_masks = program.get_channel(program.get().selected_sequencer_pattern, channel).step_chord_masks
+  local step_chord_masks = program.get_channel(program.get().selected_song_pattern, channel).step_chord_masks
   if not step_chord_masks[step] then
     step_chord_masks[step] = {}
   end

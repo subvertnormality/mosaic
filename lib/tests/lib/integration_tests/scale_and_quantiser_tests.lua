@@ -41,8 +41,8 @@ end
 
 function test_global_default_scale_setting_quantises_notes_properly()
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     local test_pattern = program.initialise_default_pattern()
   
     local scale = quantiser.get_scales()[3]
@@ -59,15 +59,15 @@ function test_global_default_scale_setting_quantises_notes_properly()
     )
   
     program.get().default_scale = 2
-    program.get_channel(program.get().selected_sequencer_pattern, 1).default_scale = 0
+    program.get_channel(program.get().selected_song_pattern, 1).default_scale = 0
   
     test_pattern.note_values[2] = 2
     test_pattern.lengths[2] = 1
     test_pattern.trig_values[2] = 1
     test_pattern.velocity_values[2] = 100
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
   
     pattern.update_working_patterns()
   
@@ -86,8 +86,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
   function test_channel_default_scale_setting_quantises_notes_properly()
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     local test_pattern = program.initialise_default_pattern()
     local channel = 2
     local scale = quantiser.get_scales()[3]
@@ -105,15 +105,15 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
     program.get().default_scale = 2
   
-    program.get_channel(program.get().selected_sequencer_pattern, channel).default_scale = 1
+    program.get_channel(program.get().selected_song_pattern, channel).default_scale = 1
   
     test_pattern.note_values[2] = 2
     test_pattern.lengths[2] = 1
     test_pattern.trig_values[2] = 1
     test_pattern.velocity_values[2] = 100
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
   
     pattern.update_working_patterns()
   
@@ -132,8 +132,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
   function test_channel_default_scale_setting_quantises_notes_properly_when_global_pentatonic_is_set_c_major()
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     local test_pattern = program.initialise_default_pattern()
     local channel = 2
     local scale = quantiser.get_scales()[1]
@@ -194,8 +194,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
     test_pattern.trig_values[8] = 1
     test_pattern.velocity_values[8] = 100
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
   
     pattern.update_working_patterns()
   
@@ -270,8 +270,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
 
   function test_channel_default_scale_setting_quantises_notes_properly_when_global_pentatonic_is_set_d_major()
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     local test_pattern = program.initialise_default_pattern()
     local channel = 2
     local scale = quantiser.get_scales()[1]
@@ -338,8 +338,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
     test_pattern.trig_values[9] = 1
     test_pattern.velocity_values[9] = 100
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
   
     pattern.update_working_patterns()
   
@@ -423,8 +423,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
 
   function test_channel_default_scale_setting_quantises_notes_properly_when_pentatonic_merged_notes()
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     local test_pattern = program.initialise_default_pattern()
     local test_pattern_2 = program.initialise_default_pattern()
     local channel = 11
@@ -433,8 +433,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
     params:set("all_scales_lock_to_pentatonic", 1)
     params:set("merged_lock_to_pentatonic", 2)
 
-    program.get_channel(program.get().selected_sequencer_pattern, channel).trig_merge_mode = "all"
-    program.get_channel(program.get().selected_sequencer_pattern, channel).note_merge_mode = "down"
+    program.get_channel(program.get().selected_song_pattern, channel).trig_merge_mode = "all"
+    program.get_channel(program.get().selected_song_pattern, channel).note_merge_mode = "down"
   
     program.set_scale(
       2,
@@ -492,10 +492,10 @@ function test_global_default_scale_setting_quantises_notes_properly()
     test_pattern_2.velocity_values[4] = 100
 
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 2)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 2)
 
 
     pattern.update_working_patterns()
@@ -538,8 +538,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
 
   function test_step_scale_trig_lock_quantises_notes_properly()
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     local test_pattern = program.initialise_default_pattern()
     local channel = 2
     local step = 2
@@ -568,16 +568,16 @@ function test_global_default_scale_setting_quantises_notes_properly()
     )
   
     program.get().default_scale = 1
-    program.get_channel(program.get().selected_sequencer_pattern, channel).default_scale = 2
-    program.get_channel(program.get().selected_sequencer_pattern, channel).step_scale_trig_lock_banks[step] = 3
+    program.get_channel(program.get().selected_song_pattern, channel).default_scale = 2
+    program.get_channel(program.get().selected_song_pattern, channel).step_scale_trig_lock_banks[step] = 3
   
     test_pattern.note_values[step] = 2
     test_pattern.lengths[step] = 1
     test_pattern.trig_values[step] = 1
     test_pattern.velocity_values[step] = 100
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
   
     pattern.update_working_patterns()
   
@@ -595,8 +595,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
   function test_global_step_scale_quantises_notes_properly()
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
   
     program.get().selected_channel = 17
   
@@ -628,7 +628,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     )
   
     program.get().default_scale = 1
-    program.get_channel(program.get().selected_sequencer_pattern, channel).default_scale = 2
+    program.get_channel(program.get().selected_song_pattern, channel).default_scale = 2
     program.add_step_scale_trig_lock(step, 3)
   
     test_pattern.note_values[step] = 2
@@ -636,8 +636,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
     test_pattern.trig_values[step] = 1
     test_pattern.velocity_values[step] = 100
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
   
     pattern.update_working_patterns()
   
@@ -657,8 +657,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
   function test_complex_step_scale_trig_lock_quantises_notes_properly_when_length_1_to_4()
 
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     program.get().selected_channel = 17
     local test_pattern = program.initialise_default_pattern()
     local scale = quantiser.get_scales()[1]
@@ -703,7 +703,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.add_step_scale_trig_lock(33, 2)
     program.add_step_scale_trig_lock(49, 3)
     
-    program.get_channel(program.get().selected_sequencer_pattern, 1).step_scale_trig_lock_banks[3] = 2
+    program.get_channel(program.get().selected_song_pattern, 1).step_scale_trig_lock_banks[3] = 2
   
     test_pattern.note_values[1] = 0
     test_pattern.lengths[1] = 1
@@ -715,14 +715,14 @@ function test_global_default_scale_setting_quantises_notes_properly()
     test_pattern.trig_values[3] = 1
     test_pattern.velocity_values[3] = 100
 
-    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[1] = 1
-    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[2] = 4
+    program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 1
+    program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
   
-    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[1] = 4
-    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[2] = 4
+    program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 4
+    program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 4
 
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
   
     pattern.update_working_patterns()
   
@@ -767,8 +767,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
   function test_complex_step_scale_trig_lock_quantises_notes_properly_when_length_17_to_20()
 
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     program.get().selected_channel = 17
     local test_pattern = program.initialise_default_pattern()
     local scale = quantiser.get_scales()[1]
@@ -813,7 +813,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.add_step_scale_trig_lock(33, 2)
     program.add_step_scale_trig_lock(49, 3)
     
-    program.get_channel(program.get().selected_sequencer_pattern, 1).step_scale_trig_lock_banks[19] = 2
+    program.get_channel(program.get().selected_song_pattern, 1).step_scale_trig_lock_banks[19] = 2
   
     test_pattern.note_values[17] = 0
     test_pattern.lengths[17] = 1
@@ -825,14 +825,14 @@ function test_global_default_scale_setting_quantises_notes_properly()
     test_pattern.trig_values[19] = 1
     test_pattern.velocity_values[19] = 100
 
-    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[1] = 1
-    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[2] = 5
+    program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 1
+    program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 5
   
-    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[1] = 4
-    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[2] = 5
+    program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 4
+    program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 5
 
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
   
     pattern.update_working_patterns()
 
@@ -879,8 +879,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
   function test_complex_step_scale_trig_lock_quantises_notes_properly_when_length_1_to_4_different_step()
 
     setup()
-    local sequencer_pattern = 1
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 1
+    program.set_selected_song_pattern(1)
     program.get().selected_channel = 17
     local test_pattern = program.initialise_default_pattern()
     local scale = quantiser.get_scales()[1]
@@ -925,7 +925,7 @@ function test_global_default_scale_setting_quantises_notes_properly()
     program.add_step_scale_trig_lock(33, 2)
     program.add_step_scale_trig_lock(49, 3)
     
-    program.get_channel(program.get().selected_sequencer_pattern, 1).step_scale_trig_lock_banks[18] = 2
+    program.get_channel(program.get().selected_song_pattern, 1).step_scale_trig_lock_banks[18] = 2
   
     test_pattern.note_values[17] = 0
     test_pattern.lengths[17] = 1
@@ -937,14 +937,14 @@ function test_global_default_scale_setting_quantises_notes_properly()
     test_pattern.trig_values[19] = 1
     test_pattern.velocity_values[19] = 100
 
-    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[1] = 1
-    program.get_channel(program.get().selected_sequencer_pattern, 1).start_trig[2] = 5
+    program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 1
+    program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 5
   
-    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[1] = 4
-    program.get_channel(program.get().selected_sequencer_pattern, 1).end_trig[2] = 5
+    program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 4
+    program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 5
 
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
   
     pattern.update_working_patterns()
 
@@ -989,8 +989,8 @@ function test_global_default_scale_setting_quantises_notes_properly()
   
 function test_global_default_scale_setting_quantises_notes_properly()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local scale = quantiser.get_scales()[3]
@@ -1007,15 +1007,15 @@ function test_global_default_scale_setting_quantises_notes_properly()
   )
 
   program.get().default_scale = 2
-  program.get_channel(program.get().selected_sequencer_pattern, 1).default_scale = 0
+  program.get_channel(program.get().selected_song_pattern, 1).default_scale = 0
 
   test_pattern.note_values[2] = 2
   test_pattern.lengths[2] = 1
   test_pattern.trig_values[2] = 1
   test_pattern.velocity_values[2] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
   pattern.update_working_patterns()
 
@@ -1034,8 +1034,8 @@ end
 
 function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_accordence_to_rotation_parameter_of_one()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1061,8 +1061,8 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
 
   pattern.update_working_patterns()
@@ -1079,8 +1079,8 @@ end
 
 function test_chord_degree_rotation_with_negative_octave_mod()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1098,7 +1098,7 @@ function test_chord_degree_rotation_with_negative_octave_mod()
   )
 
   program.set_chord_degree_rotation_for_scale(2, 1)
-  program.get_sequencer_pattern(sequencer_pattern).channels[channel].octave = -1
+  program.get_song_pattern(song_pattern).channels[channel].octave = -1
 
   program.get().default_scale = 2
 
@@ -1107,8 +1107,8 @@ function test_chord_degree_rotation_with_negative_octave_mod()
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
 
   pattern.update_working_patterns()
@@ -1128,8 +1128,8 @@ end
 
 function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_accordence_to_rotation_parameter_of_six()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1196,8 +1196,8 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
 
   program.set_chord_degree_rotation_for_scale(2, 6)
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
 
   pattern.update_working_patterns()
@@ -1280,8 +1280,8 @@ end
 
 function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_accordence_to_rotation_parameter_of_two()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1348,8 +1348,8 @@ function test_chord_degree_rotation_drops_the_octave_of_last_notes_in_scale_in_a
 
   program.set_chord_degree_rotation_for_scale(2, 2)
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
 
   pattern.update_working_patterns()
@@ -1432,8 +1432,8 @@ function test_global_transpose_applies_to_notes()
 
   setup()
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1] -- Major scale
@@ -1459,8 +1459,8 @@ function test_global_transpose_applies_to_notes()
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -1479,8 +1479,8 @@ function test_step_transpose_overrides_global_transpose()
 
   setup()
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1508,8 +1508,8 @@ function test_step_transpose_overrides_global_transpose()
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -1527,8 +1527,8 @@ function test_negative_transpose_values()
 
   setup()
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1552,8 +1552,8 @@ function test_negative_transpose_values()
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -1571,8 +1571,8 @@ function test_transpose_resets_at_pattern_start()
 
   setup()
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1604,8 +1604,8 @@ function test_transpose_resets_at_pattern_start()
   test_pattern.trig_values[2] = 1
   test_pattern.velocity_values[2] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -1634,8 +1634,8 @@ function test_transpose_with_octave_modification()
 
   setup()
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1653,15 +1653,15 @@ function test_transpose_with_octave_modification()
 
   program.get().default_scale = 2
   program.set_transpose(2) -- Transpose up 2 semitones
-  program.get_channel(program.get().selected_sequencer_pattern, channel).octave = 1 -- Up one octave
+  program.get_channel(program.get().selected_song_pattern, channel).octave = 1 -- Up one octave
 
   test_pattern.note_values[1] = 0  -- C
   test_pattern.lengths[1] = 1
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -1681,8 +1681,8 @@ function test_scale_transpose_applies_to_notes()
 
   setup()
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1] -- Major scale
@@ -1708,8 +1708,8 @@ function test_scale_transpose_applies_to_notes()
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -1726,8 +1726,8 @@ end
 
 function test_transpose_hierarchy_step_transpose_adds_to_scale_transpose()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1756,8 +1756,8 @@ function test_transpose_hierarchy_step_transpose_adds_to_scale_transpose()
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -1771,8 +1771,8 @@ end
 
 function test_transpose_hierarchy_scale_transpose_adds_to_global()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1797,8 +1797,8 @@ function test_transpose_hierarchy_scale_transpose_adds_to_global()
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -1812,8 +1812,8 @@ end
 
 function test_transpose_hierarchy_should_fall_back_to_global_on_new_scale_step()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1852,8 +1852,8 @@ function test_transpose_hierarchy_should_fall_back_to_global_on_new_scale_step()
   program.get().selected_channel = 17
   program.add_step_scale_trig_lock(3, 1) -- New scale for second step
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -1876,8 +1876,8 @@ end
 
 function test_transpose_hierarchy_uses_scale_transpose()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1899,11 +1899,11 @@ function test_transpose_hierarchy_uses_scale_transpose()
   program.set_transpose(1) -- Global transpose +1
 
   -- Set pattern length to 3 steps
-  local channel_17 = program.get_channel(program.get().selected_sequencer_pattern, 17)
+  local channel_17 = program.get_channel(program.get().selected_song_pattern, 17)
   channel_17.end_trig[1] = 3
   channel_17.end_trig[2] = 4
 
-  local channel_2 = program.get_channel(program.get().selected_sequencer_pattern, 2)
+  local channel_2 = program.get_channel(program.get().selected_song_pattern, 2)
   channel_2.end_trig[1] = 3
   channel_2.end_trig[2] = 4
   
@@ -1927,8 +1927,8 @@ function test_transpose_hierarchy_uses_scale_transpose()
   test_pattern.trig_values[3] = 1
   test_pattern.velocity_values[3] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -1961,8 +1961,8 @@ end
 
 function test_transpose_hierarchy_fallback_to_global()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -1987,8 +1987,8 @@ function test_transpose_hierarchy_fallback_to_global()
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -2002,8 +2002,8 @@ end
 
 function test_multiple_scale_transpose_changes()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -2031,8 +2031,8 @@ function test_multiple_scale_transpose_changes()
   program.get().selected_channel = 17
   program.add_step_scale_trig_lock(2, 3)
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()
@@ -2051,8 +2051,8 @@ end
 
 function test_transpose_persistence_across_steps_until_next_scale_trig_lock()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
   local channel = 2
   local scale = quantiser.get_scales()[1]
@@ -2098,8 +2098,8 @@ function test_transpose_persistence_across_steps_until_next_scale_trig_lock()
   test_pattern.trig_values[4] = 1
   test_pattern.velocity_values[4] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[channel].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[channel].selected_patterns, 1)
 
   pattern.update_working_patterns()
   clock_setup()

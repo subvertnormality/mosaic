@@ -4,6 +4,7 @@ memory.max_history_size = 50000
 -- Cache table functions
 local table_move = table.move
 
+-- Validation functions
 local function validate_step(step)
   return type(step) == "number" and step > 0 and step == math.floor(step)
 end
@@ -26,7 +27,6 @@ local function validate_chord_degrees(degrees)
   
   local seen = {}
   for _, degree in ipairs(degrees) do
-    -- Allow nil values
     if degree ~= nil then
       if type(degree) ~= "number" or degree < 1 or degree > 7 or seen[degree] then
         return false
@@ -37,53 +37,21 @@ local function validate_chord_degrees(degrees)
   return true
 end
 
+-- Event handlers
 local event_handlers = {
   note_mask = {
     validate = function(data)
-      if not (type(data.step) == "number" and data.step > 0 and data.step == math.floor(data.step)) then
-        return false
-      end
-      
-      -- Validate note if provided
-      if data.note ~= nil and not (type(data.note) == "number" and data.note >= 0 and data.note <= 127) then
-        return false
-      end
-      
-      -- Validate velocity if provided
-      if data.velocity ~= nil and not (type(data.velocity) == "number" and data.velocity >= 0 and data.velocity <= 127) then
-        return false
-      end
-      
-      -- Validate length if provided
-      if data.length ~= nil and not (type(data.length) == "number" and data.length > 0) then
-        return false
-      end
-      
-      -- Validate chord degrees if provided
-      if data.chord_degrees ~= nil then
-        if type(data.chord_degrees) ~= "table" then return false end
-        
-        -- Empty array means clear the chord
-        if fn.table_count(data.chord_degrees) == 0 then return true end
-
-        -- Check each degree is valid
-        for _, degree in ipairs(data.chord_degrees) do
-          -- Allow nil for partial updates
-          if degree ~= nil then
-            if type(degree) ~= "number" then
-              return false 
-            end
-          end
-        end
-      end
-
+      if not validate_step(data.step) then return false end
+      if not validate_note(data.note) then return false end
+      if not validate_velocity(data.velocity) then return false end
+      if not validate_length(data.length) then return false end
+      if not validate_chord_degrees(data.chord_degrees) then return false end
       return true
     end,
     
     capture_state = function(channel, step)
       local working_pattern = channel.working_pattern
       local captured = {
-        channel_number = channel.number,
         step = step,
         trig_mask = channel.step_trig_masks[step],
         note_mask = channel.step_note_masks[step],
@@ -96,19 +64,18 @@ local event_handlers = {
           length = working_pattern.lengths[step] or 1
         }
       }
-    
+      
       if channel.step_chord_masks and channel.step_chord_masks[step] then
         local chord = channel.step_chord_masks[step]
         captured.chord_mask = table_move(chord, 1, #chord, 1, {})
       end
-    
+      
       return captured
     end,
     
     restore_state = function(channel, step, saved_state)
       if not saved_state then return end
-  
-      local step = saved_state.step
+      
       local working_pattern = channel.working_pattern
       
       -- Batch assignment of masks
@@ -116,7 +83,7 @@ local event_handlers = {
       channel.step_note_masks[step] = saved_state.note_mask  
       channel.step_velocity_masks[step] = saved_state.velocity_mask
       channel.step_length_masks[step] = saved_state.length_mask
-    
+      
       -- Handle chord state
       if saved_state.chord_mask then
         if not channel.step_chord_masks then channel.step_chord_masks = {} end
@@ -126,7 +93,7 @@ local event_handlers = {
           channel.step_chord_masks[step] = nil
         end
       end
-    
+      
       -- Batch restore working pattern
       local saved_wp = saved_state.working_pattern
       working_pattern.trig_values[step] = saved_wp.trig_value
@@ -144,8 +111,7 @@ local event_handlers = {
 
       -- Handle chord degrees with partial updates
       if data.chord_degrees ~= nil then
-
-        if fn.table_count(data.chord_degrees) > 0 then
+        if #data.chord_degrees > 0 then
           -- Initialize chord masks table if needed
           if not channel.step_chord_masks then 
             channel.step_chord_masks = {}
@@ -203,206 +169,98 @@ local function create_ring_buffer(max_size)
     max_size = max_size,
     total_size = 0,
     
+    get_size = function(self)
+      return self.size
+    end,
+    
     push = function(self, event)
       local index
-      local did_wrap = false
-      
       if self.size < self.max_size then
         self.size = self.size + 1
         index = self.size
       else
-        did_wrap = true
         index = self.start
         self.start = (self.start % self.max_size) + 1
       end
-    
+      
       self.buffer[index] = event
       self.total_size = self.total_size + 1
-      return self.size, did_wrap
+      return self.size
     end,
     
     get = function(self, position)
-      if position and position > 0 and position <= self.size then
-        local actual_pos = ((self.start + position - 2) % self.max_size) + 1
-        return self.buffer[actual_pos]
+      if not position or position < 1 or position > self.size then
+        return nil
       end
-      return nil
-    end,
-    
-    get_size = function(self)
-      return self.size
+      
+      local actual_pos = ((self.start + position - 2) % self.max_size) + 1
+      if actual_pos <= 0 then 
+        actual_pos = actual_pos + self.max_size 
+      end
+      
+      return self.buffer[actual_pos]
     end,
     
     truncate = function(self, position)
       if position < self.size then
         self.size = position
-        self.total_size = position
+        self.total_size = position  -- Update total size to match current size
       end
     end
   }
   return buffer
 end
 
-local function update_step_index(index, step, event_idx, is_wrap)
-  if is_wrap then
-    local step_events = index.step_to_events[step]
-    if step_events and #step_events > 0 then
-      table.remove(step_events, 1)
-    end
-  end
-  
-  if not index.step_to_events[step] then
-    index.step_to_events[step] = {}
-  end
-  
-  table.insert(index.step_to_events[step], event_idx)
-  index.event_to_step[event_idx] = step
-  index.last_event[step] = event_idx
-end
-
--- Index structures to optimize traversal
-local function create_step_index()
-  return {
-    step_to_events = {}, -- Maps steps to event indices
-    event_to_step = {},  -- Maps event indices to steps
-    last_event = {}      -- Maps steps to their last event index
-  }
-end
-
-local function reset_step_indices(pc_state)
-  pc_state.step_indices = create_step_index()
-  for i = 1, pc_state.event_history.size do
-    local event = pc_state.event_history:get(i)
-    update_step_index(pc_state.step_indices, event.data.step, i)
-  end
-end
-
--- Pre-allocate common tables
-local empty_table = {}
-local default_working_pattern = {
-  trig_value = 0,
-  note_value = 0,
-  velocity_value = 100,
-  length = 1
-}
-
-local pattern_key_cache = {}
-local pattern_key_format = "%d_%d"
-
-local function get_pattern_key(song_pattern, channel_number)
-  local cache_key = song_pattern * 1000 + channel_number
-  local key = pattern_key_cache[cache_key]
-  if not key then
-    key = string.format(pattern_key_format, song_pattern, channel_number)
-    pattern_key_cache[cache_key] = key
-  end
-  return key
-end
-
-local function find_previous_event(index, step, current_idx)
-  local step_events = index.step_to_events[step]
-  if not step_events then return nil end
-  
-  -- Binary search for the insertion point of current_idx
-  local left, right = 1, #step_events
-  while left <= right do
-    local mid = math.floor((left + right) / 2)
-    if step_events[mid] < current_idx then
-      if mid == #step_events or step_events[mid + 1] >= current_idx then
-        return step_events[mid]
-      end
-      left = mid + 1
-    else
-      right = mid - 1
-    end
-  end
-  return nil
-end
-
-local function capture_step_state(channel, step)
-  local working_pattern = channel.working_pattern
-  local captured = {
-    channel_number = channel.number,
-    step = step,
-    trig_mask = channel.step_trig_masks[step],
-    note_mask = channel.step_note_masks[step],
-    velocity_mask = channel.step_velocity_masks[step], 
-    length_mask = channel.step_length_masks[step],
-    working_pattern = {
-      trig_value = working_pattern.trig_values[step] or 0,
-      note_value = working_pattern.note_mask_values[step] or 0,
-      velocity_value = working_pattern.velocity_values[step] or 100,
-      length = working_pattern.lengths[step] or 1
-    }
-  }
-
-  if channel.step_chord_masks and channel.step_chord_masks[step] then
-    local chord = channel.step_chord_masks[step]
-    captured.chord_mask = table_move(chord, 1, #chord, 1, {})
-  end
-
-  return captured
-end
-
-local function restore_step_state(channel, saved_state)
-  if not saved_state then return end
-  
-  local step = saved_state.step
-  local working_pattern = channel.working_pattern
-  
-  -- Batch assignment of masks
-  channel.step_trig_masks[step] = saved_state.trig_mask
-  channel.step_note_masks[step] = saved_state.note_mask  
-  channel.step_velocity_masks[step] = saved_state.velocity_mask
-  channel.step_length_masks[step] = saved_state.length_mask
-
-  -- Handle chord state
-  if saved_state.chord_mask then
-    if not channel.step_chord_masks then channel.step_chord_masks = {} end
-    channel.step_chord_masks[step] = table_move(saved_state.chord_mask, 1, #saved_state.chord_mask, 1, {})
-  else
-    if channel.step_chord_masks then
-      channel.step_chord_masks[step] = nil
-    end
-  end
-
-  -- Batch restore working pattern
-  local saved_wp = saved_state.working_pattern
-  working_pattern.trig_values[step] = saved_wp.trig_value
-  working_pattern.note_mask_values[step] = saved_wp.note_value
-  working_pattern.velocity_values[step] = saved_wp.velocity_value
-  working_pattern.lengths[step] = saved_wp.length
-end
-
-local function update_chord_mask(dest_chord, src_chord)
-  if not src_chord then 
-    return nil
-  end
-  if not dest_chord then
-    dest_chord = {}
-  end
-  
-  -- Use table.move for bulk array copy
-  return table_move(src_chord, 1, #src_chord, 1, dest_chord)
-end
-
--- Main state table with optimized indexing
+-- Main state structure
 local state = {
-  pattern_channels = {},
-  event_history = create_ring_buffer(memory.max_history_size),
-  current_event_index = 0,
-  global_index = create_step_index()
+  channels = {},
+  current_indices = {},
+  original_states = {}
 }
 
 function memory.init()
-  state.pattern_channels = {}
-  state.event_history = create_ring_buffer(memory.max_history_size)
-  state.current_event_index = 0
-  state.global_index = create_step_index()
+  state.channels = {}
+  state.current_indices = {}
+  state.original_states = {}
+  state.pattern_states = {} 
 end
 
-function memory.record_event(channel, event_type, data)
-  if not (channel and event_type and event_handlers[event_type]) then
+local function get_channel_state(channel_number, pattern_number)
+  if not state.pattern_states[pattern_number] then
+    state.pattern_states[pattern_number] = {}
+  end
+  if not state.pattern_states[pattern_number][channel_number] then
+    state.pattern_states[pattern_number][channel_number] = {
+      step_masks = {},
+      working_pattern = {}
+    }
+  end
+  return state.pattern_states[pattern_number][channel_number]
+end
+
+local function get_channel_and_state(song_pattern, channel_number)
+  if not state.pattern_states[song_pattern] then
+    state.pattern_states[song_pattern] = {}
+  end
+  if not state.pattern_states[song_pattern][channel_number] then
+    state.pattern_states[song_pattern][channel_number] = {
+      working_pattern = {
+        trig_values = {},
+        note_mask_values = {},
+        velocity_values = {},
+        lengths = {}
+      }
+    }
+  end
+  
+  local channel = program.get_channel(song_pattern, channel_number)
+  local pattern_state = state.pattern_states[song_pattern][channel_number]
+  
+  return channel, pattern_state
+end
+
+function memory.record_event(channel_number, event_type, data)
+  if not channel_number or not event_type or not event_handlers[event_type] then
     return
   end
   
@@ -411,489 +269,216 @@ function memory.record_event(channel, event_type, data)
     return
   end
   
-  local song_pattern = data.song_pattern or program.get().selected_sequencer_pattern
-  local pc_key = get_pattern_key(song_pattern, channel.number)
-  local pc_state = state.pattern_channels[pc_key]
+  -- Initialize channel state
+  if not state.channels[channel_number] then
+    state.channels[channel_number] = create_ring_buffer(memory.max_history_size)
+    state.current_indices[channel_number] = 0
+    state.original_states[channel_number] = {}
+  end
   
-  if not pc_state then
-    pc_state = {
-      event_history = create_ring_buffer(memory.max_history_size),
-      current_index = 0,
-      step_indices = create_step_index(),
-      original_states = {}
-    }
-    state.pattern_channels[pc_key] = pc_state
+  local song_pattern = data.song_pattern or program.get().selected_song_pattern
+  local channel = program.get_channel(song_pattern, channel_number)
+  
+  -- Create unique step key that includes pattern
+  local step_key = string.format("%d:%d", song_pattern, data.step)
+  
+  -- Capture original state if not already captured
+  if not state.original_states[channel_number][step_key] then
+    state.original_states[channel_number][step_key] = handler.capture_state(channel, data.step)
   end
-
-  local step_key = tostring(data.step)
-  if not pc_state.original_states[step_key] then
-    pc_state.original_states[step_key] = handler.capture_state(channel, data.step)
-  end
-
-  -- Truncate future events for this channel in this pattern
-  local curr_idx = state.current_event_index
-  while curr_idx < state.event_history.total_size do
-    local next_event = state.event_history:get(curr_idx + 1)
-    if next_event and 
-       next_event.data.channel_number == channel.number and
-       next_event.data.song_pattern == song_pattern then
-      state.event_history:truncate(curr_idx)
-      break
-    end
-    curr_idx = curr_idx + 1
-  end
-
-  pc_state.event_history:truncate(pc_state.current_index)
-
+  
+  -- Create event
   local event = {
     type = event_type,
     data = {
-      channel_number = channel.number,
-      song_pattern = song_pattern,
       step = data.step,
       step_key = step_key,
       event_data = data,
-      original_state = pc_state.original_states[step_key]
+      song_pattern = song_pattern,
+      original_state = state.original_states[channel_number][step_key]
     }
   }
-
-  local new_size, did_wrap = state.event_history:push(event)
-  state.current_event_index = new_size
-  update_step_index(state.global_index, data.step, state.current_event_index, did_wrap)
-
-  local pc_new_size, pc_did_wrap = pc_state.event_history:push(event)
-  pc_state.current_index = pc_new_size
-  update_step_index(pc_state.step_indices, data.step, pc_state.current_index, pc_did_wrap)
-
+  
+  -- Truncate and add event
+  state.channels[channel_number]:truncate(state.current_indices[channel_number])
+  local new_size = state.channels[channel_number]:push(event)
+  state.current_indices[channel_number] = new_size
+  
+  -- Apply event
   handler.apply_event(channel, data.step, data, "record")
 end
 
-local function find_previous_channel_event(index, channel_number, current_idx)
-  -- This goes backwards from current_idx in the global history looking for the previous event for this channel
-  local idx = current_idx
-  while idx > 0 do
-    local event = state.event_history:get(idx)
-    if event and event.data.channel_number == channel_number then
-      if idx < current_idx then
-        return idx
-      end
-    end
-    idx = idx - 1
-  end
-  return nil
-end
-
-local function find_channel_pattern_events(channel_number, pattern)
-  local events = {}
-  for i = 1, state.current_event_index do
-    local event = state.event_history:get(i)
-    if event and 
-       event.data.channel_number == channel_number and
-       (pattern == nil or event.data.song_pattern == pattern) then
-      table.insert(events, event)
-    end
-  end
-  return events
-end
-
-function memory.undo(sequencer_pattern, channel_number)
-  if channel_number and not sequencer_pattern then
-    -- Get all events for this channel
-    local channel_events = find_channel_pattern_events(channel_number)
-    if #channel_events == 0 then return end
+function memory.undo(channel_number)
+  if not channel_number or not state.channels[channel_number] then return end
+  
+  local channel_events = state.channels[channel_number]
+  local current_index = state.current_indices[channel_number]
+  
+  if current_index > 0 then
+    local event = channel_events:get(current_index)
+    if not event then return end
     
-    -- Find the most recent event
-    local latest_event = channel_events[#channel_events]
-    local event_pattern = latest_event.data.song_pattern
-    local pc_key = get_pattern_key(event_pattern, channel_number)
-    local pc_state = state.pattern_channels[pc_key]
+    local channel = program.get_channel(event.data.song_pattern, channel_number)
+    local handler = event_handlers[event.type]
     
-    if pc_state then
-      local handler = event_handlers[latest_event.type]
-      if handler then
-        local channel = program.get_channel(event_pattern, channel_number)
-        
-        -- Find previous event in same pattern and step
-        local prev_event = nil
-        for i = #channel_events - 1, 1, -1 do
-          if channel_events[i].data.song_pattern == event_pattern and
-              channel_events[i].data.step == latest_event.data.step then
-            prev_event = channel_events[i]
-            break
-          end
-        end
-        
-        if prev_event then
-          handler.apply_event(channel, latest_event.data.step, prev_event.data.event_data, "undo")
-        else
-          handler.restore_state(channel, latest_event.data.step_key, latest_event.data.original_state)
-        end
-        
-        pc_state.current_index = pc_state.current_index - 1
-      end
-    end
-    
-    -- Find index of latest event in global history
-    for i = state.current_event_index, 1, -1 do
-      local event = state.event_history:get(i)
-      if event == latest_event then
-        state.current_event_index = i - 1
+    -- Find previous event for same step & pattern
+    local prev_event = nil
+    for i = current_index - 1, 1, -1 do
+      local candidate = channel_events:get(i)
+      if candidate and 
+         candidate.data.song_pattern == event.data.song_pattern and 
+         candidate.data.step == event.data.step then
+        prev_event = candidate
         break
       end
     end
-    return
-  end
-
-  -- Original pattern/channel-specific logic remains unchanged
-  if sequencer_pattern and channel_number then
-    local pc_key = get_pattern_key(sequencer_pattern, channel_number)
-    local pc_state = state.pattern_channels[pc_key]
-
-    if pc_state and pc_state.current_index > 0 then
-      local event = pc_state.event_history:get(pc_state.current_index)
-      local channel = program.get_channel(sequencer_pattern, channel_number)
-      local handler = event_handlers[event.type]
-      
-      if handler then
-        local prev_index = find_previous_event(pc_state.step_indices, event.data.step, pc_state.current_index)
-        
-        if prev_index then
-          local prev_event = pc_state.event_history:get(prev_index)
-          handler.apply_event(channel, event.data.step, prev_event.data.event_data, "undo")
-        else
-          handler.restore_state(channel, event.data.step, event.data.original_state)
-        end
-        
-        pc_state.current_index = pc_state.current_index - 1
-        if state.event_history:get(state.current_event_index) == event then
-          state.current_event_index = state.current_event_index - 1
-        end
-      end
+    
+    if prev_event then
+      handler.apply_event(channel, event.data.step, prev_event.data.event_data, "undo")
+    else
+      handler.restore_state(channel, event.data.step, event.data.original_state)
     end
-    return
-  end
-
-  if state.current_event_index > 0 then
-    local event = state.event_history:get(state.current_event_index)
-    state.current_event_index = state.current_event_index - 1
-    memory.undo(event.data.song_pattern, event.data.channel_number)
+    
+    state.current_indices[channel_number] = current_index - 1
   end
 end
 
-function memory.redo(sequencer_pattern, channel_number)
-  if channel_number and not sequencer_pattern then
-    -- Look for next undone event for this channel
-    local next_idx = state.current_event_index + 1
-    while next_idx <= state.event_history.total_size do
-      local event = state.event_history:get(next_idx)
-      if event and event.data.channel_number == channel_number then
-        local pc_key = get_pattern_key(event.data.song_pattern, channel_number)
-        local pc_state = state.pattern_channels[pc_key]
-        
-        if pc_state then
-          local handler = event_handlers[event.type]
-          if handler then
-            local channel = program.get_channel(event.data.song_pattern, channel_number)
-            handler.apply_event(channel, event.data.step, event.data.event_data, "redo")
-            pc_state.current_index = pc_state.current_index + 1
-          end
-        end
-        state.current_event_index = next_idx
-        return
-      end
-      next_idx = next_idx + 1
-    end
-    return
-  end
-
-  -- Original pattern/channel-specific logic remains unchanged
-  if sequencer_pattern and channel_number then
-    local pc_key = get_pattern_key(sequencer_pattern, channel_number)
-    local pc_state = state.pattern_channels[pc_key]
+function memory.redo(channel_number)
+  if not channel_number or not state.channels[channel_number] then return end
+  
+  if state.current_indices[channel_number] < state.channels[channel_number].total_size then
+    state.current_indices[channel_number] = state.current_indices[channel_number] + 1
+    local event = state.channels[channel_number]:get(state.current_indices[channel_number])
     
-    if pc_state and pc_state.current_index < pc_state.event_history.total_size then
-      pc_state.current_index = pc_state.current_index + 1
-      local event = pc_state.event_history:get(pc_state.current_index)
-      
-      if event then
-        local channel = program.get_channel(sequencer_pattern, channel_number)
-        local handler = event_handlers[event.type]
-        
-        if handler then
-          handler.apply_event(channel, event.data.step, event.data.event_data, "redo")
-          
-          if state.event_history:get(state.current_event_index + 1) == event then
-            state.current_event_index = state.current_event_index + 1
-          end
-        end
-      end
-    end
-    return
+    local channel = program.get_channel(event.data.song_pattern, channel_number)
+    local handler = event_handlers[event.type]
+    
+    handler.apply_event(channel, event.data.step, event.data.event_data, "redo")
   end
+end
 
-  if state.current_event_index < state.event_history.total_size then
-    state.current_event_index = state.current_event_index + 1
-    local event = state.event_history:get(state.current_event_index)
+function memory.undo_all(channel_number)
+  if not channel_number or not state.channels[channel_number] then return end
+  
+  local channel_events = state.channels[channel_number]
+  local current_index = state.current_indices[channel_number]
+  
+  -- Track already restored states for each pattern to avoid duplicate restores
+  local restored_states = {}
+  
+  -- Go through events in reverse order to get the latest state for each step
+  for i = current_index, 1, -1 do
+    local event = channel_events:get(i)
     if event then
-      memory.redo(event.data.song_pattern, event.data.channel_number)
-    end
-  end
-end
-
-function memory.undo_all(sequencer_pattern, channel_number)
-  -- If only channel_number provided, undo all events for that channel across patterns
-  if channel_number and not sequencer_pattern then
-    for pc_key, pc_state in pairs(state.pattern_channels) do
-      local pattern, channel = pc_key:match("(%d+)_(%d+)")
-      if tonumber(channel) == channel_number then
-        memory.undo_all(tonumber(pattern), channel_number)
-      end
-    end
-    return
-  end
-
-  if sequencer_pattern and channel_number then
-    local pc_key = get_pattern_key(sequencer_pattern, channel_number)
-    local pc_state = state.pattern_channels[pc_key]
-    
-    if pc_state then
-      local channel = program.get_channel(sequencer_pattern, channel_number)
-      
-      -- Get handler from first event (they should all be same type)
-      local event = pc_state.event_history:get(1)
-      if event then
-        local handler = event_handlers[event.type]
-        -- Restore to original state for each modified step
-        for step_key, original_state in pairs(pc_state.original_states) do
-          handler.restore_state(channel, step_key, original_state)
+      local step_key = string.format("%d:%d", event.data.song_pattern, event.data.step)
+      if not restored_states[step_key] then
+        local channel = program.get_channel(event.data.song_pattern, channel_number)
+        local original_state = event.data.original_state
+        
+        if original_state then
+          event_handlers.note_mask.restore_state(channel, event.data.step, original_state)
+        else
+          -- If no original state, clear the step
+          event_handlers.note_mask.restore_state(channel, event.data.step, {
+            trig_mask = nil,
+            note_mask = nil,
+            velocity_mask = nil,
+            length_mask = nil,
+            working_pattern = {
+              trig_value = 0,
+              note_value = 0,
+              velocity_value = 100,
+              length = 1
+            }
+          })
         end
-      end
-      
-      -- Reset current index
-      pc_state.current_index = 0
-      
-      -- Update global index if needed
-      if state.current_event_index > 0 then
-        state.current_event_index = 0
+        
+        restored_states[step_key] = true
       end
     end
-    return
   end
-
-  -- If no pattern/channel specified, undo all patterns
-  state.current_event_index = 0
-  for pc_key, pc_state in pairs(state.pattern_channels) do
-    local pattern, channel = pc_key:match("(%d+)_(%d+)")
-    memory.undo_all(tonumber(pattern), tonumber(channel))
-  end
+  
+  state.current_indices[channel_number] = 0
 end
 
-function memory.redo_all(sequencer_pattern, channel_number)
-  -- If only channel_number provided, redo all events for that channel across patterns
-  if channel_number and not sequencer_pattern then
-    for pc_key, pc_state in pairs(state.pattern_channels) do
-      local pattern, channel = pc_key:match("(%d+)_(%d+)")
-      if tonumber(channel) == channel_number then
-        memory.redo_all(tonumber(pattern), channel_number)
-      end
+function memory.redo_all(channel_number)
+  if not channel_number or not state.channels[channel_number] then return end
+  
+  local channel_events = state.channels[channel_number]
+  if not channel_events.total_size or channel_events.total_size == 0 then return end
+  
+  -- Find latest event for each step per pattern
+  local latest_events = {}
+  
+  for i = state.current_indices[channel_number] + 1, channel_events.total_size do
+    local event = channel_events:get(i)
+    if event then
+      local step_key = string.format("%d:%d", event.data.song_pattern, event.data.step)
+      latest_events[step_key] = event
     end
-    return
   end
-
-  if sequencer_pattern and channel_number then
-    local pc_key = get_pattern_key(sequencer_pattern, channel_number)
-    local pc_state = state.pattern_channels[pc_key]
-    
-    if pc_state and pc_state.event_history.total_size > 0 then
-      local channel = program.get_channel(sequencer_pattern, channel_number)
-      local handler = event_handlers["note_mask"]
-      
-      -- Find latest event for each step from current_index to total_size
-      local step_latest_events = {}
-      for i = pc_state.current_index + 1, pc_state.event_history.total_size do
-        local event = pc_state.event_history:get(i)
-        step_latest_events[event.data.step] = event
-      end
-      
-      -- Apply latest events
-      for _, event in pairs(step_latest_events) do
-        handler.apply_event(channel, event.data.step, event.data.event_data, "redo")
-      end
-      
-      -- Update indices
-      pc_state.current_index = pc_state.event_history.total_size
-      
-      -- Update global index if needed
-      local final_event = pc_state.event_history:get(pc_state.event_history.total_size)
-      if final_event and state.event_history:get(state.current_event_index + 1) == final_event then
-        state.current_event_index = state.event_history.total_size
-      end
-    end
-    return
+  
+  -- Apply latest events
+  for _, event in pairs(latest_events) do
+    local channel = program.get_channel(event.data.song_pattern, channel_number)
+    event_handlers.note_mask.apply_event(channel, event.data.step, event.data.event_data, "redo")
   end
-
-  -- If no pattern/channel specified, redo all patterns
-  for pc_key, pc_state in pairs(state.pattern_channels) do
-    local pattern, channel = pc_key:match("(%d+)_(%d+)")
-    memory.redo_all(tonumber(pattern), tonumber(channel))
-  end
+  
+  state.current_indices[channel_number] = channel_events.total_size
 end
 
 function memory.reset()
-  -- Clear event histories and indices
-  state.event_history = create_ring_buffer(memory.max_history_size)
-  state.current_event_index = 0
-  state.global_index = create_step_index()
-  
-  -- Clear pattern channel histories but maintain pattern/channel structure
-  for pattern_key, pc_state in pairs(state.pattern_channels) do
-    pc_state.event_history = create_ring_buffer(memory.max_history_size)
-    pc_state.current_index = 0
-    pc_state.step_indices = create_step_index()
-    
-    -- Current state becomes the new original state
-    pc_state.original_states = {}
+  -- Clear histories but keep structure
+  for channel_number, channel_events in pairs(state.channels) do
+    state.channels[channel_number] = create_ring_buffer(memory.max_history_size)
+    state.current_indices[channel_number] = 0
+    state.original_states[channel_number] = {}
   end
 end
 
-function memory.get_event_count(song_pattern, channel_number)
-  if not song_pattern and not channel_number then
-    return state.current_event_index
-  end
-  
-  if song_pattern and not channel_number then
-    local count = 0
-    for pc_key, pc_state in pairs(state.pattern_channels) do
-      local pattern, _ = pc_key:match("(%d+)_(%d+)")
-      if tonumber(pattern) == song_pattern then
-        count = count + pc_state.current_index
-      end
-    end
-    return count
-  end
- 
-  if not song_pattern and channel_number then
-    local count = 0
-    for pc_key, pc_state in pairs(state.pattern_channels) do
-      local _, channel = pc_key:match("(%d+)_(%d+)")
-      if tonumber(channel) == channel_number then
-        count = count + pc_state.current_index
-      end
-    end
-    return count
-  end
- 
-  local pc_key = get_pattern_key(song_pattern, channel_number)
-  local pc_state = state.pattern_channels[pc_key]
-  return pc_state and pc_state.current_index or 0
- end
-
- function memory.get_total_event_count(song_pattern, channel_number)
-  local state = memory.get_state()
-  
-  -- Fast path for all events
-  if not song_pattern and not channel_number then
-    return state.event_history.total_size
-  end
-  
-  -- Fast path for single pattern/channel
-  if song_pattern and channel_number then
-    local pc_state = state.pattern_channels[get_pattern_key(song_pattern, channel_number)]
-    return pc_state and pc_state.event_history.total_size or 0
-  end
-  
-  -- Channel-only path
-  if channel_number then
-    local total = 0
-    local pattern_key_prefix = '_' .. channel_number
-    for pc_key, pc_state in pairs(state.pattern_channels) do
-      -- Fast string suffix check
-      if pc_key:sub(-#pattern_key_prefix) == pattern_key_prefix then
-        total = total + pc_state.event_history.total_size
-      end
-    end
-    return total
-  end
-  
-  -- Pattern-only path
-  local total = 0
-  local pattern_key_prefix = song_pattern .. '_'
-  for pc_key, pc_state in pairs(state.pattern_channels) do
-    -- Fast string prefix check
-    if pc_key:sub(1, #pattern_key_prefix) == pattern_key_prefix then
-      total = total + pc_state.event_history.total_size
-    end
-  end
-  return total
+function memory.get_event_count(channel_number)
+  if not channel_number or not state.channels[channel_number] then return 0 end
+  return state.current_indices[channel_number] or 0
 end
- 
-function memory.get_recent_events(sequencer_pattern, channel_number, count)
+
+function memory.get_total_event_count(channel_number)
+  if not channel_number or not state.channels[channel_number] then return 0 end
+  local channel_events = state.channels[channel_number]
+  return channel_events and channel_events.total_size or 0
+end
+
+function memory.get_recent_events(channel_number, count)
   count = count or 5
   local events = {}
   
-  -- If both specified, use pattern-channel specific history
-  if sequencer_pattern and channel_number then
-    local pc_key = get_pattern_key(sequencer_pattern, channel_number)
-    local pc_state = state.pattern_channels[pc_key]
+  if channel_number and state.channels[channel_number] then
+    local channel_events = state.channels[channel_number]
+    local current_idx = state.current_indices[channel_number]
     
-    if pc_state then
-      local idx = pc_state.current_index
-      while idx > 0 and #events < count do
-        local event = pc_state.event_history:get(idx)
-        if event then
-          table.insert(events, event)
-        end
-        idx = idx - 1
-      end
-    end
-    return events
-  end
-  
-  -- For channel-only filtering
-  if channel_number then
-    local idx = state.current_event_index
-    while idx > 0 and #events < count do
-      local event = state.event_history:get(idx)
-      if event and event.data.channel_number == channel_number then
+    for i = current_idx, math.max(1, current_idx - count + 1), -1 do
+      local event = channel_events:get(i)
+      if event then
         table.insert(events, event)
       end
-      idx = idx - 1
     end
-    return events
-  end
-  
-  -- For pattern-only filtering
-  if sequencer_pattern then
-    local idx = state.current_event_index
-    while idx > 0 and #events < count do
-      local event = state.event_history:get(idx)
-      if event and event.data.song_pattern == sequencer_pattern then
-        table.insert(events, event)
-      end
-      idx = idx - 1
-    end
-    return events
-  end
-  
-  -- No filtering, return most recent global events
-  local idx = state.current_event_index
-  while idx > 0 and #events < count do
-    local event = state.event_history:get(idx)
-    if event then
-      table.insert(events, event)
-    end
-    idx = idx - 1
   end
   
   return events
 end
 
-function memory.get_state()
+function memory.get_state(channel_number)
+  if not channel_number then
+    return {
+      channels = state.channels,
+      current_indices = state.current_indices,
+      original_states = state.original_states
+    }
+  end
+  
   return {
-    pattern_channels = state.pattern_channels,
-    current_event_index = state.current_event_index,
-    global_index = state.global_index,
-    event_history = state.event_history 
+    event_history = state.channels[channel_number] or create_ring_buffer(memory.max_history_size),
+    current_event_index = state.current_indices[channel_number] or 0,
+    pattern_channels = {} -- Kept for backwards compatibility
   }
 end
 

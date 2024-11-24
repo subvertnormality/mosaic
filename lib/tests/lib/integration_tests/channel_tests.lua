@@ -42,8 +42,8 @@ function test_channel_17_doesnt_fire_notes()
     local test_pattern
   
     setup()
-    local sequencer_pattern = 3
-    program.set_selected_sequencer_pattern(3)
+    local song_pattern = 3
+    program.set_selected_song_pattern(3)
     test_pattern = program.initialise_default_pattern()
     test_pattern2 = program.initialise_default_pattern()
   
@@ -54,9 +54,9 @@ function test_channel_17_doesnt_fire_notes()
     test_pattern.trig_values[steps] = 1
     test_pattern.velocity_values[steps] = 20
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
   
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[17].selected_patterns, 1)
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[17].selected_patterns, 1)
   
     pattern.update_working_patterns()
   

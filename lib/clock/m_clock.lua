@@ -124,7 +124,7 @@ function m_clock.init()
     clock_lattice.auto = false
   end
 
-  clock_lattice.pattern_length = program.get_selected_sequencer_pattern().global_pattern_length
+  clock_lattice.pattern_length = program.get_selected_song_pattern().global_pattern_length
 
   destroy_arp_sprockets()
 
@@ -138,17 +138,17 @@ function m_clock.init()
 
   master_clock = clock_lattice:new_sprocket {
     action = function(t)
-      local selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
-      if params:get("elektron_program_changes") == 2 and program_data.current_step == selected_sequencer_pattern.global_pattern_length - 1 then
-        step.process_elektron_program_change(step.calculate_next_selected_sequencer_pattern())
+      local selected_song_pattern = program_data.song_patterns[program_data.selected_song_pattern]
+      if params:get("elektron_program_changes") == 2 and program_data.current_step == selected_song_pattern.global_pattern_length - 1 then
+        step.process_elektron_program_change(step.calculate_next_selected_song_pattern())
       end
       if not first_run then
-        step.process_song_sequencer_patterns(program_data.current_step)
-        selected_sequencer_pattern = program_data.sequencer_patterns[program_data.selected_sequencer_pattern]
+        step.process_song_song_patterns(program_data.current_step)
+        selected_song_pattern = program_data.song_patterns[program_data.selected_song_pattern]
         for i = 1, 17 do
-          if ((program.get_current_step_for_channel(i) - 1) % selected_sequencer_pattern.global_pattern_length) + 1 == selected_sequencer_pattern.global_pattern_length then
-            local channel = program.get_channel(program.get().selected_sequencer_pattern, i)
-            if (fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2]) - fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2]) + 1) > selected_sequencer_pattern.global_pattern_length then
+          if ((program.get_current_step_for_channel(i) - 1) % selected_song_pattern.global_pattern_length) + 1 == selected_song_pattern.global_pattern_length then
+            local channel = program.get_channel(program.get().selected_song_pattern, i)
+            if (fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2]) - fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2]) + 1) > selected_song_pattern.global_pattern_length then
               program.set_current_step_for_channel(i, 99)
             end
           end
@@ -158,7 +158,7 @@ function m_clock.init()
       program_data.current_step = program_data.current_step + 1
       program_data.global_step_accumulator = program_data.global_step_accumulator + 1
 
-      if program_data.current_step > program.get_selected_sequencer_pattern().global_pattern_length then
+      if program_data.current_step > program.get_selected_song_pattern().global_pattern_length then
         program_data.current_step = 1
         first_run = false
       end
@@ -180,18 +180,18 @@ function m_clock.init()
   local channel_edit_page = pages.pages.channel_edit_page
   local scale_edit_page = pages.pages.scale_edit_page
   for channel_number = 17, 1, -1 do
-    local div = calculate_divisor(program.get_channel(program.get().selected_sequencer_pattern, channel_number).clock_mods)
+    local div = calculate_divisor(program.get_channel(program.get().selected_song_pattern, channel_number).clock_mods)
 
     local sprocket_action = function(t)
-      local channel = program.get_channel(program.get().selected_sequencer_pattern, channel_number)
+      local channel = program.get_channel(program.get().selected_song_pattern, channel_number)
       local current_step = program.get_current_step_for_channel(channel_number)
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
 
       local channel_length = end_trig - start_trig + 1
 
-      if channel_length > program.get_selected_sequencer_pattern().global_pattern_length then
-        end_trig = start_trig + program.get_selected_sequencer_pattern().global_pattern_length - 1
+      if channel_length > program.get_selected_song_pattern().global_pattern_length then
+        end_trig = start_trig + program.get_selected_song_pattern().global_pattern_length - 1
       end
 
       if not m_clock["channel_" .. channel_number .. "_clock"].first_run then
@@ -231,7 +231,7 @@ function m_clock.init()
     end
 
     local end_of_clock_action = function(t)
-      local channel = program.get_channel(program.get().selected_sequencer_pattern, channel_number)
+      local channel = program.get_channel(program.get().selected_song_pattern, channel_number)
       if channel_number ~= 17 then
 
         local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
@@ -266,7 +266,7 @@ function m_clock.init()
       end
     end
 
-    local shuffle_values = get_shuffle_values(program.get_channel(program.get().selected_sequencer_pattern, channel_number))
+    local shuffle_values = get_shuffle_values(program.get_channel(program.get().selected_song_pattern, channel_number))
 
     m_clock["channel_" .. channel_number .. "_clock"] = clock_lattice:new_sprocket {
       action = sprocket_action,
@@ -368,7 +368,7 @@ function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration,
     return
   end
 
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, c)
+  local channel = program.get_channel(program.get().selected_song_pattern, c)
 
   -- Clear existing arp sprockets for the channel
   if arp_sprockets[c] then
@@ -483,7 +483,7 @@ end
 function m_clock:start()
   first_run = true
   if params:get("elektron_program_changes") == 2 then
-    step.process_elektron_program_change(program.get().selected_sequencer_pattern)
+    step.process_elektron_program_change(program.get().selected_song_pattern)
   end
   
   m_clock.set_playing()
@@ -531,7 +531,7 @@ end
 
 function m_clock.reset()
   local program_data = program.get()
-  for _, pattern in ipairs(program_data.sequencer_patterns) do
+  for _, pattern in ipairs(program_data.song_patterns) do
     for i = 1, 17 do
       program.set_current_step_for_channel(i, 1)
     end

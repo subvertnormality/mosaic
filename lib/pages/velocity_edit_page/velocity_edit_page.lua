@@ -121,13 +121,13 @@ function velocity_edit_page.register_presss()
         else
           if faders["step" .. s .. "_fader"]:is_this(x, y) then
             faders["step" .. s .. "_fader"]:press(x, y)
-            local selected_sequencer_pattern = program.get().selected_sequencer_pattern
+            local selected_song_pattern = program.get().selected_song_pattern
             local selected_pattern = program.get().selected_pattern
             local velocity =
               velocity_edit_page.velocity_from_value(faders["step" .. s .. "_fader"]:get_value())
-            local seq_pattern = program.get_selected_sequencer_pattern().patterns[selected_pattern]
+            local seq_pattern = program.get_selected_song_pattern().patterns[selected_pattern]
             seq_pattern.velocity_values[s] = velocity
-            program.get_selected_sequencer_pattern().active = true
+            program.get_selected_song_pattern().active = true
             local steps_tip = s .. " "
             tooltip:show("Step " .. s .. " velocity set to " .. velocity)
 

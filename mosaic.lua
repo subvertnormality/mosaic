@@ -317,7 +317,7 @@ function init()
     end
   )
   params:add_option("reset_on_end_of_pattern_repeat", "Reset on pattern repeat", {"Off", "On"}, 1)
-  params:add_option("reset_on_sequencer_pattern_transition", "Reset on song seq change", {"Off", "On"}, 2)
+  params:add_option("reset_on_song_pattern_transition", "Reset on song seq change", {"Off", "On"}, 2)
   params:add_option("elektron_program_changes", "Elektron program changes", {"Off", "On"}, 1)
   params:add_number("elektron_program_change_channel", "Elektron p.change channel", 1, 16, 10, nil, false)
   params:add_separator("Parameter locks")

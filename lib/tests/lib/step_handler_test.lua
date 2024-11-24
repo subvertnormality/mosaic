@@ -17,8 +17,8 @@ end
 
 function test_steps_process_note_on_events()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(sequencer_pattern)
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
 
   local test_pattern = program.initialise_default_pattern()
 
@@ -27,8 +27,8 @@ function test_steps_process_note_on_events()
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
   pattern.update_working_patterns()
 
   step.handle(1, 1)
@@ -189,7 +189,7 @@ function test_manually_calculate_step_scale_number_channel_with_override()
   program.add_step_scale_trig_lock(1, 2)
   
   -- Add channel-specific override
-  program.get_channel(program.get().selected_sequencer_pattern, channel).step_scale_trig_lock_banks[1] = 5
+  program.get_channel(program.get().selected_song_pattern, channel).step_scale_trig_lock_banks[1] = 5
   
   -- Channel override should take precedence regardless of speeds
   luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 5)

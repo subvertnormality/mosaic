@@ -85,7 +85,7 @@ function scale_edit_page_ui.update_scale()
     save_confirm.set_confirm_message("K2 to save across song.")
     save_confirm.set_ok_message("Scale saved to all.")
     save_confirm.set_save(function()
-      program.set_all_sequencer_pattern_scales(
+      program.set_all_song_pattern_scales(
         program.get().selected_scale,
         {number = scale.number, scale = scale.scale, pentatonic_scale = scale.pentatonic_scale, chord = chord, root_note = root_note, chord_degree_rotation = rotation, transpose = transpose}
       )
@@ -118,7 +118,7 @@ function scale_edit_page_ui.update_clock_mods()
 end
 
 function scale_edit_page_ui.enc(n, d)
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, scales_channel)
+  local channel = program.get_channel(program.get().selected_song_pattern, scales_channel)
   if n == 3 then
     for _ = 1, math.abs(d) do
       if d > 0 then
@@ -164,7 +164,7 @@ function scale_edit_page_ui.key(n, z)
 end
 
 scale_edit_page_ui.refresh_clock_mods = scheduler.debounce(function()
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, scales_channel)
+  local channel = program.get_channel(program.get().selected_song_pattern, scales_channel)
   local clock_mods = channel.clock_mods
   local divisions = fn.filter_by_type(m_clock.get_clock_divisions(), clock_mods.type)
   local i = fn.find_index_in_table_by_value(divisions, clock_mods.value)
@@ -180,16 +180,16 @@ scale_edit_page_ui.refresh_romans = scheduler.debounce(function()
   local scale = quantizer_vertical_scroll_selector:get_selected_item()
   if scale then
     local number = scale.number
-    program.get_selected_sequencer_pattern().active = true
+    program.get_selected_song_pattern().active = true
     romans_vertical_scroll_selector:set_items(quantiser.get_scales()[number].romans)
     fn.dirty_screen(true)
   end
 end, throttle_time)
 
 scale_edit_page_ui.refresh_quantiser = scheduler.debounce(function()
-  local channel = program.get_channel(program.get().selected_sequencer_pattern, scales_channel)
+  local channel = program.get_channel(program.get().selected_song_pattern, scales_channel)
   local scale = program.get_scale(program.get().selected_scale)
-  program.get_selected_sequencer_pattern().active = true
+  program.get_selected_song_pattern().active = true
   quantizer_vertical_scroll_selector:set_selected_item(scale.number)
   notes_vertical_scroll_selector:set_selected_item(scale.root_note + 1)
   romans_vertical_scroll_selector:set_selected_item(scale.chord)
