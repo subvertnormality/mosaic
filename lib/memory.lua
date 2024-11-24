@@ -28,7 +28,7 @@ local function validate_chord_degrees(degrees)
   local seen = {}
   for _, degree in ipairs(degrees) do
     if degree ~= nil then
-      if type(degree) ~= "number" or degree < 1 or degree > 7 or seen[degree] then
+      if type(degree) ~= "number" or degree < -14 or degree > 14 or seen[degree] then
         return false
       end
       seen[degree] = true
@@ -103,6 +103,7 @@ local event_handlers = {
     end,
     
     apply_event = function(channel, step, data, apply_type)
+
       -- Update provided values only
       if data.trig ~= nil then channel.step_trig_masks[step] = data.trig end
       if data.note ~= nil then channel.step_note_masks[step] = data.note end
@@ -111,7 +112,8 @@ local event_handlers = {
 
       -- Handle chord degrees with partial updates
       if data.chord_degrees ~= nil then
-        if #data.chord_degrees > 0 then
+
+        if fn.table_count(data.chord_degrees) > 0 then
           -- Initialize chord masks table if needed
           if not channel.step_chord_masks then 
             channel.step_chord_masks = {}
@@ -123,9 +125,12 @@ local event_handlers = {
           end
           
           -- Update only non-nil values while preserving others
-          for i, degree in pairs(data.chord_degrees) do
-            if degree ~= nil then
-              channel.step_chord_masks[step][i] = degree
+          -- for i, degree in pairs(data.chord_degrees) do
+          for i = 1, 4 do
+            if data.chord_degrees[i] ~= nil then
+              channel.step_chord_masks[step][i] = data.chord_degrees[i]
+            elseif apply_type == "undo" and not data.chord_degrees[i] then
+              channel.step_chord_masks[step][i] = nil
             end
           end
           
@@ -158,6 +163,7 @@ local event_handlers = {
 
       program.update_working_pattern_for_step(channel, step, working_trig, working_note, working_velocity, working_length)
     end
+
   }
 }
 

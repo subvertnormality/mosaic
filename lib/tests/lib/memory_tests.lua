@@ -2617,6 +2617,76 @@ function test_memory_should_handle_clearing_individual_chord_degrees()
 end
 
 
+function test_memory_should_preserve_partial_chord_updates_after_reset()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Initial chord
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {1, 3, 5}
+  })
+  
+  -- Partial update
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {2, nil, nil}
+  })
+  
+  -- Reset memory
+  memory.reset()
+  
+  -- Record new partial update 
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {nil, 4, nil}
+  })
+  
+  -- Undo should restore state at reset time
+  memory.undo(1)
+  
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 2)
+  luaunit.assert_equals(chord_mask[2], 3)
+  luaunit.assert_equals(chord_mask[3], 5)
+end
+
+function test_memory_should_preserve_partial_chord_updates_after_reset()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Initial chord
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {1, 3, 5}
+  })
+  
+  -- Partial update
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {2, nil, nil}
+  })
+  
+  -- Reset memory
+  memory.reset()
+  
+  -- Record new partial update 
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {nil, 4, nil}
+  })
+  
+  -- Undo should restore state at reset time
+  memory.undo(1)
+  
+  local chord_mask = channel.step_chord_masks[1]
+  luaunit.assert_equals(chord_mask[1], 2)
+  luaunit.assert_equals(chord_mask[2], 3)
+  luaunit.assert_equals(chord_mask[3], 5)
+end
+
 function test_memory_should_count_events()
   memory.init()
   program.init()
@@ -3075,4 +3145,167 @@ function test_memory_should_maintain_event_order_under_rapid_changes()
     local event = state.event_history:get(i)
     luaunit.assert_equals(event.data.event_data.note, expected_sequence[i])
   end
+end
+
+
+
+function test_memory_should_support_partial_chord_updates()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set up initial chord state
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {1, 3, 5},
+    song_pattern = 1
+  })
+  
+  -- Verify initial state
+  luaunit.assert_not_nil(channel.step_chord_masks, "Chord masks table should exist")
+  luaunit.assert_not_nil(channel.step_chord_masks[1], "Initial chord should be set")
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 1)
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 3)
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5)
+  
+  -- Update just the middle degree
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {nil, 4, nil}
+  })
+  
+  -- Verify only the middle degree changed
+  luaunit.assert_not_nil(channel.step_chord_masks, "Chord masks table should still exist")
+  luaunit.assert_not_nil(channel.step_chord_masks[1], "Chord mask should still exist after partial update")
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 1, "First degree should remain unchanged")
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 4, "Second degree should be updated")
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5, "Third degree should remain unchanged")
+  
+  -- Update just the first degree
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {2, nil, nil}
+  })
+  
+  -- Verify only first degree changed
+  luaunit.assert_not_nil(channel.step_chord_masks[1], "Chord mask should still exist after second update")
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 2, "First degree should be updated")
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 4, "Second degree should remain from previous update")
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5, "Third degree should remain from initial state")
+end
+
+function test_memory_should_handle_multi_note_chord_recording()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Record base note first
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+
+  -- Add initial chord degrees
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {1, 3, 5},
+    song_pattern = 1
+  })
+  
+  -- Verify initial chord state
+  luaunit.assert_not_nil(channel.step_chord_masks, "Chord masks table should exist")
+  luaunit.assert_not_nil(channel.step_chord_masks[1], "Chord mask should exist")
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 1)
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 3)
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5)
+  
+  -- Now add an additional chord degree
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {nil, nil, nil, 7},
+    song_pattern = 1
+  })
+  
+  -- Verify expanded chord
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 1)
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 3)
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5)
+  luaunit.assert_equals(channel.step_chord_masks[1][4], 7)
+  
+  -- First undo - should remove last chord degree
+  memory.undo(1)
+  
+  -- Verify back to original three-note chord
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 1)
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 3)
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5)
+  luaunit.assert_equals(channel.step_chord_masks[1][4], nil)
+end
+
+function test_memory_should_handle_chord_undo_to_original_state()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Record base note first
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    song_pattern = 1
+  })
+
+  -- Add chord degrees
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    chord_degrees = {1, 3, 5},
+    song_pattern = 1
+  })
+  
+  -- Undo all the way back
+  memory.undo(1)
+  memory.undo(1)
+  
+  -- Should be back to no note, no chord
+  luaunit.assert_nil(channel.step_note_masks[1])
+  luaunit.assert_equals(channel.step_chord_masks, {})
+end
+
+function test_memory_should_preserve_chord_during_note_updates()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set initial chord
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    note = 60,
+    velocity = 100,
+    length = 1,
+    chord_degrees = {1, 3, 5},
+    song_pattern = 1
+  })
+  
+  -- Update just the base note
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    note = 64,
+    song_pattern = 1
+  })
+  
+  -- Verify chord remained intact
+  luaunit.assert_not_nil(channel.step_chord_masks, "Chord masks table should still exist")
+  luaunit.assert_not_nil(channel.step_chord_masks[1], "Chord mask should still exist")
+  luaunit.assert_equals(channel.step_note_masks[1], 64, "Base note should be updated")
+  luaunit.assert_equals(channel.step_chord_masks[1][1], 1, "First degree should be preserved")
+  luaunit.assert_equals(channel.step_chord_masks[1][2], 3, "Second degree should be preserved")
+  luaunit.assert_equals(channel.step_chord_masks[1][3], 5, "Third degree should be preserved")
 end

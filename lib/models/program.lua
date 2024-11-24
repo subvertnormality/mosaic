@@ -5,6 +5,32 @@ local quantiser = include("mosaic/lib/quantiser")
 local program = {}
 local program_store = {}
 
+-- Add this function at the top level of the program module
+local function migrate_legacy_data(data)
+  if not data then return end
+  
+  -- Migrate sequencer_patterns to song_patterns if needed
+  if data.sequencer_patterns and not data.song_patterns then
+    data.song_patterns = data.sequencer_patterns
+    data.sequencer_patterns = nil
+  end
+  
+  -- Ensure song_patterns exists
+  if not data.song_patterns then
+    data.song_patterns = {}
+  end
+  
+  -- Migrate any nested data structures if needed
+  for i, pattern in pairs(data.song_patterns) do
+    if pattern.sequencer_patterns then
+      pattern.song_patterns = pattern.sequencer_patterns
+      pattern.sequencer_patterns = nil
+    end
+  end
+  
+  return data
+end
+
 
 local function initialise_default_channels()
   local channels = {}
@@ -146,7 +172,11 @@ function program.is_song_pattern_active(p)
 end
 
 function program.get_selected_song_pattern()
-  return program.get_song_pattern(program_store.selected_song_pattern)
+  local data = program.get()
+  if not data.selected_song_pattern then
+    data.selected_song_pattern = 1
+  end
+  return program.get_song_pattern(data.selected_song_pattern)
 end
 
 function program.set_selected_song_pattern(p)
@@ -162,10 +192,11 @@ function program.get_selected_page()
 end
 
 function program.get_song_pattern(p)
-  if not program_store.song_patterns[p] then
-    program_store.song_patterns[p] = initialise_default_song_pattern()
+  local data = program.get()
+  if not data.song_patterns[p] then
+    data.song_patterns[p] = initialise_default_song_pattern()
   end
-  return program_store.song_patterns[p]
+  return data.song_patterns[p]
 end
 
 function program.set_song_pattern(p, pattern)
@@ -199,6 +230,14 @@ function program.get_channel_step_scale_number(c)
 end
 
 function program.get()
+  -- Ensure program_store is initialized
+  if not program_store then
+    program_store = {}
+  end
+  -- Ensure song_patterns exists
+  if not program_store.song_patterns then
+    program_store.song_patterns = {}
+  end
   return program_store
 end
 
@@ -215,7 +254,7 @@ function program.get_channel(song_pattern, x)
 end
 
 function program.set(p)
-  program_store = p
+  program_store = migrate_legacy_data(p) or {}
 end
 
 function program.add_step_param_trig_lock(step, parameter, trig_lock)

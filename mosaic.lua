@@ -53,7 +53,10 @@ local function load_project(pth)
     print("Loading project " .. pth)
     local saved = tab.load(pth)
     if saved ~= nil then
-
+      -- Initialize program_store before setting data
+      program.init()
+      
+      -- Set and migrate the data
       program.set(saved[2])
 
       clock.tempo_change_handler = function(x)
@@ -71,7 +74,6 @@ local function load_project(pth)
           false
         )
       end
-
 
       if saved[1] then
         params:read(norns.state.data .. saved[1] .. ".pset", true)

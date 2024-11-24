@@ -294,8 +294,8 @@ function channel_edit_page_ui.init()
   shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
 
   memory_controls.navigator:set_event_state(memory_state)
-  memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
-  memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
+  memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
+  memory_controls.navigator:set_current_index(memory.get_event_count(c))
   memory_controls.navigator:select()
 
   channel_edit_page_ui.refresh_clock_mods()
@@ -820,9 +820,9 @@ end
 
 function channel_edit_page_ui.refresh_memory()
   local c = program.get_selected_channel().number
-  memory_state.events = memory.get_recent_events(nil, c, 25)
-  memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
-  memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
+  memory_state.events = memory.get_recent_events(c, 25)
+  memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
+  memory_controls.navigator:set_current_index(memory.get_event_count(c))
 end
 
 channel_edit_page_ui.refresh_channel_config = scheduler.debounce(function()
@@ -879,15 +879,15 @@ function channel_edit_page_ui.handle_memory_navigator(d)
   local c = program.get_selected_channel().number
   if d > 0 then
     
-    memory.redo(nil, c)
-    memory_state.events = memory.get_recent_events(nil, c, 25)
-    memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
-    memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
+    memory.redo(c)
+    memory_state.events = memory.get_recent_events(c, 25)
+    memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
+    memory_controls.navigator:set_current_index(memory.get_event_count(c))
   else
-    memory.undo(nil, c)
-    memory_state.events = memory.get_recent_events(nil, c, 25)
-    memory_controls.navigator:set_max_index(memory.get_total_event_count(nil, c))
-    memory_controls.navigator:set_current_index(memory.get_event_count(nil, c))
+    memory.undo(c)
+    memory_state.events = memory.get_recent_events(c, 25)
+    memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
+    memory_controls.navigator:set_current_index(memory.get_event_count(c))
   end
 end
 
@@ -900,21 +900,22 @@ function channel_edit_page_ui.add_note_mask_event_portion(channel, step, event_p
   end
 
   mask_events[channel.number][step] = fn.deep_merge_tables(mask_events[channel.number][step], event_portion)
-  
+
 end
 
 function channel_edit_page_ui.record_note_mask_event(channel, step)
   local c = channel.number
   if mask_events and mask_events[c] and mask_events[c][step] then
     local event = mask_events[c][step]
-    local event_channel = program.get_channel(event.song_pattern, c)
 
-    memory.record_event(event_channel, "note_mask", event.data)
-
-    memory_state.events = memory.get_recent_events(nil, c, 10)
-    channel_edit_page_ui.refresh_memory()
-
+    memory.record_event(c, "note_mask", event.data)
     mask_events[c][step] = nil
+
+    scheduler.debounce(function()
+      memory_state.events = memory.get_recent_events(c, 25)
+      channel_edit_page_ui.refresh_memory()
+    end)()
+
   end
 end
 
@@ -948,8 +949,8 @@ function channel_edit_page_ui.handle_trig_mask_change(direction)
           {
             song_pattern = program.get().selected_song_pattern,
             data = {
-            step = s,
-            trig = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
+              step = s,
+              trig = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
             }
           }
         )
@@ -1265,7 +1266,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
       mask_selectors.chords[3]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        memory.record_event(channel, "note_mask", {
+        memory.record_event(channel.number, "note_mask", {
           step = s,
           chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
         })

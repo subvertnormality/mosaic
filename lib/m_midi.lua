@@ -8,8 +8,6 @@ local m_midi = {}
 midi_devices = {}
 m_midi.note_counts = {}  -- Initialize note counts table
 
-midi_devices = {}
-
 local midi_note_mappings = {
   [1] = 1, [2] = 2, [3] = 2, [4] = 3, [5] = 3,
   [6] = 4, [7] = 5, [8] = 5, [9] = 6, [10] = 6,
@@ -166,7 +164,6 @@ function handle_midi_event_data(data, midi_device)
           end
         end
   
-        -- Add length and record event only on final note
         if stored.step then
           channel_edit_page_ui.add_note_mask_event_portion(
             channel,
