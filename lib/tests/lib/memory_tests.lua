@@ -3309,3 +3309,33 @@ function test_memory_should_preserve_chord_during_note_updates()
   luaunit.assert_equals(channel.step_chord_masks[1][2], 3, "Second degree should be preserved")
   luaunit.assert_equals(channel.step_chord_masks[1][3], 5, "Third degree should be preserved")
 end
+
+function test_memory_clear_should_clear_history_for_given_channel()
+  memory.init()
+  program.init()
+  local channel_number = 1
+  local channel = program.get_channel(1, channel_number)
+  
+  -- Add events
+  for i = 1, 5 do
+    memory.record_event(channel_number, "note_mask", {
+      step = i,
+      note = 60 + i,
+      velocity = 100,
+      length = 1, 
+      song_pattern = 1
+    })
+  end
+  
+  -- Clear history
+  memory.clear(channel_number)
+  
+  -- Verify history is empty
+  local state = memory.get_state(channel_number)
+  luaunit.assert_equals(state.event_history:get_size(), 0)
+  luaunit.assert_equals(state.current_event_index, 0)
+  
+  -- Verify channel state remains intact
+  luaunit.assert_equals(channel.step_note_masks[1], 61)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 100)
+end

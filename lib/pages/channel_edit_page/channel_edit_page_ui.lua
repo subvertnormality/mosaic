@@ -1557,6 +1557,16 @@ function channel_edit_page_ui.handle_key_two_pressed()
         channel_edit_page_ui.refresh_masks()
         pattern.update_working_pattern(program.get_selected_channel().number)
       end
+    elseif channel_pages:get_selected_page() == channel_page_to_index["Memory"] then
+      if is_key3_down then
+        memory.redo_all(program.get_selected_channel().number)
+        memory.clear(program.get_selected_channel().number)
+        tooltip:show("Memory applied and forgotten")
+      else
+        memory.redo_all(program.get_selected_channel().number)
+        tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory applied")
+      end
+      channel_edit_page_ui.refresh_memory()
     end
     save_confirm.cancel()
   end
@@ -1564,7 +1574,16 @@ end
 
 function channel_edit_page_ui.handle_key_three_pressed()
   local pressed_keys = m_grid.get_pressed_keys()
-  if #pressed_keys < 1 then
+  if channel_pages:get_selected_page() == channel_page_to_index["Memory"] then
+    if is_key2_down then
+      memory.undo_all(program.get_selected_channel().number)
+      memory.clear(program.get_selected_channel().number)
+      tooltip:show("Memory undone and forgotten")
+    else
+      memory.undo_all(program.get_selected_channel().number)
+      tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory undone")
+    end
+  elseif #pressed_keys < 1 then
     save_confirm.confirm()
   end
 end

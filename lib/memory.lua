@@ -442,6 +442,14 @@ function memory.reset()
   end
 end
 
+function memory.clear(channel_number)
+  if not channel_number or not state.channels[channel_number] then return end
+  
+  state.channels[channel_number] = create_ring_buffer(memory.max_history_size)
+  state.current_indices[channel_number] = 0
+  state.original_states[channel_number] = {}
+end
+
 function memory.get_event_count(channel_number)
   if not channel_number or not state.channels[channel_number] then return 0 end
   return state.current_indices[channel_number] or 0
