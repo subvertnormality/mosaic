@@ -207,7 +207,7 @@ function param_manager.update_param(index, channel, param, meta_device)
     channel.trig_lock_params[index].param_id = param.id
       
     if param.param_type == "stock" then
-      channel.trig_lock_params[index].param_id = fn.get_param_id_from_stock_id(param.param_id, channel.number)
+      channel.trig_lock_params[index].param_id = fn.get_param_id_from_stock_id(param.param_id or param.id, channel.number)
     elseif meta_device.type == "norns" and param.param_id then
       channel.trig_lock_params[index].param_id = param.param_id
     else
