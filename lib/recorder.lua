@@ -127,6 +127,10 @@ recorder.record_trig_event = function(c, step, parameter)
   })
 end
 
+recorder.trig_lock_is_dirty = function(c, parameter)
+  return recorder.trig_lock_dirty[c][parameter]
+end
+
 recorder.set_trig_lock_dirty = function(c, parameter, value)
   recorder.trig_lock_dirty[c][parameter] = value
 end

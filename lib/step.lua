@@ -127,6 +127,11 @@ function step.process_params(c, step)
 
       value = params:get(trig_lock_params[i].param_id)
 
+
+      if params:get("record") == 2 and recorder.trig_lock_is_dirty(c, i) then
+        goto continue
+      end
+
       
       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
