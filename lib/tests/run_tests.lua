@@ -119,7 +119,7 @@ fn = include("mosaic/lib/helpers/functions")
 pages = include("mosaic/lib/pages/pages")
 scheduler = include("mosaic/lib/tests/helpers/mocks/scheduler_mock")
 program = include("mosaic/lib/models/program")
-
+memory = include("mosaic/lib/memory")
 include("mosaic/lib/tests/helpers/globals")
 
 require_all_files_in_folder('./lib')

@@ -4,6 +4,7 @@ local recorder = {}
 
 -- Stores portions of mask events for consolidation
 recorder.mask_events = {}
+recorder.trig_lock_events = {}
 recorder.trig_lock_dirty = {}
 
 for i = 1, 16 do
@@ -25,16 +26,42 @@ function recorder.add_note_mask_event_portion(c, step, event_portion)
 
 end
 
-function recorder.record_note_mask_event(c, step)
+function recorder.record_stored_note_mask_events(c, step)
   if recorder.mask_events and recorder.mask_events[c] and recorder.mask_events[c][step] then
     local event = recorder.mask_events[c][step]
+
+    if not event.data then
+      return
+    end
 
     memory.record_event(c, "note_mask", event.data)
     recorder.mask_events[c][step] = nil
 
-    scheduler.debounce(function()
-      channel_edit_page_ui.refresh_memory()
-    end)()
+  end
+end
+
+function recorder.add_trig_lock_event_portion(c, step, event_portion)
+  if not recorder.trig_lock_events[c] then
+    recorder.trig_lock_events[c] = {}
+  end
+  if not recorder.trig_lock_events[c][step] then
+    recorder.trig_lock_events[c][step] = {}
+  end
+
+  recorder.trig_lock_events[c][step] = fn.deep_merge_tables(recorder.trig_lock_events[c][step], event_portion)
+
+end
+
+function recorder.record_stored_trig_lock_events(c, step)
+  if recorder.trig_lock_events and recorder.trig_lock_events[c] and recorder.trig_lock_events[c][step] then
+    local event = recorder.trig_lock_events[c][step]
+
+    if not event.data then
+      return
+    end
+
+    memory.record_event(c, "trig_lock", event.data)
+    recorder.trig_lock_events[c][step] = nil
 
   end
 end
@@ -115,27 +142,24 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
   end
 end
 
-recorder.record_trig_event = function(c, step, parameter)
+function recorder.record_trig_event(c, step, parameter)
 
-  if not recorder.trig_lock_dirty[c][parameter] then
-    return
-  end
   memory.record_event(c, "trig_lock", {
     parameter = parameter, 
     step = step,
-    value = recorder.trig_lock_dirty[c][parameter]
+    value = recorder.trig_lock_dirty[c] and recorder.trig_lock_dirty[c][parameter] or nil
   })
 end
 
-recorder.trig_lock_is_dirty = function(c, parameter)
-  return recorder.trig_lock_dirty[c][parameter]
+function recorder.trig_lock_is_dirty(c, parameter)
+  return recorder.trig_lock_dirty[c] and recorder.trig_lock_dirty[c][parameter]
 end
 
-recorder.set_trig_lock_dirty = function(c, parameter, value)
+function recorder.set_trig_lock_dirty(c, parameter, value)
   recorder.trig_lock_dirty[c][parameter] = value
 end
 
-recorder.clear_trig_lock_dirty = function(c, parameter)
+function recorder.clear_trig_lock_dirty(c, parameter)
   recorder.trig_lock_dirty[c][parameter] = nil
 end
 

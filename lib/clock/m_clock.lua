@@ -226,7 +226,6 @@ function m_clock.init()
           step.handle(channel_number, current_step)
         end
 
-        -- ocurrent trig is 1 or trigless locks
         if channel.working_pattern.trig_values[current_step] == 1 or params:get("trigless_locks") == 2 then
           if params:get("record") == 2 and program.get_selected_channel() == channel then
             for i = 1, 10 do
@@ -258,7 +257,10 @@ function m_clock.init()
         end
 
         if params:get("record") == 2 and program.get_selected_channel() == channel then
-          recorder.record_note_mask_event(channel_number, last_step)
+          recorder.record_stored_note_mask_events(channel_number, last_step)
+          scheduler.debounce(function()
+            channel_edit_page_ui.refresh_memory()
+          end)()      
         end
 
         local next_step = program.get_current_step_for_channel(channel_number) + 1

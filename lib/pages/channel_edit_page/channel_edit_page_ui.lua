@@ -661,8 +661,15 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
 
       local value = params:get(handler_param_id_index)
 
-      program.add_step_param_trig_lock(s, dial_index, value)
       m_params[dial_index]:set_value(value)
+
+      recorder.add_trig_lock_event_portion(channel.number, s, {
+        data = {
+            parameter = dial_index, 
+            step = s,
+            value = value
+          }
+        })
     end
   elseif p_value and trig_lock_param and trig_lock_param.id then
 
@@ -676,7 +683,6 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
       local new_val = original_val + (quant * d)
       norns_param_state_handler.set_original_param_state(channel.number, dial_index, new_val)
       m_params[dial_index]:set_value(new_val)
-      recorder.set_trig_lock_dirty(channel.number, dial_index, new_val)
     else
       p:delta(d)
       recorder.set_trig_lock_dirty(channel.number, dial_index, p:get())

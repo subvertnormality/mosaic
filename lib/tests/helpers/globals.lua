@@ -10,6 +10,9 @@ globals.reset = function()
   channel_edit_page_refresh_events = {}
   channel_edit_page_refresh_trig_locks_events = {}
   has_fired = nil
+  m_grid = {
+    get_pressed_keys = function() return {} end
+  }
 end
 
 globals.reset()

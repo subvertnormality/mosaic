@@ -41,6 +41,7 @@ function handle_midi_event_data(data, midi_device)
 
   local transpose = step.calculate_step_transpose(program.get().current_step, channel.number)
   local device = program.get().devices[channel.number]
+  local d = device_map.get_device(device.device_map)
   local midi_channel = device.midi_channel
   local velocity = data[3]
 
@@ -86,7 +87,11 @@ function handle_midi_event_data(data, midi_device)
       start_time = util.time()
     }
 
-    m_midi:note_on(note, velocity, midi_channel, device.midi_device)
+    if d.player then
+      d.player:note_on(note, ((velocity - 1) / 126) or 0)
+    else
+      m_midi:note_on(note, velocity, midi_channel, device.midi_device)
+    end
 
     -- Handle chord state for this step
     if chord_state.chord_number == 0 then
@@ -164,7 +169,7 @@ function handle_midi_event_data(data, midi_device)
           end
         end
   
-        if stored.step then
+        if stored.step and params:get("record") == 2 then
           recorder.add_note_mask_event_portion(
             channel.number,
             stored.step,
@@ -176,7 +181,7 @@ function handle_midi_event_data(data, midi_device)
               }
             }
           )
-          recorder.record_note_mask_event(channel.number, stored.step)
+          recorder.record_stored_note_mask_events(channel.number, stored.step)
         end
       end
   
@@ -186,7 +191,13 @@ function handle_midi_event_data(data, midi_device)
       end
     end
   
-    m_midi:note_off(stored.note, 0, midi_channel, device.midi_device)
+    if d.player then
+      d.player:note_off(stored.note)
+    else
+      m_midi:note_off(stored.note, 0, midi_channel, device.midi_device)
+    end
+
+    
     midi_off_store[data[2]] = nil
   elseif data[1] == 176 then -- cc change
     if data[2] >= 1 and data[2] <= 20 then

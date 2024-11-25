@@ -188,7 +188,7 @@ local event_handlers = {
     restore_state = function(channel, data, saved_state)
       local step = data.step
       if not saved_state then return end
-
+      
       if saved_state.value then
         program.add_step_param_trig_lock_to_channel(channel, step, saved_state.parameter, saved_state.value)
       else
@@ -305,6 +305,7 @@ local function get_channel_and_state(song_pattern, channel_number)
 end
 
 function memory.record_event(channel_number, event_type, data)
+
   if not channel_number or not event_type or not event_handlers[event_type] then
     return
   end

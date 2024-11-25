@@ -125,14 +125,12 @@ function step.process_params(c, step)
         goto continue
       end
 
-      value = params:get(trig_lock_params[i].param_id)
-
-
       if params:get("record") == 2 and recorder.trig_lock_is_dirty(c, i) then
         goto continue
       end
 
-      
+      value = params:get(trig_lock_params[i].param_id)
+
       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
         local midi_channel = devices[channel.number].midi_channel
@@ -179,7 +177,7 @@ function step.process_params(c, step)
           end
           device.player:set_slew(step_trig_lock)
         elseif value then
-            device.player:set_slew(value)
+          device.player:set_slew(value)
         end
       elseif param.type == "norns" and param.id then
         local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
@@ -196,9 +194,7 @@ function step.process_params(c, step)
           end
           params:set(param.id, step_trig_lock)
         elseif program.step_has_trig(channel, step) then
-          if (norns_param_state_handler.get_original_param_state(c, i)) then
-          end
-          if norns_param_state_handler.get_original_param_state(c, i).value then 
+          if norns_param_state_handler.get_original_param_state(c, i) and norns_param_state_handler.get_original_param_state(c, i).value then 
             params:set(param.id, norns_param_state_handler.get_original_param_state(c, i).value)
             norns_param_state_handler.clear_original_param_state(c, i)
           end
