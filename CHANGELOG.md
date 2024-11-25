@@ -1,3 +1,7 @@
+## 1.0.2
+
+Fixed regression that stopped stock params from working.
+
 ## 1.0.1
 
 Fixed issue where default midi device assignments were referencing the wrong IDs causing unexpected behaviour in certain combinations.
