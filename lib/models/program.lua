@@ -471,16 +471,11 @@ function program.clear_trig_locks_for_step(step)
   end
 end
 
-function program.clear_trig_locks_for_step_for_channel(channel, step)
-  program.add_step_scale_trig_lock(step, nil)
-
+function program.clear_trig_lock_for_step_for_channel(channel, step, parameter)
   if channel.number ~= 17 then
-    if channel.step_trig_lock_banks and channel.step_trig_lock_banks[step] then
-      channel.step_trig_lock_banks[step] = nil
+    if channel.step_trig_lock_banks and channel.step_trig_lock_banks[step] and channel.step_trig_lock_banks[step][parameter] then
+      channel.step_trig_lock_banks[step][parameter] = nil
     end
-    program.add_step_octave_trig_lock(step, nil)
-  else
-    program.add_step_transpose_trig_lock(step, nil)
   end
 end
 

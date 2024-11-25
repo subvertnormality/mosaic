@@ -172,7 +172,6 @@ local event_handlers = {
     validate = function(data)
       if not validate_step(data.step) then return false end
       if data.parameter == nil then return false end
-      if data.value == nil then return false end
       return true
     end,
     
@@ -188,21 +187,20 @@ local event_handlers = {
     
     restore_state = function(channel, data, saved_state)
       local step = data.step
-
       if not saved_state then return end
 
-      if not saved_state.value then
-        program.clear_trig_locks_for_step_for_channel(channel, step)
-      else
+      if saved_state.value then
         program.add_step_param_trig_lock_to_channel(channel, step, saved_state.parameter, saved_state.value)
+      else
+        program.clear_trig_lock_for_step_for_channel(channel, step, saved_state.parameter)
       end
     end,
     
     apply_event = function(channel, step, data, apply_type)
-      if apply_type == "undo" and not data.value then
-        program.clear_trig_locks_for_step_for_channel(channel, step)
-      else
+      if data.value then
         program.add_step_param_trig_lock_to_channel(channel, step, data.parameter, data.value)
+      else
+        program.clear_trig_lock_for_step_for_channel(channel, step, data.parameter)
       end
     end
   }
@@ -307,7 +305,6 @@ local function get_channel_and_state(song_pattern, channel_number)
 end
 
 function memory.record_event(channel_number, event_type, data)
-
   if not channel_number or not event_type or not event_handlers[event_type] then
     return
   end
@@ -317,43 +314,41 @@ function memory.record_event(channel_number, event_type, data)
     return
   end
 
-  -- Initialize channel state
   if not state.channels[channel_number] then
     state.channels[channel_number] = create_ring_buffer(memory.max_history_size)
     state.current_indices[channel_number] = 0
     state.original_states[channel_number] = {}
   end
 
-  
   local song_pattern = data.song_pattern or program.get().selected_song_pattern
   local channel = program.get_channel(song_pattern, channel_number)
   
-  -- Create unique step key that includes pattern
-  local step_key = string.format("%d:%d", song_pattern, data.step)
-  
-  -- Capture original state if not already captured
-  if not state.original_states[channel_number][step_key] then
-    state.original_states[channel_number][step_key] = handler.capture_state(channel, data)
+  local state_key
+  if event_type == "trig_lock" then
+    state_key = string.format("%d:%d:%s", song_pattern, data.step, data.parameter)
+  else
+    state_key = string.format("%d:%d", song_pattern, data.step)
   end
   
-  -- Create event
+  if not state.original_states[channel_number][state_key] then
+    state.original_states[channel_number][state_key] = handler.capture_state(channel, data)
+  end
+  
   local event = {
     type = event_type,
     data = {
       step = data.step,
-      step_key = step_key,
+      step_key = state_key,
       event_data = data,
       song_pattern = song_pattern,
-      original_state = state.original_states[channel_number][step_key]
+      original_state = state.original_states[channel_number][state_key]
     }
   }
   
-  -- Truncate and add event
   state.channels[channel_number]:truncate(state.current_indices[channel_number])
   local new_size = state.channels[channel_number]:push(event)
   state.current_indices[channel_number] = new_size
   
-  -- Apply event
   handler.apply_event(channel, data.step, data, "record")
 end
 
@@ -412,37 +407,33 @@ function memory.undo_all(channel_number)
   local channel_events = state.channels[channel_number]
   local current_index = state.current_indices[channel_number]
   
-  -- Track already restored states for each pattern to avoid duplicate restores
+  -- Track already restored states for each pattern and step
   local restored_states = {}
   
   -- Go through events in reverse order to get the latest state for each step
   for i = current_index, 1, -1 do
     local event = channel_events:get(i)
     if event then
-      local step_key = string.format("%d:%d", event.data.song_pattern, event.data.step)
-      if not restored_states[step_key] then
+      -- Create key that includes parameter for trig_locks
+      local event_key
+      if event.type == "trig_lock" then
+        event_key = string.format("%d:%d:%s", event.data.song_pattern, event.data.step, event.data.event_data.parameter)
+      else  
+        event_key = event.data.step_key
+      end
+      
+      if not restored_states[event_key] then
         local channel = program.get_channel(event.data.song_pattern, channel_number)
+        local handler = event_handlers[event.type]
         local original_state = event.data.original_state
         
         if original_state then
-          event_handlers.note_mask.restore_state(channel, event.data, original_state)
+          handler.restore_state(channel, event.data, original_state)
         else
-          -- TODO this is note mask specific and needs to be made generic
-          event_handlers.note_mask.restore_state(channel, event.data, {
-            trig_mask = nil,
-            note_mask = nil,
-            velocity_mask = nil,
-            length_mask = nil,
-            working_pattern = {
-              trig_value = 0,
-              note_value = 0,
-              velocity_value = 100,
-              length = 1
-            }
-          })
+          handler.restore_state(channel, event.data, nil)
         end
         
-        restored_states[step_key] = true
+        restored_states[event_key] = true
       end
     end
   end
@@ -456,21 +447,42 @@ function memory.redo_all(channel_number)
   local channel_events = state.channels[channel_number]
   if not channel_events.total_size or channel_events.total_size == 0 then return end
   
-  -- Find latest event for each step per pattern
-  local latest_events = {}
+  -- Combine events for each step 
+  local combined_events = {}
   
   for i = state.current_indices[channel_number] + 1, channel_events.total_size do
     local event = channel_events:get(i)
     if event then
-      local step_key = string.format("%d:%d", event.data.song_pattern, event.data.step)
-      latest_events[step_key] = event
+      local event_key
+      if event.type == "trig_lock" then
+        event_key = string.format("%d:%d:%s", event.data.song_pattern, event.data.step, event.data.event_data.parameter)
+      else
+        event_key = string.format("%d:%d", event.data.song_pattern, event.data.step)
+      end
+      
+      if not combined_events[event_key] then
+        combined_events[event_key] = {
+          type = event.type,
+          data = {
+            step = event.data.step,
+            song_pattern = event.data.song_pattern,
+            event_data = fn.deep_copy(event.data.event_data)
+          }
+        }
+      else
+        -- Merge event data
+        for k, v in pairs(event.data.event_data) do
+          combined_events[event_key].data.event_data[k] = v
+        end
+      end
     end
   end
   
-  -- Apply latest events
-  for _, event in pairs(latest_events) do
+  -- Apply combined events
+  for _, event in pairs(combined_events) do
     local channel = program.get_channel(event.data.song_pattern, channel_number)
-    event_handlers.note_mask.apply_event(channel, event.data.step, event.data.event_data, "redo")
+    local handler = event_handlers[event.type]
+    handler.apply_event(channel, event.data.step, event.data.event_data, "redo")
   end
   
   state.current_indices[channel_number] = channel_events.total_size

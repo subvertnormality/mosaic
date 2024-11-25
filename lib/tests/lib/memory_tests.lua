@@ -3339,3 +3339,264 @@ function test_memory_clear_should_clear_history_for_given_channel()
   luaunit.assert_equals(channel.step_note_masks[1], 61)
   luaunit.assert_equals(channel.step_velocity_masks[1], 100)
 end
+
+function test_memory_should_undo_all_trig_locks_in_single_channel()
+  memory.init()
+  program.init()
+  local channel_number = 1
+  local song_pattern_number = 1
+  local channel = program.get_channel(song_pattern_number, channel_number)
+
+  -- Set initial parameter states
+  program.add_step_param_trig_lock_to_channel(channel, 1, 1, 50)
+  program.add_step_param_trig_lock_to_channel(channel, 2, 2, 60)
+
+  -- Record series of trig lock changes
+  memory.record_event(channel_number, "trig_lock", {
+    step = 1,
+    parameter = 1,
+    value = 80,
+    song_pattern = song_pattern_number
+  })
+
+  memory.record_event(channel_number, "trig_lock", {
+    step = 2,
+    parameter = 2, 
+    value = 90,
+    song_pattern = song_pattern_number
+  })
+
+  -- Add trig lock in different pattern
+  memory.record_event(channel_number, "trig_lock", {
+    step = 1,
+    parameter = 1,
+    value = 70,
+    song_pattern = 2
+  })
+
+  -- Verify current states
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), 80)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 2, 2), 90)
+
+  -- Undo all changes
+  memory.undo_all(channel_number)
+
+  -- Verify original states restored
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), 50)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 2, 2), 60)
+
+  -- Verify other channels unaffected
+  local channel2 = program.get_channel(2, 2)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel2, 1, 1), nil)
+end
+
+function test_memory_should_handle_undo_all_with_cleared_trig_locks()
+  memory.init()
+  program.init() 
+  local channel_number = 1
+  local channel = program.get_channel(1, channel_number)
+
+  -- Set initial state
+  program.add_step_param_trig_lock_to_channel(channel, 1, 1, 50)
+
+  -- Record clearing the trig lock
+  memory.record_event(channel_number, "trig_lock", {
+    step = 1,
+    parameter = 1,
+    value = nil,
+    song_pattern = 1
+  })
+
+  -- Record new trig lock
+  memory.record_event(channel_number, "trig_lock", {
+    step = 1, 
+    parameter = 2,
+    value = 80,
+    song_pattern = 1
+  })
+
+  -- Verify current state
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), nil)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 2), 80)
+
+  -- Undo all
+  memory.undo_all(channel_number)
+
+  -- Verify original state restored
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), 50)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 2), nil)
+end
+
+function test_memory_should_handle_undo_all_with_multiple_trig_lock_parameters()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+
+  -- Set initial states for multiple parameters
+  program.add_step_param_trig_lock_to_channel(channel, 1, 1, 50)
+  program.add_step_param_trig_lock_to_channel(channel, 1, 2, 60)
+  program.add_step_param_trig_lock_to_channel(channel, 1, 3, 70)
+
+  -- Record changes to all parameters
+  memory.record_event(1, "trig_lock", {
+    step = 1,
+    parameter = 1,
+    value = 80,
+    song_pattern = 1
+  })
+
+  memory.record_event(1, "trig_lock", {
+    step = 1,
+    parameter = 2,
+    value = 90,
+    song_pattern = 1
+  })
+
+  memory.record_event(1, "trig_lock", {
+    step = 1,
+    parameter = 3,
+    value = 100,
+    song_pattern = 1
+  })
+
+  -- Verify all values were updated
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), 80)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 2), 90)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 3), 100)
+
+  -- Undo all changes
+  memory.undo_all(1)
+
+  -- Verify original values restored
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), 50)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 2), 60)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 3), 70)
+end
+
+function test_memory_should_handle_interleaved_trig_lock_and_note_mask_edits()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Set initial states
+  program.add_step_param_trig_lock_to_channel(channel, 1, 1, 50)
+  channel.step_note_masks[1] = 60
+  
+  -- Interleaved edits
+  memory.record_event(1, "trig_lock", {
+    step = 1,
+    parameter = 1,
+    value = 70,
+    song_pattern = 1
+  })
+
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    note = 64,
+    song_pattern = 1
+  })
+
+  memory.record_event(1, "trig_lock", {
+    step = 1,
+    parameter = 1,
+    value = 90,
+    song_pattern = 1
+  })
+  
+  -- Verify final states
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), 90)
+  luaunit.assert_equals(channel.step_note_masks[1], 64)
+  
+  -- Undo should restore both types independently
+  memory.undo_all(1)
+  
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), 50)
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+end
+
+function test_memory_should_handle_trig_lock_parameter_deletion()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add multiple parameters
+  program.add_step_param_trig_lock_to_channel(channel, 1, 1, 50)
+  program.add_step_param_trig_lock_to_channel(channel, 1, 2, 60)
+  
+  -- Delete one parameter via nil
+  memory.record_event(1, "trig_lock", {
+    step = 1,
+    parameter = 1,
+    value = nil,
+    song_pattern = 1
+  })
+  
+  -- Verify selective deletion
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), nil)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 2), 60)
+  
+  memory.undo_all(1)
+  
+  -- Original values should be restored
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), 50)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 2), 60)
+end
+
+function test_memory_should_handle_trig_locks_across_multiple_steps()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Add parameters to different steps
+  program.add_step_param_trig_lock_to_channel(channel, 1, 1, 50)
+  program.add_step_param_trig_lock_to_channel(channel, 2, 1, 60)
+  
+  memory.record_event(1, "trig_lock", {
+    step = 1,
+    parameter = 1,
+    value = 70,
+    song_pattern = 1
+  })
+
+  memory.record_event(1, "trig_lock", {
+    step = 2,
+    parameter = 1,
+    value = 80,
+    song_pattern = 1
+  })
+  
+  memory.undo_all(1)
+  
+  -- Should restore all steps
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), 50)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 2, 1), 60)
+end
+
+function test_memory_redo_all_should_merge_events_correctly()
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  
+  -- Record note 
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    note = 60,
+    song_pattern = 1
+  })
+
+  -- Record length separately
+  memory.record_event(1, "note_mask", {
+    step = 1,
+    length = 2,
+    song_pattern = 1
+  })
+
+  memory.undo(1)
+  memory.undo(1)
+
+  memory.redo_all(1)
+
+  -- Should have both note and length
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  luaunit.assert_equals(channel.step_length_masks[1], 2)
+end

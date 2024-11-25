@@ -1556,6 +1556,7 @@ function channel_edit_page_ui.handle_key_three_pressed()
       memory.redo_all(program.get_selected_channel().number)
       tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory applied")
     end
+    channel_edit_page_ui.refresh_memory()
   elseif #pressed_keys < 1 then
     save_confirm.confirm()
   end

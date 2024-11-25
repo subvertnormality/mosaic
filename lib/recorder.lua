@@ -33,7 +33,6 @@ function recorder.record_note_mask_event(c, step)
     recorder.mask_events[c][step] = nil
 
     scheduler.debounce(function()
-      memory_state.events = memory.get_recent_events(c, 25)
       channel_edit_page_ui.refresh_memory()
     end)()
 
