@@ -143,12 +143,14 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
 end
 
 function recorder.record_trig_event(c, step, parameter)
-
-  memory.record_event(c, "trig_lock", {
-    parameter = parameter, 
-    step = step,
-    value = recorder.trig_lock_dirty[c] and recorder.trig_lock_dirty[c][parameter] or nil
-  })
+  
+  if recorder.trig_lock_dirty[c] and recorder.trig_lock_dirty[c][parameter] then
+    memory.record_event(c, "trig_lock", {
+      parameter = parameter, 
+      step = step,
+      value = recorder.trig_lock_dirty[c] and recorder.trig_lock_dirty[c][parameter] or nil
+    })
+  end
 end
 
 function recorder.trig_lock_is_dirty(c, parameter)
