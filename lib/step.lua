@@ -120,7 +120,6 @@ function step.process_params(c, step)
   for i, param in ipairs(trig_lock_params) do
 
     if should_process_param(param) then
-
       if not param.param_id then
         goto continue
       end
@@ -190,8 +189,8 @@ function step.process_params(c, step)
 
           if not norns_param_state_handler.get_original_param_state(c, i).value then
             norns_param_state_handler.set_original_param_state(c, i, value, param.id)
-
           end
+
           params:set(param.id, step_trig_lock)
         elseif program.step_has_trig(channel, step) then
           if norns_param_state_handler.get_original_param_state(c, i) and norns_param_state_handler.get_original_param_state(c, i).value then 

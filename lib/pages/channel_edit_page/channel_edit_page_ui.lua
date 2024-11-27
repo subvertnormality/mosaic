@@ -569,7 +569,7 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
   local p_value = params:get(param_id)
 
   local total_range = 0
-  local old_quantum = 1
+  local old_quantum = trig_lock_param.quantum or 1
 
   if p.controlspec then 
 

@@ -7,7 +7,6 @@ clock_lattice = {}
 local playing = false
 local master_clock
 local midi_clock_init
-local trigless_lock_active = {}
 local first_run = true
 
 local delayed_ids_must_execute = {[0] = {}}
@@ -273,10 +272,8 @@ function m_clock.init()
         local next_trig_value = channel.working_pattern.trig_values[next_step]
 
         if next_trig_value == 1 then
-          trigless_lock_active[channel_number] = false
           step.process_params(channel_number, next_step)
-        elseif params:get("trigless_locks") == 2 and not trigless_lock_active[channel_number] and program.step_has_param_trig_lock(channel, next_step) then
-          trigless_lock_active[channel_number] = true
+        elseif params:get("trigless_locks") == 2 and program.step_has_param_trig_lock(channel, next_step) then
           step.process_params(channel_number, next_step)
         end
 
