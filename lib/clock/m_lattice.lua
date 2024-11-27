@@ -137,6 +137,9 @@ function Lattice:set_meter(_)
   print("meter is deprecated")
 end
 
+function Lattice:get_ppqn()
+  return self.ppqn
+end
 
 --- use the norns clock to pulse
 -- @tparam table s this lattice
@@ -412,51 +415,42 @@ function Sprocket:update_swing()
   end
 end
 
-function Sprocket:update_shuffle(step)
+function Sprocket:calculate_shuffle_ppqn(step)
   local ppc = self.ppqn * 4
-  local old_ppqn = self.current_ppqn
-  local old_phase = self.phase
   local pattern_length = self.lattice.pattern_length
-
-  -- Ensure step wraps correctly
   local step_mod = ((step - 1) % pattern_length) + 1
-
+  
   if self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and self.shuffle_basis > 0 then
-      local feel_map = shuffle_feels[self.shuffle_feel]
-      local playpos_mod = (step_mod % 8) + 1
-      local shuffle_beat_index = playpos_mod
-      
-      local base_multiplier = 0.25 
-      local multiplier = feel_map[self.shuffle_basis][shuffle_beat_index]
-      
-      -- Scale the shuffle amount directly
-      local adjusted_multiplier = base_multiplier + self.shuffle_amount * (multiplier - base_multiplier)
-      
-      local exact_ppqn = ((self.division * 4) * ppc) * adjusted_multiplier
-      local rounded_ppqn = math.floor(exact_ppqn + self.ppqn_error)
-      self.ppqn_error = (exact_ppqn + self.ppqn_error) - rounded_ppqn
-      self.current_ppqn = rounded_ppqn
+    local feel_map = shuffle_feels[self.shuffle_feel]
+    local playpos_mod = (step_mod % 8) + 1
+    local base_multiplier = 0.25 
+    local multiplier = feel_map[self.shuffle_basis][playpos_mod]
+    local adjusted_multiplier = base_multiplier + self.shuffle_amount * (multiplier - base_multiplier)
+    return ((self.division * 4) * ppc) * adjusted_multiplier
   else
-      -- Existing swing logic remains unchanged
-      if (pattern_length % 2 == 1) and step_mod % pattern_length == 0 then
-          self.current_ppqn = self.division * ppc
-      else
-          self.current_ppqn = math.floor((self.division * ppc) * (step_mod % 2 == 1 and self.even_swing or self.odd_swing) - 0.01 + 0.5)
-      end
-  end
-
-  -- Phase adjustment logic remains unchanged
-  if self.current_ppqn ~= old_ppqn then
-      local cycle_progress = (old_phase - 1) / old_ppqn
-      self.phase = math.floor(cycle_progress * self.current_ppqn + 1)
-      if self.phase < 1 then
-          self.phase = 1
-      elseif self.phase > self.current_ppqn then
-          self.phase = self.current_ppqn
-      end
+    if (pattern_length % 2 == 1) and step_mod % pattern_length == 0 then
+      return self.division * ppc
+    else
+      return (self.division * ppc) * (step_mod % 2 == 1 and self.even_swing or self.odd_swing)
+    end
   end
 end
 
+function Sprocket:update_shuffle(step)
+  local calculated_ppqn = self:calculate_shuffle_ppqn(step)
+  local original_ppqn = self.current_ppqn
+  local original_phase = self.phase
+  
+  local rounded_ppqn = math.floor(calculated_ppqn + self.ppqn_error - 0.01)
+  self.ppqn_error = (calculated_ppqn + self.ppqn_error) - rounded_ppqn
+  self.current_ppqn = rounded_ppqn
+
+  if self.current_ppqn ~= original_ppqn then
+    local cycle_progress = (original_phase - 1) / original_ppqn
+    self.phase = math.floor(cycle_progress * self.current_ppqn + 1)
+    self.phase = math.max(1, math.min(self.current_ppqn, self.phase))
+  end
+end
 
 function Lattice:realign_eligable_sprockets()
 

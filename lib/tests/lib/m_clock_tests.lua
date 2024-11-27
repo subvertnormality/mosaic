@@ -480,3 +480,83 @@ function test_delay_action_with_full_delay_fires_as_expected()
   luaunit.assert_true(has_fired)
 
 end
+
+
+
+
+function test_execute_action_across_steps_works_with_normal_clock()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses(1, 1, 3, 0, 127, function(val)
+    table.insert(values, math.floor(val))
+  end)
+
+  progress_clock_by_pulses(96) -- One full beat (24 pulses) per step, 3 steps total
+  
+  -- Should have ~96 values transitioning from 0 to 127
+  luaunit.assert_equals(#values, 96)
+  luaunit.assert_equals(values[1], 0)
+  luaunit.assert_equals(values[#values], 127)
+end
+
+function test_execute_action_across_steps_works_with_clock_division()
+  setup()
+  clock_setup()
+  
+  local div_2_clock_mod = m_clock.calculate_divisor(m_clock.get_clock_divisions()[15])
+  m_clock.set_channel_division(1, div_2_clock_mod)
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses(1, 1, 3, 0, 100, function(val)
+    table.insert(values, math.floor(val))
+  end)
+
+  progress_clock_by_pulses(192) -- Two beats per step with div 2
+  
+  -- Should have ~192 values transitioning from 0 to 100
+  luaunit.assert_equals(#values, 192)
+  luaunit.assert_equals(values[1], 0)
+  luaunit.assert_equals(values[#values], 100)
+end
+
+function test_cancel_spread_actions_for_channel()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses(1, 1, 4, 0, 127, function(val)
+    table.insert(values, math.floor(val))
+  end)
+
+  progress_clock_by_pulses(48)
+  m_clock.cancel_spread_actions_for_channel(1)
+  progress_clock_by_pulses(48)
+  
+  -- Should have only ~48 values before cancellation
+  luaunit.assert_true(#values < 96)
+  luaunit.assert_equals(values[1], 0)
+  luaunit.assert_true(values[#values] < 127)
+end
+
+function test_spread_actions_handle_shuffle()
+  setup()
+  clock_setup()
+  
+  local channel = program.get_channel(program.get().selected_song_pattern, 1)
+  channel.shuffle_amount = 50 -- Set moderate shuffle
+  channel.swing_shuffle_type = 2
+  channel.shuffle_feel = 1
+  
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses(1, 1, 3, 0, 127, function(val)
+    table.insert(values, math.floor(val))
+  end)
+
+  progress_clock_by_pulses(96)
+  
+  -- Should still complete the transition with shuffle
+  luaunit.assert_equals(values[1], 0)
+  luaunit.assert_equals(values[#values], 127)
+end

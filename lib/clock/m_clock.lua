@@ -9,6 +9,8 @@ local master_clock
 local midi_clock_init
 local first_run = true
 
+local ppqn = 96
+
 local delayed_ids_must_execute = {[0] = {}}
 for i = 1, 16 do delayed_ids_must_execute[i] = {} end
 
@@ -20,6 +22,9 @@ for i = 1, 16 do arp_sprockets[i] = {} end
 
 local execute_at_note_end_ids = {[0] = {}}
 for i = 1, 16 do execute_at_note_end_ids[i] = {} end
+
+local execute_spread_actions = {}
+local spread_actions = {}
 
 local clock_divisions = include("mosaic/lib/clock/divisions").clock_divisions
 
@@ -116,7 +121,8 @@ end
 function m_clock.init()
   local program_data = program.get()
   clock_lattice = lattice:new({
-    enabled = false
+    enabled = false,
+    ppqn = ppqn,
   })
 
   if testing then
@@ -311,6 +317,32 @@ function m_clock.init()
     }
 
     m_clock["channel_" .. channel_number .. "_clock"].first_run = true
+
+
+    execute_spread_actions = clock_lattice:new_sprocket {
+      action = function()
+        for i = #spread_actions, 1, -1 do
+          local action = spread_actions[i]
+          if action.active then
+            local progress = math.min(1, action.pulse_count / action.total_pulses)
+            local current_value = action.start_value + (action.end_value - action.start_value) * progress
+            
+            action.func(current_value)
+            action.pulse_count = action.pulse_count + 1
+            
+            if progress >= 1 then
+              action.func(action.end_value)
+              action.active = false
+              table.remove(spread_actions, i)
+            end
+          end
+        end
+      end,
+      division = 1/ppqn,
+      enabled = true,
+      realign = false,
+      order = 5
+    }
   end
 end
 
@@ -492,6 +524,50 @@ end
 
 function m_clock.realign_sprockets()
   clock_lattice:realign_eligable_sprockets()
+end
+
+local function calculate_total_pulses(channel, start_step, end_step)
+  local total_pulses = 0
+  local chan_clock = m_clock["channel_" .. channel .. "_clock"]
+  local ppqn = clock_lattice:get_ppqn() 
+  local pulses_per_step = ppqn / 4  -- Assuming steps are sixteenth notes
+  local steps = end_step - start_step
+
+  total_pulses = steps * pulses_per_step
+
+  -- Apply clock division if set
+  if chan_clock and chan_clock.division ~= 1 then
+    total_pulses = math.floor(total_pulses / chan_clock.division)
+  end
+
+  return total_pulses
+end
+
+
+function m_clock.execute_action_across_steps_by_pulses(channel_number, start_step, end_step, start_value, end_value, func)
+  local total_pulses = calculate_total_pulses(channel_number, start_step, end_step)
+  
+  table.insert(spread_actions, {
+    channel_number = channel_number,
+    pulse_count = 0,  -- Start at 0 for proper initial value
+    total_pulses = total_pulses,
+    start_step = start_step,
+    end_step = end_step,
+    current_value = start_value,
+    start_value = start_value,
+    end_value = end_value,
+    func = func,
+    active = true
+  })
+end
+
+-- Helper function to cancel spread actions for a channel
+function m_clock.cancel_spread_actions_for_channel(channel_number)
+  for i = #spread_actions, 1, -1 do
+    if spread_actions[i].channel_number == channel_number then
+      table.remove(spread_actions, i)
+    end
+  end
 end
 
 function m_clock:start()
