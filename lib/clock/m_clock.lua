@@ -1,4 +1,3 @@
-
 local lattice = include("mosaic/lib/clock/m_lattice")
 
 m_clock = {}
@@ -128,6 +127,8 @@ function m_clock.init()
   if testing then
     clock_lattice.auto = false
   end
+
+  spread_actions = {}
 
   clock_lattice.pattern_length = program.get_selected_song_pattern().global_pattern_length
 
@@ -318,32 +319,33 @@ function m_clock.init()
 
     m_clock["channel_" .. channel_number .. "_clock"].first_run = true
 
+  end
 
-    execute_spread_actions = clock_lattice:new_sprocket {
-      action = function()
-        for i = #spread_actions, 1, -1 do
-          local action = spread_actions[i]
-          if action.active then
-            local progress = math.min(1, action.pulse_count / action.total_pulses)
-            local current_value = action.start_value + (action.end_value - action.start_value) * progress
+  execute_spread_actions = clock_lattice:new_sprocket {
+    action = function()
+      for i = #spread_actions, 1, -1 do
+        local action = spread_actions[i]
+        if action then
+          if action.pulse_count >= action.total_pulses then
+            -- We've reached the end, execute final value and remove
+            action.func(action.end_value)
+            table.remove(spread_actions, i)
+          else
+            -- Calculate progress and current value
+            local progress = action.pulse_count / action.total_pulses
+            local current_value = action.start_value + ((action.end_value - action.start_value) * progress)
             
-            action.func(current_value)
+            action.func(math.floor(current_value))
             action.pulse_count = action.pulse_count + 1
-            
-            if progress >= 1 then
-              action.func(action.end_value)
-              action.active = false
-              table.remove(spread_actions, i)
-            end
           end
         end
-      end,
-      division = 1/ppqn,
-      enabled = true,
-      realign = false,
-      order = 5
-    }
-  end
+      end
+    end,
+    division = 1/ (ppqn*4),
+    enabled = true,
+    realign = false,
+    order = 5
+  }
 end
 
 function m_clock.set_swing_shuffle_type(channel_number, swing_or_shuffle)
@@ -527,33 +529,36 @@ function m_clock.realign_sprockets()
 end
 
 local function calculate_total_pulses(channel, start_step, end_step)
-  local total_pulses = 0
   local chan_clock = m_clock["channel_" .. channel .. "_clock"]
-  local ppqn = clock_lattice:get_ppqn() 
-  local pulses_per_step = ppqn / 4  -- Assuming steps are sixteenth notes
-  local steps = end_step - start_step
-
-  total_pulses = steps * pulses_per_step
-
+  local ppqn = clock_lattice:get_ppqn()
+  local pulses_per_step = ppqn / 4  -- Each step is a sixteenth note
+  local steps = end_step - start_step + 1  -- Add 1 to include both start and end steps
+  
+  local total_pulses = steps * pulses_per_step
+  
   -- Apply clock division if set
-  if chan_clock and chan_clock.division ~= 1 then
-    total_pulses = math.floor(total_pulses / chan_clock.division)
-  end
+  if chan_clock and chan_clock.division then
 
+    -- Convert division from frequency to multiplier
+    local div_multiplier = 16 / (1 / chan_clock.division)
+    total_pulses = math.floor(total_pulses * div_multiplier)
+  end
+  
   return total_pulses
 end
 
 
 function m_clock.execute_action_across_steps_by_pulses(channel_number, start_step, end_step, start_value, end_value, func)
   local total_pulses = calculate_total_pulses(channel_number, start_step, end_step)
+  -- Clear any existing spread actions for this channel
+  m_clock.cancel_spread_actions_for_channel(channel_number)
   
   table.insert(spread_actions, {
     channel_number = channel_number,
-    pulse_count = 0,  -- Start at 0 for proper initial value
+    pulse_count = 0,
     total_pulses = total_pulses,
     start_step = start_step,
     end_step = end_step,
-    current_value = start_value,
     start_value = start_value,
     end_value = end_value,
     func = func,
@@ -563,8 +568,16 @@ end
 
 -- Helper function to cancel spread actions for a channel
 function m_clock.cancel_spread_actions_for_channel(channel_number)
+  -- Remove actions from the array (in reverse order to avoid index issues)
   for i = #spread_actions, 1, -1 do
-    if spread_actions[i].channel_number == channel_number then
+    if spread_actions[i] and spread_actions[i].channel_number == channel_number then
+      -- Execute one final value before removing
+      local action = spread_actions[i]
+      local progress = action.pulse_count / action.total_pulses
+      local final_value = action.start_value + ((action.end_value - action.start_value) * progress)
+      action.func(math.floor(final_value))
+      
+      -- Remove the action
       table.remove(spread_actions, i)
     end
   end
