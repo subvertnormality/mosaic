@@ -351,7 +351,8 @@ function m_clock.init()
               if trig_action.active then
                 if trig_action.pulse_count >= trig_action.total_pulses then
                   -- We've reached the end, execute final value and mark inactive
-                  trig_action.func(trig_action.end_value)
+                  -- print("executing final value", trig_action.end_value)
+                  -- trig_action.func(trig_action.end_value)
                   trig_action.active = false
                 else
                   -- Calculate progress and current value
@@ -627,7 +628,7 @@ function m_clock.execute_action_across_steps_by_pulses(args)
 end
 
 -- Helper function to cancel spread actions for a channel
-function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, trig_lock)
+function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, trig_lock, use_end_value)
   for i = #spread_actions, 1, -1 do
     local action = spread_actions[i]
     if action and action[channel_number] then
@@ -638,6 +639,9 @@ function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, tri
           local final_value = trig_action.start_value + ((trig_action.end_value - trig_action.start_value) * progress)
           if trig_action.quant then
             final_value = quantize_value(final_value, trig_action.quant)
+          end
+          if use_end_value then
+            final_value = trig_action.end_value
           end
           trig_action.func(final_value)
           
@@ -659,6 +663,10 @@ function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, tri
       end
     end
   end
+end
+
+function m_clock.channel_is_sliding(channel_number, trig_lock)
+  return program.get_channel_param_slide(channel_number, trig_lock)
 end
 
 function m_clock:start()

@@ -844,13 +844,14 @@ function program.get_next_trig_lock_step(channel, current_step, parameter)
   local current_song_pattern = program_data.selected_song_pattern
   local step_trig_lock_banks = channel.step_trig_lock_banks
   if not step_trig_lock_banks then return nil end
-  
   -- First check steps after current position in current pattern
   for step = current_step + 1, 64 do
     if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
       return {
         step = step,
-        song_pattern = current_song_pattern
+        current_song_pattern = current_song_pattern,
+        next_song_pattern = current_song_pattern,
+        value = step_trig_lock_banks[step][parameter]
       }
     end
   end
@@ -870,7 +871,9 @@ function program.get_next_trig_lock_step(channel, current_step, parameter)
           if next_pattern_trig_locks[step] and next_pattern_trig_locks[step][parameter] then
             return {
               step = step,
-              song_pattern = next_song_pattern
+              current_song_pattern = current_song_pattern,
+              next_song_pattern = next_song_pattern,
+              value = next_pattern_trig_locks[step][parameter]
             }
           end
         end
@@ -884,7 +887,9 @@ function program.get_next_trig_lock_step(channel, current_step, parameter)
       if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
         return {
           step = step,
-          song_pattern = current_song_pattern
+          current_song_pattern = current_song_pattern,
+          next_song_pattern = current_song_pattern,
+          value = step_trig_lock_banks[step][parameter]
         }
       end
     end

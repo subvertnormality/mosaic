@@ -128,10 +128,17 @@ function step.process_params(c, step)
         goto continue
       end
 
+      local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
+
       value = params:get(trig_lock_params[i].param_id)
 
+      local next_lock
+      
+      if step_trig_lock then
+        next_lock = program.get_next_trig_lock_step(channel, step, i)
+      end
+
       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
-        local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
         local midi_channel = devices[channel.number].midi_channel
 
         local param_id = param.param_id
@@ -152,23 +159,35 @@ function step.process_params(c, step)
 
           process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device)
 
+          if next_lock and program.get_channel_param_slide(channel, i) then
+            m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, i)
+            m_clock.execute_action_across_steps_by_pulses({
+              channel_number = channel.number,
+              trig_lock = i,
+              start_step = step,
+              end_step = next_lock.step + (64 * (next_lock.current_song_pattern - next_lock.next_song_pattern)),
+              start_value = step_trig_lock,
+              end_value = next_lock.value,
+              func = function(value)
+                process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
+              end
+            })
+          end
+
         elseif p_value and param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
           if p_value == param.off_value then
             goto continue
           end
 
           process_midi_param(param, p_value, midi_channel, devices[channel.number].midi_device)
-
         else
           if value == param.off_value then
             goto continue
           end
 
           process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
-
         end
       elseif param.type == "norns" and param.id == "nb_slew" then
-        local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
 
         if step_trig_lock then
           if step_trig_lock == param.off_value then
@@ -179,8 +198,6 @@ function step.process_params(c, step)
           device.player:set_slew(value)
         end
       elseif param.type == "norns" and param.id then
-        local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-
         if step_trig_lock then
 
           if step_trig_lock == param.off_value then
@@ -192,7 +209,21 @@ function step.process_params(c, step)
           end
 
           params:set(param.id, step_trig_lock)
-        elseif program.step_has_trig(channel, step) then
+          if next_lock and program.get_channel_param_slide(channel, i) then
+            print(next_lock.value)
+            m_clock.execute_action_across_steps_by_pulses({
+              channel_number = channel.number,
+              trig_lock = i,
+              start_step = step,
+              end_step = next_lock.step + (64 * (next_lock.current_song_pattern - next_lock.next_song_pattern)),
+              start_value = step_trig_lock,
+              end_value = next_lock.value,
+              func = function(value)
+                params:set(param.id, value)
+              end
+            })
+          end
+        elseif program.step_has_trig(channel, step) and not m_clock.channel_is_sliding(c, i)then
           if norns_param_state_handler.get_original_param_state(c, i) and norns_param_state_handler.get_original_param_state(c, i).value then 
             params:set(param.id, norns_param_state_handler.get_original_param_state(c, i).value)
             norns_param_state_handler.clear_original_param_state(c, i)

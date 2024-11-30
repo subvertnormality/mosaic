@@ -130,17 +130,20 @@ function test_get_next_trig_lock_step_basic_wrap()
   -- From step 1, should find step 5
   local result = program.get_next_trig_lock_step(channel, 1, 1)
   luaunit.assert_equals(result.step, 5)
-  luaunit.assert_equals(result.song_pattern, 1)
+  luaunit.assert_equals(result.current_song_pattern, 1)
+  luaunit.assert_equals(result.next_song_pattern, 1)
   
   -- From step 7, should find step 10
   result = program.get_next_trig_lock_step(channel, 7, 1)
   luaunit.assert_equals(result.step, 10)
-  luaunit.assert_equals(result.song_pattern, 1)
+  luaunit.assert_equals(result.current_song_pattern, 1)
+  luaunit.assert_equals(result.next_song_pattern, 1)
   
   -- From step 12, should wrap to step 5
   result = program.get_next_trig_lock_step(channel, 12, 1)
   luaunit.assert_equals(result.step, 5)
-  luaunit.assert_equals(result.song_pattern, 1)
+  luaunit.assert_equals(result.current_song_pattern, 1)
+  luaunit.assert_equals(result.next_song_pattern, 1)
 end
 
 function test_get_next_trig_lock_step_no_trig_locks()
@@ -192,7 +195,8 @@ function test_get_next_trig_lock_step_works_when_song_mode_is_enabled()
   -- Test finding trig lock in next pattern
   local result = program.get_next_trig_lock_step(c1_song_pattern_1, 5, 1)
   luaunit.assert_equals(result.step, 3)
-  luaunit.assert_equals(result.song_pattern, 2)
+  luaunit.assert_equals(result.current_song_pattern, 1)
+  luaunit.assert_equals(result.next_song_pattern, 2)
 end
 
 function test_get_next_trig_lock_step_song_mode_same_pattern()
@@ -213,7 +217,8 @@ function test_get_next_trig_lock_step_song_mode_same_pattern()
   -- Should find trig lock in current pattern
   local result = program.get_next_trig_lock_step(channel, 1, 1)
   luaunit.assert_equals(result.step, 5)
-  luaunit.assert_equals(result.song_pattern, 1)
+  luaunit.assert_equals(result.current_song_pattern, 1)
+  luaunit.assert_equals(result.next_song_pattern, 1)
 end
 
 function test_get_next_trig_lock_step_song_mode_no_next_trig_locks()
@@ -238,7 +243,8 @@ function test_get_next_trig_lock_step_song_mode_no_next_trig_locks()
   -- Should wrap in current pattern since next has no trig locks
   local result = program.get_next_trig_lock_step(channel1, 6, 1)
   luaunit.assert_equals(result.step, 5)
-  luaunit.assert_equals(result.song_pattern, 1)
+  luaunit.assert_equals(result.current_song_pattern, 1)
+  luaunit.assert_equals(result.next_song_pattern, 1)
 end
 
 function test_get_next_trig_lock_step_different_parameters()

@@ -236,7 +236,6 @@ function dial:temp_display_value()
 end
 
 function dial:set_display_modifier(display_modifier)
-  print("setting display modifier")
   self.display_modifier = display_modifier
 end 
 

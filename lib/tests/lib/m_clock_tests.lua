@@ -570,6 +570,40 @@ function test_cancel_spread_actions_for_channel()
   luaunit.assert_true(values[#values] < 127)
 end
 
+
+function test_cancel_spread_actions_for_channel_uses_end_value()
+  setup()
+  clock_setup()
+
+  local values = {}
+  local values_count_before_cancel
+  
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0,
+    end_value = 127,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
+
+  -- Progress halfway
+  progress_clock_by_pulses(48)
+  values_count_before_cancel = #values
+  
+  -- Cancel and try to progress more
+  m_clock.cancel_spread_actions_for_channel_trig_lock(1, 1, true)
+  progress_clock_by_pulses(48)
+  
+  -- Verify:
+  luaunit.assert_true(values_count_before_cancel > 0)
+  luaunit.assert_equals(values[1], 0)
+  luaunit.assert_true(values[#values] == 127)
+end
+
 function test_spread_actions_handle_shuffle()
   setup()
   clock_setup()
