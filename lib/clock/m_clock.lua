@@ -117,6 +117,25 @@ local function get_shuffle_values(channel)
   return shuffle_values
 end
 
+local function quantize_value(value, quant)
+  if not quant or quant == 0 then return value end
+  
+  -- For fractional quantization
+  if quant < 1 then
+    -- Calculate how many decimal places we need based on quant
+    local decimals = -math.floor(math.log10(quant))
+    local multiplier = 10^decimals
+    -- Round to the nearest quant step using integer math for precision
+    local scaled = math.floor(value * multiplier + 0.5)
+    local quant_scaled = math.floor(quant * multiplier + 0.5)
+    local steps = math.floor(scaled / quant_scaled + 0.5)
+    return (steps * quant_scaled) / multiplier
+  end
+  
+  -- For integer quantization
+  return math.floor(value/quant + 0.5) * quant
+end
+
 function m_clock.init()
   local program_data = program.get()
   clock_lattice = lattice:new({
@@ -343,11 +362,17 @@ function m_clock.init()
                   if trig_action.pulse_count == trig_action.total_pulses - 1 then
                     current_value = trig_action.end_value
                   else
+                    -- Ensure floating point division for raw values
                     current_value = trig_action.start_value + 
-                      ((trig_action.end_value - trig_action.start_value) * progress)
+                      ((trig_action.end_value - trig_action.start_value) * (progress + 0.0))
                   end
                   
-                  trig_action.func(math.floor(current_value))
+                  -- Quantize the value if a quantization step is specified
+                  if trig_action.quant and trig_action.quant > 0 then
+                    current_value = quantize_value(current_value, trig_action.quant)
+                  end
+                  
+                  trig_action.func(current_value)
                   trig_action.pulse_count = trig_action.pulse_count + 1
                 end
               end
@@ -593,6 +618,7 @@ function m_clock.execute_action_across_steps_by_pulses(args)
         end_step = args.end_step,
         start_value = args.start_value,
         end_value = args.end_value,
+        quant = args.quant,
         func = args.func,
         active = true
       }
@@ -602,33 +628,32 @@ end
 
 -- Helper function to cancel spread actions for a channel
 function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, trig_lock)
-  -- Remove actions from the array (in reverse order to avoid index issues)
   for i = #spread_actions, 1, -1 do
     local action = spread_actions[i]
     if action and action[channel_number] then
-      -- If trig_lock specified, only remove that specific lock's actions
       if trig_lock then
         if action[channel_number][trig_lock] then
-          -- Execute one final value before removing
           local trig_action = action[channel_number][trig_lock]
           local progress = trig_action.pulse_count / trig_action.total_pulses
           local final_value = trig_action.start_value + ((trig_action.end_value - trig_action.start_value) * progress)
-          trig_action.func(math.floor(final_value))
+          if trig_action.quant then
+            final_value = quantize_value(final_value, trig_action.quant)
+          end
+          trig_action.func(final_value)
           
-          -- Remove just this trig lock action
           action[channel_number][trig_lock] = nil
-          
-          -- If no more trig locks for this channel, remove the whole action
           if not next(action[channel_number]) then
             table.remove(spread_actions, i)
           end
         end
       else
-        -- No trig_lock specified, remove all actions for this channel
         for _, trig_action in pairs(action[channel_number]) do
           local progress = trig_action.pulse_count / trig_action.total_pulses
           local final_value = trig_action.start_value + ((trig_action.end_value - trig_action.start_value) * progress)
-          trig_action.func(math.floor(final_value))
+          if trig_action.quant then
+            final_value = quantize_value(final_value, trig_action.quant)
+          end
+          trig_action.func(final_value)
         end
         table.remove(spread_actions, i)
       end

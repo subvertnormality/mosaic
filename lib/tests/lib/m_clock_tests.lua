@@ -598,3 +598,236 @@ function test_spread_actions_handle_shuffle()
   luaunit.assert_equals(values[1], 0)
   luaunit.assert_equals(values[#values], 127)
 end
+
+function test_execute_action_across_steps_works_with_fractional_values()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0.01,
+    end_value = 1.00,
+    func = function(val)
+      table.insert(values, val) -- Don't floor the value here
+    end
+  })
+
+  progress_clock_by_pulses(96) -- One full beat (24 pulses) per step, 4 steps total
+  
+  -- Should have ~96 values transitioning from 0.01 to 1.00
+  luaunit.assert_equals(#values, 96)
+  luaunit.assert_is_number(values[1])
+  luaunit.assert_almost_equals(values[1], 0.01, 0.001)
+  luaunit.assert_almost_equals(values[#values], 1.00, 0.001)
+  
+  -- Check that we have some fractional values in between
+  local mid_value = values[#values // 2]
+  luaunit.assert_true(mid_value > 0.01 and mid_value < 1.00)
+end
+
+function test_execute_action_across_steps_works_with_fractional_quantization()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0,
+    end_value = 1.00,
+    quant = 0.01, -- Quantize to 0.01 steps
+    func = function(val)
+      table.insert(values, val)
+    end
+  })
+
+  progress_clock_by_pulses(96)
+  
+  -- Should have ~96 values transitioning from 0 to 1.00 in 0.01 increments
+  luaunit.assert_equals(#values, 96)
+  luaunit.assert_equals(values[1], 0)
+  luaunit.assert_equals(values[#values], 1.00)
+  
+  -- Check that all values are properly quantized to 0.01
+  for _, val in ipairs(values) do
+    -- Calculate what the value should be rounded to
+    local rounded = math.floor(val * 100 + 0.5) / 100
+    -- Check that the actual value matches what we expect after rounding
+    luaunit.assert_equals(val, rounded, 
+      string.format("Value %f was not properly quantized to 0.01 steps", val))
+  end
+
+  -- Verify values are monotonically increasing
+  for i = 2, #values do
+    luaunit.assert_true(values[i] >= values[i-1], 
+      string.format("Values not monotonically increasing at index %d: %f >= %f", 
+        i, values[i], values[i-1]))
+  end
+end
+
+function test_execute_action_across_steps_works_with_integer_quantization()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0,
+    end_value = 127,
+    quant = 1, -- Quantize to whole numbers
+    func = function(val)
+      table.insert(values, val)
+    end
+  })
+
+  progress_clock_by_pulses(96)
+  
+  -- Check that all values are integers
+  for _, val in ipairs(values) do
+    luaunit.assert_equals(val, math.floor(val))
+  end
+end
+
+function test_execute_action_across_steps_with_zero_quant_uses_raw_values()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0,
+    end_value = 1.00,
+    quant = 0, -- Should use raw values without quantization
+    func = function(val)
+      table.insert(values, val)
+    end
+  })
+
+  progress_clock_by_pulses(96)
+  
+  -- Verify we get floating point values
+  local has_decimal = false
+  for i = 2, #values do
+    -- Check if any value has a decimal part
+    if values[i] ~= math.floor(values[i]) then
+      has_decimal = true
+      break
+    end
+  end
+  luaunit.assert_true(has_decimal, "Expected at least one floating point value when quant = 0")
+end
+
+function test_execute_action_across_steps_with_nil_quant_uses_raw_values()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0,
+    end_value = 1.00,
+    quant = nil, -- Should use raw values without quantization
+    func = function(val)
+      table.insert(values, val)
+    end
+  })
+
+  progress_clock_by_pulses(96)
+  
+  -- Verify we get floating point values
+  local has_decimal = false
+  for i = 2, #values do
+    -- Check if any value has a decimal part
+    if values[i] ~= math.floor(values[i]) then
+      has_decimal = true
+      break
+    end
+  end
+  luaunit.assert_true(has_decimal, "Expected at least one floating point value when quant = nil")
+end
+
+function test_cancel_spread_actions_for_channel_without_trig_lock()
+  setup()
+  clock_setup()
+
+  local values1 = {}
+  local values2 = {}
+  
+  -- Create two spread actions for the same channel
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0,
+    end_value = 127,
+    func = function(val)
+      table.insert(values1, val)
+    end
+  })
+
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 2,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0,
+    end_value = 100,
+    func = function(val)
+      table.insert(values2, val)
+    end
+  })
+
+  progress_clock_by_pulses(48)
+  
+  -- Cancel all actions for channel 1 without specifying trig_lock
+  m_clock.cancel_spread_actions_for_channel_trig_lock(1)
+  progress_clock_by_pulses(48)
+  
+  -- Both actions should have been cancelled
+  luaunit.assert_true(#values1 > 0)
+  luaunit.assert_true(#values2 > 0)
+  luaunit.assert_true(values1[#values1] < 127)
+  luaunit.assert_true(values2[#values2] < 100)
+end
+
+function test_execute_action_across_steps_with_same_start_and_end_step()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 1, -- Same as start step
+    start_value = 0,
+    end_value = 100,
+    quant = 1,
+    func = function(val)
+      table.insert(values, val)
+    end
+  })
+
+  progress_clock_by_pulses(24) -- One step worth of pulses
+  
+  -- Should still get a transition over the single step
+  luaunit.assert_equals(#values, 24)
+  luaunit.assert_equals(values[1], 0)
+  luaunit.assert_equals(values[#values], 100)
+end
