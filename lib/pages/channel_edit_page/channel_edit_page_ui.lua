@@ -233,6 +233,20 @@ function channel_edit_page_ui.init()
   midi_channel_vertical_scroll_selector:select()
   midi_device_vertical_scroll_selector:set_items(m_midi.get_midi_outs())
   dials:set_items(m_params)
+
+  for i, dial in ipairs(dials:get_items()) do
+    dial:set_display_modifier(function(x, y)
+      if program.get_channel_param_slide(program.get_selected_channel(), i) then
+        screen.move(x, y+2)
+        screen.line(x+19, y+2)
+        screen.stroke()
+        screen.close()
+        screen.move(x, y)
+      end
+    end)
+  end
+
+
   clock_mod_list_selector:set_list(m_clock.get_clock_divisions())
   device_map_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Midi Map", device_map:get_devices())
 
@@ -874,7 +888,6 @@ channel_edit_page_ui.refresh_channel_config = scheduler.debounce(function()
   midi_channel_vertical_scroll_selector:deselect()
   midi_device_vertical_scroll_selector:deselect()
 end)
-
 
 
 function channel_edit_page_ui.refresh()
@@ -1563,6 +1576,9 @@ function channel_edit_page_ui.handle_key_three_pressed()
       tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory applied")
     end
     channel_edit_page_ui.refresh_memory()
+  elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
+    program.toggle_channel_param_slide(program.get_selected_channel(), dials:get_selected_index())
+    fn.dirty_screen(true)
   elseif #pressed_keys < 1 then
     save_confirm.confirm()
   end
@@ -1665,3 +1681,4 @@ end
 
 
 return channel_edit_page_ui
+

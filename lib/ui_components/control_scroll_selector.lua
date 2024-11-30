@@ -50,6 +50,10 @@ function control_scroll_selector:set_items(items)
   fn.dirty_screen(true)
 end
 
+function control_scroll_selector:get_items()
+  return self.items
+end 
+
 function control_scroll_selector:get_selected_index()
   return self.selected_item
 end

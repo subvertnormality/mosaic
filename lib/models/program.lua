@@ -41,6 +41,8 @@ local function initialise_default_channels()
       trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
       trig_lock_calculator_ids = {},
       step_trig_lock_banks = {},
+      trig_lock_slides = {false, false, false, false, false, false, false, false, false, false},
+      step_trig_lock_slides = {},
       step_octave_trig_lock_banks = {},
       step_scale_trig_lock_banks = {},
       step_trig_masks = {},
@@ -192,7 +194,7 @@ function program.get_selected_page()
 end
 
 function program.get_song_pattern(p)
-  local data = program.get()
+  local data = program_store
   if not data.song_patterns[p] then
     data.song_patterns[p] = initialise_default_song_pattern()
   end
@@ -284,6 +286,7 @@ function program.add_step_param_trig_lock_to_channel(channel, step, parameter, t
   trig_lock = math.min(trig_lock, trig_lock_params[parameter].nrpn_max_value or trig_lock_params[parameter].cc_max_value or 127)
 
   step_trig_lock_banks[step][parameter] = trig_lock
+
 end
 
 function program.get_step_param_trig_lock(channel, step, parameter)
@@ -365,6 +368,51 @@ function program.get_step_transpose_trig_lock(step)
   local step_transpose_trig_lock_banks = channel.step_transpose_trig_lock_banks
   return step_transpose_trig_lock_banks and step_transpose_trig_lock_banks[step]
 end
+
+function program.set_channel_param_slide(channel, trig_param, value)
+  channel.trig_lock_slides[trig_param] = value
+end
+
+function program.toggle_channel_param_slide(channel, trig_param)
+  if not channel.trig_lock_slides then
+    channel.trig_lock_slides = {}
+  end
+  if not channel.trig_lock_slides[trig_param] then
+    channel.trig_lock_slides[trig_param] = true
+    return
+  end
+  channel.trig_lock_slides[trig_param] = not channel.trig_lock_slides[trig_param]
+end
+
+function program.get_channel_param_slide(channel, trig_param)
+  if not channel.trig_lock_slides then
+    channel.trig_lock_slides = {}
+  end
+  return channel.trig_lock_slides[trig_param]
+end
+
+function program.set_step_param_slide(channel, step, trig_param, value)
+  if not channel.step_trig_lock_slides then
+    channel.step_trig_lock_slides = {}
+  end
+
+  channel.step_trig_lock_slides[step][trig_param] = value
+end
+
+function program.clear_step_param_slide(channel, step, trig_param)
+  channel.step_trig_lock_slides[step][trig_param] = nil
+
+  if next(channel.step_trig_lock_slides[step]) == nil then
+    channel.step_trig_lock_slides[step] = nil
+  end 
+end
+
+function program.get_step_param_slide(channel, step, trig_param)
+  if not channel.step_trig_lock_slides then
+    channel.step_trig_lock_slides = {}
+  end
+  return channel.step_trig_lock_slides[step][trig_param]
+end 
 
 function program.step_transpose_has_trig_lock(step)
   if program.get_selected_channel().number ~= 17 then return false end
@@ -788,6 +836,61 @@ function program.clear_working_pattern_for_step(channel, step)
   channel.working_pattern.note_values[step] = 0
   channel.working_pattern.velocity_values[step] = 100 -- Default velocity
   channel.working_pattern.lengths[step] = 1 -- Default length
+end
+
+-- Replace the existing get_next_trig_lock_step function with this version
+function program.get_next_trig_lock_step(channel, current_step, parameter)
+  local program_data = program.get()
+  local current_song_pattern = program_data.selected_song_pattern
+  local step_trig_lock_banks = channel.step_trig_lock_banks
+  if not step_trig_lock_banks then return nil end
+  
+  -- First check steps after current position in current pattern
+  for step = current_step + 1, 64 do
+    if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
+      return {
+        step = step,
+        song_pattern = current_song_pattern
+      }
+    end
+  end
+
+  local next_song_pattern = step.calculate_next_selected_song_pattern()
+
+  -- If in song mode, check next pattern before wrapping
+  if next_song_pattern ~= current_song_pattern and params:get("song_mode") == 2 then
+
+    if next_song_pattern ~= current_song_pattern then
+      local next_pattern_channel = program.get_channel(next_song_pattern, channel.number)
+      local next_pattern_trig_locks = next_pattern_channel.step_trig_lock_banks
+      
+      if next_pattern_trig_locks then
+        -- Start checking from step 1 in the next pattern
+        for step = 1, 64 do
+          if next_pattern_trig_locks[step] and next_pattern_trig_locks[step][parameter] then
+            return {
+              step = step,
+              song_pattern = next_song_pattern
+            }
+          end
+        end
+      end
+    end
+  end
+
+  -- If nothing found in next pattern or not in song mode, wrap around in current pattern
+  if next_song_pattern == current_song_pattern or params:get("song_mode") ~= 2 then
+    for step = 1, current_step do
+      if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
+        return {
+          step = step,
+          song_pattern = current_song_pattern
+        }
+      end
+    end
+  end
+
+  return nil
 end
 
 return program

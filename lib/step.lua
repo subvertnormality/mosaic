@@ -218,6 +218,7 @@ function step.calculate_next_selected_song_pattern()
   end
 
   local next_pattern_number = selected_song_pattern_number + 1
+
   if next_pattern_number < 97 and song_patterns[next_pattern_number] and song_patterns[next_pattern_number].active then
     return next_pattern_number
   end
