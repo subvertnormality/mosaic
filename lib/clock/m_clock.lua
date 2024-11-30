@@ -320,23 +320,54 @@ function m_clock.init()
     m_clock["channel_" .. channel_number .. "_clock"].first_run = true
 
   end
-
   execute_spread_actions = clock_lattice:new_sprocket {
     action = function()
       for i = #spread_actions, 1, -1 do
         local action = spread_actions[i]
         if action then
-          if action.pulse_count >= action.total_pulses then
-            -- We've reached the end, execute final value and remove
-            action.func(action.end_value)
+          -- Iterate through channels
+          for channel_number, channel_actions in pairs(action) do
+            -- Iterate through trig locks
+            for trig_lock, trig_action in pairs(channel_actions) do
+              if trig_action.active then
+                if trig_action.pulse_count >= trig_action.total_pulses then
+                  -- We've reached the end, execute final value and mark inactive
+                  trig_action.func(trig_action.end_value)
+                  trig_action.active = false
+                else
+                  -- Calculate progress and current value
+                  local progress = trig_action.pulse_count / trig_action.total_pulses
+                  local current_value
+                  
+                  -- Use end_value exactly when we're at the last pulse
+                  if trig_action.pulse_count == trig_action.total_pulses - 1 then
+                    current_value = trig_action.end_value
+                  else
+                    current_value = trig_action.start_value + 
+                      ((trig_action.end_value - trig_action.start_value) * progress)
+                  end
+                  
+                  trig_action.func(math.floor(current_value))
+                  trig_action.pulse_count = trig_action.pulse_count + 1
+                end
+              end
+            end
+          end
+          
+          -- Remove action if all trig locks are inactive
+          local all_inactive = true
+          for channel_number, channel_actions in pairs(action) do
+            for trig_lock, trig_action in pairs(channel_actions) do
+              if trig_action.active then
+                all_inactive = false
+                break
+              end
+            end
+            if not all_inactive then break end
+          end
+          
+          if all_inactive then
             table.remove(spread_actions, i)
-          else
-            -- Calculate progress and current value
-            local progress = action.pulse_count / action.total_pulses
-            local current_value = action.start_value + ((action.end_value - action.start_value) * progress)
-            
-            action.func(math.floor(current_value))
-            action.pulse_count = action.pulse_count + 1
           end
         end
       end
@@ -548,37 +579,59 @@ local function calculate_total_pulses(channel, start_step, end_step)
 end
 
 
-function m_clock.execute_action_across_steps_by_pulses(channel_number, start_step, end_step, start_value, end_value, func)
-  local total_pulses = calculate_total_pulses(channel_number, start_step, end_step)
+function m_clock.execute_action_across_steps_by_pulses(args)
+  local total_pulses = calculate_total_pulses(args.channel_number, args.start_step, args.end_step)
   -- Clear any existing spread actions for this channel
-  m_clock.cancel_spread_actions_for_channel(channel_number)
+  m_clock.cancel_spread_actions_for_channel_trig_lock(args.channel_number, args.trig_lock)
   
   table.insert(spread_actions, {
-    channel_number = channel_number,
-    pulse_count = 0,
-    total_pulses = total_pulses,
-    start_step = start_step,
-    end_step = end_step,
-    start_value = start_value,
-    end_value = end_value,
-    func = func,
-    active = true
+    [args.channel_number] = {
+      [args.trig_lock] = {
+        pulse_count = 0,
+        total_pulses = total_pulses,
+        start_step = args.start_step,
+        end_step = args.end_step,
+        start_value = args.start_value,
+        end_value = args.end_value,
+        func = args.func,
+        active = true
+      }
+    }
   })
 end
 
 -- Helper function to cancel spread actions for a channel
-function m_clock.cancel_spread_actions_for_channel(channel_number)
+function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, trig_lock)
   -- Remove actions from the array (in reverse order to avoid index issues)
   for i = #spread_actions, 1, -1 do
-    if spread_actions[i] and spread_actions[i].channel_number == channel_number then
-      -- Execute one final value before removing
-      local action = spread_actions[i]
-      local progress = action.pulse_count / action.total_pulses
-      local final_value = action.start_value + ((action.end_value - action.start_value) * progress)
-      action.func(math.floor(final_value))
-      
-      -- Remove the action
-      table.remove(spread_actions, i)
+    local action = spread_actions[i]
+    if action and action[channel_number] then
+      -- If trig_lock specified, only remove that specific lock's actions
+      if trig_lock then
+        if action[channel_number][trig_lock] then
+          -- Execute one final value before removing
+          local trig_action = action[channel_number][trig_lock]
+          local progress = trig_action.pulse_count / trig_action.total_pulses
+          local final_value = trig_action.start_value + ((trig_action.end_value - trig_action.start_value) * progress)
+          trig_action.func(math.floor(final_value))
+          
+          -- Remove just this trig lock action
+          action[channel_number][trig_lock] = nil
+          
+          -- If no more trig locks for this channel, remove the whole action
+          if not next(action[channel_number]) then
+            table.remove(spread_actions, i)
+          end
+        end
+      else
+        -- No trig_lock specified, remove all actions for this channel
+        for _, trig_action in pairs(action[channel_number]) do
+          local progress = trig_action.pulse_count / trig_action.total_pulses
+          local final_value = trig_action.start_value + ((trig_action.end_value - trig_action.start_value) * progress)
+          trig_action.func(math.floor(final_value))
+        end
+        table.remove(spread_actions, i)
+      end
     end
   end
 end

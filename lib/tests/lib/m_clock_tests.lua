@@ -489,9 +489,17 @@ function test_execute_action_across_steps_works_with_normal_clock()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses(1, 1, 4, 0, 127, function(val)
-    table.insert(values, math.floor(val))
-  end)
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0,
+    end_value = 127,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
 
   progress_clock_by_pulses(96) -- One full beat (24 pulses) per step, 4 steps total
   
@@ -509,9 +517,17 @@ function test_execute_action_across_steps_works_with_clock_division()
   m_clock.set_channel_division(1, div_2_clock_mod)
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses(1, 1, 4, 0, 100, function(val)
-    table.insert(values, math.floor(val))
-  end)
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0,
+    end_value = 100,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
 
   progress_clock_by_pulses(192) -- Two beats per step with div 2
   
@@ -528,22 +544,29 @@ function test_cancel_spread_actions_for_channel()
   local values = {}
   local values_count_before_cancel
   
-  m_clock.execute_action_across_steps_by_pulses(1, 1, 4, 0, 127, function(val)
-    table.insert(values, math.floor(val))
-  end)
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 0,
+    end_value = 127,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
 
   -- Progress halfway
   progress_clock_by_pulses(48)
   values_count_before_cancel = #values
   
   -- Cancel and try to progress more
-  m_clock.cancel_spread_actions_for_channel(1)
+  m_clock.cancel_spread_actions_for_channel_trig_lock(1, 1)
   progress_clock_by_pulses(48)
   
   -- Verify:
   luaunit.assert_true(values_count_before_cancel > 0)
   luaunit.assert_equals(values[1], 0)
-  print(values[#values])
   luaunit.assert_true(values[#values] < 127)
 end
 
@@ -557,9 +580,17 @@ function test_spread_actions_handle_shuffle()
   channel.shuffle_feel = 1
   
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses(1, 1, 3, 0, 127, function(val)
-    table.insert(values, math.floor(val))
-  end)
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 3,
+    start_value = 0,
+    end_value = 127,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
 
   progress_clock_by_pulses(96)
   
