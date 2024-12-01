@@ -685,7 +685,7 @@ function test_execute_action_across_steps_works_with_fractional_quantization()
   
   -- Should have ~96 values transitioning from 0 to 1.00 in 0.01 increments
   luaunit.assert_equals(#values, 96)
-  luaunit.assert_equals(values[1], 0)
+  luaunit.assert_equals(values[1], 0.01)
   luaunit.assert_equals(values[#values], 1.00)
   
   -- Check that all values are properly quantized to 0.01
@@ -860,8 +860,256 @@ function test_execute_action_across_steps_with_same_start_and_end_step()
 
   progress_clock_by_pulses(24) -- One step worth of pulses
   
-  -- Should still get a transition over the single step
-  luaunit.assert_equals(#values, 24)
+  -- Do nothing
+  luaunit.assert_equals(#values, 0)
+end
+
+function test_execute_action_across_steps_wraps_correctly()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 62, -- Near end of pattern
+    end_step = 2,   -- Wraps to beginning
+    start_value = 0,
+    end_value = 100,
+    quant = 1,
+    should_wrap = true,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
+
+  -- Progress enough pulses to cover the wrap
+  progress_clock_by_pulses(384)
+  
+  -- luaunit.assert_equals(#values, 100)
+  luaunit.assert_equals(values[1], 1)
+  luaunit.assert_equals(values[#values], 100)
+  
+  -- Check values increase monotonically
+  for i = 2, #values do
+    luaunit.assert_true(values[i] >= values[i-1])
+  end
+end
+
+function test_execute_action_across_steps_handles_wrap_with_clock_division()
+  setup()
+  clock_setup()
+  
+  local div_2_clock_mod = m_clock.calculate_divisor(m_clock.get_clock_divisions()[15])
+  m_clock.set_channel_division(1, div_2_clock_mod)
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 63,
+    end_step = 1,
+    start_value = 0,
+    end_value = 100,
+    should_wrap = true,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
+
+  -- With div 2, need twice as many pulses
+  progress_clock_by_pulses(576) -- 3 steps * 192 pulses per step
+  
   luaunit.assert_equals(values[1], 0)
   luaunit.assert_equals(values[#values], 100)
+  
+  -- Check values increase monotonically
+  for i = 2, #values do
+    luaunit.assert_true(values[i] >= values[i-1])
+  end
+end
+
+function test_execute_action_across_steps_no_wrap_when_not_specified()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 63,
+    end_step = 1,
+    start_value = 0,
+    end_value = 100,
+    should_wrap = false, -- Explicitly set to false
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
+
+  progress_clock_by_pulses(96) -- Only progress one step
+  
+  -- wrapping is off so no transition should happen
+  luaunit.assert_equals(values[1], nil)
+end
+
+function test_execute_action_across_steps_wraps_with_quantization()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 63,
+    end_step = 1,
+    start_value = 0,
+    end_value = 100,
+    should_wrap = true,
+    quant = 10, -- Quantize to steps of 10
+    func = function(val)
+      table.insert(values, val)
+    end
+  })
+
+  progress_clock_by_pulses(288) -- 3 steps worth
+  
+  -- Check all values are properly quantized
+  for _, val in ipairs(values) do
+    luaunit.assert_equals(val % 10, 0)
+  end
+  
+  luaunit.assert_equals(values[1], 10)
+  luaunit.assert_equals(values[#values], 100)
+end
+
+function test_execute_action_across_steps_wraps_at_pattern_boundaries()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 64, -- Last step
+    end_step = 1,    -- First step
+    start_value = 0,
+    end_value = 100,
+    should_wrap = true,
+    quant = 1,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
+
+  progress_clock_by_pulses(192) -- Two steps worth
+  
+  luaunit.assert_equals(values[1], 1)
+  luaunit.assert_equals(values[#values], 100)
+  
+  -- Check values increase monotonically
+  for i = 2, #values do
+    luaunit.assert_true(values[i] >= values[i-1])
+  end
+end
+
+function test_execute_action_across_steps_wraps_with_long_spans()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 60, -- Near end
+    end_step = 59,   -- Almost back to start
+    start_value = 0,
+    end_value = 100,
+    should_wrap = true,
+    quant = 1,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
+
+  -- Need to cover steps 60-64 and 1-59 = 64 steps
+  progress_clock_by_pulses(64 * 96)
+  
+  luaunit.assert_equals(values[1], 1)
+  luaunit.assert_equals(values[#values], 100)
+  
+  -- Check values increase monotonically
+  for i = 2, #values do
+    luaunit.assert_true(values[i] >= values[i-1])
+  end
+end
+
+function test_execute_action_across_steps_wraps_with_multiple_actions()
+  setup()
+  clock_setup()
+
+  local values1 = {}
+  local values2 = {}
+  
+  -- Start two overlapping wrapped transitions
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 63,
+    end_step = 2,
+    start_value = 0,
+    end_value = 100,
+    should_wrap = true,
+    quant = 1,
+    func = function(val)
+      table.insert(values1, math.floor(val))
+    end
+  })
+
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 2,
+    start_step = 64,
+    end_step = 1,
+    start_value = 0,
+    end_value = 100,
+    should_wrap = true,
+    quant = 1,
+    func = function(val)
+      table.insert(values2, math.floor(val))
+    end
+  })
+
+  progress_clock_by_pulses(384)
+  
+  -- Both transitions should complete independently
+  luaunit.assert_equals(values1[1], 1)
+  luaunit.assert_equals(values1[#values1], 100)
+  luaunit.assert_equals(values2[1], 1)
+  luaunit.assert_equals(values2[#values2], 100)
+end
+
+function test_execute_action_across_steps_wraps_with_zero_length()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 64,
+    end_step = 64, -- Same step but with wrap enabled
+    start_value = 0,
+    end_value = 100,
+    should_wrap = true,
+    quant = 1,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
+
+  progress_clock_by_pulses(96) -- One step worth
+  
+  -- Should do nothing
+  luaunit.assert_equals(#values, 0)
 end

@@ -108,6 +108,7 @@ local function process_midi_param(param, step_trig_lock, midi_channel, midi_devi
   end
 end
 
+
 function step.process_params(c, step)
   local program_data = program.get()
   local channel = program.get_channel(program.get().selected_song_pattern, c)
@@ -168,6 +169,7 @@ function step.process_params(c, step)
               end_step = next_lock.step + (64 * (next_lock.current_song_pattern - next_lock.next_song_pattern)),
               start_value = step_trig_lock,
               end_value = next_lock.value,
+              should_wrap = next_lock.should_wrap,
               func = function(value)
                 process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
               end
@@ -210,7 +212,6 @@ function step.process_params(c, step)
 
           params:set(param.id, step_trig_lock)
           if next_lock and program.get_channel_param_slide(channel, i) then
-            print(next_lock.value)
             m_clock.execute_action_across_steps_by_pulses({
               channel_number = channel.number,
               trig_lock = i,

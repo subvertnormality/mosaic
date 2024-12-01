@@ -856,41 +856,20 @@ function program.get_next_trig_lock_step(channel, current_step, parameter)
     end
   end
 
-  local next_song_pattern = step.calculate_next_selected_song_pattern()
+  if params:get("wrap_param_slides") == 2 then
+    local next_song_pattern = step.calculate_next_selected_song_pattern()
 
-  -- If in song mode, check next pattern before wrapping
-  if next_song_pattern ~= current_song_pattern and params:get("song_mode") == 2 then
-
-    if next_song_pattern ~= current_song_pattern then
-      local next_pattern_channel = program.get_channel(next_song_pattern, channel.number)
-      local next_pattern_trig_locks = next_pattern_channel.step_trig_lock_banks
-      
-      if next_pattern_trig_locks then
-        -- Start checking from step 1 in the next pattern
-        for step = 1, 64 do
-          if next_pattern_trig_locks[step] and next_pattern_trig_locks[step][parameter] then
-            return {
-              step = step,
-              current_song_pattern = current_song_pattern,
-              next_song_pattern = next_song_pattern,
-              value = next_pattern_trig_locks[step][parameter]
-            }
-          end
+    if next_song_pattern == current_song_pattern or params:get("song_mode") ~= 2 then
+      for step = 1, current_step do
+        if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
+          return {
+            step = step,
+            current_song_pattern = current_song_pattern,
+            next_song_pattern = current_song_pattern,
+            value = step_trig_lock_banks[step][parameter],
+            should_wrap = true
+          }
         end
-      end
-    end
-  end
-
-  -- If nothing found in next pattern or not in song mode, wrap around in current pattern
-  if next_song_pattern == current_song_pattern or params:get("song_mode") ~= 2 then
-    for step = 1, current_step do
-      if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
-        return {
-          step = step,
-          current_song_pattern = current_song_pattern,
-          next_song_pattern = current_song_pattern,
-          value = step_trig_lock_banks[step][parameter]
-        }
       end
     end
   end

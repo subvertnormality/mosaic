@@ -240,7 +240,7 @@ function init()
 
   blink()
 
-  params:add_group("mosaic", "MOSAIC", 31)
+  params:add_group("mosaic", "MOSAIC", 32)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -313,6 +313,7 @@ function init()
   params:add_option("record", "Record", {"Off", "On"}, 1)
   params:add_option("stop_safety", "Shift press to stop", {"Off", "On"}, 1)
   params:add_option("song_mode", "Song mode", {"Off", "On"}, 2)
+  params:add_option("wrap_param_slides", "Wrap param slides", {"Off", "On"}, 1)
   params:set_action(
     "song_mode",
     function(x)

@@ -349,9 +349,10 @@ function m_clock.init()
             -- Iterate through trig locks
             for trig_lock, trig_action in pairs(channel_actions) do
               if trig_action.active then
+
+                local quant = trig_action.quant or 0
                 if trig_action.pulse_count >= trig_action.total_pulses then
                   -- We've reached the end, execute final value and mark inactive
-                  -- print("executing final value", trig_action.end_value)
                   -- trig_action.func(trig_action.end_value)
                   trig_action.active = false
                 else
@@ -364,13 +365,16 @@ function m_clock.init()
                     current_value = trig_action.end_value
                   else
                     -- Ensure floating point division for raw values
-                    current_value = trig_action.start_value + 
-                      ((trig_action.end_value - trig_action.start_value) * (progress + 0.0))
+                    current_value = (trig_action.start_value + quant) + 
+                      (((trig_action.end_value + quant) - (trig_action.start_value + quant)) * (progress + 0.0))
+                    if current_value > trig_action.end_value then
+                      current_value = trig_action.end_value
+                    end
                   end
                   
                   -- Quantize the value if a quantization step is specified
-                  if trig_action.quant and trig_action.quant > 0 then
-                    current_value = quantize_value(current_value, trig_action.quant)
+                  if quant and quant > 0 then
+                    current_value = quantize_value(current_value, quant)
                   end
                   
                   trig_action.func(current_value)
@@ -605,8 +609,25 @@ local function calculate_total_pulses(channel, start_step, end_step)
 end
 
 
+
 function m_clock.execute_action_across_steps_by_pulses(args)
-  local total_pulses = calculate_total_pulses(args.channel_number, args.start_step, args.end_step)
+  local total_pulses, total_steps
+
+  if args.start_step == args.end_step then
+    return
+  end 
+  
+  if args.should_wrap and args.end_step < args.start_step then
+    -- For wrapping, calculate pulses from start to end of pattern (64)
+    -- plus pulses from beginning to target step
+    local pulses_to_end = calculate_total_pulses(args.channel_number, args.start_step, 64, args.should_wrap)
+    local pulses_from_start = calculate_total_pulses(args.channel_number, 1, args.end_step, args.should_wrap)
+    
+    total_pulses = pulses_to_end + pulses_from_start
+  else
+    total_pulses = calculate_total_pulses(args.channel_number, args.start_step, args.end_step, args.should_wrap)
+  end
+
   -- Clear any existing spread actions for this channel
   m_clock.cancel_spread_actions_for_channel_trig_lock(args.channel_number, args.trig_lock)
   
@@ -621,7 +642,8 @@ function m_clock.execute_action_across_steps_by_pulses(args)
         end_value = args.end_value,
         quant = args.quant,
         func = args.func,
-        active = true
+        active = true,
+        should_wrap = args.should_wrap
       }
     }
   })
