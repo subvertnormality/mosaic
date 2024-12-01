@@ -395,8 +395,8 @@ function m_clock.init()
                       current_value = quantize_value(current_value, quant)
                     end
                   end
-                  
-                  trig_action.func(current_value)
+                  trig_action.last_value = current_value
+                  trig_action.func(current_value, trig_action.last_value)
                   trig_action.pulse_count = trig_action.pulse_count + 1
                 end
               end

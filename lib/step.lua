@@ -171,8 +171,10 @@ function step.process_params(c, step)
               end_value = next_lock.value,
               should_wrap = next_lock.should_wrap,
               quant = 1,
-              func = function(value)
-                process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
+              func = function(value, last_value)
+                if last_value ~= value then
+                  process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
+                end
               end
             })
           end
@@ -221,8 +223,10 @@ function step.process_params(c, step)
               start_value = step_trig_lock,
               end_value = next_lock.value,
               should_wrap = next_lock.should_wrap,
-              func = function(value)
-                params:set(param.id, value)
+              func = function(value, last_value)
+                if last_value ~= value then 
+                  params:set(param.id, value)
+                end
               end
             })
           end
