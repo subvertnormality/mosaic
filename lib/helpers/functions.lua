@@ -114,6 +114,12 @@ function fn.print_table(t, indent, current_depth, max_depth)
   current_depth = current_depth or 0
   max_depth = max_depth or 7
 
+  -- if t is not a table, print it
+  if type(t) ~= "table" then
+    print(indent .. tostring(t))
+    return
+  end
+
   if current_depth > max_depth then
     print(indent .. "...")
     return

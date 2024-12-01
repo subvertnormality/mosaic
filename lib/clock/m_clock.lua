@@ -706,8 +706,18 @@ function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, tri
   end
 end
 
-function m_clock.channel_is_sliding(channel, trig_lock)
-  return program.get_channel_param_slide(channel, trig_lock)
+function m_clock.channel_is_sliding(channel, trig_param)
+  -- Check if there are any active spread actions
+  for _, action in ipairs(spread_actions) do
+    -- Check if this action affects our channel
+    if action[channel.number] then
+      -- Check if this action affects our trig parameter
+      if action[channel.number][trig_param] and action[channel.number][trig_param].active then
+        return true
+      end
+    end
+  end
+  return false
 end
 
 function m_clock:start()
