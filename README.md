@@ -44,6 +44,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Mods and Software Devices](#mods-and-software-devices)
   * [Getting Around Mosaic](#getting-around-mosaic)
     + [Sequencer Start and Stop](#sequencer-start-and-stop)
+    + [Live Record](#arm-live-record)
     + [Grid Menu Navigation](#grid-menu-navigation)
     + [Norns Menu Navigation](#norns-menu-navigation)
     + [Tooltips](#tooltips)
@@ -82,6 +83,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Length Merge Modes](#length-merge-modes)
     + [Note Dashboard](#note-dashboard)
     + [Clocks, Swing and Shuffle](#clocks-swing-and-shuffle)
+    + [Memory (undo and redo)](#memory)
     + [Channel Length](#channel-length)
     + [Muting Channels](#muting-channels)
     + [Trig Parameters](#trig-parameters)
@@ -107,6 +109,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
     + [Navigating the Norns Display](#navigating-the-norns-display)
   * [Locks](#locks)
     + [Trig Param Locks](#trig-param-locks)
+      - [Param Slides](#param-slides)
     + [Mask Locks](#mask-locks)
     + [Scale Locks](#scale-locks)
     + [Transposition Locks](#transposition-locks)
@@ -196,6 +199,19 @@ To start the sequencer, press the lowest left hand button on the grid. To stop t
   </svg>
   <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=632s">Start and stop functionality demo</a>
 </p>
+
+### Arm live record
+
+To enable record mode, press the second button from the left on the grid.
+
+When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantized to align with the current step.
+
+Changes to trig parameters are also recorded on the active channel. Recording begins the first time a trig parameter is modified. During recording, all parameter values are saved as trig locks, overwriting existing locks until the end of the current song pattern. Recording resumes automatically when a trig parameter is adjusted again using the encoder.
+
+By default, trig locks are recorded only on active steps. However, if the Trigless Param setting is enabled, parameter values will be recorded on every step.
+
+<img alt="Mosaic grid record button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-record-button.svg" width="300" />
+
 
 ### Grid Menu Navigation
 
@@ -287,6 +303,8 @@ When assigning multiple patterns to a single channel, you might notice that over
 #### Melody Composition
 
 The [Channel Editor](##channel-editor) doesn't merely allow you to add, merge, and apply scales to patterns; it enables you to enhance them with melodies and other elements to further enrich your music. In fact, you could compose entire songs using just the channel editor if you wanted to, thanks to [Masks](#masks). Masks provide a direct method to input triggers, notes, velocities, and chords right into the channel editor grid, giving you precise control over your musical creations. You can overwrite pattern values or create entirely new steps.
+
+Use the live recording mode to play your melodies directly over your rhythm and harmony patterns. Then record in automation directly by altering trig params whilst recording.
 
 ### Modulation, Movement, and Interest
 
@@ -630,6 +648,19 @@ Note: If a channel's swing/shuffle settings are not set ("X"), they will take th
   <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2623s">Clocks, swings and shuffle demo</a>
 </p>
 
+#### Memory (undo and redo)
+
+_Mosaic_'s memory retains all masks and trig lock actions, including those recorded using the record function. You can navigate this memory using Norns' encoder.
+
+To access _Mosaic_'s memory, open the channel editor and navigate to the Memory page on the Norns screen. On this page, each remembered action is represented as an icon, with the most recent action displayed on the right.
+
+- Notes are shown as icons, while dots indicate the length added to those notes.
+- Use E3 to scroll left and explore past actions or scroll right to move towards more recent actions.
+- Press K3 to jump directly to the latest action.
+- Press K2 to return to the beginning of the memory.
+
+To jump to the latest action and erase all subsequent memory, hold K3 and press K2. To jump to the first action and erase all memory recorded after it, hold K2 and press K3.
+
 #### Channel Length
 
 Channels in your sequencer can be customized to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
@@ -846,6 +877,17 @@ To clear all parameter trig locks from a channel:
   </svg>
   <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2235s">Trig locks demo</a>
 </p>
+
+#### Param Slides
+
+To enable parameter slides for a trig parameter, select the desired parameter and press K3. This will activate parameter slides for every trig lock of this type on the channel. While enabled, locks will smoothly transition between each other. Note that transitions do not transition across song patterns but can wrap within the same pattern if the Param Slide Wrap setting is enabled.
+
+To lock a parameter slide to a specific step:
+
+- Hold down the desired step.
+- Press K3 on the chosen trig parameter.
+
+This locks the parameter slide to the selected step, causing it to transition smoothly to the next lock. All other locks remain unaffected.
 
 ### Mask Locks
 
