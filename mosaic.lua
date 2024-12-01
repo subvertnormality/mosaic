@@ -34,6 +34,7 @@ local param_manager = include("mosaic/lib/devices/param_manager")
 local ui_splash_screen_active = false
 
 local redraw_clock = nil
+local grid_redraw_clock = nil
 local scheduler_clock = nil
 local screen_keep_alive = nil
 
@@ -222,6 +223,14 @@ function init()
         if fn.dirty_screen() then
           redraw()
         end
+      end
+    end
+  )
+
+  grid_redraw_clock = clock.run(
+    function()
+      while true do
+        clock.sleep(1/20)
         if fn.dirty_grid() then
           m_grid.grid_redraw()
         end
