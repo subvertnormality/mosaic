@@ -166,7 +166,7 @@ function step.process_params(c, step)
               channel_number = channel.number,
               trig_lock = i,
               start_step = step,
-              end_step = next_lock.step + (64 * (next_lock.current_song_pattern - next_lock.next_song_pattern)),
+              end_step = next_lock.step,
               start_value = step_trig_lock,
               end_value = next_lock.value,
               should_wrap = next_lock.should_wrap,
@@ -216,15 +216,16 @@ function step.process_params(c, step)
               channel_number = channel.number,
               trig_lock = i,
               start_step = step,
-              end_step = next_lock.step + (64 * (next_lock.current_song_pattern - next_lock.next_song_pattern)),
+              end_step = next_lock.step,
               start_value = step_trig_lock,
               end_value = next_lock.value,
+              should_wrap = next_lock.should_wrap,
               func = function(value)
                 params:set(param.id, value)
               end
             })
           end
-        elseif program.step_has_trig(channel, step) and not m_clock.channel_is_sliding(c, i)then
+        elseif program.step_has_trig(channel, step) and not m_clock.channel_is_sliding(channel, i)then
           if norns_param_state_handler.get_original_param_state(c, i) and norns_param_state_handler.get_original_param_state(c, i).value then 
             params:set(param.id, norns_param_state_handler.get_original_param_state(c, i).value)
             norns_param_state_handler.clear_original_param_state(c, i)

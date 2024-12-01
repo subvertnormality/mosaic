@@ -349,32 +349,51 @@ function m_clock.init()
             -- Iterate through trig locks
             for trig_lock, trig_action in pairs(channel_actions) do
               if trig_action.active then
-
                 local quant = trig_action.quant or 0
                 if trig_action.pulse_count >= trig_action.total_pulses then
-                  -- We've reached the end, execute final value and mark inactive
-                  -- trig_action.func(trig_action.end_value)
                   trig_action.active = false
                 else
                   -- Calculate progress and current value
                   local progress = trig_action.pulse_count / trig_action.total_pulses
                   local current_value
                   
-                  -- Use end_value exactly when we're at the last pulse
-                  if trig_action.pulse_count == trig_action.total_pulses - 1 then
+                  -- Special handling for first value
+                  if trig_action.pulse_count == 0 then
+                    if quant and quant > 0 then
+                      -- Start at first quantum above start value
+                      if trig_action.start_value < trig_action.end_value then
+                        current_value = math.ceil((trig_action.start_value + quant) / quant) * quant
+                      elseif trig_action.start_value > trig_action.end_value then
+                        current_value = math.floor((trig_action.start_value - quant) / quant) * quant
+                      end
+                    else
+                      current_value = trig_action.start_value
+                    end
+                  -- Use end_value exactly when we're at the last pulse  
+                  elseif trig_action.pulse_count == trig_action.total_pulses - 1 then
                     current_value = trig_action.end_value
                   else
-                    -- Ensure floating point division for raw values
-                    current_value = (trig_action.start_value + quant) + 
-                      (((trig_action.end_value + quant) - (trig_action.start_value + quant)) * (progress + 0.0))
-                    if current_value > trig_action.end_value then
-                      current_value = trig_action.end_value
+                    -- Basic linear interpolation
+
+                    if trig_action.start_value < trig_action.end_value then
+                      current_value = (trig_action.start_value + quant) + 
+                        ((trig_action.end_value + quant) - (trig_action.start_value + quant)) * progress
+                    else
+                      current_value = (trig_action.start_value - quant) + 
+                        ((trig_action.end_value - quant) - (trig_action.start_value - quant)) * progress
                     end
-                  end
-                  
-                  -- Quantize the value if a quantization step is specified
-                  if quant and quant > 0 then
-                    current_value = quantize_value(current_value, quant)
+                    
+                    -- Ensure we don't overshoot
+                    if trig_action.start_value > trig_action.end_value then
+                      current_value = math.max(current_value, trig_action.end_value)
+                    else
+                      current_value = math.min(current_value, trig_action.end_value)
+                    end
+
+                    -- Apply quantization
+                    if quant and quant > 0 then
+                      current_value = quantize_value(current_value, quant)
+                    end
                   end
                   
                   trig_action.func(current_value)
@@ -687,8 +706,8 @@ function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, tri
   end
 end
 
-function m_clock.channel_is_sliding(channel_number, trig_lock)
-  return program.get_channel_param_slide(channel_number, trig_lock)
+function m_clock.channel_is_sliding(channel, trig_lock)
+  return program.get_channel_param_slide(channel, trig_lock)
 end
 
 function m_clock:start()

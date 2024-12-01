@@ -849,8 +849,6 @@ function program.get_next_trig_lock_step(channel, current_step, parameter)
     if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
       return {
         step = step,
-        current_song_pattern = current_song_pattern,
-        next_song_pattern = current_song_pattern,
         value = step_trig_lock_banks[step][parameter]
       }
     end
@@ -864,8 +862,6 @@ function program.get_next_trig_lock_step(channel, current_step, parameter)
         if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
           return {
             step = step,
-            current_song_pattern = current_song_pattern,
-            next_song_pattern = current_song_pattern,
             value = step_trig_lock_banks[step][parameter],
             should_wrap = true
           }

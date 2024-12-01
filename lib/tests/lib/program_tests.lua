@@ -132,8 +132,6 @@ function test_get_next_trig_lock_step_basic_wrap_when_enabled()
   -- From step 12, should wrap to step 5
   local result = program.get_next_trig_lock_step(channel, 12, 1)
   luaunit.assert_equals(result.step, 5)
-  luaunit.assert_equals(result.current_song_pattern, 1)
-  luaunit.assert_equals(result.next_song_pattern, 1)
   luaunit.assert_equals(result.should_wrap, true)
 end
 

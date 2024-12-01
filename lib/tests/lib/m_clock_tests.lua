@@ -1113,3 +1113,75 @@ function test_execute_action_across_steps_wraps_with_zero_length()
   -- Should do nothing
   luaunit.assert_equals(#values, 0)
 end
+
+function test_execute_action_across_steps_handles_high_to_low_transition()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 1,
+    end_step = 4,
+    start_value = 100,
+    end_value = 0, -- Going from high to low
+    quant = 1,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
+
+  progress_clock_by_pulses(96) -- One full beat per step, 4 steps
+  
+  -- Check we have the expected number of values
+  luaunit.assert_equals(#values, 96)
+  
+  -- Check start and end values
+  luaunit.assert_equals(values[1], 99)
+  luaunit.assert_equals(values[#values], 0)
+  
+  -- Check values decrease monotonically
+  for i = 2, #values do
+    luaunit.assert_true(values[i] <= values[i-1], 
+      string.format("Values not monotonically decreasing at index %d: %d <= %d", 
+        i, values[i], values[i-1]))
+  end
+end
+
+function test_execute_action_across_steps_handles_high_to_low_with_wrap()
+  setup()
+  clock_setup()
+
+  local values = {}
+  m_clock.execute_action_across_steps_by_pulses({
+    channel_number = 1,
+    trig_lock = 1,
+    start_step = 63,
+    end_step = 2,
+    start_value = 127,
+    end_value = 0,
+    should_wrap = true,
+    quant = 1,
+    func = function(val)
+      table.insert(values, math.floor(val))
+    end
+  })
+
+  progress_clock_by_pulses(384) -- Enough pulses to cover the wrap
+  
+  -- Check start and end values
+  luaunit.assert_equals(values[1], 126)
+  luaunit.assert_equals(values[#values], 0)
+  
+  -- Check values decrease monotonically
+  for i = 2, #values do
+    luaunit.assert_true(values[i] <= values[i-1],
+      string.format("Values not monotonically decreasing at index %d: %d <= %d", 
+        i, values[i], values[i-1]))
+  end
+  
+  -- Check the transition continues smoothly across the wrap point
+  local wrap_point = #values * 2 / 4 -- Approximate wrap point
+  luaunit.assert_true(values[math.floor(wrap_point)] < 100 and values[math.floor(wrap_point)] > 27)
+end
