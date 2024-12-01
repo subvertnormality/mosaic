@@ -160,7 +160,7 @@ function step.process_params(c, step)
 
           process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device)
 
-          if next_lock and program.get_channel_param_slide(channel, i) then
+          if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
             m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, i)
             m_clock.execute_action_across_steps_by_pulses({
               channel_number = channel.number,
@@ -170,6 +170,7 @@ function step.process_params(c, step)
               start_value = step_trig_lock,
               end_value = next_lock.value,
               should_wrap = next_lock.should_wrap,
+              quant = 1,
               func = function(value)
                 process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
               end
@@ -211,7 +212,7 @@ function step.process_params(c, step)
           end
 
           params:set(param.id, step_trig_lock)
-          if next_lock and program.get_channel_param_slide(channel, i) then
+          if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
             m_clock.execute_action_across_steps_by_pulses({
               channel_number = channel.number,
               trig_lock = i,

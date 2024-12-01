@@ -236,12 +236,24 @@ function channel_edit_page_ui.init()
 
   for i, dial in ipairs(dials:get_items()) do
     dial:set_display_modifier(function(x, y)
+      local pressed_keys = m_grid.get_pressed_keys()
       if program.get_channel_param_slide(program.get_selected_channel(), i) then
         screen.move(x, y+2)
         screen.line(x+19, y+2)
         screen.stroke()
         screen.close()
         screen.move(x, y)
+      elseif #pressed_keys > 0 then
+        for _, keys in ipairs(pressed_keys) do
+          local s = fn.calc_grid_count(keys[1], keys[2])
+          if program.get_step_param_slide(program.get_selected_channel(), s, i) then
+            screen.move(x, y+2)
+            screen.line(x+19, y+2)
+            screen.stroke()
+            screen.close()
+            screen.move(x, y)
+          end
+        end
       end
     end)
   end
@@ -254,30 +266,28 @@ function channel_edit_page_ui.init()
     page:set_sub_name_func(func)
   end
 
-  local c = program.get().selected_channel
-
   set_sub_name_func(notes_page, function()
-    return "Ch. " .. c .. " " or ""
+    return "Ch. " .. program.get().selected_channel .. " " or ""
   end)
 
   set_sub_name_func(memory_page, function()
-    return "Ch. " .. c .. " " or ""
+    return "Ch. " .. program.get().selected_channel .. " " or ""
   end)
 
   set_sub_name_func(mask_page, function()
-    return "Ch. " .. c .. " " or ""
+    return "Ch. " .. program.get().selected_channel .. " " or ""
   end)
 
   set_sub_name_func(channel_edit_page, function()
-    return "Ch. " .. c .. " " or ""
+    return "Ch. " .. program.get().selected_channel .. " " or ""
   end)
 
   set_sub_name_func(clock_mods_page, function()
-    return "Ch. " .. c .. " " or ""
+    return "Ch. " .. program.get().selected_channel .. " " or ""
   end)
 
   set_sub_name_func(trig_lock_page, function()
-    return "Ch. " .. c .. " " or ""
+    return "Ch. " .. program.get().selected_channel .. " " or ""
   end)
 
   trig_lock_page:set_sub_page_draw_func(function()
@@ -306,8 +316,8 @@ function channel_edit_page_ui.init()
   shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
 
   memory_controls.navigator:set_event_state(memory_state)
-  memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
-  memory_controls.navigator:set_current_index(memory.get_event_count(c))
+  memory_controls.navigator:set_max_index(memory.get_total_event_count(program.get().selected_channel))
+  memory_controls.navigator:set_current_index(memory.get_event_count(program.get().selected_channel))
   memory_controls.navigator:select()
 
   channel_edit_page_ui.refresh_clock_mods()
@@ -1576,8 +1586,16 @@ function channel_edit_page_ui.handle_key_three_pressed()
       tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory applied")
     end
     channel_edit_page_ui.refresh_memory()
-  elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-    program.toggle_channel_param_slide(program.get_selected_channel(), dials:get_selected_index())
+  elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] and not trig_lock_page:is_sub_page_enabled() then
+    local pressed_keys = m_grid.get_pressed_keys()
+    if #pressed_keys > 0 then
+      for _, keys in ipairs(pressed_keys) do
+        local step = fn.calc_grid_count(keys[1], keys[2])
+        program.toggle_step_param_slide(program.get_selected_channel(), step, dials:get_selected_index())
+      end
+    else
+      program.toggle_channel_param_slide(program.get_selected_channel(), dials:get_selected_index())
+    end
     fn.dirty_screen(true)
   elseif #pressed_keys < 1 then
     save_confirm.confirm()

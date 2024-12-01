@@ -299,6 +299,19 @@ function program.step_has_param_trig_lock(channel, step)
   return step_trig_lock_banks[step] ~= nil and step_trig_lock_banks[step] ~= {}
 end
 
+function program.step_has_param_slide(channel, step)
+  local step_trig_lock_slides = channel.step_trig_lock_slides
+  if not step_trig_lock_slides[step] then return false end
+  
+  for i = 1, 10 do
+    if step_trig_lock_slides[step][i] then
+      return true
+    end
+  end
+
+  return false
+end 
+
 function program.step_has_trig_lock(channel, step)
 
   return program.step_has_param_trig_lock(channel, step) or 
@@ -313,7 +326,8 @@ function program.step_has_trig_lock(channel, step)
          program.step_has_chord_1_mask(step) or 
          program.step_has_chord_2_mask(step) or 
          program.step_has_chord_3_mask(step) or 
-         program.step_has_chord_4_mask(step)
+         program.step_has_chord_4_mask(step) or
+         program.step_has_param_slide(channel, step)
 end
 
 function program.add_step_octave_trig_lock(step, trig_lock)
@@ -391,12 +405,21 @@ function program.get_channel_param_slide(channel, trig_param)
   return channel.trig_lock_slides[trig_param]
 end
 
-function program.set_step_param_slide(channel, step, trig_param, value)
+function program.toggle_step_param_slide(channel, step, trig_param)
   if not channel.step_trig_lock_slides then
     channel.step_trig_lock_slides = {}
   end
 
-  channel.step_trig_lock_slides[step][trig_param] = value
+  if not channel.step_trig_lock_slides[step] then
+    channel.step_trig_lock_slides[step] = {}
+  end
+
+  if not channel.step_trig_lock_slides[step][trig_param] then
+    channel.step_trig_lock_slides[step][trig_param] = true
+    return
+  end
+
+  channel.step_trig_lock_slides[step][trig_param] = not channel.step_trig_lock_slides[step][trig_param]
 end
 
 function program.clear_step_param_slide(channel, step, trig_param)
@@ -411,7 +434,7 @@ function program.get_step_param_slide(channel, step, trig_param)
   if not channel.step_trig_lock_slides then
     channel.step_trig_lock_slides = {}
   end
-  return channel.step_trig_lock_slides[step][trig_param]
+  return channel.step_trig_lock_slides[step] and channel.step_trig_lock_slides[step][trig_param]
 end 
 
 function program.step_transpose_has_trig_lock(step)
@@ -514,6 +537,9 @@ function program.clear_trig_locks_for_step(step)
       channel.step_trig_lock_banks[step] = nil
     end
     program.add_step_octave_trig_lock(step, nil)
+    if channel.step_trig_lock_slides and channel.step_trig_lock_slides[step] then
+      channel.step_trig_lock_slides[step] = nil
+    end
   else
     program.add_step_transpose_trig_lock(step, nil)
   end
@@ -527,6 +553,15 @@ function program.clear_trig_lock_for_step_for_channel(channel, step, parameter)
       -- If step table is empty, remove it
       if next(channel.step_trig_lock_banks[step]) == nil then
         channel.step_trig_lock_banks[step] = nil
+      -- Clear slide params for this step and parameter
+        if channel.step_trig_lock_slides and channel.step_trig_lock_slides[step] then
+          channel.step_trig_lock_slides[step][parameter] = nil
+          
+          -- If step slide table is empty, remove it
+          if next(channel.step_trig_lock_slides[step]) == nil then
+            channel.step_trig_lock_slides[step] = nil
+          end
+        end
       end
     end
   end
