@@ -120,6 +120,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Song Mode](#song-mode)
       - [Reset at Sequence End](#reset-at-sequence-end)
       - [Reset at Seq Pattern End](#reset-at-seq-pattern-end)
+      - [Param slides wrap](#parameter-slides-wrap)
       - [Elektron Program Changes](#elektron-program-changes)
       - [Elektron Program Change Channel](#elektron-program-change-channel)
     + [Parameter Lock Options](#parameter-lock-options)
@@ -988,6 +989,10 @@ The "Reset at Song Sequence Change" option, which is turned on by default, ensur
 ##### Reset at Pattern Repeat
 
 "Reset at Pattern Repeat" is set to off by default. When enabled, it resets all channels at the end of a song sequence when repeating the same song editor pattern. This ensures all channels with a custom length will reset back to that channel's starting step at every start of the pattern. Disabling this option allows for evolving polyrhythms.
+
+##### Parameter Slides Wrap
+
+By default, "Param Slides Wrap" is turned off. When enabled, and the current song pattern is set to repeat, trig locks will smoothly transition beyond step 64, wrapping back to the next trig lock earlier in the sequence.
 
 ##### Elektron Program Changes
 
