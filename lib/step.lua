@@ -179,13 +179,13 @@ function step.process_params(c, step)
             })
           end
 
-        elseif p_value and param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
+        elseif p_value and param.type == "midi" and (param.cc_msb or param.nrpn_msb) and not m_clock.channel_is_sliding(channel, i) then
           if p_value == param.off_value then
             goto continue
           end
 
           process_midi_param(param, p_value, midi_channel, devices[channel.number].midi_device)
-        else
+        elseif not m_clock.channel_is_sliding(channel, i) then
           if value == param.off_value then
             goto continue
           end
@@ -230,7 +230,7 @@ function step.process_params(c, step)
               end
             })
           end
-        elseif program.step_has_trig(channel, step) and not m_clock.channel_is_sliding(channel, i)then
+        elseif program.step_has_trig(channel, step) and not m_clock.channel_is_sliding(channel, i) then
           if norns_param_state_handler.get_original_param_state(c, i) and norns_param_state_handler.get_original_param_state(c, i).value then 
             params:set(param.id, norns_param_state_handler.get_original_param_state(c, i).value)
             norns_param_state_handler.clear_original_param_state(c, i)

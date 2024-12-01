@@ -301,7 +301,7 @@ end
 
 function program.step_has_param_slide(channel, step)
   local step_trig_lock_slides = channel.step_trig_lock_slides
-  if not step_trig_lock_slides[step] then return false end
+  if not step_trig_lock_slides or not step_trig_lock_slides[step] then return false end
   
   for i = 1, 10 do
     if step_trig_lock_slides[step][i] then

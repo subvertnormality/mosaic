@@ -30,9 +30,9 @@ function dial:draw()
   self.display_modifier(self.x, self.y)
 
   if self.display_value == false or self.value == self.off_value then
-    screen.text(fn.title_case(self.top_label))
+    screen.text_trim(fn.title_case(self.top_label), 24)
   else
-    screen.text(self.value and fn.clean_number(self.value) or "X")
+    screen.text_trim(self.value and fn.clean_number(self.value) or "X", 24)
   end
 
   -- Position for drawing the bar
@@ -50,7 +50,7 @@ function dial:draw()
     screen.text("X")
   elseif self.ui_labels and self.min_value then
     screen.move(self.x, bar_y)
-    screen.text(self.ui_labels[self.value - (self.min_value - 1)] or "")
+    screen.text_trim(self.ui_labels[self.value - (self.min_value - 1)] or "", 24)
   else
     -- Define bar dimensions and segments
     local bar_width = 19  -- Total width of the bar
@@ -140,7 +140,7 @@ function dial:draw()
 
 
   screen.move(self.x, self.y + 14)
-  screen.text(fn.title_case(self.bottom_label))
+  screen.text_trim(fn.title_case(self.bottom_label), 24)
 end
 
 
