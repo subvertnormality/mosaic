@@ -2,23 +2,23 @@
 
 ### Major New Features
 
-#### Live recorder and looper
+#### Live Recorder and Looper
 
-- The second button in the global menu now arms recording
-- Note masks can be live recorded into the selected channel using a midi keyboard
-- Trig locks can be live recorded into the selected channel using the Norns encoder
-- Trig locks affect steps with trigs or record into empty steps if trigless locks is enabled
+- The second button in the global menu now arms recording.
+- Note masks can be live-recorded into the selected channel using a MIDI keyboard.
+- Trig locks can be live-recorded into the selected channel using the Norns encoders.
+- Trig locks affect steps with active trigs or, if Trigless Locks is enabled, record into empty steps.
 
 #### Memory
 
-- Masks and trig lock actions are remembered and can be undone and redone
-- Memory history can by traversed on a per channel basis whilst the sequencer is playing
+- Masks and trig lock actions are now remembered, allowing for undo and redo functionality.
+- Memory history can be traversed on a per-channel basis while the sequencer is playing.
 
-#### Param slides
+#### Param Slides
 
-- Trig locks with param slide activated smoothly increases or decreases to the next trig lock's value
-- Param slides can apply to on a per trig param basis or for an entire channel
-- Param slides can wrap on the same song pattern, if the param slide wrapping setting is enabled
+- Trig locks with Param Slide activated will smoothly transition to the next trig lock's value.
+- Param slides can be applied either per trig parameter or across an entire channel.
+- Param slides can wrap within the same song pattern if the Param Slide Wrapping setting is enabled.
 
 ## 1.0.2
 
