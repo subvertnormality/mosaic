@@ -330,6 +330,8 @@ function program.step_has_trig_lock(channel, step)
          program.step_has_param_slide(channel, step)
 end
 
+
+
 function program.add_step_octave_trig_lock(step, trig_lock)
   local channel = program.get_selected_channel()
   local step_octave_trig_lock_banks = channel.step_octave_trig_lock_banks

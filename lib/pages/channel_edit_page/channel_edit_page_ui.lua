@@ -1703,6 +1703,106 @@ function channel_edit_page_ui.set_note_dashboard_values(values)
   end
 end
 
+function channel_edit_page_ui.should_show_step_has_trig_lock(channel, step)
+
+  local current_page = channel_edit_page_ui.get_selected_page()
+  local is_trig_locks_page = current_page == channel_page_to_index["Trig Locks"]
+  local is_masks_page = current_page == channel_page_to_index["Masks"]
+  local is_memory_page = current_page == channel_page_to_index["Memory"]
+  local is_clock_mods_page = current_page == channel_page_to_index["Clock Mods"]
+  local is_midi_config_page = current_page == channel_page_to_index["Midi Config"]
+  local is_note_dashboard_page = current_page == channel_page_to_index["Note Dashboard"]
+
+  -- Check trig locks page conditions
+  if is_trig_locks_page then
+    return program.step_has_param_trig_lock(channel, step) or
+           program.step_has_param_slide(channel, step) or 
+           program.step_scale_has_trig_lock(channel, step) or
+           program.step_transpose_has_trig_lock(step)
+  end
+
+  -- Check masks page conditions 
+  if is_masks_page then
+    return program.step_has_trig_mask(step) or
+           program.step_has_note_mask(step) or
+           program.step_has_velocity_mask(step) or
+           program.step_has_length_mask(step) or
+           program.step_has_micro_time_mask(step) or
+           program.step_has_chord_1_mask(step) or
+           program.step_has_chord_2_mask(step) or
+           program.step_has_chord_3_mask(step) or
+           program.step_has_chord_4_mask(step) or 
+           program.step_scale_has_trig_lock(channel, step) or
+           program.step_transpose_has_trig_lock(step)
+  end
+
+  if is_memory_page then
+    return program.step_has_param_trig_lock(channel, step) or
+           program.step_has_trig_mask(step) or
+           program.step_has_note_mask(step) or
+           program.step_has_velocity_mask(step) or
+           program.step_has_length_mask(step) or
+           program.step_has_micro_time_mask(step) or
+           program.step_has_chord_1_mask(step) or
+           program.step_has_chord_2_mask(step) or
+           program.step_has_chord_3_mask(step) or
+           program.step_has_chord_4_mask(step)
+  end
+
+  if is_clock_mods_page then
+    return program.step_has_param_trig_lock(channel, step) or 
+          program.step_octave_has_trig_lock(channel, step) or 
+          program.step_scale_has_trig_lock(channel, step) or 
+          program.step_transpose_has_trig_lock(step) or 
+          program.step_has_trig_mask(step) or 
+          program.step_has_note_mask(step) or 
+          program.step_has_velocity_mask(step) or 
+          program.step_has_length_mask(step) or 
+          program.step_has_micro_time_mask(step) or 
+          program.step_has_chord_1_mask(step) or 
+          program.step_has_chord_2_mask(step) or 
+          program.step_has_chord_3_mask(step) or 
+          program.step_has_chord_4_mask(step) or
+          program.step_has_param_slide(channel, step)
+  end 
+
+  if is_midi_config_page then
+    return program.step_has_param_trig_lock(channel, step) or 
+          program.step_octave_has_trig_lock(channel, step) or 
+          program.step_scale_has_trig_lock(channel, step) or 
+          program.step_transpose_has_trig_lock(step) or 
+          program.step_has_trig_mask(step) or 
+          program.step_has_note_mask(step) or 
+          program.step_has_velocity_mask(step) or 
+          program.step_has_length_mask(step) or 
+          program.step_has_micro_time_mask(step) or 
+          program.step_has_chord_1_mask(step) or 
+          program.step_has_chord_2_mask(step) or 
+          program.step_has_chord_3_mask(step) or 
+          program.step_has_chord_4_mask(step) or
+          program.step_has_param_slide(channel, step)
+  end 
+
+  if is_note_dashboard_page then
+    return program.step_has_param_trig_lock(channel, step) or 
+          program.step_octave_has_trig_lock(channel, step) or 
+          program.step_scale_has_trig_lock(channel, step) or 
+          program.step_transpose_has_trig_lock(step) or 
+          program.step_has_trig_mask(step) or 
+          program.step_has_note_mask(step) or 
+          program.step_has_velocity_mask(step) or 
+          program.step_has_length_mask(step) or 
+          program.step_has_micro_time_mask(step) or 
+          program.step_has_chord_1_mask(step) or 
+          program.step_has_chord_2_mask(step) or 
+          program.step_has_chord_3_mask(step) or 
+          program.step_has_chord_4_mask(step) or
+          program.step_has_param_slide(channel, step)
+  end
+
+  return false
+end
+
 
 return channel_edit_page_ui
 
