@@ -92,6 +92,34 @@ local index_to_channel_page = {"Masks", "Trig Locks", "Memory", "Clock Mods", "M
 local refresh_timer_id = nil
 local throttle_time = 0.2
 
+-- Add this helper function near the top with other helper functions
+local function get_value_using_handler_param(channel, dial_index, p, param_id, p_value, delta)
+  local param_args = {}
+  
+  for key, arg in pairs(p) do
+    param_args[key] = arg
+  end
+
+  local handler_param_id = channel.number .. "_lock_calculator_" .. dial_index .. "_" .. program.get_trig_lock_calculator_id(channel, dial_index)
+
+  param_args.id = handler_param_id
+  param_args.type = fn.get_param_type_from_id(params:t(param_id))
+  param_args.controlspec = p.controlspec
+
+  local handler_param_id_index = params.lookup[handler_param_id]
+
+  if not handler_param_id_index then
+    params:add(param_args)
+    handler_param_id_index = params.lookup[handler_param_id]
+    params:hide(handler_param_id_index)
+    params:set_action(handler_param_id_index, function() end)
+    params:set(handler_param_id_index, p_value, true)
+  end
+
+  params:delta(handler_param_id_index, delta)
+  
+  return params:get(handler_param_id_index)
+end
 
 local function configure_note_value_selector(note_value_selector)
   note_value_selector:set_view_transform_func(function(value)
@@ -658,44 +686,28 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
   if #pressed_keys > 0 and trig_lock_param and trig_lock_param.id then
     for _, keys in ipairs(pressed_keys) do
       local s = fn.calc_grid_count(keys[1], keys[2])
-      local param_args = {}
-
-      for key, arg in pairs(p) do
-        param_args[key] = arg
-      end
-
-      local handler_param_id = channel.number .. "_lock_calculator_" .. dial_index .. "_" .. program.get_trig_lock_calculator_id(channel, dial_index)
-
-      param_args.id = handler_param_id
-      param_args.type = fn.get_param_type_from_id(params:t(param_id))
-      param_args.controlspec = p.controlspec
-
-      local handler_param_id_index = params.lookup[handler_param_id]
-
-      if not handler_param_id_index then
-        params:add(param_args)
-        handler_param_id_index = params.lookup[handler_param_id]
-        params:hide(handler_param_id_index)
-        params:set_action(handler_param_id_index, function() end)
-        params:set(handler_param_id_index, p_value, true)
-      end
-
       
-      params:delta(handler_param_id_index, d)
-
-      local value = params:get(handler_param_id_index)
+      local value = get_value_using_handler_param(
+        channel,
+        dial_index, 
+        p,
+        param_id,
+        p_value,
+        d
+      )
 
       m_params[dial_index]:set_value(value)
 
       recorder.add_trig_lock_event_portion(channel.number, s, {
         data = {
-            parameter = dial_index, 
-            step = s,
-            value = value
-          }
-        })
+          parameter = dial_index,
+          step = s,
+          value = value
+        }
+      })
     end
   elseif p_value and trig_lock_param and trig_lock_param.id then
+
 
     local quant = old_quantum
     if p.controlspec and p.controlspec.quantum then
@@ -704,10 +716,19 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
   
     -- TODO norns values move fractionally when sliding for some reason
     if (norns_param_state_handler.get_original_param_state(channel.number, dial_index).value) then
-      local original_val = norns_param_state_handler.get_original_param_state(channel.number, dial_index).value
-
-      local new_val = original_val + (quant * d)
+      local original_val = norns_param_state_handler.get_original_param_state(channel.number, dial_index).value      
+      
+      local new_val = get_value_using_handler_param(
+        channel,
+        dial_index, 
+        p,
+        param_id,
+        original_val,
+        d
+      )
+      
       norns_param_state_handler.set_original_param_state(channel.number, dial_index, new_val)
+      
       m_params[dial_index]:set_value(new_val)
     else
 
@@ -1304,7 +1325,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
             song_pattern = program.get().selected_song_pattern,
             data = {
             step = s,
-            chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
+            chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
           }
         }
       )
