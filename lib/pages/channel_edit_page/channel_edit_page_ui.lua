@@ -265,21 +265,28 @@ function channel_edit_page_ui.init()
   for i, dial in ipairs(dials:get_items()) do
     dial:set_display_modifier(function(x, y)
       local pressed_keys = m_grid.get_pressed_keys()
+      
       if program.get_channel_param_slide(program.get_selected_channel(), i) then
-        screen.move(x, y+2)
-        screen.line(x+19, y+2)
+        -- Draw top line
+        screen.move(x, y-6) 
+        screen.line(x+23, y-6)
         screen.stroke()
-        screen.close()
-        screen.move(x, y)
+        -- Draw right line
+        screen.move(x+23, y-6)  
+        screen.line(x+23, y+13)  
+        screen.stroke()
       elseif #pressed_keys > 0 then
         for _, keys in ipairs(pressed_keys) do
           local s = fn.calc_grid_count(keys[1], keys[2])
           if program.get_step_param_slide(program.get_selected_channel(), s, i) then
-            screen.move(x, y+2)
-            screen.line(x+19, y+2)
+            -- Draw top line
+            screen.move(x, y-6)  
+            screen.line(x+23, y-6)  
             screen.stroke()
-            screen.close()
-            screen.move(x, y)
+            -- Draw right line
+            screen.move(x+23, y-6)  
+            screen.line(x+23, y+13)  
+            screen.stroke()
           end
         end
       end
@@ -685,6 +692,7 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
 
   if #pressed_keys > 0 and trig_lock_param and trig_lock_param.id then
     for _, keys in ipairs(pressed_keys) do
+
       local s = fn.calc_grid_count(keys[1], keys[2])
       
       local value = get_value_using_handler_param(
@@ -714,7 +722,6 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
       quant = p.controlspec.quantum
     end
   
-    -- TODO norns values move fractionally when sliding for some reason
     if (norns_param_state_handler.get_original_param_state(channel.number, dial_index).value) then
       local original_val = norns_param_state_handler.get_original_param_state(channel.number, dial_index).value      
       
@@ -737,7 +744,11 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
       else
         p:delta(d)
       end
+      recorder.set_trig_lock_dirty(channel.number, dial_index, p:get())
+
     end
+
+
   
     channel_edit_page_ui.refresh_trig_lock_value(dial_index)
   end

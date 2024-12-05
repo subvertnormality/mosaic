@@ -152,7 +152,7 @@
       "off_value": -1
     },
     {
-      "cc_max_value": 4,
+      "cc_max_value": 3,
       "id": "source_parameters_source_play_mode",
       "cc_msb": 17,
       "name": "Source play mode",

@@ -141,8 +141,9 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
 end
 
 function recorder.record_trig_event(c, step, parameter)
+
   -- Only record if there's a dirty value (including nil)
-  if recorder.trig_lock_dirty[c] and recorder.trig_lock_dirty[c][parameter] ~= false then
+  if recorder.trig_lock_dirty[c] and recorder.trig_lock_dirty[c][parameter] then
     memory.record_event(c, "trig_lock", {
       parameter = parameter, 
       step = step,

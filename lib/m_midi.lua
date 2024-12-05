@@ -482,7 +482,9 @@ function m_midi.set_up_midi_mapping_params()
         end
         params:set("sel_ch_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "ch1" or param == 6 and "ch2" or param == 7 and "ch3" or param == 8 and "ch4"), 0, true)
 
-        channel_edit_page_ui.select_mask_page()
+        if (program.get_selected_page() == 2) and (channel_edit_page_ui.get_selected_page() ~= 1) then  
+          channel_edit_page_ui.select_mask_page()
+        end
         
         last_action_time = current_time
       end
@@ -572,11 +574,13 @@ function m_midi.set_up_midi_mapping_params()
           end
         end
 
+        if (program.get_selected_page() == 2) and (channel_edit_page_ui.get_selected_page() ~= 2) then
+          channel_edit_page_ui.select_trig_page()
+        end
+
         local scaled_d = d * scaling_factor
         channel_edit_page_ui.handle_trig_lock_param_change_by_direction(scaled_d, program.get_selected_channel(), param)
         params:set("sel_ch_trig_param_" .. param, 0, true)
-        channel_edit_page_ui.refresh_trig_locks()
-        channel_edit_page_ui.select_trig_page()
         
         last_action_time = current_time
       end
@@ -614,9 +618,7 @@ function m_midi.set_up_midi_mapping_params()
 
           local scaled_d = d * scaling_factor
           channel_edit_page_ui.handle_trig_lock_param_change_by_direction(scaled_d, program.get_channel(program.get().selected_song_pattern, channel), param)
-          params:set("ch_" .. channel .. "_trig_param_" .. param, 0, true)
-          channel_edit_page_ui.refresh_trig_locks()
-          
+          params:set("ch_" .. channel .. "_trig_param_" .. param, 0, true)          
           last_action_time = current_time
         end
       )
@@ -651,10 +653,13 @@ function m_midi.set_up_midi_mapping_params()
         end
       end
 
+      if (program.get_selected_page() == 2) and (channel_edit_page_ui.get_selected_page() ~= 3) then
+        channel_edit_page_ui.select_memory_page()
+      end
+
       local scaled_d = d * scaling_factor
       channel_edit_page_ui.handle_memory_navigator(program.get_selected_channel().number, scaled_d)
       params:set("sel_ch_memory", 0, true)
-      channel_edit_page_ui.select_memory_page()
       
       last_action_time = current_time
     end

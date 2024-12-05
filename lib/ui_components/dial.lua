@@ -24,16 +24,12 @@ end
 function dial:draw()
   -- Set screen level based on selection
   screen.level(self.selected and 15 or 1)
-  -- Draw the top label
-  screen.move(self.x, self.y)
 
   self.display_modifier(self.x, self.y)
 
-  if self.display_value == false or self.value == self.off_value then
-    screen.text_trim(fn.title_case(self.top_label), 24)
-  else
-    screen.text_trim(self.value and fn.clean_number(self.value) or "X", 24)
-  end
+  screen.move(self.x, self.y)
+
+  screen.text_trim(fn.title_case(self.top_label), 24)
 
   -- Position for drawing the bar
   local bar_x = self.x
@@ -50,7 +46,10 @@ function dial:draw()
     screen.text("X")
   elseif self.ui_labels and self.min_value then
     screen.move(self.x, bar_y)
-    screen.text_trim(self.ui_labels[self.value - (self.min_value - 1)] or "", 24)
+    screen.text(self.ui_labels[self.value - (self.min_value - 1)] or "", 24)
+  elseif self.display_value == true then
+    screen.move(self.x, bar_y)
+    screen.text(self.value and fn.clean_number(self.value) or "X")
   else
     -- Define bar dimensions and segments
     local bar_width = 19  -- Total width of the bar
@@ -140,7 +139,8 @@ function dial:draw()
 
 
   screen.move(self.x, self.y + 14)
-  screen.text_trim(fn.title_case(self.bottom_label), 24)
+
+  screen.text(fn.title_case(self.bottom_label))
 end
 
 
@@ -173,6 +173,7 @@ function dial:set_value(value)
   if value == nil or (self.min_value and value < (self.min_value - epsilon)) or (self.max_value and value > (self.max_value + epsilon)) then
     value = self.off_value
   end
+
   self.value = value
   fn.dirty_screen(true)
 end
