@@ -229,7 +229,7 @@ local function create_ring_buffer(max_size)
       end
       
       self.buffer[index] = event
-      self.total_size = self.total_size + 1
+      self.total_size = self.size
       return self.size
     end,
     
@@ -249,25 +249,54 @@ local function create_ring_buffer(max_size)
     truncate = function(self, position)
       if position < self.size then
         self.size = position
-        self.total_size = position  -- Update total size to match current size
+        self.total_size = position
       end
     end
   }
   return buffer
 end
 
+-- Add these serialization functions at the top of the file
+local function serialize_ring_buffer(ring_buffer)
+  -- Only save the essential data, not the functions
+  return {
+    buffer = ring_buffer.buffer,
+    start = ring_buffer.start,
+    size = ring_buffer.size,
+    max_size = ring_buffer.max_size,
+    total_size = ring_buffer.total_size
+  }
+end
+
+local function deserialize_ring_buffer(data)
+  if not data then return create_ring_buffer(memory.max_history_size) end
+  
+  local buffer = create_ring_buffer(data.max_size)
+  buffer.buffer = data.buffer or {}
+  buffer.start = data.start or 1
+  buffer.size = data.size or 0
+  buffer.total_size = data.size or 0
+  return buffer
+end
+
 -- Main state structure
-local state = {
-  channels = {},
-  current_indices = {},
-  original_states = {}
-}
+
+local state = program.get().memory
+
 
 function memory.init()
-  state.channels = {}
-  state.current_indices = {}
-  state.original_states = {}
-  state.pattern_states = {} 
+  local mem = program.get().memory
+  mem.channels = {}
+  mem.current_indices = {}
+  mem.original_states = {}
+  mem.pattern_states = {}
+  
+  -- Clear any existing state when initializing
+  state = mem
+end
+
+if not state.channels and not state.current_indices and not state.original_states then
+  memory.init()
 end
 
 local function get_channel_state(channel_number, pattern_number)
@@ -491,10 +520,8 @@ end
 
 function memory.reset()
   -- Clear histories but keep structure
-  for channel_number, channel_events in pairs(state.channels) do
-    state.channels[channel_number] = create_ring_buffer(memory.max_history_size)
-    state.current_indices[channel_number] = 0
-    state.original_states[channel_number] = {}
+  for channel_number, _ in pairs(state.channels) do
+    memory.clear(channel_number)
   end
 end
 
@@ -550,6 +577,38 @@ function memory.get_state(channel_number)
     current_event_index = state.current_indices[channel_number] or 0,
     pattern_channels = {} -- Kept for backwards compatibility
   }
+end
+
+-- Add these functions to the memory module
+function memory.serialize_state()
+  local serialized = {
+    channels = {},
+    current_indices = state.current_indices,
+    original_states = state.original_states,
+    pattern_states = state.pattern_states
+  }
+  
+  -- Serialize each channel's ring buffer
+  for channel_number, channel_buffer in pairs(state.channels) do
+    serialized.channels[channel_number] = serialize_ring_buffer(channel_buffer)
+  end
+  
+  return serialized
+end
+
+function memory.deserialize_state(saved_state)
+  if not saved_state then return end
+  
+  -- Restore the simple data
+  state.current_indices = saved_state.current_indices or {}
+  state.original_states = saved_state.original_states or {}
+  state.pattern_states = saved_state.pattern_states or {}
+  
+  -- Deserialize each channel's ring buffer
+  state.channels = {}
+  for channel_number, channel_data in pairs(saved_state.channels or {}) do
+    state.channels[channel_number] = deserialize_ring_buffer(channel_data)
+  end
 end
 
 return memory

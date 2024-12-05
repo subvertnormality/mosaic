@@ -652,7 +652,7 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
   local d = direction
 
   if trig_lock_param.type ~= "norns" then
-    if total_range > 126 and is_key3_down == false then
+    if total_range > 126 and is_key1_down == false then
       if math.abs(direction) > 0 then
         d = direction * math.floor(total_range / 127) or 1
       end

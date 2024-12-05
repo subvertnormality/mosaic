@@ -161,7 +161,13 @@ function program.init()
     song_patterns = {},
     global_step_accumulator = 0,
     devices = {},
-    blink_state = false
+    blink_state = false,
+    memory = {  -- Initialize memory structure
+      channels = {},
+      current_indices = {},
+      original_states = {},
+      pattern_states = {}
+    }
   }
 
   for i = 1, 16 do
@@ -240,6 +246,15 @@ function program.get()
   if not program_store.song_patterns then
     program_store.song_patterns = {}
   end
+  -- Ensure memory exists
+  if not program_store.memory then
+    program_store.memory = {
+      channels = {},
+      current_indices = {},
+      original_states = {},
+      pattern_states = {}
+    }
+  end
   return program_store
 end
 
@@ -257,6 +272,22 @@ end
 
 function program.set(p)
   program_store = migrate_legacy_data(p) or {}
+  
+  -- Ensure memory structure exists after loading
+  if not program_store.memory then
+    program_store.memory = {
+      channels = {},
+      current_indices = {},
+      original_states = {},
+      pattern_states = {}
+    }
+  end
+  
+  -- Deserialize the memory state if it exists
+  if program_store.memory.serialized then
+    memory.deserialize_state(program_store.memory.serialized)
+    program_store.memory = program.get().memory -- Update with deserialized state
+  end
 end
 
 function program.add_step_param_trig_lock(step, parameter, trig_lock)
@@ -908,6 +939,21 @@ function program.get_next_trig_lock_step(channel, current_step, parameter)
   end
 
   return nil
+end
+
+function program.get_memory()
+  if not program_store.memory then
+    program_store.memory = {}
+  end
+  return program_store.memory
+end
+
+-- Add a function to prepare the program state for saving
+function program.prepare_for_save()
+  -- Serialize the memory state before saving
+  local current_memory = program.get().memory
+  current_memory.serialized = memory.serialize_state()
+  return program_store
 end
 
 return program
