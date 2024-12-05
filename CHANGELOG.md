@@ -20,6 +20,10 @@
 - Param slides can be applied either per trig parameter or across an entire channel.
 - Param slides can wrap within the same song pattern if the Param Slide Wrapping setting is enabled.
 
+#### MIDI Controller Mapping
+
+- Trig params, masks and channel memory are now able to be mapped to MIDI controllers using the Norns MIDI Map function.
+
 ### QOL Improvements
 
 - Only mask locks blink on the grid sequencer when the mask lock page is active on the Norns screen.

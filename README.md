@@ -42,6 +42,8 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Stock Devices](#stock-devices)
       - [Adding Custom Devices](#adding-custom-devices)
       - [Mods and Software Devices](#mods-and-software-devices)
+      - [MIDI Keyboard Input](#midi-keyboard-input)
+      - [MIDI Controller Mapping](#midi-controller-mapping)
   * [Getting Around Mosaic](#getting-around-mosaic)
     + [Sequencer Start and Stop](#sequencer-start-and-stop)
     + [Live Record](#arm-live-record)
@@ -75,7 +77,6 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Adding Melodic Notes over Harmony and Drums](#adding-melodic-notes-over-harmony-and-drums)
       - [Adding Chords](#adding-chords)
       - [Removing Masks](#removing-masks)
-      - [MIDI Input](#midi-input)
     + [Merge Modes](#merge-modes)
       - [Trig Merge Modes](#trig-merge-modes)
       - [Note Merge Modes](#note-merge-modes)
@@ -185,6 +186,27 @@ You can customize Mosaic to perfectly align with your studio setup by configurin
 
 Mosaic can also use internal Norns sound sources and manage devices like Crow, Just Friends, and Ansible via i2c by installing [n.b.](https://github.com/sixolet/nb/) mods. These mods will appear in Mosaic's device list once installed and activated in the Norns settings menu. Ensure the n.b. mod is on the allow list to use with Mosaic. See [Norns sound sources with n.b.](#norns-sound-sources-with-nb) for more information.
 
+##### MIDI Keyboard Input
+
+You can input notes, velocity, and chords using a MIDI keyboard. You can do this live, using live record, or by holding down a step and pressing the keys on your keyboard. When setting on a per step basis, the length of these inputs requires manual selection. To do this, ensure you have your desired channel selected on _Mosaic_. Then, while holding the desired step, press the corresponding key on your keyboard. If you are on the mask page of your Norns, the values you input will display as locks.
+
+By default, the keyboard maps the steps to the currently selected scale on the white keys, with the root note of your selected scale starting from C. You can adjust this mapping in the settings of Mosaic to better suit your musical preferences or project requirements.
+
+
+##### MIDI Controller Mapping
+_Mosaic_ provides comprehensive support for MIDI mapping of channel controls through the Norns MIDI Map function. This allows you to assign MIDI controls to various parameters, enabling real-time control via compatible MIDI hardware. Your MIDI device must support relative (binary offset). 
+
+To map your MIDI device to a channel control, navigate to the parameters menu on your norns device and scroll down to the "Mosaic Midi Mapping" section. Select your desired control type and enter the parameters menu on your Norns by holding K1 (system key) and pressing K3 (enter key). Now select your desired parameter.
+
+Map "selected channel parameters" when you want to control a specific parameter of the currently selected channel. Map "channel parameters" when you want to control a parameter of a specific channel regardless of which channel is selected.
+
+Configure your parameter map as follows:
+
+Input (In) range: 1 to 2
+Output (Out) range: -1.0 to 1.0
+Accumulation (Accum): Enabled (set to "Yes")
+
+Trig params, masks and channel memory are all able to be mapped to your MIDI device.
 
 ## Getting Around Mosaic
 
@@ -559,16 +581,6 @@ To remove a mask from a step, navigate to the mask page in the channel editor wi
   <a href="https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1823s">Removing masks demo</a>
 </p>
 
-
-##### MIDI Input
-
-You can input notes, velocity, and chords using a MIDI keyboard. However, setting the length of these inputs requires manual selection. To do this, ensure you have your desired channel selected on _Mosaic_. Then, while holding the desired step, press the corresponding key on your keyboard. If you are on the mask page of your Norns, the values you input will display as trig locks.
-
-To preview notes before committing them to your sequence, simply press the keys on your keyboard without holding down a step.
-
-By default, the keyboard maps the steps to the currently selected scale on the white keys, with the root note of your selected scale starting from C. You can adjust this mapping in the settings of Mosaic to better suit your musical preferences or project requirements.
-
-You are also able to control all 10 of the trig parameters on the currently selected page independently using a MIDI controller such as Intech's en64 by sending a relative bin offset MIDI CC message to cc 11 - 20 respectively. You can control the masks by sending a relative bin offset to MIDI CC to cc 1 - 10 respectively.
 
 #### Merge Modes
 

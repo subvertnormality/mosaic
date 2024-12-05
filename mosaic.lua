@@ -370,6 +370,8 @@ function init()
   device_map.validate_devices()
   params:bang()
 
+  m_midi.set_up_midi_mapping_params()
+
   ui.init()
   m_grid.init()
   m_clock.init()

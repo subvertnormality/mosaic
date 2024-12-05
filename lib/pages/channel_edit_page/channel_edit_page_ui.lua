@@ -931,26 +931,28 @@ function channel_edit_page_ui.refresh()
   channel_edit_page_ui.select_channel_page_by_index(channel_pages:get_selected_page() or 1)
 end
 
-function channel_edit_page_ui.handle_memory_navigator(d)
-  local c = program.get_selected_channel().number
+function channel_edit_page_ui.handle_memory_navigator(c, d)
+  
   if d > 0 then
     
     memory.redo(c)
-    memory_state.events = memory.get_recent_events(c, 25)
-    memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
-    memory_controls.navigator:set_current_index(memory.get_event_count(c))
+    if program.get_selected_channel().number == c then
+      memory_state.events = memory.get_recent_events(c, 25)
+      memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
+      memory_controls.navigator:set_current_index(memory.get_event_count(c))
+    end
   else
     memory.undo(c)
-    memory_state.events = memory.get_recent_events(c, 25)
-    memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
-    memory_controls.navigator:set_current_index(memory.get_event_count(c))
+    if program.get_selected_channel().number == c then
+      memory_state.events = memory.get_recent_events(c, 25)
+      memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
+      memory_controls.navigator:set_current_index(memory.get_event_count(c))
+    end
   end
 end
 
-
-function channel_edit_page_ui.handle_trig_mask_change(direction)
+function channel_edit_page_ui.handle_trig_mask_change(channel, direction)
   local pressed_keys = m_grid.get_pressed_keys()
-  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.trig:increment()
@@ -999,9 +1001,8 @@ function channel_edit_page_ui.handle_trig_mask_change(direction)
 end
 
 
-function channel_edit_page_ui.handle_note_mask_change(direction)
+function channel_edit_page_ui.handle_note_mask_change(channel, direction)
   local pressed_keys = m_grid.get_pressed_keys()
-  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.note:increment()
@@ -1049,9 +1050,8 @@ function channel_edit_page_ui.handle_note_mask_change(direction)
   end
 end
 
-function channel_edit_page_ui.handle_velocity_mask_change(direction)
+function channel_edit_page_ui.handle_velocity_mask_change(channel, direction)
   local pressed_keys = m_grid.get_pressed_keys()
-  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.velocity:increment()
@@ -1100,9 +1100,8 @@ function channel_edit_page_ui.handle_velocity_mask_change(direction)
   end
 end
 
-function channel_edit_page_ui.handle_length_mask_change(direction)
+function channel_edit_page_ui.handle_length_mask_change(channel, direction)
   local pressed_keys = m_grid.get_pressed_keys()
-  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.length:increment()
@@ -1173,9 +1172,8 @@ function channel_edit_page_ui.handle_length_mask_change(direction)
   end
 end
 
-function channel_edit_page_ui.handle_chord_mask_one_change(direction)
+function channel_edit_page_ui.handle_chord_mask_one_change(channel, direction)
   local pressed_keys = m_grid.get_pressed_keys()
-  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.chords[1]:increment()
@@ -1222,9 +1220,8 @@ function channel_edit_page_ui.handle_chord_mask_one_change(direction)
   end
 end
 
-function channel_edit_page_ui.handle_chord_mask_two_change(direction)
+function channel_edit_page_ui.handle_chord_mask_two_change(channel, direction)
   local pressed_keys = m_grid.get_pressed_keys()
-  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.chords[2]:increment()
@@ -1271,9 +1268,8 @@ function channel_edit_page_ui.handle_chord_mask_two_change(direction)
   end
 end
 
-function channel_edit_page_ui.handle_chord_mask_three_change(direction)
+function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction)
   local pressed_keys = m_grid.get_pressed_keys()
-  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.chords[3]:increment()
@@ -1305,37 +1301,16 @@ function channel_edit_page_ui.handle_chord_mask_three_change(direction)
     mask_selectors.chords[3]:set_value(channel.chord_three_mask or -1)
     if direction > 0 then
       mask_selectors.chords[3]:increment()
-      recorder.add_note_mask_event_portion(
-          channel.number, 
-          s, 
-          {
-            song_pattern = program.get().selected_song_pattern,
-            data = {
-            step = s,
-            chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
-          }
-        }
-      )
+      program.set_chord_three_mask(channel, mask_selectors.chords[3]:get_value())
     else
       mask_selectors.chords[3]:decrement()
-      recorder.add_note_mask_event_portion(
-          channel.number, 
-          s, 
-          {
-            song_pattern = program.get().selected_song_pattern,
-            data = {
-            step = s,
-            chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
-          }
-        }
-      )
+      program.set_chord_three_mask(channel, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value())
     end
   end
 end
 
-function channel_edit_page_ui.handle_chord_mask_four_change(direction)
+function channel_edit_page_ui.handle_chord_mask_four_change(channel, direction)
   local pressed_keys = m_grid.get_pressed_keys()
-  local channel = program.get_selected_channel()
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 then
     if direction > 0 then
       mask_selectors.chords[4]:increment()
@@ -1385,34 +1360,34 @@ end
 -- Handlers for specific actions
 function channel_edit_page_ui.handle_mask_page_change(direction)
     if mask_selectors.trig:is_selected() then
-      channel_edit_page_ui.handle_trig_mask_change(direction)
+      channel_edit_page_ui.handle_trig_mask_change(program.get_selected_channel(), direction)
     end
     if mask_selectors.note:is_selected() then
-      channel_edit_page_ui.handle_note_mask_change(direction)
+      channel_edit_page_ui.handle_note_mask_change(program.get_selected_channel(), direction)
     end
     if mask_selectors.velocity:is_selected() then
-      channel_edit_page_ui.handle_velocity_mask_change(direction)
+      channel_edit_page_ui.handle_velocity_mask_change(program.get_selected_channel(), direction)
     end
     if mask_selectors.length:is_selected() then
-      channel_edit_page_ui.handle_length_mask_change(direction)
+      channel_edit_page_ui.handle_length_mask_change(program.get_selected_channel(), direction)
     end
     if mask_selectors.chords[1]:is_selected() then
-      channel_edit_page_ui.handle_chord_mask_one_change(direction)
+      channel_edit_page_ui.handle_chord_mask_one_change(program.get_selected_channel(), direction)
     end
     if mask_selectors.chords[2]:is_selected() then
-      channel_edit_page_ui.handle_chord_mask_two_change(direction)
+      channel_edit_page_ui.handle_chord_mask_two_change(program.get_selected_channel(), direction)
     end
     if mask_selectors.chords[3]:is_selected() then
-      channel_edit_page_ui.handle_chord_mask_three_change(direction)
+      channel_edit_page_ui.handle_chord_mask_three_change(program.get_selected_channel(), direction)
     end
     if mask_selectors.chords[4]:is_selected() then
-      channel_edit_page_ui.handle_chord_mask_four_change(direction)
+      channel_edit_page_ui.handle_chord_mask_four_change(program.get_selected_channel(), direction)
     end
 end
 
 function channel_edit_page_ui.handle_memory_page_change(d)
   if memory_controls.navigator:is_selected() then
-    channel_edit_page_ui.handle_memory_navigator(d)
+    channel_edit_page_ui.handle_memory_navigator(program.get_selected_channel().number, d)
   end
 end
 
