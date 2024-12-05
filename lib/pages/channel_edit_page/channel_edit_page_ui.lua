@@ -268,7 +268,7 @@ function channel_edit_page_ui.init()
       
       if program.get_channel_param_slide(program.get_selected_channel(), i) then
         -- Draw top line
-        screen.move(x, y-6) 
+        screen.move(x-1, y-6) 
         screen.line(x+23, y-6)
         screen.stroke()
         -- Draw right line

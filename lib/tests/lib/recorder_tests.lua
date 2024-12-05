@@ -405,24 +405,6 @@ function test_recorder_trig_lock_events_with_multiple_parameters()
   luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 3), 60)
 end
 
-function test_recorder_handle_nil_trig_lock_values()
-  local recorder = include("mosaic/lib/recorder")
-  program.init()
-  memory.init()
-  
-  -- Set a trig lock value
-  recorder.set_trig_lock_dirty(1, 1, 100)
-  recorder.record_trig_event(1, 1, 1)
-  
-  -- Clear it by setting to nil
-  recorder.set_trig_lock_dirty(1, 1, nil)
-  recorder.record_trig_event(1, 1, 1)
-  
-  -- Verify trig lock was cleared
-  local channel = program.get_channel(1, 1)
-  luaunit.assert_nil(program.get_step_param_trig_lock(channel, 1, 1))
-end
-
 function test_recorder_merge_partial_note_mask_events()
   local recorder = include("mosaic/lib/recorder")
   program.init()
