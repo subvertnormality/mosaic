@@ -209,6 +209,13 @@ Accumulation (Accum): Enabled (set to "Yes")
 
 Trig params, masks and channel memory are all able to be mapped to your MIDI device.
 
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=iGx5fmrbatA&t=802s">MIDI controller mapping demo</a>
+</p>
+
 ## Getting Around Mosaic
 
 ### Sequencer Start and Stop
@@ -235,6 +242,21 @@ Changes to trig parameters are also recorded on the active channel. Recording be
 By default, trig locks are recorded only on active steps. However, if the Trigless Param setting is enabled, parameter values will be recorded on every step.
 
 <img alt="Mosaic grid record button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-record-button.svg" width="300" />
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=iGx5fmrbatA&t=143s">Live recording notes</a>
+</p>
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=iGx5fmrbatA&t=640s">Live recording trig locks</a>
+</p>
+
 
 
 ### Grid Menu Navigation
@@ -677,6 +699,15 @@ To access _Mosaic_'s memory, open the channel editor and navigate to the Memory 
 
 To jump to the latest action and erase all subsequent memory, hold shift (K1) and press K3. To jump to the first action and erase all memory recorded after it, hold K1 and press K2.
 
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=iGx5fmrbatA&t=202s">Memory demo</a>
+</p>
+
+
 #### Channel Length
 
 Channels in your sequencer can be customized to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
@@ -896,7 +927,7 @@ To clear all parameter trig locks from a channel:
 
 #### Param Slides
 
-To enable parameter slides for a trig parameter, select the desired parameter and press K3. This will activate parameter slides for every trig lock of this type on the channel. While enabled, locks will smoothly transition between each other. Note that transitions do not transition across song patterns but can wrap within the same pattern if the Param Slide Wrap setting is enabled.
+To enable parameter slides for a trig parameter, select the desired parameter and press K3. This will activate parameter slides for every trig lock of this type on the channel. While enabled, locks will smoothly transition between each other. Note that transitions do not transition across song patterns but can wrap within the same pattern if the Param Slide Wrap setting is enabled. Use this sparingly as it is resource intensive
 
 To lock a parameter slide to a specific step:
 
@@ -904,6 +935,13 @@ To lock a parameter slide to a specific step:
 - Press K3 on the chosen trig parameter.
 
 This locks the parameter slide to the selected step, causing it to transition smoothly to the next lock. All other locks remain unaffected.
+
+<p>
+  <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
+    <use href="#video-icon" />
+  </svg>
+  <a href="https://www.youtube.com/watch?v=iGx5fmrbatA&t=515s">Param slides demo</a>
+</p>
 
 ### Mask Locks
 
