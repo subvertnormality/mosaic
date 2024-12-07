@@ -33,6 +33,9 @@ local insert = table.insert
 local pairs, ipairs = pairs, ipairs
 local program = program
 local table = table
+local floor = math.floor
+local min = math.min
+local max = math.max
 
 local function calculate_divisor(clock_mod)
   if clock_mod.type == "clock_multiplication" then
@@ -134,6 +137,18 @@ local function quantize_value(value, quant)
   
   -- For integer quantization
   return math.floor(value/quant + 0.5) * quant
+end
+
+local function count_active_actions(action)
+  local count = 0
+  for _, channel_actions in pairs(action) do
+    for _, trig_action in pairs(channel_actions) do
+      if trig_action.active then
+        count = count + 1
+      end
+    end
+  end
+  return count
 end
 
 function m_clock.init()
@@ -344,79 +359,78 @@ function m_clock.init()
       for i = #spread_actions, 1, -1 do
         local action = spread_actions[i]
         if action then
+          -- Cache frequently accessed values
+          local pulse_count, total_pulses, quant, start_value, end_value
+          
           -- Iterate through channels
           for channel_number, channel_actions in pairs(action) do
-            -- Iterate through trig locks
-            for trig_lock, trig_action in pairs(channel_actions) do
-              if trig_action.active then
-                local quant = trig_action.quant or 0
-                if trig_action.pulse_count >= trig_action.total_pulses then
-                  trig_action.active = false
-                else
-                  -- Calculate progress and current value
-                  local progress = trig_action.pulse_count / trig_action.total_pulses
-                  local current_value
-                  
-                  -- Special handling for first value
-                  if trig_action.pulse_count == 0 then
-                    if quant and quant > 0 then
-                      -- Start at first quantum above start value
-                      if trig_action.start_value < trig_action.end_value then
-                        current_value = math.ceil((trig_action.start_value + quant) / quant) * quant
-                      elseif trig_action.start_value > trig_action.end_value then
-                        current_value = math.floor((trig_action.start_value - quant) / quant) * quant
-                      end
-                    else
-                      current_value = trig_action.start_value
-                    end
-                  -- Use end_value exactly when we're at the last pulse  
-                  elseif trig_action.pulse_count == trig_action.total_pulses - 1 then
-                    current_value = trig_action.end_value
+            if channel_number ~= "active_count" then  -- Skip our metadata
+              -- Iterate through trig locks
+              for trig_lock, trig_action in pairs(channel_actions) do
+                if trig_action.active then
+                  -- Cache values used multiple times
+                  pulse_count = trig_action.pulse_count
+                  total_pulses = trig_action.total_pulses
+                  quant = trig_action.quant or 0
+                  start_value = trig_action.start_value
+                  end_value = trig_action.end_value
+
+                  if pulse_count >= total_pulses then
+                    trig_action.active = false
+                    action.active_count = action.active_count - 1
                   else
-                    -- Basic linear interpolation
-
-                    if trig_action.start_value < trig_action.end_value then
-                      current_value = (trig_action.start_value + quant) + 
-                        ((trig_action.end_value + quant) - (trig_action.start_value + quant)) * progress
-                    else
-                      current_value = (trig_action.start_value - quant) + 
-                        ((trig_action.end_value - quant) - (trig_action.start_value - quant)) * progress
-                    end
+                    -- Calculate progress and current value
+                    local progress = pulse_count / total_pulses
+                    local current_value
                     
-                    -- Ensure we don't overshoot
-                    if trig_action.start_value > trig_action.end_value then
-                      current_value = math.max(current_value, trig_action.end_value)
+                    -- Special handling for first value
+                    if pulse_count == 0 then
+                      if quant and quant > 0 then
+                        if start_value < end_value then
+                          current_value = floor((start_value + quant) / quant + 0.5) * quant
+                        else
+                          current_value = floor((start_value - quant) / quant + 0.5) * quant
+                        end
+                      else
+                        current_value = start_value
+                      end
+                    -- Use end_value exactly when we're at the last pulse  
+                    elseif pulse_count == total_pulses - 1 then
+                      current_value = end_value
                     else
-                      current_value = math.min(current_value, trig_action.end_value)
-                    end
+                      -- Basic linear interpolation
+                      if start_value < end_value then
+                        current_value = (start_value + quant) + 
+                          ((end_value + quant) - (start_value + quant)) * progress
+                      else
+                        current_value = (start_value - quant) + 
+                          ((end_value - quant) - (start_value - quant)) * progress
+                      end
+                      
+                      -- Ensure we don't overshoot
+                      if start_value > end_value then
+                        current_value = max(current_value, end_value)
+                      else
+                        current_value = min(current_value, end_value)
+                      end
 
-                    -- Apply quantization
-                    if quant and quant > 0 then
-                      current_value = quantize_value(current_value, quant)
+                      -- Apply quantization
+                      if quant > 0 then
+                        current_value = quantize_value(current_value, quant)
+                      end
                     end
+                    trig_action.func(current_value, trig_action.last_value)
+                    trig_action.last_value = current_value
+                    trig_action.pulse_count = pulse_count + 1
                   end
-                  trig_action.func(current_value, trig_action.last_value)
-                  trig_action.last_value = current_value
-                  trig_action.pulse_count = trig_action.pulse_count + 1
                 end
               end
             end
           end
           
-          -- Remove action if all trig locks are inactive
-          local all_inactive = true
-          for channel_number, channel_actions in pairs(action) do
-            for trig_lock, trig_action in pairs(channel_actions) do
-              if trig_action.active then
-                all_inactive = false
-                break
-              end
-            end
-            if not all_inactive then break end
-          end
-          
-          if all_inactive then
-            table.remove(spread_actions, i)
+          -- Simply check active_count instead of nested iteration
+          if action.active_count <= 0 then
+            remove(spread_actions, i)
           end
         end
       end
@@ -664,7 +678,8 @@ function m_clock.execute_action_across_steps_by_pulses(args)
         active = true,
         should_wrap = args.should_wrap
       }
-    }
+    },
+    active_count = 1  -- Add active count tracking
   })
 end
 
@@ -674,33 +689,50 @@ function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, tri
     local action = spread_actions[i]
     if action and action[channel_number] then
       if trig_lock then
-        if action[channel_number][trig_lock] then
-          local trig_action = action[channel_number][trig_lock]
-          local progress = trig_action.pulse_count / trig_action.total_pulses
-          local final_value = trig_action.start_value + ((trig_action.end_value - trig_action.start_value) * progress)
-          if trig_action.quant then
-            final_value = quantize_value(final_value, trig_action.quant)
-          end
-          if use_end_value then
-            final_value = trig_action.end_value
-          end
+        -- Handle single trig lock case
+        local trig_action = action[channel_number][trig_lock]
+        if trig_action then
+          -- Calculate final value only once
+          local final_value = use_end_value and trig_action.end_value or
+            (trig_action.quant and quantize_value(
+              trig_action.start_value + 
+              ((trig_action.end_value - trig_action.start_value) * 
+              (trig_action.pulse_count / trig_action.total_pulses)),
+              trig_action.quant
+            ) or
+            trig_action.start_value + 
+            ((trig_action.end_value - trig_action.start_value) * 
+            (trig_action.pulse_count / trig_action.total_pulses)))
+          
           trig_action.func(final_value)
           
+          -- Update active count when removing trig action
+          action.active_count = action.active_count - (trig_action.active and 1 or 0)
           action[channel_number][trig_lock] = nil
-          if not next(action[channel_number]) then
-            table.remove(spread_actions, i)
+          
+          -- Remove action if no more trig locks
+          if action.active_count <= 0 then
+            remove(spread_actions, i)
           end
         end
       else
+        -- Handle all trig locks case
         for _, trig_action in pairs(action[channel_number]) do
-          local progress = trig_action.pulse_count / trig_action.total_pulses
-          local final_value = trig_action.start_value + ((trig_action.end_value - trig_action.start_value) * progress)
-          if trig_action.quant then
-            final_value = quantize_value(final_value, trig_action.quant)
-          end
+          -- Calculate final value only once
+          local final_value = use_end_value and trig_action.end_value or
+            (trig_action.quant and quantize_value(
+              trig_action.start_value + 
+              ((trig_action.end_value - trig_action.start_value) * 
+              (trig_action.pulse_count / trig_action.total_pulses)),
+              trig_action.quant
+            ) or
+            trig_action.start_value + 
+            ((trig_action.end_value - trig_action.start_value) * 
+            (trig_action.pulse_count / trig_action.total_pulses)))
+          
           trig_action.func(final_value)
         end
-        table.remove(spread_actions, i)
+        remove(spread_actions, i)
       end
     end
   end
