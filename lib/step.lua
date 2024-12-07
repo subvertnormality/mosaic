@@ -29,6 +29,10 @@ local program = program
 local ipairs = ipairs
 local table = table
 
+local quantiser_process = quantiser.process
+local quantiser_process_chord_note_for_mask = quantiser.process_chord_note_for_mask
+local fn_constrain = fn.constrain
+
 function step.process_stock_params(c, step, type)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
   local trig_lock_params = channel.trig_lock_params
@@ -641,34 +645,46 @@ end
 local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func)
   local c = note_container.channel
   local channel = program.get_channel(program.get().selected_song_pattern, c)
+  
+  -- Cache frequently accessed values
   local step_chord_masks = channel.step_chord_masks[current_step]
-
-  local note_dashboard_values = {}
-
-  local chord_notes = {
-    step_chord_masks and step_chord_masks[1] or channel.chord_one_mask,
-    step_chord_masks and step_chord_masks[2] or channel.chord_two_mask,
-    step_chord_masks and step_chord_masks[3] or channel.chord_three_mask,
-    step_chord_masks and step_chord_masks[4] or channel.chord_four_mask
-  }
-
-  local chord_division = note_divisions[step.process_stock_params(c, current_step, "chord_strum")] and note_divisions[step.process_stock_params(c, current_step, "chord_strum")].value
+  local chord_one = step_chord_masks and step_chord_masks[1] or channel.chord_one_mask
+  local chord_two = step_chord_masks and step_chord_masks[2] or channel.chord_two_mask
+  local chord_three = step_chord_masks and step_chord_masks[3] or channel.chord_three_mask
+  local chord_four = step_chord_masks and step_chord_masks[4] or channel.chord_four_mask
+  local chord_notes = {chord_one, chord_two, chord_three, chord_four}
+  
+  -- Cache params early
+  local chord_division = note_divisions[step.process_stock_params(c, current_step, "chord_strum")] 
+                        and note_divisions[step.process_stock_params(c, current_step, "chord_strum")].value
   local chord_velocity_mod = step.process_stock_params(c, current_step, "chord_velocity_modifier")
   local chord_strum_pattern = step.process_stock_params(c, current_step, "chord_strum_pattern")
   local chord_spread = step.process_stock_params(c, current_step, "chord_spread") or 0
   local chord_acceleration = step.process_stock_params(c, current_step, "chord_acceleration") or 1
-  local arp_division = note_divisions[step.process_stock_params(c, current_step, "chord_arp")] and note_divisions[step.process_stock_params(c, current_step, "chord_arp")].value
+  local arp_division = note_divisions[step.process_stock_params(c, current_step, "chord_arp")] 
+                      and note_divisions[step.process_stock_params(c, current_step, "chord_arp")].value
   
+  -- Cache note processing values
+  local note_value = unprocessed_note_container.note_value
+  local note_mask_value = unprocessed_note_container.note_mask_value
+  local octave_mod = unprocessed_note_container.octave_mod
+  local transpose = unprocessed_note_container.transpose
+  local step_scale_number = channel.step_scale_number
+  local velocity = note_container.velocity
+  local length = note_container.length
+
   if chord_spread ~= 0 then
     chord_spread = divisions.note_division_values[chord_spread]
   end
 
-
   if arp_division then
-    handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
+    handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, 
+              chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
     return
   end
 
+  local note_dashboard_values = {}
+  
   local selected_channel = program.get().selected_channel
   if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
     play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
