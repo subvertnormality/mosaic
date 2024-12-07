@@ -798,7 +798,6 @@ function test_execute_action_across_steps_with_nil_quant_uses_raw_values()
   end
   luaunit.assert_true(has_decimal, "Expected at least one floating point value when quant = nil")
 end
-
 function test_cancel_spread_actions_for_channel_without_trig_lock()
   setup()
   clock_setup()
@@ -1345,4 +1344,148 @@ function test_channel_is_sliding_with_multiple_slides()
   
   luaunit.assert_false(m_clock.channel_is_sliding(channel, 1))
   luaunit.assert_false(m_clock.channel_is_sliding(channel, 2))
+end
+
+-- Test rapid creation and execution of delayed actions
+function test_rapid_delayed_action_creation_and_execution()
+  setup()
+  clock_setup()
+  
+  local channel = 1
+  local executed_count = 0
+  local total_actions = 1000
+  
+  -- Create many delayed actions rapidly
+  for i = 1, total_actions do
+    m_clock.delay_action(channel, 1, "must_execute", function()
+      executed_count = executed_count + 1
+    end)
+  end
+  
+  progress_clock_by_pulses(48)
+  
+  -- All actions should execute
+  luaunit.assert_equals(executed_count, total_actions)
+end
+
+-- Test delayed action execution order
+function test_delayed_action_execution_order()
+  setup()
+  clock_setup()
+  
+  local channel = 1
+  local execution_order = {}
+  
+  -- Create actions with different delays
+  m_clock.delay_action(channel, 2, "must_execute", function()
+    table.insert(execution_order, 3)
+  end)
+  
+  m_clock.delay_action(channel, 1, "must_execute", function()
+    table.insert(execution_order, 2)
+  end)
+  
+  m_clock.delay_action(channel, 0, "must_execute", function()
+    table.insert(execution_order, 1)
+  end)
+  
+  progress_clock_by_pulses(96)
+  
+  -- Verify execution order
+  luaunit.assert_equals(execution_order[1], 1)
+  luaunit.assert_equals(execution_order[2], 2)
+  luaunit.assert_equals(execution_order[3], 3)
+end
+
+-- Test memory usage during rapid spread action creation/cancellation
+function test_spread_action_memory_usage()
+  setup()
+  clock_setup()
+  
+  local initial_memory = collectgarbage("count")
+  local values = {}
+  
+  -- Create and cancel many spread actions
+  for i = 1, 100 do
+    m_clock.execute_action_across_steps_by_pulses({
+      channel_number = 1,
+      trig_lock = i,
+      start_step = 1,
+      end_step = 4,
+      start_value = 0,
+      end_value = 127,
+      func = function(val)
+        table.insert(values, val)
+      end
+    })
+    
+    if i % 2 == 0 then
+      m_clock.cancel_spread_actions_for_channel_trig_lock(1, i)
+    end
+  end
+  
+  progress_clock_by_pulses(48)
+  collectgarbage("collect")
+  
+  local final_memory = collectgarbage("count")
+  -- Allow for some memory overhead but ensure no major leaks
+  luaunit.assert_true((final_memory - initial_memory) < 100)
+end
+
+-- Test concurrent delayed actions across multiple channels
+function test_concurrent_delayed_actions_multiple_channels()
+  setup()
+  clock_setup()
+  
+  local executed_counts = {}
+  for i = 1, 16 do
+    executed_counts[i] = 0
+  end
+  
+  -- Create delayed actions for all channels
+  for channel = 1, 16 do
+    for i = 1, 10 do
+      m_clock.delay_action(channel, 1, "must_execute", function()
+        executed_counts[channel] = executed_counts[channel] + 1
+      end)
+    end
+  end
+  
+  progress_clock_by_pulses(48)
+  
+  -- Verify all actions executed for each channel
+  for channel = 1, 16 do
+    luaunit.assert_equals(executed_counts[channel], 10)
+  end
+end
+
+-- Test handling of empty but allocated delayed action tables
+function test_empty_delayed_action_table_handling()
+  setup()
+  clock_setup()
+  
+  local channel = 1
+  local executed = false
+  local executed_empty = false
+  
+  -- Create a normal delayed action
+  m_clock.delay_action(channel, 0, "must_execute", function()
+    executed = true
+  end)
+  
+  -- Force the delayed_ids_must_execute table to be empty but allocated
+  local id = m_clock.delay_action(channel, 1, "must_execute", function()
+    executed_empty = true
+  end)
+  
+  -- Clear the table while keeping its allocation
+  m_clock.destroy_at_note_end_ids(channel)
+  
+  -- Progress clock to trigger execution
+  progress_clock_by_pulses(1)
+  
+  -- The immediate action should execute
+  luaunit.assert_true(executed)
+  -- The cleared action should not execute
+  luaunit.assert_false(executed_empty)
 end

@@ -65,32 +65,23 @@ end
 local destroy_arp_sprockets = function() destroy_sprockets(arp_sprockets) end
 
 local function execute_ids(c, ids)
-  if #ids == 0 then return end  -- Early exit if empty
+  if not ids or #ids == 0 then return end  -- Early exit if empty/nil
   
   local clock = m_clock["channel_" .. c .. "_clock"]
-  if not (clock and clock.delayed_actions) then return end  -- Early exit if no clock/actions
+  local delayed_actions = clock and clock.delayed_actions
+  if not delayed_actions then return end  -- Early exit if no actions
   
-  local i = #ids
-  while i > 0 do
+  local len = #ids
+  for i = len, 1, -1 do -- Reverse iteration for stable removal
     local id = ids[i]
-    local delayed_action = clock.delayed_actions[id]
+    local delayed_action = delayed_actions[id]
     
     if delayed_action then
-      -- Cache and execute action if it's a function
       local action = delayed_action.action
-      if type(action) == "function" then
-        action()
-      end
-      
-      -- Clear action and id in one pass
-      clock.delayed_actions[id] = nil
-      -- Use swap-and-pop for O(1) removal
-      if i < #ids then
-        ids[i] = ids[#ids]
-      end
-      ids[#ids] = nil
+      if type(action) == "function" then action() end
+      delayed_actions[id] = nil
+      ids[i] = nil -- Direct removal since iterating in reverse
     end
-    i = i - 1
   end
 end
 
@@ -240,9 +231,14 @@ function m_clock.init()
     local sprocket_action = function(t)
       local channel = program.get_channel(program.get().selected_song_pattern, channel_number)
       local current_step = program.get_current_step_for_channel(channel_number)
+      local pattern = channel.working_pattern
+      local trig_values = pattern.trig_values
+      local clock = m_clock["channel_" .. channel_number .. "_clock"]
+      
+      -- Cache frequently accessed values
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
-
+      
       local channel_length = end_trig - start_trig + 1
 
       if channel_length > program.get_selected_song_pattern().global_pattern_length then
@@ -639,22 +635,17 @@ end
 
 local function calculate_total_pulses(channel, start_step, end_step)
   local chan_clock = m_clock["channel_" .. channel .. "_clock"]
-  local pulses_per_step = 12  -- 12 pulses per step (48 per beat)
+  if not chan_clock then return 0 end
+  
   local steps = end_step - start_step + 1
+  local pulses = steps * 12 -- 12 pulses per step
   
-  -- Calculate total duration in pulses
-  local total_pulses = steps * pulses_per_step
-  
-  if chan_clock and chan_clock.division then
-    local div_multiplier = 16 / (1 / chan_clock.division)
-    total_pulses = math.floor(total_pulses * div_multiplier)
+  local div = chan_clock.division
+  if div then
+    pulses = pulses * (16 / (1 / div))
   end
   
-  -- Scale down the total pulses to match our reduced execution rate
-  -- but maintain the same total duration
-  total_pulses = math.floor(total_pulses / 4)  -- Divide by 4 since we reduced from 192 to 48 updates per beat
-  
-  return total_pulses
+  return math.floor(pulses / 4)
 end
 
 
