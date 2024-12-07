@@ -798,12 +798,15 @@ function test_execute_action_across_steps_with_nil_quant_uses_raw_values()
   end
   luaunit.assert_true(has_decimal, "Expected at least one floating point value when quant = nil")
 end
+
 function test_cancel_spread_actions_for_channel_without_trig_lock()
   setup()
   clock_setup()
 
   local values1 = {}
   local values2 = {}
+  local last_value1 = nil
+  local last_value2 = nil
   
   -- Create two spread actions for the same channel
   m_clock.execute_action_across_steps_by_pulses({
@@ -815,6 +818,7 @@ function test_cancel_spread_actions_for_channel_without_trig_lock()
     end_value = 127,
     func = function(val)
       table.insert(values1, val)
+      last_value1 = val
     end
   })
 
@@ -827,20 +831,37 @@ function test_cancel_spread_actions_for_channel_without_trig_lock()
     end_value = 100,
     func = function(val)
       table.insert(values2, val)
+      last_value2 = val
     end
   })
 
-  progress_clock_by_pulses(48)
+  -- Progress part way through
+  progress_clock_by_pulses(24)
   
-  -- Cancel all actions for channel 1 without specifying trig_lock
-  m_clock.cancel_spread_actions_for_channel_trig_lock(1)
-  progress_clock_by_pulses(48)
-  
-  -- Both actions should have been cancelled
+  -- Verify actions have started but not completed
   luaunit.assert_true(#values1 > 0)
   luaunit.assert_true(#values2 > 0)
-  luaunit.assert_true(values1[#values1] < 127)
-  luaunit.assert_true(values2[#values2] < 100)
+  luaunit.assert_true(last_value1 < 127)
+  luaunit.assert_true(last_value2 < 100)
+  
+  -- Store length of value arrays before cancellation
+  local len1_before = #values1
+  local len2_before = #values2
+  
+  -- Cancel all actions for channel 1
+  m_clock.cancel_spread_actions_for_channel_trig_lock(1)
+  
+  -- Progress more pulses
+  progress_clock_by_pulses(24)
+  
+  -- Values arrays should not have grown much after cancellation
+  -- Allow for at most one more value due to timing
+  luaunit.assert_true(#values1 <= len1_before + 1)
+  luaunit.assert_true(#values2 <= len2_before + 1)
+  
+  -- Final values should still be less than targets
+  luaunit.assert_true(last_value1 < 127)
+  luaunit.assert_true(last_value2 < 100)
 end
 
 function test_execute_action_across_steps_with_same_start_and_end_step()

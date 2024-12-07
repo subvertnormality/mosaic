@@ -38,6 +38,9 @@ local floor = math.floor
 local min = math.min
 local max = math.max
 
+local active_spread_actions = {}
+local spread_action_channels = {}
+
 local function calculate_divisor(clock_mod)
   if clock_mod.type == "clock_multiplication" then
     return 4 * clock_mod.value
@@ -367,22 +370,40 @@ function m_clock.init()
   end
   execute_spread_actions = clock_lattice:new_sprocket {
     action = function()
-      local i = #spread_actions
-      while i > 0 do
+      -- Clear channel cache
+      for i = 1, #spread_action_channels do
+        spread_action_channels[i] = nil
+      end
+      
+      -- Build channel action cache and count active actions
+      local active_count = 0
+      for i = #spread_actions, 1, -1 do
         local action = spread_actions[i]
         if not action or action.active_count <= 0 then
-          -- Use swap-and-pop for O(1) removal
+          -- Remove inactive actions
           if i < #spread_actions then
             spread_actions[i] = spread_actions[#spread_actions]
           end
           spread_actions[#spread_actions] = nil
-          i = i - 1
-          goto continue
+        else
+          active_count = active_count + 1
+          -- Cache channel numbers that have active actions
+          for channel_number in pairs(action) do
+            if channel_number ~= "active_count" then
+              spread_action_channels[#spread_action_channels + 1] = channel_number
+            end
+          end
         end
-        
-        -- Process each channel's actions
-        for channel_number, channel_actions in pairs(action) do
-          if channel_number ~= "active_count" then
+      end
+      
+      -- Early exit if no active actions
+      if active_count == 0 then return end
+      
+      -- Process actions by channel for better cache locality
+      for _, channel_number in ipairs(spread_action_channels) do
+        for _, action in ipairs(spread_actions) do
+          local channel_actions = action[channel_number]
+          if channel_actions then
             for trig_lock, trig_action in pairs(channel_actions) do
               if trig_action.active then
                 local pulse_count = trig_action.pulse_count
@@ -392,12 +413,13 @@ function m_clock.init()
                   trig_action.active = false
                   action.active_count = action.active_count - 1
                 else
-                  local current_value
+                  -- Cache frequently accessed values
                   local start_val = trig_action.start_value
                   local end_val = trig_action.end_value
-                  local quant = trig_action.quant or 0
+                  local quant = trig_action.quant
                   
                   -- Calculate value based on position
+                  local current_value
                   if pulse_count == 0 then
                     current_value = start_val
                   elseif pulse_count == total_pulses - 1 then
@@ -408,9 +430,8 @@ function m_clock.init()
                   end
                   
                   -- Apply quantization if needed
-                  if quant > 0 then
+                  if quant and quant > 0 then
                     if pulse_count == 0 then
-                      -- Special handling for first value with quantization
                       if start_val < end_val then
                         current_value = quantize_value(start_val + quant, quant)
                       else
@@ -429,8 +450,6 @@ function m_clock.init()
             end
           end
         end
-        i = i - 1
-        ::continue::
       end
     end,
     division = 1/48,
@@ -696,9 +715,10 @@ function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, tri
     local action = spread_actions[i]
     if action and action[channel_number] then
       if trig_lock then
+        -- Cancel specific trig lock
         local trig_action = action[channel_number][trig_lock]
-        if trig_action then
-          -- Only execute final value if the action has started
+        if trig_action and trig_action.active then  -- Check if active
+          -- Execute final value if needed
           if trig_action.pulse_count > 0 then
             if use_end_value then
               trig_action.func(trig_action.end_value)
@@ -713,39 +733,37 @@ function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, tri
             end
           end
           
-          -- Immediately deactivate the action
+          -- Deactivate the action
           trig_action.active = false
           action.active_count = action.active_count - 1
           action[channel_number][trig_lock] = nil
-          
-          -- Remove action if no more active trig locks
-          if action.active_count <= 0 then
-            if i < #spread_actions then
-              spread_actions[i] = spread_actions[#spread_actions]
-            end
-            spread_actions[#spread_actions] = nil
-          end
         end
       else
-        -- Handle all trig locks for channel
-        for _, trig_action in pairs(action[channel_number]) do
-          if trig_action.pulse_count > 0 then
-            if use_end_value then
-              trig_action.func(trig_action.end_value)
-            else
-              local progress = trig_action.pulse_count / trig_action.total_pulses
-              local final_value = trig_action.start_value + 
-                (trig_action.end_value - trig_action.start_value) * progress
-              if trig_action.quant and trig_action.quant > 0 then
-                final_value = quantize_value(final_value, trig_action.quant)
+        -- Cancel all trig locks for channel
+        for trig_lock_id, trig_action in pairs(action[channel_number]) do
+          if trig_action.active then  -- Only process active actions
+            if trig_action.pulse_count > 0 then
+              if use_end_value then
+                trig_action.func(trig_action.end_value)
+              else
+                local progress = trig_action.pulse_count / trig_action.total_pulses
+                local final_value = trig_action.start_value + 
+                  (trig_action.end_value - trig_action.start_value) * progress
+                if trig_action.quant and trig_action.quant > 0 then
+                  final_value = quantize_value(final_value, trig_action.quant)
+                end
+                trig_action.func(final_value)
               end
-              trig_action.func(final_value)
             end
+            trig_action.active = false
+            action.active_count = action.active_count - 1
           end
-          trig_action.active = false
         end
         action[channel_number] = nil
-        action.active_count = 0
+      end
+      
+      -- Remove action if no more active trig locks
+      if action.active_count <= 0 then
         if i < #spread_actions then
           spread_actions[i] = spread_actions[#spread_actions]
         end
