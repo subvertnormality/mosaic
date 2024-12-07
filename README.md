@@ -138,6 +138,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Honor Scale Degree](#honor-scale-degree)
   * [Sinfonion Connect](#sinfonion-connect)
   * [LFOs and Modulation](#lfos-and-modulation)
+- [Performance Management](#performance-management)
 - [Development](#development)
   * [Roadmap](#roadmap)
   * [Interesting Components for Norns Script Developers](#interesting-components-for-norns-script-developers)
@@ -1065,6 +1066,17 @@ You can sync up your Eurorack Sinfonion module to Mosaic using a DIY device call
 ### LFOs and Modulation
 
 _Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit](https://github.com/sixolet/toolkit). You can add LFOs and other rhythmic modulators to any device parameter.
+
+
+## Performance Management
+
+_Mosaic_ gives you a lot of control, but it can also be resource intensive. Pushing the sequencer to its limits can cause slow down and lead to an instable external clock. Here are some tips for managing performance:
+
+ - The more channels you use, the greater care you need to take when using high clock rates, trig locks, param slides, and n.b. devices.
+ - High clock rates and multipliers place a greater strain on the sequencer. Use lower clock rates where possible.
+ - Global param slides are resource intensive and should be used sparingly. Consider using step param slides instead.
+ - Recording with trigless locks enabled places a greater strain on the sequencer. Disable if you don't need the granularity of modulations.
+- N.b. devices should be be used sparingly.
 
 ## Development
 

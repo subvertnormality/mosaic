@@ -371,81 +371,69 @@ function m_clock.init()
   end
   execute_spread_actions = clock_lattice:new_sprocket {
     action = function()
-      for i = #spread_actions, 1, -1 do
+      local i = #spread_actions
+      while i > 0 do
         local action = spread_actions[i]
-        if action then
-          -- Early exit if no active actions
-          if action.active_count <= 0 then
-            remove(spread_actions, i)
-            goto continue
+        if not action or action.active_count <= 0 then
+          -- Use swap-and-pop for O(1) removal
+          if i < #spread_actions then
+            spread_actions[i] = spread_actions[#spread_actions]
           end
-          
-          -- Iterate through channels
-          for channel_number, channel_actions in pairs(action) do
-            if channel_number ~= "active_count" then
-              -- Iterate through trig locks
-              for trig_lock, trig_action in pairs(channel_actions) do
-                if trig_action.active then
-                  -- Cache frequently accessed values
-                  local pulse_count = trig_action.pulse_count
-                  local total_pulses = trig_action.total_pulses
+          spread_actions[#spread_actions] = nil
+          i = i - 1
+          goto continue
+        end
+        
+        -- Process each channel's actions
+        for channel_number, channel_actions in pairs(action) do
+          if channel_number ~= "active_count" then
+            for trig_lock, trig_action in pairs(channel_actions) do
+              if trig_action.active then
+                local pulse_count = trig_action.pulse_count
+                local total_pulses = trig_action.total_pulses
+                
+                if pulse_count >= total_pulses then
+                  trig_action.active = false
+                  action.active_count = action.active_count - 1
+                else
+                  local current_value
+                  local start_val = trig_action.start_value
+                  local end_val = trig_action.end_value
+                  local quant = trig_action.quant or 0
                   
-                  if pulse_count >= total_pulses then
-                    trig_action.active = false
-                    action.active_count = action.active_count - 1
+                  -- Calculate value based on position
+                  if pulse_count == 0 then
+                    current_value = start_val
+                  elseif pulse_count == total_pulses - 1 then
+                    current_value = end_val
                   else
-                    local current_value
-                    local start_val = trig_action.start_value
-                    local end_val = trig_action.end_value
-                    local quant = trig_action.quant or 0
-                    
-                    -- Optimize common cases
-                    if pulse_count == 0 then
-                      if quant > 0 then
-                        if start_val < end_val then
-                          current_value = floor((start_val + quant) / quant + 0.5) * quant
-                        else
-                          current_value = floor((start_val - quant) / quant + 0.5) * quant
-                        end
-                      else
-                        current_value = start_val
-                      end
-                    elseif pulse_count == total_pulses - 1 then
-                      current_value = end_val
-                    else
-                      -- Linear interpolation with minimal operations
-                      local progress = pulse_count / total_pulses
-                      
-                      if start_val < end_val then
-                        current_value = (start_val + quant) + 
-                          ((end_val + quant) - (start_val + quant)) * progress
-                        if quant > 0 then
-                          current_value = quantize_value(current_value, quant)
-                        end
-                        current_value = min(current_value, end_val)
-                      else
-                        current_value = (start_val - quant) + 
-                          ((end_val - quant) - (start_val - quant)) * progress
-                        if quant > 0 then
-                          current_value = quantize_value(current_value, quant)
-                        end
-                        current_value = max(current_value, end_val)
-                      end
-                    end
-                    
-                    trig_action.func(current_value, trig_action.last_value)
-                    trig_action.last_value = current_value
-                    trig_action.pulse_count = pulse_count + 1
+                    local progress = pulse_count / (total_pulses - 1)
+                    current_value = start_val + (end_val - start_val) * progress
                   end
+                  
+                  -- Apply quantization if needed
+                  if quant > 0 then
+                    if pulse_count == 0 then
+                      -- Special handling for first value with quantization
+                      if start_val < end_val then
+                        current_value = quantize_value(start_val + quant, quant)
+                      else
+                        current_value = quantize_value(start_val - quant, quant)
+                      end
+                    else
+                      current_value = quantize_value(current_value, quant)
+                    end
+                  end
+                  
+                  trig_action.func(current_value, trig_action.last_value)
+                  trig_action.last_value = current_value
+                  trig_action.pulse_count = pulse_count + 1
                 end
               end
             end
           end
-          
-          if action.active_count <= 0 then
-            remove(spread_actions, i)
-          end
         end
+        i = i - 1
         ::continue::
       end
     end,
@@ -875,5 +863,10 @@ function m_clock.get_clock_lattice()
 end
 
 return m_clock
+
+
+
+
+
 
 
