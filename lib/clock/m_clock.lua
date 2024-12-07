@@ -24,6 +24,7 @@ for i = 1, 16 do execute_at_note_end_ids[i] = {} end
 
 local execute_spread_actions = {}
 local spread_actions = {}
+local spread_action_count = 0
 
 local clock_divisions = include("mosaic/lib/clock/divisions").clock_divisions
 
@@ -64,18 +65,32 @@ end
 local destroy_arp_sprockets = function() destroy_sprockets(arp_sprockets) end
 
 local function execute_ids(c, ids)
-  local clock = m_clock["channel_" .. c .. "_clock"]
+  if #ids == 0 then return end  -- Early exit if empty
   
-  for i = #ids, 1, -1 do
+  local clock = m_clock["channel_" .. c .. "_clock"]
+  if not (clock and clock.delayed_actions) then return end  -- Early exit if no clock/actions
+  
+  local i = #ids
+  while i > 0 do
     local id = ids[i]
-    if clock and clock.delayed_actions and clock.delayed_actions[id] then
-      local action = clock.delayed_actions[id].action
+    local delayed_action = clock.delayed_actions[id]
+    
+    if delayed_action then
+      -- Cache and execute action if it's a function
+      local action = delayed_action.action
       if type(action) == "function" then
         action()
       end
-      clock.delayed_actions[id] = nil  -- Remove the action after execution
-      table.remove(ids, i)  -- Remove the ID from the list
+      
+      -- Clear action and id in one pass
+      clock.delayed_actions[id] = nil
+      -- Use swap-and-pop for O(1) removal
+      if i < #ids then
+        ids[i] = ids[#ids]
+      end
+      ids[#ids] = nil
     end
+    i = i - 1
   end
 end
 
@@ -374,29 +389,33 @@ function m_clock.init()
                   -- Cache frequently accessed values
                   local pulse_count = trig_action.pulse_count
                   local total_pulses = trig_action.total_pulses
-                  local quant = trig_action.quant or 0
                   
                   if pulse_count >= total_pulses then
                     trig_action.active = false
                     action.active_count = action.active_count - 1
                   else
-                    -- Scale progress to maintain the same duration
-                    local progress = (pulse_count * 4) / (total_pulses * 4)  -- Multiply both numbers by 4 to maintain precision
                     local current_value
+                    local start_val = trig_action.start_value
+                    local end_val = trig_action.end_value
+                    local quant = trig_action.quant or 0
                     
-                    -- Optimize the most common case
+                    -- Optimize common cases
                     if pulse_count == 0 then
-                      current_value = quant > 0 and 
-                        (trig_action.start_value < trig_action.end_value and
-                          floor((trig_action.start_value + quant) / quant + 0.5) * quant or
-                          floor((trig_action.start_value - quant) / quant + 0.5) * quant) or
-                        trig_action.start_value
+                      if quant > 0 then
+                        if start_val < end_val then
+                          current_value = floor((start_val + quant) / quant + 0.5) * quant
+                        else
+                          current_value = floor((start_val - quant) / quant + 0.5) * quant
+                        end
+                      else
+                        current_value = start_val
+                      end
                     elseif pulse_count == total_pulses - 1 then
-                      current_value = trig_action.end_value
+                      current_value = end_val
                     else
-                      -- Optimize linear interpolation
-                      local start_val = trig_action.start_value
-                      local end_val = trig_action.end_value
+                      -- Linear interpolation with minimal operations
+                      local progress = pulse_count / total_pulses
+                      
                       if start_val < end_val then
                         current_value = (start_val + quant) + 
                           ((end_val + quant) - (start_val + quant)) * progress
@@ -479,6 +498,9 @@ function m_clock.get_channel_division(channel_number)
   return clock and clock.division or 0.4
 end
 
+function m_clock.get_destroy_at_note_end_ids_length(channel)
+  return #destroy_at_note_end_ids[channel]
+end
 
 function m_clock.delay_action(c, length, type, func)
   if length == 0 or length == nil then
@@ -488,7 +510,6 @@ function m_clock.delay_action(c, length, type, func)
 
   local id = m_clock["channel_" .. c .. "_clock"]:set_delayed_action(length, func)
 
-
   if type == "must_execute" then
     table.insert(delayed_ids_must_execute[c], id)
   elseif type == "destroy_at_note_end" then
@@ -497,8 +518,32 @@ function m_clock.delay_action(c, length, type, func)
     table.insert(execute_at_note_end_ids[c], id)
   end
 
+  -- Return the id so it can be cancelled if needed
+  return id
 end
 
+function m_clock.destroy_at_note_end_ids(c)
+  local clock = m_clock["channel_" .. c .. "_clock"]
+  if not (clock and clock.delayed_actions) then return end
+  
+  local ids = destroy_at_note_end_ids[c]
+  local i = #ids
+  
+  while i > 0 do
+    local id = ids[i]
+    if clock.delayed_actions[id] then
+      -- Prevent execution by making it a no-op and setting length to never trigger
+      clock.delayed_actions[id].action = function() end
+      clock.delayed_actions[id].length = math.huge
+    end
+    -- Use swap-and-pop for O(1) removal from ids list
+    if i < #ids then
+      ids[i] = ids[#ids]
+    end
+    ids[#ids] = nil
+    i = i - 1
+  end
+end
 
 function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration, length, func)
   if division == 0 or division == nil then
@@ -600,19 +645,6 @@ function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration,
   table.insert(arp_sprockets[c], arp)
 end
 
-
-function m_clock.destroy_at_note_end_ids(c)
-  local clock = m_clock["channel_" .. c .. "_clock"]
-  
-  for i = #destroy_at_note_end_ids[c], 1, -1 do
-    local id = destroy_at_note_end_ids[c][i]
-    if clock and clock.delayed_actions and clock.delayed_actions[id] then
-      clock.delayed_actions[id] = nil
-      table.remove(destroy_at_note_end_ids[c], i)
-    end
-  end
-end
-
 function m_clock.realign_sprockets()
   clock_lattice:realign_eligable_sprockets()
 end
@@ -647,8 +679,6 @@ function m_clock.execute_action_across_steps_by_pulses(args)
   end 
   
   if args.should_wrap and args.end_step < args.start_step then
-    -- For wrapping, calculate pulses from start to end of pattern (64)
-    -- plus pulses from beginning to target step
     local pulses_to_end = calculate_total_pulses(args.channel_number, args.start_step, 64, args.should_wrap)
     local pulses_from_start = calculate_total_pulses(args.channel_number, 1, args.end_step, args.should_wrap)
     
@@ -660,6 +690,7 @@ function m_clock.execute_action_across_steps_by_pulses(args)
   -- Clear any existing spread actions for this channel
   m_clock.cancel_spread_actions_for_channel_trig_lock(args.channel_number, args.trig_lock)
   
+  -- Create action with original nested structure
   table.insert(spread_actions, {
     [args.channel_number] = {
       [args.trig_lock] = {
@@ -675,75 +706,90 @@ function m_clock.execute_action_across_steps_by_pulses(args)
         should_wrap = args.should_wrap
       }
     },
-    active_count = 1  -- Add active count tracking
+    active_count = 1
   })
 end
 
--- Helper function to cancel spread actions for a channel
+-- Keep original cancel_spread_actions_for_channel_trig_lock implementation
 function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, trig_lock, use_end_value)
-  for i = #spread_actions, 1, -1 do
+  local i = #spread_actions
+  while i > 0 do
     local action = spread_actions[i]
     if action and action[channel_number] then
       if trig_lock then
-        -- Handle single trig lock case
         local trig_action = action[channel_number][trig_lock]
         if trig_action then
-          -- Calculate final value only once
-          local final_value = use_end_value and trig_action.end_value or
-            (trig_action.quant and quantize_value(
-              trig_action.start_value + 
-              ((trig_action.end_value - trig_action.start_value) * 
-              (trig_action.pulse_count / trig_action.total_pulses)),
-              trig_action.quant
-            ) or
-            trig_action.start_value + 
-            ((trig_action.end_value - trig_action.start_value) * 
-            (trig_action.pulse_count / trig_action.total_pulses)))
+          -- Only execute final value if the action has started
+          if trig_action.pulse_count > 0 then
+            if use_end_value then
+              trig_action.func(trig_action.end_value)
+            else
+              local progress = trig_action.pulse_count / trig_action.total_pulses
+              local final_value = trig_action.start_value + 
+                (trig_action.end_value - trig_action.start_value) * progress
+              if trig_action.quant and trig_action.quant > 0 then
+                final_value = quantize_value(final_value, trig_action.quant)
+              end
+              trig_action.func(final_value)
+            end
+          end
           
-          trig_action.func(final_value)
-          
-          -- Update active count when removing trig action
-          action.active_count = action.active_count - (trig_action.active and 1 or 0)
+          -- Immediately deactivate the action
+          trig_action.active = false
+          action.active_count = action.active_count - 1
           action[channel_number][trig_lock] = nil
           
-          -- Remove action if no more trig locks
+          -- Remove action if no more active trig locks
           if action.active_count <= 0 then
-            remove(spread_actions, i)
+            if i < #spread_actions then
+              spread_actions[i] = spread_actions[#spread_actions]
+            end
+            spread_actions[#spread_actions] = nil
           end
         end
       else
-        -- Handle all trig locks case
+        -- Handle all trig locks for channel
         for _, trig_action in pairs(action[channel_number]) do
-          -- Calculate final value only once
-          local final_value = use_end_value and trig_action.end_value or
-            (trig_action.quant and quantize_value(
-              trig_action.start_value + 
-              ((trig_action.end_value - trig_action.start_value) * 
-              (trig_action.pulse_count / trig_action.total_pulses)),
-              trig_action.quant
-            ) or
-            trig_action.start_value + 
-            ((trig_action.end_value - trig_action.start_value) * 
-            (trig_action.pulse_count / trig_action.total_pulses)))
-          
-          trig_action.func(final_value)
+          if trig_action.pulse_count > 0 then
+            if use_end_value then
+              trig_action.func(trig_action.end_value)
+            else
+              local progress = trig_action.pulse_count / trig_action.total_pulses
+              local final_value = trig_action.start_value + 
+                (trig_action.end_value - trig_action.start_value) * progress
+              if trig_action.quant and trig_action.quant > 0 then
+                final_value = quantize_value(final_value, trig_action.quant)
+              end
+              trig_action.func(final_value)
+            end
+          end
+          trig_action.active = false
         end
-        remove(spread_actions, i)
+        action[channel_number] = nil
+        action.active_count = 0
+        if i < #spread_actions then
+          spread_actions[i] = spread_actions[#spread_actions]
+        end
+        spread_actions[#spread_actions] = nil
       end
     end
+    i = i - 1
   end
 end
 
 function m_clock.channel_is_sliding(channel, trig_param)
-  -- Check if there are any active spread actions
-  for _, action in ipairs(spread_actions) do
-    -- Check if this action affects our channel
-    if action[channel.number] then
-      -- Check if this action affects our trig parameter
-      if action[channel.number][trig_param] and action[channel.number][trig_param].active then
+  local i = #spread_actions
+  while i > 0 do
+    local action = spread_actions[i]
+    local channel_actions = action and action[channel.number]
+    if channel_actions then
+      local trig_action = channel_actions[trig_param]
+      -- Check both active flag and pulse count
+      if trig_action and trig_action.active and trig_action.pulse_count < trig_action.total_pulses then
         return true
       end
     end
+    i = i - 1
   end
   return false
 end
@@ -829,3 +875,5 @@ function m_clock.get_clock_lattice()
 end
 
 return m_clock
+
+

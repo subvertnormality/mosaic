@@ -1132,3 +1132,4 @@ function step.reset_pattern()
 end
 
 return step
+
