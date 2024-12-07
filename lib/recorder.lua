@@ -5,12 +5,16 @@ recorder.mask_events = {}
 recorder.trig_lock_events = {}
 recorder.trig_lock_dirty = {}
 
-for i = 1, 16 do
-  recorder.trig_lock_dirty[i] = {}
-  for j = 1, 10 do
-    recorder.trig_lock_dirty[i][j] = false
+local function init_trig_lock_dirty()
+  for i = 1, 16 do
+    recorder.trig_lock_dirty[i] = {}
+    for j = 1, 10 do
+      recorder.trig_lock_dirty[i][j] = false
+    end
   end
 end
+
+init_trig_lock_dirty()
 
 function recorder.add_note_mask_event_portion(c, step, event_portion)
   if not recorder.mask_events[c] then
@@ -155,11 +159,15 @@ function recorder.trig_lock_is_dirty(c, parameter)
 end
 
 function recorder.set_trig_lock_dirty(c, parameter, value)
-  recorder.trig_lock_dirty[c][parameter] = value
+    recorder.trig_lock_dirty[c][parameter] = value
 end
 
 function recorder.clear_trig_lock_dirty(c, parameter)
-  recorder.trig_lock_dirty[c][parameter] = nil
+  recorder.trig_lock_dirty[c][parameter] = false
+end
+
+function recorder.clear_all_trig_lock_dirty()
+  init_trig_lock_dirty()
 end
 
 return recorder

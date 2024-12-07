@@ -81,7 +81,7 @@ function scale_edit_page_ui.update_scale()
   save_confirm.set_cancel_message("Scale not saved.")
   save_confirm.set_cancel(scale_edit_page_ui.refresh_quantiser)
 
-  if is_key3_down then
+  if is_key1_down then
     save_confirm.set_confirm_message("K2 to save across song.")
     save_confirm.set_ok_message("Scale saved to all.")
     save_confirm.set_save(function()

@@ -84,7 +84,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Length Merge Modes](#length-merge-modes)
     + [Note Dashboard](#note-dashboard)
     + [Clocks, Swing and Shuffle](#clocks-swing-and-shuffle)
-    + [Memory (undo and redo)](#memory)
+    + [Memory (undo and redo)](#memory-undo-and-redo)
     + [Channel Length](#channel-length)
     + [Muting Channels](#muting-channels)
     + [Trig Parameters](#trig-parameters)
@@ -196,7 +196,7 @@ By default, the keyboard maps the steps to the currently selected scale on the w
 ##### MIDI Controller Mapping
 _Mosaic_ provides comprehensive support for MIDI mapping of channel controls through the Norns MIDI Map function. This allows you to assign MIDI controls to various parameters, enabling real-time control via compatible MIDI hardware. Your MIDI device must support relative (binary offset). 
 
-To map your MIDI device to a channel control, navigate to the parameters menu on your norns device and scroll down to the "Mosaic Midi Mapping" section. Select your desired control type and enter the parameters menu on your Norns by holding K1 (system key) and pressing K3 (enter key). Now select your desired parameter.
+To map your MIDI device to a channel control, navigate to the parameters menu on your norns device and scroll down to the "Mosaic Midi Mapping" section. Select your desired control type and enter the parameters menu on your Norns by holding K1 and pressing K3 (enter key). Now select your desired parameter.
 
 Map "selected channel parameters" when you want to control a specific parameter of the currently selected channel. Map "channel parameters" when you want to control a parameter of a specific channel regardless of which channel is selected.
 
@@ -264,7 +264,9 @@ The pattern editor button cycles through three pages, accessible by pressing the
 
 ### Norns Menu Navigation
 
-Further configuration happens on Norns. Each _Mosaic_ grid page has a group of pages on the Norns screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you navigate away from the page without applying, the change will be cancelled.
+Further configuration happens on Norns. Each _Mosaic_ grid page has a group of pages on the Norns screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you press K2 or navigate away from the page without applying, the change will be cancelled.
+
+In general, the K3 button is used to confirm changes, K2 is used to cancel, and K1 is held to access shift functions.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -420,7 +422,7 @@ You've seen in the [Harmony Design](#harmony-design) section that it's possible 
 
 Select the note editor by pressing the third key in the global menu button cluster on the grid again when already in thr pattern trigger editor.
 
-This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. Whilst holding shift (K3), any entered note is automatically duplicated across all 4 step screens. 
+This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. Whilst holding shift (K1), any entered note is automatically duplicated across all 4 step screens. 
 
 <img alt="Pattern editor note select faders" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-select-faders.svg" width="300" />
 
@@ -436,7 +438,7 @@ Aim for higher or lower pitches with the octave select buttons, expanding your m
 
 Hint: Even if a step lacks a trig, don't hesitate to assign a note. This data might come in handy with different merge modes in play.
 
-The gentle flicker on the top row indicates the currently chosen pattern.  If you wish to explore a different pattern, press and hold or shift press (holding K3) on the top row.
+The gentle flicker on the top row indicates the currently chosen pattern.  If you wish to explore a different pattern, press and hold or shift press (holding K1) on the top row.
 
 On the Norns screen, you'll find the channel grid visualizer. Use E2 to select the current channel.
 
@@ -548,7 +550,7 @@ With masking, you have the flexibility to modify individual attributes of a patt
 
 ##### Adding Trig Masks
 
-You can quickly add trig masks to your sequence by shift pressing (hold K3) the desired step on the sequencer on the channel edit page. Remember to asign a note mask, velocity mask and length mask to hear your desired note! You can also quickly remove notes this way.
+You can quickly add trig masks to your sequence by shift pressing (hold K1) the desired step on the sequencer on the channel edit page. Remember to asign a note mask, velocity mask and length mask to hear your desired note! You can also quickly remove notes this way.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -572,7 +574,7 @@ Additionally, take advantage of the chord trig params to enhance your musical ex
 
 ##### Removing Masks
 
-To remove a mask from a step, navigate to the mask page in the channel editor with your desired channel selected, hold down the step with the mask-to-be-removed, and press K2. To remove all masks on a channel, hold shift (K3) and press K2.
+To remove a mask from a step, navigate to the mask page in the channel editor with your desired channel selected, hold down the step with the mask-to-be-removed, and press K2. To remove all masks on a channel, hold shift (K1) and press K2.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -638,7 +640,7 @@ These modes dictate how the duration of notes is calculated for overlapping step
 * **Shorter**: The length is calculated by subtracting the shortest length from the average of each step's length minus the shortest length.
 * **Pattern**: To apply a specific pattern’s length values, hold the length merge button and press the pattern's select button.
 
-Length merge modes are set by holding shift (K3) and pressing the velocity merge mode button.
+Length merge modes are set by holding shift (K1) and pressing the velocity merge mode button.
 
 <img alt="Channel editor length merge mode button (with shift key held)" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg" width="300" />
 
@@ -672,7 +674,7 @@ To access _Mosaic_'s memory, open the channel editor and navigate to the Memory 
 - Press K3 to jump directly to the latest action.
 - Press K2 to return to the beginning of the memory.
 
-To jump to the latest action and erase all subsequent memory, hold K3 and press K2. To jump to the first action and erase all memory recorded after it, hold K2 and press K3.
+To jump to the latest action and erase all subsequent memory, hold shift (K1) and press K3. To jump to the first action and erase all memory recorded after it, hold K1 and press K2.
 
 #### Channel Length
 
@@ -694,7 +696,7 @@ The behavior of the sequencer when handling patterns of different lengths can al
 
 #### Muting Channels
 
-To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also shift press (hold K3) the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
+To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also shift press (hold K1) the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.
 
 <img alt="Channel editor channel select buttons - hold or shift press to mute" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-select-buttons.svg" width="300" />
 
@@ -783,7 +785,7 @@ When in the scale editor, a short press of the scale buttons selects one of the 
 
 <img alt="Scale editor scale slot select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg" width="300" />
 
-A long or shift press (hold K3) on a scale button selects a scale for editing without applying it to the currently playing pattern, indicated by a dimly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
+A long or shift press (hold K1) on a scale button selects a scale for editing without applying it to the currently playing pattern, indicated by a dimly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
 
 [Scale locks](#scale-locks) can be set to apply a scale globally or to a single channel, activating at a designated step and persisting until the end of the pattern. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
 
@@ -881,7 +883,7 @@ To clear parameter trig locks from a specific step:
 To clear all parameter trig locks from a channel:
 
 1. Ensure you are on the trig lock page on your norns device.
-2. Hold K3.
+2. Hold shift (K1).
 3. Press K2.
 
 <p>
@@ -917,7 +919,7 @@ To clear mask locks from a specific step:
 To clear all mask trig locks from a channel:
 
 1. Ensure you are on the Mask page on your norns device.
-2. Hold K3.
+2. Hold shift (K1).
 3. Press K2.
 
 <p>
@@ -988,7 +990,7 @@ Various aspects of Mosaic can be configured from the param section on your Norns
 
 ##### Shift press stop
 
-When enabled, the play/stop button will only stop with a long press or when shift (K3) is held. This feature is intended to prevent accidental stops of the sequencer, especially during live performances.
+When enabled, the play/stop button will only stop with a long press or when shift (K1) is held. This feature is intended to prevent accidental stops of the sequencer, especially during live performances.
 
 ##### Song Mode
 

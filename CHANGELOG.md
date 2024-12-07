@@ -30,6 +30,7 @@
 - Only trig locks blink on the grid sequencer when the trig lock page is active on the Norns screen.
 - Mask locks and trig locks blink on the grid sequencer when on the record screen on the Norns screen.
 - All locks blink when on any other channel editor norns screen.
+- K1 is now used to hold shift functions rather than K3, for better UX consistency. K3 is now generally used to confirm/select. K2 is generally used to cancel/delete.
 
 
 ## 1.0.2

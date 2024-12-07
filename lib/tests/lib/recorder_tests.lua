@@ -181,7 +181,7 @@ function test_recorder_trig_lock_dirty_state()
   
   -- Clear dirty
   recorder.clear_trig_lock_dirty(channel, parameter)
-  luaunit.assert_nil(recorder.trig_lock_is_dirty(channel, parameter))
+  luaunit.assert_false(recorder.trig_lock_is_dirty(channel, parameter))
 end
 
 function test_recorder_record_trig_event()
@@ -508,7 +508,7 @@ function test_recorder_trig_lock_dirty_state_independence()
   -- Clear individual states
   recorder.clear_trig_lock_dirty(1, 1)
   
-  luaunit.assert_nil(recorder.trig_lock_is_dirty(1, 1))
+  luaunit.assert_false(recorder.trig_lock_is_dirty(1, 1))
   luaunit.assert_equals(recorder.trig_lock_is_dirty(1, 2), 80)
   luaunit.assert_equals(recorder.trig_lock_is_dirty(2, 1), 60)
 end

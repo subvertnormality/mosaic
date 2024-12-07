@@ -92,7 +92,7 @@ function scale_edit_page.register_presss()
     "scale_edit_page",
     function(x, y)
       if scale_fader:is_this(x, y) then
-        if is_key3_down then
+        if is_key1_down then
           program.get().selected_scale = x
           scale_edit_page_ui.refresh()
         else

@@ -744,12 +744,11 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
       else
         p:delta(d)
       end
-      recorder.set_trig_lock_dirty(channel.number, dial_index, p:get())
-
+      if params:get("record") == 2 then
+        recorder.set_trig_lock_dirty(channel.number, dial_index, p:get())
+      end
     end
 
-
-  
     channel_edit_page_ui.refresh_trig_lock_value(dial_index)
   end
 
@@ -1553,7 +1552,7 @@ function channel_edit_page_ui.handle_key_two_pressed()
     end
   else
     if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-      if is_key3_down then
+      if is_key1_down then
         program.clear_trig_locks_for_channel(program.get_selected_channel())
         tooltip:show("Trig locks for ch " .. program.get_selected_channel().number .. " cleared")
         channel_edit_page_ui.refresh_trig_locks()
@@ -1566,17 +1565,17 @@ function channel_edit_page_ui.handle_key_two_pressed()
         trig_lock_page:toggle_sub_page()
       end
     elseif channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
-      if is_key3_down then
+      if is_key1_down then
         program.clear_masks_for_channel(program.get_selected_channel())
         tooltip:show("Masks for ch " .. program.get_selected_channel().number .. " cleared")
         channel_edit_page_ui.refresh_masks()
         pattern.update_working_pattern(program.get_selected_channel().number)
       end
     elseif channel_pages:get_selected_page() == channel_page_to_index["Memory"] then
-      if is_key3_down then
-        memory.redo_all(program.get_selected_channel().number)
+      if is_key1_down then
+        memory.undo_all(program.get_selected_channel().number)
         memory.clear(program.get_selected_channel().number)
-        tooltip:show("Memory applied and forgotten")
+        tooltip:show("Memory undone and forgotten")
       else
         memory.undo_all(program.get_selected_channel().number)
         tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory undone")
@@ -1590,10 +1589,10 @@ end
 function channel_edit_page_ui.handle_key_three_pressed()
   local pressed_keys = m_grid.get_pressed_keys()
   if channel_pages:get_selected_page() == channel_page_to_index["Memory"] then
-    if is_key2_down then
-      memory.undo_all(program.get_selected_channel().number)
+    if is_key1_down then
+      memory.redo_all(program.get_selected_channel().number)
       memory.clear(program.get_selected_channel().number)
-      tooltip:show("Memory undone and forgotten")
+      tooltip:show("Memory applied and forgotten")
     else
       memory.redo_all(program.get_selected_channel().number)
       tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory applied")
@@ -1606,7 +1605,7 @@ function channel_edit_page_ui.handle_key_three_pressed()
         local step = fn.calc_grid_count(keys[1], keys[2])
         program.toggle_step_param_slide(program.get_selected_channel(), step, dials:get_selected_index())
       end
-    else
+    elseif not is_key1_down then
       program.toggle_channel_param_slide(program.get_selected_channel(), dials:get_selected_index())
     end
     fn.dirty_screen(true)

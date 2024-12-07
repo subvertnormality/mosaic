@@ -140,6 +140,7 @@ local function register_presss()
             if should_stop then
               clock.transport:stop()
               tooltip:show("Stopping playback")
+              recorder.clear_all_trig_lock_dirty()
             end
           end
           m_grid.set_menu_button_state()
@@ -148,6 +149,7 @@ local function register_presss()
           if params:get("record") == 2 then
             params:set("record", 1)
             tooltip:show("Recording stopped")
+            recorder.clear_all_trig_lock_dirty()
           else
             params:set("record", 2)
             tooltip:show("Recording started")

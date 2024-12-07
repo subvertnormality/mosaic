@@ -85,7 +85,7 @@ function note_edit_page.register_presss()
     press:register(
       "note_edit_page",
       function(x, y)
-        if y == 1 and is_key3_down then
+        if y == 1 and is_key1_down then
           program.get().selected_pattern = x
           tooltip:show("Pattern " .. x .. " selected")
           note_edit_page.refresh()
@@ -109,7 +109,7 @@ function note_edit_page.register_presss()
           program.get_selected_song_pattern().active = true
           tooltip:show("Step " .. s .. " note set to " .. note)
 
-          if is_key3_down then
+          if is_key1_down then
             local steps = {16, 32, 48, -16, -32, -48}
 
             for _, step in ipairs(steps) do

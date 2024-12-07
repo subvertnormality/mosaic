@@ -124,7 +124,7 @@ function channel_edit_page.register_draws()
   draw:register_grid(
     "channel_edit_page",
     function()
-      if is_key3_down then
+      if is_key1_down then
         length_merge_mode_button:draw()
       else
         velocity_merge_mode_button:draw()
@@ -144,7 +144,7 @@ function channel_edit_page.register_presss()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
-        if is_key3_down then
+        if is_key1_down then
           channel_edit_page_sequencer:press(x, y)
           program.toggle_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
         end
@@ -155,7 +155,7 @@ function channel_edit_page.register_presss()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
-        if is_key3_down then
+        if is_key1_down then
           program.clear_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
           channel_edit_page_ui.refresh_masks()
         end
@@ -184,7 +184,7 @@ function channel_edit_page.register_presss()
       if channel_select_fader:is_this(x, y) then
         local channel = program.get_channel(program.get().selected_song_pattern, x)
 
-        if is_key3_down == true then
+        if is_key1_down == true then
           if (channel.mute == true) then
             channel.mute = false
             tooltip:show("Channel " .. x .. " unmuted")
@@ -274,7 +274,7 @@ function channel_edit_page.register_presss()
         local channel1 = program.get_channel(program.get().selected_song_pattern, x)
         local channel2 = program.get_channel(program.get().selected_song_pattern, x2)
 
-        if is_key3_down == true then
+        if is_key1_down == true then
 
           if channel1.mute == true then
             channel1.mute = false
@@ -391,7 +391,7 @@ function channel_edit_page.register_presss()
   press:register(
     "channel_edit_page",
     function(x, y)
-      if velocity_merge_mode_button:is_this(x, y) and not is_key3_down then
+      if velocity_merge_mode_button:is_this(x, y) and not is_key1_down then
 
         velocity_merge_mode_button:press(x, y)
 
@@ -427,7 +427,7 @@ function channel_edit_page.register_presss()
   press:register(
     "channel_edit_page",
     function(x, y)
-      if length_merge_mode_button:is_this(x, y) and is_key3_down then
+      if length_merge_mode_button:is_this(x, y) and is_key1_down then
 
         length_merge_mode_button:press(x, y)
 
