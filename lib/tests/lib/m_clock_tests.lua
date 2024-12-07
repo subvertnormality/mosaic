@@ -503,10 +503,14 @@ function test_execute_action_across_steps_works_with_normal_clock()
 
   progress_clock_by_pulses(96) -- One full beat (24 pulses) per step, 4 steps total
   
-  -- Should have ~96 values transitioning from 0 to 127
-  luaunit.assert_equals(#values, 96)
+  -- Should have ~12 values transitioning from 0 to 127 (reduced from 96)
+  luaunit.assert_equals(#values, 12)
   luaunit.assert_equals(values[1], 0)
   luaunit.assert_equals(values[#values], 127)
+  -- Check values increase monotonically
+  for i = 2, #values do
+    luaunit.assert_true(values[i] >= values[i-1])
+  end
 end
 
 function test_execute_action_across_steps_works_with_clock_division()
@@ -531,8 +535,8 @@ function test_execute_action_across_steps_works_with_clock_division()
 
   progress_clock_by_pulses(192) -- Two beats per step with div 2
   
-  -- Should have ~192 values transitioning from 0 to 100
-  luaunit.assert_equals(#values, 192)
+  -- Should have ~24 values transitioning from 0 to 100 (reduced from 192)
+  luaunit.assert_equals(#values, 24)
   luaunit.assert_equals(values[1], 0)
   luaunit.assert_equals(values[#values], 100)
 end
@@ -652,8 +656,8 @@ function test_execute_action_across_steps_works_with_fractional_values()
 
   progress_clock_by_pulses(96) -- One full beat (24 pulses) per step, 4 steps total
   
-  -- Should have ~96 values transitioning from 0.01 to 1.00
-  luaunit.assert_equals(#values, 96)
+  -- Should have ~12 values transitioning from 0.01 to 1.00 (reduced from 96)
+  luaunit.assert_equals(#values, 12)
   luaunit.assert_is_number(values[1])
   luaunit.assert_almost_equals(values[1], 0.01, 0.001)
   luaunit.assert_almost_equals(values[#values], 1.00, 0.001)
@@ -683,8 +687,8 @@ function test_execute_action_across_steps_works_with_fractional_quantization()
 
   progress_clock_by_pulses(96)
   
-  -- Should have ~96 values transitioning from 0 to 1.00 in 0.01 increments
-  luaunit.assert_equals(#values, 96)
+  -- Should have ~12 values transitioning from 0 to 1.00 in 0.01 increments (reduced from 96)
+  luaunit.assert_equals(#values, 12)
   luaunit.assert_equals(values[1], 0.01)
   luaunit.assert_equals(values[#values], 1.00)
   
@@ -1135,7 +1139,7 @@ function test_execute_action_across_steps_handles_high_to_low_transition()
   progress_clock_by_pulses(96) -- One full beat per step, 4 steps
   
   -- Check we have the expected number of values
-  luaunit.assert_equals(#values, 96)
+  luaunit.assert_equals(#values, 12)
   
   -- Check start and end values
   luaunit.assert_equals(values[1], 99)

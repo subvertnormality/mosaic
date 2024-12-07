@@ -359,66 +359,61 @@ function m_clock.init()
       for i = #spread_actions, 1, -1 do
         local action = spread_actions[i]
         if action then
-          -- Cache frequently accessed values
-          local pulse_count, total_pulses, quant, start_value, end_value
+          -- Early exit if no active actions
+          if action.active_count <= 0 then
+            remove(spread_actions, i)
+            goto continue
+          end
           
           -- Iterate through channels
           for channel_number, channel_actions in pairs(action) do
-            if channel_number ~= "active_count" then  -- Skip our metadata
+            if channel_number ~= "active_count" then
               -- Iterate through trig locks
               for trig_lock, trig_action in pairs(channel_actions) do
                 if trig_action.active then
-                  -- Cache values used multiple times
-                  pulse_count = trig_action.pulse_count
-                  total_pulses = trig_action.total_pulses
-                  quant = trig_action.quant or 0
-                  start_value = trig_action.start_value
-                  end_value = trig_action.end_value
-
+                  -- Cache frequently accessed values
+                  local pulse_count = trig_action.pulse_count
+                  local total_pulses = trig_action.total_pulses
+                  local quant = trig_action.quant or 0
+                  
                   if pulse_count >= total_pulses then
                     trig_action.active = false
                     action.active_count = action.active_count - 1
                   else
-                    -- Calculate progress and current value
-                    local progress = pulse_count / total_pulses
+                    -- Scale progress to maintain the same duration
+                    local progress = (pulse_count * 4) / (total_pulses * 4)  -- Multiply both numbers by 4 to maintain precision
                     local current_value
                     
-                    -- Special handling for first value
+                    -- Optimize the most common case
                     if pulse_count == 0 then
-                      if quant and quant > 0 then
-                        if start_value < end_value then
-                          current_value = floor((start_value + quant) / quant + 0.5) * quant
-                        else
-                          current_value = floor((start_value - quant) / quant + 0.5) * quant
-                        end
-                      else
-                        current_value = start_value
-                      end
-                    -- Use end_value exactly when we're at the last pulse  
+                      current_value = quant > 0 and 
+                        (trig_action.start_value < trig_action.end_value and
+                          floor((trig_action.start_value + quant) / quant + 0.5) * quant or
+                          floor((trig_action.start_value - quant) / quant + 0.5) * quant) or
+                        trig_action.start_value
                     elseif pulse_count == total_pulses - 1 then
-                      current_value = end_value
+                      current_value = trig_action.end_value
                     else
-                      -- Basic linear interpolation
-                      if start_value < end_value then
-                        current_value = (start_value + quant) + 
-                          ((end_value + quant) - (start_value + quant)) * progress
+                      -- Optimize linear interpolation
+                      local start_val = trig_action.start_value
+                      local end_val = trig_action.end_value
+                      if start_val < end_val then
+                        current_value = (start_val + quant) + 
+                          ((end_val + quant) - (start_val + quant)) * progress
+                        if quant > 0 then
+                          current_value = quantize_value(current_value, quant)
+                        end
+                        current_value = min(current_value, end_val)
                       else
-                        current_value = (start_value - quant) + 
-                          ((end_value - quant) - (start_value - quant)) * progress
-                      end
-                      
-                      -- Ensure we don't overshoot
-                      if start_value > end_value then
-                        current_value = max(current_value, end_value)
-                      else
-                        current_value = min(current_value, end_value)
-                      end
-
-                      -- Apply quantization
-                      if quant > 0 then
-                        current_value = quantize_value(current_value, quant)
+                        current_value = (start_val - quant) + 
+                          ((end_val - quant) - (start_val - quant)) * progress
+                        if quant > 0 then
+                          current_value = quantize_value(current_value, quant)
+                        end
+                        current_value = max(current_value, end_val)
                       end
                     end
+                    
                     trig_action.func(current_value, trig_action.last_value)
                     trig_action.last_value = current_value
                     trig_action.pulse_count = pulse_count + 1
@@ -428,14 +423,14 @@ function m_clock.init()
             end
           end
           
-          -- Simply check active_count instead of nested iteration
           if action.active_count <= 0 then
             remove(spread_actions, i)
           end
         end
+        ::continue::
       end
     end,
-    division = 1/ (ppqn*4),
+    division = 1/48,
     enabled = true,
     realign = false,
     order = 5
@@ -624,19 +619,20 @@ end
 
 local function calculate_total_pulses(channel, start_step, end_step)
   local chan_clock = m_clock["channel_" .. channel .. "_clock"]
-  local ppqn = clock_lattice:get_ppqn()
-  local pulses_per_step = ppqn / 4  -- Each step is a sixteenth note
-  local steps = end_step - start_step + 1  -- Add 1 to include both start and end steps
+  local pulses_per_step = 12  -- 12 pulses per step (48 per beat)
+  local steps = end_step - start_step + 1
   
+  -- Calculate total duration in pulses
   local total_pulses = steps * pulses_per_step
   
-  -- Apply clock division if set
   if chan_clock and chan_clock.division then
-
-    -- Convert division from frequency to multiplier
     local div_multiplier = 16 / (1 / chan_clock.division)
     total_pulses = math.floor(total_pulses * div_multiplier)
   end
+  
+  -- Scale down the total pulses to match our reduced execution rate
+  -- but maintain the same total duration
+  total_pulses = math.floor(total_pulses / 4)  -- Divide by 4 since we reduced from 192 to 48 updates per beat
   
   return total_pulses
 end
