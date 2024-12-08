@@ -122,6 +122,10 @@ function step.process_params(c, step)
   local value
   local devices = program_data.devices
 
+  if channel.mute then
+    return
+  end 
+
   for i, param in ipairs(trig_lock_params) do
 
     if should_process_param(param) then

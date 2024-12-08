@@ -1108,13 +1108,15 @@ _Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit
 
 ## Performance Management
 
-_Mosaic_ gives you a lot of control, but it can also be resource intensive. Pushing the sequencer to its limits can cause slow down and lead to an instable external clock. Here are some tips for managing performance:
+_Mosaic_ gives you a lot of control, but it can also be resource intensive. Pushing the sequencer to its limits can cause slow down and lead to an instable external clock. Performance should be fine under normal usage, but more enhancements are planned for future releases. Here are some tips for managing performance:
 
  - The more channels you use, the greater care you need to take when using high clock rates, trig locks, param slides, and n.b. devices.
- - High clock rates and multipliers place a greater strain on the sequencer. Use lower clock rates where possible.
- - Global param slides are resource intensive and should be used sparingly. Consider using step param slides instead.
- - Recording with trigless locks enabled places a greater strain on the sequencer. Disable if you don't need the granularity of modulations.
-- N.b. devices should be be used sparingly.
+ - High clock rates and multipliers place a greater strain on the sequencer.
+ - Global param slides are resource intensive and should be used sparingly. Consider using step param slides instead. Generally take care to limit the number of param slides in use.
+ - Recording with trigless locks enabled places a greater strain on the sequencer. Disable if you don't need that level of modulation granularity.
+ - N.b. devices should be be used sparingly.
+
+During testing of v1.1.0, we discovered that external sync became unreliable under the following conditions: 1 n.b. device in use, trigless parameters were in use at 160 BPM, with most steps locked for all 10 trig parameters across the four channels, with 20 of those parameters utilising global param sliding. Different combinations of these conditions may yield different results. 
 
 ## Development
 
