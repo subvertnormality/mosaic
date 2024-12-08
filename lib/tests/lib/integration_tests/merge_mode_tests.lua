@@ -1,17 +1,17 @@
-pattern_controller = include("mosaic/lib/pattern_controller")
+pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock_controller")
+local m_clock = include("mosaic/lib/clock/m_clock")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/midi_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/m_midi_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_mock")
 
 local function setup()
   program.init()
@@ -20,26 +20,26 @@ local function setup()
 end
 
 local function clock_setup()
-  clock_controller.init()
-  clock_controller:start()
+  m_clock.init()
+  m_clock:start()
 end
 
 local function progress_clock_by_beats(b)
   for i = 1, (24 * b) do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
 local function progress_clock_by_pulses(p)
   for i = 1, p do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
 function test_trig_merge_modes_skip()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local step_to_skip = 1
@@ -107,17 +107,17 @@ function test_trig_merge_modes_skip()
   test_pattern_4.velocity_values[step_to_skip_3] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "skip"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "skip"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -169,8 +169,8 @@ end
 
 function test_trig_merge_modes_only()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local step_to_play = 1
@@ -233,17 +233,17 @@ function test_trig_merge_modes_only()
   test_pattern_4.velocity_values[step_to_skip_3] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "only"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "only"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -293,8 +293,8 @@ end
 
 function test_trig_merge_modes_all()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local step_to_play = 1
@@ -362,17 +362,17 @@ function test_trig_merge_modes_all()
   test_pattern_4.velocity_values[step_to_play_4] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -427,8 +427,8 @@ end
 
 function test_trig_mask_stops_steps_trigging()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local step_to_play = 1
@@ -498,17 +498,17 @@ function test_trig_mask_stops_steps_trigging()
   test_pattern_4.velocity_values[step_to_play_skip_due_to_mask] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -562,8 +562,8 @@ end
 
 function test_trig_mask_can_force_steps_trigging()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local step_to_play = 1
@@ -633,17 +633,17 @@ function test_trig_mask_can_force_steps_trigging()
   test_pattern_4.velocity_values[step_to_play_due_to_mask] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -697,8 +697,8 @@ end
 
 function test_note_merge_modes_up()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local none_merged_step_to_play = 1
@@ -771,19 +771,19 @@ function test_note_merge_modes_up()
   test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "up"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "up"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -836,8 +836,8 @@ end
 
 function test_note_merge_modes_pattern_number_1()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local none_merged_step_to_play = 1
@@ -910,19 +910,19 @@ function test_note_merge_modes_pattern_number_1()
   test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "pattern_number_1"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "pattern_number_1"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -976,8 +976,8 @@ end
 
 function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_even_when_theres_no_trig()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local none_merged_step_to_play = 1
@@ -1050,19 +1050,19 @@ function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_ev
   test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "pattern_number_1"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "pattern_number_1"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1116,8 +1116,8 @@ end
 
 function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_even_when_pattern_is_disabled()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local none_merged_step_to_play = 1
@@ -1190,19 +1190,19 @@ function test_note_merge_modes_pattern_number_1_takes_note_value_from_pattern_ev
   test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  -- fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  -- fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "pattern_number_1"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "pattern_number_1"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -1241,8 +1241,8 @@ end
 
 function test_note_merge_modes_down()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local none_merged_step_to_play = 1
@@ -1315,19 +1315,19 @@ function test_note_merge_modes_down()
   test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "down"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "down"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1383,8 +1383,8 @@ end
 
 function test_note_merge_modes_average()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local none_merged_step_to_play = 1
@@ -1457,19 +1457,19 @@ function test_note_merge_modes_average()
   test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 100
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "average"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "average"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1523,8 +1523,8 @@ end
 
 function test_velocity_merge_modes_up()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local none_merged_step_to_play = 1
@@ -1597,19 +1597,19 @@ function test_velocity_merge_modes_up()
   test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 120
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).velocity_merge_mode = "up"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).velocity_merge_mode = "up"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1663,8 +1663,8 @@ end
 
 function test_velocity_merge_modes_up()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local none_merged_step_to_play = 1
@@ -1737,19 +1737,19 @@ function test_velocity_merge_modes_up()
   test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 120
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).velocity_merge_mode = "down"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).velocity_merge_mode = "down"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1803,8 +1803,8 @@ end
 
 function test_velocity_merge_modes_up()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   local none_merged_step_to_play = 1
@@ -1877,19 +1877,19 @@ function test_velocity_merge_modes_up()
   test_pattern_3.velocity_values[twice_merged_step_to_play_6] = 120
 
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
-  program.get_sequencer_pattern(sequencer_pattern).patterns[4] = test_pattern_4
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 4)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[4] = test_pattern_4
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 4)
 
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).velocity_merge_mode = "average"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).velocity_merge_mode = "average"
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -1942,8 +1942,8 @@ end
 
 function test_trig_merge_modes_with_inactive_patterns()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   
   -- Set up patterns with different trigs
   local test_pattern = program.initialise_default_pattern()
@@ -1955,13 +1955,13 @@ function test_trig_merge_modes_with_inactive_patterns()
   test_pattern_2.trig_values[1] = 1
   test_pattern_2.trig_values[7] = 1
   
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
   
   -- Test with only pattern 1 active
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  program.get_channel(1).trig_merge_mode = "skip"
-  pattern_controller.update_working_patterns()
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "skip"
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -1973,8 +1973,8 @@ function test_trig_merge_modes_with_inactive_patterns()
   luaunit.assert_equals(note_on_event[1], 60)  -- Second trig should play
   
   -- Enable second pattern and verify behavior changes
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  pattern_controller.update_working_patterns()
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  pattern.update_working_patterns()
   
   progress_clock_by_beats(3)
   note_on_event = table.remove(midi_note_on_events, 1)
@@ -1983,8 +1983,8 @@ end
 
 function test_note_merge_modes_with_octave_shifts()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   
   -- Create patterns with notes in different octaves
   local test_pattern = program.initialise_default_pattern()
@@ -1995,16 +1995,16 @@ function test_note_merge_modes_with_octave_shifts()
   test_pattern_2.trig_values[1] = 1
   test_pattern_2.note_values[1] = 6  -- C one octave up
   
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
   
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
   
   -- Test average mode
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "average"
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -2014,8 +2014,8 @@ end
 
 function test_velocity_merge_with_extreme_values()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   
   -- Create patterns with extreme velocity values
   local test_pattern = program.initialise_default_pattern()
@@ -2026,16 +2026,16 @@ function test_velocity_merge_with_extreme_values()
   test_pattern_2.trig_values[1] = 1
   test_pattern_2.velocity_values[1] = 0
   
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
   
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
   
   -- Test different velocity merge modes with extreme values
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).velocity_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).velocity_merge_mode = "average"
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -2045,8 +2045,8 @@ end
 
 function test_length_merge_with_multiple_patterns()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   
   -- Create multiple patterns with different lengths
   local test_pattern = program.initialise_default_pattern()
@@ -2064,18 +2064,18 @@ function test_length_merge_with_multiple_patterns()
   test_pattern_3.trig_values[1] = 1
   test_pattern_3.lengths[1] = 4
   
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
-  program.get_sequencer_pattern(sequencer_pattern).patterns[3] = test_pattern_3
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[3] = test_pattern_3
   
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 3)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 3)
   
   -- Test average length merge mode
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).length_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).length_merge_mode = "average"
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -2095,8 +2095,8 @@ end
 
 function test_combined_merge_modes_integration()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   
   -- Create patterns with various combinations
   local test_pattern = program.initialise_default_pattern()
@@ -2111,19 +2111,19 @@ function test_combined_merge_modes_integration()
   test_pattern_2.velocity_values[1] = 80
   test_pattern_2.lengths[1] = 3
   
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
   
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
   
   -- Set different merge modes for each parameter
-  program.get_channel(1).trig_merge_mode = "only"
-  program.get_channel(1).note_merge_mode = "up"
-  program.get_channel(1).velocity_merge_mode = "down"
-  program.get_channel(1).length_merge_mode = "average"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "only"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "up"
+  program.get_channel(program.get().selected_song_pattern, 1).velocity_merge_mode = "down"
+  program.get_channel(program.get().selected_song_pattern, 1).length_merge_mode = "average"
   
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
 
   clock_setup()
@@ -2147,8 +2147,8 @@ end
 
 function test_pattern_specific_merge_modes()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   
   -- Create patterns with different values
   local test_pattern = program.initialise_default_pattern()
@@ -2163,18 +2163,18 @@ function test_pattern_specific_merge_modes()
   test_pattern_2.velocity_values[1] = 80
   test_pattern_2.lengths[1] = 2
   
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
   
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
   
   -- Test pattern-specific merging
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "pattern_number_1"
-  program.get_channel(1).velocity_merge_mode = "pattern_number_2"
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "pattern_number_1"
+  program.get_channel(program.get().selected_song_pattern, 1).velocity_merge_mode = "pattern_number_2"
   
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   
   local note_on_event = table.remove(midi_note_on_events, 1)
@@ -2184,8 +2184,8 @@ end
 
 function test_merge_modes_with_rests()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   
   -- Create patterns with strategic rests
   local test_pattern = program.initialise_default_pattern()
@@ -2202,15 +2202,15 @@ function test_merge_modes_with_rests()
   test_pattern_2.note_values[2] = 4  -- G (67)
   test_pattern_2.note_values[3] = 5  -- A (69)
   
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
   
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
   
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "average"
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -2234,8 +2234,8 @@ end
 
 function test_note_merge_modes_calculation()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   
 
 
@@ -2248,13 +2248,13 @@ function test_note_merge_modes_calculation()
   test_pattern_2.trig_values[1] = 1
   test_pattern_2.note_values[1] = 4  -- G (67)
   
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
   
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
 
-  local channel = program.get_channel(1)
+  local channel = program.get_channel(program.get().selected_song_pattern, 1)
 
   -- Set length to 1
 
@@ -2265,9 +2265,9 @@ function test_note_merge_modes_calculation()
 
   
   -- Test average mode
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "average"
+  pattern.update_working_patterns()
   
   clock_setup()
   
@@ -2276,8 +2276,8 @@ function test_note_merge_modes_calculation()
   luaunit.assert_equals(note_on_event[1], 64)
   
   -- Test up mode
-  program.get_channel(1).note_merge_mode = "up"
-  pattern_controller.update_working_patterns()
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "up"
+  pattern.update_working_patterns()
   
   progress_clock_by_beats(1)
   note_on_event = table.remove(midi_note_on_events, 1)
@@ -2285,8 +2285,8 @@ function test_note_merge_modes_calculation()
   luaunit.assert_equals(note_on_event[1], 71)
   
   -- Test down mode
-  program.get_channel(1).note_merge_mode = "down"
-  pattern_controller.update_working_patterns()
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "down"
+  pattern.update_working_patterns()
   
   progress_clock_by_beats(1)
   note_on_event = table.remove(midi_note_on_events, 1)
@@ -2296,8 +2296,8 @@ end
 
 function test_merge_modes_at_pattern_boundaries()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   
   -- Create patterns with different lengths
   local test_pattern = program.initialise_default_pattern()
@@ -2316,15 +2316,15 @@ function test_merge_modes_at_pattern_boundaries()
   test_pattern_2.note_values[1] = 5   -- A (69)
   test_pattern_2.note_values[2] = 6   -- B (71)
   
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern_2
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  program.get_song_pattern(song_pattern).patterns[2] = test_pattern_2
   
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
   
-  program.get_channel(1).trig_merge_mode = "all"
-  program.get_channel(1).note_merge_mode = "average"
-  pattern_controller.update_working_patterns()
+  program.get_channel(program.get().selected_song_pattern, 1).trig_merge_mode = "all"
+  program.get_channel(program.get().selected_song_pattern, 1).note_merge_mode = "average"
+  pattern.update_working_patterns()
   
   -- Move to pattern boundary
   program.set_current_step_for_channel(1, 63)

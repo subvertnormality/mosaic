@@ -8,7 +8,7 @@
    height="280"
    viewBox="0 0 510 280"
    sodipodi:docname="scale-slot-select-buttons.svg"
-   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +25,7 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="1.21"
-     inkscape:cx="165.70248"
+     inkscape:cx="119.83471"
      inkscape:cy="125.61983"
      inkscape:window-width="1432"
      inkscape:window-height="791"
@@ -74,14 +74,14 @@
        x="23.140497"
        y="226.44629" />
     <rect
-       style="fill:#ececec;fill-opacity:1;stroke:#cccccc"
+       style="fill:#ececec;fill-opacity:1;stroke:#cccccc;stroke-width:1.33461"
        id="rect1034-1"
-       width="30.578512"
-       height="32.231403"
-       x="81.078514"
-       y="226.49173"
-       inkscape:transform-center-x="-33.884298"
-       inkscape:transform-center-y="-62.809917" />
+       width="55.037292"
+       height="31.896793"
+       x="56.452431"
+       y="226.65903"
+       inkscape:transform-center-x="-60.987271"
+       inkscape:transform-center-y="-62.157865" />
     <rect
        style="fill:#ececec;fill-opacity:1;stroke:#cccccc;stroke-width:0.748852"
        id="rect1040"

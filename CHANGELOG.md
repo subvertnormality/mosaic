@@ -1,3 +1,38 @@
+## 1.1.0
+
+### Major New Features
+
+#### Live Recorder and Looper
+
+- The second button in the global menu now arms recording.
+- Note masks can be live-recorded into the selected channel using a MIDI keyboard.
+- Trig locks can be live-recorded into the selected channel using the Norns encoders.
+- Trig locks affect steps with active trigs or, if Trigless Locks is enabled, record into empty steps.
+
+#### Memory
+
+- Masks and trig lock actions are now remembered, allowing for undo and redo functionality.
+- Memory history can be traversed on a per-channel basis while the sequencer is playing.
+
+#### Param Slides
+
+- Trig locks with Param Slide activated will smoothly transition to the next trig lock's value.
+- Param slides can be applied either per trig parameter or across an entire channel.
+- Param slides can wrap within the same song pattern if the Param Slide Wrapping setting is enabled.
+
+#### MIDI Controller Mapping
+
+- Trig params, masks and channel memory are now able to be mapped to MIDI controllers using the Norns MIDI Map function.
+
+### QOL Improvements
+
+- Only mask locks blink on the grid sequencer when the mask lock page is active on the Norns screen.
+- Only trig locks blink on the grid sequencer when the trig lock page is active on the Norns screen.
+- Mask locks and trig locks blink on the grid sequencer when on the record screen on the Norns screen.
+- All locks blink when on any other channel editor norns screen.
+- K1 is now used to hold shift functions rather than K3, for better UX consistency. K3 is now generally used to confirm/select. K2 is generally used to cancel/delete.
+
+
 ## 1.0.2
 
 Fixed regression that stopped stock params from working.

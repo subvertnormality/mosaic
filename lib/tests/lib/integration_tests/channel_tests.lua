@@ -1,18 +1,18 @@
-step_handler = include("mosaic/lib/step_handler")
-pattern_controller = include("mosaic/lib/pattern_controller")
+step = include("mosaic/lib/step")
+pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock_controller")
+local m_clock = include("mosaic/lib/clock/m_clock")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/midi_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/m_midi_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_mock")
 
 local function setup()
   program.init()
@@ -21,19 +21,19 @@ local function setup()
 end
 
 local function clock_setup()
-  clock_controller.init()
-  clock_controller:start()
+  m_clock.init()
+  m_clock:start()
 end
 
 local function progress_clock_by_beats(b)
   for i = 1, (24 * b) do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
 local function progress_clock_by_pulses(p)
   for i = 1, p do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
@@ -42,8 +42,8 @@ function test_channel_17_doesnt_fire_notes()
     local test_pattern
   
     setup()
-    local sequencer_pattern = 3
-    program.set_selected_sequencer_pattern(3)
+    local song_pattern = 3
+    program.set_selected_song_pattern(3)
     test_pattern = program.initialise_default_pattern()
     test_pattern2 = program.initialise_default_pattern()
   
@@ -54,11 +54,11 @@ function test_channel_17_doesnt_fire_notes()
     test_pattern.trig_values[steps] = 1
     test_pattern.velocity_values[steps] = 20
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
   
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[17].selected_patterns, 1)
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[17].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     -- Reset and set up the clock and MIDI event tracking
     clock_setup()

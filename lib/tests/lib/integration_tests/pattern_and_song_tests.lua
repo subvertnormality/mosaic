@@ -1,18 +1,18 @@
-step_handler = include("mosaic/lib/step_handler")
-pattern_controller = include("mosaic/lib/pattern_controller")
+step = include("mosaic/lib/step")
+pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock_controller")
+local m_clock = include("mosaic/lib/clock/m_clock")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/midi_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/m_midi_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_mock")
 
 local function setup()
   program.init()
@@ -21,19 +21,19 @@ local function setup()
 end
 
 local function clock_setup()
-  clock_controller.init()
-  clock_controller:start()
+  m_clock.init()
+  m_clock:start()
 end
 
 local function progress_clock_by_beats(b)
   for i = 1, (24 * b) do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
 local function progress_clock_by_pulses(p)
   for i = 1, p do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
@@ -41,8 +41,8 @@ end
 function test_current_step_number_is_set_to_start_step_when_lower_than_start_trig_number()
 
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[3] = 0
@@ -50,14 +50,14 @@ function test_current_step_number_is_set_to_start_step_when_lower_than_start_tri
   test_pattern.trig_values[3] = 1
   test_pattern.velocity_values[3] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = 3
-  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 3
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
 
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -74,25 +74,25 @@ end
 function test_current_step_number_is_set_to_start_step_when_lower_than_start_trig_number()
 
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
-  local step = 3
+  local s = 3
 
-  test_pattern.note_values[step] = 0
-  test_pattern.lengths[step] = 1
-  test_pattern.trig_values[step] = 1
-  test_pattern.velocity_values[step] = 100
+  test_pattern.note_values[s] = 0
+  test_pattern.lengths[s] = 1
+  test_pattern.trig_values[s] = 1
+  test_pattern.velocity_values[s] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = step
-  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = s
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
 
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -108,8 +108,8 @@ end
 function test_step_continues_at_new_start_step_when_pattern_size_changes()
 
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[1] = 0
@@ -122,16 +122,16 @@ function test_step_continues_at_new_start_step_when_pattern_size_changes()
   test_pattern.trig_values[17] = 1
   test_pattern.velocity_values[17] = 101
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = 1
-  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 1
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
 
-  program.get_channel(1).end_trig[1] = 4
-  program.get_channel(1).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 4
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -150,11 +150,11 @@ function test_step_continues_at_new_start_step_when_pattern_size_changes()
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
 
-  program.get_channel(1).start_trig[1] = 1
-  program.get_channel(1).start_trig[2] = 5
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 1
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 5
 
-  program.get_channel(1).end_trig[1] = 4
-  program.get_channel(1).end_trig[2] = 5
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 5
 
   progress_clock_by_beats(1)
 
@@ -166,16 +166,16 @@ function test_step_continues_at_new_start_step_when_pattern_size_changes()
 
 end
 
-function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_pattern_reset_is_disabled()
+function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_song_pattern_lengths_when_pattern_reset_is_disabled()
 
   setup()
 
   params:set("song_mode", 2) 
   params:set("reset_on_end_of_pattern_repeat", 1)
-  params:set("reset_on_sequencer_pattern_transition", 1)
+  params:set("reset_on_song_pattern_transition", 1)
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[3] = 0
@@ -184,21 +184,21 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
   test_pattern.velocity_values[3] = 101
 
   
-  program.get_sequencer_pattern(sequencer_pattern).repeats = 1
-  program.get_sequencer_pattern(sequencer_pattern).active = true
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).repeats = 1
+  program.get_song_pattern(song_pattern).active = true
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = 3
-  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 3
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
 
-  program.get_channel(1).end_trig[1] = 4
-  program.get_channel(1).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = 4
+  program.get_song_pattern(song_pattern).global_pattern_length = 4
 
-  local sequencer_pattern_2 = 2
-  program.set_selected_sequencer_pattern(2)
+  local song_pattern_2 = 2
+  program.set_selected_song_pattern(2)
   
   local test_pattern_2 = program.initialise_default_pattern()
 
@@ -207,22 +207,22 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
   test_pattern_2.trig_values[6] = 1
   test_pattern_2.velocity_values[6] = 126
 
-  program.get_sequencer_pattern(sequencer_pattern_2).repeats = 1
-  program.get_sequencer_pattern(sequencer_pattern_2).active = true
-  program.get_sequencer_pattern(sequencer_pattern_2).patterns[2] = test_pattern_2
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_2).channels[16].selected_patterns, 2)
+  program.get_song_pattern(song_pattern_2).repeats = 1
+  program.get_song_pattern(song_pattern_2).active = true
+  program.get_song_pattern(song_pattern_2).patterns[2] = test_pattern_2
+  fn.add_to_set(program.get_song_pattern(song_pattern_2).channels[16].selected_patterns, 2)
 
-  program.get_channel(16).start_trig[1] = 1
-  program.get_channel(16).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 16).start_trig[1] = 1
+  program.get_channel(program.get().selected_song_pattern, 16).start_trig[2] = 4
 
-  program.get_channel(16).end_trig[1] = 8
-  program.get_channel(16).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 16).end_trig[1] = 8
+  program.get_channel(program.get().selected_song_pattern, 16).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern_2).global_pattern_length = 8
+  program.get_song_pattern(song_pattern_2).global_pattern_length = 8
 
-  program.set_selected_sequencer_pattern(1)
+  program.set_selected_song_pattern(1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -266,16 +266,16 @@ end
 
 
 
-function test_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_both_pattern_resets_are_disabled()
+function test_short_channel_pattern_lengths_and_short_song_pattern_lengths_when_both_pattern_resets_are_disabled()
 
   setup()
 
   params:set("song_mode", 2) 
   params:set("reset_on_end_of_pattern_repeat", 1)
-  params:set("reset_on_sequencer_pattern_transition", 1)
+  params:set("reset_on_song_pattern_transition", 1)
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[4] = 0
@@ -288,20 +288,20 @@ function test_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_
   test_pattern.trig_values[5] = 1
   test_pattern.velocity_values[5] = 102
   
-  program.get_sequencer_pattern(sequencer_pattern).repeats = 1
-  program.get_sequencer_pattern(sequencer_pattern).active = true
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).repeats = 1
+  program.get_song_pattern(song_pattern).active = true
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = 1
-  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 1
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
 
-  program.get_channel(1).end_trig[1] = 6
-  program.get_channel(1).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 6
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = 4
+  program.get_song_pattern(song_pattern).global_pattern_length = 4
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -332,14 +332,14 @@ function test_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_
 
 end
 
-function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_pattern_reset_is_enabled()
+function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_song_pattern_lengths_when_pattern_reset_is_enabled()
 
   setup()
   params:set("song_mode", 2) 
   params:set("reset_on_end_of_pattern_repeat", 2)
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[3] = 0
@@ -348,21 +348,21 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
   test_pattern.velocity_values[3] = 101
 
   
-  program.get_sequencer_pattern(sequencer_pattern).repeats = 1
-  program.get_sequencer_pattern(sequencer_pattern).active = true
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).repeats = 1
+  program.get_song_pattern(song_pattern).active = true
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = 3
-  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 3
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
 
-  program.get_channel(1).end_trig[1] = 4
-  program.get_channel(1).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = 4
+  program.get_song_pattern(song_pattern).global_pattern_length = 4
 
-  local sequencer_pattern_2 = 2
-  program.set_selected_sequencer_pattern(2)
+  local song_pattern_2 = 2
+  program.set_selected_song_pattern(2)
   
   local test_pattern_2 = program.initialise_default_pattern()
 
@@ -371,22 +371,22 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
   test_pattern_2.trig_values[6] = 1
   test_pattern_2.velocity_values[6] = 126
 
-  program.get_sequencer_pattern(sequencer_pattern_2).repeats = 1
-  program.get_sequencer_pattern(sequencer_pattern_2).active = true
-  program.get_sequencer_pattern(sequencer_pattern_2).patterns[1] = test_pattern_2
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_2).channels[16].selected_patterns, 1)
+  program.get_song_pattern(song_pattern_2).repeats = 1
+  program.get_song_pattern(song_pattern_2).active = true
+  program.get_song_pattern(song_pattern_2).patterns[1] = test_pattern_2
+  fn.add_to_set(program.get_song_pattern(song_pattern_2).channels[16].selected_patterns, 1)
 
-  program.get_channel(16).start_trig[1] = 1
-  program.get_channel(16).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 16).start_trig[1] = 1
+  program.get_channel(program.get().selected_song_pattern, 16).start_trig[2] = 4
 
-  program.get_channel(16).end_trig[1] = 8
-  program.get_channel(16).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 16).end_trig[1] = 8
+  program.get_channel(program.get().selected_song_pattern, 16).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern_2).global_pattern_length = 8
+  program.get_song_pattern(song_pattern_2).global_pattern_length = 8
 
-  program.set_selected_sequencer_pattern(1)
+  program.set_selected_song_pattern(1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -433,15 +433,15 @@ end
 
 
 
-function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_sequencer_pattern_lengths_when_seq_pattern_reset_is_enabled()
+function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_song_pattern_lengths_when_seq_pattern_reset_is_enabled()
 
   setup()
   params:set("song_mode", 2) 
-  params:set("reset_on_sequencer_pattern_transition", 2) 
+  params:set("reset_on_song_pattern_transition", 2) 
   params:set("reset_on_end_of_pattern_repeat", 1) 
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[3] = 0
@@ -450,21 +450,21 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
   test_pattern.velocity_values[3] = 101
 
   
-  program.get_sequencer_pattern(sequencer_pattern).repeats = 1
-  program.get_sequencer_pattern(sequencer_pattern).active = true
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).repeats = 1
+  program.get_song_pattern(song_pattern).active = true
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = 3
-  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 3
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
 
-  program.get_channel(1).end_trig[1] = 4
-  program.get_channel(1).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = 4
+  program.get_song_pattern(song_pattern).global_pattern_length = 4
 
-  local sequencer_pattern_2 = 2
-  program.set_selected_sequencer_pattern(2)
+  local song_pattern_2 = 2
+  program.set_selected_song_pattern(2)
   
   local test_pattern_2 = program.initialise_default_pattern()
 
@@ -473,22 +473,22 @@ function test_song_mode_functions_with_short_channel_pattern_lengths_and_short_s
   test_pattern_2.trig_values[6] = 1
   test_pattern_2.velocity_values[6] = 126
 
-  program.get_sequencer_pattern(sequencer_pattern_2).repeats = 1
-  program.get_sequencer_pattern(sequencer_pattern_2).active = true
-  program.get_sequencer_pattern(sequencer_pattern_2).patterns[2] = test_pattern_2
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_2).channels[16].selected_patterns, 2)
+  program.get_song_pattern(song_pattern_2).repeats = 1
+  program.get_song_pattern(song_pattern_2).active = true
+  program.get_song_pattern(song_pattern_2).patterns[2] = test_pattern_2
+  fn.add_to_set(program.get_song_pattern(song_pattern_2).channels[16].selected_patterns, 2)
 
-  program.get_channel(16).start_trig[1] = 1
-  program.get_channel(16).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 16).start_trig[1] = 1
+  program.get_channel(program.get().selected_song_pattern, 16).start_trig[2] = 4
 
-  program.get_channel(16).end_trig[1] = 8
-  program.get_channel(16).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 16).end_trig[1] = 8
+  program.get_channel(program.get().selected_song_pattern, 16).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern_2).global_pattern_length = 8
+  program.get_song_pattern(song_pattern_2).global_pattern_length = 8
 
-  program.set_selected_sequencer_pattern(1)
+  program.set_selected_song_pattern(1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -531,15 +531,15 @@ end
 
 
 
-function test_song_mode_functions_with_sequencer_pattern_repeats()
+function test_song_mode_functions_with_song_pattern_repeats()
 
   setup()
   params:set("song_mode", 2) 
-  params:set("reset_on_sequencer_pattern_transition", 2) 
+  params:set("reset_on_song_pattern_transition", 2) 
   params:set("reset_on_end_of_pattern_repeat", 1) 
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[3] = 0
@@ -548,21 +548,21 @@ function test_song_mode_functions_with_sequencer_pattern_repeats()
   test_pattern.velocity_values[3] = 101
 
   
-  program.get_sequencer_pattern(sequencer_pattern).repeats = 2
-  program.get_sequencer_pattern(sequencer_pattern).active = true
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).repeats = 2
+  program.get_song_pattern(song_pattern).active = true
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = 3
-  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 3
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
 
-  program.get_channel(1).end_trig[1] = 4
-  program.get_channel(1).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = 4
+  program.get_song_pattern(song_pattern).global_pattern_length = 4
 
-  local sequencer_pattern_2 = 2
-  program.set_selected_sequencer_pattern(2)
+  local song_pattern_2 = 2
+  program.set_selected_song_pattern(2)
   
   local test_pattern_2 = program.initialise_default_pattern()
 
@@ -571,22 +571,22 @@ function test_song_mode_functions_with_sequencer_pattern_repeats()
   test_pattern_2.trig_values[6] = 1
   test_pattern_2.velocity_values[6] = 126
 
-  program.get_sequencer_pattern(sequencer_pattern_2).repeats = 1
-  program.get_sequencer_pattern(sequencer_pattern_2).active = true
-  program.get_sequencer_pattern(sequencer_pattern_2).patterns[2] = test_pattern_2
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_2).channels[16].selected_patterns, 2)
+  program.get_song_pattern(song_pattern_2).repeats = 1
+  program.get_song_pattern(song_pattern_2).active = true
+  program.get_song_pattern(song_pattern_2).patterns[2] = test_pattern_2
+  fn.add_to_set(program.get_song_pattern(song_pattern_2).channels[16].selected_patterns, 2)
 
-  program.get_channel(16).start_trig[1] = 1
-  program.get_channel(16).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 16).start_trig[1] = 1
+  program.get_channel(program.get().selected_song_pattern, 16).start_trig[2] = 4
 
-  program.get_channel(16).end_trig[1] = 8
-  program.get_channel(16).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 16).end_trig[1] = 8
+  program.get_channel(program.get().selected_song_pattern, 16).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern_2).global_pattern_length = 8
+  program.get_song_pattern(song_pattern_2).global_pattern_length = 8
 
-  program.set_selected_sequencer_pattern(1)
+  program.set_selected_song_pattern(1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -647,15 +647,15 @@ end
 
 
 
-function test_song_mode_short_channel_pattern_lengths_transitions_correctly_to_longer_pattern_lengths_across_sequencer_patterns()
+function test_song_mode_short_channel_pattern_lengths_transitions_correctly_to_longer_pattern_lengths_across_song_patterns()
 
   setup()
   params:set("song_mode", 2) 
   params:set("reset_on_end_of_pattern_repeat", 2)
-  params:set("reset_on_sequencer_pattern_transition", 1)
+  params:set("reset_on_song_pattern_transition", 1)
 
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[3] = 0
@@ -664,21 +664,21 @@ function test_song_mode_short_channel_pattern_lengths_transitions_correctly_to_l
   test_pattern.velocity_values[3] = 101
 
   
-  program.get_sequencer_pattern(sequencer_pattern).repeats = 1
-  program.get_sequencer_pattern(sequencer_pattern).active = true
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).repeats = 1
+  program.get_song_pattern(song_pattern).active = true
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = 3
-  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 3
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
 
-  program.get_channel(1).end_trig[1] = 4
-  program.get_channel(1).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = 4
+  program.get_song_pattern(song_pattern).global_pattern_length = 4
 
-  local sequencer_pattern_2 = 2
-  program.set_selected_sequencer_pattern(2)
+  local song_pattern_2 = 2
+  program.set_selected_song_pattern(2)
   
   local test_pattern_2 = program.initialise_default_pattern()
 
@@ -687,22 +687,22 @@ function test_song_mode_short_channel_pattern_lengths_transitions_correctly_to_l
   test_pattern_2.trig_values[6] = 1
   test_pattern_2.velocity_values[6] = 126
 
-  program.get_sequencer_pattern(sequencer_pattern_2).repeats = 1
-  program.get_sequencer_pattern(sequencer_pattern_2).active = true
-  program.get_sequencer_pattern(sequencer_pattern_2).patterns[1] = test_pattern_2
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern_2).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern_2).repeats = 1
+  program.get_song_pattern(song_pattern_2).active = true
+  program.get_song_pattern(song_pattern_2).patterns[1] = test_pattern_2
+  fn.add_to_set(program.get_song_pattern(song_pattern_2).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).start_trig[1] = 1
-  program.get_channel(1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 1
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
 
-  program.get_channel(1).end_trig[1] = 8
-  program.get_channel(1).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 8
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 4
 
-  program.get_sequencer_pattern(sequencer_pattern_2).global_pattern_length = 16
+  program.get_song_pattern(song_pattern_2).global_pattern_length = 16
 
-  program.set_selected_sequencer_pattern(1)
+  program.set_selected_song_pattern(1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -754,8 +754,8 @@ function test_channel_steps_beyond_global_pattern_length()
   
   -- Set up a shorter global pattern length
   local global_pattern_length = 42
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   -- Place notes beyond the global pattern length
@@ -769,8 +769,8 @@ function test_channel_steps_beyond_global_pattern_length()
   test_pattern.trig_values[50] = 1
   test_pattern.velocity_values[50] = 101
 
-  -- Set up the sequencer pattern
-  local seq_pattern = program.get_sequencer_pattern(sequencer_pattern)
+  -- Set up the song pattern
+  local seq_pattern = program.get_song_pattern(song_pattern)
   if not seq_pattern then
     return
   end
@@ -783,7 +783,7 @@ function test_channel_steps_beyond_global_pattern_length()
   fn.add_to_set(seq_pattern.channels[1].selected_patterns, 1)
 
   -- Set channel start/end trigs
-  local channel = program.get_channel(1)
+  local channel = program.get_channel(program.get().selected_song_pattern, 1)
   if not channel then
     return
   end
@@ -797,7 +797,7 @@ function test_channel_steps_beyond_global_pattern_length()
   seq_pattern.global_pattern_length = global_pattern_length
 
   -- Update and setup clock
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
 
   -- Track notes that fire
@@ -853,8 +853,8 @@ function test_channel_with_pattern_longer_than_global_length()
   
   -- Set up global pattern length shorter than channel pattern length
   local global_pattern_length = 16
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(sequencer_pattern)
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
   local test_pattern = program.initialise_default_pattern()
   
   -- Place notes beyond the global pattern length
@@ -868,21 +868,21 @@ function test_channel_with_pattern_longer_than_global_length()
   test_pattern.trig_values[25] = 1
   test_pattern.velocity_values[25] = 101
 
-  -- Set up the sequencer pattern
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  -- Set up the song pattern
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
   
   -- Set channel start and end trigs to cover steps beyond global pattern length
-  program.get_channel(1).start_trig[1] = 1
-  program.get_channel(1).start_trig[2] = 4
-  program.get_channel(1).end_trig[1] = 9
-  program.get_channel(1).end_trig[2] = 5
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[1] = 1
+  program.get_channel(program.get().selected_song_pattern, 1).start_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = 9
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 5
 
   -- Set global pattern length
-  program.get_sequencer_pattern(sequencer_pattern).global_pattern_length = global_pattern_length
+  program.get_song_pattern(song_pattern).global_pattern_length = global_pattern_length
   
   -- Update and setup clock
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
   clock_setup()
   
   -- Run the sequence for multiple global pattern lengths

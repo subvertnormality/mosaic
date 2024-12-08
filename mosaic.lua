@@ -1,4 +1,4 @@
--- mosaic v1.0.0
+-- mosaic v1.1.0
 -- grid-first rhythm and 
 -- harmony sequencer.
 --
@@ -10,16 +10,18 @@
 testing = false
 
 pages = include("mosaic/lib/pages/pages")
-program = include("mosaic/lib/program")
-fn = include("mosaic/lib/functions")
+program = include("mosaic/lib/models/program")
+fn = include("mosaic/lib/helpers/functions")
 scheduler = include("mosaic/lib/scheduler")
-grid_controller = include("mosaic/lib/grid_controller")
-ui_controller = include("mosaic/lib/ui_controller")
+m_grid = include("mosaic/lib/m_grid")
+ui = include("mosaic/lib/ui")
 sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
-midi_controller = include("mosaic/lib/midi_controller")
+m_midi = include("mosaic/lib/m_midi")
+memory = include("mosaic/lib/memory")
+recorder = include("mosaic/lib/recorder")
 
 -- Debug
--- profiler = include("mosaic/lib/profiler")
+-- profiler = include("mosaic/lib/helpers/profiler")
 
 -- p = newProfiler()
 
@@ -27,36 +29,40 @@ local fileselect = require("fileselect")
 local textentry = require("textentry")
 local as_metro = metro.init(do_autosave, 1, 1)
 local autosave_timer = metro.init(prime_autosave, 60, 1)
-local param_manager = include("mosaic/lib/param_manager")
+local param_manager = include("mosaic/lib/devices/param_manager")
 
 local ui_splash_screen_active = false
 
 local redraw_clock = nil
+local grid_redraw_clock = nil
 local scheduler_clock = nil
 local screen_keep_alive = nil
 
 nb = require("mosaic/lib/nb/lib/nb")
-clock_controller = include("mosaic/lib/clock_controller")
-pattern_controller = include("mosaic/lib/pattern_controller")
-midi_controller = include("mosaic/lib/midi_controller")
-step_handler = include("lib/step_handler")
-device_map = include("mosaic/lib/device_map")
-norns_param_state_handler = include("mosaic/lib/norns_param_state_handler")
+m_clock = include("mosaic/lib/clock/m_clock")
+pattern = include("mosaic/lib/pattern")
+m_midi = include("mosaic/lib/m_midi")
+step = include("lib/step")
+device_map = include("mosaic/lib/devices/device_map")
+norns_param_state_handler = include("mosaic/lib/devices/norns_param_state_handler")
 
 g = grid.connect()
 
 local function load_project(pth)
-  clock_controller:stop()
+  m_clock:stop()
 
   if string.find(pth, ".ptn") ~= nil then
     print("Loading project " .. pth)
     local saved = tab.load(pth)
     if saved ~= nil then
-
+      -- Initialize program_store before setting data
+      program.init()
+      
+      -- Set and migrate the data
       program.set(saved[2])
 
       clock.tempo_change_handler = function(x)
-        song_edit_page_ui_controller.refresh_tempo()
+        song_edit_page_ui.refresh_tempo()
       end
 
       param_manager.init()
@@ -71,13 +77,12 @@ local function load_project(pth)
         )
       end
 
-
       if saved[1] then
         params:read(norns.state.data .. saved[1] .. ".pset", true)
       end
 
-      clock_controller:reset()
-      ui_controller.refresh()
+      m_clock:reset()
+      ui.refresh()
       fn.dirty_grid(true)
     else
       print("No data")
@@ -86,12 +91,12 @@ local function load_project(pth)
 end
 
 local function save_project(txt)
-  clock_controller:stop()
-  clock_controller:reset()
+  m_clock:stop()
+  m_clock:reset()
 
   if txt then
     print("Saving project as " .. txt)
-    tab.save({txt, program.get()}, norns.state.data .. txt .. ".ptn")
+    tab.save({txt, program.prepare_for_save()}, norns.state.data .. txt .. ".ptn")
     params:write(norns.state.data .. txt .. ".pset")
   else
     print("Save cancel")
@@ -109,8 +114,8 @@ local function load_new_project()
       true
     )
   end
-  grid_controller.refresh()
-  ui_controller.refresh()
+  m_grid.refresh()
+  ui.refresh()
 end
 
 local function do_autosave()
@@ -129,7 +134,7 @@ local function prime_autosave()
   if as_metro.id then
     metro.free(as_metro.id)
   end
-  if not clock_controller.is_playing() then
+  if not m_clock.is_playing() then
     as_metro = metro.init(do_autosave, 0.5, 1)
     as_metro:start()
   else
@@ -156,7 +161,7 @@ function redraw()
     else
       screen.level(5)
       screen.font_size(8)
-      ui_controller.redraw()
+      ui.redraw()
       screen.update()
     end
 
@@ -176,7 +181,7 @@ function init()
   ui_splash_screen_active = true
   math.randomseed(os.time())
   program.init()
-  midi_controller.init()
+  m_midi.init()
   
   grid_connected = g.device~= nil and true or false
   
@@ -218,8 +223,16 @@ function init()
         if fn.dirty_screen() then
           redraw()
         end
+      end
+    end
+  )
+
+  grid_redraw_clock = clock.run(
+    function()
+      while true do
+        clock.sleep(1/20)
         if fn.dirty_grid() then
-          grid_controller.grid_redraw()
+          m_grid.grid_redraw()
         end
       end
     end
@@ -236,7 +249,7 @@ function init()
 
   blink()
 
-  params:add_group("mosaic", "MOSAIC", 30)
+  params:add_group("mosaic", "MOSAIC", 32)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -263,8 +276,8 @@ function init()
   params:set_action(
     "global_swing_shuffle_type",
     function(x)
-      song_edit_page_ui_controller.refresh_swing_shuffle_type()
-      channel_edit_page_ui_controller.refresh_swing_shuffle_type()
+      song_edit_page_ui.refresh_swing_shuffle_type()
+      channel_edit_page_ui.refresh_swing_shuffle_type()
     end
   )
   params:hide("global_swing_shuffle_type")
@@ -273,7 +286,7 @@ function init()
   params:set_action(
     "global_swing",
     function(x)
-      song_edit_page_ui_controller.refresh_swing()
+      song_edit_page_ui.refresh_swing()
     end
   )
   params:hide("global_swing")
@@ -282,7 +295,7 @@ function init()
   params:set_action(
     "global_shuffle_feel",
     function(x)
-      song_edit_page_ui_controller.refresh_shuffle_feel()
+      song_edit_page_ui.refresh_shuffle_feel()
     end
   )
   params:hide("global_shuffle_feel")
@@ -291,7 +304,7 @@ function init()
   params:set_action(
     "global_shuffle_basis",
     function(x)
-      song_edit_page_ui_controller.refresh_shuffle_basis()
+      song_edit_page_ui.refresh_shuffle_basis()
     end
   )
   params:hide("global_shuffle_basis")
@@ -300,22 +313,24 @@ function init()
   params:set_action(
     "global_shuffle_amount",
     function(x)
-      song_edit_page_ui_controller.refresh_shuffle_amount()
+      song_edit_page_ui.refresh_shuffle_amount()
     end
   )
   params:hide("global_shuffle_amount")
 
   params:add_separator("Sequencer")
+  params:add_option("record", "Record", {"Off", "On"}, 1)
   params:add_option("stop_safety", "Shift press to stop", {"Off", "On"}, 1)
   params:add_option("song_mode", "Song mode", {"Off", "On"}, 2)
+  params:add_option("wrap_param_slides", "Wrap param slides", {"Off", "On"}, 1)
   params:set_action(
     "song_mode",
     function(x)
-      song_edit_page_ui_controller:refresh()
+      song_edit_page_ui:refresh()
     end
   )
   params:add_option("reset_on_end_of_pattern_repeat", "Reset on pattern repeat", {"Off", "On"}, 1)
-  params:add_option("reset_on_sequencer_pattern_transition", "Reset on song seq change", {"Off", "On"}, 2)
+  params:add_option("reset_on_song_pattern_transition", "Reset on song seq change", {"Off", "On"}, 2)
   params:add_option("elektron_program_changes", "Elektron program changes", {"Off", "On"}, 1)
   params:add_number("elektron_program_change_channel", "Elektron p.change channel", 1, 16, 10, nil, false)
   params:add_separator("Parameter locks")
@@ -331,7 +346,7 @@ function init()
   params:set_action(
     "tresillo_amount",
     function(x)
-      trigger_edit_page_ui_controller:refresh()
+      trigger_edit_page_ui:refresh()
     end
   )
   params:add_separator("Midi control")
@@ -342,7 +357,7 @@ function init()
   param_manager.init()
 
   clock.tempo_change_handler = function(x)
-    song_edit_page_ui_controller.refresh_tempo()
+    song_edit_page_ui.refresh_tempo()
   end
 
 
@@ -355,9 +370,11 @@ function init()
   device_map.validate_devices()
   params:bang()
 
-  ui_controller.init()
-  grid_controller.init()
-  clock_controller.init()
+  m_midi.set_up_midi_mapping_params()
+
+  ui.init()
+  m_grid.init()
+  m_clock.init()
   ui_splash_screen_active = false
   fn.dirty_grid(true)
   fn.dirty_screen(true)
@@ -365,11 +382,11 @@ function init()
 end
 
 function enc(n, d)
-  ui_controller.enc(n, d)
+  ui.enc(n, d)
 end
 
 function key(n, z)
-  ui_controller.key(n, z)
+  ui.key(n, z)
 end
 
 function autosave_reset()
@@ -381,11 +398,11 @@ function autosave_reset()
 end
 
 function clock.transport:start()
-  clock_controller:start()
+  m_clock:start()
 end
 
 function clock.transport:stop()
-  clock_controller:stop()
+  m_clock:stop()
 end
 
 -- -- Debug

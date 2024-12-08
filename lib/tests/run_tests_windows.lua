@@ -112,10 +112,11 @@ end
 
 clear_require_cache()
 
-fn = include("mosaic\\lib\\functions")
+fn = include("mosaic\\lib\\helpers\\functions")
 pages = include("mosaic\\lib\\pages\\pages")
 scheduler = include("mosaic\\lib\\tests\\helpers\\mocks\\scheduler_mock")
-program = include("mosaic\\lib\\program")
+program = include("mosaic\\lib\\models\\program")
+memory = include("mosaic\\lib\\memory")
 
 include("mosaic\\lib\\tests\\helpers\\globals")
 

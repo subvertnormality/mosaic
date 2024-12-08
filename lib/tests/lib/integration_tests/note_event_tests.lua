@@ -1,17 +1,17 @@
-pattern_controller = include("mosaic/lib/pattern_controller")
+pattern = include("mosaic/lib/pattern")
 
-local clock_controller = include("mosaic/lib/clock_controller")
+local m_clock = include("mosaic/lib/clock/m_clock")
 local quantiser = include("mosaic/lib/quantiser")
 
 -- Mocks
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
-include("mosaic/lib/tests/helpers/mocks/midi_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/m_midi_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_mock")
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/norns_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_controller_mock")
-include("mosaic/lib/tests/helpers/mocks/channel_edit_page_controller_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_sequence_page_mock")
+include("mosaic/lib/tests/helpers/mocks/channel_edit_page_mock")
 
 local function setup()
   program.init()
@@ -20,31 +20,31 @@ local function setup()
 end
 
 local function clock_setup()
-  clock_controller.init()
-  clock_controller:start()
+  m_clock.init()
+  m_clock:start()
 end
 
 local function progress_clock_by_beats(b)
   for i = 1, (24 * b) do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
 local function progress_clock_by_pulses(p)
   for i = 1, p do
-    clock_controller.get_clock_lattice():pulse()
+    m_clock.get_clock_lattice():pulse()
   end
 end
 
 
 
-function test_pattern_doesnt_fire_when_sequencer_pattern_is_not_selected()
+function test_pattern_doesnt_fire_when_song_pattern_is_not_selected()
 
     local test_pattern
   
     setup()
-    local sequencer_pattern = 2
-    program.set_selected_sequencer_pattern(1)
+    local song_pattern = 2
+    program.set_selected_song_pattern(1)
     test_pattern = program.initialise_default_pattern()
   
     local steps = 6
@@ -54,10 +54,10 @@ function test_pattern_doesnt_fire_when_sequencer_pattern_is_not_selected()
     test_pattern.trig_values[steps] = 1
     test_pattern.velocity_values[steps] = 20
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     -- Reset and set up the clock and MIDI event tracking
     clock_setup()
@@ -79,8 +79,8 @@ function test_pattern_doesnt_fire_when_sequencer_pattern_is_not_selected()
     local test_pattern
   
     setup()
-    local sequencer_pattern = 3
-    program.set_selected_sequencer_pattern(3)
+    local song_pattern = 3
+    program.set_selected_song_pattern(3)
     test_pattern = program.initialise_default_pattern()
     test_pattern2 = program.initialise_default_pattern()
   
@@ -98,13 +98,13 @@ function test_pattern_doesnt_fire_when_sequencer_pattern_is_not_selected()
     test_pattern2.trig_values[steps2] = 1
     test_pattern2.velocity_values[steps2] = 30
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern2
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    program.get_song_pattern(song_pattern).patterns[2] = test_pattern2
   
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 2)
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 2)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     -- Reset and set up the clock and MIDI event tracking
     clock_setup()
@@ -133,8 +133,8 @@ function test_pattern_doesnt_fire_when_sequencer_pattern_is_not_selected()
     local test_pattern
   
     setup()
-    local sequencer_pattern = 3
-    program.set_selected_sequencer_pattern(3)
+    local song_pattern = 3
+    program.set_selected_song_pattern(3)
     test_pattern = program.initialise_default_pattern()
     test_pattern2 = program.initialise_default_pattern()
   
@@ -152,13 +152,13 @@ function test_pattern_doesnt_fire_when_sequencer_pattern_is_not_selected()
     test_pattern2.trig_values[steps2] = 1
     test_pattern2.velocity_values[steps2] = 30
   
-    program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-    program.get_sequencer_pattern(sequencer_pattern).patterns[2] = test_pattern2
+    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+    program.get_song_pattern(song_pattern).patterns[2] = test_pattern2
   
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
-    fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[16].selected_patterns, 2)
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[16].selected_patterns, 2)
   
-    pattern_controller.update_working_patterns()
+    pattern.update_working_patterns()
   
     -- Reset and set up the clock and MIDI event tracking
     clock_setup()
@@ -195,8 +195,8 @@ function test_clock_processes_notes_at_various_steps()
     for _, steps in ipairs(steps_to_test) do
   
         setup()
-        local sequencer_pattern = 1
-        program.set_selected_sequencer_pattern(1)
+        local song_pattern = 1
+        program.set_selected_song_pattern(1)
         test_pattern = program.initialise_default_pattern()
   
         velocity = 99
@@ -206,10 +206,10 @@ function test_clock_processes_notes_at_various_steps()
         test_pattern.trig_values[steps] = 1
         test_pattern.velocity_values[steps] = velocity
   
-        program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-        fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+        program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+        fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
   
-        pattern_controller.update_working_patterns()
+        pattern.update_working_patterns()
   
         -- Reset and set up the clock and MIDI event tracking
         clock_setup()
@@ -229,8 +229,8 @@ function test_clock_processes_notes_at_various_steps()
 
 function test_clock_processes_note_events()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[1] = 0
@@ -238,10 +238,10 @@ function test_clock_processes_note_events()
   test_pattern.trig_values[1] = 1
   test_pattern.velocity_values[1] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -264,8 +264,8 @@ end
 
 function test_note_off_values_dont_fire_too_early_or_late()
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
   test_pattern.note_values[1] = 0
@@ -278,10 +278,10 @@ function test_note_off_values_dont_fire_too_early_or_late()
   test_pattern.trig_values[2] = 1
   test_pattern.velocity_values[2] = 101
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 
@@ -323,8 +323,8 @@ function test_clock_processes_notes_of_various_lengths()
   for _, length in ipairs(lengths_to_test) do
 
       setup()
-      local sequencer_pattern = 1
-      program.set_selected_sequencer_pattern(1)
+      local song_pattern = 1
+      program.set_selected_song_pattern(1)
       test_pattern = program.initialise_default_pattern()
       
       test_pattern.note_values[1] = 0
@@ -332,10 +332,10 @@ function test_clock_processes_notes_of_various_lengths()
       test_pattern.trig_values[1] = 1
       test_pattern.velocity_values[1] = 100
 
-      program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-      fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+      program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+      fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-      pattern_controller.update_working_patterns()
+      pattern.update_working_patterns()
 
       -- Reset and set up the clock and MIDI event tracking
       clock_setup()
@@ -363,25 +363,25 @@ end
 function test_end_trig_functions_as_expected()
 
   setup()
-  local sequencer_pattern = 1
-  program.set_selected_sequencer_pattern(1)
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
 
-  local step = 1
+  local s = 1
   local end_trig = 4
 
-  test_pattern.note_values[step] = 0
-  test_pattern.lengths[step] = 1
-  test_pattern.trig_values[step] = 1
-  test_pattern.velocity_values[step] = 100
+  test_pattern.note_values[s] = 0
+  test_pattern.lengths[s] = 1
+  test_pattern.trig_values[s] = 1
+  test_pattern.velocity_values[s] = 100
 
-  program.get_sequencer_pattern(sequencer_pattern).patterns[1] = test_pattern
-  fn.add_to_set(program.get_sequencer_pattern(sequencer_pattern).channels[1].selected_patterns, 1)
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
 
-  program.get_channel(1).end_trig[1] = end_trig
-  program.get_channel(1).end_trig[2] = 4
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[1] = end_trig
+  program.get_channel(program.get().selected_song_pattern, 1).end_trig[2] = 4
 
-  pattern_controller.update_working_patterns()
+  pattern.update_working_patterns()
 
   clock_setup()
 

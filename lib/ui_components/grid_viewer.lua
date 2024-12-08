@@ -13,7 +13,7 @@ function grid_viewer:new(x, y)
 end
 
 function grid_viewer:draw()
-  screen_view_sequencer:draw(program.get_channel(self.selected_channel), grid_abstraction.seq)
+  screen_view_sequencer:draw(program.get_channel(program.get().selected_song_pattern, self.selected_channel), grid_abstraction.seq)
 
   local state = grid_abstraction.get_screen_state()
 

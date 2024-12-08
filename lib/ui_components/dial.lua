@@ -1,8 +1,6 @@
 local dial = {}
 dial.__index = dial
 
-
-
 function dial:new(x, y, name, id, top_label, bottom_label)
   local self = setmetatable({}, dial)
   self.x = x
@@ -18,21 +16,20 @@ function dial:new(x, y, name, id, top_label, bottom_label)
   self.ui_labels = nil
   self.display_value = false
   self.display_value_clock = nil
+  self.display_modifier = function() end
 
   return self
 end
+
 function dial:draw()
   -- Set screen level based on selection
   screen.level(self.selected and 15 or 1)
-  
-  -- Draw the top label
+
+  self.display_modifier(self.x, self.y)
+
   screen.move(self.x, self.y)
 
-  if self.display_value == false or self.value == self.off_value then
-    screen.text(fn.title_case(self.top_label))
-  else
-    screen.text(self.value and fn.clean_number(self.value) or "X")
-  end
+  screen.text_trim(fn.title_case(self.top_label), 24)
 
   -- Position for drawing the bar
   local bar_x = self.x
@@ -49,10 +46,13 @@ function dial:draw()
     screen.text("X")
   elseif self.ui_labels and self.min_value then
     screen.move(self.x, bar_y)
-    screen.text(self.ui_labels[self.value - (self.min_value - 1)] or "")
+    screen.text(self.ui_labels[self.value - (self.min_value - 1)] or "", 24)
+  elseif self.display_value == true then
+    screen.move(self.x, bar_y)
+    screen.text(self.value and fn.clean_number(self.value) or "X")
   else
     -- Define bar dimensions and segments
-    local bar_width = 20  -- Total width of the bar
+    local bar_width = 19  -- Total width of the bar
     local bar_height = 4
     local num_segments = 20
     local segment_width = bar_width / num_segments
@@ -139,8 +139,8 @@ function dial:draw()
 
 
   screen.move(self.x, self.y + 14)
-  screen.text(fn.title_case(self.bottom_label))
 
+  screen.text(fn.title_case(self.bottom_label))
 end
 
 
@@ -173,6 +173,7 @@ function dial:set_value(value)
   if value == nil or (self.min_value and value < (self.min_value - epsilon)) or (self.max_value and value > (self.max_value + epsilon)) then
     value = self.off_value
   end
+
   self.value = value
   fn.dirty_screen(true)
 end
@@ -234,5 +235,9 @@ function dial:temp_display_value()
     self.display_value_clock = nil
   end)
 end
+
+function dial:set_display_modifier(display_modifier)
+  self.display_modifier = display_modifier
+end 
 
 return dial
