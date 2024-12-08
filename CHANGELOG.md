@@ -1,3 +1,7 @@
+## 1.1.1
+
+- Performance improvements to param slides . It's now possible to use more global param slides with trigless locks enabled without experiencing lag, although moderation is still recommended.
+
 ## 1.1.0
 
 ### Major New Features

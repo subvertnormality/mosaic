@@ -1116,7 +1116,7 @@ _Mosaic_ gives you a lot of control, but it can also be resource intensive. Push
  - Recording with trigless locks enabled places a greater strain on the sequencer. Disable if you don't need that level of modulation granularity.
  - N.b. devices should be be used sparingly.
 
-During testing of v1.1.0, we discovered that external sync became unreliable under the following conditions: 1 n.b. device in use, trigless parameters were in use at 160 BPM, with most steps locked for all 10 trig parameters across the four channels, with 20 of those parameters utilising global param sliding. Different combinations of these conditions may yield different results. 
+During testing of v1.1.1, we discovered that external sync became unreliable under the following conditions: 1 n.b. device in use (doubledecker), trigless parameters were in use at 110 BPM, with most steps locked for all 10 trig parameters across the four channels, with 40 of those parameters utilising global param sliding. Different combinations of these conditions may yield different results. 
 
 ## Development
 

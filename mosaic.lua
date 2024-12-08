@@ -1,4 +1,4 @@
--- mosaic v1.1.0
+-- mosaic v1.1.1
 -- grid-first rhythm and 
 -- harmony sequencer.
 --

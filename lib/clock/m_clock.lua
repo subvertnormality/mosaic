@@ -687,7 +687,6 @@ local function calculate_total_pulses(channel, start_step, end_step)
 end
 
 
-
 function m_clock.execute_action_across_steps_by_pulses(args)
   if args.start_step == args.end_step then return end
   
@@ -717,7 +716,6 @@ function m_clock.execute_action_across_steps_by_pulses(args)
   })
 end
 
--- Modify cancel_spread_actions_for_channel_trig_lock for ring buffer
 function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, trig_lock, use_end_value)
   local i = ring_start
   while i ~= ring_end do

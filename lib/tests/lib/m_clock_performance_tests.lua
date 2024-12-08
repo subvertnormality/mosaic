@@ -87,6 +87,7 @@ local function benchmark_operation(name, operation, iterations)
 end
 
 function test_spread_action_performance()
+  
   setup()
   clock_setup()
   
