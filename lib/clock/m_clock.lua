@@ -41,6 +41,122 @@ local max = math.max
 local active_spread_actions = {}
 local spread_action_channels = {}
 
+local RING_BUFFER_SIZE = 1024 -- Power of 2 for efficient modulo
+local spread_ring = {}
+local ring_start = 1
+local ring_end = 1
+
+-- Define quantize_value function first
+function m_clock.quantize_value(value, quant)
+  if not quant or quant == 0 then return value end
+  
+  -- For fractional quantization
+  if quant < 1 then
+    -- Calculate how many decimal places we need based on quant
+    local decimals = -math.floor(math.log10(quant))
+    local multiplier = 10^decimals
+    -- Round to the nearest quant step using integer math for precision
+    local scaled = math.floor(value * multiplier + 0.5)
+    local quant_scaled = math.floor(quant * multiplier + 0.5)
+    local steps = math.floor(scaled / quant_scaled + 0.5)
+    return (steps * quant_scaled) / multiplier
+  end
+  
+  -- For integer quantization
+  return math.floor(value/quant + 0.5) * quant
+end
+
+-- Create local reference for performance
+local quantize_value = m_clock.quantize_value
+
+-- Initialize ring buffer
+local function init_ring_buffer()
+  for i = 1, RING_BUFFER_SIZE do
+    spread_ring[i] = {
+      channel = 0,
+      trig_lock = 0, 
+      pulse_count = 0,
+      total_pulses = 0,
+      start_value = 0,
+      end_value = 0,
+      quant = 0,
+      func = nil,
+      active = false
+    }
+  end
+end
+
+-- Add action to ring buffer
+local function ring_push(action)
+  local next_end = (ring_end % RING_BUFFER_SIZE) + 1
+  if next_end == ring_start then return false end -- Buffer full
+  
+  local slot = spread_ring[ring_end]
+  slot.channel = action.channel
+  slot.trig_lock = action.trig_lock
+  slot.pulse_count = action.pulse_count
+  slot.total_pulses = action.total_pulses
+  slot.start_value = action.start_value
+  slot.end_value = action.end_value
+  slot.quant = action.quant
+  slot.func = action.func
+  slot.active = true
+  
+  ring_end = next_end
+  return true
+end
+
+-- Process ring buffer in execute_spread_actions
+local function process_ring_buffer()
+  local i = ring_start
+  while i ~= ring_end do
+    local action = spread_ring[i]
+    if action.active then
+      local pulse_count = action.pulse_count
+      local total_pulses = action.total_pulses
+      
+      if pulse_count >= total_pulses then
+        action.active = false
+      else
+        -- Calculate value based on position
+        local current_value
+        if pulse_count == 0 then
+          current_value = action.start_value
+        elseif pulse_count == total_pulses - 1 then
+          current_value = action.end_value
+        else
+          local progress = pulse_count / (total_pulses - 1)
+          current_value = action.start_value + 
+            (action.end_value - action.start_value) * progress
+        end
+        
+        -- Apply quantization if needed
+        if action.quant and action.quant > 0 then
+          if pulse_count == 0 then
+            if action.start_value < action.end_value then
+              current_value = quantize_value(action.start_value + action.quant, action.quant)
+            else
+              current_value = quantize_value(action.start_value - action.quant, action.quant)
+            end
+          else
+            current_value = quantize_value(current_value, action.quant)
+          end
+        end
+        
+        action.func(current_value, action.last_value)
+        action.last_value = current_value
+        action.pulse_count = pulse_count + 1
+      end
+    end
+    i = (i % RING_BUFFER_SIZE) + 1
+  end
+  
+  -- Compact buffer by moving start pointer past inactive entries
+  while ring_start ~= ring_end and not spread_ring[ring_start].active do
+    ring_start = (ring_start % RING_BUFFER_SIZE) + 1
+  end
+end
+
 local function calculate_divisor(clock_mod)
   if clock_mod.type == "clock_multiplication" then
     return 4 * clock_mod.value
@@ -127,25 +243,6 @@ local function get_shuffle_values(channel)
   end
   
   return shuffle_values
-end
-
-local function quantize_value(value, quant)
-  if not quant or quant == 0 then return value end
-  
-  -- For fractional quantization
-  if quant < 1 then
-    -- Calculate how many decimal places we need based on quant
-    local decimals = -math.floor(math.log10(quant))
-    local multiplier = 10^decimals
-    -- Round to the nearest quant step using integer math for precision
-    local scaled = math.floor(value * multiplier + 0.5)
-    local quant_scaled = math.floor(quant * multiplier + 0.5)
-    local steps = math.floor(scaled / quant_scaled + 0.5)
-    return (steps * quant_scaled) / multiplier
-  end
-  
-  -- For integer quantization
-  return math.floor(value/quant + 0.5) * quant
 end
 
 local function count_active_actions(action)
@@ -369,94 +466,16 @@ function m_clock.init()
 
   end
   execute_spread_actions = clock_lattice:new_sprocket {
-    action = function()
-      -- Clear channel cache
-      for i = 1, #spread_action_channels do
-        spread_action_channels[i] = nil
-      end
-      
-      -- Build channel action cache and count active actions
-      local active_count = 0
-      for i = #spread_actions, 1, -1 do
-        local action = spread_actions[i]
-        if not action or action.active_count <= 0 then
-          -- Remove inactive actions
-          if i < #spread_actions then
-            spread_actions[i] = spread_actions[#spread_actions]
-          end
-          spread_actions[#spread_actions] = nil
-        else
-          active_count = active_count + 1
-          -- Cache channel numbers that have active actions
-          for channel_number in pairs(action) do
-            if channel_number ~= "active_count" then
-              spread_action_channels[#spread_action_channels + 1] = channel_number
-            end
-          end
-        end
-      end
-      
-      -- Early exit if no active actions
-      if active_count == 0 then return end
-      
-      -- Process actions by channel for better cache locality
-      for _, channel_number in ipairs(spread_action_channels) do
-        for _, action in ipairs(spread_actions) do
-          local channel_actions = action[channel_number]
-          if channel_actions then
-            for trig_lock, trig_action in pairs(channel_actions) do
-              if trig_action.active then
-                local pulse_count = trig_action.pulse_count
-                local total_pulses = trig_action.total_pulses
-                
-                if pulse_count >= total_pulses then
-                  trig_action.active = false
-                  action.active_count = action.active_count - 1
-                else
-                  -- Cache frequently accessed values
-                  local start_val = trig_action.start_value
-                  local end_val = trig_action.end_value
-                  local quant = trig_action.quant
-                  
-                  -- Calculate value based on position
-                  local current_value
-                  if pulse_count == 0 then
-                    current_value = start_val
-                  elseif pulse_count == total_pulses - 1 then
-                    current_value = end_val
-                  else
-                    local progress = pulse_count / (total_pulses - 1)
-                    current_value = start_val + (end_val - start_val) * progress
-                  end
-                  
-                  -- Apply quantization if needed
-                  if quant and quant > 0 then
-                    if pulse_count == 0 then
-                      if start_val < end_val then
-                        current_value = quantize_value(start_val + quant, quant)
-                      else
-                        current_value = quantize_value(start_val - quant, quant)
-                      end
-                    else
-                      current_value = quantize_value(current_value, quant)
-                    end
-                  end
-                  
-                  trig_action.func(current_value, trig_action.last_value)
-                  trig_action.last_value = current_value
-                  trig_action.pulse_count = pulse_count + 1
-                end
-              end
-            end
-          end
-        end
-      end
-    end,
+    action = process_ring_buffer,
     division = 1/48,
     enabled = true,
     realign = false,
     order = 5
   }
+
+  init_ring_buffer()
+  ring_start = 1
+  ring_end = 1
 end
 
 function m_clock.set_swing_shuffle_type(channel_number, swing_or_shuffle)
@@ -668,125 +687,73 @@ local function calculate_total_pulses(channel, start_step, end_step)
 end
 
 
-
 function m_clock.execute_action_across_steps_by_pulses(args)
-  local total_pulses, total_steps
-
-  if args.start_step == args.end_step then
-    return
-  end 
+  if args.start_step == args.end_step then return end
   
+  local total_pulses
   if args.should_wrap and args.end_step < args.start_step then
-    local pulses_to_end = calculate_total_pulses(args.channel_number, args.start_step, 64, args.should_wrap)
-    local pulses_from_start = calculate_total_pulses(args.channel_number, 1, args.end_step, args.should_wrap)
-    
+    local pulses_to_end = calculate_total_pulses(args.channel_number, args.start_step, 64)
+    local pulses_from_start = calculate_total_pulses(args.channel_number, 1, args.end_step)
     total_pulses = pulses_to_end + pulses_from_start
   else
-    total_pulses = calculate_total_pulses(args.channel_number, args.start_step, args.end_step, args.should_wrap)
+    total_pulses = calculate_total_pulses(args.channel_number, args.start_step, args.end_step)
   end
 
-  -- Clear any existing spread actions for this channel
+  -- Cancel existing actions for this channel/trig_lock
   m_clock.cancel_spread_actions_for_channel_trig_lock(args.channel_number, args.trig_lock)
   
-  -- Create action with original nested structure
-  table.insert(spread_actions, {
-    [args.channel_number] = {
-      [args.trig_lock] = {
-        pulse_count = 0,
-        total_pulses = total_pulses,
-        start_step = args.start_step,
-        end_step = args.end_step,
-        start_value = args.start_value,
-        end_value = args.end_value,
-        quant = args.quant,
-        func = args.func,
-        active = true,
-        should_wrap = args.should_wrap
-      }
-    },
-    active_count = 1
+  -- Push new action to ring buffer
+  ring_push({
+    channel = args.channel_number,
+    trig_lock = args.trig_lock,
+    pulse_count = 0,
+    total_pulses = total_pulses,
+    start_value = args.start_value,
+    end_value = args.end_value,
+    quant = args.quant,
+    func = args.func,
+    active = true
   })
 end
 
--- Keep original cancel_spread_actions_for_channel_trig_lock implementation
 function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, trig_lock, use_end_value)
-  local i = #spread_actions
-  while i > 0 do
-    local action = spread_actions[i]
-    if action and action[channel_number] then
-      if trig_lock then
-        -- Cancel specific trig lock
-        local trig_action = action[channel_number][trig_lock]
-        if trig_action and trig_action.active then  -- Check if active
+  local i = ring_start
+  while i ~= ring_end do
+    local action = spread_ring[i]
+    if action.active and action.channel == channel_number then
+      if not trig_lock or action.trig_lock == trig_lock then
+        if action.pulse_count > 0 then
           -- Execute final value if needed
-          if trig_action.pulse_count > 0 then
-            if use_end_value then
-              trig_action.func(trig_action.end_value)
-            else
-              local progress = trig_action.pulse_count / trig_action.total_pulses
-              local final_value = trig_action.start_value + 
-                (trig_action.end_value - trig_action.start_value) * progress
-              if trig_action.quant and trig_action.quant > 0 then
-                final_value = quantize_value(final_value, trig_action.quant)
-              end
-              trig_action.func(final_value)
+          if use_end_value then
+            action.func(action.end_value)
+          else
+            local progress = action.pulse_count / action.total_pulses
+            local final_value = action.start_value + 
+              (action.end_value - action.start_value) * progress
+            if action.quant and action.quant > 0 then
+              final_value = quantize_value(final_value, action.quant)
             end
-          end
-          
-          -- Deactivate the action
-          trig_action.active = false
-          action.active_count = action.active_count - 1
-          action[channel_number][trig_lock] = nil
-        end
-      else
-        -- Cancel all trig locks for channel
-        for trig_lock_id, trig_action in pairs(action[channel_number]) do
-          if trig_action.active then  -- Only process active actions
-            if trig_action.pulse_count > 0 then
-              if use_end_value then
-                trig_action.func(trig_action.end_value)
-              else
-                local progress = trig_action.pulse_count / trig_action.total_pulses
-                local final_value = trig_action.start_value + 
-                  (trig_action.end_value - trig_action.start_value) * progress
-                if trig_action.quant and trig_action.quant > 0 then
-                  final_value = quantize_value(final_value, trig_action.quant)
-                end
-                trig_action.func(final_value)
-              end
-            end
-            trig_action.active = false
-            action.active_count = action.active_count - 1
+            action.func(final_value)
           end
         end
-        action[channel_number] = nil
-      end
-      
-      -- Remove action if no more active trig locks
-      if action.active_count <= 0 then
-        if i < #spread_actions then
-          spread_actions[i] = spread_actions[#spread_actions]
-        end
-        spread_actions[#spread_actions] = nil
+        action.active = false
       end
     end
-    i = i - 1
+    i = (i % RING_BUFFER_SIZE) + 1
   end
 end
 
 function m_clock.channel_is_sliding(channel, trig_param)
-  local i = #spread_actions
-  while i > 0 do
-    local action = spread_actions[i]
-    local channel_actions = action and action[channel.number]
-    if channel_actions then
-      local trig_action = channel_actions[trig_param]
-      -- Check both active flag and pulse count
-      if trig_action and trig_action.active and trig_action.pulse_count < trig_action.total_pulses then
-        return true
-      end
+  local i = ring_start
+  while i ~= ring_end do
+    local action = spread_ring[i]
+    if action.active and 
+       action.channel == channel.number and
+       action.trig_lock == trig_param and
+       action.pulse_count < action.total_pulses then
+      return true
     end
-    i = i - 1
+    i = (i % RING_BUFFER_SIZE) + 1
   end
   return false
 end
