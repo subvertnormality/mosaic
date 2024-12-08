@@ -794,6 +794,10 @@
         <div class="command-text">Start/Stop: Bottom-left button. Press to play. Press again to stop.</div>
       </div>
       <div class="command">
+         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-record-button.svg" width="80" />
+         <div class="command-text">Arm record: Press to arm recording. Press again to stop recording.</div>
+       </div>
+      <div class="command">
         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-channel-editor-select-button.svg" width="80" />
         <div class="command-text">Channel Editor: First menu button</div>
       </div>
@@ -941,8 +945,8 @@
             <li>E1: Navigate pages</li>
             <li>E2: Select parameters</li>
             <li>E3: Adjust values (hold K3 for fine control)</li>
-            <li>K2 + step: Clear locks of type based on currently selected page on step</li>
-            <li>K3 + K2: Clear all locks of type based on currently selected page on channel</li>
+            <li>Step + K2: Clear locks of type based on currently selected page on step</li>
+            <li>K1 + K2: Clear all locks of type based on currently selected page on channel</li>
           </ul>
         </li>
         <li><strong>Trig Locks:</strong>
@@ -955,7 +959,7 @@
         </li>
         <li><strong>Masks:</strong>
           <ul>
-            <li>Hold K3 + press step: Add/remove trig mask</li>
+            <li>Hold K1 + press step: Add/remove trig mask</li>
             <li>Hold step on mask page: Set note/velocity/length</li>
           </ul>
         </li>
@@ -970,10 +974,10 @@
         <div>
           <strong>Quick Operations</strong>
           <ul>
-            <li>Add/Remove Trig: Hold K3 + press step</li>
-            <li>Clear Lock: Hold step + K2</li>
-            <li>Clear All: Hold K3 + K2</li>
-            <li>Global Set: Press without holding step</li>
+            <li>Add/Remove trig: Hold K1 + press step</li>
+            <li>Clear lock: Hold step + K2</li>
+            <li>Clear all locks of selected page type: Hold K1 + K2</li>
+            <li>Global set: Press without holding step</li>
             <li>Change param on trig lock page: select param and press K2 to view param list.</li>
             <li>Save action: K3</li>
             <li>Cancel action: K2</li>
@@ -990,8 +994,8 @@
         <div>
           <strong>Chord Operations</strong>
           <ul>
-            <li>Add Chord: Hold step + select up to 4 notes</li>
-            <li>Strum Control: Use with Chord Strum param</li>
+            <li>Add chord: Hold step + select up to 4 notes</li>
+            <li>Strum control: Use with Chord Strum param</li>
             <li>Velocity: Use Chord Velocity modifier param</li>
             <li>Shape: Use Chord Shape modifier param</li>
             <li>Spread: Use spread param to space chord notes</li>
@@ -1002,9 +1006,9 @@
         <div>
           <strong>MIDI Integration</strong>
           <ul>
-            <li>Set Note: Hold step + press MIDI key</li>
+            <li>Set note: Hold step + press MIDI key</li>
             <li>Preview: Play without holding step</li>
-            <li>Scale Map: White keys follow current scale</li>
+            <li>Scale map: White keys follow current scale</li>
             <li>Real-time: Input during playback</li>
           </ul>
         </div>
@@ -1013,7 +1017,7 @@
   </div>
 
   <div class="footer">
-    MIDI Panic: Hold unused navigation button / Autosave occurs after 60s when not playing
+    Autosave occurs after 60s when not playing
   </div>
 
   <script>
