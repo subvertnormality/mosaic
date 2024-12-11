@@ -15,6 +15,18 @@ local function setup()
   m_clock:start()
 end
 
+local function mock_random()
+  random = function (min, max)
+    return max - min
+  end
+end
+
+local function progress_clock_by_beats(b)
+  for i = 1, (24 * b) do
+    m_clock.get_clock_lattice():pulse()
+  end
+end
+
 function test_steps_process_note_on_events()
   setup()
   local song_pattern = 1
@@ -306,4 +318,405 @@ function test_speed_ratio_over_16()
   luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
   luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 32), 2)
   luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 33), 3)
+end
+
+
+function test_random_notes_with_chords()
+  setup()
+  mock_random() -- This will make random return max-min
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  
+  -- Set up initial pattern with C as root note (0) and chord notes for third (+2) and fifth (+4)
+  test_pattern.note_values[1] = 0  -- C
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  -- Using relative scale degrees for chord masks
+  channel.chord_one_mask = 2  -- Third relative to root
+  channel.chord_two_mask = 4  -- Fifth relative to root
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up C major scale
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0  -- C
+  scale.number = 1     -- Major scale
+  
+  -- Set random note param to shift up by 1 step (to D)
+  channel.trig_lock_params[1].id = "bipolar_random_note"
+  program.add_step_param_trig_lock(1, 1, 1) -- Shift up by 1 step
+  
+  step.handle(1, 1)
+  
+  -- Should get three note on events - root D and chord notes F and A
+  local note_events = midi_note_on_events
+  
+  -- Print actual values for debugging
+  print("Root note:", note_events[1][1])  -- Should be 62 (D)
+  print("First chord note:", note_events[2][1])  -- Should be 65 (F)
+  print("Second chord note:", note_events[3][1])  -- Should be 69 (A)
+  
+  luaunit.assert_equals(#note_events, 3)
+  luaunit.assert_equals(note_events[1][1], 62) -- D
+  luaunit.assert_equals(note_events[2][1], 65) -- F 
+  luaunit.assert_equals(note_events[3][1], 69) -- A
+end
+
+function test_random_notes_with_arp()
+  setup()
+  mock_random() -- This will make random return max-min
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  
+  -- Set up initial pattern with C as root note (0)
+  test_pattern.note_values[1] = 0  -- C
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  -- Using relative scale degrees for chord masks
+  channel.chord_one_mask = 2  -- Third relative to root
+  channel.chord_two_mask = 4  -- Fifth relative to root
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up C major scale
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0  -- C
+  scale.number = 1     -- Major scale
+  
+  -- Set random note param to shift up by 1 step (to D)
+  channel.trig_lock_params[1] = {id = "bipolar_random_note", param_id = "random_note_1"}
+  program.add_step_param_trig_lock(1, 1, 1) -- Shift up by 1 step
+  
+  -- Enable arpeggio mode with standard division
+  channel.trig_lock_params[2] = {id = "chord_arp", param_id = "chord_arp_1"}
+  program.add_step_param_trig_lock(1, 2, 4) -- Standard division
+  
+  -- Initialize m_clock for arp timing
+  m_clock.init()
+  m_clock:start()
+  
+  
+  -- Should get first note immediately
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62) -- D
+  
+  -- Clear events and advance clock to get next notes
+  progress_clock_by_beats(1)
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65) -- F
+  
+  -- Clear and advance again for final note
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 69) -- A
+end
+
+function test_random_notes_with_arp_and_velocity_mod()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0  -- C
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2
+  channel.chord_two_mask = 4
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  
+  -- Add random note and arp with velocity modifier
+  channel.trig_lock_params[1] = {id = "bipolar_random_note", param_id = "random_note_1"}
+  program.add_step_param_trig_lock(1, 1, 1)
+  
+  channel.trig_lock_params[2] = {id = "chord_arp", param_id = "chord_arp_1"}
+  program.add_step_param_trig_lock(1, 2, 4)
+  
+  channel.trig_lock_params[3] = {id = "chord_velocity_modifier", param_id = "chord_velocity_1"}
+  program.add_step_param_trig_lock(1, 3, 10) -- Increase velocity by 10 per note
+  
+  m_clock.init()
+  m_clock:start()
+  
+  -- First note
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62) -- D
+  luaunit.assert_equals(note_on_event[2], 100) -- Base velocity
+  
+  progress_clock_by_beats(1)
+  
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65) -- F
+  luaunit.assert_equals(note_on_event[2], 110) -- Velocity + 10
+  
+  progress_clock_by_beats(1)
+
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 69) -- A
+  luaunit.assert_equals(note_on_event[2], 120) -- Velocity + 20
+end
+
+function test_random_notes_with_arp_and_note_mask()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2
+  channel.chord_two_mask = 4
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  
+  -- Add random note and arp
+  channel.trig_lock_params[1] = {id = "bipolar_random_note", param_id = "random_note_1"}
+  program.add_step_param_trig_lock(1, 1, 1)
+  
+  channel.trig_lock_params[2] = {id = "chord_arp", param_id = "chord_arp_1"}
+  program.add_step_param_trig_lock(1, 2, 4)
+  
+  m_clock.init()
+  m_clock:start()
+  
+  -- Random note shift should be added to note mask value
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62) -- C4 (mask)
+  
+  progress_clock_by_beats(1)
+  
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65) -- E4 (mask + third)
+  
+  progress_clock_by_beats(1)
+
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 69) -- G4 (mask + fifth)
+end
+
+function test_random_notes_with_arp_and_strum_pattern()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2
+  channel.chord_two_mask = 4
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  
+  -- Add random note, arp and reverse strum pattern
+  channel.trig_lock_params[1] = {id = "bipolar_random_note", param_id = "random_note_1"}
+  program.add_step_param_trig_lock(1, 1, 1)
+  
+  channel.trig_lock_params[2] = {id = "chord_arp", param_id = "chord_arp_1"}
+  program.add_step_param_trig_lock(1, 2, 4)
+  
+  channel.trig_lock_params[3] = {id = "chord_strum_pattern", param_id = "chord_strum_pattern_1"}
+  program.add_step_param_trig_lock(1, 3, 2) -- Reverse pattern
+  
+  m_clock.init()
+  m_clock:start()
+  
+  -- Should play highest note first
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 69) -- A (fifth)
+  
+  progress_clock_by_beats(1)
+  
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65) -- F (third)
+  
+  progress_clock_by_beats(1)
+
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62) -- D (root)
+end
+
+function test_random_notes_with_note_mask_and_chords()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2  -- Third
+  channel.chord_two_mask = 4  -- Fifth
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  
+  -- Add random note shift
+  channel.trig_lock_params[1] = {id = "bipolar_random_note", param_id = "random_note_1"}
+  program.add_step_param_trig_lock(1, 1, 1) -- Shift up by 1 step
+  
+  step.handle(1, 1)
+  
+  -- Should get three note on events - all shifted up by random amount
+  local note_events = midi_note_on_events
+  
+  luaunit.assert_equals(#note_events, 3)
+  luaunit.assert_equals(note_events[1][1], 62) -- D4 (C4 + random shift)
+  luaunit.assert_equals(note_events[2][1], 65) -- F4 (D4 + third)
+  luaunit.assert_equals(note_events[3][1], 69) -- A5 (D4 + fifth)
+end
+
+function test_random_notes_with_note_mask_and_chords_multiple_random_sources()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2
+  channel.chord_two_mask = 4
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  
+  -- Add both bipolar and twos random shifts
+  channel.trig_lock_params[1] = {id = "bipolar_random_note", param_id = "random_note_1"}
+  program.add_step_param_trig_lock(1, 1, 1) -- Shift up by 1 step
+  
+  channel.trig_lock_params[2] = {id = "twos_random_note", param_id = "twos_random_note_1"}
+  program.add_step_param_trig_lock(1, 2, 1) -- Additional shift up by 2 step
+  
+  step.handle(1, 1)
+  
+  -- Should get three note on events - all shifted up by combined random amount
+  local note_events = midi_note_on_events
+  
+  luaunit.assert_equals(#note_events, 3)
+  luaunit.assert_equals(note_events[1][1], 65) -- F4 (C4 + bipolar shift + twos shift)
+  luaunit.assert_equals(note_events[2][1], 69) -- A5 (E4 + third)
+  luaunit.assert_equals(note_events[3][1], 72) -- C4 (E4 + fifth)
+end
+
+function test_random_notes_with_note_mask_and_chords_minor_scale()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2
+  channel.chord_two_mask = 4
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up minor scale
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 2 -- Minor scale
+  
+  -- Add random note shift
+  channel.trig_lock_params[1] = {id = "bipolar_random_note", param_id = "random_note_1"}
+  program.add_step_param_trig_lock(1, 1, 1) -- Shift up by 1 step
+  
+  step.handle(1, 1)
+  
+  -- Should get three note on events - all shifted up by random amount, using minor scale intervals
+  local note_events = midi_note_on_events
+  
+  luaunit.assert_equals(#note_events, 3)
+  luaunit.assert_equals(note_events[1][1], 62) -- D4 (C4 + random shift)
+  luaunit.assert_equals(note_events[2][1], 65) -- F4 (D4 + minor third)
+  luaunit.assert_equals(note_events[3][1], 69) -- A4 (D4 + fifth)
 end
