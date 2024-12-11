@@ -1,3 +1,7 @@
+## 1.1.2
+
+- Chord masks now follow the root note after random note shifts have been applied.
+
 ## 1.1.1
 
 - Performance improvements to param slides . It's now possible to use more global param slides with trigless locks enabled without experiencing lag, although moderation is still recommended.
