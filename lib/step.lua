@@ -473,17 +473,18 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     if not chord_note or chord_note == 0 then
       sequenced_chord_notes[i] = false
     else
+
   
       if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
-        sequenced_chord_notes[i] = {
-          note_mask_value = unprocessed_note_container.note_mask_value,
+          sequenced_chord_notes[i] = {
+          note_mask_value = unprocessed_note_container.note_mask_value + unprocessed_note_container.random_shift,
           chord_note = chord_note,
           octave_mod = unprocessed_note_container.octave_mod,
           transpose = unprocessed_note_container.transpose
         }
       else
         sequenced_chord_notes[i] = {
-          note_value = unprocessed_note_container.note_value + (chord_note or 0),
+          note_value = unprocessed_note_container.note_value + (chord_note or 0) + unprocessed_note_container.random_shift,
           octave_mod = unprocessed_note_container.octave_mod,
           transpose = unprocessed_note_container.transpose
         }
@@ -497,7 +498,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
         table.insert(sequenced_chord_notes, 1, 
         {
-          note_mask_value = unprocessed_note_container.note_mask_value,
+          note_mask_value = unprocessed_note_container.note_mask_value + unprocessed_note_container.random_shift,
           octave_mod = unprocessed_note_container.octave_mod,
           transpose = unprocessed_note_container.transpose
         }
@@ -506,7 +507,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
 
       table.insert(sequenced_chord_notes, 1, 
         {
-          note_value = unprocessed_note_container.note_value,
+          note_value = unprocessed_note_container.note_value + unprocessed_note_container.random_shift,
           octave_mod = unprocessed_note_container.octave_mod,
           transpose = unprocessed_note_container.transpose
         }
@@ -516,7 +517,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
         table.insert(sequenced_chord_notes,  
         {
-          note_mask_value = unprocessed_note_container.note_mask_value,
+          note_mask_value = unprocessed_note_container.note_mask_value + unprocessed_note_container.random_shift,
           chord_note = chord_note,
           octave_mod = unprocessed_note_container.octave_mod,
           transpose = unprocessed_note_container.transpose
@@ -525,7 +526,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     else
       table.insert(sequenced_chord_notes,  
         {
-          note_value = unprocessed_note_container.note_value,
+          note_value = unprocessed_note_container.note_value + unprocessed_note_container.random_shift,
           octave_mod = unprocessed_note_container.octave_mod,
           transpose = unprocessed_note_container.transpose
         }
@@ -673,6 +674,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local note_mask_value = unprocessed_note_container.note_mask_value
   local octave_mod = unprocessed_note_container.octave_mod
   local transpose = unprocessed_note_container.transpose
+  local random_shift = unprocessed_note_container.random_shift
   local step_scale_number = channel.step_scale_number
   local velocity = note_container.velocity
   local length = note_container.length
@@ -738,7 +740,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         (((chord_division or 0) * delay_multiplier) + ((chord_spread * delay_multiplier) + (acceleration_accumulator)) * chord_acceleration),
         false,
         function()
-          local note_value = unprocessed_note_container.note_value + chord_notes[chord_number]
+          local note_value = unprocessed_note_container.note_value + chord_notes[chord_number] + random_shift
           local processed_chord_note = quantiser.process(
             note_value,
             unprocessed_note_container.octave_mod,
@@ -749,7 +751,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 and type(unprocessed_note_container.note_mask_value) == "number" then
 
             processed_chord_note = quantiser.process_chord_note_for_mask(
-              unprocessed_note_container.note_mask_value,
+              unprocessed_note_container.note_mask_value + random_shift,
               chord_notes[chord_number],
               unprocessed_note_container.octave_mod,
               unprocessed_note_container.transpose,
@@ -788,14 +790,14 @@ local function handle_note(device, current_step, note_container, unprocessed_not
       false,
       function()
         local processed_note = quantiser.process(
-          unprocessed_note_container.note_value,
+          unprocessed_note_container.note_value + random_shift,
           unprocessed_note_container.octave_mod,
           unprocessed_note_container.transpose,
           channel.step_scale_number
         )
         if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
           processed_note = quantiser.process_chord_note_for_mask(
-            unprocessed_note_container.note_mask_value,
+            unprocessed_note_container.note_mask_value + random_shift,
             0,
             unprocessed_note_container.octave_mod,
             unprocessed_note_container.transpose,
@@ -869,6 +871,7 @@ function step.handle(c, current_step)
 
     local random_shift = fn.transform_random_value(step.process_stock_params(c, current_step, "bipolar_random_note") or 0) +
                          fn.transform_twos_random_value(step.process_stock_params(c, current_step, "twos_random_note") or 0)
+                         
     local note
     if note_mask_value and note_mask_value > -1 then
       if params:get("quantiser_act_on_note_masks") == 2 then
@@ -926,12 +929,11 @@ function step.handle(c, current_step)
         channel = c
       }
 
-
       handle_note(
         device,
         current_step,
         note_container,
-        {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose},
+        {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose, random_shift = random_shift},
         function(chord_note, velocity, midi_channel, midi_device)
           if device.player then
             device.player:note_on(chord_note, (127 > 1) and ((velocity - 1) / 126) or 0)
