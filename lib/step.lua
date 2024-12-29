@@ -78,7 +78,8 @@ local function should_process_param(param)
       "chord_spread",
       "chord_strum_pattern",
       "fixed_note",
-      "mute_root_note"
+      "mute_root_note",
+      "fully_quantise_mask"
   }
   
   if not param then return false end
@@ -813,9 +814,12 @@ function step.handle(c, current_step)
     local octave_mod_offset = 0
 
     if note_mask_value and note_mask_value > -1 then
+
+      local fully_quantise_mask = step.process_stock_params(c, current_step, "fully_quantise_mask") or -1
+
       relative_note_mask_value, octave_mod_offset = quantiser.translate_note_mask_to_relative_scale_position(note_mask_value, channel.step_scale_number)
 
-      if params:get("quantiser_fully_act_on_note_masks") == 2 then
+      if (params:get("quantiser_fully_act_on_note_masks") == 2 and fully_quantise_mask == -1) or fully_quantise_mask == 2 then
         local final_octave = octave_mod + octave_mod_offset
         note = quantiser.process(relative_note_mask_value + random_shift, final_octave, transpose, channel.step_scale_number, do_pentatonic)
       elseif params:get("quantiser_act_on_note_masks") == 2 then

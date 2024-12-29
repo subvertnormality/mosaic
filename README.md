@@ -99,6 +99,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
         + [Chord Velocity Modifier](#chord-velocity-modifier)
         + [Chord Shape Modifier](#chord-shape-modifier)
         + [Mute Root Note](#mute-root-note)
+        + [Fully Quantise Mask](#fully-quantise-mask)
   * [Scale Editor](#scale-editor)
     + [Transposition](#transposition)
   * [Song Editor](#song-editor)
@@ -812,6 +813,10 @@ The Chord Shape Modifiers alters the order of the chord masks that are played us
 
 The Mute Root Note param allows you to silence the root note of a chord while allowing other chord notes to play. When enabled, any chord played on that step will omit its root note while still playing all other chord notes. This can be used to create more varied chord voicings and inversions.
 
+##### Fully Quantise Mask
+
+The Fully Quantise Mask param controls whether note masks on a step are fully quantized to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantized to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes.
+
 ### Scale Editor
 
 Access the scale editor by pressing the second global menu button.
@@ -1072,7 +1077,7 @@ The "Elektron program change channel" setting determines which MIDI channel to s
 
 ##### Quantise Note Masks
 
-"Quantise Note Masks" is off by default. With this setting enabled, note masks are quantised to the currently selected scale and are altered by scale degree or rotation adjustments.
+"Quantise Note Masks" is off by default. With this setting enabled, all note masks are quantised to the currently selected scale and are altered by scale degree or rotation adjustments.
 
 ##### Scales Lock Until Pattern End
 

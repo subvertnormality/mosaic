@@ -249,7 +249,7 @@ function init()
 
   blink()
 
-  params:add_group("mosaic", "MOSAIC", 32)
+  params:add_group("mosaic", "MOSAIC", 33)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(

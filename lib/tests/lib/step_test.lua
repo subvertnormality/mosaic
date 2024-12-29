@@ -877,5 +877,90 @@ function test_note_mask_with_fully_act_on_note_masks_octave_and_transpose()
   
   local note_events = midi_note_on_events
   luaunit.assert_equals(#note_events, 1)
+  luaunit.assert_equals(note_events[1][1], 86) -- E6 (C#5 quantized to C, octave up, transposed up 2 semitones to E)
+end
+
+
+function test_note_mask_with_fully_act_on_note_masks_octave_and_transpose_using_param()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 73 -- Fixed C#5 (should be quantized to D5 in C major)
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+
+  local channel = program.get_channel(song_pattern, 1)
+  channel.octave = 1 -- Add octave
+
+
+  channel.trig_lock_params[4].id = "fully_quantise_mask"
+  program.add_step_param_trig_lock(1, 4, 2) -- Enable
+
+  pattern.update_working_patterns()
+
+  -- Set up C major scale with transpose
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  scale.transpose = 2 -- Transpose up 2 semitones
+
+  step.handle(1, 1)
+  
+  local note_events = midi_note_on_events
+  luaunit.assert_equals(#note_events, 1)
   luaunit.assert_equals(note_events[1][1], 86) -- E6 (C#5 quantized to D5, octave up, transposed up 2 semitones to E)
+end
+
+
+
+function test_note_mask_with_fully_act_on_note_masks_octave_and_transpose_override_to_be_off_using_param()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 73 -- Fixed C#5 (should be quantized to D5 in C major)
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+
+  local channel = program.get_channel(song_pattern, 1)
+  channel.octave = 1 -- Add octave
+
+  channel.trig_lock_params[4].id = "fully_quantise_mask"
+  program.add_step_param_trig_lock(1, 4, 1) -- Explicitly disable
+
+  pattern.update_working_patterns()
+
+  -- Set up C major scale with transpose
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  scale.transpose = 2 -- Transpose up 2 semitones
+
+  -- Enable fully act on note masks
+  params:set("quantiser_fully_act_on_note_masks", 2)
+  
+  step.handle(1, 1)
+  
+  local note_events = midi_note_on_events
+  luaunit.assert_equals(#note_events, 1)
+  luaunit.assert_equals(note_events[1][1], 85)
 end

@@ -510,6 +510,7 @@ local stock_id_to_param_id = {
   chord_velocity_modifier = "midi_device_params_channel_%d_12",
   chord_strum_pattern = "midi_device_params_channel_%d_13",
   mute_root_note = "midi_device_params_channel_%d_14",
+  fully_quantise_mask = "midi_device_params_channel_%d_15",
 }
 
 function fn.get_param_id_from_stock_id(stock_id, channel_number)
