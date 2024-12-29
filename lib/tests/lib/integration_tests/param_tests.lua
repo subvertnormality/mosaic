@@ -2475,6 +2475,7 @@ end
 
 function test_arp_param_lock_on_note_mask_with_four_extra_notes()
   setup()
+  
   local song_pattern = 1
   program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()

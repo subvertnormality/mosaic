@@ -341,7 +341,7 @@ function quantiser.translate_note_mask_to_relative_scale_position(note_mask_valu
   local root_note = scale_container.root_note > -1 and scale_container.root_note or 0
   
   -- Calculate octave relative to program root note
-  local octave = math.floor(((note_mask_value - program.get().root_note) - root_note) / 12)
+  local octave = math.floor(((note_mask_value - program.get().root_note - 60) - root_note) / 12)
   
   -- Create a scale starting from root note for two octaves to handle snapping
   local root_scale = {}
@@ -361,8 +361,8 @@ function quantiser.translate_note_mask_to_relative_scale_position(note_mask_valu
   local position = fn.find_index_by_value(scale_container.scale, normalized_note)
   
   if position then
-    -- Return both the position (1-7) and octave
-    return position, octave
+    -- Return both the position (0-6) and octave
+    return position - 1, octave
   end
   
   return nil
