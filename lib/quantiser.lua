@@ -338,10 +338,10 @@ function quantiser.translate_note_mask_to_relative_scale_position(note_mask_valu
   if type(note_mask_value) ~= "number" then return nil end
 
   -- Get root note
-  local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
+  local root_note = scale_container.root_note > -1 and scale_container.root_note or 0
   
-  -- Calculate octave relative to middle C (60)
-  local octave = math.floor((note_mask_value - 60) / 12)
+  -- Calculate octave relative to program root note
+  local octave = math.floor(((note_mask_value - program.get().root_note) - root_note) / 12)
   
   -- Create a scale starting from root note for two octaves to handle snapping
   local root_scale = {}

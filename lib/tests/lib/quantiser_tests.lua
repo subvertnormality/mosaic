@@ -998,6 +998,9 @@ end
 
 function test_translate_note_mask_to_relative_scale_position_basic_c_major()
   setup()
+
+
+  program.get().root_note = 60
   local scale_number = 1 -- C Major
   
   -- Test notes in C major scale (C D E F G A B)
@@ -1032,6 +1035,7 @@ end
 
 function test_translate_note_mask_to_relative_scale_position_snapping()
   setup()
+  program.get().root_note = 60
   local scale_number = 1 -- C Major
   
   -- Test notes that need to be snapped to C major scale
@@ -1058,6 +1062,7 @@ end
 
 function test_translate_note_mask_to_relative_scale_position_octaves()
   setup()
+  program.get().root_note = 60
   local scale_number = 1 -- C Major
   
   -- Test notes in different octaves
@@ -1085,7 +1090,7 @@ end
 
 function test_translate_note_mask_to_relative_scale_position_minor_scale()
   setup()
-
+  program.get().root_note = 60
   program.set_scale(1, { -- Minor scale
     number = 1,
     scale = quantiser.get_scales()[3].scale,
@@ -1127,6 +1132,7 @@ end
 
 function test_translate_note_mask_to_relative_scale_position_edge_cases()
   setup()
+  program.get().root_note = 60
   local scale_number = 1 -- C Major
   
   -- Test very low and high notes
@@ -1147,6 +1153,7 @@ end
 
 function test_translate_note_mask_to_relative_scale_position_with_root_note()
   setup()
+  program.get().root_note = 60
   local scale_number = 1 -- C Major
   local scale = program.get_scale(scale_number)
   scale.root_note = 2 -- Set root note to D
