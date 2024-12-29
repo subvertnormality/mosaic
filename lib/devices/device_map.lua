@@ -256,7 +256,21 @@ local stock_params = {
       "<-->"
     },
     ["param_type"] = "stock"
-  }
+  },
+  {
+    ["id"] = "mute_root_note ",
+    ["name"] = "Mute Chord Root Note",
+    ["short_descriptor_1"] = "CHRD",
+    ["short_descriptor_2"] = "1NMT",
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 1,
+    ["ui_labels"] = = {
+      "OFF",
+      "ON"
+    },
+    ["param_type"] = "stock"
+  },
 }
 
 

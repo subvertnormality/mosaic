@@ -1,5 +1,3 @@
-
-
 <svg display="none" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
      xml:space="preserve"  width="25px" height="25px" viewbox="0 0 500 500">
      <symbol id="video-icon">
@@ -100,6 +98,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
         + [Chord Spread](#chord-spread)
         + [Chord Velocity Modifier](#chord-velocity-modifier)
         + [Chord Shape Modifier](#chord-shape-modifier)
+        + [Mute Root Note](#mute-root-note)
   * [Scale Editor](#scale-editor)
     + [Transposition](#transposition)
   * [Song Editor](#song-editor)
@@ -168,7 +167,7 @@ For those using an ACL Sinfonion, support is available through a straightforward
 
 Mosaic includes a range of stock midi devices that you can integrate into your setup. Elektron Digitone, Digitakt 2, Syntakt, and the Nord Drum 2 are first class citizens with fully tailored mappings.
 
-First, they need to be configured to appear in the device selector. Here’s how to set this up using [maiden](https://monome.org/docs/norns/maiden/):
+First, they need to be configured to appear in the device selector. Here's how to set this up using [maiden](https://monome.org/docs/norns/maiden/):
 
 1. **Access Configuration Files**: Open Maiden and navigate to the directory path `code > mosaic > lib > config`. Here, you will find the stock device configuration files.
 2. **Create a New Configuration Folder**: Next, go to the directory `data > mosaic`. In this location, create a new folder named `config`.
@@ -181,7 +180,7 @@ This allows you to easily access and use only your preferred devices within Mosa
 
 Once you've copied the stock device configuration files into the `data > mosaic > config` folder, you can also personalize these configurations to better suit your setup. This is particularly useful for setting common defaults like the MIDI output device.
 
-You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device’s MIDI specifications. You can create, load and edit midi device config files using the [Mosaic Config Creator](https://subvertnormality.github.io/mosaic/config_creator.html).
+You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device's MIDI specifications. You can create, load and edit midi device config files using the [Mosaic Config Creator](https://subvertnormality.github.io/mosaic/config_creator.html).
 
 ##### Mods and Software Devices
 
@@ -387,7 +386,7 @@ Trigs are added in the pattern editor. Using the top row, pick one of the 16 ava
 
 <img alt="Pattern editor pattern select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-select-buttons.svg" width="300" />
 
-To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolize a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. In a single pattern, one trig’s duration ends upon meeting another.
+To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolize a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. In a single pattern, one trig's duration ends upon meeting another.
 
 <img alt="Pattern editor step edit buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-step-trigger-edit-buttons.svg" width="300" />
 
@@ -414,11 +413,11 @@ The rightmost fader typically toggles between different banks in the selected al
 
 <img alt="Pattern editor bank select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg" width="300" />
 
-To see your algorithm's impact, hit the prime button. This primes the currently selected algorithm's pattern. Potential new steps are shown as flashing bright steps on the sequencer. While these steps flash, they aren’t painted yet. Any step that would be painted over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences, grounded in rhythmic fundamentals, that don't get too busy. You can modify algorithm parameters while the pattern is primed.
+To see your algorithm's impact, hit the prime button. This primes the currently selected algorithm's pattern. Potential new steps are shown as flashing bright steps on the sequencer. While these steps flash, they aren't painted yet. Any step that would be painted over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences, grounded in rhythmic fundamentals, that don't get too busy. You can modify algorithm parameters while the pattern is primed.
 
 <img alt="Pattern editor prime and paint button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/arm-paint-button.svg" width="300" />
 
-If you haven’t painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Pressing the prime button again without tweaking the algorithm or its parameters effectively acts as an undo for the last action.
+If you haven't painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Pressing the prime button again without tweaking the algorithm or its parameters effectively acts as an undo for the last action.
 
 Opt out of a prepared pattern by using the cancel button:
 
@@ -547,7 +546,7 @@ MIDI devices can be configured to load a stored patch through the Norns' params 
 
 #### Adding Patterns to Channels
 
-The core of your rhythm and harmony sections are formed by adding patterns to channels. To do this, first select a channel using the channel buttons. A single channel can accommodate multiple patterns, and likewise, a single pattern can be assigned to multiple channels. To assign patterns, use the pattern select row, located second from the top on Mosaic’s Grid UI.
+The core of your rhythm and harmony sections are formed by adding patterns to channels. To do this, first select a channel using the channel buttons. A single channel can accommodate multiple patterns, and likewise, a single pattern can be assigned to multiple channels. To assign patterns, use the pattern select row, located second from the top on Mosaic's Grid UI.
 
 <img alt="Channel editor pattern assign buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/pattern-assign-buttons.svg" width="300" />
 
@@ -650,7 +649,7 @@ These settings affect how velocity values are calculated for overlapping steps:
 * **Average**: The velocity is the average of the velocities from overlapping steps in each pattern.
 * **Higher**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and adding the highest velocity.
 * **Lower**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and not adding the highest value back.
-* **Pattern**: To use a specific pattern’s velocity values, hold the velocity merge button and press the pattern's select button.
+* **Pattern**: To use a specific pattern's velocity values, hold the velocity merge button and press the pattern's select button.
 
 <img alt="Channel editor velocity merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg" width="300" />
 
@@ -661,7 +660,7 @@ These modes dictate how the duration of notes is calculated for overlapping step
 * **Average**: The length is the average of the lengths from overlapping steps in each pattern.
 * **Longer**: The length is determined by taking the average length, subtracting the shortest length, and adding the longest length.
 * **Shorter**: The length is calculated by subtracting the shortest length from the average of each step's length minus the shortest length.
-* **Pattern**: To apply a specific pattern’s length values, hold the length merge button and press the pattern's select button.
+* **Pattern**: To apply a specific pattern's length values, hold the length merge button and press the pattern's select button.
 
 Length merge modes are set by holding shift (K1) and pressing the velocity merge mode button.
 
@@ -808,6 +807,10 @@ The Chord Velocity Modifier incrementally adjusts the velocity of successive not
 ##### Chord Shape Modifier
 
 The Chord Shape Modifiers alters the order of the chord masks that are played using the Chord Strum and Chord Arpeggio params. 
+
+##### Mute Root Note
+
+The Mute Root Note param allows you to silence the root note of a chord while allowing other chord notes to play. When enabled, any chord played on that step will omit its root note while still playing all other chord notes. This can be used to create more varied chord voicings and inversions.
 
 ### Scale Editor
 
@@ -1023,7 +1026,7 @@ To ensure the longevity of your work, it's important to save your creations into
 
 ### Options
 
-Various aspects of Mosaic can be configured from the param section on your Norns, under the Mosaic section. This flexibility allows you to tailor the sequencer’s behavior to match your creative needs.
+Various aspects of Mosaic can be configured from the param section on your Norns, under the Mosaic section. This flexibility allows you to tailor the sequencer's behavior to match your creative needs.
 
 #### Sequencer Options
 

@@ -1,3 +1,7 @@
+## 1.1.3
+
+- Added mute_root_note trig param to silence the root note of chords while allowing other chord notes to play.
+
 ## 1.1.2
 
 - Chord masks now follow the root note after random note shifts have been applied.

@@ -359,11 +359,6 @@ function test_random_notes_with_chords()
   -- Should get three note on events - root D and chord notes F and A
   local note_events = midi_note_on_events
   
-  -- Print actual values for debugging
-  print("Root note:", note_events[1][1])  -- Should be 62 (D)
-  print("First chord note:", note_events[2][1])  -- Should be 65 (F)
-  print("Second chord note:", note_events[3][1])  -- Should be 69 (A)
-  
   luaunit.assert_equals(#note_events, 3)
   luaunit.assert_equals(note_events[1][1], 62) -- D
   luaunit.assert_equals(note_events[2][1], 65) -- F 
