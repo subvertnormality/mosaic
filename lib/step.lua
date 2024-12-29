@@ -811,14 +811,17 @@ function step.handle(c, current_step)
     local note
     local relative_note_mask_value
     local octave_mod_offset = 0
+
     if note_mask_value and note_mask_value > -1 then
       relative_note_mask_value, octave_mod_offset = quantiser.translate_note_mask_to_relative_scale_position(note_mask_value, channel.step_scale_number)
+
       if params:get("quantiser_fully_act_on_note_masks") == 2 then
-        note = quantiser.process(relative_note_mask_value + octave_mod + octave_mod_offset * 12 + random_shift, octave_mod, transpose, channel.step_scale_number, do_pentatonic)
+        local final_octave = octave_mod + octave_mod_offset
+        note = quantiser.process(relative_note_mask_value + random_shift, final_octave, transpose, channel.step_scale_number, do_pentatonic)
       elseif params:get("quantiser_act_on_note_masks") == 2 then
         note = quantiser.snap_to_scale(note_mask_value + octave_mod * 12 + random_shift, channel.step_scale_number, transpose)
       else
-        note = note_mask_value + octave_mod * 12 + random_shift
+        note = note_mask_value + random_shift + octave_mod * 12
       end
     else
       local shifted_note_val = note_value + random_shift

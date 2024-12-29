@@ -239,8 +239,11 @@ local function make_cache_key(root_note, chord_rotation, scale_number, transpose
 end
 
 local function process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree, do_pentatonic)
+  
+  
   local root_note = program.get().root_note + 60
   local chord_rotation = program.get().chord - 1
+
   local scale_container = program.get_scale(scale_number)
 
   if scale_container.root_note > -1 then
@@ -333,39 +336,25 @@ function quantiser.process(note_number, octave_mod, transpose, scale_number, do_
 end
 
 function quantiser.translate_note_mask_to_relative_scale_position(note_mask_value, scale_number)
+
   local scale_container = program.get_scale(scale_number)
   if not scale_container then return nil end
   if type(note_mask_value) ~= "number" then return nil end
 
   -- Get root note
   local root_note = scale_container.root_note > -1 and scale_container.root_note or 0
-  
-  -- Calculate octave relative to program root note
-  local octave = math.floor(((note_mask_value - program.get().root_note - 60) - root_note) / 12)
-  
-  -- Create a scale starting from root note for two octaves to handle snapping
-  local root_scale = {}
-  for i = 1, #scale_container.scale do
-    root_scale[i] = scale_container.scale[i] + root_note
-    root_scale[i + #scale_container.scale] = scale_container.scale[i] + root_note + 12
-  end
-  
-  -- Find the closest note in the root-transposed scale
-  local snapped_note = musicutil.snap_note_to_array(note_mask_value, root_scale)
-  
-  -- Find which octave of the scale the snapped note belongs to
-  local scale_octave = math.floor((snapped_note - root_note) / 12)
-  
-  -- Get the position within a single octave of the scale (1-7)
-  local normalized_note = (snapped_note - root_note - (scale_octave * 12)) % 12
-  local position = fn.find_index_by_value(scale_container.scale, normalized_note)
-  
-  if position then
-    -- Return both the position (0-6) and octave
-    return position - 1, octave
-  end
-  
-  return nil
+  local octave = math.floor((note_mask_value - 60 - root_note) / 12)
+
+  -- Create a transposed scale
+  local scale = fn.deep_copy(scale_container.scale)
+  scale = fn.transpose_scale(scale, root_note)
+
+  local snapped_note = musicutil.snap_note_to_array(note_mask_value, scale)
+  local position = fn.find_index_by_value(scale, snapped_note)
+  local position_in_octave = (position - 1) % 7
+
+  return position_in_octave, octave
+
 end
 
 function quantiser.process_chord_note_for_mask(note_mask_value, unscaled_chord_value, octave_mod, transpose, scale_number)

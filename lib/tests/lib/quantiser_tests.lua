@@ -1180,7 +1180,7 @@ function test_translate_note_mask_to_relative_scale_position_with_root_note()
   pos, oct = quantiser.translate_note_mask_to_relative_scale_position(71, scale_number)
   luaunit.assert_equals(pos, 5) -- B4 -> position 5
   luaunit.assert_equals(oct, 0) -- B4 -> octave 0
-  
+
   pos, oct = quantiser.translate_note_mask_to_relative_scale_position(73, scale_number)
   luaunit.assert_equals(pos, 6) -- C#5 -> position 6
   luaunit.assert_equals(oct, 0) -- C#5 -> octave 0

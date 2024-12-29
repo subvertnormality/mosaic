@@ -1,6 +1,9 @@
 local step = include("mosaic/lib/step")
 pattern = include("mosaic/lib/pattern")
 
+local quantiser = include("mosaic/lib/quantiser")
+
+
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_mock")
 include("mosaic/lib/tests/helpers/mocks/m_midi_mock")
@@ -624,7 +627,7 @@ function test_random_notes_with_note_mask_and_chords()
   local note_events = midi_note_on_events
   
   luaunit.assert_equals(#note_events, 3)
-  luaunit.assert_equals(note_events[1][1], 62) -- D4 (C4 + random shift)
+  luaunit.assert_equals(note_events[1][1], 61) -- D4 (C4 + random shift)
   luaunit.assert_equals(note_events[2][1], 65) -- F4 (D4 + third)
   luaunit.assert_equals(note_events[3][1], 69) -- A5 (D4 + fifth)
 end
@@ -669,7 +672,7 @@ function test_random_notes_with_note_mask_and_chords_multiple_random_sources()
   local note_events = midi_note_on_events
   
   luaunit.assert_equals(#note_events, 3)
-  luaunit.assert_equals(note_events[1][1], 65) -- F4 (C4 + bipolar shift + twos shift)
+  luaunit.assert_equals(note_events[1][1], 63) -- F4 (C4 + bipolar shift + twos shift)
   luaunit.assert_equals(note_events[2][1], 69) -- A5 (E4 + third)
   luaunit.assert_equals(note_events[3][1], 72) -- C4 (E4 + fifth)
 end
@@ -711,7 +714,168 @@ function test_random_notes_with_note_mask_and_chords_minor_scale()
   local note_events = midi_note_on_events
   
   luaunit.assert_equals(#note_events, 3)
-  luaunit.assert_equals(note_events[1][1], 62) -- D4 (C4 + random shift)
+  luaunit.assert_equals(note_events[1][1], 61) -- D4 (C4 + random shift)
   luaunit.assert_equals(note_events[2][1], 65) -- F4 (D4 + minor third)
   luaunit.assert_equals(note_events[3][1], 69) -- A4 (D4 + fifth)
+end
+
+function test_note_mask_with_fully_act_on_note_masks_simple()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 61 -- Fixed C#4 (should be quantized to D4 in C major)
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up C major scale
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  scale.chord = 2
+
+  -- Enable fully act on note masks
+  params:set("quantiser_fully_act_on_note_masks", 2)
+  
+  step.handle(1, 1)
+  
+  local note_events = midi_note_on_events
+  luaunit.assert_equals(#note_events, 1)
+  luaunit.assert_equals(note_events[1][1], 62) -- D4 (C#4 quantized to next scale degree)
+end
+
+function test_note_mask_with_fully_act_on_note_masks_and_transpose()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up C major scale with transpose
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  scale.chord = 1
+  scale.transpose = 2
+  -- Enable fully act on note masks
+  params:set("quantiser_fully_act_on_note_masks", 2)
+  
+  step.handle(1, 1)
+  
+  local note_events = midi_note_on_events
+  luaunit.assert_equals(#note_events, 1)
+  luaunit.assert_equals(note_events[1][1], 62) -- E4 (C4 transposed up 2 semitones)
+end
+
+function test_note_mask_with_fully_act_on_note_masks_and_chords_minor_scale()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 61 -- Fixed C#4 (should be quantized to D4 in C major)
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2  -- Third
+  channel.chord_two_mask = 4  -- Fifth
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up minor scale
+  program.get().default_scale = 1
+
+  local scale = quantiser.get_scales()[3]
+  
+  program.set_scale(
+    1,
+    {
+      number = 1,
+      scale = scale.scale,
+      pentatonic_scale = scale.pentatonic_scale,
+      chord = 1,
+      root_note = 0,
+      transpose = 2
+    }
+  )
+
+  -- Enable fully act on note masks
+  params:set("quantiser_fully_act_on_note_masks", 2)
+  
+  step.handle(1, 1)
+  
+  local note_events = midi_note_on_events
+  luaunit.assert_equals(#note_events, 3)
+  luaunit.assert_equals(note_events[1][1], 62) -- C tranposed up 2 semitones
+  luaunit.assert_equals(note_events[2][1], 65) -- E4 (C + minor third) tranposed up 2 semitones
+  luaunit.assert_equals(note_events[3][1], 69) -- G4 (C + fifth) tranposed up 2 semitones
+end
+
+function test_note_mask_with_fully_act_on_note_masks_octave_and_transpose()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 73 -- Fixed C#5 (should be quantized to D5 in C major)
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+
+  local channel = program.get_channel(song_pattern, 1)
+  channel.octave = 1 -- Add octave
+
+  pattern.update_working_patterns()
+
+  -- Set up C major scale with transpose
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  scale.transpose = 2 -- Transpose up 2 semitones
+
+  -- Enable fully act on note masks
+  params:set("quantiser_fully_act_on_note_masks", 2)
+  
+  step.handle(1, 1)
+  
+  local note_events = midi_note_on_events
+  luaunit.assert_equals(#note_events, 1)
+  luaunit.assert_equals(note_events[1][1], 86) -- E6 (C#5 quantized to D5, octave up, transposed up 2 semitones to E)
 end
