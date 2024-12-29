@@ -332,6 +332,42 @@ function quantiser.process(note_number, octave_mod, transpose, scale_number, do_
   return process_handler(note_number, octave_mod, transpose, scale_number, true, true, do_pentatonic)
 end
 
+function quantiser.translate_note_mask_to_relative_scale_position(note_mask_value, scale_number)
+  local scale_container = program.get_scale(scale_number)
+  if not scale_container then return nil end
+  if type(note_mask_value) ~= "number" then return nil end
+
+  -- Get root note
+  local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
+  
+  -- Calculate octave relative to middle C (60)
+  local octave = math.floor((note_mask_value - 60) / 12)
+  
+  -- Create a scale starting from root note for two octaves to handle snapping
+  local root_scale = {}
+  for i = 1, #scale_container.scale do
+    root_scale[i] = scale_container.scale[i] + root_note
+    root_scale[i + #scale_container.scale] = scale_container.scale[i] + root_note + 12
+  end
+  
+  -- Find the closest note in the root-transposed scale
+  local snapped_note = musicutil.snap_note_to_array(note_mask_value, root_scale)
+  
+  -- Find which octave of the scale the snapped note belongs to
+  local scale_octave = math.floor((snapped_note - root_note) / 12)
+  
+  -- Get the position within a single octave of the scale (1-7)
+  local normalized_note = (snapped_note - root_note - (scale_octave * 12)) % 12
+  local position = fn.find_index_by_value(scale_container.scale, normalized_note)
+  
+  if position then
+    -- Return both the position (1-7) and octave
+    return position, octave
+  end
+  
+  return nil
+end
+
 function quantiser.process_chord_note_for_mask(note_mask_value, unscaled_chord_value, octave_mod, transpose, scale_number)
   local scale_container = program.get_scale(scale_number)
   local scale = fn.deep_copy(scale_container.scale)

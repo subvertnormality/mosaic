@@ -869,21 +869,24 @@ function step.handle(c, current_step)
 
     local random_shift = fn.transform_random_value(step.process_stock_params(c, current_step, "bipolar_random_note") or 0) +
                          fn.transform_twos_random_value(step.process_stock_params(c, current_step, "twos_random_note") or 0)
-                         
+                  
+    local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
+                         (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
+                         (params:get("random_lock_to_pentatonic") == 2 and random_shift > 0)            
+
     local note
     if note_mask_value and note_mask_value > -1 then
-      if params:get("quantiser_act_on_note_masks") == 2 then
+      if params:get("quantiser_fully_act_on_note_masks") == 2 then
+        local relative_note_mask_value = quantiser.translate_note_mask_to_relative_scale_position(note_mask_value, channel.step_scale_number)
+        note = quantiser.process(relative_note_mask_value + octave_mod * 12 + random_shift, octave_mod, transpose, channel.step_scale_number, do_pentatonic)
+        note_mask_value = -1 -- process as a regular note from now on
+      elseif params:get("quantiser_act_on_note_masks") == 2 then
         note = quantiser.snap_to_scale(note_mask_value + octave_mod * 12 + random_shift, channel.step_scale_number, transpose)
       else
         note = note_mask_value + octave_mod * 12 + random_shift
       end
     else
       local shifted_note_val = note_value + random_shift
-
-      local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
-                            (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
-                            (params:get("random_lock_to_pentatonic") == 2 and random_shift > 0)
-
       note = quantiser.process(shifted_note_val, octave_mod, transpose, channel.step_scale_number, do_pentatonic)
     end
 

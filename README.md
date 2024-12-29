@@ -1066,9 +1066,13 @@ The "Elektron program change channel" setting determines which MIDI channel to s
 
 #### Quantizer Options
 
-##### Quantize Note Masks
+##### Snap Note Masks to Scale
 
-"Quantize note masks" is also on by default. With this setting enabled, note masks snap to the currently selected scale, but are not altered by scale degree or rotation adjustments.
+"Snap Note Masks to Scale" is also on by default. With this setting enabled, note masks snap to the currently selected scale, but are not altered by scale degree or rotation adjustments.
+
+##### Quantise Note Masks
+
+"Quantise Note Masks" is off by default. With this setting enabled, note masks are quantised to the currently selected scale and are altered by scale degree or rotation adjustments.
 
 ##### Scales Lock Until Pattern End
 
