@@ -259,13 +259,13 @@ local stock_params = {
   },
   {
     ["id"] = "mute_root_note",
-    ["name"] = "Mute Chord Root Note",
+    ["name"] = "Mute Chord Root",
     ["short_descriptor_1"] = "CHRD",
     ["short_descriptor_2"] = "1NMT",
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
     ["cc_max_value"] = 1,
-    ["ui_labels"] = = {
+    ["ui_labels"] = {
       "OFF",
       "ON"
     },
@@ -273,13 +273,13 @@ local stock_params = {
   },
   {
     ["id"] = "fully_quantise_mask",
-    ["name"] = "Fully Quantise Note Mask",
+    ["name"] = "Quantise Note Mask",
     ["short_descriptor_1"] = "QUAN",
     ["short_descriptor_2"] = "MASK",
-    ["off_value"] = -1,
-    ["cc_min_value"] = -1,
-    ["cc_max_value"] = 1,
-    ["ui_labels"] = = {
+    ["off_value"] = 0,
+    ["cc_min_value"] = 0,
+    ["cc_max_value"] = 2,
+    ["ui_labels"] = {
       "X",
       "OFF",
       "ON"
