@@ -89,7 +89,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Sequencer Params](#sequencer-params)
         + [Trig Probability](#trig-probability)
         + [Fixed Note](#fixed-note)
-        + [Quantized Fixed Note](#quantized-fixed-note)
+        + [Quantised Fixed Note](#quantised-fixed-note)
         + [Random Note](#random-note)
         + [Random Twos Note](#random-twos-note)
         + [Chord Strum](#chord-strum)
@@ -126,9 +126,10 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
       - [Elektron Program Change Channel](#elektron-program-change-channel)
     + [Parameter Lock Options](#parameter-lock-options)
       - [Trigless Locks](#trigless-locks)
-    + [Quantizer Options](#quantizer-options)
-      - [Quantize Note Masks](#quantize-note-masks)
-      - [Scales Lock Until Ptn End](#scales-lock-until-ptn-end)
+    + [Quantiser Options](#quantiser-options)
+      - [Snap Note Masks to Scale](#snap-note-masks-to-scale)
+      - [Quantise Note Masks](#quantise-note-masks)
+      - [Scales Lock Until Pattern End](#scales-lock-until-pattern-end)
       - [Lock All to Pentatonic](#lock-all-to-pentatonic)
       - [Lock Random to Pentatonic](#lock-random-to-pentatonic)
       - [Lock Merged to Pentatonic](#lock-merged-to-pentatonic)
@@ -179,9 +180,9 @@ This allows you to easily access and use only your preferred devices within Mosa
 
 ##### Adding Custom Devices
 
-Once you've copied the stock device configuration files into the `data > mosaic > config` folder, you can also personalize these configurations to better suit your setup. This is particularly useful for setting common defaults like the MIDI output device.
+Once you've copied the stock device configuration files into the `data > mosaic > config` folder, you can also personalise these configurations to better suit your setup. This is particularly useful for setting common defaults like the MIDI output device.
 
-You can customize Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device's MIDI specifications. You can create, load and edit midi device config files using the [Mosaic Config Creator](https://subvertnormality.github.io/mosaic/config_creator.html).
+You can customise Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device's MIDI specifications. You can create, load and edit midi device config files using the [Mosaic Config Creator](https://subvertnormality.github.io/mosaic/config_creator.html).
 
 ##### Mods and Software Devices
 
@@ -235,7 +236,7 @@ To start the sequencer, press the lowest left hand button on the grid. To stop t
 
 To enable record mode, press the second button from the left on the grid.
 
-When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantized to align with the current step.
+When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step.
 
 Changes to trig parameters are also recorded on the active channel. Recording begins the first time a trig parameter is modified. During recording, all parameter values are saved as trig locks, overwriting existing locks until the end of the current song pattern. Recording resumes automatically when a trig parameter is adjusted again using the encoder.
 
@@ -356,7 +357,7 @@ Use the live recording mode to play your melodies directly over your rhythm and 
 
 ### Modulation, Movement, and Interest
 
-Even a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [Trig Parameters](#trig-parameters) and [Trig Locks](#trig-locks). "Trig lock" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantized, at each step, offering precise manipulation over the quality and dynamics of your music. 
+Even a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [Trig Parameters](#trig-parameters) and [Trig Locks](#trig-locks). "Trig lock" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantised, at each step, offering precise manipulation over the quality and dynamics of your music. 
 
 ### Song Composition
 
@@ -387,7 +388,7 @@ Trigs are added in the pattern editor. Using the top row, pick one of the 16 ava
 
 <img alt="Pattern editor pattern select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-select-buttons.svg" width="300" />
 
-To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolize a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. In a single pattern, one trig's duration ends upon meeting another.
+To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolise a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. In a single pattern, one trig's duration ends upon meeting another.
 
 <img alt="Pattern editor step edit buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-step-trigger-edit-buttons.svg" width="300" />
 
@@ -634,10 +635,10 @@ These modes define how trigs are applied when there are overlapping steps across
 
 These modes determine how note values are handled when steps overlap:
 
-* **Average**: The note value for overlapping steps is the average of those steps' values in each pattern, subsequently quantized.
+* **Average**: The note value for overlapping steps is the average of those steps' values in each pattern, subsequently quantised.
 * **Higher**: The highest note value from overlapping steps is used after calculating the average and adjusting by subtracting the lowest and adding the highest note value, followed by quantization.
 * **Lower**: The lowest note value is used after calculating the average and subtracting the lowest note value from the average, followed by quantization.
-* **Pattern**: To prioritize a specific pattern's note values during conflicts, hold the note merge button and select the desired pattern. You can even select patterns that aren't current asigned to the active channel.
+* **Pattern**: To prioritise a specific pattern's note values during conflicts, hold the note merge button and select the desired pattern. You can even select patterns that aren't current asigned to the active channel.
 
 By default, notes will snap to the pentatonic version of the currently active scale to assist with avoiding unpleasant harmonic interactions. This can be disabled in _Mosaic_'s settings.
 
@@ -710,7 +711,7 @@ To jump to the latest action and erase all subsequent memory, hold shift (K1) an
 
 #### Channel Length
 
-Channels in your sequencer can be customized to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
+Channels in your sequencer can be customised to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
 
 To adjust the length of a channel, you need to specify the start and end points. Hold down the button corresponding to the start step in the channel editor. While holding it, press the button for the desired end step. The active range of the channel will be indicated by buttons that appear slightly brighter than the others.
 
@@ -752,7 +753,7 @@ In the second user interface page of the channel editor on the Norns screen, you
 * **Default Parameter Values**: By default, a pre-set parameter value is transmitted to your selected device on steps without a trig lock. If a parameter's trig lock is set to "off," the mosaic will not send any value to your device for that parameter.
 * **Handling Off Settings**: If you set a trig lock to "off" on a step, the system will continue to send the last trig locked value instead of reverting to the default parameter value.
 
-These controls offer flexibility and precision in shaping the behavior of each sequence, ensuring that your musical creativity can be fully realized through the Norns system.
+These controls offer flexibility and precision in shaping the behavior of each sequence, ensuring that your musical creativity can be fully realised through the Norns system.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -771,27 +772,27 @@ This trig lock can be used to ensure trigs play only with a certain probability.
 
 ##### Fixed Note
 
-Use this trig param to fix your channel to any MIDI note. The value represents a MIDI note number. The note is _not_ quantized. This is useful if you have a drum pattern and you don't want note data to affect the drum sound you're playing on a drum machine. This will override any quantized fixed note values or random note values.
+Use this trig param to fix your channel to any MIDI note. The value represents a MIDI note number. The note is _not_ quantised. This is useful if you have a drum pattern and you don't want note data to affect the drum sound you're playing on a drum machine. This will override any quantised fixed note values or random note values.
 
-##### Quantized Fixed Note
+##### Quantised Fixed Note
 
-You can use this trig param to manually select a note in the currently selected scale at any step. The value represents note number, where 0 is the root and higher numbers represent notes in the quantized scale. This overrides the note data coming in from the patterns. This will override random note values.
+You can use this trig param to manually select a note in the currently selected scale at any step. The value represents note number, where 0 is the root and higher numbers represent notes in the quantised scale. This overrides the note data coming in from the patterns. This will override random note values.
 
 ##### Random Note
 
-This trig param introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random twos note trig param. By default, random notes are quantized to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings.
+This trig param introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random twos note trig param. By default, random notes are quantised to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings.
 
 ##### Random Twos Note
 
-Similar to random note, this trig param introduces an element of random to your selected notes. The difference here is that twos note restricts values to those divisible by two. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note two higher in the scale. A value of 2 will randomly give your existing note, the note two higher in your selected scale, or the note two lower. A value of 3 will randomly select notes -2, 0, 2 or 4. A value of 4 will randomly select notes -4, -2, 0, 2 or 4. And so on. Use trig locks to really spice things up. These can be combined with random note trig params. Again, random notes are quantized to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings.
+Similar to random note, this trig param introduces an element of random to your selected notes. The difference here is that twos note restricts values to those divisible by two. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note two higher in the scale. A value of 2 will randomly give your existing note, the note two higher in your selected scale, or the note two lower. A value of 3 will randomly select notes -2, 0, 2 or 4. A value of 4 will randomly select notes -4, -2, 0, 2 or 4. And so on. Use trig locks to really spice things up. These can be combined with random note trig params. Again, random notes are quantised to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings.
 
 ##### Chord Strum
 
-The Chord Strum param dynamically spaces selected chord masks using the selected step division, ensuring they align rhythmically with the channel's settings. Notes are quantized to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration. Each chord note is played once.
+The Chord Strum param dynamically spaces selected chord masks using the selected step division, ensuring they align rhythmically with the channel's settings. Notes are quantised to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration. Each chord note is played once.
 
 ##### Chord Arpeggio
 
-The Chord Arp param is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantized to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.
+The Chord Arp param is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantised to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.
 
 ##### Chord Acceleration
 
@@ -815,7 +816,7 @@ The Mute Root Note param allows you to silence the root note of a chord while al
 
 ##### Fully Quantise Mask
 
-The Fully Quantise Mask param controls whether note masks on a step are fully quantized to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantized to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes.
+The Fully Quantise Mask param controls whether note masks on a step are fully quantised to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantised to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes.
 
 ### Scale Editor
 
@@ -842,7 +843,7 @@ You can also adjust the rate of the global scale track and set its length indepe
 
 #### Transposition
 
-As well as setting a transposition value per scale, you can transpose your entire Song Sequence using the global quantizer transposition fader, either globally or by step using [transposition locks](#transposition-locks). Global and trig transposition applies on top of the currently selected scale's transposition value.
+As well as setting a transposition value per scale, you can transpose your entire Song Sequence using the global quantiser transposition fader, either globally or by step using [transposition locks](#transposition-locks). Global and trig transposition applies on top of the currently selected scale's transposition value.
 
 <img alt="Scale editor transposition fader" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/transposition-fader.svg" width="300" />
 
@@ -1069,15 +1070,15 @@ The "Elektron program change channel" setting determines which MIDI channel to s
 
 "Trigless locks" is enabled by default, meaning locks on steps with no active trig are still honored.
 
-#### Quantizer Options
+#### Quantiser Options
 
 ##### Snap Note Masks to Scale
 
-"Snap Note Masks to Scale" is also on by default. With this setting enabled, note masks snap to the currently selected scale, but are not altered by scale degree or rotation adjustments.
+"Snap Note Masks to Scale" is on by default. With this setting enabled, note masks snap to the currently selected scale, but are not altered by scale degree or rotation adjustments.
 
 ##### Quantise Note Masks
 
-"Quantise Note Masks" is off by default. With this setting enabled, all note masks are quantised to the currently selected scale and are altered by scale degree or rotation adjustments.
+"Quantise Note Masks" is off by default. With this setting enabled, all note masks are fully quantised to the currently selected scale and are altered by scale degree and transposition adjustments. Overrides the Snap Note Mask to Scale setting.
 
 ##### Scales Lock Until Pattern End
 
