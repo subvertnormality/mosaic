@@ -1,4 +1,4 @@
-## 1.1.3
+## 1.2.0
 
 - Added mute_root_note trig param to silence the root note of chords while allowing other chord notes to play.
 - Added global option to fully quantize note masks (quantiser_fully_act_on_note_masks) to make note masks follow scale degree and rotation changes.
