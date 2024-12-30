@@ -1,4 +1,4 @@
--- mosaic v1.1.1
+-- mosaic v1.1.3
 -- grid-first rhythm and 
 -- harmony sequencer.
 --
@@ -249,7 +249,7 @@ function init()
 
   blink()
 
-  params:add_group("mosaic", "MOSAIC", 32)
+  params:add_group("mosaic", "MOSAIC", 33)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -336,7 +336,8 @@ function init()
   params:add_separator("Parameter locks")
   params:add_option("trigless_locks", "Trigless locks", {"Off", "On"}, 2)
   params:add_separator("Quantiser")
-  params:add_option("quantiser_act_on_note_masks", "Quantise note masks", {"Off", "On"}, 2)
+  params:add_option("quantiser_act_on_note_masks", "Snap note masks to scale", {"Off", "On"}, 2)
+  params:add_option("quantiser_fully_act_on_note_masks", "Quantise note masks", {"Off", "On"}, 1)
   params:add_option("quantiser_trig_lock_hold", "Scales lock until ptn end", {"Off", "On"}, 2)
   params:add_option("all_scales_lock_to_pentatonic", "Lock all to pentatonic", {"Off", "On"}, 1)
   params:add_option("random_lock_to_pentatonic", "Lock random to pent.", {"Off", "On"}, 2)

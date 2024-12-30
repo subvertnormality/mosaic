@@ -31,6 +31,7 @@ local function sync_pattern_values(merged_pattern, pattern, s)
   merged_pattern.lengths[s] = pattern.lengths[s]
   merged_pattern.velocity_values[s] = pattern.velocity_values[s]
   merged_pattern.note_values[s] = pattern.note_values[s]
+  merged_pattern.note_mask_values[s] = pattern.note_mask_values[s]
   return merged_pattern
 end
 

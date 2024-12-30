@@ -77,7 +77,9 @@ local function should_process_param(param)
       "chord_velocity_modifier",
       "chord_spread",
       "chord_strum_pattern",
-      "fixed_note"
+      "fixed_note",
+      "mute_root_note",
+      "fully_quantise_mask"
   }
   
   if not param then return false end
@@ -455,7 +457,7 @@ local function get_chord_number(i, total_notes, chord_strum_pattern)
   return i -- Default case (pattern 1 or nil)
 end
 
-local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
+local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_func)
   local c = note_container.channel
   local channel = program.get_channel(program.get().selected_song_pattern, c)
 
@@ -467,99 +469,58 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   local acceleration_accumulator = 0
   
   for i, cn in ipairs(chord_notes) do
-
     local chord_note = chord_notes[get_chord_number(i, #chord_notes, chord_strum_pattern)]
 
     if not chord_note or chord_note == 0 then
       sequenced_chord_notes[i] = false
     else
-
-  
-      if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
-          sequenced_chord_notes[i] = {
-          note_mask_value = unprocessed_note_container.note_mask_value + unprocessed_note_container.random_shift,
-          chord_note = chord_note,
-          octave_mod = unprocessed_note_container.octave_mod,
-          transpose = unprocessed_note_container.transpose
-        }
-      else
-        sequenced_chord_notes[i] = {
-          note_value = unprocessed_note_container.note_value + (chord_note or 0) + unprocessed_note_container.random_shift,
-          octave_mod = unprocessed_note_container.octave_mod,
-          transpose = unprocessed_note_container.transpose
-        }
-      end
-    end
-
-  end
-
-
-  if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
-    if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
-        table.insert(sequenced_chord_notes, 1, 
-        {
-          note_mask_value = unprocessed_note_container.note_mask_value + unprocessed_note_container.random_shift,
-          octave_mod = unprocessed_note_container.octave_mod,
-          transpose = unprocessed_note_container.transpose
-        }
-      )
-    else
-
-      table.insert(sequenced_chord_notes, 1, 
-        {
-          note_value = unprocessed_note_container.note_value + unprocessed_note_container.random_shift,
-          octave_mod = unprocessed_note_container.octave_mod,
-          transpose = unprocessed_note_container.transpose
-        }
-      )
-    end
-  elseif chord_strum_pattern == 2 or chord_strum_pattern == 4 then
-    if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
-        table.insert(sequenced_chord_notes,  
-        {
-          note_mask_value = unprocessed_note_container.note_mask_value + unprocessed_note_container.random_shift,
-          chord_note = chord_note,
-          octave_mod = unprocessed_note_container.octave_mod,
-          transpose = unprocessed_note_container.transpose
-        }
-      )
-    else
-      table.insert(sequenced_chord_notes,  
-        {
-          note_value = unprocessed_note_container.note_value + unprocessed_note_container.random_shift,
-          octave_mod = unprocessed_note_container.octave_mod,
-          transpose = unprocessed_note_container.transpose
-        }
-      )
+      sequenced_chord_notes[i] = {
+        note_value = unprocessed_note_container.note_value + chord_note + unprocessed_note_container.random_shift,
+        octave_mod = unprocessed_note_container.octave_mod,
+        transpose = unprocessed_note_container.transpose
+      }
     end
   end
 
-  if sequenced_chord_notes[1] and sequenced_chord_notes[1].note_mask_value then
-    local note = quantiser.process_chord_note_for_mask(
-      sequenced_chord_notes[1].note_mask_value,
-      sequenced_chord_notes[1].chord_note or nil,
-      sequenced_chord_notes[1].octave_mod,
-      sequenced_chord_notes[1].transpose,
-      channel.step_scale_number
-    )
-    play_arp_note(note, note_container, note_container.velocity, arp_division, note_on_func)
-    note_dashboard_values.note = note
-    note_dashboard_values.velocity = note_container.velocity
-    note_dashboard_values.length = arp_division
-  elseif sequenced_chord_notes[1] and sequenced_chord_notes[1].note_value then
-    local note = quantiser.process(
-      sequenced_chord_notes[1].note_value + (sequenced_chord_notes[1].chord_note or 0),
-      sequenced_chord_notes[1].octave_mod,
-      sequenced_chord_notes[1].transpose,
-      channel.step_scale_number
-    )
-    play_arp_note(note, note_container, note_container.velocity, arp_division, note_on_func)
-    note_dashboard_values.note = note
-    note_dashboard_values.velocity = note_container.velocity
-    note_dashboard_values.length = arp_division
+  -- Add root note based on strum pattern if not muted
+  if not mute_root then
+    if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
+
+      table.insert(sequenced_chord_notes, 1, {
+        note_value = unprocessed_note_container.note_value + unprocessed_note_container.random_shift,
+        octave_mod = unprocessed_note_container.octave_mod,
+        transpose = unprocessed_note_container.transpose
+      })
+
+    elseif chord_strum_pattern == 2 or chord_strum_pattern == 4 then
+      table.insert(sequenced_chord_notes, {
+        note_value = unprocessed_note_container.note_value + unprocessed_note_container.random_shift,
+        octave_mod = unprocessed_note_container.octave_mod,
+        transpose = unprocessed_note_container.transpose
+      })
+    end
   end
 
-  arp_note[c] = 2
+  -- Only play initial note if not muted
+  if not mute_root then
+    if sequenced_chord_notes[1] and sequenced_chord_notes[1].note_value then
+
+      local note = quantiser.process(
+        sequenced_chord_notes[1].note_value + (sequenced_chord_notes[1].chord_note or 0),
+        sequenced_chord_notes[1].octave_mod,
+        sequenced_chord_notes[1].transpose,
+        channel.step_scale_number
+      )
+
+      play_arp_note(note, note_container, note_container.velocity, arp_division, note_on_func)
+      note_dashboard_values.note = note
+      note_dashboard_values.velocity = note_container.velocity
+      note_dashboard_values.length = arp_division
+    end
+  end
+
+  -- Start arp from first chord note when root is muted
+  arp_note[c] = mute_root and 1 or 2
 
   local number_of_executions = 1
   local total_notes = #sequenced_chord_notes  -- Cache the length of the processed_chord_notes table
@@ -610,26 +571,14 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     note_to_play = find_next_note()
 
     if note_to_play then
-      if note_to_play and note_to_play.note_mask_value and type(note_to_play.note_mask_value) == "number" then
-        local note = quantiser.process_chord_note_for_mask(
-          note_to_play.note_mask_value,
-          note_to_play.chord_note or nil,
-          note_to_play.octave_mod,
-          note_to_play.transpose,
-          channel.step_scale_number
-        )
-        play_arp_note(note, note_container, velocity, arp_division, note_on_func)
-        table.insert(note_dashboard_values.chords, note)
-      else
-        local note = quantiser.process(
-          note_to_play.note_value + (note_to_play.chord_note or 0),
-          note_to_play.octave_mod,
-          note_to_play.transpose,
-          channel.step_scale_number
-        )
-        play_arp_note(note, note_container, velocity, arp_division, note_on_func)
-        table.insert(note_dashboard_values.chords, note)
-      end
+      local note = quantiser.process(
+        note_to_play.note_value + (note_to_play.chord_note or 0),
+        note_to_play.octave_mod,
+        note_to_play.transpose,
+        channel.step_scale_number
+      )
+      play_arp_note(note, note_container, velocity, arp_division, note_on_func)
+      table.insert(note_dashboard_values.chords, note)
     end
 
     arp_note[c] = arp_note[c] + 1
@@ -651,6 +600,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local c = note_container.channel
   local channel = program.get_channel(program.get().selected_song_pattern, c)
   
+  -- Check if root note should be muted
+  local mute_root = step.process_stock_params(c, current_step, "mute_root_note") == 1
+  
   -- Cache frequently accessed values
   local step_chord_masks = channel.step_chord_masks[current_step]
   local chord_one = step_chord_masks and step_chord_masks[1] or channel.chord_one_mask
@@ -671,7 +623,6 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   
   -- Cache note processing values
   local note_value = unprocessed_note_container.note_value
-  local note_mask_value = unprocessed_note_container.note_mask_value
   local octave_mod = unprocessed_note_container.octave_mod
   local transpose = unprocessed_note_container.transpose
   local random_shift = unprocessed_note_container.random_shift
@@ -685,7 +636,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   if arp_division then
     handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, 
-              chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, note_on_func)
+              chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_func)
     return
   end
 
@@ -693,12 +644,14 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   
   local selected_channel = program.get().selected_channel
   if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
-    play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
-    note_dashboard_values.note = note_container.note
-    note_dashboard_values.velocity = note_container.velocity
-    note_dashboard_values.length = note_container.length
-    if c == program.get().selected_channel then
-      channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
+    if not mute_root then -- Only play root note if not muted
+      play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
+      note_dashboard_values.note = note_container.note
+      note_dashboard_values.velocity = note_container.velocity
+      note_dashboard_values.length = note_container.length
+      if c == program.get().selected_channel then
+        channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
+      end
     end
   end
 
@@ -748,17 +701,6 @@ local function handle_note(device, current_step, note_container, unprocessed_not
             channel.step_scale_number
           )
 
-          if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 and type(unprocessed_note_container.note_mask_value) == "number" then
-
-            processed_chord_note = quantiser.process_chord_note_for_mask(
-              unprocessed_note_container.note_mask_value + random_shift,
-              chord_notes[chord_number],
-              unprocessed_note_container.octave_mod,
-              unprocessed_note_container.transpose,
-              channel.step_scale_number
-            )
-          end
-
           local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
 
           if processed_chord_note then
@@ -795,15 +737,6 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           unprocessed_note_container.transpose,
           channel.step_scale_number
         )
-        if unprocessed_note_container.note_mask_value and unprocessed_note_container.note_mask_value > -1 then
-          processed_note = quantiser.process_chord_note_for_mask(
-            unprocessed_note_container.note_mask_value + random_shift,
-            0,
-            unprocessed_note_container.octave_mod,
-            unprocessed_note_container.transpose,
-            channel.step_scale_number
-          )
-        end
         if processed_note then
           local velocity = note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes)
           play_note(processed_note, note_container, velocity, note_container.length, note_on_func)
@@ -871,21 +804,31 @@ function step.handle(c, current_step)
 
     local random_shift = fn.transform_random_value(step.process_stock_params(c, current_step, "bipolar_random_note") or 0) +
                          fn.transform_twos_random_value(step.process_stock_params(c, current_step, "twos_random_note") or 0)
-                         
+                  
+    local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
+                         (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
+                         (params:get("random_lock_to_pentatonic") == 2 and random_shift > 0)            
+
     local note
+    local relative_note_mask_value
+    local octave_mod_offset = 0
+
     if note_mask_value and note_mask_value > -1 then
-      if params:get("quantiser_act_on_note_masks") == 2 then
+
+      local fully_quantise_mask = step.process_stock_params(c, current_step, "fully_quantise_mask") or -1
+
+      relative_note_mask_value, octave_mod_offset = quantiser.translate_note_mask_to_relative_scale_position(note_mask_value, channel.step_scale_number)
+
+      if (params:get("quantiser_fully_act_on_note_masks") == 2 and fully_quantise_mask == -1) or fully_quantise_mask == 2 then
+        local final_octave = octave_mod + octave_mod_offset
+        note = quantiser.process(relative_note_mask_value + random_shift, final_octave, transpose, channel.step_scale_number, do_pentatonic)
+      elseif params:get("quantiser_act_on_note_masks") == 2 then
         note = quantiser.snap_to_scale(note_mask_value + octave_mod * 12 + random_shift, channel.step_scale_number, transpose)
       else
-        note = note_mask_value + octave_mod * 12 + random_shift
+        note = note_mask_value + random_shift + octave_mod * 12
       end
     else
       local shifted_note_val = note_value + random_shift
-
-      local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
-                            (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
-                            (params:get("random_lock_to_pentatonic") == 2 and random_shift > 0)
-
       note = quantiser.process(shifted_note_val, octave_mod, transpose, channel.step_scale_number, do_pentatonic)
     end
 
@@ -933,7 +876,7 @@ function step.handle(c, current_step)
         device,
         current_step,
         note_container,
-        {note_value = note_value, note_mask_value = note_mask_value, octave_mod = octave_mod, transpose = transpose, random_shift = random_shift},
+        {note_value = relative_note_mask_value or note_value, octave_mod = octave_mod + octave_mod_offset, transpose = transpose, random_shift = random_shift},
         function(chord_note, velocity, midi_channel, midi_device)
           if device.player then
             device.player:note_on(chord_note, (127 > 1) and ((velocity - 1) / 126) or 0)

@@ -2475,6 +2475,7 @@ end
 
 function test_arp_param_lock_on_note_mask_with_four_extra_notes()
   setup()
+  
   local song_pattern = 1
   program.set_selected_song_pattern(1)
   local test_pattern = program.initialise_default_pattern()
@@ -4508,4 +4509,479 @@ function test_chord_arp_param_lock_with_two_acceleration()
 
   luaunit.assert_nil(note_on_event)
 
+end
+
+function test_chord_with_root_note_muted()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+  local test_pattern = program.initialise_default_pattern()
+
+  local test_step = 8
+  local cc_msb = 2
+
+  local chord_note_1 = 1
+  local chord_note_2 = 2
+  local chord_note_3 = 3
+  local c = 1
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 1
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  program.get().selected_channel = c
+
+  local channel = program.get_selected_channel()
+
+  -- Set up param to mute root note
+  channel.trig_lock_params[4].id = "mute_root_note"
+
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  program.add_step_param_trig_lock(test_step, 4, 1) -- Enable root note muting
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+
+  pattern.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+
+  progress_clock_by_beats(test_step - 1)
+
+  -- Should not get root note event
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  -- First note should be the first chord note (E)
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  -- Second note should be the second chord note (G)
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  -- Third note should be the third chord note (A)
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  -- Should be no more notes
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_nil(note_on_event)
+end
+
+function test_chord_arp_with_root_note_muted()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+
+  local test_step = 8
+  local cc_msb = 2
+
+  local chord_note_1 = 1
+  local chord_note_2 = 2
+  local chord_note_3 = 3
+  local chord_note_4 = 4
+  local c = 1
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 8
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  program.get().selected_channel = c
+
+  local channel = program.get_selected_channel()
+
+  channel.trig_lock_params[5].id = "chord_arp"
+  channel.trig_lock_params[4].id = "mute_root_note"
+  
+
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  channel.step_chord_masks[test_step][4] = chord_note_4
+  program.add_step_param_trig_lock(test_step, 5, 14) -- 1
+  program.add_step_param_trig_lock(test_step, 4, 1) -- Enable root note muting
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+
+  pattern.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+
+  progress_clock_by_pulses(1)
+
+  progress_clock_by_beats(test_step - 1)
+
+  -- Should not get root note event
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_nil(note_on_event)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 67)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+
+  luaunit.assert_nil(note_on_event)
+
+end
+
+function test_chord_strum_with_root_note_muted()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+  local test_pattern = program.initialise_default_pattern()
+
+  local test_step = 8
+  local cc_msb = 2
+
+  local chord_note_1 = 1
+  local chord_note_2 = 2
+  local chord_note_3 = 3
+  local c = 1
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 4
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  program.get().selected_channel = c
+
+  local channel = program.get_selected_channel()
+
+  -- Set up both chord strum and root note muting
+  channel.trig_lock_params[4].id = "mute_root_note"
+  channel.trig_lock_params[5].id = "chord_strum"
+
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  
+  program.add_step_param_trig_lock(test_step, 4, 1) -- Enable root note muting
+  program.add_step_param_trig_lock(test_step, 5, 14) -- Standard strum division
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+
+  pattern.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+
+  progress_clock_by_beats(test_step - 1)
+
+  -- Should not get root note event
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_nil(note_on_event)
+
+  progress_clock_by_beats(1)
+
+  -- First note should be the first chord note (E)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  -- Second note should be the second chord note (G)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  -- Third note should be the third chord note (A)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  -- No more notes after pattern length
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_nil(note_on_event)
+end
+
+function test_chord_strum_arp_with_root_note_muted()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+  local test_pattern = program.initialise_default_pattern()
+
+  local test_step = 8
+  local cc_msb = 2
+
+  local chord_note_1 = 1
+  local chord_note_2 = 2
+  local chord_note_3 = 3
+  local c = 1
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 5
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  program.get().selected_channel = c
+
+  local channel = program.get_selected_channel()
+
+  -- Set up chord strum, arp and root note muting
+  channel.trig_lock_params[4].id = "mute_root_note"
+  channel.trig_lock_params[6].id = "chord_arp"
+
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  
+  program.add_step_param_trig_lock(test_step, 4, 1) -- Enable root note muting
+  program.add_step_param_trig_lock(test_step, 6, 14) -- Standard arp division
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+
+  pattern.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+
+  progress_clock_by_pulses(1)
+  progress_clock_by_beats(test_step - 1)
+
+  -- Should not get root note event
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_nil(note_on_event)
+
+  progress_clock_by_beats(1)
+
+  -- First note should be the first chord note (E)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+
+  -- Second note should be the second chord note (G)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_beats(1)
+
+  -- Third note should be the third chord note (A)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+
+  -- Should loop back to first chord note
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 100)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  -- No more notes after pattern length
+  progress_clock_by_beats(1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_nil(note_on_event)
+end
+
+function test_chord_strum_with_root_note_muted_and_outside_in_pattern()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+  local test_pattern = program.initialise_default_pattern()
+
+  local test_step = 8
+  local chord_note_1 = 1
+  local chord_note_2 = 2
+  local chord_note_3 = 3
+  local chord_note_4 = 4
+  local c = 1
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 4
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  program.get().selected_channel = c
+  local channel = program.get_selected_channel()
+
+  -- Set up chord strum, root muting, and outside-in pattern
+  channel.trig_lock_params[4].id = "mute_root_note"
+  channel.trig_lock_params[5].id = "chord_strum"
+  channel.trig_lock_params[6].id = "chord_strum_pattern"
+
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  channel.step_chord_masks[test_step][4] = chord_note_4
+  
+  program.add_step_param_trig_lock(test_step, 4, 1) -- Enable root note muting
+  program.add_step_param_trig_lock(test_step, 5, 14) -- Standard strum division
+  program.add_step_param_trig_lock(test_step, 6, 3) -- Outside-in pattern
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+  pattern.update_working_patterns()
+  clock_setup()
+
+  progress_clock_by_beats(test_step - 1)
+
+  -- Should not get root note event
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_nil(note_on_event)
+
+  -- Should get outer notes first (due to outside-in pattern)
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62) -- A (chord_note_3)
+
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 67) -- B (chord_note_4)
+
+  -- Then inner notes
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 64) -- E (chord_note_1)
+
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65) -- G (chord_note_2)
+
+  -- No more notes
+  progress_clock_by_beats(1)
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_nil(note_on_event)
+end
+
+function test_chord_with_root_note_muted_and_empty_slots()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+  local test_pattern = program.initialise_default_pattern()
+
+  local test_step = 8
+  local chord_note_1 = 1
+  local chord_note_2 = 0  -- Empty slot
+  local chord_note_3 = 3
+  local chord_note_4 = 0  -- Empty slot
+  local c = 1
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 4
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  program.get().selected_channel = c
+  local channel = program.get_selected_channel()
+
+  channel.trig_lock_params[4].id = "mute_root_note"
+
+  channel.step_chord_masks[test_step] = {}
+  channel.step_chord_masks[test_step][1] = chord_note_1
+  channel.step_chord_masks[test_step][2] = chord_note_2
+  channel.step_chord_masks[test_step][3] = chord_note_3
+  channel.step_chord_masks[test_step][4] = chord_note_4
+  
+  program.add_step_param_trig_lock(test_step, 4, 1) -- Enable root note muting
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+  pattern.update_working_patterns()
+  clock_setup()
+
+  progress_clock_by_beats(test_step - 1)
+
+  -- Should get only the non-empty, non-root notes
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62) -- E (chord_note_1)
+
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65) -- A (chord_note_3)
+
+  -- No more notes (empty slots should be skipped)
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_nil(note_on_event)
 end

@@ -995,3 +995,193 @@ function test_pentatonic_intervals_consistent_across_all_octaves()
       end
   end
 end
+
+function test_translate_note_mask_to_relative_scale_position_basic_c_major()
+  setup()
+
+  local scale_number = 1 -- C Major
+  
+  -- Test notes in C major scale (C D E F G A B)
+  local pos, oct = quantiser.translate_note_mask_to_relative_scale_position(60, scale_number)
+  luaunit.assert_equals(pos, 0) -- C4 -> position 0
+  luaunit.assert_equals(oct, 0) -- C4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(62, scale_number)
+  luaunit.assert_equals(pos, 1) -- D4 -> position 1
+  luaunit.assert_equals(oct, 0) -- D4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(64, scale_number)
+  luaunit.assert_equals(pos, 2) -- E4 -> position 2
+  luaunit.assert_equals(oct, 0) -- E4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(65, scale_number)
+  luaunit.assert_equals(pos, 3) -- F4 -> position 3
+  luaunit.assert_equals(oct, 0) -- F4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(67, scale_number)
+  luaunit.assert_equals(pos, 4) -- G4 -> position 4
+  luaunit.assert_equals(oct, 0) -- G4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(69, scale_number)
+  luaunit.assert_equals(pos, 5) -- A4 -> position 5
+  luaunit.assert_equals(oct, 0) -- A4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(71, scale_number)
+  luaunit.assert_equals(pos, 6) -- B4 -> position 6
+  luaunit.assert_equals(oct, 0) -- B4 -> octave 0
+end
+
+function test_translate_note_mask_to_relative_scale_position_snapping()
+  setup()
+  
+  local scale_number = 1 -- C Major
+  
+  -- Test notes that need to be snapped to C major scale
+  local pos, oct = quantiser.translate_note_mask_to_relative_scale_position(61, scale_number)
+  luaunit.assert_equals(pos, 0) -- C#4 snaps to C -> position 0
+  luaunit.assert_equals(oct, 0) -- C#4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(63, scale_number)
+  luaunit.assert_equals(pos, 1) -- D#4 snaps to D -> position 1
+  luaunit.assert_equals(oct, 0) -- D#4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(66, scale_number)
+  luaunit.assert_equals(pos, 3) -- F#4 snaps to F -> position 3
+  luaunit.assert_equals(oct, 0) -- F#4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(68, scale_number)
+  luaunit.assert_equals(pos, 4) -- G#4 snaps to G -> position 4
+  luaunit.assert_equals(oct, 0) -- G#4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(70, scale_number)
+  luaunit.assert_equals(pos, 5) -- A#4 snaps to A -> position 5
+  luaunit.assert_equals(oct, 0) -- A#4 -> octave 0
+end
+
+function test_translate_note_mask_to_relative_scale_position_octaves()
+  setup()
+  
+  local scale_number = 1 -- C Major
+  
+  -- Test notes in different octaves
+  local pos, oct = quantiser.translate_note_mask_to_relative_scale_position(48, scale_number)
+  luaunit.assert_equals(pos, 0) -- C3 -> position 0
+  luaunit.assert_equals(oct, -1) -- C3 -> octave -1
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(72, scale_number)
+  luaunit.assert_equals(pos, 0) -- C5 -> position 0
+  luaunit.assert_equals(oct, 1) -- C5 -> octave 1
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(84, scale_number)
+  luaunit.assert_equals(pos, 0) -- C6 -> position 0
+  luaunit.assert_equals(oct, 2) -- C6 -> octave 2
+  
+  -- Test non-root notes in different octaves
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(74, scale_number)
+  luaunit.assert_equals(pos, 1) -- D5 -> position 1
+  luaunit.assert_equals(oct, 1) -- D5 -> octave 1
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(76, scale_number)
+  luaunit.assert_equals(pos, 2) -- E5 -> position 2
+  luaunit.assert_equals(oct, 1) -- E5 -> octave 1
+end
+
+function test_translate_note_mask_to_relative_scale_position_minor_scale()
+  setup()
+  
+  program.set_scale(1, { -- Minor scale
+    number = 1,
+    scale = quantiser.get_scales()[3].scale,
+    chord = 1,
+    root_note = 0
+  })
+
+  local scale_number = 1 -- Minor scale
+  
+  -- Test notes in C minor scale (C D Eb F G Ab Bb)
+  local pos, oct = quantiser.translate_note_mask_to_relative_scale_position(60, scale_number)
+  luaunit.assert_equals(pos, 0) -- C4 -> position 0
+  luaunit.assert_equals(oct, 0) -- C4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(62, scale_number)
+  luaunit.assert_equals(pos, 1) -- D4 -> position 1
+  luaunit.assert_equals(oct, 0) -- D4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(63, scale_number)
+  luaunit.assert_equals(pos, 2) -- Eb4 -> position 2
+  luaunit.assert_equals(oct, 0) -- Eb4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(65, scale_number)
+  luaunit.assert_equals(pos, 3) -- F4 -> position 3
+  luaunit.assert_equals(oct, 0) -- F4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(67, scale_number)
+  luaunit.assert_equals(pos, 4) -- G4 -> position 4
+  luaunit.assert_equals(oct, 0) -- G4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(68, scale_number)
+  luaunit.assert_equals(pos, 5) -- Ab4 -> position 5
+  luaunit.assert_equals(oct, 0) -- Ab4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(70, scale_number)
+  luaunit.assert_equals(pos, 6) -- Bb4 -> position 6
+  luaunit.assert_equals(oct, 0) -- Bb4 -> octave 0
+end
+
+function test_translate_note_mask_to_relative_scale_position_edge_cases()
+  setup()
+  
+  local scale_number = 1 -- C Major
+  
+  -- Test very low and high notes
+  local pos, oct = quantiser.translate_note_mask_to_relative_scale_position(0, scale_number)
+  luaunit.assert_equals(pos, 0) -- C-1 -> position 0
+  luaunit.assert_equals(oct, -5) -- C-1 -> octave -5
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(127, scale_number)
+  luaunit.assert_equals(pos, 4) -- G9 -> position 4
+  luaunit.assert_equals(oct, 5) -- G9 -> octave 5
+  
+  -- Test invalid inputs
+  luaunit.assert_equals(quantiser.translate_note_mask_to_relative_scale_position(nil, scale_number), nil)
+  luaunit.assert_equals(quantiser.translate_note_mask_to_relative_scale_position("60", scale_number), nil)
+  luaunit.assert_equals(quantiser.translate_note_mask_to_relative_scale_position(60, nil), nil)
+  luaunit.assert_equals(quantiser.translate_note_mask_to_relative_scale_position(60, 99), nil)
+end
+
+function test_translate_note_mask_to_relative_scale_position_with_root_note()
+  setup()
+  
+  local scale_number = 1 -- C Major
+  local scale = program.get_scale(scale_number)
+  scale.root_note = 2 -- Set root note to D
+  
+  -- Test notes in D major scale (D E F# G A B C#)
+  local pos, oct = quantiser.translate_note_mask_to_relative_scale_position(62, scale_number)
+  luaunit.assert_equals(pos, 0) -- D4 -> position 0
+  luaunit.assert_equals(oct, 0) -- D4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(64, scale_number)
+  luaunit.assert_equals(pos, 1) -- E4 -> position 1
+  luaunit.assert_equals(oct, 0) -- E4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(66, scale_number)
+  luaunit.assert_equals(pos, 2) -- F#4 -> position 2
+  luaunit.assert_equals(oct, 0) -- F#4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(67, scale_number)
+  luaunit.assert_equals(pos, 3) -- G4 -> position 3
+  luaunit.assert_equals(oct, 0) -- G4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(69, scale_number)
+  luaunit.assert_equals(pos, 4) -- A4 -> position 4
+  luaunit.assert_equals(oct, 0) -- A4 -> octave 0
+  
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(71, scale_number)
+  luaunit.assert_equals(pos, 5) -- B4 -> position 5
+  luaunit.assert_equals(oct, 0) -- B4 -> octave 0
+
+  pos, oct = quantiser.translate_note_mask_to_relative_scale_position(73, scale_number)
+  luaunit.assert_equals(pos, 6) -- C#5 -> position 6
+  luaunit.assert_equals(oct, 0) -- C#5 -> octave 0
+end
