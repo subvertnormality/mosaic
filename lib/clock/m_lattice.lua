@@ -205,6 +205,9 @@ function Lattice:pulse()
             sprocket.step = sprocket.step + 1
             if sprocket.step > sprocket.lattice.pattern_length then
               sprocket.step = 1
+              -- -- Reset shuffle state for new pattern
+              -- sprocket.ppqn_error = 0.5  -- Reset to initial error value
+              -- sprocket:update_shuffle(1)  -- Force recalculation for first step
             end
           end
           sprocket.transport = sprocket.transport + 1
