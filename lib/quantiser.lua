@@ -219,26 +219,40 @@ local function cleanup_old_cache_entries()
   quantiser._scale_cache_size = quantiser._scale_cache_size - entries_to_remove
 end
 
-local function make_cache_key(root_note, chord_rotation, scale_number, transpose, do_rotation, do_degree, do_pentatonic, degree_rotation, version)
+local function hash_scale(scale)
+  local hash = 0
+  for i, v in ipairs(scale) do
+    -- Use XOR operation to combine values in a way that's sensitive to order
+    -- Multiply by i to make position matter
+    hash = hash ~ (v * i)
+  end
+  return hash
+end
+
+local function make_cache_key(root_note, chord_rotation, scale_number, transpose, do_rotation, do_degree, do_transpose, do_pentatonic, scale_container)
   -- Use bit operations to pack booleans into a single number
   local flags = (do_rotation and 1 or 0) +
                (do_degree and 2 or 0) +
-               (do_pentatonic and 4 or 0)
+               (do_transpose and 4 or 0) +
+               (do_pentatonic and 8 or 0)
   
+  -- Hash the scale table
+  scale_hash = hash_scale(scale_container.scale)
+
   -- Create a more efficient key using string format
-  -- %d for integers, %x for hex (flags)
-  return string.format("%d:%d:%d:%d:%x:%d:%d",
+  return string.format("%d:%d:%d:%d:%x:%d:%d:%d",
       root_note,
       chord_rotation,
       scale_number,
       transpose,
       flags,
-      degree_rotation or 0,
-      version or 0
+      scale_container.chord_degree_rotation or 0,
+      scale_container.version or 0,
+      scale_hash
   )
 end
 
-local function process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree, do_pentatonic)
+local function process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree, do_transpose, do_pentatonic)
   
   
   local root_note = program.get().root_note + 60
@@ -261,10 +275,11 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
     transpose,
     do_rotation,
     do_degree,
+    do_transpose,
     do_pentatonic,
-    scale_container.chord_degree_rotation,
-    scale_container.version
+    scale_container
   )
+
 
   local cache_entry = quantiser._scale_cache[cache_key]
   local scale, pentatonic
@@ -292,9 +307,11 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
         end
       end
     end
-
-    scale = fn.transpose_scale(scale, transpose)
-    pentatonic = fn.transpose_scale(pentatonic, transpose)
+    
+    if do_transpose then
+      scale = fn.transpose_scale(scale, transpose)
+      pentatonic = fn.transpose_scale(pentatonic, transpose)
+    end
 
     -- Store processed scales in cache
     quantiser._scale_cache[cache_key] = {
@@ -332,7 +349,7 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
 end
 
 function quantiser.process(note_number, octave_mod, transpose, scale_number, do_pentatonic)
-  return process_handler(note_number, octave_mod, transpose, scale_number, true, true, do_pentatonic)
+  return process_handler(note_number, octave_mod, transpose, scale_number, true, true, true, do_pentatonic)
 end
 
 function quantiser.translate_note_mask_to_relative_scale_position(note_mask_value, scale_number)
@@ -382,9 +399,10 @@ end
 function quantiser.process_with_global_params(note_number, octave_mod, transpose, scale_number)
   local do_rotation = params:get("midi_honour_rotation") ~= 1
   local do_degree = params:get("midi_honour_degree") ~= 1
+  local do_transpose = params:get("midi_honour_transpose") ~= 1
 
 
-  return process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree)
+  return process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree, do_transpose)
 end
 
 function quantiser.snap_to_scale(note_num, scale_number, transpose)

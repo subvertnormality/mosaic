@@ -47,13 +47,13 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
     -- Adjusted navigation for Clock Mods page
     local function get_visible_clock_mod_selectors()
       local selectors = {clock_mod_list_selector, swing_shuffle_type_selector}
-      local value = swing_shuffle_type_selector:get_selected().value
-      if value == 1 then 
-        value = params:get("global_swing_shuffle_type") + 1
+      local value = channel_edit_page_ui.get_swing_shuffle_type_selector_value()
+      if value == 0 then 
+        value = params:get("global_swing_shuffle_type")
       end
-      if value == 2 then
+      if value == 1 then
         table.insert(selectors, swing_selector)
-      elseif value == 3 then
+      elseif value == 2 then
         table.insert(selectors, shuffle_feel_selector)
         table.insert(selectors, shuffle_basis_selector)
         table.insert(selectors, shuffle_amount_selector)
@@ -148,13 +148,13 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
     -- Adjusted navigation for Clock Mods page
     local function get_visible_clock_mod_selectors()
       local selectors = {clock_mod_list_selector, swing_shuffle_type_selector}
-      local value = swing_shuffle_type_selector:get_selected().value
-      if value == 1 then 
-        value = params:get("global_swing_shuffle_type") + 1
+      local value = channel_edit_page_ui.get_swing_shuffle_type_selector_value()
+      if value == 0 then 
+        value = params:get("global_swing_shuffle_type")
       end
-      if value == 2 then
+      if value == 1 then
         table.insert(selectors, swing_selector)
-      elseif value == 3 then
+      elseif value == 2 then
         table.insert(selectors, shuffle_feel_selector)
         table.insert(selectors, shuffle_basis_selector)
         table.insert(selectors, shuffle_amount_selector)

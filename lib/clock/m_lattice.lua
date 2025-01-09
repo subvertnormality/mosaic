@@ -205,9 +205,6 @@ function Lattice:pulse()
             sprocket.step = sprocket.step + 1
             if sprocket.step > sprocket.lattice.pattern_length then
               sprocket.step = 1
-              -- -- Reset shuffle state for new pattern
-              -- sprocket.ppqn_error = 0.5  -- Reset to initial error value
-              -- sprocket:update_shuffle(1)  -- Force recalculation for first step
             end
           end
           sprocket.transport = sprocket.transport + 1
@@ -250,8 +247,8 @@ function Lattice:new_sprocket(args)
   args.delay = args.delay == nil and 0 or util.clamp(args.delay,0,1)
   args.swing = args.swing == nil and 0 or util.clamp(args.swing,-50,50)
   args.swing_or_shuffle = args.swing_or_shuffle == nil and 1 or util.clamp(args.swing_or_shuffle,1,2)
-  args.shuffle_basis = args.shuffle_basis and util.clamp(args.shuffle_basis, 0, 6) or 0
-  args.shuffle_feel = args.shuffle_feel and util.clamp(args.shuffle_feel, 0, 3) or 0
+  args.shuffle_basis = args.shuffle_basis and util.clamp(args.shuffle_basis, 1, 6) or 0
+  args.shuffle_feel = args.shuffle_feel and util.clamp(args.shuffle_feel, 1, 4) or 0
   args.shuffle_amount = args.shuffle_amount and util.clamp(args.shuffle_amount, 0, 100) or 0
   args.step = 1
   args.lattice = self
@@ -300,8 +297,8 @@ function Sprocket:new(args)
   p.phase = args.phase or 1
   p.ppqn = args.ppqn
   p.swing_or_shuffle = args.swing_or_shuffle
-  p.shuffle_basis = util.clamp(args.shuffle_basis, 0, 6)
-  p.shuffle_feel = util.clamp(args.shuffle_feel, 0, 3)
+  p.shuffle_basis = util.clamp(args.shuffle_basis, 1, 6)
+  p.shuffle_feel = util.clamp(args.shuffle_feel, 1, 4)
   p.shuffle_amount = (args.shuffle_amount == nil) and 1.0 or util.clamp(args.shuffle_amount, 0, 100) / 100
   p.current_ppqn = args.ppqn
   p.ppqn_error = 0.5
@@ -392,18 +389,12 @@ function Sprocket:set_shuffle_amount(shuffle_amount)
 end
 
 function Sprocket:set_shuffle_basis(basis)
-  self.shuffle_basis = util.clamp(basis, 0, 6)
+  self.shuffle_basis = util.clamp(basis, 1, 6)
   self:update_shuffle(self.step)
 end
 
 function Sprocket:set_shuffle_feel(feel)
-  self.shuffle_feel = util.clamp(feel, 0, 3)
-  self:update_shuffle(self.step)
-end
-
-function Sprocket:set_shuffle_or_swing(swing_or_shuffle)
-  self.swing_or_shuffle = util.clamp(swing_or_shuffle, 1, 2)
-  self:update_swing()
+  self.shuffle_feel = util.clamp(feel, 1, 4)
   self:update_shuffle(self.step)
 end
 

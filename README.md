@@ -1110,6 +1110,10 @@ Similarly, "Lock merged to pent." is on by default and ensures notes modified by
 
 "Honor scale degree" is off by default. Enabling this setting means the current scale's degree option will affect the MIDI keyboard mapping.
 
+##### Honour Scale Transpose
+
+"Honour scale transpose" is off by default. Enabling this setting means the current scale's transpose option will affect the MIDI keyboard mapping.
+
 ### Sinfonion Connect
 
 You can sync up your Eurorack Sinfonion module to Mosaic using a DIY device called [norns2sinfonion](https://github.com/subvertnormality/norns2sinfonion).

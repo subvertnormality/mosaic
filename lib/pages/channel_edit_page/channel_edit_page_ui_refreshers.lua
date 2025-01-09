@@ -87,21 +87,21 @@ end, throttle_time)
 
 channel_edit_page_ui_refreshers.refresh_swing_shuffle_type = scheduler.debounce(function(swing_shuffle_type_selector)
   local channel = program.get_selected_channel()
-  local value = channel.swing_shuffle_type or 1
-  swing_shuffle_type_selector:set_selected_value(value)
+  local value = channel.swing_shuffle_type or 0
+  channel_edit_page_ui.set_swing_shuffle_type_selector_value(value)
 end, throttle_time)
 
 
 channel_edit_page_ui_refreshers.refresh_shuffle_feel = scheduler.debounce(function(shuffle_feel_selector)
   local channel = program.get_selected_channel()
-  local value = channel.shuffle_feel or 1
-  shuffle_feel_selector:set_selected_value(value)
+  local value = channel.shuffle_feel or 0
+  channel_edit_page_ui.set_shuffle_feel_selector_value(value)
 end, throttle_time)
 
 channel_edit_page_ui_refreshers.refresh_shuffle_basis = scheduler.debounce(function(shuffle_basis_selector)
   local channel = program.get_selected_channel()
-  local value = channel.shuffle_basis or 1
-  shuffle_basis_selector:set_selected_value(value)
+  local value = channel.shuffle_basis or 0
+  channel_edit_page_ui.set_shuffle_basis_selector_value(value)
 end, throttle_time)
 
 channel_edit_page_ui_refreshers.refresh_shuffle_amount = scheduler.debounce(function(shuffle_amount_selector)

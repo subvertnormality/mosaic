@@ -29,10 +29,33 @@ local shuffle_feel_selector = list_selector:new(0, 40, "Feel", {{name = "X", val
 local shuffle_basis_selector = list_selector:new(40, 40, "Basis", {{name = "X", value = 1}, {name = "9", value = 2}, {name = "7", value = 3}, {name = "5", value = 4}, {name = "6", value = 5}, {name = "8??", value = 6}, {name = "9??", value = 7}})
 local shuffle_amount_selector = value_selector:new(70, 40, "Amount", 0, 100)
 
-
 local memory_state = {
   events = {}
 }
+
+function channel_edit_page_ui.get_swing_shuffle_type_selector_value()
+  return swing_shuffle_type_selector:get_selected().value - 1
+end
+
+function channel_edit_page_ui.get_shuffle_feel_selector_value()
+  return shuffle_feel_selector:get_selected().value - 1
+end
+
+function channel_edit_page_ui.get_shuffle_basis_selector_value()
+  return shuffle_basis_selector:get_selected().value - 1
+end
+
+function channel_edit_page_ui.set_swing_shuffle_type_selector_value(value)
+  swing_shuffle_type_selector:set_selected_value(value + 1)
+end
+
+function channel_edit_page_ui.set_shuffle_feel_selector_value(value)
+  shuffle_feel_selector:set_selected_value(value + 1)
+end
+
+function channel_edit_page_ui.set_shuffle_basis_selector_value(value)
+  shuffle_basis_selector:set_selected_value(value + 1)
+end
 
 -- Value selectors with initial values
 local mask_selectors = {
@@ -219,13 +242,13 @@ end)
 
 local clock_mods_page = page:new("Clocks", function()
   swing_shuffle_type_selector:draw()
-  local value = swing_shuffle_type_selector:get_selected().value
-  if value == 1 then 
-    value = params:get("global_swing_shuffle_type") + 1
+  local value = channel_edit_page_ui.get_swing_shuffle_type_selector_value()
+  if value == 0 then 
+    value = params:get("global_swing_shuffle_type")
   end
-  if value == 2 then
+  if value == 1 then
     swing_selector:draw()
-  elseif value == 3 then
+  elseif value == 2 then
     shuffle_feel_selector:draw()
     shuffle_basis_selector:draw()
     shuffle_amount_selector:draw()
@@ -344,10 +367,10 @@ function channel_edit_page_ui.init()
   clock_mod_list_selector:select()
   swing_selector:set_value(0)
 
-  swing_shuffle_type_selector:set_selected_value(params:get("global_swing_shuffle_type"))
+  channel_edit_page_ui.set_swing_shuffle_type_selector_value(params:get("global_swing_shuffle_type"))
   swing_selector:set_value(params:get("global_swing"))
-  shuffle_feel_selector:set_selected_value(params:get("global_shuffle_feel"))
-  shuffle_basis_selector:set_selected_value(params:get("global_shuffle_basis"))
+  channel_edit_page_ui.set_shuffle_feel_selector_value(params:get("global_shuffle_feel"))
+  channel_edit_page_ui.set_shuffle_basis_selector_value(params:get("global_shuffle_basis"))
   shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
 
   memory_controls.navigator:set_event_state(memory_state)
@@ -368,11 +391,11 @@ end
 -- Update functions
 function channel_edit_page_ui.update_swing_shuffle_type()
   local channel = program.get_selected_channel()
-  local value = swing_shuffle_type_selector:get_selected().value
+  local value = channel_edit_page_ui.get_swing_shuffle_type_selector_value()
   channel.swing_shuffle_type = value
 
-  if value == 1 or nil then
-    value = params:get("global_swing_shuffle_type") + 1 or 1
+  if value == 0 or nil then
+    value = program.get_effective_swing_shuffle_type(channel)
   end
 
   if m_clock.is_playing() then
@@ -389,13 +412,7 @@ end
 
 function channel_edit_page_ui.align_global_and_local_swing_shuffle_type_values(c)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
-  local channel_value = channel.swing_shuffle_type
-  local value = channel_value
-  if channel_value == 1 or nil then
-    value = params:get("global_swing_shuffle_type") + 1 or 1
-  end
-
-  m_clock.set_swing_shuffle_type(channel.number, value)
+  m_clock.set_swing_shuffle_type(channel.number, program.get_effective_swing_shuffle_type(channel))
 
 end
 
@@ -405,7 +422,7 @@ function channel_edit_page_ui.update_swing()
   local value = swing_selector:get_value()
   channel.swing = value
   if value == -51 or nil then
-    value = params:get("global_swing") 
+    value = program.get_effective_swing(channel)
   end
   
   if m_clock.is_playing() then
@@ -421,22 +438,16 @@ end
 
 function channel_edit_page_ui.align_global_and_local_swing_values(c)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
-  local channel_value = channel.swing
-  local value = channel_value
-  if channel_value == -51 or nil then
-    value = params:get("global_swing") 
-  end
-
-  m_clock.set_channel_swing(channel.number, value)
+  m_clock.set_channel_swing(channel.number, program.get_effective_swing(channel))
 
 end
 
 function channel_edit_page_ui.update_shuffle_feel()
   local channel = program.get_selected_channel()
-  local shuffle_feel = shuffle_feel_selector:get_selected().value
+  local shuffle_feel = channel_edit_page_ui.get_shuffle_feel_selector_value()
   channel.shuffle_feel = shuffle_feel
-  if shuffle_feel == 1 or nil then
-    shuffle_feel = params:get("global_shuffle_feel") + 1 or 0
+  if shuffle_feel == 0 or nil then
+    shuffle_feel = program.get_effective_shuffle_feel(channel)
   end
 
   if m_clock.is_playing() then
@@ -452,24 +463,18 @@ end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_feel_values(c)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
-  local channel_value = channel.shuffle_feel
-  local value = channel_value
-  if channel_value == 1 or nil then
-    value = params:get("global_shuffle_feel") + 1 or 0
-  end
-  
-  m_clock.set_channel_shuffle_feel(channel.number, value)
+  m_clock.set_channel_shuffle_feel(channel.number, program.get_effective_shuffle_feel(channel))
 
 end
 
 function channel_edit_page_ui.update_shuffle_basis()
   local channel = program.get_selected_channel()
 
-  local shuffle_basis = shuffle_basis_selector:get_selected().value
+  local shuffle_basis = channel_edit_page_ui.get_shuffle_basis_selector_value()
   channel.shuffle_basis = shuffle_basis
 
-  if shuffle_basis == 1 or nil then
-    shuffle_basis = params:get("global_shuffle_basis") + 1 or 0
+  if shuffle_basis == 0 or nil then
+    shuffle_basis = program.get_effective_shuffle_basis(channel)
   end
 
   if m_clock.is_playing() then
@@ -485,14 +490,7 @@ end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_basis_values(c)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
-  local channel_value = channel.shuffle_basis
-  local value = channel_value
-  if channel_value == 1 or nil then
-    value = params:get("global_shuffle_basis") + 1 or 0
-  end
-  
-  m_clock.set_channel_shuffle_basis(channel.number, value)
-
+  m_clock.set_channel_shuffle_basis(channel.number, program.get_effective_shuffle_basis(channel))
 end
 
 function channel_edit_page_ui.update_shuffle_amount()
@@ -501,7 +499,7 @@ function channel_edit_page_ui.update_shuffle_amount()
   channel.shuffle_amount = shuffle_amount
 
   if shuffle_amount == 0 or nil then
-    shuffle_amount = params:get("global_shuffle_amount") or 0
+    shuffle_amount = program.get_effective_shuffle_amount(channel)
   end
 
   if m_clock.is_playing() then
@@ -517,13 +515,7 @@ end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_amount_values(c)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
-  local channel_value = channel.shuffle_amount
-  local value = channel_value
-  if channel_value == 0 or nil then
-    value = params:get("global_shuffle_amount") or 0
-  end
-  
-  m_clock.set_channel_shuffle_amount(channel.number, value)
+  m_clock.set_channel_shuffle_amount(channel.number, program.get_effective_shuffle_amount(channel))
 
 end
 

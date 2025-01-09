@@ -761,34 +761,42 @@ function program.get_effective_swing_shuffle_type(channel)
 end
 
 function program.get_effective_swing(channel)
-  if channel.swing ~= nil then
+  if channel.swing ~= nil and channel.swing > -51 then
     return channel.swing
-  else
+  elseif params:get("global_swing_shuffle_type") == 1 then
     return params:get("global_swing")
+  else
+    return 0
   end
 end
 
 function program.get_effective_shuffle_feel(channel)
-  if channel.shuffle_feel ~= nil then
+  if channel.shuffle_feel ~= nil and channel.shuffle_feel > 0 then
     return channel.shuffle_feel
-  else
+  elseif params:get("global_swing_shuffle_type") == 2 then
     return params:get("global_shuffle_feel")
+  else
+    return 0
   end
 end
 
 function program.get_effective_shuffle_basis(channel)
-  if channel.shuffle_basis ~= nil then
+  if channel.shuffle_basis ~= nil and channel.shuffle_basis > 0 then
     return channel.shuffle_basis
-  else
+  elseif params:get("global_swing_shuffle_type") == 2 then
     return params:get("global_shuffle_basis")
+  else
+    return 0
   end
 end
 
 function program.get_effective_shuffle_amount(channel)
-  if channel.shuffle_amount ~= nil then
+  if channel.shuffle_amount ~= nil and channel.shuffle_amount > 0 then
     return channel.shuffle_amount
-  else
+  elseif params:get("global_swing_shuffle_type") == 2 then
     return params:get("global_shuffle_amount")
+  else
+    return 0
   end
 end
 

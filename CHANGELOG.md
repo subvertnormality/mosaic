@@ -1,9 +1,16 @@
+
+
+## 1.2.1
+
+- Fixed regression that stopped shuffle from being applied to channels on pattern reset.
+- Added global option to disable honouring scale transpose when using midi input devices.
+- Fixed regression that stopped scale degree and rotation from being honoured properly when using midi input devices.
+
 ## 1.2.0
 
 - Added mute_root_note trig param to silence the root note of chords while allowing other chord notes to play.
 - Added global option to fully quantize note masks (quantiser_fully_act_on_note_masks) to make note masks follow scale degree and rotation changes.
 - Added fully_quantise_mask trig param to control whether note masks are fully quantised to the current scale, including scale degree and rotation on a per-channel or per-step basis.
-
 
 ## 1.1.2
 
