@@ -705,8 +705,6 @@ function test_drunk_shuffle_amount_0()
 
 end
 
--- TODO test 75 amount drunk 7 for note lengths
-
 function test_drunk_shuffle_amount_75()
   local test_pattern
   
@@ -774,13 +772,18 @@ function test_drunk_shuffle_amount_75()
 
   clock_setup()
 
+  -- Store the timing values from first pattern for comparison
+  local first_pattern_timings = {}
+
   local note_on_event = table.remove(midi_note_on_events, 1)
+  first_pattern_timings[1] = 0 -- First note happens immediately
 
   luaunit.assert_equals(note_on_event[1], 60)
   luaunit.assert_equals(note_on_event[2], 20)
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_pulses(30)
+  first_pattern_timings[2] = 30
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -790,6 +793,7 @@ function test_drunk_shuffle_amount_75()
 
   
   progress_clock_by_pulses(24)
+  first_pattern_timings[3] = 24
 
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -798,6 +802,7 @@ function test_drunk_shuffle_amount_75()
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_pulses(20)
+  first_pattern_timings[4] = 20
   
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -806,6 +811,7 @@ function test_drunk_shuffle_amount_75()
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_pulses(22)
+  first_pattern_timings[5] = 22
   
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -814,6 +820,7 @@ function test_drunk_shuffle_amount_75()
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_pulses(30)
+  first_pattern_timings[6] = 30
   
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -822,6 +829,7 @@ function test_drunk_shuffle_amount_75()
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_pulses(22)
+  first_pattern_timings[7] = 22
   
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -830,6 +838,7 @@ function test_drunk_shuffle_amount_75()
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_pulses(22)
+  first_pattern_timings[8] = 22
   
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -838,6 +847,7 @@ function test_drunk_shuffle_amount_75()
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_pulses(22)
+  first_pattern_timings[9] = 22
   
   local note_on_event = table.remove(midi_note_on_events, 1)
 
@@ -845,4 +855,78 @@ function test_drunk_shuffle_amount_75()
   luaunit.assert_equals(note_on_event[2], 28)
   luaunit.assert_equals(note_on_event[3], 1)
 
+  -- Progress through remaining steps to get back to step 1
+  -- We're at step 9, need to progress through steps 10-64 and get to step 1
+  -- Each step is 24 pulses (default ppqn)
+  progress_clock_by_pulses(24 * ((64 - 9) + 1))
+
+  -- Second pattern iteration - verify timing matches first pattern
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 20)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_pulses(30)
+  luaunit.assert_equals(30, first_pattern_timings[2], "Second pattern timing mismatch at step 2")
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 21)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_pulses(24)
+  luaunit.assert_equals(24, first_pattern_timings[3], "Second pattern timing mismatch at step 3")
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 22)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_pulses(20)
+  luaunit.assert_equals(20, first_pattern_timings[4], "Second pattern timing mismatch at step 4")
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 23)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_pulses(22)
+  luaunit.assert_equals(22, first_pattern_timings[5], "Second pattern timing mismatch at step 5")
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 24)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_pulses(30)
+  luaunit.assert_equals(30, first_pattern_timings[6], "Second pattern timing mismatch at step 6")
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62)
+  luaunit.assert_equals(note_on_event[2], 25)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_pulses(22)
+  luaunit.assert_equals(22, first_pattern_timings[7], "Second pattern timing mismatch at step 7")
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 64)
+  luaunit.assert_equals(note_on_event[2], 26)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_pulses(22)
+  luaunit.assert_equals(22, first_pattern_timings[8], "Second pattern timing mismatch at step 8")
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65)
+  luaunit.assert_equals(note_on_event[2], 27)
+  luaunit.assert_equals(note_on_event[3], 1)
+
+  progress_clock_by_pulses(22)
+  luaunit.assert_equals(22, first_pattern_timings[9], "Second pattern timing mismatch at step 9")
+  
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60)
+  luaunit.assert_equals(note_on_event[2], 28)
+  luaunit.assert_equals(note_on_event[3], 1)
 end

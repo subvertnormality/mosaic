@@ -227,11 +227,11 @@ end
 local function get_shuffle_values(channel)
 
   local shuffle_values = {
-    swing = (channel.swing ~= -51) and channel.swing or params:get("global_swing") or 0,
-    swing_or_shuffle = (channel.swing_shuffle_type and channel.swing_shuffle_type > 0) and (channel.swing_shuffle_type) or params:get("global_swing_shuffle_type"),
-    shuffle_basis = (channel.shuffle_basis and channel.shuffle_basis > 0) and (channel.shuffle_basis) or params:get("global_shuffle_basis"),
-    shuffle_feel = (channel.shuffle_feel and channel.shuffle_feel > 0) and (channel.shuffle_feel) or params:get("global_shuffle_feel"),
-    shuffle_amount = channel.shuffle_amount or params:get("global_shuffle_amount")
+    swing = program.get_effective_swing(channel),
+    swing_or_shuffle = program.get_effective_swing_shuffle_type(channel),
+    shuffle_basis = program.get_effective_shuffle_basis(channel),
+    shuffle_feel = program.get_effective_shuffle_feel(channel),
+    shuffle_amount = program.get_effective_shuffle_amount(channel)
   }
   
   if channel.number == 17 then
@@ -480,8 +480,8 @@ end
 
 function m_clock.set_swing_shuffle_type(channel_number, swing_or_shuffle)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
-  clock:set_swing_or_shuffle((swing_or_shuffle or 2) - 1)
-  clock.end_of_clock_processor:set_swing_or_shuffle((swing_or_shuffle or 2) - 1)
+  clock:set_swing_or_shuffle((swing_or_shuffle or 0))
+  clock.end_of_clock_processor:set_swing_or_shuffle((swing_or_shuffle or 0))
 end
 
 function m_clock.set_channel_swing(channel_number, swing)
@@ -492,14 +492,14 @@ end
 
 function m_clock.set_channel_shuffle_feel(channel_number, shuffle_feel)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
-  clock:set_shuffle_feel((shuffle_feel or 2) - 1)
-  clock.end_of_clock_processor:set_shuffle_feel((shuffle_feel or 2) - 1)
+  clock:set_shuffle_feel((shuffle_feel or 0))
+  clock.end_of_clock_processor:set_shuffle_feel((shuffle_feel or 0))
 end
 
 function m_clock.set_channel_shuffle_basis(channel_number, shuffle_basis)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
-  clock:set_shuffle_basis((shuffle_basis or 2) - 1)
-  clock.end_of_clock_processor:set_shuffle_basis((shuffle_basis or 2) - 1)
+  clock:set_shuffle_basis((shuffle_basis or 0))
+  clock.end_of_clock_processor:set_shuffle_basis((shuffle_basis or 0))
 end
 
 function m_clock.set_channel_shuffle_amount(channel_number, shuffle_amount)

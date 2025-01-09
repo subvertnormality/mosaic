@@ -1,4 +1,4 @@
--- mosaic v1.2.0
+-- mosaic v1.2.1
 -- grid-first rhythm and 
 -- harmony sequencer.
 --
@@ -249,7 +249,7 @@ function init()
 
   blink()
 
-  params:add_group("mosaic", "MOSAIC", 33)
+  params:add_group("mosaic", "MOSAIC", 34)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -354,6 +354,7 @@ function init()
   params:add_option("midi_scale_mapped_to_white_keys", "Map scale to white keys", {"Off", "On"}, 1)
   params:add_option("midi_honour_rotation", "Honour scale rotations", {"Off", "On"}, 1)
   params:add_option("midi_honour_degree", "Honour scale degree", {"Off", "On"}, 1)
+  params:add_option("midi_honour_transpose", "Honour scale transpose", {"Off", "On"}, 1)
 
   param_manager.init()
 
