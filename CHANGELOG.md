@@ -1,4 +1,6 @@
+## 1.2.2
 
+- Fixed regression that stopped channel scale locks from applying transposition properly.
 
 ## 1.2.1
 
