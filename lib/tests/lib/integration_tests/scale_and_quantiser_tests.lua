@@ -2127,3 +2127,54 @@ function test_transpose_persistence_across_steps_until_next_scale_trig_lock()
   -- D (62) + 2 semitones = E (64)
   luaunit.assert_equals(note_on_event[1], 60)
 end
+
+function test_calculate_step_transpose_uses_current_channel_scale()
+  setup()
+  local channel = 2
+  
+  -- Set up two different scales with different transposes
+  program.set_scale(
+    1,
+    {
+      number = 1,
+      scale = {0,2,4,5,7,9,11}, -- Major scale
+      pentatonic_scale = {0,2,4,7,9},
+      chord = 1,
+      root_note = 0,
+      transpose = 2 -- Scale 1 transposes up 2
+    }
+  )
+  
+  program.set_scale(
+    2,
+    {
+      number = 2,
+      scale = {0,2,4,5,7,9,11},
+      pentatonic_scale = {0,2,4,7,9},
+      chord = 1,
+      root_note = 0,
+      transpose = 4 -- Scale 2 transposes up 4
+    }
+  )
+
+  -- Set global transpose to 1
+  program.set_transpose(1)
+  
+  -- Set channel 2 to use scale 2
+  program.get_channel(program.get().selected_song_pattern, channel).step_scale_number = 2
+  
+  -- Calculate transpose for channel 2
+  local transpose = step.calculate_step_transpose(channel)
+  
+  -- Should be global transpose (1) + scale 2's transpose (4) = 5
+  luaunit.assert_equals(transpose, 5)
+  
+  -- Change channel 2 to use scale 1
+  program.get_channel(program.get().selected_song_pattern, channel).step_scale_number = 1
+  
+  -- Recalculate transpose
+  transpose = step.calculate_step_transpose(channel)
+  
+  -- Should now be global transpose (1) + scale 1's transpose (2) = 3
+  luaunit.assert_equals(transpose, 3)
+end

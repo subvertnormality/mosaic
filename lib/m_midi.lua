@@ -39,7 +39,7 @@ function handle_midi_event_data(data, midi_device)
     return 
   end
 
-  local transpose = step.calculate_step_transpose(program.get().current_step, channel.number)
+  local transpose = step.calculate_step_transpose(channel.number)
   local device = program.get().devices[channel.number]
   local d = device_map.get_device(device.device_map)
   local midi_channel = device.midi_channel

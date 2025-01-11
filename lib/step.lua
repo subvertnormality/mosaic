@@ -378,11 +378,14 @@ function step.manually_calculate_step_scale_number(c, step)
 end
 
 
-function step.calculate_step_transpose()
-  local channel = program.get_channel(program.get().selected_song_pattern, 17)
-  local current_scale_number = program.get_channel_step_scale_number(17)
+function step.calculate_step_transpose(c)
+  local channel = program.get_channel(program.get().selected_song_pattern, c)
+  local current_scale_number = program.get_channel_step_scale_number(c)
+  if not current_scale_number then
+    current_scale_number = program.get_channel_step_scale_number(17)
+  end
   local scale = program.get_scale(current_scale_number)
-  local current_step = program.get_current_step_for_channel(17)
+  local current_step = program.get_current_step_for_channel(c)
   local step_transpose = program.get_step_transpose_trig_lock(current_step)
   local global_transpose = program.get_transpose()
   local scale_transpose = scale.transpose or 0
@@ -798,7 +801,7 @@ function step.handle(c, current_step)
 
   program.set_channel_step_scale_number(c, step.calculate_step_scale_number(c, current_step))
 
-  local transpose = step.calculate_step_transpose()
+  local transpose = step.calculate_step_transpose(c)
 
   if random_outcome then
 
@@ -1014,7 +1017,7 @@ function step.sinfonian_sync(s)
   end
 
   local scale_container = program.get_scale(sinfonion_scale_number)
-  local transpose = step.calculate_step_transpose(s, 17)
+  local transpose = step.calculate_step_transpose(17)
   local degree = quantiser.get_scales()[scale_container.number].sinf_degrees[scale_container.chord]
   local root = scale_container.root_note + quantiser.get_scales()[scale_container.number].sinf_root_mod
   local sinf_mode = quantiser.get_scales()[scale_container.number].sinf_mode
