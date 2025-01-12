@@ -964,3 +964,381 @@ function test_note_mask_with_fully_act_on_note_masks_octave_and_transpose_overri
   luaunit.assert_equals(#note_events, 1)
   luaunit.assert_equals(note_events[1][1], 85)
 end
+
+
+function test_manually_calculate_step_scale_number_step_1_standard_speeds()
+  setup()
+  
+  -- Both channels at standard speed (4)
+  local channel = 2
+  local clock_division_17 = 4
+  local channel_division = 4
+  
+  m_clock.set_channel_division(17, clock_division_17)
+  m_clock.set_channel_division(channel, channel_division)
+  
+  program.get().default_scale = 1
+  program.get().selected_channel = 17
+  program.add_step_scale_trig_lock(1, 2) -- Scale 2 on step 1
+  
+  -- Step 1 should always use step 1's scale regardless of clock divisions
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
+end
+
+function test_manually_calculate_step_scale_number_step_1_different_speeds()
+  setup()
+  
+  -- Channel at half speed (2), scale channel at standard (4)
+  local channel = 2
+  local clock_division_17 = 4
+  local channel_division = 2
+  
+  m_clock.set_channel_division(17, clock_division_17)
+  m_clock.set_channel_division(channel, channel_division)
+  
+  program.get().default_scale = 1
+  program.get().selected_channel = 17
+  program.add_step_scale_trig_lock(1, 2) -- Scale 2 on step 1
+  program.add_step_scale_trig_lock(2, 3) -- Scale 3 on step 2
+  
+  -- Step 1 should still use step 1's scale even at different speeds
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
+  -- Step 2 should map to step 3 due to speed difference
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 2), 3)
+end
+
+function test_manually_calculate_step_scale_number_step_1_very_different_speeds()
+  setup()
+  
+  -- Test with more extreme speed differences
+  local channel = 2
+  local clock_division_17 = 4
+  local channel_division = 16 -- Much faster
+  
+  m_clock.set_channel_division(17, clock_division_17)
+  m_clock.set_channel_division(channel, channel_division)
+  
+  program.get().default_scale = 1
+  program.get().selected_channel = 17
+  program.add_step_scale_trig_lock(1, 2) -- Scale 2 on step 1
+  program.add_step_scale_trig_lock(2, 3) -- Scale 3 on step 2
+  
+  -- Step 1 should still use step 1's scale even at very different speeds
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 1), 2)
+  -- Later steps should map according to the speed ratio
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 2), 2)
+  luaunit.assert_equals(step.manually_calculate_step_scale_number(channel, 5), 3)
+end
+
+
+function test_step_1_scale_and_params_processing()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  -- Set up a basic pattern with a note on step 1
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale for step 1
+  program.get().default_scale = 1
+  program.get().selected_channel = 17
+  program.add_step_scale_trig_lock(1, 2) -- Scale 2 on step 1
+  
+  -- Process step 1
+  step.handle(1, 1)
+  
+  -- Verify note output
+  local note_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_not_nil(note_event, "No note event generated for step 1")
+  -- Add specific note value assertion based on your scale 2
+  luaunit.assert_equals(note_event[1], 60)
+  luaunit.assert_equals(note_event[2], 100)
+  luaunit.assert_equals(note_event[3], 1)
+
+end
+
+function test_step_1_params_with_same_clock_speeds()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  -- Set up pattern with step 1 trig lock
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  local channel = program.get_channel(song_pattern, 1)
+
+  local my_param_id = "my_param_id"
+
+  params:add(my_param_id, {
+    name = "name",
+    val = -1
+  })
+  
+  -- Add a MIDI CC parameter trig lock on step 1
+  channel.trig_lock_params[1] = {
+    type = "midi",
+    cc_msb = 1,
+    cc_min_value = 0,
+    cc_max_value = 127,
+    param_id = my_param_id,
+    device_name = "test",
+    id = 1
+  }
+  program.add_step_param_trig_lock_to_channel(channel, 1, 1, 64) -- CC value of 64 on step 1
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set different clock speeds
+  m_clock.set_channel_division(17, 4)  -- Standard speed for global
+  m_clock.set_channel_division(1, 4)   -- Standard speed for channel 1
+
+  m_clock.init()
+  m_clock:start()
+  
+  -- Verify MIDI CC was sent
+  local cc_event = table.remove(midi_cc_events, 1)
+  luaunit.assert_not_nil(cc_event, "No CC event generated for step 1")
+  luaunit.assert_equals(cc_event[1], 1)  -- CC number
+  luaunit.assert_equals(cc_event[2], 64) -- CC value
+end
+
+function test_step_1_params_with_different_clock_speeds()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  -- Set up pattern with step 1 trig lock
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  local channel = program.get_channel(song_pattern, 1)
+
+  local my_param_id = "my_param_id"
+
+  params:add(my_param_id, {
+    name = "name",
+    val = -1
+  })
+  
+  -- Add a MIDI CC parameter trig lock on step 1
+  channel.trig_lock_params[1] = {
+    type = "midi",
+    cc_msb = 1,
+    cc_min_value = 0,
+    cc_max_value = 127,
+    param_id = my_param_id,
+    device_name = "test",
+    id = 1
+  }
+  program.add_step_param_trig_lock_to_channel(channel, 1, 1, 64) -- CC value of 64 on step 1
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set different clock speeds
+  m_clock.set_channel_division(17, 4)  -- Standard speed for global
+  m_clock.set_channel_division(1, 8)   -- Standard speed for channel 1
+
+  m_clock.init()
+  m_clock:start()
+  
+  -- Verify MIDI CC was sent
+  local cc_event = table.remove(midi_cc_events, 1)
+  luaunit.assert_not_nil(cc_event, "No CC event generated for step 1")
+  luaunit.assert_equals(cc_event[1], 1)  -- CC number
+  luaunit.assert_equals(cc_event[2], 64) -- CC value
+end
+
+function test_step_1_processing_after_pattern_change()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  -- Set up pattern with step 1 note and trig lock
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  
+  -- Set up scale for step 1
+  program.get().default_scale = 1
+  program.get().selected_channel = 17
+  program.add_step_scale_trig_lock(1, 2)
+
+  pattern.update_working_patterns()
+  
+  -- Process step 1, change pattern, then process step 1 again
+  step.handle(1, 1)
+  local first_note = table.remove(midi_note_on_events, 1)
+  
+  program.set_selected_song_pattern(2) -- Change pattern
+  pattern.update_working_patterns()
+  
+  step.handle(1, 1)
+  local second_note = table.remove(midi_note_on_events, 1)
+  
+  -- Both notes should be processed with step 1's scale
+  luaunit.assert_equals(first_note[1], second_note[1])
+end
+
+function test_running_sequencer_step_1_scale()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  -- Set up pattern with notes on steps 1 and 2
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_values[2] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.lengths[2] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.trig_values[2] = 1
+  test_pattern.velocity_values[1] = 100
+  test_pattern.velocity_values[2] = 100
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  
+  -- Set up different scales for steps 1 and 2
+  program.get().default_scale = 1
+  program.get().selected_channel = 17
+  program.add_step_scale_trig_lock(1, 2) -- Scale 2 on step 1
+  program.add_step_scale_trig_lock(2, 3) -- Scale 3 on step 2
+
+  pattern.update_working_patterns()
+  
+  -- Start the clock and run for a few steps
+  m_clock.init()
+  m_clock:start()
+  
+  -- Run for 2 beats to capture both steps
+  progress_clock_by_beats(2)
+  
+  -- Check the notes that were generated
+  local first_note = table.remove(midi_note_on_events, 1)
+  local second_note = table.remove(midi_note_on_events, 1)
+  
+  -- Verify notes were processed with correct scales
+  luaunit.assert_not_nil(first_note, "No note generated for step 1")
+  luaunit.assert_not_nil(second_note, "No note generated for step 2")
+  -- Add assertions for expected note values based on scales 2 and 3
+end
+
+function test_step_param_processing_on_sequencer_start()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  -- Set up pattern with CC locks on steps 1 and 2
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.trig_values[1] = 1
+  test_pattern.trig_values[2] = 1
+
+  local channel = program.get_channel(song_pattern, 1)
+  
+  -- Add MIDI CC parameter trig locks
+  channel.trig_lock_params[1] = {
+    type = "midi",
+    cc_msb = 1,
+    cc_min_value = 0,
+    cc_max_value = 127,
+    param_id = "test_param",
+    device_name = "test",
+    id = 1
+  }
+  
+  program.add_step_param_trig_lock_to_channel(channel, 1, 1, 64)  -- CC 64 on step 1
+  program.add_step_param_trig_lock_to_channel(channel, 2, 1, 100) -- CC 100 on step 2
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set different clock speeds to match real-world scenario
+  m_clock.set_channel_division(1, 8)   -- Double speed
+  m_clock.set_channel_division(17, 4)  -- Normal speed
+
+  -- Check sequencer start behavior
+  print("\nStarting sequencer:")
+  m_clock.init()
+  midi_cc_events = {}
+  m_clock:start()
+  
+  -- Run for a few pulses to capture initial behavior
+  for i = 1, 24 do  -- One beat
+    if i == 1 then
+      print(string.format("Initial CC events: %d", #midi_cc_events))
+      for _, event in ipairs(midi_cc_events) do
+        print(string.format("Initial CC value: %d", event[2]))
+      end
+    end
+    m_clock.get_clock_lattice():pulse()
+  end
+  
+  -- Should have seen step 1's CC (64) before any pulses
+  local saw_initial_cc = false
+  for _, event in ipairs(midi_cc_events) do
+    if event[2] == 64 then
+      saw_initial_cc = true
+      break
+    end
+  end
+  luaunit.assert_true(saw_initial_cc, "Should see step 1's CC (64) immediately on start")
+  
+  -- Clear events and run until we see a wrap
+  midi_cc_events = {}
+  local found_wrap = false
+  
+  for i = 1, 24*80 do  -- Run for many beats to catch a wrap
+    m_clock.get_clock_lattice():pulse()
+    
+    if #midi_cc_events > 0 then
+      local current_step = program.get_current_step_for_channel(1)
+      for _, event in ipairs(midi_cc_events) do
+        print(string.format("Pulse %d (Step %d): CC value=%d", 
+          i, current_step, event[2]))
+        
+        -- Check wrap behavior (step 64 should fire step 1's CC)
+        if current_step == 64 and event[2] == 64 then
+          found_wrap = true
+        end
+        -- Check look-ahead behavior (step 1 should fire step 2's CC)
+        if current_step == 1 then
+          luaunit.assert_equals(event[2], 100, "Step 1 should fire step 2's CC (100)")
+        end
+      end
+      midi_cc_events = {}
+    end
+  end
+  
+  luaunit.assert_true(found_wrap, "Should see step 1's CC (64) at step 64 during wrap")
+end

@@ -1,3 +1,7 @@
+## 1.2.3
+
+- Fixed issue that was leading global scales to be applied incorrectly when another channel was running at a higher clock division.
+
 ## 1.2.2
 
 - Fixed regression that stopped channel scale locks from applying transposition properly.

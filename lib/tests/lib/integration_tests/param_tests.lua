@@ -59,57 +59,57 @@ local function contains_event(events, target_event)
 end
 
 function test_params_trig_locks_are_processed_at_the_right_step()
-    setup()
-    local song_pattern = 1
-    program.set_selected_song_pattern(1)
-    local test_pattern = program.initialise_default_pattern()
-  
-    local test_step = 8
-    local cc_msb = 2
-    local cc_value = 111
-    local c = 1
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
 
-    local my_param_id = "my_param_id"
+  local test_step = 8
+  local cc_msb = 2
+  local cc_value = 111
+  local c = 1
 
-    params:add(my_param_id, {
-      name = "name",
-      val = -1
-    })
+  local my_param_id = "my_param_id"
+
+  params:add(my_param_id, {
+    name = "name",
+    val = -1
+  })
+
+  test_pattern.note_values[test_step] = 0
+  test_pattern.lengths[test_step] = 1
+  test_pattern.trig_values[test_step] = 1
+  test_pattern.velocity_values[test_step] = 100
+
+  program.get().selected_channel = c
+
+  local channel = program.get_selected_channel()
+
+  channel.trig_lock_params[1].device_name = "test"
+  channel.trig_lock_params[1].type = "midi"
+  channel.trig_lock_params[1].id = 1
+  channel.trig_lock_params[1].param_id = my_param_id
+  channel.trig_lock_params[1].cc_msb = cc_msb
+  channel.trig_lock_params[1].cc_min_value = -1 
+  channel.trig_lock_params[1].cc_max_value = 127
+
+  program.add_step_param_trig_lock(test_step, 1, cc_value)
+
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+
+  pattern.update_working_patterns()
+
+  -- Reset and set up the clock and MIDI event tracking
+  clock_setup()
+
+  progress_clock_by_beats(test_step - 1)
+
+  local midi_cc_event = table.remove(midi_cc_events)
+
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value, 1})
   
-    test_pattern.note_values[test_step] = 0
-    test_pattern.lengths[test_step] = 1
-    test_pattern.trig_values[test_step] = 1
-    test_pattern.velocity_values[test_step] = 100
-  
-    program.get().selected_channel = c
-  
-    local channel = program.get_selected_channel()
-  
-    channel.trig_lock_params[1].device_name = "test"
-    channel.trig_lock_params[1].type = "midi"
-    channel.trig_lock_params[1].id = 1
-    channel.trig_lock_params[1].param_id = my_param_id
-    channel.trig_lock_params[1].cc_msb = cc_msb
-    channel.trig_lock_params[1].cc_min_value = -1 
-    channel.trig_lock_params[1].cc_max_value = 127
-  
-    program.add_step_param_trig_lock(test_step, 1, cc_value)
-  
-    program.get_song_pattern(song_pattern).patterns[1] = test_pattern
-    fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
-  
-    pattern.update_working_patterns()
-  
-    -- Reset and set up the clock and MIDI event tracking
-    clock_setup()
-  
-    progress_clock_by_beats(test_step - 1)
-  
-    local midi_cc_event = table.remove(midi_cc_events)
-  
-    luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value, 1})
-  
-  end
+end
   
 
 function test_params_triggless_locks_are_processed_at_the_right_step()
