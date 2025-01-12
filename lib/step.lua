@@ -301,7 +301,7 @@ function step.calculate_step_scale_number(c, s)
   end
 
   local start_trig_17 = fn.calc_grid_count(program.get_channel(program.get().selected_song_pattern, 17).start_trig[1], program.get_channel(program.get().selected_song_pattern, 17).start_trig[2])
-  if current_step_17 == start_trig_17 then
+  if c == 17 and current_step_17 == start_trig_17 then
     persistent_global_step_scale_number = nil
   end
 
