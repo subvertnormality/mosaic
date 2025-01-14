@@ -1,0 +1,10 @@
+[{
+  "params": [
+  ],
+  "name": "DT Poly CV",
+  "type": "midi",
+  "value": 9,
+  "polyphonic": true,
+  "map_params_automatically": false,
+  "id": "dt-poly-cv"
+}]
