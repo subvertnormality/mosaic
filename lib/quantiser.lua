@@ -405,6 +405,15 @@ function quantiser.process_with_global_params(note_number, octave_mod, transpose
   return process_handler(note_number, octave_mod, transpose, scale_number, do_rotation, do_degree, do_transpose)
 end
 
+function quantiser.process_with_mask_params(note_number, octave_mod, transpose, scale_number, fully_quantise_mask)
+  if fully_quantise_mask then
+    return process_handler(note_number, octave_mod, transpose, scale_number, true, true, true)
+  else
+    return process_handler(note_number, octave_mod, transpose, scale_number, false, false, false)
+  end
+end
+
+
 function quantiser.snap_to_scale(note_num, scale_number, transpose)
 
   local scale_container = program.get_scale(scale_number)

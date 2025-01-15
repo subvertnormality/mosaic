@@ -1,0 +1,90 @@
+[{
+  "params": [
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "FLDR",
+      "name": "Folder",
+      "short_descriptor_1": "SMPL",
+      "cc_min_value": -1,
+      "cc_msb": 13,
+      "id": "folder"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TIME",
+      "name": "Attack Time",
+      "short_descriptor_1": "ATCK",
+      "cc_min_value": -1,
+      "cc_msb": 21,
+      "id": "attack_time"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TIME",
+      "name": "Decay Time",
+      "short_descriptor_1": "DCAY",
+      "cc_min_value": -1,
+      "cc_msb": 22,
+      "id": "decay_time"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TIME",
+      "name": "Sustain Time",
+      "short_descriptor_1": "SUST",
+      "cc_min_value": -1,
+      "cc_msb": 23,
+      "id": "sustain_time"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "TIME",
+      "name": "Release Time",
+      "short_descriptor_1": "RELE",
+      "cc_min_value": -1,
+      "cc_msb": 24,
+      "id": "release_time"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "SPOS",
+      "name": "Transpose",
+      "short_descriptor_1": "TRAN",
+      "cc_min_value": -1,
+      "cc_msb": 11,
+      "id": "transpose"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "GAIN",
+      "name": "Gain",
+      "short_descriptor_1": "AMP",
+      "cc_min_value": -1,
+      "cc_msb": 2,
+      "id": "gain"
+    },
+    {
+      "cc_max_value": 127,
+      "off_value": -1,
+      "short_descriptor_2": "PAN",
+      "name": "Pan",
+      "short_descriptor_1": "AMP",
+      "cc_min_value": -1,
+      "cc_msb": 17,
+      "id": "pan"
+    }
+  ],
+  "name": "DT M Sample",
+  "type": "midi",
+  "value": 6,
+  "polyphonic": true,
+  "map_params_automatically": false,
+  "id": "dt-multi-sample"
+}]

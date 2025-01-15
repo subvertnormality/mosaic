@@ -1288,19 +1288,12 @@ function test_step_param_processing_on_sequencer_start()
   m_clock.set_channel_division(17, 4)  -- Normal speed
 
   -- Check sequencer start behavior
-  print("\nStarting sequencer:")
   m_clock.init()
   midi_cc_events = {}
   m_clock:start()
   
   -- Run for a few pulses to capture initial behavior
   for i = 1, 24 do  -- One beat
-    if i == 1 then
-      print(string.format("Initial CC events: %d", #midi_cc_events))
-      for _, event in ipairs(midi_cc_events) do
-        print(string.format("Initial CC value: %d", event[2]))
-      end
-    end
     m_clock.get_clock_lattice():pulse()
   end
   
@@ -1324,9 +1317,7 @@ function test_step_param_processing_on_sequencer_start()
     if #midi_cc_events > 0 then
       local current_step = program.get_current_step_for_channel(1)
       for _, event in ipairs(midi_cc_events) do
-        print(string.format("Pulse %d (Step %d): CC value=%d", 
-          i, current_step, event[2]))
-        
+
         -- Check wrap behavior (step 64 should fire step 1's CC)
         if current_step == 64 and event[2] == 64 then
           found_wrap = true
@@ -1341,4 +1332,357 @@ function test_step_param_processing_on_sequencer_start()
   end
   
   luaunit.assert_true(found_wrap, "Should see step 1's CC (64) at step 64 during wrap")
+end
+
+function test_note_mask_with_chords_no_scale_degree_effect()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2  -- Major third
+  channel.chord_two_mask = 4  -- Perfect fifth
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale with degree that would modify notes if active
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0  -- C
+  scale.number = 1     -- Major scale
+  scale.chord = 2      -- Second degree (which would modify the chord notes if active)
+
+  -- Disable fully act on note masks
+  params:set("quantiser_fully_act_on_note_masks", 1)
+  
+  step.handle(1, 1)
+  
+  -- Should get three note on events - all using raw intervals from mask
+  local note_events = midi_note_on_events
+  
+  luaunit.assert_equals(#note_events, 3)
+  luaunit.assert_equals(note_events[1][1], 60) -- C4 (mask value)
+  luaunit.assert_equals(note_events[2][1], 64) -- E4 (C4 + 4 semitones)
+  luaunit.assert_equals(note_events[3][1], 67) -- G4 (C4 + 7 semitones)
+end
+
+function test_note_mask_with_chords_with_scale_degree_effect()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2  -- Major third
+  channel.chord_two_mask = 4  -- Perfect fifth
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale with degree that would modify notes if active
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0  -- C
+  scale.number = 1     -- Major scale
+  scale.chord = 2      -- Second degree (which would modify the chord notes if active)
+
+  -- Fully act on note masks
+  params:set("quantiser_fully_act_on_note_masks", 2)
+  
+  step.handle(1, 1)
+  
+  -- Should get three note on events - all using raw intervals from mask
+  local note_events = midi_note_on_events
+  
+  luaunit.assert_equals(#note_events, 3)
+  luaunit.assert_equals(note_events[1][1], 62) -- D (mask value)
+  luaunit.assert_equals(note_events[2][1], 65) -- F (C4 + 4 semitones)
+  luaunit.assert_equals(note_events[3][1], 69) -- A (C4 + 7 semitones)
+end
+
+function test_note_mask_with_chords_and_arp_no_scale_degree_effect()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2  -- Major third
+  channel.chord_two_mask = 4  -- Perfect fifth
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale with degree that would modify notes if active
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0  -- C
+  scale.number = 1     -- Major scale
+  scale.chord = 2      -- Second degree (would modify if active)
+
+  -- Enable arpeggio mode
+  channel.trig_lock_params[1] = {id = "chord_arp", param_id = "chord_arp_1"}
+  program.add_step_param_trig_lock(1, 1, 4) -- Standard division
+
+  -- Disable fully act on note masks
+  params:set("quantiser_fully_act_on_note_masks", 1)
+  
+  -- Initialize m_clock for arp timing
+  m_clock.init()
+  m_clock:start()
+  
+  -- First note
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60) -- C4 (mask value)
+  
+  progress_clock_by_beats(1)
+  
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 64) -- E4 (C4 + 4 semitones)
+  
+  progress_clock_by_beats(1)
+
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 67) -- G4 (C4 + 7 semitones)
+end
+
+
+function test_note_mask_with_chords_and_arp_scale_degree_effect()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2  -- Major third
+  channel.chord_two_mask = 4  -- Perfect fifth
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale with degree that would modify notes if active
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0  -- C
+  scale.number = 1     -- Major scale
+  scale.chord = 2      -- Second degree (would modify if active)
+
+  -- Enable arpeggio mode
+  channel.trig_lock_params[1] = {id = "chord_arp", param_id = "chord_arp_1"}
+  program.add_step_param_trig_lock(1, 1, 4) -- Standard division
+
+  -- Enable fully act on note masks
+  params:set("quantiser_fully_act_on_note_masks", 2)
+  
+  -- Initialize m_clock for arp timing
+  m_clock.init()
+  m_clock:start()
+  
+  -- First note
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62) -- C4 (mask value)
+  
+  progress_clock_by_beats(1)
+  
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65) -- E4 (C4 + 4 semitones)
+  
+  progress_clock_by_beats(1)
+
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 69) -- G4 (C4 + 7 semitones)
+end
+
+
+
+function test_note_mask_with_chords_and_arp_scale_degree_effect_using_param_fully_quantise_mask()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2  -- Major third
+  channel.chord_two_mask = 4  -- Perfect fifth
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale with degree that would modify notes if active
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0  -- C
+  scale.number = 1     -- Major scale
+  scale.chord = 2      -- Second degree (would modify if active)
+
+  -- Enable arpeggio mode
+  channel.trig_lock_params[1] = {id = "chord_arp", param_id = "chord_arp_1"}
+  program.add_step_param_trig_lock(1, 1, 4) -- Standard division
+
+  channel.trig_lock_params[4].id = "fully_quantise_mask"
+  program.add_step_param_trig_lock(1, 4, 2) -- Explicitly enable
+  
+  -- Initialize m_clock for arp timing
+  m_clock.init()
+  m_clock:start()
+  
+  -- First note
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 62) -- C4 (mask value)
+  
+  progress_clock_by_beats(1)
+  
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 65) -- E4 (C4 + 4 semitones)
+  
+  progress_clock_by_beats(1)
+
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 69) -- G4 (C4 + 7 semitones)
+end
+
+
+function test_note_mask_with_chords_with_scale_degree_effect_using_param_fully_quantise_mask()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2  -- Major third
+  channel.chord_two_mask = 4  -- Perfect fifth
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale with degree that would modify notes if active
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0  -- C
+  scale.number = 1     -- Major scale
+  scale.chord = 2      -- Second degree (which would modify the chord notes if active)
+
+  -- Fully act on note masks
+  channel.trig_lock_params[4].id = "fully_quantise_mask"
+  program.add_step_param_trig_lock(1, 4, 2) -- Explicitly enable
+  
+  step.handle(1, 1)
+  
+  -- Should get three note on events - all using raw intervals from mask
+  local note_events = midi_note_on_events
+  
+  luaunit.assert_equals(#note_events, 3)
+  luaunit.assert_equals(note_events[1][1], 62) -- D (mask value)
+  luaunit.assert_equals(note_events[2][1], 65) -- F (C4 + 4 semitones)
+  luaunit.assert_equals(note_events[3][1], 69) -- A (C4 + 7 semitones)
+end
+
+
+
+function test_note_mask_with_chords_and_arp_no_scale_degree_effect_due_to_param_override()
+  setup()
+  mock_random()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.note_mask_values[1] = 60 -- Fixed C4
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = 2  -- Major third
+  channel.chord_two_mask = 4  -- Perfect fifth
+  
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+
+  -- Set up scale with degree that would modify notes if active
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0  -- C
+  scale.number = 1     -- Major scale
+  scale.chord = 2      -- Second degree (would modify if active)
+
+  -- Enable arpeggio mode
+  channel.trig_lock_params[1] = {id = "chord_arp", param_id = "chord_arp_1"}
+  program.add_step_param_trig_lock(1, 1, 4) -- Standard division
+
+  -- Enable fully act on note masks
+  params:set("quantiser_fully_act_on_note_masks", 2)
+
+  -- but explicitly disable it using the param
+  channel.trig_lock_params[4].id = "fully_quantise_mask"
+  program.add_step_param_trig_lock(1, 4, 1) -- Explicitly enable
+  
+  -- Initialize m_clock for arp timing
+  m_clock.init()
+  m_clock:start()
+  
+  -- First note
+  local note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 60) -- C4 (mask value)
+  
+  progress_clock_by_beats(1)
+  
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 64) -- E4 (C4 + 4 semitones)
+  
+  progress_clock_by_beats(1)
+
+  note_on_event = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals(note_on_event[1], 67) -- G4 (C4 + 7 semitones)
 end

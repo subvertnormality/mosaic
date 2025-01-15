@@ -86,111 +86,10 @@ local function benchmark_operation(name, operation, iterations)
   }
 end
 
-function test_spread_action_performance()
-  
-  setup()
-  clock_setup()
-  
-  local test_cases = {
-    { name = "Small", action_count = 10, iterations = 1000 },
-    { name = "Medium", action_count = 100, iterations = 100 },
-    { name = "Large", action_count = 1000, iterations = 10 }
-  }
-  
-  print("\nSpread Action Performance Tests:")
-  print("================================")
-  
-  for _, test in ipairs(test_cases) do
-    print(string.format("\nTest Case: %s (%d actions, %d iterations)", 
-      test.name, test.action_count, test.iterations))
-    
-    local test_actions = generate_test_actions(test.action_count)
-    
-    -- Test action creation
-    local creation_result = benchmark_operation(
-      "Action Creation",
-      function()
-        for _, action in ipairs(test_actions) do
-          m_clock.execute_action_across_steps_by_pulses(action)
-        end
-      end,
-      test.iterations
-    )
-    
-    -- Test action processing
-    local processing_result = benchmark_operation(
-      "Action Processing",
-      function()
-        progress_clock_by_pulses(48) -- One processing cycle
-      end,
-      test.iterations
-    )
-    
-    -- Test action cancellation
-    local cancellation_result = benchmark_operation(
-      "Action Cancellation",
-      function()
-        for i = 1, 16 do
-          m_clock.cancel_spread_actions_for_channel_trig_lock(i)
-        end
-      end,
-      test.iterations
-    )
-    
-    -- Print results
-    local function print_result(result)
-      print(string.format("%s:", result.name))
-      print(string.format("  Time: %.6f seconds", result.time))
-      print(string.format("  Time per iteration: %.6f ms", 
-        (result.time / result.iterations) * 1000))
-      print(string.format("  Memory delta: %.2f KB", result.memory_delta))
-    end
-    
-    print_result(creation_result)
-    print_result(processing_result)
-    print_result(cancellation_result)
-    
-    -- Calculate throughput
-    local total_actions = test.action_count * test.iterations
-    local total_time = creation_result.time + processing_result.time + 
-                      cancellation_result.time
-    print(string.format("\nThroughput: %.2f actions/second", 
-      total_actions / total_time))
-    
-    -- Memory efficiency
-    local memory_per_action = (creation_result.memory_delta + 
-      processing_result.memory_delta + cancellation_result.memory_delta) / 
-      total_actions
-    print(string.format("Memory per action: %.2f bytes", 
-      memory_per_action * 1024))
-  end
-  
-  -- Test memory stability over time
-  print("\nMemory Stability Test:")
-  print("=====================")
-  local initial_memory = get_memory_usage()
-  local samples = 10
-  
-  for i = 1, samples do
-    local test_actions = generate_test_actions(100)
-    for _, action in ipairs(test_actions) do
-      m_clock.execute_action_across_steps_by_pulses(action)
-    end
-    progress_clock_by_pulses(96)
-    collectgarbage("collect")
-    
-    local current_memory = get_memory_usage()
-    print(string.format("Sample %d memory: %.2f KB (delta: %.2f KB)",
-      i, current_memory, current_memory - initial_memory))
-  end
-end
 
 function test_massive_concurrent_automation_with_param_slides()
   setup()
   clock_setup()
-  
-  print("\nMassive Concurrent Automation Test with Parameter Slides:")
-  print("=====================================================")
   
   local start_memory = get_memory_usage()
   local start_time = clock()
@@ -316,10 +215,7 @@ function test_massive_concurrent_automation_with_param_slides()
     end
   end
   
-  -- Rest of the test remains the same...
   local setup_time = clock() - start_time
-  print(string.format("Setup time: %.3f seconds", setup_time))
-  print(string.format("Total actions created: %d", action_count))
   
   -- Process the automation
   local process_start = clock()
@@ -347,12 +243,6 @@ function test_massive_concurrent_automation_with_param_slides()
       local current_memory = get_memory_usage()
       peak_memory = math.max(peak_memory, current_memory)
       table.insert(memory_samples, current_memory)
-      
-      print(string.format("Bar %d memory: %.2f KB (delta: %.2f KB)", 
-        pulse / 96,
-        current_memory,
-        current_memory - last_memory))
-      
       last_memory = current_memory
     end
   end
@@ -369,22 +259,6 @@ function test_massive_concurrent_automation_with_param_slides()
     timing_variance = timing_variance + (time - avg_process_time) ^ 2
   end
   timing_variance = math.sqrt(timing_variance / #processing_times)
-  
-  -- Print extended results
-  print("\nResults:")
-  print(string.format("Total runtime: %.3f seconds", clock() - start_time))
-  print(string.format("Processing time: %.3f seconds", clock() - process_start))
-  print(string.format("Values processed: %d", processed_values))
-  print(string.format("Processing rate: %.2f values/second", 
-    processed_values / (clock() - process_start)))
-  print(string.format("Peak memory: %.2f KB", peak_memory))
-  print(string.format("Memory overhead per action: %.2f bytes", 
-    (peak_memory - start_memory) * 1024 / action_count))
-  print("\nTiming Statistics:")
-  print(string.format("Average process time: %.3f ms", avg_process_time * 1000))
-  print(string.format("Min process time: %.3f ms", min_process_time * 1000))
-  print(string.format("Max process time: %.3f ms", max_process_time * 1000))
-  print(string.format("Timing variance: %.3f ms", timing_variance * 1000))
   
   -- Verify performance meets requirements
   luaunit.assert_true(max_process_time < 0.002, -- 2ms max processing time per pulse

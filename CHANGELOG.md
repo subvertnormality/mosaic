@@ -1,3 +1,7 @@
+## 1.2.4
+
+- Fixed inconsistent behaviours with chord masks being quantised to the scale degree and rotations depending on different settings.
+
 ## 1.2.3
 
 - Fixed issue that was leading global scales to be applied incorrectly when another channel was running at a higher clock division.
