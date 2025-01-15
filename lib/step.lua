@@ -636,7 +636,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   local process_func
   if unprocessed_note_container.is_mask then
-    process_func = quantiser.process_with_mask_params
+    process_func = function (note_number, octave_mod, transpose, scale_number) 
+      return quantiser.process_with_mask_params(note_number, octave_mod, transpose, scale_number, unprocessed_note_container.fully_quantise_mask) 
+    end
   else
     process_func = quantiser.process
   end
@@ -828,14 +830,14 @@ function step.handle(c, current_step)
     local octave_mod_offset = 0
 
     local is_mask = false
+    local fully_quantise_mask = step.process_stock_params(c, current_step, "fully_quantise_mask")
 
     if note_mask_value and note_mask_value > -1 then
       is_mask = true
-      local fully_quantise_mask = step.process_stock_params(c, current_step, "fully_quantise_mask") or -1
-
+      fully_quantise_mask = (params:get("quantiser_fully_act_on_note_masks") == 2 and (fully_quantise_mask == -1 or fully_quantise_mask == nil)) or fully_quantise_mask == 2
       relative_note_mask_value, octave_mod_offset = quantiser.translate_note_mask_to_relative_scale_position(note_mask_value, channel.step_scale_number)
 
-      if (params:get("quantiser_fully_act_on_note_masks") == 2 and fully_quantise_mask == -1) or fully_quantise_mask == 2 then
+      if fully_quantise_mask then
         local final_octave = octave_mod + octave_mod_offset
         note = quantiser.process(relative_note_mask_value + random_shift, final_octave, transpose, channel.step_scale_number, do_pentatonic)
       elseif params:get("quantiser_act_on_note_masks") == 2 then
@@ -892,7 +894,7 @@ function step.handle(c, current_step)
         device,
         current_step,
         note_container,
-        {note_value = relative_note_mask_value or note_value, octave_mod = octave_mod + octave_mod_offset, transpose = transpose, random_shift = random_shift, is_mask = is_mask, do_pentatonic = do_pentatonic },
+        {note_value = relative_note_mask_value or note_value, octave_mod = octave_mod + octave_mod_offset, transpose = transpose, random_shift = random_shift, is_mask = is_mask, fully_quantise_mask = fully_quantise_mask, do_pentatonic = do_pentatonic },
         function(chord_note, velocity, midi_channel, midi_device)
           if device.player then
             device.player:note_on(chord_note, (127 > 1) and ((velocity - 1) / 126) or 0)
