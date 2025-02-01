@@ -64,7 +64,7 @@ function handle_midi_event_data(data, midi_device)
         step_scale_number = step.manually_calculate_step_scale_number(channel.number, s)
       end
     else
-      step_scale_number = step.manually_calculate_step_scale_number(channel.number, s)
+      step_scale_number = step.calculate_step_scale_number(channel.number, s)
     end
 
     local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, step_scale_number)
