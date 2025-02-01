@@ -1,3 +1,7 @@
+## 1.2.5
+
+- Fixed regression that led to midi input not using the correct global scale number.
+
 ## 1.2.4
 
 - Fixed inconsistent behaviours with chord masks being quantised to the scale degree and rotations depending on different settings.
