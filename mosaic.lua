@@ -205,6 +205,7 @@ function init()
   sinfonion.set_chaotic_detune(0)
   sinfonion.set_harmonic_shift(0)
 
+  crow.ii.pullup(true)
 
   scheduler_clock = clock.run(
     function()

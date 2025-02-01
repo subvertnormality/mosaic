@@ -575,7 +575,14 @@ function channel_edit_page_ui.update_channel_config()
     device_m.id == "jf n 3" or
     device_m.id == "jf n 6"
   then
+    crow.ii.pullup(true) 
     crow.ii.jf.mode(1)
+  end
+
+  if device_m.id == "ansible 1" or
+    device_m.id == "ansible 2"
+  then
+    crow.ii.pullup(true) 
   end
 
   param_manager.add_device_params(
