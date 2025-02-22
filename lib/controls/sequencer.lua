@@ -38,6 +38,7 @@ function sequencer:draw(channel, draw_func)
   local program_get_selected_song_pattern = program.get_selected_song_pattern
   local program_get_current_step_for_channel = program.get_current_step_for_channel
   local program_step_has_trig_lock = channel_edit_page_ui.should_show_step_has_trig_lock
+
   local m_clock_is_playing = m_clock.is_playing
   local fn_calc_grid_count = fn.calc_grid_count
   local math_floor = math.floor

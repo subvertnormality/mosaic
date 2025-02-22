@@ -1,3 +1,7 @@
+## 1.2.6
+
+- Fixed issue where param locks on the first step of a pattern were not being applied properly in song mode.
+
 ## 1.2.5
 
 - Fixed regression that led to midi input not using the correct global scale number.

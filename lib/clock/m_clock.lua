@@ -417,16 +417,18 @@ function m_clock.init()
         local next_step = program.get_current_step_for_channel(channel_number) + 1
         if next_step < 1 then return end
 
+        local song_pattern_number = program.get().selected_song_pattern
         if next_step > end_trig then
           next_step = start_trig
+          song_pattern_number = step.calculate_next_selected_song_pattern()
         end
 
         local next_trig_value = channel.working_pattern.trig_values[next_step]
 
         if next_trig_value == 1 then
-          step.process_params(channel_number, next_step)
+          step.process_params(channel_number, next_step, song_pattern_number)
         elseif params:get("trigless_locks") == 2 and program.step_has_param_trig_lock(channel, next_step) then
-          step.process_params(channel_number, next_step)
+          step.process_params(channel_number, next_step, song_pattern_number)
         end
 
       end

@@ -115,9 +115,11 @@ local function process_midi_param(param, step_trig_lock, midi_channel, midi_devi
 end
 
 
-function step.process_params(c, step)
+function step.process_params(c, step, song_pattern_number)
   local program_data = program.get()
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
+
+  local channel = program.get_channel(song_pattern_number or program.get().selected_song_pattern, c)
+
   local device = device_map.get_device(program_data.devices[channel.number].device_map)
   local trig_lock_params = channel.trig_lock_params
 
@@ -150,6 +152,7 @@ function step.process_params(c, step)
       end
 
       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
+
         local midi_channel = devices[channel.number].midi_channel
 
         local param_id = param.param_id
