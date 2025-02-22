@@ -290,22 +290,12 @@ function program.set(p)
   end
 end
 
-function program.add_step_param_trig_lock(step, parameter, trig_lock)
-  local channel = program.get_selected_channel()
-  local step_trig_lock_banks = channel.step_trig_lock_banks
-  local trig_lock_params = channel.trig_lock_params
-
-  if not step_trig_lock_banks[step] then
-    step_trig_lock_banks[step] = {}
-  end
-
-  trig_lock = math.max(trig_lock, trig_lock_params[parameter].nrpn_min_value or trig_lock_params[parameter].cc_min_value or 0)
-  trig_lock = math.min(trig_lock, trig_lock_params[parameter].nrpn_max_value or trig_lock_params[parameter].cc_max_value or 127)
-
-  step_trig_lock_banks[step][parameter] = trig_lock
-end
-
 function program.add_step_param_trig_lock_to_channel(channel, step, parameter, trig_lock)
+
+  if not parameter then
+    return
+  end
+
   local step_trig_lock_banks = channel.step_trig_lock_banks
   local trig_lock_params = channel.trig_lock_params
 
@@ -319,6 +309,11 @@ function program.add_step_param_trig_lock_to_channel(channel, step, parameter, t
   step_trig_lock_banks[step][parameter] = trig_lock
 
 end
+
+function program.add_step_param_trig_lock(step, parameter, trig_lock)
+  program.add_step_param_trig_lock_to_channel(program.get_selected_channel(), step, parameter, trig_lock)
+end
+
 
 function program.get_step_param_trig_lock(channel, step, parameter)
   local step_trig_lock_banks = channel.step_trig_lock_banks

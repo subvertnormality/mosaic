@@ -1805,7 +1805,7 @@ function channel_edit_page_ui.should_show_step_has_trig_lock(channel, step)
           program.step_has_param_slide(channel, step)
   end
 
-  return false
+  return true
 end
 
 
