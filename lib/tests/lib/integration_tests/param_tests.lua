@@ -4991,6 +4991,8 @@ function test_param_locks_fire_on_first_step_when_transitioning_song_patterns()
   local song_pattern_1 = 1
   local song_pattern_2 = 2
   program.set_selected_song_pattern(song_pattern_1)
+
+  program.get().repeat_count = 1
   
   -- Set up first pattern
   local test_pattern_1 = program.initialise_default_pattern()

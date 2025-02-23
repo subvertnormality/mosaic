@@ -57,7 +57,7 @@ function song_edit_page.register_draws()
   )
 end
 
-function song_edit_page.register_presss()
+function song_edit_page.register_press()
   press:register(
     "song_edit_page",
     function(x, y)

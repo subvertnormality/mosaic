@@ -197,14 +197,14 @@ end
 
 pattern.update_working_patterns = scheduler.debounce(function()
   for c = 1, 16 do
-    pattern.update_working_pattern(c)
+    pattern.update_working_pattern(c, program.get_selected_song_pattern())
     coroutine.yield()
   end
 end, throttle_time)
 
-function pattern.update_working_pattern(c)
-  local selected_song_pattern = program.get_selected_song_pattern()
-  local channel_pattern = selected_song_pattern.channels[c]
+function pattern.update_working_pattern(c, song_pattern)
+
+  local channel_pattern = song_pattern.channels[c]
   channel_pattern.working_pattern = pattern.get_and_merge_patterns(
     c,
     channel_pattern.trig_merge_mode,

@@ -84,13 +84,13 @@ local function register_draws()
 end
 
 
-local function register_presss()
-  channel_edit_page.register_presss()
-  scale_edit_page.register_presss()
-  trigger_edit_page.register_presss()
-  note_edit_page.register_presss()
-  velocity_edit_page.register_presss()
-  song_edit_page.register_presss()
+local function register_press()
+  channel_edit_page.register_press()
+  scale_edit_page.register_press()
+  trigger_edit_page.register_press()
+  note_edit_page.register_press()
+  velocity_edit_page.register_press()
+  song_edit_page.register_press()
 
   press:register(
     "menu",
@@ -226,7 +226,7 @@ function m_grid.init()
   m_grid.set_menu_button_state()
 
   register_draws()
-  register_presss()
+  register_press()
   
   function g.key(x, y, z)
 

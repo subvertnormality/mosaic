@@ -115,10 +115,8 @@ local function process_midi_param(param, step_trig_lock, midi_channel, midi_devi
 end
 
 
-function step.process_params(c, step, song_pattern_number)
+function step.process_params(channel, step)
   local program_data = program.get()
-
-  local channel = program.get_channel(song_pattern_number or program.get().selected_song_pattern, c)
 
   local device = device_map.get_device(program_data.devices[channel.number].device_map)
   local trig_lock_params = channel.trig_lock_params
@@ -257,16 +255,30 @@ function step.process_params(c, step, song_pattern_number)
 end
 
 
-function step.calculate_next_selected_song_pattern()
+function step.calculate_next_selected_song_pattern(check_repeats)
   local program_data = program.get()  -- Store the result of program.get() in a local variable
   local selected_song_pattern_number = program_data.selected_song_pattern
+  local current_song_pattern = program.get_selected_song_pattern()
   local song_patterns = program_data.song_patterns
 
   if next_song_pattern_queue then
-    local next = next_song_pattern_queue
-    next_song_pattern_queue = nil
-    return next
+    print("returning next song pattern queued number", next_song_pattern_queue)
+    return next_song_pattern_queue
   end
+
+  if params:get("song_mode") ~= 2 then
+    print("returning selected song pattern number becayse song mode is not 2", selected_song_pattern_number)
+    return selected_song_pattern_number
+  end
+
+  print("repeat count", program.get().repeat_count)
+  print("repeats", current_song_pattern.repeats)
+  if check_repeats and ((program.get().repeat_count or 1) < current_song_pattern.repeats) then
+    print("returning selected song pattern number because step is not at end of current song pattern", selected_song_pattern_number)
+    return selected_song_pattern_number
+  end
+
+  print("calculating next song pattern number")
 
   local next_pattern_number = selected_song_pattern_number + 1
 
@@ -951,21 +963,25 @@ function step.queue_for_pattern_change(func)
   table.insert(pattern_change_queue, func)
 end
 
-function step.at_end_of_current_song_pattern()
-  local selected_song_pattern = program.get().song_patterns[program.get().selected_song_pattern]
-  return (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (selected_song_pattern.global_pattern_length * selected_song_pattern.repeats) ==
-  0)
+function step.at_end_of_current_song_pattern(song_pattern)
+  return (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (song_pattern.global_pattern_length * song_pattern.repeats) == 0)
 end
+
 
 function step.process_song_song_patterns()
   local selected_song_pattern_number = program.get().selected_song_pattern
   local selected_song_pattern = program.get().song_patterns[selected_song_pattern_number]
-  if step.at_end_of_current_song_pattern() then
+
+  
+  if step.at_end_of_current_song_pattern(selected_song_pattern) then
+
+    program.get().repeat_count = 1
     m_clock.realign_sprockets()
     
     if params:get("song_mode") == 2 then
 
       local next_song_pattern = step.calculate_next_selected_song_pattern()
+      next_song_pattern_queue = nil
 
       program.set_selected_song_pattern(next_song_pattern)
       if selected_song_pattern_number ~= next_song_pattern and params:get("reset_on_song_pattern_transition") == 2 then
@@ -1019,6 +1035,8 @@ function step.process_song_song_patterns()
       channel_edit_page_ui.align_global_and_local_shuffle_amount_values(channel_number)
     end
     pattern_change_queue = {}
+
+    program.get().repeat_count = (program.get().repeat_count or 1) + 1
   end
 
 end

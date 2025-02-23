@@ -80,7 +80,7 @@ function note_edit_page.register_draws()
   )
 end
 
-function note_edit_page.register_presss()
+function note_edit_page.register_press()
   for s = 1, 64 do
     press:register(
       "note_edit_page",
