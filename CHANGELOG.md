@@ -1,4 +1,8 @@
 
+## 1.2.8
+
+- Song mode now respects repeat settings when considering which first step to process.
+
 ## 1.2.7
 
 - Fixed the reverse case, where param locks on the first step of a pattern were not being applied properly outside of song mode.

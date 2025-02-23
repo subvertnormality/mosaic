@@ -951,13 +951,16 @@ function step.queue_for_pattern_change(func)
   table.insert(pattern_change_queue, func)
 end
 
+function step.at_end_of_current_song_pattern()
+  local selected_song_pattern = program.get().song_patterns[program.get().selected_song_pattern]
+  return (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (selected_song_pattern.global_pattern_length * selected_song_pattern.repeats) ==
+  0)
+end
+
 function step.process_song_song_patterns()
   local selected_song_pattern_number = program.get().selected_song_pattern
   local selected_song_pattern = program.get().song_patterns[selected_song_pattern_number]
-  if
-    (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (selected_song_pattern.global_pattern_length * selected_song_pattern.repeats) ==
-      0)
-   then
+  if step.at_end_of_current_song_pattern() then
     m_clock.realign_sprockets()
     
     if params:get("song_mode") == 2 then
