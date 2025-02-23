@@ -4992,7 +4992,7 @@ function test_param_locks_fire_on_first_step_when_transitioning_song_patterns()
   local song_pattern_2 = 2
   program.set_selected_song_pattern(song_pattern_1)
 
-  program.get().repeat_count = 1
+  program.set_repeat_count(1)
   
   -- Set up first pattern
   local test_pattern_1 = program.initialise_default_pattern()
@@ -5279,4 +5279,255 @@ function test_param_locks_fire_on_first_step_with_pattern_repeats()
   -- Now check second pattern's param lock fires
   local midi_cc_event = table.remove(midi_cc_events)
   luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_2, 1})
+end
+
+function test_param_locks_use_correct_pattern_during_repeats()
+  setup()
+  local song_pattern_1 = 1
+  local song_pattern_2 = 2
+  program.set_selected_song_pattern(song_pattern_1)
+  
+  -- Set up first pattern
+  local test_pattern_1 = program.initialise_default_pattern()
+  local cc_msb = 2
+  local cc_value_1 = 111
+  local c = 1
+
+  local my_param_id = "my_param_id"
+  params:add(my_param_id, {
+    name = "name",
+    val = -1
+  })
+
+  -- Configure first step of first pattern
+  test_pattern_1.note_values[1] = 0
+  test_pattern_1.lengths[1] = 1
+  test_pattern_1.trig_values[1] = 1
+  test_pattern_1.velocity_values[1] = 100
+
+  program.get().selected_channel = c
+  local channel = program.get_selected_channel()
+
+  channel.trig_lock_params[1].device_name = "test"
+  channel.trig_lock_params[1].type = "midi"
+  channel.trig_lock_params[1].id = 1
+  channel.trig_lock_params[1].param_id = my_param_id
+  channel.trig_lock_params[1].cc_msb = cc_msb
+  channel.trig_lock_params[1].cc_min_value = -1 
+  channel.trig_lock_params[1].cc_max_value = 127
+
+  program.add_step_param_trig_lock(1, 1, cc_value_1)
+
+  -- Set up second pattern with different param lock value
+  program.set_selected_song_pattern(song_pattern_2)
+  local test_pattern_2 = program.initialise_default_pattern()
+  local cc_value_2 = 122
+
+  -- Configure first step of second pattern
+  test_pattern_2.note_values[1] = 0
+  test_pattern_2.lengths[1] = 1
+  test_pattern_2.trig_values[1] = 1
+  test_pattern_2.velocity_values[1] = 100
+
+  -- Add patterns to song patterns
+  program.get_song_pattern(song_pattern_1).patterns[1] = test_pattern_1
+  program.get_song_pattern(song_pattern_2).patterns[1] = test_pattern_2
+  
+  fn.add_to_set(program.get_song_pattern(song_pattern_1).channels[c].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern_2).channels[c].selected_patterns, 1)
+
+  -- Set up second pattern's param lock
+  local channel_song_pattern_2 = program.get_song_pattern(song_pattern_2).channels[c]
+  channel_song_pattern_2.trig_lock_params[1].device_name = "test"
+  channel_song_pattern_2.trig_lock_params[1].type = "midi"
+  channel_song_pattern_2.trig_lock_params[1].id = 1
+  channel_song_pattern_2.trig_lock_params[1].param_id = my_param_id
+  channel_song_pattern_2.trig_lock_params[1].cc_msb = cc_msb
+  channel_song_pattern_2.trig_lock_params[1].cc_min_value = -1 
+  channel_song_pattern_2.trig_lock_params[1].cc_max_value = 127
+
+  program.add_step_param_trig_lock_to_channel(channel_song_pattern_2, 1, 1, cc_value_2)
+
+  -- Set 2 repeats for first pattern
+  program.get_song_pattern(song_pattern_1).repeats = 2
+
+  -- Enable song mode and activate both patterns
+  params:set("song_mode", 2)
+  program.get_song_pattern(song_pattern_1).active = true
+  program.get_song_pattern(song_pattern_2).active = true
+
+  -- Start from first pattern
+  program.set_selected_song_pattern(song_pattern_1)
+  pattern.update_working_patterns()
+
+  -- Set up clock and start playback
+  clock_setup()
+
+  -- Progress almost to end of first repeat (63 beats)
+  progress_clock_by_beats(63)
+
+  -- Check we're still using first pattern's param lock value
+  local midi_cc_event = table.remove(midi_cc_events)
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1})
+
+  -- Progress to start of second repeat
+  progress_clock_by_beats(1)
+
+  -- This should still be pattern 1's value since we haven't finished repeats
+  local midi_cc_event = table.remove(midi_cc_events)
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1})
+end
+
+function test_param_locks_fire_on_first_step_with_pattern_repeats()
+  setup()
+  local song_pattern_1 = 1
+  local song_pattern_2 = 2
+  program.set_selected_song_pattern(song_pattern_1)
+  
+  -- Set up first pattern
+  local test_pattern_1 = program.initialise_default_pattern()
+  local cc_msb = 2
+  local cc_value_1 = 111
+  local c = 1
+
+  local my_param_id = "my_param_id"
+
+  params:add(my_param_id, {
+    name = "name",
+    val = -1
+  })
+
+  -- Configure first step of first pattern
+  test_pattern_1.note_values[1] = 0
+  test_pattern_1.lengths[1] = 1
+  test_pattern_1.trig_values[1] = 1
+  test_pattern_1.velocity_values[1] = 100
+
+  program.get().selected_channel = c
+  local channel = program.get_selected_channel()
+
+  channel.trig_lock_params[1].device_name = "test"
+  channel.trig_lock_params[1].type = "midi"
+  channel.trig_lock_params[1].id = 1
+  channel.trig_lock_params[1].param_id = my_param_id
+  channel.trig_lock_params[1].cc_msb = cc_msb
+  channel.trig_lock_params[1].cc_min_value = -1 
+  channel.trig_lock_params[1].cc_max_value = 127
+
+  program.add_step_param_trig_lock(1, 1, cc_value_1)
+
+  -- Set up second pattern
+  program.set_selected_song_pattern(song_pattern_2)
+  local test_pattern_2 = program.initialise_default_pattern()
+  local cc_value_2 = 122
+
+  -- Configure first step of second pattern
+  test_pattern_2.note_values[1] = 0
+  test_pattern_2.lengths[1] = 1
+  test_pattern_2.trig_values[1] = 1
+  test_pattern_2.velocity_values[1] = 100
+
+  -- Add patterns to song patterns
+  program.get_song_pattern(song_pattern_1).patterns[1] = test_pattern_1
+  program.get_song_pattern(song_pattern_2).patterns[1] = test_pattern_2
+  
+  fn.add_to_set(program.get_song_pattern(song_pattern_1).channels[c].selected_patterns, 1)
+  fn.add_to_set(program.get_song_pattern(song_pattern_2).channels[c].selected_patterns, 1)
+
+  -- Set up second pattern's param lock
+  local channel_song_pattern_2 = program.get_song_pattern(song_pattern_2).channels[c]
+  channel_song_pattern_2.trig_lock_params[1].device_name = "test"
+  channel_song_pattern_2.trig_lock_params[1].type = "midi"
+  channel_song_pattern_2.trig_lock_params[1].id = 1
+  channel_song_pattern_2.trig_lock_params[1].param_id = my_param_id
+  channel_song_pattern_2.trig_lock_params[1].cc_msb = cc_msb
+  channel_song_pattern_2.trig_lock_params[1].cc_min_value = -1 
+  channel_song_pattern_2.trig_lock_params[1].cc_max_value = 127
+
+  program.add_step_param_trig_lock(1, 1, cc_value_2)
+
+  -- Set 3 repeats for first pattern
+  program.get_song_pattern(song_pattern_1).repeats = 3
+
+  -- Enable song mode and activate both patterns
+  params:set("song_mode", 2)
+  program.get_song_pattern(song_pattern_1).active = true
+  program.get_song_pattern(song_pattern_2).active = true
+
+  -- Start from first pattern
+  program.set_selected_song_pattern(song_pattern_1)
+  pattern.update_working_patterns()
+
+  -- Set up clock and start playback
+  clock_setup()
+
+  -- Check first pattern's param lock fires on first repeat
+  local midi_cc_event = table.remove(midi_cc_events)
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1})
+
+  -- Progress to end of first repeat
+  progress_clock_by_beats(64)
+
+  -- Check first pattern's param lock fires again on second repeat
+  local midi_cc_event = table.remove(midi_cc_events)
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1})
+
+  -- Progress to end of second repeat
+  progress_clock_by_beats(64)
+
+  -- Check first pattern's param lock fires again on third repeat
+  local midi_cc_event = table.remove(midi_cc_events)
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1})
+
+  -- Progress to end of third repeat
+  progress_clock_by_beats(64)
+
+  -- Now check second pattern's param lock fires
+  local midi_cc_event = table.remove(midi_cc_events)
+  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_2, 1})
+end
+
+
+function test_repeat_count_increments_correctly()
+  setup()
+  local song_pattern_1 = 1
+  program.set_selected_song_pattern(song_pattern_1)
+  
+  -- Set up pattern with repeats
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  
+  -- Set 3 repeats
+  program.get_song_pattern(song_pattern_1).repeats = 3
+  program.get_song_pattern(song_pattern_1).global_pattern_length = 64
+  program.get_song_pattern(song_pattern_1).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern_1).channels[1].selected_patterns, 1)
+  
+  -- Enable song mode
+  params:set("song_mode", 2)
+  program.get_song_pattern(song_pattern_1).active = true
+  
+  pattern.update_working_patterns()
+  
+  -- Start playback
+  clock_setup()
+  
+  -- Check initial repeat count
+  luaunit.assert_equals(program.get_repeat_count(), 1)
+  
+  -- Progress to end of first repeat
+  progress_clock_by_beats(64)
+  luaunit.assert_equals(program.get_repeat_count(), 2)
+  
+  -- Progress to end of second repeat
+  progress_clock_by_beats(64)
+  luaunit.assert_equals(program.get_repeat_count(), 3)
+  
+  -- Progress to end of third repat
+  progress_clock_by_beats(64)
+  -- Should reset back to 1 for next pattern
+  luaunit.assert_equals(program.get_repeat_count(), 1)
 end

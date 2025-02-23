@@ -271,9 +271,9 @@ function step.calculate_next_selected_song_pattern(check_repeats)
     return selected_song_pattern_number
   end
 
-  print("repeat count", program.get().repeat_count)
+  print("repeat count", program.get_repeat_count())
   print("repeats", current_song_pattern.repeats)
-  if check_repeats and ((program.get().repeat_count or 1) < current_song_pattern.repeats) then
+  if check_repeats and ((program.get_repeat_count() or 1) < current_song_pattern.repeats) then
     print("returning selected song pattern number because step is not at end of current song pattern", selected_song_pattern_number)
     return selected_song_pattern_number
   end
@@ -975,7 +975,7 @@ function step.process_song_song_patterns()
   
   if step.at_end_of_current_song_pattern(selected_song_pattern) then
 
-    program.get().repeat_count = 1
+    program.set_repeat_count(1)
     m_clock.realign_sprockets()
     
     if params:get("song_mode") == 2 then
@@ -1036,7 +1036,10 @@ function step.process_song_song_patterns()
     end
     pattern_change_queue = {}
 
-    program.get().repeat_count = (program.get().repeat_count or 1) + 1
+    -- Only increment repeat count if we haven't hit the end of all repeats
+    if not step.at_end_of_current_song_pattern(selected_song_pattern) then
+      program.set_repeat_count(program.get_repeat_count() + 1)
+    end
   end
 
 end
