@@ -420,7 +420,7 @@ function m_clock.init()
         local song_pattern_number = program.get().selected_song_pattern
         if next_step > end_trig then
           next_step = start_trig
-          if params:get("song_mode") == 2 then
+          if params:get("song_mode") == 2 and step.at_end_of_current_song_pattern() then
             song_pattern_number = step.calculate_next_selected_song_pattern()
           end
         end
