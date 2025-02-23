@@ -420,7 +420,9 @@ function m_clock.init()
         local song_pattern_number = program.get().selected_song_pattern
         if next_step > end_trig then
           next_step = start_trig
-          song_pattern_number = step.calculate_next_selected_song_pattern()
+          if params:get("song_mode") == 2 then
+            song_pattern_number = step.calculate_next_selected_song_pattern()
+          end
         end
 
         local next_trig_value = channel.working_pattern.trig_values[next_step]
