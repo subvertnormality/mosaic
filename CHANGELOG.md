@@ -1,3 +1,8 @@
+
+## 1.2.7
+
+- Fixed the reverse case, where param locks on the first step of a pattern were not being applied properly outside of song mode.
+
 ## 1.2.6
 
 - Fixed issue where param locks on the first step of a pattern were not being applied properly in song mode.
