@@ -1,3 +1,7 @@
+## 1.2.10
+
+- Fixed regression that was causing manual song mode changes to not refresh pattern state
+
 ## 1.2.9
 
 - Further song mode parameter handling fixes

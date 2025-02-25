@@ -94,6 +94,8 @@ function song_edit_page.register_press()
 
           refresh_button[previous_selected_pattern] = true
           refresh_button[s] = true
+
+          pattern.update_working_patterns()
           
           song_edit_page.refresh()
           song_edit_page.refresh_faders()
