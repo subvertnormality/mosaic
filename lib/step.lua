@@ -255,43 +255,54 @@ function step.process_params(channel, step)
 end
 
 
-function step.calculate_next_selected_song_pattern(check_repeats)
-  local program_data = program.get()  -- Store the result of program.get() in a local variable
+function step.calculate_next_selected_song_pattern()
+  local program_data = program.get()
   local selected_song_pattern_number = program_data.selected_song_pattern
   local current_song_pattern = program.get_selected_song_pattern()
   local song_patterns = program_data.song_patterns
 
+  -- If there's a queued pattern number, use that
   if next_song_pattern_queue then
-    print("returning next song pattern queued number", next_song_pattern_queue)
     return next_song_pattern_queue
   end
 
+  -- If song mode is not active, stay on the current pattern
   if params:get("song_mode") ~= 2 then
-    print("returning selected song pattern number becayse song mode is not 2", selected_song_pattern_number)
     return selected_song_pattern_number
   end
 
-  print("repeat count", program.get_repeat_count())
-  print("repeats", current_song_pattern.repeats)
-  if check_repeats and ((program.get_repeat_count() or 1) < current_song_pattern.repeats) then
-    print("returning selected song pattern number because step is not at end of current song pattern", selected_song_pattern_number)
+  -- Get current repeat count and total repeats needed
+  local repeat_count = program.get_repeat_count() or 1
+  local total_repeats = current_song_pattern.repeats or 1
+  
+  -- Check if we're already at the end of the current pattern
+  -- If we are, then we should find the next pattern regardless of repeat count
+  local at_end_of_pattern = step.at_end_of_current_song_pattern(current_song_pattern)
+  
+  -- If we haven't completed all repeats AND not at end of pattern, stay on the current pattern
+  if repeat_count < total_repeats and not at_end_of_pattern then
     return selected_song_pattern_number
   end
 
-  print("calculating next song pattern number")
-
+  -- Find the next active song pattern
   local next_pattern_number = selected_song_pattern_number + 1
 
-  if next_pattern_number < 97 and song_patterns[next_pattern_number] and song_patterns[next_pattern_number].active then
+  -- If a valid next pattern exists, use it
+  if next_pattern_number < 97 and 
+     song_patterns[next_pattern_number] and 
+     song_patterns[next_pattern_number].active then
     return next_pattern_number
   end
 
-  local last_active_previous_song_pattern = selected_song_pattern_number
-  while last_active_previous_song_pattern > 1 and song_patterns[last_active_previous_song_pattern - 1] and song_patterns[last_active_previous_song_pattern - 1].active do
-    last_active_previous_song_pattern = last_active_previous_song_pattern - 1
+  -- If no valid next pattern, wrap around to the first active pattern
+  local first_active_pattern = selected_song_pattern_number
+  while first_active_pattern > 1 and 
+        song_patterns[first_active_pattern - 1] and 
+        song_patterns[first_active_pattern - 1].active do
+    first_active_pattern = first_active_pattern - 1
   end
 
-  return last_active_previous_song_pattern
+  return first_active_pattern
 end
 
 
@@ -964,69 +975,38 @@ function step.queue_for_pattern_change(func)
 end
 
 function step.at_end_of_current_song_pattern(song_pattern)
-  return (program.get().global_step_accumulator ~= 0 and program.get().global_step_accumulator % (song_pattern.global_pattern_length * song_pattern.repeats) == 0)
+  -- Calculate the total length of the pattern including all repeats
+  local total_length = song_pattern.global_pattern_length * song_pattern.repeats
+  local global_step = program.get().global_step_accumulator
+  
+  local is_end = global_step > 0 and global_step % total_length == 0
+  
+  -- We're at the end of the pattern if:
+  -- 1. We've progressed past the initialization (global_step > 0)
+  -- 2. We've completed exactly all repeats (global_step is divisible by the total length)
+  return is_end
 end
 
 
 function step.process_song_song_patterns()
   local selected_song_pattern_number = program.get().selected_song_pattern
   local selected_song_pattern = program.get().song_patterns[selected_song_pattern_number]
+  local global_step_accumulator = program.get().global_step_accumulator
 
-  
-  if step.at_end_of_current_song_pattern(selected_song_pattern) then
-
-    program.set_repeat_count(1)
-    m_clock.realign_sprockets()
+  -- Check if we've completed one full global pattern length cycle
+  if global_step_accumulator > 0 and 
+     global_step_accumulator % selected_song_pattern.global_pattern_length == 0 then
     
-    if params:get("song_mode") == 2 then
-
-      local next_song_pattern = step.calculate_next_selected_song_pattern()
-      next_song_pattern_queue = nil
-
-      program.set_selected_song_pattern(next_song_pattern)
-      if selected_song_pattern_number ~= next_song_pattern and params:get("reset_on_song_pattern_transition") == 2 then
-        step.reset_pattern()
-      else
-        if params:get("reset_on_end_of_pattern_repeat") == 2 then
-          step.reset_pattern()
-        end
-      end
-      pattern.update_working_patterns()
-
-      if selected_song_pattern_number ~= next_song_pattern then
-        for channel_number = 1, 17 do
-          local channel = program.get_channel(program.get().selected_song_pattern, channel_number)
-          m_clock.set_channel_division(channel_number, m_clock.calculate_divisor(channel.clock_mods))
-          if channel_number ~= 17 then
-            channel_edit_page_ui.align_global_and_local_shuffle_feel_values(channel_number)
-            channel_edit_page_ui.align_global_and_local_swing_values(channel_number)
-            channel_edit_page_ui.align_global_and_local_swing_shuffle_type_values(channel_number)
-            channel_edit_page_ui.align_global_and_local_shuffle_basis_values(channel_number)
-            channel_edit_page_ui.align_global_and_local_shuffle_amount_values(channel_number)
-          end
-      
-        end
-      
-        channel_edit_page_ui.refresh_clock_mods()
-        channel_edit_page_ui.refresh_swing()
-        channel_edit_page_ui.refresh_swing_shuffle_type()
-        channel_edit_page_ui.refresh_shuffle_feel()
-        channel_edit_page_ui.refresh_shuffle_basis()
-        channel_edit_page_ui.refresh_shuffle_amount()
-        song_edit_page.refresh()
-        channel_edit_page.refresh()
-      end
-    end
-  end
-
-  if program.get().global_step_accumulator % selected_song_pattern.global_pattern_length == 0 then
     switch_to_next_song_pattern_func()
     switch_to_next_song_pattern_blink_cancel_func()
-    switch_to_next_song_pattern_func = function()
-    end
+    switch_to_next_song_pattern_func = function() end
+    
+    -- Execute any queued pattern change functions
     for i, func in ipairs(pattern_change_queue) do
       func()
     end
+    
+    -- Align shuffle values for all channels
     for channel_number = 1, 16 do
       channel_edit_page_ui.align_global_and_local_swing_shuffle_type_values(channel_number)
       channel_edit_page_ui.align_global_and_local_swing_values(channel_number)
@@ -1034,14 +1014,71 @@ function step.process_song_song_patterns()
       channel_edit_page_ui.align_global_and_local_shuffle_basis_values(channel_number)
       channel_edit_page_ui.align_global_and_local_shuffle_amount_values(channel_number)
     end
+    
     pattern_change_queue = {}
 
-    -- Only increment repeat count if we haven't hit the end of all repeats
-    if not step.at_end_of_current_song_pattern(selected_song_pattern) then
-      program.set_repeat_count(program.get_repeat_count() + 1)
+    -- Update repeat count
+    local current_repeat = program.get_repeat_count() or 1
+    local max_repeats = selected_song_pattern.repeats or 1
+    
+    -- Check if we've reached the end of all repeats
+    if step.at_end_of_current_song_pattern(selected_song_pattern) then
+      -- We've completed all repeats, going to next pattern
+      program.set_repeat_count(1)
+      
+      -- Only change patterns if in song mode
+      if params:get("song_mode") == 2 then
+        -- Calculate the next pattern to use
+        local next_song_pattern = step.calculate_next_selected_song_pattern()
+        next_song_pattern_queue = nil
+
+        -- Switch to the next pattern
+        program.set_selected_song_pattern(next_song_pattern)
+        
+        -- Handle pattern reset based on settings
+        if selected_song_pattern_number ~= next_song_pattern and params:get("reset_on_song_pattern_transition") == 2 then
+          step.reset_pattern()
+        else
+          if params:get("reset_on_end_of_pattern_repeat") == 2 then
+            step.reset_pattern()
+          end
+        end
+        
+        pattern.update_working_patterns()
+
+        -- Update all channel settings if we've changed song patterns
+        if selected_song_pattern_number ~= next_song_pattern then
+          for channel_number = 1, 17 do
+            local channel = program.get_channel(program.get().selected_song_pattern, channel_number)
+            m_clock.set_channel_division(channel_number, m_clock.calculate_divisor(channel.clock_mods))
+            if channel_number ~= 17 then
+              channel_edit_page_ui.align_global_and_local_shuffle_feel_values(channel_number)
+              channel_edit_page_ui.align_global_and_local_swing_values(channel_number)
+              channel_edit_page_ui.align_global_and_local_swing_shuffle_type_values(channel_number)
+              channel_edit_page_ui.align_global_and_local_shuffle_basis_values(channel_number)
+              channel_edit_page_ui.align_global_and_local_shuffle_amount_values(channel_number)
+            end
+          end
+        
+          channel_edit_page_ui.refresh_clock_mods()
+          channel_edit_page_ui.refresh_swing()
+          channel_edit_page_ui.refresh_swing_shuffle_type()
+          channel_edit_page_ui.refresh_shuffle_feel()
+          channel_edit_page_ui.refresh_shuffle_basis()
+          channel_edit_page_ui.refresh_shuffle_amount()
+          song_edit_page.refresh()
+          channel_edit_page.refresh()
+        end
+        
+        m_clock.realign_sprockets()
+      end
+    else
+      -- Not at the end of all repeats yet, increment repeat count if needed
+      if current_repeat < max_repeats then
+        program.set_repeat_count(current_repeat + 1)
+      end
     end
   end
-
 end
 
 function step.sinfonian_sync(s)

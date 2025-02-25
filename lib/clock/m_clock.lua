@@ -419,7 +419,7 @@ function m_clock.init()
 
         local song_pattern_number = program.get().selected_song_pattern
         if next_step > end_trig then
-          song_pattern_number = step.calculate_next_selected_song_pattern(true)
+          song_pattern_number = step.calculate_next_selected_song_pattern()
           channel = program.get_channel(song_pattern_number, channel_number)
           pattern.update_working_pattern(channel_number, program.get_song_pattern(song_pattern_number))
           next_step = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
