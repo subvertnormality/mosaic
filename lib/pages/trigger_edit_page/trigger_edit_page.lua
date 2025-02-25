@@ -216,7 +216,7 @@ local function save_paint_pattern(p)
   program.get_selected_song_pattern().active = true
 end
 
-function trigger_edit_page.register_presss()
+function trigger_edit_page.register_press()
   press:register(
     "trigger_edit_page",
     function(x, y)

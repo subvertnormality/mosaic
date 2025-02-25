@@ -959,4 +959,16 @@ function program.prepare_for_save()
   return program_store
 end
 
+
+function program.get_repeat_count()
+  if not program_store.repeat_count then
+    program_store.repeat_count = 1
+  end
+  return program_store.repeat_count
+end
+
+function program.set_repeat_count(count)
+  program_store.repeat_count = count
+end
+
 return program

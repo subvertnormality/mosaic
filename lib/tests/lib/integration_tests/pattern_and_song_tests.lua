@@ -631,7 +631,7 @@ function test_song_mode_functions_with_song_pattern_repeats()
   local note_on_event = table.remove(midi_note_on_events, 1)
 
   luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 126)
+  luaunit.assert_equals(note_on_event[2], 126) -- Expecting velocity 126 from pattern 2
   luaunit.assert_equals(note_on_event[3], 1)
 
   progress_clock_by_beats(3)

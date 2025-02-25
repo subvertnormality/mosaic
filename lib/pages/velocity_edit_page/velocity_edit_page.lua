@@ -109,7 +109,7 @@ function velocity_edit_page.register_draws()
   )
 end
 
-function velocity_edit_page.register_presss()
+function velocity_edit_page.register_press()
   for s = 1, 64 do
     press:register(
       "velocity_edit_page",

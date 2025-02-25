@@ -53,7 +53,7 @@ function scale_edit_page.register_draws()
   )
 end
 
-function scale_edit_page.register_presss()
+function scale_edit_page.register_press()
   press:register_dual(
     "scale_edit_page",
     function(x, y, x2, y2)

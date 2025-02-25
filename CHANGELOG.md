@@ -1,3 +1,6 @@
+## 1.2.9
+
+- Further song mode parameter handling fixes
 
 ## 1.2.8
 

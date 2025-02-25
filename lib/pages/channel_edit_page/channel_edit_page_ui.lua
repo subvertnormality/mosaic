@@ -1005,7 +1005,7 @@ function channel_edit_page_ui.handle_trig_mask_change(channel, direction)
       mask_selectors.trig:decrement()
       program.set_trig_mask(channel, mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value())
     end
-    pattern.update_working_pattern(channel.number)
+    pattern.update_working_pattern(channel.number, program.get_selected_song_pattern())
   end
 end
 
@@ -1055,7 +1055,7 @@ function channel_edit_page_ui.handle_note_mask_change(channel, direction)
       mask_selectors.note:decrement()
       program.set_note_mask(channel, mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value())
     end
-    pattern.update_working_pattern(channel.number)
+    pattern.update_working_pattern(channel.number, program.get_selected_song_pattern())
   end
 end
 
@@ -1105,7 +1105,7 @@ function channel_edit_page_ui.handle_velocity_mask_change(channel, direction)
       mask_selectors.velocity:decrement()
       program.set_velocity_mask(channel, mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value())
     end
-    pattern.update_working_pattern(channel.number)
+    pattern.update_working_pattern(channel.number, program.get_selected_song_pattern())
   end
 end
 
@@ -1177,7 +1177,7 @@ function channel_edit_page_ui.handle_length_mask_change(channel, direction)
         program.set_length_mask(channel, nil)
       end
     end
-    pattern.update_working_pattern(channel.number)
+    pattern.update_working_pattern(channel.number, program.get_selected_song_pattern())
   end
 end
 
@@ -1541,7 +1541,7 @@ function channel_edit_page_ui.handle_key_two_pressed()
         program.clear_masks_for_step(s)
         tooltip:show("Masks for step " .. s .. " cleared")
         channel_edit_page_ui.refresh_masks()
-        pattern.update_working_pattern(program.get_selected_channel().number)
+        pattern.update_working_pattern(program.get_selected_channel().number, program.get_selected_song_pattern())
       end
       if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
         program.clear_trig_locks_for_step(s)
@@ -1568,7 +1568,7 @@ function channel_edit_page_ui.handle_key_two_pressed()
         program.clear_masks_for_channel(program.get_selected_channel())
         tooltip:show("Masks for ch " .. program.get_selected_channel().number .. " cleared")
         channel_edit_page_ui.refresh_masks()
-        pattern.update_working_pattern(program.get_selected_channel().number)
+        pattern.update_working_pattern(program.get_selected_channel().number, program.get_selected_song_pattern())
       end
     elseif channel_pages:get_selected_page() == channel_page_to_index["Memory"] then
       if is_key1_down then

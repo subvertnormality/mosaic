@@ -139,7 +139,7 @@ function channel_edit_page.register_draws()
   )
 end
 
-function channel_edit_page.register_presss()
+function channel_edit_page.register_press()
   press:register(
     "channel_edit_page",
     function(x, y)
