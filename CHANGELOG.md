@@ -1,3 +1,7 @@
+## 1.2.11
+
+- Fixed issue where params dont display correctly in norns param menu
+
 ## 1.2.10
 
 - Fixed regression that was causing manual song mode changes to not refresh pattern state
