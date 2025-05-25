@@ -10,12 +10,12 @@ local function construct_value_formatter(off_value, ui_labels)
   return function(param)
     local value = param:get()
     if not off_value then
-      return ui_labels and ui_labels[value + 1] or value
+      return ui_labels and ui_labels[value-off_value+1] or value
     end
     if value == off_val then
       return "X"
     else
-      return ui_labels and ui_labels[value + 1] or value
+      return ui_labels and ui_labels[value-off_value+1] or value
     end
   end
 end
