@@ -1,3 +1,7 @@
+## 1.2.12
+
+- Fixed regression where norns devices wouldn't initiate due to lack of prexisting state
+
 ## 1.2.11
 
 - Fixed issue where params dont display correctly in norns param menu
