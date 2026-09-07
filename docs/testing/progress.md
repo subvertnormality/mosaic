@@ -619,3 +619,22 @@ There are52 native cases. This establishes simultaneous-onset chord release
 order, not staggered-onset length or cross-source recording ownership. Those,
 mixed armed/unarmed overlap, repeated same-pitch input and the remaining manual
 and emulator release campaign still require execution.
+
+
+## Recording chord ownership across channels
+
+M-REC-024/025 record overlapping same-pitch inputs from two ports or two MIDI
+input channels onto different Mosaic channels at the same step. Source-time
+queued releases are independently held500ms each. Both baselines fail in
+controlled and real time: replay retains the original channel1 note instead of
+the recording. Preview releases route correctly, so the earlier source ownership
+fix alone was insufficient. Candidate0016 keys chord bookkeeping by Mosaic
+channel as well as step. Exact replay pitches, velocities, routes and lengths
+now pass for both channels in both clock modes. Both cases pass three identical
+fresh controlled processes; chord-release/disarm neighbors and all474 units pass.
+
+There are54 native cases. Same-channel source aggregation, song changes and
+repeated pitch overlap remain required. User decision: staggered chords use
+first press to final release for their shared recorded length. Implement and
+document that next, with native baseline/candidate regressions. The complete
+manual campaign and emulator acceptance/release remain incomplete.

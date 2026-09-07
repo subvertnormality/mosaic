@@ -983,7 +983,64 @@ def recorded_chord_release(c,release_order=(76,79,72)):
     assert len(durations)==9 and all(abs(value-.5)<=tolerance for value in durations),dict(expected=.5,durations=durations,release_order=release_order)
     c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
 
+def recorded_input_sources(c,second_port=2,second_channel=1):
+    hold_ns=500000000;expected_duration=.5;release_status=128;input_channel=1;disarm_while_held=False
+    c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
+    c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1)
+    c.tap(2,8);marker=c.snapshot()['midi_count'];c.tap(1,8)
+    controlled=c.clock_mode=='controlled-experimental'
+    field='logical_ns' if controlled else 'monotonic_ns'
+    state=c.wait(lambda state:any(m['index']>marker and m['port']==1 and m['bytes']==[144,60,127] for m in state['midi']))
+    anchor=next(m[field] for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes']==[144,60,127])
+    # The next four-step loop starts2/3s after the observed first onset.
+    # Enter20ms into step1, select channel2, then enter its note100ms later.
+    # Client snapshots/channel selection must not lengthen the keyboard hold.
+    origin=anchor+666666667+20000000
+    events=[dict(port=1,bytes=data,**{'at_'+field:origin+offset}) for offset,data in [(0,[143+input_channel,72,90]),(hold_ns,[release_status+input_channel-1,72,0])]]
+    events += [dict(port=second_port,bytes=data,**{'at_'+field:origin+offset}) for offset,data in [(100000000,[143+second_channel,72,80]),(600000000,[127+second_channel,72,0])]]
+    events.sort(key=lambda event:event['at_'+field])
+    request=dict(type='midi_schedule',schedule_id=1,events=events)
+    if controlled:request['time_domain']='logical'
+    c.action(**request)
+    if controlled:c.elapse((origin+10000000-c.logical_ns)/1e9)
+    else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])>=1,timeout=2)
+    c.tap(2,1)
+    if disarm_while_held:c.tap(2,8)
+    marker=c.snapshot()['midi_count']
+    if controlled:c.elapse((origin+610000000-c.logical_ns)/1e9)
+    else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==4,timeout=2)
+    state=c.snapshot()
+    c.results.append(dict(kind='scheduled-keyboard-hold',expected_ns=hold_ns,events=events,delivered=state['midi_input_schedule']['delivered']))
+    releases=[(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and 128<=m['bytes'][0]<=143 and m['bytes'][1]==72]
+    c.results.append(dict(kind='held-input-release-route',expected=[(1,[128,72,0]),(2,[129,72,0])],actual=releases))
+    assert releases==[(1,[128,72,0]),(2,[129,72,0])],releases
+    if disarm_while_held:
+        # New post-disarm notes may preview, but must not alter channel2 replay.
+        c.action(type='midi',port=1,bytes=[144,79,80]);c.elapse(.03)
+        c.action(type='midi',port=1,bytes=[128,79,0])
+    c.tap(1,8)
+    if not disarm_while_held:c.tap(2,8)
+    c.wait(lambda state:not state['midi_capture']['outstanding'])
+    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    def notes(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0]
+    state=c.wait(lambda state:all(sum(m['bytes'][0]==status for m in notes(state))>=13 for status in (144,145)),timeout=5)
+    rows=notes(state);field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    for port,status,phrase,pitch,duration in [(1,144,[(72,90),(62,117),(64,107),(65,97)],72,expected_duration),(2,145,[(72,80),(62,117),(64,107),(65,97)],72,.5)]:
+        channel_notes=[m for m in rows if m['bytes'][0]==status]
+        actual=[(m['port'],m['bytes']) for m in channel_notes];expected=[(port,[status,*phrase[i%4]]) for i in range(len(actual))]
+        assert actual==expected,dict(expected=expected,actual=actual)
+        durations=[]
+        for note in [m for m in channel_notes if m['bytes'][1]==pitch][:3]:
+            off=next(m for m in state['midi'] if m['index']>note['index'] and m['port']==port and m['bytes'][:2]==[status-16,pitch])
+            durations.append((off[field]-note[field])/1e9)
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        assert all(abs(value-duration)<=tolerance for value in durations),dict(channel=status-143,durations=durations,expected=duration)
+        c.results.append(dict(kind='recording-origin-channel',channel=status-143,expected=expected,actual=actual,durations=durations,expected_duration=duration))
+    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+
 CASES={
+ 'M-REC-024':dict(run=recorded_input_sources,requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Two ports record the same pitch on distinct channels in the same step; independent replay and lengths'),
+ 'M-REC-025':dict(run=lambda c:recorded_input_sources(c,1,16),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Two input channels record overlapping notes on distinct Mosaic channels; independent replay and lengths'),
  'M-REC-020':dict(run=lambda c:recorded_chord_release(c,(72, 79, 76)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord release order (72, 79, 76) retains full shared length'),
  'M-REC-021':dict(run=lambda c:recorded_chord_release(c,(76, 72, 79)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord release order (76, 72, 79) retains full shared length'),
  'M-REC-022':dict(run=lambda c:recorded_chord_release(c,(79, 72, 76)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord release order (79, 72, 76) retains full shared length'),

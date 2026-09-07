@@ -1604,7 +1604,9 @@
         "M-REC-016",
         "M-MIDI-002",
         "M-MIDI-003",
-        "M-MIDI-004"
+        "M-MIDI-004",
+        "M-REC-024",
+        "M-REC-025"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -4608,7 +4610,9 @@
         "M-REC-020",
         "M-REC-021",
         "M-REC-022",
-        "M-REC-023"
+        "M-REC-023",
+        "M-REC-024",
+        "M-REC-025"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",

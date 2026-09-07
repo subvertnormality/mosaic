@@ -90,8 +90,10 @@ function handle_midi_event_data(data, midi_device)
       note = data[2]
     end
 
-    if not chord_states[s] then
-      chord_states[s] = {
+    chord_states[channel.number] = chord_states[channel.number] or {}
+    local channel_chords = chord_states[channel.number]
+    if not channel_chords[s] then
+      channel_chords[s] = {
         chord_one_note = nil,
         chord_number = 0,
         notes = {},
@@ -99,7 +101,7 @@ function handle_midi_event_data(data, midi_device)
       }
     end
 
-    local chord_state = chord_states[s]
+    local chord_state = channel_chords[s]
 
     input_notes[data[2]] = {
       note = note,
@@ -159,7 +161,8 @@ function handle_midi_event_data(data, midi_device)
     local stored = input_notes[data[2]]
     if stored == nil then return end
   
-    local chord_state = chord_states[stored.step]
+    local channel_chords = chord_states[stored.channel_number] or {}
+    local chord_state = channel_chords[stored.step]
     if chord_state then
       chord_state.notes[data[2]] = nil
       chord_state.chord_number = chord_state.chord_number - 1
@@ -211,7 +214,7 @@ function handle_midi_event_data(data, midi_device)
   
       -- Clean up if no more notes
       if next(chord_state.notes) == nil then
-        chord_states[stored.step] = nil
+        channel_chords[stored.step] = nil
       end
     end
   
