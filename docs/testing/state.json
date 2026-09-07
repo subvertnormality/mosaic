@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue remaining C08 manual domains, channel independence, live range edits, remaining range endpoint combinations and exact mute thresholds/sequence isolation. Range/mute focused validation passed; full campaign remains incomplete. SEM-001 formula clarification pending. No refactor.",
+  "next_action": "Continue C08 remaining range and harmony domains, channel routing remap/unassigned/error paths, sequence isolation and undo/redo. M-CHANNEL-001 passes RT/D across16 routed channels with cumulative mute/unmute;3freshD repeats remain required. Full campaign incomplete; SEM-001 merge formula pending; no refactor.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -306,7 +306,7 @@
   "manual_requirements": 141,
   "new_cases_pending": [],
   "controlled_admission_checkpoint": "Emulator artifacts/c16/m5-admission-06d.json; subsequent application edits do not reuse old application evidence as current-source passes.",
-  "implemented_cases": 21,
+  "implemented_cases": 22,
   "latest_partial_domain_evidence": {
     "M-SCALE-001": [
       {
@@ -454,6 +454,20 @@
         "manifest_sha256": "67b0bf0935502ccb58da1bd444444a906174e68647ed435bd50e827b5d3b0193",
         "mode": "controlled-experimental",
         "wall_elapsed_seconds": 26.65843121893704
+      }
+    ],
+    "M-CHANNEL-001": [
+      {
+        "run_id": "e354fba0289d47b59875c8e733286875",
+        "manifest_sha256": "634449ed23bf66db2b72276e73d597881f85e63ced19c642e1083dbf39bbdf84",
+        "mode": "controlled-experimental",
+        "wall_elapsed_seconds": 287.454914476024
+      },
+      {
+        "run_id": "11990779b1c547229165cefdcce3ee77",
+        "manifest_sha256": "2fd6a1007ab7a1886b5ef0e96e681eb31d1d0b5e2e9930526e844df10818a5e5",
+        "mode": "real-time",
+        "wall_elapsed_seconds": 133.0062819039449
       }
     ]
   },

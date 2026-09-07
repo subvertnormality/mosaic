@@ -620,7 +620,61 @@ def channel_mute_gestures(c):
     c.results.append(dict(kind='unmute-live-phrase',expected=expected,actual=actual))
     c.tap(1,8);c.wait(lambda s:not s['midi_capture']['outstanding'])
 
+def channel_routing_isolation(c):
+    c.configure()
+    phrase=[(60,127),(62,117),(64,107),(65,97)]
+    for channel in range(2,17):
+        c.tap(channel,1)
+        from frame_oracle import header,matches
+        title='Ch. '+str(channel)+' Device Config';expected_header=header(title,selected=5)
+        c.wait(lambda state:matches(state,expected_header))
+        c.results.append(dict(kind='screen-header',expected=title,matched=True))
+        c.enc(3,1) # none -> generic CC device
+        c.enc(2,1);c.enc(3,channel-1) # distinct MIDI channel
+        c.enc(2,1)
+        if channel%2==0:c.enc(3,1) # second virtual port
+        c.key(3);c.tap(1,2);c.hold_tap((1,4),(4,4))
+        c.led_values([(channel,1),(1,2)],[15,15])
+    def verify(active):
+        marker=c.snapshot()['midi_count'];c.tap(1,8)
+        def ons(state):
+            return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+        if active:
+            state=c.wait(lambda state:all(sum(m['bytes'][0]==143+ch for m in ons(state))>=9 for ch in active),timeout=5)
+        else:
+            c.elapse(1.5);state=c.snapshot()
+        notes=ons(state)
+        assert {m['bytes'][0]-143 for m in notes}==set(active),dict(active=active,actual=[m['bytes'] for m in notes])
+        traces={}
+        for ch in active:
+            trace=[m for m in notes if m['bytes'][0]==143+ch]
+            actual=[(m['port'],m['bytes']) for m in trace]
+            expected=[(1 if ch%2 else 2,[143+ch,*phrase[i%4]]) for i in range(len(trace))]
+            assert actual==expected,dict(channel=ch,expected=expected,actual=actual)
+            field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+            times=[m[field] for m in trace];tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+            assert all(abs((b-a)/1e9-1/6)<=tolerance for a,b in zip(times,times[1:])),dict(channel=ch,times=times)
+            traces[ch]=times
+        # Equal-rate channels must stay aligned; retain within-channel order.
+        if traces:
+            firsts=[times[0] for times in traces.values()]
+            tolerance_ns=2 if c.clock_mode=='controlled-experimental' else 10000000
+            assert max(firsts)-min(firsts)<=tolerance_ns,firsts
+        c.results.append(dict(kind='channel-routing-isolation',active_channels=active,note_on_count=len(notes),times_by_channel=traces))
+        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    def toggle(ch):
+        c.action(type='key',n=1,state=1)
+        try:
+            c.elapse(.3);c.tap(ch,1)
+        finally:c.action(type='key',n=1,state=0)
+    verify(list(range(1,17)))
+    for ch in range(1,17):
+        toggle(ch);c.led_values([(ch,1)],[7 if ch==16 else 0]);verify(list(range(ch+1,17)))
+    for ch in range(16,0,-1):
+        toggle(ch);c.led_values([(ch,1)],[15 if ch==16 else 2]);verify(list(range(ch,17)))
+
 CASES={
+ 'M-CHANNEL-001':dict(run=channel_routing_isolation,requirements=['CH-SELECT','CH-DEVICE','CH-ASSIGN','CH-MUTE'],description='All16 independently routed MIDI channels across two ports; cumulative mute/unmute preserves other phrases and clock alignment'),
  'M-MUTE-001':dict(run=channel_mute_gestures,requirements=['CH-MUTE'],description='Below-threshold hold, long hold and K1 mute toggles; stopped/live silence, resumed phrase and releases'),
  'M-RANGE-002':dict(run=adjacent_channel_ranges,requirements=['CH-RANGE'],description='All63 adjacent channel ranges plus full64-step range: exact grid, complete MIDI loops and spacing'),
  'M-RANGE-001':dict(run=channel_long_hold,requirements=['CH-RANGE'],description='A lone long hold is inactive; a delayed end-step combination still selects the range with exact MIDI loop spacing'),

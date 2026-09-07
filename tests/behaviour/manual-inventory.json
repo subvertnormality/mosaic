@@ -2293,8 +2293,10 @@
         "MAN-033"
       ],
       "statement": "Select each of16 channels on the channel page.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-CHANNEL-001"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "All channels and navigation return; selected vs playing and muted states.",
       "oracles": [
         "Selected LED and screen; edits and MIDI routing isolated per channel."
@@ -2318,8 +2320,10 @@
         "MAN-035"
       ],
       "statement": "Assign a device per scene; retain device settings across song sequences.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-CHANNEL-001"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Configured generic CC/named MIDI devices; every virtual port/channel; unassigned and missing devices.",
       "oracles": [
         "Device screen and exact outgoing port/channel/CC; unassigned channel emits no notes."
@@ -2391,7 +2395,8 @@
       ],
       "statement": "Assign multiple patterns per channel and one pattern to multiple channels.",
       "cases": [
-        "M-PAT-002"
+        "M-PAT-002",
+        "M-CHANNEL-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16x16 individual assignments; empty/all sets; toggles; shared-pattern edits.",
@@ -3050,7 +3055,8 @@
       ],
       "statement": "One-second hold or K1-press mutes per sequence; muted channel select LED dims.",
       "cases": [
-        "M-MUTE-001"
+        "M-MUTE-001",
+        "M-CHANNEL-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 channels; threshold-1/on/+1; pending notes; repeated gesture; sequence changes.",

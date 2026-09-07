@@ -333,3 +333,21 @@ is broader validation, not a fast smoke test. Controlled time is not claimed to
 be faster; polling/capture cost remains an emulator feedback task. No production
 Mosaic changes were needed in this continuation. There are21 executable cases;
 the141-requirement campaign remains incomplete.
+
+
+## All-channel routing and mute isolation
+
+M-CHANNEL-001 configures every channel through native grid/encoders/keys, checks
+its rendered Device Config title, assigns the shared authored four-note pattern,
+and routes16 distinct MIDI channels over two virtual ports. Real-time and
+controlled runs verify exact pitches/velocities/routes and phrase spacing while
+cumulatively muting every channel and restoring them in reverse order. Every
+phase checks active-channel membership; equal-rate first onsets align and stop
+drains all notes. No production change was needed. The first diagnostic failed
+in the test's channel1-only header lookup; explicit tab5 rendering fixes that
+oracle limitation without changing the intended screen expectation.
+
+This raises executable case count to22. It does not complete CH-SELECT/DEVICE/
+ASSIGN/MUTE: arbitrary pattern combinations, other device types, every port and
+route-remap failure, song-sequence isolation and live route changes remain.
+Three fresh controlled repeats of this new case are also still required.
