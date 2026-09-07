@@ -638,3 +638,22 @@ repeated pitch overlap remain required. User decision: staggered chords use
 first press to final release for their shared recorded length. Implement and
 document that next, with native baseline/candidate regressions. The complete
 manual campaign and emulator acceptance/release remain incomplete.
+
+
+## Staggered chord length: first press to final release
+
+User approved first press to final release for the chord's shared length.
+M-REC-026/027 stagger C/E/G onsets by0/40/80ms within one step, release in
+root-first/root-last orders and verify replayed notes and nine voice durations.
+Before candidate0017, root-first saves416.667ms instead of500ms in controlled
+and real time (e38bb0bb06f84693a046c9b1faee039b and
+44674f6eea3f4908a4215b40ac64b1ee); root-last already passes. The candidate stores
+the first onset on chord creation and uses it at final release. Both cases and
+simultaneous-chord/channel-isolation neighbors pass in both clock modes;
+root-first passes three identical controlled processes. All474 unit tests pass.
+README Arm live record now documents the shared length and quantisation rule;
+manual source hashes and quotations are reconciled.
+
+There are56 native cases. Adding a voice after releasing the root, same-channel
+cross-source aggregation, mixed armed/unarmed and repeated-pitch overlap,
+tempo/song transitions and the remaining manual/emulator campaign remain open.

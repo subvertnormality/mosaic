@@ -1,0 +1,189 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "3a9635fe422d359efaf21a937f674893294447b2",
+  "before_sha256": "0e31780dcd05363f2bc833cadfcd85978f0f39efdf12a91c9a2bf3b51cac400e",
+  "after_sha256": "afde4794df20831861796a6a7ce1b1930794c430fe0d4e9ded1544f5697941ef",
+  "patch_sha256": "428e05fb7e612b58e073884d7e6bf10cfe1dd429ee5b9f4af2450f0a03d847d5",
+  "baselines": [
+    {
+      "run_id": "e38bb0bb06f84693a046c9b1faee039b",
+      "manifest_sha256": "5eff41fb881728c4637c0d5f76ac8dd32c826b028ab52cfbc413af45c3954906",
+      "passed": false,
+      "length": [
+        {
+          "kind": "recorded-chord-length",
+          "expected": 0.5,
+          "actual": [
+            0.416666668,
+            0.416666668,
+            0.416666668,
+            0.416666667,
+            0.416666667,
+            0.416666667,
+            0.416666666,
+            0.416666666,
+            0.416666666
+          ],
+          "release_order": [
+            72,
+            76,
+            79
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": "5cefd7a85172438f9ae5a31455a9a964",
+      "manifest_sha256": "3e8e736b8c7fae8c8fe8b4e3f9fbde71c97297da5cb0382dc6cab114fa5d31cf",
+      "passed": true,
+      "length": [
+        {
+          "kind": "recorded-chord-length",
+          "expected": 0.5,
+          "actual": [
+            0.500000001,
+            0.500000001,
+            0.500000001,
+            0.499999999,
+            0.499999999,
+            0.499999999,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "release_order": [
+            76,
+            79,
+            72
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": "44674f6eea3f4908a4215b40ac64b1ee",
+      "manifest_sha256": "dc4db3777d3e4ccc3f961570bb75e8b41513e2c99464d5adeb924a7625955341",
+      "passed": false,
+      "length": [
+        {
+          "kind": "recorded-chord-length",
+          "expected": 0.5,
+          "actual": [
+            0.416379214,
+            0.416365305,
+            0.416358354,
+            0.416666496,
+            0.416663475,
+            0.416656346,
+            0.415276818,
+            0.415262848,
+            0.415244418
+          ],
+          "release_order": [
+            72,
+            76,
+            79
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": "7dfa73841986450ab3de99d3a311fca2",
+      "manifest_sha256": "b96d388bcdf68c047d424971811ed90c0aa0b1b632280916c1ae933eea81c551",
+      "passed": true,
+      "length": [
+        {
+          "kind": "recorded-chord-length",
+          "expected": 0.5,
+          "actual": [
+            0.500748752,
+            0.500706982,
+            0.500696241,
+            0.499986785,
+            0.499958294,
+            0.499945174,
+            0.500407497,
+            0.500381876,
+            0.500372716
+          ],
+          "release_order": [
+            76,
+            79,
+            72
+          ]
+        }
+      ]
+    }
+  ],
+  "decision": "User approved first press to final release for shared chord length.",
+  "scope": "Staggered onset within one chord and step; same-channel cross-source input, adding voices after root release, tempo/song changes remain separately required.",
+  "validation": [
+    {
+      "run_id": "83f434505ec0479f868b8e555d0159b3",
+      "case": "M-REC-026",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "15e332669ef960724c449af21f989f15fb6ec3f403385c0b85e4ee01d80b53b1"
+    },
+    {
+      "run_id": "44f420768825468fa02f0b90ce218d76",
+      "case": "M-REC-027",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "81466f358045b4a1a39fa0e4933572e77f382cb878eb96af5e00e427978ea93b"
+    },
+    {
+      "run_id": "c6e97b6c77fa4d708c41fd8c19419063",
+      "case": "M-REC-024",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "ecc0ca4f59497a996f3310ca789ba5a2ab6b2064707adb6f834d844b5a8010fc"
+    },
+    {
+      "run_id": "69d55edbd28a440cbe8678b116a4d3e3",
+      "case": "M-REC-019",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "14f45de3ff9e31c323f4e1cee88021711e01252a7a93d59d5b81e54a37a3ba91"
+    },
+    {
+      "run_id": "a7a3da2916814156b15a15618ace6c92",
+      "case": "M-REC-026",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "182f7c5410f233a2bc1e7ed9cfa15de9dd7bbed059381c7a687c76b4b384c3e8"
+    },
+    {
+      "run_id": "a7319b72b42148b4ba02256fa29fe0e4",
+      "case": "M-REC-027",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "348ccb962ee28e98e88dd3cdcac066aca22a507909af4f11f92faf60b7f5358a"
+    },
+    {
+      "run_id": "89647d2481904648b9de446d3cef58ae",
+      "case": "M-REC-024",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "251d06ce1f50ca5a87ccd51f99596d26031b5a9f11a5419fb31de0ee06d3cdbc"
+    },
+    {
+      "run_id": "d3dce590803641ef850984220b6e6fb5",
+      "case": "M-REC-019",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "a6a099341294f6e471174971db5549d9de3747d30f700ed9e4f7ad099cc41be3"
+    },
+    {
+      "run_id": "repeat-1bec7192ada04ca9b40bb101b010fd31",
+      "case": "M-REC-026",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "f65674b0f491b1147e5ab119cfb5334fdb920a2a7744feffd140ffdb22a7dd63"
+    }
+  ],
+  "units": {
+    "passed": 474,
+    "failed": 0,
+    "artifact": "emulator:artifacts/c16/staggered-chord-units-isolated.json"
+  }
+}

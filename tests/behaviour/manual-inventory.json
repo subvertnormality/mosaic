@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "55dfaf72996b417a3f51ceb05062e8d3694138e4a1a932a5ccc3f63e13d45a58",
+  "manual_sha256": "c089c063a2487ed1127494016476256335295c01561bb2a71dfad1a2371cc01c",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "statement-inventory-pending-audit-and-implementation",
   "sections": [
@@ -159,7 +159,7 @@
       "level": 3,
       "start_line": 235,
       "end_line": 262,
-      "text_sha256": "fc657ab8ca8243b76f9462bb75ef6bd781ddab2e5314d2d335236ca175ab53c5",
+      "text_sha256": "a74c91edf6b9aadcbba5622038424ce4bfe018cad65ed821d1f8ae2e472ad1c4",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "REC-LIVE-NOTES",
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "55dfaf72996b417a3f51ceb05062e8d3694138e4a1a932a5ccc3f63e13d45a58"
+      "sha256": "c089c063a2487ed1127494016476256335295c01561bb2a71dfad1a2371cc01c"
     },
     {
       "path": "cheat_sheet.html",
@@ -4421,7 +4421,9 @@
         "M-REC-020",
         "M-REC-021",
         "M-REC-022",
-        "M-REC-023"
+        "M-REC-023",
+        "M-REC-026",
+        "M-REC-027"
       ],
       "status": "unimplemented",
       "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels.",
@@ -4612,7 +4614,9 @@
         "M-REC-022",
         "M-REC-023",
         "M-REC-024",
-        "M-REC-025"
+        "M-REC-025",
+        "M-REC-026",
+        "M-REC-027"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",
@@ -4626,8 +4630,8 @@
       "source": {
         "path": "README.md",
         "line": 239,
-        "text": "When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step. Disarming recording prevents new notes from being recorded. Notes that began while recording was armed are kept, and their full note lengths are measured and committed when you release them, even if recording has since been disarmed.",
-        "sha256": "c665c091ae2ee28b67a5ac54455b0358accedddffb38485b206d8a9f56d2d27b"
+        "text": "When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step. A recorded chord has one shared note length, measured from the first key press to the final key release and quantised to the nearest supported note length. This applies even when the chord keys are pressed or released at different times. Disarming recording prevents new notes from being recorded. Notes that began while recording was armed are kept, and their full note lengths are measured and committed when you release them, even if recording has since been disarmed.",
+        "sha256": "9afbf576a4004d1e2950963b6d3a476dcd383fc140e661f7e034356fadb53db3"
       },
       "open_decision": "SEM-008: current active step versus nearest/intended pulse boundary; M-REC-004 is an unresolved diagnostic, not passing coverage."
     },

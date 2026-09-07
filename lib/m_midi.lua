@@ -123,6 +123,7 @@ function handle_midi_event_data(data, midi_device)
     -- Handle chord state for this step
     if chord_state.chord_number == 0 then
       chord_state.chord_one_note = data[2]
+      chord_state.start_time = input_notes[data[2]].start_time
       chord_state.chord_number = 1
       chord_state.length_recorded = false
     else
@@ -132,6 +133,7 @@ function handle_midi_event_data(data, midi_device)
         else
             -- New step or root note released, start new chord
             chord_state.chord_one_note = data[2]
+            chord_state.start_time = input_notes[data[2]].start_time
             chord_state.chord_number = 1
             chord_state.length_recorded = false
         end
@@ -176,7 +178,7 @@ function handle_midi_event_data(data, midi_device)
       -- Only process the length when we're on the last note of the chord
       if chord_state.chord_number <= 0 and not chord_state.length_recorded then
         chord_state.length_recorded = true
-        local duration = util.time() - stored.start_time
+        local duration = util.time() - chord_state.start_time
         local beats_per_second = clock.get_tempo() / 60
   
         local clock_mods = channel.clock_mods

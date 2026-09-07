@@ -236,7 +236,7 @@ To start the sequencer, press the lowest left hand button on the grid. To stop t
 
 To enable record mode, press the second button from the left on the grid.
 
-When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step. Disarming recording prevents new notes from being recorded. Notes that began while recording was armed are kept, and their full note lengths are measured and committed when you release them, even if recording has since been disarmed.
+When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step. A recorded chord has one shared note length, measured from the first key press to the final key release and quantised to the nearest supported note length. This applies even when the chord keys are pressed or released at different times. Disarming recording prevents new notes from being recorded. Notes that began while recording was armed are kept, and their full note lengths are measured and committed when you release them, even if recording has since been disarmed.
 
 Changes to trig parameters are also recorded on the active channel. Recording begins the first time a trig parameter is modified. During recording, all parameter values are saved as trig locks, overwriting existing locks until the end of the current song pattern. Recording resumes automatically when a trig parameter is adjusted again using the encoder.
 
