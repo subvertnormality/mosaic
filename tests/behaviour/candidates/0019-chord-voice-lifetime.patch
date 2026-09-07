@@ -1,0 +1,61 @@
+diff --git a/lib/m_midi.lua b/lib/m_midi.lua
+index 243ec6c..a57b434 100644
+--- a/lib/m_midi.lua
++++ b/lib/m_midi.lua
+@@ -123,45 +123,25 @@ function handle_midi_event_data(data, midi_device)
+       m_midi:note_on(note, velocity, midi_channel, device.midi_device)
+     end
+ 
+-    -- Handle chord state for this step
++    -- The chord survives individual releases while another voice is held.
++    -- Preserve its root and onset independently of the root key's lifetime.
+     if chord_state.chord_number == 0 then
+       chord_state.chord_one_note = data[2]
++      chord_state.root_note = note
+       chord_state.start_time = input_notes[data[2]].start_time
+-      chord_state.chord_number = 1
++      chord_state.voice_count = 0
+       chord_state.length_recorded = false
+-    else
+-        if input_notes[chord_state.chord_one_note] and
+-          input_notes[chord_state.chord_one_note].step == s then
+-            chord_state.chord_number = chord_state.chord_number + 1
+-        else
+-            -- New step or root note released, start new chord
+-            chord_state.chord_one_note = data[2]
+-            chord_state.start_time = input_notes[data[2]].start_time
+-            chord_state.chord_number = 1
+-            chord_state.length_recorded = false
+-        end
+     end
+-    
+-    -- Store this note
++    chord_state.chord_number = chord_state.chord_number + 1
++    -- Recorded voice slots do not become reusable when a key is released.
++    chord_state.voice_count = chord_state.voice_count + 1
+     chord_state.notes[data[2]] = true
+ 
+-    local chord_degree = nil
+-    if chord_state.chord_one_note and 
+-      input_notes[chord_state.chord_one_note] and
+-      input_notes[chord_state.chord_one_note].step == s then
+-        chord_degree = quantiser.get_chord_degree(note, input_notes[chord_state.chord_one_note].note, step_scale_number)
+-        if chord_degree < -14 or chord_degree > 14 then
+-            chord_degree = nil
+-        end
+-    end
+-
+-    -- If we're on same step as chord root, send as part of chord
+-    -- Otherwise send as new note
+-    if chord_state.chord_one_note and input_notes[chord_state.chord_one_note] and input_notes[chord_state.chord_one_note].step == s then
+-      recorder.handle_note_midi_message(note, velocity, chord_state.chord_number, chord_degree)
+-    else
+-      recorder.handle_note_midi_message(note, velocity, 1, nil)
++    local chord_degree = quantiser.get_chord_degree(note, chord_state.root_note, step_scale_number)
++    if chord_degree < -14 or chord_degree > 14 then
++      chord_degree = nil
+     end
++    recorder.handle_note_midi_message(note, velocity, chord_state.voice_count, chord_degree)
+   elseif data[1] == 128 then -- note off
+     local stored = input_notes[data[2]]
+     if stored == nil then return end

@@ -695,3 +695,37 @@ they are not skipped, waived or treated as completed acceptance.
 
 There are60 native cases. This candidate is pending, and the full manual and
 emulator delivery remain incomplete. Unaffected delivery work may continue.
+
+
+## Approved chord voice lifetime candidate: broad validation
+
+User explicitly approved candidate0019 and requested unit, integration and
+behavior regression testing. It retains the chord root/onset while any voice
+remains held and separates recorded voice slots from held-key count. Both new
+regressions pass controlled and real time, plus three identical fresh controlled
+processes each. All474 existing unit tests pass. All65 emulator contracts and
+1200 repeated framebuffer draws pass. The native chord-editing integration
+package54bf1d368fab4e45af3077afdbd3c2c8 passes on the same MIDI source hash.
+Native MIDI roundtrip/overflow and grid conformance/fault-detection groups pass
+through the real norns runtime with probe scripts independent of Mosaic.
+
+All61 implemented behavior cases ran in both clock modes:117pass and5fail.
+M-TIM-003 failed during MIDI-clock warmup because its per-pulse client request
+missed a25ms deadline. The stimulus now uses the admitted native queue for49
+warmup pulses,start,60 playback pulses and stop, with unchanged musical timing
+expectations and a source-time assertion against premature notes. Targeted
+controlled and real-time reruns pass. The initial failed sweep remains evidence;
+it is not relabelled as passing. No production change was needed for that failure.
+M-MIDI-005 still omits note0; exact MIDI payload comparisons match its pre-fix
+controlled baseline, including the real-time candidate output. M-REC-004 still
+times out on exact-boundary placement; final step grids match prior respective
+controlled/real-time baselines. These failures remain explicit, unwaived and
+incompatible with a full release-pass claim. No other implemented case failed.
+The initial integration setup failed before execution because n.b. was looked
+up as a sibling app; corrected to Mosaic's pinned lib/nb submodule.
+
+Coverage audit:61 cases bind to portions of34 of141 requirements;107 have no
+Mosaic-owned case binding. Existing emulator fixture packages are separate
+evidence and cannot silently count as complete Mosaic-owned coverage. Same-pitch
+overlap, chord voice overflow and the remaining manual/emulator stages remain
+required. No refactor or full-delivery completion is authorized by this slice.

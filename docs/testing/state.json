@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Resolve pending approval for exact chord voice lifetime candidate; until then continue unaffected manual/emulator work. Baseline M-REC-030/031 fail in both clock modes. Full campaign remains incomplete.",
+  "next_action": "Fix independently reproduced MIDI note0 omission with isolated baseline/candidate evidence; resolve exact-boundary semantics without changing expectations merely to pass. Continue remaining manual coverage (107 currently unbound requirements), chord overlap/voice limits, and emulator acceptance/release stages.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -1285,9 +1285,947 @@
     }
   ],
   "chord_voice_overlap_candidate": {
-    "status": "awaiting-payload-approval",
-    "implementation_applied": false,
-    "review": "emulator:docs/delivery/reviews/chord-voice-lifetime-approval.md",
-    "reason": "Automatic approval review rejected the core chord/MIDI replacement due to unvalidated regression risk."
+    "status": "validated-with-explicit-existing-failures",
+    "source_sha256": "3a4fff8fe94e18be17987dc3d8947035f39a6a5d17404d37c7cc2e7b61b33c3c",
+    "unit_tests": {
+      "passed": 474,
+      "failed": 0
+    },
+    "contracts": 65,
+    "frame_draws": 1200,
+    "native_chord_package": {
+      "run_id": "54bf1d368fab4e45af3077afdbd3c2c8",
+      "manifest_sha256": "74b8a931e3b0a1f3326632197d4a86757864f873bb898c26ee47f3f2deeba39b"
+    },
+    "native_device_probes": {
+      "groups": 4,
+      "artifact": "emulator:artifacts/c16/chord-voice-device-probes/results.json",
+      "sha256": "e412eab99ca688243301cdff895fe3c7bddbe35242568eb43357476d146074d1"
+    },
+    "behaviour": {
+      "runs": 122,
+      "passed": 117,
+      "failed": 5,
+      "evidence": [
+        {
+          "case": "M-REC-030",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "b3612c42ae594936b0e1b7a3ceb7766b",
+          "manifest_sha256": "31657345beb0ae2d3da21ab15dafafc8510eb0312eb5b639a5051bf4520e715e"
+        },
+        {
+          "case": "M-REC-031",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "abe57e2ded0a4c918209275e6bef2b49",
+          "manifest_sha256": "28ed8fb75e13ef44d99fce8e9716fad54079179cfb03a26c05a284ec10d71703"
+        },
+        {
+          "case": "M-CHANNEL-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "e75440d9c8dd465097a37b8dfb1cc0db",
+          "manifest_sha256": "abccf2fbb440198154228f1cb7b6cd2ee6eaab2456b7837720f973676c36cc25"
+        },
+        {
+          "case": "M-LEN-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "2102376ee59142a9a0be4f5bd15a033a",
+          "manifest_sha256": "d444cd6450b08952c344c091b081e00fcc3cd45e104fa818543f89a5929a47f1"
+        },
+        {
+          "case": "M-LEN-002",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "fe45634f96a449fbba4cee0941bfffba",
+          "manifest_sha256": "b4c0e151e2b52bbc0e2fbdc1dca6210aff5f799078b491eee0e65a1cebe561a0"
+        },
+        {
+          "case": "M-LEN-003",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "c565b42ab0514840ab7148517362fb54",
+          "manifest_sha256": "997d683c5771b88fc6caa312a55b02116160e22a3fe32f4334a00bd3fe3eb3b3"
+        },
+        {
+          "case": "M-MEMORY-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "627912052fd94a6c819fd7385220052e",
+          "manifest_sha256": "b00275f491e7ed68d8695513ac4face37b5858b6018d0768916489db10a3b62a"
+        },
+        {
+          "case": "M-MEMORY-002",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "ca82d78580db4b52ba4caa1a2e869ce1",
+          "manifest_sha256": "89bf633bbecd6b5c0f6edd475eb176b07c2251bc77c5d4315665e8e515fc9f45"
+        },
+        {
+          "case": "M-MERGE-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "6b6840fb7aa34801b30831d401918361",
+          "manifest_sha256": "0c318a04738a38316da8af70ccb16c8775cf148b3a0966a6cb3d66e8a6336ee8"
+        },
+        {
+          "case": "M-MIDI-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "d18eb441a2bd42a38a3f1b8d7733c5ce",
+          "manifest_sha256": "2ee9fc2dc96db54ad729d9ca9a2f549282f59dd2d1666f7598169a0554097ab3"
+        },
+        {
+          "case": "M-MIDI-002",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "3c11cf82c2574e878bb651144c2aa8bf",
+          "manifest_sha256": "c863d9f6756eda2bf9660e28a379036a27e9b0668252f325d62e5e828f773f0f"
+        },
+        {
+          "case": "M-MIDI-003",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "2aa8bee302bd4e15a89936ccdc79cabd",
+          "manifest_sha256": "fc8a0d4862b04e91d46345e4fb3802673672fafbac7cb541bfe93712e3a67ffc"
+        },
+        {
+          "case": "M-MIDI-004",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "7ccba63c1ed548eb98dd7ace38709a00",
+          "manifest_sha256": "3cbe55fa524da57618ab6468c283caf94524ad30077b83e24920170cda1884ff"
+        },
+        {
+          "case": "M-MIDI-005",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "run_id": "bd44858ead50451ab09693bdcac09e04",
+          "manifest_sha256": "b911504928b88bc44a93339a0b0bb9455bf71ed8e1c8b69b848fba86103af7ee"
+        },
+        {
+          "case": "M-MOD-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "502eb6e9aaf24f558f81430c19a35eb4",
+          "manifest_sha256": "82f87490a875c2136568a45011c4e7f54f0536175d4f224f8b31cfae4adc02c3"
+        },
+        {
+          "case": "M-MOD-002",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "dfe6a0fc86fe47ef86b82407f6dcc990",
+          "manifest_sha256": "fc8862e42d3ee2f5bea4e57660277a7d8bf33eec6cec89530c31761fc39d3833"
+        },
+        {
+          "case": "M-MOD-003",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "4f2b94c1446642fc937b2c7afcfa48b5",
+          "manifest_sha256": "9354f434fe912fbd4f3baa4dc2c4a2016c92d3db6ab28ed3b9a421ac372977d2"
+        },
+        {
+          "case": "M-MUTE-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "2befd09608644429a073ced94902db91",
+          "manifest_sha256": "82ba207896ce2545c512817ef2c682b424a2213a54dc68b31701b62ed7898945"
+        },
+        {
+          "case": "M-PAT-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "ae170070ecc34248b6bbd0ff56ec4518",
+          "manifest_sha256": "08194859d0131c2c1a5bd78595ea2f45b5adec6dbc9d03fa5ce7e77c22181841"
+        },
+        {
+          "case": "M-PAT-002",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "bf9c40e636e94d23a4d11c2447cb7778",
+          "manifest_sha256": "7d0a068e9a31b2c22399886a7f1ec43681c1e4cb6212211197dda59ef37d1589"
+        },
+        {
+          "case": "M-RANGE-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "99799ebbf1884b498511d15a2eaf7369",
+          "manifest_sha256": "d80be69574353fb9d5c624e3bf0594e441ec1ee2c2fe55d74c5fe15e20e107eb"
+        },
+        {
+          "case": "M-RANGE-002",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "dff6eb534c4041e098143dedf169aab7",
+          "manifest_sha256": "80a68cb97d35ec58d292331183b6f21a8963093cfe9458e5c168fabbd2f2fb57"
+        },
+        {
+          "case": "M-REC-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "f9458d29aac54508a8527707b8c94162",
+          "manifest_sha256": "319e6c8d8a402f171570b0af2655a2905126ced9083ade86f6edb0b27a2d2b09"
+        },
+        {
+          "case": "M-REC-002",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "31a7a1747ec346e89af9e4ec8e9e3bba",
+          "manifest_sha256": "9b9a26edc80c9836b08ade4622df00285c46c0afdee13ebb31edc6453ee7d71a"
+        },
+        {
+          "case": "M-REC-003",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "b5eea4d5817f42c39de588e9a8de0d6c",
+          "manifest_sha256": "043284de3801c97de8d8d61a6d8e16efa5645c7df094bd7bcaa807c703cb1125"
+        },
+        {
+          "case": "M-REC-004",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "run_id": "b34c4966656e4e2a8a7d985c768eb38c",
+          "manifest_sha256": "ad8824d5b37f1f1ec665312a80a7c356c841f0d910062130b35f82978a87e47f"
+        },
+        {
+          "case": "M-REC-005",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "5c10d31c9d664c4ea1e548bcfd8ef760",
+          "manifest_sha256": "bdd06ed9637721367e36c6be671b4fc0922ba8068dc19ab4a3633a19999f7458"
+        },
+        {
+          "case": "M-REC-006",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "501c406a07144fca94fa998979a40ec4",
+          "manifest_sha256": "a17b074b0385eee8e56a9c119eb23f52c1b25f464cbf0bc0b957609fcb069f53"
+        },
+        {
+          "case": "M-REC-007",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "ccda2093a7604deeaa4b65601c4648da",
+          "manifest_sha256": "b658cd5f8fb6d3f66b0f7860c08155242d3898e1252e6c0848f1250c0ed78a1f"
+        },
+        {
+          "case": "M-REC-008",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "e688da0780e3481996a99499c1d5e65b",
+          "manifest_sha256": "ea564d366bfe66877fe0c52f073a7eed64eb79b3b169650d19f9ce3f70f1cf3a"
+        },
+        {
+          "case": "M-REC-009",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "ff8e74ecd0b942ae95899a5b49aa9960",
+          "manifest_sha256": "c818483cb8eb327bd06ca6304c1086a8779979d31536598d1e3760ae95341903"
+        },
+        {
+          "case": "M-REC-010",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "4cb0fdb5862849ec85f9c8c924cc8f0e",
+          "manifest_sha256": "1f2098db074daea1661a72058a07cc6601ef6d9863e888f9e87e1059d392eee3"
+        },
+        {
+          "case": "M-REC-011",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "a22c07d494bd4829aef73829fcdd6c70",
+          "manifest_sha256": "147b9d85422e1d4105578cbd0e8a6f53f091d9282432ecf75ee6ab1a84771c9b"
+        },
+        {
+          "case": "M-REC-012",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "34b7f37aa2974b139d361ea3328a1984",
+          "manifest_sha256": "75d32379271826cd72a4ca79eae43c5fa94491be752fcea8686efe7d7125b2df"
+        },
+        {
+          "case": "M-REC-013",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "991593e737f2420e88c8e1cd6969777c",
+          "manifest_sha256": "94751d967b3d8ac3a86ae78b506b98a691912a497a3ca354e26a087c5b1d7658"
+        },
+        {
+          "case": "M-REC-014",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "8934530281d346758ae0cc9e9591074c",
+          "manifest_sha256": "5af0ce32e715083cef499a3b389cac3755e8fbc2b16715042cf1af18dbf2a825"
+        },
+        {
+          "case": "M-REC-015",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "5cef0b64972749379577ad0c19fbc76a",
+          "manifest_sha256": "59bf13c31fdd37cd49aa3243eaa6a6d52165766abeab0ca20d1c0082e232f69f"
+        },
+        {
+          "case": "M-REC-016",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "402b36ea45c44a0fb4f261de71e8d092",
+          "manifest_sha256": "2b9efa16c682b61eafc84e61515192f66772bf9aed3b85c5c581f409282ff15b"
+        },
+        {
+          "case": "M-REC-017",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "6d60963a9ad44e799817c141cdf06e88",
+          "manifest_sha256": "5ad384332e300399f45b44f4d221e0bb66dd7bd92cf066ff24f5acfcaaec0e49"
+        },
+        {
+          "case": "M-REC-018",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "5fd727e68a0d43459047567cf68e2db5",
+          "manifest_sha256": "d9569b9f7ea9955852e398d93c8036087a655dda68c8d62e5acf85620b03ff3a"
+        },
+        {
+          "case": "M-REC-019",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "386bd561f12f41208769ffd5d1f2c398",
+          "manifest_sha256": "b1995806c24ffef6768f5655ae1d42830954f6290a1f8587d209d3ed56fa35f0"
+        },
+        {
+          "case": "M-REC-020",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "a7b7985996314d749cebfb27dfa69814",
+          "manifest_sha256": "4ed2ead1167d350aeb5882fd0e73c602c37bbead5c84121e7abaabeafd8fea3f"
+        },
+        {
+          "case": "M-REC-021",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "e80b52cf8420400d89f6df96cc67d18c",
+          "manifest_sha256": "44f9d044186795277c17fa188bc2573fb9580347e84126622c026399799d14de"
+        },
+        {
+          "case": "M-REC-022",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "e1edb69f22de42d78e3aa22dde1ab133",
+          "manifest_sha256": "8d050bc6e14cb82f0ba7a1f2a9668341822cff975fb25f3ad376fa250a6c188b"
+        },
+        {
+          "case": "M-REC-023",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "261e8ebc6ddb430dabb26cba8b2f0e59",
+          "manifest_sha256": "fc61ffd798d4bde9f245e7c08c0e035cc35983dbeffc47da245e20b2b934afc3"
+        },
+        {
+          "case": "M-REC-024",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "0ff71fe5ab5c4a11afdd9e35197a0f32",
+          "manifest_sha256": "2d50b31cffab612eba96e97cca9095b5fc3a54f79d11e3c4ad16628eb532e33c"
+        },
+        {
+          "case": "M-REC-025",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "c67987c5f1ca4f71be91c15d2b96bcc5",
+          "manifest_sha256": "53db05dd6416743a96cd9aab1e19e2c050eb8fc927a633e45d4a7a9714d166de"
+        },
+        {
+          "case": "M-REC-026",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "9f110e9b996a4ca79ea24f03cdc59589",
+          "manifest_sha256": "8c7a66fe15d8cee87d0903da33b534dc970234f874f52539168f13ccc749e1ec"
+        },
+        {
+          "case": "M-REC-027",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "0ea34f41550341f6802a4aa430025460",
+          "manifest_sha256": "122f3d65fcf3322c8465951b6339559e74bce65e13ca9d8b6afb80d16d448dc5"
+        },
+        {
+          "case": "M-REC-028",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "1704c32fcdcf4403a120242d53ec30ac",
+          "manifest_sha256": "fa0209bc1027651648bf74a73d42e5f6d03b7a4b24e9dc8b0ba403eaa32cdddf"
+        },
+        {
+          "case": "M-REC-029",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "e493a2d1c74842a59fdc422c7c875ef7",
+          "manifest_sha256": "6d002d7296ebc64e5cdab4082ec00a65eb6c971b1fa9b3d77a2aef8b13f913de"
+        },
+        {
+          "case": "M-SAVE-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "91b3dc35541842299f7f7224221234d3",
+          "manifest_sha256": "4a6d77874fcc22682276130350fd37a5817692160789318b956d04e6173a9f42"
+        },
+        {
+          "case": "M-SCALE-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "a70b9f4448f84a3e85bdfd78d280a0ca",
+          "manifest_sha256": "8f747aa2bac6d6c091732e79190ba6ec855f4599acd0d8d2f9a4431349ea71c0"
+        },
+        {
+          "case": "M-SCALE-002",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "268d037d11c94295974a6a0875d8871f",
+          "manifest_sha256": "ab7b3dda857cd51ed547445bde7d0a1011ee65d566f193924b8b7e236b6fdfb3"
+        },
+        {
+          "case": "M-SCALE-003",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "4996b67a323d40de8e916227af4d5954",
+          "manifest_sha256": "b5bff5e66d5f4de8375534494986f82373fadef21fd741865dab87efd07aefa3"
+        },
+        {
+          "case": "M-TIM-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "e31237afb1cf479687ea6c3f9c705fd9",
+          "manifest_sha256": "2198db131956118eef7c81e40757a3b78bf091ee97cef69c3cdc0dbdf2611188"
+        },
+        {
+          "case": "M-TIM-002",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "55bd1a6d2a4e4d2794d934c794d0fff3",
+          "manifest_sha256": "d6a70420a139f4775b4d82d0b39ff6ea1ac14af6545ea10b0e8c2263c458b19e"
+        },
+        {
+          "case": "M-TIM-003",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "528bc5c52d7046ee9efafcada05ca7f7",
+          "manifest_sha256": "1e3a1f538d3516765a07fc74f36b24816b45f8592f9c57ce798526e499cdcb46"
+        },
+        {
+          "case": "M-TIM-004",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "b621d6cfe167483c8872f9d10f9e7539",
+          "manifest_sha256": "bebc5de90d49c643ec50b421c31a5ab86dd77b04eaa7040d947bbb497157c2b9"
+        },
+        {
+          "case": "M-UI-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "63e530ce9e2c460092261bfed7b7453e",
+          "manifest_sha256": "0df74463ee6e3175929ada529b8c1a2474af62b2fedb8c678b3f296200e24f96"
+        },
+        {
+          "case": "M-UI-002",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "run_id": "157351d6316e446f9ead09e4499a4b8a",
+          "manifest_sha256": "cdc62e705c297fe5166dde98289b00fbd29fa41e91ea17bd982a1c14de2337ff"
+        },
+        {
+          "case": "M-REC-030",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "0cea57db37bc412fbb6f57a87d8f20ea",
+          "manifest_sha256": "061da08a05572aa770110f0afc650869865e93d1e21450bb95bcea5db9113dcf"
+        },
+        {
+          "case": "M-REC-031",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "f183717c32624553b73dd7864144a3a1",
+          "manifest_sha256": "3090fb6126263592356a9c4c1c9973da5ca925086b8146f6c759103ae6a5f756"
+        },
+        {
+          "case": "M-CHANNEL-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "d537b901a93b4349a13bcc7d452f06f4",
+          "manifest_sha256": "8963c7a47bb71040ef3af25672df6af9c948ebbfa9af86476ab9e1dc58a0911f"
+        },
+        {
+          "case": "M-LEN-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "0b54c0cba2ad43d9ba9ecaafc5026957",
+          "manifest_sha256": "9e7c347afb7c27c5463ff138134e215e01d275decab250843cd3a8b9198af7e8"
+        },
+        {
+          "case": "M-LEN-002",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "8103417892f648e8a07356552f4c066c",
+          "manifest_sha256": "8f944dffc4f3320dafd2bba067a52fc24c1520673fc1612daef99df981a03ca9"
+        },
+        {
+          "case": "M-LEN-003",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "daac99a7eb17483a97213f338940ccd4",
+          "manifest_sha256": "9eb5aed7de93b424b138040eca41bd1945b89d5ba8fc197f331a70622829f9a1"
+        },
+        {
+          "case": "M-MEMORY-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "a13e14d00ceb4f0ea00a161fecf1da3d",
+          "manifest_sha256": "e7198ab7e691f9360b02ae51906c7f66bbe1dd854bb2587142f727fb6a84b60b"
+        },
+        {
+          "case": "M-MEMORY-002",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "dee593c072e847768ae1f16c95587c34",
+          "manifest_sha256": "51e2a065625ca860deedd5d19cbc7f3abcfda8570ddbf1856e5c053d2a0dd790"
+        },
+        {
+          "case": "M-MERGE-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "f29fc37b5dd24138b0fa2229ff9d6ef4",
+          "manifest_sha256": "2b6e92195a50d86461984f5333668b6be366fb016c4da3c6d5510c0a5021eb74"
+        },
+        {
+          "case": "M-MIDI-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "e343106a458a44e08ff7186b329260c7",
+          "manifest_sha256": "ff5155cdf3bc89daeb00160ae2a7ff8e1a839153e96c6b2508541e46a19a32b1"
+        },
+        {
+          "case": "M-MIDI-002",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "e28325de943540ba8d36120fa6b038ba",
+          "manifest_sha256": "963ba571cdb5e0410fe6786c7d0e2bb981841b81767956c559a1e9817c391b98"
+        },
+        {
+          "case": "M-MIDI-003",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "d3624762b7344dc283ae858a17b7444b",
+          "manifest_sha256": "bc5ea4e791bbe6b33e49f9330657f74a98c9ea7dc6adbc1a053d72e8f17a736e"
+        },
+        {
+          "case": "M-MIDI-004",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "6e09d7f2a383451881240e0920f102d5",
+          "manifest_sha256": "2e7bd55278ed5b56893931fb5b790ce521421fc2df534ecaf76a395833179ddc"
+        },
+        {
+          "case": "M-MIDI-005",
+          "mode": "real-time",
+          "passed": false,
+          "run_id": "9fd59ae9945a471dbd3d2224c2552e72",
+          "manifest_sha256": "eec23022c0786164dc6ffd7feca7d164e67728e589958c28c6b63551cef0ed2b"
+        },
+        {
+          "case": "M-MOD-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "08decc42ee97481cb97988165d885e9f",
+          "manifest_sha256": "5affc381f661eff9821c8c12146c6d126841ea91b29282302cd3698565b0381d"
+        },
+        {
+          "case": "M-MOD-002",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "34462bf237e7453a8543e0988577a526",
+          "manifest_sha256": "80f1bab9162c429eff6046a154b776d416f11fe60e60891de869a0a02200a2bc"
+        },
+        {
+          "case": "M-MOD-003",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "51221fc6c4bf4c8abc66128dbbace0d4",
+          "manifest_sha256": "13e701f802ad830b9e9ba0b967d5cf1ccf40e6af642b254160495322181ddd57"
+        },
+        {
+          "case": "M-MUTE-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "a8a075a1a1184cadb2dce688c0275419",
+          "manifest_sha256": "3e9535cf8e8e794abfbd2d8e2e21815d78c63b0c9fc0e2877b7c86341f649b2a"
+        },
+        {
+          "case": "M-PAT-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "0e5fd8179b5f48e4bc97d24e8963e3ff",
+          "manifest_sha256": "26e0617e8b0528b5752958a74a3dd4d8fa29f62f3ba5b216e3b43730d8974b06"
+        },
+        {
+          "case": "M-PAT-002",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "36d5c5cec76b4aba9bc15ad06438e7f7",
+          "manifest_sha256": "1a07faed4c481f0b93aaddfe4d84630a5e8b9b74a395a9502a7813d06ee57eaa"
+        },
+        {
+          "case": "M-RANGE-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "1737e89f41c04a3983e5a579c06b0af4",
+          "manifest_sha256": "a84892167c0c976d6417fc65e43f6e31fd95db7d3f679c2c346dcc202427eeaf"
+        },
+        {
+          "case": "M-RANGE-002",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "a66e0967664c4c9fb110c75bb143c459",
+          "manifest_sha256": "f0bcbb899a9f7259e2e86a473b182b5154786491a542ca0594e1018b3c3284a4"
+        },
+        {
+          "case": "M-REC-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "a79c5c0b8884490fa3b5f13448db5b5a",
+          "manifest_sha256": "4b626f196abb8dee9c5a9f8971ea58289abaf0cfab56cbcd7ad7eb97fd6bc9b6"
+        },
+        {
+          "case": "M-REC-002",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "8764f81218e94831b303ff2a2a6d7dfd",
+          "manifest_sha256": "7443c928bdcb466900c6d6db31052b4055d4f1344e491002a47037236f83308f"
+        },
+        {
+          "case": "M-REC-003",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "734c561ef4f944a497488ae785d679c5",
+          "manifest_sha256": "610d3ba0f826a60ebdd5d49028bec48771e12817f57fcb80d757e107aa7a9365"
+        },
+        {
+          "case": "M-REC-004",
+          "mode": "real-time",
+          "passed": false,
+          "run_id": "55c741030b0641c388b4c82d5b09fa9e",
+          "manifest_sha256": "3fc1019fe04d50a6e23ecdd95e2776f1ea60fd2734d8eaaf240f63235c0e48f2"
+        },
+        {
+          "case": "M-REC-005",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "684ca8ae1b2142a2b78f71963b71c9b8",
+          "manifest_sha256": "f70bb39a52980ef3374969e75ce0a78561e85a81dc981c7ec9883e6bed3ca4d1"
+        },
+        {
+          "case": "M-REC-006",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "a6e5fbc07c6047d3ba80fe51243beef3",
+          "manifest_sha256": "bd3d60bbe17839227005dba5b97747ea476c92dc4b756f81267581c6935ddc65"
+        },
+        {
+          "case": "M-REC-007",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "5a8b8b692782465b980fa2fcf8a2fcbc",
+          "manifest_sha256": "cb4454b9a398e61674b7efd2b52fc5a1b58c39bd6a5b3d7f8757695237561b21"
+        },
+        {
+          "case": "M-REC-008",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "10ae14d5b1be4198a9e753c5a11b6f00",
+          "manifest_sha256": "b1a1078fce46e92a470873725994152f0d7340241b2379fbbad642e514fce646"
+        },
+        {
+          "case": "M-REC-009",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "55ee9529e2614429a3692a978b200085",
+          "manifest_sha256": "be258eb5317dfe0fef80c0717974fb85c76abaee01206ad4ebbde79f066cf3d0"
+        },
+        {
+          "case": "M-REC-010",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "4ece071579c148e0b03a768cf92d7cde",
+          "manifest_sha256": "26d65f00ea7b56df25fe7f582df86dd8085c41d5b74575028f86bed78f2f3b7b"
+        },
+        {
+          "case": "M-REC-011",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "fe5c0013e2574cb08833812e5a09f4b8",
+          "manifest_sha256": "aae4073afe165ea771875de60c50bf67d80fc9067d6cf0b07ab1a7801f72b679"
+        },
+        {
+          "case": "M-REC-012",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "98f7c42c31784361aacf6c18b68da900",
+          "manifest_sha256": "3df54e346c92de65d2a3b1ee39433333228116d43674cb23bea872692f552fb3"
+        },
+        {
+          "case": "M-REC-013",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "71404a3edbdd4f57a02c1b71b965a825",
+          "manifest_sha256": "2a5926ad03ec193a18bff955f0359b71f54d44ed4f4118e75352dd13eb438e93"
+        },
+        {
+          "case": "M-REC-014",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "bac63f5a2cb54a70911f9d48fabe883d",
+          "manifest_sha256": "08141f92944325bc330446ac262f75a6c04fa1631f11a28062c14f241ac603b8"
+        },
+        {
+          "case": "M-REC-015",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "46b4a9aedb6a402b8625011a4573192e",
+          "manifest_sha256": "f68bfe8bb6341c3dda6a1c450eed32078aae4b9a86be1004565cd1fab0b8e2dd"
+        },
+        {
+          "case": "M-REC-016",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "be3fbc0f830a4d5ab189eb3980dc1c4b",
+          "manifest_sha256": "af4a952645d87abf3c8971d18f888ea8df6ea56d969b172fb18f9a573a43fc2c"
+        },
+        {
+          "case": "M-REC-017",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "080a115d926749a9ae82b94bc48437bc",
+          "manifest_sha256": "ec182f190bd6142267c0b00d8486dcb9bed2a79f794ac22e68a0d431a77fa4e8"
+        },
+        {
+          "case": "M-REC-018",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "d9bb14dc8bb244449efbd472975a0dd7",
+          "manifest_sha256": "c312214bcaaa4e059b09b528d3e771c216807cecc1bc544ad19f807ee5e34ced"
+        },
+        {
+          "case": "M-REC-019",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "533abf57bf724af1965c5e85ae038f9b",
+          "manifest_sha256": "b4c968412aa487b209adf3b1d1278f4d6422a489179713c6b9d85679259435ec"
+        },
+        {
+          "case": "M-REC-020",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "40f578b302d1486c93150c0ef4e23c28",
+          "manifest_sha256": "87d492371e230d92797e316ae586a10ede539fd46928642136c675d713ca012f"
+        },
+        {
+          "case": "M-REC-021",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "71e109f225fd466d99343e12d71ca8a3",
+          "manifest_sha256": "818f9807773fb31399dc4394538f366fdadba2ace7c4ac0fb944a9b279f3ea7d"
+        },
+        {
+          "case": "M-REC-022",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "db434eb224ee4f4a8b47a6172c49b5fe",
+          "manifest_sha256": "7d6ac151cf2ce631eac36c97a602a68506478862079565c023aa31a7b8f5b8c5"
+        },
+        {
+          "case": "M-REC-023",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "c66013ebf71e42e7b1f23d0684ddae15",
+          "manifest_sha256": "bc76de87e781618f710dc6ea3e08ffa8f794258a762d7092e0b8ab49b1a8c794"
+        },
+        {
+          "case": "M-REC-024",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "21bc4a57c67c4acfadbe7bd124b95356",
+          "manifest_sha256": "d5329fac3889bcc7283ae03625e29778d71f4258cdbc63cb27993502d378d106"
+        },
+        {
+          "case": "M-REC-025",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "0f4d9d44eef1454898613c80f484e8d5",
+          "manifest_sha256": "96418f0e8e732a3ac8d5947cb15ad90e08e28bc43c0a7cc3453b39d319da980f"
+        },
+        {
+          "case": "M-REC-026",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "381f6b1f08e845be9e1a1bf57270d71f",
+          "manifest_sha256": "e558c0d9d914b816dd0501e822179c1301b3cc6f20b43f40746379c80993287e"
+        },
+        {
+          "case": "M-REC-027",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "f96c5c0bc6574ca8a4848dc297b8aaa3",
+          "manifest_sha256": "2748a93bfbcb4e0dd795dd98c66abd2e906d923535b733ede062825326234f16"
+        },
+        {
+          "case": "M-REC-028",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "5726d6b235f54bc2a7e12ddf24aa172c",
+          "manifest_sha256": "7c41fdfd340dc9e5d60dfa412b289253946ca5a141a2bb2566d1994cd4618123"
+        },
+        {
+          "case": "M-REC-029",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "fd5165d415a64f46993d57973e29a5cc",
+          "manifest_sha256": "0c3db967fc9571cec0a152fca20d0f94d891344c87d36319f6ccd057586d39df"
+        },
+        {
+          "case": "M-SAVE-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "c4368b85e6964853bc2d7c1f2f3dc346",
+          "manifest_sha256": "e2205e18e0d717a632205677b5fb580a7ae11cc7584eff842b6a951c6e736b91"
+        },
+        {
+          "case": "M-SCALE-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "d2400ee2bf2a4dc8a81d39d21e7f9c83",
+          "manifest_sha256": "60f721acf0d8aecb83713f42729519acff43bff1e570a47633e593de91f17a40"
+        },
+        {
+          "case": "M-SCALE-002",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "1c96a28e6bce4dd09d2e86c575769220",
+          "manifest_sha256": "06a3217bbe77a9e16bb98584aebb290326c8ef97b4a409f1d205282e9e39ce74"
+        },
+        {
+          "case": "M-SCALE-003",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "8b66f7c425b447b9b58d1016356c5813",
+          "manifest_sha256": "1d1669c1453c6421ce128bede06c9b4705dfd2059eac72022e561404f018fac9"
+        },
+        {
+          "case": "M-TIM-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "df4b26271ea84c149a4eb85714e39475",
+          "manifest_sha256": "907278837b5d7471b2831faea7afdebd281d82dcf106177dd61ba6f170e0f013"
+        },
+        {
+          "case": "M-TIM-002",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "13cbd1528f0b4318a18cdf1bbbb18ef4",
+          "manifest_sha256": "018c96f515059036da11b2a1c47d96c7534eeb69f991bb169ec1b4527aedb920"
+        },
+        {
+          "case": "M-TIM-003",
+          "mode": "real-time",
+          "passed": false,
+          "run_id": "5bab86b13f454d248c2230b693f6849a",
+          "manifest_sha256": "5d525101d47e83faa5395ed0cbc08f6b9706e41aa9dda0be3e7a0471db1754e5"
+        },
+        {
+          "case": "M-TIM-004",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "63b83ed935004723af984cffc9f08bb7",
+          "manifest_sha256": "3bfb95fc4b4ef3cd777fea4be4f5bc7f52d31d33177bfa882787b96944d77af8"
+        },
+        {
+          "case": "M-UI-001",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "97001f4a61c34d9998623e3dcad7bb74",
+          "manifest_sha256": "e18bd5fda6d922be8c85612477e8a333099f13669dbd1861415fe4e9efc3750f"
+        },
+        {
+          "case": "M-UI-002",
+          "mode": "real-time",
+          "passed": true,
+          "run_id": "20a813d20fe4413e8590fdc392cc22c0",
+          "manifest_sha256": "65f766d1d61aac6a2079b1c7c10f57c0ba7a9de860eacc7b60b1b45825c35568"
+        }
+      ]
+    },
+    "transport_stimulus_repair": {
+      "change": {
+        "status": "awaiting-targeted-validation",
+        "case": "M-TIM-003",
+        "baseline_failure": "5bab86b13f454d248c2230b693f6849a",
+        "before_sha256": "fbb3aa2157d1002fbd8a503d223711905c96ef3f0b311ea49586fc8610d9ac88",
+        "after_sha256": "4bea687eed76eb2d3465803cf98fe04d009b4dfc4a817efb172fdbce73f5fbeb",
+        "change": "Replace real-time25ms client roundtrips with one native MIDI schedule;49 warmup pulses, start,60 playback pulses,stop. Assert no note output before first playback pulse using source timestamps. Existing pitch, timing,duration and restored-clock expectations unchanged.",
+        "classification": "Test stimulus delivery failure during warmup, before application playback; original failed full-suite run retained. No production change."
+      },
+      "validation": [
+        {
+          "mode": "real-time",
+          "run_id": "aa0cfa35190a4500b96246e027ef1009",
+          "manifest_sha256": "c5b7a588a3401832b69a637d58ca5c904fd9e35d6048651bc2b3bb6126ff026d",
+          "passed": true
+        },
+        {
+          "mode": "controlled-experimental",
+          "run_id": "59cd69a0feb0491c8b2473d89efc9512",
+          "manifest_sha256": "2e311347e2102309b9d11b2ca2b57d26337da418be38309ed82428c324e21618",
+          "passed": true
+        }
+      ]
+    },
+    "controlled_repeats": [
+      {
+        "case": "M-REC-030",
+        "run_id": "repeat-5eee7506bb284933be9950c9fe0a74c0",
+        "manifest_sha256": "a9dd732e5def4cd7f829f6562511b8ac0550a9ffc5ad7cf388bbd9dd90122497",
+        "passed": true
+      },
+      {
+        "case": "M-REC-031",
+        "run_id": "repeat-9bc7bb0b8f324eceb8290e03a2343e6e",
+        "manifest_sha256": "364bae4165cd3750c3d1c7dce20d97c92e0ceb4b01427b0b10a37f0b7d946865",
+        "passed": true
+      }
+    ],
+    "existing_failure_comparisons": [
+      {
+        "artifact": "emulator:artifacts/c16/chord-voice-pitch-baseline-comparison.json",
+        "sha256": "9b254ff479d1f08ba9364fca969daa44980ffa04c5b42c82aa0fcade948f984d"
+      },
+      {
+        "artifact": "emulator:artifacts/c16/chord-voice-pitch-realtime-comparison.json",
+        "sha256": "d2e196e4a964243047d8db55c4063b9bd2059caac496cf57eb42ac44d4c626c0"
+      },
+      {
+        "artifact": "emulator:artifacts/c16/chord-voice-boundary-baseline-comparison.json",
+        "sha256": "d22c4d5ad405a4101262c0c8afa4b4f0f8d4cac36de94bfe6213818d21d0897a"
+      },
+      {
+        "artifact": "emulator:artifacts/c16/chord-voice-boundary-realtime-comparison.json",
+        "sha256": "389f0db4bfc7139e6ec40e045669b4af4ec09a1b1734d566c644084d3df1595a"
+      }
+    ],
+    "full_manual_coverage": false,
+    "full_release_acceptance": false,
+    "limitations": "Initial sweep retained all5 failures. M-TIM-003 had a client-deadline stimulus failure; native-queued repair passes both modes without changing musical expectations. Note0 remains missing and exact-boundary placement remains unresolved. Known failures were executed and retained, not skipped or waived. MIDI real-time failure payload matches the pre-candidate controlled baseline; it is not a separate real-time baseline. Same-pitch overlap, voice overflow and remaining manual domains remain required."
+  },
+  "active_behaviour_test": {
+    "exec_session": null,
+    "status": "finished"
   }
 }

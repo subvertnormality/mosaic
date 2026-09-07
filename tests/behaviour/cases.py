@@ -199,15 +199,32 @@ def midi_clock_transport(c):
             else:inject(248,start+(i+1)*25000000)
     # Replace the native estimator startup window with49 evenly spaced pulses.
     before=c.snapshot()['midi_count']
-    pulses(49)
-    def new_notes():return [m for m in c.snapshot()['midi'] if m['index']>before and m['bytes'][0]==144 and m['bytes'][2]>0]
-    assert not new_notes(),'Clock pulses alone started playback'
-    inject(250)
-    if c.clock_mode=='controlled-experimental':c.elapse(0)
-    assert not new_notes(),'Transport started before the next MIDI clock pulse'
-    pulses(60);inject(252)
+    first_play_pulse=None
+    if c.clock_mode=='controlled-experimental':
+        pulses(49)
+        def new_notes():return [m for m in c.snapshot()['midi'] if m['index']>before and m['bytes'][0]==144 and m['bytes'][2]>0]
+        assert not new_notes(),'Clock pulses alone started playback'
+        inject(250);c.elapse(0)
+        assert not new_notes(),'Transport started before the next MIDI clock pulse'
+        pulses(60);inject(252)
+    else:
+        # One native queue avoids requiring every client roundtrip to finish
+        # inside the25ms MIDI clock interval. Keep pulse spacing at100BPM.
+        origin=time.monotonic_ns()+500000000
+        packets=[(i*25000000,248) for i in range(1,50)]
+        packets += [(1240000000,250)]
+        packets += [(1250000000+i*25000000,248) for i in range(60)]
+        packets += [(2735000000,252)]
+        events=[dict(port=1,bytes=[value],at_monotonic_ns=origin+offset) for offset,value in packets]
+        c.action(type='midi_schedule',schedule_id=1,events=events)
+        state=c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=5)
+        delivered=state['midi_input_schedule']['delivered']
+        first_play_pulse=delivered[50]['actual_monotonic_ns']
+        c.results.append(dict(kind='native-midi-clock-stimulus',events=events,delivered=delivered))
     c.wait(lambda s:not s['midi_capture']['outstanding'])
     state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and m['bytes'][0]==144 and m['bytes'][2]>0]
+    if first_play_pulse is not None:
+        assert not [m for m in notes if m['monotonic_ns']<first_play_pulse],'Warmup/transport emitted notes before the first playback pulse'
     expected=[(60,127),(62,117),(64,107),(65,97)]
     assert len(notes)>=9,notes
     assert [(m['port'],m['bytes']) for m in notes]==[(1,[144,*expected[i%4]]) for i in range(len(notes))],notes
@@ -1046,7 +1063,31 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
         c.results.append(dict(kind='recording-origin-channel',channel=status-143,expected=expected,actual=actual,durations=durations,expected_duration=duration))
     c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
 
+def keyboard_pitch_range(c):
+    import time
+    c.configure();marker=c.snapshot()['midi_count']
+    controlled=c.clock_mode=='controlled-experimental';field='logical_ns' if controlled else 'monotonic_ns'
+    origin=c.logical_ns+100000000 if controlled else time.monotonic_ns()+500000000
+    events=[];expected=[];ordinal=0
+    for note in range(128):
+        for release,velocity in ((128,1),(144,127)):
+            onset=origin+ordinal*30000000
+            events += [dict(port=1,bytes=[144,note,velocity],**{'at_'+field:onset}),dict(port=1,bytes=[release,note,0],**{'at_'+field:onset+15000000})]
+            expected += [(1,[144,note,velocity]),(1,[128,note,0])]
+            ordinal+=1
+    request=dict(type='midi_schedule',schedule_id=1,events=events)
+    if controlled:request['time_domain']='logical'
+    c.action(**request)
+    if controlled:c.elapse((origin+ordinal*30000000-c.logical_ns)/1e9)
+    else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=12)
+    state=c.snapshot();assert len(state['midi_input_schedule']['delivered'])==512
+    actual=[(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
+    assert actual==expected,dict(expected=expected,actual=actual)
+    assert not state['midi_capture']['outstanding']
+    c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
+
 CASES={
+ 'M-MIDI-005':dict(run=keyboard_pitch_range,requirements=['MIDI-RELEASE-001'],description='All128 MIDI pitches at minimum/maximum velocity with both release forms; exact preview and no outstanding notes'),
  'M-REC-030':dict(run=lambda c:recorded_chord_release(c,(72,76,79),(0,0,80000000),release_offsets=(40000000,400000000,500000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Add third voice after root release while second voice remains held; preserve chord and first onset'),
  'M-REC-031':dict(run=lambda c:recorded_chord_release(c,(76,72,79),(0,0,80000000),release_offsets=(40000000,400000000,500000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Add third voice after second voice release while root remains held; preserve all recorded voices'),
  'M-REC-028':dict(run=lambda c:recorded_chord_release(c,preview_release_ns=600000000),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Post-disarm preview outlasts a recorded chord without extending or losing its shared length'),
