@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Ten named cases are partial manual coverage. M-TIM-001 checks61 onsets/60 durations over20 phrases: controlled046a98f passes; RT e3d81b fails initial phrase before longer stage. Profile indicates36.5ms main matron CPU near late onset, but all-service sampling cost13-39ms prevents precise attribution. Next use new matron-only sampler with per-thread timestamps, then identify expensive callback/scheduling cause without tolerance widening. M5/P5, phase/source edges, full manual/T01 and remaining stages incomplete. No active runners.",
+  "next_action": "M-TIM-001 now passes all20 phrases in controlled time and two full real-time profiles (7d09589/3f0d6e). Earlier RT failures retained; no inferred GC fix. Native perf works via installed5.4 binary but Lua symbols stripped; aggregate sample includes startup, not callback attribution. Next phase/source-change edges and fresh M5 matrix/P5 follow-up; investigate intermittent misses with playback-only attribution as needed. Ten cases remain partial; full atomic manual/T01 and remaining stages required. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -219,6 +219,18 @@
       "path": "../mosaic-behaviour-runs/e3d81b0c466e48419d7dae50b3f72a9b/manifest.json",
       "sha256": "1651fae26c76fdacec7e27628eb9ca249164fd3e8ef25900ff72704c4dfdd830",
       "passed": false
+    }
+  },
+  "latest_targeted_realtime_profiles": {
+    "matron_profile": {
+      "path": "../mosaic-behaviour-runs/7d0958915644404f8324aaf8b7684c5b/manifest.json",
+      "sha256": "8ffea75e660cbd7c46cae435e3263b54d1ebdedb9c45c7eabd29868c9ec97a23",
+      "passed": true
+    },
+    "stack_profile": {
+      "path": "../mosaic-behaviour-runs/3f0d6e0072514c2d9f91742a6405e620/manifest.json",
+      "sha256": "f6b45113feb56f6d75a5a3ad938b8b010fa12fe7e401ea90bb8026611c2a69ab",
+      "passed": true
     }
   }
 }
