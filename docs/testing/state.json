@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Transport-start-phase candidate preserves immediate onset with full intervals. M-LEN-001 and multi-restart M-LEN-002 controlled pass; baseline reproduces4.722ms shortening. Real-time candidate fails one note by585ms amid726ms native event gap: diagnose before retry or admission. All474 baseline/candidate units pass after extending unit clock mock with beat API. Candidate remains unvalidated; source-transition/phase-edge tests and final repeats required. Then M5/Codex follow-up and full atomic manual/T01, remaining feature families. No active runners.",
+  "next_action": "Instrumented real-time run passed but prior726ms stall remains unexplained. Three-repeat package failed on second child native advance timeout:5.13s between input trace and native ack; receiver lag19.33ms. Add post-submission time and independent host heartbeat before another diagnostic attempt. No timeout widening or repeat credit. Source transitions and boundary starts remain required. Full atomic manual/T01 and remaining feature families, M5 and Codex follow-up remain incomplete. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -173,6 +173,23 @@
       "path": "../mosaic-behaviour-runs/units-d12ac17c58a940a0b7d1ec86bf43c207/results.json",
       "sha256": "d8009ee8c2490b56cb99fd68c9431a8d56a4ea43b185897a1252ac1da4b2c606",
       "passed": true
+    }
+  },
+  "latest_receiver_diagnostics": {
+    "real_time_diagnostic": {
+      "path": "../mosaic-behaviour-runs/472830eabb394150ae1144bbb08c9e4b/manifest.json",
+      "sha256": "c61527d0804d9a43d47732da727eed78b66fd127f426b2a7b1da7b46ac689ef8",
+      "passed": true
+    },
+    "controlled_repeats": {
+      "path": "../mosaic-behaviour-runs/repeat-639ebffcc6a247c995e19b529ad18a3e/manifest.json",
+      "sha256": "f2963671bbab7fb5dd396555a86456de4709e70c4a60755d6bf3d5c6ec4868c7",
+      "passed": false
+    },
+    "controlled_failed_child": {
+      "path": "../mosaic-behaviour-runs/bd4676fcad0f4a54974a6e49e04f3b33/manifest.json",
+      "sha256": "db2b2122d67c0fe0527ea75daa6e75cb219ce52e6adc9bce3ab032dd7432c53b",
+      "passed": false
     }
   }
 }

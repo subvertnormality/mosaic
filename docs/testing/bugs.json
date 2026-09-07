@@ -193,7 +193,24 @@
           "passed": true
         }
       },
-      "remaining": "Real-time run has a726ms gap across native events and one585ms duration error; do not waive or retry blindly. Diagnose event stall; test off-boundary/restart/source-change timing and three-repeat determinism. Unit-only clock mock now exposes beat0; it is not timing evidence."
+      "remaining": "Instrumented real-time run passed but prior726ms stall remains unexplained. Three-repeat package failed on second child native advance timeout:5.13s between input trace and native ack; receiver lag19.33ms. Add post-submission time and independent host heartbeat before another diagnostic attempt. No timeout widening or repeat credit. Source transitions and boundary starts remain required.",
+      "receiver_diagnostic_evidence": {
+        "real_time_diagnostic": {
+          "path": "../mosaic-behaviour-runs/472830eabb394150ae1144bbb08c9e4b/manifest.json",
+          "sha256": "c61527d0804d9a43d47732da727eed78b66fd127f426b2a7b1da7b46ac689ef8",
+          "passed": true
+        },
+        "controlled_repeats": {
+          "path": "../mosaic-behaviour-runs/repeat-639ebffcc6a247c995e19b529ad18a3e/manifest.json",
+          "sha256": "f2963671bbab7fb5dd396555a86456de4709e70c4a60755d6bf3d5c6ec4868c7",
+          "passed": false
+        },
+        "controlled_failed_child": {
+          "path": "../mosaic-behaviour-runs/bd4676fcad0f4a54974a6e49e04f3b33/manifest.json",
+          "sha256": "db2b2122d67c0fe0527ea75daa6e75cb219ce52e6adc9bce3ab032dd7432c53b",
+          "passed": false
+        }
+      }
     },
     {
       "id": "matrix-clear-depth",
