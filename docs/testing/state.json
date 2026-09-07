@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Test the pattern-screen channel visualizer with an independent framebuffer oracle, including shrinking ranges and switching channels. Hold-boundary cases pass both modes. Continue full manual/emulator delivery; do not bypass rejected SEM-007 arbitration.",
+  "next_action": "Continue inactive-note merging, remaining visualizer/algorithm domains and full manual/emulator stages. Visualizer candidate0022 passes both modes and all 474 units. SEM-007 arbitration remains pending; do not bypass its denial.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2848,11 +2848,11 @@
   },
   "updated": "2026-09-08",
   "manual_binding_snapshot": {
-    "implemented_cases": 76,
+    "implemented_cases": 77,
     "requirements": 141,
-    "requirements_with_case": 46,
-    "requirements_without_case": 95,
-    "scope": "Bindings only; every bound domain is still partial and full campaign remains incomplete."
+    "requirements_with_case": 47,
+    "requirements_without_case": 94,
+    "scope": "Bindings only; full finite domains and interactions remain incomplete."
   },
   "note_pattern_selector_validation": {
     "status": "validated",
@@ -3101,5 +3101,34 @@
     ],
     "scope": "Note-up and velocity-down fine/held controls at one second minus/plus1ns in controlled time, with measured real-time margins. A second grid press cancels each pending long action without changing the range.",
     "limitations": "Other directions, more overlapping gestures, exact equality ordering and playing-state transitions remain required. Partial domains; full delivery incomplete."
+  },
+  "grid_viewer_validation": {
+    "status": "validated",
+    "candidate_manifest": "tests/behaviour/candidates/grid-viewer-clear.json",
+    "case": "M-VIEW-001",
+    "runs": [
+      {
+        "mode": "controlled-experimental",
+        "run_id": "3f1c9e3fae4346bebb58f699b7fbffaa",
+        "manifest_sha256": "694a8d4f2bf9afb00746eacc6c78d2692eb2c7822ca35e10676c8ec2d1111978",
+        "passed": true,
+        "frames": 27,
+        "channels": 16,
+        "editors": 3
+      },
+      {
+        "mode": "real-time",
+        "run_id": "f25bcb19bec04d769b87270bb146efe6",
+        "manifest_sha256": "a174262546a8adcda3a6732078839ec98411627d8dc49672547c2c9177c2c88c",
+        "passed": true,
+        "frames": 27,
+        "channels": 16,
+        "editors": 3
+      }
+    ],
+    "unit_tests": 474,
+    "render_contract_checks": 4288,
+    "scope": "Clear the viewer cache before drawing the selected channel, removing stale out-of-range cells and cross-page residues.",
+    "limitations": "Multi-pattern merged examples, running playhead transitions and other page interactions remain required; full manual/release incomplete."
   }
 }

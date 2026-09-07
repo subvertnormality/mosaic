@@ -521,6 +521,12 @@
           "passed": true
         }
       }
+    },
+    {
+      "id": "grid-viewer-stale-cells",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "grid-viewer-clear.json",
+      "case": "M-VIEW-001"
     }
   ]
 }

@@ -2019,9 +2019,11 @@
         "MAN-030"
       ],
       "statement": "Pattern screen shows selected channel merged state; E2 selects channel.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All16 channels; unassigned/multi-pattern/merged examples; page transitions.",
+      "cases": [
+        "M-VIEW-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "All16 channels; unassigned/multi-pattern/merged examples; page transitions. M-VIEW-001 validates independent framebuffer range/channel selection, all 16 channels and three editor pages in both modes. Multi-pattern merge and running playhead transitions remain required.",
       "oracles": [
         "Screen merged cells and matching channel MIDI; pattern data unchanged by channel selection."
       ],

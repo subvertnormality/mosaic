@@ -1,0 +1,49 @@
+{
+  "status": "validated",
+  "case": "M-VIEW-001",
+  "source_file": "lib/ui_components/grid_viewer.lua",
+  "base_revision": "51ef861a31731c0d839f7b1a82bcee2751abbaf8",
+  "before_sha256": "0b6bf8d45a62ea3ea283cd5c97ac88dc81b59c40ebdf99b6e175c06a5eabddb7",
+  "after_sha256": "f53dd15061b6776ebf80f3b4d7e1ab99e236c45f5527c81e4668fd975c6c1063",
+  "patch": "tests/behaviour/candidates/0022-grid-viewer-clear.patch",
+  "patch_sha256": "5fd2ed78efd502f8a9e5be44997b4aa40151b3fe9ff24106d71fee76d62e2155",
+  "baselines": [
+    {
+      "mode": "controlled-experimental",
+      "run_id": "919f465fb3d24654b380d701c56b0009",
+      "passed": false,
+      "manifest_sha256": "2b8dd66669267595be1406805f7910c1ce563c57a0d8e223b3148d76da2f682d"
+    },
+    {
+      "mode": "real-time",
+      "run_id": "413668fb2fd44295a397565fcb441df5",
+      "passed": false,
+      "manifest_sha256": "62cb5d8f3f64ed32958f16e27e5a3778367b1d30420da5019dc1d15c7e2dba88"
+    }
+  ],
+  "runs": [
+    {
+      "mode": "controlled-experimental",
+      "run_id": "3f1c9e3fae4346bebb58f699b7fbffaa",
+      "manifest_sha256": "694a8d4f2bf9afb00746eacc6c78d2692eb2c7822ca35e10676c8ec2d1111978",
+      "passed": true,
+      "frames": 27,
+      "channels": 16,
+      "editors": 3
+    },
+    {
+      "mode": "real-time",
+      "run_id": "f25bcb19bec04d769b87270bb146efe6",
+      "manifest_sha256": "a174262546a8adcda3a6732078839ec98411627d8dc49672547c2c9177c2c88c",
+      "passed": true,
+      "frames": 27,
+      "channels": 16,
+      "editors": 3
+    }
+  ],
+  "unit_tests": 474,
+  "render_contract_checks": 4288,
+  "fix": "Clear the viewer cache before drawing the selected channel, removing stale out-of-range cells and cross-page residues.",
+  "oracle": "Literal64-cell levels and independently rendered official font with the pinned script default screen.aa(0). Initial antialias-oracle failures are retained separately and earn no product-defect credit.",
+  "limitations": "Multi-pattern merged examples, running playhead transitions and other page interactions remain required; full manual/release incomplete."
+}

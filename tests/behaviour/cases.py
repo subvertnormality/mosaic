@@ -429,6 +429,47 @@ def editor_hold_boundaries(c):
         c.results.append(dict(kind='editor-hold-boundary',editor='velocity',boundary=label,velocity=velocity,passed=True))
 
 
+def pattern_grid_viewer(c):
+    import base64
+    from frame_oracle import render
+    # Independent layout contract:16x4 sequencer dots,7px spacing,35px font.
+    # Levels come only from the authored phrase and declared channel range.
+    def viewer(channel,levels,label):
+        assert len(levels)==64
+        dots=render([(-3+x*7,-2+y*7,levels[(y-4)*16+x-1],'.') for y in range(4,8) for x in range(1,17)],font_size=35,antialias=1)
+        # Official norns core/script.lua resets screen.aa(0) on script load.
+        title=render([(0,9,10,'Channel '+str(channel)+' grid viewer')],antialias=1)
+        def matches(state):
+            actual=base64.b64decode(state['frame']['pixels_base64'])
+            return (all(actual[(y*128+x)*4+k]==dots[(y*128+x)*4+k] for y in range(20,57) for x in range(120) for k in range(3))
+              and all(actual[(y*128+x)*4+k]==title[(y*128+x)*4+k] for y in range(2,11) for x in range(114) for k in range(3)))
+        row=dict(kind='grid-viewer-frame',channel=channel,label=label,expected_levels=levels,passed=False)
+        c.results.append(row);c.wait(matches);row['passed']=True
+    baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    viewer(1,[15]*4+[2]*60,'wide-range-positive-oracle')
+    c.tap(3,8);c.hold_tap((1,4),(4,4));c.tap(5,8)
+    viewer(1,[15]*4+[0]*60,'shortened-range-clears-outside')
+    c.playback(baseline,cycles=2,timeout=3,settle_seconds=4/3-.1)
+    for channel in range(2,17):
+        c.enc(2,1);viewer(channel,[2]*64,'unassigned-channel')
+    c.enc(2,1);viewer(16,[2]*64,'upper-channel-clamp')
+    c.enc(2,-15);viewer(1,[15]*4+[0]*60,'return-to-short-channel')
+    c.enc(2,-1);viewer(1,[15]*4+[0]*60,'lower-channel-clamp')
+    # Note and velocity editors have separate viewer selections but share the
+    # same drawing/cache component. Page changes must not leak the previous view.
+    c.tap(5,8);viewer(1,[15]*4+[0]*60,'note-page-short-channel')
+    c.enc(2,15);viewer(16,[2]*64,'note-page-channel16')
+    c.tap(5,8);viewer(1,[15]*4+[0]*60,'velocity-page-short-channel')
+    c.enc(2,15);viewer(16,[2]*64,'velocity-page-channel16')
+    c.tap(5,8);viewer(1,[15]*4+[0]*60,'trig-page-retains-own-selection')
+    c.tap(5,8);viewer(16,[2]*64,'note-page-retains-own-selection')
+    c.tap(3,8);c.tap(5,8);viewer(1,[15]*4+[0]*60,'return-from-channel-page')
+    # Viewer selection is independent of the channel's pattern data and route.
+    c.led_values([((s-1)%16+1,(s-1)//16+4) for s in range(1,65)],[15]*4+[2]*60)
+    c.playback(baseline,cycles=2,timeout=3,settle_seconds=4/3-.1)
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1510,6 +1551,7 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-VIEW-001':dict(run=pattern_grid_viewer,requirements=['PAT-VIEWER'],description='Independent screen grid for wide/short channel ranges, all16 E2 selections, clamps and unchanged MIDI/pattern data'),
  'M-EDIT-005':dict(run=editor_hold_boundaries,requirements=['PAT-NOTE-RANGE','PAT-VELOCITY'],description='Note/velocity range holds immediately before/after1s and cancelled by a second grid press; exact MIDI and measured real-time margins'),
  'M-EDIT-004':dict(run=note_pattern_selectors,requirements=['PAT-NOTE-SELECT'],description='K1 and long-hold note-editor pattern selection across all16 slots, edit/playback and retained-pattern isolation'),
  'M-EDIT-001':dict(run=editor_note_ranges,requirements=['PAT-NOTE-RANGE'],description='Note range fine steps, held extrema, clamps and center reset'),

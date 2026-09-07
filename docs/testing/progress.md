@@ -872,3 +872,18 @@ A second grid press cancels each pending long action; holding past its former
 deadline and releasing leaves the range unchanged. Each result is checked via
 grid selection and exact MIDI playback. No production change. Other directions,
 exact equal-deadline ordering and live/overlap combinations remain required.
+
+## Stale channel visualizer cells
+
+M-VIEW-001 reproduced stale screen dots after shortening a channel range in both
+clock modes. Each baseline first passed an independent wide-range frame oracle.
+Candidate 0022 clears the shared viewer cache before drawing the selected channel;
+it changes screen feedback only. The focused rendered-cell contract fails on the
+baseline and passes 4288 checks on the candidate; all 474 existing units pass.
+Both native runs pass 27 exact frames across all 16 channels and trigger/note/velocity
+viewers, with channel clamps, independent page selections and unchanged grid/MIDI.
+An initial test-rasterizer error was corrected against the official norns
+screen.aa(0) default and preserved separately. No captured output became a golden.
+Multi-pattern merge and running-playhead cases remain required; full delivery
+remains incomplete. This screen defect is not claimed as the cause of the user's
+earlier live-recording step-placement observation.
