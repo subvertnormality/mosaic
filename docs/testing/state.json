@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue C08 remaining range and harmony domains, channel routing remap/unassigned/error paths, sequence isolation and undo/redo. M-CHANNEL-001 passes RT/D across16 routed channels with cumulative mute/unmute;3freshD repeats remain required. Full campaign incomplete; SEM-001 merge formula pending; no refactor.",
+  "next_action": "Continue C08 memory variants/channel isolation, harmony and remaining channel domains. M-MEMORY-001 passes RT/D and3freshD repeats. SEM-007 shifted forget-history semantics and SEM-001 merge formula await user; unrelated work continues. Full campaign incomplete; no refactor.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -306,7 +306,7 @@
   "manual_requirements": 141,
   "new_cases_pending": [],
   "controlled_admission_checkpoint": "Emulator artifacts/c16/m5-admission-06d.json; subsequent application edits do not reuse old application evidence as current-source passes.",
-  "implemented_cases": 22,
+  "implemented_cases": 23,
   "latest_partial_domain_evidence": {
     "M-SCALE-001": [
       {
@@ -469,6 +469,20 @@
         "mode": "real-time",
         "wall_elapsed_seconds": 133.0062819039449
       }
+    ],
+    "M-MEMORY-001": [
+      {
+        "run_id": "da1dc47bffc44d24a673d5670fc59209",
+        "manifest_sha256": "da97e4352347935490211f16131f368b64837c686b144fe65d495f8fbb6a9c15",
+        "case": "M-MEMORY-001",
+        "mode": "controlled-experimental"
+      },
+      {
+        "run_id": "363d0991c0e04d26aa8d648baa850953",
+        "manifest_sha256": "a254bfed7e8414bbeaf3dd5970f803c591aa6170cec57c5aaf006e748a05a24a",
+        "case": "M-MEMORY-001",
+        "mode": "real-time"
+      }
     ]
   },
   "fresh_controlled_repeats": {
@@ -485,6 +499,19 @@
       "normalized_sha256": "871f8d813efdd5d819899821a822ca25562788f29391f48ace0d662774589adb",
       "fresh_processes": 3,
       "passed": true
+    },
+    "M-MEMORY-001": {
+      "run_id": "repeat-a58f11c8476747bea57bc96a09641e6a",
+      "manifest_sha256": "789b200702fcf8c444c996154eec080fbff9dcb8e549f6e7aadb32d8dc05846c",
+      "fresh_processes": 3,
+      "passed": true,
+      "normalized_sha256": "2ed0d03bebe96c12030e5f972fee2940125a82640ba2f843973e0954f350ff8e"
     }
+  },
+  "renderer_regression": {
+    "run_id": "38dd44a7b8ba4234a505a622a652adec",
+    "manifest_sha256": "94b74e1888b95f528e5faa813fc3f562a3d5648d6859ac3df0ed9a991c5e859b",
+    "case": "M-PAT-001",
+    "mode": "real-time"
   }
 }

@@ -351,3 +351,23 @@ This raises executable case count to22. It does not complete CH-SELECT/DEVICE/
 ASSIGN/MUTE: arbitrary pattern combinations, other device types, every port and
 route-remap failure, song-sequence isolation and live route changes remain.
 Three fresh controlled repeats of this new case are also still required.
+
+
+## Native memory navigation and branching
+
+M-MEMORY-001 enters two distinct held-step MIDI notes, then verifies E3 undo/redo,
+K2/K3 jumps, empty and end-of-history bounds, and a new edit after undo replacing
+the old redo path. Each stage asserts exact pitches/velocities and independently
+rendered current/total memory counters. Real-time, controlled and three fresh
+controlled repeats pass. The existing M-PAT-001 real-time header regression also
+passes after the renderer gained explicit font-size/antialias parameters.
+
+The first diagnostic failed at the initial counter because the test renderer used
+antialiased10px text; pinned norns script.lua sets screen.aa(0). Correcting the
+oracle to that native contract retains exact pixels and required no production
+Mosaic change. No observed output was accepted as a golden.
+
+There are23 cases. This covers held-step note/velocity memory only: all other mask
+and lock types, recording histories, large histories, channel/song isolation and
+live editing remain required. Shifted forget-history behavior awaits SEM-007;
+full memory coverage and the complete campaign remain unfinished.

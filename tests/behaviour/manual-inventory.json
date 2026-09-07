@@ -2955,8 +2955,10 @@
         "MAN-051"
       ],
       "statement": "Memory retains mask and trig-lock actions including recording, with notes/length icons.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-MEMORY-001"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts.",
       "oracles": [
         "Screen history icons and undo-restored MIDI/lock values."
@@ -2979,8 +2981,10 @@
         "MAN-051"
       ],
       "statement": "E3 moves history; K3 jumps latest and K2 beginning.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-MEMORY-001"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback.",
       "oracles": [
         "Exact previous/reapplied output and selected history indicator."
@@ -4526,8 +4530,10 @@
         "MAN-009"
       ],
       "statement": "Held-step MIDI enters notes, velocity and chords on selected channel; length selected separately.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-MEMORY-001"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "All notes/velocities; chord voices; held-step release/input order; wrong port/channel; mask page vs other pages.",
       "oracles": [
         "Exact stored grid/lock feedback and playback pitch/velocity; no inferred duration from held key."

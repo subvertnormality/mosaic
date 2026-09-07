@@ -11,7 +11,7 @@ def read_json(path):return json.loads(path.read_text())
 
 _font_state=None
 
-def render(commands):
+def render(commands,font_size=8,antialias=2):
     global _font_state
     ft,ca=_font_state[:2] if _font_state else (C.CDLL('libfreetype.so.6'),C.CDLL('libcairo.so.2'))
     def bind(lib,name,args,result=None):
@@ -32,10 +32,10 @@ def render(commands):
     context=bind(ca,'cairo_create',[ptr],ptr)(surface)
     options=bind(ca,'cairo_font_options_create',[],ptr)()
     try:
-        bind(ca,'cairo_font_options_set_antialias',[ptr,integer])(options,2)
+        bind(ca,'cairo_font_options_set_antialias',[ptr,integer])(options,antialias)
         bind(ca,'cairo_set_font_options',[ptr,ptr])(context,options)
         bind(ca,'cairo_set_font_face',[ptr,ptr])(context,fontface)
-        bind(ca,'cairo_set_font_size',[ptr,double])(context,8)
+        bind(ca,'cairo_set_font_size',[ptr,double])(context,font_size)
         for x,y,level,label in commands:
             if x is None:
                 extents=(double*6)()

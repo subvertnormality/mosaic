@@ -30,3 +30,11 @@ decisions from source inspection, not completed behaviour-test coverage.
 
 README and cheat sheet now state these rules. Add their edge regressions during
 full manual reconciliation; do not mark requirements complete from this edit.
+
+
+SEM-007 (pending user clarification): K1+K3 currently redoes all history and then
+clears the entire history while preserving the resulting music. K1+K2 undoes all
+history and then clears it. The manual's “subsequent memory” wording is ambiguous.
+The user has been asked whether to preserve these behaviors and clarify the
+manual. Only these shifted-key expectations wait; ordinary navigation and
+new-edit-after-undo behavior have native regression coverage.
