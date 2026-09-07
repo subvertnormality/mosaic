@@ -2956,7 +2956,8 @@
       ],
       "statement": "Memory retains mask and trig-lock actions including recording, with notes/length icons.",
       "cases": [
-        "M-MEMORY-001"
+        "M-MEMORY-001",
+        "M-MEMORY-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts.",
@@ -2982,7 +2983,8 @@
       ],
       "statement": "E3 moves history; K3 jumps latest and K2 beginning.",
       "cases": [
-        "M-MEMORY-001"
+        "M-MEMORY-001",
+        "M-MEMORY-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback.",
@@ -4531,7 +4533,8 @@
       ],
       "statement": "Held-step MIDI enters notes, velocity and chords on selected channel; length selected separately.",
       "cases": [
-        "M-MEMORY-001"
+        "M-MEMORY-001",
+        "M-MEMORY-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "All notes/velocities; chord voices; held-step release/input order; wrong port/channel; mask page vs other pages.",

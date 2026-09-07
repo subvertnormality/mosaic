@@ -371,3 +371,18 @@ There are23 cases. This covers held-step note/velocity memory only: all other ma
 and lock types, recording histories, large histories, channel/song isolation and
 live editing remain required. Shifted forget-history behavior awaits SEM-007;
 full memory coverage and the complete campaign remain unfinished.
+
+
+## Channel history isolation
+
+M-MEMORY-002 passes real-time and three identical fresh controlled runs. Two
+channels share the same source pattern but receive different held-step MIDI
+edits. Alternating E3/K2/K3 undo/redo changes only the selected channel's exact
+emitted phrase and history counter. Separate output ports/MIDI channels identify
+both voices. Navigating an untouched third channel preserves its0-of-0 display
+and both audible channels, and returning restores each channel's own counter.
+Stop drains all notes after each phrase. No production changes were needed.
+
+The suite now has24 cases. This is note/velocity history isolation on a small
+channel set, not all history types or every channel/song transition. Remaining
+domains and the complete campaign stay open; SEM-001/007 await user decisions.

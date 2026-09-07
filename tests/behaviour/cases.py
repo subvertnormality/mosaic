@@ -713,7 +713,55 @@ def memory_navigation(c):
     c.key(2);counter(0,2);phrase(baseline)
     c.key(3);counter(2,2);phrase(branch)
 
+def memory_channel_isolation(c):
+    from frame_oracle import header,matches,render
+    import base64
+    c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
+    c.tap(1,2);c.hold_tap((1,4),(4,4));c.enc(1,-4)
+    baseline=[(60,127),(62,117),(64,107),(65,97)]
+    edited_one=[(72,90),*baseline[1:]]
+    edited_two=[baseline[0],(79,80),*baseline[2:]]
+    def record(step,note,velocity):
+        c.action(type='grid',x=step,y=4,state=1)
+        try:
+            c.action(type='midi',port=1,bytes=[144,note,velocity]);c.elapse(.05)
+            c.action(type='midi',port=1,bytes=[128,note,0])
+        finally:c.action(type='grid',x=step,y=4,state=0)
+        c.elapse(.1)
+    def history(channel,current,total=1):
+        expected=header('Ch. '+str(channel)+' Memory',selected=3)
+        c.wait(lambda state:matches(state,expected))
+        expected=render([(0,23,15,str(current)),(0,49,15,str(total))],font_size=10,antialias=1)
+        indices=[(y*128+x)*4+k for y in list(range(13,26))+list(range(39,52)) for x in range(16) for k in range(3)]
+        def match(state):
+            pixels=base64.b64decode(state['frame']['pixels_base64'])
+            return all(pixels[i]==expected[i] for i in indices)
+        c.wait(match);c.results.append(dict(kind='channel-history-counter',channel=channel,current=current,total=total))
+    def verify(one,two):
+        marker=c.snapshot()['midi_count'];c.tap(1,8)
+        def notes(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+        state=c.wait(lambda state:all(sum(m['bytes'][0]==status for m in notes(state))>=9 for status in (144,145)),timeout=5)
+        observed=notes(state)
+        assert {m['bytes'][0] for m in observed}=={144,145}
+        for port,status,phrase in [(1,144,one),(2,145,two)]:
+            actual=[(m['port'],m['bytes']) for m in observed if m['bytes'][0]==status]
+            expected=[(port,[status,*phrase[i%4]]) for i in range(len(actual))]
+            assert actual==expected,dict(channel=status-143,expected=expected,actual=actual)
+            c.results.append(dict(kind='history-musical-isolation',channel=status-143,expected=expected,actual=actual))
+        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    record(2,79,80);c.tap(1,1);record(1,72,90);c.enc(1,2)
+    history(1,1);verify(edited_one,edited_two)
+    c.enc(3,-1);history(1,0);verify(baseline,edited_two)
+    c.tap(2,1);history(2,1);c.key(2);history(2,0);verify(baseline,baseline)
+    c.tap(1,1);history(1,0);c.key(3);history(1,1);verify(edited_one,baseline)
+    c.tap(2,1);history(2,0);c.enc(3,1);history(2,1);verify(edited_one,edited_two)
+    # Switching to an untouched channel and navigating its empty history must
+    # not affect either audible channel or borrow their history counters.
+    c.tap(3,1);history(3,0,0);c.key(2);c.key(3);c.enc(3,-2);c.enc(3,2);history(3,0,0);verify(edited_one,edited_two)
+    c.tap(1,1);history(1,1);c.tap(2,1);history(2,1)
+
 CASES={
+ 'M-MEMORY-002':dict(run=memory_channel_isolation,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='Independent histories on two routed channels sharing a pattern; untouched channel navigation cannot alter either phrase'),
  'M-MEMORY-001':dict(run=memory_navigation,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='Held-step MIDI edits, visible memory counter, undo/redo bounds and history branching verified through exact musical output'),
  'M-CHANNEL-001':dict(run=channel_routing_isolation,requirements=['CH-SELECT','CH-DEVICE','CH-ASSIGN','CH-MUTE'],description='All16 independently routed MIDI channels across two ports; cumulative mute/unmute preserves other phrases and clock alignment'),
  'M-MUTE-001':dict(run=channel_mute_gestures,requirements=['CH-MUTE'],description='Below-threshold hold, long hold and K1 mute toggles; stopped/live silence, resumed phrase and releases'),

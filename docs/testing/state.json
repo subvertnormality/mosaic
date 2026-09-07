@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue C08 memory variants/channel isolation, harmony and remaining channel domains. M-MEMORY-001 passes RT/D and3freshD repeats. SEM-007 shifted forget-history semantics and SEM-001 merge formula await user; unrelated work continues. Full campaign incomplete; no refactor.",
+  "next_action": "Continue remaining C08 mask/lock history types, harmony/channel domains and controlled repeat backlog. M-MEMORY-002 passes RT and3freshD repeats, including two independent channel histories and untouched thirdchannel0of0 counter. Full campaign incomplete; SEM-001/007 pending; no refactor.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -306,7 +306,7 @@
   "manual_requirements": 141,
   "new_cases_pending": [],
   "controlled_admission_checkpoint": "Emulator artifacts/c16/m5-admission-06d.json; subsequent application edits do not reuse old application evidence as current-source passes.",
-  "implemented_cases": 23,
+  "implemented_cases": 24,
   "latest_partial_domain_evidence": {
     "M-SCALE-001": [
       {
@@ -483,6 +483,28 @@
         "case": "M-MEMORY-001",
         "mode": "real-time"
       }
+    ],
+    "M-MEMORY-002": [
+      {
+        "run_id": "400dcbaf9ceb4617a28fd83758d726f8",
+        "manifest_sha256": "779e7139b6796a9dacfdcf73a284c099b9377604bdabef04644e830d567b08d3",
+        "mode": "real-time"
+      },
+      {
+        "run_id": "0b5b58e8d4834bf48d077933112a6f93",
+        "manifest_sha256": "ecc9767d298bf2f45e9dda4b27254ca07b5852b94c0e778020ed8aebc560127c",
+        "mode": "controlled-experimental"
+      },
+      {
+        "run_id": "a637b4e9d11a4448b66e6128b4bc441a",
+        "manifest_sha256": "786ad36ed641788e3fd326aeb5c5df2a2ca816d1b602e9fc9206dfd293111d53",
+        "mode": "controlled-experimental"
+      },
+      {
+        "run_id": "91a7b52d33cf48548194b9e5c079c65f",
+        "manifest_sha256": "d34f627cefb1a07fdda8f6ae6271d0a40e20a53732041eea1f73e86cbc6a121a",
+        "mode": "controlled-experimental"
+      }
     ]
   },
   "fresh_controlled_repeats": {
@@ -506,6 +528,13 @@
       "fresh_processes": 3,
       "passed": true,
       "normalized_sha256": "2ed0d03bebe96c12030e5f972fee2940125a82640ba2f843973e0954f350ff8e"
+    },
+    "M-MEMORY-002": {
+      "run_id": "repeat-bb3a2fb05a0a4271916dc6f61f839135",
+      "manifest_sha256": "6873d27b10f065af820490cf4d873fa45aca8bd5b9958533c760e74c5f2ae9ac",
+      "fresh_processes": 3,
+      "passed": true,
+      "normalized_sha256": "ce2d8ca98f13f1a09a8faa435ccaeeb774fd77c48141b2879cbd46e5f8224c1e"
     }
   },
   "renderer_regression": {
