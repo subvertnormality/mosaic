@@ -193,7 +193,7 @@
           "passed": true
         }
       },
-      "remaining": "Full20-phrase real-time profiles now pass twice; earlier intermittent failures retained, no underlying stability fix claimed. Phase-boundary/source-change coverage, fresh complete M5 matrix and P5 remain required. Native stack sampling is available but stripped Lua internals prevent precise callback attribution.",
+      "remaining": "Five restart phase edges now pass controlled and real time. Clock-source transitions, fresh final-source3-repeat matrix and M5/P5 remain required. Historical intermittent timing failures are retained separately from the corrected first-pulse phase regression.",
       "receiver_diagnostic_evidence": {
         "real_time_diagnostic": {
           "path": "../mosaic-behaviour-runs/472830eabb394150ae1144bbb08c9e4b/manifest.json",
@@ -249,6 +249,18 @@
         "stack_profile": {
           "path": "../mosaic-behaviour-runs/3f0d6e0072514c2d9f91742a6405e620/manifest.json",
           "sha256": "f6b45113feb56f6d75a5a3ad938b8b010fa12fe7e401ea90bb8026611c2a69ab",
+          "passed": true
+        }
+      },
+      "restart_phase_edges": {
+        "controlled": {
+          "path": "../mosaic-behaviour-runs/d6ffb42b6d8b4f35bed8f0f5e66cc82e/manifest.json",
+          "sha256": "7040c6927c5137d7073a4e11ba098efbcb6362446a9a7b78cda6696efa214fb2",
+          "passed": true
+        },
+        "real_time": {
+          "path": "../mosaic-behaviour-runs/ee322cb6482b4d41bc60e21aa6aae341/manifest.json",
+          "sha256": "e9b9d448d1b51ac9a35f24f1a619b6333d510171cdf9653fd3bbb34762f57ca9",
           "passed": true
         }
       }

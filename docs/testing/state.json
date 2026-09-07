@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "M-TIM-001 now passes all20 phrases in controlled time and two full real-time profiles (7d09589/3f0d6e). Earlier RT failures retained; no inferred GC fix. Native perf works via installed5.4 binary but Lua symbols stripped; aggregate sample includes startup, not callback attribution. Next phase/source-change edges and fresh M5 matrix/P5 follow-up; investigate intermittent misses with playback-only attribution as needed. Ten cases remain partial; full atomic manual/T01 and remaining stages required. No active runners.",
+  "next_action": "M-TIM-002 passes all five96PPQN restart phases in controlled time and real time; precise phase placement asserted only in controlled mode. M5 now requires12 case/profile comparisons including both timing cases. Next actual clock-source transition coverage, final-source three-repeat/real-time matrix and Codex P5. Eleven named cases remain partial coverage; full atomic manual/T01 and all remaining stages required. Historical intermittent RT failures retained. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -230,6 +230,18 @@
     "stack_profile": {
       "path": "../mosaic-behaviour-runs/3f0d6e0072514c2d9f91742a6405e620/manifest.json",
       "sha256": "f6b45113feb56f6d75a5a3ad938b8b010fa12fe7e401ea90bb8026611c2a69ab",
+      "passed": true
+    }
+  },
+  "latest_restart_phase_edges": {
+    "controlled": {
+      "path": "../mosaic-behaviour-runs/d6ffb42b6d8b4f35bed8f0f5e66cc82e/manifest.json",
+      "sha256": "7040c6927c5137d7073a4e11ba098efbcb6362446a9a7b78cda6696efa214fb2",
+      "passed": true
+    },
+    "real_time": {
+      "path": "../mosaic-behaviour-runs/ee322cb6482b4d41bc60e21aa6aae341/manifest.json",
+      "sha256": "e9b9d448d1b51ac9a35f24f1a619b6333d510171cdf9653fd3bbb34762f57ca9",
       "passed": true
     }
   }

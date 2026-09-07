@@ -165,7 +165,23 @@ def phrase_timing(c):
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     assert len(rows)==61 and all(abs(r['actual_seconds']-r['expected_seconds'])<=tolerance for r in rows),rows
 
+def restart_phase_edges(c):
+    import math
+    next_trig_cutoff(c)
+    for offset_ns in (-100,-1,0,1,100):
+        beat=c.snapshot()['diagnostics']['beats']
+        boundary=(math.ceil(beat*96)+96)/96
+        c.elapse((boundary-beat)*2/3+offset_ns/1e9)
+        observed=c.snapshot()['diagnostics']['beats']
+        error_ns=(observed-boundary)*2/3*1e9
+        c.results.append(dict(kind='restart-phase',requested_offset_ns=offset_ns,observed_offset_ns=error_ns,exact_phase=c.clock_mode=='controlled-experimental'))
+        if c.clock_mode=='controlled-experimental':
+            assert abs(error_ns-offset_ns)<=2,(offset_ns,error_ns)
+        notes=c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(67,100)]],cycles=2,timeout=4)
+        assert_durations(c,notes,[2,1,1]*2)
+
 CASES={
+ 'M-TIM-002':dict(run=restart_phase_edges,requirements=['CLOCK-PHASE-EDGE-001'],description='Restart around96PPQN boundaries; preserve full MIDI durations at five start phases'),
  'M-TIM-001':dict(run=phrase_timing,requirements=['CLOCK-PHRASE-001'],description='Restart edited phrase; verify every onset and duration through20 complete phrases at90BPM'),
  'M-MOD-003':dict(run=held_macro_rebind,requirements=['MOD-HELD-001'],description='Rebind an already-held nonzero macro; MIDI must immediately reflect its current value without a new source event'),
  'M-MOD-001':dict(run=macro_route_clear,requirements=['MOD-ROUTE-001'],description='Route macro through native Matrix menu; assert affected MIDI pitches and restoration after clearing depth'),

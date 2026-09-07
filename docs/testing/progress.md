@@ -200,3 +200,12 @@ Thread profiling found a main-matron CPU burst near the late onset, with
 insufficient sampling precision to identify the responsible callback. The next
 profile uses matron-only selection and per-thread timestamps. No timing tolerance
 was changed; neither real-time correctness nor M5 admission is claimed.
+
+## Restart clock phase edges
+
+M-TIM-002 checks full note durations at five offsets around a future96PPQN
+boundary. Controlled execution places starts within1ns of requested offsets;
+both controlled and real-time executions pass all five restarts. Real-time phase
+placement remains approximate and keeps the10ms musical timing oracle. Evidence
+is linked in state.json and bugs.json. Three-repeat admission and actual
+clock-source transitions remain required; manual coverage is still partial.

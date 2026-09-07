@@ -338,7 +338,8 @@
         "PAT-LENGTH-002",
         "PAT-LENGTH-003",
         "MIDI-RELEASE-001",
-        "CLOCK-PHRASE-001"
+        "CLOCK-PHRASE-001",
+        "CLOCK-PHASE-EDGE-001"
       ],
       "status": "unreviewed"
     },
@@ -564,7 +565,8 @@
       "text_sha256": "ce04352a8d256cf48676ecb0c8c75da5dc1413f6603a0dd9db676d418463232c",
       "classification": "pending-statement-reconciliation",
       "requirements": [
-        "CLOCK-PHRASE-001"
+        "CLOCK-PHRASE-001",
+        "CLOCK-PHASE-EDGE-001"
       ],
       "status": "unreviewed"
     },
@@ -1462,6 +1464,24 @@
         "61 ordered onset times",
         "60 note durations",
         "Edited grid and screen assertions from setup"
+      ]
+    },
+    {
+      "id": "CLOCK-PHASE-EDGE-001",
+      "sections": [
+        "MAN-030",
+        "MAN-050"
+      ],
+      "statement": "Playback restart preserves authored note durations regardless of its phase relative to the native clock grid.",
+      "cases": [
+        "M-TIM-002"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "90BPM, five offsets(-100,-1,0,1,100ns) around96PPQN boundaries; exact phase asserted only in controlled time. Other tempos and clock-source transitions remain required.",
+      "oracles": [
+        "Read-only clock confirms requested start phase",
+        "Six independently timed note releases at each restart",
+        "MIDI pitches and grid/screen setup"
       ]
     }
   ]
