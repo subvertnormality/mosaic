@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Test live grid playhead versus scheduled musical steps and keyboard-recorded positions. Continue recording lifecycle, remaining clock divisions/changes, song transitions and full C08/manual/emulator release.",
+  "next_action": "Continue keyboard event/playhead correlation and recording arm/disarm, held-note stop/start and tempo/song transitions; remaining manual and emulator release scopes stay open.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -797,5 +797,40 @@
       "passed": true,
       "mode": "controlled-repeat"
     }
-  ]
+  ],
+  "playhead_validation": [
+    {
+      "run_id": "ea8f7e4b539f4cc48af791f92b8401fe",
+      "sha256": "14b1dc01eddfd5ad7cb10b0f84e78f71b23af7fe897f9d50fb1df254093eed29",
+      "case": "M-UI-001",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "92d40ffa39db41a29f06e062632938a7",
+      "sha256": "cb4bfd8dd049f17f8dbf7d92389e492e77510fa3b737dfca1a384031bc62f2d7",
+      "case": "M-UI-002",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-24d345b0645e4dfe8419b546bfc0296c",
+      "sha256": "81c59f03a916cd34480aff759e3a321ca87bf31762d4d7be84d53257c39d81b7",
+      "case": "M-UI-001",
+      "passed": true,
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-49a18409375b4190959402e1981478ed",
+      "sha256": "bde54591906421fc45496e2fc07301ba96d37d16775f664e1f9ed6b9fc60958c",
+      "case": "M-UI-002",
+      "passed": true,
+      "mode": "controlled-repeat"
+    }
+  ],
+  "playhead_stale_fault": {
+    "run_id": "e68551ca4a31440c8dbc34a214772f92",
+    "sha256": "6d92240b37771bf56c3ddd1224db5e645a844163806f3dde59ea4e771de76b61",
+    "rejected": true
+  }
 }

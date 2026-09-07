@@ -1684,7 +1684,9 @@
       "statement": "A fixed-tempo unswung phrase preserves note intervals and authored durations across repeated phrases and playback restart.",
       "basis": "Independent90BPM quarter-step timing,8-step phrase and documented next-trig cutoff; no production sequencer calls in the oracle.",
       "cases": [
-        "M-TIM-001"
+        "M-TIM-001",
+        "M-UI-001",
+        "M-UI-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "20 phrases at90BPM; other tempos, swing/shuffle, external clocks and tempo/source changes remain required.",
@@ -4379,7 +4381,10 @@
         "CHEAT-ALL"
       ],
       "statement": "Bottom-left grid key starts/stops transport.",
-      "cases": [],
+      "cases": [
+        "M-UI-001",
+        "M-UI-002"
+      ],
       "status": "unimplemented",
       "domain": "Stopped/playing; repeated press/release; protected stop; pending notes; external clock source.",
       "oracles": [

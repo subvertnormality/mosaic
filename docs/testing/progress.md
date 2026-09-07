@@ -497,3 +497,28 @@ steps, with global clock phase intentionally different. After disarming, interna
 Both cases pass real-time and three identical fresh controlled processes. No
 production changes were needed. There are38 cases. These sampled clock rates do
 not close all divisions, live rate changes, playhead feedback or the full campaign.
+
+
+## Live playhead latency
+
+M-UI-001/002 compare actual MIDI onsets with the visible grid playhead across two
+four-step loops at normal/twice channel rate. Notes/velocities must match the
+independent phrase; the playhead cannot show a future/unrelated step, must catch
+up within the50ms redraw period (plus the existing10ms real-time scheduler
+allowance), and must disappear on stop. Real-time observation brackets retain
+client timestamp uncertainty. Both cases pass real-time and three identical
+fresh controlled processes. No production change was made.
+
+Normal-rate observations saw the previous step still visible at33.33ms in
+controlled time and at least38.98ms after a MIDI onset in real time. These are
+sampled stale intervals, not exact refresh latency or hardware measurements.
+This is a plausible contributor to misplaced-looking live input; it does not
+prove the cause of the user's report or alter current-step recording semantics.
+An isolated one-step-stale renderer failed the intended native latency assertion
+(e68551ca4a31440c8dbc34a214772f92, still step4 while MIDI step1 at69.22ms).
+The normal checkout was untouched by fault injection.
+
+There are40 native cases. Keyboard event/playhead boundary correlation, faster
+rates, all clock divisions, recording lifecycle and the complete manual/release
+campaign remain open. Existing recording placement cases independently verify
+stored grid and replay; this feedback test does not replace them.
