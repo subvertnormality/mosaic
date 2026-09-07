@@ -1,5 +1,5 @@
 """User-input driver using only the emulator's public external-suite client."""
-import hashlib,json,os,sys,time,uuid
+import hashlib,json,os,sys,time,uuid,subprocess
 from pathlib import Path
 REPO=Path(__file__).resolve().parents[2]
 EMULATOR_ROOT=Path(os.environ['MONOME_EMULATOR']).resolve()
@@ -10,18 +10,32 @@ def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 class Driver:
-    def __init__(self,out,clock_mode="real-time",experimental_install=None):
+    def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None):
+        self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root)
         self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]
         code=out/'code';code.mkdir();(code/'mosaic').symlink_to(REPO,target_is_directory=True)
+        if profile not in ('base-midi','midi-modulation'):raise ValueError('Unknown profile')
+        self.profile=profile;self.mod_revisions={}
+        if profile=='midi-modulation':
+            if not mod_code_root:raise ValueError('Modulation profile requires an explicit mod code root')
+            for name,entry in json.loads((REPO/'tests/behaviour/mods.lock.json').read_text())['mods'].items():
+                source=Path(mod_code_root).resolve()/name
+                revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip()
+                if revision!=entry['commit']:raise ValueError('Unexpected mod revision: '+name)
+                dirty=subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=source,text=True)
+                if dirty:raise ValueError('Mod source has uncommitted changes: '+name)
+                (code/name).symlink_to(source,target_is_directory=True);self.mod_revisions[name]=revision
         self.runtime=Session(script=code/'mosaic/mosaic.lua',code_root=code,
-            data=out/'data',data_seeds=[dict(source=str(REPO/'tests/behaviour/config'),destination='mosaic/config',format='json-files')],
-            midi_config=dict(ports=['Emulator MIDI','Second MIDI','Norns2sinfonion']),random_seed=42,
+            data=out/'data',data_seeds=([dict(source=str(project_seed),destination='mosaic')] if project_seed else [dict(source=str(REPO/'tests/behaviour/config'),destination='mosaic/config',format='json-files')]),
+            midi_config=dict(ports=['Emulator MIDI','Second MIDI','Norns2sinfonion']),random_seed=42,enabled_mods=list(self.mod_revisions),
             clock_mode=clock_mode,experimental_install=experimental_install)
+        self.data_directory=Path(self.runtime.info['data'])/'mosaic'
         self.identity=self.runtime.info['application_identity']
         try:
             entry=next(f for f in self.identity['files'] if f['path']=='mosaic/mosaic.lua')
             assert entry['sha256']==digest(REPO/'mosaic.lua'),'Wrong application loaded'
+            if clock_mode!='real-time':self.elapse(0)  # Drain native deferred init before user input.
         except Exception:
             self.runtime.close(self.out/'native')
             raise
@@ -86,15 +100,19 @@ class Driver:
         self.results.append(dict(kind='midi',expected=wanted,actual=actual,complete_cycles=cycles))
         return notes(state)
     def finish(self):
+        if getattr(self,"finished",False):return
         try:
             self.runtime.close(self.out/'native')
         finally:
             write(self.out/'recipe.json',self.recipe);write(self.out/'observations.json',self.observations)
             write(self.out/'results.json',self.results)
+        if self.observations:
+            diagnostics=self.observations[-1]['state']['diagnostics']
+            assert diagnostics['enabled_mods']==len(self.mod_revisions) and diagnostics['loaded_mods']==len(self.mod_revisions),'Requested mod profile did not load'
         cleanup=json.loads((self.out/'native/cleanup.json').read_text())
         assert all(c['returncode']==0 for c in cleanup if c['service']!='sclang'),cleanup
         log=(self.out/'native/matron.log').read_text(errors='replace')
-        errors=[line for line in log.splitlines() if line.startswith('Coroutine error:')]
+        errors=[line for line in log.splitlines() if line.startswith('Coroutine error:') or (line.startswith('hook: ') and ' failed, error: ' in line)]
         assert not errors,errors
         for item in self.identity['files']:
             source=Path(self.identity['code_root'])/item['path']
@@ -110,3 +128,5 @@ class Driver:
         assert native==self.recipe,'Native input trace differs from supplied user recipe'
         captured=[e for e in events if e['kind'] in (3,11)]
         if captured:assert [e['sequence'] for e in captured]==list(range(1,len(captured)+1)),'Incomplete MIDI capture'
+
+        self.finished=True

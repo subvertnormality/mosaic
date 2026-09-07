@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Experimental controlled-time driver is implemented; M-PAT-001 passes and M-LEN-001 finds shortened opening interval (transport-start-phase in bugs.json). Both affected real-time regressions pass. Preserve failing exact oracle; test start/restart phases, tempo/reset and MIDI clock, audit mod/time sources, then Codex P5 before D admission. Complete atomic manual requirements/T01 and remaining features; full campaign remains incomplete.",
+  "next_action": "M-SAVE-001 now passes real-time and three exact controlled fresh-process repeats, restoring LEDs/MIDI from autosave; M-PAT-001 passes real-time and three controlled repeats with both pinned native mods loaded. About3.95x end-to-end autosave feedback improvement. Evidence in progress.md. Next route actual modulation through physical menus into MIDI (loaded-mod coexistence is not modulation coverage), transport-start-phase fix investigation, M5 gate/Codex P5, then atomic manual/T01 and remaining feature families. Controlled mode remains unadmitted and full campaign incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -59,6 +59,28 @@
     "real_time_length": {
       "path": "../mosaic-behaviour-runs/d83c613c804b4cf0bc83f086434ec680/manifest.json",
       "sha256": "f07bcaddd624faeb3a2f3e17a1d0cce35dc615be31c4d46f65dd49ba588a639d",
+      "passed": true
+    }
+  },
+  "latest_profile_and_save_evidence": {
+    "autosave_real_time": {
+      "path": "../mosaic-behaviour-runs/f8fdcd07fa4f45658d1bd7c172e4075b/manifest.json",
+      "sha256": "09483c5098d1deda8260f31467c7ed1997ab5299601380e27da29da530f0c54e",
+      "passed": true
+    },
+    "autosave_controlled_repeats": {
+      "path": "../mosaic-behaviour-runs/repeat-4ac65dde67a542b9afa2255edfc1647a/manifest.json",
+      "sha256": "ea6b61a72938417a7e1028b82023e2e2caf6a94e6e04f2871dcd087e14634fd5",
+      "passed": true
+    },
+    "mod_edit_real_time": {
+      "path": "../mosaic-behaviour-runs/6104e51a7847405d933bc8397c32e278/manifest.json",
+      "sha256": "e870e180772f988989c9cb9fa04236724df011cf8990491f5c622c2c154f554c",
+      "passed": true
+    },
+    "mod_edit_controlled_repeats": {
+      "path": "../mosaic-behaviour-runs/repeat-1833b336c02b48d69145b86a8c761e38/manifest.json",
+      "sha256": "47731fdc0412fc4e6e294bc6b86febf1408609947c1902e847b8dac7c8780962",
       "passed": true
     }
   }

@@ -936,8 +936,10 @@
       "end_line": 1032,
       "text_sha256": "84ab6c1c8cec1da5bf3179910d7e18d7eabc14a708b336b171a0d04e475d33a8",
       "classification": "pending-statement-reconciliation",
-      "requirements": [],
-      "status": "unreviewed"
+      "requirements": [
+        "PERSIST-AUTO-001"
+      ],
+      "status": "partial-domain-coverage"
     },
     {
       "id": "MAN-085",
@@ -1368,6 +1370,23 @@
         "Native capture of balanced Note On/Off",
         "No outstanding MIDI note after stop",
         "Independent wrapped note durations"
+      ]
+    },
+    {
+      "id": "PERSIST-AUTO-001",
+      "sections": [
+        "MAN-084"
+      ],
+      "statement": "While stopped, idle edits autosave after60 seconds and the next boot restores the latest autosave.",
+      "cases": [
+        "M-SAVE-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Fresh stopped project with four notes,59-second absence and61-second save, fresh-process reload; repeated saves, playing exclusion, interruption, corrupt/old data and explicit save/load dialogs remain required.",
+      "oracles": [
+        "No early autosave file; saved project and parameters exist",
+        "Restored exact grid LEDs",
+        "Restored complete MIDI phrases without recreating notes"
       ]
     }
   ]

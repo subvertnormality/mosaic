@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "mods": {
+    "matrix": {
+      "url": "https://github.com/sixolet/matrix.git",
+      "commit": "41e11286bee8dbe48e8746e7a456400f93dc739a"
+    },
+    "toolkit": {
+      "url": "https://github.com/sixolet/toolkit.git",
+      "commit": "2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7"
+    }
+  }
+}

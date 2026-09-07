@@ -66,3 +66,39 @@ supports a startup-phase diagnosis, not complete transport correctness or D
 admission. Next: phase-swept transport start/restart, tempo/reset/external clock
 contracts, mod/time-source audit and bounded Codex P5. Keep the failing duration
 oracle; do not capture this shortened first note as a musical golden.
+
+
+## Autosave restoration and optional modulation profile
+
+Six named behaviour cases now exist. M-SAVE-001 creates its four-note pattern
+through grid/encoders, checks no autosave at59 seconds idle, observes saved project
+and PSET after61 seconds, closes the first process, and launches a fresh process
+with those actual saved files as its isolated data seed. Restored grid LEDs and
+three complete MIDI phrases are asserted without recreating or assigning notes.
+The initial failing recipe8374d65c toggled off the restored pattern assignment;
+removing that unintended edit made the unchanged output oracle pass (fd193c8a).
+This was a harness correction, not a new Mosaic production bug or fix.
+
+The final real-time case passes (f8fdcd07). Three fresh controlled runs also pass
+and agree exactly in each segment's input recipe, full logical MIDI, grid, screen
+hash and final clock/outstanding-note state (repeat-4ac65dde). Their wall times
+are22.528/22.172/22.402s for64.93s of advanced time across both native processes,
+versus88.536s end-to-end real time: about3.95x faster, including startup/cleanup.
+No blanket speedup is claimed for shorter interactions or every feature.
+
+The runner also supports an explicit midi-modulation profile with external
+matrix/toolkit checkouts bound by mods.lock.json. It verifies exact clean source
+revisions, uses actual native mod activation, records profile/revisions, rejects
+missing mods and caught mod hook errors, and checks loaded/enabled counts.
+M-PAT-001 passes real time (6104e51a) and three controlled fresh runs with exact
+normalized output agreement (repeat-1833b336). The latter include startup with
+matrix deferred bangs and the running toolkit lattice. This establishes loading
+and coexistence; routing LFOs/rhythms/macros into Mosaic's emitted MIDI still needs
+user-input workflow tests. No source/model mutations substitute for those tests.
+
+Exact manifest paths and SHA digests are in state.json's
+latest_profile_and_save_evidence. repeat.py retains child process output, source
+bound case manifests and normalized comparison data outside the checkout.
+Controlled time remains diagnostic-only pending C16/P5. The opening-note timing
+failure remains open, and explicit save/load dialogs, corrupted/migrated files,
+playing autosave exclusion, all remaining manual domains and T01 remain incomplete.

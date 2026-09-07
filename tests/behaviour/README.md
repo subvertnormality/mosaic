@@ -44,3 +44,23 @@ public input API. Recipes include every advance and are checked against the full
 native input trace. MIDI assertions use native logical emission timestamps with
 a two-nanosecond rounding allowance; real-time assertions retain the existing
 10ms jitter allowance. An exact-time failure remains a nonzero exit.
+
+
+The optional modulation profile uses independently supplied, clean checkouts at
+the exact revisions in mods.lock.json; no mod is a default test dependency:
+
+```sh
+python3 tests/behaviour/run.py --case M-PAT-001 --profile midi-modulation \
+  --mod-code-root /path/to/code-containing-matrix-and-toolkit
+python3 tests/behaviour/run.py --case M-SAVE-001
+python3 tests/behaviour/repeat.py --case M-SAVE-001 \
+  --experimental-install /path/to/candidate/installation.json
+```
+
+repeat.py runs three fresh controlled cases and compares physical input recipes,
+ordered logical MIDI, final grid/frame/clock and outstanding notes for every
+process segment. Only host timestamps and process/source-location identities are
+omitted. It preserves failures and never converts incomplete campaign coverage
+into acceptance. Per-case manifests record end-to-end wall time and total logical
+time advanced. M-SAVE-001 retains both native process segments under its run
+directory; its second process reads the actual first process's saved data.

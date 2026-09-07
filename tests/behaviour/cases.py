@@ -1,5 +1,5 @@
 """Mosaic-owned physical-input regressions; independent literal musical oracles."""
-from driver import REPO
+from driver import REPO,Driver,digest
 
 def four_notes(c):
     c.configure()
@@ -54,7 +54,30 @@ def wrapped_length(c,same_pitch=False):
     notes=c.playback([(1,[144,60,127]),(1,[144,60 if same_pitch else 67,100])],timeout=38)
     assert_durations(c,notes,[1,2]*2)
 
+
+def autosave_restart(c):
+    c.configure()
+    saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
+    assert not saved.exists() and not pset.exists(),'Fresh fixture unexpectedly contains autosave'
+    c.elapse(59)
+    assert not saved.exists(),'Autosave occurred before the documented60-second idle period'
+    c.elapse(2)
+    c.wait(lambda _:saved.is_file() and pset.is_file(),timeout=2)
+    assert saved.stat().st_size>0 and pset.stat().st_size>0
+    c.results.append(dict(kind='saved-project',files=[dict(name=p.name,sha256=digest(p)) for p in (saved,pset)]))
+    c.finish()
+    out=c.out/'reloaded';out.mkdir()
+    loaded=Driver(out,project_seed=c.data_directory,**c.launch_options)
+    try:
+        # Read the restored pattern through the visible grid and complete MIDI
+        # phrases. Do not re-create notes or inspect the serialized model.
+        loaded.tap(3,8);loaded.tap(5,8)
+        loaded.led_values([(x,4) for x in range(1,5)],[15,15,15,15])
+        loaded.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
+    finally:loaded.finish()
+
 CASES={
+ 'M-SAVE-001':dict(run=autosave_restart,requirements=['PERSIST-AUTO-001'],description='Create notes through the grid; idle autosave; boot a fresh native process from saved data and verify restored LEDs and MIDI'),
  'M-MIDI-001':dict(run=lambda c:wrapped_length(c,same_pitch=True),requirements=['MIDI-RELEASE-001'],description='Repeated pitch at wrapped duration boundary emits balanced note releases and drains after stop'),
  'M-LEN-003':dict(run=wrapped_length,requirements=['PAT-LENGTH-003'],description='A length crossing step64 ends at the next trig on step1; verify complete64-step MIDI loops and LEDs'),
  'M-LEN-002':dict(run=restore_length,requirements=['PAT-LENGTH-002'],description='Delete and reinsert an interrupting trig; MIDI duration and grid restore the authored length'),
