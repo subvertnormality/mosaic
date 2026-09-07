@@ -234,7 +234,51 @@ def midi_clock_transport(c):
     c.results.append(dict(kind='restored-internal-onsets',actual_seconds=restored))
     assert len(restored)==9 and all(abs(t-i/6)<=tolerance for i,t in enumerate(restored)),restored
 
+def live_clock_handoff(c):
+    import math,time
+    next_trig_cutoff(c)
+    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
+    c.enc(2,position);c.key(3);menu_label(c,'source');menu_value(c,'internal')
+    pulse_target=time.monotonic_ns()
+    def pulses(count):
+        nonlocal pulse_target
+        for i in range(count):
+            pulse_target+=25000000
+            if c.clock_mode=='controlled-experimental':
+                c.elapse(.025);c.action(type='midi',port=1,bytes=[248])
+            else:c.action(type='midi',port=1,bytes=[248],at_monotonic_ns=pulse_target)
+    pulses(49)
+    before=c.snapshot();start_beat=before['diagnostics']['beats'];marker=before['midi_count']
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    pulses(4)
+    pending=c.snapshot()
+    assert pending['midi_capture']['outstanding'],'No pending note at source switch'
+    elapsed_ticks=math.floor((pending['diagnostics']['beats']-start_beat)*96)
+    assert 0<elapsed_ticks<48,elapsed_ticks
+    c.action(type='enc',n=3,delta=2)
+    handoff=c.snapshot();beat=handoff['diagnostics']['beats']
+    quantum=1/96;phase=start_beat%quantum;epsilon=2**-23
+    next_beat=math.ceil((beat+epsilon)/quantum)*quantum+phase-quantum
+    while next_beat<beat+epsilon:next_beat+=quantum
+    # One two-step note is48 ticks. Only its pending next wait is rephased;
+    # remaining ticks proceed at100BPM (0.6 seconds per quarter note).
+    remaining_seconds=(next_beat-beat)*.6+(48-elapsed_ticks-1)*.6/96
+    origin_ns=c.logical_ns if c.clock_mode=='controlled-experimental' else handoff['diagnostics']['monotonic_ns']
+    expected_off_ns=origin_ns+remaining_seconds*1e9
+    pulses(30);c.action(type='midi',port=1,bytes=[252])
+    c.wait(lambda s:not s['midi_capture']['outstanding']);state=c.snapshot()
+    notes=[m for m in state['midi'] if m['index']>marker and m['bytes'][0]==144 and m['bytes'][2]>0]
+    assert [(m['port'],m['bytes']) for m in notes]==[(1,[144,60,127]),(1,[144,64,107]),(1,[144,67,100])],notes
+    off=next(m for m in state['midi'] if m['index']>notes[0]['index'] and m['bytes']==[128,60,127])
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    error_ns=off[field]-expected_off_ns
+    c.results.append(dict(kind='pending-note-source-handoff',elapsed_ticks=elapsed_ticks,expected_off_ns=expected_off_ns,actual_off_ns=off[field],error_ns=error_ns))
+    assert abs(error_ns)<=(2 if c.clock_mode=='controlled-experimental' else 10000000),c.results[-1]
+    menu_value(c,'midi')
+
 CASES={
+ 'M-TIM-004':dict(run=live_clock_handoff,requirements=['CLOCK-LIVE-HANDOFF-001'],description='Switch internal to MIDI clock with a note pending; preserve remaining musical ticks and release'),
  'M-TIM-003':dict(run=midi_clock_transport,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Native menu selects MIDI clock; physical MIDI starts/stops playback at100BPM; return to internal clock'),
  'M-TIM-002':dict(run=restart_phase_edges,requirements=['CLOCK-PHASE-EDGE-001'],description='Restart around96PPQN boundaries; preserve full MIDI durations at five start phases'),
  'M-TIM-001':dict(run=phrase_timing,requirements=['CLOCK-PHRASE-001'],description='Restart edited phrase; verify every onset and duration through20 complete phrases at90BPM'),

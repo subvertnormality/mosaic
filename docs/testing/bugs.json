@@ -344,6 +344,25 @@
           "passed": true
         }
       }
+    },
+    {
+      "id": "continuous-midi-control-input",
+      "component": "emulator automation input scheduling",
+      "status": "reproduced-gap; implementation-required",
+      "case": "M-TIM-004",
+      "finding": "Continuous25ms pulse schedule misses its next target while synchronous grid/snapshot actions complete. Real-time test fails before source selection; no Mosaic defect established. Do not shift the input clock timeline to obtain a pass.",
+      "evidence": {
+        "controlled": {
+          "path": "../mosaic-behaviour-runs/939d8ae50960413bad48df5ef40952e4/manifest.json",
+          "sha256": "2575d12c714574d8e5b4e4e36ac66e483499bdc86156d94ec4fe34da5fe4804f",
+          "passed": true
+        },
+        "real_time": {
+          "path": "../mosaic-behaviour-runs/24c9a480f3f0457997434b3abe42af1e/manifest.json",
+          "sha256": "1b693a677aa3779d1339a83180d38ebe3d60092175783d976cff81c98a333b92",
+          "passed": false
+        }
+      }
     }
   ]
 }

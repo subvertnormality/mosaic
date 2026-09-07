@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "M-TIM-003 passes native menu MIDI-source selection, clock-only silence, Start on next pulse,100BPM note onsets/lengths, Stop drain and explicit90BPM menu edit after internal handoff in both modes. Norns adopts external tempo on handoff; no production defect/fix in this slice. Next live source switch with pending notes, fresh13-comparison M5 D3-repeat/E/R matrix and Codex P5. Twelve named cases remain partial; full atomic manual/T01 and all remaining stages required. No active runners.",
+  "next_action": "M-TIM-004 controlled pending-note handoff passes. RT continuous25ms input schedule fails before source selection because grid/snapshot acknowledgements consume the next deadline. Implement generic independently scheduled native MIDI input in emulator; do not retime clock around UI calls. Then rerun live handoff and add reverse direction. M5 requires14 comparisons; final3-repeat/E/R matrix/P5 and full manual/T01/later stages remain required. Thirteen named cases remain partial coverage. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -255,6 +255,18 @@
       "path": "../mosaic-behaviour-runs/58bc1394a5ad47599f273d4e67d89206/manifest.json",
       "sha256": "aa52ad6a56dd10ab3408a1d33eea19bbff533a8b34fa9dbdc380c6241e7bf408",
       "passed": true
+    }
+  },
+  "latest_live_clock_handoff": {
+    "controlled": {
+      "path": "../mosaic-behaviour-runs/939d8ae50960413bad48df5ef40952e4/manifest.json",
+      "sha256": "2575d12c714574d8e5b4e4e36ac66e483499bdc86156d94ec4fe34da5fe4804f",
+      "passed": true
+    },
+    "real_time": {
+      "path": "../mosaic-behaviour-runs/24c9a480f3f0457997434b3abe42af1e/manifest.json",
+      "sha256": "1b693a677aa3779d1339a83180d38ebe3d60092175783d976cff81c98a333b92",
+      "passed": false
     }
   }
 }

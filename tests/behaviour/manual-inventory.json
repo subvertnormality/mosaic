@@ -567,7 +567,8 @@
       "requirements": [
         "CLOCK-PHRASE-001",
         "CLOCK-PHASE-EDGE-001",
-        "CLOCK-MIDI-TRANSPORT-001"
+        "CLOCK-MIDI-TRANSPORT-001",
+        "CLOCK-LIVE-HANDOFF-001"
       ],
       "status": "unreviewed"
     },
@@ -1502,6 +1503,27 @@
         "Literal ordered MIDI notes and150ms onset spacing",
         "Stop drains all notes",
         "Internal playback resumes"
+      ]
+    },
+    {
+      "id": "CLOCK-LIVE-HANDOFF-001",
+      "sections": [
+        "MAN-030",
+        "MAN-050"
+      ],
+      "statement": "A live source switch preserves sequencer progress and rephases the pending wait to the selected source, releasing the active note after its remaining ticks.",
+      "basis": "Pinned native clock_set_source and scheduler offset contract; literal48-tick authored note, public clock observations and physical controls.",
+      "cases": [
+        "M-TIM-004"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "90BPM internal to100BPM MIDI with a pending two-step note. Reverse live handoff, other phases/tempos and simultaneous transport remain required.",
+      "oracles": [
+        "Pending MIDI note before switch",
+        "Three exact note onsets without reset or duplicate",
+        "Independent remaining-tick release deadline",
+        "Stop drains notes",
+        "Native MIDI source menu"
       ]
     }
   ]

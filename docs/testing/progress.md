@@ -224,3 +224,17 @@ adopts external tempo. The corrected test asserts100BPM before explicitly editin
 90BPM. These were test errors, not Mosaic bugs, and no production workaround was
 added. Passing manifests are linked in state.json. Live source changes with
 pending notes and the final13-comparison M5 matrix remain required.
+
+## Live clock handoff
+
+M-TIM-004 verifies the release of a pending two-step note after internal90BPM
+to MIDI100BPM source selection. The controlled oracle uses remaining native
+ticks and the source phase; controlled execution passes without reset or lost
+notes. The real-time variant preserves one continuous25ms pulse schedule and
+fails before source selection when UI/observation work consumes the next target.
+
+This is an emulator scheduling gap, not a Mosaic defect. The next dependency is
+a bounded native MIDI schedule that runs independently of control acknowledgements,
+with actual delivery evidence and cancellation/cleanup tests. Do not retime the
+clock around UI calls. Both run references are in state.json and bugs.json;
+reverse live handoff and full admission remain required.
