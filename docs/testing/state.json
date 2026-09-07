@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "First diagnose simultaneous note-release order in repeat-cf0ac225403244fba1daa2b4498d5f1c; then continue live-recording placement matrix: fractional recorded lengths, non-first ranges/divisions and playhead agreement; preserve current-step semantics. Complete remaining C08 and campaign/release stages.",
+  "next_action": "Continue live keyboard recording matrix: fractional lengths, non-first channel ranges/divisions and visible playhead agreement. Finish remaining C08, manual behaviours and emulator release stages; full campaign incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -635,5 +635,35 @@
       }
     ],
     "full_campaign_complete": false
-  }
+  },
+  "delayed_action_order_validation": [
+    {
+      "run_id": "65c5f5e5dc0143ae8292479ca7f22cbe",
+      "sha256": "c475391eb5a7eaa2aefabc6219b907f4699f37c1af924ca6d223df93d4855cea",
+      "case": "M-REC-005",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "55f17980c6c74c52ba107a01d4c3f114",
+      "sha256": "6d870cbe2f2c5ecb301d23474fd292af35c2e110f81a820936b6e5093250d10c",
+      "case": "M-TIM-001",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "e9468e195cc241bbab5587e97ef4b548",
+      "sha256": "d9d5e7f039de407186602c2daece53a861d0fb8d1965a656039d4ad46fa5c08a",
+      "case": "M-MIDI-001",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-8e4519b3dbbc4f05b0125b2282b21dce",
+      "sha256": "fed9df6d3d65f7781700f3c52e9b0c679c613375cc919a7d59f6574bc508e721",
+      "case": "M-REC-005",
+      "passed": true,
+      "mode": "controlled-repeat"
+    }
+  ]
 }

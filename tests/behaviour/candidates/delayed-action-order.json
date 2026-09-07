@@ -1,0 +1,49 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "61455fe",
+  "file": "lib/clock/m_lattice.lua",
+  "before_sha256": "1f779d283e6089aa3a9ea6b3729667864a9d23d3f933861872eb41562b709c88",
+  "after_sha256": "8a0a51dea9701d697d43d96e20d4e5e784ce889220de75c0731f0a5e5ed63916",
+  "patch": "0009-delayed-action-order.patch",
+  "patch_sha256": "cd94ddd9b5de8c4cc3f27a9514515888ab58a5a04ca39dfa276b40c54d67e527",
+  "regression": "M-REC-005 three fresh controlled repeats",
+  "baseline": "repeat-cf0ac225403244fba1daa2b4498d5f1c",
+  "rationale": "Preserve insertion order for simultaneous delayed actions instead of Lua hash iteration order.",
+  "limitations": "Full delayed-action, arpeggio, cancellation and performance matrices remain required.",
+  "upstream_merged": false,
+  "validation": [
+    {
+      "run_id": "65c5f5e5dc0143ae8292479ca7f22cbe",
+      "sha256": "c475391eb5a7eaa2aefabc6219b907f4699f37c1af924ca6d223df93d4855cea",
+      "case": "M-REC-005",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "55f17980c6c74c52ba107a01d4c3f114",
+      "sha256": "6d870cbe2f2c5ecb301d23474fd292af35c2e110f81a820936b6e5093250d10c",
+      "case": "M-TIM-001",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "e9468e195cc241bbab5587e97ef4b548",
+      "sha256": "d9d5e7f039de407186602c2daece53a861d0fb8d1965a656039d4ad46fa5c08a",
+      "case": "M-MIDI-001",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-8e4519b3dbbc4f05b0125b2282b21dce",
+      "sha256": "fed9df6d3d65f7781700f3c52e9b0c679c613375cc919a7d59f6574bc508e721",
+      "case": "M-REC-005",
+      "passed": true,
+      "mode": "controlled-repeat"
+    }
+  ],
+  "units": {
+    "passed": 474,
+    "failed": 0,
+    "artifact": "emulator:artifacts/c16/delayed-action-order-units-isolated-02.json"
+  }
+}

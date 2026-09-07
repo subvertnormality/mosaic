@@ -427,3 +427,21 @@ frequent step misplacement. Current-step quantisation is unchanged. Song changes
 cross-channel overlapping chords, route edits, variable tempo/divisions, fractional
 lengths and the remaining placement matrix remain required. There are29 cases;
 the complete campaign remains incomplete, including the exact-pulse diagnostic.
+
+
+## Stable simultaneous delayed-action order
+
+M-REC-005's three fresh processes exposed varying MIDI release order at equal
+logical deadlines. Mosaic's lattice traversed generated string IDs with pairs(),
+whose order is not stable across Lua processes. Candidate0009 keeps insertion
+order in a compact per-sprocket list and respects cancellation before dispatch.
+No emitted trace is sorted by the test runner. Native recording and musical timing
+regressions and fresh-process repeat evidence are recorded in the candidate manifest.
+
+The first candidate sorted pending actions each pulse. Its native repeats passed,
+but a concurrent unit run failed the2ms pulse-performance gate (473/474).
+The refined candidate retains insertion order without per-pulse sorting; the
+sequential unit run passed474/474, including that performance gate. The earlier
+failure remains retained; concurrency and implementation changed together, so its
+cause is not attributed solely to sorting. Full performance/endurance and advanced
+arpeggio/cancellation matrices remain required. No full campaign completion claim.

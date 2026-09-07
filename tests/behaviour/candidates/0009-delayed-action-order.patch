@@ -1,0 +1,57 @@
+diff --git a/lib/clock/m_lattice.lua b/lib/clock/m_lattice.lua
+index 0e396ce..26cd508 100644
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -174,7 +174,12 @@ function Lattice:pulse()
+ 
+           local to_remove = {}
+     
+-          for id, delayed_action in pairs(sprocket.delayed_actions) do
++          -- Equal-deadline actions retain insertion order across Lua processes.
++          local pending_ids = sprocket.delayed_action_order
++          for index = 1, #pending_ids do
++            local id = pending_ids[index]
++            local delayed_action = sprocket.delayed_actions[id]
++            if delayed_action then
+               if delayed_action.length == 0 then
+                   delayed_action.action()
+                   table.insert(to_remove, id)
+@@ -192,11 +197,22 @@ function Lattice:pulse()
+               elseif sprocket.phase > sprocket.current_ppqn then
+                   delayed_action.length = delayed_action.length - 1
+               end
++            end
+           end
+           
+           for _, id in ipairs(to_remove) do
+               sprocket.delayed_actions[id] = nil
+           end
++          -- Compact cancelled/completed entries without sorting or shifting.
++          local retained = 0
++          for index = 1, #pending_ids do
++            local id = pending_ids[index]
++            if sprocket.delayed_actions[id] then
++              retained = retained + 1
++              pending_ids[retained] = id
++            end
++          end
++          for index = #pending_ids, retained + 1, -1 do pending_ids[index] = nil end
+ 
+           if sprocket.phase > sprocket.current_ppqn then
+             sprocket.phase = 1
+@@ -311,6 +327,7 @@ function Sprocket:new(args)
+   p.lattice = args.lattice
+   p.realign = args.realign
+   p.delayed_actions = args.delayed_actions
++  p.delayed_action_order = {}
+   p.cleanup_delayed_action = args.cleanup_delayed_action
+   return p
+ end
+@@ -367,6 +384,7 @@ end
+ function Sprocket:set_delayed_action(length, action)
+   local id = fn.generate_id()
+   self.delayed_actions[id] = {length = length, action = action}
++  table.insert(self.delayed_action_order, id)
+   return id
+ end
+ 
