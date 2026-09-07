@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Test adding chord voices after root release, same-channel cross-source aggregation, mixed armed/unarmed and repeated-pitch overlap; proceed through remaining manual and emulator acceptance/release stages.",
+  "next_action": "Test adding chord voices after root release, rearming while notes are held, same-channel cross-source and repeated-pitch overlap; continue remaining manual and emulator acceptance/release stages.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -1187,6 +1187,71 @@
       "mode": "controlled-repeat",
       "passed": true,
       "manifest_sha256": "f65674b0f491b1147e5ab119cfb5334fdb920a2a7744feffd140ffdb22a7dd63"
+    }
+  ],
+  "mixed_recording_validation": [
+    {
+      "run_id": "34d17a993a3c4dd7a4d0d5488562be28",
+      "case": "M-REC-028",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "3330857799f5a5aa5dacb79ec61a8791ce601ce406fe9000448a7e4880dbff40"
+    },
+    {
+      "run_id": "edd4d304d0e7469295afb23b5dc3ce44",
+      "case": "M-REC-029",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "57c6fed30a6c23f9215f6f98e6ed398a5254fbe810fba9e18bbef7de7cd4ca66"
+    },
+    {
+      "run_id": "dc6810378a294a1ba491490c5e7461d5",
+      "case": "M-REC-026",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "6e59c2167e043e0eb87514a0f3f73bb959e0e118fbe424120e8272a7b6059428"
+    },
+    {
+      "run_id": "9cbf66b2dcec45b5bcf34bc58423a99a",
+      "case": "M-REC-024",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "379aba06777bc7dd951029f62e7744e6fa5d57710b9d21e206802a13468a7152"
+    },
+    {
+      "run_id": "4206a7376f30479ba26305dde86093c3",
+      "case": "M-REC-028",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "607a400c9853077af045bd412aef077559ffe9cd622392422d96c954a0a0d5bb"
+    },
+    {
+      "run_id": "db288a8960ef4c8db0d8f6c7c906239a",
+      "case": "M-REC-029",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "f72b544c370352a1cb2a8a04be2675792b6e269f94a2e6470920d7b1e687bdf6"
+    },
+    {
+      "run_id": "189b86649345443e829f19f481e93252",
+      "case": "M-REC-026",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "77cdbed452c53ed901254863cd657966d530bc37b818da5c44fa0707197e2c9d"
+    },
+    {
+      "run_id": "d43d8c885243416dbf2c2ee26057622f",
+      "case": "M-REC-024",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "24e29eaf8b47d5152f7248fb9f9add8cd4c675fab9c13789d1ff531ee44ca19d"
+    },
+    {
+      "run_id": "repeat-10b54dae24644b818354acec731b08ac",
+      "case": "M-REC-028",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "0a44ab11162e92d9195ccaeca492a86ad07ccf289747eec0c2143ef80f37d854"
     }
   ]
 }

@@ -657,3 +657,21 @@ manual source hashes and quotations are reconciled.
 There are56 native cases. Adding a voice after releasing the root, same-channel
 cross-source aggregation, mixed armed/unarmed and repeated-pitch overlap,
 tempo/song transitions and the remaining manual/emulator campaign remain open.
+
+
+## Post-disarm preview must not own an armed chord
+
+M-REC-028/029 inject a new preview note after disarming a held recorded chord,
+with preview release after/before the recorded voices. The late preview release
+loses the chord on baseline in controlled time9a4c4949e9a4430ba31cd2a1ddbc304b
+and real time74093c6f5152413aa1eb0f688b566d18; early preview release passes.
+Candidate0018 separates chord bookkeeping by armed-at-onset ownership. Both
+cases now assert ordinary preview MIDI onset/release as well as unchanged
+recorded chord replay and500ms shared length. Both pass controlled and real time,
+with staggered-chord and cross-channel recording neighbors. The late preview
+case passes three identical fresh controlled processes; all474 units pass.
+
+There are58 native cases. This does not establish rearming with held notes,
+same-pitch overlap, manual-step/live interaction, adding voices after root
+release, same-channel cross-source aggregation or tempo/song transitions.
+Those and the full manual/emulator acceptance and release campaign remain open.

@@ -943,7 +943,7 @@ def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
         assert not state['midi_capture']['outstanding']
         c.results.append(dict(kind='overlapping-keyboard-source-isolation',input_sources=inputs,release_order=order,expected=expected,actual=actual))
 
-def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0)):
+def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),preview_release_ns=None):
     c.configure();c.tap(2,8)
     marker=c.snapshot()['midi_count'];c.tap(1,8)
     controlled=c.clock_mode=='controlled-experimental'
@@ -953,17 +953,25 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0)):
     origin=anchor+666666667+50000000
     packets=[(offset,[144,pitch,90]) for offset,pitch in zip(onset_offsets,(72,76,79))]
     packets += [(300000000+i*100000000,[128,pitch,0]) for i,pitch in enumerate(release_order)]
+    if preview_release_ns is not None:
+        packets += [(100000000,[144,83,80]),(preview_release_ns,[128,83,0])]
+        packets.sort(key=lambda item:item[0])
     events=[dict(port=1,bytes=data,**{'at_'+field:origin+offset}) for offset,data in packets]
     request=dict(type='midi_schedule',schedule_id=1,events=events)
     if controlled:request['time_domain']='logical'
     c.action(**request)
-    if controlled:c.elapse((origin+100000000-c.logical_ns)/1e9)
+    if controlled:c.elapse((origin+(10000000 if preview_release_ns is not None else 100000000)-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])>=3,timeout=2)
     c.tap(2,8) # Disarm while all three notes are held.
-    if controlled:c.elapse((origin+510000000-c.logical_ns)/1e9)
-    else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==6,timeout=2)
+    if controlled:c.elapse((origin+max(500000000,preview_release_ns or 0)+10000000-c.logical_ns)/1e9)
+    else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=2)
     state=c.snapshot()
     c.results.append(dict(kind='scheduled-recorded-chord',release_order=release_order,events=events,delivered=state['midi_input_schedule']['delivered']))
+    if preview_release_ns is not None:
+        preview=[(m['port'],m['bytes']) for m in state['midi'] if m['bytes'][1:2]==[83] and m['bytes'][0] in (128,144)]
+        expected_preview=[(1,[144,83,80]),(1,[128,83,0])]
+        c.results.append(dict(kind='post-disarm-preview',expected=expected_preview,actual=preview))
+        assert preview==expected_preview,dict(expected=expected_preview,actual=preview)
     c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
     marker=c.snapshot()['midi_count'];c.tap(1,8)
     def notes(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0]==144 and m['bytes'][2]>0]
@@ -1039,6 +1047,8 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
     c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
 
 CASES={
+ 'M-REC-028':dict(run=lambda c:recorded_chord_release(c,preview_release_ns=600000000),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Post-disarm preview outlasts a recorded chord without extending or losing its shared length'),
+ 'M-REC-029':dict(run=lambda c:recorded_chord_release(c,preview_release_ns=250000000),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Post-disarm preview releases before the recorded chord without altering replay'),
  'M-REC-026':dict(run=lambda c:recorded_chord_release(c,(72,76,79),(0,40000000,80000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Staggered chord with root released first spans first press to final release'),
  'M-REC-027':dict(run=lambda c:recorded_chord_release(c,(76,79,72),(0,40000000,80000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Staggered chord with root released last retains first-press to final-release shared length'),
  'M-REC-024':dict(run=recorded_input_sources,requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Two ports record the same pitch on distinct channels in the same step; independent replay and lengths'),

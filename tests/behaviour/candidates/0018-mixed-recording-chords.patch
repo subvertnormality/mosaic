@@ -1,0 +1,36 @@
+diff --git a/lib/m_midi.lua b/lib/m_midi.lua
+index 97c03d0..243ec6c 100644
+--- a/lib/m_midi.lua
++++ b/lib/m_midi.lua
+@@ -90,8 +90,11 @@ function handle_midi_event_data(data, midi_device)
+       note = data[2]
+     end
+ 
++    local recording = params:get("record") == 2
+     chord_states[channel.number] = chord_states[channel.number] or {}
+-    local channel_chords = chord_states[channel.number]
++    local recording_groups = chord_states[channel.number]
++    recording_groups[recording] = recording_groups[recording] or {}
++    local channel_chords = recording_groups[recording]
+     if not channel_chords[s] then
+       channel_chords[s] = {
+         chord_one_note = nil,
+@@ -107,7 +110,7 @@ function handle_midi_event_data(data, midi_device)
+       note = note,
+       step = s,
+       start_time = util.time(),
+-      recording = params:get("record") == 2,
++      recording = recording,
+       channel_number = channel.number,
+       midi_channel = midi_channel,
+       midi_device = device.midi_device,
+@@ -163,7 +166,8 @@ function handle_midi_event_data(data, midi_device)
+     local stored = input_notes[data[2]]
+     if stored == nil then return end
+   
+-    local channel_chords = chord_states[stored.channel_number] or {}
++    local recording_groups = chord_states[stored.channel_number] or {}
++    local channel_chords = recording_groups[stored.recording] or {}
+     local chord_state = channel_chords[stored.step]
+     if chord_state then
+       chord_state.notes[data[2]] = nil

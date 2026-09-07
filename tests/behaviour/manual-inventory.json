@@ -4423,7 +4423,9 @@
         "M-REC-022",
         "M-REC-023",
         "M-REC-026",
-        "M-REC-027"
+        "M-REC-027",
+        "M-REC-028",
+        "M-REC-029"
       ],
       "status": "unimplemented",
       "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels.",
@@ -4616,7 +4618,9 @@
         "M-REC-024",
         "M-REC-025",
         "M-REC-026",
-        "M-REC-027"
+        "M-REC-027",
+        "M-REC-028",
+        "M-REC-029"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",
