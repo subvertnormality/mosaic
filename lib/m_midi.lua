@@ -98,6 +98,7 @@ function handle_midi_event_data(data, midi_device)
       note = note,
       step = s,
       start_time = util.time(),
+      recording = params:get("record") == 2,
       channel_number = channel.number,
       midi_channel = midi_channel,
       midi_device = device.midi_device,
@@ -185,7 +186,7 @@ function handle_midi_event_data(data, midi_device)
           end
         end
   
-        if stored.step and params:get("record") == 2 then
+        if stored.step and stored.recording then
           recorder.add_note_mask_event_portion(
             channel.number,
             stored.step,

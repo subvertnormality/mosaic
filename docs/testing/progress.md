@@ -561,3 +561,25 @@ identical fresh controlled processes; all474 unit tests pass. There are43 cases.
 Simultaneous same-pitch inputs across channels/ports remain a separate required
 isolation test; this sequential matrix does not prove overlap correctness.
 Full manual coverage and emulator release remain incomplete.
+
+
+## Confirmed held-note disarm policy
+
+User decision: keep notes that began while recording was armed and finish their
+length on release. M-REC-017 reproduces the old lost-note behaviour in real-time
+ab7279ed7f7e4df09b93e6b023481174. Candidate0013 latches recording ownership at
+note-on, allowing note-off to commit the complete quantised length after disarm.
+The strengthened test also plays a new post-disarm note; replay must preserve the
+original channel's complete held note and leave the other channel unchanged.
+Real-time, three identical controlled repeats and ordinary held-note real-time
+regression pass. README Arm live record now states this policy; all113 section
+hashes and README requirement quotes were reconciled and audited.
+
+An initial unit run passed473 and failed the automation2ms maximum pulse gate.
+A paired isolated baseline/candidate diagnostic, with thresholds unchanged, passed
+all474 each; maxima were0.954ms baseline and0.824ms candidate. Both the initial
+failure and paired results are retained, without claiming a proven cause for the
+first timing miss. No unrelated clock/performance code was changed.
+
+There are44 native cases. Chord release permutations, mixed armed/unarmed overlap,
+recording tempo/song transitions and the remaining full campaign remain required.

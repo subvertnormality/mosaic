@@ -808,7 +808,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     assert all(abs(gap-expected)<=tolerance for gap,expected in zip(gaps,expected_gaps)),dict(actual=gaps,expected=expected_gaps)
     c.results.append(dict(kind='recorded-replay-spacing',expected_seconds=expected_gaps,actual_seconds=gaps))
 
-def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128,input_channel=1):
+def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128,input_channel=1,disarm_while_held=False):
     c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
     c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1)
     c.tap(2,8);marker=c.snapshot()['midi_count'];c.tap(1,8)
@@ -826,7 +826,9 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
     c.action(**request)
     if controlled:c.elapse((origin+100000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])>=1,timeout=2)
-    c.tap(2,1);marker=c.snapshot()['midi_count']
+    c.tap(2,1)
+    if disarm_while_held:c.tap(2,8)
+    marker=c.snapshot()['midi_count']
     if controlled:c.elapse((origin+hold_ns+10000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==2,timeout=2)
     state=c.snapshot()
@@ -834,7 +836,13 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
     releases=[(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and 128<=m['bytes'][0]<=143 and m['bytes'][1]==72]
     c.results.append(dict(kind='held-input-release-route',expected=[(1,[128,72,0])],actual=releases))
     assert releases==[(1,[128,72,0])],releases
-    c.tap(1,8);c.tap(2,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    if disarm_while_held:
+        # New post-disarm notes may preview, but must not alter channel2 replay.
+        c.action(type='midi',port=1,bytes=[144,79,80]);c.elapse(.03)
+        c.action(type='midi',port=1,bytes=[128,79,0])
+    c.tap(1,8)
+    if not disarm_while_held:c.tap(2,8)
+    c.wait(lambda state:not state['midi_capture']['outstanding'])
     marker=c.snapshot()['midi_count'];c.tap(1,8)
     def notes(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0]
     state=c.wait(lambda state:all(sum(m['bytes'][0]==status for m in notes(state))>=13 for status in (144,145)),timeout=5)
@@ -918,6 +926,7 @@ def keyboard_input_channels(c):
     c.results.append(dict(kind='keyboard-input-channel-matrix',input_ports=[1,2],input_channels=list(range(1,17)),release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-REC-017':dict(run=lambda c:recorded_note_channel_switch(c,disarm_while_held=True),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarm while holding a recorded keyboard note; release commits its full quantised length on the original channel'),
  'M-MIDI-002':dict(run=keyboard_input_channels,requirements=['MIDI-RELEASE-001','REC-LIVE-NOTES'],description='All16 keyboard input channels across both ports and both release forms produce exact selected-channel preview MIDI with no stuck notes'),
  'M-REC-016':dict(run=lambda c:recorded_note_channel_switch(c,input_channel=16),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Keyboard on MIDI input channel16 records and releases on the selected Mosaic channel independently of its input channel'),
  'M-REC-015':dict(run=lambda c:recorded_note_channel_switch(c,release_status=144),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Velocity-zero Note On releases the original held note and commits its recorded length after channel selection changes'),

@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Test simultaneous same-pitch keyboard inputs across ports/channels and recording lifecycle; disarm policy awaits user. Remaining manual behaviours and emulator release stay incomplete.",
+  "next_action": "Continue simultaneous keyboard input isolation and chord/disarm lifecycle combinations, then remaining manual and emulator release stages. Full campaign remains incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -857,13 +857,9 @@
     }
   ],
   "pending_disarm_held_note": {
-    "status": "asked-awaiting-user",
-    "current": "Note buffered at note-on; disarming before note-off prevents commit.",
-    "options": [
-      "keep and finish on release",
-      "trim at disarm",
-      "discard unfinished note"
-    ]
+    "status": "implemented-focused-validated",
+    "decision": "Keep notes begun while armed; finish full quantised length on release after disarm.",
+    "manual": "README.md#arm-live-record"
   },
   "keyboard_input_channels_validation": [
     {
@@ -892,6 +888,29 @@
       "sha256": "0b77bd26624cb33effafc275861523d99e72b83a2630659fe06a54cef2d91041",
       "case": "M-MIDI-002",
       "passed": true,
+      "mode": "controlled-repeat"
+    }
+  ],
+  "disarm_held_note_validation": [
+    {
+      "run_id": "e3193eea351746a487ef02e9260befa3",
+      "sha256": "bfc6a5d0d52a99279d89aaf403e0cef79d822311d117f5a882cbfeb795c2f418",
+      "passed": true,
+      "case": "M-REC-017",
+      "mode": "real-time"
+    },
+    {
+      "run_id": "081ab04751db4ca08546702efe8189c8",
+      "sha256": "c9ac096c15e6ae6f197d0cda4dc79fe1b5f40f4bfe62f1b9cf7d80766fcbe611",
+      "passed": true,
+      "case": "M-REC-005",
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-c9807f9b50c34b9f888581d999394a6b",
+      "sha256": "e18fdd7c61ada8af3c2a80dcb83a247ee9295f5de6936d1144fe0c0f68e73413",
+      "passed": true,
+      "case": "M-REC-017",
       "mode": "controlled-repeat"
     }
   ]

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "fab8458e41f38324012e496a88c4f320f4c1345653b2b9bfacc7500b67e972eb",
+  "manual_sha256": "55dfaf72996b417a3f51ceb05062e8d3694138e4a1a932a5ccc3f63e13d45a58",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "statement-inventory-pending-audit-and-implementation",
   "sections": [
@@ -159,7 +159,7 @@
       "level": 3,
       "start_line": 235,
       "end_line": 262,
-      "text_sha256": "4ab8c90364f60183ffd5a7224148bdaf46b0bcd7df30cccb8b29065dedd7a5fe",
+      "text_sha256": "fc657ab8ca8243b76f9462bb75ef6bd781ddab2e5314d2d335236ca175ab53c5",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "REC-LIVE-NOTES",
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "fab8458e41f38324012e496a88c4f320f4c1345653b2b9bfacc7500b67e972eb"
+      "sha256": "55dfaf72996b417a3f51ceb05062e8d3694138e4a1a932a5ccc3f63e13d45a58"
     },
     {
       "path": "cheat_sheet.html",
@@ -4410,7 +4410,9 @@
         "CHEAT-ALL"
       ],
       "statement": "Record key toggles arm/disarm.",
-      "cases": [],
+      "cases": [
+        "M-REC-017"
+      ],
       "status": "unimplemented",
       "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels.",
       "oracles": [
@@ -4591,7 +4593,8 @@
         "M-REC-014",
         "M-REC-015",
         "M-REC-016",
-        "M-MIDI-002"
+        "M-MIDI-002",
+        "M-REC-017"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",
@@ -4605,8 +4608,8 @@
       "source": {
         "path": "README.md",
         "line": 239,
-        "text": "When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step.",
-        "sha256": "ee3aa78a8f8636eee6b6300d1e8a0f9b54ae10ae2f62831e730684724c781fb9"
+        "text": "When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step. Disarming recording prevents new notes from being recorded. Notes that began while recording was armed are kept, and their full note lengths are measured and committed when you release them, even if recording has since been disarmed.",
+        "sha256": "c665c091ae2ee28b67a5ac54455b0358accedddffb38485b206d8a9f56d2d27b"
       },
       "open_decision": "SEM-008: current active step versus nearest/intended pulse boundary; M-REC-004 is an unresolved diagnostic, not passing coverage."
     },
