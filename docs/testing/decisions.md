@@ -64,3 +64,15 @@ that denial or represent a single-provider query as arbitration. SEM-007 remains
 pending; no semantic choice or implementation change follows from a failed tool.
 Continue independent work. Raw failed arbitration and approval-rejection summary
 are referenced in state.json; ordinary planned reviews remain Codex-only.
+
+## Velocity-page numeric correction
+
+The manual's first velocity-page lower value was 67; it is 68. The existing 14-value
+mapping evenly divides 127..0 and floors each value: the seventh value is
+floor(127 - 6*127/13) =68. M-EDIT-002 confirms every displayed value, including 68,
+through actual grid input and emitted MIDI in both clock modes. Corrected the
+one-number documentation error and reconciled its exact inventory source hashes.
+No velocity behavior or test oracle changed. The preceding native run identities
+retain the pre-correction manual hash; they prove the same unchanged implementation,
+not a fresh run against the edited documentation. Full campaign acceptance remains
+pending and will bind the final manual. No coverage requirement was removed.

@@ -838,3 +838,15 @@ Polling is reduced only by waiting with capture active before checking the entir
 MIDI sequence; early/extra notes remain observable and fail the same assertions.
 Selected pattern/bank fixtures remain partial coverage of algorithm/fader
 requirements; broader domains and all remaining delivery gates are still required.
+
+## Note, velocity and step-page editor ranges
+
+M-EDIT-001..003 pass controlled and real-time native runs. Note-range tests cover
+fine up/down movement, long-held extrema, repeated bounds and center reset using
+literal expected MIDI pitches. Velocity tests cover all 14 displayed values,
+including zero, fine range movements and held limits. K1 note and velocity edits
+are checked on all four step pages and each page is replayed with exact MIDI.
+Four manual requirements now have partial case bindings. Threshold edges, all
+columns, mixed existing values and live edits remain required. No production
+change; these cases migrate the earlier emulator-owned editor fixture into the
+Mosaic suite without importing private emulator tests. Full delivery incomplete.

@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue note/velocity/page editor coverage and remaining manual/emulator delivery. Tresillo candidate0004, multiplier and all-bank selected-pattern cases pass both modes plus474 units and409600 algorithm checks. SEM-007 decision remains pending after rejected arbitration retry; do not bypass denial.",
+  "next_action": "Continue remaining note selector, fader, editor threshold/playing-state domains and other manual/emulator stages. M-EDIT-001..003 pass both modes. SEM-007 arbitration remains pending and must not bypass the rejection.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2706,5 +2706,152 @@
     "limitations": "Selected bank/pattern fixtures do not cover all fader values, all combinations or running edits. Full manual and release remain incomplete.",
     "initial_porting_failure": "Four native attempts failed on a nonexistent driver send method before rhythm assertions; corrected to public action API and retained in local tresillo-porting-error evidence.",
     "fix": "Apply previously isolated0004 candidate: wrap bit index at stored pattern length before byte lookup. Larger3m tresillo segments no longer read nil past16-bit drum data. Existing drum output is independently checked unchanged."
+  },
+  "editor_range_validation": {
+    "status": "validated",
+    "runs": [
+      {
+        "case": "M-EDIT-001",
+        "mode": "controlled-experimental",
+        "run_id": "57bdb3e53d0c4b828f55ece05f037ff4",
+        "manifest_sha256": "3f963f09126cbec70572dc21683a1a78d4546be40bbf82f683333d6a1b5ba1f8",
+        "passed": true,
+        "checks": [
+          "initial-note-range",
+          "first-up-step",
+          "second-up-step",
+          "first-down-step",
+          "second-down-step",
+          "hold-to-highest-range",
+          "highest-range-clamp",
+          "hold-to-lowest-range",
+          "lowest-range-clamp",
+          "center-restores-root-page"
+        ]
+      },
+      {
+        "case": "M-EDIT-001",
+        "mode": "real-time",
+        "run_id": "7d3e524f6c4f466bad7aa7f1fab0afe8",
+        "manifest_sha256": "942ffb60798097952ec3e4cfb9be239ff86c92ee734ca0a63fa2da3ae93e9c5a",
+        "passed": true,
+        "checks": [
+          "initial-note-range",
+          "first-up-step",
+          "second-up-step",
+          "first-down-step",
+          "second-down-step",
+          "hold-to-highest-range",
+          "highest-range-clamp",
+          "hold-to-lowest-range",
+          "lowest-range-clamp",
+          "center-restores-root-page"
+        ]
+      },
+      {
+        "case": "M-EDIT-002",
+        "mode": "controlled-experimental",
+        "run_id": "40c4e8020e9a4bd2936852a8e4700402",
+        "manifest_sha256": "89104367732f4341c7825f9badda2b33244191a7bbce68cad4c2eabc7084f98b",
+        "passed": true,
+        "checks": [
+          "velocity-127",
+          "velocity-117",
+          "velocity-107",
+          "velocity-97",
+          "velocity-87",
+          "velocity-78",
+          "velocity-68",
+          "first-velocity-range-step",
+          "second-velocity-range-step",
+          "velocity-range-step-back",
+          "velocity-58",
+          "velocity-48",
+          "velocity-39",
+          "velocity-29",
+          "velocity-19",
+          "velocity-9",
+          "velocity-0",
+          "lowest-velocity-range-clamp",
+          "hold-to-highest-velocity-range",
+          "highest-velocity-range-clamp"
+        ]
+      },
+      {
+        "case": "M-EDIT-002",
+        "mode": "real-time",
+        "run_id": "d494fcce1b114cc4bc51e7e4e4ee3862",
+        "manifest_sha256": "f1f02ed4478c66748b6a0eb09cefdabb86eebc92386b6826661e0e6616441999",
+        "passed": true,
+        "checks": [
+          "velocity-127",
+          "velocity-117",
+          "velocity-107",
+          "velocity-97",
+          "velocity-87",
+          "velocity-78",
+          "velocity-68",
+          "first-velocity-range-step",
+          "second-velocity-range-step",
+          "velocity-range-step-back",
+          "velocity-58",
+          "velocity-48",
+          "velocity-39",
+          "velocity-29",
+          "velocity-19",
+          "velocity-9",
+          "velocity-0",
+          "lowest-velocity-range-clamp",
+          "hold-to-highest-velocity-range",
+          "highest-velocity-range-clamp"
+        ]
+      },
+      {
+        "case": "M-EDIT-003",
+        "mode": "controlled-experimental",
+        "run_id": "b65e8db2f4114b76845662e7887a50eb",
+        "manifest_sha256": "473aa3cb3b320dcf61f47c238feb0eaf53bc1bca254a0f19e6814ed97a957f8a",
+        "passed": true,
+        "checks": [
+          "shift-copies-notes-to-four-groups",
+          "shift-copies-velocities-to-four-groups",
+          "play-step-group-1",
+          "play-step-group-2",
+          "play-step-group-3",
+          "play-step-group-4"
+        ]
+      },
+      {
+        "case": "M-EDIT-003",
+        "mode": "real-time",
+        "run_id": "9e824ef8072847b58d43463e7e35154a",
+        "manifest_sha256": "9aabe10c09eda12bbd778d6bff4a2763015ce5f3455c6811d8e95e1a78485df2",
+        "passed": true,
+        "checks": [
+          "shift-copies-notes-to-four-groups",
+          "shift-copies-velocities-to-four-groups",
+          "play-step-group-1",
+          "play-step-group-2",
+          "play-step-group-3",
+          "play-step-group-4"
+        ]
+      }
+    ],
+    "scope": "Note range fine moves, held extrema, clamps and center reset; all14 displayed velocities, fine range movement and extreme clamps; K1 note/velocity copies and playback across all four step pages.",
+    "limitations": "Partial domains: hold-threshold boundaries, every column, mixed existing values and playing-state edits remain required. Full manual and emulator delivery incomplete."
+  },
+  "velocity_manual_correction": {
+    "before_sha256": "14cf0689f34464c2997bcbe1577b97d05b58929c49380c872007fe80907d636c",
+    "after_sha256": "c10b42f8fbdda5c63a512e7c7a0e904167bdbe01f21a812cdf853c10ad918b98",
+    "change": "First velocity page ends at68, not67. Existing mapping and native MIDI confirmed; no behavior/oracle change.",
+    "evidence": "M-EDIT-002 both modes; exact pre-documentation-change run identities retained. Final whole-campaign run remains pending."
+  },
+  "updated": "2026-09-08",
+  "manual_binding_snapshot": {
+    "implemented_cases": 74,
+    "requirements": 141,
+    "requirements_with_case": 45,
+    "requirements_without_case": 96,
+    "scope": "Bindings only; every bound domain is still partial and full campaign remains incomplete."
   }
 }

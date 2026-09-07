@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "14cf0689f34464c2997bcbe1577b97d05b58929c49380c872007fe80907d636c",
+  "manual_sha256": "c10b42f8fbdda5c63a512e7c7a0e904167bdbe01f21a812cdf853c10ad918b98",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "statement-inventory-pending-audit-and-implementation",
   "sections": [
@@ -423,7 +423,7 @@
       "level": 4,
       "start_line": 477,
       "end_line": 491,
-      "text_sha256": "068c720bf82ee7c462885cc38dfb55bdca5db47db56b4100c0b372174599a936",
+      "text_sha256": "714fcfbed5c7eaad4b73d6b14c56f920d9c646535a7a03e8ce0ccc74b5312d7c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PAT-EDIT-001",
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "14cf0689f34464c2997bcbe1577b97d05b58929c49380c872007fe80907d636c"
+      "sha256": "c10b42f8fbdda5c63a512e7c7a0e904167bdbe01f21a812cdf853c10ad918b98"
     },
     {
       "path": "cheat_sheet.html",
@@ -2093,9 +2093,11 @@
         "MAN-031"
       ],
       "statement": "K1-entered notes duplicate across all four step pages.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every column/page; mixed pre-existing values; held/released K1; inactive steps.",
+      "cases": [
+        "M-EDIT-003"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Every column/page; mixed pre-existing values; held/released K1; inactive steps. M-EDIT-003 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required.",
       "oracles": [
         "All four pages show same entered value and corresponding complete64-step MIDI."
       ],
@@ -2117,9 +2119,11 @@
         "MAN-031"
       ],
       "statement": "Select each of four16-step pages.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every page; first/last columns; edit/switch/revisit; stopped/playing.",
+      "cases": [
+        "M-EDIT-003"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Every page; first/last columns; edit/switch/revisit; stopped/playing. M-EDIT-003 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required.",
       "oracles": [
         "Page LED and distinct notes for steps1/16/17/32/33/48/49/64."
       ],
@@ -2141,9 +2145,11 @@
         "MAN-031"
       ],
       "statement": "Range end taps move one step, holds reach extremes, center resets root page.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Both directions, tap/hold threshold edges, extrema and repeated bounds.",
+      "cases": [
+        "M-EDIT-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Both directions, tap/hold threshold edges, extrema and repeated bounds. M-EDIT-001 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required.",
       "oracles": [
         "Visible range/root row and corresponding independent MIDI pitches."
       ],
@@ -2213,9 +2219,12 @@
         "MAN-032"
       ],
       "statement": "Velocity editor supports two ranges, fine tap and long-hold extreme selection.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "127/67/58/0 and every displayed row; fine increments across page discontinuity; bounds; all step pages.",
+      "cases": [
+        "M-EDIT-002",
+        "M-EDIT-003"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "127/68/58/0 and every displayed row; fine increments across page discontinuity; bounds; all step pages. M-EDIT-002 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required. M-EDIT-003 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required.",
       "oracles": [
         "Exact velocity LEDs/screen and output MIDI velocity; zero semantics explicitly resolved."
       ],
@@ -2227,8 +2236,8 @@
         "path": "README.md",
         "line": 479,
         "end_line": 483,
-        "text": "Now let's look at the velocity editor, which functions similarly to the note page. Access it by pressing the third button in the global menu cluster again when already in the pattern note editor.\n\nThe velocity editor spans two vertical pages: the first displays velocities from 127 down to 67, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.\n\nOn the Norns screen, you can see the channel grid visualizer. Use E2 to select the current channel.",
-        "sha256": "72257e13894fd0c6992d68d821b430eeaa5d6dc7801e449b36d958322c21f1db"
+        "text": "Now let's look at the velocity editor, which functions similarly to the note page. Access it by pressing the third button in the global menu cluster again when already in the pattern note editor.\n\nThe velocity editor spans two vertical pages: the first displays velocities from 127 down to 68, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.\n\nOn the Norns screen, you can see the channel grid visualizer. Use E2 to select the current channel.",
+        "sha256": "78e23e3b54386385d9e945102ee311f630388a8fa86598ff21fe4bd1a56c486a"
       }
     },
     {

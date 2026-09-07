@@ -478,7 +478,7 @@ On the Norns screen, you'll find the channel grid visualizer. Use E2 to select t
 
 Now let's look at the velocity editor, which functions similarly to the note page. Access it by pressing the third button in the global menu cluster again when already in the pattern note editor.
 
-The velocity editor spans two vertical pages: the first displays velocities from 127 down to 67, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.
+The velocity editor spans two vertical pages: the first displays velocities from 127 down to 68, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.
 
 On the Norns screen, you can see the channel grid visualizer. Use E2 to select the current channel.
 

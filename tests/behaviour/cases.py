@@ -293,6 +293,71 @@ def rhythm_bank_workflow(c):
 
 
 
+# Ported editor-range fixture; literal pitches and velocities remain independent.
+def editor_shift_tap(c,x,y):
+    c.action(type='key',n=1,state=1);c.elapse(.3)
+    try:c.tap(x,y)
+    finally:c.action(type='key',n=1,state=0)
+
+def editor_range_hold(c,x,y):
+    c.action(type='grid',x=x,y=y,state=1)
+    try:c.elapse(1.1)
+    finally:c.action(type='grid',x=x,y=y,state=0)
+
+def editor_note_ranges(c):
+    c.configure();c.tap(5,8);c.tap(5,8)
+    def choose(y,note):
+        c.tap(4,y);c.led_values([(4,y)],[12]);c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+[(1,[144,note,97])])
+    choose(1,71);c.results.append(dict(kind='workflow-check',name='initial-note-range',passed=True))
+    c.tap(14,8);choose(1,72);c.results.append(dict(kind='workflow-check',name='first-up-step',passed=True))
+    c.tap(14,8);choose(1,74);c.results.append(dict(kind='workflow-check',name='second-up-step',passed=True))
+    c.tap(16,8);choose(1,72);c.results.append(dict(kind='workflow-check',name='first-down-step',passed=True))
+    c.tap(16,8);choose(1,71);c.results.append(dict(kind='workflow-check',name='second-down-step',passed=True))
+    editor_range_hold(c,14,8);choose(1,83);c.results.append(dict(kind='workflow-check',name='hold-to-highest-range',passed=True))
+    c.tap(14,8);choose(1,83);c.results.append(dict(kind='workflow-check',name='highest-range-clamp',passed=True))
+    editor_range_hold(c,16,8);choose(7,48);c.results.append(dict(kind='workflow-check',name='hold-to-lowest-range',passed=True))
+    c.tap(16,8);choose(7,48);c.results.append(dict(kind='workflow-check',name='lowest-range-clamp',passed=True))
+    c.tap(15,8);choose(4,65);c.results.append(dict(kind='workflow-check',name='center-restores-root-page',passed=True))
+
+VELOCITIES=[127,117,107,97,87,78,68,58,48,39,29,19,9,0]
+
+def editor_velocity_ranges(c):
+    c.configure();c.tap(5,8);c.tap(5,8);c.tap(5,8)
+    def choose(y,value):
+        c.tap(4,y);c.led_values([(4,y)],[12])
+        c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+([(1,[144,65,value])] if value else []))
+    for y,value in enumerate(VELOCITIES[:7],1):choose(y,value);c.results.append(dict(kind='workflow-check',name='velocity-'+str(value),passed=True))
+    c.tap(16,8);choose(1,117);c.results.append(dict(kind='workflow-check',name='first-velocity-range-step',passed=True))
+    c.tap(16,8);choose(1,107);c.results.append(dict(kind='workflow-check',name='second-velocity-range-step',passed=True))
+    c.tap(15,8);choose(1,117);c.results.append(dict(kind='workflow-check',name='velocity-range-step-back',passed=True))
+    editor_range_hold(c,16,8)
+    for y,value in enumerate(VELOCITIES[7:],1):choose(y,value);c.results.append(dict(kind='workflow-check',name='velocity-'+str(value),passed=True))
+    c.tap(16,8);choose(7,0);c.results.append(dict(kind='workflow-check',name='lowest-velocity-range-clamp',passed=True))
+    editor_range_hold(c,15,8);choose(1,127);c.results.append(dict(kind='workflow-check',name='hold-to-highest-velocity-range',passed=True))
+    c.tap(15,8);choose(1,127);c.results.append(dict(kind='workflow-check',name='highest-velocity-range-clamp',passed=True))
+
+def editor_step_groups(c):
+    c.configure();c.tap(5,8)
+    for y in range(5,8):
+        for x in range(1,5):c.tap(x,y)
+    c.tap(5,8)
+    for x in range(1,5):editor_shift_tap(c,x,8-x)
+    for group in range(4):
+        c.tap(9+group,8);c.led_values([(x,8-x) for x in range(1,5)],[12]*4)
+    c.results.append(dict(kind='workflow-check',name='shift-copies-notes-to-four-groups',passed=True))
+    c.tap(5,8)
+    for x in range(1,5):editor_shift_tap(c,x,2)
+    for group in range(4):
+        c.tap(9+group,8);c.led_values([(x,2) for x in range(1,5)],[12]*4)
+    c.results.append(dict(kind='workflow-check',name='shift-copies-velocities-to-four-groups',passed=True))
+    c.tap(3,8)
+    for group in range(4):
+        c.hold_tap((1,4+group),(4,4+group))
+        c.playback([(1,[144,n,117]) for n in [60,62,64,65]])
+        c.results.append(dict(kind='workflow-check',name='play-step-group-'+str(group+1),passed=True))
+
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1374,6 +1439,10 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-EDIT-001':dict(run=editor_note_ranges,requirements=['PAT-NOTE-RANGE'],description='Note range fine steps, held extrema, clamps and center reset'),
+ 'M-EDIT-002':dict(run=editor_velocity_ranges,requirements=['PAT-VELOCITY'],description='Every displayed velocity value, fine range steps, held extrema and clamps'),
+ 'M-EDIT-003':dict(run=editor_step_groups,requirements=['PAT-NOTE-SHIFT', 'PAT-STEP-PAGES', 'PAT-VELOCITY'],description='K1 copies note and velocity edits across all four step pages; each page replays exact MIDI'),
+
  'M-ALG-004':dict(run=rhythm_bank_workflow,requirements=['PAT-ALGORITHM','PAT-FADERS','PAT-PAINT'],description='All five drum banks and four numeric masks at literal selected patterns, including empty-bank silence and repaint'),
  'M-ALG-002':dict(run=tresillo_multipliers,requirements=['PAT-ALGORITHM','PAT-FADERS','PAT-PAINT'],description='All eight tresillo multipliers: full grid, repeated MIDI phrase, exact musical spacing and repaint erasure'),
  'M-ALG-003':dict(run=tresillo_drum_boundary,requirements=['PAT-ALGORITHM','PAT-PAINT'],description='Tresillo drum-bank 64-step boundary: full grid, MIDI spacing and repaint erasure'),
