@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue keyboard event/playhead correlation and recording arm/disarm, held-note stop/start and tempo/song transitions; remaining manual and emulator release scopes stay open.",
+  "next_action": "Continue MIDI input channels/ports and note lifecycle tests; held-note disarm policy awaits user. Recording timing, full manual coverage and emulator release remain incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -832,5 +832,37 @@
     "run_id": "e68551ca4a31440c8dbc34a214772f92",
     "sha256": "6d92240b37771bf56c3ddd1224db5e645a844163806f3dde59ea4e771de76b61",
     "rejected": true
+  },
+  "zero_velocity_release_validation": [
+    {
+      "run_id": "409b3e2e525a4ddd97214b1870332721",
+      "sha256": "f8c3aefdc4ab342bdae44f0b9a81bd1557b1be00d9add276361b705287e13cc4",
+      "case": "M-REC-015",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "25357c4389d84b72b0dbcd0641d8a281",
+      "sha256": "4082f15d5955a7342d5720419e70eb726a377a15a509b8e80fc2cd72ddb7650e",
+      "case": "M-REC-005",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-81229471579a461292b1ecb27681b321",
+      "sha256": "c95ca7c7863940cf99ac4397ed5690637875e4c7331032d91c462a7fc2b87cd9",
+      "case": "M-REC-015",
+      "passed": true,
+      "mode": "controlled-repeat"
+    }
+  ],
+  "pending_disarm_held_note": {
+    "status": "asked-awaiting-user",
+    "current": "Note buffered at note-on; disarming before note-off prevents commit.",
+    "options": [
+      "keep and finish on release",
+      "trim at disarm",
+      "discard unfinished note"
+    ]
   }
 }

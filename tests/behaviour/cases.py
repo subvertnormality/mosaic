@@ -808,7 +808,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     assert all(abs(gap-expected)<=tolerance for gap,expected in zip(gaps,expected_gaps)),dict(actual=gaps,expected=expected_gaps)
     c.results.append(dict(kind='recorded-replay-spacing',expected_seconds=expected_gaps,actual_seconds=gaps))
 
-def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5):
+def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128):
     c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
     c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1)
     c.tap(2,8);marker=c.snapshot()['midi_count'];c.tap(1,8)
@@ -820,7 +820,7 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5):
     # Enter50ms into step1; supply the requested hold with native deadlines.
     # Client snapshots/channel selection must not lengthen the keyboard hold.
     origin=anchor+666666667+50000000
-    events=[dict(port=1,bytes=data,**{'at_'+field:origin+offset}) for offset,data in [(0,[144,72,90]),(hold_ns,[128,72,0])]]
+    events=[dict(port=1,bytes=data,**{'at_'+field:origin+offset}) for offset,data in [(0,[144,72,90]),(hold_ns,[release_status,72,0])]]
     request=dict(type='midi_schedule',schedule_id=1,events=events)
     if controlled:request['time_domain']='logical'
     c.action(**request)
@@ -894,6 +894,7 @@ def live_playhead_feedback(c,clock_delta=0):
     c.led_values([(x,4) for x in range(1,5)],[15]*4)
 
 CASES={
+ 'M-REC-015':dict(run=lambda c:recorded_note_channel_switch(c,release_status=144),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Velocity-zero Note On releases the original held note and commits its recorded length after channel selection changes'),
  'M-UI-002':dict(run=lambda c:live_playhead_feedback(c,3),requirements=['CLOCK-PHRASE-001','NAV-TRANSPORT'],description='Twice-rate live grid playhead follows emitted MIDI within one redraw period across two loops'),
  'M-UI-001':dict(run=live_playhead_feedback,requirements=['CLOCK-PHRASE-001','NAV-TRANSPORT'],description='Live grid playhead follows independently checked emitted MIDI steps within one redraw period; two loops and stopped grid'),
  'M-REC-013':dict(run=lambda c:live_record_placement(c,(1355000000,1505000000),(16,18),15,3,.5),requirements=['REC-LIVE-NOTES','CH-RANGE'],description='Twice-rate channel records on its own steps across a grid row; absolute LEDs and independent replay gaps'),

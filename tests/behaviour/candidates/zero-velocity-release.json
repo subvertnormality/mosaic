@@ -1,0 +1,44 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "11cd25b",
+  "file": "lib/m_midi.lua",
+  "before_sha256": "608dfb3f2cf7f48d9a74391219dc920e6964d2680148c3dad6b21b89faf14f15",
+  "after_sha256": "6249228fc7488471e7fad383a1f6e354aeb8a886f330fa3049e57d5f19b08cad",
+  "patch": "0011-zero-velocity-release.patch",
+  "patch_sha256": "fa0380854fab47e7c1ff1d480c37b83df86418d3062e7159d2fe86563cfb30b1",
+  "regression": "M-REC-015",
+  "baseline_controlled": "1c254dcdcaf1473982c70e22d11a5a65",
+  "baseline_real_time": "6ff91400fe924ce6b42c4195972d4d3f",
+  "rationale": "Treat zero-velocity Note On as release before resolving held-note ownership and recording length.",
+  "oracle": "Pinned official norns lua/core/midi.lua:271-284",
+  "limitations": "This preserves existing channel1 input handling; other input channels and repeated-pitch/port collisions still require coverage.",
+  "upstream_merged": false,
+  "validation": [
+    {
+      "run_id": "409b3e2e525a4ddd97214b1870332721",
+      "sha256": "f8c3aefdc4ab342bdae44f0b9a81bd1557b1be00d9add276361b705287e13cc4",
+      "case": "M-REC-015",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "25357c4389d84b72b0dbcd0641d8a281",
+      "sha256": "4082f15d5955a7342d5720419e70eb726a377a15a509b8e80fc2cd72ddb7650e",
+      "case": "M-REC-005",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-81229471579a461292b1ecb27681b321",
+      "sha256": "c95ca7c7863940cf99ac4397ed5690637875e4c7331032d91c462a7fc2b87cd9",
+      "case": "M-REC-015",
+      "passed": true,
+      "mode": "controlled-repeat"
+    }
+  ],
+  "units": {
+    "passed": 474,
+    "failed": 0,
+    "artifact": "emulator:artifacts/c16/zero-release-units-isolated.json"
+  }
+}

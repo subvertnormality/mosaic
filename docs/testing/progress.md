@@ -522,3 +522,22 @@ There are40 native cases. Keyboard event/playhead boundary correlation, faster
 rates, all clock divisions, recording lifecycle and the complete manual/release
 campaign remain open. Existing recording placement cases independently verify
 stored grid and replay; this feedback test does not replace them.
+
+
+## Velocity-zero keyboard release
+
+M-REC-015 uses Note On with velocity0 to release a held input note after channel
+selection changes. Pinned official norns midi.to_msg defines this as Note Off.
+Mosaic previously treated it as a new note, sent it to the newly selected channel
+and left the original output note outstanding. Both controlled baseline
+1c254dcdcaf1473982c70e22d11a5a65 and real-time6ff91400fe924ce6b42c4195972d4d3f
+fail the original-route release assertion. Candidate0011 normalises a copy of the
+packet before looking up held-note ownership. The release and recorded duration
+then pass real-time and three controlled repeats, with conventional Note Off
+real-time regression and474 unit tests passing. No emulator workaround was added.
+
+There are41 cases. Other MIDI input channels/ports and repeated-pitch collisions
+remain open. A separate user clarification asks whether disarming during a held
+note should preserve its full length, trim at disarm, or discard it. Current code
+buffers the note but skips committing it if release arrives after disarm; no
+policy change has been made pending that answer. Full campaign remains unfinished.
