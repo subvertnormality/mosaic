@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue MIDI input channels/ports and note lifecycle tests; held-note disarm policy awaits user. Recording timing, full manual coverage and emulator release remain incomplete.",
+  "next_action": "Test simultaneous same-pitch keyboard inputs across ports/channels and recording lifecycle; disarm policy awaits user. Remaining manual behaviours and emulator release stay incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -864,5 +864,35 @@
       "trim at disarm",
       "discard unfinished note"
     ]
-  }
+  },
+  "keyboard_input_channels_validation": [
+    {
+      "run_id": "05046028e0d94454a47278a1fde7f32c",
+      "sha256": "eb4c9c040749b3ea1752364e41e1550d90d414cb1fe2129ad5816c6932408674",
+      "case": "M-REC-016",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "af0a15c3eb344db1bf9da9e956d691d3",
+      "sha256": "2223d69129af2c1e28f9a9acaf669fd8936a258ea1356e4a549f9fc4e1d5c17a",
+      "case": "M-MIDI-002",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-32ec5494c88d4c989abeb75e78367363",
+      "sha256": "16ce515a069f15577ad3eb5b15176ac5a4081d9d20af8f3e081018f565b995d2",
+      "case": "M-REC-016",
+      "passed": true,
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-26df2cd71fd741789c10d09a105d93d6",
+      "sha256": "0b77bd26624cb33effafc275861523d99e72b83a2630659fe06a54cef2d91041",
+      "case": "M-MIDI-002",
+      "passed": true,
+      "mode": "controlled-repeat"
+    }
+  ]
 }

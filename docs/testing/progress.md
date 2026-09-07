@@ -541,3 +541,23 @@ remain open. A separate user clarification asks whether disarming during a held
 note should preserve its full length, trim at disarm, or discard it. Current code
 buffers the note but skips committing it if release arrives after disarm; no
 policy change has been made pending that answer. Full campaign remains unfinished.
+
+
+## Keyboard MIDI input channels
+
+M-REC-016 reproduces ignored keyboard notes on MIDI input channel16: both
+controlled3bbaba3df8ae4c09bbc113556435840f and real-timee1dbb6ee63644582a10c168c3915174b
+fail with no preview/release output. The handler compared whole status bytes
+against channel1 constants. Candidate0012 extracts note message type from the
+status high nibble; selected Mosaic channel still owns the output route.
+The manual describes keyboard notes targeting the selected Mosaic channel and
+provides no input-channel restriction/filter; pinned norns midi.to_msg decodes
+note type separately from input channel. Controller CC handling is unchanged.
+
+M-MIDI-002 verifies all16 channels across two input ports and both release forms:
+64 sequential notes produce the exact128 output messages and leave no outstanding
+notes. That matrix and channel16 recording/length replay pass real-time and three
+identical fresh controlled processes; all474 unit tests pass. There are43 cases.
+Simultaneous same-pitch inputs across channels/ports remain a separate required
+isolation test; this sequential matrix does not prove overlap correctness.
+Full manual coverage and emulator release remain incomplete.

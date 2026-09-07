@@ -1,0 +1,16 @@
+diff --git a/lib/m_midi.lua b/lib/m_midi.lua
+index 1e06842..b2680d1 100644
+--- a/lib/m_midi.lua
++++ b/lib/m_midi.lua
+@@ -31,6 +31,11 @@ for i = 0, 127 do
+ end
+ 
+ function handle_midi_event_data(data, midi_device)
++  -- Keyboard notes target the selected Mosaic channel, regardless of input channel.
++  local message_type = data[1] & 0xf0
++  if message_type == 0x80 or message_type == 0x90 then
++    data = {message_type, data[2], data[3]}
++  end
+   -- MIDI Note On with zero velocity is a release, as in norns midi.to_msg.
+   -- Use a new packet so other listeners retain the original input bytes.
+   if data[1] == 144 and data[3] == 0 then

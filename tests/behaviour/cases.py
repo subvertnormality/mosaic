@@ -808,7 +808,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     assert all(abs(gap-expected)<=tolerance for gap,expected in zip(gaps,expected_gaps)),dict(actual=gaps,expected=expected_gaps)
     c.results.append(dict(kind='recorded-replay-spacing',expected_seconds=expected_gaps,actual_seconds=gaps))
 
-def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128):
+def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128,input_channel=1):
     c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
     c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1)
     c.tap(2,8);marker=c.snapshot()['midi_count'];c.tap(1,8)
@@ -820,7 +820,7 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
     # Enter50ms into step1; supply the requested hold with native deadlines.
     # Client snapshots/channel selection must not lengthen the keyboard hold.
     origin=anchor+666666667+50000000
-    events=[dict(port=1,bytes=data,**{'at_'+field:origin+offset}) for offset,data in [(0,[144,72,90]),(hold_ns,[release_status,72,0])]]
+    events=[dict(port=1,bytes=data,**{'at_'+field:origin+offset}) for offset,data in [(0,[143+input_channel,72,90]),(hold_ns,[release_status+input_channel-1,72,0])]]
     request=dict(type='midi_schedule',schedule_id=1,events=events)
     if controlled:request['time_domain']='logical'
     c.action(**request)
@@ -893,7 +893,33 @@ def live_playhead_feedback(c,clock_delta=0):
     c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
     c.led_values([(x,4) for x in range(1,5)],[15]*4)
 
+def keyboard_input_channels(c):
+    import time
+    c.configure();marker=c.snapshot()['midi_count']
+    controlled=c.clock_mode=='controlled-experimental';field='logical_ns' if controlled else 'monotonic_ns'
+    origin=c.logical_ns+100000000 if controlled else time.monotonic_ns()+500000000
+    events=[];expected=[];ordinal=0
+    for port in (1,2):
+        for channel in range(1,17):
+            for release in (128,144):
+                note=60+(channel-1)%12;onset=origin+ordinal*60000000
+                events += [dict(port=port,bytes=[143+channel,note,90],**{'at_'+field:onset}),dict(port=port,bytes=[release+channel-1,note,0],**{'at_'+field:onset+30000000})]
+                expected += [(1,[144,note,90]),(1,[128,note,0])]
+                ordinal+=1
+    request=dict(type='midi_schedule',schedule_id=1,events=events)
+    if controlled:request['time_domain']='logical'
+    c.action(**request)
+    if controlled:c.elapse((origin+ordinal*60000000-c.logical_ns)/1e9)
+    else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=6)
+    state=c.snapshot();assert len(state['midi_input_schedule']['delivered'])==128
+    actual=[(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
+    assert actual==expected,dict(expected=expected,actual=actual)
+    assert not state['midi_capture']['outstanding']
+    c.results.append(dict(kind='keyboard-input-channel-matrix',input_ports=[1,2],input_channels=list(range(1,17)),release_status_types=[128,144],expected=expected,actual=actual))
+
 CASES={
+ 'M-MIDI-002':dict(run=keyboard_input_channels,requirements=['MIDI-RELEASE-001','REC-LIVE-NOTES'],description='All16 keyboard input channels across both ports and both release forms produce exact selected-channel preview MIDI with no stuck notes'),
+ 'M-REC-016':dict(run=lambda c:recorded_note_channel_switch(c,input_channel=16),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Keyboard on MIDI input channel16 records and releases on the selected Mosaic channel independently of its input channel'),
  'M-REC-015':dict(run=lambda c:recorded_note_channel_switch(c,release_status=144),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Velocity-zero Note On releases the original held note and commits its recorded length after channel selection changes'),
  'M-UI-002':dict(run=lambda c:live_playhead_feedback(c,3),requirements=['CLOCK-PHRASE-001','NAV-TRANSPORT'],description='Twice-rate live grid playhead follows emitted MIDI within one redraw period across two loops'),
  'M-UI-001':dict(run=live_playhead_feedback,requirements=['CLOCK-PHRASE-001','NAV-TRANSPORT'],description='Live grid playhead follows independently checked emitted MIDI steps within one redraw period; two loops and stopped grid'),
