@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "M-TIM-004 controlled pending-note handoff passes. RT continuous25ms input schedule fails before source selection because grid/snapshot acknowledgements consume the next deadline. Implement generic independently scheduled native MIDI input in emulator; do not retime clock around UI calls. Then rerun live handoff and add reverse direction. M5 requires14 comparisons; final3-repeat/E/R matrix/P5 and full manual/T01/later stages remain required. Thirteen named cases remain partial coverage. No active runners.",
+  "next_action": "Independent real-time MIDI scheduling implemented in explicit controlled-04 candidate; generic scheduled-midi-02 passes13 checks (40 exact echoes, arrivals during150ms Lua callback, cancellation/close). Five C queue contracts and54 total contracts passed across discovery plus corrected client import invocation. Next integrate queued events into Mosaic M-TIM-004 and its trace/evidence verifier, run against04 without retiming UI gaps; add controlled-domain schedule support as needed and reverse live handoff. Keep default install unchanged; M5 final14 comparisons/three repeats/P5 and full manual campaign remain open. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",

@@ -238,3 +238,15 @@ a bounded native MIDI schedule that runs independently of control acknowledgemen
 with actual delivery evidence and cancellation/cleanup tests. Do not retime the
 clock around UI calls. Both run references are in state.json and bugs.json;
 reverse live handoff and full admission remain required.
+
+## Independent MIDI scheduling prerequisite
+
+The emulator now has an opt-in controlled-04 native candidate with a bounded
+real-time input queue independent of Lua/control acknowledgements. Its generic
+probe passes13 checks including40 exact MIDI echoes, arrivals during a150ms
+Lua control callback, cancellation and clean shutdown. This is emulator
+prerequisite evidence, not a passing Mosaic M-TIM-004 run. Next connect the
+Mosaic recipe and native evidence verifier to scheduled events, retain the
+continuous intended timeline, execute the handoff, and add controlled-domain
+scheduling/reverse handoff as needed. No Mosaic production code changed here;
+M5/P5/full manual coverage and later stages remain incomplete.
