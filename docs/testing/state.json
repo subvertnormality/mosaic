@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Candidate05 queues MIDI in explicit logical/monotonic domains; generic logical11 and RT13 checks pass. Mosaic M-TIM-004 now covers both live source directions plus ignored unselected MIDI Stop; D00527347 and RT34898ce pass. Next make queued-input generic checks/repeats mandatory and source-bound in M5, and resolve how the new real-time queue enters the default-baseline installation before the final differential matrix. Keep current default unchanged until its adapter conformance passes. Pending reverse tempo-publication/other phase edges, continuous batch refill for long external-clock tests, final three-repeat matrix/Codex P5, full manual reconciliation and remaining stages stay open. No active runners.",
+  "next_action": "Default real-time queue pinned as0012, lock8b84937d7d187387; controlled overlay06 rebuilt. All three mandatory queue lanes pass, including three fresh controlled sessions; seven rehashed fault checks and seven admission contracts pass. Mosaic handoff oracle now anchors RT timing to emitted onset and native applied-control time; defaultc579bae and Db5007eb pass both directions. Next collect remaining seven generic groups, eight legacy D probe families x3 and all14 app/profile comparisons x3D+RT on the new lock, then Codex P5 follow-up and M5 index. Queue refill/endurance, further timing edges, full manual reconciliation and later stages remain required. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -278,6 +278,28 @@
     "real_time": {
       "path": "../mosaic-behaviour-runs/34898ce5ea29477a9091300c00303668/manifest.json",
       "sha256": "723401bd7fb50f99e07480f46c506f0a1ce92fa09a3968a6d0ca12229bcf0e7d",
+      "passed": true
+    }
+  },
+  "latest_applied_time_handoff": {
+    "failed_oracle": {
+      "path": "../mosaic-behaviour-runs/d0d302945a314c7b9946a50f6596be4d/manifest.json",
+      "sha256": "e6c9adac794f84bb6b0a14771d6903b45e62dc122c4bf19b7a53c61423e8c165",
+      "passed": false
+    },
+    "corrected_candidate": {
+      "path": "../mosaic-behaviour-runs/234790227daf49c8bc350c9b2dcb1d6c/manifest.json",
+      "sha256": "67747c57f2e942a2051e75401983e07e5d85cf3eeeebbca29d5a7d245148797c",
+      "passed": true
+    },
+    "default": {
+      "path": "../mosaic-behaviour-runs/c579bae284e246908c84ae872cb395ca/manifest.json",
+      "sha256": "3a1b60946e864953dd90708857d1099169600f18fbe03918efcff1c803fc5298",
+      "passed": true
+    },
+    "controlled": {
+      "path": "../mosaic-behaviour-runs/b5007ebc38304abe9ea494e4d6988cd7/manifest.json",
+      "sha256": "416c58c30a894ba038a72a41ac57ac317cd0b9968fd5e51cafa3d1dff871b684",
       "passed": true
     }
   }

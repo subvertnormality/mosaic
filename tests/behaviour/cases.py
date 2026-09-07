@@ -266,15 +266,25 @@ def live_clock_handoff(c):
     assert pending['midi_capture']['outstanding'],'No pending note at source switch'
     elapsed_ticks=math.floor((pending['diagnostics']['beats']-start_beat)*96)
     assert 0<elapsed_ticks<48,elapsed_ticks
-    c.action(type='enc',n=3,delta=2)
+    switch_ack=c.action(type='enc',n=3,delta=2)
     handoff=c.snapshot();beat=handoff['diagnostics']['beats']
+    if not controlled:
+        # A pre-input snapshot can precede the audible onset by tens of ms.
+        # Anchor to emitted MIDI and the runtime's applied control timestamp,
+        # not HTTP receipt or a stale pre-grid observation.
+        onset=next(m for m in pending['midi'] if m['index']>marker and m['bytes']==[144,60,127])
+        applied=switch_ack['native']['monotonic_ns']
+        start_beat=before['diagnostics']['beats']+(onset['monotonic_ns']-before['diagnostics']['monotonic_ns'])*1.5e-9
+        elapsed_ticks=math.floor((applied-onset['monotonic_ns'])*144e-9)
+        beat-=(handoff['diagnostics']['monotonic_ns']-applied)*(100/60)*1e-9
+        assert 0<elapsed_ticks<48,elapsed_ticks
     quantum=1/96;phase=start_beat%quantum;epsilon=2**-23
     next_beat=math.ceil((beat+epsilon)/quantum)*quantum+phase-quantum
     while next_beat<beat+epsilon:next_beat+=quantum
     # One two-step note is48 ticks. Only its pending next wait is rephased;
     # remaining ticks proceed at100BPM (0.6 seconds per quarter note).
     remaining_seconds=(next_beat-beat)*.6+(48-elapsed_ticks-1)*.6/96
-    origin_ns=c.logical_ns if c.clock_mode=='controlled-experimental' else handoff['diagnostics']['monotonic_ns']
+    origin_ns=c.logical_ns if controlled else applied
     expected_off_ns=origin_ns+remaining_seconds*1e9
     pulses(30);pulses(1)
     arrivals=c.snapshot()['midi_input_schedule']['delivered']
@@ -320,14 +330,21 @@ def reverse_live_clock_handoff(c):
     pending=c.snapshot();assert pending['midi_capture']['outstanding']
     elapsed_ticks=math.floor((pending['diagnostics']['beats']-start_beat)*96)
     assert 0<elapsed_ticks<48,elapsed_ticks
-    c.action(type='enc',n=3,delta=-2)
+    switch_ack=c.action(type='enc',n=3,delta=-2)
     handoff=c.snapshot();beat=handoff['diagnostics']['beats']
+    if not controlled:
+        onset=next(m for m in pending['midi'] if m['index']>marker and m['bytes']==[144,60,127])
+        applied=switch_ack['native']['monotonic_ns']
+        start_beat=before['diagnostics']['beats']+(onset['monotonic_ns']-before['diagnostics']['monotonic_ns'])*(100/60)*1e-9
+        elapsed_ticks=math.floor((applied-onset['monotonic_ns'])*160e-9)
+        beat-=(handoff['diagnostics']['monotonic_ns']-applied)*(100/60)*1e-9
+        assert 0<elapsed_ticks<48,elapsed_ticks
     assert abs(handoff['diagnostics']['tempo']-100)<1e-6,handoff['diagnostics']
     quantum=1/96;phase=start_beat%quantum;epsilon=2**-23
     next_beat=math.ceil((beat+epsilon)/quantum)*quantum+phase-quantum
     while next_beat<beat+epsilon:next_beat+=quantum
     remaining=(next_beat-beat)*.6+(48-elapsed_ticks-1)*.6/96
-    expected_off=(c.logical_ns if controlled else handoff['diagnostics']['monotonic_ns'])+remaining*1e9
+    expected_off=(c.logical_ns if controlled else applied)+remaining*1e9
     until(84)
     def onsets(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0]==144 and m['bytes'][2]>0]
     # The scheduled MIDI Stop is no longer the selected transport. Internal

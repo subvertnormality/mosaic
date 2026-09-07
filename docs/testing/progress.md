@@ -267,3 +267,18 @@ Generic queue checks also pass in both modes. M5 still needs required queued
 input checks/repeats, an accepted real-time baseline with this adapter, fresh
 source-bound differential evidence, and Codex P5 follow-up. Batch refill for
 long continuous MIDI-clock endurance and full manual reconciliation remain open.
+
+## Applied-time handoff oracle and default queue
+
+The emulator now includes the real-time queue in its default pinned runtime;
+controlled-06 is rebuilt on that baseline. Mandatory queue checks pass for
+default RT, candidate RT and three fresh D sessions; seven rehashed evidence
+faults are rejected. Full M5 matrix and Codex follow-up remain pending.
+
+Run d0d30294 exposed an oracle error: the pre-grid snapshot was26.907ms before
+the audible onset. The predicted release was12.435ms early. The RT handoff now
+uses emitted MIDI onset and actual native applied-control time, retaining the
+10ms tolerance. Corrected prototype23479022, actual-default c579bae2 and
+controlled b5007ebc pass both source directions. No Mosaic production change
+was needed. The failed evidence remains in bugs.json; all manual coverage and
+remaining timing-edge obligations are unchanged.

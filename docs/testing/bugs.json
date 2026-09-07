@@ -348,7 +348,7 @@
     {
       "id": "continuous-midi-control-input",
       "component": "emulator automation input scheduling",
-      "status": "reproduced-gap; implementation-required",
+      "status": "fixed-by-native-queue-in-default; full-admission-pending",
       "case": "M-TIM-004",
       "finding": "Continuous25ms pulse schedule misses its next target while synchronous grid/snapshot actions complete. Real-time test fails before source selection; no Mosaic defect established. Do not shift the input clock timeline to obtain a pass.",
       "evidence": {
@@ -361,6 +361,35 @@
           "path": "../mosaic-behaviour-runs/24c9a480f3f0457997434b3abe42af1e/manifest.json",
           "sha256": "1b693a677aa3779d1339a83180d38ebe3d60092175783d976cff81c98a333b92",
           "passed": false
+        }
+      }
+    },
+    {
+      "id": "handoff-snapshot-origin",
+      "component": "behaviour-test timing oracle",
+      "status": "fixed-with-native-applied-time-and-emitted-onset",
+      "case": "M-TIM-004",
+      "finding": "A pre-grid snapshot preceded audible onset by26.907ms and overcounted elapsed ticks. RT now uses the emitted onset and native applied-control acknowledgement, retaining the10ms bound. No Mosaic production defect established.",
+      "evidence": {
+        "failed_oracle": {
+          "path": "../mosaic-behaviour-runs/d0d302945a314c7b9946a50f6596be4d/manifest.json",
+          "sha256": "e6c9adac794f84bb6b0a14771d6903b45e62dc122c4bf19b7a53c61423e8c165",
+          "passed": false
+        },
+        "corrected_candidate": {
+          "path": "../mosaic-behaviour-runs/234790227daf49c8bc350c9b2dcb1d6c/manifest.json",
+          "sha256": "67747c57f2e942a2051e75401983e07e5d85cf3eeeebbca29d5a7d245148797c",
+          "passed": true
+        },
+        "default": {
+          "path": "../mosaic-behaviour-runs/c579bae284e246908c84ae872cb395ca/manifest.json",
+          "sha256": "3a1b60946e864953dd90708857d1099169600f18fbe03918efcff1c803fc5298",
+          "passed": true
+        },
+        "controlled": {
+          "path": "../mosaic-behaviour-runs/b5007ebc38304abe9ea494e4d6988cd7/manifest.json",
+          "sha256": "416c58c30a894ba038a72a41ac57ac317cd0b9968fd5e51cafa3d1dff871b684",
+          "passed": true
         }
       }
     }
