@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue independent algorithm/fader/preview coverage and remaining manual/emulator stages. M-ALG-001 passes both modes. SEM-007 arbitration is not live: default-model quota failure, then alternative-model execution rejected twice by automatic approval review. Do not restart or bypass; dependent shifted-history decision remains pending. User requests autonomous continuation without routine questions.",
+  "next_action": "Continue note/velocity/page editor coverage and remaining manual/emulator delivery. Tresillo candidate0004, multiplier and all-bank selected-pattern cases pass both modes plus474 units and409600 algorithm checks. SEM-007 decision remains pending after rejected arbitration retry; do not bypass denial.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2582,5 +2582,129 @@
     "raw_artifact": "emulator:artifacts/c16/memory-semantics-arbitration-fable-limit.json",
     "raw_sha256": "6d218c3f1df16249aeadba07a8cfd8ca614da11b4c4b4586e3b5c3b145d7b24f",
     "scope": "Only this unresolved semantic decision and its dependent shifted-key tests wait. Continue all independent delivery work. Ordinary Paranoia reviews remain Codex-only."
+  },
+  "tresillo_workflow_validation": {
+    "status": "candidate-applied-and-validated",
+    "runs": [
+      {
+        "case": "M-ALG-002",
+        "mode": "controlled-experimental",
+        "run_id": "1651c543c3f6462ca22728208d1879e5",
+        "manifest_sha256": "d15b85fca4ee6afa7ca613929269d60777a73af267f870152a08e0844a198f5f",
+        "passed": true,
+        "lengths": [
+          8,
+          16,
+          24,
+          32,
+          40,
+          48,
+          56,
+          64
+        ],
+        "max_spacing_error_seconds": 1.333333221609223e-09
+      },
+      {
+        "case": "M-ALG-002",
+        "mode": "real-time",
+        "run_id": "0be512a759aa4a0883b8e68d12890895",
+        "manifest_sha256": "61b510a38dd5d37f97f8f83e7610afc0c482fb4251b982fda609f7574eb204ba",
+        "passed": true,
+        "lengths": [
+          8,
+          16,
+          24,
+          32,
+          40,
+          48,
+          56,
+          64
+        ],
+        "max_spacing_error_seconds": 0.0009976709999999223
+      },
+      {
+        "case": "M-ALG-003",
+        "mode": "controlled-experimental",
+        "run_id": "d68a3f264d2b4658b320aeacef403e1a",
+        "manifest_sha256": "9ec7add444b0393c95d60fb78472c12a4f911226c70f41941ffee4ba93cb6ceb",
+        "passed": true,
+        "lengths": [
+          64
+        ],
+        "max_spacing_error_seconds": 1.666666804567285e-09
+      },
+      {
+        "case": "M-ALG-003",
+        "mode": "real-time",
+        "run_id": "143bed2cea0c4144974f1e4ff018b10a",
+        "manifest_sha256": "fb8b6728eddd46ab278865a05c61eb32f6b2f2ef3b93e02ea11824e5fd9c9383",
+        "passed": true,
+        "lengths": [
+          64
+        ],
+        "max_spacing_error_seconds": 0.0008109863333332079
+      },
+      {
+        "case": "M-ALG-004",
+        "mode": "controlled-experimental",
+        "run_id": "18e0f6c3a605480e992fbf63892249a5",
+        "manifest_sha256": "48b8905d92d5ab4fa6da00b6ac6fa367f610102901100025027eec58b429369d",
+        "passed": true,
+        "checks": [
+          "drum-bank-1",
+          "drum-bank-2",
+          "drum-bank-3",
+          "drum-bank-4",
+          "drum-bank-5",
+          "empty-pattern",
+          "numeric-mask-1",
+          "numeric-mask-2",
+          "numeric-mask-3",
+          "numeric-mask-4"
+        ]
+      },
+      {
+        "case": "M-ALG-004",
+        "mode": "real-time",
+        "run_id": "f0cbe96d9a0d4d1a8333806deaae7f49",
+        "manifest_sha256": "c11bb103d1eff4229a0ddd8d2e34655bf28a375820b7be1a057da86e6a537b28",
+        "passed": true,
+        "checks": [
+          "drum-bank-1",
+          "drum-bank-2",
+          "drum-bank-3",
+          "drum-bank-4",
+          "drum-bank-5",
+          "empty-pattern",
+          "numeric-mask-1",
+          "numeric-mask-2",
+          "numeric-mask-3",
+          "numeric-mask-4"
+        ]
+      }
+    ],
+    "baseline_runs": [
+      {
+        "run_id": "7a7098a47b78474c89b03d7205865295",
+        "mode": "controlled-experimental",
+        "passed": false,
+        "manifest_sha256": "474d43baff48f7415cb61879f73f8e24cfd1998dd65fb156a3b839c77dcf3699"
+      },
+      {
+        "run_id": "4a3a8ceac3df450ea5d7779d7e1a7d41",
+        "mode": "real-time",
+        "passed": false,
+        "manifest_sha256": "c48264807c7b6c34bfddbf6abf96b42526a8e7d81f8bf8fe7209d92e6cbd1153"
+      }
+    ],
+    "source_file": "lib/helpers/drum_ops.lua",
+    "before_sha256": "0cdbd92a2fc73a21cfab3e36f102e6d869315af1496a31151c1fcd5cc649545f",
+    "after_sha256": "aa5be5e8d5ac70e7bd532319ee1183b996b5cb2ccf4c8af005aa1f9913804322",
+    "unit_tests": 474,
+    "algorithm_checks": 409600,
+    "scope": "All eight tresillo multipliers for literal bank1/pattern2 and the drum-bank 64-step boundary. Full64-cell paint/repaint, two complete MIDI cycles plus closing onset and every inter-onset gap including wraps. All five drum banks and four numeric masks at selected literal patterns, including empty-bank silence.",
+    "limitations": "Selected bank/pattern fixtures do not cover all fader values, all combinations or running edits. Full manual and release remain incomplete.",
+    "initial_porting_failure": "Four native attempts failed on a nonexistent driver send method before rhythm assertions; corrected to public action API and retained in local tresillo-porting-error evidence.",
+    "fix": "Apply previously isolated0004 candidate: wrap bit index at stored pattern length before byte lookup. Larger3m tresillo segments no longer read nil past16-bit drum data. Existing drum output is independently checked unchanged."
   }
 }

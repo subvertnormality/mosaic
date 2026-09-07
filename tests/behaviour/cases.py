@@ -190,6 +190,109 @@ def euclidean_workflow(c):
     c.led_values([(x,y) for y in range(4,8) for x in range(1,17)],[2]*4+[15]*60)
     c.playback([(1,[144,n,100]) for n in [67,69,71,62]]);c.results.append(dict(kind='workflow-check',name='dense-fill-boundary',passed=True))
 
+# Independent literal 3/3/2 segment tables; no application algorithm import.
+TRESILLO_STEPS={8:[3,6],16:[3,9,15],24:[3,12,21],32:[3,15,27],
+      40:[3,18,33],48:[3,16,21,34,39],56:[3,16,24,37,45],
+      64:[3,16,27,40,51,64]}
+
+def tresillo_setup(c):
+    c.configure();c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    c.tap(5,8)
+    for x in range(1,17):
+        c.action(type='key',n=1,state=1);c.elapse(.3)
+        c.tap(x,7-((x-1)%6));c.action(type='key',n=1,state=0)
+    c.tap(3,8);c.tap(5,8);c.tap(13,2);c.tap(12,3)
+    c.tap(2,2);c.tap(10,2);c.tap(2,3);c.tap(10,3)
+    c.enc(1,1);c.enc(3,-8)
+    from frame_oracle import header,matches
+    expected=header('Trig editor options',selected=2,tabs=2)
+    c.wait(lambda state:matches(state,expected))
+    c.results.append(dict(kind='screen-header',expected='Trig editor options',selected=2,tabs=2,matched=True))
+
+def tresillo_rhythm(c,length,steps):
+    c.tap(3,8);c.hold_tap((1,4),((length-1)%16+1,4+(length-1)//16));c.tap(5,8)
+    c.tap(16,8)
+    first=((steps[0]-1)%16+1,4+(steps[0]-1)//16)
+    c.led_values([first],[15]);c.tap(16,8)
+    cells=[(x,y) for y in range(4,8) for x in range(1,17)]
+    c.led_values(cells,[15 if i%length+1 in steps else 2 for i in range(64)])
+    pitches=[60,62,64,65,67,69]
+    velocities=[127,117,107,97]+[100]*60
+    expected=[(1,[144,pitches[((s-1)%16)%6],velocities[s-1]]) for s in steps]
+    notes=c.playback(expected,cycles=2,timeout=4,settle_seconds=length/3-.1)
+    # Literal candidate positions imply audible inter-onset spacing at90 BPM.
+    # Include the wraparound gap; pitch order alone cannot prove the rhythm.
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    rows=[]
+    for i,(left,right) in enumerate(zip(notes,notes[1:])):
+        gap=(steps[(i+1)%len(steps)]-steps[i%len(steps)])%length
+        if gap==0:gap=length
+        actual=(right[field]-left[field])/1e9
+        rows.append(dict(from_step=steps[i%len(steps)],to_step=steps[(i+1)%len(steps)],expected_seconds=gap/6,actual_seconds=actual))
+    c.results.append(dict(kind='tresillo-timing',length=length,steps=steps,rows=rows))
+    assert len(rows)>=2*len(steps) and all(abs(x['actual_seconds']-x['expected_seconds'])<=tolerance for x in rows),rows
+    c.tap(16,8);c.led_values([first],[0]);c.tap(16,8);c.led_values(cells,[2]*64)
+
+def tresillo_multipliers(c):
+    tresillo_setup(c);c.results.append(dict(kind='workflow-check',name='tresillo-input-setup',passed=True))
+    for i,(length,steps) in enumerate(TRESILLO_STEPS.items()):
+        if i:c.enc(3,1)
+        tresillo_rhythm(c,length,steps);c.results.append(dict(kind='workflow-check',name='multiplier-'+str(length),passed=True))
+
+def tresillo_drum_boundary(c):
+    tresillo_setup(c);c.tap(13,3);c.enc(3,7)
+    tresillo_rhythm(c,64,list(range(1,65,8)));c.results.append(dict(kind='workflow-check',name='drum-bank-64-step-tresillo',passed=True))
+
+
+
+def rhythm_bank_workflow(c):
+    # Literal decoded bank entries, independent of drum_ops implementation.
+    # Pattern2 covers all five drum banks including the empty fifth bank.
+    oracle={'drum_pattern_2':{'1':[3,16],'2':[1,9],'3':[5,13],
+      '4':[1,3,5,7,9,11,13,15],'5':[]},
+      'numeric_prime_1_factor_1':{'1':[5,13],'2':[1],'3':[9],'4':[1,5,9,13]}}
+    def silence(c):
+        before=c.snapshot()['midi_count'];c.tap(1,8)
+        c.elapse(16/6*2+.1);c.tap(1,8)
+        state=c.snapshot()
+        emitted=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+        assert emitted==[] and state['midi_capture']['outstanding']==[],emitted
+        c.results.append(dict(kind='silence',complete_cycles=2,emitted=emitted))
+    c.configure();c.hold_tap((1,4),(16,4))
+    c.tap(5,8)
+    for x in range(1,5):c.tap(x,4) # empty pattern, retain routing
+    c.tap(5,8)
+    for x in range(1,17):c.tap(x,7-((x-1)%7))
+    c.tap(3,8);c.tap(5,8)
+    cells=[(x,y) for y in range(4,8) for x in range(1,17)]
+    c.led_values(cells,[2]*64);silence(c);c.results.append(dict(kind='workflow-check',name='empty-pattern',passed=True))
+    def paint(steps):
+        c.tap(16,8)
+        # Nonempty previews flash coherently. Empty banks have no step flashes.
+        if steps:c.led_values([((steps[0]-1)%16+1,4)],[15])
+        else:c.led_values([(14,8)],[15])
+        c.tap(16,8)
+        c.led_values(cells,[15 if i%16+1 in steps else 2 for i in range(64)])
+        if steps:
+            pitches=[60,62,64,65,67,69,71]
+            velocities=[127,117,107,97]+[100]*12
+            c.playback([(1,[144,pitches[(s-1)%7],velocities[s-1]]) for s in steps],cycles=2,timeout=4,settle_seconds=16/3-.1)
+        else:silence(c)
+        c.tap(16,8)
+        if steps:c.led_values([((steps[0]-1)%16+1,4)],[0])
+        else:c.led_values([(14,8)],[15])
+        c.tap(16,8);c.led_values(cells,[2]*64)
+    c.tap(12,2);c.tap(2,2);c.tap(10,2) # drum pattern2
+    for bank in range(1,6):
+        c.tap(11+bank,3);paint(oracle['drum_pattern_2'][str(bank)]);c.results.append(dict(kind='workflow-check',name='drum-bank-'+str(bank),passed=True))
+    c.tap(15,2);c.tap(2,2);c.tap(2,3) # numeric prime1, factor1
+    for bank in range(1,5):
+        c.tap(11+bank,3);paint(oracle['numeric_prime_1_factor_1'][str(bank)]);c.results.append(dict(kind='workflow-check',name='numeric-mask-'+str(bank),passed=True))
+
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1271,6 +1374,9 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-ALG-004':dict(run=rhythm_bank_workflow,requirements=['PAT-ALGORITHM','PAT-FADERS','PAT-PAINT'],description='All five drum banks and four numeric masks at literal selected patterns, including empty-bank silence and repaint'),
+ 'M-ALG-002':dict(run=tresillo_multipliers,requirements=['PAT-ALGORITHM','PAT-FADERS','PAT-PAINT'],description='All eight tresillo multipliers: full grid, repeated MIDI phrase, exact musical spacing and repaint erasure'),
+ 'M-ALG-003':dict(run=tresillo_drum_boundary,requirements=['PAT-ALGORITHM','PAT-PAINT'],description='Tresillo drum-bank 64-step boundary: full grid, MIDI spacing and repaint erasure'),
  'M-ALG-001':dict(run=euclidean_workflow,requirements=['PAT-ALGORITHM', 'PAT-FADERS', 'PAT-PREVIEW', 'PAT-PAINT', 'PAT-CANCEL', 'PAT-MOVE'],description='Euclidean3-in-8: full-grid two-phase preview, unchanged playback, cancel, shifted XOR paint/repaint, left/reset and dense-fill boundary'),
  'M-PAT-004':dict(run=pattern_duration_controls,requirements=['PAT-DURATION'],description='Length extension/reset and empty-step gestures preserve exact grid and MIDI phrase'),
  'M-PAT-005':dict(run=live_pattern_duration,requirements=['PAT-DURATION'],description='Shorten and extend during playback: pending release unchanged, following onsets use edited length, phrase timing preserved'),

@@ -818,3 +818,23 @@ exceeding length exercises saturation. All seven workflow checkpoints pass in
 controlled and real time. No production change or emulator-private test import.
 Six manual requirements gain partial coverage; all algorithms/faders/banks,
 offsets and playing-state combinations remain required. Full delivery incomplete.
+
+## Tresillo multiplier and drum-boundary coverage
+
+M-ALG-002 covers all eight multipliers using independent literal 3/3/2 segment
+positions; M-ALG-003 checks the drum-bank 64-step boundary. Both cases pass in
+controlled and real time. Each variant checks all 64 painted cells and repaint
+erasure, two complete MIDI phrases plus the closing onset, and every inter-onset
+gap including wraparound. The Norns options-page header is independently checked.
+A test-porting API error in the first four attempts was retained and corrected.
+Then M-ALG-003 reproduced the previously isolated tresillo-bounds Mosaic defect
+in both modes: a 3m segment can exceed a 16-bit drum table and read nil. Candidate 0004
+now wraps the index at the stored bit length. The baseline supplementary contract
+fails; the candidate passes 409600 independently constructed bit-string checks
+across all stored patterns/multipliers and unchanged drum output, plus all 474
+existing units. Six native candidate runs pass, also covering all five drum banks
+and four numeric masks at selected literal patterns, including empty-bank silence.
+Polling is reduced only by waiting with capture active before checking the entire
+MIDI sequence; early/extra notes remain observable and fail the same assertions.
+Selected pattern/bank fixtures remain partial coverage of algorithm/fader
+requirements; broader domains and all remaining delivery gates are still required.

@@ -99,9 +99,13 @@ class Driver:
         for x,y in ((1,1),(2,2),(3,3),(4,4)):self.tap(x,y)
         self.tap(3,8);self.tap(1,2);self.hold_tap((1,4),(4,4))
         self.led_values([(1,2)],[15]);self.screen_header('Ch. 1 Device Config')
-    def playback(self,expected,cycles=3,timeout=5):
+    def playback(self,expected,cycles=3,timeout=5,settle_seconds=0):
         assert expected and cycles>=2
+        assert settle_seconds>=0
         before=self.snapshot()['midi_count'];self.tap(1,8)
+        # Capture remains active throughout the wait. Check every captured note,
+        # including early/extra notes; this only reduces observation polling.
+        if settle_seconds:self.elapse(settle_seconds)
         def notes(s):return [m for m in s['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
         # One extra onset closes the preceding complete phrases, including rests.
         state=self.wait(lambda s:len(notes(s))>=len(expected)*cycles+1,timeout)
