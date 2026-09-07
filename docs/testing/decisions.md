@@ -40,11 +40,12 @@ manual. Only these shifted-key expectations wait; ordinary navigation and
 new-edit-after-undo behavior have native regression coverage.
 
 
-SEM-008 (pending user clarification): live keyboard recording currently targets
-the active sequencer step; the manual says current-step quantisation. A note just
-before the boundary therefore belongs to the preceding step. Exact MIDI pulse
-deadlines can also precede native strict clock.sync's step transition. User asked
-whether to preserve this rule or use nearest-step quantisation after reporting
-frequent apparent placement errors. M-REC-004 retains the failed new-step
-hypothesis explicitly; it is not an accepted oracle or a confirmed Mosaic defect.
-Other live-recording placement/lifecycle investigations proceed independently.
+SEM-008 resolved: the user explicitly chose to keep current-active-step recording.
+A note targets the step active when its note-on is processed, not the nearest
+step and not automatically the new step at a MIDI pulse's requested deadline.
+The prior new-step hypothesis was never accepted. Native strict clock.sync and
+serial event dispatch explain the original steps1/3 result. The synchronized
+channel MIDI witness, complete phrase timing, native input delivery, full grid
+and disarmed replay now pass before/on/after the pulse boundary in both modes.
+Codex review and original failed manifests are retained in state.json and
+reviews/boundary-oracle-triage.md. No Mosaic scheduling change was needed.

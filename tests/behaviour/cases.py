@@ -777,9 +777,24 @@ def memory_channel_isolation(c):
     c.tap(3,1);history(3,0,0);c.key(2);c.key(3);c.enc(3,-2);c.enc(3,2);history(3,0,0);verify(edited_one,edited_two)
     c.tap(1,1);history(1,1);c.tap(2,1);history(2,1)
 
-def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1,clock_delta=0,rate_factor=1):
+def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1,clock_delta=0,rate_factor=1,boundary_witness=False):
     import time
-    c.configure();c.tap(5,8)
+    c.configure()
+    if boundary_witness:
+        # An independent audible channel marks the active step through MIDI.
+        # Same four-step range and clock; no application-state oracle.
+        c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
+        c.tap(1,2);c.hold_tap((1,4),(4,4))
+        # Build a separate pattern; channel1's source will be cleared below.
+        c.tap(5,8);c.tap(2,1)
+        for x in range(1,5):c.tap(x,4)
+        c.tap(5,8)
+        for x,y in ((1,7),(2,6),(3,5),(4,4)):c.tap(x,y)
+        c.tap(5,8)
+        for x,y in ((1,1),(2,2),(3,3),(4,4)):c.tap(x,y)
+        c.tap(3,8);c.tap(1,2);c.tap(2,2);c.tap(1,1)
+    c.tap(5,8)
+    if boundary_witness:c.tap(1,1)
     for x in range(1,5):c.tap(x,4)
     c.tap(3,8)
     cell=lambda step:((step-1)%16+1,(step-1)//16+4)
@@ -808,6 +823,38 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     if controlled:c.elapse((origin+2820000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=5)
     state=c.snapshot();assert len(state['midi_input_schedule']['delivered'])==len(events)
+    if boundary_witness:
+        emitted=state['midi'];field='logical_ns' if controlled else 'monotonic_ns'
+        arrivals=state['midi_input_schedule']['delivered']
+        limit=0 if controlled else 10000000
+        for sent,received in zip(events,arrivals):
+            assert received['bytes']==sent['bytes'] and received['port']==sent['port']
+            assert received['intended_'+domain+'_ns']==sent['at_'+domain+'_ns']
+            assert 0<=received['actual_'+domain+'_ns']-received['intended_'+domain+'_ns']<=limit,received
+        assert all(a['actual_'+domain+'_ns']<=b['actual_'+domain+'_ns'] for a,b in zip(arrivals,arrivals[1:]))
+        witness=[m for m in emitted if m['port']==2 and m['bytes'][0]==145 and m['bytes'][2]>0]
+        phrase=[(60,127),(62,117),(64,107),(65,97)]
+        # FA at1.23s, first playback pulse at1.25s; stop at2.805s permits
+        # exactly11 sixteenths at100BPM. Anchor to stimulus, not captured output.
+        assert [m['bytes'] for m in witness]==[[145,*phrase[i%4]] for i in range(11)],witness
+        for i,m in enumerate(witness):
+            assert abs(m[field]-(origin+1250000000+i*150000000))<=(2 if controlled else 10000000),m
+        evidence=[]
+        for pitch,step in zip((72,79),expected_steps):
+            active_pitch=phrase[step-1][0]
+            preview=next(m for m in emitted if m['port']==1 and m['bytes'][:2]==[144,pitch])
+            prior=[m for m in emitted if m['index']<preview['index'] and m['port']==2 and m['bytes'][0]==145 and m['bytes'][2]>0]
+            following=[m for m in emitted if m['index']>preview['index'] and m['port']==2 and m['bytes'][0]==145 and m['bytes'][2]>0]
+            assert prior and following,'Missing MIDI step witness'
+            assert prior[-1]['bytes'][1]==active_pitch,dict(preview=preview,prior=prior[-1])
+            assert following[0]['bytes'][1]==phrase[step%4][0]
+            assert prior[-1][field]<=preview[field]<following[0][field]
+            delivery=next(d for d in arrivals if d['bytes'][:2]==[144,pitch])
+            assert 0<=preview[field]-delivery['actual_'+domain+'_ns']<=(0 if controlled else 10000000)
+            if controlled and input_offsets==(1400000000,1700000000):
+                assert following[0][field]-preview[field]==1
+            evidence.append(dict(recorded_step=step,preview=preview,active_step_onset=prior[-1],next_step_onset=following[0],gap_to_next_ns=following[0][field]-preview[field]))
+        c.results.append(dict(kind='boundary-active-step-midi-witness',events=evidence))
     c.wait(lambda state:not state['midi_capture']['outstanding']);c.tap(2,8)
     c.led_values(cells,[15 if step in expected_steps else (2 if range_start<=step<=range_start+3 else 0) for step in range(1,65)])
     c.results.append(dict(kind='recorded-step-placement',expected_steps=list(expected_steps),input_note_on_offsets_ns=list(input_offsets),clock_step_ns=round(150000000*rate_factor),channel_range=[range_start,range_start+3]))
@@ -817,6 +864,8 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     c.enc(2,1);menu_label(c,'tempo');c.enc(3,-10);menu_value(c,'90');c.key(1)
     # Independent step positions define playback order, including wrap input.
     phrase=sorted(zip(expected_steps,[(1,[144,72,90]),(1,[144,79,80])]))
+    if boundary_witness:
+        c.tap(2,1);c.tap(2,2);c.tap(1,1)
     notes=c.playback([event for step,event in phrase],cycles=3)
     field='logical_ns' if controlled else 'monotonic_ns'
     gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
@@ -1087,6 +1136,8 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-REC-032':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Two milliseconds before boundary: independent active-step MIDI witness, grid and replay'),
+ 'M-REC-033':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Two milliseconds after boundary: independent active-step MIDI witness, grid and replay'),
  'M-MIDI-005':dict(run=keyboard_pitch_range,requirements=['MIDI-RELEASE-001'],description='All128 MIDI pitches at minimum/maximum velocity with both release forms; exact preview and no outstanding notes'),
  'M-REC-030':dict(run=lambda c:recorded_chord_release(c,(72,76,79),(0,0,80000000),release_offsets=(40000000,400000000,500000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Add third voice after root release while second voice remains held; preserve chord and first onset'),
  'M-REC-031':dict(run=lambda c:recorded_chord_release(c,(76,72,79),(0,0,80000000),release_offsets=(40000000,400000000,500000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Add third voice after second voice release while root remains held; preserve all recorded voices'),
@@ -1123,7 +1174,7 @@ CASES={
  'M-REC-005':dict(run=recorded_note_channel_switch,requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Switch selected channel while recording a held note; release route and recorded length remain on origin channel'),
  'M-REC-002':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3)),requirements=['REC-LIVE-NOTES'],description='Live notes2ms before step boundaries belong to preceding steps; recorded grid and replay'),
  'M-REC-003':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4)),requirements=['REC-LIVE-NOTES'],description='Live notes2ms after step boundaries belong to new steps; recorded grid and replay'),
- 'M-REC-004':dict(run=lambda c:live_record_placement(c,(1400000000,1700000000),(2,4)),requirements=['REC-LIVE-NOTES'],description='Unresolved boundary hypothesis: same-deadline clock pulse then note should target new step; retained failing diagnostic pending SEM-008'),
+ 'M-REC-004':dict(run=lambda c:live_record_placement(c,(1400000000,1700000000),(1,3),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Equal-deadline pulse/note uses current active step; transport-anchored independent MIDI witness, grid and disarmed replay'),
  'M-REC-001':dict(run=live_record_placement,requirements=['REC-LIVE-NOTES'],description='Queued keyboard notes land on independently planned steps under MIDI clock; exact recorded LEDs and disarmed replay MIDI'),
  'M-MEMORY-002':dict(run=memory_channel_isolation,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='Independent histories on two routed channels sharing a pattern; untouched channel navigation cannot alter either phrase'),
  'M-MEMORY-001':dict(run=memory_navigation,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='Held-step MIDI edits, visible memory counter, undo/redo bounds and history branching verified through exact musical output'),

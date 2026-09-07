@@ -746,3 +746,15 @@ The exact-boundary M-REC-004 failures remain unresolved; their initial new-step
 hypothesis was never an accepted oracle. The user's current-active-step decision
 needs explicit reconciliation with native pulse/step ordering, not a silent
 expectation change. Full campaign and release acceptance remain incomplete.
+
+## Current-step boundary hypothesis resolved
+
+The user chose current-active-step recording. Independent synchronized-channel
+MIDI evidence and Codex review establish that MIDI pulse arrival need not mean
+the next Mosaic step has executed. The old steps2/4 expectation was never an
+accepted oracle. M-REC-004 now checks active steps1/3 at the pulse deadline;
+M-REC-032/033 check minus/plus2ms, with fixed steps1/3 and2/4 respectively.
+All six strengthened native runs pass, including complete transport-anchored
+witness phrases, actual input delivery timing/order, grid and disarmed replay.
+README clarifies the behavior. Production/runtime source is unchanged.
+Original failing evidence remains in state.json. Full campaign remains incomplete.

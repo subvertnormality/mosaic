@@ -9,7 +9,7 @@ feedback and disarmed replay MIDI with independently calculated step positions.
 | Area | Required cases | Status |
 |---|---|---|
 | Stable placement | Empty pattern, distinct notes inside steps2/4 at100BPM, external MIDI clock, disarmed internal replay | M-REC-001 passes controlled and real-time |
-| Boundary phase | Just before/on/after step boundaries, native pulse boundaries and fractional phases; explicit equal-deadline ordering contract | M-REC-002/003 pass at minus/plus2ms; M-REC-004 exact pulse hypothesis fails; SEM-008 open |
+| Boundary phase | Just before/on/after step boundaries, native pulse boundaries and fractional phases; explicit equal-deadline ordering contract | M-REC-002/003 pass at minus/plus2ms; M-REC-004/032/033 strengthened MIDI witness passes both modes; SEM-008 resolved |
 | Clock and tempo | Internal and MIDI sources, slow/fast tempo, tempo change while held, source handoff | Planned |
 | Channel position | Channel divisions, non-first range start, unequal/coprime lengths, selected-channel switches during held notes | M-REC-005 origin ownership; M-REC-008/009/010 non-first ranges pass; divisions and unequal lengths remain |
 | Wrap | Last-to-first step, grid row transitions, global/channel wrap, song transitions | M-REC-009 crosses a grid row; M-REC-011/012 record across channel wrap; song transitions remain |
@@ -36,3 +36,10 @@ just to make the case green. SEM-008 asks whether current-step quantisation shou
 remain or change to nearest-step behavior. The before/after tests and midpoint
 test have passing grid and disarmed MIDI replay evidence; exact-boundary acceptance,
 fresh three-process repeats and every other matrix row remain open.
+
+Resolution: the user preserved current-active-step recording. The hypothesis
+above is retained as investigation history, not an outstanding product decision.
+Codex reviewed the amended oracle; complete transport-anchored MIDI witness,
+actual input delivery, fixed placement, full grid and replay assertions pass
+before/on/after boundary in both modes. See reviews/boundary-oracle-triage.md.
+No production clock or recording change was required for this hypothesis.

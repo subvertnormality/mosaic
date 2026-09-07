@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Resolve exact-boundary recording against the user-confirmed current-active-step rule, preserving failed hypothesis evidence and requiring justified ordering assertions plus Codex review of any oracle amendment. Continue remaining manual coverage, chord overlap/voice limits and emulator acceptance/release stages.",
+  "next_action": "Continue Mosaic manual coverage and confirmed-defect discovery: recording overlap/voice limits, tempo and source changes while held, pattern and advanced sequencing domains; complete emulator C08 onward and full acceptance. Boundary pulse hypothesis corrected with Codex-reviewed, dual-mode witnessed evidence; no full-suite completion claim.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2297,5 +2297,79 @@
       "sha256": "d141f790bf0949e3100a7158ced9f96085b8dd96aa873cb11522864676d283c3"
     },
     "limitations": "Exact-boundary recording remains unresolved. Full manual and emulator release acceptance remain incomplete. This candidate changes only the note-table guard index."
+  },
+  "boundary_oracle_amendment": {
+    "status": "validated-oracle-amendment",
+    "classification": "Original new-step expectation was explicitly unaccepted and conflicted with user-confirmed current-step behavior. No production/runtime change.",
+    "review": {
+      "engine": "codex",
+      "session": "01a07db9-4780-7d03-8ccc-a3c86e1eaea7",
+      "artifact": "emulator:artifacts/c16/boundary-oracle-review.json",
+      "sha256": "fd3dcf2326aa83592d2b7f8344d8ceaf17be8f9466d279dfb976c55b767bb8aa",
+      "disposition": "Implemented complete transport-anchored witness sequence, actual input delivery order/lateness, fixed current-step and adjacent MIDI timestamp checks, before/on/after in both modes."
+    },
+    "original_failures": [
+      {
+        "run_id": "b34c4966656e4e2a8a7d985c768eb38c",
+        "manifest_sha256": "ad8824d5b37f1f1ec665312a80a7c356c841f0d910062130b35f82978a87e47f",
+        "passed": false
+      },
+      {
+        "run_id": "55c741030b0641c388b4c82d5b09fa9e",
+        "manifest_sha256": "3fc1019fe04d50a6e23ecdd95e2776f1ea60fd2734d8eaaf240f63235c0e48f2",
+        "passed": false
+      }
+    ],
+    "validation": [
+      {
+        "case": "M-REC-004",
+        "mode": "controlled-experimental",
+        "run_id": "47b98d49f9574b49ba62eb698e211695",
+        "manifest_sha256": "5b919637fb6c45b41bc3e4f662f4b876bc277975ab14f559ec3aa3152fb2ca7b",
+        "passed": true
+      },
+      {
+        "case": "M-REC-004",
+        "mode": "real-time",
+        "run_id": "adfcde2143514a189b482da800be5bd1",
+        "manifest_sha256": "14ff56b205e871d3fb8997bdff1432fa1e97985791fcf1cecdd8df3e6a7060dc",
+        "passed": true
+      },
+      {
+        "case": "M-REC-032",
+        "mode": "controlled-experimental",
+        "run_id": "8d27bbad0849403da6932eb469011f82",
+        "manifest_sha256": "49f6761fff1a3fa9aee5500a2d29fcff1b6dddfc07947c49018e5a373b525594",
+        "passed": true
+      },
+      {
+        "case": "M-REC-032",
+        "mode": "real-time",
+        "run_id": "1d5f86ff717f46fd9dae7bac75884455",
+        "manifest_sha256": "04da0ef5d716df33b776d1861b577466796b4f7aa5d1a08234380e33c27e85a6",
+        "passed": true
+      },
+      {
+        "case": "M-REC-033",
+        "mode": "controlled-experimental",
+        "run_id": "8c95e80c4b3f4412abdfd656a5b7744d",
+        "manifest_sha256": "29ade80434040958ff30b5c2aa80d9f42e28822b0eccde73d08143511989639d",
+        "passed": true
+      },
+      {
+        "case": "M-REC-033",
+        "mode": "real-time",
+        "run_id": "1dd05aa01a1c4bfe98be9a62aef92fd5",
+        "manifest_sha256": "acb2bbfb1d65edd460a8b9db8bf5cae58ffddc3a0869628218b2613859b6a593",
+        "passed": true
+      }
+    ],
+    "limitations": "Synchronized immediate-note witness only; independent clock divisions, swing, arp/strum and remaining manual domains still need their own coverage. Old sweep remains117/122, not relabelled passing. Full campaign/release incomplete.",
+    "exact_boundary_repeats": {
+      "run_id": "repeat-589899e4276f41769a99c1f377b80966",
+      "manifest_sha256": "0ad0e83766659430b5d99ccfdeae8f4ff9a341572c64e03bf6f241e5b1080355",
+      "passed": true,
+      "fresh_processes": 3
+    }
   }
 }
