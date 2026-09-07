@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue remaining C08 mask/lock history types, harmony/channel domains and controlled repeat backlog. M-MEMORY-002 passes RT and3freshD repeats, including two independent channel histories and untouched thirdchannel0of0 counter. Full campaign incomplete; SEM-001/007 pending; no refactor.",
+  "next_action": "Prioritise reported live-record placement: three scheduled recipes pass RT/D, exact pulse hypothesis remains failing/open SEM-008. Next cover non-first channel ranges/divisions, held note channel switching, wrap/arm/disarm and distinguish stale UI from replay placement. No production timing change without resolving semantics. C08 and full campaign remain incomplete; SEM-001/007 also pending.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -306,7 +306,7 @@
   "manual_requirements": 141,
   "new_cases_pending": [],
   "controlled_admission_checkpoint": "Emulator artifacts/c16/m5-admission-06d.json; subsequent application edits do not reuse old application evidence as current-source passes.",
-  "implemented_cases": 24,
+  "implemented_cases": 28,
   "latest_partial_domain_evidence": {
     "M-SCALE-001": [
       {
@@ -505,6 +505,62 @@
         "manifest_sha256": "d34f627cefb1a07fdda8f6ae6271d0a40e20a53732041eea1f73e86cbc6a121a",
         "mode": "controlled-experimental"
       }
+    ],
+    "M-REC-001": [
+      {
+        "run_id": "d9e97871ad4340e8b50bd344c116f90c",
+        "manifest_sha256": "c2e827a1d46228af0bbeeade73995b4c2af1536ce3263c37485b84ada2362cc4",
+        "mode": "controlled-experimental",
+        "passed": true
+      },
+      {
+        "run_id": "f2324b2dac15481ea5d81c3a87e6f472",
+        "manifest_sha256": "e9b7222bcaf4fdd7b98fe3eee25b8b6efac0d5eaa243400ea82618b2e8610371",
+        "mode": "real-time",
+        "passed": true
+      }
+    ],
+    "M-REC-002": [
+      {
+        "run_id": "b0bf3b3870444437b850bc9b4dded2a5",
+        "manifest_sha256": "6a7576e571109b7f0289a47992cf10cdadc14fa077f1339ee2b3581e04cd23ad",
+        "mode": "controlled-experimental",
+        "passed": true
+      },
+      {
+        "run_id": "18c06dd9f32844ae93437895e031be93",
+        "manifest_sha256": "5e42887cad3279a86a4300064e4c98a59a50f094d034503603c483d80b0cf645",
+        "mode": "real-time",
+        "passed": true
+      }
+    ],
+    "M-REC-003": [
+      {
+        "run_id": "bcc2343c4f4840179a762778b1343ad6",
+        "manifest_sha256": "2d1904db6860232ea2cc98cdce9d82dffc0b21020d7bc51a8898775d227f971a",
+        "mode": "controlled-experimental",
+        "passed": true
+      },
+      {
+        "run_id": "c43786842b85462c81f7748d5a5b9f50",
+        "manifest_sha256": "0f2902d37b33b80e7c4ded61db62effe5d3cf073d5ef9765031031cf724b1424",
+        "mode": "real-time",
+        "passed": true
+      }
+    ],
+    "M-REC-004": [
+      {
+        "run_id": "9678d57f07614ff280cb1c35a38a4ab9",
+        "manifest_sha256": "99baaa1ded9759ce7de6883cff6e599a872cdff1977f8c91cbba707069247d17",
+        "mode": "controlled-experimental",
+        "passed": false
+      },
+      {
+        "run_id": "018e01fb7e324087a7976627ef901beb",
+        "manifest_sha256": "6e361f857fe833978270dd50b8b6f8d0fe95037e5d9e72e43df6072a83ff9121",
+        "mode": "real-time",
+        "passed": false
+      }
     ]
   },
   "fresh_controlled_repeats": {
@@ -542,5 +598,6 @@
     "manifest_sha256": "94b74e1888b95f528e5faa813fc3f562a3d5648d6859ac3df0ed9a991c5e859b",
     "case": "M-PAT-001",
     "mode": "real-time"
-  }
+  },
+  "live_recording_plan": "LIVE_RECORDING_PLACEMENT.md"
 }

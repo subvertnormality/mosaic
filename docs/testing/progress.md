@@ -386,3 +386,16 @@ Stop drains all notes after each phrase. No production changes were needed.
 The suite now has24 cases. This is note/velocity history isolation on a small
 channel set, not all history types or every channel/song transition. Remaining
 domains and the complete campaign stay open; SEM-001/007 await user decisions.
+
+
+## User-reported live keyboard placement
+
+The targeted campaign in LIVE_RECORDING_PLACEMENT.md is now a priority. Native
+scheduled MIDI clock and keyboard inputs remove client polling from the input
+schedule. Mid-step and minus/plus2ms-boundary cases pass both lanes: recorded grid
+locations and disarmed internal-clock replay agree with independent expectations.
+The exact-pulse new-step hypothesis fails in both lanes and is retained as an
+unresolved diagnostic (SEM-008), not marked passing or called a confirmed bug.
+Controlled native evidence separates pulse-deadline input from strict sync step
+processing by1ns. No production changes were made. There are28 executable cases,
+including this failing diagnostic; the complete suite is not green or complete.

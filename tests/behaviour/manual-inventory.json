@@ -4558,8 +4558,13 @@
         "MAN-013"
       ],
       "statement": "Live notes/chords/lengths record as selected-channel masks quantised to current step.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-REC-001",
+        "M-REC-002",
+        "M-REC-003",
+        "M-REC-004"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",
       "oracles": [
         "Independent snapped onset/duration table; playback and mask feedback; no internal model mutation."
@@ -4573,7 +4578,8 @@
         "line": 239,
         "text": "When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step.",
         "sha256": "ee3aa78a8f8636eee6b6300d1e8a0f9b54ae10ae2f62831e730684724c781fb9"
-      }
+      },
+      "open_decision": "SEM-008: current active step versus nearest/intended pulse boundary; M-REC-004 is an unresolved diagnostic, not passing coverage."
     },
     {
       "id": "REC-PARAM-AUTOMATION",

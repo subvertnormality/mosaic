@@ -38,3 +38,13 @@ history and then clears it. The manual's “subsequent memory” wording is ambi
 The user has been asked whether to preserve these behaviors and clarify the
 manual. Only these shifted-key expectations wait; ordinary navigation and
 new-edit-after-undo behavior have native regression coverage.
+
+
+SEM-008 (pending user clarification): live keyboard recording currently targets
+the active sequencer step; the manual says current-step quantisation. A note just
+before the boundary therefore belongs to the preceding step. Exact MIDI pulse
+deadlines can also precede native strict clock.sync's step transition. User asked
+whether to preserve this rule or use nearest-step quantisation after reporting
+frequent apparent placement errors. M-REC-004 retains the failed new-step
+hypothesis explicitly; it is not an accepted oracle or a confirmed Mosaic defect.
+Other live-recording placement/lifecycle investigations proceed independently.

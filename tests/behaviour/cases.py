@@ -760,7 +760,48 @@ def memory_channel_isolation(c):
     c.tap(3,1);history(3,0,0);c.key(2);c.key(3);c.enc(3,-2);c.enc(3,2);history(3,0,0);verify(edited_one,edited_two)
     c.tap(1,1);history(1,1);c.tap(2,1);history(2,1)
 
+def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4)):
+    import time
+    c.configure();c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    c.tap(3,8);c.led_values([(x,4) for x in range(1,5)],[2,2,2,2])
+    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
+    c.enc(2,position);c.key(3);menu_label(c,'source');c.enc(3,1);menu_value(c,'midi');c.key(1)
+    c.tap(2,8) # arm recording through the grid
+    controlled=c.clock_mode=='controlled-experimental';domain='logical' if controlled else 'monotonic'
+    origin=c.logical_ns+100000000 if controlled else time.monotonic_ns()+500000000
+    # 24PPQN at100BPM:25ms pulses,150ms per sixteenth. FA follows49 warmup
+    # pulses; pulse50 begins step1. Notes well inside steps2/4 isolate address
+    # placement from the separate exact-boundary ordering campaign.
+    packets=[(i*25000000,[248]) for i in range(1,113)]
+    packets += [(1230000000,[250]),(input_offsets[0],[144,72,90]),(input_offsets[0]+20000000,[128,72,0]),(input_offsets[1],[144,79,80]),(input_offsets[1]+20000000,[128,79,0]),(2805000000,[252])]
+    events=[dict(port=1,bytes=data,**{'at_'+domain+'_ns':origin+offset}) for offset,data in sorted(packets,key=lambda pair:pair[0])]
+    request=dict(type='midi_schedule',schedule_id=1,events=events)
+    if controlled:request['time_domain']='logical'
+    c.action(**request)
+    if controlled:c.elapse((origin+2820000000-c.logical_ns)/1e9)
+    else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=5)
+    state=c.snapshot();assert len(state['midi_input_schedule']['delivered'])==len(events)
+    c.wait(lambda state:not state['midi_capture']['outstanding']);c.tap(2,8)
+    c.led_values([(x,4) for x in range(1,5)],[15 if x in expected_steps else 2 for x in range(1,5)])
+    c.results.append(dict(kind='recorded-step-placement',expected_steps=list(expected_steps),input_note_on_offsets_ns=list(input_offsets),clock_step_ns=150000000))
+    # Replay in normal internal clock after disarming; preview MIDI cannot
+    # satisfy this oracle because playback takes a fresh capture marker.
+    c.key(1);c.key(3);menu_label(c,'source');c.enc(3,-1);menu_value(c,'internal')
+    c.enc(2,1);menu_label(c,'tempo');c.enc(3,-10);menu_value(c,'90');c.key(1)
+    notes=c.playback([(1,[144,72,90]),(1,[144,79,80])],cycles=3)
+    field='logical_ns' if controlled else 'monotonic_ns'
+    gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
+    tolerance=2e-9 if controlled else .01
+    assert all(abs(gap-1/3)<=tolerance for gap in gaps),gaps
+    c.results.append(dict(kind='recorded-replay-spacing',expected_seconds=1/3,actual_seconds=gaps))
+
 CASES={
+ 'M-REC-002':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3)),requirements=['REC-LIVE-NOTES'],description='Live notes2ms before step boundaries belong to preceding steps; recorded grid and replay'),
+ 'M-REC-003':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4)),requirements=['REC-LIVE-NOTES'],description='Live notes2ms after step boundaries belong to new steps; recorded grid and replay'),
+ 'M-REC-004':dict(run=lambda c:live_record_placement(c,(1400000000,1700000000),(2,4)),requirements=['REC-LIVE-NOTES'],description='Unresolved boundary hypothesis: same-deadline clock pulse then note should target new step; retained failing diagnostic pending SEM-008'),
+ 'M-REC-001':dict(run=live_record_placement,requirements=['REC-LIVE-NOTES'],description='Queued keyboard notes land on independently planned steps under MIDI clock; exact recorded LEDs and disarmed replay MIDI'),
  'M-MEMORY-002':dict(run=memory_channel_isolation,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='Independent histories on two routed channels sharing a pattern; untouched channel navigation cannot alter either phrase'),
  'M-MEMORY-001':dict(run=memory_navigation,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='Held-step MIDI edits, visible memory counter, undo/redo bounds and history branching verified through exact musical output'),
  'M-CHANNEL-001':dict(run=channel_routing_isolation,requirements=['CH-SELECT','CH-DEVICE','CH-ASSIGN','CH-MUTE'],description='All16 independently routed MIDI channels across two ports; cumulative mute/unmute preserves other phrases and clock alignment'),
