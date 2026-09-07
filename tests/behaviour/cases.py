@@ -358,6 +358,41 @@ def editor_step_groups(c):
 
 
 
+def note_pattern_selectors(c):
+    # Author distinguishable single-note patterns through the normal editor.
+    c.configure();pitches=[60,62,64,65,67,69,71];authored={}
+    for slot in range(1,17):
+        c.tap(5,8);c.tap(slot,1)
+        if slot==1:
+            for x in (2,3,4):c.tap(x,4)
+        else:c.tap(1,4)
+        c.tap(5,8);offset=(slot-1)%7;c.tap(1,7-offset)
+        authored[slot]=pitches[offset];c.tap(3,8)
+    assigned=1
+    c.tap(5,8);c.tap(5,8)
+    for pass_index,gesture in enumerate(('shift','hold'),1):
+        for slot in range(1,17):
+            if gesture=='shift':editor_shift_tap(c,slot,1)
+            else:editor_range_hold(c,slot,1)
+            offset=(slot-1+pass_index)%7
+            assert authored[slot]!=pitches[offset]
+            c.tap(1,7-offset);c.led_values([(1,7-offset)],[12])
+            authored[slot]=pitches[offset];c.tap(3,8)
+            if assigned!=slot:c.tap(assigned,2);c.tap(slot,2)
+            assigned=slot;c.led_values([(slot,2)],[15])
+            c.playback([(1,[144,authored[slot],127 if slot==1 else 100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
+            c.results.append(dict(kind='pattern-selector',gesture=gesture,slot=slot,pitch=authored[slot],passed=True))
+            c.tap(5,8);c.tap(5,8)
+    # Holding a top-row cell must not damage a previously edited pattern.
+    # Revisit every assignment after the whole selector/edit history.
+    c.tap(3,8)
+    for slot in range(1,17):
+        if assigned!=slot:c.tap(assigned,2);c.tap(slot,2)
+        assigned=slot
+        c.playback([(1,[144,authored[slot],127 if slot==1 else 100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
+        c.results.append(dict(kind='pattern-selector-retained',slot=slot,pitch=authored[slot],passed=True))
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1439,6 +1474,7 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-EDIT-004':dict(run=note_pattern_selectors,requirements=['PAT-NOTE-SELECT'],description='K1 and long-hold note-editor pattern selection across all16 slots, edit/playback and retained-pattern isolation'),
  'M-EDIT-001':dict(run=editor_note_ranges,requirements=['PAT-NOTE-RANGE'],description='Note range fine steps, held extrema, clamps and center reset'),
  'M-EDIT-002':dict(run=editor_velocity_ranges,requirements=['PAT-VELOCITY'],description='Every displayed velocity value, fine range steps, held extrema and clamps'),
  'M-EDIT-003':dict(run=editor_step_groups,requirements=['PAT-NOTE-SHIFT', 'PAT-STEP-PAGES', 'PAT-VELOCITY'],description='K1 copies note and velocity edits across all four step pages; each page replays exact MIDI'),

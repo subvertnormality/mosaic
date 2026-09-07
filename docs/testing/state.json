@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue remaining note selector, fader, editor threshold/playing-state domains and other manual/emulator stages. M-EDIT-001..003 pass both modes. SEM-007 arbitration remains pending and must not bypass the rejection.",
+  "next_action": "Continue gesture threshold/interruption, inactive-note, visualizer and remaining manual/emulator domains. All-slot note selectors pass both modes. SEM-007 arbitration remains pending; do not bypass denial.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2848,10 +2848,37 @@
   },
   "updated": "2026-09-08",
   "manual_binding_snapshot": {
-    "implemented_cases": 74,
+    "implemented_cases": 75,
     "requirements": 141,
-    "requirements_with_case": 45,
-    "requirements_without_case": 96,
+    "requirements_with_case": 46,
+    "requirements_without_case": 95,
     "scope": "Bindings only; every bound domain is still partial and full campaign remains incomplete."
+  },
+  "note_pattern_selector_validation": {
+    "status": "validated",
+    "runs": [
+      {
+        "case": "M-EDIT-004",
+        "mode": "controlled-experimental",
+        "run_id": "473b7b3c411845239a3c43b49a271c61",
+        "manifest_sha256": "1043b61f8a9ac0ef5c168974c14f2bbbca3842d7839c8928bc7105fc02ebce37",
+        "passed": true,
+        "selector_edits": 32,
+        "retained_patterns": 16,
+        "complete_midi_phrases": 96
+      },
+      {
+        "case": "M-EDIT-004",
+        "mode": "real-time",
+        "run_id": "79b8173b5df34c2eb5f90aadac35bbd8",
+        "manifest_sha256": "ddb58c48882f14d9e115b87e4219178ef5bebadc13d875ccc771d715c60f9ede",
+        "passed": true,
+        "selector_edits": 32,
+        "retained_patterns": 16,
+        "complete_midi_phrases": 96
+      }
+    ],
+    "scope": "K1+press and long-hold selection in the note editor across all16 slots. Each gesture changes the intended pattern, emits its expected MIDI, and all16 patterns retain their final edits.",
+    "limitations": "Short-tap versus hold threshold boundaries, interrupted modifiers and playing-state selection remain required. Partial requirement coverage, not full acceptance."
   }
 }

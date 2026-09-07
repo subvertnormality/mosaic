@@ -850,3 +850,14 @@ Four manual requirements now have partial case bindings. Threshold edges, all
 columns, mixed existing values and live edits remain required. No production
 change; these cases migrate the earlier emulator-owned editor fixture into the
 Mosaic suite without importing private emulator tests. Full delivery incomplete.
+
+## Note-editor pattern selection across all slots
+
+M-EDIT-004 passes both clock modes. It creates16 patterns through normal inputs,
+uses both K1+press and long-hold selection to change each pattern, and verifies
+the result through assigned-channel MIDI. A final revisit of all16 patterns checks
+that later selection/edit gestures did not corrupt earlier patterns. Each run
+contains32 selector edits and16 retention checks, with96 complete MIDI phrases.
+The note-selector requirement now has a partial binding. Exact gesture thresholds,
+interrupted modifiers and playing-state changes remain required; no production
+change or full-coverage claim.

@@ -2195,9 +2195,11 @@
         "MAN-031"
       ],
       "statement": "Hold or K1-press top row selects another pattern.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All16 slots; short tap vs hold threshold; shift release; note page state preservation.",
+      "cases": [
+        "M-EDIT-004"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "All16 slots; short tap vs hold threshold; shift release; note page state preservation. M-EDIT-004 validates both selection gestures across all16 slots and retention checks in controlled and real time. Exact hold thresholds, interrupted modifiers and playing-state switches remain required.",
       "oracles": [
         "Selected-pattern flicker and no unintended note edit; selected phrase MIDI."
       ],
