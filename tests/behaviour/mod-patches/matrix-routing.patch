@@ -9,3 +9,12 @@
          if self.matrix[modulation_id] ~= nil then
              self.matrix[modulation_id][p.id] = nil
              if next(self.matrix[modulation_id]) == nil then
+@@ -277,7 +279,7 @@
+         end
+         self.matrix[modulation_id][p.id] = depth
+         if p.modulation == nil then p.modulation = {} end
+-        p.modulation[modulation_id] = nilmul(self:get(modulation_id))
++        p.modulation[modulation_id] = nilmul(depth, self:get(modulation_id))
+         if p.t ~= params.tTRIGGER then
+             self:defer_bang(p.id, p.priority)
+         end

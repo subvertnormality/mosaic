@@ -113,6 +113,13 @@ def macro_route_clear(c):
     menu_label(c,'macro 1');c.key(3);menu_value(c,'-');c.key(1)
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))])
 
+def held_macro_rebind(c):
+    macro_route_clear(c)
+    # The macro still holds1. Rebinding must apply it without touching the
+    # source or waiting for another source event.
+    c.key(1);menu_label(c,'macro 1');c.enc(3,100);menu_value(c,'1.00');c.key(1)
+    c.playback([(1,[144,127,v]) for v in (127,117,107,97)])
+
 def pulse_lfo(c):
     route_fixed_note(c,4,'lfo 1')
     toolkit_parameter_group(c,'lfo 1');menu_label(c,'clocked');c.key(3)
@@ -143,6 +150,7 @@ def pulse_lfo(c):
     assert all(abs(row['actual_seconds']-row['expected_seconds'])<=tolerance for row in rows),rows
 
 CASES={
+ 'M-MOD-003':dict(run=held_macro_rebind,requirements=['MOD-HELD-001'],description='Rebind an already-held nonzero macro; MIDI must immediately reflect its current value without a new source event'),
  'M-MOD-001':dict(run=macro_route_clear,requirements=['MOD-ROUTE-001'],description='Route macro through native Matrix menu; assert affected MIDI pitches and restoration after clearing depth'),
  'M-MOD-002':dict(run=pulse_lfo,requirements=['MOD-LFO-001'],description='Configure a clocked4-beat pulse LFO through native menus and verify two complete modulation cycles of MIDI pitches'),
  'M-SAVE-001':dict(run=autosave_restart,requirements=['PERSIST-AUTO-001'],description='Create notes through the grid; idle autosave; boot a fresh native process from saved data and verify restored LEDs and MIDI'),

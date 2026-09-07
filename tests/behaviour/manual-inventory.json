@@ -1215,7 +1215,8 @@
       "classification": "pending-statement-reconciliation",
       "requirements": [
         "MOD-ROUTE-001",
-        "MOD-LFO-001"
+        "MOD-LFO-001",
+        "MOD-HELD-001"
       ],
       "status": "partial-domain-coverage"
     },
@@ -1422,6 +1423,23 @@
       "oracles": [
         "Literal selected menu labels/depth",
         "Exact emitted MIDI over complete phrases/modulation periods"
+      ]
+    },
+    {
+      "id": "MOD-HELD-001",
+      "sections": [
+        "MAN-109"
+      ],
+      "statement": "A newly bound modulation source applies its current value, including after removing and recreating the route.",
+      "basis": "Boundary of source routing: a held macro remains a valid modulation value without a new change event.",
+      "cases": [
+        "M-MOD-003"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Rebind macro1 at value1 to Fixed Note with depth1; partial values, negative depths, multiple sources and active-depth parameters remain required.",
+      "oracles": [
+        "Exact native menu depth",
+        "Three full phrases with independently expected MIDI pitch127"
       ]
     }
   ]

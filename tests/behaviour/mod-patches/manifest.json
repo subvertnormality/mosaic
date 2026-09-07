@@ -1,9 +1,9 @@
 {
   "matrix": {
-    "patch": "matrix-clear-depth.patch",
-    "sha256": "f2811fd9ef4c2e45c2015e8bed4edf158ef84ccd4d554de8a4b16ac64165b57a",
+    "patch": "matrix-routing.patch",
+    "sha256": "e92f7a0cf8fecc774528de373db4de620673e5161470c0ee385ea58c93181482",
     "file": "lib/matrix.lua",
     "before_sha256": "096e07e8d1d3a1531af2226cc4fa941a63253d991f0a53392cc0ae9cba49fbea",
-    "after_sha256": "5886cf86d76c2fd9cf7ac1e93560f2722cbcaada2a7ffcd239cead17e233e50d"
+    "after_sha256": "0ad59f5cfebe4a6e8e19e01ac8e36c5093c16acb48f4e5f991c855aa1ae3086f"
   }
 }

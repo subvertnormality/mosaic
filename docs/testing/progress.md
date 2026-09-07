@@ -138,3 +138,35 @@ call. That remains a source suspicion until reproduced with physical inputs;
 it is not fixed or covered by clearing an existing route. Other LFO shapes,
 depth signs, targets, source combinations, recording and manual domains remain
 required. C16/P5 admission and full campaign completion are still open.
+
+
+## Held macro routing and stable screen oracles
+
+M-MOD-003 clears and restores a route, then binds depth 1.00 again while macro 1
+remains at 1. The original held-source calculation fails in both clock modes:
+the visible route exists but MIDI remains 60/62/64/65 instead of 127. These
+baselines include the prior clear-cache fix, isolating the second Matrix defect.
+The combined matrix-routing.patch supplies the missing depth argument to nilmul
+and retains the clear-cache fix. It is applied only to an owned per-run copy.
+No Mosaic production code or original pinned dependency checkout changed.
+
+The unchanged held-source and pulse-LFO MIDI oracles pass real time and three
+fresh controlled processes each, with exact normalized event/end-state agreement.
+State latest_held_modulation_evidence records verified manifests and SHA digests;
+all child manifest and artifact hashes were checked before recording these results.
+
+A separate screen-oracle false failure was reproduced by repeated text drawing:
+Cairo retained a scaled font after its FreeType face had been freed. The oracle
+now retains one font/library pair for its process lifetime. oracle_contract.py
+performs 1200 repeated draws; native modulation workflows pass after this fix.
+This corrects a test harness defect, not Mosaic rendering or its expected pixels.
+
+Reproduce with MONOME_EMULATOR pointing at the external emulator, run.py with
+--profile midi-modulation --mod-code-root <pinned-code-root> --mod-patches and
+--case M-MOD-003 or M-MOD-002. For controlled repeats, use repeat.py with those
+arguments and --experimental-install <controlled-candidate-installation.json>.
+Run python3 tests/behaviour/oracle_contract.py for the focused renderer check.
+
+Nine named cases still cover only part of the manual. Controlled time remains
+diagnostic-only until M5/P5; transport-start phase and all remaining feature,
+failure-mode, timing and full release obligations remain open.

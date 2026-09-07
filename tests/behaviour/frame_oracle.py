@@ -9,18 +9,27 @@ from driver import EMULATOR_ROOT as ROOT
 import json
 def read_json(path):return json.loads(path.read_text())
 
+_font_state=None
+
 def render(commands):
-    ft=C.CDLL('libfreetype.so.6'); ca=C.CDLL('libcairo.so.2')
+    global _font_state
+    ft,ca=_font_state[:2] if _font_state else (C.CDLL('libfreetype.so.6'),C.CDLL('libcairo.so.2'))
     def bind(lib,name,args,result=None):
         f=getattr(lib,name);f.argtypes=args;f.restype=result;return f
     ptr=C.c_void_p; integer=C.c_int; double=C.c_double
-    library=ptr();face=ptr()
-    assert bind(ft,'FT_Init_FreeType',[C.POINTER(ptr)],integer)(C.byref(library))==0
-    font=read_json(ROOT/'.runtime/current.json')['source']+'/resources/norns.ttf'
-    assert bind(ft,'FT_New_Face',[ptr,C.c_char_p,C.c_long,C.POINTER(ptr)],integer)(library,font.encode(),0,C.byref(face))==0
+    # Cairo caches scaled fonts beyond a context's lifetime. Keep their
+    # FreeType face/library alive for this oracle process, not just one draw.
+    if _font_state is None:
+        library=ptr();face=ptr()
+        assert bind(ft,'FT_Init_FreeType',[C.POINTER(ptr)],integer)(C.byref(library))==0
+        font=read_json(ROOT/'.runtime/current.json')['source']+'/resources/norns.ttf'
+        assert bind(ft,'FT_New_Face',[ptr,C.c_char_p,C.c_long,C.POINTER(ptr)],integer)(library,font.encode(),0,C.byref(face))==0
+        fontface=bind(ca,'cairo_ft_font_face_create_for_ft_face',[ptr,integer],ptr)(face,0)
+        _font_state=(ft,ca,library,face,fontface)
+    else:
+        ft,ca,library,face,fontface=_font_state
     surface=bind(ca,'cairo_image_surface_create',[integer,integer,integer],ptr)(0,128,64)
     context=bind(ca,'cairo_create',[ptr],ptr)(surface)
-    fontface=bind(ca,'cairo_ft_font_face_create_for_ft_face',[ptr,integer],ptr)(face,0)
     options=bind(ca,'cairo_font_options_create',[],ptr)()
     try:
         bind(ca,'cairo_font_options_set_antialias',[ptr,integer])(options,2)
@@ -41,10 +50,7 @@ def render(commands):
     finally:
         bind(ca,'cairo_destroy',[ptr])(context)
         bind(ca,'cairo_surface_destroy',[ptr])(surface)
-        bind(ca,'cairo_font_face_destroy',[ptr])(fontface)
         bind(ca,'cairo_font_options_destroy',[ptr])(options)
-        bind(ft,'FT_Done_Face',[ptr],integer)(face)
-        bind(ft,'FT_Done_FreeType',[ptr],integer)(library)
 
 def header(text,selected=None,tabs=6):
     if selected is None:selected={'Ch. 1 Note Masks':1,'Ch. 1 Memory':3,'Ch. 1 Device Config':5}[text]

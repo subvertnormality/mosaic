@@ -209,8 +209,42 @@
     {
       "id": "matrix-bind-held-source",
       "component": "sixolet/matrix dependency",
-      "status": "source-suspicion-needs-independent-real-input-reproducer",
-      "finding": "set_depth calls two-argument nilmul with only the current source value. Test binding a route to an already-held nonzero macro; do not claim fixed by the clear-depth candidate."
+      "status": "isolated-opt-in-candidate-verified; original-pinned-checkout-unchanged",
+      "finding": "Rebinding depth1.00 to macro1 held at1 leaves original pitches60/62/64/65 instead of127. set_depth omitted the depth argument to nilmul. Baseline includes the earlier clear-cache fix to isolate this second defect.",
+      "case": "M-MOD-003",
+      "candidate": "tests/behaviour/mod-patches/manifest.json",
+      "evidence": {
+        "held_baseline_controlled": {
+          "path": "../mosaic-behaviour-runs/45e770d5ebb34facb0b8f800f0f619b5/manifest.json",
+          "sha256": "e6be5d46bc655ab6c5dcd5482226fbac692c905afcf6be961642ea1efebf5f74",
+          "passed": false
+        },
+        "held_baseline_real_time": {
+          "path": "../mosaic-behaviour-runs/c5ed90666aa743e5b61f5deb60640071/manifest.json",
+          "sha256": "0c81e222f213d6f04ad7dcb477267f59c2da49d73fff3d49e2902cbdbc151c9c",
+          "passed": false
+        },
+        "held_candidate_real_time": {
+          "path": "../mosaic-behaviour-runs/e6679ec529154c72b9730150ce4f5f62/manifest.json",
+          "sha256": "821ebd0d46a9da9a8def5d975598cff05464c5a9b35883f9b6cd3ac02abadccc",
+          "passed": true
+        },
+        "lfo_candidate_real_time": {
+          "path": "../mosaic-behaviour-runs/08bbd0b9072c41f9ae0a959026af2da1/manifest.json",
+          "sha256": "f26496bf5eadf85a9b33fb483cd33fdac168460485635d7f5c61124a6bce2404",
+          "passed": true
+        },
+        "held_candidate_repeats": {
+          "path": "../mosaic-behaviour-runs/repeat-a7eb0af16e8345d0b3ddde9f4219ea53/manifest.json",
+          "sha256": "090148132ffc90b87fdb34c29114b45d84dbfbabe515deaffef4caa88dca5469",
+          "passed": true
+        },
+        "lfo_candidate_repeats": {
+          "path": "../mosaic-behaviour-runs/repeat-0d3e9748636549a59bcfde6f6cf99b30/manifest.json",
+          "sha256": "da3077bb61282d5f890bc107d9dcd63be85b22a6ee09c4a56ae1aa09e9f21f45",
+          "passed": true
+        }
+      }
     }
   ]
 }

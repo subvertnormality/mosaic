@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "M-MOD-001 and002 now drive native menus and assert actual modulated MIDI. Original matrix clear-depth fails in D and real time; isolated two-line candidate passes both and LFO regression. Pulse LFO passes three exact D repeats and real-time90BPM onset timing (max0.551ms). Eight named cases, still partial manual coverage. Next reproduce held-source binding suspicion, remaining transport-start-phase fix investigation, M5 gate/Codex P5 then complete atomic manual/T01 and remaining feature families. Default dependencies unchanged; --mod-patches explicitly selects candidate. Full campaign and controlled admission remain incomplete.",
+  "next_action": "Nine named cases remain partial manual coverage. M-MOD-003 confirms matrix held-source rebind failure in both modes; explicit combined routing candidate passes real time and three exact controlled repeats, as does LFO regression. Fixed proven Cairo/FreeType oracle lifetime bug; 1200-draw stress passes. Next resolve transport-start-phase, M5 gate and bounded Codex P5; complete atomic manual/T01 and remaining feature families. Controlled time remains diagnostic-only. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -113,6 +113,38 @@
     "lfo_candidate_repeats": {
       "path": "../mosaic-behaviour-runs/repeat-98e437c855144a2c8321d40714a0db56/manifest.json",
       "sha256": "9f2e59cbd05765bfe5c378f6a7d5ddd763f0b366e1808dfc8a19229232c39eb1",
+      "passed": true
+    }
+  },
+  "latest_held_modulation_evidence": {
+    "held_baseline_controlled": {
+      "path": "../mosaic-behaviour-runs/45e770d5ebb34facb0b8f800f0f619b5/manifest.json",
+      "sha256": "e6be5d46bc655ab6c5dcd5482226fbac692c905afcf6be961642ea1efebf5f74",
+      "passed": false
+    },
+    "held_baseline_real_time": {
+      "path": "../mosaic-behaviour-runs/c5ed90666aa743e5b61f5deb60640071/manifest.json",
+      "sha256": "0c81e222f213d6f04ad7dcb477267f59c2da49d73fff3d49e2902cbdbc151c9c",
+      "passed": false
+    },
+    "held_candidate_real_time": {
+      "path": "../mosaic-behaviour-runs/e6679ec529154c72b9730150ce4f5f62/manifest.json",
+      "sha256": "821ebd0d46a9da9a8def5d975598cff05464c5a9b35883f9b6cd3ac02abadccc",
+      "passed": true
+    },
+    "lfo_candidate_real_time": {
+      "path": "../mosaic-behaviour-runs/08bbd0b9072c41f9ae0a959026af2da1/manifest.json",
+      "sha256": "f26496bf5eadf85a9b33fb483cd33fdac168460485635d7f5c61124a6bce2404",
+      "passed": true
+    },
+    "held_candidate_repeats": {
+      "path": "../mosaic-behaviour-runs/repeat-a7eb0af16e8345d0b3ddde9f4219ea53/manifest.json",
+      "sha256": "090148132ffc90b87fdb34c29114b45d84dbfbabe515deaffef4caa88dca5469",
+      "passed": true
+    },
+    "lfo_candidate_repeats": {
+      "path": "../mosaic-behaviour-runs/repeat-0d3e9748636549a59bcfde6f6cf99b30/manifest.json",
+      "sha256": "da3077bb61282d5f890bc107d9dcd63be85b22a6ee09c4a56ae1aa09e9f21f45",
       "passed": true
     }
   }
