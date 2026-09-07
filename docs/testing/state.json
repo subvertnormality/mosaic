@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue remaining manual domains: pattern algorithm preview/paint/cancel/move and faders, note editor pages and relative scales, plus duration origins/interrupted gestures and recording overlap/voice limits. Retain full emulator card completion/acceptance obligations. M-PAT-004/005 validated in both modes; no production change.",
+  "next_action": "Continue independent algorithm/fader/preview coverage and remaining manual/emulator stages. M-ALG-001 passes both modes. SEM-007 arbitration is not live: default-model quota failure, then alternative-model execution rejected twice by automatic approval review. Do not restart or bypass; dependent shifted-history decision remains pending. User requests autonomous continuation without routine questions.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2533,5 +2533,54 @@
     ],
     "scope": "Pattern long-hold reset, empty-source combo/long-hold, re-extension, live shortening/extension with scheduled releases retained and exact MIDI stream. No production change.",
     "limitations": "Not complete PAT-DURATION: remaining origins, gesture interruptions and other live-edit interactions need coverage; full manual/emulator delivery incomplete."
+  },
+  "euclidean_workflow_validation": {
+    "status": "validated",
+    "runs": [
+      {
+        "case": "M-ALG-001",
+        "mode": "controlled-experimental",
+        "run_id": "ff9548e7a2ed41e9b9f0eb53bc7ecdd2",
+        "manifest_sha256": "67b54a2be46e69e56eec1c0880ebf6e45312b54ce6d472616650db45b3ff811c",
+        "passed": true,
+        "checks": [
+          "cancel-retains-pattern",
+          "dense-fill-boundary",
+          "eight-step-loop-baseline",
+          "left-and-center-reset",
+          "preview-does-not-paint",
+          "repaint-restores-original",
+          "shifted-paint-xor"
+        ]
+      },
+      {
+        "case": "M-ALG-001",
+        "mode": "real-time",
+        "run_id": "60402313a5cf4463883dc24af9a203ea",
+        "manifest_sha256": "20c00394bbbbb99d04f8474310006a01d01aee48946a405c0fee8c27ea63b63e",
+        "passed": true,
+        "checks": [
+          "cancel-retains-pattern",
+          "dense-fill-boundary",
+          "eight-step-loop-baseline",
+          "left-and-center-reset",
+          "preview-does-not-paint",
+          "repaint-restores-original",
+          "shifted-paint-xor"
+        ]
+      }
+    ],
+    "scope": "Euclidean3-in-8 and dense fill, all64-cell two-phase preview, no unpainted MIDI changes, cancel, shifted XOR paint/repaint and left/reset. Migrated from emulator fixture into Mosaic-owned case; no private test imports.",
+    "limitations": "Six requirements now have partial bindings. Other algorithms, all fader/bank values, all offsets and playing-state interactions remain required. Full manual and release incomplete."
+  },
+  "memory_semantics_arbitration": {
+    "status": "pending-not-arbitrated",
+    "decision": "SEM-007 shifted Memory-page semantics",
+    "user_direction": "Continue autonomously; use Paranoia arbitration for decisions; no escalation; standing approval for usual tool calls.",
+    "initial_failure": "Claude default-model usage limit; no decision selected.",
+    "retry": "Alternative-model retry rejected twice by automatic approval review, including authorization-evidence reconsideration. Stated reason: earlier Codex-only instruction does not authorize repository context submission to Claude. No workaround or additional retry performed.",
+    "raw_artifact": "emulator:artifacts/c16/memory-semantics-arbitration-fable-limit.json",
+    "raw_sha256": "6d218c3f1df16249aeadba07a8cfd8ca614da11b4c4b4586e3b5c3b145d7b24f",
+    "scope": "Only this unresolved semantic decision and its dependent shifted-key tests wait. Continue all independent delivery work. Ordinary Paranoia reviews remain Codex-only."
   }
 }

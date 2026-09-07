@@ -145,6 +145,51 @@ def live_pattern_duration(c):
     assert_durations(c,notes,[4,4])
 
 
+def euclidean_workflow(c):
+    # Migrated from emulator tests/mosaic_euclidean.py; independent3-in-8 table.
+    baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    c.configure();c.hold_tap((1,4),(8,4))
+    c.tap(5,8);c.tap(5,8)
+    for x,y in [(5,3),(6,2),(7,1),(8,6)]:c.tap(x,y)
+    c.tap(3,8);c.tap(5,8) # trig editor
+    c.playback(baseline);c.results.append(dict(kind='workflow-check',name='eight-step-loop-baseline',passed=True))
+    c.tap(14,2) # Euclidean
+    c.tap(2,2) # broad fader minimum: one pulse
+    for _ in range(2):c.tap(10,2)
+    c.tap(2,3)
+    for _ in range(7):c.tap(10,3)
+    c.tap(16,8)
+    # The manual distinguishes dim overlaps and bright newly proposed steps.
+    # Verify both blink phases and all64 cells against fixed authored/candidate
+    # sets; no application rhythm calculation supplies the expected positions.
+    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
+    original={1,2,3,4}
+    proposed={step for step in range(1,65) if (step-1)%8+1 in (1,4,7)}
+    for overlap,new in ((0,15),(3,12)):
+        c.led_values(cells,[overlap if step in original and step in proposed else new if step in proposed else 15 if step in original else 2 for step in range(1,65)])
+    c.playback(baseline);c.results.append(dict(kind='workflow-check',name='preview-does-not-paint',passed=True))
+    c.tap(14,8);c.led_values([(x,4) for x in range(1,9)],[15]*4+[2]*4)
+    c.playback(baseline);c.results.append(dict(kind='workflow-check',name='cancel-retains-pattern',passed=True))
+    c.tap(16,8);c.tap(12,8) # shift right: {2,5,8}
+    c.led_values([(2,4),(5,4),(8,4)],[0,15,15]);c.tap(16,8)
+    shifted={step for step in range(1,65) if (step-1)%8+1 in (2,5,8)}
+    painted=original.symmetric_difference(shifted)
+    c.led_values(cells,[15 if step in painted else 2 for step in range(1,65)])
+    c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(65,97),(67,100),(62,100)]])
+    c.results.append(dict(kind='workflow-check',name='shifted-paint-xor',passed=True))
+    c.tap(16,8);c.led_values([(2,4),(5,4),(8,4)],[15,0,0]);c.tap(16,8)
+    c.playback(baseline);c.results.append(dict(kind='workflow-check',name='repaint-restores-original',passed=True))
+    c.tap(16,8);c.tap(10,8) # left: back to {1,4,7}
+    c.led_values([(1,4),(4,4),(7,4)],[0,0,15]);c.tap(12,8);c.tap(11,8)
+    c.led_values([(1,4),(4,4),(7,4)],[0,0,15]);c.tap(16,8)
+    c.playback([(1,[144,n,v]) for n,v in [(62,117),(64,107),(71,100)]])
+    c.results.append(dict(kind='workflow-check',name='left-and-center-reset',passed=True))
+    c.tap(16,8);c.led_values([(1,4),(4,4),(7,4)],[15,15,0]);c.tap(16,8);c.playback(baseline)
+    c.tap(9,2) # fill32, exceeding length8: every step selected
+    c.tap(16,8);c.led_values([(1,4),(4,4),(5,4),(16,7)],[0,0,15,15]);c.tap(16,8)
+    c.led_values([(x,y) for y in range(4,8) for x in range(1,17)],[2]*4+[15]*60)
+    c.playback([(1,[144,n,100]) for n in [67,69,71,62]]);c.results.append(dict(kind='workflow-check',name='dense-fill-boundary',passed=True))
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1226,6 +1271,7 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-ALG-001':dict(run=euclidean_workflow,requirements=['PAT-ALGORITHM', 'PAT-FADERS', 'PAT-PREVIEW', 'PAT-PAINT', 'PAT-CANCEL', 'PAT-MOVE'],description='Euclidean3-in-8: full-grid two-phase preview, unchanged playback, cancel, shifted XOR paint/repaint, left/reset and dense-fill boundary'),
  'M-PAT-004':dict(run=pattern_duration_controls,requirements=['PAT-DURATION'],description='Length extension/reset and empty-step gestures preserve exact grid and MIDI phrase'),
  'M-PAT-005':dict(run=live_pattern_duration,requirements=['PAT-DURATION'],description='Shorten and extend during playback: pending release unchanged, following onsets use edited length, phrase timing preserved'),
  'M-LEN-004':dict(run=lambda c:pattern_duration_domain(c,(4,),4),requirements=['PAT-DURATION','MIDI-RELEASE-001'],description='Full-loop same-pitch retrigger must release the previous note before emitting the next note-on'),

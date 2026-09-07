@@ -49,3 +49,18 @@ channel MIDI witness, complete phrase timing, native input delivery, full grid
 and disarmed replay now pass before/on/after the pulse boundary in both modes.
 Codex review and original failed manifests are retained in state.json and
 reviews/boundary-oracle-triage.md. No Mosaic scheduling change was needed.
+
+## Overnight autonomy and SEM-007 arbitration
+
+The latest user requests continued delivery to completion, Paranoia arbitration
+for decisions, no escalation, and standing approval for usual tool calls.
+The installed arbitrate interface uses Codex and Claude. SEM-007 was submitted
+with two neutral options and pinned repository evidence; the default Claude
+model hit its usage limit and the tool returned FAILED, with no selection.
+A supported alternative-model retry was rejected by automatic approval review,
+which cited the earlier Codex-only restriction on external repository context.
+The authorization-evidence reconsideration was also rejected. Do not work around
+that denial or represent a single-provider query as arbitration. SEM-007 remains
+pending; no semantic choice or implementation change follows from a failed tool.
+Continue independent work. Raw failed arbitration and approval-rejection summary
+are referenced in state.json; ordinary planned reviews remain Codex-only.

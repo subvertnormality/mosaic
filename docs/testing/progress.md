@@ -805,3 +805,16 @@ The initial live-edit runs also passed; their oracle was strengthened to reject
 extra/wrong-channel/reordered note events and rerun in both modes. No production
 change or new bug was needed. PAT-DURATION and the overall campaign remain
 partial, including origins, interrupted gestures and other live-edit interactions.
+
+## Euclidean preview, paint and movement
+
+M-ALG-001 ports the prior emulator fixture into Mosaic ownership with independent
+three-in-eight and dense-fill rhythm expectations. Both preview blink phases
+are checked across all64 cells; overlapping and new trigs remain distinct.
+Unpainted preview and cancellation preserve exact MIDI playback. Shifted paint
+uses an independently constructed XOR set across64 steps; repaint restores the
+original phrase, left/reset controls restore the expected preview, and fill
+exceeding length exercises saturation. All seven workflow checkpoints pass in
+controlled and real time. No production change or emulator-private test import.
+Six manual requirements gain partial coverage; all algorithms/faders/banks,
+offsets and playing-state combinations remain required. Full delivery incomplete.

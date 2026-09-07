@@ -1855,9 +1855,11 @@
         "MAN-030"
       ],
       "statement": "Select drum, tresillo, Euclidean and Numeric Repetitor algorithms.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All four algorithms and legal banks/options; zero/min/max/dense/sparse rhythms; tresillo multipliers.",
+      "cases": [
+        "M-ALG-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "All four algorithms and legal banks/options; zero/min/max/dense/sparse rhythms; tresillo multipliers. M-ALG-001 implements Euclidean3-in-8 preview/paint/cancel/move and dense fill; validated in both modes. Other algorithms, exhaustive fader positions and playing-state interactions remain required.",
       "oracles": [
         "Selection feedback, independently specified rhythm tables and exact MIDI."
       ],
@@ -1879,9 +1881,11 @@
         "MAN-030"
       ],
       "statement": "Fader endpoints adjust finely, middle positions broadly, and bank controls select banks.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every fader cell and bank; endpoint repeated presses and limits; algorithm switching.",
+      "cases": [
+        "M-ALG-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Every fader cell and bank; endpoint repeated presses and limits; algorithm switching. M-ALG-001 implements Euclidean3-in-8 preview/paint/cancel/move and dense fill; validated in both modes. Other algorithms, exhaustive fader positions and playing-state interactions remain required.",
       "oracles": [
         "Parameter text/LED and resulting independently expected rhythm."
       ],
@@ -1903,9 +1907,11 @@
         "MAN-030"
       ],
       "statement": "Prime previews new steps and existing-step overlaps without painting.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "No overlap/partial/full overlap; change parameters while primed; observe both blink phases.",
+      "cases": [
+        "M-ALG-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "No overlap/partial/full overlap; change parameters while primed; observe both blink phases. M-ALG-001 implements Euclidean3-in-8 preview/paint/cancel/move and dense fill; validated in both modes. Other algorithms, exhaustive fader positions and playing-state interactions remain required.",
       "oracles": [
         "Bright/dim blink classes; unchanged playing MIDI until paint."
       ],
@@ -1927,9 +1933,11 @@
         "MAN-030"
       ],
       "statement": "Paint applies preview and repeating paint without adjustments undoes the action.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Each algorithm; empty/full/partial overlap; repeat paint; parameter change between paints.",
+      "cases": [
+        "M-ALG-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Each algorithm; empty/full/partial overlap; repeat paint; parameter change between paints. M-ALG-001 implements Euclidean3-in-8 preview/paint/cancel/move and dense fill; validated in both modes. Other algorithms, exhaustive fader positions and playing-state interactions remain required.",
       "oracles": [
         "Exact resulting trig XOR table, LED state and complete MIDI phrases."
       ],
@@ -1951,9 +1959,11 @@
         "MAN-030"
       ],
       "statement": "Cancel discards a prepared pattern.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Before/after movement or parameter edits; stopped/playing; all algorithms.",
+      "cases": [
+        "M-ALG-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Before/after movement or parameter edits; stopped/playing; all algorithms. M-ALG-001 implements Euclidean3-in-8 preview/paint/cancel/move and dense fill; validated in both modes. Other algorithms, exhaustive fader positions and playing-state interactions remain required.",
       "oracles": [
         "Preview disappears and original LED/MIDI pattern remains."
       ],
@@ -1975,9 +1985,11 @@
         "MAN-030"
       ],
       "statement": "Move preview left/right or reset, then paint.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All offsets; wrap; left/right inverse and reset; overlap after shift.",
+      "cases": [
+        "M-ALG-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "All offsets; wrap; left/right inverse and reset; overlap after shift. M-ALG-001 implements Euclidean3-in-8 preview/paint/cancel/move and dense fill; validated in both modes. Other algorithms, exhaustive fader positions and playing-state interactions remain required.",
       "oracles": [
         "Independently rotated preview/painted pattern and MIDI."
       ],
