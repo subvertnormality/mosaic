@@ -144,9 +144,13 @@ end
 --- use the norns clock to pulse
 -- @tparam table s this lattice
 function Lattice.auto_pulse(s)
+  local interval = 1 / s.ppqn
+  -- Preserve the immediate first pulse, then keep full intervals from its phase.
+  -- A negative equivalent offset avoids skipping a pulse at a sync boundary.
+  local offset = (clock.get_beats() % interval) - interval
   while true do
     s:pulse()
-    clock.sync(1/s.ppqn)
+    clock.sync(interval, offset)
   end
 end
 

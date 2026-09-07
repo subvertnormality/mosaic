@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Nine named cases remain partial manual coverage. M-MOD-003 confirms matrix held-source rebind failure in both modes; explicit combined routing candidate passes real time and three exact controlled repeats, as does LFO regression. Fixed proven Cairo/FreeType oracle lifetime bug; 1200-draw stress passes. Next resolve transport-start-phase, M5 gate and bounded Codex P5; complete atomic manual/T01 and remaining feature families. Controlled time remains diagnostic-only. No active runners.",
+  "next_action": "Transport-start-phase candidate preserves immediate onset with full intervals. M-LEN-001 and multi-restart M-LEN-002 controlled pass; baseline reproduces4.722ms shortening. Real-time candidate fails one note by585ms amid726ms native event gap: diagnose before retry or admission. All474 baseline/candidate units pass after extending unit clock mock with beat API. Candidate remains unvalidated; source-transition/phase-edge tests and final repeats required. Then M5/Codex follow-up and full atomic manual/T01, remaining feature families. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -145,6 +145,33 @@
     "lfo_candidate_repeats": {
       "path": "../mosaic-behaviour-runs/repeat-0d3e9748636549a59bcfde6f6cf99b30/manifest.json",
       "sha256": "da3077bb61282d5f890bc107d9dcd63be85b22a6ee09c4a56ae1aa09e9f21f45",
+      "passed": true
+    }
+  },
+  "latest_phase_candidate_evidence": {
+    "baseline_controlled": {
+      "path": "../mosaic-behaviour-runs/a6cedf6c624f44dda4daea4f508805b3/manifest.json",
+      "sha256": "ad7118d12fcc41b6069ce0de0d840c7fe57dedcd5dd19031182a431b1f91d961",
+      "passed": false
+    },
+    "candidate_controlled": {
+      "path": "../mosaic-behaviour-runs/c184cdb5ccb9422aa00b3c57c76e2dc7/manifest.json",
+      "sha256": "f418b99f1811a6c37c7f48479486c3d9962815359512240735f6926c568e2718",
+      "passed": true
+    },
+    "candidate_restart_controlled": {
+      "path": "../mosaic-behaviour-runs/fd3a68ff907b4be9a051493fcc9ab3d8/manifest.json",
+      "sha256": "6ba7705b986ab496121a04735e1cb50a7b259cd3776aa5c52ef4d3b690daafeb",
+      "passed": true
+    },
+    "candidate_real_time": {
+      "path": "../mosaic-behaviour-runs/5c45def0995f4dd6b9c665b26a65eeda/manifest.json",
+      "sha256": "a62d19ab87b246eb90578946f905e3a7c6dd360a045cd44f1e993a6af262708e",
+      "passed": false
+    },
+    "units": {
+      "path": "../mosaic-behaviour-runs/units-d12ac17c58a940a0b7d1ec86bf43c207/results.json",
+      "sha256": "d8009ee8c2490b56cb99fd68c9431a8d56a4ea43b185897a1252ac1da4b2c606",
       "passed": true
     }
   }

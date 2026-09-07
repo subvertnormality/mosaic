@@ -140,7 +140,7 @@
     },
     {
       "id": "transport-start-phase",
-      "status": "diagnostic-failure; transport-semantics-and-runtime-admission-pending; no-application-fix",
+      "status": "isolated-candidate-applied; controlled-regressions-pass; real-time-failure-open",
       "case": "M-LEN-001",
       "finding": "First two-step note at90 BPM is328611113ns rather than333333333.333ns; subsequent durations agree within1ns. Generic native absolute-sync phase probe agrees with independent120BPM expectations. Immediate lattice pulse followed by absolute96PPQN sync is the suspected source. Do not waive or widen tolerance.",
       "evidence": {
@@ -164,7 +164,36 @@
           "sha256": "f07bcaddd624faeb3a2f3e17a1d0cce35dc615be31c4d46f65dd49ba588a639d",
           "passed": true
         }
-      }
+      },
+      "candidate": "tests/behaviour/candidates/0003-transport-start-phase.patch",
+      "latest_evidence": {
+        "baseline_controlled": {
+          "path": "../mosaic-behaviour-runs/a6cedf6c624f44dda4daea4f508805b3/manifest.json",
+          "sha256": "ad7118d12fcc41b6069ce0de0d840c7fe57dedcd5dd19031182a431b1f91d961",
+          "passed": false
+        },
+        "candidate_controlled": {
+          "path": "../mosaic-behaviour-runs/c184cdb5ccb9422aa00b3c57c76e2dc7/manifest.json",
+          "sha256": "f418b99f1811a6c37c7f48479486c3d9962815359512240735f6926c568e2718",
+          "passed": true
+        },
+        "candidate_restart_controlled": {
+          "path": "../mosaic-behaviour-runs/fd3a68ff907b4be9a051493fcc9ab3d8/manifest.json",
+          "sha256": "6ba7705b986ab496121a04735e1cb50a7b259cd3776aa5c52ef4d3b690daafeb",
+          "passed": true
+        },
+        "candidate_real_time": {
+          "path": "../mosaic-behaviour-runs/5c45def0995f4dd6b9c665b26a65eeda/manifest.json",
+          "sha256": "a62d19ab87b246eb90578946f905e3a7c6dd360a045cd44f1e993a6af262708e",
+          "passed": false
+        },
+        "units": {
+          "path": "../mosaic-behaviour-runs/units-d12ac17c58a940a0b7d1ec86bf43c207/results.json",
+          "sha256": "d8009ee8c2490b56cb99fd68c9431a8d56a4ea43b185897a1252ac1da4b2c606",
+          "passed": true
+        }
+      },
+      "remaining": "Real-time run has a726ms gap across native events and one585ms duration error; do not waive or retry blindly. Diagnose event stall; test off-boundary/restart/source-change timing and three-repeat determinism. Unit-only clock mock now exposes beat0; it is not timing evidence."
     },
     {
       "id": "matrix-clear-depth",

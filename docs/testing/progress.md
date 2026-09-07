@@ -170,3 +170,19 @@ Run python3 tests/behaviour/oracle_contract.py for the focused renderer check.
 Nine named cases still cover only part of the manual. Controlled time remains
 diagnostic-only until M5/P5; transport-start phase and all remaining feature,
 failure-mode, timing and full release obligations remain open.
+
+## Transport starting phase candidate
+
+Current baseline reproduces the first-note4.722ms shortening. The isolated
+0003 patch keeps the immediate lattice pulse and anchors subsequent syncs to
+its phase, using the equivalent negative offset to avoid boundary skipping.
+M-LEN-001 now meets the unchanged2ns bound; M-LEN-002 passes delete/reinsert
+and repeated playback starts. Full474 baseline and candidate units pass after
+adding the missing beat-time API to the unit-only native clock mock.
+
+The real-time candidate is **failed**, not accepted: one later note has585ms
+excess duration and the raw trace has a726ms gap across all native event types.
+No timeout or tolerance was widened. Retain and diagnose this event stall before
+a new real-time attempt. Source transitions, boundary starts and three repeats
+remain required; controlled time is still diagnostic-only. Hash-bound run links
+are recorded under transport-start-phase in bugs.json and state.json.
