@@ -64,7 +64,7 @@ function handle_midi_event_data(data, midi_device)
   local velocity = data[3]
 
   if data[1] == 144 then -- note on
-    if midi_tables[data[2]] == nil then
+    if midi_tables[data[2] + 1] == nil then
       return
     end
 

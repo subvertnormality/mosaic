@@ -729,3 +729,20 @@ Mosaic-owned case binding. Existing emulator fixture packages are separate
 evidence and cannot silently count as complete Mosaic-owned coverage. Same-pitch
 overlap, chord voice overflow and the remaining manual/emulator stages remain
 required. No refactor or full-delivery completion is authorized by this slice.
+
+## MIDI note zero: isolated guard correction
+
+Candidate0020 corrects the note-table guard to use the same one-based index as
+conversion. Both prior native baselines dropped the two pitch-zero note pairs
+(508 events instead of512). M-MIDI-005 now emits all512 expected events over
+all128 pitches at velocities1/127 with explicit and velocity-zero releases, in
+controlled and real time, with no outstanding notes. M-MIDI-002 all16 input
+channels and M-REC-031 overlapping chord voice recording also pass both modes.
+All474 existing unit tests pass against an isolated snapshot of the same source.
+The six native manifests and source hashes are in candidates/midi-note-zero.json
+and state.json. No emulator runtime or expected MIDI payload changed.
+
+The exact-boundary M-REC-004 failures remain unresolved; their initial new-step
+hypothesis was never an accepted oracle. The user's current-active-step decision
+needs explicit reconciliation with native pulse/step ordering, not a silent
+expectation change. Full campaign and release acceptance remain incomplete.

@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Fix independently reproduced MIDI note0 omission with isolated baseline/candidate evidence; resolve exact-boundary semantics without changing expectations merely to pass. Continue remaining manual coverage (107 currently unbound requirements), chord overlap/voice limits, and emulator acceptance/release stages.",
+  "next_action": "Resolve exact-boundary recording against the user-confirmed current-active-step rule, preserving failed hypothesis evidence and requiring justified ordering assertions plus Codex review of any oracle amendment. Continue remaining manual coverage, chord overlap/voice limits and emulator acceptance/release stages.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2227,5 +2227,75 @@
   "active_behaviour_test": {
     "exec_session": null,
     "status": "finished"
+  },
+  "midi_note_zero_fix": {
+    "status": "validated",
+    "base_revision": "7eddda54b3154f38a8e497f94143b21208c4a268",
+    "before_sha256": "3a4fff8fe94e18be17987dc3d8947035f39a6a5d17404d37c7cc2e7b61b33c3c",
+    "after_sha256": "93216c73d5b4c61511f31c690eb6e0af24b46f9bf46e6a72a2b69593c67aa62b",
+    "baselines": [
+      {
+        "run_id": "bd44858ead50451ab09693bdcac09e04",
+        "manifest_sha256": "b911504928b88bc44a93339a0b0bb9455bf71ed8e1c8b69b848fba86103af7ee",
+        "passed": false
+      },
+      {
+        "run_id": "9fd59ae9945a471dbd3d2224c2552e72",
+        "manifest_sha256": "eec23022c0786164dc6ffd7feca7d164e67728e589958c28c6b63551cef0ed2b",
+        "passed": false
+      }
+    ],
+    "scope": "Use the same one-based lookup index for validation and conversion. MIDI pitch zero is valid; all128 pitches must pass native preview and both release forms.",
+    "validation": [
+      {
+        "case": "M-MIDI-005",
+        "mode": "controlled-experimental",
+        "run_id": "918e1ac45c84497eae1880ce831a8533",
+        "manifest_sha256": "8c33bf074e363b2ab14bb7474061cc87581c8dab539f19aed735d078394fce09",
+        "passed": true
+      },
+      {
+        "case": "M-MIDI-005",
+        "mode": "real-time",
+        "run_id": "7db94e0c6f9c4170a6e45d2183c50bc4",
+        "manifest_sha256": "c8c50ec7ee8eab8ddce4930580f932a2cccffc999f8bb169f158ad17632d9187",
+        "passed": true
+      },
+      {
+        "case": "M-MIDI-002",
+        "mode": "controlled-experimental",
+        "run_id": "931f8d07b3284b69a8d72f60192b7fb2",
+        "manifest_sha256": "c3d92914179fc3d8b8a0dbd70efbd9cd39eef3884545eb6061fa48cda6f61a0a",
+        "passed": true
+      },
+      {
+        "case": "M-MIDI-002",
+        "mode": "real-time",
+        "run_id": "be8ae528447b496fb251d934b11fc81c",
+        "manifest_sha256": "1024568da37ad7c007979a4a358529a2ce12850b98caea3dd589dac2a5636702",
+        "passed": true
+      },
+      {
+        "case": "M-REC-031",
+        "mode": "controlled-experimental",
+        "run_id": "a4abb8ba5bec46c8bff0832aca657a7b",
+        "manifest_sha256": "c341555f3022985ddf5ec08d5075d85c0c6331bbd4861003aa6e397cb4e1e7d2",
+        "passed": true
+      },
+      {
+        "case": "M-REC-031",
+        "mode": "real-time",
+        "run_id": "776cb23cbbc24b28859a1fee2609b5d4",
+        "manifest_sha256": "32b0762ea53b6e025ccec8ad672660b30dee85e7d0416943f7754ad047e0d9cf",
+        "passed": true
+      }
+    ],
+    "units": {
+      "count": 474,
+      "passed": true,
+      "artifact": "emulator:artifacts/c16/midi-zero-units-isolated.json",
+      "sha256": "d141f790bf0949e3100a7158ced9f96085b8dd96aa873cb11522864676d283c3"
+    },
+    "limitations": "Exact-boundary recording remains unresolved. Full manual and emulator release acceptance remain incomplete. This candidate changes only the note-table guard index."
   }
 }
