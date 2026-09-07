@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "runtime_lock_sha256": "da993410f493edec1074ee100ed0770ef86fec0d440905405b290ba35367e239",
+  "norns": {
+    "url": "https://github.com/monome/norns.git",
+    "commit": "14bbeae8646c6717f6bb44c8cd60250bf94b6042",
+    "submodules": [
+      {
+        "path": "crone/lib/readerwriterqueue",
+        "commit": "4927fe6d22720366aa249e1abc3d2144498dea09",
+        "url": "https://github.com/cameron314/readerwriterqueue.git"
+      },
+      {
+        "path": "crone/softcut",
+        "commit": "ce870c55fae1b58fd357ca639bbfe0754c0760e4",
+        "url": "https://github.com/monome/softcut-lib.git"
+      },
+      {
+        "path": "third-party/doctest",
+        "commit": "1da23a3e8119ec5cce4f9388e91b065e20bf06f5",
+        "url": "https://github.com/doctest/doctest.git"
+      },
+      {
+        "path": "third-party/link",
+        "commit": "adbbb529831c22edecba20e983343b3b23a73f60",
+        "url": "https://github.com/Ableton/link.git"
+      },
+      {
+        "path": "third-party/link/modules/asio-standalone",
+        "commit": "01b4e87c04abd4daec58e40463bcdc150085b269",
+        "url": "https://github.com/chriskohlhoff/asio.git"
+      },
+      {
+        "path": "third-party/trompeloeil",
+        "commit": "2a633b923f32cebc336dc8a6a77e4c04f2238106",
+        "url": "https://github.com/rollbear/trompeloeil.git"
+      }
+    ],
+    "license_files": [
+      {
+        "path": "LICENSE.txt",
+        "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+      }
+    ],
+    "license_status": "root file recorded; transitive notices retained in source"
+  },
+  "application_sources": {
+    "mosaic": {
+      "url": "https://github.com/subvertnormality/mosaic.git",
+      "commit": "160d1ea7506773e65f298094e11d005dcb568dff",
+      "submodules": [
+        {
+          "path": "lib/nb",
+          "commit": "503be3ae9a7f4368a8bc35d6081795e0a130cadf",
+          "url": "https://github.com/sixolet/nb.git"
+        }
+      ],
+      "license_files": [
+        {
+          "path": "LICENSE",
+          "sha256": "8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b"
+        }
+      ],
+      "license_status": "root file recorded; transitive notices retained in source"
+    },
+    "matrix": {
+      "url": "https://github.com/sixolet/matrix.git",
+      "commit": "41e11286bee8dbe48e8746e7a456400f93dc739a",
+      "submodules": [],
+      "license_files": [],
+      "license_status": "No root license found; do not redistribute fixture sources"
+    },
+    "toolkit": {
+      "url": "https://github.com/sixolet/toolkit.git",
+      "commit": "2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7",
+      "submodules": [],
+      "license_files": [],
+      "license_status": "No root license found; do not redistribute fixture sources"
+    }
+  },
+  "profiles": {
+    "base-midi": {
+      "code": [
+        "mosaic"
+      ],
+      "enabled_mods": [],
+      "audio_required": false
+    },
+    "midi-modulation": {
+      "code": [
+        "mosaic",
+        "matrix",
+        "toolkit"
+      ],
+      "enabled_mods": [
+        "matrix",
+        "toolkit"
+      ],
+      "audio_required": false
+    }
+  },
+  "emulator": {
+    "url": "https://github.com/subvertnormality/monome-emulator.git",
+    "commit": "ce812e7",
+    "api": "automation.client.Session",
+    "status": "initial-native-client; controlled-time-not-yet-admitted"
+  }
+}

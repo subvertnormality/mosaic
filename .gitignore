@@ -47,3 +47,10 @@ sync.ffs_db
 lib/tests/test_artefacts/latest_release.json
 
 .DS_Store
+# Python behaviour-suite caches
+__pycache__/
+*.pyc
+
+# Raw review packets retained locally; publish triage and packet digests only.
+docs/testing/reviews/*-raw.json
+docs/testing/reviews/*-raw.stderr.log

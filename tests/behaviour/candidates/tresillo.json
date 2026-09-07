@@ -1,0 +1,14 @@
+{
+  "status": "isolated-candidate",
+  "baseline_failure": "artifacts/c08/fef9e7ab31fd435ab874c79f8029a0eb/manifest.json",
+  "name": "tresillo-repeat-bank-bits",
+  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
+  "schema_version": 1,
+  "files": [
+    {
+      "sha256": "cb8c2693769220f226c2d4bb411121f681178626ff2dbfaf7b0b3d6ca02de025",
+      "path": "fixtures/apps/mosaic-patches/0004-tresillo-repeat-bank-bits.patch",
+      "kind": "patch"
+    }
+  ]
+}

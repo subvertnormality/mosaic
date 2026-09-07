@@ -1,0 +1,15 @@
+--- a/lib/models/program.lua
++++ b/lib/models/program.lua
+@@ -623,4 +623,12 @@
+ function program.clear_masks_for_channel(channel)
++  channel.trig_mask = nil
++  channel.note_mask = nil
++  channel.velocity_mask = nil
++  channel.length_mask = nil
++  channel.chord_one_mask = nil
++  channel.chord_two_mask = nil
++  channel.chord_three_mask = nil
++  channel.chord_four_mask = nil
+   channel.step_trig_masks = {}
+   channel.step_note_masks = {}
+   channel.step_velocity_masks = {}

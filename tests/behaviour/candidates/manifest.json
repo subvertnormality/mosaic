@@ -1,0 +1,19 @@
+{
+  "baseline_failure": "artifacts/c08/a8a88d024bff4db19db38ae80f8dbe1f/manifest.json",
+  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
+  "schema_version": 1,
+  "files": [
+    {
+      "kind": "patch",
+      "sha256": "06ff10d638bda3a6e3ac2e5aac78e9380c19e51a13d7ff1bb20059b5bad8b6bf",
+      "path": "fixtures/apps/mosaic-patches/0001-memory-preserve-pattern.patch"
+    },
+    {
+      "kind": "test",
+      "sha256": "84756359db0b22489b726ce9973e7c16f90c4e3d704c396576c0bac5555b62b7",
+      "path": "fixtures/apps/mosaic-patches/memory-preservation-tests.lua"
+    }
+  ],
+  "status": "isolated-candidate",
+  "name": "memory-preserve-pattern"
+}

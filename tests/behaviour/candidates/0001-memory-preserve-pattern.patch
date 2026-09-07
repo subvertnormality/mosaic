@@ -1,0 +1,16 @@
+--- a/lib/memory.lua
++++ b/lib/memory.lua
+@@ -161,8 +161,9 @@
+       -- Update working pattern with current values
+-      local working_trig = data.trig or channel.step_trig_masks[step] or 0
+-      local working_note = data.note or channel.step_note_masks[step] or 0
+-      local working_velocity = data.velocity or channel.step_velocity_masks[step] or 100
+-      local working_length = data.length or channel.step_length_masks[step] or 1
++      local working = channel.working_pattern
++      local working_trig = data.trig or channel.step_trig_masks[step] or working.trig_values[step] or 0
++      local working_note = data.note or channel.step_note_masks[step] or working.note_mask_values[step]
++      local working_velocity = data.velocity or channel.step_velocity_masks[step] or working.velocity_values[step] or 100
++      local working_length = data.length or channel.step_length_masks[step] or working.lengths[step] or 1
+ 
+       program.update_working_pattern_for_step(channel, step, working_trig, working_note, working_velocity, working_length)
+     end

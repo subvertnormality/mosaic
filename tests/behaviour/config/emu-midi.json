@@ -1,0 +1,1 @@
+[{"name":"Emulator test device","id":"emu-test","type":"midi","polyphonic":true,"map_params_automatically":false,"params":[{"id":"emu_cc","param_id":"emu_cc","name":"Control 1","cc_msb":1,"cc_min_value":0,"cc_max_value":127,"off_value":-1,"short_descriptor_1":"CC","short_descriptor_2":"1"}]}]

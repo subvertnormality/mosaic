@@ -1,0 +1,12 @@
+--- a/lib/helpers/drum_ops.lua
++++ b/lib/helpers/drum_ops.lua
+@@ -17,6 +17,9 @@
+ end
+ 
+ local function get_bit(a, k)
++    -- A rhythm repeats at its stored bit length. Tresillo's 3m segments
++    -- can exceed the 16-bit drum banks at the larger multipliers.
++    k = wrap(k, 1, #a * 8)
+     local byte = get_byte(a, k)
+     local bit_index = 7 - ((k - 1) % 8)
+     return bit32.band(byte, bit32.lshift(1, bit_index)) ~= 0

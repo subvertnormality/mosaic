@@ -27,8 +27,23 @@ local default_note_values = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 local default_note_mask_values = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
 local default_velocity_values = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100}
 
-local function sync_pattern_values(merged_pattern, pattern, s)
-  merged_pattern.lengths[s] = pattern.lengths[s]
+local function effective_lengths(source)
+  local result = {unpack(source.lengths)}
+  for s = 1, 64 do
+    if source.trig_values[s] == 1 and result[s] > 1 then
+      for distance = 1, math.min(63, math.ceil(result[s]) - 1) do
+        if source.trig_values[(s + distance - 1) % 64 + 1] == 1 then
+          result[s] = distance
+          break
+        end
+      end
+    end
+  end
+  return result
+end
+
+local function sync_pattern_values(merged_pattern, pattern, s, source_lengths)
+  merged_pattern.lengths[s] = source_lengths[s]
   merged_pattern.velocity_values[s] = pattern.velocity_values[s]
   merged_pattern.note_values[s] = pattern.note_values[s]
   merged_pattern.note_mask_values[s] = pattern.note_mask_values[s]
@@ -92,13 +107,14 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
 
   for pattern_number, pattern_enabled in pairs(patterns_to_process) do
     local pattern = patterns[pattern_number]
+    local source_lengths = effective_lengths(pattern)
 
     for s = 1, 64 do
       local is_pattern_trig_one = pattern.trig_values[s] == 1
       if pattern_enabled then
         if trig_merge_mode == "skip" then
           if is_pattern_trig_one and merged_pattern.trig_values[s] < 1 and skip_bits[s] < 1 then
-            merged_pattern = sync_pattern_values(merged_pattern, pattern, s)
+            merged_pattern = sync_pattern_values(merged_pattern, pattern, s, source_lengths)
             merged_pattern.trig_values[s] = 1
           elseif is_pattern_trig_one and merged_pattern.trig_values[s] == 1 then
             merged_pattern.trig_values[s] = 0
@@ -128,7 +144,7 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
         do_moded_merge(pattern_number, true, s, velocity_merge_mode, pattern.velocity_values, merged_pattern.velocity_values, velocities)
       end
       if should_process_length_merge_mode then
-        do_moded_merge(pattern_number, true, s, length_merge_mode, pattern.lengths, merged_pattern.lengths, lengths)
+        do_moded_merge(pattern_number, true, s, length_merge_mode, source_lengths, merged_pattern.lengths, lengths)
       end
     end
   end

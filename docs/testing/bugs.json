@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "status": "active-campaign",
+  "source_repository": "https://github.com/subvertnormality/monome-emulator",
+  "source_revision": "a0252d8",
+  "bugs": [
+    {
+      "id": "memory-preservation",
+      "status": "candidate-not-applied",
+      "candidate_manifest": "manifest.json"
+    },
+    {
+      "id": "midi-counts-and-mask-clearing",
+      "status": "candidate-not-applied",
+      "candidate_manifest": "midi-counts.json"
+    },
+    {
+      "id": "tresillo-bounds",
+      "status": "candidate-not-applied",
+      "candidate_manifest": "tresillo.json"
+    },
+    {
+      "id": "pattern-length-cutoff",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "pattern-lengths.json",
+      "case": "M-LEN-001",
+      "evidence": {
+        "baseline_edit": {
+          "path": "../mosaic-behaviour-runs/747d1cb025fa4615a8f49f29e3a9be52/manifest.json",
+          "sha256": "a07cabc41a77d462c663848d37da949678e797f18491a8dc45eca8d2d746ecd7",
+          "passed": true
+        },
+        "baseline_length": {
+          "path": "../mosaic-behaviour-runs/a1af3001d1cb4e21ab7e264049999db4/manifest.json",
+          "sha256": "bde1a995dbab3b736bd1cab4bc87644a41c22be49aa27f9da8d8859044da4c18",
+          "passed": false
+        },
+        "corrected_length": {
+          "path": "../mosaic-behaviour-runs/f1721ab92443441bb6571c9913a3b689/manifest.json",
+          "sha256": "781c585e807d5bbee06763a7ab83ce8d160ccd26274cd3fe2ed092eeeb4bb5be",
+          "passed": true
+        },
+        "corrected_edit": {
+          "path": "../mosaic-behaviour-runs/0b3d9e5693694bac84666374323380d3/manifest.json",
+          "sha256": "2b541fb76f1d3f7f228598592c4ee42b403127d93b30ddf4ad3ccd5381027020",
+          "passed": true
+        },
+        "units": {
+          "path": "../mosaic-behaviour-runs/units-cf035b2bf9ee4bac80091cc5705c5517/results.json",
+          "sha256": "569d3ff806ad2f3b2aea37e38f80ddc490ee6899e49165a8f9f7625bd2068a0d",
+          "result": {
+            "passed": true,
+            "runtime_lock_sha256": "da993410f493edec1074ee100ed0770ef86fec0d440905405b290ba35367e239",
+            "runs": [
+              {
+                "name": "baseline",
+                "collected": 474,
+                "successes": 474,
+                "failures": 0,
+                "exit_code": 0,
+                "log": "../mosaic-behaviour-runs/units-cf035b2bf9ee4bac80091cc5705c5517/baseline.log",
+                "log_sha256": "cb4249488c5fef2f0ae4971b19c9a13a3b6d58f1ef4331ae3c1990f970d8d968"
+              },
+              {
+                "name": "candidate",
+                "collected": 474,
+                "successes": 474,
+                "failures": 0,
+                "exit_code": 0,
+                "log": "../mosaic-behaviour-runs/units-cf035b2bf9ee4bac80091cc5705c5517/candidate.log",
+                "log_sha256": "8f3eabbcd836980977e24e8bc64987eeebbb9e7e035dfbd96f737f499454eba1"
+              }
+            ]
+          }
+        }
+      },
+      "remaining": "Wrap, masks, merges and restoration remain campaign obligations; not full length-family certification."
+    },
+    {
+      "id": "stopped-scale-highlight",
+      "status": "known-baseline-needs-regression"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "branch": "codex/behaviour-validation",
+  "worktree": "../mosaic-behaviour-tests",
+  "emulator": "/path/to/monome-emulator",
+  "stage": "T00",
+  "status": "in_progress",
+  "plan_review": "completed-with-triage",
+  "manual_sections": 113,
+  "next_action": "Expand atomic README/cheat-sheet requirements and source-image gestures; implement full runner admission/fault probes and controlled-time native adapter/P5. Extend length boundary regressions, then remaining T03 editing/harmony candidates. SEM-001/002 remain dependent clarifications only.",
+  "stages": {
+    "T00": "in_progress",
+    "T01": "in_progress",
+    "T02": "planned",
+    "T03": "planned",
+    "T04": "planned",
+    "T05": "planned",
+    "T06": "planned",
+    "T07": "planned",
+    "T08": "planned"
+  },
+  "review_evidence": "reviews/plan-triage.md",
+  "active_runners": [],
+  "evidence": "progress.md"
+}

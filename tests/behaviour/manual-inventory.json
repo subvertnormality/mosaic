@@ -1,0 +1,1318 @@
+{
+  "schema_version": 1,
+  "manual": "README.md",
+  "manual_sha256": "c66fe4506846a0087308b5bf42d9d68ccadd5f43c751f0806cfa555dc8c23ccf",
+  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
+  "status": "section-index-only-not-complete-coverage",
+  "sections": [
+    {
+      "id": "MAN-001",
+      "title": "Getting Started",
+      "level": 2,
+      "start_line": 148,
+      "end_line": 149,
+      "text_sha256": "1e695ab10ae9abde60ddb6cdc1a8e425ad744cb62032d687c92449216aaf9d74",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-002",
+      "title": "Install",
+      "level": 3,
+      "start_line": 150,
+      "end_line": 155,
+      "text_sha256": "665a72350c10907670a68a6d6cd41de5e759ae8e2008123decd2e4a393080dd9",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-003",
+      "title": "Setup",
+      "level": 3,
+      "start_line": 156,
+      "end_line": 157,
+      "text_sha256": "db04f4dc76c1102a92a380a299b7869d008a220a581a93b1fb95f45bddece361",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-004",
+      "title": "Hardware",
+      "level": 4,
+      "start_line": 158,
+      "end_line": 165,
+      "text_sha256": "d05bd22b0dbf4d6e52aee0005e451040d6ea59725b6e05467cdaaf34ec2c6ec1",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-005",
+      "title": "MIDI Device Configuration",
+      "level": 4,
+      "start_line": 166,
+      "end_line": 167,
+      "text_sha256": "88bac2b35d6061120264806cfe1895cfbc8e807f18665386e72ab9dca42f8a2b",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-006",
+      "title": "Stock Devices",
+      "level": 5,
+      "start_line": 168,
+      "end_line": 180,
+      "text_sha256": "829c4c211577d4131d8f38627b1877bdb079b8ced2300977676427579a4e3463",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-007",
+      "title": "Adding Custom Devices",
+      "level": 5,
+      "start_line": 181,
+      "end_line": 186,
+      "text_sha256": "85da33a3cc8207bb2a521a0d0a0d1057fa566bb77f1973a8ee0240a684ee4220",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-008",
+      "title": "Mods and Software Devices",
+      "level": 5,
+      "start_line": 187,
+      "end_line": 190,
+      "text_sha256": "dcb78d8ff3b14fa3172ac83bec2df0a2b8ed0f330557bdb271519353fb4e4efc",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-009",
+      "title": "MIDI Keyboard Input",
+      "level": 5,
+      "start_line": 191,
+      "end_line": 197,
+      "text_sha256": "0a7ea0e4bf57f7d2e8fba2c77b063e4f84cad481f1aaac117ca1a3f6cbc123df",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-010",
+      "title": "MIDI Controller Mapping",
+      "level": 5,
+      "start_line": 198,
+      "end_line": 219,
+      "text_sha256": "8d3b52063d5fd60ee2bf9f0ceb3594aec0cc8f8b454d5567f31de2c8925b2ea8",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-011",
+      "title": "Getting Around Mosaic",
+      "level": 2,
+      "start_line": 220,
+      "end_line": 221,
+      "text_sha256": "dda43b59b423023494f61c874436c54ad328eb8e7fb465889ef2edacadab1219",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-012",
+      "title": "Sequencer Start and Stop",
+      "level": 3,
+      "start_line": 222,
+      "end_line": 234,
+      "text_sha256": "ec1c2fe2eb3dbf3138810677b0f434739f1a4593059bdbb6d48645ac93ffb42c",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-013",
+      "title": "Arm live record",
+      "level": 3,
+      "start_line": 235,
+      "end_line": 262,
+      "text_sha256": "4ab8c90364f60183ffd5a7224148bdaf46b0bcd7df30cccb8b29065dedd7a5fe",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-014",
+      "title": "Grid Menu Navigation",
+      "level": 3,
+      "start_line": 263,
+      "end_line": 288,
+      "text_sha256": "340240e5cc8eaf9f4dc5de18301dd4141cf20c62c2fd3caca967a10fd134e1d7",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-015",
+      "title": "Norns Menu Navigation",
+      "level": 3,
+      "start_line": 289,
+      "end_line": 303,
+      "text_sha256": "ea90932ceb01d5932ab408919ffc56c8dd2ee3fac9e6fec9f4e938ba50e5f264",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-016",
+      "title": "Tooltips",
+      "level": 3,
+      "start_line": 304,
+      "end_line": 307,
+      "text_sha256": "203f85f16df8874bd667633cc8ffeae902ac821014f5c70cefde97510a5908a0",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-017",
+      "title": "MIDI Panic",
+      "level": 3,
+      "start_line": 308,
+      "end_line": 311,
+      "text_sha256": "cc0433ec76409980622791d8544cc779a977f9d0ca01070a8dd3dd4345cfe21c",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-018",
+      "title": "Cheat Sheet",
+      "level": 3,
+      "start_line": 312,
+      "end_line": 315,
+      "text_sha256": "c514dca5086d6bf1db302f3742ad43e3a4161df97750429e19d771212d71f94a",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-019",
+      "title": "Typical Workflow",
+      "level": 2,
+      "start_line": 316,
+      "end_line": 319,
+      "text_sha256": "ea3762faa8923506a196f20206e4fe78bafb23d3af0c3cc0a5b36cb4d3a4aa1e",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-020",
+      "title": "Sound Design",
+      "level": 3,
+      "start_line": 320,
+      "end_line": 327,
+      "text_sha256": "4a4664ca7079ccd5df4fb5fab4298b67134a7e5639616d1eed307fb26069f1df",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-021",
+      "title": "Rhythm Section Design",
+      "level": 3,
+      "start_line": 328,
+      "end_line": 335,
+      "text_sha256": "5afb68aeaa1ac9b8b41addbd2e0ac31135920b598fcfa200223e65f71d00f35c",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-022",
+      "title": "Harmony Design",
+      "level": 3,
+      "start_line": 336,
+      "end_line": 343,
+      "text_sha256": "43353056569f1cdfbab6a1d3c46fb43a501678ce5e524ec291619d1b29ff29d0",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-023",
+      "title": "Sequence Composition",
+      "level": 3,
+      "start_line": 344,
+      "end_line": 347,
+      "text_sha256": "1e293968de77f874b1ccf7a3e83294ac18952b6d3924575c1d329d0afc92dcd4",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-024",
+      "title": "Using Merge Modes",
+      "level": 4,
+      "start_line": 348,
+      "end_line": 351,
+      "text_sha256": "3f30424f614595c6c9529f96904b765cb798fe916c52df341ee2d7ba3b6445ba",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-025",
+      "title": "Melody Composition",
+      "level": 4,
+      "start_line": 352,
+      "end_line": 357,
+      "text_sha256": "49defb9b79964467e2f44f6db0c4529751ab840e1f16d2d0f960544a4234eecc",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-026",
+      "title": "Modulation, Movement, and Interest",
+      "level": 3,
+      "start_line": 358,
+      "end_line": 361,
+      "text_sha256": "be20a25319a1bf8b1acc1e1e4debd447e1b6305882277868a325cfd2f8ce3a4f",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-027",
+      "title": "Song Composition",
+      "level": 3,
+      "start_line": 362,
+      "end_line": 367,
+      "text_sha256": "4e41f8bae91e28143bb478286229fe0c21cb39897bd0e77537fc76b93099296e",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-028",
+      "title": "Dig Deeper",
+      "level": 2,
+      "start_line": 368,
+      "end_line": 371,
+      "text_sha256": "c8a74289619f2cd0236652afca58ffc129f25f977aa758736b2639ba18e7030a",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-029",
+      "title": "Pattern Editor",
+      "level": 3,
+      "start_line": 372,
+      "end_line": 384,
+      "text_sha256": "2a13ca80bc0e92bc1db34925474cfd2a82809cfd3cac0b02f78423da03941ebc",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-030",
+      "title": "Adding Trigs",
+      "level": 4,
+      "start_line": 385,
+      "end_line": 440,
+      "text_sha256": "ea0d4b0ac8211b36d7f07d93123ef6e1ee67998e4a1a677a5c65a988fd36d38e",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [
+        "PAT-EDIT-001",
+        "PAT-LENGTH-001"
+      ],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-031",
+      "title": "Adding Notes",
+      "level": 4,
+      "start_line": 441,
+      "end_line": 476,
+      "text_sha256": "6f254e2bd4c61282e90218ce69d898bc188a2716cf87b01a271afc45dccf1984",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [
+        "PAT-EDIT-001"
+      ],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-032",
+      "title": "Adding Velocity",
+      "level": 4,
+      "start_line": 477,
+      "end_line": 491,
+      "text_sha256": "068c720bf82ee7c462885cc38dfb55bdca5db47db56b4100c0b372174599a936",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [
+        "PAT-EDIT-001"
+      ],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-033",
+      "title": "Channel Editor",
+      "level": 3,
+      "start_line": 492,
+      "end_line": 504,
+      "text_sha256": "17efe19834fd5f84ac8d905c0cbbcfb936bc83b594c8ca27d9bd29b493ef29f1",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-034",
+      "title": "Devices",
+      "level": 4,
+      "start_line": 505,
+      "end_line": 515,
+      "text_sha256": "f416516e58e326f35c93581dc476a9898fe0c3f3f9ed3c468bca1ca73195fcf6",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-035",
+      "title": "MIDI Sound Sources",
+      "level": 5,
+      "start_line": 516,
+      "end_line": 521,
+      "text_sha256": "89169e670534434d971ae303aeb6fdfc5377c229c1078e373e5b5f246d2930eb",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-036",
+      "title": "Norns Sound Sources with n.b.",
+      "level": 5,
+      "start_line": 522,
+      "end_line": 537,
+      "text_sha256": "cf69cc2e19481bf2be072c05b96a1160e11a75aec64a4a864dd89f7d7f7390d8",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-037",
+      "title": "Device Parameters",
+      "level": 4,
+      "start_line": 538,
+      "end_line": 548,
+      "text_sha256": "e4060cccc714b4360b917cce8796939b298ba98db6851e83ac5e2cbd75b09ee4",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-038",
+      "title": "Adding Patterns to Channels",
+      "level": 4,
+      "start_line": 549,
+      "end_line": 561,
+      "text_sha256": "bed3b0532206401ab32351008247f26b7efcb254482dd6feb994aff4ea8ce815",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-039",
+      "title": "Masks",
+      "level": 4,
+      "start_line": 562,
+      "end_line": 574,
+      "text_sha256": "513d26ff5a4fff4619a6e028d856ba0dccc6f5b5d80c46062d6c40760ba79268",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-040",
+      "title": "Adding Trig Masks",
+      "level": 5,
+      "start_line": 575,
+      "end_line": 586,
+      "text_sha256": "14eb7aedb79c929a2c625492f7a81828c5779889458d92f9e38eb2b2cac3e07d",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-041",
+      "title": "Adding Melodic Notes over Harmony and Drums",
+      "level": 5,
+      "start_line": 587,
+      "end_line": 592,
+      "text_sha256": "3236048f2988263f13fde3a7f718c9f8e9000db0441760a6e062b96a8d34e14d",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-042",
+      "title": "Adding Chords",
+      "level": 5,
+      "start_line": 593,
+      "end_line": 598,
+      "text_sha256": "4f47c2c4008b0fbcb8955fc9e48b73bfe488557325a3cdcdb25be13d8b0845e8",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-043",
+      "title": "Removing Masks",
+      "level": 5,
+      "start_line": 599,
+      "end_line": 610,
+      "text_sha256": "c68b625108eba452744850797057feedaf588dd803b1e190b57a8dd5464486f4",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-044",
+      "title": "Merge Modes",
+      "level": 4,
+      "start_line": 611,
+      "end_line": 623,
+      "text_sha256": "3873e18f2771907bac76f937d917639a4df1ada3d34de252ee7cf400bf414f64",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-045",
+      "title": "Trig Merge Modes",
+      "level": 5,
+      "start_line": 624,
+      "end_line": 633,
+      "text_sha256": "838f3597035c39f17f4f5cf5586cd7537076f135b645763fceb10ef88eac82ee",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-046",
+      "title": "Note Merge Modes",
+      "level": 5,
+      "start_line": 634,
+      "end_line": 646,
+      "text_sha256": "14741886e7db500491eddb9b971c1e29ac248decc5a98db70990a14de89c1677",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-047",
+      "title": "Velocity Merge Modes",
+      "level": 5,
+      "start_line": 647,
+      "end_line": 657,
+      "text_sha256": "176668a485782c7b5d5cfc5baf1c35cb649e4cdca7bcfa45248ce973f1f3cc93",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-048",
+      "title": "Length Merge Modes",
+      "level": 5,
+      "start_line": 658,
+      "end_line": 670,
+      "text_sha256": "8c41fdd5feace67b36e8722c1418098fdab96e4cebebe595df9bfda68dc61c5e",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-049",
+      "title": "Note Dashboard",
+      "level": 4,
+      "start_line": 671,
+      "end_line": 674,
+      "text_sha256": "4535e34c026ee740a6824567cf3d107885c2eb208d7b0ee4ac87a96b3d7eec0d",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-050",
+      "title": "Clocks, Swing and Shuffle",
+      "level": 4,
+      "start_line": 675,
+      "end_line": 689,
+      "text_sha256": "ce04352a8d256cf48676ecb0c8c75da5dc1413f6603a0dd9db676d418463232c",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-051",
+      "title": "Memory (undo and redo)",
+      "level": 4,
+      "start_line": 690,
+      "end_line": 711,
+      "text_sha256": "dc7bc5f4c469b996c94ebfe8008f1f1ccf64b04618ccd8e02d254e19dfea20fc",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-052",
+      "title": "Channel Length",
+      "level": 4,
+      "start_line": 712,
+      "end_line": 729,
+      "text_sha256": "7e18b24036489f52a55a685efdd2def3a92ec87068c2fe42f0e3b6744b5a0967",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-053",
+      "title": "Muting Channels",
+      "level": 4,
+      "start_line": 730,
+      "end_line": 742,
+      "text_sha256": "d4693f6a37a0edf2f58ff8b48568995924a75ba9b69589d756f46a71588c7bc9",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-054",
+      "title": "Trig Parameters",
+      "level": 3,
+      "start_line": 743,
+      "end_line": 764,
+      "text_sha256": "ef17893a74ab73410357cb29cd116e882b6af2a826cb11d8a85c0c307f4ea9bf",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-055",
+      "title": "Sequencer Params",
+      "level": 4,
+      "start_line": 765,
+      "end_line": 768,
+      "text_sha256": "5b7bd6f92824c01002ca8fff6a995fed732b5dd84e58df1d2db112c0c5c5561c",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-056",
+      "title": "Trig Probability",
+      "level": 5,
+      "start_line": 769,
+      "end_line": 772,
+      "text_sha256": "6345e2014ace2bf5b0c75dc224c429f3ed59dd0287bcace2123d415740b2d020",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-057",
+      "title": "Fixed Note",
+      "level": 5,
+      "start_line": 773,
+      "end_line": 776,
+      "text_sha256": "5e80c36332bb3bde2b5c766dca144d2f440a9b93f6685b38c6e6ac9c74edc9e7",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-058",
+      "title": "Quantised Fixed Note",
+      "level": 5,
+      "start_line": 777,
+      "end_line": 780,
+      "text_sha256": "577f9b316b77aa953bfa3c3be8f8ee6d31624068a302c84666451cb99d0d6641",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-059",
+      "title": "Random Note",
+      "level": 5,
+      "start_line": 781,
+      "end_line": 784,
+      "text_sha256": "8659f4ee7fdad68b6f6342bc3120f21ce39ae1ef682eeb4da2f082272cdb4892",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-060",
+      "title": "Random Twos Note",
+      "level": 5,
+      "start_line": 785,
+      "end_line": 788,
+      "text_sha256": "9da9f1100341333ad65bd7faaa787a1603644cda384d1339e515182f59b21ca5",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-061",
+      "title": "Chord Strum",
+      "level": 5,
+      "start_line": 789,
+      "end_line": 792,
+      "text_sha256": "61b85f4c852df8347f24db76ccdbc63d3d197d0dd4067a24df52058f38a2e2fe",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-062",
+      "title": "Chord Arpeggio",
+      "level": 5,
+      "start_line": 793,
+      "end_line": 796,
+      "text_sha256": "2b98a3f57bd47968f6962e073c1c647ceef87fc7f73de1e603c581e42aa58975",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-063",
+      "title": "Chord Acceleration",
+      "level": 5,
+      "start_line": 797,
+      "end_line": 800,
+      "text_sha256": "e42558ed511889cc574cf9e816cb575a926ee747eee9ab8e410259ca7c18603e",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-064",
+      "title": "Chord Spread",
+      "level": 5,
+      "start_line": 801,
+      "end_line": 804,
+      "text_sha256": "830b4c3f5091f15950d56fa7865b3ef2f6ca40d62f46072c68b17205a5fdd23a",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-065",
+      "title": "Chord Velocity Modifier",
+      "level": 5,
+      "start_line": 805,
+      "end_line": 808,
+      "text_sha256": "7dd51af2cf1b90014f30f83d9a36f7caafb63f87269a3ee08d7a57e544b035eb",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-066",
+      "title": "Chord Shape Modifier",
+      "level": 5,
+      "start_line": 809,
+      "end_line": 812,
+      "text_sha256": "5a13c29f0b3ddc6ed3279973efddf8d887f699391d94f7ca15dedc6002a38b38",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-067",
+      "title": "Mute Root Note",
+      "level": 5,
+      "start_line": 813,
+      "end_line": 816,
+      "text_sha256": "88111a4c6b3d6cf200a2303fdaa69094327fb6c6d8ee04850c5d882e1108cb01",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-068",
+      "title": "Fully Quantise Mask",
+      "level": 5,
+      "start_line": 817,
+      "end_line": 820,
+      "text_sha256": "2f4276b1da63dc93bc149481f4f75e3c9ec4ac85fe649f54b0ef72bc07d7e1b6",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-069",
+      "title": "Scale Editor",
+      "level": 3,
+      "start_line": 821,
+      "end_line": 843,
+      "text_sha256": "824c321b3332f584468c5d3111a1dc958d2df8ae1fa9fd2e8959fe125fa17035",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-070",
+      "title": "Transposition",
+      "level": 4,
+      "start_line": 844,
+      "end_line": 856,
+      "text_sha256": "5336961e5456d860865534b599798373ec80018a8203669d9f0d1a52e3fd8742",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-071",
+      "title": "Song Editor",
+      "level": 3,
+      "start_line": 857,
+      "end_line": 868,
+      "text_sha256": "789cdf7bfff07380fb81fcc971634e4f4dab1981f51212180eb74329564849c2",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-072",
+      "title": "Button Indicators",
+      "level": 4,
+      "start_line": 869,
+      "end_line": 874,
+      "text_sha256": "be3fc63e1627c5f9cc57a52cb50eb44ae1f247f0aaa67962766821a91309d06b",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-073",
+      "title": "Interacting with Slots",
+      "level": 4,
+      "start_line": 875,
+      "end_line": 882,
+      "text_sha256": "072a47fe0374c191133c4e53c319ca79377ad2f09ddef8f5c980d12d66199689",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-074",
+      "title": "Song Mode Operations",
+      "level": 4,
+      "start_line": 883,
+      "end_line": 886,
+      "text_sha256": "8d805187ee9019217468edf12d3c615b1ffea37c60ca17808c311049443b79f2",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-075",
+      "title": "Adjusting Song Sequence Length",
+      "level": 4,
+      "start_line": 887,
+      "end_line": 902,
+      "text_sha256": "8f70a4025ac591f78427d0d44a536dedb31e7d2d1c0e86b30947726491c76fa4",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-076",
+      "title": "Navigating the Norns Display",
+      "level": 4,
+      "start_line": 903,
+      "end_line": 907,
+      "text_sha256": "9d96ef1211c58904783033bbf9775a68783e786992e0abfe22fd04bc72b22a73",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-077",
+      "title": "Locks",
+      "level": 2,
+      "start_line": 908,
+      "end_line": 911,
+      "text_sha256": "1086cd587af5d9bee150ed95ddbbcf2fcae2a5a9d7b55b298c16b7e79e1d6d4b",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-078",
+      "title": "Trig Param Locks",
+      "level": 3,
+      "start_line": 912,
+      "end_line": 936,
+      "text_sha256": "10a093dc138f0f3136fa33119e610c09d24533485c80973f84f2149969f84131",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-079",
+      "title": "Param Slides",
+      "level": 4,
+      "start_line": 937,
+      "end_line": 954,
+      "text_sha256": "2ba111203cec78292fed4bbd58780461fb34800f48d93e3b59d66a1e5f633b53",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-080",
+      "title": "Mask Locks",
+      "level": 3,
+      "start_line": 955,
+      "end_line": 979,
+      "text_sha256": "c8e0ae5d7cac3dc5819bc62c0e2e0443154d65fb93443cfaca28ebe77f758f5f",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-081",
+      "title": "Scale Locks",
+      "level": 3,
+      "start_line": 980,
+      "end_line": 998,
+      "text_sha256": "28afd72b93c3508469e581feb3e7fa676a9413e631b4624628f9fc649a908e33",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-082",
+      "title": "Transposition Locks",
+      "level": 3,
+      "start_line": 999,
+      "end_line": 1012,
+      "text_sha256": "1460b116233a23b003c8b8fe57c4f0f89223f6b83805fd7ccae04aff59f5ed73",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-083",
+      "title": "Octave Locks",
+      "level": 3,
+      "start_line": 1013,
+      "end_line": 1024,
+      "text_sha256": "049b9380f75ab62c2c6c5431015f141fbf56f55526c5f94d4fb4ddf7fce804ff",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-084",
+      "title": "Save and Load",
+      "level": 2,
+      "start_line": 1025,
+      "end_line": 1032,
+      "text_sha256": "84ab6c1c8cec1da5bf3179910d7e18d7eabc14a708b336b171a0d04e475d33a8",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-085",
+      "title": "Options",
+      "level": 3,
+      "start_line": 1033,
+      "end_line": 1036,
+      "text_sha256": "804652c99130b6e05e1674aee0ccb9b0911c3a814e1cfc17eee7d17930e33912",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-086",
+      "title": "Sequencer Options",
+      "level": 4,
+      "start_line": 1037,
+      "end_line": 1038,
+      "text_sha256": "62b109384a5bdaa837429ca58f271923454d08b303d4a9c201eb9631c1b2c17b",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-087",
+      "title": "Shift press stop",
+      "level": 5,
+      "start_line": 1039,
+      "end_line": 1042,
+      "text_sha256": "41bbc1b85ee606f3dad9e8eb6da930633549c161707906efa2fc259c71d02af5",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-088",
+      "title": "Song Mode",
+      "level": 5,
+      "start_line": 1043,
+      "end_line": 1046,
+      "text_sha256": "f23336e64501c742cde537f4ecc5df1b8d83293c6687c9117aa37f270ffa1ebb",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-089",
+      "title": "Reset at Song Editor Pattern Change",
+      "level": 5,
+      "start_line": 1047,
+      "end_line": 1050,
+      "text_sha256": "38cf83228d1b01c9cd84eae77de4d746495d7f9f66caac547ef1224e683c684a",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-090",
+      "title": "Reset at Pattern Repeat",
+      "level": 5,
+      "start_line": 1051,
+      "end_line": 1054,
+      "text_sha256": "3995abf998e5d234142e01c2dbf6f8a6f5bd65d965289c75b4a23354d0b1e368",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-091",
+      "title": "Parameter Slides Wrap",
+      "level": 5,
+      "start_line": 1055,
+      "end_line": 1058,
+      "text_sha256": "1126b92230a10a63aa1cb785c248fd602cde00bd79d9ee0db70ef471eb8f069b",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-092",
+      "title": "Elektron Program Changes",
+      "level": 5,
+      "start_line": 1059,
+      "end_line": 1062,
+      "text_sha256": "1cba70fdce2ca5bb2ad162f362319a1e064d77556ef2ce6703674d96f3abe8de",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-093",
+      "title": "Elektron Program Change Channel",
+      "level": 5,
+      "start_line": 1063,
+      "end_line": 1066,
+      "text_sha256": "d20a2bca639e7721431fb5ced41c2ee67dc4b6000635eca3523d0e9d47ea47c1",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-094",
+      "title": "Parameter Lock Options",
+      "level": 4,
+      "start_line": 1067,
+      "end_line": 1068,
+      "text_sha256": "eb807418d84eae137ff8d7539ae2e5c95f8f88b99db7a2a6edf07d7e22c8d02a",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-095",
+      "title": "Trigless Locks",
+      "level": 5,
+      "start_line": 1069,
+      "end_line": 1072,
+      "text_sha256": "68986f0fa56d488e241131fc44c8cc7ab250ee2e2c11d7ab77ab0a8446f18d0c",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-096",
+      "title": "Quantiser Options",
+      "level": 4,
+      "start_line": 1073,
+      "end_line": 1074,
+      "text_sha256": "71cff99220f53087fa5f5af920c346fea5ff43a8b6bc81e5a033509edf174874",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-097",
+      "title": "Snap Note Masks to Scale",
+      "level": 5,
+      "start_line": 1075,
+      "end_line": 1078,
+      "text_sha256": "00eea8b20f2428b91dded6ee8e27d333201bf035e8adb88a3f2647912d97d127",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-098",
+      "title": "Quantise Note Masks",
+      "level": 5,
+      "start_line": 1079,
+      "end_line": 1082,
+      "text_sha256": "eaa7a26cc59730712354f00158d3aee68e047106ca779b043618532cdb65d888",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-099",
+      "title": "Scales Lock Until Pattern End",
+      "level": 5,
+      "start_line": 1083,
+      "end_line": 1086,
+      "text_sha256": "6663c21aa91c4dfcb9419aef12c527d4ece7570316f6aa928c429ca7d193ffa2",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-100",
+      "title": "Lock All to Pentatonic",
+      "level": 5,
+      "start_line": 1087,
+      "end_line": 1090,
+      "text_sha256": "af037466acd892dec1c4f2e818fa161081d3309bcd3fc530d42f9e131b7368b1",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-101",
+      "title": "Lock Random to Pentatonic",
+      "level": 5,
+      "start_line": 1091,
+      "end_line": 1094,
+      "text_sha256": "7f245bbcdcd317be8f0035988ff10f0738150feb5834064db63f6306c22b7659",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-102",
+      "title": "Lock Merged to Pentatonic",
+      "level": 5,
+      "start_line": 1095,
+      "end_line": 1098,
+      "text_sha256": "aff4ee548aef3c87f2b49b9bd69946cecca6cfdc9d46f4ad7f1cddbc1f25eb08",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-103",
+      "title": "MIDI Controller Options",
+      "level": 4,
+      "start_line": 1099,
+      "end_line": 1100,
+      "text_sha256": "669023112eee3c6b79e78753c55ef07530a73d307e8bda1601da8a9851397b8f",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-104",
+      "title": "Map Scale to White Keys",
+      "level": 5,
+      "start_line": 1101,
+      "end_line": 1104,
+      "text_sha256": "8b71583873d815aa7592538200cbac5da5b3e4630a3e0209f2d4a8b14f0225ed",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-105",
+      "title": "Honor Scale Rotations",
+      "level": 5,
+      "start_line": 1105,
+      "end_line": 1108,
+      "text_sha256": "4382eff70dbb6472724d3d1a0a825b88cca2dd0daf6c5cf5b1bd61dec39b08ba",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-106",
+      "title": "Honor Scale Degree",
+      "level": 5,
+      "start_line": 1109,
+      "end_line": 1112,
+      "text_sha256": "820ae209d5121b182c7213e76e8b9e83ec4d62e14b8fb8d56a30a0e1ac8455bb",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-107",
+      "title": "Honour Scale Transpose",
+      "level": 5,
+      "start_line": 1113,
+      "end_line": 1116,
+      "text_sha256": "c1a9d97479c644a3c988dd8f79dbe8528a42cdd23b56462eebf9c30afc8f0dac",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-108",
+      "title": "Sinfonion Connect",
+      "level": 3,
+      "start_line": 1117,
+      "end_line": 1120,
+      "text_sha256": "d4cbd415db5e6c577bf2a170c6c583727f414d7030ba7823a665b1fc005d3d06",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-109",
+      "title": "LFOs and Modulation",
+      "level": 3,
+      "start_line": 1121,
+      "end_line": 1125,
+      "text_sha256": "247817a1e4ef185b4be509a053544ef510ba4fd93d4566db639b408970638edc",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-110",
+      "title": "Performance Management",
+      "level": 2,
+      "start_line": 1126,
+      "end_line": 1137,
+      "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-111",
+      "title": "Development",
+      "level": 2,
+      "start_line": 1138,
+      "end_line": 1147,
+      "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-112",
+      "title": "Roadmap",
+      "level": 3,
+      "start_line": 1148,
+      "end_line": 1151,
+      "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-113",
+      "title": "Interesting Components for Norns Script Developers",
+      "level": 3,
+      "start_line": 1152,
+      "end_line": 1157,
+      "text_sha256": "80cb16cd1906f008d0f8f125c92d4b904efe308162539589ab9ae13e85922cd1",
+      "classification": "pending-statement-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    },
+    {
+      "id": "CHEAT-ALL",
+      "title": "All cheat-sheet gestures",
+      "classification": "pending-atomic-gesture-reconciliation",
+      "requirements": [],
+      "status": "unreviewed"
+    }
+  ],
+  "manual_sources": [
+    {
+      "path": "README.md",
+      "sha256": "c66fe4506846a0087308b5bf42d9d68ccadd5f43c751f0806cfa555dc8c23ccf"
+    },
+    {
+      "path": "cheat_sheet.html",
+      "sha256": "55d164b0d4e61364fa2b2ab111fc2b11963b7393cf359a0a1b690e530bbd9a2f"
+    },
+    {
+      "url": "https://t.ly/h-Wsw",
+      "status": "user-confirmed-derived-from-repository-documentation",
+      "confirmed": "2026-09-07"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "PAT-EDIT-001",
+      "sections": [
+        "MAN-030",
+        "MAN-031",
+        "MAN-032"
+      ],
+      "statement": "Tapping steps and note/velocity cells creates an editable pattern whose emitted pitches and velocities reflect those choices.",
+      "cases": [
+        "M-PAT-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Current example: four active steps, C D E F then C D E G, velocities 127/117/107/97; remaining steps, patterns, ranges and gestures required.",
+      "oracles": [
+        "exact MIDI note sequence over complete phrases",
+        "edited note LED",
+        "native screen header"
+      ]
+    },
+    {
+      "id": "PAT-LENGTH-001",
+      "sections": [
+        "MAN-030"
+      ],
+      "statement": "In a single pattern, one trig's duration ends upon meeting another.",
+      "cases": [
+        "M-LEN-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Current example: length4 at step1 interrupted by step3 in an8-step loop; wrap, deletion/restoration, fractional lengths, masks and merge interactions remain required.",
+      "oracles": [
+        "exact length LEDs",
+        "MIDI note on/off timestamps with independently expected2-step duration"
+      ]
+    }
+  ]
+}
