@@ -12,3 +12,21 @@ Real input / MIDI-grid-screen outputs are mandatory; controlled time is brought 
 | TIME-001 | Fractional note-off phase and rounding | Independent musical intent required; existing phase-minus-two observations are not correctness goldens |
 
 REV-001 (2026-09-07): user requires Codex only for all future Paranoia reviews. Completed historical reviews remain valid; do not rerun just to change engines.
+
+## Confirmed manual semantics (2026-09-07)
+
+The user confirmed preserving current implementation for these three cases and
+requested corresponding manual clarifications. These are intended behaviour
+decisions from source inspection, not completed behaviour-test coverage.
+
+- SEM-004: An explicit MIDI off lock sends nothing for that step; it does not
+  resend the last lock or cancel an already-running slide.
+- SEM-005: K1+press selects scale editing only. Long press selects a different
+  editing slot, but long-pressing the already selected editing slot disables
+  the global scale and clears editing selection.
+- SEM-006: Channel scale persistence follows the hold-until-end option. With
+  it off, only an active trig passing probability clears prior persistence.
+  Global scale locks persist until replacement/global wrap independently.
+
+README and cheat sheet now state these rules. Add their edge regressions during
+full manual reconciliation; do not mark requirements complete from this edit.

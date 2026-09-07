@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "c66fe4506846a0087308b5bf42d9d68ccadd5f43c751f0806cfa555dc8c23ccf",
+  "manual_sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "section-index-only-not-complete-coverage",
   "sections": [
@@ -611,7 +611,7 @@
       "level": 3,
       "start_line": 743,
       "end_line": 764,
-      "text_sha256": "ef17893a74ab73410357cb29cd116e882b6af2a826cb11d8a85c0c307f4ea9bf",
+      "text_sha256": "0201fcc995e961851cff49c836214cd183e77e528e7e9c5e9cff930c489b2602",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -776,7 +776,7 @@
       "level": 3,
       "start_line": 821,
       "end_line": 843,
-      "text_sha256": "824c321b3332f584468c5d3111a1dc958d2df8ae1fa9fd2e8959fe125fa17035",
+      "text_sha256": "d02820f8ea7fb86889042b4431fa3965f79f93dbd326844125cc520d5578eec3",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -864,7 +864,7 @@
       "level": 2,
       "start_line": 908,
       "end_line": 911,
-      "text_sha256": "1086cd587af5d9bee150ed95ddbbcf2fcae2a5a9d7b55b298c16b7e79e1d6d4b",
+      "text_sha256": "d6b36696cd868adb542b004eaf87c165c3e05e4e4cdaa037adeab3001206b8cb",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -908,7 +908,7 @@
       "level": 3,
       "start_line": 980,
       "end_line": 998,
-      "text_sha256": "28afd72b93c3508469e581feb3e7fa676a9413e631b4624628f9fc649a908e33",
+      "text_sha256": "cf5abf336ea77377a81dbc2dee556fdfa50c78f1eaeb1c0ed7a6929caea07b09",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1108,7 +1108,7 @@
       "level": 5,
       "start_line": 1083,
       "end_line": 1086,
-      "text_sha256": "6663c21aa91c4dfcb9419aef12c527d4ece7570316f6aa928c429ca7d193ffa2",
+      "text_sha256": "da8498011d5eae9759a4b2b04d31e68e4d592fdb25a95bc9c28e306a4462c73e",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1282,11 +1282,11 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "c66fe4506846a0087308b5bf42d9d68ccadd5f43c751f0806cfa555dc8c23ccf"
+      "sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9"
     },
     {
       "path": "cheat_sheet.html",
-      "sha256": "55d164b0d4e61364fa2b2ab111fc2b11963b7393cf359a0a1b690e530bbd9a2f"
+      "sha256": "4e964ac61b350d4f90fe954a8ded36f6e4b52bbaeb6364316a7d2d5602fc85f3"
     },
     {
       "url": "https://t.ly/h-Wsw",

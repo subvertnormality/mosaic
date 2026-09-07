@@ -853,7 +853,7 @@
         <div class="lock">Trig Locks: Hold step, modify desired trig param</div>
         <div class="lock">Mask Lock: Hold step, modify desired mask</div>
         <div class="lock">Octave Lock: Hold step, press desired octave</div>
-        <div class="lock">Channel Scale Lock: Hold step, press desired scale slot. Scale is applied to this channel only on selected step.</div>
+        <div class="lock">Channel Scale Lock: Hold step, press desired scale slot. Applies only to this channel. Persists until channel wrap when hold-until-end is on, or the next active trig passing probability when off; a new channel lock replaces it.</div>
       </div>
     </div>
   </div>
@@ -901,7 +901,7 @@
       <h2>Scale Editor</h2>
       <div class="command">
         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg" width="80" />
-        <div class="command-text">Scale Select: Quick press to apply global scale, hold to edit without applying scale</div>
+        <div class="command-text">Scale Select: Quick press toggles the global scale. K1+press selects editing only. Hold another editing slot to select it; hold the already selected editing slot to turn the global scale off.</div>
       </div>
       <div class="command">
         <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg" width="80" />
@@ -913,7 +913,7 @@
       </div>
       <h2>Locks</h2>
       <div class="locks">
-         <div class="lock">Scale Lock: Hold step, press desired scale slot. Lock applies globally on this step.</div>
+         <div class="lock">Scale Lock: Hold step, press desired scale slot. Applies globally from this step until another global lock or global-track wrap, independently of the channel hold-until-end option.</div>
          <div class="lock">Transposition Lock: Hold step, select desired transposition using the transposition fader. Applies transposition on top of current scale values.</div>  
        </div>
        

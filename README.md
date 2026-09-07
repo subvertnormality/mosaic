@@ -750,8 +750,8 @@ In the second user interface page of the channel editor on the Norns screen, you
 * **Changing Parameters**: To select a parameter, turn E2. Once highlighted, adjust the parameter's value by rotating E3. To fine tune, rotate E3 whilst holding K1.
 * **Activating Parameters**: To activate a different parameter within the same slot, press K2.
 * **Locking Changes**: As you adjust values, the system automatically saves your changes. You can also create "trig locks" on specific steps by holding down the step and turning E3. This allows you to set values that will override the default parameter for that step.
-* **Default Parameter Values**: By default, a pre-set parameter value is transmitted to your selected device on steps without a trig lock. If a parameter's trig lock is set to "off," the mosaic will not send any value to your device for that parameter.
-* **Handling Off Settings**: If you set a trig lock to "off" on a step, the system will continue to send the last trig locked value instead of reverting to the default parameter value.
+* **Default Parameter Values**: A pre-set parameter value is transmitted to your selected device on steps without a trig lock, unless the value is off or a parameter slide is active.
+* **Handling Off Settings**: An explicit MIDI parameter lock set to "off" sends no value for that parameter on that step. It does not resend the previous lock or restore the default, so the device keeps its last received value. An off lock does not itself cancel a parameter slide that is already running; that slide may continue sending values.
 
 These controls offer flexibility and precision in shaping the behavior of each sequence, ensuring that your musical creativity can be fully realised through the Norns system.
 
@@ -826,9 +826,9 @@ When in the scale editor, a short press of the scale buttons selects one of the 
 
 <img alt="Scale editor scale slot select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg" width="300" />
 
-A long or shift press (hold K1) on a scale button selects a scale for editing without applying it to the currently playing pattern, indicated by a dimly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
+A shift press (hold K1) selects a scale slot for editing without changing the global scale selection. A long press on a different editing slot does the same. A long press on the slot already selected for editing turns the global scale off and clears the editing selection. Selecting a slot for editing does not switch playback to it; however, saving changes to a scale already used by playback changes that scale. The editing selection has a dim indicator when it differs from the applied scale.
 
-[Scale locks](#scale-locks) can be set to apply a scale globally or to a single channel, activating at a designated step and persisting until the end of the pattern. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
+[Scale locks](#scale-locks) can be set to apply a scale globally or to a single channel, activating at a designated step. Global locks persist until another global lock or the global scale track wraps. Channel-lock duration follows the Scales Lock Until Pattern End option. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
 
 <img alt="Scale editor step select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg" width="300" />
 
@@ -907,7 +907,7 @@ The song sequence's length can be adjusted using the fader located at the lower 
 
 ## Locks
 
-Trig param values, masks, and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. When a value is locked to a step, it applies for the duration of that step. This includes trig params, scales, and octave settings on the channel page, as well as global scale and transpose settings on the global scale page. Locks are set on the channel edit page. Trig locks enhance your control over the sequencing process, allowing for precise adjustments and modifications at any step of your sequence.
+Trig param values, masks, and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. A lock takes effect at its designated step. Its duration depends on the lock type: parameter and octave locks affect that step, while scale locks follow the persistence rules below. See the relevant lock section for transposition behaviour. Locks are set on the channel edit page. Trig locks enhance your control over the sequencing process, allowing for precise adjustments and modifications at any step of your sequence.
 
 ### Trig Param Locks
 
@@ -979,7 +979,7 @@ To clear all mask trig locks from a channel:
 
 ### Scale Locks
 
-Scales can be set on a per-step basis. They can be set globally across all channels on the Scale Editor, or per channel oin the Channel Editor. Scale locks on set on steps in the Channel Editor take prescedence over global scale locks. Scales persist until the end of the pattern unless another scale lock is encountered. To set a scale lock:
+Scales can be set on a per-step basis. They can be set globally across all channels on the Scale Editor, or per channel oin the Channel Editor. Scale locks set on steps in the Channel Editor take precedence over global scale locks. With Scales Lock Until Pattern End on, a channel scale lock persists until that channel wraps to its start, unless another channel scale lock replaces it. With the option off, it persists until the next active trig that passes its probability check; a probability-rejected trig does not clear it. A scale lock on that next trig applies in place of the old lock. Global scale-track locks are independent of this option: they persist until another global lock replaces them or the global scale track wraps. To set a scale lock:
 
 1. Hold down the step you want to modify on the channel page sequencer.
 2. Press the desired scale slot.
@@ -1082,7 +1082,7 @@ The "Elektron program change channel" setting determines which MIDI channel to s
 
 ##### Scales Lock Until Pattern End
 
-The "Scales lock until ptn end" option, when enabled, ensures scale locks persist until the end of the channel's length. If disabled, scale locks continue only until the next trig.
+The "Scales lock until ptn end" option is on by default and controls channel scale locks. When on, a lock persists until the channel wraps to its start, unless another channel scale lock replaces it. When off, the next active trig that passes its probability check clears the previous lock; probability-rejected trigs do not clear it. A new lock on that trig takes effect normally. Global scale-track locks do not use this option: they persist until replacement or global-track wrap.
 
 ##### Lock All to Pentatonic
 
