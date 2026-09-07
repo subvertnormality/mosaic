@@ -11,8 +11,8 @@ feedback and disarmed replay MIDI with independently calculated step positions.
 | Stable placement | Empty pattern, distinct notes inside steps2/4 at100BPM, external MIDI clock, disarmed internal replay | M-REC-001 passes controlled and real-time |
 | Boundary phase | Just before/on/after step boundaries, native pulse boundaries and fractional phases; explicit equal-deadline ordering contract | M-REC-002/003 pass at minus/plus2ms; M-REC-004 exact pulse hypothesis fails; SEM-008 open |
 | Clock and tempo | Internal and MIDI sources, slow/fast tempo, tempo change while held, source handoff | Planned |
-| Channel position | Channel divisions, non-first range start, unequal/coprime lengths, selected-channel switches during held notes | Planned |
-| Wrap | Last-to-first step, grid row transitions, global/channel wrap, song transitions | Planned |
+| Channel position | Channel divisions, non-first range start, unequal/coprime lengths, selected-channel switches during held notes | M-REC-005 origin ownership; M-REC-008/009/010 non-first ranges pass; divisions and unequal lengths remain |
+| Wrap | Last-to-first step, grid row transitions, global/channel wrap, song transitions | M-REC-009 crosses a grid row; M-REC-011/012 record across channel wrap; song transitions remain |
 | Note lifecycle | Short/long notes, same-pitch retrigger/overlap, chords and all release orders, note-on velocity0 | Planned |
 | Recording lifecycle | Arm/disarm before/on/after boundary; stop/start while held; empty and existing target steps | Planned |
 | Feedback | Live updates and stopped/revisited grid/mask screen; distinguish stale display from wrong stored/replayed position | Planned |

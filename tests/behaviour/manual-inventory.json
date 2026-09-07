@@ -3036,7 +3036,12 @@
       "statement": "Independent channel ranges use two distinct held start/end steps. A standalone long hold is inactive and must preserve subsequent combinations.",
       "cases": [
         "M-RANGE-001",
-        "M-RANGE-002"
+        "M-RANGE-002",
+        "M-REC-008",
+        "M-REC-009",
+        "M-REC-010",
+        "M-REC-011",
+        "M-REC-012"
       ],
       "status": "partial-domain-coverage",
       "domain": "All supported distinct starts/ends; wrap; SEM-002 inactive lone long hold and delayed combination; coprime lengths; global-scale interaction.",
@@ -4566,7 +4571,12 @@
         "M-REC-004",
         "M-REC-005",
         "M-REC-006",
-        "M-REC-007"
+        "M-REC-007",
+        "M-REC-008",
+        "M-REC-009",
+        "M-REC-010",
+        "M-REC-011",
+        "M-REC-012"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",

@@ -471,3 +471,17 @@ There are31 native behaviour cases. This validates fixed-tempo, onset-scheduled
 fractional releases only. Arbitrary-phase arpeggio callbacks, changing clocks,
 swing/shuffle, recording wrap/arm/disarm, visible playhead agreement and the
 remaining manual/campaign/release domains remain required.
+
+
+## Live recording range positions and wrap
+
+M-REC-008/009/010 cover channel ranges2..5,15..18 and61..64. Independently
+scheduled notes on relative steps2/4 must appear at the correct absolute grid
+cells. M-REC-011/012 record across4-to1 and64-to61 wrap: replay must reverse the
+input note order and preserve the expected three-step/one-step gaps. All64 grid
+cells are asserted, then recording is disarmed and fresh MIDI capture checks
+pitch, velocity, order and spacing. All five cases pass real-time and three
+identical fresh controlled processes. No production Mosaic/emulator changes
+were needed. There are36 native cases; these results do not explain the user's
+reported frequent misplacement. Unequal divisions, live playhead feedback,
+recording lifecycle, tempo changes and song boundaries remain open.

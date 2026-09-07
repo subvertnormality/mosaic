@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue live recording: non-first channel ranges/divisions, wrap and playhead agreement; extend fractional duration coverage to arbitrary-phase callbacks and changing clocks. C08 and full behaviour/emulator release remain incomplete.",
+  "next_action": "Continue live recording at unequal channel divisions and compare live playhead feedback with scheduled MIDI. Recording arm/disarm, tempo/source changes, song transitions and full C08/manual/emulator release remain unfinished.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -693,6 +693,78 @@
       "sha256": "78b02581dd882d2a2204e317730b559727b40fb1dccaa1303d899f8828943596",
       "passed": true,
       "case": "M-REC-007",
+      "mode": "controlled-repeat"
+    }
+  ],
+  "recording_range_wrap_validation": [
+    {
+      "run_id": "1d19498ef8674a36b016efd543eb4ff2",
+      "sha256": "dd7f070dc4f41089de4f7d11505bba04e117800c54325912b2ca4a05075ddde2",
+      "case": "M-REC-008",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "67ad28110c4547a2b7cc798e51cf361f",
+      "sha256": "693cd85369c168e4df1dd69cb8940c9eb927d2c441b1639082a73778f75ab014",
+      "case": "M-REC-009",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "2fb1eee72a58444797ad6f81eb6df433",
+      "sha256": "3aa83f86cf214d6c261a0c154f5542fe5611e8887a24032c1c1b8652c730492d",
+      "case": "M-REC-010",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "12871acd33d64d3d9fdd83636d8dad2f",
+      "sha256": "37c1570f325c0396fe405281e1a6e9963acba1b7f39813e3c9c90cb8b599a5ff",
+      "case": "M-REC-011",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "08536bdf596c403eacba5eaa164c307d",
+      "sha256": "6344c50023973a0558d120816026569dd562f92b413536eaecacee9e1a9897f1",
+      "case": "M-REC-012",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-489d9c23d23542fcaa8c4961e1ee025f",
+      "sha256": "4fb34c1c4072f63c9339c538cc36031cf975cc7324b2b53b36d29c8ff92a1c8c",
+      "case": "M-REC-008",
+      "passed": true,
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-2dc0e9c6898446bba21e1d7884ec6b88",
+      "sha256": "d0c7b399186122576f3f162aec1441b3a5d915e47f307559f5fe0ae41da532e2",
+      "case": "M-REC-009",
+      "passed": true,
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-6d1661b224d344d4be5053d735716195",
+      "sha256": "af73a573af14fce1e4bdd8a856968228d06e2da36417cee18ec440699667627b",
+      "case": "M-REC-010",
+      "passed": true,
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-d62528db87d24fc08e058b5352d7eb49",
+      "sha256": "90c3ad14a3b6b2e6b8e3f612e553654e1726eb94687444ba008ea00b1d901875",
+      "case": "M-REC-011",
+      "passed": true,
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-3efae38c58f4465382efbfe0ef5d1c8d",
+      "sha256": "308f2d48305a3dfeaebe7c5ef882a7bdf50c41a13a1782163b9113f0750cbeee",
+      "case": "M-REC-012",
+      "passed": true,
       "mode": "controlled-repeat"
     }
   ]
