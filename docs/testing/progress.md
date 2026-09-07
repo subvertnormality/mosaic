@@ -22,3 +22,25 @@ Coverage remains incomplete:113 README headings plus the cheat sheet are indexed
 but only two requirements have partial-domain executable coverage. --require-all
 fails explicitly. Controlled time has an inspected adapter design, no admitted
 runtime implementation yet. T00/T01/T02 remain unfinished; no refactor starts.
+
+## Continuation: length boundaries and repeated-pitch releases
+
+Codex is the only permitted engine for future Paranoia reviews. No new review
+checkpoint has been claimed in this continuation.
+
+M-LEN-002 now verifies collision deletion/restoration/reinsertion with exact LEDs
+and MIDI durations. M-LEN-003 verifies truncation across step64 using distinct
+pitches over three complete64-step loops. The original same-pitch version failed
+the stop/drain oracle and is retained as M-MIDI-001. Raw native emissions show
+7 Note Ons but only4 Note Offs on the failing baseline; the minimal m_midi.lua
+correction emits a release for each note lifetime and produces7/7. Both wrapped
+duration cases, restoration and ordinary editing pass with both fixes applied.
+All474 existing units pass on baseline and combined corrected isolated copies.
+Exact manifests, digests and event counts are in bugs.json.
+
+Five named Mosaic-owned cases now exist (M-LEN-001 is also executed inside the
+restoration case). This remains partial coverage, not an exhaustive suite. The
+emulator's isolated C scheduler seam passes original-versus-candidate boundary
+checks, but controlled-time runtime integration and Codex P5 remain unfinished.
+Next: coherent native time/internal clock/metro/event draining, complete atomic
+manual reconciliation, runner fault probes and remaining workflow families.

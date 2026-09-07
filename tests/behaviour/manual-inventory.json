@@ -334,7 +334,10 @@
       "classification": "pending-statement-reconciliation",
       "requirements": [
         "PAT-EDIT-001",
-        "PAT-LENGTH-001"
+        "PAT-LENGTH-001",
+        "PAT-LENGTH-002",
+        "PAT-LENGTH-003",
+        "MIDI-RELEASE-001"
       ],
       "status": "unreviewed"
     },
@@ -1312,6 +1315,59 @@
       "oracles": [
         "exact length LEDs",
         "MIDI note on/off timestamps with independently expected2-step duration"
+      ]
+    },
+    {
+      "id": "PAT-LENGTH-002",
+      "sections": [
+        "MAN-030"
+      ],
+      "statement": "An authored trig length remains available after a temporary following trig is removed; reinsertion truncates playback again.",
+      "basis": "Interaction inferred from independent duration editing and next-trig truncation rules; retain authored length instead of destructive mutation.",
+      "cases": [
+        "M-LEN-002"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Step1 length4; insert/remove/reinsert step3; length endpoints/wrap/masks/merges remain required.",
+      "oracles": [
+        "Grid length segments",
+        "MIDI duration4 to2 steps with exact complete phrase notes"
+      ]
+    },
+    {
+      "id": "PAT-LENGTH-003",
+      "sections": [
+        "MAN-030"
+      ],
+      "statement": "Next-trig duration truncation applies across the64-step pattern boundary.",
+      "basis": "Boundary application of the manual next-trig rule and the exposed wrap-length gesture.",
+      "cases": [
+        "M-LEN-003"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Step63 length4 interrupted by step1; other endpoints, masks and shortened-channel interactions remain required.",
+      "oracles": [
+        "Exact wrapped length LEDs",
+        "Exact MIDI pitches/velocities over3 complete64-step loops",
+        "Independent2-step duration at step63"
+      ]
+    },
+    {
+      "id": "MIDI-RELEASE-001",
+      "sections": [
+        "MAN-030"
+      ],
+      "statement": "Each emitted MIDI note has a corresponding release, including repeated pitches at a pattern wrap and subsequent transport stop.",
+      "basis": "MIDI note lifetime invariant and mandatory no-stuck-note acceptance, tested through manual duration and transport gestures.",
+      "cases": [
+        "M-MIDI-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
+      "oracles": [
+        "Native capture of balanced Note On/Off",
+        "No outstanding MIDI note after stop",
+        "Independent wrapped note durations"
       ]
     }
   ]

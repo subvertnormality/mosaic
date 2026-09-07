@@ -358,3 +358,5 @@ These clarifications resolve initial Paranoia findings and govern the cards abov
   approval wording is superseded: the user authorises pushing this branch.
 
 Review outcome: focused follow-up `d8e019ad-c0ba-4074-a2c7-1341b09a13ce` found no consequential plan-level gap. This admits execution, not coverage completion. Inventory Sinfonion commands 5–10 as init-only unless a documented runtime contract supplies another requirement.
+
+Review engine policy (2026-09-07 user steering): all future Paranoia critiques and follow-ups use Codex only. Existing completed reviews remain historical evidence.

@@ -293,9 +293,10 @@ function m_midi:note_off(note, velocity, channel, device)
     if self.note_counts[device] and self.note_counts[device][channel] and self.note_counts[device][channel][note] then
       -- Decrement the note count
       self.note_counts[device][channel][note] = self.note_counts[device][channel][note] - 1
+      -- Every emitted Note On owns a Note Off, including overlapping pitches.
+      -- Retain counts for bookkeeping without collapsing receiver releases.
+      midi_devices[device]:note_off(note, velocity, channel)
       if self.note_counts[device][channel][note] <= 0 then
-        -- Send Note Off only when count reaches zero
-        midi_devices[device]:note_off(note, velocity, channel)
         -- Remove the note from the table
         self.note_counts[device][channel][note] = nil
       end

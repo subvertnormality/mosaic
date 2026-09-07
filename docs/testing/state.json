@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Expand atomic README/cheat-sheet requirements and source-image gestures; implement full runner admission/fault probes and controlled-time native adapter/P5. Extend length boundary regressions, then remaining T03 editing/harmony candidates. SEM-001/002 remain dependent clarifications only.",
+  "next_action": "Codex-only reviews. Five initial cases and two isolated source fixes exist; latest passing manifests and native release counts in progress.md/bugs.json. Continue emulator C16 shared-time/internal24PPQN/metro/event-drain implementation then generic runtime probes/Codex P5; expand atomic manual requirements and T01 fault admission, remaining feature cases. Full campaign incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -21,5 +21,23 @@
   },
   "review_evidence": "reviews/plan-triage.md",
   "active_runners": [],
-  "evidence": "progress.md"
+  "evidence": "progress.md",
+  "latest_evidence": {
+    "M-MIDI-001": {
+      "path": "../mosaic-behaviour-runs/89a4f8adbf9f47d8b36b73bb6051ea29/manifest.json",
+      "sha256": "119dddbed5ea80d34b3d8af69a224ced1acae113a7268d341d1b150d155ea61b"
+    },
+    "M-LEN-003": {
+      "path": "../mosaic-behaviour-runs/04e6ee27860b4a1c98ac6c9d9272c24d/manifest.json",
+      "sha256": "5b262400137fba2a26800146e15121a2c724026004fe91291d0dc997b558221d"
+    },
+    "M-LEN-002": {
+      "path": "../mosaic-behaviour-runs/92b25d70a645400f854d3d712fe953ae/manifest.json",
+      "sha256": "cca112a615fef6825a0e517aabf373863e8cc8349c7879ed4dd08f0fe752c490"
+    },
+    "M-PAT-001": {
+      "path": "../mosaic-behaviour-runs/a1f98a7c965b49458b496a79546775ba/manifest.json",
+      "sha256": "1b1121ff3a483b59fe73dbd81e7f4517506871e27734c5810e86579d44856b54"
+    }
+  }
 }

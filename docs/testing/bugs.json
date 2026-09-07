@@ -11,7 +11,7 @@
     },
     {
       "id": "midi-counts-and-mask-clearing",
-      "status": "candidate-not-applied",
+      "status": "note-release-patch-applied-and-verified; separate-mask-clearing-patch-not-applied",
       "candidate_manifest": "midi-counts.json"
     },
     {
@@ -74,11 +74,69 @@
           }
         }
       },
-      "remaining": "Wrap, masks, merges and restoration remain campaign obligations; not full length-family certification."
+      "remaining": "Wrap, masks, merges and restoration remain campaign obligations; not full length-family certification.",
+      "additional_regressions": {
+        "M-LEN-003": {
+          "path": "../mosaic-behaviour-runs/04e6ee27860b4a1c98ac6c9d9272c24d/manifest.json",
+          "sha256": "5b262400137fba2a26800146e15121a2c724026004fe91291d0dc997b558221d"
+        },
+        "M-LEN-002": {
+          "path": "../mosaic-behaviour-runs/92b25d70a645400f854d3d712fe953ae/manifest.json",
+          "sha256": "cca112a615fef6825a0e517aabf373863e8cc8349c7879ed4dd08f0fe752c490"
+        }
+      }
     },
     {
       "id": "stopped-scale-highlight",
       "status": "known-baseline-needs-regression"
+    },
+    {
+      "id": "repeated-pitch-wrap-release",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "case": "M-MIDI-001",
+      "historical_case": "M-LEN-003 before separating distinct-pitch duration coverage",
+      "baseline": {
+        "path": "../mosaic-behaviour-runs/9c97dd5fe3a84aed94b07efe85977c1c/manifest.json",
+        "sha256": "63501d3e5f6cc802ed0c4814d75ffc92189c623e0e72d6e32c067ec3f0279cb1"
+      },
+      "failure": "Required stop drain times out: repeated pitch Note Ons have missing matching Note Offs.",
+      "candidate": "tests/behaviour/candidates/0002-midi-balanced-note-offs.patch",
+      "corrected": {
+        "path": "../mosaic-behaviour-runs/89a4f8adbf9f47d8b36b73bb6051ea29/manifest.json",
+        "sha256": "119dddbed5ea80d34b3d8af69a224ced1acae113a7268d341d1b150d155ea61b"
+      },
+      "emission_counts": {
+        "baseline": {
+          "note_on": 7,
+          "note_off": 4
+        },
+        "corrected": {
+          "note_on": 7,
+          "note_off": 7
+        }
+      },
+      "regressions": {
+        "M-MIDI-001": {
+          "path": "../mosaic-behaviour-runs/89a4f8adbf9f47d8b36b73bb6051ea29/manifest.json",
+          "sha256": "119dddbed5ea80d34b3d8af69a224ced1acae113a7268d341d1b150d155ea61b"
+        },
+        "M-LEN-003": {
+          "path": "../mosaic-behaviour-runs/04e6ee27860b4a1c98ac6c9d9272c24d/manifest.json",
+          "sha256": "5b262400137fba2a26800146e15121a2c724026004fe91291d0dc997b558221d"
+        },
+        "M-LEN-002": {
+          "path": "../mosaic-behaviour-runs/92b25d70a645400f854d3d712fe953ae/manifest.json",
+          "sha256": "cca112a615fef6825a0e517aabf373863e8cc8349c7879ed4dd08f0fe752c490"
+        },
+        "M-PAT-001": {
+          "path": "../mosaic-behaviour-runs/a1f98a7c965b49458b496a79546775ba/manifest.json",
+          "sha256": "1b1121ff3a483b59fe73dbd81e7f4517506871e27734c5810e86579d44856b54"
+        }
+      },
+      "units": {
+        "path": "../mosaic-behaviour-runs/units-f7b8b7b73ddc4695b514c6b475b566e1/results.json",
+        "sha256": "785c1f9edbb1bf150bde43cdd66d8e4131c0437378e0b3421140cf2569e7fdc5"
+      }
     }
   ]
 }
