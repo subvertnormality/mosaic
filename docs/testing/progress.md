@@ -861,3 +861,14 @@ contains32 selector edits and16 retention checks, with96 complete MIDI phrases.
 The note-selector requirement now has a partial binding. Exact gesture thresholds,
 interrupted modifiers and playing-state changes remain required; no production
 change or full-coverage claim.
+
+## Hold boundaries and cancellation
+
+M-EDIT-005 passes both modes. Note-up and velocity-down range controls distinguish
+short presses at one second minus1ns from long presses at one second plus1ns in
+controlled time. Real-time delivery intervals are bracketed around native input
+acknowledgements and must stay entirely on the intended side of the threshold.
+A second grid press cancels each pending long action; holding past its former
+deadline and releasing leaves the range unchanged. Each result is checked via
+grid selection and exact MIDI playback. No production change. Other directions,
+exact equal-deadline ordering and live/overlap combinations remain required.

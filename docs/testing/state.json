@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue gesture threshold/interruption, inactive-note, visualizer and remaining manual/emulator domains. All-slot note selectors pass both modes. SEM-007 arbitration remains pending; do not bypass denial.",
+  "next_action": "Test the pattern-screen channel visualizer with an independent framebuffer oracle, including shrinking ranges and switching channels. Hold-boundary cases pass both modes. Continue full manual/emulator delivery; do not bypass rejected SEM-007 arbitration.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2848,7 +2848,7 @@
   },
   "updated": "2026-09-08",
   "manual_binding_snapshot": {
-    "implemented_cases": 75,
+    "implemented_cases": 76,
     "requirements": 141,
     "requirements_with_case": 46,
     "requirements_without_case": 95,
@@ -2880,5 +2880,226 @@
     ],
     "scope": "K1+press and long-hold selection in the note editor across all16 slots. Each gesture changes the intended pattern, emits its expected MIDI, and all16 patterns retain their final edits.",
     "limitations": "Short-tap versus hold threshold boundaries, interrupted modifiers and playing-state selection remain required. Partial requirement coverage, not full acceptance."
+  },
+  "editor_hold_boundary_validation": {
+    "status": "validated",
+    "runs": [
+      {
+        "case": "M-EDIT-005",
+        "mode": "controlled-experimental",
+        "run_id": "cb12503e697041dcb2a581c402469cb1",
+        "manifest_sha256": "cabe9df4339693333eafb37353e5773e536bfafba132cfbece58951716db0109",
+        "passed": true,
+        "checks": [
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "note",
+            "boundary": "before",
+            "pitch": 72,
+            "passed": true
+          },
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "note",
+            "boundary": "after",
+            "pitch": 83,
+            "passed": true
+          },
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "note",
+            "boundary": "cancelled",
+            "pitch": 71,
+            "passed": true
+          },
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "velocity",
+            "boundary": "before",
+            "velocity": 117,
+            "passed": true
+          },
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "velocity",
+            "boundary": "after",
+            "velocity": 58,
+            "passed": true
+          },
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "velocity",
+            "boundary": "cancelled",
+            "velocity": 127,
+            "passed": true
+          }
+        ],
+        "input_bounds": [
+          {
+            "kind": "hold-input-bounds",
+            "x": 14,
+            "interrupted": false,
+            "expected_long": false,
+            "logical_seconds": 0.999999999,
+            "wall_lower_seconds": 0.016547094,
+            "wall_upper_seconds": 0.042814777
+          },
+          {
+            "kind": "hold-input-bounds",
+            "x": 14,
+            "interrupted": false,
+            "expected_long": true,
+            "logical_seconds": 1.000000001,
+            "wall_lower_seconds": 0.017025926,
+            "wall_upper_seconds": 0.044927988
+          },
+          {
+            "kind": "hold-input-bounds",
+            "x": 14,
+            "interrupted": true,
+            "expected_long": false,
+            "logical_seconds": 1.16,
+            "wall_lower_seconds": 0.068962995,
+            "wall_upper_seconds": 0.093705351
+          },
+          {
+            "kind": "hold-input-bounds",
+            "x": 16,
+            "interrupted": false,
+            "expected_long": false,
+            "logical_seconds": 0.999999999,
+            "wall_lower_seconds": 0.01659895,
+            "wall_upper_seconds": 0.043596556
+          },
+          {
+            "kind": "hold-input-bounds",
+            "x": 16,
+            "interrupted": false,
+            "expected_long": true,
+            "logical_seconds": 1.000000001,
+            "wall_lower_seconds": 0.015683301,
+            "wall_upper_seconds": 0.041205509
+          },
+          {
+            "kind": "hold-input-bounds",
+            "x": 16,
+            "interrupted": true,
+            "expected_long": false,
+            "logical_seconds": 1.16,
+            "wall_lower_seconds": 0.069904874,
+            "wall_upper_seconds": 0.095081638
+          }
+        ]
+      },
+      {
+        "case": "M-EDIT-005",
+        "mode": "real-time",
+        "run_id": "8b0a196eb7254655b86d1a3da1072b95",
+        "manifest_sha256": "13c66c8758065d30d652be5a897678d3ca8adcf5a2ca6af8adf90bcd4da180e1",
+        "passed": true,
+        "checks": [
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "note",
+            "boundary": "before",
+            "pitch": 72,
+            "passed": true
+          },
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "note",
+            "boundary": "after",
+            "pitch": 83,
+            "passed": true
+          },
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "note",
+            "boundary": "cancelled",
+            "pitch": 71,
+            "passed": true
+          },
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "velocity",
+            "boundary": "before",
+            "velocity": 117,
+            "passed": true
+          },
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "velocity",
+            "boundary": "after",
+            "velocity": 58,
+            "passed": true
+          },
+          {
+            "kind": "editor-hold-boundary",
+            "editor": "velocity",
+            "boundary": "cancelled",
+            "velocity": 127,
+            "passed": true
+          }
+        ],
+        "input_bounds": [
+          {
+            "kind": "hold-input-bounds",
+            "x": 14,
+            "interrupted": false,
+            "expected_long": false,
+            "logical_seconds": 0.0,
+            "wall_lower_seconds": 0.951002448,
+            "wall_upper_seconds": 0.979892729
+          },
+          {
+            "kind": "hold-input-bounds",
+            "x": 14,
+            "interrupted": false,
+            "expected_long": true,
+            "logical_seconds": 0.0,
+            "wall_lower_seconds": 1.051100321,
+            "wall_upper_seconds": 1.083143754
+          },
+          {
+            "kind": "hold-input-bounds",
+            "x": 14,
+            "interrupted": true,
+            "expected_long": false,
+            "logical_seconds": 0.0,
+            "wall_lower_seconds": 1.189658326,
+            "wall_upper_seconds": 1.224621257
+          },
+          {
+            "kind": "hold-input-bounds",
+            "x": 16,
+            "interrupted": false,
+            "expected_long": false,
+            "logical_seconds": 0.0,
+            "wall_lower_seconds": 0.951025106,
+            "wall_upper_seconds": 0.978959423
+          },
+          {
+            "kind": "hold-input-bounds",
+            "x": 16,
+            "interrupted": false,
+            "expected_long": true,
+            "logical_seconds": 0.0,
+            "wall_lower_seconds": 1.051117945,
+            "wall_upper_seconds": 1.08153782
+          },
+          {
+            "kind": "hold-input-bounds",
+            "x": 16,
+            "interrupted": true,
+            "expected_long": false,
+            "logical_seconds": 0.0,
+            "wall_lower_seconds": 1.190598552,
+            "wall_upper_seconds": 1.223131366
+          }
+        ]
+      }
+    ],
+    "scope": "Note-up and velocity-down fine/held controls at one second minus/plus1ns in controlled time, with measured real-time margins. A second grid press cancels each pending long action without changing the range.",
+    "limitations": "Other directions, more overlapping gestures, exact equality ordering and playing-state transitions remain required. Partial domains; full delivery incomplete."
   }
 }

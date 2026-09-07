@@ -393,6 +393,42 @@ def note_pattern_selectors(c):
         c.results.append(dict(kind='pattern-selector-retained',slot=slot,pitch=authored[slot],passed=True))
 
 
+def editor_hold_boundaries(c):
+    import time
+    c.configure();c.tap(5,8);c.tap(5,8)
+    before=.999999999 if c.clock_mode=='controlled-experimental' else .95
+    after=1.000000001 if c.clock_mode=='controlled-experimental' else 1.05
+    baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]
+    def hold(x,seconds,expected_long,interrupt=False):
+        logical_start=c.logical_ns;t0=time.monotonic_ns()
+        c.action(type='grid',x=x,y=8,state=1);t1=time.monotonic_ns()
+        if interrupt:
+            c.elapse(.5);c.tap(4,3);c.elapse(.6)
+        else:c.elapse(seconds)
+        t2=time.monotonic_ns();logical_end=c.logical_ns
+        c.action(type='grid',x=x,y=8,state=0);t3=time.monotonic_ns()
+        lower=(t2-t1)/1e9;upper=(t3-t0)/1e9
+        c.results.append(dict(kind='hold-input-bounds',x=x,interrupted=interrupt,
+            expected_long=expected_long,logical_seconds=(logical_end-logical_start)/1e9,
+            wall_lower_seconds=lower,wall_upper_seconds=upper))
+        if c.clock_mode=='real-time' and not interrupt:
+            assert lower>1 if expected_long else upper<1, 'Host input delivery crossed the intended one-second hold boundary'
+        c.elapse(.06)
+    for label,duration,pitch in [('before',before,72),('after',after,83),('cancelled',0,71)]:
+        c.tap(15,8) # Return the displayed note range to the root page.
+        hold(14,duration,label=='after',interrupt=label=='cancelled')
+        c.tap(4,1);c.led_values([(4,1)],[12])
+        c.playback(baseline+[(1,[144,pitch,97])],cycles=2,timeout=3,settle_seconds=4/3-.1)
+        c.results.append(dict(kind='editor-hold-boundary',editor='note',boundary=label,pitch=pitch,passed=True))
+    c.tap(5,8) # Velocity editor; the fourth note now remains B4.
+    for label,duration,velocity in [('before',before,117),('after',after,58),('cancelled',0,127)]:
+        editor_range_hold(c,15,8) # Highest velocity range, independent of old offset.
+        hold(16,duration,label=='after',interrupt=label=='cancelled')
+        c.tap(4,1);c.led_values([(4,1)],[12])
+        c.playback(baseline+[(1,[144,71,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
+        c.results.append(dict(kind='editor-hold-boundary',editor='velocity',boundary=label,velocity=velocity,passed=True))
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1474,6 +1510,7 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-EDIT-005':dict(run=editor_hold_boundaries,requirements=['PAT-NOTE-RANGE','PAT-VELOCITY'],description='Note/velocity range holds immediately before/after1s and cancelled by a second grid press; exact MIDI and measured real-time margins'),
  'M-EDIT-004':dict(run=note_pattern_selectors,requirements=['PAT-NOTE-SELECT'],description='K1 and long-hold note-editor pattern selection across all16 slots, edit/playback and retained-pattern isolation'),
  'M-EDIT-001':dict(run=editor_note_ranges,requirements=['PAT-NOTE-RANGE'],description='Note range fine steps, held extrema, clamps and center reset'),
  'M-EDIT-002':dict(run=editor_velocity_ranges,requirements=['PAT-VELOCITY'],description='Every displayed velocity value, fine range steps, held extrema and clamps'),

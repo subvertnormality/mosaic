@@ -2146,10 +2146,11 @@
       ],
       "statement": "Range end taps move one step, holds reach extremes, center resets root page.",
       "cases": [
-        "M-EDIT-001"
+        "M-EDIT-001",
+        "M-EDIT-005"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Both directions, tap/hold threshold edges, extrema and repeated bounds. M-EDIT-001 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required.",
+      "domain": "Both directions, tap/hold threshold edges, extrema and repeated bounds. M-EDIT-001 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required. M-EDIT-005 validates one-second boundary and cancelled-hold checks in both modes. Other directions and playing-state/overlap combinations remain required.",
       "oracles": [
         "Visible range/root row and corresponding independent MIDI pitches."
       ],
@@ -2223,10 +2224,11 @@
       "statement": "Velocity editor supports two ranges, fine tap and long-hold extreme selection.",
       "cases": [
         "M-EDIT-002",
-        "M-EDIT-003"
+        "M-EDIT-003",
+        "M-EDIT-005"
       ],
       "status": "partial-domain-coverage",
-      "domain": "127/68/58/0 and every displayed row; fine increments across page discontinuity; bounds; all step pages. M-EDIT-002 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required. M-EDIT-003 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required.",
+      "domain": "127/68/58/0 and every displayed row; fine increments across page discontinuity; bounds; all step pages. M-EDIT-002 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required. M-EDIT-003 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required. M-EDIT-005 validates one-second boundary and cancelled-hold checks in both modes. Other directions and playing-state/overlap combinations remain required.",
       "oracles": [
         "Exact velocity LEDs/screen and output MIDI velocity; zero semantics explicitly resolved."
       ],
