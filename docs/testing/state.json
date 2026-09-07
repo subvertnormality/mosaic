@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue live recording at unequal channel divisions and compare live playhead feedback with scheduled MIDI. Recording arm/disarm, tempo/source changes, song transitions and full C08/manual/emulator release remain unfinished.",
+  "next_action": "Test live grid playhead versus scheduled musical steps and keyboard-recorded positions. Continue recording lifecycle, remaining clock divisions/changes, song transitions and full C08/manual/emulator release.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -764,6 +764,36 @@
       "run_id": "repeat-3efae38c58f4465382efbfe0ef5d1c8d",
       "sha256": "308f2d48305a3dfeaebe7c5ef882a7bdf50c41a13a1782163b9113f0750cbeee",
       "case": "M-REC-012",
+      "passed": true,
+      "mode": "controlled-repeat"
+    }
+  ],
+  "recording_rate_validation": [
+    {
+      "run_id": "254768fbe455433589e54f588afd4d38",
+      "sha256": "6a1d9ec80054ebe8df2c61a3062a8fe81f7655e5b49936dc5c6d05c42b70b685",
+      "case": "M-REC-013",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "0d3a07b04d434ac285a49f4bd6592e66",
+      "sha256": "4710b02965f7c77bf2b058f4cc298482607bfe46715e98155829d1fa2bc17310",
+      "case": "M-REC-014",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-4fc8e6f149bf40efa7c52a3328a50323",
+      "sha256": "d4d4a7d08ec7a61d8b491f3d3bc78548fc15ce5643724b26548079a65501984d",
+      "case": "M-REC-013",
+      "passed": true,
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-4138261603494bd89eec53aee27cdc6d",
+      "sha256": "4a38ec6add2c9c48cc0a464ac757d6385a4ed5e0926c32593b4d0f72a55ec572",
+      "case": "M-REC-014",
       "passed": true,
       "mode": "controlled-repeat"
     }

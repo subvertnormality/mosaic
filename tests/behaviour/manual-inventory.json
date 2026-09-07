@@ -3041,7 +3041,9 @@
         "M-REC-009",
         "M-REC-010",
         "M-REC-011",
-        "M-REC-012"
+        "M-REC-012",
+        "M-REC-013",
+        "M-REC-014"
       ],
       "status": "partial-domain-coverage",
       "domain": "All supported distinct starts/ends; wrap; SEM-002 inactive lone long hold and delayed combination; coprime lengths; global-scale interaction.",
@@ -4576,7 +4578,9 @@
         "M-REC-009",
         "M-REC-010",
         "M-REC-011",
-        "M-REC-012"
+        "M-REC-012",
+        "M-REC-013",
+        "M-REC-014"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",

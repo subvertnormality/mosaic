@@ -485,3 +485,15 @@ identical fresh controlled processes. No production Mosaic/emulator changes
 were needed. There are36 native cases; these results do not explain the user's
 reported frequent misplacement. Unequal divisions, live playhead feedback,
 recording lifecycle, tempo changes and song boundaries remain open.
+
+
+## Recording follows the selected channel clock rate
+
+M-REC-013 sets x2 through the Clocks page and records across range15..18;
+M-REC-014 sets /2 and records in61..64. MIDI clock supplies the independent
+100BPM schedule. Absolute recorded grid positions follow the channel's75ms/300ms
+steps, with global clock phase intentionally different. After disarming, internal
+90BPM replay retains the rate and exact independently expected MIDI spacing.
+Both cases pass real-time and three identical fresh controlled processes. No
+production changes were needed. There are38 cases. These sampled clock rates do
+not close all divisions, live rate changes, playhead feedback or the full campaign.

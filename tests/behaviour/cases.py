@@ -760,7 +760,7 @@ def memory_channel_isolation(c):
     c.tap(3,1);history(3,0,0);c.key(2);c.key(3);c.enc(3,-2);c.enc(3,2);history(3,0,0);verify(edited_one,edited_two)
     c.tap(1,1);history(1,1);c.tap(2,1);history(2,1)
 
-def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1):
+def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1,clock_delta=0,rate_factor=1):
     import time
     c.configure();c.tap(5,8)
     for x in range(1,5):c.tap(x,4)
@@ -769,6 +769,10 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     if range_start!=1:c.hold_tap(cell(range_start),cell(range_start+3))
     cells=[cell(step) for step in range(1,65)]
     c.led_values(cells,[2 if range_start<=step<=range_start+3 else 0 for step in range(1,65)])
+    if clock_delta:
+        from frame_oracle import header,matches
+        c.enc(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
+        c.enc(3,clock_delta);c.key(3)
     c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
     position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
     c.enc(2,position);c.key(3);menu_label(c,'source');c.enc(3,1);menu_value(c,'midi');c.key(1)
@@ -789,7 +793,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     state=c.snapshot();assert len(state['midi_input_schedule']['delivered'])==len(events)
     c.wait(lambda state:not state['midi_capture']['outstanding']);c.tap(2,8)
     c.led_values(cells,[15 if step in expected_steps else (2 if range_start<=step<=range_start+3 else 0) for step in range(1,65)])
-    c.results.append(dict(kind='recorded-step-placement',expected_steps=list(expected_steps),input_note_on_offsets_ns=list(input_offsets),clock_step_ns=150000000,channel_range=[range_start,range_start+3]))
+    c.results.append(dict(kind='recorded-step-placement',expected_steps=list(expected_steps),input_note_on_offsets_ns=list(input_offsets),clock_step_ns=round(150000000*rate_factor),channel_range=[range_start,range_start+3]))
     # Replay in normal internal clock after disarming; preview MIDI cannot
     # satisfy this oracle because playback takes a fresh capture marker.
     c.key(1);c.key(3);menu_label(c,'source');c.enc(3,-1);menu_value(c,'internal')
@@ -799,7 +803,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     notes=c.playback([event for step,event in phrase],cycles=3)
     field='logical_ns' if controlled else 'monotonic_ns'
     gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
-    expected_gaps=[((phrase[(i+1)%2][0]-phrase[i%2][0])%4)/6 for i in range(len(gaps))]
+    expected_gaps=[((phrase[(i+1)%2][0]-phrase[i%2][0])%4)*rate_factor/6 for i in range(len(gaps))]
     tolerance=2e-9 if controlled else .01
     assert all(abs(gap-expected)<=tolerance for gap,expected in zip(gaps,expected_gaps)),dict(actual=gaps,expected=expected_gaps)
     c.results.append(dict(kind='recorded-replay-spacing',expected_seconds=expected_gaps,actual_seconds=gaps))
@@ -849,6 +853,8 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5):
     c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
 
 CASES={
+ 'M-REC-013':dict(run=lambda c:live_record_placement(c,(1355000000,1505000000),(16,18),15,3,.5),requirements=['REC-LIVE-NOTES','CH-RANGE'],description='Twice-rate channel records on its own steps across a grid row; absolute LEDs and independent replay gaps'),
+ 'M-REC-014':dict(run=lambda c:live_record_placement(c,(1580000000,2180000000),(62,64),61,-2,2),requirements=['REC-LIVE-NOTES','CH-RANGE'],description='Half-rate channel records on its own steps near step64; absolute LEDs and independent replay gaps'),
  'M-REC-011':dict(run=lambda c:live_record_placement(c,(1730000000,1880000000),(4,1),1),requirements=['REC-LIVE-NOTES','CH-RANGE'],description='Live keyboard input across range1..4 wrap; absolute recorded cells and disarmed replay order/spacing'),
  'M-REC-012':dict(run=lambda c:live_record_placement(c,(1730000000,1880000000),(64,61),61),requirements=['REC-LIVE-NOTES','CH-RANGE'],description='Live keyboard input across range61..64 wrap; absolute recorded cells and disarmed replay order/spacing'),
  'M-REC-008':dict(run=lambda c:live_record_placement(c,expected_steps=(3,5),range_start=2),requirements=['REC-LIVE-NOTES','CH-RANGE'],description='Live keyboard notes target absolute steps3/5 in channel range2..5; all64 LEDs and disarmed MIDI replay'),
