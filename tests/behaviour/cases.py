@@ -180,7 +180,62 @@ def restart_phase_edges(c):
         notes=c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(67,100)]],cycles=2,timeout=4)
         assert_durations(c,notes,[2,1,1]*2)
 
+def midi_clock_transport(c):
+    import time
+    c.configure()
+    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    roots=c.snapshot()['diagnostics']['parameter_roots']
+    position=next(i for i,v in enumerate(roots) if v['name']=='CLOCK')
+    c.enc(2,position);c.key(3);menu_label(c,'source')
+    menu_value(c,'internal');c.enc(3,1);menu_value(c,'midi')
+    def inject(value,at=None):
+        action=dict(type='midi',port=1,bytes=[value])
+        if at is not None:action['at_monotonic_ns']=at
+        c.action(**action)
+    def pulses(count):
+        start=time.monotonic_ns()
+        for i in range(count):
+            if c.clock_mode=='controlled-experimental':c.elapse(.025);inject(248)
+            else:inject(248,start+(i+1)*25000000)
+    # Replace the native estimator startup window with49 evenly spaced pulses.
+    before=c.snapshot()['midi_count']
+    pulses(49)
+    def new_notes():return [m for m in c.snapshot()['midi'] if m['index']>before and m['bytes'][0]==144 and m['bytes'][2]>0]
+    assert not new_notes(),'Clock pulses alone started playback'
+    inject(250)
+    if c.clock_mode=='controlled-experimental':c.elapse(0)
+    assert not new_notes(),'Transport started before the next MIDI clock pulse'
+    pulses(60);inject(252)
+    c.wait(lambda s:not s['midi_capture']['outstanding'])
+    state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and m['bytes'][0]==144 and m['bytes'][2]>0]
+    expected=[(60,127),(62,117),(64,107),(65,97)]
+    assert len(notes)>=9,notes
+    assert [(m['port'],m['bytes']) for m in notes]==[(1,[144,*expected[i%4]]) for i in range(len(notes))],notes
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    rows=[]
+    for i,note in enumerate(notes[:9]):
+        rows.append(dict(index=i,expected_seconds=i*.15,actual_seconds=(note[field]-notes[0][field])/1e9))
+    c.results.append(dict(kind='midi-clock-onsets',rows=rows))
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    assert all(abs(r['actual_seconds']-r['expected_seconds'])<=tolerance for r in rows),rows
+    durations=[]
+    for note in notes[:8]:
+        off=next(m for m in state['midi'] if m['index']>note['index'] and m['bytes']==[128,note['bytes'][1],note['bytes'][2]])
+        durations.append((off[field]-note[field])/1e9)
+    c.results.append(dict(kind='midi-clock-durations',expected_seconds=.15,actual_seconds=durations))
+    assert all(abs(d-.15)<=tolerance for d in durations),durations
+    c.enc(3,-1);menu_value(c,'internal')
+    # Native clock.lua updates clock_tempo from the external source; returning
+    # to internal uses that adopted tempo. Explicitly edit it back to90BPM.
+    c.enc(2,1);menu_label(c,'tempo');menu_value(c,'100')
+    c.enc(3,-10);menu_value(c,'90');c.key(1)
+    internal=c.playback([(1,[144,n,v]) for n,v in expected])
+    restored=[(m[field]-internal[0][field])/1e9 for m in internal[:9]]
+    c.results.append(dict(kind='restored-internal-onsets',actual_seconds=restored))
+    assert len(restored)==9 and all(abs(t-i/6)<=tolerance for i,t in enumerate(restored)),restored
+
 CASES={
+ 'M-TIM-003':dict(run=midi_clock_transport,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Native menu selects MIDI clock; physical MIDI starts/stops playback at100BPM; return to internal clock'),
  'M-TIM-002':dict(run=restart_phase_edges,requirements=['CLOCK-PHASE-EDGE-001'],description='Restart around96PPQN boundaries; preserve full MIDI durations at five start phases'),
  'M-TIM-001':dict(run=phrase_timing,requirements=['CLOCK-PHRASE-001'],description='Restart edited phrase; verify every onset and duration through20 complete phrases at90BPM'),
  'M-MOD-003':dict(run=held_macro_rebind,requirements=['MOD-HELD-001'],description='Rebind an already-held nonzero macro; MIDI must immediately reflect its current value without a new source event'),

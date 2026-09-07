@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "M-TIM-002 passes all five96PPQN restart phases in controlled time and real time; precise phase placement asserted only in controlled mode. M5 now requires12 case/profile comparisons including both timing cases. Next actual clock-source transition coverage, final-source three-repeat/real-time matrix and Codex P5. Eleven named cases remain partial coverage; full atomic manual/T01 and all remaining stages required. Historical intermittent RT failures retained. No active runners.",
+  "next_action": "M-TIM-003 passes native menu MIDI-source selection, clock-only silence, Start on next pulse,100BPM note onsets/lengths, Stop drain and explicit90BPM menu edit after internal handoff in both modes. Norns adopts external tempo on handoff; no production defect/fix in this slice. Next live source switch with pending notes, fresh13-comparison M5 D3-repeat/E/R matrix and Codex P5. Twelve named cases remain partial; full atomic manual/T01 and all remaining stages required. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -242,6 +242,18 @@
     "real_time": {
       "path": "../mosaic-behaviour-runs/ee322cb6482b4d41bc60e21aa6aae341/manifest.json",
       "sha256": "e9b9d448d1b51ac9a35f24f1a619b6333d510171cdf9653fd3bbb34762f57ca9",
+      "passed": true
+    }
+  },
+  "latest_midi_clock_transport": {
+    "controlled": {
+      "path": "../mosaic-behaviour-runs/7ac20f985d0947b3a77fc33e7445ffef/manifest.json",
+      "sha256": "eebbb9c11ff258c51f4f3c33b594442bd9c4bb599e8517b0b0e93099949d484f",
+      "passed": true
+    },
+    "real_time": {
+      "path": "../mosaic-behaviour-runs/58bc1394a5ad47599f273d4e67d89206/manifest.json",
+      "sha256": "aa52ad6a56dd10ab3408a1d33eea19bbff533a8b34fa9dbdc380c6241e7bf408",
       "passed": true
     }
   }

@@ -209,3 +209,18 @@ both controlled and real-time executions pass all five restarts. Real-time phase
 placement remains approximate and keeps the10ms musical timing oracle. Evidence
 is linked in state.json and bugs.json. Three-repeat admission and actual
 clock-source transitions remain required; manual coverage is still partial.
+
+## Native MIDI source and transport
+
+M-TIM-003 passes in controlled and real time. It selects MIDI through the native
+CLOCK menu; checks clock-only silence and Start on the next pulse; asserts
+100BPM note bytes, spacing and durations; drains after Stop; switches back to
+internal and explicitly edits90BPM, checking output timing again. MIDI inputs
+are now included in the driver's native trace comparison.
+
+Initial test navigation selected SYSTEM instead of PARAMETERS. A later test
+assumption expected automatic90BPM restoration; pinned norns clock.lua instead
+adopts external tempo. The corrected test asserts100BPM before explicitly editing
+90BPM. These were test errors, not Mosaic bugs, and no production workaround was
+added. Passing manifests are linked in state.json. Live source changes with
+pending notes and the final13-comparison M5 matrix remain required.

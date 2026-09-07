@@ -132,12 +132,14 @@ class Driver:
         events=[json.loads(line) for line in (self.out/'native/native-events.jsonl').read_text().splitlines()]
         native=[]
         for event in events:
-            if event['kind']!='input' or event['type'] not in (1,2,3,8):continue
+            if event['kind']!='input' or event['type'] not in (1,2,3,7,8):continue
             t=event['type'];a=event['args']
+            if t==7:
+                native.append(dict(type='midi',port=a[0],bytes=a[1]));continue
             if t==8:
                 native.append(dict(type='advance',nanoseconds=a[0]*1000000000+a[1]));continue
             native.append(dict(type='key',n=a[0],state=a[1]) if t==1 else dict(type='enc',n=a[0],delta=a[1]) if t==2 else dict(type='grid',x=a[0]+1,y=a[1]+1,state=a[2]))
-        assert native==self.recipe,'Native input trace differs from supplied user recipe'
+        assert native==[{k:v for k,v in a.items() if k!='at_monotonic_ns'} for a in self.recipe],'Native input trace differs from supplied user recipe'
         captured=[e for e in events if e['kind'] in (3,11)]
         if captured:assert [e['sequence'] for e in captured]==list(range(1,len(captured)+1)),'Incomplete MIDI capture'
 

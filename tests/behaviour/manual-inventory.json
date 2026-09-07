@@ -566,7 +566,8 @@
       "classification": "pending-statement-reconciliation",
       "requirements": [
         "CLOCK-PHRASE-001",
-        "CLOCK-PHASE-EDGE-001"
+        "CLOCK-PHASE-EDGE-001",
+        "CLOCK-MIDI-TRANSPORT-001"
       ],
       "status": "unreviewed"
     },
@@ -1482,6 +1483,25 @@
         "Read-only clock confirms requested start phase",
         "Six independently timed note releases at each restart",
         "MIDI pitches and grid/screen setup"
+      ]
+    },
+    {
+      "id": "CLOCK-MIDI-TRANSPORT-001",
+      "sections": [
+        "MAN-050"
+      ],
+      "statement": "MIDI transport and24PPQN input clock drive Mosaic note playback; returning to internal clock restores local transport.",
+      "basis": "Pinned norns CLOCK controls plus Mosaic transport callbacks; broader than channel-speed manual subsection.",
+      "cases": [
+        "M-TIM-003"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Stopped-source changes, port1,100BPM external, native adoption of external tempo on internal handoff, then explicit90BPM menu edit. Live-source changes with pending notes, other rates and ports remain required.",
+      "oracles": [
+        "Native CLOCK source menu",
+        "Literal ordered MIDI notes and150ms onset spacing",
+        "Stop drains all notes",
+        "Internal playback resumes"
       ]
     }
   ]
