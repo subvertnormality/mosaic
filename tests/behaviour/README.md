@@ -64,3 +64,19 @@ omitted. It preserves failures and never converts incomplete campaign coverage
 into acceptance. Per-case manifests record end-to-end wall time and total logical
 time advanced. M-SAVE-001 retains both native process segments under its run
 directory; its second process reads the actual first process's saved data.
+
+
+Modulation output cases are M-MOD-001 (macro routing/clear) and M-MOD-002 (clocked
+pulse LFO with MIDI pitch and timing assertions). The former exposes a confirmed
+bug in the pinned matrix dependency. To select the isolated correction explicitly:
+
+```sh
+python3 tests/behaviour/run.py --case M-MOD-001 --profile midi-modulation \
+  --mod-code-root /path/to/code-containing-matrix-and-toolkit --mod-patches
+```
+
+The patch manifest pins original/modified file hashes and patch bytes. Only the
+run's own matrix copy is patched; supplied checkouts remain untouched. The flag
+also works with repeat.py and controlled mode. Omitting it preserves the failing
+baseline. Candidate selection is recorded in each case manifest and is not a
+claim that the full dependency or Mosaic suite passes.

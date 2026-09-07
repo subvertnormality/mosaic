@@ -9,7 +9,7 @@ from driver import EMULATOR_ROOT as ROOT
 import json
 def read_json(path):return json.loads(path.read_text())
 
-def header(text,selected=None,tabs=6):
+def render(commands):
     ft=C.CDLL('libfreetype.so.6'); ca=C.CDLL('libcairo.so.2')
     def bind(lib,name,args,result=None):
         f=getattr(lib,name);f.argtypes=args;f.restype=result;return f
@@ -27,20 +27,17 @@ def header(text,selected=None,tabs=6):
         bind(ca,'cairo_set_font_options',[ptr,ptr])(context,options)
         bind(ca,'cairo_set_font_face',[ptr,ptr])(context,fontface)
         bind(ca,'cairo_set_font_size',[ptr,double])(context,8)
-        # Six channel tabs (pages.lua); Masks is tab 1, Device Config tab 5.
-        if selected is None:selected={'Ch. 1 Note Masks':1,'Ch. 1 Memory':3,'Ch. 1 Device Config':5}[text]
-        for tab in range(1,tabs+1):
-            level=(10 if tab==selected else 1)/15
-            bind(ca,'cairo_set_source_rgb',[ptr,double,double,double])(context,level,level,level)
-            bind(ca,'cairo_move_to',[ptr,double,double])(context,(tab-1)*10,1)
-            bind(ca,'cairo_show_text',[ptr,C.c_char_p])(context,b'_')
-        bind(ca,'cairo_set_source_rgb',[ptr,double,double,double])(context,10/15,10/15,10/15)
-        for x,label in ((0,text),(120,'m')):
-            bind(ca,'cairo_move_to',[ptr,double,double])(context,x,9)
+        for x,y,level,label in commands:
+            if x is None:
+                extents=(double*6)()
+                bind(ca,'cairo_text_extents',[ptr,C.c_char_p,C.POINTER(double)])(context,label.encode(),extents)
+                x=127-extents[2]  # Native text_right subtracts ink width.
+            bind(ca,'cairo_set_source_rgb',[ptr,double,double,double])(context,level/15,level/15,level/15)
+            bind(ca,'cairo_move_to',[ptr,double,double])(context,x,y)
             bind(ca,'cairo_show_text',[ptr,C.c_char_p])(context,label.encode())
         bind(ca,'cairo_surface_flush',[ptr])(surface)
         data=bind(ca,'cairo_image_surface_get_data',[ptr],ptr)(surface)
-        return C.string_at(data,128*10*4)
+        return C.string_at(data,128*64*4)
     finally:
         bind(ca,'cairo_destroy',[ptr])(context)
         bind(ca,'cairo_surface_destroy',[ptr])(surface)
@@ -49,7 +46,27 @@ def header(text,selected=None,tabs=6):
         bind(ft,'FT_Done_Face',[ptr],integer)(face)
         bind(ft,'FT_Done_FreeType',[ptr],integer)(library)
 
+def header(text,selected=None,tabs=6):
+    if selected is None:selected={'Ch. 1 Note Masks':1,'Ch. 1 Memory':3,'Ch. 1 Device Config':5}[text]
+    commands=[((tab-1)*10,1,10 if tab==selected else 1,'_') for tab in range(1,tabs+1)]
+    commands += [(0,9,10,text),(120,9,10,'m')]
+    return render(commands)[:128*10*4]
+
+def selected_line(state,text,x=0,width=70):
+    # Native menu selected rows use baseline30, level15. Ignore the separate
+    # right-hand value field, not the text glyphs or background around them.
+    expected=render([(x,30,15,text)])
+    actual=base64.b64decode(state['frame']['pixels_base64'])
+    return all(actual[(y*128+col)*4+k]==expected[(y*128+col)*4+k]
+               for y in range(22,32) for col in range(x,x+width) for k in range(3))
+
 def matches(state,expected):
     actual=base64.b64decode(state['frame']['pixels_base64'])[:len(expected)]
     # Cairo's clear surface and hardware framebuffer differ in alpha only.
     return all(actual[i]==expected[i] for i in range(len(expected)) if i%4!=3)
+
+def selected_value(state,text):
+    expected=render([(None,30,15,text)])
+    actual=base64.b64decode(state['frame']['pixels_base64'])
+    return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k]
+               for y in range(22,32) for x in range(108,128) for k in range(3))

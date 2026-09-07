@@ -12,6 +12,7 @@ def main():
     parser.add_argument('--experimental-install')
     parser.add_argument('--profile',choices=['base-midi','midi-modulation'],default='base-midi')
     parser.add_argument('--mod-code-root')
+    parser.add_argument('--mod-patches',action='store_true',help='Apply the recorded isolated dependency candidate; original checkouts stay unchanged')
     args=parser.parse_args()
     if (args.profile=='midi-modulation') != bool(args.mod_code_root):
         parser.error('Modulation profile requires --mod-code-root; base profile takes no mod source')
@@ -38,7 +39,7 @@ def main():
         out=Path(args.artifacts).resolve()/uuid.uuid4().hex;out.mkdir(parents=True,exist_ok=False)
         c=None;failure=None;started=time.monotonic()
         revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()
-        try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root);CASES[name]['run'](c)
+        try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root,mod_patches=args.mod_patches);CASES[name]['run'](c)
         except Exception as error:failure=dict(type=type(error).__name__,message=str(error),traceback=traceback.format_exc())
         finally:
             if c:
@@ -46,7 +47,7 @@ def main():
                 except Exception as error:failure=failure or dict(type=type(error).__name__,message=str(error),traceback=traceback.format_exc())
         result=dict(schema_version=1,case=name,requirements=CASES[name]['requirements'],passed=failure is None,
             campaign_complete=False,clock_mode=args.clock_mode,diagnostic_only=args.clock_mode!='real-time',
-            controlled_time_admitted=False,profile=args.profile,mod_revisions=c.mod_revisions if c else {},seed=42,mosaic_revision=revision,
+            controlled_time_admitted=False,profile=args.profile,mod_revisions=c.mod_revisions if c else {},mod_patches=c.applied_mod_patches if c else {},seed=42,mosaic_revision=revision,
             wall_elapsed_seconds=time.monotonic()-started,
             logical_advanced_seconds=(sum(a['nanoseconds'] for p in out.rglob('recipe.json') if not {'code','data'} & set(p.relative_to(out).parts) for a in json.loads(p.read_text()) if a['type']=='advance')/1e9 if args.clock_mode!='real-time' else None),
             manual_sha256=inventory['manual_sha256'],platform=platform.platform(),failure=failure,

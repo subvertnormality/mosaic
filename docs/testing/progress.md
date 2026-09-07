@@ -102,3 +102,39 @@ bound case manifests and normalized comparison data outside the checkout.
 Controlled time remains diagnostic-only pending C16/P5. The opening-note timing
 failure remains open, and explicit save/load dialogs, corrupted/migrated files,
 playing autosave exclusion, all remaining manual domains and T01 remain incomplete.
+
+
+## Actual modulation output and a dependency defect
+
+Eight named cases now exist. M-MOD-001 uses native System/Mods/Matrix and Params
+menus to route toolkit macro1 at depth1.00 into Mosaic Fixed Note. It verifies
+three complete phrases at MIDI note127, clears the route, checks the visible
+cleared-depth marker, then requires the original60/62/64/65 pitches. The original
+pinned matrix fails that final MIDI oracle in both controlled and real time:
+its routing entry disappears but the target's cached modulation remains active.
+
+The two-line matrix-clear-depth candidate clears the cache and defers reapplying
+the non-trigger parameter. It passes the unchanged regression in both modes.
+The original clean mod checkout and Mosaic production code are untouched.
+--mod-patches applies the SHA-bound patch only to an owned per-run copy; manifests
+record base mod revisions and complete patch identities. The normal unpatched
+test remains a failing baseline, not an xfail or claimed release pass.
+
+M-MOD-002 configures an actual clocked4-beat50%-width pulse LFO through the menus.
+Across two complete modulation cycles it requires8 high-phase note127 events
+then8 original-pitch events per cycle, preserving velocities. Every onset after
+the separately tracked opening-phase issue is timed against90BPM. Real-time
+maximum steady onset error is0.551ms; three fresh D runs agree exactly in logical
+MIDI/input trace and final grid/frame/clock and pass the2ns timing bound.
+Manifest paths and SHA digests are in state.json and bugs.json.
+
+Menu assertions render literal expected labels/values with pinned font primitives,
+without calling Mosaic or matrix drawing code. The value crop excludes the
+separate source activity bar, which extends to x105; an initial wider crop caused
+a harness-only false failure and was corrected without weakening the MIDI oracle.
+
+Inspection also found a possible held-source binding problem in matrix's nilmul
+call. That remains a source suspicion until reproduced with physical inputs;
+it is not fixed or covered by clearing an existing route. Other LFO shapes,
+depth signs, targets, source combinations, recording and manual domains remain
+required. C16/P5 admission and full campaign completion are still open.

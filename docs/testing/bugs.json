@@ -165,6 +165,52 @@
           "passed": true
         }
       }
+    },
+    {
+      "id": "matrix-clear-depth",
+      "component": "sixolet/matrix dependency",
+      "status": "isolated-opt-in-candidate-verified; original-pinned-checkout-unchanged",
+      "case": "M-MOD-001",
+      "finding": "Clearing a route removes its menu depth but leaves the parameter modulation cache active. All notes remain127 rather than restoring60/62/64/65.",
+      "candidate": "tests/behaviour/mod-patches/manifest.json",
+      "evidence": {
+        "clear_baseline_controlled": {
+          "path": "../mosaic-behaviour-runs/87d8fe350096421b8be14a068ec90f34/manifest.json",
+          "sha256": "6dbeb56075797a82d3f5976c941db6046dfcaf9a761274823923365fb551c9ca",
+          "passed": false
+        },
+        "clear_baseline_real_time": {
+          "path": "../mosaic-behaviour-runs/66dfb654ea454650ab5a932ee2e71293/manifest.json",
+          "sha256": "e6b45246b4283d3b1895694340c426402c418d1d72e7234ac4de51dc72afeb42",
+          "passed": false
+        },
+        "clear_candidate_controlled": {
+          "path": "../mosaic-behaviour-runs/27927a98cceb44779a632fc45c4b630f/manifest.json",
+          "sha256": "99d1073c808f5a313760b67749a3bccd68fda7a4d76246269f124a8f0f154a0b",
+          "passed": true
+        },
+        "clear_candidate_real_time": {
+          "path": "../mosaic-behaviour-runs/fc595e4fdff54f55ae3368a17b760e9c/manifest.json",
+          "sha256": "0f6d80597aaa73614fcfe63779c85fc5ea2f812aa3e2751d9b7a4c9ff7fa6102",
+          "passed": true
+        },
+        "lfo_candidate_real_time": {
+          "path": "../mosaic-behaviour-runs/bf224097012c4732bc65d51db82f6fd9/manifest.json",
+          "sha256": "b552cb19645c2183e1a17eb1e02d380b70a78d637f881dd1c341dcc6f997fe77",
+          "passed": true
+        },
+        "lfo_candidate_repeats": {
+          "path": "../mosaic-behaviour-runs/repeat-98e437c855144a2c8321d40714a0db56/manifest.json",
+          "sha256": "9f2e59cbd05765bfe5c378f6a7d5ddd763f0b366e1808dfc8a19229232c39eb1",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "matrix-bind-held-source",
+      "component": "sixolet/matrix dependency",
+      "status": "source-suspicion-needs-independent-real-input-reproducer",
+      "finding": "set_depth calls two-argument nilmul with only the current source value. Test binding a route to an already-held nonzero macro; do not claim fixed by the clear-depth candidate."
     }
   ]
 }

@@ -1213,8 +1213,11 @@
       "end_line": 1125,
       "text_sha256": "247817a1e4ef185b4be509a053544ef510ba4fd93d4566db639b408970638edc",
       "classification": "pending-statement-reconciliation",
-      "requirements": [],
-      "status": "unreviewed"
+      "requirements": [
+        "MOD-ROUTE-001",
+        "MOD-LFO-001"
+      ],
+      "status": "partial-domain-coverage"
     },
     {
       "id": "MAN-110",
@@ -1387,6 +1390,38 @@
         "No early autosave file; saved project and parameters exist",
         "Restored exact grid LEDs",
         "Restored complete MIDI phrases without recreating notes"
+      ]
+    },
+    {
+      "id": "MOD-ROUTE-001",
+      "sections": [
+        "MAN-109"
+      ],
+      "statement": "Toolkit sources can modulate Mosaic parameters through Matrix; clearing depth restores the base behaviour.",
+      "cases": [
+        "M-MOD-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Fixed Note target, macro maximum/clear and4-beat pulse at90BPM; other targets, amounts, signs, sources, shapes, tempos and interactions remain required.",
+      "oracles": [
+        "Literal selected menu labels/depth",
+        "Exact emitted MIDI over complete phrases/modulation periods"
+      ]
+    },
+    {
+      "id": "MOD-LFO-001",
+      "sections": [
+        "MAN-109"
+      ],
+      "statement": "A clocked pulse LFO modulates a Mosaic parameter with the selected period and width, observable in emitted MIDI.",
+      "cases": [
+        "M-MOD-002"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Fixed Note target, macro maximum/clear and4-beat pulse at90BPM; other targets, amounts, signs, sources, shapes, tempos and interactions remain required.",
+      "oracles": [
+        "Literal selected menu labels/depth",
+        "Exact emitted MIDI over complete phrases/modulation periods"
       ]
     }
   ]

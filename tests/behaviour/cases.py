@@ -76,7 +76,75 @@ def autosave_restart(c):
         loaded.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
     finally:loaded.finish()
 
+def menu_label(c,text,x=0):
+    from frame_oracle import selected_line
+    c.wait(lambda s:selected_line(s,text,x));c.results.append(dict(kind='selected-menu-label',text=text))
+
+def menu_value(c,text):
+    from frame_oracle import selected_value
+    c.wait(lambda s:selected_value(s,text));c.results.append(dict(kind='selected-menu-value',text=text))
+
+def route_fixed_note(c,source_position,source_name):
+    assert c.profile=='midi-modulation','This case requires actual matrix/toolkit mods'
+    c.configure()
+    c.key(1);c.enc(2,1);c.key(3);menu_label(c,'DEVICES > ')
+    c.enc(2,2);menu_label(c,'MODS >');c.key(3);menu_label(c,'MATRIX >',4)
+    c.key(3);menu_label(c,'LEVELS >')
+    roots=c.snapshot()['diagnostics']['parameter_roots']
+    position=next(i for i,v in enumerate(roots) if v['id']=='midi_device_params_group_channel_1')
+    c.enc(2,position);c.key(3);menu_label(c,'Fixed Note')
+    c.key(3);menu_label(c,'rhythm 1')
+    c.enc(2,source_position);menu_label(c,source_name)
+    c.enc(3,100);menu_value(c,'1.00')
+
+def toolkit_parameter_group(c,name):
+    c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    roots=c.snapshot()['diagnostics']['parameter_roots']
+    position=next(i for i,v in enumerate(roots) if v['name']==name)
+    c.enc(2,position);c.key(3)
+
+def macro_route_clear(c):
+    route_fixed_note(c,12,'macro 1')
+    toolkit_parameter_group(c,'macro 1');menu_label(c,'active')
+    c.enc(2,1);menu_label(c,'value');c.enc(3,100);c.key(1)
+    c.playback([(1,[144,127,v]) for v in (127,117,107,97)])
+    # Return to the retained Matrix source selection, then zero its depth.
+    c.key(1);c.enc(1,-4);c.key(3);c.key(3);c.key(3)
+    menu_label(c,'macro 1');c.key(3);menu_value(c,'-');c.key(1)
+    c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))])
+
+def pulse_lfo(c):
+    route_fixed_note(c,4,'lfo 1')
+    toolkit_parameter_group(c,'lfo 1');menu_label(c,'clocked');c.key(3)
+    c.enc(2,1);menu_label(c,'beats');c.enc(3,9)
+    c.enc(2,2);menu_label(c,'shape');c.enc(3,2);c.key(1)
+    # A4-beat pulse with50% width is high for8 sixteenth notes and low for8.
+    # Place playback safely inside the high half using a verified native clock
+    # read (not Mosaic state); E/R jitter and the24PPQN mod sample cannot cross
+    # a half-cycle boundary at this1/8-beat offset.
+    import math
+    state=c.snapshot();beat=state['diagnostics']['beats']
+    target=4*(math.floor(beat/4)+1)+.125
+    c.elapse((target-beat)*2/3)
+    expected=[]
+    notes=[(60,127),(62,117),(64,107),(65,97)]
+    for i in range(16):
+        note,velocity=notes[i%4];expected.append((1,[144,127 if i<8 else note,velocity]))
+    emitted=c.playback(expected,cycles=2,timeout=8)
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    # Opening-pulse phase is separately exposed by M-LEN-001. Here check every
+    # subsequent onset plus the full LFO period against90BPM, not merely ratios.
+    anchor=emitted[1][field];rows=[]
+    for i,event in enumerate(emitted[1:]):
+        actual=(event[field]-anchor)/1e9;expected_seconds=i/6
+        rows.append(dict(index=i+1,expected_seconds=expected_seconds,actual_seconds=actual))
+    c.results.append(dict(kind='steady-lfo-timing',rows=rows,opening_phase_case='M-LEN-001'))
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    assert all(abs(row['actual_seconds']-row['expected_seconds'])<=tolerance for row in rows),rows
+
 CASES={
+ 'M-MOD-001':dict(run=macro_route_clear,requirements=['MOD-ROUTE-001'],description='Route macro through native Matrix menu; assert affected MIDI pitches and restoration after clearing depth'),
+ 'M-MOD-002':dict(run=pulse_lfo,requirements=['MOD-LFO-001'],description='Configure a clocked4-beat pulse LFO through native menus and verify two complete modulation cycles of MIDI pitches'),
  'M-SAVE-001':dict(run=autosave_restart,requirements=['PERSIST-AUTO-001'],description='Create notes through the grid; idle autosave; boot a fresh native process from saved data and verify restored LEDs and MIDI'),
  'M-MIDI-001':dict(run=lambda c:wrapped_length(c,same_pitch=True),requirements=['MIDI-RELEASE-001'],description='Repeated pitch at wrapped duration boundary emits balanced note releases and drains after stop'),
  'M-LEN-003':dict(run=wrapped_length,requirements=['PAT-LENGTH-003'],description='A length crossing step64 ends at the next trig on step1; verify complete64-step MIDI loops and LEDs'),

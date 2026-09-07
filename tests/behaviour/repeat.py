@@ -21,11 +21,13 @@ def main():
     parser.add_argument('--experimental-install',required=True)
     parser.add_argument('--profile',choices=['base-midi','midi-modulation'],default='base-midi')
     parser.add_argument('--mod-code-root')
+    parser.add_argument('--mod-patches',action='store_true')
     args=parser.parse_args();out=REPO.parent/'mosaic-behaviour-runs'/('repeat-'+uuid.uuid4().hex);out.mkdir()
     command=[sys.executable,str(REPO/'tests/behaviour/run.py'),'--case',args.case,
              '--clock-mode','controlled-experimental','--experimental-install',args.experimental_install,
              '--profile',args.profile]
     if args.mod_code_root:command+=['--mod-code-root',args.mod_code_root]
+    if args.mod_patches:command+=['--mod-patches']
     runs=[];values=[];failure=None
     try:
         for _ in range(3):
@@ -39,7 +41,7 @@ def main():
         assert values[0]==values[1]==values[2],'Fresh processes produced different logical traces or final output'
     except Exception as error:failure=dict(type=type(error).__name__,message=str(error))
     write(out/'normalized.json',values)
-    write(out/'manifest.json',dict(case=args.case,profile=args.profile,passed=failure is None,failure=failure,
+    write(out/'manifest.json',dict(case=args.case,profile=args.profile,mod_patches=args.mod_patches,passed=failure is None,failure=failure,
         diagnostic_only=True,controlled_time_admitted=False,runs=runs,normalized_sha256=digest(out/'normalized.json')))
     print(out/'manifest.json',flush=True)
     return int(failure is not None)

@@ -1,5 +1,5 @@
 """User-input driver using only the emulator's public external-suite client."""
-import hashlib,json,os,sys,time,uuid,subprocess
+import hashlib,json,os,sys,time,uuid,subprocess,shutil
 from pathlib import Path
 REPO=Path(__file__).resolve().parents[2]
 EMULATOR_ROOT=Path(os.environ['MONOME_EMULATOR']).resolve()
@@ -10,13 +10,15 @@ def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 class Driver:
-    def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None):
-        self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root)
+    def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None,mod_patches=False):
+        self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root,mod_patches=mod_patches)
         self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]
         code=out/'code';code.mkdir();(code/'mosaic').symlink_to(REPO,target_is_directory=True)
         if profile not in ('base-midi','midi-modulation'):raise ValueError('Unknown profile')
-        self.profile=profile;self.mod_revisions={}
+        self.profile=profile;self.mod_revisions={};self.applied_mod_patches={}
+        if mod_patches and profile!="midi-modulation":raise ValueError("Mod patches require modulation profile")
+        patches=json.loads((REPO/"tests/behaviour/mod-patches/manifest.json").read_text()) if mod_patches else {}
         if profile=='midi-modulation':
             if not mod_code_root:raise ValueError('Modulation profile requires an explicit mod code root')
             for name,entry in json.loads((REPO/'tests/behaviour/mods.lock.json').read_text())['mods'].items():
@@ -25,7 +27,17 @@ class Driver:
                 if revision!=entry['commit']:raise ValueError('Unexpected mod revision: '+name)
                 dirty=subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=source,text=True)
                 if dirty:raise ValueError('Mod source has uncommitted changes: '+name)
-                (code/name).symlink_to(source,target_is_directory=True);self.mod_revisions[name]=revision
+                if name in patches:
+                    candidate=patches[name];patch_file=REPO/'tests/behaviour/mod-patches'/candidate['patch']
+                    assert digest(patch_file)==candidate['sha256'],'Mod patch changed without manifest update'
+                    assert digest(source/candidate['file'])==candidate['before_sha256'],'Mod patch base mismatch'
+                    shutil.copytree(source,code/name,ignore=shutil.ignore_patterns('.git','__pycache__'))
+                    subprocess.run(['git','apply','--check',str(patch_file)],cwd=code/name,check=True)
+                    subprocess.run(['git','apply',str(patch_file)],cwd=code/name,check=True)
+                    assert digest(code/name/candidate['file'])==candidate['after_sha256'],'Mod patch output mismatch'
+                    self.applied_mod_patches[name]=candidate
+                else:(code/name).symlink_to(source,target_is_directory=True)
+                self.mod_revisions[name]=revision
         self.runtime=Session(script=code/'mosaic/mosaic.lua',code_root=code,
             data=out/'data',data_seeds=([dict(source=str(project_seed),destination='mosaic')] if project_seed else [dict(source=str(REPO/'tests/behaviour/config'),destination='mosaic/config',format='json-files')]),
             midi_config=dict(ports=['Emulator MIDI','Second MIDI','Norns2sinfonion']),random_seed=42,enabled_mods=list(self.mod_revisions),

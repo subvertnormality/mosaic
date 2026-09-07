@@ -1,0 +1,11 @@
+--- a/lib/matrix.lua
++++ b/lib/matrix.lua
+@@ -265,6 +265,8 @@
+     end
+     local p = params:lookup_param(param_id)
+     if depth == nil or depth == 0 then
++        if p.modulation ~= nil then p.modulation[modulation_id] = nil end
++        if p.t ~= params.tTRIGGER then self:defer_bang(p.id, p.priority) end
+         if self.matrix[modulation_id] ~= nil then
+             self.matrix[modulation_id][p.id] = nil
+             if next(self.matrix[modulation_id]) == nil then
