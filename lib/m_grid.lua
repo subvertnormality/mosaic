@@ -258,6 +258,7 @@ function m_grid.init()
           dual_in_progress = false
         end
       end
+      if #pressed_keys == 0 then dual_in_progress = false end
       m_grid.post_press(x, y)
     end
   end

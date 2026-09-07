@@ -14,6 +14,9 @@ function scale_edit_page.init()
 
   scale_fader:set_pre_func(
     function(x, y, length)
+      if not m_clock.is_playing() and not hide_scale_fader_leds then
+        scale_fader:set_value(program.get().default_scale)
+      end
       local channel = program.get_channel(program.get().selected_song_pattern, 17)
       for i = x, length + x - 1 do
         if hide_scale_fader_leds then

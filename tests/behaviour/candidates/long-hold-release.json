@@ -1,0 +1,50 @@
+{
+  "status": "isolated-candidate-focused-validation-passed",
+  "base_revision": "facbe0b",
+  "file": "lib/m_grid.lua",
+  "before_sha256": "68cf90d360e95ac8546001217fad94c9fc37afaa1709411879c64faf27d0cc9c",
+  "after_sha256": "bd834edd0e27aa94cdea54a94293eb10a0aad52603f361a344cd345f5e670adb",
+  "patch": "0007-long-hold-release.patch",
+  "patch_sha256": "b015c3a571f2e43794cf574e39af90adb57c6911b3d38f264bb5aac4944136ea",
+  "regression": "M-RANGE-001",
+  "rationale": "Clear completed combination bookkeeping after the last key is released, including a long-held primary key; do not add a standalone long-press action.",
+  "baseline": [
+    {
+      "run_id": "d870c1418aff46d89097a1b936dcc40f",
+      "mode": "controlled-experimental",
+      "manifest_sha256": "42c56a86de98b4f550cedcc85a394faee1cf3120e96ba3ad98ffab19c91d0b94",
+      "failure": "First Play press after a long-held combination is swallowed; no new MIDI phrase"
+    },
+    {
+      "run_id": "3c3dc822aa1b4fa6a9470b4aff8c5f2f",
+      "mode": "real-time",
+      "manifest_sha256": "4efc402a0fc61ee6f9e61f434ac9900ed33c9a789c0133aa5264012ea7bcd0cc",
+      "failure": "First Play press after a long-held combination is swallowed; no new MIDI phrase"
+    }
+  ],
+  "validation": [
+    {
+      "run_id": "bd0092b463f94990bd95d58bd84898d5",
+      "case": "M-RANGE-001",
+      "mode": "controlled-experimental",
+      "manifest_sha256": "1835864db3b52ade927484aa38f230d4ff335da660d9afd953e040e80c4a05a5",
+      "manual_sha256": "fab8458e41f38324012e496a88c4f320f4c1345653b2b9bfacc7500b67e972eb",
+      "source_bound_to_retained_run": true
+    },
+    {
+      "run_id": "c58aefe8dcf5479185f4c0cfa47437a9",
+      "case": "M-RANGE-001",
+      "mode": "real-time",
+      "manifest_sha256": "68aa3827577cb311e3714f11921402c7bad0784937d23f6861546f80ac54b8d9",
+      "manual_sha256": "fab8458e41f38324012e496a88c4f320f4c1345653b2b9bfacc7500b67e972eb",
+      "source_bound_to_retained_run": true
+    }
+  ],
+  "upstream_merged": false,
+  "units": {
+    "passed": 474,
+    "failed": 0,
+    "evidence_sha256": "dabe123a63b566201ada47708c338a3f65e764e20862ce2a735e621a75ead79b"
+  },
+  "limitations": "Focused regression validation only; full manual campaign and fresh three-repeat D scenario admission remain required."
+}

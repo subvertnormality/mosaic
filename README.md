@@ -711,9 +711,9 @@ To jump to the latest action and erase all subsequent memory, hold shift (K1) an
 
 #### Channel Length
 
-Channels in your sequencer can be customised to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
+Channels can be adjusted independently, including the global scale pattern, within the 64-step sequence. This feature allows for intricate layering and timing variations within your compositions.
 
-To adjust the length of a channel, you need to specify the start and end points. Hold down the button corresponding to the start step in the channel editor. While holding it, press the button for the desired end step. The active range of the channel will be indicated by buttons that appear slightly brighter than the others.
+To adjust the length of a channel, hold down the start step in the channel editor and press a different step for the end point. The active range is indicated by brighter buttons. Selecting a one-step channel range with this gesture is unsupported. Holding a step for a long time does nothing by itself: the held step remains available for combinations with other buttons, including a subsequent end-step press. This prevents an unintended action while preparing another combination.
 
 <img alt="Channel editor step and length selector buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-sequencer-step-buttons.svg" width="300" />
 

@@ -282,3 +282,30 @@ uses emitted MIDI onset and actual native applied-control time, retaining the
 controlled b5007ebc pass both source directions. No Mosaic production change
 was needed. The failed evidence remains in bugs.json; all manual coverage and
 remaining timing-edge obligations are unchanged.
+
+
+## Scale, merge, slot and held-combination continuation
+
+The emulator M5 checkpoint passed on its recorded runtime/application source;
+the default runtime remains real-time. This does not complete the full campaign.
+The inventory now contains 141 requirements, 54 cheat-sheet mappings and 33 image
+references awaiting specification audit. There are 19 executable cases. Six new
+cases have focused real-time and controlled-time passes, recorded in state.json;
+their remaining input domains and three fresh D repeats are still required.
+Evidence binds each retained source tree, not subsequent documentation edits.
+
+New cases cover scale editing/application and lock lifetime, all 16 pattern slots,
+All/Skip/Only trig merge sets, stopped scale feedback and long-held combinations.
+Two isolated production candidates have baseline failures and unchanged passing
+regressions: restoring the stopped applied-scale LED without hiding a held lock,
+and clearing combination bookkeeping after the last long-held key is released.
+The latter previously swallowed the next ordinary press, including Play, in both
+clock modes. Both candidate files document exact production patches and evidence.
+All 474 existing unit tests pass on the combined candidate in an isolated snapshot
+named mosaic, required by the legacy harness's relative include paths.
+
+SEM-002 is resolved by the user: standalone channel-step long presses remain
+inactive to protect combinations; independently selecting a one-step channel
+range is unsupported. README states this. M-RANGE-001 verifies inactivity,
+delayed range selection, the next Play press, exact notes and loop spacing.
+No standalone long-press action was added. SEM-001 remains pending.

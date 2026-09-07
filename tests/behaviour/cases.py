@@ -363,7 +363,210 @@ def reverse_live_clock_handoff(c):
     assert len(arrivals)==84 and all(0<=e<=(0 if controlled else 10000000) for e in errors),errors
     menu_value(c,'internal')
 
+def scale_edit_selection(c):
+    from frame_oracle import header,matches
+    def selected(slot,applied):
+        expected=header('Scale slot '+str(slot)+' ',selected=1,tabs=3)
+        c.wait(lambda state:matches(state,expected))
+        c.results.append(dict(kind='scale-edit-header',slot=slot))
+        levels=[15 if n==applied else 4 if n==slot else 2 for n in range(1,17)]
+        c.led_values([(n,3) for n in range(1,17)],levels)
+    def phrase(pitches):
+        c.playback([(1,[144,p,v]) for p,v in zip(pitches,[127,117,107,97])])
+    def shift_slot(slot):
+        c.action(type='key',n=1,state=1)
+        try:
+            c.elapse(.3)  # Native K1 hold threshold is250ms before script dispatch.
+            c.tap(slot,3)
+        finally:c.action(type='key',n=1,state=0)
+    def long_slot(slot):
+        c.action(type='grid',x=slot,y=3,state=1)
+        try:c.elapse(1.1)
+        finally:c.action(type='grid',x=slot,y=3,state=0)
+        c.elapse(.06)
+    c.configure();c.tap(4,8)
+    selected(1,1)
+    shift_slot(2);selected(2,1)
+    # Root C -> D, saved through E2/E3/K3. Editing an unused scale must not
+    # change playback: the applied C-major scale still governs these notes.
+    c.enc(2,-1);c.enc(3,2);c.key(3)
+    selected(2,1);phrase([60,62,64,65])
+    c.tap(2,3);selected(2,2);phrase([62,64,66,67])
+    # Long-selecting a different editor retains the D-major applied scale.
+    long_slot(3);selected(3,2);phrase([62,64,66,67])
+    # Saving an already applied scale does alter playback, even when selected
+    # through the edit-only gesture. D -> E remains a major scale.
+    shift_slot(2);selected(2,2)
+    c.enc(3,2);c.key(3);phrase([64,66,68,69])
+    # Select another editing slot, then long-press it again. Global off must
+    # restore chromatic relative intervals and clear the editor indicator.
+    long_slot(3);selected(3,2)
+    long_slot(3);selected(0,0);phrase([60,61,62,63])
+    # State can be re-entered following global off; stored scale edits persist.
+    c.tap(2,3);selected(2,2);phrase([64,66,68,69])
+
+
+def scale_lock_lifetime(c):
+    from cases import menu_label,menu_value
+    from frame_oracle import selected_line
+    def phrase(pitches):
+        c.playback([(1,[144,p,v]) for p,v in zip(pitches,[127,117,107,97])])
+    def edit_slot(slot,semitones):
+        c.action(type='key',n=1,state=1)
+        try:
+            c.elapse(.3)  # Native K1 hold threshold is250ms before script dispatch.
+            c.tap(slot,3)
+        finally:c.action(type='key',n=1,state=0)
+        c.enc(3,semitones);c.key(3)
+    c.configure();c.tap(4,8);c.enc(2,-1)
+    edit_slot(2,2);edit_slot(3,4)  # Unused D-major and E-major scales.
+    # Global D lock at step1; channel E lock at step2. Four-step channel wraps
+    # repeatedly inside the independent 64-step global scale track.
+    c.hold_tap((1,4),(2,3));c.tap(3,8)
+    c.hold_tap((2,4),(3,3))
+    phrase([62,66,68,69])
+    # Native menu navigation only; the diagnostic root names locate the group,
+    # while rasterized labels and MIDI establish the user-perceived result.
+    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    roots=c.snapshot()['diagnostics']['parameter_roots']
+    c.enc(2,next(i for i,v in enumerate(roots) if v['id']=='mosaic'))
+    c.key(3)
+    for _ in range(40):
+        if selected_line(c.snapshot(),'Scales lock until ptn end'):break
+        c.enc(2,1)
+    else:raise AssertionError('Scale lifetime control absent from native menu')
+    menu_label(c,'Scales lock until ptn end');menu_value(c,'On')
+    c.enc(3,-1);menu_value(c,'Off');c.key(1)
+    phrase([62,66,66,67])
+    # Remove the channel lock by repeating its physical gesture. The global D
+    # lock must still apply on every channel note with channel hold disabled.
+    c.hold_tap((2,4),(3,3));phrase([62,64,66,67])
+    # Remove global lock too: this restores the C-major default, proving the
+    # preceding D phrase came from global persistence rather than stale state.
+    c.tap(4,8);c.hold_tap((1,4),(2,3));c.tap(3,8)
+    phrase([60,62,64,65])
+
+
+def trig_merge_sets(c):
+    c.configure()
+    c.tap(5,8);c.tap(5,8);c.tap(4,3)  # Pattern1 fourth note F -> G.
+    c.tap(5,8);c.tap(5,8)  # Back to trig editor.
+    c.tap(2,1)
+    for step in (2,4):c.tap(step,4)
+    c.tap(3,8);c.tap(2,2)
+    c.hold_tap((15,8),(1,2));c.hold_tap((16,8),(1,2))
+    notes={1:(60,127),2:(62,117),3:(64,107),4:(67,97)}
+    def phrase(steps):
+        observed=c.playback([(1,[144,*notes[s]]) for s in steps])
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        errors=[]
+        for index,(a,b) in enumerate(zip(observed,observed[1:])):
+            left=steps[index%len(steps)];right=steps[(index+1)%len(steps)]
+            expected=((right-left)%4 or 4)/6
+            errors.append((b[field]-a[field])/1e9-expected)
+        c.results.append(dict(kind='merge-rest-spacing',steps=steps,errors_seconds=errors))
+        assert errors and all(abs(e)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for e in errors),errors
+    def mode(level,steps):
+        c.led_values([(14,8)],[level]);phrase(steps)
+    mode(2,[1,3])  # Exactly one contributing pattern.
+    c.tap(14,8);mode(5,[2,4])  # Two contributors only.
+    c.tap(14,8);mode(8,[1,2,3,4])  # Set union.
+    # A third pattern overlapping step2 distinguishes exactly-one from odd
+    # parity and proves Only accepts two or more contributors.
+    c.tap(5,8);c.tap(3,1)
+    for step in (2,3):c.tap(step,4)
+    c.tap(3,8);c.tap(3,2)
+    c.tap(14,8);mode(2,[1])
+    c.tap(14,8);mode(5,[2,3,4])
+    c.tap(14,8);mode(8,[1,2,3,4])
+    # With one assigned pattern there are no overlaps. Only must be silent,
+    # not keep a stale merged pattern after unassignment.
+    c.tap(2,2);c.tap(3,2);c.tap(14,8);c.tap(14,8)
+    c.led_values([(14,8)],[5]);before=c.snapshot()['midi_count']
+    c.tap(1,8);c.elapse(1.5);c.tap(1,8)
+    state=c.snapshot()
+    emitted=[m for m in state['midi'] if m['index']>before and m['bytes'][0]==144 and m['bytes'][2]>0]
+    assert not emitted,emitted
+    assert not state['midi_capture']['outstanding']
+    c.results.append(dict(kind='only-without-overlap-silent',seconds=1.5))
+
+
+def all_pattern_slots(c):
+    c.configure();c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)  # Clear only the fixture's initial trigs.
+    pitches=[60,62,64,65,67,69,71]
+    authored={};previous=1
+    cells=[(x,y) for y in range(4,8) for x in range(1,17)]
+    for slot in range(1,17):
+        c.tap(slot,1)
+        # An untouched slot must not inherit the previous slot's authored data.
+        c.led_values(cells,[2]*64)
+        x=1+(slot-1)%4
+        active={(x,4),(slot,5),(17-slot,7)}
+        for cell in sorted(active):c.tap(*cell)
+        c.tap(5,8);c.tap(x,7-(slot-1)%7)
+        c.tap(5,8);c.tap(5,8)
+        expected=[15 if cell in active else 2 for cell in cells]
+        c.led_values(cells,expected);authored[slot]=expected
+        c.tap(3,8)
+        if slot!=previous:
+            c.tap(previous,2);c.tap(slot,2)
+        c.led_values([(slot,2)],[15])
+        # Four-step channel length excludes both deliberately authored outer
+        # trigs. Exactly one pitched event per loop may reach the MIDI port.
+        velocity=[127,117,107,97][x-1] if slot==1 else 100
+        notes=c.playback([(1,[144,pitches[(slot-1)%7],velocity])])
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        errors=[(b[field]-a[field])/1e9-4/6 for a,b in zip(notes,notes[1:])]
+        assert errors and all(abs(e)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for e in errors),errors
+        c.results.append(dict(kind='pattern-slot-playback',slot=slot,pitch=pitches[(slot-1)%7],spacing_errors_seconds=errors))
+        previous=slot;c.tap(5,8)
+    # Revisit every slot after all edits: editing slot16 must not overwrite
+    # previous slots, even where pitches or active short-loop steps coincide.
+    for slot in range(1,17):
+        c.tap(slot,1);c.led_values(cells,authored[slot])
+
+
+def scale_stop_indicator(c):
+    c.configure();c.tap(4,8);c.tap(2,3)
+    c.led_values([(2,3)],[15])
+    c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
+    # Stopping transport does not disable the applied scale. The bright
+    # applied indicator must survive the playing-to-stopped transition.
+    c.led_values([(2,3)],[15])
+    # A held global step displays its own lock, not the stopped default.
+    c.action(type='grid',x=2,y=4,state=1)
+    try:
+        c.tap(3,3);c.led_values([(2,3),(3,3)],[2,15])
+    finally:c.action(type='grid',x=2,y=4,state=0)
+    c.led_values([(2,3),(3,3)],[15,2])
+
+def channel_long_hold(c):
+    c.configure()
+    c.action(type='grid',x=2,y=4,state=1)
+    try:c.elapse(1.1)
+    finally:c.action(type='grid',x=2,y=4,state=0)
+    c.led_values([(x,4) for x in range(1,5)],[15,15,15,15])
+    c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
+    c.action(type='grid',x=2,y=4,state=1)
+    try:
+        c.elapse(1.1);c.tap(4,4)
+    finally:c.action(type='grid',x=2,y=4,state=0)
+    c.led_values([(x,4) for x in range(1,5)],[0,15,15,15])
+    notes=c.playback([(1,[144,n,v]) for n,v in [(62,117),(64,107),(65,97)]])
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    c.results.append(dict(kind='range-loop-spacing',expected_seconds=1/6,actual_seconds=gaps))
+    assert all(abs(gap-1/6)<=tolerance for gap in gaps),gaps
+
 CASES={
+ 'M-RANGE-001':dict(run=channel_long_hold,requirements=['CH-RANGE'],description='A lone long hold is inactive; a delayed end-step combination still selects the range with exact MIDI loop spacing'),
+ 'M-SCALE-003':dict(run=scale_stop_indicator,requirements=['SCALE-SELECT'],description='Applied scale stays brightly lit after transport stops'),
+ 'M-SCALE-001':dict(run=scale_edit_selection,requirements=['SCALE-SELECT', 'SCALE-EDIT'],description='Editing-only gestures, applying edited scales, global off and reentry through screen/grid/MIDI'),
+ 'M-SCALE-002':dict(run=scale_lock_lifetime,requirements=['LOCK-SCALE', 'OPT-SCALE-LIFETIME'],description='Channel hold on/off and independent global scale-lock persistence through emitted notes'),
+ 'M-MERGE-001':dict(run=trig_merge_sets,requirements=['MERGE-TRIG-ALL', 'MERGE-TRIG-SKIP', 'MERGE-TRIG-ONLY'],description='All/Skip/Only across two and three patterns; literal MIDI and rest spacing; silence without overlap'),
+ 'M-PAT-002':dict(run=all_pattern_slots,requirements=['PAT-SELECT', 'PAT-TRIG', 'PAT-NOTE-CELLS', 'CH-ASSIGN'],description='All16 pattern slots retain independent grid edits and produce expected assigned-channel MIDI'),
  'M-TIM-004':dict(run=live_clock_handoff,requirements=['CLOCK-LIVE-HANDOFF-001'],description='Switch both clock-source directions with a note pending; preserve release timing and selected transport semantics'),
  'M-TIM-003':dict(run=midi_clock_transport,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Native menu selects MIDI clock; physical MIDI starts/stops playback at100BPM; return to internal clock'),
  'M-TIM-002':dict(run=restart_phase_edges,requirements=['CLOCK-PHASE-EDGE-001'],description='Restart around96PPQN boundaries; preserve full MIDI durations at five start phases'),

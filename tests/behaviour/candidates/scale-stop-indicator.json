@@ -1,0 +1,43 @@
+{
+  "status": "isolated-candidate-focused-validation-passed",
+  "base_revision": "facbe0b",
+  "file": "lib/pages/scale_edit_page/scale_edit_page.lua",
+  "before_sha256": "ed870177fdf52f5e5f4449657ee9d6be4975b4888e7aa956427a02a8afd6e28c",
+  "after_sha256": "5e3446f2088dbb4990f94bcd2f84eb3baf6655e90fac6ad652070919b803752d",
+  "patch": "0006-scale-stop-indicator.patch",
+  "patch_sha256": "baa3018cfa1484945c9457f79dec427eef347518f0f3a7eca04f9dc293b43810",
+  "regression": "M-SCALE-003",
+  "baseline": {
+    "mode": "real-time",
+    "run_id": "405d25b64e4547b481f3ddd5aa74eda2",
+    "manifest_sha256": "6ca4edcc5907af2a3fdd2a9aaf244328303bda5e593fa9624e753c5fa0e125e5",
+    "expected_brightness": 15,
+    "actual_brightness": 4
+  },
+  "rationale": "Restore applied scale fader after playback without overriding a held-step lock display.",
+  "validation": [
+    {
+      "run_id": "156277b2886a434d9fb03d7989de544e",
+      "case": "M-SCALE-003",
+      "mode": "controlled-experimental",
+      "manifest_sha256": "104cceed7cd136d78096a5f59b3dc05707bf16ef89fc500da017b9d2a8baa41d",
+      "manual_sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9",
+      "source_bound_to_retained_run": true
+    },
+    {
+      "run_id": "d1f19072e10e407cab0e780a4b9dfa7a",
+      "case": "M-SCALE-003",
+      "mode": "real-time",
+      "manifest_sha256": "3f68ab8116d15ceabd54df5b8274cd4a484cb929b94014cedecb88fe068d9ef3",
+      "manual_sha256": "fab8458e41f38324012e496a88c4f320f4c1345653b2b9bfacc7500b67e972eb",
+      "source_bound_to_retained_run": true
+    }
+  ],
+  "upstream_merged": false,
+  "units": {
+    "passed": 474,
+    "failed": 0,
+    "evidence_sha256": "ec0f907732f457ca4af36f336e5c2dd0083be209549452c7fd90c3d11e6554dc"
+  },
+  "limitations": "Focused regression validation only; full manual campaign and fresh three-repeat D scenario admission remain required."
+}

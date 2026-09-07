@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Default real-time queue pinned as0012, lock8b84937d7d187387; controlled overlay06 rebuilt. All three mandatory queue lanes pass, including three fresh controlled sessions; seven rehashed fault checks and seven admission contracts pass. Mosaic handoff oracle now anchors RT timing to emitted onset and native applied-control time; defaultc579bae and Db5007eb pass both directions. Next collect remaining seven generic groups, eight legacy D probe families x3 and all14 app/profile comparisons x3D+RT on the new lock, then Codex P5 follow-up and M5 index. Queue refill/endurance, further timing edges, full manual reconciliation and later stages remain required. No active runners.",
+  "next_action": "Continue C08/T00 statement and image audit plus unimplemented behavior domains. Six new cases have focused real-time/controlled passes; full domain coverage and three fresh D repeats remain required. SEM-002 resolved preserving inactive long hold. SEM-001 merge formula awaits user. No refactor.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -302,5 +302,119 @@
       "sha256": "416c58c30a894ba038a72a41ac57ac317cd0b9968fd5e51cafa3d1dff871b684",
       "passed": true
     }
+  },
+  "manual_requirements": 141,
+  "new_cases_pending": [],
+  "controlled_admission_checkpoint": "Emulator artifacts/c16/m5-admission-06d.json; subsequent application edits do not reuse old application evidence as current-source passes.",
+  "implemented_cases": 19,
+  "latest_partial_domain_evidence": {
+    "M-SCALE-001": [
+      {
+        "run_id": "60a7b5cfdd8a47909430998064fe1cb2",
+        "case": "M-SCALE-001",
+        "mode": "controlled-experimental",
+        "manifest_sha256": "7d4fc5ecef9fa5cd31e244255026c17cfad61f44a85d41a6fb46d3d79a9a85db",
+        "manual_sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9",
+        "source_bound_to_retained_run": true
+      },
+      {
+        "run_id": "10e9502c68664029b61aacd92979db2a",
+        "case": "M-SCALE-001",
+        "mode": "real-time",
+        "manifest_sha256": "0b779170547b3559e09901cc3cbe9ef792a226afde0e466da4eb995af1b555e7",
+        "manual_sha256": "fab8458e41f38324012e496a88c4f320f4c1345653b2b9bfacc7500b67e972eb",
+        "source_bound_to_retained_run": true
+      }
+    ],
+    "M-SCALE-002": [
+      {
+        "run_id": "b91e8b52567745178d349514d5dbc521",
+        "case": "M-SCALE-002",
+        "mode": "controlled-experimental",
+        "manifest_sha256": "13b5aefe80305976fe0b53710ddf81dc9d3ba00c4f46fe93f058f425873478cb",
+        "manual_sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9",
+        "source_bound_to_retained_run": true
+      },
+      {
+        "run_id": "e1bb2bd30b874d5c8d1a832a4198d1af",
+        "case": "M-SCALE-002",
+        "mode": "real-time",
+        "manifest_sha256": "cc73d4181f5d0f1ae6f538cd53468a9a27c634ae5892f76019cd138c3e823f07",
+        "manual_sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9",
+        "source_bound_to_retained_run": true
+      }
+    ],
+    "M-SCALE-003": [
+      {
+        "run_id": "156277b2886a434d9fb03d7989de544e",
+        "case": "M-SCALE-003",
+        "mode": "controlled-experimental",
+        "manifest_sha256": "104cceed7cd136d78096a5f59b3dc05707bf16ef89fc500da017b9d2a8baa41d",
+        "manual_sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9",
+        "source_bound_to_retained_run": true
+      },
+      {
+        "run_id": "d1f19072e10e407cab0e780a4b9dfa7a",
+        "case": "M-SCALE-003",
+        "mode": "real-time",
+        "manifest_sha256": "3f68ab8116d15ceabd54df5b8274cd4a484cb929b94014cedecb88fe068d9ef3",
+        "manual_sha256": "fab8458e41f38324012e496a88c4f320f4c1345653b2b9bfacc7500b67e972eb",
+        "source_bound_to_retained_run": true
+      }
+    ],
+    "M-MERGE-001": [
+      {
+        "run_id": "b9beef67de444d83b47688e702d021da",
+        "case": "M-MERGE-001",
+        "mode": "controlled-experimental",
+        "manifest_sha256": "6a8337bf788f1552334d5f5b8a88ad94eeaeef5b394cd4b967a596afbb23f5ea",
+        "manual_sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9",
+        "source_bound_to_retained_run": true
+      },
+      {
+        "run_id": "049520b89c744cc680f6fdbdf0d6a224",
+        "case": "M-MERGE-001",
+        "mode": "real-time",
+        "manifest_sha256": "3d9e84aa71b45f5c331aa75d70256a1dce18e2683af7ba3b3ec5326db03c1c01",
+        "manual_sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9",
+        "source_bound_to_retained_run": true
+      }
+    ],
+    "M-PAT-002": [
+      {
+        "run_id": "851f9678c61e4911a2bb5ee2d3d01105",
+        "case": "M-PAT-002",
+        "mode": "controlled-experimental",
+        "manifest_sha256": "4936c57b1520ccdd4b73a4bc87ee349f9eb75e24419f63dccca60838108f9fd0",
+        "manual_sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9",
+        "source_bound_to_retained_run": true
+      },
+      {
+        "run_id": "a732a75532e040ae9d775d8d8636f6d0",
+        "case": "M-PAT-002",
+        "mode": "real-time",
+        "manifest_sha256": "cd9ea80522a088b4b08db210882927633647884bdd0e8f44ecbbbcf4d0f9ac7e",
+        "manual_sha256": "be76f940e737a495750528ba2ed7b373d306f487c8e01fcf8b7b6520cbdb5fe9",
+        "source_bound_to_retained_run": true
+      }
+    ],
+    "M-RANGE-001": [
+      {
+        "run_id": "bd0092b463f94990bd95d58bd84898d5",
+        "case": "M-RANGE-001",
+        "mode": "controlled-experimental",
+        "manifest_sha256": "1835864db3b52ade927484aa38f230d4ff335da660d9afd953e040e80c4a05a5",
+        "manual_sha256": "fab8458e41f38324012e496a88c4f320f4c1345653b2b9bfacc7500b67e972eb",
+        "source_bound_to_retained_run": true
+      },
+      {
+        "run_id": "c58aefe8dcf5479185f4c0cfa47437a9",
+        "case": "M-RANGE-001",
+        "mode": "real-time",
+        "manifest_sha256": "68aa3827577cb311e3714f11921402c7bad0784937d23f6861546f80ac54b8d9",
+        "manual_sha256": "fab8458e41f38324012e496a88c4f320f4c1345653b2b9bfacc7500b67e972eb",
+        "source_bound_to_retained_run": true
+      }
+    ]
   }
 }
