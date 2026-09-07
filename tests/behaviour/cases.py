@@ -560,7 +560,69 @@ def channel_long_hold(c):
     c.results.append(dict(kind='range-loop-spacing',expected_seconds=1/6,actual_seconds=gaps))
     assert all(abs(gap-1/6)<=tolerance for gap in gaps),gaps
 
+def adjacent_channel_ranges(c):
+    # Fill every step through the pattern editor. The first four authored
+    # pitches/velocities distinguish step addressing; later steps use C/100.
+    c.configure();c.tap(5,8)
+    cell=lambda step:((step-1)%16+1,(step-1)//16+4)
+    for step in range(5,65):c.tap(*cell(step))
+    c.tap(3,8)
+    cells=[cell(step) for step in range(1,65)]
+    values=[(60,127),(62,117),(64,107),(65,97)]+[(60,100)]*60
+    # Every possible adjacent pair, including all row boundaries and step64.
+    # Ascending ranges are documented; reversed endpoints remain a separate
+    # failure-mode investigation, never silently normalized by this oracle.
+    for start,end in [(s,s+1) for s in range(1,64)]+[(1,64)]:
+        c.hold_tap(cell(start),cell(end))
+        c.led_values(cells,[15 if start<=step<=end else 0 for step in range(1,65)])
+        expected=[(1,[144,n,v]) for n,v in values[start-1:end]]
+        notes=c.playback(expected,cycles=2,timeout=(end-start+1)/3+3)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        c.results.append(dict(kind='adjacent-range',start=start,end=end,expected_gap_seconds=1/6,actual_gaps=gaps))
+        assert all(abs(gap-1/6)<=tolerance for gap in gaps),dict(start=start,end=end,gaps=gaps)
+
+def channel_mute_gestures(c):
+    c.configure()
+    phrase=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    def hold(seconds):
+        c.action(type='grid',x=1,y=1,state=1)
+        try:c.elapse(seconds)
+        finally:c.action(type='grid',x=1,y=1,state=0)
+    def shift_mute():
+        c.action(type='key',n=1,state=1)
+        try:
+            c.elapse(.3);c.tap(1,1)
+        finally:c.action(type='key',n=1,state=0)
+    def silence(seconds):
+        before=c.snapshot()['midi_count'];c.elapse(seconds);state=c.snapshot()
+        notes=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+        c.results.append(dict(kind='mute-silence',seconds=seconds,new_note_ons=notes))
+        assert not notes,notes
+        assert not state['midi_capture']['outstanding'],'Muted phrase retained active notes'
+    hold(.8);c.led_values([(1,1)],[15]);c.playback(phrase)
+    hold(1.1);c.led_values([(1,1)],[7])
+    c.tap(1,8);silence(1.5);c.tap(1,8)
+    shift_mute();c.led_values([(1,1)],[15]);c.playback(phrase)
+    # Muting and unmuting during playback must leave transport running and
+    # release existing notes; resumed pitches follow the unchanged phrase.
+    c.tap(1,8)
+    c.wait(lambda s:s['midi_capture']['outstanding']!=[])
+    hold(1.1);c.led_values([(1,1)],[7]);silence(1.5)
+    marker=c.snapshot()['midi_count'];shift_mute();c.led_values([(1,1)],[15])
+    def emitted(s):
+        return [m for m in s['midi'] if m['index']>marker and m['bytes'][0]==144 and m['bytes'][2]>0]
+    state=c.wait(lambda s:len(emitted(s))>=9)
+    actual=[(m['port'],m['bytes']) for m in emitted(state)]
+    start=phrase.index(actual[0]);expected=[phrase[(start+i)%4] for i in range(len(actual))]
+    assert actual==expected,dict(expected=expected,actual=actual)
+    c.results.append(dict(kind='unmute-live-phrase',expected=expected,actual=actual))
+    c.tap(1,8);c.wait(lambda s:not s['midi_capture']['outstanding'])
+
 CASES={
+ 'M-MUTE-001':dict(run=channel_mute_gestures,requirements=['CH-MUTE'],description='Below-threshold hold, long hold and K1 mute toggles; stopped/live silence, resumed phrase and releases'),
+ 'M-RANGE-002':dict(run=adjacent_channel_ranges,requirements=['CH-RANGE'],description='All63 adjacent channel ranges plus full64-step range: exact grid, complete MIDI loops and spacing'),
  'M-RANGE-001':dict(run=channel_long_hold,requirements=['CH-RANGE'],description='A lone long hold is inactive; a delayed end-step combination still selects the range with exact MIDI loop spacing'),
  'M-SCALE-003':dict(run=scale_stop_indicator,requirements=['SCALE-SELECT'],description='Applied scale stays brightly lit after transport stops'),
  'M-SCALE-001':dict(run=scale_edit_selection,requirements=['SCALE-SELECT', 'SCALE-EDIT'],description='Editing-only gestures, applying edited scales, global off and reentry through screen/grid/MIDI'),

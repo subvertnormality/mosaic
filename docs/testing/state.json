@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue C08/T00 statement and image audit plus unimplemented behavior domains. Six new cases have focused real-time/controlled passes; full domain coverage and three fresh D repeats remain required. SEM-002 resolved preserving inactive long hold. SEM-001 merge formula awaits user. No refactor.",
+  "next_action": "Continue remaining C08 manual domains, channel independence, live range edits, remaining range endpoint combinations and exact mute thresholds/sequence isolation. Range/mute focused validation passed; full campaign remains incomplete. SEM-001 formula clarification pending. No refactor.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -306,7 +306,7 @@
   "manual_requirements": 141,
   "new_cases_pending": [],
   "controlled_admission_checkpoint": "Emulator artifacts/c16/m5-admission-06d.json; subsequent application edits do not reuse old application evidence as current-source passes.",
-  "implemented_cases": 19,
+  "implemented_cases": 21,
   "latest_partial_domain_evidence": {
     "M-SCALE-001": [
       {
@@ -415,6 +415,62 @@
         "manual_sha256": "fab8458e41f38324012e496a88c4f320f4c1345653b2b9bfacc7500b67e972eb",
         "source_bound_to_retained_run": true
       }
+    ],
+    "M-RANGE-002": [
+      {
+        "run_id": "0343326b5aef47b2a9dca5a3ffed9c35",
+        "manifest_sha256": "2a1d238d3c6c5a02694be48c6b2d87cbefdd24cf94bd7690faeb62ea06dfff59",
+        "mode": "controlled-experimental",
+        "wall_elapsed_seconds": 309.6325905129779
+      },
+      {
+        "run_id": "3c6b6a78cc6c4b1e8d6765c64f68f844",
+        "manifest_sha256": "3a1d46bc5de8d593f8bb4daba2c859f4ab4e53096db18bc4d2036e820f6e5953",
+        "mode": "real-time",
+        "wall_elapsed_seconds": 121.73645625705831
+      }
+    ],
+    "M-MUTE-001": [
+      {
+        "run_id": "abfb0785085e4a62a4aa99a084c1c23f",
+        "manifest_sha256": "9cc418f47b3aaeb43fa9761ec2ea9473457562aa1568bec34dd17fd4455f781a",
+        "mode": "real-time",
+        "wall_elapsed_seconds": 26.400461626937613
+      },
+      {
+        "run_id": "62846575086945968e20f3c07f277c9c",
+        "manifest_sha256": "816bb0d849596e0a3128c8a1bc9d5a5a8f666e4937d50443a4047bbb7824f7c6",
+        "mode": "controlled-experimental",
+        "wall_elapsed_seconds": 26.12522134091705
+      },
+      {
+        "run_id": "3f9696260a014e8a9ada18791da1ffa6",
+        "manifest_sha256": "aed3d41b5a506d89db2bb9087197fdf200febb4cac4864ebe26f7842141e8a3e",
+        "mode": "controlled-experimental",
+        "wall_elapsed_seconds": 25.980053765000775
+      },
+      {
+        "run_id": "350e757a56d94ac7a6c6d8cca34faa4f",
+        "manifest_sha256": "67b0bf0935502ccb58da1bd444444a906174e68647ed435bd50e827b5d3b0193",
+        "mode": "controlled-experimental",
+        "wall_elapsed_seconds": 26.65843121893704
+      }
     ]
+  },
+  "fresh_controlled_repeats": {
+    "M-MUTE-001": {
+      "run_id": "repeat-07c2b2dc192a47849d71e75018d7d81a",
+      "manifest_sha256": "378e80d0cb2b5f67925f95dc50f6d500b0d5836a06744f12a231a29de692f314",
+      "normalized_sha256": "82db21a877e1f1c447096399a04495244b774bffc4a75bc6d8994a72e9bf6161",
+      "fresh_processes": 3,
+      "passed": true
+    },
+    "M-RANGE-001": {
+      "run_id": "repeat-b0b0110c40004c3daeb5efa8a2d5759f",
+      "manifest_sha256": "b3c90d5861731f8247af84534f03a3b38623892b2d833ee0691bf0ec27de1e55",
+      "normalized_sha256": "871f8d813efdd5d819899821a822ca25562788f29391f48ace0d662774589adb",
+      "fresh_processes": 3,
+      "passed": true
+    }
   }
 }

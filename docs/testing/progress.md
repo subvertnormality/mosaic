@@ -309,3 +309,27 @@ inactive to protect combinations; independently selecting a one-step channel
 range is unsupported. README states this. M-RANGE-001 verifies inactivity,
 delayed range selection, the next Play press, exact notes and loop spacing.
 No standalone long-press action was added. SEM-001 remains pending.
+
+
+## Channel range sweep and mute gestures
+
+M-RANGE-002 passes controlled and real-time checks for all 63 adjacent start/end
+pairs, including row boundaries and step64, and the full 1..64 range. Every range
+checks all64 LEDs, two complete MIDI phrases plus a closing onset, exact pitches
+and velocities, stop/drain and one-sixteenth-note spacing at90BPM. This is not
+all2016 ascending endpoint combinations; live edits and channel/global isolation
+remain required. Later-step default pitches also leave independent pitch-address
+coverage to the note-editor cases.
+
+M-MUTE-001 passes the below-threshold hold, long hold and K1+press gestures,
+stopped/live silence, audible unmute and pending-note cleanup. All16 channels,
+exact threshold boundaries and per-sequence isolation remain required. Both
+M-MUTE-001 and M-RANGE-001 have three fresh controlled-process repeats with exact
+recipe, logical MIDI, grid and final-frame agreement. The broad range sweep
+still needs its three-repeat gate. Exact manifest references are in state.json.
+
+The range sweep took309.63seconds controlled and121.74seconds real-time. This
+is broader validation, not a fast smoke test. Controlled time is not claimed to
+be faster; polling/capture cost remains an emulator feedback task. No production
+Mosaic changes were needed in this continuation. There are21 executable cases;
+the141-requirement campaign remains incomplete.

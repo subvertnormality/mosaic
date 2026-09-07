@@ -3023,7 +3023,8 @@
       ],
       "statement": "Independent channel ranges use two distinct held start/end steps. A standalone long hold is inactive and must preserve subsequent combinations.",
       "cases": [
-        "M-RANGE-001"
+        "M-RANGE-001",
+        "M-RANGE-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "All supported distinct starts/ends; wrap; SEM-002 inactive lone long hold and delayed combination; coprime lengths; global-scale interaction.",
@@ -3048,8 +3049,10 @@
         "MAN-053"
       ],
       "statement": "One-second hold or K1-press mutes per sequence; muted channel select LED dims.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-MUTE-001"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "All16 channels; threshold-1/on/+1; pending notes; repeated gesture; sequence changes.",
       "oracles": [
         "Dim LED, defined silence and balanced pending releases; other channels unaffected."
