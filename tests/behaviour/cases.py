@@ -797,7 +797,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     assert all(abs(gap-1/3)<=tolerance for gap in gaps),gaps
     c.results.append(dict(kind='recorded-replay-spacing',expected_seconds=1/3,actual_seconds=gaps))
 
-def recorded_note_channel_switch(c):
+def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5):
     c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
     c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1)
     c.tap(2,8);marker=c.snapshot()['midi_count'];c.tap(1,8)
@@ -806,20 +806,20 @@ def recorded_note_channel_switch(c):
     state=c.wait(lambda state:any(m['index']>marker and m['port']==1 and m['bytes']==[144,60,127] for m in state['midi']))
     anchor=next(m[field] for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes']==[144,60,127])
     # The next four-step loop starts2/3s after the observed first onset.
-    # Enter50ms into step1 and hold exactly500ms using native deadlines.
+    # Enter50ms into step1; supply the requested hold with native deadlines.
     # Client snapshots/channel selection must not lengthen the keyboard hold.
     origin=anchor+666666667+50000000
-    events=[dict(port=1,bytes=data,**{'at_'+field:origin+offset}) for offset,data in [(0,[144,72,90]),(500000000,[128,72,0])]]
+    events=[dict(port=1,bytes=data,**{'at_'+field:origin+offset}) for offset,data in [(0,[144,72,90]),(hold_ns,[128,72,0])]]
     request=dict(type='midi_schedule',schedule_id=1,events=events)
     if controlled:request['time_domain']='logical'
     c.action(**request)
     if controlled:c.elapse((origin+100000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])>=1,timeout=2)
     c.tap(2,1);marker=c.snapshot()['midi_count']
-    if controlled:c.elapse((origin+510000000-c.logical_ns)/1e9)
+    if controlled:c.elapse((origin+hold_ns+10000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==2,timeout=2)
     state=c.snapshot()
-    c.results.append(dict(kind='scheduled-keyboard-hold',expected_ns=500000000,events=events,delivered=state['midi_input_schedule']['delivered']))
+    c.results.append(dict(kind='scheduled-keyboard-hold',expected_ns=hold_ns,events=events,delivered=state['midi_input_schedule']['delivered']))
     releases=[(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and 128<=m['bytes'][0]<=143 and m['bytes'][1]==72]
     c.results.append(dict(kind='held-input-release-route',expected=[(1,[128,72,0])],actual=releases))
     assert releases==[(1,[128,72,0])],releases
@@ -828,7 +828,7 @@ def recorded_note_channel_switch(c):
     def notes(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0]
     state=c.wait(lambda state:all(sum(m['bytes'][0]==status for m in notes(state))>=13 for status in (144,145)),timeout=5)
     rows=notes(state);field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-    for port,status,phrase,pitch,duration in [(1,144,[(72,90),(62,117),(64,107),(65,97)],72,.5),(2,145,[(60,127),(62,117),(64,107),(65,97)],60,1/6)]:
+    for port,status,phrase,pitch,duration in [(1,144,[(72,90),(62,117),(64,107),(65,97)],72,expected_duration),(2,145,[(60,127),(62,117),(64,107),(65,97)],60,1/6)]:
         channel_notes=[m for m in rows if m['bytes'][0]==status]
         actual=[(m['port'],m['bytes']) for m in channel_notes];expected=[(port,[status,*phrase[i%4]]) for i in range(len(actual))]
         assert actual==expected,dict(expected=expected,actual=actual)
@@ -842,6 +842,8 @@ def recorded_note_channel_switch(c):
     c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
 
 CASES={
+ 'M-REC-007':dict(run=lambda c:recorded_note_channel_switch(c,210000000,5/24),requirements=['REC-LIVE-NOTES'],description='A210ms keyboard hold quantises to1.25 steps at90BPM; replay lasts5/24s'),
+ 'M-REC-006':dict(run=lambda c:recorded_note_channel_switch(c,550000000,13/24),requirements=['REC-LIVE-NOTES'],description='A550ms keyboard hold at90BPM quantises to3.25 sixteenth steps; replay lasts13/24s on the origin channel'),
  'M-REC-005':dict(run=recorded_note_channel_switch,requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Switch selected channel while recording a held note; release route and recorded length remain on origin channel'),
  'M-REC-002':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3)),requirements=['REC-LIVE-NOTES'],description='Live notes2ms before step boundaries belong to preceding steps; recorded grid and replay'),
  'M-REC-003':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4)),requirements=['REC-LIVE-NOTES'],description='Live notes2ms after step boundaries belong to new steps; recorded grid and replay'),

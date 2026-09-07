@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue live keyboard recording matrix: fractional lengths, non-first channel ranges/divisions and visible playhead agreement. Finish remaining C08, manual behaviours and emulator release stages; full campaign incomplete.",
+  "next_action": "Continue live recording: non-first channel ranges/divisions, wrap and playhead agreement; extend fractional duration coverage to arbitrary-phase callbacks and changing clocks. C08 and full behaviour/emulator release remain incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -663,6 +663,36 @@
       "sha256": "fed9df6d3d65f7781700f3c52e9b0c679c613375cc919a7d59f6574bc508e721",
       "case": "M-REC-005",
       "passed": true,
+      "mode": "controlled-repeat"
+    }
+  ],
+  "fractional_recording_validation": [
+    {
+      "run_id": "3021e9a867234d98a11418b6873f56ba",
+      "sha256": "d87080c5417d39f4f03df79fea1bf04ac0b9c31027da22595b13e998c56357b8",
+      "passed": true,
+      "case": "M-REC-006",
+      "mode": "real-time"
+    },
+    {
+      "run_id": "6981305ae7b240b5b0283540ab0ad5ac",
+      "sha256": "9ebe079383c08c94270a7870b39677b7b8c64e97c211166f65c578cc12fabd5b",
+      "passed": true,
+      "case": "M-REC-007",
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-002078ce02c24876966f8e174d53f601",
+      "sha256": "fd1a32e3e72e374d9387776b31f90b545f7bfeb446602361ef726f28b8cba58e",
+      "passed": true,
+      "case": "M-REC-006",
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-44c03487b2b44a82a96c789f060c1ad2",
+      "sha256": "78b02581dd882d2a2204e317730b559727b40fb1dccaa1303d899f8828943596",
+      "passed": true,
+      "case": "M-REC-007",
       "mode": "controlled-repeat"
     }
   ]

@@ -445,3 +445,29 @@ sequential unit run passed474/474, including that performance gate. The earlier
 failure remains retained; concurrency and implementation changed together, so its
 cause is not attributed solely to sorting. Full performance/endurance and advanced
 arpeggio/cancellation matrices remain required. No full campaign completion claim.
+
+
+## Fractional recorded-note duration
+
+M-REC-006 supplies a native scheduled550ms keyboard hold at90BPM. The nearest
+supported length is3.25 sixteenth steps, so replay must last13/24s (541.67ms).
+Baseline9fd1e5a instead emits approximately527.78ms: controlled
+31a3a1a043814df49fb359e7ebf66b12 and real-time481469ce22ee459eacb0df549b1d808d
+both fail. This reproduces the fractional discrepancy suspected in the earlier
+unscheduled recording test without relying on client timing.
+
+Candidate0010 corrects fractional elapsed-pulse accounting: phase starts at1
+and is incremented before the check, so elapsed pulses are phase-2. Fractions
+rounding up to a full cycle fire on its next onset. The note length remains
+quantised as before; no recording placement model or tolerance changes.
+M-REC-007 independently supplies210ms, quantising to1.25 steps (208.33ms).
+Both cases pass real-time and three fresh controlled repeats; all474 unit tests
+pass. The supplementary lattice_duration_contract.lua independently checks23
+fractional/integer durations and cleanup. It rejects the old scheduler at the
+shortest note (expected1 pulse, actual0) and passes the candidate. These pulse
+checks complement the user-input/MIDI tests and do not replace native acceptance.
+
+There are31 native behaviour cases. This validates fixed-tempo, onset-scheduled
+fractional releases only. Arbitrary-phase arpeggio callbacks, changing clocks,
+swing/shuffle, recording wrap/arm/disarm, visible playhead agreement and the
+remaining manual/campaign/release domains remain required.

@@ -1,0 +1,57 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "9fd1e5a",
+  "file": "lib/clock/m_lattice.lua",
+  "before_sha256": "8a0a51dea9701d697d43d96e20d4e5e784ce889220de75c0731f0a5e5ed63916",
+  "after_sha256": "3932ccf794599b84c641e9305f8e103c804d6dbfd0378481dc65fbec9d51ca46",
+  "patch": "0010-fractional-note-duration.patch",
+  "patch_sha256": "09ffc0f3d82eb92ad55f92063f8fe7ed36e29c59349f5819e4ec00212f9451d7",
+  "regression": "M-REC-006",
+  "baseline_controlled": "31a3a1a043814df49fb359e7ebf66b12",
+  "baseline_real_time": "481469ce22ee459eacb0df549b1d808d",
+  "expected_seconds": 0.5416666666666666,
+  "actual_controlled_seconds": 0.5277777777777778,
+  "limitations": "Arbitrary-phase delayed actions, fractional values approaching1, swing, changing divisions and arpeggio durations require further coverage.",
+  "upstream_merged": false,
+  "validation": [
+    {
+      "run_id": "3021e9a867234d98a11418b6873f56ba",
+      "sha256": "d87080c5417d39f4f03df79fea1bf04ac0b9c31027da22595b13e998c56357b8",
+      "passed": true,
+      "case": "M-REC-006",
+      "mode": "real-time"
+    },
+    {
+      "run_id": "6981305ae7b240b5b0283540ab0ad5ac",
+      "sha256": "9ebe079383c08c94270a7870b39677b7b8c64e97c211166f65c578cc12fabd5b",
+      "passed": true,
+      "case": "M-REC-007",
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-002078ce02c24876966f8e174d53f601",
+      "sha256": "fd1a32e3e72e374d9387776b31f90b545f7bfeb446602361ef726f28b8cba58e",
+      "passed": true,
+      "case": "M-REC-006",
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-44c03487b2b44a82a96c789f060c1ad2",
+      "sha256": "78b02581dd882d2a2204e317730b559727b40fb1dccaa1303d899f8828943596",
+      "passed": true,
+      "case": "M-REC-007",
+      "mode": "controlled-repeat"
+    }
+  ],
+  "units": {
+    "passed": 474,
+    "failed": 0,
+    "artifact": "emulator:artifacts/c16/fractional-duration-units-isolated.json"
+  },
+  "pulse_contract": {
+    "cases": 23,
+    "baseline_failed": true,
+    "candidate_passed": true,
+    "artifact": "emulator:artifacts/c16/fractional-pulse-contract.json"
+  }
+}

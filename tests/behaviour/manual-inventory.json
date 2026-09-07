@@ -4564,7 +4564,9 @@
         "M-REC-002",
         "M-REC-003",
         "M-REC-004",
-        "M-REC-005"
+        "M-REC-005",
+        "M-REC-006",
+        "M-REC-007"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",
