@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Instrumented real-time run passed but prior726ms stall remains unexplained. Three-repeat package failed on second child native advance timeout:5.13s between input trace and native ack; receiver lag19.33ms. Add post-submission time and independent host heartbeat before another diagnostic attempt. No timeout widening or repeat credit. Source transitions and boundary starts remain required. Full atomic manual/T01 and remaining feature families, M5 and Codex follow-up remain incomplete. No active runners.",
+  "next_action": "Three controlled runs now pass and match. Current-source real-time run fails one note by14.7326ms; all177 actions acked, log writes under2ms, independent heartbeat regular around missed deadline. Profile native scheduler runnable delay versus Mosaic callback execution next; no blind retry or tolerance widening. Earlier multi-second host stalls remain separate evidence. M5/P5 and boundary/source-transition coverage incomplete. Full atomic manual/T01 and remaining feature families required. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -189,6 +189,23 @@
     "controlled_failed_child": {
       "path": "../mosaic-behaviour-runs/bd4676fcad0f4a54974a6e49e04f3b33/manifest.json",
       "sha256": "db2b2122d67c0fe0527ea75daa6e75cb219ce52e6adc9bce3ab032dd7432c53b",
+      "passed": false
+    }
+  },
+  "latest_submission_diagnostics": {
+    "controlled_diagnostic": {
+      "path": "../mosaic-behaviour-runs/074828c929ce4c39b9f8a9e084d82740/manifest.json",
+      "sha256": "7223cb78d718fc1dd32531dab9e16c69661977f867daf7cb205ce901e169b0ef",
+      "passed": true
+    },
+    "controlled_repeats": {
+      "path": "../mosaic-behaviour-runs/repeat-e5e596679fbc41d4878fadd5eafcb1a0/manifest.json",
+      "sha256": "730b65bd56d031898df477df25c59369e1f01c5011749e725e8571d6bdba8528",
+      "passed": true
+    },
+    "real_time": {
+      "path": "../mosaic-behaviour-runs/d5fa2557a53844ecb997a956c6ceb82d/manifest.json",
+      "sha256": "3a5421e03c62037d02f9a01c7400afe2495a1e942c66dbb6bde976abf0eb038f",
       "passed": false
     }
   }
