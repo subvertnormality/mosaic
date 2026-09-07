@@ -1,0 +1,76 @@
+{
+  "status": "focused-passed-controlled-repeat-pending",
+  "base_revision": "a932827",
+  "file": "lib/m_midi.lua",
+  "before_sha256": "f81fb4730eaac4f80e16e4e3959c13ab9d09965febeb1f41da72c0b909380e8c",
+  "after_sha256": "608dfb3f2cf7f48d9a74391219dc920e6964d2680148c3dad6b21b89faf14f15",
+  "patch": "0008-recorded-note-owner.patch",
+  "patch_sha256": "c3e60b0c94a378bf4fb3966d9fc20ee147a13d8d9f9d39cbc42a26097f489fab",
+  "regression": "M-REC-005",
+  "baseline": {
+    "run_id": "f401a64a0de845dcb996e86e05797623",
+    "manifest_sha256": "2c2806fac1eea6acff01dd182b8105e9b3c8e2b62f6f98f40e41811c80b6e766",
+    "expected_release": [
+      1,
+      [
+        128,
+        72,
+        0
+      ]
+    ],
+    "actual_release": [
+      2,
+      [
+        129,
+        72,
+        0
+      ]
+    ]
+  },
+  "rationale": "Retain note-on channel and output route for note-off and recorded length after channel selection changes.",
+  "validation": [
+    {
+      "run_id": "b5c37a7b28ea47c3bcd836e57e67826f",
+      "manifest_sha256": "4e1a686a76535d1f3d9af3787eab5e716f2a712773b4900fb01132ffe8818316",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "c260ebd73acb40d6b98e0261d1fe18a0",
+      "manifest_sha256": "c42e470411681e82fddc0e725ac70eb690fcd7c9e48c2233a9bc6f4f7eff8c1b",
+      "passed": true,
+      "mode": "controlled-experimental"
+    },
+    {
+      "run_id": "36c5a11078c04f8b83c9358b4e0395a6",
+      "manifest_sha256": "616da75efbb6d1d90bd321cdad8599ef03b817a7158bd06971cee1349324eda5",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "edbbb476c27143759b79c2aefd9f644d",
+      "manifest_sha256": "ec19aba446116fc1da25a4e6013bd742f8f27fd51ee4b5f64bd4dd8a2a578f2a",
+      "passed": true,
+      "mode": "real-time"
+    }
+  ],
+  "limitations": "Song changes, simultaneous cross-channel chord state, route reconfiguration and held-note tempo changes remain separate required regressions.",
+  "upstream_merged": false,
+  "scheduled_baseline": {
+    "run_id": "3a0d6e0f81704774858457ad1d6b919d",
+    "manifest_sha256": "218093181181798e584901f54dba7a207df54e4a424e13bb31d5147db8bfde64",
+    "passed": false,
+    "mode": "real-time"
+  },
+  "controlled_repeat": {
+    "run_id": "repeat-cf0ac225403244fba1daa2b4498d5f1c",
+    "manifest_sha256": "d14c794eaa3b05f686985e1ccb596b744bae18c7c7fe6c1e54186ea37d69287b",
+    "passed": false,
+    "mode": null
+  },
+  "units": {
+    "passed": 474,
+    "failed": 0,
+    "artifact": "emulator:artifacts/c16/recorded-note-owner-units-isolated.json"
+  }
+}

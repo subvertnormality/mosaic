@@ -399,3 +399,31 @@ unresolved diagnostic (SEM-008), not marked passing or called a confirmed bug.
 Controlled native evidence separates pulse-deadline input from strict sync step
 processing by1ns. No production changes were made. There are28 executable cases,
 including this failing diagnostic; the complete suite is not green or complete.
+
+
+## Held keyboard note survives channel selection
+
+M-REC-005 now schedules note-on and note-off exactly500ms apart,50ms into
+step1 of a90BPM four-step loop. Selecting channel2 while the note is held must
+leave its release on port1/MIDI channel1 and its recorded length on channel1.
+Replay independently checks both channels' pitches, velocities and note lengths.
+The revised unchanged test fails on original a932827 (run3a0d6e0f81704774858457ad1d6b919d):
+note-off wrongly goes to port2/channel2. Candidate0008 retains the note-on owner
+and output route. It passes real-time b5c37a7b28ea47c3bcd836e57e67826f and
+controlled c260ebd73acb40d6b98e0261d1fe18a0. Neighboring memory-isolation and
+mid-step recording real-time tests pass; all474 existing unit tests pass.
+
+Earlier real-time d8a21d6a6a9f4768a84f354401a051cb used unscheduled client waits:
+actual hold553.88409ms invalidated its intended500ms stimulus. Its approximately
+527ms replay duration is retained for a separate fractional-length investigation;
+it is not explained away or used to widen tolerances. The first isolated baseline
+clone omitted n.b. and failed startup (1b55c37e7fcb40b5863e8f508a64d6de); after
+copying the same pinned dependency the intended release assertion failed.
+
+Three fresh controlled runs each pass the case, but repeat-cf0ac225403244fba1daa2b4498d5f1c fails exact trace equality: simultaneous note releases change order. No trace sorting or tolerance change was applied. Deterministic acceptance remains pending investigation of release ordering.
+
+This confirms a held-note channel-switch defect, not the cause of the reported
+frequent step misplacement. Current-step quantisation is unchanged. Song changes,
+cross-channel overlapping chords, route edits, variable tempo/divisions, fractional
+lengths and the remaining placement matrix remain required. There are29 cases;
+the complete campaign remains incomplete, including the exact-pulse diagnostic.

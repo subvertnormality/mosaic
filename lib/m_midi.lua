@@ -33,7 +33,8 @@ end
 function handle_midi_event_data(data, midi_device)
 
 
-  local channel = program.get_selected_channel()
+  local pending_note = data[1] == 128 and midi_off_store[data[2]]
+  local channel = pending_note and program.get_channel(program.get().selected_song_pattern, pending_note.channel_number) or program.get_selected_channel()
 
   if channel.number == 17 then 
     return 
@@ -86,7 +87,11 @@ function handle_midi_event_data(data, midi_device)
     midi_off_store[data[2]] = {
       note = note,
       step = s,
-      start_time = util.time()
+      start_time = util.time(),
+      channel_number = channel.number,
+      midi_channel = midi_channel,
+      midi_device = device.midi_device,
+      player = d.player
     }
 
     if d.player then
@@ -153,7 +158,6 @@ function handle_midi_event_data(data, midi_device)
         local duration = util.time() - stored.start_time
         local beats_per_second = clock.get_tempo() / 60
   
-        local channel = program.get_selected_channel()
         local clock_mods = channel.clock_mods
         local channel_divisor = m_clock.calculate_divisor(clock_mods)
         local channel_division = 1 / (channel_divisor)
@@ -193,10 +197,10 @@ function handle_midi_event_data(data, midi_device)
       end
     end
   
-    if d.player then
-      d.player:note_off(stored.note)
+    if stored.player then
+      stored.player:note_off(stored.note)
     else
-      m_midi:note_off(stored.note, 0, midi_channel, device.midi_device)
+      m_midi:note_off(stored.note, 0, stored.midi_channel, stored.midi_device)
     end
 
     

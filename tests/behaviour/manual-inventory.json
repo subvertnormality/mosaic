@@ -1598,7 +1598,8 @@
       "statement": "Each emitted MIDI note has a corresponding release, including repeated pitches at a pattern wrap and subsequent transport stop.",
       "basis": "MIDI note lifetime invariant and mandatory no-stuck-note acceptance, tested through manual duration and transport gestures.",
       "cases": [
-        "M-MIDI-001"
+        "M-MIDI-001",
+        "M-REC-005"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -4562,7 +4563,8 @@
         "M-REC-001",
         "M-REC-002",
         "M-REC-003",
-        "M-REC-004"
+        "M-REC-004",
+        "M-REC-005"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",

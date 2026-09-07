@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Prioritise reported live-record placement: three scheduled recipes pass RT/D, exact pulse hypothesis remains failing/open SEM-008. Next cover non-first channel ranges/divisions, held note channel switching, wrap/arm/disarm and distinguish stale UI from replay placement. No production timing change without resolving semantics. C08 and full campaign remain incomplete; SEM-001/007 also pending.",
+  "next_action": "First diagnose simultaneous note-release order in repeat-cf0ac225403244fba1daa2b4498d5f1c; then continue live-recording placement matrix: fractional recorded lengths, non-first ranges/divisions and playhead agreement; preserve current-step semantics. Complete remaining C08 and campaign/release stages.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -599,5 +599,41 @@
     "case": "M-PAT-001",
     "mode": "real-time"
   },
-  "live_recording_plan": "LIVE_RECORDING_PLACEMENT.md"
+  "live_recording_plan": "LIVE_RECORDING_PLACEMENT.md",
+  "recorded_note_owner_validation": {
+    "candidate": "0008-recorded-note-owner.patch",
+    "baseline": {
+      "run_id": "3a0d6e0f81704774858457ad1d6b919d",
+      "manifest_sha256": "218093181181798e584901f54dba7a207df54e4a424e13bb31d5147db8bfde64",
+      "passed": false,
+      "mode": "real-time"
+    },
+    "passes": [
+      {
+        "run_id": "b5c37a7b28ea47c3bcd836e57e67826f",
+        "manifest_sha256": "4e1a686a76535d1f3d9af3787eab5e716f2a712773b4900fb01132ffe8818316",
+        "passed": true,
+        "mode": "real-time"
+      },
+      {
+        "run_id": "c260ebd73acb40d6b98e0261d1fe18a0",
+        "manifest_sha256": "c42e470411681e82fddc0e725ac70eb690fcd7c9e48c2233a9bc6f4f7eff8c1b",
+        "passed": true,
+        "mode": "controlled-experimental"
+      },
+      {
+        "run_id": "36c5a11078c04f8b83c9358b4e0395a6",
+        "manifest_sha256": "616da75efbb6d1d90bd321cdad8599ef03b817a7158bd06971cee1349324eda5",
+        "passed": true,
+        "mode": "real-time"
+      },
+      {
+        "run_id": "edbbb476c27143759b79c2aefd9f644d",
+        "manifest_sha256": "ec19aba446116fc1da25a4e6013bd742f8f27fd51ee4b5f64bd4dd8a2a578f2a",
+        "passed": true,
+        "mode": "real-time"
+      }
+    ],
+    "full_campaign_complete": false
+  }
 }
