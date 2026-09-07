@@ -1,5 +1,5 @@
 """Run explicitly selected real-input cases; full inventory fails closed."""
-import argparse,hashlib,json,os,platform,subprocess,sys,traceback,uuid,time
+import ast,argparse,hashlib,json,os,platform,subprocess,sys,traceback,uuid,time
 from pathlib import Path
 from driver import Driver,REPO,EMULATOR_ROOT,write,digest
 from cases import CASES
@@ -18,6 +18,15 @@ def main():
         parser.error('Modulation profile requires --mod-code-root; base profile takes no mod source')
     if args.clock_mode=='controlled-experimental' and not args.experimental_install:
         parser.error('Experimental diagnostics require both --clock-mode controlled-experimental and --experimental-install')
+    # Python dict literals silently replace duplicate keys. Reject duplicate
+    # case IDs from source before any selection can earn misleading credit.
+    tree=ast.parse((REPO/'tests/behaviour/cases.py').read_text())
+    registries=[n.value for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='CASES' for t in n.targets)]
+    assert len(registries)==1 and isinstance(registries[0],ast.Dict),'Expected one explicit CASES registry'
+    keys=registries[0].keys
+    assert all(isinstance(k,ast.Constant) and isinstance(k.value,str) for k in keys),'Case IDs must be literal strings'
+    ids=[k.value for k in keys]
+    assert len(ids)==len(set(ids)),'Duplicate case IDs in source registry'
     inventory=json.loads((REPO/'tests/behaviour/manual-inventory.json').read_text())
     assert digest(REPO/inventory['manual'])==inventory['manual_sha256'],'Manual changed: reconcile inventory'
     for source in inventory['manual_sources']:

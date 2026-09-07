@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue Mosaic manual coverage and confirmed-defect discovery: recording overlap/voice limits, tempo and source changes while held, pattern and advanced sequencing domains; complete emulator C08 onward and full acceptance. Boundary pulse hypothesis corrected with Codex-reviewed, dual-mode witnessed evidence; no full-suite completion claim.",
+  "next_action": "Continue pattern duration controls (long-hold reset, empty-step gestures, origins and live edits), remaining manual domains and recording overlap/voice limits. Candidate0021 validated with10 native runs including all64 endpoint durations in both modes,474 units,46 pulse contracts and a release/strum ordering contract. Finish evidence audit/authorized push if not yet published, then continue full emulator acceptance/release stages. Full campaign remains incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2371,5 +2371,132 @@
       "passed": true,
       "fresh_processes": 3
     }
+  },
+  "loop_release_candidate": {
+    "status": "validated",
+    "base_revision": "fe2520a66a2f6ce22ea1a2b5babaee0b679679bf",
+    "before_sha256": "3932ccf794599b84c641e9305f8e103c804d6dbfd0378481dc65fbec9d51ca46",
+    "after_sha256": "6c698cfdd464fadf65235a301a5f4f18fe56dea77235a975698963ab1dc2131e",
+    "patch_sha256": "4ae8807eb73156134e4c89dad0d82c286aa15910a4b3d604e712115ee74f8e5e",
+    "baselines": [
+      {
+        "run_id": "7614b811012a44afa80262c23c58da93",
+        "manifest_sha256": "db67349239f07b0b7c3c4c2163f837a16289a2788c2b1ca52387cf78fd23c32f",
+        "passed": false
+      },
+      {
+        "run_id": "426046d30b4148bc9c09f779ac959039",
+        "manifest_sha256": "a3fe6dac305f853821f9a62f3ab4011cad45eaa29e4acd486896558c202b6fca",
+        "passed": false
+      },
+      {
+        "run_id": "9f52a18095b64136b1d6280ccdc33f4e",
+        "manifest_sha256": "c45c021e689611c8427492c1cda062977aa352341a6bc2f407da089f8776b261",
+        "passed": false
+      }
+    ],
+    "scope": "Tag only scheduled note releases for pre-onset execution. Other due actions retain post-onset ordering so strummed notes see current scale changes.",
+    "rejected_broad_candidate": "Moving all due actions before onset caused test_chord_strum_param_lock_notes_adhere_to_scale_changes to fail: expected67,actual64;473/474units. Retained in emulator artifacts/c16/loop-release-broad-candidate-unit-failure.json.",
+    "production_sources": {
+      "lib/clock/m_lattice.lua": "6c698cfdd464fadf65235a301a5f4f18fe56dea77235a975698963ab1dc2131e",
+      "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+      "lib/step.lua": "97b01a9293bee27ac44f44f63a14041e6b770cba9287180cb479a384f2394479"
+    },
+    "validation": [
+      {
+        "case": "M-LEN-004",
+        "mode": "controlled-experimental",
+        "run_id": "e2a682b8289d41fbaf83ba5f1e25c9d2",
+        "manifest_sha256": "279b58882ac641b42174b07808d7150319f608939c738288db5d2d71c035413e",
+        "passed": true
+      },
+      {
+        "case": "M-LEN-004",
+        "mode": "real-time",
+        "run_id": "7c5ada9e225342a9a27fac1fd3fd3136",
+        "manifest_sha256": "02c7d926d1caa18ff562cc7b15720a830de4a2f754d98788b7b8eeee9953e20a",
+        "passed": true
+      },
+      {
+        "case": "M-LEN-002",
+        "mode": "controlled-experimental",
+        "run_id": "492ff2bc1a0943e1912b16f7b6a33581",
+        "manifest_sha256": "9f0fcdac9f3ab251dbe924cdca2610469a344046364b4ef3bdd79b770cdcc511",
+        "passed": true
+      },
+      {
+        "case": "M-LEN-002",
+        "mode": "real-time",
+        "run_id": "8424b477c2c34d628b1b9e1ac5ae2138",
+        "manifest_sha256": "facfec9c2ef6a498e7d916dfe2e036dc7384d9b17ebcda4faa8b89bbbc9c90a8",
+        "passed": true
+      },
+      {
+        "case": "M-REC-006",
+        "mode": "controlled-experimental",
+        "run_id": "953a4c9222c54996bc1e8b1f8a7f9fc7",
+        "manifest_sha256": "41568ed07f7d83138743794df889d8a9af411aa7298e99f6c309074b1d2b65cb",
+        "passed": true
+      },
+      {
+        "case": "M-REC-006",
+        "mode": "real-time",
+        "run_id": "72699cd0cc8b46c29061f3ce40c2e259",
+        "manifest_sha256": "223f6af29b73aa0808e4faeb666502d581f7fcdf4c7b199e628a40ef7c68adcb",
+        "passed": true
+      },
+      {
+        "case": "M-REC-007",
+        "mode": "controlled-experimental",
+        "run_id": "9d1b91123e63458ca662516f1e780c1a",
+        "manifest_sha256": "d9e40aefa1d686a7d35c2a45fb3429176962304c8ed566394aa4f34cda3e9836",
+        "passed": true
+      },
+      {
+        "case": "M-REC-007",
+        "mode": "real-time",
+        "run_id": "f5c616bd091f446686de3ea29fc32e2d",
+        "manifest_sha256": "254241d7647df0d1cc3ad1bc1d0d249c9b9349ceee74fa944912a47f0938197d",
+        "passed": true
+      },
+      {
+        "case": "M-PAT-003",
+        "mode": "controlled-experimental",
+        "run_id": "3f760508537d4b1ba344e1fd6c243890",
+        "manifest_sha256": "2fee5367b3f3ccc41b555eb2eb8c3255060777e123e611a2c679cb8cfe57f3ef",
+        "passed": true
+      },
+      {
+        "case": "M-PAT-003",
+        "mode": "real-time",
+        "run_id": "4d9990e851a7430dac95d14d31da5eda",
+        "manifest_sha256": "1dcfef63d0d5dbddd68eb041054d68beb30471d6980bd687b9417dfa30058548",
+        "passed": true
+      }
+    ],
+    "duration_domain": [
+      {
+        "mode": "controlled-experimental",
+        "endpoints": 64,
+        "max_error_seconds": 1.666666804567285e-09
+      },
+      {
+        "mode": "real-time",
+        "endpoints": 64,
+        "max_error_seconds": 0.005342753666666589
+      }
+    ],
+    "units": {
+      "passed": true,
+      "count": 474,
+      "artifact": "emulator:artifacts/c16/loop-release-units-isolated.json",
+      "sha256": "b4627062e9eba24d4b4aa6b5812cd06db9727e827cd915672520aa14b49c623e"
+    },
+    "contracts": {
+      "artifact": "emulator:artifacts/c16/loop-release-final-contracts.json",
+      "sha256": "f9e06e41b9f963c26d09414db71c3bb82fa7c71726f899976261d6ad86c70fb1",
+      "passed": true
+    },
+    "limitations": "Full manual and emulator release acceptance remain incomplete. Duration domain covers endpoints1..64 from start1; other origins, live edits, cross-channel same-pitch overlap and remaining musical domains remain required."
   }
 }

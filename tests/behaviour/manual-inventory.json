@@ -1607,7 +1607,8 @@
         "M-MIDI-004",
         "M-REC-024",
         "M-REC-025",
-        "M-MIDI-005"
+        "M-MIDI-005",
+        "M-LEN-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -1822,9 +1823,15 @@
         "MAN-030"
       ],
       "statement": "Hold a trig and choose its ending step; another trig truncates playback.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All legal endpoints including wrap; intervening trig insertion/removal; retriggers and playback edits.",
+      "cases": [
+        "M-PAT-003",
+        "M-LEN-001",
+        "M-LEN-002",
+        "M-LEN-003",
+        "M-LEN-004"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-PAT-003: all64 endpoints at source step1 with full LED and duration checks. Existing M-LEN cases cover inserted-trig truncation/restoration and wrap. Other start positions, live edits and retriggers remain required.",
       "oracles": [
         "Length LEDs and independently derived note-on/off table; authored length preserved."
       ],

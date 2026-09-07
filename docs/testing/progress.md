@@ -758,3 +758,34 @@ All six strengthened native runs pass, including complete transport-anchored
 witness phrases, actual input delivery timing/order, grid and disarmed replay.
 README clarifies the behavior. Production/runtime source is unchanged.
 Original failing evidence remains in state.json. Full campaign remains incomplete.
+
+## All duration endpoints and full-loop release ordering
+
+M-PAT-003 authors durations1..64 through grid gestures, checks all64 length LEDs,
+and verifies each note-on/off duration and stop cleanup. The baseline passed
+endpoints1..63 but emitted the new note-on before the preceding same-pitch
+note-off at64. M-LEN-004 reproduces this on a short four-step loop in both modes.
+Candidate0021 marks note releases explicitly for processing before a new onset.
+Strum and other delayed actions retain their existing post-onset order. The first
+broad candidate moved strum before scale updates and failed one existing unit
+test; it was rejected. The refined candidate passes all474 units,46 tagged and
+untagged duration contracts, and an ordering contract that rejects the baseline.
+
+All10 native regressions pass: short full-loop retrigger, length truncation and
+restoration, both fractional recording cases and the complete64-duration domain,
+each controlled and real-time. Native identities match all three changed source
+files. The full domain manifest contains all64 distinct endpoint assertions in
+each mode, not merely a passing exit code. No emulator runtime changes were made.
+
+Test-harness correction: the initial new case reused M-PAT-002, silently selecting
+the existing pattern-slot test. That run earns no duration credit. M-PAT-003 is
+unique; the runner now rejects duplicate literal case IDs before selection, and
+a permanent collection regression detects an isolated seeded duplicate. A slow
+duration attempt was intentionally interrupted after32 endpoints with cleanup;
+it earns no full-run credit. Reduced polling retains complete source-timestamped
+MIDI capture and every duration/order assertion. Original failures, rejected
+candidate output and interrupted evidence remain in ignored artifacts.
+
+PAT-DURATION remains partial: all endpoints from start1 plus existing wrap and
+collision cases do not exhaust origins, live edits, or overlapping retriggers.
+Full manual coverage and emulator delivery remain incomplete.

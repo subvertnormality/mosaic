@@ -167,6 +167,20 @@ function Lattice:pulse()
             sprocket.shuffle_updated = true
           end
           if sprocket.phase >= 1 and sprocket.phase < 2 then
+            -- Finish due note releases before a new step can retrigger
+            -- the same MIDI pitch. A late previous note-off cuts the new voice.
+            -- New zero-delay actions created by this onset still run below.
+            for index = 1, #sprocket.delayed_action_order do
+              local pending_id = sprocket.delayed_action_order[index]
+              local pending = sprocket.delayed_actions[pending_id]
+              if pending and pending.before_onset and pending.length == 0 then
+                sprocket.delayed_actions[pending_id] = nil
+                pending.action()
+                if sprocket.cleanup_delayed_action then
+                  sprocket.cleanup_delayed_action(pending_id)
+                end
+              end
+            end
             sprocket.action(self.transport)
           end
 
@@ -385,9 +399,9 @@ function Sprocket:set_action(fn)
   self.action = fn
 end
 
-function Sprocket:set_delayed_action(length, action)
+function Sprocket:set_delayed_action(length, action, before_onset)
   local id = fn.generate_id()
-  self.delayed_actions[id] = {length = length, action = action}
+  self.delayed_actions[id] = {length = length, action = action, before_onset = before_onset}
   table.insert(self.delayed_action_order, id)
   return id
 end

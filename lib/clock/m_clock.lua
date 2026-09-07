@@ -528,13 +528,13 @@ function m_clock.get_destroy_at_note_end_ids_length(channel)
   return #destroy_at_note_end_ids[channel]
 end
 
-function m_clock.delay_action(c, length, type, func)
+function m_clock.delay_action(c, length, type, func, before_onset)
   if length == 0 or length == nil then
     func()
     return
   end
 
-  local id = m_clock["channel_" .. c .. "_clock"]:set_delayed_action(length, func)
+  local id = m_clock["channel_" .. c .. "_clock"]:set_delayed_action(length, func, before_onset)
 
   if type == "must_execute" then
     table.insert(delayed_ids_must_execute[c], id)

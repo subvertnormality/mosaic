@@ -55,6 +55,37 @@ def wrapped_length(c,same_pitch=False):
     assert_durations(c,notes,[1,2]*2)
 
 
+def pattern_duration_domain(c,lengths=range(1,65),channel_end=64):
+    # The documented finite duration domain is1..64 sixteenth-note steps.
+    # Author each duration using grid gestures; observe every cell and MIDI off.
+    c.configure();c.hold_tap((1,4),((channel_end-1)%16+1,(channel_end-1)//16+4));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    for length in lengths:
+        if length>1:c.hold_tap(cells[0],cells[length-1])
+        c.led_values(cells,[15 if step==1 else 5 if step<=length else 2 for step in range(1,65)])
+        marker=c.snapshot()['midi_count'];c.tap(1,8)
+        def recorded(state):return [m for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes'][0] in (128,144)]
+        # Native capture retains all events; fewer snapshots cannot hide an
+        # early release because the emission-time and order assertions follow.
+        c.elapse(max(0,length/6-.12))
+        state=c.wait(lambda state:any(m['bytes']==[128,60,127] for m in recorded(state)),timeout=13)
+        emitted=recorded(state)
+        assert emitted[0]['bytes']==[144,60,127],emitted
+        release=next(m for m in emitted if m['bytes'][0]==128)
+        assert release['bytes']==[128,60,127]
+        elapsed=(release[field]-emitted[0][field])/1e9
+        assert abs(elapsed-length/6)<=tolerance,dict(length=length,actual=elapsed,expected=length/6)
+        # At the full64-step boundary another onset may follow the completed
+        # note before Stop arrives. Its ordering and cleanup are still required.
+        assert [m['bytes'] for m in emitted[:2]]==[[144,60,127],[128,60,127]],emitted
+        assert all(m['bytes'] in ([144,60,127],[128,60,127]) for m in emitted)
+        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+        c.results.append(dict(kind='pattern-duration-domain',steps=length,expected_seconds=length/6,actual_seconds=elapsed,first_on=emitted[0],first_off=release))
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1136,6 +1167,8 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-LEN-004':dict(run=lambda c:pattern_duration_domain(c,(4,),4),requirements=['PAT-DURATION','MIDI-RELEASE-001'],description='Full-loop same-pitch retrigger must release the previous note before emitting the next note-on'),
+ 'M-PAT-003':dict(run=pattern_duration_domain,requirements=['PAT-DURATION'],description='All64 authored duration endpoints through grid gestures, full length LEDs and independent MIDI durations with stop cleanup'),
  'M-REC-032':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Two milliseconds before boundary: independent active-step MIDI witness, grid and replay'),
  'M-REC-033':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Two milliseconds after boundary: independent active-step MIDI witness, grid and replay'),
  'M-MIDI-005':dict(run=keyboard_pitch_range,requirements=['MIDI-RELEASE-001'],description='All128 MIDI pitches at minimum/maximum velocity with both release forms; exact preview and no outstanding notes'),
@@ -1196,7 +1229,7 @@ CASES={
  'M-MOD-002':dict(run=pulse_lfo,requirements=['MOD-LFO-001'],description='Configure a clocked4-beat pulse LFO through native menus and verify two complete modulation cycles of MIDI pitches'),
  'M-SAVE-001':dict(run=autosave_restart,requirements=['PERSIST-AUTO-001'],description='Create notes through the grid; idle autosave; boot a fresh native process from saved data and verify restored LEDs and MIDI'),
  'M-MIDI-001':dict(run=lambda c:wrapped_length(c,same_pitch=True),requirements=['MIDI-RELEASE-001'],description='Repeated pitch at wrapped duration boundary emits balanced note releases and drains after stop'),
- 'M-LEN-003':dict(run=wrapped_length,requirements=['PAT-LENGTH-003'],description='A length crossing step64 ends at the next trig on step1; verify complete64-step MIDI loops and LEDs'),
- 'M-LEN-002':dict(run=restore_length,requirements=['PAT-LENGTH-002'],description='Delete and reinsert an interrupting trig; MIDI duration and grid restore the authored length'),
+ 'M-LEN-003':dict(run=wrapped_length,requirements=['PAT-LENGTH-003','PAT-DURATION'],description='A length crossing step64 ends at the next trig on step1; verify complete64-step MIDI loops and LEDs'),
+ 'M-LEN-002':dict(run=restore_length,requirements=['PAT-LENGTH-002','PAT-DURATION'],description='Delete and reinsert an interrupting trig; MIDI duration and grid restore the authored length'),
  'M-PAT-001':dict(run=four_notes,requirements=['PAT-EDIT-001'],description='Create four notes; edit through grid; verify screen, LEDs and complete MIDI phrases'),
- 'M-LEN-001':dict(run=next_trig_cutoff,requirements=['PAT-LENGTH-001'],description='A later trig cuts off preceding MIDI duration, matching manual and grid')}
+ 'M-LEN-001':dict(run=next_trig_cutoff,requirements=['PAT-LENGTH-001','PAT-DURATION'],description='A later trig cuts off preceding MIDI duration, matching manual and grid')}

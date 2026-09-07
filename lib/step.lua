@@ -454,7 +454,7 @@ local function play_note_internal(note, note_container, velocity, division, note
 
   m_clock.delay_action(c, division, action_flag, function()
     note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
-  end)
+  end, true) -- Due releases precede the next onset; strum/scale actions do not.
 
 end
 
