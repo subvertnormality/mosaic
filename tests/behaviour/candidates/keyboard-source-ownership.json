@@ -1,0 +1,70 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "0564367",
+  "file": "lib/m_midi.lua",
+  "before_sha256": "a524d522fd809e994cfc516bd023367aadcf8137543866c93fdf939428576404",
+  "after_sha256": "afa606fdb370321cd6358ebeb6ad7aa941db8b28d8ddd97e0ac4bed5150e36b0",
+  "patch": "0014-keyboard-source-ownership.patch",
+  "patch_sha256": "0b8d9b342c59d8c6282cdb12227ac578cb89c09ed249aaaf224c4584dd40360b",
+  "regressions": [
+    "M-MIDI-003",
+    "M-MIDI-004"
+  ],
+  "baseline_real_time": [
+    "29b500ccec4b48f9be39ad681717c887",
+    "041b7cef6db24ff79ea8c6e5ed11a5a5"
+  ],
+  "rationale": "Distinct input ports/channels holding identical pitches retain independent output note ownership.",
+  "limitations": "Same-source repeated-pitch overlap and recording chord-state isolation remain separate required investigations.",
+  "upstream_merged": false,
+  "validation": [
+    {
+      "run_id": "a138403178444d9e84f966647075ee5b",
+      "sha256": "a84552f8f1db73a9ad76de00e1e05ef3311dafc583fff49bf975ec89d2b640e6",
+      "case": "M-MIDI-003",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "a52e30b07ba64d02b90b818e2470f182",
+      "sha256": "55b602f94302a62d71bd921e43653a6d9e395204c49173e019d15674e0ab8dcc",
+      "case": "M-MIDI-004",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "8b8c6a2cc9e84dd792d131025053eabb",
+      "sha256": "851879fcc371354657873e081cd8bd800874b0c48ba79aa5c93fbebe744260f9",
+      "case": "M-REC-017",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "880dbc141452432793995b2461545356",
+      "sha256": "73fc66fbec4d01c1cc03ebe1e2e5c8302d1df38e4d9707db035f67fdb38bc5b6",
+      "case": "M-REC-015",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-c013bda66c6c4d69a6ef901548c1e72d",
+      "sha256": "a935ac995ffbed82adb815296e6a077cd97a05132275a4b48f289522d050c69f",
+      "case": "M-MIDI-003",
+      "passed": true,
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-6db3764b973e4339b2c1120cd80d21c3",
+      "sha256": "0a808124c17711c852814cbf96bbc03492feae6e2ed0aa0442a1bb7f59336e73",
+      "case": "M-MIDI-004",
+      "passed": true,
+      "mode": "controlled-repeat"
+    }
+  ],
+  "units": {
+    "passed": 474,
+    "failed": 0,
+    "artifact": "emulator:artifacts/c16/keyboard-source-units-isolated.json"
+  },
+  "post_validation_change": "Removed trailing whitespace on two changed condition lines; retained runtime manifests identify the pre-formatting source."
+}

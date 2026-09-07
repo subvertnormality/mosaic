@@ -583,3 +583,21 @@ first timing miss. No unrelated clock/performance code was changed.
 
 There are44 native cases. Chord release permutations, mixed armed/unarmed overlap,
 recording tempo/song transitions and the remaining full campaign remain required.
+
+
+## Simultaneous keyboard source ownership
+
+M-MIDI-003 and004 hold the same pitch from two input ports, or from two input
+channels on one port, while selecting different Mosaic output channels. The
+first release previously used the second note's output route: real-time baselines
+29b500ccec4b48f9be39ad681717c887 and041b7cef6db24ff79ea8c6e5ed11a5a5 fail exactly
+that ownership assertion. Candidate0014 keys held-note storage by input device,
+input channel and pitch. Both release orders now produce exact routed outputs
+and drain all notes. Both cases pass real-time and three identical controlled
+repeats. Held-note disarm and velocity-zero release real-time regressions pass;
+all474 existing unit tests pass. No emulator special-case was added.
+
+There are46 native cases. This is preview/release ownership, not complete
+recording chord isolation. Cross-source recording chord state and repeated-pitch
+overlap within one source remain separate required tests, as do remaining manual
+behaviours and full emulator acceptance/release stages.

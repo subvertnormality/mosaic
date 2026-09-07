@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue simultaneous keyboard input isolation and chord/disarm lifecycle combinations, then remaining manual and emulator release stages. Full campaign remains incomplete.",
+  "next_action": "Test recording chord isolation across input sources and held-note/disarm chord release permutations; same-source repeated-pitch overlap remains open. Full manual and emulator release campaign incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -911,6 +911,50 @@
       "sha256": "e18fdd7c61ada8af3c2a80dcb83a247ee9295f5de6936d1144fe0c0f68e73413",
       "passed": true,
       "case": "M-REC-017",
+      "mode": "controlled-repeat"
+    }
+  ],
+  "keyboard_source_ownership_validation": [
+    {
+      "run_id": "a138403178444d9e84f966647075ee5b",
+      "sha256": "a84552f8f1db73a9ad76de00e1e05ef3311dafc583fff49bf975ec89d2b640e6",
+      "case": "M-MIDI-003",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "a52e30b07ba64d02b90b818e2470f182",
+      "sha256": "55b602f94302a62d71bd921e43653a6d9e395204c49173e019d15674e0ab8dcc",
+      "case": "M-MIDI-004",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "8b8c6a2cc9e84dd792d131025053eabb",
+      "sha256": "851879fcc371354657873e081cd8bd800874b0c48ba79aa5c93fbebe744260f9",
+      "case": "M-REC-017",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "880dbc141452432793995b2461545356",
+      "sha256": "73fc66fbec4d01c1cc03ebe1e2e5c8302d1df38e4d9707db035f67fdb38bc5b6",
+      "case": "M-REC-015",
+      "passed": true,
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-c013bda66c6c4d69a6ef901548c1e72d",
+      "sha256": "a935ac995ffbed82adb815296e6a077cd97a05132275a4b48f289522d050c69f",
+      "case": "M-MIDI-003",
+      "passed": true,
+      "mode": "controlled-repeat"
+    },
+    {
+      "run_id": "repeat-6db3764b973e4339b2c1120cd80d21c3",
+      "sha256": "0a808124c17711c852814cbf96bbc03492feae6e2ed0aa0442a1bb7f59336e73",
+      "case": "M-MIDI-004",
+      "passed": true,
       "mode": "controlled-repeat"
     }
   ]

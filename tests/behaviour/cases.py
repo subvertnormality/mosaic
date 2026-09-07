@@ -925,7 +925,27 @@ def keyboard_input_channels(c):
     assert not state['midi_capture']['outstanding']
     c.results.append(dict(kind='keyboard-input-channel-matrix',input_ports=[1,2],input_channels=list(range(1,17)),release_status_types=[128,144],expected=expected,actual=actual))
 
+def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
+    c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
+    for order in ((0,1),(1,0)):
+        c.tap(1,1);marker=c.snapshot()['midi_count']
+        c.action(type='midi',port=1,bytes=[144,72,90])
+        c.tap(2,1);c.action(type='midi',port=second_port,bytes=[143+second_channel,72,80])
+        inputs=[(1,1),(second_port,second_channel)]
+        expected=[(1,[144,72,90]),(2,[145,72,80])]
+        for owner in order:
+            port,channel=inputs[owner]
+            c.action(type='midi',port=port,bytes=[127+channel,72,0])
+            expected.append((owner+1,[128+owner,72,0]))
+            state=c.snapshot()
+            actual=[(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
+            assert actual==expected,dict(release_order=order,expected=expected,actual=actual)
+        assert not state['midi_capture']['outstanding']
+        c.results.append(dict(kind='overlapping-keyboard-source-isolation',input_sources=inputs,release_order=order,expected=expected,actual=actual))
+
 CASES={
+ 'M-MIDI-003':dict(run=overlapping_keyboard_sources,requirements=['MIDI-RELEASE-001'],description='Two input ports hold the same pitch on different Mosaic channels; both release orders preserve ownership'),
+ 'M-MIDI-004':dict(run=lambda c:overlapping_keyboard_sources(c,1,16),requirements=['MIDI-RELEASE-001'],description='Two input channels on one port hold the same pitch on different Mosaic channels; both release orders preserve ownership'),
  'M-REC-017':dict(run=lambda c:recorded_note_channel_switch(c,disarm_while_held=True),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarm while holding a recorded keyboard note; release commits its full quantised length on the original channel'),
  'M-MIDI-002':dict(run=keyboard_input_channels,requirements=['MIDI-RELEASE-001','REC-LIVE-NOTES'],description='All16 keyboard input channels across both ports and both release forms produce exact selected-channel preview MIDI with no stuck notes'),
  'M-REC-016':dict(run=lambda c:recorded_note_channel_switch(c,input_channel=16),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Keyboard on MIDI input channel16 records and releases on the selected Mosaic channel independently of its input channel'),

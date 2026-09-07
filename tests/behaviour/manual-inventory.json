@@ -1602,7 +1602,9 @@
         "M-REC-005",
         "M-REC-015",
         "M-REC-016",
-        "M-MIDI-002"
+        "M-MIDI-002",
+        "M-MIDI-003",
+        "M-MIDI-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
