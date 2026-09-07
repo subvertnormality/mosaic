@@ -250,3 +250,20 @@ Mosaic recipe and native evidence verifier to scheduled events, retain the
 continuous intended timeline, execute the handoff, and add controlled-domain
 scheduling/reverse handoff as needed. No Mosaic production code changed here;
 M5/P5/full manual coverage and later stages remain incomplete.
+
+## Queued bidirectional live clock handoff
+
+M-TIM-004 now submits one native queue per direction, using explicit logical
+deadlines in D and monotonic deadlines in E. The driver and emulator admission
+reader verify actual native delivery records; an accepted schedule alone cannot
+pass. Both-direction runs00527347 (controlled) and34898ce (real-time) passed
+against candidate05, including pending-note releases and an ignored MIDI Stop
+after internal clock selection. The reverse phase test establishes internal
+100BPM while stopped first; internal24PPQN tempo-publication transients remain
+a named pending edge, not waived coverage. The inventory wording was expanded
+after these runs; no production Mosaic code changed.
+
+Generic queue checks also pass in both modes. M5 still needs required queued
+input checks/repeats, an accepted real-time baseline with this adapter, fresh
+source-bound differential evidence, and Codex P5 follow-up. Batch refill for
+long continuous MIDI-clock endurance and full manual reconciliation remain open.

@@ -240,14 +240,24 @@ def live_clock_handoff(c):
     c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
     position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
     c.enc(2,position);c.key(3);menu_label(c,'source');menu_value(c,'internal')
-    pulse_target=time.monotonic_ns()
+    pulse_cursor=0
+    controlled=c.clock_mode=='controlled-experimental'
+    domain='logical' if controlled else 'monotonic'
+    origin=c.logical_ns if controlled else time.monotonic_ns()+500000000
+    events=[dict(port=1,bytes=[248],**{'at_'+domain+'_ns':origin+(i+1)*25000000}) for i in range(83)]
+    events.append(dict(port=1,bytes=[252],**{'at_'+domain+'_ns':origin+84*25000000}))
+    request=dict(type='midi_schedule',schedule_id=1,events=events)
+    if controlled:request['time_domain']='logical'
+    c.action(**request)
     def pulses(count):
-        nonlocal pulse_target
-        for i in range(count):
-            pulse_target+=25000000
-            if c.clock_mode=='controlled-experimental':
-                c.elapse(.025);c.action(type='midi',port=1,bytes=[248])
-            else:c.action(type='midi',port=1,bytes=[248],at_monotonic_ns=pulse_target)
+        nonlocal pulse_cursor
+        pulse_cursor+=count
+        if controlled:
+            delta=origin+pulse_cursor*25000000-c.logical_ns
+            assert delta>=0,'Control work crossed the requested observation deadline'
+            c.elapse(delta/1e9)
+            assert len(c.snapshot()['midi_input_schedule']['delivered'])>=pulse_cursor
+        else:c.wait(lambda s:len(s['midi_input_schedule']['delivered'])>=pulse_cursor)
     pulses(49)
     before=c.snapshot();start_beat=before['diagnostics']['beats'];marker=before['midi_count']
     c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
@@ -266,7 +276,11 @@ def live_clock_handoff(c):
     remaining_seconds=(next_beat-beat)*.6+(48-elapsed_ticks-1)*.6/96
     origin_ns=c.logical_ns if c.clock_mode=='controlled-experimental' else handoff['diagnostics']['monotonic_ns']
     expected_off_ns=origin_ns+remaining_seconds*1e9
-    pulses(30);c.action(type='midi',port=1,bytes=[252])
+    pulses(30);pulses(1)
+    arrivals=c.snapshot()['midi_input_schedule']['delivered']
+    errors=[e['actual_'+domain+'_ns']-e['intended_'+domain+'_ns'] for e in arrivals]
+    c.results.append(dict(kind='continuous-midi-arrival-errors',time_domain=domain,errors_ns=errors))
+    assert len(arrivals)==84 and all(0<=e<=(0 if controlled else 10000000) for e in errors),errors
     c.wait(lambda s:not s['midi_capture']['outstanding']);state=c.snapshot()
     notes=[m for m in state['midi'] if m['index']>marker and m['bytes'][0]==144 and m['bytes'][2]>0]
     assert [(m['port'],m['bytes']) for m in notes]==[(1,[144,60,127]),(1,[144,64,107]),(1,[144,67,100])],notes
@@ -276,9 +290,64 @@ def live_clock_handoff(c):
     c.results.append(dict(kind='pending-note-source-handoff',elapsed_ticks=elapsed_ticks,expected_off_ns=expected_off_ns,actual_off_ns=off[field],error_ns=error_ns))
     assert abs(error_ns)<=(2 if c.clock_mode=='controlled-experimental' else 10000000),c.results[-1]
     menu_value(c,'midi')
+    reverse_live_clock_handoff(c)
+
+def reverse_live_clock_handoff(c):
+    import math,time
+    # Establish100BPM on the internal reference while stopped, then return to
+    # MIDI. This isolates phase/source transfer from internal24PPQN tempo
+    # publication latency; pending tempo changes remain a separate edge case.
+    c.enc(3,-1);menu_value(c,'internal');c.elapse(.1)
+    c.enc(3,1);menu_value(c,'midi')
+    controlled=c.clock_mode=='controlled-experimental'
+    domain='logical' if controlled else 'monotonic'
+    origin=c.logical_ns if controlled else time.monotonic_ns()+500000000
+    events=[dict(port=1,bytes=[248],**{'at_'+domain+'_ns':origin+(i+1)*25000000}) for i in range(83)]
+    events.append(dict(port=1,bytes=[252],**{'at_'+domain+'_ns':origin+84*25000000}))
+    request=dict(type='midi_schedule',schedule_id=2,events=events)
+    if controlled:request['time_domain']='logical'
+    c.action(**request)
+    def until(pulse):
+        if controlled:
+            delta=origin+pulse*25000000-c.logical_ns
+            assert delta>=0
+            c.elapse(delta/1e9)
+        else:c.wait(lambda s:len(s['midi_input_schedule']['delivered'])>=pulse)
+    until(49)
+    before=c.snapshot();start_beat=before['diagnostics']['beats'];marker=before['midi_count']
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    until(53);c.elapse(.001)  # Avoid observing exactly on a strict sync boundary.
+    pending=c.snapshot();assert pending['midi_capture']['outstanding']
+    elapsed_ticks=math.floor((pending['diagnostics']['beats']-start_beat)*96)
+    assert 0<elapsed_ticks<48,elapsed_ticks
+    c.action(type='enc',n=3,delta=-2)
+    handoff=c.snapshot();beat=handoff['diagnostics']['beats']
+    assert abs(handoff['diagnostics']['tempo']-100)<1e-6,handoff['diagnostics']
+    quantum=1/96;phase=start_beat%quantum;epsilon=2**-23
+    next_beat=math.ceil((beat+epsilon)/quantum)*quantum+phase-quantum
+    while next_beat<beat+epsilon:next_beat+=quantum
+    remaining=(next_beat-beat)*.6+(48-elapsed_ticks-1)*.6/96
+    expected_off=(c.logical_ns if controlled else handoff['diagnostics']['monotonic_ns'])+remaining*1e9
+    until(84)
+    def onsets(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0]==144 and m['bytes'][2]>0]
+    # The scheduled MIDI Stop is no longer the selected transport. Internal
+    # playback must continue into the next phrase until a physical grid Stop.
+    c.wait(lambda state:len(onsets(state))>=4,timeout=2)
+    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    state=c.snapshot();notes=onsets(state)
+    assert [(m['port'],m['bytes']) for m in notes]==[(1,[144,60,127]),(1,[144,64,107]),(1,[144,67,100]),(1,[144,60,127])],notes
+    off=next(m for m in state['midi'] if m['index']>notes[0]['index'] and m['bytes']==[128,60,127])
+    field='logical_ns' if controlled else 'monotonic_ns';error=off[field]-expected_off
+    c.results.append(dict(kind='pending-note-reverse-handoff',elapsed_ticks=elapsed_ticks,expected_off_ns=expected_off,actual_off_ns=off[field],error_ns=error))
+    assert abs(error)<=(2 if controlled else 10000000),c.results[-1]
+    arrivals=state['midi_input_schedule']['delivered']
+    errors=[e['actual_'+domain+'_ns']-e['intended_'+domain+'_ns'] for e in arrivals]
+    c.results.append(dict(kind='reverse-continuous-midi-arrival-errors',time_domain=domain,errors_ns=errors))
+    assert len(arrivals)==84 and all(0<=e<=(0 if controlled else 10000000) for e in errors),errors
+    menu_value(c,'internal')
 
 CASES={
- 'M-TIM-004':dict(run=live_clock_handoff,requirements=['CLOCK-LIVE-HANDOFF-001'],description='Switch internal to MIDI clock with a note pending; preserve remaining musical ticks and release'),
+ 'M-TIM-004':dict(run=live_clock_handoff,requirements=['CLOCK-LIVE-HANDOFF-001'],description='Switch both clock-source directions with a note pending; preserve release timing and selected transport semantics'),
  'M-TIM-003':dict(run=midi_clock_transport,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Native menu selects MIDI clock; physical MIDI starts/stops playback at100BPM; return to internal clock'),
  'M-TIM-002':dict(run=restart_phase_edges,requirements=['CLOCK-PHASE-EDGE-001'],description='Restart around96PPQN boundaries; preserve full MIDI durations at five start phases'),
  'M-TIM-001':dict(run=phrase_timing,requirements=['CLOCK-PHRASE-001'],description='Restart edited phrase; verify every onset and duration through20 complete phrases at90BPM'),

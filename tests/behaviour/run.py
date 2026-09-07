@@ -16,7 +16,7 @@ def main():
     args=parser.parse_args()
     if (args.profile=='midi-modulation') != bool(args.mod_code_root):
         parser.error('Modulation profile requires --mod-code-root; base profile takes no mod source')
-    if (args.clock_mode=='controlled-experimental') != bool(args.experimental_install):
+    if args.clock_mode=='controlled-experimental' and not args.experimental_install:
         parser.error('Experimental diagnostics require both --clock-mode controlled-experimental and --experimental-install')
     inventory=json.loads((REPO/'tests/behaviour/manual-inventory.json').read_text())
     assert digest(REPO/inventory['manual'])==inventory['manual_sha256'],'Manual changed: reconcile inventory'
@@ -46,7 +46,7 @@ def main():
                 try:c.finish()
                 except Exception as error:failure=failure or dict(type=type(error).__name__,message=str(error),traceback=traceback.format_exc())
         result=dict(schema_version=1,case=name,requirements=CASES[name]['requirements'],passed=failure is None,
-            campaign_complete=False,clock_mode=args.clock_mode,diagnostic_only=args.clock_mode!='real-time',
+            campaign_complete=False,clock_mode=args.clock_mode,diagnostic_only=bool(args.experimental_install),
             controlled_time_admitted=False,profile=args.profile,mod_revisions=c.mod_revisions if c else {},mod_patches=c.applied_mod_patches if c else {},seed=42,mosaic_revision=revision,
             wall_elapsed_seconds=time.monotonic()-started,
             logical_advanced_seconds=(sum(a['nanoseconds'] for p in out.rglob('recipe.json') if not {'code','data'} & set(p.relative_to(out).parts) for a in json.loads(p.read_text()) if a['type']=='advance')/1e9 if args.clock_mode!='real-time' else None),

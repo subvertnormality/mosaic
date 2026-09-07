@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Independent real-time MIDI scheduling implemented in explicit controlled-04 candidate; generic scheduled-midi-02 passes13 checks (40 exact echoes, arrivals during150ms Lua callback, cancellation/close). Five C queue contracts and54 total contracts passed across discovery plus corrected client import invocation. Next integrate queued events into Mosaic M-TIM-004 and its trace/evidence verifier, run against04 without retiming UI gaps; add controlled-domain schedule support as needed and reverse live handoff. Keep default install unchanged; M5 final14 comparisons/three repeats/P5 and full manual campaign remain open. No active runners.",
+  "next_action": "Candidate05 queues MIDI in explicit logical/monotonic domains; generic logical11 and RT13 checks pass. Mosaic M-TIM-004 now covers both live source directions plus ignored unselected MIDI Stop; D00527347 and RT34898ce pass. Next make queued-input generic checks/repeats mandatory and source-bound in M5, and resolve how the new real-time queue enters the default-baseline installation before the final differential matrix. Keep current default unchanged until its adapter conformance passes. Pending reverse tempo-publication/other phase edges, continuous batch refill for long external-clock tests, final three-repeat matrix/Codex P5, full manual reconciliation and remaining stages stay open. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -267,6 +267,18 @@
       "path": "../mosaic-behaviour-runs/24c9a480f3f0457997434b3abe42af1e/manifest.json",
       "sha256": "1b693a677aa3779d1339a83180d38ebe3d60092175783d976cff81c98a333b92",
       "passed": false
+    }
+  },
+  "latest_queued_bidirectional_handoff": {
+    "controlled": {
+      "path": "../mosaic-behaviour-runs/00527347d069477f9b84580814f07cc6/manifest.json",
+      "sha256": "b12d1b4fc90fa5f9313dccb68dac646ef581e24e998591249c71d7d4e9887934",
+      "passed": true
+    },
+    "real_time": {
+      "path": "../mosaic-behaviour-runs/34898ce5ea29477a9091300c00303668/manifest.json",
+      "sha256": "723401bd7fb50f99e07480f46c506f0a1ce92fa09a3968a6d0ca12229bcf0e7d",
+      "passed": true
     }
   }
 }

@@ -1517,13 +1517,15 @@
         "M-TIM-004"
       ],
       "status": "partial-domain-coverage",
-      "domain": "90BPM internal to100BPM MIDI with a pending two-step note. Reverse live handoff, other phases/tempos and simultaneous transport remain required.",
+      "domain": "90BPM internal to100BPM MIDI, and100BPM MIDI to a pre-established100BPM internal reference, with pending two-step notes. Unselected MIDI Stop is ignored after return; physical grid Stop drains notes. Other phases/tempos, internal24PPQN tempo-publication transients and simultaneous transport remain required.",
       "oracles": [
-        "Pending MIDI note before switch",
-        "Three exact note onsets without reset or duplicate",
-        "Independent remaining-tick release deadline",
-        "Stop drains notes",
-        "Native MIDI source menu"
+        "Pending MIDI note before each switch",
+        "Three exact forward note onsets and four reverse onsets without reset or duplicate",
+        "Independent remaining-tick release deadlines",
+        "Unselected MIDI Stop preserves internal playback",
+        "Physical Stop drains notes",
+        "Native MIDI/internal source menus",
+        "Exact logical arrival times and bounded real-time arrival errors on one continuous queue"
       ]
     }
   ]
