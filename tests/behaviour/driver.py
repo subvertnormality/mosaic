@@ -10,12 +10,14 @@ def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 class Driver:
-    def __init__(self,out):
+    def __init__(self,out,clock_mode="real-time",experimental_install=None):
+        self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]
         code=out/'code';code.mkdir();(code/'mosaic').symlink_to(REPO,target_is_directory=True)
         self.runtime=Session(script=code/'mosaic/mosaic.lua',code_root=code,
             data=out/'data',data_seeds=[dict(source=str(REPO/'tests/behaviour/config'),destination='mosaic/config',format='json-files')],
-            midi_config=dict(ports=['Emulator MIDI','Second MIDI','Norns2sinfonion']),random_seed=42)
+            midi_config=dict(ports=['Emulator MIDI','Second MIDI','Norns2sinfonion']),random_seed=42,
+            clock_mode=clock_mode,experimental_install=experimental_install)
         self.identity=self.runtime.info['application_identity']
         try:
             entry=next(f for f in self.identity['files'] if f['path']=='mosaic/mosaic.lua')
@@ -25,24 +27,31 @@ class Driver:
             raise
     def action(self,**value):
         self.recipe.append(value);return self.runtime.action(value)
+    def elapse(self,seconds):
+        if self.clock_mode=="real-time":time.sleep(seconds)
+        else:
+            ns=round(seconds*1e9)
+            self.action(type="advance",nanoseconds=ns);self.logical_ns+=ns
     def snapshot(self):
         value=self.runtime.observe();self.observations.append(value);return value['state']
     def wait(self,predicate,timeout=3):
-        start=len(self.observations);end=time.monotonic()+timeout
+        start=len(self.observations);end=time.monotonic()+(timeout if self.clock_mode=="real-time" else 180)
+        logical_end=self.logical_ns+round(timeout*1e9)
         while time.monotonic()<end:
             state=self.snapshot()
             if len(self.observations)>start+2:del self.observations[start+1:-1]
             if predicate(state):return state
-            time.sleep(.03)
+            if self.clock_mode!="real-time" and self.logical_ns>=logical_end:break
+            self.elapse(.03 if self.clock_mode=="real-time" else min(.01,(logical_end-self.logical_ns)/1e9))
         raise AssertionError('Required observable output did not arrive')
     def tap(self,x,y):
-        self.action(type='grid',x=x,y=y,state=1);self.action(type='grid',x=x,y=y,state=0);time.sleep(.06)
+        self.action(type='grid',x=x,y=y,state=1);self.action(type='grid',x=x,y=y,state=0);self.elapse(.06)
     def key(self,n):
-        self.action(type='key',n=n,state=1);self.action(type='key',n=n,state=0);time.sleep(.06)
+        self.action(type='key',n=n,state=1);self.action(type='key',n=n,state=0);self.elapse(.06)
     def enc(self,n,steps):
         for _ in range(abs(steps)):
-            time.sleep(.05);self.action(type='enc',n=n,delta=2 if steps>0 else -2)
-        time.sleep(.15)
+            self.elapse(.05);self.action(type='enc',n=n,delta=2 if steps>0 else -2)
+        self.elapse(.15)
     def hold_tap(self,first,last):
         self.action(type='grid',x=first[0],y=first[1],state=1)
         try:self.tap(*last)
@@ -93,9 +102,11 @@ class Driver:
         events=[json.loads(line) for line in (self.out/'native/native-events.jsonl').read_text().splitlines()]
         native=[]
         for event in events:
-            if event['kind']!='input' or event['type'] not in (1,2,3):continue
+            if event['kind']!='input' or event['type'] not in (1,2,3,8):continue
             t=event['type'];a=event['args']
+            if t==8:
+                native.append(dict(type='advance',nanoseconds=a[0]*1000000000+a[1]));continue
             native.append(dict(type='key',n=a[0],state=a[1]) if t==1 else dict(type='enc',n=a[0],delta=a[1]) if t==2 else dict(type='grid',x=a[0]+1,y=a[1]+1,state=a[2]))
         assert native==self.recipe,'Native input trace differs from supplied user recipe'
-        captured=[e for e in events if e['kind']==3]
+        captured=[e for e in events if e['kind'] in (3,11)]
         if captured:assert [e['sequence'] for e in captured]==list(range(1,len(captured)+1)),'Incomplete MIDI capture'

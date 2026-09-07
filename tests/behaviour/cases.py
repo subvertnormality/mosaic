@@ -22,10 +22,13 @@ def assert_durations(c,notes,lengths):
     state=c.snapshot();rows=[]
     for note,length in zip(notes,lengths):
         off=next(m for m in state['midi'] if m['index']>note['index'] and m['port']==1 and m['bytes']==[128,note['bytes'][1],note['bytes'][2]])
-        actual=(off['monotonic_ns']-note['monotonic_ns'])/1e9
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        actual=(off[field]-note[field])/1e9
         rows.append(dict(pitch=note['bytes'][1],expected_seconds=length/6,actual_seconds=actual,error_ms=1000*(actual-length/6)))
     c.results.append(dict(kind='duration',rows=rows))
-    assert all(abs(row['error_ms'])<=10 for row in rows),rows
+    # Two nanoseconds cover native integer deadline rounding; no wall jitter in D.
+    tolerance_ms=.000002 if c.clock_mode=='controlled-experimental' else 10
+    assert all(abs(row['error_ms'])<=tolerance_ms for row in rows),rows
 
 def restore_length(c):
     # The source length must survive temporary interruption by an inserted trig.

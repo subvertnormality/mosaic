@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Codex-only reviews. Five initial cases and two isolated source fixes exist; latest passing manifests and native release counts in progress.md/bugs.json. Continue emulator C16 shared-time/internal24PPQN/metro/event-drain implementation then generic runtime probes/Codex P5; expand atomic manual requirements and T01 fault admission, remaining feature cases. Full campaign incomplete.",
+  "next_action": "Experimental controlled-time driver is implemented; M-PAT-001 passes and M-LEN-001 finds shortened opening interval (transport-start-phase in bugs.json). Both affected real-time regressions pass. Preserve failing exact oracle; test start/restart phases, tempo/reset and MIDI clock, audit mod/time sources, then Codex P5 before D admission. Complete atomic manual requirements/T01 and remaining features; full campaign remains incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -38,6 +38,28 @@
     "M-PAT-001": {
       "path": "../mosaic-behaviour-runs/a1f98a7c965b49458b496a79546775ba/manifest.json",
       "sha256": "1b1121ff3a483b59fe73dbd81e7f4517506871e27734c5810e86579d44856b54"
+    }
+  },
+  "experimental_clock_evidence": {
+    "controlled_edit": {
+      "path": "../mosaic-behaviour-runs/6891e8680f72402baaf888d427b5699d/manifest.json",
+      "sha256": "5e9ee65771d3978c584c9b1b26e91eb4369a0cc4d8e068930e4b00f30fc29dd2",
+      "passed": true
+    },
+    "controlled_length": {
+      "path": "../mosaic-behaviour-runs/962284ea4aa34ef6a714c67dc8ead1f8/manifest.json",
+      "sha256": "c2cd1013b0e578d97c79cb79a3b4c18f6190d202d49f81632f7f44327817d867",
+      "passed": false
+    },
+    "real_time_edit": {
+      "path": "../mosaic-behaviour-runs/870a845a87264d5fbe184f81509c1576/manifest.json",
+      "sha256": "02d54a043d1bb81225b6aed911daa5e5d48d7f6be16fb359f37abab702f8e2d3",
+      "passed": true
+    },
+    "real_time_length": {
+      "path": "../mosaic-behaviour-runs/d83c613c804b4cf0bc83f086434ec680/manifest.json",
+      "sha256": "f07bcaddd624faeb3a2f3e17a1d0cce35dc615be31c4d46f65dd49ba588a639d",
+      "passed": true
     }
   }
 }

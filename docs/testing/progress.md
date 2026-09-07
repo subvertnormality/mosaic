@@ -44,3 +44,25 @@ emulator's isolated C scheduler seam passes original-versus-candidate boundary
 checks, but controlled-time runtime integration and Codex P5 remain unfinished.
 Next: coherent native time/internal clock/metro/event draining, complete atomic
 manual reconciliation, runner fault probes and remaining workflow families.
+
+
+## Experimental controlled-time diagnostics
+
+The public Session candidate now runs the actual Mosaic worktree with controlled
+time. This is explicitly unadmitted diagnostic evidence, pending C16/P5. Native
+trace verification includes advances and logical-timestamp MIDI packets; normal
+real-time mode remains the default. The four-note editing workflow passes in D.
+The length case fails on its first note:328611113ns observed versus one third of
+a second expected. Later notes agree within1ns. Both affected real-time cases
+still pass, so the existing10ms jitter allowance hid this opening-interval issue.
+All four source-bound manifests and digests are recorded under transport-start-phase
+in bugs.json. No new Mosaic production-code fix has been applied.
+
+A separate generic emulator probe (b7c813e19b8742bfa169161a0bd26dce) confirms
+absolute clock.sync phase behaviour from independent120BPM calculations: notes
+started at1ms/504ms end at250000001ns/750000001ns after48 native96PPQN syncs.
+Mosaic's auto_pulse emits immediately then syncs to the absolute grid. This
+supports a startup-phase diagnosis, not complete transport correctness or D
+admission. Next: phase-swept transport start/restart, tempo/reset/external clock
+contracts, mod/time-source audit and bounded Codex P5. Keep the failing duration
+oracle; do not capture this shortened first note as a musical golden.

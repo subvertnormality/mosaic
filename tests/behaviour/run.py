@@ -8,7 +8,12 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument('--list',action='store_true')
     parser.add_argument('--case',action='append');parser.add_argument('--require-all',action='store_true')
     parser.add_argument('--artifacts',default=str(REPO.parent/'mosaic-behaviour-runs'))
-    args=parser.parse_args();inventory=json.loads((REPO/'tests/behaviour/manual-inventory.json').read_text())
+    parser.add_argument('--clock-mode',choices=['real-time','controlled-experimental'],default='real-time')
+    parser.add_argument('--experimental-install')
+    args=parser.parse_args()
+    if (args.clock_mode=='controlled-experimental') != bool(args.experimental_install):
+        parser.error('Experimental diagnostics require both --clock-mode controlled-experimental and --experimental-install')
+    inventory=json.loads((REPO/'tests/behaviour/manual-inventory.json').read_text())
     assert digest(REPO/inventory['manual'])==inventory['manual_sha256'],'Manual changed: reconcile inventory'
     for source in inventory['manual_sources']:
         if 'path' in source:
@@ -29,14 +34,15 @@ def main():
         out=Path(args.artifacts).resolve()/uuid.uuid4().hex;out.mkdir(parents=True,exist_ok=False)
         c=None;failure=None
         revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()
-        try:c=Driver(out);CASES[name]['run'](c)
+        try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install);CASES[name]['run'](c)
         except Exception as error:failure=dict(type=type(error).__name__,message=str(error),traceback=traceback.format_exc())
         finally:
             if c:
                 try:c.finish()
                 except Exception as error:failure=failure or dict(type=type(error).__name__,message=str(error),traceback=traceback.format_exc())
         result=dict(schema_version=1,case=name,requirements=CASES[name]['requirements'],passed=failure is None,
-            campaign_complete=False,clock_mode='real-time',seed=42,mosaic_revision=revision,
+            campaign_complete=False,clock_mode=args.clock_mode,diagnostic_only=args.clock_mode!='real-time',
+            controlled_time_admitted=False,seed=42,mosaic_revision=revision,
             manual_sha256=inventory['manual_sha256'],platform=platform.platform(),failure=failure,
             artifacts=[dict(path=p.relative_to(out).as_posix(),sha256=digest(p),size=p.stat().st_size) for p in sorted(out.rglob('*')) if p.is_file() and 'code' not in p.relative_to(out).parts and 'data' not in p.relative_to(out).parts])
         write(out/'manifest.json',result);print(json.dumps(dict(case=name,passed=result['passed'],manifest=str(out/'manifest.json'))),flush=True)
