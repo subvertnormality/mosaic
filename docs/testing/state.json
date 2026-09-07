@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Test adding chord voices after root release, rearming while notes are held, same-channel cross-source and repeated-pitch overlap; continue remaining manual and emulator acceptance/release stages.",
+  "next_action": "Resolve pending approval for exact chord voice lifetime candidate; until then continue unaffected manual/emulator work. Baseline M-REC-030/031 fail in both clock modes. Full campaign remains incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -1253,5 +1253,41 @@
       "passed": true,
       "manifest_sha256": "0a44ab11162e92d9195ccaeca492a86ad07ccf289747eec0c2143ef80f37d854"
     }
-  ]
+  ],
+  "chord_voice_overlap_baselines": [
+    {
+      "case": "M-REC-030",
+      "mode": "controlled-experimental",
+      "run_id": "f1eafea8ff1041ad9219773d5a38fa0f",
+      "passed": false,
+      "manifest_sha256": "085bcea13fd6896683ccfbe9dbd1c95c404b7c38eff9ea9d99e5551e1dc2952f"
+    },
+    {
+      "case": "M-REC-031",
+      "mode": "controlled-experimental",
+      "run_id": "c1ecad7dd0bf446cb619a982fe8aac28",
+      "passed": false,
+      "manifest_sha256": "a547e264666ba6e2523e27981ace93243e840baddd6bfb203c6dbda4fd2406be"
+    },
+    {
+      "case": "M-REC-030",
+      "mode": "real-time",
+      "run_id": "ea725b0d1f60410c8745567649d336f8",
+      "passed": false,
+      "manifest_sha256": "8d979ccbcdbf77fdb7f4f0c599f221db943b7d007b6ba93e926f0b7887d5a178"
+    },
+    {
+      "case": "M-REC-031",
+      "mode": "real-time",
+      "run_id": "da110957937449d8ac2b6806421c91ed",
+      "passed": false,
+      "manifest_sha256": "7698dce829a2d65fa5e0da0c6f00f9f441962651d67f2dd2d886e7dbc9e6aefa"
+    }
+  ],
+  "chord_voice_overlap_candidate": {
+    "status": "awaiting-payload-approval",
+    "implementation_applied": false,
+    "review": "emulator:docs/delivery/reviews/chord-voice-lifetime-approval.md",
+    "reason": "Automatic approval review rejected the core chord/MIDI replacement due to unvalidated regression risk."
+  }
 }

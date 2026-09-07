@@ -943,7 +943,7 @@ def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
         assert not state['midi_capture']['outstanding']
         c.results.append(dict(kind='overlapping-keyboard-source-isolation',input_sources=inputs,release_order=order,expected=expected,actual=actual))
 
-def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),preview_release_ns=None):
+def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),preview_release_ns=None,release_offsets=(300000000,400000000,500000000)):
     c.configure();c.tap(2,8)
     marker=c.snapshot()['midi_count'];c.tap(1,8)
     controlled=c.clock_mode=='controlled-experimental'
@@ -952,17 +952,17 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
     anchor=next(m[field] for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes']==[144,60,127])
     origin=anchor+666666667+50000000
     packets=[(offset,[144,pitch,90]) for offset,pitch in zip(onset_offsets,(72,76,79))]
-    packets += [(300000000+i*100000000,[128,pitch,0]) for i,pitch in enumerate(release_order)]
+    packets += [(offset,[128,pitch,0]) for offset,pitch in zip(release_offsets,release_order)]
     if preview_release_ns is not None:
         packets += [(100000000,[144,83,80]),(preview_release_ns,[128,83,0])]
-        packets.sort(key=lambda item:item[0])
+    packets.sort(key=lambda item:item[0])
     events=[dict(port=1,bytes=data,**{'at_'+field:origin+offset}) for offset,data in packets]
     request=dict(type='midi_schedule',schedule_id=1,events=events)
     if controlled:request['time_domain']='logical'
     c.action(**request)
     if controlled:c.elapse((origin+(10000000 if preview_release_ns is not None else 100000000)-c.logical_ns)/1e9)
-    else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])>=3,timeout=2)
-    c.tap(2,8) # Disarm while all three notes are held.
+    else:c.wait(lambda state:sum(event['bytes'][0]==144 and event['bytes'][1] in (72,76,79) for event in state['midi_input_schedule']['delivered'])>=3,timeout=2)
+    c.tap(2,8) # Disarm after all three chord presses; some voices may already be released.
     if controlled:c.elapse((origin+max(500000000,preview_release_ns or 0)+10000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=2)
     state=c.snapshot()
@@ -1047,6 +1047,8 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
     c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
 
 CASES={
+ 'M-REC-030':dict(run=lambda c:recorded_chord_release(c,(72,76,79),(0,0,80000000),release_offsets=(40000000,400000000,500000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Add third voice after root release while second voice remains held; preserve chord and first onset'),
+ 'M-REC-031':dict(run=lambda c:recorded_chord_release(c,(76,72,79),(0,0,80000000),release_offsets=(40000000,400000000,500000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Add third voice after second voice release while root remains held; preserve all recorded voices'),
  'M-REC-028':dict(run=lambda c:recorded_chord_release(c,preview_release_ns=600000000),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Post-disarm preview outlasts a recorded chord without extending or losing its shared length'),
  'M-REC-029':dict(run=lambda c:recorded_chord_release(c,preview_release_ns=250000000),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Post-disarm preview releases before the recorded chord without altering replay'),
  'M-REC-026':dict(run=lambda c:recorded_chord_release(c,(72,76,79),(0,40000000,80000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Staggered chord with root released first spans first press to final release'),

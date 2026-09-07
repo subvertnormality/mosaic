@@ -675,3 +675,23 @@ There are58 native cases. This does not establish rearming with held notes,
 same-pitch overlap, manual-step/live interaction, adding voices after root
 release, same-channel cross-source aggregation or tempo/song transitions.
 Those and the full manual/emulator acceptance and release campaign remain open.
+
+
+## Chord voices added after a release: confirmed baseline failures
+
+M-REC-030/031 release the root/non-root40ms after C/E presses, then add G at80ms
+while another voice remains held. Both fail controlled and real-time independent
+replay: the original chord/root is lost, or G overwrites the released E voice.
+The real-time harness waits for all three note-on deliveries before disarming,
+rather than counting an interleaved note-off as the third press.
+
+Automatic approval review rejected applying the proposed core chord bookkeeping
+replacement because of possible unvalidated behavior regressions. A read-only
+diff was prepared; the implementation remains unchanged. The exact candidate and
+validation plan are in emulator docs/delivery/reviews/chord-voice-lifetime-approval.md.
+Payload-specific approval was requested. Do not execute the candidate helper
+without resolving that rejection. Baseline tests are intentionally failing;
+they are not skipped, waived or treated as completed acceptance.
+
+There are60 native cases. This candidate is pending, and the full manual and
+emulator delivery remain incomplete. Unaffected delivery work may continue.
