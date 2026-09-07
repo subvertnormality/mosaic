@@ -149,7 +149,24 @@ def pulse_lfo(c):
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     assert all(abs(row['actual_seconds']-row['expected_seconds'])<=tolerance for row in rows),rows
 
+def phrase_timing(c):
+    # Establish the edited 8-step phrase through the existing grid recipe, then
+    # restart and measure every complete phrase against the fixed 90BPM oracle.
+    next_trig_cutoff(c)
+    notes=c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(67,100)]],cycles=20,timeout=32)
+    assert_durations(c,notes,[2,1,1]*20)
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    anchor=notes[0][field];rows=[]
+    for i,note in enumerate(notes[:61]):
+        expected=(8*(i//3)+(0,2,4)[i%3])/6
+        actual=(note[field]-anchor)/1e9
+        rows.append(dict(index=i,expected_seconds=expected,actual_seconds=actual))
+    c.results.append(dict(kind='twenty-phrase-onsets',rows=rows))
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    assert len(rows)==61 and all(abs(r['actual_seconds']-r['expected_seconds'])<=tolerance for r in rows),rows
+
 CASES={
+ 'M-TIM-001':dict(run=phrase_timing,requirements=['CLOCK-PHRASE-001'],description='Restart edited phrase; verify every onset and duration through20 complete phrases at90BPM'),
  'M-MOD-003':dict(run=held_macro_rebind,requirements=['MOD-HELD-001'],description='Rebind an already-held nonzero macro; MIDI must immediately reflect its current value without a new source event'),
  'M-MOD-001':dict(run=macro_route_clear,requirements=['MOD-ROUTE-001'],description='Route macro through native Matrix menu; assert affected MIDI pitches and restoration after clearing depth'),
  'M-MOD-002':dict(run=pulse_lfo,requirements=['MOD-LFO-001'],description='Configure a clocked4-beat pulse LFO through native menus and verify two complete modulation cycles of MIDI pitches'),

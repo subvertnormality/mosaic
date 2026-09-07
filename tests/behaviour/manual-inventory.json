@@ -337,7 +337,8 @@
         "PAT-LENGTH-001",
         "PAT-LENGTH-002",
         "PAT-LENGTH-003",
-        "MIDI-RELEASE-001"
+        "MIDI-RELEASE-001",
+        "CLOCK-PHRASE-001"
       ],
       "status": "unreviewed"
     },
@@ -562,7 +563,9 @@
       "end_line": 689,
       "text_sha256": "ce04352a8d256cf48676ecb0c8c75da5dc1413f6603a0dd9db676d418463232c",
       "classification": "pending-statement-reconciliation",
-      "requirements": [],
+      "requirements": [
+        "CLOCK-PHRASE-001"
+      ],
       "status": "unreviewed"
     },
     {
@@ -1440,6 +1443,25 @@
       "oracles": [
         "Exact native menu depth",
         "Three full phrases with independently expected MIDI pitch127"
+      ]
+    },
+    {
+      "id": "CLOCK-PHRASE-001",
+      "sections": [
+        "MAN-030",
+        "MAN-050"
+      ],
+      "statement": "A fixed-tempo unswung phrase preserves note intervals and authored durations across repeated phrases and playback restart.",
+      "basis": "Independent90BPM quarter-step timing,8-step phrase and documented next-trig cutoff; no production sequencer calls in the oracle.",
+      "cases": [
+        "M-TIM-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "20 phrases at90BPM; other tempos, swing/shuffle, external clocks and tempo/source changes remain required.",
+      "oracles": [
+        "61 ordered onset times",
+        "60 note durations",
+        "Edited grid and screen assertions from setup"
       ]
     }
   ]

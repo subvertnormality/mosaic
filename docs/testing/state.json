@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Three controlled runs now pass and match. Current-source real-time run fails one note by14.7326ms; all177 actions acked, log writes under2ms, independent heartbeat regular around missed deadline. Profile native scheduler runnable delay versus Mosaic callback execution next; no blind retry or tolerance widening. Earlier multi-second host stalls remain separate evidence. M5/P5 and boundary/source-transition coverage incomplete. Full atomic manual/T01 and remaining feature families required. No active runners.",
+  "next_action": "Ten named cases are partial manual coverage. M-TIM-001 checks61 onsets/60 durations over20 phrases: controlled046a98f passes; RT e3d81b fails initial phrase before longer stage. Profile indicates36.5ms main matron CPU near late onset, but all-service sampling cost13-39ms prevents precise attribution. Next use new matron-only sampler with per-thread timestamps, then identify expensive callback/scheduling cause without tolerance widening. M5/P5, phase/source edges, full manual/T01 and remaining stages incomplete. No active runners.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -206,6 +206,18 @@
     "real_time": {
       "path": "../mosaic-behaviour-runs/d5fa2557a53844ecb997a956c6ceb82d/manifest.json",
       "sha256": "3a5421e03c62037d02f9a01c7400afe2495a1e942c66dbb6bde976abf0eb038f",
+      "passed": false
+    }
+  },
+  "latest_twenty_phrase_timing": {
+    "controlled": {
+      "path": "../mosaic-behaviour-runs/046a98f8c7ac4f14b84012b83c768129/manifest.json",
+      "sha256": "c706e27828cb8b799df98bafc334ebb009285b94950e5098223b2147848a3579",
+      "passed": true
+    },
+    "real_time": {
+      "path": "../mosaic-behaviour-runs/e3d81b0c466e48419d7dae50b3f72a9b/manifest.json",
+      "sha256": "1651fae26c76fdacec7e27628eb9ca249164fd3e8ef25900ff72704c4dfdd830",
       "passed": false
     }
   }

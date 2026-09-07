@@ -186,3 +186,17 @@ No timeout or tolerance was widened. Retain and diagnose this event stall before
 a new real-time attempt. Source transitions, boundary starts and three repeats
 remain required; controlled time is still diagnostic-only. Hash-bound run links
 are recorded under transport-start-phase in bugs.json and state.json.
+
+## Twenty-phrase timing regression
+
+M-TIM-001 adds literal90BPM onset and duration expectations across20 complete
+phrases after a physical-input edit and playback restart. Controlled execution
+passes all61 onsets and60 durations. Real-time execution failed the initial
+phrase check, so it did not complete the longer stage. Both results are retained
+in state.json and bugs.json. MAN-030/MAN-050 mapping remains partial; this does
+not certify other tempos, swing/shuffle, external clocks or source transitions.
+
+Thread profiling found a main-matron CPU burst near the late onset, with
+insufficient sampling precision to identify the responsible callback. The next
+profile uses matron-only selection and per-thread timestamps. No timing tolerance
+was changed; neither real-time correctness nor M5 admission is claimed.

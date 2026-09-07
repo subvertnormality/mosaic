@@ -227,6 +227,18 @@
           "sha256": "3a5421e03c62037d02f9a01c7400afe2495a1e942c66dbb6bde976abf0eb038f",
           "passed": false
         }
+      },
+      "twenty_phrase_evidence": {
+        "controlled": {
+          "path": "../mosaic-behaviour-runs/046a98f8c7ac4f14b84012b83c768129/manifest.json",
+          "sha256": "c706e27828cb8b799df98bafc334ebb009285b94950e5098223b2147848a3579",
+          "passed": true
+        },
+        "real_time": {
+          "path": "../mosaic-behaviour-runs/e3d81b0c466e48419d7dae50b3f72a9b/manifest.json",
+          "sha256": "1651fae26c76fdacec7e27628eb9ca249164fd3e8ef25900ff72704c4dfdd830",
+          "passed": false
+        }
       }
     },
     {
