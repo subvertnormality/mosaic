@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue pattern duration controls (long-hold reset, empty-step gestures, origins and live edits), remaining manual domains and recording overlap/voice limits. Candidate0021 validated with10 native runs including all64 endpoint durations in both modes,474 units,46 pulse contracts and a release/strum ordering contract. Finish evidence audit/authorized push if not yet published, then continue full emulator acceptance/release stages. Full campaign remains incomplete.",
+  "next_action": "Continue remaining manual domains: pattern algorithm preview/paint/cancel/move and faders, note editor pages and relative scales, plus duration origins/interrupted gestures and recording overlap/voice limits. Retain full emulator card completion/acceptance obligations. M-PAT-004/005 validated in both modes; no production change.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2498,5 +2498,40 @@
       "passed": true
     },
     "limitations": "Full manual and emulator release acceptance remain incomplete. Duration domain covers endpoints1..64 from start1; other origins, live edits, cross-channel same-pitch overlap and remaining musical domains remain required."
+  },
+  "duration_control_validation": {
+    "status": "validated",
+    "runs": [
+      {
+        "case": "M-PAT-004",
+        "mode": "controlled-experimental",
+        "run_id": "dfc9670dd117411e864609dee014f5df",
+        "manifest_sha256": "fe16b9b26a39c03a3414da72ab98422c63c1f3652d1222fe77c1702db6a8e922",
+        "passed": true
+      },
+      {
+        "case": "M-PAT-004",
+        "mode": "real-time",
+        "run_id": "23cc522ca2f24e4a92f0706dfb8e0810",
+        "manifest_sha256": "4b00dc645d2f92552f7053afe5076fe2ab112a7eefccf0a3b9df745fc593d9c0",
+        "passed": true
+      },
+      {
+        "case": "M-PAT-005",
+        "mode": "controlled-experimental",
+        "run_id": "6c9cce6d17474a6d848df21005dd5af0",
+        "manifest_sha256": "fab7c1ca3a70a7c68670ae6dacc75fca59c8baf72f12c12bc75c8541dadc9c04",
+        "passed": true
+      },
+      {
+        "case": "M-PAT-005",
+        "mode": "real-time",
+        "run_id": "bb0a930d62e2434d9c81990088f94a08",
+        "manifest_sha256": "a2aac17d729f27375c96902e3cf69a5ed8af44257b680abf42a15cd4d320b85e",
+        "passed": true
+      }
+    ],
+    "scope": "Pattern long-hold reset, empty-source combo/long-hold, re-extension, live shortening/extension with scheduled releases retained and exact MIDI stream. No production change.",
+    "limitations": "Not complete PAT-DURATION: remaining origins, gesture interruptions and other live-edit interactions need coverage; full manual/emulator delivery incomplete."
   }
 }

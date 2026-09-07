@@ -86,6 +86,65 @@ def pattern_duration_domain(c,lengths=range(1,65),channel_end=64):
         c.results.append(dict(kind='pattern-duration-domain',steps=length,expected_seconds=length/6,actual_seconds=elapsed,first_on=emitted[0],first_off=release))
 
 
+def pattern_duration_controls(c):
+    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    c.tap(5,4);c.tap(5,8);c.tap(5,3);c.tap(3,8);c.tap(5,8)
+    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
+    def phrase(length):
+        c.led_values(cells,[15 if step in (1,5) else 5 if 1<step<=length else 2 for step in range(1,65)])
+        notes=c.playback([(1,[144,60,127]),(1,[144,67,100])],cycles=2)
+        assert_durations(c,notes,[length,1]*2)
+    def long_hold(cell):
+        c.action(type='grid',x=cell[0],y=cell[1],state=1)
+        try:c.elapse(1.1)
+        finally:c.action(type='grid',x=cell[0],y=cell[1],state=0)
+        c.elapse(.06)
+    phrase(1);c.hold_tap((1,4),(3,4));phrase(3)
+    long_hold((1,4));phrase(1)
+    # Empty sources must neither create a trigger nor leave hidden length data
+    # that changes the existing phrase. Test both the combo and lone hold.
+    c.hold_tap((2,4),(4,4));phrase(1)
+    long_hold((2,4));phrase(1)
+    c.hold_tap((1,4),(4,4));phrase(4)
+
+def live_pattern_duration(c):
+    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    c.hold_tap((1,4),(4,4))
+    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    def onsets(state):return [m for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes']==[144,60,127]]
+    state=c.wait(lambda state:len(onsets(state))>=1)
+    first=onsets(state)[0]
+    c.hold_tap((1,4),(2,4))
+    now=c.logical_ns if c.clock_mode=='controlled-experimental' else c.snapshot()['diagnostics']['monotonic_ns']
+    assert now<first[field]+round(2e9/6),'Shortening gesture missed the pending note window'
+    state=c.wait(lambda state:len(onsets(state))>=2)
+    second=onsets(state)[1]
+    c.hold_tap((1,4),(4,4))
+    now=c.logical_ns if c.clock_mode=='controlled-experimental' else c.snapshot()['diagnostics']['monotonic_ns']
+    assert now<second[field]+round(2e9/6),'Extension gesture missed the pending note window'
+    state=c.wait(lambda state:len(onsets(state))>=3)
+    third=onsets(state)[2]
+    c.wait(lambda state:any(m['index']>third['index'] and m['bytes']==[128,60,127] for m in state['midi']))
+    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    state=c.snapshot()
+    actual=[(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
+    expected=[(1,[144,60,127]),(1,[128,60,127])]*3
+    assert actual==expected,dict(expected=expected,actual=actual)
+    c.results.append(dict(kind='live-duration-exact-midi',expected=expected,actual=actual))
+    # Editing the stored duration affects later onsets. Each already-emitted
+    # note retains its scheduled release; neither edit retroactively cuts it.
+    assert_durations(c,[first,second,third],[4,2,4])
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    assert all(abs((b[field]-a[field])/1e9-8/6)<=tolerance for a,b in ((first,second),(second,third)))
+    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
+    c.led_values(cells,[15 if step==1 else 5 if step<=4 else 2 for step in range(1,65)])
+    notes=c.playback([(1,[144,60,127])],cycles=2)
+    assert_durations(c,notes,[4,4])
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1167,6 +1226,8 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-PAT-004':dict(run=pattern_duration_controls,requirements=['PAT-DURATION'],description='Length extension/reset and empty-step gestures preserve exact grid and MIDI phrase'),
+ 'M-PAT-005':dict(run=live_pattern_duration,requirements=['PAT-DURATION'],description='Shorten and extend during playback: pending release unchanged, following onsets use edited length, phrase timing preserved'),
  'M-LEN-004':dict(run=lambda c:pattern_duration_domain(c,(4,),4),requirements=['PAT-DURATION','MIDI-RELEASE-001'],description='Full-loop same-pitch retrigger must release the previous note before emitting the next note-on'),
  'M-PAT-003':dict(run=pattern_duration_domain,requirements=['PAT-DURATION'],description='All64 authored duration endpoints through grid gestures, full length LEDs and independent MIDI durations with stop cleanup'),
  'M-REC-032':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Two milliseconds before boundary: independent active-step MIDI witness, grid and replay'),

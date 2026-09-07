@@ -1828,10 +1828,12 @@
         "M-LEN-001",
         "M-LEN-002",
         "M-LEN-003",
-        "M-LEN-004"
+        "M-LEN-004",
+        "M-PAT-004",
+        "M-PAT-005"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-PAT-003: all64 endpoints at source step1 with full LED and duration checks. Existing M-LEN cases cover inserted-trig truncation/restoration and wrap. Other start positions, live edits and retriggers remain required.",
+      "domain": "M-PAT-003: all64 endpoints at source step1 with full LED and duration checks. Existing M-LEN cases cover inserted-trig truncation/restoration and wrap. Other start positions, live edits and retriggers remain required. M-PAT-004 covers long-hold reset, empty source combo/hold, re-extension. M-PAT-005 covers live shortening/extension, onset-latched releases and loop spacing; validated in both modes; remaining origins and interrupted gestures still required.",
       "oracles": [
         "Length LEDs and independently derived note-on/off table; authored length preserved."
       ],

@@ -789,3 +789,19 @@ candidate output and interrupted evidence remain in ignored artifacts.
 PAT-DURATION remains partial: all endpoints from start1 plus existing wrap and
 collision cases do not exhaust origins, live edits, or overlapping retriggers.
 Full manual coverage and emulator delivery remain incomplete.
+
+## Pattern duration controls and live edits
+
+M-PAT-004 validates extension, long-hold reset to one step, empty-source combo
+and long-hold gestures, and re-extension. All64 grid cells and six replayed
+phrases have explicit expected note lengths and MIDI notes. M-PAT-005 shortens
+and extends the authored duration while a note is sounding. Edits are asserted
+to finish inside the held-note window; pending releases retain their original
+schedule, later onsets use the edited length, and loop spacing remains8 steps.
+The complete live MIDI stream is exactly three ordered note-on/off pairs with
+lengths4/2/4, followed by stopped-grid and disarmed replay checks. Both cases
+pass controlled and real time; state.json records the four final manifests.
+The initial live-edit runs also passed; their oracle was strengthened to reject
+extra/wrong-channel/reordered note events and rerun in both modes. No production
+change or new bug was needed. PAT-DURATION and the overall campaign remain
+partial, including origins, interrupted gestures and other live-edit interactions.
