@@ -164,8 +164,8 @@ function handle_midi_event_data(data, midi_device)
       chord_state.notes[data[2]] = nil
       chord_state.chord_number = chord_state.chord_number - 1
           
-      -- If root note released or no more notes, clear chord state
-      if data[2] == chord_state.chord_one_note or chord_state.chord_number <= 0 then
+      -- Retain the active chord until every held voice has been released.
+      if chord_state.chord_number <= 0 then
         chord_state.chord_one_note = nil
         chord_state.chord_number = 0
       end

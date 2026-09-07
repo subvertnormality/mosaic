@@ -601,3 +601,21 @@ There are46 native cases. This is preview/release ownership, not complete
 recording chord isolation. Cross-source recording chord state and repeated-pitch
 overlap within one source remain separate required tests, as do remaining manual
 behaviours and full emulator acceptance/release stages.
+
+
+## Recorded chord release order
+
+M-REC-018..023 cover all six release permutations for a simultaneous three-note
+keyboard chord, disarmed while held. Replay checks exact pitches, velocities,
+route and nine voice durations over three loops. Root-last baseline passes;
+root-first fails in controlled time (acc6c3097292429bb85b852dfbc8d7b8) and
+real time (6cd079cc712f42c88fbba64c455519cc): the shared length becomes about
+292ms instead of500ms. Candidate0015 removes the premature active-count reset
+when the root releases. The shared length commits on the last held voice release.
+All six permutations pass controlled and real-time; the root-first regression
+also passes three identical fresh controlled processes. All474 unit tests pass.
+
+There are52 native cases. This establishes simultaneous-onset chord release
+order, not staggered-onset length or cross-source recording ownership. Those,
+mixed armed/unarmed overlap, repeated same-pitch input and the remaining manual
+and emulator release campaign still require execution.

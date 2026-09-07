@@ -4413,7 +4413,13 @@
       ],
       "statement": "Record key toggles arm/disarm.",
       "cases": [
-        "M-REC-017"
+        "M-REC-017",
+        "M-REC-018",
+        "M-REC-019",
+        "M-REC-020",
+        "M-REC-021",
+        "M-REC-022",
+        "M-REC-023"
       ],
       "status": "unimplemented",
       "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels.",
@@ -4596,7 +4602,13 @@
         "M-REC-015",
         "M-REC-016",
         "M-MIDI-002",
-        "M-REC-017"
+        "M-REC-017",
+        "M-REC-018",
+        "M-REC-019",
+        "M-REC-020",
+        "M-REC-021",
+        "M-REC-022",
+        "M-REC-023"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",

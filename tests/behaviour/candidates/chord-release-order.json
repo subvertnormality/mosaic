@@ -1,0 +1,216 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "3791946ba9f2b2850039ecfc845b22b895ecabee",
+  "before_sha256": "afa606fdb370321cd6358ebeb6ad7aa941db8b28d8ddd97e0ac4bed5150e36b0",
+  "after_sha256": "4d89035e40047dca520641806cef6e3ab3e4fe0c98d39ed1d65120fc7a4fc9ec",
+  "patch_sha256": "29d4952fdaaef776b12ffbd713ec561c23be486a2a4d3869812c0c6cddf06beb",
+  "baselines": [
+    {
+      "run_id": "8aae597853ed47519f29f214f408f769",
+      "passed": true,
+      "manifest_sha256": "1f3198989bf10cad293ee0460e3345bc75b3d5f6c75d49ead16c0486dd5ce947",
+      "length": [
+        {
+          "kind": "recorded-chord-length",
+          "expected": 0.5,
+          "actual": [
+            0.500000001,
+            0.500000001,
+            0.500000001,
+            0.499999999,
+            0.499999999,
+            0.499999999,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "release_order": [
+            76,
+            79,
+            72
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": "acc6c3097292429bb85b852dfbc8d7b8",
+      "passed": false,
+      "manifest_sha256": "c190f1f19bef0d463f5646c42b79d532d11510cb7d3b390670153012d48af724",
+      "length": [
+        {
+          "kind": "recorded-chord-length",
+          "expected": 0.5,
+          "actual": [
+            0.291666668,
+            0.291666668,
+            0.291666668,
+            0.291666667,
+            0.291666667,
+            0.291666667,
+            0.291666666,
+            0.291666666,
+            0.291666666
+          ],
+          "release_order": [
+            72,
+            76,
+            79
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": "24ba2aa322ee4b92b3a9d9e3ba212920",
+      "passed": true,
+      "manifest_sha256": "0dff4f173c70a37cc1e7e8ee4a441d6b78ad8c8e1d236052a066c06a47a67397",
+      "length": [
+        {
+          "kind": "recorded-chord-length",
+          "expected": 0.5,
+          "actual": [
+            0.498976256,
+            0.498937785,
+            0.498926525,
+            0.5004615,
+            0.50043351,
+            0.500419819,
+            0.4999613,
+            0.49992565,
+            0.499912239
+          ],
+          "release_order": [
+            76,
+            79,
+            72
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": "6cd079cc712f42c88fbba64c455519cc",
+      "passed": false,
+      "manifest_sha256": "03e77d0cafaaafb700bd694062ca2c17bd2dea936cd793f9d6511db93d4746f5",
+      "length": [
+        {
+          "kind": "recorded-chord-length",
+          "expected": 0.5,
+          "actual": [
+            0.292020316,
+            0.292007775,
+            0.291991896,
+            0.2905957,
+            0.29060376,
+            0.29059536,
+            0.290952967,
+            0.290948957,
+            0.290941337
+          ],
+          "release_order": [
+            72,
+            76,
+            79
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Simultaneous chord onset, shared length ends at final release regardless of root release order. Staggered onset and cross-source recording remain separate required coverage.",
+  "validation": [
+    {
+      "run_id": "799e04201703434098f65eacb6ac14cd",
+      "case": "M-REC-018",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "edcb968da5ff604a3a22f9f939a6e152f81bb147c93a95bd4eb892a0883eb9b5"
+    },
+    {
+      "run_id": "512006d72a0f4b609dd8f3212f836dee",
+      "case": "M-REC-019",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "e1b3de7a1fb933fc97713519c999b3a12830db53225f0abee4179dfffa9444a8"
+    },
+    {
+      "run_id": "6af1df8dad314162903b4cf247b5d0cd",
+      "case": "M-REC-020",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "298a492759cf0d371cdaee221bcf596972f72f198c3d06acb855ababd66c89af"
+    },
+    {
+      "run_id": "bf873c47ce0e4d58b504daf2b574d4fc",
+      "case": "M-REC-021",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "1cf6872122e60c7e748fa4433ee84afcb59ce188e9ecbc18e15156fdceeedca3"
+    },
+    {
+      "run_id": "a9739ddbdeec40a2b4e5bc07472d31ce",
+      "case": "M-REC-022",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "f456e0fa8e37d02f77f7373684d15d673b74d69eff60635371888b895afee694"
+    },
+    {
+      "run_id": "ba988b6791b145369e499c31091dc8a1",
+      "case": "M-REC-023",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "96c311f9a837c9da807d40ffbedf50a8a90b74608220157f63ab3811b51adf4b"
+    },
+    {
+      "run_id": "69549eb424284d16af8a310dd0beb0b2",
+      "case": "M-REC-018",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "c9f619755fac9b3474a3f636b711a444c54c4032eccbade83ebd77efb9102142"
+    },
+    {
+      "run_id": "f4ffc3b36e834a39aebad0438eb8cc9a",
+      "case": "M-REC-019",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "3529271a29acfe4f936164a329ee5ad3b3254d8128a4a6db73c328dd99ed52f2"
+    },
+    {
+      "run_id": "54930095807b4f1399ff165f7dc52dc6",
+      "case": "M-REC-020",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "ab0022dc7762491106a3de43045ca1bd96294877607d4202e44a59f284277d1e"
+    },
+    {
+      "run_id": "ebf83c78954f4013bf1f4287cb697efa",
+      "case": "M-REC-021",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "2fabdbf63eb945cae73647ea3e727b34093fe55f43658d3cc44b2a12a769b4a6"
+    },
+    {
+      "run_id": "9c40eae2dd9b4f00b42136b6bc2fd29f",
+      "case": "M-REC-022",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "6916233c4a1ee82800ae3102109bf64592eff7520c24da2a219a622b64279955"
+    },
+    {
+      "run_id": "9397c3e539294599ae48c32c2b4457ce",
+      "case": "M-REC-023",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "b6762f5a44c6fc06f2f5f33be9ff2f3ae0763f42b71488edc12f16ab26bff533"
+    },
+    {
+      "run_id": "repeat-a645f880a5e24b8685c91822f602d2bb",
+      "case": "M-REC-019",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "a1a12238725750268df4c81b6efd4927fc9bcbc111efbc862a7e0c7bea0d591a"
+    }
+  ],
+  "units": {
+    "passed": 474,
+    "failed": 0,
+    "artifact": "emulator:artifacts/c16/chord-release-units-isolated.json"
+  }
+}

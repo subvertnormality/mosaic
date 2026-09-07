@@ -943,7 +943,54 @@ def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
         assert not state['midi_capture']['outstanding']
         c.results.append(dict(kind='overlapping-keyboard-source-isolation',input_sources=inputs,release_order=order,expected=expected,actual=actual))
 
+def recorded_chord_release(c,release_order=(76,79,72)):
+    c.configure();c.tap(2,8)
+    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    controlled=c.clock_mode=='controlled-experimental'
+    field='logical_ns' if controlled else 'monotonic_ns'
+    state=c.wait(lambda state:any(m['index']>marker and m['port']==1 and m['bytes']==[144,60,127] for m in state['midi']))
+    anchor=next(m[field] for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes']==[144,60,127])
+    origin=anchor+666666667+50000000
+    packets=[(0,[144,pitch,90]) for pitch in (72,76,79)]
+    packets += [(300000000+i*100000000,[128,pitch,0]) for i,pitch in enumerate(release_order)]
+    events=[dict(port=1,bytes=data,**{'at_'+field:origin+offset}) for offset,data in packets]
+    request=dict(type='midi_schedule',schedule_id=1,events=events)
+    if controlled:request['time_domain']='logical'
+    c.action(**request)
+    if controlled:c.elapse((origin+100000000-c.logical_ns)/1e9)
+    else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])>=3,timeout=2)
+    c.tap(2,8) # Disarm while all three notes are held.
+    if controlled:c.elapse((origin+510000000-c.logical_ns)/1e9)
+    else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==6,timeout=2)
+    state=c.snapshot()
+    c.results.append(dict(kind='scheduled-recorded-chord',release_order=release_order,events=events,delivered=state['midi_input_schedule']['delivered']))
+    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    def notes(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0]==144 and m['bytes'][2]>0]
+    state=c.wait(lambda state:len(notes(state))>=19,timeout=5)
+    rows=notes(state)
+    phrase=[(72,90),(76,90),(79,90),(62,117),(64,107),(65,97)]
+    expected=[(1,[144,*phrase[i%6]]) for i in range(len(rows))]
+    actual=[(m['port'],m['bytes']) for m in rows]
+    c.results.append(dict(kind='recorded-chord-replay',expected=expected,actual=actual))
+    assert actual==expected,dict(expected=expected,actual=actual)
+    durations=[]
+    for note in [m for m in rows if m['bytes'][1] in (72,76,79)][:9]:
+        off=next(m for m in state['midi'] if m['index']>note['index'] and m['port']==1 and m['bytes'][:2]==[128,note['bytes'][1]])
+        durations.append((off[field]-note[field])/1e9)
+    tolerance=2e-9 if controlled else .01
+    c.results.append(dict(kind='recorded-chord-length',expected=.5,actual=durations,release_order=release_order))
+    assert len(durations)==9 and all(abs(value-.5)<=tolerance for value in durations),dict(expected=.5,durations=durations,release_order=release_order)
+    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+
 CASES={
+ 'M-REC-020':dict(run=lambda c:recorded_chord_release(c,(72, 79, 76)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord release order (72, 79, 76) retains full shared length'),
+ 'M-REC-021':dict(run=lambda c:recorded_chord_release(c,(76, 72, 79)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord release order (76, 72, 79) retains full shared length'),
+ 'M-REC-022':dict(run=lambda c:recorded_chord_release(c,(79, 72, 76)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord release order (79, 72, 76) retains full shared length'),
+ 'M-REC-023':dict(run=lambda c:recorded_chord_release(c,(79, 76, 72)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord release order (79, 76, 72) retains full shared length'),
+
+ 'M-REC-018':dict(run=recorded_chord_release,requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord records complete shared length when root is released last'),
+ 'M-REC-019':dict(run=lambda c:recorded_chord_release(c,(72,76,79)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord records complete shared length when root is released first'),
  'M-MIDI-003':dict(run=overlapping_keyboard_sources,requirements=['MIDI-RELEASE-001'],description='Two input ports hold the same pitch on different Mosaic channels; both release orders preserve ownership'),
  'M-MIDI-004':dict(run=lambda c:overlapping_keyboard_sources(c,1,16),requirements=['MIDI-RELEASE-001'],description='Two input channels on one port hold the same pitch on different Mosaic channels; both release orders preserve ownership'),
  'M-REC-017':dict(run=lambda c:recorded_note_channel_switch(c,disarm_while_held=True),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarm while holding a recorded keyboard note; release commits its full quantised length on the original channel'),
