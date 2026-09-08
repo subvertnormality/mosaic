@@ -1,0 +1,54 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Focused Codex-only follow-up to pending-voice decision01a07ec0-8698-7d63-bd63-689a73efd344. Trusted local MIDI development utility, proportionate rigor, no manual/hardware acceptance. User authorizes autonomous decisions; do not edit code.\n\nCandidate0029 is now applied but not accepted. Two native controlled baselines fail the expected1.5s note duration as1.666666667s: repeat caseM-TIME-008 run cae6c575e1504ac59c3ba6d0e14bca87 and transition caseM-TIME-009 run b70a529936dd40dc9b9236868ff59871. Candidate matrix for these cases in both modes is running; do not assume it passed.\n\nWe rejected two simpler prototypes: subtracting elapsed relative length passed360 integer contracts but failed22/245 fractional deadline cases. Projecting future musical pulse counts passed both but would freeze future swing changes. Neither was applied. Candidate0029 instead associates old pending work with a separate timing state on explicit realignment, sharing the original finish_cycle logic. Actual division/swing/shuffle/amount/delay setters forward to active pending timing states. New work uses the reset main phase; old IDs and parent cancellation remain unchanged. Due releases run before coincident main onsets. Timing groups are removed after their pending entries disappear, and ordinary clocks avoid group allocations. Same-pitch overlapping voices keep existing MIDI behavior.\n\nThe current candidate passes360 independent integer deadline cases,245 fractional cases, and9 dynamic-rate/cancellation/order/live-value cases. Fractional unit fixture explicitly sets initial rounding origin0.5; it independently calculates accumulated nearest-half-down pulse boundaries and within-cycle fractional releases. No-reset controls are included. Dynamic cases hand-calculate faster/slower division, positive/negative swing, repeated resets and deferred callback ordering/live values. Existing474 unit tests passed a functionally identical prototype before formatting and the idle fast-path guard; exact current-source unit rerun remains required. Native strum/arp, long/fractional notes, same-pitch overlaps, Stop and full regressions remain required. No keyboard recording change.\n\nReview only candidate0029's correctness, lifetime/cancellation, exact deadline/order semantics and its test oracle. Does forwarding setters and sharing cycle completion preserve actual musical rate changes without restarting consumed time? Identify concrete regressions or missing conditions, especially zero/fractional deadlines, actions scheduled inside callbacks, multiple realignments, shuffle_updated/rounding state, disabled timing groups and delayed phase. Recommend narrow fixes for substantive findings. Do not waive remaining native coverage or request a broad governance campaign. The separate real-time fractional window miss10.276ms vs10ms and earlier29.7ms gap remain recorded and are not claimed fixed by0029.",
+    "files": [
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Timing groups, cycle sharing, propagation and release order"
+      },
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Parent cancellation, scheduling and stop"
+      },
+      {
+        "path": "tests/behaviour/candidates/0029-pending-clock-reset.patch",
+        "reason": "Exact isolated diff"
+      },
+      {
+        "path": "tests/behaviour/pending_reset_contract.lua",
+        "reason": "Independent integer deadlines"
+      },
+      {
+        "path": "tests/behaviour/pending_fractional_contract.lua",
+        "reason": "Independent fractional pulse deadlines"
+      },
+      {
+        "path": "tests/behaviour/pending_dynamic_contract.lua",
+        "reason": "Rate changes, cleanup, order and live values"
+      }
+    ]
+  },
+  "input_sha256": "293703ff9c63e1a01efec0604ab1b224e98358302380815feb187b2b8c460344",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**Do not accept candidate0029 yet.** Forwarding setters and sharing cycle completion preserve existing rate-change semantics for already-associated work, but I reproduced a callback-created release regression and a cancellation lifetime leak.\n\n- **Deferred strum notes can become almost instantaneous.** With a 24-pulse period, schedule a callback for pulse 24 that creates a half-step release. Without reset, release occurs at **36**; resetting at pulse 5 preserves the callback at **24**, but release occurs at **25**. New entries receive no timing context ([m_lattice.lua:415](<mosaic-worktree>/lib/clock/m_lattice.lua:415)), so their fractional threshold uses the reset main phase ([m_lattice.lua:213](<mosaic-worktree>/lib/clock/m_lattice.lua:213)). This is a production path: strum callbacks call `play_note`, which schedules releases ([step.lua:747](<mosaic-worktree>/lib/step.lua:747), [step.lua:455](<mosaic-worktree>/lib/step.lua:455)). **Narrow fix:** preserve the executing deferred action\u2019s timing context for its child scheduling, while main-onset work retains the reset phase; test both fractional and integer children.\n\n- **Parent cancellation can retain timing groups indefinitely.** `destroy_at_note_end_ids` replaces callbacks with no-ops and sets `length = math.huge` ([m_clock.lua:561](<mosaic-worktree>/lib/clock/m_clock.lua:561)). Group liveness counts every remaining `pending.timing`, including those tombstones ([m_lattice.lua:539](<mosaic-worktree>/lib/clock/m_lattice.lua:539)). Reproducing that cancellation retained the group after 1,000 pulses. Repeated creation/reset/cancellation can accumulate groups. **Narrow fix:** remove cancelled entries, or detach their timing references. The dynamic test instead cancels with `nil`, bypassing this actual cancellation behavior ([pending_dynamic_contract.lua:33](<mosaic-worktree>/tests/behaviour/pending_dynamic_contract.lua:33)).\n\n- **The fractional oracle is independent, but its coverage hides an existing rounding discrepancy.** Extending its declared origin and formula to period `240/53`, length **18**, gives expected pulse **82**, actual **81**, both with and without reset. Implementation subtracts `0.01` ([m_lattice.lua:505](<mosaic-worktree>/lib/clock/m_lattice.lua:505)); the oracle uses `1e-9` and stops at length 8.5 ([pending_fractional_contract.lua:8](<mosaic-worktree>/tests/behaviour/pending_fractional_contract.lua:8)). HEAD already contains this rounding rule: **it is not introduced by0029**. Extend fractional coverage through complete denominator periods and resolve or explicitly record this discrepancy separately.\n\nThe underlying preservation mechanism is sound: it copies phase, step, `ppqn_error`, `shuffle_updated`, and pending delay state before reset; subsequent setters reach those copies, and shared completion advances their own cycles ([m_lattice.lua:516](<mosaic-worktree>/lib/clock/m_lattice.lua:516), [m_lattice.lua:552](<mosaic-worktree>/lib/clock/m_lattice.lua:552)). Repeated resets leave existing associations intact. Disabled parents pause their groups; Stop executes registered releases and destroys the lattice.\n\nRemaining focused contract gaps are actual shuffle/type/amount/delay changes, negative delayed phase, multiple **populated** timing generations, callback-triggered realignment, disabled/resumed cleanup, and explicit release-before-coincident-onset assertions. The supplied tests mainly create work only at the first onset.\n\nI reran **360 integer +245 fractional +9 dynamic contracts and all474 units successfully**, redirecting test includes to this checkout in memory. No files changed. Native matrix results, strum/arp, long/fractional notes, overlaps, Stop and full regressions remain unverified; neither recorded real-time miss is resolved here.\n\n**CONFIDENCE: High** in the reproduced findings; native integration results and targeted corrected-case tests would change the acceptance recommendation.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07edd-5e62-7032-90b5-6b217b05c0e1` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "bab031ab1441e204a70dbc2f634cd44957544462634103fe6002089f19793869",
+    "redaction": "Personal absolute paths replaced; complete unredacted response retained in ignored local artifacts."
+  }
+}

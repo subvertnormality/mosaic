@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue pending-note reset correction and diagnose real-time fractional timing failure. All7 controlled clock cases pass with0026/0027/0028; R006/007/005/003 pass, R004 failed and R001/002 remain unrun on final source. See clock_validation and artifacts/c16/pending-progress-notes.md. Pending timing prototypes are not applied. Preserve Codex-only review and do not bypass denied SEM007 arbitration. Continue all remaining manual/emulator delivery afterwards.",
+  "next_action": "Continue broader arp/manual coverage: define nonzero spread/acceleration recurrence through Codex-only arbitration and test actual channel-rate changes/Stop-restart histories. Implement D20 real-time deadline/origin mapping and final-source fractional/integer matrices, then remaining emulator cards and complete manual campaign. Use the Linux-filesystem emulator validation worktree for WSL sessions. Do not bypass denied SEM007 arbitration or claim full completion from these scoped passes.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2848,11 +2848,11 @@
   },
   "updated": "2026-09-08",
   "manual_binding_snapshot": {
-    "implemented_cases": 95,
+    "implemented_cases": 106,
     "requirements": 141,
-    "requirements_with_case": 62,
-    "requirements_without_case": 79,
-    "scope": "Bindings only; remaining domains and interactions must be completed."
+    "requirements_with_case": 66,
+    "requirements_without_case": 75,
+    "scope": "Bindings only; finite domains, edge cases and interactions remain mandatory."
   },
   "note_pattern_selector_validation": {
     "status": "validated",
@@ -3506,5 +3506,571 @@
       "01a07ec0-8698-7d63-bd63-689a73efd344"
     ],
     "limitations": "Real-time M-TIME-004 failed x5.3 ratio window by10.276ms against10ms limit; retained without retry or waiver. Real-time M-TIME-001/002 final-source runs remain unrun. Pending-note reset extension is confirmed and a separate unapplied prototype is under test. Full campaign/release not complete."
+  },
+  "pending_arp_validation": {
+    "status": "scoped-regressions-passed-campaign-in-progress",
+    "source_sha256": {
+      "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+      "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+      "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+      "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+    },
+    "runs": [
+      {
+        "case": "M-ARP-001",
+        "mode": "controlled-experimental",
+        "run_id": "6578fe4061604ff98582024f7d8a8324",
+        "manifest_sha256": "7b8fef8271ed96c005b70547bbcd915809d095c6dd01a18554edb00f27099e5f",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-002",
+        "mode": "controlled-experimental",
+        "run_id": "07589a5e4c22405da79aad59bfd32323",
+        "manifest_sha256": "cee17061cf0ad7171fc93e2ac1134f03b6b88d56199c112bf2f737d6edd25be0",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-003",
+        "mode": "controlled-experimental",
+        "run_id": "a0c62b8760024e468a0bba3293fb9c1f",
+        "manifest_sha256": "25c049f524d4787fdbe8740ed20a5c3582f216f5f941b0202fddd69bcf21ef25",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-004",
+        "mode": "controlled-experimental",
+        "run_id": "aa9c6377aea24ee6a9250a2e825c7be0",
+        "manifest_sha256": "e192ad09beac9ad95be1e2285299871b26135df8b26d6b6a357033c225467059",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-005",
+        "mode": "controlled-experimental",
+        "run_id": "4e5cb9c903074108862b6520176e4c73",
+        "manifest_sha256": "e3bccfe51baceb639bc8d415797fbcde434876eaa0f98495ac733e65480827ab",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-008",
+        "mode": "controlled-experimental",
+        "run_id": "8b7792b60eaa41928a2bf87778faa4fa",
+        "manifest_sha256": "425e1a03ef3766a429265b66ce6f139e74b82c483fce53f1b6df438883b1396a",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-009",
+        "mode": "controlled-experimental",
+        "run_id": "d9fbdfd1fd384fd7bbdb6d20660432dc",
+        "manifest_sha256": "6861c7ffca4846cf46cc1324974a6b694a86003295025d44cbd929f3f2f0f567",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-010",
+        "mode": "controlled-experimental",
+        "run_id": "c0af8e318c534c2dba1cbfdbcdfe26de",
+        "manifest_sha256": "f659f757aaf003886f7bbb9ac72f89724193277ee60e6bb333d78d816a2519ce",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-011",
+        "mode": "controlled-experimental",
+        "run_id": "b1cd362bd20b4bfd8183fa2b1bc3bbff",
+        "manifest_sha256": "6b2237a026cc24a4c25c522504b1aa9ca929f6ddcf3f5e090dac88cc98b3ad8e",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-012",
+        "mode": "controlled-experimental",
+        "run_id": "5dbadc4ffa994fdc8be9ee50c2f76dc7",
+        "manifest_sha256": "eea0ff78f5342baeb934395c20a21e1f1d97bbc794c4f8e380e225d17acc9b60",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-004",
+        "mode": "real-time",
+        "run_id": "d3c3a2b89dba473da2fa54e289f863a8",
+        "manifest_sha256": "6aa30a23e5a6a780d4b4518626c823dc2df65d33b82e1cf1fd2521873b54baf5",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-012",
+        "mode": "real-time",
+        "run_id": "e1d1f171aa7342908627d38e043a3275",
+        "manifest_sha256": "3130557114e977afeef8447c3edcfc38dc3a1bfdd3e6bca5b35bda870e6044af",
+        "passed": true,
+        "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+          "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+          "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      }
+    ],
+    "units": {
+      "count": 474,
+      "evidence": "artifacts/c16/arp-boundary-units.json",
+      "sha256": "22e8754005d65440606be1ced2fc51b6cdedd962ac462e8cb007a9b953c17e36"
+    },
+    "contracts": {
+      "evidence": "artifacts/c16/arp-boundary-contract-package.json",
+      "sha256": "71d64c971f14d5b641e973cf96869c001c5fcca0232fa76ab0e9a136ae430c05",
+      "current_packages": 13,
+      "rejected_counterfactuals": 2,
+      "arp_cadence_cases": 96,
+      "actual_step_release_cases": 54,
+      "extra_exact_swing_cases": 24,
+      "fractional_reset_comparisons": 3840,
+      "independent_gate_bounds": 960,
+      "rational_windows": 253
+    },
+    "review": "01a07f42-e03d-7ab3-b2cb-d9425be14605",
+    "limitations": "Specific reproduced release/Stop findings resolved. Nonzero spread/acceleration and mid-interval channel-rate changes, remaining arp finite domains/interaction histories and full campaign remain open. D is still experimental pending emulator admission. Real-time fractional metric D20 needs deadline/origin instrumentation and fresh acceptance; historical failures remain failed. C12 ten-minute and remaining emulator/platform gates are not complete."
+  },
+  "pending_arp_history": {
+    "status": "validation-in-progress",
+    "source_sha256": {
+      "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+      "lib/clock/m_clock.lua": "59b539a2364c98eb1d972e30387aa1d2e67ec9b989d484cb63b6cec21a845963",
+      "lib/step.lua": "044e09551b7feee9ac9bebe759d99d8bb943c3752ce5a04f17fff21571796012",
+      "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+    },
+    "runs": [
+      {
+        "case": "M-TIME-008",
+        "mode": "controlled-experimental",
+        "run_id": "13e57ab1c0534aa0852d300416b863f3",
+        "manifest_sha256": "254fd62c808eb18a20a4a0373f2f4eba3c2aaaed49a431138dc72a21d059546a",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "6968acab3e11ded50e25b2f8b8af3c71e9eb76f21b0e9fd0d95b2c87ec73d1a1"
+        }
+      },
+      {
+        "case": "M-TIME-009",
+        "mode": "controlled-experimental",
+        "run_id": "125adfaa6d654be5b1a48cf0e87de94f",
+        "manifest_sha256": "75b3dc23a4d955b3ee026d25a33c41a9030d189160b19978282b48d9a2f5e240",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "6968acab3e11ded50e25b2f8b8af3c71e9eb76f21b0e9fd0d95b2c87ec73d1a1"
+        }
+      },
+      {
+        "case": "M-TIME-008",
+        "mode": "real-time",
+        "run_id": "ddb0ec97b60e48f098a1ddc352767b9f",
+        "manifest_sha256": "9f4d6933e8b934fed825f5a514aec4f41644f7d1e597b2bb91f2332597ccb392",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "6968acab3e11ded50e25b2f8b8af3c71e9eb76f21b0e9fd0d95b2c87ec73d1a1"
+        }
+      },
+      {
+        "case": "M-TIME-009",
+        "mode": "real-time",
+        "run_id": "75eaabe131994dbb93951f9e13b5bf55",
+        "manifest_sha256": "9c15f614066fff46710610a2e0ef667430e757e187fd1aca8eddb3b817171da7",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "6968acab3e11ded50e25b2f8b8af3c71e9eb76f21b0e9fd0d95b2c87ec73d1a1"
+        }
+      },
+      {
+        "case": "M-MASK-001",
+        "mode": "controlled-experimental",
+        "run_id": "6b6b56418f28403b8fb714129367aae5",
+        "manifest_sha256": "25b04317a486a44029bc5eb8e761cf89cfbd4bd064cf7ea993ef37f240660e6d",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-MASK-001",
+        "mode": "real-time",
+        "run_id": "d1818192112a4c48b598aef385849fa6",
+        "manifest_sha256": "6a947a2a82d4b74e36c869b7da4e5db259677dd2f42e8c8619b404f19b989ee8",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-010",
+        "mode": "controlled-experimental",
+        "run_id": "042c471c60f642dda8903ecaee887ea3",
+        "manifest_sha256": "7748f5e6e3e172c5ab6d103906d3268fcf67ecdc99e276fcba05df368e5613b5",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-010",
+        "mode": "real-time",
+        "run_id": "e5bd3b1cb81942b7881df7d3c0e1b9bc",
+        "manifest_sha256": "1fb0e527429c17fdf5bda48a6d148fb34780d787fa23778b986618fec8e501a1",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-011",
+        "mode": "controlled-experimental",
+        "run_id": "be59732cf4fd415c99dc6bc83e887975",
+        "manifest_sha256": "35c426373647bd596fa3d5030ec8ef0f02420e20a005cc4ea10d4788ad86bab4",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-011",
+        "mode": "real-time",
+        "run_id": "b8c6d916d3224a84b5b4a01fc927d2a2",
+        "manifest_sha256": "29c214eeb1aaf175ba8297651ddffcbebe14d21256b56f53c786e797445af291",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-012",
+        "mode": "controlled-experimental",
+        "run_id": "fad8774f68f94bed91925f0e1092d52a",
+        "manifest_sha256": "dcfd0b095274a17040b01eea7d5aeaf0da523ab8c85bc3c2d321ea3dd83b591c",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-012",
+        "mode": "real-time",
+        "run_id": "bbf9a189aa2c4a5a912b28dbe60192ea",
+        "manifest_sha256": "e04d0dfd7b2f55fbe22467d8c4ecaabe484d61f0874c90dd97463b91e8c65859",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-001",
+        "mode": "controlled-experimental",
+        "run_id": "40212af74fa44af6973f5f8d104677ce",
+        "manifest_sha256": "ee30e7df73834739671c9d6dbae7696190d82a306d993aa13bb6047021853223",
+        "passed": false,
+        "failure": "('Onset phase', 1, -0.368055555)",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "8f2dd7348e5726fcdfbf65e877e83b346c25b43ba0c91908902df34265c17865",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-001",
+        "mode": "controlled-experimental",
+        "run_id": "493f6b3801cc478ca116043cc0ec7267",
+        "manifest_sha256": "b974be10e14f9c10404e443e6f5b66c94d25990d51bd71ece6d88f439053d58a",
+        "passed": false,
+        "failure": "('Release deadline', {'index': 40, 'device_id': 0, 'port': 1, 'port_name': 'Emulator MIDI', 'monotonic_ns': 2090658585571585, 'bytes': [128, 64, 127], 'decoded': [{'type': 'note_off', 'channel': 1, 'data': [64, 127]}], 'logical_ns': 11246944445}, 1.5, -0.743055555)",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "15222aa7abb2ade79537a5d7d824077e1f231a18490c97a465c894c5373d63fc",
+          "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-001",
+        "mode": "controlled-experimental",
+        "run_id": "f081eeed079b481188b2f84fbdc2a80e",
+        "manifest_sha256": "6b255cc51abf06e396892f444b8aa055449f435ae2a4a60470ea1511b9eae46f",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "89dd746f9384c2432c0b66f9a838d6035fb640ab9eb607df507ee44c3590542e",
+          "lib/step.lua": "7e7a308e8900277aab4001709b36386ac40f04e42a6d08e174a0a21fc2375e79",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-002",
+        "mode": "controlled-experimental",
+        "run_id": "328fccc1b8f84731b1fbfcf06197b8f3",
+        "manifest_sha256": "88bddc019d5d9e2c6e67386beea123504c35439ffb109adffe2a0e267f92b127",
+        "passed": false,
+        "failure": "('Release deadline', {'index': 102, 'device_id': 0, 'port': 1, 'port_name': 'Emulator MIDI', 'monotonic_ns': 2090976551619458, 'bytes': [128, 64, 107], 'decoded': [{'type': 'note_off', 'channel': 1, 'data': [64, 107]}], 'logical_ns': 13370000001}, 3.75, -0.7499999989999999)",
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "89dd746f9384c2432c0b66f9a838d6035fb640ab9eb607df507ee44c3590542e",
+          "lib/step.lua": "7e7a308e8900277aab4001709b36386ac40f04e42a6d08e174a0a21fc2375e79",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-003",
+        "mode": "controlled-experimental",
+        "run_id": "18269fa9cc854af984b2d1ceaab24649",
+        "manifest_sha256": "8e207faebbc83ecfee6343bb979e3959289707a8fbaa967b4996d1c9be0ba2a9",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "89dd746f9384c2432c0b66f9a838d6035fb640ab9eb607df507ee44c3590542e",
+          "lib/step.lua": "7e7a308e8900277aab4001709b36386ac40f04e42a6d08e174a0a21fc2375e79",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-001",
+        "mode": "controlled-experimental",
+        "run_id": "fe2921f44f0c40db836a0a7e1ce8b851",
+        "manifest_sha256": "e8fac676fdaa8c5aa9c9bcbc739dfdf32b7d3d5f3e9cb4d247681f1f48179927",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "59b539a2364c98eb1d972e30387aa1d2e67ec9b989d484cb63b6cec21a845963",
+          "lib/step.lua": "044e09551b7feee9ac9bebe759d99d8bb943c3752ce5a04f17fff21571796012",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-002",
+        "mode": "controlled-experimental",
+        "run_id": "7ab3d958a53c4de196419f5e90ab627c",
+        "manifest_sha256": "3060e0b9a963bd7ab02172872ea075e78ffdd5a368648016dede7470b47950e0",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "59b539a2364c98eb1d972e30387aa1d2e67ec9b989d484cb63b6cec21a845963",
+          "lib/step.lua": "044e09551b7feee9ac9bebe759d99d8bb943c3752ce5a04f17fff21571796012",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-003",
+        "mode": "controlled-experimental",
+        "run_id": "1efac68efe0b495085ebd8b07d616b18",
+        "manifest_sha256": "078332ad9465e2d6374fbd6911a580bb3f6456e0a55622a4d37b493123e0e2b9",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "59b539a2364c98eb1d972e30387aa1d2e67ec9b989d484cb63b6cec21a845963",
+          "lib/step.lua": "044e09551b7feee9ac9bebe759d99d8bb943c3752ce5a04f17fff21571796012",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-001",
+        "mode": "real-time",
+        "run_id": "15299cc5d7924e8187b761934bb7573e",
+        "manifest_sha256": "d4240a7d552602e59945bcd32714742974b07fad006aec3c7dde9e089bd22c49",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "59b539a2364c98eb1d972e30387aa1d2e67ec9b989d484cb63b6cec21a845963",
+          "lib/step.lua": "044e09551b7feee9ac9bebe759d99d8bb943c3752ce5a04f17fff21571796012",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-002",
+        "mode": "real-time",
+        "run_id": "fc3dc8288d314cfd9611cc38a6f37d99",
+        "manifest_sha256": "78f34ba219373c14042955ace3d86b531ee881b1174971a2cd9df993c92dd129",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "59b539a2364c98eb1d972e30387aa1d2e67ec9b989d484cb63b6cec21a845963",
+          "lib/step.lua": "044e09551b7feee9ac9bebe759d99d8bb943c3752ce5a04f17fff21571796012",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-ARP-003",
+        "mode": "real-time",
+        "run_id": "2085ecc6b4b9446797d7173807d5dce1",
+        "manifest_sha256": "f6b73d6beec4a573a6da0bb3cec0ea64a5acd986db619d6c3effde27bbc0c13f",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "59b539a2364c98eb1d972e30387aa1d2e67ec9b989d484cb63b6cec21a845963",
+          "lib/step.lua": "044e09551b7feee9ac9bebe759d99d8bb943c3752ce5a04f17fff21571796012",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      },
+      {
+        "case": "M-TIME-012",
+        "mode": "real-time",
+        "run_id": "9dcaa5d739424ea48424ac03b2cfcf08",
+        "manifest_sha256": "650e48f7a59d1a5e8642378abf4cdf70c4649c3cc913114c70781ec438c900fb",
+        "passed": true,
+        "failure": null,
+        "source_sha256": {
+          "lib/clock/m_lattice.lua": "d7d9a83e7992c6dfc2ca970babe8eeb2132b6d7958051988079bf7bd9a1e9e2b",
+          "lib/clock/m_clock.lua": "59b539a2364c98eb1d972e30387aa1d2e67ec9b989d484cb63b6cec21a845963",
+          "lib/step.lua": "044e09551b7feee9ac9bebe759d99d8bb943c3752ce5a04f17fff21571796012",
+          "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+        }
+      }
+    ],
+    "units": {
+      "count": 474,
+      "evidence": "artifacts/c16/arp-combined-units.json",
+      "sha256": "1ac49bea0eaf51755d7eed4e4dfda3d9403182d1b2829bd11a024fd6d23057fc"
+    },
+    "fractional_contract": {
+      "reset_comparisons": 3840,
+      "independent_gate_bounds": 960,
+      "rational_windows": 253,
+      "decision": "01a07f14-57cb-7cb1-9f93-07c02f229e92"
+    },
+    "arp_cadence": {
+      "cases": 96,
+      "failures": 0
+    },
+    "arp_release_probe": {
+      "cases": 48,
+      "failures": 3,
+      "detail": "5/6 division has a one-pulse release rounding error at all three integer parent rates; remains open."
+    },
+    "limitations": "No candidate/full campaign acceptance. Current focused Codex arp review pending. Arp reset/overlapping-tail, replacement edge timing, broader native divisions and Stop/restart still needed. R fractional oracle amendment and independently justified deadline mapping remain unimplemented; historical timing failures stay failed. Native Linux and remaining emulator/manual cards remain open."
   }
 }

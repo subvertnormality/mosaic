@@ -1,0 +1,58 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused follow-up to review01a07f2f-6d01-79c1-af10-45917775ec83. Do not edit. Confirm or challenge the narrow fixes for its two candidate0032 blockers and the reproduced preexisting reentrant Stop crash; do not repeat whole-project review. User authorizes autonomous ordinary fixes, local MIDI utility stakes, no manual acceptance.\n\nCandidate0034 retains negative parent-wrap offset and explicitly queues adjusted zero deadlines on the next parent pulse rather than calling synchronously. Step passes defer_zero only for off-phase arp callbacks. Integer-step residue within1e-12 and integer-pulse residue within1e-9 are normalized; this is floating precision handling, not a musical timing threshold or change to0.01 cycle rounding. Candidate0035 returns from old Lattice:pulse immediately after callbacks stop/destroy it, plus nil-safe sprocket lookup.\n\n54-case release matrix now executes actual step.lua play_arp_note helper, m_clock and lattice, with1/24/5/6 examples, exact bytes and integer pulse deadlines. It passes; pre0034 source snapshot fails.96-case cadence matrix passes. Actual arp gate->release->m_clock:stop/reset fixture drains two owned voices and another channel exactly once and leaves new lattice stopped; pre0035 crashes with nil sprocket.13 focused current scheduler contracts pass, including3840 reset comparisons,960 independent fractional gate bounds,253 rational windows,280 setting/reset pairs. Native controlled005 exercises289 one-pulse1/24 onsets through all wraps and Stop, passes. Native004 reset replacement with overlapping identical pitch tails passes D/R. Earlier three basic/final-gate/replacement cases pass D/R. Final-source focused native package and474 units are being rerun; don't assume results not supplied.\n\nREADME now documents zero-spread timing, individual gates and replacement tails. Nonzero spread/acceleration, fractional-rate/mid-interval channel-rate changes, full arp finite domains and complete release gates remain explicit work, not accepted. Review only whether these specific fixes resolve the demonstrated errors without a new release/lifecycle regression; identify any directly reproducible blocker. Don't treat these slices as complete arp coverage or request another broad review. If unchanged rate-change behavior needs separate tests, state that obligation rather than inventing a contract.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Wrapped onset and deferred-zero handling"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Precision normalization and reentrant-stop guards"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Actual note release helper"
+      },
+      {
+        "path": "tests/behaviour/arp_release_contract.lua",
+        "reason": "Actual helper integration and reviewed counterexamples"
+      },
+      {
+        "path": "tests/behaviour/arp_reentrant_stop_contract.lua",
+        "reason": "Actual Stop/reset regression"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "Native five arp cases"
+      },
+      {
+        "path": "README.md",
+        "reason": "Narrow documented musical contract"
+      }
+    ]
+  },
+  "input_sha256": "3f2ad1fadfc6cc81d47030b65dfa2a8bcf5effb319774a94c0ba1eb3adda5683",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Confirmed within the requested scope: candidate0034 fixes both demonstrated release-boundary errors, and candidate0035 fixes the reproduced reentrant Stop crash. I found no directly reproducible new release/lifecycle blocker.\n\n- **Release timing:** [m_clock.lua:622](<mosaic-worktree>/lib/clock/m_clock.lua:622) retains `(parent.phase - 2) / parent.current_ppqn`; [step.lua:457](<mosaic-worktree>/lib/step.lua:457) requests deferred zero only when an onset offset exists. Integer normalization leaves the existing `-0.01` cycle rounding intact. All **54 actual-helper release cases pass**; reversing the patches in memory reproduces **8 failures**, including `1/24: onset23 \u2192 off25 instead of24` and `5/6: onset60 \u2192 off81 instead of80`.\n- **Stop lifecycle:** [m_lattice.lua:205](<mosaic-worktree>/lib/clock/m_lattice.lua:205) returns after a release callback disables the lattice; corresponding guards cover other callback paths, with nil-safe lookup. The actual Stop/reset fixture passes its exactly-once, three-release assertions and leaves the replacement lattice stopped. Reversing0035 reproduces the nil-sprocket crash at line176.\n- **Regression checks:** All **13 focused contracts passed locally**, including96 cadence cases and the stated reset, fractional-bound, rational-window, and setting/reset checks.\n\n**CONFIDENCE: High** for these demonstrated fixes. Final-source native/474-unit reruns remain unverified; unchanged rate-change behavior requires separate tests, and broader arp coverage remains outstanding.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07f42-e03d-7ab3-b2cb-d9425be14605` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "e222f293cb8a845b8a6a52f8363017689e7bb42c5a461c3bbb376c5bcf03065d",
+    "redaction": "Personal absolute paths replaced; complete original retained in ignored artifacts."
+  }
+}

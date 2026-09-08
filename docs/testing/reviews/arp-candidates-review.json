@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused review of actual candidate fixes following decision01a07f21-248b-7013-99e8-ee8dd26fe412. Do not edit files. User authorizes autonomous fixes; local MIDI development utility, proportionate review, no manual acceptance. Review three isolated candidate patches0031/0032/0033 and current code, focusing on wrong musical timing, release ownership, cleanup and regressions. No whole-project cold review.\n\n0031 corrects zero-spread arp first interval: delay1/offset-1 compensates order2 next-pulse startup; mark constructor rounding as consumed, then finish/update that initial interval at first callback so fractional carry advances once. Actual m_clock+lattice matrix96 integer/fractional division/gate cases passes, but extend where necessary. Nonzero spread preserved and explicitly remains unresolved contract work.\n0032 fixes native off-phase arp notes released one pulse after onset. m_clock passes parent elapsed fractional phase (parent already consumed this pulse, hence phase-2) explicitly to step callback; note release length adds this offset. Root and strum paths unchanged. Native001 and fractional-final-gate003 pass. Challenge wrapping parent phase, fractional rates, rate changes and numerical rounding.\n0033 fixes native replacement328fccc1b8f84731b1fbfcf06197b8f3: old arp termination released new root immediately. Root and callbacks collect return IDs in a generation-local release list, created before root. Termination only drains those IDs and destroys its own arp; global release registry still supports Stop. Removal of channel-wide destroy_at_note_end calls is intended because arp onset clock is generation-local and old gate must not cancel later strum/arp work. Candidate matrix is running now; don't assume final pass. Verify same-pitch/other-channel isolation, reentrant Stop and cleanup; don't prescribe broad framework rewrites. Retain original pending-time policy and existing voice overlap, no voice stealing.\n\nReport reproducible blockers with focused counterexamples and minimal correction direction; distinguish new candidate bugs from preexisting uncovered semantics. Document any exact additional focused test needed before these slices can be accepted. Overall manual/full release remain incomplete. Source is public and payload-specific review is authorized.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Actual arp creation and ownership"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Native phase and pending timing"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Arp note creation and release"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New native arp regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Musical contract"
+      }
+    ]
+  },
+  "input_sha256": "82e6594822787fc9cb91e7144c09089c4e216920a43805bdb00495c95f8d95fa",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**Do not accept the combined slices yet: 0032 still produces reproducible one-pulse release errors.** The 96-case cadence matrix passes, and 0033 fixes replacement ownership in my focused reproduction; reentrant Stop still crashes, but that failure predates these patches.\n\n- **0032: wrapped parent phase loses the release origin.** With parent period **24 pulses**, zero spread, arp division **1/24**, and an eight-step gate, the note starting at pulse **23 releases at 25**, instead of **24**; this repeats at 47\u219249. The parent has already wrapped to phase 1 before the arp callback, so `math.max(0, (parent.phase - 2) / parent.current_ppqn)` produces zero ([m_clock.lua:619](<mosaic-worktree>/lib/clock/m_clock.lua:619)). Wrapping occurs at [m_lattice.lua:525](<mosaic-worktree>/lib/clock/m_lattice.lua:525). Preserve the actual onset position across that wrap; simply allowing a negative offset is insufficient because a resulting zero length executes immediately ([m_clock.lua:531](<mosaic-worktree>/lib/clock/m_clock.lua:531)).\n\n- **0032: floating-point addition moves exact deadlines.** With parent period **216**, division **1/24**, zero spread, and an eight-step gate, onset **54 releases at 64**, instead of **63**. I reproduced this using the actual `step.lua` release helper and clock/lattice code. Adding duration and phase offset ([step.lua:455](<mosaic-worktree>/lib/step.lua:455)) creates a deadline infinitesimally above an integer; the strict comparison waits another pulse ([m_lattice.lua:222](<mosaic-worktree>/lib/clock/m_lattice.lua:222)). Normalize near-integer pulse deadlines without changing the established pending-time policy.\n\n- **0033: replacement ownership works in the focused reproduction.** An old generation ending at pulse 24 releases only its own pending note; the replacement\u2019s note survives until its gate at 72. With HEAD\u2019s clock implementation, both release at 24. The candidate removes each owned pending action before invoking it ([m_clock.lua:600](<mosaic-worktree>/lib/clock/m_clock.lua:600)). Same-pitch receiver behavior remains the existing overlap policy: MIDI emits every corresponding Note Off ([m_midi.lua:301](<mosaic-worktree>/lib/m_midi.lua:301)); generation-local IDs do not imply independent receiver voices.\n\n- **Preexisting, still uncovered: reentrant Stop crashes.** Calling `m_clock:stop()` once from the old generation\u2019s gate-triggered release callback produces `m_lattice.lua:164: attempt to index a nil value`. Stop destroys the lattice while its pulse iterator continues ([m_clock.lua:834](<mosaic-worktree>/lib/clock/m_clock.lua:834)). Repeating with HEAD\u2019s clock implementation also crashes. A narrow iterator/lifecycle guard is the correction direction; this is not a newly introduced 0033 defect.\n\nBefore acceptance, add exact release/order assertions for both counterexamples, plus replacement using identical pitches, another channel with a pending release, and reentrant Stop with multiple owned releases. Add fractional-rate and mid-interval faster/slower rate-change cases against the retained pending-time reference. Current native arp cases exercise half-step spacing ([cases.py:1023](<mosaic-worktree>/tests/behaviour/cases.py:1023)); the 96-case matrix checks cadence, not releases.\n\n**CONFIDENCE: High** for these reproductions; I did not verify the running candidate matrix\u2019s final result. Nonzero spread semantics and overall manual/full-release acceptance remain incomplete.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07f2f-6d01-79c1-af10-45917775ec83` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "ee0ae5838fd032ae0e24278e62e44794d37adfe53774830ef9cb682d5189a7cf",
+    "redaction": "Personal absolute paths replaced; complete original retained in ignored artifacts."
+  }
+}

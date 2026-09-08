@@ -528,8 +528,8 @@ function m_clock.get_destroy_at_note_end_ids_length(channel)
   return #destroy_at_note_end_ids[channel]
 end
 
-function m_clock.delay_action(c, length, type, func, before_onset)
-  if length == 0 or length == nil then
+function m_clock.delay_action(c, length, type, func, before_onset, defer_zero)
+  if (length == 0 or length == nil) and not defer_zero then
     func()
     return
   end
@@ -571,7 +571,7 @@ function m_clock.destroy_at_note_end_ids(c)
   end
 end
 
-function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration, length, func)
+function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration, length, func, release_ids)
   if division == 0 or division == nil then
     return
   end
@@ -589,38 +589,54 @@ function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration,
   local arp
   local runs = 1
   local acceleration_accumulator = 0
+  release_ids = release_ids or {}
+
+  local function finish_arp()
+    local finished = arp
+    if finished then finished:destroy();arp = nil end
+    -- A replaced arp may still own sounding tails. Its old gate must never
+    -- release notes or cancel future work belonging to the replacement.
+    local parent = m_clock["channel_" .. c .. "_clock"]
+    for i = #release_ids, 1, -1 do
+      local id = release_ids[i]
+      release_ids[i] = nil
+      local pending = parent.delayed_actions[id]
+      if pending then
+        parent.delayed_actions[id] = nil
+        parent:run_pending_action(pending)
+        if parent.cleanup_delayed_action then parent.cleanup_delayed_action(id) end
+      end
+    end
+    for i = #arp_sprockets[c], 1, -1 do
+      if arp_sprockets[c][i] == finished then table.remove(arp_sprockets[c], i) end
+    end
+  end
 
   local sprocket_action = function(div)
-    func(div)
+    -- The parent order-2 channel has already consumed this pulse. Deferred
+    -- arp notes need a full duration from their own onset, not step start.
+    local parent = m_clock["channel_" .. c .. "_clock"]
+    -- After wrap, phase1 denotes the next cycle starting one pulse from
+    -- now. Retain that negative one-pulse offset; a zero target must queue
+    -- for the next parent pulse rather than execute in this callback.
+    local onset_offset = (parent.phase - 2) / parent.current_ppqn
+    func(div, onset_offset)
 
     -- Check if the arp should stop
-    if length == 0 then
-      if arp then
-        arp:destroy()
-        arp = nil
-      end
-
-      -- Execute pending note-off sprockets
-      if execute_at_note_end_ids[c] then
-        execute_ids(c, execute_at_note_end_ids[c])
-      end
-
-      -- Clean up the sprocket from arp_sprockets[c]
-      for i = #arp_sprockets[c], 1, -1 do
-        if arp_sprockets[c][i] == arp then
-          table.remove(arp_sprockets[c], i)
-          break
-        end
-      end
-
-      -- Kill any remaining arp delay sprockets
-      m_clock.destroy_at_note_end_ids(c)
-    end
+    if length == 0 then finish_arp() end
   end
 
   local shuffle_values = get_shuffle_values(channel)
   arp = clock_lattice:new_sprocket {
     action = function()
+      if runs == 1 and chord_spread == 0 then
+        -- The startup wait consumed the first interval. Advance its rounding
+        -- carry and swing step once before scheduling the following interval.
+        arp.phase = arp.current_ppqn + 1
+        arp:finish_cycle()
+        arp:update_shuffle(arp.step)
+        arp.shuffle_updated = true
+      end
       runs = runs + 1
       local div = (division + ((chord_spread * chord_acceleration * (runs - 1))) + (acceleration_accumulator * chord_acceleration))
 
@@ -631,7 +647,6 @@ function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration,
           arp:destroy()
           arp = nil
         end
-        m_clock.destroy_at_note_end_ids(c)
       else
         arp:set_division(div * m_clock["channel_" .. c .. "_clock"].division)
       end
@@ -643,30 +658,27 @@ function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration,
     shuffle_basis = shuffle_values.shuffle_basis,
     shuffle_feel = shuffle_values.shuffle_feel,
     shuffle_amount = shuffle_values.shuffle_amount,
-    delay = division + chord_spread,
+    -- Without spread, wait one complete arp interval. This order-2 clock
+    -- is created inside the channel's order-2 callback and first runs on
+    -- the next lattice pulse, so compensate that one pulse at creation.
+    -- Spread/acceleration semantics retain their existing separate path.
+    delay = chord_spread == 0 and 1 or division + chord_spread,
+    delay_offset = chord_spread == 0 and -1 or 0,
     realign = false,
     order = 2,
     step = m_clock["channel_" .. c .. "_clock"]:get_step()
   }
 
+  if chord_spread == 0 then
+    -- The constructor already chose the first rounded interval. Recomputing
+    -- it on the next pulse can clamp the negative startup phase to an onset.
+    arp.shuffle_updated = true
+  end
+
   acceleration_accumulator = acceleration_accumulator + chord_spread
 
   -- Schedule the arp to stop after 'length'
-  m_clock.delay_action(c, length, "must_execute", function()
-
-    if arp then
-      arp:destroy()
-      arp = nil
-    end
-
-    -- Execute pending note-off sprockets
-    if execute_at_note_end_ids[c] then
-      execute_ids(c, execute_at_note_end_ids[c])
-    end
-
-    -- Kill any remaining arp delay sprockets
-    m_clock.destroy_at_note_end_ids(c)
-  end)
+  m_clock.delay_action(c, length, "must_execute", finish_arp)
 
   table.insert(arp_sprockets[c], arp)
 end

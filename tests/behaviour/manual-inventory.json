@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "c10b42f8fbdda5c63a512e7c7a0e904167bdbe01f21a812cdf853c10ad918b98",
+  "manual_sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
-  "status": "statement-inventory-pending-audit-and-implementation",
+  "status": "incomplete",
   "sections": [
     {
       "id": "MAN-001",
@@ -11,7 +11,7 @@
       "level": 2,
       "start_line": 148,
       "end_line": 149,
-      "text_sha256": "1e695ab10ae9abde60ddb6cdc1a8e425ad744cb62032d687c92449216aaf9d74",
+      "text_sha256": "cb65447f5e27edf51318adf1b81924260fbbf4845fa51d55b56a396f0573b9d7",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -22,7 +22,7 @@
       "level": 3,
       "start_line": 150,
       "end_line": 155,
-      "text_sha256": "665a72350c10907670a68a6d6cd41de5e759ae8e2008123decd2e4a393080dd9",
+      "text_sha256": "fcd257b8ebdcca4058f963471f8c4bca23b3e920cd44797c01a041e5e9a7e262",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -33,7 +33,7 @@
       "level": 3,
       "start_line": 156,
       "end_line": 157,
-      "text_sha256": "db04f4dc76c1102a92a380a299b7869d008a220a581a93b1fb95f45bddece361",
+      "text_sha256": "51ea9b3407f9e6088d7e96a96e883ae99be4d54cfcd665eebb0e43a32ba0b07d",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -44,7 +44,7 @@
       "level": 4,
       "start_line": 158,
       "end_line": 165,
-      "text_sha256": "d05bd22b0dbf4d6e52aee0005e451040d6ea59725b6e05467cdaaf34ec2c6ec1",
+      "text_sha256": "010ded2cf16c68e5771449464cfd04d9dc609e946c77eb7a6aa057cb8da04b57",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SETUP-MIDI-INPUT"
@@ -57,7 +57,7 @@
       "level": 4,
       "start_line": 166,
       "end_line": 167,
-      "text_sha256": "88bac2b35d6061120264806cfe1895cfbc8e807f18665386e72ab9dca42f8a2b",
+      "text_sha256": "47b692df27f3c85fef94edd628917c5cf21b5519e0509b3d63997a7858f9c152",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -68,7 +68,7 @@
       "level": 5,
       "start_line": 168,
       "end_line": 180,
-      "text_sha256": "829c4c211577d4131d8f38627b1877bdb079b8ced2300977676427579a4e3463",
+      "text_sha256": "5d0a20c7121b5af101270169d18c1697c73727d21181dacdf840bbd661dde59d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SETUP-DEVICE-DISCOVERY",
@@ -82,7 +82,7 @@
       "level": 5,
       "start_line": 181,
       "end_line": 186,
-      "text_sha256": "85da33a3cc8207bb2a521a0d0a0d1057fa566bb77f1973a8ee0240a684ee4220",
+      "text_sha256": "a7c649b6c2db1d5de4ab95ecb87b07a60e7e5ea44225a0ee5a84fc8c1deadab0",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SETUP-CONFIG-CREATOR",
@@ -97,7 +97,7 @@
       "level": 5,
       "start_line": 187,
       "end_line": 190,
-      "text_sha256": "dcb78d8ff3b14fa3172ac83bec2df0a2b8ed0f330557bdb271519353fb4e4efc",
+      "text_sha256": "2daa3ff6b45b084843545f68905e049c4637d8602bf2ee50b4eb4ea800343c66",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -108,7 +108,7 @@
       "level": 5,
       "start_line": 191,
       "end_line": 197,
-      "text_sha256": "0a7ea0e4bf57f7d2e8fba2c77b063e4f84cad481f1aaac117ca1a3f6cbc123df",
+      "text_sha256": "ad7814de88b62d02e4c123c50648c0d20d07a0a66a2f285cc436b65cf67f0830",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "REC-KEYBOARD-STEP"
@@ -121,7 +121,7 @@
       "level": 5,
       "start_line": 198,
       "end_line": 219,
-      "text_sha256": "8d3b52063d5fd60ee2bf9f0ceb3594aec0cc8f8b454d5567f31de2c8925b2ea8",
+      "text_sha256": "532fab5e50f0ce5be0666f852a96bec652ac40e9edca24008dbcb2d090553631",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MAP-CONTROL",
@@ -137,7 +137,7 @@
       "level": 2,
       "start_line": 220,
       "end_line": 221,
-      "text_sha256": "dda43b59b423023494f61c874436c54ad328eb8e7fb465889ef2edacadab1219",
+      "text_sha256": "a759f4533af66599dad6eba7bcbc384bf73e55a750b2d8c1cad424cc99aa7e49",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -148,7 +148,7 @@
       "level": 3,
       "start_line": 222,
       "end_line": 234,
-      "text_sha256": "ec1c2fe2eb3dbf3138810677b0f434739f1a4593059bdbb6d48645ac93ffb42c",
+      "text_sha256": "89667c24987d794e2a42190d7ca5ebe9c514e1e388f4bc9bd6a47490e1f99076",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -159,7 +159,7 @@
       "level": 3,
       "start_line": 235,
       "end_line": 262,
-      "text_sha256": "61a135ae4c4df1edcc447632263c92253edacc7332289ff9fec146b5430ba743",
+      "text_sha256": "e8b6bcc924fa7f36503907d239ee6ff3c9ea7c4d103ddb392455b66f338167cb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "REC-LIVE-NOTES",
@@ -174,7 +174,7 @@
       "level": 3,
       "start_line": 263,
       "end_line": 288,
-      "text_sha256": "340240e5cc8eaf9f4dc5de18301dd4141cf20c62c2fd3caca967a10fd134e1d7",
+      "text_sha256": "09b7886f367e5cbb0d6d06d258661d2638afe95a2c9b237b4d64672f873a89d2",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "NAV-PAGES"
@@ -187,7 +187,7 @@
       "level": 3,
       "start_line": 289,
       "end_line": 303,
-      "text_sha256": "ea90932ceb01d5932ab408919ffc56c8dd2ee3fac9e6fec9f4e938ba50e5f264",
+      "text_sha256": "b5de17526658cb808a52bfa8dd5e4b49dc29c8e8417a4a88fbb79904b4072834",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "NAV-CONFIRM"
@@ -200,7 +200,7 @@
       "level": 3,
       "start_line": 304,
       "end_line": 307,
-      "text_sha256": "203f85f16df8874bd667633cc8ffeae902ac821014f5c70cefde97510a5908a0",
+      "text_sha256": "8352da735895131c9631103381f282e6fd350d2afb78460b001d9d22901abc3c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "NAV-TOOLTIPS"
@@ -213,7 +213,7 @@
       "level": 3,
       "start_line": 308,
       "end_line": 311,
-      "text_sha256": "cc0433ec76409980622791d8544cc779a977f9d0ca01070a8dd3dd4345cfe21c",
+      "text_sha256": "4eb652bf59558bd3f66808d87cc841c2e34e1739b259ced85eb57f9c5a14237c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PANIC-GESTURE"
@@ -226,7 +226,7 @@
       "level": 3,
       "start_line": 312,
       "end_line": 315,
-      "text_sha256": "c514dca5086d6bf1db302f3742ad43e3a4161df97750429e19d771212d71f94a",
+      "text_sha256": "3f24dcf0d470836a8598078e159761e1e1dd4882b28e0c6aafbc25104504fa6c",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -237,7 +237,7 @@
       "level": 2,
       "start_line": 316,
       "end_line": 319,
-      "text_sha256": "ea3762faa8923506a196f20206e4fe78bafb23d3af0c3cc0a5b36cb4d3a4aa1e",
+      "text_sha256": "f44f125ec661a589186361ff80113c249977fb540824f0ba2e82e3b69b6b6461",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -248,7 +248,7 @@
       "level": 3,
       "start_line": 320,
       "end_line": 327,
-      "text_sha256": "4a4664ca7079ccd5df4fb5fab4298b67134a7e5639616d1eed307fb26069f1df",
+      "text_sha256": "61e242cf4695cab91c70f7575083c5d3aacb29d9891865a30b1782573aa9b00d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -261,7 +261,7 @@
       "level": 3,
       "start_line": 328,
       "end_line": 335,
-      "text_sha256": "5afb68aeaa1ac9b8b41addbd2e0ac31135920b598fcfa200223e65f71d00f35c",
+      "text_sha256": "16ba6b180aa58ec5d521cb4a82ad587e7324a603e4f3bcaf930d2ffb8ff0115e",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -274,7 +274,7 @@
       "level": 3,
       "start_line": 336,
       "end_line": 343,
-      "text_sha256": "43353056569f1cdfbab6a1d3c46fb43a501678ce5e524ec291619d1b29ff29d0",
+      "text_sha256": "21d956e85f10b1432689b35f0d58b7901e40d42e87b25b9268ee0ab48aacfc48",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -287,7 +287,7 @@
       "level": 3,
       "start_line": 344,
       "end_line": 347,
-      "text_sha256": "1e293968de77f874b1ccf7a3e83294ac18952b6d3924575c1d329d0afc92dcd4",
+      "text_sha256": "f5abbdb20d68022329d39f9322020e2d8233072ea2b8c94495bc288b8906b490",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -300,7 +300,7 @@
       "level": 4,
       "start_line": 348,
       "end_line": 351,
-      "text_sha256": "3f30424f614595c6c9529f96904b765cb798fe916c52df341ee2d7ba3b6445ba",
+      "text_sha256": "fb4a246a76a23b273e80074910beb9e51ee3927b0551a6b5b16ced421826f212",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -313,7 +313,7 @@
       "level": 4,
       "start_line": 352,
       "end_line": 357,
-      "text_sha256": "49defb9b79964467e2f44f6db0c4529751ab840e1f16d2d0f960544a4234eecc",
+      "text_sha256": "63001f4d0d6afce7543822aae99290e5ab0345088ba4db90642477e3caf088ba",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -326,7 +326,7 @@
       "level": 3,
       "start_line": 358,
       "end_line": 361,
-      "text_sha256": "be20a25319a1bf8b1acc1e1e4debd447e1b6305882277868a325cfd2f8ce3a4f",
+      "text_sha256": "6d87dc6cef3646ecd7e4994ce5f880afe790ca9e8e84d97debe7b6a6fd547204",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -339,7 +339,7 @@
       "level": 3,
       "start_line": 362,
       "end_line": 367,
-      "text_sha256": "4e41f8bae91e28143bb478286229fe0c21cb39897bd0e77537fc76b93099296e",
+      "text_sha256": "ea11b55eb1738f91d1c9218c7518060494a3b4d2877c6d176a987aaba914ff15",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -352,7 +352,7 @@
       "level": 2,
       "start_line": 368,
       "end_line": 371,
-      "text_sha256": "c8a74289619f2cd0236652afca58ffc129f25f977aa758736b2639ba18e7030a",
+      "text_sha256": "9862184b9bf99c242b78b0a4a3ea72433683dcaa1b739f123c218e9cd01ded27",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -363,7 +363,7 @@
       "level": 3,
       "start_line": 372,
       "end_line": 384,
-      "text_sha256": "2a13ca80bc0e92bc1db34925474cfd2a82809cfd3cac0b02f78423da03941ebc",
+      "text_sha256": "d634a73ef8f5d99dd0676248646e2f10f66d886c2962be2b5866ee2f944f8519",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -374,7 +374,7 @@
       "level": 4,
       "start_line": 385,
       "end_line": 440,
-      "text_sha256": "ea0d4b0ac8211b36d7f07d93123ef6e1ee67998e4a1a677a5c65a988fd36d38e",
+      "text_sha256": "122654c892a3bb73f9cb3d6edb104f2c205da0daf24fb71d8bea44e45d938559",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CLOCK-PHASE-EDGE-001",
@@ -403,7 +403,7 @@
       "level": 4,
       "start_line": 441,
       "end_line": 476,
-      "text_sha256": "6f254e2bd4c61282e90218ce69d898bc188a2716cf87b01a271afc45dccf1984",
+      "text_sha256": "0550a3c973b1cce863e0be40d51f5156b4d0172052004f9fe22eae730f572035",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PAT-EDIT-001",
@@ -437,7 +437,7 @@
       "level": 3,
       "start_line": 492,
       "end_line": 504,
-      "text_sha256": "17efe19834fd5f84ac8d905c0cbbcfb936bc83b594c8ca27d9bd29b493ef29f1",
+      "text_sha256": "84f417088bc526ccd198642d987aab621f5a51d8566d38fc251c965ef4c2ea38",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-SELECT"
@@ -450,7 +450,7 @@
       "level": 4,
       "start_line": 505,
       "end_line": 515,
-      "text_sha256": "f416516e58e326f35c93581dc476a9898fe0c3f3f9ed3c468bca1ca73195fcf6",
+      "text_sha256": "da72695f49c17239d4b99080b01ae6b2cf0e5001cfce340b7c0db7e9c8663817",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-DEVICE"
@@ -463,7 +463,7 @@
       "level": 5,
       "start_line": 516,
       "end_line": 521,
-      "text_sha256": "89169e670534434d971ae303aeb6fdfc5377c229c1078e373e5b5f246d2930eb",
+      "text_sha256": "1360355ea9aea08ac032476eec0f43a307bff868233adcde9ccb7b9a7cbf9341",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-DEVICE"
@@ -476,7 +476,7 @@
       "level": 5,
       "start_line": 522,
       "end_line": 537,
-      "text_sha256": "cf69cc2e19481bf2be072c05b96a1160e11a75aec64a4a864dd89f7d7f7390d8",
+      "text_sha256": "881191ad8f40b3a4af9819146964cdc4b92cbb818d7dbcc067d2052fa9a64a9f",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -487,7 +487,7 @@
       "level": 4,
       "start_line": 538,
       "end_line": 548,
-      "text_sha256": "e4060cccc714b4360b917cce8796939b298ba98db6851e83ac5e2cbd75b09ee4",
+      "text_sha256": "e2c71405021293fac7e698841594c187e5bccfc1afb3dca84b2ce9beb0a8db80",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-PATCH-RECALL",
@@ -501,7 +501,7 @@
       "level": 4,
       "start_line": 549,
       "end_line": 561,
-      "text_sha256": "bed3b0532206401ab32351008247f26b7efcb254482dd6feb994aff4ea8ce815",
+      "text_sha256": "a17bff6e1f4f8516197e6ea2f0059f288bd003bdc5956cb36ac9d5fed19ecef5",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-ASSIGN"
@@ -514,7 +514,7 @@
       "level": 4,
       "start_line": 562,
       "end_line": 574,
-      "text_sha256": "513d26ff5a4fff4619a6e028d856ba0dccc6f5b5d80c46062d6c40760ba79268",
+      "text_sha256": "c06d9082433baeb6e460132c0efe3dd06ddd1512ef295075e6b868bb43e57e66",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-ATTRIBUTES",
@@ -528,7 +528,7 @@
       "level": 5,
       "start_line": 575,
       "end_line": 586,
-      "text_sha256": "14eb7aedb79c929a2c625492f7a81828c5779889458d92f9e38eb2b2cac3e07d",
+      "text_sha256": "b0d94cfea9b7b4d6bf0d80be73ed5e8f16a151cb4fa71ee8aba9915c722265b9",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-TRIG-GESTURE"
@@ -541,7 +541,7 @@
       "level": 5,
       "start_line": 587,
       "end_line": 592,
-      "text_sha256": "3236048f2988263f13fde3a7f718c9f8e9000db0441760a6e062b96a8d34e14d",
+      "text_sha256": "a5b8f82e22a04d8d96f87cf0d861b3403a3b93d19cbcd5fdfd5fa774095904ef",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-PRECEDENCE",
@@ -555,7 +555,7 @@
       "level": 5,
       "start_line": 593,
       "end_line": 598,
-      "text_sha256": "4f47c2c4008b0fbcb8955fc9e48b73bfe488557325a3cdcdb25be13d8b0845e8",
+      "text_sha256": "2f25d840853a6ade2237fcc53d6843ac871a8dd2cbccdac1652db170ae9ce82c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-CHORD"
@@ -568,7 +568,7 @@
       "level": 5,
       "start_line": 599,
       "end_line": 610,
-      "text_sha256": "c68b625108eba452744850797057feedaf588dd803b1e190b57a8dd5464486f4",
+      "text_sha256": "0c5053d845106b7b4b039a89902780b93aa198149e45359461f9585f2dcae25c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-CLEAR-CHANNEL",
@@ -582,7 +582,7 @@
       "level": 4,
       "start_line": 611,
       "end_line": 623,
-      "text_sha256": "3873e18f2771907bac76f937d917639a4df1ada3d34de252ee7cf400bf414f64",
+      "text_sha256": "6b9d9d151b1377f368bf062bb80b1d5680d430de71abdf2c11b527f6014909d4",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -593,7 +593,7 @@
       "level": 5,
       "start_line": 624,
       "end_line": 633,
-      "text_sha256": "838f3597035c39f17f4f5cf5586cd7537076f135b645763fceb10ef88eac82ee",
+      "text_sha256": "0a0a9da4f71a01af1143fefc8c70d08703dbaddf48ebe76258e79a16eefdb60d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-TRIG-ALL",
@@ -608,7 +608,7 @@
       "level": 5,
       "start_line": 634,
       "end_line": 646,
-      "text_sha256": "14741886e7db500491eddb9b971c1e29ac248decc5a98db70990a14de89c1677",
+      "text_sha256": "4989d5a6c45080d6f201a9a82b8e8235d0f5347e9c2a9c4827dc2f573997bd06",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-NOTE-AVERAGE",
@@ -624,7 +624,7 @@
       "level": 5,
       "start_line": 647,
       "end_line": 657,
-      "text_sha256": "176668a485782c7b5d5cfc5baf1c35cb649e4cdca7bcfa45248ce973f1f3cc93",
+      "text_sha256": "3bb7c548494219e4e696c601917d3c6312e59c0635949047f5cc0f06f36764aa",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-VELOCITY"
@@ -637,7 +637,7 @@
       "level": 5,
       "start_line": 658,
       "end_line": 670,
-      "text_sha256": "8c41fdd5feace67b36e8722c1418098fdab96e4cebebe595df9bfda68dc61c5e",
+      "text_sha256": "efd63704f5b02b683a1edfa2655f31a38701bcff0158fc3ac744b61b532cab0c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-LENGTH"
@@ -650,7 +650,7 @@
       "level": 4,
       "start_line": 671,
       "end_line": 674,
-      "text_sha256": "4535e34c026ee740a6824567cf3d107885c2eb208d7b0ee4ac87a96b3d7eec0d",
+      "text_sha256": "ea29f44bd29af328033e78eb02da738e9f4754c614ef87ca358cdb491a717b2f",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-DASHBOARD"
@@ -663,7 +663,7 @@
       "level": 4,
       "start_line": 675,
       "end_line": 689,
-      "text_sha256": "ce04352a8d256cf48676ecb0c8c75da5dc1413f6603a0dd9db676d418463232c",
+      "text_sha256": "7ccee0e9562737d3e77b1fcda96af77fcbda5088912fe5eb91f4d1d1d7e04c1d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-CLOCK-INHERIT",
@@ -683,7 +683,7 @@
       "level": 4,
       "start_line": 690,
       "end_line": 711,
-      "text_sha256": "dc7bc5f4c469b996c94ebfe8008f1f1ccf64b04618ccd8e02d254e19dfea20fc",
+      "text_sha256": "ca2f194a53e1acc2aeb1f8f94653c0c7a7b869321144aea6449aca672ccaac56",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MEMORY-NAV",
@@ -698,7 +698,7 @@
       "level": 4,
       "start_line": 712,
       "end_line": 729,
-      "text_sha256": "492104f61ed3c931b134bc0c1210be993872fbcb5ad69162dfdd95f8d889e956",
+      "text_sha256": "1b6af4b61ed095b8b207bc3fca983a362063aab4dff46bfbb445da80c1c973ad",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-RANGE"
@@ -711,7 +711,7 @@
       "level": 4,
       "start_line": 730,
       "end_line": 742,
-      "text_sha256": "d4693f6a37a0edf2f58ff8b48568995924a75ba9b69589d756f46a71588c7bc9",
+      "text_sha256": "ab10617a43f005ff99da9a99bc4271622ff1c01f18672fc25acda7f6fa7ed813",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-MUTE"
@@ -724,7 +724,7 @@
       "level": 3,
       "start_line": 743,
       "end_line": 764,
-      "text_sha256": "0201fcc995e961851cff49c836214cd183e77e528e7e9c5e9cff930c489b2602",
+      "text_sha256": "9fa81715cbba32585acce0df4db4b048d9621ec8bec24fea4d800f1cc8a9fc3c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-OFF",
@@ -738,7 +738,7 @@
       "level": 4,
       "start_line": 765,
       "end_line": 768,
-      "text_sha256": "5b7bd6f92824c01002ca8fff6a995fed732b5dd84e58df1d2db112c0c5c5561c",
+      "text_sha256": "b3865981e1aba75d3f1faa5765854ffdfefad35e46e64ae6825e39670d12972a",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -749,7 +749,7 @@
       "level": 5,
       "start_line": 769,
       "end_line": 772,
-      "text_sha256": "6345e2014ace2bf5b0c75dc224c429f3ed59dd0287bcace2123d415740b2d020",
+      "text_sha256": "33b64e0a4484ec4fcf4751fa69420333816347e7288e1d614f2588a96d5085d6",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-PROBABILITY"
@@ -762,7 +762,7 @@
       "level": 5,
       "start_line": 773,
       "end_line": 776,
-      "text_sha256": "5e80c36332bb3bde2b5c766dca144d2f440a9b93f6685b38c6e6ac9c74edc9e7",
+      "text_sha256": "c7c040cc29ebd51b2fa3a7c2bec4d72ddd2315d8e54036a4950b7260e99ae721",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-FIXED"
@@ -775,7 +775,7 @@
       "level": 5,
       "start_line": 777,
       "end_line": 780,
-      "text_sha256": "577f9b316b77aa953bfa3c3be8f8ee6d31624068a302c84666451cb99d0d6641",
+      "text_sha256": "917a6174067d8bb2edbc8b966e6098aaf2f06fabafb9c2f356087e4c80c6b0ca",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-QUANTISED-FIXED"
@@ -788,7 +788,7 @@
       "level": 5,
       "start_line": 781,
       "end_line": 784,
-      "text_sha256": "8659f4ee7fdad68b6f6342bc3120f21ce39ae1ef682eeb4da2f082272cdb4892",
+      "text_sha256": "4efc15394833a00147edc90386bf0e26cd918081de214536074bb97345a34c2a",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-RANDOM"
@@ -801,7 +801,7 @@
       "level": 5,
       "start_line": 785,
       "end_line": 788,
-      "text_sha256": "9da9f1100341333ad65bd7faaa787a1603644cda384d1339e515182f59b21ca5",
+      "text_sha256": "e0136be937b237b5e2d759433dc520a8a01e72e58ef34ad92615e1ab5057a148",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-RANDOM-TWOS"
@@ -814,7 +814,7 @@
       "level": 5,
       "start_line": 789,
       "end_line": 792,
-      "text_sha256": "61b85f4c852df8347f24db76ccdbc63d3d197d0dd4067a24df52058f38a2e2fe",
+      "text_sha256": "26f86f393598048f1c83393e9ba0f732b6e94c4f6105df51c5e85e319e7709b1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-STRUM"
@@ -826,8 +826,8 @@
       "title": "Chord Arpeggio",
       "level": 5,
       "start_line": 793,
-      "end_line": 796,
-      "text_sha256": "2b98a3f57bd47968f6962e073c1c647ceef87fc7f73de1e603c581e42aa58975",
+      "end_line": 800,
+      "text_sha256": "a14bb0fc055b33254c6cfc69e5d7ef922f59a2a981ab8fff8d4407ca0e0a6ed5",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-ARP"
@@ -838,9 +838,9 @@
       "id": "MAN-063",
       "title": "Chord Acceleration",
       "level": 5,
-      "start_line": 797,
-      "end_line": 800,
-      "text_sha256": "e42558ed511889cc574cf9e816cb575a926ee747eee9ab8e410259ca7c18603e",
+      "start_line": 801,
+      "end_line": 804,
+      "text_sha256": "40423841f98be29dfb379465a0c5dbe3dc0b8ff2afb0a24b6d8eb5158e7d6812",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-ACCEL"
@@ -851,9 +851,9 @@
       "id": "MAN-064",
       "title": "Chord Spread",
       "level": 5,
-      "start_line": 801,
-      "end_line": 804,
-      "text_sha256": "830b4c3f5091f15950d56fa7865b3ef2f6ca40d62f46072c68b17205a5fdd23a",
+      "start_line": 805,
+      "end_line": 808,
+      "text_sha256": "736d0f36bbf477e3365cb95198e14972b3963f2038e9595e4d3b5d8be4cb9bce",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-SPREAD"
@@ -864,9 +864,9 @@
       "id": "MAN-065",
       "title": "Chord Velocity Modifier",
       "level": 5,
-      "start_line": 805,
-      "end_line": 808,
-      "text_sha256": "7dd51af2cf1b90014f30f83d9a36f7caafb63f87269a3ee08d7a57e544b035eb",
+      "start_line": 809,
+      "end_line": 812,
+      "text_sha256": "3cc7e5ba327c84ee614f637fd52984b11cd74de6aef46c98bcfca6883622821c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-VELOCITY"
@@ -877,9 +877,9 @@
       "id": "MAN-066",
       "title": "Chord Shape Modifier",
       "level": 5,
-      "start_line": 809,
-      "end_line": 812,
-      "text_sha256": "5a13c29f0b3ddc6ed3279973efddf8d887f699391d94f7ca15dedc6002a38b38",
+      "start_line": 813,
+      "end_line": 816,
+      "text_sha256": "407c7209d8f8ae88edb7f2c904260896b33270c3a52903f403df19213475940a",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-SHAPE"
@@ -890,9 +890,9 @@
       "id": "MAN-067",
       "title": "Mute Root Note",
       "level": 5,
-      "start_line": 813,
-      "end_line": 816,
-      "text_sha256": "88111a4c6b3d6cf200a2303fdaa69094327fb6c6d8ee04850c5d882e1108cb01",
+      "start_line": 817,
+      "end_line": 820,
+      "text_sha256": "89dcd3dd1c2f3fdddef3291c8608b0e804475f851d4902a208cb8da6416bd542",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-MUTE-ROOT"
@@ -903,9 +903,9 @@
       "id": "MAN-068",
       "title": "Fully Quantise Mask",
       "level": 5,
-      "start_line": 817,
-      "end_line": 820,
-      "text_sha256": "2f4276b1da63dc93bc149481f4f75e3c9ec4ac85fe649f54b0ef72bc07d7e1b6",
+      "start_line": 821,
+      "end_line": 824,
+      "text_sha256": "7c099e143d86dd6c72184a936c8c3431065d08628ccaa3b0dbaad931a37d7a9f",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-FULL-QUANTISE"
@@ -916,9 +916,9 @@
       "id": "MAN-069",
       "title": "Scale Editor",
       "level": 3,
-      "start_line": 821,
-      "end_line": 843,
-      "text_sha256": "d02820f8ea7fb86889042b4431fa3965f79f93dbd326844125cc520d5578eec3",
+      "start_line": 825,
+      "end_line": 847,
+      "text_sha256": "916a7873533bed60f4e68760f88cace8167ed8e76f3931df6d35d8f167606acf",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SCALE-EDIT",
@@ -931,9 +931,9 @@
       "id": "MAN-070",
       "title": "Transposition",
       "level": 4,
-      "start_line": 844,
-      "end_line": 856,
-      "text_sha256": "5336961e5456d860865534b599798373ec80018a8203669d9f0d1a52e3fd8742",
+      "start_line": 848,
+      "end_line": 860,
+      "text_sha256": "67fc51942b4ffdcfed8ea104f9f98f8b75f303b4c0f60e91359e22d73b4baa10",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "TRANSPOSE-GLOBAL"
@@ -944,9 +944,9 @@
       "id": "MAN-071",
       "title": "Song Editor",
       "level": 3,
-      "start_line": 857,
-      "end_line": 868,
-      "text_sha256": "789cdf7bfff07380fb81fcc971634e4f4dab1981f51212180eb74329564849c2",
+      "start_line": 861,
+      "end_line": 872,
+      "text_sha256": "dde94bd99916dab5b29d1e4a52ff421099b0c4f32b4ea93467d93bc832b64684",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-SLOTS"
@@ -957,9 +957,9 @@
       "id": "MAN-072",
       "title": "Button Indicators",
       "level": 4,
-      "start_line": 869,
-      "end_line": 874,
-      "text_sha256": "be3fc63e1627c5f9cc57a52cb50eb44ae1f247f0aaa67962766821a91309d06b",
+      "start_line": 873,
+      "end_line": 878,
+      "text_sha256": "3f621ab89b28432d757c227bd331e75cfbe5437a2138ac0373471febf550f31c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-SLOTS"
@@ -970,9 +970,9 @@
       "id": "MAN-073",
       "title": "Interacting with Slots",
       "level": 4,
-      "start_line": 875,
-      "end_line": 882,
-      "text_sha256": "072a47fe0374c191133c4e53c319ca79377ad2f09ddef8f5c980d12d66199689",
+      "start_line": 879,
+      "end_line": 886,
+      "text_sha256": "61232d87d40e3c8ee0aa9ade6a1a44eaa808c19c8b7f71c1ad47405d48e8bc61",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-SLOTS"
@@ -983,9 +983,9 @@
       "id": "MAN-074",
       "title": "Song Mode Operations",
       "level": 4,
-      "start_line": 883,
-      "end_line": 886,
-      "text_sha256": "8d805187ee9019217468edf12d3c615b1ffea37c60ca17808c311049443b79f2",
+      "start_line": 887,
+      "end_line": 890,
+      "text_sha256": "20fac55f58566132cd097bde54b974648e68cc7511c0a5e223d93cd5f083ec1f",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-ADVANCE"
@@ -996,9 +996,9 @@
       "id": "MAN-075",
       "title": "Adjusting Song Sequence Length",
       "level": 4,
-      "start_line": 887,
-      "end_line": 902,
-      "text_sha256": "8f70a4025ac591f78427d0d44a536dedb31e7d2d1c0e86b30947726491c76fa4",
+      "start_line": 891,
+      "end_line": 906,
+      "text_sha256": "cf9f395683df7199fa146b5a9ef08efc8807dd775bc860bb76ce23c928a04f04",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-LENGTH"
@@ -1009,9 +1009,9 @@
       "id": "MAN-076",
       "title": "Navigating the Norns Display",
       "level": 4,
-      "start_line": 903,
-      "end_line": 907,
-      "text_sha256": "9d96ef1211c58904783033bbf9775a68783e786992e0abfe22fd04bc72b22a73",
+      "start_line": 907,
+      "end_line": 911,
+      "text_sha256": "d1981e57584617de2d594036c5cdc62f6929755041a7a1fa68c7b1889e628a11",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-SETTINGS"
@@ -1022,9 +1022,9 @@
       "id": "MAN-077",
       "title": "Locks",
       "level": 2,
-      "start_line": 908,
-      "end_line": 911,
-      "text_sha256": "d6b36696cd868adb542b004eaf87c165c3e05e4e4cdaa037adeab3001206b8cb",
+      "start_line": 912,
+      "end_line": 915,
+      "text_sha256": "63e8c4c14abef3616f35ccbc55a9c1f9a7588694d3179418b951999a369ec0fc",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1033,9 +1033,9 @@
       "id": "MAN-078",
       "title": "Trig Param Locks",
       "level": 3,
-      "start_line": 912,
-      "end_line": 936,
-      "text_sha256": "10a093dc138f0f3136fa33119e610c09d24533485c80973f84f2149969f84131",
+      "start_line": 916,
+      "end_line": 940,
+      "text_sha256": "86161126b7382a6192e51dc4c00301a1ce4e6922d0444f016a72168724c137de",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "LOCK-PARAM-CLEAR",
@@ -1047,9 +1047,9 @@
       "id": "MAN-079",
       "title": "Param Slides",
       "level": 4,
-      "start_line": 937,
-      "end_line": 954,
-      "text_sha256": "2ba111203cec78292fed4bbd58780461fb34800f48d93e3b59d66a1e5f633b53",
+      "start_line": 941,
+      "end_line": 958,
+      "text_sha256": "a0c04a64c53f741412886c4305ad23ecc73cf8fb077306740171663a1876d015",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SLIDE-GLOBAL",
@@ -1061,9 +1061,9 @@
       "id": "MAN-080",
       "title": "Mask Locks",
       "level": 3,
-      "start_line": 955,
-      "end_line": 979,
-      "text_sha256": "c8e0ae5d7cac3dc5819bc62c0e2e0443154d65fb93443cfaca28ebe77f758f5f",
+      "start_line": 959,
+      "end_line": 983,
+      "text_sha256": "48b7948446c7eb7b465c57549267c5dde4780720ca874acf77168ad2da6abc91",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "LOCK-MASK"
@@ -1074,9 +1074,9 @@
       "id": "MAN-081",
       "title": "Scale Locks",
       "level": 3,
-      "start_line": 980,
-      "end_line": 998,
-      "text_sha256": "cf5abf336ea77377a81dbc2dee556fdfa50c78f1eaeb1c0ed7a6929caea07b09",
+      "start_line": 984,
+      "end_line": 1002,
+      "text_sha256": "545b122e74526e799e0a427b6c8ecaa9bc1b4f071dbd418bc9248809dca3625d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "LOCK-SCALE"
@@ -1087,9 +1087,9 @@
       "id": "MAN-082",
       "title": "Transposition Locks",
       "level": 3,
-      "start_line": 999,
-      "end_line": 1012,
-      "text_sha256": "1460b116233a23b003c8b8fe57c4f0f89223f6b83805fd7ccae04aff59f5ed73",
+      "start_line": 1003,
+      "end_line": 1016,
+      "text_sha256": "dbd5757e928783c2520d3349655319ae5f37d38b08c55da9222e07a7b3089626",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "LOCK-TRANSPOSE"
@@ -1100,9 +1100,9 @@
       "id": "MAN-083",
       "title": "Octave Locks",
       "level": 3,
-      "start_line": 1013,
-      "end_line": 1024,
-      "text_sha256": "049b9380f75ab62c2c6c5431015f141fbf56f55526c5f94d4fb4ddf7fce804ff",
+      "start_line": 1017,
+      "end_line": 1028,
+      "text_sha256": "7ff4aace816077f1ad6eb36ed388072476afbbde248edab5d5f16360ec801e6f",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "LOCK-OCTAVE"
@@ -1113,9 +1113,9 @@
       "id": "MAN-084",
       "title": "Save and Load",
       "level": 2,
-      "start_line": 1025,
-      "end_line": 1032,
-      "text_sha256": "84ab6c1c8cec1da5bf3179910d7e18d7eabc14a708b336b171a0d04e475d33a8",
+      "start_line": 1029,
+      "end_line": 1036,
+      "text_sha256": "7840f32f607a30ede332cbf4ca260c9140c99a537712a70d7f9b55a6e55ed0da",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PERSIST-AUTO-001",
@@ -1128,9 +1128,9 @@
       "id": "MAN-085",
       "title": "Options",
       "level": 3,
-      "start_line": 1033,
-      "end_line": 1036,
-      "text_sha256": "804652c99130b6e05e1674aee0ccb9b0911c3a814e1cfc17eee7d17930e33912",
+      "start_line": 1037,
+      "end_line": 1040,
+      "text_sha256": "53b023d54e5b94e20b0b6eb04a06d03489e915cdda240cb9e69edddb00b63f59",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1139,9 +1139,9 @@
       "id": "MAN-086",
       "title": "Sequencer Options",
       "level": 4,
-      "start_line": 1037,
-      "end_line": 1038,
-      "text_sha256": "62b109384a5bdaa837429ca58f271923454d08b303d4a9c201eb9631c1b2c17b",
+      "start_line": 1041,
+      "end_line": 1042,
+      "text_sha256": "45b71ff7567730e2fe00d62abae357d60823eb28231caa7fdcb3878e022ea45f",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1150,9 +1150,9 @@
       "id": "MAN-087",
       "title": "Shift press stop",
       "level": 5,
-      "start_line": 1039,
-      "end_line": 1042,
-      "text_sha256": "41bbc1b85ee606f3dad9e8eb6da930633549c161707906efa2fc259c71d02af5",
+      "start_line": 1043,
+      "end_line": 1046,
+      "text_sha256": "9c425eb5d8713204c1f9ad74b8a72401847c304bef449039534d33ba79b89fd0",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-SHIFT-STOP"
@@ -1163,9 +1163,9 @@
       "id": "MAN-088",
       "title": "Song Mode",
       "level": 5,
-      "start_line": 1043,
-      "end_line": 1046,
-      "text_sha256": "f23336e64501c742cde537f4ecc5df1b8d83293c6687c9117aa37f270ffa1ebb",
+      "start_line": 1047,
+      "end_line": 1050,
+      "text_sha256": "7943b92e77cde215998ea7391c932a4487cb66ada589265d4803ac23aba3e147",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-SONG-MODE"
@@ -1176,9 +1176,9 @@
       "id": "MAN-089",
       "title": "Reset at Song Editor Pattern Change",
       "level": 5,
-      "start_line": 1047,
-      "end_line": 1050,
-      "text_sha256": "38cf83228d1b01c9cd84eae77de4d746495d7f9f66caac547ef1224e683c684a",
+      "start_line": 1051,
+      "end_line": 1054,
+      "text_sha256": "7240a200203933c6b633199246a8a25c47e8f7395615d4dfda6adb6f1054af9b",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-SEQUENCE-RESET"
@@ -1189,9 +1189,9 @@
       "id": "MAN-090",
       "title": "Reset at Pattern Repeat",
       "level": 5,
-      "start_line": 1051,
-      "end_line": 1054,
-      "text_sha256": "3995abf998e5d234142e01c2dbf6f8a6f5bd65d965289c75b4a23354d0b1e368",
+      "start_line": 1055,
+      "end_line": 1058,
+      "text_sha256": "a08286bd1e788795f541e5ce889a77bebcd1aae7d97b7085451dd6192f5858c6",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-REPEAT-RESET"
@@ -1202,9 +1202,9 @@
       "id": "MAN-091",
       "title": "Parameter Slides Wrap",
       "level": 5,
-      "start_line": 1055,
-      "end_line": 1058,
-      "text_sha256": "1126b92230a10a63aa1cb785c248fd602cde00bd79d9ee0db70ef471eb8f069b",
+      "start_line": 1059,
+      "end_line": 1062,
+      "text_sha256": "05b309dcfff4f9be2cbc7affbb93d7cdef84b2eee9f1b3a3f060391d394f2d47",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-SLIDE-WRAP"
@@ -1215,9 +1215,9 @@
       "id": "MAN-092",
       "title": "Elektron Program Changes",
       "level": 5,
-      "start_line": 1059,
-      "end_line": 1062,
-      "text_sha256": "1cba70fdce2ca5bb2ad162f362319a1e064d77556ef2ce6703674d96f3abe8de",
+      "start_line": 1063,
+      "end_line": 1066,
+      "text_sha256": "a8f2581fdc155c81735ad68c797d8861603bbe3f08d02ea1f7ae77ac4f3e7ff8",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-ELEKTRON"
@@ -1228,9 +1228,9 @@
       "id": "MAN-093",
       "title": "Elektron Program Change Channel",
       "level": 5,
-      "start_line": 1063,
-      "end_line": 1066,
-      "text_sha256": "d20a2bca639e7721431fb5ced41c2ee67dc4b6000635eca3523d0e9d47ea47c1",
+      "start_line": 1067,
+      "end_line": 1070,
+      "text_sha256": "c481fd84bf55836e446b0fee2c449f8830d12eb0a36127d952c59d4b0fe183d2",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-ELEKTRON"
@@ -1241,9 +1241,9 @@
       "id": "MAN-094",
       "title": "Parameter Lock Options",
       "level": 4,
-      "start_line": 1067,
-      "end_line": 1068,
-      "text_sha256": "eb807418d84eae137ff8d7539ae2e5c95f8f88b99db7a2a6edf07d7e22c8d02a",
+      "start_line": 1071,
+      "end_line": 1072,
+      "text_sha256": "c1e3df50d4bf524b990fe093a23f2aa3f52eb199a173564a26ce1ec66a05651d",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1252,9 +1252,9 @@
       "id": "MAN-095",
       "title": "Trigless Locks",
       "level": 5,
-      "start_line": 1069,
-      "end_line": 1072,
-      "text_sha256": "68986f0fa56d488e241131fc44c8cc7ab250ee2e2c11d7ab77ab0a8446f18d0c",
+      "start_line": 1073,
+      "end_line": 1076,
+      "text_sha256": "c94b376b29918d53869486174a598670c11b2bea074ba49000e2c10aaeec0e3c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-TRIGLESS"
@@ -1265,9 +1265,9 @@
       "id": "MAN-096",
       "title": "Quantiser Options",
       "level": 4,
-      "start_line": 1073,
-      "end_line": 1074,
-      "text_sha256": "71cff99220f53087fa5f5af920c346fea5ff43a8b6bc81e5a033509edf174874",
+      "start_line": 1077,
+      "end_line": 1078,
+      "text_sha256": "8a02a1eb3f0a2dd25535fa23e969687cae0a23ead3b10f739711e55a0f206fab",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1276,9 +1276,9 @@
       "id": "MAN-097",
       "title": "Snap Note Masks to Scale",
       "level": 5,
-      "start_line": 1075,
-      "end_line": 1078,
-      "text_sha256": "00eea8b20f2428b91dded6ee8e27d333201bf035e8adb88a3f2647912d97d127",
+      "start_line": 1079,
+      "end_line": 1082,
+      "text_sha256": "284caf564fd4be762a12f6ac056265f4c69ece0b35d24b11a82db4df4b3fc5bf",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-MASK-SNAP"
@@ -1289,9 +1289,9 @@
       "id": "MAN-098",
       "title": "Quantise Note Masks",
       "level": 5,
-      "start_line": 1079,
-      "end_line": 1082,
-      "text_sha256": "eaa7a26cc59730712354f00158d3aee68e047106ca779b043618532cdb65d888",
+      "start_line": 1083,
+      "end_line": 1086,
+      "text_sha256": "aacd5d5724dc4318e0b17586d6b301aa511a1c4b6894d33c73cc193b0d816fac",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-MASK-QUANTISE"
@@ -1302,9 +1302,9 @@
       "id": "MAN-099",
       "title": "Scales Lock Until Pattern End",
       "level": 5,
-      "start_line": 1083,
-      "end_line": 1086,
-      "text_sha256": "da8498011d5eae9759a4b2b04d31e68e4d592fdb25a95bc9c28e306a4462c73e",
+      "start_line": 1087,
+      "end_line": 1090,
+      "text_sha256": "988788f77c8c9410eb3d86d6b154a05e3193d1066747f9951423bdb1ce1d73d9",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-SCALE-LIFETIME"
@@ -1315,9 +1315,9 @@
       "id": "MAN-100",
       "title": "Lock All to Pentatonic",
       "level": 5,
-      "start_line": 1087,
-      "end_line": 1090,
-      "text_sha256": "af037466acd892dec1c4f2e818fa161081d3309bcd3fc530d42f9e131b7368b1",
+      "start_line": 1091,
+      "end_line": 1094,
+      "text_sha256": "0a60d0f8b776795c1bf7e82771c5c7170f4adf8142f4b46f931ef8a6dab8d0da",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-PENTATONIC-ALL"
@@ -1328,9 +1328,9 @@
       "id": "MAN-101",
       "title": "Lock Random to Pentatonic",
       "level": 5,
-      "start_line": 1091,
-      "end_line": 1094,
-      "text_sha256": "7f245bbcdcd317be8f0035988ff10f0738150feb5834064db63f6306c22b7659",
+      "start_line": 1095,
+      "end_line": 1098,
+      "text_sha256": "91d30adf3fcd62e8427f3bcec6494d2189b1f908d452b5fd95eedda3fe7315a2",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-PENTATONIC-RANDOM"
@@ -1341,9 +1341,9 @@
       "id": "MAN-102",
       "title": "Lock Merged to Pentatonic",
       "level": 5,
-      "start_line": 1095,
-      "end_line": 1098,
-      "text_sha256": "aff4ee548aef3c87f2b49b9bd69946cecca6cfdc9d46f4ad7f1cddbc1f25eb08",
+      "start_line": 1099,
+      "end_line": 1102,
+      "text_sha256": "b1e1e88fa788323d915ab0c5207d7531f7c61578aebbc34a603764f2a8acb462",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-PENTATONIC-MERGED"
@@ -1354,9 +1354,9 @@
       "id": "MAN-103",
       "title": "MIDI Controller Options",
       "level": 4,
-      "start_line": 1099,
-      "end_line": 1100,
-      "text_sha256": "669023112eee3c6b79e78753c55ef07530a73d307e8bda1601da8a9851397b8f",
+      "start_line": 1103,
+      "end_line": 1104,
+      "text_sha256": "27e03b9f06bfddd7645756d8a884fd0666c3a9ba10bf27a4d1d8c3dcf874a331",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1365,9 +1365,9 @@
       "id": "MAN-104",
       "title": "Map Scale to White Keys",
       "level": 5,
-      "start_line": 1101,
-      "end_line": 1104,
-      "text_sha256": "8b71583873d815aa7592538200cbac5da5b3e4630a3e0209f2d4a8b14f0225ed",
+      "start_line": 1105,
+      "end_line": 1108,
+      "text_sha256": "e9f64183b62a61956eb1bb819bc330de0d9113d2afdca693ebeedbb20b54f7f1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-KEYBOARD-WHITE"
@@ -1378,9 +1378,9 @@
       "id": "MAN-105",
       "title": "Honor Scale Rotations",
       "level": 5,
-      "start_line": 1105,
-      "end_line": 1108,
-      "text_sha256": "4382eff70dbb6472724d3d1a0a825b88cca2dd0daf6c5cf5b1bd61dec39b08ba",
+      "start_line": 1109,
+      "end_line": 1112,
+      "text_sha256": "2f7f4f8c4cc709d9cfeb691afc3f4ce618b3ce9cd1e0e307c96e3f60d009af2a",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-KEYBOARD-ROTATION"
@@ -1391,9 +1391,9 @@
       "id": "MAN-106",
       "title": "Honor Scale Degree",
       "level": 5,
-      "start_line": 1109,
-      "end_line": 1112,
-      "text_sha256": "820ae209d5121b182c7213e76e8b9e83ec4d62e14b8fb8d56a30a0e1ac8455bb",
+      "start_line": 1113,
+      "end_line": 1116,
+      "text_sha256": "d94834fb9635976f6d93ebafd1a373c4eb43797be8326f35488eab73a5b8568b",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-KEYBOARD-DEGREE"
@@ -1404,9 +1404,9 @@
       "id": "MAN-107",
       "title": "Honour Scale Transpose",
       "level": 5,
-      "start_line": 1113,
-      "end_line": 1116,
-      "text_sha256": "c1a9d97479c644a3c988dd8f79dbe8528a42cdd23b56462eebf9c30afc8f0dac",
+      "start_line": 1117,
+      "end_line": 1120,
+      "text_sha256": "ea768d88eb69882541b4d192f24f0528c69a97b2ef96afffb041cce47f7aefce",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-KEYBOARD-TRANSPOSE"
@@ -1417,9 +1417,9 @@
       "id": "MAN-108",
       "title": "Sinfonion Connect",
       "level": 3,
-      "start_line": 1117,
-      "end_line": 1120,
-      "text_sha256": "d4cbd415db5e6c577bf2a170c6c583727f414d7030ba7823a665b1fc005d3d06",
+      "start_line": 1121,
+      "end_line": 1124,
+      "text_sha256": "9aaa485bbe998df0a6804443b0845d3d219b114c67f82a98fefc87218a5acb57",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SIN-SOFTWARE"
@@ -1430,9 +1430,9 @@
       "id": "MAN-109",
       "title": "LFOs and Modulation",
       "level": 3,
-      "start_line": 1121,
-      "end_line": 1125,
-      "text_sha256": "247817a1e4ef185b4be509a053544ef510ba4fd93d4566db639b408970638edc",
+      "start_line": 1125,
+      "end_line": 1129,
+      "text_sha256": "452b207c8404bdebdca1af878a37484881572b46c288f58df71560fd905a322e",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MOD-HELD-001",
@@ -1446,9 +1446,9 @@
       "id": "MAN-110",
       "title": "Performance Management",
       "level": 2,
-      "start_line": 1126,
-      "end_line": 1137,
-      "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
+      "start_line": 1130,
+      "end_line": 1141,
+      "text_sha256": "17791235e441a727a0793c0b229f95cd445b6c53ab23f94628117f269d9bd230",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PERF-MIDI"
@@ -1459,9 +1459,9 @@
       "id": "MAN-111",
       "title": "Development",
       "level": 2,
-      "start_line": 1138,
-      "end_line": 1147,
-      "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
+      "start_line": 1142,
+      "end_line": 1151,
+      "text_sha256": "5649964efc0620e62d8223e87a794759bc625698eb71dd473df3b28062eb5223",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1470,9 +1470,9 @@
       "id": "MAN-112",
       "title": "Roadmap",
       "level": 3,
-      "start_line": 1148,
-      "end_line": 1151,
-      "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
+      "start_line": 1152,
+      "end_line": 1155,
+      "text_sha256": "d5f0f9415c334ad32bc9e9cd1387ed19e1975a61c95f94bb6771f8e57be03879",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1481,9 +1481,9 @@
       "id": "MAN-113",
       "title": "Interesting Components for Norns Script Developers",
       "level": 3,
-      "start_line": 1152,
-      "end_line": 1157,
-      "text_sha256": "80cb16cd1906f008d0f8f125c92d4b904efe308162539589ab9ae13e85922cd1",
+      "start_line": 1156,
+      "end_line": 1161,
+      "text_sha256": "465d3d45405ca787cb2bc63d8e1581467c575467a373a2f300f7ac72c8838a06",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "c10b42f8fbdda5c63a512e7c7a0e904167bdbe01f21a812cdf853c10ad918b98"
+      "sha256": "664eaf9269975a9641302920579bbdd1f80bb50f9e67a4e5ee33b15428239d52"
     },
     {
       "path": "cheat_sheet.html",
@@ -2286,7 +2286,7 @@
         "M-TIME-001",
         "M-TIME-002"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "Every confirmation-based selector; boundaries; cancel by each navigation route. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required.",
       "oracles": [
         "Visible pending/committed value plus MIDI effect only after confirmation."
@@ -2485,9 +2485,14 @@
         "MAN-039"
       ],
       "statement": "Masks override trig/note/velocity/length/chord independently.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Each attribute and sentinel; active/inactive/no-pattern steps; global vs per-step.",
+      "cases": [
+        "M-MASK-001",
+        "M-TIME-010",
+        "M-TIME-011",
+        "M-ARP-003"
+      ],
+      "status": "in_progress",
+      "domain": "Each attribute and sentinel; active/inactive/no-pattern steps; global vs per-step. M-MASK-001 adds length-selector endpoints and representative values; validation pending, other attributes and combinations remain required.",
       "oracles": [
         "Exact masked MIDI with unrelated attributes unchanged and visible mask value."
       ],
@@ -2941,9 +2946,18 @@
         "M-TIME-004",
         "M-TIME-005",
         "M-TIME-006",
-        "M-TIME-007"
+        "M-TIME-007",
+        "M-TIME-008",
+        "M-TIME-009",
+        "M-TIME-010",
+        "M-TIME-011",
+        "M-TIME-012",
+        "M-ARP-001",
+        "M-ARP-002",
+        "M-ARP-004",
+        "M-ARP-005"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
       "oracles": [
         "Piecewise rational beat tables, D exact and R bounded onsets/releases."
@@ -2970,7 +2984,7 @@
         "M-TIME-006",
         "M-TIME-007"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "All finite values where affordable; extrema/zero; division/tempo and pending note interactions.",
       "oracles": [
         "Independently derived paired offsets and cycle duration; MIDI and setting display."
@@ -3180,8 +3194,12 @@
         "MAN-054"
       ],
       "statement": "Assign up to10 trig parameters per channel and song pattern; edit, replace with K2, and lock by held-step E3.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-TIME-012",
+        "M-ARP-001",
+        "M-ARP-002"
+      ],
+      "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
       "oracles": [
         "Parameter screen and exact MIDI CC/sequencer effects; unrelated slots unchanged."
@@ -3348,8 +3366,10 @@
         "MAN-061"
       ],
       "statement": "Strum spaces each chord voice once by selected division and re-quantises when scale changes mid-strum.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-TIME-012"
+      ],
+      "status": "in_progress",
       "domain": "0..4 extra voices; each division; scale change before/on/after voice deadline; stop/cancel.",
       "oracles": [
         "Ordered pitch/onset/release table including pending scale transition."
@@ -3372,8 +3392,14 @@
         "MAN-062"
       ],
       "statement": "Arpeggio loops chord masks for current step length; empty voices are rests; arp overrides strum.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-ARP-001",
+        "M-ARP-002",
+        "M-ARP-003",
+        "M-ARP-004",
+        "M-ARP-005"
+      ],
+      "status": "in_progress",
       "domain": "Sparse/full/no masks ratchet; last-boundary voice; all divisions; shape/velocity; repeated pitches.",
       "oracles": [
         "Exact loop/rest table, no extra final onset, balanced releases and precedence."
@@ -3385,9 +3411,9 @@
       "source": {
         "path": "README.md",
         "line": 793,
-        "end_line": 795,
-        "text": "##### Chord Arpeggio\n\nThe Chord Arp param is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantised to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.",
-        "sha256": "cd45eb2af81f69688ca1fb9c82347ff56d1e3691ea2a6c41205a1798f57334a3"
+        "end_line": 799,
+        "text": "##### Chord Arpeggio\n\nThe Chord Arp param is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantised to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.\n\nWith Chord Spread at zero, the first arp interval is one full selected division of the channel step. For example, a half-step arp on a two-step note plays at 0, 1/2, 1 and 1 1/2 steps; it does not start another note at the two-step endpoint. Each arp note lasts one selected division from its own onset, shortened when necessary to finish at the original note's endpoint.\n\nStarting another arp on the same channel cancels the old arp's future notes. Notes already sounding keep their remaining duration, capped by their original endpoint; the old arp's endpoint does not cut notes from its replacement. Pattern resets likewise preserve the remaining duration of sounding notes. Stop releases sounding notes and cancels future arp notes. Overlapping notes of the same MIDI pitch still send a corresponding Note Off for each Note On; how a receiving instrument handles overlapping voices is unchanged.",
+        "sha256": "c0e1d53b92ee726a7e3e16449707c1f87e1bc3711b28ecdf08de89893ea69ceb"
       }
     },
     {
@@ -3408,8 +3434,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 797,
-        "end_line": 799,
+        "line": 801,
+        "end_line": 803,
         "text": "##### Chord Acceleration\n\nThe Chord Acceleration param is a modifier for the Chord Strum and Chord Arpeggio params, to be used alongside the Chord Spread param, and it doesn't function on it's own. When set, the chord spread alters in the direction of the acceleration over time. With a positive value of acceleration, the spread value will increase by multiples of the acceleration value for each note of the chord or arp. With a negative value, the spread value will decrease by multiples of the acceleration value. With this, you can create flams and bouncing ball type effects. ",
         "sha256": "70a833494e77162127102c8b92728df570bb77efb7457795b62980c219e38c81"
       }
@@ -3432,8 +3458,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 801,
-        "end_line": 803,
+        "line": 805,
+        "end_line": 807,
         "text": "##### Chord Spread\n\nThe Chord Spread param is a modifier for the Chord Strum and Chord Arpeggio params. It alters the spacing between notes in these functions by the value of the param.",
         "sha256": "b7cc1a89a46d2ef71fc25168d275e726fb1d47afbdd306d3b074901516f7b04f"
       }
@@ -3456,8 +3482,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 805,
-        "end_line": 807,
+        "line": 809,
+        "end_line": 811,
         "text": "##### Chord Velocity Modifier\n\nThe Chord Velocity Modifier incrementally adjusts the velocity of successive notes in a chord, starting from the chord's root note. This adjustment can either increase or decrease the velocity, thereby creating a \"swell\" effect for rising intensity or a \"fade\" effect for a diminishing feel.",
         "sha256": "a1a77545731238157750a6c254e4b240f57427f24e9fe2c5306a099e248e56d6"
       }
@@ -3480,8 +3506,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 809,
-        "end_line": 811,
+        "line": 813,
+        "end_line": 815,
         "text": "##### Chord Shape Modifier\n\nThe Chord Shape Modifiers alters the order of the chord masks that are played using the Chord Strum and Chord Arpeggio params. ",
         "sha256": "6422f57bb33b8c2bff43f054ba02367e48aca44e1cca8582856e1b30e5c73ebc"
       }
@@ -3504,8 +3530,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 813,
-        "end_line": 815,
+        "line": 817,
+        "end_line": 819,
         "text": "##### Mute Root Note\n\nThe Mute Root Note param allows you to silence the root note of a chord while allowing other chord notes to play. When enabled, any chord played on that step will omit its root note while still playing all other chord notes. This can be used to create more varied chord voicings and inversions.",
         "sha256": "c2b1b674e409ef6fba8ec84ed0c44a563bce5908e98f9dcaec1f048079109afa"
       }
@@ -3528,8 +3554,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 817,
-        "end_line": 819,
+        "line": 821,
+        "end_line": 823,
         "text": "##### Fully Quantise Mask\n\nThe Fully Quantise Mask param controls whether note masks on a step are fully quantised to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantised to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes.",
         "sha256": "cad603c2d099fdbf52bfa6b6b08efebd5397eb8f649be906603bff2032c4d6fe"
       }
@@ -3555,8 +3581,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 823,
-        "end_line": 825,
+        "line": 827,
+        "end_line": 829,
         "text": "Access the scale editor by pressing the second global menu button.\n\nWhen in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.",
         "sha256": "fd80b80d4e963e2f8bcdeae7d97c6a8256df6eeb527794fcf5ae194edea83b08"
       }
@@ -3581,8 +3607,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 825,
-        "end_line": 829,
+        "line": 829,
+        "end_line": 833,
         "text": "When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.\n\n<img alt=\"Scale editor scale slot select buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg\" width=\"300\" />\n\nA shift press (hold K1) selects a scale slot for editing without changing the global scale selection. A long press on a different editing slot does the same. A long press on the slot already selected for editing turns the global scale off and clears the editing selection. Selecting a slot for editing does not switch playback to it; however, saving changes to a scale already used by playback changes that scale. The editing selection has a dim indicator when it differs from the applied scale.",
         "sha256": "204dc76dc5411d0434d4f689882e7360afdd006d1fa4ef5ede2609ad0578e872"
       }
@@ -3605,8 +3631,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 831,
-        "end_line": 835,
+        "line": 835,
+        "end_line": 839,
         "text": "[Scale locks](#scale-locks) can be set to apply a scale globally or to a single channel, activating at a designated step. Global locks persist until another global lock or the global scale track wraps. Channel-lock duration follows the Scales Lock Until Pattern End option. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.\n\n<img alt=\"Scale editor step select buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg\" width=\"300\" />\n\nYou can also adjust the rate of the global scale track and set its length independently of other channels, enabling chord progressions that extend beyond a single pattern. This feature offers substantial flexibility for crafting intricate chord progressions and varying patterns.",
         "sha256": "7c8e7c60cc1784df1fed43972072b28e250b5e5b6770f37e629e3c18253ba4ba"
       }
@@ -3629,8 +3655,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 844,
-        "end_line": 846,
+        "line": 848,
+        "end_line": 850,
         "text": "#### Transposition\n\nAs well as setting a transposition value per scale, you can transpose your entire Song Sequence using the global quantiser transposition fader, either globally or by step using [transposition locks](#transposition-locks). Global and trig transposition applies on top of the currently selected scale's transposition value.",
         "sha256": "8296872523f5cb096325711c4f51130be618b433d13b3adc6962057ccf729c15"
       }
@@ -3646,7 +3672,7 @@
       "cases": [
         "M-TIME-005"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
       "oracles": [
         "Distinct saved musical states and exact indicator classes; source preserved; target fully overwritten."
@@ -3657,8 +3683,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 857,
-        "end_line": 879,
+        "line": 861,
+        "end_line": 883,
         "text": "### Song Editor\n\nThe Song Editor features a grid layout consisting of 90 slots. Each slot represents a unique opportunity to blend patterns, channels, rhythms, scales, and other elements into your compositions, making each Song Sequence a distinct musical creation.\n\n<p>\n  <svg width=\"25\" height=\"25\" viewBox=\"0 0 500 500\" style=\"vertical-align: middle;\">\n    <use href=\"#video-icon\" />\n  </svg>\n  <a href=\"https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2972s\">Song editor demo</a>\n</p>\n\n\n#### Button Indicators\n\n* **Dim buttons**: These are your blank slates, ready for your creative input.\n* **Mid-glow buttons**: These are filled with your existing rhythms and patterns.\n* **Brightly lit buttons**: This button highlights the Song Sequence currently in play.\n\n#### Interacting with Slots\n\n* **Selecting a Pattern**: Simply press the button corresponding to the pattern.\n* **Copying Slots**: To copy one slot to another, press and hold the source slot, then the destination slot. Note: This action will overwrite the content in the target slot.\n* **Erasing a Slot**: To clear a slot, copy an empty slot over it. Remember, there is no undo option, so proceed with caution.",
         "sha256": "2263c2d3439ee9e275af1ca835407532051f3fc3acb4560319dbc9fe1cb3756c"
       }
@@ -3672,9 +3698,10 @@
       "cases": [
         "M-TIME-005",
         "M-TIME-006",
-        "M-TIME-007"
+        "M-TIME-007",
+        "M-TIME-009"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
       "oracles": [
         "Exact sequence/repeat timeline and transition LEDs; no duplicate/missing onset."
@@ -3685,8 +3712,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 883,
-        "end_line": 885,
+        "line": 887,
+        "end_line": 889,
         "text": "#### Song Mode Operations\n\nWhen \"song mode\" is activated, the sequencer automatically progresses to the next slot after a pattern has played its designated number of repetitions. If it encounters an empty slot, it loops back to the first filled slot within that sequence, facilitating smooth transitions between unique pattern groups. If you wish to change slots during playback, the sequencer will queue your command and execute it after the current sequence completes.",
         "sha256": "66017401c0094259a689883da357c27ec0fab2aa592ad3dd72e4d52fff55778c"
       }
@@ -3709,8 +3736,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 887,
-        "end_line": 892,
+        "line": 891,
+        "end_line": 896,
         "text": "#### Adjusting Song Sequence Length\n\nThe song sequence's length can be adjusted using the fader located at the lower left of the song editor page.\n\n* The global length can be set anywhere from 1 step to 64 step, offering a wide range of possibilities.\n* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length.",
         "sha256": "2b85f043c8fbff472b8df49b6ea27bcb3b21079499eca6620383ae67de6355a1"
       }
@@ -3733,8 +3760,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 903,
-        "end_line": 906,
+        "line": 907,
+        "end_line": 910,
         "text": "#### Navigating the Norns Display\n\n**Page 1**: Here, you can set the number of repetitions for each Song Sequence. This setting dictates how sequences transition in song mode. When song mode is off, you manually control slot activation, allowing you to dictate the flow of your song.\n**Page 2**: Set the tempo to match the mood you want, from a soothing lullaby to a fast-paced track.",
         "sha256": "b20efe83735cbea8b9ebe6c1993cd08384f71a314333dfffaa130847c30ea919"
       }
@@ -3757,8 +3784,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 914,
-        "end_line": 918,
+        "line": 918,
+        "end_line": 921,
         "text": "Device parameters can be locked on a per-step basis. To set a param trig lock:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Adjust the param value that you want to lock to this step.\n",
         "sha256": "1a47cd406f1295e83017a7ddb78d1bb3482cf5e1b1fad771bdd3eca61c373842"
       }
@@ -3781,8 +3808,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 919,
-        "end_line": 928,
+        "line": 923,
+        "end_line": 932,
         "text": "To clear parameter trig locks from a specific step:\n\n1. On the channel editor, navigate to the trig lock page on the Norns screen.\n2. Hold the step with trig locks and press K2.\n\nTo clear all parameter trig locks from a channel:\n\n1. Ensure you are on the trig lock page on your norns device.\n2. Hold shift (K1).\n3. Press K2.",
         "sha256": "fd97937e7da7d064b5c01dc094fcfbea7a70100a2b4f2563bccf64396a17a103"
       }
@@ -3805,8 +3832,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 937,
-        "end_line": 939,
+        "line": 941,
+        "end_line": 943,
         "text": "#### Param Slides\n\nTo enable parameter slides for a trig parameter, select the desired parameter and press K3. This will activate parameter slides for every trig lock of this type on the channel. While enabled, locks will smoothly transition between each other. Note that transitions do not transition across song patterns but can wrap within the same pattern if the Param Slide Wrap setting is enabled. Use this sparingly as it is resource intensive",
         "sha256": "1b63c84e70a584a59d2ff32e1fabc74be327443306ea98d29097fe632c4476cd"
       }
@@ -3829,8 +3856,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 941,
-        "end_line": 946,
+        "line": 945,
+        "end_line": 950,
         "text": "To lock a parameter slide to a specific step:\n\n- Hold down the desired step.\n- Press K3 on the chosen trig parameter.\n\nThis locks the parameter slide to the selected step, causing it to transition smoothly to the next lock. All other locks remain unaffected.",
         "sha256": "6670f373eecdd0e063c328afefdce60919a6a3bb5294553c9fdbb8520dc4e65f"
       }
@@ -3853,8 +3880,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 955,
-        "end_line": 971,
+        "line": 959,
+        "end_line": 975,
         "text": "### Mask Locks\n\nMasks can also be locked on a per-step basis. To set a mask trig lock:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Adjust the mask value that you want to lock to this step.\n\nTo clear mask locks from a specific step:\n\n1. On the channel editor, navigate to the Masks page on the Norns screen..\n2. Hold the step with mask locks and press K2.\n\nTo clear all mask trig locks from a channel:\n\n1. Ensure you are on the Mask page on your norns device.\n2. Hold shift (K1).\n3. Press K2.",
         "sha256": "ebc7f8eb89c662f45fc3cc58eced9516c5ac09dfd8985cc57ad82575fd9ba436"
       }
@@ -3879,8 +3906,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 980,
-        "end_line": 990,
+        "line": 984,
+        "end_line": 994,
         "text": "### Scale Locks\n\nScales can be set on a per-step basis. They can be set globally across all channels on the Scale Editor, or per channel oin the Channel Editor. Scale locks set on steps in the Channel Editor take precedence over global scale locks. With Scales Lock Until Pattern End on, a channel scale lock persists until that channel wraps to its start, unless another channel scale lock replaces it. With the option off, it persists until the next active trig that passes its probability check; a probability-rejected trig does not clear it. A scale lock on that next trig applies in place of the old lock. Global scale-track locks are independent of this option: they persist until another global lock replaces them or the global scale track wraps. To set a scale lock:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Press the desired scale slot.\n\nTo clear a grid trig lock:\n\n1. Hold the step with the locked value.\n2. Press K2.",
         "sha256": "a0c4ad497d2f0f68607339a8a4ab0fd98951f2f7ebf2778a38c0e6c66f5410c6"
       }
@@ -3903,8 +3930,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 999,
-        "end_line": 1011,
+        "line": 1003,
+        "end_line": 1015,
         "text": "### Transposition Locks\n\nThe transposition of your song can be set on a per-step basis from the scale page accessed in the channel editor. Transposition locks are applies on top of scale transposition values. \n\nTo set a transposition lock:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Press the desired transposition value.\n\nTo clear a transposition lock:\n\n1. Hold the step with the locked value.\n2. Press K2.",
         "sha256": "7dc542663f16aa2fb01bf3302d3d8584562243ab9f1664daa2337b098f1c2c08"
       }
@@ -3919,7 +3946,7 @@
         "M-OCT-002",
         "M-OCT-003"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "All octave options; pitch boundaries; strum pending notes; transpose/scale pairs. M-OCT-001/002 validate five global values and all25 global/step pairs, zero-vs-absent locks and clearing in both modes. Channels, pitch bounds and playing edits remain required. M-OCT-003 validates all64 octave locks against both global extremes and channel-wide clear in both modes. Other channels, pitch bounds, pending voices and mixed-lock interactions remain required.",
       "oracles": [
         "Exact12-semitone changes per intended octave and clear fallback; lock indicators."
@@ -3930,8 +3957,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1013,
-        "end_line": 1023,
+        "line": 1017,
+        "end_line": 1027,
         "text": "### Octave Locks\n\nA step's current octave can be altered using trig locks. To lock a step's octave:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Press the desired octave using the octave buttons at the bottom of the channel page.\n\nTo clear an octave trig lock:\n\n1. Hold the step with the locked value.\n2. Press K2.",
         "sha256": "4a43dffadb516593801b99369becd23575cdb75ec0be0781f1fdf9d9d11ba280"
       }
@@ -3954,8 +3981,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1027,
-        "end_line": 1031,
+        "line": 1031,
+        "end_line": 1035,
         "text": "You can save and load your creations using the param menu. When you choose to save, you'll be prompted to enter a name for your creation. Remember to use a descriptive name so you can easily find and manage your projects.\n\nThe sequencer features an autosave function when it is not actively playing. If left idle, it will automatically save your work under the name \"autosave\" after 60 seconds. When you start Mosaic again, it automatically loads this most recent autosave.\n\nTo ensure the longevity of your work, it's important to save your creations into named slots. This prevents them from being overwritten by the autosave feature, allowing you to keep your songs indefinitely.",
         "sha256": "a5d6e0cf053079e52e29b20c5a7283549b71464d2b8ab4c817a08b7ad82732f9"
       }
@@ -3978,8 +4005,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1029,
-        "end_line": 1029,
+        "line": 1033,
+        "end_line": 1033,
         "text": "The sequencer features an autosave function when it is not actively playing. If left idle, it will automatically save your work under the name \"autosave\" after 60 seconds. When you start Mosaic again, it automatically loads this most recent autosave.",
         "sha256": "9d7c5a2de485a50197dd9c28ee8786c3ca05c8a6abf1d85381c656a5761f7c00"
       }
@@ -4002,8 +4029,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1039,
-        "end_line": 1041,
+        "line": 1043,
+        "end_line": 1045,
         "text": "##### Shift press stop\n\nWhen enabled, the play/stop button will only stop with a long press or when shift (K1) is held. This feature is intended to prevent accidental stops of the sequencer, especially during live performances.",
         "sha256": "33edff7a6e1836dc0d8a9ca93935cb2a3d0107e24b26752f8e6877ab93c20ebc"
       }
@@ -4017,7 +4044,7 @@
       "cases": [
         "M-TIME-003"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "Fresh boot/default; enable/disable before/on/after transition; explicit selection while off. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required.",
       "oracles": [
         "Exact repeated vs advancing sequence table and page indicators."
@@ -4028,8 +4055,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1043,
-        "end_line": 1045,
+        "line": 1047,
+        "end_line": 1049,
         "text": "##### Song Mode\n\n\"Song mode\" is on by default. When enabled, the song editor will progress through sequences as dictated by the options set on the song editor page. When off, song sequences will only progress with manual intervention.",
         "sha256": "c0b9a35853d9bc29a8fcecf06880f5d50defde304bd1827ce77132f716062230"
       }
@@ -4042,9 +4069,11 @@
       "statement": "Sequence-change reset defaults on and resets all channels; off retains independent polyrhythms.",
       "cases": [
         "M-TIME-003",
-        "M-TIME-005"
+        "M-TIME-005",
+        "M-TIME-008",
+        "M-TIME-009"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "Every channel length/start; coprime divisions; pending notes; scale track. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
       "oracles": [
         "Independent phase table across song transition; no duplicate/skipped onsets."
@@ -4055,8 +4084,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1047,
-        "end_line": 1049,
+        "line": 1051,
+        "end_line": 1053,
         "text": "##### Reset at Song Editor Pattern Change\n\nThe \"Reset at Song Sequence Change\" option, which is turned on by default, ensures that the sequencer resets all channels when transitioning from one song editor pattern to the next. This helps maintain rhythmic consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.",
         "sha256": "a5498ec59345036bf43d1dd57ea499ab037a7700a2f874ed3ec184452acac4bf"
       }
@@ -4070,9 +4099,15 @@
       "cases": [
         "M-TIME-003",
         "M-TIME-004",
-        "M-TIME-005"
+        "M-TIME-005",
+        "M-TIME-008",
+        "M-TIME-009",
+        "M-TIME-010",
+        "M-TIME-011",
+        "M-TIME-012",
+        "M-ARP-004"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "Both sequence/reset option combinations; nonzero starts; wrapped lengths; mute and recording. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
       "oracles": [
         "Independent per-channel phase table and complete MIDI over repeated songs."
@@ -4083,8 +4118,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1051,
-        "end_line": 1053,
+        "line": 1055,
+        "end_line": 1057,
         "text": "##### Reset at Pattern Repeat\n\n\"Reset at Pattern Repeat\" is set to off by default. When enabled, it resets all channels at the end of a song sequence when repeating the same song editor pattern. This ensures all channels with a custom length will reset back to that channel's starting step at every start of the pattern. Disabling this option allows for evolving polyrhythms.",
         "sha256": "927e6c965e5cba9a9c8de4918eceffd93fc7ea3842b56e66acb2ae968a5de3f0"
       }
@@ -4107,8 +4142,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1055,
-        "end_line": 1057,
+        "line": 1059,
+        "end_line": 1061,
         "text": "##### Parameter Slides Wrap\n\nBy default, \"Param Slides Wrap\" is turned off. When enabled, and the current song pattern is set to repeat, trig locks will smoothly transition beyond step 64, wrapping back to the next trig lock earlier in the sequence.",
         "sha256": "32a06abe526a65d4ac831ad63075d05807e738c3124c98acecc0d18acad6a58c"
       }
@@ -4132,8 +4167,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1059,
-        "end_line": 1065,
+        "line": 1063,
+        "end_line": 1069,
         "text": "##### Elektron Program Changes\n\n\"Elektron program changes\" defaults off. By enabling this setting, your Elektron devices will automatically adjust their patterns to align with the corresponding song pattern in Mosaic. For instance, selecting song pattern one on Mosaic will trigger pattern one on your Elektron device, ensuring that both systems are perfectly in sync. This feature allows for a unified performance across your equipment, with each song pattern change on Mosaic mirrored by your Elektron devices.\n\n##### Elektron Program Change Channel\n\nThe \"Elektron program change channel\" setting determines which MIDI channel to send program change messages to. The default is 10 - same as on most Elektron devices.",
         "sha256": "3a8311058ded7ff60689a65aa69874eff3f4a7a816ae5df8ef1cd0ee0743a0b9"
       }
@@ -4156,8 +4191,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1069,
-        "end_line": 1071,
+        "line": 1073,
+        "end_line": 1075,
         "text": "##### Trigless Locks\n\n\"Trigless locks\" is enabled by default, meaning locks on steps with no active trig are still honored.",
         "sha256": "67a6b877df1635c634038f780bcfca537099dfd3a98251cd7fc484e953193645"
       }
@@ -4180,8 +4215,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1075,
-        "end_line": 1077,
+        "line": 1079,
+        "end_line": 1081,
         "text": "##### Snap Note Masks to Scale\n\n\"Snap Note Masks to Scale\" is on by default. With this setting enabled, note masks snap to the currently selected scale, but are not altered by scale degree or rotation adjustments.",
         "sha256": "0109d37092ca78ce036dff3d76318d19aad4c11f816ca8b5a3626a39bb07ed05"
       }
@@ -4204,8 +4239,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1079,
-        "end_line": 1081,
+        "line": 1083,
+        "end_line": 1085,
         "text": "##### Quantise Note Masks\n\n\"Quantise Note Masks\" is off by default. With this setting enabled, all note masks are fully quantised to the currently selected scale and are altered by scale degree and transposition adjustments. Overrides the Snap Note Mask to Scale setting.",
         "sha256": "ab82d58c2108bd52c694263d17421cdcbe4e819633b487e621da9c4b306c936c"
       }
@@ -4230,8 +4265,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1083,
-        "end_line": 1085,
+        "line": 1087,
+        "end_line": 1089,
         "text": "##### Scales Lock Until Pattern End\n\nThe \"Scales lock until ptn end\" option is on by default and controls channel scale locks. When on, a lock persists until the channel wraps to its start, unless another channel scale lock replaces it. When off, the next active trig that passes its probability check clears the previous lock; probability-rejected trigs do not clear it. A new lock on that trig takes effect normally. Global scale-track locks do not use this option: they persist until replacement or global-track wrap.",
         "sha256": "4036ae1f73bd3def59bddb88c5dd54e2bf44c844dbbcdad6ad4fc595ecc8b7f6"
       }
@@ -4254,8 +4289,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1087,
-        "end_line": 1089,
+        "line": 1091,
+        "end_line": 1093,
         "text": "##### Lock All to Pentatonic\n\n\"Lock all to pent.\" is off by default. Enabling this option forces all notes to adhere to the pentatonic version of the selected scale, useful for creating highly generative compositions.",
         "sha256": "fc46fcbe7d0e6addc8b39222c1f7680f9096e41dd48f7d3808b259f5c781ebec"
       }
@@ -4278,8 +4313,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1091,
-        "end_line": 1093,
+        "line": 1095,
+        "end_line": 1097,
         "text": "##### Lock Random to Pentatonic\n\n\"Lock random to pent.\" is on by default. It ensures that notes altered by random trig locks adhere to the pentatonic version of the selected scale, making the random notes harmonically more pleasant.",
         "sha256": "a59c67cdbd8cfa4b611be541390ebdfbd054150063e303b4258456cc3592d82b"
       }
@@ -4302,8 +4337,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1095,
-        "end_line": 1097,
+        "line": 1099,
+        "end_line": 1101,
         "text": "##### Lock Merged to Pentatonic\n\nSimilarly, \"Lock merged to pent.\" is on by default and ensures notes modified by merge modes stick to the pentatonic version of the currently selected scale.",
         "sha256": "8cd7b8a7cf07419e819f1ab5fdc8025561b9dd26e144c150a166fdb385cc56ef"
       }
@@ -4326,8 +4361,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1101,
-        "end_line": 1103,
+        "line": 1105,
+        "end_line": 1107,
         "text": "##### Map Scale to White Keys\n\n\"Map scale to white keys\" is off by default. When enabled, the selected scale is mapped to the white keys of a MIDI keyboard, starting at the C key. The mapping will automatically change when the currently selected scale changes.",
         "sha256": "f0bf0d0a1e9317d99144f5618dd197556107b1b59ee985880470614a35e6b5c2"
       }
@@ -4350,8 +4385,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1105,
-        "end_line": 1107,
+        "line": 1109,
+        "end_line": 1111,
         "text": "##### Honor Scale Rotations\n\n\"Honor scale rotations\" is off by default. Enabling this setting will allow the currently selected scale's rotation setting to affect the MIDI keyboard mapping.",
         "sha256": "1b0609c17584ef476d21285530cd583419191186607e48787d3d7f77759aa0ad"
       }
@@ -4374,8 +4409,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1109,
-        "end_line": 1111,
+        "line": 1113,
+        "end_line": 1115,
         "text": "##### Honor Scale Degree\n\n\"Honor scale degree\" is off by default. Enabling this setting means the current scale's degree option will affect the MIDI keyboard mapping.",
         "sha256": "33285f6a49f1837fda545bd51344e3fa9893aa0c762e7c7235f308cd293c4df7"
       }
@@ -4398,8 +4433,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1113,
-        "end_line": 1115,
+        "line": 1117,
+        "end_line": 1119,
         "text": "##### Honour Scale Transpose\n\n\"Honour scale transpose\" is off by default. Enabling this setting means the current scale's transpose option will affect the MIDI keyboard mapping.",
         "sha256": "50614026e1d0505842e53920480edbec62d3dd6f4ce8427f58ff5a12a4fae308"
       }
@@ -4422,8 +4457,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1117,
-        "end_line": 1119,
+        "line": 1121,
+        "end_line": 1123,
         "text": "### Sinfonion Connect\n\nYou can sync up your Eurorack Sinfonion module to Mosaic using a DIY device called [norns2sinfonion](https://github.com/subvertnormality/norns2sinfonion).",
         "sha256": "5740f8e9b50e8fdc88b29c6fe3f36439409561e5f8c45923e0206c0c6e6ada31"
       }
@@ -4446,8 +4481,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1121,
-        "end_line": 1123,
+        "line": 1125,
+        "end_line": 1127,
         "text": "### LFOs and Modulation\n\n_Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit](https://github.com/sixolet/toolkit). You can add LFOs and other rhythmic modulators to any device parameter.",
         "sha256": "caa8eac85111e25f4fd9708f88d2261a558d3c3dc4089b649acc1a2af0f2e6ea"
       }
@@ -4470,8 +4505,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1126,
-        "end_line": 1136,
+        "line": 1130,
+        "end_line": 1140,
         "text": "## Performance Management\n\n_Mosaic_ gives you a lot of control, but it can also be resource intensive. Pushing the sequencer to its limits can cause slow down and lead to an instable external clock. Performance should be fine under normal usage, but more enhancements are planned for future releases. Here are some tips for managing performance:\n\n - The more channels you use, the greater care you need to take when using high clock rates, trig locks, param slides, and n.b. devices.\n - High clock rates and multipliers place a greater strain on the sequencer.\n - Global param slides are resource intensive and should be used sparingly. Consider using step param slides instead. Generally take care to limit the number of param slides in use.\n - Recording with trigless locks enabled places a greater strain on the sequencer. Disable if you don't need that level of modulation granularity.\n - N.b. devices should be be used sparingly.\n\nDuring testing of v1.1.1, we discovered that external sync became unreliable under the following conditions: 1 n.b. device in use (doubledecker), trigless parameters were in use at 110 BPM, with most steps locked for all 10 trig parameters across the four channels, with 40 of those parameters utilising global param sliding. Different combinations of these conditions may yield different results. ",
         "sha256": "466301227adb85d90c1fda6127c5177ddd9a6dcf162e8b963d23723bbbb8e82e"
       }
@@ -4486,7 +4521,7 @@
         "M-UI-001",
         "M-UI-002"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "Stopped/playing; repeated press/release; protected stop; pending notes; external clock source.",
       "oracles": [
         "Transport LED, exact first/last onset, silence and balanced note-offs."
@@ -4523,7 +4558,7 @@
         "M-REC-030",
         "M-REC-031"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels.",
       "oracles": [
         "Record LED and recorded playback present only for intended armed inputs."
@@ -4573,7 +4608,7 @@
         "M-OCT-002",
         "M-OCT-003"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "All octave positions, repeat center, explicit step octave lock override and clearing, pitch bounds. M-OCT-001/002 validate five global values and all25 global/step pairs, zero-vs-absent locks and clearing in both modes. Channels, pitch bounds and playing edits remain required. M-OCT-003 validates all64 octave locks against both global extremes and channel-wide clear in both modes. Other channels, pitch bounds, pending voices and mixed-lock interactions remain required.",
       "oracles": [
         "Exact semitone offsets and octave LED; unaffected channels and fallback after off."
@@ -4644,7 +4679,7 @@
       "cases": [
         "M-OCT-003"
       ],
-      "status": "unimplemented",
+      "status": "in_progress",
       "domain": "Each page and lock type; simultaneous mask/parameter/scale/octave/transpose locks; no step vs held step. M-OCT-003 validates all64 octave locks against both global extremes and channel-wide clear in both modes. Other channels, pitch bounds, pending voices and mixed-lock interactions remain required.",
       "oracles": [
         "Only intended indicators/output changes; unrelated locks survive and retain exact musical effect."
@@ -4683,7 +4718,8 @@
         "path": "README.md",
         "line": 193,
         "text": "You can input notes, velocity, and chords using a MIDI keyboard. You can do this live, using live record, or by holding down a step and pressing the keys on your keyboard. When setting on a per step basis, the length of these inputs requires manual selection. To do this, ensure you have your desired channel selected on _Mosaic_. Then, while holding the desired step, press the corresponding key on your keyboard. If you are on the mask page of your Norns, the values you input will display as locks.",
-        "sha256": "0b8ca244164ce39ee4522c0536a03d480b30991910ce4bd82064b17a26f59f8a"
+        "sha256": "0b8ca244164ce39ee4522c0536a03d480b30991910ce4bd82064b17a26f59f8a",
+        "end_line": 193
       }
     },
     {
@@ -4741,7 +4777,8 @@
         "path": "README.md",
         "line": 239,
         "text": "When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step: the step active when Mosaic processes the note-on, rather than the nearest step. An incoming MIDI clock pulse and a sequencer step transition are separate events; a note processed before the transition still belongs to the preceding active step. A recorded chord has one shared note length, measured from the first key press to the final key release and quantised to the nearest supported note length. This applies even when the chord keys are pressed or released at different times. Disarming recording prevents new notes from being recorded. Notes that began while recording was armed are kept, and their full note lengths are measured and committed when you release them, even if recording has since been disarmed.",
-        "sha256": "adefdf90e8b421c63b54fc11e95e6003c960ed0ea1691d9be6f307b2b1f8e6cb"
+        "sha256": "adefdf90e8b421c63b54fc11e95e6003c960ed0ea1691d9be6f307b2b1f8e6cb",
+        "end_line": 239
       },
       "open_decision": "SEM-008 resolved and boundary oracle validated in both modes; remaining recording domains still partial."
     },
@@ -4765,7 +4802,8 @@
         "path": "README.md",
         "line": 241,
         "text": "Changes to trig parameters are also recorded on the active channel. Recording begins the first time a trig parameter is modified. During recording, all parameter values are saved as trig locks, overwriting existing locks until the end of the current song pattern. Recording resumes automatically when a trig parameter is adjusted again using the encoder.",
-        "sha256": "22ee9c5b4395ec2da6131c286e357976450cffdd6c3e332ca143c4459ce948d3"
+        "sha256": "22ee9c5b4395ec2da6131c286e357976450cffdd6c3e332ca143c4459ce948d3",
+        "end_line": 241
       }
     },
     {
@@ -4788,7 +4826,8 @@
         "path": "README.md",
         "line": 243,
         "text": "By default, trig locks are recorded only on active steps. However, if the Trigless Param setting is enabled, parameter values will be recorded on every step.",
-        "sha256": "3f298103946e1be6f5540e98189535d9420621f70e437cffbeb2bba2749cf1a9"
+        "sha256": "3f298103946e1be6f5540e98189535d9420621f70e437cffbeb2bba2749cf1a9",
+        "end_line": 243
       }
     },
     {
@@ -4811,7 +4850,8 @@
         "path": "README.md",
         "line": 199,
         "text": "_Mosaic_ provides comprehensive support for MIDI mapping of channel controls through the Norns MIDI Map function. This allows you to assign MIDI controls to various parameters, enabling real-time control via compatible MIDI hardware. Your MIDI device must support relative (binary offset). ",
-        "sha256": "df28357874db26f6f4f29928423bd5b3a5d34f0acca716487c58a55046fd2af8"
+        "sha256": "df28357874db26f6f4f29928423bd5b3a5d34f0acca716487c58a55046fd2af8",
+        "end_line": 199
       }
     },
     {
@@ -4834,7 +4874,8 @@
         "path": "README.md",
         "line": 203,
         "text": "Map \"selected channel parameters\" when you want to control a specific parameter of the currently selected channel. Map \"channel parameters\" when you want to control a parameter of a specific channel regardless of which channel is selected.",
-        "sha256": "4e4d9e6e460e6d63e578abca1e82217758228801ba2015cd70b51707fd228168"
+        "sha256": "4e4d9e6e460e6d63e578abca1e82217758228801ba2015cd70b51707fd228168",
+        "end_line": 203
       }
     },
     {
@@ -4857,7 +4898,8 @@
         "path": "README.md",
         "line": 207,
         "text": "Input (In) range: 1 to 2",
-        "sha256": "14d4cc4b81b65dc2425f07e4ec71d8966eeb803c3b38f33f6c7203cfdc7de8d8"
+        "sha256": "14d4cc4b81b65dc2425f07e4ec71d8966eeb803c3b38f33f6c7203cfdc7de8d8",
+        "end_line": 207
       }
     },
     {

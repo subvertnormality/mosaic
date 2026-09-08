@@ -62,7 +62,7 @@ local mask_selectors = {
   trig = value_selector:new(0 + (1 - 1) % 5 * 25, 18 + math.floor((1 - 1) / 5) * 22, "Trig", -1, 1),
   note = value_selector:new(0 + (2 - 1) % 5 * 25, 18 + math.floor((2 - 1) / 5) * 22, "Note", -1, 127),
   velocity = value_selector:new(0 + (3 - 1) % 5 * 25, 18 + math.floor((3 - 1) / 5) * 22, "Vel", -1, 127),
-  length = value_selector:new(0 + (4 - 1) % 5 * 25, 18 + math.floor((4 - 1) / 5) * 22, "Len", -1, 92),
+  length = value_selector:new(0 + (4 - 1) % 5 * 25, 18 + math.floor((4 - 1) / 5) * 22, "Len", 0, #divisions.note_divisions),
   chords = {
     value_selector:new(0 + (6 - 1) % 5 * 25, 18 + math.floor((6 - 1) / 5) * 22, "Chd1", -14, 14),
     value_selector:new(0 + (7 - 1) % 5 * 25, 18 + math.floor((7 - 1) / 5) * 22, "Chd2", -14, 14),

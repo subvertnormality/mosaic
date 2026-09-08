@@ -1,0 +1,159 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -571,7 +571,7 @@
+   end
+ end
+ 
+-function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration, length, func)
++function m_clock.new_arp_sprocket(c, division, chord_spread, chord_acceleration, length, func, release_ids)
+   if division == 0 or division == nil then
+     return
+   end
+@@ -589,6 +589,28 @@
+   local arp
+   local runs = 1
+   local acceleration_accumulator = 0
++  release_ids = release_ids or {}
++
++  local function finish_arp()
++    local finished = arp
++    if finished then finished:destroy();arp = nil end
++    -- A replaced arp may still own sounding tails. Its old gate must never
++    -- release notes or cancel future work belonging to the replacement.
++    local parent = m_clock["channel_" .. c .. "_clock"]
++    for i = #release_ids, 1, -1 do
++      local id = release_ids[i]
++      release_ids[i] = nil
++      local pending = parent.delayed_actions[id]
++      if pending then
++        parent.delayed_actions[id] = nil
++        parent:run_pending_action(pending)
++        if parent.cleanup_delayed_action then parent.cleanup_delayed_action(id) end
++      end
++    end
++    for i = #arp_sprockets[c], 1, -1 do
++      if arp_sprockets[c][i] == finished then table.remove(arp_sprockets[c], i) end
++    end
++  end
+ 
+   local sprocket_action = function(div)
+     -- The parent order-2 channel has already consumed this pulse. Deferred
+@@ -598,28 +620,7 @@
+     func(div, onset_offset)
+ 
+     -- Check if the arp should stop
+-    if length == 0 then
+-      if arp then
+-        arp:destroy()
+-        arp = nil
+-      end
+-
+-      -- Execute pending note-off sprockets
+-      if execute_at_note_end_ids[c] then
+-        execute_ids(c, execute_at_note_end_ids[c])
+-      end
+-
+-      -- Clean up the sprocket from arp_sprockets[c]
+-      for i = #arp_sprockets[c], 1, -1 do
+-        if arp_sprockets[c][i] == arp then
+-          table.remove(arp_sprockets[c], i)
+-          break
+-        end
+-      end
+-
+-      -- Kill any remaining arp delay sprockets
+-      m_clock.destroy_at_note_end_ids(c)
+-    end
++    if length == 0 then finish_arp() end
+   end
+ 
+   local shuffle_values = get_shuffle_values(channel)
+@@ -643,7 +644,6 @@
+           arp:destroy()
+           arp = nil
+         end
+-        m_clock.destroy_at_note_end_ids(c)
+       else
+         arp:set_division(div * m_clock["channel_" .. c .. "_clock"].division)
+       end
+@@ -675,21 +675,7 @@
+   acceleration_accumulator = acceleration_accumulator + chord_spread
+ 
+   -- Schedule the arp to stop after 'length'
+-  m_clock.delay_action(c, length, "must_execute", function()
+-
+-    if arp then
+-      arp:destroy()
+-      arp = nil
+-    end
+-
+-    -- Execute pending note-off sprockets
+-    if execute_at_note_end_ids[c] then
+-      execute_ids(c, execute_at_note_end_ids[c])
+-    end
+-
+-    -- Kill any remaining arp delay sprockets
+-    m_clock.destroy_at_note_end_ids(c)
+-  end)
++  m_clock.delay_action(c, length, "must_execute", finish_arp)
+ 
+   table.insert(arp_sprockets[c], arp)
+ end
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -452,7 +452,7 @@
+   
+   note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
+ 
+-  m_clock.delay_action(c, division + (onset_offset or 0), action_flag, function()
++  return m_clock.delay_action(c, division + (onset_offset or 0), action_flag, function()
+     note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
+   end, true) -- Due releases precede the next onset; strum/scale actions do not.
+ 
+@@ -465,7 +465,7 @@
+ 
+ -- Redefine play_arp_note to use the helper function
+ local function play_arp_note(note, note_container, velocity, division, note_on_func, onset_offset)
+-  play_note_internal(note, note_container, velocity, division, note_on_func, "execute_at_note_end", onset_offset)
++  return play_note_internal(note, note_container, velocity, division, note_on_func, "execute_at_note_end", onset_offset)
+ end
+ 
+ local function get_chord_number(i, total_notes, chord_strum_pattern)
+@@ -489,6 +489,8 @@
+ local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_func, process_func)
+   local c = note_container.channel
+   local channel = program.get_channel(program.get().selected_song_pattern, c)
++
++  local release_ids = {}
+ 
+   local note_dashboard_values = {}
+   note_dashboard_values.chords = {}
+@@ -541,7 +543,8 @@
+         channel.step_scale_number
+       )
+ 
+-      play_arp_note(note, note_container, note_container.velocity, arp_division, note_on_func)
++      local release_id = play_arp_note(note, note_container, note_container.velocity, arp_division, note_on_func)
++      if release_id then table.insert(release_ids, release_id) end
+       note_dashboard_values.note = note
+       note_dashboard_values.velocity = note_container.velocity
+       note_dashboard_values.length = arp_division
+@@ -607,7 +610,8 @@
+         note_to_play.transpose,
+         channel.step_scale_number
+       )
+-      play_arp_note(note, note_container, velocity, arp_division, note_on_func, onset_offset)
++      local release_id = play_arp_note(note, note_container, velocity, arp_division, note_on_func, onset_offset)
++      if release_id then table.insert(release_ids, release_id) end
+       table.insert(note_dashboard_values.chords, note)
+     end
+ 
+@@ -622,7 +626,7 @@
+     if c == program.get().selected_channel then
+       channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
+     end
+-  end)
++  end, release_ids)
+ 
+ end
+ 

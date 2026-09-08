@@ -961,3 +961,55 @@ under unchanged effective rates. Native reset traces expose a1.5s note extended
 to1.667s; this remains a separate confirmed defect. Prototype work is unapplied.
 Actual rate changes, strums, arps, overlapping pitches and stop need their scoped
 regressions. Neither these candidates nor the whole delivery are declared done.
+
+## Pending timing and arpeggio validation in progress
+
+Candidate0029 preserves pending timing across reset, including callback-created
+children and cancellation cleanup found by Codex review. Native fractional,
+two-step and128-step releases, transition/repeat resets and strums pass in both
+clock modes. The maximum-length fixture spans18 resets. Candidate0030 fixes a
+native length-selector crash beyond the89-entry division table; both modes pass.
+These are scoped results, not complete feature-domain acceptance.
+
+Codex decision01a07f14-57cb-7cb1-9f93-07c02f229e92 rejects the new test's guessed
+nearest-rounding convention. Its replacement checks3840 exact reset invariants,
+960 independently bounded gates and253 full rational windows, including every
+denominator phase and length18/128. No Mosaic rounding policy was changed.
+The separate real-time metric amendment is approved in principle but remains
+unimplemented until independently expected deadlines and transport origin are
+established. Historical timing failures are retained; C12 remains required.
+
+Native arpeggio tests reproduced an early first interval, nearly immediate
+off-beat release and old-generation termination cutting replacement notes.
+Candidates0031/0032/0033 isolate those corrections. Basic, fractional final-gate
+and replacement cases pass controlled and real time, and strum real-time still
+passes. All474 existing units pass. A96-case actual scheduler cadence matrix
+passes; a broader48-case release probe exposes three one-pulse5/6 rounding
+errors, which are still open. Focused Codex review and reset/tail edges remain.
+
+WSL native sessions now use a detached emulator worktree on the Linux filesystem,
+at the same446672f revision, avoiding Windows-mounted hot journals. This resolves
+the diagnosed setup path for the pending-note test; it neither establishes the
+cause of earlier jitter nor counts as native-Linux portability acceptance.
+
+## Arp boundary findings resolved; broader campaign continues
+
+The final ten-case controlled package passes: five arp cases plus reset,
+transition, fractional/two-step/128-step releases and strum. Latest-source
+real-time reset overlap and strum also pass. All474 units pass. Thirteen focused
+contract packages pass and two counterfactual source snapshots fail as intended;
+24 additional exact positive/negative swing cadence cases pass.
+
+Codex follow-up01a07f42-e03d-7ab3-b2cb-d9425be14605 confirms the wrapped-origin,
+floating residue and reentrant Stop fixes, with no new blocker reproduced in
+that scope. The earlier48-case probe's three5/6 misses are resolved by the
+expanded54-case actual-step-helper integration test; old failure evidence stays.
+Native one-pulse1/24 arps emit289 expected notes with exact release/order checks.
+Its first fixture run omitted the nanosecond-rounded final pulse; the input
+horizon now explicitly includes it by1us while retaining the2ns musical oracle.
+
+README explains the zero-spread arp interval, gate clipping, preserved tails,
+replacement and Stop, and all manual evidence anchors are reconciled. Full arp
+domains, nonzero spread/acceleration, live channel-rate changes and remaining
+manual/emulator release gates still require work. No refactor or full release
+acceptance is authorized by this partial campaign result.

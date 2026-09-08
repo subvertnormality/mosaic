@@ -76,3 +76,14 @@ No velocity behavior or test oracle changed. The preceding native run identities
 retain the pre-correction manual hash; they prove the same unchanged implementation,
 not a fresh run against the edited documentation. Full campaign acceptance remains
 pending and will bind the final manual. No coverage requirement was removed.
+
+## Arp timing and replacement (2026-09-08)
+
+Codex decision01a07f21-248b-7013-99e8-ee8dd26fe412 establishes a full initial
+zero-spread interval, individual onset-relative releases capped by the root
+gate, and generation-local replacement ownership. README now gives the concrete
+half-step/two-step example and explains preserved tails and Stop. Native tests
+cover ordinary, fractional-final-gate, replacement, reset overlap and one-pulse
+boundary cases. This does not establish complete arp coverage. Nonzero spread
+and acceleration recurrence still require a separate documented decision and
+finite-domain/interaction tests; existing implementation is preserved there.

@@ -446,15 +446,15 @@ end
 
 
 
-local function play_note_internal(note, note_container, velocity, division, note_on_func, action_flag)
+local function play_note_internal(note, note_container, velocity, division, note_on_func, action_flag, onset_offset)
   local c = note_container.channel
   local channel = program.get_channel(program.get().selected_song_pattern, c)
   
   note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
 
-  m_clock.delay_action(c, division, action_flag, function()
+  return m_clock.delay_action(c, division + (onset_offset or 0), action_flag, function()
     note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
-  end, true) -- Due releases precede the next onset; strum/scale actions do not.
+  end, true, onset_offset ~= nil) -- Off-phase arp releases always queue to the parent.
 
 end
 
@@ -464,8 +464,8 @@ local function play_note(note, note_container, velocity, division, note_on_func)
 end
 
 -- Redefine play_arp_note to use the helper function
-local function play_arp_note(note, note_container, velocity, division, note_on_func)
-  play_note_internal(note, note_container, velocity, division, note_on_func, "execute_at_note_end")
+local function play_arp_note(note, note_container, velocity, division, note_on_func, onset_offset)
+  return play_note_internal(note, note_container, velocity, division, note_on_func, "execute_at_note_end", onset_offset)
 end
 
 local function get_chord_number(i, total_notes, chord_strum_pattern)
@@ -489,6 +489,8 @@ end
 local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_func, process_func)
   local c = note_container.channel
   local channel = program.get_channel(program.get().selected_song_pattern, c)
+
+  local release_ids = {}
 
   local note_dashboard_values = {}
   note_dashboard_values.chords = {}
@@ -541,7 +543,8 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
         channel.step_scale_number
       )
 
-      play_arp_note(note, note_container, note_container.velocity, arp_division, note_on_func)
+      local release_id = play_arp_note(note, note_container, note_container.velocity, arp_division, note_on_func)
+      if release_id then table.insert(release_ids, release_id) end
       note_dashboard_values.note = note
       note_dashboard_values.velocity = note_container.velocity
       note_dashboard_values.length = arp_division
@@ -558,7 +561,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
   end
 
-  m_clock.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div)
+  m_clock.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div, onset_offset)
     
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
     local length = div
@@ -607,7 +610,8 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
         note_to_play.transpose,
         channel.step_scale_number
       )
-      play_arp_note(note, note_container, velocity, arp_division, note_on_func)
+      local release_id = play_arp_note(note, note_container, velocity, arp_division, note_on_func, onset_offset)
+      if release_id then table.insert(release_ids, release_id) end
       table.insert(note_dashboard_values.chords, note)
     end
 
@@ -622,7 +626,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     if c == program.get().selected_channel then
       channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
     end
-  end)
+  end, release_ids)
 
 end
 
