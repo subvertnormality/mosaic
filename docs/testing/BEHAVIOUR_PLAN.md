@@ -382,3 +382,7 @@ tests remove, duplicate, reorder/change or misplace events and transition interv
 These cases extend PANIC-GESTURE and NAV-PAGES. They do not complete the broader
 active/pending musical, recording, song-transition or lifecycle interaction matrix,
 or admit controlled time. Evidence is in `hotplug-validation.json`.
+
+## Audio/Crow scope amendment — emulator f301e76
+
+The user expanded the behaviour campaign to the newly integrated audio and virtual Crow functionality. [AUDIO_CROW_REFACTOR_SCOPE.md](AUDIO_CROW_REFACTOR_SCOPE.md) is the authoritative additive X00–X06 plan, with 22 initial regression families in [audio-crow-scope.json](audio-crow-scope.json). For its named supported profiles it supersedes earlier audio/n.b. DSP exclusions in this document. Existing MIDI/manual requirements remain mandatory. Audio/Crow require real-time evidence; controlled Lua time does not certify them. The broad refactor is gated on both campaigns. All new families are planned, not executed; existing emulator fixture passes do not count as current Mosaic-worktree coverage.

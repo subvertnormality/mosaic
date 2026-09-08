@@ -4970,5 +4970,15 @@
     "existing_regression_passes": 4,
     "oracle_groups": 7,
     "review": "01a08158-f66a-7f31-82f0-96988d1ea9d5"
+  },
+  "audio_crow_expansion": {
+    "status": "scope-reviewed-execution-planned",
+    "plan": "docs/testing/AUDIO_CROW_REFACTOR_SCOPE.md",
+    "ledger": "docs/testing/audio-crow-scope.json",
+    "families": 22,
+    "source_emulator_revision": "f301e7644746f699fa769b6ab7cf3bb678f3c228",
+    "refactor_admitted": false,
+    "next_action": "Review the additive scope, then X00 composed runtime/public observation profiles and X01 voice ownership/release; retain current slide obligations independently.",
+    "review": "docs/testing/reviews/audio-crow-scope-review.json"
   }
 }
