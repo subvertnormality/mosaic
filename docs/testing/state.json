@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Audit, commit and push completed chord matrix and candidate0043 dashboard checkpoint. All native/review processes terminal. Then expand remaining dashboard and navigation/manual workflows, controlled admission and emulator release. No refactor.",
+  "next_action": "Navigation D/R36transition matrix passed and evidence verified. Install artifacts/install_panic_baselines.py and run two M-PANIC baseline cases, unchanged production: suspected navigation buttons3/4 excluded and shared debounce cancels earlier MIDI ports. Preserve failures, isolate confirmed fixes and review through Codex. Full manual/emulator scope remains.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -4930,5 +4930,26 @@
     "units": 482,
     "native_candidate_passes": 24,
     "remaining": "CH-DASHBOARD remains partial: chord freshness, arp, sparse/muted cases, channel-switch freshness, successive-note timing and remaining length domain are pending. Full manual, controlled admission, real-time endurance and emulator release remain incomplete."
+  },
+  "navigation_validation": {
+    "file": "docs/testing/navigation-validation.json",
+    "pairs_per_lane": 36,
+    "lanes": [
+      "controlled-experimental",
+      "real-time"
+    ],
+    "limitations": "NAV-PAGES partial: held-input combinations and cancellation behavior remain pending. Controlled admission, full manual and emulator release remain incomplete."
+  },
+  "panic_validation": {
+    "file": "docs/testing/panic-validation.json",
+    "status": "scoped-regressions-validated",
+    "candidates": [
+      "0044",
+      "0045",
+      "0046",
+      "0047"
+    ],
+    "full_campaign_complete": false,
+    "next": "Broader panic active/delayed notes, native mid-job repeat and hot reconnect; continue remaining manual domains."
   }
 }

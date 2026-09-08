@@ -1,0 +1,23 @@
+{
+  "status": "scoped-regressions-validated",
+  "scope": "Honor documented panic holds on every non-selected navigation button.",
+  "before_sha256": "bd834edd0e27aa94cdea54a94293eb10a0aad52603f361a344cd345f5e670adb",
+  "after_sha256": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+  "patch_sha256": "a7aa1397270a12fc307600eff8c26bd8a137de1cb43cac140fd6a609ca8a2efb",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "baselines": [
+    "1e63ddf3385b45e88ffea29fde655207",
+    "13099fdf86ae490e92c941bf633d84c6"
+  ],
+  "formatting": {
+    "file": "lib/m_grid.lua",
+    "before_sha256": "d9876a02c22a435ed3f279313f89c5e39a2e28298c689e92ec4564b76e0cfc5f",
+    "after_sha256": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+    "reason": "Only strip trailing whitespace on changed line; retained native matrix records its actual earlier source hash."
+  },
+  "validation": "docs/testing/panic-validation.json",
+  "limitation": "Full panic/manual coverage and release incomplete; native runs retain exact source hashes.",
+  "patch_format_note": "Deleted baseline line must preserve its inherited trailing space for exact git apply. Verify this patch as data via exact source hashes; apply ordinary whitespace checks to all changed source."
+}

@@ -1,0 +1,16 @@
+{
+  "status": "scoped-regressions-validated",
+  "scope": "Keep independent debounce jobs per MIDI port so panic does not cancel earlier ports.",
+  "before_sha256": "93216c73d5b4c61511f31c690eb6e0af24b46f9bf46e6a72a2b69593c67aa62b",
+  "after_sha256": "cb273b539faa2a2995bacbb5424b17412d7e2d7c4b801ee552a663b15ff2af69",
+  "patch_sha256": "8c3078c850fd78b7afe9458fabbc96aa38ce03db6be4bdf5eec0b7dd43fc585b",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "baselines": [
+    "1e63ddf3385b45e88ffea29fde655207",
+    "13099fdf86ae490e92c941bf633d84c6"
+  ],
+  "validation": "docs/testing/panic-validation.json",
+  "limitation": "Full panic/manual coverage and release incomplete; native runs retain exact source hashes."
+}

@@ -1,0 +1,14 @@
+{
+  "status": "scoped-regressions-validated",
+  "scope": "Retain ownership of notes played behind an in-flight panic sweep; clear each pitch/channel only as it is swept.",
+  "before_sha256": "cb273b539faa2a2995bacbb5424b17412d7e2d7c4b801ee552a663b15ff2af69",
+  "after_sha256": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+  "patch_sha256": "df4b045118e5d8062194509e3fd88be503b86aa10e44bfb58eec47f5f7b6b29c",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "baseline_run": "84d28dda904c489aa620179c27b92265",
+  "depends_on": "0045-panic-per-port-jobs",
+  "validation": "docs/testing/panic-validation.json",
+  "limitation": "Full panic/manual coverage and release incomplete; native runs retain exact source hashes."
+}

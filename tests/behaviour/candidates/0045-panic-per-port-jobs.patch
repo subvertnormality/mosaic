@@ -1,0 +1,30 @@
+--- a/lib/m_midi.lua
++++ b/lib/m_midi.lua
+@@ -411,11 +411,16 @@
+-m_midi.all_off = scheduler.debounce(function (id)
+-  for note = 0, 127 do
+-    for channel = 1, 16 do
+-      midi_devices[id]:note_off(note, 0, channel)
+-    end
+-    coroutine.yield()
+-  end
+-  -- Reset note counts for this device
+-  m_midi.note_counts[id] = nil
+-  chord_number = 0
+-end)
++local all_off_by_device = {}
++function m_midi.all_off(id)
++  if not all_off_by_device[id] then
++    all_off_by_device[id] = scheduler.debounce(function()
++      for note = 0, 127 do
++        for channel = 1, 16 do
++          midi_devices[id]:note_off(note, 0, channel)
++        end
++        coroutine.yield()
++      end
++      m_midi.note_counts[id] = nil
++      chord_number = 0
++    end)
++  end
++  all_off_by_device[id]()
++end

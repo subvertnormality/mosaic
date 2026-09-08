@@ -178,7 +178,7 @@ local function register_press()
     function(x, y)
       if (y == 8) then
         if 
-          x >= pages.pages_to_grid_menu_button_mappings.trigger_edit_page and 
+          x >= pages.pages_to_grid_menu_button_mappings.channel_edit_page and
           x <= pages.pages_to_grid_menu_button_mappings.song_edit_page 
         then
           if pages.pages_to_grid_menu_button_mappings[pages.page_numbers_to_ids[program.get_selected_page()]] ~= x then

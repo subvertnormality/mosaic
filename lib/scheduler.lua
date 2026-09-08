@@ -91,7 +91,7 @@ function scheduler.debounce(func)
   
   return function(...)
     -- Deactivate existing coroutine if it exists
-    if current_co and scheduler.coroutines[current_co] then
+    if current_co and scheduler.coroutines[current_co] and scheduler.coroutines[current_co].active then
       scheduler.coroutines[current_co].active = false
       scheduler.active_count = scheduler.active_count - 1
     end

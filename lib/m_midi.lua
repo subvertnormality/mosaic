@@ -408,17 +408,27 @@ function m_midi.stop()
 end
 
 
-m_midi.all_off = scheduler.debounce(function (id)
-  for note = 0, 127 do
-    for channel = 1, 16 do
-      midi_devices[id]:note_off(note, 0, channel)
-    end
-    coroutine.yield()
+local all_off_by_device = {}
+function m_midi.all_off(id)
+  if not all_off_by_device[id] then
+    all_off_by_device[id] = scheduler.debounce(function()
+      for note = 0, 127 do
+        for channel = 1, 16 do
+          midi_devices[id]:note_off(note, 0, channel)
+          -- Forget only notes actually cleared by this sweep position.
+          -- Notes played behind it still need ownership for transport Stop.
+          local channels = m_midi.note_counts[id]
+          if channels and channels[channel] then
+            channels[channel][note] = nil
+          end
+        end
+        coroutine.yield()
+      end
+      chord_number = 0
+    end)
   end
-  -- Reset note counts for this device
-  m_midi.note_counts[id] = nil
-  chord_number = 0
-end)
+  all_off_by_device[id]()
+end
 
 function m_midi.panic()
   for id = 1, #midi.vports do

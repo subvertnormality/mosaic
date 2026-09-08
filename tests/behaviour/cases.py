@@ -2505,7 +2505,163 @@ def chord_shape_schedule(c,arp,shape,muted,mask_bits=15,velocity=50,modifier=10,
 
     if dashboard:chord_dashboard_display(c,max(0,min(127,velocity+(4*modifier if shape in (2,4) else 0))))
 
+def navigation_matrix(c):
+    # Independent six-page model: the pattern key cycles three editors.
+    # Check each intermediate menu state and re-play the authored melody after
+    # every source/destination pair so navigation cannot silently alter music.
+    pages=('channel','scale','trig','note','velocity','song')
+    pattern_pages=('trig','note','velocity')
+    menus={'channel':[15,2,2,2], 'scale':[2,15,2,2],
+           'trig':[2,2,5,2], 'note':[2,2,10,2],
+           'velocity':[2,2,15,2], 'song':[2,2,2,15]}
+    melody=[(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))]
+    c.configure();current='channel';edges=[];presses=0
+    def choose(target):
+        nonlocal current, presses
+        if target in pattern_pages:
+            count=((pattern_pages.index(target)-pattern_pages.index(current))%3 or 3) if current in pattern_pages else pattern_pages.index(target)+1
+            button=5
+        else:
+            count=1;button={'channel':3,'scale':4,'song':6}[target]
+        for _ in range(count):
+            c.tap(button,8);presses+=1
+            if button==5:
+                current=pattern_pages[(pattern_pages.index(current)+1)%3] if current in pattern_pages else 'trig'
+            else:current={3:'channel',4:'scale',6:'song'}[button]
+            c.led_values([(x,8) for x in (3,4,5,6)],menus[current])
+        assert current==target
+    for source in pages:
+        for target in pages:
+            choose(source);choose(target)
+            notes=c.playback(melody,cycles=2)
+            assert len(notes)>=9
+            c.led_values([(x,8) for x in (3,4,5,6)],menus[target])
+            edges.append([source,target])
+    assert len(edges)==36 and len({tuple(edge) for edge in edges})==36
+    c.results.append(dict(kind='navigation-matrix',source_destination_pairs=edges,
+                          menu_presses=presses,melody_checks=36,passed=True))
+
+
+def panic_hold(c, button, source, repeats=1):
+    menus={'channel':[15,2,2,2], 'scale':[2,15,2,2],
+           'trig':[2,2,5,2], 'note':[2,2,10,2],
+           'velocity':[2,2,15,2], 'song':[2,2,2,15]}
+    selected={'channel':3,'scale':4,'trig':5,'note':5,'velocity':5,'song':6}[source]
+    c.tap(3,8)
+    if source in ('trig','note','velocity'):
+        for _ in range(('trig','note','velocity').index(source)+1):c.tap(5,8)
+    elif source!='channel':c.tap(selected,8)
+    menu=menus[source];c.led_values([(x,8) for x in (3,4,5,6)],menu)
+    expected=[[128+channel,note,0] for note in range(128) for channel in range(16)] if button!=selected else []
+    for repeat in range(repeats):
+        after=c.snapshot()['midi_count'];start=len(c.observations)
+        logical_start=c.logical_ns;press_ack=c.action(type='grid',x=button,y=8,state=1)
+        c.elapse(.9);c.snapshot()
+        # Live snapshots drive observation only; full exported MIDI is the oracle.
+        for _ in range(10):
+            c.elapse(.1);c.snapshot()
+            if len(c.observations)>start+2:del c.observations[start+1:-1]
+        c.action(type='grid',x=button,y=8,state=0);c.elapse(.06);cursor=c.snapshot()['midi_count']
+        c.led_values([(x,8) for x in (3,4,5,6)],menu)
+        if not hasattr(c,'panic_windows'):c.panic_windows=[]
+        c.panic_windows.append(dict(type='panic',after=after,cursor=cursor,source=source,
+                                   button=button,repeat=repeat,logical_start=logical_start,press_ack=press_ack))
+
+
+def panic_navigation(c, button):
+    c.configure();panic_hold(c,button,'song');finish_panic_trace(c)
+
+
+def panic_hold_matrix(c):
+    c.configure();pairs=[]
+    for source in ('channel','scale','trig','note','velocity','song'):
+        for button in (3,4,5,6):
+            panic_hold(c,button,source,repeats=2)
+            after=c.snapshot()['midi_count']
+            c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
+            c.panic_windows.append(dict(type='melody',after=after,cursor=c.snapshot()['midi_count']))
+            pairs.append([source,button])
+    assert len(pairs)==24
+    finish_panic_trace(c,dict(kind='panic-hold-matrix',pairs=pairs,holds=48,melody_checks=24,passed=True))
+
+
+
+def finish_panic_trace(c, summary=None):
+    import json
+    from automation.input_origin import verified_input_origin
+    from panic_trace import verify_panic_trace
+    c.finish()
+    try:
+        events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
+        actions=[json.loads(line) for line in (c.out/'native/actions.jsonl').read_text().splitlines()]
+        controlled=c.clock_mode=='controlled-experimental'
+        for window in c.panic_windows:
+            if window['type']!='panic':continue
+            ack=window['press_ack']
+            submitted=[e for e in events if e.get('kind')=='input' and e['sequence']==ack['native']['sequence']]
+            assert len(submitted)==1
+            evidence=verified_input_origin(events,actions,session_id=c.runtime.id,action_id=ack['action_id'],
+                expected_action=dict(type='grid',x=window['button'],y=8,state=1),declared_origin_ns=submitted[0]['monotonic_ns'])
+            window['input_origin']=evidence
+            window['minimum_ns']=window['logical_start']+1_000_000_000-2 if controlled else evidence['origin_ns']+900_000_000
+        (c.out/'panic-windows.json').write_text(json.dumps(c.panic_windows,indent=2)+'\n')
+        verify_panic_trace(events,c.panic_windows,11 if controlled else 3,c.results)
+        if summary:c.results.append(summary)
+    finally:
+        (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
+
+def panic_live_note_stop(c):
+    import json
+    c.configure();c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    c.tap(6,8);c.tap(1,8);c.elapse(.2)
+    before=c.snapshot()['midi_count']
+    c.action(type='grid',x=5,y=8,state=1)
+    released=False;played=False
+    try:
+        c.wait(lambda s:any(e['index']>before and e['port']==1 and e['bytes']==[143,24,0] for e in s['midi']),timeout=2)
+        c.action(type='grid',x=5,y=8,state=0);released=True
+        c.action(type='midi',port=1,bytes=[144,24,100]);played=True
+        c.wait(lambda s:any(e['index']>before and e['port']==3 and e['bytes']==[143,127,0] for e in s['midi']),timeout=2)
+        c.elapse(.05);stop_before=c.snapshot()['midi_count']
+        c.tap(1,8);c.elapse(.1);stop_after=c.snapshot()['midi_count']
+    finally:
+        if not released:c.action(type='grid',x=5,y=8,state=0)
+        if played:c.action(type='midi',port=1,bytes=[128,24,0]);c.elapse(.1)
+    c.finish()
+    try:
+        events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
+        midi=[e for e in events if e.get('kind') in (3,11)]
+        assert [e['sequence'] for e in midi]==list(range(1,len(midi)+1))
+        assert all(e['kind']==(11 if c.clock_mode=='controlled-experimental' else 3) for e in midi)
+        notes=[e for e in midi if e['bytes'][0]&240 in (128,144)]
+        ons=[e for e in notes if e['bytes'][0]&240==144 and e['bytes'][2]>0]
+        assert len(ons)==1 and (ons[0]['port'],ons[0]['bytes'])==(1,[144,24,100]),'Quiet transport or live keyboard note differs'
+        onset=ons[0]['sequence']
+        sweep=[e for e in midi[before:stop_before] if e['bytes'][0]&240==128]
+        expected=[[128+channel,note,0] for note in range(128) for channel in range(16)]
+        assert len(sweep)==6144
+        for port in (1,2,3):assert [e['bytes'] for e in sweep if e['port']==port]==expected
+        prior=[e for e in sweep if e['port']==1 and e['bytes']==[128,24,0]]
+        last=[e for e in sweep if e['port']==1 and e['bytes']==[143,127,0]]
+        assert prior[0]['sequence']<onset<last[0]['sequence'],'Input missed the required in-flight overlap'
+        stops=[e for e in midi[stop_before:stop_after] if e['bytes'][0]&240 in (128,144)]
+        c.results.append(dict(kind='panic-live-note-stop',onset=onset,stop_before=stop_before,stop_after=stop_after,actual=[(e['port'],e['bytes']) for e in stops]))
+        assert [(e['port'],e['bytes']) for e in stops]==[(1,[128,24,0])],'Stop failed to release the live note played behind the panic sweep'
+        cleanup=[e for e in midi[stop_after:] if e['bytes'][0]&240 in (128,144)]
+        assert [(e['port'],e['bytes']) for e in cleanup]==[(1,[128,24,0])],'Keyboard release cleanup differs'
+        assert len(notes)==6147,'Unexpected note output outside the complete sweep/live/stop/release trace'
+        c.results.append(dict(kind='panic-live-note-stop-complete',passed=True))
+    finally:
+        (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
+
+
 CASES={
+ 'M-PANIC-004':dict(run=panic_live_note_stop,requirements=['PANIC-GESTURE'],description='Keyboard note played behind an in-flight panic sweep remains owned by Stop; exact full MIDI trace'),
+ 'M-PANIC-003':dict(run=panic_hold_matrix,requirements=['PANIC-GESTURE','NAV-PAGES'],description='All24selected-page/held-menu combinations, repeated completed holds, selected-button silence and unchanged melody'),
+ 'M-PANIC-001':dict(run=lambda c:panic_navigation(c,3),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Hold non-selected channel navigation: all notes/channels/ports off and no navigation'),
+ 'M-PANIC-002':dict(run=lambda c:panic_navigation(c,5),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Hold non-selected pattern navigation: complete per-port panic output and no navigation'),
+ 'M-NAV-001':dict(run=navigation_matrix,requirements=['NAV-PAGES'],description='All36page transitions, repeated pattern cycles, exact menu LEDs and unchanged MIDI after each transition'),
  'M-DASHBOARD-005':dict(run=lambda c:chord_shape_schedule(c,False,2,False,velocity=100,modifier=10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
  'M-DASHBOARD-006':dict(run=lambda c:chord_shape_schedule(c,False,2,False,velocity=20,modifier=-10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
  'M-DASHBOARD-007':dict(run=lambda c:chord_shape_schedule(c,False,4,False,velocity=100,modifier=10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),

@@ -2258,8 +2258,13 @@
         "MAN-014"
       ],
       "statement": "Four global menu keys select channel/scale/pattern/song and pattern key cycles three editors.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-NAV-001",
+        "M-PANIC-001",
+        "M-PANIC-002",
+        "M-PANIC-003"
+      ],
+      "status": "partial",
       "domain": "All source/destination pages; repeated pattern cycles; held inputs across navigation.",
       "oracles": [
         "Correct page screen/LED and no musical-data change."
@@ -2274,7 +2279,8 @@
         "end_line": 280,
         "text": "The four buttons starting from the third column on the lowest row serve as the global menu buttons. From left to right, these buttons allow access to the [Channel Editor](#channel-editor) and [Scale Editor](#scale-editor):\n\n\n<p float=\"left\">\n  <img src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-channel-editor-select-button.svg\" alt=\"Channel editor global menu button\" width=\"300\" />\n  <img src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-scale-editor-select-button.svg\" alt=\"Scale editor global menu button\" width=\"300\" /> \n</p>\n\nAs well as the [Pattern Editors](#pattern-editor) and [Song Editor](#song-editor):\n\n<p float=\"left\">\n  <img src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-pattern-editor-select-button.svg\" alt=\"Pattern editors global menu button\" width=\"300\" />\n  <img src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-song-editor-select-button.svg\" alt=\"Song editor global menu button\" width=\"300\" />\n</p>\n\nThe pattern editor button cycles through three pages, accessible by pressing the button repeatedly. These are the [Pattern Trig Editor](#adding-trigs), the [Pattern Note Editor](#adding-notes), and the [Pattern Velocity Editor](#adding-velocity).",
         "sha256": "6d6c708952b4ca6a3d51adbc4d0f416b1314042c27c44588f2f50f52726d7e42"
-      }
+      },
+      "remaining": "Cross-key held-input combinations across navigation, beyond lone long holds."
     },
     {
       "id": "NAV-CONFIRM",
@@ -2333,8 +2339,13 @@
         "MAN-017"
       ],
       "statement": "Holding a non-selected navigation button clears all MIDI-on events.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PANIC-001",
+        "M-PANIC-002",
+        "M-PANIC-003",
+        "M-PANIC-004"
+      ],
+      "status": "partial",
       "domain": "Each selected/non-selected page; all virtual ports/channels; pending/delayed notes; repeated panic.",
       "oracles": [
         "Required stop/note-off messages on every port/channel, no outstanding notes after drain."
@@ -2349,7 +2360,8 @@
         "end_line": 310,
         "text": "### MIDI Panic\n\nShould your MIDI output devices become unresponsive, you can clear all MIDI-on events by holding down the navigation button of a non-selected page. This action will send a stop signal to all devices, on all channels, for all notes.",
         "sha256": "e26d50b96ed0f49e662ae2a8c6cca6f6570f5b7689f75079e57eed6bcbf546cf"
-      }
+      },
+      "remaining": "Broader active/pending/delayed notes, native mid-job repeated gestures and hot disconnect/reconnect. Single live-note Stop overlap has D/R regression passes."
     },
     {
       "id": "CH-SELECT",

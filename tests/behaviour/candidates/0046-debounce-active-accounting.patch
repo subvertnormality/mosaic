@@ -1,0 +1,5 @@
+--- a/lib/scheduler.lua
++++ b/lib/scheduler.lua
+@@ -94 +94 @@
+-    if current_co and scheduler.coroutines[current_co] then
++    if current_co and scheduler.coroutines[current_co] and scheduler.coroutines[current_co].active then
