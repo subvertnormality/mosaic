@@ -788,23 +788,38 @@ Similar to random note, this trig param introduces an element of random to your 
 
 ##### Chord Strum
 
-The Chord Strum param dynamically spaces selected chord masks using the selected step division, ensuring they align rhythmically with the channel's settings. Notes are quantised to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration. Each chord note is played once.
+The Chord Strum param dynamically spaces selected chord masks using the selected step division, ensuring they align rhythmically with the channel's settings. Notes are quantised to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration. Each chord note is played once. Empty mask slots keep their positions in the selected chord shape and consume spacing and acceleration ordinals, including trailing empty slots.
 
 ##### Chord Arpeggio
 
 The Chord Arp param is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantised to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.
 
-With Chord Spread at zero, the first arp interval is one full selected division of the channel step. For example, a half-step arp on a two-step note plays at 0, 1/2, 1 and 1 1/2 steps; it does not start another note at the two-step endpoint. Each arp note lasts one selected division from its own onset, shortened when necessary to finish at the original note's endpoint.
+With Chord Spread at zero, the first arp interval is one full selected division of the channel step. For example, a half-step arp on a two-step note advances through its slots at 0, 1/2, 1 and 1 1/2 steps; it does not start another note at the two-step endpoint. Each arp note lasts one selected division from its own onset, shortened when necessary to finish at the original note's endpoint.
 
 Starting another arp on the same channel cancels the old arp's future notes. Notes already sounding keep their remaining duration, capped by their original endpoint; the old arp's endpoint does not cut notes from its replacement. Pattern resets likewise preserve the remaining duration of sounding notes. Stop releases sounding notes and cancels future arp notes. Overlapping notes of the same MIDI pitch still send a corresponding Note Off for each Note On; how a receiving instrument handles overlapping voices is unchanged.
 
+Chord Shape orders the root and four chord-mask slots. An empty mask slot, or a muted root slot, is a rest and keeps its position, including at the end of the sequence. Rest slots consume the same time and acceleration ordinal as sounding slots. If no chord masks are populated, an unmuted root instead forms a one-slot ratchet; if the root is also muted, the result is silence.
+
 ##### Chord Acceleration
 
-The Chord Acceleration param is a modifier for the Chord Strum and Chord Arpeggio params, to be used alongside the Chord Spread param, and it doesn't function on it's own. When set, the chord spread alters in the direction of the acceleration over time. With a positive value of acceleration, the spread value will increase by multiples of the acceleration value for each note of the chord or arp. With a negative value, the spread value will decrease by multiples of the acceleration value. With this, you can create flams and bouncing ball type effects. 
+Chord Acceleration modifies the spacing of an enabled Strum or Arpeggio together with Chord Spread. Off (0) means no progressive change: every gap is the selected division plus Spread. A positive value lengthens each following gap; a negative value shortens it. With Spread at zero, Acceleration has no effect.
+
+In channel-step units, let `d` be the Strum or Arp division, `s` be Spread, and `a` be Acceleration (zero when off). The gap before slot `k`, counting the first gap as 1, is `d + s * (1 + (k - 1) * a)`. The first slot occurs at trigger time; later slot times are the sums of these gaps. A new trigger restarts the ordinal. Wrapping an arp's slots does not restart it. These are the nominal musical times before swing and clock-pulse quantisation. An arp interval occupies at least one scheduler pulse, including after swing. At fast channel rates, this limits the resolution of very short gaps.
+
+For a division of 1/2 and Spread of 1/4:
+
+| Acceleration | Successive gaps | Slot times from the trigger |
+|---|---|---|
+| Off | 3/4, 3/4, 3/4, 3/4 | 0, 3/4, 3/2, 9/4, 3 |
+| +1 | 3/4, 1, 5/4, 3/2 | 0, 3/4, 7/4, 3, 9/2 |
+| +2 | 3/4, 5/4, 7/4, 9/4 | 0, 3/4, 2, 15/4, 6 |
+| -1 | 3/4, 1/2, 1/4, then 0 | 0, 3/4, 5/4, 3/2, then stop |
+
+When the next gap is zero or negative, scheduling ends before that slot. There is no extra simultaneous note or reversed time; notes already sounding retain their releases. Empty slots, including trailing rests, advance the same ordinal in both strums and arps.
 
 ##### Chord Spread
 
-The Chord Spread param is a modifier for the Chord Strum and Chord Arpeggio params. It alters the spacing between notes in these functions by the value of the param.
+Chord Spread adds a duration to the selected Strum or Arp division, measured in channel steps. For example, a half-step division with quarter-step Spread starts with a three-quarter-step gap. With Acceleration off, all gaps stay at that value. With Acceleration enabled, each following gap changes by Spread multiplied by Acceleration, as above. Spacing modifiers act only when Strum or Arpeggio is enabled and do not change the selected note length. Arp notes remain limited by their original note endpoint.
 
 ##### Chord Velocity Modifier
 

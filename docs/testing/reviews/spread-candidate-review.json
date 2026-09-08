@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused review of candidate0037 following semantic decision01a07f50-06ce-76f2-86f5-76414bd23074. Do not edit files. Public source and payload-specific review authorised. Local MIDI development utility, proportionate review, no manual acceptance. Review lib/clock/chord_timing.lua, m_clock new_arp_sprocket, m_lattice begin_cycle and step strum delay against documented gap_k=d+s*(1+(k-1)*a). Off a=0, first gap d+s, nonpositive following gap stops future onsets but preserves existing releases; gate capped, cycle carry consumed once. This is intentional semantic amendment, not historical compatibility. Candidate0038 all-muted hang and rest slot handling are NOT implemented yet and have preserved native baselines; distinguish those known issues from spacing candidate defects. 174 existing clock/release/swing cases pass. Native fractional M-SPREAD023 now passes61 onsets56 windows61 releases; prior run failed a Stop release-velocity oracle, corrected to accept original or zero only at actual Stop timestamp.24 signed cases running; do not assume pass. Check variable-cycle selection before rounding, negative termination, swing, fractional carry, pending release ownership and reentrant Stop. Check ordinary block chords remain unaffected. Give concrete reproducible blockers and minimal fixes/tests. Inspect candidate0037 patch and README. No whole-repository cold review; full campaign incomplete.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Actual arp creation and ownership"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Native phase and pending timing"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Arp note creation and release"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New native arp regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Musical contract"
+      }
+    ]
+  },
+  "input_sha256": "eec90221a80424decce1281b1d40e226e8891a99ac5d55d5080ac4b6ba073a73",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**Candidate0037 has one reproducible spacing blocker: short swung intervals can round to zero and silently drop a valid arp onset.** The recurrence itself matches the amended contract; this is separate from candidate0038\u2019s known muted/rest-slot issues.\n\n- **Reproduction:** Using the actual `m_clock` and lattice, set parent period `24/5` pulses (x5), `d=1/2`, `s=1/24`, `a=-4`, swing `-50`, and gate `16` steps. The four positive gaps are `13/24, 9/24, 5/24, 1/24`; the fifth is negative. Only **three** deferred callbacks occur, at pulses **1, 4, 6**. Four are required before termination.\n- **Cause:** [m_lattice.lua:551](<mosaic-worktree>/lib/clock/m_lattice.lua:551) clamps the division before swing, but [m_lattice.lua:525](<mosaic-worktree>/lib/clock/m_lattice.lua:525) allows `rounded_ppqn=0`. Subsequent phase rescaling divides by that zero at line 530. The cycle selector then advances ordinals without delivering every onset. This exposes an existing lattice weakness through the candidate\u2019s variable-cycle scheduling.\n- **Minimal fix/test:** Enforce a one-pulse minimum on the effective swung interval before rounding and carry accumulation. An in-memory trial of that change produced all four callbacks at **1, 4, 5, 6**. Add this regression with fully populated slots, verify independent `d`-length releases capped at the gate, and assert no fifth onset. Cover both swing signs and zero-rounded startup too.\n\nOtherwise, interval selection occurs before the single rounding operation ([m_lattice.lua:546](<mosaic-worktree>/lib/clock/m_lattice.lua:546)); negative termination preserves pending releases and gate cleanup retains generation-local ownership ([m_clock.lua:593](<mosaic-worktree>/lib/clock/m_clock.lua:593)). Disabled articulation returns zero strum delay, preserving ordinary block-chord timing ([chord_timing.lua:12](<mosaic-worktree>/lib/clock/chord_timing.lua:12)).\n\nI independently reran all **174 existing arp checks**, including releases and reentrant Stop: passed. Another **788 signed-spacing checks with swung intervals \u22651 pulse** passed. Candidate file hashes match its manifest.\n\n**CONFIDENCE: High** on the reproduced blocker. I could not independently verify the reported native fractional capture or the running 24 signed cases; the full campaign remains incomplete.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07fb0-e236-72e1-bd91-01db91b83b35` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "4c973fa681982185fdd3e9fb0e7e953adf43cb76b7db3280791e9ed80d2f05a8",
+    "redaction": "Personal absolute paths replaced; complete raw response retained in ignored artifacts."
+  }
+}

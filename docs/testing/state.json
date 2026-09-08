@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Document Codex spread/acceleration decision01a07f50-06ce-76f2-86f5-76414bd23074, add/run the prepared22 new-contract baseline cases, and only then implement the chosen recurrence/rest/termination semantics. Existing nonzero code is unchanged. Continue live channel-rate changes, D20 deadline/origin work and remaining manual/emulator release gates. Do not bypass denied SEM007 arbitration.",
+  "next_action": "Continue remaining strum shape/rest/mute-root combinations and finite chord velocity/shape tests with native baselines before fixes. Finish D20 independent deadline/origin mapping, live-rate changes, all manual requirements and emulator release cards. Do not begin refactor or bypass denied SEM007 arbitration. WSL require_escalated and Codex-only reviews are explicitly authorised; do not ask routine questions.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2848,11 +2848,10 @@
   },
   "updated": "2026-09-08",
   "manual_binding_snapshot": {
-    "implemented_cases": 109,
+    "implemented_cases": 145,
     "requirements": 141,
-    "requirements_with_case": 67,
-    "requirements_without_case": 74,
-    "scope": "Bindings only; all finite domains and interactions remain required."
+    "requirements_with_case": 72,
+    "scope": "Bindings only; finite domains, failure modes, interactions and fresh release gates remain mandatory."
   },
   "note_pattern_selector_validation": {
     "status": "validated",
@@ -4128,9 +4127,784 @@
     "limitations": "Selector bounds only; spread/acceleration musical semantics are a separate pending domain."
   },
   "spread_semantics": {
-    "status": "decided-baseline-and-implementation-pending",
+    "status": "recurrence-and-arp-rest-scoped-validation",
     "decision": "01a07f50-06ce-76f2-86f5-76414bd23074",
-    "formula": "gap_k=d+s*(1+(k-1)*a), in channel steps; off a=0",
-    "compatibility": "Intentional new contract, not historical compatibility. Rest ordinals/trailing slots and nonpositive termination must be documented and tested."
+    "formula": "gap_k=d+s*(1+(k-1)*a)",
+    "limitation": "Intentional semantic amendment; strum shape/rest combinations and full musical campaign pending."
+  },
+  "spacing_rest_validation": {
+    "status": "scoped-regressions-validated",
+    "candidates": [
+      "0037",
+      "0039",
+      "0038"
+    ],
+    "source_sha256": {
+      "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+      "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+      "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+      "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+    },
+    "runs": [
+      {
+        "case": "M-SPREAD-023",
+        "mode": "controlled-experimental",
+        "run_id": "7b1e2feb8e0b4065856d5bc1d54be8ae",
+        "manifest_sha256": "3405b27d0af9f6da3a30af1710bec3a5a24064110ce7dacfb748b20effbbf132",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-023",
+        "mode": "controlled-experimental",
+        "run_id": "74bef3ae483e4e598eea1c5117560199",
+        "manifest_sha256": "673b4d408ac71adddf1f1c17d3a19b840fbfb99c3e3461d8340bf49be9b46867",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-026",
+        "mode": "controlled-experimental",
+        "run_id": "5283c5a8a7504c4fa922a0f7c4dab559",
+        "manifest_sha256": "d5472edc5582341530b0dbba9a64fa5360bd4ddffdd3c0c6e625ef4efdedd76a",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-027",
+        "mode": "controlled-experimental",
+        "run_id": "58651d0e63a34770bfd4ace8d9e03e5f",
+        "manifest_sha256": "25f14dcf1f9a372c84789c69210ddda4c2806f02efcb3303791ba574b43e4160",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-007",
+        "mode": "controlled-experimental",
+        "run_id": "f6c33ae6de284136b8de1674bbd075bf",
+        "manifest_sha256": "a2e5b39968b3a60ad7b379e9212aa2eb2a220c00cd7696ceb402cb0c3eabee01",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-012",
+        "mode": "controlled-experimental",
+        "run_id": "2de03c43ff2644cdb743f5f5f2fbeccd",
+        "manifest_sha256": "27075e20971a8f965d4fc13127d27bc067a6bf375c64548f2461cc359eb687b6",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-013",
+        "mode": "controlled-experimental",
+        "run_id": "29646a7561fd44d5a7dc77993e100819",
+        "manifest_sha256": "5744199e00ce2aef9af93a9d3ec5f2ce03adb0ffdf4b81cb9dcaa1bbf24ad3fb",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-014",
+        "mode": "controlled-experimental",
+        "run_id": "65856bc19b8e4104b145b510beda2bec",
+        "manifest_sha256": "674b2b9ebc21999ffdd47085b318e9d41e88763d9a615c4be0aff5c4d87c97ae",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-001",
+        "mode": "controlled-experimental",
+        "run_id": "4aedd955154148e1bf8b84ee25322dfc",
+        "manifest_sha256": "0d444882843cffe4efd2166ebd1f536ee80cb453935274e239e0c2c153409b00",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-002",
+        "mode": "controlled-experimental",
+        "run_id": "fc738ec63f7642ed967b0a96211c026d",
+        "manifest_sha256": "4ce90726e59261232dc34822c9fe0575839ae0266ae26c27f37697f76c08e9e9",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-003",
+        "mode": "controlled-experimental",
+        "run_id": "60b0a540f2db4190a8b9a8780b084d4d",
+        "manifest_sha256": "117ee73a0d37593b12fb66935860a0482fa74c76e4ff33b64958c51269ffb1aa",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-004",
+        "mode": "controlled-experimental",
+        "run_id": "8c576ce8c8df4a8b80c52cc2b45e687c",
+        "manifest_sha256": "6ed0d49f3702b646e44757d5158fca5b7755a95f15cd823994b997c83692fd60",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-005",
+        "mode": "controlled-experimental",
+        "run_id": "76f0701fd7514bd09348c16d52e72598",
+        "manifest_sha256": "73b6a03441a7adef53997d8ae56a5ce2a31b443b6be5ced410051076e291b0c8",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-006",
+        "mode": "controlled-experimental",
+        "run_id": "af15b8a0c2644cef972fae2b07303449",
+        "manifest_sha256": "1da6c45ec799112e1e02831e83db2763d9b4e77f4bdf4cd75ae016ed16c2cef6",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-007",
+        "mode": "controlled-experimental",
+        "run_id": "dd7ffc4c995443af990f9f6d4bd044e1",
+        "manifest_sha256": "5061b8d5ae0a55531a509a0ed8921faabd9eedf2fa3fad9600e4aeb084965def",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-008",
+        "mode": "controlled-experimental",
+        "run_id": "4257f7b73c0a41ce941526837c83a96a",
+        "manifest_sha256": "8d0130617fb09837b0a6f25bfe1b5617dbe660826371e6014bd4baff03a1e47a",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-009",
+        "mode": "controlled-experimental",
+        "run_id": "255f3b9c39f847e2b20e1d6512ac0f8c",
+        "manifest_sha256": "024b6590552762715258617ee5faa7c25ef309fd765c3c5c167648390f1dec03",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-010",
+        "mode": "controlled-experimental",
+        "run_id": "e2e6c5a0fadd48a9a5ad6213cd8e660c",
+        "manifest_sha256": "7537092a1a04eafc747974abb7452265fdf69166e4a1d42ce9598492685ee185",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-011",
+        "mode": "controlled-experimental",
+        "run_id": "e0573e2d5ec9422caf857d4f192318e6",
+        "manifest_sha256": "4abb67f44777b3347079e6def9ead947ef55cf04ecbbd6be110ae71141fd4560",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-012",
+        "mode": "controlled-experimental",
+        "run_id": "1f858ac381e24033a67cb5f153583c9c",
+        "manifest_sha256": "c9691d0b51a9a469e748302c9a0ecdca7b3c6defa047ea9e538909061e2a949c",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-013",
+        "mode": "controlled-experimental",
+        "run_id": "fd474b38957e4422853a77a6f04cd4f1",
+        "manifest_sha256": "b5684055264df654788b0a2c1fc9c20f2745f7c8b6d2f896fa7d476019c3e278",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-014",
+        "mode": "controlled-experimental",
+        "run_id": "8c1d19f328814d029cef79b4dec0fb72",
+        "manifest_sha256": "a6164abb3c69fe0ccc8121033c58faf6488a59c540ac4816921d524975c8de6e",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-015",
+        "mode": "controlled-experimental",
+        "run_id": "1ad04173a5e945deb9c4651bf30917be",
+        "manifest_sha256": "92caeeea52b4a2197a0e534678f109a9e4f13d6f1a8dc04519e741a1f3a2bb9a",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-016",
+        "mode": "controlled-experimental",
+        "run_id": "a21ee77f4e8343ba92381977b5ce10cf",
+        "manifest_sha256": "7ba2b2ecad7b0997b2da03175730bfe774b6f4d3835126e57fceecfa205c6adf",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-017",
+        "mode": "controlled-experimental",
+        "run_id": "6ce082f003144d0f8aad3de9d6004c09",
+        "manifest_sha256": "c255be3f6e7015c56c72be258d12810e35ab896d9aa95af023193c34b2bab3af",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-018",
+        "mode": "controlled-experimental",
+        "run_id": "993716e248f44b018254f3f45a99c7fe",
+        "manifest_sha256": "88b54e6915885eb2d72d6b4c9b3e65e8e57ed9f1efa8de0d8c6a9de876d60d48",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-019",
+        "mode": "controlled-experimental",
+        "run_id": "0940dcda95ed4d97b9bc7babac31e9d7",
+        "manifest_sha256": "8b08d4e17a201dfb5411ec0a28e94ed4e7cd9cfa142adc26516f56d2ab919f54",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-020",
+        "mode": "controlled-experimental",
+        "run_id": "a299286aa5444223ae1673e834735447",
+        "manifest_sha256": "4a0ba0bbf10a5b3520e5f0c173ba9a89659addcc81cc0fd479f7717311538e20",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-021",
+        "mode": "controlled-experimental",
+        "run_id": "3918a227e7a241c28ac3b89acff5d0e6",
+        "manifest_sha256": "c65908942f74dc9aca1d42ca28e99c7d2bdc35b64cde0973938c83814e4acf14",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-022",
+        "mode": "controlled-experimental",
+        "run_id": "440a56ce6b50456e91f701b005154d14",
+        "manifest_sha256": "d5d53a2ed8055f42cc6eb0efaad96961747607529f1cf37b9a5f4e834dd091af",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-024",
+        "mode": "controlled-experimental",
+        "run_id": "5b8791eb7cd94879951b4c7519a95350",
+        "manifest_sha256": "1abe93f2fb73cea5b89bff3e23b59a2a42b70020865cebcbe01eb013c2749ba6",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-025",
+        "mode": "controlled-experimental",
+        "run_id": "ce871dfdcae44d4686d99a2596fc1e24",
+        "manifest_sha256": "d5a2491874f6c7cd62484d72ffc81e5d2c297105ddd85f8ad920b83f6af3ede2",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+          "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+          "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+        },
+        "matches_current_musical_source": false,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-006",
+        "mode": "controlled-experimental",
+        "run_id": "bae7888ffb4e41008bdfe3bdbc58fb68",
+        "manifest_sha256": "9ef138a2336f149b95992e6e75b1e37410e14960ca3d8053f46333f8c7a81501",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-008",
+        "mode": "controlled-experimental",
+        "run_id": "3ed8efe866d34f4c95241269eb4d4875",
+        "manifest_sha256": "07cb66b72af48b4be6feca2a5765f729d44e98f09b3e66f0f14e97738bd2cee7",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-009",
+        "mode": "controlled-experimental",
+        "run_id": "37dbad9db4a8411fa0142504bd6d35f0",
+        "manifest_sha256": "0611b547d2dc49683a961ad37e8be039c28086ca1c0705788f564f1dfca30d5e",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-026",
+        "mode": "controlled-experimental",
+        "run_id": "62d639e3fdf7463b9b883f85a7c60815",
+        "manifest_sha256": "8167933275e0280cd464c0ccfb83fdf2a4bfc1d7aba2f6b356167483a0eb5a2f",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-SPREAD-027",
+        "mode": "controlled-experimental",
+        "run_id": "b3463ec804f945359181207a2a50cbdf",
+        "manifest_sha256": "20f71e121aa9fce3e53d313508aa2d6a619b86f0de840f1a71c20becbe9f94cf",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-001",
+        "mode": "controlled-experimental",
+        "run_id": "e3d071f687684ff2b68d8a41781e7f99",
+        "manifest_sha256": "3ab064d02a82b309c1e9712093412abbd6ef1d24d5598f73d7328bb4054a82af",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-002",
+        "mode": "controlled-experimental",
+        "run_id": "87cba2bd24454bdabe846d7f9326d475",
+        "manifest_sha256": "80d10dc007b71c7197a0ae84398b9234b4f276d8ad090e279df4a42a4cb58593",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-003",
+        "mode": "controlled-experimental",
+        "run_id": "a8fe0e62e0154427b1af509ba011e5bf",
+        "manifest_sha256": "44f9c75a295a05bbf4f869bc6288ae42f0a777d3b94f7bc6a0f41d45e4c43aae",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-004",
+        "mode": "controlled-experimental",
+        "run_id": "8e063ca508aa44d4bf4797324f80d8d0",
+        "manifest_sha256": "39e04a0a53d2a1d153f3921493ea179d2b1c7cccf604c8e07a6fb3780365a380",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-005",
+        "mode": "controlled-experimental",
+        "run_id": "be15e0122b3145de8c98e747ebf62df9",
+        "manifest_sha256": "c5e8e5333db9961811214ef384de1e44a2da3cb3c6bcb4575ca574e8e333ac9b",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-006",
+        "mode": "real-time",
+        "run_id": "214f6022909943468e4e4d986ca8e96f",
+        "manifest_sha256": "67e0f75f82699e1b91dac49c89c6722db3628d7f13ca8b973a2851a8f26750ba",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-007",
+        "mode": "real-time",
+        "run_id": "9713539f4ed94f728749242f9061473d",
+        "manifest_sha256": "07d3b209c0b0ff8ecc531ce96f640570d4bb1e8081c98af49c8e312000c51b49",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-008",
+        "mode": "real-time",
+        "run_id": "ecb7e09e48f64b128005ace64793865a",
+        "manifest_sha256": "694913fcec06f9edf399a10475dfa7d97aa9102ab63456b434c0540bfa516f8a",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-009",
+        "mode": "real-time",
+        "run_id": "403e97d4dcf844b1937ee9a23587b5de",
+        "manifest_sha256": "9e0ba1cd8d05417f153cf6e89b0e900433370e6c329180f0b4b86efcd8325867",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-001",
+        "mode": "real-time",
+        "run_id": "7d25ead152d44e9d931046d3d5aeacf0",
+        "manifest_sha256": "ad2775d28594f13a7ff4b8fd325911667d410ddef0bc3d7b5e6db5b789a00bf5",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-003",
+        "mode": "real-time",
+        "run_id": "ea8f519ce6de4cb5b356af50e826086a",
+        "manifest_sha256": "6f0eaa23a7d9de9a880a98211ddc24a5cccbfd902e39120b2fd7d61b95c83fe8",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-010",
+        "mode": "real-time",
+        "run_id": "33d556c2b0b2471e96601efa6486869c",
+        "manifest_sha256": "6352f2054c35553cb8af3371cc68b5cd2b7eb7b772b960e0d85e72ae78415374",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-011",
+        "mode": "real-time",
+        "run_id": "5ab8244f864641029ce2901f950c3aa5",
+        "manifest_sha256": "a0e8e93e27e3f7a5f074c45588650fa469f25ba36b67d8e617b4f9b08042a6a3",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-014",
+        "mode": "real-time",
+        "run_id": "a0155108aa00448d83b2947572b50914",
+        "manifest_sha256": "517a5966e9817d6a2bfd017a4c7eeb13f421b4b56020917b6016791eb10056f4",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-010",
+        "mode": "controlled-experimental",
+        "run_id": "aea0abc1df1941d982180c376a252945",
+        "manifest_sha256": "8fdd4ad90369cd12f67f29bcd6fe771831bb8d71bc732fcabb06c07938104f57",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      },
+      {
+        "case": "M-ARP-011",
+        "mode": "controlled-experimental",
+        "run_id": "85e2f44c6eaf45dfa6f26ba7cb42a2c2",
+        "manifest_sha256": "7bd6f52929d577ee09dac51aad3bd045959bc48d2f9f20eaef55ba57e63f634c",
+        "musical_source_sha256": {
+          "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+          "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+          "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+          "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+        },
+        "matches_current_musical_source": true,
+        "passed": true
+      }
+    ],
+    "units": {
+      "count": 474,
+      "evidence": "artifacts/c16/arp-rest-final-units.json",
+      "sha256": "885331b13087ce10643d903f638360e6f763f26c7d9605385cee6b9de4a19632"
+    },
+    "contract_package": {
+      "current": 13,
+      "negative": 2,
+      "evidence": "artifacts/c16/minimum-gap-contract-package.json"
+    },
+    "reviews": [
+      "spread-candidate-review",
+      "minimum-gap-followup",
+      "arp-rest-review",
+      "arp-rest-followup"
+    ],
+    "limitations": "Historical candidate-native passes are individually source-bound, not relabelled final-tree passes. Arp zero/signed spacing, rest and selected interactions only. D remains experimental; D20 absolute real-time mapping, full campaign, strum shape/rest combinations and emulator release stages remain incomplete."
   }
 }

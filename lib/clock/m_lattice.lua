@@ -176,8 +176,7 @@ function Lattice:pulse()
         local sprocket = self.sprockets[id]
         if sprocket and sprocket.enabled then
           if not sprocket.shuffle_updated then
-            sprocket:update_shuffle(sprocket.step, sprocket.id)
-            sprocket.shuffle_updated = true
+            sprocket:begin_cycle()
           end
           sprocket:prepare_pending_clocks()
           if sprocket._pending_clocks then
@@ -376,6 +375,7 @@ function Sprocket:new(args)
   p.delayed_actions = args.delayed_actions
   p.delayed_action_order = {}
   p.cleanup_delayed_action = args.cleanup_delayed_action
+  p.division_for_cycle = args.division_for_cycle
   return p
 end
 
@@ -518,7 +518,9 @@ function Sprocket:calculate_shuffle_ppqn(step)
 end
 
 function Sprocket:update_shuffle(step)
-  local calculated_ppqn = self:calculate_shuffle_ppqn(step)
+  -- A positive swung interval must consume at least one native pulse.
+  -- Clamp before carry accumulation so sub-pulse gaps cannot create zero cycles.
+  local calculated_ppqn = math.max(1, self:calculate_shuffle_ppqn(step))
   local original_ppqn = self.current_ppqn
   local original_phase = self.phase
   
@@ -539,6 +541,19 @@ function Sprocket:run_pending_action(pending)
   local ok, err = pcall(pending.action)
   self._executing_pending_action = previous
   if not ok then error(err, 0) end
+end
+
+-- Select a varying interval before consuming this cycle's rounding carry.
+-- Changing it after update_shuffle would round the same cycle twice.
+function Sprocket:begin_cycle()
+  if self.division_for_cycle then
+    local division = self.division_for_cycle()
+    assert(type(division) == "number" and division > 0 and division < math.huge,
+      "Invalid cycle division")
+    self.division = math.max(division, 1 / (self.ppqn * 4))
+  end
+  self:update_shuffle(self.step)
+  self.shuffle_updated = true
 end
 
 function Sprocket:finish_cycle()

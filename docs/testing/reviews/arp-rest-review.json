@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only proportionate focused review of candidate0038-arp-rest-slots. Do not edit files. User explicitly approved external Codex repository/test evidence and all future Codex Paranoia reviews. Local MIDI development utility, no manual acceptance or whole-repo review. Previous recurrence/minimum-gap candidates0037/0039 are reviewed; current concern is bounded rest traversal and lifecycle. Semantic decision01a07f50 explicitly defines root+four mask slots, muted root as rest, all trailing/internal slots consume time/acceleration, no-mask unmuted root-only ratchet, all-empty muted silence without loop. Old all-muted native175cc439c13e4e818f7608051f692cd9 hung matron in find_next_note; internal/trailing native baselines failed. Candidate rewrites only handle_arp traversal, adds cancel_arp_onsets(c) used by newarp and all-muted path; leaves old owned note releases/gate intact, uses false placeholders and nextslot modulo fixed nonzero length. Shape mapping uses all4mask slots. Initial reverse chord sounds even if root muted. Native empty-muted f6c33ae6de284136b8de1674bbd075bf, ratchet bae7888ffb4e41008bdfe3bdbc58fb68, internal3ed8efe866d34f4c95241269eb4d4875, trailing37dbad9db4a8411fa0142504bd6d35f0 all pass; short-gap bothsigns also pass. Six old unit assumptions skipped rests; updated to literal per-pulse schedules (including velocity and random reverse shape), isolated474 pass. Earlier boundary cases now explicitly preserve intent: reset/fast tests use no-mask ratchet for dense same-pitch overlaps; fractional gate populates third slot so final note clips at1.25step; five native boundaries currently rerunning. Challenge new trigger/cancellation/reentrant Stop/gate ownership, mutedreverse firstnote, no-mask detection and sparse masks, quantiser use and velocity ordinal across rests. Identify reproducible in-scope blockers and exact necessary additional native tests. Strum shape/rest path is unchanged and separately pending; do not conflate existing strum issues with arp patch. No fullcampaign/realtime claim.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Actual arp creation and ownership"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Native phase and pending timing"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Arp note creation and release"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New native arp regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Musical contract"
+      }
+    ]
+  },
+  "input_sha256": "c6e1e175d1198ed5926b11c964edfbf8af54e1ba63339ed200fb81aafd4f715a",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**No reproducible blocker found in candidate0038\u2019s bounded traversal or cancellation changes.** Three focused native additions would close the remaining coverage gaps.\n\n- **Traversal is bounded and sparse-mask safe.** [step.lua:497](<mosaic-worktree>/lib/step.lua:497) reads all four positions and substitutes `false` for missing/zero masks. The resulting sequence has one or five slots; advancement is `arp_note[c] % total_notes + 1` ([line 554](<mosaic-worktree>/lib/step.lua:554)). This matches [README.md:801](<mosaic-worktree>/README.md:801).\n- **Muted reverse starts correctly.** Shapes 2/4 append the muted root placeholder; initial playback tests the actual first slot, independently of root muting ([step.lua:524](<mosaic-worktree>/lib/step.lua:524)). Both initial and subsequent notes use `process_func`; velocity increments on every slot, including rests ([line 545](<mosaic-worktree>/lib/step.lua:545)).\n- **Cancellation preserves ownership.** [m_clock.lua:576](<mosaic-worktree>/lib/clock/m_clock.lua:576) destroys onset sprockets only. Destruction immediately disables them ([m_lattice.lua:398](<mosaic-worktree>/lib/clock/m_lattice.lua:398)); the retained gate closure drains its own `release_ids` and removes only its own sprocket ([m_clock.lua:598](<mosaic-worktree>/lib/clock/m_clock.lua:598)). Git history places the underlying release lifecycle in `c8781ce`; 0038 retains it.\n\nI ran **128 actual `handle_arp`/lattice schedules** covering every mask subset, all four shapes, both root states, velocity across rests and release timing. All passed, as did the existing **54 release cases, 96 cadence cases and reentrant gate-Stop contract**. The five previously pending native boundary manifests now report passes (`e3d071\u2026`, `87cba2\u2026`, `a8fe0e\u2026`, `8e063c\u2026`, `be15e0\u2026`).\n\n**Necessary additional native tests:**\n\n1. **Sounding arp \u2192 empty-muted trigger \u2192 replacement arp:** use overlapping release tails; assert cancellation emits no immediate Off, no cancelled onset escapes, the old endpoint cannot cut the replacement, and Stop drains each outstanding voice once. The current empty-muted fixture starts from silence ([cases.py:1113](<mosaic-worktree>/tests/behaviour/cases.py:1113)).\n2. **Muted sparse shapes 2 and 4:** populate only mask 4, leaving other masks unset. Expect a note at trigger time, four timed rests, then the next note at slot ordinal 5; assert corresponding velocity and releases.\n3. **Rests with acceleration, velocity and quantisation:** muted root, masks 1/3 populated; use `d=.5, s=.25, a=1`, velocity `50`, modifier `+10`. Expected sounding ordinals `1,3,6` occur at `.75,3,8.25` steps with velocities `60,80,110`. Change scale during a rest and verify the next pitch under ordinary and fully-quantised-mask processing. Existing rest fixtures use constant spacing and velocity ([cases.py:1133](<mosaic-worktree>/tests/behaviour/cases.py:1133)).\n\n**CONFIDENCE: Medium.** Those native combinations remain unverified; a failure there would change the answer. No files edited.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07fc7-92af-7850-99a4-1693a08c0693` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "706f609e4996b30b028a4099a76cf55b63f308c84f45e2ee72966c6e0f5300ec",
+    "redaction": "Personal absolute paths replaced; complete raw response retained in ignored artifacts."
+  }
+}

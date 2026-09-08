@@ -1024,3 +1024,24 @@ screen-boundary cases pass in controlled and real time;474 units pass.
 Codex decision01a07f50-06ce-76f2-86f5-76414bd23074 settles a new spread/acceleration
 contract. Its manual amendment, native old-behavior baselines and implementation
 are pending. No nonzero-spread musical code changed in this bounds correction.
+
+## Spread, minimum swung interval and bounded arp rests
+
+Candidates0037/0039/0038 implement the documented spacing recurrence, preserve
+a one-pulse minimum after swing, and traverse all arp slots without an unbounded
+search. The empty-muted native baseline hung; the corrected runtime stays silent
+and responsive. No-mask ratcheting, timed trailing/internal rests, muted reverse
+shapes, velocity ordinals, live scale editing (ordinary and fully quantised mask),
+replacement tails and Stop have native regressions.
+
+Eleven historical unit expectations were amended explicitly for the new
+spacing/rest contract; their literal per-pulse assertions reject extra notes.
+All474 units pass. Earlier dense arp boundary fixtures now use no-mask ratcheting;
+the fractional-gate fixture populates its final sounding slot, preserving the
+regression each was designed to catch. Native results are individually source
+bound in spacing-rest-validation.json. Historical failures remain unchanged.
+
+Codex found a zero-rounded swung interval and its focused follow-up verified
+the isolated fix. The rest review requested three native interactions, now
+implemented and reviewed. These are scoped validations, not full campaign or
+D20 absolute real-time acceptance. The full refactor prerequisite remains unmet.

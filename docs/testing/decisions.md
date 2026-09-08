@@ -87,3 +87,29 @@ cover ordinary, fractional-final-gate, replacement, reset overlap and one-pulse
 boundary cases. This does not establish complete arp coverage. Nonzero spread
 and acceleration recurrence still require a separate documented decision and
 finite-domain/interaction tests; existing implementation is preserved there.
+
+## Spread/acceleration target contract (2026-09-08)
+
+Codex arbitration01a07f50-06ce-76f2-86f5-76414bd23074 chooses
+gap_k=d+s*(1+(k-1)*a), in channel steps, with off a=0. The first gap is d+s;
+every later gap changes by s*a. Rest slots consume ordinals, including trailing
+slots; a new trigger resets acceleration, an arp wrap does not. A nonpositive
+next gap ends scheduling without a final collapsed note. Existing releases,
+replacement ownership, Stop and live scale evaluation remain mandatory.
+
+This is an intentional semantic amendment, not historical compatibility.
+Full ascending+1 strums retain their old spacing. Off, other signed values,
+nonzero arp startup and trailing-empty-slot behavior change. The documented
+no-mask ratchet remains a one-root-slot special case; all-empty muted arps
+are silent and bounded. README now describes the target before implementation.
+Baseline tests must retain current outputs and distinguish a new-contract pass
+from a compatibility control. No nonzero implementation has changed yet.
+
+## Spacing/rest implementation checkpoint
+
+The earlier target-only statement is historical: candidates0037/0039/0038 now
+implement the recurrence and arp rest semantics. A positive arp gap occupies
+at least one scheduler pulse after swing; clamping before rounding/carry avoids
+zero-length cycles without inventing an extra onset at a nonpositive nominal gap.
+Codex reviews and source-bound evidence are in spacing-rest-validation.json.
+Strum shape/rest combinations and full timing acceptance remain pending.

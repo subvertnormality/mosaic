@@ -574,21 +574,23 @@ function test_random_notes_with_arp_and_strum_pattern()
   
   m_clock.init()
   m_clock:start()
-  
-  -- Should play highest note first
-  local note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 69) -- A (fifth)
-  
-  progress_clock_by_beats(1)
-  
-  note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 65) -- F (third)
-  
-  progress_clock_by_beats(1)
-
-  note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 62) -- D (root)
+  -- Decision01a07f50: muted and empty slots consume their full interval.
+  local expected = {{8,69,100}, {12,65,100}, {16,62,100}}
+  local next_event = 1
+  for pulse = 0, 24 do
+    if pulse > 0 then m_clock.get_clock_lattice():pulse() end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing rest-contract note at pulse " .. pulse)
+      luaunit.assert_equals({event[1],event[2],event[3]}, {wanted[2],wanted[3],1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events,0,"Unexpected note in slot at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event,#expected+1)
 end
+
 
 function test_random_notes_with_note_mask_and_chords()
   setup()

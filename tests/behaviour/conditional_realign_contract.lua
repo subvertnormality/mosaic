@@ -23,6 +23,7 @@ for _,point in ipairs({{0,1},{1,1},{64,2},{128,2}}) do
  fn={constrain=function(n) return n end}
  local clock={realign_sprockets=function() realign_calls=realign_calls+1 end,calculate_divisor=function() return 4 end,set_channel_division=function() division_calls=division_calls+1 end}
  include=function(path)
+  if path=='mosaic/lib/clock/chord_timing' then return dofile('lib/clock/chord_timing.lua') end
   if path=='mosaic/lib/clock/m_clock' then return clock end
   if path=='mosaic/lib/quantiser' then return {} end
   assert(path=='mosaic/lib/clock/divisions',path);return {note_divisions={}}

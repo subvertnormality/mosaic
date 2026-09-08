@@ -1011,7 +1011,9 @@ def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=
     if not replacement:c.tap(2,4);c.tap(3,4)
     c.tap(3,8)
     c.enc(1,-4);c.enc(2,2);c.enc(3,15 if fractional_gate else 18);length_mask_display(c,'1.25' if fractional_gate else '2')
-    c.enc(2,1);c.enc(3,3)
+    if not (fast or reset):
+        c.enc(2,1);c.enc(3,3)
+        if fractional_gate:c.enc(2,1);c.enc(3,5)
     c.enc(1,3);c.enc(3,0 if fast else -11);c.key(3);c.enc(1,-2)
     assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,1 if fast else 8)
     if reset:set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',True)])
@@ -1038,7 +1040,12 @@ def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=
         end=min(root+gate,next_root)
         for offset in range(0,end-root,interval):
             if root+offset>seconds*144:continue
-            pitch=([60,62,64] if (offset//interval)%2==0 else [64,65,67])[step]
+            slot=(offset//interval)%5
+            if fast or reset:pitch=[60,62,64][step] # No-mask ratchet retains dense retrigger coverage.
+            elif slot==0:pitch=[60,62,64][step]
+            elif slot==1:pitch=[64,65,67][step]
+            elif slot==2 and fractional_gate:pitch=[67,69,71][step]
+            else:continue # Explicit trailing slot is a rest under the amended contract.
             expected.append((root+offset,pitch,[127,117,107][step]))
             durations.append(min(interval,root+gate-(root+offset)))
     field='logical_ns' if controlled else 'monotonic_ns';notes=capture.note_ons();assert notes
@@ -1061,6 +1068,168 @@ def parameter_division_bounds(c,parameter):
     c.enc(3,1);label('1/24');c.enc(3,88);label('128')
     c.enc(3,3);label('128')
     c.enc(3,-1);label('120');c.enc(3,-88);label('X')
+
+
+def spread_acceleration_contract(c,arp,acceleration,explicit_off=False):
+    import time
+    from midi_window import MidiWindow
+    from note_schedule import assert_schedule
+    assert acceleration in range(-5,6)
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
+    for turns in (3,5,6,8):c.enc(2,1);c.enc(3,turns)
+    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
+    assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');c.enc(3,8)
+    c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,5)
+    if acceleration or explicit_off:
+        c.enc(2,1);assign_trig_parameter(c,'Chord Accel Mod');c.enc(3,2 if explicit_off else acceleration)
+        if explicit_off:
+            c.action(type='grid',x=1,y=4,state=1)
+            try:c.enc(3,-2)
+            finally:c.action(type='grid',x=1,y=4,state=0)
+    capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(18);capture.extend(c.snapshot())
+    controlled=c.clock_mode=='controlled-experimental'
+    lower=c.logical_ns if controlled else time.monotonic_ns()
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    upper=c.logical_ns if controlled else time.monotonic_ns()
+    c.elapse(2);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
+    # Codex-arbitrated new contract, not a fit to current implementation:
+    # channel period216, d=1/2, s=1/4; gap_k=d+s*(1+(k-1)*a).
+    pitches=(60,64,67,69,72);expected=[(0,60,127)];tick=0;ordinal=1
+    while arp or ordinal<=4:
+        gap=108+54*(1+(ordinal-1)*acceleration)
+        if gap<=0:break
+        tick+=gap
+        if tick>2592:break
+        expected.append((tick,pitches[ordinal%5],127));ordinal+=1
+    field='logical_ns' if controlled else 'monotonic_ns';notes=capture.note_ons();assert notes
+    # Strum durations deliberately exceed this observation; only their Stop
+    # releases are claimed here. Arp duration is independently half a step.
+    rows=assert_schedule(capture.events,expected,[108 if arp else 27648]*len(expected),field=field,origin=notes[0][field],stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
+    c.results.append(dict(kind='spread-acceleration-contract',arp=arp,acceleration=acceleration,default_off=acceleration==0 and not explicit_off,explicit_off=explicit_off,onsets=len(expected),release_checks=len(rows),decision='01a07f50-06ce-76f2-86f5-76414bd23074',compatibility_claim='New-contract conformance; historical behavior is preserved only where independently shown',passed=True))
+
+
+def arp_empty_masks(c,muted=False):
+    from note_accounting import note_pairs
+    c.configure();c.enc(1,-3);assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
+    if muted:
+        c.enc(2,1);assign_trig_parameter(c,'Mute Chord Root');c.enc(3,1)
+        before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(.5)
+        # Silence alone cannot pass: the native input loop and screen must
+        # remain responsive while an all-empty muted arp is selected.
+        c.enc(1,3);c.screen_header('Ch. 1 Device Config');c.tap(1,8);c.elapse(.25)
+        state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and m['bytes'][0]&240==144 and m['bytes'][2]>0]
+        assert not notes and not state['midi_capture']['outstanding'],'Muted empty arp emitted or retained a voice'
+        c.results.append(dict(kind='empty-muted-arp-responsive-silence',passed=True));return
+    before=c.snapshot()['midi_count']
+    expected=[(1,[144,pitch,velocity]) for pitch,velocity in ((60,127),(62,117),(64,107),(65,97)) for _ in range(2)]
+    notes=c.playback(expected,cycles=2,timeout=4,settle_seconds=1.25)
+    assert_durations(c,notes,[.5]*16)
+    events=[m for m in c.snapshot()['midi'] if m['index']>before]
+    assert len(note_pairs(events))==len(notes),'No-mask ratchet release accounting failed'
+    c.results.append(dict(kind='no-mask-ratchet-compatibility-control',onsets=len(notes),passed=True))
+
+def arp_rest_slots(c,internal=False):
+    import time
+    from midi_window import MidiWindow
+    from note_schedule import assert_schedule
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
+    # Explicit Off values preserve real internal/trailing rest slots in the
+    # baseline; this does not depend on Lua's length of a sparse table.
+    for turns in (3,1,5 if internal else 1,1):c.enc(2,1);c.enc(3,turns)
+    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
+    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
+    capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(8);capture.extend(c.snapshot())
+    controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    upper=c.logical_ns if controlled else time.monotonic_ns()
+    c.elapse(1);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
+    slots=(60,64,None,67 if internal else None,None)
+    expected=[(ordinal*108,slots[ordinal%5],127) for ordinal in range(11) if slots[ordinal%5] is not None]
+    field='logical_ns' if controlled else 'monotonic_ns';notes=capture.note_ons();assert notes
+    rows=assert_schedule(capture.events,expected,[108]*len(expected),field=field,origin=notes[0][field],stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
+    c.results.append(dict(kind='arp-rest-slot-contract',internal=internal,onsets=len(expected),release_checks=len(rows),decision='01a07f50-06ce-76f2-86f5-76414bd23074',passed=True))
+
+
+def fractional_spread_contract(c):
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    assert c.clock_mode=='controlled-experimental','Exact fractional pulse windows require controlled time until the D20 real-time deadline oracle is implemented'
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
+    for turns in (3,5,6,8):c.enc(2,1);c.enc(3,turns)
+    c.enc(1,3);c.enc(3,7);c.key(3);c.enc(1,-2)
+    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
+    c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,5)
+    capture=MidiWindow(c.snapshot()['midi_count'])
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.elapse(1.500001);capture.extend(c.snapshot());lower=c.logical_ns
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    upper=c.logical_ns;c.elapse(.25);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
+    notes=capture.note_ons();assert len(notes)==61,('Fractional arp onset count',len(notes))
+    origin=notes[0]['logical_ns'];pitches=(60,64,67,69,72)
+    pulses=[(note['logical_ns']-origin)*144/1e9 for note in notes]
+    for i,note in enumerate(notes):
+        assert (note['port'],note['bytes'])==(1,[144,pitches[i%5],127]),('Fractional arp data',i,note)
+        assert abs(pulses[i]-i*18/5)<=1.0000003,('Fractional arp phase',i,pulses[i])
+        if i:assert min(abs(pulses[i]-pulses[i-1]-n) for n in (3,4))<=.0000003,('Fractional arp gap',i)
+        if i>=5:assert abs(pulses[i]-pulses[i-5]-18)<=.0000003,('Fractional five-slot window',i)
+    pairs=note_pairs(capture.events);assert len(pairs)==61
+    for on,off in pairs:
+        duration=(off['logical_ns']-on['logical_ns'])*144/1e9
+        regular=abs(duration-12/5)<=1.0000003
+        stopped=lower<=off['logical_ns']<=upper and off['bytes'][2] in (0,on['bytes'][2])
+        assert regular or stopped,('Fractional arp duration',duration,on,off)
+        assert off['bytes'][2]==on['bytes'][2] or stopped,'Fractional release velocity'
+    c.results.append(dict(kind='fractional-spread-contract',parent_period='24/5 pulses',arp_interval='18/5 pulses',independent_windows=56,onsets=61,release_checks=61,decision='01a07f50-06ce-76f2-86f5-76414bd23074',passed=True))
+
+
+def minimum_swung_gap_contract(c,swing):
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    assert c.clock_mode=='controlled-experimental','Exact fractional pulse windows require controlled time until the D20 real-time deadline oracle is implemented'
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
+    for turns in (3,5,6,8):c.enc(2,1);c.enc(3,turns)
+    c.enc(1,3);c.enc(3,7);c.key(3)
+    c.enc(2,1);c.enc(3,1);c.key(3)
+    c.enc(2,1);c.enc(3,swing+51);c.key(3);c.enc(1,-2)
+    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
+    c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,1)
+    c.enc(2,1);assign_trig_parameter(c,'Chord Accel Mod');c.enc(3,-4)
+    capture=MidiWindow(c.snapshot()['midi_count'])
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.elapse(.5);capture.extend(c.snapshot())
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.elapse(.25);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
+    # Four positive spacing gaps; the fifth is negative and must not sound.
+    expected=(0,1,4,5,6) if swing<0 else (0,4,5,6,7)
+    notes=capture.note_ons();assert len(notes)==5,('Minimum swung gap lost/extra note',swing,len(notes))
+    origin=notes[0]['logical_ns'];pitches=(60,64,67,69,72)
+    for note,pulse,pitch in zip(notes,expected,pitches):
+        assert (note['port'],note['bytes'])==(1,[144,pitch,127])
+        assert abs((note['logical_ns']-origin)*144/1e9-pulse)<.0000003,('Minimum gap onset',swing,pulse,note)
+    # Independently declared rounded parent cycles: x5, signed50 swing,
+    # initial half-pulse carry. A half-step gate integrates across these cycles.
+    periods=(2,8,2,7) if swing<0 else (7,3,7,2)
+    pairs=note_pairs(capture.events);assert len(pairs)==5
+    for (on,off),onset in zip(pairs,expected):
+        start=0
+        for n,period in enumerate(periods):
+            if onset<start+period:break
+            start+=period
+        fraction=(onset-start)/period+.5
+        if fraction<=1:ideal=start+fraction*period
+        else:ideal=start+period+(fraction-1)*periods[n+1]
+        actual=(off['logical_ns']-origin)*144/1e9
+        assert abs(actual-ideal)<=1.0000003,('Half-step swung release',swing,onset,ideal,actual)
+        assert off['bytes']==[128,on['bytes'][1],127]
+    c.results.append(dict(kind='minimum-swung-gap',swing=swing,onsets=5,releases=5,passed=True))
 
 
 def autosave_restart(c):
@@ -2143,7 +2312,134 @@ def keyboard_pitch_range(c):
     assert not state['midi_capture']['outstanding']
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
+
+def muted_sparse_reverse_arp(c,shape):
+    import time
+    from midi_window import MidiWindow
+    from note_schedule import assert_schedule
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    c.tap(3,8);c.enc(1,-4)
+    c.enc(2,1);c.enc(3,51) # Unset -1 -> velocity50.
+    c.enc(2,1);c.enc(3,89);length_mask_display(c,'128')
+    c.enc(2,4);c.enc(3,8) # Only mask4 is populated: octave; others remain unset.
+    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
+    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
+    c.enc(2,1);assign_trig_parameter(c,'Chord Pattern');c.enc(3,shape)
+    c.enc(2,1);assign_trig_parameter(c,'Mute Chord Root');c.enc(3,1)
+    c.enc(2,1);assign_trig_parameter(c,'Chord Velocity Mod');c.enc(3,10)
+    capture=MidiWindow(c.snapshot()['midi_count']);trigger=c.logical_ns;c.tap(1,8);c.elapse(8.5);capture.extend(c.snapshot())
+    controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    upper=c.logical_ns if controlled else time.monotonic_ns()
+    c.elapse(1);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
+    expected=[(0,72,50),(540,72,100),(1080,72,127)]
+    field='logical_ns' if controlled else 'monotonic_ns';notes=capture.note_ons();assert notes
+    if controlled:assert abs(notes[0]['logical_ns']-trigger)<=2,'Sparse reverse initial note missed trigger'
+    rows=assert_schedule(capture.events,expected,[108]*3,field=field,origin=notes[0][field],stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
+    c.results.append(dict(kind='muted-sparse-reverse-arp',shape=shape,onsets=3,releases=len(rows),velocity_ordinals=[0,5,10],passed=True))
+
+
+def arp_rest_live_scale(c,fully_masked=False):
+    from midi_window import MidiWindow
+    from note_schedule import assert_schedule
+    assert c.clock_mode=='controlled-experimental','Absolute live-edit schedule requires controlled time until D20 mapping is admitted'
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    c.tap(3,8);c.enc(1,-4)
+    if fully_masked:c.enc(3,61) # Explicit C4 mask, then use full scale processing.
+    c.enc(2,1);c.enc(3,51);c.enc(2,1);c.enc(3,89);length_mask_display(c,'128')
+    c.enc(2,1);c.enc(3,3);c.enc(2,2);c.enc(3,5)
+    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
+    values=[('Chord Note Arpeggio',8),('Chord Spread',5),('Chord Accel Mod',1),('Chord Velocity Mod',10),('Mute Chord Root',1)]
+    if fully_masked:values.append(('Quantise Note Mask',2))
+    for index,(label,value) in enumerate(values):
+        if index:c.enc(2,1)
+        assign_trig_parameter(c,label);c.enc(3,value)
+    capture=MidiWindow(c.snapshot()['midi_count']);origin=c.logical_ns
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.elapse(2);capture.extend(c.snapshot())
+    c.tap(4,8);c.enc(2,-1);c.enc(3,2);c.key(3) # Applied scale C-major -> D-major during a rest.
+    assert (c.logical_ns-origin)/1e9<4.5,'Scale edit missed its declared rest window'
+    c.elapse(14-(c.logical_ns-origin)/1e9);capture.extend(c.snapshot());lower=c.logical_ns
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    upper=c.logical_ns;c.elapse(1);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
+    expected=[(162,64,60),(648,69,80),(1782,66,110)]
+    rows=assert_schedule(capture.events,expected,[108]*3,field='logical_ns',origin=origin,stop_bounds=(lower,upper),tolerance=2e-9)
+    c.results.append(dict(kind='arp-rest-live-scale',fully_masked=fully_masked,onsets=3,releases=len(rows),ordinals=[1,3,6],passed=True))
+
+
+def arp_empty_muted_replacement(c):
+    import time
+    from midi_window import MidiWindow
+    from note_schedule import assert_schedule
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8);c.tap(4,4);c.tap(3,8)
+    c.enc(1,-4);c.enc(2,2);c.enc(3,22);length_mask_display(c,'3')
+    c.enc(2,1);c.enc(3,1) # Global chord1 Off; other masks unset.
+    for x in (1,3):
+        c.action(type='grid',x=x,y=4,state=1)
+        try:c.enc(3,2) # Third only for the first and replacement trigger.
+        finally:c.action(type='grid',x=x,y=4,state=0)
+    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
+    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,18) # Two-step notes/onsets.
+    c.enc(2,1);assign_trig_parameter(c,'Mute Chord Root');c.enc(3,1)
+    for x in (1,3):
+        c.action(type='grid',x=x,y=4,state=1)
+        try:c.enc(3,-1)
+        finally:c.action(type='grid',x=x,y=4,state=0)
+    capture=MidiWindow(c.snapshot()['midi_count']);trigger=c.logical_ns
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.elapse(6.75);capture.extend(c.snapshot())
+    controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    upper=c.logical_ns if controlled else time.monotonic_ns();c.elapse(2);capture.extend(c.snapshot())
+    c.wait(lambda state:not state['midi_capture']['outstanding'])
+    # Empty-muted trigger at216 cancels the old onset due432, preserving
+    # its root release432. Old gate648 cannot cut replacement root due864.
+    # Replacement chord begins864 and is drained by Stop972 before gate1080.
+    expected=[(0,60,127),(432,64,107),(864,67,107)]
+    notes=capture.note_ons();assert notes;field='logical_ns' if controlled else 'monotonic_ns'
+    origin=trigger if controlled else notes[0][field]
+    rows=assert_schedule(capture.events,expected,[432,432,216],field=field,origin=origin,stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
+    c.results.append(dict(kind='empty-muted-replacement-release-ownership',onsets=3,releases=len(rows),empty_trigger_pulse=216,old_gate_pulse=648,passed=True))
+
 CASES={
+ 'M-ARP-014':dict(run=arp_empty_muted_replacement,requirements=['CHORD-ARP', 'CHORD-MUTE-ROOT'],description='Empty-muted trigger cancels old arp onsets while preserving tails and replacement ownership through Stop'),
+ 'M-ARP-013':dict(run=lambda c:arp_rest_live_scale(c,True),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Rests consume acceleration and velocity ordinals; applied scale edits affect later arp notes through native controls"),
+ 'M-ARP-012':dict(run=lambda c:arp_rest_live_scale(c,False),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Rests consume acceleration and velocity ordinals; applied scale edits affect later arp notes through native controls"),
+ 'M-ARP-011':dict(run=lambda c:muted_sparse_reverse_arp(c,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Muted sparse reverse shape sounds at trigger, retains four rests and advances velocity through wrap"),
+ 'M-ARP-010':dict(run=lambda c:muted_sparse_reverse_arp(c,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Muted sparse reverse shape sounds at trigger, retains four rests and advances velocity through wrap"),
+ 'M-SPREAD-027':dict(run=lambda c:minimum_swung_gap_contract(c,50),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CH-TEMPO'],description="Positive short swung gaps retain every onset and half-step releases before negative termination"),
+ 'M-SPREAD-026':dict(run=lambda c:minimum_swung_gap_contract(c,-50),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CH-TEMPO'],description="Positive short swung gaps retain every onset and half-step releases before negative termination"),
+ 'M-SPREAD-025':dict(run=lambda c:spread_acceleration_contract(c,False,0,explicit_off=True),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'LOCK-PARAM-SET'],description='Explicit step Off overrides active global+2 acceleration while preserving constant Spread spacing'),
+ 'M-SPREAD-024':dict(run=lambda c:spread_acceleration_contract(c,True,0,explicit_off=True),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'LOCK-PARAM-SET'],description='Explicit step Off overrides active global+2 acceleration while preserving constant Spread spacing'),
+ 'M-SPREAD-023':dict(run=fractional_spread_contract,requirements=['CHORD-ARP','CHORD-SPREAD','CH-TEMPO'],description='Fractional x5 clock and constant Spread preserve exact18-pulse five-slot windows, bounded phase and all releases'),
+ 'M-ARP-009':dict(run=arp_rest_slots,requirements=['CHORD-ARP'],description='Explicit trailing empty masks occupy rest slots before arp wrap'),
+ 'M-ARP-008':dict(run=lambda c:arp_rest_slots(c,internal=True),requirements=['CHORD-ARP'],description='Explicit internal and trailing mask rests retain their timing slots'),
+ 'M-ARP-007':dict(run=lambda c:arp_empty_masks(c,muted=True),requirements=['CHORD-ARP', 'CHORD-MUTE-ROOT'],description='All-empty muted arp is silent and responsive, with bounded Stop cleanup'),
+ 'M-ARP-006':dict(run=arp_empty_masks,requirements=['CHORD-ARP'],description='No-mask arp remains a root ratchet with exact releases'),
+ 'M-SPREAD-022':dict(run=lambda c:spread_acceleration_contract(c,True,5),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel 5: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-021':dict(run=lambda c:spread_acceleration_contract(c,True,4),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel 4: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-020':dict(run=lambda c:spread_acceleration_contract(c,True,3),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel 3: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-019':dict(run=lambda c:spread_acceleration_contract(c,True,2),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel 2: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-018':dict(run=lambda c:spread_acceleration_contract(c,True,1),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel 1: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-017':dict(run=lambda c:spread_acceleration_contract(c,True,0),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel 0: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-016':dict(run=lambda c:spread_acceleration_contract(c,True,-1),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel -1: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-015':dict(run=lambda c:spread_acceleration_contract(c,True,-2),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel -2: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-014':dict(run=lambda c:spread_acceleration_contract(c,True,-3),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel -3: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-013':dict(run=lambda c:spread_acceleration_contract(c,True,-4),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel -4: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-012':dict(run=lambda c:spread_acceleration_contract(c,True,-5),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Arp with quarter-step Spread and Accel -5: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-011':dict(run=lambda c:spread_acceleration_contract(c,False,5),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel 5: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-010':dict(run=lambda c:spread_acceleration_contract(c,False,4),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel 4: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-009':dict(run=lambda c:spread_acceleration_contract(c,False,3),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel 3: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-008':dict(run=lambda c:spread_acceleration_contract(c,False,2),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel 2: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-007':dict(run=lambda c:spread_acceleration_contract(c,False,1),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel 1: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-006':dict(run=lambda c:spread_acceleration_contract(c,False,0),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel 0: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-005':dict(run=lambda c:spread_acceleration_contract(c,False,-1),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -1: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-004':dict(run=lambda c:spread_acceleration_contract(c,False,-2),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -2: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-003':dict(run=lambda c:spread_acceleration_contract(c,False,-3),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -3: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-002':dict(run=lambda c:spread_acceleration_contract(c,False,-4),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -4: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-SPREAD-001':dict(run=lambda c:spread_acceleration_contract(c,False,-5),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -5: independent new-contract gap table, nonpositive termination and Stop accounting'),
  'M-PARAM-003':dict(run=lambda c:parameter_division_bounds(c,'Chord Spread'),requirements=['PARAM-SLOTS', 'CHORD-SPREAD'],description='Chord Spread selector exposes only supported musical divisions, clamps both ends and returns to Off'),
  'M-PARAM-002':dict(run=lambda c:parameter_division_bounds(c,'Chord Note Arpeggio'),requirements=['PARAM-SLOTS', 'CHORD-ARP'],description='Chord Note Arpeggio selector exposes only supported musical divisions, clamps both ends and returns to Off'),
  'M-PARAM-001':dict(run=lambda c:parameter_division_bounds(c,'Chord Note Strum'),requirements=['PARAM-SLOTS', 'CHORD-STRUM'],description='Chord Note Strum selector exposes only supported musical divisions, clamps both ends and returns to Off'),

@@ -1,0 +1,13 @@
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -518,7 +518,9 @@
+ end
+ 
+ function Sprocket:update_shuffle(step)
+-  local calculated_ppqn = self:calculate_shuffle_ppqn(step)
++  -- A positive swung interval must consume at least one native pulse.
++  -- Clamp before carry accumulation so sub-pulse gaps cannot create zero cycles.
++  local calculated_ppqn = math.max(1, self:calculate_shuffle_ppqn(step))
+   local original_ppqn = self.current_ppqn
+   local original_phase = self.phase
+   

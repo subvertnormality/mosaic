@@ -1,0 +1,42 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused follow-up to review01a07fb0-e236-72e1-bd91-01db91b83b35; do not edit files. User authorises this public-source review. Candidate0039 clamps effective swung interval using max(1,calculate_shuffle_ppqn(step)) before rounding/carry. Reproduced baseline with actual m_clock/lattice negative50 callbacks1,4,6; afterfix1,4,5,6, positive50control4,5,6,7. New arp_minimum_gap_contract covers both signs and zero-rounded startup with literal first8pulse sequences and positive gaps. Native M-SPREAD026/027 through real UI fully populate slots, set x5, dhalf,s1/24,a-4,signed50 swing; both pass five exact MIDI onsets, half-step releases checked against independent rounded parent cycles with one-pulse bound, exact MIDI and no extra onset. Manifests5283c5a8a7504c4fa922a0f7c4dab559 and58651d0e63a34770bfd4ace8d9e03e5f are under <native-runs>. All474 units now pass: five historical spacing tests intentionally updated to literal pulse schedules for recorded new contract (no weakened tolerances; every empty pulse asserts no extra MIDI). Actual174 arp contracts plus13 pending-clock/Stop contracts pass. Two negative controls reject intended defects; old pre0035 snapshot incompatible with new begin_cycle API was replaced only in isolated negative fixture by current lattice with0035 Stop guards removed. Prior25 native signed/fractional cases passed on0037 before0039; do not claim fullfinal native campaign or real-time acceptance. Review only whether the reproduced minimum-gap blocker is resolved without new carry/phase regressions; inspect candidate0039, actualscheduler tests, native minimum_swung_gap_contract and corrected integration expectations. Known rest/all-muted candidate0038 remains unimplemented; fullrelease incomplete. Recommend only concrete remaining blockers or necessary focused checks.",
+    "files": [
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "One-pulse effective interval fix"
+      },
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Cycle selection context"
+      },
+      {
+        "path": "tests/behaviour/arp_minimum_gap_contract.lua",
+        "reason": "Minimal actual scheduler regression"
+      }
+    ]
+  },
+  "input_sha256": "f5871ad6414d97820aef4358d731bf3f7a5f8260bc72756a0b4d3967943d9369",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**Yes\u2014the reproduced minimum-gap blocker is resolved by candidate0039. I found no new carry or phase regression in the inspected code and focused reruns.**\n\n- [m_lattice.lua:523](<mosaic-worktree>/lib/clock/m_lattice.lua:523) clamps before the unchanged rounding/carry calculation. [m_clock.lua:623](<mosaic-worktree>/lib/clock/m_clock.lua:623) advances startup once; `begin_cycle()` selects the next division before consuming carry.\n- I reran [arp_minimum_gap_contract.lua:19](<mosaic-worktree>/tests/behaviour/arp_minimum_gap_contract.lua:19): negative50 gives `1,4,5,6`, positive50 gives `4,5,6,7`; both startup regressions pass. Removing only the clamp **in memory** reproduces `1,4,6` and fails the assertion.\n- All **174 actual scheduler cadence/swing/release cases** passed, alongside pending-clock, Stop, unchanged-setting and fractional-window checks.\n- Both native artifacts match the current lattice hash; manifest artifact hashes verify. Recorded MIDI confirms onsets `0,1,4,5,6` and `0,4,5,6,7`, with five releases each. The [native oracle:1204](<mosaic-worktree>/tests/behaviour/cases.py:1204) checks exact onsets/MIDI and independently declared parent cycles with the stated one-pulse release bound.\n- The five corrected integration schedules agree with the [recorded recurrence](<mosaic-worktree>/docs/testing/decisions.md:94); their per-pulse empty-queue assertions reject extra MIDI.\n\n**One concrete test-maintenance issue:** [conditional_realign_contract.lua:25](<mosaic-worktree>/tests/behaviour/conditional_realign_contract.lua:25) lacks the new `chord_timing` include and fails before testing behavior. Supplying that include in memory makes all 64 cases pass; update the fixture. This is not evidence of a scheduler regression.\n\n**CONFIDENCE: High for this blocker.** I did not independently rerun all 474 units or establish final native/real-time acceptance; candidate0038 and full-release completion remain outside this clearance.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07fbf-0a03-71c1-8286-4589ffcc9583` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "7ac3d02e9a1b3b801c55fac32805076dcc23a92ba0f6c80911fdf86fce7361a5",
+    "redaction": "Personal absolute paths replaced; complete raw response retained in ignored artifacts."
+  }
+}
