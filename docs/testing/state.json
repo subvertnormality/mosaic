@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue broader arp/manual coverage: define nonzero spread/acceleration recurrence through Codex-only arbitration and test actual channel-rate changes/Stop-restart histories. Implement D20 real-time deadline/origin mapping and final-source fractional/integer matrices, then remaining emulator cards and complete manual campaign. Use the Linux-filesystem emulator validation worktree for WSL sessions. Do not bypass denied SEM007 arbitration or claim full completion from these scoped passes.",
+  "next_action": "Document Codex spread/acceleration decision01a07f50-06ce-76f2-86f5-76414bd23074, add/run the prepared22 new-contract baseline cases, and only then implement the chosen recurrence/rest/termination semantics. Existing nonzero code is unchanged. Continue live channel-rate changes, D20 deadline/origin work and remaining manual/emulator release gates. Do not bypass denied SEM007 arbitration.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2848,11 +2848,11 @@
   },
   "updated": "2026-09-08",
   "manual_binding_snapshot": {
-    "implemented_cases": 106,
+    "implemented_cases": 109,
     "requirements": 141,
-    "requirements_with_case": 66,
-    "requirements_without_case": 75,
-    "scope": "Bindings only; finite domains, edge cases and interactions remain mandatory."
+    "requirements_with_case": 67,
+    "requirements_without_case": 74,
+    "scope": "Bindings only; all finite domains and interactions remain required."
   },
   "note_pattern_selector_validation": {
     "status": "validated",
@@ -4072,5 +4072,65 @@
       "detail": "5/6 division has a one-pulse release rounding error at all three integer parent rates; remains open."
     },
     "limitations": "No candidate/full campaign acceptance. Current focused Codex arp review pending. Arp reset/overlapping-tail, replacement edge timing, broader native divisions and Stop/restart still needed. R fractional oracle amendment and independently justified deadline mapping remain unimplemented; historical timing failures stay failed. Native Linux and remaining emulator/manual cards remain open."
+  },
+  "parameter_division_bounds_validation": {
+    "status": "scoped-regressions-validated",
+    "source_sha256": "6f50de130996a137b44506384f91089b065cce43d2201da6b4670c0a41a38037",
+    "runs": [
+      {
+        "case": "M-PARAM-001",
+        "mode": "controlled-experimental",
+        "run_id": "f9a7e32c8b4d4ff4a430ac9a01cdd94d",
+        "manifest_sha256": "808a347e30f69e01dfb5fb87da528c5a87a30b090f3bc661eccf30e9fbb80e7a",
+        "passed": true
+      },
+      {
+        "case": "M-PARAM-002",
+        "mode": "controlled-experimental",
+        "run_id": "719cacebc1d84f388490d03b28439e87",
+        "manifest_sha256": "01f7f0eb35fab7335caa6c7fe661e894cf5db24819c366dc362639930e2b406b",
+        "passed": true
+      },
+      {
+        "case": "M-PARAM-003",
+        "mode": "controlled-experimental",
+        "run_id": "490d5004b9f84513bf48a78455931587",
+        "manifest_sha256": "5cffa74ffd8a00b6118b5489db66d60ab015459a043d20b4555c574547ec5da0",
+        "passed": true
+      },
+      {
+        "case": "M-PARAM-001",
+        "mode": "real-time",
+        "run_id": "310d4f6ab06b4a24922bc62524a39933",
+        "manifest_sha256": "941c837684176139ac05137209845e1e848ea80fd5fb88ff96965064ae974a1c",
+        "passed": true
+      },
+      {
+        "case": "M-PARAM-002",
+        "mode": "real-time",
+        "run_id": "34d5eba4d6274e588ee9359a9d956813",
+        "manifest_sha256": "bc78e863bd44ef46e080a16a6a177e0d2698ccb9dc6d1eb81fb6348a5f646b4f",
+        "passed": true
+      },
+      {
+        "case": "M-PARAM-003",
+        "mode": "real-time",
+        "run_id": "d47f0adb26294e7896fd9752c8a0aeaf",
+        "manifest_sha256": "410f541eb15ebc41d414959555e677eaa098be37edbd28259388506a913a250d",
+        "passed": true
+      }
+    ],
+    "units": {
+      "count": 474,
+      "evidence": "artifacts/c16/parameter-bounds-units.json",
+      "sha256": "ee0d429bebbb68af97fc93c1e25b87aa10f67de68dcb7c62a3a62f82490c8ada"
+    },
+    "limitations": "Selector bounds only; spread/acceleration musical semantics are a separate pending domain."
+  },
+  "spread_semantics": {
+    "status": "decided-baseline-and-implementation-pending",
+    "decision": "01a07f50-06ce-76f2-86f5-76414bd23074",
+    "formula": "gap_k=d+s*(1+(k-1)*a), in channel steps; off a=0",
+    "compatibility": "Intentional new contract, not historical compatibility. Rest ordinals/trailing slots and nonpositive termination must be documented and tested."
   }
 }

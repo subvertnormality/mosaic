@@ -1013,3 +1013,14 @@ replacement and Stop, and all manual evidence anchors are reconciled. Full arp
 domains, nonzero spread/acceleration, live channel-rate changes and remaining
 manual/emulator release gates still require work. No refactor or full release
 acceptance is authorized by this partial campaign result.
+
+## Division parameter bounds
+
+Three native baselines show Strum, Arp and Spread can move beyond the89-entry
+musical division table, leaving their displayed value blank. Candidate0036
+derives their maximum from the label table excluding Off. All three native
+screen-boundary cases pass in controlled and real time;474 units pass.
+
+Codex decision01a07f50-06ce-76f2-86f5-76414bd23074 settles a new spread/acceleration
+contract. Its manual amendment, native old-behavior baselines and implementation
+are pending. No nonzero-spread musical code changed in this bounds correction.

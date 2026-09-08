@@ -3197,7 +3197,10 @@
       "cases": [
         "M-TIME-012",
         "M-ARP-001",
-        "M-ARP-002"
+        "M-ARP-002",
+        "M-PARAM-001",
+        "M-PARAM-002",
+        "M-PARAM-003"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -3367,7 +3370,8 @@
       ],
       "statement": "Strum spaces each chord voice once by selected division and re-quantises when scale changes mid-strum.",
       "cases": [
-        "M-TIME-012"
+        "M-TIME-012",
+        "M-PARAM-001"
       ],
       "status": "in_progress",
       "domain": "0..4 extra voices; each division; scale change before/on/after voice deadline; stop/cancel.",
@@ -3397,7 +3401,8 @@
         "M-ARP-002",
         "M-ARP-003",
         "M-ARP-004",
-        "M-ARP-005"
+        "M-ARP-005",
+        "M-PARAM-002"
       ],
       "status": "in_progress",
       "domain": "Sparse/full/no masks ratchet; last-boundary voice; all divisions; shape/velocity; repeated pitches.",
@@ -3446,7 +3451,9 @@
         "MAN-064"
       ],
       "statement": "Spread modifies strum/arp note spacing.",
-      "cases": [],
+      "cases": [
+        "M-PARAM-003"
+      ],
       "status": "unimplemented",
       "domain": "Every legal value; negative/zero/positive if supported; tempo/division and acceleration pairs.",
       "oracles": [

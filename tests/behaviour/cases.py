@@ -1046,6 +1046,23 @@ def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=
     c.results.append(dict(kind='native-arpeggio-half-step',replacement=replacement,fractional_gate=fractional_gate,reset=reset,fast=fast,onsets=len(expected),release_checks=len(rows),passed=True))
 
 
+def parameter_division_bounds(c,parameter):
+    import base64
+    from frame_oracle import render
+    def label(value):
+        expected=render([(0,25,15,value)])
+        indices=[(y*128+x)*4+k for y in range(19,27) for x in range(24) for k in range(3)]
+        def matches(state):
+            actual=base64.b64decode(state['frame']['pixels_base64'])
+            return all(actual[i]==expected[i] for i in indices)
+        c.wait(matches);c.results.append(dict(kind='parameter-division-label',parameter=parameter,value=value,passed=True))
+    c.configure();c.enc(1,-3);assign_trig_parameter(c,parameter)
+    label('X');c.enc(3,-3);label('X')
+    c.enc(3,1);label('1/24');c.enc(3,88);label('128')
+    c.enc(3,3);label('128')
+    c.enc(3,-1);label('120');c.enc(3,-88);label('X')
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -2127,6 +2144,9 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-PARAM-003':dict(run=lambda c:parameter_division_bounds(c,'Chord Spread'),requirements=['PARAM-SLOTS', 'CHORD-SPREAD'],description='Chord Spread selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-002':dict(run=lambda c:parameter_division_bounds(c,'Chord Note Arpeggio'),requirements=['PARAM-SLOTS', 'CHORD-ARP'],description='Chord Note Arpeggio selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-001':dict(run=lambda c:parameter_division_bounds(c,'Chord Note Strum'),requirements=['PARAM-SLOTS', 'CHORD-STRUM'],description='Chord Note Strum selector exposes only supported musical divisions, clamps both ends and returns to Off'),
  'M-ARP-005':dict(run=lambda c:arp_basic_timing(c,fast=True),requirements=['CHORD-ARP','CH-TEMPO'],description='Controlled one-pulse1/24 arp: exact note releases through every parent-cycle boundary and Stop, using native UI/MIDI'),
  'M-ARP-004':dict(run=lambda c:arp_basic_timing(c,reset=True),requirements=['CHORD-ARP','OPT-REPEAT-RESET','CH-TEMPO'],description='Repeat resets replace a long arp while an identical-pitch tail is sounding; old gates must not cut replacement voices'),
  'M-ARP-002':dict(run=lambda c:arp_basic_timing(c,replacement=True),requirements=['CHORD-ARP','PARAM-SLOTS','CH-TEMPO'],description='Replacing two-step arpeggios each step must not let old termination release the new generation'),

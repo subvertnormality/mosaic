@@ -194,7 +194,7 @@ local stock_params = {
     ["short_descriptor_2"] = "STRM",
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
-    ["cc_max_value"] = 92,
+    ["cc_max_value"] = #note_division_labels - 1,
     ["ui_labels"] = note_division_labels,
     ["param_type"] = "stock"
   },
@@ -205,7 +205,7 @@ local stock_params = {
     ["short_descriptor_2"] = "ARP",
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
-    ["cc_max_value"] = 92,
+    ["cc_max_value"] = #note_division_labels - 1,
     ["ui_labels"] = note_division_labels,
     ["param_type"] = "stock"
   },
@@ -216,7 +216,7 @@ local stock_params = {
     ["short_descriptor_2"] = "SPRD",
     ["off_value"] = 0,
     ["cc_min_value"] = 0,
-    ["cc_max_value"] = 92,
+    ["cc_max_value"] = #note_division_labels - 1,
     ["ui_labels"] = note_division_labels,
     ["param_type"] = "stock"
   },
