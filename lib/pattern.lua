@@ -172,6 +172,13 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     end
   end
 
+  -- Trig collection may copy another pattern's values. Apply explicit priorities
+  -- after that collection so table iteration order cannot overwrite the choice.
+  local note_priority = note_merge_mode and extract_pattern_number(note_merge_mode)
+  local velocity_priority = velocity_merge_mode and extract_pattern_number(velocity_merge_mode)
+  local length_priority = length_merge_mode and extract_pattern_number(length_merge_mode)
+  local priority_lengths = length_priority and effective_lengths(patterns[length_priority])
+
   local step_trig_masks = program.get_step_trig_masks(channel)
   local step_note_masks = program.get_step_note_masks(channel)
   local step_velocity_masks = program.get_step_velocity_masks(channel)
@@ -182,6 +189,10 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     do_mode_calculation(note_merge_mode, s, notes, merged_pattern.note_values)
     do_mode_calculation(velocity_merge_mode, s, velocities, merged_pattern.velocity_values)
     do_mode_calculation(length_merge_mode, s, lengths, merged_pattern.lengths)
+
+    if note_priority then merged_pattern.note_values[s] = patterns[note_priority].note_values[s] end
+    if velocity_priority then merged_pattern.velocity_values[s] = patterns[velocity_priority].velocity_values[s] end
+    if length_priority then merged_pattern.lengths[s] = priority_lengths[s] end
 
     if step_trig_masks[s] then
       merged_pattern.trig_values[s] = step_trig_masks[s]

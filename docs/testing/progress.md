@@ -887,3 +887,23 @@ screen.aa(0) default and preserved separately. No captured output became a golde
 Multi-pattern merge and running-playhead cases remain required; full delivery
 remains incomplete. This screen defect is not claimed as the cause of the user's
 earlier live-recording step-placement observation.
+
+## Priority merge ordering and modifier isolation
+
+Two independently reproduced bugs are fixed by separate patches. Candidate 0023
+applies explicit note/velocity/length priorities after trig collection, so later
+table entries cannot overwrite the selected source; masks retain precedence.
+Candidate 0024 makes dual-press priority selection honor K1, as ordinary mode
+presses already do. A velocity choice no longer changes note length, and a length
+choice no longer changes velocity. The order-only native checkpoint fixed notes
+while preserving the separate modifier failures, documenting their separation.
+
+All 474 existing units and 829760 focused merged-cell checks pass, including every
+distinct priority/rhythm slot pair, all trig modes, three fields, mask precedence
+and false/nil mode callers. The initial candidate's 34 sentinel-mode unit errors
+were retained, fixed and supplemented with explicit regressions. Seven native
+cases now have passing controlled/real-time evidence. The original final batch
+remains 13/14: one HTTP timeout occurred during setup before merge assertions.
+Cleanup completed; a single fresh-process retry passed with no source, timeout
+or tolerance change. Its unproven cause remains a C12 reliability follow-up.
+Full domains and delivery remain incomplete; no Lower/Shorter semantics changed.

@@ -1,0 +1,228 @@
+{
+  "base_revision": "e0eb03c696865add762c051339d98673b2e38852",
+  "source_file": "lib/pages/channel_edit_page/channel_edit_page.lua",
+  "before_sha256": "325fb662a52927955336238adf3a741527dfeb86e712b1ebc4b90b5d77fe15a7",
+  "after_sha256": "b2d8ffac1ae68c53d14122f1901ebbf4d20a58fe3ee28ffa78d61e3b516a480f",
+  "patch_sha256": "5a4b7d8bc381b7f91fbce10989d5ab91e70bf699661bd9b11a24115e83e0b2e8",
+  "status": "validated-with-retained-setup-failure",
+  "patch": "tests/behaviour/candidates/0024-priority-merge-modifier.patch",
+  "baselines": [
+    {
+      "case": "M-MERGE-002",
+      "mode": "controlled-experimental",
+      "run_id": "aee9d474ff284fbc9f9d247af25eb7f8",
+      "manifest_sha256": "06eb3377ada0e0ff9eb571fe62aea43c436af926b68ddb3e7c5b89bfaf6c79c9",
+      "passed": false
+    },
+    {
+      "case": "M-MERGE-002",
+      "mode": "real-time",
+      "run_id": "a09b23e7c8524f97b04948b32da8bb7c",
+      "manifest_sha256": "75d0f7159f8d466c7b49889b9e8b41fe2c45b0cfaf68ad7f8a26ba5c248b513c",
+      "passed": false
+    },
+    {
+      "case": "M-MERGE-003",
+      "mode": "controlled-experimental",
+      "run_id": "e405cac2b605482583bdadbe6d6c28cf",
+      "manifest_sha256": "1432350da27eb44dd7a485c19d67ac6e46ef87262c834e133c1d2dde1a4b0d38",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-003",
+      "mode": "real-time",
+      "run_id": "a59c6756aa814003b20202b46fb143be",
+      "manifest_sha256": "6d32bc558675168cc0df581c0203f2228785f961fdc02abe75d778468016dca4",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-004",
+      "mode": "controlled-experimental",
+      "run_id": "1b21be9503af4eba8ca6af5ca30ad468",
+      "manifest_sha256": "bdc9e07d6cd3150a2b21d54e77ae65bf7152f8be2d2ca66ed1920a8dac9a1d40",
+      "passed": false
+    },
+    {
+      "case": "M-MERGE-004",
+      "mode": "real-time",
+      "run_id": "03d0653acdc2477d83e5db5e376a4a86",
+      "manifest_sha256": "8e546af2ef98654116e702e04abd39036fd03885adeff4ff4e135991739de3cb",
+      "passed": false
+    },
+    {
+      "case": "M-MERGE-005",
+      "mode": "controlled-experimental",
+      "run_id": "69982e86447847c6bca5744cee72e7c0",
+      "manifest_sha256": "0faa0367b3f9c593e5a9e1ecd89fe6a8e836f93559ca5275939f9612238977f1",
+      "passed": false
+    },
+    {
+      "case": "M-MERGE-005",
+      "mode": "real-time",
+      "run_id": "d191f45a836e47ad8e941b51dee7288a",
+      "manifest_sha256": "ba1a08d671353d70acb4eaade8d2350a6a0c1664f9f3a92d36f89dc98cf882d0",
+      "passed": false
+    },
+    {
+      "case": "M-MERGE-006",
+      "mode": "controlled-experimental",
+      "run_id": "be9edee6a9304ec8b7197d0818d6e6a2",
+      "manifest_sha256": "6d74a99873e0974d2ffb92b652352bc430ff5873c1d78f4afd5167933067f64b",
+      "passed": false
+    },
+    {
+      "case": "M-MERGE-006",
+      "mode": "real-time",
+      "run_id": "a1f18ad69a3a460ab604b1c761cba9bf",
+      "manifest_sha256": "e1c922d858ff5d730466fa6e9ab89b4fe6ba595aae0230f97345327759571b36",
+      "passed": false
+    },
+    {
+      "case": "M-MERGE-007",
+      "mode": "controlled-experimental",
+      "run_id": "a6827b29d77f47b998320c28c5fff938",
+      "manifest_sha256": "7b3d5960f1ca5d2c17366834995337761acf3aebd4e1cf670adca0d1ebe4f0b3",
+      "passed": false
+    },
+    {
+      "case": "M-MERGE-007",
+      "mode": "real-time",
+      "run_id": "d58edc2590c34c118d528d795e6b62fa",
+      "manifest_sha256": "e58cff94210394a9dcdfffbfd11ea1dc5371e0ae810d6249f36e5102fdf25078",
+      "passed": false
+    }
+  ],
+  "order_only_checkpoint": [
+    {
+      "case": "M-MERGE-002",
+      "run_id": "3c763e538bf2493ebafefb09676f7255",
+      "manifest_sha256": "f6726fde5032e1b1105516040638cf4ac6408c313f1f0e9c4f64350ed9adec63",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-004",
+      "run_id": "f26ce8ae72e54e779c6b3d1b3a3d84ac",
+      "manifest_sha256": "850010fcf7761a1472f9bd2efffcb2e1f7f496105c42212db881fbe2bfd4feb6",
+      "passed": false
+    },
+    {
+      "case": "M-MERGE-006",
+      "run_id": "1603cdbab0a04c49981f025e200814e8",
+      "manifest_sha256": "a272e5d4f01050ed1b8022b6a7514bb16560e28465deff4365910ba48478c333",
+      "passed": false
+    }
+  ],
+  "runs": [
+    {
+      "case": "M-MERGE-001",
+      "mode": "controlled-experimental",
+      "run_id": "2747fafd8cac420b821ca576ac491875",
+      "manifest_sha256": "e09740b3a6066d59d4491cd3a4425da8e6d06219ad510f35c3d045f7f211e12b",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-001",
+      "mode": "real-time",
+      "run_id": "6dd363c958744309856944382f569c1c",
+      "manifest_sha256": "56ae221ce7e65e1b560ecec88799d60ebeb498c8a22d7b2881c07c37349887ac",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-002",
+      "mode": "controlled-experimental",
+      "run_id": "8b02f482e87d498082e9c5f873ceb94c",
+      "manifest_sha256": "f7519b4e15ca17e7463257e491fa01fcf3521253c6b30b7d97a9cd8e6f6dff04",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-002",
+      "mode": "real-time",
+      "run_id": "25b2342755d7477dbf0d613311b5089f",
+      "manifest_sha256": "d5a6e3b280750495afdc10ce27654acf8f2d1a19e0cfacb65e4569ec6b9b0cf1",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-003",
+      "mode": "controlled-experimental",
+      "run_id": "ddf425272aee49ea9fe27285a6d25132",
+      "manifest_sha256": "5b120422b5da42c2b5e671fcf3e5608f409ac1b583f1ca1def1bcacfdc3e4fea",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-003",
+      "mode": "real-time",
+      "run_id": "d7460473e34f4bbba3673330d5686607",
+      "manifest_sha256": "2b880eae78321bb438abc211be9ac0f43240832a9da4bba1b1d23573faad39ba",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-004",
+      "mode": "controlled-experimental",
+      "run_id": "b5c83560a7e847ec962c6d52b285912c",
+      "manifest_sha256": "1f32a6c8a756abe6ce2c5744a82ade940b1242b5d2bbc1c2c2fbb02fde38971f",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-005",
+      "mode": "controlled-experimental",
+      "run_id": "1a5b7983a4a74b908e0dc1a36b90cfeb",
+      "manifest_sha256": "cfdaf5a5a7b3ddf1f12803a3e11c58b78e8163b93c611a96463e7501f847475f",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-005",
+      "mode": "real-time",
+      "run_id": "1464778a8c2c4208abea5a6ecd42d291",
+      "manifest_sha256": "4f625dbdcbacb104af27ed09d0efab08d07b4883dacdd785e601ed83a66ea7b7",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-006",
+      "mode": "controlled-experimental",
+      "run_id": "eb8c0c50b1374ba1b011b417141906d8",
+      "manifest_sha256": "cd100196ed463343884f7d12a03b996d4cc80a8a6f2553bcf969e9d904d9f4af",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-006",
+      "mode": "real-time",
+      "run_id": "705aa7df0fab4bdf9eab73bc5e453412",
+      "manifest_sha256": "4d494e03813dd842081cf2eebb632a87b47a8bf9088ecb32ca56d8c3589f3d07",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-007",
+      "mode": "controlled-experimental",
+      "run_id": "b6bdffe7bca045419fbf43353ac2ecc7",
+      "manifest_sha256": "f850523916bd0b3622fabee602546a6878a73659e789546e8831f0eb4f738ce0",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-007",
+      "mode": "real-time",
+      "run_id": "a55fbeccf36541c1b22746a042fbbafe",
+      "manifest_sha256": "d0773378348f90a54bb72c6461b7501f8244741ab0f4735978befa1040126292",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-004",
+      "mode": "real-time",
+      "run_id": "8c771948c170425fb38c54dd5f77d471",
+      "manifest_sha256": "5b42cfb2e29692be709960cc7aed362cca5a303cc0f780704c0f55eaa1e40979",
+      "passed": true
+    }
+  ],
+  "unit_tests": 474,
+  "merge_contract_checks": 829760,
+  "setup_failure": {
+    "run_id": "2c86a606e24e4160a1f9254c5842d4a9",
+    "case": "M-MERGE-004",
+    "mode": "real-time",
+    "type": "setup HTTP timeout before merge assertions",
+    "original_batch_passed": 13,
+    "original_batch_failed": 1,
+    "retry_run": "8c771948c170425fb38c54dd5f77d471",
+    "root_cause": "Not proven. Native cleanup completed and logs contained no Lua error. One fresh-process retry passed without source, timeout or tolerance changes. Retained for C12 reliability/endurance follow-up."
+  },
+  "fix": "Use the same K1 selector for dual-press priority gestures as ordinary merge-mode presses; change only the intended velocity or length mode."
+}

@@ -470,6 +470,63 @@ def pattern_grid_viewer(c):
     c.playback(baseline,cycles=2,timeout=3,settle_seconds=4/3-.1)
 
 
+def inactive_note_priority(c,source_slot=1):
+    assert source_slot in (1,3)
+    def silence(label):
+        before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(1.5);c.tap(1,8)
+        state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+        assert not notes and not state['midi_capture']['outstanding'],notes
+        c.results.append(dict(kind='inactive-note-silence',phase=label,seconds=1.5,passed=True))
+    def phrase(pitch,velocity,label):
+        c.playback([(1,[144,pitch,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
+        c.results.append(dict(kind='inactive-note-priority',source_slot=source_slot,phase=label,pitch=pitch,velocity=velocity,passed=True))
+    c.configure();c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    c.tap(source_slot,1);c.tap(5,8);c.tap(1,3) # G4 on an inactive step.
+    c.led_values([(1,3)],[12]);c.tap(3,8)
+    if source_slot!=1:c.tap(1,2);c.tap(source_slot,2)
+    silence('authored-inactive-pattern')
+    c.tap(5,8);c.tap(2,1);c.tap(1,4);c.tap(3,8)
+    c.tap(source_slot,2);c.tap(2,2)
+    phrase(60,100,'rhythm-pattern-alone')
+    c.hold_tap((15,8),(source_slot,2))
+    c.led_values([(source_slot,2),(2,2),(15,8)],[2,15,15])
+    phrase(67,100,'unassigned-note-source')
+    c.tap(source_slot,2);phrase(67,100,'assigned-inactive-note-source')
+    c.tap(2,2);c.tap(5,8);c.tap(source_slot,1);c.tap(1,4);c.tap(3,8)
+    phrase(67,127 if source_slot==1 else 100,'later-trig-uses-authored-note')
+    c.tap(5,8);c.tap(1,4);c.tap(3,8);silence('trig-removed-note-retained')
+
+
+def priority_field_isolation(c,field,source_slot):
+    assert field in ('velocity','length') and source_slot in (1,3)
+    c.configure();c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    c.tap(source_slot,1);c.tap(1,4);c.hold_tap((1,4),(3,4))
+    c.led_values([(1,4),(2,4),(3,4)],[15,5,5])
+    c.tap(5,8);c.tap(1,3) # Inactive source will hold G4, velocity107, length3.
+    c.tap(5,8);c.tap(1,3);c.tap(3,8);c.tap(5,8);c.tap(1,4)
+    c.led_values([(1,4),(2,4),(3,4)],[2,2,2])
+    c.tap(2,1);c.tap(1,4);c.tap(3,8);c.tap(1,2);c.tap(2,2)
+    base=c.playback([(1,[144,60,100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
+    assert_durations(c,base,[1,1])
+    if field=='length':c.action(type='key',n=1,state=1);c.elapse(.3)
+    try:c.hold_tap((16,8),(source_slot,2));c.led_values([(16,8)],[15])
+    finally:
+        if field=='length':c.action(type='key',n=1,state=0)
+    velocity=107 if field=='velocity' else 100
+    length=3 if field=='length' else 1
+    notes=c.playback([(1,[144,60,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
+    assert_durations(c,notes,[length,length])
+    # The same physical button addresses velocity normally and length with K1.
+    # Selecting one priority source must preserve the other merge mode.
+    if field=='velocity':c.action(type='key',n=1,state=1);c.elapse(.3)
+    try:c.led_values([(16,8)],[2])
+    finally:
+        if field=='velocity':c.action(type='key',n=1,state=0)
+    c.results.append(dict(kind='priority-field-isolation',field=field,source_slot=source_slot,pitch=60,velocity=velocity,length_steps=length,passed=True))
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1551,6 +1608,13 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-MERGE-004':dict(run=lambda c:priority_field_isolation(c,'velocity',1),requirements=['MERGE-VELOCITY'],description='velocity priority from inactive slot1: exact MIDI, duration and independent K1/normal modes'),
+ 'M-MERGE-005':dict(run=lambda c:priority_field_isolation(c,'velocity',3),requirements=['MERGE-VELOCITY'],description='velocity priority from inactive slot3: exact MIDI, duration and independent K1/normal modes'),
+ 'M-MERGE-006':dict(run=lambda c:priority_field_isolation(c,'length',1),requirements=['MERGE-LENGTH'],description='length priority from inactive slot1: exact MIDI, duration and independent K1/normal modes'),
+ 'M-MERGE-007':dict(run=lambda c:priority_field_isolation(c,'length',3),requirements=['MERGE-LENGTH'],description='length priority from inactive slot3: exact MIDI, duration and independent K1/normal modes'),
+
+ 'M-MERGE-002':dict(run=inactive_note_priority,requirements=['PAT-INACTIVE-NOTE','MERGE-NOTE-PATTERN'],description='Inactive lower-numbered note source: silence, unassigned/assigned priority, later trig and removal'),
+ 'M-MERGE-003':dict(run=lambda c:inactive_note_priority(c,3),requirements=['PAT-INACTIVE-NOTE','MERGE-NOTE-PATTERN'],description='Inactive higher-numbered note source: silence, unassigned/assigned priority, later trig and removal'),
  'M-VIEW-001':dict(run=pattern_grid_viewer,requirements=['PAT-VIEWER'],description='Independent screen grid for wide/short channel ranges, all16 E2 selections, clamps and unchanged MIDI/pattern data'),
  'M-EDIT-005':dict(run=editor_hold_boundaries,requirements=['PAT-NOTE-RANGE','PAT-VELOCITY'],description='Note/velocity range holds immediately before/after1s and cancelled by a second grid press; exact MIDI and measured real-time margins'),
  'M-EDIT-004':dict(run=note_pattern_selectors,requirements=['PAT-NOTE-SELECT'],description='K1 and long-hold note-editor pattern selection across all16 slots, edit/playback and retained-pattern isolation'),

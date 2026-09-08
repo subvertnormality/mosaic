@@ -482,7 +482,7 @@ function channel_edit_page.register_press()
             "Note merge mode pattern " ..x2
           )
         end
-        if velocity_merge_mode_button:is_this(x, y) then
+        if velocity_merge_mode_button:is_this(x, y) and not is_key1_down then
           program.get_selected_channel().velocity_merge_mode = "pattern_number_" .. x2
           velocity_merge_mode_button:set_state(4)
           program.get_selected_song_pattern().active = true
@@ -491,7 +491,7 @@ function channel_edit_page.register_press()
             "Velocity merge mode pattern " ..x2
           )
         end
-        if length_merge_mode_button:is_this(x, y) then
+        if length_merge_mode_button:is_this(x, y) and is_key1_down then
           program.get_selected_channel().length_merge_mode = "pattern_number_" .. x2
           length_merge_mode_button:set_state(4)
           program.get_selected_song_pattern().active = true

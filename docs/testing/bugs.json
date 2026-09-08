@@ -527,6 +527,32 @@
       "status": "fixed-on-worktree-with-real-input-regression",
       "candidate_manifest": "grid-viewer-clear.json",
       "case": "M-VIEW-001"
+    },
+    {
+      "id": "pattern-priority-order",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "pattern-priority-order.json",
+      "cases": [
+        "M-MERGE-002",
+        "M-MERGE-003",
+        "M-MERGE-004",
+        "M-MERGE-005",
+        "M-MERGE-006",
+        "M-MERGE-007"
+      ]
+    },
+    {
+      "id": "priority-merge-modifier",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "priority-merge-modifier.json",
+      "cases": [
+        "M-MERGE-002",
+        "M-MERGE-003",
+        "M-MERGE-004",
+        "M-MERGE-005",
+        "M-MERGE-006",
+        "M-MERGE-007"
+      ]
     }
   ]
 }

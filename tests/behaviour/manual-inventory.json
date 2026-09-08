@@ -2174,9 +2174,12 @@
         "MAN-031"
       ],
       "statement": "Notes can be authored without trigs for use in merging.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All positions; later enable trig; assign merge with another pattern; removal/re-enable.",
+      "cases": [
+        "M-MERGE-002",
+        "M-MERGE-003"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "All positions; later enable trig; assign merge with another pattern; removal/re-enable. M-MERGE-002/003 validate lower/higher priority-source ordering, assigned/unassigned inactive notes and activation/removal in both modes. All positions/priority slots and pentatonic setting combinations remain required.",
       "oracles": [
         "No MIDI on inactive step alone; authored note used when independently triggered."
       ],
@@ -2818,9 +2821,12 @@
         "MAN-046"
       ],
       "statement": "Held merge button selects priority pattern, including an unassigned pattern; default merged notes use pentatonic scale.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All16 priority patterns; assigned/unassigned; inactive steps; pentatonic setting on/off.",
+      "cases": [
+        "M-MERGE-002",
+        "M-MERGE-003"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "All16 priority patterns; assigned/unassigned; inactive steps; pentatonic setting on/off. M-MERGE-002/003 validate lower/higher priority-source ordering, assigned/unassigned inactive notes and activation/removal in both modes. All positions/priority slots and pentatonic setting combinations remain required.",
       "oracles": [
         "Priority pattern values and independently quantised MIDI; selection feedback."
       ],
@@ -2842,9 +2848,12 @@
         "MAN-047"
       ],
       "statement": "Velocity merge has Average/Higher/Lower/Pattern options.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every option; means at discontinuities; 0/127; selected pattern; Lower SEM-001.",
+      "cases": [
+        "M-MERGE-004",
+        "M-MERGE-005"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Every option; means at discontinuities; 0/127; selected pattern; Lower SEM-001. M-MERGE-004 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-005 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required.",
       "oracles": [
         "Independent resolved formulas, bounds and exact MIDI velocity; zero semantics decision."
       ],
@@ -2866,9 +2875,12 @@
         "MAN-048"
       ],
       "statement": "Length merge has Average/Longer/Shorter/Pattern; K1 selects length mode.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001.",
+      "cases": [
+        "M-MERGE-006",
+        "M-MERGE-007"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001. M-MERGE-006 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-007 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required.",
       "oracles": [
         "Independent resolved duration formula and exact note on/off table; mode LED."
       ],
