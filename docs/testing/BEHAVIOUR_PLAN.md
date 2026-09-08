@@ -360,3 +360,25 @@ These clarifications resolve initial Paranoia findings and govern the cards abov
 Review outcome: focused follow-up `d8e019ad-c0ba-4074-a2c7-1341b09a13ce` found no consequential plan-level gap. This admits execution, not coverage completion. Inventory Sinfonion commands 5–10 as init-only unless a documented runtime contract supplies another requirement.
 
 Review engine policy (2026-09-07 user steering): all future Paranoia critiques and follow-ups use Codex only. Existing completed reviews remain historical evidence.
+
+
+## Native MIDI hot-plug panic edge domain
+
+M-PANIC-011 through 014 cover removal before/during a stopped panic crossed with
+reconnection during/after its sweep. Inputs are actual grid and MIDI device events.
+Native connection timestamps must prove each intended overlap. Two unaffected
+ports emit all 128 pitches on all 16 channels in order. A port absent at invocation
+gets no new sweep job; a port removed during the job emits only its connected
+prefix and, if restored before completion, its remaining suffix. Missed messages
+are not replayed. Edge counts are tied to the unaffected port within one pitch
+group because the device transition can interleave within its 16 sends. At removal,
+port 1 may lead port 2 by up to 16 messages but cannot trail it: panic jobs are
+created and resumed in ascending port order. The oracle enforces that direction.
+
+Every case checks restored keyboard input, a subsequent full sweep on all ports,
+unchanged page LEDs and the authored melody. The full native export is accounted
+for; snapshot tails are only used to schedule interactions. Independent oracle
+tests remove, duplicate, reorder/change or misplace events and transition intervals.
+These cases extend PANIC-GESTURE and NAV-PAGES. They do not complete the broader
+active/pending musical, recording, song-transition or lifecycle interaction matrix,
+or admit controlled time. Evidence is in `hotplug-validation.json`.

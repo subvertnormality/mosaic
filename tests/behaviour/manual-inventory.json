@@ -2264,7 +2264,11 @@
         "M-PANIC-002",
         "M-PANIC-003",
         "M-PANIC-005",
-        "M-PANIC-006"
+        "M-PANIC-006",
+        "M-PANIC-011",
+        "M-PANIC-012",
+        "M-PANIC-013",
+        "M-PANIC-014"
       ],
       "status": "partial",
       "domain": "All source/destination pages; repeated pattern cycles; held inputs across navigation.",
@@ -2351,7 +2355,11 @@
         "M-PANIC-007",
         "M-PANIC-008",
         "M-PANIC-009",
-        "M-PANIC-010"
+        "M-PANIC-010",
+        "M-PANIC-011",
+        "M-PANIC-012",
+        "M-PANIC-013",
+        "M-PANIC-014"
       ],
       "status": "partial",
       "domain": "Each selected/non-selected page; all virtual ports/channels; pending/delayed notes; repeated panic.",

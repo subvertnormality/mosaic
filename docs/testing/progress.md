@@ -1063,3 +1063,22 @@ the zero-velocity oracle. The one-line correction rejects30 injected bad release
 and both affected cases pass fresh native runs. See chord-shape-validation.json
 for exact identities and limitations. Historical failures are not reclassified;
 this checkpoint does not complete the manual campaign or permit the refactor.
+
+
+## Native MIDI hot-plug panic validation
+
+M-PANIC-011..014 add four removal/reconnection intervals, with eight canonical
+D/R passes. Complete exported MIDI proves unaffected ports, connected portions
+of interrupted sweeps, no replay, restored keyboard input, a fresh full panic,
+page LEDs and melody recovery. Seven oracle groups include the one/16-message
+omission regressions requested by Codex; its focused follow-up closed that gap.
+Fresh affected native cases pass the stricter bound. Existing live-note Stop and
+pending-arpeggio panic cases also pass D/R against the new runtime (four runs).
+All result/artifact hashes are verified in `hotplug-validation.json`.
+
+Only tests, driver recipe accounting, inventory mappings and delivery records
+changed; Mosaic production Lua and its manual are unchanged. The emulator is the
+published `codex/midi-hotplug` branch, using locked patch0013. Automatic approval
+review rejected emulator main merge/runtime activation; neither ran, and these
+tests use the authorised feature branch directly. Full manual coverage and
+controlled-time admission remain incomplete; this is a scoped checkpoint.

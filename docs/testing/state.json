@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Navigation D/R36transition matrix passed and evidence verified. Install artifacts/install_panic_baselines.py and run two M-PANIC baseline cases, unchanged production: suspected navigation buttons3/4 excluded and shared debounce cancels earlier MIDI ports. Preserve failures, isolate confirmed fixes and review through Codex. Full manual/emulator scope remains.",
+  "next_action": "Publish reviewed test-only M-PANIC011..014 hotplug suite and four existing D/R regression results. Then reconcile remaining manual requirement/domain coverage against actual cases and continue eligible incomplete workflows plus controlled-time repeatability/admission. Use published emulator codex/midi-hotplug branch; automatic review rejected main merge/activation, neither executed. No active processes; no routing questions, no refactor, full goal incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -4962,5 +4962,13 @@
     "overlap_passes": 4,
     "review": "01a080f4-f7fd-7b00-b1ed-73d95c9d081e",
     "full_campaign_complete": false
+  },
+  "hotplug_validation": "hotplug-validation.json",
+  "hotplug_checkpoint": {
+    "status": "scoped-native-validation-and-codex-review-complete",
+    "canonical_passes": 8,
+    "existing_regression_passes": 4,
+    "oracle_groups": 7,
+    "review": "01a08158-f66a-7f31-82f0-96988d1ea9d5"
   }
 }

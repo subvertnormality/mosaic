@@ -1,0 +1,10 @@
+{
+  "oracle_sha256": "4b5365e42b96bf1662e75c0ecb25f2c46e272962a3ec84ea14c1907297312a2f",
+  "command": "python3 -m unittest discover -s tests/behaviour -p test_panic_hotplug_trace.py",
+  "exit_code": 1,
+  "groups": 7,
+  "failures": [
+    "test_missing_one_or_sixteen_prefix_tail_messages count=1: AssertionError not raised",
+    "test_missing_one_or_sixteen_prefix_tail_messages count=16: AssertionError not raised"
+  ]
+}

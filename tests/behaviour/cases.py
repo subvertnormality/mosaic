@@ -2755,7 +2755,14 @@ def panic_pending_chord(c, arp, shape):
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
+from panic_hotplug import panic_hotplug
+
 CASES={
+ 'M-PANIC-011':dict(run=lambda c:panic_hotplug(c,True,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-012':dict(run=lambda c:panic_hotplug(c,True,True),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-013':dict(run=lambda c:panic_hotplug(c,False,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-014':dict(run=lambda c:panic_hotplug(c,False,True),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
+
  'M-PANIC-007':dict(run=lambda c:panic_pending_chord(c,False,1),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
  'M-PANIC-008':dict(run=lambda c:panic_pending_chord(c,False,2),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
  'M-PANIC-009':dict(run=lambda c:panic_pending_chord(c,True,1),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),

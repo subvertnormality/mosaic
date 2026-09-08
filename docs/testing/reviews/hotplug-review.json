@@ -1,0 +1,63 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused review of new Mosaic behaviour tests. Read-only, no source edits: real-time native validation is active. Trusted local MIDI development utility; focus concrete missed behaviour/false greens, not broad refactor or review machinery. User authorises source/docs/native-evidence export to Codex, and asks autonomous decisions.\nMosaic production code unchanged at fe6240678b0c4ddd3f3dcf68fcb5ac81b6812f7b. New tests/behaviour/panic_hotplug.py,panic_hotplug_trace.py,test_panic_hotplug_trace.py plus four literal case registrations M-PANIC011..014 and Driver.finish native type12 recipe reconstruction. Uses emulator branch codex/midi-hotplug ae203883c0c2910d914609e1091df9e844a8ed00, actual pinned native runtime with reviewed patch0013. Generic emulator lifecycle and parser/race findings closed with native baseline/fix evidence; not the scope of this review. Main merge/runtime activation was denied by approval review, so Mosaic uses published feature branch directly, no bypass.\nFour combinations: unplug port1 before/during panic, reconnect during/after sweep. Actual grid gesture from Song page, preserve LEDs. Other two ports must emit literal2048ordered NoteOffs each. Port1 absent at invocation gets no new job even if reconnected during sweep (current m_midi.panic snapshots connected ports); disconnected during sweep yields orderedprefix, plus suffix if restored before end, without replay. Native metadata times prove intended intervals. Prefix/suffix edges tied to other port within one16-message pitch group, accommodating transition interleaving within coroutine sweep tick; critique if unsupported/too broad. Literal full output ledger, contiguous native MIDI sequences, all notes accounted in declared windows. Afterwards actual keyboard C60 on/off through restored port, fresh6144-event panic on all3ports, and authored4-note melody two cycles plus onset. Six independent fault groups reject missing/extra/wrong notes, output while absent/replay, unaffected-port loss, missed overlap and excessive edge truncation. Driver verifies full public recipe against native input path and verifies native connection/action evidence through verify_midi_schedules.\nAll four D runs passed: /home/andy/projects/mosaic-behaviour-runs/{4cfa019596f04230b13749665860ea5f,7218b2ec074b4d94bc5dfd6290250937,a84825951b214f03b521b3e40c6de593,a449390483c34e279ed404c4b0ff3bf7}/manifest.json. Real-time M-PANIC011..014 runner active; do not assume its result or ask routing questions. Controlled runtime remains experimental/unadmitted; full manual/campaign incomplete. Review current code/README panic contract and whether these assertions accurately test stopped-panic hot-plug workflows. Other active/pending musical panic tests already exist, not a claim that all concurrent workflows are now exhausted. Return substantive issues/minimal fixes, or scoped no blockers. Do not change application semantics merely to make tests pass.",
+    "files": [
+      {
+        "path": "tests/behaviour/panic_hotplug.py",
+        "reason": "New hot-plug panic assertions and existing semantics"
+      },
+      {
+        "path": "tests/behaviour/panic_hotplug_trace.py",
+        "reason": "New hot-plug panic assertions and existing semantics"
+      },
+      {
+        "path": "tests/behaviour/test_panic_hotplug_trace.py",
+        "reason": "New hot-plug panic assertions and existing semantics"
+      },
+      {
+        "path": "tests/behaviour/driver.py",
+        "reason": "New hot-plug panic assertions and existing semantics"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New hot-plug panic assertions and existing semantics"
+      },
+      {
+        "path": "lib/m_midi.lua",
+        "reason": "New hot-plug panic assertions and existing semantics"
+      },
+      {
+        "path": "README.md",
+        "reason": "New hot-plug panic assertions and existing semantics"
+      }
+    ]
+  },
+  "input_sha256": "029abeb71083a6ad5e567aac10099d9a66e3b91b98d8b7a48aeee131c233fac7",
+  "source_sha256": {
+    "tests/behaviour/panic_hotplug.py": "3572ca109a0eb8bb99a2fabaa2acc2d4b312d87a01899b44c4d8d0c361e1716e",
+    "tests/behaviour/panic_hotplug_trace.py": "4b5365e42b96bf1662e75c0ecb25f2c46e272962a3ec84ea14c1907297312a2f",
+    "tests/behaviour/test_panic_hotplug_trace.py": "6143d89c05e83aef13c877e43d80271bd11400bf721fec71623ac07db99f52a8",
+    "tests/behaviour/driver.py": "38bb32b9274296a860b40aa78a6dfb2d47390e19bc111766838116993a5884ed",
+    "tests/behaviour/cases.py": "335e1efc5b87e3457d1d6201684be6cac5a58a497841e411cdbb31bdc99f2122",
+    "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+    "README.md": "9f4fb49e45d480b2b8233f02f55c45d78f1780af815e969a114fbcbdf04c6509"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "One concrete false green needs fixing: the removal-edge tolerance accepts missing NoteOffs that the scheduler ordering cannot justify. Otherwise, the assertions fit the scoped stopped-panic contract.\n\n- **Evidence:** [panic_hotplug_trace.py:24](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/panic_hotplug_trace.py:24) uses `abs(len(prefix)-len(reference))<=16`. I loaded the supplied M-PANIC-014 native sweep and removed its final 16 port-1 messages before disconnection. The verifier still passed with prefix **416**, while port 2 had emitted **432**. Removing just one also passed. An application omission would retain contiguous native sequence numbers, so that separate check would not catch it.\n- **Why this exceeds legitimate interleaving:** [m_midi.lua:434](/home/andy/projects/mosaic-behaviour-tests/lib/m_midi.lua:434) schedules ports in ascending order; [scheduler.lua:46](/home/andy/projects/mosaic-behaviour-tests/lib/scheduler.lua:46) resumes jobs in creation order; [m_midi.lua:425](/home/andy/projects/mosaic-behaviour-tests/lib/m_midi.lua:425) yields after each 16-message pitch. Before removal, port 1 can lead port 2 by up to 16 messages, but cannot trail it.\n- **Minimal fix:** require `0 <= len(prefix)-len(reference) <= 16`. Add rejection tests deleting 1 and 16 messages from the connected prefix tail. The existing [edge test:32](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_panic_hotplug_trace.py:32) deletes 20 messages, missing this hole. No application semantics change is needed.\n\nAll six existing unit tests passed. The four supplied manifests report controlled-experimental passes; I make no claim about the active real-time runner.\n\n**CONFIDENCE: High.** Different coroutine ordering could change the proposed bound; the current code explicitly fixes that ordering.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08158-f66a-7f31-82f0-96988d1ea9d5` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}
