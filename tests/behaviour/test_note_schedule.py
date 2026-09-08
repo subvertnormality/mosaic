@@ -22,4 +22,6 @@ class ScheduleTests(unittest.TestCase):
         with self.assertRaises(AssertionError):check([event(1,0,145),event(2,1,129)])
     def test_bad_stop(self):
         with self.assertRaises(AssertionError):check([event(1,0),event(2,1.9,128,velocity=0)],durations=[10])
+    def test_regular_deadline_after_stop(self):
+        with self.assertRaises(AssertionError):check([event(1,0),event(2,3,128)],durations=[3])
 if __name__=='__main__':unittest.main()

@@ -113,3 +113,7 @@ at least one scheduler pulse after swing; clamping before rounding/carry avoids
 zero-length cycles without inventing an extra onset at a nonpositive nominal gap.
 Codex reviews and source-bound evidence are in spacing-rest-validation.json.
 Strum shape/rest combinations and full timing acceptance remain pending.
+
+## Panic and transport
+
+Codex arbitration 01a080f4-f7fd-7b00-b1ed-73d95c9d081e: preserve existing panic as an all-note/all-channel Note Off sweep, with transport and scheduled voices continuing. The manual's earlier “stop signal” wording was ambiguous; Play/Stop is the separate transport control. M-PANIC-007 through010 verify the musical schedule, complete sweep and transport-message boundaries. Hot reconnect remains pending emulator support.

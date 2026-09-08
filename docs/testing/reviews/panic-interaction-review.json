@@ -1,0 +1,46 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused test-oracle review and proportional semantic arbitration. No source edits. User authorises external Codex source/test-evidence export and asks autonomy without escalation. No production Mosaic code changed in this slice. Repo /home/andy/projects/mosaic-behaviour-tests. New cases M-PANIC005/006 exercise two/three overlapping long holds: a literal independent per-port oracle requires incomplete valid ordered prefixes then one complete2048-off final sweep for each of3ports; same restart points across ports, unchanged page and exact melody. Four oracle test groups prove missing/extra/wrong/reordered events, missing restart and accidentally completed earlier sweep are rejected. Reordering mutation is within one port, not equivalent cross-port order.\nM-PANIC007..010 configure forward/reverse strum and arp via real UI, five distinct pitches/positive velocities at0,.75,1.5,2.25,3seconds. Hold panic while voices active and pending. Full export must contain exact6144ordered panic zero-velocity NoteOffs, plus complete separately validated musical onsets/releases; input-origin timing is joined through native action/session/sequence, never fitted to output. D2ns exact; R established10ms schedule tolerance and scheduling_metrics D20 p99/max/final profile. Verified actual sweep occurs between second/third onset at start and before fourth onset at end. Stop drains at identified input bounds. New12native runs D/R all pass; artifact hashes verified in docs/testing/panic-interaction-validation.json. Worst R onset error1,406,862ns. Overlap oracle in panic_repeat_trace.py/test_panic_repeat_trace.py; pending oracle near end of cases.py calls existing note_schedule and scheduling_metrics.\nArbitrate the test contract from README308..310 and current m_clock.panic/m_midi behavior: panic clears currently sounding MIDI via sweep, while Play/Stop controls transport and scheduled voices continue. Manual says clear all MIDI-on events, not cancel transport or future events; preserve current implementation absent contrary documented intent. Is this an appropriate software-level contract to document explicitly, or is there concrete contradictory evidence? Do not ask user routing questions or invent a transport-stopping behavior.\nCheck concrete false greens, extraction/accounting mistakes, timing/origin mistakes, and relevant assertion sensitivity. Do not certify full panic/manual/release. Native hot disconnect/reconnect remains unsupported by public emulator API; design/acceptance in /mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/docs/architecture/midi-hotplug.md, residual R18. Review that plan only for necessary lifecycle pitfalls; implementation is next, no generic completion claim. Return substantive issues/minimal fixes; avoid broad refactor or exhaustive review machinery. Existing482unit/integration pass on unchanged production source at prior checkpoint, not rerun for only test additions.",
+    "files": [
+      {
+        "path": "tests/behaviour/panic_repeat_trace.py",
+        "reason": "New panic test oracle and existing documented semantics"
+      },
+      {
+        "path": "tests/behaviour/test_panic_repeat_trace.py",
+        "reason": "New panic test oracle and existing documented semantics"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New panic test oracle and existing documented semantics"
+      },
+      {
+        "path": "docs/testing/panic-interaction-validation.json",
+        "reason": "New panic test oracle and existing documented semantics"
+      },
+      {
+        "path": "README.md",
+        "reason": "New panic test oracle and existing documented semantics"
+      }
+    ]
+  },
+  "input_sha256": "39e071fabfb0d24ff9317ab82a0b83b52c2722cc9d626138cd58ba76233b97ee",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Yes\u2014document panic as an all-notes/all-channels sweep that preserves transport and scheduled voices. I found no contradictory intent, but two oracle gaps warrant small fixes.\n\n[README.md:310](/home/andy/projects/mosaic-behaviour-tests/README.md:310) promises clearing MIDI-on events; transport has a separate control at [README.md:224](/home/andy/projects/mosaic-behaviour-tests/README.md:224). [m_clock.lua:826](/home/andy/projects/mosaic-behaviour-tests/lib/clock/m_clock.lua:826) only calls `m_midi.panic()`\u2014unchanged since commit `3b9ff54f` (2024). The sweep sends `note_off(note, 0, channel)` at [m_midi.lua:417](/home/andy/projects/mosaic-behaviour-tests/lib/m_midi.lua:417); transport Stop separately stops the lattice and resets scheduling. Clarify the manual\u2019s ambiguous \u201cstop signal\u201d as \u201cNote Off messages.\u201d\n\n- **Stop-drain false green:** [note_schedule.py:26](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/note_schedule.py:26) accepts `regular or truncated`, allowing a normal release deadline after Stop. Using actual M-PANIC-009/010 real-time traces, I moved the final release to its original deadline and restored its onset velocity: both passed, **375/353 ms after Stop\u2019s upper bound**. Minimal fix: require every musical release no later than `stop_upper + tolerance`, retaining the existing deadline checks. Add this mutation as a regression test.\n\n- **Unexpected transport messages escape accounting:** [cases.py:2733](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:2733) passes all remaining MIDI to `assert_schedule`, but [note_schedule.py:11](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/note_schedule.py:11) ignores every non-note message. An erroneous MIDI Stop (`0xFC`) during panic therefore escapes these assertions even while the five musical onsets remain correct. Minimal fix: explicitly validate transport messages against identified Play/Stop boundaries and reject an injected Stop during panic.\n\nThe overlapping-sweep oracle correctly enforces independent ordered prefixes, incomplete earlier sweeps, complete final sweeps, and matching restart positions. All four mutation-test groups passed. I independently verified **12 manifest hashes and 180 artifact hashes**. The input-origin join uses action/session/native-sequence evidence; I found no output-fitted origin.\n\nThe [hotplug plan](/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/docs/architecture/midi-hotplug.md:10) covers the necessary lifecycle pitfalls: native removal/addition, retained handles, ownership, queued-input delivery rules, stable slots, and capability rejection. No additional design blocker found; R18 remains open pending implementation and native acceptance.\n\n**CONFIDENCE: High.** Native runs and the prior 482-test suite were not rerun; this does not certify full panic/manual coverage or release readiness.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a080f4-f7fd-7b00-b1ed-73d95c9d081e` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}

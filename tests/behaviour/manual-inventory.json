@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "265a8b02f6c858856159eb1e38df38427c511e0a476d6442f1ad471a526498a6",
+  "manual_sha256": "9f4fb49e45d480b2b8233f02f55c45d78f1780af815e969a114fbcbdf04c6509",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -11,7 +11,7 @@
       "level": 2,
       "start_line": 148,
       "end_line": 149,
-      "text_sha256": "cb65447f5e27edf51318adf1b81924260fbbf4845fa51d55b56a396f0573b9d7",
+      "text_sha256": "1e695ab10ae9abde60ddb6cdc1a8e425ad744cb62032d687c92449216aaf9d74",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -22,7 +22,7 @@
       "level": 3,
       "start_line": 150,
       "end_line": 155,
-      "text_sha256": "fcd257b8ebdcca4058f963471f8c4bca23b3e920cd44797c01a041e5e9a7e262",
+      "text_sha256": "665a72350c10907670a68a6d6cd41de5e759ae8e2008123decd2e4a393080dd9",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -33,7 +33,7 @@
       "level": 3,
       "start_line": 156,
       "end_line": 157,
-      "text_sha256": "51ea9b3407f9e6088d7e96a96e883ae99be4d54cfcd665eebb0e43a32ba0b07d",
+      "text_sha256": "db04f4dc76c1102a92a380a299b7869d008a220a581a93b1fb95f45bddece361",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -44,7 +44,7 @@
       "level": 4,
       "start_line": 158,
       "end_line": 165,
-      "text_sha256": "010ded2cf16c68e5771449464cfd04d9dc609e946c77eb7a6aa057cb8da04b57",
+      "text_sha256": "d05bd22b0dbf4d6e52aee0005e451040d6ea59725b6e05467cdaaf34ec2c6ec1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SETUP-MIDI-INPUT"
@@ -57,7 +57,7 @@
       "level": 4,
       "start_line": 166,
       "end_line": 167,
-      "text_sha256": "47b692df27f3c85fef94edd628917c5cf21b5519e0509b3d63997a7858f9c152",
+      "text_sha256": "88bac2b35d6061120264806cfe1895cfbc8e807f18665386e72ab9dca42f8a2b",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -68,7 +68,7 @@
       "level": 5,
       "start_line": 168,
       "end_line": 180,
-      "text_sha256": "5d0a20c7121b5af101270169d18c1697c73727d21181dacdf840bbd661dde59d",
+      "text_sha256": "829c4c211577d4131d8f38627b1877bdb079b8ced2300977676427579a4e3463",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SETUP-DEVICE-DISCOVERY",
@@ -82,7 +82,7 @@
       "level": 5,
       "start_line": 181,
       "end_line": 186,
-      "text_sha256": "a7c649b6c2db1d5de4ab95ecb87b07a60e7e5ea44225a0ee5a84fc8c1deadab0",
+      "text_sha256": "85da33a3cc8207bb2a521a0d0a0d1057fa566bb77f1973a8ee0240a684ee4220",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SETUP-CONFIG-CREATOR",
@@ -97,7 +97,7 @@
       "level": 5,
       "start_line": 187,
       "end_line": 190,
-      "text_sha256": "2daa3ff6b45b084843545f68905e049c4637d8602bf2ee50b4eb4ea800343c66",
+      "text_sha256": "dcb78d8ff3b14fa3172ac83bec2df0a2b8ed0f330557bdb271519353fb4e4efc",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -108,7 +108,7 @@
       "level": 5,
       "start_line": 191,
       "end_line": 197,
-      "text_sha256": "ad7814de88b62d02e4c123c50648c0d20d07a0a66a2f285cc436b65cf67f0830",
+      "text_sha256": "0a7ea0e4bf57f7d2e8fba2c77b063e4f84cad481f1aaac117ca1a3f6cbc123df",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "REC-KEYBOARD-STEP"
@@ -121,7 +121,7 @@
       "level": 5,
       "start_line": 198,
       "end_line": 219,
-      "text_sha256": "532fab5e50f0ce5be0666f852a96bec652ac40e9edca24008dbcb2d090553631",
+      "text_sha256": "8d3b52063d5fd60ee2bf9f0ceb3594aec0cc8f8b454d5567f31de2c8925b2ea8",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MAP-CONTROL",
@@ -137,7 +137,7 @@
       "level": 2,
       "start_line": 220,
       "end_line": 221,
-      "text_sha256": "a759f4533af66599dad6eba7bcbc384bf73e55a750b2d8c1cad424cc99aa7e49",
+      "text_sha256": "dda43b59b423023494f61c874436c54ad328eb8e7fb465889ef2edacadab1219",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -148,7 +148,7 @@
       "level": 3,
       "start_line": 222,
       "end_line": 234,
-      "text_sha256": "89667c24987d794e2a42190d7ca5ebe9c514e1e388f4bc9bd6a47490e1f99076",
+      "text_sha256": "ec1c2fe2eb3dbf3138810677b0f434739f1a4593059bdbb6d48645ac93ffb42c",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -159,7 +159,7 @@
       "level": 3,
       "start_line": 235,
       "end_line": 262,
-      "text_sha256": "e8b6bcc924fa7f36503907d239ee6ff3c9ea7c4d103ddb392455b66f338167cb",
+      "text_sha256": "61a135ae4c4df1edcc447632263c92253edacc7332289ff9fec146b5430ba743",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "REC-LIVE-NOTES",
@@ -174,7 +174,7 @@
       "level": 3,
       "start_line": 263,
       "end_line": 288,
-      "text_sha256": "09b7886f367e5cbb0d6d06d258661d2638afe95a2c9b237b4d64672f873a89d2",
+      "text_sha256": "340240e5cc8eaf9f4dc5de18301dd4141cf20c62c2fd3caca967a10fd134e1d7",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "NAV-PAGES"
@@ -187,7 +187,7 @@
       "level": 3,
       "start_line": 289,
       "end_line": 303,
-      "text_sha256": "b5de17526658cb808a52bfa8dd5e4b49dc29c8e8417a4a88fbb79904b4072834",
+      "text_sha256": "ea90932ceb01d5932ab408919ffc56c8dd2ee3fac9e6fec9f4e938ba50e5f264",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "NAV-CONFIRM"
@@ -200,7 +200,7 @@
       "level": 3,
       "start_line": 304,
       "end_line": 307,
-      "text_sha256": "8352da735895131c9631103381f282e6fd350d2afb78460b001d9d22901abc3c",
+      "text_sha256": "203f85f16df8874bd667633cc8ffeae902ac821014f5c70cefde97510a5908a0",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "NAV-TOOLTIPS"
@@ -213,7 +213,7 @@
       "level": 3,
       "start_line": 308,
       "end_line": 311,
-      "text_sha256": "4eb652bf59558bd3f66808d87cc841c2e34e1739b259ced85eb57f9c5a14237c",
+      "text_sha256": "5ad89e6ca37bbcab107af1cdec23b35ce9e6fd1ad4efe77077ae41d522f62149",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PANIC-GESTURE"
@@ -226,7 +226,7 @@
       "level": 3,
       "start_line": 312,
       "end_line": 315,
-      "text_sha256": "3f24dcf0d470836a8598078e159761e1e1dd4882b28e0c6aafbc25104504fa6c",
+      "text_sha256": "c514dca5086d6bf1db302f3742ad43e3a4161df97750429e19d771212d71f94a",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -237,7 +237,7 @@
       "level": 2,
       "start_line": 316,
       "end_line": 319,
-      "text_sha256": "f44f125ec661a589186361ff80113c249977fb540824f0ba2e82e3b69b6b6461",
+      "text_sha256": "ea3762faa8923506a196f20206e4fe78bafb23d3af0c3cc0a5b36cb4d3a4aa1e",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -248,7 +248,7 @@
       "level": 3,
       "start_line": 320,
       "end_line": 327,
-      "text_sha256": "61e242cf4695cab91c70f7575083c5d3aacb29d9891865a30b1782573aa9b00d",
+      "text_sha256": "4a4664ca7079ccd5df4fb5fab4298b67134a7e5639616d1eed307fb26069f1df",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -261,7 +261,7 @@
       "level": 3,
       "start_line": 328,
       "end_line": 335,
-      "text_sha256": "16ba6b180aa58ec5d521cb4a82ad587e7324a603e4f3bcaf930d2ffb8ff0115e",
+      "text_sha256": "5afb68aeaa1ac9b8b41addbd2e0ac31135920b598fcfa200223e65f71d00f35c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -274,7 +274,7 @@
       "level": 3,
       "start_line": 336,
       "end_line": 343,
-      "text_sha256": "21d956e85f10b1432689b35f0d58b7901e40d42e87b25b9268ee0ab48aacfc48",
+      "text_sha256": "43353056569f1cdfbab6a1d3c46fb43a501678ce5e524ec291619d1b29ff29d0",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -287,7 +287,7 @@
       "level": 3,
       "start_line": 344,
       "end_line": 347,
-      "text_sha256": "f5abbdb20d68022329d39f9322020e2d8233072ea2b8c94495bc288b8906b490",
+      "text_sha256": "1e293968de77f874b1ccf7a3e83294ac18952b6d3924575c1d329d0afc92dcd4",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -300,7 +300,7 @@
       "level": 4,
       "start_line": 348,
       "end_line": 351,
-      "text_sha256": "fb4a246a76a23b273e80074910beb9e51ee3927b0551a6b5b16ced421826f212",
+      "text_sha256": "3f30424f614595c6c9529f96904b765cb798fe916c52df341ee2d7ba3b6445ba",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -313,7 +313,7 @@
       "level": 4,
       "start_line": 352,
       "end_line": 357,
-      "text_sha256": "63001f4d0d6afce7543822aae99290e5ab0345088ba4db90642477e3caf088ba",
+      "text_sha256": "49defb9b79964467e2f44f6db0c4529751ab840e1f16d2d0f960544a4234eecc",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -326,7 +326,7 @@
       "level": 3,
       "start_line": 358,
       "end_line": 361,
-      "text_sha256": "6d87dc6cef3646ecd7e4994ce5f880afe790ca9e8e84d97debe7b6a6fd547204",
+      "text_sha256": "be20a25319a1bf8b1acc1e1e4debd447e1b6305882277868a325cfd2f8ce3a4f",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -339,7 +339,7 @@
       "level": 3,
       "start_line": 362,
       "end_line": 367,
-      "text_sha256": "ea11b55eb1738f91d1c9218c7518060494a3b4d2877c6d176a987aaba914ff15",
+      "text_sha256": "4e41f8bae91e28143bb478286229fe0c21cb39897bd0e77537fc76b93099296e",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "WORKFLOW-COMPOSITION"
@@ -352,7 +352,7 @@
       "level": 2,
       "start_line": 368,
       "end_line": 371,
-      "text_sha256": "9862184b9bf99c242b78b0a4a3ea72433683dcaa1b739f123c218e9cd01ded27",
+      "text_sha256": "c8a74289619f2cd0236652afca58ffc129f25f977aa758736b2639ba18e7030a",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -363,7 +363,7 @@
       "level": 3,
       "start_line": 372,
       "end_line": 384,
-      "text_sha256": "d634a73ef8f5d99dd0676248646e2f10f66d886c2962be2b5866ee2f944f8519",
+      "text_sha256": "2a13ca80bc0e92bc1db34925474cfd2a82809cfd3cac0b02f78423da03941ebc",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -374,7 +374,7 @@
       "level": 4,
       "start_line": 385,
       "end_line": 440,
-      "text_sha256": "122654c892a3bb73f9cb3d6edb104f2c205da0daf24fb71d8bea44e45d938559",
+      "text_sha256": "ea0d4b0ac8211b36d7f07d93123ef6e1ee67998e4a1a677a5c65a988fd36d38e",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CLOCK-PHASE-EDGE-001",
@@ -403,7 +403,7 @@
       "level": 4,
       "start_line": 441,
       "end_line": 476,
-      "text_sha256": "0550a3c973b1cce863e0be40d51f5156b4d0172052004f9fe22eae730f572035",
+      "text_sha256": "6f254e2bd4c61282e90218ce69d898bc188a2716cf87b01a271afc45dccf1984",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PAT-EDIT-001",
@@ -423,7 +423,7 @@
       "level": 4,
       "start_line": 477,
       "end_line": 491,
-      "text_sha256": "714fcfbed5c7eaad4b73d6b14c56f920d9c646535a7a03e8ce0ccc74b5312d7c",
+      "text_sha256": "a36f2cb254613654b65536a53ca374791634a211b2872b249b77e2da2978bd5a",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PAT-EDIT-001",
@@ -437,7 +437,7 @@
       "level": 3,
       "start_line": 492,
       "end_line": 504,
-      "text_sha256": "84f417088bc526ccd198642d987aab621f5a51d8566d38fc251c965ef4c2ea38",
+      "text_sha256": "17efe19834fd5f84ac8d905c0cbbcfb936bc83b594c8ca27d9bd29b493ef29f1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-SELECT"
@@ -450,7 +450,7 @@
       "level": 4,
       "start_line": 505,
       "end_line": 515,
-      "text_sha256": "da72695f49c17239d4b99080b01ae6b2cf0e5001cfce340b7c0db7e9c8663817",
+      "text_sha256": "f416516e58e326f35c93581dc476a9898fe0c3f3f9ed3c468bca1ca73195fcf6",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-DEVICE"
@@ -463,7 +463,7 @@
       "level": 5,
       "start_line": 516,
       "end_line": 521,
-      "text_sha256": "1360355ea9aea08ac032476eec0f43a307bff868233adcde9ccb7b9a7cbf9341",
+      "text_sha256": "89169e670534434d971ae303aeb6fdfc5377c229c1078e373e5b5f246d2930eb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-DEVICE"
@@ -476,7 +476,7 @@
       "level": 5,
       "start_line": 522,
       "end_line": 537,
-      "text_sha256": "881191ad8f40b3a4af9819146964cdc4b92cbb818d7dbcc067d2052fa9a64a9f",
+      "text_sha256": "cf69cc2e19481bf2be072c05b96a1160e11a75aec64a4a864dd89f7d7f7390d8",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -487,7 +487,7 @@
       "level": 4,
       "start_line": 538,
       "end_line": 548,
-      "text_sha256": "e2c71405021293fac7e698841594c187e5bccfc1afb3dca84b2ce9beb0a8db80",
+      "text_sha256": "e4060cccc714b4360b917cce8796939b298ba98db6851e83ac5e2cbd75b09ee4",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-PATCH-RECALL",
@@ -501,7 +501,7 @@
       "level": 4,
       "start_line": 549,
       "end_line": 561,
-      "text_sha256": "a17bff6e1f4f8516197e6ea2f0059f288bd003bdc5956cb36ac9d5fed19ecef5",
+      "text_sha256": "bed3b0532206401ab32351008247f26b7efcb254482dd6feb994aff4ea8ce815",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-ASSIGN"
@@ -514,7 +514,7 @@
       "level": 4,
       "start_line": 562,
       "end_line": 574,
-      "text_sha256": "c06d9082433baeb6e460132c0efe3dd06ddd1512ef295075e6b868bb43e57e66",
+      "text_sha256": "513d26ff5a4fff4619a6e028d856ba0dccc6f5b5d80c46062d6c40760ba79268",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-ATTRIBUTES",
@@ -528,7 +528,7 @@
       "level": 5,
       "start_line": 575,
       "end_line": 586,
-      "text_sha256": "b0d94cfea9b7b4d6bf0d80be73ed5e8f16a151cb4fa71ee8aba9915c722265b9",
+      "text_sha256": "14eb7aedb79c929a2c625492f7a81828c5779889458d92f9e38eb2b2cac3e07d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-TRIG-GESTURE"
@@ -541,7 +541,7 @@
       "level": 5,
       "start_line": 587,
       "end_line": 592,
-      "text_sha256": "a5b8f82e22a04d8d96f87cf0d861b3403a3b93d19cbcd5fdfd5fa774095904ef",
+      "text_sha256": "3236048f2988263f13fde3a7f718c9f8e9000db0441760a6e062b96a8d34e14d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-PRECEDENCE",
@@ -555,7 +555,7 @@
       "level": 5,
       "start_line": 593,
       "end_line": 598,
-      "text_sha256": "2f25d840853a6ade2237fcc53d6843ac871a8dd2cbccdac1652db170ae9ce82c",
+      "text_sha256": "4f47c2c4008b0fbcb8955fc9e48b73bfe488557325a3cdcdb25be13d8b0845e8",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-CHORD"
@@ -568,7 +568,7 @@
       "level": 5,
       "start_line": 599,
       "end_line": 610,
-      "text_sha256": "0c5053d845106b7b4b039a89902780b93aa198149e45359461f9585f2dcae25c",
+      "text_sha256": "c68b625108eba452744850797057feedaf588dd803b1e190b57a8dd5464486f4",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-CLEAR-CHANNEL",
@@ -582,7 +582,7 @@
       "level": 4,
       "start_line": 611,
       "end_line": 623,
-      "text_sha256": "6b9d9d151b1377f368bf062bb80b1d5680d430de71abdf2c11b527f6014909d4",
+      "text_sha256": "3873e18f2771907bac76f937d917639a4df1ada3d34de252ee7cf400bf414f64",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -593,7 +593,7 @@
       "level": 5,
       "start_line": 624,
       "end_line": 633,
-      "text_sha256": "0a0a9da4f71a01af1143fefc8c70d08703dbaddf48ebe76258e79a16eefdb60d",
+      "text_sha256": "838f3597035c39f17f4f5cf5586cd7537076f135b645763fceb10ef88eac82ee",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-TRIG-ALL",
@@ -608,7 +608,7 @@
       "level": 5,
       "start_line": 634,
       "end_line": 646,
-      "text_sha256": "4989d5a6c45080d6f201a9a82b8e8235d0f5347e9c2a9c4827dc2f573997bd06",
+      "text_sha256": "14741886e7db500491eddb9b971c1e29ac248decc5a98db70990a14de89c1677",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-NOTE-AVERAGE",
@@ -624,7 +624,7 @@
       "level": 5,
       "start_line": 647,
       "end_line": 657,
-      "text_sha256": "3bb7c548494219e4e696c601917d3c6312e59c0635949047f5cc0f06f36764aa",
+      "text_sha256": "176668a485782c7b5d5cfc5baf1c35cb649e4cdca7bcfa45248ce973f1f3cc93",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-VELOCITY"
@@ -637,7 +637,7 @@
       "level": 5,
       "start_line": 658,
       "end_line": 670,
-      "text_sha256": "efd63704f5b02b683a1edfa2655f31a38701bcff0158fc3ac744b61b532cab0c",
+      "text_sha256": "8c41fdd5feace67b36e8722c1418098fdab96e4cebebe595df9bfda68dc61c5e",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-LENGTH"
@@ -650,7 +650,7 @@
       "level": 4,
       "start_line": 671,
       "end_line": 674,
-      "text_sha256": "ea29f44bd29af328033e78eb02da738e9f4754c614ef87ca358cdb491a717b2f",
+      "text_sha256": "4535e34c026ee740a6824567cf3d107885c2eb208d7b0ee4ac87a96b3d7eec0d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-DASHBOARD"
@@ -663,7 +663,7 @@
       "level": 4,
       "start_line": 675,
       "end_line": 689,
-      "text_sha256": "7ccee0e9562737d3e77b1fcda96af77fcbda5088912fe5eb91f4d1d1d7e04c1d",
+      "text_sha256": "ce04352a8d256cf48676ecb0c8c75da5dc1413f6603a0dd9db676d418463232c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-CLOCK-INHERIT",
@@ -683,7 +683,7 @@
       "level": 4,
       "start_line": 690,
       "end_line": 711,
-      "text_sha256": "ca2f194a53e1acc2aeb1f8f94653c0c7a7b869321144aea6449aca672ccaac56",
+      "text_sha256": "dc7bc5f4c469b996c94ebfe8008f1f1ccf64b04618ccd8e02d254e19dfea20fc",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MEMORY-NAV",
@@ -698,7 +698,7 @@
       "level": 4,
       "start_line": 712,
       "end_line": 729,
-      "text_sha256": "1b6af4b61ed095b8b207bc3fca983a362063aab4dff46bfbb445da80c1c973ad",
+      "text_sha256": "492104f61ed3c931b134bc0c1210be993872fbcb5ad69162dfdd95f8d889e956",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-RANGE"
@@ -711,7 +711,7 @@
       "level": 4,
       "start_line": 730,
       "end_line": 742,
-      "text_sha256": "ab10617a43f005ff99da9a99bc4271622ff1c01f18672fc25acda7f6fa7ed813",
+      "text_sha256": "d4693f6a37a0edf2f58ff8b48568995924a75ba9b69589d756f46a71588c7bc9",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-MUTE"
@@ -724,7 +724,7 @@
       "level": 3,
       "start_line": 743,
       "end_line": 764,
-      "text_sha256": "9fa81715cbba32585acce0df4db4b048d9621ec8bec24fea4d800f1cc8a9fc3c",
+      "text_sha256": "0201fcc995e961851cff49c836214cd183e77e528e7e9c5e9cff930c489b2602",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-OFF",
@@ -738,7 +738,7 @@
       "level": 4,
       "start_line": 765,
       "end_line": 768,
-      "text_sha256": "b3865981e1aba75d3f1faa5765854ffdfefad35e46e64ae6825e39670d12972a",
+      "text_sha256": "5b7bd6f92824c01002ca8fff6a995fed732b5dd84e58df1d2db112c0c5c5561c",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -749,7 +749,7 @@
       "level": 5,
       "start_line": 769,
       "end_line": 772,
-      "text_sha256": "33b64e0a4484ec4fcf4751fa69420333816347e7288e1d614f2588a96d5085d6",
+      "text_sha256": "6345e2014ace2bf5b0c75dc224c429f3ed59dd0287bcace2123d415740b2d020",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-PROBABILITY"
@@ -762,7 +762,7 @@
       "level": 5,
       "start_line": 773,
       "end_line": 776,
-      "text_sha256": "c7c040cc29ebd51b2fa3a7c2bec4d72ddd2315d8e54036a4950b7260e99ae721",
+      "text_sha256": "5e80c36332bb3bde2b5c766dca144d2f440a9b93f6685b38c6e6ac9c74edc9e7",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-FIXED"
@@ -775,7 +775,7 @@
       "level": 5,
       "start_line": 777,
       "end_line": 780,
-      "text_sha256": "917a6174067d8bb2edbc8b966e6098aaf2f06fabafb9c2f356087e4c80c6b0ca",
+      "text_sha256": "577f9b316b77aa953bfa3c3be8f8ee6d31624068a302c84666451cb99d0d6641",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-QUANTISED-FIXED"
@@ -788,7 +788,7 @@
       "level": 5,
       "start_line": 781,
       "end_line": 784,
-      "text_sha256": "4efc15394833a00147edc90386bf0e26cd918081de214536074bb97345a34c2a",
+      "text_sha256": "8659f4ee7fdad68b6f6342bc3120f21ce39ae1ef682eeb4da2f082272cdb4892",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-RANDOM"
@@ -801,7 +801,7 @@
       "level": 5,
       "start_line": 785,
       "end_line": 788,
-      "text_sha256": "e0136be937b237b5e2d759433dc520a8a01e72e58ef34ad92615e1ab5057a148",
+      "text_sha256": "9da9f1100341333ad65bd7faaa787a1603644cda384d1339e515182f59b21ca5",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-RANDOM-TWOS"
@@ -814,7 +814,7 @@
       "level": 5,
       "start_line": 789,
       "end_line": 792,
-      "text_sha256": "ea6b2c465e2a28205c50c57650b1f677542f83852451d522d9b5cfa7e90c881e",
+      "text_sha256": "9b9dc1490387e933020beca0b013e5d22754e84ee11fd7b9b586d7d7f4bce4a2",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-STRUM"
@@ -827,7 +827,7 @@
       "level": 5,
       "start_line": 793,
       "end_line": 802,
-      "text_sha256": "94f70dc9b4079b2871138f3c7e44eb340b15a227dcfea6f11c7d59f5c44202f8",
+      "text_sha256": "1cfa612aa9df7502564124367b78cea6db4f477e1a5b7820323401b24b3ccdce",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-ARP"
@@ -840,7 +840,7 @@
       "level": 5,
       "start_line": 803,
       "end_line": 819,
-      "text_sha256": "b8c952ffff6f053b331d344bd290752ece994049a8c6d534652ff10872690efe",
+      "text_sha256": "9516fc6e1a31a17bd608dd443db02944defb5e62870178af3ec22d02ae28a708",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-ACCEL"
@@ -853,7 +853,7 @@
       "level": 5,
       "start_line": 820,
       "end_line": 823,
-      "text_sha256": "98223f22f17370c8219e2e21c31a67f8a964afa92379f7a0ad73ce039845bc6e",
+      "text_sha256": "7ad4157066b524b9c4fceda4170659c7f0d85b3621b0e0bb3d0864e2fc29fc90",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-SPREAD"
@@ -866,7 +866,7 @@
       "level": 5,
       "start_line": 824,
       "end_line": 827,
-      "text_sha256": "3cc7e5ba327c84ee614f637fd52984b11cd74de6aef46c98bcfca6883622821c",
+      "text_sha256": "7dd51af2cf1b90014f30f83d9a36f7caafb63f87269a3ee08d7a57e544b035eb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-VELOCITY"
@@ -879,7 +879,7 @@
       "level": 5,
       "start_line": 828,
       "end_line": 831,
-      "text_sha256": "407c7209d8f8ae88edb7f2c904260896b33270c3a52903f403df19213475940a",
+      "text_sha256": "5a13c29f0b3ddc6ed3279973efddf8d887f699391d94f7ca15dedc6002a38b38",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-SHAPE"
@@ -892,7 +892,7 @@
       "level": 5,
       "start_line": 832,
       "end_line": 835,
-      "text_sha256": "89dcd3dd1c2f3fdddef3291c8608b0e804475f851d4902a208cb8da6416bd542",
+      "text_sha256": "88111a4c6b3d6cf200a2303fdaa69094327fb6c6d8ee04850c5d882e1108cb01",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CHORD-MUTE-ROOT"
@@ -905,7 +905,7 @@
       "level": 5,
       "start_line": 836,
       "end_line": 839,
-      "text_sha256": "7c099e143d86dd6c72184a936c8c3431065d08628ccaa3b0dbaad931a37d7a9f",
+      "text_sha256": "2f4276b1da63dc93bc149481f4f75e3c9ec4ac85fe649f54b0ef72bc07d7e1b6",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-FULL-QUANTISE"
@@ -918,7 +918,7 @@
       "level": 3,
       "start_line": 840,
       "end_line": 862,
-      "text_sha256": "916a7873533bed60f4e68760f88cace8167ed8e76f3931df6d35d8f167606acf",
+      "text_sha256": "d02820f8ea7fb86889042b4431fa3965f79f93dbd326844125cc520d5578eec3",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SCALE-EDIT",
@@ -933,7 +933,7 @@
       "level": 4,
       "start_line": 863,
       "end_line": 875,
-      "text_sha256": "67fc51942b4ffdcfed8ea104f9f98f8b75f303b4c0f60e91359e22d73b4baa10",
+      "text_sha256": "5336961e5456d860865534b599798373ec80018a8203669d9f0d1a52e3fd8742",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "TRANSPOSE-GLOBAL"
@@ -946,7 +946,7 @@
       "level": 3,
       "start_line": 876,
       "end_line": 887,
-      "text_sha256": "dde94bd99916dab5b29d1e4a52ff421099b0c4f32b4ea93467d93bc832b64684",
+      "text_sha256": "789cdf7bfff07380fb81fcc971634e4f4dab1981f51212180eb74329564849c2",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-SLOTS"
@@ -959,7 +959,7 @@
       "level": 4,
       "start_line": 888,
       "end_line": 893,
-      "text_sha256": "3f621ab89b28432d757c227bd331e75cfbe5437a2138ac0373471febf550f31c",
+      "text_sha256": "be3fc63e1627c5f9cc57a52cb50eb44ae1f247f0aaa67962766821a91309d06b",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-SLOTS"
@@ -972,7 +972,7 @@
       "level": 4,
       "start_line": 894,
       "end_line": 901,
-      "text_sha256": "61232d87d40e3c8ee0aa9ade6a1a44eaa808c19c8b7f71c1ad47405d48e8bc61",
+      "text_sha256": "072a47fe0374c191133c4e53c319ca79377ad2f09ddef8f5c980d12d66199689",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-SLOTS"
@@ -985,7 +985,7 @@
       "level": 4,
       "start_line": 902,
       "end_line": 905,
-      "text_sha256": "20fac55f58566132cd097bde54b974648e68cc7511c0a5e223d93cd5f083ec1f",
+      "text_sha256": "8d805187ee9019217468edf12d3c615b1ffea37c60ca17808c311049443b79f2",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-ADVANCE"
@@ -998,7 +998,7 @@
       "level": 4,
       "start_line": 906,
       "end_line": 921,
-      "text_sha256": "cf9f395683df7199fa146b5a9ef08efc8807dd775bc860bb76ce23c928a04f04",
+      "text_sha256": "8f70a4025ac591f78427d0d44a536dedb31e7d2d1c0e86b30947726491c76fa4",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-LENGTH"
@@ -1011,7 +1011,7 @@
       "level": 4,
       "start_line": 922,
       "end_line": 926,
-      "text_sha256": "d1981e57584617de2d594036c5cdc62f6929755041a7a1fa68c7b1889e628a11",
+      "text_sha256": "9d96ef1211c58904783033bbf9775a68783e786992e0abfe22fd04bc72b22a73",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-SETTINGS"
@@ -1024,7 +1024,7 @@
       "level": 2,
       "start_line": 927,
       "end_line": 930,
-      "text_sha256": "63e8c4c14abef3616f35ccbc55a9c1f9a7588694d3179418b951999a369ec0fc",
+      "text_sha256": "d6b36696cd868adb542b004eaf87c165c3e05e4e4cdaa037adeab3001206b8cb",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1035,7 +1035,7 @@
       "level": 3,
       "start_line": 931,
       "end_line": 955,
-      "text_sha256": "86161126b7382a6192e51dc4c00301a1ce4e6922d0444f016a72168724c137de",
+      "text_sha256": "10a093dc138f0f3136fa33119e610c09d24533485c80973f84f2149969f84131",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "LOCK-PARAM-CLEAR",
@@ -1049,7 +1049,7 @@
       "level": 4,
       "start_line": 956,
       "end_line": 973,
-      "text_sha256": "a0c04a64c53f741412886c4305ad23ecc73cf8fb077306740171663a1876d015",
+      "text_sha256": "2ba111203cec78292fed4bbd58780461fb34800f48d93e3b59d66a1e5f633b53",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SLIDE-GLOBAL",
@@ -1063,7 +1063,7 @@
       "level": 3,
       "start_line": 974,
       "end_line": 998,
-      "text_sha256": "48b7948446c7eb7b465c57549267c5dde4780720ca874acf77168ad2da6abc91",
+      "text_sha256": "c8e0ae5d7cac3dc5819bc62c0e2e0443154d65fb93443cfaca28ebe77f758f5f",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "LOCK-MASK"
@@ -1076,7 +1076,7 @@
       "level": 3,
       "start_line": 999,
       "end_line": 1017,
-      "text_sha256": "545b122e74526e799e0a427b6c8ecaa9bc1b4f071dbd418bc9248809dca3625d",
+      "text_sha256": "cf5abf336ea77377a81dbc2dee556fdfa50c78f1eaeb1c0ed7a6929caea07b09",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "LOCK-SCALE"
@@ -1089,7 +1089,7 @@
       "level": 3,
       "start_line": 1018,
       "end_line": 1031,
-      "text_sha256": "dbd5757e928783c2520d3349655319ae5f37d38b08c55da9222e07a7b3089626",
+      "text_sha256": "1460b116233a23b003c8b8fe57c4f0f89223f6b83805fd7ccae04aff59f5ed73",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "LOCK-TRANSPOSE"
@@ -1102,7 +1102,7 @@
       "level": 3,
       "start_line": 1032,
       "end_line": 1043,
-      "text_sha256": "7ff4aace816077f1ad6eb36ed388072476afbbde248edab5d5f16360ec801e6f",
+      "text_sha256": "049b9380f75ab62c2c6c5431015f141fbf56f55526c5f94d4fb4ddf7fce804ff",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "LOCK-OCTAVE"
@@ -1115,7 +1115,7 @@
       "level": 2,
       "start_line": 1044,
       "end_line": 1051,
-      "text_sha256": "7840f32f607a30ede332cbf4ca260c9140c99a537712a70d7f9b55a6e55ed0da",
+      "text_sha256": "84ab6c1c8cec1da5bf3179910d7e18d7eabc14a708b336b171a0d04e475d33a8",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PERSIST-AUTO-001",
@@ -1130,7 +1130,7 @@
       "level": 3,
       "start_line": 1052,
       "end_line": 1055,
-      "text_sha256": "53b023d54e5b94e20b0b6eb04a06d03489e915cdda240cb9e69edddb00b63f59",
+      "text_sha256": "804652c99130b6e05e1674aee0ccb9b0911c3a814e1cfc17eee7d17930e33912",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1141,7 +1141,7 @@
       "level": 4,
       "start_line": 1056,
       "end_line": 1057,
-      "text_sha256": "45b71ff7567730e2fe00d62abae357d60823eb28231caa7fdcb3878e022ea45f",
+      "text_sha256": "62b109384a5bdaa837429ca58f271923454d08b303d4a9c201eb9631c1b2c17b",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1152,7 +1152,7 @@
       "level": 5,
       "start_line": 1058,
       "end_line": 1061,
-      "text_sha256": "9c425eb5d8713204c1f9ad74b8a72401847c304bef449039534d33ba79b89fd0",
+      "text_sha256": "41bbc1b85ee606f3dad9e8eb6da930633549c161707906efa2fc259c71d02af5",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-SHIFT-STOP"
@@ -1165,7 +1165,7 @@
       "level": 5,
       "start_line": 1062,
       "end_line": 1065,
-      "text_sha256": "7943b92e77cde215998ea7391c932a4487cb66ada589265d4803ac23aba3e147",
+      "text_sha256": "f23336e64501c742cde537f4ecc5df1b8d83293c6687c9117aa37f270ffa1ebb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-SONG-MODE"
@@ -1178,7 +1178,7 @@
       "level": 5,
       "start_line": 1066,
       "end_line": 1069,
-      "text_sha256": "7240a200203933c6b633199246a8a25c47e8f7395615d4dfda6adb6f1054af9b",
+      "text_sha256": "38cf83228d1b01c9cd84eae77de4d746495d7f9f66caac547ef1224e683c684a",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-SEQUENCE-RESET"
@@ -1191,7 +1191,7 @@
       "level": 5,
       "start_line": 1070,
       "end_line": 1073,
-      "text_sha256": "a08286bd1e788795f541e5ce889a77bebcd1aae7d97b7085451dd6192f5858c6",
+      "text_sha256": "3995abf998e5d234142e01c2dbf6f8a6f5bd65d965289c75b4a23354d0b1e368",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-REPEAT-RESET"
@@ -1204,7 +1204,7 @@
       "level": 5,
       "start_line": 1074,
       "end_line": 1077,
-      "text_sha256": "05b309dcfff4f9be2cbc7affbb93d7cdef84b2eee9f1b3a3f060391d394f2d47",
+      "text_sha256": "1126b92230a10a63aa1cb785c248fd602cde00bd79d9ee0db70ef471eb8f069b",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-SLIDE-WRAP"
@@ -1217,7 +1217,7 @@
       "level": 5,
       "start_line": 1078,
       "end_line": 1081,
-      "text_sha256": "a8f2581fdc155c81735ad68c797d8861603bbe3f08d02ea1f7ae77ac4f3e7ff8",
+      "text_sha256": "1cba70fdce2ca5bb2ad162f362319a1e064d77556ef2ce6703674d96f3abe8de",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-ELEKTRON"
@@ -1230,7 +1230,7 @@
       "level": 5,
       "start_line": 1082,
       "end_line": 1085,
-      "text_sha256": "c481fd84bf55836e446b0fee2c449f8830d12eb0a36127d952c59d4b0fe183d2",
+      "text_sha256": "d20a2bca639e7721431fb5ced41c2ee67dc4b6000635eca3523d0e9d47ea47c1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-ELEKTRON"
@@ -1243,7 +1243,7 @@
       "level": 4,
       "start_line": 1086,
       "end_line": 1087,
-      "text_sha256": "c1e3df50d4bf524b990fe093a23f2aa3f52eb199a173564a26ce1ec66a05651d",
+      "text_sha256": "eb807418d84eae137ff8d7539ae2e5c95f8f88b99db7a2a6edf07d7e22c8d02a",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1254,7 +1254,7 @@
       "level": 5,
       "start_line": 1088,
       "end_line": 1091,
-      "text_sha256": "c94b376b29918d53869486174a598670c11b2bea074ba49000e2c10aaeec0e3c",
+      "text_sha256": "68986f0fa56d488e241131fc44c8cc7ab250ee2e2c11d7ab77ab0a8446f18d0c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-TRIGLESS"
@@ -1267,7 +1267,7 @@
       "level": 4,
       "start_line": 1092,
       "end_line": 1093,
-      "text_sha256": "8a02a1eb3f0a2dd25535fa23e969687cae0a23ead3b10f739711e55a0f206fab",
+      "text_sha256": "71cff99220f53087fa5f5af920c346fea5ff43a8b6bc81e5a033509edf174874",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1278,7 +1278,7 @@
       "level": 5,
       "start_line": 1094,
       "end_line": 1097,
-      "text_sha256": "284caf564fd4be762a12f6ac056265f4c69ece0b35d24b11a82db4df4b3fc5bf",
+      "text_sha256": "00eea8b20f2428b91dded6ee8e27d333201bf035e8adb88a3f2647912d97d127",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-MASK-SNAP"
@@ -1291,7 +1291,7 @@
       "level": 5,
       "start_line": 1098,
       "end_line": 1101,
-      "text_sha256": "aacd5d5724dc4318e0b17586d6b301aa511a1c4b6894d33c73cc193b0d816fac",
+      "text_sha256": "eaa7a26cc59730712354f00158d3aee68e047106ca779b043618532cdb65d888",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-MASK-QUANTISE"
@@ -1304,7 +1304,7 @@
       "level": 5,
       "start_line": 1102,
       "end_line": 1105,
-      "text_sha256": "988788f77c8c9410eb3d86d6b154a05e3193d1066747f9951423bdb1ce1d73d9",
+      "text_sha256": "da8498011d5eae9759a4b2b04d31e68e4d592fdb25a95bc9c28e306a4462c73e",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-SCALE-LIFETIME"
@@ -1317,7 +1317,7 @@
       "level": 5,
       "start_line": 1106,
       "end_line": 1109,
-      "text_sha256": "0a60d0f8b776795c1bf7e82771c5c7170f4adf8142f4b46f931ef8a6dab8d0da",
+      "text_sha256": "af037466acd892dec1c4f2e818fa161081d3309bcd3fc530d42f9e131b7368b1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-PENTATONIC-ALL"
@@ -1330,7 +1330,7 @@
       "level": 5,
       "start_line": 1110,
       "end_line": 1113,
-      "text_sha256": "91d30adf3fcd62e8427f3bcec6494d2189b1f908d452b5fd95eedda3fe7315a2",
+      "text_sha256": "7f245bbcdcd317be8f0035988ff10f0738150feb5834064db63f6306c22b7659",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-PENTATONIC-RANDOM"
@@ -1343,7 +1343,7 @@
       "level": 5,
       "start_line": 1114,
       "end_line": 1117,
-      "text_sha256": "b1e1e88fa788323d915ab0c5207d7531f7c61578aebbc34a603764f2a8acb462",
+      "text_sha256": "aff4ee548aef3c87f2b49b9bd69946cecca6cfdc9d46f4ad7f1cddbc1f25eb08",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-PENTATONIC-MERGED"
@@ -1356,7 +1356,7 @@
       "level": 4,
       "start_line": 1118,
       "end_line": 1119,
-      "text_sha256": "27e03b9f06bfddd7645756d8a884fd0666c3a9ba10bf27a4d1d8c3dcf874a331",
+      "text_sha256": "669023112eee3c6b79e78753c55ef07530a73d307e8bda1601da8a9851397b8f",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1367,7 +1367,7 @@
       "level": 5,
       "start_line": 1120,
       "end_line": 1123,
-      "text_sha256": "e9f64183b62a61956eb1bb819bc330de0d9113d2afdca693ebeedbb20b54f7f1",
+      "text_sha256": "8b71583873d815aa7592538200cbac5da5b3e4630a3e0209f2d4a8b14f0225ed",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-KEYBOARD-WHITE"
@@ -1380,7 +1380,7 @@
       "level": 5,
       "start_line": 1124,
       "end_line": 1127,
-      "text_sha256": "2f7f4f8c4cc709d9cfeb691afc3f4ce618b3ce9cd1e0e307c96e3f60d009af2a",
+      "text_sha256": "4382eff70dbb6472724d3d1a0a825b88cca2dd0daf6c5cf5b1bd61dec39b08ba",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-KEYBOARD-ROTATION"
@@ -1393,7 +1393,7 @@
       "level": 5,
       "start_line": 1128,
       "end_line": 1131,
-      "text_sha256": "d94834fb9635976f6d93ebafd1a373c4eb43797be8326f35488eab73a5b8568b",
+      "text_sha256": "820ae209d5121b182c7213e76e8b9e83ec4d62e14b8fb8d56a30a0e1ac8455bb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-KEYBOARD-DEGREE"
@@ -1406,7 +1406,7 @@
       "level": 5,
       "start_line": 1132,
       "end_line": 1135,
-      "text_sha256": "ea768d88eb69882541b4d192f24f0528c69a97b2ef96afffb041cce47f7aefce",
+      "text_sha256": "c1a9d97479c644a3c988dd8f79dbe8528a42cdd23b56462eebf9c30afc8f0dac",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-KEYBOARD-TRANSPOSE"
@@ -1419,7 +1419,7 @@
       "level": 3,
       "start_line": 1136,
       "end_line": 1139,
-      "text_sha256": "9aaa485bbe998df0a6804443b0845d3d219b114c67f82a98fefc87218a5acb57",
+      "text_sha256": "d4cbd415db5e6c577bf2a170c6c583727f414d7030ba7823a665b1fc005d3d06",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SIN-SOFTWARE"
@@ -1432,7 +1432,7 @@
       "level": 3,
       "start_line": 1140,
       "end_line": 1144,
-      "text_sha256": "452b207c8404bdebdca1af878a37484881572b46c288f58df71560fd905a322e",
+      "text_sha256": "247817a1e4ef185b4be509a053544ef510ba4fd93d4566db639b408970638edc",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MOD-HELD-001",
@@ -1448,7 +1448,7 @@
       "level": 2,
       "start_line": 1145,
       "end_line": 1156,
-      "text_sha256": "17791235e441a727a0793c0b229f95cd445b6c53ab23f94628117f269d9bd230",
+      "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PERF-MIDI"
@@ -1461,7 +1461,7 @@
       "level": 2,
       "start_line": 1157,
       "end_line": 1166,
-      "text_sha256": "5649964efc0620e62d8223e87a794759bc625698eb71dd473df3b28062eb5223",
+      "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1472,7 +1472,7 @@
       "level": 3,
       "start_line": 1167,
       "end_line": 1170,
-      "text_sha256": "d5f0f9415c334ad32bc9e9cd1387ed19e1975a61c95f94bb6771f8e57be03879",
+      "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1483,7 +1483,7 @@
       "level": 3,
       "start_line": 1171,
       "end_line": 1176,
-      "text_sha256": "465d3d45405ca787cb2bc63d8e1581467c575467a373a2f300f7ac72c8838a06",
+      "text_sha256": "80cb16cd1906f008d0f8f125c92d4b904efe308162539589ab9ae13e85922cd1",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
       "status": "unreviewed"
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "265a8b02f6c858856159eb1e38df38427c511e0a476d6442f1ad471a526498a6"
+      "sha256": "9f4fb49e45d480b2b8233f02f55c45d78f1780af815e969a114fbcbdf04c6509"
     },
     {
       "path": "cheat_sheet.html",
@@ -2262,7 +2262,9 @@
         "M-NAV-001",
         "M-PANIC-001",
         "M-PANIC-002",
-        "M-PANIC-003"
+        "M-PANIC-003",
+        "M-PANIC-005",
+        "M-PANIC-006"
       ],
       "status": "partial",
       "domain": "All source/destination pages; repeated pattern cycles; held inputs across navigation.",
@@ -2338,12 +2340,18 @@
       "sections": [
         "MAN-017"
       ],
-      "statement": "Holding a non-selected navigation button clears all MIDI-on events.",
+      "statement": "A non-selected navigation hold sweeps Note Offs on all connected ports/channels, preserves page, transport and scheduled voices; selected holds are inactive.",
       "cases": [
         "M-PANIC-001",
         "M-PANIC-002",
         "M-PANIC-003",
-        "M-PANIC-004"
+        "M-PANIC-004",
+        "M-PANIC-005",
+        "M-PANIC-006",
+        "M-PANIC-007",
+        "M-PANIC-008",
+        "M-PANIC-009",
+        "M-PANIC-010"
       ],
       "status": "partial",
       "domain": "Each selected/non-selected page; all virtual ports/channels; pending/delayed notes; repeated panic.",
@@ -2358,10 +2366,10 @@
         "path": "README.md",
         "line": 308,
         "end_line": 310,
-        "text": "### MIDI Panic\n\nShould your MIDI output devices become unresponsive, you can clear all MIDI-on events by holding down the navigation button of a non-selected page. This action will send a stop signal to all devices, on all channels, for all notes.",
-        "sha256": "e26d50b96ed0f49e662ae2a8c6cca6f6570f5b7689f75079e57eed6bcbf546cf"
+        "text": "### MIDI Panic\n\nShould your MIDI output devices become unresponsive, hold the navigation button of a non-selected page to send Note Off messages for every note on every MIDI channel and connected device. Panic clears sounding notes with a short sweep; it does not stop the sequencer or cancel scheduled strum or arpeggio voices. Playback and scheduled voices continue, so new notes can sound during or after the sweep. Use the Play/Stop control to stop playback. Holding the selected page button does not trigger panic, and releasing a panic hold does not change pages.",
+        "sha256": "6c007afd7ba61ca45251e32565d4223ea54fb563bc9f4c6987cab1d15ec74b61"
       },
-      "remaining": "Broader active/pending/delayed notes, native mid-job repeated gestures and hot disconnect/reconnect. Single live-note Stop overlap has D/R regression passes."
+      "remaining": "Native hot disconnect/reconnect remains pending emulator support. Overlapping two/three held gestures and active/pending forward/reverse strum/arp now have D/R passes. Other unenumerated cross-feature interactions are not claimed exhaustive."
     },
     {
       "id": "CH-SELECT",
@@ -3565,7 +3573,9 @@
         "M-CHORDVEL-004",
         "M-CHORDSHAPE-257",
         "M-CHORDSHAPE-258",
-        "M-CHORDSHAPE-259"
+        "M-CHORDSHAPE-259",
+        "M-PANIC-007",
+        "M-PANIC-008"
       ],
       "status": "in_progress",
       "domain": "0..4 extra voices; each division; scale change before/on/after voice deadline; stop/cancel.",
@@ -3748,7 +3758,9 @@
         "M-CHORDSHAPE-253",
         "M-CHORDSHAPE-254",
         "M-CHORDSHAPE-255",
-        "M-CHORDSHAPE-256"
+        "M-CHORDSHAPE-256",
+        "M-PANIC-009",
+        "M-PANIC-010"
       ],
       "status": "in_progress",
       "domain": "Sparse/full/no masks ratchet; last-boundary voice; all divisions; shape/velocity; repeated pitches.",
@@ -4999,8 +5011,8 @@
         "path": "README.md",
         "line": 933,
         "end_line": 936,
-        "text": "Device parameters can be locked on a per-step basis. To set a param trig lock:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Adjust the param value that you want to lock to this step.\n",
-        "sha256": "1a47cd406f1295e83017a7ddb78d1bb3482cf5e1b1fad771bdd3eca61c373842"
+        "text": "Device parameters can be locked on a per-step basis. To set a param trig lock:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Adjust the param value that you want to lock to this step.",
+        "sha256": "2acab7dfa8f9589c10eec3ab349a9becf6db12ac970ae9845d97288003bb549b"
       }
     },
     {

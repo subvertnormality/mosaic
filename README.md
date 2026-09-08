@@ -307,7 +307,7 @@ Most _Mosaic_ functions are described by tooltips that appear at the bottom of t
 
 ### MIDI Panic
 
-Should your MIDI output devices become unresponsive, you can clear all MIDI-on events by holding down the navigation button of a non-selected page. This action will send a stop signal to all devices, on all channels, for all notes.
+Should your MIDI output devices become unresponsive, hold the navigation button of a non-selected page to send Note Off messages for every note on every MIDI channel and connected device. Panic clears sounding notes with a short sweep; it does not stop the sequencer or cancel scheduled strum or arpeggio voices. Playback and scheduled voices continue, so new notes can sound during or after the sweep. Use the Play/Stop control to stop playback. Holding the selected page button does not trigger panic, and releasing a panic hold does not change pages.
 
 ### Cheat Sheet
 

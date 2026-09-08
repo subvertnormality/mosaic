@@ -2656,7 +2656,112 @@ def panic_live_note_stop(c):
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
+def panic_overlapping_holds(c, repeats):
+    import json
+    from panic_repeat_trace import verify_restarted_sweeps
+    from panic_trace import verify_panic_trace
+    c.configure();c.tap(6,8)
+    before=c.snapshot()['midi_count'];held=[]
+    try:
+        for button in (3,4,5)[:repeats]:
+            c.action(type='grid',x=button,y=8,state=1);held.append(button);c.elapse(.12)
+        c.elapse(1.9)
+    finally:
+        for button in held:c.action(type='grid',x=button,y=8,state=0)
+    c.elapse(.1);after=c.snapshot()['midi_count']
+    c.led_values([(x,8) for x in (3,4,5,6)],[2,2,2,15])
+    melody_before=c.snapshot()['midi_count']
+    c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
+    melody_after=c.snapshot()['midi_count'];c.finish()
+    try:
+        events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
+        midi=[e for e in events if e.get('kind') in (3,11)]
+        assert [e['sequence'] for e in midi]==list(range(1,len(midi)+1))
+        kind=11 if c.clock_mode=='controlled-experimental' else 3
+        assert all(e['kind']==kind for e in midi)
+        c.results.append(verify_restarted_sweeps(midi[before:after],repeats))
+        # Reuse the independent melody oracle on a reindexed copy of that window.
+        melody=[dict(e,sequence=i+1,index=i+1) for i,e in enumerate(midi[melody_before:melody_after])]
+        verify_panic_trace(melody,[dict(type='melody',after=0,cursor=len(melody))],kind,c.results)
+        outside=midi[:before]+midi[after:melody_before]+midi[melody_after:]
+        assert not [e for e in outside if e['bytes'][0]&240 in (128,144)],'Notes outside panic/melody windows'
+        c.results.append(dict(kind='panic-overlap-complete-stream',repeats=repeats,passed=True))
+    finally:
+        (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
+
+
+def panic_pending_chord(c, arp, shape):
+    import json
+    from automation.input_origin import verified_input_origin
+    from automation.scheduling_metrics import scheduling_metrics
+    from note_schedule import assert_schedule
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    c.tap(3,8);c.enc(1,-4);c.enc(2,1);c.enc(3,51)
+    c.enc(2,1);c.enc(3,26);length_mask_display(c,'4')
+    for turns in (3,5,6,8):c.enc(2,1);c.enc(3,turns)
+    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
+    assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');c.enc(3,8)
+    c.enc(2,1);assign_trig_parameter(c,'Chord Pattern');c.enc(3,shape)
+    c.enc(2,1);assign_trig_parameter(c,'Chord Velocity Mod');c.enc(3,10)
+    c.tap(6,8);logical_start=c.logical_ns
+    c.action(type='grid',x=1,y=8,state=1);start_ack=c.action(type='grid',x=1,y=8,state=0)
+    c.elapse(.1);panic_before=c.snapshot()['midi_count']
+    c.action(type='grid',x=5,y=8,state=1)
+    try:c.elapse(1.9)
+    finally:c.action(type='grid',x=5,y=8,state=0)
+    c.elapse(.06);panic_after=c.snapshot()['midi_count']
+    c.led_values([(x,8) for x in (3,4,5,6)],[2,2,2,15])
+    c.elapse(1.19);logical_stop=c.logical_ns
+    c.action(type='grid',x=1,y=8,state=1);stop_ack=c.action(type='grid',x=1,y=8,state=0)
+    c.elapse(1);c.snapshot();c.finish()
+    try:
+        events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
+        actions=[json.loads(line) for line in (c.out/'native/actions.jsonl').read_text().splitlines()]
+        def origin(ack):
+            submitted=[e for e in events if e.get('kind')=='input' and e['sequence']==ack['native']['sequence']]
+            assert len(submitted)==1
+            return verified_input_origin(events,actions,session_id=c.runtime.id,action_id=ack['action_id'],expected_action=dict(type='grid',x=1,y=8,state=0),declared_origin_ns=submitted[0]['monotonic_ns'])
+        start,stop=origin(start_ack),origin(stop_ack)
+        controlled=c.clock_mode=='controlled-experimental';kind=11 if controlled else 3;field='logical_ns' if controlled else 'monotonic_ns'
+        midi=[e for e in events if e.get('kind') in (3,11)]
+        assert [e['sequence'] for e in midi]==list(range(1,len(midi)+1)) and all(e['kind']==kind for e in midi)
+        sweep=[e for e in midi[panic_before:panic_after] if e['bytes'][0]&240==128 and e['bytes'][2]==0]
+        expected_sweep=[[128+channel,note,0] for note in range(128) for channel in range(16)]
+        assert len(sweep)==6144,'Incomplete panic during chord playback'
+        for port in (1,2,3):assert [e['bytes'] for e in sweep if e['port']==port]==expected_sweep
+        sweep_ids={e['sequence'] for e in sweep};musical=[e for e in midi if e['sequence'] not in sweep_ids]
+        order=(0,1,2,3,4) if shape==1 else (4,3,2,1,0)
+        pitches=(60,64,67,69,72)
+        expected=[(ordinal*108,pitches[slot],50+ordinal*10) for ordinal,slot in enumerate(order)]
+        onset_events=[e for e in musical if e['bytes'][0]&240==144 and e['bytes'][2]>0]
+        assert len(onset_events)==5
+        # Require active voices before the sweep and pending voices after it.
+        assert onset_events[1][field]<min(e[field] for e in sweep)<onset_events[2][field]
+        assert max(e[field] for e in sweep)<onset_events[3][field]
+        initial=logical_start if controlled else start['origin_ns']
+        bounds=(logical_stop,logical_stop) if controlled else (stop['origin_ns'],stop['applied_ns'])
+        from panic_transport import verify_panic_transport
+        start_bounds=(logical_start,logical_start) if controlled else (start['origin_ns'],start['applied_ns'])
+        c.results.append(verify_panic_transport(midi,field=field,start_bounds=start_bounds,stop_bounds=bounds))
+        rows=assert_schedule(musical,expected,[108 if arp else 864]*5,field=field,origin=initial,stop_bounds=bounds,tolerance=2e-9 if controlled else .01)
+        metrics=None
+        if not controlled:
+            planned=[dict(port=1,bytes=[144,pitch,velocity],intent_ns=initial+ordinal*750_000_000,deadline_ns=initial+ordinal*750_000_000) for ordinal,(_,pitch,velocity) in enumerate(expected)]
+            metrics=scheduling_metrics(planned,onset_events)
+            assert metrics['within_event_profile'],('Pending chord onset scheduling',metrics)
+        c.results.append(dict(kind='panic-pending-chord',arp=arp,shape=shape,sweep_events=len(sweep),onsets=5,releases=len(rows),start_origin=start,stop_origin=stop,metrics=metrics,passed=True))
+    finally:
+        (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
+
+
 CASES={
+ 'M-PANIC-007':dict(run=lambda c:panic_pending_chord(c,False,1),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-008':dict(run=lambda c:panic_pending_chord(c,False,2),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-009':dict(run=lambda c:panic_pending_chord(c,True,1),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-010':dict(run=lambda c:panic_pending_chord(c,True,2),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-005':dict(run=lambda c:panic_overlapping_holds(c,2),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Two overlapping long holds restart all port sweeps mid-job, preserve page and melody'),
+ 'M-PANIC-006':dict(run=lambda c:panic_overlapping_holds(c,3),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Three overlapping long holds restart all port sweeps twice mid-job, preserve page and melody'),
  'M-PANIC-004':dict(run=panic_live_note_stop,requirements=['PANIC-GESTURE'],description='Keyboard note played behind an in-flight panic sweep remains owned by Stop; exact full MIDI trace'),
  'M-PANIC-003':dict(run=panic_hold_matrix,requirements=['PANIC-GESTURE','NAV-PAGES'],description='All24selected-page/held-menu combinations, repeated completed holds, selected-button silence and unchanged melody'),
  'M-PANIC-001':dict(run=lambda c:panic_navigation(c,3),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Hold non-selected channel navigation: all notes/channels/ports off and no navigation'),

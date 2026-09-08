@@ -1,0 +1,25 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "session_ref": "01a080f4-f7fd-7b00-b1ed-73d95c9d081e",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "rebuttal": "Focused follow-up to both demonstrated oracle gaps in session01a080f4-f7fd-7b00-b1ed-73d95c9d081e. User explicitly approves repository source, documentation and test-evidence export to Codex. Do not edit source; new native validation active.\n1. note_schedule.py now asserts every release timestamp <= Stop upper bound + existing tolerance before accepting normal or truncated deadline. Added test_regular_deadline_after_stop: onset0,duration3,Stop2..2.1,release3 with original onset velocity. It failed against old oracle with AssertionError not raised (preserved artifacts/c16/panic-stop-oracle-baseline.json), now all11schedule unit tests pass.\n2. New panic_transport.py validates exactly initial3Stop messages before Play,3Starts within identified Play submission/application bounds,3Stops within identified final Stop bounds, configured ports1..3, and rejects all unexpected/reordered/missing realtime transport messages. Four test groups cover injected Stop during panic, moving final Stop into panic, wrong port, missing/reordered message, late Stop and unexpected Clock. M-PANIC007..010 invoke it on the full native MIDI stream, not the sweep-filtered musical subset. Controlled bounds are exact logical input instants; R bounds use verified_input_origin submission/applied timestamps.\nManual README310 now explicitly says Note Off sweep, preserves sequencer/scheduled voices, Play/Stop stops transport, selected-button hold inactive and release preserves page. This follows your arbitration, no production code change. All113section hashes, README source quotations,141unique requirements and test registry audit pass.\nFresh M-PANIC007..010 D/R runner is /mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/artifacts/c16/panic-pending-reviewed-native.json. Treat running/unavailable results as pending. Prior12passes stay historical, not relabelled strengthened acceptance. Please check both minimal remedies and whether any substantive false-green remains in them. Read tests/behaviour/note_schedule.py,test_note_schedule.py,panic_transport.py,test_panic_transport.py and panic_pending_chord near end of cases.py. No cold whole-suite review, no full panic/manual/release claim; MIDI hot-plug implementation remains next."
+  },
+  "input_sha256": "7f6b588a8a3bddff1ae2a00dd47bb28b748b85dff8170e4892dc05ec7688c31d",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**CONCEDE \u2014 both gaps are now fixed.** The earlier findings applied to the previous code; the supplied changes address them.\n\n- [note_schedule.py:25](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/note_schedule.py:25) now requires `event[field] <= upper + tolerance*1e9` before accepting either release path, closing the post-Stop regular-deadline bypass.\n- [panic_transport.py:3](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/panic_transport.py:3) checks the exact nine realtime messages, ports, order, and control boundaries. [cases.py:2746](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:2746) invokes it on the full `midi` stream, so sweep filtering cannot hide an injected Stop.\n\nI reran all **15 focused tests; they pass**. No substantive false green remains in these two remedies. Fresh native acceptance remains pending: the supplied runner reports `running`, with four controlled-mode passes recorded.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a080f4-f7fd-7b00-b1ed-73d95c9d081e` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}

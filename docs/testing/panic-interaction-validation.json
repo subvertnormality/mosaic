@@ -1,0 +1,1240 @@
+{
+  "status": "reviewed-scoped-interactions-validated",
+  "production_change": false,
+  "remaining": "Native MIDI hot disconnect/reconnect requires emulator support. Full manual coverage, controlled admission and emulator release remain incomplete.",
+  "review_status": "two-findings-fixed-and-followup-cleared",
+  "initial_runs": [
+    {
+      "case": "M-PANIC-005",
+      "clock_mode": "controlled-experimental",
+      "run_id": "a8ca6ff3bc284a29b3639f14c16aa9ae",
+      "manifest_sha256": "a626a7d3ffc95f2b1d355b1cabfd5dccfad4ce50205d6115bf245d21e159c989",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "802d1e7f5ec25e57437b91a5412749a77710ea68c4648f505100bc23c10ef674",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-in-flight-restarts",
+          "repeats": 2,
+          "segment_lengths": [
+            [
+              576,
+              2048
+            ],
+            [
+              576,
+              2048
+            ],
+            [
+              576,
+              2048
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "kind": "panic-overlap-complete-stream",
+          "repeats": 2,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-006",
+      "clock_mode": "controlled-experimental",
+      "run_id": "04cee5b717e348b9a5be30c42fee722c",
+      "manifest_sha256": "6d5217d1030d2d82c3ae9ce48be6064a2dc4dd561935722dfc8f774a6645d4d3",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "802d1e7f5ec25e57437b91a5412749a77710ea68c4648f505100bc23c10ef674",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-in-flight-restarts",
+          "repeats": 3,
+          "segment_lengths": [
+            [
+              576,
+              576,
+              2048
+            ],
+            [
+              576,
+              576,
+              2048
+            ],
+            [
+              576,
+              576,
+              2048
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "kind": "panic-overlap-complete-stream",
+          "repeats": 3,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-005",
+      "clock_mode": "real-time",
+      "run_id": "975981e68add492d99f0acf04985923e",
+      "manifest_sha256": "9fd19c183b5205d8154e5bc9a6a8b6e8a0c5a3eee335d3fd90ea2722e45c6c5f",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "802d1e7f5ec25e57437b91a5412749a77710ea68c4648f505100bc23c10ef674",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-in-flight-restarts",
+          "repeats": 2,
+          "segment_lengths": [
+            [
+              448,
+              2048
+            ],
+            [
+              448,
+              2048
+            ],
+            [
+              448,
+              2048
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "kind": "panic-overlap-complete-stream",
+          "repeats": 2,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-006",
+      "clock_mode": "real-time",
+      "run_id": "f749aed723ae4e9e9fc9191349ba4b6c",
+      "manifest_sha256": "cee9d17a13baad351bfa1fa9d7456c95e0e6638b7b2ef174c57723700619a166",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "802d1e7f5ec25e57437b91a5412749a77710ea68c4648f505100bc23c10ef674",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-in-flight-restarts",
+          "repeats": 3,
+          "segment_lengths": [
+            [
+              448,
+              448,
+              2048
+            ],
+            [
+              448,
+              448,
+              2048
+            ],
+            [
+              448,
+              448,
+              2048
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "kind": "panic-overlap-complete-stream",
+          "repeats": 3,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-007",
+      "clock_mode": "controlled-experimental",
+      "run_id": "80b768eef79240629db19429418ee0cd",
+      "manifest_sha256": "c59965de07cca1612efcdf65bf42e1b3e07badd7f8ef457505390ee21b7bc673",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "9d1d6d0450c491945ed00f9858a1c0e6eaf2bcc2fd787b6cb273fb44bac59827",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-pending-chord",
+          "arp": false,
+          "shape": 1,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "d937722c5de746599dcb98dbe2064f3a",
+            "native_sequence": 876,
+            "origin_ns": 2120600648500452,
+            "applied_ns": 2120600649396805,
+            "input_to_applied_ns": 896353,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "5a85d5fda3c14be39dfd2a42fe1d314a",
+            "native_sequence": 887,
+            "origin_ns": 2120601270284449,
+            "applied_ns": 2120601286941582,
+            "input_to_applied_ns": 16657133,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-008",
+      "clock_mode": "controlled-experimental",
+      "run_id": "0505221b5da046c0b5c4986b80278fc4",
+      "manifest_sha256": "f514ede04421155d85075a3bc5f7983b5941fe1e8ed5688f4a57dd8109477b79",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "9d1d6d0450c491945ed00f9858a1c0e6eaf2bcc2fd787b6cb273fb44bac59827",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-pending-chord",
+          "arp": false,
+          "shape": 2,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "b12c209c89d941589bb0ac8f52d1e89d",
+            "native_sequence": 878,
+            "origin_ns": 2120612760602704,
+            "applied_ns": 2120612761787787,
+            "input_to_applied_ns": 1185083,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "bfdf4f208c6043dd908f09a687e87aa7",
+            "native_sequence": 889,
+            "origin_ns": 2120613498100372,
+            "applied_ns": 2120613519608443,
+            "input_to_applied_ns": 21508071,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-009",
+      "clock_mode": "controlled-experimental",
+      "run_id": "8d27f7c530e5475e8e4226ecaa566b50",
+      "manifest_sha256": "f565cc4f44be014b574e74abcccb338aa823d5e5386cd7cc0c1d516641428ddb",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "9d1d6d0450c491945ed00f9858a1c0e6eaf2bcc2fd787b6cb273fb44bac59827",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-pending-chord",
+          "arp": true,
+          "shape": 1,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "77a1fe7f88d54f57b5fa9962db62b2f8",
+            "native_sequence": 880,
+            "origin_ns": 2120623938937859,
+            "applied_ns": 2120623940150558,
+            "input_to_applied_ns": 1212699,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "bca22a43b416456182fd89cc63f5e610",
+            "native_sequence": 891,
+            "origin_ns": 2120624755989061,
+            "applied_ns": 2120624785542152,
+            "input_to_applied_ns": 29553091,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-010",
+      "clock_mode": "controlled-experimental",
+      "run_id": "1198156acd564bed8162a9fe5315b853",
+      "manifest_sha256": "49168657ac0abc6004930f493e8ce38ea0a1f32a90554c3ba9902eb127388ed7",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "9d1d6d0450c491945ed00f9858a1c0e6eaf2bcc2fd787b6cb273fb44bac59827",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-pending-chord",
+          "arp": true,
+          "shape": 2,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "e8c020f35fd94274bc478557c2c7b456",
+            "native_sequence": 882,
+            "origin_ns": 2120633914197883,
+            "applied_ns": 2120633915217920,
+            "input_to_applied_ns": 1020037,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "8482a77e34bf4590a2da28fbcfdc8522",
+            "native_sequence": 893,
+            "origin_ns": 2120634504344373,
+            "applied_ns": 2120634521443564,
+            "input_to_applied_ns": 17099191,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-007",
+      "clock_mode": "real-time",
+      "run_id": "08288a023a8440bbaddda2642d41be12",
+      "manifest_sha256": "7cd0b6e9987557009a9a2eb8582545327d39354cab012d0ffed84c38e7c8aacd",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "9d1d6d0450c491945ed00f9858a1c0e6eaf2bcc2fd787b6cb273fb44bac59827",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-pending-chord",
+          "arp": false,
+          "shape": 1,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "6c134bfd9a3b4c4399ae5210ded58e6a",
+            "native_sequence": 451,
+            "origin_ns": 2120670151737525,
+            "applied_ns": 2120670152970925,
+            "input_to_applied_ns": 1233400,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "6d3b672e543a417ebd0056406a8d2867",
+            "native_sequence": 458,
+            "origin_ns": 2120673513550988,
+            "applied_ns": 2120673526467848,
+            "input_to_applied_ns": 12916860,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": {
+            "count": 5,
+            "nearest_rank": 5,
+            "p99_absolute_error_ns": 1166900,
+            "maximum_absolute_error_ns": 1166900,
+            "final_phase_error_ns": 655071,
+            "scheduling_errors_ns": [
+              784683,
+              618164,
+              1101316,
+              1166900,
+              655071
+            ],
+            "quantisation_offsets_ns": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "interval_residuals_ns": [
+              -166519,
+              483152,
+              65584,
+              -511829
+            ],
+            "within_event_profile": true
+          },
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-008",
+      "clock_mode": "real-time",
+      "run_id": "2f72aa4d63c04a26be47eecb5f6a77aa",
+      "manifest_sha256": "25398b9f341341fb771bc177dbbc377b060b3d99dc2bae109ab99fb984a1d3e7",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "9d1d6d0450c491945ed00f9858a1c0e6eaf2bcc2fd787b6cb273fb44bac59827",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-pending-chord",
+          "arp": false,
+          "shape": 2,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "f06d575f4dff4204aaf03d8595e87230",
+            "native_sequence": 452,
+            "origin_ns": 2120709892294994,
+            "applied_ns": 2120709893307867,
+            "input_to_applied_ns": 1012873,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "f4bb81cd705f419cb74d778784dbb98e",
+            "native_sequence": 459,
+            "origin_ns": 2120713251497175,
+            "applied_ns": 2120713263580490,
+            "input_to_applied_ns": 12083315,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": {
+            "count": 5,
+            "nearest_rank": 5,
+            "p99_absolute_error_ns": 1406862,
+            "maximum_absolute_error_ns": 1406862,
+            "final_phase_error_ns": 1126778,
+            "scheduling_errors_ns": [
+              599907,
+              504894,
+              1406862,
+              1034140,
+              1126778
+            ],
+            "quantisation_offsets_ns": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "interval_residuals_ns": [
+              -95013,
+              901968,
+              -372722,
+              92638
+            ],
+            "within_event_profile": true
+          },
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-009",
+      "clock_mode": "real-time",
+      "run_id": "31c378822b79483ababf41609c101d9d",
+      "manifest_sha256": "c9d4d23f02b0b650d8717062ab477707fcd4b39a2c781ff49151344e6fb5a495",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "9d1d6d0450c491945ed00f9858a1c0e6eaf2bcc2fd787b6cb273fb44bac59827",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-pending-chord",
+          "arp": true,
+          "shape": 1,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "11f7b5be7318443a9ff82c52d3acab33",
+            "native_sequence": 453,
+            "origin_ns": 2120749990924787,
+            "applied_ns": 2120749991955193,
+            "input_to_applied_ns": 1030406,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "85f3b4b73f464c2c8017f1beb324a2a1",
+            "native_sequence": 460,
+            "origin_ns": 2120753350649140,
+            "applied_ns": 2120753367155617,
+            "input_to_applied_ns": 16506477,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": {
+            "count": 5,
+            "nearest_rank": 5,
+            "p99_absolute_error_ns": 1153535,
+            "maximum_absolute_error_ns": 1153535,
+            "final_phase_error_ns": 804181,
+            "scheduling_errors_ns": [
+              533188,
+              1153535,
+              893069,
+              1061423,
+              804181
+            ],
+            "quantisation_offsets_ns": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "interval_residuals_ns": [
+              620347,
+              -260466,
+              168354,
+              -257242
+            ],
+            "within_event_profile": true
+          },
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-010",
+      "clock_mode": "real-time",
+      "run_id": "a5f414b0c58544dc97c80d49247088d6",
+      "manifest_sha256": "bb4c989d2f39e1ad7a01c7ba30fd56cdb1983896e37eae887126bd5018a44dc5",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "9d1d6d0450c491945ed00f9858a1c0e6eaf2bcc2fd787b6cb273fb44bac59827",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd"
+      },
+      "checks": [
+        {
+          "kind": "panic-pending-chord",
+          "arp": true,
+          "shape": 2,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "0011174ae70b4f39ad31362812915e1b",
+            "native_sequence": 454,
+            "origin_ns": 2120790271552338,
+            "applied_ns": 2120790272766399,
+            "input_to_applied_ns": 1214061,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "476b78e660724a799adeb4fbc9e4034c",
+            "native_sequence": 461,
+            "origin_ns": 2120793654926438,
+            "applied_ns": 2120793669687272,
+            "input_to_applied_ns": 14760834,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": {
+            "count": 5,
+            "nearest_rank": 5,
+            "p99_absolute_error_ns": 1205689,
+            "maximum_absolute_error_ns": 1205689,
+            "final_phase_error_ns": 1205689,
+            "scheduling_errors_ns": [
+              724723,
+              547786,
+              860778,
+              685060,
+              1205689
+            ],
+            "quantisation_offsets_ns": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "interval_residuals_ns": [
+              -176937,
+              312992,
+              -175718,
+              520629
+            ],
+            "within_event_profile": true
+          },
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "reviewed_pending_runs": [
+    {
+      "case": "M-PANIC-007",
+      "clock_mode": "controlled-experimental",
+      "run_id": "068d6bbab7404744a08e124fe15a842c",
+      "manifest_sha256": "93d047b44991db06a6488e288d63f78e82cc41d42f630826ba6076137f1d7a3b",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "21abc65a3c26da5e34e756d9c4890f744411d505f178e4545c1376c4819cef06",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd",
+        "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+        "tests/behaviour/panic_transport.py": "5b2f7d4d8225285e131449aba7d62689b67f1086e5a9a38eddbf2c9bd9d8d4c7",
+        "tests/behaviour/test_panic_transport.py": "151fbe68d589d1a0946c85e82886f853f514733e028f8247d6f90e7c319d6d09"
+      },
+      "checks": [
+        {
+          "kind": "panic-transport-boundaries",
+          "initial_stops": 3,
+          "starts": 3,
+          "stops": 3,
+          "unexpected": 0,
+          "passed": true
+        },
+        {
+          "kind": "panic-pending-chord",
+          "arp": false,
+          "shape": 1,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "88ceddc8df344378937e4d74e43928d4",
+            "native_sequence": 876,
+            "origin_ns": 2121321010724410,
+            "applied_ns": 2121321011685170,
+            "input_to_applied_ns": 960760,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "69dc0dcbf5b04e5d84798703a5c4f35b",
+            "native_sequence": 887,
+            "origin_ns": 2121321572654182,
+            "applied_ns": 2121321584357585,
+            "input_to_applied_ns": 11703403,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-008",
+      "clock_mode": "controlled-experimental",
+      "run_id": "f2443d6388a94664bd32d07e54df62a3",
+      "manifest_sha256": "7efa714db8b3ae168b1e9c77b280fcb4a343ac713346555a4277d903639dc73b",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "21abc65a3c26da5e34e756d9c4890f744411d505f178e4545c1376c4819cef06",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd",
+        "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+        "tests/behaviour/panic_transport.py": "5b2f7d4d8225285e131449aba7d62689b67f1086e5a9a38eddbf2c9bd9d8d4c7",
+        "tests/behaviour/test_panic_transport.py": "151fbe68d589d1a0946c85e82886f853f514733e028f8247d6f90e7c319d6d09"
+      },
+      "checks": [
+        {
+          "kind": "panic-transport-boundaries",
+          "initial_stops": 3,
+          "starts": 3,
+          "stops": 3,
+          "unexpected": 0,
+          "passed": true
+        },
+        {
+          "kind": "panic-pending-chord",
+          "arp": false,
+          "shape": 2,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "d386cec6ab134ad39813149e68c45a3d",
+            "native_sequence": 878,
+            "origin_ns": 2121330386608902,
+            "applied_ns": 2121330387426698,
+            "input_to_applied_ns": 817796,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "ba64feb0ec694e3abd1c0004898856a1",
+            "native_sequence": 889,
+            "origin_ns": 2121330906480177,
+            "applied_ns": 2121330917907176,
+            "input_to_applied_ns": 11426999,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-009",
+      "clock_mode": "controlled-experimental",
+      "run_id": "7a6dad7118c34062aef777b904c54dc1",
+      "manifest_sha256": "20d3436fb2b8bc2a64b0c9e25eedd9d9e4c89b739fe6e4417fd4e811ccfc4348",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "21abc65a3c26da5e34e756d9c4890f744411d505f178e4545c1376c4819cef06",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd",
+        "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+        "tests/behaviour/panic_transport.py": "5b2f7d4d8225285e131449aba7d62689b67f1086e5a9a38eddbf2c9bd9d8d4c7",
+        "tests/behaviour/test_panic_transport.py": "151fbe68d589d1a0946c85e82886f853f514733e028f8247d6f90e7c319d6d09"
+      },
+      "checks": [
+        {
+          "kind": "panic-transport-boundaries",
+          "initial_stops": 3,
+          "starts": 3,
+          "stops": 3,
+          "unexpected": 0,
+          "passed": true
+        },
+        {
+          "kind": "panic-pending-chord",
+          "arp": true,
+          "shape": 1,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "d1e092440b0044a09ff8905c12b28b30",
+            "native_sequence": 880,
+            "origin_ns": 2121339799532797,
+            "applied_ns": 2121339800464137,
+            "input_to_applied_ns": 931340,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "2fb33bf3539b4628ad9863a83a4dc59a",
+            "native_sequence": 891,
+            "origin_ns": 2121340340380317,
+            "applied_ns": 2121340352616042,
+            "input_to_applied_ns": 12235725,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-010",
+      "clock_mode": "controlled-experimental",
+      "run_id": "caaad2f6cce54800a1cf61ce7634479e",
+      "manifest_sha256": "d7c259424a5a0a764d3ce7f9e8c348fdb4a91f525b2b180439b0d428e7febe23",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "21abc65a3c26da5e34e756d9c4890f744411d505f178e4545c1376c4819cef06",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd",
+        "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+        "tests/behaviour/panic_transport.py": "5b2f7d4d8225285e131449aba7d62689b67f1086e5a9a38eddbf2c9bd9d8d4c7",
+        "tests/behaviour/test_panic_transport.py": "151fbe68d589d1a0946c85e82886f853f514733e028f8247d6f90e7c319d6d09"
+      },
+      "checks": [
+        {
+          "kind": "panic-transport-boundaries",
+          "initial_stops": 3,
+          "starts": 3,
+          "stops": 3,
+          "unexpected": 0,
+          "passed": true
+        },
+        {
+          "kind": "panic-pending-chord",
+          "arp": true,
+          "shape": 2,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "ab81575f305e47818ab5aefb7265d285",
+            "native_sequence": 882,
+            "origin_ns": 2121349254807640,
+            "applied_ns": 2121349255632413,
+            "input_to_applied_ns": 824773,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "21fc6323e1aa47cd820a103794d9a6f6",
+            "native_sequence": 893,
+            "origin_ns": 2121349773824997,
+            "applied_ns": 2121349785080567,
+            "input_to_applied_ns": 11255570,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-007",
+      "clock_mode": "real-time",
+      "run_id": "e7ceec377724401f8f2a753927ea2389",
+      "manifest_sha256": "1355ee97c1c6180e04122e6e518e245a87388cf5699c6f1545081954ed70ac71",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "21abc65a3c26da5e34e756d9c4890f744411d505f178e4545c1376c4819cef06",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd",
+        "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+        "tests/behaviour/panic_transport.py": "5b2f7d4d8225285e131449aba7d62689b67f1086e5a9a38eddbf2c9bd9d8d4c7",
+        "tests/behaviour/test_panic_transport.py": "151fbe68d589d1a0946c85e82886f853f514733e028f8247d6f90e7c319d6d09"
+      },
+      "checks": [
+        {
+          "kind": "panic-transport-boundaries",
+          "initial_stops": 3,
+          "starts": 3,
+          "stops": 3,
+          "unexpected": 0,
+          "passed": true
+        },
+        {
+          "kind": "panic-pending-chord",
+          "arp": false,
+          "shape": 1,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "fae99004cb2c49a8b145bb161cf815e2",
+            "native_sequence": 451,
+            "origin_ns": 2121385129551611,
+            "applied_ns": 2121385130885451,
+            "input_to_applied_ns": 1333840,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "5cbec3e36a424950b9883beebcc225a0",
+            "native_sequence": 458,
+            "origin_ns": 2121388494113404,
+            "applied_ns": 2121388506747500,
+            "input_to_applied_ns": 12634096,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": {
+            "count": 5,
+            "nearest_rank": 5,
+            "p99_absolute_error_ns": 2110996,
+            "maximum_absolute_error_ns": 2110996,
+            "final_phase_error_ns": -2110996,
+            "scheduling_errors_ns": [
+              805072,
+              -1808317,
+              -2017115,
+              -1745687,
+              -2110996
+            ],
+            "quantisation_offsets_ns": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "interval_residuals_ns": [
+              -2613389,
+              -208798,
+              271428,
+              -365309
+            ],
+            "within_event_profile": true
+          },
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-008",
+      "clock_mode": "real-time",
+      "run_id": "1b3a5a6c2c3e4c8c90405e11012fdc2e",
+      "manifest_sha256": "58f7599962c24de2c7113df01a4c86f7e9ebd6a41a14ca5decd9d457d8e1bd7d",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "21abc65a3c26da5e34e756d9c4890f744411d505f178e4545c1376c4819cef06",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd",
+        "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+        "tests/behaviour/panic_transport.py": "5b2f7d4d8225285e131449aba7d62689b67f1086e5a9a38eddbf2c9bd9d8d4c7",
+        "tests/behaviour/test_panic_transport.py": "151fbe68d589d1a0946c85e82886f853f514733e028f8247d6f90e7c319d6d09"
+      },
+      "checks": [
+        {
+          "kind": "panic-transport-boundaries",
+          "initial_stops": 3,
+          "starts": 3,
+          "stops": 3,
+          "unexpected": 0,
+          "passed": true
+        },
+        {
+          "kind": "panic-pending-chord",
+          "arp": false,
+          "shape": 2,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "8b58bfb13add428e896f23003125c6f8",
+            "native_sequence": 452,
+            "origin_ns": 2121424663052195,
+            "applied_ns": 2121424664099151,
+            "input_to_applied_ns": 1046956,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "fa58dbd093b24129803408eb0d739d02",
+            "native_sequence": 459,
+            "origin_ns": 2121428043057572,
+            "applied_ns": 2121428057020115,
+            "input_to_applied_ns": 13962543,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": {
+            "count": 5,
+            "nearest_rank": 5,
+            "p99_absolute_error_ns": 1205395,
+            "maximum_absolute_error_ns": 1205395,
+            "final_phase_error_ns": 685032,
+            "scheduling_errors_ns": [
+              565149,
+              1126866,
+              1205395,
+              676915,
+              685032
+            ],
+            "quantisation_offsets_ns": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "interval_residuals_ns": [
+              561717,
+              78529,
+              -528480,
+              8117
+            ],
+            "within_event_profile": true
+          },
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-009",
+      "clock_mode": "real-time",
+      "run_id": "9ed77756472f49beb0ac38efb964079e",
+      "manifest_sha256": "d4afec6278a1bca39e82420522ab1da0925b80c6fc3092fffb683f8a3a1afa99",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "21abc65a3c26da5e34e756d9c4890f744411d505f178e4545c1376c4819cef06",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd",
+        "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+        "tests/behaviour/panic_transport.py": "5b2f7d4d8225285e131449aba7d62689b67f1086e5a9a38eddbf2c9bd9d8d4c7",
+        "tests/behaviour/test_panic_transport.py": "151fbe68d589d1a0946c85e82886f853f514733e028f8247d6f90e7c319d6d09"
+      },
+      "checks": [
+        {
+          "kind": "panic-transport-boundaries",
+          "initial_stops": 3,
+          "starts": 3,
+          "stops": 3,
+          "unexpected": 0,
+          "passed": true
+        },
+        {
+          "kind": "panic-pending-chord",
+          "arp": true,
+          "shape": 1,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "e70cd3f1c751436983db7ae120c66690",
+            "native_sequence": 453,
+            "origin_ns": 2121464365530939,
+            "applied_ns": 2121464366577817,
+            "input_to_applied_ns": 1046878,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "6fc674da380245b8afe4d52f9ec09176",
+            "native_sequence": 460,
+            "origin_ns": 2121467726706043,
+            "applied_ns": 2121467738894749,
+            "input_to_applied_ns": 12188706,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": {
+            "count": 5,
+            "nearest_rank": 5,
+            "p99_absolute_error_ns": 1428597,
+            "maximum_absolute_error_ns": 1428597,
+            "final_phase_error_ns": 778158,
+            "scheduling_errors_ns": [
+              564510,
+              1428597,
+              1102529,
+              1105683,
+              778158
+            ],
+            "quantisation_offsets_ns": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "interval_residuals_ns": [
+              864087,
+              -326068,
+              3154,
+              -327525
+            ],
+            "within_event_profile": true
+          },
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-010",
+      "clock_mode": "real-time",
+      "run_id": "7856862b13034fe2b3466bbec80ac7f2",
+      "manifest_sha256": "f5b6f86a9a6a67d64637c3287bf8db606cdaccbbf4fc1efcde9c4b9efdb4f91f",
+      "source_sha256": {
+        "lib/m_grid.lua": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+        "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+        "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+        "tests/behaviour/cases.py": "21abc65a3c26da5e34e756d9c4890f744411d505f178e4545c1376c4819cef06",
+        "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+        "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+        "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+        "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+        "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd",
+        "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+        "tests/behaviour/panic_transport.py": "5b2f7d4d8225285e131449aba7d62689b67f1086e5a9a38eddbf2c9bd9d8d4c7",
+        "tests/behaviour/test_panic_transport.py": "151fbe68d589d1a0946c85e82886f853f514733e028f8247d6f90e7c319d6d09"
+      },
+      "checks": [
+        {
+          "kind": "panic-transport-boundaries",
+          "initial_stops": 3,
+          "starts": 3,
+          "stops": 3,
+          "unexpected": 0,
+          "passed": true
+        },
+        {
+          "kind": "panic-pending-chord",
+          "arp": true,
+          "shape": 2,
+          "sweep_events": 6144,
+          "onsets": 5,
+          "releases": 5,
+          "start_origin": {
+            "action_id": "4f7e2c32c2404397b028d96d1c60482a",
+            "native_sequence": 454,
+            "origin_ns": 2121504204087254,
+            "applied_ns": 2121504205054951,
+            "input_to_applied_ns": 967697,
+            "boundary": "backend-input-submission"
+          },
+          "stop_origin": {
+            "action_id": "fcfe285dd2e042de82a47c9971e2323f",
+            "native_sequence": 461,
+            "origin_ns": 2121507555286544,
+            "applied_ns": 2121507567085825,
+            "input_to_applied_ns": 11799281,
+            "boundary": "backend-input-submission"
+          },
+          "metrics": {
+            "count": 5,
+            "nearest_rank": 5,
+            "p99_absolute_error_ns": 1073023,
+            "maximum_absolute_error_ns": 1073023,
+            "final_phase_error_ns": 1073023,
+            "scheduling_errors_ns": [
+              499279,
+              784387,
+              788791,
+              657734,
+              1073023
+            ],
+            "quantisation_offsets_ns": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "interval_residuals_ns": [
+              285108,
+              4404,
+              -131057,
+              415289
+            ],
+            "within_event_profile": true
+          },
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "review": "docs/testing/reviews/panic-interaction-review.json",
+  "followup": "docs/testing/reviews/panic-interaction-followup.json",
+  "oracle_tests": {
+    "schedule": 11,
+    "transport": 4,
+    "restarted_sweep": 4
+  },
+  "historical_evidence_note": "Initial runs retain their original oracle/manual/source identities. Use reviewed_pending_runs for strengthened Stop/transport claims. The four overlapping-gesture passes remain source-bound to their unchanged oracle. Other historical note_schedule callers require the strengthened guard at final campaign validation; no release/refactor admission claim."
+}

@@ -22,6 +22,7 @@ def assert_schedule(events,onsets,durations,*,field,origin,stop_bounds,pulse_rat
         else:
             assert voices[key],('Extra or misrouted release',event)
             voice=voices[key].popleft();expected=voice['due']/pulse_rate
+            assert event[field]<=upper+tolerance*1e9,('Release after Stop drain',event,upper)
             phase=(event[field]-origin)/1e9-expected
             regular=abs(phase)<=tolerance
             truncated=(origin+expected*1e9>=lower-tolerance*1e9 and lower-tolerance*1e9<=event[field]<=upper+tolerance*1e9)

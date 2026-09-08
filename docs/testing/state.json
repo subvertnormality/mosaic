@@ -4951,5 +4951,16 @@
     ],
     "full_campaign_complete": false,
     "next": "Broader panic active/delayed notes, native mid-job repeat and hot reconnect; continue remaining manual domains."
+  },
+  "panic_interactions": {
+    "validation": "docs/testing/panic-interaction-validation.json",
+    "native_passes": 12,
+    "remaining": "Native MIDI hot disconnect/reconnect requires emulator support. Full manual coverage, controlled admission and emulator release remain incomplete.",
+    "next": "Implement generic native MIDI hot-plug, then Mosaic disconnect/reconnect behavior tests.",
+    "status": "reviewed-scoped-interactions-validated",
+    "reviewed_pending_passes": 8,
+    "overlap_passes": 4,
+    "review": "01a080f4-f7fd-7b00-b1ed-73d95c9d081e",
+    "full_campaign_complete": false
   }
 }
