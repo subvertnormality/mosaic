@@ -1,0 +1,3003 @@
+{
+  "status": "production-fixes-scoped-native-validation; finite-matrix-incomplete",
+  "candidates": [
+    "0040",
+    "0041",
+    "0042"
+  ],
+  "source_sha256": {
+    "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+    "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+    "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+  },
+  "runs": [
+    {
+      "case": "M-CHORDSHAPE-001",
+      "mode": "controlled-experimental",
+      "run_id": "a3742981bfe545a8a2052d1595b6442a",
+      "manifest_sha256": "f06006dca57c091d96e2576d79650b73aa725c399b98bffbe4fe0c5a0408e1a9",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-002",
+      "mode": "controlled-experimental",
+      "run_id": "758feb5d5e574e56b3fe2ff1eea2dfd6",
+      "manifest_sha256": "b92b59bfdadedb32c6d68f5d75ed0366f0ef197bc7b38325f79c13648c124b2a",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-003",
+      "mode": "controlled-experimental",
+      "run_id": "c9278e63b0544c419e6992e0aedc9bc2",
+      "manifest_sha256": "c8231d99a48c46911a5435a6f91a0c5106af25d962394e95f16d2a8ad08aa448",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-004",
+      "mode": "controlled-experimental",
+      "run_id": "74ae16e7894c4709a795c0140730bc5d",
+      "manifest_sha256": "74f5ba31442fbf249d279e51ffff4ce16456724a558d3b1a428815c663ed42e7",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-005",
+      "mode": "controlled-experimental",
+      "run_id": "0706a68e47584262a2e322b2783e7a86",
+      "manifest_sha256": "04ca4bc2b31777048a0699d0cdee47961a1fe772159b546512b5decf3a37be08",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-006",
+      "mode": "controlled-experimental",
+      "run_id": "e77fefd6031c4f14a722c62b6df5ab3e",
+      "manifest_sha256": "4eee289ef3f3478891d88f990a6fb87f1d26a49ba213a4811d954e83089d9e2a",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-007",
+      "mode": "controlled-experimental",
+      "run_id": "03262cf65a934f228bd4ec09c9b69f5e",
+      "manifest_sha256": "099feebf405f726a555b868515aeafe7d9411feb163ed49e8a6dd859e36a1c74",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-008",
+      "mode": "controlled-experimental",
+      "run_id": "a6e799f3933d4b35aa311170f82aedb8",
+      "manifest_sha256": "1ea006e5b46ae3cdc254f44b7e0971317ad0f4585dd04d2646ed84f4a404a9e9",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-009",
+      "mode": "controlled-experimental",
+      "run_id": "49668e0dc77e4c3cb1eff76d8b2dc01e",
+      "manifest_sha256": "6a145c18b93934d72ec9df3f8804f083cbad7d7275c79ec9dcbf6f3d3120a007",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-010",
+      "mode": "controlled-experimental",
+      "run_id": "bc118762957e4c8caf59796f4d7f93e0",
+      "manifest_sha256": "6d1dfa1e8ca763df9d9e45bb8c8708416cec074defcf47591ea6aa644025237a",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-011",
+      "mode": "controlled-experimental",
+      "run_id": "2c5b6473cb6f49328790b341ba705aa5",
+      "manifest_sha256": "27e4ff46df90d82a1f575068fb06c6158431c6a4888fee9b0f151eac6c230038",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-012",
+      "mode": "controlled-experimental",
+      "run_id": "72893091ce4743a78d85b37715b88897",
+      "manifest_sha256": "0c6e211a924f5d7b02bab0e107f425ca4431d9f1f8aae598c1ca686458991c1f",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-013",
+      "mode": "controlled-experimental",
+      "run_id": "ad43c6eb56284a27b4c2e9a73007e5a2",
+      "manifest_sha256": "205da591af938f458d5d158cabe0526239e996bc9b4fd76438b7d6044103bbb5",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-014",
+      "mode": "controlled-experimental",
+      "run_id": "2ff270ba917e4b9a899ea1e867737652",
+      "manifest_sha256": "8ab04c35b18cd0b708e3da10cfc1aa8c1a09b4572d0f55c7d25c39e1145c6da8",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-015",
+      "mode": "controlled-experimental",
+      "run_id": "99e6e1347e5b40c28c5545bb63bd893f",
+      "manifest_sha256": "e8955a6adcd7705b7b97c333d44ea9e37c9c8b24fa720038adf345b029b821ab",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-016",
+      "mode": "controlled-experimental",
+      "run_id": "0d0b4188c4124ecab56d246d17310297",
+      "manifest_sha256": "ddee6c259b361596a09c27f65656727f1fd4cfd5495a68122d0883074dcd7140",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-017",
+      "mode": "controlled-experimental",
+      "run_id": "57e84fda1b9c483198b5ad73b63b6893",
+      "manifest_sha256": "5978b2459394cb6deadcf5080815e0d8381f27634d3e49aed954d2183d0b70f7",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-018",
+      "mode": "controlled-experimental",
+      "run_id": "004dadbc58e7417894df52b24ed4ce8a",
+      "manifest_sha256": "9335bfb8851a9b5f9f3be0f64afb439a21dc526e6a79a05fb09a98de05b18cc5",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-019",
+      "mode": "controlled-experimental",
+      "run_id": "3171b90f49d54673ae28d84d51ac426b",
+      "manifest_sha256": "2b72645c65a0c5a711b48c3117f5a4d49cd7938ae4d364dd43153d973c656e86",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-020",
+      "mode": "controlled-experimental",
+      "run_id": "8b432919e05d498c99347fe58a189e97",
+      "manifest_sha256": "87c48066271901734db33742f4e99b3fc300a02f50365d70a33f3ddccdab4aaf",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-021",
+      "mode": "controlled-experimental",
+      "run_id": "9d379e5cae3c4d0fa621924facb5ff3a",
+      "manifest_sha256": "bc10e83c8804581b8868ab6b095a2e1db879a18d3c2a47e305915655266877bb",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-022",
+      "mode": "controlled-experimental",
+      "run_id": "b5fbf4f357c84f62810fd27b61d633bc",
+      "manifest_sha256": "54214b54aecb82f3a7d13df62d3c746badac5764e4086b465c0a86a88443d798",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-023",
+      "mode": "controlled-experimental",
+      "run_id": "eb047497c2be473ca1e7337c9e0e5e27",
+      "manifest_sha256": "b42cf8aec5c662577553ee8f9aca93fffaeb4945f131dffd0a1c08a499528b82",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-024",
+      "mode": "controlled-experimental",
+      "run_id": "a67b324ce7d84a55a9bb016250ee364c",
+      "manifest_sha256": "9e630552c2299d653202da3dbf61c7ab687730835e43306dcb6560c31d11d6a9",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-025",
+      "mode": "controlled-experimental",
+      "run_id": "0e20c58bc72e446b9c50103755731e5a",
+      "manifest_sha256": "a44c5f0ea7ba4fa18a624a4f6f3b1f46d266918955691692685a97c8178e7951",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-026",
+      "mode": "controlled-experimental",
+      "run_id": "228756eef1a64df0988839fbc58ca25f",
+      "manifest_sha256": "1edfe832d9b57cb8716b5689f2005825c31c4ee02e25c8bd656086f7eb23f151",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-027",
+      "mode": "controlled-experimental",
+      "run_id": "7d93cffb699a4440a168c8d6a3b8ea26",
+      "manifest_sha256": "c689fb3af1c731998abd082e424387df328bb1b99bc8a65673dc0763c9cac775",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-028",
+      "mode": "controlled-experimental",
+      "run_id": "504b58d43d624451b551fb218119102c",
+      "manifest_sha256": "e6bc17f87aabb83a66c50ea9f2dcdb600eef429100ca37f4245095f6b3759fe1",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-029",
+      "mode": "controlled-experimental",
+      "run_id": "05f49b42f01b402caa6d1afbf775c920",
+      "manifest_sha256": "17b8c45d107a4976d08b2f163a1eb910a7b9fadc2a3dadd5e5885b293fc7093d",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-030",
+      "mode": "controlled-experimental",
+      "run_id": "2b72b9e1f94f498f93f925a036407dd4",
+      "manifest_sha256": "3261a3ef0160b276b183ab33ee269ddd714c6804c65596c6d2091aaa971dc59b",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-031",
+      "mode": "controlled-experimental",
+      "run_id": "b47b4a43703e46dbad9c82a6faf13c4f",
+      "manifest_sha256": "bfc9dca4c4acfe07e5b5dd1e0d09e4c234ac1b63ec2de22c2d875ee983f8ca1c",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-032",
+      "mode": "controlled-experimental",
+      "run_id": "9d858f9cca6a4534b675ff0c1f812335",
+      "manifest_sha256": "77481711410a41aa78a65e58d97990b05341a4fd460eb191a6c6df77ef2de192",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-033",
+      "mode": "controlled-experimental",
+      "run_id": "ad96fee5990c419c9a17a3d4f6ef48a4",
+      "manifest_sha256": "b93fea604df201e497fc16c908d974378c6bdef16db7b95f1d58becce4d42c61",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-034",
+      "mode": "controlled-experimental",
+      "run_id": "a4398b88503340bb9df656a1085abad1",
+      "manifest_sha256": "d3cb88da17159490470650b1682a2eff387448ff38f49d48fa7fef567ecb52d2",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-035",
+      "mode": "controlled-experimental",
+      "run_id": "7d66651ec1884dce8f44e058d18ddad2",
+      "manifest_sha256": "6d36c5f2757332bd024571322c8f2042ffcb9d5ed88fab7921c9e0bb0e629292",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-036",
+      "mode": "controlled-experimental",
+      "run_id": "73dc90156eb9477b92f9c56c682cd9d4",
+      "manifest_sha256": "92200953d3e8c1e5083aef803487784128ea72e5a66f9c1aa75b7baf35635142",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-037",
+      "mode": "controlled-experimental",
+      "run_id": "a2fc0a21a43646958b69fe890cf25f22",
+      "manifest_sha256": "ba54cf4e1208bbc28c5dd6d4e953e929999c8bf8896ce23cf194a6ee0fdd7e9b",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-038",
+      "mode": "controlled-experimental",
+      "run_id": "ce7f803eb09e441db8332723d8388ccb",
+      "manifest_sha256": "798556268a0b57f3d11ef16db939e915cefd82093f387c553bb6c7cae3b933c1",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-039",
+      "mode": "controlled-experimental",
+      "run_id": "0c23ae2b8fac44ffa1b70ef7a7e2bc6c",
+      "manifest_sha256": "b4e1b1bd0e61a0a1022f5312c41ffc7b92dd781686505f5dba677aefc979af82",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-040",
+      "mode": "controlled-experimental",
+      "run_id": "33775b8bde614702bca14bc355d7dd1e",
+      "manifest_sha256": "6a15dab084317f486d0edbfc620721d6ef585221d9a9b6c2a15ee4ecbe11d4c9",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-041",
+      "mode": "controlled-experimental",
+      "run_id": "51556ba089e04e0aa249707003379188",
+      "manifest_sha256": "371f2846a152bb7486bfcbf51576c2e29ebc07e08a627f3b009ebf34a0d8a117",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-042",
+      "mode": "controlled-experimental",
+      "run_id": "bc8b01d73b9d4bea82d9c1b16e91a3b1",
+      "manifest_sha256": "784fb983e309a2411c80a8a6daf374f09219f51ed81efe62fadbd12cc1d7cdbe",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-043",
+      "mode": "controlled-experimental",
+      "run_id": "10f8c0d9bb944a488a2b09b92dcaf8d1",
+      "manifest_sha256": "380173f537e124b6328ce2b1110555ebeadcd88f94aa439f75d98050fee7ee26",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-044",
+      "mode": "controlled-experimental",
+      "run_id": "8b0e1c16cbba4bda819ff1fe3c4849e9",
+      "manifest_sha256": "c2a48db9ee410c6d6b08059f790c99b80689574bfb5dd4e7d182e26b940e1dcc",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-045",
+      "mode": "controlled-experimental",
+      "run_id": "da2e22d853c64651a1a65e28d25d2041",
+      "manifest_sha256": "d5e4a15d94d30e7db6e708e4d580c6c0a873330c34f27487b67dd7721e4a0796",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-046",
+      "mode": "controlled-experimental",
+      "run_id": "d1c7de53f3044534bb833d73b25ecc07",
+      "manifest_sha256": "bf0bb1c3a2a9b0c237cf803d8fa0a8b20a7205bf14a078e4b1dbab92b10f7498",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-047",
+      "mode": "controlled-experimental",
+      "run_id": "962ab80f417a46c2a0f6a66e4e1178c8",
+      "manifest_sha256": "d6be44b94daaf0f3fe2154182f0c5e839e86da864fd3cc1643e77c6a0e94656b",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-048",
+      "mode": "controlled-experimental",
+      "run_id": "e00da3afb4134e3093885b1e9f0ac984",
+      "manifest_sha256": "a0cc9ab282c518785f59c1a4bbb798ba4c4e30750f4468bc771649f5cbaa9565",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-049",
+      "mode": "controlled-experimental",
+      "run_id": "1a10b3e0f9ba4ebfb052134be527b387",
+      "manifest_sha256": "d8759db20d693759dd6c0df3af7580d798c724c35c4e779a5f7017b1b3418f5e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-050",
+      "mode": "controlled-experimental",
+      "run_id": "aeb7db33dfd149cba1824c5db00fb4b3",
+      "manifest_sha256": "c4a4acdeb173acd9693b893f0f043ce9092646df23ceff4b56154233f8f8fe0d",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-051",
+      "mode": "controlled-experimental",
+      "run_id": "a04def9694974959842d6676f80ab572",
+      "manifest_sha256": "96884fc23f41b7a2e062965200de78dff47ac6b4dced48a49783e0bfa8465bbf",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-052",
+      "mode": "controlled-experimental",
+      "run_id": "b7be8365c1d0499ab462826065d8676b",
+      "manifest_sha256": "26ef94f7cf1ba002f3b8201ba27cf359b76ee1b0449b41751b5e6de36cb38fb8",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-053",
+      "mode": "controlled-experimental",
+      "run_id": "5c68f71da38d480db6e2e21619ee12cc",
+      "manifest_sha256": "f3b9893c3f3ef9a697b26dedb562c0603ac9e5a0091a45e59c33ce692cb9d8d9",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-054",
+      "mode": "controlled-experimental",
+      "run_id": "5f049f6cae7d41408bcf7a48076a0192",
+      "manifest_sha256": "ce7cc978a429a2dd4df3fa9a6607c62b0248b602e84c5fbd5dc00757f658e0b3",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-055",
+      "mode": "controlled-experimental",
+      "run_id": "c88a98ea3bde4eeb8801fb58a5f94c8b",
+      "manifest_sha256": "5d6362a936ccc0bde39351af181027e3b1adb9f2d492e6b5206b498c2bf68957",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-056",
+      "mode": "controlled-experimental",
+      "run_id": "56b9866c1536464d93e5c25aa1b2b405",
+      "manifest_sha256": "ad915c154e50fcdd697d5f186fa3ac42f1935df0aa979c7ab92d50c2482d2d7e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-057",
+      "mode": "controlled-experimental",
+      "run_id": "7e83d0794e6f47d8850a04f66bd80aec",
+      "manifest_sha256": "400fe3e20952d66781b016a9e8ef888474d8e1cb630a2352144cb2b843588b7f",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-058",
+      "mode": "controlled-experimental",
+      "run_id": "d23bba2dde9f4c1e878985dcc7dc40f0",
+      "manifest_sha256": "aa151f03dc34a5b2eed444eda1f1ff545613684ac4f4d4ba59dae9db8a1ff3fe",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-059",
+      "mode": "controlled-experimental",
+      "run_id": "276393f3e52b44e29e3ee07c608399b1",
+      "manifest_sha256": "f323699f9cc0a13d76a0af7fc359b41e7d59b8259b54e2a236d8fc76b32c3597",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-060",
+      "mode": "controlled-experimental",
+      "run_id": "15d2222e406549328e4abb9f74d98ed0",
+      "manifest_sha256": "ac095eab9b4ff56a5b76ce715189153bd1c4d3f5c060a489eb6373965078b676",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-061",
+      "mode": "controlled-experimental",
+      "run_id": "3ad6874c1e794e9a8f19aa5e4b3cde1d",
+      "manifest_sha256": "c51bef12536020e7319c878f6a56fda929ac385dca9be3eefa64f3e060f84935",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-062",
+      "mode": "controlled-experimental",
+      "run_id": "56930bfb6c414ccda2e4df214a6ece0e",
+      "manifest_sha256": "d45b6b9cc550b9706e37ae92f71f1eef33991b7aeb282427f74337700707077a",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-063",
+      "mode": "controlled-experimental",
+      "run_id": "47a0b0d1a18548ffbd1cf07eb4e2caa8",
+      "manifest_sha256": "e431524634f110ebd3e697407c36406d4b45d215dca46f14cd4a7df57c1ede40",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-064",
+      "mode": "controlled-experimental",
+      "run_id": "8da34e57799f48bd900f102ce03aa05e",
+      "manifest_sha256": "443b10de6d2e75a95d3c07879ee41a5a3e638f24d86df971990dee0ba9608025",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-065",
+      "mode": "controlled-experimental",
+      "run_id": "2a8110788d3e492f9c28ff679ca07ddc",
+      "manifest_sha256": "0afd37b8736f315adb6d71584ad4c4d7699ca57027e4f349d6a1671b5a507767",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-066",
+      "mode": "controlled-experimental",
+      "run_id": "af7157bda41e4bd085711cd715081a74",
+      "manifest_sha256": "5faa443a0a0c6f9d4112109a256db2860e1d21bd56ce0e8984657c8ad93998ac",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-067",
+      "mode": "controlled-experimental",
+      "run_id": "bcdf910a8ecb4432b96f571fad3ca23e",
+      "manifest_sha256": "190147a598fefcf8523e95f5045e95c2ea61f72451f59bf215e6c72050a50c5a",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-068",
+      "mode": "controlled-experimental",
+      "run_id": "1f4194507dfd4128aed6ca8e4dd0d3a4",
+      "manifest_sha256": "1d318425159229d8fe7c56b413ff0380abfe740fd6b2963ea6cd6467dcac03af",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-069",
+      "mode": "controlled-experimental",
+      "run_id": "1bed366fc0da49199fd5e4bc1c72e6c7",
+      "manifest_sha256": "f5947c2521a12fca536cf973c8deb0c2357f8dc9497508ec689e5b996d50a291",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-070",
+      "mode": "controlled-experimental",
+      "run_id": "5ad05681d01b4a8fbc5585702ac58d10",
+      "manifest_sha256": "efccbdb365a2bcc3a42b6d96b88e061fd6f4b76a68bf593d71069c280bdc0734",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-071",
+      "mode": "controlled-experimental",
+      "run_id": "675e6a7028f44803a7f7950855456d64",
+      "manifest_sha256": "ec7c0b61890c4cc596b62a8d8d1d18dfa48d8214c0cbf5b39fae83b11ec3a79c",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-072",
+      "mode": "controlled-experimental",
+      "run_id": "5aa92e3dfc014cbcada3c6795d59001d",
+      "manifest_sha256": "5d59c13c9323b4b2e4e7265ff84d4964f1667042fb38746125f644acda7c5774",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-073",
+      "mode": "controlled-experimental",
+      "run_id": "2f2e8f2612d24dbb88be53bcad59ff95",
+      "manifest_sha256": "d87b6dc5fe894268c1b92a124d6fd15286887517bf56b333a472ac2566d00b7c",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-074",
+      "mode": "controlled-experimental",
+      "run_id": "5a636338928249eebca5f5cc61367050",
+      "manifest_sha256": "fce253acb7cf581bdb56b55245d6ce121c1bf2e6f8103a1a77b5102de3d5ec0e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-075",
+      "mode": "controlled-experimental",
+      "run_id": "1db8359953274c698d7efb4725076c08",
+      "manifest_sha256": "ce931822b964adcae8248ca71cbf4bc4f85c226f6df4cf6d7553347ec4c7b1ba",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-076",
+      "mode": "controlled-experimental",
+      "run_id": "799f6f5e58284978a17c2155e451e3bd",
+      "manifest_sha256": "f8339ec16b6429157d5f3a7cfb30291ed62b5298646ec06c39621512570f83f2",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-077",
+      "mode": "controlled-experimental",
+      "run_id": "a18114f639c04866a3c13ddd72b8ab7c",
+      "manifest_sha256": "550381cc49af6a7307e455c5224b35a0ec8f21f33204a29533109d1468890480",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-078",
+      "mode": "controlled-experimental",
+      "run_id": "f733c622787c405b94789b91ca24fa06",
+      "manifest_sha256": "15217730e3c736e407505483b525d5846e8fde6edf699e75fdfdbb1e61b09043",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-079",
+      "mode": "controlled-experimental",
+      "run_id": "fd71685e5cbd465eb544db522e14d2c8",
+      "manifest_sha256": "93e50199106bbde35046a7c1a629bddc4557160aa59bc8b086b6d02dccca787c",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-080",
+      "mode": "controlled-experimental",
+      "run_id": "d031d336100441e982a61d65a85bac1a",
+      "manifest_sha256": "0234db08163493b8bf7a76ec6ca1f15cf8148df3801fe5ccad79686a96a65f35",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-081",
+      "mode": "controlled-experimental",
+      "run_id": "e46a3392ca724d8cafd79d215641db48",
+      "manifest_sha256": "7a48991694c0ff34ddf642e7d090760a93d3221f9b149f59f0416221280c0c9f",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-082",
+      "mode": "controlled-experimental",
+      "run_id": "3390541c995c4eb8a5dd534617986e33",
+      "manifest_sha256": "d48453eee8d369a08f0a33f8fbfbe426930c2b096f64431431fc2e6ed6a534fe",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-083",
+      "mode": "controlled-experimental",
+      "run_id": "ca6e7d9d15e84f32aeb6ac7598dfa9af",
+      "manifest_sha256": "1327f1318c6ad85d8432b63907b12ac965abefb3043f3594c8b83e80128aaf70",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-084",
+      "mode": "controlled-experimental",
+      "run_id": "6da7cd5e77384c2487957d43fefd9866",
+      "manifest_sha256": "7733f6e90fd64c4435ab6c1bfb612605031a80c8bcbc7b91e10f5d73322ba98e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-085",
+      "mode": "controlled-experimental",
+      "run_id": "d0768c4bff594a688adfbd3968c99aed",
+      "manifest_sha256": "8a5ee1e96c858ae4e1f327d35c62a13210cbc01fe9be1a3098d9bb75192ead1e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-086",
+      "mode": "controlled-experimental",
+      "run_id": "38fd9d6233f648fa80b1c5cf280876d8",
+      "manifest_sha256": "d80b7a105f550c9fc0acb01de9b19cc94a22131d67b30d8df23b4f142a33343e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-087",
+      "mode": "controlled-experimental",
+      "run_id": "9c37e6a378844afaa481996a6909fbdf",
+      "manifest_sha256": "a02a8a65f4f6bdbd3ea073c951d350522d369923db517f42098bd1fddaa593af",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-088",
+      "mode": "controlled-experimental",
+      "run_id": "9f83de3aabac4bd58c763d425c954b23",
+      "manifest_sha256": "1b0a34e875bafc190da8311cac9b93bf662fafaecb6ddeb5e134bebbeca4713a",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-089",
+      "mode": "controlled-experimental",
+      "run_id": "af75eb6aba3a4915b70fef3ceed08301",
+      "manifest_sha256": "ddd34d2fbc1c6469b88d80965506034defd7885a5459dcbd5ccbbd94e6af6fdb",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-090",
+      "mode": "controlled-experimental",
+      "run_id": "8c32de5fbe7f4bcebe796668a0d80919",
+      "manifest_sha256": "7357eb89ae23a60be2066ce2930aca94e2066dbd4f85d9c4a2d61f5675a55374",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-091",
+      "mode": "controlled-experimental",
+      "run_id": "3cb0134b8ea7430894d631ee626cca39",
+      "manifest_sha256": "51ae5a299c600fcc98b8af054cdf535318a2e9927948808420e1e92a5b1e8a25",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-092",
+      "mode": "controlled-experimental",
+      "run_id": "466f83027c0541fda1995104891ca97d",
+      "manifest_sha256": "0a8718eb2e0242fa14eb92c6483dfdd73fc0576af44ee1e960079384240c685e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-093",
+      "mode": "controlled-experimental",
+      "run_id": "343d3f5244a24a85b6d9570fa575f6e8",
+      "manifest_sha256": "ea45a23005009cdd7ca4751584dd831e8ba32ed403d27f4fba532183e2517294",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-094",
+      "mode": "controlled-experimental",
+      "run_id": "4df9d3b311b34599808f2b42e20d4373",
+      "manifest_sha256": "548e6f13f3a5e2ed9037d3cdce6c021aba4cfa28848165360a416506cb2b37be",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-095",
+      "mode": "controlled-experimental",
+      "run_id": "8ff65a1d442a461488d6e528b9621760",
+      "manifest_sha256": "c163f527b1e5900d2b5776205fdabf1ccaeb571cd13400eb1dc60d9b7b2d42ad",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-096",
+      "mode": "controlled-experimental",
+      "run_id": "c4afd70636484326a14a26a95828ddec",
+      "manifest_sha256": "6a31d4a13b5b6c47bbf6284e35503e5e2caf2dceb28eed532d1f7167f7f72691",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-097",
+      "mode": "controlled-experimental",
+      "run_id": "d1d6ec9270c741528befba0bca5a7736",
+      "manifest_sha256": "7bb145807a4d338a83094c2170bfeb1bbaab60d7380d12692056809a8c26afa5",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-098",
+      "mode": "controlled-experimental",
+      "run_id": "c01ea260a0a4407ca14641b9d478fe7d",
+      "manifest_sha256": "f686ffd3d637ca267f4887068ad1e9eb63cf307510f0627921434d73178edff2",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-099",
+      "mode": "controlled-experimental",
+      "run_id": "d9b33696ee1b42cc8946fb3553309f11",
+      "manifest_sha256": "20a596c46a7f55b1a509f5f52370dc5456dd092ea0e4aa68d5e95d75c9977cc6",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-100",
+      "mode": "controlled-experimental",
+      "run_id": "a57141b63da44b72b16d880d7e8c5a7c",
+      "manifest_sha256": "dcfc7bfeb75a09b9ae504020feec5fa8b3bf1cd1779a552f94478e6b865b9b0b",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-101",
+      "mode": "controlled-experimental",
+      "run_id": "64ffc45b24404a2dba69a9aef4e5ca8d",
+      "manifest_sha256": "cccca5afb0f648b051791de10e4be7a2312a0732fb4a446d713729c809096f71",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-102",
+      "mode": "controlled-experimental",
+      "run_id": "a31dfefbf4384044927accb3ae222d51",
+      "manifest_sha256": "619d4f53e6a8818c9150b3ddfe96327158c912cadf275fb572da728f02276400",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-103",
+      "mode": "controlled-experimental",
+      "run_id": "a4f98c4c07fd46289588bf213ec13e68",
+      "manifest_sha256": "e04695e23007368f5bf886cd50211cae0b2eb347260ec5a4117094fe4fc14998",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-104",
+      "mode": "controlled-experimental",
+      "run_id": "14e2732619b4408f952ae15364f73b0a",
+      "manifest_sha256": "eace18a6ab36d078f4c136c98d9528f0675b20851a33c79b50d172752fa9321d",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-105",
+      "mode": "controlled-experimental",
+      "run_id": "1aab20e5a45a44cfa093fd482ba11f2b",
+      "manifest_sha256": "bb60a0a69f51f490e0be930c2968f19673675f5b087d3455cd73c135e09261c6",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-106",
+      "mode": "controlled-experimental",
+      "run_id": "7d07bc09896643d9917bae23a6e9fc0e",
+      "manifest_sha256": "a16753b4a2a9254a91d60e78493dd600f9a9ec07794042c36a5360042b7cc18e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-107",
+      "mode": "controlled-experimental",
+      "run_id": "ed97f3f6712840af8c1ae67d1e6b4886",
+      "manifest_sha256": "10f0023bff1b554b68d12d8e46cbd08e70e0acd379903d8ccdf77b3de179dc5b",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-108",
+      "mode": "controlled-experimental",
+      "run_id": "4f27bc931a9e4ef49c0ad0158defacf2",
+      "manifest_sha256": "623b05bb58ae441e7944791412470c041be2df5b43d7573141c1aadcd1fcccc5",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-109",
+      "mode": "controlled-experimental",
+      "run_id": "1c6dfa8e88924095a909a5a7914c3f39",
+      "manifest_sha256": "da4588c09ae3aa76f90bec8be68e40a817c86bd0fac478430ce25aba3ebfbcb6",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-110",
+      "mode": "controlled-experimental",
+      "run_id": "fbb53f8475c24659a530e1621db90c68",
+      "manifest_sha256": "54c991d4b942fd50eb7ed18ad3729ad7ebf9718aee11f1f22d42a3d7af35a3cf",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-111",
+      "mode": "controlled-experimental",
+      "run_id": "8afaba9c074341fc8bb336bb29e565f5",
+      "manifest_sha256": "9a558da825e0eab60a916cb41176cb512189a6dea76d391e181630f1ac6637f0",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-112",
+      "mode": "controlled-experimental",
+      "run_id": "751e8ea556304a4d8f32a2f912b468d7",
+      "manifest_sha256": "5cbc30ddb17b8861977fdf4ab18de1f54d1659b2c95d3b4b8f629c080ef87ca8",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-113",
+      "mode": "controlled-experimental",
+      "run_id": "a8f6f9f214c7488badc665dc0b2611f6",
+      "manifest_sha256": "ead531446408044077766f152dca3f1b13a081b5d98c02504e5d6311e0c2eca6",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-114",
+      "mode": "controlled-experimental",
+      "run_id": "c43825f72a994bf9a2df8b6be729e5ef",
+      "manifest_sha256": "6a44f82bcba58ed9926551af94bc05b74e3e812a38dac10e83dfad2842628d66",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-115",
+      "mode": "controlled-experimental",
+      "run_id": "7a2d61323a47476f8c85afc4fbc35e8c",
+      "manifest_sha256": "511719dc3d813dbbcb57d63b5d0aea9f9715003567561f5155a11fae4066dd13",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-116",
+      "mode": "controlled-experimental",
+      "run_id": "0bcef8af3f8049bc85368b475a09ab98",
+      "manifest_sha256": "5b471ef3de6fde74f7cd37180cbbf924e6dc92959191f4ed88af78e921f2023f",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-117",
+      "mode": "controlled-experimental",
+      "run_id": "801090dab3344599a847a91e56cb1202",
+      "manifest_sha256": "8790973e24787a03d913b6aab40090c2082a4bd894792c443a5177705ab6fdc5",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-118",
+      "mode": "controlled-experimental",
+      "run_id": "aea71af7235340dfb5c0b0e3b0c18321",
+      "manifest_sha256": "cb3a198d45d12e12e2a5d3869500fedc10621d637d0bd47ac0fffe91513e096a",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-119",
+      "mode": "controlled-experimental",
+      "run_id": "03cd3baf57d44c7cb593cc123ce50f44",
+      "manifest_sha256": "520bb812317914f981117a5e1e9bcb17a2becc26ae481c5b29f734db1d530fbe",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-120",
+      "mode": "controlled-experimental",
+      "run_id": "2ead11ea05834b61b6d5d29f2d79e58b",
+      "manifest_sha256": "3b6f2aed86192582a1642dec3342ff877e6c6ec1bbecaac325189c2e54d27d46",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-121",
+      "mode": "controlled-experimental",
+      "run_id": "17c00a37d3204bef862c26b16ccf994b",
+      "manifest_sha256": "5d9364d6d1f509a46bd5993a203bacd1492ce3c6fa57047166ff7e7a307204ba",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-122",
+      "mode": "controlled-experimental",
+      "run_id": "12ac41551db0474d9e44b017997b8da9",
+      "manifest_sha256": "12d855f9f581112418e1efdb7b4301d9d855d2599a31bad2eb4e439650f2379f",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-123",
+      "mode": "controlled-experimental",
+      "run_id": "3ae591f585d7424c92f55655abd87085",
+      "manifest_sha256": "93388ee3c1a8412e28669cb5ae4f21218c39eb5c829c0901a347a5a3a8370069",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-124",
+      "mode": "controlled-experimental",
+      "run_id": "7ba2c3d9ffab40c3a83ab23336def037",
+      "manifest_sha256": "191a35099877c10950fe2c585c22306fedc4ddc6a284c4c35a58011f363e4fcc",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-125",
+      "mode": "controlled-experimental",
+      "run_id": "d2bdf6e5ebd448c5ac832fc66bda3c0c",
+      "manifest_sha256": "b623d6d38e944a55acc8029fda434890610ebf2e68e4173a6039db9b8688355d",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-126",
+      "mode": "controlled-experimental",
+      "run_id": "5e5041f7b4e84331892837cfb3ab4ce0",
+      "manifest_sha256": "d3500bebfbfc9988eede07e97646d2881ae709997f6090978e1fb025a0c96872",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-127",
+      "mode": "controlled-experimental",
+      "run_id": "a6adc12a175d4a11ba1413d16261b82e",
+      "manifest_sha256": "139ba3564e3f16a952bf7c8cbac28573cb4d25e36c42c3fd5671c411c4adf3c8",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-128",
+      "mode": "controlled-experimental",
+      "run_id": "5f7586f73713462a9aab42d8893cc5dd",
+      "manifest_sha256": "2a85a709f123dbbea8f220945a251c61d23eb730cd5e99726caf806afe177603",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-129",
+      "mode": "controlled-experimental",
+      "run_id": "6b6f8f9265404df4b7eefc6363706ca6",
+      "manifest_sha256": "46cbbae66dbf6d64dd93d0065e0d7fb4368a3e477ef471f211d8b2e1bd3e01d0",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-130",
+      "mode": "controlled-experimental",
+      "run_id": "6255d222384c42ec895442408d148fb3",
+      "manifest_sha256": "b1a37abb36eb292b78efa65fb413f18f0641e1a3282656218c8bd62cb6e7d86d",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-131",
+      "mode": "controlled-experimental",
+      "run_id": "9bc4d3fa713c4cccaba9148460f2ec8c",
+      "manifest_sha256": "3f5335c784380ab0de80f90d9ec957b1a2adcb7fcec992e05f8e5eb60d812bd6",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-132",
+      "mode": "controlled-experimental",
+      "run_id": "a4d708856dd94c50980e7489b3cb207e",
+      "manifest_sha256": "aef8919999335323a12c576c7ea795a3825d2d15333efa47f5eebad3c5ffbc3b",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-133",
+      "mode": "controlled-experimental",
+      "run_id": "943c9f3e2ca147c8b6e371101300355b",
+      "manifest_sha256": "8fa9b225ce1a179cd883fc80d51586e20cfffa8fc9d07cb58253842dae186121",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-134",
+      "mode": "controlled-experimental",
+      "run_id": "380119dbd9c24205882a24b071f60795",
+      "manifest_sha256": "e14f64adba8178c2a66eedf8fedb970c569c5296b310493b9667748977d85df6",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-135",
+      "mode": "controlled-experimental",
+      "run_id": "a52622dd87944ff8bddb0ff4a3fcaa0b",
+      "manifest_sha256": "c9c63d4e64dfcbaa2f5d1c612063cbc327b00bc4baac568f79a6dcb450f7e450",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-136",
+      "mode": "controlled-experimental",
+      "run_id": "ca70ab65d16641d993185916b7917cd2",
+      "manifest_sha256": "9607c56667c74f85fc732a2f4122213b9e7cbb59d45c584268bafb9d514d4a0a",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-137",
+      "mode": "controlled-experimental",
+      "run_id": "cf0d4d39a38143a39bc78d525cd9af86",
+      "manifest_sha256": "d30b849fb72cdc356add8daa72f5284e2d70b53522afdcaf432272c78e9bebfd",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-138",
+      "mode": "controlled-experimental",
+      "run_id": "31468b842564421d99871275cc595d54",
+      "manifest_sha256": "11a9ce10501d5580479aaf5e8c23809f011947ac4aab90bb036760bbd44c167c",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-139",
+      "mode": "controlled-experimental",
+      "run_id": "113fa3097afd4142989a455789f52eb5",
+      "manifest_sha256": "3afa3c5112bb6db882729e5ce52603b02a2a79bb7b5bb83bb3cb05c7d29d888d",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-140",
+      "mode": "controlled-experimental",
+      "run_id": "4a6afe5af9974ef3a250e0002706297c",
+      "manifest_sha256": "c10d512c54c8764a84bd7a27268db10c54a17c67fcc7859a9b8921624b922e2b",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-141",
+      "mode": "controlled-experimental",
+      "run_id": "e7d63072c61742df8917cf223bd6a230",
+      "manifest_sha256": "a4c822aa696d6e3a31e3696e4656e190ed116c3a55c5eb621dbdb878ac630d09",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-142",
+      "mode": "controlled-experimental",
+      "run_id": "8573084bc53e4f9ab3e17394ff660240",
+      "manifest_sha256": "9a436f5bae316bf0772d334964fab389c2f0b6de4aaedbfc426e8726199f08bb",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-143",
+      "mode": "controlled-experimental",
+      "run_id": "510518a1350d4735ba8f7bb54bf2ec21",
+      "manifest_sha256": "81556b1896815d7218075e6baa2a2083ceb7482fac952b44de95efaf31285743",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-144",
+      "mode": "controlled-experimental",
+      "run_id": "66cbea31d0af446baa6e3d1f15428b6c",
+      "manifest_sha256": "d475b3ad92b5854b2400e18fb5fa312c15107e7fd9af0a922ed4dededd5442d3",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-145",
+      "mode": "controlled-experimental",
+      "run_id": "7c86954051c64158a944ed089d79c028",
+      "manifest_sha256": "8d32b6b60658e707db2d50975a9ca91920bacf123e17416793565e4e4b45455a",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-146",
+      "mode": "controlled-experimental",
+      "run_id": "edf0657596384174bb4bbfb6dbdbe2f6",
+      "manifest_sha256": "70d4f70b6ba38d112c7825395f72e93d8b4da4bbaf43a28d0d12ab277a4520c9",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-147",
+      "mode": "controlled-experimental",
+      "run_id": "a3e47dab9bcb4b3c8790cd0196062cfd",
+      "manifest_sha256": "c0d410f9cc0ba23561f749df6a903d14c88a2aad5cf04174ef98bcb575dc5160",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-148",
+      "mode": "controlled-experimental",
+      "run_id": "6ab6c6b8092a4aa2a82c9de3d2e2a04e",
+      "manifest_sha256": "e67e52d21f3de74f9d0409c6bb214e459b82aa2910a0a5583202eb00e06c6512",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-149",
+      "mode": "controlled-experimental",
+      "run_id": "cdd689c7222144548eecdd9d1439408c",
+      "manifest_sha256": "9f39f8f238de207bfea2e3cfc36f682434f88fa92e1685676d37ae4ba8277b6a",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-150",
+      "mode": "controlled-experimental",
+      "run_id": "1d0d351df6124a4fabea51262da1ee47",
+      "manifest_sha256": "70bb56a02c0dc5c2958a48485969e03c8cb7305f1c9c3861d5d5972119a9c28f",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-151",
+      "mode": "controlled-experimental",
+      "run_id": "115871c80b3a4e21ad996512e1af0f6a",
+      "manifest_sha256": "703ddcfd6255adccc399de8c36b53f38f1fbe1ae7d47ed44d87a35228bed9a96",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-152",
+      "mode": "controlled-experimental",
+      "run_id": "7a2e96569931489b8f6359a25474d6c8",
+      "manifest_sha256": "3367de30b8d00a97f0d78ffc5d15df5ecfd81a29c75cc6ac9e1c6d8bbe9324c2",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-153",
+      "mode": "controlled-experimental",
+      "run_id": "c46f64a48c35461fad5430925834c647",
+      "manifest_sha256": "46bf6145f60f5501a1b24e7e824a51b1ad3d3c5b359ae257c697448eb5b3d366",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-154",
+      "mode": "controlled-experimental",
+      "run_id": "2ba88b04392b4f6289b72dcf882656fc",
+      "manifest_sha256": "194ec640007eb23cfbc875fbcccd7c621898beb14b34b156680f6d24f096206e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-155",
+      "mode": "controlled-experimental",
+      "run_id": "cd3fe46fdea74678a7ea64e13e6095b7",
+      "manifest_sha256": "8f301bbfb97b89c4090417b9ea2572b58e263b332fed1e46704e7825f0a307eb",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-156",
+      "mode": "controlled-experimental",
+      "run_id": "f99cfe07e650423abceb2b09ef8acc2c",
+      "manifest_sha256": "226f65a7e18da12241dadff675997169f4628c21720f7118d1316944c2a62271",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-157",
+      "mode": "controlled-experimental",
+      "run_id": "1a034433caad464f87e6d1d6697460c8",
+      "manifest_sha256": "6097f9920ef85b4dad4dc2838e864df82f0e6d0402093b3e3acb632047545c0e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-158",
+      "mode": "controlled-experimental",
+      "run_id": "9bc6fc600f8440959980774163ea1d10",
+      "manifest_sha256": "71ddb2714267c41a506240f34a9e932f2d0c878e009d5ac85e06ae6ff2895f97",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-159",
+      "mode": "controlled-experimental",
+      "run_id": "9aad353235a14b1396a6d3d844f68d71",
+      "manifest_sha256": "1b61a20e361cfd5eaf93944ab8e475ab03fb4d57dff8cc8b332cd2b15f8f4974",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-160",
+      "mode": "controlled-experimental",
+      "run_id": "ae6bb7bf1f424ea5b9a11de848aa9a31",
+      "manifest_sha256": "9dbfa3a751349dd38fb09e170b147f01c3887453497bb0eca7bcd229695bb81d",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-161",
+      "mode": "controlled-experimental",
+      "run_id": "3e642fcbefd948248269ac5263ebe5a7",
+      "manifest_sha256": "9160294361a6ad8f76dfc279e2f984329e0f5779b9e9ae7ff194e01b85604704",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-162",
+      "mode": "controlled-experimental",
+      "run_id": "070a545918f944fd8cd05a37720ac8c9",
+      "manifest_sha256": "99053bc4ebf73b00a48f583543db906b52e6c5885277d8d0698e2f4754dbb064",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-163",
+      "mode": "controlled-experimental",
+      "run_id": "e2bb1be2e9544545b137e67c6216bef7",
+      "manifest_sha256": "320cffecaaef882e092a7cf41aafae9fd9b0430f5f08a473c61c60b2c58f8ccd",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-164",
+      "mode": "controlled-experimental",
+      "run_id": "20b114bdcfa2423095dfd61f449dcdcc",
+      "manifest_sha256": "e08c1823f0c357ed649fa499c1af8c43961d877a0c9007b74b25ffb4fbbe4e74",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-165",
+      "mode": "controlled-experimental",
+      "run_id": "460ce1f87dec4d88914809698f055f16",
+      "manifest_sha256": "adea73c72d06721638fcd4aacc005ef686305cc601d74d343dec423d9a510158",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-166",
+      "mode": "controlled-experimental",
+      "run_id": "eb005d7ba60e4da3ba4761ed6faa1e94",
+      "manifest_sha256": "fbdea332e7a686168818165bc9960563489f628e7f8769d337bfe0e5d519f74f",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-167",
+      "mode": "controlled-experimental",
+      "run_id": "24b66c67094241a5bf5301c84f81f0b4",
+      "manifest_sha256": "74b6b921eb64efe1495d36c261ec52d68f68831b876a3bf788d2c389103278b1",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-168",
+      "mode": "controlled-experimental",
+      "run_id": "0f5b127258ff42d18ef94c349291f6e2",
+      "manifest_sha256": "3e1e34d8af5545e90db4d4befcfd0ba23b050ee6ba490016114f1b75b333df95",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-169",
+      "mode": "controlled-experimental",
+      "run_id": "447bd44f60bc4470855ae71bee5574a2",
+      "manifest_sha256": "8f1120c3aadf0c206a2bdeb5e41d22ed6830a778cf0b3aa630cfb318c8b78fc0",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-170",
+      "mode": "controlled-experimental",
+      "run_id": "0d9e96878a234c0c9f3ee37be571f3cc",
+      "manifest_sha256": "f39211abf355c97abf3a21ddfffdef313f46229b2903ab0ce305c7969ecce402",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-171",
+      "mode": "controlled-experimental",
+      "run_id": "77b636ed201c4789ac961b0c5e0b5b8a",
+      "manifest_sha256": "aef09bd1cb90590b4a20f6acc7ad7e1c17a5dddef58d98000d5c68d517feb11e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-172",
+      "mode": "controlled-experimental",
+      "run_id": "e0fcb28421854bbd8d2272bbea8946a8",
+      "manifest_sha256": "591fef8878e8d3d6273c561f9786c054f66f31c3c9f35e1230700b9ee4a5c6e4",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-173",
+      "mode": "controlled-experimental",
+      "run_id": "56eb596c33834520bc08e72aff14686c",
+      "manifest_sha256": "c97822154701d1a171318cfa549b81279c2dc7fb6975490fe805a1c6e9543817",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-174",
+      "mode": "controlled-experimental",
+      "run_id": "e26e20b96bcd498ea467bd9c7aa0e803",
+      "manifest_sha256": "70012e007ebec9b889bbd43902ecc79643a25c121eb25d95050416f55112e789",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-175",
+      "mode": "controlled-experimental",
+      "run_id": "2d6b1026cf7c4a8a84d24cdae4379975",
+      "manifest_sha256": "4699cb4ee8116c5078f921962ca844aafefb67f3ba855477ba560c96830409e4",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-176",
+      "mode": "controlled-experimental",
+      "run_id": "1fccbb8f42ab4b57b0c35a2d1d6428d8",
+      "manifest_sha256": "c9603ef20ca62a737d0e2a8ac469db95fe81a795f9d053d16095678c514fb7a9",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-177",
+      "mode": "controlled-experimental",
+      "run_id": "c7d2167bc4204ba7852b95d0d51a5a71",
+      "manifest_sha256": "88df9086278f91c7a71eaec18af065b47293b08cfff3555039352426e3da4254",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-178",
+      "mode": "controlled-experimental",
+      "run_id": "272c082504884760888028aa310ccd53",
+      "manifest_sha256": "4fef7ccffb25a0a4f33288e95190180c1b82a6f4c055f475772d61c21d7aaf6e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-179",
+      "mode": "controlled-experimental",
+      "run_id": "9537af8e83c2400ea3d8e4f47c1682aa",
+      "manifest_sha256": "29b812ecf969b4fed346de65d6b54b5c4e0097da1cccc763c43f7efdf32a0912",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-180",
+      "mode": "controlled-experimental",
+      "run_id": "1a924ddda1f64e6499648267959d7dae",
+      "manifest_sha256": "1bf42f9a56c3990034b9827da9be3d6ce1c34bf7cf210e70c94c5a4737075d34",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-181",
+      "mode": "controlled-experimental",
+      "run_id": "a3029d97aaa84c39b68a906c1b08773d",
+      "manifest_sha256": "998f4dd63370737e33854e01749a65be7cc3e322d763e05a1c72a2a2cc580353",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-182",
+      "mode": "controlled-experimental",
+      "run_id": "3e965d6a88bb4232aa2f4f61de7d48ea",
+      "manifest_sha256": "acad9e5a187635ddbb27ba0c2b3ceebd178e0766e81caa711c6aa9fa634f3b6e",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-183",
+      "mode": "controlled-experimental",
+      "run_id": "c4e63049405d4670b991681597c77ed7",
+      "manifest_sha256": "c48e8d0824ad77a96b22ba2d26b0653bab348f456c0b57406c97491335540657",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-184",
+      "mode": "controlled-experimental",
+      "run_id": "a391477b5819415db14b964ffd652537",
+      "manifest_sha256": "0573e8e74342972251cd0c562b088c018881ac7696f9a6fbfed81efbcb824c57",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-185",
+      "mode": "controlled-experimental",
+      "run_id": "4798182126b74ee39b2671bb60242dc5",
+      "manifest_sha256": "d015dca169234db602bae6e4a0156d7f0e9599f9a7e8aa1f5b36c4f54e6ff476",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-186",
+      "mode": "controlled-experimental",
+      "run_id": "196c9afd19094e7b9f1debe64ba61987",
+      "manifest_sha256": "2d0a31b6b8bc2f401041a9d6b8593932721fbff654652d867a7b7ff68f3911c9",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-187",
+      "mode": "controlled-experimental",
+      "run_id": "a7482dea365947dda713b81214a8e021",
+      "manifest_sha256": "e4da89b373abc9d3abff7b839b1bc732122683ff55a9bfa635f85088b01da20f",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-188",
+      "mode": "controlled-experimental",
+      "run_id": "67386bc83bad4ab497291a9a151bc971",
+      "manifest_sha256": "106ffbf6f073edff342d25c865dc98cedfea9ab957762dda85ef43932a3e50e5",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-189",
+      "mode": "controlled-experimental",
+      "run_id": "9b3f235302644b408defda83a1ce7246",
+      "manifest_sha256": "119fd7347a6b0391c7a6feb7876ecb21db4f910b8c13f021667e65ef6afa6553",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-190",
+      "mode": "controlled-experimental",
+      "run_id": "c928f0c5a6294f50922d796b6c1b04c9",
+      "manifest_sha256": "42ee0b1db1d21886a948b8de7446ca053eb991811a3d01d46377d8ccb9637521",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-191",
+      "mode": "controlled-experimental",
+      "run_id": "6ff4c58655e74d35b0b674b9a854b9ea",
+      "manifest_sha256": "94ab67ce24420a6fd95be9767f8e4c9bedbf36d528e2c581bc00f5e3a29dba9c",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-192",
+      "mode": "controlled-experimental",
+      "run_id": "3495463be2704c45b877fa321a797b4a",
+      "manifest_sha256": "cd53149baf41382fd990991756fd438607e70c41be97be00fd8a68ea8434cc9b",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-193",
+      "mode": "controlled-experimental",
+      "run_id": "15cf223d7416485db6d22d190d1b8d22",
+      "manifest_sha256": "68bcbf84e3faaf1dc56f9e5ea90d403303cfaf82353674b80442360962ec3bfd",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-194",
+      "mode": "controlled-experimental",
+      "run_id": "d8eeda4686194f2fa952536bd4b1bda1",
+      "manifest_sha256": "6e70202ee1eaf1f741a5bec7c65edfe0e8c8a001cdfdd69d66d895efaf1e5601",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDVEL-002",
+      "mode": "controlled-experimental",
+      "run_id": "9141f5a47f914f609c50b7f16eb46dbb",
+      "manifest_sha256": "a7eb1eac32e5df17a72c90743f9d9ccf6c29d0bf711505f00e56567cf9757e9c",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "296705ea7e7e815488eb4d074ccce0659a782b17e3b2e1577b98adbff347bf06",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDVEL-004",
+      "mode": "controlled-experimental",
+      "run_id": "e28af78ba56d43bdb0595b4f893c9840",
+      "manifest_sha256": "1395517af3ac06b76d514e72c47f4c23771de06d9a365638e752f1b337c7e76f",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "296705ea7e7e815488eb4d074ccce0659a782b17e3b2e1577b98adbff347bf06",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-195",
+      "mode": "controlled-experimental",
+      "run_id": "a407de397148408b817bcd31cdd4d7a5",
+      "manifest_sha256": "97a38df13e8c9d055a093ea3122baba0f54b359c9c67c9fd8d7a2e2225c3dd01",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "296705ea7e7e815488eb4d074ccce0659a782b17e3b2e1577b98adbff347bf06",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-196",
+      "mode": "controlled-experimental",
+      "run_id": "47fa1fb5716e4ff6b66ef446104299a7",
+      "manifest_sha256": "66f3be1c9aa4b06718269c221c1191005d41304c3fc2cc5f477bd01de6f93f7c",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "296705ea7e7e815488eb4d074ccce0659a782b17e3b2e1577b98adbff347bf06",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDVEL-001",
+      "mode": "controlled-experimental",
+      "run_id": "9438fd3c7cc44f30a24fcc944cd529bc",
+      "manifest_sha256": "6d2d4b2441ed37bf18d4549c7bcfda20416e1efdde146a46152ae3f4e1837ab2",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDVEL-002",
+      "mode": "controlled-experimental",
+      "run_id": "daa384f2e5a7403d9673c92f4f7892ee",
+      "manifest_sha256": "6a129f961becbf007d36511c9a75f8e2b35330ccecc4aae25490a4e74814a2a0",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDVEL-003",
+      "mode": "controlled-experimental",
+      "run_id": "3d2fd8e3e63c46998a8962d7afd77ea7",
+      "manifest_sha256": "3ca1fd95c7508bab89d389ebe7e3cf2751a7f244c53b0ab9b74b3fda3a665c61",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDVEL-004",
+      "mode": "controlled-experimental",
+      "run_id": "fadb1dee56f9403e87e9f3957f720b05",
+      "manifest_sha256": "e9ef93bb6e51aa1ded95c40a80026a1052a9b03e6c09dda75b5730c2b53a6965",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-258",
+      "mode": "controlled-experimental",
+      "run_id": "beb6da17e3484cc5ada141fd12e5ede6",
+      "manifest_sha256": "fb0a8f2722235b66b97bf685b172b5cb1ae167302f3187b67ab4630355dfff82",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-259",
+      "mode": "controlled-experimental",
+      "run_id": "f492ac049ee54a77949c288d4491ff63",
+      "manifest_sha256": "58ded0f2d8423440f0ae785d90ad399e19632b353effb6ed484ddbe36f8d0ddb",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-038",
+      "mode": "controlled-experimental",
+      "run_id": "06330009191a42629242e776d4c74518",
+      "manifest_sha256": "8a0b9827ef74ca2424d1fe13c617e332cf659b0108ae92ae080cdd05b7cd6294",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-160",
+      "mode": "controlled-experimental",
+      "run_id": "3de1a398d2a7465594dc084804c46d6f",
+      "manifest_sha256": "c7f07257fb65f3b3db496b60089afdb2fc0d036e1b56e39c708fa8776d4f7843",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    },
+    {
+      "case": "M-CHORDSHAPE-257",
+      "mode": "controlled-experimental",
+      "run_id": "6ac87c50524f457ba4daecd176df35dd",
+      "manifest_sha256": "67758581f6ca15eefe9e15deb03f46a5c8957a36e30df4ddb8fcd51acfab4c07",
+      "musical_source_sha256": {
+        "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+        "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+        "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb"
+      },
+      "matches_current_musical_source": true,
+      "case_source_sha256": "68987708c5bd80a4ce1412301da2eaa5cda2cd4e9f4babc046e0dd8904928bb2",
+      "passed": true
+    }
+  ],
+  "matrix": {
+    "passed_cases": 196,
+    "total": 256,
+    "unverified": [
+      197,
+      198,
+      199,
+      200,
+      201,
+      202,
+      203,
+      204,
+      205,
+      206,
+      207,
+      208,
+      209,
+      210,
+      211,
+      212,
+      213,
+      214,
+      215,
+      216,
+      217,
+      218,
+      219,
+      220,
+      221,
+      222,
+      223,
+      224,
+      225,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243,
+      244,
+      245,
+      246,
+      247,
+      248,
+      249,
+      250,
+      251,
+      252,
+      253,
+      254,
+      255,
+      256
+    ],
+    "failed_attempts": [
+      "475e6d470dfb49b3a45648da5c66b054",
+      "38b16a99650441819d7d7b133f5ce606",
+      "bc059e99cdea437490aaf9d4678a371d"
+    ],
+    "note": "Positive cases are individually source-bound across attempts, not one uninterrupted matrix pass. Failed startup/response attempts remain failed."
+  },
+  "units": {
+    "count": 478,
+    "evidence_sha256": "7079aa749ad010530c4c8b135bc015707eac1373522b2dc5ae6c49a7d1dc7da8"
+  },
+  "oracle_correction": {
+    "rejected_release_mutations": 30,
+    "evidence_sha256": "ef3273bb9e4cd603f3bc9ee705207962867dd78bee2913b70c0ddac9f9665e3f",
+    "fresh_native_cases": [
+      "M-CHORDVEL-002",
+      "M-CHORDVEL-004"
+    ]
+  },
+  "review": {
+    "session": "01a08014-6fb3-7261-8691-dcbc85b6a69b",
+    "production_findings": "resolved",
+    "remaining_finding_disposition": "Release-channel assertion corrected,30 faults rejected, two fresh native regressions passed; boundary257 manifest inspected."
+  },
+  "limitations": "Full finite chord matrix, real-time shape variants, dashboard defect, full manual campaign, D20 long-duration timing and emulator release remain incomplete. No refactor prerequisite claim."
+}

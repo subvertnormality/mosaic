@@ -1,0 +1,16 @@
+{
+  "status": "scoped-native-regressions-validated; full-matrix-pending",
+  "before_sha256": "5a253e1cb8992d34dacfe6306eba7de4e17cc6cc71a1256307dc10e11918f24a",
+  "after_sha256": "7522619b37edff93c06ede770c75ed4b37a3e6d99c30a141130d24b1c8d009ed",
+  "patch_sha256": "b6168e14f5517ddf5efb5c3b4ad54e78e2101baa652a8ef08f8056b6e104c2e6",
+  "scope": "Use four explicit ordered mask positions so missing slots retain timing and mapped presence controls playback. Root-last uses ordinal4.",
+  "baselines": [
+    "e6ae05cf0551435e9c08e754f7f947f5",
+    "8c7bc1c40b9f4a038f74225bc5bb2d04",
+    "52e1ffd6e6144713bb75dd191cfe6777",
+    "2450d5ebaf784901996d6bc7ffeb1a16",
+    "477ed73ff92c40b8b9deb8b4defd274a",
+    "280d6db887ed41adbc93b9c7038848a5"
+  ],
+  "validation": "docs/testing/chord-shape-validation.json"
+}

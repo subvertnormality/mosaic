@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused follow-up to01a07feb-b53b-7ec2-b44a-d573efb37f18. Do not edit files; a serial native matrix is running against this exact application tree. Scope:0040/0041 and minimal0042 root velocity clamp plus the requested oracle and boundary corrections.0042 constrains final-root velocity0..127; the native baseline emitted malformed140 and236 and failed the independent MIDI decoder. M-CHORDVEL001..004 now pass native upper/lower reverse/outside-in cases; four literal per-pulse integration regressions added, all478 units pass. Silence cases now assert no0x80/0x90 capture directly, without calling the nonempty note_schedule helper. M-CHORDSHAPE257 sparse reverse nonpositive gap,258 disabled articulation,259 Stop-before-final-root all pass. The full256 shape/mask/root/articulation matrix is still running SERIAL after diagnosed concurrent JACK startup failures. Do not claim matrix completion or release; review code correctness and completed focused evidence only. More than130 serial cases have passed so far, including muted empty strums; completion will be independently checked after terminal. Preexisting root-last dashboard issue is separately owned by screen workflow and remains unfixed; no dashboard correctness claim from this slice. Check that these changes resolve the two blocking findings, that the lower-bound zero-velocity wire oracle is sound, and that the three requested boundary tests actually fail on missing/cancelled/wrong onsets/releases. Avoid broad refactor or whole-suite review. Evidence paths below are ABSOLUTE accessible paths in the emulator checkout, not relative to Mosaic: <emulator-worktree>/artifacts/c16/strum-boundary-native.json ; <emulator-worktree>/artifacts/c16/strum-final-units.json ; <emulator-worktree>/artifacts/c16/chord-mask-exhaustive-serial.json . Native manifest paths in stdout fields can be read directly in WSL. Retain failed baseline evidence and D20 pending status. This authorised Codex review may read the repository source and these exact delivery/test evidence files.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Actual arp creation and ownership"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Native phase and pending timing"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Arp note creation and release"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New native arp regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Musical contract"
+      }
+    ]
+  },
+  "input_sha256": "44f83bd2c5764749ed7254bb00c8a45fe67771808a776984555d4adbf7facd7d",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "The production changes resolve the scoped root-muting, sparse-slot ordering, and final-root velocity defects. **The lower-bound oracle still has a release-channel blind spot**, so I cannot call it fully sound.\n\n- [step.lua:634](<mosaic-worktree>/lib/step.lua:634) maps each of four slots before testing presence; [line 678](<mosaic-worktree>/lib/step.lua:678) gates the final root with `not mute_root`, retains ordinal 4, and clamps its velocity to `0..127`.\n- Zero-velocity messages are correctly checked explicitly, without treating them as sounding voices. However, [cases.py:2461](<mosaic-worktree>/tests/behaviour/cases.py:2461) keys releases only by pitch and checks port/velocity, **never MIDI channel**. I executed that assertion block with every release changed from `0x80` to `0x81`; it passed. Require the expected release status/channel too.\n- Boundary cases 257\u2013259 use exact onset and release accounting through [note_schedule.py:4](<mosaic-worktree>/tests/behaviour/note_schedule.py:4). Read-only synthetic checks rejected **72 mutations** removing events or changing pitch, timestamp, or channel. Their expectations distinguish nonpositive-gap termination, simultaneous disabled articulation, and Stop cancellation before the final root.\n- Supplied evidence records four velocity passes, boundary **258/259** passes, and **478 unit successes**. **257 is absent from the supplied boundary summary**, so its native pass remains unverified. The serial snapshot contained **149/256 passes**, status `running`, with matching source hashes.\n\n**CONFIDENCE: High** for these scoped findings; fixing the release-channel assertion and supplying 257\u2019s manifest would close the identified gaps. Failed baselines remain failed; D20, matrix completion, release acceptance, and dashboard correctness remain pending.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08014-6fb3-7261-8691-dcbc85b6a69b` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "530afa0632af7027a2b65a6f309a01d2f808a7eb4ccde0da34cae7487e11d229",
+    "redaction": "Personal absolute paths replaced; raw retained in ignored artifacts."
+  }
+}

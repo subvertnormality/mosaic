@@ -1,0 +1,12 @@
+{
+  "status": "scoped-native-regressions-validated; full-matrix-pending",
+  "before_sha256": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9",
+  "after_sha256": "5a253e1cb8992d34dacfe6306eba7de4e17cc6cc71a1256307dc10e11918f24a",
+  "patch_sha256": "90f22c147f2d24293a19ed89d37a09499ca4ad1126d5ee2044ab36c22ddce7f5",
+  "scope": "Honor root muting for root-last strum shapes; ordinary root-first behavior unchanged.",
+  "baselines": [
+    "3cbecb414bc549eca6e9fc78a426dfe2",
+    "b74da7080a2d4d2b81262bcb0fdf876a"
+  ],
+  "validation": "docs/testing/chord-shape-validation.json"
+}

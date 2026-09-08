@@ -631,33 +631,11 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local chord_note_dashboard_values = {}
   chord_note_dashboard_values.chords = {}
 
-  for i, chord_note in ipairs(chord_notes) do
+  for i = 1, 4 do
+    local chord_number = get_chord_number(i, 4, chord_strum_pattern)
+    local chord_note = chord_notes[chord_number]
+    local delay_multiplier = (chord_strum_pattern == 2 or chord_strum_pattern == 4) and i - 1 or i
     if chord_note and chord_note ~= 0 then
-
-      local chord_number, delay_multiplier = i, i
-
-      local half_i = i // 2
-
-      if chord_strum_pattern == 2 then
-        chord_number = #chord_notes + 1 - i
-        delay_multiplier = delay_multiplier - 1
-      elseif chord_strum_pattern == 3 then
-        if i % 2 == 1 then
-          chord_number = half_i + 1
-        else
-          chord_number = #chord_notes - half_i + 1
-        end
-      elseif chord_strum_pattern == 4 then
-        if i % 2 == 1 then
-          chord_number = #chord_notes - half_i
-        else
-          chord_number = half_i
-        end
-        delay_multiplier = delay_multiplier - 1
-      end
-
-      
-
       local delay = chord_timing.delay(chord_division, chord_spread, chord_acceleration, delay_multiplier)
       if delay ~= nil then
       m_clock.delay_action(
@@ -697,9 +675,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   end
 
-  if chord_strum_pattern == 2 or chord_strum_pattern == 4 then
+  if not mute_root and (chord_strum_pattern == 2 or chord_strum_pattern == 4) then
 
-    local delay = chord_timing.delay(chord_division, chord_spread, chord_acceleration, #chord_notes)
+    local delay = chord_timing.delay(chord_division, chord_spread, chord_acceleration, 4)
     if delay ~= nil then
     m_clock.delay_action(
       c,
@@ -715,7 +693,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         )
 
         if processed_note then
-          local velocity = note_container.velocity + ((chord_velocity_mod or 0) * #chord_notes)
+          local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * 4))
           play_note(processed_note, note_container, velocity, note_container.length, note_on_func)
 
           if not note_dashboard_values.chords then

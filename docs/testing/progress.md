@@ -1045,3 +1045,21 @@ Codex found a zero-rounded swung interval and its focused follow-up verified
 the isolated fix. The rest review requested three native interactions, now
 implemented and reviewed. These are scoped validations, not full campaign or
 D20 absolute real-time acceptance. The full refactor prerequisite remains unmet.
+
+## Chord shape, sparse slots and velocity boundaries
+
+Candidates0040/0041/0042 correct muted reverse roots, preserve all four mapped
+strum slots and clamp the final root velocity to MIDI bounds. Native baselines
+retained extra/missing/wrongly timed notes and malformed velocity bytes. All478
+unit/integration tests pass, including four new literal pulse/velocity tests.
+The finite256 mask/shape/root/articulation cases have196 source-bound passes;
+startup/response failures interrupted the campaign, and197..256 remain unverified.
+Boundary257 (nonpositive next gap),258 (disabled articulation) and259 (Stop before
+the final root) have passing native evidence. Full real-time shape coverage and
+the pre-existing root-last dashboard issue remain pending.
+
+Codex cleared the production changes and found a release-channel blind spot in
+the zero-velocity oracle. The one-line correction rejects30 injected bad releases
+and both affected cases pass fresh native runs. See chord-shape-validation.json
+for exact identities and limitations. Historical failures are not reclassified;
+this checkpoint does not complete the manual campaign or permit the refactor.

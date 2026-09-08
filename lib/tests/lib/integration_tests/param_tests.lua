@@ -5067,3 +5067,40 @@ function test_repeat_count_increments_correctly()
   -- Should reset back to 1 for next pattern
   luaunit.assert_equals(program.get_repeat_count(), 1)
 end
+-- Real step and scheduler path: reverse roots share the same MIDI bounds as masks.
+local function assert_reverse_root_velocity(shape, base_velocity, modifier)
+  setup()
+  program.set_selected_song_pattern(1)
+  local p = program.initialise_default_pattern()
+  p.note_values[1]=0;p.trig_values[1]=1;p.lengths[1]=6;p.velocity_values[1]=base_velocity
+  program.get().selected_channel=1
+  local channel=program.get_selected_channel()
+  channel.step_chord_masks[1]={1,2,3,4}
+  channel.trig_lock_params[5].id='chord_strum'
+  channel.trig_lock_params[6].id='chord_strum_pattern'
+  channel.trig_lock_params[7].id='chord_velocity_modifier'
+  channel.trig_lock_params[7].cc_min_value=-40
+  program.add_step_param_trig_lock(1,5,14)
+  program.add_step_param_trig_lock(1,6,shape)
+  program.add_step_param_trig_lock(1,7,modifier)
+  program.get_song_pattern(1).patterns[1]=p
+  fn.add_to_set(channel.selected_patterns,1)
+  pattern.update_working_patterns()
+  clock_setup()
+  local pitches=shape==2 and {67,65,64,62,60} or {67,62,65,64,60}
+  local velocities=modifier>0 and {100,110,120,127,127} or {20,10,0,0,0}
+  for pulse=0,96 do
+    if pulse>0 then progress_clock_by_pulses(1) end
+    if pulse%24==0 then
+      local event=table.remove(midi_note_on_events,1)
+      local i=pulse//24+1
+      luaunit.assert_not_nil(event)
+      luaunit.assert_equals({event[1],event[2],event[3]},{pitches[i],velocities[i],1})
+    end
+    luaunit.assert_equals(#midi_note_on_events,0)
+  end
+end
+function test_reverse_root_velocity_upper_bound() assert_reverse_root_velocity(2,100,10) end
+function test_reverse_root_velocity_lower_bound() assert_reverse_root_velocity(2,20,-10) end
+function test_outside_in_root_velocity_upper_bound() assert_reverse_root_velocity(4,100,10) end
+function test_outside_in_root_velocity_lower_bound() assert_reverse_root_velocity(4,20,-10) end

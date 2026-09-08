@@ -1,0 +1,13 @@
+{
+  "status": "scoped-native-regressions-validated; full-matrix-pending",
+  "before_sha256": "7522619b37edff93c06ede770c75ed4b37a3e6d99c30a141130d24b1c8d009ed",
+  "after_sha256": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+  "patch_sha256": "349c0d1d4c1c002cd08bb353e34ca0e3b0c55fc301d4211bb0fe82810c5613c0",
+  "review": "01a07feb-b53b-7ec2-b44a-d573efb37f18",
+  "baselines": [
+    "0b867fb759b84d8c8396ede7186ab36e",
+    "b8b693c6ec4641509cbdb56d8fb18441"
+  ],
+  "scope": "Clamp root-last strum velocity using the same MIDI range as chord masks; invalid velocity bytes previously interrupted MIDI decoding.",
+  "validation": "docs/testing/chord-shape-validation.json"
+}
