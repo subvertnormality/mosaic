@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused follow-up to review 01a08071-4480-7593-abf6-1e85158fe272. Do not edit any files; a native test is active. The only review blocker was notes outside seven capture windows. Inspect reconcile_note_stream in tests/behaviour/fractional_deadlines.py, its invocation in fractional_clock_continuity in cases.py, and test_complete_stream_rejects_notes_outside_windows in fractional_deadline_contract.py. All exported native notes must belong to exactly one window; no setup/cleanup exemption; five contract groups pass including injected off, pair, zero-velocity on before/between/after windows. Both prior native streams have zero outside notes retrospectively. Also inspect the source-proven origin correction: lib/m_grid.lua g.key at z0 invokes short_press, whose menu handler performs transport start/stop. The earlier native real-time run9b0093bf failed because it bounded forced Stop release using z1 press ack. Both selected start_ack and stop_ack now identify z0 RELEASE submission, before emission, not fitted to output; D logical times unchanged. All event thresholds and quantisation unchanged. Review whether release identity and full-stream accounting close the blocker without creating false greens, and whether separately bounded forced Stop releases are causal. Fresh corrected D/R evidence is pending in emulator artifacts/c16/fractional-release-native-validation.json. Read source if needed, use only Codex, no broad re-review or edits. Explicit user authorisation covers this source and evidence review. Return concrete remaining blockers or clear this scoped follow-up.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Actual arp creation and ownership"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Native phase and pending timing"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Arp note creation and release"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New native arp regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Musical contract"
+      }
+    ]
+  },
+  "input_sha256": "94610beb5a3e9c5667114e97189f1e1b22cc73a837c5063d5130280bd3d8fa7d",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "The release identity and full-stream accounting close the code blocker; I found no new false-green path in these changes. Fresh corrected real-time evidence remains outstanding.\n\n- [fractional_deadlines.py:85](<mosaic-worktree>/tests/behaviour/fractional_deadlines.py:85) requires exactly one window owner for every native note, including zero-velocity ons, with no setup/cleanup exemption. [cases.py:823](<mosaic-worktree>/tests/behaviour/cases.py:823) applies this to the completed export before validating each window\u2019s exact population.\n- All five contract tests passed, including injected outside-window offs, pairs, and zero-velocity ons. Retrospective reconciliation found zero outside notes in prior streams `8ed09b22\u2026` (16,644 notes) and `9b0093bf\u2026` (18,092).\n- Release identity is source-correct: [m_grid.lua:237](<mosaic-worktree>/lib/m_grid.lua:237) dispatches short press on `z=0`; its menu handler starts/stops transport at lines 136/141. Both selected acknowledgements now identify that release, independently of output timestamps.\n- Forced Stop releases are causally bounded: [m_clock.lua:779](<mosaic-worktree>/lib/clock/m_clock.lua:779) executes pending releases during Stop; [fractional_deadlines.py:63](<mosaic-worktree>/tests/behaviour/fractional_deadlines.py:63) requires the final off within the identified submission/applied interval. Scheduled-event checks remain separate.\n\n**Confidence: High** for scoped code clearance. Corrected controlled run `686a1b05\u2026` passes all seven windows, but remains diagnostic-only; the requested validation JSON was absent, so corrected real-time success is unverified.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08080-f62d-71e1-81ac-33873cbd5a06` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "fc81344d4a8b280d12199c28d73b84b304ef75a4bbb6b8a106af457999f4ab08",
+    "redaction": "Personal absolute paths replaced; raw retained locally"
+  }
+}

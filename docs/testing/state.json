@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Diagnose native startup/response pauses before more matrix retries.196/256 chord mask/shape cases have source-bound passes;197..256 remain unverified. New input-origin verifier passed4 native fault probes; integrate independent fractional pulse/release tables and45-second/10-minute D20 lanes. Complete real-time chord variants, dashboard regression, all manual and emulator release cards. No active native process at checkpoint; do not rerun old mutation helpers. Continue using authorised WSL and Codex-only reviews without routing questions.",
+  "next_action": "Commit and push the reviewed fractional oracle/evidence checkpoint after publication audit. Native timing runners terminal. Then continue chord197..256, full manual69unbound requirements and emulator delivery; no refactor.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -4913,5 +4913,14 @@
     "matrix_total": 256,
     "units": 478,
     "scope": "Production fixes and focused oracles; full matrix and release incomplete"
+  },
+  "fractional_deadline_work": {
+    "status": "scoped-seven-rate-controlled-and-realtime-validation",
+    "validation": "docs/testing/fractional-clock-validation.json",
+    "runs": [
+      "686a1b059edc4635815d868f75061640",
+      "419286ddbe0a45e3900ed71ac64cf119"
+    ],
+    "limitations": "One fresh process per lane. Controlled repeat admission, ten-minute C12, other real-time timing scenarios, full manual and emulator release remain incomplete. No refactor prerequisite claim."
   }
 }

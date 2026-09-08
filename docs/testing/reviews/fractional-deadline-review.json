@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused review of the new external Mosaic fractional-clock oracle. Do not edit files: native validation is running against this exact application tree. Local MIDI development utility; proportionate review, not financial stakes. Inspect tests/behaviour/fractional_deadlines.py, fractional_deadline_contract.py, fractional_lattice_contract.lua, fractional_history_lattice_contract.lua and fractional_clock_continuity in cases.py, plus Driver.finish/run.py. D20 contract permits fixed-tempo input-origin scheduling: q0 is the specific backend Play submission, not first MIDI or callback time; all input/dispatch latency counts. Generic native probes proved normal20event timing and sensitivity to80ms entry/registration delays, wrongtempo and shiftedorigin. Evidence-verifier helper is <emulator-worktree>/src/automation/input_origin.py; metrics helper and ACCEPTANCE.md are in that emulator checkout. New fixture runs7x45-second ratios at90BPM/96PPQN, exactNoteOn/Off data/order/count, independent rational intent and pulse deadlines, and separately bounded forcedStop releases. D2ns unchanged; Rnearest-rankp99<=10ms,max50ms,final20ms. No first-note fitting or pointwise10ms window assumption. Important diagnosed oracle correction: the first D native run67c6b42a5ebc4613b2396c90831d36a5 failed at the second ratio because the fresh-constructor model omitted retained rounding carry after Stop reconstructs the prior rate and K3 commits the new rate. Explicit seed=previousP+1/2-floor(previousP+49/100); q_n=floor((n+1)*P+seed-1/100)-floor(P+seed-1/100). This follows declared input history and pinned quantisation, never derives seed from MIDI.1400 actual lattice positions and4 fault-contract groups pass. Retained failed run reanalysis matches all7segments<=2ns but its original manifest is still FAILED; fresh D/R validation is pending. Review for actual blockers: circularity or hidden phase fitting, missing/extra event escape, incomplete input/Stop identity, applying event profile correctly, source-binding, c.finish-before-offline-assertion/failure propagation, false-green window/count checks. Scope does not include a new Mosaic musical semantic or a full campaign release. Source/evidence read and Codex export are authorised by the user; no other engine, edits, or extra broad review. Return concrete findings and minimal remedies.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Actual arp creation and ownership"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Native phase and pending timing"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Arp note creation and release"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New native arp regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Musical contract"
+      }
+    ]
+  },
+  "input_sha256": "4967c76045b3bfaff148092a8ccde940f271ad600a9eee6be6bc98277a441e40",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "One blocker remains: **extra notes outside the seven capture ranges can escape validation**. I found no hidden phase fitting or failure-propagation blocker.\n\n- **Event-accounting gap:** [cases.py:792](<mosaic-worktree>/tests/behaviour/cases.py:792) takes a fresh MIDI-count baseline after each rate edit; [cases.py:827](<mosaic-worktree>/tests/behaviour/cases.py:827) checks only `after < sequence <= cursor`. An extra NoteOff\u2014or a complete On/Off pair\u2014between segments or after the final cursor is excluded. [Driver.finish:153](<mosaic-worktree>/tests/behaviour/driver.py:153) verifies sequence continuity, which does not reject those extra events. **Minimal remedy:** reconcile every exported NoteOn/Off against the union of validated segments, explicitly accounting for any permitted setup/cleanup notes. Add fault cases inserting notes between segments and after the last cursor.\n\nThe retained-carry correction is supported by constructor preview rounding and `set_division()` retaining carry ([m_lattice.lua:325](<mosaic-worktree>/lib/clock/m_lattice.lua:325), [m_lattice.lua:409](<mosaic-worktree>/lib/clock/m_lattice.lua:409)). Its seed uses declared previous rate, not MIDI. Play/Stop identities are verified; scheduled events use the correct 10/50/20 ms profile, with forced releases checked separately. Offline exceptions still produce `passed=False` and nonzero exit ([run.py:51](<mosaic-worktree>/tests/behaviour/run.py:51)).\n\nI reproduced all four Python contract tests and 1,400 Lua positions. Source identities include untracked oracle files and emulator helpers.\n\n**CONFIDENCE: High.** Fresh native D/R results and retained-run reanalysis were not independently verified; full-stream reconciliation would resolve the identified blocker.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08071-4480-7593-abf6-1e85158fe272` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "2c547abf071aa09e47de2ec8bdff0dd3ecfc3d7f8d8f908943b9af05850af1de",
+    "redaction": "Personal absolute paths replaced; raw retained locally"
+  }
+}

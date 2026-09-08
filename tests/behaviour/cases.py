@@ -778,46 +778,64 @@ def repeated_pattern_reset_policy(c,verify_pending=False):
 def fractional_clock_continuity(c):
     from fractions import Fraction
     from midi_window import MidiWindow
+    from fractional_deadlines import check_segment, preview_residual, reconcile_note_stream
+    from automation.input_origin import verified_input_origin
+    import json
     c.configure();c.tap(5,8);c.tap(5,8)
     for x in range(1,5):c.tap(x,7)
     c.tap(3,8);c.enc(1,-1)
     set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',False)])
-    # These ratios have fractional pulse periods at96PPQN (24 pulses/step).
-    # Any complete denominator-sized window must contain exactly the numerator
-    # pulses. This oracle is independent of rounding phase or tie convention.
     ratios=[(1,'x16',Fraction(3,2)),(5,'x5.3',Fraction(240,53)),(6,'x5',Fraction(24,5)),(9,'x2.6',Fraction(120,13)),(12,'x1.3',Fraction(240,13)),(16,'/2.6',Fraction(312,5)),(20,'/5.3',Fraction(636,5))]
-    selected=13
+    selected=13;segments=[];previous_period=Fraction(24);trigger_action=dict(type='grid',x=1,y=8,state=0)
     for index,label,pulses in ratios:
         c.enc(3,selected-index);c.key(3);selected=index
-        capture=MidiWindow(c.snapshot()['midi_count']);observation_start=len(c.observations);c.tap(1,8)
+        capture=MidiWindow(c.snapshot()['midi_count']);observation_start=len(c.observations)
+        seed=preview_residual(previous_period)
+        c.action(type='grid',x=1,y=8,state=1)
+        logical_start=c.logical_ns;start_ack=c.action(**trigger_action)
+        c.elapse(.06)
         for _ in range(90):
             c.elapse(.5);capture.extend(c.snapshot())
             if len(c.observations)>observation_start+2:del c.observations[observation_start+1:-1]
-        c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
-        notes=capture.note_ons();assert len(notes)>=2*pulses.denominator+1,label
-        assert [(m['port'],m['bytes']) for m in notes]==[(1,[144,60,[127,117,107,97][i%4]]) for i in range(len(notes))],label
-        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-        assert (notes[-1][field]-notes[0][field])/1e9>=4*64/6,'Missing post-fourth-boundary note'
-        low=pulses.numerator//pulses.denominator;high=low+1
-        gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
-        assert all(min(abs(gap-low/144),abs(gap-high/144))<=tolerance for gap in gaps),(label,'non-adjacent pulse interval',min(gaps),max(gaps))
-        windows=[(notes[i+pulses.denominator][field]-notes[i][field])/1e9-pulses.numerator/144 for i in range(len(notes)-pulses.denominator)]
-        assert all(abs(error)<=tolerance for error in windows),(label,'musical ratio drift',max(abs(x) for x in windows))
-        phase=[(note[field]-notes[0][field])/1e9-float(i*pulses/144) for i,note in enumerate(notes)]
-        assert max(abs(x) for x in phase)<=1/144+tolerance,(label,'unbounded quantisation phase',max(abs(x) for x in phase))
-        from note_accounting import note_pairs
-        pairs=note_pairs(capture.events)
-        assert len(pairs)==len(notes),(label,'Incomplete release accounting')
-        by_onset={note['index']:off for note,off in pairs}
-        releases=[]
-        for note,next_note in zip(notes,notes[1:]):
-            off=by_onset[note['index']]
-            assert off['bytes']==[128,60,note['bytes'][2]],(label,'Wrong release data',off)
-            error=(off[field]-next_note[field])/1e9
-            assert abs(error)<=tolerance and off['index']<next_note['index'],(label,'release/retrigger ordering',note,off,next_note)
-            releases.append(error)
-        c.results.append(dict(kind='fractional-clock-continuity',label=label,pulse_ratio=[pulses.numerator,pulses.denominator],onsets=len(notes),complete_ratio_windows=len(windows),global_boundaries_crossed=4,max_window_error_seconds=max(abs(x) for x in windows),max_quantisation_phase_seconds=max(abs(x) for x in phase),release_order_checks=len(releases),passed=True))
+        c.action(type='grid',x=1,y=8,state=1)
+        logical_stop=c.logical_ns;stop_ack=c.action(**trigger_action)
+        c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        segments.append(dict(label=label,ratio=[pulses.numerator,pulses.denominator],preview_seed=[seed.numerator,seed.denominator],after=capture.after,cursor=capture.cursor,
+            start_ack=start_ack,stop_ack=stop_ack,logical_start=logical_start,logical_stop=logical_stop,
+            capture=capture.events))
+        previous_period=pulses # Stop reconstructed this period before the next committed edit.
+    # Complete the public-client export before checking causal input records.
+    # finish() is idempotent; the outer runner still propagates any assertion.
+    c.finish()
+    events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
+    actions=[json.loads(line) for line in (c.out/'native/actions.jsonl').read_text().splitlines()]
+    controlled=c.clock_mode=='controlled-experimental';kind=11 if controlled else 3
+    (c.out/'fractional-clock-plans.json').write_text(json.dumps(dict(
+        formula='floor((n+1)*P+seed-1/100)-floor(P+seed-1/100); seed=preceding stopped-clock preview residual',pulse_rate=144,tempo=90,
+        origin_rule='Identified backend grid RELEASE submission triggers short Play; controlled lane uses declared logical release input time',
+        stop_rule='Identified grid RELEASE Stop submission and its native applied acknowledgement',segments=segments),indent=2)+'\n')
+    def input_origin(ack):
+        submissions=[e for e in events if e.get('kind')=='input' and e['sequence']==ack['native']['sequence']]
+        assert len(submissions)==1
+        return verified_input_origin(events,actions,session_id=c.runtime.id,action_id=ack['action_id'],
+            expected_action=trigger_action,declared_origin_ns=submissions[0]['monotonic_ns'])
+    try:
+        c.results.append(reconcile_note_stream(events,segments,kind))
+        for segment in segments:
+            start_evidence=input_origin(segment['start_ack']);stop_evidence=input_origin(segment['stop_ack'])
+            origin=segment['logical_start'] if controlled else start_evidence['origin_ns']
+            stop=segment['logical_stop'] if controlled else stop_evidence['origin_ns']
+            applied=stop if controlled else stop_evidence['applied_ns']
+            captured=[e for e in events if e.get('kind')==kind and segment['after']<e['sequence']<=segment['cursor']]
+            fields=('port','bytes','logical_ns' if controlled else 'monotonic_ns')
+            assert [{k:e[k] for k in fields} for e in captured]==[{k:e[k] for k in fields} for e in segment['capture']], 'Public/native MIDI capture differs'
+            report=check_segment(captured,Fraction(*segment['ratio']),origin,stop,applied,controlled=controlled,preview_seed=Fraction(*segment['preview_seed']))
+            assert report['onsets']>=2*segment['ratio'][1]+1
+            assert stop-origin>=45_000_000_000, 'Missing45-second timing population'
+            report.update(label=segment['label'],global_boundaries_crossed=4,start_input=start_evidence,stop_input=stop_evidence)
+            c.results.append(report)
+    finally:
+        (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
 def song_transition_reset_policy(c,verify_pending=False):
