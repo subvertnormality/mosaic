@@ -5104,3 +5104,24 @@ function test_reverse_root_velocity_upper_bound() assert_reverse_root_velocity(2
 function test_reverse_root_velocity_lower_bound() assert_reverse_root_velocity(2,20,-10) end
 function test_outside_in_root_velocity_upper_bound() assert_reverse_root_velocity(4,100,10) end
 function test_outside_in_root_velocity_lower_bound() assert_reverse_root_velocity(4,20,-10) end
+
+
+local function assert_root_dashboard(shape, base_velocity, modifier, expected_velocity)
+  local original = channel_edit_page_ui.set_note_dashboard_values
+  local observed
+  channel_edit_page_ui.set_note_dashboard_values = function(values)
+    if values and values.note then
+      observed = {values.note, values.velocity, values.length}
+    end
+  end
+  local ok, failure = pcall(function()
+    assert_reverse_root_velocity(shape, base_velocity, modifier)
+    luaunit.assert_equals(observed, {60, expected_velocity, 6})
+  end)
+  channel_edit_page_ui.set_note_dashboard_values = original
+  if not ok then error(failure) end
+end
+function test_reverse_root_dashboard_upper() assert_root_dashboard(2,100,10,127) end
+function test_reverse_root_dashboard_zero() assert_root_dashboard(2,20,-10,0) end
+function test_outside_in_root_dashboard_upper() assert_root_dashboard(4,100,10,127) end
+function test_outside_in_root_dashboard_zero() assert_root_dashboard(4,20,-10,0) end

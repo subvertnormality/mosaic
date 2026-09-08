@@ -1,0 +1,19 @@
+{
+  "status": "scoped-native-and-unit-regressions-validated",
+  "before_sha256": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+  "after_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+  "patch_sha256": "6b66570d9f7cb67bfb3afdacadb9be593a75f4756fa540d3872065faad76caf6",
+  "baselines": [
+    "fcf36522e3f94d83b31a01d27e024471",
+    "2bae9fe8c8454975953045eae0ba09f9",
+    "13333e2b2ad14611a3097e4631de5488",
+    "c98779de207040ccb191e697e150121d"
+  ],
+  "scope": "Update selected-channel root dashboard pitch, actual clamped velocity and length after root-last strum. Chord slots and MIDI remain unchanged.",
+  "validation": "docs/testing/dashboard-validation.json",
+  "review": "01a08099-5e3a-7ba2-ad52-eb231fb21247",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "patch_validation": "Applied to exact before hash in an isolated directory; output equals after hash. Zero-context format avoids whitespace-only context lines in the patch artifact."
+}

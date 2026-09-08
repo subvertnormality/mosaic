@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Commit and push the reviewed fractional oracle/evidence checkpoint after publication audit. Native timing runners terminal. Then continue chord197..256, full manual69unbound requirements and emulator delivery; no refactor.",
+  "next_action": "Audit, commit and push completed chord matrix and candidate0043 dashboard checkpoint. All native/review processes terminal. Then expand remaining dashboard and navigation/manual workflows, controlled admission and emulator release. No refactor.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2848,10 +2848,10 @@
   },
   "updated": "2026-09-08",
   "manual_binding_snapshot": {
-    "implemented_cases": 408,
+    "implemented_cases": 416,
     "requirements": 141,
-    "requirements_with_case": 72,
-    "scope": "Bindings only; full domain, interaction and release validation incomplete."
+    "requirements_with_case": 73,
+    "scope": "Bindings only; not full domain or release coverage"
   },
   "note_pattern_selector_validation": {
     "status": "validated",
@@ -4909,10 +4909,10 @@
   },
   "chord_shape_validation": {
     "file": "docs/testing/chord-shape-validation.json",
-    "matrix_passes": 196,
+    "matrix_passes": 256,
     "matrix_total": 256,
     "units": 478,
-    "scope": "Production fixes and focused oracles; full matrix and release incomplete"
+    "scope": "All256 finite shape cases have individually source-bound controlled diagnostic passes across retained attempts. Real-time shape variants, controlled repeat admission, dashboard defect, full manual and emulator release remain incomplete. No refactor prerequisite claim."
   },
   "fractional_deadline_work": {
     "status": "scoped-seven-rate-controlled-and-realtime-validation",
@@ -4922,5 +4922,13 @@
       "419286ddbe0a45e3900ed71ac64cf119"
     ],
     "limitations": "One fresh process per lane. Controlled repeat admission, ten-minute C12, other real-time timing scenarios, full manual and emulator release remain incomplete. No refactor prerequisite claim."
+  },
+  "dashboard_candidate": {
+    "candidate": "0043",
+    "status": "scoped-native-and-unit-regressions-validated",
+    "validation": "docs/testing/dashboard-validation.json",
+    "units": 482,
+    "native_candidate_passes": 24,
+    "remaining": "CH-DASHBOARD remains partial: chord freshness, arp, sparse/muted cases, channel-switch freshness, successive-note timing and remaining length domain are pending. Full manual, controlled admission, real-time endurance and emulator release remain incomplete."
   }
 }

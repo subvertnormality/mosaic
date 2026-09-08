@@ -2422,7 +2422,25 @@ def arp_empty_muted_replacement(c):
     c.results.append(dict(kind='empty-muted-replacement-release-ownership',onsets=3,releases=len(rows),empty_trigger_pulse=216,old_gate_pulse=648,passed=True))
 
 
-def chord_shape_schedule(c,arp,shape,muted,mask_bits=15,velocity=50,modifier=10,extra=None):
+def chord_dashboard_display(c, root_velocity):
+    import base64
+    from frame_oracle import render
+    # Literal user-facing pitches/velocity for MIDI60 +64/67/69/72 (norns labels C3/E3/G3/A3/C4).
+    # Only the three complete root value widgets are compared here. Chord-slot
+    # persistence remains a separate dashboard coverage obligation.
+    expected=render([(0,18,1,'Note'),(0,26,1,'C3'),
+                     (25,18,1,'Vel'),(25,26,1,str(root_velocity)),
+                     (50,18,1,'Len'),(50,26,1,'4.0')])
+    indices=[(y*128+x)*4+k for y in range(11,29) for x in range(75) for k in range(3)]
+    def matches(state):
+        actual=base64.b64decode(state['frame']['pixels_base64'])
+        return all(actual[i]==expected[i] for i in indices)
+    c.wait(matches,timeout=.5)
+    c.results.append(dict(kind='chord-root-dashboard',note='C3',velocity=root_velocity,length='4.0',
+                          source='rendered framebuffer',passed=True))
+
+
+def chord_shape_schedule(c,arp,shape,muted,mask_bits=15,velocity=50,modifier=10,extra=None,dashboard=False):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
@@ -2441,6 +2459,7 @@ def chord_shape_schedule(c,arp,shape,muted,mask_bits=15,velocity=50,modifier=10,
     if extra=='accelerating':
         c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,5)
         c.enc(2,1);assign_trig_parameter(c,'Chord Accel Mod');c.enc(3,-1)
+    if dashboard:c.enc(1,4) # Trig Locks to Note Dashboard, stopped.
     capture=MidiWindow(c.snapshot()['midi_count']);trigger=c.logical_ns
     c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
     c.elapse(2.625 if extra=='early-stop' else 3.25);capture.extend(c.snapshot());controlled=c.clock_mode=='controlled-experimental'
@@ -2484,7 +2503,17 @@ def chord_shape_schedule(c,arp,shape,muted,mask_bits=15,velocity=50,modifier=10,
         rows=assert_schedule(capture.events,expected,[108 if arp else 864]*len(expected),field=field,origin=origin,stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
     c.results.append(dict(kind='chord-shape-slots',arp=arp,shape=shape,muted=muted,mask_bits=mask_bits,onsets=len(expected),release_checks=len(rows),passed=True))
 
+    if dashboard:chord_dashboard_display(c,max(0,min(127,velocity+(4*modifier if shape in (2,4) else 0))))
+
 CASES={
+ 'M-DASHBOARD-005':dict(run=lambda c:chord_shape_schedule(c,False,2,False,velocity=100,modifier=10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
+ 'M-DASHBOARD-006':dict(run=lambda c:chord_shape_schedule(c,False,2,False,velocity=20,modifier=-10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
+ 'M-DASHBOARD-007':dict(run=lambda c:chord_shape_schedule(c,False,4,False,velocity=100,modifier=10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
+ 'M-DASHBOARD-008':dict(run=lambda c:chord_shape_schedule(c,False,4,False,velocity=20,modifier=-10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
+ 'M-DASHBOARD-001':dict(run=lambda c:chord_shape_schedule(c,False,1,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape1; exact MIDI remains asserted'),
+ 'M-DASHBOARD-002':dict(run=lambda c:chord_shape_schedule(c,False,2,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape2; exact MIDI remains asserted'),
+ 'M-DASHBOARD-003':dict(run=lambda c:chord_shape_schedule(c,False,3,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape3; exact MIDI remains asserted'),
+ 'M-DASHBOARD-004':dict(run=lambda c:chord_shape_schedule(c,False,4,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape4; exact MIDI remains asserted'),
  'M-CHORDSHAPE-259':dict(run=lambda c:chord_shape_schedule(c,False,2,False,15,extra='early-stop'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
  'M-CHORDSHAPE-258':dict(run=lambda c:chord_shape_schedule(c,False,2,False,9,extra='disabled'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
  'M-CHORDSHAPE-257':dict(run=lambda c:chord_shape_schedule(c,False,2,False,9,extra='accelerating'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-SPREAD', 'CHORD-ACCEL'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),

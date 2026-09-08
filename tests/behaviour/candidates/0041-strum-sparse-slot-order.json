@@ -1,5 +1,5 @@
 {
-  "status": "scoped-native-regressions-validated; full-matrix-pending",
+  "status": "finite-controlled-matrix-validated; real-time-and-admission-pending",
   "before_sha256": "5a253e1cb8992d34dacfe6306eba7de4e17cc6cc71a1256307dc10e11918f24a",
   "after_sha256": "7522619b37edff93c06ede770c75ed4b37a3e6d99c30a141130d24b1c8d009ed",
   "patch_sha256": "b6168e14f5517ddf5efb5c3b4ad54e78e2101baa652a8ef08f8056b6e104c2e6",

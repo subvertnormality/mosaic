@@ -1,0 +1,555 @@
+{
+  "status": "scoped-native-and-unit-regressions-validated",
+  "candidate": "0043",
+  "source_sha256": {
+    "lib/step.lua": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+    "tests/behaviour/cases.py": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14"
+  },
+  "description": "Root-last strums update the selected-channel dashboard with the emitted root pitch, clamped velocity and length. MIDI scheduling unchanged.",
+  "runs": [
+    {
+      "case": "M-DASHBOARD-001",
+      "clock_mode": "controlled-experimental",
+      "run_id": "fcf36522e3f94d83b31a01d27e024471",
+      "manifest_sha256": "f088cc2348bf45db2667e4bd9894f785ebb95a9f6bb42f0ece24f785fdb3ac68",
+      "step_sha256": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+      "case_sha256": "298f88efa468c0e38e159a945cbda209232e9da213c37a31e2e3dbf6a8f07b05",
+      "scope": "dashboard-corrected-baselines",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 50,
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-002",
+      "clock_mode": "controlled-experimental",
+      "run_id": "2bae9fe8c8454975953045eae0ba09f9",
+      "manifest_sha256": "00500dd3a434aa7f91cd5d024764848a2d36e906868b87e41ba92f137ecef425",
+      "step_sha256": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+      "case_sha256": "298f88efa468c0e38e159a945cbda209232e9da213c37a31e2e3dbf6a8f07b05",
+      "scope": "dashboard-corrected-baselines",
+      "passed": false,
+      "display": []
+    },
+    {
+      "case": "M-DASHBOARD-003",
+      "clock_mode": "controlled-experimental",
+      "run_id": "13333e2b2ad14611a3097e4631de5488",
+      "manifest_sha256": "4703048dcb160c16565286be6bac40424650ae137bcd2ec5b9341eeb2d77a536",
+      "step_sha256": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+      "case_sha256": "298f88efa468c0e38e159a945cbda209232e9da213c37a31e2e3dbf6a8f07b05",
+      "scope": "dashboard-corrected-baselines",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 50,
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-004",
+      "clock_mode": "controlled-experimental",
+      "run_id": "c98779de207040ccb191e697e150121d",
+      "manifest_sha256": "96ba43fc55b83357f900814a689b758cf7b2d8a1fc8902cc857ec36a6291a112",
+      "step_sha256": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+      "case_sha256": "298f88efa468c0e38e159a945cbda209232e9da213c37a31e2e3dbf6a8f07b05",
+      "scope": "dashboard-corrected-baselines",
+      "passed": false,
+      "display": []
+    },
+    {
+      "case": "M-DASHBOARD-001",
+      "clock_mode": "controlled-experimental",
+      "run_id": "cb8d2cff801241629767c5fcdaecdc06",
+      "manifest_sha256": "fca27078ba9dbba65a13d7a43a2e0fd9abfcb53dd8d94540a440f63f1f6a8da8",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "cf5ad20c61265186245b49258dd48875a0ce423694ff2574d8b70469a52191a3",
+      "scope": "dashboard-candidate-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 50,
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-002",
+      "clock_mode": "controlled-experimental",
+      "run_id": "bdd74ebe30324a86b5ce61d26cd09e47",
+      "manifest_sha256": "52a60ffd2fe81b0d9ddf39195fdc8f07c0621f538dbfa1719d3322276426524b",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "cf5ad20c61265186245b49258dd48875a0ce423694ff2574d8b70469a52191a3",
+      "scope": "dashboard-candidate-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 90,
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-003",
+      "clock_mode": "controlled-experimental",
+      "run_id": "debe9a21609e4e8d9d9c2efc81332588",
+      "manifest_sha256": "01672eadd79d74d455836ba8c86020845ceed12d9fb5f8f7c5055ea476ced6e8",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "cf5ad20c61265186245b49258dd48875a0ce423694ff2574d8b70469a52191a3",
+      "scope": "dashboard-candidate-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 50,
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-004",
+      "clock_mode": "controlled-experimental",
+      "run_id": "59ff3a258ddc476995d4190b4d95746c",
+      "manifest_sha256": "f34983019fa17228613931a5d6a6862036b0ea6384cdc492730dbd71500476ae",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "cf5ad20c61265186245b49258dd48875a0ce423694ff2574d8b70469a52191a3",
+      "scope": "dashboard-candidate-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 90,
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-001",
+      "clock_mode": "real-time",
+      "run_id": "0e6c3230a30b47e59468b6cf47e9d580",
+      "manifest_sha256": "4d61556441652ae8e9eb2940a4daca38dd50b63037116a7368e15f9190e70c99",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "cf5ad20c61265186245b49258dd48875a0ce423694ff2574d8b70469a52191a3",
+      "scope": "dashboard-candidate-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 50,
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-002",
+      "clock_mode": "real-time",
+      "run_id": "b459a434635c413b997511a30b49c12f",
+      "manifest_sha256": "c994d3f4cea86bdb40a8f4acdb67341f5b9e7ccf42de41ccad2c7caeac132a50",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "cf5ad20c61265186245b49258dd48875a0ce423694ff2574d8b70469a52191a3",
+      "scope": "dashboard-candidate-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 90,
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-003",
+      "clock_mode": "real-time",
+      "run_id": "7e20f4ad362343ada26dadf40655907f",
+      "manifest_sha256": "f7c382f73965429f1a7878174fcdf31b953ce99c0e94b4a010bc8a6533ebb7d7",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "cf5ad20c61265186245b49258dd48875a0ce423694ff2574d8b70469a52191a3",
+      "scope": "dashboard-candidate-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 50,
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-004",
+      "clock_mode": "real-time",
+      "run_id": "ce389a4c2a354da48697c9a80c6ccaef",
+      "manifest_sha256": "36f772247ce4bc87beac3addd64179cb096751e25fd26c32bc6c29a0cda464af",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "cf5ad20c61265186245b49258dd48875a0ce423694ff2574d8b70469a52191a3",
+      "scope": "dashboard-candidate-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 90,
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-001",
+      "clock_mode": "controlled-experimental",
+      "run_id": "77e25dccd0974bf68e75f770d62d6f1f",
+      "manifest_sha256": "4ee22a0f1a59036cf58705f6ec887bd3f5ca11b398dac1c3b8b9d9dc1e689adc",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 50,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-002",
+      "clock_mode": "controlled-experimental",
+      "run_id": "2e18b3cd9c0c47698fc29e29e0aa817f",
+      "manifest_sha256": "a0675b0e937cfe54780fbb09cc04f9f5751c6d8a3a3b79c4950c3a1f98c0bbe4",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 90,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-003",
+      "clock_mode": "controlled-experimental",
+      "run_id": "6797ea711b2a42648f91f7249a2c866b",
+      "manifest_sha256": "69e22ab9d329e9e819d95048fd126d2e28ee925be867a5cf69733accffd02c06",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 50,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-004",
+      "clock_mode": "controlled-experimental",
+      "run_id": "2ae555f4a52c4fbbba593283c5bf607d",
+      "manifest_sha256": "cf5e43a18047f27cee4127b27270a79c5bbc2688a96bbba04d1097f3b5d56608",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 90,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-005",
+      "clock_mode": "controlled-experimental",
+      "run_id": "8c57a585e03f45c6a3b48d5c35f13cc1",
+      "manifest_sha256": "424225c3137d13a1e5b619a75c912cbe548392f792ca423c0d26156850cac46c",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 127,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-006",
+      "clock_mode": "controlled-experimental",
+      "run_id": "0cd73a3fd49346c096a54ddb990530a1",
+      "manifest_sha256": "6224cc08362de45925aedfce67227fbf08958a96229560d626312b727f09fffc",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 0,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-007",
+      "clock_mode": "controlled-experimental",
+      "run_id": "c4967b9449474300a59bfc38861b494b",
+      "manifest_sha256": "a4fcd581bb60b1fdc6e2977f52cb4a36f5c94b316e85a3059566a170dbf02d4e",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 127,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-008",
+      "clock_mode": "controlled-experimental",
+      "run_id": "0158b1b4022a4dccb482066e5c4459f5",
+      "manifest_sha256": "4c68304ddd1cd1b3d7d41e1cefbfcc78d8f5c835a06c3b4d6fb9298977e92c07",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 0,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-001",
+      "clock_mode": "real-time",
+      "run_id": "34731c1565644959b510e9d9cac5c300",
+      "manifest_sha256": "2acd9929aa7d9dc73650d00ae41d6041088ba186ea36e765bf6607689408dce2",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 50,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-002",
+      "clock_mode": "real-time",
+      "run_id": "a9c5e0de29584418954cbb048e2f23c0",
+      "manifest_sha256": "06a6ed97520a26bd16151664ad5a9942f9ccd53bc5952b75ee7c00f256d7e839",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 90,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-003",
+      "clock_mode": "real-time",
+      "run_id": "8bccd1edd35b4619984e293d4f3b30a8",
+      "manifest_sha256": "333920f559317c37296d936cf73c3262e23e869093d9329bbc2d604e23ed68fa",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 50,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-004",
+      "clock_mode": "real-time",
+      "run_id": "88fe69e6e94d459096cfc01d47ffa9c2",
+      "manifest_sha256": "d801cc2ec59be2924662bd113a6f5cc71b148cdeacb057df79fabdd46e00ef18",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 90,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-005",
+      "clock_mode": "real-time",
+      "run_id": "3b923cc1599644588078b0ead9ad4767",
+      "manifest_sha256": "9ab2431b50fba0ba1f4fd64e5c8464ee852e89cb464de4784cdef9a78f3900d1",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 127,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-006",
+      "clock_mode": "real-time",
+      "run_id": "044d6d8540e7460f8528fc82c5d300e9",
+      "manifest_sha256": "e32ed4901ca7c7c9e5bf0cce1f343754f646d19965e5689dc8edaba434f377b2",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 0,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-007",
+      "clock_mode": "real-time",
+      "run_id": "1d413f3f00f5452db902fa19abded61c",
+      "manifest_sha256": "c324061379844194aaec4ea893476d1cefd96647cb9c0574be4a29a5c3aed346",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 127,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-DASHBOARD-008",
+      "clock_mode": "real-time",
+      "run_id": "78756c6e43fc4a6f8c13f2cdffdc28ba",
+      "manifest_sha256": "ab512676ab1b096a08df9287a8e4feca8738396d186f5344f070f0b899e4e36e",
+      "step_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "case_sha256": "c610f8c7abe36545e2493165ef9272d0c1f675809ece5d318ae82d2b3d597a14",
+      "scope": "dashboard-boundary-native",
+      "passed": true,
+      "display": [
+        {
+          "kind": "chord-root-dashboard",
+          "note": "C3",
+          "velocity": 0,
+          "length": "4.0",
+          "source": "rendered framebuffer",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "units": {
+    "count": 482,
+    "baseline_existing_successes": 478,
+    "baseline_new_failures": 4,
+    "evidence_sha256": "3c0cce54a66665924114088225bbbf6410d8072747192a97cf4f2be65b56fc4d"
+  },
+  "review": {
+    "session_ref": "01a08099-5e3a-7ba2-ad52-eb231fb21247",
+    "status": "no-code-blocker",
+    "remedy": "Optional dashboard expectation clamped before adding rendered zero/max velocity tests"
+  },
+  "limitations": "CH-DASHBOARD remains partial: chord freshness, arp, sparse/muted cases, channel-switch freshness, successive-note timing and remaining length domain are pending. Full manual, controlled admission, real-time endurance and emulator release remain incomplete."
+}

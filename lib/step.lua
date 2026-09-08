@@ -696,13 +696,12 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * 4))
           play_note(processed_note, note_container, velocity, note_container.length, note_on_func)
 
-          if not note_dashboard_values.chords then
-            note_dashboard_values.chords = {}
-          end
-          table.insert(note_dashboard_values.chords, processed_note)
-
           if c == program.get().selected_channel then
-            channel_edit_page_ui.set_note_dashboard_values(chord_note_dashboard_values)
+            channel_edit_page_ui.set_note_dashboard_values({
+              note = processed_note,
+              velocity = velocity,
+              length = note_container.length
+            })
           end
         end
       end

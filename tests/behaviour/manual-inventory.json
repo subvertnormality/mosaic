@@ -2915,8 +2915,17 @@
         "MAN-049"
       ],
       "statement": "Channel first screen page displays last played notes for selected channel.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-DASHBOARD-001",
+        "M-DASHBOARD-002",
+        "M-DASHBOARD-003",
+        "M-DASHBOARD-004",
+        "M-DASHBOARD-005",
+        "M-DASHBOARD-006",
+        "M-DASHBOARD-007",
+        "M-DASHBOARD-008"
+      ],
+      "status": "partial",
       "domain": "All channels; chords; rests; selection during playback; stale-frame transitions.",
       "oracles": [
         "Screen-note oracle matched to independently expected emitted notes."
@@ -2931,7 +2940,8 @@
         "end_line": 673,
         "text": "On the Norns first page in the channel mode you can see the last played notes on the currently selected channel.",
         "sha256": "027ea4097da2bbf85e93519e01c4e3657c4028c88a0227f27dceeafed0a8593a"
-      }
+      },
+      "remaining": "Chord-slot freshness, arp, sparse/muted cases, channel switching, successive-note timing and remaining length domain."
     },
     {
       "id": "CH-TEMPO",
