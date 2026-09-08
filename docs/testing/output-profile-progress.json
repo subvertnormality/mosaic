@@ -1,0 +1,103 @@
+{
+  "status": "first-JF-workflow-and-profile-composition-validated",
+  "generic_native": [
+    {
+      "path": "artifacts/audio/capture-api-20260908-183506/report.json",
+      "sha256": "6f6775e550dd5422443cd5faf2d39ac65e29129c7fd1b6c6de95888cfbb32a99",
+      "passed": true
+    },
+    {
+      "path": "artifacts/crow/input-api-20260908-183543/report.json",
+      "sha256": "bc630a4af462700bd0a8bbfe774618c3e46fa902a88555b225e1b5725542dab1",
+      "passed": true
+    },
+    {
+      "path": "artifacts/crow/callbacks-native-20260908-183554/report.json",
+      "sha256": "cede1f81c8bcbcfd91715eaa9baa6c8addfb3de139fac723ffbe3ff05a39bc4c",
+      "passed": true
+    },
+    {
+      "path": "artifacts/crow/ii-native-20260908-183601/report.json",
+      "sha256": "2670be04f4ea18f38f9d2ec03d2ac836926272e1463d890dbe9090b4fd4989e8",
+      "passed": true
+    }
+  ],
+  "cases": [
+    {
+      "case": "M-PATCH-001",
+      "run_id": "d884e2661a6246dcac92b9154a4207dd",
+      "profile": "mixed-outputs",
+      "sha256": "12eb839bd3dbdf9d77bcfad18775a860a8b7f5b3bd1443f4c58394304cd071ea",
+      "passed": true
+    },
+    {
+      "case": "M-XA-001-JF",
+      "run_id": "1bbe2296effd4b3b9d3207250370070b",
+      "profile": "crow-jf",
+      "sha256": "239ec3c35baf6d4b21e46ea5205ee5e9e5599c51f53f509f32a16ef172360030",
+      "passed": true
+    }
+  ],
+  "controlled_profile_rejections": [
+    {
+      "profile": "nb-audio",
+      "exit_code": 2,
+      "diagnostic": "Audio/Crow profiles require real time",
+      "command": [
+        "python3",
+        "tests/behaviour/run.py",
+        "--case",
+        "M-XA-001-JF",
+        "--profile",
+        "nb-audio",
+        "--clock-mode",
+        "controlled-experimental",
+        "--mod-code-root",
+        "/home/andy/projects/mosaic-output-mods"
+      ]
+    },
+    {
+      "profile": "crow-jf",
+      "exit_code": 2,
+      "diagnostic": "Audio/Crow profiles require real time",
+      "command": [
+        "python3",
+        "tests/behaviour/run.py",
+        "--case",
+        "M-XA-001-JF",
+        "--profile",
+        "crow-jf",
+        "--clock-mode",
+        "controlled-experimental",
+        "--mod-code-root",
+        "/home/andy/projects/mosaic-output-mods"
+      ]
+    },
+    {
+      "profile": "mixed-outputs",
+      "exit_code": 2,
+      "diagnostic": "Audio/Crow profiles require real time",
+      "command": [
+        "python3",
+        "tests/behaviour/run.py",
+        "--case",
+        "M-XA-001-JF",
+        "--profile",
+        "mixed-outputs",
+        "--clock-mode",
+        "controlled-experimental",
+        "--mod-code-root",
+        "/home/andy/projects/mosaic-output-mods"
+      ]
+    }
+  ],
+  "remaining": [
+    "Native unavailable-capability negative still pending; wrong/missing/edited/ignored-code identity and capability-cleanup unit contracts pass",
+    "Audio waveform event detector and Mosaic-owned sounding phrase",
+    "JF full velocity/voice/ownership/timing matrices",
+    "X00 scoped integration review and publication",
+    "All remaining original and expanded campaign gates"
+  ],
+  "full_campaign_complete": false,
+  "loader_rejections": "docs/testing/output-profile-rejections.json"
+}

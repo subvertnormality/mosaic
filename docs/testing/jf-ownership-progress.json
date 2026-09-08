@@ -1,0 +1,81 @@
+{
+  "status": "overlap-output-checks-pass-native-shutdown-fails",
+  "runs": [
+    {
+      "run_id": "221cfc4edc7948859b197fe8d42f6e85",
+      "case": "M-XA-003-JF-OWNERSHIP",
+      "passed": false,
+      "manifest_sha256": "bd937eea36912ac1e5de26bceceb8719cc9519f8cc3822735a7a80f503d53748",
+      "failure": {
+        "type": "KeyError",
+        "message": "'Ch. 16 Device Config'",
+        "traceback": "Traceback (most recent call last):\n  File \"tests/behaviour/run.py\", line 53, in main\n    try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root,mod_patches=args.mod_patches);CASES[name]['run'](c)\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/output_cases.py\", line 151, in jf_keyboard_ownership\n    c.tap(channel,1);c.screen_header('Ch. '+str(channel)+' Device Config')\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/driver.py\", line 107, in screen_header\n    expected=header(text);self.wait(lambda s:matches(s,expected))\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/frame_oracle.py\", line 56, in header\n    if selected is None:selected={'Ch. 1 Note Masks':1,'Ch. 1 Memory':3,'Ch. 1 Device Config':5}[text]\nKeyError: 'Ch. 16 Device Config'\n"
+      }
+    },
+    {
+      "run_id": "21d022a326f949aa81076be7c83c9f9c",
+      "case": "M-XA-003-JF-OWNERSHIP",
+      "passed": true,
+      "manifest_sha256": "f9792f57502e98f0c92257ea16cb3deb902d899e9a49625490b0a197c11ec18a",
+      "failure": null
+    },
+    {
+      "run_id": "7b0d5c592fc94a41a7cba8a02877c6a1",
+      "case": "M-XA-003-JF-OWNERSHIP",
+      "passed": true,
+      "manifest_sha256": "df5a20d19ed410e7c27798355d81c342c8ed94fb857bf8d384ef630d6943fdd9",
+      "failure": null
+    },
+    {
+      "run_id": "e0900d9817944dc7a355eae1661b0868",
+      "case": "M-XA-004-JF-OVERLAP",
+      "passed": false,
+      "manifest_sha256": "4fb25735eb6229310be460753def657f732ce420fb584d3510e156872b148068",
+      "failure": {
+        "type": "ContractError",
+        "message": "Unexpected native shutdown exits: [{\"service\": \"matron\", \"pid\": 19251, \"returncode\": -11, \"seconds\": 1.064410229679197}]",
+        "traceback": "Traceback (most recent call last):\n  File \"/home/andy/projects/monome-emulator-behaviour-audio-crow/src/automation/session.py\", line 25, in request\n    with urllib.request.urlopen(req,timeout=timeout) as response: return json.load(response)\n  File \"/usr/lib/python3.8/urllib/request.py\", line 222, in urlopen\n    return opener.open(url, data, timeout)\n  File \"/usr/lib/python3.8/urllib/request.py\", line 531, in open\n    response = meth(req, response)\n  File \"/usr/lib/python3.8/urllib/request.py\", line 640, in http_response\n    response = self.parent.error(\n  File \"/usr/lib/python3.8/urllib/request.py\", line 569, in error\n    return self._call_chain(*args)\n  File \"/usr/lib/python3.8/urllib/request.py\", line 502, in _call_chain\n    result = func(*args)\n  File \"/usr/lib/python3.8/urllib/request.py\", line 649, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 400: Bad Request\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"tests/behaviour/run.py\", line 53, in main\n    try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root,mod_patches=args.mod_patches);CASES[name]['run'](c)\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/output_cases.py\", line 209, in jf_same_voice_overlap\n    c.finish()\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/driver.py\", line 137, in finish\n    self.runtime.close(self.out/'native')\n  File \"/home/andy/projects/monome-emulator-behaviour-audio-crow/src/automation/client.py\", line 53, in close\n    return session.stop(self.id)\n  File \"/home/andy/projects/monome-emulator-behaviour-audio-crow/src/automation/session.py\", line 89, in stop\n    result=request(session_id,'/stop',{},timeout=15)\n  File \"/home/andy/projects/monome-emulator-behaviour-audio-crow/src/automation/session.py\", line 28, in request\n    raise ContractError(value.get('code','http_error'),value.get('message',str(error))) from error\nautomation.protocol.ContractError: Unexpected native shutdown exits: [{\"service\": \"matron\", \"pid\": 19251, \"returncode\": -11, \"seconds\": 1.064410229679197}]\n"
+      }
+    }
+  ],
+  "owned_debugger": {
+    "status": "terminal",
+    "diagnostic_only": true,
+    "baseline": "e0900d9817944dc7a355eae1661b0868",
+    "command": [
+      "python3",
+      "tests/behaviour/run.py",
+      "--case",
+      "M-XA-004-JF-OVERLAP",
+      "--profile",
+      "crow-jf",
+      "--mod-code-root",
+      "/home/andy/projects/mosaic-output-mods",
+      "--experimental-install",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json"
+    ],
+    "wrapper_sha256": "e1c863771f7ccacd9b37b34f719be9fb64cb2d53cbff8a2aef2f540379b69e95",
+    "matron_sha256": "2599ded0dd351119691373bf604357465d01ce9193a060c6905e2bf26a2aa262",
+    "scope": "Wrap only this newly launched verified matron binary in GDB; no attach to or alteration of unrelated sessions. Strict child exit status retained. No acceptance claim from debugger timing.",
+    "exit_code": 1
+  },
+  "contracts": {
+    "jf_oracle_tests": 6,
+    "pcm_oracle_tests": 14,
+    "output_profile_tests": 8,
+    "outputs": [
+      "3c0a50",
+      "ad5b19"
+    ],
+    "initial_invocation_errors": "Eight profile tests initially errored due omitted MOSAIC_OUTPUT_MOD_ROOT; corrected invocation passed all eight"
+  },
+  "scope": "Six mono voices paired across channels1/16 passed both release orders with exact JF packets and no MIDI leakage. Same-player source-overlap passed all12 output checks but cannot pass acceptance due matron shutdown SIGSEGV.",
+  "next_action": "Capture and diagnose matron shutdown SIGSEGV under the owned debugger, implement a minimal runtime candidate with independent shutdown regression, then rerun affected generic/Mosaic lifecycle and scoped Codex review. Do not waive shutdown crashes.",
+  "remaining": [
+    "Other JF modes/velocity/ownership/timing matrices",
+    "PCM onset/sequence/polyphony and clock mapping",
+    "Native capability-absence guard",
+    "Original slide bugs and full manual/refactor admission"
+  ],
+  "full_campaign_complete": false
+}

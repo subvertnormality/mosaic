@@ -15,18 +15,28 @@ class Driver:
         self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]
         code=out/'code';code.mkdir();(code/'mosaic').symlink_to(REPO,target_is_directory=True)
-        if profile not in ('base-midi','midi-modulation'):raise ValueError('Unknown profile')
+        output_profiles=json.loads((REPO/'tests/behaviour/output-profiles.json').read_text())['profiles']
+        if profile not in ('base-midi','midi-modulation') and profile not in output_profiles:raise ValueError('Unknown profile')
+        if profile in output_profiles and clock_mode!='real-time':raise ValueError('Audio/Crow profiles require real time; DSP and Crow are not controlled-time sources')
         self.profile=profile;self.mod_revisions={};self.applied_mod_patches={}
         if mod_patches and profile!="midi-modulation":raise ValueError("Mod patches require modulation profile")
         patches=json.loads((REPO/"tests/behaviour/mod-patches/manifest.json").read_text()) if mod_patches else {}
-        if profile=='midi-modulation':
-            if not mod_code_root:raise ValueError('Modulation profile requires an explicit mod code root')
-            for name,entry in json.loads((REPO/'tests/behaviour/mods.lock.json').read_text())['mods'].items():
+        if profile!='base-midi':
+            if not mod_code_root:raise ValueError('Mod profile requires an explicit mod code root')
+            mods=(output_profiles[profile]['mods'] if profile in output_profiles else json.loads((REPO/'tests/behaviour/mods.lock.json').read_text())['mods'])
+            for name,entry in mods.items():
                 source=Path(mod_code_root).resolve()/name
+                if not source.is_dir():raise ValueError('Missing mod source: '+name)
+                if profile in output_profiles:
+                    origin=subprocess.check_output(['git','remote','get-url','origin'],cwd=source,text=True).strip()
+                    if origin!=entry['url']:raise ValueError('Unexpected mod origin: '+name)
                 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip()
                 if revision!=entry['commit']:raise ValueError('Unexpected mod revision: '+name)
                 dirty=subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=source,text=True)
                 if dirty:raise ValueError('Mod source has uncommitted changes: '+name)
+                if profile in output_profiles:
+                    ignored=subprocess.check_output(['git','ls-files','--others','--ignored','--exclude-standard','--','*.lua','*.sc','*.so','*.scx'],cwd=source,text=True)
+                    if ignored:raise ValueError('Ignored runtime source outside mod pin: '+name)
                 if name in patches:
                     candidate=patches[name];patch_file=REPO/'tests/behaviour/mod-patches'/candidate['patch']
                     assert digest(patch_file)==candidate['sha256'],'Mod patch changed without manifest update'
@@ -45,6 +55,12 @@ class Driver:
         self.data_directory=Path(self.runtime.info['data'])/'mosaic'
         self.identity=self.runtime.info['application_identity']
         try:
+            if profile in output_profiles:
+                capability=self.runtime.capabilities()
+                supported=' '.join(capability['supported'])
+                for required in output_profiles[profile]['capabilities']:
+                    if required not in supported:raise ValueError('Missing required output capability: '+required)
+                write(self.out/'output-capabilities.json',capability)
             entry=next(f for f in self.identity['files'] if f['path']=='mosaic/mosaic.lua')
             assert entry['sha256']==digest(REPO/'mosaic.lua'),'Wrong application loaded'
             if clock_mode!='real-time':self.elapse(0)  # Drain native deferred init before user input.
@@ -86,9 +102,9 @@ class Driver:
         indexes=[(y-1)*16+x-1 for x,y in cells]
         state=self.wait(lambda s:[s['grid'][i] for i in indexes]==expected)
         self.results.append(dict(kind='grid',cells=cells,expected=expected,actual=[state['grid'][i] for i in indexes]))
-    def screen_header(self,text):
+    def screen_header(self,text,selected=None):
         from frame_oracle import header,matches
-        expected=header(text);self.wait(lambda s:matches(s,expected))
+        expected=header(text,selected=selected);self.wait(lambda s:matches(s,expected))
         self.results.append(dict(kind='screen-header',expected=text,matched=True))
     def configure(self):
         self.tap(3,8);self.enc(1,4);self.enc(3,1);self.key(3);self.tap(5,8)
@@ -126,7 +142,7 @@ class Driver:
             diagnostics=self.observations[-1]['state']['diagnostics']
             assert diagnostics['enabled_mods']==len(self.mod_revisions) and diagnostics['loaded_mods']==len(self.mod_revisions),'Requested mod profile did not load'
         cleanup=json.loads((self.out/'native/cleanup.json').read_text())
-        assert all(c['returncode']==0 for c in cleanup if c['service']!='sclang'),cleanup
+        assert all(c['returncode'] in ((0,-15) if c['service'] in ('sclang','crow') else (0,)) for c in cleanup),cleanup
         log=(self.out/'native/matron.log').read_text(errors='replace')
         errors=[line for line in log.splitlines() if line.startswith('Coroutine error:') or (line.startswith('hook: ') and ' failed, error: ' in line)]
         assert not errors,errors

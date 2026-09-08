@@ -1,0 +1,32 @@
+{
+  "status": "eight-unit-contracts-and-native-positive-passed",
+  "scope": "Output-profile loader rejection before native startup",
+  "baseline": {
+    "driver_sha256": "562f7e53ee7c113fd6a6491bdbd05d367fc9fbcf267f85d50dc6a01a3addb814",
+    "tests": 7,
+    "passed": 5,
+    "failures": 1,
+    "errors": 1,
+    "failed_tests": [
+      "test_ignored_runtime_source",
+      "test_missing_source"
+    ],
+    "tool_output": "56b4d3"
+  },
+  "candidate_sha256": "dfa62713d4f4c798740833c4c14f4fb172d204cf212890560e3a74e12bcce5b4",
+  "notes": "Ignored Lua/SC/native-plugin source is rejected; missing mod directory gets named diagnostic. Original mod checkouts unchanged. Unit boundary only, not native workflow evidence.",
+  "unit_result": {
+    "collected": 8,
+    "passed": 8,
+    "failures": 0,
+    "errors": 0,
+    "tool_output": "6ebed4",
+    "test_sha256": "8f3abe967efccbf931d48e19a6a87c83364c48282a4dfc3d4ae8806daa99982a"
+  },
+  "native_positive": {
+    "run_id": "592c04e646d54f3c8a2647b9f13faab6",
+    "manifest_sha256": "242d5b8d6965ac91f8ea144d7aabd46397299228e82c623055c79505d3850014",
+    "passed": true
+  },
+  "native_capability_absence_tested": false
+}

@@ -2757,7 +2757,13 @@ def panic_pending_chord(c, arp, shape):
 
 from panic_hotplug import panic_hotplug
 
+from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_phrase, doubledecker_audition
+
 CASES={
+ 'M-XA-004-JF-OVERLAP':dict(run=jf_same_voice_overlap,requirements=['CH-DEVICE','MIDI-RELEASE-001','REC-LIVE-NOTES'],expansion_families=['XA-006','XA-008','XA-013'],description='All six mono JF voices: two sources hold same pitch on one player; both release orders, no premature gate-off, one final release, selection moved to channel16'),
+ 'M-XA-003-JF-OWNERSHIP':dict(run=jf_keyboard_ownership,requirements=['CH-DEVICE','MIDI-RELEASE-001','REC-LIVE-NOTES'],expansion_families=['XA-004','XA-006','XA-008','XA-013'],description='All six compatible JF mono voices paired on Mosaic channels1/16; same pitch from separate ports/input channels, both release orders, channel8 selected during release, no MIDI leakage'),
+ 'M-XA-002-AUDIO':dict(run=doubledecker_audition,requirements=['CH-DEVICE','SETUP-DEVICE-DISCOVERY'],expansion_families=['XA-001','XA-005','XA-013'],description='Native keyboard audition through visible Doubledecker selection; measured stereo C4/E4/G4 sustain, bounded release silence, no MIDI note leakage'),
+ 'M-XA-001-JF':dict(run=jf_mono_phrase,requirements=['CH-DEVICE','SETUP-DEVICE-DISCOVERY'],expansion_families=['XA-001','XA-005','XA-008'],description='Current Mosaic selects visible JF mono voice1, plays exactly two phrases, emits independently decoded pitches/velocity ordering/releases with no MIDI note leakage'),
  'M-PANIC-011':dict(run=lambda c:panic_hotplug(c,True,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
  'M-PANIC-012':dict(run=lambda c:panic_hotplug(c,True,True),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
  'M-PANIC-013':dict(run=lambda c:panic_hotplug(c,False,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect after sweep; restored keyboard, fresh panic and melody'),

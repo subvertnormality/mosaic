@@ -10,12 +10,14 @@ def main():
     parser.add_argument('--artifacts',default=str(REPO.parent/'mosaic-behaviour-runs'))
     parser.add_argument('--clock-mode',choices=['real-time','controlled-experimental'],default='real-time')
     parser.add_argument('--experimental-install')
-    parser.add_argument('--profile',choices=['base-midi','midi-modulation'],default='base-midi')
+    parser.add_argument('--profile',choices=['base-midi','midi-modulation','nb-audio','crow-jf','mixed-outputs'],default='base-midi')
     parser.add_argument('--mod-code-root')
     parser.add_argument('--mod-patches',action='store_true',help='Apply the recorded isolated dependency candidate; original checkouts stay unchanged')
     args=parser.parse_args()
-    if (args.profile=='midi-modulation') != bool(args.mod_code_root):
-        parser.error('Modulation profile requires --mod-code-root; base profile takes no mod source')
+    if (args.profile!='base-midi') != bool(args.mod_code_root):
+        parser.error('Mod profiles require --mod-code-root; base profile takes no mod source')
+    if args.profile in ('nb-audio','crow-jf','mixed-outputs') and args.clock_mode!='real-time':
+        parser.error('Audio/Crow profiles require real time')
     if args.clock_mode=='controlled-experimental' and not args.experimental_install:
         parser.error('Experimental diagnostics require both --clock-mode controlled-experimental and --experimental-install')
     # Python dict literals silently replace duplicate keys. Reject duplicate
@@ -54,7 +56,7 @@ def main():
             if c:
                 try:c.finish()
                 except Exception as error:failure=failure or dict(type=type(error).__name__,message=str(error),traceback=traceback.format_exc())
-        result=dict(schema_version=1,case=name,requirements=CASES[name]['requirements'],passed=failure is None,
+        result=dict(schema_version=1,case=name,requirements=CASES[name]['requirements'],expansion_families=CASES[name].get('expansion_families',[]),passed=failure is None,
             campaign_complete=False,clock_mode=args.clock_mode,diagnostic_only=bool(args.experimental_install),
             controlled_time_admitted=False,profile=args.profile,mod_revisions=c.mod_revisions if c else {},mod_patches=c.applied_mod_patches if c else {},seed=42,mosaic_revision=revision,
             wall_elapsed_seconds=time.monotonic()-started,

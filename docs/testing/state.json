@@ -4972,13 +4972,42 @@
     "review": "01a08158-f66a-7f31-82f0-96988d1ea9d5"
   },
   "audio_crow_expansion": {
-    "status": "scope-reviewed-execution-planned",
+    "status": "scoped-native-regressions-and-codex-review-complete",
     "plan": "docs/testing/AUDIO_CROW_REFACTOR_SCOPE.md",
     "ledger": "docs/testing/audio-crow-scope.json",
     "families": 22,
     "source_emulator_revision": "f301e7644746f699fa769b6ab7cf3bb678f3c228",
     "refactor_admitted": false,
-    "next_action": "Review the additive scope, then X00 composed runtime/public observation profiles and X01 voice ownership/release; retain current slide obligations independently.",
-    "review": "docs/testing/reviews/audio-crow-scope-review.json"
+    "next_action": "Continue incomplete output families and original parameter-slide timing/critical-interaction campaign. Published test checkpoint does not admit refactor.",
+    "review": "docs/testing/reviews/audio-crow-scope-review.json",
+    "composition_receipt": "/home/andy/projects/monome-emulator-behaviour-audio-crow/docs/delivery/completions/X00-composition-progress.json",
+    "progress": "docs/testing/output-profile-progress.json",
+    "pcm_oracle": "docs/testing/pcm-oracle-progress.json",
+    "jf_ownership": "docs/testing/jf-ownership-progress.json",
+    "integration_progress": "docs/testing/output-integration-progress.json"
+  },
+  "critical_musical_interactions": {
+    "status": "required-incomplete",
+    "plan": "docs/testing/BEHAVIOUR_PLAN.md#critical-refactor-prerequisites-locks-trig-parameters-and-scale-merging",
+    "families": [
+      "F05",
+      "F06",
+      "F09",
+      "F11",
+      "F18"
+    ],
+    "owners": [
+      "T03",
+      "T04",
+      "T05",
+      "T08"
+    ],
+    "refactor_gate": true
+  },
+  "screen_worker_validation": {
+    "status": "scoped-regressions-and-review-complete",
+    "receipt": "/home/andy/projects/monome-emulator-behaviour-audio-crow/docs/delivery/completions/screen-worker-progress.json",
+    "full_campaign_complete": false,
+    "review": "01a082af-b7d1-70e2-b7fc-814dd8c5cc91"
   }
 }

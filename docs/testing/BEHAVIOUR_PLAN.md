@@ -386,3 +386,33 @@ or admit controlled time. Evidence is in `hotplug-validation.json`.
 ## Audio/Crow scope amendment — emulator f301e76
 
 The user expanded the behaviour campaign to the newly integrated audio and virtual Crow functionality. [AUDIO_CROW_REFACTOR_SCOPE.md](AUDIO_CROW_REFACTOR_SCOPE.md) is the authoritative additive X00–X06 plan, with 22 initial regression families in [audio-crow-scope.json](audio-crow-scope.json). For its named supported profiles it supersedes earlier audio/n.b. DSP exclusions in this document. Existing MIDI/manual requirements remain mandatory. Audio/Crow require real-time evidence; controlled Lua time does not certify them. The broad refactor is gated on both campaigns. All new families are planned, not executed; existing emulator fixture passes do not count as current Mosaic-worktree coverage.
+
+
+## Critical refactor prerequisites: locks, trig parameters and scale merging
+
+User priority confirmed 2026-09-08. These are already required by F05/F06/F09/F11
+and F18; the following makes their interaction obligations explicit. Owners remain
+T03 (editing/harmony), T04 (musical scheduling/locks), T05 (recording/modulation),
+and T08 (refactor admission). This is a required todo list, not passing coverage.
+Complete these before the broad refactor; isolated parameter tests are insufficient.
+
+| Required interaction | Extensive regression obligations |
+|---|---|
+| Parameter locks × stored/global/channel/step values | Every supported parameter type and slot; Off versus zero and extrema; set/edit/clear/undo; stored recall before first lock before note; equal values, adjacent locks, unlocked steps and original-value restoration where specified; edit/clear/reassign while pending; preserve MIDI Off does-not-send/does-not-cancel contract. |
+| Trig parameters × locks and probability | Every stock enum/range with boundaries and seeded randomness; parameter precedence and independent slots; active, inactive, probability-accepted/rejected steps with trigless on/off; recorded locks overwrite the intended steps only; clearing or reassigning a slot cannot retain old behaviour. |
+| Scale merging × quantisation and scale locks | Explicitly map manual pattern-note merge formulas and merged-pentatonic behaviour alongside global/channel/step scale composition. Cover every merge mode, two/three source patterns, no/single/double/triple overlap, ties, fractional/negative results, fixed assigned/unassigned priority sources and assignment order where meaningful. Verify literal resulting MIDI pitches, not only scale membership. |
+| Scale merging × masks, transpose, degree, rotation and octave | All finite scale/slot/setting choices in domain tests; targeted combined boundaries around octave/MIDI limits. Distinguish raw/snapped/fully-quantised masks and all/random/merged pentatonic switches; cover all switch combinations. Inactive note data, source edits/unassignment, scale edits, active versus edit-only slots and song copies must invalidate the correct cached result without changing another channel. |
+| Locks/slides × musical time and lifecycle | No/one/multiple/equal/ascending/descending endpoints, adjacent chains, non-1 ranges, wrap on/off and no cross-song slide. Endpoint-before-note ordering; no duplicate/stale writes after replacement, clear, reassignment, stop or song change. Combine fractional division, swing/shuffle and live tempo/range changes; preserve pending note releases and continuous intended parameter motion. |
+| Scale changes × delayed voices and recording | Scale-lock hold-until-wrap option, replacement locks and probability-rejected steps; global track17 versus per-channel boundaries. Change merged pattern/scale while chords, strums, arps and keyboard notes are pending. Verify intended pitch application point, unchanged owned releases, recorded/replayed pitch and first-press/final-release duration. |
+| Required stress combinations | Merge + scale lock + random/trig parameter; trigless + slide + external-clock change; recording + lock edit + song transition; manual edit + modulation + lock restoration. Add channel/source/player reassignment with queued work and save/reload of each critical combined state. Audio/JF equivalents use the supported XA-009..014 profiles and their own output oracles; MIDI evidence alone cannot certify them. |
+
+Expand small finite domains fully. Use explicit boundary cases and a reviewed
+pairwise interaction matrix plus the named high-risk triples, avoiding an opaque
+Cartesian explosion. Expected merge formulas, pitch tables, event order and
+musical deadlines must be independently specified from the manual/agreed contract.
+Use actual user inputs and full MIDI/grid/screen traces, plus PCM/ii/CV where
+applicable. Controlled timing checks supplement real-time validation. Fault guards
+must catch a stale merged scale, wrong precedence, missed/extra lock, wrong endpoint,
+wrong pitch and release routed to a replacement owner. Candidate-specific passes
+must be rerun on the accepted baseline before T08; no broad refactor admission
+while required cases or confirmed defects remain unresolved.

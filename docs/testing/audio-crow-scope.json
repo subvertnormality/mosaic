@@ -13,11 +13,29 @@
       "card": "X00",
       "recipe_and_oracle": "Boot current Mosaic with each supported mod profile; select by verified displayed name, author a note, observe its intended output and no other route",
       "edges_and_negatives": "Cold/warm load, mod absent/disabled, changed engine/Crow Lua identity, failed engine readiness; no fallback to MIDI or silent success",
-      "status": "planned",
+      "status": "partial-native-output-cases",
       "required_lane": "real-time",
-      "executable_cases": [],
-      "evidence": [],
-      "applicability": "required-supported-profile"
+      "executable_cases": [
+        "M-XA-001-JF",
+        "M-XA-002-AUDIO"
+      ],
+      "evidence": [
+        {
+          "case": "M-XA-001-JF",
+          "run_id": "1bbe2296effd4b3b9d3207250370070b",
+          "profile": "crow-jf",
+          "sha256": "239ec3c35baf6d4b21e46ea5205ee5e9e5599c51f53f509f32a16ef172360030",
+          "passed": true
+        },
+        {
+          "run_id": "fe61221c7a504f59ba52e2d351fb49b0",
+          "passed": true,
+          "manifest_sha256": "23e31f8b1b5a5903dd356f732161b2e5a565c93e9adba4bcac5842afef4a8399",
+          "failure": null
+        }
+      ],
+      "applicability": "required-supported-profile",
+      "remaining": "Other player domains, lifecycle/ownership, recording, timing and per-family failure guards remain required; held-note audio is scoped pitch/activity/release evidence only."
     },
     {
       "id": "XA-002",
@@ -57,11 +75,29 @@
       "card": "X01",
       "recipe_and_oracle": "Play distinct pitches and velocities through each supported player",
       "edges_and_negatives": "Pitch low/middle/high legal values, octave boundaries; velocity minimum, midpoint, maximum, zero only where UI supports it; no hard-coded shared gain formula",
-      "status": "planned",
+      "status": "partial-native-output-cases",
       "required_lane": "real-time",
-      "executable_cases": [],
-      "evidence": [],
-      "applicability": "required-supported-profile"
+      "executable_cases": [
+        "M-XA-001-JF",
+        "M-XA-002-AUDIO"
+      ],
+      "evidence": [
+        {
+          "case": "M-XA-001-JF",
+          "run_id": "1bbe2296effd4b3b9d3207250370070b",
+          "profile": "crow-jf",
+          "sha256": "239ec3c35baf6d4b21e46ea5205ee5e9e5599c51f53f509f32a16ef172360030",
+          "passed": true
+        },
+        {
+          "run_id": "fe61221c7a504f59ba52e2d351fb49b0",
+          "passed": true,
+          "manifest_sha256": "23e31f8b1b5a5903dd356f732161b2e5a565c93e9adba4bcac5842afef4a8399",
+          "failure": null
+        }
+      ],
+      "applicability": "required-supported-profile",
+      "remaining": "Other player domains, lifecycle/ownership, recording, timing and per-family failure guards remain required; held-note audio is scoped pitch/activity/release evidence only."
     },
     {
       "id": "XA-006",
@@ -90,11 +126,22 @@
       "card": "X01",
       "recipe_and_oracle": "Exercise supported mono/poly/kit/MPE/unison JF selections",
       "edges_and_negatives": "Independently specified setup, voice allocation, pitch/level packets and final releases; all finite voices, repeated/overlapping notes, allocation exhaustion/stealing, mode switch with pending notes/slew, parameter limits; unsupported functions explicit",
-      "status": "planned",
+      "status": "partial-first-mono-JF-case",
       "required_lane": "real-time",
-      "executable_cases": [],
-      "evidence": [],
-      "applicability": "required-supported-profile"
+      "executable_cases": [
+        "M-XA-001-JF"
+      ],
+      "evidence": [
+        {
+          "case": "M-XA-001-JF",
+          "run_id": "1bbe2296effd4b3b9d3207250370070b",
+          "profile": "crow-jf",
+          "sha256": "239ec3c35baf6d4b21e46ea5205ee5e9e5599c51f53f509f32a16ef172360030",
+          "passed": true
+        }
+      ],
+      "applicability": "required-supported-profile",
+      "remaining": "Other supported profiles, player domains, edge cases and per-family negative guards remain required; scoped pitch/velocity-order/release case only"
     },
     {
       "id": "XA-009",
@@ -145,11 +192,21 @@
       "card": "X03",
       "recipe_and_oracle": "Record keyboard notes/chords assigned to audio/JF; replay and inspect grid, duration and output route",
       "edges_and_negatives": "Disarmed live audition; held key across selected-channel/device changes; live/sequenced same-pitch overlap with exact release ownership; before/on/after boundary, unequal rates, first-press/final-release, arm/disarm",
-      "status": "planned",
+      "status": "partial-native-output-cases",
       "required_lane": "real-time",
-      "executable_cases": [],
-      "evidence": [],
-      "applicability": "required-supported-profile"
+      "executable_cases": [
+        "M-XA-002-AUDIO"
+      ],
+      "evidence": [
+        {
+          "run_id": "fe61221c7a504f59ba52e2d351fb49b0",
+          "passed": true,
+          "manifest_sha256": "23e31f8b1b5a5903dd356f732161b2e5a565c93e9adba4bcac5842afef4a8399",
+          "failure": null
+        }
+      ],
+      "applicability": "required-supported-profile",
+      "remaining": "Other player domains, lifecycle/ownership, recording, timing and per-family failure guards remain required; held-note audio is scoped pitch/activity/release evidence only."
     },
     {
       "id": "XA-014",
