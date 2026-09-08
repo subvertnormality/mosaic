@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Expand remaining merge modes, mask controls and timing domains. All64 inactive positions and all16 note-priority sources pass both lanes;0025 fixes assignment pollution. Full manual/emulator delivery remains incomplete; do not bypass rejected arbitration.",
+  "next_action": "Continue channel timing, masks, remaining merge modes and complete manual/emulator delivery. Octave controls/locks pass both lanes with all64 positions and clear gestures; other channels, bounds and interactions remain required. SEM-001/007 remain unresolved; do not bypass rejected arbitration.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2848,11 +2848,11 @@
   },
   "updated": "2026-09-08",
   "manual_binding_snapshot": {
-    "implemented_cases": 85,
+    "implemented_cases": 88,
     "requirements": 141,
-    "requirements_with_case": 51,
-    "requirements_without_case": 90,
-    "scope": "Bindings only; full domains and interactions remain required."
+    "requirements_with_case": 54,
+    "requirements_without_case": 87,
+    "scope": "Bindings only; remaining domains and interactions must be completed."
   },
   "note_pattern_selector_validation": {
     "status": "validated",
@@ -3332,5 +3332,60 @@
     "patch": "tests/behaviour/candidates/0025-priority-assignment-isolation.patch",
     "fix": "Copy the assignment set before adding merge-only sources. Render only truthy assignments so legacy false entries stay unassigned.",
     "limitations": "Native regression covers freshly created projects. Persisted legacy false-entry loading remains a lifecycle obligation."
+  },
+  "octave_validation": {
+    "status": "validated",
+    "runs": [
+      {
+        "case": "M-OCT-001",
+        "mode": "controlled-experimental",
+        "run_id": "968bb2f4a9734ebb93aab3cb9592fc1b",
+        "manifest_sha256": "a2777bd3de872a47d93ff84b8d76316d3d5ffa22a4fe54701bc13324134475bc",
+        "asserted_phrases": 8,
+        "passed": true
+      },
+      {
+        "case": "M-OCT-001",
+        "mode": "real-time",
+        "run_id": "bd9916fa7be0470f87113a306246efff",
+        "manifest_sha256": "7fe15e4f594f5eaa323afd9874bf96bcf29986c6167cc7617403e451151c3d3b",
+        "asserted_phrases": 8,
+        "passed": true
+      },
+      {
+        "case": "M-OCT-002",
+        "mode": "controlled-experimental",
+        "run_id": "dcc4c106fff04bfcaa8ae9a63cf696f4",
+        "manifest_sha256": "6c6b157a1074c6ee22659b11fd6709211d9e1de52b6ef6aa9665c617facb53e6",
+        "asserted_phrases": 58,
+        "passed": true
+      },
+      {
+        "case": "M-OCT-002",
+        "mode": "real-time",
+        "run_id": "3834a60f67ae4b648ceeece3472a5938",
+        "manifest_sha256": "c48140fc695871b373948319d720ad3380137c9e27830e58f632642a421d03f4",
+        "asserted_phrases": 58,
+        "passed": true
+      },
+      {
+        "case": "M-OCT-003",
+        "mode": "controlled-experimental",
+        "run_id": "42ecfb6e7ce5413aa1fde128181618f4",
+        "manifest_sha256": "eafcebdf73ac08487235c4c4d73e2a90ef7d1642e23228cf5063e5fe382e2997",
+        "asserted_phrases": 3,
+        "passed": true
+      },
+      {
+        "case": "M-OCT-003",
+        "mode": "real-time",
+        "run_id": "0a0459b3335f4602b9b18e7b7c8e5c86",
+        "manifest_sha256": "b026c2739ae27934d117d5a3f5ff10435517c00d645ad941546e8e1f319b5e56",
+        "asserted_phrases": 3,
+        "passed": true
+      }
+    ],
+    "scope": "All five global octave positions, all25 global/step octave pairs, explicit zero, K2 and repeated-selector clearing, all64 locked positions against both global extremes, channel-wide clear. Full loops and durations/spacing checked in both lanes.",
+    "limitations": "All channels, MIDI pitch limits, strummed pending voices, live edits and mixed-lock interactions remain required. No production change in this slice."
   }
 }

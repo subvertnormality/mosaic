@@ -603,6 +603,89 @@ def all_note_priorities(c):
         c.tap(slot,2)
 
 
+def octave_phrase(c,octaves,phase):
+    base=[60,62,64,65];velocities=[127,117,107,97]
+    expected=[(1,[144,n+12*o,v]) for n,o,v in zip(base,octaves,velocities)]
+    notes=c.playback(expected,cycles=2,timeout=3,settle_seconds=4/3-.1)
+    assert_durations(c,notes,[1]*8)
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    errors=[(b[field]-a[field])/1e9-1/6 for a,b in zip(notes,notes[1:])]
+    assert len(errors)>=8 and all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),errors
+    c.results.append(dict(kind='octave-phrase',phase=phase,octaves=octaves,passed=True))
+
+def channel_octave_controls(c):
+    c.configure()
+    for octave in (-2,-1,0,1,2,0,0):
+        c.tap(octave+10,8)
+        c.led_values([(x,8) for x in range(8,13)],[15 if x==octave+10 else 2 for x in range(8,13)])
+        octave_phrase(c,[octave]*4,'global-'+str(octave))
+    c.tap(5,8);c.tap(3,8)
+    c.led_values([(x,8) for x in range(8,13)],[2,2,15,2,2])
+    octave_phrase(c,[0]*4,'center-retained-after-navigation')
+
+def octave_lock_precedence(c):
+    c.configure();c.enc(1,-3)
+    def held_feedback(step,octave):
+        c.action(type='grid',x=step,y=4,state=1)
+        try:c.led_values([(x,8) for x in range(8,13)],[15 if x==octave+10 else 2 for x in range(8,13)])
+        finally:c.action(type='grid',x=step,y=4,state=0)
+    for global_octave in range(-2,3):
+        c.tap(global_octave+10,8)
+        for locked_octave in range(-2,3):
+            c.hold_tap((2,4),(locked_octave+10,8));held_feedback(2,locked_octave)
+            octave_phrase(c,[global_octave,locked_octave,global_octave,global_octave],'override-%s-%s'%(global_octave,locked_octave))
+            c.action(type='grid',x=2,y=4,state=1)
+            try:c.key(2)
+            finally:c.action(type='grid',x=2,y=4,state=0)
+            held_feedback(2,global_octave)
+            octave_phrase(c,[global_octave]*4,'cleared-%s-%s'%(global_octave,locked_octave))
+    c.tap(-2+10,8)
+    # Repeating the same lock selector removes it, including explicit zero.
+    for step in range(1,5):
+        c.hold_tap((step,4),(10,8));held_feedback(step,0)
+        expected=[-2]*4;expected[step-1]=0
+        octave_phrase(c,expected,'zero-lock-step-'+str(step))
+        c.hold_tap((step,4),(10,8));held_feedback(step,-2)
+        octave_phrase(c,[-2]*4,'toggle-clear-step-'+str(step))
+
+
+def octave_all_positions(c):
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    cells=[(i%16+1,i//16+4) for i in range(64)]
+    for cell in cells[4:]:c.tap(*cell)
+    c.tap(5,8)
+    for page in range(4):
+        c.tap(9+page,8)
+        for x in range(1,17):c.tap(x,7)
+    c.tap(3,8);c.enc(1,-3)
+    octaves=[i%5-2 for i in range(64)]
+    for cell,octave in zip(cells,octaves):c.hold_tap(cell,(10+octave,8))
+    velocities=[127,117,107,97]+[100]*60
+    def play(expected_octaves,phase):
+        expected=[(1,[144,60+12*octave,velocity]) for octave,velocity in zip(expected_octaves,velocities)]
+        notes=c.playback(expected,cycles=2,timeout=5,settle_seconds=64/3-.1)
+        assert_durations(c,notes,[1]*128)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        errors=[(b[field]-a[field])/1e9-1/6 for a,b in zip(notes,notes[1:])]
+        assert len(errors)>=128 and all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),errors
+        c.results.append(dict(kind='octave-position-playback',phase=phase,octaves=expected_octaves,passed=True))
+    for global_octave in (-2,2):
+        c.tap(10+global_octave,8)
+        for cell,octave in zip(cells,octaves):
+            c.action(type='grid',x=cell[0],y=cell[1],state=1)
+            try:c.led_values([(x,8) for x in range(8,13)],[15 if x==10+octave else 2 for x in range(8,13)])
+            finally:c.action(type='grid',x=cell[0],y=cell[1],state=0)
+        play(octaves,'all64-override-global-'+str(global_octave))
+    c.action(type='key',n=1,state=1)
+    try:c.elapse(.3);c.key(2)
+    finally:c.action(type='key',n=1,state=0)
+    for cell in cells:
+        c.action(type='grid',x=cell[0],y=cell[1],state=1)
+        try:c.led_values([(x,8) for x in range(8,13)],[2,2,2,2,15])
+        finally:c.action(type='grid',x=cell[0],y=cell[1],state=0)
+    play([2]*64,'all64-cleared-to-global')
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1684,6 +1767,9 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
+ 'M-OCT-001':dict(run=channel_octave_controls,requirements=['CH-GLOBAL-OCTAVE'],description='All five octave positions, repeated center and navigation retention with exact MIDI'),
+ 'M-OCT-002':dict(run=octave_lock_precedence,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE'],description='Every global/step octave pair, K2 clear, explicit zero and repeated-selector removal with exact MIDI'),
  'M-MERGE-008':dict(run=all_note_priorities,requirements=['MERGE-NOTE-PATTERN','PAT-INACTIVE-NOTE'],description='All16 assigned/unassigned priority-note sources with unique musical fingerprints, durations and wrap-rest spacing'),
  'M-PAT-006':dict(run=inactive_note_positions,requirements=['PAT-INACTIVE-NOTE','MERGE-NOTE-PATTERN','PAT-STEP-PAGES'],description='All64 inactive notes: silent loops, assigned/unassigned priority source, later trig activation/removal and exact MIDI timing'),
  'M-MERGE-004':dict(run=lambda c:priority_field_isolation(c,'velocity',1),requirements=['MERGE-VELOCITY'],description='velocity priority from inactive slot1: exact MIDI, duration and independent K1/normal modes'),

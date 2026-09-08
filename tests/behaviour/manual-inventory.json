@@ -3895,9 +3895,12 @@
         "MAN-083"
       ],
       "statement": "Held-step octave button sets octave lock; K2 clears.",
-      "cases": [],
+      "cases": [
+        "M-OCT-002",
+        "M-OCT-003"
+      ],
       "status": "unimplemented",
-      "domain": "All octave options; pitch boundaries; strum pending notes; transpose/scale pairs.",
+      "domain": "All octave options; pitch boundaries; strum pending notes; transpose/scale pairs. M-OCT-001/002 validate five global values and all25 global/step pairs, zero-vs-absent locks and clearing in both modes. Channels, pitch bounds and playing edits remain required. M-OCT-003 validates all64 octave locks against both global extremes and channel-wide clear in both modes. Other channels, pitch bounds, pending voices and mixed-lock interactions remain required.",
       "oracles": [
         "Exact12-semitone changes per intended octave and clear fallback; lock indicators."
       ],
@@ -4536,9 +4539,13 @@
         "CHEAT-ALL"
       ],
       "statement": "Octave fader applies channel-wide; middle turns it off.",
-      "cases": [],
+      "cases": [
+        "M-OCT-001",
+        "M-OCT-002",
+        "M-OCT-003"
+      ],
       "status": "unimplemented",
-      "domain": "All octave positions, repeat center, explicit step octave lock override and clearing, pitch bounds.",
+      "domain": "All octave positions, repeat center, explicit step octave lock override and clearing, pitch bounds. M-OCT-001/002 validate five global values and all25 global/step pairs, zero-vs-absent locks and clearing in both modes. Channels, pitch bounds and playing edits remain required. M-OCT-003 validates all64 octave locks against both global extremes and channel-wide clear in both modes. Other channels, pitch bounds, pending voices and mixed-lock interactions remain required.",
       "oracles": [
         "Exact semitone offsets and octave LED; unaffected channels and fallback after off."
       ],
@@ -4605,9 +4612,11 @@
         "CHEAT-ALL"
       ],
       "statement": "Held-step K2 and K1+K2 clear only lock type belonging to selected page.",
-      "cases": [],
+      "cases": [
+        "M-OCT-003"
+      ],
       "status": "unimplemented",
-      "domain": "Each page and lock type; simultaneous mask/parameter/scale/octave/transpose locks; no step vs held step.",
+      "domain": "Each page and lock type; simultaneous mask/parameter/scale/octave/transpose locks; no step vs held step. M-OCT-003 validates all64 octave locks against both global extremes and channel-wide clear in both modes. Other channels, pitch bounds, pending voices and mixed-lock interactions remain required.",
       "oracles": [
         "Only intended indicators/output changes; unrelated locks survive and retain exact musical effect."
       ],

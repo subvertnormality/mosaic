@@ -928,3 +928,14 @@ All474 existing units and830480 focused merge checks pass. Four native cases pas
 both modes, including affected velocity/length priority regressions. No tolerance
 or musical expectation was changed. Existing persisted false-entry projects and
 the remaining manual domains remain explicit obligations; delivery is incomplete.
+
+## Octave controls and locks
+
+Three native cases pass in both time modes. They cover all five global octave
+positions, repeated center presses and navigation, every25 global/step octave
+pair, explicit zero overriding nonzero global values, and K2/repeated-selector
+clearing. The K2 gesture runs on the Trig Locks screen page. A64-step sequence
+checks every held-step octave indicator, overrides at both global extremes and
+channel-wide clearing. Exact MIDI phrases, durations and inter-onset spacing
+include loop boundaries. No production change. Channel isolation, pitch bounds,
+pending strummed voices, playing edits and mixed-lock interactions remain required.
