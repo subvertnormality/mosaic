@@ -1,0 +1,21 @@
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -435,14 +435,16 @@
+   local value = util.clamp(basis, 1, 6)
+   if self.shuffle_basis == value then return end
+   self.shuffle_basis = value
+-  self:update_shuffle(self.step)
++  -- Store inactive shuffle preferences without consuming Swing rounding phase.
++  if self.swing_or_shuffle == 2 then self:update_shuffle(self.step) end
+ end
+ 
+ function Sprocket:set_shuffle_feel(feel)
+   local value = util.clamp(feel, 1, 4)
+   if self.shuffle_feel == value then return end
+   self.shuffle_feel = value
+-  self:update_shuffle(self.step)
++  -- Store inactive shuffle preferences without consuming Swing rounding phase.
++  if self.swing_or_shuffle == 2 then self:update_shuffle(self.step) end
+ end
+ 
+ function Sprocket:update_swing()

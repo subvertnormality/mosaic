@@ -939,3 +939,25 @@ checks every held-step octave indicator, overrides at both global extremes and
 channel-wide clearing. Exact MIDI phrases, durations and inter-onset spacing
 include loop boundaries. No production change. Channel isolation, pitch bounds,
 pending strummed voices, playing edits and mixed-lock interactions remain required.
+
+## Clock continuity and reset validation in progress
+
+Seven native timing cases cover all47 clock selector rates, actual reset menus,
+copied song transitions, and inactive shuffle preferences. All seven pass in
+controlled time. Real-time inactive feel/basis, transitions and repeat policy
+pass. The final fractional run fails an x5.3 ratio window at10.276ms against the
+unchanged10ms bound; it remains failed. The matrix stopped, leaving its two
+integer-ratio real-time cases unrun. Earlier passes do not replace this record.
+
+Three separate candidates fix unconditional realignment, reapplication of
+unchanged fractional settings, and inactive shuffle edits disturbing Swing.
+All474 units and143 scheduler decision/integration traces pass, along with15
+capture/release-oracle checks. The collector now rejects retention gaps and the
+fractional test accounts for every note release, including duplicate rejection.
+Candidate JSON files retain exact combined native source identities and results.
+
+Codex arbitration chooses preserving remaining musical time for pending work
+under unchanged effective rates. Native reset traces expose a1.5s note extended
+to1.667s; this remains a separate confirmed defect. Prototype work is unapplied.
+Actual rate changes, strums, arps, overlapping pitches and stop need their scoped
+regressions. Neither these candidates nor the whole delivery are declared done.

@@ -2282,9 +2282,12 @@
         "MAN-015"
       ],
       "statement": "E1 navigates pages, E2 settings, E3 values; K3 confirms and K2/navigation cancels pending settings.",
-      "cases": [],
+      "cases": [
+        "M-TIME-001",
+        "M-TIME-002"
+      ],
       "status": "unimplemented",
-      "domain": "Every confirmation-based selector; boundaries; cancel by each navigation route.",
+      "domain": "Every confirmation-based selector; boundaries; cancel by each navigation route. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required.",
       "oracles": [
         "Visible pending/committed value plus MIDI effect only after confirmation."
       ],
@@ -2931,9 +2934,17 @@
         "MAN-050"
       ],
       "statement": "Each song sequence has a tempo and channels have independent division/multiplication.",
-      "cases": [],
+      "cases": [
+        "M-TIME-001",
+        "M-TIME-002",
+        "M-TIME-003",
+        "M-TIME-004",
+        "M-TIME-005",
+        "M-TIME-006",
+        "M-TIME-007"
+      ],
       "status": "unimplemented",
-      "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes.",
+      "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
       "oracles": [
         "Piecewise rational beat tables, D exact and R bounded onsets/releases."
       ],
@@ -2955,7 +2966,10 @@
         "MAN-050"
       ],
       "statement": "Per-channel swing ranges -50..50 and shifts alternating note spacing.",
-      "cases": [],
+      "cases": [
+        "M-TIME-006",
+        "M-TIME-007"
+      ],
       "status": "unimplemented",
       "domain": "All finite values where affordable; extrema/zero; division/tempo and pending note interactions.",
       "oracles": [
@@ -3629,9 +3643,11 @@
         "MAN-073"
       ],
       "statement": "90 song slots support selection, filled/empty/playing indicators, copy overwrite and empty-copy erase.",
-      "cases": [],
+      "cases": [
+        "M-TIME-005"
+      ],
       "status": "unimplemented",
-      "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target.",
+      "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
       "oracles": [
         "Distinct saved musical states and exact indicator classes; source preserved; target fully overwritten."
       ],
@@ -3653,9 +3669,13 @@
         "MAN-074"
       ],
       "statement": "Song mode advances after repetitions, loops at empty slots and queues live slot selection.",
-      "cases": [],
+      "cases": [
+        "M-TIME-005",
+        "M-TIME-006",
+        "M-TIME-007"
+      ],
       "status": "unimplemented",
-      "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices.",
+      "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
       "oracles": [
         "Exact sequence/repeat timeline and transition LEDs; no duplicate/missing onset."
       ],
@@ -3994,9 +4014,11 @@
         "MAN-088"
       ],
       "statement": "Song mode defaults on; disabling suppresses automatic sequence progression.",
-      "cases": [],
+      "cases": [
+        "M-TIME-003"
+      ],
       "status": "unimplemented",
-      "domain": "Fresh boot/default; enable/disable before/on/after transition; explicit selection while off.",
+      "domain": "Fresh boot/default; enable/disable before/on/after transition; explicit selection while off. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required.",
       "oracles": [
         "Exact repeated vs advancing sequence table and page indicators."
       ],
@@ -4018,9 +4040,12 @@
         "MAN-089"
       ],
       "statement": "Sequence-change reset defaults on and resets all channels; off retains independent polyrhythms.",
-      "cases": [],
+      "cases": [
+        "M-TIME-003",
+        "M-TIME-005"
+      ],
       "status": "unimplemented",
-      "domain": "Every channel length/start; coprime divisions; pending notes; scale track.",
+      "domain": "Every channel length/start; coprime divisions; pending notes; scale track. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
       "oracles": [
         "Independent phase table across song transition; no duplicate/skipped onsets."
       ],
@@ -4042,9 +4067,13 @@
         "MAN-090"
       ],
       "statement": "Repeat-reset defaults off; on resets each channel to its start at song repetition.",
-      "cases": [],
+      "cases": [
+        "M-TIME-003",
+        "M-TIME-004",
+        "M-TIME-005"
+      ],
       "status": "unimplemented",
-      "domain": "Both sequence/reset option combinations; nonzero starts; wrapped lengths; mute and recording.",
+      "domain": "Both sequence/reset option combinations; nonzero starts; wrapped lengths; mute and recording. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
       "oracles": [
         "Independent per-channel phase table and complete MIDI over repeated songs."
       ],

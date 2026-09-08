@@ -17,11 +17,12 @@ def next_trig_cutoff(c):
     notes=c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(67,100)]],timeout=6)
     assert_durations(c,notes,[2,1,1]*2)
 
-def assert_durations(c,notes,lengths):
+def assert_durations(c,notes,lengths,events=None):
     assert lengths and len(notes)>=len(lengths),'Missing duration observations'
     state=c.snapshot();rows=[]
+    events=state['midi'] if events is None else events
     for note,length in zip(notes,lengths):
-        off=next(m for m in state['midi'] if m['index']>note['index'] and m['port']==1 and m['bytes']==[128,note['bytes'][1],note['bytes'][2]])
+        off=next(m for m in events if m['index']>note['index'] and m['port']==1 and m['bytes']==[128,note['bytes'][1],note['bytes'][2]])
         field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
         actual=(off[field]-note[field])/1e9
         rows.append(dict(pitch=note['bytes'][1],expected_seconds=length/6,actual_seconds=actual,error_ms=1000*(actual-length/6)))
@@ -686,6 +687,201 @@ def octave_all_positions(c):
     play([2]*64,'all64-cleared-to-global')
 
 
+def integral_clock_divisions(c,slow=False):
+    from fractions import Fraction
+    from midi_window import MidiWindow
+    from frame_oracle import header,matches
+    # Fixed public selector labels; expected seconds follow the musical ratio,
+    # never Mosaic's clock or lattice implementation.
+    labels=['x16','x12','x8','x6','x5.3','x5','x4','x3','x2.6','x2','x1.5','x1.3',
+      '/1','/1.5','/2','/2.6','/3','/4','/5','/5.3','/6','/7','/8','/9','/10','/11','/12','/13','/14','/15','/16',
+      '/17','/19','/21','/23','/24','/25','/27','/29','/32','/40','/48','/56','/64','/96','/101','/128']
+    c.configure();c.enc(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
+    selected=13;tested=[]
+    for index,label in enumerate(labels,1):
+        number=Fraction(label[1:]);factor=1/number if label[0]=='x' else number
+        pulses=24*factor
+        if pulses.denominator!=1 or (factor>16)!=slow:continue
+        c.enc(3,selected-index);c.key(3);selected=index
+        expected=[(1,[144,n,v]) for n,v in zip([60,62,64,65],[127,117,107,97])]
+        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);capture.extend(c.snapshot())
+        remaining=float(8*factor/6)
+        # Public controlled advances are bounded to60s. Small chunks retain
+        # responsive clients and preserve that runtime limit in both lanes.
+        while remaining>0:
+            chunk=min(30,remaining);c.elapse(chunk);remaining-=chunk;capture.extend(c.snapshot())
+        c.wait(lambda state:len(capture.extend(state).note_ons())>=9,timeout=3)
+        notes=capture.note_ons()
+        assert [(m['port'],m['bytes']) for m in notes]==[expected[i%4] for i in range(len(notes))],label
+        c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        errors=[(m[field]-notes[0][field])/1e9-float(i*factor/6) for i,m in enumerate(notes)]
+        assert all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),(label,errors)
+        assert_durations(c,notes,[float(factor)]*8,events=capture.events)
+        c.results.append(dict(kind='clock-division-phrase',label=label,pulses=int(pulses),period_seconds=float(factor/6),complete_cycles=2,onsets=len(notes),max_phase_error_seconds=max(abs(x) for x in errors),passed=True));tested.append(label)
+    assert len(tested)==(16 if slow else 24),tested
+
+
+def menu_option_row(c,label,value):
+    import base64
+    from frame_oracle import render
+    # Native params draws the full name then the right-aligned value, without
+    # clearing their overlap. Assert the composite row, including both glyphs.
+    expected=render([(0,30,15,label),(None,30,15,value)])
+    indices=[(y*128+x)*4+k for y in range(22,32) for x in range(128) for k in range(3)]
+    def match(state):
+        actual=base64.b64decode(state['frame']['pixels_base64'])
+        return all(actual[i]==expected[i] for i in indices)
+    c.wait(match);c.results.append(dict(kind='selected-menu-option-row',label=label,value=value,matched=True))
+
+def set_mosaic_options(c,options):
+    from frame_oracle import selected_line
+    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    position=next(i for i,value in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if value['id']=='mosaic')
+    c.enc(2,position);c.key(3)
+    for label,enabled in options:
+        c.enc(2,-60)
+        for attempt in range(40):
+            if selected_line(c.snapshot(),label):break
+            c.enc(2,1)
+        else:raise AssertionError('Required Mosaic option not reached: '+label)
+        c.enc(3,3 if enabled else -3);menu_option_row(c,label,'On' if enabled else 'Off')
+        c.results.append(dict(kind='mosaic-option-input',label=label,enabled=enabled))
+    c.key(2);c.enc(2,-60);menu_label(c,'LEVELS >');c.key(2);c.key(1)
+
+def repeated_pattern_reset_policy(c):
+    from midi_window import MidiWindow
+    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-1);c.enc(3,-11);c.key(3)
+    for song_on,transition_reset,repeat_reset in ((True,False,False),(True,True,False),(True,False,True),(True,True,True),(False,True,True)):
+        set_mosaic_options(c,[('Song mode',song_on),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
+        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(24);capture.extend(c.snapshot())
+        c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        reset=song_on and repeat_reset
+        expected=[]
+        for tick in range(3457):
+            origin=(tick//1536)*1536 if reset else 0
+            if (tick-origin)%216==0:
+                step=((tick-origin)//216)%3
+                expected.append((tick,[144,[60,62,64][step],[127,117,107][step]]))
+        notes=capture.note_ons()
+        assert [(m['port'],m['bytes']) for m in notes]==[(1,event) for tick,event in expected],dict(reset=reset,actual=[m['bytes'] for m in notes],expected=expected)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        errors=[(m[field]-notes[0][field])/1e9-tick/144 for m,(tick,event) in zip(notes,expected)]
+        assert all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),errors
+        if not reset:assert_durations(c,notes,[9]*(len(notes)-1),events=capture.events)
+        c.results.append(dict(kind='native-repeat-reset-policy',song_mode=song_on,transition_reset=transition_reset,repeat_reset=repeat_reset,onsets=len(notes),expected_pulse_offsets=[tick for tick,event in expected],max_phase_error_seconds=max(abs(x) for x in errors),passed=True))
+
+
+def fractional_clock_continuity(c):
+    from fractions import Fraction
+    from midi_window import MidiWindow
+    c.configure();c.tap(5,8);c.tap(5,8)
+    for x in range(1,5):c.tap(x,7)
+    c.tap(3,8);c.enc(1,-1)
+    set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',False)])
+    # These ratios have fractional pulse periods at96PPQN (24 pulses/step).
+    # Any complete denominator-sized window must contain exactly the numerator
+    # pulses. This oracle is independent of rounding phase or tie convention.
+    ratios=[(1,'x16',Fraction(3,2)),(5,'x5.3',Fraction(240,53)),(6,'x5',Fraction(24,5)),(9,'x2.6',Fraction(120,13)),(12,'x1.3',Fraction(240,13)),(16,'/2.6',Fraction(312,5)),(20,'/5.3',Fraction(636,5))]
+    selected=13
+    for index,label,pulses in ratios:
+        c.enc(3,selected-index);c.key(3);selected=index
+        capture=MidiWindow(c.snapshot()['midi_count']);observation_start=len(c.observations);c.tap(1,8)
+        for _ in range(90):
+            c.elapse(.5);capture.extend(c.snapshot())
+            if len(c.observations)>observation_start+2:del c.observations[observation_start+1:-1]
+        c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        notes=capture.note_ons();assert len(notes)>=2*pulses.denominator+1,label
+        assert [(m['port'],m['bytes']) for m in notes]==[(1,[144,60,[127,117,107,97][i%4]]) for i in range(len(notes))],label
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        assert (notes[-1][field]-notes[0][field])/1e9>=4*64/6,'Missing post-fourth-boundary note'
+        low=pulses.numerator//pulses.denominator;high=low+1
+        gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
+        assert all(min(abs(gap-low/144),abs(gap-high/144))<=tolerance for gap in gaps),(label,'non-adjacent pulse interval',min(gaps),max(gaps))
+        windows=[(notes[i+pulses.denominator][field]-notes[i][field])/1e9-pulses.numerator/144 for i in range(len(notes)-pulses.denominator)]
+        assert all(abs(error)<=tolerance for error in windows),(label,'musical ratio drift',max(abs(x) for x in windows))
+        phase=[(note[field]-notes[0][field])/1e9-float(i*pulses/144) for i,note in enumerate(notes)]
+        assert max(abs(x) for x in phase)<=1/144+tolerance,(label,'unbounded quantisation phase',max(abs(x) for x in phase))
+        from note_accounting import note_pairs
+        pairs=note_pairs(capture.events)
+        assert len(pairs)==len(notes),(label,'Incomplete release accounting')
+        by_onset={note['index']:off for note,off in pairs}
+        releases=[]
+        for note,next_note in zip(notes,notes[1:]):
+            off=by_onset[note['index']]
+            assert off['bytes']==[128,60,note['bytes'][2]],(label,'Wrong release data',off)
+            error=(off[field]-next_note[field])/1e9
+            assert abs(error)<=tolerance and off['index']<next_note['index'],(label,'release/retrigger ordering',note,off,next_note)
+            releases.append(error)
+        c.results.append(dict(kind='fractional-clock-continuity',label=label,pulse_ratio=[pulses.numerator,pulses.denominator],onsets=len(notes),complete_ratio_windows=len(windows),global_boundaries_crossed=4,max_window_error_seconds=max(abs(x) for x in windows),max_quantisation_phase_seconds=max(abs(x) for x in phase),release_order_checks=len(releases),passed=True))
+
+
+def song_transition_reset_policy(c):
+    from midi_window import MidiWindow
+    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-1);c.enc(3,-11);c.key(3)
+    c.tap(6,8);c.hold_tap((1,1),(2,1));c.led_values([(1,1),(2,1)],[15,7])
+    c.tap(2,1);c.tap(3,8);c.tap(11,8);c.tap(6,8);c.tap(1,1)
+    for transition_reset,repeat_reset in ((False,False),(True,False),(False,True),(True,True)):
+        set_mosaic_options(c,[('Song mode',True),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
+        c.tap(1,1);c.led_values([(1,1),(2,1)],[15,7])
+        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
+        c.elapse(10.8);capture.extend(c.snapshot());c.led_values([(1,1),(2,1)],[7,15])
+        c.elapse(10.8);capture.extend(c.snapshot());c.led_values([(1,1),(2,1)],[15,7])
+        c.elapse(1.4);capture.extend(c.snapshot());c.tap(1,8)
+        c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        # Preserve the existing reset predicate, including repeat reset on a
+        # changed-pattern boundary; candidate0026 does not redefine that option.
+        reset=transition_reset or repeat_reset
+        expected=[]
+        for tick in range(3385):
+            epoch=tick//1536;origin=epoch*1536 if reset else 0
+            if (tick-origin)%216==0:
+                step=((tick-origin)//216)%3;pitch=[60,62,64][step]+12*(epoch%2)
+                expected.append((tick,[144,pitch,[127,117,107][step]]))
+        notes=capture.note_ons()
+        assert [(m['port'],m['bytes']) for m in notes]==[(1,event) for tick,event in expected],dict(reset=reset,actual=[m['bytes'] for m in notes],expected=expected)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        errors=[(note[field]-notes[0][field])/1e9-tick/144 for note,(tick,event) in zip(notes,expected)]
+        assert all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),errors
+        if not reset:assert_durations(c,notes,[9]*(len(notes)-1),events=capture.events)
+        c.results.append(dict(kind='native-song-transition-reset',transition_reset=transition_reset,repeat_reset=repeat_reset,onsets=len(notes),expected_pulse_offsets=[tick for tick,event in expected],max_phase_error_seconds=max(abs(x) for x in errors),passed=True))
+
+
+def inactive_shuffle_transition(c,basis=False):
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    c.configure();c.tap(5,8);c.tap(5,8)
+    for x in range(1,5):c.tap(x,7)
+    c.tap(3,8);c.enc(1,-1);c.enc(3,12);c.key(3)
+    set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',False)])
+    c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1);c.tap(3,8)
+    # Set either stored Smooth feel or7 basis in Shuffle mode, then return
+    # to Swing. Each inactive field is tested independently at transitions.
+    c.enc(2,1);c.enc(3,2);c.key(3)
+    c.enc(2,2 if basis else 1);c.enc(3,2);c.key(3)
+    c.enc(2,-2 if basis else -1);c.enc(3,-1);c.key(3)
+    c.tap(11,8);c.tap(6,8);c.tap(1,1)
+    capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
+    for i in range(90):
+        c.elapse(.5);capture.extend(c.snapshot())
+        if i==22:c.led_values([(1,1),(2,1)],[7,15])
+        if i==44:c.led_values([(1,1),(2,1)],[15,7])
+    c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+    notes=capture.note_ons();pairs=note_pairs(capture.events)
+    assert len(pairs)==len(notes) and len(notes)>4000
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    for i,note in enumerate(notes):
+        epoch=(i//1024)%2
+        assert note['port']==1 and note['bytes']==[144,60+12*epoch,[127,117,107,97][i%4]],(i,note)
+    windows=[(b[field]-a[field])/1e9-3/144 for a,b in zip(notes,notes[2:])]
+    assert max(abs(x) for x in windows)<=tolerance,('Inactive shuffle settings changed Swing timing',max(abs(x) for x in windows))
+    phase=[(note[field]-notes[0][field])/1e9-i/96 for i,note in enumerate(notes)]
+    assert max(abs(x) for x in phase)<=1/144+tolerance,('Cumulative phase',max(abs(x) for x in phase))
+    c.results.append(dict(kind='inactive-shuffle-transitions',onsets=len(notes),release_pairs=len(pairs),windows=len(windows),max_window_error_seconds=max(abs(x) for x in windows),passed=True))
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -868,7 +1064,7 @@ def midi_clock_transport(c):
     assert all(abs(r['actual_seconds']-r['expected_seconds'])<=tolerance for r in rows),rows
     durations=[]
     for note in notes[:8]:
-        off=next(m for m in state['midi'] if m['index']>note['index'] and m['bytes']==[128,note['bytes'][1],note['bytes'][2]])
+        off=next(m for m in events if m['index']>note['index'] and m['bytes']==[128,note['bytes'][1],note['bytes'][2]])
         durations.append((off[field]-note[field])/1e9)
     c.results.append(dict(kind='midi-clock-durations',expected_seconds=.15,actual_seconds=durations))
     assert all(abs(d-.15)<=tolerance for d in durations),durations
@@ -1550,7 +1746,7 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
         assert actual==expected,dict(expected=expected,actual=actual)
         durations=[]
         for note in [m for m in channel_notes if m['bytes'][1]==pitch][:3]:
-            off=next(m for m in state['midi'] if m['index']>note['index'] and m['port']==port and m['bytes'][:2]==[status-16,pitch])
+            off=next(m for m in events if m['index']>note['index'] and m['port']==port and m['bytes'][:2]==[status-16,pitch])
             durations.append((off[field]-note[field])/1e9)
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         assert all(abs(value-duration)<=tolerance for value in durations),dict(channel=status-143,durations=durations,expected=duration)
@@ -1681,7 +1877,7 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
     assert actual==expected,dict(expected=expected,actual=actual)
     durations=[]
     for note in [m for m in rows if m['bytes'][1] in (72,76,79)][:9]:
-        off=next(m for m in state['midi'] if m['index']>note['index'] and m['port']==1 and m['bytes'][:2]==[128,note['bytes'][1]])
+        off=next(m for m in events if m['index']>note['index'] and m['port']==1 and m['bytes'][:2]==[128,note['bytes'][1]])
         durations.append((off[field]-note[field])/1e9)
     tolerance=2e-9 if controlled else .01
     c.results.append(dict(kind='recorded-chord-length',expected=.5,actual=durations,release_order=release_order))
@@ -1736,7 +1932,7 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
         assert actual==expected,dict(expected=expected,actual=actual)
         durations=[]
         for note in [m for m in channel_notes if m['bytes'][1]==pitch][:3]:
-            off=next(m for m in state['midi'] if m['index']>note['index'] and m['port']==port and m['bytes'][:2]==[status-16,pitch])
+            off=next(m for m in events if m['index']>note['index'] and m['port']==port and m['bytes'][:2]==[status-16,pitch])
             durations.append((off[field]-note[field])/1e9)
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         assert all(abs(value-duration)<=tolerance for value in durations),dict(channel=status-143,durations=durations,expected=duration)
@@ -1767,6 +1963,13 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-TIME-007':dict(run=lambda c:inactive_shuffle_transition(c,True),requirements=['CH-TEMPO','CH-SWING','SONG-ADVANCE'],description='Inactive shuffle basis changes preserve Swing phase across song transitions'),
+ 'M-TIME-006':dict(run=inactive_shuffle_transition,requirements=['CH-TEMPO','CH-SWING','SONG-ADVANCE'],description='Stored inactive shuffle settings must not disturb x16 Swing timing across actual song transitions'),
+ 'M-TIME-005':dict(run=song_transition_reset_policy,requirements=['CH-TEMPO','OPT-SEQUENCE-RESET','OPT-REPEAT-RESET','SONG-SLOTS','SONG-ADVANCE'],description='Copy and alternate two song slots with octave fingerprints, all reset flag combinations and exact /9 phase across transitions'),
+ 'M-TIME-004':dict(run=fractional_clock_continuity,requirements=['CH-TEMPO','OPT-REPEAT-RESET'],description='Every fractional pulse ratio across four global boundaries: rational-window timing, bounded phase and same-pitch release ordering'),
+ 'M-TIME-003':dict(run=repeated_pattern_reset_policy,requirements=['CH-TEMPO','OPT-REPEAT-RESET','OPT-SEQUENCE-RESET','OPT-SONG-MODE'],description='Real menu reset-option combinations and song mode off at two repeat boundaries, /9 clock and three-note phase witness'),
+ 'M-TIME-001':dict(run=integral_clock_divisions,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All integral-pulse clock ratios through /16 with exact full-phrase phase and duration checks'),
+ 'M-TIME-002':dict(run=lambda c:integral_clock_divisions(c,True),requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
  'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
  'M-OCT-001':dict(run=channel_octave_controls,requirements=['CH-GLOBAL-OCTAVE'],description='All five octave positions, repeated center and navigation retention with exact MIDI'),
  'M-OCT-002':dict(run=octave_lock_precedence,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE'],description='Every global/step octave pair, K2 clear, explicit zero and repeated-selector removal with exact MIDI'),

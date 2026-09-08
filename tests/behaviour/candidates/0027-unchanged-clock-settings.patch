@@ -1,0 +1,42 @@
+diff --git a/lib/clock/m_lattice.lua b/lib/clock/m_lattice.lua
+index 5c72e60..50edc77 100644
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -378,6 +378,7 @@ end
+ --- set the division of the sprocket
+ -- @tparam number n the division of the sprocket
+ function Sprocket:set_division(n)
++  if self.division == n then return end
+   local old_ppqn = self.current_ppqn
+   local old_phase = self.phase
+ 
+@@ -413,7 +414,9 @@ function Sprocket:set_delay(delay)
+ end
+ 
+ function Sprocket:set_swing_or_shuffle(swing_or_shuffle)
+-  self.swing_or_shuffle = util.clamp(swing_or_shuffle, 1, 2)
++  local value = util.clamp(swing_or_shuffle, 1, 2)
++  if self.swing_or_shuffle == value then return end
++  self.swing_or_shuffle = value
+   self:update_swing()
+   self:update_shuffle(self.step)
+ end
+@@ -429,12 +432,16 @@ function Sprocket:set_shuffle_amount(shuffle_amount)
+ end
+ 
+ function Sprocket:set_shuffle_basis(basis)
+-  self.shuffle_basis = util.clamp(basis, 1, 6)
++  local value = util.clamp(basis, 1, 6)
++  if self.shuffle_basis == value then return end
++  self.shuffle_basis = value
+   self:update_shuffle(self.step)
+ end
+ 
+ function Sprocket:set_shuffle_feel(feel)
+-  self.shuffle_feel = util.clamp(feel, 1, 4)
++  local value = util.clamp(feel, 1, 4)
++  if self.shuffle_feel == value then return end
++  self.shuffle_feel = value
+   self:update_shuffle(self.step)
+ end
+ 

@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue channel timing, masks, remaining merge modes and complete manual/emulator delivery. Octave controls/locks pass both lanes with all64 positions and clear gestures; other channels, bounds and interactions remain required. SEM-001/007 remain unresolved; do not bypass rejected arbitration.",
+  "next_action": "Continue pending-note reset correction and diagnose real-time fractional timing failure. All7 controlled clock cases pass with0026/0027/0028; R006/007/005/003 pass, R004 failed and R001/002 remain unrun on final source. See clock_validation and artifacts/c16/pending-progress-notes.md. Pending timing prototypes are not applied. Preserve Codex-only review and do not bypass denied SEM007 arbitration. Continue all remaining manual/emulator delivery afterwards.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2848,10 +2848,10 @@
   },
   "updated": "2026-09-08",
   "manual_binding_snapshot": {
-    "implemented_cases": 88,
+    "implemented_cases": 95,
     "requirements": 141,
-    "requirements_with_case": 54,
-    "requirements_without_case": 87,
+    "requirements_with_case": 62,
+    "requirements_without_case": 79,
     "scope": "Bindings only; remaining domains and interactions must be completed."
   },
   "note_pattern_selector_validation": {
@@ -3387,5 +3387,124 @@
     ],
     "scope": "All five global octave positions, all25 global/step octave pairs, explicit zero, K2 and repeated-selector clearing, all64 locked positions against both global extremes, channel-wide clear. Full loops and durations/spacing checked in both lanes.",
     "limitations": "All channels, MIDI pitch limits, strummed pending voices, live edits and mixed-lock interactions remain required. No production change in this slice."
+  },
+  "clock_validation": {
+    "status": "validation-in-progress",
+    "source_sha256": {
+      "lib/step.lua": "35b347b3e8f0c476ee0c65990956a5fd8df142f4e0399d29173428074f9516c1",
+      "lib/clock/m_lattice.lua": "b314d2d6749a685e2104c02c22d00646795f37fd867988fc527eac5b5dd6f322"
+    },
+    "runs": [
+      {
+        "case": "M-TIME-006",
+        "mode": "controlled-experimental",
+        "run_id": "200345b1892d44e8ab84da187fa1edbe",
+        "manifest_sha256": "4526e983d14e283f0548b50fce7421a5f0aac79c5aa6dc031d00c6ad4536890c",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-007",
+        "mode": "controlled-experimental",
+        "run_id": "fb471f759cae4fdd8920f0e3daf707be",
+        "manifest_sha256": "6e417e1c30f5e57e5e08ce0e0bd5ae8e6495bb040f518c078f506e15fee23f6f",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-005",
+        "mode": "controlled-experimental",
+        "run_id": "f7e1baaf9c0e43068ca178944fe38966",
+        "manifest_sha256": "45554a8bf47d143461567d46515bbf8d039e86affe49e74fc73f6e464e5cff67",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-003",
+        "mode": "controlled-experimental",
+        "run_id": "f8bbc72aef524a8991e26e047adb52bc",
+        "manifest_sha256": "e9dc7d177ea24cdda354ab6d91b3e355303653570ae075721018f8e25d7bec61",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-004",
+        "mode": "controlled-experimental",
+        "run_id": "7c4e4cf5a65e4e1290ce8c21e97c774c",
+        "manifest_sha256": "1962f2c397c332422c43f32317b702d19a6f293f96b0c6b5a0e84ccf7b70ed42",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-001",
+        "mode": "controlled-experimental",
+        "run_id": "959265f6182e4b3d997ca8981ba468c3",
+        "manifest_sha256": "8298d73430ec9db256b9f372aa795d4150fc401b6d30e7786d661314999a9eb0",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-002",
+        "mode": "controlled-experimental",
+        "run_id": "435f21b7350345f4a01d134c4c37a0f5",
+        "manifest_sha256": "598949546e789119e182b9a72a9afa983c0ba0a9a00f12ffef0f9288e0536460",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-006",
+        "mode": "real-time",
+        "run_id": "b91958e844d049898569bfde2cd4f5c5",
+        "manifest_sha256": "fdcda3e871154574262ee81c87c7e5ed39e69c110e7b44d8fabcb3ca09ef3499",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-007",
+        "mode": "real-time",
+        "run_id": "4b1fececb7604fc29d9c58a8567df2e9",
+        "manifest_sha256": "16bdfcd99772cfb06461e33142ae922722c420a76dada5d616f0d3c53008c091",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-005",
+        "mode": "real-time",
+        "run_id": "35d78fa39391409190778f707251452e",
+        "manifest_sha256": "64a6338059480bda4d661e9e99869feaddcd737177284dabb43582a1d88e8cf1",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-003",
+        "mode": "real-time",
+        "run_id": "d987ee1291834cf69cf3cb2199c4bbdf",
+        "manifest_sha256": "4013e0853ec3bc06a51cf9a93566289abf95d7f9e1afa3b18ffd35b2f5900f9e",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "case": "M-TIME-004",
+        "mode": "real-time",
+        "run_id": "33287f32cd284889bce45f929edaa3e1",
+        "manifest_sha256": "8df1dba64ebe0793bda431cb09cca7b3d81e79cf07b808aaba6e152164442c83",
+        "passed": false,
+        "failure": "('x5.3', 'musical ratio drift', 0.010276147333333263)"
+      }
+    ],
+    "units": 474,
+    "contracts": {
+      "reset_decisions": 64,
+      "step_lattice": 16,
+      "unchanged_settings": 42,
+      "inactive_settings": 21,
+      "capture_and_lifecycle": 15
+    },
+    "reviews": [
+      "01a07e84-1d22-7121-af6d-0eea2375fa81",
+      "01a07eb3-dbf1-7eb1-aa0c-f11c4d4594e0",
+      "01a07ec0-8698-7d63-bd63-689a73efd344"
+    ],
+    "limitations": "Real-time M-TIME-004 failed x5.3 ratio window by10.276ms against10ms limit; retained without retry or waiver. Real-time M-TIME-001/002 final-source runs remain unrun. Pending-note reset extension is confirmed and a separate unapplied prototype is under test. Full campaign/release not complete."
   }
 }

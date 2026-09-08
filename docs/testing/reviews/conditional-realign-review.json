@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Review one isolated timing fix for a trusted local MIDI-only norns development tool. Use Codex only. No manual or hardware acceptance, no financial-critical governance, no full release claim. User authorizes autonomous bug fixes and requested Paranoia decision review.\n\nREADME Reset at Pattern Repeat says default off permits evolving polyrhythms. Existing step.process_song_song_patterns conditionally resets channel step counters based on reset_on_song_pattern_transition/reset_on_end_of_pattern_repeat, but unconditionally calls m_clock.realign_sprockets at every completed song pattern while song mode is on. That sets channel lattice phase to1 regardless of reset settings. Real-input test M-TIME-001 creates four C/D/E/F notes at90BPM, selects /9 using E3/K3 and asserts two full phrases plus closing onset. Both native time modes fail: first eight notes correctly spaced1.5s; ninth onset is1.333333333s early at global64-step boundary. M-TIME-002 /17 also fails across that boundary. Failed native manifests are in sibling mosaic-behaviour-runs/48d074f3258e4d07a2270c883a788ad9,99fa258564654f0f92e3362ec9581e09,4af7e9edc1644ea5b2d4cfb3e10acdfe,35b8a10d8ad943b6810ee5c0fbfbdd3e. Earlier encoder-direction setup errors are separately retained and earn no defect credit.\n\nCandidate0026 in lib/step.lua computes the SAME existing reset predicate and calls realign_sprockets only if channel counters are also reset. This preserves prior predicate semantics (repeat reset also resets on a transition if enabled) instead of deciding that adjacent ambiguity. No timing oracle/tolerance/clock runtime change. Review whether this is the correct minimal fix for phase continuity, and identify needed unit/integration/native tests: repeated same pattern, transition reset on/off, repeat reset on/off, song mode off, pending notes and fractional pulse clocks. Do not edit source or waive required tests. If this fix needs adjustment, cite the concrete path and musical consequence. This is a focused Codex review, not a dual-provider arbitration result.",
+    "files": [
+      {
+        "path": "lib/step.lua",
+        "reason": "Conditional realignment candidate and sequence transition logic"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Clock phase realignment and delayed actions"
+      },
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Realignment caller and channel clocks"
+      },
+      {
+        "path": "README.md",
+        "reason": "Documented reset and evolving-polyrhythm contract"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "Real-input timing regressions"
+      }
+    ]
+  },
+  "input_sha256": "e13a7707300046bf1af3c885157de8a485690da3bdef62c6d2f484a2e0b4dcf9",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**Yes\u2014Candidate0026 is the correct minimal fix for the unconditional boundary realignment. No adjustment to its predicate is needed; validation remains outstanding.**\n\n- [lib/step.lua:1039](<mosaic-worktree>/lib/step.lua:1039) preserves the existing predicate: `(pattern_changed and transition_reset) or repeat_reset`. Both counter reset and realignment now use it. Git blame traces the previous nested predicate and unconditional call to `f68d03e4`. Repeat reset still applies during transitions, preserving that existing ambiguity.\n- [lib/clock/m_lattice.lua:489](<mosaic-worktree>/lib/clock/m_lattice.lua:489) resets eligible sprockets\u2019 `phase`, `step`, transport and fractional-pulse error. The master processes the boundary before channel clocks run ([m_clock.lua:292](<mosaic-worktree>/lib/clock/m_clock.lua:292)); `phase = 1` therefore forces an onset that pulse. This contradicts the evolving-polyrhythm contract in [README.md:1053](<mosaic-worktree>/README.md:1053).\n- All four supplied manifests confirm failures. `/9`\u2019s ninth onset is **1.333333333s early** in controlled time and **1.332524080s early** in [real time](<user-home>/projects/mosaic-behaviour-runs/99fa258564654f0f92e3362ec9581e09/manifest.json:24). `/17` accumulates approximately 0.666667s error per boundary. These match premature realignment.\n\nRequired tests before acceptance:\n\n1. **Unit:** Exercise same-pattern versus changed-pattern boundaries with all four reset-setting combinations. Assert both reset and realignment occur exactly once iff the predicate is true. Include song mode off, initialization, non-boundary ticks, and intermediate repeats before `global_pattern_length * repeats`.\n2. **Integration:** Pulse the actual master/channel lattice across multiple boundaries with `/9`, `/17`, and simultaneous channels at different rates. Verify continued counters and onset spacing when resets are disabled; configured starting steps and aligned onsets when enabled. Cover both channel and end-of-clock sprockets.\n3. **Pending notes:** Cross boundaries with fractional-length and multistep notes, delayed note-ons, and same-pitch retriggers. Assert release timing, note-off-before-retrigger ordering, no duplicate callbacks or stuck notes, and stop cleanup. Delayed actions depend directly on phase and cycle completion ([m_lattice.lua:173](<mosaic-worktree>/lib/clock/m_lattice.lua:173)).\n4. **Fractional clocks:** Verify accumulated timing and shuffle progression across repeated and changed patterns, including unchanged and changed divisions. Boundary alignment still invokes shuffle setters, and transitions call `set_division`; those can recalculate phase/error ([step.lua:1009](<mosaic-worktree>/lib/step.lua:1009), [m_lattice.lua:473](<mosaic-worktree>/lib/clock/m_lattice.lua:473)). The guard alone does not establish exact continuity through those paths.\n5. **Native:** Rerun complete M-TIME-001/002 in both time modes with unchanged oracles/tolerances, then add real-input reset-matrix, pending-note and fractional-clock coverage. Existing cases explicitly skip nonintegral pulse counts ([cases.py:702](<mosaic-worktree>/tests/behaviour/cases.py:702)).\n\n**CONFIDENCE: High** for this isolated correction; candidate test passes were not verified, and a boundary regression in the required matrix would change acceptance.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07e84-1d22-7121-af6d-0eea2375fa81` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "a7b9a4b6f5aa31ae7d29347900b28c464ee4fba6f501a1201d49540dd96842c1",
+    "redaction": "Local absolute paths replaced with symbolic workspace names; complete original retained in local evidence."
+  }
+}
