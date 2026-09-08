@@ -907,3 +907,24 @@ remains 13/14: one HTTP timeout occurred during setup before merge assertions.
 Cleanup completed; a single fresh-process retry passed with no source, timeout
 or tolerance change. Its unproven cause remains a C12 reliability follow-up.
 Full domains and delivery remain incomplete; no Lower/Shorter semantics changed.
+
+## All inactive positions and priority-source assignment isolation
+
+M-PAT-006 exercises all64 inactive note positions: silence without trigs,
+unassigned and assigned priority use, later activation and removal. Each positive
+phase checks two full loops, note durations and wrap spacing; negative phases
+check two silent loops. M-MERGE-008 checks every16 priority slot in both assignment
+states with distinct two-note fingerprints and exact phrase/rest timing.
+
+The initial all-slot test failed in both modes when returning to the channel page.
+Merge processing aliased the channel assignment table and inserted an unassigned
+priority source as false. The refresh then treated its presence as assigned,
+misleading the grid and the next assignment press. Candidate0025 copies the set
+before adding merge-only sources and renders only active assignments. The native
+diagnostic checks the assignment before and after navigation. Its original
+failures are retained. A new module regression rejects the original source.
+
+All474 existing units and830480 focused merge checks pass. Four native cases pass
+both modes, including affected velocity/length priority regressions. No tolerance
+or musical expectation was changed. Existing persisted false-entry projects and
+the remaining manual domains remain explicit obligations; delivery is incomplete.

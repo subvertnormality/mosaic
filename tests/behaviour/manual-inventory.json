@@ -2122,10 +2122,11 @@
       ],
       "statement": "Select each of four16-step pages.",
       "cases": [
-        "M-EDIT-003"
+        "M-EDIT-003",
+        "M-PAT-006"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Every page; first/last columns; edit/switch/revisit; stopped/playing. M-EDIT-003 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required.",
+      "domain": "Every page; first/last columns; edit/switch/revisit; stopped/playing. M-EDIT-003 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required. M-PAT-006 validates all64 inactive note positions, priority use and later activation/removal with complete timing-checked loops in both modes. Settings/interactions remain required.",
       "oracles": [
         "Page LED and distinct notes for steps1/16/17/32/33/48/49/64."
       ],
@@ -2176,10 +2177,12 @@
       "statement": "Notes can be authored without trigs for use in merging.",
       "cases": [
         "M-MERGE-002",
-        "M-MERGE-003"
+        "M-MERGE-003",
+        "M-PAT-006",
+        "M-MERGE-008"
       ],
       "status": "partial-domain-coverage",
-      "domain": "All positions; later enable trig; assign merge with another pattern; removal/re-enable. M-MERGE-002/003 validate lower/higher priority-source ordering, assigned/unassigned inactive notes and activation/removal in both modes. All positions/priority slots and pentatonic setting combinations remain required.",
+      "domain": "All positions; later enable trig; assign merge with another pattern; removal/re-enable. M-MERGE-002/003 validate lower/higher priority-source ordering, assigned/unassigned inactive notes and activation/removal in both modes. All positions/priority slots and pentatonic setting combinations remain required. M-PAT-006 validates all64 inactive note positions, priority use and later activation/removal with complete timing-checked loops in both modes. Settings/interactions remain required. M-MERGE-008 validates every priority slot with assigned/unassigned inactive sources and unique MIDI fingerprints in both modes. Settings and running-edit interactions remain required.",
       "oracles": [
         "No MIDI on inactive step alone; authored note used when independently triggered."
       ],
@@ -2823,10 +2826,12 @@
       "statement": "Held merge button selects priority pattern, including an unassigned pattern; default merged notes use pentatonic scale.",
       "cases": [
         "M-MERGE-002",
-        "M-MERGE-003"
+        "M-MERGE-003",
+        "M-PAT-006",
+        "M-MERGE-008"
       ],
       "status": "partial-domain-coverage",
-      "domain": "All16 priority patterns; assigned/unassigned; inactive steps; pentatonic setting on/off. M-MERGE-002/003 validate lower/higher priority-source ordering, assigned/unassigned inactive notes and activation/removal in both modes. All positions/priority slots and pentatonic setting combinations remain required.",
+      "domain": "All16 priority patterns; assigned/unassigned; inactive steps; pentatonic setting on/off. M-MERGE-002/003 validate lower/higher priority-source ordering, assigned/unassigned inactive notes and activation/removal in both modes. All positions/priority slots and pentatonic setting combinations remain required. M-PAT-006 validates all64 inactive note positions, priority use and later activation/removal with complete timing-checked loops in both modes. Settings/interactions remain required. M-MERGE-008 validates every priority slot with assigned/unassigned inactive sources and unique MIDI fingerprints in both modes. Settings and running-edit interactions remain required.",
       "oracles": [
         "Priority pattern values and independently quantised MIDI; selection feedback."
       ],

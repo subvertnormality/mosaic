@@ -553,6 +553,14 @@
         "M-MERGE-006",
         "M-MERGE-007"
       ]
+    },
+    {
+      "id": "priority-assignment-isolation",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "priority-assignment-isolation.json",
+      "cases": [
+        "M-MERGE-008"
+      ]
     }
   ]
 }

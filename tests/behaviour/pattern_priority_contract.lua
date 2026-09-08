@@ -55,4 +55,16 @@ for _,modes in ipairs({{}, {false,false,false}, {'average',false,false}, {false,
    checked=checked+1
  end
 end
+-- A priority lookup must never add an assignment, including a false sentinel.
+for priority=1,16 do for rhythm_slot=1,16 do if priority~=rhythm_slot then
+ for _,field in ipairs({'note','velocity','length'}) do
+  channel={selected_patterns={[rhythm_slot]=true},step_trig_masks={},step_note_masks={},step_velocity_masks={},step_length_masks={}}
+  song={patterns={[priority]=source,[rhythm_slot]=rhythm},channels={[1]=channel}}
+  local modes={note='average',velocity='average',length='average'};modes[field]='pattern_number_'..priority
+  Pattern.get_and_merge_patterns(1,'skip',modes.note,modes.velocity,modes.length)
+  assert(channel.selected_patterns[priority]==nil,'Priority lookup mutated channel assignments')
+  assert(channel.selected_patterns[rhythm_slot]==true,'Rhythm assignment changed')
+  checked=checked+1
+ end
+end end end
 print(checked..' priority/mask merged-cell checks passed across all distinct slot pairs, trig modes and fields')

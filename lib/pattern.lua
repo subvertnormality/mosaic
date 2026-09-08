@@ -90,7 +90,11 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     end
   end
 
-  local patterns_to_process = pattern_channel.selected_patterns
+  -- Priority sources participate in merging without becoming channel assignments.
+  local patterns_to_process = {}
+  for number, enabled in pairs(pattern_channel.selected_patterns) do
+    patterns_to_process[number] = enabled
+  end
 
   local function process_merge_mode(merge_mode)
     if merge_mode then

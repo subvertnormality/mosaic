@@ -527,6 +527,82 @@ def priority_field_isolation(c,field,source_slot):
     c.results.append(dict(kind='priority-field-isolation',field=field,source_slot=source_slot,pitch=60,velocity=velocity,length_steps=length,passed=True))
 
 
+def inactive_note_positions(c):
+    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    c.tap(3,1);c.tap(5,8)
+    pitches=[60,62,64,65,67,69,71]
+    cells=[((s-1)%16+1,(s-1)//16+4) for s in range(1,65)]
+    for page in range(4):
+        c.tap(9+page,8)
+        selections=[(x,7-((page*16+x-1)%7)) for x in range(1,17)]
+        for cell in selections:c.tap(*cell)
+        c.led_values(selections,[12]*16)
+    c.tap(3,8);c.tap(1,2);c.tap(3,2)
+    def silence(label):
+        c.led_values(cells,[2]*64)
+        before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(64/3+.1);c.tap(1,8)
+        state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+        assert not notes and not state['midi_capture']['outstanding'],notes
+        c.results.append(dict(kind='inactive-position-silence',phase=label,steps=64,complete_cycles=2,passed=True))
+    def phrase(label):
+        expected=[(1,[144,pitches[(s-1)%7],100]) for s in range(1,65)]
+        notes=c.playback(expected,cycles=2,timeout=4,settle_seconds=64/3-.1)
+        assert_durations(c,notes,[1]*128)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        errors=[(b[field]-a[field])/1e9-1/6 for a,b in zip(notes,notes[1:])]
+        assert len(errors)>=128 and all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),errors
+        c.results.append(dict(kind='inactive-position-playback',phase=label,steps=64,complete_cycles=2,max_spacing_error_seconds=max(abs(x) for x in errors),passed=True))
+    silence('all64-authored-without-trigs')
+    c.tap(5,8);c.tap(2,1)
+    for cell in cells:c.tap(*cell)
+    c.led_values(cells,[15]*64);c.tap(3,8);c.tap(3,2);c.tap(2,2)
+    c.hold_tap((15,8),(3,2));c.led_values([(3,2),(2,2),(15,8)],[2,15,15])
+    phrase('unassigned-priority-source-all64')
+    c.tap(3,2);phrase('assigned-inactive-priority-source-all64')
+    c.tap(2,2);c.tap(5,8);c.tap(3,1)
+    for cell in cells:c.tap(*cell)
+    c.led_values(cells,[15]*64);c.tap(3,8);phrase('all64-later-activated')
+    c.tap(5,8)
+    for cell in cells:c.tap(*cell)
+    c.tap(3,8);silence('all64-trigs-removed-again')
+
+
+def all_note_priorities(c):
+    c.configure();c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    pitches=[60,62,64,65,67,69,71]
+    # Two base-seven digits make a distinct musical fingerprint for each slot.
+    for slot in range(1,17):
+        c.tap(slot,1);c.tap(5,8)
+        c.tap(1,7-(slot-1)%7);c.tap(2,7-(slot-1)//7)
+        c.tap(3,8);c.tap(5,8)
+    c.tap(2,1);c.tap(1,4);c.tap(2,4);c.tap(3,8)
+    c.tap(1,2);c.tap(2,2);rhythm=2
+    def play(slot,assigned):
+        velocities=[127,117] if rhythm==1 else [100,100]
+        expected=[(1,[144,pitches[(slot-1)%7],velocities[0]]),(1,[144,pitches[(slot-1)//7],velocities[1]])]
+        notes=c.playback(expected,cycles=2,timeout=3,settle_seconds=4/3-.1)
+        assert_durations(c,notes,[1]*4)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        errors=[(b[field]-a[field])/1e9-([1,3][i%2]/6) for i,(a,b) in enumerate(zip(notes,notes[1:]))]
+        assert len(errors)>=4 and all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),errors
+        c.results.append(dict(kind='note-priority-slot',slot=slot,assigned=assigned,rhythm_slot=rhythm,expected=expected,max_spacing_error_seconds=max(abs(x) for x in errors),passed=True))
+    for slot in range(1,17):
+        wanted_rhythm=1 if slot==2 else 2
+        if rhythm!=wanted_rhythm:
+            c.led_values([(rhythm,2),(wanted_rhythm,2)],[15,2])
+            c.tap(5,8);c.tap(rhythm,1);c.tap(1,4);c.tap(2,4)
+            c.tap(wanted_rhythm,1);c.tap(1,4);c.tap(2,4);c.tap(3,8)
+            c.led_values([(rhythm,2),(wanted_rhythm,2)],[15,2])
+            c.tap(rhythm,2);c.led_values([(rhythm,2),(wanted_rhythm,2)],[2,2])
+            c.tap(wanted_rhythm,2);c.led_values([(rhythm,2),(wanted_rhythm,2)],[2,15]);rhythm=wanted_rhythm
+        c.hold_tap((15,8),(slot,2))
+        c.led_values([(slot,2),(rhythm,2),(15,8)],[2,15,15]);play(slot,False)
+        c.tap(slot,2);c.led_values([(slot,2),(rhythm,2)],[15,15]);play(slot,True)
+        c.tap(slot,2)
+
+
 def autosave_restart(c):
     c.configure()
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
@@ -1608,6 +1684,8 @@ def keyboard_pitch_range(c):
     c.results.append(dict(kind='keyboard-pitch-range',pitches=list(range(128)),velocities=[1,127],release_status_types=[128,144],expected=expected,actual=actual))
 
 CASES={
+ 'M-MERGE-008':dict(run=all_note_priorities,requirements=['MERGE-NOTE-PATTERN','PAT-INACTIVE-NOTE'],description='All16 assigned/unassigned priority-note sources with unique musical fingerprints, durations and wrap-rest spacing'),
+ 'M-PAT-006':dict(run=inactive_note_positions,requirements=['PAT-INACTIVE-NOTE','MERGE-NOTE-PATTERN','PAT-STEP-PAGES'],description='All64 inactive notes: silent loops, assigned/unassigned priority source, later trig activation/removal and exact MIDI timing'),
  'M-MERGE-004':dict(run=lambda c:priority_field_isolation(c,'velocity',1),requirements=['MERGE-VELOCITY'],description='velocity priority from inactive slot1: exact MIDI, duration and independent K1/normal modes'),
  'M-MERGE-005':dict(run=lambda c:priority_field_isolation(c,'velocity',3),requirements=['MERGE-VELOCITY'],description='velocity priority from inactive slot3: exact MIDI, duration and independent K1/normal modes'),
  'M-MERGE-006':dict(run=lambda c:priority_field_isolation(c,'length',1),requirements=['MERGE-LENGTH'],description='length priority from inactive slot1: exact MIDI, duration and independent K1/normal modes'),
