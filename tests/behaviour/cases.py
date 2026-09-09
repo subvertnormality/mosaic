@@ -1,3 +1,4 @@
+from recording_lifetimes import recording_stop_safety
 from trig_parameter_interactions import sparse_editor_domain
 from trig_parameter_interactions import cc_encoder_domain
 from recording_lifetimes import recording_lifetime,recording_nrpn
@@ -2786,6 +2787,7 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-REC-PARAM-022':dict(run=recording_stop_safety,requirements=['REC-PARAM-AUTOMATION','REC-ARM','NAV-TRANSPORT'],description='Long Stop under Shift press to stop clears pending parameter recording while retaining arm and previously recorded steps'),
  'M-PARAM-031':dict(run=lambda c:sparse_editor_domain(c,'NS6'),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Native NS6 sparse/singleton encoder range, alternating normal/fine input with both clamps, Off and exact emitted MIDI'),
  'M-PARAM-030':dict(run=lambda c:sparse_editor_domain(c,'NS0'),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Native NS0 sparse/singleton encoder range, alternating normal/fine input with both clamps, Off and exact emitted MIDI'),
  'M-PARAM-029':dict(run=lambda c:sparse_editor_domain(c,'SparseHigh'),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Native SparseHigh sparse/singleton encoder range, alternating normal/fine input with both clamps, Off and exact emitted MIDI'),

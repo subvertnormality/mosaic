@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "0071-0073 scoped candidates reviewed and validated:54native passes,490unit/integration tests,33392official-Control positions. Continue recording StopSafety long-press cleanup, fullten-slot/mute/song/undo/persistence/reset and exact-boundary domains. Broader trig parameters/scale merging/manual and emulator gates remain incomplete; no refactor yet.",
+  "next_action": "Stop Safety cleanup validated in both modes, including retained-arm recording and ordinary Stop regression;490units pass. Continue full ten-slot, mute, song, undo, persistence, reset and exact-boundary recording interactions. Full manual and emulator gates remain incomplete.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -134,5 +134,6 @@
   "stock_lock_validation": "docs/testing/stock-pitch-lock-validation.json",
   "probability_validation": "docs/testing/probability-validation.json",
   "live_recording_validation": "docs/testing/live-parameter-recording-validation.json",
-  "recording_resume_validation": "docs/testing/recording-resume-validation.json"
+  "recording_resume_validation": "docs/testing/recording-resume-validation.json",
+  "recording_stop_safety_validation": "docs/testing/recording-stop-safety-validation.json"
 }

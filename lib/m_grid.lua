@@ -166,6 +166,7 @@ local function register_press()
         if (x == 1) then
           if params:get("stop_safety") == 2 then
             clock.transport:stop()
+            recorder.clear_all_trig_lock_dirty()
             tooltip:show("Stopping playback")
             m_grid.set_menu_button_state()
           end
