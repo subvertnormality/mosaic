@@ -2059,8 +2059,13 @@
         "MAN-031"
       ],
       "statement": "Pattern notes represent distances from channel scale root.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-MERGE-016",
+        "M-MERGE-019",
+        "M-MERGE-043",
+        "M-MERGE-044"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Positive/negative/zero degrees across scales, roots, rotations and channel assignments.",
       "oracles": [
         "Literal hand-worked C-major/E-minor examples plus independent pitch model and MIDI."
@@ -2075,7 +2080,8 @@
         "end_line": 453,
         "text": "In _Mosaic_, pattern notes aren't strictly bound to a single scale. Instead, they are valued by their position within the currently active scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D.\n\nYou've seen in the [Harmony Design](#harmony-design) section that it's possible to sequence scale and degree changes, and this affects the notes your patterns will play. When adding notes to patterns, consider that they represent the harmony of your song and map to what traditionally would be called the rhythm section. It is possible to create melodies using patterns, but it is difficult to do so in a deliberate way as your scale progressions will alter the tonality of your pattern. We'll learn about the recommended way to deliberate [Melodies](#masks) later.\n\nSelect the note editor by pressing the third key in the global menu button cluster on the grid again when already in thr pattern trigger editor.\n\nThis space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. Whilst holding shift (K1), any entered note is automatically duplicated across all 4 step screens. \n\n<img alt=\"Pattern editor note select faders\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-select-faders.svg\" width=\"300\" />\n\nRemember, each note you select links back to the root of the scale you're working within. The scale is applied to the channel, not the pattern. You must start to think about your patterns as being disconnected from each channel. This is why we say _Mosaic_ is an intentioned generative sequencer. Expect happy accidents. The channel grid viewer on the Norns screen can help you here.",
         "sha256": "95258b380872f2eef224939a9a9b5422c29efe98ec2ae96213a4dfbd23282ed0"
-      }
+      },
+      "coverage_reconciliation": "Signed and extreme degrees, all ten scales and selected root/degree/rotation interactions; all channel assignments and full discrete harmony domains remain."
     },
     {
       "id": "PAT-NOTE-CELLS",
@@ -5281,8 +5287,11 @@
         "MAN-069"
       ],
       "statement": "Channel scale locks override global locks/default; independent global track rate/length.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-SCALE-002",
+        "M-SCALE-004"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "All16 slots; staggered locks, channel wraps, coprime rates/lengths; clear/reset.",
       "oracles": [
         "Independent piecewise scale timeline and every emitted pitch."
@@ -5297,7 +5306,8 @@
         "end_line": 854,
         "text": "[Scale locks](#scale-locks) can be set to apply a scale globally or to a single channel, activating at a designated step. Global locks persist until another global lock or the global scale track wraps. Channel-lock duration follows the Scales Lock Until Pattern End option. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.\n\n<img alt=\"Scale editor step select buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg\" width=\"300\" />\n\nYou can also adjust the rate of the global scale track and set its length independently of other channels, enabling chord progressions that extend beyond a single pattern. This feature offers substantial flexibility for crafting intricate chord progressions and varying patterns.",
         "sha256": "7c8e7c60cc1784df1fed43972072b28e250b5e5b6770f37e629e3c18253ba4ba"
-      }
+      },
+      "coverage_reconciliation": "Channel/global lifetime and highest-slot override/clear tested; staggered coprime rate/length timelines and every lock slot remain."
     },
     {
       "id": "TRANSPOSE-GLOBAL",
@@ -5966,8 +5976,12 @@
         "MAN-097"
       ],
       "statement": "Snap masks defaults on, applies scale without degree/rotation.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-MASK-019",
+        "M-MASK-020",
+        "M-MASK-021"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "All scales/roots; negative/positive notes; paired full-quantise and local override.",
       "oracles": [
         "Independent pitch membership and mapped pitches; no accidental full quantisation."
@@ -5982,7 +5996,8 @@
         "end_line": 1096,
         "text": "##### Snap Note Masks to Scale\n\n\"Snap Note Masks to Scale\" is on by default. With this setting enabled, note masks snap to the currently selected scale, but are not altered by scale degree or rotation adjustments.",
         "sha256": "0109d37092ca78ce036dff3d76318d19aad4c11f816ca8b5a3626a39bb07ed05"
-      }
+      },
+      "coverage_reconciliation": "All ten scales at C and D roots, snap off/on restoration and degree/rotation independence; remaining roots, pitch boundaries and interacting masks remain."
     },
     {
       "id": "OPT-MASK-QUANTISE",
@@ -5990,8 +6005,10 @@
         "MAN-098"
       ],
       "statement": "Full mask quantisation defaults off and overrides snap when enabled.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-MASK-021"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "All combinations with snap/step Fully Quantise Mask; degree/rotation/transpose.",
       "oracles": [
         "Independent precedence matrix and literal pitch examples."
@@ -6006,7 +6023,8 @@
         "end_line": 1100,
         "text": "##### Quantise Note Masks\n\n\"Quantise Note Masks\" is off by default. With this setting enabled, all note masks are fully quantised to the currently selected scale and are altered by scale degree and transposition adjustments. Overrides the Snap Note Mask to Scale setting.",
         "sha256": "ab82d58c2108bd52c694263d17421cdcbe4e819633b487e621da9c4b306c936c"
-      }
+      },
+      "coverage_reconciliation": "Global/channel/step Off/On/X precedence and clearing under degree/rotation tested; other harmony domains and combinations remain."
     },
     {
       "id": "OPT-SCALE-LIFETIME",
@@ -6088,8 +6106,14 @@
         "MAN-102"
       ],
       "statement": "Merged-to-pentatonic defaults on.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-MERGE-011",
+        "M-MERGE-019",
+        "M-MERGE-023",
+        "M-MERGE-043",
+        "M-MERGE-044"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Every note merge, one/multiple assigned patterns, priority unassigned pattern, all-pentatonic.",
       "oracles": [
         "Independent pitch mapping with exact setting defaults and output."
@@ -6104,7 +6128,8 @@
         "end_line": 1116,
         "text": "##### Lock Merged to Pentatonic\n\nSimilarly, \"Lock merged to pent.\" is on by default and ensures notes modified by merge modes stick to the pentatonic version of the currently selected scale. Mosaic uses these application-specific five-note selections (one-based degrees of each named seven-note scale): Major and Harmonic Major 1/2/3/5/6; Minor, Harmonic Minor and Melodic Minor 1/3/4/5/7; Dorian 1/2/4/5/7; Phrygian 1/3/4/6/7; Lydian 2/3/5/6/7; Mixolydian 1/2/4/5/6; Locrian 2/3/4/6/7. The named scale\u2019s alterations apply; these selections do not always retain the tonic or avoid semitones. Merged values remain seven-note scale degrees, not five-note indices. Their scale pitches snap to the nearest selected pitch repeated across octaves, choosing the lower pitch on an exact tie; snapping may cross an octave boundary. For example, Lydian C snaps to the B below it, while Melodic Minor A snaps down to G rather than equally distant B. The scale root is used when set, otherwise the song root, with the effective octave offset applied afterward.",
         "sha256": "566d425b30fcc20c74e19fedfe86e6afc32220f4b104c3e8d0769e25122ed50a"
-      }
+      },
+      "coverage_reconciliation": "All ten pentatonic selections and numeric merge modes plus selected harmony restoration; all-pentatonic interaction, single-source and priority combinations remain."
     },
     {
       "id": "OPT-KEYBOARD-WHITE",
@@ -6399,8 +6424,11 @@
         "CHEAT-ALL"
       ],
       "statement": "Three merge buttons select trig/note/velocity; shift modifies third to length.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-MERGE-012",
+        "M-MERGE-013"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Each full mode cycle; K1 held/released around press; priority-pattern combination; no cross-mode mutation.",
       "oracles": [
         "Mode LEDs/screen and independent merged MIDI table for each control."
@@ -6414,7 +6442,8 @@
         "line": 842,
         "text": "         <div class=\"command-text\">Merge Modes: 1: trig, 2: note, 3: velocity. Hold shift for length merge modes using button 3.</div>",
         "sha256": "e2dfa142b90faf84c517d88615c851693d240fa1c5e7b86115f35700b74b432e"
-      }
+      },
+      "coverage_reconciliation": "Repeated velocity and shifted-length mode cycles tested; full trig/note cross-mode isolation and K1 release-order matrix remain."
     },
     {
       "id": "NAV-FINE-K3",
