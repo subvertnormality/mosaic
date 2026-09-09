@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "MASK002-006 all10native D/R validated and manual clarified via Codex. Next nonempty default preservation and second-channel isolation, remaining chord slots/boundary steps and recorded-mask clearing. Broader manual/emulator gates open.",
+  "next_action": "Nonempty defaults007-010 and shared006 all10D/R validated. Next populated second-channel isolation and trig-default silence with positive transport witness; remaining chord slots/boundaries/recorded masks and broad gates open.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -161,5 +161,6 @@
   "simultaneous_note_validation": "docs/testing/simultaneous-note-validation.json",
   "fractional_mask_merge_validation": "docs/testing/fractional-mask-merge-validation.json",
   "length_mask_hierarchy_validation": "docs/testing/length-mask-hierarchy-validation.json",
-  "mask_clearing_validation": "docs/testing/mask-clearing-validation.json"
+  "mask_clearing_validation": "docs/testing/mask-clearing-validation.json",
+  "mask_default_preservation_validation": "docs/testing/mask-default-preservation-validation.json"
 }
