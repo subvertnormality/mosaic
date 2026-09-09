@@ -1,4 +1,4 @@
-def numeric_note_merge(c,foreign_velocity=False,pentatonic=False):
+def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=False):
     from cases import set_mosaic_options,assert_durations
     c.configure();set_mosaic_options(c,[('Lock merged to pent.',pentatonic)])
     sources=[(0,2,4,6),(2,4,6,0),(6,6,6,6)]
@@ -32,6 +32,27 @@ def numeric_note_merge(c,foreign_velocity=False,pentatonic=False):
         for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
         c.results.append(dict(kind='numeric-note-merge',mode=mode,assigned_patterns=[1,2],velocity_source=3 if foreign_velocity else 1,pitches=pitches,passed=True))
 
+    if all_scales:
+        assert not pentatonic
+        # Musical interval fixtures, independent of Mosaic/official quantiser code.
+        scales=[('major',[0,2,4,5,7,9,11]),('harmonic-major',[0,2,4,5,7,8,11]),
+                ('minor',[0,2,3,5,7,8,10]),('harmonic-minor',[0,2,3,5,7,8,11]),
+                ('melodic-minor',[0,2,3,5,7,9,11]),('dorian',[0,2,3,5,7,9,10]),
+                ('phrygian',[0,1,3,5,7,8,10]),('lydian',[0,2,4,6,7,9,11]),
+                ('mixolydian',[0,2,4,5,7,9,10]),('locrian',[0,1,3,5,6,8,10])]
+        for number,(scale,intervals) in enumerate(scales):
+            if number:
+                c.tap(4,8);c.enc(3,1);c.key(3);c.tap(3,8)
+            # Enter with Higher selected. Cycle through Lower/Average and back.
+            for mode,level,degrees in [('higher',5,[3,5,7,9]),('lower',8,[-1,1,3,-3]),('average',2,[1,3,5,3])]:
+                if mode!='higher':c.tap(15,8)
+                c.led_values([(15,8)],[level])
+                pitches=[60+12*(d//7)+intervals[d%7] for d in degrees]
+                notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)
+                assert_durations(c,notes,[1]*8)
+                for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+                c.results.append(dict(kind='numeric-merge-all-scales',scale=scale,mode=mode,degrees=degrees,pitches=pitches,passed=True))
+            c.tap(15,8)
     if pentatonic:
         def verify(label,pitches):
             notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)

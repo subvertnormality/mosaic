@@ -1,0 +1,33 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-019",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/54bbffe57a844d7aae2bc057d03b81d1/manifest.json",
+      "sha256": "3e5f4d181be45c443b5461909491c9359c81070a65aad142670b6f6639b51ecf",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-019",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/3f4c29a3220244468fda7ebca24de2a6/manifest.json",
+      "sha256": "38c74ff982a86d4672e1c7b5f328266f689b6355632aab7bf1b95a7e11194ee8",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "semantic_basis": "Standard independent seven-note interval tables; literal merged degrees for Average/Higher/Lower",
+  "assertions": [
+    "All ten scales: major, harmonic major, minor, harmonic minor, melodic minor, dorian, phrygian, lydian, mixolydian, locrian",
+    "Thirty scale/mode scenarios per clock mode, including negative Lower degrees",
+    "Two complete phrases plus closing onset per scenario",
+    "Exact pitch/velocity/duration and1/6-second onset timing",
+    "Unassigned velocity-priority source remains isolated"
+  ],
+  "limitations": [
+    "Pentatonic off in this matrix; all-scale pentatonic and root/rotation combinations remain pending",
+    "Full manual, experimental clock admission and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}
