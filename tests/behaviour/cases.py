@@ -1,3 +1,4 @@
+from numeric_merging import fractional_length_mask_merge
 from numeric_merging import numeric_length_merge
 from numeric_merging import velocity_zero_boundary
 from numeric_merging import lydian_octave_boundary
@@ -2795,6 +2796,9 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-MERGE-039':dict(run=lambda c:fractional_length_mask_merge(c,0),requirements=['MERGE-LENGTH','MASK-ATTRIBUTES'],description='Fractional channel length masks override changing merge modes; removal restores exact numeric duration including nonpositive gates'),
+ 'M-MERGE-040':dict(run=lambda c:fractional_length_mask_merge(c,1),requirements=['MERGE-LENGTH','MASK-ATTRIBUTES'],description='Fractional channel length masks override changing merge modes; removal restores exact numeric duration including nonpositive gates'),
+ 'M-MERGE-041':dict(run=lambda c:fractional_length_mask_merge(c,2),requirements=['MERGE-LENGTH','MASK-ATTRIBUTES'],description='Fractional channel length masks override changing merge modes; removal restores exact numeric duration including nonpositive gates'),
  'M-MERGE-035':dict(run=lambda c:numeric_length_merge(c,3,strum=True,simultaneous=True,same_pitch=False),requirements=['MERGE-LENGTH','CHORD-STRUM'],description='Simultaneous zero/negative ordinary voices preserve exact interleaved On/Off order, including identical MIDI pitches'),
  'M-MERGE-036':dict(run=lambda c:numeric_length_merge(c,4,strum=True,simultaneous=True,same_pitch=False),requirements=['MERGE-LENGTH','CHORD-STRUM'],description='Simultaneous zero/negative ordinary voices preserve exact interleaved On/Off order, including identical MIDI pitches'),
  'M-MERGE-037':dict(run=lambda c:numeric_length_merge(c,3,strum=True,simultaneous=True,same_pitch=True),requirements=['MERGE-LENGTH','CHORD-STRUM'],description='Simultaneous zero/negative ordinary voices preserve exact interleaved On/Off order, including identical MIDI pitches'),

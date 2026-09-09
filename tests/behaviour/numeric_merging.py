@@ -328,3 +328,39 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
             assert len(events)==2*len(notes),events
             assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for note in notes for msg in (note['bytes'],[128,note['bytes'][1],127])],events
         c.results.append(dict(kind='numeric-length-merge',source_steps=sources,mode=mode,expected_steps=length,passed=True))
+
+
+def fractional_length_mask_merge(c,variant=0):
+    from cases import assert_durations,length_mask_display
+    sources,merged,detents,label,mask=[([2,4],[3,5,1],8,'1/2',.5),([1,4],[3,6,0],1,'1/24',1/24),([2,4],[3,5,1],15,'1.25',1.25)][variant]
+    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    for slot,length in enumerate(sources,1):
+        c.tap(slot,1)
+        if slot>1:c.tap(1,4)
+        if length>1:c.hold_tap((1,4),(length,4))
+        c.led_values([(x,4) for x in range(1,9)],[15]+[5]*(length-1)+[2]*(8-length))
+    c.tap(3,8);c.tap(2,2);c.tap(14,8);c.tap(14,8)
+    c.hold_tap((15,8),(1,2));c.hold_tap((16,8),(1,2))
+    c.enc(1,-4);c.enc(2,2);length_mask_display(c,'X')
+    c.enc(3,detents);length_mask_display(c,label)
+    key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    modes=list(zip(['average','longer','shorter'],[2,5,8],merged))+[('average',2,merged[0])]
+    for index,(mode,level,unmasked) in enumerate(modes):
+        if index:
+            c.action(type='key',n=1,state=1);c.elapse(.3)
+            try:c.tap(16,8);c.led_values([(16,8)],[level])
+            finally:c.action(type='key',n=1,state=0)
+        # Change merge mode while the mask is active, then remove the mask.
+        for masked,duration in [(True,mask),(False,unmasked)]:
+            if not masked:c.enc(3,-detents);length_mask_display(c,'X')
+            else:length_mask_display(c,label)
+            marker=c.snapshot()['midi_count']
+            notes=c.playback([(1,[144,60,127])],cycles=2,timeout=5)
+            assert_durations(c,notes,[duration]*2)
+            for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i*8/6)<=tolerance
+            events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
+            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in notes for msg in ([144,60,127],[128,60,127])],events
+            c.results.append(dict(kind='fractional-length-mask-merge',sources=sources,mode=mode,masked=masked,expected_steps=duration,passed=True))
+        c.enc(3,detents);length_mask_display(c,label)

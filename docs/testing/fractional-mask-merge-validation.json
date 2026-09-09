@@ -1,0 +1,65 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-039",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c070307d86974e2caa6ad22ed1020de8/manifest.json",
+      "sha256": "5a5ea683a232ffcc79e42a0835f198e3b5baaf955843df2fd98bcdbe2eebf2c7",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-040",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/5082f0df7b2d4396a6492fcef163e808/manifest.json",
+      "sha256": "2e101deff9ad8a7f9199c8a3ca80885f4f44a7be192ab9d4b6e2c0da0068efd1",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-041",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/5a0e614aae91493fa5d724cc8e91808f/manifest.json",
+      "sha256": "c199cf81806332bc0dafb30d461ccde52482a3c2493099cb0be132bd6bbc4779",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-039",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0b07f3751e594e439ddedcead4909d85/manifest.json",
+      "sha256": "cf1f92726866ebb291fe709d2cb232047f41c7b8f843b09aa977381140216714",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-040",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ebaa9cbd0e8643a0b12ea8a8396af19b/manifest.json",
+      "sha256": "0180e7c7d0bd8ca72b7ffcfd7e6d3d5e0ece312c7a69bd9c4edf7f32a527438e",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-041",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/02ae78aef8fa4348bca507043c0ffeaa/manifest.json",
+      "sha256": "aaffc89531e29087612cb45e5c3ad949901878448d31daa9d2efa81f19562ddf",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "mask_steps": [
+    0.5,
+    0.041666666666666664,
+    1.25
+  ],
+  "assertions": [
+    "Channel length mask overrides Average/Longer/Shorter and returnedAverage",
+    "Merge mode changes while mask is active; removing mask restores numeric duration",
+    "Positive and negative unmasked merge results",
+    "Physical editor display, exact MIDI route/pitch/velocity, complete release order, two cycles and closing onset, eight-step phrase timing"
+  ],
+  "limitations": [
+    "Step-mask versus channel-mask hierarchy and recorded fractional mask interactions remain pending",
+    "Fractional source-pattern lengths are distinct from keyboard-recorded masks",
+    "Full manual, experimental clock admission and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

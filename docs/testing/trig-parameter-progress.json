@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Native simultaneous035-038 D/R validated. Inspect fractional length domains: keyboard recording writes step length masks, not source-pattern lengths. Next high-value guard is fractional mask precedence over numeric length merging and restore behavior; assess persisted fractional source compatibility separately. Broader manual/emulator gates remain open.",
+  "next_action": "Fractional channel length masks039-041 D/R validated. Next held-step mask precedence over channel mask and independent clearing/restoration across merge modes; recorded fractional mask and persisted fractional source domains remain separate. Broader manual/emulator gates open.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -158,5 +158,6 @@
   ],
   "nonpositive_arp_validation": "docs/testing/nonpositive-arp-validation.json",
   "negative_strum_validation": "docs/testing/negative-strum-validation.json",
-  "simultaneous_note_validation": "docs/testing/simultaneous-note-validation.json"
+  "simultaneous_note_validation": "docs/testing/simultaneous-note-validation.json",
+  "fractional_mask_merge_validation": "docs/testing/fractional-mask-merge-validation.json"
 }
