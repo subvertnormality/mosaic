@@ -274,3 +274,8 @@ down. README now states the scope explicitly. NativeMASK002-006 validate five
 attributes, adjacent-step isolation, held-step shift precedence and clear with
 empty defaults. Nonempty-default and other-channel native checks remain pending;
 source inspection and semantic review are not substituted for that acceptance.
+
+
+## Quantisation X inheritance
+
+Candidate0079 recognizes channel X0 in the local full-mask inheritance clause. Codex01a08543-a3a5-7902-bc8b-7ca2ee11428f confirmed the sentinel mismatch after the historical domain change. Explicit Off1 and On2 retain their meaning. Explicit step X bypasses the channel to use global; clearing removes the lock and restores channel inheritance. Native MASK021/022 and the24-combination actual-step unit matrix cover these distinctions. No generic stock-parameter resolution or Digitakt NRPN policy change.

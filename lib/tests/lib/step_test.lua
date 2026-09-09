@@ -1916,3 +1916,43 @@ function test_nonpositive_simultaneous_note_order()
     end
   end
 end
+
+
+function test_full_mask_quantisation_assigned_default_and_step_precedence()
+  for global_value = 1, 2 do
+    for default_value = 0, 2 do
+      for local_value = -1, 2 do
+        setup()
+        local test_pattern = program.initialise_default_pattern()
+        test_pattern.note_values[1] = 0
+        test_pattern.note_mask_values[1] = 60
+        test_pattern.lengths[1] = 1
+        test_pattern.trig_values[1] = 1
+        test_pattern.velocity_values[1] = 100
+        program.get_song_pattern(1).patterns[1] = test_pattern
+        local channel = program.get_channel(1, 1)
+        fn.add_to_set(channel.selected_patterns, 1)
+        channel.trig_lock_params[1] = {id='fully_quantise_mask', param_id='test_full_mask', off_value=0}
+        params:set('test_full_mask', default_value)
+        params:set('quantiser_fully_act_on_note_masks', global_value)
+        params:set('quantiser_act_on_note_masks', 2)
+        params:set('merged_lock_to_pentatonic', 1)
+        if local_value >= 0 then program.add_step_param_trig_lock(1, 1, local_value) end
+        pattern.update_working_patterns()
+        program.get().default_scale = 1
+        local scale = program.get_scale(1)
+        scale.root_note = 0
+        scale.chord = 2 -- C major, degreeII: fully processed C becomes D.
+        scale.chord_degree_rotation = 0
+        scale.transpose = 0
+        local selected = local_value >= 0 and local_value or default_value
+        local full = selected == 2 or (selected == 0 and global_value == 2)
+        step.handle(1, 1)
+        luaunit.assert_equals(#midi_note_on_events, 1)
+        luaunit.assert_equals(midi_note_on_events[1][1], full and 62 or 60,
+          'global='..global_value..' default='..default_value..' step='..local_value)
+        luaunit.assert_equals(midi_note_on_events[1][2], 100)
+      end
+    end
+  end
+end

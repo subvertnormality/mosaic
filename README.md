@@ -835,7 +835,7 @@ The Mute Root Note param allows you to silence the root note of a chord while al
 
 ##### Fully Quantise Mask
 
-The Fully Quantise Mask param controls whether note masks on a step are fully quantised to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantised to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes.
+The Fully Quantise Mask param controls whether note masks on a step are fully quantised to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantised to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes. Channel X uses the global Quantise note masks setting; explicit Off and On override it. An explicit step X uses the global setting directly, bypassing the channel value. Clearing that step lock instead restores the channel value (and therefore the global setting if the channel is X).
 
 ### Scale Editor
 

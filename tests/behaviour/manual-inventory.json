@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "1efbf68a3a8592dc0355138588ca64c9922f3ad43694af954cc87f8d05fc9d88",
+  "manual_sha256": "5cc3997efcd19185beb232fe51c2f69ccc80c29b3ec3625899bb05d5f2d2106f",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -905,7 +905,7 @@
       "level": 5,
       "start_line": 836,
       "end_line": 839,
-      "text_sha256": "2f4276b1da63dc93bc149481f4f75e3c9ec4ac85fe649f54b0ef72bc07d7e1b6",
+      "text_sha256": "1793e941f15977ef8620756e77d4d5ffff2f6d3283ff69fc590dddd13a55714f",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-FULL-QUANTISE"
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "1efbf68a3a8592dc0355138588ca64c9922f3ad43694af954cc87f8d05fc9d88"
+      "sha256": "5cc3997efcd19185beb232fe51c2f69ccc80c29b3ec3625899bb05d5f2d2106f"
     },
     {
       "path": "cheat_sheet.html",
@@ -2605,10 +2605,11 @@
       "statement": "Default masked notes align with scale but not degree or rotation; settings can disable quantisation.",
       "cases": [
         "M-MASK-019",
-        "M-MASK-020"
+        "M-MASK-020",
+        "M-MASK-021"
       ],
       "status": "partial-domain-coverage",
-      "domain": "MASK019/020 validate all ten scales at roots C/D with accidental step note masks: snapping On, Off and restored On; exact notes, velocities, durations and timing in both clocks, native menu label/value assertions. Remaining degree/rotation independence, full-quantisation precedence, pitch endpoints, other roots and live edits.",
+      "domain": "MASK019/020 validate all ten scales at roots C/D with accidental step note masks: snapping On, Off and restored On; exact notes, velocities, durations and timing in both clocks, native menu label/value assertions. Remaining degree/rotation independence, full-quantisation precedence, pitch endpoints, other roots and live edits. MASK021/022 cover C-major degreeII/rotation1, default snapping independence, full quantisation and global/channel/step X-Off-On precedence, explicit stepX versus clear, and inherited root/chord pitch processing in both clocks. Remaining broader scale/root/degree/rotation domains, accidental snap-off/full interaction, live edits and masked arp timing.",
       "oracles": [
         "Independently mapped pitches and mask display; baseline documented distinctions."
       ],
@@ -2740,10 +2741,11 @@
         "M-MASK-014",
         "M-MASK-015",
         "M-MASK-016",
-        "M-MASK-018"
+        "M-MASK-018",
+        "M-MASK-022"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Native exact polyphonic MIDI and durations cover single chord slots, all four simultaneously, real recorded three-note chord and clearing. Keyboard extra-input attempts/repeated pitches and direct chord display assertions remain pending; strum/velocity parameter cases require separate reconciliation.",
+      "domain": "Native exact polyphonic MIDI and durations cover single chord slots, all four simultaneously, real recorded three-note chord and clearing. Keyboard extra-input attempts/repeated pitches and direct chord display assertions remain pending; strum/velocity parameter cases require separate reconciliation. MASK021/022 cover C-major degreeII/rotation1, default snapping independence, full quantisation and global/channel/step X-Off-On precedence, explicit stepX versus clear, and inherited root/chord pitch processing in both clocks. Remaining broader scale/root/degree/rotation domains, accidental snap-off/full interaction, live edits and masked arp timing.",
       "oracles": [
         "Exact chord note multiset and ordered releases, no leaked voices; chord display."
       ],
@@ -5084,9 +5086,12 @@
         "MAN-068"
       ],
       "statement": "Fully Quantise Mask includes scale degree/rotation and overrides global setting per channel/step.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Global/local/step precedence; all scale domains; unset/off/on; mid-pattern locks.",
+      "cases": [
+        "M-MASK-021",
+        "M-MASK-022"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Global/local/step precedence; all scale domains; unset/off/on; mid-pattern locks. MASK021/022 cover C-major degreeII/rotation1, default snapping independence, full quantisation and global/channel/step X-Off-On precedence, explicit stepX versus clear, and inherited root/chord pitch processing in both clocks. Remaining broader scale/root/degree/rotation domains, accidental snap-off/full interaction, live edits and masked arp timing.",
       "oracles": [
         "Independent pitch mapping and selected parameter/lock display."
       ],
@@ -5098,8 +5103,8 @@
         "path": "README.md",
         "line": 836,
         "end_line": 838,
-        "text": "##### Fully Quantise Mask\n\nThe Fully Quantise Mask param controls whether note masks on a step are fully quantised to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantised to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes.",
-        "sha256": "cad603c2d099fdbf52bfa6b6b08efebd5397eb8f649be906603bff2032c4d6fe"
+        "text": "##### Fully Quantise Mask\n\nThe Fully Quantise Mask param controls whether note masks on a step are fully quantised to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantised to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes. Channel X uses the global Quantise note masks setting; explicit Off and On override it. An explicit step X uses the global setting directly, bypassing the channel value. Clearing that step lock instead restores the channel value (and therefore the global setting if the channel is X).",
+        "sha256": "109582348b2bdb8b324c1c7622fb034ade526f26b8609eb82899d47df51506b2"
       }
     },
     {

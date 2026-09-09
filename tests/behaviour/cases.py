@@ -1,3 +1,5 @@
+from mask_quantisation import mask_full_chord_inheritance
+from mask_quantisation import mask_full_quantisation
 from mask_quantisation import mask_scale_snap
 from mask_clearing import mask_clear_recorded_chord
 from mask_clearing import mask_clear_last_steps
@@ -3295,6 +3297,8 @@ CASES={
  'M-TIME-011':dict(run=lambda c:pending_mask_lengths(c,True),requirements=['MASK-ATTRIBUTES','CH-TEMPO','OPT-REPEAT-RESET'],description='Maximum128-step notes span eighteen resets; complete initial releases precede coincident retriggers, and Stop drains remaining voices'),
  'M-MASK-013':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=2),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE','MASK-CHORD'],description='Chord mask slot2: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
  'M-MASK-014':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=3),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE','MASK-CHORD'],description='Chord mask slot3: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
+ 'M-MASK-022':dict(run=mask_full_chord_inheritance,requirements=['MASK-FULL-QUANTISE','MASK-CHORD'],description='Assigned quantisation X inheritance applies to masked root and chord voices across fresh assignment, Off, On and returned X with exact MIDI timing'),
+ 'M-MASK-021':dict(run=mask_full_quantisation,requirements=['MASK-SCALE','MASK-FULL-QUANTISE'],description='Degree/rotation independence and full-mask global/channel/step off-on-unset precedence with exact MIDI timing'),
  'M-MASK-020':dict(run=lambda c:mask_scale_snap(c,2),requirements=['MASK-SCALE'],description='Root2 all ten scales: accidental note masks snap on, raw off, restored on with exact MIDI velocities and timing'),
  'M-MASK-019':dict(run=lambda c:mask_scale_snap(c,0),requirements=['MASK-SCALE'],description='Root0 all ten scales: accidental note masks snap on, raw off, restored on with exact MIDI velocities and timing'),
  'M-MASK-018':dict(run=mask_clear_recorded_chord,requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','REC-LIVE-NOTES','MASK-STEP-ENTRY','MASK-CHORD'],description='Clear a real keyboard-recorded chord: restore source note velocity and gate, remove chord voices, preserve neighbour override, then restore original pattern with exact timing'),

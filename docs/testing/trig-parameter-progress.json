@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "MASK019/020 all120 phases across four native runs passed. Next degree/rotation independence and full-mask quantisation global/channel/step overrides; remaining manual and emulator gates incomplete.",
+  "next_action": "0079 inheritance fix validated with six native runs and497units. Continue broader mask quantisation domains and gesture/keyboard entry, then remaining manual and emulator gates.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -169,5 +169,6 @@
   "combined_chord_clearing_validation": "docs/testing/combined-chord-clearing-validation.json",
   "boundary_mask_clearing_validation": "docs/testing/boundary-mask-clearing-validation.json",
   "recorded_mask_clearing_validation": "docs/testing/recorded-mask-clearing-validation.json",
-  "mask_scale_snap_validation": "docs/testing/mask-scale-snap-validation.json"
+  "mask_scale_snap_validation": "docs/testing/mask-scale-snap-validation.json",
+  "mask_unset_validation": "docs/testing/mask-unset-validation.json"
 }

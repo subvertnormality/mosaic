@@ -808,7 +808,7 @@ function step.handle(c, current_step)
 
     if note_mask_value and note_mask_value > -1 then
       is_mask = true
-      fully_quantise_mask = (params:get("quantiser_fully_act_on_note_masks") == 2 and (fully_quantise_mask == -1 or fully_quantise_mask == nil)) or fully_quantise_mask == 2
+      fully_quantise_mask = (params:get("quantiser_fully_act_on_note_masks") == 2 and (fully_quantise_mask == 0 or fully_quantise_mask == -1 or fully_quantise_mask == nil)) or fully_quantise_mask == 2
       relative_note_mask_value, octave_mod_offset = quantiser.translate_note_mask_to_relative_scale_position(note_mask_value, channel.step_scale_number)
 
       if fully_quantise_mask then
