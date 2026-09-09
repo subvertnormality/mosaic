@@ -2841,7 +2841,10 @@ from song_length_domain import song_length_domain
 
 from song_length_sparse import sparse_song_lengths
 
+from song_repetitions import song_repetition_domain
+
 CASES={
+ 'M-SONG-SETTINGS-001':dict(run=song_repetition_domain,requirements=['SONG-SETTINGS','SONG-LENGTH','SONG-ADVANCE','SONG-SLOTS'],description='All16 slot1 repetition counts with unchanged slot2 repeat1, octave fingerprints, exact transition indices, phase and MIDI releases'),
  'M-SONG-LENGTH-002':dict(run=sparse_song_lengths,requirements=['SONG-LENGTH','CH-RANGE'],description='Sparse four-trig full-range channel at global1/2/63/64 then shrink2, independent silent-gap/repeat timing and every MIDI release'),
  'M-SONG-LENGTH-001':dict(run=song_length_domain,requirements=['SONG-LENGTH','CH-RANGE'],description='All64 global fader values, lower/upper clamp attempts, shrink/full restoration through exact tooltip and all64 channel LEDs'),
  'M-SHUFFLE-009':dict(run=lambda c:shuffle_field_inheritance(c,'feel'),requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Inherited feel: untouched X, minimum/maximum local overrides and restored X under nondefault global Shuffle, exact MIDI phase and gates'),

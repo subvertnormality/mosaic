@@ -5388,7 +5388,8 @@
       "cases": [
         "M-TIME-005",
         "M-PATCH-027",
-        "M-PATCH-043"
+        "M-PATCH-043",
+        "M-SONG-SETTINGS-001"
       ],
       "status": "in_progress",
       "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
@@ -5419,7 +5420,8 @@
         "M-TIME-007",
         "M-TIME-009",
         "M-PATCH-026",
-        "M-PATCH-027"
+        "M-PATCH-027",
+        "M-SONG-SETTINGS-001"
       ],
       "status": "in_progress",
       "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
@@ -5451,7 +5453,8 @@
         "M-RANGE-GLOBAL-004",
         "M-RANGE-LIVE-002",
         "M-SONG-LENGTH-001",
-        "M-SONG-LENGTH-002"
+        "M-SONG-LENGTH-002",
+        "M-SONG-SETTINGS-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Every length; shrink/expand; wrapped/outside channel ranges; independent one-step case.",
@@ -5477,8 +5480,10 @@
         "MAN-076"
       ],
       "statement": "Norns pages set per-sequence repetitions and tempo; manual slot control when song mode off.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-SONG-SETTINGS-001"
+      ],
+      "status": "in_progress",
       "domain": "All repetition values; tempo bounds; switching edited/playing slot; mode toggles at boundary.",
       "oracles": [
         "Displayed stored values and exact real/controlled timing/sequence effects."

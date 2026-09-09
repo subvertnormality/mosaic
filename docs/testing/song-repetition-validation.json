@@ -1,0 +1,412 @@
+{
+  "status": "scoped-behaviour-validated",
+  "base": "197e31be478cbcec8931e4f91618be5470b9d6de",
+  "production_changed": false,
+  "native_runs": [
+    {
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2bbcf8e0d2354a379d2798ee3932a7e1/manifest.json",
+      "sha256": "4d505190d30997c579283f267feba9723a6f34bebd9749fea65018a63aeff884",
+      "stages": [
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 1,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            2,
+            4
+          ],
+          "onsets": 5,
+          "release_checks": 5,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 2,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            4,
+            6
+          ],
+          "onsets": 7,
+          "release_checks": 7,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 3,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            6,
+            8
+          ],
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 4,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            8,
+            10
+          ],
+          "onsets": 11,
+          "release_checks": 11,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 5,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            10,
+            12
+          ],
+          "onsets": 13,
+          "release_checks": 13,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 6,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            12,
+            14
+          ],
+          "onsets": 15,
+          "release_checks": 15,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 7,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            14,
+            16
+          ],
+          "onsets": 17,
+          "release_checks": 17,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 8,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            16,
+            18
+          ],
+          "onsets": 19,
+          "release_checks": 19,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 9,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            18,
+            20
+          ],
+          "onsets": 21,
+          "release_checks": 21,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 10,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            20,
+            22
+          ],
+          "onsets": 23,
+          "release_checks": 23,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 11,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            22,
+            24
+          ],
+          "onsets": 25,
+          "release_checks": 25,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 12,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            24,
+            26
+          ],
+          "onsets": 27,
+          "release_checks": 27,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 13,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            26,
+            28
+          ],
+          "onsets": 29,
+          "release_checks": 29,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 14,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            28,
+            30
+          ],
+          "onsets": 31,
+          "release_checks": 31,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 15,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            30,
+            32
+          ],
+          "onsets": 33,
+          "release_checks": 33,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 16,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            32,
+            34
+          ],
+          "onsets": 35,
+          "release_checks": 35,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f63e93b12a704b54bf9bfd23bb37dfc7/manifest.json",
+      "sha256": "6c61d594cf124f56e551aae57e59e3661e435556635a6d302722c824bb6391b3",
+      "stages": [
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 1,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            2,
+            4
+          ],
+          "onsets": 5,
+          "release_checks": 5,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 2,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            4,
+            6
+          ],
+          "onsets": 7,
+          "release_checks": 7,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 3,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            6,
+            8
+          ],
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 4,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            8,
+            10
+          ],
+          "onsets": 11,
+          "release_checks": 11,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 5,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            10,
+            12
+          ],
+          "onsets": 13,
+          "release_checks": 13,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 6,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            12,
+            14
+          ],
+          "onsets": 15,
+          "release_checks": 15,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 7,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            14,
+            16
+          ],
+          "onsets": 17,
+          "release_checks": 17,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 8,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            16,
+            18
+          ],
+          "onsets": 19,
+          "release_checks": 19,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 9,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            18,
+            20
+          ],
+          "onsets": 21,
+          "release_checks": 21,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 10,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            20,
+            22
+          ],
+          "onsets": 23,
+          "release_checks": 23,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 11,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            22,
+            24
+          ],
+          "onsets": 25,
+          "release_checks": 25,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 12,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            24,
+            26
+          ],
+          "onsets": 27,
+          "release_checks": 27,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 13,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            26,
+            28
+          ],
+          "onsets": 29,
+          "release_checks": 29,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 14,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            28,
+            30
+          ],
+          "onsets": 31,
+          "release_checks": 31,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 15,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            30,
+            32
+          ],
+          "onsets": 33,
+          "release_checks": 33,
+          "passed": true
+        },
+        {
+          "kind": "song-repetition-domain",
+          "repeats": 16,
+          "second_slot_repeats": 1,
+          "transition_indices": [
+            32,
+            34
+          ],
+          "onsets": 35,
+          "release_checks": 35,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "scope": "All16 legal slot1 repeat counts under global length2, with slot2 remaining at repeat1. Selected screen values and independently pitched MIDI transitions, exact controlled/bounded real-time phase and every release.",
+  "limitations": [
+    "Boundary clamp attempts, live edits and additional length/reset combinations remain",
+    "Global tempo and manual song-mode slot control remain separate requirements",
+    "Full manual, emulator release and final hardening incomplete"
+  ],
+  "full_campaign_complete": false
+}
