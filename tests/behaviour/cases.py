@@ -1,3 +1,4 @@
+from mask_gestures import multiheld_keyboard
 from mask_gestures import held_keyboard_chord
 from mask_gestures import trig_gesture_all_steps
 from mask_quantisation import mask_full_chord_inheritance
@@ -3299,6 +3300,8 @@ CASES={
  'M-TIME-011':dict(run=lambda c:pending_mask_lengths(c,True),requirements=['MASK-ATTRIBUTES','CH-TEMPO','OPT-REPEAT-RESET'],description='Maximum128-step notes span eighteen resets; complete initial releases precede coincident retriggers, and Stop drains remaining voices'),
  'M-MASK-013':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=2),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE','MASK-CHORD'],description='Chord mask slot2: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
  'M-MASK-014':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=3),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE','MASK-CHORD'],description='Chord mask slot3: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
+ 'M-MASK-031':dict(run=lambda c:multiheld_keyboard(c,False),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstFalse: range2..4, first-held target, remaining-held target and untouched middle step'),
+ 'M-MASK-030':dict(run=lambda c:multiheld_keyboard(c,True),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstTrue: range2..4, first-held target, remaining-held target and untouched middle step'),
  'M-MASK-029':dict(run=lambda c:held_keyboard_chord(c,True,False,True),requirements=['MASK-STEP-ENTRY','MASK-CHORD','MIDI-RELEASE-001'],description='Root release/repress while other chord voices remain held: balanced preview, preserved chord/velocity and clean replacement; grid-firstTrue release'),
  'M-MASK-028':dict(run=lambda c:held_keyboard_chord(c,False,False,True),requirements=['MASK-STEP-ENTRY','MASK-CHORD','MIDI-RELEASE-001'],description='Root release/repress while other chord voices remain held: balanced preview, preserved chord/velocity and clean replacement; grid-firstFalse release'),
  'M-MASK-027':dict(run=lambda c:held_keyboard_chord(c,True,True),requirements=['MASK-STEP-ENTRY','MASK-CHORD'],description='Sixth keyboard voice previews/releases but does not exceed four stored chord additions; grid-firstTrue release and later single-note replacement remain correct'),

@@ -1,0 +1,42 @@
+{
+  "status": "scoped-multiheld-keyboard-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-030",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2d373194f68f470eabe0069430f64ed9/manifest.json",
+      "sha256": "d149ce4762225b7aa00765009b9a962fc2ce49d1a6e6c856173676480dd22264",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-031",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6e58eab08b864d73ba11e21b5ad6e708/manifest.json",
+      "sha256": "bdfd39419afd2b7012d424c33443ac2ce79d6bfbad280943e2c524503e5aa1a5",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-030",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ed0548b09208434cb1f0c9bbdf0526aa/manifest.json",
+      "sha256": "3a4d4cc63975e8ef4fae701d7762a8699db1f821b07ac3e064a8090da032feb3",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-031",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e83ac5e0ffc24dbc8a9e4964e11fd4e0/manifest.json",
+      "sha256": "4ccdb1147d94c70f11508d23d60cf62734ac81b99de434f871af07f4f00a54d8",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "review": "01a08561-1689-73c1-8dcc-dddf99453bca",
+  "scope": "First-held and remaining-held keyboard targeting with both release orders, explicit valid range restoration, exact preview/replay and nine durations per run.",
+  "limitations": [
+    "Release-order-independent range was an unsupported fixture assumption; endpoint selection remains release-driven",
+    "Reversed-range defect remains mandatory CH-RANGE work, baseline19172d47f6904bdf84961d6470f8bbe1",
+    "Full manual/current controlled admission/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}
