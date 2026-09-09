@@ -1,0 +1,50 @@
+{
+  "status": "scoped-native-validation-passed",
+  "runs": [
+    {
+      "case": "M-PARAM-015",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ff22d970e3324a788b338b48959230ba/manifest.json",
+      "sha256": "8ab8d00a99ff8fe2ad92d3825b1c0dd135d61cbd38911c0be43a5cadea63aa2f"
+    },
+    {
+      "case": "M-PARAM-016",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d9a55d6b3e45457ca6fe52327c8bb666/manifest.json",
+      "sha256": "2852032099796e2a131863d17c92936cb4d6c648aed292e21c2e84a1a363bbe8"
+    },
+    {
+      "case": "M-PARAM-015",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cbe85a6aa210487e9790b32fc0bb38d4/manifest.json",
+      "sha256": "de1941c95b9ce9d894f639725bc6ec6f3b2e9c723858c64cc093b61b18504fc4"
+    },
+    {
+      "case": "M-PARAM-016",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/09041cbac2af4bcbb5305e4336b45c72/manifest.json",
+      "sha256": "5e26da6d3a4a82ed3e28906939c6fea3d2cff7ba6a51d191b6d2c3242333fe28"
+    },
+    {
+      "case": "M-PARAM-017",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2c7d9a93c6c341adbc13eec112e45ca4/manifest.json",
+      "sha256": "f07fb50e203bbd9ff0ecd67f5e3aedd139ee93edf61ef3e5d24a4831baa1b219"
+    },
+    {
+      "case": "M-PARAM-017",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/935718f5860b4a2d89ba71c8712574d4/manifest.json",
+      "sha256": "ed3b284c4973d6f8f36de33e883c2765398cb6ca19a1a001ac6b5112b3bbfe1c"
+    }
+  ],
+  "production_base": "d3f46412c930993d59a53e98f8284562ef7098bf",
+  "scope": "Ten inheritance/edit phases each for Fixed and Quantised Fixed, plus nine competing-slot phases, all in controlled and real-time modes. Exact pitch/velocity/release and onset intervals. No production changes.",
+  "remaining": [
+    "Cross-channel/song isolation and save/reload",
+    "Scale/root/transpose/pentatonic/mask/random/modulation combinations",
+    "Probability endpoint and seeded intermediate interactions",
+    "All other stock parameters and full manual/emulator release gates"
+  ],
+  "full_campaign_complete": false
+}

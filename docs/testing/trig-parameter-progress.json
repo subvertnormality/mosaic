@@ -1,5 +1,5 @@
 {
-  "status": "fixed-domain-and-quantised-boundary-validated",
+  "status": "pitch-domain-and-stock-lock-interactions-validated",
   "cases": [
     "M-PARAM-004",
     "M-PARAM-005",
@@ -12,12 +12,12 @@
   ],
   "scope": "All128 Fixed Note pitches validated in both modes before0069; quantised major/D-major/A-harmonic-minor literal boundaries and Fixed112..127 precedence validated on0069 in both modes.",
   "remaining": [
-    "Held-step/global fixed and quantised precedence, Off inheritance, clearing, reassignment and channel/song/cache isolation",
+    "Cross-channel/song pitch-lock isolation, reassignment, undo and persistence",
     "Scale Off/root fallback, octave/transpose/degree/rotation and all pentatonic switch interactions",
-    "Probability/random ranges, masks, mixed modulation, scale merging and lifecycle triples",
+    "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Implement held-step/global Fixed and Quantised Fixed precedence through native controls, including zero, Off inheritance and clear/reassignment; keep exact MIDI/velocity/release/timing oracles. Published scoped checkpoint does not close the full critical-interaction matrix.",
+  "next_action": "Implement probability0/100 endpoint interactions with per-step overrides and fixed pitch, exact sparse musical spacing and no outstanding notes; then seeded intermediate and cross-channel/song/cache isolation. Existing stock-lock cases015..017 passed both lanes; no production change.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -130,5 +130,6 @@
   "candidate": "0069",
   "units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-c1249f25d557470a8a46dfff4946194f/results.json",
   "review": "01a083c2-e074-7af0-ad2a-4cf60ee1eac3",
-  "quantised_validation": "docs/testing/quantised-fixed-validation.json"
+  "quantised_validation": "docs/testing/quantised-fixed-validation.json",
+  "stock_lock_validation": "docs/testing/stock-pitch-lock-validation.json"
 }
