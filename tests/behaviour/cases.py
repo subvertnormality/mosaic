@@ -2780,9 +2780,10 @@ from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_p
 
 from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrpn_slide,patch_configured_off_lock
 
-from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks
+from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks
 
 CASES={
+ 'M-PARAM-018':dict(run=probability_endpoint_locks,requirements=['PARAM-PROBABILITY','PARAM-SLOTS','PARAM-FIXED'],description='Probability0/100 and upper clamp with fixed pitch, per-step overrides, first/wrap rejected steps, clear restoration, exact sparse onsets and balanced releases'),
  'M-PARAM-017':dict(run=competing_pitch_locks,requirements=['PARAM-SLOTS','PARAM-FIXED','PARAM-QUANTISED-FIXED'],description='Competing fixed/quantised channel defaults and independent held-step locks: precedence, simultaneous zero locks, Off fallback and step-scoped clearing'),
  'M-PARAM-015':dict(run=lambda c:stock_pitch_lock_inheritance(c,quantised=True),requirements=['PARAM-SLOTS','PARAM-QUANTISED-FIXED'],description='Stock pitch held-step locks: zero, Off inheritance, default edits, clear and re-entry preserve exact phrase, velocity, releases and timing'),
  'M-PARAM-016':dict(run=lambda c:stock_pitch_lock_inheritance(c,quantised=False),requirements=['PARAM-SLOTS','PARAM-FIXED'],description='Stock pitch held-step locks: zero, Off inheritance, default edits, clear and re-entry preserve exact phrase, velocity, releases and timing'),

@@ -139,3 +139,48 @@ def competing_pitch_locks(c):
     clear(2);phrase([62,62,64,0],'clear-fixed-lock-only-step2')
     clear(1);phrase([60,62,64,0],'clear-quantised-lock-only-step1')
     clear(4);phrase([60,62,64,65],'full-original-phrase-restored')
+
+
+def probability_endpoint_locks(c):
+    from cases import assign_trig_parameter,assert_durations
+    c.configure();c.enc(1,-3)
+    assign_trig_parameter(c,'Fixed Note');c.enc(3,66)
+    c.enc(2,1);assign_trig_parameter(c,'Trig Probability')
+    def phrase(steps,phase):
+        velocities=(127,117,107,97)
+        notes=c.playback([(1,[144,65,velocities[step-1]]) for step in steps],cycles=3)
+        assert_durations(c,notes,[1]*(len(notes)-1))
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        expected=[((i//len(steps))*4+steps[i%len(steps)]-steps[0])/6 for i in range(len(notes))]
+        errors=[(n[field]-notes[0][field])/1e9-t for n,t in zip(notes,expected)]
+        assert all(abs(e)<=tolerance for e in errors),errors
+        c.results.append(dict(kind='probability-endpoint-locked-phrase',phase=phase,active_steps=steps,expected_offsets=expected,timing_errors=errors,passed=True))
+    def lock(step,value):
+        c.action(type='grid',x=step,y=4,state=1)
+        try:
+            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+            c.enc(3,value+1)
+        finally:c.action(type='grid',x=step,y=4,state=0)
+        c.elapse(.15)
+    def clear(step):
+        c.action(type='grid',x=step,y=4,state=1)
+        try:c.elapse(.05);c.key(2)
+        finally:c.action(type='grid',x=step,y=4,state=0)
+        c.elapse(.15)
+    c.enc(3,101);phrase([1,2,3,4],'100-always')
+    c.enc(3,3);phrase([1,2,3,4],'upper-clamp100')
+    c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,1)
+    # Include the very first onset opportunity in the silence window.
+    before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(2.8)
+    state=c.snapshot()
+    notes=[e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
+    assert notes==[],notes
+    assert state['midi_capture']['outstanding']==[]
+    c.tap(1,8)
+    c.results.append(dict(kind='probability-zero-silence',seconds=2.8,note_ons=notes,fixed_pitch=65,passed=True))
+    lock(2,100);phrase([2],'step100-overrides-channel0')
+    c.enc(3,100);lock(1,0);phrase([2,3,4],'step0-overrides-channel100')
+    lock(4,0);phrase([2,3],'first-and-wrap-step0')
+    clear(1);phrase([1,2,3],'clear-first-zero')
+    clear(4);phrase([1,2,3,4],'clear-wrap-zero')

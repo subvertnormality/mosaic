@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Implement probability0/100 endpoint interactions with per-step overrides and fixed pitch, exact sparse musical spacing and no outstanding notes; then seeded intermediate and cross-channel/song/cache isolation. Existing stock-lock cases015..017 passed both lanes; no production change.",
+  "next_action": "Extend probability beyond endpoints: independent seeded decisions for1/50/99, masks/merges, trigless MIDI lock/slide interactions, live edits and lifecycle. M-PARAM018 D/R passed; do not treat endpoints as probability completion. Quantised pitch lock channel/song isolation and all scale-switch combinations remain required.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -131,5 +131,6 @@
   "units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-c1249f25d557470a8a46dfff4946194f/results.json",
   "review": "01a083c2-e074-7af0-ad2a-4cf60ee1eac3",
   "quantised_validation": "docs/testing/quantised-fixed-validation.json",
-  "stock_lock_validation": "docs/testing/stock-pitch-lock-validation.json"
+  "stock_lock_validation": "docs/testing/stock-pitch-lock-validation.json",
+  "probability_validation": "docs/testing/probability-validation.json"
 }

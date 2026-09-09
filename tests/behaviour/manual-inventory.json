@@ -3310,7 +3310,8 @@
         "M-PARAM-011",
         "M-PARAM-015",
         "M-PARAM-016",
-        "M-PARAM-017"
+        "M-PARAM-017",
+        "M-PARAM-018"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -3368,8 +3369,10 @@
         "MAN-056"
       ],
       "statement": "Global/per-step probability includes always100 and never0.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PARAM-018"
+      ],
+      "status": "in_progress",
       "domain": "0/1/50/99/100; bounds; masked/merged trigs; seed/reseed; no flaky frequency assertion.",
       "oracles": [
         "Exact endpoint silence/event tables and deterministic seeded decisions with independently specified PRNG consumption."
@@ -3402,7 +3405,8 @@
         "M-PARAM-010",
         "M-PARAM-011",
         "M-PARAM-016",
-        "M-PARAM-017"
+        "M-PARAM-017",
+        "M-PARAM-018"
       ],
       "status": "in_progress",
       "domain": "Every MIDI note where cheap; sentinel/bounds; all competing note sources.",

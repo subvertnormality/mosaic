@@ -1,0 +1,24 @@
+{
+  "status": "endpoints-and-pitch-lock-interactions-validated",
+  "runs": [
+    {
+      "case": "M-PARAM-018",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ca0985ac1bdf41caa969e77c989e82aa/manifest.json",
+      "sha256": "815d1f0b55ae4d1a60b0e1f80b64a64051318f6de0c92a8115340519fcb546f0"
+    },
+    {
+      "case": "M-PARAM-018",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0706d40ae0744328b64db9f3946e329b/manifest.json",
+      "sha256": "2d3cb283856c0063b2c78181b32d6170864e3d044a1353802e76221d208aa9ce"
+    }
+  ],
+  "scope": "Probability0/100, upper clamp, fixed-pitch suppression, per-step overrides and first/wrap clearing; exact sparse onset intervals and releases. No probabilistic frequency assumptions.",
+  "remaining": [
+    "1/50/99 and full legal domain with independent seeded decisions",
+    "Probability with masked/merged trigs, random pitch, trigless CC/NRPN locks and slides",
+    "Live edits, recording, channel/song isolation, save/reload and seed/reseed semantics"
+  ],
+  "full_campaign_complete": false
+}
