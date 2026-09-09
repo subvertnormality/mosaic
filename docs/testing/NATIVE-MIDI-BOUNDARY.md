@@ -82,3 +82,34 @@ reproduced natively: resetting to0 leaves the next deadline at100.5beats.
 Resolve these native blockers before admission, then forwarding/multi-port,
 rapid lifecycle, gate/wrap/tempo and the remaining external synchronization matrix.
 The original defect baseline remains retained; this is a partial candidate.
+
+## Candidate07 review fixes
+
+Queued/running scheduler state is now distinguished. Reset/source changes rearm
+waiting resumes and reject stale queued sync delivery; running coroutines rebase
+their next sync. Cancellation and sleep independence have explicit C guards.
+Original queued-reset failure is retained; native old04 fails and06passes in D/R.
+Candidate07 retains the same scheduler source as06.
+
+Faulting output subscriptions are disabled individually. get_output_error(id)
+returns a copy of the retained phase/message diagnostic until cleanup; errors are
+also printed. Optional on_error(message,phase,id) may clean up but cannot yield.
+Its failures are isolated too. Formatting an arbitrary error value is protected
+and has a fallback; subscriber and handler unprintable-error tests pass in Lua
+and native D/R. Healthy subscribers and F8 continue. Logical output IDs are
+snapshotted per dispatch; native vport device bindings remain resolved at send
+time, so remapping needs its remaining acceptance tests.
+
+Codex follow-up01a08799-74cf-7b20-8d9e-de45fb8953c9 confirmed queued-reset correction
+and identified the formatter follow-up. That exact negative/positive regression
+and native D/R checks now pass. Mosaic faults invoke cancellation and existing
+Stop cleanup;520units and7adapter scenarios pass. The14-case D/R matrix passed
+on06; four scoped Mosaic startup/restart runs pass on07 after cleanup wiring.
+See emulator midi-boundary-fixes-validation.json and Mosaic midi-boundary-fault-cleanup-validation.json for source-bound evidence and limitations.
+
+The builder now applies upstream scheduler patches before the verified existing
+controlled-step extraction. Candidate05's failed build log is retained;06/07
+build successfully. No stock/default installation or runtime lock was promoted.
+Next: rapid transport lifecycle/direct init/reset, forwarding and multiple-output
+routing/remapping, intermediate notes/gates/wrap/tempo matrices, then the other
+documented emulator/manual/final hardening gates. This is not full acceptance.

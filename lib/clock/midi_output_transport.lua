@@ -5,7 +5,7 @@ local transport = {}
 function transport.available()
   return clock.midi and type(clock.midi.subscribe_output)=="function"
 end
-function transport.start(lattice, on_start)
+function transport.start(lattice, on_start, on_error)
   assert(transport.available(), "native MIDI output boundary unavailable")
   local active, started = true, false
   local subscription, intermediate
@@ -34,7 +34,18 @@ function transport.start(lattice, on_start)
       end
     end)
   end
+  local function cancel()
+    if not active then return end
+    active = false
+    generation = generation + 1
+    clock.midi.cancel_output(subscription)
+    if intermediate then clock.cancel(intermediate);intermediate=nil end
+  end
   subscription = clock.midi.subscribe_output({
+    on_error = function(message, phase)
+      cancel()
+      if on_error then on_error(message, phase) end
+    end,
     before = function()
       if active and not started then on_start() end
     end,
@@ -57,12 +68,6 @@ function transport.start(lattice, on_start)
       if changed then start_intermediate() end
     end
   })
-  return function()
-    if not active then return end
-    active = false
-    generation = generation + 1
-    clock.midi.cancel_output(subscription)
-    if intermediate then clock.cancel(intermediate);intermediate=nil end
-  end
+  return cancel
 end
 return transport

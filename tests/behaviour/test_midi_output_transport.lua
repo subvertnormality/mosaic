@@ -15,7 +15,7 @@ local function setup()
   function lattice:start()assert(not self.auto);self.enabled=true end
   function lattice:pulse()assert(self.enabled);events[#events+1]='P'..self.count;self.count=self.count+1 end
   local owner=assert(loadfile('lib/clock/midi_output_transport.lua'))()
-  local stop=owner.start(lattice,function()events[#events+1]='FA'end)
+  local stop=owner.start(lattice,function()events[#events+1]='FA'end,function() lattice.enabled=false;events[#events+1]='ERROR_STOP' end)
   local function boundary(deadline,epoch)
     if callbacks[1] then callbacks[1].before(deadline,epoch,{1},deadline) end
     events[#events+1]='F8'
@@ -25,7 +25,7 @@ local function setup()
     local co=threads[id or next_id]
     if co then local ok,err=coroutine.resume(co,deadline,deadline,epoch);assert(ok,err) end
   end
-  return {events=events,boundary=boundary,resume=resume,stop=stop,lattice=lattice,threads=threads}
+  return {fail=function()callbacks[1].on_error('injected failure','after')end,events=events,boundary=boundary,resume=resume,stop=stop,lattice=lattice,threads=threads}
 end
 local function expect(t,s)assert(table.concat(t.events,',')==s,table.concat(t.events,','))end
 do
@@ -59,4 +59,8 @@ do
   local t=setup();t.boundary(1,0);t.resume(1+3/96,0);t.resume(1+3/96,0)
   expect(t,'FA,F8,P0,P1,P2,P3');t.stop();t.stop()
 end
-print('PASS:6 adapter scenarios; pending cancellation, pulse ownership, delayed delivery, active cancellation, epoch change, duplicate wakeups')
+do
+  local t=setup();t.boundary(1,0);t.fail();t.resume(10,0);t.boundary(10,0)
+  expect(t,'FA,F8,P0,ERROR_STOP,F8');assert(next(t.threads)==nil);assert(not t.lattice.enabled)
+end
+print('PASS:7 adapter scenarios including fault cancellation and caller cleanup')

@@ -839,7 +839,7 @@ function m_clock:start(from_external_transport)
     if params:get("clock_midi_out_" .. port) == 1 then sends_clock = true end
   end
   if sends_clock and not from_external_transport and midi_output_transport.available() then
-    cancel_midi_output_transport = midi_output_transport.start(clock_lattice, m_midi.start)
+    cancel_midi_output_transport = midi_output_transport.start(clock_lattice, m_midi.start, function() m_clock:stop() end)
   else
     if sends_clock and not from_external_transport and not warned_midi_boundary then
       print("Mosaic: native MIDI output boundary unavailable; master phase alignment is not guaranteed")
