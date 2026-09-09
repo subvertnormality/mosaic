@@ -2851,7 +2851,10 @@ from external_cold_start import external_cold_start
 
 from external_started_handoff import external_started_handoff
 
+from repeated_external_start import repeated_external_start
+
 CASES={
+ 'M-SYNC-006':dict(run=repeated_external_start,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Repeated incoming Start during a held note resets to step1 at the next external Clock, releases the previous note and preserves absolute phase'),
  'M-SYNC-005':dict(run=external_started_handoff,requirements=['CLOCK-LIVE-HANDOFF-001','CLOCK-MIDI-TRANSPORT-001'],description='Incoming Start then MIDI-to-internal source switch preserves phrase order and prevents epoch-driven note bursts'),
  'M-SYNC-003':dict(run=lambda c:external_cold_start(c,bpm=20),requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold20BPM external clock: first note and all phrase deadlines through initial unknown-tempo acquisition'),
  'M-SYNC-004':dict(run=lambda c:external_cold_start(c,bpm=300),requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold300BPM external clock: absolute startup, phase and releases'),

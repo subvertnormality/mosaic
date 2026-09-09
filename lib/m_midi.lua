@@ -392,14 +392,17 @@ function m_midi:all_notes_off()
 end
 
 -- Modify the stop function
-function m_midi.stop()
+function m_midi.stop(send_transport)
   -- Turn off all active notes
   m_midi:all_notes_off()
 
-  -- Stop MIDI devices
-  for id = 1, #midi.vports do
-    if midi_devices[id] and midi_devices[id].device ~= nil then
-      midi_devices[id]:stop()
+  -- Restart cleanup releases voices without sending Stop back to the clock
+  -- source. Ordinary Stop retains its transport output on every device.
+  if send_transport ~= false then
+    for id = 1, #midi.vports do
+      if midi_devices[id] and midi_devices[id].device ~= nil then
+        midi_devices[id]:stop()
+      end
     end
   end
 

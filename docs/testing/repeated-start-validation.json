@@ -1,0 +1,73 @@
+{
+  "status": "scoped-repeated-start-fixed",
+  "case": "M-SYNC-006",
+  "native_runs": [
+    {
+      "case": "M-SYNC-006",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/92b893d28ba04ac3b8d18b3ccdf02590/manifest.json",
+      "sha256": "232ff40e3151a5b43c1a25273004e0ae52afb48903777dba3c673d8cab4406cf"
+    },
+    {
+      "case": "M-SYNC-006",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/5fd17f2c301145bca124e413658d0f60/manifest.json",
+      "sha256": "d1ea4cd594fd77a23ff9da6f15eb5189ea75560d34f16464d3b4cd66a5d5201f"
+    },
+    {
+      "case": "M-SYNC-005",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/ec0756ba6eb14578a34a793ecb850129/manifest.json",
+      "sha256": "0b7397646fd834e8ae1979f74ce514e73a5188a18ff994c5b703770c1fba8e89"
+    },
+    {
+      "case": "M-SYNC-005",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/ae362662a31e45f7b84cf44b43a02c4e/manifest.json",
+      "sha256": "61a19efcb815c5a5da5a7f6c4a23bf2dd51e6e90a52558e15b9a1ce031f11750"
+    },
+    {
+      "case": "M-SYNC-003",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/d4a0835fe56045e6b97a49c73e221bd7/manifest.json",
+      "sha256": "72405a11e16b2222942568e997bb7b1665682a072a5533fed7e462d55348584d"
+    },
+    {
+      "case": "M-SYNC-003",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/ff49bd281d0f4414bbf1c6caaca7c571/manifest.json",
+      "sha256": "aaf612a7d063ab6206ceba95f4af3a498a1d27b3d1ec52c435b97507dbb80665"
+    },
+    {
+      "case": "M-TIM-002",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/ddf809cd89334c2eb7e266e414edc174/manifest.json",
+      "sha256": "25761fabfb135a871def81fef3013d1806ea1eedefe44d3528dc25be49274ddd"
+    },
+    {
+      "case": "M-TIM-002",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/9a62ecae8564463696c63e4865435da3/manifest.json",
+      "sha256": "36d94e2ad79f3fb15270969c39082970287852a3bd202b4d69f841cf518c53af"
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-9c64cb1a114d45178451592a4faada2d/results.json",
+    "sha256": "721d492f55a1e844ec137d1b7bc3934c8d43a3f83995e4aae30e2132e6b37e2b",
+    "successes": 520
+  },
+  "baseline": "/home/andy/projects/mosaic-behaviour-runs/ad645d48e057464c9eb37faef2655c9b/manifest.json",
+  "intermediate_cleanup_trace": "/home/andy/projects/mosaic-behaviour-runs/e88d550b75a340b69fee1a10b8b7d767/manifest.json",
+  "correction": "Repeated incoming Start resets through note cleanup without echoing Stop; held-note release precedes the restarted step1 note. Local already-playing Start preserves existing transport.",
+  "production_sha256": {
+    "lib/clock/m_clock.lua": "75b1f851f70fcc250590507861db54e9a1bba121779603fa24804ed472b86243",
+    "lib/m_midi.lua": "db8a8bafaf2a34bbfdf21caf39761a0ca95472c2d743e692458dd5bd27a7cc84"
+  },
+  "remaining": [
+    "Stop and fast divisions during initial tempo acquisition",
+    "Master MIDI output alignment",
+    "Final combined Codex review and full sync matrix",
+    "Internal tempo discontinuity, full manual/release campaign and final unit/integration hardening"
+  ],
+  "full_goal_complete": false
+}

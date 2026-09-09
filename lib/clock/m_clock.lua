@@ -808,6 +808,9 @@ function m_clock.channel_is_sliding(channel, trig_param)
 end
 
 function m_clock:start(from_external_transport)
+  -- MIDI Start resets position even when playback is already active.
+  -- Reuse cleanup so held voices and pending releases cannot cross epochs.
+  if playing and from_external_transport then self:stop(false) end
   if not playing then
     -- Stopped edits can consume fractional preview carry in different orders.
     -- Build both processors from the final settings before the first onset.
@@ -832,7 +835,7 @@ function m_clock:start(from_external_transport)
        
 end
 
-function m_clock:stop()
+function m_clock:stop(send_transport)
 
   playing = false
   first_run = true
@@ -846,7 +849,7 @@ function m_clock:stop()
   end
 
   nb:stop_all()
-  m_midi:stop()
+  m_midi.stop(send_transport)
 
   if clock_lattice and clock_lattice.stop then
     clock_lattice:stop()

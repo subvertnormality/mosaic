@@ -1616,7 +1616,8 @@
         "M-PROJECT-LIVE-001",
         "M-PROJECT-LIVE-002",
         "M-PROJECT-LIVE-003",
-        "M-PROJECT-LIVE-004"
+        "M-PROJECT-LIVE-004",
+        "M-SYNC-006"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -1750,7 +1751,8 @@
         "M-SYNC-002",
         "M-SYNC-003",
         "M-SYNC-004",
-        "M-SYNC-005"
+        "M-SYNC-005",
+        "M-SYNC-006"
       ],
       "status": "partial-domain-coverage",
       "domain": "Stopped-source changes, port1,100BPM external, native adoption of external tempo on internal handoff, then explicit90BPM menu edit. Live-source changes with pending notes, other rates and ports remain required.",

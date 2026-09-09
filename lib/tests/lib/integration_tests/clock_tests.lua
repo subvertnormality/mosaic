@@ -1067,3 +1067,25 @@ function test_shuffle_stopped_edit_history_and_replay_have_identical_midi_pulses
     end
   end)
 end
+
+
+function test_external_start_resets_active_transport_and_releases()
+  with_restart_sinks(function()
+    setup();m_clock.init();m_clock:stop();m_clock:start(true)
+    local previous=m_clock.get_clock_lattice()
+    progress_clock_by_pulses(30)
+    luaunit.assertTrue(previous.transport>1)
+    local releases=0
+    m_midi.stop=function() releases=releases+1 end
+    m_clock:start(true)
+    local restarted=m_clock.get_clock_lattice()
+    luaunit.assertNotEquals(restarted,previous)
+    luaunit.assertEquals(restarted.transport,1)
+    luaunit.assertEquals(releases,1)
+    luaunit.assertTrue(m_clock.is_playing())
+    m_clock:start() -- Local already-playing Start retains the transport.
+    luaunit.assertEquals(m_clock.get_clock_lattice(),restarted)
+    luaunit.assertEquals(releases,1)
+    m_clock:stop()
+  end)
+end
