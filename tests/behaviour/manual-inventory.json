@@ -2578,7 +2578,8 @@
         "M-MASK-015",
         "M-MASK-016",
         "M-MASK-017",
-        "M-MASK-018"
+        "M-MASK-018",
+        "M-MASK-023"
       ],
       "status": "in_progress",
       "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks.",
@@ -2631,9 +2632,11 @@
         "MAN-040"
       ],
       "statement": "K1-step press adds/removes trig masks.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All64 steps; no pattern/active pattern; required note/velocity/length present or absent.",
+      "cases": [
+        "M-MASK-023"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Existing-pattern and missing-default combinations remain pending.",
       "oracles": [
         "Step LED and exact playback/silence; no unintended edits to another step."
       ],

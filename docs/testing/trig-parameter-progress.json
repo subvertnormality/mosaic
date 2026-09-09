@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "0079 inheritance fix validated with six native runs and497units. Continue broader mask quantisation domains and gesture/keyboard entry, then remaining manual and emulator gates.",
+  "next_action": "MASK023 all64 gesture matrix passed both clocks. Next held-step keyboard chord entry/release/replacement; existing-pattern and missing-default gesture variants remain pending.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -170,5 +170,6 @@
   "boundary_mask_clearing_validation": "docs/testing/boundary-mask-clearing-validation.json",
   "recorded_mask_clearing_validation": "docs/testing/recorded-mask-clearing-validation.json",
   "mask_scale_snap_validation": "docs/testing/mask-scale-snap-validation.json",
-  "mask_unset_validation": "docs/testing/mask-unset-validation.json"
+  "mask_unset_validation": "docs/testing/mask-unset-validation.json",
+  "trig_gesture_all64_validation": "docs/testing/trig-gesture-all64-validation.json"
 }
