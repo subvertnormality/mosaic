@@ -2677,10 +2677,12 @@
         "M-MASK-017",
         "M-MASK-018",
         "M-MASK-024",
-        "M-MASK-025"
+        "M-MASK-025",
+        "M-MASK-026",
+        "M-MASK-027"
       ],
       "status": "partial-domain-coverage",
-      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Extra/repeated keyboard inputs, multiple held grid steps and comprehensive mask display assertions remain pending.",
+      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Repeated keyboard inputs, multiple held grid steps and comprehensive mask display assertions remain pending.",
       "oracles": [
         "Visible step-lock values and exact playback; selected-channel isolation."
       ],
@@ -2749,10 +2751,12 @@
         "M-MASK-018",
         "M-MASK-022",
         "M-MASK-024",
-        "M-MASK-025"
+        "M-MASK-025",
+        "M-MASK-026",
+        "M-MASK-027"
       ],
       "status": "partial-domain-coverage",
-      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Extra/repeated keyboard inputs, multiple held grid steps and comprehensive mask display assertions remain pending.",
+      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Repeated keyboard inputs, multiple held grid steps and comprehensive mask display assertions remain pending.",
       "oracles": [
         "Exact chord note multiset and ordered releases, no leaked voices; chord display."
       ],

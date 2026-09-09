@@ -34,10 +34,11 @@ def trig_gesture_all_steps(c):
     toggle(even);verify(all_steps,'even-restored-all64')
 
 
-def held_keyboard_chord(c,grid_first=False):
+def held_keyboard_chord(c,grid_first=False,extra_note=False):
     from cases import assert_durations
     c.configure();c.enc(1,-4)
     pitches=[72,76,79,83,86];velocities=[90,80,70,60,50]
+    if extra_note:pitches.append(88);velocities.append(40)
     marker=c.snapshot()['midi_count']
     c.action(type='grid',x=2,y=4,state=1)
     for pitch,velocity in zip(pitches,velocities):c.action(type='midi',port=1,bytes=[144,pitch,velocity])
@@ -57,8 +58,8 @@ def held_keyboard_chord(c,grid_first=False):
         for i,note in enumerate(notes):
             wanted=((i//len(phrase))*4+positions[i%len(phrase)])/6
             assert abs((note[field]-notes[0][field])/1e9-wanted)<=tolerance
-        c.results.append(dict(kind='held-keyboard-mask',stage=stage,grid_released_first=grid_first,chord=chord,velocity=velocity,passed=True))
-    verify(pitches,90,'five-voice-chord-committed')
+        c.results.append(dict(kind='held-keyboard-mask',stage=stage,grid_released_first=grid_first,extra_note=extra_note,chord=chord,velocity=velocity,passed=True))
+    verify(pitches[:5],90,'five-voice-chord-committed')
     c.action(type='grid',x=2,y=4,state=1)
     c.action(type='midi',port=1,bytes=[144,67,55]);c.action(type='midi',port=1,bytes=[128,67,0])
     c.action(type='grid',x=2,y=4,state=0);c.elapse(.15)

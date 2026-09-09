@@ -1,0 +1,74 @@
+{
+  "status": "scoped-keyboard-chord-limit-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-026",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/bc2f758dd52d4ef690bb1e8497519dba/manifest.json",
+      "sha256": "8f59450255c6666ba07895a6b56be8397ead041013f76c70bafbd21968a1df3f",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-027",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d6a4763b0fbd4eedad4c3a51ae87df53/manifest.json",
+      "sha256": "32817d3322c05b1433be3e1572c245fbb02f57bc09cfedd706428632ecad8df8",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-024",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8685f49fbb534627b7e5f7d4d40e13a7/manifest.json",
+      "sha256": "5d924d0c5626c09b0456bfd59cd74e8c139a1cfad2cd897f50fd082506b97562",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-025",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/5504effd71d542879315fd086c5be54e/manifest.json",
+      "sha256": "a5295f23d2253685467a472ef6242c50ec0f41c1b046cd520b14fb08e2f67ec9",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-026",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/787f8de9812f44878bc329d04597f962/manifest.json",
+      "sha256": "b1ff4287f6f57144da25855964b54390932a57b8c1ea1dcac02feede85d75f4d",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-027",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0130c0f971884224b828d2d15eac8b50/manifest.json",
+      "sha256": "5c96694d737f4bf887205ad52e9031437dac449d49f1bb6497e820799788f6a3",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-024",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b763b6f868d149faa320ae26260bde0c/manifest.json",
+      "sha256": "0846892a0b630392b1f5888c5fdf52e1d78d44f76adf65630c9ec5e94875e249",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-025",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/79283b6691344bd0b3f5a8d0b987ccb6/manifest.json",
+      "sha256": "20cb065c3ac51715cd288f700cb8bc492c3c8f11848b0dab1411ba5205ed82ca",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Held step2 keyboard entry preserves neighbouring source notes",
+    "Sixth input E88 previews and releases but stored chord retains first five voices C E G B D; five-voice controls revalidated",
+    "Grid release before MIDI releases and MIDI releases before grid release both commit identical chords",
+    "Replacing the five-voice chord with a single G removes stale chord voices and sets velocity55",
+    "Exact preview On/Off packets, replay phrase, durations and timing; no outstanding notes afterStop"
+  ],
+  "limitations": [
+    "Repeated keyboard inputs, multiple held grid steps and comprehensive mask display assertions remain pending",
+    "Full manual/current controlled admission/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}
