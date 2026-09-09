@@ -1185,3 +1185,10 @@ ordinary clock.sync strict and forbid speculative pre-acquisition subdivisions.
 Implementation card: emulator docs/delivery/MIDI-RECEIVED-ZERO.md. Evidence and
 exact identities: midi-lifecycle-forwarding-validation.json. Full synchronization,
 manual coverage, release and final hardening remain incomplete.
+
+### Candidate09 received-zero forwarding checkpoint
++Candidate09 serializes source selection with Start eligibility and admits only an
++actually received beat-zero boundary to tagged MIDI-output waiters. Generic D/R,
++M-SYNC001..013 D/R (26/26),526 Lua tests, complete-tail mutations and the focused
++Codex follow-up pass. Exact evidence is in midi-forwarding-candidate09-validation.json.
++The broader synchronization/manual/release campaign remains incomplete.

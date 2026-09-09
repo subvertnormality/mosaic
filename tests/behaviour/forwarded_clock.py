@@ -1,4 +1,21 @@
 """External input clock, Mosaic notes and a second independent receiver."""
+def assert_forwarded_receiver(events,field,first,tolerance):
+    active=False;tick=-1;notes=0;clocks=[];starts=0;stops=0
+    for event in events:
+        data=event['bytes']
+        if event['port']==2:
+            if data==[250]:active=True;tick=-1;starts+=1
+            elif data==[252]:active=False;stops+=1
+            elif data==[248] and active:tick+=1;clocks.append(event)
+        elif event['port']==1 and len(data)==3 and data[0]==144 and data[2]>0:
+            assert active and tick==notes*6,('Forwarded receiver note phase',notes,tick,active)
+            notes+=1
+    assert starts==1 and stops==1 and not active and notes==10 and len(clocks)==60
+    for i,event in enumerate(clocks):
+        assert abs((event[field]-first)/1e9-i/40)<=tolerance,('Forwarded absolute clock phase',i)
+    assert not any(e['port'] in (1,3) and e['bytes']==[248] for e in events),'Clock leaked to input/disabled port'
+    return dict(notes=notes,clock_ticks=len(clocks),starts=starts,stops=stops)
+
 def forwarded_clock(c,warm_ticks):
     import time,base64
     from cases import menu_label,menu_value
@@ -15,7 +32,9 @@ def forwarded_clock(c,warm_ticks):
     assert not enabled(c.snapshot());c.enc(3,1);c.wait(enabled)
     controlled=c.clock_mode=='controlled-experimental';domain='logical' if controlled else 'monotonic'
     origin=(c.logical_ns if controlled else time.monotonic_ns())+500_000_000
-    first=origin+(warm_ticks+1)*25_000_000;stop=first+1_475_000_000
+    # Stop is half a clock interval after Clock59. This makes the required full
+    # pre-Stop tail unambiguous even when native input and output queues differ.
+    first=origin+(warm_ticks+1)*25_000_000;stop=first+1_487_500_000
     packets=[(origin+i*25_000_000,248) for i in range(1,warm_ticks+1)]
     packets+=[(first,250)]+[(first+i*25_000_000,248) for i in range(60)]+[(stop,252)]
     packets.sort(key=lambda x:x[0])
@@ -31,20 +50,8 @@ def forwarded_clock(c,warm_ticks):
     onsets=[(6*i,(60,62,64,65)[i%4],(127,117,107,97)[i%4]) for i in range(10)]
     assert len(capture.note_ons())==10
     assert_schedule(capture.events,onsets,[6]*10,field=field,origin=first,stop_bounds=(stop,stop),pulse_rate=40,tolerance=tolerance)
-    active=False;tick=-1;notes=0;clocks=[];starts=0
-    for event in capture.events:
-        data=event['bytes']
-        if event['port']==2:
-            if data==[250]:active=True;tick=-1;starts+=1
-            elif data==[252]:active=False
-            elif data==[248] and active:tick+=1;clocks.append(event)
-        elif event['port']==1 and len(data)==3 and data[0]==144 and data[2]>0:
-            assert active and tick==notes*6,('Forwarded receiver note phase',notes,tick,active)
-            notes+=1
-    assert starts==1 and notes==10 and clocks
-    for i,event in enumerate(clocks):
-        assert abs((event[field]-first)/1e9-i/40)<=tolerance,('Forwarded absolute clock phase',i)
-    assert not any(e['port'] in (1,3) and e['bytes']==[248] for e in capture.events),'Clock leaked to input/disabled port'
-    c.results.append(dict(kind='forwarded-clock-independent-receiver',warm_ticks=warm_ticks,notes=notes,clock_ticks=len(clocks),passed=True))
+    # Require the complete pre-Stop tail and stopped receiver so truncation fails.
+    receiver=assert_forwarded_receiver(capture.events,field,first,tolerance)
+    c.results.append(dict(kind='forwarded-clock-independent-receiver',warm_ticks=warm_ticks,passed=True,**receiver))
 def cold_forwarded_clock(c):return forwarded_clock(c,0)
 def warm_forwarded_clock(c):return forwarded_clock(c,49)

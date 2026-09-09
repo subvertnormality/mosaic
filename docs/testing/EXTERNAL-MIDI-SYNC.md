@@ -134,3 +134,13 @@ ordinary clock.sync strict and forbid speculative pre-acquisition subdivisions.
 Implementation card: emulator docs/delivery/MIDI-RECEIVED-ZERO.md. Evidence and
 exact identities: midi-lifecycle-forwarding-validation.json. Full synchronization,
 manual coverage, release and final hardening remain incomplete.
+
+## Candidate09 forwarding checkpoint
+
+The initial cold/warm and repeated-Start forwarding defect is fixed and accepted
+in the optional candidate09 path. M-SYNC001..013 pass controlled and real time
+(26/26); the forwarded receiver requires all60 pre-Stop clocks and stopped state,
+and deletion mutations fail. A scheduler/source barrier regression closes the
+source-switch race. See midi-forwarding-candidate09-validation.json. This closes
+the received-zero/forwarding checkpoint only; the remaining scenarios in this
+document are still mandatory.

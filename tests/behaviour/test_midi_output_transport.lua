@@ -1,5 +1,5 @@
 -- Actual Mosaic adapter with controlled native scheduler/output boundaries.
-local function setup()
+local function setup(source_origin)
   local callbacks,threads,events={}, {}, {}
   local next_id=0
   clock={midi={}}
@@ -15,7 +15,7 @@ local function setup()
   function lattice:start()assert(not self.auto);self.enabled=true end
   function lattice:pulse()assert(self.enabled);events[#events+1]='P'..self.count;self.count=self.count+1 end
   local owner=assert(loadfile('lib/clock/midi_output_transport.lua'))()
-  local stop=owner.start(lattice,function()events[#events+1]='FA'end,function() lattice.enabled=false;events[#events+1]='ERROR_STOP' end)
+  local stop=owner.start(lattice,function()events[#events+1]='FA'end,function() lattice.enabled=false;events[#events+1]='ERROR_STOP' end,source_origin)
   local function boundary(deadline,epoch)
     if callbacks[1] then callbacks[1].before(deadline,epoch,{1},deadline) end
     events[#events+1]='F8'
@@ -45,6 +45,12 @@ do
   expect(t,'FA,F8,P0,P1,P2,P3,F8,P4,F8,P5,P6,P7,P8');t.stop()
 end
 do
+  -- An externally supplied origin remains authoritative if callback delivery is
+  -- late. Pulses through that received source position follow the outgoing F8.
+  local t=setup(0);t.boundary(4/96,0)
+  expect(t,'FA,F8,P0,P1,P2,P3,P4');t.stop()
+end
+do
   local t=setup();t.boundary(1,0);t.stop();t.resume(10,0);t.boundary(10,0)
   expect(t,'FA,F8,P0,F8');assert(next(t.threads)==nil)
 end
@@ -63,4 +69,4 @@ do
   local t=setup();t.boundary(1,0);t.fail();t.resume(10,0);t.boundary(10,0)
   expect(t,'FA,F8,P0,ERROR_STOP,F8');assert(next(t.threads)==nil);assert(not t.lattice.enabled)
 end
-print('PASS:7 adapter scenarios including fault cancellation and caller cleanup')
+print('PASS:8 adapter scenarios including source-origin phase and fault cleanup')

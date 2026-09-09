@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Continue mixed parameter types, modulation and lifecycle interactions using patch-slide-progress.json and the incomplete manual inventory. Parameter/slide/NRPN checkpointff8c27f is published; do not republish or rerun completed scopes without a relevant change. Full manual, controlled-time admission and emulator release remain incomplete.",
+  "next_action": "Candidate09 received-zero/source-serialization forwarding checkpoint passes generic D/R, M-SYNC001..013 D/R26/26,526units, receiver mutations and Codex follow-up high confidence. See midi-forwarding-candidate09-validation.json. Next add Continue/SPP support or explicit unsupported behavior and its external receiver cases; then jitter/loss/recovery, tempo transitions and sustained drift. Full manual/emulator release/final hardening remain incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2846,7 +2846,7 @@
     "change": "First velocity page ends at68, not67. Existing mapping and native MIDI confirmed; no behavior/oracle change.",
     "evidence": "M-EDIT-002 both modes; exact pre-documentation-change run identities retained. Final whole-campaign run remains pending."
   },
-  "updated": "2026-09-08",
+  "updated": "2026-09-09",
   "manual_binding_snapshot": {
     "implemented_cases": 416,
     "requirements": 141,
@@ -5091,5 +5091,6 @@
     "receipt": "docs/testing/parameter-checkpoint-publication.json",
     "push_verified": true,
     "full_campaign_complete": false
-  }
+  },
+  "midi_forwarding_checkpoint": "docs/testing/midi-forwarding-candidate09-validation.json"
 }

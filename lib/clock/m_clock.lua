@@ -841,10 +841,13 @@ function m_clock:start(from_external_transport)
   for port = 1,16 do
     if params:get("clock_midi_out_" .. port) == 1 then sends_clock = true end
   end
-  if sends_clock and not from_external_transport and midi_output_transport.available() then
-    cancel_midi_output_transport = midi_output_transport.start(clock_lattice, m_midi.start, function() m_clock:stop() end)
+  if sends_clock and midi_output_transport.available() then
+    -- Incoming Start establishes source beat zero. Supplying it prevents a late
+    -- first output callback from silently rebasing the forwarded phrase.
+    local source_origin = from_external_transport and 0 or nil
+    cancel_midi_output_transport = midi_output_transport.start(clock_lattice, m_midi.start, function() m_clock:stop() end, source_origin)
   else
-    if sends_clock and not from_external_transport and not warned_midi_boundary then
+    if sends_clock and not warned_midi_boundary then
       print("Mosaic: native MIDI output boundary unavailable; master phase alignment is not guaranteed")
       warned_midi_boundary = true
     end

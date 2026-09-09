@@ -1091,7 +1091,7 @@ function test_external_start_resets_active_transport_and_releases()
 end
 
 
-local function boundary_lifecycle_case(operation, activated)
+local function boundary_lifecycle_case(operation, activated, from_external_transport)
   with_restart_sinks(function()
     local old_midi, old_run, old_cancel = clock.midi, clock.run, clock.cancel
     local old_start, old_stop = m_midi.start, m_midi.stop
@@ -1110,7 +1110,7 @@ local function boundary_lifecycle_case(operation, activated)
     m_midi.stop=function()stops=stops+1 end
     local ok,err=pcall(function()
       setup();m_clock.init();m_clock:stop();params:set("clock_midi_out_1",1)
-      m_clock:start()
+      m_clock:start(from_external_transport)
       local _, callbacks = next(subscribers);luaunit.assertNotNil(callbacks)
       if activated then callbacks.before();callbacks.after(1,0) end
       stops=0
@@ -1134,3 +1134,7 @@ function test_boundary_pending_direct_init_cleans_transport() boundary_lifecycle
 function test_boundary_active_direct_init_cleans_transport() boundary_lifecycle_case("init",true) end
 function test_boundary_pending_direct_reset_cleans_transport() boundary_lifecycle_case("reset",false) end
 function test_boundary_active_direct_reset_cleans_transport() boundary_lifecycle_case("reset",true) end
+-- Incoming Start with clock output must use the same cancellable boundary owner;
+-- pending and active paths previously bypassed it and could put notes before F8.
+function test_boundary_external_pending_direct_reset_cleans_transport() boundary_lifecycle_case("reset",false,true) end
+function test_boundary_external_active_direct_init_cleans_transport() boundary_lifecycle_case("init",true,true) end

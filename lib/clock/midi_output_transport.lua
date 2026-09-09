@@ -5,7 +5,7 @@ local transport = {}
 function transport.available()
   return clock.midi and type(clock.midi.subscribe_output)=="function"
 end
-function transport.start(lattice, on_start, on_error)
+function transport.start(lattice, on_start, on_error, source_origin)
   assert(transport.available(), "native MIDI output boundary unavailable")
   local active, started = true, false
   local subscription, intermediate
@@ -53,7 +53,10 @@ function transport.start(lattice, on_start, on_error)
       if not active then return end
       local changed = epoch ~= current_epoch
       if not started then
-        origin, epoch, last_boundary = deadline, current_epoch, 0
+        origin, epoch = source_origin or deadline, current_epoch
+        last_boundary = math.floor((deadline-origin)*lattice.ppqn+1e-9)
+        assert(last_boundary >= 0,
+          "MIDI output boundary precedes source origin")
         started = true
         lattice:start()
       elseif changed then
