@@ -1,3 +1,4 @@
+from numeric_merging import numeric_note_merge
 from recording_lifetimes import recording_ten_slots
 from recording_lifetimes import recording_stop_safety
 from trig_parameter_interactions import sparse_editor_domain
@@ -2788,6 +2789,8 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-MERGE-009':dict(run=numeric_note_merge,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER'],description='Two assigned patterns: independent Average/Higher degree arithmetic, C-major pitches, velocity priority isolation and exact timing'),
+ 'M-MERGE-010':dict(run=lambda c:numeric_note_merge(c,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-VELOCITY'],description='Unassigned velocity-priority source must not contribute notes to numeric merge'),
  'M-REC-PARAM-027':dict(run=lambda c:recording_lifetime(c,'persistence'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','PERSIST-AUTO-001'],description='Recorded locks and undo position survive autosave and two fresh native processes; persisted redo restores recorded step after restart'),
  'M-REC-PARAM-026':dict(run=lambda c:recording_lifetime(c,'memory-branch'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','MEMORY-NAV'],description='New lock edit after undo branches recorded automation history; latest/undo/redo/past-end preserve independent step2 and cannot resurrect abandoned step4'),
  'M-REC-PARAM-025':dict(run=lambda c:recording_lifetime(c,'memory'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','MEMORY-NAV'],description='Undo and redo each of three recorded parameter steps: restore overwritten lock96 and unbound defaults, exact disarmed MIDI replay after every action'),

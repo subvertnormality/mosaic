@@ -1,0 +1,97 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0075",
+  "native_runs": [
+    {
+      "case": "M-MERGE-009",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/3c1565f707624de680645dafcabdbffa/manifest.json",
+      "sha256": "1ff5ccc6f659c85a005ab7b682ef6f74a37bcb82b27a1d17a1032244929bbb5c",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-010",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/98d655a7eb454431baf528ffad547752/manifest.json",
+      "sha256": "bfd7ec649930d0288ecfec3ee5cc0bec2d80a14e4871d4f3817e897c471f94c6",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-002",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4c5a1a62577747eda987733b8f54d431/manifest.json",
+      "sha256": "be03bbb10a6153174750ca47ff6211936fbd018eeb6f944a733fd2db91c8fc0f",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-004",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cfde1dd47e7a43a3b00a59a6a60e5c35/manifest.json",
+      "sha256": "bb73ca8da3cbec774c6902de53286ced83f04d119189ea346d5546b77c887c77",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-006",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b514a5cdf7824c01ae6e34d13947bcd6/manifest.json",
+      "sha256": "6b0821596a1f01f70497a7e0473ab3ad60ec1391d060c55a59f750a4d59696b7",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-009",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ffccf733c0e941d596313c3717a4a763/manifest.json",
+      "sha256": "0ec505d0f748b741b0f03bf417a5c2dbeae5f157ebfab8fbbbf59c9f4437032d",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-010",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/425bf16cb6d34287ac0ad30c228ced3c/manifest.json",
+      "sha256": "a2a17215d3d32372e19c4ad4a54aee7200a11c6ffde800401b059e70b1da60a9",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-002",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/55ba71c2c0c0407ba68289caaee9844a/manifest.json",
+      "sha256": "387ceeecd0b89bf082288f3afecb2dddbeb42c031341f73539265aed7afc562f",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-004",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f76fdfd5287f491ba9df200ffe63b514/manifest.json",
+      "sha256": "84a638a8089a1d9c23421f702592837f94c5506a20e8dc6baed9f85fda7b3de5",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-006",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/23e5a503e2a549c7a019920d24b2cb5f/manifest.json",
+      "sha256": "427e1738121bfc60b8e85f762f0fa67afe3782cbf80084a3c1902cc31e0a5263",
+      "passed": true
+    }
+  ],
+  "unit": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-c8d9ea92020a4f93b258c3e044323846/results.json",
+    "sha256": "6f71bec28dead452a543b524c4fcc05f0b823f1e1e6577e2d4e6360036e5b14b",
+    "summary": "Ran 492 tests in 8.173 seconds, 492 successes, 0 failures",
+    "production_matches": true
+  },
+  "review": "01a08498-ac0b-7693-a1e2-8554dd8d8552",
+  "review_artifact": "docs/testing/reviews/numeric-merge-isolation-review.json",
+  "review_disposition": "No material defect; added inactive-assigned sources with positive trig mask, mask-absent counterpart and final note/velocity/length mask overrides. All492 tests pass. Baseline unit failure is one observed assertion, not18 independent failures.",
+  "baseline_controlled": "b461c87fc40e431e967de8054e4bc80c",
+  "baseline_real_time": "d479f6a857e14bc796082f504a85ff56",
+  "baseline_unit": "slide-deadline-units-c4c8582b9e2b49368e057b20850748e1",
+  "fixture_failure": "25017ac3790e46af9d6c2e9958faea04",
+  "patch_reconstruction": "/home/andy/projects/mosaic-behaviour-runs/merge-isolation-patch-v3a3derz",
+  "production_sha256": "dec99616098d46d4d14bc420467eebbe30d61f800ad3f65f0e23d475616c39b7",
+  "limitations": [
+    "Targeted accumulated validation; extra mask unit added after native matrix, production unchanged.",
+    "Positive integer Average/Higher examples only; fractional/negative inputs, pentatonic/scale interactions and Lower semantics remain incomplete.",
+    "Controlled profile admission, full manual and emulator release remain incomplete."
+  ],
+  "full_campaign_complete": false
+}

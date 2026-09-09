@@ -1,0 +1,19 @@
+--- a/lib/pattern.lua
++++ b/lib/pattern.lua
+@@ -142,13 +142,13 @@
+       local should_process_length_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (length_merge_mode and extract_pattern_number(length_merge_mode))
+ 
+       if should_process_note_merge_mode then
+-        do_moded_merge(pattern_number, true, s, note_merge_mode, pattern.note_values, merged_pattern.note_values, notes)
++        do_moded_merge(pattern_number, pattern_enabled, s, note_merge_mode, pattern.note_values, merged_pattern.note_values, notes)
+       end
+       if should_process_velocity_merge_mode then
+-        do_moded_merge(pattern_number, true, s, velocity_merge_mode, pattern.velocity_values, merged_pattern.velocity_values, velocities)
++        do_moded_merge(pattern_number, pattern_enabled, s, velocity_merge_mode, pattern.velocity_values, merged_pattern.velocity_values, velocities)
+       end
+       if should_process_length_merge_mode then
+-        do_moded_merge(pattern_number, true, s, length_merge_mode, source_lengths, merged_pattern.lengths, lengths)
++        do_moded_merge(pattern_number, pattern_enabled, s, length_merge_mode, source_lengths, merged_pattern.lengths, lengths)
+       end
+     end
+   end

@@ -2828,9 +2828,12 @@
         "MAN-046"
       ],
       "statement": "Average overlapping note values, then quantise.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options.",
+      "cases": [
+        "M-MERGE-009",
+        "M-MERGE-010"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending.",
       "oracles": [
         "Independent rational mean and resolved rounding/quantisation table; MIDI pitches."
       ],
@@ -2852,9 +2855,12 @@
         "MAN-046"
       ],
       "statement": "Higher combines average minus lowest plus highest, then quantises.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Equal/asymmetric/negative values; clipping; assignment order.",
+      "cases": [
+        "M-MERGE-009",
+        "M-MERGE-010"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Equal/asymmetric/negative values; clipping; assignment order. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending.",
       "oracles": [
         "Independent formula and pitch table; exact MIDI."
       ],
@@ -2931,7 +2937,8 @@
       "statement": "Velocity merge has Average/Higher/Lower/Pattern options.",
       "cases": [
         "M-MERGE-004",
-        "M-MERGE-005"
+        "M-MERGE-005",
+        "M-MERGE-010"
       ],
       "status": "partial-domain-coverage",
       "domain": "Every option; means at discontinuities; 0/127; selected pattern; Lower SEM-001. M-MERGE-004 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-005 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required.",

@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Recorded locks and undo position survive two fresh native processes in both modes. Continue song/reset/exact-boundary recording, explicit persistence workflows, critical trig/scale interactions and emulator admission/release gates.",
+  "next_action": "0075 fixes priority-only pattern leakage into numeric note/velocity/length merging.10native passes,492units,Codex review. Next numeric merge fractional/negative/pentatonic/scale domains, Lower Codex arbitration; broader manual and emulator gates remain incomplete.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -140,5 +140,6 @@
   "recording_ten_slot_validation": "docs/testing/recording-ten-slot-validation.json",
   "recording_memory_validation": "docs/testing/recording-memory-validation.json",
   "recording_memory_branch_validation": "docs/testing/recording-memory-branch-validation.json",
-  "recording_persistence_validation": "docs/testing/recording-persistence-validation.json"
+  "recording_persistence_validation": "docs/testing/recording-persistence-validation.json",
+  "numeric_merge_validation": "docs/testing/numeric-merge-validation.json"
 }

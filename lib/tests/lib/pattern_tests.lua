@@ -570,3 +570,58 @@ function test_length_masks_should_take_precedence_over_lengths()
 
   luaunit.assert_equals(pattern.get_and_merge_patterns(1, "all", false, false, "up").lengths[5], 80)
 end
+function test_priority_sources_do_not_leak_into_numeric_fields()
+  local expected = {average={3,30,3}, up={5,50,5}, down={1,10,1}}
+  local fields = {"note_values", "velocity_values", "lengths"}
+  for priority_field=1,3 do
+    for mode,values in pairs(expected) do
+      for _,explicit_false in ipairs({false,true}) do
+        program.init()
+        local song=program.get_song_pattern(1)
+        local channel=song.channels[1]
+        channel.selected_patterns={[1]=true,[2]=true}
+        if explicit_false then channel.selected_patterns[3]=false end
+        for source=1,3 do
+          song.patterns[source].trig_values[1]=1
+          song.patterns[source].note_values[1]=({2,4,9})[source]
+          song.patterns[source].velocity_values[1]=({20,40,90})[source]
+          song.patterns[source].lengths[1]=({2,4,9})[source]
+        end
+        local modes={mode,mode,mode};modes[priority_field]="pattern_number_3"
+        local merged=pattern.get_and_merge_patterns(1,"all",modes[1],modes[2],modes[3])
+        for field=1,3 do
+          luaunit.assert_equals(merged[fields[field]][1],field==priority_field and ({9,90,9})[field] or values[field])
+        end
+        luaunit.assert_equals(merged.trig_values[1],1)
+      end
+    end
+  end
+end
+
+function test_numeric_priority_mask_eligibility_and_final_overrides()
+  for _,masked in ipairs({false,true}) do
+    program.init()
+    local song=program.get_song_pattern(1)
+    local channel=song.channels[1]
+    channel.selected_patterns={[1]=true,[2]=true}
+    for source=1,3 do
+      song.patterns[source].trig_values[1]=source==3 and 1 or 0
+      song.patterns[source].note_values[1]=({2,4,9})[source]
+      song.patterns[source].velocity_values[1]=({20,40,90})[source]
+      song.patterns[source].lengths[1]=({2,4,9})[source]
+    end
+    if masked then channel.step_trig_masks[1]=1 end
+    local merged=pattern.get_and_merge_patterns(1,"all","average","pattern_number_3","average")
+    luaunit.assert_equals(merged.trig_values[1],masked and 1 or 0)
+    luaunit.assert_equals(merged.note_values[1],masked and 3 or 0)
+    luaunit.assert_equals(merged.lengths[1],masked and 3 or 0)
+    luaunit.assert_equals(merged.velocity_values[1],90)
+    channel.step_note_masks[1]=72
+    channel.step_velocity_masks[1]=77
+    channel.step_length_masks[1]=8
+    merged=pattern.get_and_merge_patterns(1,"all","average","pattern_number_3","average")
+    luaunit.assert_equals(merged.note_mask_values[1],72)
+    luaunit.assert_equals(merged.velocity_values[1],77)
+    luaunit.assert_equals(merged.lengths[1],8)
+  end
+end
