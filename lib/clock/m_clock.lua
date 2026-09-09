@@ -807,7 +807,7 @@ function m_clock.channel_is_sliding(channel, trig_param)
   return false
 end
 
-function m_clock:start()
+function m_clock:start(from_external_transport)
   if not playing then
     -- Stopped edits can consume fractional preview carry in different orders.
     -- Build both processors from the final settings before the first onset.
@@ -822,6 +822,10 @@ function m_clock:start()
   
   midi_patch_recall.send()
   m_clock.set_playing()
+  -- Only incoming transport Start defines external beat zero. Local Play
+  -- against an already-running MIDI clock retains its own starting phase.
+  clock_lattice.sync_to_external = from_external_transport == true
+  clock_lattice.external_clock_active = function() return params:get("clock_source") == 2 end
   -- The onset callback prepares the resolved first step before its note.
   clock_lattice:start()
   m_midi.start()

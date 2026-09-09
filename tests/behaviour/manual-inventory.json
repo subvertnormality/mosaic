@@ -1747,7 +1747,10 @@
       "cases": [
         "M-TIM-003",
         "M-SYNC-001",
-        "M-SYNC-002"
+        "M-SYNC-002",
+        "M-SYNC-003",
+        "M-SYNC-004",
+        "M-SYNC-005"
       ],
       "status": "partial-domain-coverage",
       "domain": "Stopped-source changes, port1,100BPM external, native adoption of external tempo on internal handoff, then explicit90BPM menu edit. Live-source changes with pending notes, other rates and ports remain required.",
@@ -1767,7 +1770,8 @@
       "statement": "A live source switch preserves sequencer progress and rephases the pending wait to the selected source, releasing the active note after its remaining ticks.",
       "basis": "Pinned native clock_set_source and scheduler offset contract; literal48-tick authored note, public clock observations and physical controls.",
       "cases": [
-        "M-TIM-004"
+        "M-TIM-004",
+        "M-SYNC-005"
       ],
       "status": "partial-domain-coverage",
       "domain": "90BPM internal to100BPM MIDI, and100BPM MIDI to a pre-established100BPM internal reference, with pending two-step notes. Unselected MIDI Stop is ignored after return; physical grid Stop drains notes. Other phases/tempos, internal24PPQN tempo-publication transients and simultaneous transport remain required.",

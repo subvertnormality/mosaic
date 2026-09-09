@@ -215,6 +215,9 @@
     "initial_native_passes": 2,
     "cold_case": "M-SYNC-002",
     "cold_validation": "docs/testing/external-cold-start-validation.json",
-    "cold_status": "confirmed-upstream-baseline-failure"
+    "cold_status": "confirmed-upstream-baseline-failure",
+    "acquisition_checkpoint": "/home/andy/projects/mosaic-behaviour-runs/midi-acquisition-checkpoint.json",
+    "acquisition_validation": "docs/testing/midi-acquisition-validation.json",
+    "next_case": "Repeated external Start while playing"
   }
 }

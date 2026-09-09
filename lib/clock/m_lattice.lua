@@ -75,6 +75,8 @@ function Lattice:new(args)
   args = args == nil and {} or args
   l.auto = args.auto == nil and true or args.auto
   l.ppqn = args.ppqn == nil and 96 or args.ppqn
+  l.sync_to_external = args.sync_to_external == true
+  l.external_clock_active = args.external_clock_active
   l.step = 1
   l.enabled = false
   l.transport = 1
@@ -157,6 +159,20 @@ end
 -- @tparam table s this lattice
 function Lattice.auto_pulse(s)
   local interval = 1 / s.ppqn
+  if s.sync_to_external then
+    -- MIDI transport defines beat zero independently of callback latency.
+    -- Count each elapsed pulse once, including acquisition/callback catch-up.
+    -- Never reuse the callback's fractional phase as a permanent offset.
+    local next_pulse = 0
+    while not s.external_clock_active or s.external_clock_active() do
+      local due = math.floor(clock.get_beats() * s.ppqn + 1e-9)
+      while next_pulse <= due do
+        s:pulse()
+        next_pulse = next_pulse + 1
+      end
+      clock.sync(interval, 0)
+    end
+  end
   -- Preserve the immediate first pulse, then keep full intervals from its phase.
   -- A negative equivalent offset avoids skipping a pulse at a sync boundary.
   local offset = (clock.get_beats() % interval) - interval

@@ -473,7 +473,7 @@ function autosave_reset()
 end
 
 function clock.transport:start()
-  m_clock:start()
+  m_clock:start(params:get("clock_source") == 2)
 end
 
 function clock.transport:stop()
