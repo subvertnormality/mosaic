@@ -202,5 +202,19 @@
   "mixed_shuffle_inheritance_validation": "docs/testing/mixed-shuffle-inheritance-validation.json",
   "shuffle_field_inheritance_validation": "docs/testing/shuffle-field-inheritance-validation.json",
   "song_length_validation": "docs/testing/song-length-validation.json",
-  "song_repetition_validation": "docs/testing/song-repetition-validation.json"
+  "song_repetition_validation": "docs/testing/song-repetition-validation.json",
+  "external_midi_sync_gate": {
+    "status": "in_progress",
+    "card": "docs/testing/EXTERNAL-MIDI-SYNC.md",
+    "priority": "user-reported-live-sync-defect",
+    "both_directions": true,
+    "first_note_absolute_phase": true,
+    "initial_case": "M-SYNC-001",
+    "review": "/home/andy/projects/mosaic-behaviour-runs/tempo-reference-review-02.json",
+    "initial_validation": "docs/testing/external-start-phase-validation.json",
+    "initial_native_passes": 2,
+    "cold_case": "M-SYNC-002",
+    "cold_validation": "docs/testing/external-cold-start-validation.json",
+    "cold_status": "confirmed-upstream-baseline-failure"
+  }
 }

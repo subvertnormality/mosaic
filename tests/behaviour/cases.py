@@ -2843,7 +2843,16 @@ from song_length_sparse import sparse_song_lengths
 
 from song_repetitions import song_repetition_domain
 
+from song_tempo import song_tempo_bounds
+
+from external_start_phase import external_start_phase
+
+from external_cold_start import external_cold_start
+
 CASES={
+ 'M-SYNC-002':dict(run=external_cold_start,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold external Start followed by first-ever24PPQN clock: absolute beat origin, phrase timing and note releases'),
+ 'M-SYNC-001':dict(run=external_start_phase,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Warmed external24PPQN clock with four Start phases, absolute first-clock-to-note alignment, full phrase phase and releases'),
+ 'M-SONG-SETTINGS-002':dict(run=song_tempo_bounds,requirements=['SONG-SETTINGS','SONG-SLOTS'],description='Global tempo30/300 bounds and90 restoration persist across manually selected octave-fingerprinted slots, screen values and exact MIDI gates/phase'),
  'M-SONG-SETTINGS-001':dict(run=song_repetition_domain,requirements=['SONG-SETTINGS','SONG-LENGTH','SONG-ADVANCE','SONG-SLOTS'],description='All16 slot1 repetition counts with unchanged slot2 repeat1, octave fingerprints, exact transition indices, phase and MIDI releases'),
  'M-SONG-LENGTH-002':dict(run=sparse_song_lengths,requirements=['SONG-LENGTH','CH-RANGE'],description='Sparse four-trig full-range channel at global1/2/63/64 then shrink2, independent silent-gap/repeat timing and every MIDI release'),
  'M-SONG-LENGTH-001':dict(run=song_length_domain,requirements=['SONG-LENGTH','CH-RANGE'],description='All64 global fader values, lower/upper clamp attempts, shrink/full restoration through exact tooltip and all64 channel LEDs'),

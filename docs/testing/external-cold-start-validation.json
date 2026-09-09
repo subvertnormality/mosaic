@@ -1,0 +1,26 @@
+{
+  "case": "M-SYNC-002",
+  "status": "confirmed-upstream-baseline-failure",
+  "evidence": [
+    {
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c1d8beb3540e4a8e8e9256a0761f1ec4/manifest.json",
+      "sha256": "f32d69c8fb72490ee1fc9ada7c4c2607ec6f099a0231346597d2921717bb0a59",
+      "failure": "('Onset phase', 0, 0.025)"
+    },
+    {
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/5efbddd6f0ff477790bc28c6745aa035/manifest.json",
+      "sha256": "6654afba475162fe35f6e6a2d94a6095a82bfe6029957ca57891deae13946fa2",
+      "failure": "('Onset phase', 0, 0.028368785)"
+    }
+  ],
+  "native_probe": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/native-midi-start-854520f1c08e40d7a22d3cbc9837ef44/results.json",
+    "sha256": "7e86e5882eae2cc2f0e279ec5371d874bc82ba5e41a7a848ad3e0407d5973035"
+  },
+  "diagnosis": "Pinned official clock_midi.c defers transport until the second-ever Clock; cold startup differs from warm startup by one tick.",
+  "correction_status": "not-implemented",
+  "full_sync_gate_complete": false,
+  "next_action": "Prepare explicitly identified upstream-compatible candidate; test native cold/warm tempo estimator and transport, then rerun Mosaic in both modes. Preserve stock failure."
+}

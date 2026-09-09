@@ -1,0 +1,26 @@
+{
+  "case": "M-SYNC-001",
+  "status": "scoped-pass",
+  "scope": "Warm external-master startup at four Start-to-first-Clock phases; absolute note alignment and releases",
+  "evidence": [
+    {
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1de1b4c26a544d8886ea8826c8080164/manifest.json",
+      "sha256": "b0235df568e1780ce0269fdea6730da4b8581c8639ebb4288a415759bac82343"
+    },
+    {
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/84cee281846541b88ae429b9121bdcdc/manifest.json",
+      "sha256": "0c77cd86097a7067ff7b2f25b9aac3fd20cef4b6536f23e677e2bb5805b6ec45"
+    }
+  ],
+  "full_sync_gate_complete": false,
+  "remaining": [
+    "Cold startup",
+    "Mosaic master with independent receiver",
+    "Stop/Continue/SPP semantics",
+    "Routing and source lifecycle",
+    "Tempo changes, jitter/loss, sustained drift",
+    "Musical feature interactions and final Codex review"
+  ]
+}

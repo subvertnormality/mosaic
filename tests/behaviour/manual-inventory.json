@@ -1745,7 +1745,9 @@
       "statement": "MIDI transport and24PPQN input clock drive Mosaic note playback; returning to internal clock restores local transport.",
       "basis": "Pinned norns CLOCK controls plus Mosaic transport callbacks; broader than channel-speed manual subsection.",
       "cases": [
-        "M-TIM-003"
+        "M-TIM-003",
+        "M-SYNC-001",
+        "M-SYNC-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Stopped-source changes, port1,100BPM external, native adoption of external tempo on internal handoff, then explicit90BPM menu edit. Live-source changes with pending notes, other rates and ports remain required.",
@@ -5389,7 +5391,8 @@
         "M-TIME-005",
         "M-PATCH-027",
         "M-PATCH-043",
-        "M-SONG-SETTINGS-001"
+        "M-SONG-SETTINGS-001",
+        "M-SONG-SETTINGS-002"
       ],
       "status": "in_progress",
       "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
@@ -5481,7 +5484,8 @@
       ],
       "statement": "Norns pages set per-sequence repetitions and tempo; manual slot control when song mode off.",
       "cases": [
-        "M-SONG-SETTINGS-001"
+        "M-SONG-SETTINGS-001",
+        "M-SONG-SETTINGS-002"
       ],
       "status": "in_progress",
       "domain": "All repetition values; tempo bounds; switching edited/playing slot; mode toggles at boundary.",
