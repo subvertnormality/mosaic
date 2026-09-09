@@ -1,0 +1,374 @@
+{
+  "status": "scoped-behaviour-validated",
+  "base": "cb2f409bdac7b21805f86c74ef01099f855e0bb4",
+  "native_runs": [
+    {
+      "case": "M-SHUFFLE-009",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2d90608d1a1140958485cd7281af6cac/manifest.json",
+      "sha256": "2b97625ab5c564ff424df5c7cd6dde4ac6c0efcd6b2014310bb91bb7e201dd96",
+      "stages": [
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "feel",
+          "stage": "untouched-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.666666804567285e-09,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "feel",
+          "stage": "minimum-override",
+          "local_value": 1,
+          "effective_feel": "Drunk",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.8888888231316514e-09,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "feel",
+          "stage": "maximum-override",
+          "local_value": 4,
+          "effective_feel": "Clave",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.000000082740371e-09,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "feel",
+          "stage": "restored-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.7777777028271657e-09,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-010",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/41a5605432034629a67809ddce7434c3/manifest.json",
+      "sha256": "96fcfa66164f689ce21fcebd9aa106f31b84cb25a505011b275aa7aba55f8dd2",
+      "stages": [
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "basis",
+          "stage": "untouched-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.4444444529360112e-09,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "basis",
+          "stage": "minimum-override",
+          "local_value": 1,
+          "effective_feel": "Heavy",
+          "effective_basis": 1,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.333333443653828e-09,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "basis",
+          "stage": "maximum-override",
+          "local_value": 6,
+          "effective_feel": "Heavy",
+          "effective_basis": 6,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.8888888231316514e-09,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "basis",
+          "stage": "restored-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.7777777028271657e-09,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-011",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/879f25f54c00478ca1531ee3a0c6a93c/manifest.json",
+      "sha256": "748f1f4fbcda0929a3acdc8f95f47373fda8b9dd247d552dcc058b358abcc080",
+      "stages": [
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "amount",
+          "stage": "untouched-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.000000082740371e-09,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "amount",
+          "stage": "minimum-override",
+          "local_value": 1,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 1,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.000000082740371e-09,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "amount",
+          "stage": "maximum-override",
+          "local_value": 100,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 100,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 8.888889624358853e-10,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "amount",
+          "stage": "restored-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 1.333333443653828e-09,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-009",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8efc2ce28499429cad5a7230e4bb51f5/manifest.json",
+      "sha256": "1d33500bc9ed84577777ef872f3e9499805467224525926a701d34940a3acd9d",
+      "stages": [
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "feel",
+          "stage": "untouched-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.0009716503333332405,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "feel",
+          "stage": "minimum-override",
+          "local_value": 1,
+          "effective_feel": "Drunk",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.00107832699999999,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "feel",
+          "stage": "maximum-override",
+          "local_value": 4,
+          "effective_feel": "Clave",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.0011649710000001257,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "feel",
+          "stage": "restored-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.0015634806666666723,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-010",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8fa35b9894374f5186db2b679e2a4e6d/manifest.json",
+      "sha256": "21be1502571a4fb36667b633d173c2ea4d44f8a8174957d3ea8102ebf8b6056a",
+      "stages": [
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "basis",
+          "stage": "untouched-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.00138429233333337,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "basis",
+          "stage": "minimum-override",
+          "local_value": 1,
+          "effective_feel": "Heavy",
+          "effective_basis": 1,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.0008700583333336454,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "basis",
+          "stage": "maximum-override",
+          "local_value": 6,
+          "effective_feel": "Heavy",
+          "effective_basis": 6,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.0010177638888888563,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "basis",
+          "stage": "restored-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.0011579713333333963,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-011",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f9d770317d334a3f963150882446d0a7/manifest.json",
+      "sha256": "7bc7352148f3afd60c844464c7368511654f755a4245c955a46203c010e3fdad",
+      "stages": [
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "amount",
+          "stage": "untouched-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.000725630888888884,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "amount",
+          "stage": "minimum-override",
+          "local_value": 1,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 1,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.0010234633333334742,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "amount",
+          "stage": "maximum-override",
+          "local_value": 100,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 100,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.0009970763333333466,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-field-inheritance",
+          "field": "amount",
+          "stage": "restored-X",
+          "local_value": 0,
+          "effective_feel": "Heavy",
+          "effective_basis": 4,
+          "effective_amount": 50,
+          "onsets": 17,
+          "release_pairs": 17,
+          "max_phase_error_seconds": 0.0012302863333333303,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "production_changed": false,
+  "scope": "Feel, basis and amount each tested independently through untouched sentinel, minimum explicit override, maximum override and restored sentinel. Nondefault global Heavy/basis6/50percent prevents straight-timing false positives. Rational canonical pulse oracle plus exact MIDI values, complete gates and Stop release checks.",
+  "limitations": [
+    "Live global changes with mixed overrides and boundary-adjacent confirmations remain",
+    "Field interactions and wider affordable domains belong in native anchors plus final unit/integration hardening",
+    "Full manual and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

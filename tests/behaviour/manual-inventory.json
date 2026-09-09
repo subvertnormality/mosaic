@@ -3332,7 +3332,10 @@
         "M-SHUFFLE-005",
         "M-SHUFFLE-006",
         "M-SHUFFLE-007",
-        "M-SHUFFLE-008"
+        "M-SHUFFLE-008",
+        "M-SHUFFLE-009",
+        "M-SHUFFLE-010",
+        "M-SHUFFLE-011"
       ],
       "status": "partial-domain-coverage",
       "domain": "All legal feel/basis options; differing channels; tempo/division interactions.",
@@ -3362,7 +3365,10 @@
         "M-SHUFFLE-005",
         "M-SHUFFLE-006",
         "M-SHUFFLE-007",
-        "M-SHUFFLE-008"
+        "M-SHUFFLE-008",
+        "M-SHUFFLE-009",
+        "M-SHUFFLE-010",
+        "M-SHUFFLE-011"
       ],
       "status": "partial-domain-coverage",
       "domain": "Local/X transitions; global edit with mixed overrides; before/on/after reset.",

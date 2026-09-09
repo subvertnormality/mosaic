@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Continue inherited feel/basis/amount round trips and live global mixed-channel edits, then remaining manual/release/final hardening gates.",
+  "next_action": "Continue live global/mixed inheritance; audit unlinked manual workflows and add song length/settings coverage. Final unit/integration hardening remains mandatory.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -199,5 +199,6 @@
   "shuffle_start_validation": "docs/testing/shuffle-start-validation.json",
   "shuffle_inheritance_validation": "docs/testing/shuffle-inheritance-validation.json",
   "live_shuffle_inheritance_validation": "docs/testing/live-shuffle-inheritance-validation.json",
-  "mixed_shuffle_inheritance_validation": "docs/testing/mixed-shuffle-inheritance-validation.json"
+  "mixed_shuffle_inheritance_validation": "docs/testing/mixed-shuffle-inheritance-validation.json",
+  "shuffle_field_inheritance_validation": "docs/testing/shuffle-field-inheritance-validation.json"
 }

@@ -2835,7 +2835,13 @@ from shuffle_inheritance import shuffle_type_inheritance,live_shuffle_type_inher
 
 from shuffle_mixed_channels import mixed_shuffle_inheritance
 
+from shuffle_field_inheritance import shuffle_field_inheritance
+
 CASES={
+ 'M-SHUFFLE-009':dict(run=lambda c:shuffle_field_inheritance(c,'feel'),requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Inherited feel: untouched X, minimum/maximum local overrides and restored X under nondefault global Shuffle, exact MIDI phase and gates'),
+ 'M-SHUFFLE-010':dict(run=lambda c:shuffle_field_inheritance(c,'basis'),requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Inherited basis: untouched X, minimum/maximum local overrides and restored X under nondefault global Shuffle, exact MIDI phase and gates'),
+ 'M-SHUFFLE-011':dict(run=lambda c:shuffle_field_inheritance(c,'amount'),requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Inherited amount: untouched X, minimum/maximum local overrides and restored X under nondefault global Shuffle, exact MIDI phase and gates'),
+
  'M-SHUFFLE-008':dict(run=mixed_shuffle_inheritance,requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT','CH-DEVICE'],description='Simultaneous inheriting and explicit Swing channels across global Shuffle/Swing/Shuffle edits, independent MIDI routing, phase and gates'),
  'M-SHUFFLE-007':dict(run=lambda c:live_shuffle_type_inheritance(c,override=True),requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Live explicit Swing override retains inherited Shuffle until the global boundary, then preserves straight phase and complete gates'),
  'M-SHUFFLE-006':dict(run=live_shuffle_type_inheritance,requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Live restoration of X waits for the global boundary rather than the shorter channel loop, with complete MIDI gates and exact phase'),
