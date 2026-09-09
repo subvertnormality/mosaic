@@ -2796,6 +2796,7 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-MERGE-042':dict(run=lambda c:fractional_length_mask_merge(c,hierarchy=True),requirements=['MERGE-LENGTH','MASK-ATTRIBUTES','MASK-CLEAR-STEP'],description='Step length masks override channel masks; clearing either layer independently preserves and reveals the next duration source'),
  'M-MERGE-039':dict(run=lambda c:fractional_length_mask_merge(c,0),requirements=['MERGE-LENGTH','MASK-ATTRIBUTES'],description='Fractional channel length masks override changing merge modes; removal restores exact numeric duration including nonpositive gates'),
  'M-MERGE-040':dict(run=lambda c:fractional_length_mask_merge(c,1),requirements=['MERGE-LENGTH','MASK-ATTRIBUTES'],description='Fractional channel length masks override changing merge modes; removal restores exact numeric duration including nonpositive gates'),
  'M-MERGE-041':dict(run=lambda c:fractional_length_mask_merge(c,2),requirements=['MERGE-LENGTH','MASK-ATTRIBUTES'],description='Fractional channel length masks override changing merge modes; removal restores exact numeric duration including nonpositive gates'),

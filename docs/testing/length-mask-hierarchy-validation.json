@@ -1,0 +1,41 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-042",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/039cf128384142579240d889ab6ef05c/manifest.json",
+      "sha256": "040f6084c605507f819e40fdbabed1c1b6e14d69a7fa6d72f48b1cc6186c64a0",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-042",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/5b5d50fe1766431f89e8ff7e6ca1925a/manifest.json",
+      "sha256": "979c6558a0fdfac17f9c67aa3ee25fe408fb6fe0d8b614aacfbc213518d6384d",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "step_mask": 1.25,
+  "channel_mask": 0.5,
+  "merged_durations": {
+    "average": 3,
+    "longer": 5,
+    "shorter": 1
+  },
+  "assertions": [
+    "Held-step selector inherits channel default before explicit override",
+    "Step mask overrides channel mask across all numeric modes and returnedAverage",
+    "Removing channel mask preserves explicit step mask",
+    "Held-step K2 clears step masks, revealing restored channel default",
+    "Removing channel default restores numeric merge duration",
+    "Actual screen labels, exact MIDI release timing and balanced ordering across two complete cycles per stage"
+  ],
+  "retained_fixture_failure": "60b3cbf072ec4236a74af70b34b34498 expected X while holding a step; documented/refresher fallback is channel1/2. Corrected input to seven detents toward1.25, unchanged musical expectations.",
+  "limitations": [
+    "Other mask attributes, channel-wide clear, neighbouring-step isolation and recording interactions remain pending",
+    "Full manual, experimental clock admission and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

@@ -330,7 +330,7 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
         c.results.append(dict(kind='numeric-length-merge',source_steps=sources,mode=mode,expected_steps=length,passed=True))
 
 
-def fractional_length_mask_merge(c,variant=0):
+def fractional_length_mask_merge(c,variant=0,hierarchy=False):
     from cases import assert_durations,length_mask_display
     sources,merged,detents,label,mask=[([2,4],[3,5,1],8,'1/2',.5),([1,4],[3,6,0],1,'1/24',1/24),([2,4],[3,5,1],15,'1.25',1.25)][variant]
     c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
@@ -352,6 +352,29 @@ def fractional_length_mask_merge(c,variant=0):
             c.action(type='key',n=1,state=1);c.elapse(.3)
             try:c.tap(16,8);c.led_values([(16,8)],[level])
             finally:c.action(type='key',n=1,state=0)
+        if hierarchy:
+            assert variant==0
+            c.action(type='grid',x=1,y=4,state=1)
+            try:
+                length_mask_display(c,label);c.enc(3,15-detents);length_mask_display(c,'1.25')
+            finally:c.action(type='grid',x=1,y=4,state=0)
+            c.elapse(.06);length_mask_display(c,label)
+            # An explicit step mask remains in force whether or not the
+            # channel default exists. Clearing it later must reveal that default.
+            for channel_active in (True,False):
+                if not channel_active:c.enc(3,-detents);length_mask_display(c,'X')
+                marker=c.snapshot()['midi_count']
+                notes=c.playback([(1,[144,60,127])],cycles=2,timeout=5)
+                assert_durations(c,notes,[1.25]*2)
+                for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i*8/6)<=tolerance
+                events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
+                assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in notes for msg in ([144,60,127],[128,60,127])],events
+                c.results.append(dict(kind='step-length-mask-precedence',mode=mode,channel_active=channel_active,expected_steps=1.25,passed=True))
+            c.enc(3,detents);length_mask_display(c,label)
+            c.action(type='grid',x=1,y=4,state=1)
+            try:c.key(2)
+            finally:c.action(type='grid',x=1,y=4,state=0)
+            c.elapse(.06);length_mask_display(c,label)
         # Change merge mode while the mask is active, then remove the mask.
         for masked,duration in [(True,mask),(False,unmasked)]:
             if not masked:c.enc(3,-detents);length_mask_display(c,'X')
