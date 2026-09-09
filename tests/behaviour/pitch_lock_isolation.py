@@ -1,6 +1,6 @@
 """Independent MIDI oracles for pitch-lock ownership across channels/song copies."""
 
-def pitch_lock_isolation(c,song_copy=False,history=False):
+def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False):
     from cases import assign_trig_parameter,assert_durations
     c.configure()
     c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
@@ -17,7 +17,8 @@ def pitch_lock_isolation(c,song_copy=False,history=False):
         try:c.elapse(.05);c.key(2)
         finally:c.action(type='grid',x=step,y=4,state=0)
         c.elapse(.15)
-    def verify(one,two,label):
+    def verify(one,two,label,driver=c):
+        c=driver
         before=c.snapshot()['midi_count'];c.tap(1,8)
         def emitted(state):return [m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
         state=c.wait(lambda state:all(sum(m['port']==port for m in emitted(state))>=9 for port in [1,2]),4)
@@ -55,6 +56,38 @@ def pitch_lock_isolation(c,song_copy=False,history=False):
         c.key(3);verify(one,[65,65,65,72],'branched-history-end')
         c.tap(1,1);c.key(2);verify([60]*4,[65,65,65,72],'other-history-survives-branch')
         c.key(3);verify(one,[65,65,65,72],'other-history-redo-survives-branch')
+        if persistence:
+            from driver import Driver,digest
+            def save_idle(driver):
+                previous=(driver.data_directory/'autosave.ptn').stat().st_mtime_ns if (driver.data_directory/'autosave.ptn').exists() else -1
+                driver.elapse(59);driver.elapse(2)
+                driver.wait(lambda _:(driver.data_directory/'autosave.ptn').is_file() and (driver.data_directory/'autosave.ptn').stat().st_mtime_ns>previous)
+                assert (driver.data_directory/'autosave.pset').is_file()
+            save_idle(c);c.finish()
+            original={name:digest(c.data_directory/name) for name in ['autosave.ptn','autosave.pset']}
+            next_seed=c.data_directory
+            for generation in range(2):
+                out=c.out/('pitch-history-reload-'+str(generation));out.mkdir()
+                loaded=Driver(out,project_seed=next_seed,**c.launch_options)
+                try:
+                    # Cold init does not preserve the encoder-selected UI page.
+                    loaded.tap(3,8);loaded.tap(1,1);loaded.enc(1,-10);loaded.enc(1,2)
+                    loaded.screen_header('Ch. 1 Memory',selected=3)
+                    verify(one if generation==0 else [60]*4,[65,65,65,72],'cold-restored-history-'+str(generation),loaded)
+                    if generation==0:
+                        loaded.key(2)
+                        verify([60]*4,[65,65,65,72],'save-undone-first-channel',loaded)
+                        save_idle(loaded)
+                    else:
+                        loaded.key(3);verify(one,[65,65,65,72],'redo-after-undone-cold-save',loaded)
+                        loaded.tap(2,1);loaded.screen_header('Ch. 2 Memory',selected=3)
+                        loaded.key(2);verify(one,[65]*4,'other-channel-undo-after-two-boots',loaded)
+                        loaded.key(3);verify(one,[65,65,65,72],'discarded-redo-does-not-return-after-boots',loaded)
+                    loaded.results.append(dict(kind='pitch-lock-history-cold-generation',generation=generation,passed=True))
+                finally:loaded.finish()
+                next_seed=loaded.data_directory
+            assert {name:digest(c.data_directory/name) for name in original}==original
+            c.results.append(dict(kind='pitch-lock-history-persistence',cold_generations=2,undone_position_and_redo=True,source_preserved=True,passed=True))
         return
     if song_copy:
         c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1)

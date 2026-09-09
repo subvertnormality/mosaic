@@ -1,0 +1,33 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-PARAM-035",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d0c3ace10d6f4d40be79fb96ee3df9da/manifest.json",
+      "sha256": "d1ad6a740159a63a68f07eb99e277d92d7e8476dab7b19d00776ed55130d89f9",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-035",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f35e4c0934d443f6963630b2504d3c89/manifest.json",
+      "sha256": "dc2033d8fc8cd7a8a2076472b6565496f5e3e68d9f27b25622207964205d31bf",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Actual autosave and two fresh native processes preserve fixed/quantised pitch locks and independent channel histories",
+    "Saving with channel1 undone preserves that position on the second boot; redo restores zero/127 locks",
+    "Channel2 undo/redo preserves its new branch and does not revive discarded older locks after either boot",
+    "Native Memory headers and exact two-route pitches/velocities, eight complete releases per route and phase at each replay stage"
+  ],
+  "limitations": [
+    "Initial attempt561f7ac assumed the encoder-selected Memory page survives cold init; corrected to established native navigation before checking restored contents",
+    "Nested generation results and traces carry cold-start evidence; parent closed before nested runs",
+    "Other song slots, intermediate undo positions, named save and broader failure domains remain required",
+    "Current controlled profile remains diagnostic; full manual/runtime gates and final hardening remain incomplete"
+  ],
+  "full_campaign_complete": false
+}

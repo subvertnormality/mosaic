@@ -1638,7 +1638,8 @@
         "M-RANGE-SAVED-001",
         "M-RANGE-SAVED-002",
         "M-RANGE-SAVED-005",
-        "M-RANGE-SAVED-006"
+        "M-RANGE-SAVED-006",
+        "M-PARAM-035"
       ],
       "status": "partial-domain-coverage",
       "domain": "Fresh stopped project with four notes,59-second absence and61-second save, fresh-process reload; repeated saves, playing exclusion, interruption, corrupt/old data and explicit save/load dialogs remain required.",
@@ -3361,7 +3362,8 @@
         "M-REC-PARAM-025",
         "M-REC-PARAM-026",
         "M-REC-PARAM-027",
-        "M-PARAM-034"
+        "M-PARAM-034",
+        "M-PARAM-035"
       ],
       "status": "partial-domain-coverage",
       "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts.",
@@ -3601,7 +3603,8 @@
         "M-PARAM-031",
         "M-PARAM-032",
         "M-PARAM-033",
-        "M-PARAM-034"
+        "M-PARAM-034",
+        "M-PARAM-035"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -3716,7 +3719,8 @@
         "M-PARAM-018",
         "M-PARAM-032",
         "M-PARAM-033",
-        "M-PARAM-034"
+        "M-PARAM-034",
+        "M-PARAM-035"
       ],
       "status": "in_progress",
       "domain": "Every MIDI note where cheap; sentinel/bounds; all competing note sources.",
@@ -3749,7 +3753,8 @@
         "M-PARAM-017",
         "M-PARAM-032",
         "M-PARAM-033",
-        "M-PARAM-034"
+        "M-PARAM-034",
+        "M-PARAM-035"
       ],
       "status": "in_progress",
       "domain": "All legal MIDI inputs and roots/scales; lower ties and endpoints; channel/step locks and Off inheritance; octave/transpose/degree/rotation and pentatonic independence; masks/random precedence; scale Off, root fallback, channel/song isolation and lifecycle.",
