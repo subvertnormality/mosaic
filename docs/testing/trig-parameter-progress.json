@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Stop Safety cleanup validated in both modes, including retained-arm recording and ordinary Stop regression;490units pass. Continue full ten-slot, mute, song, undo, persistence, reset and exact-boundary recording interactions. Full manual and emulator gates remain incomplete.",
+  "next_action": "Recording mute/unmute output suppression,12-second resume and distinct-default replay validated D/R. Continue ten-slot/song/undo/persistence/reset/exact-boundary domains and remaining full manual/emulator gates.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -135,5 +135,6 @@
   "probability_validation": "docs/testing/probability-validation.json",
   "live_recording_validation": "docs/testing/live-parameter-recording-validation.json",
   "recording_resume_validation": "docs/testing/recording-resume-validation.json",
-  "recording_stop_safety_validation": "docs/testing/recording-stop-safety-validation.json"
+  "recording_stop_safety_validation": "docs/testing/recording-stop-safety-validation.json",
+  "recording_mute_validation": "docs/testing/recording-mute-validation.json"
 }

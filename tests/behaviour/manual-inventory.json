@@ -3258,7 +3258,8 @@
       "statement": "One-second hold or K1-press mutes per sequence; muted channel select LED dims.",
       "cases": [
         "M-MUTE-001",
-        "M-CHANNEL-001"
+        "M-CHANNEL-001",
+        "M-REC-PARAM-023"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 channels; threshold-1/on/+1; pending notes; repeated gesture; sequence changes.",
@@ -6271,7 +6272,8 @@
         "M-REC-PARAM-019",
         "M-REC-PARAM-020",
         "M-REC-PARAM-021",
-        "M-REC-PARAM-022"
+        "M-REC-PARAM-022",
+        "M-REC-PARAM-023"
       ],
       "status": "in_progress",
       "domain": "Every slot; existing locks overwritten only in interval; reset/sequence change; edit exactly at end; disarm.",

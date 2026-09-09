@@ -3,7 +3,7 @@
 def recording_lifetime(c,ending,scale_page=False):
     from cases import assign_trig_parameter,menu_value,parameter_list_label
     from patch_params import open_patch_control,turn
-    assert ending in ('selected-wrap','nonselected-wrap','disarm','stop','reassign','same-assignment','configuration','slide-active','slide-off','pending-assignment','pending-configuration')
+    assert ending in ('selected-wrap','nonselected-wrap','disarm','stop','reassign','same-assignment','configuration','slide-active','slide-off','pending-assignment','pending-configuration','mute')
     slide=ending.startswith('slide-')
     value=-1 if ending=='slide-off' else 64
     open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
@@ -21,7 +21,18 @@ def recording_lifetime(c,ending,scale_page=False):
     if value==-1:c.action(type='enc',n=3,delta=-126);c.elapse(.15)
     else:c.enc(3,1)
     wanted_steps=4;replay=[24,64,64,64];port=1;channel=0;cc_number=1
-    if ending=='selected-wrap':wanted_steps=5
+    if ending=='mute':
+        def shift_mute():
+            c.action(type='key',n=1,state=1)
+            try:c.elapse(.3);c.tap(1,1)
+            finally:c.action(type='key',n=1,state=0)
+        shift_mute();c.led_values([(1,1)],[7])
+        marker=c.snapshot()['midi_count'];c.elapse(8)
+        quiet=c.snapshot()
+        assert not [e for e in quiet['midi'] if e['index']>marker and (e['bytes'][0]&240==176 or (e['bytes'][0]&240==144 and e['bytes'][2]>0))],quiet['midi']
+        assert not quiet['midi_capture']['outstanding']
+        shift_mute();c.led_values([(1,1)],[15]);wanted_steps=2
+    elif ending=='selected-wrap':wanted_steps=5
     elif ending=='nonselected-wrap':
         c.tap(4,8) if scale_page else c.tap(2,1)
         c.wait(lambda state:len(notes(state))>=5,timeout=18)
@@ -60,13 +71,20 @@ def recording_lifetime(c,ending,scale_page=False):
             assert len(notes(c.snapshot()))<4,'Reassignment missed pre-wrap step4'
     state=c.wait(lambda state:len(notes(state))>=wanted_steps,timeout=18)
     ons=notes(state);assert len(ons)==wanted_steps,ons
+    if ending=='mute':
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        resumed_seconds=(ons[1][field]-ons[0][field])/1e9
+        assert abs(resumed_seconds-12)<=tolerance,dict(resumed_seconds=resumed_seconds,expected=12)
     for i,note in enumerate(ons):
         expected_port=port if ending=='configuration' and i>=2 else 1
         expected_channel=channel if ending=='configuration' and i>=2 else 0
-        assert (note['port'],note['bytes'])==(expected_port,[144+expected_channel,(60,62,64,65)[i%4],(127,117,107,97)[i%4]])
+        position=(0,3)[i] if ending=='mute' else i%4
+        assert (note['port'],note['bytes'])==(expected_port,[144+expected_channel,(60,62,64,65)[position],(127,117,107,97)[position]])
     emitted=[e for e in state['midi'] if e['index']>edit and e['bytes'][0]&240==176]
     actual=[(e['port'],e['bytes']) for e in emitted]
-    if ending=='selected-wrap':wanted=[(1,[176,1,v]) for v in [64,64,64,64,24]]
+    if ending=='mute':wanted=[(1,[176,1,64])]*2 # Manual edit and resumed step4 only.
+    elif ending=='selected-wrap':wanted=[(1,[176,1,v]) for v in [64,64,64,64,24]]
     elif ending=='nonselected-wrap':wanted=[(1,[176,1,v]) for v in [64,64,96,64,24,64,64,64]]
     elif ending=='disarm':wanted=[(1,[176,1,v]) for v in [64,64,96,64]]
     elif ending=='stop':wanted=[(1,[176,1,v]) for v in [64,24,64,96,64]]
