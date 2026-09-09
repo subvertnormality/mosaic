@@ -1,0 +1,32 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-PARAM-034",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/806f0baf4f1d45c692ed0797108e5fac/manifest.json",
+      "sha256": "5e806a58a358a3081e51c5fa59d22052d9311ef8a301110ca651f1b663166652",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-034",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0a76dc60376d425990def4b43a3cd579/manifest.json",
+      "sha256": "9220a30e73f395b5b2979c28fa4dd0b8e973e3b7234158374b90333a56df2450",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Actual Memory page headers and K2/K3 navigation on two independently routed MIDI channels",
+    "Undo/redo restores channel defaults versus local zero/127 and quantised pitch locks without changing the other channel",
+    "A new lock after undo discards that channel redo branch; the other channel history survives",
+    "Repeated start/end history navigation preserves the new branch",
+    "Exact pitches/velocities over two phrases, eight full releases per route, onset phase and cross-route alignment at every stage"
+  ],
+  "limitations": [
+    "Two selected channel histories; arbitrary intermediate positions, reassignment and persistence combinations remain required",
+    "Current controlled profile remains diagnostic; no whole-campaign or refactor-readiness claim"
+  ],
+  "full_campaign_complete": false
+}

@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Pitch-lock channel/song-copy isolation validated. Continue reassignment, undo/persistence and scale/merge interactions, then remaining manual/runtime gates and mandatory final unit/integration hardening.",
+  "next_action": "Pitch-lock independent undo/redo and new-edit branching validated. Continue reassignment/persistence and remaining scale/merge interactions, then manual/runtime gates and mandatory final unit/integration hardening.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -188,5 +188,6 @@
     "required_before_goal_completion": true,
     "required_before_refactor": true
   },
-  "pitch_lock_isolation_validation": "docs/testing/pitch-lock-isolation-validation.json"
+  "pitch_lock_isolation_validation": "docs/testing/pitch-lock-isolation-validation.json",
+  "pitch_lock_history_validation": "docs/testing/pitch-lock-history-validation.json"
 }

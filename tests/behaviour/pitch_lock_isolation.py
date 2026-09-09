@@ -1,6 +1,6 @@
 """Independent MIDI oracles for pitch-lock ownership across channels/song copies."""
 
-def pitch_lock_isolation(c,song_copy=False):
+def pitch_lock_isolation(c,song_copy=False,history=False):
     from cases import assign_trig_parameter,assert_durations
     c.configure()
     c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
@@ -41,6 +41,21 @@ def pitch_lock_isolation(c,song_copy=False):
     lock(2,0);lock(4,127)
     one=[60,0,60,127];two=[62,65,0,65]
     verify(one,two,'independent-fixed-and-quantised-locks')
+    if history:
+        c.tap(1,1);c.enc(1,1);c.screen_header('Ch. 1 Memory',selected=3)
+        c.key(2);verify([60]*4,two,'undo-first-channel-only')
+        c.key(3);verify(one,two,'redo-first-channel-extreme-locks')
+        c.tap(2,1);c.screen_header('Ch. 2 Memory',selected=3)
+        c.key(2);verify(one,[65]*4,'undo-second-channel-only')
+        c.key(3);verify(one,two,'redo-second-channel-quantised-and-zero')
+        c.key(2);c.enc(1,-1);lock(4,72);c.enc(1,1)
+        c.screen_header('Ch. 2 Memory',selected=3);c.key(3)
+        verify(one,[65,65,65,72],'new-edit-discards-second-channel-redo')
+        c.key(2);verify(one,[65]*4,'branched-history-start')
+        c.key(3);verify(one,[65,65,65,72],'branched-history-end')
+        c.tap(1,1);c.key(2);verify([60]*4,[65,65,65,72],'other-history-survives-branch')
+        c.key(3);verify(one,[65,65,65,72],'other-history-redo-survives-branch')
+        return
     if song_copy:
         c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1)
         c.led_values([(1,1),(2,1)],[7,15]);c.tap(3,8)
