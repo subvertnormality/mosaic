@@ -1,3 +1,4 @@
+from random_note_domains import random_note_domains
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from project_dialog_lifecycle import project_dialog_while_playing
@@ -2862,6 +2863,8 @@ CASES={
  'M-REC-PARAM-024':dict(run=recording_ten_slots,requirements=['REC-PARAM-AUTOMATION'],description='All ten recording slots: staggered odd zero/even one edits, untouched-slot isolation, exact MIDI deadlines and distinct-default disarmed replay'),
  'M-REC-PARAM-023':dict(run=lambda c:recording_lifetime(c,'mute'),requirements=['REC-PARAM-AUTOMATION','CH-MUTE'],description='Mute spans eligible recording steps: no MIDI during mute, correctly phased resume and distinct-default disarmed lock replay'),
  'M-REC-PARAM-022':dict(run=recording_stop_safety,requirements=['REC-PARAM-AUTOMATION','REC-ARM','NAV-TRANSPORT'],description='Long Stop under Shift press to stop clears pending parameter recording while retaining arm and previously recorded steps'),
+ 'M-PARAM-037':dict(run=lambda c:random_note_domains(c,twos=False),requirements=['PARAM-RANDOM','PARAM-RANDOM-TWOS'],description='Literal random offset domains0..4, separate seeded PRNG exact MIDI, random plus twos composition, zero restoration and full gates/phase; twos=False'),
+ 'M-PARAM-038':dict(run=lambda c:random_note_domains(c,twos=True),requirements=['PARAM-RANDOM','PARAM-RANDOM-TWOS'],description='Literal random offset domains0..4, separate seeded PRNG exact MIDI, random plus twos composition, zero restoration and full gates/phase; twos=True'),
  'M-PARAM-036':dict(run=lambda c:pitch_lock_isolation(c,reassign=True),requirements=['PARAM-SLOTS','PARAM-FIXED','PARAM-QUANTISED-FIXED','LOCK-PARAM-SET'],description='Fixed/quantised/None slot reassignment retains raw zero/tie/127 values, same-target confirmation preserves locks, dormant locks do not apply, second MIDI channel remains unchanged'),
  'M-PARAM-035':dict(run=lambda c:pitch_lock_isolation(c,history=True,persistence=True),requirements=['PARAM-SLOTS','PARAM-FIXED','PARAM-QUANTISED-FIXED','MEMORY-RECORD','PERSIST-AUTO-001'],description='Two cold starts preserve fixed/quantised extreme locks, channel-isolated branch history, saved undone position and redo via native Memory UI and exact MIDI'),
  'M-PARAM-034':dict(run=lambda c:pitch_lock_isolation(c,history=True),requirements=['PARAM-SLOTS','PARAM-FIXED','PARAM-QUANTISED-FIXED','MEMORY-TRUNCATE','MEMORY-RECORD'],description='Independent pitch-lock undo/redo on two MIDI channels, zero/127 restoration and new edit after undo discards only its channel redo history'),

@@ -1,0 +1,47 @@
+{
+  "status": "scoped-domain-validated",
+  "native_runs": [
+    {
+      "case": "M-PARAM-037",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/3399351aeaf148289ec98d088be96856/manifest.json",
+      "sha256": "85dea3f66b39a30e6e43cbf016b5e884cf20ba272b2e220a9e32d7c7f3112a92",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-038",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/766f34bd915545d791d156b8f18e45ab/manifest.json",
+      "sha256": "e0ed74b0d1e6da4cfe7f688b87c78e77235bf3278982cea6c496b08ce96508c5",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-037",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/954875efa24242de9c6f69ca298bb165/manifest.json",
+      "sha256": "406c0b0f5325fd648367efb710bf66e27e5ae85e4eb907451a6b1227bc882be5",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-038",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7973db64afd94ca5b74697d0ec9daaa0/manifest.json",
+      "sha256": "c8ab23a8dc4db9af1c2a71ebb2ed42b8294b6d92ee902af50e7b376e2439e30d",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Every documented single-parameter offset at values0..4 occurs and matches separate seeded Lua PRNG expectations",
+    "Random4 plus Twos4 composition uses sum of independently selected offsets",
+    "Both parameters zero restores original phrase without shifting PRNG state",
+    "Exact MIDI route/pitch/velocity, 32 full gates and phase through closing onset per stage"
+  ],
+  "limitations": [
+    "Random pentatonic filtering disabled; its signed/zero behaviour and other switches remain required",
+    "Legal parameter maxima, masks, locks, probability interplay and lifecycle combinations remain required",
+    "Only documented finite domains0..4 exhausted here; combined domain sampled by seed42 with exact expected sequence",
+    "Controlled profile unadmitted; full campaign and final unit/integration hardening incomplete"
+  ],
+  "full_campaign_complete": false
+}

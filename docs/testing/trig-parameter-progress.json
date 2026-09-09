@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "All16 scale edit/application and highest-slot lock precedence slice validated. Continue remaining scale lifecycle, manual and runtime gates, then mandatory final unit/integration hardening.",
+  "next_action": "Continue signed/zero random pentatonic semantics, lock and mask combinations, remaining manual/runtime gates, then final unit/integration hardening.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -193,5 +193,6 @@
   "pitch_lock_persistence_validation": "docs/testing/pitch-lock-persistence-validation.json",
   "pitch_lock_reassignment_validation": "docs/testing/pitch-lock-reassignment-validation.json",
   "merge_harmony_validation": "docs/testing/merge-harmony-validation.json",
-  "scale_slot_matrix_validation": "docs/testing/scale-slot-matrix-validation.json"
+  "scale_slot_matrix_validation": "docs/testing/scale-slot-matrix-validation.json",
+  "random_note_domains_validation": "docs/testing/random-note-domains-validation.json"
 }

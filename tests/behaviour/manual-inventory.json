@@ -3794,8 +3794,11 @@
         "MAN-059"
       ],
       "statement": "Random note offset domains alternate asymmetric/symmetric sets and optionally pentatonic-quantise.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PARAM-037",
+        "M-PARAM-038"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Documented0..4 examples; all legal values; odd/even boundaries; locks; combined random-twos.",
       "oracles": [
         "Independent offset sets, fixed seed and rational scale mapping; zero leaves note unchanged."
@@ -3810,7 +3813,8 @@
         "end_line": 783,
         "text": "##### Random Note\n\nThis trig param introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random twos note trig param. By default, random notes are quantised to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings.",
         "sha256": "dc4172a67ea7f1513ce25e202c4ca6315072e4af4b7ab39537720c7012737af0"
-      }
+      },
+      "coverage_reconciliation": "Documented values0..4, exact seed42 single/combined output and zero restoration covered by037/038; full legal values, locks/masks, random-pentatonic and lifecycle interactions remain."
     },
     {
       "id": "PARAM-RANDOM-TWOS",
@@ -3818,8 +3822,11 @@
         "MAN-060"
       ],
       "statement": "Random-twos offsets use even intervals with the documented domains.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PARAM-037",
+        "M-PARAM-038"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "0..4 examples and all legal values; composition with random note; pentatonic on/off.",
       "oracles": [
         "Independent even-offset domains and seeded MIDI; no implementation imports."
@@ -3834,7 +3841,8 @@
         "end_line": 787,
         "text": "##### Random Twos Note\n\nSimilar to random note, this trig param introduces an element of random to your selected notes. The difference here is that twos note restricts values to those divisible by two. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note two higher in the scale. A value of 2 will randomly give your existing note, the note two higher in your selected scale, or the note two lower. A value of 3 will randomly select notes -2, 0, 2 or 4. A value of 4 will randomly select notes -4, -2, 0, 2 or 4. And so on. Use trig locks to really spice things up. These can be combined with random note trig params. Again, random notes are quantised to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings.",
         "sha256": "ae75c7ba34979e83fb8cd7c52efc156030e81cb23562748482ddf487d28e6e68"
-      }
+      },
+      "coverage_reconciliation": "Documented values0..4, exact seed42 single/combined output and zero restoration covered by037/038; full legal values, locks/masks, random-pentatonic and lifecycle interactions remain."
     },
     {
       "id": "CHORD-STRUM",
