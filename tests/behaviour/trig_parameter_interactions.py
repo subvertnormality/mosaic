@@ -236,3 +236,71 @@ def seeded_probability(c,probability=50,opportunities=64):
     assert all(abs(e)<=tolerance for e in reference_errors),reference_errors
     assert all(abs(e)<=tolerance for e in errors),errors
     c.results.append(dict(kind='seeded-probability-reference-midi',probability=probability,actual=actual,accepted_zero_based_steps=accepted,reference_count=len(ref),reference_timing_errors=reference_errors,accepted_alignment_errors=errors,passed=True,scope='Every native reference opportunity through closing onset; first acceptance and rejected tail are checked.'))
+
+
+def probability_midi_locks(c,trigless=True,nrpn=False):
+    from cases import assign_trig_parameter,set_mosaic_options,assert_durations
+    c.configure()
+    if nrpn:c.enc(3,1);c.key(3) # Generic CC -> existing configured NRPN fixture.
+    set_mosaic_options(c,[('Trigless locks',trigless)])
+    c.tap(2,1);c.screen_header('Ch. 2 Device Config',selected=5)
+    c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
+    c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1);c.enc(1,-3)
+    assign_trig_parameter(c,'NRPN14' if nrpn else 'CC 1')
+    values=[126,253,126,253] if nrpn else [24,48,72,96]
+    for step,value in enumerate(values,1):
+        c.action(type='grid',x=step,y=4,state=1)
+        try:
+            c.elapse(.05);c.action(type='enc',n=3,delta=-126)
+            c.enc(3,(1 if value==126 else 2) if nrpn else value+1)
+            if nrpn:
+                c.action(type='key',n=1,state=1);c.elapse(.3)
+                try:c.enc(3,-2 if value==126 else -4)
+                finally:c.action(type='key',n=1,state=0)
+        finally:c.action(type='grid',x=step,y=4,state=0)
+    c.enc(2,1);assign_trig_parameter(c,'Trig Probability');c.enc(3,1)
+    def phase(active,accepted,label):
+        before=c.snapshot()['midi_count'];c.tap(1,8)
+        def ons(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
+        def refs(state):return [e for e in ons(state) if e['port']==2 and e['bytes'][0]==145]
+        state=c.wait(lambda state:len(refs(state))>=2*len(active)+1)
+        ref=refs(state);assert len(ref)==2*len(active)+1
+        opportunities=[4*cycle+step-1 for cycle in range(2) for step in active]+[0+8]
+        assert [(e['port'],e['bytes']) for e in ref]==[(2,[145,(60,62,64,65)[i%4],(127,117,107,97)[i%4]]) for i in opportunities]
+        selected=[e for e in ons(state) if e['port']==1 and e['bytes'][0]==144]
+        target_steps=[4*cycle+step-1 for cycle in range(2) for step in accepted]
+        assert [(e['port'],e['bytes']) for e in selected]==[(1,[144,(60,62,64,65)[i%4],(127,117,107,97)[i%4]]) for i in target_steps]
+        assert len(ons(state))==len(ref)+len(selected)
+        cc=[e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==176]
+        lock_steps=[i for i in range(9) if i%4+1 in active or trigless]
+        packets=[]
+        if nrpn:
+            assert len(cc)==4*len(lock_steps)
+            for i,step in enumerate(lock_steps):
+                group=cc[4*i:4*i+4];v=values[step%4]
+                assert [(e['port'],e['bytes']) for e in group]==[(1,[176,99,4]),(1,[176,98,5]),(1,[176,6,v//128]),(1,[176,38,v%128])]
+                packets.append(group[-1])
+        else:
+            assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,values[i%4]]) for i in lock_steps]
+            packets=cc
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        origin=ref[0][field]
+        for events,indexes in [(ref,opportunities),(selected,target_steps),(packets,lock_steps)]:
+            errors=[(e[field]-origin)/1e9-i/6 for e,i in zip(events,indexes)]
+            assert all(abs(e)<=tolerance for e in errors),errors
+        for note,step in zip(selected,target_steps):
+            packet=packets[lock_steps.index(step)]
+            assert packet['index']<note['index'],'MIDI lock must precede accepted note'
+        c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[])
+        assert_durations(c,ref,[1]*(len(ref)-1))
+        if selected:assert_durations(c,selected,[1]*len(selected))
+        c.results.append(dict(kind='probability-trigless-midi-locks',nrpn=nrpn,trigless=trigless,phase=label,active_steps=active,accepted_steps=accepted,lock_opportunities=lock_steps,passed=True))
+    phase([1,2,3,4],[],'probability0-active-trigs-retain-locks')
+    c.tap(5,8);c.tap(3,4);c.tap(3,8)
+    phase([1,2,4],[],'removed-trig-respects-trigless')
+    c.action(type='grid',x=4,y=4,state=1)
+    try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,101)
+    finally:c.action(type='grid',x=4,y=4,state=0)
+    c.elapse(.15)
+    phase([1,2,4],[4],'step-probability100-keeps-lock-before-note')

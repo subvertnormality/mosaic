@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Probability endpoints and independent seeded1/50/99 now pass D/R with first-onset/reference alignment, full rejected tails and comparator boundaries. Continue probability with trigless CC/NRPN lock/slide processing, masks/merged trigs and live edits; then full domain and seed/persistence/channel/song isolation. Quantised scale-switch interactions remain required. No production changes in this checkpoint.",
+  "next_action": "Probability x CC/standard NRPN x Trigless on/off passed022..025 in both modes. Continue live lock recording and probability/slide interactions. Inspect step.process_params dirty-recording guard: it passes undefined c instead of channel.number (source suspicion only; native baseline required before any fix). Build user-like recording scenario with existing locks and edited values, exact MIDI/step playback and undo/persistence. Mask/merge, full random domain, channel/song and quantised scale-switch obligations remain.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {

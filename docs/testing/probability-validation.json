@@ -17,8 +17,8 @@
   "scope": "Probability0/100, upper clamp, fixed-pitch suppression, per-step overrides and first/wrap clearing; exact sparse onset intervals and releases. No probabilistic frequency assumptions.",
   "remaining": [
     "Other legal intermediate values and seed/reseed lifecycle",
-    "Probability with masked/merged trigs, random pitch, trigless CC/NRPN locks and slides",
-    "Live edits, recording, channel/song isolation and persistence"
+    "Probability with masked/merged trigs, random pitch and active slides",
+    "Live edits and recording (old lock versus dirty edited value), channel/song isolation and persistence"
   ],
   "full_campaign_complete": false,
   "seeded_status": "1/50/99-independent-reference-aligned-passed",
@@ -475,5 +475,661 @@
     "failed_run": "767b2b7c507f4b63bc0b51059398d46c",
     "cause": "Existing helper hardcoded port1/channel1. Test-only fix matches each note route; five sensitivity tests verify default/reference, wrong port/channel, and wrong time.",
     "tests": "tests/behaviour/test_duration_routes.py"
+  },
+  "midi_lock_status": "CC/NRPN-x-trigless-native-matrix-passed",
+  "midi_lock_runs": [
+    {
+      "case": "M-PARAM-022",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8ba98d54305e4b25859fca79cdabf440/manifest.json",
+      "sha256": "6f53a3c867d754580feb2eefe8cfa76ee6f4d7de25429d4939c7c83b76b055f7",
+      "phases": [
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": true,
+          "phase": "probability0-active-trigs-retain-locks",
+          "active_steps": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": true,
+          "phase": "removed-trig-respects-trigless",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": true,
+          "phase": "step-probability100-keeps-lock-before-note",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [
+            4
+          ],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-PARAM-023",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2136b1c648324b74be19a0d9966be420/manifest.json",
+      "sha256": "cf1931d6f15f71632570a4785015847874a51362c14e5f4ac12f4bcd8740896f",
+      "phases": [
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": false,
+          "phase": "probability0-active-trigs-retain-locks",
+          "active_steps": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": false,
+          "phase": "removed-trig-respects-trigless",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": false,
+          "phase": "step-probability100-keeps-lock-before-note",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [
+            4
+          ],
+          "lock_opportunities": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-PARAM-024",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1ddaf11a97614e5aab7905ed70db2e75/manifest.json",
+      "sha256": "ba6fc13b0dc359489a07f588d89fc7d68b9d1e0bc29617c93e9e805f465d07c7",
+      "phases": [
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": true,
+          "phase": "probability0-active-trigs-retain-locks",
+          "active_steps": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": true,
+          "phase": "removed-trig-respects-trigless",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": true,
+          "phase": "step-probability100-keeps-lock-before-note",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [
+            4
+          ],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-PARAM-025",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/711debae7dc942a5ac131efb637ed573/manifest.json",
+      "sha256": "08273b96ff69ef8a5e0ac11c995e39f4b48662cd354e6c87592939b94af7ed41",
+      "phases": [
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": false,
+          "phase": "probability0-active-trigs-retain-locks",
+          "active_steps": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": false,
+          "phase": "removed-trig-respects-trigless",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": false,
+          "phase": "step-probability100-keeps-lock-before-note",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [
+            4
+          ],
+          "lock_opportunities": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-PARAM-022",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/15e79c1fada449b3a052209c08765f6a/manifest.json",
+      "sha256": "6fddcf59a9e7204bdcc7c083a9bb50b0941e1fd6ac7364eb744cbcd88373858b",
+      "phases": [
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": true,
+          "phase": "probability0-active-trigs-retain-locks",
+          "active_steps": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": true,
+          "phase": "removed-trig-respects-trigless",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": true,
+          "phase": "step-probability100-keeps-lock-before-note",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [
+            4
+          ],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-PARAM-023",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/387661c0bf304674a359bbaba7d72bd2/manifest.json",
+      "sha256": "9d91e93e82f63a7af21bee6ddd2d05c71fd54fd8c617b3743240b781f8a6e666",
+      "phases": [
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": false,
+          "phase": "probability0-active-trigs-retain-locks",
+          "active_steps": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": false,
+          "phase": "removed-trig-respects-trigless",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": false,
+          "trigless": false,
+          "phase": "step-probability100-keeps-lock-before-note",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [
+            4
+          ],
+          "lock_opportunities": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-PARAM-024",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2ff378cb2e834f4a8da391273e590452/manifest.json",
+      "sha256": "f3943b97d2638d9ef5bd7db7a79d0c97f1db86d339f77af749f6164403290f61",
+      "phases": [
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": true,
+          "phase": "probability0-active-trigs-retain-locks",
+          "active_steps": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": true,
+          "phase": "removed-trig-respects-trigless",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": true,
+          "phase": "step-probability100-keeps-lock-before-note",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [
+            4
+          ],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "case": "M-PARAM-025",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/feac9ef136644c1a9e4aa527b9675b91/manifest.json",
+      "sha256": "a6174423320b45e228ac16b9198929940bac53664d894bf79b932078e933b3dc",
+      "phases": [
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": false,
+          "phase": "probability0-active-trigs-retain-locks",
+          "active_steps": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": false,
+          "phase": "removed-trig-respects-trigless",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [],
+          "lock_opportunities": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "passed": true
+        },
+        {
+          "kind": "probability-trigless-midi-locks",
+          "nrpn": true,
+          "trigless": false,
+          "phase": "step-probability100-keeps-lock-before-note",
+          "active_steps": [
+            1,
+            2,
+            4
+          ],
+          "accepted_steps": [
+            4
+          ],
+          "lock_opportunities": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "midi_lock_scope": "Active probability0 trigs still send locks; removed step3 obeys Trigless on/off; step4 probability100 sends lock before note. Exact CC/standard NRPN bytes, route, count, timing against MIDI2 reference and complete releases. No slides or recording claim.",
+  "midi_lock_setup_failure": {
+    "run": "c61ebf7f617f42f69f7ad2935cbe0c70",
+    "cause": "Generic CC fixture was selected; NRPN14 unavailable. Selected the preexisting configured NRPN fixture through native E3/K3; output oracle unchanged."
   }
 }

@@ -2780,9 +2780,13 @@ from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_p
 
 from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrpn_slide,patch_configured_off_lock
 
-from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability
+from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks
 
 CASES={
+ 'M-PARAM-022':dict(run=lambda c:probability_midi_locks(c,trigless=True,nrpn=False),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=True, NRPN=False; exact lock bytes/timing and step100 lock-before-note'),
+ 'M-PARAM-023':dict(run=lambda c:probability_midi_locks(c,trigless=False,nrpn=False),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=False, NRPN=False; exact lock bytes/timing and step100 lock-before-note'),
+ 'M-PARAM-024':dict(run=lambda c:probability_midi_locks(c,trigless=True,nrpn=True),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=True, NRPN=True; exact lock bytes/timing and step100 lock-before-note'),
+ 'M-PARAM-025':dict(run=lambda c:probability_midi_locks(c,trigless=False,nrpn=True),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=False, NRPN=True; exact lock bytes/timing and step100 lock-before-note'),
  'M-PARAM-019':dict(run=lambda c:seeded_probability(c,probability=1,opportunities=320),requirements=['PARAM-PROBABILITY'],description='Seed42 probability1: independent native PRNG draws select exact note/velocity sequence aligned to a second MIDI channel through the rejected tail'),
  'M-PARAM-020':dict(run=lambda c:seeded_probability(c,probability=50,opportunities=208),requirements=['PARAM-PROBABILITY'],description='Seed42 probability50: independent native PRNG draws select exact note/velocity sequence aligned to a second MIDI channel through the rejected tail'),
  'M-PARAM-021':dict(run=lambda c:seeded_probability(c,probability=99,opportunities=64),requirements=['PARAM-PROBABILITY'],description='Seed42 probability99: independent native PRNG draws select exact note/velocity sequence aligned to a second MIDI channel through the rejected tail'),
