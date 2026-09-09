@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "All ten scale types pass native019 across Average/Higher/Lower,30scenarios per lane. Next all-scale pentatonic contract/coverage and outstanding velocity/length merge value domains; full manual and emulator gates remain open.",
+  "next_action": "Numeric velocity020/021 D/R validated. Continue modal pentatonic contract/review and all-scale pent coverage, zero/negative velocity results and numeric length domains; broader gates remain open.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -145,5 +145,6 @@
   "merge_cycle_validation": "docs/testing/merge-cycle-validation.json",
   "merge_rounding_validation": "docs/testing/merge-rounding-validation.json",
   "merge_extremes_validation": "docs/testing/merge-extremes-validation.json",
-  "merge_all_scales_validation": "docs/testing/merge-all-scales-validation.json"
+  "merge_all_scales_validation": "docs/testing/merge-all-scales-validation.json",
+  "numeric_velocity_validation": "docs/testing/numeric-velocity-validation.json"
 }

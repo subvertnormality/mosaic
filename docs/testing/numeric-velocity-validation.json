@@ -1,0 +1,47 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-020",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ed07cea30a164bb5b1ff9dd047035c9a/manifest.json",
+      "sha256": "e612478a6fcf04942c5e7fe67f1d6ac5bff572fee1e9993376d3ba700dcd1db1",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-021",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6e11c210d3c24688ae2ee814b376bb4e/manifest.json",
+      "sha256": "f4fba048b3e9809462d3fa8b780ad94e2ca38c4508ec93b84d21e5de9dc6e25b",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-020",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8ad6fc74cf8245909cef78ccc3c6e08f/manifest.json",
+      "sha256": "60b3dfdab42380ee3b28fea17ba3d47c1046f74db3b96ffa233095baff8b7321",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-021",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d53a29145b20446d92558436c72e39af/manifest.json",
+      "sha256": "f024412f9416c86faf41fc9d7bcc1c49bea5f0e2d0473365873e6e5f0bec8768",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "semantic_basis": "Literal rounded-mean/range arithmetic and MIDI velocity bounds, independent of Mosaic implementation",
+  "assertions": [
+    "Two/three contributing patterns across Average/Higher/Lower/returnedAverage",
+    "Half and noninteger mean rounding",
+    "Higher result141/136 clamps to MIDI127",
+    "Unassigned note-priority source affects pitch only, not numeric velocities",
+    "Exact notes, velocities, durations and1/6-second onset timing"
+  ],
+  "limitations": [
+    "Zero/negative Lower results, full velocity domain and further lifecycle interactions remain pending",
+    "Full manual, experimental clock admission and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

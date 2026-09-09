@@ -1,3 +1,4 @@
+from numeric_merging import numeric_velocity_merge
 from numeric_merging import merge_rounding
 from numeric_merging import merge_mode_cycle
 from numeric_merging import numeric_note_merge
@@ -2791,6 +2792,8 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-MERGE-021':dict(run=lambda c:numeric_velocity_merge(c,True),requirements=['MERGE-VELOCITY','MERGE-NOTE-PATTERN'],description='Numeric velocity Average/Higher/Lower: rounded means, upper MIDI clamp and unassigned note-priority isolation'),
+ 'M-MERGE-020':dict(run=lambda c:numeric_velocity_merge(c,False),requirements=['MERGE-VELOCITY','MERGE-NOTE-PATTERN'],description='Numeric velocity Average/Higher/Lower: rounded means, upper MIDI clamp and unassigned note-priority isolation'),
  'M-MERGE-019':dict(run=lambda c:numeric_note_merge(c,True,False,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT'],description='All ten scale types across Average/Higher/Lower, negative degrees and exact MIDI timing with independent interval tables'),
  'M-MERGE-018':dict(run=lambda c:merge_rounding(c,extreme=False,pentatonic=True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Signed/extreme note merging with pentatonic=True, exact output beyond editor input range and octave-crossing quantisation'),
  'M-MERGE-017':dict(run=lambda c:merge_rounding(c,extreme=True,pentatonic=True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Signed/extreme note merging with pentatonic=True, exact output beyond editor input range and octave-crossing quantisation'),

@@ -2931,7 +2931,9 @@
         "M-MERGE-002",
         "M-MERGE-003",
         "M-PAT-006",
-        "M-MERGE-008"
+        "M-MERGE-008",
+        "M-MERGE-020",
+        "M-MERGE-021"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 priority patterns; assigned/unassigned; inactive steps; pentatonic setting on/off. M-MERGE-002/003 validate lower/higher priority-source ordering, assigned/unassigned inactive notes and activation/removal in both modes. All positions/priority slots and pentatonic setting combinations remain required. M-PAT-006 validates all64 inactive note positions, priority use and later activation/removal with complete timing-checked loops in both modes. Settings/interactions remain required. M-MERGE-008 validates every priority slot with assigned/unassigned inactive sources and unique MIDI fingerprints in both modes. Settings and running-edit interactions remain required.",
@@ -2960,10 +2962,12 @@
         "M-MERGE-004",
         "M-MERGE-005",
         "M-MERGE-010",
-        "M-MERGE-012"
+        "M-MERGE-012",
+        "M-MERGE-020",
+        "M-MERGE-021"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Every option; means at discontinuities; 0/127; selected pattern; Lower SEM-001. M-MERGE-004 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-005 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required.",
+      "domain": "Every option; means at discontinuities; 0/127; selected pattern; Lower SEM-001. M-MERGE-004 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-005 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native020/021 cover two/three contributors, all numeric modes, fractional means, upper127 clamp and unassigned note-priority isolation in both modes. Lower zero/negative results remain pending.",
       "oracles": [
         "Independent resolved formulas, bounds and exact MIDI velocity; zero semantics decision."
       ],
