@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Publish reviewed test-only M-PANIC011..014 hotplug suite and four existing D/R regression results. Then reconcile remaining manual requirement/domain coverage against actual cases and continue eligible incomplete workflows plus controlled-time repeatability/admission. Use published emulator codex/midi-hotplug branch; automatic review rejected main merge/activation, neither executed. No active processes; no routing questions, no refactor, full goal incomplete.",
+  "next_action": "Consolidate and publish the authorised parameter/slide/NRPN checkpoint using patch-slide-progress.json and nrpn-review-resolution.json, then expand remaining cross-feature parameter/modulation/lifecycle tests. Older0063/0064 reset follow-up is resolved; the full manual and emulator release remain incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -5009,5 +5009,81 @@
     "receipt": "/home/andy/projects/monome-emulator-behaviour-audio-crow/docs/delivery/completions/screen-worker-progress.json",
     "full_campaign_complete": false,
     "review": "01a082af-b7d1-70e2-b7fc-814dd8c5cc91"
+  },
+  "slide_cancellation_checkpoint": {
+    "candidate": "0054",
+    "status": "partial-validation",
+    "progress": "docs/testing/patch-slide-progress.json",
+    "production_changes_published": false,
+    "full_campaign_complete": false
+  },
+  "output_test_publication": {
+    "revision": "f3de5c48e5827cd8a733193d397bbd72176cf624",
+    "staged_contract_tests": 31,
+    "push_verified": true,
+    "production_changes_committed": false
+  },
+  "slide_onset_projection": {
+    "candidate": "0055-slide-onset-projection",
+    "status": "projection-conformance-passed-not-yet-used-by-slides",
+    "configurations": 537,
+    "comparisons": 25776,
+    "test": "tests/behaviour/test_slide_onset_projection.lua",
+    "log": "/home/andy/projects/mosaic-behaviour-runs/slide-onset-projection.log",
+    "log_sha256": "2c96c5b8d95de0e270c15a6ec426b883aa9ede0e16a42a23d173319f43c1cbc0",
+    "source_sha256": "1d1d4c3774bab9dd0aed316ec018bc74843fc066b228c6c17d8a99fb194c3366",
+    "scope": "Resolved non-delayed channel onsets only; actual future lattice callbacks, unchanged live state, straight-sixteenth literal oracle. Not independent musical certification of every shuffle map.",
+    "full_campaign_complete": false
+  },
+  "slide_absolute_pulse_checkpoint": {
+    "candidate": "0057",
+    "status": "four-native-regressions-passed",
+    "progress": "docs/testing/patch-slide-progress.json",
+    "production_changes_published": false,
+    "full_campaign_complete": false
+  },
+  "slide_rounded_endpoint_checkpoint": {
+    "candidate": "0058",
+    "progress": "docs/testing/patch-slide-progress.json",
+    "phase_cases": 576,
+    "native_candidate_passes": 3,
+    "unit_passed": 457,
+    "unit_errors": 25,
+    "full_campaign_complete": false
+  },
+  "slide_unit_fixture_checkpoint": {
+    "progress": "docs/testing/patch-slide-progress.json",
+    "passed": 465,
+    "failed": 17,
+    "errors": 0,
+    "full_campaign_complete": false
+  },
+  "slide_zero_distance_checkpoint": {
+    "candidate": "0059",
+    "phase_cases": 864,
+    "units_passed": 466,
+    "units_failed": 16,
+    "progress": "docs/testing/patch-slide-progress.json",
+    "full_campaign_complete": false
+  },
+  "slide_ownership_fixture_checkpoint": {
+    "passed": 467,
+    "failed": 15,
+    "errors": 0,
+    "progress": "docs/testing/patch-slide-progress.json",
+    "full_campaign_complete": false
+  },
+  "slide_progress": "docs/testing/patch-slide-progress.json",
+  "patch_slide_latest_checkpoint": {
+    "status": "scoped-review-findings-resolved",
+    "progress": "docs/testing/patch-slide-progress.json",
+    "nrpn_resolution": "docs/testing/nrpn-review-resolution.json",
+    "units": 485,
+    "candidates": [
+      "0066",
+      "0067",
+      "0068"
+    ],
+    "full_campaign_complete": false
   }
 }

@@ -1320,20 +1320,19 @@ function test_step_param_processing_on_sequencer_start()
       local current_step = program.get_current_step_for_channel(1)
       for _, event in ipairs(midi_cc_events) do
 
-        -- Check wrap behavior (step 64 should fire step 1's CC)
-        if current_step == 64 and event[2] == 64 then
-          found_wrap = true
-        end
-        -- Check look-ahead behavior (step 1 should fire step 2's CC)
+        -- Parameter values belong to the resolved step, including wrap.
         if current_step == 1 then
-          luaunit.assert_equals(event[2], 100, "Step 1 should fire step 2's CC (100)")
+          luaunit.assert_equals(event[2], 64, "Step 1 must apply its own CC (64)")
+          found_wrap = true
+        elseif current_step == 2 then
+          luaunit.assert_equals(event[2], 100, "Step 2 must apply its own CC (100)")
         end
       end
       midi_cc_events = {}
     end
   end
   
-  luaunit.assert_true(found_wrap, "Should see step 1's CC (64) at step 64 during wrap")
+  luaunit.assert_true(found_wrap, "Should see step 1's CC (64) on returning to step 1")
 end
 
 function test_note_mask_with_chords_no_scale_degree_effect()

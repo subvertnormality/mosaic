@@ -3,6 +3,7 @@ local step = include("mosaic/lib/step")
 local quantiser = include("mosaic/lib/quantiser")
 local divisions = include("mosaic/lib/clock/divisions")
 
+local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 local m_midi = {}
 
 midi_devices = {}
@@ -332,20 +333,20 @@ function m_midi.cc(cc_msb, cc_lsb, value, channel, device)
   end
 end
 
-function m_midi.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
-  -- Select NRPN (LSB and MSB)
+function m_midi.nrpn(nrpn_msb, nrpn_lsb, value, channel, device, mode)
+  -- Validate the whole message before selecting a receiver parameter.
+  local msb, lsb = nrpn_codec.encode(value, mode)
+  for _,address in ipairs({nrpn_msb, nrpn_lsb}) do
+    assert(type(address) == "number" and address % 1 == 0 and address >= 0 and address <= 127,
+      "NRPN address must contain two 7-bit integers")
+  end
+  assert(nrpn_msb ~= nil and nrpn_lsb ~= nil, "NRPN address is required")
+  assert(type(channel) == "number" and channel % 1 == 0 and channel >= 1 and channel <= 16,
+    "NRPN channel must be from 1 to 16")
   m_midi.cc(99, nil, nrpn_msb, channel, device)
   m_midi.cc(98, nil, nrpn_lsb, channel, device)
-
-
-  -- Calculate MSB and LSB from value
-  local msb_value = math.floor(value / 128) -- MSB
-  local lsb_value = value % 128  -- LSB
-
-  -- Send MSB and LSB values
-  m_midi.cc(6, nil, msb_value, channel, device)
-  m_midi.cc(38, nil, lsb_value/2, channel, device)
-
+  m_midi.cc(6, nil, msb, channel, device)
+  m_midi.cc(38, nil, lsb, channel, device)
 end
 
 

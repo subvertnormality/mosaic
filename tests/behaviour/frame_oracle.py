@@ -58,13 +58,13 @@ def header(text,selected=None,tabs=6):
     commands += [(0,9,10,text),(120,9,10,'m')]
     return render(commands)[:128*10*4]
 
-def selected_line(state,text,x=0,width=70):
+def selected_line(state,text,x=0,width=70,top=22):
     # Native menu selected rows use baseline30, level15. Ignore the separate
     # right-hand value field, not the text glyphs or background around them.
     expected=render([(x,30,15,text)])
     actual=base64.b64decode(state['frame']['pixels_base64'])
     return all(actual[(y*128+col)*4+k]==expected[(y*128+col)*4+k]
-               for y in range(22,32) for col in range(x,x+width) for k in range(3))
+               for y in range(top,32) for col in range(x,x+width) for k in range(3))
 
 def matches(state,expected):
     actual=base64.b64decode(state['frame']['pixels_base64'])[:len(expected)]

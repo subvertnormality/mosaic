@@ -1,0 +1,14 @@
+{
+  "id": "0061-slide-live-retime",
+  "status": "isolated-regressions-pass-native-and-review-pending",
+  "baseline": "/home/andy/projects/mosaic-behaviour-runs/slide-live-retime-baseline.log",
+  "source_sha256": {
+    "lib/clock/m_lattice.lua": "a33c4b82c063eae2c3e65a7416288e61197eca0c0fc01cae5932fa516f3301de",
+    "lib/clock/m_clock.lua": "0a3a15a0f263b7763b743709dc22dcbec8fb90729ea927cdeef7b8321a632ff7"
+  },
+  "limitations": "Timing-type switches, between-pulse projection matrix and native live-edit input acceptance still required.",
+  "review_pending": true,
+  "unit_evidence": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-54c5a332d2644d75b4ea4cf6c411310a/results.json",
+  "future_onset_comparisons": 8132,
+  "retime_phase_cases": 14
+}

@@ -1,0 +1,13 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -695,7 +695,9 @@
+       action.active = false
+       if action.end_step == step_number and action.end_value == value and
+           clock_lattice.transport >= action.start_pulse + action.total_pulses then
+-        action.func(action.end_value, action.last_value)
++        -- This is the explicit destination lock, not an intermediate sample.
++        -- Retain its write even if earlier interpolation rounded to the target.
++        action.func(action.end_value)
+         action.last_value = action.end_value
+         applied = true
+       end

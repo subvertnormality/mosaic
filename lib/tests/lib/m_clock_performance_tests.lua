@@ -1,3 +1,4 @@
+local slide_onset_fixture = include("mosaic/lib/tests/helpers/slide_onset_fixture")
 local clock = os.clock
 
 step = include("mosaic/lib/step")
@@ -160,7 +161,7 @@ function test_massive_concurrent_automation_with_param_slides()
         if point % 3 == 0 then
           -- Create a slide that overlaps with the next automation
           local slide_end = math.min(end_step + math.random(2, 8), steps_per_pattern)
-          m_clock.execute_action_across_steps_by_pulses({
+          slide_onset_fixture.queue(m_clock, {
             channel_number = channel,
             trig_lock = (pattern * automation_points + point) % 10 + 1,
             start_step = end_step,
@@ -177,7 +178,7 @@ function test_massive_concurrent_automation_with_param_slides()
         end
         
         -- Create the main automation
-        m_clock.execute_action_across_steps_by_pulses({
+        slide_onset_fixture.queue(m_clock, {
           channel_number = channel,
           trig_lock = (pattern * automation_points + point) % 10 + 1,
           start_step = start_step,
@@ -196,7 +197,7 @@ function test_massive_concurrent_automation_with_param_slides()
         -- Add some wrapping slides
         if point % 5 == 0 and end_step > steps_per_pattern - 4 then
           -- Create a slide that wraps around to the start
-          m_clock.execute_action_across_steps_by_pulses({
+          slide_onset_fixture.queue(m_clock, {
             channel_number = channel,
             trig_lock = (pattern * automation_points + point) % 10 + 1,
             start_step = end_step,
@@ -215,6 +216,10 @@ function test_massive_concurrent_automation_with_param_slides()
     end
   end
   
+  -- These bulk requests were historically installed during setup. Drain them
+  -- at resolved channel onsets before measuring steady-state playback; the
+  -- separate live-admission test measures scheduling inside a timed pulse.
+  slide_onset_fixture.start_pending(m_clock)
   local setup_time = clock() - start_time
   
   -- Process the automation
@@ -267,4 +272,42 @@ function test_massive_concurrent_automation_with_param_slides()
     "Timing variance exceeded 1ms")
   luaunit.assert_true((peak_memory - start_memory) < 1024,
     "Memory usage exceeded 1MB")
-end 
+end
+
+function test_live_slide_admission_all_channel_parameter_slots()
+  setup()
+  clock_setup()
+  local callbacks, admitted = {}, {}
+  for channel = 1, 16 do
+    callbacks[channel], admitted[channel] = {}, {}
+    for slot = 1, 10 do
+      callbacks[channel][slot] = 0
+      slide_onset_fixture.queue(m_clock, {
+        channel_number = channel, trig_lock = slot,
+        start_step = 1, end_step = 64,
+        start_value = 0, end_value = 127, quant = 1,
+        should_wrap = true,
+        func = function(value) callbacks[channel][slot] = callbacks[channel][slot] + 1 end
+      }, function()
+        admitted[channel][slot] = true
+      end)
+    end
+  end
+  local max_pulse = 0
+  -- Include the admission onset and later sampling, with no pre-drain.
+  for pulse = 1, 96 do
+    local began = clock()
+    progress_clock_by_pulses(1)
+    max_pulse = math.max(max_pulse, clock() - began)
+  end
+  for channel = 1, 16 do
+    for slot = 1, 10 do
+      -- Inspect ownership outside the timed pulse; all long slides are still active.
+      luaunit.assert_true(m_clock.channel_is_sliding({number=channel}, slot))
+      luaunit.assert_true(admitted[channel][slot], "Every live slot must acquire ownership")
+      luaunit.assert_true(callbacks[channel][slot] > 0, "Every live slot must execute")
+    end
+  end
+  luaunit.assert_true(max_pulse < 0.002,
+    string.format("Live slide admission exceeded 2ms: %.6fs", max_pulse))
+end

@@ -1,0 +1,9 @@
+{
+  "id": "0062-slide-timing-type",
+  "status": "isolated-regression-and-units-pass-native-review-pending",
+  "before_sha256": "0a3a15a0f263b7763b743709dc22dcbec8fb90729ea927cdeef7b8321a632ff7",
+  "after_sha256": "b7b50874554f74eb26bfc8a41f0a94ab5d42a717e867f7e416bcbcb4c4ab5726",
+  "review_pending": true,
+  "unit_evidence": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-a8583bf42e744cd0857a2eba6c29e7ef/results.json",
+  "regression_log": "/home/andy/projects/mosaic-behaviour-runs/slide-type-candidate-confirmed.log"
+}

@@ -1,0 +1,46 @@
+{
+  "status": "focused-validation-passed-review-pending",
+  "scope": "Process first-step locks before synchronous lattice startup emits first note",
+  "depends_on": [
+    "0049-stored-patch-play-recall"
+  ],
+  "files": [
+    {
+      "path": "lib/clock/m_clock.lua",
+      "before_sha256": "45050d38467d8d62d382f3ef0310f5da1af4581e0a987dbe4620dad3f5d51739",
+      "after_sha256": "44e4bc0d844b66d1072118fe8f786c99c899ca398efbf477663cca3500c34613"
+    }
+  ],
+  "patch_sha256": "53d25ea7e71a5ec0904131098e162e035ac046680ac905225676707d788847ad",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "baseline_runs": [
+    "b725dfc96c9c4366beeab785facf0a5a"
+  ],
+  "test": "M-PATCH-012",
+  "full_campaign_complete": false,
+  "candidate_runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/d0420a4d31d54654ba89a06e15e970b2/manifest.json",
+      "sha256": "56570fd1fede92a69ad095c87cb583cb0138dc9c4a21b58140a69bdda4b57a28",
+      "case": "M-PATCH-012",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/14e4d3744e02430381e95f7e20330651/manifest.json",
+      "sha256": "2f06ffa40b35627c5cd3696272653c1155b6cc14dc353e5955f2cf6889fb5b5b",
+      "case": "M-PATCH-012",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/a872d340234f4e62bf3ba0abecbfbdcd/manifest.json",
+      "sha256": "a3d3b368ba2962adda2cf99df1f23b2396f45d88fccde6acbf395d342cd18da5",
+      "case": "M-PATCH-005",
+      "clock_mode": "real-time"
+    }
+  ],
+  "existing_suite": "482 successes, 0 failures",
+  "unit_receipt": "/home/andy/projects/mosaic-behaviour-runs/patch-domain-units-bf6e05ffb73a4a30bfabd6419a0a781b/results.json",
+  "next_action": "Extend initial lock coverage to Off and equal stored/locked values, verify first-step slide scheduling after reorder, run scoped Codex follow-up and reconcile/publish pending patches. NRPN unchanged."
+}

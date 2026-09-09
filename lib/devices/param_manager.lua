@@ -1,6 +1,8 @@
+local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 
 
 local param_manager = {}
+local midi_value_domain = include("mosaic/lib/devices/midi_value_domain")
 
 local first_run = true
 
@@ -65,18 +67,14 @@ function param_manager.add_device_params(channel_id, device, c, midi_device, ini
         local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
 
         p.default = val.off_value or -1
-        p.controlspec.minval = val.cc_min_value or -1
-        p.controlspec.maxval = val.cc_max_value or 127
         p.min = val.cc_min_value or -1
         p.max = val.cc_max_value or 127
-        p.controlspec.step = 1
-        p.controlspec.quantum = 1/((val.cc_max_value - val.cc_min_value) or 127)
-        p.controlspec.default = val.off_value or -1
+        p.controlspec = controlspec.new(p.min,p.max,"lin",1,p.default,"",1/math.max(1,p.max-p.min))
 
         p.name = val.name
 
         if init == true then
-          p:set(val.off_value or -1)
+          p:set(val.off_value or -1, true)
         end
         p.formatter = construct_value_formatter(val.off_value or -1, val.ui_labels)
         params:set_action(
@@ -100,16 +98,12 @@ function param_manager.add_device_params(channel_id, device, c, midi_device, ini
       local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. oob_accumulator)
 
       p.default = -1
-      p.controlspec.minval = 0
-      p.controlspec.maxval = 60
       p.min = 0
       p.max = 60
-      p.controlspec.step = 1
-      p.controlspec.quantum = 1/60
-      p.controlspec.default = 0
+      p.controlspec = controlspec.new(0,60,"lin",1,0,"",1/60)
       p.name = "Slew"
       if init == true then
-        p:set(0)
+        p:set(0, true)
       end
       p.formatter = construct_value_formatter(-1)
       params:set_action(
@@ -130,36 +124,27 @@ function param_manager.add_device_params(channel_id, device, c, midi_device, ini
       if device.type == "midi" and val and val.id ~= "none" and val.param_type ~= "stock" then
         local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
 
-        if val.nrpn_min_value and val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
-          p.controlspec.minval = val.nrpn_min_value or -1
-          p.controlspec.maxval = val.nrpn_max_value or 16383
-          p.min = val.nrpn_min_value or -1
-          p.max = val.nrpn_max_value or 16383
-          p.controlspec.step = 1
-          p.controlspec.quantum = 1/(((val.nrpn_max_value - val.nrpn_min_value) or 16383) / 127)
-          p.controlspec.default = val.off_value or -1
-        else
-          p.controlspec.minval = val.cc_min_value or -1
-          p.controlspec.maxval = val.cc_max_value or 127
-          p.min = val.cc_min_value or -1
-          p.max = val.cc_max_value or 127
-          p.controlspec.step = 1
-          p.controlspec.quantum = 1/(val.cc_max_value - val.cc_min_value) or 127
-          p.controlspec.default = val.off_value or -1
-        end
+        local nrpn = val.nrpn_min_value and val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb
+        local minimum = nrpn and val.nrpn_min_value or val.cc_min_value or -1
+        local maximum = nrpn and val.nrpn_max_value or val.cc_max_value or 127
+        p.default = val.off_value or -1
+        p.controlspec = midi_value_domain.new(minimum,maximum,p.default,nrpn and 127 or 1)
+        p.min = p.controlspec.minval
+        p.max = p.controlspec.maxval
         p.name = val.name
         if init == true then
-          p:set(val.off_value or 0)
+          p:set(val.off_value or -1, true)
         end
-        p.formatter = construct_value_formatter(val.off_value, val.ui_labels)
+        p.formatter = construct_value_formatter(val.off_value == nil and -1 or val.off_value, val.ui_labels)
         params:set_action(
           "midi_device_params_channel_" .. channel_id .. "_" .. i,
           function(x)
-            if x ~= val.off_value then
+            if x ~= (val.off_value == nil and -1 or val.off_value) then
               if val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
-                m_midi.nrpn(val.nrpn_msb, val.nrpn_lsb, x, c, midi_device)
+                m_midi.nrpn(val.nrpn_msb, val.nrpn_lsb, x, val.channel or c, midi_device,
+                  nrpn_codec.stored_mode(program.get(), channel_id, val, device))
               elseif val.cc_msb and val.cc_max_value then
-                m_midi.cc(val.cc_msb, val.cc_lsb or nil, x, c, midi_device)
+                m_midi.cc(val.cc_msb, val.cc_lsb or nil, x, val.channel or c, midi_device)
               end
               channel_edit_page_ui.refresh_trig_lock_values()
             end
@@ -185,7 +170,7 @@ function param_manager.add_device_params(channel_id, device, c, midi_device, ini
     params:hide("midi_device_params_group_channel_" .. channel_id)
     for i = 1, 180 do
       local p = params:lookup_param("midi_device_params_channel_" .. channel_id .. "_" .. i)
-      p:set(-1)
+      p:set(p.controlspec.default, true)
       p.name = "undefined"
       params:set_action("midi_device_params_channel_" .. channel_id .. "_" .. i, function(x) end)
       params:hide("midi_device_params_channel_" .. channel_id .. "_" .. i)
@@ -196,6 +181,7 @@ end
 
 
 function param_manager.update_param(index, channel, param, meta_device)
+  local previous = channel.trig_lock_params[index] or {}
   if param.id == "none" then
     channel.trig_lock_params[index] = {}
   else
@@ -214,6 +200,17 @@ function param_manager.update_param(index, channel, param, meta_device)
       channel.trig_lock_params[index].param_id = string.format("midi_device_params_channel_%d_%d", channel.number, param.index)
     end
 
+  end
+  local assigned = channel.trig_lock_params[index]
+  if assigned.nrpn_msb ~= nil and assigned.nrpn_lsb ~= nil then
+    assigned.nrpn_lsb_mode = nrpn_codec.stored_mode(program.get(), channel.number, param, meta_device)
+  end
+  if previous.id ~= assigned.id or previous.param_id ~= assigned.param_id or
+      previous.type ~= assigned.type or previous.device_name ~= assigned.device_name or
+      previous.nrpn_lsb_mode ~= assigned.nrpn_lsb_mode then
+    -- An active callback belongs to its original parameter, not just the slot.
+    -- Retire silently so it cannot consume the new parameter's destination lock.
+    m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, index)
   end
 end
 
@@ -241,6 +238,9 @@ local function safe_set_param(channel, index, param, meta_device)
     param_copy.param_id = string.format("midi_device_params_channel_%d_%d", channel.number, param_copy.index)
   end
   
+  if param_copy.nrpn_msb ~= nil and param_copy.nrpn_lsb ~= nil then
+    param_copy.nrpn_lsb_mode = nrpn_codec.stored_mode(program.get(), channel.number, param, meta_device)
+  end
   -- Assign the cloned and modified param
   channel.trig_lock_params[index] = param_copy
 end

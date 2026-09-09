@@ -1,3 +1,4 @@
+local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 local chord_timing = include("mosaic/lib/clock/chord_timing")
 local quantiser = include("mosaic/lib/quantiser")
 local m_clock = include("mosaic/lib/clock/m_clock")
@@ -94,7 +95,7 @@ local function should_process_param(param)
   return true
 end
 
-local function process_midi_param(param, step_trig_lock, midi_channel, midi_device)
+local function process_midi_param(param, step_trig_lock, midi_channel, midi_device, mode)
 
   if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
       m_midi.nrpn(
@@ -102,7 +103,8 @@ local function process_midi_param(param, step_trig_lock, midi_channel, midi_devi
           param.nrpn_lsb, 
           step_trig_lock or value,
           midi_channel,
-          midi_device
+          midi_device,
+          mode
       )
   elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
       m_midi.cc(
@@ -130,6 +132,7 @@ function step.process_params(channel, step)
   end 
 
   for i, param in ipairs(trig_lock_params) do
+    local off = param.off_value == nil and -1 or param.off_value
 
     if should_process_param(param) then
       if not param.param_id then
@@ -147,12 +150,16 @@ function step.process_params(channel, step)
       local next_lock
       
       if step_trig_lock then
-        next_lock = program.get_next_trig_lock_step(channel, step, i)
+        next_lock = program.get_next_trig_lock_step(channel, step, i, off)
       end
 
       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
 
-        local midi_channel = devices[channel.number].midi_channel
+        local midi_channel = param.channel or devices[channel.number].midi_channel
+        local nrpn_mode
+        if param.nrpn_msb ~= nil then
+          nrpn_mode = param.nrpn_lsb_mode or nrpn_codec.stored_mode(program_data, channel.number, param, device)
+        end
 
         local param_id = param.param_id
         local p_value = nil
@@ -166,48 +173,50 @@ function step.process_params(channel, step)
           midi_channel = param.channel
         end
         if step_trig_lock then
-          if step_trig_lock == param.off_value then
+          if step_trig_lock == off then
             goto continue
           end
 
-          process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device)
+          if not m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock) then
+            process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+          end
 
           if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
-            m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, i)
             m_clock.execute_action_across_steps_by_pulses({
               channel_number = channel.number,
               trig_lock = i,
               start_step = step,
               end_step = next_lock.step,
+              distance = next_lock.distance,
               start_value = step_trig_lock,
               end_value = next_lock.value,
               should_wrap = next_lock.should_wrap,
               quant = 1,
               func = function(value, last_value)
                 if last_value ~= value then
-                  process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
+                  process_midi_param(param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
                 end
               end
             })
           end
 
         elseif p_value and param.type == "midi" and (param.cc_msb or param.nrpn_msb) and not m_clock.channel_is_sliding(channel, i) then
-          if p_value == param.off_value then
+          if p_value == off then
             goto continue
           end
 
-          process_midi_param(param, p_value, midi_channel, devices[channel.number].midi_device)
+          process_midi_param(param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
         elseif not m_clock.channel_is_sliding(channel, i) then
-          if value == param.off_value then
+          if value == off then
             goto continue
           end
 
-          process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
+          process_midi_param(param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
         end
       elseif param.type == "norns" and param.id == "nb_slew" then
 
         if step_trig_lock then
-          if step_trig_lock == param.off_value then
+          if step_trig_lock == off then
             goto continue
           end
           device.player:set_slew(step_trig_lock)
@@ -217,7 +226,7 @@ function step.process_params(channel, step)
       elseif param.type == "norns" and param.id then
         if step_trig_lock then
 
-          if step_trig_lock == param.off_value then
+          if step_trig_lock == off then
             goto continue
           end
 
@@ -225,13 +234,16 @@ function step.process_params(channel, step)
             norns_param_state_handler.set_original_param_state(c, i, value, param.id)
           end
 
-          params:set(param.id, step_trig_lock)
+          if not m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock) then
+            params:set(param.id, step_trig_lock)
+          end
           if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
             m_clock.execute_action_across_steps_by_pulses({
               channel_number = channel.number,
               trig_lock = i,
               start_step = step,
               end_step = next_lock.step,
+              distance = next_lock.distance,
               start_value = step_trig_lock,
               end_value = next_lock.value,
               should_wrap = next_lock.should_wrap,
@@ -947,6 +959,10 @@ function step.process_song_song_patterns()
 
         -- Switch to the next pattern
         program.set_selected_song_pattern(next_song_pattern)
+        if selected_song_pattern_number ~= next_song_pattern then
+          -- Slides never cross song patterns; a same-pattern repeat may wrap.
+          m_clock.cancel_all_spread_actions()
+        end
         
         -- Handle pattern reset based on settings
         local reset_channels = selected_song_pattern_number ~= next_song_pattern and

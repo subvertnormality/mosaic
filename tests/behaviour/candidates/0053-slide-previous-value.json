@@ -1,0 +1,31 @@
+{
+  "status": "scoped-native-regression-passed",
+  "depends_on": [
+    "0052-slide-onset-distance"
+  ],
+  "scope": "Retain the initial value in the slide queue to suppress duplicate initial MIDI and reset recycled-slot history",
+  "baseline_run": "1cecd177d15c461ebb22b90c52edc33d",
+  "test": "M-PATCH-017",
+  "before_sha256": "3395510beb830471fde333aeda0798ebd4cd14a6dd4decbca339d5b62b8e662d",
+  "after_sha256": "0e482d3cafaa16c91f796d898b28f36a582e19e52e5eb8b36fd958f5ac8c0641",
+  "patch_sha256": "ac53e83822f96f57e7f9a00deb0c85b97431e66c3b2af502f18d8682a6f06e04",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "remaining": "0052 unit failures and broader slide timing domains remain unresolved; no NRPN changes",
+  "native_runs": [
+    {
+      "run_id": "26fa1e165d7f4de8909af5e77784fdc6",
+      "mode": "controlled-experimental",
+      "manifest_sha256": "ea7ce543ce0a0b55ed979cc690eb30cf38d105d967289b95e12ff47128b1c262",
+      "passed": true
+    },
+    {
+      "run_id": "d22c5a3986e84f238700bb801c861b00",
+      "mode": "real-time",
+      "manifest_sha256": "6d3047a12d4399a5a555b4c325f9738b4317a1ca07d90a0d233d22d4924651ca",
+      "passed": true
+    }
+  ],
+  "full_campaign_complete": false
+}

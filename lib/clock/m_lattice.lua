@@ -208,6 +208,8 @@ function Lattice:pulse()
                 end
               end
             end
+            sprocket.onset_count = (sprocket.onset_count or 0) + 1
+            sprocket.last_onset_transport = self.transport
             sprocket.action(self.transport)
             if not self.enabled then return end
           end
@@ -273,6 +275,7 @@ function Lattice:pulse()
             end
           end
           sprocket:finish_cycle()
+          sprocket.last_processed_transport = self.transport
           sprocket.transport = sprocket.transport + 1
         elseif sprocket and sprocket.flag then
           self.sprockets[sprocket.id] = nil
@@ -570,6 +573,63 @@ function Sprocket:finish_cycle()
       self.step = 1
     end
   end
+end
+
+-- Project future onsets from the current channel onset without consuming live
+-- fractional carry or changing phase. Call after begin_cycle, inside action.
+-- Variable-division callbacks are not channel clocks and may have side effects.
+function Sprocket:project_onset_pulses(distance)
+  assert(type(distance) == "number" and distance >= 1 and distance <= 64 and distance == math.floor(distance), "Invalid onset distance")
+  assert(self.phase >= 1 and self.phase < 2 and self.shuffle_updated, "Projection requires a resolved channel onset")
+  assert(not self.division_for_cycle and self.delay == 0 and not self.delay_new, "Unsupported variable or delayed projection")
+  -- An integer straight interval preserves its carry on every future cycle.
+  -- This common case needs no per-step simulation. Fractional and modulated
+  -- clocks retain the exact recurrence below.
+  local base = self.division * self.ppqn * 4
+  local shuffle_active = self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and self.shuffle_basis > 0
+  if not shuffle_active and self.even_swing == 1 and self.odd_swing == 1 and
+      base >= 1 and base == math.floor(base) and
+      self.ppqn_error >= 0.01 and self.ppqn_error < 1.01 then
+    return self.current_ppqn + (distance - 1) * base
+  end
+  -- Only interval length and rounding carry affect future onset deadlines.
+  -- Advance those scalars without copying clocks or updating irrelevant phase
+  -- fields for every parameter. Keep update_shuffle's rounding recurrence.
+  local elapsed, carry, step = self.current_ppqn, self.ppqn_error, self.step
+  for interval = 2, distance do
+    step = step + 1
+    if step > self.lattice.pattern_length then step = 1 end
+    local calculated = math.max(1, self:calculate_shuffle_ppqn(step))
+    local rounded = math.floor(calculated + carry - 0.01)
+    carry = calculated + carry - rounded
+    elapsed = elapsed + rounded
+  end
+  return elapsed
+end
+
+-- Predict an identified future onset from the current phase, including the
+-- boundary between pulses where the next onset has not executed yet.
+function Sprocket:project_onset_occurrence(occurrence)
+  local remaining = occurrence - (self.onset_count or 0)
+  assert(remaining >= 1 and remaining <= 64 and remaining == math.floor(remaining), "Invalid future onset occurrence")
+  assert(not self.division_for_cycle and self.delay == 0 and not self.delay_new, "Unsupported variable or delayed projection")
+  -- Later callbacks in this lattice pulse see phase already advanced for
+  -- the next pulse. Their projection origin needs that one-pulse offset.
+  local offset = self.last_processed_transport == self.lattice.transport and 1 or 0
+  local projected = setmetatable({}, getmetatable(self))
+  for key,value in pairs(self) do projected[key] = value end
+  if not projected.shuffle_updated then projected:begin_cycle() end
+  if projected.phase >= 1 and projected.phase < 2 and (offset == 1 or self.last_onset_transport ~= self.lattice.transport) then
+    remaining = remaining - 1
+    if remaining == 0 then return offset end
+  end
+  local elapsed = projected.current_ppqn - (projected.phase - 1)
+  for interval = 2, remaining do
+    projected.phase = projected.current_ppqn + 1
+    projected:finish_cycle();projected:begin_cycle()
+    elapsed = elapsed + projected.current_ppqn
+  end
+  return elapsed + offset
 end
 
 function Sprocket:forward_pending_setting(method, value)

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "9f4fb49e45d480b2b8233f02f55c45d78f1780af815e969a114fbcbdf04c6509",
+  "manual_sha256": "f3d98be21e4421aa53995829ee7f040bb7612e03f2a68f43bd335cb869550ae9",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -663,7 +663,7 @@
       "level": 4,
       "start_line": 675,
       "end_line": 689,
-      "text_sha256": "ce04352a8d256cf48676ecb0c8c75da5dc1413f6603a0dd9db676d418463232c",
+      "text_sha256": "7726e967387a81de37de9d1e9cd040fd594047281fc24bb5318f21bb7dcd57bc",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-CLOCK-INHERIT",
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "9f4fb49e45d480b2b8233f02f55c45d78f1780af815e969a114fbcbdf04c6509"
+      "sha256": "f3d98be21e4421aa53995829ee7f040bb7612e03f2a68f43bd335cb869550ae9"
     },
     {
       "path": "cheat_sheet.html",
@@ -2438,8 +2438,27 @@
         "MAN-037"
       ],
       "statement": "Parameter -1 leaves external device setting unchanged; other values send MIDI.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PATCH-028",
+        "M-PATCH-036",
+        "M-PATCH-048",
+        "M-PATCH-049",
+        "M-PATCH-050",
+        "M-PATCH-051",
+        "M-PATCH-052",
+        "M-PATCH-053",
+        "M-PATCH-054",
+        "M-PATCH-055",
+        "M-PATCH-056",
+        "M-PATCH-057",
+        "M-PATCH-058",
+        "M-PATCH-059",
+        "M-PATCH-060",
+        "M-PATCH-061",
+        "M-PATCH-062",
+        "M-PATCH-063"
+      ],
+      "status": "in_progress",
       "domain": "-1/0/1/63/126/127 and bounds; each configured CC; repeated edits.",
       "oracles": [
         "Exact CC bytes and explicit silence for sentinel; corresponding parameter display."
@@ -2452,8 +2471,8 @@
         "path": "README.md",
         "line": 540,
         "end_line": 540,
-        "text": "MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to a value of -1 ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly.",
-        "sha256": "1e1fd137e1549d4f276fe76ae33656dcd9517518d17e0e1237d98177fc190fc5"
+        "text": "MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to its configured Off value (default -1) ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly. NRPN encoding is explicit: new generic configurations use standard 14-bit values, while existing projects preserve their historical output. See [NRPN encoding and project conversion](docs/testing/NRPN_COMPATIBILITY.md) for device settings and deliberate conversion without rewriting numeric values.",
+        "sha256": "5dabc5b1113beffa7b611703ca43877e8631f622ee6514c519633fb2dc4667f1"
       }
     },
     {
@@ -2462,8 +2481,11 @@
         "MAN-037"
       ],
       "statement": "Stored MIDI parameter values transmit on load and play and persist across patterns.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PATCH-019",
+        "M-PATCH-017"
+      ],
+      "status": "in_progress",
       "domain": "Cold load/reload/play/restart/song changes; mixed sentinel and active parameters.",
       "oracles": [
         "Exact recalled CC table and ordering relative to first notes; no sentinel messages."
@@ -2476,8 +2498,8 @@
         "path": "README.md",
         "line": 540,
         "end_line": 540,
-        "text": "MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to a value of -1 ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly.",
-        "sha256": "1e1fd137e1549d4f276fe76ae33656dcd9517518d17e0e1237d98177fc190fc5"
+        "text": "MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to its configured Off value (default -1) ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly. NRPN encoding is explicit: new generic configurations use standard 14-bit values, while existing projects preserve their historical output. See [NRPN encoding and project conversion](docs/testing/NRPN_COMPATIBILITY.md) for device settings and deliberate conversion without rewriting numeric values.",
+        "sha256": "5dabc5b1113beffa7b611703ca43877e8631f622ee6514c519633fb2dc4667f1"
       }
     },
     {
@@ -2996,10 +3018,14 @@
         "M-ARP-005",
         "M-SPREAD-023",
         "M-SPREAD-026",
-        "M-SPREAD-027"
+        "M-SPREAD-027",
+        "M-PATCH-026",
+        "M-PATCH-024",
+        "M-PATCH-020",
+        "M-PATCH-032"
       ],
       "status": "in_progress",
-      "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
+      "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. Confirmed channel clock edits queue to the global pattern boundary while playing; stopped edits apply immediately. M-PATCH-024/026 cover queued rate changes during active slides; full live-edit domain remains incomplete.",
       "oracles": [
         "Piecewise rational beat tables, D exact and R bounded onsets/releases."
       ],
@@ -3023,7 +3049,11 @@
       "statement": "Per-channel swing ranges -50..50 and shifts alternating note spacing.",
       "cases": [
         "M-TIME-006",
-        "M-TIME-007"
+        "M-TIME-007",
+        "M-PATCH-025",
+        "M-PATCH-023",
+        "M-PATCH-021",
+        "M-PATCH-022"
       ],
       "status": "in_progress",
       "domain": "All finite values where affordable; extrema/zero; division/tempo and pending note interactions.",
@@ -3086,8 +3116,8 @@
         "path": "README.md",
         "line": 681,
         "end_line": 681,
-        "text": "Note: If a channel's swing/shuffle settings are not set (\"X\"), they will take the global setting which is set on the song editor page global settings page. Clock, swing and shuffle settings apply when the sequencer resets if the sequencer is currently playing.",
-        "sha256": "8df37526faa967d6c36c3d6a580c2410c2a9518cf0d963c0c379117ba5efa6fe"
+        "text": "Note: If a channel's swing/shuffle settings are not set (\"X\"), they will take the global setting which is set on the song editor page global settings page. While playback is running, confirmed changes on this channel page take effect at the next global song-pattern boundary, including a repeat of the same pattern. They do not take effect immediately or at the next step of a shorter channel loop. While stopped, confirmed changes apply immediately.",
+        "sha256": "bd4031d3e4d382ba5c8e014ce8df0410492d9d9b2a3dd6dcba2daf4f88609ee5"
       }
     },
     {
@@ -3183,7 +3213,8 @@
         "M-REC-011",
         "M-REC-012",
         "M-REC-013",
-        "M-REC-014"
+        "M-REC-014",
+        "M-PATCH-018"
       ],
       "status": "partial-domain-coverage",
       "domain": "All supported distinct starts/ends; wrap; SEM-002 inactive lone long hold and delayed combination; coprime lengths; global-scale interaction.",
@@ -3263,7 +3294,12 @@
         "M-SPREAD-019",
         "M-SPREAD-020",
         "M-SPREAD-021",
-        "M-SPREAD-022"
+        "M-SPREAD-022",
+        "M-PATCH-038",
+        "M-PATCH-044",
+        "M-PATCH-045",
+        "M-PATCH-046",
+        "M-PATCH-047"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -4900,7 +4936,9 @@
       ],
       "statement": "90 song slots support selection, filled/empty/playing indicators, copy overwrite and empty-copy erase.",
       "cases": [
-        "M-TIME-005"
+        "M-TIME-005",
+        "M-PATCH-027",
+        "M-PATCH-043"
       ],
       "status": "in_progress",
       "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
@@ -4929,7 +4967,9 @@
         "M-TIME-005",
         "M-TIME-006",
         "M-TIME-007",
-        "M-TIME-009"
+        "M-TIME-009",
+        "M-PATCH-026",
+        "M-PATCH-027"
       ],
       "status": "in_progress",
       "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
@@ -5004,7 +5044,8 @@
       "statement": "Held-step parameter edits create per-step device locks.",
       "cases": [
         "M-SPREAD-024",
-        "M-SPREAD-025"
+        "M-SPREAD-025",
+        "M-PATCH-035"
       ],
       "status": "unimplemented",
       "domain": "All64 steps/10slots; sentinels; no trig/trigless; overwrite; pending playback.",
@@ -5029,8 +5070,15 @@
         "MAN-078"
       ],
       "statement": "K2 held-step clears parameter locks; K1+K2 clears selected channel locks on trig-lock page.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PATCH-037",
+        "M-PATCH-039",
+        "M-PATCH-040",
+        "M-PATCH-041",
+        "M-PATCH-043",
+        "M-PATCH-044"
+      ],
+      "status": "in_progress",
       "domain": "Single/multiple fields; empty/full; wrong page; other channels/masks.",
       "oracles": [
         "Cleared indicators and restored default CC; no cross-type or cross-channel clearing."
@@ -5053,8 +5101,42 @@
         "MAN-079"
       ],
       "statement": "K3 enables all locks of selected parameter to slide; wrap optional; no cross-song slide.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PATCH-026",
+        "M-PATCH-025",
+        "M-PATCH-024",
+        "M-PATCH-023",
+        "M-PATCH-021",
+        "M-PATCH-022",
+        "M-PATCH-020",
+        "M-PATCH-019",
+        "M-PATCH-018",
+        "M-PATCH-017",
+        "M-PATCH-027",
+        "M-PATCH-028",
+        "M-PATCH-029",
+        "M-PATCH-030",
+        "M-PATCH-031",
+        "M-PATCH-032",
+        "M-PATCH-034",
+        "M-PATCH-035",
+        "M-PATCH-036",
+        "M-PATCH-037",
+        "M-PATCH-038",
+        "M-PATCH-039",
+        "M-PATCH-045",
+        "M-PATCH-046",
+        "M-PATCH-047",
+        "M-PATCH-048",
+        "M-PATCH-049",
+        "M-PATCH-053",
+        "M-PATCH-054",
+        "M-PATCH-055",
+        "M-PATCH-056",
+        "M-PATCH-062",
+        "M-PATCH-063"
+      ],
+      "status": "in_progress",
       "domain": "All parameters; endpoints equal/up/down; wrap on/off; sequence transition; stopped/play edits.",
       "oracles": [
         "Independent per-tick CC trajectory/endpoints and exact end-of-song cutoff."
@@ -5077,8 +5159,11 @@
         "MAN-079"
       ],
       "statement": "Held-step K3 enables only that step slide toward next lock.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PATCH-033",
+        "M-PATCH-034"
+      ],
+      "status": "in_progress",
       "domain": "First/last/wrapped next lock; rest/trigless; global slide mixed; clear/reassign.",
       "oracles": [
         "Exact local trajectory, next endpoint, unchanged non-slide locks and indicators."
@@ -5101,8 +5186,11 @@
         "MAN-080"
       ],
       "statement": "Held-step mask edits and page-specific K2/K1+K2 clear mask locks.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PATCH-041",
+        "M-PATCH-042"
+      ],
+      "status": "in_progress",
       "domain": "Each mask type; chords; missing pattern; other lock types/pages and channels.",
       "oracles": [
         "Exact mask fallback MIDI and lock feedback; cross-reference mask requirements without duplicate coverage credit."
@@ -5177,7 +5265,12 @@
       "statement": "Held-step octave button sets octave lock; K2 clears.",
       "cases": [
         "M-OCT-002",
-        "M-OCT-003"
+        "M-OCT-003",
+        "M-PATCH-040",
+        "M-PATCH-041",
+        "M-PATCH-042",
+        "M-PATCH-043",
+        "M-PATCH-044"
       ],
       "status": "in_progress",
       "domain": "All octave options; pitch boundaries; strum pending notes; transpose/scale pairs. M-OCT-001/002 validate five global values and all25 global/step pairs, zero-vs-absent locks and clearing in both modes. Channels, pitch bounds and playing edits remain required. M-OCT-003 validates all64 octave locks against both global extremes and channel-wide clear in both modes. Other channels, pitch bounds, pending voices and mixed-lock interactions remain required.",
@@ -5363,8 +5456,14 @@
         "MAN-091"
       ],
       "statement": "Slide wrap defaults off; on interpolates to earlier locks when current pattern repeats.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PATCH-026",
+        "M-PATCH-023",
+        "M-PATCH-021",
+        "M-PATCH-022",
+        "M-PATCH-018"
+      ],
+      "status": "in_progress",
       "domain": "Last/first lock, shortened length, nonrepeating transition; same/different endpoint; on/off mid-slide.",
       "oracles": [
         "Independent CC trajectory and endpoint; no interpolation across song patterns."
@@ -5412,8 +5511,11 @@
         "MAN-095"
       ],
       "statement": "Trigless default enabled honors locks on inactive steps.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PATCH-029",
+        "M-PATCH-030"
+      ],
+      "status": "in_progress",
       "domain": "Fresh boot vs manual recording prose default; off/on; parameter/mask/slide and probability0.",
       "oracles": [
         "Exact CC changes without added note-ons; active-step-only behavior when disabled. Resolve conflicting default prose239..243."
@@ -5752,7 +5854,8 @@
       "statement": "Bottom-left grid key starts/stops transport.",
       "cases": [
         "M-UI-001",
-        "M-UI-002"
+        "M-UI-002",
+        "M-PATCH-031"
       ],
       "status": "in_progress",
       "domain": "Stopped/playing; repeated press/release; protected stop; pending notes; external clock source.",
@@ -5910,7 +6013,10 @@
       ],
       "statement": "Held-step K2 and K1+K2 clear only lock type belonging to selected page.",
       "cases": [
-        "M-OCT-003"
+        "M-OCT-003",
+        "M-PATCH-040",
+        "M-PATCH-041",
+        "M-PATCH-042"
       ],
       "status": "in_progress",
       "domain": "Each page and lock type; simultaneous mask/parameter/scale/octave/transpose locks; no step vs held step. M-OCT-003 validates all64 octave locks against both global extremes and channel-wide clear in both modes. Other channels, pitch bounds, pending voices and mixed-lock interactions remain required.",

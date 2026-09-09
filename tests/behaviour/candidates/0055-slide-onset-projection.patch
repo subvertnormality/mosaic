@@ -1,0 +1,30 @@
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -572,6 +572,27 @@
+   end
+ end
+ 
++-- Project future onsets from the current channel onset without consuming live
++-- fractional carry or changing phase. Call after begin_cycle, inside action.
++-- Variable-division callbacks are not channel clocks and may have side effects.
++function Sprocket:project_onset_pulses(distance)
++  assert(type(distance) == "number" and distance >= 1 and distance <= 64 and distance == math.floor(distance), "Invalid onset distance")
++  assert(self.phase >= 1 and self.phase < 2 and self.shuffle_updated, "Projection requires a resolved channel onset")
++  assert(not self.division_for_cycle and self.delay == 0 and not self.delay_new, "Unsupported variable or delayed projection")
++  local projected = setmetatable({}, getmetatable(self))
++  for key, value in pairs(self) do projected[key] = value end
++  local elapsed = 0
++  for interval = 1, distance do
++    elapsed = elapsed + projected.current_ppqn
++    if interval < distance then
++      projected.phase = projected.current_ppqn + 1
++      projected:finish_cycle()
++      projected:begin_cycle()
++    end
++  end
++  return elapsed
++end
++
+ function Sprocket:forward_pending_setting(method, value)
+   for _, timing in ipairs(self._pending_clocks or {}) do timing[method](timing, value) end
+ end

@@ -1,0 +1,196 @@
+{
+  "status": "focused-validation-passed-expanded-regressions-pending",
+  "depends_on": [
+    "0050-initial-lock-before-note"
+  ],
+  "scope": "One parameter dispatch at resolved channel onset before note, replacing predictive dispatch and duplicated initial pass; recording completion bookkeeping unchanged",
+  "files": [
+    {
+      "path": "lib/clock/m_clock.lua",
+      "before_sha256": "44e4bc0d844b66d1072118fe8f786c99c899ca398efbf477663cca3500c34613",
+      "after_sha256": "365ae46529b7b0d35d6ffa296b5e8ceca891c1342659ec1760e88b4f952e78e0"
+    }
+  ],
+  "patch_sha256": "aca1fefe421bb25eed033d8bd486a52b22447d0908486c680b852b0fe70dd767",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "baseline_runs": [
+    "25fa6518ecf549f298a0535a64e07915",
+    "b1a4986e7c71482cb413227c5041fba2",
+    "e9e30720543f4f46bcf5f0ca5cd1fb69"
+  ],
+  "review_session": "01a08177-fe90-70b1-9926-cbab884ee61c",
+  "full_campaign_complete": false,
+  "candidate_runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/a3de4ba87a9e4aa2bdea7a7fd64a1aed/manifest.json",
+      "sha256": "be9a29c9ecb8f1bcd5935aab6d29762177ad8f1c7b1a245fe887edc43ddfc5c6",
+      "case": "M-PATCH-012",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/8073e9c3e7a84ae59201df41ce6e973c/manifest.json",
+      "sha256": "92b0c393b9130d82db87de2b09ae2838f10b1647e2dc697061f0d7f37d034f6a",
+      "case": "M-PATCH-013",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/622e4b3cba3649ce876eb15a55ce51ee/manifest.json",
+      "sha256": "adbc1ba967e643314f33d0ec0800a678ea353b4582460c37d9f37f61233f69e7",
+      "case": "M-PATCH-014",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/743edef0ced145169aa6108313363de2/manifest.json",
+      "sha256": "e9684212d751a62de973f7fa04c012f4f0d5461a9a2e6913c9cc1dfa0c608be6",
+      "case": "M-PATCH-012",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/10022709520e442ca49a0016839f99fd/manifest.json",
+      "sha256": "dacd9fbba898df71dd2f5e056f2bd887637e701340b1d5f0d2adfc730c0e4b46",
+      "case": "M-PATCH-013",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/debec4363f8e4fd7b08d2250de8fd55c/manifest.json",
+      "sha256": "ba22e98a515c7142ea282a178e6cab4445e726d8913429644766d8bc41e0eba3",
+      "case": "M-PATCH-014",
+      "clock_mode": "real-time"
+    }
+  ],
+  "unit_receipt": "/home/andy/projects/mosaic-behaviour-runs/patch-domain-units-41567ca94fc2436abb17e7c52fec84e5/results.json",
+  "existing_suite": {
+    "collected": 482,
+    "passed": 482
+  },
+  "review": "docs/testing/reviews/patch-scheduling-followup.json",
+  "next_action": "Native first-step slide and Off-mid-slide endpoint/timestamp oracle; song transitions and mixed divisions/swing remain. Slide calculate_total_pulses uses inclusive distance and ring update special first increment: inspect with independent musical oracle, do not infer correct output from implementation. NRPN unchanged; inventory/publication incomplete.",
+  "legacy_assertion_updates": {
+    "failed_receipt": "/home/andy/projects/mosaic-behaviour-runs/patch-domain-units-e289bb04df284053a5dd73954afabb8c/results.json",
+    "rationale": "Four stale expectations: look-ahead step1->step2 replaced by own-step lock assertions; two fixtures with no MIDI device/first-step trig no longer require predictive startup CC; disabled trigless fixture asserts actual silence instead of indexing missing event.",
+    "files": [
+      {
+        "path": "lib/tests/lib/integration_tests/param_tests.lua",
+        "sha256": "3932f16925e4fc77e019d1c17c5f55c271bef03499d31620e4cda3fb85072571"
+      },
+      {
+        "path": "lib/tests/lib/step_test.lua",
+        "sha256": "a57efc030f2f9e25724fbac5ebf81c7eda45f0c207d9d7e1b488e61a1ccbb73d"
+      }
+    ]
+  },
+  "adjacent_and_range_runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/19f2e7fc88fb4aa9accd058876794e3f/manifest.json",
+      "sha256": "48363daa662a17c1d513aadf2cb9ef1b6b2f2db151ee6ffe010619ef7a10f686",
+      "case": "M-PATCH-015",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/373361e675964f7aa6b8bebffc0a993f/manifest.json",
+      "sha256": "ae0a355389f41eb7df4d596dcf5c5add03d64e2da4cd3e10e7ab49f02b223cb7",
+      "case": "M-PATCH-016",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/88934bb2040d46aa99fde8b5aa806ef8/manifest.json",
+      "sha256": "64cd0a8d17a77ee9b5d28a85b26fb92408f32a4f0e6a21f5e24a096faeac0f87",
+      "case": "M-PATCH-015",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/715f5bba91624a71b75715c69fe1c3dc/manifest.json",
+      "sha256": "c9bc9bd07b7bb0a2d3d13aa29eb8c8727f157526264eeead975d84f30b1979cd",
+      "case": "M-PATCH-016",
+      "clock_mode": "real-time"
+    }
+  ],
+  "recording_and_clock_regressions": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/26116d2a63914373bcfd858b44a111d4/manifest.json",
+      "sha256": "a046e39443af98eafce8eecb5c7bd2618dc79b90c60e465fee84876c732da850",
+      "case": "M-REC-002",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/a5107af70bfc48cfb0f5dc683e11136e/manifest.json",
+      "sha256": "d86948d374db1bf77f3b4cfe1552cb45d3f196eb11b46d61d3a431966d3caf2a",
+      "case": "M-REC-003",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/47055ea939a24a5a8c46cd85f92f857f/manifest.json",
+      "sha256": "9c3295a0f01105d48f13e5394ecf04a3259f064065b6847274a26496983d43ea",
+      "case": "M-REC-004",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/c001a59dc30f4505a07ec6c49ab3c411/manifest.json",
+      "sha256": "a6adc2d95be748fe2b4a7116734a7944fad7ee6261f4a3b8ead10d9c948364fc",
+      "case": "M-REC-013",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/cf7049fbc3eb463eb7b4b93822802aa7/manifest.json",
+      "sha256": "89c4bdc9c781fd605288e80d54c0afc34df2a9f3c0a1f14c465ce41638e36873",
+      "case": "M-REC-018",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/2b61c8bb00d241ceb6e5f6ca7b821b7c/manifest.json",
+      "sha256": "7f506810d010e1d344d8534a9d057abc73de794d2e095c677d8cd4650f7f5fcd",
+      "case": "M-TIM-003",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/47c7f2c4ded94710b7c61e8f9f64dc15/manifest.json",
+      "sha256": "3ac640358d5409a2dba94c8f3037d4a2a1acf6cb420b57a7dec31f92bf2d9ade",
+      "case": "M-TIM-004",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/d163b2cb1b4840b09f8882234efd52ed/manifest.json",
+      "sha256": "807ddb78176d5717d63e43d14d30a8b5756f5e0c635c6e5342154c4f78a206cb",
+      "case": "M-REC-002",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/4ad3040d60e54c079d4c2ec9e0992b7c/manifest.json",
+      "sha256": "c7c017ca71238aaf09b73859d4a7e83fab155a362ee2836c939b4cebdae40d9d",
+      "case": "M-REC-003",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/f6e840e0780e4590b096f868ddbf408a/manifest.json",
+      "sha256": "c3d26075065a35f36ea8770941f23af51f4f3bd510bfee332078a3afb7ce0f45",
+      "case": "M-REC-004",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/e3bcf3caa3ff449683c412f82d767d40/manifest.json",
+      "sha256": "fc675613828a33779b912643acdb8e5919b9b1e3bd67ff32910fcb7efea3fe6f",
+      "case": "M-REC-013",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/189f827bab0348208404bed256fe2439/manifest.json",
+      "sha256": "02f5723a3a7336ee9a42868ede65380d378b43af670b0a1d81474236220c4730",
+      "case": "M-REC-018",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/47a23da9f02c4c12b0bd62d4722c862e/manifest.json",
+      "sha256": "a5cb3ca577e0d90ed77403973304d788a3dd4026b45f44ff6f803b34d90a7f47",
+      "case": "M-TIM-003",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/392332310e1248419e5b78e07d45a0c2/manifest.json",
+      "sha256": "eac331a5ae6c3dda79d1ec638ce28a843fb26a85d0c901d508335f9ba21b2171",
+      "case": "M-TIM-004",
+      "clock_mode": "real-time"
+    }
+  ]
+}

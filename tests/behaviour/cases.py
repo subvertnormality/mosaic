@@ -1,3 +1,18 @@
+from patch_params import patch_sparse_slide
+from patch_params import patch_ten_slot_slides
+from patch_params import patch_channel_clear_isolation
+from patch_params import patch_clear_mask_boundary
+from patch_params import patch_slide_live_destination
+from patch_params import patch_slide_trigless
+from patch_params import patch_slide_song_cutoff
+from patch_params import patch_slide_live_division
+from patch_params import patch_slide_timing
+from patch_params import patch_adjacent_locks
+from patch_params import patch_lock_precedence
+from patch_params import patch_sparse_range
+from patch_params import patch_restart
+from patch_params import patch_nrpn_bytes
+from patch_params import patch_muted_recall
 """Mosaic-owned physical-input regressions; independent literal musical oracles."""
 from driver import REPO,Driver,digest
 
@@ -722,13 +737,13 @@ def integral_clock_divisions(c,slow=False):
     assert len(tested)==(16 if slow else 24),tested
 
 
-def menu_option_row(c,label,value):
+def menu_option_row(c,label,value,top=22):
     import base64
     from frame_oracle import render
     # Native params draws the full name then the right-aligned value, without
     # clearing their overlap. Assert the composite row, including both glyphs.
     expected=render([(0,30,15,label),(None,30,15,value)])
-    indices=[(y*128+x)*4+k for y in range(22,32) for x in range(128) for k in range(3)]
+    indices=[(y*128+x)*4+k for y in range(top,32) for x in range(128) for k in range(3)]
     def match(state):
         actual=base64.b64decode(state['frame']['pixels_base64'])
         return all(actual[i]==expected[i] for i in indices)
@@ -740,12 +755,14 @@ def set_mosaic_options(c,options):
     position=next(i for i,value in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if value['id']=='mosaic')
     c.enc(2,position);c.key(3)
     for label,enabled in options:
+        # The preceding Parameter locks separator draws its rule at y22.
+        top=23 if label=='Trigless locks' else 22
         c.enc(2,-60)
         for attempt in range(40):
-            if selected_line(c.snapshot(),label):break
+            if selected_line(c.snapshot(),label,top=top):break
             c.enc(2,1)
         else:raise AssertionError('Required Mosaic option not reached: '+label)
-        c.enc(3,3 if enabled else -3);menu_option_row(c,label,'On' if enabled else 'Off')
+        c.enc(3,3 if enabled else -3);menu_option_row(c,label,'On' if enabled else 'Off',top=top)
         c.results.append(dict(kind='mosaic-option-input',label=label,enabled=enabled))
     c.key(2);c.enc(2,-60);menu_label(c,'LEVELS >');c.key(2);c.key(1)
 
@@ -1432,7 +1449,7 @@ def midi_clock_transport(c):
     assert all(abs(r['actual_seconds']-r['expected_seconds'])<=tolerance for r in rows),rows
     durations=[]
     for note in notes[:8]:
-        off=next(m for m in events if m['index']>note['index'] and m['bytes']==[128,note['bytes'][1],note['bytes'][2]])
+        off=next(m for m in state['midi'] if m['index']>note['index'] and m['bytes']==[128,note['bytes'][1],note['bytes'][2]])
         durations.append((off[field]-note[field])/1e9)
     c.results.append(dict(kind='midi-clock-durations',expected_seconds=.15,actual_seconds=durations))
     assert all(abs(d-.15)<=tolerance for d in durations),durations
@@ -2245,7 +2262,7 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
     assert actual==expected,dict(expected=expected,actual=actual)
     durations=[]
     for note in [m for m in rows if m['bytes'][1] in (72,76,79)][:9]:
-        off=next(m for m in events if m['index']>note['index'] and m['port']==1 and m['bytes'][:2]==[128,note['bytes'][1]])
+        off=next(m for m in state['midi'] if m['index']>note['index'] and m['port']==1 and m['bytes'][:2]==[128,note['bytes'][1]])
         durations.append((off[field]-note[field])/1e9)
     tolerance=2e-9 if controlled else .01
     c.results.append(dict(kind='recorded-chord-length',expected=.5,actual=durations,release_order=release_order))
@@ -2756,14 +2773,83 @@ def panic_pending_chord(c, arp, shape):
 
 
 from panic_hotplug import panic_hotplug
+from patch_params import patch_boundaries,patch_play_recall
+from patch_matrix import patch_cc_matrix
 
-from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_phrase, doubledecker_audition
+from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_phrase,doubledecker_audition
+
+from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrpn_slide,patch_configured_off_lock
 
 CASES={
+ 'M-PATCH-060':dict(run=lambda c:patch_configured_off_lock(c,default_kind='CCdefault'),requirements=['CH-PATCH-SENTINEL'],description='Omitted off_value defaults to silent-1 for a CC step lock'),
+ 'M-PATCH-061':dict(run=lambda c:patch_configured_off_lock(c,default_kind='NRPNdef'),requirements=['CH-PATCH-SENTINEL'],description='Omitted off_value defaults to silent-1 for an NRPN step lock, without Lua failure'),
+ 'M-PATCH-062':dict(run=lambda c:patch_slide_timing(c,off_middle=True,default_off=True),requirements=['SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='Default-Off CC middle step does not cancel or become a destination of the active slide'),
+ 'M-PATCH-063':dict(run=lambda c:patch_nrpn_slide(c,default_off=True),requirements=['SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='Default-Off NRPN middle step preserves the rollover curve and exact musical destination'),
+ 'M-PATCH-059':dict(run=lambda c:patch_nrpn_restart(c,legacy=True,convert=True),requirements=['CH-PATCH-SENTINEL'],description='Explicit old-project conversion writes a new copy with identical numeric PSET, preserves source, refuses overwrite, and emits standard bytes across native cold loads/edit/Play'),
+ 'M-PATCH-057':dict(run=patch_configured_off_lock,requirements=['CH-PATCH-SENTINEL'],description='Configured NRPN Off below active range stays silent when authored as a held-step lock'),
+ 'M-PATCH-058':dict(run=lambda c:patch_configured_off_lock(c,high=True),requirements=['CH-PATCH-SENTINEL'],description='Configured CC Off above active range stays silent when authored as a held-step lock'),
+ 'M-PATCH-053':dict(run=lambda c:patch_nrpn_slide(c,legacy=False,descending=False),requirements=['SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='NRPN slow rollover slide legacy=False descending=False: exact routing, value curve, endpoint-before-note and no Off tail'),
+ 'M-PATCH-054':dict(run=lambda c:patch_nrpn_slide(c,legacy=False,descending=True),requirements=['SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='NRPN slow rollover slide legacy=False descending=True: exact routing, value curve, endpoint-before-note and no Off tail'),
+ 'M-PATCH-055':dict(run=lambda c:patch_nrpn_slide(c,legacy=True,descending=False),requirements=['SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='NRPN slow rollover slide legacy=True descending=False: exact routing, value curve, endpoint-before-note and no Off tail'),
+ 'M-PATCH-056':dict(run=lambda c:patch_nrpn_slide(c,legacy=True,descending=True),requirements=['SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='NRPN slow rollover slide legacy=True descending=True: exact routing, value curve, endpoint-before-note and no Off tail'),
+ 'M-PATCH-052':dict(run=patch_nrpn_boundary_matrix,requirements=['CH-PATCH-SENTINEL'],description='Native NRPN0/1/126/127/128/129/16383 in both explicit modes, parameter channel overrides, Off silence and A/B/A switching'),
+ 'M-PATCH-050':dict(run=patch_nrpn_restart,requirements=['CH-PATCH-SENTINEL'],description='Standard NRPN edits, two cold loads, autosave and Play recall preserve126 then253 with exact bytes and melody'),
+ 'M-PATCH-051':dict(run=lambda c:patch_nrpn_restart(c,legacy=True),requirements=['CH-PATCH-SENTINEL'],description='Pre-policy NRPN project migrates stored control to historical mode and preserves even/odd bytes across edits, Play and second cold load'),
+ 'M-PATCH-029':dict(run=lambda c:patch_slide_trigless(c,True),requirements=['SLIDE-GLOBAL','OPT-TRIGLESS'],description='Slide reaches silent locked destination with trigless enabled and preserves note rests'),
+ 'M-PATCH-048':dict(run=patch_sparse_slide,requirements=['SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='Sparse active100..127 CC slide with Off below range keeps exact musical curve and stored recall'),
+ 'M-PATCH-049':dict(run=lambda c:patch_sparse_slide(c,high=True),requirements=['SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='Sparse active100..127 CC slide with Off above range never emits sentinel or gap and preserves endpoint timing'),
+ 'M-PATCH-047':dict(run=lambda c:patch_ten_slot_slides(c,remove_middle=True),requirements=['SLIDE-GLOBAL','PARAM-SLOTS'],description='Remove middle assignment during ten active slides; selected CC stops immediately while nine independent curves and note timing continue'),
+ 'M-PATCH-046':dict(run=patch_ten_slot_slides,requirements=['SLIDE-GLOBAL','PARAM-SLOTS'],description='All ten native parameter slots slide concurrently with distinct CC identities and exact independent trajectories/endpoints'),
+ 'M-PATCH-045':dict(run=lambda c:patch_slide_live_destination(c,unassign=True),requirements=['SLIDE-GLOBAL','PARAM-SLOTS'],description='Selecting None during active slide immediately retires CC output while preserving complete note sequence and timing'),
+ 'M-PATCH-044':dict(run=patch_channel_clear_isolation,requirements=['LOCK-PARAM-CLEAR','LOCK-OCTAVE','PARAM-SLOTS'],description='Repeated clear on channel1 preserves channel2 MIDI/octave locks on distinct port/channel, exact note times and lock values'),
+ 'M-PATCH-043':dict(run=lambda c:patch_clear_mask_boundary(c,copy_isolation=True),requirements=['LOCK-PARAM-CLEAR','SONG-SLOTS','LOCK-OCTAVE'],description='Copied song pattern lock clear stays isolated across repeated slot switching; original locks and both length masks remain correct'),
+ 'M-PATCH-042':dict(run=lambda c:patch_clear_mask_boundary(c,inverse=True,single=True),requirements=['LOCK-MASK','LOCK-CLEAR-PAGE','LOCK-OCTAVE'],description='Held-step K2 on Masks clears only step2 length mask while preserving other steps, octave and MIDI locks'),
+ 'M-PATCH-041':dict(run=lambda c:patch_clear_mask_boundary(c,inverse=True),requirements=['LOCK-MASK','LOCK-CLEAR-PAGE','LOCK-OCTAVE','LOCK-PARAM-CLEAR'],description='Mask-page channel clear removes held-step length masks while preserving MIDI parameter and octave locks with exact durations'),
+ 'M-PATCH-040':dict(run=patch_clear_mask_boundary,requirements=['LOCK-PARAM-CLEAR','LOCK-CLEAR-PAGE','LOCK-OCTAVE'],description='Channel lock clear removes parameter and octave locks while preserving the independent length mask and musical note timing'),
+ 'M-PATCH-039':dict(run=lambda c:patch_slide_live_destination(c,clear_all=True),requirements=['SLIDE-GLOBAL','LOCK-PARAM-CLEAR'],description='Live K1+K2 clears source and destination channel locks; subsequent cycles recall stored value at each unchanged note'),
+ 'M-PATCH-038':dict(run=lambda c:patch_slide_live_destination(c,reassign=True),requirements=['SLIDE-GLOBAL','PARAM-SLOTS'],description='Live CC1-to-CC2 reassignment sends new parameter destination despite old slide ownership and preserves next-cycle locks/timing'),
+ 'M-PATCH-037':dict(run=lambda c:patch_slide_live_destination(c,clear=True),requirements=['SLIDE-GLOBAL','LOCK-PARAM-CLEAR'],description='Held-step K2 clears live destination without disturbing source or notes; next cycle recalls stored patch without stale lock or slide'),
+ 'M-PATCH-036':dict(run=lambda c:patch_slide_live_destination(c,off=True),requirements=['SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='Live Off destination preserves the captured slide to completion without sentinel emission and excludes it from subsequent cycles'),
+ 'M-PATCH-035':dict(run=patch_slide_live_destination,requirements=['SLIDE-GLOBAL','LOCK-PARAM-SET'],description='Editing destination during active slide applies new endpoint before its note and next cycle uses the new trajectory without stale tail'),
+ 'M-PATCH-034':dict(run=lambda c:patch_slide_timing(c,step_local=True,global_roundtrip=True),requirements=['SLIDE-STEP','SLIDE-GLOBAL'],description='Global slides enable later locks then switch off while preserving an existing local slide and its exact timing'),
+ 'M-PATCH-033':dict(run=lambda c:patch_slide_timing(c,step_local=True),requirements=['SLIDE-STEP'],description='Held-step K3 slides only source lock with exact trajectory and endpoint; later lock jumps directly without unwanted global interpolation'),
+ 'M-PATCH-032':dict(run=lambda c:patch_slide_live_division(c,repeated_edits=True),requirements=['SLIDE-GLOBAL','CH-TEMPO'],description='Repeated confirmed queued rate edits preserve pre-boundary timing and retime active slide continuously to final rate'),
+ 'M-PATCH-031':dict(run=lambda c:patch_slide_timing(c,stop_restarts=3),requirements=['SLIDE-GLOBAL','NAV-TRANSPORT'],description='Three active-slide stop/restarts leave no stale MIDI or outstanding notes and retain exact restarted slide timing'),
+ 'M-PATCH-030':dict(run=lambda c:patch_slide_trigless(c,False),requirements=['SLIDE-GLOBAL','OPT-TRIGLESS'],description='Disabled trigless excludes silent lock from slide destination and parameter emission'),
+ 'M-PATCH-028':dict(run=lambda c:patch_slide_timing(c,off_middle=True),requirements=['SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='Explicit Off lock between active slide endpoints emits no sentinel/stored value and does not cancel or distort the MIDI trajectory'),
+ 'M-PATCH-027':dict(run=patch_slide_song_cutoff,requirements=['SLIDE-GLOBAL','SONG-ADVANCE','SONG-SLOTS'],description='Actual song transition without reset retires old active CC slide at global boundary; new octave fingerprint, phase and explicit lock remain correct'),
+ 'M-PATCH-026':dict(run=lambda c:patch_slide_live_division(c,reset=True),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-TEMPO','SONG-ADVANCE'],description='Same-pattern reset during queued rate edit preserves wrapped slide through unowned first step and retargets the actual third-step endpoint'),
+ 'M-PATCH-025':dict(run=lambda c:patch_slide_live_division(c,type_switch=True),requirements=['SLIDE-GLOBAL','CH-SWING'],description='Queued Swing-to-Heavy6 change crosses active /3 slide; exact global-boundary retiming, continuous CC and framebuffer readback'),
+ 'M-PATCH-024':dict(run=patch_slide_live_division,requirements=['SLIDE-GLOBAL','CH-TEMPO'],description='Queued /3-to-/6 edit applies at global pattern boundary during a slide; preserves continuous CC and independently retimed destination'),
+ 'M-PATCH-023':dict(run=lambda c:patch_slide_timing(c,wrap=True,shuffle=True),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-SWING'],description='Heavy basis6 full shuffle: independent16/16/16/48pulse onsets, one-gap outgoing slide and three-gap wrapped return'),
+ 'M-PATCH-021':dict(run=lambda c:patch_slide_timing(c,wrap=True,swing=50),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-SWING'],description='Positive50 swing CC slide over one gap and wrapped return over three gaps; independent36/12pulse onsets and endpoint ordering'),
+ 'M-PATCH-022':dict(run=lambda c:patch_slide_timing(c,wrap=True,swing=-50),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-SWING'],description='Negative50 swing CC slide over one short gap and wrapped return over three gaps; independent12/36pulse onsets and endpoint ordering'),
+ 'M-PATCH-020':dict(run=lambda c:patch_slide_timing(c,wrap=True,fractional=True),requirements=['SLIDE-GLOBAL','CH-TEMPO'],description='Fractional x5.3 native CC slides and wrapped endpoints follow independently rounded musical onsets'),
+ 'M-PATCH-019':dict(run=lambda c:patch_slide_timing(c,target=25),requirements=['SLIDE-GLOBAL','CH-PATCH-RECALL'],description='One-unit24to25 slide reaches rounded target early yet applies one explicit destination lock before its note, with no stale tail'),
  'M-XA-004-JF-OVERLAP':dict(run=jf_same_voice_overlap,requirements=['CH-DEVICE','MIDI-RELEASE-001','REC-LIVE-NOTES'],expansion_families=['XA-006','XA-008','XA-013'],description='All six mono JF voices: two sources hold same pitch on one player; both release orders, no premature gate-off, one final release, selection moved to channel16'),
  'M-XA-003-JF-OWNERSHIP':dict(run=jf_keyboard_ownership,requirements=['CH-DEVICE','MIDI-RELEASE-001','REC-LIVE-NOTES'],expansion_families=['XA-004','XA-006','XA-008','XA-013'],description='All six compatible JF mono voices paired on Mosaic channels1/16; same pitch from separate ports/input channels, both release orders, channel8 selected during release, no MIDI leakage'),
  'M-XA-002-AUDIO':dict(run=doubledecker_audition,requirements=['CH-DEVICE','SETUP-DEVICE-DISCOVERY'],expansion_families=['XA-001','XA-005','XA-013'],description='Native keyboard audition through visible Doubledecker selection; measured stereo C4/E4/G4 sustain, bounded release silence, no MIDI note leakage'),
  'M-XA-001-JF':dict(run=jf_mono_phrase,requirements=['CH-DEVICE','SETUP-DEVICE-DISCOVERY'],expansion_families=['XA-001','XA-005','XA-008'],description='Current Mosaic selects visible JF mono voice1, plays exactly two phrases, emits independently decoded pitches/velocity ordering/releases with no MIDI note leakage'),
+ 'M-PATCH-004':dict(run=patch_cc_matrix,requirements=['CH-PATCH-SENTINEL'],description='All127configured generic CC controls: sentinel, every declared boundary/interior value and saturation, exact MIDI and screen output'),
+
+ 'M-PATCH-001':dict(run=lambda c:patch_boundaries(c,False),requirements=['CH-PATCH-SENTINEL'],description='Generic CC stored parameter sentinel, boundary values and clamped edits via native params menu'),
+ 'M-PATCH-002':dict(run=lambda c:patch_boundaries(c,True),requirements=['CH-PATCH-SENTINEL'],description='Configured CC device supports documented minus-one sentinel and numeric boundary edits'),
+ 'M-PATCH-018':dict(run=lambda c:patch_slide_timing(c,True),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-RANGE'],description='Native Wrap param slides option:24to96 and96to24 span two musical steps inside active range1..4 across two loops, exact interpolated CCs and pre-note endpoints'),
+ 'M-PATCH-017':dict(run=patch_slide_timing,requirements=['SLIDE-GLOBAL','CH-PATCH-RECALL'],description='Two-step24to96 slide follows musical elapsed time across two loops, reaches destination before note and cannot send stale values afterward'),
+ 'M-PATCH-015':dict(run=patch_adjacent_locks,requirements=['CH-PATCH-RECALL'],description='Four adjacent distinct locks match their own note through three wraps; stored value unchanged and exact90BPM onset schedule'),
+ 'M-PATCH-016':dict(run=lambda c:patch_adjacent_locks(c,2),requirements=['CH-PATCH-RECALL','CH-RANGE'],description='Range2..4 starts with its own lock rather than step1 and wraps with distinct lock values before each musical onset'),
+ 'M-PATCH-013':dict(run=lambda c:patch_lock_precedence(c,63),requirements=['CH-PATCH-RECALL'],description='Equal stored and step-lock values preserve explicit recall and lock messages; verify full phrase ordering and stored value'),
+ 'M-PATCH-014':dict(run=lambda c:patch_lock_precedence(c,-1),requirements=['CH-PATCH-RECALL','CH-PATCH-SENTINEL'],description='First-step Off sends no lock CC and does not undo stored-patch recall; full phrases and menu readback'),
+ 'M-PATCH-012':dict(run=patch_lock_precedence,requirements=['CH-PATCH-RECALL'],description='Stored CC63 is recalled before first-step CC99 lock and note, while native menu readback retains stored63'),
+ 'M-PATCH-010':dict(run=patch_sparse_range,requirements=['CH-PATCH-SENTINEL'],description='All28 valid CC values100..127 with off-minus-one, no exposed/transmitted gap values, saturation and screen checks'),
+ 'M-PATCH-011':dict(run=lambda c:patch_sparse_range(c,True),requirements=['CH-PATCH-SENTINEL'],description='All28 valid CC values100..127 with custom Off200 above range, no gap values or Off MIDI transmission'),
+ 'M-PATCH-008':dict(run=patch_restart,requirements=['CH-PATCH-RECALL'],description='Store CC via native menu, actual autosave and fresh-process load; assert restored display, startup MIDI, Play recall and melody'),
+ 'M-PATCH-009':dict(run=lambda c:patch_restart(c,True),requirements=['CH-PATCH-RECALL','CH-PATCH-SENTINEL'],description='Persist an edited parameter returned to Off; cold load and Play preserve Off without unwanted CC'),
+ 'M-PATCH-007':dict(run=patch_nrpn_bytes,requirements=['CH-PATCH-SENTINEL'],description='Configured NRPN control sends independent address and 14-bit data bytes through native menu input'),
+ 'M-PATCH-006':dict(run=patch_muted_recall,requirements=['CH-PATCH-RECALL'],description='Muted channel recalls stored patch on Play while grid feedback and full MIDI trace prove note silence'),
+ 'M-PATCH-005':dict(run=lambda c:patch_play_recall(c,3),requirements=['CH-PATCH-RECALL'],description='Three actual grid Play/Stop cycles each recall exactly one stored unassigned CC before their first note'),
+ 'M-PATCH-003':dict(run=patch_play_recall,requirements=['CH-PATCH-RECALL'],description='Play recalls a stored CC that is not assigned to a trig-lock slot before the first note'),
+
  'M-PANIC-011':dict(run=lambda c:panic_hotplug(c,True,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
  'M-PANIC-012':dict(run=lambda c:panic_hotplug(c,True,True),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
  'M-PANIC-013':dict(run=lambda c:panic_hotplug(c,False,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect after sweep; restored keyboard, fresh panic and melody'),

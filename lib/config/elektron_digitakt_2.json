@@ -15,6 +15,7 @@
   ],
   "polyphonic": false,
   "id": "digitakt2",
+  "nrpn_lsb_mode": "legacy-half",
   "params": [
     {
       "cc_max_value": 127,

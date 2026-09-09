@@ -1,0 +1,1075 @@
+{
+  "status": "in-progress",
+  "candidate": "0064-slide-reset-ownership",
+  "native_runs": [
+    {
+      "run_id": "26fa1e165d7f4de8909af5e77784fdc6",
+      "mode": "controlled-experimental",
+      "manifest_sha256": "ea7ce543ce0a0b55ed979cc690eb30cf38d105d967289b95e12ff47128b1c262",
+      "passed": true
+    },
+    {
+      "run_id": "d22c5a3986e84f238700bb801c861b00",
+      "mode": "real-time",
+      "manifest_sha256": "6d3047a12d4399a5a555b4c325f9738b4317a1ca07d90a0d233d22d4924651ca",
+      "passed": true
+    }
+  ],
+  "source_sha256": "be54ea3edc9c0a7664226420c0e7a6c061956c637075a63caec0af2eb602db39",
+  "unit_baseline": "patch-domain-units-222d73bb7b4146238f90d53201e674df",
+  "unit_results": {
+    "collected": 484,
+    "passed": 484,
+    "failed": 0,
+    "errors": 0,
+    "artifact": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-a6c1e9af234643f98a315af9161ac144/results.json",
+    "source_sha256": {
+      "lib/clock/m_clock.lua": "273944e01377dc0493a5917256a2aa974408b887d8ab4b62fa0a222c43571100",
+      "lib/clock/m_lattice.lua": "4ccbc5f088a96e993f101ef587ea2c7d69c4adb32e90fb514afaa8f60228e222",
+      "lib/models/program.lua": "7d66554d03a5f3de1ae78c4057299d5c7de186f5eee6aaec35ca10ac7fc824f7",
+      "lib/step.lua": "725665c441897c575931f9d8d1d7995e962cb9b27a32105e872558e46e595b60"
+    }
+  },
+  "findings": [
+    "0052 improved straight onset-distance native behaviour but is not accepted as a complete slide fix.",
+    "0053 fixes an omitted ring slot.last_value assignment. Strengthened native test fails before and passes in controlled and real time afterward.",
+    "Seven first-failure assertions count samples using inclusive step duration; these need contract-based revision, not blind count replacement.",
+    "Six first-failure assertions require a forced one-quantum initial jump; these need interpolation-contract review.",
+    "Two first-failure assertions show missing terminal endpoint: division-wrap ends at91 instead of100; shuffle ends at105 instead of127.",
+    "The candidate process_ring_buffer deactivates at pulse_count >= total_pulses without emitting the endpoint. The native straight case receives that value from the destination lock; this does not establish direct scheduler endpoint correctness.",
+    "Further assertions may fail after each first assertion is resolved."
+  ],
+  "next_action": "Consolidate and publish the authorised parameter/slide/NRPN checkpoint after candidate hygiene checks. Then continue remaining mixed parameter types, modulation/lifecycle interactions and exhaustive manual/emulator gates. No native/review processes active. No refactor readiness claim.",
+  "full_campaign_complete": false,
+  "native_processes_active": false,
+  "review": {
+    "path": "docs/testing/reviews/slide-contract-review.json",
+    "session": "01a081f0-25fa-7c20-bca6-14386d39b7b5",
+    "status": "completed-scoped-guidance-not-certification"
+  },
+  "wrap_baseline": {
+    "run_id": "e9fdf9a88f794da099cad5e16dfa9945",
+    "manifest_sha256": "01f6896e4e6eb51f29df14f3e2b578bc44e578ba7e0f33b2f48a2e8980465574",
+    "failure": "{'cycle': 0, 'wrapped': True, 'elapsed': 0.11111111, 'value': 95, 'ideal': 72.00000023999999, 'error': 22.99999976000001}",
+    "passed": false
+  },
+  "review_caution": "Codex suggested Off destination retargeting. Preserve user-approved Off sends-nothing/does-not-cancel semantics and validate live-edit cases explicitly before documenting any new detail.",
+  "cancellation_candidate": "0054-slide-silent-replacement",
+  "cancellation_validation": {
+    "isolated_contracts": 7,
+    "baseline_failures": 4,
+    "candidate_failures": 0,
+    "native_straight_slide_runs": [
+      {
+        "run_id": "42fedd882c4e4df7b1b59a254bee5355",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "8f1bb4fcf04d667379eb13f6c2b415665d90e8dd9771bf5f17fdbd0f707e9c5b"
+      },
+      {
+        "run_id": "c986a54bb89a4bb6a5528d33849b6cd7",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "897e981d7c2a7b48cc77b1f637bae2297c1c96b22adf34675298afe495d0da2d"
+      }
+    ],
+    "unit_results": {
+      "collected": 482,
+      "passed": 467,
+      "failed": 15,
+      "artifact": "/home/andy/projects/mosaic-behaviour-runs/patch-domain-units-e875683b763b42d7a7489824a5047140/results.json",
+      "same_failure_names_as_0052": true,
+      "failure_names": [
+        "test_concurrent_sliding_parameters",
+        "test_execute_action_across_steps_handles_high_to_low_transition",
+        "test_execute_action_across_steps_handles_high_to_low_with_wrap",
+        "test_execute_action_across_steps_handles_wrap_with_clock_division",
+        "test_execute_action_across_steps_works_with_clock_division",
+        "test_execute_action_across_steps_works_with_fractional_quantization",
+        "test_execute_action_across_steps_works_with_fractional_values",
+        "test_execute_action_across_steps_works_with_normal_clock",
+        "test_execute_action_across_steps_wraps_at_pattern_boundaries",
+        "test_execute_action_across_steps_wraps_correctly",
+        "test_execute_action_across_steps_wraps_with_long_spans",
+        "test_execute_action_across_steps_wraps_with_multiple_actions",
+        "test_execute_action_across_steps_wraps_with_quantization",
+        "test_rapid_spread_action_cancellation",
+        "test_spread_actions_handle_shuffle"
+      ]
+    },
+    "limitations": "Native straight-slide regression does not establish mid-slide replacement or norns-parameter handoff. Full timing correction remains incomplete.",
+    "current_fixture": {
+      "contracts": 8,
+      "passed": 8,
+      "log": "/home/andy/projects/mosaic-behaviour-runs/slide-cancellation-absolute-fixture.log",
+      "scope": "Ownership-only units with explicit timing dependency stubs; not native workflow evidence."
+    }
+  },
+  "onset_projection": {
+    "candidate": "0055-slide-onset-projection",
+    "status": "integrated-native-straight-and-shortened-wrap-validated",
+    "configurations": 537,
+    "comparisons": 25776,
+    "test": "tests/behaviour/test_slide_onset_projection.lua",
+    "log": "/home/andy/projects/mosaic-behaviour-runs/slide-onset-projection.log",
+    "log_sha256": "2c96c5b8d95de0e270c15a6ec426b883aa9ede0e16a42a23d173319f43c1cbc0",
+    "source_sha256": "1d1d4c3774bab9dd0aed316ec018bc74843fc066b228c6c17d8a99fb194c3366",
+    "scope": "Resolved non-delayed channel onsets only; actual future lattice callbacks, unchanged live state, straight-sixteenth literal oracle. Not independent musical certification of every shuffle map.",
+    "full_campaign_complete": false
+  },
+  "absolute_pulse_validation": {
+    "native_runs": [
+      {
+        "run_id": "1a99281cffca4bdfb0dbb51bc0c2f693",
+        "case": "M-PATCH-017",
+        "mode": "controlled-experimental",
+        "manifest_sha256": "8c33ec36ccc47e538e5009266b7054c328184295ddce63f8f656d37bf6af9870",
+        "passed": true
+      },
+      {
+        "run_id": "887d9f40e2c044e88910e875ee3e18da",
+        "case": "M-PATCH-018",
+        "mode": "controlled-experimental",
+        "manifest_sha256": "b3f86146eea556903d16d8305e50b24e338fcd9306c0055ee7a1360049673c98",
+        "passed": true
+      },
+      {
+        "run_id": "9db76d99d8294ad1b0fadd5c96b02e01",
+        "case": "M-PATCH-017",
+        "mode": "real-time",
+        "manifest_sha256": "d0f4c800f002aaf46794a2f12f7aeb0856ad3a5cf15cdf28d4eecc4f1c437dfb",
+        "passed": true
+      },
+      {
+        "run_id": "4c17a0c9d5374bf380fd6447e4411d94",
+        "case": "M-PATCH-018",
+        "mode": "real-time",
+        "manifest_sha256": "ccc09c38d5bf678ebd5de7eb6bfe8e544b22411d8dad887290e534c4a14ab83c",
+        "passed": true
+      }
+    ],
+    "report": "/home/andy/projects/mosaic-behaviour-runs/slide-absolute-native/report.json",
+    "full_campaign_complete": false
+  },
+  "destination_lookup": {
+    "candidate": "0056-slide-effective-destination",
+    "tests": 9,
+    "baseline_failures": 8,
+    "candidate_failures": 0,
+    "evidence": "/home/andy/projects/mosaic-behaviour-runs/slide-destination-range"
+  },
+  "rounded_endpoint_validation": {
+    "phase_cases": 576,
+    "baseline_failed": 175,
+    "candidate_failed": 0,
+    "native_runs": [
+      {
+        "run_id": "07a8ae1d47894e5aa01f5c8f116652e4",
+        "case": "M-PATCH-019",
+        "mode": "controlled-experimental",
+        "passed": false,
+        "manifest_sha256": "186ff7d844626d67e06f04d82bae64fbfb2a506b36110b1746e01c6c5bbac5af"
+      },
+      {
+        "run_id": "663c10b26f91447587d25915f525e5d1",
+        "case": "M-PATCH-019",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "2aaaec91bf772b40d41e8747acc335f37c11fcb45319031579e5b8c2d0146a95"
+      },
+      {
+        "run_id": "8c6149c7a51a4cb0a104e964988ffaae",
+        "case": "M-PATCH-019",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "a8913e8ba700568db2f0e6130f61020eba80eb0f18c41a58dcce5d0f9ed0af7a"
+      },
+      {
+        "run_id": "19be7d0afa5d405388ec7224c415a68b",
+        "case": "M-PATCH-017",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "ec382873bea44129919363fbd3046dcf3718811ede695cf40b61ac87548e7540"
+      }
+    ]
+  },
+  "lookup_fixture_correction": "Nine stored-lock fixtures explicitly enable trigless playback; all original assertions retained, seven errors resolved. Dedicated active/inactive lookup contracts retained.",
+  "onset_fixture_progress": {
+    "helper": "lib/tests/helpers/slide_onset_fixture.lua",
+    "clock_requests": 31,
+    "performance_requests": 3,
+    "production_assertion_bypassed": false,
+    "notes": "Legacy test reloads create distinct module closures: fixture obtains installed channel clocks globally but invokes the same module closure whose ring initializer and sampler ran."
+  },
+  "explicit_occurrence_validation": {
+    "phase_cases": 864,
+    "passed": 864,
+    "zero_distance_unit_passed": true,
+    "candidate": "0059"
+  },
+  "ownership_fixture_resolution": {
+    "diagnostic": "/home/andy/projects/mosaic-behaviour-runs/slide-ownership-diagnostic/diagnostic.log",
+    "cause": "start() already pulses once; queued requests were still waiting at channel phase3 after one additional pulse.",
+    "fix": "Bounded start_pending waits until actual channel callbacks consume their requests. Queued ownership false, active ownership true and eventual ownership false assertions all retained and passed."
+  },
+  "performance_resolution": {
+    "diagnostic": "/home/andy/projects/mosaic-behaviour-runs/slide-benchmark-profile-999e138e74c74227ba8463d5395ed5cc/results.json",
+    "bulk_requests": 2728,
+    "bulk_setup_in_pulse_seconds": 0.019516,
+    "live_160_slot_baseline_seconds": 0.004589,
+    "scalar_candidate_seconds": 0.00298,
+    "final_candidate_passed": true,
+    "threshold_seconds": 0.002,
+    "scope": "Straight full-distance live admission and original steady-state workload; modulated live admission performance remains unverified."
+  },
+  "timing_unit_contracts": {
+    "tests_revised": 13,
+    "oracle": "Literal 24-pulse sixteenth and 48-pulse half-speed gaps; exact eight-pulse sampler timestamps, independently quantised linear values, exact endpoint and no extra callbacks. Native application handoff is separate.",
+    "rapid_cancellation": "Cancel after actual admission, before sampling; each cancelled slot silent and each surviving slot follows exact timestamps/values."
+  },
+  "projection_cost_validation": {
+    "configurations": 537,
+    "onset_comparisons": 25776,
+    "endpoint_phase_cases": 864,
+    "logs": [
+      "/home/andy/projects/mosaic-behaviour-runs/projection-cost-test_slide_onset_projection.lua.log",
+      "/home/andy/projects/mosaic-behaviour-runs/projection-cost-test_slide_endpoint_phases.lua.log"
+    ],
+    "review_pending": false
+  },
+  "fractional_slide_native": {
+    "case": "M-PATCH-020",
+    "runs": [
+      {
+        "run_id": "7f6bc07df5aa4d5fbd024e8059492cb9",
+        "passed": false,
+        "sha256": "12c3b82d03e8e00f6ffa9adba41e4e4c995a8f03e8b18c971288140fa2f5e4bc"
+      },
+      {
+        "run_id": "8de8e315ed0b428c8a1d9c1a9af7a61f",
+        "passed": true,
+        "sha256": "e265ee4c2df65fe9e6e126226610fa9a26c23778e5d82f073ba95cf8571b6ba6"
+      },
+      {
+        "run_id": "308b00cc6e6047cf9b7c6df1a1c9a516",
+        "passed": true,
+        "sha256": "66d321984357a28632bff9214fccd19e58f9c9530d8fc5b7e660d494b7cecd60"
+      }
+    ],
+    "oracle": "Existing fractional_deadlines.quantised_pulse constructor-preview contract, not fitted to captured notes. First failure omitted preview consumption; retained as oracle failure.",
+    "real_time": "See latest native manifest; not inferred from controlled result."
+  },
+  "checkpoint_review": {
+    "session": "01a082f5-1cbe-72a1-8bee-59a26774b403",
+    "raw": "docs/testing/reviews/slide-timing-checkpoint.json",
+    "status": "three-fixture-findings-resolved-with-regression-evidence",
+    "baseline": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-905b1022083f47978e5c793abaeda7f0/results.json",
+    "candidate": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-63f0876a0dd14f59b6b4ae7790bfc588/results.json",
+    "triage": [
+      "Legacy reload replacement routing: bind global module during admission/callbacks, restore even on exceptions. New same-slot replacement regression fails baseline and passes candidate.",
+      "Memory cancellation: execute after admission; require all100 admissions, zero cancelled callbacks and surviving activity; original memory bound unchanged.",
+      "Live benchmark: all160 channel/slot ownership and callback assertions required; unchanged2ms pulse bound passes."
+    ],
+    "production_changed_by_review_fixes": false,
+    "release_certification": false
+  },
+  "native_swing_shuffle": {
+    "cases": [
+      "M-PATCH-021",
+      "M-PATCH-022",
+      "M-PATCH-023"
+    ],
+    "scope": "Signed50 swing and Heavy basis6 at100percent; unequal one-gap outgoing and three-gap wrapped return. Both controlled and real-time modes. Not all shuffle domains or live edits.",
+    "runs": [
+      {
+        "run_id": "4db2a16dabba4a7787e0b1133156cf13",
+        "manifest_sha256": "4f751986312ac565ed7b3257072e78976326b0691f71489c73a55459715e33c5",
+        "passed": true
+      },
+      {
+        "run_id": "d4dc97f8ac694a2dac01c302d9a87583",
+        "manifest_sha256": "9da307141c4e88de96549bdb25961ce82c5d151e65b95eea1db7f93a68f05c9a",
+        "passed": true
+      },
+      {
+        "run_id": "2cc2c60fd1bf40f8b0e8255c244c7a66",
+        "manifest_sha256": "6d0763e462a8d7d4b65eee04d58922684144f3898e1618c5e0856be7fe976fc8",
+        "passed": true
+      },
+      {
+        "run_id": "92f901809e8e499b8661d26beadef99e",
+        "manifest_sha256": "7647291cfefa7917056393957b7de15f2a4c636d5167247e2b1df9c74b3e9955",
+        "passed": true
+      },
+      {
+        "run_id": "ab1f8a00c7db498ab84919faeb63957b",
+        "manifest_sha256": "b7608b11b75f5a27a9ca7c3a106635411826f556d8a1d2d8bcdb25b8856ec761",
+        "passed": true
+      },
+      {
+        "run_id": "8c0a7a4a0f4d483f86abc1fb9a4a3461",
+        "manifest_sha256": "df0e633fe882ea039b4e4413d84de8f20166ec652574a7ebbdce3bdbb9fa10b0",
+        "passed": true
+      }
+    ],
+    "regression_batch": "/home/andy/projects/mosaic-behaviour-runs/slide-swing-batch-f81c0246ffb44ce4903ffe3ff405d93f/report.json"
+  },
+  "live_retime_regression": {
+    "test": "tests/behaviour/test_slide_live_retime.lua",
+    "baseline_log": "/home/andy/projects/mosaic-behaviour-runs/slide-live-retime-baseline.log",
+    "status": "isolated-candidate-passes-native-companion-pending",
+    "expected": "After one24pulse gap, halving rate makes remaining two gaps48pulses each. Preserve value48 at change and interpolate continuously to96 over remaining96pulses.",
+    "observed": "Slide follows original72pulse duration: reaches96 at elapsed72 while destination onset is elapsed120. Six wrong emissions.",
+    "scope": "Actual Mosaic lattice and slide scheduler with dependency stubs; production UI path still required.",
+    "fix_pending": true,
+    "candidate": "0061-slide-live-retime",
+    "candidate_log": "/home/andy/projects/mosaic-behaviour-runs/live-retime-candidate-test_slide_live_retime.lua.log"
+  },
+  "live_retime_candidate_validation": {
+    "onset_projections": 8132,
+    "onset_projection_log": "/home/andy/projects/mosaic-behaviour-runs/slide-future-onsets.log",
+    "phase_cases": 14,
+    "phase_log": "/home/andy/projects/mosaic-behaviour-runs/slide-retime-phase-matrix-corrected-origin.log",
+    "prior_onset_comparisons": 25776,
+    "prior_endpoint_cases": 864,
+    "benchmark_failure_retained": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-e3e2258f9f8d48deaea6fe71321720bb/results.json",
+    "benchmark_correction": "Per-slot ownership inspection moved outside timed pulse; every admission, callback and ownership assertion remains, as does2ms bound.",
+    "limitations": "Native live edits, timing-type switch handling, repeated edits, shuffle/swing live mutation and lifecycle acceptance remain pending. Codex checkpoint required before publication."
+  },
+  "native_live_retime": {
+    "case": "M-PATCH-024",
+    "controlled_candidate": "b8c68c4e0468476ebcb707747ffb31dd",
+    "controlled_baseline": "eb4d82c6cf14450c96536421b355273a",
+    "real_time_candidate": "897a0cbfdc3a4040ade5eb09b7a89f1b",
+    "report": "/home/andy/projects/mosaic-behaviour-runs/slide-live-retime-native/report.json",
+    "contract": "Clock edits during playback apply at the global pattern boundary, not immediately or at the next channel onset. /3-to-/6 at1536pulses retimes an active1440-to1584 slide to1632 with continuous value72 at the edit. On-screen /6 required; all emitted note onsets checked.",
+    "source_candidate": "0061",
+    "failed_fixture_attempts": [
+      "b1bd01b689e745698eef7a4208c6fbf0",
+      "add0d9173d3e432db3782d0816e6af4b",
+      "5ef11a8e0826453195c8a4567504b807"
+    ]
+  },
+  "timing_type_candidate": {
+    "candidate": "0062",
+    "baseline_wrong_emissions": 3,
+    "candidate_wrong_emissions": 0,
+    "baseline_log": "/home/andy/projects/mosaic-behaviour-runs/slide-type-baseline.log",
+    "candidate_log": "/home/andy/projects/mosaic-behaviour-runs/slide-type-candidate-confirmed.log",
+    "scope": "Actual-lattice Swing-to-Heavy6 switch; native active-switch companion still pending.",
+    "review_pending": true
+  },
+  "live_retime_review": {
+    "session": "01a08315-6b3e-7291-aed7-8c5886ac6974",
+    "raw": "docs/testing/reviews/slide-live-retime-review.json",
+    "status": "reset-finding-closed-by-focused-codex-followup",
+    "finding": "Realignment resets channel phase/step but not active slide destination identity or deadline. Reviewer actual-lattice reproduction: retained109deadline, sample endpoint113, actual target133; occurrence4 now step2 instead of3.",
+    "required": "Reconcile active slide ownership at reset; preserve intentional same-pattern wrapping and cancel cross-song-pattern transitions per manual. Add native reset regression."
+  },
+  "late_pulse_projection": {
+    "candidate": "0063",
+    "baseline": "/home/andy/projects/mosaic-behaviour-runs/slide-late-pulse-projection/probe.log",
+    "failed_intermediate": "/home/andy/projects/mosaic-behaviour-runs/slide-late-pulse-future-candidate.log",
+    "comparisons": 21336,
+    "passing_log": "/home/andy/projects/mosaic-behaviour-runs/slide-late-pulse-future-final.log",
+    "phase_regressions": 14,
+    "reason": "After a channel advances within a pulse, current phase describes the next pulse; add one-pulse origin offset, including one-pulse clocks with an imminent onset."
+  },
+  "native_active_type_switch": {
+    "case": "M-PATCH-025",
+    "controlled_run": "74ca1eafa3e34ac9a03b1afd26a08979",
+    "real_time_run": "7d763468259542a6b62fed2ff6e7bdd7",
+    "passed": true
+  },
+  "manual_clarification": "README channel clock page now identifies confirmed edits as queued to the global pattern boundary; stopped edits immediate. Existing behaviour clarification, not a new timing policy.",
+  "reset_candidate": {
+    "candidate": "0064",
+    "baseline_log": "/home/andy/projects/mosaic-behaviour-runs/slide-reset-baseline.log",
+    "candidate_log": "/home/andy/projects/mosaic-behaviour-runs/slide-reset-candidate.log",
+    "baseline_bad_emissions": 9,
+    "candidate_bad_emissions": 0,
+    "native_case": "M-PATCH-026",
+    "controlled_candidate": "86c3a9188f0a4da39ee08ff639908e38",
+    "controlled_baseline": "4aff43b2dfb4467786ffe0171c8a6b16",
+    "real_time_candidate": "85fae0db6ec242d89f9a9ec72868e84e",
+    "native_report": "/home/andy/projects/mosaic-behaviour-runs/slide-reset-native/report.json",
+    "scope": "Same-pattern wrapped source at1368, queued rate edit/reset1536 with value80, destination reset step3 at1824. No first-step lock may mask old ownership.",
+    "cross_song_native_pending": false,
+    "review_followup_pending": false
+  },
+  "manual_inventory_reconciliation": {
+    "path": "tests/behaviour/manual-inventory.json",
+    "status": "clarification-hashes-and-case-bindings-reconciled",
+    "mapped_cases": "M-PATCH-017 through026",
+    "requirements_marked_complete": false
+  },
+  "reset_followup_review": {
+    "session": "01a08329-fcb7-77e3-ac4c-983d23fd65e0",
+    "raw": "docs/testing/reviews/slide-reset-followup-review.json",
+    "disposition": "Reset finding closed; no material blocker in focused0063/0064 changes; full campaign incomplete."
+  },
+  "native_song_slide_cutoff": {
+    "case": "M-PATCH-027",
+    "controlled_candidate": "9d119e1d643d40478c9b6db0a60fca19",
+    "controlled_baseline": "33dd86affd054014b7e91a3a312fa19c",
+    "real_time_candidate": "1dfc3cc775a34cc6a9da255feacab5fc",
+    "report": "/home/andy/projects/mosaic-behaviour-runs/slide-song-cutoff-native/report.json",
+    "status": "baseline-failed-candidates-passed"
+  },
+  "native_off_mid_slide": {
+    "case": "M-PATCH-028",
+    "runs": [
+      {
+        "mode": "controlled-experimental",
+        "run_id": "1ae9835772314b36bc1fbe194e3a6966",
+        "manifest": "/home/andy/projects/mosaic-behaviour-runs/1ae9835772314b36bc1fbe194e3a6966/manifest.json",
+        "manifest_sha256": "ebac0b1418af68ac3215bb209a1a760782b9fb2ecec6a70539b59d1ec58602e9",
+        "passed": true
+      },
+      {
+        "mode": "real-time",
+        "run_id": "d5500c29327242508926f1e4060d63e4",
+        "manifest": "/home/andy/projects/mosaic-behaviour-runs/d5500c29327242508926f1e4060d63e4/manifest.json",
+        "manifest_sha256": "a1c549d8bc95d964ca21ef9fa87ecfad573ff1aad94eccdf2ee719940ea4c032",
+        "passed": true
+      }
+    ],
+    "scope": "Explicit Off lock at step2 between24 and96 endpoints at1 and3: full CC trajectory, endpoint-before-note, unchanged stored63 and no stale tail, two cycles per mode."
+  },
+  "native_trigless_slide": {
+    "runs": [
+      {
+        "run_id": "249bc9626dea441dae45e89f43815860",
+        "case": "M-PATCH-029",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "5ce2beb0e202315fb623c39f9b6307b478ee1fbe5aba7a97292c734ba0a0e6ff"
+      },
+      {
+        "run_id": "c666c1a791a242e6ab121721ab8d78b5",
+        "case": "M-PATCH-030",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "38ca7b16c5776d6e79456fda5006bf1a32d80410b124b5c7b5b7bddaa839b747"
+      },
+      {
+        "run_id": "1c44531fa55e4664b0af7ccaa168cf67",
+        "case": "M-PATCH-029",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "fa30a8e0516cd7a89e41bc8e2049bf7eb646b3ec88a19783b654170c665a0526"
+      },
+      {
+        "run_id": "8b4d8d20cd2241ceb1465acd9b3b5134",
+        "case": "M-PATCH-030",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "dcfb99a36263803d2a306faad32fcc42697dffa2593c8152cb4d5c396abaa49a"
+      }
+    ],
+    "scope": "Silent destination step3: enabled reaches96 on time without a note; disabled excludes lock/slide and recalls63 at active unlocked steps2/4. Two cycles, exact note/rest timing and MIDI values; unchanged stored patch.",
+    "retained_fixture_failures": [
+      "fe7842689f504d52ad30150deecd30f6",
+      "e2746dd429e14ea3b00d0e9484c81a24"
+    ],
+    "fixture_corrections": "Option label matcher excludes documented separator at y22 only for Trigless locks; disabled expected table includes both unlocked active notes, with exact timestamps. No production changes."
+  },
+  "native_stop_restart_and_queued_edits": {
+    "runs": [
+      {
+        "case": "M-PATCH-031",
+        "run_id": "4abb556a365643ac8d2763be02688bed",
+        "mode": "controlled-experimental",
+        "manifest_sha256": "a1e9a8a8a0d4262ad027333cb5f47d30046b85586fe3adfaec9707f0ea6accb5",
+        "passed": true
+      },
+      {
+        "case": "M-PATCH-031",
+        "run_id": "af55dc6ba4d645f19d953fcc1fa76880",
+        "mode": "real-time",
+        "manifest_sha256": "5368d5c400ec51539abe5f7e424a0b9313febedaa07bdebc906360c165d3a05b",
+        "passed": true
+      },
+      {
+        "case": "M-PATCH-032",
+        "run_id": "b74576aa8b5a49b0ba403a2a1ea0029a",
+        "mode": "controlled-experimental",
+        "manifest_sha256": "dbe4fd2dd5168d8620f29936f12a158f7ece40c151e7143737a1de8aa88b553c",
+        "passed": true
+      },
+      {
+        "case": "M-PATCH-032",
+        "run_id": "2a89445f9be74d8a8fa48b249cbe5067",
+        "mode": "real-time",
+        "manifest_sha256": "27b2dc271a095b04ccf20d9b6d69e11a36efc9ad0362969db3583cacaaa1e285",
+        "passed": true
+      }
+    ],
+    "stop_restart": "Three interrupted active slides,30ms delivery drain then1second quiet window, no outstanding notes; final restart validates two full cycles and closing onset against independent curve/timing.",
+    "queued_edits": "Five confirmed rate selections before the same global boundary, final /6; every note onset and active boundary-crossing CC trajectory checked.",
+    "limitations": "Does not establish zero-latency stop delivery, edits spanning successive boundaries, live parameter-lock replacement or the complete lifecycle matrix."
+  },
+  "native_step_local_slide": {
+    "case": "M-PATCH-033",
+    "runs": [
+      {
+        "run_id": "4cbed5eef0de44b6976af0daa9417b10",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "ce581989c64266005d8c0166bb6286d4351ed8ee1ae8acda4d16c9f05ed79baf"
+      },
+      {
+        "run_id": "952d02854e3d4bb7937d07ce8a0cdabe",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "46a745b4f3a9f44d300d6ccfbe7a919efd974df5a512f2a77a04b2ce9d711c92"
+      }
+    ],
+    "scope": "Held step1 K3, global slide off;24-to96 curve tostep3, then direct48 atstep4 with no intervening slide samples. Two cycles, note times, endpoint ordering and unchanged stored63.",
+    "remaining": "Wrap/rest interactions, clear/reassign, per-step/global toggle interaction and other parameter domains."
+  },
+  "native_local_global_toggle": {
+    "case": "M-PATCH-034",
+    "runs": [
+      {
+        "run_id": "aabe9b704b5a4c7fb086d0bd374d5c66",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "22dba86015c0072c8353fb6027fb8b14612ae2e9805ed8eae8110f141004d355"
+      },
+      {
+        "run_id": "2a6ae844bd6e4e74a14ea4ca29d166ca",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "14bdf2af6121213fe9d292ae785c6e3dac56b942150cc400f35334120e9aaf2a"
+      }
+    ],
+    "scope": "Two cycles global-on with later96-to48 slide; global-off retains source-local24-to96 slide and removes later interpolation. Literal CC trajectories and endpoints, unchanged note phrase and stored patch."
+  },
+  "native_live_destination_edit": {
+    "case": "M-PATCH-035",
+    "runs": [
+      {
+        "run_id": "87b3a9f435c74fe685138c85b314d9c9",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "1e7bc7364c45b359cbf41bbcd15729d2c1c0e386adb7178ed52f9198fffe9e9e"
+      },
+      {
+        "run_id": "a172e6a58e3a47c7b0ea44156a374252",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "aba6201665aa0b5d4ef71ce24413c7e9e70fd15effc68ed690973c4fdb44310a"
+      }
+    ],
+    "scope": "At /6 edit96to84 during active source24 slide. New endpoint precedes destination note, no stale post-destination tail; next cycle follows independent24to84 curve with exact note times.",
+    "limitations": "Does not define or certify immediate mid-segment retargeting semantics; current-segment interpolation after edit deliberately not asserted. Off/clear/reassign live destinations and other parameters remain pending."
+  },
+  "native_live_off_destination": {
+    "case": "M-PATCH-036",
+    "runs": [
+      {
+        "run_id": "0c38bbb17cc4476fb1ccba997134a232",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "0befb022b85da193e476e3fdd2f78035df9e2aa528cb34a56873c6cb18fdfc1f"
+      },
+      {
+        "run_id": "1aa3c866fa5041b79b6809a9f4d80d10",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "8245d3a692612823a2c6b7ec4e6da58ccef3b84295b650aad488b99496ec0f3d"
+      }
+    ],
+    "scope": "Native held-step edit to Off during24to96 slide: unchanged independent current curve and final96 within one8-pulse sample interval; no sentinel; next cycle emits only stored recalls at active unlocked steps and next source24.",
+    "policy": "User-approved Off sends nothing and does not cancel active slide.",
+    "remaining": "Clear/reassign, other parameter types, live toggles, lifecycle domains."
+  },
+  "native_live_clear_destination": {
+    "case": "M-PATCH-037",
+    "runs": [
+      {
+        "run_id": "05fb9cd2328f4f0b937c4f4e25f500ee",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "d34575d38c323c5b41263b62d2f5f7088c1980e140bb6055df066d301189730e"
+      },
+      {
+        "run_id": "e4945d27890a42fbb45c2a15e0e4929c",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "90441e199a4678ae010317a66e2d1de3e6aa09fa35ca099c89cf9dd7a3f1f973"
+      }
+    ],
+    "scope": "Held-step K2 while slide active removes destination lock. Following cycle exact CC63 atsteps2/3/4 and source24 atnextstep1, no old96 or slide; exact note pitch/velocity/time and unchanged stored patch.",
+    "limitations": "Does not certify immediate current-segment cancellation/retargeting or multi-parameter clear isolation."
+  },
+  "reassignment_candidate": {
+    "candidate": "0065-slide-reassignment-ownership",
+    "status": "scoped-review-and-requested-regressions-resolved",
+    "case": "M-PATCH-038",
+    "runs": [
+      {
+        "run_id": "5fbe99dec1ad4d22942629582fc6e35d",
+        "mode": "controlled-experimental",
+        "passed": false,
+        "manifest_sha256": "87e8b4ee40dc8c8f948a698672566caf5866be31c6083ba9a3b75507345cd6e8"
+      },
+      {
+        "run_id": "799c001c96394a8195a3be639ad104f5",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "de8a36f25a52fecda4658b8cdbe3bf5b0a54833fcbc31f06241a13e56b929174"
+      },
+      {
+        "run_id": "303d674aeea84e2386045fc0f4845f7f",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "513527316a49a68f346ae79f17a53033ae8863f8d4f2b1dbd7f31a4f165a1455"
+      }
+    ],
+    "defect": "Old callback owns only channel/slot, so its matching destination handoff suppresses the newly assigned parameter value.",
+    "fix": "Changed effective parameter identity silently retires old slot slide. Same assignment retained; other slots/channels preserved.",
+    "isolated_units": {
+      "baseline_passed": 9,
+      "baseline_failed": 2,
+      "candidate_passed": 11,
+      "baseline_log": "/home/andy/projects/mosaic-behaviour-runs/slide-reassignment-unit-baseline.log",
+      "candidate_log": "/home/andy/projects/mosaic-behaviour-runs/slide-reassignment-unit-candidate.log"
+    },
+    "full_units": {
+      "passed": 484,
+      "results": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-ad47a71c319d423db717794063a40da4/results.json",
+      "param_manager_sha256": "1c3d54162d2ad789398304c980831c3c0f58f8f9aa2f31af5142b1a6bada257c"
+    },
+    "review_pending": false,
+    "review": {
+      "session": "01a08351-7050-75c1-9415-f5cd76ceead8",
+      "raw": "docs/testing/reviews/slide-reassignment-review.json",
+      "disposition": "No implementation blocker; requested independent identity-field tests and native post-confirmation silence checks pass."
+    },
+    "review_validation": {
+      "ownership_contracts": 15,
+      "log": "/home/andy/projects/mosaic-behaviour-runs/slide-reassignment-unit-reviewed.log",
+      "native_runs": [
+        {
+          "run_id": "2ffccfa1bd874ae0937aeb233cd27fdd",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "manifest_sha256": "b548aebdfc82b026316147ef55c6df8e3d9e06ad24605ed32318b2c8d41e2909"
+        },
+        {
+          "run_id": "879fa668528d4b518a650a513dd6f5c3",
+          "mode": "real-time",
+          "passed": true,
+          "manifest_sha256": "43879de9e74f605267c0e37e1808512d0fbe8e06507b58c09c623e675411a5c4"
+        }
+      ]
+    }
+  },
+  "native_channel_clear": {
+    "case": "M-PATCH-039",
+    "runs": [
+      {
+        "run_id": "01690dac04174173bccc6e14a1196fc7",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "cbb351288298d0e726995a957ec0b99c83d38e146c368811be6ef71a7edf7799"
+      },
+      {
+        "run_id": "3f19829316c840a2948b29a7a0abf3cc",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "56b38e99da463b9dae9ab210ea443182cc4faa35343cc9938395fff201c0326d"
+      }
+    ],
+    "scope": "K1 hold300ms thenK2 while slide active; following cycle restores stored63 at every active step, removes source/destination locks and preserves exact note timing.",
+    "fixture_failure": "84bde866567a4e578e62c5c523709885 used too-short K1 hold and toggled native menu; retained.",
+    "remaining": "Multiple parameters, other channels and mask/octave/scale lock isolation."
+  },
+  "native_clear_mask_boundary": {
+    "case": "M-PATCH-040",
+    "runs": [
+      {
+        "run_id": "54a8beacce584d4a9cae02f396a686d1",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "ef6d577ee1d5c811bf499bc9860c105402f459ff767e2b7c3b391ec724848b15"
+      },
+      {
+        "run_id": "4309ef9ccb98453789eb53c08d572778",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "2119e455fe17a005724719a7014d80d52a8339e40f1ac1fad736b94f19c0e302"
+      }
+    ],
+    "scope": "Before clear: explicitCC24/96 and octave+1 onstep2, global length mask1/2step. After K1+K2 from trig-lock page: CC63 restored, octave removed, note lengths remain1/12sec and mask framebuffer1/2 preserved. Two cycles before/after plus closing onset.",
+    "interpretation": "Existing M-OCT003 already expects channel-wide octave clear. Not a newly classified Mosaic defect. Scope is parameter/grid locks versus masks, not individual MIDI versus octave banks.",
+    "retained_fixture_failure": "47eca0eb1d4f4a8886255a97b7f82002 parser indexed one-byte MIDI transport as note; corrected.",
+    "remaining": "Native scale/transpose and other-channel isolation, mask-page inverse clear, manual wording clarification after complete scope audit."
+  },
+  "native_inverse_mask_clear": {
+    "case": "M-PATCH-041",
+    "runs": [
+      {
+        "run_id": "948c0a0936bf482484d5747a92c863c9",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "333daef92727786b11f643e3560c9123b0a833dc1b1659ca6d7e74c0319f718c"
+      },
+      {
+        "run_id": "cd04706539594f5bbb3dac64865e5bf5",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "8b8cd6db73904b88dc79893319ad64f7d7c29dc5b7e3ec4b25f91ed70830bfa7"
+      }
+    ],
+    "scope": "Held-step1/2 length masks onall4steps; mask-page K1+K2 restores1step duration while retaining octave+1 onstep2 andCC24/96 locks. Two cycles before/after, framebufferX, exact CC and note timing.",
+    "remaining": "Single-step mask clear, multiple mask types, other-channel/song and scale/transpose isolation."
+  },
+  "native_single_step_mask_clear": {
+    "case": "M-PATCH-042",
+    "runs": [
+      {
+        "run_id": "c3392b8ee505488bbdf88ef3a54aa931",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "4f2be5124d3be5331afacc73fba5cf1270a4b2a5294c5a94cb2b1e34f46e1d55"
+      },
+      {
+        "run_id": "25a03afe0e6d42bd8f318cc7a379342a",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "f39a9072e069a6bd79373092eefefcccc1a8085dcc4e95f0374b464813d4b822"
+      }
+    ],
+    "scope": "Held-step2 K2 on Masks changes durations from[1/12]*4 to[1/12,1/6,1/12,1/12]sec. Octave+1 atstep2 andCC24/96 locks preserved. Two cycles before/after with exact notes, values and lengths.",
+    "remaining": "Cross-channel/song isolation, other mask types, native None and remaining assignment domains."
+  },
+  "native_song_clear_isolation": {
+    "case": "M-PATCH-043",
+    "runs": [
+      {
+        "run_id": "cd45cfb1d7f3415da9c61d30743a2630",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "0edbd8d8cda441a6f1d3e03ebf7f4ab82071652948a1a5a0875fe93a2ea64456"
+      },
+      {
+        "run_id": "ce18af77707b4a8e9aa178a560d89826",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "3e4b657ea82333bb1956a0ecb8c48bf685ea2619c46ccc41faaeb0b68f835f49"
+      }
+    ],
+    "scope": "Five phases: original, copied with locks intact, cleared copy, original intact again, repeated cleared copy. Each phase two cycles with exact MIDI CC, octave melody, mask durations, note times and song-slot LED checks.",
+    "remaining": "Channel copy/isolation and other lock types; no full clear-domain completion claim."
+  },
+  "native_channel_clear_isolation": {
+    "case": "M-PATCH-044",
+    "runs": [
+      {
+        "run_id": "1eae913732924fd291aa820bd24cc4b1",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "fdbe454f37802c9bcfd5ea033c2c4e09401ce7b2f4c763bae2ff6842689e4295"
+      },
+      {
+        "run_id": "bc754e283d114d408cfc9dd12401d67b",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "980ed74a375bfdaa6de15d50c769c6be983f9add4c77ac9fd0942a11a72c6c3a"
+      }
+    ],
+    "scope": "Two channels/ports with24/96 versus40/80CC locks and opposite octave locks; baseline then channel1 clear twice. Channel1 locks removed, channel2 unchanged; every MIDI value before its note, pitches/velocities, onset times and channel phase alignment checked.",
+    "remaining": "Other parameter types, mask/scale/transpose cross-channel isolation and full manual domains."
+  },
+  "native_live_unassignment": {
+    "case": "M-PATCH-045",
+    "runs": [
+      {
+        "run_id": "b4d22e4f07d346a38f5cf3d88460dd4c",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "f0f8d9784dc5a6806fd43f315fe45b57c810fbb05f9cf3d73089034e6d4a9bd5"
+      },
+      {
+        "run_id": "4cf9c264ad4b42d683c77aa6c137ac71",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "af70432112a03b5dadd97fe7e31e47a65d1e02e327e9b1a81833c87a5d6bdbd1"
+      }
+    ],
+    "scope": "Confirm None during active24to96CC slide at/6; exact native confirmation interval has no subsequent CC, complete melody/onsets remain correct, stored patch63 unchanged.",
+    "candidate_covered": "0065-slide-reassignment-ownership",
+    "remaining": "Multiple active-slot unassignment isolation, other parameter types and assignment lifecycle domains."
+  },
+  "native_ten_slot_slides": {
+    "case": "M-PATCH-046",
+    "runs": [
+      {
+        "run_id": "59cb21a88e9240a78411bbd27f4bebc3",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "e941e2774ca19da5954f6f7a66be22342eec4eb7140ab57c1385e8f131d21de9"
+      },
+      {
+        "run_id": "e3e33712bd7d4d19bdaf2ecb1802f936",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "44666fcefdbef73aaf29281f4567b11c9db24648a6cc74140170fc72bff6eb1b"
+      }
+    ],
+    "scope": "All10slots independently assigned CC1..10 through menus and held-step locks; concurrent slot-to-slot+16 trajectories, initial writes before note, exact endpoint before destination, no stale tail, next source and note timing. Two cycles20curves per mode.",
+    "remaining": "Concurrent-slot mutation/unassignment and mixed parameter types, broader ranges and modulation."
+  },
+  "native_ten_slot_removal": {
+    "case": "M-PATCH-047",
+    "runs": [
+      {
+        "run_id": "8e62a98705f242579d9d55d8bd3fafc3",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "4144e97fdb37f62d9adbc4f6a5b34a4f214a420c028bb7e5e02e83ddbe007442"
+      },
+      {
+        "run_id": "e60b46198edf43f4a20ca9530cc94040",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "edc2d1b8cf404ff7305e178ab8ebe769043da6c5eff87489c1905b325218a1d5"
+      }
+    ],
+    "scope": "Ten active /6 slides; confirm None for middle slot5 after observed intermediate output. CC5 silent immediately afterward; remaining9 independent curves/endpoints and next-cycle sources unaffected, exact notes and timing.",
+    "candidate_covered": "0065-slide-reassignment-ownership",
+    "remaining": "Mixed parameter types, parameter-domain extremes, other slot mutations and full campaign."
+  },
+  "native_sparse_slides": {
+    "cases": [
+      "M-PATCH-048",
+      "M-PATCH-049"
+    ],
+    "runs": [
+      {
+        "case": "M-PATCH-048",
+        "run_id": "762c6eb71fbc41fcb09489a868af4856",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "8cb73b4b008d59a482b174edc2fc9837c857f5edb6eda66621eca76920a551c6"
+      },
+      {
+        "case": "M-PATCH-049",
+        "run_id": "5c08d018f49642c49590e3c09858b209",
+        "mode": "controlled-experimental",
+        "passed": true,
+        "manifest_sha256": "e8452c3fa356a7d211744b96f3e58fbfa4bd40066892da6e1cfb18fccf518dff"
+      },
+      {
+        "case": "M-PATCH-048",
+        "run_id": "1aa82b9cd60849cc8bcf3a92b8c156e2",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "378941b0e561d357a585aefe05266aca1a7f5d3c000bfe06be31ed7e9fbbe30c"
+      },
+      {
+        "case": "M-PATCH-049",
+        "run_id": "2beb53d77e094086b498e498e60cf8db",
+        "mode": "real-time",
+        "passed": true,
+        "manifest_sha256": "2e8fbe0509d830397fff275fc4ca12520682c2d230c3cbebd691957827261402"
+      }
+    ],
+    "scope": "Configured100..127active ranges with Off=-1 andOff=200; held-step endpoints, exact100to127curve, no gap/sentinel output, destination before note and stored113 recall. Two cycles each.",
+    "remaining": "Descending/equal sparse slides, mixed NRPN/norns/sequencer parameters and other timing/lifecycle combinations."
+  },
+  "nrpn_policy_arbitration": {
+    "status": "implemented-scoped-native-and-review-validated",
+    "session_id": 35566,
+    "artifact": "docs/testing/reviews/nrpn-compatibility-policy-review.json",
+    "scope": "NRPN encoding/migration only; no receiver compatibility claim; preserve current production encoder until arbitration read.",
+    "review": "01a0837a-c2da-7833-be25-527ced94bead"
+  },
+  "nrpn_codec_preparation": {
+    "status": "integrated-scoped-native-and-review-validated",
+    "unit": "docs/testing/nrpn-codec-unit.json",
+    "serializer": "docs/testing/nrpn-legacy-serializer.json",
+    "review": "01a0837a-c2da-7833-be25-527ced94bead",
+    "native_pending": false
+  },
+  "nrpn_integration": {
+    "candidate": "0066",
+    "runs": [
+      {
+        "run_id": "634ff6a85e0c49b798da48790e891d87",
+        "manifest_sha256": "78a09e40895bad6487392fb02a05887c64f9eb7c20f0a9f126e29ab8800aa086"
+      },
+      {
+        "run_id": "d043de37cb58480d9cda99496c0d225b",
+        "manifest_sha256": "40db5f1817327ff3d43cd8a1b76a9563bdd539a7a5da4f424b323455371a9ab0"
+      },
+      {
+        "run_id": "d1ab74e45b8544e492c3fde1f3bd75bd",
+        "manifest_sha256": "74e41eabf1cda4bf0e3291af5598f310d0e7605a9ca0c1214ec4ef5428965342"
+      },
+      {
+        "run_id": "1ee8857ed56849bc85474cf872ac3eca",
+        "manifest_sha256": "f2c7b035fb7b7fe5ae8d8721786fc5b359f8f9cab1867fb4b42a408ab3f1a107"
+      },
+      {
+        "run_id": "c6383c118bcb486eb26ae0ba8e0a5b29",
+        "manifest_sha256": "de4833096e9bdcb71fb97d49ddfbd617b3c9a27c127c0cefb989a7e317af96b4"
+      },
+      {
+        "run_id": "a893a888a5764f8587376f0752a2e479",
+        "manifest_sha256": "879d269ae6b5af0d910ddbe642eeff217d1728301b259d0492f529830984c511"
+      }
+    ],
+    "full_units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-80622558f3af4b5891d3b605b4ffaa2c/results.json",
+    "units": 484,
+    "focused_units": "/home/andy/projects/mosaic-behaviour-runs/nrpn-conversion-units-01.json",
+    "status": "scoped-native-validation-and-review-finding-resolved",
+    "pending": [
+      "Remaining mixed parameter types, modulation and lifecycle interactions",
+      "Exhaustive manual, controlled-time admission and emulator release gates"
+    ],
+    "boundary_slide_off_runs": [
+      {
+        "case": "M-PATCH-053",
+        "mode": "controlled-experimental",
+        "run_id": "9479f23e3eec421b801fa643755beab7",
+        "manifest_sha256": "5fc0cb8c5d23cdf52a2c69aee72bdbe8b804bf6d5cfb50566031d4b734111c8b"
+      },
+      {
+        "case": "M-PATCH-054",
+        "mode": "controlled-experimental",
+        "run_id": "931246819bd44f9f9341fbd20911bca6",
+        "manifest_sha256": "165042b30b85792509ed1dfba7c737229380dba40638b46c572e25689075a216"
+      },
+      {
+        "case": "M-PATCH-055",
+        "mode": "controlled-experimental",
+        "run_id": "e2293fbd75134c989b82db3bfab1b70c",
+        "manifest_sha256": "b2a5b187be5c3042ceb8e402f39ac7095a28c550d2fa457e7c608892e5b4e6bd"
+      },
+      {
+        "case": "M-PATCH-056",
+        "mode": "controlled-experimental",
+        "run_id": "6221b53ac6f040d6b4c4c21f9cc48109",
+        "manifest_sha256": "5c377070e8cffbd89e03e7dfa84c47aab5031f7fdf1cfb286943a495205e62e8"
+      },
+      {
+        "case": "M-PATCH-058",
+        "mode": "controlled-experimental",
+        "run_id": "15bcc0b60a754c7491809df768fc09e4",
+        "manifest_sha256": "e2318860ae36ceef6604b02a953f3a97ddceed13e858623f9bcb29149bd04dca"
+      },
+      {
+        "case": "M-PATCH-052",
+        "mode": "real-time",
+        "run_id": "eb5d3bfe748146288adac0c4826227ef",
+        "manifest_sha256": "05a736fae6a0314876cb0dc5ec172b33c07f51afe816cee3baa7d6b962e6b33b"
+      },
+      {
+        "case": "M-PATCH-053",
+        "mode": "real-time",
+        "run_id": "4486fecf1e354748aaa464b680373c75",
+        "manifest_sha256": "631df703957853d36f5cb0995fa1bfff6692621dd9eb9c9e39d3285b851d6f31"
+      },
+      {
+        "case": "M-PATCH-054",
+        "mode": "real-time",
+        "run_id": "6a515b22e1874804928fcd5eb4ad054c",
+        "manifest_sha256": "42ff268ff37856fd034349934525373113d258a18961e1abfe9a6c97f0bebb08"
+      },
+      {
+        "case": "M-PATCH-055",
+        "mode": "real-time",
+        "run_id": "9e9dd991f68b4a39808423787be13712",
+        "manifest_sha256": "6aa2b4c10069b107fabb23fe0b9ece903ee5da4a2005f55ffd5daaa10be1a239"
+      },
+      {
+        "case": "M-PATCH-056",
+        "mode": "real-time",
+        "run_id": "e4d95b5744cd40409ffe2bbc38cf934c",
+        "manifest_sha256": "d0d7315911878044c22fcdc29686011d6cb577f29bdf627f4ad4f9f027a606f9"
+      },
+      {
+        "case": "M-PATCH-057",
+        "mode": "real-time",
+        "run_id": "1d9860a88de94acea647e50063629c1c",
+        "manifest_sha256": "da90cf09ab08ff936065aab4e82692997bca643c8dba90ded07ac0a27dd14d35"
+      },
+      {
+        "case": "M-PATCH-058",
+        "mode": "real-time",
+        "run_id": "4c91bbaf14384f7d994b1b9c3eeb2e6e",
+        "manifest_sha256": "751c5f30927864c6809f2bdf7bad332cc95b2113b506c2ddd2e59092d874cf1a"
+      }
+    ],
+    "conversion_controlled": "fb6f3f36fdd947c18cf0a72ec1230a89",
+    "conversion_real_time": "bdc320dc5dc949e3bbde91ebe5e683f1",
+    "review": "01a083ab-fbb9-78b0-9fcc-68da8aec97c1"
+  },
+  "configured_off_candidate": {
+    "candidate": "0067",
+    "baselines": [
+      "698693f462184e009cae61626e28f6e7",
+      "0603d458042a4431818b455c8798c64b"
+    ],
+    "status": "native-both-lanes-and-unit-validated",
+    "full_units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-8fc0377707bd4e39a0b6efefc6cd9f04/results.json",
+    "units": 485
+  },
+  "default_off_review_resolution": {
+    "status": "scoped-review-finding-resolved",
+    "review": "01a083ab-fbb9-78b0-9fcc-68da8aec97c1",
+    "candidate": "0068",
+    "finding": "Missing off_value defaulted to-1 in storage but remained nil in playback/destination checks.",
+    "baselines": [
+      "07470f8d52e74302b10716611839db59",
+      "5ba78873129741169a81a5b6e6b9d343"
+    ],
+    "baseline_effects": [
+      "CC emitted byte255 and was rejected by MIDI framing",
+      "NRPN validation correctly raised instead of emitting negative data"
+    ],
+    "resolution": "Normalize default-1 for playback, next destination and display. Off remains silent and does not cancel an active slide.",
+    "native": [
+      {
+        "run_id": "53224ffa35fe4ab581bbbf2ed2386f34",
+        "manifest_sha256": "3984cc12febea50d0de804dc858d066dfa9690f2723c6ba084f01c52e8c3d81f"
+      },
+      {
+        "run_id": "3a391362312d44e78e2e43eec0f87989",
+        "manifest_sha256": "4d33ea6269957080629f9214383ea53f39a5be1a9fa6d717535d8bfad6843add"
+      },
+      {
+        "run_id": "8eba7b19cc6e4cee82d7453adeb1435c",
+        "manifest_sha256": "3b469ac785535d379e4b1780bbb34932d030a45be7d00d98c7b22ceb5e1610d9"
+      },
+      {
+        "run_id": "104c541557dc4d4fade719ae27964620",
+        "manifest_sha256": "94d7151bffd99a08d0bfeac6a7fa37d45d23b6da0276873c4673730fccdd5d50"
+      },
+      {
+        "run_id": "4b3c49b6c4204d9ca366082671ece904",
+        "manifest_sha256": "ad4aa9aba055d0e39497657f2d3efcef8a5c5f05d5988d23824de9cf7baa0ffc"
+      },
+      {
+        "run_id": "e922b4954f8749518d6ca1098a848a26",
+        "manifest_sha256": "93f22a42d95fb814fec4ae3df9de30fa4e040a204a2ec9411d41a20eab2a9abf"
+      },
+      {
+        "run_id": "c359622677534f1089dbb92dccfcfb22",
+        "manifest_sha256": "b4559fc6195e349cd60129044e27a040c3e6d6eb5b2935e5eb78f5ff3ed5affe"
+      },
+      {
+        "run_id": "e71b21c50e0d47ab853bacf8e4b5aad6",
+        "manifest_sha256": "fb4a00fe98dee42172120e615c05420472f96ad0276d191781344c8bfe918342"
+      }
+    ],
+    "full_units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-f6b77732c2844e118374a8fd41721856/results.json",
+    "unit_successes": 485,
+    "review_limits": "The actual Codex review inspected0066/0067 and found this issue.0068 is the focused remedy, validated with independent native baselines, both timing lanes and units; no second whole-review certification claimed.",
+    "full_campaign_complete": false
+  }
+}

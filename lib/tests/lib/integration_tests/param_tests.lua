@@ -221,7 +221,7 @@ function test_params_triggless_locks_are_not_processed_if_trigless_param_is_off(
 
   local midi_cc_event = table.remove(midi_cc_events)
 
-  luaunit.assert_not_equals(midi_cc_event[2], 111)
+  luaunit.assert_nil(midi_cc_event, "Disabled trigless lock must emit no CC on this silent fixture")
 
 end
 
@@ -2235,7 +2235,9 @@ function test_global_params_are_processed_at_all_steps()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
   local midi_cc_event = table.remove(midi_cc_events)
-  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value, 1}) -- CC is fired at start of pattern to reset value to default
+  -- No configured MIDI device and no first-step trig in this fixture.
+  -- Stored-device startup recall is covered by native M-PATCH-003/008.
+  luaunit.assert_nil(midi_cc_event, "No predictive CC before the authored trig")
 
   progress_clock_by_beats(test_step - 1)
 
@@ -2338,7 +2340,9 @@ function test_global_params_are_processed_with_the_correct_value_across_song_pat
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
   local midi_cc_event = table.remove(midi_cc_events)
-  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1}) -- CC is fired at start of pattern to reset value to default
+  -- No configured MIDI device and no first-step trig in this fixture.
+  -- Stored-device startup recall is covered by native M-PATCH-003/008.
+  luaunit.assert_nil(midi_cc_event, "No predictive CC before the authored trig")
 
   progress_clock_by_beats(test_step - 1)
 

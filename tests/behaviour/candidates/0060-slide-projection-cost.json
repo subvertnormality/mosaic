@@ -1,0 +1,12 @@
+{
+  "id": "0060-slide-projection-cost",
+  "status": "scoped-tests-and-review-resolved-not-release-admitted",
+  "reason": "160 concurrent full-distance slide admissions exceed unchanged 2ms pulse budget",
+  "baseline": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-4673a94f427944a2b9caab52af7fcef2/results.json",
+  "before_sha256": "1d1d4c3774bab9dd0aed316ec018bc74843fc066b228c6c17d8a99fb194c3366",
+  "after_sha256": "077058405275241592085b070d176af12419b63b8fba2977bf88a3ee4cb101d4",
+  "review_pending": false,
+  "unit_evidence": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-63f0876a0dd14f59b6b4ae7790bfc588/results.json",
+  "projection_progress": "docs/testing/patch-slide-progress.json",
+  "review": "docs/testing/reviews/slide-timing-checkpoint.json"
+}

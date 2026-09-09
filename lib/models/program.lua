@@ -2,6 +2,7 @@ local musicutil = require("musicutil")
 
 local quantiser = include("mosaic/lib/quantiser")
 
+local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 local program = {}
 local program_store = {}
 
@@ -28,7 +29,7 @@ local function migrate_legacy_data(data)
     end
   end
   
-  return data
+  return nrpn_codec.migrate(data, device_map and device_map.get_device)
 end
 
 
@@ -148,6 +149,8 @@ end
 function program.init()
   local root_note = 0
   program_store = {
+    nrpn_policy_version = 1,
+    nrpn_stored_modes = {},
     selected_page = pages.pages.channel_edit_page,
     selected_song_pattern = 1,
     selected_pattern = 1,
@@ -303,8 +306,12 @@ function program.add_step_param_trig_lock_to_channel(channel, step, parameter, t
     step_trig_lock_banks[step] = {}
   end
 
-  trig_lock = math.max(trig_lock, trig_lock_params[parameter].nrpn_min_value or trig_lock_params[parameter].cc_min_value or 0)
-  trig_lock = math.min(trig_lock, trig_lock_params[parameter].nrpn_max_value or trig_lock_params[parameter].cc_max_value or 127)
+  local definition = trig_lock_params[parameter]
+  local off = definition.off_value == nil and -1 or definition.off_value
+  if trig_lock ~= off then
+    trig_lock = math.max(trig_lock, definition.nrpn_min_value or definition.cc_min_value or 0)
+    trig_lock = math.min(trig_lock, definition.nrpn_max_value or definition.cc_max_value or 127)
+  end
 
   step_trig_lock_banks[step][parameter] = trig_lock
 
@@ -909,38 +916,31 @@ function program.clear_working_pattern_for_step(channel, step)
   channel.working_pattern.lengths[step] = 1 -- Default length
 end
 
--- Replace the existing get_next_trig_lock_step function with this version
-function program.get_next_trig_lock_step(channel, current_step, parameter)
-  local program_data = program.get()
-  local current_song_pattern = program_data.selected_song_pattern
-  local step_trig_lock_banks = channel.step_trig_lock_banks
-  if not step_trig_lock_banks then return nil end
-  -- First check steps after current position in current pattern
-  for step = current_step + 1, 64 do
-    if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
-      return {
-        step = step,
-        value = step_trig_lock_banks[step][parameter]
-      }
+-- Playback and slide destinations share the effective channel traversal.
+function program.get_channel_step_bounds(channel)
+  local first = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+  local last = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
+  last = math.min(last, first + program.get_selected_song_pattern().global_pattern_length - 1)
+  return first, last
+end
+
+function program.get_next_trig_lock_step(channel, current_step, parameter, off_value)
+  local banks = channel.step_trig_lock_banks
+  if not banks then return nil end
+  local first, last = program.get_channel_step_bounds(channel)
+  if current_step < first or current_step > last then return nil end
+  local wrap = params:get("wrap_param_slides") == 2 and
+    (params:get("song_mode") ~= 2 or step.calculate_next_selected_song_pattern() == program.get().selected_song_pattern)
+  local limit = wrap and (last - first + 1) or (last - current_step)
+  for distance = 1, limit do
+    local candidate = first + ((current_step - first + distance) % (last - first + 1))
+    local value = banks[candidate] and banks[candidate][parameter]
+    if value ~= nil and value ~= off_value and
+        (program.step_has_trig(channel, candidate) or params:get("trigless_locks") == 2) then
+      return {step=candidate, value=value, distance=distance,
+        should_wrap=(current_step + distance > last) or nil}
     end
   end
-
-  if params:get("wrap_param_slides") == 2 then
-    local next_song_pattern = step.calculate_next_selected_song_pattern()
-
-    if next_song_pattern == current_song_pattern or params:get("song_mode") ~= 2 then
-      for step = 1, current_step do
-        if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
-          return {
-            step = step,
-            value = step_trig_lock_banks[step][parameter],
-            should_wrap = true
-          }
-        end
-      end
-    end
-  end
-
   return nil
 end
 

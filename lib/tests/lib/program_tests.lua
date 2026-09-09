@@ -119,6 +119,9 @@ end
 
 function test_get_next_trig_lock_step_basic_wrap_when_enabled()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig locks at steps 5 and 10
@@ -137,6 +140,9 @@ end
 
 function test_get_next_trig_lock_step_no_wrap_when_disabled()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig locks at steps 5 and 10
@@ -154,6 +160,9 @@ end
 
 function test_get_next_trig_lock_step_no_cross_pattern_in_song_mode()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   
   -- Set up current pattern trig locks
   local c1_song_pattern_1 = program.get_channel(1, 1)
@@ -180,6 +189,9 @@ end
 
 function test_get_next_trig_lock_step_returns_value()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig lock with specific value
@@ -193,6 +205,9 @@ end
 
 function test_get_next_trig_lock_step_wrap_from_last_step()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig lock at step 5
@@ -210,6 +225,9 @@ end
 
 function test_get_next_trig_lock_step_wrap_with_single_trig_lock()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up single trig lock at step 5
@@ -231,6 +249,9 @@ end
 
 function test_get_next_trig_lock_step_wrap_with_multiple_parameters()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig locks for different parameters
@@ -254,6 +275,9 @@ end
 
 function test_get_next_trig_lock_step_wrap_at_step_one()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig lock at last step
@@ -271,6 +295,9 @@ end
 
 function test_get_next_trig_lock_step_empty_steps_between_locks()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig locks with gaps
@@ -288,4 +315,26 @@ function test_get_next_trig_lock_step_empty_steps_between_locks()
   local result2 = program.get_next_trig_lock_step(channel, 51, 1)
   luaunit.assert_equals(result2.step, 5)
   luaunit.assert_equals(result2.should_wrap, true)
+end
+
+function test_step_parameter_lock_preserves_off_outside_active_range()
+  setup()
+  local channel = program.get_channel(1, 1)
+  for _,definition in ipairs({
+    {nrpn_min_value=0,nrpn_max_value=16383,off_value=-1},
+    {cc_min_value=100,cc_max_value=127,off_value=200},
+    {cc_min_value=100,cc_max_value=127,off_value=-1},
+    {cc_min_value=-1,cc_max_value=127},
+    {nrpn_min_value=0,nrpn_max_value=16383}
+  }) do
+    channel.trig_lock_params[1] = definition
+    local minimum=definition.nrpn_min_value or definition.cc_min_value
+    local maximum=definition.nrpn_max_value or definition.cc_max_value
+    local off=definition.off_value == nil and -1 or definition.off_value
+    for _,pair in ipairs({{off,off},{minimum,minimum},
+      {maximum,maximum},{-100,minimum},{20000,maximum}}) do
+      program.add_step_param_trig_lock_to_channel(channel,1,1,pair[1])
+      luaunit.assert_equals(channel.step_trig_lock_banks[1][1],pair[2])
+    end
+  end
 end

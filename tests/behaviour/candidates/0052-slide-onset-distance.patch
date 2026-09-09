@@ -1,0 +1,27 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -127,2 +126,0 @@
+-        elseif pulse_count == total_pulses - 1 then
+-          current_value = action.end_value
+@@ -130 +128 @@
+-          local progress = pulse_count / (total_pulses - 1)
++          local progress = pulse_count / total_pulses
+@@ -137,9 +135 @@
+-          if pulse_count == 0 then
+-            if action.start_value < action.end_value then
+-              current_value = quantize_value(action.start_value + action.quant, action.quant)
+-            else
+-              current_value = quantize_value(action.start_value - action.quant, action.quant)
+-            end
+-          else
+-            current_value = quantize_value(current_value, action.quant)
+-          end
++          current_value = quantize_value(current_value, action.quant)
+@@ -664 +654 @@
+-  local steps = end_step - start_step + 1
++  local steps = end_step - start_step -- distance between lock onsets
+@@ -681 +671 @@
+-    local pulses_to_end = calculate_total_pulses(args.channel_number, args.start_step, 64)
++    local pulses_to_end = calculate_total_pulses(args.channel_number, args.start_step, 65)
+@@ -697,0 +688 @@
++    last_value = args.start_value, -- Initial lock already emitted this value.

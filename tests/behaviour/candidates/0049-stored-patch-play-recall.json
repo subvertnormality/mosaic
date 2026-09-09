@@ -1,0 +1,113 @@
+{
+  "status": "validation-in-progress",
+  "scope": "Recall stored MIDI parameters before transport starts, independently of masks, locks or mute",
+  "files": [
+    {
+      "path": "lib/devices/midi_patch_recall.lua",
+      "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_sha256": "ad07eaebec49c612578e5f21e706b36a8901a2731dd0657b33676ac40a35d270"
+    },
+    {
+      "path": "lib/clock/m_clock.lua",
+      "before_sha256": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+      "after_sha256": "45050d38467d8d62d382f3ef0310f5da1af4581e0a987dbe4620dad3f5d51739"
+    }
+  ],
+  "patch_sha256": "0e9f44bdc3b6e238cf1a0c25dd342327a65a1cbd9808029d15c16523dc484439",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "baseline_runs": [
+    "2a14c364512f43cba3ba767617921ba2",
+    "e7173d50eb044cb7a884ac08f9d171d2"
+  ],
+  "review_session": "01a08177-fe90-70b1-9926-cbab884ee61c",
+  "full_campaign_complete": false,
+  "initial_native_runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/ec78cb0f12974e0294babe5d3253701c/manifest.json",
+      "sha256": "5119fa9386d3de711688ae50b8593bf090d4522240ab90ee2e1352e164f80101",
+      "clock_mode": "controlled-experimental",
+      "scope": "Initial candidate before relocating stock-count lookup inside MIDI-device branch; final-source rerun pending"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/3477b43681c34e9fa952e3c482577504/manifest.json",
+      "sha256": "123992e95ee0c29ab7f1b8052473124bc65b53c0200e090abde27f9042e1f78c",
+      "clock_mode": "real-time",
+      "scope": "Initial candidate before relocating stock-count lookup inside MIDI-device branch; final-source rerun pending"
+    }
+  ],
+  "final_source_existing_units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/patch-domain-units-2c8552620433428b850e98c608136687/results.json",
+    "sha256": "4e2d5c961155748d5d77b5387ef6567bed2c7e6190a07989bc692f855d74076d",
+    "passed": 482
+  },
+  "next_action": "Complete sparse/custom-off and multiport native tests, stored-patch versus step-lock precedence; inspect project-load while running; reconcile inventory and bounded Codex follow-up. NRPN compatibility remains unresolved, encoder unchanged.",
+  "current_implementation_native_runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/a7123af1e039496d8db45a4f331213b8/manifest.json",
+      "sha256": "48dbad31e5950326b8c7e570e2569b6cb6c19f7b00ccb94ba896882d1e4d9d4f",
+      "case": "M-PATCH-003",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/c9620d89f7af41d1a1326384e8bc441b/manifest.json",
+      "sha256": "a759e8729b613e23156fb0236b8bf9830668db88cc66a17ccd4c3b5389fb4ca0",
+      "case": "M-PATCH-005",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/208378405ed64227a6c0cb677606983c/manifest.json",
+      "sha256": "eb8c4876307a489777e57d307bec944880462efebde165d374739cca8c5fa28f",
+      "case": "M-PATCH-003",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/e150959898194e5292782269d88e1ec3/manifest.json",
+      "sha256": "bf82a3cbc22687a7fdada11305e4520ef27cf710ec78a821a027240989a08728",
+      "case": "M-PATCH-005",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/5ad53d4f8ac548889da4e8b68ebeec46/manifest.json",
+      "sha256": "53b86ad30cd62eaa0da2eb8814c409f744226f1a7a024dafabd10e9c66a4cc6b",
+      "case": "M-PATCH-006",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/c4b9fcf6a4c545e38a0a44050d76e708/manifest.json",
+      "sha256": "9ea545a0127357e87e360423f2cfdf0e14aeed7910afc6909f5bf211426948e0",
+      "case": "M-PATCH-006",
+      "clock_mode": "real-time"
+    }
+  ],
+  "direct_contract": "tests/behaviour/test_patch_recall.lua",
+  "nrpn_compatibility_note": "docs/testing/NRPN_COMPATIBILITY.md",
+  "nrpn_decision": "Unresolved: preserve existing encoder pending device-aware evidence and Codex arbitration; generic M-PATCH-007 failures are not alone proof of physical incompatibility.",
+  "cold_restart_native_runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/d83b9404be7a482ba1f6111e45f47434/manifest.json",
+      "sha256": "36da7f97ad4a7fb06ac193dc6c9e7955c1263b459522449552a847093d1620cc",
+      "case": "M-PATCH-008",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/020165fb98004d158866bda9d460851b/manifest.json",
+      "sha256": "66542c290e93b944ac7b0514e900a59660a8df7ad3858dd47091c4879e87ff8f",
+      "case": "M-PATCH-009",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/8f22cb8ce17d4554a102682878c96ead/manifest.json",
+      "sha256": "8a953cfb3ad16cdae9dabf0b0b3b5e3efd6c1aa05b7d2851369de26f13481288",
+      "case": "M-PATCH-008",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/88a613360b4e40acbb2b87bfc6e62435/manifest.json",
+      "sha256": "07ce8666a01f259baeb5a246b1475b4df9f1a3f9a330117c9fe574daec8dab1f",
+      "case": "M-PATCH-009",
+      "clock_mode": "real-time"
+    }
+  ]
+}

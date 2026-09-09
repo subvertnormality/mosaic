@@ -1,0 +1,53 @@
+{
+  "status": "partial-domain",
+  "runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/01cca7b5a3df4a06a4daeb077a9360c6/manifest.json",
+      "sha256": "633679ee7ba25adac0dc345eceafc4d5f662b60d848b9554a88b0105bf4aefb7",
+      "case": "M-PATCH-010",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/533de97f247a47ff9fe9721614275f88/manifest.json",
+      "sha256": "c4dcd2f3e79e9564ddaba6b52963c3e3b61a4a846ec3abca7ecbcc56e27360b0",
+      "case": "M-PATCH-011",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/65e9b04f1c3f44bdae132750115653cd/manifest.json",
+      "sha256": "27834fb96abb5971dfeb261ebf47601e8f7d8b6419517c3698ebbb7c033610a1",
+      "case": "M-PATCH-010",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/a7098f5a05e64ba2a48f226202349875/manifest.json",
+      "sha256": "f2edd6818d6b47510f09f5cfa6bce3bfc9e4b32c08cfad2caab1c760d3d3fa0f",
+      "case": "M-PATCH-011",
+      "clock_mode": "real-time"
+    }
+  ],
+  "domain": {
+    "active_min": 100,
+    "active_max": 127,
+    "off_values": [
+      -1,
+      200
+    ],
+    "all_active_values_tested": true
+  },
+  "oracle_correction": {
+    "baseline_runs": [
+      "1ef81b5e63a2491e8e5a3a1ff669ede0",
+      "8b741f6509364a6c9152d982d2bce5d2"
+    ],
+    "reason": "Unmodified pinned norns Control detects raw normalized change and emits an extra endpoint callback after28 increments of1/28. Independent standalone contract with linear0..28 controls proves both directions without any Mosaic code. Exact one endpoint repetition is required; no general duplicate allowance.",
+    "contract": "tests/behaviour/test_native_control_endpoint.lua",
+    "unchanged_retries": [
+      "c85dab6a2ec3417dbc983b1d66168c96",
+      "df4bd490f58e42e2ad223533279ae978"
+    ],
+    "retry_reason": "Shell quoting rejected the intended edit; those runs exercised the previous oracle and remain failures."
+  },
+  "production_changed_this_slice": false,
+  "full_campaign_complete": false
+}

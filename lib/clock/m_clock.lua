@@ -1,3 +1,4 @@
+local midi_patch_recall = include("mosaic/lib/devices/midi_patch_recall")
 local chord_timing = include("mosaic/lib/clock/chord_timing")
 local lattice = include("mosaic/lib/clock/m_lattice")
 
@@ -97,7 +98,11 @@ local function ring_push(action)
   slot.trig_lock = action.trig_lock
   slot.pulse_count = action.pulse_count
   slot.total_pulses = action.total_pulses
+  slot.start_pulse = action.start_pulse
+  slot.end_occurrence = action.end_occurrence
+  slot.end_step = action.end_step
   slot.start_value = action.start_value
+  slot.last_value = action.last_value
   slot.end_value = action.end_value
   slot.quant = action.quant
   slot.func = action.func
@@ -113,40 +118,32 @@ local function process_ring_buffer()
   while i ~= ring_end do
     local action = spread_ring[i]
     if action.active then
-      local pulse_count = action.pulse_count
+      local pulse_count = clock_lattice.transport - action.start_pulse
       local total_pulses = action.total_pulses
       
       if pulse_count >= total_pulses then
         action.active = false
+        action.func(action.end_value, action.last_value)
+        action.last_value = action.end_value
       else
         -- Calculate value based on position
         local current_value
         if pulse_count == 0 then
           current_value = action.start_value
-        elseif pulse_count == total_pulses - 1 then
-          current_value = action.end_value
         else
-          local progress = pulse_count / (total_pulses - 1)
+          local progress = pulse_count / total_pulses
           current_value = action.start_value + 
             (action.end_value - action.start_value) * progress
         end
         
         -- Apply quantization if needed
         if action.quant and action.quant > 0 then
-          if pulse_count == 0 then
-            if action.start_value < action.end_value then
-              current_value = quantize_value(action.start_value + action.quant, action.quant)
-            else
-              current_value = quantize_value(action.start_value - action.quant, action.quant)
-            end
-          else
-            current_value = quantize_value(current_value, action.quant)
-          end
+          current_value = quantize_value(current_value, action.quant)
         end
         
         action.func(current_value, action.last_value)
         action.last_value = current_value
-        action.pulse_count = pulse_count + 1
+        action.pulse_count = pulse_count
       end
     end
     i = (i % RING_BUFFER_SIZE) + 1
@@ -373,7 +370,13 @@ function m_clock.init()
         step.sinfonian_sync(current_step)
       else
         program.set_channel_step_scale_number(channel_number, step.calculate_step_scale_number(channel_number, current_step))
-        
+        -- Resolve parameters for the same step as the note, including startup.
+        -- A single dispatch site prevents duplicate first-step lock messages.
+        if channel.working_pattern.trig_values[current_step] == 1 or
+          (params:get("trigless_locks") == 2 and program.step_has_param_trig_lock(channel, current_step)) then
+          step.process_params(channel, current_step)
+        end
+
         if channel.working_pattern.trig_values[current_step] == 1 then
           step.handle(channel_number, current_step)
         end
@@ -415,24 +418,6 @@ function m_clock.init()
           end)()      
         end
 
-        local next_step = program.get_current_step_for_channel(channel_number) + 1
-        if next_step < 1 then return end
-
-        local song_pattern_number = program.get().selected_song_pattern
-        if next_step > end_trig then
-          song_pattern_number = step.calculate_next_selected_song_pattern()
-          channel = program.get_channel(song_pattern_number, channel_number)
-          pattern.update_working_pattern(channel_number, program.get_song_pattern(song_pattern_number))
-          next_step = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
-        end
-
-        local next_trig_value = channel.working_pattern.trig_values[next_step]
-
-        if next_trig_value == 1 then
-          step.process_params(channel, next_step)
-        elseif params:get("trigless_locks") == 2 and program.step_has_param_trig_lock(channel, next_step) then
-          step.process_params(channel, next_step)
-        end
 
       end
     end
@@ -483,41 +468,73 @@ function m_clock.init()
   ring_end = 1
 end
 
+
+
+local function retime_channel_slides(channel_number, channel_clock)
+  local now = clock_lattice.transport
+  local i = ring_start
+  while i ~= ring_end do
+    local action = spread_ring[i]
+    if action.active and action.channel == channel_number and action.end_occurrence and
+        action.end_occurrence > (channel_clock.onset_count or 0) then
+      local progress = action.total_pulses > 0 and math.min(1,math.max(0,(now-action.start_pulse)/action.total_pulses)) or 1
+      local value = action.start_value + (action.end_value-action.start_value)*progress
+      action.total_pulses = channel_clock:project_onset_occurrence(action.end_occurrence)
+      action.start_pulse = now
+      action.start_value = value
+      -- Retain last_value: rebasing alone must not send a MIDI message.
+    end
+    i = (i % RING_BUFFER_SIZE) + 1
+  end
+end
+
 function m_clock.set_swing_shuffle_type(channel_number, swing_or_shuffle)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
+  local previous = clock.swing_or_shuffle
   clock:set_swing_or_shuffle((swing_or_shuffle or 0))
   clock.end_of_clock_processor:set_swing_or_shuffle((swing_or_shuffle or 0))
+  if clock.swing_or_shuffle ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
 function m_clock.set_channel_swing(channel_number, swing)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
+  local previous = clock.swing
   clock:set_swing(swing or 0)
   clock.end_of_clock_processor:set_swing(swing or 0)
+  if clock.swing ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
 function m_clock.set_channel_shuffle_feel(channel_number, shuffle_feel)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
+  local previous = clock.shuffle_feel
   clock:set_shuffle_feel((shuffle_feel or 0))
   clock.end_of_clock_processor:set_shuffle_feel((shuffle_feel or 0))
+  if clock.shuffle_feel ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
 function m_clock.set_channel_shuffle_basis(channel_number, shuffle_basis)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
+  local previous = clock.shuffle_basis
   clock:set_shuffle_basis((shuffle_basis or 0))
   clock.end_of_clock_processor:set_shuffle_basis((shuffle_basis or 0))
+  if clock.shuffle_basis ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
 function m_clock.set_channel_shuffle_amount(channel_number, shuffle_amount)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
+  local previous = clock.shuffle_amount
   clock:set_shuffle_amount(shuffle_amount or 0)
   clock.end_of_clock_processor:set_shuffle_amount(shuffle_amount or 0)
+  if clock.shuffle_amount ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
 function m_clock.set_channel_division(channel_number, division)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
+  local previous = clock.division
   local div_value = 1 / (division * 4)
   clock:set_division(div_value)
   clock.end_of_clock_processor:set_division(div_value)
+  if clock.division ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
 function m_clock.get_channel_division(channel_number)
@@ -666,35 +683,53 @@ end
 
 function m_clock.realign_sprockets()
   clock_lattice:realign_eligable_sprockets()
-end
-
-local function calculate_total_pulses(channel, start_step, end_step)
-  local chan_clock = m_clock["channel_" .. channel .. "_clock"]
-  if not chan_clock then return 0 end
-  
-  local steps = end_step - start_step + 1
-  local pulses = steps * 12 -- 12 pulses per step
-  
-  local div = chan_clock.division
-  if div then
-    pulses = pulses * (16 / (1 / div))
+  local now = clock_lattice.transport
+  local i = ring_start
+  while i ~= ring_end do
+    local action = spread_ring[i]
+    local clock = m_clock["channel_" .. action.channel .. "_clock"]
+    if action.active and clock and clock.realign then
+      local channel = program.get_channel(program.get().selected_song_pattern, action.channel)
+      local first, last = program.get_channel_step_bounds(channel)
+      if action.end_step < first or action.end_step > last then
+        action.active = false
+      else
+        -- Reset makes the next onset the channel's first step. Retain the
+        -- destination's step identity, not its old occurrence ordinal.
+        local progress = action.total_pulses > 0 and math.min(1,math.max(0,(now-action.start_pulse)/action.total_pulses)) or 1
+        local value = action.start_value + (action.end_value-action.start_value)*progress
+        action.end_occurrence = (clock.onset_count or 0) + 1 + action.end_step - first
+        action.total_pulses = clock:project_onset_occurrence(action.end_occurrence)
+        action.start_pulse = now
+        action.start_value = value
+      end
+    end
+    i = (i % RING_BUFFER_SIZE) + 1
   end
-  
-  return math.floor(pulses / 4)
 end
 
+function m_clock.cancel_all_spread_actions()
+  local i = ring_start
+  while i ~= ring_end do
+    spread_ring[i].active = false
+    i = (i % RING_BUFFER_SIZE) + 1
+  end
+end
 
 function m_clock.execute_action_across_steps_by_pulses(args)
-  if args.start_step == args.end_step then return end
-  
-  local total_pulses
-  if args.should_wrap and args.end_step < args.start_step then
-    local pulses_to_end = calculate_total_pulses(args.channel_number, args.start_step, 64)
-    local pulses_from_start = calculate_total_pulses(args.channel_number, 1, args.end_step)
-    total_pulses = pulses_to_end + pulses_from_start
-  else
-    total_pulses = calculate_total_pulses(args.channel_number, args.start_step, args.end_step)
+  local distance = args.distance
+  -- Equal labels alone mean no movement. A next-loop occurrence carries
+  -- an explicit positive distance from the destination lookup.
+  if distance == nil and args.start_step == args.end_step then return end
+  if not distance then
+    local channel = program.get_channel(program.get().selected_song_pattern, args.channel_number)
+    local first, last = program.get_channel_step_bounds(channel)
+    distance = args.end_step - args.start_step
+    if args.should_wrap and distance <= 0 then distance = distance + last - first + 1 end
   end
+  if distance <= 0 then return end
+  local chan_clock = m_clock["channel_" .. args.channel_number .. "_clock"]
+  local total_pulses = chan_clock:project_onset_pulses(distance)
 
   -- Cancel existing actions for this channel/trig_lock
   m_clock.cancel_spread_actions_for_channel_trig_lock(args.channel_number, args.trig_lock)
@@ -705,7 +740,11 @@ function m_clock.execute_action_across_steps_by_pulses(args)
     trig_lock = args.trig_lock,
     pulse_count = 0,
     total_pulses = total_pulses,
+    start_pulse = clock_lattice.transport,
+    end_step = args.end_step,
+    end_occurrence = (chan_clock.onset_count or 0) + distance,
     start_value = args.start_value,
+    last_value = args.start_value, -- Initial lock already emitted this value.
     end_value = args.end_value,
     quant = args.quant,
     func = args.func,
@@ -713,27 +752,42 @@ function m_clock.execute_action_across_steps_by_pulses(args)
   })
 end
 
+-- Resolve incoming ownership before a non-Off lock and its note are sent.
+-- A matching scheduled endpoint shares one write with that destination lock.
+function m_clock.handoff_spread_lock(channel_number, trig_lock, step_number, value)
+  local applied = false
+  local i, stop = ring_start, ring_end
+  while i ~= stop do
+    local action = spread_ring[i]
+    if action.active and action.channel == channel_number and action.trig_lock == trig_lock then
+      action.active = false
+      if action.end_step == step_number and action.end_value == value and
+          clock_lattice.transport >= action.start_pulse + action.total_pulses then
+        -- This is the explicit destination lock, not an intermediate sample.
+        -- Retain its write even if earlier interpolation rounded to the target.
+        action.func(action.end_value)
+        action.last_value = action.end_value
+        applied = true
+      end
+    end
+    i = (i % RING_BUFFER_SIZE) + 1
+  end
+  return applied
+end
+
 function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, trig_lock, use_end_value)
-  local i = ring_start
-  while i ~= ring_end do
+  local i, stop = ring_start, ring_end
+  while i ~= stop do
     local action = spread_ring[i]
     if action.active and action.channel == channel_number then
       if not trig_lock or action.trig_lock == trig_lock then
-        if action.pulse_count > 0 then
-          -- Execute final value if needed
-          if use_end_value then
-            action.func(action.end_value)
-          else
-            local progress = action.pulse_count / action.total_pulses
-            local final_value = action.start_value + 
-              (action.end_value - action.start_value) * progress
-            if action.quant and action.quant > 0 then
-              final_value = quantize_value(final_value, action.quant)
-            end
-            action.func(final_value)
-          end
-        end
+        -- Replacement is silent. Retire ownership before invoking an explicit
+        -- finish callback, which may itself cancel or schedule another action.
         action.active = false
+        if use_end_value then
+          action.func(action.end_value, action.last_value)
+          action.last_value = action.end_value
+        end
       end
     end
     i = (i % RING_BUFFER_SIZE) + 1
@@ -746,8 +800,7 @@ function m_clock.channel_is_sliding(channel, trig_param)
     local action = spread_ring[i]
     if action.active and 
        action.channel == channel.number and
-       action.trig_lock == trig_param and
-       action.pulse_count < action.total_pulses then
+       action.trig_lock == trig_param then
       return true
     end
     i = (i % RING_BUFFER_SIZE) + 1
@@ -761,13 +814,11 @@ function m_clock:start()
     step.process_elektron_program_change(program.get().selected_song_pattern)
   end
   
+  midi_patch_recall.send()
   m_clock.set_playing()
+  -- The onset callback prepares the resolved first step before its note.
   clock_lattice:start()
   m_midi.start()
-
-  for i = 1, 16 do
-    step.process_params(program.get_channel(program.get().selected_song_pattern, i), 1)
-  end
        
 end
 

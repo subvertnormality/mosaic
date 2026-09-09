@@ -1,0 +1,9 @@
+{
+  "status": "candidate-validation-pending",
+  "review": "01a083ab-fbb9-78b0-9fcc-68da8aec97c1",
+  "baselines": [
+    "07470f8d52e74302b10716611839db59",
+    "5ba78873129741169a81a5b6e6b9d343"
+  ],
+  "scope": "Use default-1 consistently for playback, next slide destination and parameter display; Off does not cancel active slides."
+}

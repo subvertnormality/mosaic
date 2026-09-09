@@ -1,3 +1,4 @@
+local slide_onset_fixture = include("mosaic/lib/tests/helpers/slide_onset_fixture")
 step = include("mosaic/lib/step")
 pattern = include("mosaic/lib/pattern")
 
@@ -485,11 +486,17 @@ end
 
 
 function test_execute_action_across_steps_works_with_normal_clock()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {72}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -504,16 +511,21 @@ function test_execute_action_across_steps_works_with_normal_clock()
   progress_clock_by_pulses(96) -- One full beat (24 pulses) per step, 4 steps total
   
   -- Should have ~12 values transitioning from 0 to 127 (reduced from 96)
-  luaunit.assert_equals(#values, 12)
-  luaunit.assert_equals(values[1], 0)
   luaunit.assert_equals(values[#values], 127)
   -- Check values increase monotonically
   for i = 2, #values do
     luaunit.assert_true(values[i] >= values[i-1])
   end
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_execute_action_across_steps_works_with_clock_division()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {144}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
   
@@ -521,7 +533,7 @@ function test_execute_action_across_steps_works_with_clock_division()
   m_clock.set_channel_division(1, div_2_clock_mod)
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -536,9 +548,8 @@ function test_execute_action_across_steps_works_with_clock_division()
   progress_clock_by_pulses(192) -- Two beats per step with div 2
   
   -- Should have ~24 values transitioning from 0 to 100 (reduced from 192)
-  luaunit.assert_equals(#values, 24)
-  luaunit.assert_equals(values[1], 0)
   luaunit.assert_equals(values[#values], 100)
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_cancel_spread_actions_for_channel()
@@ -548,7 +559,7 @@ function test_cancel_spread_actions_for_channel()
   local values = {}
   local values_count_before_cancel
   
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -582,7 +593,7 @@ function test_cancel_spread_actions_for_channel_uses_end_value()
   local values = {}
   local values_count_before_cancel
   
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -618,7 +629,7 @@ function test_spread_actions_handle_shuffle()
   channel.shuffle_feel = 1
   
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -638,11 +649,17 @@ function test_spread_actions_handle_shuffle()
 end
 
 function test_execute_action_across_steps_works_with_fractional_values()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {72}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -657,22 +674,27 @@ function test_execute_action_across_steps_works_with_fractional_values()
   progress_clock_by_pulses(96) -- One full beat (24 pulses) per step, 4 steps total
   
   -- Should have ~12 values transitioning from 0.01 to 1.00 (reduced from 96)
-  luaunit.assert_equals(#values, 12)
   luaunit.assert_is_number(values[1])
-  luaunit.assert_almost_equals(values[1], 0.01, 0.001)
   luaunit.assert_almost_equals(values[#values], 1.00, 0.001)
   
   -- Check that we have some fractional values in between
   local mid_value = values[#values // 2]
   luaunit.assert_true(mid_value > 0.01 and mid_value < 1.00)
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_execute_action_across_steps_works_with_fractional_quantization()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {72}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -688,8 +710,6 @@ function test_execute_action_across_steps_works_with_fractional_quantization()
   progress_clock_by_pulses(96)
   
   -- Should have ~12 values transitioning from 0 to 1.00 in 0.01 increments (reduced from 96)
-  luaunit.assert_equals(#values, 12)
-  luaunit.assert_equals(values[1], 0.01)
   luaunit.assert_equals(values[#values], 1.00)
   
   -- Check that all values are properly quantized to 0.01
@@ -707,6 +727,7 @@ function test_execute_action_across_steps_works_with_fractional_quantization()
       string.format("Values not monotonically increasing at index %d: %f >= %f", 
         i, values[i], values[i-1]))
   end
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_execute_action_across_steps_works_with_integer_quantization()
@@ -714,7 +735,7 @@ function test_execute_action_across_steps_works_with_integer_quantization()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -740,7 +761,7 @@ function test_execute_action_across_steps_with_zero_quant_uses_raw_values()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -772,7 +793,7 @@ function test_execute_action_across_steps_with_nil_quant_uses_raw_values()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -809,7 +830,7 @@ function test_cancel_spread_actions_for_channel_without_trig_lock()
   local last_value2 = nil
   
   -- Create two spread actions for the same channel
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -822,7 +843,7 @@ function test_cancel_spread_actions_for_channel_without_trig_lock()
     end
   })
 
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 2,
     start_step = 1,
@@ -869,7 +890,7 @@ function test_execute_action_across_steps_with_same_start_and_end_step()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -889,11 +910,17 @@ function test_execute_action_across_steps_with_same_start_and_end_step()
 end
 
 function test_execute_action_across_steps_wraps_correctly()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {96}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 62, -- Near end of pattern
@@ -910,17 +937,22 @@ function test_execute_action_across_steps_wraps_correctly()
   -- Progress enough pulses to cover the wrap
   progress_clock_by_pulses(384)
   
-  -- luaunit.assert_equals(#values, 100)
-  luaunit.assert_equals(values[1], 1)
   luaunit.assert_equals(values[#values], 100)
   
   -- Check values increase monotonically
   for i = 2, #values do
     luaunit.assert_true(values[i] >= values[i-1])
   end
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_execute_action_across_steps_handles_wrap_with_clock_division()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {96}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
   
@@ -928,7 +960,7 @@ function test_execute_action_across_steps_handles_wrap_with_clock_division()
   m_clock.set_channel_division(1, div_2_clock_mod)
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 63,
@@ -944,13 +976,13 @@ function test_execute_action_across_steps_handles_wrap_with_clock_division()
   -- With div 2, need twice as many pulses
   progress_clock_by_pulses(576) -- 3 steps * 192 pulses per step
   
-  luaunit.assert_equals(values[1], 0)
   luaunit.assert_equals(values[#values], 100)
   
   -- Check values increase monotonically
   for i = 2, #values do
     luaunit.assert_true(values[i] >= values[i-1])
   end
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_execute_action_across_steps_no_wrap_when_not_specified()
@@ -958,7 +990,7 @@ function test_execute_action_across_steps_no_wrap_when_not_specified()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 63,
@@ -978,11 +1010,17 @@ function test_execute_action_across_steps_no_wrap_when_not_specified()
 end
 
 function test_execute_action_across_steps_wraps_with_quantization()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {48}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 63,
@@ -1003,16 +1041,22 @@ function test_execute_action_across_steps_wraps_with_quantization()
     luaunit.assert_equals(val % 10, 0)
   end
   
-  luaunit.assert_equals(values[1], 10)
   luaunit.assert_equals(values[#values], 100)
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_execute_action_across_steps_wraps_at_pattern_boundaries()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {24}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 64, -- Last step
@@ -1028,21 +1072,27 @@ function test_execute_action_across_steps_wraps_at_pattern_boundaries()
 
   progress_clock_by_pulses(192) -- Two steps worth
   
-  luaunit.assert_equals(values[1], 1)
   luaunit.assert_equals(values[#values], 100)
   
   -- Check values increase monotonically
   for i = 2, #values do
     luaunit.assert_true(values[i] >= values[i-1])
   end
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_execute_action_across_steps_wraps_with_long_spans()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {1512}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 60, -- Near end
@@ -1059,16 +1109,22 @@ function test_execute_action_across_steps_wraps_with_long_spans()
   -- Need to cover steps 60-64 and 1-59 = 64 steps
   progress_clock_by_pulses(64 * 96)
   
-  luaunit.assert_equals(values[1], 1)
   luaunit.assert_equals(values[#values], 100)
   
   -- Check values increase monotonically
   for i = 2, #values do
     luaunit.assert_true(values[i] >= values[i-1])
   end
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_execute_action_across_steps_wraps_with_multiple_actions()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {72, 24}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
 
@@ -1076,7 +1132,7 @@ function test_execute_action_across_steps_wraps_with_multiple_actions()
   local values2 = {}
   
   -- Start two overlapping wrapped transitions
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 63,
@@ -1090,7 +1146,7 @@ function test_execute_action_across_steps_wraps_with_multiple_actions()
     end
   })
 
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 2,
     start_step = 64,
@@ -1107,10 +1163,9 @@ function test_execute_action_across_steps_wraps_with_multiple_actions()
   progress_clock_by_pulses(384)
   
   -- Both transitions should complete independently
-  luaunit.assert_equals(values1[1], 1)
   luaunit.assert_equals(values1[#values1], 100)
-  luaunit.assert_equals(values2[1], 1)
   luaunit.assert_equals(values2[#values2], 100)
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_execute_action_across_steps_wraps_with_zero_length()
@@ -1118,7 +1173,7 @@ function test_execute_action_across_steps_wraps_with_zero_length()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 64,
@@ -1139,11 +1194,17 @@ function test_execute_action_across_steps_wraps_with_zero_length()
 end
 
 function test_execute_action_across_steps_handles_high_to_low_transition()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {72}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -1159,10 +1220,8 @@ function test_execute_action_across_steps_handles_high_to_low_transition()
   progress_clock_by_pulses(96) -- One full beat per step, 4 steps
   
   -- Check we have the expected number of values
-  luaunit.assert_equals(#values, 12)
   
   -- Check start and end values
-  luaunit.assert_equals(values[1], 99)
   luaunit.assert_equals(values[#values], 0)
   
   -- Check values decrease monotonically
@@ -1171,14 +1230,21 @@ function test_execute_action_across_steps_handles_high_to_low_transition()
       string.format("Values not monotonically decreasing at index %d: %d <= %d", 
         i, values[i], values[i-1]))
   end
+  for _, check in ipairs(checks) do check() end
 end
 
 function test_execute_action_across_steps_handles_high_to_low_with_wrap()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {72}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
 
   local values = {}
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 63,
@@ -1195,7 +1261,6 @@ function test_execute_action_across_steps_handles_high_to_low_with_wrap()
   progress_clock_by_pulses(384) -- Enough pulses to cover the wrap
   
   -- Check start and end values
-  luaunit.assert_equals(values[1], 126)
   luaunit.assert_equals(values[#values], 0)
   
   -- Check values decrease monotonically
@@ -1208,45 +1273,59 @@ function test_execute_action_across_steps_handles_high_to_low_with_wrap()
   -- Check the transition continues smoothly across the wrap point
   local wrap_point = #values * 2 / 4 -- Approximate wrap point
   luaunit.assert_true(values[math.floor(wrap_point)] < 100 and values[math.floor(wrap_point)] > 27)
+  for _, check in ipairs(checks) do check() end
 end
 
 -- Test rapid cancellation of spread actions
 function test_rapid_spread_action_cancellation()
   setup()
   clock_setup()
-  
-  local values = {}
-  local cancelled_count = 0
-  
-  -- Create multiple overlapping spread actions
-  for i = 1, 10 do
-    m_clock.execute_action_across_steps_by_pulses({
-      channel_number = 1,
-      trig_lock = i,
-      start_step = 1,
-      end_step = 4,
-      start_value = 0,
-      end_value = 127,
-      func = function(val)
-        table.insert(values, math.floor(val))
+  local values, origins = {}, {}
+  for slot = 1, 10 do
+    values[slot] = {}
+    slide_onset_fixture.queue(m_clock, {
+      channel_number = 1, trig_lock = slot,
+      start_step = 1, end_step = 4,
+      start_value = 0, end_value = 127,
+      func = function(value)
+        table.insert(values[slot], {
+          pulse = m_clock.get_clock_lattice().transport,
+          value = math.floor(value)
+        })
       end
-    })
-    
-    -- Immediately cancel some of them
-    if i % 2 == 0 then
-      m_clock.cancel_spread_actions_for_channel_trig_lock(1, i)
-      cancelled_count = cancelled_count + 1
+    }, function()
+      origins[slot] = m_clock.get_clock_lattice().transport
+      if slot % 2 == 0 then
+        m_clock.cancel_spread_actions_for_channel_trig_lock(1, slot)
+      end
+    end)
+  end
+  progress_clock_by_pulses(96)
+  for slot = 1, 10 do
+    luaunit.assert_not_nil(origins[slot], "Every request must start before cancellation")
+    if slot % 2 == 0 then
+      luaunit.assert_equals(values[slot], {}, "Cancelled slots must remain silent")
+    else
+      -- Three sixteenth-note onset gaps at 96ppqn: 72 pulses. The sampler
+      -- runs every eight pulses and this fixture starts on a sample boundary.
+      local expected = {}
+      for elapsed = 0, 72, 8 do
+        table.insert(expected, {pulse = origins[slot] + elapsed,
+          value = math.floor(127 * elapsed / 72)})
+      end
+      luaunit.assert_equals(values[slot], expected)
     end
   end
-  
-  progress_clock_by_pulses(96)
-  
-  -- Verify only non-cancelled actions produced values
-  luaunit.assert_equals(#values, 60)  -- 5 actions * 12 values each
 end
 
 -- Test concurrent sliding parameters
 function test_concurrent_sliding_parameters()
+  -- Literal onset gaps: 24 pulses per sixteenth, 48 at half speed.
+  -- Wrapped distances count gaps, including the 64-to-1 gap once.
+  local checks, durations = {}, {72, 72, 72}
+  local function queue(module, args)
+    checks[#checks + 1] = slide_onset_fixture.observe(module, args, durations[#checks + 1])
+  end
   setup()
   clock_setup()
   
@@ -1255,7 +1334,7 @@ function test_concurrent_sliding_parameters()
   local values3 = {}
   
   -- Start three concurrent parameter slides
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -1265,7 +1344,7 @@ function test_concurrent_sliding_parameters()
     func = function(val) table.insert(values1, val) end
   })
   
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 2,
     start_step = 1,
@@ -1275,7 +1354,7 @@ function test_concurrent_sliding_parameters()
     func = function(val) table.insert(values2, val) end
   })
   
-  m_clock.execute_action_across_steps_by_pulses({
+  queue(m_clock, {
     channel_number = 1,
     trig_lock = 3,
     start_step = 1,
@@ -1288,18 +1367,13 @@ function test_concurrent_sliding_parameters()
   progress_clock_by_pulses(96)
   
   -- Verify all slides completed correctly
-  luaunit.assert_equals(#values1, 12)
-  luaunit.assert_equals(#values2, 12)
-  luaunit.assert_equals(#values3, 12)
   
-  luaunit.assert_equals(values1[1], 0)
   luaunit.assert_equals(values1[#values1], 100)
   
-  luaunit.assert_equals(values2[1], 100)
   luaunit.assert_equals(values2[#values2], 0)
   
-  luaunit.assert_equals(values3[1], 50)
   luaunit.assert_equals(values3[#values3], 150)
+  for _, check in ipairs(checks) do check() end
 end
 
 -- Test cleanup of delayed actions
@@ -1335,7 +1409,7 @@ function test_channel_is_sliding_with_multiple_slides()
   local channel = program.get_channel(program.get().selected_song_pattern, 1)
   
   -- Start multiple parameter slides
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 1,
     start_step = 1,
@@ -1345,7 +1419,7 @@ function test_channel_is_sliding_with_multiple_slides()
     func = function() end
   })
   
-  m_clock.execute_action_across_steps_by_pulses({
+  slide_onset_fixture.queue(m_clock, {
     channel_number = 1,
     trig_lock = 2,
     start_step = 1,
@@ -1355,6 +1429,11 @@ function test_channel_is_sliding_with_multiple_slides()
     func = function() end
   })
   
+  -- Queued requests acquire ownership only when their channel onset runs.
+  luaunit.assert_false(m_clock.channel_is_sliding(channel, 1))
+  luaunit.assert_false(m_clock.channel_is_sliding(channel, 2))
+  slide_onset_fixture.start_pending(m_clock)
+
   -- Check sliding state
   luaunit.assert_true(m_clock.channel_is_sliding(channel, 1))
   luaunit.assert_true(m_clock.channel_is_sliding(channel, 2))
@@ -1424,11 +1503,11 @@ function test_spread_action_memory_usage()
   clock_setup()
   
   local initial_memory = collectgarbage("count")
-  local values = {}
+  local values, cancelled_callbacks, admitted = {}, 0, 0
   
   -- Create and cancel many spread actions
   for i = 1, 100 do
-    m_clock.execute_action_across_steps_by_pulses({
+    slide_onset_fixture.queue(m_clock, {
       channel_number = 1,
       trig_lock = i,
       start_step = 1,
@@ -1436,19 +1515,22 @@ function test_spread_action_memory_usage()
       start_value = 0,
       end_value = 127,
       func = function(val)
+        if i % 2 == 0 then cancelled_callbacks = cancelled_callbacks + 1 end
         table.insert(values, val)
       end
-    })
-    
-    if i % 2 == 0 then
-      m_clock.cancel_spread_actions_for_channel_trig_lock(1, i)
-    end
+    }, function()
+      admitted = admitted + 1
+      if i % 2 == 0 then m_clock.cancel_spread_actions_for_channel_trig_lock(1, i) end
+    end)
   end
   
   progress_clock_by_pulses(48)
   collectgarbage("collect")
   
   local final_memory = collectgarbage("count")
+  luaunit.assert_equals(admitted, 100)
+  luaunit.assert_equals(cancelled_callbacks, 0)
+  luaunit.assert_true(#values > 0, "Surviving requests must run")
   -- Allow for some memory overhead but ensure no major leaks
   luaunit.assert_true((final_memory - initial_memory) < 100)
 end
@@ -1509,4 +1591,25 @@ function test_empty_delayed_action_table_handling()
   luaunit.assert_true(executed)
   -- The cleared action should not execute
   luaunit.assert_false(executed_empty)
+end
+
+function test_slide_replacement_under_legacy_module_reload()
+  setup()
+  clock_setup()
+  local old_values, replacement_values = {}, {}
+  slide_onset_fixture.queue(m_clock, {
+    channel_number=1, trig_lock=1, start_step=1, end_step=4,
+    start_value=0, end_value=127,
+    func=function(value) old_values[#old_values+1]=value end
+  })
+  slide_onset_fixture.queue(m_clock, {
+    channel_number=1, trig_lock=1, start_step=1, end_step=4,
+    start_value=64, end_value=32,
+    func=function(value) replacement_values[#replacement_values+1]=value end
+  })
+  progress_clock_by_pulses(120)
+  luaunit.assert_equals(old_values, {}, "Replaced request must never emit")
+  luaunit.assert_true(#replacement_values>0, "Replacement must execute")
+  luaunit.assert_equals(replacement_values[1],64)
+  luaunit.assert_equals(replacement_values[#replacement_values],32)
 end

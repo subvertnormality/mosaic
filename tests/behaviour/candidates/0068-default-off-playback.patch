@@ -1,0 +1,73 @@
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -132,6 +132,7 @@
+   end 
+ 
+   for i, param in ipairs(trig_lock_params) do
++    local off = param.off_value == nil and -1 or param.off_value
+ 
+     if should_process_param(param) then
+       if not param.param_id then
+@@ -149,7 +150,7 @@
+       local next_lock
+       
+       if step_trig_lock then
+-        next_lock = program.get_next_trig_lock_step(channel, step, i, param.off_value)
++        next_lock = program.get_next_trig_lock_step(channel, step, i, off)
+       end
+ 
+       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
+@@ -172,7 +173,7 @@
+           midi_channel = param.channel
+         end
+         if step_trig_lock then
+-          if step_trig_lock == param.off_value then
++          if step_trig_lock == off then
+             goto continue
+           end
+ 
+@@ -200,13 +201,13 @@
+           end
+ 
+         elseif p_value and param.type == "midi" and (param.cc_msb or param.nrpn_msb) and not m_clock.channel_is_sliding(channel, i) then
+-          if p_value == param.off_value then
++          if p_value == off then
+             goto continue
+           end
+ 
+           process_midi_param(param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+         elseif not m_clock.channel_is_sliding(channel, i) then
+-          if value == param.off_value then
++          if value == off then
+             goto continue
+           end
+ 
+@@ -215,7 +216,7 @@
+       elseif param.type == "norns" and param.id == "nb_slew" then
+ 
+         if step_trig_lock then
+-          if step_trig_lock == param.off_value then
++          if step_trig_lock == off then
+             goto continue
+           end
+           device.player:set_slew(step_trig_lock)
+@@ -225,7 +226,7 @@
+       elseif param.type == "norns" and param.id then
+         if step_trig_lock then
+ 
+-          if step_trig_lock == param.off_value then
++          if step_trig_lock == off then
+             goto continue
+           end
+ 
+--- a/lib/devices/param_manager.lua
++++ b/lib/devices/param_manager.lua
+@@ -135,7 +135,7 @@
+         if init == true then
+           p:set(val.off_value or -1, true)
+         end
+-        p.formatter = construct_value_formatter(val.off_value, val.ui_labels)
++        p.formatter = construct_value_formatter(val.off_value == nil and -1 or val.off_value, val.ui_labels)
+         params:set_action(
+           "midi_device_params_channel_" .. channel_id .. "_" .. i,
+           function(x)

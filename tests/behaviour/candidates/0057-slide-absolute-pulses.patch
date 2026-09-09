@@ -1,0 +1,172 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -98,6 +98,8 @@
+   slot.trig_lock = action.trig_lock
+   slot.pulse_count = action.pulse_count
+   slot.total_pulses = action.total_pulses
++  slot.start_pulse = action.start_pulse
++  slot.end_step = action.end_step
+   slot.start_value = action.start_value
+   slot.last_value = action.last_value
+   slot.end_value = action.end_value
+@@ -115,11 +117,13 @@
+   while i ~= ring_end do
+     local action = spread_ring[i]
+     if action.active then
+-      local pulse_count = action.pulse_count
++      local pulse_count = clock_lattice.transport - action.start_pulse
+       local total_pulses = action.total_pulses
+       
+       if pulse_count >= total_pulses then
+         action.active = false
++        action.func(action.end_value, action.last_value)
++        action.last_value = action.end_value
+       else
+         -- Calculate value based on position
+         local current_value
+@@ -138,7 +142,7 @@
+         
+         action.func(current_value, action.last_value)
+         action.last_value = current_value
+-        action.pulse_count = pulse_count + 1
++        action.pulse_count = pulse_count
+       end
+     end
+     i = (i % RING_BUFFER_SIZE) + 1
+@@ -648,33 +652,17 @@
+   clock_lattice:realign_eligable_sprockets()
+ end
+ 
+-local function calculate_total_pulses(channel, start_step, end_step)
+-  local chan_clock = m_clock["channel_" .. channel .. "_clock"]
+-  if not chan_clock then return 0 end
+-  
+-  local steps = end_step - start_step -- distance between lock onsets
+-  local pulses = steps * 12 -- 12 pulses per step
+-  
+-  local div = chan_clock.division
+-  if div then
+-    pulses = pulses * (16 / (1 / div))
+-  end
+-  
+-  return math.floor(pulses / 4)
+-end
+-
+-
+ function m_clock.execute_action_across_steps_by_pulses(args)
+-  if args.start_step == args.end_step then return end
+-  
+-  local total_pulses
+-  if args.should_wrap and args.end_step < args.start_step then
+-    local pulses_to_end = calculate_total_pulses(args.channel_number, args.start_step, 65)
+-    local pulses_from_start = calculate_total_pulses(args.channel_number, 1, args.end_step)
+-    total_pulses = pulses_to_end + pulses_from_start
+-  else
+-    total_pulses = calculate_total_pulses(args.channel_number, args.start_step, args.end_step)
+-  end
++  local distance = args.distance
++  if not distance then
++    local channel = program.get_channel(program.get().selected_song_pattern, args.channel_number)
++    local first, last = program.get_channel_step_bounds(channel)
++    distance = args.end_step - args.start_step
++    if args.should_wrap and distance <= 0 then distance = distance + last - first + 1 end
++  end
++  if distance <= 0 then return end
++  local chan_clock = m_clock["channel_" .. args.channel_number .. "_clock"]
++  local total_pulses = chan_clock:project_onset_pulses(distance)
+ 
+   -- Cancel existing actions for this channel/trig_lock
+   m_clock.cancel_spread_actions_for_channel_trig_lock(args.channel_number, args.trig_lock)
+@@ -685,6 +673,8 @@
+     trig_lock = args.trig_lock,
+     pulse_count = 0,
+     total_pulses = total_pulses,
++    start_pulse = clock_lattice.transport,
++    end_step = args.end_step,
+     start_value = args.start_value,
+     last_value = args.start_value, -- Initial lock already emitted this value.
+     end_value = args.end_value,
+@@ -694,9 +684,30 @@
+   })
+ end
+ 
++-- Resolve incoming ownership before a non-Off lock and its note are sent.
++-- A matching scheduled endpoint shares one write with that destination lock.
++function m_clock.handoff_spread_lock(channel_number, trig_lock, step_number, value)
++  local applied = false
++  local i, stop = ring_start, ring_end
++  while i ~= stop do
++    local action = spread_ring[i]
++    if action.active and action.channel == channel_number and action.trig_lock == trig_lock then
++      action.active = false
++      if action.end_step == step_number and action.end_value == value and
++          clock_lattice.transport >= action.start_pulse + action.total_pulses then
++        action.func(action.end_value, action.last_value)
++        action.last_value = action.end_value
++        applied = true
++      end
++    end
++    i = (i % RING_BUFFER_SIZE) + 1
++  end
++  return applied
++end
++
+ function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, trig_lock, use_end_value)
+-  local i = ring_start
+-  while i ~= ring_end do
++  local i, stop = ring_start, ring_end
++  while i ~= stop do
+     local action = spread_ring[i]
+     if action.active and action.channel == channel_number then
+       if not trig_lock or action.trig_lock == trig_lock then
+@@ -719,8 +730,7 @@
+     local action = spread_ring[i]
+     if action.active and 
+        action.channel == channel.number and
+-       action.trig_lock == trig_param and
+-       action.pulse_count < action.total_pulses then
++       action.trig_lock == trig_param then
+       return true
+     end
+     i = (i % RING_BUFFER_SIZE) + 1
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -170,8 +170,9 @@
+             goto continue
+           end
+ 
+-          m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, i)
+-          process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device)
++          if not m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock) then
++            process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device)
++          end
+ 
+           if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
+             m_clock.execute_action_across_steps_by_pulses({
+@@ -179,6 +180,7 @@
+               trig_lock = i,
+               start_step = step,
+               end_step = next_lock.step,
++              distance = next_lock.distance,
+               start_value = step_trig_lock,
+               end_value = next_lock.value,
+               should_wrap = next_lock.should_wrap,
+@@ -225,14 +227,16 @@
+             norns_param_state_handler.set_original_param_state(c, i, value, param.id)
+           end
+ 
+-          m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, i)
+-          params:set(param.id, step_trig_lock)
++          if not m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock) then
++            params:set(param.id, step_trig_lock)
++          end
+           if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
+             m_clock.execute_action_across_steps_by_pulses({
+               channel_number = channel.number,
+               trig_lock = i,
+               start_step = step,
+               end_step = next_lock.step,
++              distance = next_lock.distance,
+               start_value = step_trig_lock,
+               end_value = next_lock.value,
+               should_wrap = next_lock.should_wrap,

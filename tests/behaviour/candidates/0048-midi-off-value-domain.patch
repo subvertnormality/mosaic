@@ -1,0 +1,95 @@
+--- /dev/null
++++ b/lib/devices/midi_value_domain.lua
+@@ -0,0 +1,35 @@
++-- Native controls remain numeric, while off is a distinct selectable value.
++local domain = {}
++function domain.new(minimum, maximum, off, units)
++  off = off == nil and -1 or off
++  units = units or 1
++  assert(type(minimum)=="number" and type(maximum)=="number" and minimum<=maximum,
++    "Invalid MIDI parameter range")
++  assert(minimum%1==0 and maximum%1==0 and type(off)=="number" and off%1==0,
++    "MIDI parameter bounds and off value must be integers")
++  if off>=minimum and off<=maximum then
++    return controlspec.new(minimum,maximum,"lin",1,off,"",units/math.max(1,maximum-minimum))
++  end
++  local intervals = maximum-minimum+1 -- active values plus one off position
++  local first_off = off<minimum
++  local spec = controlspec.new(math.min(minimum,off),math.max(maximum,off),"lin",1,off,"",units/intervals)
++  spec.warp = {
++    map=function(_,raw)
++      local index=util.round(raw*intervals,1)
++      if first_off then return index==0 and off or minimum+index-1 end
++      return index==intervals and off or minimum+index
++    end,
++    unmap=function(_,value)
++      if value==off then return first_off and 0 or 1 end
++      local index=util.clamp(value,minimum,maximum)-minimum+(first_off and 1 or 0)
++      return index/intervals
++    end
++  }
++  local function preserve_domain(s)
++    s.constrain=function(self,value)return self:map(self:unmap(value)) end
++    s.copy=function(self)return preserve_domain(controlspec.copy(self)) end
++    return s
++  end
++  return preserve_domain(spec)
++end
++return domain
+--- a/lib/devices/param_manager.lua
++++ b/lib/devices/param_manager.lua
+@@ -3,0 +4 @@
++local midi_value_domain = include("mosaic/lib/devices/midi_value_domain")
+@@ -68,2 +68,0 @@
+-        p.controlspec.minval = val.cc_min_value or -1
+-        p.controlspec.maxval = val.cc_max_value or 127
+@@ -72,3 +71 @@
+-        p.controlspec.step = 1
+-        p.controlspec.quantum = 1/((val.cc_max_value - val.cc_min_value) or 127)
+-        p.controlspec.default = val.off_value or -1
++        p.controlspec = controlspec.new(p.min,p.max,"lin",1,p.default,"",1/math.max(1,p.max-p.min))
+@@ -79 +76 @@
+-          p:set(val.off_value or -1)
++          p:set(val.off_value or -1, true)
+@@ -103,2 +99,0 @@
+-      p.controlspec.minval = 0
+-      p.controlspec.maxval = 60
+@@ -107,3 +102 @@
+-      p.controlspec.step = 1
+-      p.controlspec.quantum = 1/60
+-      p.controlspec.default = 0
++      p.controlspec = controlspec.new(0,60,"lin",1,0,"",1/60)
+@@ -112 +105 @@
+-        p:set(0)
++        p:set(0, true)
+@@ -133,17 +126,7 @@
+-        if val.nrpn_min_value and val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
+-          p.controlspec.minval = val.nrpn_min_value or -1
+-          p.controlspec.maxval = val.nrpn_max_value or 16383
+-          p.min = val.nrpn_min_value or -1
+-          p.max = val.nrpn_max_value or 16383
+-          p.controlspec.step = 1
+-          p.controlspec.quantum = 1/(((val.nrpn_max_value - val.nrpn_min_value) or 16383) / 127)
+-          p.controlspec.default = val.off_value or -1
+-        else
+-          p.controlspec.minval = val.cc_min_value or -1
+-          p.controlspec.maxval = val.cc_max_value or 127
+-          p.min = val.cc_min_value or -1
+-          p.max = val.cc_max_value or 127
+-          p.controlspec.step = 1
+-          p.controlspec.quantum = 1/(val.cc_max_value - val.cc_min_value) or 127
+-          p.controlspec.default = val.off_value or -1
+-        end
++        local nrpn = val.nrpn_min_value and val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb
++        local minimum = nrpn and val.nrpn_min_value or val.cc_min_value or -1
++        local maximum = nrpn and val.nrpn_max_value or val.cc_max_value or 127
++        p.default = val.off_value or -1
++        p.controlspec = midi_value_domain.new(minimum,maximum,p.default,nrpn and 127 or 1)
++        p.min = p.controlspec.minval
++        p.max = p.controlspec.maxval
+@@ -152 +135 @@
+-          p:set(val.off_value or 0)
++          p:set(val.off_value or -1, true)
+@@ -188 +171 @@
+-      p:set(-1)
++      p:set(p.controlspec.default, true)

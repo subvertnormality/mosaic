@@ -1,0 +1,47 @@
+{
+  "status": "partial-domain",
+  "runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/d83b9404be7a482ba1f6111e45f47434/manifest.json",
+      "sha256": "36da7f97ad4a7fb06ac193dc6c9e7955c1263b459522449552a847093d1620cc",
+      "case": "M-PATCH-008",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/020165fb98004d158866bda9d460851b/manifest.json",
+      "sha256": "66542c290e93b944ac7b0514e900a59660a8df7ad3858dd47091c4879e87ff8f",
+      "case": "M-PATCH-009",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/8f22cb8ce17d4554a102682878c96ead/manifest.json",
+      "sha256": "8a953cfb3ad16cdae9dabf0b0b3b5e3efd6c1aa05b7d2851369de26f13481288",
+      "case": "M-PATCH-008",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/88a613360b4e40acbb2b87bfc6e62435/manifest.json",
+      "sha256": "07ce8666a01f259baeb5a246b1475b4df9f1a3f9a330117c9fe574daec8dab1f",
+      "case": "M-PATCH-009",
+      "clock_mode": "real-time"
+    }
+  ],
+  "scope": "Native menu edits, actual 61-second autosave, cold-process load, restored screen, initial CC recall, Play recall and melody; edited-then-Off case has no load/Play CC",
+  "diagnostic_failures": [
+    {
+      "runs": [
+        "37aec7bfbe844fbfa5317298f8fde80a",
+        "e9977749e2a840e8b80054ab86372420"
+      ],
+      "cause": "Test requested61seconds in one advance; fixed using59+2 without changing elapsed requirement"
+    },
+    {
+      "runs": [
+        "0a822a90393f4b9081e548841e59c6db",
+        "3899318f585b454e88f0034d57d54bd4"
+      ],
+      "cause": "JACK registry exhausted before application load; verified stale probe slot recovered with normal owned-process start/stop; live audio preserved"
+    }
+  ],
+  "full_campaign_complete": false
+}

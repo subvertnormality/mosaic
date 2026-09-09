@@ -1,0 +1,85 @@
+{
+  "status": "focused-native-validation-passed-review-pending",
+  "scope": "Preserve numeric configured MIDI range plus off sentinel, including sparse/custom/singleton domains and reused native controls without stale initialization actions",
+  "files": [
+    {
+      "path": "lib/devices/midi_value_domain.lua",
+      "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_sha256": "f6da66053c57cd946e0afa6c5dc2721c020f34005eea1d5bd8b27a0a9d5897fa"
+    },
+    {
+      "path": "lib/devices/param_manager.lua",
+      "before_sha256": "89c8a92a135731af4cb1d8622094de324684f41a4e5269ac207e561c0608210b",
+      "after_sha256": "cee410db610f0356c9091d90cce8782b003d56dd265df9db8b1b07b2057eaac5"
+    }
+  ],
+  "patch_sha256": "caf84e2402be2c5d986833aad902220cdc2d41a69662eb7756ee72e1fd413603",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "baseline_runs": [
+    "9a4f4f74e0ac4697ad68382b394a0a65",
+    "36c89bbe8fb0456ca943b88cfa84d80c"
+  ],
+  "review_session": "01a08177-fe90-70b1-9926-cbab884ee61c",
+  "full_campaign_complete": false,
+  "candidate_runs": [
+    {
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c40efac4dda04f75b29723965196845f/manifest.json",
+      "sha256": "7e80d419a22930cd7c8159b35d8e39f9ed4840cf78701ecbd9631997578df261",
+      "case": "M-PATCH-002",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/fe7193c8b7bb4c3fac4ab8488a49a935/manifest.json",
+      "sha256": "b42536c5c85fe967e72e30d89c2804d5e07a74246efcdf83a7aed624af173497",
+      "case": "M-PATCH-001",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ff37e6d73bf8410e910421856cb50ad5/manifest.json",
+      "sha256": "83d835f793b508d3728b35d4d5756ba2f52a42679fd7a2410350aa8a562ea1f6",
+      "case": "M-PATCH-002",
+      "clock_mode": "real-time"
+    },
+    {
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a0277de50b244eccb071e49a20c1779a/manifest.json",
+      "sha256": "f28860ed14b720cc0b2e970b3ef514b4bd11f753429dcdbb83654c3a7fdb8352",
+      "case": "M-PATCH-001",
+      "clock_mode": "real-time"
+    }
+  ],
+  "existing_units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/patch-domain-units-d0cbcd07bc1d474cac83e6e510d87b1b/results.json",
+    "sha256": "2b7c7a3ded118b1d22c3c030e0c1f9d9c78d056e0db03308f17d551888e0b34a",
+    "passed": 482
+  },
+  "next_action": "Native sparse/custom-off persistence, routing override tests, stored-patch lock precedence and scoped Codex follow-up remain pending.",
+  "sparse_native_runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/01cca7b5a3df4a06a4daeb077a9360c6/manifest.json",
+      "sha256": "633679ee7ba25adac0dc345eceafc4d5f662b60d848b9554a88b0105bf4aefb7",
+      "case": "M-PATCH-010",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/533de97f247a47ff9fe9721614275f88/manifest.json",
+      "sha256": "c4dcd2f3e79e9564ddaba6b52963c3e3b61a4a846ec3abca7ecbcc56e27360b0",
+      "case": "M-PATCH-011",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/65e9b04f1c3f44bdae132750115653cd/manifest.json",
+      "sha256": "27834fb96abb5971dfeb261ebf47601e8f7d8b6419517c3698ebbb7c033610a1",
+      "case": "M-PATCH-010",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/a7098f5a05e64ba2a48f226202349875/manifest.json",
+      "sha256": "f2edd6818d6b47510f09f5cfa6bce3bfc9e4b32c08cfad2caab1c760d3d3fa0f",
+      "case": "M-PATCH-011",
+      "clock_mode": "real-time"
+    }
+  ],
+  "native_endpoint_contract": "tests/behaviour/test_native_control_endpoint.lua"
+}

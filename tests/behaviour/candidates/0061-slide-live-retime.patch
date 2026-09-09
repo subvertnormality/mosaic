@@ -1,0 +1,122 @@
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -208,6 +208,8 @@
+                 end
+               end
+             end
++            sprocket.onset_count = (sprocket.onset_count or 0) + 1
++            sprocket.last_onset_transport = self.transport
+             sprocket.action(self.transport)
+             if not self.enabled then return end
+           end
+@@ -604,6 +606,28 @@
+   return elapsed
+ end
+ 
++-- Predict an identified future onset from the current phase, including the
++-- boundary between pulses where the next onset has not executed yet.
++function Sprocket:project_onset_occurrence(occurrence)
++  local remaining = occurrence - (self.onset_count or 0)
++  assert(remaining >= 1 and remaining <= 64 and remaining == math.floor(remaining), "Invalid future onset occurrence")
++  assert(not self.division_for_cycle and self.delay == 0 and not self.delay_new, "Unsupported variable or delayed projection")
++  local projected = setmetatable({}, getmetatable(self))
++  for key,value in pairs(self) do projected[key] = value end
++  if not projected.shuffle_updated then projected:begin_cycle() end
++  if projected.phase >= 1 and projected.phase < 2 and self.last_onset_transport ~= self.lattice.transport then
++    remaining = remaining - 1
++    if remaining == 0 then return 0 end
++  end
++  local elapsed = projected.current_ppqn - (projected.phase - 1)
++  for interval = 2, remaining do
++    projected.phase = projected.current_ppqn + 1
++    projected:finish_cycle();projected:begin_cycle()
++    elapsed = elapsed + projected.current_ppqn
++  end
++  return elapsed
++end
++
+ function Sprocket:forward_pending_setting(method, value)
+   for _, timing in ipairs(self._pending_clocks or {}) do timing[method](timing, value) end
+ end
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -99,6 +99,7 @@
+   slot.pulse_count = action.pulse_count
+   slot.total_pulses = action.total_pulses
+   slot.start_pulse = action.start_pulse
++  slot.end_occurrence = action.end_occurrence
+   slot.end_step = action.end_step
+   slot.start_value = action.start_value
+   slot.last_value = action.last_value
+@@ -473,35 +474,63 @@
+   clock.end_of_clock_processor:set_swing_or_shuffle((swing_or_shuffle or 0))
+ end
+ 
++local function retime_channel_slides(channel_number, channel_clock)
++  local now = clock_lattice.transport
++  local i = ring_start
++  while i ~= ring_end do
++    local action = spread_ring[i]
++    if action.active and action.channel == channel_number and action.end_occurrence and
++        action.end_occurrence > (channel_clock.onset_count or 0) then
++      local progress = action.total_pulses > 0 and math.min(1,math.max(0,(now-action.start_pulse)/action.total_pulses)) or 1
++      local value = action.start_value + (action.end_value-action.start_value)*progress
++      action.total_pulses = channel_clock:project_onset_occurrence(action.end_occurrence)
++      action.start_pulse = now
++      action.start_value = value
++      -- Retain last_value: rebasing alone must not send a MIDI message.
++    end
++    i = (i % RING_BUFFER_SIZE) + 1
++  end
++end
++
+ function m_clock.set_channel_swing(channel_number, swing)
+   local clock = m_clock["channel_" .. channel_number .. "_clock"]
++  local previous = clock.swing
+   clock:set_swing(swing or 0)
+   clock.end_of_clock_processor:set_swing(swing or 0)
++  if clock.swing ~= previous then retime_channel_slides(channel_number, clock) end
+ end
+ 
+ function m_clock.set_channel_shuffle_feel(channel_number, shuffle_feel)
+   local clock = m_clock["channel_" .. channel_number .. "_clock"]
++  local previous = clock.shuffle_feel
+   clock:set_shuffle_feel((shuffle_feel or 0))
+   clock.end_of_clock_processor:set_shuffle_feel((shuffle_feel or 0))
++  if clock.shuffle_feel ~= previous then retime_channel_slides(channel_number, clock) end
+ end
+ 
+ function m_clock.set_channel_shuffle_basis(channel_number, shuffle_basis)
+   local clock = m_clock["channel_" .. channel_number .. "_clock"]
++  local previous = clock.shuffle_basis
+   clock:set_shuffle_basis((shuffle_basis or 0))
+   clock.end_of_clock_processor:set_shuffle_basis((shuffle_basis or 0))
++  if clock.shuffle_basis ~= previous then retime_channel_slides(channel_number, clock) end
+ end
+ 
+ function m_clock.set_channel_shuffle_amount(channel_number, shuffle_amount)
+   local clock = m_clock["channel_" .. channel_number .. "_clock"]
++  local previous = clock.shuffle_amount
+   clock:set_shuffle_amount(shuffle_amount or 0)
+   clock.end_of_clock_processor:set_shuffle_amount(shuffle_amount or 0)
++  if clock.shuffle_amount ~= previous then retime_channel_slides(channel_number, clock) end
+ end
+ 
+ function m_clock.set_channel_division(channel_number, division)
+   local clock = m_clock["channel_" .. channel_number .. "_clock"]
++  local previous = clock.division
+   local div_value = 1 / (division * 4)
+   clock:set_division(div_value)
+   clock.end_of_clock_processor:set_division(div_value)
++  if clock.division ~= previous then retime_channel_slides(channel_number, clock) end
+ end
+ 
+ function m_clock.get_channel_division(channel_number)
+@@ -678,6 +707,7 @@
+     total_pulses = total_pulses,
+     start_pulse = clock_lattice.transport,
+     end_step = args.end_step,
++    end_occurrence = (chan_clock.onset_count or 0) + distance,
+     start_value = args.start_value,
+     last_value = args.start_value, -- Initial lock already emitted this value.
+     end_value = args.end_value,

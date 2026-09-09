@@ -1,0 +1,36 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -377 +377,7 @@
+-        
++        -- Resolve parameters for the same step as the note, including startup.
++        -- A single dispatch site prevents duplicate first-step lock messages.
++        if channel.working_pattern.trig_values[current_step] == 1 or
++          (params:get("trigless_locks") == 2 and program.step_has_param_trig_lock(channel, current_step)) then
++          step.process_params(channel, current_step)
++        end
++
+@@ -419,18 +424,0 @@
+-        local next_step = program.get_current_step_for_channel(channel_number) + 1
+-        if next_step < 1 then return end
+-
+-        local song_pattern_number = program.get().selected_song_pattern
+-        if next_step > end_trig then
+-          song_pattern_number = step.calculate_next_selected_song_pattern()
+-          channel = program.get_channel(song_pattern_number, channel_number)
+-          pattern.update_working_pattern(channel_number, program.get_song_pattern(song_pattern_number))
+-          next_step = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+-        end
+-
+-        local next_trig_value = channel.working_pattern.trig_values[next_step]
+-
+-        if next_trig_value == 1 then
+-          step.process_params(channel, next_step)
+-        elseif params:get("trigless_locks") == 2 and program.step_has_param_trig_lock(channel, next_step) then
+-          step.process_params(channel, next_step)
+-        end
+@@ -767,4 +755 @@
+-  -- Lattice startup can synchronously emit the first note.
+-  for i = 1, 16 do
+-    step.process_params(program.get_channel(program.get().selected_song_pattern, i), 1)
+-  end
++  -- The onset callback prepares the resolved first step before its note.

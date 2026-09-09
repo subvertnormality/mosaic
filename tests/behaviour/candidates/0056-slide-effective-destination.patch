@@ -1,0 +1,75 @@
+--- a/lib/models/program.lua
++++ b/lib/models/program.lua
+@@ -909,38 +909,31 @@
+   channel.working_pattern.lengths[step] = 1 -- Default length
+ end
+ 
+--- Replace the existing get_next_trig_lock_step function with this version
+-function program.get_next_trig_lock_step(channel, current_step, parameter)
+-  local program_data = program.get()
+-  local current_song_pattern = program_data.selected_song_pattern
+-  local step_trig_lock_banks = channel.step_trig_lock_banks
+-  if not step_trig_lock_banks then return nil end
+-  -- First check steps after current position in current pattern
+-  for step = current_step + 1, 64 do
+-    if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
+-      return {
+-        step = step,
+-        value = step_trig_lock_banks[step][parameter]
+-      }
++-- Playback and slide destinations share the effective channel traversal.
++function program.get_channel_step_bounds(channel)
++  local first = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
++  local last = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
++  last = math.min(last, first + program.get_selected_song_pattern().global_pattern_length - 1)
++  return first, last
++end
++
++function program.get_next_trig_lock_step(channel, current_step, parameter, off_value)
++  local banks = channel.step_trig_lock_banks
++  if not banks then return nil end
++  local first, last = program.get_channel_step_bounds(channel)
++  if current_step < first or current_step > last then return nil end
++  local wrap = params:get("wrap_param_slides") == 2 and
++    (params:get("song_mode") ~= 2 or step.calculate_next_selected_song_pattern() == program.get().selected_song_pattern)
++  local limit = wrap and (last - first + 1) or (last - current_step)
++  for distance = 1, limit do
++    local candidate = first + ((current_step - first + distance) % (last - first + 1))
++    local value = banks[candidate] and banks[candidate][parameter]
++    if value ~= nil and value ~= off_value and
++        (program.step_has_trig(channel, candidate) or params:get("trigless_locks") == 2) then
++      return {step=candidate, value=value, distance=distance,
++        should_wrap=(current_step + distance > last) or nil}
+     end
+   end
+-
+-  if params:get("wrap_param_slides") == 2 then
+-    local next_song_pattern = step.calculate_next_selected_song_pattern()
+-
+-    if next_song_pattern == current_song_pattern or params:get("song_mode") ~= 2 then
+-      for step = 1, current_step do
+-        if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
+-          return {
+-            step = step,
+-            value = step_trig_lock_banks[step][parameter],
+-            should_wrap = true
+-          }
+-        end
+-      end
+-    end
+-  end
+-
+   return nil
+ end
+ 
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -147,7 +147,7 @@
+       local next_lock
+       
+       if step_trig_lock then
+-        next_lock = program.get_next_trig_lock_step(channel, step, i)
++        next_lock = program.get_next_trig_lock_step(channel, step, i, param.off_value)
+       end
+ 
+       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then

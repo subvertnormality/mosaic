@@ -1,0 +1,12 @@
+{
+  "id": "0064-slide-reset-ownership",
+  "status": "same-pattern-unit-and-native-pass-cross-song-and-review-pending",
+  "source_sha256": {
+    "lib/clock/m_clock.lua": "273944e01377dc0493a5917256a2aa974408b887d8ab4b62fa0a222c43571100",
+    "lib/step.lua": "725665c441897c575931f9d8d1d7995e962cb9b27a32105e872558e46e595b60"
+  },
+  "baseline": "/home/andy/projects/mosaic-behaviour-runs/slide-reset-baseline.log",
+  "review_pending": true,
+  "unit_evidence": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-a6c1e9af234643f98a315af9161ac144/results.json",
+  "native_report": "/home/andy/projects/mosaic-behaviour-runs/slide-reset-native/report.json"
+}

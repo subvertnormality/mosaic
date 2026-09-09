@@ -1,0 +1,61 @@
+{
+  "status": "isolated-lifecycle-and-straight-native-regressions-passed-full-slide-incomplete",
+  "depends_on": [
+    "0053-slide-previous-value"
+  ],
+  "scope": "Silent slide cancellation before effective non-Off replacement locks; explicit finish retires ownership before callback and works before first sample.",
+  "test": "tests/behaviour/test_slide_cancellation.lua",
+  "baseline_log": "/home/andy/projects/mosaic-behaviour-runs/slide-cancellation-baseline.log",
+  "candidate_log": "/home/andy/projects/mosaic-behaviour-runs/slide-cancellation-candidate.log",
+  "patch_sha256": "46b3ed80bb0a2dbed882907bdec3ebebf35847d397d8e345505fb8c06c0c6a78",
+  "files": {
+    "lib/clock/m_clock.lua": {
+      "before_sha256": "0e482d3cafaa16c91f796d898b28f36a582e19e52e5eb8b36fd958f5ac8c0641",
+      "after_sha256": "09a0999232cb26ab36e39cb81274704cf26fda9e6fd9cec3f470b5b52dc8030a"
+    },
+    "lib/step.lua": {
+      "before_sha256": "2c69ce83cb736abb3b9a461b998acbbea47762a03c1ed24a2f150fdbd9a503c1",
+      "after_sha256": "3afbf99fa516ee3dc71901beee21efca28103b75c74fdea3c5c618178066aad6"
+    }
+  },
+  "full_campaign_complete": false,
+  "remaining": "Native replacement and norns-param integration; full unit regression treatment; absolute pulse timing, endpoint handoff, active-range destination lookup and live changes remain incomplete.",
+  "native_runs": [
+    {
+      "run_id": "42fedd882c4e4df7b1b59a254bee5355",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "8f1bb4fcf04d667379eb13f6c2b415665d90e8dd9771bf5f17fdbd0f707e9c5b"
+    },
+    {
+      "run_id": "c986a54bb89a4bb6a5528d33849b6cd7",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "897e981d7c2a7b48cc77b1f637bae2297c1c96b22adf34675298afe495d0da2d"
+    }
+  ],
+  "unit_results": {
+    "collected": 482,
+    "passed": 467,
+    "failed": 15,
+    "artifact": "/home/andy/projects/mosaic-behaviour-runs/patch-domain-units-e875683b763b42d7a7489824a5047140/results.json",
+    "same_failure_names_as_0052": true,
+    "failure_names": [
+      "test_concurrent_sliding_parameters",
+      "test_execute_action_across_steps_handles_high_to_low_transition",
+      "test_execute_action_across_steps_handles_high_to_low_with_wrap",
+      "test_execute_action_across_steps_handles_wrap_with_clock_division",
+      "test_execute_action_across_steps_works_with_clock_division",
+      "test_execute_action_across_steps_works_with_fractional_quantization",
+      "test_execute_action_across_steps_works_with_fractional_values",
+      "test_execute_action_across_steps_works_with_normal_clock",
+      "test_execute_action_across_steps_wraps_at_pattern_boundaries",
+      "test_execute_action_across_steps_wraps_correctly",
+      "test_execute_action_across_steps_wraps_with_long_spans",
+      "test_execute_action_across_steps_wraps_with_multiple_actions",
+      "test_execute_action_across_steps_wraps_with_quantization",
+      "test_rapid_spread_action_cancellation",
+      "test_spread_actions_handle_shuffle"
+    ]
+  }
+}

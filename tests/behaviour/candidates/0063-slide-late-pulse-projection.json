@@ -1,0 +1,8 @@
+{
+  "id": "0063-slide-late-pulse-projection",
+  "status": "validation-in-progress",
+  "before_sha256": "a33c4b82c063eae2c3e65a7416288e61197eca0c0fc01cae5932fa516f3301de",
+  "after_sha256": "4ccbc5f088a96e993f101ef587ea2c7d69c4adb32e90fb514afaa8f60228e222",
+  "baseline": "/home/andy/projects/mosaic-behaviour-runs/slide-late-pulse-projection/probe.log",
+  "review_pending": true
+}
