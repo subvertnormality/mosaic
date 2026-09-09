@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "0075 fixes priority-only pattern leakage into numeric note/velocity/length merging.10native passes,492units,Codex review. Next numeric merge fractional/negative/pentatonic/scale domains, Lower Codex arbitration; broader manual and emulator gates remain incomplete.",
+  "next_action": "0076 merge-cycle correction and pentatonic/root/scale011 validated D/R;492units. SEM001 resolved via Codex preserving established rounding/formulas; manual clarified. Next fractional/negative numeric merge and Lower cases using independent examples from semantic review; remaining manual/emulator gates open.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -141,5 +141,6 @@
   "recording_memory_validation": "docs/testing/recording-memory-validation.json",
   "recording_memory_branch_validation": "docs/testing/recording-memory-branch-validation.json",
   "recording_persistence_validation": "docs/testing/recording-persistence-validation.json",
-  "numeric_merge_validation": "docs/testing/numeric-merge-validation.json"
+  "numeric_merge_validation": "docs/testing/numeric-merge-validation.json",
+  "merge_cycle_validation": "docs/testing/merge-cycle-validation.json"
 }

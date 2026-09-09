@@ -5,7 +5,7 @@ Real input / MIDI-grid-screen outputs are mandatory; controlled time is brought 
 
 | ID | Question | Status / treatment |
 |---|---|---|
-| SEM-001 | Lower note/velocity/length merge formulas disagree or are ambiguous | User clarification previously requested; only dependent cases blocked |
+| SEM-001 | Lower note/velocity/length merge formulas disagree or are ambiguous | Resolved by Codex semantic decision below; native boundary coverage remains pending |
 | SEM-002 | Independent one-step channel selection gesture | Resolved 2026-09-07: user requires unsupported one-step selection; a lone long hold stays inactive so held-step combinations remain safe. Do not substitute global clamp |
 | SEM-003 | Input MIDI channels beyond channel1 | Manual silent; source handles channel1; characterise before deciding support contract |
 | MAN-001 | Source-header manual short link |Resolved 2026-09-07: user confirms browser page derives from repository documentation; README and cheat sheet remain mandatory |
@@ -200,3 +200,18 @@ the correction. Codex review01a08442-1d6d-79a1-b142-cd77eee475dd found no blocke
 and requested native sparse/custom-Off/singleton UI coverage, recorded separately
 from lower-level domain tests. This is a defect correction, not a numeric project
 migration or a generalisation of the Digitakt NRPN compatibility allowance.
+
+
+## SEM-001 resolved — numeric merge arithmetic
+
+Under the standing instruction to resolve decisions through Codex Paranoia,
+review01a0849f-a7c3-7102-98e4-8d69d14e6ffe recommends preserving established
+arithmetic and correcting conflicting prose. With multiple contributors, let
+A=floor(mean+0.5), m=minimum, M=maximum. Average=A, Higher/Longer=A+M-m,
+Lower/Shorter=2m-A. A single contributor bypasses this calculation. Negative
+half ties select the greater integer. This preserves longstanding output; it
+does not infer author intent from symmetry or generalise the Digitakt exception.
+README now states the formulas, rounding and effective source-length rule.
+Fractional Higher/Lower results, downstream MIDI bounds, length validity and
+all scale/pentatonic interactions still need independent behavior acceptance.
+This is a single Codex decision review, not multi-vendor arbitration.

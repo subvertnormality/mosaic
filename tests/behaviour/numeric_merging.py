@@ -1,6 +1,6 @@
-def numeric_note_merge(c,foreign_velocity=False):
+def numeric_note_merge(c,foreign_velocity=False,pentatonic=False):
     from cases import set_mosaic_options,assert_durations
-    c.configure();set_mosaic_options(c,[('Lock merged to pent.',False)])
+    c.configure();set_mosaic_options(c,[('Lock merged to pent.',pentatonic)])
     sources=[(0,2,4,6),(2,4,6,0),(6,6,6,6)]
     c.tap(5,8)
     for slot,values in enumerate(sources,1):
@@ -22,7 +22,7 @@ def numeric_note_merge(c,foreign_velocity=False):
     velocity=[100]*4 if foreign_velocity else [127,117,107,97]
     # Degree means [1,3,5,3]; Higher = mean+(max-min)=[3,5,7,9].
     # Independently map these zero-based degrees through C major.
-    for mode,level,pitches in [('average',2,[62,65,69,65]),('higher',5,[65,69,72,76])]:
+    for mode,level,pitches in [('average',2,[62,64,69,64] if pentatonic else [62,65,69,65]),('higher',5,[64,69,72,76] if pentatonic else [65,69,72,76])]:
         if mode=='higher':c.tap(15,8)
         c.led_values([(15,8)],[level])
         notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)
@@ -31,3 +31,46 @@ def numeric_note_merge(c,foreign_velocity=False):
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
         c.results.append(dict(kind='numeric-note-merge',mode=mode,assigned_patterns=[1,2],velocity_source=3 if foreign_velocity else 1,pitches=pitches,passed=True))
+
+    if pentatonic:
+        def verify(label,pitches):
+            notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)
+            assert_durations(c,notes,[1]*8)
+            for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+            c.results.append(dict(kind='numeric-merge-scale-transition',label=label,pitches=pitches,passed=True))
+        c.tap(4,8);c.enc(2,-1);c.enc(3,2);c.key(3) # Root C -> D.
+        verify('D-major-pentatonic-higher',[66,71,74,78])
+        c.enc(2,1);c.enc(3,2);c.key(3) # Major -> natural minor.
+        verify('D-minor-pentatonic-higher',[67,69,74,77])
+        c.tap(3,8);c.tap(15,8);c.tap(15,8);c.led_values([(15,8)],[2])
+        verify('D-minor-pentatonic-average',[65,67,69,67])
+        c.tap(4,8);c.enc(3,-2);c.key(3);c.enc(2,-1);c.enc(3,-2);c.key(3)
+        verify('restored-C-major-pentatonic-average',[62,64,69,64])
+
+
+def merge_mode_cycle(c,field):
+    from cases import assert_durations
+    assert field in ('velocity','length')
+    c.configure();c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    if field=='length':c.hold_tap((1,4),(2,4))
+    c.tap(2,1);c.tap(1,4)
+    if field=='length':c.hold_tap((1,4),(4,4))
+    c.tap(3,8);c.tap(2,2);c.tap(14,8);c.tap(14,8)
+    c.hold_tap((15,8),(1,2))
+    if field=='length':c.hold_tap((16,8),(1,2))
+    def verify(stage):
+        notes=c.playback([(1,[144,60,127 if field=='length' else 114])],cycles=2,timeout=4)
+        assert_durations(c,notes,[3 if field=='length' else 1]*2)
+        key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i*4/6)<=tolerance
+        c.results.append(dict(kind='merge-mode-cycle',field=field,stage=stage,passed=True))
+    verify('initial-average')
+    for cycle in range(2):
+        if field=='length':c.action(type='key',n=1,state=1);c.elapse(.3)
+        try:
+            for level in (5,8,2):c.tap(16,8);c.led_values([(16,8)],[level])
+        finally:
+            if field=='length':c.action(type='key',n=1,state=0)
+        verify('returned-average-'+str(cycle+1))

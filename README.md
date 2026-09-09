@@ -635,9 +635,9 @@ These modes define how trigs are applied when there are overlapping steps across
 
 These modes determine how note values are handled when steps overlap:
 
-* **Average**: The note value for overlapping steps is the average of those steps' values in each pattern, subsequently quantised.
-* **Higher**: The highest note value from overlapping steps is used after calculating the average and adjusting by subtracting the lowest and adding the highest note value, followed by quantization.
-* **Lower**: The lowest note value is used after calculating the average and subtracting the lowest note value from the average, followed by quantization.
+* **Average**: Average the contributing note values and round to the nearest integer, choosing the greater integer at an exact half (1.5 becomes 2; -1.5 becomes -1; -0.5 becomes 0). One contributor passes through unchanged. The result then uses the configured scale and pentatonic processing.
+* **Higher**: Add the difference between the highest and lowest contributing note values to their rounded average. One contributor passes through unchanged; the result then uses the configured scale and pentatonic processing.
+* **Lower**: Subtract the rounded average from twice the lowest contributing note value: `2 * lowest - rounded_average`. One contributor passes through unchanged; the result then uses the configured scale and pentatonic processing.
 * **Pattern**: To prioritise a specific pattern's note values during conflicts, hold the note merge button and select the desired pattern. You can even select patterns that aren't current asigned to the active channel.
 
 By default, notes will snap to the pentatonic version of the currently active scale to assist with avoiding unpleasant harmonic interactions. This can be disabled in _Mosaic_'s settings.
@@ -648,9 +648,9 @@ By default, notes will snap to the pentatonic version of the currently active sc
 
 These settings affect how velocity values are calculated for overlapping steps:
 
-* **Average**: The velocity is the average of the velocities from overlapping steps in each pattern.
-* **Higher**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and adding the highest velocity.
-* **Lower**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and not adding the highest value back.
+* **Average**: Average the contributing velocities and round to the nearest integer, choosing the greater integer at an exact half. One contributor passes through unchanged.
+* **Higher**: Add the difference between the highest and lowest contributing velocities to their rounded average.
+* **Lower**: Subtract the rounded average from twice the lowest contributing velocity: `2 * lowest - rounded_average`.
 * **Pattern**: To use a specific pattern's velocity values, hold the velocity merge button and press the pattern's select button.
 
 <img alt="Channel editor velocity merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg" width="300" />
@@ -659,9 +659,9 @@ These settings affect how velocity values are calculated for overlapping steps:
 
 These modes dictate how the duration of notes is calculated for overlapping steps:
 
-* **Average**: The length is the average of the lengths from overlapping steps in each pattern.
-* **Longer**: The length is determined by taking the average length, subtracting the shortest length, and adding the longest length.
-* **Shorter**: The length is calculated by subtracting the shortest length from the average of each step's length minus the shortest length.
+* **Average**: Average the contributing lengths and round to the nearest integer, choosing the greater integer at an exact half. One contributor passes through unchanged. Source lengths account for interruption by the next trig in that pattern.
+* **Longer**: Add the difference between the longest and shortest contributing lengths to their rounded average. One contributor passes through unchanged.
+* **Shorter**: Subtract the rounded average from twice the shortest contributing length: `2 * shortest - rounded_average`. One contributor passes through unchanged. Only the mean is rounded at this stage, so fractional source lengths can still produce fractional Longer or Shorter results.
 * **Pattern**: To apply a specific pattern's length values, hold the length merge button and press the pattern's select button.
 
 Length merge modes are set by holding shift (K1) and pressing the velocity merge mode button.

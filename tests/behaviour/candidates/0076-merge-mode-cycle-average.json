@@ -1,0 +1,11 @@
+{
+  "status": "scoped-candidate-validated",
+  "scope": "Returning through Lower/Shorter to Average must set the actual merge mode as well as its button and tooltip.",
+  "baselines": {
+    "note_D": "145309d64efe4628b3628dc801113720",
+    "note_R": "b3b402d8d13c4d209c41c77997a944c5",
+    "velocity_D": "6dd9144bf7394c878d1ca236ec07c104",
+    "length_D": "93295ac817304fb58e7369e7d4b9ef7a"
+  },
+  "validation": "docs/testing/merge-cycle-validation.json"
+}

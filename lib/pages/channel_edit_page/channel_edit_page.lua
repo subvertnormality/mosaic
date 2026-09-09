@@ -377,6 +377,7 @@ function channel_edit_page.register_press()
         elseif note_merge_mode_button:get_state() == 4 then
 
           note_merge_mode_button:set_state(1)
+          program.get_selected_channel().note_merge_mode = "average"
           tooltip:show(
             "Average note merge mode"
           )
@@ -412,6 +413,7 @@ function channel_edit_page.register_press()
           )
         elseif velocity_merge_mode_button:get_state() == 4 then
           velocity_merge_mode_button:set_state(1)
+          program.get_selected_channel().velocity_merge_mode = "average"
           tooltip:show(
             "Average velocity merge mode"
           )
@@ -448,6 +450,7 @@ function channel_edit_page.register_press()
           )
         elseif length_merge_mode_button:get_state() == 4 then
           length_merge_mode_button:set_state(1)
+          program.get_selected_channel().length_merge_mode = "average"
           tooltip:show(
             "Average length merge mode"
           )

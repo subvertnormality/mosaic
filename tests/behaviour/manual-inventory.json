@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "943fbbec25722ad64f0ec9a0135b9842e2b245b3ae851117b874bff9c33b547d",
+  "manual_sha256": "807bcf46b04e10c3e8a14ff54c2645c9905839e8293d514d5d18ff017f766578",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -608,7 +608,7 @@
       "level": 5,
       "start_line": 634,
       "end_line": 646,
-      "text_sha256": "14741886e7db500491eddb9b971c1e29ac248decc5a98db70990a14de89c1677",
+      "text_sha256": "3381ca32a97ddeca3bc1c98fc9b45a8e1f81c9a366097251e05b95e7313cfb19",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-NOTE-AVERAGE",
@@ -624,7 +624,7 @@
       "level": 5,
       "start_line": 647,
       "end_line": 657,
-      "text_sha256": "176668a485782c7b5d5cfc5baf1c35cb649e4cdca7bcfa45248ce973f1f3cc93",
+      "text_sha256": "6b953321e057687a14d787d68433b845e688fd5ef5b03f43129481ad3deaf11f",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-VELOCITY"
@@ -637,7 +637,7 @@
       "level": 5,
       "start_line": 658,
       "end_line": 670,
-      "text_sha256": "8c41fdd5feace67b36e8722c1418098fdab96e4cebebe595df9bfda68dc61c5e",
+      "text_sha256": "9a828f5e75ae4b532cace2757c267f0d301ee921452b715a8799368d1f4d9e30",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-LENGTH"
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "943fbbec25722ad64f0ec9a0135b9842e2b245b3ae851117b874bff9c33b547d"
+      "sha256": "807bcf46b04e10c3e8a14ff54c2645c9905839e8293d514d5d18ff017f766578"
     },
     {
       "path": "cheat_sheet.html",
@@ -2830,7 +2830,8 @@
       "statement": "Average overlapping note values, then quantise.",
       "cases": [
         "M-MERGE-009",
-        "M-MERGE-010"
+        "M-MERGE-010",
+        "M-MERGE-011"
       ],
       "status": "partial-domain-coverage",
       "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending.",
@@ -2845,8 +2846,8 @@
         "path": "README.md",
         "line": 638,
         "end_line": 638,
-        "text": "* **Average**: The note value for overlapping steps is the average of those steps' values in each pattern, subsequently quantised.",
-        "sha256": "842f62231cd32262d7ba76c99f0ccbb1dfc21ac61f501f2231c080280c3eda1b"
+        "text": "* **Average**: Average the contributing note values and round to the nearest integer, choosing the greater integer at an exact half (1.5 becomes 2; -1.5 becomes -1; -0.5 becomes 0). One contributor passes through unchanged. The result then uses the configured scale and pentatonic processing.",
+        "sha256": "825e2367e5857b338ccc1e077f3ecf9be08395ad83814dc876105cb855a4001d"
       }
     },
     {
@@ -2857,7 +2858,8 @@
       "statement": "Higher combines average minus lowest plus highest, then quantises.",
       "cases": [
         "M-MERGE-009",
-        "M-MERGE-010"
+        "M-MERGE-010",
+        "M-MERGE-011"
       ],
       "status": "partial-domain-coverage",
       "domain": "Equal/asymmetric/negative values; clipping; assignment order. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending.",
@@ -2872,8 +2874,8 @@
         "path": "README.md",
         "line": 639,
         "end_line": 639,
-        "text": "* **Higher**: The highest note value from overlapping steps is used after calculating the average and adjusting by subtracting the lowest and adding the highest note value, followed by quantization.",
-        "sha256": "ab57bb5ee64c9cafc95d178c01b3a18c559458f337ef2b1eb2e0dc2e07515ce9"
+        "text": "* **Higher**: Add the difference between the highest and lowest contributing note values to their rounded average. One contributor passes through unchanged; the result then uses the configured scale and pentatonic processing.",
+        "sha256": "8a198b7e3019b07623ca48708f871cb98e7df3cfa796bf58815cf17469c3513a"
       }
     },
     {
@@ -2881,12 +2883,12 @@
       "sections": [
         "MAN-046"
       ],
-      "statement": "Lower note merge semantics require SEM-001 resolution.",
+      "statement": "Lower uses twice the minimum minus the rounded mean, then quantises; SEM-001 resolved by Codex semantic decision.",
       "cases": [],
       "status": "unimplemented",
       "domain": "Asymmetric/equal/negative values separating competing formulas.",
       "oracles": [
-        "Pending explicit decision; never implementation-derived golden."
+        "Independent literal arithmetic and MIDI pitch tables; fractional/negative native acceptance remains pending."
       ],
       "lanes": [
         "E",
@@ -2896,8 +2898,8 @@
         "path": "README.md",
         "line": 640,
         "end_line": 640,
-        "text": "* **Lower**: The lowest note value is used after calculating the average and subtracting the lowest note value from the average, followed by quantization.",
-        "sha256": "fcf4a29a5042b6327ceed0e4a724a1c4c2094e5518acf2cb49d88eeb8de219bf"
+        "text": "* **Lower**: Subtract the rounded average from twice the lowest contributing note value: `2 * lowest - rounded_average`. One contributor passes through unchanged; the result then uses the configured scale and pentatonic processing.",
+        "sha256": "106ff8519bf05bb0dc4b9f5828e58ef51a77612890a8a9b849af9da52a5c0ed7"
       }
     },
     {
@@ -2938,7 +2940,8 @@
       "cases": [
         "M-MERGE-004",
         "M-MERGE-005",
-        "M-MERGE-010"
+        "M-MERGE-010",
+        "M-MERGE-012"
       ],
       "status": "partial-domain-coverage",
       "domain": "Every option; means at discontinuities; 0/127; selected pattern; Lower SEM-001. M-MERGE-004 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-005 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required.",
@@ -2953,8 +2956,8 @@
         "path": "README.md",
         "line": 651,
         "end_line": 654,
-        "text": "* **Average**: The velocity is the average of the velocities from overlapping steps in each pattern.\n* **Higher**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and adding the highest velocity.\n* **Lower**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and not adding the highest value back.\n* **Pattern**: To use a specific pattern's velocity values, hold the velocity merge button and press the pattern's select button.",
-        "sha256": "1a29fb7951505678be9b4f875dea690ca81ceb2defa43df8a1a70db0bf41b6a8"
+        "text": "* **Average**: Average the contributing velocities and round to the nearest integer, choosing the greater integer at an exact half. One contributor passes through unchanged.\n* **Higher**: Add the difference between the highest and lowest contributing velocities to their rounded average.\n* **Lower**: Subtract the rounded average from twice the lowest contributing velocity: `2 * lowest - rounded_average`.\n* **Pattern**: To use a specific pattern's velocity values, hold the velocity merge button and press the pattern's select button.",
+        "sha256": "d525b6f29c9ffef498b5f8faa6098225584d3f45e0ae30785a86101132ad929b"
       }
     },
     {
@@ -2965,7 +2968,8 @@
       "statement": "Length merge has Average/Longer/Shorter/Pattern; K1 selects length mode.",
       "cases": [
         "M-MERGE-006",
-        "M-MERGE-007"
+        "M-MERGE-007",
+        "M-MERGE-013"
       ],
       "status": "partial-domain-coverage",
       "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001. M-MERGE-006 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-007 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required.",
@@ -2980,8 +2984,8 @@
         "path": "README.md",
         "line": 662,
         "end_line": 667,
-        "text": "* **Average**: The length is the average of the lengths from overlapping steps in each pattern.\n* **Longer**: The length is determined by taking the average length, subtracting the shortest length, and adding the longest length.\n* **Shorter**: The length is calculated by subtracting the shortest length from the average of each step's length minus the shortest length.\n* **Pattern**: To apply a specific pattern's length values, hold the length merge button and press the pattern's select button.\n\nLength merge modes are set by holding shift (K1) and pressing the velocity merge mode button.",
-        "sha256": "b14d03aabe700ed39459c0a830dec15188c63fa69b0e1451f6a99887d924295e"
+        "text": "* **Average**: Average the contributing lengths and round to the nearest integer, choosing the greater integer at an exact half. One contributor passes through unchanged. Source lengths account for interruption by the next trig in that pattern.\n* **Longer**: Add the difference between the longest and shortest contributing lengths to their rounded average. One contributor passes through unchanged.\n* **Shorter**: Subtract the rounded average from twice the shortest contributing length: `2 * shortest - rounded_average`. One contributor passes through unchanged. Only the mean is rounded at this stage, so fractional source lengths can still produce fractional Longer or Shorter results.\n* **Pattern**: To apply a specific pattern's length values, hold the length merge button and press the pattern's select button.\n\nLength merge modes are set by holding shift (K1) and pressing the velocity merge mode button.",
+        "sha256": "ec81ec6c06da6b8cba2a0ab062d1789e2b40c146335ad9d9a76f798bafdfa1e1"
       }
     },
     {
@@ -4978,7 +4982,8 @@
       ],
       "statement": "K1 press selects editing only; long press another editing slot selects it; long press already-selected editing slot disables global scale and clears selection.",
       "cases": [
-        "M-SCALE-001"
+        "M-SCALE-001",
+        "M-MERGE-011"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 slots; same/different editing vs applied slot; long threshold; editing currently used scale and saving.",

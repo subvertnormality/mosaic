@@ -1,3 +1,4 @@
+from numeric_merging import merge_mode_cycle
 from numeric_merging import numeric_note_merge
 from recording_lifetimes import recording_ten_slots
 from recording_lifetimes import recording_stop_safety
@@ -2789,6 +2790,9 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-MERGE-013':dict(run=lambda c:merge_mode_cycle(c,'length'),requirements=['MERGE-LENGTH'],description='Repeated Average/Higher/Lower/Average control cycles preserve displayed and audible length merge mode'),
+ 'M-MERGE-012':dict(run=lambda c:merge_mode_cycle(c,'velocity'),requirements=['MERGE-VELOCITY'],description='Repeated Average/Higher/Lower/Average control cycles preserve displayed and audible velocity merge mode'),
+ 'M-MERGE-011':dict(run=lambda c:numeric_note_merge(c,True,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','SCALE-EDIT'],description='Numeric Average/Higher with pentatonic filtering across C major, D major, D minor and restored scale; unassigned velocity source stays isolated'),
  'M-MERGE-009':dict(run=numeric_note_merge,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER'],description='Two assigned patterns: independent Average/Higher degree arithmetic, C-major pitches, velocity priority isolation and exact timing'),
  'M-MERGE-010':dict(run=lambda c:numeric_note_merge(c,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-VELOCITY'],description='Unassigned velocity-priority source must not contribute notes to numeric merge'),
  'M-REC-PARAM-027':dict(run=lambda c:recording_lifetime(c,'persistence'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','PERSIST-AUTO-001'],description='Recorded locks and undo position survive autosave and two fresh native processes; persisted redo restores recorded step after restart'),
