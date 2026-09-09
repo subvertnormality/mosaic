@@ -3146,7 +3146,8 @@
       "cases": [
         "M-MEMORY-001",
         "M-MEMORY-002",
-        "M-REC-PARAM-025"
+        "M-REC-PARAM-025",
+        "M-REC-PARAM-026"
       ],
       "status": "partial-domain-coverage",
       "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts.",
@@ -3174,7 +3175,8 @@
       "cases": [
         "M-MEMORY-001",
         "M-MEMORY-002",
-        "M-REC-PARAM-025"
+        "M-REC-PARAM-025",
+        "M-REC-PARAM-026"
       ],
       "status": "partial-domain-coverage",
       "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback.",
@@ -6277,7 +6279,8 @@
         "M-REC-PARAM-022",
         "M-REC-PARAM-023",
         "M-REC-PARAM-024",
-        "M-REC-PARAM-025"
+        "M-REC-PARAM-025",
+        "M-REC-PARAM-026"
       ],
       "status": "in_progress",
       "domain": "Every slot; existing locks overwritten only in interval; reset/sequence change; edit exactly at end; disarm.",

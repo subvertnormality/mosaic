@@ -1,0 +1,32 @@
+{
+  "status": "scoped-interaction-validated",
+  "case": "M-REC-PARAM-026",
+  "native_runs": [
+    {
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b78919d22c4f443a961847d42d91f74d/manifest.json",
+      "sha256": "06e172125c826f696669e1fce605c8d2ea899ae773fab6106da107ce1b1e34a7",
+      "passed": true
+    },
+    {
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4bd0d7f7e3fb43909a3f9cfe8eb51a4c/manifest.json",
+      "sha256": "30d7dfa1d230cca1c3e6d92442174f2764709649e6f16f7fa91741c47e885e12",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "oracle": "After undoing recorded steps3/4, one new held-step edit changes original step3 lock96 to97 and discards the abandoned redo suffix. Recorded step2 remains64; step4 remains unbound and uses default65. Undo/redo of the new branch restores96/97 respectively.",
+  "assertions": [
+    "Inherited six recorded-lock undo/redo replay stages",
+    "Latest and past-end navigation cannot resurrect abandoned step4 recording",
+    "Independent step2 recording survives branching",
+    "Every branch stage checks two complete MIDI cycles plus closing onset, exact routes and one-second CC deadlines"
+  ],
+  "limitations": [
+    "Scoped history branching; song, persistence, reset and exact-boundary recording remain pending",
+    "Current experimental controlled runtime is not covered by historical C16 admission; real-time acceptance retained",
+    "Full manual and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

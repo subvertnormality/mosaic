@@ -3,7 +3,7 @@
 def recording_lifetime(c,ending,scale_page=False):
     from cases import assign_trig_parameter,menu_value,parameter_list_label
     from patch_params import open_patch_control,turn
-    assert ending in ('selected-wrap','nonselected-wrap','disarm','stop','reassign','same-assignment','configuration','slide-active','slide-off','pending-assignment','pending-configuration','mute','memory')
+    assert ending in ('selected-wrap','nonselected-wrap','disarm','stop','reassign','same-assignment','configuration','slide-active','slide-off','pending-assignment','pending-configuration','mute','memory','memory-branch')
     slide=ending.startswith('slide-')
     value=-1 if ending=='slide-off' else 64
     open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
@@ -90,7 +90,7 @@ def recording_lifetime(c,ending,scale_page=False):
     elif ending=='stop':wanted=[(1,[176,1,v]) for v in [64,24,64,96,64]]
     elif ending=='reassign':wanted=[(1,[176,1,64]),(1,[176,1,64]),(1,[176,2,96])]
     elif ending=='configuration':wanted=[(1,[176,1,64]),(1,[176,1,64])]
-    elif ending in ('same-assignment','pending-assignment','pending-configuration','memory'):wanted=[(1,[176,1,64])]*4
+    elif ending in ('same-assignment','pending-assignment','pending-configuration','memory','memory-branch'):wanted=[(1,[176,1,64])]*4
     elif ending=='slide-active':
         # The encoder's established silent update during a slide is separate
         # from step-boundary restoration. No stale callback may follow it.
@@ -146,7 +146,7 @@ def recording_lifetime(c,ending,scale_page=False):
         assert control['index']<played[i]['index']
         assert abs((control[field]-played[0][field])/1e9-i*4)<=tolerance
     c.results.append(dict(kind='recording-lifetime-disarmed-replay',ending=ending,values=table,distinct_default=65,passed=True))
-    if ending=='memory':
+    if ending in ('memory','memory-branch'):
         # Recorded steps2/3/4 are the last three memory actions. Step3
         # overwrote an authored96; steps2/4 were previously unbound.
         c.enc(1,2);c.enc(3,15);c.key(3);c.enc(1,-1) # /6, Memory page.
@@ -163,6 +163,26 @@ def recording_lifetime(c,ending,scale_page=False):
                 assert event['index']<played[i]['index']
                 assert abs((event[field]-played[0][field])/1e9-i)<=tolerance
             c.results.append(dict(kind='recording-memory-step-replay',direction=direction,values=values,passed=True))
+        if ending=='memory-branch':
+            c.enc(3,-2) # Keep recorded step2; undo recorded steps3/4.
+            c.enc(1,-1) # Trig Parameters.
+            c.action(type='grid',x=3,y=4,state=1)
+            try:c.elapse(.05);c.enc(3,1) # Existing96 -> new97, one memory action.
+            finally:c.action(type='grid',x=3,y=4,state=0)
+            c.enc(1,1);c.screen_header('Ch. 1 Memory')
+            for action,values in [('latest',[24,64,97,65]),('undo',[24,64,96,65]),('redo',[24,64,97,65]),('past-end',[24,64,97,65])]:
+                if action=='latest':c.key(3)
+                else:c.enc(3,-1 if action=='undo' else (1 if action=='redo' else 3))
+                start=c.snapshot()['midi_count']
+                played=c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=12)
+                cc=[e for e in c.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
+                expected=[65]+values*2+[values[0]]
+                assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in expected],dict(action=action,expected=expected,actual=cc)
+                for i,event in enumerate(cc[1:]):
+                    assert event['index']<played[i]['index']
+                    assert abs((event[field]-played[0][field])/1e9-i)<=tolerance
+                c.results.append(dict(kind='recording-memory-branch-replay',action=action,values=values,passed=True))
+
 
 
 
