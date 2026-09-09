@@ -1774,7 +1774,11 @@
         "M-SYNC-006",
         "M-SYNC-007",
         "M-SYNC-008",
-        "M-SYNC-009"
+        "M-SYNC-009",
+        "M-SYNC-010",
+        "M-SYNC-011",
+        "M-SYNC-012",
+        "M-SYNC-013"
       ],
       "status": "partial-domain-coverage",
       "domain": "Scoped cold20/100/300BPM and warmed startup, repeated Start, release ordering and source handoff; acquisition interactions, other ports, master output and full matrix remain required.",

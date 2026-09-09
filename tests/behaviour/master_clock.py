@@ -24,7 +24,7 @@ def assert_master_receiver(events,field,tolerance):
         assert abs((clock[field]-first)/1e9-i/36)<=tolerance,('Master clock cadence',i)
     return dict(notes=len(notes),clock_ticks=len(clocks),first_clock_ns=first)
 
-def master_clock(c):
+def configure_master_output(c):
     from cases import menu_label,menu_value
     from midi_window import MidiWindow
     c.configure();c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
@@ -41,6 +41,9 @@ def master_clock(c):
                    for y in range(26,29) for x in range(124,127) for k in range(3))
     assert not output_enabled(c.snapshot())
     c.enc(3,1);c.wait(output_enabled)
+def master_clock(c):
+    from midi_window import MidiWindow
+    configure_master_output(c)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     for phase in (0,.001,.009,.025):
         c.elapse(phase)

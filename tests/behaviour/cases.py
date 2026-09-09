@@ -2859,7 +2859,17 @@ from fast_acquisition import fast_acquisition
 
 from master_clock import master_clock
 
+from master_lifecycle import master_lifecycle
+
+from master_multi_output import master_multi_output
+
+from forwarded_clock import cold_forwarded_clock,warm_forwarded_clock
+
 CASES={
+ 'M-SYNC-012':dict(run=cold_forwarded_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold external clock on port1; Mosaic notes and forwarded port2 receiver align to original input, no input-port clock echo'),
+ 'M-SYNC-013':dict(run=warm_forwarded_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Warmed external clock on port1; Mosaic and forwarded port2 receiver keep absolute input phase'),
+ 'M-SYNC-011':dict(run=master_multi_output,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Two clock outputs enabled through native menu: independent receiver note phase/count, disabled third port, no note-routing leakage'),
+ 'M-SYNC-010':dict(run=master_lifecycle,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Master pending/active Start cancellation at zero,1ms,25ms; clock continues, no late notes/Start, no held voices, independent restart phase'),
  'M-SYNC-009':dict(run=master_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Mosaic master: native clock-output menu, Start/Clock/note ordering and independent24PPQN receiver phase across four local start delays'),
  'M-SYNC-008':dict(run=fast_acquisition,requirements=['CLOCK-MIDI-TRANSPORT-001','CH-TEMPO','MIDI-RELEASE-001'],description='Cold20BPM MIDI at x8: reconcile the one unknowable pre-acquisition step at Clock2, preserve subsequent absolute deadlines and balanced gates'),
  'M-SYNC-007':dict(run=acquisition_stop,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Cold20BPM external Start then Stop before Clock2: timely first-note release and no restart as subsequent clocks acquire tempo'),

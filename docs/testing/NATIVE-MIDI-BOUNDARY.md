@@ -113,3 +113,29 @@ build successfully. No stock/default installation or runtime lock was promoted.
 Next: rapid transport lifecycle/direct init/reset, forwarding and multiple-output
 routing/remapping, intermediate notes/gates/wrap/tempo matrices, then the other
 documented emulator/manual/final hardening gates. This is not full acceptance.
+
+## Direct lifecycle, multiple receivers, and forwarding baseline
+
+M-SYNC010 cancels Start at0/1/25ms, proves continuing F8 with no late Start/notes
+after Stop, balanced ownership, and aligned restart. M-SYNC011 enables two outputs
+through native menus, compares independent receiver clock/phase, and checks no
+F8 on disabled port3 or note leakage to port2. Both plus M-SYNC009 pass D/R.
+Four new integration tests reproduce stale boundary subscriptions on direct
+init/reset in pending/active states. Routing those replacements through existing
+Stop cleanup fixes all four; the full524-test suite passes.
+
+M-SYNC012/013 add cold/warmed incoming clock forwarding to port2, independently
+checking notes against the original input timeline and the second receiver.
+All4D/R baselines fail first-note/forwarded-F8 ordering. Cold output is25ms late
+with bunched first ticks; warmed controlled output is1ns after the first note.
+The existing absolute note/gate checks pass before the receiver assertion fails.
+A separate generic native probe reproduces cold delay without Mosaic:25msD and
+25.486193msR. These are open failures, not accepted limitations.
+
+Codex arbitration01a087b2-c56f-7d50-8699-ea5b325ede1d recommends an optional native
+received-zero output-boundary exception and atomic sourceStart publication,
+then source-origin-aware Mosaic forwarding through the boundary adapter. Keep
+ordinary clock.sync strict and forbid speculative pre-acquisition subdivisions.
+Implementation card: emulator docs/delivery/MIDI-RECEIVED-ZERO.md. Evidence and
+exact identities: midi-lifecycle-forwarding-validation.json. Full synchronization,
+manual coverage, release and final hardening remain incomplete.

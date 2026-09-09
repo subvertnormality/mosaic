@@ -259,6 +259,9 @@ local function count_active_actions(action)
 end
 
 function m_clock.init()
+  -- Stop clears the native subscription before re-entering reset/init, so the
+  -- old callbacks cannot retain a replaced lattice or its held voices.
+  if cancel_midi_output_transport then m_clock:stop(); return end
   local program_data = program.get()
   clock_lattice = lattice:new({
     enabled = false,
@@ -889,6 +892,9 @@ function m_clock.set_playing()
 end
 
 function m_clock.reset()
+  -- Stop clears the native subscription before re-entering reset/init, so the
+  -- old callbacks cannot retain a replaced lattice or its held voices.
+  if cancel_midi_output_transport then m_clock:stop(); return end
   local program_data = program.get()
   for _, pattern in ipairs(program_data.song_patterns) do
     for i = 1, 17 do

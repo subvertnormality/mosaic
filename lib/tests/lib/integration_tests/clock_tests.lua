@@ -1089,3 +1089,48 @@ function test_external_start_resets_active_transport_and_releases()
     m_clock:stop()
   end)
 end
+
+
+local function boundary_lifecycle_case(operation, activated)
+  with_restart_sinks(function()
+    local old_midi, old_run, old_cancel = clock.midi, clock.run, clock.cancel
+    local old_start, old_stop = m_midi.start, m_midi.stop
+    local subscribers, threads, id = {}, {}, 0
+    local starts, stops = 0, 0
+    clock.midi = {
+      subscribe_output=function(callbacks) id=id+1;subscribers[id]=callbacks;return id end,
+      cancel_output=function(handle) subscribers[handle]=nil end
+    }
+    clock.run=function(body)
+      id=id+1;local handle=id;threads[handle]=coroutine.create(body)
+      local ok,err=coroutine.resume(threads[handle]);assert(ok,err);return handle
+    end
+    clock.cancel=function(handle)threads[handle]=nil end
+    m_midi.start=function()starts=starts+1 end
+    m_midi.stop=function()stops=stops+1 end
+    local ok,err=pcall(function()
+      setup();m_clock.init();m_clock:stop();params:set("clock_midi_out_1",1)
+      m_clock:start()
+      local _, callbacks = next(subscribers);luaunit.assertNotNil(callbacks)
+      if activated then callbacks.before();callbacks.after(1,0) end
+      stops=0
+      m_clock[operation]()
+      luaunit.assertNil(next(subscribers), "Direct lifecycle call left native subscription")
+      luaunit.assertNil(next(threads), "Direct lifecycle call left intermediate scheduler")
+      luaunit.assertFalse(m_clock.is_playing())
+      luaunit.assertEquals(stops,1,"Lifecycle replacement must release held voices through Stop")
+      -- Already-captured old callbacks must remain inert after replacement.
+      callbacks.before();callbacks.after(10,0)
+      luaunit.assertEquals(starts,activated and 1 or 0)
+      luaunit.assertFalse(m_clock.get_clock_lattice().enabled)
+    end)
+    m_clock:stop()
+    clock.midi,clock.run,clock.cancel=old_midi,old_run,old_cancel
+    m_midi.start,m_midi.stop=old_start,old_stop
+    if not ok then error(err) end
+  end)
+end
+function test_boundary_pending_direct_init_cleans_transport() boundary_lifecycle_case("init",false) end
+function test_boundary_active_direct_init_cleans_transport() boundary_lifecycle_case("init",true) end
+function test_boundary_pending_direct_reset_cleans_transport() boundary_lifecycle_case("reset",false) end
+function test_boundary_active_direct_reset_cleans_transport() boundary_lifecycle_case("reset",true) end
