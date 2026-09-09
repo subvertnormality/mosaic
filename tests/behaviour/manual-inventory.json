@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "8631c922e0e4caf6de02e6779f954048d3073a5f6e59a56e9406b98b41edbb63",
+  "manual_sha256": "8e31ec10ca7789e87e36b8e6ad763262970f37d383045a33a39dbcb72556fbbf",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -998,7 +998,7 @@
       "level": 4,
       "start_line": 906,
       "end_line": 921,
-      "text_sha256": "8f70a4025ac591f78427d0d44a536dedb31e7d2d1c0e86b30947726491c76fa4",
+      "text_sha256": "6295ae2069029c0974fb425b0c642fef5de0d02e7f39d641cddb77eb5e02d535",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-LENGTH"
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "8631c922e0e4caf6de02e6779f954048d3073a5f6e59a56e9406b98b41edbb63"
+      "sha256": "8e31ec10ca7789e87e36b8e6ad763262970f37d383045a33a39dbcb72556fbbf"
     },
     {
       "path": "cheat_sheet.html",
@@ -3218,7 +3218,8 @@
         "M-PATCH-026",
         "M-PATCH-024",
         "M-PATCH-020",
-        "M-PATCH-032"
+        "M-PATCH-032",
+        "M-RANGE-GLOBAL-003"
       ],
       "status": "in_progress",
       "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. Confirmed channel clock edits queue to the global pattern boundary while playing; stopped edits apply immediately. M-PATCH-024/026 cover queued rate changes during active slides; full live-edit domain remains incomplete.",
@@ -3422,10 +3423,14 @@
         "M-RANGE-REJECT-002",
         "M-RANGE-REJECT-003",
         "M-RANGE-REJECT-004",
-        "M-RANGE-REJECT-005"
+        "M-RANGE-REJECT-005",
+        "M-RANGE-GLOBAL-001",
+        "M-RANGE-GLOBAL-002",
+        "M-RANGE-GLOBAL-003",
+        "M-RANGE-GLOBAL-004"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Candidate0080 rejects reversed/equal gesture endpoints before either assignment, preserving prior range. NativeREJECT001-004 cover both release sequences on channel/scale editors, stopped/playing, rejection framebuffer, unchanged range LEDs/MIDI/timing, valid recovery; MASK030/031 multiheld input and RANGE001/002 delayed/long holds/all63adjacent/full64 controls revalidated both clocks. Unit integration covers8192 channel1/17 endpoint pairs and4032 distinct-key pattern lengths. Remaining global-length clipping, accepted live changes with playhead inside/outside and persisted malformed ranges; broader CH-RANGE completion not claimed. REJECT005 verifies live rejected range preserves independently routed four/three-step phrases, exact pitches/velocities, fractional lengths, onset alignment and phase in both clocks.",
+      "domain": "Candidate0080 rejects reversed/equal gesture endpoints before either assignment, preserving prior range. NativeREJECT001-004 cover both release sequences on channel/scale editors, stopped/playing, rejection framebuffer, unchanged range LEDs/MIDI/timing, valid recovery; MASK030/031 multiheld input and RANGE001/002 delayed/long holds/all63adjacent/full64 controls revalidated both clocks. Unit integration covers8192 channel1/17 endpoint pairs and4032 distinct-key pattern lengths. Remaining accepted live changes with playhead inside/outside and persisted malformed ranges; broader CH-RANGE completion not claimed. REJECT005 verifies live rejected range preserves independently routed four/three-step phrases, exact pitches/velocities, fractional lengths, onset alignment and phase in both clocks. Candidate0081 removes absolute-step master reset that truncated offset ranges. GLOBAL001-004 validate 15 cap/bounds combinations, minimal2..4/G2, five rates and scale17 D/E/C caps/restoration through MIDI, LEDs and exact phase.45 real-lattice integration combinations cover offset row/last-step boundaries and five rates for channel1/17. Accepted live transitions and malformed persisted ranges remain.",
       "oracles": [
         "Range LEDs, exact loop boundaries and note/scale sequence; no global clamp substitution."
       ],
@@ -5319,8 +5324,8 @@
         "path": "README.md",
         "line": 906,
         "end_line": 911,
-        "text": "#### Adjusting Song Sequence Length\n\nThe song sequence's length can be adjusted using the fader located at the lower left of the song editor page.\n\n* The global length can be set anywhere from 1 step to 64 step, offering a wide range of possibilities.\n* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length.",
-        "sha256": "2b85f043c8fbff472b8df49b6ea27bcb3b21079499eca6620383ae67de6355a1"
+        "text": "#### Adjusting Song Sequence Length\n\nThe song sequence's length can be adjusted using the fader located at the lower left of the song editor page.\n\n* The global length can be set anywhere from 1 step to 64 step, offering a wide range of possibilities.\n* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length. The cap counts steps from the channel start: a channel set to steps 2\u20134 with global length 2 plays steps 2 and 3 repeatedly. Increasing the global length restores the remaining selected steps. This also applies to the scale track and follows each track\u2019s clock rate; explicit song reset options still apply.",
+        "sha256": "65a66b953435f348a0b4d5185450e6c34bc4866193462d3d1dc252f2c564845d"
       }
     },
     {
@@ -5533,7 +5538,8 @@
       ],
       "statement": "Channel lock persists until channel wrap with hold-on, or next active probability-passing trig with hold-off; replacements apply normally. Global locks persist until replacement/global wrap independently.",
       "cases": [
-        "M-SCALE-002"
+        "M-SCALE-002",
+        "M-RANGE-GLOBAL-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "Both option values; probability0/100; active/rest steps; current-step lock; channel/global coprime lengths; all scale slots.",

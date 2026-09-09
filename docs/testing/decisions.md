@@ -284,3 +284,8 @@ Candidate0079 recognizes channel X0 in the local full-mask inheritance clause. C
 ## Reject reversed channel range gestures
 
 Codex01a08566-379b-7423-a152-c89bb3fe476e selected rejection with prior-range preservation. Circular channel ranges would be a new feature; the scheduler and LED renderer assume ascending endpoints. Candidate0080 validates only the shared channel-mode gesture boundary and reports rejection in both channel/scale editors. Pattern note-length wrap and directly constructed one-step data remain unchanged. Four MIDI-free diagnostic runs reproduced repeated-start playback and no active-range LEDs before the fix;16native regressions and499units validate its stated scope. Persisted malformed data is a separate remaining domain.
+
+
+## Relative global cap on offset channel ranges
+
+Codex01a08583-7196-7f31-ad1a-08698f6d60da traced the repeated-start defect to a redundant master callback using absolute-step modulo. Candidate0081 removes only that loop; channel callbacks already cap their length relative to their own start, at their own rate. Explicit song resets retain their separate path. Native2..4/G2 failed in both clock modes before the fix;24native regressions and500unit/integration tests cover the stated scope. Global1 can yield an effective one-step range without adding a one-step gesture. Remaining live edit and persisted-data domains are not waived.

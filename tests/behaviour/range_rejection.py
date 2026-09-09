@@ -87,3 +87,91 @@ def rejected_range_channel_isolation(c):
     first=[next(m[field] for m in all_notes if m['port']==port) for port in [1,2]]
     assert abs(first[0]-first[1])/1e9<=tolerance
     c.results.append(dict(kind='rejected-range-channel-isolation',ranges=[[1,4],[1,3]],phrases=phrases,passed=True))
+
+
+def global_range_clipping(c):
+    from cases import assert_durations
+    from frame_oracle import render
+    c.configure();c.tap(5,8)
+    c.tap(15,7);c.tap(16,7);c.tap(3,8)
+    # Distinguish the last two steps through held-step note masks.
+    c.enc(1,-4)
+    for x,turns in [(15,73),(16,75)]:
+        c.action(type='grid',x=x,y=7,state=1)
+        try:c.enc(3,turns)
+        finally:c.action(type='grid',x=x,y=7,state=0)
+    cell=lambda step:((step-1)%16+1,(step-1)//16+4)
+    values={1:(60,127),2:(62,117),3:(64,107),4:(65,97),63:(72,100),64:(74,100)}
+    for start,end in [(1,4),(2,4),(63,64)]:
+        c.hold_tap(cell(start),cell(end))
+        for length in [1,2,3,4,64]:
+            c.tap(6,8)
+            # Song fader inner-left/right select absolute 1/64; rightmost
+            # increments by one. This also exercises the fine adjustment.
+            c.tap(7 if length==64 else 2,7)
+            if length!=64:
+                for _ in range(length-1):c.tap(8,7)
+            expected=render([(0,62,10,'Global pattern length: '+str(length))])
+            def feedback(state):
+                actual=base64.b64decode(state['frame']['pixels_base64'])
+                return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(55,64) for x in range(128) for k in range(3))
+            c.wait(feedback);c.tap(3,8)
+            # LEDs show the playable range, capped by global length. Restoring
+            # global length must expose the previously selected endpoints again.
+            steps=list(range(start,min(end,start+length-1)+1))
+            c.led_values([cell(i) for i in range(1,65)],[15 if i in steps else 0 for i in range(1,65)])
+            phrase=[(1,[144,*values[i]]) for i in steps]
+            notes=c.playback(phrase,cycles=3,timeout=5)
+            assert_durations(c,notes,[1]*(len(steps)*2))
+            field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+            tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+            for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+            c.results.append(dict(kind='global-channel-range-clipping',start=start,end=end,global_length=length,played_steps=steps,passed=True))
+
+
+def offset_range_clipping(c):
+    from cases import assert_durations
+    c.configure();c.hold_tap((2,4),(4,4));c.tap(6,8);c.tap(2,7);c.tap(8,7);c.tap(3,8)
+    c.led_values([(1,4),(2,4),(3,4),(4,4)],[0,15,15,0])
+    notes=c.playback([(1,[144,62,117]),(1,[144,64,107])],cycles=3,timeout=4)
+    assert_durations(c,notes,[1]*6)
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+    c.results.append(dict(kind='offset-channel-global-cap',start=2,end=4,global_length=2,passed=True))
+
+
+def offset_range_rates(c):
+    from cases import assert_durations
+    c.configure();c.hold_tap((2,4),(4,4));c.tap(6,8);c.tap(2,7);c.tap(8,7);c.tap(3,8)
+    c.enc(1,-1);selected=13
+    for index,label,factor in [(8,'x3',1/3),(10,'x2',.5),(13,'/1',1),(15,'/2',2),(17,'/3',3)]:
+        c.enc(3,selected-index);c.key(3);selected=index
+        notes=c.playback([(1,[144,62,117]),(1,[144,64,107])],cycles=10,timeout=12)
+        assert_durations(c,notes,[factor]*18)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i*factor/6)<=tolerance
+        c.results.append(dict(kind='offset-global-range-clock-rate',label=label,completed_loops=10,passed=True))
+
+def offset_scale_range_clipping(c):
+    from cases import assert_durations
+    c.configure();c.tap(4,8);c.enc(2,-1)
+    for slot,semitones in [(2,2),(3,4)]:
+        c.action(type='key',n=1,state=1)
+        try:c.elapse(.3);c.tap(slot,3)
+        finally:c.action(type='key',n=1,state=0)
+        c.enc(3,semitones);c.key(3)
+    # Scale track starts beyond step1, with independent D/E/C locks.
+    for step,slot in [(2,2),(3,3),(4,1)]:c.hold_tap((step,4),(slot,3))
+    c.hold_tap((2,4),(4,4))
+    for length,pitches in [(1,[62]),(2,[62,66]),(3,[62,66,64]),(2,[62,66])]:
+        c.tap(6,8);c.tap(2,7)
+        for _ in range(length-1):c.tap(8,7)
+        c.tap(4,8)
+        notes=c.playback([(1,[144,p,v]) for p,v in zip(pitches,[127,117,107])],cycles=4,timeout=5)
+        assert_durations(c,notes,[1]*(len(pitches)*3))
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+        c.results.append(dict(kind='offset-scale-global-cap',length=length,pitches=pitches,passed=True))

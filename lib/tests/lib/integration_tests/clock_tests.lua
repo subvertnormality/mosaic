@@ -930,3 +930,44 @@ function test_drunk_shuffle_amount_75()
   luaunit.assert_equals(note_on_event[2], 28)
   luaunit.assert_equals(note_on_event[3], 1)
 end
+
+
+function test_offset_global_cap_uses_channel_clock_and_relative_steps()
+  local bounds = {{1,4,1},{1,4,3},{2,4,2},{3,6,2},{16,19,3},{62,64,2},{63,64,1},{63,64,2},{1,64,64}}
+  local rates = {{"clock_multiplication",1,24},{"clock_multiplication",2,12},{"clock_division",2,48},{"clock_multiplication",3,8},{"clock_division",3,72}}
+  for _, b in ipairs(bounds) do
+    for _, rate in ipairs(rates) do
+      setup()
+      local first,last,cap=b[1],b[2],b[3]
+      local song=program.get_selected_song_pattern()
+      song.global_pattern_length=cap
+      local authored=program.initialise_default_pattern()
+      for i=1,64 do
+        authored.trig_values[i]=1;authored.note_values[i]=0
+        authored.velocity_values[i]=i;authored.lengths[i]=1
+      end
+      song.patterns[1]=authored;fn.add_to_set(song.channels[1].selected_patterns,1)
+      for _,number in ipairs({1,17}) do
+        local channel=song.channels[number]
+        channel.start_trig={((first-1)%16)+1,math.floor((first-1)/16)+4}
+        channel.end_trig={((last-1)%16)+1,math.floor((last-1)/16)+4}
+        channel.clock_mods={type=rate[1],value=rate[2]}
+      end
+      pattern.update_working_patterns();clock_setup()
+      local length=math.min(last-first+1,cap)
+      -- Include startup and several complete loops/global boundaries. Observe
+      -- actual MIDI plus scale playhead; no copied scheduler helper is used.
+      local count=math.max(length*3+1,math.ceil(cap*24*3/rate[3])+1)
+      for n=0,count-1 do
+        local expected=first+(n%length)
+        local event=table.remove(midi_note_on_events,1)
+        luaunit.assert_not_nil(event)
+        luaunit.assert_equals(event,{60,expected,1,1})
+        luaunit.assert_equals(#midi_note_on_events,0)
+        luaunit.assert_equals(program.get_current_step_for_channel(1),expected)
+        luaunit.assert_equals(program.get_current_step_for_channel(17),expected)
+        progress_clock_by_pulses(rate[3])
+      end
+    end
+  end
+end

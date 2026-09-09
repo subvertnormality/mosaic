@@ -908,7 +908,7 @@ When "song mode" is activated, the sequencer automatically progresses to the nex
 The song sequence's length can be adjusted using the fader located at the lower left of the song editor page.
 
 * The global length can be set anywhere from 1 step to 64 step, offering a wide range of possibilities.
-* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length.
+* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length. The cap counts steps from the channel start: a channel set to steps 2–4 with global length 2 plays steps 2 and 3 repeatedly. Increasing the global length restores the remaining selected steps. This also applies to the scale track and follows each track’s clock rate; explicit song reset options still apply.
 
 <img alt="Song editor global length select fader" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-slot-pattern-length-fader.svg" width="300" />
 
