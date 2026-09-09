@@ -1,3 +1,4 @@
+from shuffle_matrix import shuffle_matrix
 from random_note_domains import random_note_domains
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
@@ -843,7 +844,7 @@ def repeated_pattern_reset_policy(c,verify_pending=False):
 def fractional_clock_continuity(c):
     from fractions import Fraction
     from midi_window import MidiWindow
-    from fractional_deadlines import check_segment, preview_residual, reconcile_note_stream
+    from fractional_deadlines import check_segment, reconcile_note_stream
     from automation.input_origin import verified_input_origin
     import json
     c.configure();c.tap(5,8);c.tap(5,8)
@@ -851,11 +852,12 @@ def fractional_clock_continuity(c):
     c.tap(3,8);c.enc(1,-1)
     set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',False)])
     ratios=[(1,'x16',Fraction(3,2)),(5,'x5.3',Fraction(240,53)),(6,'x5',Fraction(24,5)),(9,'x2.6',Fraction(120,13)),(12,'x1.3',Fraction(240,13)),(16,'/2.6',Fraction(312,5)),(20,'/5.3',Fraction(636,5))]
-    selected=13;segments=[];previous_period=Fraction(24);trigger_action=dict(type='grid',x=1,y=8,state=0)
+    selected=13;segments=[];trigger_action=dict(type='grid',x=1,y=8,state=0)
     for index,label,pulses in ratios:
         c.enc(3,selected-index);c.key(3);selected=index
         capture=MidiWindow(c.snapshot()['midi_count']);observation_start=len(c.observations)
-        seed=preview_residual(previous_period)
+        # Transport start reconstructs from final settings with one canonical preview.
+        seed=Fraction(1,2)
         c.action(type='grid',x=1,y=8,state=1)
         logical_start=c.logical_ns;start_ack=c.action(**trigger_action)
         c.elapse(.06)
@@ -868,7 +870,6 @@ def fractional_clock_continuity(c):
         segments.append(dict(label=label,ratio=[pulses.numerator,pulses.denominator],preview_seed=[seed.numerator,seed.denominator],after=capture.after,cursor=capture.cursor,
             start_ack=start_ack,stop_ack=stop_ack,logical_start=logical_start,logical_stop=logical_stop,
             capture=capture.events))
-        previous_period=pulses # Stop reconstructed this period before the next committed edit.
     # Complete the public-client export before checking causal input records.
     # finish() is idempotent; the outer runner still propagates any assertion.
     c.finish()
@@ -876,7 +877,7 @@ def fractional_clock_continuity(c):
     actions=[json.loads(line) for line in (c.out/'native/actions.jsonl').read_text().splitlines()]
     controlled=c.clock_mode=='controlled-experimental';kind=11 if controlled else 3
     (c.out/'fractional-clock-plans.json').write_text(json.dumps(dict(
-        formula='floor((n+1)*P+seed-1/100)-floor(P+seed-1/100); seed=preceding stopped-clock preview residual',pulse_rate=144,tempo=90,
+        formula='floor((n+1)*P+seed-1/100)-floor(P+seed-1/100); seed=1/2 at canonical transport-start construction',pulse_rate=144,tempo=90,
         origin_rule='Identified backend grid RELEASE submission triggers short Play; controlled lane uses declared logical release input time',
         stop_rule='Identified grid RELEASE Stop submission and its native applied acknowledgement',segments=segments),indent=2)+'\n')
     def input_origin(ack):
@@ -2831,6 +2832,11 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-SHUFFLE-001':dict(run=lambda c:shuffle_matrix(c,'Drunk'),requirements=['CH-SHUFFLE'],description='All six bases and amount boundary/midpoint/restoration for Drunk, exact MIDI phase and complete shuffled gates'),
+ 'M-SHUFFLE-002':dict(run=lambda c:shuffle_matrix(c,'Smooth'),requirements=['CH-SHUFFLE'],description='All six bases and amount boundary/midpoint/restoration for Smooth, exact MIDI phase and complete shuffled gates'),
+ 'M-SHUFFLE-003':dict(run=lambda c:shuffle_matrix(c,'Heavy'),requirements=['CH-SHUFFLE'],description='All six bases and amount boundary/midpoint/restoration for Heavy, exact MIDI phase and complete shuffled gates'),
+ 'M-SHUFFLE-004':dict(run=lambda c:shuffle_matrix(c,'Clave'),requirements=['CH-SHUFFLE'],description='All six bases and amount boundary/midpoint/restoration for Clave, exact MIDI phase and complete shuffled gates'),
+
  'M-MERGE-042':dict(run=lambda c:fractional_length_mask_merge(c,hierarchy=True),requirements=['MERGE-LENGTH','MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-PRECEDENCE'],description='Step length masks override channel masks; clearing either layer independently preserves and reveals the next duration source'),
  'M-MERGE-039':dict(run=lambda c:fractional_length_mask_merge(c,0),requirements=['MERGE-LENGTH','MASK-ATTRIBUTES'],description='Fractional channel length masks override changing merge modes; removal restores exact numeric duration including nonpositive gates'),
  'M-MERGE-040':dict(run=lambda c:fractional_length_mask_merge(c,1),requirements=['MERGE-LENGTH','MASK-ATTRIBUTES'],description='Fractional channel length masks override changing merge modes; removal restores exact numeric duration including nonpositive gates'),

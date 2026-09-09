@@ -3323,8 +3323,13 @@
         "MAN-050"
       ],
       "statement": "Per-channel shuffle has feel and basis settings.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-SHUFFLE-001",
+        "M-SHUFFLE-002",
+        "M-SHUFFLE-003",
+        "M-SHUFFLE-004"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "All legal feel/basis options; differing channels; tempo/division interactions.",
       "oracles": [
         "Independent cited shuffle tables and exact D/bounded R timing; no output-derived goldens."
@@ -3339,7 +3344,8 @@
         "end_line": 679,
         "text": "Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable. There are two modes to choose from: swing, which moves notes closer or further apart depending on the value which ranges from -50 to 50. Shuffle is based on 21echoes' excellent [Cyrene](https://github.com/21echoes/cyrene) and uses more complex patterns and can be set to a \"feel\" and a \"basis\". Each channel can have an independent setting, giving endless possibilities. ",
         "sha256": "c01e200188c094bdbaf187bbecd6e50b71eb8aa7701d63ccd610ce6afda278e7"
-      }
+      },
+      "remaining": "Global/local inheritance, differing channels, live boundary application, division/tempo combinations and additional amount values remain.24feel/basis pairs plus selected amount bounds validated in D and R."
     },
     {
       "id": "CH-CLOCK-INHERIT",

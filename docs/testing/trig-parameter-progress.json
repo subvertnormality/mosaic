@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Continue random lock/channel/song lifecycle, remaining manual/runtime gates and mandatory final unit/integration hardening.",
+  "next_action": "Continue CH-SHUFFLE/CH-CLOCK-INHERIT native inheritance round trips and remaining manual/runtime gates; mandatory final unit/integration hardening remains.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -195,5 +195,6 @@
   "merge_harmony_validation": "docs/testing/merge-harmony-validation.json",
   "scale_slot_matrix_validation": "docs/testing/scale-slot-matrix-validation.json",
   "random_note_domains_validation": "docs/testing/random-note-domains-validation.json",
-  "random_pentatonic_validation": "docs/testing/random-pentatonic-validation.json"
+  "random_pentatonic_validation": "docs/testing/random-pentatonic-validation.json",
+  "shuffle_start_validation": "docs/testing/shuffle-start-validation.json"
 }

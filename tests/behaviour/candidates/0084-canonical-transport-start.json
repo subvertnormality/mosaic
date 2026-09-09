@@ -1,0 +1,12 @@
+{
+  "candidate": "0084",
+  "status": "scoped-candidate-validated",
+  "base": "45c1b6d5854c02a0c30c216e978f8fff0a2331e4",
+  "production": [
+    "lib/clock/m_clock.lua"
+  ],
+  "patch": "0084-canonical-transport-start.patch",
+  "review": "/home/andy/projects/mosaic-behaviour-runs/shuffle-restart-review-01.json",
+  "full_campaign_complete": false,
+  "validation": "docs/testing/shuffle-start-validation.json"
+}

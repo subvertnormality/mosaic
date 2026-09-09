@@ -808,6 +808,13 @@ function m_clock.channel_is_sliding(channel, trig_param)
 end
 
 function m_clock:start()
+  if not playing then
+    -- Stopped edits can consume fractional preview carry in different orders.
+    -- Build both processors from the final settings before the first onset.
+    -- Preserve step state and leave already-playing clocks untouched.
+    if clock_lattice then clock_lattice:destroy() end
+    self.init()
+  end
   first_run = true
   if params:get("elektron_program_changes") == 2 then
     step.process_elektron_program_change(program.get().selected_song_pattern)

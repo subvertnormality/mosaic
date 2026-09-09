@@ -39,12 +39,42 @@ def note_plan(period, origin, stop, pulse_rate=144, preview_seed=Fraction(1, 2))
     return planned, onsets
 
 
+
+def realtime_stop_prefix(events, period, origin, stop, applied, preview_seed):
+    """Match an independently bounded canonical prefix at an asynchronous Stop.
+
+    D20 already permits a50ms per-event maximum (p99 remains10ms and final20ms).
+    This bound defines cancellation uncertainty; it does not loosen timing checks
+    for emitted notes or fit the schedule to observed startup/phase.
+    """
+    bound=50_000_000
+    planned,onsets=note_plan(period,origin,applied+bound+1,preview_seed=preview_seed)
+    required=sum(n['deadline_ns']+bound<stop for n in onsets)
+    # N onsets have exactly2*N-1 scheduled messages and one forced release.
+    # Enumerate allowed lengths from canonical deadlines, not observed pitches.
+    admissible=range(max(1,required),len(onsets)+1)
+    assert len(events)%2==0 and len(events)//2 in admissible, (
+        'Missing/extra note event outside Stop boundary',len(events),required,len(onsets))
+    emitted=len(events)//2
+    final=events[-1]
+    assert origin<=events[0]['monotonic_ns']<=origin+bound,'Start latency outside D20 bound'
+    assert all(e['monotonic_ns']<=final['monotonic_ns'] for e in events[:-1]),'Scheduled emission after forced release'
+    return planned[:2*emitted-1],onsets[:emitted],dict(
+        bound_ns=bound,required_onsets=required,emitted_onsets=emitted,
+        maximum_admissible_onsets=len(onsets),boundary_ambiguous_onsets=len(onsets)-required,
+        permitted_prefix_lengths=list(admissible))
+
+
 def check_segment(events, period, origin, stop, applied, *, controlled, preview_seed=Fraction(1, 2)):
     from automation.scheduling_metrics import scheduling_metrics
     assert stop <= applied
     planned, onsets = note_plan(period, origin, stop, preview_seed=preview_seed)
     notes = [e for e in events if e['bytes'][0] & 240 in (128, 144)]
-    assert len(notes) == len(planned) + 1, ('Missing/extra note event', len(notes), len(planned)+1)
+    boundary=None
+    if controlled:
+        assert len(notes) == len(planned) + 1, ('Missing/extra note event', len(notes), len(planned)+1)
+    else:
+        planned,onsets,boundary=realtime_stop_prefix(notes,period,origin,stop,applied,preview_seed)
     field = 'logical_ns' if controlled else 'monotonic_ns'
     scheduled = notes[:-1]
     if controlled:
@@ -79,7 +109,7 @@ def check_segment(events, period, origin, stop, applied, *, controlled, preview_
                 maximum_quantisation_offset_ns=max(abs(p['deadline_ns']-p['intent_ns']) for p in planned),
                 complete_ratio_windows=len(window_errors), maximum_window_residual_ns=max(map(abs,window_errors),default=0),
                 release_order_checks=len(release_errors),
-                metrics=metrics, passed=True)
+                metrics=metrics, realtime_stop_boundary=boundary, passed=True)
 
 
 def reconcile_note_stream(events, segments, kind):

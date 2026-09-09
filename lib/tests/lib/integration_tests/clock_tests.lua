@@ -971,3 +971,99 @@ function test_offset_global_cap_uses_channel_clock_and_relative_steps()
     end
   end
 end
+
+-- Stop/start must use final stored musical settings, independent of edit order.
+-- Only hardware stop sinks are stubbed; model, scheduler and step code are real.
+local function with_restart_sinks(body)
+  local old_testing = testing
+  testing = true -- This fixture supplies every native-lattice pulse explicitly.
+  local old_clock = _G.m_clock
+  _G.m_clock = m_clock -- Production module functions share this global table.
+  local old_handler = norns_param_state_handler
+  norns_param_state_handler = include("mosaic/lib/devices/norns_param_state_handler")
+  local old_stop = m_midi.stop
+  local old_nb = nb
+  local old_nb_stop = nb and nb.stop_all
+  nb = nb or {}
+  nb.stop_all = function() end
+  m_midi.stop = function() end
+  local ok, err = pcall(body)
+  m_midi.stop = old_stop
+  norns_param_state_handler = old_handler
+  _G.m_clock = old_clock
+  testing = old_testing
+  nb.stop_all = old_nb_stop
+  nb = old_nb
+  if not ok then error(err) end
+end
+
+function test_stopped_shuffle_start_rebuilds_both_processors_only_when_stopped()
+  with_restart_sinks(function()
+    setup();m_clock.init();m_clock:stop()
+    local channel = program.get_channel(1, 1)
+    channel.swing_shuffle_type=2;channel.shuffle_feel=1
+    channel.shuffle_basis=2;channel.shuffle_amount=100
+    m_clock.init()
+    channel.shuffle_basis=3;m_clock.set_channel_shuffle_basis(1,3)
+    m_clock:start()
+    local lattice=m_clock.get_clock_lattice()
+    local on=m_clock.channel_1_clock
+    local off=on.end_of_clock_processor
+    -- Fresh Drunk/5 preview: 38.4 + 0.5 -> 38, residual0.9.
+    luaunit.assertAlmostEquals(on.ppqn_error,0.9,1e-10)
+    luaunit.assertAlmostEquals(off.ppqn_error,0.9,1e-10)
+    progress_clock_by_pulses(5)
+    local phase,carry=on.phase,on.ppqn_error
+    m_clock:start() -- An already-playing Start must not rebuild or rewind.
+    luaunit.assertEquals(m_clock.get_clock_lattice(),lattice)
+    luaunit.assertEquals(m_clock.channel_1_clock,on)
+    luaunit.assertEquals(on.phase,phase)
+    luaunit.assertEquals(on.ppqn_error,carry)
+    m_clock:stop()
+  end)
+end
+
+function test_shuffle_stopped_edit_history_and_replay_have_identical_midi_pulses()
+  with_restart_sinks(function()
+    local expected={0,39,58,77,96,135,154,173,192,231,250,269,288,327,346,365,384}
+    for _,history in ipairs({false,true}) do
+      setup();m_clock.init();m_clock:stop()
+      local song=program.get_song_pattern(1)
+      local channel=program.get_channel(1,1)
+      local source=program.initialise_default_pattern()
+      for i=1,4 do
+        source.note_values[i]=0;source.lengths[i]=1
+        source.trig_values[i]=1;source.velocity_values[i]=100
+      end
+      song.patterns[1]=source;fn.add_to_set(channel.selected_patterns,1)
+      channel.start_trig={1,4};channel.end_trig={4,4}
+      channel.swing_shuffle_type=2;channel.shuffle_feel=1
+      channel.shuffle_basis=history and 1 or 3;channel.shuffle_amount=100
+      pattern.update_working_patterns();m_clock.init()
+      if history then
+        channel.shuffle_basis=2;m_clock.set_channel_shuffle_basis(1,2)
+        channel.shuffle_basis=3;m_clock.set_channel_shuffle_basis(1,3)
+        channel.shuffle_amount=0;m_clock.set_channel_shuffle_amount(1,0)
+        channel.shuffle_amount=100;m_clock.set_channel_shuffle_amount(1,100)
+      end
+      for replay=1,2 do
+        midi_note_on_events={};midi_note_off_events={}
+        m_clock:start()
+        local seen={}
+        for tick=0,384 do
+          local before=#midi_note_on_events
+          progress_clock_by_pulses(1)
+          if #midi_note_on_events>before then
+            luaunit.assertEquals(#midi_note_on_events,before+1)
+            seen[#seen+1]=tick
+          end
+        end
+        luaunit.assertEquals(seen,expected)
+        luaunit.assertEquals(#midi_note_off_events,#seen-1)
+        -- Final hardware Stop release is covered by native note_pairs;
+        -- this fixture stubs the hardware stop sinks.
+        m_clock:stop()
+      end
+    end
+  end)
+end
