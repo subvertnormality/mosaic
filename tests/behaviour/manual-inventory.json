@@ -1608,7 +1608,9 @@
         "M-REC-024",
         "M-REC-025",
         "M-MIDI-005",
-        "M-LEN-004"
+        "M-LEN-004",
+        "M-MASK-028",
+        "M-MASK-029"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -2679,10 +2681,12 @@
         "M-MASK-024",
         "M-MASK-025",
         "M-MASK-026",
-        "M-MASK-027"
+        "M-MASK-027",
+        "M-MASK-028",
+        "M-MASK-029"
       ],
       "status": "partial-domain-coverage",
-      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Repeated keyboard inputs, multiple held grid steps and comprehensive mask display assertions remain pending.",
+      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Duplicate Note On without release, multiple held grid steps and comprehensive mask display assertions remain pending.",
       "oracles": [
         "Visible step-lock values and exact playback; selected-channel isolation."
       ],
@@ -2753,10 +2757,12 @@
         "M-MASK-024",
         "M-MASK-025",
         "M-MASK-026",
-        "M-MASK-027"
+        "M-MASK-027",
+        "M-MASK-028",
+        "M-MASK-029"
       ],
       "status": "partial-domain-coverage",
-      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Repeated keyboard inputs, multiple held grid steps and comprehensive mask display assertions remain pending.",
+      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Duplicate Note On without release, multiple held grid steps and comprehensive mask display assertions remain pending.",
       "oracles": [
         "Exact chord note multiset and ordered releases, no leaked voices; chord display."
       ],
