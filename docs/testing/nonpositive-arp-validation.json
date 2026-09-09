@@ -1,0 +1,62 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-031",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/edc780fbbc1a4686a6f48cb4fd6b1ddc/manifest.json",
+      "sha256": "f2fe53099b86438055dc96f1f39b1f376fb98532c37ea18964ae1bae272320f1",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-032",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/3bf5a599eee345dcb338fb91380dbaa5/manifest.json",
+      "sha256": "2a517e1a367e30b9f89953db8b146a8ec0f4f708650afc55b6e75ca8c4c3ba5f",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-031",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4897603aedb64f22870a7f5319071134/manifest.json",
+      "sha256": "c56e7543da6c704cd88595e6060251250e94c86cfb72b9411463ec443f7e47a4",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-032",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c58194e963b948baa7236b861e8b9d38/manifest.json",
+      "sha256": "a60c11aaffaddc11cf2ff7a361d8ba5e1236ab5fe0e48e9f89bb7c94613f8a87",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "review_basis": "01a084db-8b84-7c50-9ab9-a05641b0f893",
+  "source_lengths": [
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      4
+    ]
+  ],
+  "merged_shorter": [
+    0,
+    -1
+  ],
+  "arp_division": 0.5,
+  "assertions": [
+    "Initial arp note releases in same scheduler pulse for zero and negative parent length",
+    "No additional ratchets during sixteen-step gaps",
+    "Exact On/Off order, route, pitch, velocity and release count",
+    "Two complete cycles plus closing onset per transport run, twice per fresh process",
+    "No duplicate or delayed notes after Stop; no outstanding voices"
+  ],
+  "limitations": [
+    "Delayed strum nonpositive releases, simultaneous voices and fractional source lengths remain pending",
+    "Full manual, experimental clock admission and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

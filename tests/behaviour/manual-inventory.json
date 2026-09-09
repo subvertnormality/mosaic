@@ -3003,10 +3003,12 @@
         "M-MERGE-027",
         "M-MERGE-028",
         "M-MERGE-029",
-        "M-MERGE-030"
+        "M-MERGE-030",
+        "M-MERGE-031",
+        "M-MERGE-032"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001. M-MERGE-006 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-007 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native025-027 cover two/three contributors, exact/half/noninteger means, all numeric modes and returnedAverage, with exact MIDI release and phrase timing in both modes. Zero/negative and fractional source lengths remain pending. Native028-030 validate ordinary zero/negative outcomes with exact raw On/Off ordering and release counts in both modes. Arp, delayed strum, simultaneous voices and fractional sources remain separate interaction obligations.",
+      "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001. M-MERGE-006 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-007 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native025-027 cover two/three contributors, exact/half/noninteger means, all numeric modes and returnedAverage, with exact MIDI release and phrase timing in both modes. Zero/negative and fractional source lengths remain pending. Native028-030 validate ordinary zero/negative outcomes with exact raw On/Off ordering and release counts in both modes. Arp, delayed strum, simultaneous voices and fractional sources remain separate interaction obligations. Native031/032 validate zero/negative parent arp endpoints, suppression of future ratchets and exact balanced releases across repeated transport in both modes. Delayed strum and simultaneous-voice interactions remain separate.",
       "oracles": [
         "Independent resolved duration formula and exact note on/off table; mode LED."
       ],
@@ -3960,10 +3962,12 @@
         "M-CHORDSHAPE-255",
         "M-CHORDSHAPE-256",
         "M-PANIC-009",
-        "M-PANIC-010"
+        "M-PANIC-010",
+        "M-MERGE-031",
+        "M-MERGE-032"
       ],
       "status": "in_progress",
-      "domain": "Sparse/full/no masks ratchet; last-boundary voice; all divisions; shape/velocity; repeated pitches.",
+      "domain": "Sparse/full/no masks ratchet; last-boundary voice; all divisions; shape/velocity; repeated pitches. Native031/032 validate zero/negative parent arp endpoints, suppression of future ratchets and exact balanced releases across repeated transport in both modes. Delayed strum and simultaneous-voice interactions remain separate.",
       "oracles": [
         "Exact loop/rest table, no extra final onset, balanced releases and precedence."
       ],
