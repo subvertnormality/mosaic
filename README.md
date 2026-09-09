@@ -664,7 +664,7 @@ These modes dictate how the duration of notes is calculated for overlapping step
 * **Shorter**: Subtract the rounded average from twice the shortest contributing length: `2 * shortest - rounded_average`. One contributor passes through unchanged. Only the mean is rounded at this stage, so fractional source lengths can still produce fractional Longer or Shorter results.
 * **Pattern**: To apply a specific pattern's length values, hold the length merge button and press the pattern's select button.
 
-Length merge modes are set by holding shift (K1) and pressing the velocity merge mode button.
+Length merge modes are set by holding shift (K1) and pressing the velocity merge mode button. Numeric merging retains zero and negative length results. For ordinary step-onset playback, a nonpositive effective length sends Note On followed by Note Off in the same scheduler pulse, without advancing musical time. This describes MIDI event order, not the sound or response of a connected instrument.
 
 <img alt="Channel editor length merge mode button (with shift key held)" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg" width="300" />
 

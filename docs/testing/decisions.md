@@ -231,3 +231,15 @@ The semantic review's no-tie comment was incorrect: melodic minor A69 lies
 equally betweenG67/B71 and must select67. The independent unit oracle and
 native all-scale023 cover this. Full scale/rotation/mask interactions and
 complete delivery remain separate obligations.
+
+
+## Nonpositive ordinary note lengths
+
+Codex01a084db-8b84-7c50-9ab9-a05641b0f893 recommends retaining SEM-001
+arithmetic, including negative results. Ordinary playback emits Note On then
+Note Off in the same scheduler pulse for nonpositive effective lengths. Zero
+is synchronous; negative is processed by the pending queue later in that pulse.
+Native028-030 prove both-mode output order, duration and balanced releases.
+No production change is justified by these passing ordinary-onset cases.
+This does not promise audible/device equivalence or establish simultaneous-voice,
+arp or delayed-strum ordering. Those need their own regression guards.

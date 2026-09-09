@@ -1,0 +1,124 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-028",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0f12a8b8665946078324cc565a3489cb/manifest.json",
+      "sha256": "9bdfae15e0083e395c2e5463f23829299fb58d403cbdffd48945164e8478b505",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-029",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/97fd6650669e4dcbaddc19837693affa/manifest.json",
+      "sha256": "d1c72248c160efa1f2917e3dc1842adca0271ea6d1b20c0c0ed3772228329960",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-030",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7ea588309b1c44a4b6cf01f0bab295ef/manifest.json",
+      "sha256": "92b42efd544e38ca9e1c68995685c1c5bc1e1b1370746c2d1d05bb27d178f76a",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-025",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8338751e660a4c56b3b2aa594245ee0d/manifest.json",
+      "sha256": "7f1c54a323641b6dace13d230fcdaa7526c8555eef2e85c0820ae6ae577bd2f7",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-028",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/06bd3ecaa4dd49a8ae72e750bfa7953e/manifest.json",
+      "sha256": "04c8842318a3609acee1c95504f65cda2f2cee7c3c8deb82ff7c42530e7ffe07",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-029",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9387718d5ece4d5298da9b4b12454418/manifest.json",
+      "sha256": "6f24c0fb77fe5851d05b5d75bdc897352e77fe917ef2e156e358624be944b06a",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-030",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/983933b06ad64750b571ce9b7d814ac6/manifest.json",
+      "sha256": "5cd45da1f2dc785f994d0310e0f4c1f60340b5c35030fbeba6df1850aa550032",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-025",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7c4846315c35437a8546cfd81a6314e5/manifest.json",
+      "sha256": "0106f981a57ee525a6192cbc15adaa3f94f5cfd97d3bcdff995755e2c3023f29",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "review": "01a084db-8b84-7c50-9ab9-a05641b0f893",
+  "source_lengths": [
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      2,
+      2,
+      8
+    ]
+  ],
+  "merged_average_longer_shorter": [
+    [
+      2,
+      3,
+      0
+    ],
+    [
+      3,
+      6,
+      -1
+    ],
+    [
+      4,
+      10,
+      0
+    ]
+  ],
+  "playback_average_longer_shorter": [
+    [
+      2,
+      3,
+      0
+    ],
+    [
+      3,
+      6,
+      0
+    ],
+    [
+      4,
+      10,
+      0
+    ]
+  ],
+  "assertions": [
+    "Preserve arithmetic; nonpositive ordinary notes release in same scheduler pulse",
+    "Two complete cycles with same-pitch retriggers and closing onset",
+    "Exact raw route/pitch/velocity/On-Off ordering and release count, no outstanding notes",
+    "Positive mode durations and return to Average; shared positive025 regression"
+  ],
+  "limitations": [
+    "Manual clarification follows native evidence; no production or scenario change afterward",
+    "Simultaneous same-pitch voices, arpeggio and delayed strum nonpositive lengths remain pending",
+    "Fractional source lengths and remaining manual/emulator gates incomplete"
+  ],
+  "full_campaign_complete": false
+}

@@ -2795,6 +2795,9 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-MERGE-028':dict(run=lambda c:numeric_length_merge(c,3),requirements=['MERGE-LENGTH'],description='Nonpositive numeric note lengths retain Note On followed by same-pulse release, exact ordering and no stuck notes'),
+ 'M-MERGE-029':dict(run=lambda c:numeric_length_merge(c,4),requirements=['MERGE-LENGTH'],description='Nonpositive numeric note lengths retain Note On followed by same-pulse release, exact ordering and no stuck notes'),
+ 'M-MERGE-030':dict(run=lambda c:numeric_length_merge(c,5),requirements=['MERGE-LENGTH'],description='Nonpositive numeric note lengths retain Note On followed by same-pulse release, exact ordering and no stuck notes'),
  'M-MERGE-025':dict(run=lambda c:numeric_length_merge(c,0),requirements=['MERGE-LENGTH'],description='Numeric length merging with literal rounded arithmetic, all modes and exact MIDI release timing'),
  'M-MERGE-026':dict(run=lambda c:numeric_length_merge(c,1),requirements=['MERGE-LENGTH'],description='Numeric length merging with literal rounded arithmetic, all modes and exact MIDI release timing'),
  'M-MERGE-027':dict(run=lambda c:numeric_length_merge(c,2),requirements=['MERGE-LENGTH'],description='Numeric length merging with literal rounded arithmetic, all modes and exact MIDI release timing'),
