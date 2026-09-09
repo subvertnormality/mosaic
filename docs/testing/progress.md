@@ -1099,3 +1099,13 @@ The earlier cold-start baseline above is historical. Subsequent acquisition,
 repeated Start, early Stop, and fractional subdivision results are recorded in
 `midi-acquisition-validation.json`, `repeated-start-validation.json`, and
 `acquisition-edge-validation.json`. The complete bidirectional matrix stays open.
+
+## Master boundary arbitration
+
+M-SYNC-009 exposes first-note-before-Start in both modes. An independent sync
+candidate passed controlled four-phase checks but failed real time with the
+first note after the second F8. Codex session01a0876c-f9b2-7c63-95b0-8afea1324d1f
+rejected that approach; its patch and manifests are retained, production restored.
+Seven independent receiver unit checks pass. Next execute NATIVE-MIDI-BOUNDARY.md:
+prove a generic native output transaction/deadline contract before integrating
+Mosaic. This remains an unresolved master synchronization defect.
