@@ -1,6 +1,9 @@
 local midi_patch_recall = include("mosaic/lib/devices/midi_patch_recall")
 local chord_timing = include("mosaic/lib/clock/chord_timing")
 local lattice = include("mosaic/lib/clock/m_lattice")
+local midi_output_transport = include("mosaic/lib/clock/midi_output_transport")
+local cancel_midi_output_transport
+local warned_midi_boundary = false
 
 m_clock = {}
 clock_lattice = {}
@@ -808,6 +811,8 @@ function m_clock.channel_is_sliding(channel, trig_param)
 end
 
 function m_clock:start(from_external_transport)
+  if playing and not from_external_transport and
+      (clock_lattice.enabled or cancel_midi_output_transport) then return end
   -- MIDI Start resets position even when playback is already active.
   -- Reuse cleanup so held voices and pending releases cannot cross epochs.
   if playing and from_external_transport then self:stop(false) end
@@ -829,13 +834,28 @@ function m_clock:start(from_external_transport)
   -- against an already-running MIDI clock retains its own starting phase.
   clock_lattice.sync_to_external = from_external_transport == true
   clock_lattice.external_clock_active = function() return params:get("clock_source") == 2 end
-  -- The onset callback prepares the resolved first step before its note.
-  clock_lattice:start()
-  m_midi.start()
+  local sends_clock = false
+  for port = 1,16 do
+    if params:get("clock_midi_out_" .. port) == 1 then sends_clock = true end
+  end
+  if sends_clock and not from_external_transport and midi_output_transport.available() then
+    cancel_midi_output_transport = midi_output_transport.start(clock_lattice, m_midi.start)
+  else
+    if sends_clock and not from_external_transport and not warned_midi_boundary then
+      print("Mosaic: native MIDI output boundary unavailable; master phase alignment is not guaranteed")
+      warned_midi_boundary = true
+    end
+    m_midi.start()
+    clock_lattice:start()
+  end
        
 end
 
 function m_clock:stop(send_transport)
+  if cancel_midi_output_transport then
+    cancel_midi_output_transport()
+    cancel_midi_output_transport = nil
+  end
 
   playing = false
   first_run = true

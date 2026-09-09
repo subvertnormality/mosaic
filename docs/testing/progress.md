@@ -1109,3 +1109,22 @@ rejected that approach; its patch and manifests are retained, production restore
 Seven independent receiver unit checks pass. Next execute NATIVE-MIDI-BOUNDARY.md:
 prove a generic native output transaction/deadline contract before integrating
 Mosaic. This remains an unresolved master synchronization defect.
+
+## Coordinated output integration checkpoint
+
+The optional candidate04 native boundary API now has a Mosaic consumer. It emits
+Start before the chosen F8, owns coincident lattice pulses after F8, and schedules
+intermediate96-PPQN pulses using exact deadlines capped before the next boundary.
+Stop cancels the subscription/thread; pending/running local Start coalesces while
+explicitly reinitialized disabled lattices can start. Stock norns still loads and
+uses immediate playback, with an explicit master-phase limitation; the sync fix
+is not claimed without the optional native capability.
+
+All14 affected D/R runs,520 existing units and6 adapter scenarios pass. Source
+and manifests: midi-boundary-integration-validation.json. Codex review
+01a08785-156e-7a81-bc0b-03fed3a76d2e holds acceptance for shared-clock failure on a
+subscriber error and stale queued scheduler state across reset. The latter is
+reproduced natively: resetting to0 leaves the next deadline at100.5beats.
+Resolve these native blockers before admission, then forwarding/multi-port,
+rapid lifecycle, gate/wrap/tempo and the remaining external synchronization matrix.
+The original defect baseline remains retained; this is a partial candidate.
