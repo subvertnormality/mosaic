@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "896011d6b4794120f5be47f4c58da9d2966a3dd14ebd692eda00b735b0913042",
+  "manual_sha256": "19f02284664dde4a9fb6333d508c936f6de5468df77ee0012fb4569fdaf83dcb",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -918,7 +918,7 @@
       "level": 3,
       "start_line": 840,
       "end_line": 862,
-      "text_sha256": "d02820f8ea7fb86889042b4431fa3965f79f93dbd326844125cc520d5578eec3",
+      "text_sha256": "b67a6e9beb0f4f83fcc84408253cd703923f12ce100578bc523f85a1242dd5a0",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SCALE-EDIT",
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "896011d6b4794120f5be47f4c58da9d2966a3dd14ebd692eda00b735b0913042"
+      "sha256": "19f02284664dde4a9fb6333d508c936f6de5468df77ee0012fb4569fdaf83dcb"
     },
     {
       "path": "cheat_sheet.html",
@@ -5221,7 +5221,8 @@
       "statement": "Short press applies selected one of16 scales with bright selected LED.",
       "cases": [
         "M-SCALE-001",
-        "M-SCALE-003"
+        "M-SCALE-003",
+        "M-SCALE-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "All slots, stopped/playing, default vs global/channel locks; known stopped highlight regression.",
@@ -5236,9 +5237,10 @@
         "path": "README.md",
         "line": 842,
         "end_line": 844,
-        "text": "Access the scale editor by pressing the second global menu button.\n\nWhen in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.",
-        "sha256": "fd80b80d4e963e2f8bcdeae7d97c6a8256df6eeb527794fcf5ae194edea83b08"
-      }
+        "text": "Access the scale editor by pressing the second global menu button.\n\nWhen in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. A short press on the already applied scale turns the global scale off while retaining that slot for editing; another short press applies it again. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.",
+        "sha256": "fc694d1e8c46466b0569a2bbb058b103db43273bf6feb1efd1dc721df22d8600"
+      },
+      "short_reselect_contract": "Short press on the applied slot disables global scale, retains editing selection and yields chromatic degrees without locks; repeat restores saved scale. M-SCALE-004 validates slots1 and16."
     },
     {
       "id": "SCALE-EDIT",
@@ -5253,7 +5255,8 @@
         "M-MERGE-022",
         "M-MERGE-023",
         "M-MERGE-043",
-        "M-MERGE-044"
+        "M-MERGE-044",
+        "M-SCALE-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 slots; same/different editing vs applied slot; long threshold; editing currently used scale and saving.",
@@ -5268,8 +5271,8 @@
         "path": "README.md",
         "line": 844,
         "end_line": 848,
-        "text": "When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.\n\n<img alt=\"Scale editor scale slot select buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg\" width=\"300\" />\n\nA shift press (hold K1) selects a scale slot for editing without changing the global scale selection. A long press on a different editing slot does the same. A long press on the slot already selected for editing turns the global scale off and clears the editing selection. Selecting a slot for editing does not switch playback to it; however, saving changes to a scale already used by playback changes that scale. The editing selection has a dim indicator when it differs from the applied scale.",
-        "sha256": "204dc76dc5411d0434d4f689882e7360afdd006d1fa4ef5ede2609ad0578e872"
+        "text": "When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. A short press on the already applied scale turns the global scale off while retaining that slot for editing; another short press applies it again. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.\n\n<img alt=\"Scale editor scale slot select buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg\" width=\"300\" />\n\nA shift press (hold K1) selects a scale slot for editing without changing the global scale selection. A long press on a different editing slot does the same. A long press on the slot already selected for editing turns the global scale off and clears the editing selection. Selecting a slot for editing does not switch playback to it; however, saving changes to a scale already used by playback changes that scale. The editing selection has a dim indicator when it differs from the applied scale.",
+        "sha256": "0a18abf52cfc37934c8c57a34ff15c2e9b02455f90be6f8fb6360fc562f650bf"
       }
     },
     {
@@ -5619,7 +5622,8 @@
       "statement": "Channel lock persists until channel wrap with hold-on, or next active probability-passing trig with hold-off; replacements apply normally. Global locks persist until replacement/global wrap independently.",
       "cases": [
         "M-SCALE-002",
-        "M-RANGE-GLOBAL-004"
+        "M-RANGE-GLOBAL-004",
+        "M-SCALE-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "Both option values; probability0/100; active/rest steps; current-step lock; channel/global coprime lengths; all scale slots.",

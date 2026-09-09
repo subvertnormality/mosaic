@@ -1,0 +1,35 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-SCALE-004",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/98b7f15ca90841948e45fb6a6afb8487/manifest.json",
+      "sha256": "f4535e16fc669b75e5acbc37958ce1a9f9ba1d0cbbb1ed8caf0c14a8c7fc57b5",
+      "passed": true
+    },
+    {
+      "case": "M-SCALE-004",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/997cfa64785645f4988276c12d3adb25/manifest.json",
+      "sha256": "39ce98eb9af3fedb17d9c2590b5a87e0741564c83de899077edf0c46ec54dc02",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Short reselect disables the global scale with chromatic playback, retains editing selection, and second press restores the scale; manual clarified",
+    "All16 native edit-only selections and root edits retain applied slot1 MIDI",
+    "All16 slots apply forward and reverse with literal root-transposed major pitches",
+    "Rasterized editing header and all16 applied/editing grid indicators",
+    "Highest global16 and channel15 locks have correct precedence; clear channel reveals global, clear global restores default",
+    "Two cycles and eight full gates per stage, exact MIDI velocities and phase"
+  ],
+  "limitations": [
+    "Initial 2bd054b3 run expected reselect to stay applied; existing native handler deliberately toggles off, now explicitly tested",
+    "Stopped edit/application between transport trials; live editing, cold persistence and other scale fields remain separate requirements",
+    "Slots13-16 repeat root values but each slot is edited and read independently",
+    "Controlled profile experimental and unadmitted; full campaign and final hardening incomplete"
+  ],
+  "full_campaign_complete": false
+}

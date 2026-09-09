@@ -1,3 +1,4 @@
+from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from project_dialog_lifecycle import project_dialog_while_playing
 from persisted_ranges import saved_range_compatibility
@@ -3452,6 +3453,7 @@ CASES={
  'M-MUTE-001':dict(run=channel_mute_gestures,requirements=['CH-MUTE'],description='Below-threshold hold, long hold and K1 mute toggles; stopped/live silence, resumed phrase and releases'),
  'M-RANGE-002':dict(run=adjacent_channel_ranges,requirements=['CH-RANGE'],description='All63 adjacent channel ranges plus full64-step range: exact grid, complete MIDI loops and spacing'),
  'M-RANGE-001':dict(run=channel_long_hold,requirements=['CH-RANGE'],description='A lone long hold is inactive; a delayed end-step combination still selects the range with exact MIDI loop spacing'),
+ 'M-SCALE-004':dict(run=scale_slot_matrix,requirements=['SCALE-SELECT','SCALE-EDIT','LOCK-SCALE'],description='All16 scale slots edit-only isolation, forward/reverse application with screen/grid and exact MIDI, highest global/channel slot precedence and independent clearing'),
  'M-SCALE-003':dict(run=scale_stop_indicator,requirements=['SCALE-SELECT'],description='Applied scale stays brightly lit after transport stops'),
  'M-SCALE-001':dict(run=scale_edit_selection,requirements=['SCALE-SELECT', 'SCALE-EDIT'],description='Editing-only gestures, applying edited scales, global off and reentry through screen/grid/MIDI'),
  'M-SCALE-002':dict(run=scale_lock_lifetime,requirements=['LOCK-SCALE', 'OPT-SCALE-LIFETIME'],description='Channel hold on/off and independent global scale-lock persistence through emitted notes'),
