@@ -1,0 +1,31 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-011",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/38639227410a4476ab1df293381dbd14/manifest.json",
+      "sha256": "61c8f1095621e450c5a1ec4363c024840c0d5d6df40ca73f31e5fc137bc3dcb8",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-011",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/14296c637b0f4c52a2f9ea2e88f2f1c5/manifest.json",
+      "sha256": "640e6e25cedb010c90c5326ded85f588aa33ae9ad7247d6f3830979c65ceb49b",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Selected channel1 note masks clear through held-step K2 and K1+K2",
+    "Channel2 on separate MIDI port/channel retains note79/velocity40/half-step defaults and step2 note81/velocity60/1.25-step overrides",
+    "Independent per-route complete MIDI phrases, release durations, step timing and onset alignment",
+    "No unexpected output route; all notes released after Stop"
+  ],
+  "limitations": [
+    "Trig-default silence, remaining chord slots/boundaries and recorded-mask clearing remain pending",
+    "Full manual/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

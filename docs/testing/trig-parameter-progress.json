@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Nonempty defaults007-010 and shared006 all10D/R validated. Next populated second-channel isolation and trig-default silence with positive transport witness; remaining chord slots/boundaries/recorded masks and broad gates open.",
+  "next_action": "MASK011 D/R proves populated second-channel isolation. Next trig-default silence using that second-channel positive playback witness; remaining chord slots/boundaries and recording interactions remain.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -162,5 +162,6 @@
   "fractional_mask_merge_validation": "docs/testing/fractional-mask-merge-validation.json",
   "length_mask_hierarchy_validation": "docs/testing/length-mask-hierarchy-validation.json",
   "mask_clearing_validation": "docs/testing/mask-clearing-validation.json",
-  "mask_default_preservation_validation": "docs/testing/mask-default-preservation-validation.json"
+  "mask_default_preservation_validation": "docs/testing/mask-default-preservation-validation.json",
+  "mask_channel_isolation_validation": "docs/testing/mask-channel-isolation-validation.json"
 }
