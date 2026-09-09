@@ -1,0 +1,46 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-PARAM-032",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/51d9948fa4c1433ca4f054b25ea9429a/manifest.json",
+      "sha256": "bc3bfc93f3ac32cf560a9d158fd82a0dcbe1f7194bb3a53b1652a899ac85eb6a",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-033",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/5d1d471bb208495f8ef71994a3c2a282/manifest.json",
+      "sha256": "a55eded7098f54f1f9e12df5e58bc09c4c65eae8a0947a26f1c6c82a14a7c334",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-032",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a200bd4cc61b44e1b43a096d60334973/manifest.json",
+      "sha256": "b5a8b811fa507349b26623cf48b2a35e21be7a4e973b1056f87029f038be849b",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-033",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1c32bbeef5f94aa9a585bf5869680445/manifest.json",
+      "sha256": "2e78d6a184379b90a2311c6f8cc7efba7a78647896b612ee647c96324a0c7393",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Simultaneous channel1/port1 Fixed Note and channel2/port2 Quantised Fixed Note with independent zero/127 held-step locks",
+    "Clearing one channel and changing its default leaves the other channel intact",
+    "Turning defaults Off restores each source pattern while retaining local locks",
+    "Copied song preserves both channels; independent copy edits and clears leave source song zero/127 locks unchanged",
+    "Exact pitches/velocities over two phrases, eight full releases per route, onset phase and cross-route alignment at every stage"
+  ],
+  "limitations": [
+    "Two selected channels/song slots; remaining assignment, undo/persistence and broader lifecycle combinations are still required",
+    "Current controlled profile remains diagnostic; no whole-campaign or refactor-readiness claim"
+  ],
+  "full_campaign_complete": false
+}

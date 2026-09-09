@@ -1,3 +1,4 @@
+from pitch_lock_isolation import pitch_lock_isolation
 from project_dialog_lifecycle import project_dialog_while_playing
 from persisted_ranges import saved_range_compatibility
 from persisted_ranges import rejected_manual_range
@@ -2858,6 +2859,8 @@ CASES={
  'M-REC-PARAM-024':dict(run=recording_ten_slots,requirements=['REC-PARAM-AUTOMATION'],description='All ten recording slots: staggered odd zero/even one edits, untouched-slot isolation, exact MIDI deadlines and distinct-default disarmed replay'),
  'M-REC-PARAM-023':dict(run=lambda c:recording_lifetime(c,'mute'),requirements=['REC-PARAM-AUTOMATION','CH-MUTE'],description='Mute spans eligible recording steps: no MIDI during mute, correctly phased resume and distinct-default disarmed lock replay'),
  'M-REC-PARAM-022':dict(run=recording_stop_safety,requirements=['REC-PARAM-AUTOMATION','REC-ARM','NAV-TRANSPORT'],description='Long Stop under Shift press to stop clears pending parameter recording while retaining arm and previously recorded steps'),
+ 'M-PARAM-032':dict(run=pitch_lock_isolation,requirements=['PARAM-SLOTS','PARAM-FIXED','PARAM-QUANTISED-FIXED','LOCK-PARAM-SET'],description='Two MIDI channels: independent fixed/quantised zero and127 locks, clear/default/Off interactions, exact phrases/gates/phase'),
+ 'M-PARAM-033':dict(run=lambda c:pitch_lock_isolation(c,song_copy=True),requirements=['PARAM-SLOTS','PARAM-FIXED','PARAM-QUANTISED-FIXED','LOCK-PARAM-SET'],description='Copied song retains independent fixed/quantised locks; editing and clearing copy preserves original song including zero/127 extremes'),
  'M-PARAM-031':dict(run=lambda c:sparse_editor_domain(c,'NS6'),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Native NS6 sparse/singleton encoder range, alternating normal/fine input with both clamps, Off and exact emitted MIDI'),
  'M-PARAM-030':dict(run=lambda c:sparse_editor_domain(c,'NS0'),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Native NS0 sparse/singleton encoder range, alternating normal/fine input with both clamps, Off and exact emitted MIDI'),
  'M-PARAM-029':dict(run=lambda c:sparse_editor_domain(c,'SparseHigh'),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Native SparseHigh sparse/singleton encoder range, alternating normal/fine input with both clamps, Off and exact emitted MIDI'),

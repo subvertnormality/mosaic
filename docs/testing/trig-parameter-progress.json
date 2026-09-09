@@ -12,12 +12,12 @@
   ],
   "scope": "All128 Fixed Note pitches validated in both modes before0069; quantised major/D-major/A-harmonic-minor literal boundaries and Fixed112..127 precedence validated on0069 in both modes.",
   "remaining": [
-    "Cross-channel/song pitch-lock isolation, reassignment, undo and persistence",
+    "Pitch-lock reassignment, undo/persistence and remaining cross-channel/song lifecycle interactions",
     "Scale Off/root fallback, octave/transpose/degree/rotation and all pentatonic switch interactions",
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Live New/Save and cancel-dialog note lifetimes validated. Continue remaining lock/scale/merge interaction and manual/runtime gates.",
+  "next_action": "Pitch-lock channel/song-copy isolation validated. Continue reassignment, undo/persistence and scale/merge interactions, then remaining manual/runtime gates and mandatory final unit/integration hardening.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -187,5 +187,6 @@
     "card": "docs/testing/UNIT-INTEGRATION-HARDENING.md",
     "required_before_goal_completion": true,
     "required_before_refactor": true
-  }
+  },
+  "pitch_lock_isolation_validation": "docs/testing/pitch-lock-isolation-validation.json"
 }

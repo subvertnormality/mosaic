@@ -3595,7 +3595,9 @@
         "M-PARAM-028",
         "M-PARAM-029",
         "M-PARAM-030",
-        "M-PARAM-031"
+        "M-PARAM-031",
+        "M-PARAM-032",
+        "M-PARAM-033"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -3707,7 +3709,9 @@
         "M-PARAM-011",
         "M-PARAM-016",
         "M-PARAM-017",
-        "M-PARAM-018"
+        "M-PARAM-018",
+        "M-PARAM-032",
+        "M-PARAM-033"
       ],
       "status": "in_progress",
       "domain": "Every MIDI note where cheap; sentinel/bounds; all competing note sources.",
@@ -3737,7 +3741,9 @@
         "M-PARAM-013",
         "M-PARAM-014",
         "M-PARAM-015",
-        "M-PARAM-017"
+        "M-PARAM-017",
+        "M-PARAM-032",
+        "M-PARAM-033"
       ],
       "status": "in_progress",
       "domain": "All legal MIDI inputs and roots/scales; lower ties and endpoints; channel/step locks and Off inheritance; octave/transpose/degree/rotation and pentatonic independence; masks/random precedence; scale Off, root fallback, channel/song isolation and lifecycle.",
@@ -5416,7 +5422,9 @@
         "M-PARAM-028",
         "M-PARAM-029",
         "M-PARAM-030",
-        "M-PARAM-031"
+        "M-PARAM-031",
+        "M-PARAM-032",
+        "M-PARAM-033"
       ],
       "status": "unimplemented",
       "domain": "All64 steps/10slots; sentinels; no trig/trigless; overwrite; pending playback.",
