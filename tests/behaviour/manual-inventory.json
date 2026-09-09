@@ -2603,9 +2603,12 @@
         "MAN-039"
       ],
       "statement": "Default masked notes align with scale but not degree or rotation; settings can disable quantisation.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Roots/scales/degree/rotation; all related setting combinations; accidentals and bounds.",
+      "cases": [
+        "M-MASK-019",
+        "M-MASK-020"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "MASK019/020 validate all ten scales at roots C/D with accidental step note masks: snapping On, Off and restored On; exact notes, velocities, durations and timing in both clocks, native menu label/value assertions. Remaining degree/rotation independence, full-quantisation precedence, pitch endpoints, other roots and live edits.",
       "oracles": [
         "Independently mapped pitches and mask display; baseline documented distinctions."
       ],

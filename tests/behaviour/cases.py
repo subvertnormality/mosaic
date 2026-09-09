@@ -1,3 +1,4 @@
+from mask_quantisation import mask_scale_snap
 from mask_clearing import mask_clear_recorded_chord
 from mask_clearing import mask_clear_last_steps
 from mask_clearing import mask_clear_combined_chords
@@ -773,7 +774,7 @@ def set_mosaic_options(c,options):
     c.enc(2,position);c.key(3)
     for label,enabled in options:
         # The preceding Parameter locks separator draws its rule at y22.
-        top=23 if label=='Trigless locks' else 22
+        top=23 if label in ('Trigless locks','Snap note masks to scale') else 22
         c.enc(2,-60)
         for attempt in range(40):
             if selected_line(c.snapshot(),label,top=top):break
@@ -3294,6 +3295,8 @@ CASES={
  'M-TIME-011':dict(run=lambda c:pending_mask_lengths(c,True),requirements=['MASK-ATTRIBUTES','CH-TEMPO','OPT-REPEAT-RESET'],description='Maximum128-step notes span eighteen resets; complete initial releases precede coincident retriggers, and Stop drains remaining voices'),
  'M-MASK-013':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=2),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE','MASK-CHORD'],description='Chord mask slot2: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
  'M-MASK-014':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=3),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE','MASK-CHORD'],description='Chord mask slot3: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
+ 'M-MASK-020':dict(run=lambda c:mask_scale_snap(c,2),requirements=['MASK-SCALE'],description='Root2 all ten scales: accidental note masks snap on, raw off, restored on with exact MIDI velocities and timing'),
+ 'M-MASK-019':dict(run=lambda c:mask_scale_snap(c,0),requirements=['MASK-SCALE'],description='Root0 all ten scales: accidental note masks snap on, raw off, restored on with exact MIDI velocities and timing'),
  'M-MASK-018':dict(run=mask_clear_recorded_chord,requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','REC-LIVE-NOTES','MASK-STEP-ENTRY','MASK-CHORD'],description='Clear a real keyboard-recorded chord: restore source note velocity and gate, remove chord voices, preserve neighbour override, then restore original pattern with exact timing'),
  'M-MASK-017':dict(run=mask_clear_last_steps,requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='Steps63/64 mask clear boundary and neighbour isolation preserve channel defaults and exact MIDI timing'),
  'M-MASK-016':dict(run=mask_clear_combined_chords,requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE','MASK-CHORD'],description='All four populated chord mask slots clear together, preserve defaults and neighbour overrides, with exact polyphonic MIDI and timing'),

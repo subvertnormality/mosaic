@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Recorded chord mask clearing passed both clocks. Next mask quantisation and gesture/held-keyboard coverage; remaining clear UI/lifetime and broad manual/emulator gates.",
+  "next_action": "MASK019/020 all120 phases across four native runs passed. Next degree/rotation independence and full-mask quantisation global/channel/step overrides; remaining manual and emulator gates incomplete.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -168,5 +168,6 @@
   "chord_slot_clearing_validation": "docs/testing/chord-slot-clearing-validation.json",
   "combined_chord_clearing_validation": "docs/testing/combined-chord-clearing-validation.json",
   "boundary_mask_clearing_validation": "docs/testing/boundary-mask-clearing-validation.json",
-  "recorded_mask_clearing_validation": "docs/testing/recorded-mask-clearing-validation.json"
+  "recorded_mask_clearing_validation": "docs/testing/recorded-mask-clearing-validation.json",
+  "mask_scale_snap_validation": "docs/testing/mask-scale-snap-validation.json"
 }
