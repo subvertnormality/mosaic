@@ -1,4 +1,4 @@
-def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=False):
+def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=False,harmony=False):
     from cases import set_mosaic_options,assert_durations
     c.configure();set_mosaic_options(c,[('Lock merged to pent.',pentatonic)])
     sources=[(0,2,4,6),(2,4,6,0),(6,6,6,6)]
@@ -31,6 +31,38 @@ def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=Fals
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
         c.results.append(dict(kind='numeric-note-merge',mode=mode,assigned_patterns=[1,2],velocity_source=3 if foreign_velocity else 1,pitches=pitches,passed=True))
+
+    if harmony:
+        # Independent literal phrases: degree II maps C-major degrees through
+        # D/E/F/G/A/B/C. Rotation two lowers the final two positions by an
+        # octave; pentatonic snapping still uses the root scale C/D/E/G/A.
+        # Negative degree -3 remains in the preceding octave (A57 at degree II).
+        # Root D adds two semitones after those operations.
+        stages=[
+            ('degree-II',1,0,0,[[67,71,74,77],[60,64,67,57],[64,67,71,67]],[[67,72,74,76],[60,64,67,57],[64,67,72,67]]),
+            ('degree-II-rotation-two',0,2,0,[[67,59,74,77],[48,64,67,57],[64,67,59,67]],[[67,60,74,76],[48,64,67,57],[64,67,60,67]]),
+            ('D-root-degree-II-rotation-two',0,0,2,[[69,61,76,79],[50,66,69,59],[66,69,61,69]],[[69,62,76,78],[50,66,69,59],[66,69,62,69]]),
+            ('restored-C-major',-1,-2,-2,[[65,69,72,76],[59,62,65,55],[62,65,69,65]],[[64,69,72,76],[60,62,64,55],[62,64,69,64]])]
+        for label,degree_delta,rotation_delta,root_delta,plain,pent in stages:
+            c.tap(4,8)
+            # Normalize the selected field to scale type after each edit.
+            if degree_delta:
+                c.enc(2,1);c.enc(3,degree_delta);c.key(3);c.enc(2,-1)
+            if rotation_delta:
+                c.enc(2,3);c.enc(3,rotation_delta);c.key(3);c.enc(2,-3)
+            if root_delta:
+                c.enc(2,-1);c.enc(3,root_delta);c.key(3);c.enc(2,1)
+            c.tap(3,8)
+            for index,(mode,level) in enumerate([('higher',5),('lower',8),('average',2)]):
+                if index:c.tap(15,8)
+                c.led_values([(15,8)],[level])
+                pitches=(pent if pentatonic else plain)[index]
+                notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)
+                assert_durations(c,notes,[1]*8)
+                for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+                c.results.append(dict(kind='merge-harmony-transition',stage=label,mode=mode,pentatonic=pentatonic,pitches=pitches,passed=True))
+            c.tap(15,8)
+        return
 
     if all_scales:
         # Musical interval fixtures, independent of Mosaic/official quantiser code.

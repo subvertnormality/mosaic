@@ -2993,7 +2993,9 @@
         "M-MERGE-018",
         "M-MERGE-019",
         "M-MERGE-022",
-        "M-MERGE-023"
+        "M-MERGE-023",
+        "M-MERGE-043",
+        "M-MERGE-044"
       ],
       "status": "partial-domain-coverage",
       "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -3028,7 +3030,9 @@
         "M-MERGE-017",
         "M-MERGE-018",
         "M-MERGE-019",
-        "M-MERGE-023"
+        "M-MERGE-023",
+        "M-MERGE-043",
+        "M-MERGE-044"
       ],
       "status": "partial-domain-coverage",
       "domain": "Equal/asymmetric/negative values; clipping; assignment order. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -3060,7 +3064,9 @@
         "M-MERGE-017",
         "M-MERGE-018",
         "M-MERGE-019",
-        "M-MERGE-023"
+        "M-MERGE-023",
+        "M-MERGE-043",
+        "M-MERGE-044"
       ],
       "status": "partial-domain-coverage",
       "domain": "Asymmetric/equal/negative values separating competing formulas. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -5245,7 +5251,9 @@
         "M-MERGE-011",
         "M-MERGE-019",
         "M-MERGE-022",
-        "M-MERGE-023"
+        "M-MERGE-023",
+        "M-MERGE-043",
+        "M-MERGE-044"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 slots; same/different editing vs applied slot; long threshold; editing currently used scale and saving.",
