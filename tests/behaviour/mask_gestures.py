@@ -32,3 +32,34 @@ def trig_gesture_all_steps(c):
     toggle(odd);verify(even,'odd-steps-removed-even-preserved')
     toggle(all_steps);verify(odd,'all64-toggled-odd-only')
     toggle(even);verify(all_steps,'even-restored-all64')
+
+
+def held_keyboard_chord(c,grid_first=False):
+    from cases import assert_durations
+    c.configure();c.enc(1,-4)
+    pitches=[72,76,79,83,86];velocities=[90,80,70,60,50]
+    marker=c.snapshot()['midi_count']
+    c.action(type='grid',x=2,y=4,state=1)
+    for pitch,velocity in zip(pitches,velocities):c.action(type='midi',port=1,bytes=[144,pitch,velocity])
+    if grid_first:c.action(type='grid',x=2,y=4,state=0)
+    for pitch in pitches:c.action(type='midi',port=1,bytes=[128,pitch,0])
+    if not grid_first:c.action(type='grid',x=2,y=4,state=0)
+    c.elapse(.15);state=c.wait(lambda state:not state['midi_capture']['outstanding'])
+    preview=[(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
+    expected=[(1,[144,p,v]) for p,v in zip(pitches,velocities)]+[(1,[128,p,0]) for p in pitches]
+    assert preview==expected,dict(expected=expected,actual=preview)
+    def verify(chord,velocity,stage):
+        phrase=[(1,[144,60,127])]+[(1,[144,p,velocity]) for p in chord]+[(1,[144,64,107]),(1,[144,65,97])]
+        positions=[0]+[1]*len(chord)+[2,3]
+        notes=c.playback(phrase,cycles=2,timeout=4);assert_durations(c,notes,[1]*(len(phrase)*2))
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        for i,note in enumerate(notes):
+            wanted=((i//len(phrase))*4+positions[i%len(phrase)])/6
+            assert abs((note[field]-notes[0][field])/1e9-wanted)<=tolerance
+        c.results.append(dict(kind='held-keyboard-mask',stage=stage,grid_released_first=grid_first,chord=chord,velocity=velocity,passed=True))
+    verify(pitches,90,'five-voice-chord-committed')
+    c.action(type='grid',x=2,y=4,state=1)
+    c.action(type='midi',port=1,bytes=[144,67,55]);c.action(type='midi',port=1,bytes=[128,67,0])
+    c.action(type='grid',x=2,y=4,state=0);c.elapse(.15)
+    verify([67],55,'single-note-replaces-old-chord')

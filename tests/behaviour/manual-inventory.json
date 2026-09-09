@@ -2675,10 +2675,12 @@
         "M-MASK-015",
         "M-MASK-016",
         "M-MASK-017",
-        "M-MASK-018"
+        "M-MASK-018",
+        "M-MASK-024",
+        "M-MASK-025"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Encoder entry covers all five attributes, individual/all chord slots, neighbours and final steps through native MIDI/timing checks. Held-step MIDI keyboard entry, multiple held steps, release orders and comprehensive displayed-value assertions remain pending.",
+      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Extra/repeated keyboard inputs, multiple held grid steps and comprehensive mask display assertions remain pending.",
       "oracles": [
         "Visible step-lock values and exact playback; selected-channel isolation."
       ],
@@ -2745,10 +2747,12 @@
         "M-MASK-015",
         "M-MASK-016",
         "M-MASK-018",
-        "M-MASK-022"
+        "M-MASK-022",
+        "M-MASK-024",
+        "M-MASK-025"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Native exact polyphonic MIDI and durations cover single chord slots, all four simultaneously, real recorded three-note chord and clearing. Keyboard extra-input attempts/repeated pitches and direct chord display assertions remain pending; strum/velocity parameter cases require separate reconciliation. MASK021/022 cover C-major degreeII/rotation1, default snapping independence, full quantisation and global/channel/step X-Off-On precedence, explicit stepX versus clear, and inherited root/chord pitch processing in both clocks. Remaining broader scale/root/degree/rotation domains, accidental snap-off/full interaction, live edits and masked arp timing.",
+      "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Extra/repeated keyboard inputs, multiple held grid steps and comprehensive mask display assertions remain pending.",
       "oracles": [
         "Exact chord note multiset and ordered releases, no leaked voices; chord display."
       ],

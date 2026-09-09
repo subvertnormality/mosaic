@@ -1,0 +1,46 @@
+{
+  "status": "scoped-held-keyboard-masks-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-024",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/3caf1b6aa5814c8f8c9ad7c74ea54491/manifest.json",
+      "sha256": "6f32f8f68b63938f40a0aa2a1f60bd3aac2c3e342d4355ee720412e0ce304703",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-025",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6e7cc33080974a9084657f00cdc9ec79/manifest.json",
+      "sha256": "e92c8bf4b20f9fb47b03c30d950aa20f5c77024310c7d463298ae0f23614f586",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-024",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/3ae72e5ab32840c188c54d98e317d71d/manifest.json",
+      "sha256": "b49533c6076d360861942f5156db2da7facae1a4b20a782928cd8b72973aeb55",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-025",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b5dfc4eb12d24e0e96fcd2aaa8e6270a/manifest.json",
+      "sha256": "d6a71144a7d85b70052632610a704c9cf74e283272b5647baa8d6cf58354ec70",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Held step2 keyboard entry preserves neighbouring source notes",
+    "Five-voice C E G B D chord with differing preview velocities and root velocity applied to replay",
+    "Grid release before MIDI releases and MIDI releases before grid release both commit identical chords",
+    "Replacing the five-voice chord with a single G removes stale chord voices and sets velocity55",
+    "Exact preview On/Off packets, replay phrase, durations and timing; no outstanding notes afterStop"
+  ],
+  "limitations": [
+    "Extra/repeated keyboard inputs, multiple held grid steps and comprehensive mask display assertions remain pending",
+    "Full manual/current controlled admission/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}
