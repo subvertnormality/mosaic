@@ -39,7 +39,7 @@ def rejected_saved_range(c):
     c.results.append(dict(kind='saved-range-native-rejection',nested=str(out),passed=True))
 
 
-def select_project_action(c,offset,returning=False):
+def select_project_action(c,offset,returning=False,activate=True):
     from cases import menu_label
     from frame_oracle import selected_line
     c.key(1)
@@ -57,7 +57,7 @@ def select_project_action(c,offset,returning=False):
     c.results.append(dict(kind='selected-menu-label',text='< Save project'))
     if offset:
         c.enc(2,offset);menu_label(c,{1:'> Load project',2:'+ New'}[offset])
-    c.key(3)
+    if activate:c.key(3)
 
 def select_project_file(c,name,returning=False):
     from frame_oracle import selected_line

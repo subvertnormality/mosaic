@@ -1,3 +1,4 @@
+from project_dialog_lifecycle import project_dialog_while_playing
 from persisted_ranges import saved_range_compatibility
 from persisted_ranges import rejected_manual_range
 from persisted_ranges import rejected_saved_range
@@ -3319,6 +3320,10 @@ CASES={
  'M-RANGE-SAVED-004':dict(run=lambda c:rejected_manual_range(c,recovery='new'),requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves current playback and files; explicit New creates silent project and restarts autosave'),
  'M-RANGE-SAVED-005':dict(run=saved_range_compatibility,requirements=['CH-RANGE','SAVE-AUTO','PERSIST-AUTO-001'],description='User-authored slot96, valid stored one-step range, exact MIDI gates/phase and grid survive two cold-load/autosave generations'),
  'M-RANGE-SAVED-006':dict(run=lambda c:saved_range_compatibility(c,legacy=True),requirements=['CH-RANGE','SAVE-AUTO','PERSIST-AUTO-001'],description='Legacy sequencer_patterns alias in slot96 with valid one-step range migrates through two cold-load/autosave generations preserving MIDI/grid'),
+ 'M-PROJECT-LIVE-001':dict(run=lambda c:project_dialog_while_playing(c,'new'),requirements=['SAVE-NAMED','MIDI-RELEASE-001'],description='Native new while two MIDI channels play: pending releases and project-dialog lifetime'),
+ 'M-PROJECT-LIVE-002':dict(run=lambda c:project_dialog_while_playing(c,'cancel-save'),requirements=['SAVE-NAMED','MIDI-RELEASE-001'],description='Native cancel-save while two MIDI channels play: pending releases and project-dialog lifetime'),
+ 'M-PROJECT-LIVE-003':dict(run=lambda c:project_dialog_while_playing(c,'cancel-load'),requirements=['SAVE-NAMED','MIDI-RELEASE-001'],description='Native cancel-load while two MIDI channels play: pending releases and project-dialog lifetime'),
+ 'M-PROJECT-LIVE-004':dict(run=lambda c:project_dialog_while_playing(c,'accept-save'),requirements=['SAVE-NAMED','MIDI-RELEASE-001'],description='Native accept-save while two MIDI channels play: pending releases and project-dialog lifetime'),
  'M-RANGE-SAVED-002':dict(run=rejected_manual_range,requirements=['CH-RANGE','PERSIST-AUTO-001','SAVE-NAMED'],description='Reject malformed scale range via actual file picker during two-route playback, preserve phase/gates/current editing/files, recover autosave through valid load'),
  'M-RANGE-SAVED-001':dict(run=rejected_saved_range,requirements=['CH-RANGE','PERSIST-AUTO-001','SAVE-AUTO'],description='Actual autosave copied with reversed range: native cold rejection tooltip, two idle deadlines with inputs preserve both files, invalid phrase never plays'),
  'M-RANGE-LIVE-001':dict(run=accepted_live_range_transitions,requirements=['CH-RANGE'],description='Accepted range edits while playhead is inside/below/above new bounds: exact next note, three loops, unchanged phase, full releases and stopped range LEDs'),

@@ -1612,7 +1612,11 @@
         "M-MASK-028",
         "M-MASK-029",
         "M-XA-004-JF-OVERLAP",
-        "M-XA-003-JF-OWNERSHIP"
+        "M-XA-003-JF-OWNERSHIP",
+        "M-PROJECT-LIVE-001",
+        "M-PROJECT-LIVE-002",
+        "M-PROJECT-LIVE-003",
+        "M-PROJECT-LIVE-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -5668,7 +5672,11 @@
       "cases": [
         "M-RANGE-SAVED-002",
         "M-RANGE-SAVED-003",
-        "M-RANGE-SAVED-004"
+        "M-RANGE-SAVED-004",
+        "M-PROJECT-LIVE-001",
+        "M-PROJECT-LIVE-002",
+        "M-PROJECT-LIVE-003",
+        "M-PROJECT-LIVE-004"
       ],
       "status": "unimplemented",
       "domain": "Create/overwrite/cancel; empty/long/non-ASCII names; save while playing/stopped; corrupt/missing/unwritable files.",

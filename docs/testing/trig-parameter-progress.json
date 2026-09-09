@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "0082 saved-range preservation validated. Continue remaining lock/scale/merge lifecycle interactions, broader named-save/failure domains, and full manual/runtime release gates.",
+  "next_action": "Live New/Save and cancel-dialog note lifetimes validated. Continue remaining lock/scale/merge interaction and manual/runtime gates.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -180,5 +180,6 @@
   "range_channel_isolation_validation": "docs/testing/range-channel-isolation-validation.json",
   "offset_global_range_validation": "docs/testing/offset-global-range-validation.json",
   "live_range_validation": "docs/testing/live-range-validation.json",
-  "saved_range_validation": "docs/testing/saved-range-validation.json"
+  "saved_range_validation": "docs/testing/saved-range-validation.json",
+  "project_dialog_lifecycle_validation": "docs/testing/project-dialog-lifecycle-validation.json"
 }
