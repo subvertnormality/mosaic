@@ -3421,10 +3421,11 @@
         "M-RANGE-REJECT-001",
         "M-RANGE-REJECT-002",
         "M-RANGE-REJECT-003",
-        "M-RANGE-REJECT-004"
+        "M-RANGE-REJECT-004",
+        "M-RANGE-REJECT-005"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Candidate0080 rejects reversed/equal gesture endpoints before either assignment, preserving prior range. NativeREJECT001-004 cover both release sequences on channel/scale editors, stopped/playing, rejection framebuffer, unchanged range LEDs/MIDI/timing, valid recovery; MASK030/031 multiheld input and RANGE001/002 delayed/long holds/all63adjacent/full64 controls revalidated both clocks. Unit integration covers8192 channel1/17 endpoint pairs and4032 distinct-key pattern lengths. Remaining global-length clipping, other-channel isolation with populated routes, accepted live changes with playhead inside/outside and persisted malformed ranges; broader CH-RANGE completion not claimed.",
+      "domain": "Candidate0080 rejects reversed/equal gesture endpoints before either assignment, preserving prior range. NativeREJECT001-004 cover both release sequences on channel/scale editors, stopped/playing, rejection framebuffer, unchanged range LEDs/MIDI/timing, valid recovery; MASK030/031 multiheld input and RANGE001/002 delayed/long holds/all63adjacent/full64 controls revalidated both clocks. Unit integration covers8192 channel1/17 endpoint pairs and4032 distinct-key pattern lengths. Remaining global-length clipping, accepted live changes with playhead inside/outside and persisted malformed ranges; broader CH-RANGE completion not claimed. REJECT005 verifies live rejected range preserves independently routed four/three-step phrases, exact pitches/velocities, fractional lengths, onset alignment and phase in both clocks.",
       "oracles": [
         "Range LEDs, exact loop boundaries and note/scale sequence; no global clamp substitution."
       ],

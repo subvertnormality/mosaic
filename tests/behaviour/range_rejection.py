@@ -55,3 +55,35 @@ def rejected_range_while_playing(c,scale_page=False):
     c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
     assert_durations(c,emitted,[1]*16)
     c.results.append(dict(kind='live-range-rejection',scale_page=scale_page,onsets=len(emitted),passed=True))
+
+
+def rejected_range_channel_isolation(c):
+    from cases import assert_durations
+    c.configure()
+    c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
+    c.tap(1,2);c.hold_tap((1,4),(3,4));c.enc(1,-4)
+    for index,(global_turns,local_turns) in enumerate([(80,2),(41,20),(8,7)]):
+        if index:c.enc(2,1)
+        c.enc(3,global_turns);c.action(type='grid',x=2,y=4,state=1)
+        try:c.enc(3,local_turns)
+        finally:c.action(type='grid',x=2,y=4,state=0)
+        c.elapse(.06)
+    c.tap(1,1)
+    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    def emitted(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+    c.wait(lambda state:len(emitted(state))>=10)
+    c.hold_tap((4,4),(2,4))
+    state=c.wait(lambda state:sum(m['port']==1 for m in emitted(state))>=17 and sum(m['port']==2 for m in emitted(state))>=17,5)
+    all_notes=emitted(state);assert all((m['port'],m['bytes'][0]) in [(1,144),(2,145)] for m in all_notes)
+    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    phrases={1:[[144,60,127],[144,62,117],[144,64,107],[144,65,97]],2:[[145,79,40],[145,81,60],[145,79,40]]}
+    for port,phrase in phrases.items():
+        notes=[m for m in all_notes if m['port']==port]
+        assert [m['bytes'] for m in notes]==[phrase[i%len(phrase)] for i in range(len(notes))]
+        for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+        assert_durations(c,notes,[1]*12 if port==1 else [.5,1.25,.5]*4)
+    first=[next(m[field] for m in all_notes if m['port']==port) for port in [1,2]]
+    assert abs(first[0]-first[1])/1e9<=tolerance
+    c.results.append(dict(kind='rejected-range-channel-isolation',ranges=[[1,4],[1,3]],phrases=phrases,passed=True))

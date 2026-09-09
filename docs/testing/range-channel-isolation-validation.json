@@ -1,0 +1,22 @@
+{
+  "status": "scoped-validation-passed",
+  "native_runs": [
+    {
+      "case": "M-RANGE-REJECT-005",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4074fa29c91f45a1bcacd711db3ad038/manifest.json",
+      "sha256": "b7eef1299b912074e86be0302600ac7cb909bceb2df906814badfc0a0a2c7605",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-REJECT-005",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9df5ea70a4eb457385546f675e838517/manifest.json",
+      "sha256": "78a7e96253e533c3e890550fc89f242ab2f44b3f40e0d628d075f9b70be49cef",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "scope": "Rejected live range edit preserves both independent MIDI routes, four/three-step phrases, velocity masks, fractional gates, onset alignment and exact musical phase.",
+  "full_campaign_complete": false
+}

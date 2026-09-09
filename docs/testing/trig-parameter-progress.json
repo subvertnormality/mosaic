@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "0080 reversed-range gesture fix validated. Continue CH-RANGE global clipping/live valid transitions/isolation/persisted data, then remaining manual and emulator gates.",
+  "next_action": "Continue CH-RANGE global clipping, accepted live transitions and persisted malformed data; full manual and emulator gates remain incomplete.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -176,5 +176,6 @@
   "keyboard_chord_limit_validation": "docs/testing/keyboard-chord-limit-validation.json",
   "keyboard_rearticulation_validation": "docs/testing/keyboard-rearticulation-validation.json",
   "multiheld_keyboard_validation": "docs/testing/multiheld-keyboard-validation.json",
-  "range_guard_validation": "docs/testing/range-guard-validation.json"
+  "range_guard_validation": "docs/testing/range-guard-validation.json",
+  "range_channel_isolation_validation": "docs/testing/range-channel-isolation-validation.json"
 }
