@@ -2788,6 +2788,7 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-REC-PARAM-025':dict(run=lambda c:recording_lifetime(c,'memory'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','MEMORY-NAV'],description='Undo and redo each of three recorded parameter steps: restore overwritten lock96 and unbound defaults, exact disarmed MIDI replay after every action'),
  'M-REC-PARAM-024':dict(run=recording_ten_slots,requirements=['REC-PARAM-AUTOMATION'],description='All ten recording slots: staggered odd zero/even one edits, untouched-slot isolation, exact MIDI deadlines and distinct-default disarmed replay'),
  'M-REC-PARAM-023':dict(run=lambda c:recording_lifetime(c,'mute'),requirements=['REC-PARAM-AUTOMATION','CH-MUTE'],description='Mute spans eligible recording steps: no MIDI during mute, correctly phased resume and distinct-default disarmed lock replay'),
  'M-REC-PARAM-022':dict(run=recording_stop_safety,requirements=['REC-PARAM-AUTOMATION','REC-ARM','NAV-TRANSPORT'],description='Long Stop under Shift press to stop clears pending parameter recording while retaining arm and previously recorded steps'),

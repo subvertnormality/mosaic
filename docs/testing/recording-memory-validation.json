@@ -1,0 +1,31 @@
+{
+  "status": "scoped-interaction-validated",
+  "case": "M-REC-PARAM-025",
+  "native_runs": [
+    {
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/160d2c1052294c59881e25aba76f9040/manifest.json",
+      "sha256": "69ca4286c2ee18c0dd0f67370414e387eec412becbf70746766bbb38e6b21b0e",
+      "passed": true
+    },
+    {
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/17033f17aaa74ead966cd951aead69ab/manifest.json",
+      "sha256": "b830cc0d476055923683ce44f042b684b2bc9575c7708ab411ddba29b1482a20",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "oracle": "Manual memory contract retains recorded trig-lock actions. Undo steps4,3,2 restores absence, original96, absence respectively; redo reverses these transitions. Default65 differs from recorded64. Each of six stages has two complete MIDI replay cycles plus closing onset.",
+  "assertions": [
+    "Memory page verified through screen header",
+    "Undo values24/64/64/65 then24/64/96/65 then24/65/96/65",
+    "Redo values24/64/96/65 then24/64/64/65 then24/64/64/64",
+    "Exact notes, CC route/order/count and one-second replay deadlines;2ns controlled and10ms real-time tolerance"
+  ],
+  "limitations": [
+    "Scoped recording undo/redo interaction; history branching, persistence and other manual domains remain incomplete",
+    "Controlled mode remains diagnostic and unadmitted"
+  ],
+  "full_campaign_complete": false
+}
