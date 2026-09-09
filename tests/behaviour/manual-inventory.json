@@ -2968,10 +2968,11 @@
         "M-MERGE-010",
         "M-MERGE-012",
         "M-MERGE-020",
-        "M-MERGE-021"
+        "M-MERGE-021",
+        "M-MERGE-024"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Every option; means at discontinuities; 0/127; selected pattern; Lower SEM-001. M-MERGE-004 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-005 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native020/021 cover two/three contributors, all numeric modes, fractional means, upper127 clamp and unassigned note-priority isolation in both modes. Lower zero/negative results remain pending.",
+      "domain": "Every option; means at discontinuities; 0/127; selected pattern; Lower SEM-001. M-MERGE-004 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-005 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native020/021 cover two/three contributors, all numeric modes, fractional means, upper127 clamp and unassigned note-priority isolation in both modes. Lower zero/negative results remain pending. Native024 now covers exact zero and negative Lower results, MIDI clamp and raw zero-velocity release semantics in both clock modes; prior pending boundary statement is superseded for these vectors.",
       "oracles": [
         "Independent resolved formulas, bounds and exact MIDI velocity; zero semantics decision."
       ],

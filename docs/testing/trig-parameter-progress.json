@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "0077 validated and reviewed: eight native passes,494 units; all ten pentatonic selections documented. Next zero/negative numeric velocity results and numeric length domains. Broader interactions, manual and emulator gates remain open.",
+  "next_action": "Pentatonic0077 and numeric velocity zero/negative boundary024 published. Continue numeric length merging, fractional/zero/negative results and timing interactions; remaining manual and emulator gates open.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -147,5 +147,6 @@
   "merge_extremes_validation": "docs/testing/merge-extremes-validation.json",
   "merge_all_scales_validation": "docs/testing/merge-all-scales-validation.json",
   "numeric_velocity_validation": "docs/testing/numeric-velocity-validation.json",
-  "pentatonic_boundary_validation": "docs/testing/pentatonic-boundary-validation.json"
+  "pentatonic_boundary_validation": "docs/testing/pentatonic-boundary-validation.json",
+  "velocity_zero_validation": "docs/testing/velocity-zero-validation.json"
 }

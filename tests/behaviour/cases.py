@@ -1,3 +1,4 @@
+from numeric_merging import velocity_zero_boundary
 from numeric_merging import lydian_octave_boundary
 from numeric_merging import numeric_velocity_merge
 from numeric_merging import merge_rounding
@@ -2793,6 +2794,7 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-MERGE-024':dict(run=velocity_zero_boundary,requirements=['MERGE-VELOCITY'],description='Zero and negative numeric velocity results clamp without wrapping, with raw MIDI releases and exact timing'),
  'M-MERGE-023':dict(run=lambda c:numeric_note_merge(c,True,True,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT'],description='All ten reviewed modal pentatonic selections across numeric merge modes, negative degrees, exact MIDI and timing'),
  'M-MERGE-022':dict(run=lydian_octave_boundary,requirements=['MERGE-NOTE-AVERAGE','SCALE-EDIT'],description='Rootless Lydian pentatonic nearest-pitch snapping is octave-equivalent for merged degrees -7/0/7'),
  'M-MERGE-021':dict(run=lambda c:numeric_velocity_merge(c,True),requirements=['MERGE-VELOCITY','MERGE-NOTE-PATTERN'],description='Numeric velocity Average/Higher/Lower: rounded means, upper MIDI clamp and unassigned note-priority isolation'),

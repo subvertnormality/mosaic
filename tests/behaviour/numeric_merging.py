@@ -219,3 +219,49 @@ def lydian_octave_boundary(c):
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i/6)<=tolerance
     c.results.append(dict(kind='lydian-pentatonic-octave-equivalence',degrees=[-7,0,7,0],pitches=[47,59,71,59],passed=True))
+
+
+def velocity_zero_boundary(c):
+    c.configure();c.tap(5,8)
+    for slot in (1,2):
+        c.tap(slot,1)
+        if slot==2:
+            for x in range(1,5):c.tap(x,4)
+        c.tap(5,8)
+        if slot==1:c.tap(4,3) # G remains G under the enabled Major pentatonic lock.
+        c.tap(5,8)
+        # The manual's 14-position velocity fader spans 127..0.
+        # Literal source vectors: [0,0,19,58], [127,0,58,58].
+        if slot==2:
+            c.action(type='grid',x=15,y=8,state=1);c.elapse(1.2)
+            c.action(type='grid',x=15,y=8,state=0);c.elapse(.06);c.tap(1,1)
+        c.action(type='grid',x=16,y=8,state=1);c.elapse(1.2)
+        c.action(type='grid',x=16,y=8,state=0);c.elapse(.06)
+        cells=([(1,7),(2,7),(3,5),(4,1)] if slot==1 else [(2,7),(3,1),(4,1)])
+        for cell in cells:c.tap(*cell)
+        c.led_values(cells,[12]*len(cells))
+        c.tap(3,8);c.tap(5,8)
+    c.tap(3,8);c.tap(2,2);c.tap(14,8);c.tap(14,8)
+    c.hold_tap((15,8),(1,2))
+    key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    # Rounded mean, then mode arithmetic, then MIDI 0..127 clamp.
+    # Lower raw results [-64,0,-1,58] must not wrap into loud notes.
+    expected=[('average',2,[64,0,39,58]),('higher',5,[127,0,78,58]),('lower',8,[0,0,0,58])]
+    for index,(mode,level,velocities) in enumerate(expected+[expected[0]]):
+        if index:c.tap(16,8)
+        c.led_values([(16,8)],[level]);before=c.snapshot()['midi_count'];c.tap(1,8)
+        def onsets(state):
+            return [m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159]
+        state=c.wait(lambda state:len(onsets(state))>=9,4)
+        events=onsets(state);wanted=[(1,[144,[60,62,64,67][i%4],velocities[i%4]]) for i in range(len(events))]
+        assert [(m['port'],m['bytes']) for m in events]==wanted, dict(expected=wanted,actual=[(m['port'],m['bytes']) for m in events])
+        for i,event in enumerate(events):assert abs((event[key]-events[0][key])/1e9-i/6)<=tolerance
+        # Zero Note On is a release, not an audible onset. Check every positive
+        # note's scheduled release across both complete cycles independently.
+        for event in events[:8]:
+            if event['bytes'][2]==0:continue
+            offs=[m for m in state['midi'] if m['index']>event['index'] and m['port']==1 and m['bytes'][:2]==[128,event['bytes'][1]]]
+            assert offs and abs((offs[0][key]-event[key])/1e9-1/6)<=tolerance
+        c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[])
+        c.results.append(dict(kind='numeric-velocity-zero-boundary',mode=mode,velocities=velocities,raw_events_checked=len(events),passed=True))
