@@ -2837,7 +2837,13 @@ from shuffle_mixed_channels import mixed_shuffle_inheritance
 
 from shuffle_field_inheritance import shuffle_field_inheritance
 
+from song_length_domain import song_length_domain
+
+from song_length_sparse import sparse_song_lengths
+
 CASES={
+ 'M-SONG-LENGTH-002':dict(run=sparse_song_lengths,requirements=['SONG-LENGTH','CH-RANGE'],description='Sparse four-trig full-range channel at global1/2/63/64 then shrink2, independent silent-gap/repeat timing and every MIDI release'),
+ 'M-SONG-LENGTH-001':dict(run=song_length_domain,requirements=['SONG-LENGTH','CH-RANGE'],description='All64 global fader values, lower/upper clamp attempts, shrink/full restoration through exact tooltip and all64 channel LEDs'),
  'M-SHUFFLE-009':dict(run=lambda c:shuffle_field_inheritance(c,'feel'),requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Inherited feel: untouched X, minimum/maximum local overrides and restored X under nondefault global Shuffle, exact MIDI phase and gates'),
  'M-SHUFFLE-010':dict(run=lambda c:shuffle_field_inheritance(c,'basis'),requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Inherited basis: untouched X, minimum/maximum local overrides and restored X under nondefault global Shuffle, exact MIDI phase and gates'),
  'M-SHUFFLE-011':dict(run=lambda c:shuffle_field_inheritance(c,'amount'),requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Inherited amount: untouched X, minimum/maximum local overrides and restored X under nondefault global Shuffle, exact MIDI phase and gates'),
@@ -3358,10 +3364,10 @@ CASES={
  'M-TIME-011':dict(run=lambda c:pending_mask_lengths(c,True),requirements=['MASK-ATTRIBUTES','CH-TEMPO','OPT-REPEAT-RESET'],description='Maximum128-step notes span eighteen resets; complete initial releases precede coincident retriggers, and Stop drains remaining voices'),
  'M-MASK-013':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=2),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE','MASK-CHORD'],description='Chord mask slot2: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
  'M-MASK-014':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=3),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE','MASK-CHORD'],description='Chord mask slot3: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
- 'M-RANGE-GLOBAL-002':dict(run=offset_range_clipping,requirements=['CH-RANGE'],description='Minimal offset2..4 capped at two steps must sustain D/E sequence across global boundaries with matching grid and gates'),
- 'M-RANGE-GLOBAL-003':dict(run=offset_range_rates,requirements=['CH-RANGE','CH-TEMPO'],description='Offset2..4/G2 repeated D/E for ten loops at x3/x2/1/2/3, exact phase and gates beyond three global boundaries'),
- 'M-RANGE-GLOBAL-004':dict(run=offset_scale_range_clipping,requirements=['CH-RANGE','LOCK-SCALE'],description='Scale17 offset2..4 D/E/C locks with global1/2/3 caps and restoration; actual dependent MIDI notes and timing'),
- 'M-RANGE-LIVE-002':dict(run=queued_global_length_transitions,requirements=['CH-RANGE'],description='Queued global4-to2-to3 edits on offset2..4 apply at exact old boundaries, last queued fader value wins, step4 returns, exact uninterrupted MIDI phase/gates and queue tooltip'),
+ 'M-RANGE-GLOBAL-002':dict(run=offset_range_clipping,requirements=['SONG-LENGTH','CH-RANGE'],description='Minimal offset2..4 capped at two steps must sustain D/E sequence across global boundaries with matching grid and gates'),
+ 'M-RANGE-GLOBAL-003':dict(run=offset_range_rates,requirements=['SONG-LENGTH','CH-RANGE','CH-TEMPO'],description='Offset2..4/G2 repeated D/E for ten loops at x3/x2/1/2/3, exact phase and gates beyond three global boundaries'),
+ 'M-RANGE-GLOBAL-004':dict(run=offset_scale_range_clipping,requirements=['SONG-LENGTH','CH-RANGE','LOCK-SCALE'],description='Scale17 offset2..4 D/E/C locks with global1/2/3 caps and restoration; actual dependent MIDI notes and timing'),
+ 'M-RANGE-LIVE-002':dict(run=queued_global_length_transitions,requirements=['SONG-LENGTH','CH-RANGE'],description='Queued global4-to2-to3 edits on offset2..4 apply at exact old boundaries, last queued fader value wins, step4 returns, exact uninterrupted MIDI phase/gates and queue tooltip'),
  'M-RANGE-SAVED-003':dict(run=lambda c:rejected_manual_range(c,recovery='save'),requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves two-channel playback and files; explicit native named Save and reload retain edits and restart autosave'),
  'M-RANGE-SAVED-004':dict(run=lambda c:rejected_manual_range(c,recovery='new'),requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves current playback and files; explicit New creates silent project and restarts autosave'),
  'M-RANGE-SAVED-005':dict(run=saved_range_compatibility,requirements=['CH-RANGE','SAVE-AUTO','PERSIST-AUTO-001'],description='User-authored slot96, valid stored one-step range, exact MIDI gates/phase and grid survive two cold-load/autosave generations'),
@@ -3373,7 +3379,7 @@ CASES={
  'M-RANGE-SAVED-002':dict(run=rejected_manual_range,requirements=['CH-RANGE','PERSIST-AUTO-001','SAVE-NAMED'],description='Reject malformed scale range via actual file picker during two-route playback, preserve phase/gates/current editing/files, recover autosave through valid load'),
  'M-RANGE-SAVED-001':dict(run=rejected_saved_range,requirements=['CH-RANGE','PERSIST-AUTO-001','SAVE-AUTO'],description='Actual autosave copied with reversed range: native cold rejection tooltip, two idle deadlines with inputs preserve both files, invalid phrase never plays'),
  'M-RANGE-LIVE-001':dict(run=accepted_live_range_transitions,requirements=['CH-RANGE'],description='Accepted range edits while playhead is inside/below/above new bounds: exact next note, three loops, unchanged phase, full releases and stopped range LEDs'),
- 'M-RANGE-GLOBAL-001':dict(run=global_range_clipping,requirements=['CH-RANGE'],description='Global lengths1/2/3/4/64 cap channel1..4,2..4,63..64 by length, preserve endpoint LEDs, restore full range, exact notes/gates/phase'),
+ 'M-RANGE-GLOBAL-001':dict(run=global_range_clipping,requirements=['SONG-LENGTH','CH-RANGE'],description='Global lengths1/2/3/4/64 cap channel1..4,2..4,63..64 by length, preserve endpoint LEDs, restore full range, exact notes/gates/phase'),
  'M-RANGE-REJECT-005':dict(run=rejected_range_channel_isolation,requirements=['CH-RANGE'],description='Reject range edit while two independent routed channels play four/three-step phrases with distinct notes, velocity and fractional lengths; preserve both schedules'),
  'M-RANGE-REJECT-004':dict(run=lambda c:rejected_range_while_playing(c,True),requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageTrue: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
  'M-RANGE-REJECT-003':dict(run=lambda c:rejected_range_while_playing(c,False),requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageFalse: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),

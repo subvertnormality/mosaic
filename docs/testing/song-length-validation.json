@@ -1,0 +1,79 @@
+{
+  "status": "scoped-behaviour-validated",
+  "base": "c14c6f068a50a7f2966ede2af47c778ebe7a36d5",
+  "production_changed": false,
+  "native_runs": [
+    {
+      "case": "M-SONG-LENGTH-001",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/dcde76cfbff44aa0bb98581e3f7b0ccf/manifest.json",
+      "sha256": "509a3095c1990b56f3d2678f13c0d8919365a2e637ee2f1bc15d0a3480e6b732",
+      "stages": 67,
+      "source_differences": [
+        {
+          "path": "tests/behaviour/cases.py",
+          "recorded": "44503e76dfa29cad82315571bfc9a3408b45c8e2541cc5f49907d5e82937e9d7",
+          "current": "cb89bcf009aa02b6c60abdf592d6038839839e7ed799048ae3c3796902187b46"
+        },
+        {
+          "path": "tests/behaviour/manual-inventory.json",
+          "recorded": "8d5d2e17f8ed9821879e8a0af9a047a80429ba6d1938849fed49ac1f0a5d4a32",
+          "current": "fb9b10ae28bda66b971566dc1ed3bef894bf8f643f747bf2cca1ddec2266cd7f"
+        }
+      ]
+    },
+    {
+      "case": "M-SONG-LENGTH-001",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/fd475f44202648748ca50fb9052205d0/manifest.json",
+      "sha256": "94be1bc25b663296adea5c5d4e177263a34878871c7d0c3cab4ff1285a237e66",
+      "stages": 67,
+      "source_differences": [
+        {
+          "path": "tests/behaviour/cases.py",
+          "recorded": "44503e76dfa29cad82315571bfc9a3408b45c8e2541cc5f49907d5e82937e9d7",
+          "current": "cb89bcf009aa02b6c60abdf592d6038839839e7ed799048ae3c3796902187b46"
+        },
+        {
+          "path": "tests/behaviour/manual-inventory.json",
+          "recorded": "8d5d2e17f8ed9821879e8a0af9a047a80429ba6d1938849fed49ac1f0a5d4a32",
+          "current": "fb9b10ae28bda66b971566dc1ed3bef894bf8f643f747bf2cca1ddec2266cd7f"
+        }
+      ]
+    },
+    {
+      "case": "M-SONG-LENGTH-002",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/569e80b03ae04df18c068b389d5c7b83/manifest.json",
+      "sha256": "97b6f67ba7290951489549bd99bd5d17f494c20f4f6c2e91a70e12f0f0b92efe",
+      "stages": 5,
+      "source_differences": []
+    },
+    {
+      "case": "M-SONG-LENGTH-002",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4673e141f3804f3989945064af4dc29d/manifest.json",
+      "sha256": "5175c3e2247237d863d99bcbb739d19deb8f30a0b2e013446d9f48e1ae16cfe5",
+      "stages": 5,
+      "source_differences": []
+    }
+  ],
+  "source_scope": "Earlier001 case module and shared production/driver/oracles match exactly; only registry and inventory changed to add002. Exact prior registry/inventory hashes reconstructed. Original identities retained; not strict current-source M5.",
+  "scope": [
+    "All64 global length values,64 channelLEDs each, tooltip, min/max clamping, shrink/full restoration",
+    "Sparse MIDI loops at1/2/63/64 then2; exact silent-gap phase, notes, velocities, ports and every release",
+    "Existing range-cap, offset/scaletrack/rate and queued shrink/grow cases now linked to SONG-LENGTH"
+  ],
+  "retained_evidence": [
+    "docs/testing/offset-global-range-validation.json",
+    "docs/testing/live-range-validation.json"
+  ],
+  "failed_fixture_manifest": "/home/andy/projects/mosaic-behaviour-runs/3a37f259cde8476b97bbd9b552aead1e/manifest.json",
+  "fixture_correction": "Four configured trigs are bright15; later playable rests are dim2, inactive cells0. Confirmed in sequencer renderer, no production change.",
+  "limitations": [
+    "Per-song-slot isolation, repetitions and additional length/clock/reset interactions remain",
+    "Historical range evidence is retained, not rerun or relabelled as current",
+    "Full manual, emulator release and final unit/integration hardening incomplete"
+  ],
+  "full_campaign_complete": false
+}

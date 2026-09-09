@@ -3511,7 +3511,9 @@
         "M-RANGE-SAVED-004",
         "M-RANGE-SAVED-005",
         "M-RANGE-SAVED-006",
-        "M-PATCH-016"
+        "M-PATCH-016",
+        "M-SONG-LENGTH-001",
+        "M-SONG-LENGTH-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Candidate0080 rejects reversed/equal gesture endpoints before either assignment, preserving prior range. NativeREJECT001-004 cover both release sequences on channel/scale editors, stopped/playing, rejection framebuffer, unchanged range LEDs/MIDI/timing, valid recovery; MASK030/031 multiheld input and RANGE001/002 delayed/long holds/all63adjacent/full64 controls revalidated both clocks. Unit integration covers8192 channel1/17 endpoint pairs and4032 distinct-key pattern lengths. Remaining accepted live changes with playhead inside/outside and persisted malformed ranges; broader CH-RANGE completion not claimed. REJECT005 verifies live rejected range preserves independently routed four/three-step phrases, exact pitches/velocities, fractional lengths, onset alignment and phase in both clocks. Candidate0081 removes absolute-step master reset that truncated offset ranges. GLOBAL001-004 validate 15 cap/bounds combinations, minimal2..4/G2, five rates and scale17 D/E/C caps/restoration through MIDI, LEDs and exact phase.45 real-lattice integration combinations cover offset row/last-step boundaries and five rates for channel1/17. Accepted live transitions and malformed persisted ranges remain. LIVE001 covers accepted base-rate edits with playhead inside/below/above new range, literal next notes and three loops, full gate accounting, unchanged phase and final64LEDs. LIVE002 covers queued global4-to2-to3 on offset2..4, exact application indices4/14, queue framebuffer, final fader choice, restored step4 and all24completed gates. Both run in both clocks. Broader rate/long-note/live scale/recorder interactions and malformed persisted ranges remain; no domain completion claimed.",
@@ -5442,8 +5444,16 @@
         "MAN-075"
       ],
       "statement": "Global length1..64 caps channel length while permitting start/end outside global range.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-RANGE-GLOBAL-001",
+        "M-RANGE-GLOBAL-002",
+        "M-RANGE-GLOBAL-003",
+        "M-RANGE-GLOBAL-004",
+        "M-RANGE-LIVE-002",
+        "M-SONG-LENGTH-001",
+        "M-SONG-LENGTH-002"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Every length; shrink/expand; wrapped/outside channel ranges; independent one-step case.",
       "oracles": [
         "Independent range/clamp timeline and MIDI; fader/range feedback."
@@ -5458,7 +5468,8 @@
         "end_line": 911,
         "text": "#### Adjusting Song Sequence Length\n\nThe song sequence's length can be adjusted using the fader located at the lower left of the song editor page.\n\n* The global length can be set anywhere from 1 step to 64 step, offering a wide range of possibilities.\n* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length. The cap counts steps from the channel start: a channel set to steps 2\u20134 with global length 2 plays steps 2 and 3 repeatedly. Increasing the global length restores the remaining selected steps. This also applies to the scale track and follows each track\u2019s clock rate; explicit song reset options still apply.",
         "sha256": "65a66b953435f348a0b4d5185450e6c34bc4866193462d3d1dc252f2c564845d"
-      }
+      },
+      "remaining": "All64 fader/cap displays, clamps and sparse1/2/63/64 loops validated; existing offset/scaletrack/rate/live-shrink cases linked. Per-slot isolation, repeats and wider clock/reset combinations remain."
     },
     {
       "id": "SONG-SETTINGS",
