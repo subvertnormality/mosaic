@@ -2997,10 +2997,13 @@
       "cases": [
         "M-MERGE-006",
         "M-MERGE-007",
-        "M-MERGE-013"
+        "M-MERGE-013",
+        "M-MERGE-025",
+        "M-MERGE-026",
+        "M-MERGE-027"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001. M-MERGE-006 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-007 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required.",
+      "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001. M-MERGE-006 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-007 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native025-027 cover two/three contributors, exact/half/noninteger means, all numeric modes and returnedAverage, with exact MIDI release and phrase timing in both modes. Zero/negative and fractional source lengths remain pending.",
       "oracles": [
         "Independent resolved duration formula and exact note on/off table; mode LED."
       ],

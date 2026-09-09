@@ -265,3 +265,30 @@ def velocity_zero_boundary(c):
             assert offs and abs((offs[0][key]-event[key])/1e9-1/6)<=tolerance
         c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[])
         c.results.append(dict(kind='numeric-velocity-zero-boundary',mode=mode,velocities=velocities,raw_events_checked=len(events),passed=True))
+
+
+def numeric_length_merge(c,variant=0):
+    from cases import assert_durations
+    sources,expected=[([2,4],[3,5,1]),([3,4],[4,5,2]),([2,2,5],[3,6,1])][variant]
+    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
+    for slot,length in enumerate(sources,1):
+        c.tap(slot,1)
+        if slot>1:c.tap(1,4)
+        c.hold_tap((1,4),(length,4))
+        c.led_values([(x,4) for x in range(1,9)],[15]+[5]*(length-1)+[2]*(8-length))
+    c.tap(3,8)
+    for slot in range(2,len(sources)+1):c.tap(slot,2)
+    c.tap(14,8);c.tap(14,8)
+    c.hold_tap((15,8),(1,2));c.hold_tap((16,8),(1,2))
+    key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    for index,(mode,level,length) in enumerate(list(zip(['average','longer','shorter'],[2,5,8],expected))+[('average',2,expected[0])]):
+        if index:
+            c.action(type='key',n=1,state=1);c.elapse(.3)
+            try:c.tap(16,8);c.led_values([(16,8)],[level])
+            finally:c.action(type='key',n=1,state=0)
+        notes=c.playback([(1,[144,60,127])],cycles=2,timeout=5)
+        assert_durations(c,notes,[length]*2)
+        for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i*8/6)<=tolerance
+        c.results.append(dict(kind='numeric-length-merge',source_steps=sources,mode=mode,expected_steps=length,passed=True))

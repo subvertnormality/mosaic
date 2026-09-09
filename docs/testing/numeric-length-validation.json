@@ -1,0 +1,91 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-025",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/569f09fa48044644b9c89b9d54e7a75d/manifest.json",
+      "sha256": "6eb585c9433c4942da3ee4e8b49f5f1a3d813c0dcd01a91370b2090e1ede20a6",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-026",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f86f237723834abbb2a38b8b7abb0674/manifest.json",
+      "sha256": "7baed94c10f9cf3a9559ea9cfd60865b42f402b83ffedd32526cd62cc014bfee",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-027",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1d57cc0b3883427ea5e27a8c75f54fd8/manifest.json",
+      "sha256": "52ea2fc29a51e503d68363c41e0a39ea2500864520adf73452dd93ffc3be719d",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-025",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cb4f75f694bf4a26b9eda7fc2543b511/manifest.json",
+      "sha256": "17f7e618d0dcf273f9fa1001c6219984ada37cc069c1e27fba908925d495044a",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-026",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7cee4d0bfcd54ae5a7fea6519571af25/manifest.json",
+      "sha256": "5656e5368497690681157b5d3e27c78b470dd39b9b24d1bf1baf632bcf0026ef",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-027",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/062d60bff47d419395ae970e76bacb74/manifest.json",
+      "sha256": "c54f0006df79351cba3a699ee0f15b28b5f1459abc45ee66d8afab0a8f8121f9",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "source_lengths": [
+    [
+      2,
+      4
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      2,
+      2,
+      5
+    ]
+  ],
+  "expected_average_longer_shorter": [
+    [
+      3,
+      5,
+      1
+    ],
+    [
+      4,
+      5,
+      2
+    ],
+    [
+      3,
+      6,
+      1
+    ]
+  ],
+  "assertions": [
+    "Two/three contributing patterns with exact, half and noninteger averages",
+    "All numeric length modes and return to Average",
+    "Physical grid length gestures and feedback",
+    "Two complete cycles and closing onset; exact MIDI route, pitch, velocity, release duration and eight-step phrase spacing"
+  ],
+  "limitations": [
+    "Zero/negative results, fractional source lengths, full bounds and further lifecycle interactions remain pending",
+    "Full manual, experimental clock admission and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}
