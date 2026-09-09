@@ -1,0 +1,80 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0069",
+  "review": "01a083c2-e074-7af0-ad2a-4cf60ee1eac3",
+  "baseline": "3e5eb21e050e43d28dadf90bac08ced1",
+  "raw_invalid_note": [
+    144,
+    128,
+    127
+  ],
+  "native_runs": [
+    {
+      "case": "M-PARAM-014",
+      "mode": "controlled-experimental",
+      "run_id": "4cefb96738904221bfbd5ce7c41b1c17",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4cefb96738904221bfbd5ce7c41b1c17/manifest.json",
+      "sha256": "cc05b78684db298b73ba52106ff5b8e864aafeabe16b3e999789baaec2ea05ae"
+    },
+    {
+      "case": "M-PARAM-012",
+      "mode": "controlled-experimental",
+      "run_id": "156a7602fe1647ce9f21bfc8d6ca57a2",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/156a7602fe1647ce9f21bfc8d6ca57a2/manifest.json",
+      "sha256": "c1b9d00d1bb810e5e67440dbc178bad39661aafef48248b4c4327070d9c9a54f"
+    },
+    {
+      "case": "M-PARAM-013",
+      "mode": "controlled-experimental",
+      "run_id": "692f5e1ad5684ec8b5fb9f0e2be90d64",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/692f5e1ad5684ec8b5fb9f0e2be90d64/manifest.json",
+      "sha256": "a86ce4b7eea10a9e9357282471a9ec846094d767d6e28d27d7a8121ed7b92194"
+    },
+    {
+      "case": "M-PARAM-011",
+      "mode": "controlled-experimental",
+      "run_id": "c191f90979cf4ffeb6da32ef23eb0009",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c191f90979cf4ffeb6da32ef23eb0009/manifest.json",
+      "sha256": "0603bc7013d6c4bbe87eb6a3890f5ccd164774417c4802321c31bf43c3b00b04"
+    },
+    {
+      "case": "M-PARAM-014",
+      "mode": "real-time",
+      "run_id": "cd39ec1a63a04bdf80350f201dd185fd",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cd39ec1a63a04bdf80350f201dd185fd/manifest.json",
+      "sha256": "d0d63b6ecde4f21db5d53da439dfea4643ae4293e58616c40d0374bd15a1085b"
+    },
+    {
+      "case": "M-PARAM-012",
+      "mode": "real-time",
+      "run_id": "9a967f395234406ab5e6f1244346a0ed",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9a967f395234406ab5e6f1244346a0ed/manifest.json",
+      "sha256": "1eebd31ec6b1328c639dbf914109fba6c4241f2173fdb0cb5282ce7581b032e8"
+    },
+    {
+      "case": "M-PARAM-013",
+      "mode": "real-time",
+      "run_id": "f318029e34ae40bfa8475e5672ee1a66",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f318029e34ae40bfa8475e5672ee1a66/manifest.json",
+      "sha256": "448a8d29721f12924e08fbd70ca23577c467497a8c14fcd4fcd008171638c423"
+    },
+    {
+      "case": "M-PARAM-011",
+      "mode": "real-time",
+      "run_id": "5bc50c8bf5ed4eb1a6b87fb411c84b56",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/5bc50c8bf5ed4eb1a6b87fb411c84b56/manifest.json",
+      "sha256": "2daae7d0e7f1216fb11e2c723c2aa5b2a2999d776eb327104bf2a9534e10a56d"
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-c1249f25d557470a8a46dfff4946194f/results.json",
+    "summary": "Ran 487 tests in 7.689 seconds, 487 successes, 0 failures",
+    "scale_root_pitch_checks": 15360
+  },
+  "oracle_correction": {
+    "failed_run": "294a062779374590890cba69531739eb",
+    "reason": "Review table mistakenly excluded G/MIDI127 from D major; independent intervals require127. Test corrected, production unchanged."
+  },
+  "scope": "Nearest legal MIDI scale candidate only for Quantised Fixed Note. No saved value migration or changes to other quantiser callers. Ordinary root voice only; not full chord/arp/lock or campaign certification.",
+  "full_campaign_complete": false
+}

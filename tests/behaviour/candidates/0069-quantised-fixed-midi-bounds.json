@@ -1,0 +1,12 @@
+{
+  "status": "scoped-candidate-validated",
+  "review": "01a083c2-e074-7af0-ad2a-4cf60ee1eac3",
+  "baseline": "3e5eb21e050e43d28dadf90bac08ced1",
+  "raw_failure": [
+    144,
+    128,
+    127
+  ],
+  "scope": "Quantised Fixed Note only: filter transposed scale candidates to MIDI0..127 before nearest/lower-tie selection. Saved numeric values unchanged; other quantiser callers unchanged.",
+  "validation": "docs/testing/quantised-fixed-validation.json"
+}

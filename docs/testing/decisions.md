@@ -117,3 +117,31 @@ Strum shape/rest combinations and full timing acceptance remain pending.
 ## Panic and transport
 
 Codex arbitration 01a080f4-f7fd-7b00-b1ed-73d95c9d081e: preserve existing panic as an all-note/all-channel Note Off sweep, with transport and scheduled voices continuing. The manual's earlier “stop signal” wording was ambiguous; Play/Stop is the separate transport control. M-PANIC-007 through010 verify the musical schedule, complete sweep and transport-message boundaries. Hot reconnect remains pending emulator support.
+
+## SEM-009 — Quantised Fixed Note uses an absolute MIDI pitch
+
+Codex arbitration `01a083c2-e074-7af0-ad2a-4cf60ee1eac3` inspected history:
+`6f1fa13` introduced degree indexing; `0d4e23d` explicitly changed to pitch
+snapping in 2024 while leaving the manual wording stale. Preserve that established
+contract, without repitching saved projects or migrating their numeric values.
+Use nearest legal scale pitch with lower ties, configured root and root fallback;
+ordinary root voice only. Octave/transpose/degree/rotation/pentatonic switches do
+not modify this override. Fixed Note wins. An Off step lock inherits the channel
+value; Off is not a muted trig. Separate chord/arp paths require their own tests.
+
+The proposed upper-bound correction filters scale candidates to MIDI0..127,
+rather than emitting128 or clamping to an out-of-scale pitch. M-PARAM-014 reproduced raw128 before candidate0069; the unchanged oracle now
+passes both native lanes. See quantised-fixed-validation.json for scoped evidence.
+Independent native expectations are literal musical tables, not recorded output.
+Review: `reviews/quantised-fixed-semantics-review.json`. Broader precedence,
+modulation, held locks and lifecycle tests remain required. Manual update follows
+the boundary reproduction/fix so it can distinguish established from corrected behavior.
+
+
+SEM-009 oracle correction: the review's D-major input127 ->126 example was
+arithmetically wrong. MIDI127 is G (pitch class7), the fourth of D major:
+D/E/F#/G/A/B/C# = pitch classes2/4/6/7/9/11/1. Therefore127 stays127.
+The independent 15,360-case interval test already required this. Native failure
+`294a062779374590890cba69531739eb` is retained as a test-table defect, not a
+Mosaic defect. Only this literal expectation changes; no timing tolerance changes.
+The A harmonic-minor malformed128 baseline and candidate0069 remain valid.

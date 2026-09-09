@@ -776,7 +776,7 @@ Use this trig param to fix your channel to any MIDI note. The value represents a
 
 ##### Quantised Fixed Note
 
-You can use this trig param to manually select a note in the currently selected scale at any step. The value represents note number, where 0 is the root and higher numbers represent notes in the quantised scale. This overrides the note data coming in from the patterns. This will override random note values.
+Quantised Fixed Note supplies an absolute MIDI pitch, 0–127, and selects the nearest playable note in the active scale at its configured root (or the song root when unset). Equally close notes select the lower pitch. The number includes its octave; channel/step octave, transposition, chord degree/rotation and pentatonic switches do not modify this override. It replaces pattern, note-mask and random pitch calculations for the ordinary root voice; separately generated chord/arp voices have their own processing. Fixed Note takes precedence. A step lock set to Off inherits the channel value; when both are Off, ordinary pitch processing resumes. Off does not silence the trig.
 
 ##### Random Note
 

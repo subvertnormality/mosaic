@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "f3d98be21e4421aa53995829ee7f040bb7612e03f2a68f43bd335cb869550ae9",
+  "manual_sha256": "176f0b611e509a5429394c3e55c77f77169a0e134fa46a0f81da68294d0897be",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -775,7 +775,7 @@
       "level": 5,
       "start_line": 777,
       "end_line": 780,
-      "text_sha256": "577f9b316b77aa953bfa3c3be8f8ee6d31624068a302c84666451cb99d0d6641",
+      "text_sha256": "807999af07819a791cfc95af38adf75038bee7b0e8fd769dc35f92d311bca33d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-QUANTISED-FIXED"
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "f3d98be21e4421aa53995829ee7f040bb7612e03f2a68f43bd335cb869550ae9"
+      "sha256": "176f0b611e509a5429394c3e55c77f77169a0e134fa46a0f81da68294d0897be"
     },
     {
       "path": "cheat_sheet.html",
@@ -3299,7 +3299,15 @@
         "M-PATCH-044",
         "M-PATCH-045",
         "M-PATCH-046",
-        "M-PATCH-047"
+        "M-PATCH-047",
+        "M-PARAM-004",
+        "M-PARAM-005",
+        "M-PARAM-006",
+        "M-PARAM-007",
+        "M-PARAM-008",
+        "M-PARAM-009",
+        "M-PARAM-010",
+        "M-PARAM-011"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -3324,9 +3332,18 @@
         "MAN-054"
       ],
       "statement": "Explicit off MIDI lock sends no value on that step, neither resending last lock nor restoring default; existing slide is not cancelled.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "No lock/value/off after default or prior lock; first/wrap steps; enter off during a running slide.",
+      "cases": [
+        "M-PATCH-028",
+        "M-PATCH-036",
+        "M-PATCH-057",
+        "M-PATCH-058",
+        "M-PATCH-060",
+        "M-PATCH-061",
+        "M-PATCH-062",
+        "M-PATCH-063"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "No lock/value/off after default or prior lock; first/wrap steps; enter off during a running slide. Existing published cases cover explicit/custom/default Off and uninterrupted slides in both lanes; remaining first/wrap/live-edit combinations remain required.",
       "oracles": [
         "Exact silence for direct parameter send; independently expected continuing slide trajectory and device last-value behaviour."
       ],
@@ -3372,8 +3389,17 @@
         "MAN-057"
       ],
       "statement": "Fixed MIDI note bypasses quantisation and overrides quantised fixed/random values.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PARAM-004",
+        "M-PARAM-005",
+        "M-PARAM-006",
+        "M-PARAM-007",
+        "M-PARAM-008",
+        "M-PARAM-009",
+        "M-PARAM-010",
+        "M-PARAM-011"
+      ],
+      "status": "in_progress",
       "domain": "Every MIDI note where cheap; sentinel/bounds; all competing note sources.",
       "oracles": [
         "Literal output pitch and displayed value; unchanged velocity/duration."
@@ -3395,12 +3421,16 @@
       "sections": [
         "MAN-058"
       ],
-      "statement": "Quantised fixed note is scale-relative, overrides patterns and random notes.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Root0; positive/negative/legal extremes; roots/scales/degrees/rotation; fixed-note precedence.",
+      "statement": "Quantised Fixed Note snaps an absolute MIDI pitch to the nearest legal active-scale pitch; lower ties; Fixed Note wins.",
+      "cases": [
+        "M-PARAM-012",
+        "M-PARAM-013",
+        "M-PARAM-014"
+      ],
+      "status": "in_progress",
+      "domain": "All legal MIDI inputs and roots/scales; lower ties and endpoints; channel/step locks and Off inheritance; octave/transpose/degree/rotation and pentatonic independence; masks/random precedence; scale Off, root fallback, channel/song isolation and lifecycle.",
       "oracles": [
-        "Independent scale-index pitch table and exact MIDI."
+        "Explicit musical interval tables and literal native MIDI; no Mosaic quantiser used for expected values."
       ],
       "lanes": [
         "E",
@@ -3410,8 +3440,8 @@
         "path": "README.md",
         "line": 777,
         "end_line": 779,
-        "text": "##### Quantised Fixed Note\n\nYou can use this trig param to manually select a note in the currently selected scale at any step. The value represents note number, where 0 is the root and higher numbers represent notes in the quantised scale. This overrides the note data coming in from the patterns. This will override random note values.",
-        "sha256": "137c931e5987ee82b317000a81176bc4538e74aa92d59cb7afa0940dab28b766"
+        "text": "##### Quantised Fixed Note\n\nQuantised Fixed Note supplies an absolute MIDI pitch, 0\u2013127, and selects the nearest playable note in the active scale at its configured root (or the song root when unset). Equally close notes select the lower pitch. The number includes its octave; channel/step octave, transposition, chord degree/rotation and pentatonic switches do not modify this override. It replaces pattern, note-mask and random pitch calculations for the ordinary root voice; separately generated chord/arp voices have their own processing. Fixed Note takes precedence. A step lock set to Off inherits the channel value; when both are Off, ordinary pitch processing resumes. Off does not silence the trig.",
+        "sha256": "224b2ef6329adeeffe5af807010184a37080629c1d77d097166b8503b1b1b902"
       }
     },
     {

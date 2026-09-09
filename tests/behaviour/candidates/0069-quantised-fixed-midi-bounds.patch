@@ -1,0 +1,45 @@
+diff --git a/lib/quantiser.lua b/lib/quantiser.lua
+index 1a9717e..f9f89a0 100644
+--- a/lib/quantiser.lua
++++ b/lib/quantiser.lua
+@@ -414,7 +414,7 @@ function quantiser.process_with_mask_params(note_number, octave_mod, transpose,
+ end
+ 
+ 
+-function quantiser.snap_to_scale(note_num, scale_number, transpose)
++function quantiser.snap_to_scale(note_num, scale_number, transpose, midi_only)
+ 
+   local scale_container = program.get_scale(scale_number)
+   local scale = fn.deep_copy(scale_container.scale)
+@@ -422,6 +422,18 @@ function quantiser.snap_to_scale(note_num, scale_number, transpose)
+ 
+   scale = fn.transpose_scale(scale, root_note + (transpose or 0))
+ 
++  if midi_only then
++    -- A root shift can move the generated scale above MIDI127. Select from
++    -- playable scale notes, rather than clamping a result out of its scale.
++    local playable = {}
++    for _, pitch in ipairs(scale) do
++      if pitch >= 0 and pitch <= 127 then
++        playable[#playable + 1] = pitch
++      end
++    end
++    scale = playable
++  end
++
+   if type(note_num) ~= "number" then return nil end
+ 
+   return musicutil.snap_note_to_array(note_num, scale)
+diff --git a/lib/step.lua b/lib/step.lua
+index 0579a1f..ccc6574 100644
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -811,7 +811,7 @@ function step.handle(c, current_step)
+     end
+ 
+     if quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127 then
+-      note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number)
++      note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number, nil, true)
+     end
+ 
+     local fixed_note = step.process_stock_params(c, current_step, "fixed_note")

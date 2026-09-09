@@ -414,13 +414,25 @@ function quantiser.process_with_mask_params(note_number, octave_mod, transpose, 
 end
 
 
-function quantiser.snap_to_scale(note_num, scale_number, transpose)
+function quantiser.snap_to_scale(note_num, scale_number, transpose, midi_only)
 
   local scale_container = program.get_scale(scale_number)
   local scale = fn.deep_copy(scale_container.scale)
   local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
 
   scale = fn.transpose_scale(scale, root_note + (transpose or 0))
+
+  if midi_only then
+    -- A root shift can move the generated scale above MIDI127. Select from
+    -- playable scale notes, rather than clamping a result out of its scale.
+    local playable = {}
+    for _, pitch in ipairs(scale) do
+      if pitch >= 0 and pitch <= 127 then
+        playable[#playable + 1] = pitch
+      end
+    end
+    scale = playable
+  end
 
   if type(note_num) ~= "number" then return nil end
 

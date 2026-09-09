@@ -811,7 +811,7 @@ function step.handle(c, current_step)
     end
 
     if quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127 then
-      note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number)
+      note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number, nil, true)
     end
 
     local fixed_note = step.process_stock_params(c, current_step, "fixed_note")

@@ -1687,3 +1687,54 @@ function test_note_mask_with_chords_and_arp_no_scale_degree_effect_due_to_param_
   note_on_event = table.remove(midi_note_on_events, 1)
   luaunit.assert_equals(note_on_event[1], 67) -- G4 (C4 + 7 semitones)
 end
+
+
+function test_quantised_fixed_note_upper_boundary_through_step()
+  setup()
+  local scale = quantiser.get_scales()[4]
+  program.set_scale(1, {number=4, scale=scale.scale,
+    pentatonic_scale=scale.pentatonic_scale, chord=1, root_note=9})
+  local p = program.initialise_default_pattern()
+  p.note_values[1]=0; p.lengths[1]=1; p.trig_values[1]=1; p.velocity_values[1]=100
+  program.get_song_pattern(1).patterns[1]=p
+  fn.add_to_set(program.get_song_pattern(1).channels[1].selected_patterns,1)
+  params:set("midi_device_params_channel_1_3",127)
+  pattern.update_working_patterns()
+  step.handle(1,1)
+  local event=table.remove(midi_note_on_events,1)
+  luaunit.assert_equals(event[1],125)
+  luaunit.assert_equals(event[2],100)
+  luaunit.assert_equals(event[3],1)
+end
+
+function test_quantised_fixed_legal_pitch_domain_independent_intervals()
+  setup()
+  -- Explicit music-theory intervals; neither expected scales nor nearest-note
+  -- selection use the implementation under test or captured MIDI.
+  local intervals={
+    {0,2,4,5,7,9,11},{0,2,4,5,7,8,11},{0,2,3,5,7,8,10},
+    {0,2,3,5,7,8,11},{0,2,3,5,7,9,11},{0,2,3,5,7,9,10},
+    {0,1,3,5,7,8,10},{0,2,4,6,7,9,11},{0,2,4,5,7,9,10},
+    {0,1,3,5,6,8,10}}
+  for index, degrees in ipairs(intervals) do
+    for root=0,11 do
+      local scale=quantiser.get_scales()[index]
+      program.set_scale(1,{number=index,scale=scale.scale,
+        pentatonic_scale=scale.pentatonic_scale,chord=1,root_note=root})
+      local legal={}
+      for octave=0,10 do
+        for _,degree in ipairs(degrees) do
+          local pitch=root+12*octave+degree
+          if pitch<=127 then legal[#legal+1]=pitch end
+        end
+      end
+      for input=0,127 do
+        local expected=legal[1]
+        for _,pitch in ipairs(legal) do
+          if math.abs(pitch-input)<math.abs(expected-input) then expected=pitch end
+        end
+        luaunit.assert_equals(quantiser.snap_to_scale(input,1,nil,true),expected)
+      end
+    end
+  end
+end

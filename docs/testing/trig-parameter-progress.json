@@ -1,0 +1,134 @@
+{
+  "status": "fixed-domain-and-quantised-boundary-validated",
+  "cases": [
+    "M-PARAM-004",
+    "M-PARAM-005",
+    "M-PARAM-006",
+    "M-PARAM-007",
+    "M-PARAM-008",
+    "M-PARAM-009",
+    "M-PARAM-010",
+    "M-PARAM-011"
+  ],
+  "scope": "All128 Fixed Note pitches validated in both modes before0069; quantised major/D-major/A-harmonic-minor literal boundaries and Fixed112..127 precedence validated on0069 in both modes.",
+  "remaining": [
+    "Held-step/global fixed and quantised precedence, Off inheritance, clearing, reassignment and channel/song/cache isolation",
+    "Scale Off/root fallback, octave/transpose/degree/rotation and all pentatonic switch interactions",
+    "Probability/random ranges, masks, mixed modulation, scale merging and lifecycle triples",
+    "Full manual/emulator/refactor gates"
+  ],
+  "next_action": "Implement held-step/global Fixed and Quantised Fixed precedence through native controls, including zero, Off inheritance and clear/reassignment; keep exact MIDI/velocity/release/timing oracles. Published scoped checkpoint does not close the full critical-interaction matrix.",
+  "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
+  "fixed_note_matrix": [
+    {
+      "case": "M-PARAM-005",
+      "mode": "controlled-experimental",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-005\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/29243da0aab9480e97fb04f6674a42fe/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-006",
+      "mode": "controlled-experimental",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-006\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/cc21fa2d62bd482b801297458ba68f60/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-007",
+      "mode": "controlled-experimental",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-007\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/6d281127b16446ada971187adef0af95/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-008",
+      "mode": "controlled-experimental",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-008\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/3fd12a308db5428881d17da2d016c4ae/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-009",
+      "mode": "controlled-experimental",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-009\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/060996d0b26b48eb98ffc90dd3170658/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-010",
+      "mode": "controlled-experimental",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-010\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/5976dfd0877c444885b43c544cdea67c/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-011",
+      "mode": "controlled-experimental",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-011\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/e61cea116d624e69b7d7efa7f77d6ab1/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-004",
+      "mode": "real-time",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-004\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/590a4370a0524403aa16db30a2fa6395/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-005",
+      "mode": "real-time",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-005\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/7c9071bff5c84525aee54b2a25589651/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-006",
+      "mode": "real-time",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-006\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/f467c56757b74f08b6c79e4aaf51ef4d/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-007",
+      "mode": "real-time",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-007\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/b20d60aaa88e4eab8219093c1a1882f9/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-008",
+      "mode": "real-time",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-008\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/129cd341d17945e28679af1ebcb689e8/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-009",
+      "mode": "real-time",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-009\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/fd663e5f45504721b2340f2abf71f127/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-010",
+      "mode": "real-time",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-010\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/764b4243c7a0442789f2a4bbd48278cf/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "M-PARAM-011",
+      "mode": "real-time",
+      "exit_code": 0,
+      "stdout": "{\"case\": \"M-PARAM-011\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/7426fa643b82405d8f4bd99eccd19f2a/manifest.json\"}\n",
+      "stderr": ""
+    }
+  ],
+  "quantised_boundary_baseline": "3e5eb21e050e43d28dadf90bac08ced1",
+  "candidate": "0069",
+  "units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-c1249f25d557470a8a46dfff4946194f/results.json",
+  "review": "01a083c2-e074-7af0-ad2a-4cf60ee1eac3",
+  "quantised_validation": "docs/testing/quantised-fixed-validation.json"
+}
