@@ -1082,3 +1082,20 @@ published `codex/midi-hotplug` branch, using locked patch0013. Automatic approva
 review rejected emulator main merge/runtime activation; neither ran, and these
 tests use the authorised feature branch directly. Full manual coverage and
 controlled-time admission remain incomplete; this is a scoped checkpoint.
+
+## Master clock ordering regression
+
+M-SYNC-009 enables native MIDI clock output using norns keys/encoders and checks
+an independent receiver driven only by captured Start/Clock/Stop bytes. Expected
+note positions use that receiver's 24-PPQN timeline, never the first note as an
+origin. Four local start phases are specified. The first phase currently fails
+in both controlled and real time: Mosaic emits Note On before MIDI Start.
+See `master-clock-baseline-validation.json`; later assertions remain unverified
+because execution correctly stops on that first failure. This is an unresolved
+regression, not an accepted limitation. The fix must also align the first clock
+and note; merely reordering Start does not establish musical phase correctness.
+
+The earlier cold-start baseline above is historical. Subsequent acquisition,
+repeated Start, early Stop, and fractional subdivision results are recorded in
+`midi-acquisition-validation.json`, `repeated-start-validation.json`, and
+`acquisition-edge-validation.json`. The complete bidirectional matrix stays open.

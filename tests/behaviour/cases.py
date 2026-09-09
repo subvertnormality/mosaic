@@ -2857,7 +2857,10 @@ from acquisition_stop import acquisition_stop
 
 from fast_acquisition import fast_acquisition
 
+from master_clock import master_clock
+
 CASES={
+ 'M-SYNC-009':dict(run=master_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Mosaic master: native clock-output menu, Start/Clock/note ordering and independent24PPQN receiver phase across four local start delays'),
  'M-SYNC-008':dict(run=fast_acquisition,requirements=['CLOCK-MIDI-TRANSPORT-001','CH-TEMPO','MIDI-RELEASE-001'],description='Cold20BPM MIDI at x8: reconcile the one unknowable pre-acquisition step at Clock2, preserve subsequent absolute deadlines and balanced gates'),
  'M-SYNC-007':dict(run=acquisition_stop,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Cold20BPM external Start then Stop before Clock2: timely first-note release and no restart as subsequent clocks acquire tempo'),
  'M-SYNC-006':dict(run=repeated_external_start,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Repeated incoming Start during a held note resets to step1 at the next external Clock, releases the previous note and preserves absolute phase'),

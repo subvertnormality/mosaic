@@ -1,0 +1,28 @@
+{
+  "case": "M-SYNC-009",
+  "status": "confirmed failing baseline; fix pending",
+  "runs": [
+    {
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/97b35f79fb39481fa3abe87988a6bbde/manifest.json",
+      "sha256": "9b2738cd17abf5c10e830535637222b1a3566b22c64a36aa64a5fc9e915bc6cd",
+      "clock_mode": "controlled-experimental",
+      "mosaic_revision": "c2e58932e5abebf07cf8de45de310f898c79f58b",
+      "passed": false,
+      "failure": "Master emitted Note On before Start"
+    },
+    {
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/50040f599e474a02af31dfb0f3bf5162/manifest.json",
+      "sha256": "66675ad75cebd26cb7bbbf69b552798472112e921382085c8f1284856e44c827",
+      "clock_mode": "real-time",
+      "mosaic_revision": "c2e58932e5abebf07cf8de45de310f898c79f58b",
+      "passed": false,
+      "failure": "Master emitted Note On before Start"
+    }
+  ],
+  "runtime_install": "/home/andy/projects/monome-runtime-candidates/midi-clock-start-03/installation.json",
+  "limitations": [
+    "First ordering assertion fails; later phase sweeps and cadence assertions are not yet validated.",
+    "Experimental runtime is not default-admitted.",
+    "No physical instrument measurements."
+  ]
+}
