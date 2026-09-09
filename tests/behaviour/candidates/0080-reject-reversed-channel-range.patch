@@ -1,0 +1,56 @@
+diff --git a/lib/controls/sequencer.lua b/lib/controls/sequencer.lua
+index 0b827d4..d398a05 100644
+--- a/lib/controls/sequencer.lua
++++ b/lib/controls/sequencer.lua
+@@ -171,8 +171,14 @@ end
+ function sequencer:dual_press(x, y, x2, y2)
+   if y >= self.y and y <= self.y + 3 and y2 >= self.y and y2 <= self.y + 3 then
+     if self.mode == "channel" then
++      -- Channel ranges are ascending and need distinct endpoints. Reject the
++      -- gesture before changing either endpoint; pattern lengths may wrap.
++      if fn.calc_grid_count(x2, y2) <= fn.calc_grid_count(x, y) then
++        return false
++      end
+       program.get_selected_channel().start_trig = {x, y}
+       program.get_selected_channel().end_trig = {x2, y2}
++      return true
+     elseif self.mode == "pattern" then
+       local grid_count = fn.calc_grid_count(x, y)
+       if program.get_selected_pattern().trig_values[grid_count] == 1 then
+diff --git a/lib/pages/channel_edit_page/channel_edit_page.lua b/lib/pages/channel_edit_page/channel_edit_page.lua
+index 86b14a0..76d3871 100644
+--- a/lib/pages/channel_edit_page/channel_edit_page.lua
++++ b/lib/pages/channel_edit_page/channel_edit_page.lua
+@@ -237,10 +237,12 @@ function channel_edit_page.register_press()
+     function(x, y, x2, y2)
+       local channel = program.get_selected_channel()
+       local selected_song_pattern = program.get().selected_song_pattern
+-      channel_edit_page_sequencer:dual_press(x, y, x2, y2)
+-      if channel_edit_page_sequencer:is_this(x2, y2) then
++      local range_result = channel_edit_page_sequencer:dual_press(x, y, x2, y2)
++      if range_result == false then
++        tooltip:show("End must follow start")
++      elseif range_result == true then
+         program.get_selected_song_pattern().active = true
+-        tooltip:show("Channel " .. program.get().selected_channel .. " length changed")
++        tooltip:show("Channel " .. channel.number .. " length changed")
+       end
+       if channel_octave_fader:is_this(x2, y2) then
+         channel_octave_fader:press(x2, y2)
+diff --git a/lib/pages/scale_edit_page/scale_edit_page.lua b/lib/pages/scale_edit_page/scale_edit_page.lua
+index 750b083..60239ad 100644
+--- a/lib/pages/scale_edit_page/scale_edit_page.lua
++++ b/lib/pages/scale_edit_page/scale_edit_page.lua
+@@ -62,8 +62,10 @@ function scale_edit_page.register_press()
+     function(x, y, x2, y2)
+       local channel = program.get_channel(program.get().selected_song_pattern, 17)
+       local selected_song_pattern = program.get().selected_song_pattern
+-      scale_edit_page_sequencer:dual_press(x, y, x2, y2)
+-      if scale_edit_page_sequencer:is_this(x2, y2) then
++      local range_result = scale_edit_page_sequencer:dual_press(x, y, x2, y2)
++      if range_result == false then
++        tooltip:show("End must follow start")
++      elseif range_result == true then
+         program.get_selected_song_pattern().active = true
+         tooltip:show("Channel 17 length changed")
+       end

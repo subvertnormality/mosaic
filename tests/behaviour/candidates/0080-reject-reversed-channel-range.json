@@ -1,0 +1,13 @@
+{
+  "candidate": "0080",
+  "status": "scoped-candidate-validated",
+  "base": "908c1eedfbf5ed096440c8d1e80c321b68ba0662",
+  "production": [
+    "lib/controls/sequencer.lua",
+    "lib/pages/channel_edit_page/channel_edit_page.lua",
+    "lib/pages/scale_edit_page/scale_edit_page.lua"
+  ],
+  "patch": "0080-reject-reversed-channel-range.patch",
+  "validation": "docs/testing/range-guard-validation.json",
+  "full_campaign_complete": false
+}

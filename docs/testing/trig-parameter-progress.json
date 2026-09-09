@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Reproduce reversed range4..2 without MIDI, arbitrate rejection versus wrapping, fix with LED/MIDI and valid-range recovery checks. MASK030/031 restored-range keyboard isolation passed both clocks; reversed range remains unresolved.",
+  "next_action": "0080 reversed-range gesture fix validated. Continue CH-RANGE global clipping/live valid transitions/isolation/persisted data, then remaining manual and emulator gates.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -175,5 +175,6 @@
   "held_keyboard_masks_validation": "docs/testing/held-keyboard-masks-validation.json",
   "keyboard_chord_limit_validation": "docs/testing/keyboard-chord-limit-validation.json",
   "keyboard_rearticulation_validation": "docs/testing/keyboard-rearticulation-validation.json",
-  "multiheld_keyboard_validation": "docs/testing/multiheld-keyboard-validation.json"
+  "multiheld_keyboard_validation": "docs/testing/multiheld-keyboard-validation.json",
+  "range_guard_validation": "docs/testing/range-guard-validation.json"
 }

@@ -62,8 +62,10 @@ function scale_edit_page.register_press()
     function(x, y, x2, y2)
       local channel = program.get_channel(program.get().selected_song_pattern, 17)
       local selected_song_pattern = program.get().selected_song_pattern
-      scale_edit_page_sequencer:dual_press(x, y, x2, y2)
-      if scale_edit_page_sequencer:is_this(x2, y2) then
+      local range_result = scale_edit_page_sequencer:dual_press(x, y, x2, y2)
+      if range_result == false then
+        tooltip:show("End must follow start")
+      elseif range_result == true then
         program.get_selected_song_pattern().active = true
         tooltip:show("Channel 17 length changed")
       end

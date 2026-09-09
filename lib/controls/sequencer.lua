@@ -171,8 +171,14 @@ end
 function sequencer:dual_press(x, y, x2, y2)
   if y >= self.y and y <= self.y + 3 and y2 >= self.y and y2 <= self.y + 3 then
     if self.mode == "channel" then
+      -- Channel ranges are ascending and need distinct endpoints. Reject the
+      -- gesture before changing either endpoint; pattern lengths may wrap.
+      if fn.calc_grid_count(x2, y2) <= fn.calc_grid_count(x, y) then
+        return false
+      end
       program.get_selected_channel().start_trig = {x, y}
       program.get_selected_channel().end_trig = {x2, y2}
+      return true
     elseif self.mode == "pattern" then
       local grid_count = fn.calc_grid_count(x, y)
       if program.get_selected_pattern().trig_values[grid_count] == 1 then

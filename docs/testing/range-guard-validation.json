@@ -1,0 +1,187 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0080",
+  "native_runs": [
+    {
+      "case": "M-RANGE-REJECT-001",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/508db0f720bc416db069af715097040f/manifest.json",
+      "sha256": "8f63d2f750efb6cf919adca94877ec0801917eeeac841fc297a2cd5c76e277c6",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-REJECT-002",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/40770e983865432bbb3564ba57a94095/manifest.json",
+      "sha256": "48f61f051e194f39a07fca9b29c69be719b725a9c5c4756b6b623d78ff270a11",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-REJECT-001",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1865f9868f0142148454cd522a51060e/manifest.json",
+      "sha256": "86d20aa938f369e5b6245e59306029c19dde118a724d6ac11b3b85a9594a2cef",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-REJECT-002",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/92d00d5801ca40d0a058af998c73eabe/manifest.json",
+      "sha256": "17c277d62af145351b09834765ba783fcfc66e67e3d761e50c6fb0fb42f2d1d3",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-REJECT-003",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1c1b2b4655db44339a09e293dec32041/manifest.json",
+      "sha256": "13018ae40ebda2448bbccba12ac05e5fd5be368b6f6b8c8dbe909096c836901b",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-REJECT-004",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0316be3cf27d4fe3bc200864b7b72195/manifest.json",
+      "sha256": "b955fbe5d73345b48ca56a47ea694603ccf6de9358e9c47e05c304d4a73477ef",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-030",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e191163e1eb84545ab818726f2d34ad2/manifest.json",
+      "sha256": "0232f7963075922151948f2c70508117fe999b5eaf331396e774ce08b1f39332",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-031",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f1031e90dbec4793afec5d9f569be42e/manifest.json",
+      "sha256": "f6123e4f4dd3fd681de756734c3e479c00b3b8166db13d3e1c8b5a26a7898036",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-REJECT-003",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1530fdc298884f2da6c8960bc5a217ec/manifest.json",
+      "sha256": "785f5d855ba07ce2a06d492e22b2aeab24a421392602778b2c8a8b44ca112195",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-REJECT-004",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f45e3408502643cdaf793a2c81421866/manifest.json",
+      "sha256": "ee8316d99a263071df68d184b95ab8dc241757d44e72e95e88cfae8603ae7e0e",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-030",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/98436876c39944beb75986894aa1b4a6/manifest.json",
+      "sha256": "437d644573f8213c94ebc338df24b5ec7e935d9667f57ee64048873b1a7eec0a",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-031",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/dae1638b14b34e978da5c173dfddd3a4/manifest.json",
+      "sha256": "74d63e1a3ec5736f60ac7798c83d3ed84b7aa828e317579267441b1cf175c816",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-001",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/3e02bbafec49406e93186988bdd71a3d/manifest.json",
+      "sha256": "818b9a9f9dbc3fc872222c9f02f99a574a9a43025778e737a357859263e85c4f",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-002",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/51223135c2ca411fb051dd14bef9dfa3/manifest.json",
+      "sha256": "7774d16a06478e54e5180145388d954131687380f4b72acbd837a8a1a28b4fd3",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-001",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9598263fbe78446bb47610fc80442ac1/manifest.json",
+      "sha256": "57a3176723420da5b07e80083e1abaeb667b91ce27a6b106d29ebf8e6e432b96",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-002",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/295b85dbe8ca4a2cb696d4fd6d96ae81/manifest.json",
+      "sha256": "628169be6aafbfddd9937c2c72e470c428997a54decbedf0b0a33a4294698ef7",
+      "passed": true
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-e7a5060adbcb42df99d9e8ff7f157306/results.json",
+    "sha256": "a66d675f93e93924e6a8c31da14aa89013ae7ee6f1a2be90a8b24c90b35aebb4",
+    "summary": "Ran 499 tests in 8.630 seconds, 499 successes, 0 failures",
+    "channel_endpoint_pairs": 8192,
+    "pattern_distinct_pairs": 4032
+  },
+  "production_sha256": {
+    "lib/controls/sequencer.lua": "3ae87177f9231eeac1359672beafcc9d1ebf57bc3307f695838cfefbef9f0133",
+    "lib/pages/channel_edit_page/channel_edit_page.lua": "24d27c4b9b985c44b752998ce28c9ccf921384fb9f4510daaa2d581ede9593df",
+    "lib/pages/scale_edit_page/scale_edit_page.lua": "430062230a1ebb6b9bb96672d1175b76087b46dbc321c25f97ebf5f1069717cc"
+  },
+  "patch_sha256": "95e53b5f52af8dee2a7c4c10e1b78c93c4643e8b409f21e8f5fe5bd2df136b3e",
+  "patch_reconstruction": "/home/andy/projects/mosaic-behaviour-runs/range-guard-patch-x770dp_g",
+  "baseline": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/reversed-range-characterization-01.json",
+    "sha256": "4a02c8925800e132fb49ec219afdc03b898f06314d7f9b5eb97badbdfcf702a9",
+    "runs": [
+      {
+        "mode": "controlled-experimental",
+        "sequence": "hold4-release2",
+        "out": "/home/andy/projects/mosaic-behaviour-runs/reversed-range-diagnostic-b9b8462b607346b88bef966661b7a49a",
+        "defect_reproduced": true,
+        "recovery_verified": true,
+        "observed_repeated_pitch": 65,
+        "observed_note_count": 5,
+        "acceptance": false
+      },
+      {
+        "mode": "controlled-experimental",
+        "sequence": "press2-press4-release2",
+        "out": "/home/andy/projects/mosaic-behaviour-runs/reversed-range-diagnostic-794b6a245ebf4625aa2c5c6db7cf6b28",
+        "defect_reproduced": true,
+        "recovery_verified": true,
+        "observed_repeated_pitch": 65,
+        "observed_note_count": 5,
+        "acceptance": false
+      },
+      {
+        "mode": "real-time",
+        "sequence": "hold4-release2",
+        "out": "/home/andy/projects/mosaic-behaviour-runs/reversed-range-diagnostic-709832a8bdc442898a683484715601e9",
+        "defect_reproduced": true,
+        "recovery_verified": true,
+        "observed_repeated_pitch": 65,
+        "observed_note_count": 5,
+        "acceptance": false
+      },
+      {
+        "mode": "real-time",
+        "sequence": "press2-press4-release2",
+        "out": "/home/andy/projects/mosaic-behaviour-runs/reversed-range-diagnostic-7f5fe917b77c495d9008d52e4eb622fc",
+        "defect_reproduced": true,
+        "recovery_verified": true,
+        "observed_repeated_pitch": 65,
+        "observed_note_count": 5,
+        "acceptance": false
+      }
+    ]
+  },
+  "review": "01a08566-379b-7423-a152-c89bb3fe476e",
+  "scope": "Reject reversed/equal channel-mode gestures, preserve prior range, report rejection in both editors; valid gesture and pattern wrap behavior retained.",
+  "limitations": [
+    "Initial unit fixture called pattern dual-press with identical coordinates, an unreachable two-key gesture; old code returned65. Distinct-key matrix corrected, channel equal-end rejection retained. Failed run a38d6558b4aa405ebd35c202b1e87f0e remains evidence.",
+    "Fix is at gesture boundary, not migration/normalization of previously malformed saved data",
+    "Targeted accumulated evidence, not full same-tree manual release suite",
+    "Full manual/current controlled admission/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

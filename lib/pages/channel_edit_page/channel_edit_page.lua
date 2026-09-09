@@ -237,10 +237,12 @@ function channel_edit_page.register_press()
     function(x, y, x2, y2)
       local channel = program.get_selected_channel()
       local selected_song_pattern = program.get().selected_song_pattern
-      channel_edit_page_sequencer:dual_press(x, y, x2, y2)
-      if channel_edit_page_sequencer:is_this(x2, y2) then
+      local range_result = channel_edit_page_sequencer:dual_press(x, y, x2, y2)
+      if range_result == false then
+        tooltip:show("End must follow start")
+      elseif range_result == true then
         program.get_selected_song_pattern().active = true
-        tooltip:show("Channel " .. program.get().selected_channel .. " length changed")
+        tooltip:show("Channel " .. channel.number .. " length changed")
       end
       if channel_octave_fader:is_this(x2, y2) then
         channel_octave_fader:press(x2, y2)

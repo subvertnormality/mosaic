@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "ea7906ab467e0a49b39e3175f17a77d39a378d694a329edcdc1c0b606129a7a3",
+  "manual_sha256": "8631c922e0e4caf6de02e6779f954048d3073a5f6e59a56e9406b98b41edbb63",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -698,7 +698,7 @@
       "level": 4,
       "start_line": 712,
       "end_line": 729,
-      "text_sha256": "0b132d954c25c0996a5cc6b9903f3a4eb2afe0fc7004daba8159f682c818d90b",
+      "text_sha256": "1b83d15c22f411b61be184a7497b6093d263f15fd29f1d33e824280179b8635b",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-RANGE"
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "ea7906ab467e0a49b39e3175f17a77d39a378d694a329edcdc1c0b606129a7a3"
+      "sha256": "8631c922e0e4caf6de02e6779f954048d3073a5f6e59a56e9406b98b41edbb63"
     },
     {
       "path": "cheat_sheet.html",
@@ -3417,10 +3417,14 @@
         "M-REC-014",
         "M-PATCH-018",
         "M-MASK-030",
-        "M-MASK-031"
+        "M-MASK-031",
+        "M-RANGE-REJECT-001",
+        "M-RANGE-REJECT-002",
+        "M-RANGE-REJECT-003",
+        "M-RANGE-REJECT-004"
       ],
       "status": "partial-domain-coverage",
-      "domain": "All supported distinct starts/ends; wrap; SEM-002 inactive lone long hold and delayed combination; coprime lengths; global-scale interaction. MASK030/031 validate first-held and remaining-held keyboard targets in both release orders after explicit valid2..4 range restoration, exact preview/replay, nine completed note durations and out-of-range LEDs. This does not validate reversed-range handling. Mandatory unresolved reversed-range defect: accepted4..2 produces negative length, repeated-start playback and no matching active-range LEDs. Reproduce without MIDI for both release sequences, decide reject versus wrap with Codex arbitration, then fix and verify LEDs/MIDI/recovery. Evidence19172d47f6904bdf84961d6470f8bbe1 retained; no release gate waiver.",
+      "domain": "Candidate0080 rejects reversed/equal gesture endpoints before either assignment, preserving prior range. NativeREJECT001-004 cover both release sequences on channel/scale editors, stopped/playing, rejection framebuffer, unchanged range LEDs/MIDI/timing, valid recovery; MASK030/031 multiheld input and RANGE001/002 delayed/long holds/all63adjacent/full64 controls revalidated both clocks. Unit integration covers8192 channel1/17 endpoint pairs and4032 distinct-key pattern lengths. Remaining global-length clipping, other-channel isolation with populated routes, accepted live changes with playhead inside/outside and persisted malformed ranges; broader CH-RANGE completion not claimed.",
       "oracles": [
         "Range LEDs, exact loop boundaries and note/scale sequence; no global clamp substitution."
       ],
@@ -3432,8 +3436,8 @@
         "path": "README.md",
         "line": 714,
         "end_line": 720,
-        "text": "Channels can be adjusted independently, including the global scale pattern, within the 64-step sequence. This feature allows for intricate layering and timing variations within your compositions.\n\nTo adjust the length of a channel, hold down the start step in the channel editor, press and release a different end step while still holding the start, then release the start. The range commits when the end step is released. The active range is indicated by brighter buttons. Selecting a one-step channel range with this gesture is unsupported. Holding a step for a long time does nothing by itself: the held step remains available for combinations with other buttons, including a subsequent end-step press. This prevents an unintended action while preparing another combination.\n\n<img alt=\"Channel editor step and length selector buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-sequencer-step-buttons.svg\" width=\"300\" />\n\nThe behavior of the sequencer when handling patterns of different lengths can also be tailored to your needs. Navigate to the Norns param pages where you can find various [options](#options) that determine how the sequencer manages channels with differing lengths.",
-        "sha256": "98dc2a98ab206abd5b884f8099fec5eaeb05202aeb333a7e5ddc28913ea196be"
+        "text": "Channels can be adjusted independently, including the global scale pattern, within the 64-step sequence. This feature allows for intricate layering and timing variations within your compositions.\n\nTo adjust the length of a channel, hold down the start step in the channel editor, press and release a different end step while still holding the start, then release the start. The range commits when the end step is released. The active range is indicated by brighter buttons. Selecting a one-step channel range with this gesture is unsupported. Holding a step for a long time does nothing by itself: the held step remains available for combinations with other buttons, including a subsequent end-step press. This prevents an unintended action while preparing another combination. The end must be after the start. Reversed selections are rejected with a message, leaving the previous range unchanged; channel ranges do not wrap from the final step back to the first. The same rule applies to the Scale Editor range. Pattern note-length wrapping is unchanged.\n\n<img alt=\"Channel editor step and length selector buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-sequencer-step-buttons.svg\" width=\"300\" />\n\nThe behavior of the sequencer when handling patterns of different lengths can also be tailored to your needs. Navigate to the Norns param pages where you can find various [options](#options) that determine how the sequencer manages channels with differing lengths.",
+        "sha256": "fe8ef79a26b339b09dbca85a4949dd6fab8b71931650bd88881c5672fc7af061"
       }
     },
     {

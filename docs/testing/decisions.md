@@ -279,3 +279,8 @@ source inspection and semantic review are not substituted for that acceptance.
 ## Quantisation X inheritance
 
 Candidate0079 recognizes channel X0 in the local full-mask inheritance clause. Codex01a08543-a3a5-7902-bc8b-7ca2ee11428f confirmed the sentinel mismatch after the historical domain change. Explicit Off1 and On2 retain their meaning. Explicit step X bypasses the channel to use global; clearing removes the lock and restores channel inheritance. Native MASK021/022 and the24-combination actual-step unit matrix cover these distinctions. No generic stock-parameter resolution or Digitakt NRPN policy change.
+
+
+## Reject reversed channel range gestures
+
+Codex01a08566-379b-7423-a152-c89bb3fe476e selected rejection with prior-range preservation. Circular channel ranges would be a new feature; the scheduler and LED renderer assume ascending endpoints. Candidate0080 validates only the shared channel-mode gesture boundary and reports rejection in both channel/scale editors. Pattern note-length wrap and directly constructed one-step data remain unchanged. Four MIDI-free diagnostic runs reproduced repeated-start playback and no active-range LEDs before the fix;16native regressions and499units validate its stated scope. Persisted malformed data is a separate remaining domain.
