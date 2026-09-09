@@ -129,3 +129,33 @@ def mask_clear_combined_chords(c):
     try:c.key(2)
     finally:c.action(type='key',n=1,state=0)
     c.elapse(.06);verify(set(),'clear-channel-all-slots')
+
+
+def mask_clear_last_steps(c):
+    from cases import assert_durations
+    c.configure();c.hold_tap((15,7),(16,7));c.enc(1,-4)
+    # Last two channel steps have forced trigs, C60, velocity100, one-step gates.
+    c.enc(2,-1);c.enc(3,2);c.enc(2,1);c.enc(3,61)
+    c.enc(2,1);c.enc(3,101);c.enc(2,1);c.enc(3,14)
+    c.enc(2,-2)
+    for x,delta in [(15,12),(16,14)]:
+        c.action(type='grid',x=x,y=7,state=1)
+        try:c.enc(3,delta)
+        finally:c.action(type='grid',x=x,y=7,state=0)
+        c.elapse(.06)
+    def verify(pitches,stage):
+        notes=c.playback([(1,[144,pitch,100]) for pitch in pitches],cycles=3,timeout=5)
+        assert_durations(c,notes,[1]*4)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+        c.results.append(dict(kind='last-step-mask-clearing',stage=stage,steps=[63,64],expected=pitches,passed=True))
+    verify([72,74],'both-boundary-overrides')
+    c.action(type='grid',x=15,y=7,state=1)
+    try:c.key(2)
+    finally:c.action(type='grid',x=15,y=7,state=0)
+    c.elapse(.06);verify([60,74],'step63-cleared-step64-preserved')
+    c.action(type='key',n=1,state=1);c.elapse(.3)
+    try:c.key(2)
+    finally:c.action(type='key',n=1,state=0)
+    c.elapse(.06);verify([60,60],'step64-cleared-defaults-preserved')

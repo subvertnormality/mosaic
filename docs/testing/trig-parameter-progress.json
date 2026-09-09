@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "All four populated chord slots passed both clocks. Next boundary steps and recorded-mask clearing; broader manual and emulator gates remain incomplete.",
+  "next_action": "Steps63/64 passed both clocks. Initial fixture selected7/8 with13detents; corrected to one-step14 per divisions.lua, retained failure cf1a7154befa4308be9ed49bd0f654b3. Next recorded-mask clearing and broader manual/emulator gates.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -166,5 +166,6 @@
   "mask_channel_isolation_validation": "docs/testing/mask-channel-isolation-validation.json",
   "silent_trig_default_validation": "docs/testing/silent-trig-default-validation.json",
   "chord_slot_clearing_validation": "docs/testing/chord-slot-clearing-validation.json",
-  "combined_chord_clearing_validation": "docs/testing/combined-chord-clearing-validation.json"
+  "combined_chord_clearing_validation": "docs/testing/combined-chord-clearing-validation.json",
+  "boundary_mask_clearing_validation": "docs/testing/boundary-mask-clearing-validation.json"
 }
