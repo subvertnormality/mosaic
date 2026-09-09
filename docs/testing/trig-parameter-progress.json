@@ -218,7 +218,9 @@
     "cold_status": "confirmed-upstream-baseline-failure",
     "acquisition_checkpoint": "/home/andy/projects/mosaic-behaviour-runs/midi-acquisition-checkpoint.json",
     "acquisition_validation": "docs/testing/midi-acquisition-validation.json",
-    "next_case": "Stop and fast divisions during acquisition",
-    "repeated_start_validation": "docs/testing/repeated-start-validation.json"
+    "next_case": "Master MIDI clock output and independent receiver alignment",
+    "repeated_start_validation": "docs/testing/repeated-start-validation.json",
+    "acquisition_edge_validation": "docs/testing/acquisition-edge-validation.json",
+    "catchup_responsiveness": "pending"
   }
 }

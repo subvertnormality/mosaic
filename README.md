@@ -307,7 +307,7 @@ Most _Mosaic_ functions are described by tooltips that appear at the bottom of t
 
 ### External MIDI Transport
 
-With the norns clock source set to MIDI, an external transport Start resets Mosaic to step 1, including when it is already playing. Held notes are released before the restarted phrase begins. Restart cleanup does not send a MIDI Stop back to the connected devices; an ordinary Stop still releases notes and sends Stop. Using the grid Play button starts Mosaic locally against the running clock without resetting that external clock.
+With the norns clock source set to MIDI, an external transport Start resets Mosaic to step 1, including when it is already playing. Held notes are released before the restarted phrase begins. Restart cleanup does not send a MIDI Stop back to the connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase.
 
 ### MIDI Panic
 

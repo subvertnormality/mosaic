@@ -79,3 +79,16 @@ Done only when the matrix is reconciled, all required tests pass, discovered
 defects are resolved, any material review findings are addressed, and the
 original behaviour/emulator gates still pass. This card does not authorise the
 subsequent refactor; it strengthens the prerequisites for that work.
+
+
+## External-clock delayed callback responsiveness
+
+Required follow-up from Codex review01a08750-93e8-7213-a7d0-c7607971ab6d.
+The external lattice currently reconciles all elapsed pulse indices in one loop.
+Inject a substantially delayed callback at the coroutine/unit boundary, measure
+work before yielding, and verify that Stop can interrupt backlog processing.
+If a work budget is needed, choose it from the responsiveness measurement and
+yield between bounded batches without losing/duplicating pulse indices or
+reversing release/onset order. Verify the native Stop path too. Cold acquisition
+normally reconciles only four lattice pulses; it is not evidence for large
+backlog responsiveness. This follow-up remains open before full goal closure.

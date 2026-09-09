@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "ea5f4f25bf8a632b351709fc6d4e82a3c79bbca1330ce646259d0d728b64d3ed",
+  "manual_sha256": "80288ddd01f5847fb7032e1eca9f95219e6f1c2aef48b68ec3e19699af4b1746",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -159,7 +159,7 @@
       "level": 3,
       "start_line": 235,
       "end_line": 262,
-      "text_sha256": "a48f512977f4d74d1c07e3ac61163a41bd7b209409f619ed36894c616d6f1fc4",
+      "text_sha256": "189b74cb7eecb9ef4c65830679f8eb85543c2a6ee0cca2c65b50235215b8d034",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "REC-LIVE-NOTES",
@@ -208,11 +208,26 @@
       "status": "unreviewed"
     },
     {
-      "id": "MAN-017",
-      "title": "MIDI Panic",
+      "id": "MAN-114",
+      "title": "External MIDI Transport",
       "level": 3,
       "start_line": 308,
       "end_line": 311,
+      "text_sha256": "c48ad645d2c8b36337e6c541fce7da661a544a56e4438ef849797acc739a720f",
+      "classification": "statement-mapped-pending-audit",
+      "requirements": [
+        "CLOCK-MIDI-TRANSPORT-001",
+        "MIDI-RELEASE-001",
+        "NAV-TRANSPORT"
+      ],
+      "status": "unreviewed"
+    },
+    {
+      "id": "MAN-017",
+      "title": "MIDI Panic",
+      "level": 3,
+      "start_line": 312,
+      "end_line": 315,
       "text_sha256": "5ad89e6ca37bbcab107af1cdec23b35ce9e6fd1ad4efe77077ae41d522f62149",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -224,8 +239,8 @@
       "id": "MAN-018",
       "title": "Cheat Sheet",
       "level": 3,
-      "start_line": 312,
-      "end_line": 315,
+      "start_line": 316,
+      "end_line": 319,
       "text_sha256": "c514dca5086d6bf1db302f3742ad43e3a4161df97750429e19d771212d71f94a",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -235,8 +250,8 @@
       "id": "MAN-019",
       "title": "Typical Workflow",
       "level": 2,
-      "start_line": 316,
-      "end_line": 319,
+      "start_line": 320,
+      "end_line": 323,
       "text_sha256": "ea3762faa8923506a196f20206e4fe78bafb23d3af0c3cc0a5b36cb4d3a4aa1e",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -246,8 +261,8 @@
       "id": "MAN-020",
       "title": "Sound Design",
       "level": 3,
-      "start_line": 320,
-      "end_line": 327,
+      "start_line": 324,
+      "end_line": 331,
       "text_sha256": "4a4664ca7079ccd5df4fb5fab4298b67134a7e5639616d1eed307fb26069f1df",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -259,8 +274,8 @@
       "id": "MAN-021",
       "title": "Rhythm Section Design",
       "level": 3,
-      "start_line": 328,
-      "end_line": 335,
+      "start_line": 332,
+      "end_line": 339,
       "text_sha256": "5afb68aeaa1ac9b8b41addbd2e0ac31135920b598fcfa200223e65f71d00f35c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -272,8 +287,8 @@
       "id": "MAN-022",
       "title": "Harmony Design",
       "level": 3,
-      "start_line": 336,
-      "end_line": 343,
+      "start_line": 340,
+      "end_line": 347,
       "text_sha256": "43353056569f1cdfbab6a1d3c46fb43a501678ce5e524ec291619d1b29ff29d0",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -285,8 +300,8 @@
       "id": "MAN-023",
       "title": "Sequence Composition",
       "level": 3,
-      "start_line": 344,
-      "end_line": 347,
+      "start_line": 348,
+      "end_line": 351,
       "text_sha256": "1e293968de77f874b1ccf7a3e83294ac18952b6d3924575c1d329d0afc92dcd4",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -298,8 +313,8 @@
       "id": "MAN-024",
       "title": "Using Merge Modes",
       "level": 4,
-      "start_line": 348,
-      "end_line": 351,
+      "start_line": 352,
+      "end_line": 355,
       "text_sha256": "3f30424f614595c6c9529f96904b765cb798fe916c52df341ee2d7ba3b6445ba",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -311,8 +326,8 @@
       "id": "MAN-025",
       "title": "Melody Composition",
       "level": 4,
-      "start_line": 352,
-      "end_line": 357,
+      "start_line": 356,
+      "end_line": 361,
       "text_sha256": "49defb9b79964467e2f44f6db0c4529751ab840e1f16d2d0f960544a4234eecc",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -324,8 +339,8 @@
       "id": "MAN-026",
       "title": "Modulation, Movement, and Interest",
       "level": 3,
-      "start_line": 358,
-      "end_line": 361,
+      "start_line": 362,
+      "end_line": 365,
       "text_sha256": "be20a25319a1bf8b1acc1e1e4debd447e1b6305882277868a325cfd2f8ce3a4f",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -337,8 +352,8 @@
       "id": "MAN-027",
       "title": "Song Composition",
       "level": 3,
-      "start_line": 362,
-      "end_line": 367,
+      "start_line": 366,
+      "end_line": 371,
       "text_sha256": "4e41f8bae91e28143bb478286229fe0c21cb39897bd0e77537fc76b93099296e",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -350,8 +365,8 @@
       "id": "MAN-028",
       "title": "Dig Deeper",
       "level": 2,
-      "start_line": 368,
-      "end_line": 371,
+      "start_line": 372,
+      "end_line": 375,
       "text_sha256": "c8a74289619f2cd0236652afca58ffc129f25f977aa758736b2639ba18e7030a",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -361,8 +376,8 @@
       "id": "MAN-029",
       "title": "Pattern Editor",
       "level": 3,
-      "start_line": 372,
-      "end_line": 384,
+      "start_line": 376,
+      "end_line": 388,
       "text_sha256": "2a13ca80bc0e92bc1db34925474cfd2a82809cfd3cac0b02f78423da03941ebc",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -372,8 +387,8 @@
       "id": "MAN-030",
       "title": "Adding Trigs",
       "level": 4,
-      "start_line": 385,
-      "end_line": 440,
+      "start_line": 389,
+      "end_line": 444,
       "text_sha256": "ea0d4b0ac8211b36d7f07d93123ef6e1ee67998e4a1a677a5c65a988fd36d38e",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -401,8 +416,8 @@
       "id": "MAN-031",
       "title": "Adding Notes",
       "level": 4,
-      "start_line": 441,
-      "end_line": 476,
+      "start_line": 445,
+      "end_line": 480,
       "text_sha256": "6f254e2bd4c61282e90218ce69d898bc188a2716cf87b01a271afc45dccf1984",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -421,8 +436,8 @@
       "id": "MAN-032",
       "title": "Adding Velocity",
       "level": 4,
-      "start_line": 477,
-      "end_line": 491,
+      "start_line": 481,
+      "end_line": 495,
       "text_sha256": "a36f2cb254613654b65536a53ca374791634a211b2872b249b77e2da2978bd5a",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -435,8 +450,8 @@
       "id": "MAN-033",
       "title": "Channel Editor",
       "level": 3,
-      "start_line": 492,
-      "end_line": 504,
+      "start_line": 496,
+      "end_line": 508,
       "text_sha256": "17efe19834fd5f84ac8d905c0cbbcfb936bc83b594c8ca27d9bd29b493ef29f1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -448,8 +463,8 @@
       "id": "MAN-034",
       "title": "Devices",
       "level": 4,
-      "start_line": 505,
-      "end_line": 515,
+      "start_line": 509,
+      "end_line": 519,
       "text_sha256": "f416516e58e326f35c93581dc476a9898fe0c3f3f9ed3c468bca1ca73195fcf6",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -461,8 +476,8 @@
       "id": "MAN-035",
       "title": "MIDI Sound Sources",
       "level": 5,
-      "start_line": 516,
-      "end_line": 521,
+      "start_line": 520,
+      "end_line": 525,
       "text_sha256": "89169e670534434d971ae303aeb6fdfc5377c229c1078e373e5b5f246d2930eb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -474,8 +489,8 @@
       "id": "MAN-036",
       "title": "Norns Sound Sources with n.b.",
       "level": 5,
-      "start_line": 522,
-      "end_line": 537,
+      "start_line": 526,
+      "end_line": 541,
       "text_sha256": "cf69cc2e19481bf2be072c05b96a1160e11a75aec64a4a864dd89f7d7f7390d8",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -485,9 +500,9 @@
       "id": "MAN-037",
       "title": "Device Parameters",
       "level": 4,
-      "start_line": 538,
-      "end_line": 548,
-      "text_sha256": "e4060cccc714b4360b917cce8796939b298ba98db6851e83ac5e2cbd75b09ee4",
+      "start_line": 542,
+      "end_line": 552,
+      "text_sha256": "52ba5d77a27314e1a79ef4b742162d71511284414426d2791da86ecefaf32c92",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-PATCH-RECALL",
@@ -499,8 +514,8 @@
       "id": "MAN-038",
       "title": "Adding Patterns to Channels",
       "level": 4,
-      "start_line": 549,
-      "end_line": 561,
+      "start_line": 553,
+      "end_line": 565,
       "text_sha256": "bed3b0532206401ab32351008247f26b7efcb254482dd6feb994aff4ea8ce815",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -512,8 +527,8 @@
       "id": "MAN-039",
       "title": "Masks",
       "level": 4,
-      "start_line": 562,
-      "end_line": 574,
+      "start_line": 566,
+      "end_line": 578,
       "text_sha256": "513d26ff5a4fff4619a6e028d856ba0dccc6f5b5d80c46062d6c40760ba79268",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -526,8 +541,8 @@
       "id": "MAN-040",
       "title": "Adding Trig Masks",
       "level": 5,
-      "start_line": 575,
-      "end_line": 586,
+      "start_line": 579,
+      "end_line": 590,
       "text_sha256": "14eb7aedb79c929a2c625492f7a81828c5779889458d92f9e38eb2b2cac3e07d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -539,8 +554,8 @@
       "id": "MAN-041",
       "title": "Adding Melodic Notes over Harmony and Drums",
       "level": 5,
-      "start_line": 587,
-      "end_line": 592,
+      "start_line": 591,
+      "end_line": 596,
       "text_sha256": "3236048f2988263f13fde3a7f718c9f8e9000db0441760a6e062b96a8d34e14d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -553,8 +568,8 @@
       "id": "MAN-042",
       "title": "Adding Chords",
       "level": 5,
-      "start_line": 593,
-      "end_line": 598,
+      "start_line": 597,
+      "end_line": 602,
       "text_sha256": "4f47c2c4008b0fbcb8955fc9e48b73bfe488557325a3cdcdb25be13d8b0845e8",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -566,9 +581,9 @@
       "id": "MAN-043",
       "title": "Removing Masks",
       "level": 5,
-      "start_line": 599,
-      "end_line": 610,
-      "text_sha256": "b9afddd1cb3bd0291cfa1427027e01e050a1f4fb9434a4aa98aba301becfcbf5",
+      "start_line": 603,
+      "end_line": 614,
+      "text_sha256": "ba82df18e08ebbac095b84129bb0d95521bf4d1fc20fa07c306085e15c41ac7c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-CLEAR-CHANNEL",
@@ -580,8 +595,8 @@
       "id": "MAN-044",
       "title": "Merge Modes",
       "level": 4,
-      "start_line": 611,
-      "end_line": 623,
+      "start_line": 615,
+      "end_line": 627,
       "text_sha256": "3873e18f2771907bac76f937d917639a4df1ada3d34de252ee7cf400bf414f64",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -591,8 +606,8 @@
       "id": "MAN-045",
       "title": "Trig Merge Modes",
       "level": 5,
-      "start_line": 624,
-      "end_line": 633,
+      "start_line": 628,
+      "end_line": 637,
       "text_sha256": "838f3597035c39f17f4f5cf5586cd7537076f135b645763fceb10ef88eac82ee",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -606,9 +621,9 @@
       "id": "MAN-046",
       "title": "Note Merge Modes",
       "level": 5,
-      "start_line": 634,
-      "end_line": 646,
-      "text_sha256": "3381ca32a97ddeca3bc1c98fc9b45a8e1f81c9a366097251e05b95e7313cfb19",
+      "start_line": 638,
+      "end_line": 650,
+      "text_sha256": "3b7732216e0ea9e1d2a3c072feaa9f59bb694af7ca41ee44f550d4c61e4eb391",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-NOTE-AVERAGE",
@@ -622,9 +637,9 @@
       "id": "MAN-047",
       "title": "Velocity Merge Modes",
       "level": 5,
-      "start_line": 647,
-      "end_line": 657,
-      "text_sha256": "6b953321e057687a14d787d68433b845e688fd5ef5b03f43129481ad3deaf11f",
+      "start_line": 651,
+      "end_line": 661,
+      "text_sha256": "f7290cc1a7a35465c84cc6f020c562a10af5110c4dc0051a22e0a6d5b2e84672",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-VELOCITY"
@@ -635,9 +650,9 @@
       "id": "MAN-048",
       "title": "Length Merge Modes",
       "level": 5,
-      "start_line": 658,
-      "end_line": 670,
-      "text_sha256": "5630ad0dd2a2619c503b2ff1bd8354d8e1ed75645f88c467a85a71fda1887917",
+      "start_line": 662,
+      "end_line": 674,
+      "text_sha256": "a0d7346461fff3277d86e44f88b2b7074d42a07256b8ed1a501044a60833cbd1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-LENGTH"
@@ -648,8 +663,8 @@
       "id": "MAN-049",
       "title": "Note Dashboard",
       "level": 4,
-      "start_line": 671,
-      "end_line": 674,
+      "start_line": 675,
+      "end_line": 678,
       "text_sha256": "4535e34c026ee740a6824567cf3d107885c2eb208d7b0ee4ac87a96b3d7eec0d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -661,9 +676,9 @@
       "id": "MAN-050",
       "title": "Clocks, Swing and Shuffle",
       "level": 4,
-      "start_line": 675,
-      "end_line": 689,
-      "text_sha256": "a79bfe24389edd4e5e76d4891fbc34aa684d71ff9385ec4280b221ec92df31a5",
+      "start_line": 679,
+      "end_line": 693,
+      "text_sha256": "ecbac568d722315657978a3750a9fc0a6e9c49074aef88ffa90502a57b5257b8",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-CLOCK-INHERIT",
@@ -681,8 +696,8 @@
       "id": "MAN-051",
       "title": "Memory (undo and redo)",
       "level": 4,
-      "start_line": 690,
-      "end_line": 711,
+      "start_line": 694,
+      "end_line": 715,
       "text_sha256": "dc7bc5f4c469b996c94ebfe8008f1f1ccf64b04618ccd8e02d254e19dfea20fc",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -696,9 +711,9 @@
       "id": "MAN-052",
       "title": "Channel Length",
       "level": 4,
-      "start_line": 712,
-      "end_line": 729,
-      "text_sha256": "1b83d15c22f411b61be184a7497b6093d263f15fd29f1d33e824280179b8635b",
+      "start_line": 716,
+      "end_line": 733,
+      "text_sha256": "ce85e7fc9080983aebed704622a8f69da5df19cd573f1ca10dc30214ee3232c1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-RANGE"
@@ -709,8 +724,8 @@
       "id": "MAN-053",
       "title": "Muting Channels",
       "level": 4,
-      "start_line": 730,
-      "end_line": 742,
+      "start_line": 734,
+      "end_line": 746,
       "text_sha256": "d4693f6a37a0edf2f58ff8b48568995924a75ba9b69589d756f46a71588c7bc9",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -722,8 +737,8 @@
       "id": "MAN-054",
       "title": "Trig Parameters",
       "level": 3,
-      "start_line": 743,
-      "end_line": 764,
+      "start_line": 747,
+      "end_line": 768,
       "text_sha256": "0201fcc995e961851cff49c836214cd183e77e528e7e9c5e9cff930c489b2602",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -736,8 +751,8 @@
       "id": "MAN-055",
       "title": "Sequencer Params",
       "level": 4,
-      "start_line": 765,
-      "end_line": 768,
+      "start_line": 769,
+      "end_line": 772,
       "text_sha256": "5b7bd6f92824c01002ca8fff6a995fed732b5dd84e58df1d2db112c0c5c5561c",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -747,8 +762,8 @@
       "id": "MAN-056",
       "title": "Trig Probability",
       "level": 5,
-      "start_line": 769,
-      "end_line": 772,
+      "start_line": 773,
+      "end_line": 776,
       "text_sha256": "6345e2014ace2bf5b0c75dc224c429f3ed59dd0287bcace2123d415740b2d020",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -760,8 +775,8 @@
       "id": "MAN-057",
       "title": "Fixed Note",
       "level": 5,
-      "start_line": 773,
-      "end_line": 776,
+      "start_line": 777,
+      "end_line": 780,
       "text_sha256": "5e80c36332bb3bde2b5c766dca144d2f440a9b93f6685b38c6e6ac9c74edc9e7",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -773,9 +788,9 @@
       "id": "MAN-058",
       "title": "Quantised Fixed Note",
       "level": 5,
-      "start_line": 777,
-      "end_line": 780,
-      "text_sha256": "807999af07819a791cfc95af38adf75038bee7b0e8fd769dc35f92d311bca33d",
+      "start_line": 781,
+      "end_line": 784,
+      "text_sha256": "b4291012d2edb193e1d8230576a4d545489f0fb0e315b0b67bdfcbf02bbd9e89",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-QUANTISED-FIXED"
@@ -786,9 +801,9 @@
       "id": "MAN-059",
       "title": "Random Note",
       "level": 5,
-      "start_line": 781,
-      "end_line": 784,
-      "text_sha256": "2fa70056b1a25a815c5c695ff93ab019071810f2875527eb4d4002b7526914c8",
+      "start_line": 785,
+      "end_line": 788,
+      "text_sha256": "43e4bbd83e0d0189095f844f48e1fabafa1051ffb2019a9155bb4d0c7bdded2a",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-RANDOM"
@@ -799,8 +814,8 @@
       "id": "MAN-060",
       "title": "Random Twos Note",
       "level": 5,
-      "start_line": 785,
-      "end_line": 788,
+      "start_line": 789,
+      "end_line": 792,
       "text_sha256": "9da9f1100341333ad65bd7faaa787a1603644cda384d1339e515182f59b21ca5",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -812,8 +827,8 @@
       "id": "MAN-061",
       "title": "Chord Strum",
       "level": 5,
-      "start_line": 789,
-      "end_line": 792,
+      "start_line": 793,
+      "end_line": 796,
       "text_sha256": "9b9dc1490387e933020beca0b013e5d22754e84ee11fd7b9b586d7d7f4bce4a2",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -825,8 +840,8 @@
       "id": "MAN-062",
       "title": "Chord Arpeggio",
       "level": 5,
-      "start_line": 793,
-      "end_line": 802,
+      "start_line": 797,
+      "end_line": 806,
       "text_sha256": "1cfa612aa9df7502564124367b78cea6db4f477e1a5b7820323401b24b3ccdce",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -838,8 +853,8 @@
       "id": "MAN-063",
       "title": "Chord Acceleration",
       "level": 5,
-      "start_line": 803,
-      "end_line": 819,
+      "start_line": 807,
+      "end_line": 823,
       "text_sha256": "9516fc6e1a31a17bd608dd443db02944defb5e62870178af3ec22d02ae28a708",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -851,8 +866,8 @@
       "id": "MAN-064",
       "title": "Chord Spread",
       "level": 5,
-      "start_line": 820,
-      "end_line": 823,
+      "start_line": 824,
+      "end_line": 827,
       "text_sha256": "7ad4157066b524b9c4fceda4170659c7f0d85b3621b0e0bb3d0864e2fc29fc90",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -864,8 +879,8 @@
       "id": "MAN-065",
       "title": "Chord Velocity Modifier",
       "level": 5,
-      "start_line": 824,
-      "end_line": 827,
+      "start_line": 828,
+      "end_line": 831,
       "text_sha256": "7dd51af2cf1b90014f30f83d9a36f7caafb63f87269a3ee08d7a57e544b035eb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -877,8 +892,8 @@
       "id": "MAN-066",
       "title": "Chord Shape Modifier",
       "level": 5,
-      "start_line": 828,
-      "end_line": 831,
+      "start_line": 832,
+      "end_line": 835,
       "text_sha256": "5a13c29f0b3ddc6ed3279973efddf8d887f699391d94f7ca15dedc6002a38b38",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -890,8 +905,8 @@
       "id": "MAN-067",
       "title": "Mute Root Note",
       "level": 5,
-      "start_line": 832,
-      "end_line": 835,
+      "start_line": 836,
+      "end_line": 839,
       "text_sha256": "88111a4c6b3d6cf200a2303fdaa69094327fb6c6d8ee04850c5d882e1108cb01",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -903,9 +918,9 @@
       "id": "MAN-068",
       "title": "Fully Quantise Mask",
       "level": 5,
-      "start_line": 836,
-      "end_line": 839,
-      "text_sha256": "1793e941f15977ef8620756e77d4d5ffff2f6d3283ff69fc590dddd13a55714f",
+      "start_line": 840,
+      "end_line": 843,
+      "text_sha256": "4bd6d1bcf77c8050c6e26126dae7926ad1e3f0da0a6ede6f900ec34d8dd44749",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-FULL-QUANTISE"
@@ -916,9 +931,9 @@
       "id": "MAN-069",
       "title": "Scale Editor",
       "level": 3,
-      "start_line": 840,
-      "end_line": 862,
-      "text_sha256": "b67a6e9beb0f4f83fcc84408253cd703923f12ce100578bc523f85a1242dd5a0",
+      "start_line": 844,
+      "end_line": 866,
+      "text_sha256": "f5ed52b6baa9a6dccc00f1cc0ea0f1da5a09e83eebf3689e1f291c817c21ee69",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SCALE-EDIT",
@@ -931,8 +946,8 @@
       "id": "MAN-070",
       "title": "Transposition",
       "level": 4,
-      "start_line": 863,
-      "end_line": 875,
+      "start_line": 867,
+      "end_line": 879,
       "text_sha256": "5336961e5456d860865534b599798373ec80018a8203669d9f0d1a52e3fd8742",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -944,9 +959,9 @@
       "id": "MAN-071",
       "title": "Song Editor",
       "level": 3,
-      "start_line": 876,
-      "end_line": 887,
-      "text_sha256": "733653885e599d34f84a25ed0f108f85e30779079bf657ccd9410fdc53fd93e4",
+      "start_line": 880,
+      "end_line": 891,
+      "text_sha256": "cdae67432e7bf5e54a432c6a3c472d981faae4fd2880f8c3e9197acc63e5db4b",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-SLOTS"
@@ -957,8 +972,8 @@
       "id": "MAN-072",
       "title": "Button Indicators",
       "level": 4,
-      "start_line": 888,
-      "end_line": 893,
+      "start_line": 892,
+      "end_line": 897,
       "text_sha256": "be3fc63e1627c5f9cc57a52cb50eb44ae1f247f0aaa67962766821a91309d06b",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -970,8 +985,8 @@
       "id": "MAN-073",
       "title": "Interacting with Slots",
       "level": 4,
-      "start_line": 894,
-      "end_line": 901,
+      "start_line": 898,
+      "end_line": 905,
       "text_sha256": "072a47fe0374c191133c4e53c319ca79377ad2f09ddef8f5c980d12d66199689",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -983,8 +998,8 @@
       "id": "MAN-074",
       "title": "Song Mode Operations",
       "level": 4,
-      "start_line": 902,
-      "end_line": 905,
+      "start_line": 906,
+      "end_line": 909,
       "text_sha256": "8d805187ee9019217468edf12d3c615b1ffea37c60ca17808c311049443b79f2",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -996,9 +1011,9 @@
       "id": "MAN-075",
       "title": "Adjusting Song Sequence Length",
       "level": 4,
-      "start_line": 906,
-      "end_line": 921,
-      "text_sha256": "6295ae2069029c0974fb425b0c642fef5de0d02e7f39d641cddb77eb5e02d535",
+      "start_line": 910,
+      "end_line": 925,
+      "text_sha256": "2d86d97021b2582174e3e867a7e5e27daadc1ab46283510d116c6efda3711bc3",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-LENGTH"
@@ -1009,8 +1024,8 @@
       "id": "MAN-076",
       "title": "Navigating the Norns Display",
       "level": 4,
-      "start_line": 922,
-      "end_line": 926,
+      "start_line": 926,
+      "end_line": 930,
       "text_sha256": "9d96ef1211c58904783033bbf9775a68783e786992e0abfe22fd04bc72b22a73",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1022,8 +1037,8 @@
       "id": "MAN-077",
       "title": "Locks",
       "level": 2,
-      "start_line": 927,
-      "end_line": 930,
+      "start_line": 931,
+      "end_line": 934,
       "text_sha256": "d6b36696cd868adb542b004eaf87c165c3e05e4e4cdaa037adeab3001206b8cb",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -1033,8 +1048,8 @@
       "id": "MAN-078",
       "title": "Trig Param Locks",
       "level": 3,
-      "start_line": 931,
-      "end_line": 955,
+      "start_line": 935,
+      "end_line": 959,
       "text_sha256": "10a093dc138f0f3136fa33119e610c09d24533485c80973f84f2149969f84131",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1047,8 +1062,8 @@
       "id": "MAN-079",
       "title": "Param Slides",
       "level": 4,
-      "start_line": 956,
-      "end_line": 973,
+      "start_line": 960,
+      "end_line": 977,
       "text_sha256": "2ba111203cec78292fed4bbd58780461fb34800f48d93e3b59d66a1e5f633b53",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1061,8 +1076,8 @@
       "id": "MAN-080",
       "title": "Mask Locks",
       "level": 3,
-      "start_line": 974,
-      "end_line": 998,
+      "start_line": 978,
+      "end_line": 1002,
       "text_sha256": "c8e0ae5d7cac3dc5819bc62c0e2e0443154d65fb93443cfaca28ebe77f758f5f",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1074,8 +1089,8 @@
       "id": "MAN-081",
       "title": "Scale Locks",
       "level": 3,
-      "start_line": 999,
-      "end_line": 1017,
+      "start_line": 1003,
+      "end_line": 1021,
       "text_sha256": "cf5abf336ea77377a81dbc2dee556fdfa50c78f1eaeb1c0ed7a6929caea07b09",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1087,8 +1102,8 @@
       "id": "MAN-082",
       "title": "Transposition Locks",
       "level": 3,
-      "start_line": 1018,
-      "end_line": 1031,
+      "start_line": 1022,
+      "end_line": 1035,
       "text_sha256": "1460b116233a23b003c8b8fe57c4f0f89223f6b83805fd7ccae04aff59f5ed73",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1100,8 +1115,8 @@
       "id": "MAN-083",
       "title": "Octave Locks",
       "level": 3,
-      "start_line": 1032,
-      "end_line": 1043,
+      "start_line": 1036,
+      "end_line": 1047,
       "text_sha256": "049b9380f75ab62c2c6c5431015f141fbf56f55526c5f94d4fb4ddf7fce804ff",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1113,9 +1128,9 @@
       "id": "MAN-084",
       "title": "Save and Load",
       "level": 2,
-      "start_line": 1044,
-      "end_line": 1051,
-      "text_sha256": "3b0c4e2f6fb230fdb366548b844af5344127ed810de720ad8d90e58c495a6f9d",
+      "start_line": 1048,
+      "end_line": 1055,
+      "text_sha256": "037991ed7ca9958389ddb78f420698c7de846ecd171b932d9c5f9b7b5cbab656",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PERSIST-AUTO-001",
@@ -1128,8 +1143,8 @@
       "id": "MAN-085",
       "title": "Options",
       "level": 3,
-      "start_line": 1052,
-      "end_line": 1055,
+      "start_line": 1056,
+      "end_line": 1059,
       "text_sha256": "804652c99130b6e05e1674aee0ccb9b0911c3a814e1cfc17eee7d17930e33912",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -1139,8 +1154,8 @@
       "id": "MAN-086",
       "title": "Sequencer Options",
       "level": 4,
-      "start_line": 1056,
-      "end_line": 1057,
+      "start_line": 1060,
+      "end_line": 1061,
       "text_sha256": "62b109384a5bdaa837429ca58f271923454d08b303d4a9c201eb9631c1b2c17b",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -1150,8 +1165,8 @@
       "id": "MAN-087",
       "title": "Shift press stop",
       "level": 5,
-      "start_line": 1058,
-      "end_line": 1061,
+      "start_line": 1062,
+      "end_line": 1065,
       "text_sha256": "41bbc1b85ee606f3dad9e8eb6da930633549c161707906efa2fc259c71d02af5",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1163,8 +1178,8 @@
       "id": "MAN-088",
       "title": "Song Mode",
       "level": 5,
-      "start_line": 1062,
-      "end_line": 1065,
+      "start_line": 1066,
+      "end_line": 1069,
       "text_sha256": "f23336e64501c742cde537f4ecc5df1b8d83293c6687c9117aa37f270ffa1ebb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1176,8 +1191,8 @@
       "id": "MAN-089",
       "title": "Reset at Song Editor Pattern Change",
       "level": 5,
-      "start_line": 1066,
-      "end_line": 1069,
+      "start_line": 1070,
+      "end_line": 1073,
       "text_sha256": "38cf83228d1b01c9cd84eae77de4d746495d7f9f66caac547ef1224e683c684a",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1189,8 +1204,8 @@
       "id": "MAN-090",
       "title": "Reset at Pattern Repeat",
       "level": 5,
-      "start_line": 1070,
-      "end_line": 1073,
+      "start_line": 1074,
+      "end_line": 1077,
       "text_sha256": "3995abf998e5d234142e01c2dbf6f8a6f5bd65d965289c75b4a23354d0b1e368",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1202,8 +1217,8 @@
       "id": "MAN-091",
       "title": "Parameter Slides Wrap",
       "level": 5,
-      "start_line": 1074,
-      "end_line": 1077,
+      "start_line": 1078,
+      "end_line": 1081,
       "text_sha256": "1126b92230a10a63aa1cb785c248fd602cde00bd79d9ee0db70ef471eb8f069b",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1215,8 +1230,8 @@
       "id": "MAN-092",
       "title": "Elektron Program Changes",
       "level": 5,
-      "start_line": 1078,
-      "end_line": 1081,
+      "start_line": 1082,
+      "end_line": 1085,
       "text_sha256": "1cba70fdce2ca5bb2ad162f362319a1e064d77556ef2ce6703674d96f3abe8de",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1228,8 +1243,8 @@
       "id": "MAN-093",
       "title": "Elektron Program Change Channel",
       "level": 5,
-      "start_line": 1082,
-      "end_line": 1085,
+      "start_line": 1086,
+      "end_line": 1089,
       "text_sha256": "d20a2bca639e7721431fb5ced41c2ee67dc4b6000635eca3523d0e9d47ea47c1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1241,8 +1256,8 @@
       "id": "MAN-094",
       "title": "Parameter Lock Options",
       "level": 4,
-      "start_line": 1086,
-      "end_line": 1087,
+      "start_line": 1090,
+      "end_line": 1091,
       "text_sha256": "eb807418d84eae137ff8d7539ae2e5c95f8f88b99db7a2a6edf07d7e22c8d02a",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -1252,8 +1267,8 @@
       "id": "MAN-095",
       "title": "Trigless Locks",
       "level": 5,
-      "start_line": 1088,
-      "end_line": 1091,
+      "start_line": 1092,
+      "end_line": 1095,
       "text_sha256": "68986f0fa56d488e241131fc44c8cc7ab250ee2e2c11d7ab77ab0a8446f18d0c",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1265,8 +1280,8 @@
       "id": "MAN-096",
       "title": "Quantiser Options",
       "level": 4,
-      "start_line": 1092,
-      "end_line": 1093,
+      "start_line": 1096,
+      "end_line": 1097,
       "text_sha256": "71cff99220f53087fa5f5af920c346fea5ff43a8b6bc81e5a033509edf174874",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -1276,8 +1291,8 @@
       "id": "MAN-097",
       "title": "Snap Note Masks to Scale",
       "level": 5,
-      "start_line": 1094,
-      "end_line": 1097,
+      "start_line": 1098,
+      "end_line": 1101,
       "text_sha256": "00eea8b20f2428b91dded6ee8e27d333201bf035e8adb88a3f2647912d97d127",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1289,8 +1304,8 @@
       "id": "MAN-098",
       "title": "Quantise Note Masks",
       "level": 5,
-      "start_line": 1098,
-      "end_line": 1101,
+      "start_line": 1102,
+      "end_line": 1105,
       "text_sha256": "eaa7a26cc59730712354f00158d3aee68e047106ca779b043618532cdb65d888",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1302,8 +1317,8 @@
       "id": "MAN-099",
       "title": "Scales Lock Until Pattern End",
       "level": 5,
-      "start_line": 1102,
-      "end_line": 1105,
+      "start_line": 1106,
+      "end_line": 1109,
       "text_sha256": "da8498011d5eae9759a4b2b04d31e68e4d592fdb25a95bc9c28e306a4462c73e",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1315,8 +1330,8 @@
       "id": "MAN-100",
       "title": "Lock All to Pentatonic",
       "level": 5,
-      "start_line": 1106,
-      "end_line": 1109,
+      "start_line": 1110,
+      "end_line": 1113,
       "text_sha256": "af037466acd892dec1c4f2e818fa161081d3309bcd3fc530d42f9e131b7368b1",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1328,8 +1343,8 @@
       "id": "MAN-101",
       "title": "Lock Random to Pentatonic",
       "level": 5,
-      "start_line": 1110,
-      "end_line": 1113,
+      "start_line": 1114,
+      "end_line": 1117,
       "text_sha256": "7f245bbcdcd317be8f0035988ff10f0738150feb5834064db63f6306c22b7659",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1341,9 +1356,9 @@
       "id": "MAN-102",
       "title": "Lock Merged to Pentatonic",
       "level": 5,
-      "start_line": 1114,
-      "end_line": 1117,
-      "text_sha256": "30c4946aeb6e5aa5d5706987f15f0f4f70a16f5ab7716a2892cf97a9db1212c7",
+      "start_line": 1118,
+      "end_line": 1121,
+      "text_sha256": "d5ba3e6bd470acc257b1e2d9ae925a9fee14d104e3426ab2cf3266791e927eb4",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-PENTATONIC-MERGED"
@@ -1354,8 +1369,8 @@
       "id": "MAN-103",
       "title": "MIDI Controller Options",
       "level": 4,
-      "start_line": 1118,
-      "end_line": 1119,
+      "start_line": 1122,
+      "end_line": 1123,
       "text_sha256": "669023112eee3c6b79e78753c55ef07530a73d307e8bda1601da8a9851397b8f",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -1365,8 +1380,8 @@
       "id": "MAN-104",
       "title": "Map Scale to White Keys",
       "level": 5,
-      "start_line": 1120,
-      "end_line": 1123,
+      "start_line": 1124,
+      "end_line": 1127,
       "text_sha256": "8b71583873d815aa7592538200cbac5da5b3e4630a3e0209f2d4a8b14f0225ed",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1378,8 +1393,8 @@
       "id": "MAN-105",
       "title": "Honor Scale Rotations",
       "level": 5,
-      "start_line": 1124,
-      "end_line": 1127,
+      "start_line": 1128,
+      "end_line": 1131,
       "text_sha256": "4382eff70dbb6472724d3d1a0a825b88cca2dd0daf6c5cf5b1bd61dec39b08ba",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1391,8 +1406,8 @@
       "id": "MAN-106",
       "title": "Honor Scale Degree",
       "level": 5,
-      "start_line": 1128,
-      "end_line": 1131,
+      "start_line": 1132,
+      "end_line": 1135,
       "text_sha256": "820ae209d5121b182c7213e76e8b9e83ec4d62e14b8fb8d56a30a0e1ac8455bb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1404,8 +1419,8 @@
       "id": "MAN-107",
       "title": "Honour Scale Transpose",
       "level": 5,
-      "start_line": 1132,
-      "end_line": 1135,
+      "start_line": 1136,
+      "end_line": 1139,
       "text_sha256": "c1a9d97479c644a3c988dd8f79dbe8528a42cdd23b56462eebf9c30afc8f0dac",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1417,8 +1432,8 @@
       "id": "MAN-108",
       "title": "Sinfonion Connect",
       "level": 3,
-      "start_line": 1136,
-      "end_line": 1139,
+      "start_line": 1140,
+      "end_line": 1143,
       "text_sha256": "d4cbd415db5e6c577bf2a170c6c583727f414d7030ba7823a665b1fc005d3d06",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1430,8 +1445,8 @@
       "id": "MAN-109",
       "title": "LFOs and Modulation",
       "level": 3,
-      "start_line": 1140,
-      "end_line": 1144,
+      "start_line": 1144,
+      "end_line": 1148,
       "text_sha256": "247817a1e4ef185b4be509a053544ef510ba4fd93d4566db639b408970638edc",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1446,8 +1461,8 @@
       "id": "MAN-110",
       "title": "Performance Management",
       "level": 2,
-      "start_line": 1145,
-      "end_line": 1156,
+      "start_line": 1149,
+      "end_line": 1160,
       "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
@@ -1459,8 +1474,8 @@
       "id": "MAN-111",
       "title": "Development",
       "level": 2,
-      "start_line": 1157,
-      "end_line": 1166,
+      "start_line": 1161,
+      "end_line": 1170,
       "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -1470,8 +1485,8 @@
       "id": "MAN-112",
       "title": "Roadmap",
       "level": 3,
-      "start_line": 1167,
-      "end_line": 1170,
+      "start_line": 1171,
+      "end_line": 1174,
       "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -1481,8 +1496,8 @@
       "id": "MAN-113",
       "title": "Interesting Components for Norns Script Developers",
       "level": 3,
-      "start_line": 1171,
-      "end_line": 1176,
+      "start_line": 1175,
+      "end_line": 1180,
       "text_sha256": "80cb16cd1906f008d0f8f125c92d4b904efe308162539589ab9ae13e85922cd1",
       "classification": "pending-statement-reconciliation",
       "requirements": [],
@@ -1507,7 +1522,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "ea5f4f25bf8a632b351709fc6d4e82a3c79bbca1330ce646259d0d728b64d3ed"
+      "sha256": "80288ddd01f5847fb7032e1eca9f95219e6f1c2aef48b68ec3e19699af4b1746"
     },
     {
       "path": "cheat_sheet.html",
@@ -1593,7 +1608,8 @@
     {
       "id": "MIDI-RELEASE-001",
       "sections": [
-        "MAN-030"
+        "MAN-030",
+        "MAN-114"
       ],
       "statement": "Each emitted MIDI note has a corresponding release, including repeated pitches at a pattern wrap and subsequent transport stop.",
       "basis": "MIDI note lifetime invariant and mandatory no-stuck-note acceptance, tested through manual duration and transport gestures.",
@@ -1617,7 +1633,9 @@
         "M-PROJECT-LIVE-002",
         "M-PROJECT-LIVE-003",
         "M-PROJECT-LIVE-004",
-        "M-SYNC-006"
+        "M-SYNC-006",
+        "M-SYNC-007",
+        "M-SYNC-008"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -1741,10 +1759,11 @@
     {
       "id": "CLOCK-MIDI-TRANSPORT-001",
       "sections": [
-        "MAN-050"
+        "MAN-050",
+        "MAN-114"
       ],
       "statement": "MIDI transport and24PPQN input clock drive Mosaic note playback; returning to internal clock restores local transport.",
-      "basis": "Pinned norns CLOCK controls plus Mosaic transport callbacks; broader than channel-speed manual subsection.",
+      "basis": "README External MIDI Transport plus pinned norns CLOCK controls and Mosaic transport callbacks.",
       "cases": [
         "M-TIM-003",
         "M-SYNC-001",
@@ -1752,10 +1771,12 @@
         "M-SYNC-003",
         "M-SYNC-004",
         "M-SYNC-005",
-        "M-SYNC-006"
+        "M-SYNC-006",
+        "M-SYNC-007",
+        "M-SYNC-008"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Stopped-source changes, port1,100BPM external, native adoption of external tempo on internal handoff, then explicit90BPM menu edit. Live-source changes with pending notes, other rates and ports remain required.",
+      "domain": "Scoped cold20/100/300BPM and warmed startup, repeated Start, release ordering and source handoff; acquisition interactions, other ports, master output and full matrix remain required.",
       "oracles": [
         "Native CLOCK source menu",
         "Literal ordered MIDI notes and150ms onset spacing",
@@ -1807,8 +1828,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 387,
-        "end_line": 387,
+        "line": 391,
+        "end_line": 391,
         "text": "Trigs are added in the pattern editor. Using the top row, pick one of the 16 available patterns.",
         "sha256": "0217884b8a9806b4902262e117bc9f554230281e69fde11e386443ac9385b3e9"
       }
@@ -1833,8 +1854,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 391,
-        "end_line": 391,
+        "line": 395,
+        "end_line": 395,
         "text": "To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolise a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. In a single pattern, one trig's duration ends upon meeting another.",
         "sha256": "45f472cf67c58d4f3b0dbba56d40e705ddb7722a2c40f530a486c40c59a34788"
       }
@@ -1865,8 +1886,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 391,
-        "end_line": 391,
+        "line": 395,
+        "end_line": 395,
         "text": "To set your rhythm, simply tap in steps using the sequencer. Bright steps symbolise a trig. To define its length, press and hold a trig, then choose its ending step. Steps with a subtle glow show the length. In a single pattern, one trig's duration ends upon meeting another.",
         "sha256": "45f472cf67c58d4f3b0dbba56d40e705ddb7722a2c40f530a486c40c59a34788"
       }
@@ -1894,8 +1915,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 396,
-        "end_line": 405,
+        "line": 400,
+        "end_line": 409,
         "text": "Craft unique rhythms using a variety of built-in algorithms. The algorithm is selected using the four algorithm select buttons. From left to right:\n\n* Button 1: The drum algorithm, drawing from a rich collection of classic drum patterns.\n* Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the Norns screen for more variations.\n* Button 3: Euclidean, a rhythm tool rooted in mathematical logic.\n* Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.\n\n<img alt=\"Pattern editor algorithm select buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg\" width=\"300\" />\n\nThe grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the Norns screen.",
         "sha256": "7b2392114c7fea3a9cf5cbcbf82b85085a54858b37989a2c336b61e3b9dae067"
       }
@@ -1922,8 +1943,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 407,
-        "end_line": 414,
+        "line": 411,
+        "end_line": 418,
         "text": "The left side faders adjust algorithm values. Brightly lit end buttons refine values, with the furthest left-hand button incrementing downwards and the furthest right-hand button incrementing upwards. The dimmer ones in the middle of the faders adjust values broadly. \n\n<p float=\"left\">\n<img alt=\"Pattern editor pattern 1 select fader\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-select-fader.svg\" width=\"300\" />\n<img alt=\"Pattern editor pattern 2 select fader\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-2-select-fader.svg\" width=\"300\" />\n</p>\n\nThe rightmost fader typically toggles between different banks in the selected algorithm.",
         "sha256": "91ccca0cb840ac7c413ed922d0a42811116482b5c6cdcbb7b150faa4f47f7a72"
       }
@@ -1948,8 +1969,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 418,
-        "end_line": 418,
+        "line": 422,
+        "end_line": 422,
         "text": "To see your algorithm's impact, hit the prime button. This primes the currently selected algorithm's pattern. Potential new steps are shown as flashing bright steps on the sequencer. While these steps flash, they aren't painted yet. Any step that would be painted over an existing active step will blink dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. This approach lets you craft intricate sequences, grounded in rhythmic fundamentals, that don't get too busy. You can modify algorithm parameters while the pattern is primed.",
         "sha256": "ce5909d5d0d3d52c333a99b2125ceff415be86b0448e225ec4039c05b7072a62"
       }
@@ -1977,8 +1998,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 422,
-        "end_line": 422,
+        "line": 426,
+        "end_line": 426,
         "text": "If you haven't painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Pressing the prime button again without tweaking the algorithm or its parameters effectively acts as an undo for the last action.",
         "sha256": "44de717fdd1533481290576437120429bb0df7c4c7b513127e43db752f20d794"
       }
@@ -2003,8 +2024,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 424,
-        "end_line": 426,
+        "line": 428,
+        "end_line": 430,
         "text": "Opt out of a prepared pattern by using the cancel button:\n\n<img alt=\"Pattern editor prime and paint cancel button\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg\" width=\"300\" />",
         "sha256": "31531f024e0c6e6d55da28c335dcff796b922bb385217035b855cd27691627b4"
       }
@@ -2029,8 +2050,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 428,
-        "end_line": 428,
+        "line": 432,
+        "end_line": 432,
         "text": "While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes.",
         "sha256": "3cf1542d874881f85f346633e973744d303cd3e36ac859be619efae43667ef7b"
       }
@@ -2055,8 +2076,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 432,
-        "end_line": 432,
+        "line": 436,
+        "end_line": 436,
         "text": "On the Norns screen, you can see the selected channel's grid state on page 1. This is the merged version of the channel and is a useful context for editing your pattern. Use E2 to select channels. On page 2 you can select trig editor options. Currently, this allows you to edit the tresillo multiplier in use. Experiment with different values to get wildly different results with the tresillo algorithm.",
         "sha256": "5f2ef612b0c04ad406ddb7e906d75051abe6e191f45a02db674488a33d23a804"
       }
@@ -2084,8 +2105,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 443,
-        "end_line": 453,
+        "line": 447,
+        "end_line": 457,
         "text": "In _Mosaic_, pattern notes aren't strictly bound to a single scale. Instead, they are valued by their position within the currently active scale, measured by distance from the root. Take C major for instance: C is your starting point. One step up brings you to D, and one step down lands on B. If you were to change the applied scale to E minor, the root of your pattern would now be E, one step up would output F sharp, one down would be D.\n\nYou've seen in the [Harmony Design](#harmony-design) section that it's possible to sequence scale and degree changes, and this affects the notes your patterns will play. When adding notes to patterns, consider that they represent the harmony of your song and map to what traditionally would be called the rhythm section. It is possible to create melodies using patterns, but it is difficult to do so in a deliberate way as your scale progressions will alter the tonality of your pattern. We'll learn about the recommended way to deliberate [Melodies](#masks) later.\n\nSelect the note editor by pressing the third key in the global menu button cluster on the grid again when already in thr pattern trigger editor.\n\nThis space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. Whilst holding shift (K1), any entered note is automatically duplicated across all 4 step screens. \n\n<img alt=\"Pattern editor note select faders\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-select-faders.svg\" width=\"300\" />\n\nRemember, each note you select links back to the root of the scale you're working within. The scale is applied to the channel, not the pattern. You must start to think about your patterns as being disconnected from each channel. This is why we say _Mosaic_ is an intentioned generative sequencer. Expect happy accidents. The channel grid viewer on the Norns screen can help you here.",
         "sha256": "95258b380872f2eef224939a9a9b5422c29efe98ec2ae96213a4dfbd23282ed0"
       },
@@ -2111,8 +2132,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 449,
-        "end_line": 449,
+        "line": 453,
+        "end_line": 453,
         "text": "This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. Whilst holding shift (K1), any entered note is automatically duplicated across all 4 step screens. ",
         "sha256": "9de2e0afa5552a13c20a238884a261214516edd81b36c20a46908e0ba62c21ae"
       }
@@ -2137,8 +2158,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 449,
-        "end_line": 449,
+        "line": 453,
+        "end_line": 453,
         "text": "This space displays 16 steps at a glance. Active trigs appear as soft-glowing vertical bars while the root note lies in a subtle horizontal line. The notes you've actively chosen glow brightly. To pick a note for any of the 16 steps, just press. Whilst holding shift (K1), any entered note is automatically duplicated across all 4 step screens. ",
         "sha256": "9de2e0afa5552a13c20a238884a261214516edd81b36c20a46908e0ba62c21ae"
       }
@@ -2164,8 +2185,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 455,
-        "end_line": 457,
+        "line": 459,
+        "end_line": 461,
         "text": "Switch between the four sets of 16 steps using the dedicated buttons.\n\n<img alt=\"Pattern editor note step range buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-step-select-buttons.svg\" width=\"300\" />",
         "sha256": "63272a9496780ad7cd34c41af73eb16a76ee824617d3495c5ede8447715830bf"
       }
@@ -2191,8 +2212,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 459,
-        "end_line": 461,
+        "line": 463,
+        "end_line": 465,
         "text": "Aim for higher or lower pitches with the octave select buttons, expanding your melodic range. A single press of the end buttons in this trio steps up and down by one step. Long press these to quickly navigate to the pages at the extremes. A single press of the middle button gets you back to the page with the root note on the bottom row.\n\n<img alt=\"Pattern editor note value range buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-value-range-select-faders.svg\" width=\"300\" />",
         "sha256": "9b59d1092a1a56a33019706f14a63c236dcfeea345e276dad577c3a6ea27cd73"
       }
@@ -2220,8 +2241,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 463,
-        "end_line": 463,
+        "line": 467,
+        "end_line": 467,
         "text": "Hint: Even if a step lacks a trig, don't hesitate to assign a note. This data might come in handy with different merge modes in play.",
         "sha256": "2e6104a0dcc44d243def8c05415d5e39aa63cf5e6ffe267a9d79bf45f891ddf8"
       }
@@ -2246,8 +2267,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 465,
-        "end_line": 465,
+        "line": 469,
+        "end_line": 469,
         "text": "The gentle flicker on the top row indicates the currently chosen pattern.  If you wish to explore a different pattern, press and hold or shift press (holding K1) on the top row.",
         "sha256": "6a79482547e24ea3f1c27f39d5b70bb2bb6933ebc768018dd322da192e742413"
       }
@@ -2274,8 +2295,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 479,
-        "end_line": 483,
+        "line": 483,
+        "end_line": 487,
         "text": "Now let's look at the velocity editor, which functions similarly to the note page. Access it by pressing the third button in the global menu cluster again when already in the pattern note editor.\n\nThe velocity editor spans two vertical pages: the first displays velocities from 127 down to 68, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.\n\nOn the Norns screen, you can see the channel grid visualizer. Use E2 to select the current channel.",
         "sha256": "78e23e3b54386385d9e945102ee311f630388a8fa86598ff21fe4bd1a56c486a"
       }
@@ -2402,8 +2423,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 308,
-        "end_line": 310,
+        "line": 312,
+        "end_line": 314,
         "text": "### MIDI Panic\n\nShould your MIDI output devices become unresponsive, hold the navigation button of a non-selected page to send Note Off messages for every note on every MIDI channel and connected device. Panic clears sounding notes with a short sweep; it does not stop the sequencer or cancel scheduled strum or arpeggio voices. Playback and scheduled voices continue, so new notes can sound during or after the sweep. Use the Play/Stop control to stop playback. Holding the selected page button does not trigger panic, and releasing a panic hold does not change pages.",
         "sha256": "6c007afd7ba61ca45251e32565d4223ea54fb563bc9f4c6987cab1d15ec74b61"
       },
@@ -2433,8 +2454,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 494,
-        "end_line": 494,
+        "line": 498,
+        "end_line": 498,
         "text": "Select the channel editor page by pressing the far left global menu button, and select one of the 16 available channels using the channel select row at the top of _Mosaic_'s Grid UI.",
         "sha256": "32135634fd84ce0a46709e08880fd17a1b9cb5b702b21de36300c5410475e50b"
       }
@@ -2471,8 +2492,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 507,
-        "end_line": 520,
+        "line": 511,
+        "end_line": 524,
         "text": "For _Mosaic_ to do anything, you must have a device assigned to a channel. Devices represent a hardware device in your studio, perhaps a software device on your computer, or a software device in Norns itself.\n\n<p>\n  <svg width=\"25\" height=\"25\" viewBox=\"0 0 500 500\" style=\"vertical-align: middle;\">\n    <use href=\"#video-icon\" />\n  </svg>\n  <a href=\"https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=1358s\">Devices demo</a>\n</p>\n\n##### MIDI Sound Sources\n\nIn Mosaic, a device can be either an internal Norns sound engine powered by [n.b.](https://github.com/sixolet/nb/tree/main), or a representation of a MIDI device within your workspace. Devices are assigned per scene and maintain their settings consistently across all song sequences. To utilise MIDI sound sources, you must have a MIDI output device configured in Norns.\n\nIf your device has an associated configuration file, such as those available for Elektron -takt devices, the device's name will be displayed, allowing you to select parameters directly without needing to know the MIDI CC numbers. If no such configuration exists, you can still use the CC device, but you will need to manually look up and input CC numbers.",
         "sha256": "9f57c3ce2ce24f6c607c7391131c117a625cdec0a561ba8184c1be2db26897d6"
       }
@@ -2527,8 +2548,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 540,
-        "end_line": 540,
+        "line": 544,
+        "end_line": 544,
         "text": "MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to its configured Off value (default -1) ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly. NRPN encoding is explicit: new generic configurations use standard 14-bit values, while existing projects preserve their historical output. See [NRPN encoding and project conversion](docs/testing/NRPN_COMPATIBILITY.md) for device settings and deliberate conversion without rewriting numeric values.",
         "sha256": "5dabc5b1113beffa7b611703ca43877e8631f622ee6514c519633fb2dc4667f1"
       }
@@ -2564,8 +2585,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 540,
-        "end_line": 540,
+        "line": 544,
+        "end_line": 544,
         "text": "MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to its configured Off value (default -1) ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly. NRPN encoding is explicit: new generic configurations use standard 14-bit values, while existing projects preserve their historical output. See [NRPN encoding and project conversion](docs/testing/NRPN_COMPATIBILITY.md) for device settings and deliberate conversion without rewriting numeric values.",
         "sha256": "5dabc5b1113beffa7b611703ca43877e8631f622ee6514c519633fb2dc4667f1"
       }
@@ -2591,8 +2612,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 551,
-        "end_line": 551,
+        "line": 555,
+        "end_line": 555,
         "text": "The core of your rhythm and harmony sections are formed by adding patterns to channels. To do this, first select a channel using the channel buttons. A single channel can accommodate multiple patterns, and likewise, a single pattern can be assigned to multiple channels. To assign patterns, use the pattern select row, located second from the top on Mosaic's Grid UI.",
         "sha256": "09fa74f3aa5c57285ef97d315478cef26651dd28847cfe66b24b45356eedcfb3"
       }
@@ -2642,8 +2663,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 564,
-        "end_line": 566,
+        "line": 568,
+        "end_line": 570,
         "text": "Masks in _Mosaic_ allow you to precisely control trig values, notes, velocities, lengths, and chords for specific steps within the channel page's sequencer. Ideal for crafting intentional melodies, masks can superimpose these elements onto your existing harmonic and rhythmic foundation. You can apply masks to override pattern values either individually using step locks or all at once by setting the global value \u2014 this process named \"masking.\"\n\nWith masking, you have the flexibility to modify individual attributes of a pattern. For instance, you could increase the velocity of a note without changing other settings, add additional chord tones, or completely silence a note. Masks also enable you to assign values to steps that are currently void of any pattern influence. By default, notes added this way will align with the selected musical scale. However, they will not conform to specific scale degrees or rotations. If you wish to incorporate accidentals or embrace a more dissonant sound, this default behavior can be disabled in the _Mosaic_ settings.",
         "sha256": "40b1911d1e85bf33cdeae13be16d788ed2222ce31baf05fbc8366d3ebcf1a73c"
       }
@@ -2673,8 +2694,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 566,
-        "end_line": 566,
+        "line": 570,
+        "end_line": 570,
         "text": "With masking, you have the flexibility to modify individual attributes of a pattern. For instance, you could increase the velocity of a note without changing other settings, add additional chord tones, or completely silence a note. Masks also enable you to assign values to steps that are currently void of any pattern influence. By default, notes added this way will align with the selected musical scale. However, they will not conform to specific scale degrees or rotations. If you wish to incorporate accidentals or embrace a more dissonant sound, this default behavior can be disabled in the _Mosaic_ settings.",
         "sha256": "2cd5399fa87e49d653a590911a4f46321e04de6377d165eb1adb0be402ce61f3"
       }
@@ -2699,8 +2720,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 577,
-        "end_line": 577,
+        "line": 581,
+        "end_line": 581,
         "text": "You can quickly add trig masks to your sequence by shift pressing (hold K1) the desired step on the sequencer on the channel edit page. Remember to asign a note mask, velocity mask and length mask to hear your desired note! You can also quickly remove notes this way.",
         "sha256": "864bcb036774b789ee31dfcf8ed02a80bc07239aaeddefadfe9a15d4a0ed7208"
       }
@@ -2749,8 +2770,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 589,
-        "end_line": 589,
+        "line": 593,
+        "end_line": 593,
         "text": "To add a mask to your sequence, start by accessing the mask page on your Norns device. Once there, press and hold the step you wish to modify, then input the desired value as a trig lock. Alternatively, you can hold the step while pressing a corresponding key on your MIDI keyboard to set the value. This method allows you to easily and intuitively assign specific musical attributes to any step in your sequence.",
         "sha256": "5bfd637dd33a60ff9a2a981251a3d5aedece859d5a8b30bb865a227d884908ca"
       }
@@ -2786,8 +2807,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 591,
-        "end_line": 591,
+        "line": 595,
+        "end_line": 595,
         "text": "You can apply masks to all steps in a channel by setting the mask value without holding down a step. It's possible, for example, to add a chord note to every trigger, or set a fixed velocity for every trigger, or even turn on or off every trigger. The default mask value will apply to all steps that don't have a specific mask lock set.",
         "sha256": "5d8037834ec512a5c7fe6df5b9b647817879fa24f88ef10adc1bd25432596fe3"
       }
@@ -2825,8 +2846,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 595,
-        "end_line": 597,
+        "line": 599,
+        "end_line": 601,
         "text": "Chords can be seamlessly integrated into your sequence using masks. You can add up to four additional voices to the root note, provided that your selected device supports polyphony. To do this, make sure you are on the masks page of your Norns. Then, hold the desired step and select each note you want to include in the chord.\n\nAdditionally, take advantage of the chord trig params to enhance your musical expression. Experiment with the \"[chord strum](#chord-strum)\" and \"[chord velocity modifier](#chord-velocity-modifier)\" trig parameters to vary the playback dynamics and timing of each chord component. These tools allow you to create more nuanced and dynamic chord progressions, adding depth to your compositions.",
         "sha256": "a8815d5c417fc8a300490254aaa46084bc635287bbb0be9ff8c8640193fa9d20"
       }
@@ -2868,8 +2889,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 601,
-        "end_line": 601,
+        "line": 605,
+        "end_line": 605,
         "text": "On the Masks page, hold a step and press K2 to clear its step-mask overrides. With no grid keys held, hold K1 and press K2 to clear all step-mask overrides on the selected channel. Both actions preserve channel mask defaults, which apply wherever an explicit step override is absent. Held steps take precedence even while K1 is down. Other channels are unaffected.",
         "sha256": "b3dfeca6a6d2dfe001528ba2d589d7058b02560e276f06b2d96d925a27228c1e"
       }
@@ -2910,8 +2931,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 601,
-        "end_line": 601,
+        "line": 605,
+        "end_line": 605,
         "text": "On the Masks page, hold a step and press K2 to clear its step-mask overrides. With no grid keys held, hold K1 and press K2 to clear all step-mask overrides on the selected channel. Both actions preserve channel mask defaults, which apply wherever an explicit step override is absent. Held steps take precedence even while K1 is down. Other channels are unaffected.",
         "sha256": "b3dfeca6a6d2dfe001528ba2d589d7058b02560e276f06b2d96d925a27228c1e"
       }
@@ -2936,8 +2957,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 628,
-        "end_line": 628,
+        "line": 632,
+        "end_line": 632,
         "text": "* **All**: Trigs will apply if they appear on a step in any selected pattern.",
         "sha256": "7bf933772e89b1a79dc7a97059a3929baea778fcd95aa1bdd18585b4ec7ec385"
       }
@@ -2962,8 +2983,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 629,
-        "end_line": 629,
+        "line": 633,
+        "end_line": 633,
         "text": "* **Skip**: Trigs will apply only if they appear on a step in exactly one selected pattern. If a trig appears on a step in multiple patterns, it won't activate.",
         "sha256": "621f0af64a6c38fed3f7b34f002069d480c4b7335b8453f1b8e958cb6a7fd3ae"
       }
@@ -2988,8 +3009,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 630,
-        "end_line": 630,
+        "line": 634,
+        "end_line": 634,
         "text": "* **Only**: Trigs will apply only if they appear on a step in more than one selected pattern, ignoring those that appear in just one.",
         "sha256": "b470c01b90eb3fd4ffe8522204537030fe75748d9e145d3612ac13194f1941b5"
       }
@@ -3026,8 +3047,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 638,
-        "end_line": 638,
+        "line": 642,
+        "end_line": 642,
         "text": "* **Average**: Average the contributing note values and round to the nearest integer, choosing the greater integer at an exact half (1.5 becomes 2; -1.5 becomes -1; -0.5 becomes 0). One contributor passes through unchanged. The result then uses the configured scale and pentatonic processing.",
         "sha256": "825e2367e5857b338ccc1e077f3ecf9be08395ad83814dc876105cb855a4001d"
       }
@@ -3063,8 +3084,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 639,
-        "end_line": 639,
+        "line": 643,
+        "end_line": 643,
         "text": "* **Higher**: Add the difference between the highest and lowest contributing note values to their rounded average. One contributor passes through unchanged; the result then uses the configured scale and pentatonic processing.",
         "sha256": "8a198b7e3019b07623ca48708f871cb98e7df3cfa796bf58815cf17469c3513a"
       }
@@ -3097,8 +3118,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 640,
-        "end_line": 640,
+        "line": 644,
+        "end_line": 644,
         "text": "* **Lower**: Subtract the rounded average from twice the lowest contributing note value: `2 * lowest - rounded_average`. One contributor passes through unchanged; the result then uses the configured scale and pentatonic processing.",
         "sha256": "106ff8519bf05bb0dc4b9f5828e58ef51a77612890a8a9b849af9da52a5c0ed7"
       }
@@ -3128,8 +3149,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 641,
-        "end_line": 643,
+        "line": 645,
+        "end_line": 647,
         "text": "* **Pattern**: To prioritise a specific pattern's note values during conflicts, hold the note merge button and select the desired pattern. You can even select patterns that aren't current asigned to the active channel.\n\nBy default, notes will snap to the pentatonic version of the currently active scale to assist with avoiding unpleasant harmonic interactions. This can be disabled in _Mosaic_'s settings.",
         "sha256": "8664f7eb9d722dc508610e423adfe6547664275133a16c5be661526291d7f524"
       }
@@ -3160,8 +3181,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 651,
-        "end_line": 654,
+        "line": 655,
+        "end_line": 658,
         "text": "* **Average**: Average the contributing velocities and round to the nearest integer, choosing the greater integer at an exact half. One contributor passes through unchanged.\n* **Higher**: Add the difference between the highest and lowest contributing velocities to their rounded average.\n* **Lower**: Subtract the rounded average from twice the lowest contributing velocity: `2 * lowest - rounded_average`.\n* **Pattern**: To use a specific pattern's velocity values, hold the velocity merge button and press the pattern's select button.",
         "sha256": "d525b6f29c9ffef498b5f8faa6098225584d3f45e0ae30785a86101132ad929b"
       }
@@ -3206,8 +3227,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 662,
-        "end_line": 667,
+        "line": 666,
+        "end_line": 671,
         "text": "* **Average**: Average the contributing lengths and round to the nearest integer, choosing the greater integer at an exact half. One contributor passes through unchanged. Source lengths account for interruption by the next trig in that pattern.\n* **Longer**: Add the difference between the longest and shortest contributing lengths to their rounded average. One contributor passes through unchanged.\n* **Shorter**: Subtract the rounded average from twice the shortest contributing length: `2 * shortest - rounded_average`. One contributor passes through unchanged. Only the mean is rounded at this stage, so fractional source lengths can still produce fractional Longer or Shorter results.\n* **Pattern**: To apply a specific pattern's length values, hold the length merge button and press the pattern's select button.\n\nLength merge modes are set by holding shift (K1) and pressing the velocity merge mode button. Numeric merging retains zero and negative length results. For ordinary note playback, including delayed strums, a nonpositive effective length sends Note On followed by Note Off in the same scheduler pulse, without advancing musical time. This describes MIDI event order, not the sound or response of a connected instrument.",
         "sha256": "3f388bc825121b1be5392bda571c3a2f6e5a9c3be2f07a667f45baa5e1fd75ce"
       }
@@ -3239,8 +3260,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 673,
-        "end_line": 673,
+        "line": 677,
+        "end_line": 677,
         "text": "On the Norns first page in the channel mode you can see the last played notes on the currently selected channel.",
         "sha256": "027ea4097da2bbf85e93519e01c4e3657c4028c88a0227f27dceeafed0a8593a"
       },
@@ -3276,7 +3297,8 @@
         "M-PATCH-024",
         "M-PATCH-020",
         "M-PATCH-032",
-        "M-RANGE-GLOBAL-003"
+        "M-RANGE-GLOBAL-003",
+        "M-SYNC-008"
       ],
       "status": "in_progress",
       "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. Confirmed channel clock edits queue to the global pattern boundary while playing; stopped edits apply immediately. M-PATCH-024/026 cover queued rate changes during active slides; full live-edit domain remains incomplete.",
@@ -3289,8 +3311,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 677,
-        "end_line": 677,
+        "line": 681,
+        "end_line": 681,
         "text": "You can easily adjust the tempo of your entire composition directly from the song editor page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels via the channel editor page in the Norns menu. This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.",
         "sha256": "e96ad951cf41820b6365d5012ceb727fcb3cbd1d0ee0c93d6fa52be2b337a6fd"
       }
@@ -3320,8 +3342,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 679,
-        "end_line": 679,
+        "line": 683,
+        "end_line": 683,
         "text": "Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable. There are two modes to choose from: swing, which moves notes closer or further apart depending on the value which ranges from -50 to 50. Shuffle is based on 21echoes' excellent [Cyrene](https://github.com/21echoes/cyrene) and uses more complex patterns and can be set to a \"feel\" and a \"basis\". Each channel can have an independent setting, giving endless possibilities. ",
         "sha256": "c01e200188c094bdbaf187bbecd6e50b71eb8aa7701d63ccd610ce6afda278e7"
       }
@@ -3356,8 +3378,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 679,
-        "end_line": 679,
+        "line": 683,
+        "end_line": 683,
         "text": "Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable. There are two modes to choose from: swing, which moves notes closer or further apart depending on the value which ranges from -50 to 50. Shuffle is based on 21echoes' excellent [Cyrene](https://github.com/21echoes/cyrene) and uses more complex patterns and can be set to a \"feel\" and a \"basis\". Each channel can have an independent setting, giving endless possibilities. ",
         "sha256": "c01e200188c094bdbaf187bbecd6e50b71eb8aa7701d63ccd610ce6afda278e7"
       },
@@ -3389,8 +3411,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 681,
-        "end_line": 681,
+        "line": 685,
+        "end_line": 685,
         "text": "Note: If a channel's swing/shuffle settings are not set (\"X\"), they will take the global setting which is set on the song editor page global settings page. Selecting \"X\" again after choosing a local Swing or Shuffle mode restores global mode inheritance, just like an untouched channel; choosing either mode explicitly overrides the global mode. While playback is running, confirmed changes on this channel page take effect at the next global song-pattern boundary, including a repeat of the same pattern. They do not take effect immediately or at the next step of a shorter channel loop. While stopped, confirmed changes apply immediately.",
         "sha256": "625fc91c5679431cd5adccccbb6f591a93d70d3a5844d6dabae1e07a2d0a91c9"
       },
@@ -3422,8 +3444,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 692,
-        "end_line": 696,
+        "line": 696,
+        "end_line": 700,
         "text": "_Mosaic_'s memory retains all masks and trig lock actions, including those recorded using the record function. You can navigate this memory using Norns' encoder.\n\nTo access _Mosaic_'s memory, open the channel editor and navigate to the Memory page on the Norns screen. On this page, each remembered action is represented as an icon, with the most recent action displayed on the right.\n\n- Notes are shown as icons, while dots indicate the length added to those notes.",
         "sha256": "96a2580a58766332f4482ee4052a93a8291184636ca747a717cb02d44273d2c8"
       }
@@ -3451,8 +3473,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 697,
-        "end_line": 699,
+        "line": 701,
+        "end_line": 703,
         "text": "- Use E3 to scroll left and explore past actions or scroll right to move towards more recent actions.\n- Press K3 to jump directly to the latest action.\n- Press K2 to return to the beginning of the memory.",
         "sha256": "e26b471061ced9a0a9dc5e451379a0bb22f9dabd919387746c3f454ab3ff0939"
       }
@@ -3477,8 +3499,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 701,
-        "end_line": 701,
+        "line": 705,
+        "end_line": 705,
         "text": "To jump to the latest action and erase all subsequent memory, hold shift (K1) and press K3. To jump to the first action and erase all memory recorded after it, hold K1 and press K2.",
         "sha256": "3f1c09e762e8c47426fcc3148842b2db8ec303f5d7fe1a13129d838d0e56eca7"
       }
@@ -3534,8 +3556,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 714,
-        "end_line": 720,
+        "line": 718,
+        "end_line": 724,
         "text": "Channels can be adjusted independently, including the global scale pattern, within the 64-step sequence. This feature allows for intricate layering and timing variations within your compositions.\n\nTo adjust the length of a channel, hold down the start step in the channel editor, press and release a different end step while still holding the start, then release the start. The range commits when the end step is released. The active range is indicated by brighter buttons. Selecting a one-step channel range with this gesture is unsupported. Holding a step for a long time does nothing by itself: the held step remains available for combinations with other buttons, including a subsequent end-step press. This prevents an unintended action while preparing another combination. The end must be after the start. Reversed selections are rejected with a message, leaving the previous range unchanged; channel ranges do not wrap from the final step back to the first. The same rule applies to the Scale Editor range. Pattern note-length wrapping is unchanged.\n\n<img alt=\"Channel editor step and length selector buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-sequencer-step-buttons.svg\" width=\"300\" />\n\nThe behavior of the sequencer when handling patterns of different lengths can also be tailored to your needs. Navigate to the Norns param pages where you can find various [options](#options) that determine how the sequencer manages channels with differing lengths.",
         "sha256": "fe8ef79a26b339b09dbca85a4949dd6fab8b71931650bd88881c5672fc7af061"
       }
@@ -3562,8 +3584,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 732,
-        "end_line": 732,
+        "line": 736,
+        "end_line": 736,
         "text": "To mute a channel on your sequencer, press and hold the select button for the desired channel for one second. You can also shift press (hold K1) the desired channel to mute it immediately. The button will dim to indicate that the channel has been muted. This function allows for muting on a per-sequence basis, enabling you to selectively silence different channels at various stages of your composition. This feature is particularly useful for creating dynamic shifts and variations in your overall song structure.",
         "sha256": "2d9aea74e2b108b70a0bc05cef7e71a5e09f671ce3f9bf72b4a5a733c7a4213d"
       }
@@ -3666,8 +3688,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 745,
-        "end_line": 752,
+        "line": 749,
+        "end_line": 756,
         "text": "Most devices in _Mosaic_ feature a set of trig params that alters either the quality of the sound or the trig in some way. Trig params are unique to a song pattern, allowing drastic transitions when moving from one section to another. Each channel can have up to 10 trig params assigned, and each trig param can be [trig locked](#locks) independently. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. \n\nIn the second user interface page of the channel editor on the Norns screen, you will encounter a variety of parameters. Here's how to navigate and manipulate these settings:\n\n* **Page Navigation**: Use E1 to switch between pages.\n* **Changing Parameters**: To select a parameter, turn E2. Once highlighted, adjust the parameter's value by rotating E3. To fine tune, rotate E3 whilst holding K1.\n* **Activating Parameters**: To activate a different parameter within the same slot, press K2.\n* **Locking Changes**: As you adjust values, the system automatically saves your changes. You can also create \"trig locks\" on specific steps by holding down the step and turning E3. This allows you to set values that will override the default parameter for that step.",
         "sha256": "a94ce4303a74fb9e0685abee3e9cee7509a23befc3fe20d1e610a120a59d7cea"
       }
@@ -3709,8 +3731,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 753,
-        "end_line": 754,
+        "line": 757,
+        "end_line": 758,
         "text": "* **Default Parameter Values**: A pre-set parameter value is transmitted to your selected device on steps without a trig lock, unless the value is off or a parameter slide is active.\n* **Handling Off Settings**: An explicit MIDI parameter lock set to \"off\" sends no value for that parameter on that step. It does not resend the previous lock or restore the default, so the device keeps its last received value. An off lock does not itself cancel a parameter slide that is already running; that slide may continue sending values.",
         "sha256": "9a6b18dd3fc13cf3e3b5b6e4de709f6b683eb4e06d4af545de646ee436bd1b6e"
       }
@@ -3742,8 +3764,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 769,
-        "end_line": 771,
+        "line": 773,
+        "end_line": 775,
         "text": "##### Trig Probability\n\nThis trig lock can be used to ensure trigs play only with a certain probability. When set to 100, the trig will always play. When set to 0, the trig will never play. At 50, the trig will play half the time. You can set this globally and per step.",
         "sha256": "4c44d5f991b9cc02f58c6af76998afb20082cd273901e8dfe3d5e18598a078c8"
       }
@@ -3783,8 +3805,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 773,
-        "end_line": 775,
+        "line": 777,
+        "end_line": 779,
         "text": "##### Fixed Note\n\nUse this trig param to fix your channel to any MIDI note. The value represents a MIDI note number. The note is _not_ quantised. This is useful if you have a drum pattern and you don't want note data to affect the drum sound you're playing on a drum machine. This will override any quantised fixed note values or random note values.",
         "sha256": "ea576e3d183297a92953c07230710e34185b1a02f4678d04130a087bc4a85539"
       }
@@ -3818,8 +3840,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 777,
-        "end_line": 779,
+        "line": 781,
+        "end_line": 783,
         "text": "##### Quantised Fixed Note\n\nQuantised Fixed Note supplies an absolute MIDI pitch, 0\u2013127, and selects the nearest playable note in the active scale at its configured root (or the song root when unset). Equally close notes select the lower pitch. The number includes its octave; channel/step octave, transposition, chord degree/rotation and pentatonic switches do not modify this override. It replaces pattern, note-mask and random pitch calculations for the ordinary root voice; separately generated chord/arp voices have their own processing. Fixed Note takes precedence. A step lock set to Off inherits the channel value; when both are Off, ordinary pitch processing resumes. Off does not silence the trig.",
         "sha256": "224b2ef6329adeeffe5af807010184a37080629c1d77d097166b8503b1b1b902"
       }
@@ -3849,8 +3871,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 781,
-        "end_line": 783,
+        "line": 785,
+        "end_line": 787,
         "text": "##### Random Note\n\nThis trig param introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random twos note trig param. By default, random notes are quantised to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings. With Lock random to pent. enabled, a nonzero sum of Random Note and Random Twos offsets triggers nearest-pentatonic snapping for ordinary notes and fully quantised note masks, in either direction. Zero sums, including cancellation, do not trigger this option; other applicable pentatonic options still apply. Equal-distance pitches choose the lower note. Snap-only and unquantised masks retain their chromatic random-offset behaviour. Fixed Note and Quantised Fixed Note retain their override precedence.",
         "sha256": "4a1cf2b3c8658f5e226b55618174268087a607f83601305f6f252169e1374fd1"
       },
@@ -3881,8 +3903,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 785,
-        "end_line": 787,
+        "line": 789,
+        "end_line": 791,
         "text": "##### Random Twos Note\n\nSimilar to random note, this trig param introduces an element of random to your selected notes. The difference here is that twos note restricts values to those divisible by two. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note two higher in the scale. A value of 2 will randomly give your existing note, the note two higher in your selected scale, or the note two lower. A value of 3 will randomly select notes -2, 0, 2 or 4. A value of 4 will randomly select notes -4, -2, 0, 2 or 4. And so on. Use trig locks to really spice things up. These can be combined with random note trig params. Again, random notes are quantised to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings.",
         "sha256": "ae75c7ba34979e83fb8cd7c52efc156030e81cb23562748482ddf487d28e6e68"
       },
@@ -4064,8 +4086,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 789,
-        "end_line": 791,
+        "line": 793,
+        "end_line": 795,
         "text": "##### Chord Strum\n\nThe Chord Strum param dynamically spaces selected chord masks using the selected step division, ensuring they align rhythmically with the channel's settings. Notes are quantised to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration. Each chord note is played once. Empty mask slots keep their positions in the selected chord shape and consume spacing and acceleration ordinals, including trailing empty slots.",
         "sha256": "a9c34c894bd34203cc28c6faa87a3ebe819a27bc413202cbae60e384aaf54760"
       }
@@ -4251,8 +4273,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 793,
-        "end_line": 801,
+        "line": 797,
+        "end_line": 805,
         "text": "##### Chord Arpeggio\n\nThe Chord Arp param is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantised to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.\n\nWith Chord Spread at zero, the first arp interval is one full selected division of the channel step. For example, a half-step arp on a two-step note advances through its slots at 0, 1/2, 1 and 1 1/2 steps; it does not start another note at the two-step endpoint. Each arp note lasts one selected division from its own onset, shortened when necessary to finish at the original note's endpoint.\n\nStarting another arp on the same channel cancels the old arp's future notes. Notes already sounding keep their remaining duration, capped by their original endpoint; the old arp's endpoint does not cut notes from its replacement. Pattern resets likewise preserve the remaining duration of sounding notes. Stop releases sounding notes and cancels future arp notes. Overlapping notes of the same MIDI pitch still send a corresponding Note Off for each Note On; how a receiving instrument handles overlapping voices is unchanged.\n\nChord Shape orders the root and four chord-mask slots. An empty mask slot, or a muted root slot, is a rest and keeps its position, including at the end of the sequence. Rest slots consume the same time and acceleration ordinal as sounding slots. If no chord masks are populated, an unmuted root instead forms a one-slot ratchet; if the root is also muted, the result is silence.",
         "sha256": "34d1c76a9c5409b835468a797ee9c1e1fd9ca9f449a2b4de80678fe3e1116516"
       }
@@ -4305,8 +4327,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 803,
-        "end_line": 818,
+        "line": 807,
+        "end_line": 822,
         "text": "##### Chord Acceleration\n\nChord Acceleration modifies the spacing of an enabled Strum or Arpeggio together with Chord Spread. Off (0) means no progressive change: every gap is the selected division plus Spread. A positive value lengthens each following gap; a negative value shortens it. With Spread at zero, Acceleration has no effect.\n\nIn channel-step units, let `d` be the Strum or Arp division, `s` be Spread, and `a` be Acceleration (zero when off). The gap before slot `k`, counting the first gap as 1, is `d + s * (1 + (k - 1) * a)`. The first slot occurs at trigger time; later slot times are the sums of these gaps. A new trigger restarts the ordinal. Wrapping an arp's slots does not restart it. These are the nominal musical times before swing and clock-pulse quantisation. An arp interval occupies at least one scheduler pulse, including after swing. At fast channel rates, this limits the resolution of very short gaps.\n\nFor a division of 1/2 and Spread of 1/4:\n\n| Acceleration | Successive gaps | Slot times from the trigger |\n|---|---|---|\n| Off | 3/4, 3/4, 3/4, 3/4 | 0, 3/4, 3/2, 9/4, 3 |\n| +1 | 3/4, 1, 5/4, 3/2 | 0, 3/4, 7/4, 3, 9/2 |\n| +2 | 3/4, 5/4, 7/4, 9/4 | 0, 3/4, 2, 15/4, 6 |\n| -1 | 3/4, 1/2, 1/4, then 0 | 0, 3/4, 5/4, 3/2, then stop |\n\nWhen the next gap is zero or negative, scheduling ends before that slot. There is no extra simultaneous note or reversed time; notes already sounding retain their releases. Empty slots, including trailing rests, advance the same ordinal in both strums and arps.",
         "sha256": "1f4763460fa3e225715de644982fff8c6bdbc331af18953b34b8c14f1ef7f17d"
       }
@@ -4361,8 +4383,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 820,
-        "end_line": 822,
+        "line": 824,
+        "end_line": 826,
         "text": "##### Chord Spread\n\nChord Spread adds a duration to the selected Strum or Arp division, measured in channel steps. For example, a half-step division with quarter-step Spread starts with a three-quarter-step gap. With Acceleration off, all gaps stay at that value. With Acceleration enabled, each following gap changes by Spread multiplied by Acceleration, as above. Spacing modifiers act only when Strum or Arpeggio is enabled and do not change the selected note length. Arp notes remain limited by their original note endpoint.",
         "sha256": "f18187b47d3779a8f83e1967d81183ff63726c1a3b8375772a99d792926afe48"
       }
@@ -4657,8 +4679,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 824,
-        "end_line": 826,
+        "line": 828,
+        "end_line": 830,
         "text": "##### Chord Velocity Modifier\n\nThe Chord Velocity Modifier incrementally adjusts the velocity of successive notes in a chord, starting from the chord's root note. This adjustment can either increase or decrease the velocity, thereby creating a \"swell\" effect for rising intensity or a \"fade\" effect for a diminishing feel.",
         "sha256": "a1a77545731238157750a6c254e4b240f57427f24e9fe2c5306a099e248e56d6"
       }
@@ -4951,8 +4973,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 828,
-        "end_line": 830,
+        "line": 832,
+        "end_line": 834,
         "text": "##### Chord Shape Modifier\n\nThe Chord Shape Modifiers alters the order of the chord masks that are played using the Chord Strum and Chord Arpeggio params. ",
         "sha256": "6422f57bb33b8c2bff43f054ba02367e48aca44e1cca8582856e1b30e5c73ebc"
       }
@@ -5238,8 +5260,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 832,
-        "end_line": 834,
+        "line": 836,
+        "end_line": 838,
         "text": "##### Mute Root Note\n\nThe Mute Root Note param allows you to silence the root note of a chord while allowing other chord notes to play. When enabled, any chord played on that step will omit its root note while still playing all other chord notes. This can be used to create more varied chord voicings and inversions.",
         "sha256": "c2b1b674e409ef6fba8ec84ed0c44a563bce5908e98f9dcaec1f048079109afa"
       }
@@ -5265,8 +5287,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 836,
-        "end_line": 838,
+        "line": 840,
+        "end_line": 842,
         "text": "##### Fully Quantise Mask\n\nThe Fully Quantise Mask param controls whether note masks on a step are fully quantised to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantised to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes. Channel X uses the global Quantise note masks setting; explicit Off and On override it. An explicit step X uses the global setting directly, bypassing the channel value. Clearing that step lock instead restores the channel value (and therefore the global setting if the channel is X).",
         "sha256": "109582348b2bdb8b324c1c7622fb034ade526f26b8609eb82899d47df51506b2"
       }
@@ -5293,8 +5315,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 842,
-        "end_line": 844,
+        "line": 846,
+        "end_line": 848,
         "text": "Access the scale editor by pressing the second global menu button.\n\nWhen in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. A short press on the already applied scale turns the global scale off while retaining that slot for editing; another short press applies it again. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.",
         "sha256": "fc694d1e8c46466b0569a2bbb058b103db43273bf6feb1efd1dc721df22d8600"
       },
@@ -5327,8 +5349,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 844,
-        "end_line": 848,
+        "line": 848,
+        "end_line": 852,
         "text": "When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. A short press on the already applied scale turns the global scale off while retaining that slot for editing; another short press applies it again. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.\n\n<img alt=\"Scale editor scale slot select buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg\" width=\"300\" />\n\nA shift press (hold K1) selects a scale slot for editing without changing the global scale selection. A long press on a different editing slot does the same. A long press on the slot already selected for editing turns the global scale off and clears the editing selection. Selecting a slot for editing does not switch playback to it; however, saving changes to a scale already used by playback changes that scale. The editing selection has a dim indicator when it differs from the applied scale.",
         "sha256": "0a18abf52cfc37934c8c57a34ff15c2e9b02455f90be6f8fb6360fc562f650bf"
       }
@@ -5354,8 +5376,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 850,
-        "end_line": 854,
+        "line": 854,
+        "end_line": 858,
         "text": "[Scale locks](#scale-locks) can be set to apply a scale globally or to a single channel, activating at a designated step. Global locks persist until another global lock or the global scale track wraps. Channel-lock duration follows the Scales Lock Until Pattern End option. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.\n\n<img alt=\"Scale editor step select buttons\" src=\"https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg\" width=\"300\" />\n\nYou can also adjust the rate of the global scale track and set its length independently of other channels, enabling chord progressions that extend beyond a single pattern. This feature offers substantial flexibility for crafting intricate chord progressions and varying patterns.",
         "sha256": "7c8e7c60cc1784df1fed43972072b28e250b5e5b6770f37e629e3c18253ba4ba"
       },
@@ -5379,8 +5401,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 863,
-        "end_line": 865,
+        "line": 867,
+        "end_line": 869,
         "text": "#### Transposition\n\nAs well as setting a transposition value per scale, you can transpose your entire Song Sequence using the global quantiser transposition fader, either globally or by step using [transposition locks](#transposition-locks). Global and trig transposition applies on top of the currently selected scale's transposition value.",
         "sha256": "8296872523f5cb096325711c4f51130be618b433d13b3adc6962057ccf729c15"
       }
@@ -5411,8 +5433,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 876,
-        "end_line": 898,
+        "line": 880,
+        "end_line": 902,
         "text": "### Song Editor\n\nThe Song Editor features a grid layout consisting of 96 slots (six rows of 16). Each slot represents a unique opportunity to blend patterns, channels, rhythms, scales, and other elements into your compositions, making each Song Sequence a distinct musical creation.\n\n<p>\n  <svg width=\"25\" height=\"25\" viewBox=\"0 0 500 500\" style=\"vertical-align: middle;\">\n    <use href=\"#video-icon\" />\n  </svg>\n  <a href=\"https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2972s\">Song editor demo</a>\n</p>\n\n\n#### Button Indicators\n\n* **Dim buttons**: These are your blank slates, ready for your creative input.\n* **Mid-glow buttons**: These are filled with your existing rhythms and patterns.\n* **Brightly lit buttons**: This button highlights the Song Sequence currently in play.\n\n#### Interacting with Slots\n\n* **Selecting a Pattern**: Simply press the button corresponding to the pattern.\n* **Copying Slots**: To copy one slot to another, press and hold the source slot, then the destination slot. Note: This action will overwrite the content in the target slot.\n* **Erasing a Slot**: To clear a slot, copy an empty slot over it. Remember, there is no undo option, so proceed with caution.",
         "sha256": "09ac43c4f8c8bb81ca45119d2c56cf31cdc523ae491910ff74a3e30f4e6eb25e"
       }
@@ -5443,8 +5465,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 902,
-        "end_line": 904,
+        "line": 906,
+        "end_line": 908,
         "text": "#### Song Mode Operations\n\nWhen \"song mode\" is activated, the sequencer automatically progresses to the next slot after a pattern has played its designated number of repetitions. If it encounters an empty slot, it loops back to the first filled slot within that sequence, facilitating smooth transitions between unique pattern groups. If you wish to change slots during playback, the sequencer will queue your command and execute it after the current sequence completes.",
         "sha256": "66017401c0094259a689883da357c27ec0fab2aa592ad3dd72e4d52fff55778c"
       }
@@ -5476,8 +5498,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 906,
-        "end_line": 911,
+        "line": 910,
+        "end_line": 915,
         "text": "#### Adjusting Song Sequence Length\n\nThe song sequence's length can be adjusted using the fader located at the lower left of the song editor page.\n\n* The global length can be set anywhere from 1 step to 64 step, offering a wide range of possibilities.\n* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length. The cap counts steps from the channel start: a channel set to steps 2\u20134 with global length 2 plays steps 2 and 3 repeatedly. Increasing the global length restores the remaining selected steps. This also applies to the scale track and follows each track\u2019s clock rate; explicit song reset options still apply.",
         "sha256": "65a66b953435f348a0b4d5185450e6c34bc4866193462d3d1dc252f2c564845d"
       },
@@ -5504,8 +5526,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 922,
-        "end_line": 925,
+        "line": 926,
+        "end_line": 929,
         "text": "#### Navigating the Norns Display\n\n**Page 1**: Here, you can set the number of repetitions for each Song Sequence. This setting dictates how sequences transition in song mode. When song mode is off, you manually control slot activation, allowing you to dictate the flow of your song.\n**Page 2**: Set the tempo to match the mood you want, from a soothing lullaby to a fast-paced track.",
         "sha256": "b20efe83735cbea8b9ebe6c1993cd08384f71a314333dfffaa130847c30ea919"
       }
@@ -5541,8 +5563,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 933,
-        "end_line": 936,
+        "line": 937,
+        "end_line": 940,
         "text": "Device parameters can be locked on a per-step basis. To set a param trig lock:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Adjust the param value that you want to lock to this step.",
         "sha256": "2acab7dfa8f9589c10eec3ab349a9becf6db12ac970ae9845d97288003bb549b"
       }
@@ -5572,8 +5594,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 938,
-        "end_line": 947,
+        "line": 942,
+        "end_line": 951,
         "text": "To clear parameter trig locks from a specific step:\n\n1. On the channel editor, navigate to the trig lock page on the Norns screen.\n2. Hold the step with trig locks and press K2.\n\nTo clear all parameter trig locks from a channel:\n\n1. Ensure you are on the trig lock page on your norns device.\n2. Hold shift (K1).\n3. Press K2.",
         "sha256": "fd97937e7da7d064b5c01dc094fcfbea7a70100a2b4f2563bccf64396a17a103"
       }
@@ -5632,8 +5654,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 956,
-        "end_line": 958,
+        "line": 960,
+        "end_line": 962,
         "text": "#### Param Slides\n\nTo enable parameter slides for a trig parameter, select the desired parameter and press K3. This will activate parameter slides for every trig lock of this type on the channel. While enabled, locks will smoothly transition between each other. Note that transitions do not transition across song patterns but can wrap within the same pattern if the Param Slide Wrap setting is enabled. Use this sparingly as it is resource intensive",
         "sha256": "1b63c84e70a584a59d2ff32e1fabc74be327443306ea98d29097fe632c4476cd"
       }
@@ -5659,8 +5681,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 960,
-        "end_line": 965,
+        "line": 964,
+        "end_line": 969,
         "text": "To lock a parameter slide to a specific step:\n\n- Hold down the desired step.\n- Press K3 on the chosen trig parameter.\n\nThis locks the parameter slide to the selected step, causing it to transition smoothly to the next lock. All other locks remain unaffected.",
         "sha256": "6670f373eecdd0e063c328afefdce60919a6a3bb5294553c9fdbb8520dc4e65f"
       }
@@ -5686,8 +5708,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 974,
-        "end_line": 990,
+        "line": 978,
+        "end_line": 994,
         "text": "### Mask Locks\n\nMasks can also be locked on a per-step basis. To set a mask trig lock:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Adjust the mask value that you want to lock to this step.\n\nTo clear mask locks from a specific step:\n\n1. On the channel editor, navigate to the Masks page on the Norns screen..\n2. Hold the step with mask locks and press K2.\n\nTo clear all mask trig locks from a channel:\n\n1. Ensure you are on the Mask page on your norns device.\n2. Hold shift (K1).\n3. Press K2.",
         "sha256": "ebc7f8eb89c662f45fc3cc58eced9516c5ac09dfd8985cc57ad82575fd9ba436"
       }
@@ -5714,8 +5736,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 999,
-        "end_line": 1009,
+        "line": 1003,
+        "end_line": 1013,
         "text": "### Scale Locks\n\nScales can be set on a per-step basis. They can be set globally across all channels on the Scale Editor, or per channel oin the Channel Editor. Scale locks set on steps in the Channel Editor take precedence over global scale locks. With Scales Lock Until Pattern End on, a channel scale lock persists until that channel wraps to its start, unless another channel scale lock replaces it. With the option off, it persists until the next active trig that passes its probability check; a probability-rejected trig does not clear it. A scale lock on that next trig applies in place of the old lock. Global scale-track locks are independent of this option: they persist until another global lock replaces them or the global scale track wraps. To set a scale lock:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Press the desired scale slot.\n\nTo clear a grid trig lock:\n\n1. Hold the step with the locked value.\n2. Press K2.",
         "sha256": "a0c4ad497d2f0f68607339a8a4ab0fd98951f2f7ebf2778a38c0e6c66f5410c6"
       }
@@ -5738,8 +5760,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1018,
-        "end_line": 1030,
+        "line": 1022,
+        "end_line": 1034,
         "text": "### Transposition Locks\n\nThe transposition of your song can be set on a per-step basis from the scale page accessed in the channel editor. Transposition locks are applies on top of scale transposition values. \n\nTo set a transposition lock:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Press the desired transposition value.\n\nTo clear a transposition lock:\n\n1. Hold the step with the locked value.\n2. Press K2.",
         "sha256": "7dc542663f16aa2fb01bf3302d3d8584562243ab9f1664daa2337b098f1c2c08"
       }
@@ -5770,8 +5792,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1032,
-        "end_line": 1042,
+        "line": 1036,
+        "end_line": 1046,
         "text": "### Octave Locks\n\nA step's current octave can be altered using trig locks. To lock a step's octave:\n\n1. Hold down the step you want to modify on the channel page sequencer.\n2. Press the desired octave using the octave buttons at the bottom of the channel page.\n\nTo clear an octave trig lock:\n\n1. Hold the step with the locked value.\n2. Press K2.",
         "sha256": "4a43dffadb516593801b99369becd23575cdb75ec0be0781f1fdf9d9d11ba280"
       }
@@ -5802,8 +5824,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1046,
-        "end_line": 1050,
+        "line": 1050,
+        "end_line": 1054,
         "text": "You can save and load your creations using the param menu. When you choose to save, you'll be prompted to enter a name for your creation. Remember to use a descriptive name so you can easily find and manage your projects.\n\nThe sequencer features an autosave function when it is not actively playing. If left idle, it will automatically save your work under the name \"autosave\" after 60 seconds. When you start Mosaic again, it automatically loads this most recent autosave. Before replacing the current project, Mosaic checks saved song slots, global lengths, and channel and scale-track ranges. If a check fails, the screen identifies the problem and the current project and playback are retained. Autosaving is then suspended to protect the rejected file; editing, playing or cancelling a dialog does not resume it. Successfully loading a valid project, saving a named project, or choosing New resumes the normal idle autosave interval. A failed save leaves autosaving suspended. Valid saved one-step ranges remain supported, without adding a one-step range gesture. These checks cover the saved range structure, not every possible corrupted project field.\n\nTo ensure the longevity of your work, it's important to save your creations into named slots. This prevents them from being overwritten by the autosave feature, allowing you to keep your songs indefinitely.",
         "sha256": "b1226d54811be74cd7a44d0dd1f53380125af5cfa11d3e8fa77433c8c74f544b"
       }
@@ -5832,8 +5854,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1048,
-        "end_line": 1048,
+        "line": 1052,
+        "end_line": 1052,
         "text": "The sequencer features an autosave function when it is not actively playing. If left idle, it will automatically save your work under the name \"autosave\" after 60 seconds. When you start Mosaic again, it automatically loads this most recent autosave. Before replacing the current project, Mosaic checks saved song slots, global lengths, and channel and scale-track ranges. If a check fails, the screen identifies the problem and the current project and playback are retained. Autosaving is then suspended to protect the rejected file; editing, playing or cancelling a dialog does not resume it. Successfully loading a valid project, saving a named project, or choosing New resumes the normal idle autosave interval. A failed save leaves autosaving suspended. Valid saved one-step ranges remain supported, without adding a one-step range gesture. These checks cover the saved range structure, not every possible corrupted project field.",
         "sha256": "73210520ab7de5abb8b832c742bce23fdb1bcd11f7c7444fc432a9a0fd6ee260"
       }
@@ -5856,8 +5878,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1058,
-        "end_line": 1060,
+        "line": 1062,
+        "end_line": 1064,
         "text": "##### Shift press stop\n\nWhen enabled, the play/stop button will only stop with a long press or when shift (K1) is held. This feature is intended to prevent accidental stops of the sequencer, especially during live performances.",
         "sha256": "33edff7a6e1836dc0d8a9ca93935cb2a3d0107e24b26752f8e6877ab93c20ebc"
       }
@@ -5882,8 +5904,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1062,
-        "end_line": 1064,
+        "line": 1066,
+        "end_line": 1068,
         "text": "##### Song Mode\n\n\"Song mode\" is on by default. When enabled, the song editor will progress through sequences as dictated by the options set on the song editor page. When off, song sequences will only progress with manual intervention.",
         "sha256": "c0b9a35853d9bc29a8fcecf06880f5d50defde304bd1827ce77132f716062230"
       }
@@ -5911,8 +5933,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1066,
-        "end_line": 1068,
+        "line": 1070,
+        "end_line": 1072,
         "text": "##### Reset at Song Editor Pattern Change\n\nThe \"Reset at Song Sequence Change\" option, which is turned on by default, ensures that the sequencer resets all channels when transitioning from one song editor pattern to the next. This helps maintain rhythmic consistency but may limit more complex polyrhythms. If you prefer continuously evolving polyrhythms, especially when dealing with patterns of different lengths, you can turn this setting off.",
         "sha256": "a5498ec59345036bf43d1dd57ea499ab037a7700a2f874ed3ec184452acac4bf"
       }
@@ -5945,8 +5967,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1070,
-        "end_line": 1072,
+        "line": 1074,
+        "end_line": 1076,
         "text": "##### Reset at Pattern Repeat\n\n\"Reset at Pattern Repeat\" is set to off by default. When enabled, it resets all channels at the end of a song sequence when repeating the same song editor pattern. This ensures all channels with a custom length will reset back to that channel's starting step at every start of the pattern. Disabling this option allows for evolving polyrhythms.",
         "sha256": "927e6c965e5cba9a9c8de4918eceffd93fc7ea3842b56e66acb2ae968a5de3f0"
       }
@@ -5975,8 +5997,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1074,
-        "end_line": 1076,
+        "line": 1078,
+        "end_line": 1080,
         "text": "##### Parameter Slides Wrap\n\nBy default, \"Param Slides Wrap\" is turned off. When enabled, and the current song pattern is set to repeat, trig locks will smoothly transition beyond step 64, wrapping back to the next trig lock earlier in the sequence.",
         "sha256": "32a06abe526a65d4ac831ad63075d05807e738c3124c98acecc0d18acad6a58c"
       }
@@ -6000,8 +6022,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1078,
-        "end_line": 1084,
+        "line": 1082,
+        "end_line": 1088,
         "text": "##### Elektron Program Changes\n\n\"Elektron program changes\" defaults off. By enabling this setting, your Elektron devices will automatically adjust their patterns to align with the corresponding song pattern in Mosaic. For instance, selecting song pattern one on Mosaic will trigger pattern one on your Elektron device, ensuring that both systems are perfectly in sync. This feature allows for a unified performance across your equipment, with each song pattern change on Mosaic mirrored by your Elektron devices.\n\n##### Elektron Program Change Channel\n\nThe \"Elektron program change channel\" setting determines which MIDI channel to send program change messages to. The default is 10 - same as on most Elektron devices.",
         "sha256": "3a8311058ded7ff60689a65aa69874eff3f4a7a816ae5df8ef1cd0ee0743a0b9"
       }
@@ -6032,8 +6054,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1088,
-        "end_line": 1090,
+        "line": 1092,
+        "end_line": 1094,
         "text": "##### Trigless Locks\n\n\"Trigless locks\" is enabled by default, meaning locks on steps with no active trig are still honored.",
         "sha256": "67a6b877df1635c634038f780bcfca537099dfd3a98251cd7fc484e953193645"
       }
@@ -6060,8 +6082,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1094,
-        "end_line": 1096,
+        "line": 1098,
+        "end_line": 1100,
         "text": "##### Snap Note Masks to Scale\n\n\"Snap Note Masks to Scale\" is on by default. With this setting enabled, note masks snap to the currently selected scale, but are not altered by scale degree or rotation adjustments.",
         "sha256": "0109d37092ca78ce036dff3d76318d19aad4c11f816ca8b5a3626a39bb07ed05"
       },
@@ -6087,8 +6109,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1098,
-        "end_line": 1100,
+        "line": 1102,
+        "end_line": 1104,
         "text": "##### Quantise Note Masks\n\n\"Quantise Note Masks\" is off by default. With this setting enabled, all note masks are fully quantised to the currently selected scale and are altered by scale degree and transposition adjustments. Overrides the Snap Note Mask to Scale setting.",
         "sha256": "ab82d58c2108bd52c694263d17421cdcbe4e819633b487e621da9c4b306c936c"
       },
@@ -6114,8 +6136,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1102,
-        "end_line": 1104,
+        "line": 1106,
+        "end_line": 1108,
         "text": "##### Scales Lock Until Pattern End\n\nThe \"Scales lock until ptn end\" option is on by default and controls channel scale locks. When on, a lock persists until the channel wraps to its start, unless another channel scale lock replaces it. When off, the next active trig that passes its probability check clears the previous lock; probability-rejected trigs do not clear it. A new lock on that trig takes effect normally. Global scale-track locks do not use this option: they persist until replacement or global-track wrap.",
         "sha256": "4036ae1f73bd3def59bddb88c5dd54e2bf44c844dbbcdad6ad4fc595ecc8b7f6"
       }
@@ -6138,8 +6160,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1106,
-        "end_line": 1108,
+        "line": 1110,
+        "end_line": 1112,
         "text": "##### Lock All to Pentatonic\n\n\"Lock all to pent.\" is off by default. Enabling this option forces all notes to adhere to the pentatonic version of the selected scale, useful for creating highly generative compositions.",
         "sha256": "fc46fcbe7d0e6addc8b39222c1f7680f9096e41dd48f7d3808b259f5c781ebec"
       }
@@ -6167,8 +6189,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1110,
-        "end_line": 1112,
+        "line": 1114,
+        "end_line": 1116,
         "text": "##### Lock Random to Pentatonic\n\n\"Lock random to pent.\" is on by default. It ensures that notes altered by random trig locks adhere to the pentatonic version of the selected scale, making the random notes harmonically more pleasant.",
         "sha256": "a59c67cdbd8cfa4b611be541390ebdfbd054150063e303b4258456cc3592d82b"
       }
@@ -6197,8 +6219,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1114,
-        "end_line": 1116,
+        "line": 1118,
+        "end_line": 1120,
         "text": "##### Lock Merged to Pentatonic\n\nSimilarly, \"Lock merged to pent.\" is on by default and ensures notes modified by merge modes stick to the pentatonic version of the currently selected scale. Mosaic uses these application-specific five-note selections (one-based degrees of each named seven-note scale): Major and Harmonic Major 1/2/3/5/6; Minor, Harmonic Minor and Melodic Minor 1/3/4/5/7; Dorian 1/2/4/5/7; Phrygian 1/3/4/6/7; Lydian 2/3/5/6/7; Mixolydian 1/2/4/5/6; Locrian 2/3/4/6/7. The named scale\u2019s alterations apply; these selections do not always retain the tonic or avoid semitones. Merged values remain seven-note scale degrees, not five-note indices. Their scale pitches snap to the nearest selected pitch repeated across octaves, choosing the lower pitch on an exact tie; snapping may cross an octave boundary. For example, Lydian C snaps to the B below it, while Melodic Minor A snaps down to G rather than equally distant B. The scale root is used when set, otherwise the song root, with the effective octave offset applied afterward.",
         "sha256": "566d425b30fcc20c74e19fedfe86e6afc32220f4b104c3e8d0769e25122ed50a"
       },
@@ -6222,8 +6244,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1120,
-        "end_line": 1122,
+        "line": 1124,
+        "end_line": 1126,
         "text": "##### Map Scale to White Keys\n\n\"Map scale to white keys\" is off by default. When enabled, the selected scale is mapped to the white keys of a MIDI keyboard, starting at the C key. The mapping will automatically change when the currently selected scale changes.",
         "sha256": "f0bf0d0a1e9317d99144f5618dd197556107b1b59ee985880470614a35e6b5c2"
       }
@@ -6246,8 +6268,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1124,
-        "end_line": 1126,
+        "line": 1128,
+        "end_line": 1130,
         "text": "##### Honor Scale Rotations\n\n\"Honor scale rotations\" is off by default. Enabling this setting will allow the currently selected scale's rotation setting to affect the MIDI keyboard mapping.",
         "sha256": "1b0609c17584ef476d21285530cd583419191186607e48787d3d7f77759aa0ad"
       }
@@ -6270,8 +6292,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1128,
-        "end_line": 1130,
+        "line": 1132,
+        "end_line": 1134,
         "text": "##### Honor Scale Degree\n\n\"Honor scale degree\" is off by default. Enabling this setting means the current scale's degree option will affect the MIDI keyboard mapping.",
         "sha256": "33285f6a49f1837fda545bd51344e3fa9893aa0c762e7c7235f308cd293c4df7"
       }
@@ -6294,8 +6316,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1132,
-        "end_line": 1134,
+        "line": 1136,
+        "end_line": 1138,
         "text": "##### Honour Scale Transpose\n\n\"Honour scale transpose\" is off by default. Enabling this setting means the current scale's transpose option will affect the MIDI keyboard mapping.",
         "sha256": "50614026e1d0505842e53920480edbec62d3dd6f4ce8427f58ff5a12a4fae308"
       }
@@ -6318,8 +6340,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1136,
-        "end_line": 1138,
+        "line": 1140,
+        "end_line": 1142,
         "text": "### Sinfonion Connect\n\nYou can sync up your Eurorack Sinfonion module to Mosaic using a DIY device called [norns2sinfonion](https://github.com/subvertnormality/norns2sinfonion).",
         "sha256": "5740f8e9b50e8fdc88b29c6fe3f36439409561e5f8c45923e0206c0c6e6ada31"
       }
@@ -6342,8 +6364,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1140,
-        "end_line": 1142,
+        "line": 1144,
+        "end_line": 1146,
         "text": "### LFOs and Modulation\n\n_Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit](https://github.com/sixolet/toolkit). You can add LFOs and other rhythmic modulators to any device parameter.",
         "sha256": "caa8eac85111e25f4fd9708f88d2261a558d3c3dc4089b649acc1a2af0f2e6ea"
       }
@@ -6366,8 +6388,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 1145,
-        "end_line": 1155,
+        "line": 1149,
+        "end_line": 1159,
         "text": "## Performance Management\n\n_Mosaic_ gives you a lot of control, but it can also be resource intensive. Pushing the sequencer to its limits can cause slow down and lead to an instable external clock. Performance should be fine under normal usage, but more enhancements are planned for future releases. Here are some tips for managing performance:\n\n - The more channels you use, the greater care you need to take when using high clock rates, trig locks, param slides, and n.b. devices.\n - High clock rates and multipliers place a greater strain on the sequencer.\n - Global param slides are resource intensive and should be used sparingly. Consider using step param slides instead. Generally take care to limit the number of param slides in use.\n - Recording with trigless locks enabled places a greater strain on the sequencer. Disable if you don't need that level of modulation granularity.\n - N.b. devices should be be used sparingly.\n\nDuring testing of v1.1.1, we discovered that external sync became unreliable under the following conditions: 1 n.b. device in use (doubledecker), trigless parameters were in use at 110 BPM, with most steps locked for all 10 trig parameters across the four channels, with 40 of those parameters utilising global param sliding. Different combinations of these conditions may yield different results. ",
         "sha256": "466301227adb85d90c1fda6127c5177ddd9a6dcf162e8b963d23723bbbb8e82e"
       }
@@ -6375,7 +6397,8 @@
     {
       "id": "NAV-TRANSPORT",
       "sections": [
-        "CHEAT-ALL"
+        "CHEAT-ALL",
+        "MAN-114"
       ],
       "statement": "Bottom-left grid key starts/stops transport.",
       "cases": [
@@ -6981,8 +7004,8 @@
       ],
       "source": {
         "path": "README.md",
-        "line": 322,
-        "end_line": 366,
+        "line": 326,
+        "end_line": 370,
         "text": "The initial stage of song creation with _Mosaic_ involves setting up a few basic voices. These preliminary sound designs may evolve, but it's useful to have a basic foundation for developing the rhythmic, harmonic, and melodic aspects of your track.\n\nStart by selecting the device for each element of your composition, whether it be an internal Norns player, an external drum machine or synthesizer, or components of a modular patch. To do this, assign each device to a Mosaic [channel](#channel-editor) as detailed in the [device](#devices) section. Organizing different instruments can be helpful; for instance, group drums on channels 1-6, harmonic and textural elements on channels 7-10, melodic elements on channels 11-14, and reserve channels 15 and 16 for modulation. Adapt these assignments to suit your specific musical style and needs.\n\nWith your devices assigned, you're ready to begin the rhythm and harmony design process.\n\n### Rhythm Section Design\n\nThe rhythm of your track is crafted using the [pattern editor](#pattern-editor), accessible by pressing the third button in the global menu cluster located at the bottom left of your grid. A pattern in Mosaic is defined as a sequence composed of 64 steps with trigs, notes, velocities, and duration data. Patterns are the building blocks of your rhythm section.\n\nThe pattern editor provides multiple tools to create these building blocks. You can input trigs manually in an XOX style, or choose from predefined banks featuring bass, snare, and hi-hat patterns. For more complex needs, explore using Euclidean patterns or patterns from Noise Engineering's Numeric Repetitor. To add unique rhythmic variations, apply a tresillo modifier, which introduces a 3-3-2 repeating pattern. These rhythm types can be blended by selecting and \"painting\" them onto the grid. It's possible to paint more than one pattern at a time, and then edit further to taste XOX style. To learn more about this process, refer to the [Adding Trigs](#adding-trigs) section.\n\nAfter establishing a pattern of trigs, assign relative [notes](#adding-notes) and [velocity](#adding-velocity) data. These patterns will later be merged and remixed to form your rhythm and harmony sections.\n\n### Harmony Design\n\n_Mosaic_'s harmony tools enable you to compose your song's chordal progressions. These progressions can dynamically modulate your patterns, allowing for the creation of complex harmonic sequences with minimal music theory knowledge.\n\nHarmonic progressions can be applied globally \u2014 modulating all notes across all channels to the same key, degree, and scale rotation \u2014 or on a per-channel basis, affecting only the notes within that channel. This decoupling of patterns and notes from the active scale enables dynamic and experimental tonal modulations. For example, setting your global scale to change in a polyrhythmic pattern relative to your channel's note data can create captivating musical textures.\n\nEach project supports 16 scale slots. Each slot includes a root note, a scale type (e.g., Dorian, Major), a degree, transposition, and a scale rotation. The [Scale Editor](#scale-editor) is where you craft the scales that will form your chord progressions, and you can sequence these using [Scale Locks](#scale-locks) either globally from the scale editor, or per channel using the channel editor.\n\n### Sequence Composition\n\nAt this point you will have a set of sound sources attached to a number of channels, a set of patterns with relative notes, trigs, velocities, and lengths, and a set of scales that work well together - possibly assigned as either a global scale or a set of trig locks on the global scale editor. Now it's time to compose your first sequence. The pattern tools offer the ability to craft intricate rhythmic and harmonic sections. However, the true heart of Mosaic is the [Channel Editor](##channel-editor). The channel editor is used to lay out your harmonic and rhythm sections by [adding patterns to channels](#adding-patterns-to-channels).\n\n#### Using Merge Modes\n\nWhen assigning multiple patterns to a single channel, you might notice that overlapping steps in different patterns deactivate. This occurs because the default \"skip\" merge mode is active. [Merge Modes](#merge-mode) control the behavior of these overlaps, allowing patterns to be combined in different combinations across multiple channels whilst interacting in harmonically meaningful ways. Experiment with different merge modes to explore various musical interactions.\n\n#### Melody Composition\n\nThe [Channel Editor](##channel-editor) doesn't merely allow you to add, merge, and apply scales to patterns; it enables you to enhance them with melodies and other elements to further enrich your music. In fact, you could compose entire songs using just the channel editor if you wanted to, thanks to [Masks](#masks). Masks provide a direct method to input triggers, notes, velocities, and chords right into the channel editor grid, giving you precise control over your musical creations. You can overwrite pattern values or create entirely new steps.\n\nUse the live recording mode to play your melodies directly over your rhythm and harmony patterns. Then record in automation directly by altering trig params whilst recording.\n\n### Modulation, Movement, and Interest\n\nEven a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [Trig Parameters](#trig-parameters) and [Trig Locks](#trig-locks). \"Trig lock\" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantised, at each step, offering precise manipulation over the quality and dynamics of your music. \n\n### Song Composition\n\nAt this point, your sequence is likely \"full to the brim,\" containing all the elements of your song in its most complex form. For those familiar with Elektron devices, this stage can feel like a precarious juncture, where it's tempting to fall into a cycle of making minor adjustments to the same pattern repeatedly. _Mosaic_ offers a solution with its [Song Editor](#song-editor), designed to help you break free from this procrastination loop.\n\nTo access the song editor, press the last key in the global menu's Grid button cluster. You'll be greeted by a grid where the first button is dimly lit, indicating the sequence you are currently working on. The song editor allows you to take this sequence, copy it, and creatively manipulate the copy: you can mute channels, modify scale locks, alter pattern combinations and merge modes, adjust masks, and more. You can then chain multiple sequences together. This flexibility enables you to develop your composition from the base sequence upwards. As you become accustomed to this workflow, you'll find that you can construct an entire song from a single sequence, streamlining your creative process.",
         "sha256": "d8551a2f3b2ecf6648f014725ba8fdc68cee3618a83b1ed0a75cd8237f2b6fc8"
       }
@@ -7646,6 +7669,24 @@
         "NAV-CONFIRM"
       ],
       "status": "mapped-to-draft-not-tested"
+    },
+    {
+      "source": {
+        "path": "README.md",
+        "line": 310,
+        "sha256": "f7d388c45fac92b1572dc01b8826b07727451ad642c4545368fb365fc4bbcb76",
+        "text": "With the norns clock source set to MIDI, an external transport Start resets Mosaic to step 1, including when it is already playing. Held notes are released before the restarted phrase begins. Restart cleanup does not send a MIDI Stop back to the connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase."
+      },
+      "proposed_requirements": [
+        "CLOCK-MIDI-TRANSPORT-001",
+        "MIDI-RELEASE-001",
+        "NAV-TRANSPORT"
+      ],
+      "cases": [
+        "M-SYNC-006",
+        "M-TIM-004"
+      ],
+      "status": "mapped-scoped-native-evidence"
     }
   ],
   "image_references": [
