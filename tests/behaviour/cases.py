@@ -60,6 +60,11 @@ def four_notes(c):
     c.tap(5,8);c.tap(5,8);c.tap(4,3)
     c.led_values([(4,3)],[12])
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(67,97)]])
+    # Selected pattern's top LED deliberately alternates 3-1 / 3+1.
+    # Observe both states, then compare the same visible phase in both clocks.
+    # Do not mask this LED or weaken the full-grid admission comparison.
+    c.led_values([(1,1)],[4]);c.led_values([(1,1)],[2])
+    c.results.append(dict(kind='selected-pattern-blink-cycle',levels=[4,2],passed=True))
 
 def next_trig_cutoff(c):
     c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
@@ -107,6 +112,11 @@ def wrapped_length(c,same_pitch=False):
         c.led_values([(15,3)],[12])
     notes=c.playback([(1,[144,60,127]),(1,[144,60 if same_pitch else 67,100])],timeout=38)
     assert_durations(c,notes,[1,2]*2)
+    if not same_pitch:
+        # Page49-64's empty selected-pattern top cell has base brightness1,
+        # with the same +/-1 selection animation as the authored-note page.
+        c.led_values([(1,1)],[0]);c.led_values([(1,1)],[2])
+        c.results.append(dict(kind='selected-pattern-blink-cycle',levels=[0,2],passed=True))
 
 
 def pattern_duration_domain(c,lengths=range(1,65),channel_end=64):
