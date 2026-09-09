@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "0081 relative global cap validated. Continue accepted live range/global-length changes, malformed persisted ranges and remaining manual/emulator gates.",
+  "next_action": "Live base-rate range and queued global transitions passed. Investigate malformed persisted ranges, then remaining live musical interactions/manual and emulator gates.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -178,5 +178,6 @@
   "multiheld_keyboard_validation": "docs/testing/multiheld-keyboard-validation.json",
   "range_guard_validation": "docs/testing/range-guard-validation.json",
   "range_channel_isolation_validation": "docs/testing/range-channel-isolation-validation.json",
-  "offset_global_range_validation": "docs/testing/offset-global-range-validation.json"
+  "offset_global_range_validation": "docs/testing/offset-global-range-validation.json",
+  "live_range_validation": "docs/testing/live-range-validation.json"
 }

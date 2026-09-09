@@ -175,3 +175,74 @@ def offset_scale_range_clipping(c):
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
         c.results.append(dict(kind='offset-scale-global-cap',length=length,pitches=pitches,passed=True))
+
+
+def accepted_live_range_transitions(c):
+    from cases import assert_durations
+    c.configure()
+    phrase=[(60,127),(62,117),(64,107),(65,97)]
+    # Explicit hand-derived next steps: retain progress within the new range,
+    # jump forward to its start from below, or wrap to its start from above.
+    scenarios=[('inside',2,2,4,[3,4,2]),('below',1,3,4,[3,4]),('above',4,1,2,[1,2])]
+    for label,after,start,end,tail in scenarios:
+        c.hold_tap((1,4),(4,4))
+        marker=c.snapshot()['midi_count'];c.tap(1,8)
+        def emitted(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+        before=c.wait(lambda state:len(emitted(state))>=after)
+        assert len(emitted(before))==after,'Fixture missed its intended pre-edit onset'
+        for x,z in [(start,1),(end,1),(end,0),(start,0)]:c.action(type='grid',x=x,y=4,state=z)
+        assert len(emitted(c.snapshot()))==after,'Fixture edit crossed an onset before its release; retain evidence'
+        count=after+len(tail)*3+1
+        state=c.wait(lambda state:len(emitted(state))>=count,5);notes=emitted(state)
+        steps=list(range(1,after+1))+[tail[i%len(tail)] for i in range(len(notes)-after)]
+        expected=[(1,[144,*phrase[step-1]]) for step in steps]
+        assert [(m['port'],m['bytes']) for m in notes]==expected,dict(label=label,expected=expected,actual=[(m['port'],m['bytes']) for m in notes])
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+        assert_durations(c,notes,[1]*(count-1))
+        cells=[((i-1)%16+1,(i-1)//16+4) for i in range(1,65)]
+        c.led_values(cells,[15 if start<=i<=end else 0 for i in range(1,65)])
+        c.results.append(dict(kind='accepted-live-range-transition',relation=label,range=[start,end],after_step=after,expected_steps=steps,passed=True))
+
+
+def queued_global_length_transitions(c):
+    from cases import assert_durations
+    from frame_oracle import render
+    c.configure();c.hold_tap((2,4),(4,4));c.tap(6,8)
+    c.tap(2,7)
+    for _ in range(3):c.tap(8,7)
+    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    def emitted(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+    def queued(length,before_count):
+        c.tap(2,7)
+        for _ in range(length-1):c.tap(8,7)
+        expected=render([(0,62,10,"Q'd: Global pattern length: "+str(length))])
+        def feedback(state):
+            actual=base64.b64decode(state['frame']['pixels_base64'])
+            return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(55,64) for x in range(128) for k in range(3))
+        state=c.wait(feedback)
+        assert len(emitted(state))<before_count,'Fixture queue missed the intended boundary'
+    # Global4 finishes at onset index4. The capped offset phrase becomes
+    # steps2/3 there, without resetting its clock or its still-valid playhead.
+    queued(2,5)
+    state=c.wait(lambda state:len(emitted(state))>=13,4)
+    assert len(emitted(state))==13,'Fixture missed growth scheduling window'
+    # The new global2 cycles end at indices6,8,10,12,14. Queue after12;
+    # growth to3 must apply at14 and expose step4 again on index15.
+    queued(3,15)
+    state=c.wait(lambda state:len(emitted(state))>=25,5);notes=emitted(state)
+    steps=[2,3,4,2]+[3,2]*5+[3,4,2]*4
+    assert len(notes)<=len(steps)
+    values={2:(62,117),3:(64,107),4:(65,97)}
+    expected=[(1,[144,*values[step]]) for step in steps[:len(notes)]]
+    actual=[(m['port'],m['bytes']) for m in notes]
+    assert actual==expected,dict(expected=expected,actual=actual)
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    assert_durations(c,notes,[1]*24);c.tap(3,8)
+    c.led_values([(1,4),(2,4),(3,4),(4,4),(5,4)],[0,15,15,15,0])
+    c.results.append(dict(kind='queued-global-shrink-grow',caps=[4,2,3],application_onset_indices=[4,14],expected_steps=steps[:len(notes)],passed=True))

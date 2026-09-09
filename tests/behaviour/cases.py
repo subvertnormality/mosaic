@@ -1,3 +1,5 @@
+from range_rejection import queued_global_length_transitions
+from range_rejection import accepted_live_range_transitions
 from range_rejection import offset_range_rates,offset_scale_range_clipping
 from range_rejection import offset_range_clipping
 from range_rejection import global_range_clipping
@@ -3309,6 +3311,8 @@ CASES={
  'M-RANGE-GLOBAL-002':dict(run=offset_range_clipping,requirements=['CH-RANGE'],description='Minimal offset2..4 capped at two steps must sustain D/E sequence across global boundaries with matching grid and gates'),
  'M-RANGE-GLOBAL-003':dict(run=offset_range_rates,requirements=['CH-RANGE','CH-TEMPO'],description='Offset2..4/G2 repeated D/E for ten loops at x3/x2/1/2/3, exact phase and gates beyond three global boundaries'),
  'M-RANGE-GLOBAL-004':dict(run=offset_scale_range_clipping,requirements=['CH-RANGE','LOCK-SCALE'],description='Scale17 offset2..4 D/E/C locks with global1/2/3 caps and restoration; actual dependent MIDI notes and timing'),
+ 'M-RANGE-LIVE-002':dict(run=queued_global_length_transitions,requirements=['CH-RANGE'],description='Queued global4-to2-to3 edits on offset2..4 apply at exact old boundaries, last queued fader value wins, step4 returns, exact uninterrupted MIDI phase/gates and queue tooltip'),
+ 'M-RANGE-LIVE-001':dict(run=accepted_live_range_transitions,requirements=['CH-RANGE'],description='Accepted range edits while playhead is inside/below/above new bounds: exact next note, three loops, unchanged phase, full releases and stopped range LEDs'),
  'M-RANGE-GLOBAL-001':dict(run=global_range_clipping,requirements=['CH-RANGE'],description='Global lengths1/2/3/4/64 cap channel1..4,2..4,63..64 by length, preserve endpoint LEDs, restore full range, exact notes/gates/phase'),
  'M-RANGE-REJECT-005':dict(run=rejected_range_channel_isolation,requirements=['CH-RANGE'],description='Reject range edit while two independent routed channels play four/three-step phrases with distinct notes, velocity and fractional lengths; preserve both schedules'),
  'M-RANGE-REJECT-004':dict(run=lambda c:rejected_range_while_playing(c,True),requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageTrue: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
