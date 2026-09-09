@@ -5,7 +5,7 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False):
     selection,turns={'note':(0,[73,75]),'velocity':(1,[91,81]),'length':(2,[8,15]),'trig':(-1,[1,1]),'chord':(3,[2,4])}[attribute]
     c.configure()
     if other_channel:
-        assert defaults and attribute=='note'
+        assert defaults and attribute in ('note','trig')
         c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
         c.tap(1,2);c.hold_tap((1,4),(4,4))
         c.enc(1,-4)
@@ -21,7 +21,7 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False):
         c.tap(1,1);c.enc(2,-10);c.enc(2,1)
     c.enc(1,-4);c.enc(2,selection)
     if defaults:
-        default_turns,turns={"note":(68,[5,7]),"velocity":(51,[40,30]),"length":(18,[-10,-3]),"chord":(3,[2,3])}[attribute]
+        default_turns,turns={"note":(68,[5,7]),"velocity":(51,[40,30]),"length":(18,[-10,-3]),"chord":(3,[2,3]),"trig":(1,[1,1])}[attribute]
         c.enc(3,default_turns)
     for step,amount in enumerate(turns,1):
         c.action(type='grid',x=step,y=4,state=1)
@@ -34,7 +34,7 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False):
         phrase=[];lengths=[];positions=[]
         for step,(note,velocity) in enumerate(zip([60,62,64,65],[127,117,107,97]),1):
             overridden=step in active
-            if attribute=='trig' and overridden:continue
+            if attribute=='trig' and (not overridden if defaults else overridden):continue
             if defaults and attribute=='note':note=67
             if defaults and attribute=='velocity':velocity=50
             if attribute=='note' and overridden:note=[72,74][step-1]
@@ -48,22 +48,25 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False):
         if other_channel:
             marker=c.snapshot()['midi_count'];c.tap(1,8)
             def emitted(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
-            state=c.wait(lambda state:sum(m['port']==1 for m in emitted(state))>=len(phrase)*3+1 and sum(m['port']==2 for m in emitted(state))>=13,5)
+            state=c.wait(lambda state:(not phrase or sum(m['port']==1 for m in emitted(state))>=len(phrase)*3+1) and sum(m['port']==2 for m in emitted(state))>=13,5)
             all_notes=emitted(state)
             assert all((m['port'],m['bytes'][0]) in ((1,144),(2,145)) for m in all_notes)
             notes=[m for m in all_notes if m['port']==1]
             sentinel=[m for m in all_notes if m['port']==2]
-            assert [(m['port'],m['bytes']) for m in notes]==[phrase[i%len(phrase)] for i in range(len(notes))]
+            if phrase:
+                assert [(m['port'],m['bytes']) for m in notes]==[phrase[i%len(phrase)] for i in range(len(notes))]
+            else:
+                assert not [m for m in state['midi'] if m['index']>marker and m['port']==1 and 128<=m['bytes'][0]<=159], 'Silent default emitted MIDI notes or releases'
             expected_other=[[145,79,40],[145,81,60],[145,79,40],[145,79,40]]
             assert [m['bytes'] for m in sentinel]==[expected_other[i%4] for i in range(len(sentinel))]
             c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
             assert_durations(c,sentinel,[.5,1.25,.5,.5]*2)
-            assert abs((sentinel[0][field]-notes[0][field])/1e9)<=tolerance
+            if notes:assert abs((notes[0][field]-sentinel[0][field])/1e9-positions[0]/6)<=tolerance
             for i,note in enumerate(sentinel):assert abs((note[field]-sentinel[0][field])/1e9-i/6)<=tolerance
             c.results.append(dict(kind='mask-clear-other-channel-isolation',stage=stage,expected_notes=expected_other,observed_onsets=len(sentinel),passed=True))
         else:
             notes=c.playback(phrase,cycles=3 if defaults else 2,timeout=5)
-        assert_durations(c,notes,lengths*2)
+        if lengths:assert_durations(c,notes,lengths*2)
         for i,note in enumerate(notes):
             elapsed=((i//len(phrase))*4+positions[i%len(phrase)]-positions[0])/6
             assert abs((note[field]-notes[0][field])/1e9-elapsed)<=tolerance
