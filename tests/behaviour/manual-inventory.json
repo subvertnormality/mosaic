@@ -1625,7 +1625,8 @@
       ],
       "statement": "While stopped, idle edits autosave after60 seconds and the next boot restores the latest autosave.",
       "cases": [
-        "M-SAVE-001"
+        "M-SAVE-001",
+        "M-REC-PARAM-027"
       ],
       "status": "partial-domain-coverage",
       "domain": "Fresh stopped project with four notes,59-second absence and61-second save, fresh-process reload; repeated saves, playing exclusion, interruption, corrupt/old data and explicit save/load dialogs remain required.",
@@ -3147,7 +3148,8 @@
         "M-MEMORY-001",
         "M-MEMORY-002",
         "M-REC-PARAM-025",
-        "M-REC-PARAM-026"
+        "M-REC-PARAM-026",
+        "M-REC-PARAM-027"
       ],
       "status": "partial-domain-coverage",
       "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts.",
@@ -6280,7 +6282,8 @@
         "M-REC-PARAM-023",
         "M-REC-PARAM-024",
         "M-REC-PARAM-025",
-        "M-REC-PARAM-026"
+        "M-REC-PARAM-026",
+        "M-REC-PARAM-027"
       ],
       "status": "in_progress",
       "domain": "Every slot; existing locks overwritten only in interval; reset/sequence change; edit exactly at end; disarm.",

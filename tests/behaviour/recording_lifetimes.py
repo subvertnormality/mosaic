@@ -3,7 +3,7 @@
 def recording_lifetime(c,ending,scale_page=False):
     from cases import assign_trig_parameter,menu_value,parameter_list_label
     from patch_params import open_patch_control,turn
-    assert ending in ('selected-wrap','nonselected-wrap','disarm','stop','reassign','same-assignment','configuration','slide-active','slide-off','pending-assignment','pending-configuration','mute','memory','memory-branch')
+    assert ending in ('selected-wrap','nonselected-wrap','disarm','stop','reassign','same-assignment','configuration','slide-active','slide-off','pending-assignment','pending-configuration','mute','memory','memory-branch','persistence')
     slide=ending.startswith('slide-')
     value=-1 if ending=='slide-off' else 64
     open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
@@ -90,7 +90,7 @@ def recording_lifetime(c,ending,scale_page=False):
     elif ending=='stop':wanted=[(1,[176,1,v]) for v in [64,24,64,96,64]]
     elif ending=='reassign':wanted=[(1,[176,1,64]),(1,[176,1,64]),(1,[176,2,96])]
     elif ending=='configuration':wanted=[(1,[176,1,64]),(1,[176,1,64])]
-    elif ending in ('same-assignment','pending-assignment','pending-configuration','memory','memory-branch'):wanted=[(1,[176,1,64])]*4
+    elif ending in ('same-assignment','pending-assignment','pending-configuration','memory','memory-branch','persistence'):wanted=[(1,[176,1,64])]*4
     elif ending=='slide-active':
         # The encoder's established silent update during a slide is separate
         # from step-boundary restoration. No stale callback may follow it.
@@ -146,6 +146,39 @@ def recording_lifetime(c,ending,scale_page=False):
         assert control['index']<played[i]['index']
         assert abs((control[field]-played[0][field])/1e9-i*4)<=tolerance
     c.results.append(dict(kind='recording-lifetime-disarmed-replay',ending=ending,values=table,distinct_default=65,passed=True))
+    if ending=='persistence':
+        import json
+        from driver import Driver,digest
+        c.enc(1,2);c.enc(3,15);c.key(3) # /6 for fresh-process replay.
+        def save(driver):
+            driver.elapse(59);driver.elapse(2)
+            driver.wait(lambda _:all((driver.data_directory/name).is_file() for name in ('autosave.ptn','autosave.pset')),timeout=3)
+            driver.results.append(dict(kind='recording-autosave-files',files={name:digest(driver.data_directory/name) for name in ('autosave.ptn','autosave.pset')}))
+        save(c);c.finish();seed=c.data_directory
+        for generation in (1,2):
+            out=c.out/('recording-reload-'+str(generation));out.mkdir()
+            loaded=Driver(out,project_seed=seed,**c.launch_options)
+            try:
+                loaded.tap(3,8);loaded.enc(1,-10);loaded.enc(1,2);loaded.screen_header('Ch. 1 Memory')
+                def replay(values,stage):
+                    start=loaded.snapshot()['midi_count']
+                    played=loaded.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=12)
+                    cc=[e for e in loaded.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
+                    expected=[65]+values*2+[values[0]]
+                    assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in expected],dict(generation=generation,stage=stage,expected=expected,actual=cc)
+                    for i,event in enumerate(cc[1:]):
+                        assert event['index']<played[i]['index']
+                        assert abs((event[field]-played[0][field])/1e9-i)<=tolerance
+                    loaded.results.append(dict(kind='recording-fresh-process-replay',generation=generation,stage=stage,values=values,passed=True))
+                replay([24,64,64,64] if generation==1 else [24,64,64,65],'restored')
+                loaded.enc(3,-1 if generation==1 else 1)
+                replay([24,64,64,65] if generation==1 else [24,64,64,64],'undo' if generation==1 else 'redo')
+                if generation==1:save(loaded)
+            finally:loaded.finish()
+            seed=loaded.data_directory
+        c.results.append(dict(kind='recorded-lock-and-history-persistence',fresh_processes=2,undone_position_preserved=True,passed=True))
+        (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
+
     if ending in ('memory','memory-branch'):
         # Recorded steps2/3/4 are the last three memory actions. Step3
         # overwrote an authored96; steps2/4 were previously unbound.

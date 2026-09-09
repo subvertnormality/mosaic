@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Recording history branching validated D/R, including new-edit undo/redo and abandoned suffix rejection. Continue song/persistence/reset/exact-boundary recording and critical trig/scale interactions. Refresh admission for current experimental runtime and complete remaining emulator release gates.",
+  "next_action": "Recorded locks and undo position survive two fresh native processes in both modes. Continue song/reset/exact-boundary recording, explicit persistence workflows, critical trig/scale interactions and emulator admission/release gates.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -139,5 +139,6 @@
   "recording_mute_validation": "docs/testing/recording-mute-validation.json",
   "recording_ten_slot_validation": "docs/testing/recording-ten-slot-validation.json",
   "recording_memory_validation": "docs/testing/recording-memory-validation.json",
-  "recording_memory_branch_validation": "docs/testing/recording-memory-branch-validation.json"
+  "recording_memory_branch_validation": "docs/testing/recording-memory-branch-validation.json",
+  "recording_persistence_validation": "docs/testing/recording-persistence-validation.json"
 }
