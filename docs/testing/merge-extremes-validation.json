@@ -1,0 +1,61 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-016",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/30a36b7d88a0496599267164c6485aac/manifest.json",
+      "sha256": "a345b61f2ad9ddd68fa4423ba581c4368340c8bbf314874fc400506e9910d3e7",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-017",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/73f5f6de71484c8ca85965c1a691aaf6/manifest.json",
+      "sha256": "daa70f6fe8c74be36c68488018f3e9d73a872314d66ec8ecfdf04f6d9343345e",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-018",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/57e60df7b49a4db9937d2e5e8ace9ff3/manifest.json",
+      "sha256": "ad39db31281b988234c2ded9449ae223b786ee075e5825d51da6f298c37cb471",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-016",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cb391f53c5d040019963af555f657d58/manifest.json",
+      "sha256": "8223698da6fed0f7a7b8a94838c7f3d1d499772b23ae71a693125643c05383bf",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-017",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8a32d8742977437290dbcfbea2345e43/manifest.json",
+      "sha256": "6f75d86c6fe54d15cfbe66e64b3f1212fa47f4b2787bb99191ac8e882e844989",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-018",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/dfc54337d718446b82358617faf1ee73/manifest.json",
+      "sha256": "68df626dc40d492bf37ab1428b609e442aaac69c858859ef526711148751b51b",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "semantic_basis": "Independent literal degree and C-major pitch tables; SEM001 arithmetic retained",
+  "assertions": [
+    "Editor limits-7/13 combine to Average3, Higher23, Lower-17 without clipping back to input range",
+    "Equal minimum/maximum inputs preserve values",
+    "Major pentatonic F-to-E and B-to-next-octave-C; negative B-to-C crossing",
+    "Signed fractional means with pentatonic enabled",
+    "All modes and returnedAverage, reversed assignment order, exact notes/velocities/durations/1/6-second timing"
+  ],
+  "limitations": [
+    "Scoped extrema and major pentatonic; all-scale and cross-feature domains remain incomplete",
+    "Full manual, experimental clock admission and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

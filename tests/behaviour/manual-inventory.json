@@ -2833,10 +2833,13 @@
         "M-MERGE-010",
         "M-MERGE-011",
         "M-MERGE-014",
-        "M-MERGE-015"
+        "M-MERGE-015",
+        "M-MERGE-016",
+        "M-MERGE-017",
+        "M-MERGE-018"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending.",
+      "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending.",
       "oracles": [
         "Independent rational mean and resolved rounding/quantisation table; MIDI pitches."
       ],
@@ -2863,10 +2866,13 @@
         "M-MERGE-010",
         "M-MERGE-011",
         "M-MERGE-014",
-        "M-MERGE-015"
+        "M-MERGE-015",
+        "M-MERGE-016",
+        "M-MERGE-017",
+        "M-MERGE-018"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Equal/asymmetric/negative values; clipping; assignment order. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending.",
+      "domain": "Equal/asymmetric/negative values; clipping; assignment order. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending.",
       "oracles": [
         "Independent formula and pitch table; exact MIDI."
       ],
@@ -2890,10 +2896,13 @@
       "statement": "Lower uses twice the minimum minus the rounded mean, then quantises; SEM-001 resolved by Codex semantic decision.",
       "cases": [
         "M-MERGE-014",
-        "M-MERGE-015"
+        "M-MERGE-015",
+        "M-MERGE-016",
+        "M-MERGE-017",
+        "M-MERGE-018"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Asymmetric/equal/negative values separating competing formulas. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending.",
+      "domain": "Asymmetric/equal/negative values separating competing formulas. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending.",
       "oracles": [
         "Independent literal arithmetic and MIDI pitch tables; fractional/negative native acceptance remains pending."
       ],

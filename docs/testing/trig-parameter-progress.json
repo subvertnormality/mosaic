@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Signed fractional means, Lower and assignment order now have native014/015 D/R acceptance. Continue extrema (-7/13 inputs), pentatonic negative/extreme values, scale interactions and remaining manual/emulator gates.",
+  "next_action": "Extrema and signed pentatonic cases016-018 validated D/R. Next all ten scale types with numeric modes, then outstanding velocity/length merge domains and broader manual/emulator gates.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -143,5 +143,6 @@
   "recording_persistence_validation": "docs/testing/recording-persistence-validation.json",
   "numeric_merge_validation": "docs/testing/numeric-merge-validation.json",
   "merge_cycle_validation": "docs/testing/merge-cycle-validation.json",
-  "merge_rounding_validation": "docs/testing/merge-rounding-validation.json"
+  "merge_rounding_validation": "docs/testing/merge-rounding-validation.json",
+  "merge_extremes_validation": "docs/testing/merge-extremes-validation.json"
 }

@@ -76,15 +76,25 @@ def merge_mode_cycle(c,field):
         verify('returned-average-'+str(cycle+1))
 
 
-def merge_rounding(c,three=False):
+def merge_rounding(c,three=False,extreme=False,pentatonic=False):
     from cases import set_mosaic_options,assert_durations
-    c.configure();set_mosaic_options(c,[('Lock merged to pent.',False)])
+    c.configure();set_mosaic_options(c,[('Lock merged to pent.',pentatonic)])
     sources=[(0,-1,2,6),(1,0,2,6),(1,0,8,6)] if three else [(1,-2,-1,6),(2,-1,0,6)]
     # Literal arithmetic before pitch mapping:
     # two: A=[2,-1,0,6], H=[3,0,1,6], L=[0,-3,-2,6].
     # three: A=[1,0,4,6], H=[2,1,10,6], L=[-1,-2,0,6].
     expected=([('average',2,[62,60,67,71]),('higher',5,[64,62,77,71]),('lower',8,[59,57,60,71])] if three else
               [('average',2,[64,59,60,71]),('higher',5,[65,60,62,71]),('lower',8,[60,55,57,71])])
+    assert not (three and (extreme or pentatonic))
+    if extreme:
+        sources=[(-7,13,-7,13),(13,-7,-7,13)]
+        # A=[3,3,-7,13], H=[23,23,-7,13], L=[-17,-17,-7,13].
+        # Major pentatonic snaps F down to E and B up to next-octave C.
+        expected=[('average',2,[64,64,48,84] if pentatonic else [65,65,48,83]),
+                  ('higher',5,[100,100,48,84] if pentatonic else [100,100,48,83]),
+                  ('lower',8,[31,31,48,84] if pentatonic else [31,31,48,83])]
+    elif pentatonic:
+        expected=[('average',2,[64,60,60,72]),('higher',5,[64,60,62,72]),('lower',8,[60,55,57,72])]
     c.tap(5,8)
     for slot,values in enumerate(sources,1):
         c.tap(slot,1)
