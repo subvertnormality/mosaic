@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "7bad229f9a924af38d16aa98961fe7b36707da4a04edc541d20971731c85c52d",
+  "manual_sha256": "1efbf68a3a8592dc0355138588ca64c9922f3ad43694af954cc87f8d05fc9d88",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -568,7 +568,7 @@
       "level": 5,
       "start_line": 599,
       "end_line": 610,
-      "text_sha256": "c68b625108eba452744850797057feedaf588dd803b1e190b57a8dd5464486f4",
+      "text_sha256": "b9afddd1cb3bd0291cfa1427027e01e050a1f4fb9434a4aa98aba301becfcbf5",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MASK-CLEAR-CHANNEL",
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "7bad229f9a924af38d16aa98961fe7b36707da4a04edc541d20971731c85c52d"
+      "sha256": "1efbf68a3a8592dc0355138588ca64c9922f3ad43694af954cc87f8d05fc9d88"
     },
     {
       "path": "cheat_sheet.html",
@@ -2561,10 +2561,15 @@
         "M-MERGE-039",
         "M-MERGE-040",
         "M-MERGE-041",
-        "M-MERGE-042"
+        "M-MERGE-042",
+        "M-MASK-002",
+        "M-MASK-003",
+        "M-MASK-004",
+        "M-MASK-005",
+        "M-MASK-006"
       ],
       "status": "in_progress",
-      "domain": "Each attribute and sentinel; active/inactive/no-pattern steps; global vs per-step. M-MASK-001 adds length-selector endpoints and representative values; validation pending, other attributes and combinations remain required. Native039-041 validate1/24,1/2,1.25 channel length masks across changing numeric modes and removal/restoration, including negative unmasked gates, in both modes. Native042 validates length step/channel/merge precedence and independent layer clearing, held-step K2 restoration and inherited display, across numeric modes in both clocks. Other attributes and neighbour isolation remain pending.",
+      "domain": "Each attribute and sentinel; active/inactive/no-pattern steps; global vs per-step. M-MASK-001 adds length-selector endpoints and representative values; validation pending, other attributes and combinations remain required. Native039-041 validate1/24,1/2,1.25 channel length masks across changing numeric modes and removal/restoration, including negative unmasked gates, in both modes. Native042 validates length step/channel/merge precedence and independent layer clearing, held-step K2 restoration and inherited display, across numeric modes in both clocks. Other attributes and neighbour isolation remain pending. NativeMASK002-006 cover note,velocity,length,trig and first-chord overrides on adjacent steps, isolated held-step clear, repeated held-step K1+K2 precedence and channel step-override clear in both clocks. Nonempty defaults and second-channel isolation remain pending.",
       "oracles": [
         "Exact masked MIDI with unrelated attributes unchanged and visible mask value."
       ],
@@ -2707,10 +2712,15 @@
       ],
       "statement": "Held-step K2 removes masks from that step.",
       "cases": [
-        "M-MERGE-042"
+        "M-MERGE-042",
+        "M-MASK-002",
+        "M-MASK-003",
+        "M-MASK-004",
+        "M-MASK-005",
+        "M-MASK-006"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Each field and mixed masks; multiple steps/channels; already-clear state. Native042 validates length step/channel/merge precedence and independent layer clearing, held-step K2 restoration and inherited display, across numeric modes in both clocks. Other attributes and neighbour isolation remain pending.",
+      "domain": "Each field and mixed masks; multiple steps/channels; already-clear state. Native042 validates length step/channel/merge precedence and independent layer clearing, held-step K2 restoration and inherited display, across numeric modes in both clocks. Other attributes and neighbour isolation remain pending. NativeMASK002-006 cover note,velocity,length,trig and first-chord overrides on adjacent steps, isolated held-step clear, repeated held-step K1+K2 precedence and channel step-override clear in both clocks. Nonempty defaults and second-channel isolation remain pending.",
       "oracles": [
         "Pattern/global fallback MIDI and cleared lock indicators; neighbours preserved."
       ],
@@ -2722,8 +2732,8 @@
         "path": "README.md",
         "line": 601,
         "end_line": 601,
-        "text": "To remove a mask from a step, navigate to the mask page in the channel editor with your desired channel selected, hold down the step with the mask-to-be-removed, and press K2. To remove all masks on a channel, hold shift (K1) and press K2.",
-        "sha256": "8ac95ec843df0c70bb3d88c2f86b1a958e2885d1a3be6884e0b7b1fa5ff2b987"
+        "text": "On the Masks page, hold a step and press K2 to clear its step-mask overrides. With no grid keys held, hold K1 and press K2 to clear all step-mask overrides on the selected channel. Both actions preserve channel mask defaults, which apply wherever an explicit step override is absent. Held steps take precedence even while K1 is down. Other channels are unaffected.",
+        "sha256": "b3dfeca6a6d2dfe001528ba2d589d7058b02560e276f06b2d96d925a27228c1e"
       }
     },
     {
@@ -2731,10 +2741,16 @@
       "sections": [
         "MAN-043"
       ],
-      "statement": "K1+K2 removes all masks on selected channel.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Global/per-step masks; empty/full64-step; other channels and sequences.",
+      "statement": "With no grid keys held, K1+K2 clears all step-mask overrides on the selected channel, preserving channel defaults and other channels.",
+      "cases": [
+        "M-MASK-002",
+        "M-MASK-003",
+        "M-MASK-004",
+        "M-MASK-005",
+        "M-MASK-006"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Global/per-step masks; empty/full64-step; other channels and sequences. NativeMASK002-006 cover note,velocity,length,trig and first-chord overrides on adjacent steps, isolated held-step clear, repeated held-step K1+K2 precedence and channel step-override clear in both clocks. Nonempty defaults and second-channel isolation remain pending.",
       "oracles": [
         "All selected-channel mask indicators cleared; fallback MIDI; other channels preserved."
       ],
@@ -2746,8 +2762,8 @@
         "path": "README.md",
         "line": 601,
         "end_line": 601,
-        "text": "To remove a mask from a step, navigate to the mask page in the channel editor with your desired channel selected, hold down the step with the mask-to-be-removed, and press K2. To remove all masks on a channel, hold shift (K1) and press K2.",
-        "sha256": "8ac95ec843df0c70bb3d88c2f86b1a958e2885d1a3be6884e0b7b1fa5ff2b987"
+        "text": "On the Masks page, hold a step and press K2 to clear its step-mask overrides. With no grid keys held, hold K1 and press K2 to clear all step-mask overrides on the selected channel. Both actions preserve channel mask defaults, which apply wherever an explicit step override is absent. Held steps take precedence even while K1 is down. Other channels are unaffected.",
+        "sha256": "b3dfeca6a6d2dfe001528ba2d589d7058b02560e276f06b2d96d925a27228c1e"
       }
     },
     {

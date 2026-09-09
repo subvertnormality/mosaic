@@ -1,0 +1,98 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-002",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cb17dd0bc8dd4e848817faacc0305b77/manifest.json",
+      "sha256": "8ac6f400ca8a13cab62098645aea23cd54682cee3ad61a2210072a46ecb808d0",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-003",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a8d0d725c947469e9c9b7caccf17ab51/manifest.json",
+      "sha256": "ab816b72a04f2f24d41b14966daddfe073bbdfa1717454c28856cfcf20c35e51",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-004",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e789b34cbb534400a8bfb2b84af3fa6e/manifest.json",
+      "sha256": "1bba0c34789bfce2df0d66efe5858cdf0ee3877ba437d433c9b04896041ef6b4",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-005",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cdb6746ecd3748efb60b306ad2acc7df/manifest.json",
+      "sha256": "739f7bf4511d883b0d9bfd5800f3123c0dbcbf499a5264a091ac8aeb1cbcc8a3",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-006",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9448c83482254991888777c3791ae584/manifest.json",
+      "sha256": "d67a2b91516048dd90b198745a38589f4a56997a1ebc9d09341dbbf9b55a3207",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-002",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ab6c22506c9a4862b10a4647ba89dcde/manifest.json",
+      "sha256": "c0a0278201a0f444d6f3b17e7549ce7c0312382a3671c2b32e6533488e6729cc",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-003",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/af99458be0f8439e8d524275471cf055/manifest.json",
+      "sha256": "79ae6d6603ab68931c4b0054259c3977c305b331e03dab9651961b47e745fe5d",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-004",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b2289079f84e4ebd9456f0a5bff9656b/manifest.json",
+      "sha256": "da180ee8e1a8855834574f7dc38823c0ecb5d54ae733beb5c82c6dfd8082bcea",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-005",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/04333d4f3465490f89b4bbadfe18fa19/manifest.json",
+      "sha256": "39de0a98496bbeda990efd47b7a9b6da8cfe201fc235bea31fbbc9f422717819",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-006",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e4bdfc20fbd24fe18eac5961196caa7f/manifest.json",
+      "sha256": "97f154ea628038610651765b4713ceae9e16250fbba82c9ff621e271c76f050a",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "review": "01a08515-bc01-76e1-ba40-aebd4c68adb7",
+  "attributes": [
+    "note",
+    "velocity",
+    "length",
+    "trig",
+    "first-chord"
+  ],
+  "assertions": [
+    "Neighbour override survives held-step K2",
+    "Repeated clear is idempotent",
+    "Held-step K1+K2 takes precedence over channel clear",
+    "Channel clear removes remaining step overrides",
+    "Exact MIDI content, rests/chord onset positions, lengths and timing through two cycles at each stage"
+  ],
+  "retained_fixture_failure": "60d28636f569447db479a9eb783ec93b: held chord selector starts0, not channel-handler-1; corrected input3/5 to2/4, unchanged expected E/A chord pitches",
+  "limitations": [
+    "Reviewed manual semantics preserve defaults and other channels; dedicated nonempty-default and second-channel native evidence remains pending",
+    "Other chord slots, boundary steps, recorded masks and micro-time remain separate obligations",
+    "Manual clarification follows native runs; targeted accumulated evidence, full manual/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

@@ -1,3 +1,4 @@
+from mask_clearing import mask_clear_attributes
 from numeric_merging import fractional_length_mask_merge
 from numeric_merging import numeric_length_merge
 from numeric_merging import velocity_zero_boundary
@@ -3288,6 +3289,11 @@ CASES={
  'M-TIME-012':dict(run=strum_reset_continuity,requirements=['CHORD-STRUM','PARAM-SLOTS','OPT-REPEAT-RESET','CH-TEMPO'],description='Assign a strum through native parameter UI, verify root/chord offsets and existing gate across resets, and reject deferred notes after Stop'),
  'M-TIME-010':dict(run=pending_mask_lengths,requirements=['MASK-ATTRIBUTES','CH-TEMPO','OPT-REPEAT-RESET'],description='Half-step and two-step note releases across repeat resets, including expected same-pitch overlaps and explicit stop accounting'),
  'M-TIME-011':dict(run=lambda c:pending_mask_lengths(c,True),requirements=['MASK-ATTRIBUTES','CH-TEMPO','OPT-REPEAT-RESET'],description='Maximum128-step notes span eighteen resets; complete initial releases precede coincident retriggers, and Stop drains remaining voices'),
+ 'M-MASK-002':dict(run=lambda c:mask_clear_attributes(c,'note'),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='Clear one step override without affecting its neighbour, repeat safely, then clear channel step overrides with exact MIDI and timing'),
+ 'M-MASK-003':dict(run=lambda c:mask_clear_attributes(c,'velocity'),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='Clear one step override without affecting its neighbour, repeat safely, then clear channel step overrides with exact MIDI and timing'),
+ 'M-MASK-004':dict(run=lambda c:mask_clear_attributes(c,'length'),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='Clear one step override without affecting its neighbour, repeat safely, then clear channel step overrides with exact MIDI and timing'),
+ 'M-MASK-005':dict(run=lambda c:mask_clear_attributes(c,'trig'),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='Clear one step override without affecting its neighbour, repeat safely, then clear channel step overrides with exact MIDI and timing'),
+ 'M-MASK-006':dict(run=lambda c:mask_clear_attributes(c,'chord'),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='Clear one step override without affecting its neighbour, repeat safely, then clear channel step overrides with exact MIDI and timing'),
  'M-MASK-001':dict(run=length_mask_boundaries,requirements=['MASK-ATTRIBUTES'],description='Length mask minimum/X, maximum128, repeated endpoint turns and representative fractional/multi-step values with exact screen assertions'),
  'M-TIME-008':dict(run=lambda c:repeated_pattern_reset_policy(c,True),requirements=['CH-TEMPO','OPT-REPEAT-RESET','OPT-SEQUENCE-RESET'],description='Repeat resets preserve pending /9 one-step release deadlines and complete MIDI lifecycle'),
  'M-TIME-009':dict(run=lambda c:song_transition_reset_policy(c,True),requirements=['CH-TEMPO','OPT-REPEAT-RESET','OPT-SEQUENCE-RESET','SONG-ADVANCE'],description='Song transitions preserve pending /9 release deadlines under every reset combination'),

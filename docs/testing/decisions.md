@@ -262,3 +262,15 @@ Performance fixtures now collect prior-test garbage after clock setup, before
 queueing live admissions. The collector remains enabled during measured pulses;
 all160admissions and existing2ms limits are unchanged. This is fixture isolation,
 not a runtime performance improvement. Codex01a084fa-3262-7583-a377-cf7e84316b00 accepted fixture isolation; garbage provenance and eliminated flakiness are not established. Earlier failed runs remain evidence.
+
+
+## Mask clear scope
+
+Codex01a08515-bc01-76e1-ba40-aebd4c68adb7 recommends preserving the
+longstanding distinction between channel defaults and step-mask overrides.
+K1+K2 on Masks, with no grid keys held, clears the selected channel's step
+overrides; defaults remain. Held steps take precedence, including while K1 is
+down. README now states the scope explicitly. NativeMASK002-006 validate five
+attributes, adjacent-step isolation, held-step shift precedence and clear with
+empty defaults. Nonempty-default and other-channel native checks remain pending;
+source inspection and semantic review are not substituted for that acceptance.
