@@ -39,7 +39,7 @@
     "The candidate process_ring_buffer deactivates at pulse_count >= total_pulses without emitting the endpoint. The native straight case receives that value from the destination lock; this does not establish direct scheduler endpoint correctness.",
     "Further assertions may fail after each first assertion is resolved."
   ],
-  "next_action": "Consolidate and publish the authorised parameter/slide/NRPN checkpoint after candidate hygiene checks. Then continue remaining mixed parameter types, modulation/lifecycle interactions and exhaustive manual/emulator gates. No native/review processes active. No refactor readiness claim.",
+  "next_action": "Publishedff8c27f; continue remaining mixed parameter types, modulation, lifecycle interactions and exhaustive manual/emulator gates. No active native/review process. No refactor readiness claim.",
   "full_campaign_complete": false,
   "native_processes_active": false,
   "review": {
@@ -1070,6 +1070,15 @@
     "full_units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-f6b77732c2844e118374a8fd41721856/results.json",
     "unit_successes": 485,
     "review_limits": "The actual Codex review inspected0066/0067 and found this issue.0068 is the focused remedy, validated with independent native baselines, both timing lanes and units; no second whole-review certification claimed.",
+    "full_campaign_complete": false
+  },
+  "publication": {
+    "commit": "ff8c27f17b0f0d50e64946bac2276094240db0b9",
+    "remote": "ff8c27f17b0f0d50e64946bac2276094240db0b9",
+    "branch": "codex/behaviour-validation",
+    "files": 99,
+    "push_verified": true,
+    "signing": "unsigned; local signing key locked, no signed-commit delivery gate",
     "full_campaign_complete": false
   }
 }

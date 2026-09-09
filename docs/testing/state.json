@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Consolidate and publish the authorised parameter/slide/NRPN checkpoint using patch-slide-progress.json and nrpn-review-resolution.json, then expand remaining cross-feature parameter/modulation/lifecycle tests. Older0063/0064 reset follow-up is resolved; the full manual and emulator release remain incomplete.",
+  "next_action": "Continue mixed parameter types, modulation and lifecycle interactions using patch-slide-progress.json and the incomplete manual inventory. Parameter/slide/NRPN checkpointff8c27f is published; do not republish or rerun completed scopes without a relevant change. Full manual, controlled-time admission and emulator release remain incomplete.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -5084,6 +5084,12 @@
       "0067",
       "0068"
     ],
+    "full_campaign_complete": false
+  },
+  "parameter_checkpoint_publication": {
+    "source_commit": "ff8c27f17b0f0d50e64946bac2276094240db0b9",
+    "receipt": "docs/testing/parameter-checkpoint-publication.json",
+    "push_verified": true,
     "full_campaign_complete": false
   }
 }
