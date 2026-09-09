@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Pitch-lock histories and saved undo position survive two cold starts. Continue slot reassignment and remaining scale/merge interactions, then manual/runtime gates and mandatory final unit/integration hardening.",
+  "next_action": "Pitch-lock channel/song/history/persistence/reassignment slices validated. Continue remaining scale/merge lifecycle interactions and manual/runtime gates, followed by mandatory final unit/integration hardening.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -190,5 +190,6 @@
   },
   "pitch_lock_isolation_validation": "docs/testing/pitch-lock-isolation-validation.json",
   "pitch_lock_history_validation": "docs/testing/pitch-lock-history-validation.json",
-  "pitch_lock_persistence_validation": "docs/testing/pitch-lock-persistence-validation.json"
+  "pitch_lock_persistence_validation": "docs/testing/pitch-lock-persistence-validation.json",
+  "pitch_lock_reassignment_validation": "docs/testing/pitch-lock-reassignment-validation.json"
 }

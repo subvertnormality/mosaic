@@ -1,0 +1,33 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-PARAM-036",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2bd08fd04aa940d290f624e99077baeb/manifest.json",
+      "sha256": "21fc1d973361d4d6f11e1385db9fbaf80b92e7931dd056bf630bcc10265efd9b",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-036",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6d885be863324a2989dd2e80cfccab2c/manifest.json",
+      "sha256": "893982fef6eb1f89bd3750baf39779342445cbed5ac1b416e7ccc9e64e675163",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Same Fixed/Quantised assignment preserves stored raw locks0/63/61/127",
+    "Unassigned active Fixed Note default60 retains precedence over the new quantised assignment",
+    "Turning the Fixed default Off leaves its local locks unchanged; retargeting then emits independently expected0/62/60/127",
+    "None leaves stored locks dormant and restores the original pattern; restoring Fixed recovers original raw values",
+    "Second MIDI channel remains unchanged; exact pitches/velocities, eight full releases per route, phase and cross-route alignment at each stage"
+  ],
+  "limitations": [
+    "Initial run974eefc conflated reassigned locks with still-active Fixed default60; source fallback and observed MIDI established the confound, which now has its own explicit assertion",
+    "Selected pitch parameters only; general slot/device reassignments and remaining scale/merge lifecycle combinations remain required",
+    "Current controlled profile remains diagnostic; whole campaign and final unit/integration hardening remain incomplete"
+  ],
+  "full_campaign_complete": false
+}

@@ -1,6 +1,6 @@
 """Independent MIDI oracles for pitch-lock ownership across channels/song copies."""
 
-def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False):
+def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reassign=False):
     from cases import assign_trig_parameter,assert_durations
     c.configure()
     c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
@@ -42,6 +42,29 @@ def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False):
     lock(2,0);lock(4,127)
     one=[60,0,60,127];two=[62,65,0,65]
     verify(one,two,'independent-fixed-and-quantised-locks')
+    if reassign:
+        # Lock every step so changed target defaults cannot explain the result.
+        lock(1,0);lock(2,63);lock(3,61)
+        raw=[0,63,61,127];quantised=[0,62,60,127]
+        verify(raw,two,'fixed-values-before-reassignment')
+        assign_trig_parameter(c,'Fixed Note')
+        verify(raw,two,'same-assignment-retains-locks')
+        assign_trig_parameter(c,'Quantised Fixed Note')
+        # Stock defaults remain active without a slot. Fixed Note's existing
+        # channel default takes precedence over the newly assigned quantiser.
+        verify([60]*4,two,'unassigned-fixed-default-retains-precedence')
+        assign_trig_parameter(c,'Fixed Note');verify(raw,two,'restore-fixed-with-original-locks')
+        c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+        verify(raw,two,'disable-fixed-default-without-clearing-locks')
+        assign_trig_parameter(c,'Quantised Fixed Note')
+        verify(quantised,two,'stored-values-follow-quantised-target')
+        assign_trig_parameter(c,'Quantised Fixed Note')
+        verify(quantised,two,'same-quantised-assignment-retains-locks')
+        assign_trig_parameter(c,'None')
+        verify([60,62,64,65],two,'unassigned-slot-does-not-apply-dormant-locks')
+        assign_trig_parameter(c,'Fixed Note')
+        verify(raw,two,'restored-assignment-reuses-original-raw-values')
+        return
     if history:
         c.tap(1,1);c.enc(1,1);c.screen_header('Ch. 1 Memory',selected=3)
         c.key(2);verify([60]*4,two,'undo-first-channel-only')
