@@ -181,5 +181,11 @@
   "offset_global_range_validation": "docs/testing/offset-global-range-validation.json",
   "live_range_validation": "docs/testing/live-range-validation.json",
   "saved_range_validation": "docs/testing/saved-range-validation.json",
-  "project_dialog_lifecycle_validation": "docs/testing/project-dialog-lifecycle-validation.json"
+  "project_dialog_lifecycle_validation": "docs/testing/project-dialog-lifecycle-validation.json",
+  "final_hardening_gate": {
+    "status": "planned",
+    "card": "docs/testing/UNIT-INTEGRATION-HARDENING.md",
+    "required_before_goal_completion": true,
+    "required_before_refactor": true
+  }
 }
