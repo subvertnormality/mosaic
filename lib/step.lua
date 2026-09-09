@@ -797,7 +797,7 @@ function step.handle(c, current_step)
                   
     local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
                          (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
-                         (params:get("random_lock_to_pentatonic") == 2 and random_shift > 0)            
+                         (params:get("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
 
     local note
     local relative_note_mask_value

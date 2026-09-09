@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "19f02284664dde4a9fb6333d508c936f6de5468df77ee0012fb4569fdaf83dcb",
+  "manual_sha256": "e949ae319b251492feaa3180962df82f7d9397dcd9e1b1d23fc92f5a8ff35665",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -788,7 +788,7 @@
       "level": 5,
       "start_line": 781,
       "end_line": 784,
-      "text_sha256": "8659f4ee7fdad68b6f6342bc3120f21ce39ae1ef682eeb4da2f082272cdb4892",
+      "text_sha256": "2fa70056b1a25a815c5c695ff93ab019071810f2875527eb4d4002b7526914c8",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PARAM-RANDOM"
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "19f02284664dde4a9fb6333d508c936f6de5468df77ee0012fb4569fdaf83dcb"
+      "sha256": "e949ae319b251492feaa3180962df82f7d9397dcd9e1b1d23fc92f5a8ff35665"
     },
     {
       "path": "cheat_sheet.html",
@@ -2648,7 +2648,10 @@
       "cases": [
         "M-MASK-019",
         "M-MASK-020",
-        "M-MASK-021"
+        "M-MASK-021",
+        "M-PARAM-040",
+        "M-PARAM-041",
+        "M-PARAM-042"
       ],
       "status": "partial-domain-coverage",
       "domain": "MASK019/020 validate all ten scales at roots C/D with accidental step note masks: snapping On, Off and restored On; exact notes, velocities, durations and timing in both clocks, native menu label/value assertions. Remaining degree/rotation independence, full-quantisation precedence, pitch endpoints, other roots and live edits. MASK021/022 cover C-major degreeII/rotation1, default snapping independence, full quantisation and global/channel/step X-Off-On precedence, explicit stepX versus clear, and inherited root/chord pitch processing in both clocks. Remaining broader scale/root/degree/rotation domains, accidental snap-off/full interaction, live edits and masked arp timing.",
@@ -3796,7 +3799,11 @@
       "statement": "Random note offset domains alternate asymmetric/symmetric sets and optionally pentatonic-quantise.",
       "cases": [
         "M-PARAM-037",
-        "M-PARAM-038"
+        "M-PARAM-038",
+        "M-PARAM-039",
+        "M-PARAM-040",
+        "M-PARAM-041",
+        "M-PARAM-042"
       ],
       "status": "partial-domain-coverage",
       "domain": "Documented0..4 examples; all legal values; odd/even boundaries; locks; combined random-twos.",
@@ -3811,8 +3818,8 @@
         "path": "README.md",
         "line": 781,
         "end_line": 783,
-        "text": "##### Random Note\n\nThis trig param introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random twos note trig param. By default, random notes are quantised to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings.",
-        "sha256": "dc4172a67ea7f1513ce25e202c4ca6315072e4af4b7ab39537720c7012737af0"
+        "text": "##### Random Note\n\nThis trig param introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random twos note trig param. By default, random notes are quantised to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings. With Lock random to pent. enabled, a nonzero sum of Random Note and Random Twos offsets triggers nearest-pentatonic snapping for ordinary notes and fully quantised note masks, in either direction. Zero sums, including cancellation, do not trigger this option; other applicable pentatonic options still apply. Equal-distance pitches choose the lower note. Snap-only and unquantised masks retain their chromatic random-offset behaviour. Fixed Note and Quantised Fixed Note retain their override precedence.",
+        "sha256": "4a1cf2b3c8658f5e226b55618174268087a607f83601305f6f252169e1374fd1"
       },
       "coverage_reconciliation": "Documented values0..4, exact seed42 single/combined output and zero restoration covered by037/038; full legal values, locks/masks, random-pentatonic and lifecycle interactions remain."
     },
@@ -3824,7 +3831,11 @@
       "statement": "Random-twos offsets use even intervals with the documented domains.",
       "cases": [
         "M-PARAM-037",
-        "M-PARAM-038"
+        "M-PARAM-038",
+        "M-PARAM-039",
+        "M-PARAM-040",
+        "M-PARAM-041",
+        "M-PARAM-042"
       ],
       "status": "partial-domain-coverage",
       "domain": "0..4 examples and all legal values; composition with random note; pentatonic on/off.",
@@ -6090,8 +6101,13 @@
         "MAN-101"
       ],
       "statement": "Random-to-pentatonic defaults on.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-PARAM-039",
+        "M-PARAM-040",
+        "M-PARAM-041",
+        "M-PARAM-042"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Random0/nonzero, random-twos combinations, lock/global override.",
       "oracles": [
         "Independent seeded domain mapping and exact pitch membership."

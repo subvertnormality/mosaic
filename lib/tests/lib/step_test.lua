@@ -1956,3 +1956,78 @@ function test_full_mask_quantisation_assigned_default_and_step_precedence()
     end
   end
 end
+
+function test_signed_random_pentatonic_step_outcomes()
+
+  -- Literal cases: raw PRNG draws are injected only at the randomness boundary.
+  -- Actual transforms, stock locks, scale processing and MIDI emission execute.
+  local cases={
+    {name="negative",degree=0,a=4,b=0,draws={-1},plain=59,pent=60,mask=59},
+    {name="positive",degree=2,a=4,b=0,draws={1},plain=65,pent=64,mask=65},
+    {name="negative_twos",degree=1,a=0,b=4,draws={1},plain=59,pent=60,mask=60},
+    {name="positive_twos",degree=1,a=0,b=4,draws={3},plain=65,pent=64,mask=64},
+    {name="sampled_zero",degree=3,a=4,b=0,draws={0},plain=65,pent=65,mask=65},
+    {name="disabled",degree=3,a=0,b=0,draws={},plain=65,pent=65,mask=65},
+    {name="cancel_positive",degree=3,a=4,b=4,draws={2,1},plain=65,pent=65,mask=65},
+    {name="cancel_negative",degree=3,a=4,b=4,draws={-2,3},plain=65,pent=65,mask=65}}
+  local original_random=random
+  local ok,err=pcall(function()
+    for _,case in ipairs(cases) do
+      for _,path in ipairs({"ordinary"}) do
+        for _,policy in ipairs({"off","on"}) do
+          setup()
+          params:set("random_lock_to_pentatonic",policy=="off" and 1 or 2)
+          params:set("all_scales_lock_to_pentatonic",policy=="all" and 2 or 1)
+          params:set("merged_lock_to_pentatonic",policy=="merged" and 2 or 1)
+          local source=program.initialise_default_pattern()
+          source.note_values[1]=case.degree;source.lengths[1]=1
+          source.trig_values[1]=1;source.velocity_values[1]=100
+          program.get_song_pattern(1).patterns[1]=source
+          local channel=program.get_channel(1,1)
+          fn.add_to_set(channel.selected_patterns,1)
+          if policy=="merged" then
+            local second=program.initialise_default_pattern()
+            second.note_values[1]=case.degree;second.lengths[1]=1
+            second.trig_values[1]=1;second.velocity_values[1]=100
+            program.get_song_pattern(1).patterns[2]=second
+            fn.add_to_set(channel.selected_patterns,2)
+          end
+          channel.trig_lock_params[1]={id="bipolar_random_note",param_id="test_random"}
+          channel.trig_lock_params[2]={id="twos_random_note",param_id="test_twos"}
+          program.add_step_param_trig_lock(1,1,case.a)
+          program.add_step_param_trig_lock(1,2,case.b)
+          if path~="ordinary" then
+            channel.note_mask=({60,62,64,65})[case.degree+1]
+            params:set("quantiser_fully_act_on_note_masks",path=="full" and 2 or 1)
+            params:set("quantiser_act_on_note_masks",path=="snap" and 2 or 1)
+          end
+          if policy=="fixed" or policy=="quantised_fixed" then
+            channel.trig_lock_params[3]={id=policy=="fixed" and "fixed_note" or "quantised_fixed_note",param_id="test_fixed"}
+            program.add_step_param_trig_lock(1,3,63)
+          end
+          pattern.update_working_patterns()
+          local cursor=0
+          random=function(low,high)
+            cursor=cursor+1;local value=case.draws[cursor]
+            luaunit.assert_not_nil(value,"Unexpected extra PRNG draw")
+            luaunit.assert_true(value>=low and value<=high,"Forced draw outside actual domain")
+            return value
+          end
+          step.handle(1,1)
+          luaunit.assert_equals(cursor,#case.draws)
+          local expected=(policy=="off") and case.plain or case.pent
+          if policy=="all" or policy=="merged" then
+            expected=case.pent==65 and 64 or case.pent
+          end
+          if path=="snap" or path=="raw" then expected=case.mask end
+          if policy=="fixed" then expected=63 end
+          if policy=="quantised_fixed" then expected=62 end
+          luaunit.assert_equals(#midi_note_on_events,1,case.name.."/"..path.."/"..policy)
+          luaunit.assert_equals(midi_note_on_events[1],{expected,100,1,1},case.name.."/"..path.."/"..policy)
+        end
+      end
+    end
+  end)
+  random=original_random
+  if not ok then error(err) end
+end
