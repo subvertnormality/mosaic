@@ -1,0 +1,32 @@
+{
+  "status": "scoped-combined-chord-clearing-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-016",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/614cd52570b745d4aa3b37fcbd9206ec/manifest.json",
+      "sha256": "fb9763c2f480e130a72a0cfd794a38092dd087641ff6cc736a6ee5712183faf8",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-016",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8c23269519874715b98cb1cffbf5142e/manifest.json",
+      "sha256": "563cace8a72180e23dc1efb25c987e05b766cc07c1e2d0f3e034908ae33afe48",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "All four chord slots simultaneously populated: exact five-note chords, velocities and durations",
+    "Held-step K2 clears first override while preserving second and nonempty channel default",
+    "All four step overrides removed together by one clear gesture",
+    "Channel K1+K2 clears remaining step overrides and preserves default chord offset",
+    "Exact note ordering, musical step timing and balanced Stop"
+  ],
+  "limitations": [
+    "Boundary steps and recorded-mask clearing remain pending",
+    "Full manual and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

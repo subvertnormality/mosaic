@@ -87,3 +87,45 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_s
     try:c.key(2)
     finally:c.action(type='key',n=1,state=0)
     c.elapse(.06);verify(set(),'clear-channel-step-overrides')
+
+
+def mask_clear_combined_chords(c):
+    """Four populated chord slots: clearing a step clears every slot together."""
+    from cases import assert_durations
+    c.configure();c.enc(1,-4);c.enc(2,3)
+    offsets=[2,4,6,7]
+    for slot,offset in enumerate(offsets):
+        if slot:c.enc(2,1)
+        c.enc(3,offset+1)
+        for step,delta in [(1,1),(2,2)]:
+            c.action(type='grid',x=step,y=4,state=1)
+            try:c.enc(3,delta)
+            finally:c.action(type='grid',x=step,y=4,state=0)
+            c.elapse(.06)
+    # Independent C-major degree table. Each default/override is a scale offset.
+    major=[0,2,4,5,7,9,11]
+    def pitch(degree):return 60+12*(degree//7)+major[degree%7]
+    def verify(active,stage):
+        expected=[]
+        for step,velocity in enumerate([127,117,107,97],1):
+            degree=step-1
+            expected.append((1,[144,pitch(degree),velocity]))
+            for offset in offsets:
+                delta=step if step in active else 0
+                expected.append((1,[144,pitch(degree+offset+delta),velocity]))
+        notes=c.playback(expected,cycles=3,timeout=5)
+        assert_durations(c,notes,[1]*40)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        for i,note in enumerate(notes):
+            assert abs((note[field]-notes[0][field])/1e9-(i//5)/6)<=tolerance
+        c.results.append(dict(kind='combined-chord-mask-clearing',stage=stage,expected_phrase=expected,active_steps=sorted(active),passed=True))
+    verify({1,2},'all-four-slots-populated')
+    c.action(type='grid',x=1,y=4,state=1)
+    try:c.key(2)
+    finally:c.action(type='grid',x=1,y=4,state=0)
+    c.elapse(.06);verify({2},'clear-step-all-slots')
+    c.action(type='key',n=1,state=1);c.elapse(.3)
+    try:c.key(2)
+    finally:c.action(type='key',n=1,state=0)
+    c.elapse(.06);verify(set(),'clear-channel-all-slots')

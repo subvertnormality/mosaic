@@ -1,3 +1,4 @@
+from mask_clearing import mask_clear_combined_chords
 from mask_clearing import mask_clear_attributes
 from numeric_merging import fractional_length_mask_merge
 from numeric_merging import numeric_length_merge
@@ -3291,6 +3292,7 @@ CASES={
  'M-TIME-011':dict(run=lambda c:pending_mask_lengths(c,True),requirements=['MASK-ATTRIBUTES','CH-TEMPO','OPT-REPEAT-RESET'],description='Maximum128-step notes span eighteen resets; complete initial releases precede coincident retriggers, and Stop drains remaining voices'),
  'M-MASK-013':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=2),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='Chord mask slot2: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
  'M-MASK-014':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=3),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='Chord mask slot3: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
+ 'M-MASK-016':dict(run=mask_clear_combined_chords,requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='All four populated chord mask slots clear together, preserve defaults and neighbour overrides, with exact polyphonic MIDI and timing'),
  'M-MASK-015':dict(run=lambda c:mask_clear_attributes(c,'chord',True,chord_slot=4),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='Chord mask slot4: held-step and channel clearing preserve nonempty defaults and neighbouring overrides with exact MIDI and durations'),
  'M-MASK-012':dict(run=lambda c:mask_clear_attributes(c,'trig',True,True),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='Clearing forced-on step overrides restores a silent trig default while another routed channel proves transport continues'),
  'M-MASK-011':dict(run=lambda c:mask_clear_attributes(c,'note',True,True),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL'],description='Clearing selected-channel overrides preserves another routed channel with nonempty defaults and conflicting note/velocity/length step masks'),
