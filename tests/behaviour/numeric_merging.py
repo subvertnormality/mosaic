@@ -74,3 +74,47 @@ def merge_mode_cycle(c,field):
         finally:
             if field=='length':c.action(type='key',n=1,state=0)
         verify('returned-average-'+str(cycle+1))
+
+
+def merge_rounding(c,three=False):
+    from cases import set_mosaic_options,assert_durations
+    c.configure();set_mosaic_options(c,[('Lock merged to pent.',False)])
+    sources=[(0,-1,2,6),(1,0,2,6),(1,0,8,6)] if three else [(1,-2,-1,6),(2,-1,0,6)]
+    # Literal arithmetic before pitch mapping:
+    # two: A=[2,-1,0,6], H=[3,0,1,6], L=[0,-3,-2,6].
+    # three: A=[1,0,4,6], H=[2,1,10,6], L=[-1,-2,0,6].
+    expected=([('average',2,[62,60,67,71]),('higher',5,[64,62,77,71]),('lower',8,[59,57,60,71])] if three else
+              [('average',2,[64,59,60,71]),('higher',5,[65,60,62,71]),('lower',8,[60,55,57,71])])
+    c.tap(5,8)
+    for slot,values in enumerate(sources,1):
+        c.tap(slot,1)
+        if slot>1:
+            for x in range(1,5):c.tap(x,4)
+        c.tap(5,8)
+        for x,degree in enumerate(values,1):
+            if 0<=degree<=6:c.tap(15,8);y=7-degree
+            else:
+                button=16 if degree<0 else 14
+                c.action(type='grid',x=button,y=8,state=1)
+                try:c.elapse(1.2)
+                finally:c.action(type='grid',x=button,y=8,state=0)
+                c.elapse(.06);y=-degree if degree<0 else 14-degree
+            c.tap(x,y)
+            if not (y==1 and x==slot):c.led_values([(x,y)],[12])
+        c.tap(3,8);c.tap(5,8)
+    c.tap(3,8)
+    for slot in range(2,len(sources)+1):c.tap(slot,2)
+    c.tap(14,8);c.tap(14,8);c.hold_tap((16,8),(1,2))
+    key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    for index,(mode,level,pitches) in enumerate(expected+[expected[0]]):
+        if index:c.tap(15,8)
+        c.led_values([(15,8)],[level])
+        for reversed_order in (False,True):
+            if reversed_order:
+                for slot in range(1,len(sources)+1):c.tap(slot,2)
+                for slot in range(len(sources),0,-1):c.tap(slot,2)
+            notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,[127,117,107,97])],cycles=2,timeout=4)
+            assert_durations(c,notes,[1]*8)
+            for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i/6)<=tolerance
+            c.results.append(dict(kind='merge-rounded-mean-native',contributors=sources,mode=mode,reversed_assignment=reversed_order,pitches=pitches,passed=True))

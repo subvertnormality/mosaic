@@ -1,3 +1,4 @@
+from numeric_merging import merge_rounding
 from numeric_merging import merge_mode_cycle
 from numeric_merging import numeric_note_merge
 from recording_lifetimes import recording_ten_slots
@@ -2790,6 +2791,8 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-MERGE-015':dict(run=lambda c:merge_rounding(c,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Signed fractional means with 3 contributors, half ties, equal values, all numeric modes and assignment-order invariance'),
+ 'M-MERGE-014':dict(run=lambda c:merge_rounding(c,False),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Signed fractional means with 2 contributors, half ties, equal values, all numeric modes and assignment-order invariance'),
  'M-MERGE-013':dict(run=lambda c:merge_mode_cycle(c,'length'),requirements=['MERGE-LENGTH'],description='Repeated Average/Higher/Lower/Average control cycles preserve displayed and audible length merge mode'),
  'M-MERGE-012':dict(run=lambda c:merge_mode_cycle(c,'velocity'),requirements=['MERGE-VELOCITY'],description='Repeated Average/Higher/Lower/Average control cycles preserve displayed and audible velocity merge mode'),
  'M-MERGE-011':dict(run=lambda c:numeric_note_merge(c,True,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','SCALE-EDIT'],description='Numeric Average/Higher with pentatonic filtering across C major, D major, D minor and restored scale; unassigned velocity source stays isolated'),

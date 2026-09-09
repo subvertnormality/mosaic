@@ -1,0 +1,47 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-014",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e4fce38543cc419e9e4401295fc00b09/manifest.json",
+      "sha256": "e66741581ac4e0723d42c576a89ef89f830c254bae01ed81fed26949e217b4d8",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-015",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a9c259fd7d54448fbf3392da1e2f976b/manifest.json",
+      "sha256": "a5b480e3a2f9ea4fb97ab4caa28e86638f8f4a0ec55d9f96fce1a65be43fa775",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-014",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/05d29d972c144a649f71db61d3cfddca/manifest.json",
+      "sha256": "9e99536f12beabca09b499229374e4fdd4481e01021f715371ef7f258e491c60",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-015",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6e906e6641c843b295f1bbf01a7cc5e4/manifest.json",
+      "sha256": "e51c91e55c630ae2812514edc7c431c576985620e5fdc900edc6ba9c7dc41aa2",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "semantic_basis": "SEM001 Codex01a0849f-a7c3-7102-98e4-8d69d14e6ffe; independent literal degree and C-major pitch tables",
+  "assertions": [
+    "Two contributors: positive/negative half means and equal positive inputs",
+    "Three contributors: positive2/3 and negative1/3 means, asymmetric2/2/8, equal inputs",
+    "Average/Higher/Lower/returned-Average; normal/reversed assignment order",
+    "Two complete phrases plus closing onset per stage; exact pitch/velocity/duration and1/6-second onset timing"
+  ],
+  "limitations": [
+    "Scoped examples, not complete merge-value domain",
+    "Pentatonic negative/extreme inputs and broader scale interactions remain pending",
+    "Full manual, experimental clock admission and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}
