@@ -3328,7 +3328,9 @@
         "M-SHUFFLE-002",
         "M-SHUFFLE-003",
         "M-SHUFFLE-004",
-        "M-SHUFFLE-005"
+        "M-SHUFFLE-005",
+        "M-SHUFFLE-006",
+        "M-SHUFFLE-007"
       ],
       "status": "partial-domain-coverage",
       "domain": "All legal feel/basis options; differing channels; tempo/division interactions.",
@@ -3355,7 +3357,9 @@
       ],
       "statement": "Unset X inherits global swing/shuffle; playing edits apply at reset.",
       "cases": [
-        "M-SHUFFLE-005"
+        "M-SHUFFLE-005",
+        "M-SHUFFLE-006",
+        "M-SHUFFLE-007"
       ],
       "status": "partial-domain-coverage",
       "domain": "Local/X transitions; global edit with mixed overrides; before/on/after reset.",
@@ -3373,7 +3377,7 @@
         "text": "Note: If a channel's swing/shuffle settings are not set (\"X\"), they will take the global setting which is set on the song editor page global settings page. Selecting \"X\" again after choosing a local Swing or Shuffle mode restores global mode inheritance, just like an untouched channel; choosing either mode explicitly overrides the global mode. While playback is running, confirmed changes on this channel page take effect at the next global song-pattern boundary, including a repeat of the same pattern. They do not take effect immediately or at the next step of a shorter channel loop. While stopped, confirmed changes apply immediately.",
         "sha256": "625fc91c5679431cd5adccccbb6f591a93d70d3a5844d6dabae1e07a2d0a91c9"
       },
-      "remaining": "Stopped type round trips added; live boundary, mixed overrides, global edits and other inherited fields still require coverage."
+      "remaining": "Stopped and live type transitions in both directions validated. Mixed channels/global edits, other inherited fields and confirmations adjacent to boundaries remain."
     },
     {
       "id": "MEMORY-RECORD",

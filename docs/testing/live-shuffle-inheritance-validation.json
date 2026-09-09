@@ -1,0 +1,52 @@
+{
+  "status": "scoped-behaviour-validated",
+  "base": "78ebf7695102ba8a79612b40eb8cebe3663fbde7",
+  "production_changed": false,
+  "native_runs": [
+    {
+      "case": "M-SHUFFLE-006",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/84db7f3abd3849f7aa10b717c5791424/manifest.json",
+      "sha256": "f70291cc72714b2d9bc016713d0c578496afe47b3a72b997d3cd6d7950c0cd5e",
+      "onsets": 85,
+      "max_phase_error_seconds": 1.000000082740371e-09
+    },
+    {
+      "case": "M-SHUFFLE-006",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cc4b1e35a5ae42f38144ae32ba60eff0/manifest.json",
+      "sha256": "8183e939a2978f36d6827d48611d690c7762a8eb6239d6ebcc461229b16b97f3",
+      "onsets": 85,
+      "max_phase_error_seconds": 0.001255380666666639
+    },
+    {
+      "case": "M-SHUFFLE-007",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/64ec58f90e934241a89da2f248c0f9d6/manifest.json",
+      "sha256": "75a152d4bb7ea7b3c264d901a5a47e9be70bcd222a6bfb3041eaf7aae213e47a",
+      "onsets": 85,
+      "max_phase_error_seconds": 1.5555556842627993e-09
+    },
+    {
+      "case": "M-SHUFFLE-007",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6e1250c91e4a4137a7c51c4a1e51b3a9/manifest.json",
+      "sha256": "d962979de464a729145074640c97bb512202b46636a6b47649eb422e3595d0ee",
+      "onsets": 85,
+      "max_phase_error_seconds": 0.0014323617777777797
+    }
+  ],
+  "oracle": "Four-step channel loop within64 global steps. Straight timing is24 pulses per step; Heavy6 repeats16/16/16/48. Confirm edits approximately2seconds into playback. Both directions retain their old schedule through pulse1536 and then follow the new schedule. Every onset has independent pitch, velocity, port and absolute relative-to-first-onset timing assertions; all complete gates end at the next onset and Stop clears the last held note.",
+  "coverage": [
+    "Live X restoration from local Swing",
+    "Live explicit Swing override from inherited Shuffle",
+    "No application at earlier short channel-loop boundaries",
+    "Exact controlled phase and bounded real-time phase; all captured MIDI releases"
+  ],
+  "limitations": [
+    "Global setting edits, multiple channels with different overrides, inherited feel/basis/amount and boundary-adjacent confirmations remain",
+    "This is a test-only extension; no additional unit suite rerun required because production is unchanged",
+    "Full manual, emulator release and mandatory final unit/integration hardening remain incomplete"
+  ],
+  "full_campaign_complete": false
+}
