@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Nonpositive ordinary and arp note-length boundaries validated D/R. Continue delayed-strum nonpositive release ordering and simultaneous voices, then fractional source-duration path; remaining scale/mask/song and emulator gates open.",
+  "next_action": "0078 strum correction validated with ten native runs,496units and Codex review. Continue fractional source duration path and broader simultaneous-voice native cases, then remaining scale/mask/song and emulator gates.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -156,5 +156,6 @@
     "Simultaneous same-pitch voices: preserve balanced releases and explicit ordering",
     "Fractional source lengths: user-created data path and arithmetic/timing"
   ],
-  "nonpositive_arp_validation": "docs/testing/nonpositive-arp-validation.json"
+  "nonpositive_arp_validation": "docs/testing/nonpositive-arp-validation.json",
+  "negative_strum_validation": "docs/testing/negative-strum-validation.json"
 }

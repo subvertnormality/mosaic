@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "c5f65c0b763d466a6415cc8fac4ecd591fa85276a812822c7e71217e4134f2ee",
+  "manual_sha256": "7bad229f9a924af38d16aa98961fe7b36707da4a04edc541d20971731c85c52d",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -637,7 +637,7 @@
       "level": 5,
       "start_line": 658,
       "end_line": 670,
-      "text_sha256": "3e22c5e60f1e7fcdccc4e7613505ae425ae8e68e26570bb494cf9845f0d41ad2",
+      "text_sha256": "5630ad0dd2a2619c503b2ff1bd8354d8e1ed75645f88c467a85a71fda1887917",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "MERGE-LENGTH"
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "c5f65c0b763d466a6415cc8fac4ecd591fa85276a812822c7e71217e4134f2ee"
+      "sha256": "7bad229f9a924af38d16aa98961fe7b36707da4a04edc541d20971731c85c52d"
     },
     {
       "path": "cheat_sheet.html",
@@ -3005,10 +3005,12 @@
         "M-MERGE-029",
         "M-MERGE-030",
         "M-MERGE-031",
-        "M-MERGE-032"
+        "M-MERGE-032",
+        "M-MERGE-033",
+        "M-MERGE-034"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001. M-MERGE-006 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-007 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native025-027 cover two/three contributors, exact/half/noninteger means, all numeric modes and returnedAverage, with exact MIDI release and phrase timing in both modes. Zero/negative and fractional source lengths remain pending. Native028-030 validate ordinary zero/negative outcomes with exact raw On/Off ordering and release counts in both modes. Arp, delayed strum, simultaneous voices and fractional sources remain separate interaction obligations. Native031/032 validate zero/negative parent arp endpoints, suppression of future ratchets and exact balanced releases across repeated transport in both modes. Delayed strum and simultaneous-voice interactions remain separate.",
+      "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001. M-MERGE-006 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-007 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native025-027 cover two/three contributors, exact/half/noninteger means, all numeric modes and returnedAverage, with exact MIDI release and phrase timing in both modes. Zero/negative and fractional source lengths remain pending. Native028-030 validate ordinary zero/negative outcomes with exact raw On/Off ordering and release counts in both modes. Arp, delayed strum, simultaneous voices and fractional sources remain separate interaction obligations. Native031/032 validate zero/negative parent arp endpoints, suppression of future ratchets and exact balanced releases across repeated transport in both modes. Delayed strum and simultaneous-voice interactions remain separate. Native033/034 cover zero/negative delayed-strum release deadlines, balanced raw MIDI and repeated transport in both modes. Actual-step/lattice integration covers simultaneous distinct and same-pitch On/Off order; broader native simultaneous-voice cases remain separate.",
       "oracles": [
         "Independent resolved duration formula and exact note on/off table; mode LED."
       ],
@@ -3020,8 +3022,8 @@
         "path": "README.md",
         "line": 662,
         "end_line": 667,
-        "text": "* **Average**: Average the contributing lengths and round to the nearest integer, choosing the greater integer at an exact half. One contributor passes through unchanged. Source lengths account for interruption by the next trig in that pattern.\n* **Longer**: Add the difference between the longest and shortest contributing lengths to their rounded average. One contributor passes through unchanged.\n* **Shorter**: Subtract the rounded average from twice the shortest contributing length: `2 * shortest - rounded_average`. One contributor passes through unchanged. Only the mean is rounded at this stage, so fractional source lengths can still produce fractional Longer or Shorter results.\n* **Pattern**: To apply a specific pattern's length values, hold the length merge button and press the pattern's select button.\n\nLength merge modes are set by holding shift (K1) and pressing the velocity merge mode button. Numeric merging retains zero and negative length results. For ordinary step-onset playback, a nonpositive effective length sends Note On followed by Note Off in the same scheduler pulse, without advancing musical time. This describes MIDI event order, not the sound or response of a connected instrument.",
-        "sha256": "2a5e647bdbd18bdcf289e6a9dcd0f9bed61bddbbcfee51ecaa12ac099b5e34b7"
+        "text": "* **Average**: Average the contributing lengths and round to the nearest integer, choosing the greater integer at an exact half. One contributor passes through unchanged. Source lengths account for interruption by the next trig in that pattern.\n* **Longer**: Add the difference between the longest and shortest contributing lengths to their rounded average. One contributor passes through unchanged.\n* **Shorter**: Subtract the rounded average from twice the shortest contributing length: `2 * shortest - rounded_average`. One contributor passes through unchanged. Only the mean is rounded at this stage, so fractional source lengths can still produce fractional Longer or Shorter results.\n* **Pattern**: To apply a specific pattern's length values, hold the length merge button and press the pattern's select button.\n\nLength merge modes are set by holding shift (K1) and pressing the velocity merge mode button. Numeric merging retains zero and negative length results. For ordinary note playback, including delayed strums, a nonpositive effective length sends Note On followed by Note Off in the same scheduler pulse, without advancing musical time. This describes MIDI event order, not the sound or response of a connected instrument.",
+        "sha256": "3f388bc825121b1be5392bda571c3a2f6e5a9c3be2f07a667f45baa5e1fd75ce"
       }
     },
     {
@@ -3777,10 +3779,12 @@
         "M-CHORDSHAPE-258",
         "M-CHORDSHAPE-259",
         "M-PANIC-007",
-        "M-PANIC-008"
+        "M-PANIC-008",
+        "M-MERGE-033",
+        "M-MERGE-034"
       ],
       "status": "in_progress",
-      "domain": "0..4 extra voices; each division; scale change before/on/after voice deadline; stop/cancel.",
+      "domain": "0..4 extra voices; each division; scale change before/on/after voice deadline; stop/cancel. Native033/034 cover zero/negative delayed-strum release deadlines, balanced raw MIDI and repeated transport in both modes. Actual-step/lattice integration covers simultaneous distinct and same-pitch On/Off order; broader native simultaneous-voice cases remain separate.",
       "oracles": [
         "Ordered pitch/onset/release table including pending scale transition."
       ],

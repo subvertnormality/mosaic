@@ -267,7 +267,7 @@ def velocity_zero_boundary(c):
         c.results.append(dict(kind='numeric-velocity-zero-boundary',mode=mode,velocities=velocities,raw_events_checked=len(events),passed=True))
 
 
-def numeric_length_merge(c,variant=0,arp=False):
+def numeric_length_merge(c,variant=0,arp=False,strum=False):
     from cases import assert_durations
     sources,expected=[([2,4],[3,5,1]),([3,4],[4,5,2]),([2,2,5],[3,6,1]),([1,2],[2,3,0]),([1,4],[3,6,0]),([2,2,8],[4,10,0])][variant]
     cycle_steps=16 if variant>=3 else 8
@@ -284,26 +284,33 @@ def numeric_length_merge(c,variant=0,arp=False):
     c.hold_tap((15,8),(1,2));c.hold_tap((16,8),(1,2))
     key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-    if arp:
+    if arp or strum:
         from cases import assign_trig_parameter
         assert variant in (3,4)
         c.action(type='key',n=1,state=1);c.elapse(.3)
         try:
             c.tap(16,8);c.tap(16,8);c.led_values([(16,8)],[8])
         finally:c.action(type='key',n=1,state=0)
-        c.enc(1,-3);assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
+        if strum:
+            c.enc(1,-4);c.enc(2,3);c.enc(3,3) # First chord mask: degree2, E64.
+            c.enc(1,1);assign_trig_parameter(c,'Chord Note Strum');c.enc(3,8)
+        else:
+            c.enc(1,-3);assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
         # Half-step ratchet selected, but nonpositive parent gate ends at onset.
         # Repeat transport to expose retained arp jobs and duplicate releases.
         for trial in range(2):
             marker=c.snapshot()['midi_count']
-            notes=c.playback([(1,[144,60,127])],cycles=2,timeout=8)
-            assert_durations(c,notes,[0]*2)
-            for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i*cycle_steps/6)<=tolerance
+            expected_notes=[(1,[144,60,127])]+([(1,[144,64,127])] if strum else [])
+            notes=c.playback(expected_notes,cycles=2,timeout=8)
+            assert_durations(c,notes,[0]*(4 if strum else 2))
+            for i,note in enumerate(notes):
+                expected_time=((i//2)*cycle_steps+(i%2)*.5)/6 if strum else i*cycle_steps/6
+                assert abs((note[key]-notes[0][key])/1e9-expected_time)<=tolerance
             c.elapse(.3)
             events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
-            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in notes for msg in ([144,60,127],[128,60,127])],events
+            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for note in notes for msg in (note['bytes'],[128,note['bytes'][1],127])],events
             assert not c.snapshot()['midi_capture']['outstanding']
-            c.results.append(dict(kind='nonpositive-arp-endpoint',source_lengths=sources,trial=trial,onsets=len(notes),passed=True))
+            c.results.append(dict(kind='nonpositive-strum-release' if strum else 'nonpositive-arp-endpoint',source_lengths=sources,trial=trial,onsets=len(notes),passed=True))
         return
     for index,(mode,level,length) in enumerate(list(zip(['average','longer','shorter'],[2,5,8],expected))+[('average',2,expected[0])]):
         if index:
@@ -317,5 +324,5 @@ def numeric_length_merge(c,variant=0,arp=False):
         if variant>=3:
             events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
             assert len(events)==2*len(notes),events
-            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in notes for msg in ([144,60,127],[128,60,127])],events
+            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for note in notes for msg in (note['bytes'],[128,note['bytes'][1],127])],events
         c.results.append(dict(kind='numeric-length-merge',source_steps=sources,mode=mode,expected_steps=length,passed=True))

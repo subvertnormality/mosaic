@@ -26,6 +26,8 @@ end
 local function clock_setup()
   m_clock.init()
   m_clock:start()
+  -- Collect setup/prior-test garbage before queuing; admission and sampling remain timed with GC enabled.
+  collectgarbage("collect")
 end
 
 local function progress_clock_by_beats(b)

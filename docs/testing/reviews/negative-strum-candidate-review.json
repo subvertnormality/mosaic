@@ -1,0 +1,32 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Focused read-only Codex follow-up implementation review to semantic decision01a084db-8b84-7c50-9ab9-a05641b0f893. Local musical tool; proportional review, no edits, extra agents or native launches. User authorises these files. Native034 baseline f5902f8b42e54f8fbc9994a24b5cc3df proves delayed E strum negative gate-1 releases6.944444ms (one pulse) after onset; root same-pulse. Zero033 passes. Actual step/lattice integration test also fails only for -1 at pulse12 (495total494success); baseline df2df373129e485598e79c47e7eae471. Candidate0078 changes ONLY ordinary play_note wrapper to math.max(0,division) before play_note_internal, avoiding newly appended negative release in fixed-bound pending iteration. Stored merge arithmetic unchanged, positive gates unchanged, play_arp_note path unchanged. Assess this correction against reviewed nonpositive MIDI event semantics, synchronous ordering impact at root/simultaneous notes, nil/nonfinite valid input expectations, and any missed material regression. Native033/034/029/032/025 in both modes and fullunits are running, not yet acceptance claims. Need focused high-value missing tests only; do not demand broad project governance. If simultaneous root ordering should be tested, propose concrete expectations. No audible/hardware equivalence claim. Files: /home/andy/projects/mosaic-behaviour-tests/lib/step.lua, /home/andy/projects/mosaic-behaviour-tests/lib/clock/m_clock.lua, /home/andy/projects/mosaic-behaviour-tests/lib/clock/m_lattice.lua, /home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/step_test.lua, /home/andy/projects/mosaic-behaviour-tests/tests/behaviour/numeric_merging.py, /home/andy/projects/mosaic-behaviour-tests/tests/behaviour/candidates/0078-nonpositive-strum-release.patch, /home/andy/projects/mosaic-behaviour-tests/docs/testing/reviews/nonpositive-length-contract-review.json"
+  },
+  "input_sha256": {
+    "/home/andy/projects/mosaic-behaviour-tests/lib/step.lua": "2a20625cc6f2cee0a244fbdd10df85249b23066778fa49f15ed6a8a4038a822e",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/clock/m_clock.lua": "7f01cafaa15854ea463e098fa09ecbbe59ce54afacccb8353aacd3dc0fe3f56e",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/clock/m_lattice.lua": "4ccbc5f088a96e993f101ef587ea2c7d69c4adb32e90fb514afaa8f60228e222",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/step_test.lua": "2339258a4e2c2d28e169c58b591c3afe57d151455a8de34edea65b88ff90c3db",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/numeric_merging.py": "1c6d32af80f9e407a668c556d9c0ca157e758c493762bcf006a8b1c687eb4916",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/candidates/0078-nonpositive-strum-release.patch": "3aa0a5db639240ea5b6486bcf7003c0365428a5f3052688267d4699894c43fa1",
+    "/home/andy/projects/mosaic-behaviour-tests/docs/testing/reviews/nonpositive-length-contract-review.json": "61385ffea852ec6e9102712f163dfdbb6400b53aec9c8206bf9fc30d8625a397"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**Candidate0078 is a sound, narrowly scoped correction for finite numeric gates.** It satisfies the reviewed same-pulse release contract, but deliberately strengthens negative root/simultaneous-note ordering to synchronous On\u2192Off; that ordering deserves one focused regression test.\n\n- **Mechanism:** [step.lua:499](/home/andy/projects/mosaic-behaviour-tests/lib/step.lua:499) clamps only the ordinary wrapper. Note On still precedes release scheduling at lines 488\u2013492; [m_clock.lua:555](/home/andy/projects/mosaic-behaviour-tests/lib/clock/m_clock.lua:555) executes zero immediately. This avoids appending a negative release inside the fixed-bound pending loop at [m_lattice.lua:226](/home/andy/projects/mosaic-behaviour-tests/lib/clock/m_lattice.lua:226). Positive finite gates pass through unchanged, stored lengths are not mutated, and `play_arp_note` remains separate at step.lua:503.\n\n- **Ordering impact:** Ordinary root playback precedes chord callbacks ([step.lua:655](/home/andy/projects/mosaic-behaviour-tests/lib/step.lua:655), [step.lua:693](/home/andy/projects/mosaic-behaviour-tests/lib/step.lua:693)). For simultaneous root/chord notes, negative gates previously could produce `On(root), On(chord), Off(root), Off(chord)`; the candidate produces `On(root), Off(root), On(chord), Off(chord)`, matching zero. This fits the reviewed event contract, but is an observable sequence change.\n\n- **Nil/nonfinite:** Nil was already unsupported here: the old helper emitted On, then failed at `division + offset`; the candidate fails before On. The scheduler\u2019s nil shortcut never made this wrapper nil-safe. `math.max` is not finite-value validation: positive infinity survives, negative infinity becomes zero, and NaN should not be assigned valid gate semantics. Nothing in the inspected contract establishes these as supported inputs; no additional hardening is warranted for this correction.\n\n**Highest-value missing coverage:** Add one ordered-event integration test, parameterized over `0` and `-1`, with zero strum delay. Assert the exact sequence above for distinct pitches, then for root/chord resolving to the same port/channel/pitch: `On(P), Off(P), On(P), Off(P)`. Require identical pulse timestamps and no additional releases on subsequent pulses or stop. The current [step_test.lua:1845](/home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/step_test.lua:1845) compares separate On/Off arrays, so it cannot prove interleaving; the native assertion at [numeric_merging.py:311](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/numeric_merging.py:311) covers delayed strums, not simultaneous voices. I found no other material regression requiring extra tests beyond the runs already underway.\n\n**CONFIDENCE: High** for the code-level correction; no launches performed, pending runs remain unverified, and the supplied baseline identifiers do not resolve as local Git commits.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a084eb-77db-7cb3-a406-236f22be8016` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}

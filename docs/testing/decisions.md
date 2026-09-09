@@ -243,3 +243,22 @@ Native028-030 prove both-mode output order, duration and balanced releases.
 No production change is justified by these passing ordinary-onset cases.
 This does not promise audible/device equivalence or establish simultaneous-voice,
 arp or delayed-strum ordering. Those need their own regression guards.
+
+
+## Nonpositive delayed strum releases and test fixture collection
+
+Candidate0078 corrects a one-pulse negative-gate release delay inside nested
+strum callbacks. Ordinary playback normalizes nonpositive gates to zero; stored
+merge arithmetic and the separate arp path remain unchanged. This supersedes
+the earlier description of negative ordinary releases as queued: they now run
+synchronously after each On, matching zero. Codex01a084eb-77db-7cb3-a406-236f22be8016
+accepted the correction and requested simultaneous-voice ordering coverage;
+the actual-step/lattice regression checks distinct and same pitches, timestamps,
+later pulses and Stop. Native033/034 prove delayed-strum behavior in both modes.
+
+The full-suite slide benchmark showed sensitivity to heap history. Paired
+diagnostics found about109MB heap before admission and47MB after collection.
+Performance fixtures now collect prior-test garbage after clock setup, before
+queueing live admissions. The collector remains enabled during measured pulses;
+all160admissions and existing2ms limits are unchanged. This is fixture isolation,
+not a runtime performance improvement. Codex01a084fa-3262-7583-a377-cf7e84316b00 accepted fixture isolation; garbage provenance and eliminated flakiness are not established. Earlier failed runs remain evidence.

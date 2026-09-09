@@ -1818,3 +1818,101 @@ function test_recorded_midi_output_uses_dirty_action_and_preserves_off_slide()
   recorder=old_recorder;dependency_clock.cancel_spread_actions_for_channel_trig_lock=old_cancel
   if not ok then error(err) end
 end
+
+
+function test_nonpositive_strum_releases_in_onset_pulse()
+  for _, length in ipairs({0, -1}) do
+    setup()
+    local source = program.initialise_default_pattern()
+    source.note_values[1] = 0
+    source.lengths[1] = length
+    source.trig_values[1] = 1
+    source.velocity_values[1] = 100
+    program.get_song_pattern(1).patterns[1] = source
+    local channel = program.get_channel(1, 1)
+    fn.add_to_set(channel.selected_patterns, 1)
+    channel.chord_one_mask = 2
+    channel.trig_lock_params[1] = {id = "chord_strum", param_id = "chord_strum_1"}
+    program.add_step_param_trig_lock(1, 1, 8)
+    pattern.update_working_patterns()
+    m_clock.init()
+    m_clock:start()
+    local count = 0
+    for pulse = 1, 128 do
+      m_clock.get_clock_lattice():pulse()
+      -- Actual step and lattice execute nested strum callbacks. Every note
+      -- with a nonpositive gate must release within its own onset pulse.
+      luaunit.assert_equals(#midi_note_off_events, #midi_note_on_events,
+        "Unreleased nonpositive strum length " .. length .. " at pulse " .. pulse)
+      while #midi_note_on_events > 0 do
+        local on = table.remove(midi_note_on_events, 1)
+        local off = table.remove(midi_note_off_events, 1)
+        luaunit.assert_equals(off, on)
+        count = count + 1
+      end
+    end
+    luaunit.assert_true(count >= 2, "Root and delayed chord must actually play")
+  end
+end
+
+
+function test_nonpositive_simultaneous_note_order()
+  for _, length in ipairs({0, -1}) do
+    for _, same_pitch in ipairs({false, true}) do
+      setup()
+      params:set("all_scales_lock_to_pentatonic", 2)
+      local source = program.initialise_default_pattern()
+      source.note_values[1] = same_pitch and -2 or 0
+      source.lengths[1] = length
+      source.trig_values[1] = 1
+      source.velocity_values[1] = 100
+      program.get_song_pattern(1).patterns[1] = source
+      local channel = program.get_channel(1, 1)
+      fn.add_to_set(channel.selected_patterns, 1)
+      -- Fixed root C and source degree -2 plus chord offset2 both yield C.
+      channel.chord_one_mask = 2
+      if same_pitch then
+        channel.trig_lock_params[1] = {id = "fixed_note", param_id = "fixed_note_1"}
+        program.add_step_param_trig_lock(1, 1, 60)
+      end
+      pattern.update_working_patterns()
+      m_clock.init()
+      m_clock:start()
+      local midi = _G.m_midi
+      local original_on, original_off = midi.note_on, midi.note_off
+      local original_nb, original_stop = _G.nb, midi.stop
+      local original_param_state = _G.norns_param_state_handler
+      _G.norns_param_state_handler = original_param_state or {flush_norns_original_param_trig_lock_store = function() end}
+      -- This MIDI-only unit fixture has no nb service or transport stop mock.
+      _G.nb = original_nb or {stop_all = function() end}
+      midi.stop = original_stop or function() end
+      local events = {}
+      local function record(kind, note, velocity, channel_number, device)
+        events[#events + 1] = {kind, note, velocity, channel_number, device,
+          m_clock.get_clock_lattice().transport}
+      end
+      midi.note_on = function(_, ...) record("on", ...) end
+      midi.note_off = function(_, ...) record("off", ...) end
+      local ok, err = pcall(function()
+        step.handle(1, 1) -- Disabled strum: root and chord are simultaneous.
+        luaunit.assert_equals(#events, 4)
+        local root = 60
+        local chord = same_pitch and 60 or 64
+        local tick = events[1][6]
+        luaunit.assert_equals(events, {
+          {"on",root,100,1,1,tick}, {"off",root,100,1,1,tick},
+          {"on",chord,100,1,1,tick}, {"off",chord,100,1,1,tick}})
+        -- Suppress new sequencer trigs, without discarding pending releases.
+        channel.working_pattern.trig_values[1] = 0
+        for pulse = 1, 48 do m_clock.get_clock_lattice():pulse() end
+        luaunit.assert_equals(#events, 4, "No late or duplicate releases")
+        m_clock:stop()
+        luaunit.assert_equals(#events, 4, "Stop must not duplicate releases")
+      end)
+      midi.note_on, midi.note_off = original_on, original_off
+      _G.nb, midi.stop = original_nb, original_stop
+      _G.norns_param_state_handler = original_param_state
+      if not ok then error(err, 0) end
+    end
+  end
+end

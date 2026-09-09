@@ -2795,6 +2795,8 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-MERGE-033':dict(run=lambda c:numeric_length_merge(c,3,strum=True),requirements=['MERGE-LENGTH','CHORD-STRUM'],description='Nonpositive merged lengths release delayed strum voices without an extra scheduler pulse and retain balanced MIDI'),
+ 'M-MERGE-034':dict(run=lambda c:numeric_length_merge(c,4,strum=True),requirements=['MERGE-LENGTH','CHORD-STRUM'],description='Nonpositive merged lengths release delayed strum voices without an extra scheduler pulse and retain balanced MIDI'),
  'M-MERGE-031':dict(run=lambda c:numeric_length_merge(c,3,True),requirements=['MERGE-LENGTH','CHORD-ARP'],description='Zero or negative merged arp gate cancels future ratchets, releases initial note once, and survives repeated transport'),
  'M-MERGE-032':dict(run=lambda c:numeric_length_merge(c,4,True),requirements=['MERGE-LENGTH','CHORD-ARP'],description='Zero or negative merged arp gate cancels future ratchets, releases initial note once, and survives repeated transport'),
  'M-MERGE-028':dict(run=lambda c:numeric_length_merge(c,3),requirements=['MERGE-LENGTH'],description='Nonpositive numeric note lengths retain Note On followed by same-pulse release, exact ordering and no stuck notes'),

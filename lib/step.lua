@@ -495,7 +495,8 @@ end
 
 -- Redefine play_note to use the helper function
 local function play_note(note, note_container, velocity, division, note_on_func)
-  play_note_internal(note, note_container, velocity, division, note_on_func, "must_execute")
+  -- Nonpositive ordinary gates release immediately, including nested strum callbacks.
+  play_note_internal(note, note_container, velocity, math.max(0, division), note_on_func, "must_execute")
 end
 
 -- Redefine play_arp_note to use the helper function

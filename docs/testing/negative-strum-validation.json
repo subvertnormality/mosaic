@@ -1,0 +1,101 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0078",
+  "native_runs": [
+    {
+      "case": "M-MERGE-033",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/96232bac58a949fcbdff87c38322d9be/manifest.json",
+      "sha256": "4c222ebad887e5ec747d42007273e130c47f55a4dc0534bc4079abc8da3680d3",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-034",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/73ef36c134fe4782b5bc3f78eaf34e3e/manifest.json",
+      "sha256": "f78e19637a51756be60d941e80a33da15d14452145196b1429bbc4ca6e4ab410",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-029",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2d09c02fe2564f6ca9c8f562efce1024/manifest.json",
+      "sha256": "92ac9a6239798095aaba32f85b9580ce2a251d12c2d65c338d69641056761c13",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-032",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6bb22b7313414a5a90e449619cea5d89/manifest.json",
+      "sha256": "8083792796a730282ef852e99e0c8afb7c5893a7892e44778c93cd07a522dc64",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-025",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ea759f77214c4785a30391f8f824d02e/manifest.json",
+      "sha256": "63c9a8825b96be6789880727f57c1caaa1c308809c69b4f235edf30430922974",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-033",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/67eb82b249e14b1687e5bd309830ff2c/manifest.json",
+      "sha256": "a158b75dd6215bbc7b82671e857e9829524843f4a2f7b522c6932f51b36095ef",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-034",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f20506255e124564866d9dff99a89536/manifest.json",
+      "sha256": "8f40ddcc5ffb7d8438f64f0bb56ee3ee5656e8c13006ae15f94d072fc5a2e9fc",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-029",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/bad7f88f45ce45e5a7c172dff16ff76e/manifest.json",
+      "sha256": "4ba1b28fe03e9c3e4d5de090550e030e70a44a4f387ebb382863623d441b424f",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-032",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/fc6b16bfe23b4d5a96837b78002952dd/manifest.json",
+      "sha256": "71f202cdebae3aede327f8c646fa87fcb2d995badd9f3de0e9b0470d39a831e6",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-025",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d1b6857d79764f2c93624fa2f082a097/manifest.json",
+      "sha256": "f277ae37af6875d3384b49bb3b8a36eca6e6615ffbff28a5c8cc914524eae631",
+      "passed": true
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-4892f8349eda4a21986aae23a83aaf57/results.json",
+    "sha256": "8fa8f5ec3d186b73c7867301d80c88bace38a2db79713072293c140688a208d8",
+    "summary": "Ran 496 tests in 11.317 seconds, 496 successes, 0 failures",
+    "production_and_tests_match": true
+  },
+  "production_sha256": "2a20625cc6f2cee0a244fbdd10df85249b23066778fa49f15ed6a8a4038a822e",
+  "baseline": "f5902f8b42e54f8fbc9994a24b5cc3df",
+  "baseline_units": "slide-deadline-units-df2df373129e485598e79c47e7eae471",
+  "patch_reconstruction": "/home/andy/projects/mosaic-behaviour-runs/negative-strum-patch-fdggy4pa",
+  "implementation_review": "01a084eb-77db-7cb3-a406-236f22be8016",
+  "performance_fixture_review": "docs/testing/reviews/slide-performance-fixture-review.json",
+  "performance_diagnostics": [
+    "slide-suite-history-920c05cb01f3444387660ce5612fcd9f/results.json",
+    "slide-clean-start-f6c4626f07ab42d6a3866d55b6868a35/results.json",
+    "strum-performance-comparison-8580f1f434bc4268a6f7911b9e90ddfd/results.json"
+  ],
+  "scope": "Ordinary nonpositive gates normalize to zero at playback, so nested strum releases are synchronous. Stored arithmetic, positive gates and arp scheduling remain unchanged.",
+  "limitations": [
+    "Earlier full-suite performance failures retained; fixture now collects prior-test garbage before measurement without changing thresholds or draining actions",
+    "Final ordered integration test and fixture cleanup followed native matrix; targeted accumulated evidence, not a full manual release campaign",
+    "Real-time 10ms tolerance alone cannot detect the6.944ms baseline; controlled exact deadline plus actual-lattice pulse assertion prove correction",
+    "Broader simultaneous native voices, fractional source lengths and manual/emulator gates remain incomplete"
+  ],
+  "full_campaign_complete": false
+}
