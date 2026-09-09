@@ -215,3 +215,19 @@ README now states the formulas, rounding and effective source-length rule.
 Fractional Higher/Lower results, downstream MIDI bounds, length validity and
 all scale/pentatonic interactions still need independent behavior acceptance.
 This is a single Codex decision review, not multi-vendor arbitration.
+
+
+## Modal pentatonic selections and octave equivalence
+
+Codex semantic review01a084b8-9ef7-79b1-b32f-6f30bd9b6656 supports preserving
+Mosaic's longstanding five-note selections and documenting them explicitly.
+They are application choices, not universal modal definitions. Numeric degrees
+remain seven-note positions; pentatonic snapping uses nearest selected pitch
+across octaves, lower pitch on ties. Native022 reproduced Lydian50/62/71 where
+octave-equivalent nearest pitches are47/59/71. Candidate0077 adds preceding-octave
+candidates to ordinary processing's cached array without changing selected
+pitch classes. This is an explicit output correction at the missing boundary.
+The semantic review's no-tie comment was incorrect: melodic minor A69 lies
+equally betweenG67/B71 and must select67. The independent unit oracle and
+native all-scale023 cover this. Full scale/rotation/mask interactions and
+complete delivery remain separate obligations.

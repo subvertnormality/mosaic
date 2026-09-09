@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "807bcf46b04e10c3e8a14ff54c2645c9905839e8293d514d5d18ff017f766578",
+  "manual_sha256": "ae8bd11c2a96bd0c03eacf9980e4e7384c2ecc34ca8ed1b3f3dd32b980ca92cf",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -1343,7 +1343,7 @@
       "level": 5,
       "start_line": 1114,
       "end_line": 1117,
-      "text_sha256": "aff4ee548aef3c87f2b49b9bd69946cecca6cfdc9d46f4ad7f1cddbc1f25eb08",
+      "text_sha256": "30c4946aeb6e5aa5d5706987f15f0f4f70a16f5ab7716a2892cf97a9db1212c7",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "OPT-PENTATONIC-MERGED"
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "807bcf46b04e10c3e8a14ff54c2645c9905839e8293d514d5d18ff017f766578"
+      "sha256": "ae8bd11c2a96bd0c03eacf9980e4e7384c2ecc34ca8ed1b3f3dd32b980ca92cf"
     },
     {
       "path": "cheat_sheet.html",
@@ -2837,7 +2837,9 @@
         "M-MERGE-016",
         "M-MERGE-017",
         "M-MERGE-018",
-        "M-MERGE-019"
+        "M-MERGE-019",
+        "M-MERGE-022",
+        "M-MERGE-023"
       ],
       "status": "partial-domain-coverage",
       "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -2871,7 +2873,8 @@
         "M-MERGE-016",
         "M-MERGE-017",
         "M-MERGE-018",
-        "M-MERGE-019"
+        "M-MERGE-019",
+        "M-MERGE-023"
       ],
       "status": "partial-domain-coverage",
       "domain": "Equal/asymmetric/negative values; clipping; assignment order. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -2902,7 +2905,8 @@
         "M-MERGE-016",
         "M-MERGE-017",
         "M-MERGE-018",
-        "M-MERGE-019"
+        "M-MERGE-019",
+        "M-MERGE-023"
       ],
       "status": "partial-domain-coverage",
       "domain": "Asymmetric/equal/negative values separating competing formulas. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -5007,7 +5011,9 @@
       "cases": [
         "M-SCALE-001",
         "M-MERGE-011",
-        "M-MERGE-019"
+        "M-MERGE-019",
+        "M-MERGE-022",
+        "M-MERGE-023"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 slots; same/different editing vs applied slot; long threshold; editing currently used scale and saving.",
@@ -5834,8 +5840,8 @@
         "path": "README.md",
         "line": 1114,
         "end_line": 1116,
-        "text": "##### Lock Merged to Pentatonic\n\nSimilarly, \"Lock merged to pent.\" is on by default and ensures notes modified by merge modes stick to the pentatonic version of the currently selected scale.",
-        "sha256": "8cd7b8a7cf07419e819f1ab5fdc8025561b9dd26e144c150a166fdb385cc56ef"
+        "text": "##### Lock Merged to Pentatonic\n\nSimilarly, \"Lock merged to pent.\" is on by default and ensures notes modified by merge modes stick to the pentatonic version of the currently selected scale. Mosaic uses these application-specific five-note selections (one-based degrees of each named seven-note scale): Major and Harmonic Major 1/2/3/5/6; Minor, Harmonic Minor and Melodic Minor 1/3/4/5/7; Dorian 1/2/4/5/7; Phrygian 1/3/4/6/7; Lydian 2/3/5/6/7; Mixolydian 1/2/4/5/6; Locrian 2/3/4/6/7. The named scale\u2019s alterations apply; these selections do not always retain the tonic or avoid semitones. Merged values remain seven-note scale degrees, not five-note indices. Their scale pitches snap to the nearest selected pitch repeated across octaves, choosing the lower pitch on an exact tie; snapping may cross an octave boundary. For example, Lydian C snaps to the B below it, while Melodic Minor A snaps down to G rather than equally distant B. The scale root is used when set, otherwise the song root, with the effective octave offset applied afterward.",
+        "sha256": "566d425b30fcc20c74e19fedfe86e6afc32220f4b104c3e8d0769e25122ed50a"
       }
     },
     {

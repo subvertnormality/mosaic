@@ -1185,3 +1185,56 @@ function test_translate_note_mask_to_relative_scale_position_with_root_note()
   luaunit.assert_equals(pos, 6) -- C#5 -> position 6
   luaunit.assert_equals(oct, 0) -- C#5 -> octave 0
 end
+
+function test_modal_pentatonic_periodic_candidates()
+  local intervals={{0,2,4,5,7,9,11},{0,2,4,5,7,8,11},{0,2,3,5,7,8,10},
+    {0,2,3,5,7,8,11},{0,2,3,5,7,9,11},{0,2,3,5,7,9,10},
+    {0,1,3,5,7,8,10},{0,2,4,6,7,9,11},{0,2,4,5,7,9,10},{0,1,3,5,6,8,10}}
+  local pent={{0,2,4,7,9},{0,2,4,7,8},{0,3,5,7,10},{0,3,5,7,11},
+    {0,3,5,7,11},{0,2,5,7,10},{0,3,5,8,10},{2,4,7,9,11},{0,2,5,7,9},{1,3,5,8,10}}
+  luaunit.assert_equals(musicutil.snap_note_to_array(69,{67,71}),67)
+  for number=1,10 do
+    for root=0,11 do
+      setup()
+      program.set_scale(1,{number=number,scale=quantiser.get_scales()[number].scale,
+        pentatonic_scale=quantiser.get_scales()[number].pentatonic_scale,chord=1,root_note=root})
+      for _,degree in ipairs({-14,-7,-3,-1,0,1,3,5,6,7,9,13,14,20,21}) do
+        local target=12*math.floor(degree/7)+intervals[number][degree%7+1]
+        local nearest,distance
+        for octave=-4,5 do
+          for _,offset in ipairs(pent[number]) do
+            local candidate=12*octave+offset
+            local delta=math.abs(candidate-target)
+            if not distance or delta<distance then nearest=candidate;distance=delta end
+          end
+        end
+        for _,transpose in ipairs({-2,0,2}) do
+          for octave=-1,1 do
+            local expected=60+root+transpose+12*octave+nearest
+            luaunit.assert_equals(quantiser.process(degree,octave,transpose,1,true),expected)
+            luaunit.assert_equals(quantiser.process(degree,octave,transpose,1,true),expected) -- cached
+          end
+        end
+      end
+    end
+  end
+end
+
+
+function test_pentatonic_rotated_boundary_cache()
+  setup()
+  local container={number=1,scale=quantiser.get_scales()[1].scale,
+    pentatonic_scale=quantiser.get_scales()[1].pentatonic_scale,chord=1,
+    root_note=0,chord_degree_rotation=2}
+  program.set_scale(1,container)
+  -- Second rotation lowers degree5 A by an octave. A57 is itself selected;
+  -- a missing preceding octave must not force it upward to C60.
+  luaunit.assert_equals(quantiser.process(5,0,0,1,true),57)
+  luaunit.assert_equals(quantiser.process(5,0,0,1,true),57)
+  program.get_scale(1).chord_degree_rotation=0
+  luaunit.assert_equals(quantiser.process(5,0,0,1,true),69)
+  luaunit.assert_equals(quantiser.process(5,0,0,1,true),69)
+  program.get_scale(1).chord_degree_rotation=2
+  luaunit.assert_equals(quantiser.process(5,0,0,1,true),57)
+  luaunit.assert_equals(quantiser.process(5,0,0,1,false),57)
+end

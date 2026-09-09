@@ -291,6 +291,15 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
   else
     scale = fn.deep_copy(scale_container.scale)
     pentatonic = fn.deep_copy(scale_container.pentatonic_scale)
+    -- Include the preceding octave when the selection omits its tonic.
+    -- Otherwise low Lydian C has no B below it and snaps differently by octave.
+    local lower_octave = {}
+    for i = 1, math.min(5, #pentatonic) do
+      lower_octave[i] = pentatonic[i] - 12
+    end
+    for i = #lower_octave, 1, -1 do
+      table.insert(pentatonic, 1, lower_octave[i])
+    end
 
     if do_degree and chord_rotation > 0 then
       for _ = 1, chord_rotation do

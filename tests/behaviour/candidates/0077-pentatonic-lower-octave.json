@@ -1,0 +1,8 @@
+{
+  "status": "scoped-candidate-validated",
+  "scope": "Provide preceding-octave pentatonic candidates in ordinary note processing, preserving selected pitch classes and native nearest/lower-tie semantics.",
+  "baseline_controlled": "2545343c6d654b229343ea47df0c0614",
+  "baseline_real_time": "082e5e035fa648dd963c9ce3ca70f4d1",
+  "baseline_unit": "slide-deadline-units-78f5523ffa714fa4a758618f0b0e2fc9",
+  "validation": "docs/testing/pentatonic-boundary-validation.json"
+}

@@ -1,0 +1,83 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0077",
+  "native_runs": [
+    {
+      "case": "M-MERGE-022",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9bd400999f2b48faa4eb13ad609db289/manifest.json",
+      "sha256": "a887aa2c980970ac44e51fc8610c49413ef1f45080791d1cbb3e0845e9e1f6ec",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-023",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e69398db12a84ccb9fde7885366b512e/manifest.json",
+      "sha256": "8f0304e909033757f54b32f31af0710b2e50243b4865dc7426d4ce28837e8f50",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-011",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/598ef10004094f1b8f971809df713995/manifest.json",
+      "sha256": "98d216b0c43f8d96fbcd58e64e0db400f24e6d303c3139f9300e51ad03a37745",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-017",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/03cbcf36f9c54c91af9d01542e08e173/manifest.json",
+      "sha256": "04e20fb51b5e3595a10391eb3d636e697c5ebf37bb54196776e910d85b989326",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-022",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/876012a3f108478daefc6760b248be6b/manifest.json",
+      "sha256": "acafb7bb67c8d90963ed6b2c53097288da431cf331c62f45ebf636dd1aa51629",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-023",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/af842848d2524193b46bc82177a4f95c/manifest.json",
+      "sha256": "5917f8f3cea64b766bba95189ddb6aaeed6d960bfa55aafe1d9821da24c341e7",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-011",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/25552767e4db41e69eed04c9ca4ad0df/manifest.json",
+      "sha256": "3f6f6452faab341cc566943a2ce3fd332f42be305a0a90f5c713203dd65cd8c7",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-017",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9f29f81210a4446782727c8930326341/manifest.json",
+      "sha256": "3c883c2a1156e083e00bda0e4a869f321f2a88e922b5de8c6a3cfb556e71db74",
+      "passed": true
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-98cc97cd9b784eb5b8ba3d057473851f/results.json",
+    "sha256": "ecda784d3c3d371b7b51f26ff480b434628df1f0dcbd9a12565272f4dcff5497",
+    "summary": "Ran 494 tests in 8.295 seconds, 494 successes, 0 failures",
+    "production_and_tests_match": true
+  },
+  "retained_unit_failure": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-5acd3b808c8a46c780a06f0bb6aa5447/results.json",
+    "sha256": "40548cadc8bd603bb9eca86e6728b8fa840c8b0d010a9bae40ddc91894551071",
+    "reason": "Existing concurrent-slide 2 ms performance limit; unchanged retry passed"
+  },
+  "production_sha256": "eaa9e1267838e4248b061e723f8d96e826caf6c7f86edecded0e36654b480f8a",
+  "patch_reconstruction": "/home/andy/projects/mosaic-behaviour-runs/pentatonic-patch-nizwzgtv",
+  "review": "01a084c3-3daa-75e2-976c-db313aa2fc04",
+  "scope": "Nearest periodic pentatonic pitches below the original candidate array; all ten modal selections, exact native MIDI and timing, root/transpose/octave unit matrix and rotation/cache regression",
+  "limitations": [
+    "Documentation and additional rotation unit followed native matrix; targeted accumulated evidence only",
+    "Further mask, rotation and lifecycle interactions remain pending",
+    "Full manual, current controlled profile admission and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

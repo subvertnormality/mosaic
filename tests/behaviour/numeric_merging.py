@@ -33,13 +33,25 @@ def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=Fals
         c.results.append(dict(kind='numeric-note-merge',mode=mode,assigned_patterns=[1,2],velocity_source=3 if foreign_velocity else 1,pitches=pitches,passed=True))
 
     if all_scales:
-        assert not pentatonic
         # Musical interval fixtures, independent of Mosaic/official quantiser code.
         scales=[('major',[0,2,4,5,7,9,11]),('harmonic-major',[0,2,4,5,7,8,11]),
                 ('minor',[0,2,3,5,7,8,10]),('harmonic-minor',[0,2,3,5,7,8,11]),
                 ('melodic-minor',[0,2,3,5,7,9,11]),('dorian',[0,2,3,5,7,9,10]),
                 ('phrygian',[0,1,3,5,7,8,10]),('lydian',[0,2,4,6,7,9,11]),
                 ('mixolydian',[0,2,4,5,7,9,10]),('locrian',[0,1,3,5,6,8,10])]
+        # Literal H/L/A tables from reviewed modal selections, independently
+        # derived from interval fixtures; never call the runtime quantiser.
+        pent_tables=[
+          [[64,69,72,76],[60,62,64,55],[62,64,69,64]],
+          [[64,68,72,76],[60,62,64,55],[62,64,68,64]],
+          [[65,67,72,75],[58,63,65,55],[63,65,67,65]],
+          [[65,67,72,75],[59,63,65,55],[63,65,67,65]],
+          [[65,67,72,75],[59,63,65,55],[63,65,67,65]],
+          [[65,70,72,74],[58,62,65,55],[62,65,70,65]],
+          [[65,68,72,75],[58,60,65,56],[60,65,68,65]],
+          [[67,69,71,76],[59,62,67,55],[62,67,69,67]],
+          [[65,69,72,77],[57,62,65,55],[62,65,69,65]],
+          [[65,68,73,75],[58,61,65,53],[61,65,68,65]]]
         for number,(scale,intervals) in enumerate(scales):
             if number:
                 c.tap(4,8);c.enc(3,1);c.key(3);c.tap(3,8)
@@ -47,13 +59,13 @@ def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=Fals
             for mode,level,degrees in [('higher',5,[3,5,7,9]),('lower',8,[-1,1,3,-3]),('average',2,[1,3,5,3])]:
                 if mode!='higher':c.tap(15,8)
                 c.led_values([(15,8)],[level])
-                pitches=[60+12*(d//7)+intervals[d%7] for d in degrees]
+                pitches=pent_tables[number][{'higher':0,'lower':1,'average':2}[mode]] if pentatonic else [60+12*(d//7)+intervals[d%7] for d in degrees]
                 notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)
                 assert_durations(c,notes,[1]*8)
                 for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
                 c.results.append(dict(kind='numeric-merge-all-scales',scale=scale,mode=mode,degrees=degrees,pitches=pitches,passed=True))
             c.tap(15,8)
-    if pentatonic:
+    if pentatonic and not all_scales:
         def verify(label,pitches):
             notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)
             assert_durations(c,notes,[1]*8)
@@ -177,3 +189,33 @@ def numeric_velocity_merge(c,three=False):
         assert_durations(c,notes,[1]*8)
         for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i/6)<=tolerance
         c.results.append(dict(kind='numeric-velocity-merge',contributors=3 if three else 2,mode=mode,velocities=velocities,note_priority_unassigned=4,passed=True))
+
+
+def lydian_octave_boundary(c):
+    from cases import assert_durations
+    c.configure();c.tap(5,8)
+    for slot in (1,2):
+        c.tap(slot,1)
+        if slot==2:
+            for x in range(1,5):c.tap(x,4)
+        c.tap(5,8)
+        for x,degree in enumerate((-7,0,7,0),1):
+            if degree==0:c.tap(15,8);y=7
+            else:
+                button=16 if degree<0 else 14
+                c.action(type='grid',x=button,y=8,state=1)
+                try:c.elapse(1.2)
+                finally:c.action(type='grid',x=button,y=8,state=0)
+                c.elapse(.06);y=7
+            c.tap(x,y);c.led_values([(x,y)],[12])
+        c.tap(3,8);c.tap(5,8)
+    c.tap(3,8);c.tap(2,2);c.tap(14,8);c.tap(14,8)
+    c.hold_tap((16,8),(1,2));c.tap(4,8);c.enc(3,7);c.key(3)
+    # Lydian selection D/E/G/A/B repeats across octaves. C48/60/72
+    # has B47/59/71 nearer than D50/62/74. Equal source values still merge.
+    notes=c.playback([(1,[144,n,v]) for n,v in zip([47,59,71,59],[127,117,107,97])],cycles=2,timeout=4)
+    assert_durations(c,notes,[1]*8)
+    key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i/6)<=tolerance
+    c.results.append(dict(kind='lydian-pentatonic-octave-equivalence',degrees=[-7,0,7,0],pitches=[47,59,71,59],passed=True))
