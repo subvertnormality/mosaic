@@ -2577,10 +2577,11 @@
         "M-MASK-014",
         "M-MASK-015",
         "M-MASK-016",
-        "M-MASK-017"
+        "M-MASK-017",
+        "M-MASK-018"
       ],
       "status": "in_progress",
-      "domain": "Each attribute and sentinel; active/inactive/no-pattern steps; global vs per-step. M-MASK-001 adds length-selector endpoints and representative values; validation pending, other attributes and combinations remain required. Native039-041 validate1/24,1/2,1.25 channel length masks across changing numeric modes and removal/restoration, including negative unmasked gates, in both modes. Native042 validates length step/channel/merge precedence and independent layer clearing, held-step K2 restoration and inherited display, across numeric modes in both clocks. Other attributes and neighbour isolation remain pending. NativeMASK002-006 cover note,velocity,length,trig and first-chord overrides on adjacent steps, isolated held-step clear, repeated held-step K1+K2 precedence and channel step-override clear in both clocks. Nonempty defaults and second-channel isolation remain pending. NativeMASK007-010 validate nonempty note/velocity/length/first-chord defaults surviving both clear gestures in both modes; trig-default silence and second-channel isolation remain pending. NativeMASK011 validates second-channel note/velocity/length defaults and overrides survive selected-channel clear, with independent routed MIDI and timing in both clocks. Native MASK012 proves silence after clearing forced-on overrides over a zero trig default; routed channel2 provides a positive transport witness. MASK011 revalidated in both clocks. MASK010 and MASK013-015 validate all four chord mask slots independently with nonempty defaults, neighbour preservation and exact MIDI/timing in both clocks; simultaneous slot population and boundary steps remain pending. MASK016 validates all four chord slots populated together with default and step overrides; exact polyphonic MIDI/timing, neighbour preservation and clear-step/channel in both clocks. Boundary and recording interactions remain pending. MASK017 validates steps63/64 note overrides, clear-step63 preserving64, channel clear reaching64, and nonempty trig/note/velocity/length defaults in both clocks. Recording interactions remain pending.",
+      "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks.",
       "oracles": [
         "Exact masked MIDI with unrelated attributes unchanged and visible mask value."
       ],
@@ -2650,9 +2651,27 @@
         "MAN-041"
       ],
       "statement": "Held-step mask editing accepts encoders and MIDI keyboard.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every mask field; input note/velocity/chord; multiple held keys; release orders.",
+      "cases": [
+        "M-MASK-002",
+        "M-MASK-003",
+        "M-MASK-004",
+        "M-MASK-005",
+        "M-MASK-006",
+        "M-MASK-007",
+        "M-MASK-008",
+        "M-MASK-009",
+        "M-MASK-010",
+        "M-MASK-011",
+        "M-MASK-012",
+        "M-MASK-013",
+        "M-MASK-014",
+        "M-MASK-015",
+        "M-MASK-016",
+        "M-MASK-017",
+        "M-MASK-018"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Encoder entry covers all five attributes, individual/all chord slots, neighbours and final steps through native MIDI/timing checks. Held-step MIDI keyboard entry, multiple held steps, release orders and comprehensive displayed-value assertions remain pending.",
       "oracles": [
         "Visible step-lock values and exact playback; selected-channel isolation."
       ],
@@ -2674,9 +2693,22 @@
         "MAN-041"
       ],
       "statement": "Global mask applies only where no specific step mask lock exists.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Each field; default change, step override, clear step, clear global; playing edits.",
+      "cases": [
+        "M-MASK-007",
+        "M-MASK-008",
+        "M-MASK-009",
+        "M-MASK-010",
+        "M-MASK-011",
+        "M-MASK-012",
+        "M-MASK-013",
+        "M-MASK-014",
+        "M-MASK-015",
+        "M-MASK-016",
+        "M-MASK-017",
+        "M-MERGE-042"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Nonempty trig/note/velocity/length/chord defaults and step overrides validated in both clocks, including clear-step fallback, length default removal/restoration and routed channel isolation. Playing edits and comprehensive display assertions remain pending.",
       "oracles": [
         "Literal per-step MIDI expectations plus global/step displays."
       ],
@@ -2698,9 +2730,17 @@
         "MAN-042"
       ],
       "statement": "Masks add up to four voices to the root and interact with chord parameters.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "0..4 voices; extra input attempts; repeated pitches; polyphonic MIDI; strum/velocity interactions.",
+      "cases": [
+        "M-MASK-006",
+        "M-MASK-010",
+        "M-MASK-013",
+        "M-MASK-014",
+        "M-MASK-015",
+        "M-MASK-016",
+        "M-MASK-018"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Native exact polyphonic MIDI and durations cover single chord slots, all four simultaneously, real recorded three-note chord and clearing. Keyboard extra-input attempts/repeated pitches and direct chord display assertions remain pending; strum/velocity parameter cases require separate reconciliation.",
       "oracles": [
         "Exact chord note multiset and ordered releases, no leaked voices; chord display."
       ],
@@ -2739,10 +2779,11 @@
         "M-MASK-014",
         "M-MASK-015",
         "M-MASK-016",
-        "M-MASK-017"
+        "M-MASK-017",
+        "M-MASK-018"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Each field and mixed masks; multiple steps/channels; already-clear state. Native042 validates length step/channel/merge precedence and independent layer clearing, held-step K2 restoration and inherited display, across numeric modes in both clocks. Other attributes and neighbour isolation remain pending. NativeMASK002-006 cover note,velocity,length,trig and first-chord overrides on adjacent steps, isolated held-step clear, repeated held-step K1+K2 precedence and channel step-override clear in both clocks. Nonempty defaults and second-channel isolation remain pending. NativeMASK007-010 validate nonempty note/velocity/length/first-chord defaults surviving both clear gestures in both modes; trig-default silence and second-channel isolation remain pending. NativeMASK011 validates second-channel note/velocity/length defaults and overrides survive selected-channel clear, with independent routed MIDI and timing in both clocks. Native MASK012 proves silence after clearing forced-on overrides over a zero trig default; routed channel2 provides a positive transport witness. MASK011 revalidated in both clocks. MASK010 and MASK013-015 validate all four chord mask slots independently with nonempty defaults, neighbour preservation and exact MIDI/timing in both clocks; simultaneous slot population and boundary steps remain pending. MASK016 validates all four chord slots populated together with default and step overrides; exact polyphonic MIDI/timing, neighbour preservation and clear-step/channel in both clocks. Boundary and recording interactions remain pending. MASK017 validates steps63/64 note overrides, clear-step63 preserving64, channel clear reaching64, and nonempty trig/note/velocity/length defaults in both clocks. Recording interactions remain pending.",
+      "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks.",
       "oracles": [
         "Pattern/global fallback MIDI and cleared lock indicators; neighbours preserved."
       ],
@@ -2780,10 +2821,11 @@
         "M-MASK-014",
         "M-MASK-015",
         "M-MASK-016",
-        "M-MASK-017"
+        "M-MASK-017",
+        "M-MASK-018"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Global/per-step masks; empty/full64-step; other channels and sequences. NativeMASK002-006 cover note,velocity,length,trig and first-chord overrides on adjacent steps, isolated held-step clear, repeated held-step K1+K2 precedence and channel step-override clear in both clocks. Nonempty defaults and second-channel isolation remain pending. NativeMASK007-010 validate nonempty note/velocity/length/first-chord defaults surviving both clear gestures in both modes; trig-default silence and second-channel isolation remain pending. NativeMASK011 validates second-channel note/velocity/length defaults and overrides survive selected-channel clear, with independent routed MIDI and timing in both clocks. Native MASK012 proves silence after clearing forced-on overrides over a zero trig default; routed channel2 provides a positive transport witness. MASK011 revalidated in both clocks. MASK010 and MASK013-015 validate all four chord mask slots independently with nonempty defaults, neighbour preservation and exact MIDI/timing in both clocks; simultaneous slot population and boundary steps remain pending. MASK016 validates all four chord slots populated together with default and step overrides; exact polyphonic MIDI/timing, neighbour preservation and clear-step/channel in both clocks. Boundary and recording interactions remain pending. MASK017 validates steps63/64 note overrides, clear-step63 preserving64, channel clear reaching64, and nonempty trig/note/velocity/length defaults in both clocks. Recording interactions remain pending.",
+      "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks.",
       "oracles": [
         "All selected-channel mask indicators cleared; fallback MIDI; other channels preserved."
       ],
@@ -6354,7 +6396,8 @@
         "M-REC-030",
         "M-REC-031",
         "M-REC-032",
-        "M-REC-033"
+        "M-REC-033",
+        "M-MASK-018"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",

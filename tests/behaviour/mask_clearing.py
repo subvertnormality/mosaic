@@ -159,3 +159,38 @@ def mask_clear_last_steps(c):
     try:c.key(2)
     finally:c.action(type='key',n=1,state=0)
     c.elapse(.06);verify([60,60],'step64-cleared-defaults-preserved')
+
+
+def mask_clear_recorded_chord(c):
+    from cases import recorded_chord_release,assert_durations
+    # Real scheduled keyboard input creates C/E/G on step1; release commits
+    # the shared three-step gate. The existing fixture proves recorded replay.
+    recorded_chord_release(c)
+    c.enc(1,-4)
+    # An independent neighbouring note override must survive step1 clearing.
+    c.action(type='grid',x=2,y=4,state=1)
+    try:c.enc(3,75)
+    finally:c.action(type='grid',x=2,y=4,state=0)
+    c.elapse(.06)
+    def verify(recorded,neighbour,stage):
+        phrase=([(1,[144,n,90]) for n in [72,76,79]] if recorded else [(1,[144,60,127])])
+        phrase += [(1,[144,74 if neighbour else 62,117]),(1,[144,64,107]),(1,[144,65,97])]
+        lengths=([3,3,3] if recorded else [1])+[1,1,1]
+        positions=([0,0,0] if recorded else [0])+[1,2,3]
+        notes=c.playback(phrase,cycles=3,timeout=5)
+        assert_durations(c,notes,lengths*2)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        for i,note in enumerate(notes):
+            expected=((i//len(phrase))*4+positions[i%len(phrase)])/6
+            assert abs((note[field]-notes[0][field])/1e9-expected)<=tolerance
+        c.results.append(dict(kind='recorded-mask-clearing',stage=stage,expected_phrase=phrase,expected_lengths=lengths,passed=True))
+    verify(True,True,'recorded-chord-and-neighbour')
+    c.action(type='grid',x=1,y=4,state=1)
+    try:c.key(2)
+    finally:c.action(type='grid',x=1,y=4,state=0)
+    c.elapse(.06);verify(False,True,'recorded-masks-cleared-neighbour-preserved')
+    c.action(type='key',n=1,state=1);c.elapse(.3)
+    try:c.key(2)
+    finally:c.action(type='key',n=1,state=0)
+    c.elapse(.06);verify(False,False,'original-pattern-restored')
