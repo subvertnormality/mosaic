@@ -2865,7 +2865,10 @@ from master_multi_output import master_multi_output
 
 from forwarded_clock import cold_forwarded_clock,warm_forwarded_clock
 
+from continue_spp import continue_spp_unsupported
+
 CASES={
+ 'M-SYNC-014':dict(run=continue_spp_unsupported,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Pinned norns Continue/SPP limitation: raw delivery without false transport resume/reposition; later Start resets step1'),
  'M-SYNC-012':dict(run=cold_forwarded_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold external clock on port1; Mosaic notes and forwarded port2 receiver align to original input, no input-port clock echo'),
  'M-SYNC-013':dict(run=warm_forwarded_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Warmed external clock on port1; Mosaic and forwarded port2 receiver keep absolute input phase'),
  'M-SYNC-011':dict(run=master_multi_output,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Two clock outputs enabled through native menu: independent receiver note phase/count, disabled third port, no note-routing leakage'),

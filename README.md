@@ -309,6 +309,8 @@ Most _Mosaic_ functions are described by tooltips that appear at the bottom of t
 
 With the norns clock source set to MIDI, an external transport Start resets Mosaic to step 1, including when it is already playing. Held notes are released before the restarted phrase begins. Restart cleanup does not send a MIDI Stop back to the connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase.
 
+Pinned norns does not interpret MIDI Continue or Song Position Pointer as clock-transport commands. Mosaic therefore remains stopped when it receives them and does not reposition; send MIDI Start to begin again from step 1. The messages remain available to scripts through the normal MIDI event API.
+
 ### MIDI Panic
 
 Should your MIDI output devices become unresponsive, hold the navigation button of a non-selected page to send Note Off messages for every note on every MIDI channel and connected device. Panic clears sounding notes with a short sweep; it does not stop the sequencer or cancel scheduled strum or arpeggio voices. Playback and scheduled voices continue, so new notes can sound during or after the sweep. Use the Play/Stop control to stop playback. Holding the selected page button does not trigger panic, and releasing a panic hold does not change pages.
