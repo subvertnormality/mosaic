@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "8e31ec10ca7789e87e36b8e6ad763262970f37d383045a33a39dbcb72556fbbf",
+  "manual_sha256": "896011d6b4794120f5be47f4c58da9d2966a3dd14ebd692eda00b735b0913042",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -946,7 +946,7 @@
       "level": 3,
       "start_line": 876,
       "end_line": 887,
-      "text_sha256": "789cdf7bfff07380fb81fcc971634e4f4dab1981f51212180eb74329564849c2",
+      "text_sha256": "733653885e599d34f84a25ed0f108f85e30779079bf657ccd9410fdc53fd93e4",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "SONG-SLOTS"
@@ -1115,7 +1115,7 @@
       "level": 2,
       "start_line": 1044,
       "end_line": 1051,
-      "text_sha256": "84ab6c1c8cec1da5bf3179910d7e18d7eabc14a708b336b171a0d04e475d33a8",
+      "text_sha256": "3b0c4e2f6fb230fdb366548b844af5344127ed810de720ad8d90e58c495a6f9d",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "PERSIST-AUTO-001",
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "8e31ec10ca7789e87e36b8e6ad763262970f37d383045a33a39dbcb72556fbbf"
+      "sha256": "896011d6b4794120f5be47f4c58da9d2966a3dd14ebd692eda00b735b0913042"
     },
     {
       "path": "cheat_sheet.html",
@@ -1610,7 +1610,9 @@
         "M-MIDI-005",
         "M-LEN-004",
         "M-MASK-028",
-        "M-MASK-029"
+        "M-MASK-029",
+        "M-XA-004-JF-OVERLAP",
+        "M-XA-003-JF-OWNERSHIP"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -1628,7 +1630,11 @@
       "statement": "While stopped, idle edits autosave after60 seconds and the next boot restores the latest autosave.",
       "cases": [
         "M-SAVE-001",
-        "M-REC-PARAM-027"
+        "M-REC-PARAM-027",
+        "M-RANGE-SAVED-001",
+        "M-RANGE-SAVED-002",
+        "M-RANGE-SAVED-005",
+        "M-RANGE-SAVED-006"
       ],
       "status": "partial-domain-coverage",
       "domain": "Fresh stopped project with four notes,59-second absence and61-second save, fresh-process reload; repeated saves, playing exclusion, interruption, corrupt/old data and explicit save/load dialogs remain required.",
@@ -2428,7 +2434,11 @@
         "M-REC-PARAM-017",
         "M-REC-PARAM-018",
         "M-REC-PARAM-020",
-        "M-REC-PARAM-021"
+        "M-REC-PARAM-021",
+        "M-XA-004-JF-OVERLAP",
+        "M-XA-003-JF-OWNERSHIP",
+        "M-XA-002-AUDIO",
+        "M-XA-001-JF"
       ],
       "status": "partial-domain-coverage",
       "domain": "Configured generic CC/named MIDI devices; every virtual port/channel; unassigned and missing devices.",
@@ -2476,7 +2486,15 @@
         "M-PARAM-023",
         "M-PARAM-024",
         "M-PARAM-025",
-        "M-REC-PARAM-001"
+        "M-REC-PARAM-001",
+        "M-PATCH-004",
+        "M-PATCH-001",
+        "M-PATCH-002",
+        "M-PATCH-014",
+        "M-PATCH-010",
+        "M-PATCH-011",
+        "M-PATCH-009",
+        "M-PATCH-007"
       ],
       "status": "in_progress",
       "domain": "-1/0/1/63/126/127 and bounds; each configured CC; repeated edits.",
@@ -2503,7 +2521,17 @@
       "statement": "Stored MIDI parameter values transmit on load and play and persist across patterns.",
       "cases": [
         "M-PATCH-019",
-        "M-PATCH-017"
+        "M-PATCH-017",
+        "M-PATCH-015",
+        "M-PATCH-016",
+        "M-PATCH-013",
+        "M-PATCH-014",
+        "M-PATCH-012",
+        "M-PATCH-008",
+        "M-PATCH-009",
+        "M-PATCH-006",
+        "M-PATCH-005",
+        "M-PATCH-003"
       ],
       "status": "in_progress",
       "domain": "Cold load/reload/play/restart/song changes; mixed sentinel and active parameters.",
@@ -3429,7 +3457,14 @@
         "M-RANGE-GLOBAL-003",
         "M-RANGE-GLOBAL-004",
         "M-RANGE-LIVE-001",
-        "M-RANGE-LIVE-002"
+        "M-RANGE-LIVE-002",
+        "M-RANGE-SAVED-001",
+        "M-RANGE-SAVED-002",
+        "M-RANGE-SAVED-003",
+        "M-RANGE-SAVED-004",
+        "M-RANGE-SAVED-005",
+        "M-RANGE-SAVED-006",
+        "M-PATCH-016"
       ],
       "status": "partial-domain-coverage",
       "domain": "Candidate0080 rejects reversed/equal gesture endpoints before either assignment, preserving prior range. NativeREJECT001-004 cover both release sequences on channel/scale editors, stopped/playing, rejection framebuffer, unchanged range LEDs/MIDI/timing, valid recovery; MASK030/031 multiheld input and RANGE001/002 delayed/long holds/all63adjacent/full64 controls revalidated both clocks. Unit integration covers8192 channel1/17 endpoint pairs and4032 distinct-key pattern lengths. Remaining accepted live changes with playhead inside/outside and persisted malformed ranges; broader CH-RANGE completion not claimed. REJECT005 verifies live rejected range preserves independently routed four/three-step phrases, exact pitches/velocities, fractional lengths, onset alignment and phase in both clocks. Candidate0081 removes absolute-step master reset that truncated offset ranges. GLOBAL001-004 validate 15 cap/bounds combinations, minimal2..4/G2, five rates and scale17 D/E/C caps/restoration through MIDI, LEDs and exact phase.45 real-lattice integration combinations cover offset row/last-step boundaries and five rates for channel1/17. Accepted live transitions and malformed persisted ranges remain. LIVE001 covers accepted base-rate edits with playhead inside/below/above new range, literal next notes and three loops, full gate accounting, unchanged phase and final64LEDs. LIVE002 covers queued global4-to2-to3 on offset2..4, exact application indices4/14, queue framebuffer, final fader choice, restored step4 and all24completed gates. Both run in both clocks. Broader rate/long-note/live scale/recorder interactions and malformed persisted ranges remain; no domain completion claimed.",
@@ -4517,7 +4552,11 @@
         "M-CHORDVEL-004",
         "M-CHORDSHAPE-257",
         "M-CHORDSHAPE-258",
-        "M-CHORDSHAPE-259"
+        "M-CHORDSHAPE-259",
+        "M-DASHBOARD-005",
+        "M-DASHBOARD-006",
+        "M-DASHBOARD-007",
+        "M-DASHBOARD-008"
       ],
       "status": "unimplemented",
       "domain": "Root0/1/64/126/127; positive/negative extremes; rest/muted-root and shape interactions.",
@@ -4807,7 +4846,11 @@
         "M-CHORDVEL-004",
         "M-CHORDSHAPE-257",
         "M-CHORDSHAPE-258",
-        "M-CHORDSHAPE-259"
+        "M-CHORDSHAPE-259",
+        "M-DASHBOARD-001",
+        "M-DASHBOARD-002",
+        "M-DASHBOARD-003",
+        "M-DASHBOARD-004"
       ],
       "status": "unimplemented",
       "domain": "Every selector, sparse voices, repeated pitches, mute-root and acceleration.",
@@ -5271,8 +5314,8 @@
         "path": "README.md",
         "line": 876,
         "end_line": 898,
-        "text": "### Song Editor\n\nThe Song Editor features a grid layout consisting of 90 slots. Each slot represents a unique opportunity to blend patterns, channels, rhythms, scales, and other elements into your compositions, making each Song Sequence a distinct musical creation.\n\n<p>\n  <svg width=\"25\" height=\"25\" viewBox=\"0 0 500 500\" style=\"vertical-align: middle;\">\n    <use href=\"#video-icon\" />\n  </svg>\n  <a href=\"https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2972s\">Song editor demo</a>\n</p>\n\n\n#### Button Indicators\n\n* **Dim buttons**: These are your blank slates, ready for your creative input.\n* **Mid-glow buttons**: These are filled with your existing rhythms and patterns.\n* **Brightly lit buttons**: This button highlights the Song Sequence currently in play.\n\n#### Interacting with Slots\n\n* **Selecting a Pattern**: Simply press the button corresponding to the pattern.\n* **Copying Slots**: To copy one slot to another, press and hold the source slot, then the destination slot. Note: This action will overwrite the content in the target slot.\n* **Erasing a Slot**: To clear a slot, copy an empty slot over it. Remember, there is no undo option, so proceed with caution.",
-        "sha256": "2263c2d3439ee9e275af1ca835407532051f3fc3acb4560319dbc9fe1cb3756c"
+        "text": "### Song Editor\n\nThe Song Editor features a grid layout consisting of 96 slots (six rows of 16). Each slot represents a unique opportunity to blend patterns, channels, rhythms, scales, and other elements into your compositions, making each Song Sequence a distinct musical creation.\n\n<p>\n  <svg width=\"25\" height=\"25\" viewBox=\"0 0 500 500\" style=\"vertical-align: middle;\">\n    <use href=\"#video-icon\" />\n  </svg>\n  <a href=\"https://www.youtube.com/watch?v=J1ckUZvhFJ0&t=2972s\">Song editor demo</a>\n</p>\n\n\n#### Button Indicators\n\n* **Dim buttons**: These are your blank slates, ready for your creative input.\n* **Mid-glow buttons**: These are filled with your existing rhythms and patterns.\n* **Brightly lit buttons**: This button highlights the Song Sequence currently in play.\n\n#### Interacting with Slots\n\n* **Selecting a Pattern**: Simply press the button corresponding to the pattern.\n* **Copying Slots**: To copy one slot to another, press and hold the source slot, then the destination slot. Note: This action will overwrite the content in the target slot.\n* **Erasing a Slot**: To clear a slot, copy an empty slot over it. Remember, there is no undo option, so proceed with caution.",
+        "sha256": "09ac43c4f8c8bb81ca45119d2c56cf31cdc523ae491910ff74a3e30f4e6eb25e"
       }
     },
     {
@@ -5622,7 +5665,11 @@
         "MAN-084"
       ],
       "statement": "Named save/load uses parameter menu and text prompt; autosave must not overwrite named slots.",
-      "cases": [],
+      "cases": [
+        "M-RANGE-SAVED-002",
+        "M-RANGE-SAVED-003",
+        "M-RANGE-SAVED-004"
+      ],
       "status": "unimplemented",
       "domain": "Create/overwrite/cancel; empty/long/non-ASCII names; save while playing/stopped; corrupt/missing/unwritable files.",
       "oracles": [
@@ -5636,8 +5683,8 @@
         "path": "README.md",
         "line": 1046,
         "end_line": 1050,
-        "text": "You can save and load your creations using the param menu. When you choose to save, you'll be prompted to enter a name for your creation. Remember to use a descriptive name so you can easily find and manage your projects.\n\nThe sequencer features an autosave function when it is not actively playing. If left idle, it will automatically save your work under the name \"autosave\" after 60 seconds. When you start Mosaic again, it automatically loads this most recent autosave.\n\nTo ensure the longevity of your work, it's important to save your creations into named slots. This prevents them from being overwritten by the autosave feature, allowing you to keep your songs indefinitely.",
-        "sha256": "a5d6e0cf053079e52e29b20c5a7283549b71464d2b8ab4c817a08b7ad82732f9"
+        "text": "You can save and load your creations using the param menu. When you choose to save, you'll be prompted to enter a name for your creation. Remember to use a descriptive name so you can easily find and manage your projects.\n\nThe sequencer features an autosave function when it is not actively playing. If left idle, it will automatically save your work under the name \"autosave\" after 60 seconds. When you start Mosaic again, it automatically loads this most recent autosave. Before replacing the current project, Mosaic checks saved song slots, global lengths, and channel and scale-track ranges. If a check fails, the screen identifies the problem and the current project and playback are retained. Autosaving is then suspended to protect the rejected file; editing, playing or cancelling a dialog does not resume it. Successfully loading a valid project, saving a named project, or choosing New resumes the normal idle autosave interval. A failed save leaves autosaving suspended. Valid saved one-step ranges remain supported, without adding a one-step range gesture. These checks cover the saved range structure, not every possible corrupted project field.\n\nTo ensure the longevity of your work, it's important to save your creations into named slots. This prevents them from being overwritten by the autosave feature, allowing you to keep your songs indefinitely.",
+        "sha256": "b1226d54811be74cd7a44d0dd1f53380125af5cfa11d3e8fa77433c8c74f544b"
       }
     },
     {
@@ -5646,7 +5693,13 @@
         "MAN-084"
       ],
       "statement": "Idle stopped sequencer autosaves after60s and next startup restores it.",
-      "cases": [],
+      "cases": [
+        "M-RANGE-SAVED-001",
+        "M-RANGE-SAVED-003",
+        "M-RANGE-SAVED-004",
+        "M-RANGE-SAVED-005",
+        "M-RANGE-SAVED-006"
+      ],
       "status": "unimplemented",
       "domain": "59.999999999/60/60.000000001 seconds; idle-reset edit; playing past60; stop/restart; missing/corrupt autosave.",
       "oracles": [
@@ -5660,8 +5713,8 @@
         "path": "README.md",
         "line": 1048,
         "end_line": 1048,
-        "text": "The sequencer features an autosave function when it is not actively playing. If left idle, it will automatically save your work under the name \"autosave\" after 60 seconds. When you start Mosaic again, it automatically loads this most recent autosave.",
-        "sha256": "9d7c5a2de485a50197dd9c28ee8786c3ca05c8a6abf1d85381c656a5761f7c00"
+        "text": "The sequencer features an autosave function when it is not actively playing. If left idle, it will automatically save your work under the name \"autosave\" after 60 seconds. When you start Mosaic again, it automatically loads this most recent autosave. Before replacing the current project, Mosaic checks saved song slots, global lengths, and channel and scale-track ranges. If a check fails, the screen identifies the problem and the current project and playback are retained. Autosaving is then suspended to protect the rejected file; editing, playing or cancelling a dialog does not resume it. Successfully loading a valid project, saving a named project, or choosing New resumes the normal idle autosave interval. A failed save leaves autosaving suspended. Valid saved one-step ranges remain supported, without adding a one-step range gesture. These checks cover the saved range structure, not every possible corrupted project field.",
+        "sha256": "73210520ab7de5abb8b832c742bce23fdb1bcd11f7c7444fc432a9a0fd6ee260"
       }
     },
     {
@@ -5816,7 +5869,7 @@
       "statement": "Optional Elektron program change mirrors song slot; default off and channel10.",
       "cases": [],
       "status": "unimplemented",
-      "domain": "All90 slots and16 channels; configured/unconfigured ports; copy/queued transition/repeat; default/off.",
+      "domain": "All96 slots and16 channels; configured/unconfigured ports; copy/queued transition/repeat; default/off.",
       "oracles": [
         "Exact program numbers, ports/channels and timing relative to transition; disabled silence."
       ],
@@ -6439,7 +6492,9 @@
         "M-REC-031",
         "M-REC-032",
         "M-REC-033",
-        "M-MASK-018"
+        "M-MASK-018",
+        "M-XA-004-JF-OVERLAP",
+        "M-XA-003-JF-OWNERSHIP"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",
@@ -6613,7 +6668,10 @@
         "MAN-006"
       ],
       "statement": "Only device configurations copied into the project data/config directory appear in the device picker.",
-      "cases": [],
+      "cases": [
+        "M-XA-002-AUDIO",
+        "M-XA-001-JF"
+      ],
       "status": "unimplemented",
       "domain": "Empty directory; one and multiple stock configurations; two isolated projects; restart after addition/removal.",
       "oracles": [

@@ -1,0 +1,217 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0082",
+  "base": "8c39d04a0bd188dff3b2450111a10cd8bec39a00",
+  "scope": "Validate all present song slots1..96 and channels1..17 before replacing the current project; reject malformed range structure without interrupting playback; inhibit autosave until a successful explicit recovery action.",
+  "native_runs": [
+    {
+      "case": "M-RANGE-SAVED-004",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/62bcef2ecd2246579c2528c7ba77e70f/manifest.json",
+      "sha256": "a91f64ee97fc3b712f2cf6d9f73b12ba36f79cadff1898f8512f1cc5f31e676b",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-003",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e58ff8aa2b6d4c30bd8fae49fdc3f2c1/manifest.json",
+      "sha256": "a6a6220e96b17dbd912ba9e796aad54dacbc8943c0d745c25de4349c8c68b798",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-002",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b1b9d605dddd4364849c89b35e47e241/manifest.json",
+      "sha256": "d7c9de7dcf189123500b1f7da40c384f32e85d8fb45394c96d477b7ae8b770f3",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-004",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0016415a27e443b9bf31aff8f856df92/manifest.json",
+      "sha256": "8cc94824b05bc76d146d3d39bf91a77e716e5b094dc9e38af254a7d4b7e3b516",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-003",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4f4cd81291ca4a9b98866837b66d26a1/manifest.json",
+      "sha256": "d6942f80eeeca6184bd985dcf7a212913af89b931acbcc60172ab98746396605",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-002",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/29d01581bf3e42e8af3ee3439879f2e2/manifest.json",
+      "sha256": "0ed633c8eae013fcd7aa1eadee88be13c6adffea0f1bc2490456649e0f423ad2",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-005",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ae7f509e4b2345bbb105a7491c39bc56/manifest.json",
+      "sha256": "648e6060a69a97e89aaf27289c38e7b8141025e4250b34b75e5d758f996f9005",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-006",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d94795d6b9fc4976bc5a94240ce4e4c3/manifest.json",
+      "sha256": "131ac14201fd0d05d6c4c443bd08dd470636593d81c950ae41412438378438d9",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-001",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8f5366a4e9844eb8ac6e6da9f7d7b639/manifest.json",
+      "sha256": "115d59a22de04b923a569c714c63a400034df4d734ccae5f615420eb6a237f6a",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-SAVE-001",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/de1be4e5453648c49659d261b32d10db/manifest.json",
+      "sha256": "cf6580b6a8cde5f4bb17e85734fd456023d060e54f897ab9e8402bbfcb731590",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-REC-PARAM-027",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2e6e7c5a31de487ebc40f4bf6bd050ca/manifest.json",
+      "sha256": "0711b50795315d29653a9428a2942121f4ee6d660db71ba6c251aaa5bf243e7e",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-005",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a6717a8e8d474279a330891f937efa1d/manifest.json",
+      "sha256": "7b2e2cbe8b3eb11e92a2a42b6a1f30029e057a82c2cbf01efaf75b36299772df",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-006",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/55623cd8c3e045999d14015be61f0fac/manifest.json",
+      "sha256": "74f7f61e5d5e072812314209d9a962bd0fcec7273086e17ddda4357ab6e7caef",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-RANGE-SAVED-001",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/823344e6375e435994be7052dd051cb1/manifest.json",
+      "sha256": "06b7293f5b6e3d572cf64bc38c4455a4cf5c8e14b1ce37f1e384c1053a3af891",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-SAVE-001",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d8df3bdcfa8e47a491cf4163b74cea96/manifest.json",
+      "sha256": "218764db169c0d704990eced708a72efbe410a56aa9a957075acfe2ae011618a",
+      "passed": true,
+      "production_matches": true
+    },
+    {
+      "case": "M-REC-PARAM-027",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f0c7afa7fc9d41c3bcd13eb1f53f6f44/manifest.json",
+      "sha256": "dda277900e88c3bce728de93addb749b32caa10157b3b169133cace501846941",
+      "passed": true,
+      "production_matches": true
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-0305b0f3c72c4b35b46c773983152108/results.json",
+    "sha256": "6507df4dd44979769566d9512bf8e35bdbd6cbb86ea6f4d3bdfd642d42fc4350",
+    "summary": "Ran 509 tests in 10.548 seconds, 509 successes, 0 failures"
+  },
+  "production_sha256": {
+    "mosaic.lua": "9970445f0f6acbe6f5eab66e624501e78d80a12f73651d1d87bea8191e44f3b9",
+    "lib/project_validation.lua": "3747735702b30039f6e55b6990609196087842653f63d3041d3e08592d637fcf"
+  },
+  "patch_sha256": "1b5d814d48ce5fed57ae1c0facf437b296112e1fd31bc0d8c354738e3be99d71",
+  "patch_reconstruction": "/home/andy/projects/mosaic-behaviour-runs/saved-range-patch-zwwqbull",
+  "baseline": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/saved-reversed-range-characterization-01.json",
+    "sha256": "a15e73f9f5ff36f2dd65b50d933b779f9a95da74b2a760c9304d0b19a0ac38f4",
+    "runs": [
+      {
+        "mode": "controlled-experimental",
+        "out": "/home/andy/projects/mosaic-behaviour-runs/saved-range-diagnostic-d90ae13051704b809505640a559e5bc0",
+        "defect_reproduced": true,
+        "recovery_verified": true,
+        "observed_repeated_pitch": 65,
+        "observed_note_count": 5,
+        "original_sha256": "96abe5c92ce92100f9e2d1d4e231b684a565d60d9a419d4984e70fd83e309c55",
+        "malformed_sha256": "0ec3a44f973fbb497669dc3800e2b0085a81e68f2a86ed2de163332ce5f5aa27",
+        "source_files_preserved": true,
+        "acceptance": false
+      },
+      {
+        "mode": "real-time",
+        "out": "/home/andy/projects/mosaic-behaviour-runs/saved-range-diagnostic-646041db654c47c48b92740681b632fb",
+        "defect_reproduced": true,
+        "recovery_verified": true,
+        "observed_repeated_pitch": 65,
+        "observed_note_count": 5,
+        "original_sha256": "c6c9e50a937def00aebcc6e4cc126b1d9877686c1d6eb2a918894bc43a8d4c60",
+        "malformed_sha256": "e0a4a18b42dd775be2378aa4ef9d001aece576f06014cfcb6b4d98a3c7de9095",
+        "source_files_preserved": true,
+        "acceptance": false
+      }
+    ],
+    "results": [
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/saved-range-diagnostic-d90ae13051704b809505640a559e5bc0/results.json",
+        "sha256": "3c73cffeb1873159bcda003a6b5ac422eafa1a58361271d924f8a5cf48381570"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/saved-range-diagnostic-d90ae13051704b809505640a559e5bc0/reloaded/results.json",
+        "sha256": "82f118ff67f454ecb7c5f1ac6b87125ef33b586d0e50cdf3faa572542dd9320a"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/saved-range-diagnostic-646041db654c47c48b92740681b632fb/results.json",
+        "sha256": "3c73cffeb1873159bcda003a6b5ac422eafa1a58361271d924f8a5cf48381570"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/saved-range-diagnostic-646041db654c47c48b92740681b632fb/reloaded/results.json",
+        "sha256": "82f118ff67f454ecb7c5f1ac6b87125ef33b586d0e50cdf3faa572542dd9320a"
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "session": "01a085a2-b264-7063-8c68-fb73df0e52a3",
+      "path": "docs/testing/reviews/saved-range-load-policy-review.json",
+      "sha256": "941cdacf3cd73b55caa1be3134fac6956ccd77aa2459b19f8c7469927df3827f"
+    },
+    {
+      "session": "01a085af-844e-7980-80a0-d973657b5ac6",
+      "path": "docs/testing/reviews/saved-range-implementation-review.json",
+      "sha256": "84f870c8a98223e6e731cc092aa82ca8dc9fa92b26db483a8e21aaacd61807a2"
+    }
+  ],
+  "review_resolution": "Follow-up identified nonthrowing serializer write/close failures. Checked synchronous IO and restored prior IO functions/hooks; six injected write/close/hook failure cases pass in the actual-entrypoint integration suite. Corrected validator upper bound from64 to actual96 with every-slot unit matrix and native slot96 round trips.",
+  "limitations": [
+    "Range-envelope validation only; arbitrary corruption outside the validated structure remains a wider persistence obligation.",
+    "Project/PSET saving is not transactional. Failed explicit saves can retain pre-existing stop/reset or partial-write effects; this change prevents false success from releasing autosave inhibition.",
+    "Equal persisted endpoints are valid. No new one-step or long-hold range gesture is introduced.",
+    "Earlier native menu failures were test navigation/oracle defects: selectable separator, separator raster row, and retained group on menu re-entry. They remain in saved-range-manual-01/02/03 receipts.",
+    "Controlled runs remain diagnostic on the current unadmitted runtime profile. Real-time counterparts are retained.",
+    "Targeted native results do not establish full manual, whole-tree release, runtime admission or refactor readiness."
+  ],
+  "full_campaign_complete": false
+}

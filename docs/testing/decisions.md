@@ -289,3 +289,8 @@ Codex01a08566-379b-7423-a152-c89bb3fe476e selected rejection with prior-range pr
 ## Relative global cap on offset channel ranges
 
 Codex01a08583-7196-7f31-ad1a-08698f6d60da traced the repeated-start defect to a redundant master callback using absolute-step modulo. Candidate0081 removes only that loop; channel callbacks already cap their length relative to their own start, at their own rate. Explicit song resets retain their separate path. Native2..4/G2 failed in both clock modes before the fix;24native regressions and500unit/integration tests cover the stated scope. Global1 can yield an effective one-step range without adding a one-step gesture. Remaining live edit and persisted-data domains are not waived.
+
+
+## Reject malformed saved ranges before replacing the current project
+
+Candidate0082 implements the Codex-reviewed preservation policy. The existing loader accepted reversed saved ranges and emitted repeated end notes with no active range LEDs. Validate the range envelope before stopping playback or replacing model state. A rejected load retains live edits, pending notes and memory; suppress queued and future autosaves until successful named Save, New or valid Load. Missing startup autosave remains normal. Equal endpoints and the legacy song-pattern alias remain valid. Native tests cover all three recovery actions in both clocks, slot96/one-step/legacy round trips, ordinary autosave and recorded undo/redo persistence. Checked IO resolves the review finding that the official serializers can ignore nonthrowing write/close failures. This is not a transactional save redesign or complete arbitrary-corruption schema. See saved-range-validation.json for source-bound evidence and remaining obligations.

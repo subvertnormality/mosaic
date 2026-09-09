@@ -1,0 +1,30 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Read-only focused implementation follow-up to Codex01a085a2-b264-7063-8c68-fb73df0e52a3; no agents/edits/web/runtime launches. Local music tool, proportionate review. Inspect uncommitted candidate0082 vs8c39d04: saved-range validator before stop/init/set, legacyalias and equalends valid, allslots/channels1..17 coordinates/globalcap; rejection latch cancels/guardsautosave stages, explicitNew/save/validload resumes, cancel/failedsave staysblocked. Params.write silentlyreturnsnil on openfailure, so save temporarily wraps/preserves action_write as successful-open/write callback signal; assess correctness/side effects and failed-recovery semantics. Existing save path is not a complete transactional serializer; assess any material newly introduced loss risk without assuming wider named-save domain complete.507unit/integration tests passed /home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-6907064b75664dc68a29d4ef5399d9b3/results.json; native D rejection/two idle deadlines preservedptn/pset/noinvalidMIDI0d9b93a6b6c24c02ae6d8fbe4b80baa3 and ordinaryautosave/reloadb09127fca76d4f45be6b4a38b7b30429 passed; real-time runs ongoing. Manual rejection during multichannel playback and successful recovery native cases are next and not yet claimed. Find substantive defects in the implementation or required targeted regressions, distinguish tested evidence from source inference, no broad redesign. Files: /home/andy/projects/mosaic-behaviour-tests/mosaic.lua, /home/andy/projects/mosaic-behaviour-tests/lib/project_validation.lua, /home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/project_validation_tests.lua, /home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/project_load_integration_tests.lua, /home/andy/projects/mosaic-behaviour-tests/tests/behaviour/persisted_ranges.py"
+  },
+  "input_sha256": {
+    "/home/andy/projects/mosaic-behaviour-tests/mosaic.lua": "8420bfde2d3a5401f4fc21c3395f58dc25c6f4edf1194bcb1ef2dc8d2d38b956",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/project_validation.lua": "acc743884b16d086375e5e2ed6ac996d2553fd299c120adb105b1d4b9a7e4b0e",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/project_validation_tests.lua": "8c30f0ff17c7b87d3daf9ce9af3d671176c8d519e7fc05617c0500bb193f99bf",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/project_load_integration_tests.lua": "0149c1771eed0c073bd80ea1aab24c031406b1e1b86b345200625cae31b79352",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/persisted_ranges.py": "1e8e1492e389eedbb97fccf2a644f449adcd5053e9cd8c0fb93e4a5cf093b00a"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "No substantive defect found in the range validator or rejection latch versus `8c39d04`. The save wrapper correctly detects silent **open failure**, but its callback does not prove successful disk writes.\n\n- **Validation is correctly placed and scoped.** [mosaic.lua:78](/home/andy/projects/mosaic-behaviour-tests/mosaic.lua:78) validates before transport stop, initialization or replacement. [project_validation.lua:19](/home/andy/projects/mosaic-behaviour-tests/lib/project_validation.lua:19) matches the legacy alias, examines every stored slot and channels 1\u201317, checks integer coordinates/global length, and rejects only `first > last`; equal endpoints and endpoints beyond the global cap remain valid.\n\n- **Latch/recovery behavior looks correct.** Rejection stops both timers; reset, prime and write stages all guard inhibition. Cancel returns before transport changes. Detected save failures retain inhibition; successful explicit Save, New and valid Load resume it. The wrapper forwards callback arguments and restores the previous hook even when writing or the hook throws. See [mosaic.lua:107](/home/andy/projects/mosaic-behaviour-tests/mosaic.lua:107). Failed saves still stop/reset playback and may leave a newly written `.ptn` with an old `.pset`; comparison with the baseline shows these are existing save-path behaviors.\n\n- **One material qualification:** [ParamSet:write:508](/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-6907064b75664dc68a29d4ef5399d9b3/mosaic/lib/tests/test_artefacts/norns_test_artefact/lua/core/paramset.lua:508) ignores `io.write`/`io.close` results before invoking `action_write`. Consequently, a nonthrowing write/close failure can falsely release the new latch. The underlying partial-write risk predates this change; the new recovery signal inherits it. This does not require treating named saves as complete transactional serialization.\n\n**Targeted regressions:** add a throwing previous hook/write case, verifying hook restoration and continued inhibition; distinguish silent open failure from nonthrowing write/close failure. Complete the planned native multichannel-playing rejection and explicit recovery cases.\n\n**Evidence:** the recorded 507-test pass is verified, and the archived entrypoint, validator and integration-test files match current hashes. Native artifacts confirm two-deadline cold-rejection preservation and ordinary reload MIDI; they do not establish manual rejection during playback or successful native recovery.\n\n**CONFIDENCE: High** for source behavior; pending native cases and write/close-failure handling could change the recovery assessment.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a085af-844e-7980-80a0-d973657b5ac6` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}
