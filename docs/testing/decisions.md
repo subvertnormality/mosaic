@@ -145,3 +145,20 @@ The independent 15,360-case interval test already required this. Native failure
 `294a062779374590890cba69531739eb` is retained as a test-table defect, not a
 Mosaic defect. Only this literal expectation changes; no timing tolerance changes.
 The A harmonic-minor malformed128 baseline and candidate0069 remain valid.
+
+
+## SEM-010 — Parameter recording boundaries
+
+Codex review01a08404-8475-7c82-be93-02d19cf99aa6 inspected history726b0d29
+and confirmed future-step recording and selected-channel-wrap clearing predate
+this fix. Editing records only edited parameters on subsequent eligible selected
+channel steps; it does not rewrite a step that already sounded. Clarify the manual
+rather than change that behavior. The note first-press/final-release decision is
+separate. Stop/disarm clears pending parameter recording. Switch-away/return,
+retained dirty values, wrap/restart, trigless, slide and persistence need further
+native coverage and are not certified by candidate0070.
+
+Review accepted the narrow guard. Its channel/slot/disarm test uses a fake
+recorder and proves suppression policy, not clock-driven switch recording.
+Strengthen native replay by changing default64 to65 before playback: continued64
+on steps2..4 must then be stored locks. Preserve all failed baseline artifacts.

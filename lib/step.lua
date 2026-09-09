@@ -139,7 +139,8 @@ function step.process_params(channel, step)
         goto continue
       end
 
-      if params:get("record") == 2 and recorder.trig_lock_is_dirty(c, i) then
+      if params:get("record") == 2 and program_data.selected_channel == channel.number and
+        recorder.trig_lock_is_dirty(channel.number, i) then
         goto continue
       end
 

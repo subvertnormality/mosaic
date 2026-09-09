@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Probability x CC/standard NRPN x Trigless on/off passed022..025 in both modes. Continue live lock recording and probability/slide interactions. Inspect step.process_params dirty-recording guard: it passes undefined c instead of channel.number (source suspicion only; native baseline required before any fix). Build user-like recording scenario with existing locks and edited values, exact MIDI/step playback and undo/persistence. Mask/merge, full random domain, channel/song and quantised scale-switch obligations remain.",
+  "next_action": "Candidate0070 reviewed and native validated in D/R with distinct-default replay, all488 units pass. Continue native recording switch-away/return (retained dirty values), wrap/restart/disarm, trigless and CC/NRPN/slide interactions, then undo/persistence/song isolation. Suppression unit uses fake recorder and does not close clock-driven switch behavior. Full manual/emulator gates remain incomplete.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -132,5 +132,6 @@
   "review": "01a083c2-e074-7af0-ad2a-4cf60ee1eac3",
   "quantised_validation": "docs/testing/quantised-fixed-validation.json",
   "stock_lock_validation": "docs/testing/stock-pitch-lock-validation.json",
-  "probability_validation": "docs/testing/probability-validation.json"
+  "probability_validation": "docs/testing/probability-validation.json",
+  "live_recording_validation": "docs/testing/live-parameter-recording-validation.json"
 }

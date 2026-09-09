@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "176f0b611e509a5429394c3e55c77f77169a0e134fa46a0f81da68294d0897be",
+  "manual_sha256": "716953399b67524f422339bafe588268ba29c059f1880ed6c2bd090a103f3602",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -159,7 +159,7 @@
       "level": 3,
       "start_line": 235,
       "end_line": 262,
-      "text_sha256": "61a135ae4c4df1edcc447632263c92253edacc7332289ff9fec146b5430ba743",
+      "text_sha256": "464bde8cf3eab1a0620b542d6c7ab505f16112719b561253f58f86b014b10574",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "REC-LIVE-NOTES",
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "176f0b611e509a5429394c3e55c77f77169a0e134fa46a0f81da68294d0897be"
+      "sha256": "716953399b67524f422339bafe588268ba29c059f1880ed6c2bd090a103f3602"
     },
     {
       "path": "cheat_sheet.html",
@@ -2460,7 +2460,8 @@
         "M-PARAM-022",
         "M-PARAM-023",
         "M-PARAM-024",
-        "M-PARAM-025"
+        "M-PARAM-025",
+        "M-REC-PARAM-001"
       ],
       "status": "in_progress",
       "domain": "-1/0/1/63/126/127 and bounds; each configured CC; repeated edits.",
@@ -3319,7 +3320,8 @@
         "M-PARAM-022",
         "M-PARAM-023",
         "M-PARAM-024",
-        "M-PARAM-025"
+        "M-PARAM-025",
+        "M-REC-PARAM-001"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -6186,9 +6188,11 @@
       "sections": [
         "MAN-013"
       ],
-      "statement": "First edited parameter begins lock recording through song-pattern end; subsequent edit resumes recording.",
-      "cases": [],
-      "status": "unimplemented",
+      "statement": "Edited parameter values record on subsequent eligible selected-channel steps through its final step; wrapping clears pending recording before the starting step, and an edit restarts it.",
+      "cases": [
+        "M-REC-PARAM-001"
+      ],
+      "status": "in_progress",
       "domain": "Every slot; existing locks overwritten only in interval; reset/sequence change; edit exactly at end; disarm.",
       "oracles": [
         "Exact CC trajectory and lock presence per step, including silent/no-edit windows."
@@ -6200,8 +6204,8 @@
       "source": {
         "path": "README.md",
         "line": 241,
-        "text": "Changes to trig parameters are also recorded on the active channel. Recording begins the first time a trig parameter is modified. During recording, all parameter values are saved as trig locks, overwriting existing locks until the end of the current song pattern. Recording resumes automatically when a trig parameter is adjusted again using the encoder.",
-        "sha256": "22ee9c5b4395ec2da6131c286e357976450cffdd6c3e332ca143c4459ce948d3",
+        "text": "While recording is armed, editing a trig parameter starts recording that parameter\u2019s value on subsequent eligible steps processed for the selected channel. Already-processed steps are unchanged. Only edited parameters are recorded, overwriting their existing locks through the channel\u2019s final step; recording clears before its next starting step is processed while the channel remains selected. Further encoder edits update or restart recording. Grid Stop or disarm clears pending parameter recording.",
+        "sha256": "bec0f7c83e7bb660b328fa2fa4085482ee5bb90e499b8914f84aae15627367d4",
         "end_line": 241
       }
     },
@@ -6224,8 +6228,8 @@
       "source": {
         "path": "README.md",
         "line": 243,
-        "text": "By default, trig locks are recorded only on active steps. However, if the Trigless Param setting is enabled, parameter values will be recorded on every step.",
-        "sha256": "3f298103946e1be6f5540e98189535d9420621f70e437cffbeb2bba2749cf1a9",
+        "text": "With Trigless Param off, parameter values are recorded only on active steps. When it is on, every step is eligible. Trigless Locks is enabled by default.",
+        "sha256": "580eed81393a7fb38a91e1f6f819fcd42311e8c00f667ce9146cfc7d8c07f53f",
         "end_line": 243
       }
     },

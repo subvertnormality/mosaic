@@ -304,3 +304,50 @@ def probability_midi_locks(c,trigless=True,nrpn=False):
     finally:c.action(type='grid',x=4,y=4,state=0)
     c.elapse(.15)
     phase([1,2,4],[4],'step-probability100-keeps-lock-before-note')
+
+
+def live_parameter_recording(c):
+    from cases import assign_trig_parameter,menu_value
+    from patch_params import open_patch_control,turn
+    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
+    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    for step,value in [(1,24),(3,96)]:
+        c.action(type='grid',x=step,y=4,state=1)
+        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
+        finally:c.action(type='grid',x=step,y=4,state=0)
+    c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2) # Four seconds per step.
+    c.tap(2,8) # Native recording arm.
+    before=c.snapshot()['midi_count'];c.tap(1,8)
+    def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
+    first=c.wait(lambda state:len(notes(state))==1)
+    assert notes(first)[0]['bytes']==[144,60,127]
+    cc=[e['bytes'] for e in first['midi'] if e['index']>before and e['bytes'][0]==176]
+    assert cc==[[176,1,63],[176,1,24]],cc # Stored patch recall precedes first lock.
+    c.elapse(.5)
+    edited_after=c.snapshot()['midi_count'];c.enc(3,1) # Authored default63 ->64.
+    state=c.wait(lambda state:len(notes(state))>=4,timeout=14)
+    captured=[e for e in state['midi'] if e['index']>edited_after and e['bytes'][0]==176]
+    actual=[(e['port'],e['bytes']) for e in captured]
+    c.results.append(dict(kind='live-parameter-recording-dirty-value',expected=[(1,[176,1,64])],actual=actual,meaning='Manual edit is sent immediately; old locks cannot overwrite it while recording their replacements.'))
+    assert actual==[(1,[176,1,64])],dict(expected=[(1,[176,1,64])],actual=actual)
+    assert [e['bytes'] for e in notes(state)]==[[144,n,v] for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[]);c.tap(2,8)
+    c.key(1);menu_value(c,'64');c.key(1)
+    c.enc(3,1) # Change default to65: output64 must now come from stored locks.
+    c.key(1);menu_value(c,'65');c.key(1)
+    # Disarmed playback proves the future steps were actually recorded, not
+    # merely suppressed during the recording pass. Step1 already sounded before
+    # the edit; steps2..4 receive64 through the end of this channel cycle.
+    before=c.snapshot()['midi_count']
+    played=c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=36,settle_seconds=30)
+    cc=[e for e in c.snapshot()['midi'] if e['index']>before and e['bytes'][0]==176]
+    expected=[24,64,64,64]*2+[24]
+    assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in [65]+expected]
+    cc=cc[1:] # Stored patch recall is separate from per-step lock dispatch.
+    assert len(cc)==len(played)
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    for control,note in zip(cc,played):
+        assert control['index']<note['index']
+        assert abs((control[field]-note[field])/1e9)<=tolerance
+    c.results.append(dict(kind='recorded-parameter-disarmed-replay',values=expected,distinct_patch_default=65,passed=True))

@@ -1738,3 +1738,39 @@ function test_quantised_fixed_legal_pitch_domain_independent_intervals()
     end
   end
 end
+
+
+function test_live_parameter_recording_guard_channel_and_slot_isolation()
+  setup()
+  local old_recorder=recorder
+  recorder={trig_lock_is_dirty=function(channel,slot)
+    return (channel==1 or channel==2) and slot==1
+  end}
+  local ok,err=pcall(function()
+    for c=1,2 do
+      local channel=program.get_channel(1,c)
+      channel.trig_lock_params={}
+      program.get().devices[c].midi_channel=c
+      for slot=1,(c==1 and 2 or 1) do
+        local id="record_guard_"..c.."_"..slot
+        channel.trig_lock_params[slot]={id=id,param_id=id,type="midi",cc_msb=slot,cc_min_value=0,cc_max_value=127,off_value=-1}
+        params:set(id,64)
+        program.add_step_param_trig_lock_to_channel(channel,1,slot,c==1 and slot*24 or 96)
+      end
+    end
+    local one=program.get_channel(1,1)
+    local two=program.get_channel(1,2)
+    program.get().selected_channel=1;params:set("record",2)
+    midi_cc_events={};step.process_params(one,1);step.process_params(two,1)
+    luaunit.assert_equals(midi_cc_events,{{2,48,1},{1,96,2}})
+    -- Dirty flags retained on another channel must not suppress its playback.
+    program.get().selected_channel=2
+    midi_cc_events={};step.process_params(one,1);step.process_params(two,1)
+    luaunit.assert_equals(midi_cc_events,{{1,24,1},{2,48,1}})
+    params:set("record",1)
+    midi_cc_events={};step.process_params(one,1);step.process_params(two,1)
+    luaunit.assert_equals(midi_cc_events,{{1,24,1},{2,48,1},{1,96,2}})
+  end)
+  recorder=old_recorder
+  if not ok then error(err) end
+end

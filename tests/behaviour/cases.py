@@ -2780,9 +2780,10 @@ from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_p
 
 from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrpn_slide,patch_configured_off_lock
 
-from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks
+from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
 CASES={
+ 'M-REC-PARAM-001':dict(run=live_parameter_recording,requirements=['REC-PARAM-AUTOMATION','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Live encoder recording holds the edited CC value against old locks, records future steps, and replays exact locks before notes after disarming'),
  'M-PARAM-022':dict(run=lambda c:probability_midi_locks(c,trigless=True,nrpn=False),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=True, NRPN=False; exact lock bytes/timing and step100 lock-before-note'),
  'M-PARAM-023':dict(run=lambda c:probability_midi_locks(c,trigless=False,nrpn=False),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=False, NRPN=False; exact lock bytes/timing and step100 lock-before-note'),
  'M-PARAM-024':dict(run=lambda c:probability_midi_locks(c,trigless=True,nrpn=True),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=True, NRPN=True; exact lock bytes/timing and step100 lock-before-note'),
