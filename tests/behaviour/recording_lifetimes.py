@@ -264,3 +264,63 @@ def recording_stop_safety(c):
     assert cc==[(1,[176,1,v]) for v in [66,24,65]],dict(actual=cc,meaning='Stop retains arm: new step-2 edit survives disarmed replay with a different default')
     long_stop()
     c.results.append(dict(kind='recording-stop-safety-long-press-restart',record_arm_retained=True,first_lock=24,recorded_step2=64,untouched_step3=96,new_recorded_step2=65,replay_default=66,passed=True))
+
+
+def recording_ten_slots(c):
+    from cases import assign_trig_parameter
+    c.configure();c.enc(1,-3)
+    for slot in range(1,11):
+        if slot>1:c.enc(2,1)
+        assign_trig_parameter(c,'CC '+str(slot))
+        for step,value in [(1,slot),(3,slot+16)]:
+            c.action(type='grid',x=step,y=4,state=1)
+            try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
+            finally:c.action(type='grid',x=step,y=4,state=0)
+    c.enc(2,-9);c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2)
+    c.tap(2,8);before=c.snapshot()['midi_count'];c.tap(1,8)
+    def notes(s):return [e for e in s['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
+    def controls(s,marker):return [e for e in s['midi'] if e['index']>marker and e['bytes'][0]&240==176]
+    first=c.wait(lambda s:len(notes(s))==1)
+    assert [(e['port'],e['bytes']) for e in controls(first,before)]==[(1,[176,slot,slot]) for slot in range(1,11)]
+    selected=1
+    def edit_slots(slots,value):
+        nonlocal selected
+        for slot in slots:
+            if slot!=selected:c.enc(2,slot-selected);selected=slot
+            c.enc(3,value+1) # Each previously unedited default starts at Off=-1.
+    edit_slots(range(1,11,2),0)
+    assert len(notes(c.snapshot()))==1,'Odd-slot edit batch missed step2 deadline'
+    marker=c.snapshot()['midi_count'];second=c.wait(lambda s:len(notes(s))>=2,timeout=5)
+    second_cc=controls(second,marker)
+    assert [(e['port'],e['bytes']) for e in second_cc]==[(1,[176,slot,0]) for slot in range(1,11,2)]
+    edit_slots(range(2,11,2),1)
+    assert len(notes(c.snapshot()))==2,'Even-slot edit batch missed step3 deadline'
+    marker=c.snapshot()['midi_count'];state=c.wait(lambda s:len(notes(s))>=4,timeout=9)
+    ons=notes(state);assert [(e['port'],e['bytes']) for e in ons]==[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    cc=controls(state,marker)
+    expected=[(1,[176,slot,0 if slot%2 else 1]) for _ in (3,4) for slot in range(1,11)]
+    assert [(e['port'],e['bytes']) for e in cc]==expected,dict(actual=cc,expected=expected)
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    for i,note in enumerate(ons):assert abs((note[field]-ons[0][field])/1e9-4*i)<=tolerance
+    for event,i in [(e,1) for e in second_cc]+[(e,2+j//10) for j,e in enumerate(cc)]:
+        assert event['index']<ons[i]['index']
+        assert abs((event[field]-ons[0][field])/1e9-4*i)<=tolerance
+    c.tap(1,8);c.wait(lambda s:not s['midi_capture']['outstanding']);c.tap(2,8)
+    # Give every patch default a distinct value2, proving replay uses stored locks.
+    for slot in range(1,11):
+        if slot!=selected:c.enc(2,slot-selected);selected=slot
+        c.enc(3,2 if slot%2 else 1)
+    start=c.snapshot()['midi_count']
+    played=c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=36,settle_seconds=30)
+    cc=controls(c.snapshot(),start)
+    expected=[(1,[176,slot,2]) for slot in range(1,11)]
+    for step in [1,2,3,4]*2+[1]:
+        for slot in range(1,11):
+            value=slot if step==1 else (0 if slot%2 else (2 if step==2 else 1))
+            expected.append((1,[176,slot,value]))
+    assert [(e['port'],e['bytes']) for e in cc]==expected,dict(actual=cc,expected=expected)
+    for j,event in enumerate(cc[10:]):
+        i=j//10;assert event['index']<played[i]['index']
+        assert abs((event[field]-played[0][field])/1e9-4*i)<=tolerance
+    c.results.append(dict(kind='ten-slot-recording-staggered-zero-one',slots=10,odd_edit_before_step=2,even_edit_before_step=3,distinct_default=2,cycles=2,passed=True))

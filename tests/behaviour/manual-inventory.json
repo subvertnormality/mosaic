@@ -6273,7 +6273,8 @@
         "M-REC-PARAM-020",
         "M-REC-PARAM-021",
         "M-REC-PARAM-022",
-        "M-REC-PARAM-023"
+        "M-REC-PARAM-023",
+        "M-REC-PARAM-024"
       ],
       "status": "in_progress",
       "domain": "Every slot; existing locks overwritten only in interval; reset/sequence change; edit exactly at end; disarm.",
