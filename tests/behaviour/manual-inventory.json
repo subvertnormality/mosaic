@@ -2449,7 +2449,8 @@
         "M-XA-004-JF-OVERLAP",
         "M-XA-003-JF-OWNERSHIP",
         "M-XA-002-AUDIO",
-        "M-XA-001-JF"
+        "M-XA-001-JF",
+        "M-SHUFFLE-008"
       ],
       "status": "partial-domain-coverage",
       "domain": "Configured generic CC/named MIDI devices; every virtual port/channel; unassigned and missing devices.",
@@ -3330,7 +3331,8 @@
         "M-SHUFFLE-004",
         "M-SHUFFLE-005",
         "M-SHUFFLE-006",
-        "M-SHUFFLE-007"
+        "M-SHUFFLE-007",
+        "M-SHUFFLE-008"
       ],
       "status": "partial-domain-coverage",
       "domain": "All legal feel/basis options; differing channels; tempo/division interactions.",
@@ -3359,7 +3361,8 @@
       "cases": [
         "M-SHUFFLE-005",
         "M-SHUFFLE-006",
-        "M-SHUFFLE-007"
+        "M-SHUFFLE-007",
+        "M-SHUFFLE-008"
       ],
       "status": "partial-domain-coverage",
       "domain": "Local/X transitions; global edit with mixed overrides; before/on/after reset.",

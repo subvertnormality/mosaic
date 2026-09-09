@@ -2833,7 +2833,10 @@ from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,
 
 from shuffle_inheritance import shuffle_type_inheritance,live_shuffle_type_inheritance
 
+from shuffle_mixed_channels import mixed_shuffle_inheritance
+
 CASES={
+ 'M-SHUFFLE-008':dict(run=mixed_shuffle_inheritance,requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT','CH-DEVICE'],description='Simultaneous inheriting and explicit Swing channels across global Shuffle/Swing/Shuffle edits, independent MIDI routing, phase and gates'),
  'M-SHUFFLE-007':dict(run=lambda c:live_shuffle_type_inheritance(c,override=True),requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Live explicit Swing override retains inherited Shuffle until the global boundary, then preserves straight phase and complete gates'),
  'M-SHUFFLE-006':dict(run=live_shuffle_type_inheritance,requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Live restoration of X waits for the global boundary rather than the shorter channel loop, with complete MIDI gates and exact phase'),
  'M-SHUFFLE-005':dict(run=shuffle_type_inheritance,requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Untouched and explicitly restored inheritance follow global Shuffle; local Swing and Shuffle overrides preserve exact MIDI gates and phase'),
