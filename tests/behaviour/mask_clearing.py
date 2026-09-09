@@ -1,8 +1,10 @@
 """Manual mask-clear gestures, neighbouring-step isolation and MIDI oracles."""
 
-def mask_clear_attributes(c,attribute,defaults=False,other_channel=False):
+def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_slot=1):
     from cases import assert_durations
     selection,turns={'note':(0,[73,75]),'velocity':(1,[91,81]),'length':(2,[8,15]),'trig':(-1,[1,1]),'chord':(3,[2,4])}[attribute]
+    assert 1 <= chord_slot <= 4
+    if attribute == "chord":selection += chord_slot - 1
     c.configure()
     if other_channel:
         assert defaults and attribute in ('note','trig')
@@ -70,7 +72,7 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False):
         for i,note in enumerate(notes):
             elapsed=((i//len(phrase))*4+positions[i%len(phrase)]-positions[0])/6
             assert abs((note[field]-notes[0][field])/1e9-elapsed)<=tolerance
-        c.results.append(dict(kind='mask-clear-attribute',attribute=attribute,defaults=defaults,stage=stage,active_step_overrides=sorted(active),expected_phrase=phrase,expected_lengths=lengths,passed=True))
+        c.results.append(dict(kind='mask-clear-attribute',attribute=attribute,chord_slot=chord_slot,defaults=defaults,stage=stage,active_step_overrides=sorted(active),expected_phrase=phrase,expected_lengths=lengths,passed=True))
     verify({1,2},'both-step-overrides')
     for stage in ('clear-first-step','repeat-clear-first-step'):
         c.action(type='grid',x=1,y=4,state=1)
