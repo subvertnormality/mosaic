@@ -338,3 +338,45 @@ function test_step_parameter_lock_preserves_off_outside_active_range()
     end
   end
 end
+
+function test_clock_type_all_legal_inheritance_pairs()
+  setup()
+  local channel = program.get_channel(1, 1)
+  for global_type = 1, 2 do
+    params:set("global_swing_shuffle_type", global_type)
+    channel.swing_shuffle_type = nil
+    luaunit.assert_equals(program.get_effective_swing_shuffle_type(channel), global_type)
+    luaunit.assert_nil(channel.swing_shuffle_type)
+    for local_type = 0, 2 do
+      channel.swing_shuffle_type = local_type
+      local expected = local_type == 0 and global_type or local_type
+      luaunit.assert_equals(program.get_effective_swing_shuffle_type(channel), expected)
+      luaunit.assert_equals(channel.swing_shuffle_type, local_type)
+    end
+  end
+end
+
+function test_clock_type_inheritance_tracks_global_changes_without_mutation()
+  setup()
+  local channel = program.get_channel(1, 1)
+  channel.swing_shuffle_type = 0
+  for _, global_type in ipairs({2, 1, 2}) do
+    params:set("global_swing_shuffle_type", global_type)
+    luaunit.assert_equals(program.get_effective_swing_shuffle_type(channel), global_type)
+    luaunit.assert_equals(channel.swing_shuffle_type, 0)
+  end
+end
+
+function test_clock_type_overrides_are_isolated_across_channels_and_songs()
+  setup()
+  local a = program.get_channel(1, 1)
+  local b = program.get_channel(1, 2)
+  local c = program.get_channel(2, 1)
+  a.swing_shuffle_type, b.swing_shuffle_type, c.swing_shuffle_type = 0, 1, 2
+  for global_type = 1, 2 do
+    params:set("global_swing_shuffle_type", global_type)
+    luaunit.assert_equals(program.get_effective_swing_shuffle_type(a), global_type)
+    luaunit.assert_equals(program.get_effective_swing_shuffle_type(b), 1)
+    luaunit.assert_equals(program.get_effective_swing_shuffle_type(c), 2)
+  end
+end

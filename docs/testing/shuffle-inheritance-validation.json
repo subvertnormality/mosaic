@@ -1,0 +1,299 @@
+{
+  "candidate": "0085",
+  "status": "scoped-candidate-validated",
+  "base": "adb94019740b0376c3a1741e4db1391c71bdc0ec",
+  "production_patch_sha256": "4c56ab28aa532f67db7fce9401c119031e5fc6fd612ac8c86b0dd43a5aeb4c7e",
+  "native_runs": [
+    {
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a68249963e124ae0a57a2220b7ad2001/manifest.json",
+      "sha256": "2cc3e2c04fb17a7fa85a535373f3612cc5a16ddab45fd34b932c768b58c65f98",
+      "stages": [
+        {
+          "kind": "shuffle-type-inheritance",
+          "stage": "untouched-X",
+          "expected_pulses": [
+            0,
+            16,
+            32,
+            48,
+            96,
+            112,
+            128,
+            144,
+            192,
+            208,
+            224,
+            240,
+            288,
+            304,
+            320,
+            336,
+            384
+          ],
+          "onsets": 17,
+          "release_pairs": 17,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-type-inheritance",
+          "stage": "local-Swing",
+          "expected_pulses": [
+            0,
+            24,
+            48,
+            72,
+            96,
+            120,
+            144,
+            168,
+            192,
+            216,
+            240,
+            264,
+            288,
+            312,
+            336,
+            360,
+            384
+          ],
+          "onsets": 17,
+          "release_pairs": 17,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-type-inheritance",
+          "stage": "explicit-X-from-Swing",
+          "expected_pulses": [
+            0,
+            16,
+            32,
+            48,
+            96,
+            112,
+            128,
+            144,
+            192,
+            208,
+            224,
+            240,
+            288,
+            304,
+            320,
+            336,
+            384
+          ],
+          "onsets": 17,
+          "release_pairs": 17,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-type-inheritance",
+          "stage": "local-Shuffle",
+          "expected_pulses": [
+            0,
+            16,
+            32,
+            48,
+            96,
+            112,
+            128,
+            144,
+            192,
+            208,
+            224,
+            240,
+            288,
+            304,
+            320,
+            336,
+            384
+          ],
+          "onsets": 17,
+          "release_pairs": 17,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-type-inheritance",
+          "stage": "explicit-X-from-Shuffle",
+          "expected_pulses": [
+            0,
+            16,
+            32,
+            48,
+            96,
+            112,
+            128,
+            144,
+            192,
+            208,
+            224,
+            240,
+            288,
+            304,
+            320,
+            336,
+            384
+          ],
+          "onsets": 17,
+          "release_pairs": 17,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/fbe552b576654612afb0a0709dbe59ed/manifest.json",
+      "sha256": "459eeadcbb40deb4e5a6508e2506b7e7d19731f11c754a0950c61bc8375643c1",
+      "stages": [
+        {
+          "kind": "shuffle-type-inheritance",
+          "stage": "untouched-X",
+          "expected_pulses": [
+            0,
+            16,
+            32,
+            48,
+            96,
+            112,
+            128,
+            144,
+            192,
+            208,
+            224,
+            240,
+            288,
+            304,
+            320,
+            336,
+            384
+          ],
+          "onsets": 17,
+          "release_pairs": 17,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-type-inheritance",
+          "stage": "local-Swing",
+          "expected_pulses": [
+            0,
+            24,
+            48,
+            72,
+            96,
+            120,
+            144,
+            168,
+            192,
+            216,
+            240,
+            264,
+            288,
+            312,
+            336,
+            360,
+            384
+          ],
+          "onsets": 17,
+          "release_pairs": 17,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-type-inheritance",
+          "stage": "explicit-X-from-Swing",
+          "expected_pulses": [
+            0,
+            16,
+            32,
+            48,
+            96,
+            112,
+            128,
+            144,
+            192,
+            208,
+            224,
+            240,
+            288,
+            304,
+            320,
+            336,
+            384
+          ],
+          "onsets": 17,
+          "release_pairs": 17,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-type-inheritance",
+          "stage": "local-Shuffle",
+          "expected_pulses": [
+            0,
+            16,
+            32,
+            48,
+            96,
+            112,
+            128,
+            144,
+            192,
+            208,
+            224,
+            240,
+            288,
+            304,
+            320,
+            336,
+            384
+          ],
+          "onsets": 17,
+          "release_pairs": 17,
+          "passed": true
+        },
+        {
+          "kind": "shuffle-type-inheritance",
+          "stage": "explicit-X-from-Shuffle",
+          "expected_pulses": [
+            0,
+            16,
+            32,
+            48,
+            96,
+            112,
+            128,
+            144,
+            192,
+            208,
+            224,
+            240,
+            288,
+            304,
+            320,
+            336,
+            384
+          ],
+          "onsets": 17,
+          "release_pairs": 17,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "unit_integration": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-705c23b689cd44e6b4158d903ff0ac7a/results.json",
+    "sha256": "0481afd268ca1d4f0ad82f991bbd3a27140fafaa332bbb4477861958ba7efbac",
+    "summary": "Ran 516 tests in 12.576 seconds, 516 successes, 0 failures"
+  },
+  "baselines": [
+    "/home/andy/projects/mosaic-behaviour-runs/66bdce67f8cb459e8597ce1a1f882719/manifest.json",
+    "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-503a8cd72429408d8cb8287b1d10c9f4/results.json"
+  ],
+  "decision": "Zero is the UI inheritance sentinel, like an unset nil value; only positive local Swing/Shuffle modes override global settings. This matches the manual and sibling effective-value getters.",
+  "review_scope": "Routine minimal defect correction under the local runbook; no new independent Paranoia review claimed. Broader clock-interaction review remains with its checkpoint.",
+  "limitations": [
+    "Five stopped-edit round trips verified in each clock mode; live boundary application and global edits with mixed overrides remain",
+    "Unit matrix exhausts eight legal type combinations, not all clock-setting interactions",
+    "Full campaign, emulator release and mandatory final hardening incomplete"
+  ],
+  "full_campaign_complete": false
+}

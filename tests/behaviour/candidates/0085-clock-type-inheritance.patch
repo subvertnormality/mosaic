@@ -1,0 +1,13 @@
+diff --git a/lib/models/program.lua b/lib/models/program.lua
+index ea987f4..d2f7d4a 100644
+--- a/lib/models/program.lua
++++ b/lib/models/program.lua
+@@ -755,7 +755,7 @@ function program.set_chord_four_mask(channel, mask)
+ end
+ 
+ function program.get_effective_swing_shuffle_type(channel)
+-  if channel.swing_shuffle_type ~= nil then
++  if channel.swing_shuffle_type ~= nil and channel.swing_shuffle_type > 0 then
+     return channel.swing_shuffle_type
+   else
+     return params:get("global_swing_shuffle_type")

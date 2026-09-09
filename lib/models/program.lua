@@ -755,7 +755,7 @@ function program.set_chord_four_mask(channel, mask)
 end
 
 function program.get_effective_swing_shuffle_type(channel)
-  if channel.swing_shuffle_type ~= nil then
+  if channel.swing_shuffle_type ~= nil and channel.swing_shuffle_type > 0 then
     return channel.swing_shuffle_type
   else
     return params:get("global_swing_shuffle_type")

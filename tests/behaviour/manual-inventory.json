@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "e949ae319b251492feaa3180962df82f7d9397dcd9e1b1d23fc92f5a8ff35665",
+  "manual_sha256": "ea5f4f25bf8a632b351709fc6d4e82a3c79bbca1330ce646259d0d728b64d3ed",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -663,7 +663,7 @@
       "level": 4,
       "start_line": 675,
       "end_line": 689,
-      "text_sha256": "7726e967387a81de37de9d1e9cd040fd594047281fc24bb5318f21bb7dcd57bc",
+      "text_sha256": "a79bfe24389edd4e5e76d4891fbc34aa684d71ff9385ec4280b221ec92df31a5",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CH-CLOCK-INHERIT",
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "e949ae319b251492feaa3180962df82f7d9397dcd9e1b1d23fc92f5a8ff35665"
+      "sha256": "ea5f4f25bf8a632b351709fc6d4e82a3c79bbca1330ce646259d0d728b64d3ed"
     },
     {
       "path": "cheat_sheet.html",
@@ -3327,7 +3327,8 @@
         "M-SHUFFLE-001",
         "M-SHUFFLE-002",
         "M-SHUFFLE-003",
-        "M-SHUFFLE-004"
+        "M-SHUFFLE-004",
+        "M-SHUFFLE-005"
       ],
       "status": "partial-domain-coverage",
       "domain": "All legal feel/basis options; differing channels; tempo/division interactions.",
@@ -3353,8 +3354,10 @@
         "MAN-050"
       ],
       "statement": "Unset X inherits global swing/shuffle; playing edits apply at reset.",
-      "cases": [],
-      "status": "unimplemented",
+      "cases": [
+        "M-SHUFFLE-005"
+      ],
+      "status": "partial-domain-coverage",
       "domain": "Local/X transitions; global edit with mixed overrides; before/on/after reset.",
       "oracles": [
         "No early application; exact old/new phase schedules and displayed values."
@@ -3367,9 +3370,10 @@
         "path": "README.md",
         "line": 681,
         "end_line": 681,
-        "text": "Note: If a channel's swing/shuffle settings are not set (\"X\"), they will take the global setting which is set on the song editor page global settings page. While playback is running, confirmed changes on this channel page take effect at the next global song-pattern boundary, including a repeat of the same pattern. They do not take effect immediately or at the next step of a shorter channel loop. While stopped, confirmed changes apply immediately.",
-        "sha256": "bd4031d3e4d382ba5c8e014ce8df0410492d9d9b2a3dd6dcba2daf4f88609ee5"
-      }
+        "text": "Note: If a channel's swing/shuffle settings are not set (\"X\"), they will take the global setting which is set on the song editor page global settings page. Selecting \"X\" again after choosing a local Swing or Shuffle mode restores global mode inheritance, just like an untouched channel; choosing either mode explicitly overrides the global mode. While playback is running, confirmed changes on this channel page take effect at the next global song-pattern boundary, including a repeat of the same pattern. They do not take effect immediately or at the next step of a shorter channel loop. While stopped, confirmed changes apply immediately.",
+        "sha256": "625fc91c5679431cd5adccccbb6f591a93d70d3a5844d6dabae1e07a2d0a91c9"
+      },
+      "remaining": "Stopped type round trips added; live boundary, mixed overrides, global edits and other inherited fields still require coverage."
     },
     {
       "id": "MEMORY-RECORD",

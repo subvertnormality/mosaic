@@ -2831,7 +2831,10 @@ from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrp
 
 from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
 
+from shuffle_inheritance import shuffle_type_inheritance
+
 CASES={
+ 'M-SHUFFLE-005':dict(run=shuffle_type_inheritance,requirements=['CH-SHUFFLE','CH-CLOCK-INHERIT'],description='Untouched and explicitly restored inheritance follow global Shuffle; local Swing and Shuffle overrides preserve exact MIDI gates and phase'),
  'M-SHUFFLE-001':dict(run=lambda c:shuffle_matrix(c,'Drunk'),requirements=['CH-SHUFFLE'],description='All six bases and amount boundary/midpoint/restoration for Drunk, exact MIDI phase and complete shuffled gates'),
  'M-SHUFFLE-002':dict(run=lambda c:shuffle_matrix(c,'Smooth'),requirements=['CH-SHUFFLE'],description='All six bases and amount boundary/midpoint/restoration for Smooth, exact MIDI phase and complete shuffled gates'),
  'M-SHUFFLE-003':dict(run=lambda c:shuffle_matrix(c,'Heavy'),requirements=['CH-SHUFFLE'],description='All six bases and amount boundary/midpoint/restoration for Heavy, exact MIDI phase and complete shuffled gates'),
