@@ -3007,10 +3007,14 @@
         "M-MERGE-031",
         "M-MERGE-032",
         "M-MERGE-033",
-        "M-MERGE-034"
+        "M-MERGE-034",
+        "M-MERGE-035",
+        "M-MERGE-036",
+        "M-MERGE-037",
+        "M-MERGE-038"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001. M-MERGE-006 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-007 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native025-027 cover two/three contributors, exact/half/noninteger means, all numeric modes and returnedAverage, with exact MIDI release and phrase timing in both modes. Zero/negative and fractional source lengths remain pending. Native028-030 validate ordinary zero/negative outcomes with exact raw On/Off ordering and release counts in both modes. Arp, delayed strum, simultaneous voices and fractional sources remain separate interaction obligations. Native031/032 validate zero/negative parent arp endpoints, suppression of future ratchets and exact balanced releases across repeated transport in both modes. Delayed strum and simultaneous-voice interactions remain separate. Native033/034 cover zero/negative delayed-strum release deadlines, balanced raw MIDI and repeated transport in both modes. Actual-step/lattice integration covers simultaneous distinct and same-pitch On/Off order; broader native simultaneous-voice cases remain separate.",
+      "domain": "Every option; fractional lengths, wrap, selected pattern and cutoff; Shorter SEM-001. M-MERGE-006 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-007 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native025-027 cover two/three contributors, exact/half/noninteger means, all numeric modes and returnedAverage, with exact MIDI release and phrase timing in both modes. Zero/negative and fractional source lengths remain pending. Native028-030 validate ordinary zero/negative outcomes with exact raw On/Off ordering and release counts in both modes. Arp, delayed strum, simultaneous voices and fractional sources remain separate interaction obligations. Native031/032 validate zero/negative parent arp endpoints, suppression of future ratchets and exact balanced releases across repeated transport in both modes. Delayed strum and simultaneous-voice interactions remain separate. Native033/034 cover zero/negative delayed-strum release deadlines, balanced raw MIDI and repeated transport in both modes. Actual-step/lattice integration covers simultaneous distinct and same-pitch On/Off order; broader native simultaneous-voice cases remain separate. Native035-038 now validate simultaneous distinct/same-pitch zero/negative voices with exact interleaved On/Off order and repeated transport in both modes.",
       "oracles": [
         "Independent resolved duration formula and exact note on/off table; mode LED."
       ],
@@ -3781,10 +3785,14 @@
         "M-PANIC-007",
         "M-PANIC-008",
         "M-MERGE-033",
-        "M-MERGE-034"
+        "M-MERGE-034",
+        "M-MERGE-035",
+        "M-MERGE-036",
+        "M-MERGE-037",
+        "M-MERGE-038"
       ],
       "status": "in_progress",
-      "domain": "0..4 extra voices; each division; scale change before/on/after voice deadline; stop/cancel. Native033/034 cover zero/negative delayed-strum release deadlines, balanced raw MIDI and repeated transport in both modes. Actual-step/lattice integration covers simultaneous distinct and same-pitch On/Off order; broader native simultaneous-voice cases remain separate.",
+      "domain": "0..4 extra voices; each division; scale change before/on/after voice deadline; stop/cancel. Native033/034 cover zero/negative delayed-strum release deadlines, balanced raw MIDI and repeated transport in both modes. Actual-step/lattice integration covers simultaneous distinct and same-pitch On/Off order; broader native simultaneous-voice cases remain separate. Native035-038 now validate simultaneous distinct/same-pitch zero/negative voices with exact interleaved On/Off order and repeated transport in both modes.",
       "oracles": [
         "Ordered pitch/onset/release table including pending scale transition."
       ],

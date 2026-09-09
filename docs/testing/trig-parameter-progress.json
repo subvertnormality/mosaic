@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "0078 strum correction validated with ten native runs,496units and Codex review. Continue fractional source duration path and broader simultaneous-voice native cases, then remaining scale/mask/song and emulator gates.",
+  "next_action": "Native simultaneous035-038 D/R validated. Inspect fractional length domains: keyboard recording writes step length masks, not source-pattern lengths. Next high-value guard is fractional mask precedence over numeric length merging and restore behavior; assess persisted fractional source compatibility separately. Broader manual/emulator gates remain open.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -157,5 +157,6 @@
     "Fractional source lengths: user-created data path and arithmetic/timing"
   ],
   "nonpositive_arp_validation": "docs/testing/nonpositive-arp-validation.json",
-  "negative_strum_validation": "docs/testing/negative-strum-validation.json"
+  "negative_strum_validation": "docs/testing/negative-strum-validation.json",
+  "simultaneous_note_validation": "docs/testing/simultaneous-note-validation.json"
 }
