@@ -89,6 +89,7 @@ tests.reentrant_finish_preserves_replacement=function()
   for i=1,20 do tick() end
   assert(new_calls==1,'Replacement ignored later explicit cancellation')
 end
+recorder=dofile('lib/recorder.lua')
 local manager=dofile('lib/devices/param_manager.lua')
 m_clock=clock
 fn={deep_copy=function(t) local o={};for k,v in pairs(t) do o[k]=v end;return o end}
@@ -100,7 +101,10 @@ tests.reassignment_retires_only_old_parameter=function()
   local channel=assigned_channel();local old_calls=0
   begin(1,1,function() old_calls=old_calls+1 end)
   begin(1,2,function() end);begin(2,1,function() end)
+  recorder.set_trig_lock_dirty(1,1,64);recorder.set_trig_lock_dirty(1,2,48);recorder.set_trig_lock_dirty(2,1,96)
   manager.update_param(1,channel,{id='cc2',index=2},meta)
+  assert(recorder.trig_lock_is_dirty(1,1)==false)
+  assert(recorder.trig_lock_is_dirty(1,2)==48 and recorder.trig_lock_is_dirty(2,1)==96)
   assert(not clock.channel_is_sliding(channel,1),'Reassigned parameter retained old slide')
   assert(clock.channel_is_sliding(channel,2) and clock.channel_is_sliding({number=2},1),'Reassignment cancelled unrelated slide')
   assert(old_calls==0,'Reassignment emitted stale completion')
@@ -111,7 +115,9 @@ end
 tests.same_assignment_preserves_active_slide=function()
   local channel=assigned_channel()
   begin(1,1,function() end)
+  recorder.set_trig_lock_dirty(1,1,64)
   manager.update_param(1,channel,{id='cc1',index=1},meta)
+  assert(recorder.trig_lock_is_dirty(1,1)==64,'Unchanged assignment cleared recording')
   assert(clock.channel_is_sliding(channel,1),'Unchanged assignment cancelled slide')
 end
 tests.unassign_retires_old_slide=function()
@@ -146,6 +152,18 @@ for _,changed in ipairs({false,true}) do
     assert(clock.channel_is_sliding(channel,2),'Mode edit cancelled a different slot')
     assert(channel.trig_lock_params[1].nrpn_lsb_mode==mode)
   end
+end
+tests.automatic_assignment_clears_only_its_channel_recording=function()
+  local channel=assigned_channel()
+  recorder.set_trig_lock_dirty(1,1,64);recorder.set_trig_lock_dirty(1,2,48)
+  recorder.set_trig_lock_dirty(2,1,96)
+  device_map={get_params=function()return {{id='cc2',index=2}} end}
+  fn.find_in_table_by_id=function(values,id)for _,v in ipairs(values) do if v.id==id then return v end end end
+  channel_edit_page_ui={refresh_trig_lock_values=function()end}
+  manager.update_default_params(channel,{id='new',type='midi',device_name='CC',map_params_automatically={'cc2'}})
+  assert(channel.trig_lock_params[1].id=='cc2')
+  for slot=1,10 do assert(recorder.trig_lock_is_dirty(1,slot)==false) end
+  assert(recorder.trig_lock_is_dirty(2,1)==96)
 end
 local failures=0;local count=0
 local names={};for name in pairs(tests) do names[#names+1]=name end;table.sort(names)

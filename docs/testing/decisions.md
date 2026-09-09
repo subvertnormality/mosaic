@@ -162,3 +162,41 @@ Review accepted the narrow guard. Its channel/slot/disarm test uses a fake
 recorder and proves suppression policy, not clock-driven switch recording.
 Strengthen native replay by changing default64 to65 before playback: continued64
 on steps2..4 must then be stored locks. Preserve all failed baseline artifacts.
+
+
+## SEM-010 recording output and lifetime clarification
+
+Codex design arbitration01a0840d-77e7-7673-9e5d-d3da6e68e3e0 and implementation
+review01a08436-219c-76d3-a857-7d208afe58e9 support emitting the retained active
+MIDI value on every eligible recorded step, before notes, through the existing
+parameter action. This resolves the native live96/replay64 discrepancy after
+switching away and returning. Repeated output is intentional; the future-step
+write boundary and stored defaults do not change. The user's explicit Off rule
+overrides the design review's cancellation pseudocode: Off sends nothing and
+does not cancel a running slide. Its final rounded value can precede the nominal
+endpoint; the native Off-slide oracle checks the independently quantized sample
+timeline rather than demanding an extra endpoint emission.
+
+Configuration confirmation already clears device locks and resets assignments
+and defaults, including route-only changes. The first configuration test assumed
+retention and failed; retain bb2f74ced108480994a5b5b9dea9e349 as an oracle defect.
+The corrected test reassigns before wrap to expose stale pending recording.
+Pending changes across an eligible step and subsequent cancellation have their
+own tests. Global channel17 has no MIDI recorder bank: candidate0072 excludes it
+from wrap cleanup instead of inventing a seventeenth bank. Native baseline
+338e7a2cbfd446f58b39ba1c25a69ac0 and real-time07db569c7ab940f7876064f465fda027
+both reproduce the nil-index crash; the actual-lattice integration also fails
+before the isolated guard. Full recording coverage remains an independent gate.
+
+## SEM-011 — MIDI editor selectable intervals
+
+Candidate0073 aligns editor increments with the existing parameter domain:
+an Off sentinel outside the active range adds exactly one selectable interval,
+regardless of the numeric gap. It changes neither saved values nor the existing
+coarse NRPN multiplier. Baseline08dcfc71d3e54533ac196fa63cc0b526 proves the
+configured CC editor skipped63 on its64th detent. The unchanged full native
+integer oracle and independent official-Control forward/reverse tests validate
+the correction. Codex review01a08442-1d6d-79a1-b142-cd77eee475dd found no blocker
+and requested native sparse/custom-Off/singleton UI coverage, recorded separately
+from lower-level domain tests. This is a defect correction, not a numeric project
+migration or a generalisation of the Digitakt NRPN compatibility allowance.

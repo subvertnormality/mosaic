@@ -1,3 +1,4 @@
+local midi_value_domain = include("mosaic/lib/devices/midi_value_domain")
 -- channel_edit_page_ui.lua
 local channel_edit_page_ui = {}
 
@@ -549,6 +550,10 @@ function channel_edit_page_ui.update_channel_config()
     end
   end
 
+  -- Configuration confirmation rebuilds the parameter bank and its actions.
+  for slot = 1, 10 do
+    recorder.clear_trig_lock_dirty(channel.number, slot)
+  end
   program.get().devices[channel.number].midi_device = midi_device and midi_device.value or nil
   program.get().devices[channel.number].midi_channel = midi_channel and midi_channel.value or nil
   program.get().devices[channel.number].device_map = device_m and device_m.id or nil
@@ -638,13 +643,13 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
     total_range = ((p.controlspec.maxval - p.controlspec.minval) / p.controlspec.quantum)
 
     if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
-      p.controlspec.quantum = 1 / (trig_lock_param.nrpn_max_value - trig_lock_param.nrpn_min_value) 
+      p.controlspec.quantum = midi_value_domain.unit_quantum(trig_lock_param.nrpn_min_value, trig_lock_param.nrpn_max_value, trig_lock_param.off_value)
       total_range = p.controlspec.maxval - p.controlspec.minval
     elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.cc_msb then
-      p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
+      p.controlspec.quantum = midi_value_domain.unit_quantum(trig_lock_param.cc_min_value, trig_lock_param.cc_max_value, trig_lock_param.off_value)
       total_range = p.controlspec.maxval - p.controlspec.minval
     elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.type == "midi" then
-      p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
+      p.controlspec.quantum = midi_value_domain.unit_quantum(trig_lock_param.cc_min_value, trig_lock_param.cc_max_value, trig_lock_param.off_value)
       total_range = p.controlspec.maxval - p.controlspec.minval
     end
   elseif p.count then

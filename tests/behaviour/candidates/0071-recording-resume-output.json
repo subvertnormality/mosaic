@@ -1,0 +1,7 @@
+{
+  "status": "scoped-candidate-validated",
+  "baseline": "599e085bfe014dd4942618831a479615",
+  "review": "01a0840d-77e7-7673-9e5d-d3da6e68e3e0",
+  "scope": "Emit retained dirty MIDI value on each eligible selected recording step using current parameter action before notes; clear stale values on assignment/configuration reset. Active values silently cancel conflicting slot slides. Off remains silent and does not cancel slides per explicit user contract.",
+  "validation": "docs/testing/recording-resume-validation.json"
+}

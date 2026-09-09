@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "716953399b67524f422339bafe588268ba29c059f1880ed6c2bd090a103f3602",
+  "manual_sha256": "943fbbec25722ad64f0ec9a0135b9842e2b245b3ae851117b874bff9c33b547d",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -159,7 +159,7 @@
       "level": 3,
       "start_line": 235,
       "end_line": 262,
-      "text_sha256": "464bde8cf3eab1a0620b542d6c7ab505f16112719b561253f58f86b014b10574",
+      "text_sha256": "a48f512977f4d74d1c07e3ac61163a41bd7b209409f619ed36894c616d6f1fc4",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "REC-LIVE-NOTES",
@@ -1507,7 +1507,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "716953399b67524f422339bafe588268ba29c059f1880ed6c2bd090a103f3602"
+      "sha256": "943fbbec25722ad64f0ec9a0135b9842e2b245b3ae851117b874bff9c33b547d"
     },
     {
       "path": "cheat_sheet.html",
@@ -2268,7 +2268,9 @@
         "M-PANIC-011",
         "M-PANIC-012",
         "M-PANIC-013",
-        "M-PANIC-014"
+        "M-PANIC-014",
+        "M-REC-PARAM-004",
+        "M-REC-PARAM-019"
       ],
       "status": "partial",
       "domain": "All source/destination pages; repeated pattern cycles; held inputs across navigation.",
@@ -2386,7 +2388,11 @@
       ],
       "statement": "Select each of16 channels on the channel page.",
       "cases": [
-        "M-CHANNEL-001"
+        "M-CHANNEL-001",
+        "M-REC-PARAM-002",
+        "M-REC-PARAM-004",
+        "M-REC-PARAM-008",
+        "M-REC-PARAM-019"
       ],
       "status": "partial-domain-coverage",
       "domain": "All channels and navigation return; selected vs playing and muted states.",
@@ -2413,7 +2419,13 @@
       ],
       "statement": "Assign a device per scene; retain device settings across song sequences.",
       "cases": [
-        "M-CHANNEL-001"
+        "M-CHANNEL-001",
+        "M-REC-PARAM-013",
+        "M-REC-PARAM-016",
+        "M-REC-PARAM-017",
+        "M-REC-PARAM-018",
+        "M-REC-PARAM-020",
+        "M-REC-PARAM-021"
       ],
       "status": "partial-domain-coverage",
       "domain": "Configured generic CC/named MIDI devices; every virtual port/channel; unassigned and missing devices.",
@@ -3321,7 +3333,31 @@
         "M-PARAM-023",
         "M-PARAM-024",
         "M-PARAM-025",
-        "M-REC-PARAM-001"
+        "M-REC-PARAM-001",
+        "M-REC-PARAM-002",
+        "M-REC-PARAM-003",
+        "M-REC-PARAM-005",
+        "M-REC-PARAM-006",
+        "M-REC-PARAM-007",
+        "M-REC-PARAM-008",
+        "M-REC-PARAM-009",
+        "M-REC-PARAM-010",
+        "M-REC-PARAM-011",
+        "M-REC-PARAM-012",
+        "M-REC-PARAM-013",
+        "M-REC-PARAM-014",
+        "M-REC-PARAM-015",
+        "M-REC-PARAM-016",
+        "M-REC-PARAM-017",
+        "M-REC-PARAM-018",
+        "M-PARAM-026",
+        "M-PARAM-027",
+        "M-REC-PARAM-020",
+        "M-REC-PARAM-021",
+        "M-PARAM-028",
+        "M-PARAM-029",
+        "M-PARAM-030",
+        "M-PARAM-031"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -3354,7 +3390,17 @@
         "M-PATCH-060",
         "M-PATCH-061",
         "M-PATCH-062",
-        "M-PATCH-063"
+        "M-PATCH-063",
+        "M-REC-PARAM-015",
+        "M-REC-PARAM-016",
+        "M-REC-PARAM-017",
+        "M-REC-PARAM-018",
+        "M-PARAM-026",
+        "M-PARAM-027",
+        "M-PARAM-028",
+        "M-PARAM-029",
+        "M-PARAM-030",
+        "M-PARAM-031"
       ],
       "status": "partial-domain-coverage",
       "domain": "No lock/value/off after default or prior lock; first/wrap steps; enter off during a running slide. Existing published cases cover explicit/custom/default Off and uninterrupted slides in both lanes; remaining first/wrap/live-edit combinations remain required.",
@@ -5103,7 +5149,13 @@
       "cases": [
         "M-SPREAD-024",
         "M-SPREAD-025",
-        "M-PATCH-035"
+        "M-PATCH-035",
+        "M-PARAM-026",
+        "M-PARAM-027",
+        "M-PARAM-028",
+        "M-PARAM-029",
+        "M-PARAM-030",
+        "M-PARAM-031"
       ],
       "status": "unimplemented",
       "domain": "All64 steps/10slots; sentinels; no trig/trigless; overwrite; pending playback.",
@@ -5192,7 +5244,9 @@
         "M-PATCH-055",
         "M-PATCH-056",
         "M-PATCH-062",
-        "M-PATCH-063"
+        "M-PATCH-063",
+        "M-REC-PARAM-014",
+        "M-REC-PARAM-015"
       ],
       "status": "in_progress",
       "domain": "All parameters; endpoints equal/up/down; wrap on/off; sequence transition; stopped/play edits.",
@@ -5575,7 +5629,8 @@
         "M-PARAM-022",
         "M-PARAM-023",
         "M-PARAM-024",
-        "M-PARAM-025"
+        "M-PARAM-025",
+        "M-REC-PARAM-003"
       ],
       "status": "in_progress",
       "domain": "Fresh boot vs manual recording prose default; off/on; parameter/mask/slide and probability0.",
@@ -5917,7 +5972,8 @@
       "cases": [
         "M-UI-001",
         "M-UI-002",
-        "M-PATCH-031"
+        "M-PATCH-031",
+        "M-REC-PARAM-010"
       ],
       "status": "in_progress",
       "domain": "Stopped/playing; repeated press/release; protected stop; pending notes; external clock source.",
@@ -5954,7 +6010,9 @@
         "M-REC-028",
         "M-REC-029",
         "M-REC-030",
-        "M-REC-031"
+        "M-REC-031",
+        "M-REC-PARAM-007",
+        "M-REC-PARAM-009"
       ],
       "status": "in_progress",
       "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels.",
@@ -6190,7 +6248,27 @@
       ],
       "statement": "Edited parameter values record on subsequent eligible selected-channel steps through its final step; wrapping clears pending recording before the starting step, and an edit restarts it.",
       "cases": [
-        "M-REC-PARAM-001"
+        "M-REC-PARAM-001",
+        "M-REC-PARAM-002",
+        "M-REC-PARAM-003",
+        "M-REC-PARAM-004",
+        "M-REC-PARAM-005",
+        "M-REC-PARAM-006",
+        "M-REC-PARAM-007",
+        "M-REC-PARAM-008",
+        "M-REC-PARAM-009",
+        "M-REC-PARAM-010",
+        "M-REC-PARAM-011",
+        "M-REC-PARAM-012",
+        "M-REC-PARAM-013",
+        "M-REC-PARAM-014",
+        "M-REC-PARAM-015",
+        "M-REC-PARAM-016",
+        "M-REC-PARAM-017",
+        "M-REC-PARAM-018",
+        "M-REC-PARAM-019",
+        "M-REC-PARAM-020",
+        "M-REC-PARAM-021"
       ],
       "status": "in_progress",
       "domain": "Every slot; existing locks overwritten only in interval; reset/sequence change; edit exactly at end; disarm.",
@@ -6204,8 +6282,8 @@
       "source": {
         "path": "README.md",
         "line": 241,
-        "text": "While recording is armed, editing a trig parameter starts recording that parameter\u2019s value on subsequent eligible steps processed for the selected channel. Already-processed steps are unchanged. Only edited parameters are recorded, overwriting their existing locks through the channel\u2019s final step; recording clears before its next starting step is processed while the channel remains selected. Further encoder edits update or restart recording. Grid Stop or disarm clears pending parameter recording.",
-        "sha256": "bec0f7c83e7bb660b328fa2fa4085482ee5bb90e499b8914f84aae15627367d4",
+        "text": "While recording is armed, editing a trig parameter starts recording that parameter\u2019s value on subsequent eligible steps processed for the selected channel. Already-processed steps are unchanged. Only edited parameters are recorded, overwriting their existing locks through the channel\u2019s final step; recording clears before its next starting step is processed while the channel remains selected. Further encoder edits update or restart recording. Grid Stop or disarm clears pending parameter recording. Active MIDI values are sent again before each eligible step\u2019s note, even when the value has not changed. Selecting another channel or the Scale Editor pauses this parameter recording; returning resumes on the next eligible step unless that step clears recording at the selected channel\u2019s wrap. Wraps while the channel is not selected leave its pending values intact. An active recorded value cancels that slot\u2019s existing slide at the next eligible step. Off sends nothing and leaves an existing slide running. Changing a parameter assignment clears its pending recording; confirming the same assignment preserves it. Applying a MIDI device, channel or port change resets the device locks, assignments, defaults and pending parameter recording. Unconfirmed changes and cancellation leave the original recording intact.",
+        "sha256": "b4587b2595a79da779320d2087e9b7e01c8ff9bd182214ec4f78fbeadd920dbf",
         "end_line": 241
       }
     },
@@ -6228,8 +6306,8 @@
       "source": {
         "path": "README.md",
         "line": 243,
-        "text": "With Trigless Param off, parameter values are recorded only on active steps. When it is on, every step is eligible. Trigless Locks is enabled by default.",
-        "sha256": "580eed81393a7fb38a91e1f6f819fcd42311e8c00f667ce9146cfc7d8c07f53f",
+        "text": "With Trigless Locks off, parameter values are recorded only on active steps. When it is on, every step is eligible. Trigless Locks is enabled by default.",
+        "sha256": "e59c8e5e41b07f712fc62cb329650f86e55fa3eb19d8cc31c22d2e2d17facf1b",
         "end_line": 243
       }
     },

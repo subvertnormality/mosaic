@@ -1,0 +1,8 @@
+{
+  "status": "scoped-candidate-validated",
+  "controlled_baseline": "338e7a2cbfd446f58b39ba1c25a69ac0",
+  "case": "M-REC-PARAM-019",
+  "scope": "Global scale channel17 has no MIDI parameter recorder bank. Restrict wrap clearing to the16 MIDI channels; preserve selected MIDI clearing and nonselected pause retention.",
+  "dependency": "0071",
+  "validation": "docs/testing/recording-resume-validation.json"
+}

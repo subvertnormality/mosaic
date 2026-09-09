@@ -1774,3 +1774,47 @@ function test_live_parameter_recording_guard_channel_and_slot_isolation()
   recorder=old_recorder
   if not ok then error(err) end
 end
+
+
+function test_recorded_midi_output_uses_dirty_action_and_preserves_off_slide()
+  setup()
+  -- Test includes create distinct modules; spy on the actual clock dependency.
+  local dependency_clock
+  for i=1,20 do
+    local name,value=debug.getupvalue(step.process_recording_params,i)
+    if name=="m_clock" then dependency_clock=value;break end
+  end
+  assert(dependency_clock)
+  local old_recorder,old_cancel=recorder,dependency_clock.cancel_spread_actions_for_channel_trig_lock
+  local dirty={[1]=0,[2]=-1,[3]=253,[4]=false,[5]=64,[6]=200}
+  recorder={trig_lock_is_dirty=function(_,slot)return dirty[slot] end}
+  local sent,cancelled={},{}
+  dependency_clock.cancel_spread_actions_for_channel_trig_lock=function(c,slot)
+    cancelled[#cancelled+1]={c,slot}
+  end
+  local ok,err=pcall(function()
+    local channel=program.get_channel(1,1)
+    channel.trig_lock_params={
+      {type="midi",param_id="out1",cc_msb=1,off_value=-1},
+      {type="midi",param_id="out2",cc_msb=2},
+      {type="midi",param_id="out3",nrpn_msb=4,nrpn_lsb=5},
+      {type="midi",param_id="out4",cc_msb=4},
+      {type="midi",param_id="out5",id="fixed_note"},
+      {type="midi",param_id="out6",cc_msb=6,off_value=200}}
+    for i=1,6 do
+      local slot=i;params:set("out"..i,65)
+      params:lookup_param("out"..i).action=function(value)sent[#sent+1]={slot,value} end
+    end
+    program.get().selected_channel=1;params:set("record",2)
+    step.process_recording_params(channel)
+    luaunit.assert_equals(sent,{{1,0},{3,253}})
+    luaunit.assert_equals(cancelled,{{1,1},{1,3}})
+    for i=1,6 do luaunit.assert_equals(params:get("out"..i),65) end
+    sent={};cancelled={};channel.mute=true;step.process_recording_params(channel)
+    channel.mute=false;program.get().selected_channel=2;step.process_recording_params(channel)
+    program.get().selected_channel=1;params:set("record",1);step.process_recording_params(channel)
+    luaunit.assert_equals(sent,{});luaunit.assert_equals(cancelled,{})
+  end)
+  recorder=old_recorder;dependency_clock.cancel_spread_actions_for_channel_trig_lock=old_cancel
+  if not ok then error(err) end
+end

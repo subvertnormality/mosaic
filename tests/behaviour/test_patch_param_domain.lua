@@ -17,6 +17,8 @@ function autosave_reset()edits=edits+1 end
 _menu={rebuild_params=function()end}
 local stock={{id="none"}}
 device_map={get_stock_params=function()return stock end}
+-- Policy fixture only; MIDI emission and project persistence are separate native tests.
+program={get=function()return {nrpn_policy_version=1,nrpn_stored_modes={}} end}
 local sent={}
 m_midi={cc=function(...)sent[#sent+1]={...} end,nrpn=function(...)sent[#sent+1]={...} end}
 local manager=include("mosaic/lib/devices/param_manager");manager.init()
@@ -53,3 +55,27 @@ p=params:lookup_param("midi_device_params_channel_1_2");local count=#sent;p:delt
 stock={{id="none"}};p=configure(100,127,200);p:set(100);count=#sent
 manager.add_device_params(1,nil,1,1,true);assert(#sent==count,"Hiding device emitted its previous MIDI action")
 print("PASS actual norns Control/ControlSpec + Mosaic parameter manager: contiguous, sparse, custom-off, singleton, NRPN numeric roundtrip, copying and reuse")
+
+-- Actual official Control objects use the same fine-editor quantum. Expected
+-- values enumerate the configured domain, not the implementation's mapping.
+local domain=include("mosaic/lib/devices/midi_value_domain")
+local positions=0
+for _,bounds in ipairs({{0,127,-1},{100,127,-1},{100,127,200},{100,100,-1},{0,127,64},{0,16383,-1}}) do
+  local minimum,maximum,off=table.unpack(bounds)
+  local control=configure(minimum,maximum,off,maximum>127)
+  control.controlspec.quantum=domain.unit_quantum(minimum,maximum,off)
+  local values={}
+  if off<minimum then values[#values+1]=off end
+  for value=minimum,maximum do values[#values+1]=value end
+  if off>maximum then values[#values+1]=off end
+  control:set(values[1],true)
+  for i=2,#values do
+    control:delta(1);assert(control:get()==values[i],"Editor skipped value "..values[i]);positions=positions+1
+  end
+  control:delta(1);assert(control:get()==values[#values],"Upper clamp")
+  for i=#values-1,1,-1 do
+    control:delta(-1);assert(control:get()==values[i],"Reverse editor skipped value "..values[i]);positions=positions+1
+  end
+  control:delta(-1);assert(control:get()==values[1],"Lower clamp")
+end
+print("PASS editor domain forward/reverse "..positions.." positions, including off and singleton bounds")

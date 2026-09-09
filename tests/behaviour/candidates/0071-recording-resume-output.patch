@@ -1,0 +1,79 @@
+diff --git a/lib/clock/m_clock.lua b/lib/clock/m_clock.lua
+index 765aa29..ebf5795 100644
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -370,6 +370,10 @@ function m_clock.init()
+         step.sinfonian_sync(current_step)
+       else
+         program.set_channel_step_scale_number(channel_number, step.calculate_step_scale_number(channel_number, current_step))
++        -- Recording includes empty trigless steps as well as active trigs.
++        if channel.working_pattern.trig_values[current_step] == 1 or params:get("trigless_locks") == 2 then
++          step.process_recording_params(channel)
++        end
+         -- Resolve parameters for the same step as the note, including startup.
+         -- A single dispatch site prevents duplicate first-step lock messages.
+         if channel.working_pattern.trig_values[current_step] == 1 or
+diff --git a/lib/devices/param_manager.lua b/lib/devices/param_manager.lua
+index c9d1287..a13a5d2 100644
+--- a/lib/devices/param_manager.lua
++++ b/lib/devices/param_manager.lua
+@@ -211,10 +211,12 @@ function param_manager.update_param(index, channel, param, meta_device)
+     -- An active callback belongs to its original parameter, not just the slot.
+     -- Retire silently so it cannot consume the new parameter's destination lock.
+     m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, index)
++    recorder.clear_trig_lock_dirty(channel.number, index)
+   end
+ end
+ 
+ local function safe_set_param(channel, index, param, meta_device)
++  recorder.clear_trig_lock_dirty(channel.number, index)
+   if not channel.trig_lock_params then 
+     channel.trig_lock_params = {} 
+   end
+diff --git a/lib/pages/channel_edit_page/channel_edit_page_ui.lua b/lib/pages/channel_edit_page/channel_edit_page_ui.lua
+index 766f53d..cd8dec5 100644
+--- a/lib/pages/channel_edit_page/channel_edit_page_ui.lua
++++ b/lib/pages/channel_edit_page/channel_edit_page_ui.lua
+@@ -549,6 +549,10 @@ function channel_edit_page_ui.update_channel_config()
+     end
+   end
+ 
++  -- Configuration confirmation rebuilds the parameter bank and its actions.
++  for slot = 1, 10 do
++    recorder.clear_trig_lock_dirty(channel.number, slot)
++  end
+   program.get().devices[channel.number].midi_device = midi_device and midi_device.value or nil
+   program.get().devices[channel.number].midi_channel = midi_channel and midi_channel.value or nil
+   program.get().devices[channel.number].device_map = device_m and device_m.id or nil
+diff --git a/lib/step.lua b/lib/step.lua
+index b852d9f..b46847b 100644
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -118,6 +118,27 @@ local function process_midi_param(param, step_trig_lock, midi_channel, midi_devi
+ end
+ 
+ 
++-- Emit the value that this eligible step will record, not a stale playback
++-- lock. Repeating it also restores sound after selection or mute pauses.
++function step.process_recording_params(channel)
++  local data = program.get()
++  if channel.mute or params:get("record") ~= 2 or data.selected_channel ~= channel.number then return end
++  for i, param in ipairs(channel.trig_lock_params) do
++    local dirty = recorder.trig_lock_is_dirty(channel.number, i)
++    if dirty ~= nil and dirty ~= false and param.type == "midi" and param.param_id and
++        (param.cc_msb ~= nil or (param.nrpn_msb ~= nil and param.nrpn_lsb ~= nil)) then
++      local off = param.off_value == nil and -1 or param.off_value
++      -- Off sends nothing and does not cancel a running slide (user contract).
++      if dirty ~= off then
++        m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, i)
++        local p = params:lookup_param(param.param_id)
++        assert(p and type(p.action) == "function", "Missing MIDI parameter recording action")
++        p.action(dirty)
++      end
++    end
++  end
++end
++
+ function step.process_params(channel, step)
+   local program_data = program.get()
+ 

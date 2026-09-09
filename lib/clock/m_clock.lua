@@ -357,7 +357,8 @@ function m_clock.init()
         program.set_current_step_for_channel(channel_number, start_trig)
         current_step = start_trig
         
-        if params:get("record") == 2 and program.get_selected_channel() == channel then
+        -- The global scale channel has no MIDI parameter recorder bank.
+        if channel_number ~= 17 and params:get("record") == 2 and program.get_selected_channel() == channel then
           for i = 1, 10 do
             recorder.clear_trig_lock_dirty(channel_number, i)
           end
@@ -370,6 +371,10 @@ function m_clock.init()
         step.sinfonian_sync(current_step)
       else
         program.set_channel_step_scale_number(channel_number, step.calculate_step_scale_number(channel_number, current_step))
+        -- Recording includes empty trigless steps as well as active trigs.
+        if channel.working_pattern.trig_values[current_step] == 1 or params:get("trigless_locks") == 2 then
+          step.process_recording_params(channel)
+        end
         -- Resolve parameters for the same step as the note, including startup.
         -- A single dispatch site prevents duplicate first-step lock messages.
         if channel.working_pattern.trig_values[current_step] == 1 or

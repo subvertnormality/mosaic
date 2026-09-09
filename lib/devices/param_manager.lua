@@ -211,10 +211,12 @@ function param_manager.update_param(index, channel, param, meta_device)
     -- An active callback belongs to its original parameter, not just the slot.
     -- Retire silently so it cannot consume the new parameter's destination lock.
     m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, index)
+    recorder.clear_trig_lock_dirty(channel.number, index)
   end
 end
 
 local function safe_set_param(channel, index, param, meta_device)
+  recorder.clear_trig_lock_dirty(channel.number, index)
   if not channel.trig_lock_params then 
     channel.trig_lock_params = {} 
   end

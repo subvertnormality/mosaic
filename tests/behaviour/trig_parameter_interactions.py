@@ -306,15 +306,19 @@ def probability_midi_locks(c,trigless=True,nrpn=False):
     phase([1,2,4],[4],'step-probability100-keeps-lock-before-note')
 
 
-def live_parameter_recording(c):
-    from cases import assign_trig_parameter,menu_value
+def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=False,edit_value=64):
+    from cases import assign_trig_parameter,menu_value,set_mosaic_options
     from patch_params import open_patch_control,turn
-    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
+    c.configure()
+    if empty_step:set_mosaic_options(c,[('Trigless locks',True)])
+    open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
     c.enc(1,-3);assign_trig_parameter(c,'CC 1')
     for step,value in [(1,24),(3,96)]:
         c.action(type='grid',x=step,y=4,state=1)
         try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
         finally:c.action(type='grid',x=step,y=4,state=0)
+    if empty_step:
+        c.tap(5,8);c.tap(3,4);c.tap(3,8) # Remove note3 through pattern editor.
     c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2) # Four seconds per step.
     c.tap(2,8) # Native recording arm.
     before=c.snapshot()['midi_count'];c.tap(1,8)
@@ -324,30 +328,130 @@ def live_parameter_recording(c):
     cc=[e['bytes'] for e in first['midi'] if e['index']>before and e['bytes'][0]==176]
     assert cc==[[176,1,63],[176,1,24]],cc # Stored patch recall precedes first lock.
     c.elapse(.5)
-    edited_after=c.snapshot()['midi_count'];c.enc(3,1) # Authored default63 ->64.
-    state=c.wait(lambda state:len(notes(state))>=4,timeout=14)
+    edited_after=c.snapshot()['midi_count']
+    if edit_value==64:c.enc(3,1)
+    else:
+        assert edit_value in (-1,0)
+        c.action(type='enc',n=3,delta=-126);c.elapse(.15) # Saturate to Off.
+        if edit_value==0:c.enc(3,1)
+    if switch_return:
+        c.tap(4,8) if scale_page else c.tap(2,1) # Pause via global scale editor or channel2.
+        paused=c.wait(lambda state:len(notes(state))>=3,timeout=10)
+        old=[e for e in paused['midi'] if e['index']>edited_after and e['bytes'][0]==176]
+        assert old[-1]['bytes']==[176,1,96],old
+        c.elapse(.3)
+        c.tap(3,8) if scale_page else c.tap(1,1)
+    state=c.wait(lambda state:len(notes(state))>=(3 if empty_step else 4),timeout=14)
     captured=[e for e in state['midi'] if e['index']>edited_after and e['bytes'][0]==176]
     actual=[(e['port'],e['bytes']) for e in captured]
-    c.results.append(dict(kind='live-parameter-recording-dirty-value',expected=[(1,[176,1,64])],actual=actual,meaning='Manual edit is sent immediately; old locks cannot overwrite it while recording their replacements.'))
-    assert actual==[(1,[176,1,64])],dict(expected=[(1,[176,1,64])],actual=actual)
-    assert [e['bytes'] for e in notes(state)]==[[144,n,v] for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    wanted=[] if edit_value==-1 else [(1,[176,1,edit_value])]*4
+    c.results.append(dict(kind='live-parameter-recording-dirty-value',expected=wanted if not switch_return else None,actual=actual,meaning='Active edited values emit immediately and on eligible steps; Off remains silent.'))
+    live_value=actual[-1][1][2] if actual else None
+    if not switch_return:
+        assert actual==wanted,dict(expected=wanted,actual=actual)
+    else:
+        assert actual==[(1,[176,1,v]) for v in [64,64,96,64]],actual
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        assert captured[-1]['index']<notes(state)[-1]['index']
+        assert abs(captured[-1][field]-notes(state)[-1][field])<=(2 if c.clock_mode=='controlled-experimental' else 10000000)
+    phrase=[(60,127),(62,117)]+([] if empty_step else [(64,107)])+[(65,97)]
+    assert [e['bytes'] for e in notes(state)]==[[144,n,v] for n,v in phrase]
     c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[]);c.tap(2,8)
-    c.key(1);menu_value(c,'64');c.key(1)
-    c.enc(3,1) # Change default to65: output64 must now come from stored locks.
+    c.key(1);menu_value(c,'X' if edit_value==-1 else str(edit_value));c.key(1)
+    c.enc(3,65-edit_value) # Distinct default proves stored locks independently.
     c.key(1);menu_value(c,'65');c.key(1)
     # Disarmed playback proves the future steps were actually recorded, not
     # merely suppressed during the recording pass. Step1 already sounded before
     # the edit; steps2..4 receive64 through the end of this channel cycle.
     before=c.snapshot()['midi_count']
-    played=c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=36,settle_seconds=30)
+    played=c.playback([(1,[144,n,v]) for n,v in phrase],cycles=2,timeout=36,settle_seconds=30)
     cc=[e for e in c.snapshot()['midi'] if e['index']>before and e['bytes'][0]==176]
-    expected=[24,64,64,64]*2+[24]
-    assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in [65]+expected]
+    expected=([24,65,96,64] if switch_return else [24,edit_value,edit_value,edit_value])*2+[24]
+    emitted_steps=[i for i,value in enumerate(expected) if value!=-1]
+    assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in [65]+expected if v!=-1]
     cc=cc[1:] # Stored patch recall is separate from per-step lock dispatch.
-    assert len(cc)==len(played)
+    assert len(cc)==len(emitted_steps)
+    assert len(played)==(7 if empty_step else 9)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-    for control,note in zip(cc,played):
+    origin=played[0][field]
+    for i,control in zip(emitted_steps,cc):
+        assert abs((control[field]-origin)/1e9-i*4)<=tolerance,dict(step=i,control=control,origin=origin)
+    note_steps=[i for i in range(9) if not empty_step or i%4!=2]
+    notes_by_step=dict(zip(note_steps,played))
+    for i,control in zip(emitted_steps,cc):
+        if i not in notes_by_step:continue
+        note=notes_by_step[i]
         assert control['index']<note['index']
         assert abs((control[field]-note[field])/1e9)<=tolerance
     c.results.append(dict(kind='recorded-parameter-disarmed-replay',values=expected,distinct_patch_default=65,passed=True))
+    if switch_return:
+        c.results.append(dict(kind='recording-switch-return-live-replay',live_step4_value=live_value,recorded_step4_value=expected[3],passed=live_value==expected[3]))
+        assert live_value==expected[3],dict(live_step4=live_value,recorded_step4=expected[3],meaning='Resumed recorded value must match the value heard at that step')
+
+
+def cc_encoder_domain(c,configured=True):
+    from cases import assign_trig_parameter
+    c.configure()
+    if configured:c.enc(3,1);c.key(3)
+    c.enc(1,-3);assign_trig_parameter(c,'Control 1' if configured else 'CC 1')
+    c.enc(1,2);c.enc(3,-8);c.key(3);c.enc(1,-2) # One-second step avoids host input latency overlap.
+    tested=[]
+    for expected in list(range(128))+[127,-1,0]:
+        c.action(type='grid',x=1,y=4,state=1)
+        try:
+            if expected==-1:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+            else:c.enc(3,1)
+        finally:c.action(type='grid',x=1,y=4,state=0)
+        before=c.snapshot()['midi_count'];c.tap(1,8)
+        def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
+        state=c.wait(lambda state:len(notes(state))>=1)
+        assert [(e['port'],e['bytes']) for e in notes(state)]==[(1,[144,60,127])]
+        cc=[e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==176]
+        wanted=[] if expected==-1 else [(1,[176,1,expected])]
+        actual=[(e['port'],e['bytes']) for e in cc]
+        assert actual==wanted,dict(configured=configured,encoder_detent=len(tested)+1,expected=wanted,actual=actual)
+        if cc:assert cc[0]['index']<notes(state)[0]['index']
+        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+        tested.append(expected)
+    c.results.append(dict(kind='CC-editor-every-detent-native-MIDI',configured=configured,values=tested,includes_clamp_Off_reentry=True,passed=True))
+
+
+def sparse_editor_domain(c,domain):
+    from cases import assign_trig_parameter
+    assert domain in ('SparseLow','SparseHigh','NS0','NS6')
+    c.configure();c.enc(3,1);c.key(3);c.enc(1,-3);assign_trig_parameter(c,domain)
+    c.enc(1,2);c.enc(3,-8);c.key(3);c.enc(1,-2)
+    if domain=='SparseLow':
+        operations=[(1,v) for v in range(100,128)]+[(1,127)]+[(-1,v) for v in range(126,99,-1)]+[(-1,None),(-1,None),(1,100)]
+    elif domain=='SparseHigh':
+        operations=[(1,None)]+[(-1,v) for v in range(127,99,-1)]+[(-1,100)]+[(1,v) for v in range(101,128)]+[(1,None),(1,None),(-1,127)]
+    else:
+        value=0 if domain=='NS0' else 16383
+        operations=[(1,value),(1,value),(-1,None),(-1,None),(1,value)]*2
+    checked=[]
+    for i,(direction,value) in enumerate(operations):
+        fine=i%2==0
+        c.action(type='grid',x=1,y=4,state=1)
+        try:
+            if fine:c.action(type='key',n=1,state=1);c.elapse(.3)
+            try:c.enc(3,direction)
+            finally:
+                if fine:c.action(type='key',n=1,state=0)
+        finally:c.action(type='grid',x=1,y=4,state=0)
+        start=c.snapshot()['midi_count'];c.tap(1,8)
+        def notes(state):return [e for e in state['midi'] if e['index']>start and e['bytes'][0]&240==144 and e['bytes'][2]>0]
+        state=c.wait(lambda state:len(notes(state))>=1)
+        assert [(e['port'],e['bytes']) for e in notes(state)]==[(1,[144,60,127])]
+        cc=[e for e in state['midi'] if e['index']>start and e['bytes'][0]&240==176]
+        if value is None:wanted=[]
+        elif domain.startswith('NS'):
+            address=0 if domain=='NS0' else 6
+            wanted=[(1,[177,99,6]),(1,[177,98,address]),(1,[177,6,value//128]),(1,[177,38,value%128])]
+        else:wanted=[(1,[176,2 if domain=='SparseLow' else 3,value])]
+        actual=[(e['port'],e['bytes']) for e in cc]
+        assert actual==wanted,dict(domain=domain,operation=i,direction=direction,fine=fine,expected=wanted,actual=actual)
+        assert all(e['index']<notes(state)[0]['index'] for e in cc)
+        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+        checked.append(dict(direction=direction,value=value,fine=fine))
+    c.results.append(dict(kind='native-sparse-singleton-editor-domain',domain=domain,operations=checked,clamp_and_Off=True,passed=True))

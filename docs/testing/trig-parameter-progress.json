@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Candidate0070 reviewed and native validated in D/R with distinct-default replay, all488 units pass. Continue native recording switch-away/return (retained dirty values), wrap/restart/disarm, trigless and CC/NRPN/slide interactions, then undo/persistence/song isolation. Suppression unit uses fake recorder and does not close clock-driven switch behavior. Full manual/emulator gates remain incomplete.",
+  "next_action": "0071-0073 scoped candidates reviewed and validated:54native passes,490unit/integration tests,33392official-Control positions. Continue recording StopSafety long-press cleanup, fullten-slot/mute/song/undo/persistence/reset and exact-boundary domains. Broader trig parameters/scale merging/manual and emulator gates remain incomplete; no refactor yet.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
@@ -133,5 +133,6 @@
   "quantised_validation": "docs/testing/quantised-fixed-validation.json",
   "stock_lock_validation": "docs/testing/stock-pitch-lock-validation.json",
   "probability_validation": "docs/testing/probability-validation.json",
-  "live_recording_validation": "docs/testing/live-parameter-recording-validation.json"
+  "live_recording_validation": "docs/testing/live-parameter-recording-validation.json",
+  "recording_resume_validation": "docs/testing/recording-resume-validation.json"
 }

@@ -1,0 +1,12 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -357,7 +357,8 @@
+         program.set_current_step_for_channel(channel_number, start_trig)
+         current_step = start_trig
+         
+-        if params:get("record") == 2 and program.get_selected_channel() == channel then
++        -- The global scale channel has no MIDI parameter recorder bank.
++        if channel_number ~= 17 and params:get("record") == 2 and program.get_selected_channel() == channel then
+           for i = 1, 10 do
+             recorder.clear_trig_lock_dirty(channel_number, i)
+           end

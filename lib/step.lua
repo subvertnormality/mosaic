@@ -118,6 +118,27 @@ local function process_midi_param(param, step_trig_lock, midi_channel, midi_devi
 end
 
 
+-- Emit the value that this eligible step will record, not a stale playback
+-- lock. Repeating it also restores sound after selection or mute pauses.
+function step.process_recording_params(channel)
+  local data = program.get()
+  if channel.mute or params:get("record") ~= 2 or data.selected_channel ~= channel.number then return end
+  for i, param in ipairs(channel.trig_lock_params) do
+    local dirty = recorder.trig_lock_is_dirty(channel.number, i)
+    if dirty ~= nil and dirty ~= false and param.type == "midi" and param.param_id and
+        (param.cc_msb ~= nil or (param.nrpn_msb ~= nil and param.nrpn_lsb ~= nil)) then
+      local off = param.off_value == nil and -1 or param.off_value
+      -- Off sends nothing and does not cancel a running slide (user contract).
+      if dirty ~= off then
+        m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, i)
+        local p = params:lookup_param(param.param_id)
+        assert(p and type(p.action) == "function", "Missing MIDI parameter recording action")
+        p.action(dirty)
+      end
+    end
+  end
+end
+
 function step.process_params(channel, step)
   local program_data = program.get()
 

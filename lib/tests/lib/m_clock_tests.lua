@@ -1613,3 +1613,30 @@ function test_slide_replacement_under_legacy_module_reload()
   luaunit.assert_equals(replacement_values[1],64)
   luaunit.assert_equals(replacement_values[#replacement_values],32)
 end
+
+
+function test_recording_global_wrap_preserves_midi_banks()
+  setup()
+  local previous_recorder = recorder
+  recorder = include("mosaic/lib/recorder")
+  local ok, err = pcall(function()
+    program.get_selected_song_pattern().global_pattern_length = 4
+    program.get().selected_channel = 17
+    params:set("record", 2)
+    recorder.set_trig_lock_dirty(1, 1, 64)
+    recorder.set_trig_lock_dirty(16, 10, 96)
+    clock_setup()
+    -- Pulse the actual Mosaic lattice through multiple short channel wraps.
+    -- Only MIDI and UI boundaries are mocked by this integration fixture.
+    progress_clock_by_pulses(256)
+    luaunit.assert_nil(recorder.trig_lock_dirty[17])
+    luaunit.assert_equals(recorder.trig_lock_is_dirty(1, 1), 64)
+    luaunit.assert_equals(recorder.trig_lock_is_dirty(16, 10), 96)
+    program.get().selected_channel = 1
+    progress_clock_by_pulses(256)
+    luaunit.assert_false(recorder.trig_lock_is_dirty(1, 1))
+    luaunit.assert_equals(recorder.trig_lock_is_dirty(16, 10), 96)
+  end)
+  recorder = previous_recorder
+  if not ok then error(err) end
+end

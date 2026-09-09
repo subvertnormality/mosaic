@@ -1,5 +1,12 @@
 -- Native controls remain numeric, while off is a distinct selectable value.
 local domain = {}
+-- A separate Off position is one selectable interval, including sparse ranges.
+function domain.unit_quantum(minimum, maximum, off)
+  off = off == nil and -1 or off
+  local intervals = maximum - minimum
+  if off < minimum or off > maximum then intervals = intervals + 1 end
+  return 1 / math.max(1, intervals)
+end
 function domain.new(minimum, maximum, off, units)
   off = off == nil and -1 or off
   units = units or 1
