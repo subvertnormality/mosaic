@@ -3370,7 +3370,10 @@
       ],
       "statement": "Global/per-step probability includes always100 and never0.",
       "cases": [
-        "M-PARAM-018"
+        "M-PARAM-018",
+        "M-PARAM-019",
+        "M-PARAM-020",
+        "M-PARAM-021"
       ],
       "status": "in_progress",
       "domain": "0/1/50/99/100; bounds; masked/merged trigs; seed/reseed; no flaky frequency assertion.",

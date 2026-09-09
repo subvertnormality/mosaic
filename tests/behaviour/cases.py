@@ -37,7 +37,7 @@ def assert_durations(c,notes,lengths,events=None):
     state=c.snapshot();rows=[]
     events=state['midi'] if events is None else events
     for note,length in zip(notes,lengths):
-        off=next(m for m in events if m['index']>note['index'] and m['port']==1 and m['bytes']==[128,note['bytes'][1],note['bytes'][2]])
+        off=next(m for m in events if m['index']>note['index'] and m['port']==note['port'] and m['bytes']==[128+(note['bytes'][0]&15),note['bytes'][1],note['bytes'][2]])
         field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
         actual=(off[field]-note[field])/1e9
         rows.append(dict(pitch=note['bytes'][1],expected_seconds=length/6,actual_seconds=actual,error_ms=1000*(actual-length/6)))
@@ -2780,9 +2780,12 @@ from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_p
 
 from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrpn_slide,patch_configured_off_lock
 
-from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks
+from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability
 
 CASES={
+ 'M-PARAM-019':dict(run=lambda c:seeded_probability(c,probability=1,opportunities=320),requirements=['PARAM-PROBABILITY'],description='Seed42 probability1: independent native PRNG draws select exact note/velocity sequence aligned to a second MIDI channel through the rejected tail'),
+ 'M-PARAM-020':dict(run=lambda c:seeded_probability(c,probability=50,opportunities=208),requirements=['PARAM-PROBABILITY'],description='Seed42 probability50: independent native PRNG draws select exact note/velocity sequence aligned to a second MIDI channel through the rejected tail'),
+ 'M-PARAM-021':dict(run=lambda c:seeded_probability(c,probability=99,opportunities=64),requirements=['PARAM-PROBABILITY'],description='Seed42 probability99: independent native PRNG draws select exact note/velocity sequence aligned to a second MIDI channel through the rejected tail'),
  'M-PARAM-018':dict(run=probability_endpoint_locks,requirements=['PARAM-PROBABILITY','PARAM-SLOTS','PARAM-FIXED'],description='Probability0/100 and upper clamp with fixed pitch, per-step overrides, first/wrap rejected steps, clear restoration, exact sparse onsets and balanced releases'),
  'M-PARAM-017':dict(run=competing_pitch_locks,requirements=['PARAM-SLOTS','PARAM-FIXED','PARAM-QUANTISED-FIXED'],description='Competing fixed/quantised channel defaults and independent held-step locks: precedence, simultaneous zero locks, Off fallback and step-scoped clearing'),
  'M-PARAM-015':dict(run=lambda c:stock_pitch_lock_inheritance(c,quantised=True),requirements=['PARAM-SLOTS','PARAM-QUANTISED-FIXED'],description='Stock pitch held-step locks: zero, Off inheritance, default edits, clear and re-entry preserve exact phrase, velocity, releases and timing'),

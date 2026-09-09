@@ -184,3 +184,55 @@ def probability_endpoint_locks(c):
     lock(4,0);phrase([2,3],'first-and-wrap-step0')
     clear(1);phrase([1,2,3],'clear-first-zero')
     clear(4);phrase([1,2,3,4],'clear-wrap-zero')
+
+
+def seeded_probability(c,probability=50,opportunities=64):
+    from cases import assign_trig_parameter,assert_durations
+    import subprocess
+    assert probability in (1,50,99)
+    # Separate Lua process uses the native PRNG interface, not Mosaic's
+    # sequencer, probability logic, capture output or private state.
+    code='math.randomseed(42); for i=1,'+str(opportunities+1)+' do print(math.random(0,99)) end'
+    proc=subprocess.run(['lua5.3','-e',code],capture_output=True,text=True,check=True)
+    draws=[int(line) for line in proc.stdout.splitlines()]
+    assert len(draws)==opportunities+1 and all(0<=n<=99 for n in draws)
+    assert probability-1 in draws and probability in draws,'Seeded fixture must exercise both comparison boundaries'
+    accepted=[i for i,n in enumerate(draws) if n<probability]
+    assert len(accepted)>=3
+    expected=[(1,[144,(60,62,64,65)[i%4],(127,117,107,97)[i%4]]) for i in accepted]
+    c.results.append(dict(kind='independent-probability-oracle',seed=42,probability=probability,draws=draws,accepted_zero_based_steps=accepted,expected=expected,source='Separate lua5.3 native math.random; no startup draws expected from non-yielding Mosaic init. Never fit a draw offset to MIDI.'))
+
+    c.configure()
+    # A second channel carries the same authored four-step phrase at100%.
+    # Its raw MIDI output independently exposes every opportunity, including
+    # the first accepted note's position and the complete rejected tail.
+    c.tap(2,1);c.screen_header('Ch. 2 Device Config',selected=5)
+    c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
+    c.tap(1,2);c.hold_tap((1,4),(4,4));c.led_values([(2,1),(1,2)],[15,15])
+    c.tap(1,1);c.enc(1,-3);assign_trig_parameter(c,'Trig Probability');c.enc(3,probability+1)
+    before=c.snapshot()['midi_count'];c.tap(1,8)
+    def notes(state):
+        return [e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
+    def reference(state):return [e for e in notes(state) if e['port']==2 and e['bytes'][0]==145]
+    state=c.wait(lambda state:len(reference(state))>=opportunities+1,timeout=opportunities/6+3)
+    all_notes=notes(state);ref=reference(state)
+    assert len(ref)==opportunities+1,len(ref)
+    events=[e for e in all_notes if e['port']==1 and e['bytes'][0]==144]
+    assert len(all_notes)==len(ref)+len(events),'Unexpected MIDI route'
+    actual=[(e['port'],e['bytes']) for e in events]
+    assert actual==expected,dict(expected=expected,actual=actual)
+    ref_expected=[(2,[145,(60,62,64,65)[i%4],(127,117,107,97)[i%4]]) for i in range(opportunities+1)]
+    assert [(e['port'],e['bytes']) for e in ref]==ref_expected
+    c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[])
+    # The closing reference onset can be cut by Stop. Every earlier planned
+    # reference note and accepted probability note must get its full duration.
+    assert_durations(c,ref,[1]*opportunities)
+    completed=sum(i<opportunities for i in accepted)
+    assert_durations(c,events,[1]*completed)
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    reference_errors=[(e[field]-ref[0][field])/1e9-i/6 for i,e in enumerate(ref)]
+    errors=[(e[field]-ref[i][field])/1e9 for e,i in zip(events,accepted)]
+    assert all(abs(e)<=tolerance for e in reference_errors),reference_errors
+    assert all(abs(e)<=tolerance for e in errors),errors
+    c.results.append(dict(kind='seeded-probability-reference-midi',probability=probability,actual=actual,accepted_zero_based_steps=accepted,reference_count=len(ref),reference_timing_errors=reference_errors,accepted_alignment_errors=errors,passed=True,scope='Every native reference opportunity through closing onset; first acceptance and rejected tail are checked.'))

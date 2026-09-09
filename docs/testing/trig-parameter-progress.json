@@ -17,7 +17,7 @@
     "Probability/random boundaries and intermediate values, masks, modulation, scale merging and lifecycle triples",
     "Full manual/emulator/refactor gates"
   ],
-  "next_action": "Extend probability beyond endpoints: independent seeded decisions for1/50/99, masks/merges, trigless MIDI lock/slide interactions, live edits and lifecycle. M-PARAM018 D/R passed; do not treat endpoints as probability completion. Quantised pitch lock channel/song isolation and all scale-switch combinations remain required.",
+  "next_action": "Probability endpoints and independent seeded1/50/99 now pass D/R with first-onset/reference alignment, full rejected tails and comparator boundaries. Continue probability with trigless CC/NRPN lock/slide processing, masks/merged trigs and live edits; then full domain and seed/persistence/channel/song isolation. Quantised scale-switch interactions remain required. No production changes in this checkpoint.",
   "initial_controlled": "e5137534b83648f8b43e51c731ad0d8f",
   "fixed_note_matrix": [
     {
