@@ -5854,16 +5854,17 @@
       ],
       "statement": "Named save/load uses parameter menu and text prompt; autosave must not overwrite named slots.",
       "cases": [
-        "M-RANGE-SAVED-002",
-        "M-RANGE-SAVED-003",
-        "M-RANGE-SAVED-004",
         "M-PROJECT-LIVE-001",
         "M-PROJECT-LIVE-002",
         "M-PROJECT-LIVE-003",
-        "M-PROJECT-LIVE-004"
+        "M-PROJECT-LIVE-004",
+        "M-RANGE-SAVED-002",
+        "M-RANGE-SAVED-003",
+        "M-RANGE-SAVED-004",
+        "M-SAVE-NAMED-001"
       ],
-      "status": "unimplemented",
-      "domain": "Create/overwrite/cancel; empty/long/non-ASCII names; save while playing/stopped; corrupt/missing/unwritable files.",
+      "status": "partial-domain-coverage",
+      "domain": "M-SAVE-NAMED-001 (E and D, 3 fresh D repeats): save with the default name and with a typed name (one character appended through the native text entry), idle autosave leaves both named saves byte-identical, cancel writes nothing, re-saving the default name overwrites only it, and loading each name restores its exact phrase in-session. M-PROJECT-LIVE-001..004 cover dialogs while playing. Remaining: long/empty/non-ASCII names, delete in text entry, corrupt/missing/unwritable files at load and save.",
       "oracles": [
         "File round-trip plus exact MIDI/grid/screen; valid prior data preserved on failed/cancelled save."
       ],
