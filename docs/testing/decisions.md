@@ -356,3 +356,19 @@ observes raw keys at a fresh boot. Recommendation: keep the implemented default
 and correct line 195. Until decided, the case asserts the code/MAN-103 default;
 changing the README invalidates the inventory manual hash and needs
 reconciliation.
+
+## SEM-013 — Elektron program changes for global lengths 1 and 2 (pending)
+
+The manual promises that each song pattern change is mirrored so both systems stay
+in sync. Mosaic announces the next slot at the onset of the outgoing slot's
+penultimate step (`current_step == length - 1`, evaluated before the song
+switch), giving a two-step lead that a playing receiver can queue. No such lead
+exists at lengths 2 and 1: length 2 sends the next slot at Play before slot 1
+sounds and later announcements coincide with their boundaries; length 1 never
+announces a transition. M-OPT-ELEK-002/003 fail on this and stay red. A fix must
+choose where the announcement goes when the lead is shorter than two steps — for
+example at the final step's onset, after the step's notes and, at Play, after the
+first onset — which is a timing decision, not an isolated correction.
+Recommendation: announce at the final step's onset after that step is emitted,
+keep the current two-step lead for lengths of three or more, and never send a
+next-slot change before the first onset after Play.

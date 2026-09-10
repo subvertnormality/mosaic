@@ -570,6 +570,59 @@
         "M-OPT-STOP-001"
       ],
       "summary": "Shift press to stop accepted K3, not the documented shift (K1), as the short-press stop modifier."
+    },
+    {
+      "id": "elektron-short-song-program-changes",
+      "status": "confirmed-open-pending-design-decision",
+      "cases": [
+        "M-OPT-ELEK-002",
+        "M-OPT-ELEK-003"
+      ],
+      "summary": "With Elektron program changes on, m_clock announces the next song slot when current_step == global_pattern_length - 1, before the slot switch. Global length 4 announces each transition once, two steps ahead (M-OPT-ELEK-001 passes). Length 2: at Play the current-slot change is followed at the same instant by the next-slot change, before slot 1 sounds, and each later announcement coincides with the boundary it names. Length 1: no transition is announced.",
+      "decision": "SEM-013",
+      "evidence": [
+        {
+          "run_id": "b019203f1be54c2f91495778ba10395e",
+          "case": "M-OPT-ELEK-002",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "87e6e00fefedcd51dcbfcb9d90582788673479a18dfb0f792767a96875255f12",
+          "failure": "('Play must name the playing slot last', [(156856869931441, 'pc', 1), (156856870171975, 'pc', 2), (156856870483290, 'slot', 1)])"
+        },
+        {
+          "run_id": "fc6942a665e64e51a3574494ec6b25e3",
+          "case": "M-OPT-ELEK-003",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "f23554a88bd9b472b1d1fc52c7d4b50c1258332acbd1018bbc0e2cca4e99d7d9",
+          "failure": "('One program change naming the incoming slot', 2, [])"
+        },
+        {
+          "run_id": "2cb5c14375d64675a7e3b6585a97f138",
+          "case": "M-OPT-ELEK-002",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "6af9aeb0740d76b08e35eb9a0f841cdc3d64595e4d96a1f99224d156c9177507",
+          "failure": "('Play must name the playing slot last', [(12510000000, 'pc', 1), (12510000000, 'pc', 2), (12510000000, 'slot', 1)])"
+        },
+        {
+          "run_id": "905a0566b19942d38afbd2a979535a82",
+          "case": "M-OPT-ELEK-003",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "1e34a229184a6060f4f64c5d363f31dfd040f3317a6723f6e28b4e84e1daa4db",
+          "failure": "('One program change naming the incoming slot', 2, [])"
+        },
+        {
+          "run_id": "f28740fff7b64f708b5937e5302c8461",
+          "case": "M-OPT-ELEK-001",
+          "mode": "real-time",
+          "passed": true,
+          "manifest_sha256": "f90801ec16584267e48e3c85c044c3eee4131422836d19388240acec45198340",
+          "failure": null
+        }
+      ],
+      "source_observation": "step.process_elektron_program_change sends one change per Elektron-device channel through devices[1].midi_device; multi-port and duplicate behaviour are not yet exercised."
     }
   ]
 }

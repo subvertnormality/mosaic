@@ -6063,9 +6063,13 @@
         "MAN-093"
       ],
       "statement": "Optional Elektron program change mirrors song slot; default off and channel10.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All96 slots and16 channels; configured/unconfigured ports; copy/queued transition/repeat; default/off.",
+      "cases": [
+        "M-OPT-ELEK-001",
+        "M-OPT-ELEK-002",
+        "M-OPT-ELEK-003"
+      ],
+      "status": "in_progress",
+      "domain": "M-OPT-ELEK-001 (E and D, 3 fresh D repeats), seeded Digitakt on channel 1: default Off sends nothing; On mirrors stopped slot selection and Play on channel 10, announces each automatic transition once two steps ahead at global length 4, and the channel setting moves the status to 192. Global lengths 2 and 1 fail (bugs.json elektron-short-song-program-changes, SEM-013). Remaining: all 90 slots and 16 channels, queued live selection, repeats, copies, several Elektron channels and ports.",
       "oracles": [
         "Exact program numbers, ports/channels and timing relative to transition; disabled silence."
       ],
