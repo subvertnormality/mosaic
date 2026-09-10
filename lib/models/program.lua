@@ -388,7 +388,7 @@ function program.add_step_transpose_trig_lock(step, trig_lock)
   local channel = program.get_channel(program.get().selected_song_pattern, 17)
 
   if trig_lock ~= nil then
-    trig_lock = math.max(math.min(trig_lock, 7), -7) or nil
+    trig_lock = math.max(math.min(trig_lock, 12), -12) or nil
   end
 
   if not channel.step_transpose_trig_lock_banks then 

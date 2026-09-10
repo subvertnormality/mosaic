@@ -1210,3 +1210,8 @@ releases the sounding note and reanchors step1 with no stale task output. The
 README now states the all-input default, pulse-fault consequences and holdover
 semantics. This does not decide ambiguous recovery without Start or cover burst
 loss, stochastic jitter, simultaneous source edits or every feature interaction.
+
+
+## Full-range transpose-lock defect
+
+M-TRANS-001 now walks every -12..+12 value advertised by the scale-page fader through held-step grid input. The stock `061fc8c` baseline fails immediately: selecting -12 emits MIDI53 because the model clamps it to -7 instead of emitting MIDI48. The isolated candidate aligns the storage clamp to the public range; controlled and real-time native runs then pass exact pitches, gates, phase, explicit-zero bounding and K2 restoration. The fresh snapshot also passes527 Lua tests and21 focused integration/oracle tests. Codex review and its explicit-zero follow-up accepted the scoped fix. Wrap, scale/octave, live-clear, merge and lifecycle interactions remain.

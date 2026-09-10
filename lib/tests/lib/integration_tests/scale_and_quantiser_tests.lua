@@ -1475,6 +1475,22 @@ function test_global_transpose_applies_to_notes()
 end
 
 
+function test_step_transpose_preserves_full_scale_page_range()
+  setup()
+  program.get().selected_channel = 17
+
+  for value = -12, 12 do
+    program.add_step_transpose_trig_lock(1, value)
+    luaunit.assert_equals(program.get_step_transpose_trig_lock(1), value)
+  end
+
+  program.add_step_transpose_trig_lock(1, -13)
+  luaunit.assert_equals(program.get_step_transpose_trig_lock(1), -12)
+  program.add_step_transpose_trig_lock(1, 13)
+  luaunit.assert_equals(program.get_step_transpose_trig_lock(1), 12)
+end
+
+
 function test_step_transpose_overrides_global_transpose()
 
   setup()

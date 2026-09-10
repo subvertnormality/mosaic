@@ -5761,9 +5761,11 @@
         "MAN-082"
       ],
       "statement": "Held-step transpose locks add to scale transpose and K2 clears.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every legal fader value; wrap; scale/octave composition; clear while playing.",
+      "cases": [
+        "M-TRANS-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-TRANS-001 validates all25 advertised -12..+12 values through native held-grid input, an explicit-zero bounding lock, K2 clear, exact MIDI gates and musical phase in controlled and real-time lanes. Wrap persistence, scale/octave composition, clear while playing, channel/source reassignment and song-copy/persistence interactions remain required.",
       "oracles": [
         "Independent pitch/phase timeline and restored transpose after clear."
       ],

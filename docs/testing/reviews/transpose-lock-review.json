@@ -1,0 +1,55 @@
+{
+  "started_at": "2026-09-10T02:42:26.829807+00:00",
+  "packet_sha256": "49e748d0acc6b33d8aa1e10bff40f226d600a6fb19d003fac8d5d0915bbdbc16",
+  "files": [
+    "/home/andy/projects/mosaic-behaviour-tests/lib/models/program.lua",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/integration_tests/scale_and_quantiser_tests.lua",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py",
+    "/home/andy/projects/mosaic-behaviour-tests/docs/testing/transpose-lock-validation.json"
+  ],
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Full-range transpose-lock candidate review\n\nUse Codex only. Read-only local shell commands are allowed to inspect the Mosaic worktree, retained manifests/logs, Git diff and pinned manual. Do not edit files or launch tests or runtime processes.\n\nReview the isolated Mosaic candidate in `/home/andy/projects/mosaic-behaviour-tests`. The scale-page fader publicly exposes transpose values -12..+12, and the manual says a held step accepts the desired transpose value. The retained stock-baseline run in `docs/testing/transpose-lock-validation.json` shows selecting -12 emits MIDI53 rather than independently expected MIDI48 because `program.add_step_transpose_trig_lock` clamps to -7. The candidate changes that clamp to -12..+12, adds a 25-value native behavior case and a focused unit regression.\n\nChallenge these points:\n\n1. Does the manual/UI/source evidence justify -12..+12 for step locks, including endpoint behavior?\n2. Is changing only the model clamp the smallest correct production fix, without changing global or scale transpose semantics?\n3. Does M-TRANS-001 genuinely exercise user-like held-step input for every value, distinguish explicit zero from absence, assert literal pitches and note timing, and prove K2 restoration?\n4. Are the unit regression and retained controlled/real-time evidence adequate for this scoped defect?\n5. Are any false positives, stale-state paths, pitch-accounting mistakes, or material regressions left in the scoped slice?\n\nReturn ACCEPTED or CHANGES REQUIRED with findings ordered by severity. This review concerns the scoped full-range defect only; it must not claim the broader transpose interaction domain or manual campaign complete.\n",
+    "files": [
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/lib/models/program.lua",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/integration_tests/scale_and_quantiser_tests.lua",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/docs/testing/transpose-lock-validation.json",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/docs/testing/decisions.md",
+        "reason": "Findings and fixes"
+      }
+    ],
+    "web_search": false,
+    "effort": "medium"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**ACCEPTED for the scoped \u221212\u2026+12 defect.** No blocking defect or material regression found; the one-line clamp change is the smallest correct production fix.\n\n- **Low \u2014 coverage claims need qualification.** K2 demonstrably restores the phrase after +12, but the zero-global setup cannot distinguish deletion from replacement with zero, or prove step 2\u2019s zero lock survives clearing. See [cases.py:696](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:696). The actual clear path stores `nil` only for the held step ([program.lua:579](/home/andy/projects/mosaic-behaviour-tests/lib/models/program.lua:579)); this limitation does not block the range fix.\n\n- **The range, including both endpoints, is justified.** The manual instructs \u201cPress the desired transposition value\u201d ([README.md:1031](/home/andy/projects/mosaic-behaviour-tests/README.md:1031)). The scale page creates a 25-position fader and subtracts 13 when storing locks ([scale_edit_page.lua:7](/home/andy/projects/mosaic-behaviour-tests/lib/pages/scale_edit_page/scale_edit_page.lua:7), [line 86](/home/andy/projects/mosaic-behaviour-tests/lib/pages/scale_edit_page/scale_edit_page.lua:86)). Its proportional selection and increment logic reach \u221212 and +12 ([fader.lua:121](/home/andy/projects/mosaic-behaviour-tests/lib/controls/fader.lua:121)). Repeated endpoint presses retain the existing same-value lock-toggle behavior; this candidate does not change it.\n\n- **Production semantics remain appropriately isolated.** Only the lock clamp changes. Global and scale setters remain unchanged; playback still selects step/persistent/global transpose and then adds scale transpose ([program.lua:387](/home/andy/projects/mosaic-behaviour-tests/lib/models/program.lua:387), [step.lua:467](/home/andy/projects/mosaic-behaviour-tests/lib/step.lua:467)).\n\n- **The regression is substantive.** All 25 values use physical held-grid gestures, with independent expected pitches `60 + value`. Step 2\u2019s explicit zero prevents nonzero locks from persisting into the remaining phrase. Playback checks every captured onset through two complete cycles; duration and spacing assertions check one-sixth-second timing ([cases.py:671](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:671), [driver.py:118](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/driver.py:118)). No scoped pitch-accounting or stale-capture false positive found.\n\n- **Retained evidence is adequate.** I verified manifest/artifact hashes, candidate source identities, and unit snapshot hashes. Stock emits 53 against expected 48; both candidate lanes pass all 25 values and restoration. Logs report 527 unit successes and 21 oracle successes. The focused unit checks every value plus \u00b113 clamping ([unit regression:1478](/home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/integration_tests/scale_and_quantiser_tests.lua:1478), [validation evidence](/home/andy/projects/mosaic-behaviour-tests/docs/testing/transpose-lock-validation.json)). Controlled time remains diagnostic; real-time evidence independently passes.\n\n**CONFIDENCE: High.** No tests were launched; broader transpose interactions and the manual campaign remain incomplete and outside this acceptance.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08931-fa99-7441-b097-636bd7524745` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "status": "returned",
+  "finished_at": "2026-09-10T02:44:37.477144+00:00"
+}

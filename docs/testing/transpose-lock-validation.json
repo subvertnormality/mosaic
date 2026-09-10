@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "status": "scoped-candidate-pass-codex-accepted",
+  "date": "2026-09-10",
+  "requirement": "LOCK-TRANSPOSE",
+  "baseline_revision": "061fc8c453af0c242284a8954021e2dce24d5fd0",
+  "baseline_failure": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/7970ee5f237c4e8daabdd2b3a42617fa/manifest.json",
+    "sha256": "77308ec0ebdabc5f7ec3c53529b0bda1bfbd65133a93a5eb840795c8a7d47155",
+    "passed": false,
+    "artifact_count": 15,
+    "expected_first_pitch": 48,
+    "actual_first_pitch": 53,
+    "cause": "The native -12 scale-page value was stored as -7 by program.add_step_transpose_trig_lock."
+  },
+  "candidate": {
+    "change": "Align the step-transpose storage clamp with the scale page advertised -12..+12 range.",
+    "source_sha256": {
+      "lib/models/program.lua": "d0399b22e263cfadadf28cbc5bd8bf70d11ce3142af02e536eb6e78216360bad",
+      "lib/tests/lib/integration_tests/scale_and_quantiser_tests.lua": "e3eb97a6d656264402ca7ba7da6f748ce47184cb54fc98f4f25e1d17c3bcdc92",
+      "tests/behaviour/cases.py": "463efcf81d45caac49bfbbf321818382a8a130602b983ebd958bf646cafd7277"
+    }
+  },
+  "native_behavior": {
+    "controlled-experimental": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/ad957759ef3a4a8d8e3cac9a526340e4/manifest.json",
+      "sha256": "9c68af17dab2191fa2afe6aff398bdf75e469c6f46240f88b2e356e2fa61e0bc",
+      "passed": true,
+      "artifact_count": 15
+    },
+    "real-time": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/3d30863506334a5fbf27a41e1d63dfce/manifest.json",
+      "sha256": "98c4a839f1c21f276d41b98f13d3a6f23072ff21d29f1da9b53f50fbc08c8e60",
+      "passed": true,
+      "artifact_count": 15
+    }
+  },
+  "unit_integration": {
+    "unit_log": "/home/andy/projects/mosaic-behaviour-runs/transpose-lock-units-final-20260910/unit.log",
+    "unit_log_sha256": "90511a2e4be978ceb15d85da78877d3077614cc46ff29ca08e021497aa77e206",
+    "unit_summary": "Ran 527 tests in 11.558 seconds, 527 successes, 0 failures",
+    "oracle_log": "/home/andy/projects/mosaic-behaviour-runs/transpose-lock-units-final-20260910/python-oracles.log",
+    "oracle_log_sha256": "16e95730e6e4018911df76b22e28814a92fc0a8346af1571a05b3e7994c7daa4",
+    "oracle_summary": "21 focused integration/oracle tests passed",
+    "source_snapshot": "/home/andy/projects/mosaic-behaviour-runs/transpose-lock-units-final-20260910/mosaic"
+  },
+  "oracles": [
+    "All25 public fader values are authored through held-step grid gestures.",
+    "Literal MIDI pitch is independently expected as base pitch plus the selected semitone value.",
+    "With global transpose +4, an explicit zero lock on step2 bounds persistence and distinguishes absent from zero.",
+    "Every voice has an exact release, one-step duration and bounded inter-onset phase.",
+    "K2 clear restores global +4 on step1 while the explicit-zero step2 continues to suppress it."
+  ],
+  "remaining": "Wrap persistence, scale/octave composition, clear while playing, channel/source reassignment and song-copy/persistence interactions remain required.",
+  "review": {
+    "status": "accepted",
+    "provider": "codex-only",
+    "initial": "docs/testing/reviews/transpose-lock-review.json",
+    "initial_session": "01a08931-fa99-7441-b097-636bd7524745",
+    "followup": "docs/testing/reviews/transpose-lock-review-followup.json",
+    "followup_session": "01a08937-c53f-7170-ad68-8ea0b570474b"
+  },
+  "full_campaign_complete": false
+}

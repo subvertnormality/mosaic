@@ -668,6 +668,45 @@ def all_note_priorities(c):
         c.tap(slot,2)
 
 
+def transpose_lock_domain(c):
+    """Walk every transpose value exposed by the native scale-page fader."""
+    c.configure(); c.tap(4,8)
+    c.tap(13,8)  # Global +4 distinguishes an absent lock from explicit zero.
+    # Bound the step-1 lock with an explicit zero lock at step 2 so its
+    # persistence cannot hide which authored step supplied each pitch.
+    c.hold_tap((2,4),(12,8))
+    values = list(range(-12,13))
+    # Direct inner press selects -12, then the right endpoint advances one
+    # semitone per physical press while the step remains the first operand.
+    c.hold_tap((1,4),(9,8))
+    for index, value in enumerate(values):
+        if index:
+            c.hold_tap((1,4),(16,8))
+        expected = [(1,[144,60+value,127]), (1,[144,62,117]),
+                    (1,[144,64,107]), (1,[144,65,97])]
+        notes = c.playback(expected, cycles=2, timeout=3, settle_seconds=4/3-.1)
+        assert_durations(c, notes, [1]*8)
+        field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
+        errors = [(b[field]-a[field])/1e9-1/6 for a,b in zip(notes,notes[1:])]
+        tolerance = 2e-9 if c.clock_mode == 'controlled-experimental' else .01
+        assert errors and max(abs(error) for error in errors) <= tolerance, (value, errors)
+        c.results.append(dict(kind='transpose-lock-value', value=value,
+                              expected_first_pitch=60+value,
+                              maximum_spacing_error_seconds=max(abs(error) for error in errors),
+                              passed=True))
+    # K2 while holding step1 restores global +4 there. Step2 must remain
+    # explicitly zero and keep the remaining phrase untransposed.
+    c.action(type='grid',x=1,y=4,state=1)
+    try: c.key(2)
+    finally: c.action(type='grid',x=1,y=4,state=0)
+    restored = (64,62,64,65)
+    notes = c.playback([(1,[144,p,v]) for p,v in zip(restored,(127,117,107,97))],
+                       cycles=2, timeout=3, settle_seconds=4/3-.1)
+    assert_durations(c, notes, [1]*8)
+    c.results.append(dict(kind='transpose-lock-clear', global_transpose=4,
+                          explicit_zero_step=2, restored_pitches=list(restored), passed=True))
+
+
 def octave_phrase(c,octaves,phase):
     base=[60,62,64,65];velocities=[127,117,107,97]
     expected=[(1,[144,n+12*o,v]) for n,o,v in zip(base,octaves,velocities)]
@@ -3474,6 +3513,7 @@ CASES={
  'M-TIME-001':dict(run=integral_clock_divisions,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All integral-pulse clock ratios through /16 with exact full-phrase phase and duration checks'),
  'M-TIME-002':dict(run=lambda c:integral_clock_divisions(c,True),requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
  'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
+ 'M-TRANS-001':dict(run=transpose_lock_domain,requirements=['LOCK-TRANSPOSE'],description='All25 advertised step-transpose values through native held-grid input, explicit-zero bounding lock, K2 clear, exact MIDI gates and musical phase'),
  'M-OCT-001':dict(run=channel_octave_controls,requirements=['CH-GLOBAL-OCTAVE'],description='All five octave positions, repeated center and navigation retention with exact MIDI'),
  'M-OCT-002':dict(run=octave_lock_precedence,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE'],description='Every global/step octave pair, K2 clear, explicit zero and repeated-selector removal with exact MIDI'),
  'M-MERGE-008':dict(run=all_note_priorities,requirements=['MERGE-NOTE-PATTERN','PAT-INACTIVE-NOTE'],description='All16 assigned/unassigned priority-note sources with unique musical fingerprints, durations and wrap-rest spacing'),

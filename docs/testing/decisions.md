@@ -307,3 +307,8 @@ rather than silently treated as Stop. The unambiguous recovery contract requires
 external Start followed by its next Clock: cancel the previous playback owner,
 release its held note and restart Mosaic at step1 on that beat-zero clock. Recovery without Start remains
 an explicit pending policy, not a defect allowance for other MIDI behavior.
+
+
+## 2026-09-10 — Step transpose locks use the scale page's full range
++
++The public fader offers -12 through +12 and the manual says a held step accepts the desired displayed value. Native M-TRANS-001 independently expects semitone addition and retained the stock failure where -12 became -7. The smallest candidate changes only the model clamp from +/-7 to +/-12 and adds unit plus native behavior regressions. Values outside the UI range remain clamped to the nearest public endpoint.
