@@ -3047,7 +3047,8 @@
         "M-MERGE-022",
         "M-MERGE-023",
         "M-MERGE-043",
-        "M-MERGE-044"
+        "M-MERGE-044",
+        "M-TRANS-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -5349,7 +5350,8 @@
         "M-MERGE-023",
         "M-MERGE-043",
         "M-MERGE-044",
-        "M-SCALE-004"
+        "M-SCALE-004",
+        "M-TRANS-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 slots; same/different editing vs applied slot; long threshold; editing currently used scale and saving.",
@@ -5736,7 +5738,8 @@
       "cases": [
         "M-SCALE-002",
         "M-RANGE-GLOBAL-004",
-        "M-SCALE-004"
+        "M-SCALE-004",
+        "M-TRANS-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "Both option values; probability0/100; active/rest steps; current-step lock; channel/global coprime lengths; all scale slots.",
@@ -5764,10 +5767,11 @@
       "cases": [
         "M-TRANS-001",
         "M-TRANS-002",
-        "M-TRANS-003"
+        "M-TRANS-003",
+        "M-TRANS-004"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-TRANS-001 validates all25 advertised -12..+12 values, explicit-zero distinction and K2 clear in both clocks. M-TRANS-002 composes endpoint/zero locks across wrap with saved scale transpose, overridden song transpose and channel octave. M-TRANS-003 clears a future wrap lock during playback while the sounding explicit-zero step retains its owned release and duration. Remaining: additional scale/root/rotation choices, octave/MIDI clipping boundaries, merge/scale-lock combinations, channel/source reassignment, song copy and persistence.",
+      "domain": "M-TRANS-001 validates all25 advertised -12..+12 values, explicit-zero distinction and K2 clear in both clocks. M-TRANS-002 composes endpoint/zero locks across wrap with saved scale transpose, overridden song transpose and channel octave. M-TRANS-003 clears a future wrap lock during playback with complete owner accounting. M-TRANS-004 composes two-pattern Average merging with a four-step global D-minor scale lock, root D, saved scale transpose+3 and -12/zero/+12 step locks; it proves scale-track reset and step3 transpose persistence into unlocked step4. Remaining: additional scale/root/rotation choices, octave/MIDI clipping boundaries, other merge modes, channel/source reassignment, song copy and persistence.",
       "oracles": [
         "Independent pitch/phase timeline and restored transpose after clear."
       ],

@@ -113,6 +113,100 @@ def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=Fals
         verify('restored-C-major-pentatonic-average',[62,64,69,64])
 
 
+def merge_transpose_scale_lock(c):
+    """Merge degrees before independent scale-lock and transpose composition."""
+    from cases import set_mosaic_options,assert_durations
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    # Include Mosaic's script-start output as well as the subsequent user run.
+    capture=MidiWindow(0)
+    c.configure(); set_mosaic_options(c,[('Lock merged to pent.',False)])
+    sources=[(0,2,4,6),(2,4,6,0)]
+    c.tap(5,8)
+    for slot,values in enumerate(sources,1):
+        c.tap(slot,1)
+        if slot>1:
+            for x in range(1,5): c.tap(x,4)
+        c.tap(5,8)
+        for x,degree in enumerate(values,1): c.tap(x,7-degree)
+        c.tap(3,8); c.tap(5,8)
+    c.tap(3,8); c.tap(2,2)
+    c.tap(14,8); c.tap(14,8)  # All trigs; Average notes is the default.
+    c.hold_tap((16,8),(1,2))  # Velocity remains owned by pattern1.
+
+    # Edit-only scale slot2: D natural minor, transpose +3.
+    c.tap(4,8)
+    c.action(type='key',n=1,state=1)
+    try: c.elapse(.3); c.tap(2,3)
+    finally: c.action(type='key',n=1,state=0)
+    c.enc(3,2); c.key(3)      # Major -> Minor.
+    c.enc(2,-1); c.enc(3,2); c.key(3)  # Root C -> D.
+    c.enc(2,3); c.enc(3,3); c.key(3)   # Transpose 0 -> +3.
+
+    # Make the independent global scale track four steps long, then change
+    # to slot2 at step3. It must reset at step1 of every loop. Step transpose
+    # +12 persists from step3 through step4 on the same track.
+    c.hold_tap((1,4),(4,4))
+    c.hold_tap((3,4),(2,3))
+    c.hold_tap((1,4),(9,8))
+    c.hold_tap((2,4),(12,8))
+    c.hold_tap((3,4),(15,8))
+    c.tap(3,8)
+
+    # Average degrees are [1,3,5,3]. Steps1/2 use C major: D62/F65.
+    # Steps3/4 use D minor: Bb70/G67. Apply locks [-12,0,+12,+12]
+    # and slot2's saved +3 only where the slot2 scale lock is active.
+    expected_pitches=(50,65,85,82); expected_velocities=(127,117,107,97)
+    c.action(type='grid',x=1,y=8,state=1); c.action(type='grid',x=1,y=8,state=0)
+    c.elapse(1.9)
+    c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=13,timeout=5)
+    c.action(type='grid',x=1,y=8,state=1)
+    stop_lower=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
+    c.action(type='grid',x=1,y=8,state=0)
+    stop_upper=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
+    c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+
+    notes=capture.note_ons(); assert len(notes)==13,('Unexpected onset count',len(notes))
+    expected_notes=[(1,[144,expected_pitches[i%4],expected_velocities[i%4]]) for i in range(13)]
+    assert [(event['port'],event['bytes']) for event in notes]==expected_notes
+    pairs=note_pairs(capture.events); assert len(pairs)==len(notes)==13
+    assert [on for on,off in pairs]==notes,'Release pairing changed onset order'
+    assert all((off['port'],off['bytes'])==(on['port'],[128+(on['bytes'][0]&15),on['bytes'][1],on['bytes'][2]])
+               for on,off in pairs),'Release bytes differ from their onset'
+    assert_durations(c,notes[:12],[1]*12,events=capture.events)
+
+    # The remaining non-note output is an exact part of this user-visible run:
+    # Mosaic initializes ten Elektron program channels, sends transport on the
+    # three configured outputs, then sends four program changes per played step.
+    startup=[(3,[192,0]),(3,[193,0]),(3,[194,0]),(3,[195,64]),(3,[196,0]),
+             (3,[197,0]),(3,[198,0]),(3,[199,0]),(3,[200,64]),(3,[201,11])]
+    programs=[[(3,[192,0]),(3,[193,0]),(3,[194,3]),(3,[195,52])],
+              [(3,[192,0]),(3,[193,0]),(3,[194,3]),(3,[195,64])],
+              [(3,[192,2]),(3,[193,0]),(3,[194,4]),(3,[195,79])],
+              [(3,[192,2]),(3,[193,0]),(3,[194,4]),(3,[195,79])]]
+    wanted_nonnotes=(startup+[(p,[250]) for p in (1,2,3)]+
+                     [event for i in range(13) for event in programs[i%4]]+
+                     [(p,[252]) for p in (1,2,3)])
+    actual_nonnotes=[(event['port'],event['bytes']) for event in capture.events
+                     if event['bytes'][0]&240 not in (128,144)]
+    assert actual_nonnotes==wanted_nonnotes,dict(expected=wanted_nonnotes,actual=actual_nonnotes)
+    assert len(capture.events)==len(wanted_nonnotes)+2*len(notes),'Unaccounted MIDI event'
+
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    errors=[(note[field]-notes[0][field])/1e9-i/6 for i,note in enumerate(notes)]
+    assert max(abs(error) for error in errors)<=tolerance,errors
+    boundary_release=pairs[-1][1][field]
+    assert stop_lower<=boundary_release<=stop_upper+int(tolerance*1e9),(stop_lower,boundary_release,stop_upper)
+    c.results.append(dict(kind='merge-transpose-scale-lock',source_degrees=sources,
+                          merged_average_degrees=[1,3,5,3],scale_lock_step=3,
+                          scale2=dict(type='minor',root='D',transpose=3),
+                          step_transposes=[-12,0,12,None],expected_pitches=list(expected_pitches),
+                          complete_onsets=len(notes),complete_releases=len(pairs),
+                          accounted_non_note_events=len(actual_nonnotes),
+                          maximum_phase_error_seconds=max(abs(error) for error in errors),passed=True))
+
+
 def merge_mode_cycle(c,field):
     from cases import assert_durations
     assert field in ('velocity','length')

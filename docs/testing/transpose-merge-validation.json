@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "status": "scoped-pass-codex-accepted",
+  "date": "2026-09-10",
+  "case": "M-TRANS-004",
+  "base_revision": "1aa9dc54c8182daee0c0a7758c89949cdc2e19b7",
+  "scope": "Average note merge composed with global scale lock and step transpose locks",
+  "source_sha256": {
+    "tests/behaviour/numeric_merging.py": "4e53fc9d7992f7d5887b44eab53b41ca9c3a0ffb81ca08ed13772ebf1701dc97",
+    "tests/behaviour/cases.py": "eb7a839b1421dee1fc44b54214141c501cf022da4e62adced52b9d47ba0c41a1"
+  },
+  "native_behavior": {
+    "controlled-experimental": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/ecef6c54395a43978fad6010aae8d7ab/manifest.json",
+      "sha256": "ce32af9a62b454333e0f5ad0095ee3df596b7bd5ac5f04cec8bb7e79f715656b",
+      "passed": true,
+      "artifact_count": 15
+    },
+    "real-time": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/57b55a0ae6a94ff1bbd64f759f9df098/manifest.json",
+      "sha256": "4733c73dd0494823a221467ca19cd2a235d17b613fc2ebf78958f30b305b817f",
+      "passed": true,
+      "artifact_count": 15
+    }
+  },
+  "adjacent_regressions": {
+    "M-MERGE-009": {
+      "controlled-experimental": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/748bbdc07a8a4cb1b2b6ef7d3f9d35ab/manifest.json",
+        "sha256": "24ee903681932dc7074e7b5fc5237f61bc6543efa3bca6ef57198d5f69024538",
+        "passed": true,
+        "artifact_count": 15
+      },
+      "real-time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/0fd450515d9842f68380620d3109400a/manifest.json",
+        "sha256": "210b6542e93020e5bfa2c332b3051d959f8e597f3d2e7498f54e010b6a6b6d69",
+        "passed": true,
+        "artifact_count": 15
+      }
+    },
+    "M-SCALE-002": {
+      "controlled-experimental": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/55ca08d635c54572a1d223d8abf461e4/manifest.json",
+        "sha256": "55c3e06678a33341edf0eb066a6b8d74f9b455f904031acc574258d629489b29",
+        "passed": true,
+        "artifact_count": 15
+      },
+      "real-time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/1e444f16d3c34daf95be9140515b4338/manifest.json",
+        "sha256": "5baaa957710debc9dcce8580d6b9582b14d289f47fb3459d57d10fafd526e8f3",
+        "passed": true,
+        "artifact_count": 15
+      }
+    }
+  },
+  "independent_oracle": {
+    "source_degrees": [
+      [
+        0,
+        2,
+        4,
+        6
+      ],
+      [
+        2,
+        4,
+        6,
+        0
+      ]
+    ],
+    "average_degrees": [
+      1,
+      3,
+      5,
+      3
+    ],
+    "scale_track_length": 4,
+    "scale_lock_step": 3,
+    "scale2": {
+      "type": "minor",
+      "root_midi": 62,
+      "transpose": 3
+    },
+    "step_transpose": [
+      -12,
+      0,
+      12,
+      12
+    ],
+    "expected_pitches": [
+      50,
+      65,
+      85,
+      82
+    ],
+    "derivation": [
+      "C major degree1 D62 minus12 =50",
+      "C major degree3 F65 plus0 =65",
+      "D minor degree5 Bb70 plus12 plus3 =85",
+      "D minor degree3 G67 plus persistent12 plus3 =82"
+    ]
+  },
+  "assertions": [
+    "physical grid/menu input only",
+    "three complete scale-track loops plus boundary onset",
+    "exact port/status/pitch/velocity",
+    "all13 onsets paired to all13 releases including Stop boundary",
+    "all68 non-note events matched exactly and all94 MIDI events accounted",
+    "accumulated one-sixth-second onset phase from first onset"
+  ],
+  "remaining": "additional scale/root/rotation choices, octave/MIDI clipping boundaries, other merge modes, channel/source reassignment, song copy and persistence.",
+  "review": {
+    "status": "accepted",
+    "provider": "codex-only",
+    "initial": "docs/testing/reviews/transpose-merge-review.json",
+    "session": "01a08956-97fc-7553-a504-13dce1e77774",
+    "followup": "docs/testing/reviews/transpose-merge-followup.json",
+    "disposition": "CONCEDE: all three findings addressed"
+  },
+  "full_campaign_complete": false,
+  "unit_integration": {
+    "initial_log": "/home/andy/projects/mosaic-behaviour-runs/transpose-merge-units-20260910/unit.log",
+    "initial_result": "invalid launch layout: worktree basename did not satisfy legacy include path",
+    "rerun_log": "/home/andy/projects/mosaic-behaviour-runs/transpose-merge-units-20260910/unit-rerun.log",
+    "rerun_log_sha256": "e6ee001aa5e06aed7ca3801cd380ea904778595cbfdb32fd23ad1229f2e8cbf2",
+    "rerun_summary": "Ran 527 tests in 11.769 seconds, 527 successes, 0 failures",
+    "oracle_log": "/home/andy/projects/mosaic-behaviour-runs/transpose-merge-units-20260910/python-oracles.log",
+    "oracle_log_sha256": "d3f3c300d6f9d2b40e90e2b6aa67d0a1c70870bdbae0e57437fd7467dd1e5689",
+    "oracle_summary": "21 focused integration/oracle tests passed",
+    "source_snapshot": "/home/andy/projects/mosaic-behaviour-runs/transpose-merge-units-20260910/mosaic"
+  }
+}

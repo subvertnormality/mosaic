@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Extend accepted transpose coverage into remaining scale/root/rotation choices, MIDI clipping boundaries, merge/scale-lock combinations, reassignment, song copies and persistence. Full manual coverage and final hardening remain mandatory.",
+  "next_action": "Cover transpose MIDI clipping boundaries, additional scale/root/rotation choices, other merge modes, reassignment, song copy and persistence. Full campaign and final unit/integration hardening remain mandatory.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -5094,5 +5094,6 @@
   },
   "midi_forwarding_checkpoint": "docs/testing/midi-forwarding-candidate09-validation.json",
   "external_clock_fault_checkpoint": "docs/testing/external-clock-fault-validation.json",
-  "transpose_lock_checkpoint": "docs/testing/transpose-lock-validation.json"
+  "transpose_lock_checkpoint": "docs/testing/transpose-lock-validation.json",
+  "transpose_merge_checkpoint": "docs/testing/transpose-merge-validation.json"
 }

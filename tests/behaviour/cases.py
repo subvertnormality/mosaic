@@ -32,6 +32,7 @@ from numeric_merging import numeric_velocity_merge
 from numeric_merging import merge_rounding
 from numeric_merging import merge_mode_cycle
 from numeric_merging import numeric_note_merge
+from numeric_merging import merge_transpose_scale_lock
 from recording_lifetimes import recording_ten_slots
 from recording_lifetimes import recording_stop_safety
 from trig_parameter_interactions import sparse_editor_domain
@@ -3600,6 +3601,7 @@ CASES={
  'M-TIME-001':dict(run=integral_clock_divisions,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All integral-pulse clock ratios through /16 with exact full-phrase phase and duration checks'),
  'M-TIME-002':dict(run=lambda c:integral_clock_divisions(c,True),requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
  'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
+ 'M-TRANS-004':dict(run=merge_transpose_scale_lock,requirements=['LOCK-TRANSPOSE','LOCK-SCALE','MERGE-NOTE-AVERAGE','SCALE-EDIT'],description='Two-pattern average degrees compose with a D-minor scale lock, D root, saved scale transpose and endpoint/zero step transposes, proving scale reset and persistence into an unlocked step'),
  'M-TRANS-003':dict(run=transpose_lock_live_clear,requirements=['LOCK-TRANSPOSE'],description='K2 clears a future step lock during playback at the next wrap while an explicit-zero step sounds; exact MIDI ownership and phase'),
  'M-TRANS-002':dict(run=transpose_scale_octave_composition,requirements=['LOCK-TRANSPOSE','LOCK-OCTAVE','SCALE-EDIT'],description='Step-lock persistence and wrap across -12/zero/+12 composed with scale transpose, song transpose override and channel octave; exact MIDI gates and phase'),
  'M-TRANS-001':dict(run=transpose_lock_domain,requirements=['LOCK-TRANSPOSE'],description='All25 advertised step-transpose values through native held-grid input, explicit-zero bounding lock, K2 clear, exact MIDI gates and musical phase'),
