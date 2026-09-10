@@ -50,5 +50,6 @@ Status: `open`, `done` (test landed), `defect` (test found a defect), `decision`
 | E | Incoming MIDI recomputes the selected channel's step transpose (shared persistent state) | differential probe | not reproduced; a CC-path mutation that clears the state left playback unchanged, so no case kept |
 | 9 | MIDI map targets beyond velocity | M-MAP-003 | done: mapped note/length masks, trig param and memory equal their page encoders (equivalence characterisation) |
 | 14 | Keyboard chord state (`chord_states`, `midi_off_store`) is never reset, so a Note Off lost with a removed device leaves a stale chord at that step | behaviour | open: README 239 does not say what a lost release should record; needs a decision before an oracle |
-| F-G, 5-8, 10-13, 15-18 | Working-pattern sweep at a song boundary, prime/paint race, stuck held keys, fixed-channel held-step map, merge order (checked: merged values are order-independent), repetitor golden table, UI asymmetries, per-call debouncers | behaviour/unit | open |
+| 8 | Held grid key surviving a grid disconnect as a phantom hold | probe | not reproduced: hold step 1, disconnect, reconnect, tap step 24 left the phrase unchanged (no range gesture); the driver's recipe check does not yet model grid_connection, so no case |
+| F-G, 5-7, 10-13, 15-18 | Working-pattern sweep at a song boundary, prime/paint race, stuck held keys, fixed-channel held-step map, merge order (checked: merged values are order-independent), repetitor golden table, UI asymmetries, per-call debouncers | behaviour/unit | open |
 
