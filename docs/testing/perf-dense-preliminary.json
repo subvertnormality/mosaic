@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "workload": "PERF-002 dense sequencing",
+  "status": "preliminary-contended-host",
+  "result": "/home/andy/projects/mosaic-behaviour-runs/perf-dense-01/result.json",
+  "result_sha256": "c5206db86a2d4e93927a5eb05737689c34ccc93ea5e6709441ea8ca77d04e9e2",
+  "mosaic_revision": "7cfde6eb5e7ac9ec1a094d4963fa9799d52b979a",
+  "image": "monome-emulator:perf-recorder-02",
+  "image_id": "sha256:38b516ef4a8e7f85355da8d94d8f6f21c007b6a8d47fa829a8fc9039c01eea91",
+  "note": "Measured while two regression suites ran on the same host (load average 2.8-5.0) and the container shared cpuset 0 with host processes. Not an idle-host qualification; rerun canonically on an idle host. Channels 8 repeat 3 lost two whole steps after a ~333 ms stall with zero CFS throttling (host preemption): p99 = max = 331 ms and every later step two steps late. This matches the stock internal-clock skip-ahead (emulator R19) and is PERF-008 overload evidence for the refactor, not fixed now (D23).",
+  "runs": [
+    {
+      "channels": 1,
+      "repeat": 1,
+      "passed": true,
+      "p99_ns": 1604379,
+      "max_ns": 1604379,
+      "service_max_ns": 0,
+      "cpu_ns": 808187385,
+      "peak_rss_bytes": 391618560,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        2.78,
+        3.19,
+        3.42
+      ],
+      "failed_gates": []
+    },
+    {
+      "channels": 1,
+      "repeat": 2,
+      "passed": true,
+      "p99_ns": 2447293,
+      "max_ns": 2447293,
+      "service_max_ns": 0,
+      "cpu_ns": 868254194,
+      "peak_rss_bytes": 391827456,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        2.99,
+        3.21,
+        3.42
+      ],
+      "failed_gates": []
+    },
+    {
+      "channels": 1,
+      "repeat": 3,
+      "passed": true,
+      "p99_ns": 2051636,
+      "max_ns": 2051636,
+      "service_max_ns": 0,
+      "cpu_ns": 861890971,
+      "peak_rss_bytes": 390926336,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        3.42,
+        3.29,
+        3.44
+      ],
+      "failed_gates": []
+    },
+    {
+      "channels": 4,
+      "repeat": 1,
+      "passed": true,
+      "p99_ns": 2028611,
+      "max_ns": 2126981,
+      "service_max_ns": 1582718,
+      "cpu_ns": 1038898572,
+      "peak_rss_bytes": 394395648,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        3.31,
+        3.27,
+        3.43
+      ],
+      "failed_gates": []
+    },
+    {
+      "channels": 4,
+      "repeat": 2,
+      "passed": true,
+      "p99_ns": 2464188,
+      "max_ns": 2771222,
+      "service_max_ns": 1536620,
+      "cpu_ns": 954868866,
+      "peak_rss_bytes": 394436608,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        3.55,
+        3.33,
+        3.45
+      ],
+      "failed_gates": []
+    },
+    {
+      "channels": 4,
+      "repeat": 3,
+      "passed": true,
+      "p99_ns": 2040778,
+      "max_ns": 2116884,
+      "service_max_ns": 1147996,
+      "cpu_ns": 950407363,
+      "peak_rss_bytes": 393588736,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        3.36,
+        3.3,
+        3.43
+      ],
+      "failed_gates": []
+    },
+    {
+      "channels": 8,
+      "repeat": 1,
+      "passed": true,
+      "p99_ns": 2699769,
+      "max_ns": 3264617,
+      "service_max_ns": 3264617,
+      "cpu_ns": 951431723,
+      "peak_rss_bytes": 401797120,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        3.44,
+        3.33,
+        3.44
+      ],
+      "failed_gates": []
+    },
+    {
+      "channels": 8,
+      "repeat": 2,
+      "passed": true,
+      "p99_ns": 6458330,
+      "max_ns": 6823242,
+      "service_max_ns": 3760287,
+      "cpu_ns": 929933450,
+      "peak_rss_bytes": 402374656,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        3.65,
+        3.38,
+        3.45
+      ],
+      "failed_gates": []
+    },
+    {
+      "channels": 8,
+      "repeat": 3,
+      "passed": false,
+      "p99_ns": 331486396,
+      "max_ns": 331733669,
+      "service_max_ns": 2858093,
+      "cpu_ns": 1082043323,
+      "peak_rss_bytes": 401657856,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        4.18,
+        3.55,
+        3.51
+      ],
+      "failed_gates": [
+        "event_timing"
+      ]
+    },
+    {
+      "channels": 16,
+      "repeat": 1,
+      "passed": true,
+      "p99_ns": 5753102,
+      "max_ns": 7382114,
+      "service_max_ns": 7416314,
+      "cpu_ns": 1072982141,
+      "peak_rss_bytes": 411136000,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        4.97,
+        3.8,
+        3.59
+      ],
+      "failed_gates": []
+    },
+    {
+      "channels": 16,
+      "repeat": 2,
+      "passed": true,
+      "p99_ns": 5421654,
+      "max_ns": 6539087,
+      "service_max_ns": 5368804,
+      "cpu_ns": 1081531077,
+      "peak_rss_bytes": 411156480,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        4.74,
+        3.92,
+        3.64
+      ],
+      "failed_gates": []
+    },
+    {
+      "channels": 16,
+      "repeat": 3,
+      "passed": false,
+      "p99_ns": 11179341,
+      "max_ns": 12179292,
+      "service_max_ns": 11360213,
+      "cpu_ns": 1014673780,
+      "peak_rss_bytes": 411369472,
+      "throttled_periods": 0,
+      "host_loadavg_before": [
+        4.7,
+        4.01,
+        3.69
+      ],
+      "failed_gates": [
+        "event_timing"
+      ]
+    }
+  ]
+}
