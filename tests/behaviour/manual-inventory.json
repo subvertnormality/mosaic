@@ -2389,9 +2389,11 @@
         "MAN-016"
       ],
       "statement": "Activating functions displays tooltips at the bottom of the screen.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Inventory each documented gesture; replacement/expiry; playback redraw.",
+      "cases": [
+        "M-TOOLTIP-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-TOOLTIP-001 (E and D, 3 fresh D repeats): exact bottom-screen texts for four page changes, channel selection, record on/off, memory apply/undo, Play and Stop; an immediate second activation replaces the first; each clears without input (measured ~3 s) while stopped and playing. A never-expiring tooltip is detected. Texts are characterised implementation strings; the manual lists none. Remaining: the other ~40 messages (editors, faders, locks, masks, errors and their priority), and whether tooltip:do_tip freeing metro by list index affects other metros.",
       "oracles": [
         "Semantic text-region assertion with explicit timing, no whole-screen masking."
       ],
