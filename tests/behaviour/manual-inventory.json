@@ -6198,9 +6198,11 @@
         "MAN-100"
       ],
       "statement": "Lock-all-to-pentatonic defaults off.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "On/off with merged/random/masked/fixed notes; scales with different pentatonic mappings.",
+      "cases": [
+        "M-OPT-PENT-ALL-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Covered (M-OPT-PENT-ALL-001, E and D, 3 fresh D repeats): fresh default Off leaves unmodified notes chromatic; On snaps degrees I..VII of all ten scale types at root C to the README MAN-102 selections (nearest, lower on tie) with random/merged switches Off; Off restores plain pitches. UI label is \"Lock all to pentatonic\"; README quotes \"Lock all to pent.\". Remaining: root/degree/rotation/transpose/octave composition, note masks (raw/snap/full), chord/strum/arp voices, Fixed and Quantised Fixed Note precedence, and combination with random/merged switches On.",
       "oracles": [
         "Independent precedence and pitch table; clarify fixed-note bypass explicitly."
       ],

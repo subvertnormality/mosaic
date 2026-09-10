@@ -1,5 +1,6 @@
 from shuffle_matrix import shuffle_matrix
 from random_note_domains import random_note_domains
+from pentatonic_options import lock_all_to_pentatonic
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3211,6 +3212,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-OPT-PENT-ALL-001':dict(run=lock_all_to_pentatonic,requirements=['OPT-PENTATONIC-ALL','SCALE-EDIT'],description='Lock all to pentatonic defaults off, snaps unmodified C major and C minor notes to the documented selections with random/merged switches off, and restores plain pitches when disabled'),
  'M-SYNC-021':dict(run=lambda c:external_clock_fault(c,'burst'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Three2ms bunched external clocks followed by an exactly compensating gap preserve received-pulse phrase phase, including an onset inside the burst, with complete gates and releases'),
  'M-SYNC-022':dict(run=long_external_phase,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Sixteen external-master bars deliver1536 exact24PPQN clocks and256 onsets with absolute first-beat phase, bounded accumulated drift, complete gates and post-Stop silence'),
  'M-SYNC-020':dict(run=external_clock_explicit_recovery,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='External clock loss freewheels at the acquired tempo; Start followed by the next Clock cancels holdover ownership, releases the held note and reanchors step1 without stale notes'),

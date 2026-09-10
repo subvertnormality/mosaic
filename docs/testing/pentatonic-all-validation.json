@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "case": "M-OPT-PENT-ALL-001",
+  "requirements": [
+    "OPT-PENTATONIC-ALL",
+    "SCALE-EDIT"
+  ],
+  "emulator": {
+    "root": "/home/andy/projects/monome-emulator-midi-clock",
+    "install": "/home/andy/projects/monome-runtime-candidates/midi-schedule-capacity-12/installation.json",
+    "lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0"
+  },
+  "runs": [
+    {
+      "run_id": "fe1f94be9d7f434b901b939cc1c9c7b0",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "49bdfc243dca1b797bcb6ba25eef4c3bd0c75c65def80d1cda54de0eed7bf40f"
+    },
+    {
+      "run_id": "3f9a67e76c6b479184670d679e4c0533",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "ae95f4b514f3f2494cfbefdae20af6c8394a6a867f55232c6fe146ebed652b30"
+    },
+    {
+      "run_id": "repeat-f0f1cb600f9648e48db40c9433ca877b",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "84a5f46b8e400fd1e449ed8789bc1ebdc91b25616155761d165064b1383316c8"
+    }
+  ],
+  "repeat_normalized_sha256": "c9cb7323e6048748ff9e71cc4a654b8776cd133bc1942504002865cc29d56bc9",
+  "fault_sensitivity": [
+    {
+      "mutation": "step.lua ignores all_scales_lock_to_pentatonic",
+      "detected_at": "on-major",
+      "run_id": "see mut1 (controlled)",
+      "passed": false
+    },
+    {
+      "mutation": "mosaic.lua option default On",
+      "detected_at": "default-off-major",
+      "passed": false
+    }
+  ],
+  "oracle": "Independent interval fixtures plus README MAN-102 five-degree selections; nearest pitch across octaves, lower on tie; README Lydian and melodic-minor examples as anchors.",
+  "preserved_failures": [
+    {
+      "run_id": "c2847335ec4f4a708051face70913059",
+      "cause": "host: JACK client creation failed at session start while other sessions started"
+    },
+    {
+      "run_id": "b567fe9942414ab38564404610586fee",
+      "cause": "test mistake: LED assertion listed 7 cells against 6 values"
+    }
+  ],
+  "specification_note": "README quotes \"Lock all to pent.\"; the parameter label is \"Lock all to pentatonic\".",
+  "full_campaign_complete": false
+}
