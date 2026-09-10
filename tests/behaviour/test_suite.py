@@ -48,6 +48,17 @@ class FailureClassTests(unittest.TestCase):
         for failure in ("AssertionError: ('Onset phase', 0, 19255089)",None,'ContractError: midi_drop'):
             self.assertEqual(suite.failure_class(dict(failure=failure)),'case')
 
+class StartGateTests(unittest.TestCase):
+    def test_launches_are_spaced_by_the_interval(self):
+        import threading,time
+        gate=suite.StartGate(.2);times=[]
+        def launch():gate.wait();times.append(time.monotonic())
+        threads=[threading.Thread(target=launch) for _ in range(3)]
+        for t in threads:t.start()
+        for t in threads:t.join()
+        times.sort()
+        self.assertTrue(all(b-a>=.19 for a,b in zip(times,times[1:])),times)
+
 class CollectionTests(unittest.TestCase):
     def test_every_existing_test_file_is_classified(self):
         lua,python=suite.collect(set(suite.case_registry()))

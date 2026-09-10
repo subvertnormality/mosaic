@@ -143,7 +143,24 @@ def lua_units(norns,out):
 def tree_digest(root):
     return sha(json.dumps({p.relative_to(root).as_posix():sha(p.read_bytes()) for p in sorted(root.rglob('*')) if p.is_file()},sort_keys=True).encode())
 
-def run_case(case,lane,profile,args,artifacts,env):
+class StartGate:
+    """Space case launches: concurrent native startups race on JACK's shared registry.
+
+    Measured in the emulator (R22): six simultaneous starts failed 15 of 18 times.
+    Startup is not under test, so spacing launches changes no case result.
+    """
+    def __init__(self,interval):
+        import threading
+        self.interval=interval;self.lock=threading.Lock();self.last=None
+    def wait(self):
+        with self.lock:
+            if self.last is not None:
+                delay=self.interval-(time.monotonic()-self.last)
+                if delay>0:time.sleep(delay)
+            self.last=time.monotonic()
+
+def run_case(case,lane,profile,args,artifacts,env,gate=None):
+    if gate:gate.wait()
     command=[sys.executable,str(BEHAVIOUR/'run.py'),'--case',case,'--artifacts',str(artifacts),'--clock-mode',lane]
     if args.experimental_install:command+=['--experimental-install',args.experimental_install]
     if profile!='base-midi':command+=['--profile',profile,'--mod-code-root',args.mod_code_root[profile]]
@@ -205,8 +222,9 @@ def run(args):
         artifacts=out/'runs'/lane;artifacts.mkdir(parents=True)
         workers=args.real_time_workers if lane=='real-time' else args.controlled_workers
         lane_jobs=[j for j in jobs if j[1]==lane]
+        gate=StartGate(args.start_interval)
         with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
-            futures=[pool.submit(run_case,case,lane,profile,args,artifacts,env) for case,lane,profile in lane_jobs]
+            futures=[pool.submit(run_case,case,lane,profile,args,artifacts,env,gate) for case,lane,profile in lane_jobs]
             for done,future in enumerate(concurrent.futures.as_completed(futures),1):
                 row=future.result();results.append(row)
                 print(json.dumps(dict(done=done,of=len(lane_jobs),lane=lane,case=row['case'],passed=row['passed'],seconds=row['seconds'])),flush=True)
@@ -316,6 +334,7 @@ def main():
     r.add_argument('--real-time-workers',type=int,default=2)
     r.add_argument('--controlled-workers',type=int,default=6)
     r.add_argument('--case-timeout',type=int,default=3600)
+    r.add_argument('--start-interval',type=float,default=10,help='Minimum seconds between case launches (native startup race, emulator R22)')
     r.add_argument('--skip-fast-layers',action='store_true')
     c=commands.add_parser('compare');c.add_argument('baseline');c.add_argument('candidate')
     s=commands.add_parser('rerun',help='Serially rerun failed case runs into suite-effective.json')
