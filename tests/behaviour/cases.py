@@ -721,6 +721,103 @@ def transpose_global_domain(c):
                               maximum_phase_error_seconds=max(abs(error) for error in errors),passed=True))
 
 
+def transpose_song_copy_isolation(c):
+    """Copied song transpose remains isolated and alternates at live boundaries."""
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    c.configure();c.tap(4,8);c.hold_tap((1,4),(4,4))
+    def set_global(value):
+        c.tap(9,8)
+        for _ in range(value+12):c.tap(16,8)
+    set_global(5)
+    c.tap(6,8);c.hold_tap((1,1),(2,1));c.led_values([(1,1),(2,1)],[15,7])
+    c.tap(2,1);c.led_values([(1,1),(2,1)],[7,15])
+    c.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
+    c.tap(3,8);c.tap(4,8);set_global(-7)
+    c.tap(6,8);c.led_values([(1,1),(2,1)],[7,15])
+    set_mosaic_options(c,[('Song mode',True)])
+    c.tap(1,1);c.led_values([(1,1),(2,1)],[15,7])
+    capture=MidiWindow(c.snapshot()['midi_count'])
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    # The note lane emits every24 pulses.  Song slots advance on the full
+    # 1,536-pulse global cycle, so this four-step phrase repeats16 times.
+    c.elapse(10.8);capture.extend(c.snapshot())
+    assert len(capture.note_ons())>=65
+    c.led_values([(1,1),(2,1)],[7,15])
+    c.elapse(10.8);capture.extend(c.snapshot())
+    assert len(capture.note_ons())>=129
+    c.led_values([(1,1),(2,1)],[15,7])
+    c.action(type='grid',x=1,y=8,state=1)
+    stop_lower=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
+    c.action(type='grid',x=1,y=8,state=0)
+    stop_upper=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
+    c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+    notes=capture.note_ons();assert 129<=len(notes)<=136,('Observation overshoot',len(notes))
+    source=tuple(x+5 for x in (60,62,64,65));copy=tuple(x-7 for x in (60,62,64,65))
+    phrase=source*16+copy*16;velocities=(127,117,107,97)*32
+    wanted=[(1,[144,phrase[i%128],velocities[i%128]]) for i in range(len(notes))]
+    assert [(e['port'],e['bytes']) for e in notes]==wanted
+    pairs=note_pairs(capture.events);assert len(pairs)==len(notes)
+    assert [on for on,off in pairs]==notes
+    assert all((off['port'],off['bytes'])==(1,[128,on['bytes'][1],on['bytes'][2]]) for on,off in pairs)
+    assert_durations(c,notes[:-1],[1]*(len(notes)-1),events=capture.events)
+    nonnotes=[e for e in capture.events if e['bytes'][0]&240 not in (128,144)]
+    assert [(e['port'],e['bytes']) for e in nonnotes[:3]]==[(1,[250]),(2,[250]),(3,[250])]
+    assert [(e['port'],e['bytes']) for e in nonnotes[-3:]]==[(1,[252]),(2,[252]),(3,[252])]
+    programs=nonnotes[3:-3];assert len(programs)==4*len(notes)
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    expected_programs=[]
+    for i in range(len(notes)):
+        transpose=5 if i%128<64 else -7
+        expected_programs.extend(([192,0],[193,0],[194,3],[195,transpose+64]))
+    assert [(e['port'],e['bytes']) for e in programs]==[(3,b) for b in expected_programs]
+    for i,note in enumerate(notes):
+        group=programs[4*i:4*i+4]
+        assert group[-1]['index']<note['index'] and (i==0 or group[0]['index']>notes[i-1]['index'])
+        deltas=[note[field]-e[field] for e in group]
+        assert (deltas==[0]*4 if c.clock_mode=='controlled-experimental' else all(0<=d<=2_000_000 for d in deltas))
+    assert len(capture.events)==6*len(notes)+6
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    errors=[(note[field]-notes[0][field])/1e9-i/6 for i,note in enumerate(notes)]
+    assert max(abs(error) for error in errors)<=tolerance,errors
+    assert stop_lower<=pairs[-1][1][field]<=stop_upper+int(tolerance*1e9)
+    c.results.append(dict(kind='transpose-song-copy-isolation',source_transpose=5,copy_transpose=-7,
+                          source_pitches=list(source),copy_pitches=list(copy),transitions=2,
+                          onsets=len(notes),releases=len(pairs),maximum_phase_error_seconds=max(abs(error) for error in errors),passed=True))
+
+
+def transpose_song_persistence(c):
+    """Independent copied song transposes survive autosave and cold reload."""
+    c.configure();c.tap(4,8)
+    def set_global(driver,value):
+        driver.tap(9,8)
+        for _ in range(value+12):driver.tap(16,8)
+    set_global(c,5)
+    c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1)
+    c.led_values([(1,1),(2,1)],[7,15])
+    c.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
+    c.tap(3,8);c.tap(4,8);set_global(c,-7)
+    saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
+    c.elapse(59);assert not saved.exists() and not pset.exists()
+    c.elapse(2);c.wait(lambda _:saved.is_file() and pset.is_file(),timeout=2)
+    hashes={path.name:digest(path) for path in (saved,pset)}
+    c.results.append(dict(kind='transpose-autosave',files=hashes,passed=True))
+    c.finish()
+    out=c.out/'reloaded';out.mkdir()
+    loaded=Driver(out,project_seed=c.data_directory,**c.launch_options)
+    try:
+        loaded.tap(6,8);loaded.led_values([(1,1),(2,1)],[7,15])
+        loaded.tap(1,1);loaded.led_values([(1,1),(2,1)],[15,7])
+        loaded.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
+        loaded.tap(6,8);loaded.tap(2,1);loaded.led_values([(1,1),(2,1)],[7,15])
+        loaded.playback([(1,[144,n,v]) for n,v in ((53,127),(55,117),(57,107),(58,97))],cycles=2)
+        loaded.results.append(dict(kind='transpose-cold-reload',source_transpose=5,
+                                   copy_transpose=-7,source_and_copy_played=True,passed=True))
+    finally:
+        loaded.finish()
+
+
 def transpose_lock_domain(c):
     """Walk every transpose value exposed by the native scale-page fader."""
     c.configure(); c.tap(4,8)
@@ -3653,6 +3750,8 @@ CASES={
  'M-TIME-001':dict(run=integral_clock_divisions,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All integral-pulse clock ratios through /16 with exact full-phrase phase and duration checks'),
  'M-TIME-002':dict(run=lambda c:integral_clock_divisions(c,True),requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
  'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
+ 'M-TRANS-008':dict(run=transpose_song_persistence,requirements=['TRANSPOSE-GLOBAL','SONG-SLOTS','SAVE-AUTO','PERSIST-AUTO-001'],description='Independent +5/-7 copied song transposes survive the real autosave deadline and a fresh native process with exact restored MIDI and slot LEDs'),
+ 'M-TRANS-007':dict(run=transpose_song_copy_isolation,requirements=['TRANSPOSE-GLOBAL','SONG-SLOTS','SONG-ADVANCE','OPT-SONG-MODE'],description='Copy +5 song transpose, edit copy to -7, then cross live 16-step song boundaries with exact MIDI, slot LEDs, ownership and phase'),
  'M-TRANS-006':dict(run=transpose_global_domain,requirements=['TRANSPOSE-GLOBAL'],description='All25 global transpose values selected through the scale-page fader with exact MIDI, gates and accumulated phase'),
  'M-TRANS-005':dict(run=transpose_midi_boundaries,requirements=['LOCK-TRANSPOSE','LOCK-OCTAVE','LOCK-SCALE','SCALE-EDIT','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Extreme Higher/Lower note merges compose with channel octave and scale/step transpose, clamping final MIDI pitches at 0 and 127'),
  'M-TRANS-004':dict(run=merge_transpose_scale_lock,requirements=['LOCK-TRANSPOSE','LOCK-SCALE','MERGE-NOTE-AVERAGE','SCALE-EDIT'],description='Two-pattern average degrees compose with a D-minor scale lock, D root, saved scale transpose and endpoint/zero step transposes, proving scale reset and persistence into an unlocked step'),

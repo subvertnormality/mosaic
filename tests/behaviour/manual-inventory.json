@@ -1658,7 +1658,8 @@
         "M-RANGE-SAVED-002",
         "M-RANGE-SAVED-005",
         "M-RANGE-SAVED-006",
-        "M-PARAM-035"
+        "M-PARAM-035",
+        "M-TRANS-008"
       ],
       "status": "partial-domain-coverage",
       "domain": "Fresh stopped project with four notes,59-second absence and61-second save, fresh-process reload; repeated saves, playing exclusion, interruption, corrupt/old data and explicit save/load dialogs remain required.",
@@ -5408,10 +5409,12 @@
       ],
       "statement": "Global/step transpose is additive to scale transpose.",
       "cases": [
-        "M-TRANS-006"
+        "M-TRANS-006",
+        "M-TRANS-007",
+        "M-TRANS-008"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-TRANS-006 validates every advertised -12..+12 value through the physical scale-page fader with exact four-note MIDI, gates and accumulated phase in both clocks. Lock, octave and MIDI-boundary interactions are covered by M-TRANS-001..005; song copy, persistence and live-edit timing remain.",
+      "domain": "M-TRANS-006 validates every advertised -12..+12 value through the physical scale-page fader with exact four-note MIDI, gates and accumulated phase in both clocks. M-TRANS-007 covers independent copied song values and live 1,536-pulse boundaries; M-TRANS-008 covers autosave and fresh-process restoration. Lock, octave and MIDI-boundary interactions are covered by M-TRANS-001..005; live-edit timing remains.",
       "oracles": [
         "Hand-derived additive pitch tables and fader/lock feedback."
       ],
@@ -5440,7 +5443,9 @@
         "M-PATCH-027",
         "M-PATCH-043",
         "M-SONG-SETTINGS-001",
-        "M-SONG-SETTINGS-002"
+        "M-SONG-SETTINGS-002",
+        "M-TRANS-007",
+        "M-TRANS-008"
       ],
       "status": "in_progress",
       "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
@@ -5472,7 +5477,8 @@
         "M-TIME-009",
         "M-PATCH-026",
         "M-PATCH-027",
-        "M-SONG-SETTINGS-001"
+        "M-SONG-SETTINGS-001",
+        "M-TRANS-007"
       ],
       "status": "in_progress",
       "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
@@ -5870,7 +5876,8 @@
         "M-RANGE-SAVED-003",
         "M-RANGE-SAVED-004",
         "M-RANGE-SAVED-005",
-        "M-RANGE-SAVED-006"
+        "M-RANGE-SAVED-006",
+        "M-TRANS-008"
       ],
       "status": "unimplemented",
       "domain": "59.999999999/60/60.000000001 seconds; idle-reset edit; playing past60; stop/restart; missing/corrupt autosave.",
@@ -5920,7 +5927,8 @@
       ],
       "statement": "Song mode defaults on; disabling suppresses automatic sequence progression.",
       "cases": [
-        "M-TIME-003"
+        "M-TIME-003",
+        "M-TRANS-007"
       ],
       "status": "in_progress",
       "domain": "Fresh boot/default; enable/disable before/on/after transition; explicit selection while off. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required.",

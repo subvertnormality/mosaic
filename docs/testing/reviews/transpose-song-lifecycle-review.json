@@ -1,0 +1,29 @@
+{
+  "started_at": "2026-09-10T05:19:57.732371+00:00",
+  "packet_sha256": "185c7e9971d29126295ffc71a8c4ebcc77be7267519536dc2805b52ed46d9181",
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Copied-song global transpose lifecycle review\n\nUse Codex only. Read-only local commands are allowed; do not edit or launch tests/runtime processes.\n\nReview M-TRANS-007, M-TRANS-008, their manual-inventory mappings, and `docs/testing/transpose-song-lifecycle-validation.json`. M-TRANS-007 creates a four-note pattern through the grid, sets song slot1 global transpose +5, copies slot1 to2, changes only slot2 to -7, enables Song mode, then plays across two actual 1,536-pulse song boundaries. The note lane emits every24 pulses, so each slot contains64 onsets. It checks slot LEDs, the exact 128-note pitch cycle, velocities, ports, every release, one-step gates, four program changes per onset, three-port Start/Stop, total event identity, Stop release bracketing and accumulated phase in controlled and real time. M-TRANS-008 crosses the actual 60-second autosave deadline, launches a fresh native process from the saved project, selects both slots through grid inputs, and verifies exact restored +5/-7 MIDI phrases and slot LEDs in both clock modes.\n\nChallenge whether the copy/edit gestures actually isolate the two song slots, whether the 1,536/24 boundary model and cyclic pitch oracle are independent and correct, observation-count tolerance, complete event/release ownership, persistence source identity, and whether the inventory overclaims. The initial 4- and16-onset boundary assumptions failed and are retained as oracle-correction evidence. Production source is unchanged. A source-bound snapshot passes530 Lua tests and21 focused Python timing oracles. Broad unittest discovery is not a supported aggregate because four executable/helper modules require environment or argv at import; do not count those import errors as product regressions. Global-transpose live-edit timing remains explicitly pending.\n\nReturn ACCEPTED or CHANGES REQUIRED with findings ordered by severity. Keep unrelated manual domains outside this scoped verdict.",
+    "files": [
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "User recipes and observable-output oracles"
+      },
+      {
+        "path": "tests/behaviour/manual-inventory.json",
+        "reason": "Manual coverage mapping"
+      },
+      {
+        "path": "docs/testing/transpose-song-lifecycle-validation.json",
+        "reason": "Bound evidence"
+      }
+    ],
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**CHANGES REQUIRED.** The note-lane lifecycle and reload evidence are convincing, but \u201ccomplete event identity\u201d overstates the oracle, and copy inheritance is not directly tested.\n\n1. **P2 \u2014 Program-change values and per-onset ownership are unchecked.** [cases.py:765](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:765) checks aggregate count, repeating statuses and any payload in `0..127`. Incorrect transpose messages\u2014or groups displaced between onsets\u2014could pass. The transpose payload should be `transpose + 64`: **69 \u2192 57 \u2192 69** across the boundaries ([sinfonion_harmonic_sync.lua:24](/home/andy/projects/mosaic-behaviour-tests/lib/sinfonion_harmonic_sync.lua:24)). The retained captures contain that sequence, but the assertions do not enforce it. Check exact program bytes and their association with each onset.\n\n2. **P2 \u2014 Both recipes overwrite the copied transpose before observing it.** M-TRANS-007 copies, checks LEDs, then resets the destination fader and sets \u22127; M-TRANS-008 does likewise ([cases.py:729](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:729), [cases.py:782](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:782)). They prove independent values after editing, but would miss a copy operation that omitted `transpose`. Production currently uses `fn.deep_copy` ([program.lua:213](/home/andy/projects/mosaic-behaviour-tests/lib/models/program.lua:213)); add an observable +5 check on slot2 before editing it.\n\n3. **P2 \u2014 M-TRANS-007\u2019s source binding needs reconciliation.** Both recorded executions identify `cases.py` as `8f9981f1\u2026`, whereas the validation document binds current source `71b87e97\u2026` ([recorded identity:3371](/home/andy/projects/mosaic-behaviour-runs/41b9b3e128a14d599fa86143b3e67bbc/native/identity.json:3371), [validation:5](/home/andy/projects/mosaic-behaviour-tests/docs/testing/transpose-song-lifecycle-validation.json:5)). Inventory hashes differ too. Manifest and artifact hashes verify, but retain the tested source/diff demonstrating unchanged M-TRANS-007 assertions, or bind fresh executions.\n\nThe boundary model is correct: `96 \u00d7 4 \u00d7 1/16 = 24` pulses per step, and the default 64-step song length gives **1,536 pulses**. Both captures contain 130 onsets/releases with pitch changes at onsets 65 and 129; the 129\u2013131 observation allowance preserves exact cyclic pitch and accumulated-phase checks. Reload sessions are distinct, with matching application identities and byte-identical saved/seeded project files. Inventory appropriately retains partial coverage and pending live-edit timing ([manual-inventory.json:5416](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/manual-inventory.json:5416)).\n\n**CONFIDENCE: High.** No tests or runtimes were launched; strengthening these assertions and reconciling M-TRANS-007 provenance would change the verdict.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a089c2-2b46-7881-a09e-ae993c467ba7` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T05:24:10.486168+00:00"
+}

@@ -1,0 +1,16 @@
+{
+  "started_at": "2026-09-10T05:38:57.892923+00:00",
+  "packet_sha256": "2950ea4fb629422e8ccbe66da03c9aa1864cb82b16581503fb84c2be96b70135",
+  "tool": "rebut",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "session_ref": "01a089c2-2b46-7881-a09e-ae993c467ba7",
+    "rebuttal": "All three requested changes are implemented. Review the updated files and final bound evidence.\n\n1. M-TRANS-007 now asserts exact per-onset program groups `[192,0],[193,0],[194,3],[195,transpose+64]`, giving69 for source,57 for copy and69 after wrap. Each group is ordered after the preceding onset and before its target onset. All four controlled timestamps equal the onset; in real time every program message precedes its onset by at most2ms. Every captured event remains classified and counted.\n2. Immediately after copy and before any destination edit, both M-TRANS-007 and008 select slot2, assert its LEDs, and play two complete exact +5 phrases through the public MIDI path. They then navigate back and edit it to-7. This directly tests copy inheritance plus later isolation.\n3. Fresh final executions bind current source hashes: M-TRANS-007 controlled818140fa... and realf813c0cc...; M-TRANS-008 controlleddd1398a... and realc4d17450.... A fresh current-source snapshot passes530/530 Lua and21/21 focused Python tests. The validation JSON contains full paths and digests.\n\nThe real-time observation upper bound is136 onsets: the retained strict run observed132 after exactly21.6s plus UI observation overhead. Every captured onset still must match the full128-note cycle, exact programs, releases, gates, event identity and phase. Initial boundary, exact-adjacency, exact-real-timestamp, and narrow-count failures remain retained as oracle corrections. Live-edit timing remains pending. Return ACCEPTED or identify a concrete remaining blocker.",
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**CONCEDE \u2014 the updated implementation resolves all three findings.** They no longer apply to the current source.\n\n- Exact program payloads, per-onset ordering and timestamp bounds are enforced at [cases.py:769](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:769).\n- Both recipes play inherited +5 phrases before editing slot2: [cases.py:734](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:734) and [cases.py:797](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:797).\n- I verified all four final manifests pass, their artifact digests match, and their recorded source hashes match the current files and snapshot listed in [validation.json:4](/home/andy/projects/mosaic-behaviour-tests/docs/testing/transpose-song-lifecycle-validation.json:4).\n\nThe 136-onset allowance retains exact checks for every captured onset. No remaining blocker from these findings.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a089c2-2b46-7881-a09e-ae993c467ba7` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T05:39:33.728434+00:00"
+}

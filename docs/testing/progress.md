@@ -1235,3 +1235,21 @@ M-TRANS-005 combines the already validated extreme Higher/Lower merge arithmetic
 ## Global transpose full value domain
 
 M-TRANS-006 selects every displayed global transpose value from -12 through +12 using the scale-page fader and verifies the independent base+semitone four-note phrase in controlled and real time. Every stage pairs all onsets/releases through physical Stop, checks one-step gates, ordered program channels, three-port transport, complete dynamic event count and accumulated phase. A retained first strict real-time run correctly exposed that the observation loop can receive a tenth valid onset before Stop; the bounded oracle accepts nine or ten and accounts for either without dropping data. No production change. Codex accepted the scoped checkpoint with high confidence; tooltip text is not independently asserted by this case, while exact MIDI and complete grid-driven behavior are.
+
+
+## Global transpose copied-song lifecycle
+
+M-TRANS-007 copies song slot1 at global transpose+5, visibly selects slot2 and
+plays its inherited +5 phrase before editing only the copy to-7. Song mode then
+crosses two full1,536-pulse boundaries while the 24-pulse note lane produces
+the exact 64-onset source, 64-onset copy and wrapped source sequence. Controlled
+and real-time lanes validate every note, release, gate, exact per-onset program
+group (including transposition69/57/69), three-port transport, slot LEDs, event
+count and accumulated phase. M-TRANS-008 crosses the actual60-second autosave
+deadline and loads a fresh native process, where both slots retain their exact
+MIDI phrases and selection feedback. Initial shorter-boundary, strict adjacency,
+exact wall-clock timestamp and narrow observation assumptions are retained as
+oracle corrections. The final source-bound snapshot passes530 Lua tests and21
+focused Python timing oracles. Codex review requested stronger copy-inheritance,
+program-payload and provenance checks; its focused follow-up conceded all three
+findings. Global-transpose live-edit timing remains pending.
