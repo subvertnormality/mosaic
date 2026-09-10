@@ -294,3 +294,16 @@ Codex01a08583-7196-7f31-ad1a-08698f6d60da traced the repeated-start defect to a 
 ## Reject malformed saved ranges before replacing the current project
 
 Candidate0082 implements the Codex-reviewed preservation policy. The existing loader accepted reversed saved ranges and emitted repeated end notes with no active range LEDs. Validate the range envelope before stopping playback or replacing model state. A rejected load retains live edits, pending notes and memory; suppress queued and future autosaves until successful named Save, New or valid Load. Missing startup autosave remains normal. Equal endpoints and the legacy song-pattern alias remain valid. Native tests cover all three recovery actions in both clocks, slot96/one-step/legacy round trips, ordinary autosave and recorded undo/redo persistence. Checked IO resolves the review finding that the official serializers can ignore nonthrowing write/close failures. This is not a transactional save redesign or complete arbitrary-corruption schema. See saved-range-validation.json for source-bound evidence and remaining obligations.
+
+
+## External clock faults follow received pulses; explicit Start owns recovery
+
+Treat each received MIDI Clock byte as one24PPQN pulse. A dropped byte therefore
+delays later step ordinals and an inserted byte advances them; the oracle does not
+force an ideal wall timeline over the source's observed pulse stream. Norns may
+predict between pulses from its24-sample estimate. When pulses vanish without a
+transport message, pinned norns freewheels at the acquired tempo; this is stated
+rather than silently treated as Stop. The unambiguous recovery contract requires
+external Start followed by its next Clock: cancel the previous playback owner,
+release its held note and restart Mosaic at step1 on that beat-zero clock. Recovery without Start remains
+an explicit pending policy, not a defect allowance for other MIDI behavior.

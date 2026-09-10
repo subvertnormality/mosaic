@@ -1192,3 +1192,21 @@ manual coverage, release and final hardening remain incomplete.
 +M-SYNC001..013 D/R (26/26),526 Lua tests, complete-tail mutations and the focused
 +Codex follow-up pass. Exact evidence is in midi-forwarding-candidate09-validation.json.
 +The broader synchronization/manual/release campaign remains incomplete.
+
+
+## Degraded external MIDI clock and explicit recovery
+
+M-SYNC015-020 drive Mosaic through the native CLOCK menu and scheduled physical
+MIDI input. The matrix covers alternating +/-5ms jitter, one missing pulse, one
+extra half-interval pulse, an abrupt100-to150BPM step, gradual drift over42
+intervals, and a500ms clock gap followed by Start. Every case asserts received
+24PPQN ordinal phase, the authored four-note phrase, velocity, complete note
+ownership and release timing in controlled and wall-clock lanes. Selecting MIDI
+clock input1 through the menu proves transport on port2 cannot start Mosaic.
+
+Pinned norns freewheels during an unaccompanied clock gap. In the explicit
+recovery case, Mosaic produces the bounded holdover phrase, then Start followed by the next Clock
+releases the sounding note and reanchors step1 with no stale task output. The
+README now states the all-input default, pulse-fault consequences and holdover
+semantics. This does not decide ambiguous recovery without Start or cover burst
+loss, stochastic jitter, simultaneous source edits or every feature interaction.

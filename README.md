@@ -307,7 +307,7 @@ Most _Mosaic_ functions are described by tooltips that appear at the bottom of t
 
 ### External MIDI Transport
 
-With the norns clock source set to MIDI, an external transport Start resets Mosaic to step 1, including when it is already playing. Held notes are released before the restarted phrase begins. Restart cleanup does not send a MIDI Stop back to the connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase.
+With the norns clock source set to MIDI, external MIDI Clock drives Mosaic at 24 pulses per quarter note. Norns receives clock from all connected MIDI devices by default; use **CLOCK > midi clock in** to select one input when other devices also send transport or clock. Mosaic follows received pulse order: a missing pulse delays later step boundaries and an extra pulse advances them; norns estimates timing between received pulses from recent intervals. If clock pulses disappear without Stop, norns continues at its last acquired tempo and does not infer Stop. A later external Start marks the next Clock as beat zero. When that Clock arrives, Mosaic releases held notes and resets to step 1, including when it is already playing. Restart cleanup does not send a MIDI Stop back to connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase.
 
 Pinned norns does not interpret MIDI Continue or Song Position Pointer as clock-transport commands. Mosaic therefore remains stopped when it receives them and does not reposition; send MIDI Start to begin again from step 1. The messages remain available to scripts through the normal MIDI event API.
 

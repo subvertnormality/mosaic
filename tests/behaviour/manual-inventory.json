@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "e10fb26756eb7b9d198b3fcec12333c56e06d027a74c359d6c45da4a3aa262f8",
+  "manual_sha256": "0ac717754ac5c424c541d6e66729e62b9b140483a5c85f402cbae793c4a355bf",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -213,7 +213,7 @@
       "level": 3,
       "start_line": 308,
       "end_line": 313,
-      "text_sha256": "7ecacf2e47e331136d9453270a19cdd0862618afac74ba344725a893b4ff738b",
+      "text_sha256": "38c389e250750e595c711869072196149ab1862d5c64dc03b575f53a13c0c668",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "CLOCK-MIDI-TRANSPORT-001",
@@ -1522,7 +1522,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "e10fb26756eb7b9d198b3fcec12333c56e06d027a74c359d6c45da4a3aa262f8"
+      "sha256": "0ac717754ac5c424c541d6e66729e62b9b140483a5c85f402cbae793c4a355bf"
     },
     {
       "path": "cheat_sheet.html",
@@ -1779,14 +1779,21 @@
         "M-SYNC-011",
         "M-SYNC-012",
         "M-SYNC-013",
-        "M-SYNC-014"
+        "M-SYNC-014",
+        "M-SYNC-015",
+        "M-SYNC-016",
+        "M-SYNC-017",
+        "M-SYNC-018",
+        "M-SYNC-019",
+        "M-SYNC-020"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Scoped cold20/100/300BPM and warmed startup, repeated Start, release ordering, source handoff, and pinned-norns Continue/SPP raw-delivery-without-transport behavior; acquisition interactions, other ports, degraded clocks and full matrix remain required.",
+      "domain": "Cold20/100/300BPM and warmed startup; repeated Start; release ordering; source handoff; pinned-norns Continue/SPP behavior; two-port input selection; alternating +/-5ms jitter; one missing or extra pulse; abrupt and gradual100-to150BPM changes; and500ms loss with explicit-Start recovery. Larger stochastic jitter, repeated/burst pulse corruption, loss without an explicit transport recovery, simultaneous source edits and remaining feature interactions are pending.",
       "oracles": [
-        "Native CLOCK source menu",
-        "Literal ordered MIDI notes and150ms onset spacing",
-        "Stop drains all notes",
+        "Native CLOCK source and midi-clock-input menus",
+        "Received-pulse ordinal phase with independently authored fault timestamps",
+        "Literal ordered MIDI pitches and velocities with complete release ownership",
+        "Explicit Start followed by the next Clock reanchors step1 after bounded norns holdover; Stop drains all notes",
         "Internal playback resumes"
       ]
     },
@@ -7680,8 +7687,8 @@
       "source": {
         "path": "README.md",
         "line": 310,
-        "sha256": "f7d388c45fac92b1572dc01b8826b07727451ad642c4545368fb365fc4bbcb76",
-        "text": "With the norns clock source set to MIDI, an external transport Start resets Mosaic to step 1, including when it is already playing. Held notes are released before the restarted phrase begins. Restart cleanup does not send a MIDI Stop back to the connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase."
+        "sha256": "3fe513c4c75dc63c0f1a9cf156f6a592e25d6c43cea3820e48ed303dd439d2ee",
+        "text": "With the norns clock source set to MIDI, external MIDI Clock drives Mosaic at 24 pulses per quarter note. Norns receives clock from all connected MIDI devices by default; use **CLOCK > midi clock in** to select one input when other devices also send transport or clock. Mosaic follows received pulse order: a missing pulse delays later step boundaries and an extra pulse advances them; norns estimates timing between received pulses from recent intervals. If clock pulses disappear without Stop, norns continues at its last acquired tempo and does not infer Stop. A later external Start marks the next Clock as beat zero. When that Clock arrives, Mosaic releases held notes and resets to step 1, including when it is already playing. Restart cleanup does not send a MIDI Stop back to connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase."
       },
       "proposed_requirements": [
         "CLOCK-MIDI-TRANSPORT-001",
@@ -7690,7 +7697,13 @@
       ],
       "cases": [
         "M-SYNC-006",
-        "M-TIM-004"
+        "M-TIM-004",
+        "M-SYNC-015",
+        "M-SYNC-016",
+        "M-SYNC-017",
+        "M-SYNC-018",
+        "M-SYNC-019",
+        "M-SYNC-020"
       ],
       "status": "mapped-scoped-native-evidence"
     }

@@ -1,0 +1,55 @@
+{
+  "started_at": "2026-09-10T01:35:31.071525+00:00",
+  "packet_sha256": "3bfba54361b5b70bbd1c1a1a8f56e37128a6625fdd0aee4d7381682a0911190f",
+  "files": [
+    "tests/behaviour/external_clock_faults.py",
+    "tests/behaviour/test_external_clock_fault_oracle.py",
+    "README.md",
+    "docs/testing/external-clock-fault-validation.json"
+  ],
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "Focused Codex-only paranoia review of the new external MIDI-clock fault checkpoint.\nThis is a trusted single-user local musical development utility. The user has\napproved sending these repository sources and evidence to Codex. Review only;\ndo not edit files, launch processes, use extra agents, browse the web, or certify\nthe full emulator/manual campaign.\n\nThe new generic norns probe and Mosaic cases cover alternating +/-5ms jitter,\none missing clock, one extra clock at a half interval, abrupt and gradual\n100-to150BPM changes, per-port receive selection, and a500ms clock gap followed\nby explicit Start. Controlled and real-time results all pass. The intended\nmusical rule is received-pulse ordinal at24PPQN: missing input delays later\nboundaries and extra input advances them. Pinned norns may extrapolate between\npulses. Without Stop it freewheels from the last estimate; explicit Start must\ncancel old playback ownership, release the sounding note, and reanchor Mosaic\nstep1. Recovery without a transport command remains unclaimed and pending.\n\nAssess these specific risks:\n\n1. Is the expected-timing oracle independent enough, or does it mirror the\n   norns estimator/Mosaic scheduler and permit a timing regression?\n2. Can note filtering/accounting miss wrong ports/channels, extra/missing notes,\n   duplicate/incorrect releases, reordered events, stale post-Start output, or\n   output after Stop?\n3. Does the physical CLOCK menu recipe actually prove input1 selection and\n   port2 rejection, given norns defaults to all inputs?\n4. Are the controlled bounds (2ns,2ms,3ms,5ms by scenario) and the existing\n   additional10ms wall dispatch allowance capable of hiding a whole-pulse or\n   musically material phase error?\n5. Is the manual statement about all-input default, received-pulse behavior,\n   freewheel and explicit-Start recovery no broader than source and evidence?\n6. Are the generic and Mosaic recovery traces checking one owner after restart,\n   or merely accepting the observed output as a golden trace?\n\nGive concrete material findings with file/line and a bounded correction/test.\nDistinguish missing future scope from a blocker in this slice. Do not request\nhardware/manual testing, a broad refactor, security governance, stochastic\ncertification, or dual-vendor review.\n\nMosaic files:\n- tests/behaviour/external_clock_faults.py\n- tests/behaviour/test_external_clock_fault_oracle.py\n- tests/behaviour/cases.py\n- README.md\n- tests/behaviour/manual-inventory.json\n- docs/testing/external-clock-fault-validation.json\n\nGeneric emulator files:\n- /home/andy/projects/monome-emulator-midi-clock/fixtures/probes/midi-clock-faults/midi-clock-faults.lua\n- /home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py\n- /home/andy/projects/monome-emulator-midi-clock/docs/delivery/external-midi-fault-checkpoint.json\n\nFinal generic evidence:\n- /home/andy/projects/monome-emulator-midi-clock/artifacts/external-midi-faults/e61945eb3ef64811a7134f7dc50ab64b/manifest.json\n- /home/andy/projects/monome-emulator-midi-clock/artifacts/external-midi-faults/8394c266e5a44c52977ff8a7f9c78c66/manifest.json\n\nFinal Mosaic manifests are enumerated and hashed in\ndocs/testing/external-clock-fault-validation.json. The full526-test unit log and\n18 mutation-test log are under\n/home/andy/projects/mosaic-behaviour-runs/external-clock-units-20260910-0218/.\n",
+    "files": [
+      {
+        "path": "tests/behaviour/external_clock_faults.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "tests/behaviour/test_external_clock_fault_oracle.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "README.md",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "docs/testing/external-clock-fault-validation.json",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "docs/testing/decisions.md",
+        "reason": "Findings and fixes"
+      }
+    ],
+    "web_search": false,
+    "effort": "medium"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "I can\u2019t substantiate a verdict on these six risks under the current access constraints. The available local file/git reader requires launching a process, which you explicitly prohibited; no repository resource reader is exposed.\n\nConsequently, I have not opened the specified sources, manifests, logs, or history, and cannot honestly provide file:line findings or validate the reported passes.\n\n**CONFIDENCE: Low.** Providing the source/evidence contents or permitting read-only shell commands would enable the requested review; no tests or emulator execution are needed.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a088f4-b447-7b71-aac2-d5f192a9a036` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "status": "returned",
+  "finished_at": "2026-09-10T01:35:48.507027+00:00"
+}

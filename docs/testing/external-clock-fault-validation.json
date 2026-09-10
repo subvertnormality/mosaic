@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "status": "scoped-pass-codex-accepted",
+  "date": "2026-09-10",
+  "scope": "External MIDI clock jitter, one missing/extra pulse, abrupt and gradual tempo changes, per-port receive selection, norns holdover and explicit Start/next-Clock Mosaic recovery.",
+  "mosaic_base_revision": "f55c682414c2094448cb65b12f2f296e0d85396b",
+  "emulator_base_revision": "a65f07601cfca655d3fc08f20314380d5df71cf7",
+  "experimental_install": "/home/andy/projects/monome-runtime-candidates/internal-tempo-continuity-10/installation.json",
+  "generic_norns": {
+    "controlled-experimental": {
+      "path": "/home/andy/projects/monome-emulator-midi-clock/artifacts/external-midi-faults/d1b68e74ec374b0f890f9fe3b956df6b/manifest.json",
+      "sha256": "d000709cc5bcc8926427d890d993fc1af5f4b9574d0fcbda65d3385ee6ca0b9b",
+      "passed": true
+    },
+    "real-time": {
+      "path": "/home/andy/projects/monome-emulator-midi-clock/artifacts/external-midi-faults/0080af5a555e48f1b7575317a955bf0c/manifest.json",
+      "sha256": "fff7e0ccd08a12142c6bd89178d72cf97c6fc5970a63b895d2ff36dc9274236d",
+      "passed": true
+    }
+  },
+  "mosaic_cases": {
+    "controlled-experimental": {
+      "M-SYNC-015": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/8cc66dc431c94543a20e70a11f0540bb/manifest.json",
+        "sha256": "613c2817923009999d0586cb39a7daeb2294c7ad09b25e3256846c79203ad4e4",
+        "passed": true
+      },
+      "M-SYNC-016": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/d0d7ed66a8734154a97af78402fe3f75/manifest.json",
+        "sha256": "2e4dc0379467e019b94eb9467d084a243d25c3bd6b6ee647704b4e7720ad8f5e",
+        "passed": true
+      },
+      "M-SYNC-017": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/33e96192ee4d41b98d279e03fa605c78/manifest.json",
+        "sha256": "97215134cce536d051eb40a5027ba1cf70ab0d9e8f39ab745c9c8fdfdfc8f212",
+        "passed": true
+      },
+      "M-SYNC-018": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/bbc22d69212d430bac8a1d36ffc698c6/manifest.json",
+        "sha256": "792e9523e3444e014c34a75f83a8b76ea5e53d74eba52713348d4da1499a48a3",
+        "passed": true
+      },
+      "M-SYNC-019": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/444874830c034980a173c7330fc02feb/manifest.json",
+        "sha256": "65d57b9cc7dd8075032dd4d61abe67fb6f45ddf4158b3ae1aa5597b60318e951",
+        "passed": true
+      },
+      "M-SYNC-020": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/a67c8586870f4ba2ade2b3d51dfbdc00/manifest.json",
+        "sha256": "7b96c81483548aeb9f708fefb67dcac7dc9fb60382cc812a953a795f63b6fa83",
+        "passed": true
+      }
+    },
+    "real-time": {
+      "M-SYNC-015": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/e2931ff541cb444d933e5aec20631ede/manifest.json",
+        "sha256": "48fe8a494ec7f711dcbc05954ea8329f354d799f6ad6ab28815322fad6807244",
+        "passed": true
+      },
+      "M-SYNC-016": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/304bb12ed7bb4187860e6bb8791744fe/manifest.json",
+        "sha256": "e308ee0ffd223ca2887584bd0e6a65178e5aed7caea22f2f4701d91dd70b710d",
+        "passed": true
+      },
+      "M-SYNC-017": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/93cee3fcd28f4453a0e8c35fe7270ed9/manifest.json",
+        "sha256": "98459f8c46363ce3f4087d03b0883a5b4063cc99f407e3c58910c809a5ce9566",
+        "passed": true
+      },
+      "M-SYNC-018": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/38f6b821cb4e4d3ba155200c4e7f9bee/manifest.json",
+        "sha256": "fefa43e8b5afb3f4475ba9fbd7df07ec28b7063273a4178e6d437c719aaf05e1",
+        "passed": true
+      },
+      "M-SYNC-019": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/a32dd7e66f3e4dfa9f83b2e2088ae809/manifest.json",
+        "sha256": "5f7f6040d60b1bd84ba7bc9cad8d9612b91f2bf4d30fd08cdf017c5dfe8c76c6",
+        "passed": true
+      },
+      "M-SYNC-020": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/f1d50fdf971547d3af14f21b00ca1465/manifest.json",
+        "sha256": "6583e161e3bb7ba801d8170bc8fc3bb628d59ac5beaa79c89f53b1fe3170e8a8",
+        "passed": true
+      }
+    }
+  },
+  "unit_integration": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/external-clock-units-causalfix2-20260910/results.json",
+    "sha256": "c156917a285b411a9cbeea30c73324d001eb65751620f75a495cae3c579003ff",
+    "exit_code": 0,
+    "summary": "Ran 526 tests in 11.388 seconds, 526 successes, 0 failures",
+    "log": "/home/andy/projects/mosaic-behaviour-runs/external-clock-units-causalfix2-20260910/unit.log",
+    "log_sha256": "2b23a3f37baa2c4a70e80eaecc222a67a8145611bebb73850a5d451d0fa9e7f7",
+    "source_snapshot": "/home/andy/projects/mosaic-behaviour-runs/external-clock-units-causalfix2-20260910/mosaic",
+    "source_sha256": {
+      "lib/clock/m_clock.lua": "d90e3dd12610ab16fa91af356dd215f200068c64d75d93d97c69753854416a61",
+      "lib/clock/m_lattice.lua": "166a0a691fa9cf506cbddde7c45e15b6a3de84f01c54a6659560b72184b313ec",
+      "lib/models/program.lua": "c4e57c831206a55485d042bc8ff0fda1c9d422841c1ecea97b13ad7d49000556",
+      "lib/step.lua": "f0ce6b9a7d88d7fb56e2062978541e4bd2a9d2805aba68cde786bb9d54d6951e"
+    },
+    "full_campaign_complete": false
+  },
+  "oracle_mutations": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/external-clock-units-causalfix2-20260910/python-oracles.log",
+    "sha256": "16e95730e6e4018911df76b22e28814a92fc0a8346af1571a05b3e7994c7daa4",
+    "summary": "21 passing tests: 8 external-clock mutations plus acquisition, forwarding and master-clock guards"
+  },
+  "manual_sha256": "0ac717754ac5c424c541d6e66729e62b9b140483a5c85f402cbae793c4a355bf",
+  "oracle": [
+    "Physical native CLOCK menu selects source and MIDI input vport1.",
+    "MIDI Clock is counted at24PPQN; expected step targets come from independently authored received-pulse ordinals.",
+    "Every captured note onset has literal port/channel/pitch/velocity and bounded target time; every voice has exactly one owned release.",
+    "During a500ms gap without Stop, pinned norns freewheels at the acquired tempo. Explicit Start marks the next Clock as beat zero; that Clock releases the old owner and reanchors step1.",
+    "After Stop, twelve further Clock pulses produce no notes or probe markers.",
+    "Controlled deadlines use scenario bounds of2ns to5.000002ms; wall time adds the established10ms dispatch allowance."
+  ],
+  "corrected_test_assumption": {
+    "failed_manifests": [
+      "/home/andy/projects/mosaic-behaviour-runs/fae82d169d044ff9845b747081f037a8/manifest.json",
+      "/home/andy/projects/mosaic-behaviour-runs/78e20b0794f64ca1b654054e1d2913f2/manifest.json",
+      "/home/andy/projects/mosaic-behaviour-runs/f4d1ca3a435c41e7b83562ffe4ab21a6/manifest.json"
+    ],
+    "resolution": "Norns defaults MIDI clock input to all devices. The initial port2 negative was invalid; the final physical recipe selects input1 before asserting port2 silence. No emulator production fix was made."
+  },
+  "limitations": [
+    "Loss without Start/Stop is characterized as pinned-norns holdover; its ambiguous resume policy is not certified.",
+    "Repeated/burst corruption, stochastic long jitter, simultaneous source/menu edits and broader feature interactions remain.",
+    "The optional candidate remains unpromoted; this checkpoint does not complete the manual campaign, emulator release or final hardening."
+  ],
+  "review": {
+    "status": "accepted",
+    "provider": "codex-only",
+    "initial_review": "docs/testing/reviews/external-clock-review-02.json",
+    "initial_session": "01a088f5-c6a7-7082-84b2-e95572ddef15",
+    "closure_review": "docs/testing/reviews/external-clock-review-followup-02.json",
+    "closure_session": "01a0891b-bf33-7800-9fd4-ee6d30cd41e5",
+    "corrections": [
+      "Require every active voice to release before its successor onset.",
+      "Continue twelve Clock pulses after Stop and require complete silence.",
+      "Validate every generic output event including port and MIDI bytes.",
+      "Use causal lower bounds and separate transport timing tolerances.",
+      "Document Start as taking effect on the next Clock and loss as freewheel without inferred Stop."
+    ]
+  }
+}

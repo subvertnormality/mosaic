@@ -1,0 +1,55 @@
+{
+  "started_at": "2026-09-10T01:36:42.438825+00:00",
+  "packet_sha256": "0baedef6e1b4fa2dcc9cc549940a81b05c15e36b0f93ce102cdca5ce686f647a",
+  "files": [
+    "tests/behaviour/external_clock_faults.py",
+    "tests/behaviour/test_external_clock_fault_oracle.py",
+    "README.md",
+    "docs/testing/external-clock-fault-validation.json"
+  ],
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "Focused Codex-only paranoia review of the new external MIDI-clock fault checkpoint.\nThis is a trusted single-user local musical development utility. The user has\napproved sending these repository sources and evidence to Codex. Review only;\nUse read-only shell commands as needed to inspect the listed local files, Git\nhistory and retained evidence. Do not edit files, run tests or emulator/runtime\nprocesses, use extra agents, browse the web, or certify the full campaign.\n\nThe new generic norns probe and Mosaic cases cover alternating +/-5ms jitter,\none missing clock, one extra clock at a half interval, abrupt and gradual\n100-to150BPM changes, per-port receive selection, and a500ms clock gap followed\nby explicit Start. Controlled and real-time results all pass. The intended\nmusical rule is received-pulse ordinal at24PPQN: missing input delays later\nboundaries and extra input advances them. Pinned norns may extrapolate between\npulses. Without Stop it freewheels from the last estimate; explicit Start must\ncancel old playback ownership, release the sounding note, and reanchor Mosaic\nstep1. Recovery without a transport command remains unclaimed and pending.\n\nAssess these specific risks:\n\n1. Is the expected-timing oracle independent enough, or does it mirror the\n   norns estimator/Mosaic scheduler and permit a timing regression?\n2. Can note filtering/accounting miss wrong ports/channels, extra/missing notes,\n   duplicate/incorrect releases, reordered events, stale post-Start output, or\n   output after Stop?\n3. Does the physical CLOCK menu recipe actually prove input1 selection and\n   port2 rejection, given norns defaults to all inputs?\n4. Are the controlled bounds (2ns,2ms,3ms,5ms by scenario) and the existing\n   additional10ms wall dispatch allowance capable of hiding a whole-pulse or\n   musically material phase error?\n5. Is the manual statement about all-input default, received-pulse behavior,\n   freewheel and explicit-Start recovery no broader than source and evidence?\n6. Are the generic and Mosaic recovery traces checking one owner after restart,\n   or merely accepting the observed output as a golden trace?\n\nGive concrete material findings with file/line and a bounded correction/test.\nDistinguish missing future scope from a blocker in this slice. Do not request\nhardware/manual testing, a broad refactor, security governance, stochastic\ncertification, or dual-vendor review.\n\nMosaic files:\n- tests/behaviour/external_clock_faults.py\n- tests/behaviour/test_external_clock_fault_oracle.py\n- tests/behaviour/cases.py\n- README.md\n- tests/behaviour/manual-inventory.json\n- docs/testing/external-clock-fault-validation.json\n\nGeneric emulator files:\n- /home/andy/projects/monome-emulator-midi-clock/fixtures/probes/midi-clock-faults/midi-clock-faults.lua\n- /home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py\n- /home/andy/projects/monome-emulator-midi-clock/docs/delivery/external-midi-fault-checkpoint.json\n\nFinal generic evidence:\n- /home/andy/projects/monome-emulator-midi-clock/artifacts/external-midi-faults/e61945eb3ef64811a7134f7dc50ab64b/manifest.json\n- /home/andy/projects/monome-emulator-midi-clock/artifacts/external-midi-faults/8394c266e5a44c52977ff8a7f9c78c66/manifest.json\n\nFinal Mosaic manifests are enumerated and hashed in\ndocs/testing/external-clock-fault-validation.json. The full526-test unit log and\n18 mutation-test log are under\n/home/andy/projects/mosaic-behaviour-runs/external-clock-units-20260910-0218/.\n",
+    "files": [
+      {
+        "path": "tests/behaviour/external_clock_faults.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "tests/behaviour/test_external_clock_fault_oracle.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "README.md",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "docs/testing/external-clock-fault-validation.json",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "docs/testing/decisions.md",
+        "reason": "Findings and fixes"
+      }
+    ],
+    "web_search": false,
+    "effort": "medium"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "The timing oracle is independent enough, and the recovery traces meaningfully constrain playback ownership. However, this slice still has material gaps in release ordering, post-Stop observation, and generic output accounting; the manual also overstates what Start alone does.\n\n1. **Release-before-restart ordering is not enforced.** In [_assert_notes](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:44), increasing capture indices establish capture order, but not the required musical order. A different-pitch onset may precede the previous note\u2019s release at the same deadline and still pass. At recovery, the old pitch is 62 and the restarted pitch is 60, so this loophole applies directly. The [reordering mutation](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_external_clock_fault_oracle.py:53) only duplicates an index; it never swaps release/onset events and assigns valid increasing indices. **Correction:** require the previous owner\u2019s release before each replacement onset, particularly step 1 after Start; add that equal-deadline swap mutation. The retained recovery trace has the correct order, but the oracle would accept its reversal.\n\n2. **Post-Stop silence is not established.** Mosaic\u2019s [_schedule](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:81) returns once input delivery finishes and outstanding notes become empty. The generic [wait_delivered](/home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py:45) observes at Stop + 1 ns in controlled mode. Neither observes through the next possible stale callback. A broken Stop that releases the current note but leaves playback scheduled can pass. **Correction:** continue capture for two step periods after Stop, including continued input clocks, and reject subsequent notes/sync markers. This is a blocker for the claimed Stop coverage, not future campaign scope.\n\n3. **Mosaic note accounting is strong; generic filtering is weaker.** Mosaic examines note messages across every channel and port before asserting identity, counts and owned releases. Wrong routing, missing/extra notes and duplicate releases within capture are rejected. Generic [marker filtering](/home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py:87), also repeated at line 129, selects only status `176` and never checks output port. Expected markers on port 2 pass; additional markers on another channel disappear. Balanced unexpected notes also escape its empty-outstanding check. **Correction:** validate the complete probe output as ordered `(port, bytes, time)` events, with mutations for wrong-port markers, other-channel duplicates and unexpected balanced notes.\n\n4. **The timing targets do not reproduce the estimator, but the tolerances permit measurable phase errors.** Mosaic uses [`offsets[6 * index]`](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:108); generic uses the same musical rule. Neither implements norns\u2019 24-sample mean or Mosaic\u2019s scheduler. Each scenario\u2019s absolute allowance is smaller than its shortest input interval, so a whole-pulse deviation **from the target** fails. Nevertheless, wall allowances of 10\u201315 ms permit substantial subpulse errors; they do not establish tighter musical accuracy. The shared allowance also permits an early Stop release\u2014for wall jitter, 15 ms exceeds the final note\u2019s scheduled 12.5 ms duration. **Correction:** give transport-triggered releases a separate causal bound, and add scenario-boundary mutations. Alternating jitter cancels at every sixth pulse, so this case proves boundary stability under that stimulus, not a particular smoothing response.\n\n5. **The input-selection recipe is meaningful for this pinned configuration.** The [menu actions and port-2 prelude](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:33) are backed by positive port-1 playback and rejection of premature port-2 playback. Native options are `all`, `none`, `1`, \u2026, and [selection disables all devices before enabling the chosen vport](/home/andy/projects/monome-runtime-candidates/internal-tempo-continuity-10/norns/lua/core/midi.lua:416). Clock and transport share the same [receive gate](/home/andy/projects/monome-runtime-candidates/internal-tempo-continuity-10/norns/matron/src/device/device_midi.c:288). No selection blocker found.\n\n6. **Recovery is authored, but the manual needs qualification.** Generic [expected marker indices and deadlines](/home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py:130) and Mosaic\u2019s [six holdover/eight restarted onsets](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:140) would expose an old owner continuing to emit during the captured restart interval. They are not observed golden traces. However, [README:310](/home/andy/projects/mosaic-behaviour-tests/README.md:310) says Start cancels holdover: native [Start merely sets the counter to \u22121; the following Clock triggers restart](/home/andy/projects/monome-runtime-candidates/internal-tempo-continuity-10/norns/matron/src/clocks/clock_midi.c:51). Freewheel [has no timeout here](/home/andy/projects/monome-runtime-candidates/internal-tempo-continuity-10/norns/matron/src/clock.c:60). **Correction:** say \u201cStart followed by the next Clock\u201d and remove any implication that \u201ctemporarily\u201d means automatic expiry. Keep pulse-order claims qualified by extrapolation.\n\n**CONFIDENCE: High.** All 14 manifest hashes, 36 Mosaic evidence-artifact hashes and supplied log hashes matched; no tests were run. The bounded corrections above would change the acceptance judgment; transport-free recovery and broader corruption remain legitimate pending scope.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a088f5-c6a7-7082-84b2-e95572ddef15` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "status": "returned",
+  "finished_at": "2026-09-10T01:39:33.266990+00:00"
+}

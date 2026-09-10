@@ -2867,7 +2867,15 @@ from forwarded_clock import cold_forwarded_clock,warm_forwarded_clock
 
 from continue_spp import continue_spp_unsupported
 
+from external_clock_faults import external_clock_fault,external_clock_explicit_recovery
+
 CASES={
+ 'M-SYNC-020':dict(run=external_clock_explicit_recovery,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='External clock loss freewheels at the acquired tempo; Start followed by the next Clock cancels holdover ownership, releases the held note and reanchors step1 without stale notes'),
+ 'M-SYNC-019':dict(run=lambda c:external_clock_fault(c,'drift'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Gradual external tempo drift from100 to150BPM preserves pulse-ordinal phrase phase, pitches, velocities and balanced gates'),
+ 'M-SYNC-018':dict(run=lambda c:external_clock_fault(c,'step'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Abrupt external tempo step from100 to150BPM preserves pulse-ordinal phrase phase, pitches, velocities and balanced gates'),
+ 'M-SYNC-017':dict(run=lambda c:external_clock_fault(c,'extra'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='One extra half-interval MIDI clock advances only the received-pulse phase, with no duplicate notes or unbalanced gates'),
+ 'M-SYNC-016':dict(run=lambda c:external_clock_fault(c,'missing'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='One missing MIDI clock delays only the received-pulse phase, with no dropped notes or unbalanced gates'),
+ 'M-SYNC-015':dict(run=lambda c:external_clock_fault(c,'jitter'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Alternating plus/minus5ms external-clock jitter stays aligned to each sixth received pulse with exact phrase identity and gates'),
  'M-SYNC-014':dict(run=continue_spp_unsupported,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Pinned norns Continue/SPP limitation: raw delivery without false transport resume/reposition; later Start resets step1'),
  'M-SYNC-012':dict(run=cold_forwarded_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold external clock on port1; Mosaic notes and forwarded port2 receiver align to original input, no input-port clock echo'),
  'M-SYNC-013':dict(run=warm_forwarded_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Warmed external clock on port1; Mosaic and forwarded port2 receiver keep absolute input phase'),

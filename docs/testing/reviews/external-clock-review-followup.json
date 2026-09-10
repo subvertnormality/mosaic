@@ -1,0 +1,55 @@
+{
+  "started_at": "2026-09-10T01:59:32.357381+00:00",
+  "packet_sha256": "5dfe6ff7496d122a690be696e6430f217d09c85d43b748544d1de3965b02014c",
+  "files": [
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_external_clock_fault_oracle.py",
+    "/home/andy/projects/mosaic-behaviour-tests/README.md",
+    "/home/andy/projects/mosaic-behaviour-tests/docs/testing/external-clock-fault-validation.json"
+  ],
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# External MIDI clock follow-up review\n\nUse Codex only. Read-only local shell commands are allowed for inspecting files, manifests, logs, and Git diffs. Do not edit files or launch tests or runtime processes.\n\nReview the corrected external MIDI clock slice in `/home/andy/projects/mosaic-behaviour-tests` and its generic emulator support in `/home/andy/projects/monome-emulator-midi-clock`. The initial substantive review is `docs/testing/reviews/external-clock-review-02.json`, session `01a088f5-c6a7-7082-84b2-e95572ddef15`.\n\nConfirm whether these five findings are closed:\n\n1. Every active note owner must release before the next onset, including equal-deadline restart swaps.\n2. Stop silence must be demonstrated while twelve further MIDI Clock pulses arrive.\n3. The generic oracle must validate every captured output event, including port and full MIDI bytes, and reject unexpected traffic.\n4. Transport-triggered releases must have causal lower bounds and an appropriate transport-specific upper tolerance.\n5. Documentation must state that clock loss freewheels without inferred Stop, and that Start takes effect on the next Clock pulse.\n\nUse `docs/testing/external-clock-fault-validation.json` for the current immutable evidence paths and hashes. Also inspect the changed tests, README/manual binding, generic probe/runner, mutation tests, and both repositories' diffs. Report any remaining correctness blocker in this scoped slice. Clearly return either ACCEPTED or CHANGES REQUIRED, with concrete findings ordered by severity.\n",
+    "files": [
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_external_clock_fault_oracle.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/README.md",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/docs/testing/external-clock-fault-validation.json",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/docs/testing/decisions.md",
+        "reason": "Findings and fixes"
+      }
+    ],
+    "web_search": false,
+    "effort": "medium"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**CHANGES REQUIRED.** Findings 1, 2, 3 and 5 are closed; finding 4 remains partially open.\n\n**Medium \u2014 transport causality is not fully enforced.** Mosaic supplies scheduled `stop`/`recovery` deadlines as causal lower bounds, rather than actual delivery timestamps ([external_clock_faults.py:124](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:124), [line 162](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:162)). A release between the scheduled deadline and delayed input delivery can therefore pass. Generic recovery additionally uses only `abs(error) <= allowance`, permitting its Stop marker up to 10 ms early in real-time mode ([external_midi_faults_native.py:152](/home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py:152)). Use actual delivered Stop/beat-zero Clock timestamps as lower bounds, retain the separate upper tolerances, and add mutations for both gaps. This is an oracle blocker, not evidence of incorrect runtime output.\n\nThe other corrections are concrete:\n\n- **1 closed:** `assert not active` precedes every onset; the mutation swaps equal-deadline release/onset events and renumbers indices ([oracle:57](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:57), [mutation:57](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_external_clock_fault_oracle.py:57)).\n- **2 closed:** Both runners deliver twelve additional clocks before completing observation; exact note/marker counts reject continued playback ([Mosaic:112](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:112), [generic:87](/home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py:87)). Retained delivery traces contain the twelve-clock tails.\n- **3 closed:** Generic validation checks the entire captured list\u2019s count, order, port and full bytes, with wrong-port, other-channel and balanced-unexpected-note mutations ([validator:60](/home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py:60), [mutations:23](/home/andy/projects/monome-emulator-midi-clock/tests/test_external_midi_fault_output.py:23)).\n- **5 closed:** The manual explicitly states freewheel without inferred Stop and restart on the next Clock; its inventory binding matches ([README:310](/home/andy/projects/mosaic-behaviour-tests/README.md:310), [binding:7687](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/manual-inventory.json:7687)).\n\nBoth repositories\u2019 diffs and recent history were inspected. All 14 manifest hashes, 180 Mosaic artifact hashes, recorded log hashes and generic probe/runner hashes matched.\n\n**CONFIDENCE: High.** Closing the causal-bound gaps would change the judgment; no tests or runtime processes were launched.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a0890a-adf0-7311-876a-0137f7a6b8e6` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "status": "returned",
+  "finished_at": "2026-09-10T02:01:54.093573+00:00"
+}

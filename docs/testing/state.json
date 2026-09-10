@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Candidate09 received-zero/source-serialization forwarding checkpoint passes generic D/R, M-SYNC001..013 D/R26/26,526units, receiver mutations and Codex follow-up high confidence. See midi-forwarding-candidate09-validation.json. Next add Continue/SPP support or explicit unsupported behavior and its external receiver cases; then jitter/loss/recovery, tempo transitions and sustained drift. Full manual/emulator release/final hardening remain incomplete.",
+  "next_action": "M-SYNC015-020 and generic norns fault matrices pass controlled/real lanes for jitter, one missing/extra pulse, 100-to150BPM step/drift, input1 routing, Stop silence and Start/next-Clock recovery;526 units and21 oracle tests pass. Codex review accepted the slice; resume the highest-value remaining manual interactions. Final unit/integration hardening remains mandatory.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -5092,5 +5092,6 @@
     "push_verified": true,
     "full_campaign_complete": false
   },
-  "midi_forwarding_checkpoint": "docs/testing/midi-forwarding-candidate09-validation.json"
+  "midi_forwarding_checkpoint": "docs/testing/midi-forwarding-candidate09-validation.json",
+  "external_clock_fault_checkpoint": "docs/testing/external-clock-fault-validation.json"
 }
