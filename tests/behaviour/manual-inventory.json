@@ -5891,10 +5891,11 @@
         "M-RANGE-SAVED-004",
         "M-RANGE-SAVED-005",
         "M-RANGE-SAVED-006",
+        "M-SAVE-002",
         "M-TRANS-008"
       ],
-      "status": "unimplemented",
-      "domain": "59.999999999/60/60.000000001 seconds; idle-reset edit; playing past60; stop/restart; missing/corrupt autosave.",
+      "status": "partial-domain-coverage",
+      "domain": "M-SAVE-002 (E and D, 3 fresh D repeats): no autosave within 59.5 s of the last grid input; a grid press restarts the period; no autosave during 65 s of playback including an edit made while playing; autosave 60 s after Stop; a fresh process restores the edited phrase. The write follows a 0.5 s metro after the 60 s timer. A forced save while playing is detected. Existing M-RANGE-SAVED-001/003..006 and M-TRANS-008 cover rejected/corrupt saved data. Remaining: norns key/encoder input and parameter-menu changes as idle resets, missing/unwritable storage, named-save interaction.",
       "oracles": [
         "No early/playing write; restored observable musical state; named data unchanged."
       ],

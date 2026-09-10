@@ -5,6 +5,7 @@ from keyboard_options import keyboard_options
 from stop_safety import shift_press_to_stop
 from memory_truncate import memory_truncate
 from elektron_program_changes import elektron_program_changes
+from autosave_idle import autosave_idle_lifecycle
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3219,6 +3220,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-SAVE-002':dict(run=autosave_idle_lifecycle,requirements=['SAVE-AUTO','PERSIST-AUTO-001'],description='Idle autosave: none before 60 s, a grid press restarts the period, none while playing for 65 s with an edit, a save 60 s after Stop, and a fresh boot restores the edited phrase'),
  'M-OPT-ELEK-001':dict(run=elektron_program_changes,requirements=['OPT-ELEKTRON','SONG-ADVANCE','SONG-SLOTS'],description='Global length 4: Elektron program changes default Off sends none; On mirrors stopped slot selection and Play on channel 10, announces each next song slot before its first onset without duplicates, and follows the program-change channel setting'),
  'M-OPT-ELEK-002':dict(run=lambda c:elektron_program_changes(c,length=2,settings=False),requirements=['OPT-ELEKTRON','SONG-ADVANCE'],description='Global length 2: Play names the playing slot and each song transition is announced once before its boundary'),
  'M-OPT-ELEK-003':dict(run=lambda c:elektron_program_changes(c,length=1,settings=False),requirements=['OPT-ELEKTRON','SONG-ADVANCE'],description='Global length 1: Play names the playing slot and each song transition is announced once before its boundary'),
