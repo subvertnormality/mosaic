@@ -6960,9 +6960,11 @@
         "MAN-007"
       ],
       "statement": "Custom device configurations establish MIDI output defaults and parameter metadata.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every documented field; minimum/maximum legal MIDI channel, port, CC and value; omitted optional fields; two devices with different defaults.",
+      "cases": [
+        "M-SETUP-003"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-SETUP-003 (E and D, 3 fresh D repeats): two seeded custom configs confirmed through the picker: default_midi_device 2 + default_midi_channel 10 + fixed_note 36 give port 2, status 153, note 36 with pattern velocities; default_midi_channel 5 alone gives status 148 on the selector port with pattern notes. An ignored default channel is detected. Remaining: parameter metadata (params, map_params_automatically, CC/NRPN ranges), channel/port bounds, omitted optional fields.",
       "oracles": [
         "Screen labels/ranges and literal routed MIDI bytes, including sentinel no-send behaviour."
       ],
