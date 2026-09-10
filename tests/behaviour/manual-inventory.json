@@ -5714,10 +5714,11 @@
       "cases": [
         "M-PATCH-033",
         "M-PATCH-034",
-        "M-PATCH-064"
+        "M-PATCH-064",
+        "M-SLIDE-STEP-001"
       ],
       "status": "in_progress",
-      "domain": "First/last/wrapped next lock; rest/trigless; global slide mixed; clear/reassign. Mixed local CC plus global NRPN concurrency is covered.",
+      "domain": "First/last/wrapped next lock; rest/trigless; global slide mixed; clear/reassign. Mixed local CC plus global NRPN concurrency is covered. M-SLIDE-STEP-001 (E and D, 3 fresh D repeats), CC 1 locks 24/96/48 on steps 1/3/4: a step slide toggled on and off jumps to its destination; a step slide on the last lock has no target with wrap off; with \"Wrap param slides\" on it moves linearly 48->24 across the wrap (40/32/24), arriving with the next step-1 note. Ignoring the wrap option is detected.",
       "oracles": [
         "Exact local trajectory, next endpoint, unchanged non-slide locks and indicators."
       ],
@@ -6042,14 +6043,15 @@
       ],
       "statement": "Slide wrap defaults off; on interpolates to earlier locks when current pattern repeats.",
       "cases": [
-        "M-PATCH-026",
-        "M-PATCH-023",
+        "M-PATCH-018",
         "M-PATCH-021",
         "M-PATCH-022",
-        "M-PATCH-018"
+        "M-PATCH-023",
+        "M-PATCH-026",
+        "M-SLIDE-STEP-001"
       ],
       "status": "in_progress",
-      "domain": "Last/first lock, shortened length, nonrepeating transition; same/different endpoint; on/off mid-slide.",
+      "domain": "Last/first lock, shortened length, nonrepeating transition; same/different endpoint; on/off mid-slide. M-SLIDE-STEP-001 (E and D, 3 fresh D repeats), CC 1 locks 24/96/48 on steps 1/3/4: a step slide toggled on and off jumps to its destination; a step slide on the last lock has no target with wrap off; with \"Wrap param slides\" on it moves linearly 48->24 across the wrap (40/32/24), arriving with the next step-1 note. Ignoring the wrap option is detected.",
       "oracles": [
         "Independent CC trajectory and endpoint; no interpolation across song patterns."
       ],

@@ -14,6 +14,7 @@ from midi_mapping import midi_mapping,midi_map_entry
 from device_configs import invalid_device_configs,device_config_defaults
 from trig_note_merge import trig_note_merge_matrix
 from scale_lock_precedence import scale_lock_precedence
+from step_slides import step_slide_variants
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3228,6 +3229,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-SLIDE-STEP-001':dict(run=step_slide_variants,requirements=['SLIDE-STEP','OPT-SLIDE-WRAP'],description='Held-step K3 slide toggled off jumps to its destination; a step slide on the last lock has no target without wrap and moves linearly to the wrapped first lock with wrap on'),
  'M-SCALE-LOCK-003':dict(run=scale_lock_precedence,requirements=['SCALE-PRECEDENCE','LOCK-SCALE','OPT-SCALE-LIFETIME','PARAM-PROBABILITY'],description='Channel scale lock over a global scale-track lock with the lifetime option on and off: next active trig clears, probability-rejected trigs and rests do not, replacements apply; exact pitches per step'),
  'M-MERGE-TRIG-002':dict(run=trig_note_merge_matrix,requirements=['MERGE-TRIG-ALL','MERGE-TRIG-SKIP','MERGE-TRIG-ONLY','MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','MERGE-VELOCITY'],description='All 3 trig merge modes x 3 note merge modes over two overlapping patterns: only trig-bearing patterns contribute, single contributors pass through, exact pitches, pattern-1 velocities and rest spacing'),
  'M-MAP-002':dict(run=midi_map_entry,requirements=['SETUP-MIDI-MAP-ENTRY','MAP-RANGES','MAP-CONTROL'],description='Create the documented map through the native norns parameter-map menu (learn CC, in 1..2, accumulate), verify the written PMAP, then step the selected channel velocity mask by relative CCs with exact velocities'),
