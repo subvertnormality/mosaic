@@ -7109,9 +7109,11 @@
         "MAN-027"
       ],
       "statement": "A project supports building rhythm, harmony, channel combinations, recording and a chained song from copied sequences.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Small independently computed two-sequence composition; shared source pattern on multiple channels; edit copied masks/scale without mutating source; save/restart.",
+      "cases": [
+        "M-WORKFLOW-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-WORKFLOW-001 (E and D, 3 fresh D repeats) follows README Typical Workflow: two instruments on separate ports, XOX rhythm, applied D major harmony, default Skip deactivating overlaps then All/Average with pattern-1 velocity, a held-step keyboard melody mask, a copied song slot with channel 1 an octave up chained by song mode, idle autosave and a fresh process replaying the whole song, all with exact per-port bytes and step timing. A changed default trig merge mode is detected. Remaining: generated rhythms (banks/Euclid/tresillo painting), channel mutes in copies, scale locks, live recording and trig-param automation within the same walkthrough.",
       "oracles": [
         "Complete expected MIDI phrases, sequence LEDs and restored screen/grid state across transitions. Complements atomic feature tests."
       ],
