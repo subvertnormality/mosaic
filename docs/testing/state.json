@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Cover global transpose song copy/persistence and live edits, scale/root/rotation combinations, other merge modes and reassignment. Full campaign and final hardening remain mandatory.",
+  "next_action": "Close the highest-value remaining parameter-slide interactions and lifecycle domains, then continue all unimplemented/in-progress manual requirements. Full campaign and final unit/integration hardening remain mandatory.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -5097,5 +5097,22 @@
   "transpose_lock_checkpoint": "docs/testing/transpose-lock-validation.json",
   "transpose_merge_checkpoint": "docs/testing/transpose-merge-validation.json",
   "midi_pitch_boundary_checkpoint": "docs/testing/midi-pitch-boundary-validation.json",
-  "global_transpose_checkpoint": "docs/testing/global-transpose-validation.json"
+  "global_transpose_checkpoint": "docs/testing/global-transpose-validation.json",
+  "parameter_slots_fine_checkpoint": {
+    "revision": "486a73c",
+    "validation": "docs/testing/parameter-slots-fine-validation.json",
+    "cases": [
+      "M-PARAM-045",
+      "M-PARAM-046"
+    ],
+    "lanes": [
+      "controlled-experimental",
+      "real-time"
+    ],
+    "lua": 531,
+    "python_unit_oracles": 100,
+    "review": "01a08a94-e05a-77e2-8cfc-4e5b6fba6356",
+    "production_change": false,
+    "full_campaign_complete": false
+  }
 }
