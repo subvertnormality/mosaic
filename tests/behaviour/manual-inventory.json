@@ -1635,7 +1635,15 @@
         "M-PROJECT-LIVE-004",
         "M-SYNC-006",
         "M-SYNC-007",
-        "M-SYNC-008"
+        "M-SYNC-008",
+        "M-SYNC-021",
+        "M-SYNC-022",
+        "M-SYNC-020",
+        "M-SYNC-019",
+        "M-SYNC-018",
+        "M-SYNC-017",
+        "M-SYNC-016",
+        "M-SYNC-015"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -1659,10 +1667,13 @@
         "M-RANGE-SAVED-005",
         "M-RANGE-SAVED-006",
         "M-PARAM-035",
-        "M-TRANS-008"
+        "M-TRANS-008",
+        "M-LIFECYCLE-001",
+        "M-SAVE-002",
+        "M-PERSIST-COMBINED-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Fresh stopped project with four notes,59-second absence and61-second save, fresh-process reload; repeated saves, playing exclusion, interruption, corrupt/old data and explicit save/load dialogs remain required.",
+      "domain": "Fresh stopped project with four notes,59-second absence and61-second save, fresh-process reload; repeated saves, playing exclusion, interruption, corrupt/old data and explicit save/load dialogs remain required. M-LIFECYCLE-001 (E and D, 3 fresh D repeats): ten cold lifecycle cycles; each raises global transpose, autosaves when idle and shuts down cleanly, and every next process restores the cumulative transpose with exact phrases. M-PERSIST-COMBINED-001 (E and D, 3 fresh D repeats): the M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2 locks, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream. Tempo is norns system state (clock_tempo save=false), outside the script autosave. Skipping the pset read on load is detected.",
       "oracles": [
         "No early autosave file; saved project and parameters exist",
         "Restored exact grid LEDs",
@@ -1789,10 +1800,11 @@
         "M-SYNC-019",
         "M-SYNC-020",
         "M-SYNC-021",
-        "M-SYNC-022"
+        "M-SYNC-022",
+        "M-TRIPLE-004"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Cold20/100/300BPM and warmed startup; repeated Start; release ordering; source handoff; pinned-norns Continue/SPP behavior; two-port input selection; alternating +/-5ms jitter; one missing or extra pulse; abrupt and gradual100-to150BPM changes; and500ms loss with explicit-Start recovery. Three-tick2ms burst with exact phase compensation; sixteen-bar1536-clock/256-onset accumulated phase; larger stochastic jitter, repeated burst corruption, loss without an explicit transport recovery, simultaneous source edits and remaining feature interactions are pending.",
+      "domain": "Cold20/100/300BPM and warmed startup; repeated Start; release ordering; source handoff; pinned-norns Continue/SPP behavior; two-port input selection; alternating +/-5ms jitter; one missing or extra pulse; abrupt and gradual100-to150BPM changes; and500ms loss with explicit-Start recovery. Three-tick2ms burst with exact phase compensation; sixteen-bar1536-clock/256-onset accumulated phase; larger stochastic jitter, repeated burst corruption, loss without an explicit transport recovery, simultaneous source edits and remaining feature interactions are pending. M-TRIPLE-004 (E and D, 3 fresh D repeats), plan stress triple trigless x slide x external-clock change: a global CC slide to a silent trigless lock under a 24 PPQN clock that steps from 100 to 150 BPM mid-slide arrives with the destination lock (README 964) and, as characterisation beyond the manual, stays linear in received clock ordinals; stored-patch recall, exact onsets and balanced gates. A slide timed by seconds at the start tempo is detected.",
       "oracles": [
         "Native CLOCK source and midi-clock-input menus",
         "Received-pulse ordinal phase with independently authored fault timestamps",
@@ -2498,7 +2510,8 @@
         "M-XA-003-JF-OWNERSHIP",
         "M-XA-002-AUDIO",
         "M-XA-001-JF",
-        "M-SHUFFLE-008"
+        "M-SHUFFLE-008",
+        "M-SETUP-003"
       ],
       "status": "partial-domain-coverage",
       "domain": "Configured generic CC/named MIDI devices; every virtual port/channel; unassigned and missing devices.",
@@ -2965,7 +2978,9 @@
       "cases": [
         "M-MERGE-001",
         "M-MERGE-TRIG-002",
-        "M-TRIPLE-001"
+        "M-TRIPLE-001",
+        "M-ENDURANCE-001",
+        "M-WORKFLOW-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Overlap cardinalities0..16 and assignment order; every step. M-MERGE-TRIG-002 (E and D, 3 fresh D repeats): 3 trig modes x 3 note modes over two overlapping patterns with merged-pentatonic On, and All x 3 note modes with it Off; only trig-bearing patterns contribute, single contributors pass through unsnapped, exact pitches, pattern-1 velocity priority and rest spacing. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
@@ -2992,7 +3007,8 @@
       "statement": "Skip triggers only when exactly one assigned pattern has a trig.",
       "cases": [
         "M-MERGE-001",
-        "M-MERGE-TRIG-002"
+        "M-MERGE-TRIG-002",
+        "M-WORKFLOW-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Overlap cardinalities0..16; duplicate-like patterns; sparse/full. M-MERGE-TRIG-002 (E and D, 3 fresh D repeats): 3 trig modes x 3 note modes over two overlapping patterns with merged-pentatonic On, and All x 3 note modes with it Off; only trig-bearing patterns contribute, single contributors pass through unsnapped, exact pitches, pattern-1 velocity priority and rest spacing.",
@@ -3059,7 +3075,9 @@
         "M-MERGE-043",
         "M-MERGE-044",
         "M-TRANS-004",
-        "M-TRIPLE-001"
+        "M-TRIPLE-001",
+        "M-WORKFLOW-001",
+        "M-MERGE-TRIG-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
@@ -3097,7 +3115,8 @@
         "M-MERGE-023",
         "M-MERGE-043",
         "M-MERGE-044",
-        "M-TRANS-005"
+        "M-TRANS-005",
+        "M-MERGE-TRIG-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Equal/asymmetric/negative values; clipping; assignment order. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -3132,7 +3151,8 @@
         "M-MERGE-023",
         "M-MERGE-043",
         "M-MERGE-044",
-        "M-TRANS-005"
+        "M-TRANS-005",
+        "M-MERGE-TRIG-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Asymmetric/equal/negative values separating competing formulas. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -3195,7 +3215,8 @@
         "M-MERGE-012",
         "M-MERGE-020",
         "M-MERGE-021",
-        "M-MERGE-024"
+        "M-MERGE-024",
+        "M-MERGE-TRIG-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Every option; means at discontinuities; 0/127; selected pattern; Lower SEM-001. M-MERGE-004 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. M-MERGE-005 validates inactive priority-source ordering and independent velocity/length selection in both modes. Other merge options and full value domains remain required. Native020/021 cover two/three contributors, all numeric modes, fractional means, upper127 clamp and unassigned note-priority isolation in both modes. Lower zero/negative results remain pending. Native024 now covers exact zero and negative Lower results, MIDI clamp and raw zero-velocity release semantics in both clock modes; prior pending boundary statement is superseded for these vectors.",
@@ -3325,10 +3346,11 @@
         "M-PATCH-020",
         "M-PATCH-032",
         "M-RANGE-GLOBAL-003",
-        "M-SYNC-008"
+        "M-SYNC-008",
+        "M-SONG-TEMPO-001"
       ],
       "status": "in_progress",
-      "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. Confirmed channel clock edits queue to the global pattern boundary while playing; stopped edits apply immediately. M-PATCH-024/026 cover queued rate changes during active slides; full live-edit domain remains incomplete.",
+      "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. Confirmed channel clock edits queue to the global pattern boundary while playing; stopped edits apply immediately. M-PATCH-024/026 cover queued rate changes during active slides; full live-edit domain remains incomplete. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected.",
       "oracles": [
         "Piecewise rational beat tables, D exact and R bounded onsets/releases."
       ],
@@ -3458,7 +3480,8 @@
         "M-REC-PARAM-026",
         "M-REC-PARAM-027",
         "M-PARAM-034",
-        "M-PARAM-035"
+        "M-PARAM-035",
+        "M-MEMORY-003"
       ],
       "status": "partial-domain-coverage",
       "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts.",
@@ -3487,7 +3510,8 @@
         "M-MEMORY-001",
         "M-MEMORY-002",
         "M-REC-PARAM-025",
-        "M-REC-PARAM-026"
+        "M-REC-PARAM-026",
+        "M-MEMORY-003"
       ],
       "status": "partial-domain-coverage",
       "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback.",
@@ -3707,7 +3731,13 @@
         "M-PARAM-045",
         "M-PARAM-046",
         "M-PATCH-064",
-        "M-MOD-004"
+        "M-MOD-004",
+        "M-PARAM-044",
+        "M-PARAM-043",
+        "M-REC-PARAM-031",
+        "M-REC-PARAM-030",
+        "M-REC-PARAM-029",
+        "M-REC-PARAM-028"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -3750,7 +3780,9 @@
         "M-PARAM-028",
         "M-PARAM-029",
         "M-PARAM-030",
-        "M-PARAM-031"
+        "M-PARAM-031",
+        "M-PARAM-044",
+        "M-PARAM-043"
       ],
       "status": "partial-domain-coverage",
       "domain": "No lock/value/off after default or prior lock; first/wrap steps; enter off during a running slide. Existing published cases cover explicit/custom/default Off and uninterrupted slides in both lanes; remaining first/wrap/live-edit combinations remain required.",
@@ -3783,7 +3815,9 @@
         "M-PARAM-022",
         "M-PARAM-023",
         "M-PARAM-024",
-        "M-PARAM-025"
+        "M-PARAM-025",
+        "M-SCALE-LOCK-003",
+        "M-REC-PARAM-029"
       ],
       "status": "in_progress",
       "domain": "0/1/50/99/100; bounds; masked/merged trigs; seed/reseed; no flaky frequency assertion.",
@@ -4106,7 +4140,14 @@
         "M-MERGE-035",
         "M-MERGE-036",
         "M-MERGE-037",
-        "M-MERGE-038"
+        "M-MERGE-038",
+        "M-CHORDVEL-005",
+        "M-CHORDVEL-006",
+        "M-CHORDVEL-007",
+        "M-CHORDVEL-008",
+        "M-CHORDVEL-009",
+        "M-CHORDVEL-010",
+        "M-CHORDVEL-011"
       ],
       "status": "in_progress",
       "domain": "0..4 extra voices; each division; scale change before/on/after voice deadline; stop/cancel. Native033/034 cover zero/negative delayed-strum release deadlines, balanced raw MIDI and repeated transport in both modes. Actual-step/lattice integration covers simultaneous distinct and same-pitch On/Off order; broader native simultaneous-voice cases remain separate. Native035-038 now validate simultaneous distinct/same-pitch zero/negative voices with exact interleaved On/Off order and repeated transport in both modes.",
@@ -4699,7 +4740,14 @@
         "M-DASHBOARD-005",
         "M-DASHBOARD-006",
         "M-DASHBOARD-007",
-        "M-DASHBOARD-008"
+        "M-DASHBOARD-008",
+        "M-CHORDVEL-005",
+        "M-CHORDVEL-006",
+        "M-CHORDVEL-007",
+        "M-CHORDVEL-008",
+        "M-CHORDVEL-009",
+        "M-CHORDVEL-010",
+        "M-CHORDVEL-011"
       ],
       "status": "unimplemented",
       "domain": "Root0/1/64/126/127; positive/negative extremes; rest/muted-root and shape interactions.",
@@ -4993,7 +5041,14 @@
         "M-DASHBOARD-001",
         "M-DASHBOARD-002",
         "M-DASHBOARD-003",
-        "M-DASHBOARD-004"
+        "M-DASHBOARD-004",
+        "M-CHORDVEL-005",
+        "M-CHORDVEL-006",
+        "M-CHORDVEL-007",
+        "M-CHORDVEL-008",
+        "M-CHORDVEL-009",
+        "M-CHORDVEL-010",
+        "M-CHORDVEL-011"
       ],
       "status": "unimplemented",
       "domain": "Every selector, sparse voices, repeated pitches, mute-root and acceleration.",
@@ -5280,7 +5335,8 @@
         "M-CHORDSHAPE-253",
         "M-CHORDSHAPE-254",
         "M-CHORDSHAPE-255",
-        "M-CHORDSHAPE-256"
+        "M-CHORDSHAPE-256",
+        "M-CHORDVEL-011"
       ],
       "status": "in_progress",
       "domain": "No chord/sparse/full; root duplicated in a chord voice; strum/arp/ratchet; pending releases.",
@@ -5335,7 +5391,9 @@
       "cases": [
         "M-SCALE-001",
         "M-SCALE-003",
-        "M-SCALE-004"
+        "M-SCALE-004",
+        "M-WORKFLOW-001",
+        "M-SCALE-DISPLAY-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "All slots, stopped/playing, default vs global/channel locks; known stopped highlight regression.",
@@ -5371,7 +5429,9 @@
         "M-MERGE-044",
         "M-SCALE-004",
         "M-TRANS-004",
-        "M-TRANS-005"
+        "M-TRANS-005",
+        "M-OPT-PENT-ALL-001",
+        "M-TRANS-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 slots; same/different editing vs applied slot; long threshold; editing currently used scale and saving.",
@@ -5465,10 +5525,16 @@
         "M-SONG-SETTINGS-002",
         "M-TIME-005",
         "M-TRANS-007",
-        "M-TRANS-008"
+        "M-TRANS-008",
+        "M-TRIPLE-002",
+        "M-WORKFLOW-001",
+        "M-OPT-ELEK-001",
+        "M-TRIPLE-005",
+        "M-PERSIST-COMBINED-001",
+        "M-SONG-TEMPO-001"
       ],
       "status": "in_progress",
-      "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed).",
+      "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed). M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-PERSIST-COMBINED-001 (E and D, 3 fresh D repeats): the M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2 locks, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream. Tempo is norns system state (clock_tempo save=false), outside the script autosave. Skipping the pset read on load is detected. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected.",
       "oracles": [
         "Distinct saved musical states and exact indicator classes; source preserved; target fully overwritten."
       ],
@@ -5499,10 +5565,19 @@
         "M-TIME-006",
         "M-TIME-007",
         "M-TIME-009",
-        "M-TRANS-007"
+        "M-TRANS-007",
+        "M-TRIPLE-003",
+        "M-TRIPLE-002",
+        "M-ENDURANCE-001",
+        "M-WORKFLOW-001",
+        "M-OPT-ELEK-001",
+        "M-OPT-ELEK-002",
+        "M-OPT-ELEK-003",
+        "M-TRIPLE-005",
+        "M-SONG-TEMPO-001"
       ],
       "status": "in_progress",
-      "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed).",
+      "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed). M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-003 (E and D, 3 fresh D repeats): a note pressed on slot 1 step 4 and released after the transition records on slot 1 step 4, the step and slot active at its first press. The baseline stored it on slot 2 (defect record-slot-at-first-press, fixed). M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected.",
       "oracles": [
         "Exact sequence/repeat timeline and transition LEDs; no duplicate/missing onset."
       ],
@@ -5601,10 +5676,12 @@
         "M-PARAM-036",
         "M-PARAM-043",
         "M-PARAM-044",
-        "M-MOD-004"
+        "M-MOD-004",
+        "M-PARAM-046",
+        "M-TRIPLE-005"
       ],
       "status": "in_progress",
-      "domain": "All64 steps distributed across all10 slots through native held-step input, plus exhaustive64x10 model storage; sentinels, trig/trigless, overwrite, live future-step editing and song isolation.",
+      "domain": "All64 steps distributed across all10 slots through native held-step input, plus exhaustive64x10 model storage; sentinels, trig/trigless, overwrite, live future-step editing and song isolation. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected.",
       "oracles": [
         "Blinking lock LEDs and held value display; exact per-boundary parameter-before-note MIDI with balanced releases and full completed gates; exhaustive model cross-product."
       ],
@@ -5693,10 +5770,11 @@
         "M-PATCH-063",
         "M-REC-PARAM-014",
         "M-REC-PARAM-015",
-        "M-PATCH-064"
+        "M-PATCH-064",
+        "M-TRIPLE-004"
       ],
       "status": "in_progress",
-      "domain": "All parameters; endpoints equal/up/down; wrap on/off; sequence transition; stopped/play edits. Mixed standard CC/NRPN concurrency is covered.",
+      "domain": "All parameters; endpoints equal/up/down; wrap on/off; sequence transition; stopped/play edits. Mixed standard CC/NRPN concurrency is covered. M-TRIPLE-004 (E and D, 3 fresh D repeats), plan stress triple trigless x slide x external-clock change: a global CC slide to a silent trigless lock under a 24 PPQN clock that steps from 100 to 150 BPM mid-slide arrives with the destination lock (README 964) and, as characterisation beyond the manual, stays linear in received clock ordinals; stored-patch recall, exact onsets and balanced gates. A slide timed by seconds at the start tempo is detected.",
       "oracles": [
         "Independent per-tick CC trajectory/endpoints and exact end-of-song cutoff."
       ],
@@ -5781,7 +5859,8 @@
         "M-SCALE-LOCK-003",
         "M-TRANS-004",
         "M-TRANS-005",
-        "M-TRIPLE-001"
+        "M-TRIPLE-001",
+        "M-SCALE-DISPLAY-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Both option values; probability0/100; active/rest steps; current-step lock; channel/global coprime lengths; all scale slots. M-SCALE-LOCK-003 (E and D, 3 fresh D repeats): channel step-1 lock (E major) over a global step-2 lock (G major) with the lifetime option On (whole cycle E) and Off (next active trig clears, global applies); a probability-0 trig and a rest do not clear; a step-3 replacement applies in both option states; exact pitches per step. Removing channel-lock persistence is detected. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
@@ -5811,10 +5890,11 @@
         "M-TRANS-002",
         "M-TRANS-003",
         "M-TRANS-004",
-        "M-TRANS-005"
+        "M-TRANS-005",
+        "M-LIFECYCLE-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-TRANS-001 validates all25 advertised -12..+12 values, explicit-zero distinction and K2 clear in both clocks. M-TRANS-002 composes endpoint/zero locks across wrap with saved scale transpose, overridden song transpose and channel octave. M-TRANS-003 clears a future wrap lock during playback with complete owner accounting. M-TRANS-004 composes two-pattern Average merging with a four-step global D-minor scale lock, root D, saved scale transpose+3 and -12/zero/+12 step locks; it proves scale-track reset and step3 transpose persistence into unlocked step4. M-TRANS-005 composes extreme Higher/Lower merges with channel octave, saved scale transpose, a scale lock and step transpose; final MIDI pitches below0 and above127 clamp at the protocol boundary with complete ownership and phase. Remaining: additional scale/root/rotation choices, other merge modes, channel/source reassignment, song copy and persistence.",
+      "domain": "M-TRANS-001 validates all25 advertised -12..+12 values, explicit-zero distinction and K2 clear in both clocks. M-TRANS-002 composes endpoint/zero locks across wrap with saved scale transpose, overridden song transpose and channel octave. M-TRANS-003 clears a future wrap lock during playback with complete owner accounting. M-TRANS-004 composes two-pattern Average merging with a four-step global D-minor scale lock, root D, saved scale transpose+3 and -12/zero/+12 step locks; it proves scale-track reset and step3 transpose persistence into unlocked step4. M-TRANS-005 composes extreme Higher/Lower merges with channel octave, saved scale transpose, a scale lock and step transpose; final MIDI pitches below0 and above127 clamp at the protocol boundary with complete ownership and phase. Remaining: additional scale/root/rotation choices, other merge modes, channel/source reassignment, song copy and persistence. M-LIFECYCLE-001 (E and D, 3 fresh D repeats): ten cold lifecycle cycles; each raises global transpose, autosaves when idle and shuts down cleanly, and every next process restores the cumulative transpose with exact phrases.",
       "oracles": [
         "Independent pitch/phase timeline and restored transpose after clear."
       ],
@@ -5844,7 +5924,8 @@
         "M-PATCH-042",
         "M-PATCH-043",
         "M-PATCH-044",
-        "M-TRANS-005"
+        "M-TRANS-005",
+        "M-TRANS-002"
       ],
       "status": "in_progress",
       "domain": "All octave options; pitch boundaries; strum pending notes; transpose/scale pairs. M-OCT-001/002 validate five global values and all25 global/step pairs, zero-vs-absent locks and clearing in both modes. Channels, pitch bounds and playing edits remain required. M-OCT-003 validates all64 octave locks against both global extremes and channel-wide clear in both modes. Other channels, pitch bounds, pending voices and mixed-lock interactions remain required.",
@@ -5909,10 +5990,14 @@
         "M-RANGE-SAVED-005",
         "M-RANGE-SAVED-006",
         "M-SAVE-002",
-        "M-TRANS-008"
+        "M-TRANS-008",
+        "M-LIFECYCLE-001",
+        "M-WORKFLOW-001",
+        "M-SAVE-NAMED-001",
+        "M-PERSIST-COMBINED-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-SAVE-002 (E and D, 3 fresh D repeats): no autosave within 59.5 s of the last grid input; a grid press restarts the period; no autosave during 65 s of playback including an edit made while playing; autosave 60 s after Stop; a fresh process restores the edited phrase. The write follows a 0.5 s metro after the 60 s timer. A forced save while playing is detected. Existing M-RANGE-SAVED-001/003..006 and M-TRANS-008 cover rejected/corrupt saved data. Remaining: norns key/encoder input and parameter-menu changes as idle resets, missing/unwritable storage, named-save interaction.",
+      "domain": "M-SAVE-002 (E and D, 3 fresh D repeats): no autosave within 59.5 s of the last grid input; a grid press restarts the period; no autosave during 65 s of playback including an edit made while playing; autosave 60 s after Stop; a fresh process restores the edited phrase. The write follows a 0.5 s metro after the 60 s timer. A forced save while playing is detected. Existing M-RANGE-SAVED-001/003..006 and M-TRANS-008 cover rejected/corrupt saved data. Remaining: norns key/encoder input and parameter-menu changes as idle resets, missing/unwritable storage, named-save interaction. M-LIFECYCLE-001 (E and D, 3 fresh D repeats): ten cold lifecycle cycles; each raises global transpose, autosaves when idle and shuts down cleanly, and every next process restores the cumulative transpose with exact phrases. M-PERSIST-COMBINED-001 (E and D, 3 fresh D repeats): the M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2 locks, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream. Tempo is norns system state (clock_tempo save=false), outside the script autosave. Skipping the pset read on load is detected.",
       "oracles": [
         "No early/playing write; restored observable musical state; named data unchanged."
       ],
@@ -6118,10 +6203,16 @@
         "M-PARAM-023",
         "M-PARAM-024",
         "M-PARAM-025",
-        "M-REC-PARAM-003"
+        "M-REC-PARAM-003",
+        "M-PARAM-043",
+        "M-REC-PARAM-031",
+        "M-REC-PARAM-030",
+        "M-REC-PARAM-029",
+        "M-REC-PARAM-028",
+        "M-TRIPLE-004"
       ],
       "status": "in_progress",
-      "domain": "Fresh boot vs manual recording prose default; off/on; parameter/mask/slide and probability0.",
+      "domain": "Fresh boot vs manual recording prose default; off/on; parameter/mask/slide and probability0. M-TRIPLE-004 (E and D, 3 fresh D repeats), plan stress triple trigless x slide x external-clock change: a global CC slide to a silent trigless lock under a 24 PPQN clock that steps from 100 to 150 BPM mid-slide arrives with the destination lock (README 964) and, as characterisation beyond the manual, stays linear in received clock ordinals; stored-patch recall, exact onsets and balanced gates. A slide timed by seconds at the start tempo is detected.",
       "oracles": [
         "Exact CC changes without added note-ons; active-step-only behavior when disabled. Resolve conflicting default prose239..243."
       ],
@@ -6507,7 +6598,8 @@
         "M-PATCH-031",
         "M-REC-PARAM-010",
         "M-REC-PARAM-022",
-        "M-TRANS-009"
+        "M-TRANS-009",
+        "M-OPT-STOP-001"
       ],
       "status": "in_progress",
       "domain": "Stopped/playing; repeated press/release; protected stop; pending notes; external clock source.",
@@ -6547,10 +6639,12 @@
         "M-REC-031",
         "M-REC-PARAM-007",
         "M-REC-PARAM-009",
-        "M-REC-PARAM-022"
+        "M-REC-PARAM-022",
+        "M-TRIPLE-002",
+        "M-TRIPLE-005"
       ],
       "status": "in_progress",
-      "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels.",
+      "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels. M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected.",
       "oracles": [
         "Record LED and recorded playback present only for intended armed inputs."
       ],
@@ -6705,7 +6799,9 @@
       "statement": "Held-step MIDI enters notes, velocity and chords on selected channel; length selected separately.",
       "cases": [
         "M-MEMORY-001",
-        "M-MEMORY-002"
+        "M-MEMORY-002",
+        "M-WORKFLOW-001",
+        "M-MEMORY-003"
       ],
       "status": "partial-domain-coverage",
       "domain": "All notes/velocities; chord voices; held-step release/input order; wrong port/channel; mask page vs other pages.",
@@ -6767,10 +6863,12 @@
         "M-REC-033",
         "M-MASK-018",
         "M-XA-004-JF-OVERLAP",
-        "M-XA-003-JF-OWNERSHIP"
+        "M-XA-003-JF-OWNERSHIP",
+        "M-TRIPLE-003",
+        "M-TRIPLE-002"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop.",
+      "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop. M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-003 (E and D, 3 fresh D repeats): a note pressed on slot 1 step 4 and released after the transition records on slot 1 step 4, the step and slot active at its first press. The baseline stored it on slot 2 (defect record-slot-at-first-press, fixed).",
       "oracles": [
         "Independent snapped onset/duration table; playback and mask feedback; no internal model mutation."
       ],
@@ -6820,10 +6918,16 @@
         "M-REC-PARAM-024",
         "M-REC-PARAM-025",
         "M-REC-PARAM-026",
-        "M-REC-PARAM-027"
+        "M-REC-PARAM-027",
+        "M-REC-PARAM-031",
+        "M-REC-PARAM-030",
+        "M-REC-PARAM-029",
+        "M-REC-PARAM-028",
+        "M-TRIPLE-005",
+        "M-PERSIST-COMBINED-001"
       ],
       "status": "in_progress",
-      "domain": "Every slot; existing locks overwritten only in interval; reset/sequence change; edit exactly at end; disarm.",
+      "domain": "Every slot; existing locks overwritten only in interval; reset/sequence change; edit exactly at end; disarm. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-PERSIST-COMBINED-001 (E and D, 3 fresh D repeats): the M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2 locks, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream. Tempo is norns system state (clock_tempo save=false), outside the script autosave. Skipping the pset read on load is detected.",
       "oracles": [
         "Exact CC trajectory and lock presence per step, including silent/no-edit windows."
       ],
@@ -6959,7 +7063,8 @@
         "M-OPT-ELEK-001",
         "M-SETUP-001",
         "M-XA-001-JF",
-        "M-XA-002-AUDIO"
+        "M-XA-002-AUDIO",
+        "M-SETUP-003"
       ],
       "status": "unimplemented",
       "domain": "Empty directory; one and multiple stock configurations; two isolated projects; restart after addition/removal. M-SETUP-001 and M-OPT-ELEK-001 boot seeded config directories and select their devices by picker name.",

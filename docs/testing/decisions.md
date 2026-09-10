@@ -372,3 +372,16 @@ first onset — which is a timing decision, not an isolated correction.
 Recommendation: announce at the final step's onset after that step is emitted,
 keep the current two-step lead for lengths of three or more, and never send a
 next-slot change before the first onset after Play.
+
+## SEM-014 — Per-sequence tempo (decided 2026-09-10, user)
+
+README "Clocks, Swing and Shuffle" says each song sequence can have its own
+tempo. User decision: a sequence's tempo is expressed as clock divisions or
+multiplications of the one global tempo, not as a separate BPM. This matches
+the code: the song editor's tempo selector sets the single norns `clock_tempo`
+(`song_edit_page_ui.update_tempo`), while each slot's channels carry their own
+`clock_mods`, applied at the song transition (`step.lua`,
+`m_clock.set_channel_division`). norns marks `clock_tempo` `save=false`, so the
+global tempo persists as norns system state, not in Mosaic's autosave or named
+saves; M-PERSIST-COMBINED-001 checks the restored stream at the tempo the fresh
+process reports. M-SONG-TEMPO-001 covers per-slot divisions across transitions.

@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "D23/user 2026-09-10: coverage and the regression suite first; isolated bug fixes only; no performance fixes or refactor. When ../mosaic-behaviour-runs/suite-baseline-5e0501a finishes, run suite.py rerun from ../mosaic-suite-5e0501a, record the effective baseline, then run a new full suite at the current head (it contains four fixes and ~30 new cases). Then idle-host perf_dense.py runs (dense and slides, 1/4/8/16 channels x3). Remaining plan triples: trigless+slide+external-clock change; recording+lock edit+song transition. Pending decisions: SEM-012, SEM-013. SETUP-CONFIG-CREATOR needs a portable headless browser (not available).",
+  "next_action": "D23/user 2026-09-10: coverage and the regression suite first; isolated bug fixes only; no performance fixes or refactor. Oracles cite README lines; anything else is labelled characterisation. When ../mosaic-behaviour-runs/suite-baseline-5e0501a finishes, run suite.py rerun from ../mosaic-suite-5e0501a (M-REC-005/006/007/015/016/017/024/025 fail there from the 0d6387e harness defect, fixed since), record the effective baseline, then run a new full suite at the current head. Then idle-host perf_dense.py runs (dense and slides, 1/4/8/16 channels x3). Pending decisions: SEM-012, SEM-013. SETUP-CONFIG-CREATOR needs a portable headless browser (not available).",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -5138,38 +5138,49 @@
     ]
   },
   "session_2026_09_10_cases": [
-    "M-OPT-PENT-ALL-001",
-    "M-OPT-KEYS-001",
-    "M-OPT-STOP-001",
     "M-CHORDVEL-005..011",
+    "M-ENDURANCE-001",
+    "M-LIFECYCLE-001",
+    "M-MAP-001",
+    "M-MAP-002",
     "M-MEMORY-003",
+    "M-MERGE-TRIG-002",
     "M-OPT-ELEK-001..003",
+    "M-OPT-KEYS-001",
+    "M-OPT-PENT-ALL-001",
+    "M-OPT-STOP-001",
+    "M-PERSIST-COMBINED-001",
     "M-SAVE-002",
     "M-SAVE-NAMED-001",
     "M-SCALE-DISPLAY-001",
-    "M-TOOLTIP-001",
-    "M-SIN-001",
-    "M-MAP-001",
-    "M-MAP-002",
-    "M-SETUP-001..003",
-    "M-MERGE-TRIG-002",
     "M-SCALE-LOCK-003",
+    "M-SETUP-001..003",
+    "M-SIN-001",
     "M-SLIDE-STEP-001",
-    "M-WORKFLOW-001",
     "M-SONG-FLOW-001",
-    "M-ENDURANCE-001",
-    "M-LIFECYCLE-001",
-    "M-TRIPLE-001"
+    "M-SONG-TEMPO-001",
+    "M-TOOLTIP-001",
+    "M-TRIPLE-001",
+    "M-TRIPLE-002",
+    "M-TRIPLE-003",
+    "M-TRIPLE-004",
+    "M-TRIPLE-005",
+    "M-WORKFLOW-001"
   ],
   "session_2026_09_10_bugs": {
     "fixed": [
       "stop-safety-shift-k1",
       "midi-map-neutral-default",
       "device-config-requires-id",
-      "song-queue-after-manual-switch"
+      "song-queue-after-manual-switch",
+      "record-slot-at-first-press"
     ],
     "open": [
       "elektron-short-song-program-changes (SEM-013)"
+    ],
+    "harness": [
+      "0d6387e release lookup read scheduled inputs (M-REC-005/006/007/015/016/017/024/025), fixed",
+      "inventory back-links (90) reconciled; test_inventory guards drift"
     ]
   },
   "performance_runner": {

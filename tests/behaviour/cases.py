@@ -20,6 +20,10 @@ from song_mode_flow import song_mode_flow
 from endurance import endurance_mixed
 from lifecycle_cycles import lifecycle_cycles
 from merge_lock_random import merge_lock_random
+from recording_song_transition import recording_song_transition
+from trigless_slide_clock import trigless_slide_clock
+from recording_lock_song import recording_lock_song
+from song_divisions import song_tempo_divisions
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -2540,7 +2544,7 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
         assert actual==expected,dict(expected=expected,actual=actual)
         durations=[]
         for note in [m for m in channel_notes if m['bytes'][1]==pitch][:3]:
-            off=next(m for m in events if m['index']>note['index'] and m['port']==port and m['bytes'][:2]==[status-16,pitch])
+            off=next(m for m in state['midi'] if m['index']>note['index'] and m['port']==port and m['bytes'][:2]==[status-16,pitch])
             durations.append((off[field]-note[field])/1e9)
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         assert all(abs(value-duration)<=tolerance for value in durations),dict(channel=status-143,durations=durations,expected=duration)
@@ -2726,7 +2730,7 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
         assert actual==expected,dict(expected=expected,actual=actual)
         durations=[]
         for note in [m for m in channel_notes if m['bytes'][1]==pitch][:3]:
-            off=next(m for m in events if m['index']>note['index'] and m['port']==port and m['bytes'][:2]==[status-16,pitch])
+            off=next(m for m in state['midi'] if m['index']>note['index'] and m['port']==port and m['bytes'][:2]==[status-16,pitch])
             durations.append((off[field]-note[field])/1e9)
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         assert all(abs(value-duration)<=tolerance for value in durations),dict(channel=status-143,durations=durations,expected=duration)
@@ -3234,6 +3238,12 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-SONG-TEMPO-001':dict(run=song_tempo_divisions,requirements=['SONG-ADVANCE','SONG-SLOTS','CH-TEMPO'],description='Per-sequence tempo as clock divisions of the global tempo: slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing; exact pitches, octave fingerprints and onset times over two song cycles'),
+ 'M-PERSIST-COMBINED-001':dict(run=lambda c:recording_lock_song(c,persist=True),requirements=['SAVE-AUTO','PERSIST-AUTO-001','REC-PARAM-AUTOMATION','SONG-SLOTS'],description='The M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream; tempo is norns system state'),
+ 'M-TRIPLE-005':dict(run=recording_lock_song,requirements=['REC-PARAM-AUTOMATION','REC-ARM','LOCK-PARAM-SET','SONG-ADVANCE','SONG-SLOTS'],description='A CC lock edit while recording is armed records slot 1 steps 2..4 through the final step and clears at the song transition: the copied slot 2 keeps its own locks and stored-patch recalls across two song cycles'),
+ 'M-TRIPLE-004':dict(run=trigless_slide_clock,requirements=['OPT-TRIGLESS','SLIDE-GLOBAL','CLOCK-MIDI-TRANSPORT-001'],description='Trigless silent-destination global slide under an external 24 PPQN clock that steps from 100 to 150 BPM mid-slide: ramp linear in received clock ordinals, arriving with the destination lock; stored-patch recall, exact onsets and balanced gates'),
+ 'M-TRIPLE-003':dict(run=lambda c:recording_song_transition(c,held_across=True),requirements=['REC-LIVE-NOTES','SONG-ADVANCE'],description='A live note pressed on slot 1 step 4 and released after the song transition records on the step and slot active at its first press'),
+ 'M-TRIPLE-002':dict(run=recording_song_transition,requirements=['REC-LIVE-NOTES','REC-ARM','SONG-ADVANCE','SONG-SLOTS'],description='Live recording under MIDI clock across a song transition: a note recorded in slot 1 and another in slot 2 each replay only in their own slot at the exact step'),
  'M-TRIPLE-001':dict(run=merge_lock_random,requirements=['MERGE-NOTE-AVERAGE','MERGE-TRIG-ALL','LOCK-SCALE','SCALE-PRECEDENCE','PARAM-RANDOM','OPT-PENTATONIC-MERGED','OPT-PENTATONIC-RANDOM'],description='Scale merge x channel scale lock x seeded Random Note: averaged degrees in C major then a held E major lock, random offsets from an independent seed-42 PRNG, merged-pentatonic snapping to the active scale; exact pitches'),
  'M-LIFECYCLE-001':dict(run=lifecycle_cycles,requirements=['SAVE-AUTO','PERSIST-AUTO-001','LOCK-TRANSPOSE'],description='Ten cold lifecycle cycles: each edits global transpose, autosaves when idle and shuts down cleanly; every next process restores the cumulative transpose with exact phrases'),
  'M-ENDURANCE-001':dict(run=endurance_mixed,requirements=['WORKFLOW-COMPOSITION','PERF-MIDI','SONG-ADVANCE','MERGE-TRIG-ALL'],description='Ten minutes of the typical-workflow two-instrument song at 120 BPM: exact complete native event streams, balanced releases, p99/max/final phase within 10/50/20 ms on both ports'),
@@ -3241,7 +3251,7 @@ CASES={
  'M-WORKFLOW-001':dict(run=composition_workflow,requirements=['WORKFLOW-COMPOSITION','MERGE-TRIG-SKIP','MERGE-TRIG-ALL','MERGE-NOTE-AVERAGE','SCALE-SELECT','REC-KEYBOARD-STEP','SONG-SLOTS','SONG-ADVANCE','SAVE-AUTO'],description='README typical workflow end to end: two instruments, XOX rhythm, applied D major harmony, default-Skip then All/Average merging, keyboard melody mask, copied and octave-shifted song slot chained by song mode, autosave and a fresh process replaying the song'),
  'M-SLIDE-STEP-001':dict(run=step_slide_variants,requirements=['SLIDE-STEP','OPT-SLIDE-WRAP'],description='Held-step K3 slide toggled off jumps to its destination; a step slide on the last lock has no target without wrap and moves linearly to the wrapped first lock with wrap on'),
  'M-SCALE-LOCK-003':dict(run=scale_lock_precedence,requirements=['SCALE-PRECEDENCE','LOCK-SCALE','OPT-SCALE-LIFETIME','PARAM-PROBABILITY'],description='Channel scale lock over a global scale-track lock with the lifetime option on and off: next active trig clears, probability-rejected trigs and rests do not, replacements apply; exact pitches per step'),
- 'M-MERGE-TRIG-002':dict(run=trig_note_merge_matrix,requirements=['MERGE-TRIG-ALL','MERGE-TRIG-SKIP','MERGE-TRIG-ONLY','MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','MERGE-VELOCITY'],description='All 3 trig merge modes x 3 note merge modes over two overlapping patterns: only trig-bearing patterns contribute, single contributors pass through, exact pitches, pattern-1 velocities and rest spacing'),
+ 'M-MERGE-TRIG-002':dict(run=trig_note_merge_matrix,requirements=['MERGE-TRIG-ALL','MERGE-TRIG-SKIP','MERGE-TRIG-ONLY','MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','MERGE-VELOCITY','OPT-PENTATONIC-MERGED'],description='All 3 trig merge modes x 3 note merge modes over two overlapping patterns: only trig-bearing patterns contribute, single contributors pass through, exact pitches, pattern-1 velocities and rest spacing'),
  'M-MAP-002':dict(run=midi_map_entry,requirements=['SETUP-MIDI-MAP-ENTRY','MAP-RANGES','MAP-CONTROL'],description='Create the documented map through the native norns parameter-map menu (learn CC, in 1..2, accumulate), verify the written PMAP, then step the selected channel velocity mask by relative CCs with exact velocities'),
  'M-SETUP-003':dict(run=device_config_defaults,requirements=['SETUP-DEVICE-DEFAULTS','SETUP-DEVICE-DISCOVERY','CH-DEVICE'],description='Custom configs set output defaults on confirmation: a drum config routes channel 1 to port 2, MIDI channel 10, fixed note 36; a polyphonic config routes channel 2 to MIDI channel 5 with its pattern notes'),
  'M-SETUP-001':dict(run=lambda c:invalid_device_configs(c,'malformed'),requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='Malformed, empty and object-shaped config files beside a valid one: Mosaic boots, plays through the valid device, and the picker lists none of the invalid files'),
@@ -3252,7 +3262,7 @@ CASES={
  'M-SCALE-DISPLAY-001':dict(run=channel_active_scale_display,requirements=['CH-ACTIVE-SCALE-DISPLAY','LOCK-SCALE','SCALE-SELECT'],description='Channel page scale row: stopped shows the applied slot; playing follows the active slot including a step-3 scale lock (with its exact phrase); stop restores the applied slot; global off lights only the locked step'),
  'M-SAVE-NAMED-001':dict(run=named_save_load,requirements=['SAVE-NAMED','SAVE-AUTO'],description='Default-name and typed-name saves through the native text entry; idle autosave never overwrites them; cancel writes nothing; overwrite replaces only its own name; loading each name restores its exact phrase'),
  'M-SAVE-002':dict(run=autosave_idle_lifecycle,requirements=['SAVE-AUTO','PERSIST-AUTO-001'],description='Idle autosave: none before 60 s, a grid press restarts the period, none while playing for 65 s with an edit, a save 60 s after Stop, and a fresh boot restores the edited phrase'),
- 'M-OPT-ELEK-001':dict(run=elektron_program_changes,requirements=['OPT-ELEKTRON','SONG-ADVANCE','SONG-SLOTS'],description='Global length 4: Elektron program changes default Off sends none; On mirrors stopped slot selection and Play on channel 10, announces each next song slot before its first onset without duplicates, and follows the program-change channel setting'),
+ 'M-OPT-ELEK-001':dict(run=elektron_program_changes,requirements=['OPT-ELEKTRON','SONG-ADVANCE','SONG-SLOTS','SETUP-DEVICE-DISCOVERY'],description='Global length 4: Elektron program changes default Off sends none; On mirrors stopped slot selection and Play on channel 10, announces each next song slot before its first onset without duplicates, and follows the program-change channel setting'),
  'M-OPT-ELEK-002':dict(run=lambda c:elektron_program_changes(c,length=2,settings=False),requirements=['OPT-ELEKTRON','SONG-ADVANCE'],description='Global length 2: Play names the playing slot and each song transition is announced once before its boundary'),
  'M-OPT-ELEK-003':dict(run=lambda c:elektron_program_changes(c,length=1,settings=False),requirements=['OPT-ELEKTRON','SONG-ADVANCE'],description='Global length 1: Play names the playing slot and each song transition is announced once before its boundary'),
  'M-MEMORY-003':dict(run=memory_truncate,requirements=['MEMORY-TRUNCATE','MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='K1+K3 applies the latest action and forgets history; K1+K2 returns to the beginning of the current history and forgets it; forgotten history is inert to E3/K2/K3 and new actions start a fresh history, all checked on the memory counter and complete musical phrases'),

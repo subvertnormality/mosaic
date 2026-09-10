@@ -2617,7 +2617,7 @@ function test_memory_should_handle_clearing_individual_chord_degrees()
 end
 
 
-function test_memory_should_preserve_partial_chord_updates_after_reset()
+function test_memory_should_preserve_partial_chord_updates_after_reset_first_variant()
   memory.init()
   program.init()
   local channel = program.get_channel(1, 1)

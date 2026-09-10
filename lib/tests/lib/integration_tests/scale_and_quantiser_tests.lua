@@ -39,7 +39,7 @@ end
 
 
 
-function test_global_default_scale_setting_quantises_notes_properly()
+function test_global_default_scale_setting_quantises_notes_properly_first_variant()
     setup()
     local song_pattern = 1
     program.set_selected_song_pattern(1)

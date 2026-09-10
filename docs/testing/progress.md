@@ -1397,3 +1397,26 @@ active scale slot display; tooltips. Concurrent native startup failed 15 of 18
 simultaneous sessions (emulator R22); the emulator line now serialises startup,
 and the suite spaces launches because the current campaign emulator checkout
 predates that fix.
+
+## Stress triples, persistence and traceability — 2026-09-10
+
+The remaining plan stress triples now run in both lanes with three fresh controlled
+repeats and a demonstrated fault detection each. M-TRIPLE-002/003 record live notes
+under MIDI clock across a song transition; M-TRIPLE-003 found that a note held
+across the transition was stored in the next slot, fixed by capturing the slot at
+first press (`record-slot-at-first-press`). M-TRIPLE-004 follows a trigless
+silent-destination slide through an external 100 -> 150 BPM step; the ramp is
+linear in received clock ordinals. M-TRIPLE-005 records a CC edit while armed and
+shows recording clears at the song transition. M-PERSIST-COMBINED-001 restores
+that combined state after idle autosave and cold restart; tempo is norns system
+state. Per-sequence tempo means per-slot clock divisions of the global tempo
+(SEM-014, user decision), covered by M-SONG-TEMPO-001.
+
+Two harness defects were repaired. Commit 0d6387e had redirected the release
+lookups in `recorded_note_channel_switch` and `recorded_input_sources` to the
+scheduled-input list, so M-REC-005/006/007/015/016/017/024/025 failed with
+`KeyError: 'index'` in both lanes since 2026-09-08; they read the snapshot
+again, as ff8c27f had already done for the other two sites. The inventory was
+missing 90 case-to-requirement back-links and two cases omitted a requirement
+the inventory listed them under; `test_inventory` (in the suite) now
+fails on either direction of drift.

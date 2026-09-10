@@ -38,7 +38,7 @@ local function progress_clock_by_pulses(p)
 end
 
 
-function test_current_step_number_is_set_to_start_step_when_lower_than_start_trig_number()
+function test_current_step_number_is_set_to_start_step_when_lower_than_start_trig_number_first_variant()
 
   setup()
   local song_pattern = 1

@@ -396,7 +396,7 @@ function test_trig_probability_param_lock_set_to_one_hundred_fires()
 
 end
 
-function test_quantised_fixed_note_param_lock()
+function test_quantised_fixed_note_param_lock_snaps_tie_to_lower_pitch()
   setup()
   local song_pattern = 1
   program.set_selected_song_pattern(1)
@@ -404,7 +404,7 @@ function test_quantised_fixed_note_param_lock()
 
   local test_step = 8
   local cc_msb = 2
-  local note = 1
+  local note = 63 -- README 785: absolute pitch, nearest scale note; ties choose the lower (62 over 64)
   local c = 1
 
   test_pattern.note_values[test_step] = 0
@@ -4712,7 +4712,7 @@ function test_param_locks_fire_on_first_step_when_song_mode_off()
   luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1})
 end
 
-function test_param_locks_fire_on_first_step_with_pattern_repeats()
+function test_param_locks_fire_on_first_step_with_pattern_repeats_first_variant()
   setup()
   local song_pattern_1 = 1
   local song_pattern_2 = 2
