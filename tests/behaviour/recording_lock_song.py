@@ -90,9 +90,14 @@ def recording_lock_song(c, persist=False):
     c.finish()
     out = c.out/'restarted'; out.mkdir()
     d = Driver(out, project_seed=c.data_directory, **c.launch_options)
-    d.tap(6, 8); d.tap(1, 1); d.tap(3, 8)
-    tempo = d.snapshot()['diagnostics']['tempo']
-    restored = run([([24, 64, 64, 64], 65), ([24, 65, 96, 65], 65), ([24, 64, 64, 64], 65), ([24, 65, 96, 65], 65)], c=d, step_seconds=15/tempo)
+    try:
+        d.tap(6, 8); d.tap(1, 1); d.tap(3, 8)
+        tempo = d.snapshot()['diagnostics']['tempo']
+        restored = run([([24, 64, 64, 64], 65), ([24, 65, 96, 65], 65), ([24, 64, 64, 64], 65), ([24, 65, 96, 65], 65)], c=d, step_seconds=15/tempo)
+    except Exception:
+        try: d.finish()                                           # never leave the restarted session running
+        except Exception: pass
+        raise
     d.results.append(dict(kind='recording-lock-across-song-transition-restored', replay=restored, restored_tempo=tempo, passed=True))
     d.finish()
     c.results.append(dict(kind='recording-lock-across-song-transition-restored', replay=restored, restored_tempo=tempo, passed=True))

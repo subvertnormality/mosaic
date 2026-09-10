@@ -17,7 +17,7 @@ local function load_fixture()
 end
 
 local function load_context()
-  local count={stop=0,reset=0,init=0,set=0,read=0,restore=0,writes=0,hooks=0}
+  local count={stop=0,reset=0,init=0,set=0,read=0,restore=0,writes=0,hooks=0,memory_init=0}
   local original={identity="live",pending_notes={60,64},memory={position=3}}
   local state={store=original,playing=true,files={},messages={},timers={}}
   local env=setmetatable({}, {__index=_G})
@@ -67,7 +67,8 @@ local function load_context()
     ["mosaic/lib/helpers/functions"]={dirty_screen=function() end,dirty_grid=function() end},
     ["mosaic/lib/ui"]={refresh=function() end},["mosaic/lib/m_grid"]={refresh=function() end},
     ["mosaic/lib/devices/param_manager"]={init=function() count.restore=count.restore+1 end,add_device_params=function() end},
-    ["mosaic/lib/devices/device_map"]={get_device=function() return {} end}}
+    ["mosaic/lib/devices/device_map"]={get_device=function() return {} end},
+    ["mosaic/lib/memory"]={init=function() count.memory_init=count.memory_init+1 end}}
   env.include=function(name) return modules[name] or {} end
   env.require=function(name)
     assert(name=="fileselect" or name=="textentry" or name=="mosaic/lib/nb/lib/nb")
@@ -111,7 +112,7 @@ function test_rejected_load_autosave_recovery_actions_and_failed_saves()
     c.state.pset_error=true;luaunit.assert_false(c.save("failed-pset"));c.state.pset_error=false
     luaunit.assert_is(c.env.params.action_write,hook);c.blocked()
     if recovery=="save" then luaunit.assert_true(c.save("recovered"));luaunit.assert_equals(c.count.hooks,1)
-    elseif recovery=="new" then c.new()
+    elseif recovery=="new" then c.new();luaunit.assert_equals(c.count.memory_init,1) -- New starts an empty memory
     else c.state.files["fixture/good.ptn"]=load_fixture();luaunit.assert_true(c.load("fixture/good.ptn")) end
     luaunit.assert_true(c.state.timers[#c.state.timers].running)
     c.state.playing=false;c.prime();local writes=c.count.writes;c.autosave()

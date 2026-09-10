@@ -24,6 +24,17 @@ from recording_song_transition import recording_song_transition
 from trigless_slide_clock import trigless_slide_clock
 from recording_lock_song import recording_lock_song
 from song_divisions import song_tempo_divisions
+from memory_wrap import memory_wrap
+from scale_cache import scale_cache_saves
+from nb_param_lock import nb_param_lock
+from length_persistence import length_persistence
+from slide_capacity import slide_capacity
+from memory_new_project import memory_new_project
+from autosave_failure import autosave_failure
+from scale_lock_order import scale_lock_order
+from persisted_fixture import persisted_fixture
+from elektron_two_ports import elektron_two_ports
+from memory_persistence import memory_persistence
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3238,6 +3249,18 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-MEMORY-006':dict(run=memory_persistence,requirements=['MEMORY-NAV','MEMORY-RECORD','PERSIST-AUTO-001'],description='Two recorded mask actions survive idle autosave and a cold restart: the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions (characterisation)'),
+ 'M-OPT-ELEK-004':dict(run=elektron_two_ports,requirements=['OPT-ELEKTRON','SETUP-DEVICE-DISCOVERY'],description='Digitakt on port 1 and Syntakt on port 2: each stopped slot change reaches each Elektron device once on its own port, channel 10'),
+ 'M-PERSIST-FIXTURE-CURRENT':dict(run=lambda c:persisted_fixture(c,'current'),requirements=['PERSIST-AUTO-001','SAVE-AUTO'],description='A frozen autosave written by the current version (locks, slide, masks, scale lock, two song slots, memory) cold-loads and plays its golden note/CC stream exactly'),
+ 'M-PERSIST-FIXTURE-1.2.12':dict(run=lambda c:persisted_fixture(c,'release-1.2.12','current'),requirements=['PERSIST-AUTO-001','SAVE-AUTO'],description='The same project autosaved by release 1.2.12 cold-loads and plays exactly as the current version plays its own save'),
+ 'M-SCALE-ORDER-001':dict(run=scale_lock_order,requirements=['LOCK-SCALE','SCALE-PRECEDENCE'],description='A global scale lock at step 3 already quantises the coinciding channel step (60 62 68 69); a channel lock on the same step overrides it and holds to pattern end (60 62 71 72)'),
+ 'M-SAVE-FAIL-001':dict(run=autosave_failure,requirements=['SAVE-AUTO','SAVE-NAMED'],description='While a rejected load suspends autosave, a named save into a read-only project directory fails and autosave stays suspended; a successful named save resumes it. Characterised: an unsuspended failed idle autosave is retried after the next input'),
+ 'M-MEMORY-005':dict(run=memory_new_project,requirements=['MEMORY-NAV','MEMORY-RECORD','SAVE-NAMED'],description='After two recorded mask actions, + New starts a project whose memory is empty: counter 0 of 0, E3 back and forward replay nothing and the rebuilt phrase is unchanged'),
+ 'M-SLIDE-CAPACITY-001':dict(run=slide_capacity,requirements=['SLIDE-GLOBAL','PERF-MIDI'],description='Nine channel-1 slides replaced every 1/6 s behind one 31 s channel-2 slide: every channel-1 slide keeps moving through intermediate values for 25 s'),
+ 'M-SAVE-LENGTH-001':dict(run=length_persistence,requirements=['SAVE-AUTO','PERSIST-AUTO-001','MASK-ATTRIBUTES'],description='A channel length mask of 1/3 and a step length mask of 5/6 display and play the same after idle autosave and a cold restart'),
+ 'M-XA-005-NB-LOCK':dict(run=nb_param_lock,requirements=['LOCK-PARAM-SET','CH-DEVICE'],expansion_families=['XA-005'],description='Doubledecker slot 1 (Shape 1, a norns parameter) step lock: playback crosses the locked step without a Lua error'),
+ 'M-SCALE-CACHE-001':dict(run=scale_cache_saves,requirements=['SCALE-EDIT','SCALE-SELECT'],description='110 saves of the playing scale while playing (root C/C# alternating): the first onset after each save is the step degree in the new root and no Lua error occurs past the quantiser cache bound'),
+ 'M-MEMORY-004':dict(run=memory_wrap,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='5003 held-step keyboard actions wrap the 5000-action history; E3 back two, a new step-2 action, then E3 back and forward restore and reapply exactly that action with the counter and phrases matching'),
  'M-SONG-TEMPO-001':dict(run=song_tempo_divisions,requirements=['SONG-ADVANCE','SONG-SLOTS','CH-TEMPO'],description='Per-sequence tempo as clock divisions of the global tempo: slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing; exact pitches, octave fingerprints and onset times over two song cycles'),
  'M-PERSIST-COMBINED-001':dict(run=lambda c:recording_lock_song(c,persist=True),requirements=['SAVE-AUTO','PERSIST-AUTO-001','REC-PARAM-AUTOMATION','SONG-SLOTS'],description='The M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream; tempo is norns system state'),
  'M-TRIPLE-005':dict(run=recording_lock_song,requirements=['REC-PARAM-AUTOMATION','REC-ARM','LOCK-PARAM-SET','SONG-ADVANCE','SONG-SLOTS'],description='A CC lock edit while recording is armed records slot 1 steps 2..4 through the final step and clears at the song transition: the copied slot 2 keeps its own locks and stored-patch recalls across two song cycles'),

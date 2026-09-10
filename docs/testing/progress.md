@@ -1420,3 +1420,30 @@ again, as ff8c27f had already done for the other two sites. The inventory was
 missing 90 case-to-requirement back-links and two cases omitted a requirement
 the inventory listed them under; `test_inventory` (in the suite) now
 fails on either direction of drift.
+
+## Refactor and performance-sweep gap scan — 2026-09-10 (night)
+
+User direction: finish the behaviour and unit/integration suites, then find and
+fill the tests a broad refactor or performance sweep could regress
+(`refactor-gap-scan.md`). Every scanned claim was checked in code before use; two
+were wrong and corrected (the README states 96 song slots, not 90; the D4 step
+argument is masked, not observable).
+
+Seven defects were found by the new tests, each with a Lua unit regression, a real-input
+behaviour regression that fails on the baseline, an isolated fix and a candidate
+record: memory history after wrapping (M-MEMORY-004), the quantiser cache raising
+after about 100 scale saves (M-SCALE-CACHE-001), nb/norns parameter step locks
+raising at Play (M-XA-005-NB-LOCK, nb-audio runtime), fractional length masks shown
+as X after reload (M-SAVE-LENGTH-001), slides dropped once 1024 replaced slides sat
+behind a long one (M-SLIDE-CAPACITY-001), + New keeping the previous project's
+memory (M-MEMORY-005), and Elektron program changes sent only to channel 1's port
+(M-OPT-ELEK-004).
+
+Refactor guards: seven shadowed Lua unit tests revived (`test_lua_test_names`
+prevents repeats); every production Lua file must compile (`test_lua_syntax`; the
+units never load the pages); division table alignment; a real tabutil save/load
+round trip; the Sinfonion global-lock path; 14-bit CC splitting; processing order of
+the global scale track (M-SCALE-ORDER-001); failed saves and autosave suspension
+(M-SAVE-FAIL-001); and frozen saved projects from the current version and release
+1.2.12 (M-PERSIST-FIXTURE-*). Restart-style cases now close their second session on
+failure; leaked sessions had exhausted JACK's server slots.

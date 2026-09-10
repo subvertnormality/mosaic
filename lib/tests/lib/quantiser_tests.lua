@@ -1238,3 +1238,27 @@ function test_pentatonic_rotated_boundary_cache()
   luaunit.assert_equals(quantiser.process(5,0,0,1,true),57)
   luaunit.assert_equals(quantiser.process(5,0,0,1,false),57)
 end
+
+-- The scale cache is an optimisation: filling it past its bound must neither raise
+-- nor change any quantised note (performance-sweep guard).
+function test_scale_cache_beyond_its_bound_keeps_results_and_does_not_raise()
+  setup()
+  program.set_scale(1, {number = 1, scale = quantiser.get_scales()[1].scale,
+    pentatonic_scale = quantiser.get_scales()[1].pentatonic_scale, chord = 1, root_note = 0})
+  local expected = {}
+  for transpose = -60, 60 do
+    quantiser._scale_cache = {}
+    quantiser._scale_cache_size = 0
+    expected[transpose] = quantiser.process(3, 0, transpose, 1)
+  end
+  quantiser._scale_cache = {}
+  quantiser._scale_cache_size = 0
+  for pass = 1, 2 do
+    for transpose = -60, 60 do
+      local ok, result = pcall(quantiser.process, 3, 0, transpose, 1)
+      luaunit.assert_true(ok, tostring(result))
+      luaunit.assert_equals(result, expected[transpose])
+    end
+  end
+  luaunit.assert_true(quantiser._scale_cache_size <= quantiser._scale_cache_max_size)
+end

@@ -313,3 +313,43 @@ function test_live_slide_admission_all_channel_parameter_slots()
   luaunit.assert_true(max_pulse < 0.002,
     string.format("Live slide admission exceeded 2ms: %.6fs", max_pulse))
 end
+
+-- README 964: with slides enabled, locks smoothly transition between each other. Replacing
+-- a channel's slide cancels the old one; cancelled entries must not exhaust slide capacity
+-- while an earlier, longer slide is still running (performance-sweep guard for the ring).
+function test_replaced_slides_do_not_exhaust_capacity_behind_a_long_slide()
+  setup()
+  clock_setup()
+  local long_calls = 0
+  slide_onset_fixture.queue(m_clock, {
+    channel_number = 1, trig_lock = 1, start_step = 1, end_step = 64,
+    start_value = 0, end_value = 127, quant = 1, should_wrap = false,
+    func = function() long_calls = long_calls + 1 end
+  })
+  progress_clock_by_pulses(24)
+  local replaced = 0
+  for _ = 1, 8 do
+    for channel = 2, 16 do
+      for slot = 1, 10 do
+        slide_onset_fixture.queue(m_clock, {
+          channel_number = channel, trig_lock = slot, start_step = 1, end_step = 64,
+          start_value = 0, end_value = 127, quant = 1, should_wrap = false,
+          func = function() end
+        })
+        replaced = replaced + 1
+      end
+    end
+    progress_clock_by_pulses(24)
+  end
+  luaunit.assert_true(replaced > 1024)
+  local late_calls = 0
+  slide_onset_fixture.queue(m_clock, {
+    channel_number = 2, trig_lock = 1, start_step = 1, end_step = 64,
+    start_value = 0, end_value = 127, quant = 1, should_wrap = false,
+    func = function() late_calls = late_calls + 1 end
+  })
+  progress_clock_by_pulses(48)
+  luaunit.assert_true(m_clock.channel_is_sliding({number = 1}, 1), "The long slide is still running")
+  luaunit.assert_true(late_calls > 0, "A slide started after many replacements must run")
+  luaunit.assert_true(m_clock.channel_is_sliding({number = 2}, 1))
+end

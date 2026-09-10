@@ -25,12 +25,12 @@ LUA_ARGUMENT={'panic_live_note_contract.lua':'mosaic-root','test_native_control_
 PYTHON_UNITTEST={'test_acquisition_oracle','test_collection','test_duration_routes','test_external_clock_fault_oracle',
     'test_forwarded_clock_oracle','test_fractional_stop_boundary','test_jf_oracle','test_master_clock_oracle',
     'test_midi_window','test_note_accounting','test_note_schedule','test_output_profiles','test_panic_hotplug_trace',
-    'test_inventory','test_lua_test_names','test_panic_repeat_trace','test_panic_trace','test_panic_transport','test_pcm_oracle','test_suite'}
+    'test_inventory','test_lua_test_names','test_lua_syntax','test_panic_repeat_trace','test_panic_trace','test_panic_transport','test_pcm_oracle','test_suite'}
 PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}
 PYTHON_SCRIPT={'test_nrpn_legacy_serializer':'norns-source-and-artifact-directory'}
 # Cases whose code asserts a non-base profile. Base cases are everything else.
 CASE_PROFILE={'M-MOD-001':'midi-modulation','M-MOD-002':'midi-modulation','M-MOD-003':'midi-modulation',
-    'M-MOD-004':'midi-modulation','M-XA-001-JF':'crow-jf','M-XA-002-AUDIO':'nb-audio',
+    'M-MOD-004':'midi-modulation','M-XA-001-JF':'crow-jf','M-XA-002-AUDIO':'nb-audio','M-XA-005-NB-LOCK':'nb-audio',
     'M-XA-003-JF-OWNERSHIP':'crow-jf','M-XA-004-JF-OVERLAP':'crow-jf'}
 LANES=('real-time','controlled-experimental')
 

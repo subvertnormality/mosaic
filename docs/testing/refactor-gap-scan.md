@@ -16,23 +16,24 @@ Status: `open`, `done` (test landed), `defect` (test found a defect), `decision`
 
 | # | Gap | Layer | Status |
 |---|---|---|---|
-| U1 | Seven Lua unit tests shadowed by repeated global names (merge_mode x2, param_tests x2, pattern_and_song, scale_and_quantiser, memory) | unit + guard | done: renamed; one stale expectation corrected to README 785 (ties choose the lower pitch); `test_lua_test_names` guards |
-| D1 | Memory ring buffer: after wrapping, truncate then push writes an absolute slot (`memory.lua` `push`), so history after undo+edit is wrong | unit + behaviour | open (verified in code) |
-| D2 | Quantiser scale cache: entries get a timestamp only on a hit; the 101st distinct key sorts nil timestamps and raises (`quantiser.lua` `cleanup_old_cache_entries`) | unit + behaviour | open (verified in code) |
-| D3 | `step.process_params` norns/nb parameter step locks index an undefined global `c`; `get_original_param_state(nil,i).value` raises | unit + behaviour (nb-audio) | open (verified in code) |
-| D4 | `step.sinfonian_sync(s)` reads the `step` module table instead of `s` as the step number | unit | open (verified in code) |
-| G1 | No frozen project saved by an earlier release is loaded; all persistence cases write with current code | behaviour fixture | open |
-| G2 | No Lua round trip of real `program.prepare_for_save` -> serialise -> load | unit | open |
-| G3 | New/load does not reset memory history (`memory.lua` keeps the module-load table) | behaviour | open (to verify) |
-| G4 | Slide ring (1024) saturation: a full ring drops a new slide after cancelling the old one | unit | open |
-| G5 | Division table consistency (`divisions.lua` parallel arrays, float index keys) | unit | open |
-| G6 | CC-before-note order not observable in unit mocks (separate note/CC logs) | unit mock | open |
-| G7 | Picker-loaded project referencing a missing device config (nil device) | behaviour | open (to verify) |
-| G8 | 14-bit CC MSB/LSB split in real `m_midi.cc` | unit | open |
-| G9 | `device_map.get_params` cached table shared with callers | unit | open |
-| G10 | Elektron program changes with two devices on different ports | behaviour | open |
-| G11 | Global scale channel 17 versus channel scale lock on a coincident step; processing order | unit + behaviour | open |
-| G12 | Autosave with unwritable storage then recovery | behaviour | open |
-| G13 | Song slot bound 90 (README) versus validation accepting 96 | decision | open |
-| G14 | `mosaic.lua` load tests reach locals through `debug.getupvalue` | unit seam | open (refactor-fragile; note only unless a seam exists) |
+| U1 | Seven Lua unit tests shadowed by repeated global names | unit + guard | done: renamed; one stale expectation corrected to README 785; `test_lua_test_names` guards |
+| U2 | Page modules are never loaded by the Lua units, so a syntax error there surfaces only at boot | guard | done: `test_lua_syntax` compiles all 65 production Lua files |
+| D1 | Memory history after wrapping: undo then a new action writes an absolute slot | unit + M-MEMORY-004 | defect fixed (`memory-wrap-logical-slot`) |
+| D2 | Quantiser cache: the 101st distinct key sorts nil timestamps and raises at Play | unit + M-SCALE-CACHE-001 | defect fixed (`quantiser-cache-timestamp`) |
+| D3 | norns/nb parameter step locks index an undefined global `c` and raise at Play | unit + M-XA-005-NB-LOCK (nb-audio) | defect fixed (`norns-param-lock-channel`) |
+| D4 | `step.sinfonian_sync(s)` passes the `step` module as the step number | unit | latent: masked by the persistent global scale set just before; observable path pinned by `sinfonion_sync_tests.lua`; not changed |
+| D5 | Fractional length masks (1/24, 1/12, 1/6, 1/3, 2/3, 5/6) reload as 14-digit floats; the length selector shows X | unit + M-SAVE-LENGTH-001 | defect fixed (`length-index-after-reload`) |
+| D6 | Slide ring: replaced slides behind one long slide exhaust the 1024 slots and new slides are dropped | unit + M-SLIDE-CAPACITY-001 | defect fixed (`slide-ring-compaction`) |
+| D7 | `+ New` keeps the previous project's memory history (E3 replays it) | unit + M-MEMORY-005 | defect fixed (`new-project-memory`) |
+| G1 | No project saved by an earlier version is loaded | fixtures + M-PERSIST-FIXTURE-CURRENT/1.2.12 | done: frozen current and 1.2.12 autosaves; 1.2.12 plays exactly as the current version's own save |
+| G2 | No Lua round trip of real `program.prepare_for_save` -> tabutil -> load | unit | done: `persistence_round_trip_tests.lua` (memory binding caveat: the memory module keeps its own state table) |
+| G5 | Division tables are parallel arrays | unit | done: `divisions_tests.lua` |
+| G6 | CC-before-note order not observable in unit mocks | behaviour | covered by patch_ten_slot_slides and live_parameter_recording ordering asserts |
+| G8 | 14-bit CC MSB/LSB split | unit | done (characterisation, MIDI 1.0 convention) |
+| G9 | `device_map.get_params` cached table shared with callers | code reading | safe today: `safe_set_param` deep-copies; no test |
+| G10 | Elektron program changes with two devices on different ports | behaviour | open (SEM-013 area) |
+| G11 | Global scale track versus channel scale lock on a coincident step | behaviour | done: M-SCALE-ORDER-001 (processing order and precedence) |
+| G12 | Failed saves and autosave suspension | behaviour | done: M-SAVE-FAIL-001 (README 1054 read in context: a failed save does not end a rejected-load suspension) |
+| G13 | Song slot bound versus validation | check | no conflict: README 884 states 96 slots (six rows of 16), as validation and the song page use; the plan's F12 row says 90 |
+| G14 | `mosaic.lua` load tests reach locals through `debug.getupvalue` | unit seam | refactor-fragile; note only |
 | G15 | PERF-003..008 canonical constrained runs | performance | open (measurement only; no fixes) |

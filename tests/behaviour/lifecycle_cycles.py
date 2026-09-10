@@ -22,6 +22,10 @@ def lifecycle_cycles(c,cycles=10):
         idle_autosave(d);d.finish()
         out=c.out/('cycle-%02d'%cycle);out.mkdir()
         d=Driver(out,project_seed=d.data_directory,**c.launch_options)
-        d.tap(3,8);phrase(d,cycle,'cycle-%d-restored'%cycle)
+        try:d.tap(3,8);phrase(d,cycle,'cycle-%d-restored'%cycle)
+        except Exception:
+            try:d.finish() # never leave a restarted session running
+            except Exception:pass
+            raise
     d.finish()
     c.results.append(dict(kind='lifecycle-summary',cycles=cycles,final_transpose=cycles,passed=True))

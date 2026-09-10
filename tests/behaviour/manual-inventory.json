@@ -1670,10 +1670,14 @@
         "M-TRANS-008",
         "M-LIFECYCLE-001",
         "M-SAVE-002",
-        "M-PERSIST-COMBINED-001"
+        "M-PERSIST-COMBINED-001",
+        "M-SAVE-LENGTH-001",
+        "M-PERSIST-FIXTURE-CURRENT",
+        "M-PERSIST-FIXTURE-1.2.12",
+        "M-MEMORY-006"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Fresh stopped project with four notes,59-second absence and61-second save, fresh-process reload; repeated saves, playing exclusion, interruption, corrupt/old data and explicit save/load dialogs remain required. M-LIFECYCLE-001 (E and D, 3 fresh D repeats): ten cold lifecycle cycles; each raises global transpose, autosaves when idle and shuts down cleanly, and every next process restores the cumulative transpose with exact phrases. M-PERSIST-COMBINED-001 (E and D, 3 fresh D repeats): the M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2 locks, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream. Tempo is norns system state (clock_tempo save=false), outside the script autosave. Skipping the pset read on load is detected.",
+      "domain": "Fresh stopped project with four notes,59-second absence and61-second save, fresh-process reload; repeated saves, playing exclusion, interruption, corrupt/old data and explicit save/load dialogs remain required. M-LIFECYCLE-001 (E and D, 3 fresh D repeats): ten cold lifecycle cycles; each raises global transpose, autosaves when idle and shuts down cleanly, and every next process restores the cumulative transpose with exact phrases. M-PERSIST-COMBINED-001 (E and D, 3 fresh D repeats): the M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2 locks, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream. Tempo is norns system state (clock_tempo save=false), outside the script autosave. Skipping the pset read on load is detected. M-SAVE-LENGTH-001 (E and D, 3 fresh D repeats): a channel length mask of 1/3 and a step mask of 5/6 display and play the same after idle autosave and a cold restart. The baseline showed X after reload (defect length-index-after-reload, fixed).",
       "oracles": [
         "No early autosave file; saved project and parameters exist",
         "Restored exact grid LEDs",
@@ -2511,10 +2515,11 @@
         "M-XA-002-AUDIO",
         "M-XA-001-JF",
         "M-SHUFFLE-008",
-        "M-SETUP-003"
+        "M-SETUP-003",
+        "M-XA-005-NB-LOCK"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Configured generic CC/named MIDI devices; every virtual port/channel; unassigned and missing devices.",
+      "domain": "Configured generic CC/named MIDI devices; every virtual port/channel; unassigned and missing devices. M-XA-005-NB-LOCK (real time, nb-audio profile, 3 runs): a Doubledecker Shape 1 (norns parameter) step lock plays across the locked step without a Lua error; lock application and restoration are pinned by Lua units. The baseline raised at Play (defect norns-param-lock-channel, fixed).",
       "oracles": [
         "Device screen and exact outgoing port/channel/CC; unassigned channel emits no notes."
       ],
@@ -2682,10 +2687,11 @@
         "M-MASK-016",
         "M-MASK-017",
         "M-MASK-018",
-        "M-MASK-023"
+        "M-MASK-023",
+        "M-SAVE-LENGTH-001"
       ],
       "status": "in_progress",
-      "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks.",
+      "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks. M-SAVE-LENGTH-001 (E and D, 3 fresh D repeats): a channel length mask of 1/3 and a step mask of 5/6 display and play the same after idle autosave and a cold restart. The baseline showed X after reload (defect length-index-after-reload, fixed).",
       "oracles": [
         "Exact masked MIDI with unrelated attributes unchanged and visible mask value."
       ],
@@ -3481,10 +3487,13 @@
         "M-REC-PARAM-027",
         "M-PARAM-034",
         "M-PARAM-035",
-        "M-MEMORY-003"
+        "M-MEMORY-003",
+        "M-MEMORY-004",
+        "M-MEMORY-005",
+        "M-MEMORY-006"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts.",
+      "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed).",
       "oracles": [
         "Screen history icons and undo-restored MIDI/lock values."
       ],
@@ -3511,10 +3520,13 @@
         "M-MEMORY-002",
         "M-REC-PARAM-025",
         "M-REC-PARAM-026",
-        "M-MEMORY-003"
+        "M-MEMORY-003",
+        "M-MEMORY-004",
+        "M-MEMORY-005",
+        "M-MEMORY-006"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback.",
+      "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed).",
       "oracles": [
         "Exact previous/reapplied output and selected history indicator."
       ],
@@ -5393,10 +5405,11 @@
         "M-SCALE-003",
         "M-SCALE-004",
         "M-WORKFLOW-001",
-        "M-SCALE-DISPLAY-001"
+        "M-SCALE-DISPLAY-001",
+        "M-SCALE-CACHE-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "All slots, stopped/playing, default vs global/channel locks; known stopped highlight regression.",
+      "domain": "All slots, stopped/playing, default vs global/channel locks; known stopped highlight regression. M-SCALE-CACHE-001 (E and D, 3 fresh D repeats): 110 saves of the playing scale (root C/C# alternating) while playing; the first onset after each save is the step degree in the new root. The baseline raised at Play after about 100 saves (defect quantiser-cache-timestamp, fixed).",
       "oracles": [
         "Applied pitches and exact selection LED/screen."
       ],
@@ -5431,10 +5444,11 @@
         "M-TRANS-004",
         "M-TRANS-005",
         "M-OPT-PENT-ALL-001",
-        "M-TRANS-002"
+        "M-TRANS-002",
+        "M-SCALE-CACHE-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "All16 slots; same/different editing vs applied slot; long threshold; editing currently used scale and saving.",
+      "domain": "All16 slots; same/different editing vs applied slot; long threshold; editing currently used scale and saving. M-SCALE-CACHE-001 (E and D, 3 fresh D repeats): 110 saves of the playing scale (root C/C# alternating) while playing; the first onset after each save is the step degree in the new root. The baseline raised at Play after about 100 saves (defect quantiser-cache-timestamp, fixed).",
       "oracles": [
         "Exact global off/unchanged/apply pitch outcomes, editor selection and LED feedback."
       ],
@@ -5460,7 +5474,8 @@
         "M-SCALE-002",
         "M-SCALE-004",
         "M-SCALE-LOCK-003",
-        "M-TRIPLE-001"
+        "M-TRIPLE-001",
+        "M-SCALE-ORDER-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 slots; staggered locks, channel wraps, coprime rates/lengths; clear/reset. M-SCALE-LOCK-003 (E and D, 3 fresh D repeats): channel step-1 lock (E major) over a global step-2 lock (G major) with the lifetime option On (whole cycle E) and Off (next active trig clears, global applies); a probability-0 trig and a rest do not clear; a step-3 replacement applies in both option states; exact pitches per step. Removing channel-lock persistence is detected. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
@@ -5678,10 +5693,11 @@
         "M-PARAM-044",
         "M-MOD-004",
         "M-PARAM-046",
-        "M-TRIPLE-005"
+        "M-TRIPLE-005",
+        "M-XA-005-NB-LOCK"
       ],
       "status": "in_progress",
-      "domain": "All64 steps distributed across all10 slots through native held-step input, plus exhaustive64x10 model storage; sentinels, trig/trigless, overwrite, live future-step editing and song isolation. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected.",
+      "domain": "All64 steps distributed across all10 slots through native held-step input, plus exhaustive64x10 model storage; sentinels, trig/trigless, overwrite, live future-step editing and song isolation. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-XA-005-NB-LOCK (real time, nb-audio profile, 3 runs): a Doubledecker Shape 1 (norns parameter) step lock plays across the locked step without a Lua error; lock application and restoration are pinned by Lua units. The baseline raised at Play (defect norns-param-lock-channel, fixed).",
       "oracles": [
         "Blinking lock LEDs and held value display; exact per-boundary parameter-before-note MIDI with balanced releases and full completed gates; exhaustive model cross-product."
       ],
@@ -5771,10 +5787,11 @@
         "M-REC-PARAM-014",
         "M-REC-PARAM-015",
         "M-PATCH-064",
-        "M-TRIPLE-004"
+        "M-TRIPLE-004",
+        "M-SLIDE-CAPACITY-001"
       ],
       "status": "in_progress",
-      "domain": "All parameters; endpoints equal/up/down; wrap on/off; sequence transition; stopped/play edits. Mixed standard CC/NRPN concurrency is covered. M-TRIPLE-004 (E and D, 3 fresh D repeats), plan stress triple trigless x slide x external-clock change: a global CC slide to a silent trigless lock under a 24 PPQN clock that steps from 100 to 150 BPM mid-slide arrives with the destination lock (README 964) and, as characterisation beyond the manual, stays linear in received clock ordinals; stored-patch recall, exact onsets and balanced gates. A slide timed by seconds at the start tempo is detected.",
+      "domain": "All parameters; endpoints equal/up/down; wrap on/off; sequence transition; stopped/play edits. Mixed standard CC/NRPN concurrency is covered. M-TRIPLE-004 (E and D, 3 fresh D repeats), plan stress triple trigless x slide x external-clock change: a global CC slide to a silent trigless lock under a 24 PPQN clock that steps from 100 to 150 BPM mid-slide arrives with the destination lock (README 964) and, as characterisation beyond the manual, stays linear in received clock ordinals; stored-patch recall, exact onsets and balanced gates. A slide timed by seconds at the start tempo is detected. M-SLIDE-CAPACITY-001 (E and D, 3 fresh D repeats): nine channel-1 slides replaced every 1/6 s behind one 31 s channel-2 slide keep passing through intermediate values for 25 s (sample rate and ring size are characterisation). The baseline dropped every slide after 18.8 s (defect slide-ring-compaction, fixed).",
       "oracles": [
         "Independent per-tick CC trajectory/endpoints and exact end-of-song cutoff."
       ],
@@ -5860,7 +5877,8 @@
         "M-TRANS-004",
         "M-TRANS-005",
         "M-TRIPLE-001",
-        "M-SCALE-DISPLAY-001"
+        "M-SCALE-DISPLAY-001",
+        "M-SCALE-ORDER-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Both option values; probability0/100; active/rest steps; current-step lock; channel/global coprime lengths; all scale slots. M-SCALE-LOCK-003 (E and D, 3 fresh D repeats): channel step-1 lock (E major) over a global step-2 lock (G major) with the lifetime option On (whole cycle E) and Off (next active trig clears, global applies); a probability-0 trig and a rest do not clear; a step-3 replacement applies in both option states; exact pitches per step. Removing channel-lock persistence is detected. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
@@ -5958,10 +5976,12 @@
         "M-RANGE-SAVED-002",
         "M-RANGE-SAVED-003",
         "M-RANGE-SAVED-004",
-        "M-SAVE-NAMED-001"
+        "M-SAVE-NAMED-001",
+        "M-MEMORY-005",
+        "M-SAVE-FAIL-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-SAVE-NAMED-001 (E and D, 3 fresh D repeats): save with the default name and with a typed name (one character appended through the native text entry), idle autosave leaves both named saves byte-identical, cancel writes nothing, re-saving the default name overwrites only it, and loading each name restores its exact phrase in-session. M-PROJECT-LIVE-001..004 cover dialogs while playing. Remaining: long/empty/non-ASCII names, delete in text entry, corrupt/missing/unwritable files at load and save.",
+      "domain": "M-SAVE-NAMED-001 (E and D, 3 fresh D repeats): save with the default name and with a typed name (one character appended through the native text entry), idle autosave leaves both named saves byte-identical, cancel writes nothing, re-saving the default name overwrites only it, and loading each name restores its exact phrase in-session. M-PROJECT-LIVE-001..004 cover dialogs while playing. Remaining: long/empty/non-ASCII names, delete in text entry, corrupt/missing/unwritable files at load and save. M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed).",
       "oracles": [
         "File round-trip plus exact MIDI/grid/screen; valid prior data preserved on failed/cancelled save."
       ],
@@ -5994,10 +6014,14 @@
         "M-LIFECYCLE-001",
         "M-WORKFLOW-001",
         "M-SAVE-NAMED-001",
-        "M-PERSIST-COMBINED-001"
+        "M-PERSIST-COMBINED-001",
+        "M-SAVE-LENGTH-001",
+        "M-PERSIST-FIXTURE-CURRENT",
+        "M-PERSIST-FIXTURE-1.2.12",
+        "M-SAVE-FAIL-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-SAVE-002 (E and D, 3 fresh D repeats): no autosave within 59.5 s of the last grid input; a grid press restarts the period; no autosave during 65 s of playback including an edit made while playing; autosave 60 s after Stop; a fresh process restores the edited phrase. The write follows a 0.5 s metro after the 60 s timer. A forced save while playing is detected. Existing M-RANGE-SAVED-001/003..006 and M-TRANS-008 cover rejected/corrupt saved data. Remaining: norns key/encoder input and parameter-menu changes as idle resets, missing/unwritable storage, named-save interaction. M-LIFECYCLE-001 (E and D, 3 fresh D repeats): ten cold lifecycle cycles; each raises global transpose, autosaves when idle and shuts down cleanly, and every next process restores the cumulative transpose with exact phrases. M-PERSIST-COMBINED-001 (E and D, 3 fresh D repeats): the M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2 locks, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream. Tempo is norns system state (clock_tempo save=false), outside the script autosave. Skipping the pset read on load is detected.",
+      "domain": "M-SAVE-002 (E and D, 3 fresh D repeats): no autosave within 59.5 s of the last grid input; a grid press restarts the period; no autosave during 65 s of playback including an edit made while playing; autosave 60 s after Stop; a fresh process restores the edited phrase. The write follows a 0.5 s metro after the 60 s timer. A forced save while playing is detected. Existing M-RANGE-SAVED-001/003..006 and M-TRANS-008 cover rejected/corrupt saved data. Remaining: norns key/encoder input and parameter-menu changes as idle resets, missing/unwritable storage, named-save interaction. M-LIFECYCLE-001 (E and D, 3 fresh D repeats): ten cold lifecycle cycles; each raises global transpose, autosaves when idle and shuts down cleanly, and every next process restores the cumulative transpose with exact phrases. M-PERSIST-COMBINED-001 (E and D, 3 fresh D repeats): the M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2 locks, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream. Tempo is norns system state (clock_tempo save=false), outside the script autosave. Skipping the pset read on load is detected. M-SAVE-LENGTH-001 (E and D, 3 fresh D repeats): a channel length mask of 1/3 and a step mask of 5/6 display and play the same after idle autosave and a cold restart. The baseline showed X after reload (defect length-index-after-reload, fixed).",
       "oracles": [
         "No early/playing write; restored observable musical state; named data unchanged."
       ],
@@ -6171,10 +6195,11 @@
       "cases": [
         "M-OPT-ELEK-001",
         "M-OPT-ELEK-002",
-        "M-OPT-ELEK-003"
+        "M-OPT-ELEK-003",
+        "M-OPT-ELEK-004"
       ],
       "status": "in_progress",
-      "domain": "M-OPT-ELEK-001 (E and D, 3 fresh D repeats), seeded Digitakt on channel 1: default Off sends nothing; On mirrors stopped slot selection and Play on channel 10, announces each automatic transition once two steps ahead at global length 4, and the channel setting moves the status to 192. Global lengths 2 and 1 fail (bugs.json elektron-short-song-program-changes, SEM-013). Remaining: all 90 slots and 16 channels, queued live selection, repeats, copies, several Elektron channels and ports.",
+      "domain": "M-OPT-ELEK-001 (E and D, 3 fresh D repeats), seeded Digitakt on channel 1: default Off sends nothing; On mirrors stopped slot selection and Play on channel 10, announces each automatic transition once two steps ahead at global length 4, and the channel setting moves the status to 192. Global lengths 2 and 1 fail (bugs.json elektron-short-song-program-changes, SEM-013). Remaining: all 90 slots and 16 channels, queued live selection, repeats, copies, several Elektron channels and ports. M-OPT-ELEK-004 (E and D, 3 fresh D repeats): Digitakt on port 1 and Syntakt on port 2; each stopped slot change reaches each Elektron device once on its own port, channel 10. The baseline sent both changes to port 1 twice and none to port 2 (defect elektron-program-change-port, fixed). Several Elektron channels on one port still send one change per channel (characterised, unchanged).",
       "oracles": [
         "Exact program numbers, ports/channels and timing relative to transition; disabled silence."
       ],
@@ -6566,10 +6591,11 @@
       ],
       "statement": "Normal MIDI workload remains stable; dense slides/locks/high clock rates need measured limits.",
       "cases": [
-        "M-ENDURANCE-001"
+        "M-ENDURANCE-001",
+        "M-SLIDE-CAPACITY-001"
       ],
       "status": "in_progress",
-      "domain": "tests/behaviour/perf_dense.py (PERF-002 dense sequencing) runs actual Mosaic in the constrained norns-class container with a UI-built 16-step project on 1/4/8/16 channels, the complete native export as oracle and recorder resource figures. Preliminary contended-host results in docs/testing/perf-dense-preliminary.json (not canonical). Remaining: idle-host canonical runs; PERF-003..008 (locks/slides/trig params/scale merges, input, rendering, storage, ten-minute mixed run, overload/recovery). Measurements only; no performance fixes before the refactor (D23). M-ENDURANCE-001 (E ten real minutes, D ten logical minutes, 3 fresh D repeats): the typical-workflow two-instrument song at 120 BPM with exact complete native event streams (600 cycles), balanced releases and p99/max/final phase within 10/50/20 ms on both ports (measured E: 1.9/2.3 ms p99, 18.1 ms max, 0.85 ms final). A single note dropped after about two minutes is detected. Host unconstrained; the constrained runs are perf_dense.py.",
+      "domain": "tests/behaviour/perf_dense.py (PERF-002 dense sequencing) runs actual Mosaic in the constrained norns-class container with a UI-built 16-step project on 1/4/8/16 channels, the complete native export as oracle and recorder resource figures. Preliminary contended-host results in docs/testing/perf-dense-preliminary.json (not canonical). Remaining: idle-host canonical runs; PERF-003..008 (locks/slides/trig params/scale merges, input, rendering, storage, ten-minute mixed run, overload/recovery). Measurements only; no performance fixes before the refactor (D23). M-ENDURANCE-001 (E ten real minutes, D ten logical minutes, 3 fresh D repeats): the typical-workflow two-instrument song at 120 BPM with exact complete native event streams (600 cycles), balanced releases and p99/max/final phase within 10/50/20 ms on both ports (measured E: 1.9/2.3 ms p99, 18.1 ms max, 0.85 ms final). A single note dropped after about two minutes is detected. Host unconstrained; the constrained runs are perf_dense.py. M-SLIDE-CAPACITY-001 (E and D, 3 fresh D repeats): nine channel-1 slides replaced every 1/6 s behind one 31 s channel-2 slide keep passing through intermediate values for 25 s (sample rate and ring size are characterisation). The baseline dropped every slide after 18.8 s (defect slide-ring-compaction, fixed).",
       "oracles": [
         "Existing exact event/lifecycle checks and central p99/max/phase thresholds; report overload as failure, not silent drops."
       ],
@@ -6801,10 +6827,11 @@
         "M-MEMORY-001",
         "M-MEMORY-002",
         "M-WORKFLOW-001",
-        "M-MEMORY-003"
+        "M-MEMORY-003",
+        "M-MEMORY-004"
       ],
       "status": "partial-domain-coverage",
-      "domain": "All notes/velocities; chord voices; held-step release/input order; wrong port/channel; mask page vs other pages.",
+      "domain": "All notes/velocities; chord voices; held-step release/input order; wrong port/channel; mask page vs other pages. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed).",
       "oracles": [
         "Exact stored grid/lock feedback and playback pitch/velocity; no inferred duration from held key."
       ],
@@ -7064,10 +7091,11 @@
         "M-SETUP-001",
         "M-XA-001-JF",
         "M-XA-002-AUDIO",
-        "M-SETUP-003"
+        "M-SETUP-003",
+        "M-OPT-ELEK-004"
       ],
       "status": "unimplemented",
-      "domain": "Empty directory; one and multiple stock configurations; two isolated projects; restart after addition/removal. M-SETUP-001 and M-OPT-ELEK-001 boot seeded config directories and select their devices by picker name.",
+      "domain": "Empty directory; one and multiple stock configurations; two isolated projects; restart after addition/removal. M-SETUP-001 and M-OPT-ELEK-001 boot seeded config directories and select their devices by picker name. M-OPT-ELEK-004 (E and D, 3 fresh D repeats): Digitakt on port 1 and Syntakt on port 2; each stopped slot change reaches each Elektron device once on its own port, channel 10. The baseline sent both changes to port 1 twice and none to port 2 (defect elektron-program-change-port, fixed). Several Elektron channels on one port still send one change per channel (characterised, unchanged).",
       "oracles": [
         "Screen picker names and resulting MIDI routing; absence of unselected configurations."
       ],

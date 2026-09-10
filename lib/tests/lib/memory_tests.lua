@@ -3600,3 +3600,55 @@ function test_memory_redo_all_should_merge_events_correctly()
   luaunit.assert_equals(channel.step_note_masks[1], 60)
   luaunit.assert_equals(channel.step_length_masks[1], 2)
 end
+-- README 698-707: memory keeps every mask and trig lock action in order; after moving
+-- back with E3, a new action continues from the displayed position. Wrapping the
+-- bounded history must not change that order.
+local function wrapped_history_notes(history)
+  local notes = {}
+  for i = 1, history:get_size() do notes[i] = history:get(i).data.event_data.note end
+  return notes
+end
+
+function test_memory_wrapped_history_edit_after_undo_keeps_logical_order()
+  memory.init()
+  program.init()
+  local original_max = memory.max_history_size
+  memory.max_history_size = 5
+  for i = 1, 8 do
+    memory.record_event(1, "note_mask", {step = i, note = 60 + i, velocity = 100, song_pattern = 1})
+  end
+  luaunit.assert_equals(wrapped_history_notes(memory.get_state(1).event_history), {64, 65, 66, 67, 68})
+  memory.undo(1); memory.undo(1); memory.undo(1)
+  memory.record_event(1, "note_mask", {step = 20, note = 99, velocity = 100, song_pattern = 1})
+  local state = memory.get_state(1)
+  memory.max_history_size = original_max
+  luaunit.assert_equals(state.current_event_index, 3)
+  luaunit.assert_equals(wrapped_history_notes(state.event_history), {64, 65, 99})
+  -- Recording continues to fill logically and wraps again without losing order.
+  memory.max_history_size = 5
+  for i = 1, 4 do
+    memory.record_event(1, "note_mask", {step = 30 + i, note = 100 + i, velocity = 100, song_pattern = 1})
+  end
+  memory.max_history_size = original_max
+  luaunit.assert_equals(wrapped_history_notes(memory.get_state(1).event_history), {99, 101, 102, 103, 104})
+end
+
+function test_memory_wrapped_history_survives_serialisation_in_order()
+  memory.init()
+  program.init()
+  local original_max = memory.max_history_size
+  memory.max_history_size = 5
+  for i = 1, 8 do
+    memory.record_event(1, "note_mask", {step = i, note = 60 + i, velocity = 100, song_pattern = 1})
+  end
+  memory.undo(1); memory.undo(1)
+  memory.record_event(1, "note_mask", {step = 20, note = 99, velocity = 100, song_pattern = 1})
+  local saved = memory.serialize_state()
+  memory.init()
+  memory.deserialize_state(saved)
+  memory.record_event(1, "note_mask", {step = 21, note = 98, velocity = 100, song_pattern = 1})
+  memory.max_history_size = original_max
+  local state = memory.get_state(1)
+  luaunit.assert_equals(wrapped_history_notes(state.event_history), {64, 65, 66, 99, 98})
+  luaunit.assert_equals(state.current_event_index, 5)
+end

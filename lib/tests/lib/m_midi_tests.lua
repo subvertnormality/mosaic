@@ -53,3 +53,22 @@ function test_all_notes_off_preserves_every_clamped_endpoint_owner()
     luaunit.assert_equals(midi_output.note_counts,{})
   end)
 end
+
+-- Characterisation (not README text; MIDI 1.0 convention): a 14-bit controller sends
+-- its MSB (value // 128) before its LSB (value % 128) on the same channel; a 7-bit
+-- controller sends the value unchanged; an absent output device sends nothing.
+function test_cc_sends_seven_bit_values_and_splits_fourteen_bit_values_msb_first()
+  local original_devices = midi_devices
+  local sent = {}
+  midi_devices = {{cc = function(_, number, value, channel) sent[#sent + 1] = {number, value, channel} end}}
+  local ok, err = pcall(function()
+    midi_output.cc(74, nil, 127, 3, 1)
+    midi_output.cc(1, 33, 16383, 2, 1)
+    midi_output.cc(1, 33, 8191, 2, 1)
+    midi_output.cc(7, 39, 0, 16, 1)
+    midi_output.cc(1, nil, 64, 1, 2)
+  end)
+  midi_devices = original_devices
+  if not ok then error(err, 0) end
+  luaunit.assert_equals(sent, {{74, 127, 3}, {1, 127, 2}, {33, 127, 2}, {1, 63, 2}, {33, 127, 2}, {7, 0, 16}, {39, 0, 16}})
+end
