@@ -1512,7 +1512,7 @@
         "CH-GLOBAL-OCTAVE",
         "LOCK-CLEAR-PAGE",
         "MERGE-CONTROL",
-        "NAV-FINE-K3",
+        "NAV-FINE-K1",
         "NAV-TRANSPORT",
         "REC-ARM"
       ],
@@ -1526,7 +1526,7 @@
     },
     {
       "path": "cheat_sheet.html",
-      "sha256": "4e964ac61b350d4f90fe954a8ded36f6e4b52bbaeb6364316a7d2d5602fc85f3"
+      "sha256": "b859da381df8bdef11e5178278dd033d72bbc8a7c0820123d6ee7eebf5e68b51"
     },
     {
       "url": "https://t.ly/h-Wsw",
@@ -3692,7 +3692,9 @@
         "M-PARAM-033",
         "M-PARAM-034",
         "M-PARAM-035",
-        "M-PARAM-036"
+        "M-PARAM-036",
+        "M-PARAM-045",
+        "M-PARAM-046"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -6583,16 +6585,18 @@
       "coverage_reconciliation": "Repeated velocity and shifted-length mode cycles tested; full trig/note cross-mode isolation and K1 release-order matrix remain."
     },
     {
-      "id": "NAV-FINE-K3",
+      "id": "NAV-FINE-K1",
       "sections": [
         "CHEAT-ALL"
       ],
-      "statement": "Cheat sheet specifies held K3 for E3 fine adjustment; README750 says K1.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "K3/K1/neither and press order; every numeric parameter class; min/max/discontinuity; avoid unwanted confirmation.",
+      "statement": "Hold K1 while turning E3 for fine adjustment; K3 retains its parameter-slide action.",
+      "cases": [
+        "M-PARAM-045"
+      ],
+      "status": "in_progress",
+      "domain": "K1/K3/neither and press order; wide NRPN plus existing CC/sparse numeric classes; min/max/discontinuity; no unwanted slide or confirmation side effects. K1 behavior and corrected manual wording are established; remaining numeric classes and boundaries stay in progress.",
       "oracles": [
-        "Exact value increments and resulting CC/pitch/duration; intended gesture pending resolution."
+        "Exact values and MIDI bytes for identical E3 input, final patch recall, and established K3 parameter-slide action."
       ],
       "lanes": [
         "E",
@@ -6601,8 +6605,8 @@
       "source": {
         "path": "cheat_sheet.html",
         "line": 947,
-        "text": "            <li>E3: Adjust values (hold K3 for fine control)</li>",
-        "sha256": "1838cfa2a5bd4ce1c70f3221ff1ae3b546b8cc5404972fb272355b209de6d044"
+        "text": "            <li>E3: Adjust values (hold K1 for fine control)</li>",
+        "sha256": "b331207dc3fff2a3336775def30f8f201f96d917b4115e537a060a6d465f7a35"
       }
     },
     {
@@ -7528,13 +7532,13 @@
       "source": {
         "path": "cheat_sheet.html",
         "line": 947,
-        "sha256": "1838cfa2a5bd4ce1c70f3221ff1ae3b546b8cc5404972fb272355b209de6d044",
-        "text": "E3: Adjust values (hold K3 for fine control)"
+        "sha256": "b331207dc3fff2a3336775def30f8f201f96d917b4115e537a060a6d465f7a35",
+        "text": "            <li>E3: Adjust values (hold K1 for fine control)</li>"
       },
       "proposed_requirements": [
-        "NAV-FINE-K3"
+        "NAV-FINE-K1"
       ],
-      "status": "mapped-to-draft-not-tested"
+      "status": "mapped-to-tested-requirement"
     },
     {
       "source": {

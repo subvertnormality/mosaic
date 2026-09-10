@@ -1315,3 +1315,23 @@ and the four final manifests bind one source. Follow-up
 01a08a73-f1f9-7082-99e2-73e91f6ec64b accepted the scoped held-step contract.
 Clearing, slides, recording lifetimes and parameter-type semantics remain under
 their own inventory requirements.
+
+
+## Trig-parameter slots and K1 fine adjustment
+
+M-PARAM-045 uses native K1/K3 and E3 input on a wide NRPN parameter. The same
+encoder detent advances Off to0 with K1, while neither modifier and K3 each use
+the coarse129 increment. Playback requires exact standard NRPN bytes for258 as
+both patch recall and step1 default before its note. Source and history show the
+cheat sheet's K3 wording was stale; it now agrees with the README and production
+K1 behavior, while K3 keeps its established parameter-slide action.
+
+M-PARAM-046 assigns all ten slots, drives the selector twenty inputs past each
+endpoint, and proves through held-step edits and exact MIDI that it remains at
+slot10/CC10 and slot1/CC1. Both cases pass fresh controlled and real-time runs
+after the documentation correction. The final source snapshot passes531/531 Lua
+and100/100 applicable Python tests. Codex review
+01a08a85-ce64-7a01-9624-71c0b506c667 accepted the scoped cases and K1 manual
+resolution; final source/evidence audit 01a08a94-e05a-77e2-8cfc-4e5b6fba6356
+verified all source, manifest, artifact and snapshot bindings. PARAM-SLOTS and NAV-FINE-K1 remain in progress for their declared
+additional classes, boundaries and gesture orders.

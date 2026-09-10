@@ -317,3 +317,16 @@ an explicit pending policy, not a defect allowance for other MIDI behavior.
 ## 2026-09-10 — Clamp composed notes at the final MIDI boundary
 
 Scale-relative note merging deliberately permits degrees beyond the editor range. Combining those results with channel octave, scale transpose and step transpose can produce note numbers below 0 or above 127. Passing those numbers to norns creates malformed MIDI data bytes. Normalize only in `m_midi.note_on` and `m_midi.note_off`, after all musical transformations and before ownership accounting and wire output. This preserves non-MIDI players and covers roots, chords and arpeggios that are computed after the main step pitch. Distinct internal notes that meet at 0 or 127 retain one emitted release per onset. The Digitakt NRPN exception does not apply to note bytes or any other MIDI behavior.
+
++## 2026-09-10 — K1 is the trig-parameter fine-control modifier
++
++The README, production gesture code and later documentation history agree that
++holding K1 while turning E3 selects fine adjustment. The cheat sheet's K3 wording
++was stale and is corrected to K1. K3 remains the parameter-slide action on the
++Trig Locks page; an E3 turn while K3 is held therefore uses the ordinary coarse
++increment and does not redefine K3 as a fine modifier. M-PARAM-045 proves the
++distinction through native key/encoder inputs, exact NRPN bytes and playback
++recall in controlled and real time. Codex review
++`01a08a85-ce64-7a01-9624-71c0b506c667` accepted the behavior and documentation
++correction.
++

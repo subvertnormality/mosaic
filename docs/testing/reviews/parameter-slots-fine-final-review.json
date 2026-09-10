@@ -1,0 +1,44 @@
+{
+  "started_at": "2026-09-10T09:10:06.927403+00:00",
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Final trig-parameter slot and fine-control evidence review\n\nUse Codex only. Read-only local commands are allowed; do not edit or launch tests/runtime processes.\n\nReview the finalized M-PARAM-045/046 slice and `docs/testing/parameter-slots-fine-validation.json`. A prior Codex review (`01a08a85-ce64-7a01-9624-71c0b506c667`) accepted both cases and decided that K1+E3 is the established fine-control contract while the cheat sheet's K3 wording was stale. That wording is now corrected to K1, the inventory requirement is NAV-FINE-K1, and the decision/progress records preserve K3's parameter-slide action.\n\nBoth behavior cases were rerun after the documentation and inventory change in controlled and real time. The validation JSON references only those four fresh manifests and a copied source snapshot passing 531/531 Lua and 100/100 applicable Python tests. Verify source/manual bindings, manifest and artifact hashes, the manual/inventory reconciliation, the K1/K3 case description, and the snapshot/log claims. Confirm ACCEPTED or identify concrete CHANGES REQUIRED. Keep broader parameter classes and gesture orders outside this scoped verdict; those remain explicitly in progress. Do not generalize the historical Digitakt NRPN exception.",
+    "files": [
+      {
+        "path": "cheat_sheet.html",
+        "reason": "Final source-bound evidence"
+      },
+      {
+        "path": "docs/testing/decisions.md",
+        "reason": "Final source-bound evidence"
+      },
+      {
+        "path": "docs/testing/progress.md",
+        "reason": "Final source-bound evidence"
+      },
+      {
+        "path": "tests/behaviour/parameter_lock_domain.py",
+        "reason": "Final source-bound evidence"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "Final source-bound evidence"
+      },
+      {
+        "path": "tests/behaviour/manual-inventory.json",
+        "reason": "Final source-bound evidence"
+      },
+      {
+        "path": "docs/testing/parameter-slots-fine-validation.json",
+        "reason": "Final source-bound evidence"
+      }
+    ],
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**ACCEPTED for the scoped M-PARAM-045/046 slice.** The final evidence matches the corrected K1 contract; no blocking changes are required.\n\n- **Bindings and hashes:** Independently recomputed all seven source hashes, four manifest hashes, and all **60 artifact hashes and sizes** referenced by [the validation JSON](/home/andy/projects/mosaic-behaviour-tests/docs/testing/parameter-slots-fine-validation.json:4). All match. Every run\u2019s application identity binds the corrected cheat sheet, inventory, cases and decision record; all four report passes with the expected case and clock mode. Controlled runs remain diagnostic-only.\n\n- **Manual reconciliation:** [Cheat-sheet line 947](/home/andy/projects/mosaic-behaviour-tests/cheat_sheet.html:947) now says K1. The inventory\u2019s full-file hash, quoted source line, line hash and `NAV-FINE-K1` mapping agree; its status remains [`in_progress`](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/manual-inventory.json:6588). Git history confirms the older K3 wording in `064cc38b` and explicit README correction to K1 in `4f4084b5`.\n\n- **Behavior and descriptions:** [M-PARAM-045](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/parameter_lock_domain.py:152) and both fresh captures show values **0 \u2192 129 \u2192 258**, followed by two exact 258 NRPN messages before the note. K1 controls fine adjustment; [K3 still toggles parameter slides](/home/andy/projects/mosaic-behaviour-tests/lib/pages/channel_edit_page/channel_edit_page_ui.lua:1605). The description preserves that distinction; this case does not establish slide trajectories. [M-PARAM-046](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/parameter_lock_domain.py:120) verifies ten assignments, endpoint clamping, CC10/CC1 routing, timing, ordering, gates and releases.\n\n- **Snapshot and logs:** All **215 tracked Python/Lua files** match both the copied snapshot and each run\u2019s recorded source identity. Snapshot hashes and log hashes match; the logs explicitly report [531 Lua successes](/home/andy/projects/mosaic-behaviour-runs/parameter-slots-fine-final-20260910/lua-tests.log:4) and [100 Python tests, OK](/home/andy/projects/mosaic-behaviour-runs/parameter-slots-fine-final-20260910/python-tests.log:3). Broader classes and gesture orders remain outside this verdict. No Digitakt exception was applied.\n\n**CONFIDENCE: High.** Verification used recorded evidence only; tests were not rerun, and the aggregate Python log does not enumerate test selection.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08a94-e05a-77e2-8cfc-4e5b6fba6356` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T09:12:43.933646+00:00"
+}

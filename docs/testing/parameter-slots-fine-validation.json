@@ -1,0 +1,94 @@
+{
+  "scope": "Ten trig-parameter slots and K1 fine control",
+  "source_revision": "2b96cf2 plus recorded working-tree diff",
+  "source_sha256": {
+    "tests/behaviour/parameter_lock_domain.py": "dfd2ea92599f50315305da09fcca44ab4e0f4115be15336718b321819c34bdae",
+    "tests/behaviour/cases.py": "d257b62b9a4e9e969e76e48bfc09be393605674cb0864399b7ed851cb099d858",
+    "tests/behaviour/manual-inventory.json": "01bd3fd082f0c3184bc6ad3f1b02df90433f9c8f95e106739c43534d6b9e1c57",
+    "README.md": "0ac717754ac5c424c541d6e66729e62b9b140483a5c85f402cbae793c4a355bf",
+    "cheat_sheet.html": "b859da381df8bdef11e5178278dd033d72bbc8a7c0820123d6ee7eebf5e68b51",
+    "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "891699e4f417f8eecbab663993e91ef404eb5452b0f370556e66d3a5674ef462",
+    "docs/testing/decisions.md": "59d0013c9b7adbe90b2547917693cffbd76becb2c234a8a0bb6e2e018e9025ac"
+  },
+  "native_behavior": {
+    "M-PARAM-045-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/86da9fc142a943dabddb2c6879f2a668/manifest.json",
+      "sha256": "885ad5522d2f794ae70828f67ff1749d84615b2424b51a5d044fc6a8bf8ae732",
+      "case": "M-PARAM-045",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-PARAM-045-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/f71ecf44fdfb44d8864324fbd2410dbd/manifest.json",
+      "sha256": "f53012d9063c7a644056de9cd8faa4f79a1bdf5759a896b7d7a6c191fb627caf",
+      "case": "M-PARAM-045",
+      "clock_mode": "real-time"
+    },
+    "M-PARAM-046-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/0aa82c0af01541628fb45ec1117f7fe9/manifest.json",
+      "sha256": "3c0b05fb368a011d37d5b1a441e27e86145f666de3e76ad0d7cb9ab77d8dd4c3",
+      "case": "M-PARAM-046",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-PARAM-046-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/4083baf5f85d4a0ab9f2312ea53f765a/manifest.json",
+      "sha256": "3caf938a14710827791d81c4aded01d0a6a1ba997ab12435aa85e83f48be58e1",
+      "case": "M-PARAM-046",
+      "clock_mode": "real-time"
+    }
+  },
+  "unit_integration": {
+    "snapshot": "/home/andy/projects/mosaic-behaviour-runs/parameter-slots-fine-final-20260910/mosaic",
+    "lua": "531/531",
+    "python_unit_oracles": "100/100",
+    "logs": {
+      "lua": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/parameter-slots-fine-final-20260910/lua-tests.log",
+        "sha256": "40808aeb1859b5a5dc7dfae1c78239a2bc7c84e7a91d397a087ca9590c7f9d3d"
+      },
+      "python": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/parameter-slots-fine-final-20260910/python-tests.log",
+        "sha256": "43bd956cd89d3bc621c60fa30b2e1d9b3de4dc571f5ad7d8dbc565b364f05f90"
+      },
+      "source_hashes": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/parameter-slots-fine-final-20260910/source-hashes.json",
+        "sha256": "0186b20e503aef30899a16b047eece274dd8b89797d3d4854da192b05abfb047"
+      }
+    }
+  },
+  "observations": {
+    "same_NRPN_E3_detent": {
+      "K1": {
+        "from": -1,
+        "to": 0,
+        "delta": 1
+      },
+      "neither": {
+        "from": 0,
+        "to": 129,
+        "delta": 129
+      },
+      "K3": {
+        "from": 129,
+        "to": 258,
+        "delta": 129
+      }
+    },
+    "play_recall": 258,
+    "slot_bounds": {
+      "upper": "slot10 / CC10",
+      "lower": "slot1 / CC1"
+    }
+  },
+  "manual_resolution": {
+    "decision": "K1 is fine control; K3 retains parameter-slide behavior",
+    "cheat_sheet_corrected": true,
+    "codex_review": "01a08a85-ce64-7a01-9624-71c0b506c667",
+    "history": {
+      "cheat_K3_commit": "064cc38b 2024-11-03",
+      "README_K1_correction": "4f4084b5 2024-12-05"
+    },
+    "final_codex_review": "01a08a94-e05a-77e2-8cfc-4e5b6fba6356"
+  },
+  "production_change": false,
+  "coverage_limit": "Additional numeric parameter classes, range boundaries and gesture orders remain in PARAM-SLOTS/NAV-FINE-K1."
+}
