@@ -3,6 +3,7 @@ from random_note_domains import random_note_domains
 from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
 from stop_safety import shift_press_to_stop
+from memory_truncate import memory_truncate
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -2887,11 +2888,14 @@ def chord_shape_schedule(c,arp,shape,muted,mask_bits=15,velocity=50,modifier=10,
         expected=[] if muted else [(i*108,60,max(0,min(127,velocity+i*modifier))) for i in range(5)] # Root-only ratchet, independent of shape.
     notes=capture.note_ons();assert notes or not expected
     field='logical_ns' if controlled else 'monotonic_ns'
-    origin=trigger if controlled else (notes[0][field]-expected[0][0]/144*1e9 if notes else 0)
+    # Real time anchors on the first sounding onset; a velocity-zero root is a
+    # wire-level release and is not among note_ons().
+    audible=[tick for tick,_,vel in expected if vel>0]
+    origin=trigger if controlled else (notes[0][field]-audible[0]/144*1e9 if notes and audible else 0)
     if not expected:
         assert not [m for m in capture.events if m['bytes'][0]&240 in (128,144)],'Silent chord emitted MIDI notes/releases'
         rows=[]
-    elif modifier<0:
+    elif modifier<0 or any(vel==0 for _,_,vel in expected):
         # Zero-velocity Note On is a wire-level Note Off; inspect the explicit
         # zero messages separately instead of pretending they opened voices.
         ons=[m for m in capture.events if m['bytes'][0]&240==144]
@@ -3214,6 +3218,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-MEMORY-003':dict(run=memory_truncate,requirements=['MEMORY-TRUNCATE','MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='K1+K3 applies the latest action and forgets history; K1+K2 returns to the beginning of the current history and forgets it; forgotten history is inert to E3/K2/K3 and new actions start a fresh history, all checked on the memory counter and complete musical phrases'),
  'M-OPT-STOP-001':dict(run=shift_press_to_stop,requirements=['OPT-SHIFT-STOP','NAV-TRANSPORT'],description='Shift press to stop: default tap stops; enabled, a tap starts but a short tap, a 0.9 s hold and a K3-held tap do not stop, while shift (K1) plus tap and a 1.1 s long press stop; disabling restores tap stop'),
  'M-OPT-KEYS-001':dict(run=keyboard_options,requirements=['OPT-KEYBOARD-WHITE','OPT-KEYBOARD-ROTATION','OPT-KEYBOARD-DEGREE','OPT-KEYBOARD-TRANSPOSE','SETUP-MIDI-INPUT'],description='Keyboard mapping defaults (raw keys, honour switches Off) across all 128 keys; white-key C-major mapping over all keys; scale change; degree II, rotation two and transpose +2 honoured alone and together; disabling restores raw keys'),
  'M-OPT-PENT-ALL-001':dict(run=lock_all_to_pentatonic,requirements=['OPT-PENTATONIC-ALL','SCALE-EDIT'],description='Lock all to pentatonic defaults off, snaps unmodified C major and C minor notes to the documented selections with random/merged switches off, and restores plain pitches when disabled'),
@@ -3463,6 +3468,13 @@ CASES={
  'M-CHORDSHAPE-259':dict(run=lambda c:chord_shape_schedule(c,False,2,False,15,extra='early-stop'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
  'M-CHORDSHAPE-258':dict(run=lambda c:chord_shape_schedule(c,False,2,False,9,extra='disabled'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
  'M-CHORDSHAPE-257':dict(run=lambda c:chord_shape_schedule(c,False,2,False,9,extra='accelerating'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-SPREAD', 'CHORD-ACCEL'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
+ 'M-CHORDVEL-005':dict(run=lambda c:chord_shape_schedule(c,False,1,False,15,velocity=127,modifier=40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root 127 with +40: every strummed voice clamps at 127, exact order and releases'),
+ 'M-CHORDVEL-006':dict(run=lambda c:chord_shape_schedule(c,False,1,False,15,velocity=1,modifier=-40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root 1 with -40: root at 1 and every voice clamps to explicit velocity-zero messages'),
+ 'M-CHORDVEL-007':dict(run=lambda c:chord_shape_schedule(c,False,3,False,15,velocity=64,modifier=1),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Interior root 64 with +1 across shape 3 order: 64..68 by play ordinal'),
+ 'M-CHORDVEL-008':dict(run=lambda c:chord_shape_schedule(c,False,4,False,15,velocity=64,modifier=-1),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Interior root 64 with -1 across shape 4 order: 64..60 by play ordinal'),
+ 'M-CHORDVEL-009':dict(run=lambda c:chord_shape_schedule(c,False,2,False,15,velocity=126,modifier=1),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root-last shape 2 from 126 with +1: first voice 126, then clamp at 127 including the root'),
+ 'M-CHORDVEL-010':dict(run=lambda c:chord_shape_schedule(c,False,1,False,15,velocity=0,modifier=40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root velocity 0 with +40: explicit zero root message, voices 40/80/120/127'),
+ 'M-CHORDVEL-011':dict(run=lambda c:chord_shape_schedule(c,False,2,True,15,velocity=100,modifier=-40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY','CHORD-MUTE-ROOT'],description='Muted root in shape 2 with -40: voices 100/60/20/0 by ordinal, no root message'),
  'M-CHORDVEL-004':dict(run=lambda c:chord_shape_schedule(c,False,4,False,15,velocity=20,modifier=-10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),
  'M-CHORDVEL-003':dict(run=lambda c:chord_shape_schedule(c,False,4,False,15,velocity=100,modifier=10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),
  'M-CHORDVEL-002':dict(run=lambda c:chord_shape_schedule(c,False,2,False,15,velocity=20,modifier=-10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),

@@ -3506,10 +3506,11 @@
       ],
       "statement": "K1+K3/K1+K2 jump and erase subsequent history.",
       "cases": [
+        "M-MEMORY-003",
         "M-PARAM-034"
       ],
-      "status": "unimplemented",
-      "domain": "Middle/latest/first selection; new edit after undo; channel isolation.",
+      "status": "partial-domain-coverage",
+      "domain": "M-MEMORY-003 (E and D, 3 fresh D repeats): K1+K3 from the middle applies the latest action and forgets all history (counter 0/0); forgotten history is inert to E3, K2 and K3; a new action starts a fresh history whose beginning is the applied state; K1+K2 returns to the beginning of the current history and forgets it, from its end and from its middle. Manual wording \"first action\" is read as the beginning, matching plain K2. Remaining: channel isolation of truncation, recorded (live-record) histories, save/reload after truncation.",
       "oracles": [
         "Retained history and musical state; erased redo unavailable. Resolve ambiguous latest wording before oracle."
       ],
