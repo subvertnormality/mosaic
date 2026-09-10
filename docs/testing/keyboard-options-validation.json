@@ -46,7 +46,7 @@
     "A black key plays the next white key degree (C#->D) when white-key mapping is On; the manual describes white keys only.",
     "The scale page selects the scale track; keyboard notes are ignored there (channel 17)."
   ],
-  "specification_decision": "SEM-003 pending: README line 195 vs MAN-103 on the white-key default.",
+  "specification_decision": "SEM-012 pending: README line 195 vs MAN-103 on the white-key default.",
   "preserved_failures": [
     {
       "run_id": "see first controlled attempt",

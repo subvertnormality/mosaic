@@ -6288,7 +6288,7 @@
         "M-OPT-KEYS-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-OPT-KEYS-001 (E and D, 3 fresh D repeats) on channel 1, transport stopped. Covered: fresh default Off plays all 128 raw keys; On maps all 128 keys through C major from C (black keys take the next white key degree, characterised), follows a change to natural minor, and Off restores raw keys. SEM-003: README line 195 says white-key mapping is the default; README MAN-103, the parameter default and observed output say Off. Remaining: roots other than C, held notes across a scale change, octave/MIDI clamp boundaries, recording through the mapping.",
+      "domain": "M-OPT-KEYS-001 (E and D, 3 fresh D repeats) on channel 1, transport stopped. Covered: fresh default Off plays all 128 raw keys; On maps all 128 keys through C major from C (black keys take the next white key degree, characterised), follows a change to natural minor, and Off restores raw keys. SEM-012: README line 195 says white-key mapping is the default; README MAN-103, the parameter default and observed output say Off. Remaining: roots other than C, held notes across a scale change, octave/MIDI clamp boundaries, recording through the mapping.",
       "oracles": [
         "Independent mapping and recorded-playback pitch; held note-off pairs match original input."
       ],
