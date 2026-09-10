@@ -19,6 +19,13 @@ def _offsets(kind):
         intervals = [round(TICK_NS - index * (TICK_NS - 16_666_667) / 41)
                      for index in range(42)]
         tolerance = 3_000_000
+    elif kind == 'burst':
+        # Preserve the long-term100BPM phase while bunching three ticks at2ms.
+        # The following94ms gap pays back the69ms displacement exactly. A note
+        # boundary falls inside the bunch, so averaging BPM cannot satisfy it.
+        intervals = [TICK_NS] * 42
+        intervals[16:20] = [2_000_000, 2_000_000, 2_000_000, 94_000_000]
+        tolerance = 3_000_002
     else:
         raise ValueError('Unknown external-clock fault: ' + kind)
     offsets = [0]
@@ -88,13 +95,18 @@ def _actual_delivery(delivered, data, intended_ns, domain):
     return matches[0][actual_key]
 
 
-def _schedule(c, events, schedule_id, timeout):
+def _schedule(c, events, schedule_id, timeout, controlled_batch=False):
     from midi_window import MidiWindow
     controlled = c.clock_mode == 'controlled-experimental'
     capture = MidiWindow(c.snapshot()['midi_count'])
     request = dict(type='midi_schedule', schedule_id=schedule_id, events=events)
     if controlled: request['time_domain'] = 'logical'
     c.action(**request)
+    # One advance still visits every native deadline in order. It avoids making
+    # thousands of full framebuffer/MIDI snapshots for long deterministic runs.
+    if controlled and controlled_batch:
+        final_ns = events[-1]['at_logical_ns']
+        c.elapse((final_ns - c.logical_ns + 10_000_000) / 1e9)
     state = c.wait(lambda state: capture.extend(state) and
                    len(state['midi_input_schedule']['delivered']) == len(events), timeout=timeout)
     c.wait(lambda state: capture.extend(state) and not state['midi_capture']['outstanding'])
@@ -123,7 +135,7 @@ def external_clock_fault(c, kind):
     events += [dict(port=1, bytes=[248], **{key: stop + index * tail_interval})
                for index in range(1, 13)]
     events.sort(key=lambda event: (event[key], 0 if event['bytes'] == [250] else 1))
-    capture, state = _schedule(c, events, 400 + ('jitter','missing','extra','step','drift').index(kind), 6)
+    capture, state = _schedule(c, events, 400 + ('jitter','missing','extra','step','drift','burst').index(kind), 6)
     field = domain + '_ns'; tolerance = fault_tolerance + (0 if controlled else 10_000_000)
     targets = [origin + offsets[6 * index] for index in range(8)]
     pitches = (60, 62, 64, 65); velocities = (127, 117, 107, 97)

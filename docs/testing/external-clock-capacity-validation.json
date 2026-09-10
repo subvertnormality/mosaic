@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "date": "2026-09-10",
+  "scope": "M-SYNC-021 burst corruption and M-SYNC-022 sixteen-bar external-clock phase/drift",
+  "runtime_candidate": {
+    "path": "/home/andy/projects/monome-runtime-candidates/midi-schedule-capacity-12/installation.json",
+    "sha256": "810a098f080bc3e452bd10588e3fb0006dffa0a245fee85a33744b07b8f6884f"
+  },
+  "runs": {
+    "burst_controlled": {
+      "run_id": "83a4643171cd4ebda01bd17f84054893",
+      "passed": true,
+      "clock_mode": "controlled-experimental",
+      "manifest_sha256": "65fca09ffc384b4ba961bf66a7ccd2bdb4c4c8cbac3967553f7bdb188d5c0aeb",
+      "wall_elapsed_seconds": 9.625578551000217,
+      "logical_advanced_seconds": 6.9,
+      "metrics": {
+        "fault": "burst",
+        "pulse_count": 43,
+        "tolerance_ns": 3000002,
+        "onsets": 8,
+        "releases": 8,
+        "maximum_onset_error_ns": 1
+      }
+    },
+    "burst_real": {
+      "run_id": "58aa8083491d4485aa3603ea06f1066e",
+      "passed": true,
+      "clock_mode": "real-time",
+      "manifest_sha256": "e4251e8a8f0fd9f78a77934c2d3f19745400e478c507b72f9ba323f91dbe7e52",
+      "wall_elapsed_seconds": 13.200093269988429,
+      "logical_advanced_seconds": null,
+      "metrics": {
+        "fault": "burst",
+        "pulse_count": 43,
+        "tolerance_ns": 13000002,
+        "onsets": 8,
+        "releases": 8,
+        "maximum_onset_error_ns": 9201328
+      }
+    },
+    "long_controlled": {
+      "run_id": "6837664cd44d4ebf9c544b9ae21fc88f",
+      "passed": true,
+      "clock_mode": "controlled-experimental",
+      "manifest_sha256": "f6049db487906e35fc55c8873bee9716d96579f19a022397a5e951de8e95f8ba",
+      "wall_elapsed_seconds": 6.7240036180010065,
+      "logical_advanced_seconds": 44.2275,
+      "metrics": {
+        "bars": 16,
+        "input_clocks": 1536,
+        "accumulated_phase_error_ns": 1,
+        "tolerance_ns": 2,
+        "onsets": 256,
+        "releases": 256,
+        "maximum_onset_error_ns": 1
+      }
+    },
+    "long_real": {
+      "run_id": "e091ddcbc57142f3a325410aa60096b8",
+      "passed": true,
+      "clock_mode": "real-time",
+      "manifest_sha256": "20bef3d4d37b787329ea94610e6cf101e31f803faefdb077d1b82ece5f38d93b",
+      "wall_elapsed_seconds": 50.614262621005764,
+      "logical_advanced_seconds": null,
+      "metrics": {
+        "bars": 16,
+        "input_clocks": 1536,
+        "accumulated_phase_error_ns": -3819393,
+        "tolerance_ns": 10000000,
+        "onsets": 256,
+        "releases": 256,
+        "maximum_onset_error_ns": 4330126
+      }
+    }
+  },
+  "emulator_tests": {
+    "contract_suite": "73/73 passed",
+    "focused_capacity": "13/13 passed"
+  },
+  "review": {
+    "engine": "Codex",
+    "historical": true,
+    "note": "Both rounds completed before the user changed future reviews to Opus-only.",
+    "critique_session": "01a08b57-7e16-7d60-86c9-3a0d6c754501",
+    "finding": "Combined2048-event/32768-byte packet required65552 bytes but transport capped65536.",
+    "disposition": "Fixed HTTP, Python datagram and native receive bounds; exact combined-boundary test added.",
+    "followup_session": "01a08b5f-a400-7533-b5ca-fedcd46eeb2d",
+    "followup": "No actionable defects identified."
+  }
+}

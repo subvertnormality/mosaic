@@ -1,7 +1,7 @@
 """Mutation guards for the degraded-clock MIDI event oracle."""
 import copy
 import unittest
-from external_clock_faults import _assert_notes
+from external_clock_faults import TICK_NS,_assert_notes,_offsets
 
 TARGETS = [1_000_000_000, 1_150_000_000, 1_300_000_000]
 ONSETS = [(TARGETS[0], 60, 100), (TARGETS[1], 62, 90), (TARGETS[2], 64, 80)]
@@ -28,6 +28,14 @@ class ExternalClockFaultOracle(unittest.TestCase):
 
     def test_accepts_exact_balanced_trace(self):
         self.accept(valid_events())
+
+    def test_burst_offsets_preserve_phase_and_cross_a_note_boundary(self):
+        offsets, tolerance = _offsets('burst')
+        intervals = [right - left for left, right in zip(offsets, offsets[1:])]
+        self.assertEqual(intervals[16:20], [2_000_000, 2_000_000, 2_000_000, 94_000_000])
+        self.assertEqual(offsets[-1], 42 * TICK_NS)
+        self.assertIn(offsets[18], [offsets[6 * index] for index in range(8)])
+        self.assertEqual(tolerance, 3_000_002)
 
     def test_rejects_missing_or_extra_onset_and_release(self):
         for remove in (0, 1, 4, 5):

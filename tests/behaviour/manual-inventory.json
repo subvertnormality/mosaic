@@ -1787,10 +1787,12 @@
         "M-SYNC-017",
         "M-SYNC-018",
         "M-SYNC-019",
-        "M-SYNC-020"
+        "M-SYNC-020",
+        "M-SYNC-021",
+        "M-SYNC-022"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Cold20/100/300BPM and warmed startup; repeated Start; release ordering; source handoff; pinned-norns Continue/SPP behavior; two-port input selection; alternating +/-5ms jitter; one missing or extra pulse; abrupt and gradual100-to150BPM changes; and500ms loss with explicit-Start recovery. Larger stochastic jitter, repeated/burst pulse corruption, loss without an explicit transport recovery, simultaneous source edits and remaining feature interactions are pending.",
+      "domain": "Cold20/100/300BPM and warmed startup; repeated Start; release ordering; source handoff; pinned-norns Continue/SPP behavior; two-port input selection; alternating +/-5ms jitter; one missing or extra pulse; abrupt and gradual100-to150BPM changes; and500ms loss with explicit-Start recovery. Three-tick2ms burst with exact phase compensation; sixteen-bar1536-clock/256-onset accumulated phase; larger stochastic jitter, repeated burst corruption, loss without an explicit transport recovery, simultaneous source edits and remaining feature interactions are pending.",
       "oracles": [
         "Native CLOCK source and midi-clock-input menus",
         "Received-pulse ordinal phase with independently authored fault timestamps",

@@ -3208,8 +3208,11 @@ from forwarded_clock import cold_forwarded_clock,warm_forwarded_clock
 from continue_spp import continue_spp_unsupported
 
 from external_clock_faults import external_clock_fault,external_clock_explicit_recovery
+from external_clock_long import long_external_phase
 
 CASES={
+ 'M-SYNC-021':dict(run=lambda c:external_clock_fault(c,'burst'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Three2ms bunched external clocks followed by an exactly compensating gap preserve received-pulse phrase phase, including an onset inside the burst, with complete gates and releases'),
+ 'M-SYNC-022':dict(run=long_external_phase,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Sixteen external-master bars deliver1536 exact24PPQN clocks and256 onsets with absolute first-beat phase, bounded accumulated drift, complete gates and post-Stop silence'),
  'M-SYNC-020':dict(run=external_clock_explicit_recovery,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='External clock loss freewheels at the acquired tempo; Start followed by the next Clock cancels holdover ownership, releases the held note and reanchors step1 without stale notes'),
  'M-SYNC-019':dict(run=lambda c:external_clock_fault(c,'drift'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Gradual external tempo drift from100 to150BPM preserves pulse-ordinal phrase phase, pitches, velocities and balanced gates'),
  'M-SYNC-018':dict(run=lambda c:external_clock_fault(c,'step'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Abrupt external tempo step from100 to150BPM preserves pulse-ordinal phrase phase, pitches, velocities and balanced gates'),
