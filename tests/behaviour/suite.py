@@ -25,7 +25,7 @@ LUA_ARGUMENT={'panic_live_note_contract.lua':'mosaic-root','test_native_control_
 PYTHON_UNITTEST={'test_acquisition_oracle','test_collection','test_duration_routes','test_external_clock_fault_oracle',
     'test_forwarded_clock_oracle','test_fractional_stop_boundary','test_jf_oracle','test_master_clock_oracle',
     'test_midi_window','test_note_accounting','test_note_schedule','test_output_profiles','test_panic_hotplug_trace',
-    'test_panic_repeat_trace','test_panic_trace','test_panic_transport','test_pcm_oracle'}
+    'test_panic_repeat_trace','test_panic_trace','test_panic_transport','test_pcm_oracle','test_suite'}
 PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}
 PYTHON_SCRIPT={'test_nrpn_legacy_serializer':'norns-source-and-artifact-directory'}
 # Cases whose code asserts a non-base profile. Base cases are everything else.
@@ -39,15 +39,34 @@ def write(path,value):path.write_text(json.dumps(value,indent=1)+'\n')
 def git(*args,cwd=REPO,binary=False):
     return subprocess.run(['git',*args],cwd=cwd,check=True,capture_output=True,text=not binary).stdout
 
-def source_state(root=REPO):
-    """Digest every tracked and untracked, non-ignored file: the tree under test."""
+RUNNER='tests/behaviour/suite.py'
+
+def source_state(root=REPO,exclude_runner=False):
+    """Digest every tracked and untracked, non-ignored file: the tree under test.
+
+    The Mosaic tree excludes this runner, which only selects and invokes tests;
+    its own digest is recorded separately so harness fixes can rerun a baseline.
+    """
     names=sorted(set(git('ls-files','-z',cwd=root).split('\0')+
                      git('ls-files','-z','--others','--exclude-standard',cwd=root).split('\0'))-{''})
-    files={n:sha((root/n).read_bytes()) for n in names if (root/n).is_file() and not (root/n).is_symlink()}
-    return dict(revision=git('rev-parse','HEAD',cwd=root).strip(),
-                dirty_patch_sha256=sha(git('diff','HEAD',cwd=root,binary=True)),
-                untracked=sorted(git('ls-files','--others','--exclude-standard',cwd=root).split()),
-                tree_sha256=sha(json.dumps(files,sort_keys=True).encode()),file_count=len(files))
+    files={n:sha((root/n).read_bytes()) for n in names if (root/n).is_file() and not (root/n).is_symlink()
+           and not (exclude_runner and n==RUNNER)}
+    state=dict(revision=git('rev-parse','HEAD',cwd=root).strip(),
+               dirty_patch_sha256=sha(git('diff','HEAD',cwd=root,binary=True)),
+               untracked=sorted(git('ls-files','--others','--exclude-standard',cwd=root).split()),
+               tree_sha256=sha(json.dumps(files,sort_keys=True).encode()),file_count=len(files))
+    if exclude_runner:state.update(files=files,runner_sha256=sha((root/RUNNER).read_bytes()))
+    return state
+
+def same_tested_tree(recorded):
+    """True if this checkout is the tree a suite report tested, runner aside."""
+    if 'files' in recorded:return source_state(exclude_runner=True)['files']==recorded['files']
+    # Reports before per-file digests: same commit, nothing untracked, and any
+    # working-tree change confined to the runner.
+    changed=set(git('diff','--name-only','HEAD').split())
+    return (git('rev-parse','HEAD').strip()==recorded['revision'] and not recorded['untracked'] and
+            recorded['dirty_patch_sha256']==sha(b'') and changed<={RUNNER} and
+            not git('ls-files','--others','--exclude-standard').split())
 
 def collect(case_ids):
     """Classify every test file; unclassified or stale declarations fail closed."""
@@ -158,7 +177,7 @@ def run(args):
     lua,python=collect(set(registry))
     selected=[c for c in registry if not args.case_pattern or re.search(args.case_pattern,c)]
     if not selected:raise SystemExit('Case selection is empty')
-    before=source_state()
+    before=source_state(exclude_runner=True)
     identity=dict(mosaic=before,emulator=source_state(Path(args.emulator).resolve()),
         norns_source=dict(path=str(norns),revision=git('rev-parse','HEAD',cwd=norns).strip(),lua_tree_sha256=tree_digest(norns/'lua')),
         experimental_install=dict(path=args.experimental_install,sha256=sha(Path(args.experimental_install).read_bytes()),
@@ -192,8 +211,8 @@ def run(args):
                 row=future.result();results.append(row)
                 print(json.dumps(dict(done=done,of=len(lane_jobs),lane=lane,case=row['case'],passed=row['passed'],seconds=row['seconds'])),flush=True)
                 if done%10==0:write(out/'suite.json',dict(report,status='running',layers=layers,cases=results,not_run=not_run))
-    after=source_state()
-    stable=after==before
+    after=source_state(exclude_runner=True)
+    stable=after['files']==before['files'] and after['runner_sha256']==before['runner_sha256']
     results.sort(key=lambda r:(args.lanes.index(r['lane']),r['case']))
     layer_rows=[r for rows in layers.values() for r in (rows if isinstance(rows,list) else [rows])]
     requirements={}
@@ -214,9 +233,44 @@ def run(args):
               not args.skip_fast_layers and set(args.lanes)==set(LANES))
     write(out/'suite.json',dict(report,status='finished',finished=time.strftime('%Y-%m-%dT%H:%M:%S%z'),
         passed=bool(passed),complete_regression_run=bool(complete),summary=summary,layers=layers,cases=results,
-        not_run=not_run,requirements=requirements,sources_after=after))
+        not_run=not_run,requirements=requirements,sources_after={k:v for k,v in after.items() if k!='files'}))
     print(json.dumps(dict(suite=str(out/'suite.json'),passed=bool(passed),complete=bool(complete),
         failed_case_runs=len(summary['case_runs_failed']),failed_layer_items=summary['layer_items_failed'])))
+    return 0 if passed else 1
+
+def rerun(args):
+    """Serially rerun every failed case run; the original report is untouched.
+
+    A first-attempt failure that passes serially is marked load_sensitive, never
+    silently green. The effective report is what compare should read.
+    """
+    source=Path(args.suite).resolve();report=json.loads(source.read_text())
+    if report.get('status')!='finished':raise SystemExit('Suite has not finished')
+    if not same_tested_tree(report['identity']['mosaic']):
+        raise SystemExit('Tested tree differs from the suite run; rerun from the same tree')
+    env=dict(os.environ,MONOME_EMULATOR=str(Path(args.emulator).resolve()))
+    artifacts=source.parent/'serial-rerun';artifacts.mkdir(exist_ok=False)
+    rows=[]
+    for row in report['cases']:
+        if row['passed']:rows.append(row);continue
+        again=run_case(row['case'],row['lane'],row['profile'],args,artifacts,env)
+        print(json.dumps(dict(case=row['case'],lane=row['lane'],serial_passed=again['passed'])),flush=True)
+        rows.append(dict(again,first_attempt=row,load_sensitive=bool(again['passed'])))
+    summary=dict(report['summary'],case_runs_passed=sum(r['passed'] for r in rows),
+                 case_runs_failed=[dict(case=r['case'],lane=r['lane']) for r in rows if not r['passed']],
+                 load_sensitive=[dict(case=r['case'],lane=r['lane']) for r in rows if r.get('load_sensitive')],
+                 serial_rerun_sources_stable=same_tested_tree(report['identity']['mosaic']))
+    passed=(report['summary']['sources_stable'] and summary['serial_rerun_sources_stable'] and
+            not summary['case_runs_failed'] and not summary['layer_items_failed'] and len(rows)==len(report['cases']))
+    effective=dict(report,cases=rows,summary=summary,passed=bool(passed),
+                   complete_regression_run=bool(passed and report.get('complete_regression_run') is not None and
+                       not summary['layer_items_not_run'] and not summary['required_not_run'] and not report.get('case_pattern')
+                       and not summary['fast_layers_skipped'] and set(report['lanes'])==set(LANES)),
+                   serial_rerun=dict(of=str(source),sha256=sha(source.read_bytes()),argv=sys.argv[1:],
+                                     runner_sha256=sha((REPO/RUNNER).read_bytes())))
+    write(source.parent/'suite-effective.json',effective)
+    print(json.dumps(dict(effective=str(source.parent/'suite-effective.json'),passed=effective['passed'],
+        still_failing=len(summary['case_runs_failed']),load_sensitive=len(summary['load_sensitive']))))
     return 0 if passed else 1
 
 def compare(args):
@@ -254,8 +308,16 @@ def main():
     r.add_argument('--case-timeout',type=int,default=3600)
     r.add_argument('--skip-fast-layers',action='store_true')
     c=commands.add_parser('compare');c.add_argument('baseline');c.add_argument('candidate')
+    s=commands.add_parser('rerun',help='Serially rerun failed case runs into suite-effective.json')
+    s.add_argument('suite')
+    s.add_argument('--emulator',default=os.environ.get('MONOME_EMULATOR'),required='MONOME_EMULATOR' not in os.environ)
+    s.add_argument('--experimental-install')
+    s.add_argument('--mod-code-root',action='append',default=[])
+    s.add_argument('--case-timeout',type=int,default=3600)
     args=parser.parse_args()
     if args.command=='compare':return compare(args)
+    if args.command=='rerun':
+        args.mod_code_root=dict(v.split('=',1) for v in args.mod_code_root);return rerun(args)
     if any(l not in LANES for l in args.lanes) or len(set(args.lanes))!=len(args.lanes) or not args.lanes:
         parser.error('Lanes must be unique values from '+','.join(LANES))
     if 'controlled-experimental' in args.lanes and not args.experimental_install:
