@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "D23/user 2026-09-10: coverage and the regression suite first; isolated bug fixes only; no performance fixes or refactor. Oracles cite README lines; anything else is labelled characterisation. When ../mosaic-behaviour-runs/suite-baseline-5e0501a finishes, run suite.py rerun from ../mosaic-suite-5e0501a (M-REC-005/006/007/015/016/017/024/025 fail there from the 0d6387e harness defect, fixed since), record the effective baseline, then run a new full suite at the current head. Then idle-host perf_dense.py runs (dense and slides, 1/4/8/16 channels x3). Pending decisions: SEM-012, SEM-013. SETUP-CONFIG-CREATOR needs a portable headless browser (not available).",
+  "next_action": "D23/user 2026-09-10: coverage and the regression suite first; isolated bug fixes only; no performance fixes or refactor. Oracles cite README lines; anything else is labelled characterisation; semantic decisions go to paranoia arbitrate (cross-vendor; Claude-only if Codex quota fails) and are recorded as SEM entries. Full suite suite-8bd70b5 (both lanes) is the regression reference for the gap-scan fixes: when it finishes run suite.py rerun and record the effective result; the 5e0501a baseline is invalid (disk full truncated suite.json). Then idle-host perf_dense.py canonical runs. Open gap items: refactor-gap-scan.md. Pending decisions: SEM-012, SEM-013.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2846,7 +2846,7 @@
     "change": "First velocity page ends at68, not67. Existing mapping and native MIDI confirmed; no behavior/oracle change.",
     "evidence": "M-EDIT-002 both modes; exact pre-documentation-change run identities retained. Final whole-campaign run remains pending."
   },
-  "updated": "2026-09-10",
+  "updated": "2026-09-11",
   "manual_binding_snapshot": {
     "implemented_cases": 416,
     "requirements": 141,
@@ -5169,11 +5169,21 @@
   ],
   "session_2026_09_10_bugs": {
     "fixed": [
-      "stop-safety-shift-k1",
-      "midi-map-neutral-default",
       "device-config-requires-id",
+      "elektron-program-change-port",
+      "length-index-after-reload",
+      "memory-wrap-logical-slot",
+      "midi-map-neutral-default",
+      "new-project-memory",
+      "norns-param-lock-channel",
+      "quantiser-cache-timestamp",
+      "record-slot-at-first-press",
+      "slide-ring-compaction",
       "song-queue-after-manual-switch",
-      "record-slot-at-first-press"
+      "song-queue-discard-on-stop",
+      "song-slot-copy-press-order",
+      "stop-safety-shift-k1",
+      "tooltip-metro-id"
     ],
     "open": [
       "elektron-short-song-program-changes (SEM-013)"

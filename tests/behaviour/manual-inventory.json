@@ -2688,10 +2688,11 @@
         "M-MASK-017",
         "M-MASK-018",
         "M-MASK-023",
-        "M-SAVE-LENGTH-001"
+        "M-SAVE-LENGTH-001",
+        "M-MAP-003"
       ],
       "status": "in_progress",
-      "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks. M-SAVE-LENGTH-001 (E and D, 3 fresh D repeats): a channel length mask of 1/3 and a step mask of 5/6 display and play the same after idle autosave and a cold restart. The baseline showed X after reload (defect length-index-after-reload, fixed).",
+      "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks. M-SAVE-LENGTH-001 (E and D, 3 fresh D repeats): a channel length mask of 1/3 and a step mask of 5/6 display and play the same after idle autosave and a cold restart. The baseline showed X after reload (defect length-index-after-reload, fixed). M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected.",
       "oracles": [
         "Exact masked MIDI with unrelated attributes unchanged and visible mask value."
       ],
@@ -3523,10 +3524,11 @@
         "M-MEMORY-003",
         "M-MEMORY-004",
         "M-MEMORY-005",
-        "M-MEMORY-006"
+        "M-MEMORY-006",
+        "M-MAP-003"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-MEMORY-006 (E and D, 3 fresh D repeats), characterisation: two recorded mask actions survive idle autosave and a cold restart; the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions. Skipping memory deserialisation on load is detected.",
+      "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-MEMORY-006 (E and D, 3 fresh D repeats), characterisation: two recorded mask actions survive idle autosave and a cold restart; the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions. Skipping memory deserialisation on load is detected. M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected.",
       "oracles": [
         "Exact previous/reapplied output and selected history indicator."
       ],
@@ -7012,10 +7014,11 @@
       "statement": "Native Norns MIDI Map supports relative binary-offset controls.",
       "cases": [
         "M-MAP-001",
-        "M-MAP-002"
+        "M-MAP-002",
+        "M-MAP-003"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-MAP-001 (E and D, 3 fresh D repeats), saved PMAP: Relative binary-offset CCs (65 up, 63 and 0 down) step the mapped velocity mask by one per event when slower than 0.15 s. Baseline defect fixed (midi-map-neutral-default). Remaining: acceleration under 0.15 s, other mask/trig-param/memory maps.",
+      "domain": "M-MAP-001 (E and D, 3 fresh D repeats), saved PMAP: Relative binary-offset CCs (65 up, 63 and 0 down) step the mapped velocity mask by one per event when slower than 0.15 s. Baseline defect fixed (midi-map-neutral-default). Remaining: acceleration under 0.15 s, other mask/trig-param/memory maps. M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected.",
       "oracles": [
         "Exact public parameter changes and MIDI effects, UI mapping retained; no unintended targets."
       ],
@@ -7065,10 +7068,11 @@
       "statement": "Documented map uses input1..2, output-1..1 and accumulation enabled.",
       "cases": [
         "M-MAP-001",
-        "M-MAP-002"
+        "M-MAP-002",
+        "M-MAP-003"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-MAP-001 (E and D, 3 fresh D repeats), saved PMAP: The documented settings (in 1..2, out -1..1, accumulate on) are used as the saved PMAP and produce single-step relative control in both directions. Remaining: other ranges shown not to work, accumulator start value from a fresh learn.",
+      "domain": "M-MAP-001 (E and D, 3 fresh D repeats), saved PMAP: The documented settings (in 1..2, out -1..1, accumulate on) are used as the saved PMAP and produce single-step relative control in both directions. Remaining: other ranges shown not to work, accumulator start value from a fresh learn. M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected.",
       "oracles": [
         "Native mapping configuration plus exact increments and resulting musical output."
       ],

@@ -48,5 +48,7 @@ Status: `open`, `done` (test landed), `defect` (test found a defect), `decision`
 | C | Real scheduler: a job cancelled earlier in the same update pass still runs one slice; `active_count` can go negative | unit | latent (visible effect at most one stale UI refresh); semantics that hold pinned by `scheduler_tests.lua`; not changed |
 | D12 | `pattern.lua` checks `lengths_mask ~= -1` (typo for `length_mask`) | code reading | latent: no version writes -1 (1.2.12 and current write nil); not changed |
 | E | Incoming MIDI recomputes the selected channel's step transpose (shared persistent state) | differential probe | not reproduced; a CC-path mutation that clears the state left playback unchanged, so no case kept |
-| F-G, 5-18 | Working-pattern sweep at a song boundary, prime/paint race, MIDI map targets, stuck held keys, chord state after lost Note Off, UI asymmetries, per-call debouncers | behaviour | open |
+| 9 | MIDI map targets beyond velocity | M-MAP-003 | done: mapped note/length masks, trig param and memory equal their page encoders (equivalence characterisation) |
+| 14 | Keyboard chord state (`chord_states`, `midi_off_store`) is never reset, so a Note Off lost with a removed device leaves a stale chord at that step | behaviour | open: README 239 does not say what a lost release should record; needs a decision before an oracle |
+| F-G, 5-8, 10-13, 15-18 | Working-pattern sweep at a song boundary, prime/paint race, stuck held keys, fixed-channel held-step map, merge order (checked: merged values are order-independent), repetitor golden table, UI asymmetries, per-call debouncers | behaviour/unit | open |
 

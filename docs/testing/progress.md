@@ -1447,3 +1447,16 @@ the global scale track (M-SCALE-ORDER-001); failed saves and autosave suspension
 (M-SAVE-FAIL-001); and frozen saved projects from the current version and release
 1.2.12 (M-PERSIST-FIXTURE-*). Restart-style cases now close their second session on
 failure; leaked sessions had exhausted JACK's server slots.
+
+Second pass (UI state machines, MIDI input, algorithms, hot loops, shared state): three
+more defects fixed with real-input regressions — the "Autosaved" tooltip never expired
+because tooltips freed metro slot 1 instead of their own id (M-TOOLTIP-002); song
+commands queued during playback survived Stop invisibly (M-SONG-QUEUE-STOP-001,
+arbitrated SEM-015 discard-on-stop); releasing the copy source first erased it
+(M-SONG-COPY-001, arbitrated SEM-016 press order for slot copy only). The real
+scheduler is pinned by Lua units; a cancelled-mid-sweep slice and a `lengths_mask`
+typo are recorded as latent; a claimed transpose side effect of incoming MIDI was not
+reproduced. Mapped mask, trig-param and memory controls now have an equivalence case
+(M-MAP-003). The root disk filled at midnight: the 5e0501a baseline suite was
+truncated and is invalid; large observations were gzipped in place (evidence kept)
+and the full suite was restarted at 8bd70b5 with a compressor alongside.

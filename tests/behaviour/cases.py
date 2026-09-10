@@ -38,6 +38,7 @@ from memory_persistence import memory_persistence
 from tooltip_autosave import tooltip_autosave
 from song_queue_stop import song_queue_stop
 from song_slot_copy import song_slot_copy
+from midi_mapping_targets import midi_mapping_targets
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3252,6 +3253,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-MAP-003':dict(run=midi_mapping_targets,requirements=['MAP-CONTROL','MAP-RANGES','MEMORY-NAV','MASK-ATTRIBUTES'],description='Mapped note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders: identical CC edits, memory position and played note/CC stream (equivalence characterisation)'),
  'M-SONG-COPY-001':dict(run=song_slot_copy,requirements=['SONG-SLOTS'],description='Song slot copy and erase take the first-pressed slot as the source in either release order (arbitrated SEM-016); the source and other slots are unchanged'),
  'M-SONG-QUEUE-STOP-001':dict(run=song_queue_stop,requirements=['SONG-ADVANCE','SONG-LENGTH'],description='A slot or global length queued during playback and interrupted by Stop is discarded (arbitrated SEM-015): the next Play follows song mode from the playing slot; a length set while stopped applies'),
  'M-TOOLTIP-002':dict(run=tooltip_autosave,requirements=['SAVE-AUTO'],description='After several tooltips, the idle-autosave "Autosaved" tooltip clears like any other (about 3 s, characterised) and a later tooltip still clears'),
