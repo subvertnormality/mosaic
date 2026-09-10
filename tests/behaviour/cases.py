@@ -19,6 +19,7 @@ from composition_workflow import composition_workflow
 from song_mode_flow import song_mode_flow
 from endurance import endurance_mixed
 from lifecycle_cycles import lifecycle_cycles
+from merge_lock_random import merge_lock_random
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3233,6 +3234,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-TRIPLE-001':dict(run=merge_lock_random,requirements=['MERGE-NOTE-AVERAGE','MERGE-TRIG-ALL','LOCK-SCALE','SCALE-PRECEDENCE','PARAM-RANDOM','OPT-PENTATONIC-MERGED','OPT-PENTATONIC-RANDOM'],description='Scale merge x channel scale lock x seeded Random Note: averaged degrees in C major then a held E major lock, random offsets from an independent seed-42 PRNG, merged-pentatonic snapping to the active scale; exact pitches'),
  'M-LIFECYCLE-001':dict(run=lifecycle_cycles,requirements=['SAVE-AUTO','PERSIST-AUTO-001','LOCK-TRANSPOSE'],description='Ten cold lifecycle cycles: each edits global transpose, autosaves when idle and shuts down cleanly; every next process restores the cumulative transpose with exact phrases'),
  'M-ENDURANCE-001':dict(run=endurance_mixed,requirements=['WORKFLOW-COMPOSITION','PERF-MIDI','SONG-ADVANCE','MERGE-TRIG-ALL'],description='Ten minutes of the typical-workflow two-instrument song at 120 BPM: exact complete native event streams, balanced releases, p99/max/final phase within 10/50/20 ms on both ports'),
  'M-SONG-FLOW-001':dict(run=song_mode_flow,requirements=['SONG-ADVANCE','OPT-SONG-MODE','SONG-SETTINGS','SONG-SLOTS'],description='Song mode default on loops each filled-slot group at its empty slot, queues live selections to the sequence boundary (later of two wins, characterised), holds the slot when off while still honouring manual selection, and resumes when re-enabled'),

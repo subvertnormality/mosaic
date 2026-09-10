@@ -2964,10 +2964,11 @@
       "statement": "All triggers when any assigned pattern has a trig.",
       "cases": [
         "M-MERGE-001",
-        "M-MERGE-TRIG-002"
+        "M-MERGE-TRIG-002",
+        "M-TRIPLE-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Overlap cardinalities0..16 and assignment order; every step. M-MERGE-TRIG-002 (E and D, 3 fresh D repeats): 3 trig modes x 3 note modes over two overlapping patterns with merged-pentatonic On, and All x 3 note modes with it Off; only trig-bearing patterns contribute, single contributors pass through unsnapped, exact pitches, pattern-1 velocity priority and rest spacing.",
+      "domain": "Overlap cardinalities0..16 and assignment order; every step. M-MERGE-TRIG-002 (E and D, 3 fresh D repeats): 3 trig modes x 3 note modes over two overlapping patterns with merged-pentatonic On, and All x 3 note modes with it Off; only trig-bearing patterns contribute, single contributors pass through unsnapped, exact pitches, pattern-1 velocity priority and rest spacing. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
       "oracles": [
         "Independent union truth table, LEDs and complete MIDI."
       ],
@@ -3057,10 +3058,11 @@
         "M-MERGE-023",
         "M-MERGE-043",
         "M-MERGE-044",
-        "M-TRANS-004"
+        "M-TRANS-004",
+        "M-TRIPLE-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
+      "domain": "Odd/even/fractional means; positive/negative/zero; all quantiser options. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
       "oracles": [
         "Independent rational mean and resolved rounding/quantisation table; MIDI pitches."
       ],
@@ -3888,10 +3890,11 @@
         "M-PARAM-039",
         "M-PARAM-040",
         "M-PARAM-041",
-        "M-PARAM-042"
+        "M-PARAM-042",
+        "M-TRIPLE-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Documented0..4 examples; all legal values; odd/even boundaries; locks; combined random-twos.",
+      "domain": "Documented0..4 examples; all legal values; odd/even boundaries; locks; combined random-twos. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
       "oracles": [
         "Independent offset sets, fixed seed and rational scale mapping; zero leaves note unchanged."
       ],
@@ -5396,10 +5399,11 @@
       "cases": [
         "M-SCALE-002",
         "M-SCALE-004",
-        "M-SCALE-LOCK-003"
+        "M-SCALE-LOCK-003",
+        "M-TRIPLE-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "All16 slots; staggered locks, channel wraps, coprime rates/lengths; clear/reset. M-SCALE-LOCK-003 (E and D, 3 fresh D repeats): channel step-1 lock (E major) over a global step-2 lock (G major) with the lifetime option On (whole cycle E) and Off (next active trig clears, global applies); a probability-0 trig and a rest do not clear; a step-3 replacement applies in both option states; exact pitches per step. Removing channel-lock persistence is detected.",
+      "domain": "All16 slots; staggered locks, channel wraps, coprime rates/lengths; clear/reset. M-SCALE-LOCK-003 (E and D, 3 fresh D repeats): channel step-1 lock (E major) over a global step-2 lock (G major) with the lifetime option On (whole cycle E) and Off (next active trig clears, global applies); a probability-0 trig and a rest do not clear; a step-3 replacement applies in both option states; exact pitches per step. Removing channel-lock persistence is detected. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
       "oracles": [
         "Independent piecewise scale timeline and every emitted pitch."
       ],
@@ -5776,10 +5780,11 @@
         "M-SCALE-004",
         "M-SCALE-LOCK-003",
         "M-TRANS-004",
-        "M-TRANS-005"
+        "M-TRANS-005",
+        "M-TRIPLE-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Both option values; probability0/100; active/rest steps; current-step lock; channel/global coprime lengths; all scale slots. M-SCALE-LOCK-003 (E and D, 3 fresh D repeats): channel step-1 lock (E major) over a global step-2 lock (G major) with the lifetime option On (whole cycle E) and Off (next active trig clears, global applies); a probability-0 trig and a rest do not clear; a step-3 replacement applies in both option states; exact pitches per step. Removing channel-lock persistence is detected.",
+      "domain": "Both option values; probability0/100; active/rest steps; current-step lock; channel/global coprime lengths; all scale slots. M-SCALE-LOCK-003 (E and D, 3 fresh D repeats): channel step-1 lock (E major) over a global step-2 lock (G major) with the lifetime option On (whole cycle E) and Off (next active trig clears, global applies); a probability-0 trig and a rest do not clear; a step-3 replacement applies in both option states; exact pitches per step. Removing channel-lock persistence is detected. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
       "oracles": [
         "Independent piecewise scale/pitch timeline, probability-rejected trig retains channel lock, global unaffected by channel option."
       ],
@@ -6251,10 +6256,11 @@
         "M-PARAM-039",
         "M-PARAM-040",
         "M-PARAM-041",
-        "M-PARAM-042"
+        "M-PARAM-042",
+        "M-TRIPLE-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Random0/nonzero, random-twos combinations, lock/global override.",
+      "domain": "Random0/nonzero, random-twos combinations, lock/global override. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
       "oracles": [
         "Independent seeded domain mapping and exact pitch membership."
       ],
@@ -6282,10 +6288,11 @@
         "M-MERGE-023",
         "M-MERGE-043",
         "M-MERGE-044",
-        "M-MERGE-TRIG-002"
+        "M-MERGE-TRIG-002",
+        "M-TRIPLE-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Every note merge, one/multiple assigned patterns, priority unassigned pattern, all-pentatonic. M-MERGE-TRIG-002 (E and D, 3 fresh D repeats): 3 trig modes x 3 note modes over two overlapping patterns with merged-pentatonic On, and All x 3 note modes with it Off; only trig-bearing patterns contribute, single contributors pass through unsnapped, exact pitches, pattern-1 velocity priority and rest spacing.",
+      "domain": "Every note merge, one/multiple assigned patterns, priority unassigned pattern, all-pentatonic. M-MERGE-TRIG-002 (E and D, 3 fresh D repeats): 3 trig modes x 3 note modes over two overlapping patterns with merged-pentatonic On, and All x 3 note modes with it Off; only trig-bearing patterns contribute, single contributors pass through unsnapped, exact pitches, pattern-1 velocity priority and rest spacing. M-TRIPLE-001 (E and D, 3 fresh D repeats), plan stress triple merge x scale lock x random: trig All + note Average over two patterns, a held E major channel lock from step 3, Random Note 1 with twelve seed-42 draws from an independent Lua process, merged-pentatonic snapping to the active scale; exact pitches. Disabling merged snapping is detected.",
       "oracles": [
         "Independent pitch mapping with exact setting defaults and output."
       ],
