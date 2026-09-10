@@ -47,3 +47,44 @@ def midi_mapping(c):
         cc(21,0);velocities('fixed-ch2-value-0-decreases',{1:8,2:3})
     finally:e.finish()
     c.results.append(dict(kind='midi-mapping-session',nested=str(out),passed=True))
+
+def midi_map_entry(c):
+    """Create the documented map through the native norns menu, then use it."""
+    from cases import menu_label
+    from frame_oracle import selected_line
+    c.configure()
+    def hold_k1(n):
+        c.action(type='key',n=1,state=1)
+        try:c.elapse(.4);c.key(n) # menu receives K1 after its 0.25 s threshold
+        finally:c.action(type='key',n=1,state=0)
+        c.elapse(.1)
+    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['id']=='mosaic_mask_midi_maps')
+    c.enc(2,position);c.key(3)
+    for _ in range(12):
+        if selected_line(c.snapshot(),'Selected Ch. Velocity',top=23) or selected_line(c.snapshot(),'Selected Ch. Velocity'):break
+        c.enc(2,1)
+    else:raise AssertionError('Mapping parameter not reached')
+    hold_k1(3)          # EDIT -> MAP mode
+    c.key(3)            # open the parameter's map editor on "learn"
+    c.key(3)            # arm learn
+    c.action(type='midi',port=1,bytes=[176,20,63]);c.elapse(.2) # learned CC 20 (consumed by learn)
+    c.enc(2,5);c.enc(3,1)      # in lo 0 -> 1
+    c.enc(2,1);c.enc(3,-125)   # in hi 127 -> 2
+    c.enc(2,3);c.enc(3,1)      # accum yes
+    c.key(2)                   # assign and write the PMAP
+    hold_k1(3)                 # back to EDIT mode
+    c.key(2);c.key(2);c.key(1) # leave the group and the menu
+    pmap=(c.data_directory/'mosaic.pmap').read_text()
+    line=[l for l in pmap.splitlines() if l.startswith('"sel_ch_vel"')]
+    assert len(line)==1 and all(t in line[0] for t in ('cc=20','ch=1','dev=1','in_lo=1','in_hi=2','accum=true')),pmap
+    c.results.append(dict(kind='pmap-entry',line=line[0],passed=True))
+    def cc(value):c.action(type='midi',port=1,bytes=[176,20,value]);c.elapse(.2)
+    # A fresh map starts below its input range; begin with a decrease (Off stays Off),
+    # then five increases reach velocity mask 4 and one decrease gives 3.
+    cc(63)
+    for _ in range(5):cc(65)
+    marker=c.snapshot()['midi_count']
+    c.playback([(1,[144,n,4]) for n in (60,62,64,65)])
+    cc(63);c.playback([(1,[144,n,3]) for n in (60,62,64,65)])
+    c.results.append(dict(kind='pmap-entry-control',velocities=[4,3],passed=True))

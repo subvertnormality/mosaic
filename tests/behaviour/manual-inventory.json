@@ -6854,7 +6854,8 @@
       ],
       "statement": "Native Norns MIDI Map supports relative binary-offset controls.",
       "cases": [
-        "M-MAP-001"
+        "M-MAP-001",
+        "M-MAP-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "M-MAP-001 (E and D, 3 fresh D repeats), saved PMAP: Relative binary-offset CCs (65 up, 63 and 0 down) step the mapped velocity mask by one per event when slower than 0.15 s. Baseline defect fixed (midi-map-neutral-default). Remaining: acceleration under 0.15 s, other mask/trig-param/memory maps.",
@@ -6906,7 +6907,8 @@
       ],
       "statement": "Documented map uses input1..2, output-1..1 and accumulation enabled.",
       "cases": [
-        "M-MAP-001"
+        "M-MAP-001",
+        "M-MAP-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "M-MAP-001 (E and D, 3 fresh D repeats), saved PMAP: The documented settings (in 1..2, out -1..1, accumulate on) are used as the saved PMAP and produce single-step relative control in both directions. Remaining: other ranges shown not to work, accumulator start value from a fresh learn.",
@@ -7065,9 +7067,11 @@
         "MAN-010"
       ],
       "statement": "Mosaic MIDI mapping is configured through the native Norns parameter mapping menu.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Enter/cancel/save mapping; all documented control classes; relative binary offset direction and accumulation; restart persistence.",
+      "cases": [
+        "M-MAP-002"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-MAP-002 (E and D, 3 fresh D repeats): through the native menu, K1+K3 enters map mode on \"Selected Ch. Velocity\", learn assigns CC 20, input 1..2 and accumulate are set, K2 writes the PMAP (line asserted), and relative CCs then step the velocity mask with exact velocities. Characterised upstream: a freshly learned map starts at value 0, below its input range, so its first increase maps to -1; the case begins with a decrease. Remaining: channel and trig-param/memory maps, removal, persistence across restart.",
       "oracles": [
         "Native menu frame assertions plus subsequent MIDI input changes visible values and playback; no internal parameter writes."
       ],
