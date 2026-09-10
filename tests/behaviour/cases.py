@@ -9,6 +9,7 @@ from autosave_idle import autosave_idle_lifecycle
 from named_save import named_save_load
 from channel_scale_display import channel_active_scale_display
 from tooltips import tooltip_messages
+from sinfonion_software import sinfonion_software
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3223,6 +3224,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-SIN-001':dict(run=sinfonion_software,requirements=['SIN-SOFTWARE'],description='Norns2sinfonion port: exact init sequence; no traffic while stopped; channel 1-4 program changes per scale step following the applied root, global transpose and a scale-track lock'),
  'M-TOOLTIP-001':dict(run=tooltip_messages,requirements=['NAV-TOOLTIPS'],description='Bottom-screen tooltips for page changes, channel selection, record, memory apply/undo and transport, with replacement and clearing without input while stopped and playing; exact texts characterised'),
  'M-SCALE-DISPLAY-001':dict(run=channel_active_scale_display,requirements=['CH-ACTIVE-SCALE-DISPLAY','LOCK-SCALE','SCALE-SELECT'],description='Channel page scale row: stopped shows the applied slot; playing follows the active slot including a step-3 scale lock (with its exact phrase); stop restores the applied slot; global off lights only the locked step'),
  'M-SAVE-NAMED-001':dict(run=named_save_load,requirements=['SAVE-NAMED','SAVE-AUTO'],description='Default-name and typed-name saves through the native text entry; idle autosave never overwrites them; cancel writes nothing; overwrite replaces only its own name; loading each name restores its exact phrase'),

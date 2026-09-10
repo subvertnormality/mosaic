@@ -6399,9 +6399,11 @@
         "MAN-108"
       ],
       "statement": "Sinfonion connection includes software MIDI output; physical conversion excluded.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Named Norns2sinfonion port, scale/root/degree/transpose changes; init-only commands5..10 per prior plan review.",
+      "cases": [
+        "M-SIN-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-SIN-001 (E and D, 3 fresh D repeats), port Norns2sinfonion: exact ten-message init (commands 5-10 init-only, characterised); no traffic while stopped; while playing, Start, then per scale step program changes on channels 1-4 (root/degree/mode/transposition, the norns2sinfonion contract), then Stop. Root follows the applied D scale (2); global transpose +2 moves only transposition (64->66, characterised offset); a scale-track lock to E minor gives root 4 and mode 4 from the locked step until wrap. Removing the sync is detected. Remaining: every scale type/degree/mode mapping, the minor-fifth adjustment, channel/step transpose, song changes.",
       "oracles": [
         "Nonempty exact program-change commands and ordering; explicit physical exclusion."
       ],
