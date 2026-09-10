@@ -1358,3 +1358,24 @@ Fresh M-PATCH-033/034/046/053 regressions retain local/global toggle behavior,
 +accepted the corrected slice. Broader modulation, live lifecycle, wrap and song
 +domains remain pending.
 +
+
+## Norns-class performance scope — 2026-09-10
+
+Performance is now a required pre-refactor campaign, not incidental timing in
+individual cases. The emulator plan owns calibrated resource control and generic
+probes; Mosaic owns dense-channel/lock/trig/scale/clock/render/recording/persistence
+stress cases and musical output oracles. Toolkit/Matrix is deprioritized. Future
+Paranoia reviews use Opus only. Implementation and qualification remain pending.
+
+
+## External-clock burst and long-run phase — 2026-09-10
+
+M-SYNC-021 adds a three-pulse2ms burst with an exactly compensating gap and an
+onset inside the burst. M-SYNC-022 runs16 bars from1536 external24PPQN clocks,
+checks256 exact note lifetimes, accumulated phase and post-Stop silence. Both pass
+controlled and real time on capacity candidate12. The emulator now admits2048
+events atomically; its73 contract tests and13 focused capacity tests pass. The
+completed Codex review found and then closed a combined event/payload transport
+bound. Future reviews use Opus only. Evidence is in
+`external-clock-capacity-validation.json`. Larger stochastic corruption and
+clock-loss-without-explicit-transport behavior remain open.

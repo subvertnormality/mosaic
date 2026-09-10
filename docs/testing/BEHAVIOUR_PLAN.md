@@ -359,7 +359,7 @@ These clarifications resolve initial Paranoia findings and govern the cards abov
 
 Review outcome: focused follow-up `d8e019ad-c0ba-4074-a2c7-1341b09a13ce` found no consequential plan-level gap. This admits execution, not coverage completion. Inventory Sinfonion commands 5–10 as init-only unless a documented runtime contract supplies another requirement.
 
-Review engine policy (2026-09-07 user steering): all future Paranoia critiques and follow-ups use Codex only. Existing completed reviews remain historical evidence.
+Review engine policy (2026-09-10 user steering): all future Paranoia critiques and follow-ups use Opus only. This supersedes the 2026-09-07 Codex-only instruction; completed reviews remain historical evidence.
 
 
 ## Native MIDI hot-plug panic edge domain
@@ -416,3 +416,39 @@ must catch a stale merged scale, wrong precedence, missed/extra lock, wrong endp
 wrong pitch and release routed to a replacement owner. Candidate-specific passes
 must be rerun on the accepted baseline before T08; no broad refactor admission
 while required cases or confirmed defects remain unresolved.
+
+
+## Norns-class performance and musical load
+
+User priority added 2026-09-10. F17 is expanded into a required automated
+performance campaign before broad refactor admission. The emulator contract is
+`docs/delivery/PERFORMANCE.md` in the general-purpose emulator repository. Monome
+documents standard norns as quad-core1.2GHz,1GB RAM on CM3/CM3+ with a real-time
+kernel. Those facts define a constrained proxy target, but x86 quota and QEMU wall
+time must not be described as physical-norns measurements.
+
+Mosaic performance scenarios must use real UI/MIDI inputs and exact MIDI/grid/screen
+oracles while collecting process CPU, peak/slope RSS, queue depth, input latency,
+frame age, note onset/release error, jitter quantiles and final phase. Cover quiet,
+single-axis sweeps and high-risk combinations across1/4/8/16 active channels,
+minimum/typical/maximum tempo and division, dense trigs/chords, lock density,
+trigless locks/slides/trig params, scale merging/quantisation, external and internal
+clock, live recording/editing, MIDI traffic, full-grid/screen updates, autosave,
+reload and reconnect. Explicit triples include external clock+dense locks+rendering,
+recording+playback+parameter updates, and scale merge+scale locks+random trig params.
+
+The ten-minute real-time mixed run keeps the central10/50/20ms p99/max/final-phase
+limits, exact event accounting and zero stuck notes. Constrained runs use the
+emulator's768MiB process-group limit and calibrated CPU profile, require queue
+return to baseline within one bar and final-five-minute RSS slope at most1MiB/min.
+Candidate comparisons on the same host/runtime may not regress p99 timing by more
+than10% or CPU per musical event by more than15% without a recorded calibration
+showing measurement noise. P99 sustained work must use at most half the shortest
+independently calculated musical deadline; exceeding the deadline is a hard fail.
+
+Every failure is minimized and profiled before optimization. Retain it as a unit,
+integration or behaviour regression at the cheapest faithful layer, then rerun the
+combined musical case. Do not obtain green results by lowering event density,
+dropping redraws, weakening timing or changing expected output. Base-MIDI is the
+current priority; Toolkit/Matrix performance is deferred until the user restores
+that priority.
