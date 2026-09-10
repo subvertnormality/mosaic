@@ -949,6 +949,11 @@ function step.process_song_song_patterns()
     switch_to_next_song_pattern_func()
     switch_to_next_song_pattern_blink_cancel_func()
     switch_to_next_song_pattern_func = function() end
+    -- With song mode off the queued switch above is the whole manual change;
+    -- a retained queue would redirect the first transition after re-enabling.
+    if params:get("song_mode") ~= 2 then
+      next_song_pattern_queue = nil
+    end
     
     -- Execute any queued pattern change functions
     for i, func in ipairs(pattern_change_queue) do

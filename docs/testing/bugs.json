@@ -641,6 +641,15 @@
         "M-SETUP-002"
       ],
       "summary": "One device config entry without an id aborted Mosaic initialisation."
+    },
+    {
+      "id": "song-queue-after-manual-switch",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "song-queue-after-manual-switch.json",
+      "cases": [
+        "M-SONG-FLOW-001"
+      ],
+      "summary": "A slot selected while song mode was off stayed queued and redirected the first transition after song mode was re-enabled."
     }
   ]
 }

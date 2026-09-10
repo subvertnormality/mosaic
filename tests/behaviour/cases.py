@@ -16,6 +16,7 @@ from trig_note_merge import trig_note_merge_matrix
 from scale_lock_precedence import scale_lock_precedence
 from step_slides import step_slide_variants
 from composition_workflow import composition_workflow
+from song_mode_flow import song_mode_flow
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3230,6 +3231,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-SONG-FLOW-001':dict(run=song_mode_flow,requirements=['SONG-ADVANCE','OPT-SONG-MODE','SONG-SETTINGS','SONG-SLOTS'],description='Song mode default on loops each filled-slot group at its empty slot, queues live selections to the sequence boundary (later of two wins, characterised), holds the slot when off while still honouring manual selection, and resumes when re-enabled'),
  'M-WORKFLOW-001':dict(run=composition_workflow,requirements=['WORKFLOW-COMPOSITION','MERGE-TRIG-SKIP','MERGE-TRIG-ALL','MERGE-NOTE-AVERAGE','SCALE-SELECT','REC-KEYBOARD-STEP','SONG-SLOTS','SONG-ADVANCE','SAVE-AUTO'],description='README typical workflow end to end: two instruments, XOX rhythm, applied D major harmony, default-Skip then All/Average merging, keyboard melody mask, copied and octave-shifted song slot chained by song mode, autosave and a fresh process replaying the song'),
  'M-SLIDE-STEP-001':dict(run=step_slide_variants,requirements=['SLIDE-STEP','OPT-SLIDE-WRAP'],description='Held-step K3 slide toggled off jumps to its destination; a step slide on the last lock has no target without wrap and moves linearly to the wrapped first lock with wrap on'),
  'M-SCALE-LOCK-003':dict(run=scale_lock_precedence,requirements=['SCALE-PRECEDENCE','LOCK-SCALE','OPT-SCALE-LIFETIME','PARAM-PROBABILITY'],description='Channel scale lock over a global scale-track lock with the lifetime option on and off: next active trig clears, probability-rejected trigs and rests do not, replacements apply; exact pitches per step'),

@@ -1,0 +1,55 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "7cfde6e",
+  "file": "lib/step.lua",
+  "before_sha256": "262de7b6d7ed9c1453bac34082447b82ed0587e2365aa99e32b000a35edb9aaa",
+  "after_sha256": "9913f83e1ff2566ee9b9fc4165e07015394ced3ec1c33cd120c3b55e1c532382",
+  "patch": "0089-song-queue-after-manual-switch.patch",
+  "patch_sha256": "e8485bc15ea6cdff041d43a5a3b60e3b38972469a852210ddbc138cb3bf2b5db",
+  "regression": "M-SONG-FLOW-001 (stage on-again)",
+  "baseline": [
+    {
+      "run_id": "bf87ce44e69c4feeb3ee8eca34ffd289",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "30daf3e492b8bae25548e81c6c1413fbaaa36a7ecad1454714b231dbb21fed29",
+      "failure": "('on-again', [72, 74, 72, 74, 60, 62, 72, 74], [72, 74, 60, 62, 72, 74, 60, 62])"
+    },
+    {
+      "run_id": "e23dcdf3717f40eb87846feb2720510a",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "e2851c07bf2cffc81d0d975c2ac59ade17e101d7d072c4fb3d7c449af1848107",
+      "failure": "('on-again', [72, 74, 72, 74, 60, 62, 72, 74], [72, 74, 60, 62, 72, 74, 60, 62])"
+    }
+  ],
+  "rationale": "A slot chosen during playback with song mode off is applied by the queued switch at the boundary, but next_song_pattern_queue was only cleared on the song-mode branch. After re-enabling song mode the stale entry made the first transition stay on that slot for an extra repetition. With song mode off the queue is now cleared once the queued switch has run; the song-mode path is unchanged.",
+  "oracle": "README Song Mode Operations: progression after the designated repetitions; an empty slot loops to the first filled slot of its group.",
+  "validation": [
+    {
+      "run_id": "ceea16c42c7c4bf69ab6ceef1de9fa4b",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "0c216f92b760bdb635b8ecbc929ba60a399b4d1985b977b693ed3ed06f870ea7",
+      "failure": null
+    },
+    {
+      "run_id": "b9e9e810b4e74a189fd331d2da69e36a",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "69f9e5e526e9033a8afedb076348bfbb549df30b7da85bad2897da8d8e4fa495",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-a023f5860db24ccd8f8c3537498c36d3",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "68d91a29b1a396452f3e606ffd77e4e1b9bff3b44e9aae2b4cda6b96971d6229",
+      "failure": null,
+      "normalized_sha256": "499bfdba592196b36dd24263748f0355db57cfaeae81669dbd2073ea408a41a0"
+    }
+  ],
+  "collateral": "All 25 registered song/sequence-option cases pass in the controlled lane with the fix.",
+  "limitations": "With song mode on and repeats above 1, a queue retained across non-final boundaries is not exercised.",
+  "upstream_merged": false
+}

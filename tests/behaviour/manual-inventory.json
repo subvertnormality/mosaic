@@ -5454,16 +5454,17 @@
       ],
       "statement": "90 song slots support selection, filled/empty/playing indicators, copy overwrite and empty-copy erase.",
       "cases": [
-        "M-TIME-005",
         "M-PATCH-027",
         "M-PATCH-043",
+        "M-SONG-FLOW-001",
         "M-SONG-SETTINGS-001",
         "M-SONG-SETTINGS-002",
+        "M-TIME-005",
         "M-TRANS-007",
         "M-TRANS-008"
       ],
       "status": "in_progress",
-      "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
+      "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed).",
       "oracles": [
         "Distinct saved musical states and exact indicator classes; source preserved; target fully overwritten."
       ],
@@ -5486,17 +5487,18 @@
       ],
       "statement": "Song mode advances after repetitions, loops at empty slots and queues live slot selection.",
       "cases": [
+        "M-PATCH-026",
+        "M-PATCH-027",
+        "M-SONG-FLOW-001",
+        "M-SONG-SETTINGS-001",
         "M-TIME-005",
         "M-TIME-006",
         "M-TIME-007",
         "M-TIME-009",
-        "M-PATCH-026",
-        "M-PATCH-027",
-        "M-SONG-SETTINGS-001",
         "M-TRANS-007"
       ],
       "status": "in_progress",
-      "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
+      "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed).",
       "oracles": [
         "Exact sequence/repeat timeline and transition LEDs; no duplicate/missing onset."
       ],
@@ -5553,11 +5555,12 @@
       ],
       "statement": "Norns pages set per-sequence repetitions and tempo; manual slot control when song mode off.",
       "cases": [
+        "M-SONG-FLOW-001",
         "M-SONG-SETTINGS-001",
         "M-SONG-SETTINGS-002"
       ],
       "status": "in_progress",
-      "domain": "All repetition values; tempo bounds; switching edited/playing slot; mode toggles at boundary.",
+      "domain": "All repetition values; tempo bounds; switching edited/playing slot; mode toggles at boundary. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed).",
       "oracles": [
         "Displayed stored values and exact real/controlled timing/sequence effects."
       ],
@@ -5953,11 +5956,12 @@
       ],
       "statement": "Song mode defaults on; disabling suppresses automatic sequence progression.",
       "cases": [
+        "M-SONG-FLOW-001",
         "M-TIME-003",
         "M-TRANS-007"
       ],
       "status": "in_progress",
-      "domain": "Fresh boot/default; enable/disable before/on/after transition; explicit selection while off. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required.",
+      "domain": "Fresh boot/default; enable/disable before/on/after transition; explicit selection while off. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed).",
       "oracles": [
         "Exact repeated vs advancing sequence table and page indicators."
       ],
