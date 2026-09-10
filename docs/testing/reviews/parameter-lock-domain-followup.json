@@ -1,0 +1,15 @@
+{
+  "started_at": "2026-09-10T08:33:45.372366+00:00",
+  "tool": "rebut",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "session_ref": "01a08a69-b1dc-7460-a6d8-8e38916305597",
+    "rebuttal": "I accepted and fixed all three findings from session 01a08a69-b1dc-7460-a6d8-8e38916305597. Inspect current source and refreshed docs/testing/parameter-lock-domain-validation.json.\n\n1. M-PARAM-044 now starts a second physical transport pass without another edit and again requires exactly CC1=24 and persisted CC2=49 before their notes, exact four-second spacing, complete first-two gates and paired releases. A one-shot future value cannot pass.\n2. The unsupported `visible49` phrase was removed from the registry, and M-PARAM-043's unused `visible` argument was removed. Visible lock presence remains established by both blinking grid-LED phases for all64 cells.\n3. Both cases were rerun in both clocks after these source changes: M-PARAM-043 controlled bdc292028b1640a2866714997b11bbdf and real d242e855925c4fa49b11b9c28379485d; M-PARAM-044 controlled 119adf710dda43ed8df67cd67ece634d and real 1e55317cc95c446e8fb6d0507dd471be. All four manifests bind current source. A fresh correctly named snapshot passes531/531 Lua and100/100 Python checks with hashed logs.\n\nConfirm the prior findings are resolved and return ACCEPTED or CHANGES REQUIRED with concrete findings. Keep this to the scoped held-step lock creation/overwrite contract.",
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**CONCEDE \u2014 resolved; ACCEPTED for the scoped held-step lock contract.** The prior findings applied to the earlier source; the supplied changes address all three.\n\n- [parameter_lock_domain.py:102](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/parameter_lock_domain.py:102) starts another transport pass without editing. Line 112 requires `[(1,[176,1,24]),(1,[176,2,49])]`; surrounding assertions verify paired releases, complete gates, CC-before-note ordering and four-second spacing.\n- [cases.py:3290](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:3290) removes `visible49`. The unused argument is removed, while both LED-phase assertions remain.\n- I verified all four manifests and artifact hashes referenced by [validation.json:10](/home/andy/projects/mosaic-behaviour-tests/docs/testing/parameter-lock-domain-validation.json:10), their current-source bindings, snapshot source hashes, and hashed logs recording 531/531 Lua and 100/100 Python passes.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08a73-f1f9-7082-99e2-73e91f6ec64b` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T08:35:21.380209+00:00"
+}

@@ -1293,3 +1293,25 @@ unit/oracle tests with hashed logs. Codex follow-up
 01a08a51-15cb-7780-aab2-46622b7d49c6 accepted the scoped slice. Broader
 recording-lifetime combinations remain under REC-PARAM-AUTOMATION, so the
 manual inventory stays conservatively partial.
+
+
+## Held-step parameter lock creation and overwrite
+
+M-PARAM-043 creates locks through native held-grid/E3 input on every physical
+step1..64, distributed round-robin across ten independently assigned CC slots.
+It overwrites the first, middle and last rows, makes step33 explicitly Off,
+observes both phases of every lock LED, and validates the exact first-cycle plus
+wrap CC stream, step ordinals, CC-before-note order, pitches, completed gates
+and paired releases in controlled and real time. M-PARAM-044 changes future
+step2 from48 to49 while step1 is sounding at /24; step1 retains its full
+four-second gate, step2 receives49 before its note, and a fresh transport pass
+proves the overwrite was committed rather than consumed once.
+
+A production-model unit test stores, reads, isolates from song2, overwrites and
+rereads all640 step/slot cells. The final source snapshot passes531/531 Lua and
+100/100 applicable Python tests. Codex initially found stale controlled evidence,
+a missing persistent replay and an unsupported display phrase; all were fixed
+and the four final manifests bind one source. Follow-up
+01a08a73-f1f9-7082-99e2-73e91f6ec64b accepted the scoped held-step contract.
+Clearing, slides, recording lifetimes and parameter-type semantics remain under
+their own inventory requirements.

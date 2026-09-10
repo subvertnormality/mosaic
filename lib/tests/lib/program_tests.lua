@@ -380,3 +380,40 @@ function test_clock_type_overrides_are_isolated_across_channels_and_songs()
     luaunit.assert_equals(program.get_effective_swing_shuffle_type(c), 2)
   end
 end
+
+
+function test_program_parameter_lock_full_64_by_10_cross_product()
+  setup()
+  local channel = program.get_channel(1, 1)
+  local other_song = program.get_channel(2, 1)
+  for slot = 1, 10 do
+    channel.trig_lock_params[slot] = {
+      id = "cc_" .. slot, param_id = "cc_" .. slot,
+      type = "midi", cc_msb = slot,
+      cc_min_value = 0, cc_max_value = 127, off_value = -1
+    }
+  end
+  local expected = {}
+  for step = 1, 64 do
+    expected[step] = {}
+    for slot = 1, 10 do
+      local value = (step * 17 + slot * 13) % 128
+      expected[step][slot] = value
+      program.add_step_param_trig_lock_to_channel(channel, step, slot, value)
+    end
+  end
+  for step = 1, 64 do
+    luaunit.assert_true(program.step_has_param_trig_lock(channel, step))
+    for slot = 1, 10 do
+      luaunit.assert_equals(program.get_step_param_trig_lock(channel, step, slot), expected[step][slot])
+      luaunit.assert_nil(program.get_step_param_trig_lock(other_song, step, slot))
+    end
+  end
+  for step = 1, 64 do
+    for slot = 1, 10 do
+      local replacement = 127 - expected[step][slot]
+      program.add_step_param_trig_lock_to_channel(channel, step, slot, replacement)
+      luaunit.assert_equals(program.get_step_param_trig_lock(channel, step, slot), replacement)
+    end
+  end
+end

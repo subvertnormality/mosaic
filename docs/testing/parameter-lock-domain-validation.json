@@ -1,0 +1,63 @@
+{
+  "scope": "Held-step device parameter lock creation and overwrite",
+  "source_revision": "507793a plus recorded working-tree diff",
+  "source_sha256": {
+    "tests/behaviour/parameter_lock_domain.py": "877cd645a9b4a9beaffd04590598488103fd8b9316729a4590c31869fd749553",
+    "tests/behaviour/cases.py": "e799ff8cdc32c218ee5026baceccf99770460fbd053d227c8fff404924111fa2",
+    "tests/behaviour/manual-inventory.json": "110c62c534295c8084f9ac22f43ca44eb608c8f77556ff60f2dae2105c1203c5",
+    "lib/tests/lib/program_tests.lua": "ff0bedfccf9b0d381069ac06ee003b3beca52b528546f74dbda5c7a42e53ea1c"
+  },
+  "native_behavior": {
+    "M-PARAM-043-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/bdc292028b1640a2866714997b11bbdf/manifest.json",
+      "sha256": "a0df242143cdcaa812a61fd6b876d2f790312925cda7662f12647d25c13d4b06",
+      "case": "M-PARAM-043",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-PARAM-043-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/d242e855925c4fa49b11b9c28379485d/manifest.json",
+      "sha256": "4b20f87ee04468085c3e754d8edca1e4219b6401474ffadfa70c6c384e87a37b",
+      "case": "M-PARAM-043",
+      "clock_mode": "real-time"
+    },
+    "M-PARAM-044-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/119adf710dda43ed8df67cd67ece634d/manifest.json",
+      "sha256": "20a54cdb1b68512f1e76d4cb5020361ee533a75d5ee3d5d4064663e566230744",
+      "case": "M-PARAM-044",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-PARAM-044-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/1e55317cc95c446e8fb6d0507dd471be/manifest.json",
+      "sha256": "cd96530822e484d03792567d53ab23acab2cda185215d00c02a7db2540efbac1",
+      "case": "M-PARAM-044",
+      "clock_mode": "real-time"
+    }
+  },
+  "unit_integration": {
+    "snapshot": "/home/andy/projects/mosaic-behaviour-runs/parameter-lock-domain-final-20260910/mosaic",
+    "lua": "531/531",
+    "python_unit_oracles": "100/100",
+    "logs": {
+      "lua": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/parameter-lock-domain-final-20260910/lua-tests.log",
+        "sha256": "f7005c2b6aaa757c0b032885fc53a3b5df6701c3fb2c5bc1b3939c3e8e0c2994"
+      },
+      "python": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/parameter-lock-domain-final-20260910/python-tests.log",
+        "sha256": "1c667cf3353f31cd3d44b89f479f6da8266a8f3104f9f06f551ddbee7b557e30"
+      }
+    }
+  },
+  "coverage": [
+    "every physical step1..64",
+    "all ten CC slots",
+    "lock LED blink phases",
+    "first/middle/last overwrite",
+    "explicit Off",
+    "exact wrap timing and CC-before-note",
+    "future lock overwrite during sounding gate and persistent replay",
+    "exhaustive model64x10 storage/overwrite/song isolation"
+  ],
+  "production_change": false,
+  "economy": "Native behavior distributes64 steps across10 slots; production-model coverage exhausts all640 storage cells."
+}

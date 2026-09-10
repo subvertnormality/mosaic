@@ -2,6 +2,7 @@ from shuffle_matrix import shuffle_matrix
 from random_note_domains import random_note_domains
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
+from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback
 from project_dialog_lifecycle import project_dialog_while_playing
 from persisted_ranges import saved_range_compatibility
 from persisted_ranges import rejected_manual_range
@@ -3286,6 +3287,8 @@ CASES={
  'M-REC-PARAM-024':dict(run=recording_ten_slots,requirements=['REC-PARAM-AUTOMATION'],description='All ten recording slots: staggered odd zero/even one edits, untouched-slot isolation, exact MIDI deadlines and distinct-default disarmed replay'),
  'M-REC-PARAM-023':dict(run=lambda c:recording_lifetime(c,'mute'),requirements=['REC-PARAM-AUTOMATION','CH-MUTE'],description='Mute spans eligible recording steps: no MIDI during mute, correctly phased resume and distinct-default disarmed lock replay'),
  'M-REC-PARAM-022':dict(run=recording_stop_safety,requirements=['REC-PARAM-AUTOMATION','REC-ARM','NAV-TRANSPORT'],description='Long Stop under Shift press to stop clears pending parameter recording while retaining arm and previously recorded steps'),
+ 'M-PARAM-044':dict(run=parameter_lock_during_playback,requirements=['PARAM-SLOTS','LOCK-PARAM-SET','PARAM-OFF'],description='Overwrite a future held-step CC lock while step1 sounds; unchanged current four-second gate, new step2 CC before note, and persistent fresh replay'),
+ 'M-PARAM-043':dict(run=parameter_lock_all_steps_slots,requirements=['PARAM-SLOTS','LOCK-PARAM-SET','PARAM-OFF','OPT-TRIGLESS'],description='Native held-step locks cover every step1..64 distributed across all10 CC slots, first/middle/last overwrite, explicit Off, lock LEDs, exact CC timing and CC-before-note'),
  'M-PARAM-040':dict(run=lambda c:random_note_domains(c,pentatonic=True,mask='full'),requirements=['PARAM-RANDOM','PARAM-RANDOM-TWOS','OPT-PENTATONIC-RANDOM','MASK-SCALE'],description='Signed random and twos composition with full masks, exact seeded MIDI, zero restoration and musical timing'),
  'M-PARAM-041':dict(run=lambda c:random_note_domains(c,pentatonic=True,mask='snap'),requirements=['PARAM-RANDOM','PARAM-RANDOM-TWOS','OPT-PENTATONIC-RANDOM','MASK-SCALE'],description='Signed random and twos composition with snap masks, exact seeded MIDI, zero restoration and musical timing'),
  'M-PARAM-042':dict(run=lambda c:random_note_domains(c,pentatonic=True,mask='raw'),requirements=['PARAM-RANDOM','PARAM-RANDOM-TWOS','OPT-PENTATONIC-RANDOM','MASK-SCALE'],description='Signed random and twos composition with raw masks, exact seeded MIDI, zero restoration and musical timing'),

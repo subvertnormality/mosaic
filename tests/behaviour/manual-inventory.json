@@ -5577,12 +5577,14 @@
         "M-PARAM-031",
         "M-PARAM-032",
         "M-PARAM-033",
-        "M-PARAM-036"
+        "M-PARAM-036",
+        "M-PARAM-043",
+        "M-PARAM-044"
       ],
-      "status": "unimplemented",
-      "domain": "All64 steps/10slots; sentinels; no trig/trigless; overwrite; pending playback.",
+      "status": "in_progress",
+      "domain": "All64 steps distributed across all10 slots through native held-step input, plus exhaustive64x10 model storage; sentinels, trig/trigless, overwrite, live future-step editing and song isolation.",
       "oracles": [
-        "Step-lock indicator and exact parameter-before-note MIDI."
+        "Blinking lock LEDs and held value display; exact per-boundary parameter-before-note MIDI with balanced releases and full completed gates; exhaustive model cross-product."
       ],
       "lanes": [
         "E",
