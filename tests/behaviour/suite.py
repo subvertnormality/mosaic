@@ -238,6 +238,12 @@ def run(args):
         failed_case_runs=len(summary['case_runs_failed']),failed_layer_items=summary['layer_items_failed'])))
     return 0 if passed else 1
 
+STARTUP_FAILURE=re.compile(r'^ContractError: (?:(?:jack|crone|sclang|matron) exited|.* did not reach )')
+
+def failure_class(row):
+    """Separate native startup failures from failures of the case itself."""
+    return 'native-startup' if STARTUP_FAILURE.search(row.get('failure') or '') else 'case'
+
 def rerun(args):
     """Serially rerun every failed case run; the original report is untouched.
 
@@ -255,10 +261,14 @@ def rerun(args):
         if row['passed']:rows.append(row);continue
         again=run_case(row['case'],row['lane'],row['profile'],args,artifacts,env)
         print(json.dumps(dict(case=row['case'],lane=row['lane'],serial_passed=again['passed'])),flush=True)
-        rows.append(dict(again,first_attempt=row,load_sensitive=bool(again['passed'])))
+        kind=failure_class(row)
+        rows.append(dict(again,first_attempt=row,first_attempt_class=kind,
+                         load_sensitive=bool(again['passed']) and kind=='case',
+                         startup_retry=bool(again['passed']) and kind=='native-startup'))
     summary=dict(report['summary'],case_runs_passed=sum(r['passed'] for r in rows),
                  case_runs_failed=[dict(case=r['case'],lane=r['lane']) for r in rows if not r['passed']],
                  load_sensitive=[dict(case=r['case'],lane=r['lane']) for r in rows if r.get('load_sensitive')],
+                 startup_retries=[dict(case=r['case'],lane=r['lane']) for r in rows if r.get('startup_retry')],
                  serial_rerun_sources_stable=same_tested_tree(report['identity']['mosaic']))
     passed=(report['summary']['sources_stable'] and summary['serial_rerun_sources_stable'] and
             not summary['case_runs_failed'] and not summary['layer_items_failed'] and len(rows)==len(report['cases']))

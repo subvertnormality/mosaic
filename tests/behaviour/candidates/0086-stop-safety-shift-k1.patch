@@ -1,0 +1,13 @@
+diff --git a/lib/m_grid.lua b/lib/m_grid.lua
+index bb3fa38..e27a952 100644
+--- a/lib/m_grid.lua
++++ b/lib/m_grid.lua
+@@ -136,7 +136,7 @@ local function register_press()
+             m_clock:start()
+             tooltip:show("Starting playback")
+           else
+-            local should_stop = params:get("stop_safety") ~= 2 or is_key3_down
++            local should_stop = params:get("stop_safety") ~= 2 or is_key1_down
+             if should_stop then
+               clock.transport:stop()
+               tooltip:show("Stopping playback")

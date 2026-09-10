@@ -40,6 +40,14 @@ class CompareTests(unittest.TestCase):
         code,result=self.compare(base,new)
         self.assertEqual((code,result['regressions']),(1,['layer/python/test_x']))
 
+class FailureClassTests(unittest.TestCase):
+    def test_native_startup_is_not_a_case_result(self):
+        crone='ContractError: crone exited -6; /x/crone.log; cleanup also failed'
+        timeout='ContractError: sclang did not reach AudioContext: initPolls; inspect /x'
+        self.assertEqual([suite.failure_class(dict(failure=f)) for f in (crone,timeout)],['native-startup']*2)
+        for failure in ("AssertionError: ('Onset phase', 0, 19255089)",None,'ContractError: midi_drop'):
+            self.assertEqual(suite.failure_class(dict(failure=failure)),'case')
+
 class CollectionTests(unittest.TestCase):
     def test_every_existing_test_file_is_classified(self):
         lua,python=suite.collect(set(suite.case_registry()))

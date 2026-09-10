@@ -5915,9 +5915,11 @@
         "MAN-087"
       ],
       "statement": "Enabled stop protection requires long press or K1; ordinary tap cannot stop.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "On/off; tap/hold threshold edges; shift release order; start unaffected; pending notes.",
+      "cases": [
+        "M-OPT-STOP-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-OPT-STOP-001 (E and D, 3 fresh D repeats): default Off tap stops; On: tap starts, short tap, 0.9 s hold and K3-held tap do not stop, K1-held tap and 1.1 s hold stop; Off restores tap stop. Baseline defect: K3, not K1, was the modifier (bugs.json stop-safety-shift-k1, fixed). Remaining: pending note releases/strums across a guarded stop, shift release before grid release, recording interaction beyond M-REC-PARAM-022.",
       "oracles": [
         "Transport LED, complete continued phrase or bounded stop/drain as appropriate."
       ],

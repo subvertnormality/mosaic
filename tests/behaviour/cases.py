@@ -2,6 +2,7 @@ from shuffle_matrix import shuffle_matrix
 from random_note_domains import random_note_domains
 from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
+from stop_safety import shift_press_to_stop
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3213,6 +3214,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-OPT-STOP-001':dict(run=shift_press_to_stop,requirements=['OPT-SHIFT-STOP','NAV-TRANSPORT'],description='Shift press to stop: default tap stops; enabled, a tap starts but a short tap, a 0.9 s hold and a K3-held tap do not stop, while shift (K1) plus tap and a 1.1 s long press stop; disabling restores tap stop'),
  'M-OPT-KEYS-001':dict(run=keyboard_options,requirements=['OPT-KEYBOARD-WHITE','OPT-KEYBOARD-ROTATION','OPT-KEYBOARD-DEGREE','OPT-KEYBOARD-TRANSPOSE','SETUP-MIDI-INPUT'],description='Keyboard mapping defaults (raw keys, honour switches Off) across all 128 keys; white-key C-major mapping over all keys; scale change; degree II, rotation two and transpose +2 honoured alone and together; disabling restores raw keys'),
  'M-OPT-PENT-ALL-001':dict(run=lock_all_to_pentatonic,requirements=['OPT-PENTATONIC-ALL','SCALE-EDIT'],description='Lock all to pentatonic defaults off, snaps unmodified C major and C minor notes to the documented selections with random/merged switches off, and restores plain pitches when disabled'),
  'M-SYNC-021':dict(run=lambda c:external_clock_fault(c,'burst'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Three2ms bunched external clocks followed by an exactly compensating gap preserve received-pulse phrase phase, including an onset inside the burst, with complete gates and releases'),

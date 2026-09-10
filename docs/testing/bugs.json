@@ -561,6 +561,15 @@
       "cases": [
         "M-MERGE-008"
       ]
+    },
+    {
+      "id": "stop-safety-shift-k1",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "stop-safety-shift-k1.json",
+      "cases": [
+        "M-OPT-STOP-001"
+      ],
+      "summary": "Shift press to stop accepted K3, not the documented shift (K1), as the short-press stop modifier."
     }
   ]
 }

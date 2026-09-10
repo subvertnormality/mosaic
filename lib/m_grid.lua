@@ -136,7 +136,7 @@ local function register_press()
             m_clock:start()
             tooltip:show("Starting playback")
           else
-            local should_stop = params:get("stop_safety") ~= 2 or is_key3_down
+            local should_stop = params:get("stop_safety") ~= 2 or is_key1_down
             if should_stop then
               clock.transport:stop()
               tooltip:show("Stopping playback")
