@@ -5762,10 +5762,12 @@
       ],
       "statement": "Held-step transpose locks add to scale transpose and K2 clears.",
       "cases": [
-        "M-TRANS-001"
+        "M-TRANS-001",
+        "M-TRANS-002",
+        "M-TRANS-003"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-TRANS-001 validates all25 advertised -12..+12 values through native held-grid input, an explicit-zero bounding lock, K2 clear, exact MIDI gates and musical phase in controlled and real-time lanes. Wrap persistence, scale/octave composition, clear while playing, channel/source reassignment and song-copy/persistence interactions remain required.",
+      "domain": "M-TRANS-001 validates all25 advertised -12..+12 values, explicit-zero distinction and K2 clear in both clocks. M-TRANS-002 composes endpoint/zero locks across wrap with saved scale transpose, overridden song transpose and channel octave. M-TRANS-003 clears a future wrap lock during playback while the sounding explicit-zero step retains its owned release and duration. Remaining: additional scale/root/rotation choices, octave/MIDI clipping boundaries, merge/scale-lock combinations, channel/source reassignment, song copy and persistence.",
       "oracles": [
         "Independent pitch/phase timeline and restored transpose after clear."
       ],

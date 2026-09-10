@@ -1215,3 +1215,8 @@ loss, stochastic jitter, simultaneous source edits or every feature interaction.
 ## Full-range transpose-lock defect
 
 M-TRANS-001 now walks every -12..+12 value advertised by the scale-page fader through held-step grid input. The stock `061fc8c` baseline fails immediately: selecting -12 emits MIDI53 because the model clamps it to -7 instead of emitting MIDI48. The isolated candidate aligns the storage clamp to the public range; controlled and real-time native runs then pass exact pitches, gates, phase, explicit-zero bounding and K2 restoration. The fresh snapshot also passes527 Lua tests and21 focused integration/oracle tests. Codex review and its explicit-zero follow-up accepted the scoped fix. Wrap, scale/octave, live-clear, merge and lifecycle interactions remain.
+
+
+## Transpose composition and live-clear interactions
+
+M-TRANS-002 composes -12/zero/+12 step locks with scale transpose+3, overridden song transpose+4 and channel octave+1 across repeated wrap; exact native output is63/77/91/92 in both clocks. M-TRANS-003 clears step1 during playback while step2 sounds, proving the current release remains owned and one step long, the next wrap inherits global+4, and step2 remains explicitly zero. Both lanes pass. A fresh immutable snapshot first hit the existing2ms param-slide performance threshold with526 functional successes, then passed527/527 on immediate rerun; both logs are retained. Twenty-one focused oracles pass. Codex interaction review and focused follow-up accepted the scoped cases with all findings closed.

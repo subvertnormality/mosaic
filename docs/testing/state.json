@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Extend the accepted full-range transpose-lock fix into wrap, scale/octave, live-clear, merge and lifecycle interactions. The full manual campaign and final unit/integration hardening remain mandatory.",
+  "next_action": "Extend accepted transpose coverage into remaining scale/root/rotation choices, MIDI clipping boundaries, merge/scale-lock combinations, reassignment, song copies and persistence. Full manual coverage and final hardening remain mandatory.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",

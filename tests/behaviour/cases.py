@@ -707,6 +707,93 @@ def transpose_lock_domain(c):
                           explicit_zero_step=2, restored_pitches=list(restored), passed=True))
 
 
+def transpose_scale_octave_composition(c):
+    """Compose channel octave, saved scale transpose and persistent step locks."""
+    c.configure()
+    c.tap(11,8)  # Channel octave +1.
+    c.tap(4,8)
+    c.tap(13,8)  # Song/global transpose +4; locks below must override it.
+    # Native scale editor: Quantizer -> Roman -> Transpose, then save +3.
+    c.enc(2,2); c.enc(3,3); c.key(3)
+    # Step locks are persistent until replacement and reset at channel wrap.
+    c.hold_tap((1,4),(9,8))   # -12
+    c.hold_tap((2,4),(12,8))  # explicit 0
+    c.hold_tap((3,4),(15,8))  # +12, persists through step4
+    pitches = (63,77,91,92)
+    notes = c.playback([(1,[144,p,v]) for p,v in zip(pitches,(127,117,107,97))],
+                       cycles=3, timeout=5, settle_seconds=2-.1)
+    assert_durations(c, notes, [1]*12)
+    field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
+    errors = [(b[field]-a[field])/1e9-1/6 for a,b in zip(notes,notes[1:])]
+    tolerance = 2e-9 if c.clock_mode == 'controlled-experimental' else .01
+    assert errors and max(abs(error) for error in errors) <= tolerance, errors
+    c.results.append(dict(kind='transpose-scale-octave-composition', channel_octave=1,
+                          global_transpose=4, scale_transpose=3,
+                          step_locks=[-12,0,12,None], expected_pitches=list(pitches),
+                          wraps=2, maximum_spacing_error_seconds=max(abs(error) for error in errors),
+                          passed=True))
+
+
+def transpose_lock_live_clear(c):
+    """Clear a future wrap lock while another explicitly-zero step sounds."""
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    c.configure(); c.tap(4,8); c.tap(13,8)  # Global +4.
+    c.hold_tap((1,4),(9,8))   # Step1 -12.
+    c.hold_tap((2,4),(12,8))  # Step2 explicit zero bounds persistence.
+    capture = MidiWindow(c.snapshot()['midi_count'])
+    c.tap(1,8)
+    def onsets(state):
+        capture.extend(state)
+        return capture.note_ons()
+    state = c.wait(lambda state: len(onsets(state)) >= 6, timeout=3)
+    before = capture.note_ons()
+    expected_before = [[144,48,127],[144,62,117],[144,64,107],[144,65,97],
+                       [144,48,127],[144,62,117]]
+    assert [event['bytes'] for event in before[:6]] == expected_before, before
+    clear_lower = c.logical_ns if c.clock_mode == 'controlled-experimental' else __import__('time').monotonic_ns()
+    c.action(type='grid',x=1,y=4,state=1)
+    try: c.key(2)
+    finally: c.action(type='grid',x=1,y=4,state=0)
+    clear_upper = c.logical_ns if c.clock_mode == 'controlled-experimental' else __import__('time').monotonic_ns()
+    c.wait(lambda state: len(onsets(state)) >= 11, timeout=3)
+    c.tap(1,8)
+    c.wait(lambda state: capture.extend(state) and not state['midi_capture']['outstanding'])
+    notes = capture.note_ons()
+    assert 11 <= len(notes) <= 12, ('Unexpected complete onset count', len(notes), notes)
+    old_pitches = (48,62,64,65); new_pitches = (64,62,64,65)
+    velocities = (127,117,107,97)
+    expected = []
+    for index in range(len(notes)):
+        pitches = old_pitches if index < 6 else new_pitches
+        expected.append((1,[144,pitches[index%4],velocities[index%4]]))
+    assert [(event['port'],event['bytes']) for event in notes] == expected, notes
+    pairs = note_pairs(capture.events)
+    assert len(pairs) == len(notes), (len(notes),len(pairs))
+    for onset,release in pairs:
+        assert onset['port'] == release['port'] == 1
+        assert release['bytes'] == [128,onset['bytes'][1],onset['bytes'][2]], (onset,release)
+    field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
+    errors = [(b[field]-a[field])/1e9-1/6 for a,b in zip(notes,notes[1:])]
+    tolerance = 2e-9 if c.clock_mode == 'controlled-experimental' else .01
+    assert max(abs(error) for error in errors) <= tolerance, errors
+    # Identify the sounding step2 owner by its onset event, independent of
+    # release order, and prove the entire edit occurred within its lifetime.
+    owner_index = before[5]['index']
+    matches = [pair for pair in pairs if pair[0]['index'] == owner_index]
+    assert len(matches) == 1, ('Missing or ambiguous sounding owner', owner_index, matches)
+    second_cycle_step2 = matches[0]
+    assert second_cycle_step2[0][field] <= clear_lower <= clear_upper < second_cycle_step2[1][field], (
+        second_cycle_step2, clear_lower, clear_upper)
+    duration = (second_cycle_step2[1][field]-second_cycle_step2[0][field])/1e9
+    assert abs(duration-1/6) <= tolerance, duration
+    c.results.append(dict(kind='transpose-lock-live-clear', clear_window_ns=[clear_lower,clear_upper],
+                          expected_complete_onsets=expected, onset_count=len(notes),
+                          release_pairs=len(pairs), sounding_owner_index=owner_index,
+                          sounding_note_duration_seconds=duration,
+                          maximum_spacing_error_seconds=max(abs(error) for error in errors), passed=True))
+
+
 def octave_phrase(c,octaves,phase):
     base=[60,62,64,65];velocities=[127,117,107,97]
     expected=[(1,[144,n+12*o,v]) for n,o,v in zip(base,octaves,velocities)]
@@ -3513,6 +3600,8 @@ CASES={
  'M-TIME-001':dict(run=integral_clock_divisions,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All integral-pulse clock ratios through /16 with exact full-phrase phase and duration checks'),
  'M-TIME-002':dict(run=lambda c:integral_clock_divisions(c,True),requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
  'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
+ 'M-TRANS-003':dict(run=transpose_lock_live_clear,requirements=['LOCK-TRANSPOSE'],description='K2 clears a future step lock during playback at the next wrap while an explicit-zero step sounds; exact MIDI ownership and phase'),
+ 'M-TRANS-002':dict(run=transpose_scale_octave_composition,requirements=['LOCK-TRANSPOSE','LOCK-OCTAVE','SCALE-EDIT'],description='Step-lock persistence and wrap across -12/zero/+12 composed with scale transpose, song transpose override and channel octave; exact MIDI gates and phase'),
  'M-TRANS-001':dict(run=transpose_lock_domain,requirements=['LOCK-TRANSPOSE'],description='All25 advertised step-transpose values through native held-grid input, explicit-zero bounding lock, K2 clear, exact MIDI gates and musical phase'),
  'M-OCT-001':dict(run=channel_octave_controls,requirements=['CH-GLOBAL-OCTAVE'],description='All five octave positions, repeated center and navigation retention with exact MIDI'),
  'M-OCT-002':dict(run=octave_lock_precedence,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE'],description='Every global/step octave pair, K2 clear, explicit zero and repeated-selector removal with exact MIDI'),
