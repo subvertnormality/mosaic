@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "case": "M-OPT-KEYS-001",
+  "requirements": [
+    "OPT-KEYBOARD-WHITE",
+    "OPT-KEYBOARD-ROTATION",
+    "OPT-KEYBOARD-DEGREE",
+    "OPT-KEYBOARD-TRANSPOSE",
+    "SETUP-MIDI-INPUT"
+  ],
+  "emulator": {
+    "root": "/home/andy/projects/monome-emulator-midi-clock",
+    "install": "/home/andy/projects/monome-runtime-candidates/midi-schedule-capacity-12/installation.json",
+    "lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0"
+  },
+  "runs": [
+    {
+      "run_id": "81c1f086aaf8427187f330a63abd335f",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "816295f0f38e07b77b85acb10424cdeeba6b3e7c0bc7d58988077e46d49dd03b"
+    },
+    {
+      "run_id": "347b12dcb7dd4ea08e130941fe7a35be",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "5a925bd9bd2e149ef29149d983446c5a344862cd4241bda560eb96b1fdba39a5"
+    },
+    {
+      "run_id": "repeat-c8b5f9ec32fb422492c22067f1926068",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "de796343332fe5a7f165a9dec4d5c6817a3e0e91f44fa6775c1e766c6307b05b"
+    }
+  ],
+  "repeat_normalized_sha256": "58e6feee459c60acc6476f6f29cde7b1bf3abc6ac6e1211e2210e500ca839843",
+  "fault_sensitivity": [
+    {
+      "mutation": "quantiser ignores midi_honour_degree",
+      "detected_at": "honour-degree",
+      "run_id": "9245ab8c1ea24914a33e9e63b59cac3f"
+    }
+  ],
+  "oracle": "Independent keyboard table: key semitone -> zero-based position (black keys take the next white key), 60 as octave 0, scale intervals, degree shift, rotation lowering the last r positions, transpose; literal C-major octave anchor.",
+  "characterised": [
+    "A black key plays the next white key degree (C#->D) when white-key mapping is On; the manual describes white keys only.",
+    "The scale page selects the scale track; keyboard notes are ignored there (channel 17)."
+  ],
+  "specification_decision": "SEM-003 pending: README line 195 vs MAN-103 on the white-key default.",
+  "preserved_failures": [
+    {
+      "run_id": "see first controlled attempt",
+      "cause": "test mistake: sweep sent from the scale page, where keyboard input is ignored"
+    }
+  ],
+  "full_campaign_complete": false
+}

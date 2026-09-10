@@ -346,3 +346,13 @@ the `nrpn_codec` include added in ff8c27f or stub `cancel_all_spread_actions`;
 `panic_live_note_contract` lacked the `fn` global used since d18f3fc). They now
 load the real modules; the realign contract additionally asserts that slides are
 cancelled exactly on a song-pattern change, and fails when that call is removed.
+
+## SEM-003 — Keyboard white-key default (pending, recommendation recorded)
+
+README "MIDI Keyboard Input" (line 195) says the keyboard maps the selected scale
+to the white keys by default. README "Map Scale to White Keys" (MAN-103) says
+the option is off by default, and `mosaic.lua` defaults it Off; M-OPT-KEYS-001
+observes raw keys at a fresh boot. Recommendation: keep the implemented default
+and correct line 195. Until decided, the case asserts the code/MAN-103 default;
+changing the README invalidates the inventory manual hash and needs
+reconciliation.

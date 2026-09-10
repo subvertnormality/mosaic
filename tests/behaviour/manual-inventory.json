@@ -6284,9 +6284,11 @@
         "MAN-104"
       ],
       "statement": "White-key option maps current scale from C and updates with selected scale.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All MIDI notes where cheap; black keys, multiple octaves, scale change during held notes; default conflict with195.",
+      "cases": [
+        "M-OPT-KEYS-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-OPT-KEYS-001 (E and D, 3 fresh D repeats) on channel 1, transport stopped. Covered: fresh default Off plays all 128 raw keys; On maps all 128 keys through C major from C (black keys take the next white key degree, characterised), follows a change to natural minor, and Off restores raw keys. SEM-003: README line 195 says white-key mapping is the default; README MAN-103, the parameter default and observed output say Off. Remaining: roots other than C, held notes across a scale change, octave/MIDI clamp boundaries, recording through the mapping.",
       "oracles": [
         "Independent mapping and recorded-playback pitch; held note-off pairs match original input."
       ],
@@ -6308,9 +6310,11 @@
         "MAN-105"
       ],
       "statement": "Keyboard rotation option defaults off.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every legal rotation; white-key mapping on/off; degree/transpose combinations.",
+      "cases": [
+        "M-OPT-KEYS-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-OPT-KEYS-001 (E and D, 3 fresh D repeats) on channel 1, transport stopped. Covered: default Off ignores rotation two; On lowers the last two of seven positions an octave, alone and with degree II and transpose +2. Remaining: every legal rotation, other scales/roots, white-key Off interaction.",
       "oracles": [
         "Independent input-to-output pitch map and UI value."
       ],
@@ -6332,9 +6336,11 @@
         "MAN-106"
       ],
       "statement": "Keyboard degree option defaults off.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every degree; negative/out-of-range attempts; rotation/scale changes.",
+      "cases": [
+        "M-OPT-KEYS-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-OPT-KEYS-001 (E and D, 3 fresh D repeats) on channel 1, transport stopped. Covered: default Off ignores degree II; On starts the keyboard positions on degree II, alone and combined with rotation/transpose. Remaining: every degree, other scales/roots.",
       "oracles": [
         "Independent input-to-output pitch map and recorded playback."
       ],
@@ -6356,9 +6362,11 @@
         "MAN-107"
       ],
       "statement": "Keyboard transpose option defaults off.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Legal transpose limits; white-key/degree/rotation; held chord during transpose change.",
+      "cases": [
+        "M-OPT-KEYS-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-OPT-KEYS-001 (E and D, 3 fresh D repeats) on channel 1, transport stopped. Covered: default Off ignores global transpose +2; On adds it, alone and combined. Remaining: transpose limits (-12..+12), step/lock transpose, held chord during a transpose change.",
       "oracles": [
         "Independent pitches, note-off pairing and recording duration."
       ],
@@ -7003,9 +7011,11 @@
         "MAN-004"
       ],
       "statement": "A MIDI keyboard provides note entry and a compatible relative controller provides data entry.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Ports/channels; note-on velocity zero; overlapping same pitch; disconnect; held notes across selection change; wrong ports.",
+      "cases": [
+        "M-OPT-KEYS-001"
+      ],
+      "status": "in_progress",
+      "domain": "Ports/channels; note-on velocity zero; overlapping same pitch; disconnect; held notes across selection change; wrong ports. Keyboard note entry through native MIDI input is exercised by M-OPT-KEYS-001 (live monitoring) and existing M-MIDI/M-REC cases; relative-controller data entry remains.",
       "oracles": [
         "Only intended selected-channel MIDI/grid outcomes and no stuck notes."
       ],
