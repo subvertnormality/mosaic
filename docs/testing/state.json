@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "Close the highest-value remaining parameter-slide interactions and lifecycle domains, then continue all unimplemented/in-progress manual requirements. Full campaign and final unit/integration hardening remain mandatory.",
+  "next_action": "D23/user 2026-09-10: coverage and a full regression suite before the refactor; isolated bug fixes allowed; no performance fixes or refactor. Full suite: tests/behaviour/suite.py (run/rerun/compare). Baseline in progress: ../mosaic-behaviour-runs/suite-baseline-5e0501a (clean snapshot worktree ../mosaic-suite-5e0501a, emulator ../monome-emulator-midi-clock + candidate midi-schedule-capacity-12); when finished run suite.py rerun from that worktree, then record the effective baseline. Continue unimplemented requirements (SIN-SOFTWARE, MAP-*, SETUP-*, WORKFLOW-COMPOSITION, PERF-MIDI) and the lock/trig/scale interaction obligations. Pending decisions: SEM-012 (white-key default wording), SEM-013 (Elektron program changes at global lengths 1-2).",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -2846,7 +2846,7 @@
     "change": "First velocity page ends at68, not67. Existing mapping and native MIDI confirmed; no behavior/oracle change.",
     "evidence": "M-EDIT-002 both modes; exact pre-documentation-change run identities retained. Final whole-campaign run remains pending."
   },
-  "updated": "2026-09-09",
+  "updated": "2026-09-10",
   "manual_binding_snapshot": {
     "implemented_cases": 416,
     "requirements": 141,
@@ -5124,5 +5124,37 @@
     "review": "01a08aa9-c9ea-76c3-b2a2-02c4366b0590",
     "production_change": false,
     "full_campaign_complete": false
+  },
+  "regression_suite": {
+    "runner": "tests/behaviour/suite.py",
+    "baseline_run": "../mosaic-behaviour-runs/suite-baseline-5e0501a",
+    "snapshot_worktree": "../mosaic-suite-5e0501a",
+    "emulator": "../monome-emulator-midi-clock",
+    "install": "../monome-runtime-candidates/midi-schedule-capacity-12/installation.json",
+    "aborted_first_attempt": "../mosaic-behaviour-runs/suite-baseline-cf945e5 (stopped at ~90 real-time runs to add the launch gate; partial results retained)",
+    "known_host_effects": [
+      "concurrent native startup race (emulator R22; suite --start-interval)",
+      "M-SYNC-021/022/003 first-onset phase 11-20 ms under concurrent real-time sessions"
+    ]
+  },
+  "session_2026_09_10_cases": [
+    "M-OPT-PENT-ALL-001",
+    "M-OPT-KEYS-001",
+    "M-OPT-STOP-001",
+    "M-CHORDVEL-005..011",
+    "M-MEMORY-003",
+    "M-OPT-ELEK-001..003",
+    "M-SAVE-002",
+    "M-SAVE-NAMED-001",
+    "M-SCALE-DISPLAY-001",
+    "M-TOOLTIP-001"
+  ],
+  "session_2026_09_10_bugs": {
+    "fixed": [
+      "stop-safety-shift-k1"
+    ],
+    "open": [
+      "elektron-short-song-program-changes"
+    ]
   }
 }

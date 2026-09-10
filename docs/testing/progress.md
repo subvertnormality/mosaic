@@ -1379,3 +1379,21 @@ completed Codex review found and then closed a combined event/payload transport
 bound. Future reviews use Opus only. Evidence is in
 `external-clock-capacity-validation.json`. Larger stochastic corruption and
 clock-loss-without-explicit-transport behavior remain open.
+
+## Coverage session — 2026-09-10
+
+User direction: coverage and a full regression suite first; isolated bug fixes
+only; no performance fixes or refactor. `tests/behaviour/suite.py` now runs every
+Lua contract, Python oracle module, the isolated Lua units and every registered
+case in both lanes, fail-closed, with serial rerun and baseline comparison. Its
+first collection found three contracts that no longer loaded current production
+modules; they were repaired. New cases, each passing both lanes and three fresh
+controlled repeats with a demonstrated fault detection: lock-all-to-pentatonic
+across all ten scales; keyboard white-key/degree/rotation/transpose options;
+Shift press to stop (baseline defect: K3 instead of K1, fixed); chord velocity
+boundaries; memory truncation; Elektron program changes (length 4 passes; lengths
+2 and 1 fail, open as SEM-013); idle autosave lifecycle; named save/load; channel
+active scale slot display; tooltips. Concurrent native startup failed 15 of 18
+simultaneous sessions (emulator R22); the emulator line now serialises startup,
+and the suite spaces launches because the current campaign emulator checkout
+predates that fix.
