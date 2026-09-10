@@ -35,6 +35,9 @@ from scale_lock_order import scale_lock_order
 from persisted_fixture import persisted_fixture
 from elektron_two_ports import elektron_two_ports
 from memory_persistence import memory_persistence
+from tooltip_autosave import tooltip_autosave
+from song_queue_stop import song_queue_stop
+from song_slot_copy import song_slot_copy
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3249,6 +3252,9 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-SONG-COPY-001':dict(run=song_slot_copy,requirements=['SONG-SLOTS'],description='Song slot copy and erase take the first-pressed slot as the source in either release order (arbitrated SEM-016); the source and other slots are unchanged'),
+ 'M-SONG-QUEUE-STOP-001':dict(run=song_queue_stop,requirements=['SONG-ADVANCE','SONG-LENGTH'],description='A slot or global length queued during playback and interrupted by Stop is discarded (arbitrated SEM-015): the next Play follows song mode from the playing slot; a length set while stopped applies'),
+ 'M-TOOLTIP-002':dict(run=tooltip_autosave,requirements=['SAVE-AUTO'],description='After several tooltips, the idle-autosave "Autosaved" tooltip clears like any other (about 3 s, characterised) and a later tooltip still clears'),
  'M-MEMORY-006':dict(run=memory_persistence,requirements=['MEMORY-NAV','MEMORY-RECORD','PERSIST-AUTO-001'],description='Two recorded mask actions survive idle autosave and a cold restart: the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions (characterisation)'),
  'M-OPT-ELEK-004':dict(run=elektron_two_ports,requirements=['OPT-ELEKTRON','SETUP-DEVICE-DISCOVERY'],description='Digitakt on port 1 and Syntakt on port 2: each stopped slot change reaches each Elektron device once on its own port, channel 10'),
  'M-PERSIST-FIXTURE-CURRENT':dict(run=lambda c:persisted_fixture(c,'current'),requirements=['PERSIST-AUTO-001','SAVE-AUTO'],description='A frozen autosave written by the current version (locks, slide, masks, scale lock, two song slots, memory) cold-loads and plays its golden note/CC stream exactly'),

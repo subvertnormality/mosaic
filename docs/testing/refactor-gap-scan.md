@@ -37,3 +37,16 @@ Status: `open`, `done` (test landed), `defect` (test found a defect), `decision`
 | G13 | Song slot bound versus validation | check | no conflict: README 884 states 96 slots (six rows of 16), as validation and the song page use; the plan's F12 row says 90 |
 | G14 | `mosaic.lua` load tests reach locals through `debug.getupvalue` | unit seam | refactor-fragile; note only |
 | G15 | PERF-003..008 canonical constrained runs | performance | open (measurement only; no fixes) |
+
+### Second pass (UI state, MIDI input, algorithms, hot loops, shared state)
+
+| # | Gap | Layer | Status |
+|---|---|---|---|
+| D9 | Tooltip frees metro slot `i` (list position) instead of `m.id`; the tooltip timer aliases the autosave metro and "Autosaved" never clears | M-TOOLTIP-002 | defect fixed (`tooltip-metro-id`) |
+| D10 | Song slot / global length queued during playback survive Stop and apply at the next Play | M-SONG-QUEUE-STOP-001 | defect fixed (`song-queue-discard-on-stop`, arbitrated SEM-015) |
+| D11 | Two-key gestures resolved by release order: releasing the copy source first erased it | M-SONG-COPY-001 | defect fixed for slot copy (`song-slot-copy-press-order`, arbitrated SEM-016); other gestures unchanged by decision |
+| C | Real scheduler: a job cancelled earlier in the same update pass still runs one slice; `active_count` can go negative | unit | latent (visible effect at most one stale UI refresh); semantics that hold pinned by `scheduler_tests.lua`; not changed |
+| D12 | `pattern.lua` checks `lengths_mask ~= -1` (typo for `length_mask`) | code reading | latent: no version writes -1 (1.2.12 and current write nil); not changed |
+| E | Incoming MIDI recomputes the selected channel's step transpose (shared persistent state) | differential probe | not reproduced; a CC-path mutation that clears the state left playback unchanged, so no case kept |
+| F-G, 5-18 | Working-pattern sweep at a song boundary, prime/paint race, MIDI map targets, stuck held keys, chord state after lost Note Off, UI asymmetries, per-call debouncers | behaviour | open |
+

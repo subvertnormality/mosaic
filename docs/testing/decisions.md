@@ -385,3 +385,29 @@ the code: the song editor's tempo selector sets the single norns `clock_tempo`
 global tempo persists as norns system state, not in Mosaic's autosave or named
 saves; M-PERSIST-COMBINED-001 checks the restored stream at the tempo the fresh
 process reports. M-SONG-TEMPO-001 covers per-slot divisions across transitions.
+
+## SEM-015 — Song commands queued during playback, then Stop (decided 2026-09-11, arbitrated)
+
+README 910 queues a slot change made during playback until the current sequence
+completes; it does not say what Stop does to a queued command. Mosaic kept the queued
+slot (and a queued global length) across Stop with no pending indicator and applied it
+at the first boundary of the next Play. Arbitration (paranoia arbitrate, cross-vendor,
+repository-only): `OUTCOME: CONVERGED`, `SELECTED: discard-on-stop`, unanimous in round
+1 (claude risk MINOR, decisive lib/step.lua:1125; codex risk NONE, decisive
+lib/step.lua:1102), `CLEANING: original-attested`, audit
+`20260911T001059-arbitrate-7a89340b`, snapshot b146b6d6 retained. The MINOR risk (the
+length fader showing a discarded value) is addressed by refreshing the fader in
+step.reset(). Regression M-SONG-QUEUE-STOP-001; defect `song-queue-discard-on-stop`.
+
+## SEM-016 — Two-key gestures released first-pressed-first (decided 2026-09-11, arbitrated)
+
+m_grid resolves a two-key gesture at the first release, taking the key still held as
+the first operand. Releasing the song slot pressed first therefore copied the
+destination over the source (data loss; README 903-904 has no undo). Arbitration:
+`OUTCOME: CONVERGED`, `SELECTED: press-order-slot-copy-only`, round 2 unanimous (claude
+flipped from press-order-all; both cite tests/behaviour/range_rejection.py:19-21, an
+existing range oracle that relies on release order), `CLEANING: original-attested`,
+audit `20260911T002251-arbitrate-288c3f8c`, snapshot bbba51ae retained. Only song slot
+copy/erase uses press order; other gestures are unchanged. Claude's MINOR risk: operand
+order is now page-dependent, to unify in the planned refactor. Regression
+M-SONG-COPY-001; defect `song-slot-copy-press-order`.
