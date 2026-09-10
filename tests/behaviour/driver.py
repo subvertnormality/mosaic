@@ -6,6 +6,23 @@ EMULATOR_ROOT=Path(os.environ['MONOME_EMULATOR']).resolve()
 sys.path.insert(0,str(EMULATOR_ROOT/'src'))
 from automation.client import Session
 
+def startup_lock(timeout=300):
+    import contextlib,fcntl
+    @contextlib.contextmanager
+    def held():
+        fd=os.open('/tmp/mosaic-behaviour-%d-startup.lock'%os.getuid(),os.O_RDWR|os.O_CREAT,0o600)
+        end=time.monotonic()+timeout
+        try:
+            while True:
+                try:fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB);break
+                except BlockingIOError:
+                    if time.monotonic()>end:raise TimeoutError('Mosaic startup lock held for over %ss'%timeout)
+                    time.sleep(.05)
+            yield
+        finally:
+            os.close(fd)
+    return held()
+
 def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -48,10 +65,13 @@ class Driver:
                     self.applied_mod_patches[name]=candidate
                 else:(code/name).symlink_to(source,target_is_directory=True)
                 self.mod_revisions[name]=revision
-        self.runtime=Session(script=code/'mosaic/mosaic.lua',code_root=code,
-            data=out/'data',data_seeds=([dict(source=str(project_seed),destination='mosaic')] if project_seed else [dict(source=str(REPO/'tests/behaviour/config'),destination='mosaic/config',format='json-files')]),
-            midi_config=dict(ports=['Emulator MIDI','Second MIDI','Norns2sinfonion']),random_seed=42,enabled_mods=list(self.mod_revisions),
-            clock_mode=clock_mode,experimental_install=experimental_install)
+        # Concurrent native startups race on JACK's shared registry (emulator R22);
+        # serialise session starts across every Mosaic test process on this host.
+        with startup_lock():
+            self.runtime=Session(script=code/'mosaic/mosaic.lua',code_root=code,
+                data=out/'data',data_seeds=([dict(source=str(project_seed),destination='mosaic')] if project_seed else [dict(source=str(REPO/'tests/behaviour/config'),destination='mosaic/config',format='json-files')]),
+                midi_config=dict(ports=['Emulator MIDI','Second MIDI','Norns2sinfonion']),random_seed=42,enabled_mods=list(self.mod_revisions),
+                clock_mode=clock_mode,experimental_install=experimental_install)
         self.data_directory=Path(self.runtime.info['data'])/'mosaic'
         self.identity=self.runtime.info['application_identity']
         try:

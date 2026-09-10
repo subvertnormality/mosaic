@@ -5395,10 +5395,11 @@
       "statement": "Channel scale locks override global locks/default; independent global track rate/length.",
       "cases": [
         "M-SCALE-002",
-        "M-SCALE-004"
+        "M-SCALE-004",
+        "M-SCALE-LOCK-003"
       ],
       "status": "partial-domain-coverage",
-      "domain": "All16 slots; staggered locks, channel wraps, coprime rates/lengths; clear/reset.",
+      "domain": "All16 slots; staggered locks, channel wraps, coprime rates/lengths; clear/reset. M-SCALE-LOCK-003 (E and D, 3 fresh D repeats): channel step-1 lock (E major) over a global step-2 lock (G major) with the lifetime option On (whole cycle E) and Off (next active trig clears, global applies); a probability-0 trig and a rest do not clear; a step-3 replacement applies in both option states; exact pitches per step. Removing channel-lock persistence is detected.",
       "oracles": [
         "Independent piecewise scale timeline and every emitted pitch."
       ],
@@ -5766,14 +5767,15 @@
       ],
       "statement": "Channel lock persists until channel wrap with hold-on, or next active probability-passing trig with hold-off; replacements apply normally. Global locks persist until replacement/global wrap independently.",
       "cases": [
-        "M-SCALE-002",
         "M-RANGE-GLOBAL-004",
+        "M-SCALE-002",
         "M-SCALE-004",
+        "M-SCALE-LOCK-003",
         "M-TRANS-004",
         "M-TRANS-005"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Both option values; probability0/100; active/rest steps; current-step lock; channel/global coprime lengths; all scale slots.",
+      "domain": "Both option values; probability0/100; active/rest steps; current-step lock; channel/global coprime lengths; all scale slots. M-SCALE-LOCK-003 (E and D, 3 fresh D repeats): channel step-1 lock (E major) over a global step-2 lock (G major) with the lifetime option On (whole cycle E) and Off (next active trig clears, global applies); a probability-0 trig and a rest do not clear; a step-3 replacement applies in both option states; exact pitches per step. Removing channel-lock persistence is detected.",
       "oracles": [
         "Independent piecewise scale/pitch timeline, probability-rejected trig retains channel lock, global unaffected by channel option."
       ],
@@ -6187,10 +6189,11 @@
       ],
       "statement": "Hold option defaults on and controls channel locks only; off clears prior channel persistence at next active probability-passing trig.",
       "cases": [
-        "M-SCALE-002"
+        "M-SCALE-002",
+        "M-SCALE-LOCK-003"
       ],
       "status": "partial-domain-coverage",
-      "domain": "On/off; probability-rejected trigs; rest; replacement; global/channel simultaneous locks and wrap.",
+      "domain": "On/off; probability-rejected trigs; rest; replacement; global/channel simultaneous locks and wrap. M-SCALE-LOCK-003 (E and D, 3 fresh D repeats): channel step-1 lock (E major) over a global step-2 lock (G major) with the lifetime option On (whole cycle E) and Off (next active trig clears, global applies); a probability-0 trig and a rest do not clear; a step-3 replacement applies in both option states; exact pitches per step. Removing channel-lock persistence is detected.",
       "oracles": [
         "Exact pitch timeline with user-confirmed distinctions; no pending semantic decision."
       ],
