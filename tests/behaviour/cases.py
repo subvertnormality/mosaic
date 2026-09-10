@@ -12,6 +12,7 @@ from tooltips import tooltip_messages
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
 from device_configs import invalid_device_configs,device_config_defaults
+from trig_note_merge import trig_note_merge_matrix
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3226,6 +3227,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-MERGE-TRIG-002':dict(run=trig_note_merge_matrix,requirements=['MERGE-TRIG-ALL','MERGE-TRIG-SKIP','MERGE-TRIG-ONLY','MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','MERGE-VELOCITY'],description='All 3 trig merge modes x 3 note merge modes over two overlapping patterns: only trig-bearing patterns contribute, single contributors pass through, exact pitches, pattern-1 velocities and rest spacing'),
  'M-MAP-002':dict(run=midi_map_entry,requirements=['SETUP-MIDI-MAP-ENTRY','MAP-RANGES','MAP-CONTROL'],description='Create the documented map through the native norns parameter-map menu (learn CC, in 1..2, accumulate), verify the written PMAP, then step the selected channel velocity mask by relative CCs with exact velocities'),
  'M-SETUP-003':dict(run=device_config_defaults,requirements=['SETUP-DEVICE-DEFAULTS','SETUP-DEVICE-DISCOVERY','CH-DEVICE'],description='Custom configs set output defaults on confirmation: a drum config routes channel 1 to port 2, MIDI channel 10, fixed note 36; a polyphonic config routes channel 2 to MIDI channel 5 with its pattern notes'),
  'M-SETUP-001':dict(run=lambda c:invalid_device_configs(c,'malformed'),requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='Malformed, empty and object-shaped config files beside a valid one: Mosaic boots, plays through the valid device, and the picker lists none of the invalid files'),

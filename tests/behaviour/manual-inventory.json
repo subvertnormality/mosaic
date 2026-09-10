@@ -2963,10 +2963,11 @@
       ],
       "statement": "All triggers when any assigned pattern has a trig.",
       "cases": [
-        "M-MERGE-001"
+        "M-MERGE-001",
+        "M-MERGE-TRIG-002"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Overlap cardinalities0..16 and assignment order; every step.",
+      "domain": "Overlap cardinalities0..16 and assignment order; every step. M-MERGE-TRIG-002 (E and D, 3 fresh D repeats): 3 trig modes x 3 note modes over two overlapping patterns with merged-pentatonic On, and All x 3 note modes with it Off; only trig-bearing patterns contribute, single contributors pass through unsnapped, exact pitches, pattern-1 velocity priority and rest spacing.",
       "oracles": [
         "Independent union truth table, LEDs and complete MIDI."
       ],
@@ -2989,10 +2990,11 @@
       ],
       "statement": "Skip triggers only when exactly one assigned pattern has a trig.",
       "cases": [
-        "M-MERGE-001"
+        "M-MERGE-001",
+        "M-MERGE-TRIG-002"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Overlap cardinalities0..16; duplicate-like patterns; sparse/full.",
+      "domain": "Overlap cardinalities0..16; duplicate-like patterns; sparse/full. M-MERGE-TRIG-002 (E and D, 3 fresh D repeats): 3 trig modes x 3 note modes over two overlapping patterns with merged-pentatonic On, and All x 3 note modes with it Off; only trig-bearing patterns contribute, single contributors pass through unsnapped, exact pitches, pattern-1 velocity priority and rest spacing.",
       "oracles": [
         "Independent cardinality==1 truth table, LEDs and silence windows."
       ],
@@ -3015,10 +3017,11 @@
       ],
       "statement": "Only triggers when more than one assigned pattern has a trig.",
       "cases": [
-        "M-MERGE-001"
+        "M-MERGE-001",
+        "M-MERGE-TRIG-002"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Overlap cardinalities0..16; one/two boundary.",
+      "domain": "Overlap cardinalities0..16; one/two boundary. M-MERGE-TRIG-002 (E and D, 3 fresh D repeats): 3 trig modes x 3 note modes over two overlapping patterns with merged-pentatonic On, and All x 3 note modes with it Off; only trig-bearing patterns contribute, single contributors pass through unsnapped, exact pitches, pattern-1 velocity priority and rest spacing.",
       "oracles": [
         "Independent cardinality>1 truth table and MIDI."
       ],
@@ -6269,10 +6272,11 @@
         "M-MERGE-019",
         "M-MERGE-023",
         "M-MERGE-043",
-        "M-MERGE-044"
+        "M-MERGE-044",
+        "M-MERGE-TRIG-002"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Every note merge, one/multiple assigned patterns, priority unassigned pattern, all-pentatonic.",
+      "domain": "Every note merge, one/multiple assigned patterns, priority unassigned pattern, all-pentatonic. M-MERGE-TRIG-002 (E and D, 3 fresh D repeats): 3 trig modes x 3 note modes over two overlapping patterns with merged-pentatonic On, and All x 3 note modes with it Off; only trig-bearing patterns contribute, single contributors pass through unsnapped, exact pitches, pattern-1 velocity priority and rest spacing.",
       "oracles": [
         "Independent pitch mapping with exact setting defaults and output."
       ],
