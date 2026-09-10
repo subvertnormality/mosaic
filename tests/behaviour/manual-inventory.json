@@ -6779,9 +6779,15 @@
         "MAN-013"
       ],
       "statement": "Recording active-step versus all-step locks depends on trigless setting.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Active/rest/probability0 steps; on/off while recording; dense10-slot lock recording.",
+      "cases": [
+        "M-REC-PARAM-003",
+        "M-REC-PARAM-028",
+        "M-REC-PARAM-029",
+        "M-REC-PARAM-030",
+        "M-REC-PARAM-031"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "Active, removed-rest and authored probability0 steps are compared with trigless on/off. M-REC-PARAM-030 toggles Off/On/Off live across rest/rest/active opportunities. M-REC-PARAM-031 records all10 slots on one rest and proves adjacent locks unchanged. Core documented domain covered; broader recording lifetime combinations remain under REC-PARAM-AUTOMATION.",
       "oracles": [
         "Exact per-step lock and CC presence; default wording conflict with1071 recorded separately."
       ],

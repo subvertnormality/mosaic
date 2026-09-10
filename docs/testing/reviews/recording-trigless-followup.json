@@ -1,0 +1,16 @@
+{
+  "started_at": "2026-09-10T07:55:31.097595+00:00",
+  "packet_sha256": "b6e157832fc5dfa176f9eea7ab554eff16158cdc649524133d0a034000b7f16b",
+  "tool": "rebut",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "session_ref": "01a08a3c-b321-7a71-ad86-e6e546012cca1",
+    "rebuttal": "I accepted and fixed both shared-helper findings from session 01a08a3c-b321-7a71-ad86-e6e546012cca1. Please inspect current source and the refreshed docs/testing/recording-trigless-validation.json.\n\n1. `edit_value=-1` now expects an empty timestamp list and skips the immediate-emission assertion while retaining exact MIDI silence, stored Off replay, complete gate durations and paired release checks. M-REC-PARAM-006 passes controlled manifest e4ca7eff9cda4bcc85fcdbbcc8c9e795 and real manifest 3d906c527922458090708ef4f161722e.\n2. `edit_value=0` now uses the physical saturation path's exact controlled offset of .76 seconds; ordinary one-detent input remains .61 seconds. M-REC-PARAM-005 passes controlled manifest 9b4cbd0d3cd34a5f83eace9a24bea4ee and real manifest a9cf96ab61e744ef957efed92b6a6128.\n3. All five scoped cases were rerun in both clocks after the fix, producing ten new current-source-bound manifests listed in the validation JSON. A new source snapshot passes 530/530 Lua and 100/100 applicable Python unit/oracle tests; hashed logs and source hashes are linked in the JSON.\n\nConfirm that the two helper regressions are resolved and the scoped REC-TRIGLESS slice is acceptable. Return ACCEPTED or CHANGES REQUIRED with concrete findings. Keep broader REC-PARAM-AUTOMATION combinations outside this verdict.",
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**CONCEDE \u2014 both findings are resolved; the scoped REC-TRIGLESS slice is ACCEPTED.** The previous objections no longer apply to the corrected helper.\n\n- Off now uses `expected_offsets=[] if edit_value==-1` and guards emission timing with `if expected_offsets:` ([source:370](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/trig_parameter_interactions.py:370)). Exact silence, stored-Off replay, gate durations and paired releases remain checked.\n- Zero now uses `immediate_offset=.76 if edit_value==0 else .61`, matching the saturation path ([source:369](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/trig_parameter_interactions.py:369)).\n- Verified all 14 passing manifests, their 210 artifact hashes, current-source bindings, and snapshot/log hashes in the [refreshed validation](/home/andy/projects/mosaic-behaviour-tests/docs/testing/recording-trigless-validation.json). Logs report 530/530 Lua and 100/100 Python tests passing.\n\nAcceptance covers only this slice and the two helper regressions.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08a51-15cb-7780-aab2-46622b7d49c6` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T07:57:28.039629+00:00"
+}

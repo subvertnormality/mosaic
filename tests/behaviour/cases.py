@@ -34,7 +34,7 @@ from numeric_merging import merge_mode_cycle
 from numeric_merging import numeric_note_merge
 from numeric_merging import merge_transpose_scale_lock
 from numeric_merging import transpose_midi_boundaries
-from recording_lifetimes import recording_ten_slots
+from recording_lifetimes import recording_ten_slots,recording_ten_slots_trigless
 from recording_lifetimes import recording_stop_safety
 from trig_parameter_interactions import sparse_editor_domain
 from trig_parameter_interactions import cc_encoder_domain
@@ -3166,7 +3166,7 @@ from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_p
 
 from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrpn_slide,patch_configured_off_lock
 
-from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording
+from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording,recording_trigless_toggle
 
 from shuffle_inheritance import shuffle_type_inheritance,live_shuffle_type_inheritance
 
@@ -3321,7 +3321,11 @@ CASES={
  'M-REC-PARAM-006':dict(run=lambda c:live_parameter_recording(c,edit_value=-1),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded Off suppresses conflicting locks through the cycle and remains silent during distinct-default disarmed replay'),
  'M-REC-PARAM-005':dict(run=lambda c:live_parameter_recording(c,edit_value=0),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded zero is active MIDI, replacing a conflicting lock and surviving distinct-default disarmed replay'),
  'M-REC-PARAM-004':dict(run=lambda c:live_parameter_recording(c,switch_return=True,scale_page=True),requirements=['REC-PARAM-AUTOMATION', 'CH-SELECT', 'NAV-PAGES'],description='Scale-page selection pauses channel recording; returning restores retained MIDI before note with unchanged paused locks'),
- 'M-REC-PARAM-003':dict(run=lambda c:live_parameter_recording(c,empty_step=True),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','PARAM-SLOTS'],description='Live CC recording crosses an empty trigless step; exact MIDI automation survives disarmed replay independently of changed patch default, with absent note and four-second deadlines'),
+ 'M-REC-PARAM-031':dict(run=recording_ten_slots_trigless,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='All ten CC slots record zero on one trigless rest; Stop before step3 and exact fast replay prove step1/3/4 locks unchanged'),
+ 'M-REC-PARAM-030':dict(run=recording_trigless_toggle,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Toggle trigless Off/On/Off during recording across rest/rest/active steps, then enable for exact24/48/65/65 stored replay and timing'),
+ 'M-REC-PARAM-029':dict(run=lambda c:live_parameter_recording(c,probability_zero=True,trigless=False),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS'],description='Trigless-off recording treats authored probability-zero step3 as eligible despite note silence; exact CC replay distinguishes trigger state from audible outcome'),
+ 'M-REC-PARAM-028':dict(run=lambda c:live_parameter_recording(c,empty_step=True,trigless=False),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Trigless-off recording skips a rest without overwriting its old96 lock; re-enable only for disarmed replay to expose exact24/64/96/64 storage'),
+ 'M-REC-PARAM-003':dict(run=lambda c:live_parameter_recording(c,empty_step=True),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Trigless-on live recording crosses an empty step; exact MIDI automation survives disarmed replay independently of changed patch default, with absent note and four-second deadlines'),
  'M-REC-PARAM-002':dict(run=lambda c:live_parameter_recording(c,switch_return=True),requirements=['REC-PARAM-AUTOMATION','CH-SELECT','PARAM-SLOTS'],description='Switch away during live parameter recording, hear old locks, return before step4; live value must match its stored disarmed replay while paused steps remain unchanged'),
  'M-REC-PARAM-001':dict(run=live_parameter_recording,requirements=['REC-PARAM-AUTOMATION','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Live encoder recording holds the edited CC value against old locks, records future steps, and replays exact locks before notes after disarming'),
  'M-PARAM-022':dict(run=lambda c:probability_midi_locks(c,trigless=True,nrpn=False),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=True, NRPN=False; exact lock bytes/timing and step100 lock-before-note'),

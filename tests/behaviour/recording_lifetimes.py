@@ -337,6 +337,69 @@ def recording_stop_safety(c):
     c.results.append(dict(kind='recording-stop-safety-long-press-restart',record_arm_retained=True,first_lock=24,recorded_step2=64,untouched_step3=96,new_recorded_step2=65,replay_default=66,passed=True))
 
 
+def recording_ten_slots_trigless(c):
+    """All ten slots record on one rest without changing later locks."""
+    import time
+    from cases import assign_trig_parameter,assert_durations,set_mosaic_options
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    c.configure();set_mosaic_options(c,[('Trigless locks',True)]);c.enc(1,-3)
+    for slot in range(1,11):
+        if slot>1:c.enc(2,1)
+        assign_trig_parameter(c,'CC '+str(slot))
+        for step,value in enumerate((1,2,3,4),1):
+            c.action(type='grid',x=step,y=4,state=1)
+            try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
+            finally:c.action(type='grid',x=step,y=4,state=0)
+    c.enc(2,-9);c.tap(5,8);c.tap(2,4);c.tap(3,8)
+    c.enc(1,2);c.enc(3,-29);c.key(3);c.enc(1,-2) # /48: eight seconds per step.
+    c.tap(2,8);capture=MidiWindow(c.snapshot()['midi_count'])
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    def now():return c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
+    origin=now();selected=1
+    for slot in range(1,11):
+        if slot!=selected:c.enc(2,slot-selected);selected=slot
+        c.enc(3,1) # Off to zero.
+    assert now()<origin+7_500_000_000
+    remaining=origin+8_200_000_000-now();assert remaining>0;c.elapse(remaining/1e9)
+    capture.extend(c.snapshot());c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+    notes=capture.note_ons();assert [(e['port'],e['bytes']) for e in notes]==[(1,[144,60,127])]
+    pairs=note_pairs(capture.events);assert len(pairs)==1 and pairs[0][0]==notes[0]
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns';tol=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    assert abs((pairs[0][1][field]-notes[0][field])/1e9-8)<=tol
+    cc=[e for e in capture.events if e['bytes'][0]&240==176]
+    expected=[(1,[176,slot,1]) for slot in range(1,11)]
+    expected += [(1,[176,slot,0]) for slot in range(1,11)]*2
+    assert [(e['port'],e['bytes']) for e in cc]==expected
+    for event in cc[:20]:assert abs((event[field]-notes[0][field])/1e9)<=7.5
+    for event in cc[20:]:assert abs((event[field]-notes[0][field])/1e9-8)<=tol
+    c.tap(2,8);c.enc(1,2);c.enc(3,29);c.key(3);c.enc(1,-2)
+    for slot in range(1,11):
+        if slot!=selected:c.enc(2,slot-selected);selected=slot
+        c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,6) # Default5.
+    before=c.snapshot()['midi_count']
+    played=c.playback([(1,[144,60,127]),(1,[144,64,107]),(1,[144,65,97])],cycles=2,timeout=6)
+    events=[e for e in c.snapshot()['midi'] if e['index']>before];cc=[e for e in events if e['bytes'][0]&240==176]
+    expected=[(1,[176,slot,5]) for slot in range(1,11)]
+    for step in (1,2,3,4,1,2,3,4,1):
+        value=(1,0,3,4)[step-1];expected += [(1,[176,slot,value]) for slot in range(1,11)]
+    assert [(e['port'],e['bytes']) for e in cc]==expected
+    origin2=played[0][field]
+    for index,event in enumerate(cc[10:]):
+        assert abs((event[field]-origin2)/1e9-(index//10)/6)<=tol
+    note_steps=(0,2,3,4,6,7,8)
+    for note,step in zip(played,note_steps):
+        assert abs((note[field]-origin2)/1e9-step/6)<=tol
+        group=cc[10+step*10:20+step*10]
+        assert len(group)==10 and all(control['index']<note['index'] for control in group)
+        assert all(abs((control[field]-note[field])/1e9)<=tol for control in group)
+    replay_pairs=note_pairs(events);assert [on for on,off in replay_pairs]==played
+    assert_durations(c,played,[1]*(len(played)-1),events=events)
+    c.results.append(dict(kind='recording-ten-slot-trigless-rest',slots=10,recorded_step=2,
+                          live_zero_packets=20,replay_values=[1,0,3,4],distinct_default=5,passed=True))
+
+
 def recording_ten_slots(c):
     from cases import assign_trig_parameter
     c.configure();c.enc(1,-3)

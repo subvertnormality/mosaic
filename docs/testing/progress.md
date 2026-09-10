@@ -1266,3 +1266,30 @@ program groups with transpose64/65/52, complete onset/release ownership,
 three-port transport, Stop cleanup, event-count identity and accumulated phase.
 Controlled and real-time runs each capture11 balanced onsets. Codex accepted the
 timing and ownership oracle with high confidence. No production code changed.
+
+
+## Recording eligibility under Trigless Locks
+
+M-REC-PARAM-003 and M-REC-PARAM-028 compare the same removed step with
+Trigless Locks enabled and disabled. Enabled recording writes the empty rest;
+disabled recording skips it and preserves the old value96, which a later
+re-enabled replay exposes against the distinct channel default65.
+M-REC-PARAM-029 proves an authored probability-zero trigger remains eligible
+for recording even though probability suppresses its note. M-REC-PARAM-030
+changes the option Off/On/Off through the native parameter menu during a /48
+recording pass and distinguishes the resulting rest/rest/active boundaries.
+M-REC-PARAM-031 records zero across all ten CC slots on one rest while exact
+replay proves adjacent step values1/3/4 remain unchanged.
+
+The oracles separate live encoder emissions from step dispatch, require exact
+controlled and bounded real-time deadlines, order every applicable CC before
+its note, pair every onset and release, and measure every naturally completed
+gate. Codex review found shared-helper regressions for the existing recorded
+zero and Off paths; their path-specific timing/silence assertions were fixed,
+and M-REC-PARAM-005/006 pass both clocks. Fourteen final native manifests and
+210 artifact hashes are recorded in recording-trigless-validation.json. The
+source-bound snapshot passes530/530 Lua tests and100/100 applicable Python
+unit/oracle tests with hashed logs. Codex follow-up
+01a08a51-15cb-7780-aab2-46622b7d49c6 accepted the scoped slice. Broader
+recording-lifetime combinations remain under REC-PARAM-AUTOMATION, so the
+manual inventory stays conservatively partial.

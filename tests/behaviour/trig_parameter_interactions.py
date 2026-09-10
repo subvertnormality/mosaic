@@ -306,17 +306,24 @@ def probability_midi_locks(c,trigless=True,nrpn=False):
     phase([1,2,4],[4],'step-probability100-keeps-lock-before-note')
 
 
-def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=False,edit_value=64):
-    from cases import assign_trig_parameter,menu_value,set_mosaic_options
+def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=False,edit_value=64,trigless=True,probability_zero=False):
+    from cases import assign_trig_parameter,menu_label,menu_value,set_mosaic_options
     from patch_params import open_patch_control,turn
     c.configure()
-    if empty_step:set_mosaic_options(c,[('Trigless locks',True)])
+    assert not (empty_step and probability_zero)
+    if empty_step or probability_zero:set_mosaic_options(c,[('Trigless locks',trigless)])
     open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
     c.enc(1,-3);assign_trig_parameter(c,'CC 1')
     for step,value in [(1,24),(3,96)]:
         c.action(type='grid',x=step,y=4,state=1)
         try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
         finally:c.action(type='grid',x=step,y=4,state=0)
+    if probability_zero:
+        c.enc(2,1);assign_trig_parameter(c,'Trig Probability')
+        c.action(type='grid',x=3,y=4,state=1)
+        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,1)
+        finally:c.action(type='grid',x=3,y=4,state=0)
+        c.enc(2,-1)
     if empty_step:
         c.tap(5,8);c.tap(3,4);c.tap(3,8) # Remove note3 through pattern editor.
     c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2) # Four seconds per step.
@@ -341,43 +348,92 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
         assert old[-1]['bytes']==[176,1,96],old
         c.elapse(.3)
         c.tap(3,8) if scale_page else c.tap(1,1)
-    state=c.wait(lambda state:len(notes(state))>=(3 if empty_step else 4),timeout=14)
+    silent_step=empty_step or probability_zero
+    state=c.wait(lambda state:len(notes(state))>=(3 if silent_step else 4),timeout=14)
     captured=[e for e in state['midi'] if e['index']>edited_after and e['bytes'][0]==176]
     actual=[(e['port'],e['bytes']) for e in captured]
-    wanted=[] if edit_value==-1 else [(1,[176,1,edit_value])]*4
+    live_repetitions=3 if empty_step and not trigless else 4
+    wanted=[] if edit_value==-1 else [(1,[176,1,edit_value])]*live_repetitions
     c.results.append(dict(kind='live-parameter-recording-dirty-value',expected=wanted if not switch_return else None,actual=actual,meaning='Active edited values emit immediately and on eligible steps; Off remains silent.'))
     live_value=actual[-1][1][2] if actual else None
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     if not switch_return:
         assert actual==wanted,dict(expected=wanted,actual=actual)
+        # Separate the immediate encoder emission from later step dispatches.
+        # The edit lands .61 seconds after step1; eligible future boundaries are
+        # steps2/3/4 at 4/8/12 seconds. A removed rest is skipped only when the
+        # option is Off; an authored probability-zero trig remains eligible.
+        boundary_offsets=[4,12] if empty_step and not trigless else [4,8,12]
+        actual_offsets=[(e[field]-notes(state)[0][field])/1e9 for e in captured]
+        immediate_offset=.76 if edit_value==0 else .61
+        expected_offsets=[] if edit_value==-1 else [immediate_offset]+boundary_offsets
+        assert len(actual_offsets)==len(expected_offsets)
+        if expected_offsets:
+            input_tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .03
+            assert abs(actual_offsets[0]-expected_offsets[0])<=input_tolerance,dict(actual=actual_offsets,expected=expected_offsets)
+            assert all(abs(actual-wanted)<=tolerance for actual,wanted in zip(actual_offsets[1:],expected_offsets[1:])),dict(actual=actual_offsets,expected=expected_offsets)
     else:
         assert actual==[(1,[176,1,v]) for v in [64,64,96,64]],actual
-        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
         assert captured[-1]['index']<notes(state)[-1]['index']
         assert abs(captured[-1][field]-notes(state)[-1][field])<=(2 if c.clock_mode=='controlled-experimental' else 10000000)
-    phrase=[(60,127),(62,117)]+([] if empty_step else [(64,107)])+[(65,97)]
-    assert [e['bytes'] for e in notes(state)]==[[144,n,v] for n,v in phrase]
-    c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[]);c.tap(2,8)
+    phrase=[(60,127),(62,117)]+([] if silent_step else [(64,107)])+[(65,97)]
+    live_notes=notes(state);assert [e['bytes'] for e in live_notes]==[[144,n,v] for n,v in phrase]
+    if not switch_return:
+        note_offsets=[0,4,12] if silent_step else [0,4,8,12]
+        notes_by_offset=dict(zip(note_offsets,live_notes))
+        for control,offset in zip(captured[1:],boundary_offsets):
+            if offset in notes_by_offset:
+                note=notes_by_offset[offset]
+                assert control['index']<note['index'],'Recorded control must precede its audible note'
+                assert abs((control[field]-note[field])/1e9)<=tolerance
+    # Disarm just before wrap, then observe the final intended gate complete
+    # naturally. Stop only the extra wrap onset, which cannot alter stored locks.
+    import time
+    origin_live=live_notes[0][field]
+    now=lambda:c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
+    remaining=origin_live+15_800_000_000-now();assert remaining>0;c.elapse(remaining/1e9)
+    c.tap(2,8)
+    remaining=origin_live+16_200_000_000-now();assert remaining>0;c.elapse(remaining/1e9)
+    c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[])
+    live_events=[e for e in c.snapshot()['midi'] if e['index']>before]
+    from note_accounting import note_pairs
+    pairs=note_pairs(live_events);assert [on for on,off in pairs[:len(live_notes)]]==live_notes
+    assert len(pairs)==len(live_notes)+1 and pairs[-1][0]['bytes']==[144,60,127]
+    from cases import assert_durations
+    assert_durations(c,live_notes,[24]*len(live_notes),events=live_events)
     c.key(1);menu_value(c,'X' if edit_value==-1 else str(edit_value));c.key(1)
     c.enc(3,65-edit_value) # Distinct default proves stored locks independently.
     c.key(1);menu_value(c,'65');c.key(1)
+    if empty_step and not trigless:
+        # Native params reopens at the prior device control. Return through its
+        # group list to a stable root before selecting Mosaic options.
+        c.key(1);c.key(2);c.enc(2,-60);menu_label(c,'LEVELS >');c.key(2);c.key(1)
+        # Reveal the silent step's stored value during replay. If recording while
+        # disabled overwrote it, the expected96 below becomes64 and fails.
+        set_mosaic_options(c,[('Trigless locks',True)])
     # Disarmed playback proves the future steps were actually recorded, not
     # merely suppressed during the recording pass. Step1 already sounded before
     # the edit; steps2..4 receive64 through the end of this channel cycle.
     before=c.snapshot()['midi_count']
     played=c.playback([(1,[144,n,v]) for n,v in phrase],cycles=2,timeout=36,settle_seconds=30)
     cc=[e for e in c.snapshot()['midi'] if e['index']>before and e['bytes'][0]==176]
-    expected=([24,65,96,64] if switch_return else [24,edit_value,edit_value,edit_value])*2+[24]
+    values=([24,65,96,64] if switch_return else [24,edit_value,96,edit_value] if empty_step and not trigless else [24,edit_value,edit_value,edit_value])
+    expected=values*2+[24]
     emitted_steps=[i for i,value in enumerate(expected) if value!=-1]
     assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in [65]+expected if v!=-1]
     cc=cc[1:] # Stored patch recall is separate from per-step lock dispatch.
     assert len(cc)==len(emitted_steps)
-    assert len(played)==(7 if empty_step else 9)
+    assert len(played)==(7 if silent_step else 9)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    replay_events=[e for e in c.snapshot()['midi'] if e['index']>before]
+    replay_pairs=note_pairs(replay_events);assert [on for on,off in replay_pairs]==played
+    assert_durations(c,played,[24]*(len(played)-1),events=replay_events)
     origin=played[0][field]
     for i,control in zip(emitted_steps,cc):
         assert abs((control[field]-origin)/1e9-i*4)<=tolerance,dict(step=i,control=control,origin=origin)
-    note_steps=[i for i in range(9) if not empty_step or i%4!=2]
+    note_steps=[i for i in range(9) if not silent_step or i%4!=2]
     notes_by_step=dict(zip(note_steps,played))
     for i,control in zip(emitted_steps,cc):
         if i not in notes_by_step:continue
@@ -389,6 +445,77 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
         c.results.append(dict(kind='recording-switch-return-live-replay',live_step4_value=live_value,recorded_step4_value=expected[3],passed=live_value==expected[3]))
         assert live_value==expected[3],dict(live_step4=live_value,recorded_step4=expected[3],meaning='Resumed recorded value must match the value heard at that step')
 
+
+def recording_trigless_toggle(c):
+    """Mid-recording option changes use authored-trigger eligibility immediately."""
+    import time
+    from cases import assign_trig_parameter,assert_durations,menu_label,menu_option_row,set_mosaic_options
+    from frame_oracle import selected_line
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    c.configure();set_mosaic_options(c,[('Trigless locks',False)])
+    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    for step,value in enumerate((24,48,96,120),1):
+        c.action(type='grid',x=step,y=4,state=1)
+        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
+        finally:c.action(type='grid',x=step,y=4,state=0)
+    c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,65) # Explicit default64.
+    c.tap(5,8);c.tap(2,4);c.tap(3,4);c.tap(3,8)
+    c.enc(1,2);c.enc(3,-29);c.key(3);c.enc(1,-2) # /48: eight seconds per step.
+    c.tap(2,8);capture=MidiWindow(c.snapshot()['midi_count'])
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    def now():return c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
+    origin=now();c.elapse(.5)
+    c.enc(3,1) # Timed live edit64 to65.
+    def reach(seconds):
+        remaining=origin+round(seconds*1e9)-now();assert remaining>0
+        c.elapse(remaining/1e9)
+    # Open Trigless locks once and leave it selected for both live transitions.
+    reach(1);c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    position=next(i for i,value in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if value['id']=='mosaic')
+    c.enc(2,position);c.key(3);c.action(type='enc',n=2,delta=-126);c.elapse(.15)
+    for _ in range(40):
+        if selected_line(c.snapshot(),'Trigless locks',top=23):break
+        c.enc(2,1)
+    else:raise AssertionError('Trigless option not reached during recording')
+    assert now()<origin+7_000_000_000
+    reach(8.2);c.enc(3,3);menu_option_row(c,'Trigless locks','On',top=23)
+    reach(16.2);c.enc(3,-3);menu_option_row(c,'Trigless locks','Off',top=23)
+    # Disarm before wrap so step4 can complete its natural eight-second gate
+    # without recording the next step1. Observe that wrap, then Stop the new gate.
+    reach(31.8);c.tap(2,8);reach(32.2);capture.extend(c.snapshot())
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+    notes=capture.note_ons();assert [(e['port'],e['bytes']) for e in notes]==[(1,[144,60,127]),(1,[144,65,97]),(1,[144,60,127])]
+    pairs=note_pairs(capture.events);assert len(pairs)==3 and [on for on,off in pairs]==notes
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns';tol=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    for on,off in pairs[:2]:assert abs((off[field]-on[field])/1e9-8)<=tol
+    assert .19<=(pairs[2][1][field]-pairs[2][0][field])/1e9<=.31,'Stop must release the wrap note promptly'
+    live_cc=[e for e in capture.events if e['bytes'][0]&240==176]
+    assert [(e['port'],e['bytes']) for e in live_cc]==[(1,[176,1,v]) for v in (64,24,65,65,65,24)]
+    offsets=[(e[field]-notes[0][field])/1e9 for e in live_cc]
+    for actual,wanted in zip(offsets,(0,0,.55,16,24,32)):assert abs(actual-wanted)<=tol,(offsets,wanted)
+    for control,note in ((live_cc[1],notes[0]),(live_cc[4],notes[1]),(live_cc[5],notes[2])):
+        assert control['index']<note['index'] and abs((control[field]-note[field])/1e9)<=tol
+    c.enc(3,3);menu_option_row(c,'Trigless locks','On',top=23)
+    c.key(2);c.action(type='enc',n=2,delta=-126);c.elapse(.15);menu_label(c,'LEVELS >');c.key(2);c.key(1)
+    c.enc(3,1)
+    before=c.snapshot()['midi_count']
+    played=c.playback([(1,[144,60,127]),(1,[144,65,97])],cycles=2,timeout=80,settle_seconds=60)
+    events=[e for e in c.snapshot()['midi'] if e['index']>before]
+    cc=[e for e in events if e['bytes'][0]&240==176]
+    values=[66]+[24,48,65,65,24,48,65,65,24]
+    assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in values]
+    steps=(0,1,2,3,4,5,6,7,8);origin2=played[0][field]
+    for event,step in zip(cc[1:],steps):assert abs((event[field]-origin2)/1e9-step*8)<=tol
+    note_steps=(0,3,4,7,8)
+    for note,step in zip(played,note_steps):
+        assert abs((note[field]-origin2)/1e9-step*8)<=tol
+        control=cc[1+step];assert control['index']<note['index'] and abs((control[field]-note[field])/1e9)<=tol
+    replay_pairs=note_pairs(events);assert [on for on,off in replay_pairs]==played
+    assert_durations(c,played,[48]*(len(played)-1),events=events)
+    c.results.append(dict(kind='recording-trigless-live-toggle',live_values=[64,24,65,65,65,24],
+                          replay_values=values[1:],transitions=['off','on','off','on-for-replay'],passed=True))
 
 def cc_encoder_domain(c,configured=True):
     from cases import assign_trig_parameter
