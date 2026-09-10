@@ -18,8 +18,10 @@ for _,repeat_reset in ipairs({false,true}) do
  local flags={song_mode=song_on and 2 or 1,reset_on_song_pattern_transition=transition_reset and 2 or 1,reset_on_end_of_pattern_repeat=repeat_reset and 2 or 1}
  params={get=function(_,key) assert(flags[key]~=nil,key);return flags[key] end}
  fn={constrain=function(n) return n end,generate_id=function() id=id+1;return id end}
- local clock={realign_sprockets=function() lattice:realign_eligable_sprockets() end,calculate_divisor=function() return 4 end,set_channel_division=function() end}
+ local clock={cancel_all_spread_actions=function() end,realign_sprockets=function() lattice:realign_eligable_sprockets() end,calculate_divisor=function() return 4 end,set_channel_division=function() end}
  include=function(path)
+  if path=='mosaic/lib/devices/nrpn_codec' then return dofile('lib/devices/nrpn_codec.lua') end
+  if path=='mosaic/lib/clock/chord_timing' then return dofile('lib/clock/chord_timing.lua') end
   if path=='mosaic/lib/clock/m_clock' then return clock end
   if path=='mosaic/lib/quantiser' then return {} end
   assert(path=='mosaic/lib/clock/divisions',path);return {note_divisions={}}

@@ -80,3 +80,30 @@ run's own matrix copy is patched; supplied checkouts remain untouched. The flag
 also works with repeat.py and controlled mode. Omitting it preserves the failing
 baseline. Candidate selection is recorded in each case manifest and is not a
 claim that the full dependency or Mosaic suite passes.
+
+## Full regression suite
+
+`suite.py` runs every declared layer and every registered case, fail-closed:
+
+```sh
+export MONOME_EMULATOR=/path/to/monome-emulator
+python3 tests/behaviour/suite.py run --output ../mosaic-behaviour-runs/suite-<name> \
+  --experimental-install /path/to/candidate/installation.json \
+  --output-mod-root /path/to/mosaic-output-mods
+python3 tests/behaviour/suite.py compare BASELINE/suite.json CANDIDATE/suite.json
+```
+
+Layers: all `tests/behaviour/*.lua` contracts (each with its declared argument),
+every `test_*.py` oracle module (unittest or declared script), the unchanged Lua
+units in an isolated copy seeded with the emulator's pinned norns Lua tree (a
+network fetch fails the layer), and each case in the real-time and controlled
+lanes. A test file the suite does not classify fails collection. Non-base
+profiles are reported NOT RUN unless requested with `--profiles` and
+`--mod-code-root PROFILE=PATH`; audio/Crow profiles are real-time only. The
+report binds the Mosaic tree digest (tracked, dirty and untracked files), the
+emulator checkout and the installation, and fails if the tested tree changes
+during the run; run it from a clean worktree of the commit under test when
+editing continues elsewhere. `compare` exits nonzero on any item that passed in
+the baseline and does not pass in the candidate: this is the refactor guard.
+`complete_regression_run` is true only for an unfiltered run of every layer in
+both lanes with no required item left unrun. It is not manual coverage closure.

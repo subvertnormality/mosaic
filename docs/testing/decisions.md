@@ -330,3 +330,19 @@ Scale-relative note merging deliberately permits degrees beyond the editor range
 +`01a08a85-ce64-7a01-9624-71c0b506c667` accepted the behavior and documentation
 +correction.
 +
+## 2026-09-10 — Coverage first; isolated fixes only
+
+User direction: build the tests and a full regression suite that will guard the
+later broad refactor and performance work. Do not start the refactor or attempt
+performance fixes now. Isolated bug fixes remain in scope under the existing
+defect rule (minimal real-input regression, isolated fix, baseline evidence and
+bug-ledger entry). Performance measurements record ceilings and failures as
+regression evidence only. Future Paranoia reviews use Opus only (supersedes the
+Codex-only wording in UNIT-INTEGRATION-HARDENING.md step 2).
+
+The first suite collection found three Lua contracts no longer executable against
+current production (`conditional_realign_contract`/`_integration` did not load
+the `nrpn_codec` include added in ff8c27f or stub `cancel_all_spread_actions`;
+`panic_live_note_contract` lacked the `fn` global used since d18f3fc). They now
+load the real modules; the realign contract additionally asserts that slides are
+cancelled exactly on a song-pattern change, and fails when that call is removed.

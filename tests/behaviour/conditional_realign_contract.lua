@@ -21,8 +21,10 @@ for _,point in ipairs({{0,1},{1,1},{64,2},{128,2}}) do
  local flags={song_mode=song_on and 2 or 1,reset_on_song_pattern_transition=transition_reset and 2 or 1,reset_on_end_of_pattern_repeat=repeat_reset and 2 or 1}
  params={get=function(_,key) assert(flags[key]~=nil,key);return flags[key] end}
  fn={constrain=function(n) return n end}
- local clock={realign_sprockets=function() realign_calls=realign_calls+1 end,calculate_divisor=function() return 4 end,set_channel_division=function() division_calls=division_calls+1 end}
+ local spread_cancels=0
+ local clock={cancel_all_spread_actions=function() spread_cancels=spread_cancels+1 end,realign_sprockets=function() realign_calls=realign_calls+1 end,calculate_divisor=function() return 4 end,set_channel_division=function() division_calls=division_calls+1 end}
  include=function(path)
+  if path=='mosaic/lib/devices/nrpn_codec' then return dofile('lib/devices/nrpn_codec.lua') end
   if path=='mosaic/lib/clock/chord_timing' then return dofile('lib/clock/chord_timing.lua') end
   if path=='mosaic/lib/clock/m_clock' then return clock end
   if path=='mosaic/lib/quantiser' then return {} end
@@ -41,6 +43,7 @@ for _,point in ipairs({{0,1},{1,1},{64,2},{128,2}}) do
  for c=1,17 do assert(counters[c]==(should_reset and 99 or initial[c]),'Wrong channel reset') end
  assert(data.selected_song_pattern==((boundary and song_on and changed) and 2 or 1),'Unexpected song transition')
  assert(division_calls==((boundary and song_on and changed) and 17 or 0),'Unexpected division update')
+ assert(spread_cancels==((boundary and song_on and changed) and 1 or 0),'Slides must be cancelled exactly on a song-pattern change')
  checked=checked+1
 end end end end end
 print(checked..' reset decision cases passed: both reset flags, transitions/repeats, song mode and boundary state')

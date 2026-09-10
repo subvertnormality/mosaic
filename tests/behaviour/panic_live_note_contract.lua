@@ -1,6 +1,7 @@
 local root=assert(arg[1])
 local environment=setmetatable({include=function() return {} end,
- scheduler=assert(loadfile(root..'/lib/scheduler.lua'))(),midi={vports={1}}},{__index=_G})
+ scheduler=assert(loadfile(root..'/lib/scheduler.lua'))(),midi={vports={1}},
+ fn=assert(loadfile(root..'/lib/helpers/functions.lua'))()},{__index=_G})
 local implementation=assert(loadfile(root..'/lib/m_midi.lua','t',environment))()
 local sent={}
 environment.midi_devices[1]={device={},
