@@ -1,0 +1,28 @@
+diff --git a/lib/step.lua b/lib/step.lua
+index 4a5af98..60e7c68 100644
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -252,8 +252,8 @@ function step.process_params(channel, step)
+             goto continue
+           end
+ 
+-          if not norns_param_state_handler.get_original_param_state(c, i).value then
+-            norns_param_state_handler.set_original_param_state(c, i, value, param.id)
++          if not norns_param_state_handler.get_original_param_state(channel.number, i).value then
++            norns_param_state_handler.set_original_param_state(channel.number, i, value, param.id)
+           end
+ 
+           if not m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock) then
+@@ -277,9 +277,9 @@ function step.process_params(channel, step)
+             })
+           end
+         elseif program.step_has_trig(channel, step) and not m_clock.channel_is_sliding(channel, i) then
+-          if norns_param_state_handler.get_original_param_state(c, i) and norns_param_state_handler.get_original_param_state(c, i).value then 
+-            params:set(param.id, norns_param_state_handler.get_original_param_state(c, i).value)
+-            norns_param_state_handler.clear_original_param_state(c, i)
++          if norns_param_state_handler.get_original_param_state(channel.number, i) and norns_param_state_handler.get_original_param_state(channel.number, i).value then 
++            params:set(param.id, norns_param_state_handler.get_original_param_state(channel.number, i).value)
++            norns_param_state_handler.clear_original_param_state(channel.number, i)
+           end
+         end
+       end

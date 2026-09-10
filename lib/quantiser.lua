@@ -325,7 +325,8 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
     -- Store processed scales in cache
     quantiser._scale_cache[cache_key] = {
       scale = scale,
-      pentatonic = pentatonic
+      pentatonic = pentatonic,
+      timestamp = os.time()  -- cleanup sorts every entry by timestamp
     }
     quantiser._scale_cache_size = quantiser._scale_cache_size + 1
 

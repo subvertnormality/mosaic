@@ -1,0 +1,14 @@
+diff --git a/lib/quantiser.lua b/lib/quantiser.lua
+index 82f17cb..26fef99 100644
+--- a/lib/quantiser.lua
++++ b/lib/quantiser.lua
+@@ -325,7 +325,8 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
+     -- Store processed scales in cache
+     quantiser._scale_cache[cache_key] = {
+       scale = scale,
+-      pentatonic = pentatonic
++      pentatonic = pentatonic,
++      timestamp = os.time()  -- cleanup sorts every entry by timestamp
+     }
+     quantiser._scale_cache_size = quantiser._scale_cache_size + 1
+ 

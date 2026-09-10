@@ -1,0 +1,72 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "64e15c9",
+  "files": [
+    {
+      "file": "mosaic.lua",
+      "before_sha256": "e9801a848a3572a7c7ac0abd84e475dd4bd081e10b500705e77eeac17b9daf1b",
+      "after_sha256": "ccc8661d49a729e3b4fbb1358ba8af0e650bbdf61872241bacfee76c1172b4c4"
+    }
+  ],
+  "patch": "0096-new-project-memory.patch",
+  "patch_sha256": "d541e77f9c0fd1183e5315ef052f98274517f933a9bae6937426a5e765f3a242",
+  "regression": "M-MEMORY-005",
+  "unit_regression": "project_load_integration_tests.lua (New initialises memory)",
+  "baseline": [
+    {
+      "run_id": "56c92d7b216148468afe60f418070162",
+      "case": "M-MEMORY-005",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "0d8196f600f9a93e3725579902548d22fbd54fa589236e8d6652093a29efe644",
+      "failure": "Required observable output did not arrive"
+    },
+    {
+      "run_id": "72c6a7cd491643738ad8329eb3c87ef1",
+      "case": "M-MEMORY-005",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "a8a14bb79cfce5e7afbeba6fb11323cf895dc7956127974e364d6dba41c54c33",
+      "failure": "Required observable output did not arrive"
+    }
+  ],
+  "rationale": "+ New re-initialised the program but not the memory module, which keeps its own reference to the history. The new project showed the previous project's actions and E3 could replay them onto it. load_new_project now calls memory.init() after program.init().",
+  "oracle": "README Memory (698-707): memory holds the actions made in the project and E3 moves through them; + New replaces the project.",
+  "validation": [
+    {
+      "run_id": "cd338370518848f7b7ea271eb37f31e6",
+      "case": "M-MEMORY-005",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "57d77d9c48542a0cff0e8c7a77e5ecc567166e9be42045dc5b71fbd2d6727567",
+      "failure": null
+    },
+    {
+      "run_id": "ef3406ed41f74f709026f85b138c5ce3",
+      "case": "M-MEMORY-005",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "f99b0adc96569e914d8cd0e17138eaee73bd698ea2d7e4e1bb723177cb0d3bfa",
+      "failure": null
+    },
+    {
+      "run_id": "6f10d11a99094895806efb0385cf7ebb",
+      "case": "M-MEMORY-005",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "88b647269abed990b775d4a96e02b7332aee977da25c68005884c9c4b04478cf",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-d3568489edb94b43beb6f61b39e69b8e",
+      "case": "M-MEMORY-005",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "f3bd6c33a8ba124926b74d77e491e2891639f5a60af26f17b233d83e1a059efc",
+      "failure": null,
+      "normalized_sha256": "db40627fa5a2227869618c0cf3e34ab6ff8a90fc15f8bdaf259576fa90fd143e"
+    }
+  ],
+  "collateral": "All 551 Lua units pass (the project-load test now asserts that New initialises memory); M-MEMORY-001..005 pass.",
+  "upstream_merged": false
+}

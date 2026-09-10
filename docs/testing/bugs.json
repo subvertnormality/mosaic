@@ -659,6 +659,69 @@
         "M-TRIPLE-003"
       ],
       "summary": "A live-recorded note held across a song transition was stored in the slot selected at release instead of the slot and step active at its first press."
+    },
+    {
+      "id": "memory-wrap-logical-slot",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "memory-wrap-logical-slot.json",
+      "cases": [
+        "M-MEMORY-004"
+      ],
+      "summary": "After the bounded memory history wrapped, a new action recorded after moving back was stored in the wrong slot, so undoing it reverted a different action."
+    },
+    {
+      "id": "quantiser-cache-timestamp",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "quantiser-cache-timestamp.json",
+      "cases": [
+        "M-SCALE-CACHE-001"
+      ],
+      "summary": "After about 100 saves of the playing scale in one session, pressing Play raised a Lua error in the quantiser cache cleanup and stopped the sequencer."
+    },
+    {
+      "id": "norns-param-lock-channel",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "norns-param-lock-channel.json",
+      "cases": [
+        "M-XA-005-NB-LOCK"
+      ],
+      "summary": "A step lock on an nb (norns-parameter) device parameter such as Doubledecker Shape 1 raised a Lua error at Play and stopped the sequencer."
+    },
+    {
+      "id": "length-index-after-reload",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "length-index-after-reload.json",
+      "cases": [
+        "M-SAVE-LENGTH-001"
+      ],
+      "summary": "After a save and reload, channel and step length masks of 1/24, 1/12, 1/6, 1/3, 2/3 or 5/6 were shown as X on the Note Masks page."
+    },
+    {
+      "id": "slide-ring-compaction",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "slide-ring-compaction.json",
+      "cases": [
+        "M-SLIDE-CAPACITY-001"
+      ],
+      "summary": "With one long slide running, busy slides on other parameters stopped moving after about 1000 replacements and only jumped between lock values until the long slide ended."
+    },
+    {
+      "id": "new-project-memory",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "new-project-memory.json",
+      "cases": [
+        "M-MEMORY-005"
+      ],
+      "summary": "After + New, the Memory page still showed the previous project's history and E3 could replay those actions onto the new project."
+    },
+    {
+      "id": "elektron-program-change-port",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "elektron-program-change-port.json",
+      "cases": [
+        "M-OPT-ELEK-004"
+      ],
+      "summary": "With Elektron program changes on, an Elektron device on a MIDI port other than channel 1's never received program changes, and channel 1's port received duplicates."
     }
   ]
 }

@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "64e15c9",
+  "files": [
+    {
+      "file": "lib/step.lua",
+      "before_sha256": "9913f83e1ff2566ee9b9fc4165e07015394ced3ec1c33cd120c3b55e1c532382",
+      "after_sha256": "07ce948db7f0bfb86e73c1bcf6cf944e8ceff733a4188b408040dbbe97e39291"
+    }
+  ],
+  "patch": "0097-elektron-program-change-port.patch",
+  "patch_sha256": "57c29e9747222db738ea083e251d0574188b9e864f10c5e876a98adbfcc1a498",
+  "regression": "M-OPT-ELEK-004",
+  "unit_regression": null,
+  "baseline": [
+    {
+      "run_id": "4396dcff53d64d4096a0231f10a241f5",
+      "case": "M-OPT-ELEK-004",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "fbc4a279466891b6154bdced2e9fd4b070f518ee330b2cd24ee9ce4857b6f3cb",
+      "failure": "{'expected': [(1, [201, 0]), (1, [201, 1]), (2, [201, 0]), (2, [201, 1])], 'actual': [(1, [201, 0]), (1, [201, 0]), (1, [201, 1]), (1, [201, 1])]}"
+    },
+    {
+      "run_id": "1ea8ddded24f452da3b3ac6c7b34511c",
+      "case": "M-OPT-ELEK-004",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "b0f51bfd190775cdc87278f61d652083a9fc9b851e5ca766f3e61a61e120a2c3",
+      "failure": "{'expected': [(1, [201, 0]), (1, [201, 1]), (2, [201, 0]), (2, [201, 1])], 'actual': [(1, [201, 0]), (1, [201, 0]), (1, [201, 1]), (1, [201, 1])]}"
+    }
+  ],
+  "rationale": "process_elektron_program_change looped over the Elektron channels but always sent on channel 1's MIDI device, so an Elektron on another port received nothing and channel 1's port received one change per Elektron channel. Each channel's own device now receives it. Several Elektron channels on one port still send one change per channel, as before.",
+  "oracle": "README Elektron Program Changes: your Elektron devices adjust their patterns to the song pattern; each song pattern change is mirrored by your Elektron devices.",
+  "validation": [
+    {
+      "run_id": "877a751f3bcb4e7f98d4583c035e6054",
+      "case": "M-OPT-ELEK-004",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "fe2093089b784f41e35f54b62a053041dcd77944d21d8d6d873c717e863c445c",
+      "failure": null
+    },
+    {
+      "run_id": "56eba6ca078c4df0ae69f44e92b65811",
+      "case": "M-OPT-ELEK-004",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "55f385632b32c4499744e38b98312556eb18fa9de7c4af705bf48775240a9e13",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-0fe91827ea37463ca3d72d72b3961366",
+      "case": "M-OPT-ELEK-004",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "bd0794184d300d287a7b69785dc64d901e75156937aed02f76bc946b76cf6937",
+      "failure": null,
+      "normalized_sha256": "4e4bab609dac9b5e9d0ac7e052bf05b56b4ec3d21872a0afb1738f3edf504e16"
+    }
+  ],
+  "collateral": "M-OPT-ELEK-001 (single device) still passes; M-OPT-ELEK-002/003 remain SEM-013 (short global lengths), unchanged.",
+  "upstream_merged": false
+}

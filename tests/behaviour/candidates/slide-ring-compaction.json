@@ -1,0 +1,72 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "64e15c9",
+  "files": [
+    {
+      "file": "lib/clock/m_clock.lua",
+      "before_sha256": "d90e3dd12610ab16fa91af356dd215f200068c64d75d93d97c69753854416a61",
+      "after_sha256": "d7f1f986e394a8ba223b9405f010aab3346c96dd5439729e9906ddb1b8328c7a"
+    }
+  ],
+  "patch": "0095-slide-ring-compaction.patch",
+  "patch_sha256": "42d3e0707d64308d0f3be3df91107d9bf9236f7f760dadb9e46f56c496c59ffe",
+  "regression": "M-SLIDE-CAPACITY-001",
+  "unit_regression": "m_clock_performance_tests.lua test_replaced_slides_do_not_exhaust_capacity_behind_a_long_slide",
+  "baseline": [
+    {
+      "run_id": "92ebbb0190384d6590a56bad514af63c",
+      "case": "M-SLIDE-CAPACITY-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "343bd50a0aa1115a1fd53564dee24415b2eb906cab1a91596b441cde90842f98",
+      "failure": "{'missing_slide_at_seconds': 18.833, 'slot': 6}"
+    },
+    {
+      "run_id": "d0a05489090548709b46b290938b4427",
+      "case": "M-SLIDE-CAPACITY-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "aee87bdd891840c37ee8bdb7c7459cca75d5f21f360b770e7b302241bb81fe7d",
+      "failure": "{'missing_slide_at_seconds': 18.835, 'slot': 6}"
+    }
+  ],
+  "rationale": "Slide actions live in a 1024-slot ring reclaimed only from its front. Replaced slides behind one long slide stayed allocated until the long slide finished, so after about 1020 replacements every new slide was dropped (after its predecessor had already been cancelled). When the ring is full it is now compacted: active actions move to the front in order and retired slots are reused.",
+  "oracle": "README Param Slides (964): with slides enabled, locks smoothly transition between each other.",
+  "validation": [
+    {
+      "run_id": "689ca34d141c4d6e8cd34cc4fed895c5",
+      "case": "M-SLIDE-CAPACITY-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "9573ac538b2268aaae34f7654b3315c178e5a6a196f86e1efc9a0a2a39ce9773",
+      "failure": null
+    },
+    {
+      "run_id": "82c4f6214ee3424d8261d4a9742f1091",
+      "case": "M-SLIDE-CAPACITY-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "79aacc961941c8925b95692567e44b41a20d7608b4ca01d6d90459c15d7c6999",
+      "failure": null
+    },
+    {
+      "run_id": "f3916ce571ef4c38898488b58f1415f4",
+      "case": "M-SLIDE-CAPACITY-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "5714776162088189cc5bca6fbc15586adb7b8df6dae5b0afe8dbae7aebcf7f6e",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-d4c2ad23dd3d4c9480877a657483453d",
+      "case": "M-SLIDE-CAPACITY-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "4985adaa8d678438529fb009af35938d8d0f047af0d67f19bd9022497e893b76",
+      "failure": null,
+      "normalized_sha256": "86ca89cfc71227df558dab3cca232a39eab294586d535f4bbe24dd8caf549f41"
+    }
+  ],
+  "collateral": "All Lua units pass, including the existing slide admission and concurrency performance tests.",
+  "upstream_merged": false
+}

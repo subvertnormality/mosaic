@@ -1169,7 +1169,7 @@ function channel_edit_page_ui.handle_length_mask_change(channel, direction)
       end
     end
   else
-    mask_selectors.length:set_value(divisions.note_division_indexes[channel.length_mask] or 0)
+    mask_selectors.length:set_value(divisions.note_division_index(channel.length_mask) or 0)
     if direction > 0 then
       mask_selectors.length:increment()
       program.set_length_mask(channel, divisions.note_division_values[mask_selectors.length:get_value()])

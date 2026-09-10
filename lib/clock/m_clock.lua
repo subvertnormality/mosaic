@@ -91,10 +91,31 @@ local function init_ring_buffer()
   end
 end
 
+-- Replaced and finished actions are only reclaimed from the front. When a long
+-- action sits there, move the active actions (in order) to the front so the
+-- retired slots behind it can be reused.
+local function compact_ring()
+  local active, retired = {}, {}
+  local i = ring_start
+  repeat
+    local slot = spread_ring[i]
+    if slot.active then active[#active + 1] = slot else retired[#retired + 1] = slot end
+    i = (i % RING_BUFFER_SIZE) + 1
+  until i == ring_start
+  for index, slot in ipairs(active) do spread_ring[index] = slot end
+  for index, slot in ipairs(retired) do spread_ring[#active + index] = slot end
+  ring_start = 1
+  ring_end = #active + 1
+end
+
 -- Add action to ring buffer
 local function ring_push(action)
   local next_end = (ring_end % RING_BUFFER_SIZE) + 1
-  if next_end == ring_start then return false end -- Buffer full
+  if next_end == ring_start then
+    compact_ring()
+    next_end = (ring_end % RING_BUFFER_SIZE) + 1
+    if next_end == ring_start then return false end -- Every slot holds an active action
+  end
   
   local slot = spread_ring[ring_end]
   slot.channel = action.channel

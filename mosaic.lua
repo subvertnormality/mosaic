@@ -175,6 +175,7 @@ end
 
 local function load_new_project()
   program.init()
+  memory.init() -- bind memory to the new project; the old history must not carry over
   for i = 1, 16 do
     param_manager.add_device_params(
       i,

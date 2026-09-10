@@ -221,8 +221,9 @@ local function create_ring_buffer(max_size)
     push = function(self, event)
       local index
       if self.size < self.max_size then
+        -- The next logical position; after a wrap and truncate it is not the absolute slot size.
+        index = ((self.start + self.size - 1) % self.max_size) + 1
         self.size = self.size + 1
-        index = self.size
       else
         index = self.start
         self.start = (self.start % self.max_size) + 1

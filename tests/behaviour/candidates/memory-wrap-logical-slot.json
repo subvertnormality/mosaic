@@ -1,0 +1,72 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "64e15c9",
+  "files": [
+    {
+      "file": "lib/memory.lua",
+      "before_sha256": "011b1c1ce9cecd047921f43ceefedbf69f4da49528be81701a134941ff56409c",
+      "after_sha256": "757d2962b3ede21a4925c93d79e239ad548bfde799055aea204f8584deb0404a"
+    }
+  ],
+  "patch": "0091-memory-wrap-logical-slot.patch",
+  "patch_sha256": "6280f993b85e2b08c9ac6cb4ac7ae722dd08b6995717249c605a4902f586c007",
+  "regression": "M-MEMORY-004",
+  "unit_regression": "memory_tests.lua test_memory_wrapped_history_*",
+  "baseline": [
+    {
+      "run_id": "1bc6ca0a97b64baf984f662c96dd7c73",
+      "case": "M-MEMORY-004",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "cda765ba4718474e5810f952167a00453f2e06eb8eba5aab60a22a41f3568592",
+      "failure": "{'expected': [(1, [144, 60, 100]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 60, 100]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 60, 100])]"
+    },
+    {
+      "run_id": "bd4d114942874decbcc297ae6838ab8c",
+      "case": "M-MEMORY-004",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "20641c6b6237e0fab799b8d82fb787e2aaf27a6c05fe472fc3b48c772582c9aa",
+      "failure": "{'expected': [(1, [144, 60, 100]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 60, 100]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 60, 100])]"
+    }
+  ],
+  "rationale": "After the 5000-action history wrapped, moving back and recording a new action truncated the logical size but wrote the new action at the absolute slot equal to the size, overwriting an older logical position and leaving a stale action at the new one. Undo then reverted the wrong action. push now writes the next logical slot.",
+  "oracle": "README Memory (698-707): actions are retained in order; E3 moves through them; a new action after moving back continues from the displayed position (M-MEMORY-003).",
+  "validation": [
+    {
+      "run_id": "a5a0cd17b4e74f5593184345368e225a",
+      "case": "M-MEMORY-004",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "a3aad94af66816fc8af989cfbef6631cf2719542e00e2aae2863f8bc3ccb8814",
+      "failure": null
+    },
+    {
+      "run_id": "2d8af1993628492bb25f4682ab6ec101",
+      "case": "M-MEMORY-004",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "151afa23e1675b10e868d6de47b4a9be781f52c0c3fc2bb60858591cc0bbdd51",
+      "failure": null
+    },
+    {
+      "run_id": "74c4faf5703049ff89484ab29bd52de8",
+      "case": "M-MEMORY-004",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "eef5e039c834aa38482ceaba53faaabcbb80cef15299c3d3b2ab709ed7ecbe41",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-c7849cec880e4c1ab4aac7b5fd2bc50d",
+      "case": "M-MEMORY-004",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "2e25dbaa71b5fd6c0f71f86a24405a753143457988f28c70d8f6cc3a498935e6",
+      "failure": null,
+      "normalized_sha256": "50e613608cddb8ff66298c1c4bcd86e119f38918ba4a5284d679e37110226658"
+    }
+  ],
+  "collateral": "All 551 Lua units pass; M-MEMORY-001..003 and all REC/MEMORY cases pass (fast layers and the 67-case sweep).",
+  "upstream_merged": false
+}
