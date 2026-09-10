@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "D23/user 2026-09-10: coverage and a full regression suite before the refactor; isolated bug fixes allowed; no performance fixes or refactor. Full suite: tests/behaviour/suite.py (run/rerun/compare). Baseline in progress: ../mosaic-behaviour-runs/suite-baseline-5e0501a (clean snapshot worktree ../mosaic-suite-5e0501a, emulator ../monome-emulator-midi-clock + candidate midi-schedule-capacity-12); when finished run suite.py rerun from that worktree, then record the effective baseline. Continue unimplemented requirements (SIN-SOFTWARE, MAP-*, SETUP-*, WORKFLOW-COMPOSITION, PERF-MIDI) and the lock/trig/scale interaction obligations. Pending decisions: SEM-012 (white-key default wording), SEM-013 (Elektron program changes at global lengths 1-2).",
+  "next_action": "D23/user 2026-09-10: coverage and the regression suite first; isolated bug fixes only; no performance fixes or refactor. When ../mosaic-behaviour-runs/suite-baseline-5e0501a finishes, run suite.py rerun from ../mosaic-suite-5e0501a, record the effective baseline, then run a new full suite at the current head (it contains four fixes and ~30 new cases). Then idle-host perf_dense.py runs (dense and slides, 1/4/8/16 channels x3). Remaining plan triples: trigless+slide+external-clock change; recording+lock edit+song transition. Pending decisions: SEM-012, SEM-013. SETUP-CONFIG-CREATOR needs a portable headless browser (not available).",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -5147,14 +5147,38 @@
     "M-SAVE-002",
     "M-SAVE-NAMED-001",
     "M-SCALE-DISPLAY-001",
-    "M-TOOLTIP-001"
+    "M-TOOLTIP-001",
+    "M-SIN-001",
+    "M-MAP-001",
+    "M-MAP-002",
+    "M-SETUP-001..003",
+    "M-MERGE-TRIG-002",
+    "M-SCALE-LOCK-003",
+    "M-SLIDE-STEP-001",
+    "M-WORKFLOW-001",
+    "M-SONG-FLOW-001",
+    "M-ENDURANCE-001",
+    "M-LIFECYCLE-001",
+    "M-TRIPLE-001"
   ],
   "session_2026_09_10_bugs": {
     "fixed": [
-      "stop-safety-shift-k1"
+      "stop-safety-shift-k1",
+      "midi-map-neutral-default",
+      "device-config-requires-id",
+      "song-queue-after-manual-switch"
     ],
     "open": [
-      "elektron-short-song-program-changes"
+      "elektron-short-song-program-changes (SEM-013)"
     ]
+  },
+  "performance_runner": {
+    "runner": "tests/behaviour/perf_dense.py",
+    "workloads": [
+      "dense (PERF-002)",
+      "slides (PERF-003)"
+    ],
+    "preliminary": "docs/testing/perf-dense-preliminary.json",
+    "canonical": "pending idle host (run after the regression baseline finishes)"
   }
 }
