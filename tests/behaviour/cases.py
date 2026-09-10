@@ -7,6 +7,7 @@ from memory_truncate import memory_truncate
 from elektron_program_changes import elektron_program_changes
 from autosave_idle import autosave_idle_lifecycle
 from named_save import named_save_load
+from channel_scale_display import channel_active_scale_display
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3221,6 +3222,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-SCALE-DISPLAY-001':dict(run=channel_active_scale_display,requirements=['CH-ACTIVE-SCALE-DISPLAY','LOCK-SCALE','SCALE-SELECT'],description='Channel page scale row: stopped shows the applied slot; playing follows the active slot including a step-3 scale lock (with its exact phrase); stop restores the applied slot; global off lights only the locked step'),
  'M-SAVE-NAMED-001':dict(run=named_save_load,requirements=['SAVE-NAMED','SAVE-AUTO'],description='Default-name and typed-name saves through the native text entry; idle autosave never overwrites them; cancel writes nothing; overwrite replaces only its own name; loading each name restores its exact phrase'),
  'M-SAVE-002':dict(run=autosave_idle_lifecycle,requirements=['SAVE-AUTO','PERSIST-AUTO-001'],description='Idle autosave: none before 60 s, a grid press restarts the period, none while playing for 65 s with an edit, a save 60 s after Stop, and a fresh boot restores the edited phrase'),
  'M-OPT-ELEK-001':dict(run=elektron_program_changes,requirements=['OPT-ELEKTRON','SONG-ADVANCE','SONG-SLOTS'],description='Global length 4: Elektron program changes default Off sends none; On mirrors stopped slot selection and Play on channel 10, announces each next song slot before its first onset without duplicates, and follows the program-change channel setting'),

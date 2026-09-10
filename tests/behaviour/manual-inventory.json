@@ -6545,9 +6545,11 @@
         "CHEAT-ALL"
       ],
       "statement": "Channel scale row displays the active scale slot.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "All16 scales/channels; global/channel lock precedence; selected editor differs from playing; stopped state.",
+      "cases": [
+        "M-SCALE-DISPLAY-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-SCALE-DISPLAY-001 (E and D, 3 fresh D repeats): stopped row 3 lights the applied slot at 15 over 2; a step-3 channel scale lock does not change the stopped display; playing lights slot 3 from step 3 until the wrap (lock held by the default \"Scales lock until ptn end\") and slot 2 otherwise, confirmed by the exact phrase 62/64/68/69; stop restores the applied slot; global scale off lights nothing stopped and only the locked slot while playing. Removing the playing highlight is detected. Remaining: other channels, global scale-track locks, hold option Off, all 16 slots.",
       "oracles": [
         "Exact active-scale LED matched to independently expected MIDI pitches, not edited slot."
       ],
