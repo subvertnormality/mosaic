@@ -632,6 +632,15 @@
         "M-MAP-001"
       ],
       "summary": "Mapped relative increases were ignored after boot until a decrease fired, because mapping parameters defaulted to 1."
+    },
+    {
+      "id": "device-config-requires-id",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "device-config-requires-id.json",
+      "cases": [
+        "M-SETUP-002"
+      ],
+      "summary": "One device config entry without an id aborted Mosaic initialisation."
     }
   ]
 }

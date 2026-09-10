@@ -11,6 +11,7 @@ from channel_scale_display import channel_active_scale_display
 from tooltips import tooltip_messages
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping
+from device_configs import invalid_device_configs
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3225,6 +3226,8 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-SETUP-001':dict(run=lambda c:invalid_device_configs(c,'malformed'),requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='Malformed, empty and object-shaped config files beside a valid one: Mosaic boots, plays through the valid device, and the picker lists none of the invalid files'),
+ 'M-SETUP-002':dict(run=lambda c:invalid_device_configs(c,'missing-id'),requirements=['SETUP-DEVICE-INVALID'],description='A config entry without an id beside a valid one: Mosaic boots, plays through the valid device, and the entry is not offered'),
  'M-MAP-001':dict(run=midi_mapping,requirements=['MAP-CONTROL','MAP-ROUTING','MAP-RANGES'],description='Saved documented PMAP (in 1..2, out -1..1, accumulate): relative binary-offset CCs step the selected channel velocity mask, follow channel selection, and a fixed channel map ignores selection; exact velocities on both ports'),
  'M-SIN-001':dict(run=sinfonion_software,requirements=['SIN-SOFTWARE'],description='Norns2sinfonion port: exact init sequence; no traffic while stopped; channel 1-4 program changes per scale step following the applied root, global transpose and a scale-track lock'),
  'M-TOOLTIP-001':dict(run=tooltip_messages,requirements=['NAV-TOOLTIPS'],description='Bottom-screen tooltips for page changes, channel selection, record, memory apply/undo and transport, with replacement and clearing without input while stopped and playing; exact texts characterised'),

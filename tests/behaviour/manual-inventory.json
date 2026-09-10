@@ -6932,11 +6932,13 @@
       ],
       "statement": "Only device configurations copied into the project data/config directory appear in the device picker.",
       "cases": [
-        "M-XA-002-AUDIO",
-        "M-XA-001-JF"
+        "M-OPT-ELEK-001",
+        "M-SETUP-001",
+        "M-XA-001-JF",
+        "M-XA-002-AUDIO"
       ],
       "status": "unimplemented",
-      "domain": "Empty directory; one and multiple stock configurations; two isolated projects; restart after addition/removal.",
+      "domain": "Empty directory; one and multiple stock configurations; two isolated projects; restart after addition/removal. M-SETUP-001 and M-OPT-ELEK-001 boot seeded config directories and select their devices by picker name.",
       "oracles": [
         "Screen picker names and resulting MIDI routing; absence of unselected configurations."
       ],
@@ -6983,9 +6985,12 @@
         "MAN-007"
       ],
       "statement": "Invalid configuration files must not silently create a misleading working device.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Malformed JSON; wrong types; duplicate names; missing required fields; invalid bounds; unsupported fields.",
+      "cases": [
+        "M-SETUP-001",
+        "M-SETUP-002"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-SETUP-001/002 (E and D, 3 fresh D repeats each): malformed, empty and object-shaped files and an entry without an id sit beside a valid config; Mosaic boots, plays through the valid device and offers none of the invalid entries. Baseline defect: the missing id aborted init (fixed). Remaining: wrong field types, invalid bounds, duplicate ids/names, unsupported fields.",
       "oracles": [
         "Explicit load error or documented rejection; no partial device masquerading as valid. Establish current behaviour before prescribing a fix."
       ],

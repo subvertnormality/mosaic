@@ -1,0 +1,19 @@
+diff --git a/lib/devices/device_map.lua b/lib/devices/device_map.lua
+index 2f7fb27..b007de1 100644
+--- a/lib/devices/device_map.lua
++++ b/lib/devices/device_map.lua
+@@ -45,7 +45,13 @@ local function combine_json_files_into_table(directory)
+     for _, file_path in ipairs(files) do
+         local table_from_file = read_json_file(file_path)
+         if table_from_file then
+-          table.insert(devices, table_from_file[1])
++          local device = table_from_file[1]
++          -- Skip an entry that cannot be keyed or shown, as invalid JSON is skipped.
++          if type(device) == "table" and type(device.id) == "string" and type(device.name) == "string" then
++            table.insert(devices, device)
++          else
++            print("Error: device config needs a string id and name:", file_path)
++          end
+         end
+     end
+     return devices
