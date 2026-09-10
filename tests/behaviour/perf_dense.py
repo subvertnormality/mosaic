@@ -50,7 +50,7 @@ class ContainerDriver(driver.Driver):
     def finish(self):
         driver.write(self.out/'recipe.json',self.recipe);driver.write(self.out/'results.json',self.results)
 
-def build_project(d,channels):
+def build_project(d,channels,workload='dense'):
     d.tap(5,8);d.tap(1,1)                          # trig editor, pattern 1
     for x in range(1,17):d.tap(x,4)                # all 16 steps active
     d.tap(3,8);d.enc(1,4)                          # channel page, Device Config
@@ -59,13 +59,37 @@ def build_project(d,channels):
         d.enc(3,1);d.enc(2,1)                      # first device, then its MIDI channel
         if channel>1:d.enc(3,channel-1)
         d.key(3);d.tap(1,2);d.hold_tap((1,4),(16,4))
+        if workload=='slides':
+            # PERF-003: CC 1 locked 0 on step 1 and 127 on step 9, global slide on.
+            from cases import assign_trig_parameter
+            d.enc(1,-3);assign_trig_parameter(d,'CC 1')
+            for step,value in ((1,0),(9,127)):
+                d.action(type='grid',x=step,y=4,state=1)
+                try:d.elapse(.05);d.action(type='enc',n=3,delta=-126);d.elapse(.15);d.enc(3,value+1)
+                finally:d.action(type='grid',x=step,y=4,state=0)
+                d.elapse(.1)
+            d.key(3);d.enc(1,3)
     d.tap(1,1)
 
-def run_one(image,out,channels,repeat,seconds):
+def check_slides(emitted,ons,channels):
+    """Each channel's CC 1: 0 with step 1, a rising ramp, 127 with step 9, every cycle."""
+    checked=0
+    for channel in range(channels):
+        cc=[e for e in emitted if e['bytes'][:2]==[176+channel,1]]
+        notes=[e for e in ons if e['bytes'][0]==144+channel]
+        for cycle in range(len(notes)//16):
+            first,ninth=notes[16*cycle],notes[16*cycle+8]
+            ramp=[e['bytes'][2] for e in cc if first['index']-channels*2<e['index']<ninth['index']]
+            assert ramp and ramp[0]==0 and ramp[-1]==127 and ramp==sorted(ramp) and len(set(ramp))>=4,(channel+1,cycle,ramp)
+            checked+=1
+    assert checked>=channels,('No complete slide cycle',checked)
+    return checked
+
+def run_one(image,out,channels,repeat,seconds,workload='dense'):
     out.mkdir(parents=True);data=Path(tempfile.mkdtemp(prefix='perf-dense-data-'))
     name='mosaic-perf-'+uuid.uuid4().hex[:10];started=False
     code=Path(tempfile.mkdtemp(prefix='perf-dense-code-'))
-    result=dict(schema_version=1,workload='PERF-002',channels=channels,repeat=repeat,seconds=seconds,image=image,passed=False)
+    result=dict(schema_version=1,workload={'dense':'PERF-002','slides':'PERF-003'}[workload],channels=channels,repeat=repeat,seconds=seconds,image=image,passed=False)
     result['host_loadavg_before']=os.getloadavg() # shared host: record contention, never correct for it
     try:
         docker('run','-d','--name',name,'--cpus','0.5','--memory','768m','--memory-swap','768m','--cpuset-cpus','0',
@@ -83,7 +107,7 @@ def run_one(image,out,channels,repeat,seconds):
         port=int(docker('port',name,'8765/tcp').stdout.strip().rsplit(':',1)[1])
         http=Http(port,ready['token'],ready['session_id'])
         d=ContainerDriver(out,http)
-        build_project(d,channels)
+        build_project(d,channels,workload)
         recording=http.request('/performance/start',dict(period_ms=10,maximum_seconds=int(seconds+15)))
         time.sleep(1.0)                            # recorded settle: build work leaves the quota window
         http.action(dict(type='grid',x=1,y=8,state=1));http.action(dict(type='grid',x=1,y=8,state=0))
@@ -109,6 +133,7 @@ def run_one(image,out,channels,repeat,seconds):
             assert sorted(e['bytes'][0] for e in group)==[144+c for c in range(channels)],('Channels at step',index,[e['bytes'] for e in group])
             assert all(e['bytes'][1:]==[60,100] and e['port']==1 for e in group),('Bytes at step',index,[e['bytes'] for e in group])
         assert len(offs)==len(ons),('Unbalanced releases',len(ons),len(offs))
+        slide_cycles=check_slides(emitted,ons,channels) if workload=='slides' else None
         origin=steps[0][0]['monotonic_ns']
         errors=[e['monotonic_ns']-(origin+round(k*STEP*1e9)) for k,group in enumerate(steps) for e in group]
         service=[group[-1]['monotonic_ns']-group[0]['monotonic_ns'] for group in steps]
@@ -118,7 +143,7 @@ def run_one(image,out,channels,repeat,seconds):
         assert abs(len(steps)-expected_steps)<=2,('Step count',len(steps),expected_steps)
         driver.write(out/'samples.json',dict(recording=recording,samples=samples))
         result['host_loadavg_after']=os.getloadavg()
-        result.update(passed=bool(metrics['passed']),session_id=ready['session_id'],limits=recording['limits'],steps=len(steps),
+        result.update(slide_cycles_checked=slide_cycles,passed=bool(metrics['passed']),session_id=ready['session_id'],limits=recording['limits'],steps=len(steps),
             note_ons=len(ons),messages=len(emitted),metrics=metrics,throttling_workload=window,final_phase_error_ns=errors[-1])
         d.finish()
     except Exception as error:
@@ -132,6 +157,7 @@ def run_one(image,out,channels,repeat,seconds):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__,formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--workload',choices=('dense','slides'),default='dense')
     parser.add_argument('--image',default='monome-emulator:perf-recorder-02');parser.add_argument('--output',required=True)
     parser.add_argument('--channels',default='1,4,8,16');parser.add_argument('--repeats',type=int,default=3);parser.add_argument('--seconds',type=float,default=8)
     args=parser.parse_args()
@@ -139,8 +165,8 @@ def main():
     revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()
     dirty=subprocess.check_output(['git','diff','HEAD'],cwd=REPO)
     image_id=docker('image','inspect',args.image,'--format','{{.Id}}').stdout.strip()
-    rows=[run_one(args.image,root/('channels-%s-%d'%(n,r)),int(n),r,args.seconds) for n in args.channels.split(',') for r in range(1,args.repeats+1)]
-    report=dict(schema_version=1,workload='PERF-002',mosaic_revision=revision,dirty_patch_sha256=hashlib.sha256(dirty).hexdigest() if dirty else None,
+    rows=[run_one(args.image,root/('channels-%s-%d'%(n,r)),int(n),r,args.seconds,args.workload) for n in args.channels.split(',') for r in range(1,args.repeats+1)]
+    report=dict(schema_version=1,workload={'dense':'PERF-002','slides':'PERF-003'}[args.workload],mosaic_revision=revision,dirty_patch_sha256=hashlib.sha256(dirty).hexdigest() if dirty else None,
                 emulator=str(EMULATOR),image=args.image,image_id=image_id,argv=sys.argv[1:],passed=all(r['passed'] for r in rows),runs=rows)
     driver.write(root/'result.json',report);print(root/'result.json')
     return 0 if report['passed'] else 1
