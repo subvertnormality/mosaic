@@ -623,6 +623,15 @@
         }
       ],
       "source_observation": "step.process_elektron_program_change sends one change per Elektron-device channel through devices[1].midi_device; multi-port and duplicate behaviour are not yet exercised."
+    },
+    {
+      "id": "midi-map-neutral-default",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "midi-map-neutral-default.json",
+      "cases": [
+        "M-MAP-001"
+      ],
+      "summary": "Mapped relative increases were ignored after boot until a decrease fired, because mapping parameters defaulted to 1."
     }
   ]
 }

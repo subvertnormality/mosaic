@@ -1,0 +1,54 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "bd467f4",
+  "file": "lib/m_midi.lua",
+  "before_sha256": "bf339dc7fbbae4dba3d655f20cdeee3a0d3472ce8636a7b44a37052be7db281e",
+  "after_sha256": "aaf2dbade2add9cca4d4720f27fa81890ed6721be78f4a60267189604f01b396",
+  "patch": "0087-midi-map-neutral-default.patch",
+  "patch_sha256": "c68f3ca3480ee14b44b76497ac13eef2f66c909f7ab496c701dacf163ed7a064",
+  "regression": "M-MAP-001",
+  "baseline": [
+    {
+      "run_id": "ed13e54a6bbb4036a30e89efce270bd7",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "80022cb33250f2283cd844f3d9b26c4ac2ac1d58b28cc624d1cf22f3ec428e40",
+      "failure": "('selected-ch1-plus-11', 1, [127, 117, 107, 97], 10)"
+    },
+    {
+      "run_id": "36960fd06fa4489a941316fe94bf14a1",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "49a33700b74ff1a6125d25f5dc0eeab5d609b07833bff50aed706103635501d5",
+      "failure": "('selected-ch1-plus-11', 1, [127, 117, 107, 97], 10)"
+    }
+  ],
+  "rationale": "Every MIDI-mapping parameter was declared with default 1. norns Control:set_raw fires the action only when the raw value changes, and Mosaic resets the parameter to 0 only inside that action, so increases after boot mapped to 1 again and were swallowed until a decrease fired. A neutral default of 0 makes the first increase act.",
+  "oracle": "README MIDI Controller Mapping (documented map settings; relative binary-offset control); pinned norns core/menu/params.lua accumulate path and core/params/control.lua set_raw.",
+  "validation": [
+    {
+      "run_id": "cc6d9e44a86c4186992fcc70314486c8",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "85df1109d95e5ed531ac331e0ccc968f47b21a427af0387d70fe966cefa46d8c",
+      "failure": null
+    },
+    {
+      "run_id": "796e948a51ad44e6945902970cd3dfa5",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "9b64fd66cc47e67062258bec406e985026592100ce725e1f7b7e4aee13ab0667",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-980804ac939c46f7bc504a00d404ee5f",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "1a118dbf5ba4cfc0eeb3e95e2a320ec4339d1636bd33b06275fc1c7ac7717c94",
+      "failure": null,
+      "normalized_sha256": "89ad6bcce9a5fbe3375a04f65b37cf4f2eba81dc5dce5a81ceb095d7ef634a7c"
+    }
+  ],
+  "limitations": "Covers velocity masks only; trig-param, other mask and memory maps share the declaration and are fixed by the same change but not yet exercised.",
+  "upstream_merged": false
+}

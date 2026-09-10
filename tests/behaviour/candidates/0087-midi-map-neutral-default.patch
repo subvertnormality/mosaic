@@ -1,0 +1,58 @@
+diff --git a/lib/m_midi.lua b/lib/m_midi.lua
+index a6aac20..43b35fb 100644
+--- a/lib/m_midi.lua
++++ b/lib/m_midi.lua
+@@ -478,7 +478,7 @@ function m_midi.set_up_midi_mapping_params()
+     params:add_control(
+       "sel_ch_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "ch1" or param == 6 and "ch2" or param == 7 and "ch3" or param == 8 and "ch4"),
+       "Selected Ch. " .. (param == 1 and "Trig" or param == 2 and "Note" or param == 3 and "Velocity" or param == 4 and "Length" or param == 5 and "Chord 1" or param == 6 and "Chord 2" or param == 7 and "Chord 3" or param == 8 and "Chord 4"),
+-      controlspec.new(-1,1, 'lin', 1, 1, '', 1, false), 
++      controlspec.new(-1,1, 'lin', 1, 0, '', 1, false), 
+       function() return "MAP" end
+     )
+     params:set_action(
+@@ -533,7 +533,7 @@ function m_midi.set_up_midi_mapping_params()
+       params:add_control(
+         "ch" .. channel .. "_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "chd1" or param == 6 and "chd2" or param == 7 and "chd3" or param == 8 and "chd4"),
+         "Ch." .. channel .. " " .. (param == 1 and "Trig" or param == 2 and "Note" or param == 3 and "Vel" or param == 4 and "Len" or param == 5 and "Chd 1" or param == 6 and "Chd 2" or param == 7 and "Chd 3" or param == 8 and "Chd 4") .. " Mask",
+-        controlspec.new(-1,1, 'lin', 1, 1, '', 1, false),
++        controlspec.new(-1,1, 'lin', 1, 0, '', 1, false),
+         function() return "MAP" end
+       )
+       params:set_action(
+@@ -587,7 +587,7 @@ function m_midi.set_up_midi_mapping_params()
+     params:add_control(
+       "sel_ch_trig_param_" .. param,
+       "Selected Ch. Trig Param " .. param, 
+-      controlspec.new(-1,1, 'lin', 1, 1, '', 1, false),
++      controlspec.new(-1,1, 'lin', 1, 0, '', 1, false),
+       function() return "MAP" end
+     )
+     params:set_action(
+@@ -629,7 +629,7 @@ function m_midi.set_up_midi_mapping_params()
+       params:add_control(
+         "ch_" .. channel .. "_trig_param_" .. param,
+         "Ch." .. channel .. " Trig Param " .. param, 
+-        controlspec.new(-1,1, 'lin', 1, 1, '', 1, false),
++        controlspec.new(-1,1, 'lin', 1, 0, '', 1, false),
+         function() return "MAP" end
+       )
+       params:set_action(
+@@ -669,7 +669,7 @@ function m_midi.set_up_midi_mapping_params()
+   params:add_control(
+     "sel_ch_memory",
+     "Selected Ch. Memory",
+-    controlspec.new(-1,1, 'lin', 1, 1, '', 1, false),
++    controlspec.new(-1,1, 'lin', 1, 0, '', 1, false),
+     function() return "MAP" end
+   )
+   params:set_action(
+@@ -706,7 +706,7 @@ function m_midi.set_up_midi_mapping_params()
+     params:add_control(
+       "ch" .. channel .. "_memory",
+       "Ch." .. channel .. " Memory",
+-      controlspec.new(-1,1, 'lin', 1, 1, '', 1, false),
++      controlspec.new(-1,1, 'lin', 1, 0, '', 1, false),
+       function() return "MAP" end
+     )
+     params:set_action(

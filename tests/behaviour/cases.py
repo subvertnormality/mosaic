@@ -10,6 +10,7 @@ from named_save import named_save_load
 from channel_scale_display import channel_active_scale_display
 from tooltips import tooltip_messages
 from sinfonion_software import sinfonion_software
+from midi_mapping import midi_mapping
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3224,6 +3225,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-MAP-001':dict(run=midi_mapping,requirements=['MAP-CONTROL','MAP-ROUTING','MAP-RANGES'],description='Saved documented PMAP (in 1..2, out -1..1, accumulate): relative binary-offset CCs step the selected channel velocity mask, follow channel selection, and a fixed channel map ignores selection; exact velocities on both ports'),
  'M-SIN-001':dict(run=sinfonion_software,requirements=['SIN-SOFTWARE'],description='Norns2sinfonion port: exact init sequence; no traffic while stopped; channel 1-4 program changes per scale step following the applied root, global transpose and a scale-track lock'),
  'M-TOOLTIP-001':dict(run=tooltip_messages,requirements=['NAV-TOOLTIPS'],description='Bottom-screen tooltips for page changes, channel selection, record, memory apply/undo and transport, with replacement and clearing without input while stopped and playing; exact texts characterised'),
  'M-SCALE-DISPLAY-001':dict(run=channel_active_scale_display,requirements=['CH-ACTIVE-SCALE-DISPLAY','LOCK-SCALE','SCALE-SELECT'],description='Channel page scale row: stopped shows the applied slot; playing follows the active slot including a step-3 scale lock (with its exact phrase); stop restores the applied slot; global off lights only the locked step'),

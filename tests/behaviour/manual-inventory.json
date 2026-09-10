@@ -6853,9 +6853,11 @@
         "MAN-010"
       ],
       "statement": "Native Norns MIDI Map supports relative binary-offset controls.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Input1/2 and other raw values; min/max; repeated acceleration around0.15s; wrong port/channel; PMAP save/reload.",
+      "cases": [
+        "M-MAP-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-MAP-001 (E and D, 3 fresh D repeats), saved PMAP: Relative binary-offset CCs (65 up, 63 and 0 down) step the mapped velocity mask by one per event when slower than 0.15 s. Baseline defect fixed (midi-map-neutral-default). Remaining: acceleration under 0.15 s, other mask/trig-param/memory maps.",
       "oracles": [
         "Exact public parameter changes and MIDI effects, UI mapping retained; no unintended targets."
       ],
@@ -6877,9 +6879,11 @@
         "MAN-010"
       ],
       "statement": "Selected-channel mappings follow selection; fixed-channel mappings stay bound.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Every16 channels; selected changes during stream; trig params/masks/memory; simultaneous mappings.",
+      "cases": [
+        "M-MAP-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-MAP-001 (E and D, 3 fresh D repeats), saved PMAP: The selected-channel map follows channel selection (ch1 then ch2) while the fixed Ch.2 map ignores selection; exact velocities on ports 1 and 2. Remaining: all 16 channels and map types.",
       "oracles": [
         "Target-only screen and MIDI change with independent expected per-channel results."
       ],
@@ -6901,9 +6905,11 @@
         "MAN-010"
       ],
       "statement": "Documented map uses input1..2, output-1..1 and accumulation enabled.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Endpoints; accumulated bounds; reset/remap; alternate mapping conflict and input source isolation.",
+      "cases": [
+        "M-MAP-001"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-MAP-001 (E and D, 3 fresh D repeats), saved PMAP: The documented settings (in 1..2, out -1..1, accumulate on) are used as the saved PMAP and produce single-step relative control in both directions. Remaining: other ranges shown not to work, accumulator start value from a fresh learn.",
       "oracles": [
         "Native mapping configuration plus exact increments and resulting musical output."
       ],
