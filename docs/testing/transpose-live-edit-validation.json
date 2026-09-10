@@ -1,0 +1,27 @@
+{
+  "scope": "Global transpose edits during sounding notes",
+  "source_revision": "50c6e3a plus recorded working-tree diff",
+  "source_sha256": {
+    "tests/behaviour/cases.py": "382bdb3b527d3f3100adf429a769bcb766b0ef8dae08662848c27fb5f603b3b1",
+    "tests/behaviour/manual-inventory.json": "555e72ab2d0a14f7343b7bf83942574d83b06149c306179563b002a25cfffd61"
+  },
+  "native_behavior": {
+    "controlled-experimental": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/31f951e84e76437b90bb43dc78b5bc0d/manifest.json",
+      "sha256": "f82551ec6fa73f372ea83f70b14b9cf3e98ef218f4b1510b02c34dcc4a40df44",
+      "run_id": "31f951e84e76437b90bb43dc78b5bc0d"
+    },
+    "real-time": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/e7989f7af30d4b00af71028331f7d819/manifest.json",
+      "sha256": "8ceb090047612090b422fb82fd61479f51fe58e666fb17eed075ff559a4e60ad",
+      "run_id": "e7989f7af30d4b00af71028331f7d819"
+    }
+  },
+  "production_change": false,
+  "prior_checkpoint": {
+    "commit": "50c6e3a",
+    "lua": "530/530",
+    "python_timing_oracles": "21/21"
+  },
+  "oracle": "Two public scale-page edits occur inside held-note lifetimes; all MIDI data, program groups, releases, gates, transport, count and phase are asserted."
+}

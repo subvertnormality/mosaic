@@ -1,0 +1,29 @@
+{
+  "started_at": "2026-09-10T05:45:02.280148+00:00",
+  "packet_sha256": "94b4da9b75534b48831a85219fe568866cf97b86605c72b9e9f48e7ad6d3ddde",
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Global transpose live-edit timing review\n\nUse Codex only. Read-only local commands are allowed; do not edit or launch tests/runtime processes.\n\nReview M-TRANS-009, its inventory mapping and `docs/testing/transpose-live-edit-validation.json`. Through the native grid path, it starts playback on the scale page, waits for a real onset, then changes global transpose0\u2192+1 while that note sounds. After at least five onsets it changes +1\u2192-12 inside another sounding note. It classifies every captured onset by its timestamp relative to the completed input windows and rejects an onset inside an ambiguous window. It requires one and only one spanning note pair per edit, with release after input completion, unchanged full one-step gates, exact sequential base+transpose pitches and velocities, matching release identities, exact per-onset harmonic-sync program bytes including64/65/52 transpose values, ordered program ownership, complete transport/event count, Stop release bracketing and accumulated1/6-second phase. Controlled and real-time native runs pass. Production is unchanged from commit50c6e3a, whose checkpoint passed530 Lua and21 focused Python tests.\n\nChallenge whether press/release timing and chosen event clocks are comparable, classification proves next-onset semantics without adapting expected results to a bug, spanning-pair selection detects cuts/retriggers, the exact program oracle is well associated, real-time tolerances are justified, and inventory wording is honest. Return ACCEPTED or CHANGES REQUIRED with concrete findings. Keep unrelated transpose/song and manual domains outside this scoped verdict.",
+    "files": [
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "User recipe and timing oracle"
+      },
+      {
+        "path": "tests/behaviour/manual-inventory.json",
+        "reason": "Manual mapping"
+      },
+      {
+        "path": "docs/testing/transpose-live-edit-validation.json",
+        "reason": "Bound native evidence"
+      }
+    ],
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**ACCEPTED.** The implementation and bound native evidence support next-onset transpose semantics for these two sounding-note edits; I found no blocking defect within scope.\n\n- **Timing is comparable.** Grid short presses execute on release ([m_grid.lua:238](/home/andy/projects/mosaic-behaviour-tests/lib/m_grid.lua:238)). Native acknowledgements follow input dispatch, and native emissions use `CLOCK_MONOTONIC`, matching Python\u2019s clock on this host; controlled emissions use the explicitly advanced logical clock. The recipe brackets both press and release ([cases.py:831](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:831)). In the real-time capture, the edited notes released approximately 117 ms and 100 ms after native input completion.\n\n- **Classification does not learn expected pitches from output.** It rejects every onset inside either input window, then applies literal `0/+1/-12` offsets to the sequential base pitches and velocities ([cases.py:844](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:844)). Delayed transpose application fails the first subsequent onset; skipped or extra onsets also face the accumulated phase oracle.\n\n- **Cuts, retriggers and program misassociation are constrained.** Complete pairing rejects unmatched releases and overlapping same-pitch retriggers. Exactly one pair must span each entire edit, with full gates checked except the final Stop-truncated note ([cases.py:854](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:854)). Four exact program messages per onset\u2014including transpose bytes `64/65/52`\u2014must precede their owner, follow the preceding onset, and satisfy timestamp bounds ([cases.py:863](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:863)).\n\n- **Evidence and wording hold up.** Both source hashes, both manifests and every listed artifact hash match the [validation record](/home/andy/projects/mosaic-behaviour-tests/docs/testing/transpose-live-edit-validation.json:4). Each run captures 11 onsets, 11 releases and 72 playback events. Real-time maximum phase/gate errors are 0.870/0.895 ms; program lead is 0.412 ms. The established 10 ms jitter allowance and tighter 2 ms program bound are reasonable for this scoped check, though they do not prove zero jitter. Inventory retains `partial-domain-coverage` and transport `in_progress`. Git confirms no production changes since `50c6e3a`.\n\n**CONFIDENCE: High.** No tests or runtime processes were launched; controlled evidence remains explicitly diagnostic, and sub-tolerance timing defects are outside this verdict.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a089d9-1f6a-75c2-804b-18440ba4019f` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T05:47:45.959801+00:00"
+}

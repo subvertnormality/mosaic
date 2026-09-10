@@ -818,6 +818,67 @@ def transpose_song_persistence(c):
         loaded.finish()
 
 
+def transpose_global_live_edit(c):
+    """Live global edits affect the next onset without cutting the held note."""
+    import time
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    c.configure();c.tap(4,8)
+    capture=MidiWindow(c.snapshot()['midi_count'])
+    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=1)
+    c.elapse(.04)
+    def now():
+        return c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
+    edit1_lower=now();c.action(type='grid',x=16,y=8,state=1);c.action(type='grid',x=16,y=8,state=0);edit1_upper=now()
+    c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=5)
+    c.elapse(.04)
+    before_second=len(capture.note_ons());assert 5<=before_second<=6
+    edit2_lower=now();c.action(type='grid',x=9,y=8,state=1);c.action(type='grid',x=9,y=8,state=0);edit2_upper=now()
+    c.elapse(1);capture.extend(c.snapshot())
+    c.action(type='grid',x=1,y=8,state=1)
+    stop_lower=now();c.action(type='grid',x=1,y=8,state=0);stop_upper=now()
+    c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+    notes=capture.note_ons();assert len(notes)>=10
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    edits=((edit1_lower,edit1_upper,1),(edit2_lower,edit2_upper,-12))
+    transposes=[]
+    for note in notes:
+        stamp=note[field]
+        assert not any(lower<=stamp<=upper for lower,upper,value in edits),'Onset occurred inside edit-observation window'
+        transposes.append(0 if stamp<edit1_lower else 1 if stamp<edit2_lower else -12)
+    assert 0 in transposes and 1 in transposes and -12 in transposes
+    bases=(60,62,64,65);velocities=(127,117,107,97)
+    expected=[(1,[144,bases[i%4]+value,velocities[i%4]]) for i,value in enumerate(transposes)]
+    assert [(e['port'],e['bytes']) for e in notes]==expected
+    pairs=note_pairs(capture.events);assert len(pairs)==len(notes) and [on for on,off in pairs]==notes
+    assert all((off['port'],off['bytes'])==(1,[128,on['bytes'][1],on['bytes'][2]]) for on,off in pairs)
+    assert_durations(c,notes[:-1],[1]*(len(notes)-1),events=capture.events)
+    for lower,upper,value in edits:
+        candidates=[pair for pair in pairs if pair[0][field]<lower<pair[1][field]]
+        assert len(candidates)==1 and candidates[0][1][field]>upper
+    nonnotes=[e for e in capture.events if e['bytes'][0]&240 not in (128,144)]
+    assert [(e['port'],e['bytes']) for e in nonnotes[:3]]==[(1,[250]),(2,[250]),(3,[250])]
+    assert [(e['port'],e['bytes']) for e in nonnotes[-3:]]==[(1,[252]),(2,[252]),(3,[252])]
+    programs=nonnotes[3:-3];assert len(programs)==4*len(notes)
+    wanted_programs=[]
+    for value in transposes:wanted_programs.extend(([192,0],[193,0],[194,3],[195,value+64]))
+    assert [(e['port'],e['bytes']) for e in programs]==[(3,b) for b in wanted_programs]
+    for i,note in enumerate(notes):
+        group=programs[4*i:4*i+4]
+        assert group[-1]['index']<note['index'] and (i==0 or group[0]['index']>notes[i-1]['index'])
+        deltas=[note[field]-e[field] for e in group]
+        assert (deltas==[0]*4 if c.clock_mode=='controlled-experimental' else all(0<=d<=2_000_000 for d in deltas))
+    assert len(capture.events)==6*len(notes)+6
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    errors=[(note[field]-notes[0][field])/1e9-i/6 for i,note in enumerate(notes)]
+    assert max(abs(error) for error in errors)<=tolerance,errors
+    assert stop_lower<=pairs[-1][1][field]<=stop_upper+int(tolerance*1e9)
+    c.results.append(dict(kind='transpose-global-live-edit',onsets=len(notes),releases=len(pairs),
+                          transposes=transposes,second_edit_after_onsets=before_second,
+                          maximum_phase_error_seconds=max(abs(error) for error in errors),passed=True))
+
+
 def transpose_lock_domain(c):
     """Walk every transpose value exposed by the native scale-page fader."""
     c.configure(); c.tap(4,8)
@@ -3750,6 +3811,7 @@ CASES={
  'M-TIME-001':dict(run=integral_clock_divisions,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All integral-pulse clock ratios through /16 with exact full-phrase phase and duration checks'),
  'M-TIME-002':dict(run=lambda c:integral_clock_divisions(c,True),requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
  'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
+ 'M-TRANS-009':dict(run=transpose_global_live_edit,requirements=['TRANSPOSE-GLOBAL','NAV-TRANSPORT'],description='Two global transpose edits during sounding notes preserve current pitch/gate and change the next onset, exact harmonic-sync programs, releases and phase'),
  'M-TRANS-008':dict(run=transpose_song_persistence,requirements=['TRANSPOSE-GLOBAL','SONG-SLOTS','SAVE-AUTO','PERSIST-AUTO-001'],description='Independent +5/-7 copied song transposes survive the real autosave deadline and a fresh native process with exact restored MIDI and slot LEDs'),
  'M-TRANS-007':dict(run=transpose_song_copy_isolation,requirements=['TRANSPOSE-GLOBAL','SONG-SLOTS','SONG-ADVANCE','OPT-SONG-MODE'],description='Copy +5 song transpose, edit copy to -7, then cross live 16-step song boundaries with exact MIDI, slot LEDs, ownership and phase'),
  'M-TRANS-006':dict(run=transpose_global_domain,requirements=['TRANSPOSE-GLOBAL'],description='All25 global transpose values selected through the scale-page fader with exact MIDI, gates and accumulated phase'),

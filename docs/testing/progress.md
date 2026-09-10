@@ -1253,3 +1253,16 @@ oracle corrections. The final source-bound snapshot passes530 Lua tests and21
 focused Python timing oracles. Codex review requested stronger copy-inheritance,
 program-payload and provenance checks; its focused follow-up conceded all three
 findings. Global-transpose live-edit timing remains pending.
+
+
+## Global transpose live-edit timing
+
+M-TRANS-009 performs 0 to +1 and +1 to -12 global transpose edits through the
+scale-page grid while notes are sounding. Each edit is bracketed from first
+press through final release. The sounding note retains its original pitch and
+full gate; the first onset after the completed gesture uses the new transpose.
+Both clock lanes validate literal pitch/velocity sequences, exact harmonic-sync
+program groups with transpose64/65/52, complete onset/release ownership,
+three-port transport, Stop cleanup, event-count identity and accumulated phase.
+Controlled and real-time runs each capture11 balanced onsets. Codex accepted the
+timing and ownership oracle with high confidence. No production code changed.
