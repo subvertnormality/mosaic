@@ -3085,7 +3085,8 @@
         "M-MERGE-019",
         "M-MERGE-023",
         "M-MERGE-043",
-        "M-MERGE-044"
+        "M-MERGE-044",
+        "M-TRANS-005"
       ],
       "status": "partial-domain-coverage",
       "domain": "Equal/asymmetric/negative values; clipping; assignment order. Native009/010 verify positive integer arithmetic and unassigned velocity-priority isolation; broader value/scale domains remain pending. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -3119,7 +3120,8 @@
         "M-MERGE-019",
         "M-MERGE-023",
         "M-MERGE-043",
-        "M-MERGE-044"
+        "M-MERGE-044",
+        "M-TRANS-005"
       ],
       "status": "partial-domain-coverage",
       "domain": "Asymmetric/equal/negative values separating competing formulas. M-MERGE-014/015 validate signed half/non-half means, equal/asymmetric inputs and reversed assignment order in both modes. Extreme and full scale domains remain pending. M-MERGE-016/017/018 validate editor extrema and signed pentatonic octave crossings in both modes; all-scale and cross-feature domains remain pending. M-MERGE-019 validates all ten scale types across three numeric modes with pentatonic off; pentatonic/root/rotation combinations remain pending.",
@@ -5351,7 +5353,8 @@
         "M-MERGE-043",
         "M-MERGE-044",
         "M-SCALE-004",
-        "M-TRANS-004"
+        "M-TRANS-004",
+        "M-TRANS-005"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 slots; same/different editing vs applied slot; long threshold; editing currently used scale and saving.",
@@ -5739,7 +5742,8 @@
         "M-SCALE-002",
         "M-RANGE-GLOBAL-004",
         "M-SCALE-004",
-        "M-TRANS-004"
+        "M-TRANS-004",
+        "M-TRANS-005"
       ],
       "status": "partial-domain-coverage",
       "domain": "Both option values; probability0/100; active/rest steps; current-step lock; channel/global coprime lengths; all scale slots.",
@@ -5768,10 +5772,11 @@
         "M-TRANS-001",
         "M-TRANS-002",
         "M-TRANS-003",
-        "M-TRANS-004"
+        "M-TRANS-004",
+        "M-TRANS-005"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-TRANS-001 validates all25 advertised -12..+12 values, explicit-zero distinction and K2 clear in both clocks. M-TRANS-002 composes endpoint/zero locks across wrap with saved scale transpose, overridden song transpose and channel octave. M-TRANS-003 clears a future wrap lock during playback with complete owner accounting. M-TRANS-004 composes two-pattern Average merging with a four-step global D-minor scale lock, root D, saved scale transpose+3 and -12/zero/+12 step locks; it proves scale-track reset and step3 transpose persistence into unlocked step4. Remaining: additional scale/root/rotation choices, octave/MIDI clipping boundaries, other merge modes, channel/source reassignment, song copy and persistence.",
+      "domain": "M-TRANS-001 validates all25 advertised -12..+12 values, explicit-zero distinction and K2 clear in both clocks. M-TRANS-002 composes endpoint/zero locks across wrap with saved scale transpose, overridden song transpose and channel octave. M-TRANS-003 clears a future wrap lock during playback with complete owner accounting. M-TRANS-004 composes two-pattern Average merging with a four-step global D-minor scale lock, root D, saved scale transpose+3 and -12/zero/+12 step locks; it proves scale-track reset and step3 transpose persistence into unlocked step4. M-TRANS-005 composes extreme Higher/Lower merges with channel octave, saved scale transpose, a scale lock and step transpose; final MIDI pitches below0 and above127 clamp at the protocol boundary with complete ownership and phase. Remaining: additional scale/root/rotation choices, other merge modes, channel/source reassignment, song copy and persistence.",
       "oracles": [
         "Independent pitch/phase timeline and restored transpose after clear."
       ],
@@ -5800,7 +5805,8 @@
         "M-PATCH-041",
         "M-PATCH-042",
         "M-PATCH-043",
-        "M-PATCH-044"
+        "M-PATCH-044",
+        "M-TRANS-005"
       ],
       "status": "in_progress",
       "domain": "All octave options; pitch boundaries; strum pending notes; transpose/scale pairs. M-OCT-001/002 validate five global values and all25 global/step pairs, zero-vs-absent locks and clearing in both modes. Channels, pitch bounds and playing edits remain required. M-OCT-003 validates all64 octave locks against both global extremes and channel-wide clear in both modes. Other channels, pitch bounds, pending voices and mixed-lock interactions remain required.",

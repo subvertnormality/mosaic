@@ -207,6 +207,92 @@ def merge_transpose_scale_lock(c):
                           maximum_phase_error_seconds=max(abs(error) for error in errors),passed=True))
 
 
+def transpose_midi_boundaries(c):
+    """Clamp composed musical pitch to the MIDI 0..127 wire domain."""
+    from cases import assert_durations
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    sources=[(-7,13,-7,-7),(13,-7,-7,-7)]
+    c.configure(); c.tap(5,8)
+    for slot,values in enumerate(sources,1):
+        c.tap(slot,1)
+        if slot>1:
+            for x in range(1,5): c.tap(x,4)
+        c.tap(5,8)
+        for x,degree in enumerate(values,1):
+            button=16 if degree<0 else 14
+            c.action(type='grid',x=button,y=8,state=1)
+            try: c.elapse(1.2)
+            finally: c.action(type='grid',x=button,y=8,state=0)
+            c.elapse(.06)
+            c.tap(x,-degree if degree<0 else 14-degree)
+        c.tap(3,8); c.tap(5,8)
+    c.tap(3,8); c.tap(2,2)
+    c.tap(14,8); c.tap(14,8); c.hold_tap((16,8),(1,2))
+    c.tap(15,8)  # Average -> Higher.
+
+    def set_scale_transpose(delta,lock=False):
+        c.tap(4,8)
+        c.action(type='key',n=1,state=1)
+        try: c.elapse(.3); c.tap(1,3)
+        finally: c.action(type='key',n=1,state=0)
+        c.enc(2,2); c.enc(3,delta); c.key(3); c.enc(2,-2)
+        if lock: c.hold_tap((1,4),(1,3))
+
+    def play(mode,pitches,unbounded):
+        velocities=(127,117,107,97); before=c.snapshot()
+        if mode=='higher':
+            startup=[(3,[192,0]),(3,[193,0]),(3,[194,0]),(3,[195,64]),(3,[196,0]),
+                     (3,[197,0]),(3,[198,0]),(3,[199,0]),(3,[200,64]),(3,[201,11])]
+            assert before['midi_count']==10
+            assert [(e['port'],e['bytes']) for e in before['midi']]==startup
+        capture=MidiWindow(before['midi_count'])
+        c.action(type='grid',x=1,y=8,state=1); c.action(type='grid',x=1,y=8,state=0)
+        c.elapse(4/3-.1)
+        c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=9,timeout=4)
+        c.action(type='grid',x=1,y=8,state=1)
+        stop_lower=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
+        c.action(type='grid',x=1,y=8,state=0)
+        stop_upper=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
+        c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        notes=capture.note_ons(); assert len(notes)==9
+        wanted=[(1,[144,pitches[i%4],velocities[i%4]]) for i in range(9)]
+        assert [(event['port'],event['bytes']) for event in notes]==wanted
+        pairs=note_pairs(capture.events); assert len(pairs)==len(notes)==9
+        assert [on for on,off in pairs]==notes
+        assert all((off['port'],off['bytes'])==(1,[128,on['bytes'][1],on['bytes'][2]]) for on,off in pairs)
+        assert_durations(c,notes[:8],[1]*8,events=capture.events)
+        nonnotes=[event for event in capture.events if event['bytes'][0]&240 not in (128,144)]
+        assert [(e['port'],e['bytes']) for e in nonnotes[:3]]==[(1,[250]),(2,[250]),(3,[250])]
+        assert [(e['port'],e['bytes']) for e in nonnotes[-3:]]==[(1,[252]),(2,[252]),(3,[252])]
+        programs=nonnotes[3:-3]
+        program_value=88 if mode=='higher' else 40
+        program_group=[(3,[192,0]),(3,[193,0]),(3,[194,3]),(3,[195,program_value])]
+        assert [(e['port'],e['bytes']) for e in programs]==program_group*9
+        assert len(capture.events)==60,'Extra or missing note/program/transport event'
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        errors=[(note[field]-notes[0][field])/1e9-i/6 for i,note in enumerate(notes)]
+        assert max(abs(error) for error in errors)<=tolerance,errors
+        assert stop_lower<=pairs[-1][1][field]<=stop_upper+int(tolerance*1e9)
+        c.results.append(dict(kind='transpose-midi-boundary',mode=mode,sources=sources,
+                              unbounded=list(unbounded),expected=list(pitches),onsets=9,releases=9,
+                              program_changes=36,program_group=program_group,
+                              excluded_script_start_events=10 if mode=='higher' else 0,
+                              transport_events=6,total_events=60,
+                              maximum_phase_error_seconds=max(abs(error) for error in errors),passed=True))
+
+    # Higher degrees [23,23,-7,-7] map to [100,100,48,48]. Channel
+    # octave +2, scale +12 and step +12 add 48 semitones.
+    c.tap(12,8); set_scale_transpose(12,lock=True); c.hold_tap((1,4),(15,8)); c.tap(3,8)
+    play('higher',(127,127,96,96),(148,148,96,96))
+
+    # Lower degrees [-17,-17,-7,-7] map to [31,31,48,48]. Reversing
+    # octave, scale and step transpose subtracts 48 semitones.
+    c.tap(8,8); set_scale_transpose(-24); c.hold_tap((1,4),(9,8)); c.tap(3,8); c.tap(15,8)
+    play('lower',(0,0,0,0),(-17,-17,0,0))
+
+
 def merge_mode_cycle(c,field):
     from cases import assert_durations
     assert field in ('velocity','length')

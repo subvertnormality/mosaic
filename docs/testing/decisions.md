@@ -312,3 +312,8 @@ an explicit pending policy, not a defect allowance for other MIDI behavior.
 ## 2026-09-10 — Step transpose locks use the scale page's full range
 +
 +The public fader offers -12 through +12 and the manual says a held step accepts the desired displayed value. Native M-TRANS-001 independently expects semitone addition and retained the stock failure where -12 became -7. The smallest candidate changes only the model clamp from +/-7 to +/-12 and adds unit plus native behavior regressions. Values outside the UI range remain clamped to the nearest public endpoint.
+
+
+## 2026-09-10 — Clamp composed notes at the final MIDI boundary
+
+Scale-relative note merging deliberately permits degrees beyond the editor range. Combining those results with channel octave, scale transpose and step transpose can produce note numbers below 0 or above 127. Passing those numbers to norns creates malformed MIDI data bytes. Normalize only in `m_midi.note_on` and `m_midi.note_off`, after all musical transformations and before ownership accounting and wire output. This preserves non-MIDI players and covers roots, chords and arpeggios that are computed after the main step pitch. Distinct internal notes that meet at 0 or 127 retain one emitted release per onset. The Digitakt NRPN exception does not apply to note bytes or any other MIDI behavior.

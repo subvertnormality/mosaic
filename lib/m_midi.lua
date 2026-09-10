@@ -280,6 +280,9 @@ end
 
 function m_midi:note_on(note, velocity, channel, device)
   if midi_devices[device] ~= nil then
+    -- Composed scale/chord/merge/octave operations may exceed MIDI's
+    -- seven-bit note domain. Normalize at the final MIDI-only boundary.
+    note = fn.constrain(0, 127, note)
     -- Initialize tables if necessary
     if not self.note_counts[device] then
       self.note_counts[device] = {}
@@ -301,6 +304,8 @@ end
 
 function m_midi:note_off(note, velocity, channel, device)
   if midi_devices[device] ~= nil then
+    -- Use the same normalized key as note_on so ownership cannot strand.
+    note = fn.constrain(0, 127, note)
     -- Check if the note is currently on
     if self.note_counts[device] and self.note_counts[device][channel] and self.note_counts[device][channel][note] then
       -- Decrement the note count
@@ -372,9 +377,11 @@ function m_midi:all_notes_off()
       for channel, notes in pairs(channels) do
         for note, count in pairs(notes) do
           if count > 0 then
-            -- Send Note Off for the active note
-            midi_devices[device]:note_off(note, 0, channel)
-            -- Reset the note count for this note
+            -- Preserve one release for every owned onset, including distinct
+            -- internal notes that clamp to the same MIDI endpoint.
+            for _ = 1, count do
+              midi_devices[device]:note_off(note, 0, channel)
+            end
             self.note_counts[device][channel][note] = nil
           end
         end

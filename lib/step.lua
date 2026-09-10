@@ -847,6 +847,7 @@ function step.handle(c, current_step)
       note = fixed_note
     end
 
+
     local device = device_map.get_device(devices.device_map)
     if device.id == "none" then
       return
