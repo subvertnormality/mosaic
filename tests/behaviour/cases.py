@@ -18,6 +18,7 @@ from step_slides import step_slide_variants
 from composition_workflow import composition_workflow
 from song_mode_flow import song_mode_flow
 from endurance import endurance_mixed
+from lifecycle_cycles import lifecycle_cycles
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3232,6 +3233,7 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-LIFECYCLE-001':dict(run=lifecycle_cycles,requirements=['SAVE-AUTO','PERSIST-AUTO-001','LOCK-TRANSPOSE'],description='Ten cold lifecycle cycles: each edits global transpose, autosaves when idle and shuts down cleanly; every next process restores the cumulative transpose with exact phrases'),
  'M-ENDURANCE-001':dict(run=endurance_mixed,requirements=['WORKFLOW-COMPOSITION','PERF-MIDI','SONG-ADVANCE','MERGE-TRIG-ALL'],description='Ten minutes of the typical-workflow two-instrument song at 120 BPM: exact complete native event streams, balanced releases, p99/max/final phase within 10/50/20 ms on both ports'),
  'M-SONG-FLOW-001':dict(run=song_mode_flow,requirements=['SONG-ADVANCE','OPT-SONG-MODE','SONG-SETTINGS','SONG-SLOTS'],description='Song mode default on loops each filled-slot group at its empty slot, queues live selections to the sequence boundary (later of two wins, characterised), holds the slot when off while still honouring manual selection, and resumes when re-enabled'),
  'M-WORKFLOW-001':dict(run=composition_workflow,requirements=['WORKFLOW-COMPOSITION','MERGE-TRIG-SKIP','MERGE-TRIG-ALL','MERGE-NOTE-AVERAGE','SCALE-SELECT','REC-KEYBOARD-STEP','SONG-SLOTS','SONG-ADVANCE','SAVE-AUTO'],description='README typical workflow end to end: two instruments, XOX rhythm, applied D major harmony, default-Skip then All/Average merging, keyboard melody mask, copied and octave-shifted song slot chained by song mode, autosave and a fresh process replaying the song'),
