@@ -42,34 +42,32 @@ def verify(d,stage,slots,cycles=2):
         for m,row in zip(actual,wanted):assert abs((m[field]-origin)/1e9-row[4]/6)<=tolerance,(stage,port,row)
     d.results.append(dict(kind='composition-workflow',stage=stage,expected=expected,cycles=cycles,passed=True))
 
-def composition_workflow(c):
+def build_composition(c,check=None):
+    """The workflow project; check(stage, slots) runs after each workflow stage when given."""
+    check=check or (lambda stage,slots:None)
     def edit_root(semitones):c.enc(2,-1);c.enc(3,semitones);c.key(3);c.enc(2,1)
-    # Sound design: channel 1 on port 1 (configure); rhythm pattern 1 is the four-note phrase.
     c.configure()
-    # Rhythm: pattern 2 by XOX trigs on steps 1 and 3 with degrees 4 and 6.
     c.tap(5,8);c.tap(2,1);c.tap(1,4);c.tap(3,4);c.tap(5,8);c.tap(1,3);c.tap(3,1);c.tap(3,8)
-    # Harmony: slot 2 D major applied globally.
     c.tap(4,8);c.tap(2,3);edit_root(2);c.tap(3,8)
-    # Sequence: both patterns on channel 1; overlapping steps deactivate by default.
-    c.tap(2,2);verify(c,'default-skip',[(CH1_SKIP,{},0)])
-    c.tap(14,8);c.tap(14,8);c.led_values([(14,8)],[8])          # Skip -> Only -> All
-    c.hold_tap((16,8),(1,2))                                      # velocity priority: pattern 1
-    verify(c,'merge-all-average',[(CH1_ALL,{},0)])
-    # A second instrument: channel 2 on port 2 / MIDI channel 2 playing pattern 2.
+    c.tap(2,2);check('default-skip',[(CH1_SKIP,{},0)])
+    c.tap(14,8);c.tap(14,8);c.led_values([(14,8)],[8])
+    c.hold_tap((16,8),(1,2))
+    check('merge-all-average',[(CH1_ALL,{},0)])
     c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
     c.tap(2,2);c.hold_tap((1,4),(4,4))
-    # Melody: a held-step keyboard note replaces channel 2 step 3 (shown as a mask lock).
     c.enc(1,-4);c.screen_header('Ch. 2 Note Masks',selected=1)
     c.action(type='grid',x=3,y=4,state=1)
     try:c.action(type='midi',port=1,bytes=[144,76,90]);c.elapse(.05);c.action(type='midi',port=1,bytes=[128,76,0])
     finally:c.action(type='grid',x=3,y=4,state=0)
     c.elapse(.1);c.tap(1,1)
-    verify(c,'two-channels-with-melody',[(CH1_ALL,CH2,0)])
-    # Song: 4-step sequence copied to slot 2, channel 1 an octave up there, chained by song mode.
+    check('two-channels-with-melody',[(CH1_ALL,CH2,0)])
     c.tap(6,8);c.tap(2,7)
     for _ in range(3):c.tap(8,7)
     c.hold_tap((1,1),(2,1));c.tap(2,1);c.tap(3,8);c.tap(1,1);c.tap(11,8);c.tap(6,8);c.tap(1,1);c.tap(3,8)
-    song=[(CH1_ALL,CH2,0),(CH1_ALL,CH2,1)]
+    return [(CH1_ALL,CH2,0),(CH1_ALL,CH2,1)]
+
+def composition_workflow(c):
+    song=build_composition(c,lambda stage,slots:verify(c,stage,slots))
     verify(c,'chained-song',song)
     # Keep it: idle autosave, then a fresh process plays the same song.
     for _ in range(3):c.elapse(21)

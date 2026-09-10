@@ -6467,9 +6467,11 @@
         "MAN-110"
       ],
       "statement": "Normal MIDI workload remains stable; dense slides/locks/high clock rates need measured limits.",
-      "cases": [],
+      "cases": [
+        "M-ENDURANCE-001"
+      ],
       "status": "in_progress",
-      "domain": "tests/behaviour/perf_dense.py (PERF-002 dense sequencing) runs actual Mosaic in the constrained norns-class container with a UI-built 16-step project on 1/4/8/16 channels, the complete native export as oracle and recorder resource figures. Preliminary contended-host results in docs/testing/perf-dense-preliminary.json (not canonical). Remaining: idle-host canonical runs; PERF-003..008 (locks/slides/trig params/scale merges, input, rendering, storage, ten-minute mixed run, overload/recovery). Measurements only; no performance fixes before the refactor (D23).",
+      "domain": "tests/behaviour/perf_dense.py (PERF-002 dense sequencing) runs actual Mosaic in the constrained norns-class container with a UI-built 16-step project on 1/4/8/16 channels, the complete native export as oracle and recorder resource figures. Preliminary contended-host results in docs/testing/perf-dense-preliminary.json (not canonical). Remaining: idle-host canonical runs; PERF-003..008 (locks/slides/trig params/scale merges, input, rendering, storage, ten-minute mixed run, overload/recovery). Measurements only; no performance fixes before the refactor (D23). M-ENDURANCE-001 (E ten real minutes, D ten logical minutes, 3 fresh D repeats): the typical-workflow two-instrument song at 120 BPM with exact complete native event streams (600 cycles), balanced releases and p99/max/final phase within 10/50/20 ms on both ports (measured E: 1.9/2.3 ms p99, 18.1 ms max, 0.85 ms final). A single note dropped after about two minutes is detected. Host unconstrained; the constrained runs are perf_dense.py.",
       "oracles": [
         "Existing exact event/lifecycle checks and central p99/max/phase thresholds; report overload as failure, not silent drops."
       ],
@@ -7114,10 +7116,11 @@
       ],
       "statement": "A project supports building rhythm, harmony, channel combinations, recording and a chained song from copied sequences.",
       "cases": [
+        "M-ENDURANCE-001",
         "M-WORKFLOW-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-WORKFLOW-001 (E and D, 3 fresh D repeats) follows README Typical Workflow: two instruments on separate ports, XOX rhythm, applied D major harmony, default Skip deactivating overlaps then All/Average with pattern-1 velocity, a held-step keyboard melody mask, a copied song slot with channel 1 an octave up chained by song mode, idle autosave and a fresh process replaying the whole song, all with exact per-port bytes and step timing. A changed default trig merge mode is detected. Remaining: generated rhythms (banks/Euclid/tresillo painting), channel mutes in copies, scale locks, live recording and trig-param automation within the same walkthrough.",
+      "domain": "M-WORKFLOW-001 (E and D, 3 fresh D repeats) follows README Typical Workflow: two instruments on separate ports, XOX rhythm, applied D major harmony, default Skip deactivating overlaps then All/Average with pattern-1 velocity, a held-step keyboard melody mask, a copied song slot with channel 1 an octave up chained by song mode, idle autosave and a fresh process replaying the whole song, all with exact per-port bytes and step timing. A changed default trig merge mode is detected. Remaining: generated rhythms (banks/Euclid/tresillo painting), channel mutes in copies, scale locks, live recording and trig-param automation within the same walkthrough. M-ENDURANCE-001 (E ten real minutes, D ten logical minutes, 3 fresh D repeats): the typical-workflow two-instrument song at 120 BPM with exact complete native event streams (600 cycles), balanced releases and p99/max/final phase within 10/50/20 ms on both ports (measured E: 1.9/2.3 ms p99, 18.1 ms max, 0.85 ms final). A single note dropped after about two minutes is detected. Host unconstrained; the constrained runs are perf_dense.py.",
       "oracles": [
         "Complete expected MIDI phrases, sequence LEDs and restored screen/grid state across transitions. Complements atomic feature tests."
       ],
