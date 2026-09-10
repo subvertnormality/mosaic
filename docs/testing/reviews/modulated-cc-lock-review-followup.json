@@ -1,0 +1,18 @@
+{
+  "started_at": "2026-09-10T11:52:42.956483+00:00",
+  "tool": "query",
+  "request": {
+    "repo_path": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/_staged/mosaic-review-repo",
+    "engine": "codex",
+    "question": "Exact mechanically generated scoped source/evidence bundle; omitted from repository because it duplicates source and eight manifests.",
+    "files": [],
+    "effort": "high",
+    "web_search": false,
+    "bundle_sha256": "2c6c25c261a30d68288a0b95e6b570cf90fcca14b39c3665b46cfb3eb0e24492",
+    "bundle_bytes": 271852,
+    "bundle_retained_in_repository": false
+  },
+  "result": "**CHANGES REQUIRED.** The refreshed assertions improve completeness, but two claimed guarantees still have concrete gaps.\n\n- **Per-input causality remains ambiguous.** In `tests/behaviour/modulation_interactions.py`, `expected_positive` begins `[33,33,34,\u2026]`. Input 1 can emit `33`, then a delayed duplicate after input 2, while input 2 emits nothing. The pre-input prefix, `new_events==[(1,[176,1,wanted])]`, cumulative prefixes and final settle comparison all pass. Add a regression reproducing this substitution and an input-correlated observation mechanism or a justified bound that drains pending output before the next input.\n\n- **Only port 1 Start must precede playback.** In `phase()`, `cc[0]['index']<starts[0]['index']<notes[0]['index']` permits port 2 and port 3 Start after the first note. Filtering realtime events preserves their relative sequence while hiding intervening notes. Require `starts[-1]['index']<notes[0]['index']` as well.\n\nAlso, the claimed **40ms action-to-observation bound is not enforced**: `c.wait(...,timeout=.04)` starts after `c.action()` returns, and `Driver.wait()` accepts a successful snapshot without checking whether that observation crossed the deadline. Measure from input dispatch and check the successful observation\u2019s elapsed time.\n\nThe four phase defaults, explicit locks, release accounting and selected eight manifests otherwise support this scoped slice; historical manifests are distinguishable by their source hashes, and inventory remains incomplete.\n\n**CONFIDENCE: High.** Review used the supplied bundle; repository history, raw captures and hashes were not independently verified.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08b29-bb61-7281-a1fa-ed19613d3f52` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T11:53:20.987239+00:00"
+}

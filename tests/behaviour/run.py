@@ -61,7 +61,9 @@ def main():
             controlled_time_admitted=False,profile=args.profile,mod_revisions=c.mod_revisions if c else {},mod_patches=c.applied_mod_patches if c else {},seed=42,mosaic_revision=revision,
             wall_elapsed_seconds=time.monotonic()-started,
             logical_advanced_seconds=(sum(a['nanoseconds'] for p in out.rglob('recipe.json') if not {'code','data'} & set(p.relative_to(out).parts) for a in json.loads(p.read_text()) if a['type']=='advance')/1e9 if args.clock_mode!='real-time' else None),
-            manual_sha256=inventory['manual_sha256'],platform=platform.platform(),failure=failure,
+            manual_sha256=inventory['manual_sha256'],
+            behaviour_source_sha256={p.relative_to(REPO).as_posix():digest(p) for p in sorted((REPO/'tests/behaviour').glob('*.py'))},
+            platform=platform.platform(),failure=failure,
             artifacts=[dict(path=p.relative_to(out).as_posix(),sha256=digest(p),size=p.stat().st_size) for p in sorted(out.rglob('*')) if p.is_file() and 'code' not in p.relative_to(out).parts and 'data' not in p.relative_to(out).parts])
         write(out/'manifest.json',result);print(json.dumps(dict(case=name,passed=result['passed'],manifest=str(out/'manifest.json'))),flush=True)
         failed|=failure is not None

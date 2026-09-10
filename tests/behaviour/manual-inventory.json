@@ -1676,10 +1676,11 @@
       ],
       "statement": "Toolkit sources can modulate Mosaic parameters through Matrix; clearing depth restores the base behaviour.",
       "cases": [
-        "M-MOD-001"
+        "M-MOD-001",
+        "M-MOD-004"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Fixed Note target, macro maximum/clear and4-beat pulse at90BPM; other targets, amounts, signs, sources, shapes, tempos and interactions remain required.",
+      "domain": "Fixed Note and configured CC targets; macro positive/negative/clear and4-beat pulse at90BPM; other targets, amounts, sources, shapes, tempos and interactions remain required.",
       "oracles": [
         "Literal selected menu labels/depth",
         "Exact emitted MIDI over complete phrases/modulation periods"
@@ -3695,7 +3696,8 @@
         "M-PARAM-036",
         "M-PARAM-045",
         "M-PARAM-046",
-        "M-PATCH-064"
+        "M-PATCH-064",
+        "M-MOD-004"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -5582,7 +5584,8 @@
         "M-PARAM-033",
         "M-PARAM-036",
         "M-PARAM-043",
-        "M-PARAM-044"
+        "M-PARAM-044",
+        "M-MOD-004"
       ],
       "status": "in_progress",
       "domain": "All64 steps distributed across all10 slots through native held-step input, plus exhaustive64x10 model storage; sentinels, trig/trigless, overwrite, live future-step editing and song isolation.",
@@ -6397,9 +6400,14 @@
         "MAN-109"
       ],
       "statement": "Matrix/toolkit modulation can target device parameters.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Both mod paths; all supported parameter types; zero/positive/negative depth, clear/rebind; LFO shape/rate/phase.",
+      "cases": [
+        "M-MOD-001",
+        "M-MOD-002",
+        "M-MOD-003",
+        "M-MOD-004"
+      ],
+      "status": "in_progress",
+      "domain": "Both pinned mod paths active; Fixed Note and configured CC targets; zero/positive/negative depth, clear/rebind, manual edit and step-lock precedence; additional device types, LFO shapes/rates/phases, slides, recording, persistence and source combinations remain required.",
       "oracles": [
         "Real modulation UI, independent CC/note trajectories, baseline unchanged when cleared; no audio claim."
       ],
