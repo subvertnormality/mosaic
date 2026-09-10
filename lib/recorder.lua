@@ -69,6 +69,7 @@ function recorder.record_stored_trig_lock_events(c, step)
 end
 
 function recorder.handle_note_midi_message(note, velocity, chord_number, chord_degree)
+  -- memory.record_event stores into data.song_pattern: capture the slot at first press.
   local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
   if #pressed_keys > 0 then
@@ -82,6 +83,7 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
           {
             song_pattern = program.get().selected_song_pattern,
             data = {
+              song_pattern = program.get().selected_song_pattern,
               trig = 1,
               note = note,
               velocity = velocity,
@@ -100,6 +102,7 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
           {
             song_pattern = program.get().selected_song_pattern,
             data = {
+              song_pattern = program.get().selected_song_pattern,
               step = s,
               chord_degrees = chord
             }
@@ -117,6 +120,7 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
           {
             song_pattern = program.get().selected_song_pattern,
             data = {
+              song_pattern = program.get().selected_song_pattern,
               trig = 1,
               note = note,
               velocity = velocity,
@@ -135,6 +139,7 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
           {
             song_pattern = program.get().selected_song_pattern,
             data = {
+              song_pattern = program.get().selected_song_pattern,
               step = s,
               chord_degrees = chord
             }

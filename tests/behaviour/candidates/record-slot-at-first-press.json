@@ -1,0 +1,84 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "ec7e29c",
+  "file": "lib/recorder.lua",
+  "before_sha256": "9c7c3ed5d91a962bd9e27100f10f120b6a2ab6eb991d3eecc85375dd519ce344",
+  "after_sha256": "7c5b7fa1b4fd9761d8f48a08fc4aa7f0c84d765efe98928ccf390afee9b1e9a2",
+  "patch": "0090-record-slot-at-first-press.patch",
+  "patch_sha256": "5bea5b37b3fe43edc1e2266c7d0e458fa6302daad70f375eafcfd37934a3c871",
+  "regression": "M-TRIPLE-003",
+  "baseline": [
+    {
+      "run_id": "c12c585aa628470f8a01b1df328cb673",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "3ecab9dfe1ded303c3b3b4390e25e8badb28cd4763edade80304088bcdd0058d",
+      "failure": "{'expected': [(1, [144, 72, 90]), (1, [144, 84, 70]), (1, [144, 79, 80]), (1, [144, 72, 90]), (1, [144, 84, 70]), (1, [144, 79, 80]), (1, [144, 72, 90]), (1, [144, 84, 70]), (1, [144, 79, 80]), (1, [1",
+      "case": "M-TRIPLE-003"
+    },
+    {
+      "run_id": "2faa1dc1c960403fa3b762b56aca3bc0",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "cc3981135d3b7c1ec9bf7b374ee7a20a2e5e51cecac3d16e82a03180bb58aa19",
+      "failure": "{'expected': [(1, [144, 72, 90]), (1, [144, 84, 70]), (1, [144, 79, 80]), (1, [144, 72, 90]), (1, [144, 84, 70]), (1, [144, 79, 80]), (1, [144, 72, 90]), (1, [144, 84, 70]), (1, [144, 79, 80]), (1, [1",
+      "case": "M-TRIPLE-003"
+    }
+  ],
+  "rationale": "Recorded note events kept their slot beside, not inside, the data that memory.record_event stores, so memory used the slot selected at release. A note pressed on slot 1 step 4 and released after the song transition was stored on slot 2 step 4. The slot is now captured with the note at first press.",
+  "oracle": "README \"Arm live record\" (line 239): recordings are quantised to the step active when Mosaic processes the note-on; lengths are committed at release.",
+  "validation": [
+    {
+      "run_id": "bdad5cbcc2e24f8b9116f78e5f348f08",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "2fc7fe1c118b61222a0e74df69c0dbc7afe7563b36d8953092fcd5362ba1d73d",
+      "failure": null,
+      "case": "M-TRIPLE-003"
+    },
+    {
+      "run_id": "667ef9d902634a17b7947a8fa470195f",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "8c31b1b5ffca4ea95887e6ad0be70840c27d023d43d4d464d60d4c62947c10af",
+      "failure": null,
+      "case": "M-TRIPLE-003"
+    },
+    {
+      "run_id": "repeat-68b38190bfa446e598eaca233ceb4e8e",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "a0c8abf55767ea9feb9c3c9f1dcd0a59a576ed020e20463abfe9056328b42b04",
+      "failure": null,
+      "normalized_sha256": "7acf3ec4c7d4325ed2233815cb8b244630f5c2dc2f5689afa2b02dfa04bda351",
+      "case": "M-TRIPLE-003"
+    },
+    {
+      "run_id": "1bd147e9871849f094306cf74f16d692",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "30b81da918bfdc6baa051ea57f66eb6ad8b2f6a5a1aa5ec1880b2e2bd3777980",
+      "failure": null,
+      "case": "M-TRIPLE-002"
+    },
+    {
+      "run_id": "cc1d9ff6e98f43f39f64d2f3f28eb05c",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "dacb6db0f989d3c2c209dad9736d888b94d9973f0c44cbf34572e938a4b7ba11",
+      "failure": null,
+      "case": "M-TRIPLE-002"
+    },
+    {
+      "run_id": "repeat-925efdb4caf8446d829e2334409acacf",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "c8c1d19c2dc7b1af35c4841db698daf79150d479727d947d7c61f40889cec0ea",
+      "failure": null,
+      "normalized_sha256": "579d742c6bbbaedd2f928da424a568a5bfae5996e2f5da8b413bbb9b6b1c2968",
+      "case": "M-TRIPLE-002"
+    }
+  ],
+  "collateral": "With the fix, all 67 registered M-REC-*/M-MEMORY-* cases pass in the controlled lane. In real time 65 pass in the sweep; M-REC-004 and M-REC-PARAM-024 missed a 10 ms deadline under concurrent host load and pass on serial rerun. Eight cases (M-REC-005/006/007/015/016/017/024/025) needed the separate 0d6387e harness repair first. M-TRIPLE-002 also passes in both lanes and three fresh repeats.",
+  "upstream_merged": false
+}

@@ -650,6 +650,15 @@
         "M-SONG-FLOW-001"
       ],
       "summary": "A slot selected while song mode was off stayed queued and redirected the first transition after song mode was re-enabled."
+    },
+    {
+      "id": "record-slot-at-first-press",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "record-slot-at-first-press.json",
+      "cases": [
+        "M-TRIPLE-003"
+      ],
+      "summary": "A live-recorded note held across a song transition was stored in the slot selected at release instead of the slot and step active at its first press."
     }
   ]
 }
