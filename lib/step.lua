@@ -1122,6 +1122,12 @@ function step.reset()
   }
   arp_note = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
   persistent_step_transpose = nil
+  -- Stop discards song commands queued for a boundary that was never reached
+  -- (arbitrated 2026-09-11, discard-on-stop); the next Play follows song mode.
+  next_song_pattern_queue = nil
+  switch_to_next_song_pattern_func = function() end
+  pattern_change_queue = {}
+  if song_edit_page and song_edit_page.refresh_faders then song_edit_page.refresh_faders() end -- show the length that will play
   step.execute_blink_cancel_func()
   local c = program.get_selected_channel().number
   program.set_channel_step_scale_number(

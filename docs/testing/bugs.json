@@ -722,6 +722,33 @@
         "M-OPT-ELEK-004"
       ],
       "summary": "With Elektron program changes on, an Elektron device on a MIDI port other than channel 1's never received program changes, and channel 1's port received duplicates."
+    },
+    {
+      "id": "tooltip-metro-id",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "tooltip-metro-id.json",
+      "cases": [
+        "M-TOOLTIP-002"
+      ],
+      "summary": "After a few tooltips, the idle-autosave Autosaved tooltip stayed on screen until another tooltip replaced it."
+    },
+    {
+      "id": "song-queue-discard-on-stop",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "song-queue-discard-on-stop.json",
+      "cases": [
+        "M-SONG-QUEUE-STOP-001"
+      ],
+      "summary": "A song slot or global length queued during playback survived Stop invisibly and took effect at the first boundary of the next Play."
+    },
+    {
+      "id": "song-slot-copy-press-order",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "song-slot-copy-press-order.json",
+      "cases": [
+        "M-SONG-COPY-001"
+      ],
+      "summary": "Copying a song slot erased the source instead when the source key was released before the destination key."
     }
   ]
 }

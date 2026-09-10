@@ -25,7 +25,7 @@ function tooltip:do_tip(text)
   -- Stop any existing metro and remove it from the table
   for i, m in ipairs(tooltip.metros) do
     m:stop()
-    metro.free(i)
+    metro.free(m.id) -- the metro's own slot, not its position in this list
     table.remove(tooltip.metros, i)
   end
 
