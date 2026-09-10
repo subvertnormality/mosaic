@@ -41,6 +41,7 @@ from trig_parameter_interactions import sparse_editor_domain
 from trig_parameter_interactions import cc_encoder_domain
 from recording_lifetimes import recording_lifetime,recording_nrpn
 from patch_params import patch_sparse_slide
+from patch_params import patch_mixed_cc_nrpn_slides
 from patch_params import patch_ten_slot_slides
 from patch_params import patch_channel_clear_isolation
 from patch_params import patch_clear_mask_boundary
@@ -3355,6 +3356,7 @@ CASES={
  'M-PARAM-009':dict(run=lambda c:fixed_note_domain(c,start=80),requirements=['PARAM-FIXED','PARAM-SLOTS'],description='Fixed MIDI notes80..95 override quantised/random/pattern sources, preserve velocities/releases/timing and restore the source phrase'),
  'M-PARAM-010':dict(run=lambda c:fixed_note_domain(c,start=96),requirements=['PARAM-FIXED','PARAM-SLOTS'],description='Fixed MIDI notes96..111 override quantised/random/pattern sources, preserve velocities/releases/timing and restore the source phrase'),
  'M-PARAM-011':dict(run=lambda c:fixed_note_domain(c,start=112),requirements=['PARAM-FIXED','PARAM-SLOTS'],description='Fixed MIDI notes112..127 override quantised/random/pattern sources, preserve velocities/releases/timing and restore the source phrase'),
+ 'M-PATCH-064':dict(run=patch_mixed_cc_nrpn_slides,requirements=['SLIDE-GLOBAL','SLIDE-STEP','PARAM-SLOTS'],description='Concurrent step-local CC and global standard-NRPN slides retain independent slot ownership, exact encodings, endpoints, timing, gates and cycle restart'),
  'M-PATCH-060':dict(run=lambda c:patch_configured_off_lock(c,default_kind='CCdefault'),requirements=['PARAM-OFF','CH-PATCH-SENTINEL'],description='Omitted off_value defaults to silent-1 for a CC step lock'),
  'M-PATCH-061':dict(run=lambda c:patch_configured_off_lock(c,default_kind='NRPNdef'),requirements=['PARAM-OFF','CH-PATCH-SENTINEL'],description='Omitted off_value defaults to silent-1 for an NRPN step lock, without Lua failure'),
  'M-PATCH-062':dict(run=lambda c:patch_slide_timing(c,off_middle=True,default_off=True),requirements=['PARAM-OFF','SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='Default-Off CC middle step does not cancel or become a destination of the active slide'),

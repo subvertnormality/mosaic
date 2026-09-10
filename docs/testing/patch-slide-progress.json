@@ -1080,5 +1080,13 @@
     "push_verified": true,
     "signing": "unsigned; local signing key locked, no signed-commit delivery gate",
     "full_campaign_complete": false
+  },
+  "native_mixed_cc_nrpn": {
+    "case": "M-PATCH-064",
+    "status": "codex-reviewed-scoped-acceptance",
+    "validation": "docs/testing/mixed-parameter-slide-validation.json",
+    "scope": "Concurrent step-local CC and global standard-NRPN on one channel; exact encoding, trajectory, endpoint, restart and note lifetime.",
+    "full_campaign_complete": false,
+    "review": "01a08aa9-c9ea-76c3-b2a2-02c4366b0590"
   }
 }

@@ -1335,3 +1335,26 @@ and100/100 applicable Python tests. Codex review
 resolution; final source/evidence audit 01a08a94-e05a-77e2-8cfc-4e5b6fba6356
 verified all source, manifest, artifact and snapshot bindings. PARAM-SLOTS and NAV-FINE-K1 remain in progress for their declared
 additional classes, boundaries and gesture orders.
+
+
+## Concurrent local CC and global NRPN slides
+
+M-PATCH-064 configures two slots through native menus on one MIDI channel. A
++held-step K3 gesture makes CC1 step1 slide locally from24 to96, while unheld K3
++enables a standard-NRPN global slide from126 to253. Across two cycles and both
++clock lanes, the case classifies every MIDI event, requires exact program and
++transport traffic, complete note/release ownership, literal status176/port1 CC
++traffic, contiguous NRPN packets, and independent six-sample trajectories at
++1/18-second intervals with both endpoints before their notes and both sources
++restarted at the next cycle.
++
+Fresh M-PATCH-033/034/046/053 regressions retain local/global toggle behavior,
++all ten concurrent CC slots and slow NRPN rollover in both lanes. Final4 passes
++531/531 Lua and100/100 Python checks. An earlier snapshot's existing2ms
++performance assertion failed once and remains recorded; the focused immutable
++recheck passed, and a subsequent unmodified full snapshot passed. Codex session
++01a08aa9-c9ea-76c3-b2a2-02c4366b0590 required complete MIDI accounting, literal
++curves, closed timing windows and exact channel status, then conceded and
++accepted the corrected slice. Broader modulation, live lifecycle, wrap and song
++domains remain pending.
++

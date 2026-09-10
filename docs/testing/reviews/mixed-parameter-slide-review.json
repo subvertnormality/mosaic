@@ -1,0 +1,36 @@
+{
+  "started_at": "2026-09-10T09:32:57.882808+00:00",
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Mixed CC/NRPN slide behavior review\n\nUse Codex only. Read-only local commands are allowed; do not edit or launch tests/runtime processes.\n\nReview M-PATCH-064, its SLIDE-GLOBAL/SLIDE-STEP/PARAM-SLOTS inventory mappings, the slide ledger entry, and `docs/testing/mixed-parameter-slide-validation.json`.\n\nThe case configures Mosaic through native menus and assigns two trig-parameter slots on one channel. Slot1 receives CC locks24/96 and only held step1 has K3 local slide enabled. Slot2 receives standard-NRPN locks126/253 and K3 enables its channel-global slide. Two cycles must emit independent linear curves, exact CC1 bytes and standard four-message NRPN packets, explicit destinations before step3 notes, silence through step4, both source locks before the next cycle, exact note phase, complete gates and paired releases. It passes controlled and real time. Fresh adjacent M-PATCH-033/034/046/053 runs cover local-only/global roundtrip, all ten concurrent CC slots and a slow standard-NRPN rollover slide in both lanes. The immutable snapshot passes531 Lua and100 applicable Python tests. Production source is unchanged.\n\nChallenge whether the gestures really create local CC versus global NRPN state; whether event filtering or packet grouping could hide cross-slot interference, malformed/extra MIDI, or attribution errors; whether the trajectory/endpoints/cycle-restart and note lifetime checks are independent and complete; whether the adjacent runs bind current source; whether inventory wording remains conservative; and all source/manifest/artifact/snapshot hashes. Return ACCEPTED or CHANGES REQUIRED with concrete findings. Do not treat this as complete coverage of modulation, every parameter type, live lifecycle, wrap or song transitions. Do not generalize the Digitakt NRPN exception.",
+    "files": [
+      {
+        "path": "tests/behaviour/patch_params.py",
+        "reason": "Mixed slide source-bound evidence"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "Mixed slide source-bound evidence"
+      },
+      {
+        "path": "tests/behaviour/manual-inventory.json",
+        "reason": "Mixed slide source-bound evidence"
+      },
+      {
+        "path": "docs/testing/patch-slide-progress.json",
+        "reason": "Mixed slide source-bound evidence"
+      },
+      {
+        "path": "docs/testing/mixed-parameter-slide-validation.json",
+        "reason": "Mixed slide source-bound evidence"
+      }
+    ],
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**CHANGES REQUIRED.** The recorded runs support the intended behavior, but M-PATCH-064\u2019s assertions do not fully enforce its exact MIDI and trajectory claims.\n\n- **Routing and packet validation have gaps.** [patch_params.py:1151](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/patch_params.py:1151) selects CC1 and NRPN controllers without checking their ports or rejecting other parameter output. NRPN grouping occurs after filtering, without checking packet contiguity, message length or seven-bit data bytes. Wrong-port output, unrelated extra CCs, and split packets can escape detection. Validate complete messages and account for all parameter output, explicitly allowing expected transport/auxiliary traffic.\n\n- **Curve completeness is not enforced.** [patch_params.py:1177](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/patch_params.py:1177) requires only three samples and checks each surviving sample against its timestamp. Three duplicate destination messages immediately before step3 could satisfy these assertions without intermediate interpolation. Require independently expected sample progression or bounded gaps and distinct intermediate values.\n\n- **Some timing windows remain unchecked.** [patch_params.py:1191](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/patch_params.py:1191) excludes NRPN packets straddling note boundaries from interval checks. The final restart checks values but not proximity to the closing step1 onset; unlike the earlier restart, no subsequent loop iteration checks that timestamp. Require complete packet attribution and timestamp both final source locks.\n\nThe gestures themselves are correct: held-grid K3 toggles the selected slot\u2019s step flag, while unheld K3 toggles its channel flag ([channel_edit_page_ui.lua:1605](/home/andy/projects/mosaic-behaviour-tests/lib/pages/channel_edit_page/channel_edit_page_ui.lua:1605)). Note checks independently enforce phase, eight completed gates and paired releases, including the deliberately stopped closing note ([patch_params.py:1144](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/patch_params.py:1144)).\n\nHash verification passed: three declared source hashes, ten manifests, all 150 artifacts, three log/hash files, and application identity digests. Every run\u2019s 725 application files matches the snapshot; current files differ only by the subsequent ledger addition. Adjacent runs therefore bind the reviewed implementation. Logs report **531 Lua and 100 Python passes**. Production is unchanged. Inventory remains `in_progress`, and broader exclusions remain explicit in the [validation record](/home/andy/projects/mosaic-behaviour-tests/docs/testing/mixed-parameter-slide-validation.json:100). Both mixed captures contain correctly routed, contiguous standard NRPN packets; these findings concern assertion gaps.\n\n**CONFIDENCE: High.** Closing these gaps and refreshing source-bound evidence would change the verdict; no tests or runtime processes were launched.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08aa9-c9ea-76c3-b2a2-02c4366b0590` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T09:35:59.876535+00:00"
+}

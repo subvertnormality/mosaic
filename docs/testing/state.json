@@ -5114,5 +5114,15 @@
     "review": "01a08a94-e05a-77e2-8cfc-4e5b6fba6356",
     "production_change": false,
     "full_campaign_complete": false
+  },
+  "mixed_parameter_slide_checkpoint": {
+    "validation": "docs/testing/mixed-parameter-slide-validation.json",
+    "case": "M-PATCH-064",
+    "native_passes": 10,
+    "lua": 531,
+    "python_unit_oracles": 100,
+    "review": "01a08aa9-c9ea-76c3-b2a2-02c4366b0590",
+    "production_change": false,
+    "full_campaign_complete": false
   }
 }

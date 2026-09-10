@@ -1,0 +1,111 @@
+{
+  "scope": "Concurrent step-local CC and global standard-NRPN slides",
+  "source_revision": "754f490 plus recorded working-tree diff",
+  "source_sha256": {
+    "tests/behaviour/patch_params.py": "039b068041a58ad9e37ae1acb86376a5750bc3b604799ea01eea40bc6a2266c4",
+    "tests/behaviour/cases.py": "236114d51348227e250ccac0cd79d23c88dd22edf64360b2b8ab412b83d3de3a",
+    "tests/behaviour/manual-inventory.json": "478c3c280429fa29975d2a234682959590975c08ed3f5d1a6f00478ab0404421"
+  },
+  "native_behavior": {
+    "M-PATCH-064-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/692fc4847fdb4f19919477c16198fd3d/manifest.json",
+      "sha256": "68b9ab6d40ab9161596fa0733532820dbce80391538737ddf9ab60e578f367db",
+      "case": "M-PATCH-064",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-PATCH-064-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/762d870875594ec5aba836c1641491c4/manifest.json",
+      "sha256": "9c03fea1b3597773e6fd9a22d7edcf9b3c73acab939c68c048b454ed3f39f892",
+      "case": "M-PATCH-064",
+      "clock_mode": "real-time"
+    },
+    "M-PATCH-033-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/39522dd1f375416c9f1b352b4a3d87cf/manifest.json",
+      "sha256": "f2d5f98d020598d4a5dc0c1e6cf969d00d5aee2a78c49b2d679dbf88f5050237",
+      "case": "M-PATCH-033",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-PATCH-033-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/7aa491c25d184700b443604262516026/manifest.json",
+      "sha256": "7314a2a6497f7f4f90dbf7ef64264a555c6e0fb947f5b6db31c1646e6541998c",
+      "case": "M-PATCH-033",
+      "clock_mode": "real-time"
+    },
+    "M-PATCH-034-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/816aa945726b43db9d19c715025a1a4d/manifest.json",
+      "sha256": "6155d4e5da3a40d2eed12405c6b8d9154738e811069d007056c6b17362ed6fa3",
+      "case": "M-PATCH-034",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-PATCH-034-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/15d796ef79cd4f14a03b780a4a3a166a/manifest.json",
+      "sha256": "05b4304724bce2727b7bb5911968e46d07ccea6572ad95334390539fb248a83e",
+      "case": "M-PATCH-034",
+      "clock_mode": "real-time"
+    },
+    "M-PATCH-046-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/1e42f4fdddb740a7a20304a3698526ca/manifest.json",
+      "sha256": "a095696ecebc50fa340f9763f3a6064aca757c92f7914d1e2ef531e5b8397f8c",
+      "case": "M-PATCH-046",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-PATCH-046-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/6b7d821fe76940d8961286192109b737/manifest.json",
+      "sha256": "e9a8d83e4a1410ba6ef16e04f1cef6daa06178831664dcd33c4d1c119a3eea76",
+      "case": "M-PATCH-046",
+      "clock_mode": "real-time"
+    },
+    "M-PATCH-053-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/6666ab9819984f1294aeb852998e4e9e/manifest.json",
+      "sha256": "a33850b7b1b772ab20a205ff3eb7ad93dc2591b8a4730a07c36bbd9c0f261f9d",
+      "case": "M-PATCH-053",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-PATCH-053-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/6c3a1bca456843e98c5e83b1555362a3/manifest.json",
+      "sha256": "51ef8dcda604c0dcfab3faf051f686ec8695ae687af730e2f2d1747715aaf68d",
+      "case": "M-PATCH-053",
+      "clock_mode": "real-time"
+    }
+  },
+  "unit_integration": {
+    "snapshot": "/home/andy/projects/mosaic-behaviour-runs/mixed-slide-final4-20260910/mosaic",
+    "lua": "531/531",
+    "python_unit_oracles": "100/100",
+    "logs": {
+      "lua": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/mixed-slide-final4-20260910/lua-tests.log",
+        "sha256": "a6b941fcbda25f41bf04cb99e9140547a1d3a50fe3ffc3c91ed47c4930fa9f44"
+      },
+      "python": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/mixed-slide-final4-20260910/python-tests.log",
+        "sha256": "da82c7eee7b87503346caf21e3a337581bc422c88cbc8a797c00924521521a8f"
+      },
+      "source_hashes": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/mixed-slide-final4-20260910/source-hashes.json",
+        "sha256": "a149c1905ad000deb50dbb83edddafbd48b3a82e0adf1edf98389bccfda0ac3b"
+      }
+    }
+  },
+  "coverage": [
+    "same-channel concurrent standard CC and standard NRPN",
+    "held-step local slide plus channel-global slide",
+    "independent per-slot ownership and cycle restart",
+    "exact CC bytes and four-message NRPN packets",
+    "independent linear trajectories and explicit endpoints before notes",
+    "exact note timing, completed gates and paired releases",
+    "adjacent local/global, ten-slot CC and slow NRPN regressions in both clock lanes"
+  ],
+  "production_change": false,
+  "retained_snapshot_failure": {
+    "snapshot": "/home/andy/projects/mosaic-behaviour-runs/mixed-slide-final2-20260910/mosaic",
+    "failure": "Existing test_massive_concurrent_automation_with_param_slides exceeded its 2ms maximum in the full suite.",
+    "focused_recheck": "1/1 pass in 0.142s from the same immutable snapshot; Lua source is unchanged by this Python-only oracle correction.",
+    "classification": "Retained environmental/suite-history diagnostic; cause not claimed and failure not reclassified as a pass."
+  },
+  "remaining": "Other parameter types, modulation ownership, live edit lifecycle, wrap and song interactions remain governed by their existing requirements.",
+  "codex_review": {
+    "session": "01a08aa9-c9ea-76c3-b2a2-02c4366b0590",
+    "status": "CONCEDE / ACCEPTED after complete-MIDI, curve-completeness, timing-window and exact-channel corrections"
+  }
+}

@@ -1106,6 +1106,124 @@ def patch_nrpn_slide(c,legacy=False,descending=False,default_off=False):
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
+
+def patch_mixed_cc_nrpn_slides(c):
+    """Run independent step-local CC and global NRPN slides concurrently."""
+    from cases import assign_trig_parameter,assert_durations
+    from note_accounting import note_pairs
+
+    open_patch_control(c,True)
+    c.key(1);c.enc(1,-3)
+
+    def hold(step, action):
+        c.action(type='grid',x=step,y=4,state=1)
+        try:
+            c.elapse(.05);action()
+        finally:c.action(type='grid',x=step,y=4,state=0)
+        c.elapse(.15)
+
+    # Slot1: CC from24 to96, with only step1 marked as a slide source.
+    assign_trig_parameter(c,'CCdefault')
+    for step,value in ((1,24),(3,96)):
+        hold(step,lambda value=value:(c.action(type='enc',n=3,delta=-126),c.enc(3,value+1)))
+    hold(1,lambda:c.key(3))
+
+    # Slot2: standard NRPN from126 to253, with the channel-wide slide flag.
+    c.enc(2,1);assign_trig_parameter(c,'NRPN14')
+    for step,value in ((1,126),(3,253)):
+        def set_nrpn(value=value):
+            c.action(type='enc',n=3,delta=-126)
+            c.enc(3,1 if value==126 else 2)
+            c.action(type='key',n=1,state=1);c.elapse(.3)
+            try:c.enc(3,-2 if value==126 else -4)
+            finally:c.action(type='key',n=1,state=0)
+        hold(step,set_nrpn)
+    c.key(3)
+
+    before=c.snapshot()['midi_count']
+    played=c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
+    events=[e for e in c.snapshot()['midi'] if e['index']>before]
+    notes=[e for e in events if e['bytes'][0]==144 and e['bytes'][2]>0]
+    assert notes==played and len(notes)>=9
+    pairs=note_pairs(events);assert [on for on,off in pairs]==notes
+    assert_durations(c,notes,[1]*(len(notes)-1),events=events)
+
+    parameter_events=[e for e in events if len(e['bytes'])==3 and e['bytes'][0]&240==176]
+    programs=[e for e in events if len(e['bytes'])==2 and e['bytes'][0]&240==192]
+    releases=[e for e in events if len(e['bytes'])==3 and e['bytes'][0]&240==128]
+    transport=[e for e in events if len(e['bytes'])==1]
+    assert [(e['port'],e['bytes']) for e in transport]==[(1,[250]),(2,[250]),(3,[250]),(1,[252]),(2,[252]),(3,[252])]
+    expected_program=[[192,0],[193,0],[194,3],[195,64]]*len(notes)
+    assert all(e['port']==3 for e in programs) and [e['bytes'] for e in programs]==expected_program
+    for ordinal,note in enumerate(notes):
+        group=programs[ordinal*4:ordinal*4+4]
+        assert all(e['index']<note['index'] for e in group)
+        assert ordinal==0 or all(e['index']>notes[ordinal-1]['index'] for e in group)
+    assert len(releases)==len(notes)
+    assert len(events)==len(parameter_events)+len(programs)+len(notes)+len(releases)+len(transport),'Unclassified MIDI output'
+    assert all(e['port']==1 and len(e['bytes'])==3 and e['bytes'][0]==176 and all(0<=v<=127 for v in e['bytes'][1:]) for e in parameter_events)
+    assert all(e['bytes'][1] in (1,99,98,6,38) for e in parameter_events),'Unexpected parameter controller'
+
+    # Parse the complete parameter stream. A standard NRPN packet must be four
+    # consecutive captured MIDI messages; filtering cannot hide an interleave.
+    cc=[];nrpn=[];offset=0
+    while offset<len(parameter_events):
+        event=parameter_events[offset]
+        if event['bytes'][1]==1:
+            cc.append(event);offset+=1;continue
+        group=parameter_events[offset:offset+4]
+        assert len(group)==4
+        assert [e['bytes'][1] for e in group]==[99,98,6,38]
+        assert [e['bytes'][2] for e in group[:2]]==[4,5]
+        assert [e['index'] for e in group]==list(range(group[0]['index'],group[0]['index']+4))
+        nrpn.append(dict(first=group[0],last=group[-1],value=group[2]['bytes'][2]*128+group[3]['bytes'][2]))
+        offset+=4
+
+    expected_cc=[24,36,48,60,72,84,96,24,36,48,60,72,84,96,24]
+    expected_nrpn=[126,147,168,190,211,232,253,126,147,168,190,211,232,253,126]
+    assert [e['bytes'][2] for e in cc]==expected_cc
+    assert [p['value'] for p in nrpn]==expected_nrpn
+
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    origin=notes[0][field]
+    for ordinal,note in enumerate(notes):
+        assert abs((note[field]-origin)/1e9-ordinal/6)<=tolerance
+
+    checks=[]
+    for cycle in range(2):
+        note_base=cycle*4;event_base=cycle*7
+        source,destination,following,next_source=notes[note_base],notes[note_base+2],notes[note_base+3],notes[note_base+4]
+        initial_cc,initial_nrpn=cc[event_base],nrpn[event_base]
+        cc_ramp=cc[event_base+1:event_base+7]
+        nrpn_ramp=nrpn[event_base+1:event_base+7]
+        next_cc,next_nrpn=cc[event_base+7],nrpn[event_base+7]
+        assert initial_cc['bytes'][2]==24 and initial_nrpn['value']==126
+        assert initial_cc['index']<source['index'] and initial_nrpn['last']['index']<source['index']
+        assert abs((initial_cc[field]-source[field])/1e9)<=tolerance
+        assert abs((initial_nrpn['last'][field]-source[field])/1e9)<=tolerance
+        for sample,(cc_event,nrpn_packet) in enumerate(zip(cc_ramp,nrpn_ramp),1):
+            expected_offset=sample/18
+            assert source['index']<cc_event['index']<destination['index']
+            assert source['index']<nrpn_packet['first']['index']<=nrpn_packet['last']['index']<destination['index']
+            assert abs((cc_event[field]-source[field])/1e9-expected_offset)<=tolerance
+            assert abs((nrpn_packet['last'][field]-source[field])/1e9-expected_offset)<=tolerance
+            assert abs((cc_event[field]-nrpn_packet['last'][field])/1e9)<=tolerance
+        assert len(set(e['bytes'][2] for e in cc_ramp[:-1]))==5
+        assert len(set(p['value'] for p in nrpn_ramp[:-1]))==5
+        assert cc_ramp[-1]['bytes'][2]==96 and nrpn_ramp[-1]['value']==253
+        assert abs((cc_ramp[-1][field]-destination[field])/1e9)<=tolerance
+        assert abs((nrpn_ramp[-1]['last'][field]-destination[field])/1e9)<=tolerance
+        assert not [e for e in parameter_events if destination['index']<e['index']<following['index']]
+        assert following['index']<next_cc['index']<next_source['index']
+        assert following['index']<next_nrpn['first']['index']<=next_nrpn['last']['index']<next_source['index']
+        assert abs((next_cc[field]-next_source[field])/1e9)<=tolerance
+        assert abs((next_nrpn['last'][field]-next_source[field])/1e9)<=tolerance
+        checks.append(dict(cycle=cycle,cc_samples=6,nrpn_samples=6,sample_period_seconds=1/18))
+    c.results.append(dict(kind='mixed-cc-nrpn-slides',cc_mode='step-local',nrpn_mode='global',
+                          encoding_independent=True,cycles=2,checks=checks,passed=True))
+
+
 def patch_configured_off_lock(c,high=False,default_kind=None):
     from cases import assign_trig_parameter,menu_value
     name=default_kind or ('SparseHigh' if high else 'NRPN14')

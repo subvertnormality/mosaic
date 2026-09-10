@@ -3694,7 +3694,8 @@
         "M-PARAM-035",
         "M-PARAM-036",
         "M-PARAM-045",
-        "M-PARAM-046"
+        "M-PARAM-046",
+        "M-PATCH-064"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -5672,10 +5673,11 @@
         "M-PATCH-062",
         "M-PATCH-063",
         "M-REC-PARAM-014",
-        "M-REC-PARAM-015"
+        "M-REC-PARAM-015",
+        "M-PATCH-064"
       ],
       "status": "in_progress",
-      "domain": "All parameters; endpoints equal/up/down; wrap on/off; sequence transition; stopped/play edits.",
+      "domain": "All parameters; endpoints equal/up/down; wrap on/off; sequence transition; stopped/play edits. Mixed standard CC/NRPN concurrency is covered.",
       "oracles": [
         "Independent per-tick CC trajectory/endpoints and exact end-of-song cutoff."
       ],
@@ -5699,10 +5701,11 @@
       "statement": "Held-step K3 enables only that step slide toward next lock.",
       "cases": [
         "M-PATCH-033",
-        "M-PATCH-034"
+        "M-PATCH-034",
+        "M-PATCH-064"
       ],
       "status": "in_progress",
-      "domain": "First/last/wrapped next lock; rest/trigless; global slide mixed; clear/reassign.",
+      "domain": "First/last/wrapped next lock; rest/trigless; global slide mixed; clear/reassign. Mixed local CC plus global NRPN concurrency is covered.",
       "oracles": [
         "Exact local trajectory, next endpoint, unchanged non-slide locks and indicators."
       ],

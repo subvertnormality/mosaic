@@ -1,0 +1,15 @@
+{
+  "started_at": "2026-09-10T10:01:45.189448+00:00",
+  "tool": "rebut",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "session_ref": "01a08aa9-c9ea-76c3-b2a2-02c4366b0590",
+    "rebuttal": "The remaining status-channel finding is fixed. In M-PATCH-064 every parameter event now requires literal status byte176 in addition to port1, three-byte length, seven-bit data and the exact allowed controllers. A CC or any NRPN packet member on status177 now fails before parsing.\n\nAll ten source-bound cases were rerun after that one-line source change. M-PATCH-064 passes controlled692fc4847fdb4f19919477c16198fd3d and real762d870875594ec5aba836c1641491c4. Adjacent M-PATCH-033/034/046/053 pass current-source controlled39522dd1/f816aa945/1e42f4fd/6666ab98 and real7aa491c2/15d796ef/6b7d821f/6c3a1bca respectively; full IDs, manifest hashes and artifacts are in the refreshed validation JSON. Final4 snapshot passes531/531 Lua and100/100 Python. The retained earlier performance diagnostic remains unchanged.\n\nConfirm the last finding is resolved and return ACCEPTED or CHANGES REQUIRED for this scoped slice.",
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**CONCEDE \u2014 ACCEPTED for this scoped slice.** The remaining finding is now resolved by the added `e['bytes'][0]==176` assertion at [patch_params.py:1164](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/patch_params.py:1164). Status177 on any CC or NRPN member fails before parsing.\n\nVerified all ten refreshed passing manifests, artifact hashes and current-source bindings. Final4 source hashes match, and its verified logs report **531/531 Lua and 100/100 Python passes**.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08aa9-c9ea-76c3-b2a2-02c4366b0590` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T10:02:16.383921+00:00"
+}
