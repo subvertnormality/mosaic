@@ -670,6 +670,57 @@ def all_note_priorities(c):
         c.tap(slot,2)
 
 
+def transpose_global_domain(c):
+    """Walk every value exposed by the global transpose fader."""
+    from midi_window import MidiWindow
+    from note_accounting import note_pairs
+    c.configure(); c.tap(4,8)
+    c.tap(9,8)  # Direct inner press selects the left endpoint, -12.
+    values=list(range(-12,13)); velocities=(127,117,107,97)
+    for index,value in enumerate(values):
+        if index: c.tap(16,8)  # Repeated right endpoint presses advance by one.
+        pitches=tuple(base+value for base in (60,62,64,65));before=c.snapshot()
+        if index==0:
+            startup=[(3,[192,0]),(3,[193,0]),(3,[194,0]),(3,[195,64]),(3,[196,0]),
+                     (3,[197,0]),(3,[198,0]),(3,[199,0]),(3,[200,64]),(3,[201,11])]
+            assert before['midi_count']==10
+            assert [(e['port'],e['bytes']) for e in before['midi']]==startup
+        capture=MidiWindow(before['midi_count'])
+        c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+        c.elapse(4/3-.1)
+        c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=9,timeout=3)
+        c.action(type='grid',x=1,y=8,state=1)
+        stop_lower=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
+        c.action(type='grid',x=1,y=8,state=0)
+        stop_upper=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
+        c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        notes=capture.note_ons();assert 9<=len(notes)<=10,('Observation overshoot',len(notes))
+        wanted=[(1,[144,pitches[i%4],velocities[i%4]]) for i in range(len(notes))]
+        assert [(event['port'],event['bytes']) for event in notes]==wanted,(value,wanted,notes)
+        pairs=note_pairs(capture.events);assert len(pairs)==len(notes)
+        assert [on for on,off in pairs]==notes
+        assert all((off['port'],off['bytes'])==(1,[128,on['bytes'][1],on['bytes'][2]]) for on,off in pairs)
+        assert_durations(c,notes[:-1],[1]*(len(notes)-1),events=capture.events)
+        nonnotes=[event for event in capture.events if event['bytes'][0]&240 not in (128,144)]
+        assert [(e['port'],e['bytes']) for e in nonnotes[:3]]==[(1,[250]),(2,[250]),(3,[250])]
+        assert [(e['port'],e['bytes']) for e in nonnotes[-3:]]==[(1,[252]),(2,[252]),(3,[252])]
+        programs=nonnotes[3:-3]
+        assert len(programs)==4*len(notes)
+        assert [(e['port'],e['bytes'][0]&240) for e in programs]==[(3,192)]*(4*len(notes))
+        assert [e['bytes'][0] for e in programs]==[192,193,194,195]*len(notes)
+        assert all(len(e['bytes'])==2 and 0<=e['bytes'][1]<=127 for e in programs)
+        assert len(capture.events)==6*len(notes)+6,'Extra or missing note/program/transport event'
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        errors=[(note[field]-notes[0][field])/1e9-i/6 for i,note in enumerate(notes)]
+        assert max(abs(error) for error in errors)<=tolerance,(value,errors)
+        assert stop_lower<=pairs[-1][1][field]<=stop_upper+int(tolerance*1e9)
+        c.results.append(dict(kind='global-transpose-value',value=value,pitches=list(pitches),
+                              onsets=len(notes),releases=len(pairs),owned_durations=len(notes)-1,
+                              program_changes=len(programs),transport_events=6,total_events=len(capture.events),
+                              maximum_phase_error_seconds=max(abs(error) for error in errors),passed=True))
+
+
 def transpose_lock_domain(c):
     """Walk every transpose value exposed by the native scale-page fader."""
     c.configure(); c.tap(4,8)
@@ -3602,6 +3653,7 @@ CASES={
  'M-TIME-001':dict(run=integral_clock_divisions,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All integral-pulse clock ratios through /16 with exact full-phrase phase and duration checks'),
  'M-TIME-002':dict(run=lambda c:integral_clock_divisions(c,True),requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
  'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
+ 'M-TRANS-006':dict(run=transpose_global_domain,requirements=['TRANSPOSE-GLOBAL'],description='All25 global transpose values selected through the scale-page fader with exact MIDI, gates and accumulated phase'),
  'M-TRANS-005':dict(run=transpose_midi_boundaries,requirements=['LOCK-TRANSPOSE','LOCK-OCTAVE','LOCK-SCALE','SCALE-EDIT','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Extreme Higher/Lower note merges compose with channel octave and scale/step transpose, clamping final MIDI pitches at 0 and 127'),
  'M-TRANS-004':dict(run=merge_transpose_scale_lock,requirements=['LOCK-TRANSPOSE','LOCK-SCALE','MERGE-NOTE-AVERAGE','SCALE-EDIT'],description='Two-pattern average degrees compose with a D-minor scale lock, D root, saved scale transpose and endpoint/zero step transposes, proving scale reset and persistence into an unlocked step'),
  'M-TRANS-003':dict(run=transpose_lock_live_clear,requirements=['LOCK-TRANSPOSE'],description='K2 clears a future step lock during playback at the next wrap while an explicit-zero step sounds; exact MIDI ownership and phase'),

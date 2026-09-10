@@ -5407,9 +5407,11 @@
         "MAN-070"
       ],
       "statement": "Global/step transpose is additive to scale transpose.",
-      "cases": [],
-      "status": "unimplemented",
-      "domain": "Negative/zero/positive extrema; channel locks, octave and MIDI pitch bounds.",
+      "cases": [
+        "M-TRANS-006"
+      ],
+      "status": "partial-domain-coverage",
+      "domain": "M-TRANS-006 validates every advertised -12..+12 value through the physical scale-page fader with exact four-note MIDI, gates and accumulated phase in both clocks. Lock, octave and MIDI-boundary interactions are covered by M-TRANS-001..005; song copy, persistence and live-edit timing remain.",
       "oracles": [
         "Hand-derived additive pitch tables and fader/lock feedback."
       ],
