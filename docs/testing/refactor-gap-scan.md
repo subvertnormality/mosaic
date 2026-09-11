@@ -49,12 +49,48 @@ Status: `open`, `done` (test landed), `defect` (test found a defect), `decision`
 | D12 | `pattern.lua` checks `lengths_mask ~= -1` (typo for `length_mask`) | code reading | latent: no version writes -1 (1.2.12 and current write nil); not changed |
 | E | Incoming MIDI recomputes the selected channel's step transpose (shared persistent state) | differential probe | not reproduced; a CC-path mutation that clears the state left playback unchanged, so no case kept |
 | 9 | MIDI map targets beyond velocity | M-MAP-003 | done: mapped note/length masks, trig param and memory equal their page encoders (equivalence characterisation) |
-| 14 | Keyboard chord state (`chord_states`, `midi_off_store`) is never reset, so a Note Off lost with a removed device leaves a stale chord at that step | behaviour | open: README 239 does not say what a lost release should record; needs a decision before an oracle |
+| 14 | Keyboard chord state (`chord_states`, `midi_off_store`) is never reset, so a Note Off lost with a removed device leaves a stale chord at that step | behaviour | probe written (disconnect mid-hold, then Stop or Panic); `stop()` and `panic()` still reset a module `chord_number` nothing reads since chord state moved per step, which suggests the reset was intended; decision after the probe |
 | 8 | Held grid key surviving a grid disconnect as a phantom hold | probe | not reproduced: hold step 1, disconnect, reconnect, tap step 24 left the phrase unchanged (no range gesture); the driver's recipe check does not yet model grid_connection, so no case |
-| G, 5-7, 11-12, 15-18 | Prime/paint race, stuck held keys, UI asymmetries, per-call debouncers (merge order checked: merged values are order-independent) | behaviour/unit | open |
+| G | Paint pressed before the primed preview settles (the prime job rebuilds the paint pattern from empty over ~18 scheduler ticks) | M-ALG-PAINT-RACE-001 | written; runs after the 96d465d suite frees JACK slots |
+| 16 | Held-step velocity increment writes the step mask before the release commits the action, so memory captures the new value as the "before" state | M-MEMORY-008 | written; runs after the suite (undo must restore the earlier velocity, also after a rebuild) |
+| 17 | Scale page reads `pressed_keys[1]` whatever its row | code reading | no audible consequence: holding two scale slots writes a lock at step x-16 (never played), and a held non-step key maps outside steps 1-64; LED-only, note |
+| 18 | Per-call debouncers (`m_clock.lua:442`, `channel_edit_page.lua:171`) never coalesce | code reading | no test: any debouncer keeps the visible end state (the last refresh runs); the difference is work per step, a performance-sweep item |
+| 8 | Duplicate key-down overwrites the long-press counter | code reading | not pursued: needs a grid that repeats z=1 without z=0, which monome grids do not send; the disconnect case was probed (not reproduced) |
+| 5-7, 11-12, 15 | Merge order (checked: merged values are order-independent), length-mask sentinel (latent), queued length after Stop (covered by M-SONG-QUEUE-STOP-001) | — | closed as noted |
 | 13 | Numeric Repetitor full domain | unit | done: drum_ops_tests.lua golden checksum (characterisation) |
 | F | Pattern edit within a few ms of a song boundary is not heard at the next pass of its slot | M-PAT-BOUNDARY-001 | open defect (`pattern-edit-before-song-boundary`), deferred to the refactor: controlled red at 1 ms (3 of 3), green at 10-80 ms and in real time (80 ms) |
 | — | Reset with a sounding note across a song transition; memory truncation isolation and save/reload; scale-lock release order | M-TIME-013, M-MEMORY-007, M-GESTURE-ORDER-001 | done (E and D, 3 fresh D repeats each); release order is characterisation kept by SEM-016 |
 | D13 | Fixed-channel mask map while a selected-channel step is held wrote the other channel's step mask from the selected channel's value | M-MAP-004 | defect fixed (`fixed-map-held-steps`, arbitrated SEM-017) |
 | — | MIDI transport at startup: fresh boot sends none, an autosave-loaded boot sends Stop per port (the M-PANIC-007..010 reds bisected to `b1afcc5`) | M-STARTUP-TRANSPORT-001, panic oracle | done (arbitrated SEM-018: current behaviour kept, oracle corrected) |
 | — | Suite lane applicability: six controlled-only fixtures assert on the clock mode and always failed in the real-time lane | suite.py + test_suite | done: declared `controlled_only` in cases.py and recorded as not applicable in real time, with the case's reason |
+
+### Unit pass (2026-09-11): modules the unit suite mocked or never loaded
+
+Measured with a line hook over the Lua unit suite (luacov is not installed): 556 units
+reached 39.0% of Mosaic's executable lines. `device_map`, `m_midi`, `m_grid` and the
+Sinfonion module are mocked in most units, and the pages, controls and UI components are
+exercised only by the emulator cases. New test files, which pin current behaviour exactly and
+label it characterisation unless a README line or the MIDI 1.0 specification says otherwise:
+`device_value_encoding_tests.lua` (NRPN codec, value domain, patch recall; 51),
+`device_map_real_tests.lua` (real device map and param manager; 56), `m_midi_input_tests.lua`
+(real keyboard input, chords, CC mapping and acceleration, stop/panic bookkeeping; 44),
+`functions_extra_tests.lua`, `sequencer_control_tests.lua`, `json_tests.lua` (112). Each author
+hand-mutated the module under test; every mutation that can change behaviour was caught.
+
+Suspected defects pinned as current behaviour (`-- characterisation (suspected defect: ...)`),
+not fixed: each needs a real-input reproduction before an isolated fix.
+
+| Where | Suspected defect | User-visible effect |
+|---|---|---|
+| `config/ex_braids.json`, `device_map.lua:499` vs `param_manager.lua:123` | A leading param with id `none` is dropped by the device map but counted by the param manager | Braids trig locks address the slot before the intended control |
+| `config/elektron_syntakt.json`, `param_manager.lua:127/143` | Sustain and Sostenuto carry `nrpn_*` = -1, which Lua treats as present | Sent as NRPN -1/-1 instead of CC 64/66 |
+| `param_manager.lua:95/164` | Switching a channel to an n.b. device without params leaves slots 16-39 as they were | Stale slots stay visible and still send MIDI |
+| `param_manager.lua:97-117, 159-164` | The n.b. Slew slot is set up, then hidden and its action cleared; `nb_slew` points at slot 16 | Slew cannot be set |
+| `device_map.lua:381-388` | n.b. param `quantum` is overwritten by `step`, which is always 0 | Coarse encoder steps for n.b. params |
+| `device_map.lua:13` | An unreadable config file raises and stops all device loading | No devices after one broken file |
+| `m_midi.lua:110` | A repeated Note On for a held key overwrites its stored release | One output note stays counted until Stop or Panic |
+| `m_midi.lua:203-205` | The same key held from two devices shares one chord slot | No length recorded for the key still held |
+| `m_midi.lua:216` | The CC page-return check compares the whole status byte (176) | CCs on MIDI channels 2-16 never return to the previous page |
+| `m_midi.lua:367, 446, 457` | `start`, `panic` and `midi_devices_connected` index `midi_devices[id].device` without the nil check `stop` has | Error if a port entry is missing |
+| `sequencer.lua:131-132` | Pattern-mode lit tails follow the selected channel's range and locks | Trigger editor LEDs depend on the selected channel |
+| `functions.lua:105` | `fn.table_to_string` rejects booleans and does not escape quotes | None today: no production caller |
