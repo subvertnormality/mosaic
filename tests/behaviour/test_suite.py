@@ -29,6 +29,16 @@ class CompareTests(unittest.TestCase):
         self.assertEqual(result['fixed'],['case/C/real-time'])
         self.assertEqual(result['added'],['case/D/real-time'])
 
+    def test_real_time_subset_skips_are_listed_not_counted_as_regressions(self):
+        base=report([('A','real-time',True),('B','real-time',True),('C','real-time',True)])
+        new=report([('A','real-time',True)])
+        new['not_run']=[dict(case='B',lane='real-time',profile='base-midi',reason='real-time subset: not timing-selected; run in the controlled lane only'),
+                        dict(case='C',lane='real-time',profile='base-midi',reason='profile not requested')]
+        code,result=self.compare(base,new)
+        self.assertEqual(result['regressions'],['case/C/real-time'])
+        self.assertEqual(result['not_run_by_subset'],['case/B/real-time'])
+        self.assertEqual(code,1)
+
     def test_identical_passing_reports_compare_clean(self):
         value=report([('A','controlled-experimental',True)],layers={'python':[dict(name='test_x',passed=True)]})
         code,result=self.compare(value,value)
@@ -92,6 +102,37 @@ class SchedulingTests(unittest.TestCase):
     def test_controlled_only_declarations_match_the_clock_mode_guards(self):
         self.assertEqual(sorted(suite.controlled_only_cases()),
                          ['M-ARP-005','M-ARP-012','M-ARP-013','M-SPREAD-023','M-SPREAD-026','M-SPREAD-027'])
+
+    def test_real_time_subset_selects_timing_requirements_profiles_and_history(self):
+        registry={'T':['CH-SWING'],'P':['CLOCK-PHRASE-001'],'R':['REC-LIVE'],'N':['NAV-PAGES'],'A':['NAV-PAGES'],'H':['CH-RANGE']}
+        chosen=suite.real_time_subset(registry,{'A':'crow-jf'},{'H'})
+        self.assertEqual(chosen,{'T','P','R','A','H'})
+        self.assertEqual(suite.real_time_subset(registry,{},set()),{'T','P','R'})
+
+    def test_real_time_subset_names_live_requirements(self):
+        requirements={r for case in suite.case_registry().values() for r in case}
+        self.assertEqual(sorted(suite.REAL_TIME_REQUIREMENTS-requirements),[])
+        self.assertEqual([p for p in suite.REAL_TIME_PREFIXES if not any(r.startswith(p) for r in requirements)],[])
+
+    def test_real_time_history_reads_failed_real_time_first_attempts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'suite.json'
+            path.write_text(json.dumps(dict(cases=[
+                dict(case='A',lane='real-time',passed=False),
+                dict(case='B',lane='real-time',passed=True,first_attempt=dict(passed=False)),
+                dict(case='C',lane='controlled-experimental',passed=False),
+                dict(case='D',lane='real-time',passed=True)])))
+            self.assertEqual(suite.real_time_history(str(path)),{'A','B'})
+        self.assertEqual(suite.real_time_history(None),set())
+
+    def test_real_time_subset_records_skipped_runs_as_required_not_run(self):
+        jobs,not_run=suite.plan_jobs(['A','B'],['real-time','controlled-experimental'],{'base-midi'},{},real_time_subset={'A'})
+        self.assertEqual(jobs,[('A','real-time','base-midi'),('A','controlled-experimental','base-midi'),('B','controlled-experimental','base-midi')])
+        self.assertEqual(not_run,[dict(case='B',lane='real-time',profile='base-midi',
+                                      reason='real-time subset: not timing-selected; run in the controlled lane only')])
+        self.assertTrue(not_run[0].get('applicable',True))
+        jobs,not_run=suite.plan_jobs(['A','B'],['real-time'],{'base-midi'},{},real_time_subset=None)
+        self.assertEqual((len(jobs),not_run),(2,[]))
 
     def test_session_budget_fits_the_jack_server_cap(self):
         self.assertEqual(suite.session_budget({'real-time':3,'controlled-experimental':5},0),{'real-time':3,'controlled-experimental':5})

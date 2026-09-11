@@ -244,7 +244,28 @@ def controlled_only_cases():
     from cases import CASES
     return {name:case['controlled_only'] for name,case in CASES.items() if case.get('controlled_only')}
 
-def plan_jobs(selected,lanes,profiles,controlled_only):
+# The real-time subset keeps every case whose contract is about time: tempo, swing and shuffle,
+# arp/spread/strum/acceleration, durations, song timeline, clock and transport, slides, panic,
+# performance, modulation and live recording. Everything else runs in the controlled lane only.
+REAL_TIME_REQUIREMENTS={'CH-TEMPO','CH-SWING','CH-SHUFFLE','CH-CLOCK-INHERIT','CHORD-ARP','CHORD-SPREAD',
+    'CHORD-ACCEL','CHORD-STRUM','PAT-DURATION','SONG-ADVANCE','SONG-LENGTH','MIDI-RELEASE-001','OPT-ELEKTRON'}
+REAL_TIME_PREFIXES=('CLOCK-','SLIDE-','PANIC-','PERF-','MOD-','REC-')
+
+def real_time_history(path):
+    """Cases whose real-time run (or its first attempt) failed in a previous report."""
+    if not path:return set()
+    data=json.loads(Path(path).read_text())
+    return {row['case'] for row in data.get('cases',[]) if row.get('lane')=='real-time' and
+            (row.get('passed') is False or (row.get('first_attempt') or {}).get('passed') is False)}
+
+def real_time_subset(registry,case_profiles,history):
+    """Timing-selected cases, every non-base profile (real-time only) and every case with a
+    real-time failure in the history report, which catches jitter no requirement names."""
+    return {case for case,requirements in registry.items()
+            if case in history or case_profiles.get(case,'base-midi')!='base-midi' or
+            any(r in REAL_TIME_REQUIREMENTS or r.startswith(REAL_TIME_PREFIXES) for r in requirements)}
+
+def plan_jobs(selected,lanes,profiles,controlled_only,real_time_subset=None):
     """Split (case, lane) pairs into runnable jobs and recorded not-run rows. Controlled-only
     fixtures assert on the clock mode, so a real-time run of one proves nothing; it is recorded as
     not applicable with the case's own reason rather than run and reported as a failure."""
@@ -257,6 +278,9 @@ def plan_jobs(selected,lanes,profiles,controlled_only):
                 not_run.append(dict(case=case,lane=lane,profile=profile,reason='audio/Crow profiles are real-time only',applicable=False))
             elif lane=='real-time' and case in controlled_only:
                 not_run.append(dict(case=case,lane=lane,profile=profile,reason='controlled only: '+controlled_only[case],applicable=False))
+            elif lane=='real-time' and real_time_subset is not None and case not in real_time_subset:
+                # Still required: a subset run is never a complete regression run.
+                not_run.append(dict(case=case,lane=lane,profile=profile,reason='real-time subset: not timing-selected; run in the controlled lane only'))
             else:jobs.append((case,lane,profile))
     return jobs,not_run
 
@@ -284,7 +308,13 @@ def run(args):
         layers['python']=python_layer(python,env,norns,out)
         layers['lua_units']=lua_units(norns,out)
         write(out/'suite.json',dict(report,status='running',layers=layers))
-    jobs,not_run=plan_jobs(selected,args.lanes,args.profiles,controlled_only_cases())
+    subset=None
+    if args.real_time_subset:
+        history_path=args.real_time_history or args.durations_from
+        subset=real_time_subset(registry,CASE_PROFILE,real_time_history(history_path))
+        report['real_time_subset']=dict(cases=len(subset&set(selected)),of=len(selected),history=history_path,
+                                         requirements=sorted(REAL_TIME_REQUIREMENTS),prefixes=list(REAL_TIME_PREFIXES))
+    jobs,not_run=plan_jobs(selected,args.lanes,args.profiles,controlled_only_cases(),subset)
     results=[]
     requested={lane:(args.real_time_workers if lane=='real-time' else args.controlled_workers) for lane in args.lanes}
     budget=session_budget(requested,active_jack_servers())
@@ -382,11 +412,15 @@ def compare(args):
             for r in (items if isinstance(items,list) else [items]):rows[('layer',layer,r['name'])]=r['passed']
         return rows
     b,n=index(base),index(new)
-    regressions=sorted('/'.join(k) for k in b if b[k] is True and n.get(k) is not True)
+    # Runs a real-time subset deliberately skipped are recorded by name in the candidate; they are
+    # listed, not counted as regressions. Anything else missing still is one.
+    skipped={('case',r['case'],r['lane']) for r in new.get('not_run',[]) if r.get('reason','').startswith('real-time subset:')}
+    regressions=sorted('/'.join(k) for k in b if b[k] is True and n.get(k) is not True and k not in skipped)
     fixed=sorted('/'.join(k) for k in n if n[k] is True and b.get(k) is False)
     added=sorted('/'.join(k) for k in n if k not in b)
     result=dict(baseline=args.baseline,candidate=args.candidate,regressions=regressions,fixed=fixed,added=added,
                 still_failing=sorted('/'.join(k) for k in n if n[k] is False and b.get(k) is False),
+                not_run_by_subset=sorted('/'.join(k) for k in skipped if k in b),
                 candidate_passed=new.get('passed'),candidate_complete=new.get('complete_regression_run'))
     print(json.dumps(result,indent=1))
     return 1 if regressions or not new.get('passed') else 0
@@ -414,6 +448,9 @@ def main():
     r.add_argument('--sequential-lanes',action='store_true',help='Run lanes one after the other (default: concurrently within the JACK server budget)')
     r.add_argument('--durations-from',help='A previous suite.json whose case durations order each lane longest-first')
     r.add_argument('--skip-fast-layers',action='store_true')
+    r.add_argument('--real-time-subset',action='store_true',help='Real-time lane runs only timing-selected cases and prior real-time failures; '
+                   'the rest are recorded as not run, so the report is never a complete regression run')
+    r.add_argument('--real-time-history',help='Report whose real-time failures join the subset (default: --durations-from)')
     c=commands.add_parser('compare');c.add_argument('baseline');c.add_argument('candidate')
     s=commands.add_parser('rerun',help='Serially rerun failed case runs into suite-effective.json')
     s.add_argument('suite')
