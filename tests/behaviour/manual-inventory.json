@@ -1645,7 +1645,9 @@
         "M-SYNC-017",
         "M-SYNC-016",
         "M-SYNC-015",
-        "M-MIDI-REPEAT-001"
+        "M-MIDI-REPEAT-001",
+        "M-REC-SOURCES-001",
+        "M-REC-SOURCES-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -6917,7 +6919,9 @@
         "M-XA-004-JF-OVERLAP",
         "M-XA-003-JF-OWNERSHIP",
         "M-TRIPLE-003",
-        "M-TRIPLE-002"
+        "M-TRIPLE-002",
+        "M-REC-SOURCES-001",
+        "M-REC-SOURCES-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop. M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-003 (E and D, 3 fresh D repeats): a note pressed on slot 1 step 4 and released after the transition records on slot 1 step 4, the step and slot active at its first press. The baseline stored it on slot 2 (defect record-slot-at-first-press, fixed).",

@@ -648,21 +648,23 @@ function test_midi_input_keys_on_different_steps_are_separate_chords_with_own_le
   end)
 end
 
--- characterisation (suspected defect): the same key held from two sources shares
--- one chord slot; the first release empties chord_state.notes and deletes the
--- chord (m_midi.lua:203-205) although a voice is still held, so no length is
--- ever recorded for it.
-function test_midi_input_same_key_from_two_sources_loses_the_chord_length()
+-- README 239: one shared length to the final key release. Human decision 2026-09-11
+-- (bugs.json same-key-two-sources-chord, was S9): the same key held from two sources
+-- keeps the chord until both sources release it; the final release records the length.
+function test_midi_input_same_key_from_two_sources_records_the_length_at_the_final_release()
   with_midi(function(env)
     env.params.record = 2
     local keyboard_b = {}
     press(env, 60, 100, env.dev1)
     press(env, 60, 100, keyboard_b)
     luaunit.assert_equals(handles(env)[2].voice, 2)
-    env.now = 100.5
+    env.now = 100.25
     release(env, 60, env.dev1)
-    release(env, 60, keyboard_b)
     luaunit.assert_equals(portions(env), {})
+    env.now = 100.5
+    release(env, 60, keyboard_b)
+    luaunit.assert_equals(portions(env), {
+      {"portion", 1, 1, {song_pattern = 2, data = {step = 1, length = 4}}}, {"commit", 1, 1}})
     press(env, 64, 100, env.dev1)
     luaunit.assert_equals(handles(env)[3], {note = 64, velocity = 100, voice = 1, degree = 0})
   end)

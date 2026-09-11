@@ -138,7 +138,8 @@ function handle_midi_event_data(data, midi_device)
     chord_state.chord_number = chord_state.chord_number + 1
     -- Recorded voice slots do not become reusable when a key is released.
     chord_state.voice_count = chord_state.voice_count + 1
-    chord_state.notes[data[2]] = true
+    -- Count holders: the same key may be held from several sources.
+    chord_state.notes[data[2]] = (chord_state.notes[data[2]] or 0) + 1
 
     local chord_degree = quantiser.get_chord_degree(note, chord_state.root_note, step_scale_number)
     if chord_degree < -14 or chord_degree > 14 then
@@ -153,7 +154,8 @@ function handle_midi_event_data(data, midi_device)
     local channel_chords = recording_groups[stored.recording] or {}
     local chord_state = channel_chords[stored.step]
     if chord_state then
-      chord_state.notes[data[2]] = nil
+      local holders = (chord_state.notes[data[2]] or 1) - 1
+      chord_state.notes[data[2]] = holders > 0 and holders or nil
       chord_state.chord_number = chord_state.chord_number - 1
           
       -- Retain the active chord until every held voice has been released.

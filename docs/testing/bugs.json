@@ -889,6 +889,16 @@
         "M-MIDI-REPEAT-001"
       ],
       "summary": "A repeated Note On for a held key (merged keyboards) replaced its release record and left one output note stuck; each onset now keeps its own release (S8)"
+    },
+    {
+      "id": "same-key-two-sources-chord",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "same-key-two-sources-chord.json",
+      "cases": [
+        "M-REC-SOURCES-001",
+        "M-REC-SOURCES-002"
+      ],
+      "summary": "The same key held from two MIDI inputs shared one chord slot, so the first release ended the chord early; chord lengths now run to the final release (S9, S38)"
     }
   ]
 }
