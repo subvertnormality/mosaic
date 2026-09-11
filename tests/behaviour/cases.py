@@ -44,6 +44,7 @@ from reset_pending_voice import reset_pending_voice
 from memory_truncate_isolation import memory_truncate_isolation
 from memory_held_velocity import memory_held_velocity
 from memory_redo_encoder_lock import memory_redo_encoder_lock
+from memory_step_undo import memory_step_undo
 from paint_race import paint_race
 from device_picker_names import device_picker_names
 from syntakt_pedal_params import syntakt_pedal_params
@@ -3269,6 +3270,7 @@ CASES={
  'M-MAP-004':dict(run=midi_mapping_held_step,requirements=['MAP-ROUTING','MAP-CONTROL'],description='With a selected-channel step held, a fixed channel-2 velocity map edits channel 2 from its own value and a selected-channel map still edits the held step (arbitrated SEM-017)'),
  'M-GESTURE-ORDER-001':dict(run=gesture_release_order,requirements=['LOCK-SCALE'],description='Channel scale lock by hold step + tap slot applies; releasing the step before the slot sets no lock (release-order characterisation kept by SEM-016)'),
  'M-TIME-013':dict(run=reset_pending_voice,requirements=['OPT-SEQUENCE-RESET','SONG-ADVANCE','MASK-ATTRIBUTES'],description='A 3-step note sounding across a song transition with reset on sequence change keeps its full length (README 805) while the next slot starts on time'),
+ 'M-MEMORY-010':dict(run=memory_step_undo,requirements=['MEMORY-NAV','MEMORY-RECORD','MASK-ATTRIBUTES'],description='Stepping memory back one action restores the whole step as it was before that action: a note undo keeps an earlier velocity lock, a note undo keeps an earlier chord (also at K3), and a trig lock undo after a note lock or another slot lock drops only that lock (README 698-707)'),
  'M-MEMORY-009':dict(run=memory_redo_encoder_lock,requirements=['MEMORY-NAV','MASK-ATTRIBUTES'],description='Redo of an encoder-made held-step note or velocity lock returns to the locked state, immediately and after a working-pattern rebuild (README 697-702)'),
  'M-MEMORY-008':dict(run=memory_held_velocity,requirements=['MEMORY-NAV','MASK-ATTRIBUTES'],description='Stepping memory back over a held-step velocity lock restores the previous velocity, also after a working-pattern rebuild; a held-step note lock undo is the control (README 697-702)'),
  'M-MEMORY-007':dict(run=memory_truncate_isolation,requirements=['MEMORY-TRUNCATE','MEMORY-NAV','PERSIST-AUTO-001'],description='K1+K3 truncation forgets only its own channel history; the other channel keeps and undoes; both positions and applied masks survive autosave and a cold restart'),
