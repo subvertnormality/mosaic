@@ -14,6 +14,7 @@ from tooltips import tooltip_messages
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
 from device_configs import invalid_device_configs,device_config_defaults
+from unreadable_device_config import unreadable_device_config
 from trig_note_merge import trig_note_merge_matrix
 from scale_lock_precedence import scale_lock_precedence
 from step_slides import step_slide_variants
@@ -31,6 +32,8 @@ from song_divisions import song_tempo_divisions
 from memory_wrap import memory_wrap
 from scale_cache import scale_cache_saves
 from nb_param_lock import nb_param_lock
+from nb_chord_acceleration_lock import nb_chord_acceleration_lock
+from nb_device_switch_slots import nb_device_switch_slots
 from length_persistence import length_persistence
 from slide_capacity import slide_capacity
 from memory_new_project import memory_new_project
@@ -3297,6 +3300,8 @@ CASES={
  'M-SLIDE-CAPACITY-001':dict(run=slide_capacity,requirements=['SLIDE-GLOBAL','PERF-MIDI'],description='Nine channel-1 slides replaced every 1/6 s behind one 31 s channel-2 slide: every channel-1 slide keeps moving through intermediate values for 25 s'),
  'M-SAVE-LENGTH-001':dict(run=length_persistence,requirements=['SAVE-AUTO','PERSIST-AUTO-001','MASK-ATTRIBUTES'],description='A channel length mask of 1/3 and a step length mask of 5/6 display and play the same after idle autosave and a cold restart'),
  'M-XA-005-NB-LOCK':dict(run=nb_param_lock,requirements=['LOCK-PARAM-SET','CH-DEVICE'],expansion_families=['XA-005'],description='Doubledecker slot 1 (Shape 1, a norns parameter) step lock: playback crosses the locked step without a Lua error'),
+ 'M-XA-006-NB-CHORD-ACCEL':dict(run=nb_chord_acceleration_lock,requirements=['LOCK-PARAM-SET','CHORD-ACCEL','CH-DEVICE'],expansion_families=['XA-005'],description='Doubledecker channel, slot 1 replaced by Chord Accel Mod and step 1 locked to +2: playback crosses the locked step without a Lua error (user decision S47)'),
+ 'M-XA-007-NB-SWITCH-SLOTS':dict(run=nb_device_switch_slots,requirements=['CH-DEVICE','CH-PATCH-SENTINEL'],expansion_families=['XA-005'],description='Channel 1 switched from the CC Device to Jf Kit (an n.b. player without parameters): its norns params group ends at the last stock parameter and sends no MIDI; the baseline kept CC 1 onwards visible and sending CC (user decision S4)'),
  'M-SCALE-CACHE-001':dict(run=scale_cache_saves,requirements=['SCALE-EDIT','SCALE-SELECT'],description='110 saves of the playing scale while playing (root C/C# alternating): the first onset after each save is the step degree in the new root and no Lua error occurs past the quantiser cache bound'),
  'M-MEMORY-004':dict(run=memory_wrap,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='5003 held-step keyboard actions wrap the 5000-action history; E3 back two, a new step-2 action, then E3 back and forward restore and reapply exactly that action with the counter and phrases matching'),
  'M-SONG-TEMPO-001':dict(run=song_tempo_divisions,requirements=['SONG-ADVANCE','SONG-SLOTS','CH-TEMPO'],description='Per-sequence tempo as clock divisions of the global tempo: slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing; exact pitches, octave fingerprints and onset times over two song cycles'),
@@ -3317,6 +3322,7 @@ CASES={
  'M-SETUP-003':dict(run=device_config_defaults,requirements=['SETUP-DEVICE-DEFAULTS','SETUP-DEVICE-DISCOVERY','CH-DEVICE'],description='Custom configs set output defaults on confirmation: a drum config routes channel 1 to port 2, MIDI channel 10, fixed note 36; a polyphonic config routes channel 2 to MIDI channel 5 with its pattern notes'),
  'M-SETUP-001':dict(run=lambda c:invalid_device_configs(c,'malformed'),requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='Malformed, empty and object-shaped config files beside a valid one: Mosaic boots, plays through the valid device, and the picker lists none of the invalid files'),
  'M-SETUP-002':dict(run=lambda c:invalid_device_configs(c,'missing-id'),requirements=['SETUP-DEVICE-INVALID'],description='A config entry without an id beside a valid one: Mosaic boots, plays through the valid device, and the entry is not offered'),
+ 'M-SETUP-UNREADABLE-CONFIG-001':dict(run=unreadable_device_config,requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='A config entry that cannot be opened sits between two valid configs: Mosaic boots, plays through the valid device, and the picker offers both valid devices (user decision S7: skip it and load the rest)'),
  'M-MAP-001':dict(run=midi_mapping,requirements=['MAP-CONTROL','MAP-ROUTING','MAP-RANGES'],description='Saved documented PMAP (in 1..2, out -1..1, accumulate): relative binary-offset CCs step the selected channel velocity mask, follow channel selection, and a fixed channel map ignores selection; exact velocities on both ports'),
  'M-SIN-001':dict(run=sinfonion_software,requirements=['SIN-SOFTWARE'],description='Norns2sinfonion port: exact init sequence; no traffic while stopped; channel 1-4 program changes per scale step following the applied root, global transpose and a scale-track lock'),
  'M-TOOLTIP-001':dict(run=tooltip_messages,requirements=['NAV-TOOLTIPS'],description='Bottom-screen tooltips for page changes, channel selection, record, memory apply/undo and transport, with replacement and clearing without input while stopped and playing; exact texts characterised'),

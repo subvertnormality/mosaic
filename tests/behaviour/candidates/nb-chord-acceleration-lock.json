@@ -1,0 +1,56 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "fe7c082",
+  "files": [
+    {
+      "file": "lib/step.lua",
+      "before_sha256": "6edb759a31790dbe16ebc549381aecfe06b5969863de5e4db54d007303700b4b",
+      "after_sha256": "55479f9987c8cb844595910c30ca3509a59d4cc77a197c123ace94e7cba12262"
+    }
+  ],
+  "patch": "0141-nb-chord-acceleration-lock.patch",
+  "patch_sha256": "f69429ccf0e92dddd4d5c65a4a37080552c7a1dcd7d51c848e50832dac19c181",
+  "regression": "M-XA-006-NB-CHORD-ACCEL",
+  "unit_regression": "test_step_killer_chord_acceleration_lock_on_norns_device_is_not_a_norns_param",
+  "baseline": [
+    {
+      "run_id": "f0b575c9ca2a4a4e851d274719e4ad78",
+      "case": "M-XA-006-NB-CHORD-ACCEL",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "92982af44fccc1ac3080b6bf51e3488b7976f242efa0762b23682d9c42133491",
+      "failure": "...fd9eb671ccb4040b0c1b6f11f24c624/norns/lua/core/clock.lua:73: ...eb671ccb4040b0c1b6f11f24c624/norns/lua/core/paramset.lua:491: invalid paramset index: chord_acceleration\nstack traceback:\n\t[C]: in fu"
+    }
+  ],
+  "rationale": "step.should_process_param skips the stock sequencer parameters that step.handle consumes, but \"chord_acceleration\" was missing from the list. On an n.b. (norns) device a Chord Accel Mod trig lock therefore reached the norns branch of process_params and params:set(\"chord_acceleration\", ...), which norns rejects with \"invalid paramset index\", raising in the clock coroutine at the locked step. chord_acceleration is added to the skip list; the sequencer still reads it through process_stock_params for strum/arp spacing.",
+  "oracle": "README 749-756 and 937-940: a trig parameter is assigned with K2 and a held-step E3 turn locks it to that step; README 807-809: Chord Acceleration changes the spacing of an enabled Strum or Arpeggio; README 542: n.b. devices are picked from the device picker. User decision 2026-09-11 on S47: fix.",
+  "validation": [
+    {
+      "run_id": "f07422bb3fbb46d192b51ea19ad105ed",
+      "case": "M-XA-006-NB-CHORD-ACCEL",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "bc08c686199d4bbdd8b8cc09849110298b7d64f85c417a14eb917e346fdc1ba1",
+      "failure": null
+    },
+    {
+      "run_id": "730bccc2322c453294be6d0f9c2a48c4",
+      "case": "M-XA-006-NB-CHORD-ACCEL",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "75cdd539c70ac7342634f518e76f2f05f889f4022983c25467dd23e750d2293f",
+      "failure": null
+    },
+    {
+      "run_id": "86e8288f05f24b27b5c6740ef27fb181",
+      "case": "M-XA-006-NB-CHORD-ACCEL",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "c323ff92e13bf5f816e9dea06d5aa2ba057ee3c4f3e75c579af0304ca6ee4040",
+      "failure": null
+    }
+  ],
+  "collateral": "With the fix: M-XA-005-NB-LOCK (b8407f51d1f541d3879fe62d769930bf) and M-XA-002-AUDIO (96388cd81b9d4c5dbe18bf401c7e64bd) in the nb-audio profile (real time); controlled lane M-SPREAD-019 (25e967a16b0149cc9d9cc6ee6b3f09a0), M-SPREAD-008 (03c95a2520664bd2824702b654cc1392), M-SPREAD-024 (0ee5621db8704361b43b3affd8c61f87), M-SPREAD-016 (f73de3fe6b3a44d5b5d2d54350370248) all passed. Full Lua units OK (1465); guards OK. The characterisation unit test_step_killer_chord_acceleration_lock_on_norns_device_is_written_as_a_norns_param became ..._is_not_a_norns_param. No controlled-lane run or repeat.py: run.py and repeat.py refuse the nb-audio profile outside real time (DSP is not a controlled-time source), so validation is three real-time runs, as for norns-param-lock-channel.",
+  "upstream_merged": false,
+  "runtime": "MONOME_EMULATOR=/home/andy/projects/monome-emulator-behaviour-audio-crow with --experimental-install /home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json and --profile nb-audio --mod-code-root /home/andy/projects/mosaic-output-mods (real time only); M-SPREAD collateral on monome-emulator-midi-clock, controlled lane"
+}
