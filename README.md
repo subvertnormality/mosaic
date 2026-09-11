@@ -192,7 +192,7 @@ Mosaic can also use internal Norns sound sources and manage devices like Crow, J
 
 You can input notes, velocity, and chords using a MIDI keyboard. You can do this live, using live record, or by holding down a step and pressing the keys on your keyboard. When setting on a per step basis, the length of these inputs requires manual selection. To do this, ensure you have your desired channel selected on _Mosaic_. Then, while holding the desired step, press the corresponding key on your keyboard. If you are on the mask page of your Norns, the values you input will display as locks.
 
-By default, the keyboard maps the steps to the currently selected scale on the white keys, with the root note of your selected scale starting from C. You can adjust this mapping in the settings of Mosaic to better suit your musical preferences or project requirements.
+By default, the keyboard plays the keys you press. Enable "Map scale to white keys" in the settings of Mosaic to map the currently selected scale to the white keys, with the root note of your selected scale starting from C, to better suit your musical preferences or project requirements.
 
 
 ##### MIDI Controller Mapping

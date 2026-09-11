@@ -1460,3 +1460,22 @@ reproduced. Mapped mask, trig-param and memory controls now have an equivalence 
 (M-MAP-003). The root disk filled at midnight: the 5e0501a baseline suite was
 truncated and is invalid; large observations were gzipped in place (evidence kept)
 and the full suite was restarted at 8bd70b5 with a compressor alongside.
+
+Full suite at 8bd70b5 (real-time lane from the original run, controlled lane from a
+parallel run at the same tree; combined in `suite-8bd70b5-combined`, serial rerun in
+`suite-effective.json`): 1504 case runs, 18 still failing and 3 load-sensitive
+(real-time M-PARAM-040, M-SYNC-020, M-TIME-007 pass serially). The 18 are all known:
+four M-OPT-ELEK-002/003 runs (SEM-013 pending), eight M-PANIC-007..010 runs on an
+oracle that predates `b1afcc5` (arbitrated SEM-018: a fresh project sends no startup
+Stop; oracle corrected, green in both lanes), and six controlled-only fixtures that
+assert on the clock mode in the real-time lane (now declared `controlled_only` and
+recorded as not applicable there).
+
+Third pass: M-STARTUP-TRANSPORT-001 pins both boots from the native export (fresh:
+no transport; autosave: one Stop per port). M-MAP-004 found that a fixed-channel mask
+map wrote another channel's held-step masks from the selected channel's value
+(fixed, SEM-017). M-TIME-013, M-MEMORY-007 and M-GESTURE-ORDER-001 pass in both
+lanes. M-PAT-BOUNDARY-001 is red at a 1 ms margin (controlled) and green at 10-80 ms:
+an edit that close to a song boundary is heard one pass late; the fix changes
+boundary scheduling, so it is deferred to the refactor. A full suite at 96d465d runs
+with the concurrent scheduler.

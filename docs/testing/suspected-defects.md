@@ -1,0 +1,65 @@
+# Suspected defects awaiting validation
+
+Found by reading code and by the unit pass of 2026-09-11. Each is pinned as current
+behaviour in a Lua unit (`-- characterisation (suspected defect: ...)`) so a refactor cannot
+change it silently, but **none is confirmed and none is fixed**. A suspected defect moves to
+`docs/testing/bugs.json` only when a behaviour test on real input reproduces it (the test
+must fail on the baseline) or when a human confirms the intended behaviour. Fixes follow the
+campaign rule: failing real-input regression first, then an isolated change.
+
+Status values: `unvalidated`, `behaviour-probe-planned`, `behaviour-reproduced`,
+`not-reproduced`, `human-confirmed`, `human-rejected`.
+
+| # | Where | Suspected defect | Would be seen as | Pinned by | Status |
+|---|---|---|---|---|---|
+| S1 | `lib/config/elektron_digitakt_2.json` (`"name": "Digitakt"`, id `digitakt2`) | The Digitakt 2 config carries the Digitakt name | Device picker lists "Digitakt" twice; README 170 names "Digitakt 2" | `test_real_device_map_stock_configs_load_sorted_with_none_first`, `..._get_device_by_name_is_exact_and_case_sensitive` | `fixed` (human-confirmed; M-SETUP-DEVICE-NAMES-001 failed at baseline in both lanes, passes with the fix; bugs.json `digitakt-2-config-name`) |
+| S2 | `lib/config/elektron_syntakt.json`, `param_manager.lua:127/143` | Sustain and Sostenuto carry `nrpn_*` = -1, which Lua treats as present | The range collapses to the Off value -1, so the parameter probably cannot be set at all (the unit agent's first reading, "sent as NRPN -1/-1", needs a value other than Off, which the range does not allow); the config's intent is CC 64/66 | `device_map_real_tests.lua` | `fixed` (M-SETUP-SYNTAKT-PEDALS-001 failed at baseline in both lanes with the NRPN control passing, passes with the fix; bugs.json `syntakt-pedal-params`) |
+| S3 | `config/ex_braids.json`, `device_map.lua:499` vs `param_manager.lua:123` | A leading param with id `none` is dropped by the device map but counted by the param manager | Braids trig locks address the slot before the intended control | `device_map_real_tests.lua` | `unvalidated` (needs a human: EX devices are not emulated here) |
+| S4 | `param_manager.lua:95/164` | Switching a channel to an n.b. device without params leaves slots 16-39 as they were | Stale slots stay visible and still send MIDI | `device_map_real_tests.lua` | `unvalidated` (nb-audio runtime probe possible) |
+| S5 | `param_manager.lua:97-117, 159-164` | The n.b. Slew slot is set up, then hidden and its action cleared; `nb_slew` points at slot 16 | Slew cannot be set | `device_map_real_tests.lua` | `unvalidated` (nb-audio runtime probe possible) |
+| S6 | `device_map.lua:381-388` | n.b. param `quantum` is overwritten by `step`, which is always 0 | Coarse or unexpected encoder steps for n.b. params | `device_map_real_tests.lua` | `unvalidated` |
+| S7 | `device_map.lua:13` | An unreadable config file raises and stops all device loading | No devices after one broken file (e.g. a broken symlink) | `device_map_real_tests.lua` | `unvalidated` (needs a human: is this a supported situation?) |
+| S8 | `m_midi.lua:110` | A repeated Note On for a held key overwrites its stored release | One output note keeps sounding until Stop or Panic | `m_midi_input_tests.lua` | `unvalidated` (needs a human: is a second Note On for a key still held, e.g. from a merged keyboard, input Mosaic must handle? README is silent) |
+| S9 | `m_midi.lua:203-205` | The same key held from two input devices shares one chord slot | No length recorded for the key still held | `m_midi_input_tests.lua` | `unvalidated` |
+| S10 | `m_midi.lua:216` | The CC page-return check compares the whole status byte (176) | CCs on MIDI channels 2-16 never return to the previous page | `m_midi_input_tests.lua` | `unvalidated` (needs a human: the README does not describe the page auto-switch or its return) |
+| S11 | `m_midi.lua:367, 446, 457` | `start`, `panic` and `midi_devices_connected` index `midi_devices[id].device` without the nil check `stop` has | Error if a port entry is missing | `m_midi_input_tests.lua` (noted, not tested) | `unvalidated` (may be unreachable: needs a human) |
+| S12 | `sequencer.lua:131-132` | Pattern-mode lit tails follow the selected channel's range and locks | Trigger editor LEDs depend on the selected channel | `sequencer_control_tests.lua` | `unvalidated` (intended? needs a human) |
+| S13 | `functions.lua:105` | `fn.table_to_string` rejects booleans and does not escape quotes | None: no production caller | `functions_extra_tests.lua` | `unvalidated` (dead code) |
+| S14 | `m_midi.lua` chord state (gap-scan #14) | Chord state after a Note Off that never arrives is never reset; `stop()`/`panic()` reset an unused module variable | A key entered later at that step becomes a chord voice | `m_midi_input_tests.lua` | `behaviour-reproduced`, open in bugs.json (`keyboard-chord-state-after-lost-release`): needs a human to choose the reset point (Stop, Panic, device removal) |
+| S15 | `channel_edit_page_ui.lua` velocity handler (gap-scan #16) | The held-step velocity increment writes the step mask before the release commits the action | Stepping memory back may not restore the earlier velocity | M-MEMORY-008 (behaviour, written) | `not-reproduced` (M-MEMORY-008 passes in both lanes: undo restores the earlier velocity, also after a rebuild); kept as a regression guard |
+| S16 | `trigger_edit_page.lua:139,309` (gap-scan G) | Paint pressed before the primed preview settles saves a partial pattern | Painted steps missing; preview re-shown | M-ALG-PAINT-RACE-001 (behaviour, written) | `behaviour-reproduced`, open in bugs.json (`paint-before-preview-settles`); M-ALG-PAINT-RACE-001 stays red until a human decides fix now or with the scheduler refactor |
+| S17 | `controls/fader.lua:103` vs `:138` | `press` uses fine-grain mode when `length < size`, `draw` also requires `length > 2` | A 2-long fader draws as simple but its left key at value 1 jumps to the middle value | `grid_controls_tests.lua` | `unvalidated` (is any 2-long fader used? needs a human or a probe) |
+| S18 | `controls/vertical_fader.lua:61` | The active LED compares the absolute step with `selected_pattern`, the row loop the on-screen column | On note/velocity editor pages 2-4 the selected pattern's active top-row LED never flickers | `grid_controls_tests.lua` | `unvalidated` (behaviour-probeable via LEDs; intent needs a human) |
+| S19 | `controls/paint_button.lua:25,29,36` | `#states` reads an undefined global; `get_state`/`set_state` use `self.value` | A second press errors | `grid_controls_tests.lua` | `unvalidated` (no production file includes this module: dead code) |
+| S20 | `ui_components/dial.lua:39-44` | The value is clamped into [min, max] before the Off check | A dial with `off_value = -1`, `min = 0` draws an empty bar instead of "X" and overwrites the value with 0 | `ui_components_tests.lua` | `unvalidated` (behaviour-probeable on the Trig Locks page) |
+| S21 | `ui_components/dial.lua:4,204` | The `id` argument is never stored | `get_id()` always returns nil | `ui_components_tests.lua` | `unvalidated` (any caller?) |
+| S22 | `dial.lua:196`, `value_selector.lua:72`, `list_selector.lua:72` | `set_name` assigns the global `name`, ignoring its argument | `channel_edit_page_ui_refreshers.lua:193` calls `set_name`, so dial names are wiped | `ui_components_tests.lua` | `unvalidated` (behaviour-probeable: Trig Locks dial labels) |
+| S23 | `ui_components/control_scroll_selector.lua:65` | `set_selected_item(item)` never uses `item` | The selection does not move | `ui_components_tests.lua` | `unvalidated` (any caller?) |
+| S24 | `channel_edit_page_ui.lua` 1000, 1013, 1052, 1065, 1104, 1117, 1229, 1242, 1279, 1292, 1324, 1335, 1372, 1385 | `v == -1 and nil or v` always yields `v` (Lua: `true and nil` is nil, then `nil or v`), so "off" is stored and recorded as -1, never nil | Depends on whether every reader treats -1 as unset (compare the `lengths_mask ~= -1` typo, gap-scan D12) | `channel_edit_mask_handler_tests.lua` | `unvalidated` (behaviour-probeable: turn a mask down to off, then save/reload and undo) |
+| S25 | `channel_edit_page_ui.lua:1319-1326` | Chord three's held-step decrement calls `memory.record_event` directly, without a song pattern, unlike every other handler | History entry for chord 3 bound to no song slot | `channel_edit_mask_handler_tests.lua` | `unvalidated` |
+| S26 | `channel_edit_page_ui.lua:63-71, 178-185` | Chord masks seed an unset value as -1, but the display shows 0 as "X" and -1 as "-7th"; one decrement from unset gives -2 | An unset chord mask turned down shows "-7th"/lower rather than starting from X | `channel_edit_mask_handler_tests.lua` | `unvalidated` (behaviour-probeable via the screen) |
+| S27 | `channel_edit_page_ui.lua` held-step branch (all eight handlers) | Only the first held key's row is checked | A second held key on row 2 is recorded as step -30 | `channel_edit_mask_handler_tests.lua` | `unvalidated` |
+| S28 | `m_grid.lua:237-241` | A second key-down without a key-up is not ignored and the first long-press timer is not cancelled | Releasing the key runs a two-key gesture with itself and the orphaned timer fires a long press after release | `grid_input_tests.lua` | `unvalidated` (needs a grid that repeats key-down; monome grids do not) |
+| S29 | `m_grid.lua:272-274` (gap-scan #8) | Grid disconnect keeps held keys and their timers | Long presses fire after disconnect; the next tap is a two-key gesture with the stale key | `grid_input_tests.lua` | `not-reproduced` in the emulator (hold step 1, disconnect, reconnect, tap step 24 left the phrase unchanged); the unit reading and the probe disagree, so a human or a finer probe must settle it |
+| S30 | `m_grid.lua:248` | Timers are never cleared after a tap | A second key-up with no new key-down re-runs a short press | `grid_input_tests.lua` | `unvalidated` (needs a duplicate key-up; unlikely from hardware) |
+| S31 | `memory.lua:108-167` (`apply_event`), `memory.redo`/`memory.undo` | Redo re-applies an event with fallback values for fields it lacks (`trig or step_trig_masks or 0`, velocity 100, note 0, length 1) and nothing recomputes the working pattern afterwards | After undo then redo of an encoder-made held-step note lock, step 2 is silent (M-MEMORY-009, both lanes) | M-MEMORY-009 (behaviour) | `fixed` (M-MEMORY-009 failed at baseline in both lanes; the probe showed a rebuild restores the step; passes with the fix, 15 memory cases as collateral; bugs.json `memory-redo-working-pattern`) |
+| S32 | `recorder.lua:75-114` (`elseif`), `m_midi.lua:79-86` | With record armed, holding any grid key outside rows 4-7 records no note; a note-off then commits a length-only mask | Live-recorded notes lost while a page or menu key is held | `recorder_extra_tests.lua` | `behaviour-probe-planned` |
+| S33 | `models/program.lua:332` | `step_trig_lock_banks[step] ~= {}` compares with a new table, so it is always true | With trigless locks on (`m_clock.lua:426`), every step counts as having a lock | `program_extra_tests.lua` | `behaviour-probe-planned` (README trigless locks option) |
+| S34 | `models/program.lua:589-599` | Clearing one lock on a step keeps that parameter's slide while other locks remain | A slide continues after its lock was cleared | `program_extra_tests.lua` | `unvalidated` (behaviour-probeable) |
+| S35 | `models/program.lua:668-672` | K1 "save across song" stores one shared scale table in every existing song pattern | Editing one song pattern's scale (e.g. chord rotation) changes all of them | `program_extra_tests.lua` | `unvalidated` (behaviour-probeable; intent needs a human) |
+| S36 | `models/program.lua:348-364` | `step_has_trig_lock(channel, step)` reads masks from the selected channel | None today: no production caller | `program_extra_tests.lua` | `unvalidated` (dead code) |
+| S37 | `helpers/drum_ops.lua:29-39, 77-85` | Out-of-range guards return 1 (truthy) rather than false | A trig on every step for out-of-range inputs, which the trigger editor never sends | `drum_ops_extra_tests.lua` | `unvalidated` (unreachable from the UI) |
+
+Test-suite note: `test_live_slide_admission_all_channel_parameter_slots`
+(`m_clock_performance_tests.lua`) has a 2 ms limit and failed twice while the host was loaded by
+mutation runs; it passed alone and in later full runs. It is a load-sensitive unit, not a
+behaviour check; the mutation campaign must not run it concurrently with other load or must
+treat it as flaky.
+
+Real-time reliability (not Mosaic defects, thresholds unchanged): at 96d465d the concurrent
+suite (6 real-time sessions) failed M-RANGE-002, M-SYNC-006, M-TIME-006 and M-TIME-007 on
+timing margins. On an idle host M-TIME-007 passed 3/3; M-SYNC-006 failed 1/3 with an 11-12 ms
+onset-phase error both at 96d465d and at 8bd70b5, so it is a pre-existing intermittent case
+at its 10 ms bound. Whether the bound, the external-clock scheduling or the host is the cause
+needs a human decision; until then an M-SYNC-006 real-time failure is not evidence of a
+regression on its own.

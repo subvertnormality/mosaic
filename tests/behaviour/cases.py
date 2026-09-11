@@ -42,6 +42,11 @@ from midi_mapping_targets import midi_mapping_targets
 from pattern_boundary_edit import pattern_boundary_edit
 from reset_pending_voice import reset_pending_voice
 from memory_truncate_isolation import memory_truncate_isolation
+from memory_held_velocity import memory_held_velocity
+from memory_redo_encoder_lock import memory_redo_encoder_lock
+from paint_race import paint_race
+from device_picker_names import device_picker_names
+from syntakt_pedal_params import syntakt_pedal_params
 from gesture_release_order import gesture_release_order
 from midi_mapping_held_step import midi_mapping_held_step
 from startup_transport import startup_transport
@@ -3263,6 +3268,8 @@ CASES={
  'M-MAP-004':dict(run=midi_mapping_held_step,requirements=['MAP-ROUTING','MAP-CONTROL'],description='With a selected-channel step held, a fixed channel-2 velocity map edits channel 2 from its own value and a selected-channel map still edits the held step (arbitrated SEM-017)'),
  'M-GESTURE-ORDER-001':dict(run=gesture_release_order,requirements=['LOCK-SCALE'],description='Channel scale lock by hold step + tap slot applies; releasing the step before the slot sets no lock (release-order characterisation kept by SEM-016)'),
  'M-TIME-013':dict(run=reset_pending_voice,requirements=['OPT-SEQUENCE-RESET','SONG-ADVANCE','MASK-ATTRIBUTES'],description='A 3-step note sounding across a song transition with reset on sequence change keeps its full length (README 805) while the next slot starts on time'),
+ 'M-MEMORY-009':dict(run=memory_redo_encoder_lock,requirements=['MEMORY-NAV','MASK-ATTRIBUTES'],description='Redo of an encoder-made held-step note or velocity lock returns to the locked state, immediately and after a working-pattern rebuild (README 697-702)'),
+ 'M-MEMORY-008':dict(run=memory_held_velocity,requirements=['MEMORY-NAV','MASK-ATTRIBUTES'],description='Stepping memory back over a held-step velocity lock restores the previous velocity, also after a working-pattern rebuild; a held-step note lock undo is the control (README 697-702)'),
  'M-MEMORY-007':dict(run=memory_truncate_isolation,requirements=['MEMORY-TRUNCATE','MEMORY-NAV','PERSIST-AUTO-001'],description='K1+K3 truncation forgets only its own channel history; the other channel keeps and undoes; both positions and applied masks survive autosave and a cold restart'),
  'M-PAT-BOUNDARY-001':dict(run=pattern_boundary_edit,requirements=['SONG-ADVANCE','PAT-EDIT-001'],description='A pattern note edited 1 ms before a song boundary (controlled; 80 ms in real time) is heard at step 1 the next time its slot plays'),
  'M-MAP-003':dict(run=midi_mapping_targets,requirements=['MAP-CONTROL','MAP-RANGES','MEMORY-NAV','MASK-ATTRIBUTES'],description='Mapped note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders: identical CC edits, memory position and played note/CC stream (equivalence characterisation)'),
@@ -3964,6 +3971,9 @@ CASES={
  'M-ALG-004':dict(run=rhythm_bank_workflow,requirements=['PAT-ALGORITHM','PAT-FADERS','PAT-PAINT'],description='All five drum banks and four numeric masks at literal selected patterns, including empty-bank silence and repaint'),
  'M-ALG-002':dict(run=tresillo_multipliers,requirements=['PAT-ALGORITHM','PAT-FADERS','PAT-PAINT'],description='All eight tresillo multipliers: full grid, repeated MIDI phrase, exact musical spacing and repaint erasure'),
  'M-ALG-003':dict(run=tresillo_drum_boundary,requirements=['PAT-ALGORITHM','PAT-PAINT'],description='Tresillo drum-bank 64-step boundary: full grid, MIDI spacing and repaint erasure'),
+ 'M-SETUP-SYNTAKT-PEDALS-001':dict(run=syntakt_pedal_params,requirements=['SETUP-DEVICE-DISCOVERY'],description='Syntakt Sustain and Sostenuto trig parameters change on screen and send CC 64/66 with increasing values; Mute (NRPN) is the control'),
+ 'M-SETUP-DEVICE-NAMES-001':dict(run=device_picker_names,requirements=['SETUP-DEVICE-DISCOVERY'],description='The device picker lists Digitakt and Digitakt 2 as distinct entries (README 170; user-confirmed)'),
+ 'M-ALG-PAINT-RACE-001':dict(run=paint_race,requirements=['PAT-PREVIEW','PAT-PAINT'],description='Paint pressed 20 ms after prime paints the full primed exclusive-or on all 64 cells and the preview is not re-shown (README 424-428)'),
  'M-ALG-001':dict(run=euclidean_workflow,requirements=['PAT-ALGORITHM', 'PAT-FADERS', 'PAT-PREVIEW', 'PAT-PAINT', 'PAT-CANCEL', 'PAT-MOVE'],description='Euclidean3-in-8: full-grid two-phase preview, unchanged playback, cancel, shifted XOR paint/repaint, left/reset and dense-fill boundary'),
  'M-PAT-004':dict(run=pattern_duration_controls,requirements=['PAT-DURATION'],description='Length extension/reset and empty-step gestures preserve exact grid and MIDI phrase'),
  'M-PAT-005':dict(run=live_pattern_duration,requirements=['PAT-DURATION'],description='Shorten and extend during playback: pending release unchanged, following onsets use edited length, phrase timing preserved'),

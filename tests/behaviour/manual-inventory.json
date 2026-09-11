@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "0ac717754ac5c424c541d6e66729e62b9b140483a5c85f402cbae793c4a355bf",
+  "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -108,7 +108,7 @@
       "level": 5,
       "start_line": 191,
       "end_line": 197,
-      "text_sha256": "0a7ea0e4bf57f7d2e8fba2c77b063e4f84cad481f1aaac117ca1a3f6cbc123df",
+      "text_sha256": "f1296ed46f122188f90414c1759bef69a7ca9a74f34b036b3335ce5f03684ea2",
       "classification": "statement-mapped-pending-audit",
       "requirements": [
         "REC-KEYBOARD-STEP"
@@ -1522,7 +1522,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "0ac717754ac5c424c541d6e66729e62b9b140483a5c85f402cbae793c4a355bf"
+      "sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2"
     },
     {
       "path": "cheat_sheet.html",
@@ -1993,7 +1993,8 @@
       ],
       "statement": "Prime previews new steps and existing-step overlaps without painting.",
       "cases": [
-        "M-ALG-001"
+        "M-ALG-001",
+        "M-ALG-PAINT-RACE-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "No overlap/partial/full overlap; change parameters while primed; observe both blink phases. M-ALG-001 implements Euclidean3-in-8 preview/paint/cancel/move and dense fill; validated in both modes. Other algorithms, exhaustive fader positions and playing-state interactions remain required.",
@@ -2022,7 +2023,8 @@
         "M-ALG-001",
         "M-ALG-002",
         "M-ALG-003",
-        "M-ALG-004"
+        "M-ALG-004",
+        "M-ALG-PAINT-RACE-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Each algorithm; empty/full/partial overlap; repeat paint; parameter change between paints. M-ALG-001 implements Euclidean3-in-8 preview/paint/cancel/move and dense fill; validated in both modes. Other algorithms, exhaustive fader positions and playing-state interactions remain required. Tresillo all eight multipliers and drum-bank 64-step boundary validated in controlled and real time. All-bank/fader combinations remain required. M-ALG-004 validates selected patterns in all drum/numeric banks including empty in controlled and real time. Exhaustive pattern selections and numeric factors remain required.",
@@ -2694,7 +2696,9 @@
         "M-MASK-023",
         "M-SAVE-LENGTH-001",
         "M-MAP-003",
-        "M-TIME-013"
+        "M-TIME-013",
+        "M-MEMORY-008",
+        "M-MEMORY-009"
       ],
       "status": "in_progress",
       "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks. M-SAVE-LENGTH-001 (E and D, 3 fresh D repeats): a channel length mask of 1/3 and a step mask of 5/6 display and play the same after idle autosave and a cold restart. The baseline showed X after reload (defect length-index-after-reload, fixed). M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected. M-TIME-013 (E and D, 3 fresh D repeats): with Reset at Song Sequence Change on, a 3-step note sounding across a song transition keeps its full length (README 805) while the next slot starts its step 1 on time.",
@@ -3531,7 +3535,9 @@
         "M-MEMORY-005",
         "M-MEMORY-006",
         "M-MAP-003",
-        "M-MEMORY-007"
+        "M-MEMORY-007",
+        "M-MEMORY-008",
+        "M-MEMORY-009"
       ],
       "status": "partial-domain-coverage",
       "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-MEMORY-006 (E and D, 3 fresh D repeats), characterisation: two recorded mask actions survive idle autosave and a cold restart; the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions. Skipping memory deserialisation on load is detected. M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected. M-MEMORY-007 (E and D, 3 fresh D repeats): K1+K3 truncation forgets only its own channel's history (0 of 0) while another channel keeps 1 of 1 and still undoes; both positions and the applied masks survive idle autosave and a cold restart (persistence is characterisation, as M-MEMORY-006).",
@@ -6452,7 +6458,7 @@
         "M-OPT-KEYS-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "M-OPT-KEYS-001 (E and D, 3 fresh D repeats) on channel 1, transport stopped. Covered: fresh default Off plays all 128 raw keys; On maps all 128 keys through C major from C (black keys take the next white key degree, characterised), follows a change to natural minor, and Off restores raw keys. SEM-012: README line 195 says white-key mapping is the default; README MAN-103, the parameter default and observed output say Off. Remaining: roots other than C, held notes across a scale change, octave/MIDI clamp boundaries, recording through the mapping.",
+      "domain": "M-OPT-KEYS-001 (E and D, 3 fresh D repeats) on channel 1, transport stopped. Covered: fresh default Off plays all 128 raw keys; On maps all 128 keys through C major from C (black keys take the next white key degree, characterised), follows a change to natural minor, and Off restores raw keys. SEM-012 (arbitrated): README line 195 corrected to agree with MAN-103, the parameter default and the observed output (Off: the keyboard plays the keys pressed). Remaining: roots other than C, held notes across a scale change, octave/MIDI clamp boundaries, recording through the mapping.",
       "oracles": [
         "Independent mapping and recorded-playback pitch; held note-off pairs match original input."
       ],
@@ -7113,7 +7119,9 @@
         "M-XA-001-JF",
         "M-XA-002-AUDIO",
         "M-SETUP-003",
-        "M-OPT-ELEK-004"
+        "M-OPT-ELEK-004",
+        "M-SETUP-DEVICE-NAMES-001",
+        "M-SETUP-SYNTAKT-PEDALS-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Empty directory; one and multiple stock configurations; two isolated projects; restart after addition/removal. M-SETUP-001 and M-OPT-ELEK-001 boot seeded config directories and select their devices by picker name. M-OPT-ELEK-004 (E and D, 3 fresh D repeats): Digitakt on port 1 and Syntakt on port 2; each stopped slot change reaches each Elektron device once on its own port, channel 10. The baseline sent both changes to port 1 twice and none to port 2 (defect elektron-program-change-port, fixed). Several Elektron channels on one port still send one change per channel (characterised, unchanged). Status corrected 2026-09-11 from \"unimplemented\", a label that predates the 6 registered cases.",
