@@ -955,6 +955,15 @@
         "M-DASHBOARD-CHORD-001"
       ],
       "summary": "Note Dashboard chord slots show the chord voices as sent (MIDI 0 and clamped voices below 0 show C-2) and X for slots that never played, instead of keeping the previous name, showing unclamped names, or C-2 on a fresh dashboard"
+    },
+    {
+      "id": "held-mask-extra-key",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "held-mask-extra-key.json",
+      "cases": [
+        "M-MASK-HELD-EXTRA-001"
+      ],
+      "summary": "A held pattern-row key made mask handlers record step -30 or, pressed first, turned a held-step edit into a channel-wide one; keys outside rows 4-7 are now ignored (S27)"
     }
   ]
 }

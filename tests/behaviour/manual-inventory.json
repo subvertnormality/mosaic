@@ -2810,7 +2810,8 @@
         "M-MASK-028",
         "M-MASK-029",
         "M-MASK-030",
-        "M-MASK-031"
+        "M-MASK-031",
+        "M-MASK-HELD-EXTRA-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Duplicate Note On without release, multiple held grid steps and comprehensive mask display assertions remain pending. MASK030/031 validate first-held and remaining-held keyboard targets in both release orders after explicit valid2..4 range restoration, exact preview/replay, nine completed note durations and out-of-range LEDs. This does not validate reversed-range handling.",
@@ -2847,7 +2848,8 @@
         "M-MASK-015",
         "M-MASK-016",
         "M-MASK-017",
-        "M-MERGE-042"
+        "M-MERGE-042",
+        "M-MASK-HELD-EXTRA-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Nonempty trig/note/velocity/length/chord defaults and step overrides validated in both clocks, including clear-step fallback, length default removal/restoration and routed channel isolation. Playing edits and comprehensive display assertions remain pending.",
