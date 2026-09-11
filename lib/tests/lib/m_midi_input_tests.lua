@@ -693,21 +693,32 @@ function test_midi_input_repeated_note_on_keeps_a_release_for_each_output_onset(
   end)
 end
 
--- characterisation (open question, gap-scan #14): Stop and Panic release output
--- voices but leave keyboard chord and release state in place; a key pressed on
--- the same step after a lost Note Off joins the stale chord.
-function test_midi_input_stop_leaves_a_held_chord_open()
+-- Human decision 2026-09-11 (bugs.json keyboard-chord-state-after-lost-release,
+-- was S14): Stop resets keyboard chord state, so a key pressed on the same step
+-- after a lost Note Off starts a new chord; the stale key's late release does not
+-- end or measure that new chord.
+function test_midi_input_stop_resets_a_held_chord()
   with_midi(function(env, m)
+    env.params.record = 2
+    env.now = 100
     press(env, 60, 100, env.dev1)
     m.stop()
     luaunit.assert_equals(env.sent, {
       {1, "note_on", 60, 100, 1}, {1, "note_off", 60, 0, 1}, {1, "stop"}, {2, "stop"}})
     press(env, 64, 100, env.dev1)
-    -- characterisation (open question, gap-scan #14)
-    luaunit.assert_equals(handles(env)[2], {note = 64, velocity = 100, voice = 2, degree = 4})
+    luaunit.assert_equals(handles(env)[2], {note = 64, velocity = 100, voice = 1, degree = 0})
+    env.now = 100.25
     release(env, 60, env.dev1)
-    -- characterisation (open question, gap-scan #14): the stale key still owns a release.
+    -- characterisation: the stale key still owns a release of its output note.
     luaunit.assert_equals(env.sent[#env.sent], {1, "note_off", 60, 0, 1})
+    luaunit.assert_equals(portions(env), {})
+    press(env, 67, 100, env.dev1)
+    luaunit.assert_equals(handles(env)[3], {note = 67, velocity = 100, voice = 2, degree = 3})
+    env.now = 100.5
+    release(env, 64, env.dev1)
+    release(env, 67, env.dev1)
+    luaunit.assert_equals(portions(env), {
+      {"portion", 1, 1, {song_pattern = 2, data = {step = 1, length = 4}}}, {"commit", 1, 1}})
   end)
 end
 
