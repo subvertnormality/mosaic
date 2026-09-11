@@ -7122,7 +7122,8 @@
         "M-SETUP-003",
         "M-OPT-ELEK-004",
         "M-SETUP-DEVICE-NAMES-001",
-        "M-SETUP-SYNTAKT-PEDALS-001"
+        "M-SETUP-SYNTAKT-PEDALS-001",
+        "M-SETUP-UNREADABLE-CONFIG-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Empty directory; one and multiple stock configurations; two isolated projects; restart after addition/removal. M-SETUP-001 and M-OPT-ELEK-001 boot seeded config directories and select their devices by picker name. M-OPT-ELEK-004 (E and D, 3 fresh D repeats): Digitakt on port 1 and Syntakt on port 2; each stopped slot change reaches each Elektron device once on its own port, channel 10. The baseline sent both changes to port 1 twice and none to port 2 (defect elektron-program-change-port, fixed). Several Elektron channels on one port still send one change per channel (characterised, unchanged). Status corrected 2026-09-11 from \"unimplemented\", a label that predates the 6 registered cases. M-SETUP-DEVICE-NAMES-001 (E and D, 3 fresh D repeats): the device picker lists Digitakt and Digitakt 2 as distinct entries (README 170; user-confirmed). The baseline listed Digitakt twice (defect digitakt-2-config-name, fixed). M-SETUP-SYNTAKT-PEDALS-001 (E and D, 3 fresh D repeats): Syntakt Sustain and Sostenuto trig parameters change on screen and send CC 64/66 with increasing values, with the NRPN Mute parameter as the control (README 546). The baseline could not set either (defect syntakt-pedal-params, fixed).",
@@ -7176,7 +7177,8 @@
       "statement": "Invalid configuration files must not silently create a misleading working device.",
       "cases": [
         "M-SETUP-001",
-        "M-SETUP-002"
+        "M-SETUP-002",
+        "M-SETUP-UNREADABLE-CONFIG-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "M-SETUP-001/002 (E and D, 3 fresh D repeats each): malformed, empty and object-shaped files and an entry without an id sit beside a valid config; Mosaic boots, plays through the valid device and offers none of the invalid entries. Baseline defect: the missing id aborted init (fixed). Remaining: wrong field types, invalid bounds, duplicate ids/names, unsupported fields.",

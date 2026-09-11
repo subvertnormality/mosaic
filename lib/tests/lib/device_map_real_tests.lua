@@ -712,15 +712,15 @@ function test_real_device_map_missing_config_directory_leaves_builtin_devices()
   end)
 end
 
-function test_real_device_map_unopenable_config_file_aborts_init()
+function test_real_device_map_unopenable_config_file_is_skipped()
   isolated(function(env)
-    local data, config = make_data_dir(env, {["a.json"] = device_json("fine", "Fine")},
+    local data = make_data_dir(env, {["a.json"] = device_json("fine", "Fine")},
       {["dangling.json"] = "/nonexistent/mosaic-device-map-test-target"})
     local dm = load_device_map(env, data, nil, true)
-    -- characterisation (suspected defect: an unreadable file aborts every device, while an
-    -- invalid or empty one is skipped)
-    luaunit.assert_error_msg_contains("Cannot open file: " .. config .. "/dangling.json", dm.init)
-    luaunit.assert_nil(dm.get_devices())
+    -- bugs.json unreadable-device-config-skipped (was suspected defect S7): an unreadable file
+    -- is skipped like an invalid or empty one, and the rest still load
+    dm.init()
+    luaunit.assert_equals(ids_of(dm.get_devices()), {"none", "cc_device", "fine"})
   end)
 end
 
