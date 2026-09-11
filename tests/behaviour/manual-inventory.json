@@ -2523,7 +2523,8 @@
         "M-SHUFFLE-008",
         "M-SETUP-003",
         "M-XA-005-NB-LOCK",
-        "M-XA-006-NB-CHORD-ACCEL"
+        "M-XA-006-NB-CHORD-ACCEL",
+        "M-XA-007-NB-SWITCH-SLOTS"
       ],
       "status": "partial-domain-coverage",
       "domain": "Configured generic CC/named MIDI devices; every virtual port/channel; unassigned and missing devices. M-XA-005-NB-LOCK (real time, nb-audio profile, 3 runs): a Doubledecker Shape 1 (norns parameter) step lock plays across the locked step without a Lua error; lock application and restoration are pinned by Lua units. The baseline raised at Play (defect norns-param-lock-channel, fixed).",
@@ -2579,7 +2580,8 @@
         "M-PATCH-010",
         "M-PATCH-011",
         "M-PATCH-009",
-        "M-PATCH-007"
+        "M-PATCH-007",
+        "M-XA-007-NB-SWITCH-SLOTS"
       ],
       "status": "in_progress",
       "domain": "-1/0/1/63/126/127 and bounds; each configured CC; repeated edits.",
