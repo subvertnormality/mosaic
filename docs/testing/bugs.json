@@ -832,11 +832,11 @@
     },
     {
       "id": "paint-before-preview-settles",
-      "status": "open-awaiting-human-decision",
+      "status": "fixed-on-worktree-with-real-input-regression",
       "cases": [
         "M-ALG-PAINT-RACE-001"
       ],
-      "summary": "A paint press within the ~60 ms it takes the prime job to rebuild the paint pattern (18 scheduler ticks) saves a partial pattern and the job then re-shows the preview; the in-case control (paint after the preview settles) paints the full exclusive-or. README 424-428.",
+      "summary": "A paint press within the ~60 ms it takes the prime job to rebuild the paint pattern (18 scheduler ticks) saves a partial pattern and the job then re-shows the preview; the in-case control (paint after the preview settles) paints the full exclusive-or. README 424-428. Human decision 2026-09-11: fix now. Fixed (S16): Paint builds and saves the complete primed pattern, and a job overtaken by Paint or Cancel no longer re-shows the preview.",
       "evidence": [
         {
           "run_id": "1942e27228f24d17a4f0618aea356203",
@@ -854,7 +854,8 @@
           "manifest_sha256": "8b7801187e11e89b5f4c5c9bf045cd7508f9eebf34d9606b38615e4a413854b1",
           "failure": "('Paint 20 ms after prime differs from the primed pattern', [[23, 25, 28, 31, 33, 36, 39, 41, 44, 47, 49, 52, 55, 57, 60, 63], [1, 4, 7, 9, 12, 15, 17, 20, 23, 25, 28, 31, 33, 36, 39, 41, 44, 47, 49, "
         }
-      ]
+      ],
+      "candidate_manifest": "paint-before-preview-settles.json"
     },
     {
       "id": "keyboard-chord-state-after-lost-release",
