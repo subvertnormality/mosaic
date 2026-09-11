@@ -3779,7 +3779,8 @@
         "M-REC-PARAM-031",
         "M-REC-PARAM-030",
         "M-REC-PARAM-029",
-        "M-REC-PARAM-028"
+        "M-REC-PARAM-028",
+        "M-PARAM-DIAL-OFF-001"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -3824,7 +3825,8 @@
         "M-PARAM-030",
         "M-PARAM-031",
         "M-PARAM-044",
-        "M-PARAM-043"
+        "M-PARAM-043",
+        "M-PARAM-DIAL-OFF-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "No lock/value/off after default or prior lock; first/wrap steps; enter off during a running slide. Existing published cases cover explicit/custom/default Off and uninterrupted slides in both lanes; remaining first/wrap/live-edit combinations remain required.",

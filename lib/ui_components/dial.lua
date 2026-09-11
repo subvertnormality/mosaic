@@ -35,21 +35,23 @@ function dial:draw()
   local bar_x = self.x
   local bar_y = self.y + 7  -- Position below the top label
 
-  -- Ensure `self.value` is within `min_value` and `max_value`
-  if self.min_value and self.value then
-    self.value = math.max(self.min_value, math.min(self.value, self.max_value))
+  -- Clamp a display copy only: an Off value outside [min, max] (off -1, min 0) must still
+  -- show "X" and must not overwrite the dial's value (bugs.json dial-off-display).
+  local value = self.value
+  if self.min_value and value then
+    value = math.max(self.min_value, math.min(value, self.max_value))
   end
 
   -- Handle special cases for displaying value
-  if self.value == self.off_value or not self.value or not self.min_value or not self.max_value then
+  if self.value == self.off_value or value == self.off_value or not value or not self.min_value or not self.max_value then
     screen.move(self.x, bar_y)
     screen.text("X")
   elseif self.ui_labels and self.min_value then
     screen.move(self.x, bar_y)
-    screen.text(self.ui_labels[self.value - (self.min_value - 1)] or "", 24)
+    screen.text(self.ui_labels[value - (self.min_value - 1)] or "", 24)
   elseif self.display_value == true then
     screen.move(self.x, bar_y)
-    screen.text(self.value and fn.clean_number(self.value) or "X")
+    screen.text(value and fn.clean_number(value) or "X")
   else
     -- Define bar dimensions and segments
     local bar_width = 19  -- Total width of the bar
@@ -69,9 +71,9 @@ function dial:draw()
       local total_positive_range = self.max_value - off_value
       local half_num_segments = num_segments / 2
 
-      if self.value >= off_value then
+      if value >= off_value then
         -- Positive values: fill from center to right
-        local value_fraction = (self.value - off_value) / total_positive_range
+        local value_fraction = (value - off_value) / total_positive_range
         if total_positive_range == 0 then value_fraction = 0 end  -- Prevent division by zero
         local filled_segments = math.floor(value_fraction * half_num_segments)
         local partial_fill = (value_fraction * half_num_segments) - filled_segments
@@ -92,7 +94,7 @@ function dial:draw()
         end
       else
         -- Negative values: fill from center to left
-        local value_fraction = (off_value - self.value) / total_negative_range
+        local value_fraction = (off_value - value) / total_negative_range
         if total_negative_range == 0 then value_fraction = 0 end  -- Prevent division by zero
         local filled_segments = math.floor(value_fraction * half_num_segments)
         local partial_fill = (value_fraction * half_num_segments) - filled_segments
@@ -115,7 +117,7 @@ function dial:draw()
     else
       -- Positive-only values: fill from left edge to right
       local total_range = self.max_value - self.min_value
-      local value_fraction = (self.value - self.min_value) / total_range
+      local value_fraction = (value - self.min_value) / total_range
       if total_range == 0 then value_fraction = 0 end  -- Prevent division by zero
       local filled_segments = math.floor(value_fraction * num_segments)
       local partial_fill = (value_fraction * num_segments) - filled_segments

@@ -309,6 +309,38 @@ function test_w3c_trig_lock_page_layout()
   end)
 end
 
+function test_w3c_trig_lock_dials_show_x_at_off_outside_range_and_midi_default_off()
+  isolated(function(env)
+    setup_rich(env)
+    local c = env.channel
+    -- Dial 1: off -1 below its 0..127 range (54 stock Digitakt params); at Off.
+    c.trig_lock_params[1] = {id = "beta", param_id = "p1", name = "n1", short_descriptor_1 = "L1",
+      short_descriptor_2 = "", type = "midi", off_value = -1, cc_min_value = 0, cc_max_value = 127}
+    -- Dial 2: a MIDI device-config param without off_value (README 546: "default -1"); at -1.
+    c.trig_lock_params[2] = {id = "tl2", param_id = "p2", name = "n2", short_descriptor_1 = "L2",
+      short_descriptor_2 = "", type = "midi", cc_min_value = -1, cc_max_value = 127}
+    -- Dial 3: the same MIDI param at 0, a value.
+    c.trig_lock_params[3] = {id = "tl3", param_id = "p3", name = "n3", short_descriptor_1 = "L3",
+      short_descriptor_2 = "", type = "midi", cc_min_value = -1, cc_max_value = 127}
+    env.params.p3 = 0
+    -- Dial 4: an n.b. (norns) param without off_value keeps -1 as a value (no X).
+    c.trig_lock_params[4] = {id = "tl4", param_id = "p4", name = "n4", short_descriptor_1 = "L4",
+      short_descriptor_2 = "", type = "norns", cc_min_value = -1, cc_max_value = 1}
+    start(env)
+    env.ui.select_trig_page()
+    local shown = {}
+    for _, e in ipairs(frame(env)) do
+      local x, text = e:match("^(%d+),25 (.*)$")
+      if x then shown[tonumber(x)] = text end
+    end
+    -- Human decision S20/S62 (bugs.json dial-off-display, M-PARAM-DIAL-OFF-001): X at Off.
+    luaunit.assert_equals(shown[0], "X")
+    luaunit.assert_equals(shown[25], "X")
+    luaunit.assert_nil(shown[50]) -- a bar, no text
+    luaunit.assert_nil(shown[75]) -- characterisation: n.b. params are outside README 546
+  end)
+end
+
 function test_w3c_trig_lock_param_list_layout()
   isolated(function(env)
     setup_rich(env)

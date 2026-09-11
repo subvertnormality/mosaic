@@ -966,6 +966,15 @@
         "M-SLIDE-RESET-001"
       ],
       "summary": "A reset in the middle of a channel step ran the restarted first step straight/unrounded: swing pairs shifted after a song transition, fractional clocks and their slides off by a pulse (S41, S53)"
+    },
+    {
+      "id": "dial-off-display",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "dial-off-display.json",
+      "cases": [
+        "M-PARAM-DIAL-OFF-001"
+      ],
+      "summary": "Trig Locks dials show X at Off when Off lies below the range (off -1, min 0) and for MIDI device params without off_value (default -1), instead of an empty or half bar and a 0/-1 read-out"
     }
   ]
 }
