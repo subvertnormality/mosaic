@@ -596,15 +596,26 @@ function test_program_extra_clear_one_trig_lock_for_step_for_channel()
   local channel = program.get_channel(1, 3)
   channel.step_trig_lock_banks[6] = {[1] = 10, [2] = 20}
   channel.step_trig_lock_slides[6] = {[1] = true, [2] = true}
-  -- characterisation (suspected defect: the slide for a cleared parameter survives while
-  -- another lock remains on the step; slides are only tidied when the step empties;
-  -- program.lua:589-599).
+  -- clearing one lock clears that parameter's slide while another lock remains on the step
+  -- (bugs.json undo-lock-clears-step-slide; formerly S34 characterisation).
   program.clear_trig_lock_for_step_for_channel(channel, 6, 1)
   luaunit.assert_equals(channel.step_trig_lock_banks[6], {[2] = 20})
-  luaunit.assert_equals(channel.step_trig_lock_slides[6], {[1] = true, [2] = true})
+  luaunit.assert_equals(channel.step_trig_lock_slides[6], {[2] = true})
   program.clear_trig_lock_for_step_for_channel(channel, 6, 2)
   luaunit.assert_nil(channel.step_trig_lock_banks[6])
-  luaunit.assert_equals(channel.step_trig_lock_slides[6], {[1] = true})
+  luaunit.assert_nil(channel.step_trig_lock_slides[6])
+  -- a slide on a step with no lock for its parameter (hold + K3 on a lock-less step) is kept
+  -- when another parameter's lock there is cleared
+  channel.step_trig_lock_banks[5] = {[2] = 20}
+  channel.step_trig_lock_slides[5] = {[1] = true, [2] = true}
+  program.clear_trig_lock_for_step_for_channel(channel, 5, 2)
+  luaunit.assert_nil(channel.step_trig_lock_banks[5])
+  luaunit.assert_equals(channel.step_trig_lock_slides[5], {[1] = true})
+  -- clearing an absent lock leaves the parameter's slide alone
+  channel.step_trig_lock_banks[11] = {[2] = 20}
+  channel.step_trig_lock_slides[11] = {[1] = true}
+  program.clear_trig_lock_for_step_for_channel(channel, 11, 1)
+  luaunit.assert_equals(channel.step_trig_lock_slides[11], {[1] = true})
   -- the slide table goes when its last entry is cleared
   channel.step_trig_lock_banks[7] = {[3] = 1}
   channel.step_trig_lock_slides[7] = {[3] = true}
