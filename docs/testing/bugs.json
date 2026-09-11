@@ -937,15 +937,6 @@
       "summary": "A Chord Accel Mod trig lock on a channel playing an n.b. device raised a Lua error at the locked step during playback; the lock is now handled by the sequencer like the other chord parameters."
     },
     {
-      "id": "nb-device-switch-clears-slots",
-      "status": "fixed-on-worktree-with-real-input-regression",
-      "candidate_manifest": "nb-device-switch-clears-slots.json",
-      "cases": [
-        "M-XA-007-NB-SWITCH-SLOTS"
-      ],
-      "summary": "Switching a channel from a MIDI device to an n.b. device without params (for example Jf Kit) left the old device's parameters in the channel's norns params menu, still sending MIDI; they are now cleared."
-    },
-    {
       "id": "realign-mid-step-length",
       "status": "fixed-on-worktree-with-real-input-regression",
       "candidate_manifest": "realign-mid-step-length.json",

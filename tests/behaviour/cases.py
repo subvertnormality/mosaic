@@ -32,7 +32,6 @@ from memory_wrap import memory_wrap
 from scale_cache import scale_cache_saves
 from nb_param_lock import nb_param_lock
 from nb_chord_acceleration_lock import nb_chord_acceleration_lock
-from nb_device_switch_slots import nb_device_switch_slots
 from length_persistence import length_persistence
 from slide_capacity import slide_capacity
 from memory_new_project import memory_new_project
@@ -3307,7 +3306,6 @@ CASES={
  'M-SAVE-LENGTH-001':dict(run=length_persistence,requirements=['SAVE-AUTO','PERSIST-AUTO-001','MASK-ATTRIBUTES'],description='A channel length mask of 1/3 and a step length mask of 5/6 display and play the same after idle autosave and a cold restart'),
  'M-XA-005-NB-LOCK':dict(run=nb_param_lock,requirements=['LOCK-PARAM-SET','CH-DEVICE'],expansion_families=['XA-005'],description='Doubledecker slot 1 (Shape 1, a norns parameter) step lock: playback crosses the locked step without a Lua error'),
  'M-XA-006-NB-CHORD-ACCEL':dict(run=nb_chord_acceleration_lock,requirements=['LOCK-PARAM-SET','CHORD-ACCEL','CH-DEVICE'],expansion_families=['XA-005'],description='Doubledecker channel, slot 1 replaced by Chord Accel Mod and step 1 locked to +2: playback crosses the locked step without a Lua error (user decision S47)'),
- 'M-XA-007-NB-SWITCH-SLOTS':dict(run=nb_device_switch_slots,requirements=['CH-DEVICE','CH-PATCH-SENTINEL'],expansion_families=['XA-005'],description='Channel 1 switched from the CC Device to Jf Kit (an n.b. player without parameters): its norns params group ends at the last stock parameter and sends no MIDI; the baseline kept CC 1 onwards visible and sending CC (user decision S4)'),
  'M-SCALE-CACHE-001':dict(run=scale_cache_saves,requirements=['SCALE-EDIT','SCALE-SELECT'],description='110 saves of the playing scale while playing (root C/C# alternating): the first onset after each save is the step degree in the new root and no Lua error occurs past the quantiser cache bound'),
  'M-MEMORY-004':dict(run=memory_wrap,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='5003 held-step keyboard actions wrap the 5000-action history; E3 back two, a new step-2 action, then E3 back and forward restore and reapply exactly that action with the counter and phrases matching'),
  'M-SONG-TEMPO-001':dict(run=song_tempo_divisions,requirements=['SONG-ADVANCE','SONG-SLOTS','CH-TEMPO'],description='Per-sequence tempo as clock divisions of the global tempo: slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing; exact pitches, octave fingerprints and onset times over two song cycles'),

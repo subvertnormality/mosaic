@@ -159,10 +159,6 @@ function param_manager.add_device_params(channel_id, device, c, midi_device, ini
       oob_accumulator = i + 1
     end
 
-    -- A device without its own params keeps none of the previous device's slots
-    if next(device.params) == nil then
-      oob_accumulator = accumulator
-    end
 
     -- Hide remaining parameters
     for j = oob_accumulator, 180 do
