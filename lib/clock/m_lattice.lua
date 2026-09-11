@@ -702,6 +702,9 @@ function Lattice:realign_eligable_sprockets()
         sprocket:update_swing()
         sprocket:update_shuffle(1)  -- Passing 1 as we've reset to step 1
         sprocket.current_ppqn = sprocket.division * self.ppqn * 4
+        -- Restarted step 1 is resolved by begin_cycle, as at a step boundary,
+        -- also when the reset lands mid-step (defect realign-mid-step-length).
+        sprocket.shuffle_updated = false
       end
     end
   end
