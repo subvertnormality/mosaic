@@ -199,6 +199,8 @@ configure_note_value_selector(note_displays.chords[1])
 configure_note_value_selector(note_displays.chords[2])
 configure_note_value_selector(note_displays.chords[3])
 configure_note_value_selector(note_displays.chords[4])
+-- Chord slots start as "no note played" (X), not MIDI note 0 (bugs.json dashboard-chord-slots).
+for _, chord_display in ipairs(note_displays.chords) do chord_display.value = -1 end
 configure_note_value_selector(mask_selectors.note)
 configure_note_page_velocity_length_value_selector(mask_selectors.velocity)
 configure_mask_length_selector(mask_selectors.length)
@@ -1731,7 +1733,8 @@ function channel_edit_page_ui.set_note_dashboard_values(values)
 
     for i = 1, 4 do
       
-      if values.chords[i] and values.chords[i] ~= 0 then
+      -- MIDI note 0 is a played chord voice, not "no chord" (bugs.json dashboard-chord-slots).
+      if values.chords[i] then
         note_displays.chords[i]:set_value(values.chords[i])
       elseif note_displays.chords[i]:get_value() ~= -1 then
         note_displays.chords[i]:set_value(note_displays.chords[i]:get_value())

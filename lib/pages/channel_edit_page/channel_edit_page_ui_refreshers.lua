@@ -194,7 +194,13 @@ channel_edit_page_ui_refreshers.refresh_trig_locks = scheduler.debounce(function
     m_param:set_name(u_trig_lock_param.name)
     m_param:set_top_label(u_trig_lock_param.short_descriptor_1)
     m_param:set_bottom_label(u_trig_lock_param.short_descriptor_2)
-    m_param:set_off_value(u_trig_lock_param.off_value)
+    -- A MIDI device parameter's configured Off value defaults to -1 (README 546,
+    -- param_manager.lua; bugs.json dial-off-display).
+    if u_trig_lock_param.off_value == nil and u_trig_lock_param.type == "midi" then
+      m_param:set_off_value(-1)
+    else
+      m_param:set_off_value(u_trig_lock_param.off_value)
+    end
     m_param:set_min_value(u_trig_lock_param.nrpn_min_value or u_trig_lock_param.cc_min_value)
     m_param:set_max_value(u_trig_lock_param.nrpn_max_value or u_trig_lock_param.cc_max_value)
     m_param:set_ui_labels(u_trig_lock_param.ui_labels)

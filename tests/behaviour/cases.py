@@ -61,6 +61,7 @@ from paint_race import paint_race
 from device_picker_names import device_picker_names
 from syntakt_pedal_params import syntakt_pedal_params
 from dashboard_channel_select import dashboard_channel_select
+from dashboard_chord_slots import dashboard_chord_slots
 from gesture_release_order import gesture_release_order
 from midi_mapping_held_step import midi_mapping_held_step
 from midi_cc_page_return import midi_cc_page_return
@@ -68,6 +69,7 @@ from startup_transport import startup_transport
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
+from dial_off_display import dial_off_display
 from project_dialog_lifecycle import project_dialog_while_playing
 from persisted_ranges import saved_range_compatibility
 from persisted_ranges import rejected_manual_range
@@ -3441,6 +3443,7 @@ CASES={
  'M-PARAM-032':dict(run=pitch_lock_isolation,requirements=['PARAM-SLOTS','PARAM-FIXED','PARAM-QUANTISED-FIXED','LOCK-PARAM-SET'],description='Two MIDI channels: independent fixed/quantised zero and127 locks, clear/default/Off interactions, exact phrases/gates/phase'),
  'M-PARAM-033':dict(run=lambda c:pitch_lock_isolation(c,song_copy=True),requirements=['PARAM-SLOTS','PARAM-FIXED','PARAM-QUANTISED-FIXED','LOCK-PARAM-SET'],description='Copied song retains independent fixed/quantised locks; editing and clearing copy preserves original song including zero/127 extremes'),
  'M-PARAM-031':dict(run=lambda c:sparse_editor_domain(c,'NS6'),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Native NS6 sparse/singleton encoder range, alternating normal/fine input with both clamps, Off and exact emitted MIDI'),
+ 'M-PARAM-DIAL-OFF-001':dict(run=dial_off_display,requirements=['PARAM-SLOTS','PARAM-OFF'],description='Trig Locks dials show X at Off for Control 1 (off -1 below its 0..127 range) and CCdefault (no off_value, README 546 default -1), in the 2-second read-out and settled; the parameters stay Off and send no CC (README 546, 761; human decision S20/S62)'),
  'M-PARAM-030':dict(run=lambda c:sparse_editor_domain(c,'NS0'),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Native NS0 sparse/singleton encoder range, alternating normal/fine input with both clamps, Off and exact emitted MIDI'),
  'M-PARAM-029':dict(run=lambda c:sparse_editor_domain(c,'SparseHigh'),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Native SparseHigh sparse/singleton encoder range, alternating normal/fine input with both clamps, Off and exact emitted MIDI'),
  'M-PARAM-028':dict(run=lambda c:sparse_editor_domain(c,'SparseLow'),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Native SparseLow sparse/singleton encoder range, alternating normal/fine input with both clamps, Off and exact emitted MIDI'),
@@ -3998,6 +4001,7 @@ CASES={
  'M-ALG-003':dict(run=tresillo_drum_boundary,requirements=['PAT-ALGORITHM','PAT-PAINT'],description='Tresillo drum-bank 64-step boundary: full grid, MIDI spacing and repaint erasure'),
  'M-SETUP-SYNTAKT-PEDALS-001':dict(run=syntakt_pedal_params,requirements=['SETUP-DEVICE-DISCOVERY'],description='Syntakt Sustain and Sostenuto trig parameters change on screen and send CC 64/66 with increasing values; Mute (NRPN) is the control'),
  'M-DASHBOARD-SELECT-001':dict(run=dashboard_channel_select,requirements=['CH-DASHBOARD'],description='After a grid channel select the Note Dashboard shows X for Note, Vel and Len, and played values after the channel plays (README 679)'),
+ 'M-DASHBOARD-CHORD-001':dict(run=dashboard_chord_slots,requirements=['CH-DASHBOARD','MASK-CHORD'],description='Note Dashboard chord slots show the chord voice MIDI received (a voice at note 0, and voices computed below 0 and sent as 0, show C-2) and X for slots that never played, on a fresh dashboard too (README 679; human decision S51)'),
  'M-SETUP-DEVICE-NAMES-001':dict(run=device_picker_names,requirements=['SETUP-DEVICE-DISCOVERY'],description='The device picker lists Digitakt and Digitakt 2 as distinct entries (README 170; user-confirmed)'),
  'M-ALG-PAINT-RACE-001':dict(run=paint_race,requirements=['PAT-PREVIEW','PAT-PAINT'],description='Paint pressed 20 ms after prime paints the full primed exclusive-or on all 64 cells and the preview is not re-shown (README 424-428)'),
  'M-ALG-001':dict(run=euclidean_workflow,requirements=['PAT-ALGORITHM', 'PAT-FADERS', 'PAT-PREVIEW', 'PAT-PAINT', 'PAT-CANCEL', 'PAT-MOVE'],description='Euclidean3-in-8: full-grid two-phase preview, unchanged playback, cancel, shifted XOR paint/repaint, left/reset and dense-fill boundary'),

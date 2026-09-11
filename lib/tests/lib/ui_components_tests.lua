@@ -525,29 +525,36 @@ function test_uicomp_dial_draw_shows_x_at_off_value_inside_range()
   luaunit.assert_nil(d:get_value())
 end
 
-function test_uicomp_dial_draw_clamps_off_value_below_min_into_range()
-  -- characterisation (suspected defect: draw() clamps the value into
-  -- [min, max] before testing for off_value, so the common off_value -1 with
-  -- min 0 is drawn as an empty bar rather than "X", and the stored value
-  -- becomes 0).
+function test_uicomp_dial_draw_shows_x_at_off_value_below_min()
+  -- An off_value below min (off -1, min 0) is Off, not the minimum: draw() shows "X" and
+  -- leaves the dial's value alone (human decision S20; bugs.json dial-off-display,
+  -- M-PARAM-DIAL-OFF-001). This test pinned the old empty bar and stored 0.
   local d = new_dial()
   d:set_min_value(0)
   d:set_max_value(127)
   recorded(function() d:set_value(nil) end)
   luaunit.assert_equals(d:get_value(), -1)
+  luaunit.assert_equals(draw_log(d), dial_frame(1, {{"move", 10, 27}, {"text", "X"}}))
+  luaunit.assert_equals(d:get_value(), -1)
+  -- The 2-second numeric read-out shows "X" at Off too, not the clamped "0".
+  d.display_value = true
+  luaunit.assert_equals(draw_log(d), dial_frame(1, {{"move", 10, 27}, {"text", "X"}}))
+  d.display_value = false
+  -- min 0 itself is a value, drawn as an empty bar.
+  recorded(function() d:set_value(0) end)
   luaunit.assert_equals(draw_log(d), dial_frame(1, {}))
-  luaunit.assert_equals(d:get_value(), 0)
 end
 
 function test_uicomp_dial_draw_clamps_value_above_max()
   local d = new_dial()
   d:set_min_value(0)
   d:set_max_value(10)
-  d.value = 15 -- increment() does not clamp; draw() does
+  d.value = 15 -- increment() does not clamp; draw() clamps its display copy
   local rects = {}
   for i = 1, 20 do rects[i] = {10 + (i - 1) * (19 / 20), 19 / 20} end
   luaunit.assert_equals(draw_log(d), dial_frame(1, bar(rects))) -- characterisation
-  luaunit.assert_equals(d:get_value(), 10)
+  -- draw() no longer writes the clamped copy back (bugs.json dial-off-display).
+  luaunit.assert_equals(d:get_value(), 15)
 end
 
 function test_uicomp_dial_draw_positive_range_bar_segments()

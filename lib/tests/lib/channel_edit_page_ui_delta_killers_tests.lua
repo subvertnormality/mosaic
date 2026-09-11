@@ -622,7 +622,7 @@ function test_w4c_dashboard_partial_updates_keep_the_other_values()
   end)
 end
 
-function test_w4c_dashboard_rounds_length_and_treats_chord_zero_as_empty()
+function test_w4c_dashboard_rounds_length_and_shows_chord_note_zero()
   isolated(function(env)
     start(env)
     env.ui.select_note_dashboard_page()
@@ -634,10 +634,25 @@ function test_w4c_dashboard_rounds_length_and_treats_chord_zero_as_empty()
     end
     luaunit.assert_equals(shown, {"1.0", "0.33", "2.5"}) -- characterisation: two decimals
     env.ui.set_note_dashboard_values({chords = {1, 0}})
-    -- characterisation: MIDI note 1 is shown by name.
-    -- characterisation (suspected defect: 0 is treated as "no chord" (line 1726), so a chord
-    -- voice at MIDI note 0 leaves the previous chord note on screen instead of showing C-2).
+    -- README.md:679: a chord voice sent as MIDI note 0 is a played note and is shown as C-2;
+    -- this test pinned the old "0 means no chord" (human decision S51; bugs.json
+    -- dashboard-chord-slots, M-DASHBOARD-CHORD-001).
     luaunit.assert_equals(dashboard(env)["0,48"], "C#-2")
-    luaunit.assert_equals(dashboard(env)["25,48"], "E3")
+    luaunit.assert_equals(dashboard(env)["25,48"], "C-2")
+  end)
+end
+
+function test_w4c_fresh_dashboard_chord_slots_show_x()
+  isolated(function(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    -- Human decision S51 (bugs.json dashboard-chord-slots): chord slots that never played
+    -- show X (characterisation of the marker), not C-2 (MIDI 0).
+    local d = dashboard(env)
+    luaunit.assert_equals({d["0,48"], d["25,48"], d["50,48"], d["75,48"]}, {"X", "X", "X", "X"})
+    -- A partial update leaves unplayed slots at X.
+    env.ui.set_note_dashboard_values({chords = {[2] = 69}})
+    d = dashboard(env)
+    luaunit.assert_equals({d["0,48"], d["25,48"], d["50,48"], d["75,48"]}, {"X", "A3", "X", "X"})
   end)
 end

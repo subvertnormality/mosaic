@@ -2889,7 +2889,8 @@
         "M-MASK-027",
         "M-MASK-028",
         "M-MASK-029",
-        "M-MEMORY-011"
+        "M-MEMORY-011",
+        "M-DASHBOARD-CHORD-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Duplicate Note On without release, multiple held grid steps and comprehensive mask display assertions remain pending.",
@@ -3320,7 +3321,8 @@
         "M-DASHBOARD-006",
         "M-DASHBOARD-007",
         "M-DASHBOARD-008",
-        "M-DASHBOARD-SELECT-001"
+        "M-DASHBOARD-SELECT-001",
+        "M-DASHBOARD-CHORD-001"
       ],
       "status": "partial",
       "domain": "All channels; chords; rests; selection during playback; stale-frame transitions. M-DASHBOARD-SELECT-001 (E and D, 3 fresh D repeats): after a grid channel select the Note Dashboard shows X for Note, Vel and Len, and played values once the channel plays (README 679; the X marker is characterisation). The baseline showed Vel -1 and Len -1.0 (defect dashboard-absent-velocity-length, fixed).",
@@ -3781,7 +3783,8 @@
         "M-REC-PARAM-031",
         "M-REC-PARAM-030",
         "M-REC-PARAM-029",
-        "M-REC-PARAM-028"
+        "M-REC-PARAM-028",
+        "M-PARAM-DIAL-OFF-001"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -3826,7 +3829,8 @@
         "M-PARAM-030",
         "M-PARAM-031",
         "M-PARAM-044",
-        "M-PARAM-043"
+        "M-PARAM-043",
+        "M-PARAM-DIAL-OFF-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "No lock/value/off after default or prior lock; first/wrap steps; enter off during a running slide. Existing published cases cover explicit/custom/default Off and uninterrupted slides in both lanes; remaining first/wrap/live-edit combinations remain required.",

@@ -970,6 +970,34 @@ function test_step_killer_note_dashboard_follows_only_the_selected_channel()
   luaunit.assert_equals(chord[2].chords[1], 64)
 end
 
+-- Human decision S51 (bugs.json dashboard-chord-slots): the dashboard shows chord voices as
+-- MIDI sends them, clamped to 0..127 (lib/m_midi.lua note_on). A root at MIDI 12 with the
+-- chord mask -9 (--6th) computes MIDI -3.
+function test_step_killer_note_dashboard_chord_voices_are_clamped_as_sent()
+  local function chord_voice(mask)
+    local dashboard, ons
+    with_env(function(env)
+      local channel = working_pattern({1}, {note_mask_values = {[1] = 12}})
+      channel.chord_one_mask = mask
+      program.get().selected_channel = 1
+      step_under_test.handle(1, 1)
+      dashboard = env.dashboard
+      ons = notes_of(events_of(env, "on"))
+    end)
+    local chords = {}
+    for _, values in ipairs(dashboard) do
+      if values.chords then table.insert(chords, values.chords[1]) end
+    end
+    return chords, ons
+  end
+  local chords, ons = chord_voice(-9)
+  luaunit.assert_equals(ons, {12, -3}) -- characterisation: this fake note_on does not clamp
+  luaunit.assert_equals(chords, {0})
+  chords, ons = chord_voice(-7)
+  luaunit.assert_equals(ons, {12, 0})
+  luaunit.assert_equals(chords, {0})
+end
+
 -- Clock-driven cases: the first lattice pulse processes step 1.
 
 -- characterisation: when the same pitch repeats on consecutive steps, the earlier
@@ -1055,6 +1083,23 @@ function test_step_killer_arp_updates_the_dashboard_only_for_the_selected_channe
   end
   luaunit.assert_equals(arp_dashboard(2), 0)
   luaunit.assert_true(arp_dashboard(1) >= 2)
+end
+
+-- Human decision S51 (bugs.json dashboard-chord-slots): arpeggiated chord voices are shown as
+-- sent too, clamped to 0..127. Root MIDI 12, chord mask -9 computes MIDI -3.
+function test_step_killer_arp_dashboard_chord_voices_are_clamped_as_sent()
+  local chords, ons
+  with_env(function(env)
+    local channel = arp_step(env, 1/4, {note_mask_values = {[1] = 12}})
+    channel.chord_one_mask = -9
+    program.get().selected_channel = 1
+    env.start()
+    pulse(24)
+    ons = notes_of(note_ons(env))
+    chords = env.dashboard[#env.dashboard].chords
+  end)
+  luaunit.assert_equals({ons[1], ons[2]}, {12, -3}) -- characterisation: the fake does not clamp
+  luaunit.assert_equals(chords[1], 0)
 end
 
 -- characterisation: with strum shape 2 the root plays last, carrying the random
