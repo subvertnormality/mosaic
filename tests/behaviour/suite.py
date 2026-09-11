@@ -239,6 +239,27 @@ def case_registry():
     from cases import CASES
     return {name:list(case['requirements']) for name,case in CASES.items()}
 
+def controlled_only_cases():
+    sys.path.insert(0,str(BEHAVIOUR))
+    from cases import CASES
+    return {name:case['controlled_only'] for name,case in CASES.items() if case.get('controlled_only')}
+
+def plan_jobs(selected,lanes,profiles,controlled_only):
+    """Split (case, lane) pairs into runnable jobs and recorded not-run rows. Controlled-only
+    fixtures assert on the clock mode, so a real-time run of one proves nothing; it is recorded as
+    not applicable with the case's own reason rather than run and reported as a failure."""
+    jobs=[];not_run=[]
+    for lane in lanes:
+        for case in selected:
+            profile=CASE_PROFILE.get(case,'base-midi')
+            if profile not in profiles:not_run.append(dict(case=case,lane=lane,profile=profile,reason='profile not requested'))
+            elif profile in ('crow-jf','nb-audio') and lane!='real-time':
+                not_run.append(dict(case=case,lane=lane,profile=profile,reason='audio/Crow profiles are real-time only',applicable=False))
+            elif lane=='real-time' and case in controlled_only:
+                not_run.append(dict(case=case,lane=lane,profile=profile,reason='controlled only: '+controlled_only[case],applicable=False))
+            else:jobs.append((case,lane,profile))
+    return jobs,not_run
+
 def run(args):
     out=Path(args.output).resolve();out.mkdir(parents=True,exist_ok=False)
     env=dict(os.environ,MONOME_EMULATOR=str(Path(args.emulator).resolve()))
@@ -263,14 +284,7 @@ def run(args):
         layers['python']=python_layer(python,env,norns,out)
         layers['lua_units']=lua_units(norns,out)
         write(out/'suite.json',dict(report,status='running',layers=layers))
-    jobs=[];not_run=[]
-    for lane in args.lanes:
-        for case in selected:
-            profile=CASE_PROFILE.get(case,'base-midi')
-            if profile not in args.profiles:not_run.append(dict(case=case,lane=lane,profile=profile,reason='profile not requested'))
-            elif profile in ('crow-jf','nb-audio') and lane!='real-time':
-                not_run.append(dict(case=case,lane=lane,profile=profile,reason='audio/Crow profiles are real-time only',applicable=False))
-            else:jobs.append((case,lane,profile))
+    jobs,not_run=plan_jobs(selected,args.lanes,args.profiles,controlled_only_cases())
     results=[]
     requested={lane:(args.real_time_workers if lane=='real-time' else args.controlled_workers) for lane in args.lanes}
     budget=session_budget(requested,active_jack_servers())

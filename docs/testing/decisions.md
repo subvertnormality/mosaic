@@ -411,3 +411,32 @@ audit `20260911T002251-arbitrate-288c3f8c`, snapshot bbba51ae retained. Only son
 copy/erase uses press order; other gestures are unchanged. Claude's MINOR risk: operand
 order is now page-dependent, to unify in the planned refactor. Regression
 M-SONG-COPY-001; defect `song-slot-copy-press-order`.
+
+## SEM-017 — Fixed-channel mask maps while a selected-channel step is held (decided 2026-09-11, arbitrated)
+
+With a sequencer step held, the mask handlers applied a fixed-channel map (e.g. `ch2_vel`)
+to the mapped channel's held-step mask using the selected channel's on-screen value
+(observed: channel 1 mask 50, channel 2 step 2 became 53); such edits are never committed
+to memory because held-step commits are keyed to the selected channel. Arbitration:
+`OUTCOME: CONVERGED`, `SELECTED: fixed-map-ignores-held-steps`, unanimous in round 1
+(both decisive lib/pages/channel_edit_page/channel_edit_page.lua:169), `CLEANING: attested`,
+audit `20260911T060320-arbitrate-06545021`, snapshot 14b7a0a0 retained. Implemented as the
+MINOR-risk note advised: the held-step branch applies only when the handled channel is the
+selected channel, so encoders and selected-channel maps are unchanged. Regression M-MAP-004;
+defect `fixed-map-held-steps`.
+
+## SEM-018 — MIDI transport at startup (decided 2026-09-11, arbitrated)
+
+README is silent on transport at boot. Bisected M-PANIC-007..010 failures to `b1afcc5`
+(loading a missing autosave returns before `m_clock:stop()`): since then a fresh start
+with no autosave sends no MIDI Stop, while a start that loads the autosave still stops the
+transport first and sends Stop to every connected MIDI port. Arbitration: `OUTCOME:
+CONVERGED`, `SELECTED: no-stop-without-project`, unanimous in round 1 (claude decisive
+mosaic.lua:72, codex decisive lib/m_midi.lua:409), `CLEANING: attested`, audit
+`20260911T061259-arbitrate-1239e30d`, snapshot 6f41bc62 retained. Recorded risk (claude):
+boot transport stays asymmetric and the regression pins that asymmetry. No Mosaic change;
+`verify_panic_transport` expects no startup Stops from its fresh-project fixture, and
+M-STARTUP-TRANSPORT-001 pins both boots from the native event export before the first
+input (fresh: none; autosave: one Stop per port 1-3, verified in run
+c9d9607632634f4aba76887d55fef575 once the cut compared host times — input and MIDI
+events carry separate sequence counters).

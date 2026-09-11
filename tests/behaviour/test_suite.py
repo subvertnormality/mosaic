@@ -84,6 +84,15 @@ class TreeIdentityTests(unittest.TestCase):
         self.assertFalse(suite.same_tested_tree(changed))
 
 class SchedulingTests(unittest.TestCase):
+    def test_controlled_only_cases_are_not_applicable_in_real_time(self):
+        jobs,not_run=suite.plan_jobs(['A','B'],['real-time','controlled-experimental'],{'base-midi'},{'B':'needs logical time'})
+        self.assertEqual(jobs,[('A','real-time','base-midi'),('A','controlled-experimental','base-midi'),('B','controlled-experimental','base-midi')])
+        self.assertEqual(not_run,[dict(case='B',lane='real-time',profile='base-midi',reason='controlled only: needs logical time',applicable=False)])
+
+    def test_controlled_only_declarations_match_the_clock_mode_guards(self):
+        self.assertEqual(sorted(suite.controlled_only_cases()),
+                         ['M-ARP-005','M-ARP-012','M-ARP-013','M-SPREAD-023','M-SPREAD-026','M-SPREAD-027'])
+
     def test_session_budget_fits_the_jack_server_cap(self):
         self.assertEqual(suite.session_budget({'real-time':3,'controlled-experimental':5},0),{'real-time':3,'controlled-experimental':5})
         self.assertEqual(suite.session_budget({'real-time':3,'controlled-experimental':5},2),{'real-time':3,'controlled-experimental':3})

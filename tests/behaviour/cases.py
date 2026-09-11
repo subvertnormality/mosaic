@@ -39,6 +39,12 @@ from tooltip_autosave import tooltip_autosave
 from song_queue_stop import song_queue_stop
 from song_slot_copy import song_slot_copy
 from midi_mapping_targets import midi_mapping_targets
+from pattern_boundary_edit import pattern_boundary_edit
+from reset_pending_voice import reset_pending_voice
+from memory_truncate_isolation import memory_truncate_isolation
+from gesture_release_order import gesture_release_order
+from midi_mapping_held_step import midi_mapping_held_step
+from startup_transport import startup_transport
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
@@ -3253,6 +3259,12 @@ from external_clock_faults import external_clock_fault,external_clock_explicit_r
 from external_clock_long import long_external_phase
 
 CASES={
+ 'M-STARTUP-TRANSPORT-001':dict(run=startup_transport,requirements=['PERSIST-AUTO-001','CLOCK-MIDI-TRANSPORT-001'],description='A fresh start sends no MIDI transport; a start that loads the autosave sends one Stop per connected MIDI port before any input (arbitrated SEM-018)'),
+ 'M-MAP-004':dict(run=midi_mapping_held_step,requirements=['MAP-ROUTING','MAP-CONTROL'],description='With a selected-channel step held, a fixed channel-2 velocity map edits channel 2 from its own value and a selected-channel map still edits the held step (arbitrated SEM-017)'),
+ 'M-GESTURE-ORDER-001':dict(run=gesture_release_order,requirements=['LOCK-SCALE'],description='Channel scale lock by hold step + tap slot applies; releasing the step before the slot sets no lock (release-order characterisation kept by SEM-016)'),
+ 'M-TIME-013':dict(run=reset_pending_voice,requirements=['OPT-SEQUENCE-RESET','SONG-ADVANCE','MASK-ATTRIBUTES'],description='A 3-step note sounding across a song transition with reset on sequence change keeps its full length (README 805) while the next slot starts on time'),
+ 'M-MEMORY-007':dict(run=memory_truncate_isolation,requirements=['MEMORY-TRUNCATE','MEMORY-NAV','PERSIST-AUTO-001'],description='K1+K3 truncation forgets only its own channel history; the other channel keeps and undoes; both positions and applied masks survive autosave and a cold restart'),
+ 'M-PAT-BOUNDARY-001':dict(run=pattern_boundary_edit,requirements=['SONG-ADVANCE','PAT-EDIT-001'],description='A pattern note edited 1 ms before a song boundary (controlled; 80 ms in real time) is heard at step 1 the next time its slot plays'),
  'M-MAP-003':dict(run=midi_mapping_targets,requirements=['MAP-CONTROL','MAP-RANGES','MEMORY-NAV','MASK-ATTRIBUTES'],description='Mapped note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders: identical CC edits, memory position and played note/CC stream (equivalence characterisation)'),
  'M-SONG-COPY-001':dict(run=song_slot_copy,requirements=['SONG-SLOTS'],description='Song slot copy and erase take the first-pressed slot as the source in either release order (arbitrated SEM-016); the source and other slots are unchanged'),
  'M-SONG-QUEUE-STOP-001':dict(run=song_queue_stop,requirements=['SONG-ADVANCE','SONG-LENGTH'],description='A slot or global length queued during playback and interrupted by Stop is discarded (arbitrated SEM-015): the next Play follows song mode from the playing slot; a length set while stopped applies'),
@@ -3814,15 +3826,15 @@ CASES={
  'M-CHORDSHAPE-002':dict(run=lambda c:chord_shape_schedule(c,False,1,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
  'M-CHORDSHAPE-001':dict(run=lambda c:chord_shape_schedule(c,False,1,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
  'M-ARP-014':dict(run=arp_empty_muted_replacement,requirements=['CHORD-ARP', 'CHORD-MUTE-ROOT'],description='Empty-muted trigger cancels old arp onsets while preserving tails and replacement ownership through Stop'),
- 'M-ARP-013':dict(run=lambda c:arp_rest_live_scale(c,True),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Rests consume acceleration and velocity ordinals; applied scale edits affect later arp notes through native controls"),
- 'M-ARP-012':dict(run=lambda c:arp_rest_live_scale(c,False),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Rests consume acceleration and velocity ordinals; applied scale edits affect later arp notes through native controls"),
+ 'M-ARP-013':dict(controlled_only='Absolute live-edit schedule requires controlled time until D20 mapping is admitted',run=lambda c:arp_rest_live_scale(c,True),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Rests consume acceleration and velocity ordinals; applied scale edits affect later arp notes through native controls"),
+ 'M-ARP-012':dict(controlled_only='Absolute live-edit schedule requires controlled time until D20 mapping is admitted',run=lambda c:arp_rest_live_scale(c,False),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Rests consume acceleration and velocity ordinals; applied scale edits affect later arp notes through native controls"),
  'M-ARP-011':dict(run=lambda c:muted_sparse_reverse_arp(c,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Muted sparse reverse shape sounds at trigger, retains four rests and advances velocity through wrap"),
  'M-ARP-010':dict(run=lambda c:muted_sparse_reverse_arp(c,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Muted sparse reverse shape sounds at trigger, retains four rests and advances velocity through wrap"),
- 'M-SPREAD-027':dict(run=lambda c:minimum_swung_gap_contract(c,50),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CH-TEMPO'],description="Positive short swung gaps retain every onset and half-step releases before negative termination"),
- 'M-SPREAD-026':dict(run=lambda c:minimum_swung_gap_contract(c,-50),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CH-TEMPO'],description="Positive short swung gaps retain every onset and half-step releases before negative termination"),
+ 'M-SPREAD-027':dict(controlled_only='Exact fractional pulse windows require controlled time until the D20 real-time deadline oracle is implemented',run=lambda c:minimum_swung_gap_contract(c,50),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CH-TEMPO'],description="Positive short swung gaps retain every onset and half-step releases before negative termination"),
+ 'M-SPREAD-026':dict(controlled_only='Exact fractional pulse windows require controlled time until the D20 real-time deadline oracle is implemented',run=lambda c:minimum_swung_gap_contract(c,-50),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CH-TEMPO'],description="Positive short swung gaps retain every onset and half-step releases before negative termination"),
  'M-SPREAD-025':dict(run=lambda c:spread_acceleration_contract(c,False,0,explicit_off=True),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'LOCK-PARAM-SET'],description='Explicit step Off overrides active global+2 acceleration while preserving constant Spread spacing'),
  'M-SPREAD-024':dict(run=lambda c:spread_acceleration_contract(c,True,0,explicit_off=True),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'LOCK-PARAM-SET'],description='Explicit step Off overrides active global+2 acceleration while preserving constant Spread spacing'),
- 'M-SPREAD-023':dict(run=fractional_spread_contract,requirements=['CHORD-ARP','CHORD-SPREAD','CH-TEMPO'],description='Fractional x5 clock and constant Spread preserve exact18-pulse five-slot windows, bounded phase and all releases'),
+ 'M-SPREAD-023':dict(controlled_only='Exact fractional pulse windows require controlled time until the D20 real-time deadline oracle is implemented',run=fractional_spread_contract,requirements=['CHORD-ARP','CHORD-SPREAD','CH-TEMPO'],description='Fractional x5 clock and constant Spread preserve exact18-pulse five-slot windows, bounded phase and all releases'),
  'M-ARP-009':dict(run=arp_rest_slots,requirements=['CHORD-ARP'],description='Explicit trailing empty masks occupy rest slots before arp wrap'),
  'M-ARP-008':dict(run=lambda c:arp_rest_slots(c,internal=True),requirements=['CHORD-ARP'],description='Explicit internal and trailing mask rests retain their timing slots'),
  'M-ARP-007':dict(run=lambda c:arp_empty_masks(c,muted=True),requirements=['CHORD-ARP', 'CHORD-MUTE-ROOT'],description='All-empty muted arp is silent and responsive, with bounded Stop cleanup'),
@@ -3852,7 +3864,7 @@ CASES={
  'M-PARAM-003':dict(run=lambda c:parameter_division_bounds(c,'Chord Spread'),requirements=['PARAM-SLOTS', 'CHORD-SPREAD'],description='Chord Spread selector exposes only supported musical divisions, clamps both ends and returns to Off'),
  'M-PARAM-002':dict(run=lambda c:parameter_division_bounds(c,'Chord Note Arpeggio'),requirements=['PARAM-SLOTS', 'CHORD-ARP'],description='Chord Note Arpeggio selector exposes only supported musical divisions, clamps both ends and returns to Off'),
  'M-PARAM-001':dict(run=lambda c:parameter_division_bounds(c,'Chord Note Strum'),requirements=['PARAM-SLOTS', 'CHORD-STRUM'],description='Chord Note Strum selector exposes only supported musical divisions, clamps both ends and returns to Off'),
- 'M-ARP-005':dict(run=lambda c:arp_basic_timing(c,fast=True),requirements=['CHORD-ARP','CH-TEMPO'],description='Controlled one-pulse1/24 arp: exact note releases through every parent-cycle boundary and Stop, using native UI/MIDI'),
+ 'M-ARP-005':dict(controlled_only='Exact one-pulse arp boundary fixture requires controlled time; real-time family acceptance uses separate scheduling metrics',run=lambda c:arp_basic_timing(c,fast=True),requirements=['CHORD-ARP','CH-TEMPO'],description='Controlled one-pulse1/24 arp: exact note releases through every parent-cycle boundary and Stop, using native UI/MIDI'),
  'M-ARP-004':dict(run=lambda c:arp_basic_timing(c,reset=True),requirements=['CHORD-ARP','OPT-REPEAT-RESET','CH-TEMPO'],description='Repeat resets replace a long arp while an identical-pitch tail is sounding; old gates must not cut replacement voices'),
  'M-ARP-002':dict(run=lambda c:arp_basic_timing(c,replacement=True),requirements=['CHORD-ARP','PARAM-SLOTS','CH-TEMPO'],description='Replacing two-step arpeggios each step must not let old termination release the new generation'),
  'M-ARP-003':dict(run=lambda c:arp_basic_timing(c,fractional_gate=True),requirements=['CHORD-ARP','MASK-ATTRIBUTES'],description='Half-step arp ends at a1.25-step gate, clips its final note and emits no extra final onset'),
