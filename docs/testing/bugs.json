@@ -871,6 +871,15 @@
         "M-DASHBOARD-SELECT-001"
       ],
       "summary": "Note Dashboard showed Vel -1 and Len -1.0 after a grid channel select; now X like the Note cell (S50)"
+    },
+    {
+      "id": "cc-page-return-any-channel",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "cc-page-return-any-channel.json",
+      "cases": [
+        "M-MAP-PAGE-RETURN-001"
+      ],
+      "summary": "A mapped CC on MIDI channels 2-16 switched the channel editor page and never returned; the return now works on every channel (S10)"
     }
   ]
 }

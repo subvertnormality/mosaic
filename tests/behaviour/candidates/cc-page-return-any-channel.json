@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "1e1a2cc",
+  "files": [
+    {
+      "file": "lib/m_midi.lua",
+      "before_sha256": "aaf2dbade2add9cca4d4720f27fa81890ed6721be78f4a60267189604f01b396",
+      "after_sha256": "e2f48b168b34de77a7152547b36f6ef92a2fc5d68a4888ba1095a6d02231aecf"
+    }
+  ],
+  "patch": "0120-cc-page-return-any-channel.patch",
+  "patch_sha256": "7d4f80e358e68b167a21da57f924c8fc3bc74b8476f07a4bb0c0638cdfddb198",
+  "regression": "M-MAP-PAGE-RETURN-001",
+  "unit_regression": "test_midi_input_cc_timer_needs_cc_one_to_twenty_on_edit_page_on_any_channel",
+  "baseline": [
+    {
+      "run_id": "85778edeeffb43c6b728e7d3f61ad089",
+      "case": "M-MAP-PAGE-RETURN-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "c6584145efd86993cb6c4044fa23d2f5f5720804105ac17e2fc016ed3ba79dfa",
+      "failure": "CC 5 on MIDI channel 2 switched to Note Masks and never returned to Device Config"
+    },
+    {
+      "run_id": "b2c58627e90d412ca435ecc68fc2a96d",
+      "case": "M-MAP-PAGE-RETURN-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "48609c6de0592a0b2de836d8c15efb1b2fbfd0eaaec5d68b94c0ad797d573858",
+      "failure": "CC 5 on MIDI channel 2 switched to Note Masks and never returned to Device Config"
+    }
+  ],
+  "rationale": "handle_midi_event_data compared the whole CC status byte with 176, so only CCs on MIDI channel 1 started the two-second page-return timer; a mapped CC on channels 2-16 switched the channel editor to the mask page (through the norns pmap action) and never returned. The check now masks the channel nibble: (data[1] & 0xf0) == 176.",
+  "oracle": "README 197-211 documents selected-channel MIDI maps but not the page switch or return; the return on MIDI channels 1-16 is the recorded human decision of 2026-09-11 for S10 (docs/testing/suspected-defects.md). The case labels its assertions characterisation, not manual text.",
+  "validation": [
+    {
+      "run_id": "ece3d664e1794e31a125bf0fe4364b18",
+      "case": "M-MAP-PAGE-RETURN-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "3ff7ea7fa6328b9403e9927b4edd8cd2399aceb3dc853ee4e78fdbd2be38d334",
+      "failure": null
+    },
+    {
+      "run_id": "844cd9b861b14f0882118c349b2e3654",
+      "case": "M-MAP-PAGE-RETURN-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "748a9740a13d4004d22738d58d0888d24ef64e37f8c67862f333fb0d9a56c28a",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-e4418a6321f54b548bcc70000d545f93",
+      "case": "M-MAP-PAGE-RETURN-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "861181519bf8396dfafd9adeed25492d6c36514ca4d397fe884daf264a9e21b9",
+      "failure": null,
+      "normalized_sha256": "2ff3c6ca421954905969eea8dfd40db8e21c1dfbbf962719bc1d6bd343b86b94"
+    }
+  ],
+  "collateral": "Controlled lane with the fix: M-MAP-001 (24a8ad755a1042f29a25363168b25871), M-MAP-002 (676189168a4a484f8d42ca5354399047), M-MAP-003 (54feb36b80ad4302aa54f51e32d3d2dd), M-MAP-004 (ed07db2049c746a3bfe661e821cbd1b1) all passed; full Lua units 1465/1465 OK; guards OK. The unit that pinned channel-1-only was updated to pin channels 1-16.",
+  "upstream_merged": false
+}

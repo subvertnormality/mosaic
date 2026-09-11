@@ -50,6 +50,7 @@ from syntakt_pedal_params import syntakt_pedal_params
 from dashboard_channel_select import dashboard_channel_select
 from gesture_release_order import gesture_release_order
 from midi_mapping_held_step import midi_mapping_held_step
+from midi_cc_page_return import midi_cc_page_return
 from startup_transport import startup_transport
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
@@ -3266,6 +3267,7 @@ from external_clock_long import long_external_phase
 
 CASES={
  'M-STARTUP-TRANSPORT-001':dict(run=startup_transport,requirements=['PERSIST-AUTO-001','CLOCK-MIDI-TRANSPORT-001'],description='A fresh start sends no MIDI transport; a start that loads the autosave sends one Stop per connected MIDI port before any input (arbitrated SEM-018)'),
+ 'M-MAP-PAGE-RETURN-001':dict(run=midi_cc_page_return,requirements=['MAP-CONTROL'],description='A selected-channel mask map on MIDI channel 1, 2 or 16 brings up Note Masks and the channel editor returns to Device Config two seconds later (human decision S10: return on channels 1-16)'),
  'M-MAP-004':dict(run=midi_mapping_held_step,requirements=['MAP-ROUTING','MAP-CONTROL'],description='With a selected-channel step held, a fixed channel-2 velocity map edits channel 2 from its own value and a selected-channel map still edits the held step (arbitrated SEM-017)'),
  'M-GESTURE-ORDER-001':dict(run=gesture_release_order,requirements=['LOCK-SCALE'],description='Channel scale lock by hold step + tap slot applies; releasing the step before the slot sets no lock (release-order characterisation kept by SEM-016)'),
  'M-TIME-013':dict(run=reset_pending_voice,requirements=['OPT-SEQUENCE-RESET','SONG-ADVANCE','MASK-ATTRIBUTES'],description='A 3-step note sounding across a song transition with reset on sequence change keeps its full length (README 805) while the next slot starts on time'),

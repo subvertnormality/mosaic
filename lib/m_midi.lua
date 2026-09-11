@@ -213,7 +213,7 @@ function handle_midi_event_data(data, midi_device)
 
     
     input_notes[data[2]] = nil
-  elseif data[1] == 176 then -- cc change
+  elseif (data[1] & 0xf0) == 176 then -- cc change on any MIDI channel
     if data[2] >= 1 and data[2] <= 20 then
 
       if (program.get_selected_page() == 2) then
