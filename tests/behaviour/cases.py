@@ -70,6 +70,7 @@ from range_rejection import rejected_range
 from mask_gestures import multiheld_keyboard
 from mask_gestures import held_keyboard_chord
 from mask_gestures import trig_gesture_all_steps
+from held_mask_extra_key import held_mask_extra_key
 from mask_quantisation import mask_full_chord_inheritance
 from mask_quantisation import mask_full_quantisation
 from mask_quantisation import mask_scale_snap
@@ -3909,6 +3910,7 @@ CASES={
  'M-RANGE-REJECT-002':dict(run=lambda c:rejected_range(c,True),requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageTrue: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
  'M-RANGE-REJECT-001':dict(run=lambda c:rejected_range(c,False),requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageFalse: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
  'M-MASK-031':dict(run=lambda c:multiheld_keyboard(c,False),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstFalse: range2..4, first-held target, remaining-held target and untouched middle step'),
+ 'M-MASK-HELD-EXTRA-001':dict(run=held_mask_extra_key,requirements=['MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='A held-step velocity turn with a pattern-row key also held locks only the held step, in either press order (README 595-597; human decision S27)'),
  'M-MASK-030':dict(run=lambda c:multiheld_keyboard(c,True),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstTrue: range2..4, first-held target, remaining-held target and untouched middle step'),
  'M-MASK-029':dict(run=lambda c:held_keyboard_chord(c,True,False,True),requirements=['MASK-STEP-ENTRY','MASK-CHORD','MIDI-RELEASE-001'],description='Root release/repress while other chord voices remain held: balanced preview, preserved chord/velocity and clean replacement; grid-firstTrue release'),
  'M-MASK-028':dict(run=lambda c:held_keyboard_chord(c,False,False,True),requirements=['MASK-STEP-ENTRY','MASK-CHORD','MIDI-RELEASE-001'],description='Root release/repress while other chord voices remain held: balanced preview, preserved chord/velocity and clean replacement; grid-firstFalse release'),

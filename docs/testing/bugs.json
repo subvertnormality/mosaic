@@ -881,6 +881,15 @@
         "M-EDIT-FLICKER-001"
       ],
       "summary": "On note/velocity editor step pages 2-4 the chosen pattern's top-row active LED did not flicker; it now does, as on page 1 (S18)"
+    },
+    {
+      "id": "held-mask-extra-key",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "held-mask-extra-key.json",
+      "cases": [
+        "M-MASK-HELD-EXTRA-001"
+      ],
+      "summary": "A held pattern-row key made mask handlers record step -30 or, pressed first, turned a held-step edit into a channel-wide one; keys outside rows 4-7 are now ignored (S27)"
     }
   ]
 }
