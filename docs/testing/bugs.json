@@ -911,6 +911,32 @@
         "M-MASK-CHORD-X-001"
       ],
       "summary": "An unset chord mask turned once showed X (up) or -6th (down); it now starts from X: 2nd up, -7th down (S26)"
+    },
+    {
+      "id": "mask-off-stored-as-minus-one",
+      "status": "open-awaiting-human-decision",
+      "cases": [
+        "M-MASK-OFF-001"
+      ],
+      "summary": "S24 probe (M-MASK-OFF-001, both lanes): a channel velocity mask turned back to X plays as unset, but held-step masks turned back to X do not. Step 2's trig mask turned N then back to X stays silent (the handler stores trig -1 as a step lock, and pattern.lua applies any step trig lock, so -1 is not 1 and the step never plays). Step 3's velocity lock 50 turned back to X keeps velocity 50 (the -1 portion fails memory's validate_velocity, so the release commits nothing). Both survive an autosave restart; one Memory-page step back after the restart left the phrase unchanged (observation). README 570/597: a step without a mask lock uses the channel/pattern value. The fix (nil for X, or -1 treated as unset, per field; chord masks must keep -1 as '-7th') needs a human decision.",
+      "evidence": [
+        {
+          "run_id": "ffe79abad2ff4c8581475a1583f5c8a6",
+          "case": "M-MASK-OFF-001",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "7ac40f6028d665f1542382dbc8d3eae9170b55829c2ce78a26ee97ba5197d4f8",
+          "failure": "('Mask turned back to X does not play as unset', [('B step 2 trig back to X', {'expected': [(60, 127), (62, 117), (64, 107), (65, 97)], 'heard': [(60, 127), (64, 107), (65, 97)]}), ('C step 3 velocity"
+        },
+        {
+          "run_id": "7ce05f800c6b409290d757893d4b3095",
+          "case": "M-MASK-OFF-001",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "980e6260b33c29b39ae9b8c5384d256fca5def3f8130354263bad620b0d37733",
+          "failure": "('Mask turned back to X does not play as unset', [('B step 2 trig back to X', {'expected': [(60, 127), (62, 117), (64, 107), (65, 97)], 'heard': [(60, 127), (64, 107), (65, 97)]}), ('C step 3 velocity"
+        }
+      ]
     }
   ]
 }
