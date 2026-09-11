@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "5f31859",
+  "files": [
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "e9108ab8821d91a47369f2eac8f2fe22dca4d572fe61641eed4a2e312961332b",
+      "after_sha256": "45072c77493bcb0bc521ae8220f68411d51c307e766532f0f1ba00f463c03fdb"
+    }
+  ],
+  "patch": "0101-fixed-map-held-steps.patch",
+  "patch_sha256": "f6c9867ed8d344d062b71e7848edfc143defcaa1322e92de0678e5c1fb115de1",
+  "regression": "M-MAP-004",
+  "unit_regression": null,
+  "baseline": [
+    {
+      "run_id": "eb436c1a10d34bcc845c324009b52b4d",
+      "case": "M-MAP-004",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "1104c057b493cb7c2dec45e926c94a8727f892f449db3f9c3a5afd7fac59924e",
+      "failure": "('fixed-map-with-held-step', {1: [50, 50, 50, 50], 2: [127, 53, 107, 97]}, {1: [50, 50, 50, 50], 2: [2, 2, 2, 2]})"
+    },
+    {
+      "run_id": "8bdb703ca003454f83f4a8965c263013",
+      "case": "M-MAP-004",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "866c4ac98693b484f8c928b12972d64bb742dbab6cb1b615154074bdad9bdb98",
+      "failure": "('fixed-map-with-held-step', {1: [50, 50, 50, 50], 2: [127, 53, 107, 97]}, {1: [50, 50, 50, 50], 2: [2, 2, 2, 2]})"
+    }
+  ],
+  "rationale": "The eight mask handlers applied any mapped mask change to the held steps when a sequencer step was held, whichever channel the map named. A fixed channel-2 map therefore wrote channel 2's held-step masks from the selected channel's on-screen value (channel 1 velocity 50 made channel 2 step 2 read 53), and those edits bypassed memory, whose held-step commits are keyed to the selected channel. Arbitrated SEM-017 (fixed-map-ignores-held-steps): the held-step branch applies only when the handled channel is the selected channel.",
+  "oracle": "README MIDI Controller Mapping (203): channel parameters control a parameter of a specific channel regardless of which channel is selected.",
+  "validation": [
+    {
+      "run_id": "f68c94e7327e412295c8f44daa0f0659",
+      "case": "M-MAP-004",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "baf3da6ecadb8cf297d6d98a8a88e2f3653e047fca35128e04c3b26792213fab",
+      "failure": null
+    },
+    {
+      "run_id": "f080f0ea4af140afa85ecde962e6cfef",
+      "case": "M-MAP-004",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "7b25b7fd3884c971ed801596bc2f5784a5acad769d47e06f15d0b700aa5fcadb",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-0c35dff641bb462a8424055759568258",
+      "case": "M-MAP-004",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "b029c8932b47ab0ff0b47a6a1e95121c4125ac22463906a6cf8d190e62690baa",
+      "failure": null,
+      "normalized_sha256": "e8b85f83fad3a3e9461a3fea319cad826475cc7a90ac639b756b7c9961226e57"
+    }
+  ],
+  "collateral": "All 556 Lua units pass; M-MAP-001, M-MAP-002 and M-MAP-003 pass in both lanes with the fix; encoder and selected-channel map edits of held steps are unchanged (M-MAP-004 second half).",
+  "upstream_merged": false
+}

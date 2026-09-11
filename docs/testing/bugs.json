@@ -749,6 +749,58 @@
         "M-SONG-COPY-001"
       ],
       "summary": "Copying a song slot erased the source instead when the source key was released before the destination key."
+    },
+    {
+      "id": "pattern-edit-before-song-boundary",
+      "status": "open-deferred-to-refactor",
+      "cases": [
+        "M-PAT-BOUNDARY-001"
+      ],
+      "summary": "A pattern edit made within a few milliseconds of a song boundary (up to ~53 ms for channel 16) is not heard at step 1 the next time its slot plays, only from the pass after: the boundary's working-pattern sweep cancels the edit's debounced sweep and step 1 is processed before the new sweep reaches the channel. Observed with a 1 ms margin (controlled lane); 10 ms and more are heard at once. The fix changes when working patterns are recomputed on the boundary pulse (performance-sensitive scheduling), so it is deferred to the refactor; the case stays red, as SEM-013.",
+      "evidence": [
+        {
+          "run_id": "7ad1d88c2ca64dea80f13447fee45df8",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "41095508fbb0f17cfb4a1325e82a46e88281696bb0687c93fdaf6f7dd5f063ba",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72]}"
+        },
+        {
+          "run_id": "b55dfbba56fa4de186d1ca2755b00ea8",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "2f1e763316c1577c6953464b708f1cb2e867b00d1af536141547273aac417ae7",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72]}"
+        },
+        {
+          "run_id": "b3154ba7350048ac9aea79990fc5b9c6",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "1dbced5c9ce6410c7d9d6a2e2a130f22e53c2787105bf48bb179f66e987cb74f",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72]}"
+        },
+        {
+          "run_id": "3b603c2949904cc9ab2241dbc2950dff",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": true,
+          "manifest_sha256": "18957f1d7f50930f3cbfc6992a212e9f4b95f5db7d0644fe5ef6b1e448cc27b0",
+          "failure": null
+        }
+      ],
+      "note": "Real time edits 80 ms before the boundary (the ordinary case) and passes. Three controlled passes at the same Mosaic source (13d7a87e, 514b0ccb, c193a7b1) are the margin sweep: their recipes place the edit 80, 30 and 10 ms before the boundary; every run at the 1 ms margin fails."
+    },
+    {
+      "id": "fixed-map-held-steps",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "fixed-map-held-steps.json",
+      "cases": [
+        "M-MAP-004"
+      ],
+      "summary": "With a step held, a fixed-channel mask map edited that channel's step masks from the selected channel's value, outside memory."
     }
   ]
 }
