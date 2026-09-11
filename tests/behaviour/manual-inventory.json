@@ -2522,7 +2522,8 @@
         "M-XA-001-JF",
         "M-SHUFFLE-008",
         "M-SETUP-003",
-        "M-XA-005-NB-LOCK"
+        "M-XA-005-NB-LOCK",
+        "M-XA-006-NB-CHORD-ACCEL"
       ],
       "status": "partial-domain-coverage",
       "domain": "Configured generic CC/named MIDI devices; every virtual port/channel; unassigned and missing devices. M-XA-005-NB-LOCK (real time, nb-audio profile, 3 runs): a Doubledecker Shape 1 (norns parameter) step lock plays across the locked step without a Lua error; lock application and restoration are pinned by Lua units. The baseline raised at Play (defect norns-param-lock-channel, fixed).",
@@ -4416,7 +4417,8 @@
         "M-SPREAD-027",
         "M-ARP-012",
         "M-ARP-013",
-        "M-CHORDSHAPE-257"
+        "M-CHORDSHAPE-257",
+        "M-XA-006-NB-CHORD-ACCEL"
       ],
       "status": "in_progress",
       "domain": "Negative/zero/positive and limits; spread0/extremes; duration exhaustion; inactive articulation.",
@@ -5715,7 +5717,8 @@
         "M-MOD-004",
         "M-PARAM-046",
         "M-TRIPLE-005",
-        "M-XA-005-NB-LOCK"
+        "M-XA-005-NB-LOCK",
+        "M-XA-006-NB-CHORD-ACCEL"
       ],
       "status": "in_progress",
       "domain": "All64 steps distributed across all10 slots through native held-step input, plus exhaustive64x10 model storage; sentinels, trig/trigless, overwrite, live future-step editing and song isolation. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-XA-005-NB-LOCK (real time, nb-audio profile, 3 runs): a Doubledecker Shape 1 (norns parameter) step lock plays across the locked step without a Lua error; lock application and restoration are pinned by Lua units. The baseline raised at Play (defect norns-param-lock-channel, fixed).",

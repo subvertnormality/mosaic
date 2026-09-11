@@ -431,11 +431,11 @@ function test_step_killer_consumed_stock_param_on_norns_device_is_not_a_norns_pa
   end)
 end
 
--- characterisation (suspected defect: "chord_acceleration" is missing from
--- should_process_param's skip list, lib/step.lua:71-85, so on an n.b. device its
--- lock reaches params:set("chord_acceleration", ...) at lib/step.lua:260; norns'
--- ParamSet:lookup_param raises "invalid paramset index" for an unknown id).
-function test_step_killer_chord_acceleration_lock_on_norns_device_is_written_as_a_norns_param()
+-- bugs.json nb-chord-acceleration-lock (was suspected defect S47): "chord_acceleration"
+-- is in should_process_param's skip list, so on an n.b. device its lock is not passed
+-- to params:set("chord_acceleration", ...), which norns rejects as "invalid paramset
+-- index"; the sequencer consumes it like the other chord parameters.
+function test_step_killer_chord_acceleration_lock_on_norns_device_is_not_a_norns_param()
   with_env(function(env)
     env.device = {id = "nb_device", player = {}}
     local channel = working_pattern({1})
@@ -446,7 +446,7 @@ function test_step_killer_chord_acceleration_lock_on_norns_device_is_written_as_
 
     step_under_test.process_params(channel, 1)
 
-    luaunit.assert_equals(sets_of(env, "chord_acceleration"), {2})
+    luaunit.assert_equals(env.sets, {})
   end)
 end
 

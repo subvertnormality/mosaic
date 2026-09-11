@@ -78,6 +78,7 @@ local function should_process_param(param)
       "chord_arp",
       "chord_velocity_modifier",
       "chord_spread",
+      "chord_acceleration",
       "chord_strum_pattern",
       "fixed_note",
       "mute_root_note",

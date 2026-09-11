@@ -880,6 +880,15 @@
         "M-SETUP-UNREADABLE-CONFIG-001"
       ],
       "summary": "One device config file that could not be opened (for example a broken symlink in the config folder) stopped Mosaic from starting, with no devices loaded; it is now skipped and the other configs load."
+    },
+    {
+      "id": "nb-chord-acceleration-lock",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "nb-chord-acceleration-lock.json",
+      "cases": [
+        "M-XA-006-NB-CHORD-ACCEL"
+      ],
+      "summary": "A Chord Accel Mod trig lock on a channel playing an n.b. device raised a Lua error at the locked step during playback; the lock is now handled by the sequencer like the other chord parameters."
     }
   ]
 }
