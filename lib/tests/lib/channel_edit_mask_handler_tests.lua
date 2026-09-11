@@ -104,9 +104,9 @@ local SPECS = {
     dec_from_unset = -2, -- lines 1329, 1334-1335
     payload = function(s, v) return {step = s, chord_degrees = {nil, nil, v, nil}} end, -- lines 1313, 1324
     updates_working_pattern = false, -- lines 1328-1337
-    -- DIFFERENCE: the held DECREMENT calls memory.record_event(channel, "note_mask", {step, chord_degrees})
-    -- directly, with no song_pattern and no recorder portion (lines 1319-1326).
-    decrement_sink = "memory",
+    -- The held decrement is a recorder portion like every other handler's (bugs.json
+    -- chord-three-held-decrement-recorder; it formerly called memory.record_event directly).
+    decrement_sink = "recorder",
     writes_step_velocity_on_increment = false
   },
   chord_four = {
@@ -241,14 +241,8 @@ end
 local function held_path_calls(spec, channel, steps, value, sink)
   local calls = {}
   for _, s in ipairs(steps) do
-    if sink == "memory" then
-      local data = spec.payload(s, value)
-      table.insert(calls, table.pack("memory.record_event", channel.number, "note_mask",
-        {step = data.step, chord_degrees = data.chord_degrees}))
-    else
-      table.insert(calls, table.pack("recorder.add_note_mask_event_portion", channel.number, s,
-        {song_pattern = RECORDER_SONG_PATTERN, data = spec.payload(s, value)}))
-    end
+    table.insert(calls, table.pack("recorder.add_note_mask_event_portion", channel.number, s,
+      {song_pattern = RECORDER_SONG_PATTERN, data = spec.payload(s, value)}))
   end
   return calls
 end
@@ -710,7 +704,7 @@ function test_mask_handler_only_chord_handlers_skip_the_working_pattern_update()
   end)
 end
 
-function test_mask_handler_only_chord_three_decrement_bypasses_the_recorder()
+function test_mask_handler_every_held_decrement_is_a_recorder_portion()
   isolated(function(env)
     local sinks = {}
     for _, pair in ipairs(ALL_HANDLER_FIELDS) do
@@ -718,7 +712,8 @@ function test_mask_handler_only_chord_three_decrement_bypasses_the_recorder()
       luaunit.assert_equals(#calls, 1)
       sinks[pair[1]] = calls[1][1]
     end
-    -- characterisation: line 1322 is the only held-step write that is not a recorder portion
+    -- Every held-step decrement is a recorder portion, committed on release (bugs.json
+    -- chord-three-held-decrement-recorder: chord three formerly wrote memory directly)
     luaunit.assert_equals(sinks, {
       handle_trig_mask_change = "recorder.add_note_mask_event_portion",
       handle_note_mask_change = "recorder.add_note_mask_event_portion",
@@ -726,7 +721,7 @@ function test_mask_handler_only_chord_three_decrement_bypasses_the_recorder()
       handle_length_mask_change = "recorder.add_note_mask_event_portion",
       handle_chord_mask_one_change = "recorder.add_note_mask_event_portion",
       handle_chord_mask_two_change = "recorder.add_note_mask_event_portion",
-      handle_chord_mask_three_change = "memory.record_event",
+      handle_chord_mask_three_change = "recorder.add_note_mask_event_portion",
       handle_chord_mask_four_change = "recorder.add_note_mask_event_portion"
     })
   end)

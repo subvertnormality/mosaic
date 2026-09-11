@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "10d037b",
+  "files": [
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "07a77e9919f8001437837d9de35787a64de3ef0a14207d16b3f681da3a27fdcf",
+      "after_sha256": "392824517246d979e6f248bc2fb8eca1e1a2b2596ef53e8b8f80fab8d41deb84"
+    }
+  ],
+  "patch": "0111-chord-three-held-decrement-recorder.patch",
+  "patch_sha256": "67fdde3d2f3ebb6ce17a2687638533e805c30f2af92457f00a3333e3aaf34b26",
+  "regression": "M-MEMORY-011",
+  "unit_regression": "test_mask_handler_every_held_decrement_is_a_recorder_portion",
+  "baseline": [
+    {
+      "run_id": "877c73c7c9dd4dcdb4279ea5f5c3652a",
+      "case": "M-MEMORY-011",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "f57b87a712ea70ff8ea90ccf2f5343f0b2d778d151213361e3a91f2d3efa4c9e",
+      "failure": "[('chord', {'expected': [[60, 127], [62, 117], [65, 117], [64, 107], [65, 97]], 'actual': [[60, 127], [62, 117], [67, 117], [64, 107], [65, 97]]}), ('memory', \"('Memory counter', 'chd3-up-three-down-o"
+    },
+    {
+      "run_id": "b6f873c93ce842f8a9ce44ef420db9ed",
+      "case": "M-MEMORY-011",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "b6893aba56e6e3d126bd976da3a99da46e594f55088a26db72d60aa74834a358",
+      "failure": "[('chord', {'expected': [[60, 127], [62, 117], [65, 117], [64, 107], [65, 97]], 'actual': [[60, 127], [62, 117], [67, 117], [64, 107], [65, 97]]}), ('memory', \"('Memory counter', 'chd3-up-three-down-o"
+    }
+  ],
+  "rationale": "On a held step, the Chd3 decrement (channel_edit_page_ui.lua:1319-1326) called memory.record_event at once instead of adding a recorder portion committed on release, as every other mask handler does. The missing song_pattern had no visible effect (record_event falls back to the selected song pattern, and the recorder drops the portion's top-level song_pattern for the other handlers too); the bypass did: turning Chd3 up and then back down in one hold wrote the decrement immediately, then the release committed the still-pending increment portion over it, so the step sounded the value before the decrement (67 instead of the selected 65) and the hold was remembered as two actions. The decrement now adds the same recorder portion as the other handlers.",
+  "oracle": "README 601: hold the desired step and select each note you want to include in the chord (the selected value sounds). README 698-707: memory retains mask actions, each shown as an icon. Human decision 2026-09-11 on S25: match the other handlers; the one-action count is characterisation of the Chd4 control.",
+  "validation": [
+    {
+      "run_id": "497ce80d02d64d778af26c9cc81de453",
+      "case": "M-MEMORY-011",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "53b94a687166f752febbbec51dd30a86bd5f5a014680e570f52dd6159915d812",
+      "failure": null
+    },
+    {
+      "run_id": "2f8b4e24f7d043fa98bb5976884ecf87",
+      "case": "M-MEMORY-011",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "c55f7f69d5ea1d45531f79ec784b1d8a88f0049ced32c1c0f1020f85f68c4066",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-12edb336a98f4dc2aaea2493a65f8edc",
+      "case": "M-MEMORY-011",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "8bc33c2b904c3b6f43ec67c8226a2c16db26a0990998dd9c9a3593e2cfb0add3",
+      "failure": null,
+      "normalized_sha256": "24e47d418cbc87e13ac4675e9b8d0e75df888a361467e7f9f4dbd57bff69af0a"
+    }
+  ],
+  "collateral": "Controlled lane with the fix: M-MEMORY-001..010 and the MASK-CHORD cases M-MASK-006, 010, 013, 014, 015, 016, 018, 022, 024, 025, 026, 027, 028, 029 all passed (M-MEMORY-001 a3f3adad357a411fa25d9df3de73ac1e, M-MEMORY-002 2b16d0cb17074d23a2c039b149a7bdfa, M-MEMORY-003 eb319b05360a425baec967b8bf147255, M-MEMORY-004 cfcf6497e23343fa85c88269689075f4, M-MEMORY-005 07e93de54b9b44829aad86b193801fa5, M-MEMORY-006 d4c68340b1a1442a8e2f184303e128e5, M-MEMORY-007 eadd4eb2cd424cfc9079c4833ba7be31, M-MEMORY-008 59174559d3824aa8bbbccbb86f00ddc8, M-MEMORY-009 9ae2841e2bb14854aac8af16372bfec2, M-MEMORY-010 450dd877293e45bbbf4781087bed2424, M-MASK-006 1bb053470199454593c1fe7d7ae7f0b5, M-MASK-010 b3fc4146fd9b4a0b8fbcc997be4e1c09, M-MASK-013 82acabcec9ce4371a7094488a4e5dd2c, M-MASK-014 31ed2b28869e4fdb9811e0be87c12874, M-MASK-015 6f3c938556054180af124e958b9c8bbe, M-MASK-016 1feb20b4530b4dc1bc0d68f64f6841ce, M-MASK-018 f1c2b6dadf024070a3f293df4fd753e6, M-MASK-022 8e6ca82ac18e4cc5bf6f13e0ab5d75ad, M-MASK-024 b627ea2f89e84bab8a652beae2b3aae2, M-MASK-025 6688dd88c49944af95438f021c542a69, M-MASK-026 d7e36cd818934560aeb636235a16f3bb, M-MASK-027 616bf225ad8949968607dd60d7821b2c, M-MASK-028 83114799686d4cd5af1892b0e81676de, M-MASK-029 b459a33e21c3407cbf2a34a333f32334). Full Lua units OK (1465 tests) with channel_edit_mask_handler_tests.lua updated: the chord_three spec's decrement sink is now the recorder and test_mask_handler_only_chord_three_decrement_bypasses_the_recorder became test_mask_handler_every_held_decrement_is_a_recorder_portion; guards test_inventory, test_lua_test_names, test_lua_syntax OK.",
+  "upstream_merged": false
+}

@@ -2918,7 +2918,11 @@ function test_memory_should_handle_concurrent_step_modifications()
   
   -- Verify undo restores states in correct order
   memory.undo(channel_number)
-  luaunit.assert_equals(channel.step_length_masks[1], 2) -- Length remains unchanged as it's preserved
+  -- Undo restores the step's full prior state, so the length edit is reverted too
+  -- (bugs.json memory-undo-full-step-state; this line formerly pinned length 2).
+  luaunit.assert_equals(channel.step_length_masks[1], 1)
+  luaunit.assert_equals(channel.step_note_masks[1], 62)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 90)
   
   memory.undo(channel_number)
   luaunit.assert_equals(channel.step_note_masks[1], 60)

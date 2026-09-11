@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "1e1a2cc",
+  "files": [
+    {
+      "file": "lib/memory.lua",
+      "before_sha256": "757d2962b3ede21a4925c93d79e239ad548bfde799055aea204f8584deb0404a",
+      "after_sha256": "8f05bec3ed7fbcc73fce81cf4e4f2d582df55eb55933ebe461c6c7ff9cc3d354"
+    }
+  ],
+  "patch": "0110-memory-undo-full-step-state.patch",
+  "patch_sha256": "c6736f18302c6c49dcd4699b740ec281d3345d0cf5bf70a7f0dd12265ee71442",
+  "regression": "M-MEMORY-010",
+  "unit_regression": "test_memory_killer_undo_reverts_a_field_the_previous_event_did_not_carry",
+  "baseline": [
+    {
+      "run_id": "d4cc5386eb3046b9a14fab8383f80f98",
+      "case": "M-MEMORY-010",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "47001e837bcfa06a16208d878ebff24bab92141e2330c94b9f7c4c4a9198133d",
+      "failure": "[('S42-undo-restores-note-and-keeps-velocity', {'expected': [[60, 127], [4, 30], [64, 107], [65, 97]], 'actual': [[60, 127], [5, 30], [64, 107], [65, 97]]}), ('S43-undo-keeps-earlier-chord', {'expecte"
+    },
+    {
+      "run_id": "6dc6b4cc2e1f4c3c84a1928f2b2b4d62",
+      "case": "M-MEMORY-010",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "a0463a5ea39c5cb4c330fe15932256c9b053fb900b9e73047e09a7147a0417d8",
+      "failure": "[('S42-undo-restores-note-and-keeps-velocity', {'expected': [[60, 127], [4, 30], [64, 107], [65, 97]], 'actual': [[60, 127], [5, 30], [64, 107], [65, 97]]}), ('S43-undo-keeps-earlier-chord', {'expecte"
+    }
+  ],
+  "rationale": "memory.undo re-applied only the fields of the previous history entry on the same step (memory.lua:401-412), found by step alone: a field the undone edit changed but that entry did not carry stayed changed (S42); apply_event's undo branch cleared the step's chord whenever that entry carried no chord degrees, and redo-all could not bring it back (S43); and the entry could be of another type or trig-lock parameter, so undoing a trig lock after another edit of the step left the lock in place (S44). Undo now restores the undone entry's saved original state for its key (song pattern, step, and for trig locks the parameter) and replays, in order, every earlier entry of the same type and key, so the step returns to its full state before the undone action. Redo, undo-all and redo-all are unchanged.",
+  "oracle": "README 698-707 (Memory): memory retains all mask and trig lock actions; E3 scrolls left to explore past actions and right towards more recent ones; K3 jumps to the latest action. Human decision 2026-09-11 on S42-S44: undo restores the full prior step state. Supporting: README 572 (a velocity mask leaves other settings), 601 (chord masks on a held step), 781 and 785 (Fixed Note takes precedence over Quantised Fixed Note).",
+  "validation": [
+    {
+      "run_id": "7dc7be63af0b479585fb86439496b10d",
+      "case": "M-MEMORY-010",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "a9b93e18d7cc063253a28e4747c8a7d9593cb59e6dbe90560de2637578babe6f",
+      "failure": null
+    },
+    {
+      "run_id": "313e106161394392b8f6b2963f4c8407",
+      "case": "M-MEMORY-010",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "fd67e4ae3ddea9c10911f86b3d54546dccd85e0010f922fa6ee3621a4915b991",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-95cdfe91ebcf4dcfb0edda1e42c7ed47",
+      "case": "M-MEMORY-010",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "9bacfb81b6e544572909afa68fec3a52427ef46359f3b51eaaa3c48b17a14ef9",
+      "failure": null,
+      "normalized_sha256": "9de5544c6b62fae9dc9cac8edf88886edc61797c6416240fd71707ee55034d21"
+    }
+  ],
+  "collateral": "Controlled lane with the fix: M-MEMORY-001..009, M-REC-PARAM-025, M-REC-PARAM-026, M-REC-PARAM-027, M-PARAM-034, M-PARAM-035, M-MAP-003 all passed (M-MEMORY-001 63026b9ae643492cb7cbf9fe617d1567, M-MEMORY-002 a8c15112b14e4b9d817ac002afcb82ce, M-MEMORY-003 6ec97ac3c44f4ac0b6938cd1f50a7903, M-MEMORY-004 6a0c63d5ccc541e1937e795749a0b8c5, M-MEMORY-005 7743f41eb9e2448c9f24c0fbe5bce5b8, M-MEMORY-006 7ac863dd57d14eec839af2be40d98f45, M-MEMORY-007 ebf8eed36e7c4ed4abe34d789bbb867b, M-MEMORY-008 54b2f0388cb049e0ae43763ab79c06e4, M-MEMORY-009 5673609645804b4191b5a6cad0ad0a75, M-REC-PARAM-025 f4e0d67961ce414fb3fa3b29ff24a9d3, M-REC-PARAM-026 77a44a49c8ec4008a4f0fc05d51be766, M-REC-PARAM-027 c2859431c6c24f0ca75c62d28d66faa1, M-PARAM-034 87ba1197c16747a3bdfce5fea0d3f2bc, M-PARAM-035 f2037b4aa84e490ab56345dd87fb7bbd, M-MAP-003 ba29b8e90cda4b748a4026f7fafa61d0). Full Lua units OK (1465 tests) with three characterisation units in memory_mutation_killers_tests.lua rewritten to pin the fixed behaviour (S42-S44) and test_memory_should_handle_concurrent_step_modifications in memory_tests.lua updated (it pinned the unreverted length); guards test_inventory, test_lua_test_names, test_lua_syntax OK.",
+  "upstream_merged": false
+}

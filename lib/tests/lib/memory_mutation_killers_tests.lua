@@ -225,54 +225,72 @@ function test_memory_killer_history_keeps_the_most_recent_5000_actions()
   luaunit.assert_equals(recent[1].data.event_data.note, 5001 % 128)
 end
 
--- characterisation (suspected defect: memory.lua:411-412 undo re-applies only the
--- previous same-step event's own fields, via apply_event memory.lua:111-114, so a field
--- the undone event changed but the previous event did not carry is not reverted).
-function test_memory_killer_undo_keeps_a_field_the_previous_event_did_not_carry()
+-- Undo restores the full prior state of the step: a field the undone event changed but the
+-- previous event on the step did not carry is reverted too (bugs.json
+-- memory-undo-full-step-state; formerly characterised as suspected defect S42).
+function test_memory_killer_undo_reverts_a_field_the_previous_event_did_not_carry()
   local channel = fresh_channel()
   mem.record_event(1, "note_mask", {step = 1, note = 60, song_pattern = 1})
   mem.record_event(1, "note_mask", {step = 1, velocity = 30, song_pattern = 1})
   mem.record_event(1, "note_mask", {step = 1, note = 64, song_pattern = 1})
   mem.undo(1)
   luaunit.assert_equals(mem.get_event_count(1), 2)
-  luaunit.assert_equals(channel.step_note_masks[1], 64)
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
   luaunit.assert_equals(channel.step_velocity_masks[1], 30)
+  mem.undo(1)
+  luaunit.assert_equals({channel.step_note_masks[1], channel.step_velocity_masks[1]}, {60, nil})
+  mem.redo(1)
+  mem.redo(1)
+  luaunit.assert_equals({channel.step_note_masks[1], channel.step_velocity_masks[1]}, {64, 30})
 end
 
--- characterisation (suspected defect: memory.lua:157-158 undo clears the step's chord when
--- the previous same-step event carried no chord degrees, although the chord was set
--- earlier; redo_all from there does not bring it back).
-function test_memory_killer_undo_drops_an_earlier_chord_and_redo_all_does_not_restore_it()
+-- Undo keeps a chord set by an earlier edit of the step when the previous edit carried no
+-- chord degrees, and redo_all from there keeps it (bugs.json memory-undo-full-step-state;
+-- formerly characterised as suspected defect S43).
+function test_memory_killer_undo_keeps_an_earlier_chord_and_redo_all_keeps_it()
   local channel = fresh_channel()
   mem.record_event(1, "note_mask", {step = 1, chord_degrees = {1, 3}, song_pattern = 1})
   mem.record_event(1, "note_mask", {step = 1, note = 60, song_pattern = 1})
   mem.record_event(1, "note_mask", {step = 1, note = 62, song_pattern = 1})
   mem.undo(1)
   luaunit.assert_equals(channel.step_note_masks[1], 60)
-  luaunit.assert_nil(channel.step_chord_masks[1])
+  luaunit.assert_equals(channel.step_chord_masks[1], {1, 3})
   mem.redo_all(1)
   luaunit.assert_equals(channel.step_note_masks[1], 62)
-  luaunit.assert_nil(channel.step_chord_masks[1])
+  luaunit.assert_equals(channel.step_chord_masks[1], {1, 3})
   luaunit.assert_equals({mem.get_event_count(1), mem.get_total_event_count(1)}, {3, 3})
+  mem.undo(1)
+  mem.undo(1)
+  mem.undo(1)
+  luaunit.assert_equals({channel.step_note_masks[1], channel.step_chord_masks[1]}, {nil, nil})
 end
 
--- characterisation (suspected defect: memory.lua:401-412 undo takes the previous event on
--- the same step whatever its type or trig lock parameter, so undoing a trig lock that
--- follows another edit of that step leaves the undone lock in place).
-function test_memory_killer_undo_of_a_trig_lock_after_another_edit_of_its_step_keeps_the_lock()
+-- Undo of a trig lock restores only that lock's prior value, whatever edit of another type or
+-- trig lock parameter precedes it on the step (bugs.json memory-undo-full-step-state;
+-- formerly characterised as suspected defect S44).
+function test_memory_killer_undo_of_a_trig_lock_after_another_edit_of_its_step_drops_the_lock()
   local channel = fresh_channel()
   mem.record_event(1, "trig_lock", {step = 1, parameter = 1, value = 5, song_pattern = 1})
   mem.record_event(1, "trig_lock", {step = 1, parameter = 2, value = 7, song_pattern = 1})
   mem.undo(1)
   luaunit.assert_equals(mem.get_event_count(1), 1)
   luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 1), 5)
-  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 2), 7)
+  luaunit.assert_nil(program.get_step_param_trig_lock(channel, 1, 2))
 
   channel = fresh_channel()
   mem.record_event(1, "note_mask", {step = 1, note = 60, song_pattern = 1})
   mem.record_event(1, "trig_lock", {step = 1, parameter = 2, value = 7, song_pattern = 1})
   mem.undo(1)
   luaunit.assert_equals(mem.get_event_count(1), 1)
-  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 2), 7)
+  luaunit.assert_nil(program.get_step_param_trig_lock(channel, 1, 2))
   luaunit.assert_equals(channel.step_note_masks[1], 60)
+
+  channel = fresh_channel()
+  mem.record_event(1, "trig_lock", {step = 1, parameter = 2, value = 7, song_pattern = 1})
+  mem.record_event(1, "trig_lock", {step = 1, parameter = 2, value = 9, song_pattern = 1})
+  mem.record_event(1, "note_mask", {step = 1, note = 60, song_pattern = 1})
+  mem.undo(1)
+  luaunit.assert_equals({program.get_step_param_trig_lock(channel, 1, 2), channel.step_note_masks[1]}, {9, nil})
+  mem.undo(1)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, 2), 7)
 end
