@@ -964,6 +964,18 @@
         "M-MASK-HELD-EXTRA-001"
       ],
       "summary": "A held pattern-row key made mask handlers record step -30 or, pressed first, turned a held-step edit into a channel-wide one; keys outside rows 4-7 are now ignored (S27)"
+    },
+    {
+      "id": "grid-disconnect-held-keys",
+      "status": "fixed-on-worktree-with-unit-regression-no-behaviour-reproduction-by-decision",
+      "candidate_manifest": "grid-disconnect-held-keys.json",
+      "cases": [],
+      "summary": "Grid disconnect kept held keys, their long-press timers and gesture state; disconnect now clears them (S29, defensive, no behaviour reproduction by decision). No behaviour reproduction exists, by decision: an emulator probe showed no user-visible effect; the human decided on 2026-09-11 to fix defensively, with Lua units that fail before the fix as the regression.",
+      "unit_regression": [
+        "test_grid_input_remove_clears_held_keys_and_cancels_their_timers",
+        "test_grid_input_remove_forgets_a_fired_long_press",
+        "test_grid_input_remove_ends_a_two_key_gesture_in_progress"
+      ]
     }
   ]
 }
