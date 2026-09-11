@@ -115,7 +115,9 @@ function handle_midi_event_data(data, midi_device)
       channel_number = channel.number,
       midi_channel = midi_channel,
       midi_device = device.midi_device,
-      player = d.player
+      player = d.player,
+      -- A repeated Note On for a held key keeps the earlier onset's release.
+      previous = input_notes[data[2]]
     }
 
     if d.player then
@@ -136,7 +138,8 @@ function handle_midi_event_data(data, midi_device)
     chord_state.chord_number = chord_state.chord_number + 1
     -- Recorded voice slots do not become reusable when a key is released.
     chord_state.voice_count = chord_state.voice_count + 1
-    chord_state.notes[data[2]] = true
+    -- Count holders: the same key may be held from several sources.
+    chord_state.notes[data[2]] = (chord_state.notes[data[2]] or 0) + 1
 
     local chord_degree = quantiser.get_chord_degree(note, chord_state.root_note, step_scale_number)
     if chord_degree < -14 or chord_degree > 14 then
@@ -150,8 +153,10 @@ function handle_midi_event_data(data, midi_device)
     local recording_groups = chord_states[stored.channel_number] or {}
     local channel_chords = recording_groups[stored.recording] or {}
     local chord_state = channel_chords[stored.step]
-    if chord_state then
-      chord_state.notes[data[2]] = nil
+    -- A key held across a Stop no longer belongs to the (reset) chord on its step.
+    if chord_state and chord_state.notes[data[2]] then
+      local holders = (chord_state.notes[data[2]] or 1) - 1
+      chord_state.notes[data[2]] = holders > 0 and holders or nil
       chord_state.chord_number = chord_state.chord_number - 1
           
       -- Retain the active chord until every held voice has been released.
@@ -212,8 +217,8 @@ function handle_midi_event_data(data, midi_device)
     end
 
     
-    input_notes[data[2]] = nil
-  elseif data[1] == 176 then -- cc change
+    input_notes[data[2]] = stored.previous
+  elseif (data[1] & 0xf0) == 176 then -- cc change on any MIDI channel
     if data[2] >= 1 and data[2] <= 20 then
 
       if (program.get_selected_page() == 2) then
@@ -415,7 +420,9 @@ function m_midi.stop(send_transport)
 
   -- Reset note counts
   m_midi.note_counts = {}
-  chord_number = 0
+  -- Transport Stop also resets keyboard chord state, so a key whose Note Off
+  -- never arrived cannot keep a step's chord open.
+  chord_states = {}
 end
 
 

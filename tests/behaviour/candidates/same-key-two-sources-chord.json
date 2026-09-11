@@ -1,0 +1,105 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "dec96cf",
+  "files": [
+    {
+      "file": "lib/m_midi.lua",
+      "before_sha256": "5b8ffdf993fb37e9d3ed55385af093d436ddb45bfed1e1d13e221c0f5f2bc82c",
+      "after_sha256": "b89fe13c5be7fd3ffc2540f607a84fa9da74495fffc329cd614b5fe16765f013"
+    }
+  ],
+  "patch": "0122-same-key-two-sources-chord.patch",
+  "patch_sha256": "021a90048496fc791bb4ed0a7457a51725dee9b251bb60076c069e341f010202",
+  "regression": "M-REC-SOURCES-001",
+  "unit_regression": "test_midi_input_same_key_from_two_sources_records_the_length_at_the_final_release",
+  "baseline": [
+    {
+      "run_id": "eb991461cacb4ac4af6f8fce906159d4",
+      "case": "M-REC-SOURCES-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "211d091235d78436795d39ccfd6bfd39600bf37b9e3c8bf7477f54c3bd350a25",
+      "failure": "{'scenario': 'held', 'expected': 0.5, 'durations': [0.166809158, 0.166454403, 0.166140688]}"
+    },
+    {
+      "run_id": "b4ebb36defa947689385338924a25ad2",
+      "case": "M-REC-SOURCES-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "a9bb041a84c54391f8881bef017acc60bf31f4e41358d388499921351a9f600d",
+      "failure": "{'scenario': 'held', 'expected': 0.5, 'durations': [0.166666667, 0.166666667, 0.166666667]}"
+    },
+    {
+      "run_id": "c5165cef5c1e42b2bbba765eaeb73c8d",
+      "case": "M-REC-SOURCES-002",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "4c918d845918823898685980ac2cf498d62260ca59ba8d9009a51c46f9200092",
+      "failure": "{'scenario': 'joined', 'expected': [(1, [144, 72, 90]), (1, [144, 76, 90]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 72, 90]), (1, [144, 76, 90]), (1, [144, 62, 117]), ("
+    },
+    {
+      "run_id": "a01bb764f39d45ae9f45d540fb15968f",
+      "case": "M-REC-SOURCES-002",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "0d523e3adb7a251e956448184f82e395baf8e8b0958006806c76e4ef3333dcd9",
+      "failure": "{'scenario': 'joined', 'expected': [(1, [144, 72, 90]), (1, [144, 76, 90]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 72, 90]), (1, [144, 76, 90]), (1, [144, 62, 117]), ("
+    }
+  ],
+  "rationale": "A keyboard chord kept its held keys as a set keyed by key number. The same key held from two input sources was one set entry, so the first source's release emptied the set and deleted the chord while the other source still held the key: no length was recorded for it (S9, M-REC-SOURCES-001: step 1 kept its one-sixteenth default), and a key pressed next on the step started a new chord whose length the stale key's release then recorded early (S38, M-REC-SOURCES-002: 76 replaced 72 with a shortened length). The set now counts holders per key, so the chord stays open until the last holder of every key is released.",
+  "oracle": "README 239: a recorded chord has one shared note length, measured from the first key press to the final key release, even when keys are pressed or released at different times. Human decision 2026-09-11 for S9 and S38 (fix together, reproduce with two MIDI inputs).",
+  "validation": [
+    {
+      "run_id": "d99abce945a749a48586c64b7041ecf3",
+      "case": "M-REC-SOURCES-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "99c451854e586b3f6497a5a7ae38ca751f3b8ba1c449f563bffef8e9a87eba17",
+      "failure": null
+    },
+    {
+      "run_id": "b4588cd55cda4e459fc314a075164f20",
+      "case": "M-REC-SOURCES-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "15f825db5026a2ecebe8e69bf3001b27b0f62b31dffe335c0997cb0cd149dfff",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-a51d0e4b60394a85a4d6cf599ea8c609",
+      "case": "M-REC-SOURCES-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "82b2fcef8703e349df1e2f35b43932a10c43c0e21a40963721d2d8d72bec742f",
+      "failure": null,
+      "normalized_sha256": "ff289a483ccd57f194d5af2be98ff65145e1e49dc5fd82d14bd487c02ef1033f"
+    },
+    {
+      "run_id": "d1425e4c1089422ba3a506dcf9ecf73e",
+      "case": "M-REC-SOURCES-002",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "63de3a65c834efc4fc3ed728fcd07c5f82375fbbbf4c1694fc114e55d1a2bf27",
+      "failure": null
+    },
+    {
+      "run_id": "27dd16b2b1ac485cb85c297ea2c7bde1",
+      "case": "M-REC-SOURCES-002",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "0d653d9ce560ea897a14a0e1aaa8d1c2c7c2fb7ea2965ee4a3cd33cb9fec32ab",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-c2396a1fb86646f0a429ad608153eede",
+      "case": "M-REC-SOURCES-002",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "07242f5a7108d1b04dac003aeeec70acd914cc738b62c8781bb5cddc996bbf18",
+      "failure": null,
+      "normalized_sha256": "b6e2f89ad2bae664721c4c6e5114d8992a12df9019e7c870fe28532c50555640"
+    }
+  ],
+  "collateral": "Controlled lane with the fix: M-REC-018 (ca63cecd59c74a8a83be41816e110af6), M-REC-019 (b4da8884e8bc446c83d87b0bb664e4d8), M-REC-024 (4e6c0062a5a646bcbcc8e34a503c80d3), M-REC-025 (96a3835f89c94f4b8620038ea3feea4f), M-REC-026 (6b8dd9ea53294f9ea5d1077a2b847dc9), M-REC-027 (07660977c4334cf7a66ae1bb2a1ce29e), M-REC-030 (c794067b30254b0d8e5d77e96f2f9831), M-REC-031 (56d904b2884f4273810485cc9aedaac3), M-MIDI-003 (63e9aa52daea48b3bb08edd417e6e3d3), M-MIDI-REPEAT-001 (10eb249850084610ab776b1977f28f19), M-MASK-018 (2dcb6a42f5c548b8a83ccf75ae2974a7) all passed; full Lua units 1465/1465 OK on rerun (one run showed only the known load-sensitive test_massive_concurrent_automation_with_param_slides); guards OK. Second regression M-REC-SOURCES-002 (S38) is in the baseline/validation lists. Units that pinned the shared slot were updated: test_midi_input_same_key_from_two_sources_records_the_length_at_the_final_release and test_w3a_same_key_from_two_sources_keeps_one_chord_to_the_final_release.",
+  "upstream_merged": false
+}

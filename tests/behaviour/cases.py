@@ -2,6 +2,8 @@ from shuffle_matrix import shuffle_matrix
 from random_note_domains import random_note_domains
 from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
+from keyboard_repeated_note_on import keyboard_repeated_note_on
+from keyboard_chord_after_stop import keyboard_chord_after_stop
 from stop_safety import shift_press_to_stop
 from memory_truncate import memory_truncate
 from elektron_program_changes import elektron_program_changes
@@ -21,6 +23,8 @@ from endurance import endurance_mixed
 from lifecycle_cycles import lifecycle_cycles
 from merge_lock_random import merge_lock_random
 from recording_song_transition import recording_song_transition
+from recorded_same_key_sources import recorded_same_key_sources
+from recorded_note_page_key_held import recorded_note_page_key_held
 from trigless_slide_clock import trigless_slide_clock
 from recording_lock_song import recording_lock_song
 from song_divisions import song_tempo_divisions
@@ -52,6 +56,7 @@ from syntakt_pedal_params import syntakt_pedal_params
 from dashboard_channel_select import dashboard_channel_select
 from gesture_release_order import gesture_release_order
 from midi_mapping_held_step import midi_mapping_held_step
+from midi_cc_page_return import midi_cc_page_return
 from startup_transport import startup_transport
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
@@ -3268,6 +3273,7 @@ from external_clock_long import long_external_phase
 
 CASES={
  'M-STARTUP-TRANSPORT-001':dict(run=startup_transport,requirements=['PERSIST-AUTO-001','CLOCK-MIDI-TRANSPORT-001'],description='A fresh start sends no MIDI transport; a start that loads the autosave sends one Stop per connected MIDI port before any input (arbitrated SEM-018)'),
+ 'M-MAP-PAGE-RETURN-001':dict(run=midi_cc_page_return,requirements=['MAP-CONTROL'],description='A selected-channel mask map on MIDI channel 1, 2 or 16 brings up Note Masks and the channel editor returns to Device Config two seconds later (human decision S10: return on channels 1-16)'),
  'M-MAP-004':dict(run=midi_mapping_held_step,requirements=['MAP-ROUTING','MAP-CONTROL'],description='With a selected-channel step held, a fixed channel-2 velocity map edits channel 2 from its own value and a selected-channel map still edits the held step (arbitrated SEM-017)'),
  'M-GESTURE-ORDER-001':dict(run=gesture_release_order,requirements=['LOCK-SCALE'],description='Channel scale lock by hold step + tap slot applies; releasing the step before the slot sets no lock (release-order characterisation kept by SEM-016)'),
  'M-TIME-013':dict(run=reset_pending_voice,requirements=['OPT-SEQUENCE-RESET','SONG-ADVANCE','MASK-ATTRIBUTES'],description='A 3-step note sounding across a song transition with reset on sequence change keeps its full length (README 805) while the next slot starts on time'),
@@ -3994,6 +4000,9 @@ CASES={
  'M-REC-029':dict(run=lambda c:recorded_chord_release(c,preview_release_ns=250000000),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Post-disarm preview releases before the recorded chord without altering replay'),
  'M-REC-026':dict(run=lambda c:recorded_chord_release(c,(72,76,79),(0,40000000,80000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Staggered chord with root released first spans first press to final release'),
  'M-REC-027':dict(run=lambda c:recorded_chord_release(c,(76,79,72),(0,40000000,80000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Staggered chord with root released last retains first-press to final-release shared length'),
+ 'M-REC-PAGE-KEY-001':dict(run=recorded_note_page_key_held,requirements=['REC-LIVE-NOTES','REC-ARM'],description='With record armed and the selected page key held, a live keyboard note records its note, velocity and length on the current step as with no key held (human decision S32)'),
+ 'M-REC-SOURCES-001':dict(run=lambda c:recorded_same_key_sources(c,'held'),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Two input ports hold the same key on one recorded step; the first release does not end the chord and the recorded length runs to the final release (S9)'),
+ 'M-REC-SOURCES-002':dict(run=lambda c:recorded_same_key_sources(c,'joined'),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Same key from two ports; after one source releases, a new key on the step joins the still-held chord and the other source\'s release does not record the length early: one chord, first press to final release (S38)'),
  'M-REC-024':dict(run=recorded_input_sources,requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Two ports record the same pitch on distinct channels in the same step; independent replay and lengths'),
  'M-REC-025':dict(run=lambda c:recorded_input_sources(c,1,16),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Two input channels record overlapping notes on distinct Mosaic channels; independent replay and lengths'),
  'M-REC-020':dict(run=lambda c:recorded_chord_release(c,(72, 79, 76)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord release order (72, 79, 76) retains full shared length'),
@@ -4003,6 +4012,8 @@ CASES={
 
  'M-REC-018':dict(run=recorded_chord_release,requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord records complete shared length when root is released last'),
  'M-REC-019':dict(run=lambda c:recorded_chord_release(c,(72,76,79)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord records complete shared length when root is released first'),
+ 'M-KEYBOARD-STOP-001':dict(run=keyboard_chord_after_stop,requirements=['REC-KEYBOARD-STEP','NAV-TRANSPORT','SETUP-MIDI-INPUT'],description='A held-step key whose Note Off is lost (input port removed while held) leaves its chord open; after a Play/Stop, single keys entered on that step are its note, not chord voices over the lost key (human decision S14: Stop resets keyboard chord state)'),
+ 'M-MIDI-REPEAT-001':dict(run=keyboard_repeated_note_on,requirements=['MIDI-RELEASE-001','SETUP-MIDI-INPUT'],description='Two merged keyboards press the same key on one port and channel (Note On, Note On, two releases, both release forms): both onsets play and each gets a release, leaving no stuck note (human decision S8)'),
  'M-MIDI-003':dict(run=overlapping_keyboard_sources,requirements=['MIDI-RELEASE-001'],description='Two input ports hold the same pitch on different Mosaic channels; both release orders preserve ownership'),
  'M-MIDI-004':dict(run=lambda c:overlapping_keyboard_sources(c,1,16),requirements=['MIDI-RELEASE-001'],description='Two input channels on one port hold the same pitch on different Mosaic channels; both release orders preserve ownership'),
  'M-REC-017':dict(run=lambda c:recorded_note_channel_switch(c,disarm_while_held=True),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarm while holding a recorded keyboard note; release commits its full quantised length on the original channel'),

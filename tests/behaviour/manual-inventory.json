@@ -1644,7 +1644,10 @@
         "M-SYNC-018",
         "M-SYNC-017",
         "M-SYNC-016",
-        "M-SYNC-015"
+        "M-SYNC-015",
+        "M-MIDI-REPEAT-001",
+        "M-REC-SOURCES-001",
+        "M-REC-SOURCES-002"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -6654,7 +6657,8 @@
         "M-REC-PARAM-010",
         "M-REC-PARAM-022",
         "M-TRANS-009",
-        "M-OPT-STOP-001"
+        "M-OPT-STOP-001",
+        "M-KEYBOARD-STOP-001"
       ],
       "status": "in_progress",
       "domain": "Stopped/playing; repeated press/release; protected stop; pending notes; external clock source.",
@@ -6696,7 +6700,8 @@
         "M-REC-PARAM-009",
         "M-REC-PARAM-022",
         "M-TRIPLE-002",
-        "M-TRIPLE-005"
+        "M-TRIPLE-005",
+        "M-REC-PAGE-KEY-001"
       ],
       "status": "in_progress",
       "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels. M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected.",
@@ -6857,7 +6862,8 @@
         "M-MEMORY-002",
         "M-WORKFLOW-001",
         "M-MEMORY-003",
-        "M-MEMORY-004"
+        "M-MEMORY-004",
+        "M-KEYBOARD-STOP-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "All notes/velocities; chord voices; held-step release/input order; wrong port/channel; mask page vs other pages. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed).",
@@ -6921,7 +6927,10 @@
         "M-XA-004-JF-OVERLAP",
         "M-XA-003-JF-OWNERSHIP",
         "M-TRIPLE-003",
-        "M-TRIPLE-002"
+        "M-TRIPLE-002",
+        "M-REC-SOURCES-001",
+        "M-REC-SOURCES-002",
+        "M-REC-PAGE-KEY-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop. M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-003 (E and D, 3 fresh D repeats): a note pressed on slot 1 step 4 and released after the transition records on slot 1 step 4, the step and slot active at its first press. The baseline stored it on slot 2 (defect record-slot-at-first-press, fixed).",
@@ -7039,7 +7048,8 @@
         "M-MAP-001",
         "M-MAP-002",
         "M-MAP-003",
-        "M-MAP-004"
+        "M-MAP-004",
+        "M-MAP-PAGE-RETURN-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "M-MAP-001 (E and D, 3 fresh D repeats), saved PMAP: Relative binary-offset CCs (65 up, 63 and 0 down) step the mapped velocity mask by one per event when slower than 0.15 s. Baseline defect fixed (midi-map-neutral-default). Remaining: acceleration under 0.15 s, other mask/trig-param/memory maps. M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected. M-MAP-004 (E and D, 3 fresh D repeats): with a selected-channel step held, a fixed channel-2 velocity map edits channel 2's channel mask from its own value (README 203) and a selected-channel map still edits the held step. The baseline wrote channel 2's step masks from channel 1's value (defect fixed-map-held-steps, arbitrated SEM-017).",
@@ -7232,7 +7242,9 @@
       ],
       "statement": "A MIDI keyboard provides note entry and a compatible relative controller provides data entry.",
       "cases": [
-        "M-OPT-KEYS-001"
+        "M-OPT-KEYS-001",
+        "M-MIDI-REPEAT-001",
+        "M-KEYBOARD-STOP-001"
       ],
       "status": "in_progress",
       "domain": "Ports/channels; note-on velocity zero; overlapping same pitch; disconnect; held notes across selection change; wrong ports. Keyboard note entry through native MIDI input is exercised by M-OPT-KEYS-001 (live monitoring) and existing M-MIDI/M-REC cases; relative-controller data entry remains.",

@@ -648,56 +648,77 @@ function test_midi_input_keys_on_different_steps_are_separate_chords_with_own_le
   end)
 end
 
--- characterisation (suspected defect): the same key held from two sources shares
--- one chord slot; the first release empties chord_state.notes and deletes the
--- chord (m_midi.lua:203-205) although a voice is still held, so no length is
--- ever recorded for it.
-function test_midi_input_same_key_from_two_sources_loses_the_chord_length()
+-- README 239: one shared length to the final key release. Human decision 2026-09-11
+-- (bugs.json same-key-two-sources-chord, was S9): the same key held from two sources
+-- keeps the chord until both sources release it; the final release records the length.
+function test_midi_input_same_key_from_two_sources_records_the_length_at_the_final_release()
   with_midi(function(env)
     env.params.record = 2
     local keyboard_b = {}
     press(env, 60, 100, env.dev1)
     press(env, 60, 100, keyboard_b)
     luaunit.assert_equals(handles(env)[2].voice, 2)
-    env.now = 100.5
+    env.now = 100.25
     release(env, 60, env.dev1)
-    release(env, 60, keyboard_b)
     luaunit.assert_equals(portions(env), {})
+    env.now = 100.5
+    release(env, 60, keyboard_b)
+    luaunit.assert_equals(portions(env), {
+      {"portion", 1, 1, {song_pattern = 2, data = {step = 1, length = 4}}}, {"commit", 1, 1}})
     press(env, 64, 100, env.dev1)
     luaunit.assert_equals(handles(env)[3], {note = 64, velocity = 100, voice = 1, degree = 0})
   end)
 end
 
--- characterisation (suspected defect): a second Note On for a held key from the
--- same source overwrites its release record (m_midi.lua:110); one Note Off then
--- releases one of the two output onsets and the other stays counted.
-function test_midi_input_repeated_note_on_without_release_strands_one_output_onset()
+-- Human decision 2026-09-11 (bugs.json repeated-note-on-stuck-note, was S8): a
+-- second Note On for a held key from the same source (a merged keyboard) keeps the
+-- first onset's release; each Note Off releases one onset, the latest first, and
+-- no output onset stays counted.
+function test_midi_input_repeated_note_on_keeps_a_release_for_each_output_onset()
   with_midi(function(env, m)
+    env.selected = 3
     press(env, 60, 100, env.dev1)
-    press(env, 60, 100, env.dev1)
+    env.selected = 1
+    press(env, 60, 90, env.dev1)
     release(env, 60, env.dev1)
+    luaunit.assert_equals(env.sent[#env.sent], {1, "note_off", 60, 0, 1})
     release(env, 60, env.dev1)
     luaunit.assert_equals(env.sent, {
-      {1, "note_on", 60, 100, 1}, {1, "note_on", 60, 100, 1}, {1, "note_off", 60, 0, 1}})
-    luaunit.assert_equals(m.note_counts[1][1][60], 1)
+      {2, "note_on", 60, 100, 5}, {1, "note_on", 60, 90, 1},
+      {1, "note_off", 60, 0, 1}, {2, "note_off", 60, 0, 5}})
+    luaunit.assert_equals(m.note_counts, {[1] = {[1] = {}}, [2] = {[5] = {}}})
+    -- Both records are consumed: a further release sends nothing.
+    release(env, 60, env.dev1)
+    luaunit.assert_equals(#env.sent, 4)
   end)
 end
 
--- characterisation (open question, gap-scan #14): Stop and Panic release output
--- voices but leave keyboard chord and release state in place; a key pressed on
--- the same step after a lost Note Off joins the stale chord.
-function test_midi_input_stop_leaves_a_held_chord_open()
+-- Human decision 2026-09-11 (bugs.json keyboard-chord-state-after-lost-release,
+-- was S14): Stop resets keyboard chord state, so a key pressed on the same step
+-- after a lost Note Off starts a new chord; the stale key's late release does not
+-- end or measure that new chord.
+function test_midi_input_stop_resets_a_held_chord()
   with_midi(function(env, m)
+    env.params.record = 2
+    env.now = 100
     press(env, 60, 100, env.dev1)
     m.stop()
     luaunit.assert_equals(env.sent, {
       {1, "note_on", 60, 100, 1}, {1, "note_off", 60, 0, 1}, {1, "stop"}, {2, "stop"}})
     press(env, 64, 100, env.dev1)
-    -- characterisation (open question, gap-scan #14)
-    luaunit.assert_equals(handles(env)[2], {note = 64, velocity = 100, voice = 2, degree = 4})
+    luaunit.assert_equals(handles(env)[2], {note = 64, velocity = 100, voice = 1, degree = 0})
+    env.now = 100.25
     release(env, 60, env.dev1)
-    -- characterisation (open question, gap-scan #14): the stale key still owns a release.
+    -- characterisation: the stale key still owns a release of its output note.
     luaunit.assert_equals(env.sent[#env.sent], {1, "note_off", 60, 0, 1})
+    luaunit.assert_equals(portions(env), {})
+    press(env, 67, 100, env.dev1)
+    luaunit.assert_equals(handles(env)[3], {note = 67, velocity = 100, voice = 2, degree = 3})
+    env.now = 100.5
+    release(env, 64, env.dev1)
+    release(env, 67, env.dev1)
+    luaunit.assert_equals(portions(env), {
+      {"portion", 1, 1, {song_pattern = 2, data = {step = 1, length = 4}}}, {"commit", 1, 1}})
   end)
 end
 
@@ -752,17 +773,18 @@ function test_midi_input_cc_on_channel_edit_page_restores_sub_page_after_timer()
   end)
 end
 
--- characterisation: the timer only starts for CC 1-20, on the channel edit page,
--- on MIDI channel 1 (suspected defect: m_midi.lua:216 compares the whole status
--- byte, so CCs on MIDI channels 2-16 never start it).
-function test_midi_input_cc_timer_needs_cc_one_to_twenty_on_edit_page_and_channel_one()
+-- characterisation: the timer only starts for CC 1-20, on the channel edit page.
+-- Human decision 2026-09-11 (bugs.json cc-page-return-any-channel, was S10): it
+-- starts on every MIDI channel 1-16, not only channel 1.
+function test_midi_input_cc_timer_needs_cc_one_to_twenty_on_edit_page_on_any_channel()
   with_midi(function(env)
     env.program_page = 2
     handle_midi_event_data({0xB0, 0, 65}, env.dev1)
     handle_midi_event_data({0xB0, 21, 65}, env.dev1)
-    handle_midi_event_data({0xB1, 5, 65}, env.dev1)
+    handle_midi_event_data({0xBF, 21, 65}, env.dev1)
     env.program_page = 1
     handle_midi_event_data({0xB0, 5, 65}, env.dev1)
+    handle_midi_event_data({0xB1, 5, 65}, env.dev1)
     env.program_page = 2
     env.selected = 17
     handle_midi_event_data({0xB0, 5, 65}, env.dev1)
@@ -770,6 +792,14 @@ function test_midi_input_cc_timer_needs_cc_one_to_twenty_on_edit_page_and_channe
     env.selected = 1
     handle_midi_event_data({0xB0, 5, 65}, env.dev1)
     luaunit.assert_equals(#env.runs, 1)
+    handle_midi_event_data({0xB1, 5, 65}, env.dev1)
+    luaunit.assert_equals(#env.runs, 2)
+    handle_midi_event_data({0xBF, 20, 63}, env.dev1)
+    luaunit.assert_equals(#env.runs, 3)
+    -- Neither a key-pressure message (0xA0) nor a program change (0xC0) starts it.
+    handle_midi_event_data({0xA1, 5, 65}, env.dev1)
+    handle_midi_event_data({0xC1, 5, 65}, env.dev1)
+    luaunit.assert_equals(#env.runs, 3)
   end)
 end
 

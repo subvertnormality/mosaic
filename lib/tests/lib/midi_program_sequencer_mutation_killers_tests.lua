@@ -214,14 +214,13 @@ end
 -- m_midi: chord length bookkeeping across a stale release
 -- ---------------------------------------------------------------------------
 
--- characterisation (suspected defect, m_midi.lua:150-165 with 203-205): the same key
--- held from two sources shares one chord slot; the first release deletes that chord
--- while the other source still holds the key. A new key on the same step starts a
--- fresh chord, and the stale key's release then records that fresh chord's length
--- (0.25 s = 2 beats here) although its key is still held. README.md:239 says a
--- chord's length runs to the final key release; the final release (1 s later)
--- records nothing more, because the length is recorded once per chord.
-function test_w3a_stale_release_records_the_new_chord_length_once()
+-- README.md:239: a chord's length runs from the first key press to the final key
+-- release. Human decision 2026-09-11 (bugs.json same-key-two-sources-chord, was S9 and
+-- S38): the same key held from two sources is two holders of one chord; the first
+-- source's release does not end the chord, a new key on the step joins it, the other
+-- source's release records nothing, and the final release records one length for the
+-- whole chord (2 s = 16 here).
+function test_w3a_same_key_from_two_sources_keeps_one_chord_to_the_final_release()
   isolated(function()
     local sent, recorded = {}, {}
     local now = 100
@@ -278,11 +277,12 @@ function test_w3a_stale_release_records_the_new_chord_length_once()
     handle_midi_event_data({0x90, 64, 100}, keyboard_a)
     now = 101.25
     handle_midi_event_data({0x80, 60, 0}, keyboard_b)
-    luaunit.assert_equals(recorded, {
-      {"portion", 1, 1, {song_pattern = 2, data = {step = 1, length = 2}}}, {"commit", 1, 1}})
+    luaunit.assert_equals(recorded, {})
+    luaunit.assert_equals(sent[#sent], {1, "note_off", 60, 0, 1})
     now = 102
     handle_midi_event_data({0x80, 64, 0}, keyboard_a)
-    luaunit.assert_equals(#recorded, 2)
+    luaunit.assert_equals(recorded, {
+      {"portion", 1, 1, {song_pattern = 2, data = {step = 1, length = 16}}}, {"commit", 1, 1}})
     luaunit.assert_equals(sent[#sent], {1, "note_off", 64, 0, 1})
   end)
 end

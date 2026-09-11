@@ -72,8 +72,9 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
   -- memory.record_event stores into data.song_pattern: capture the slot at first press.
   local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
-  if #pressed_keys > 0 then
-    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+  -- Only a held step (rows 4-7) is step entry; any other held key records normally.
+  if #pressed_keys > 0 and (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+    do
 
       local s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
       if chord_number == 1 then

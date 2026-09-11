@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "85f0d19",
+  "files": [
+    {
+      "file": "lib/m_midi.lua",
+      "before_sha256": "e2f48b168b34de77a7152547b36f6ef92a2fc5d68a4888ba1095a6d02231aecf",
+      "after_sha256": "5b8ffdf993fb37e9d3ed55385af093d436ddb45bfed1e1d13e221c0f5f2bc82c"
+    }
+  ],
+  "patch": "0121-repeated-note-on-stuck-note.patch",
+  "patch_sha256": "8e14be84547b2fc5f5bf7e7bc656c15ce4c6f856841f63c828362fea09c1854b",
+  "regression": "M-MIDI-REPEAT-001",
+  "unit_regression": "test_midi_input_repeated_note_on_keeps_a_release_for_each_output_onset",
+  "baseline": [
+    {
+      "run_id": "6a5a430292064819a89d9a2f47b505e3",
+      "case": "M-MIDI-REPEAT-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "d5acd160894f91669e6f7453cb6d24bcc2bb67fdcc1f61bec69b428195875eed",
+      "failure": "[(1, [144, 72, 90]), (1, [144, 72, 80]), (1, [128, 72, 0])]"
+    },
+    {
+      "run_id": "f476bfa59c824067854333a7c1780600",
+      "case": "M-MIDI-REPEAT-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "98b331e23a174baa6bc81b879ea9b01a392b5c8b5836491dd5a1d330805597ad",
+      "failure": "[(1, [144, 72, 90]), (1, [144, 72, 80]), (1, [128, 72, 0])]"
+    }
+  ],
+  "rationale": "A second Note On for a key already held on the same input port and channel (two keyboards merged onto one input) replaced that key's stored release record, so the first output onset lost its release: two Note Ons were sent and only one Note Off, leaving one note sounding until Stop or Panic. Each new record now keeps the record it displaces (previous), and a Note Off restores it after releasing its own onset, so every output onset gets exactly one release (the latest first).",
+  "oracle": "Human decision 2026-09-11 for S8: a repeated Note On for a held key must not leave a stuck note. README 195 (the keyboard plays the keys you press) for both onsets sounding; README 805 states for sequenced notes that overlapping notes of the same MIDI pitch still send a corresponding Note Off for each Note On.",
+  "validation": [
+    {
+      "run_id": "6238883d46414b7fa9588c848e8d8be3",
+      "case": "M-MIDI-REPEAT-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "8e85415009307ea879f15c1ea9630fc977e881958c562433b61207582e1b2833",
+      "failure": null
+    },
+    {
+      "run_id": "a117834fc86c4d47930f2d3c2077ead3",
+      "case": "M-MIDI-REPEAT-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "2f1139cbe5cf2d9a2ac4be812766403254899c2a13d4e2375300958e0b578483",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-bc936bdcdb344ed3a3ae5780641558f0",
+      "case": "M-MIDI-REPEAT-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "32ecf5a7e281e611f115c64a1fe22d7d7537da6400195299dfd438f88d249922",
+      "failure": null,
+      "normalized_sha256": "4dd5fb3f0825f28fb2c13e08a12b903db851d75607f7ce95f3774b9e307e5540"
+    }
+  ],
+  "collateral": "Controlled lane with the fix: M-MIDI-001 (68b8c988dfd74c448b0c7476401785bf), M-MIDI-002 (af5a731b54d241588fa5c2b534c9eca4), M-MIDI-003 (78a5587bc8444e17a3223eb9d9639c3a), M-MIDI-004 (5cf717b2d23f4d36a017cd5ea4227dc9), M-MIDI-005 (fdd99f8b4c1a49e88e6e4ad086a0fd95), M-REC-015 (a707a1bc3f0c4a4f91c6c7af0246036d), M-REC-017 (bfb4ea498fae4e899c12c0d631a16d10), M-REC-018 (60b2103aabaa458ea05ee1e99ba4323f), M-REC-024 (666b5410315042aca84892c2a1928989), M-REC-026 (06b5d4830d934c11a6e389e490ed67ce), M-OPT-KEYS-001 (f758c193268a48ff960cf574a43dfac6), M-MASK-018 (9cf0bcbbaa6948f6a264439ce5183354) all passed; full Lua units 1465/1465 OK; guards OK. The unit that pinned the stranded onset now pins one release per onset.",
+  "upstream_merged": false
+}

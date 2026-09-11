@@ -56,15 +56,25 @@ function test_recorder_extra_held_step_rows_four_to_seven_are_steps()
   end)
 end
 
-function test_recorder_extra_held_non_step_key_records_nothing_even_when_armed()
-  -- characterisation (suspected defect: with record armed, holding any grid key outside
-  -- rows 4..7 suppresses live note recording, while m_midi still takes the current step).
+function test_recorder_extra_held_non_step_key_records_live_when_armed()
+  -- Human decision 2026-09-11 (bugs.json record-with-non-step-key-held, was S32): with
+  -- record armed, holding a grid key outside rows 4..7 (a page or menu key) records at the
+  -- current step exactly as with no key held; disarmed, it records nothing.
   for _, row in ipairs({3, 8}) do
     local recorder = fresh(1, 1)
     program.set_current_step_for_channel(1, 6)
     with_recorder_globals({{2, row}}, 2, function(calls)
       recorder.handle_note_midi_message(60, 100, 1, nil)
       recorder.handle_note_midi_message(64, 100, 2, 2)
+      local expected = root_portion(1, 6, 60, 100)
+      expected.data.chord_degrees = {[1] = 2}
+      luaunit.assert_equals(recorder.mask_events, {[1] = {[6] = expected}})
+      luaunit.assert_equals(calls, {})
+    end)
+    recorder = fresh(1, 1)
+    program.set_current_step_for_channel(1, 6)
+    with_recorder_globals({{2, row}}, 1, function(calls)
+      recorder.handle_note_midi_message(60, 100, 1, nil)
       luaunit.assert_equals(recorder.mask_events, {})
       luaunit.assert_equals(calls, {})
     end)
