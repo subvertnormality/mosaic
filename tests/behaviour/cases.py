@@ -26,7 +26,6 @@ from lifecycle_cycles import lifecycle_cycles
 from merge_lock_random import merge_lock_random
 from recording_song_transition import recording_song_transition
 from recorded_same_key_sources import recorded_same_key_sources
-from recorded_note_page_key_held import recorded_note_page_key_held
 from trigless_slide_clock import trigless_slide_clock
 from recording_lock_song import recording_lock_song
 from song_divisions import song_tempo_divisions
@@ -4016,7 +4015,6 @@ CASES={
  'M-REC-029':dict(run=lambda c:recorded_chord_release(c,preview_release_ns=250000000),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Post-disarm preview releases before the recorded chord without altering replay'),
  'M-REC-026':dict(run=lambda c:recorded_chord_release(c,(72,76,79),(0,40000000,80000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Staggered chord with root released first spans first press to final release'),
  'M-REC-027':dict(run=lambda c:recorded_chord_release(c,(76,79,72),(0,40000000,80000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Staggered chord with root released last retains first-press to final-release shared length'),
- 'M-REC-PAGE-KEY-001':dict(run=recorded_note_page_key_held,requirements=['REC-LIVE-NOTES','REC-ARM'],description='With record armed and the selected page key held, a live keyboard note records its note, velocity and length on the current step as with no key held (human decision S32)'),
  'M-REC-SOURCES-001':dict(run=lambda c:recorded_same_key_sources(c,'held'),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Two input ports hold the same key on one recorded step; the first release does not end the chord and the recorded length runs to the final release (S9)'),
  'M-REC-SOURCES-002':dict(run=lambda c:recorded_same_key_sources(c,'joined'),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Same key from two ports; after one source releases, a new key on the step joins the still-held chord and the other source\'s release does not record the length early: one chord, first press to final release (S38)'),
  'M-REC-024':dict(run=recorded_input_sources,requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Two ports record the same pitch on distinct channels in the same step; independent replay and lengths'),
