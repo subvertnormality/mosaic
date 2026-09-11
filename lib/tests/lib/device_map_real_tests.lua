@@ -341,7 +341,7 @@ function test_real_device_map_stock_configs_load_sorted_with_none_first()
     local dm = load_device_map(env)
     -- characterisation: None first, then case-insensitive alphabetical order
     luaunit.assert_equals(names_of(dm.get_devices()), {
-      "None", "CC Device", "Digitakt", "Digitakt", "Digitone", "DRM BD", "DRM Clap",
+      "None", "CC Device", "Digitakt", "Digitakt 2", "Digitone", "DRM BD", "DRM Clap",
       "DRM Drum 1", "DRM Drum 2", "DRM HH 1", "DRM HH 2", "DRM Multi", "DRM Snare",
       "DT M Sample", "DT Poly CV", "EX Braids", "EX M Mixer", "EX M Sample", "EX Plaits",
       "MidiSid", "Nord Drum 2", "OP-1", "Syntakt"
@@ -355,7 +355,7 @@ function test_real_device_map_get_device_returns_the_first_class_stock_devices_b
     -- README.md:170 names Digitone, Digitakt 2, Syntakt and Nord Drum 2 as first class.
     local expected = {
       digitakt = {"Digitakt", 56, "source_parameters_source_tune", 9},
-      digitakt2 = {"Digitakt", 87, "source_parameters_source_tune", 10},
+      digitakt2 = {"Digitakt 2", 87, "source_parameters_source_tune", 10},
       digitone = {"Digitone", 98, "fm_parameters_syn_1_ratio_a", 10},
       syntakt = {"Syntakt", 96, "syn_data_entry_knob_b", 10},
       ["nord-drum-2"] = {"Nord Drum 2", 34, "tone_wave", 10},
@@ -386,10 +386,10 @@ function test_real_device_map_get_device_by_name_is_exact_and_case_sensitive()
     luaunit.assert_equals(dm.get_device_by_name("None").id, "none") -- characterisation
     luaunit.assert_nil(dm.get_device_by_name("nord drum 2")) -- characterisation
     luaunit.assert_nil(dm.get_device_by_name("Nord Drum")) -- characterisation
-    -- characterisation (suspected defect: elektron_digitakt.json and elektron_digitakt_2.json
-    -- share the name "Digitakt", so a lookup by name cannot tell them apart)
-    local by_name = dm.get_device_by_name("Digitakt").id
-    luaunit.assert_true(by_name == "digitakt" or by_name == "digitakt2")
+    -- Digitakt and Digitakt 2 are different devices (README.md:170 names Digitakt 2; user-confirmed
+    -- 2026-09-11); each stock config carries its own name (defect digitakt-2-config-name, fixed).
+    luaunit.assert_equals(dm.get_device_by_name("Digitakt").id, "digitakt")
+    luaunit.assert_equals(dm.get_device_by_name("Digitakt 2").id, "digitakt2")
   end)
 end
 
@@ -1046,23 +1046,22 @@ function test_real_param_manager_device_slot_controlspecs_follow_cc_or_nrpn_rang
   end)
 end
 
-function test_real_param_manager_syntakt_negative_nrpn_fields_collapse_the_range()
+function test_real_param_manager_syntakt_pedals_are_cc_parameters()
   isolated(function(env)
     local dm = load_device_map(env)
     local pm = load_param_manager(env)
     pm.add_device_params(1, dm.get_device("syntakt"), 6, 2, true)
-    -- characterisation (suspected defect: lib/config/elektron_syntakt.json gives Sustain and
-    -- Sostenuto nrpn_* = -1, which are truthy in Lua, so param_manager.lua:127/143 treat them as
-    -- NRPN: the slot's range is the single value -1 and a set value is sent as NRPN -1/-1
-    -- instead of CC 64/66)
-    for _, e in ipairs({{110, "Sustain"}, {111, "Sostenuto"}}) do
+    -- The Syntakt configuration maps Sustain and Sostenuto to CC 64 and CC 66 (MIDI 1.0 pedal
+    -- controllers); README.md:546 "all CC parameters are accessible for editing". They carried
+    -- nrpn_* = -1 placeholders that collapsed the range to -1 (defect syntakt-pedal-params, fixed).
+    for _, e in ipairs({{110, "Sustain", 64}, {111, "Sostenuto", 66}}) do
       local p = env.params.store[slot_id(1, e[1])]
       luaunit.assert_equals(p.name, e[2])
-      luaunit.assert_equals(p.controlspec.args, {minval = -1, maxval = -1, warp = "lin", step = 1, default = -1, units = "", quantum = 127})
-      luaunit.assert_equals({p.min, p.max}, {-1, -1})
+      luaunit.assert_equals(p.controlspec.args, {minval = -1, maxval = 127, warp = "lin", step = 1, default = -1, units = "", quantum = 1 / 128}) -- characterisation: one CC step per detent
+      luaunit.assert_equals({p.min, p.max}, {-1, 127})
       env.midi = {}
       env.params.actions[slot_id(1, e[1])](100)
-      luaunit.assert_equals(env.midi, {{kind = "nrpn", msb = -1, lsb = -1, value = 100, channel = 6, device = 2, mode = "standard", n = 6}})
+      luaunit.assert_equals(env.midi, {{kind = "cc", msb = e[3], value = 100, channel = 6, device = 2, n = 5}})
     end
   end)
 end

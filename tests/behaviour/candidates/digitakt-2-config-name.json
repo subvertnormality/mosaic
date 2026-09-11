@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "2266c0c",
+  "files": [
+    {
+      "file": "lib/config/elektron_digitakt_2.json",
+      "before_sha256": "ed2602585c40ff2d8a3bcd52d260aeee04670c2de039483badf97c4ffeeabfd2",
+      "after_sha256": "aa1b73bada6b09f9166dbefaa4a752bfd9afa6f09e94a497674c482fbaf2e8a2"
+    }
+  ],
+  "patch": "0103-digitakt-2-config-name.patch",
+  "patch_sha256": "5edae1a045f91343ad8c3f71562c8d2532cffcbb26b481f4402e6d4fd794de85",
+  "regression": "M-SETUP-DEVICE-NAMES-001",
+  "unit_regression": "test_real_device_map_stock_configs_load_sorted_with_none_first, test_real_device_map_get_device_by_name_is_exact_and_case_sensitive",
+  "baseline": [
+    {
+      "run_id": "df9d55893f7a4ff1a5ab9f2578e7ccc7",
+      "case": "M-SETUP-DEVICE-NAMES-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "44c41f15e6df6e264918c31ece70228798a02d1cc44e5d44b8df433d5f852a13",
+      "failure": "('Device picker entries', ['None', 'CC Device', 'Digitakt', 'Digitakt', 'Digitone'])"
+    },
+    {
+      "run_id": "55ab2a9ea3f9495d84c973c28dedc80a",
+      "case": "M-SETUP-DEVICE-NAMES-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "0428c6d91e3688cd4a743f7c849666113bce835f99aae8012df29a0c2db798f1",
+      "failure": "('Device picker entries', ['None', 'CC Device', 'Digitakt', 'Digitakt', 'Digitone'])"
+    }
+  ],
+  "rationale": "The Digitakt 2 stock configuration (id digitakt2) carried the name \"Digitakt\", so the device picker listed Digitakt twice and a lookup by name could not tell the devices apart. The config now names it \"Digitakt 2\". Saved projects store the device id, not the name, so they are unaffected.",
+  "oracle": "README 170 names Digitakt 2 as a first-class device; the user confirmed 2026-09-11 that Digitakt and Digitakt 2 are different devices with those names.",
+  "validation": [
+    {
+      "run_id": "d5657bf3858b405aa5c7a4d2b5ec6e8a",
+      "case": "M-SETUP-DEVICE-NAMES-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "5fb0b3c33df264bd098cd6eebef26270e8578ab6e0e93154f6a1baa846153b02",
+      "failure": null
+    },
+    {
+      "run_id": "847bb5a09590464cbb8aa78b406bd711",
+      "case": "M-SETUP-DEVICE-NAMES-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "1de382c32ee5f68f8998f3711d2042ece95b1ead61097db41ca65c70bc82ec3d",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-54d7d2b11b174eaaa3f325a76594fdf2",
+      "case": "M-SETUP-DEVICE-NAMES-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "920a12d81bc2f513ca214cc2ca3f0afdc5975440cddfcf267c1c77f536e58e33",
+      "failure": null,
+      "normalized_sha256": "6d785ed5715e335ff0b87e60af546de5add942d50a43fa936255f3bdae8e6e50"
+    }
+  ],
+  "collateral": "All Lua units pass; M-OPT-ELEK-004 (Digitakt picked by name) passes in real time; the Elektron cases seed only the Digitakt config.",
+  "upstream_merged": false
+}
