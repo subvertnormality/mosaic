@@ -20,8 +20,9 @@ REPO = Path(__file__).resolve().parents[1]
 SWAPS = {'==': ['~='], '~=': ['=='], '<': ['<='], '<=': ['<'], '>': ['>='], '>=': ['>'],
          '+': ['-'], '*': ['/'], '/': ['*'], '//': ['/'], 'and': ['or'], 'or': ['and'],
          'true': ['false'], 'false': ['true']}
-# Known load-sensitive unit (2 ms limit); excluded so host load cannot fake a kill.
-EXCLUDE = ['test_live_slide_admission_all_channel_parameter_slots']
+# Units with wall-clock limits (os.clock, 1-2 ms per pulse) fail under host load; excluded so a
+# loaded host cannot fake a kill. Timing is covered by the emulator lanes.
+EXCLUDE = ['test_live_slide_admission_all_channel_parameter_slots', 'test_massive_concurrent_automation_with_param_slides']
 
 
 def tokens(src):
@@ -102,7 +103,7 @@ def run_units(root, timeout):
     args = ['lua5.3', './run_tests.lua', '-f']
     for name in EXCLUDE: args += ['-x', name]
     try:
-        r = subprocess.run(args, cwd=root / 'mosaic/lib/tests', capture_output=True, text=True, timeout=timeout)
+        r = subprocess.run(args, cwd=root / 'mosaic/lib/tests', capture_output=True, text=True, errors='replace', timeout=timeout)
     except subprocess.TimeoutExpired:
         return 'timeout', ''
     tail = (r.stdout + r.stderr)[-600:]
@@ -155,10 +156,14 @@ def main():
     status, _ = run_units(base, a.timeout)
     if status != 'survived':
         raise SystemExit('Unit suite is not green on the unmutated copy: ' + status)
-    work = out / 'work'; work.mkdir(exist_ok=True)
-    results = []
-    with open(out / 'mutants.jsonl', 'w') as log, concurrent.futures.ThreadPoolExecutor(a.workers) as pool:
-        for r in pool.map(one, [(m, base, work, a.timeout) for m in all_mutants]):
+    work = out / 'work'; shutil.rmtree(work, ignore_errors=True); work.mkdir()
+    # Resume: mutants already recorded (same file, position and replacement) are not rerun.
+    log_path = out / 'mutants.jsonl'
+    results = [json.loads(l) for l in log_path.read_text().splitlines()] if log_path.exists() else []
+    done = {(r['file'], r['start'], r['mutant']) for r in results}
+    pending = [m for m in all_mutants if (m['file'], m['start'], m['mutant']) not in done]
+    with open(log_path, 'a') as log, concurrent.futures.ThreadPoolExecutor(a.workers) as pool:
+        for r in pool.map(one, [(m, base, work, a.timeout) for m in pending]):
             results.append(r); log.write(json.dumps(r) + '\n'); log.flush()
             if len(results) % 100 == 0: print(json.dumps(dict(done=len(results), of=len(all_mutants))), flush=True)
     by = {}
