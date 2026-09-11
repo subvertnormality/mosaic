@@ -12,6 +12,13 @@ and are reported NOT RUN (never passed) unless requested. A suite passes only if
 every selected item ran and passed and the tested sources did not change during
 the run. The emulator checkout and installs are configuration, recorded in the
 report; they are not part of Mosaic's acceptance oracle.
+
+Scheduling: both lanes run at the same time within jack2's limit of 8 servers per host
+(each case session starts one; running jackd processes reduce the budget). Case
+launches rely on the driver's startup lock; --durations-from orders each lane
+longest-first from a previous suite.json. The real-time lane gets most sessions: its
+cases wait in wall-clock time, while controlled cases are short and CPU-bound.
+Load-sensitive real-time failures are separated by `rerun`.
 """
 import argparse,concurrent.futures,hashlib,json,os,re,shutil,subprocess,sys,time
 from pathlib import Path
@@ -159,6 +166,53 @@ class StartGate:
                 if delay>0:time.sleep(delay)
             self.last=time.monotonic()
 
+# jack2 refuses a ninth concurrent server per host ("Too many servers already active",
+# measured 2026-09-11); every case session starts one, so lanes share this budget.
+JACK_SERVER_CAP=8
+
+def active_jack_servers():
+    """jackd processes already running for this user (other runs, leaked sessions)."""
+    result=subprocess.run(['pgrep','-u',str(os.getuid()),'-x','jackd'],capture_output=True,text=True)
+    return len(result.stdout.split())
+
+def session_budget(requested,active,cap=JACK_SERVER_CAP):
+    """Fit per-lane worker requests into the free JACK server slots, keeping every lane >= 1.
+
+    requested: {lane: workers}. Lanes are reduced from the largest request first."""
+    free=cap-active
+    if free<len(requested):raise SystemExit('Only %d of %d JACK server slots are free for %d lanes'%(max(free,0),cap,len(requested)))
+    budget={lane:max(1,workers) for lane,workers in requested.items()}
+    while sum(budget.values())>free:
+        lane=max(budget,key=lambda l:(budget[l],l));budget[lane]-=1
+    return budget
+
+def longest_first(jobs,durations):
+    """Start cases with the longest recorded duration first so the tail is short; unknown first."""
+    return sorted(jobs,key=lambda job:(-(durations.get((job[0],job[1]),float('inf'))),job[0]))
+
+def recorded_durations(path):
+    if not path:return {}
+    data=json.loads(Path(path).read_text())
+    return {(row['case'],row['lane']):row['seconds'] for row in data.get('cases',[]) if row.get('seconds') is not None}
+
+def execute_lanes(lane_jobs,budget,run_one,on_done,concurrent_lanes=True):
+    """Run each lane in its own pool; lanes run at the same time unless concurrent_lanes is False."""
+    import threading
+    lock=threading.Lock()
+    def lane_worker(lane):
+        jobs=lane_jobs[lane]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=budget[lane]) as pool:
+            futures=[pool.submit(run_one,job) for job in jobs]
+            for done,future in enumerate(concurrent.futures.as_completed(futures),1):
+                row=future.result()
+                with lock:on_done(lane,done,len(jobs),row)
+    if not concurrent_lanes:
+        for lane in lane_jobs:lane_worker(lane)
+        return
+    threads=[threading.Thread(target=lane_worker,args=(lane,)) for lane in lane_jobs]
+    for thread in threads:thread.start()
+    for thread in threads:thread.join()
+
 def run_case(case,lane,profile,args,artifacts,env,gate=None):
     if gate:gate.wait()
     command=[sys.executable,str(BEHAVIOUR/'run.py'),'--case',case,'--artifacts',str(artifacts),'--clock-mode',lane]
@@ -218,17 +272,22 @@ def run(args):
                 not_run.append(dict(case=case,lane=lane,profile=profile,reason='audio/Crow profiles are real-time only',applicable=False))
             else:jobs.append((case,lane,profile))
     results=[]
-    for lane in args.lanes:
-        artifacts=out/'runs'/lane;artifacts.mkdir(parents=True)
-        workers=args.real_time_workers if lane=='real-time' else args.controlled_workers
-        lane_jobs=[j for j in jobs if j[1]==lane]
-        gate=StartGate(args.start_interval)
-        with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
-            futures=[pool.submit(run_case,case,lane,profile,args,artifacts,env,gate) for case,lane,profile in lane_jobs]
-            for done,future in enumerate(concurrent.futures.as_completed(futures),1):
-                row=future.result();results.append(row)
-                print(json.dumps(dict(done=done,of=len(lane_jobs),lane=lane,case=row['case'],passed=row['passed'],seconds=row['seconds'])),flush=True)
-                if done%10==0:write(out/'suite.json',dict(report,status='running',layers=layers,cases=results,not_run=not_run))
+    requested={lane:(args.real_time_workers if lane=='real-time' else args.controlled_workers) for lane in args.lanes}
+    budget=session_budget(requested,active_jack_servers())
+    durations=recorded_durations(args.durations_from)
+    lane_jobs={lane:longest_first([j for j in jobs if j[1]==lane],durations) for lane in args.lanes}
+    gate=StartGate(args.start_interval) if args.start_interval>0 else None
+    for lane in args.lanes:(out/'runs'/lane).mkdir(parents=True)
+    report['scheduling']=dict(budget=budget,requested=requested,concurrent_lanes=not args.sequential_lanes,
+                              start_interval=args.start_interval,durations_from=args.durations_from)
+    def run_one(job):
+        case,lane,profile=job
+        return run_case(case,lane,profile,args,out/'runs'/lane,env,gate)
+    def on_done(lane,done,total,row):
+        results.append(row)
+        print(json.dumps(dict(done=done,of=total,lane=lane,case=row['case'],passed=row['passed'],seconds=row['seconds'])),flush=True)
+        if len(results)%10==0:write(out/'suite.json',dict(report,status='running',layers=layers,cases=results,not_run=not_run))
+    execute_lanes(lane_jobs,budget,run_one,on_done,concurrent_lanes=not args.sequential_lanes)
     after=source_state(exclude_runner=True)
     stable=after['files']==before['files'] and after['runner_sha256']==before['runner_sha256']
     results.sort(key=lambda r:(args.lanes.index(r['lane']),r['case']))
@@ -331,10 +390,15 @@ def main():
     r.add_argument('--mod-code-root',action='append',default=[],help='PROFILE=PATH for non-base profiles')
     r.add_argument('--output-mod-root',default=os.environ.get('MOSAIC_OUTPUT_MOD_ROOT'))
     r.add_argument('--case-pattern',help='Regex selection (a partial run is never a complete regression run)')
-    r.add_argument('--real-time-workers',type=int,default=2)
-    r.add_argument('--controlled-workers',type=int,default=6)
+    # Measured 2026-09-11: real-time work ~10.5 worker-hours (752 cases x ~50 s, mostly wall-clock waiting),
+    # controlled ~3.4 (x ~16 s, CPU-bound). Within jack2's 8-server cap, 6 + 2 balances the lanes at ~1.75 h;
+    # serialised startups (~5 s each under the driver lock) put a ~2.1 h floor under a full two-lane suite.
+    r.add_argument('--real-time-workers',type=int,default=6)
+    r.add_argument('--controlled-workers',type=int,default=2)
     r.add_argument('--case-timeout',type=int,default=3600)
-    r.add_argument('--start-interval',type=float,default=10,help='Minimum seconds between case launches (native startup race, emulator R22)')
+    r.add_argument('--start-interval',type=float,default=0,help='Minimum seconds between case launches; 0 relies on the driver startup lock (emulator R22)')
+    r.add_argument('--sequential-lanes',action='store_true',help='Run lanes one after the other (default: concurrently within the JACK server budget)')
+    r.add_argument('--durations-from',help='A previous suite.json whose case durations order each lane longest-first')
     r.add_argument('--skip-fast-layers',action='store_true')
     c=commands.add_parser('compare');c.add_argument('baseline');c.add_argument('candidate')
     s=commands.add_parser('rerun',help='Serially rerun failed case runs into suite-effective.json')

@@ -83,4 +83,43 @@ class TreeIdentityTests(unittest.TestCase):
         changed=dict(state,files=dict(state['files'],**{'lib/step.lua':'0'*64}))
         self.assertFalse(suite.same_tested_tree(changed))
 
+class SchedulingTests(unittest.TestCase):
+    def test_session_budget_fits_the_jack_server_cap(self):
+        self.assertEqual(suite.session_budget({'real-time':3,'controlled-experimental':5},0),{'real-time':3,'controlled-experimental':5})
+        self.assertEqual(suite.session_budget({'real-time':3,'controlled-experimental':5},2),{'real-time':3,'controlled-experimental':3})
+        self.assertEqual(suite.session_budget({'real-time':6,'controlled-experimental':6},0,cap=8),{'real-time':4,'controlled-experimental':4})
+        self.assertEqual(suite.session_budget({'real-time':0},7),{'real-time':1})
+        with self.assertRaises(SystemExit):suite.session_budget({'real-time':1,'controlled-experimental':1},7)
+        self.assertEqual(suite.JACK_SERVER_CAP,8)
+
+    def test_longest_first_puts_unknown_then_longest_cases_first(self):
+        jobs=[('A','real-time','base-midi'),('B','real-time','base-midi'),('C','real-time','base-midi'),('D','real-time','base-midi')]
+        durations={('A','real-time'):10,('B','real-time'):600,('D','real-time'):10}
+        self.assertEqual([j[0] for j in suite.longest_first(jobs,durations)],['C','B','A','D'])
+
+    def test_recorded_durations_reads_case_seconds(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'suite.json'
+            path.write_text(json.dumps(dict(cases=[dict(case='A',lane='real-time',seconds=12.5),dict(case='B',lane='real-time')])))
+            self.assertEqual(suite.recorded_durations(str(path)),{('A','real-time'):12.5})
+        self.assertEqual(suite.recorded_durations(None),{})
+
+    def test_lanes_run_concurrently_within_each_lane_budget(self):
+        import threading,time
+        active={'a':0,'b':0};peak={'a':0,'b':0};both=[False];lock=threading.Lock();seen=[]
+        def run_one(job):
+            lane=job[1]
+            with lock:
+                active[lane]+=1;peak[lane]=max(peak[lane],active[lane])
+                if active['a'] and active['b']:both[0]=True
+            time.sleep(.05)
+            with lock:active[lane]-=1
+            return dict(case=job[0])
+        jobs={'a':[(str(i),'a','p') for i in range(6)],'b':[(str(i),'b','p') for i in range(6)]}
+        suite.execute_lanes(jobs,{'a':2,'b':3},run_one,lambda lane,done,total,row:seen.append((lane,row['case'])))
+        self.assertTrue(both[0]);self.assertEqual(peak,{'a':2,'b':3});self.assertEqual(len(seen),12)
+        both[0]=False;peak.update(a=0,b=0)
+        suite.execute_lanes(jobs,{'a':2,'b':3},run_one,lambda *a:None,concurrent_lanes=False)
+        self.assertFalse(both[0]);self.assertEqual(peak,{'a':2,'b':3})
+
 if __name__=='__main__':unittest.main()
