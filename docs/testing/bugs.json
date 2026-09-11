@@ -858,13 +858,10 @@
     },
     {
       "id": "keyboard-chord-state-after-lost-release",
-      "status": "fixed-on-worktree-with-real-input-regression",
-      "cases": [
-        "M-KEYBOARD-STOP-001"
-      ],
-      "summary": "After a Note Off that never arrives (MIDI port disconnected while a key and a step are held), later single-key entries on that step add chord voices (72, then 72+76, then 72+76+79) instead of replacing the note; Stop and Panic do not clear it (they reset an unused module variable). Reproduced by probe_chord.py in the controlled lane (variants none, stop, panic). README 239 does not say which reset is intended. Human decision 2026-09-11: Stop resets keyboard chord state; fixed (M-KEYBOARD-STOP-001).",
-      "evidence": [],
-      "candidate_manifest": "keyboard-chord-state-after-lost-release.json"
+      "status": "open-awaiting-human-decision",
+      "cases": [],
+      "summary": "After a Note Off that never arrives (MIDI port disconnected while a key and a step are held), later single-key entries on that step add chord voices (72, then 72+76, then 72+76+79) instead of replacing the note; Stop and Panic do not clear it (they reset an unused module variable). Reproduced by probe_chord.py in the controlled lane (variants none, stop, panic). README 239 does not say which reset is intended.",
+      "evidence": []
     },
     {
       "id": "dashboard-absent-velocity-length",

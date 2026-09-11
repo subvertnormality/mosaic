@@ -6673,8 +6673,7 @@
         "M-REC-PARAM-010",
         "M-REC-PARAM-022",
         "M-TRANS-009",
-        "M-OPT-STOP-001",
-        "M-KEYBOARD-STOP-001"
+        "M-OPT-STOP-001"
       ],
       "status": "in_progress",
       "domain": "Stopped/playing; repeated press/release; protected stop; pending notes; external clock source.",
@@ -6878,8 +6877,7 @@
         "M-MEMORY-002",
         "M-WORKFLOW-001",
         "M-MEMORY-003",
-        "M-MEMORY-004",
-        "M-KEYBOARD-STOP-001"
+        "M-MEMORY-004"
       ],
       "status": "partial-domain-coverage",
       "domain": "All notes/velocities; chord voices; held-step release/input order; wrong port/channel; mask page vs other pages. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed).",
@@ -7261,8 +7259,7 @@
       "statement": "A MIDI keyboard provides note entry and a compatible relative controller provides data entry.",
       "cases": [
         "M-OPT-KEYS-001",
-        "M-MIDI-REPEAT-001",
-        "M-KEYBOARD-STOP-001"
+        "M-MIDI-REPEAT-001"
       ],
       "status": "in_progress",
       "domain": "Ports/channels; note-on velocity zero; overlapping same pitch; disconnect; held notes across selection change; wrong ports. Keyboard note entry through native MIDI input is exercised by M-OPT-KEYS-001 (live monitoring) and existing M-MIDI/M-REC cases; relative-controller data entry remains.",

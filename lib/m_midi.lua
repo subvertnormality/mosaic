@@ -153,8 +153,7 @@ function handle_midi_event_data(data, midi_device)
     local recording_groups = chord_states[stored.channel_number] or {}
     local channel_chords = recording_groups[stored.recording] or {}
     local chord_state = channel_chords[stored.step]
-    -- A key held across a Stop no longer belongs to the (reset) chord on its step.
-    if chord_state and chord_state.notes[data[2]] then
+    if chord_state then
       local holders = (chord_state.notes[data[2]] or 1) - 1
       chord_state.notes[data[2]] = holders > 0 and holders or nil
       chord_state.chord_number = chord_state.chord_number - 1
@@ -420,9 +419,7 @@ function m_midi.stop(send_transport)
 
   -- Reset note counts
   m_midi.note_counts = {}
-  -- Transport Stop also resets keyboard chord state, so a key whose Note Off
-  -- never arrived cannot keep a step's chord open.
-  chord_states = {}
+  chord_number = 0
 end
 
 
