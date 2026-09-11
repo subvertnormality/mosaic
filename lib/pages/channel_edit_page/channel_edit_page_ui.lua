@@ -963,6 +963,9 @@ function channel_edit_page_ui.handle_memory_navigator(c, d)
       memory_controls.navigator:set_current_index(memory.get_event_count(c))
     end
   end
+  -- Undo and redo re-apply only an event's own fields; rebuild the channel's working pattern
+  -- from its masks, as every edit does (defect memory-redo-working-pattern, M-MEMORY-009).
+  pattern.update_working_pattern(c, program.get_selected_song_pattern())
 end
 
 function channel_edit_page_ui.handle_trig_mask_change(channel, direction)
@@ -1601,6 +1604,7 @@ function channel_edit_page_ui.handle_key_two_pressed()
         tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory undone")
       end
       channel_edit_page_ui.refresh_memory()
+      pattern.update_working_pattern(program.get_selected_channel().number, program.get_selected_song_pattern())
     end
     save_confirm.cancel()
   end
@@ -1618,6 +1622,7 @@ function channel_edit_page_ui.handle_key_three_pressed()
       tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory applied")
     end
     channel_edit_page_ui.refresh_memory()
+    pattern.update_working_pattern(program.get_selected_channel().number, program.get_selected_song_pattern())
   elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] and not trig_lock_page:is_sub_page_enabled() then
     local pressed_keys = m_grid.get_pressed_keys()
     if #pressed_keys > 0 then
