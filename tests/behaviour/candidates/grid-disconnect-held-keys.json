@@ -1,0 +1,44 @@
+{
+  "status": "isolated-candidate-unit-validated-no-behaviour-reproduction-by-decision",
+  "base_revision": "ee4fb2a",
+  "files": [
+    {
+      "file": "lib/m_grid.lua",
+      "before_sha256": "d47787d95ea4a040215152746c6bb8aebe6743edb1335585380f07e6cce31193",
+      "after_sha256": "8f3e8b09254a7ed7647044bc53a8a7b36b4047dfc9b22ef2a8a0baf25ee46f79"
+    }
+  ],
+  "patch": "0133-grid-disconnect-held-keys.patch",
+  "patch_sha256": "930fdeab3239f0761def255d44c54a7cead8557ee6ec0a44bf937e7770ba30d8",
+  "regression": null,
+  "unit_regression": "test_grid_input_remove_clears_held_keys_and_cancels_their_timers",
+  "baseline": [],
+  "rationale": "g.remove only printed 'Grid disconnected': the held-key list, the held keys' long-press timers, a fired long-press flag and an in-progress two-key gesture all survived the disconnect, so a timer could fire a long press after the grid was gone and the first tap after reconnecting could resolve as a two-key gesture with the stale key or be swallowed. Disconnect now cancels each held key's timer, clears its long-press flag, empties the (live) held-key table and ends the two-key gesture. No behaviour reproduction exists, by decision: an emulator probe did not reproduce a user-visible effect and the human decided (2026-09-11) to fix defensively; the regression is three Lua units in grid_input_tests.lua (test_grid_input_remove_clears_held_keys_and_cancels_their_timers, test_grid_input_remove_forgets_a_fired_long_press, test_grid_input_remove_ends_a_two_key_gesture_in_progress), all three failing on the unfixed m_grid.lua (logged only 'print(Grid disconnected)', no clock.cancel) and passing with the fix. They replace the characterisation unit test_grid_input_remove_alerts_but_keeps_held_keys_and_timers.",
+  "oracle": "No README text; human decision 2026-09-11 (suspected-defects S29): clear held keys and timers on disconnect.",
+  "validation": [],
+  "collateral": "Controlled lane, all passed: M-GESTURE-ORDER-001 932bdb864b944ea7a23510556ed31d80, M-EDIT-004 036430fda58b4c53a3c555c92bfcaf50, M-EDIT-005 0f33a47506b14a479f0b26c631df487d, M-MASK-HELD-EXTRA-001 2dd11e69faf84b708c2f8ed7a652e791, M-LEN-003 6e225de70c7f4eeda65a4e816b5b672f (no behaviour case disconnects the grid). Full Lua units 1467/1467 OK; guards OK.",
+  "upstream_merged": false,
+  "unit_baseline": [
+    "FFF",
+    "Failed tests:",
+    "-------------",
+    "1) test_grid_input_remove_clears_held_keys_and_cancels_their_timers",
+    ".///lib/grid_input_tests.lua:728: expected: {\"clock.cancel(1)\", \"clock.cancel(2)\", \"print(Grid disconnected)\"}",
+    "actual: {\"print(Grid disconnected)\"}",
+    "stack traceback:",
+    "",
+    "2) test_grid_input_remove_ends_a_two_key_gesture_in_progress",
+    ".///lib/grid_input_tests.lua:762: expected: {\"clock.cancel(1)\", \"print(Grid disconnected)\"}",
+    "actual: {\"print(Grid disconnected)\"}",
+    "stack traceback:",
+    "",
+    "3) test_grid_input_remove_forgets_a_fired_long_press",
+    ".///lib/grid_input_tests.lua:746: expected: {\"clock.cancel(1)\", \"print(Grid disconnected)\"}",
+    "actual: {\"print(Grid disconnected)\"}",
+    "stack traceback:",
+    "",
+    "Ran 3 tests in 0.003 seconds, 0 successes, 3 failures, 1464 non-selected",
+    ""
+  ],
+  "unit_validation": "Ran 1467 tests, 1467 successes, 0 failures (full Lua units with the fix)"
+}

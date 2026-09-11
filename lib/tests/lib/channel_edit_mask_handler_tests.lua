@@ -53,6 +53,7 @@ local SPECS = {
     fn = "handle_trig_mask_change", field = "trig_mask", setter = "program.set_trig_mask",
     min = -1, max = 1, inc_from = 0, dec_from = 1, -- selector range (line 63)
     -- unheld decrement from an unset mask: nil -> -1 -> clamp -1 (lines 1007, 1012-1013)
+    inc_from_unset = 0, -- unset counts as -1 (X), so one increment sets 0
     dec_from_unset = -1,
     payload = function(s, v) return {step = s, trig = v} end, -- lines 982-985, 998-1001
     updates_working_pattern = true, -- line 1015
@@ -62,6 +63,7 @@ local SPECS = {
   note = {
     fn = "handle_note_mask_change", field = "note_mask", setter = "program.set_note_mask",
     min = -1, max = 127, inc_from = 60, dec_from = 60, -- line 64
+    inc_from_unset = 0, -- unset counts as -1 (X), so one increment sets 0
     dec_from_unset = -1, -- lines 1059, 1064-1065
     payload = function(s, v) return {step = s, note = v} end, -- lines 1034-1037, 1050-1053
     updates_working_pattern = true, -- line 1067
@@ -71,6 +73,7 @@ local SPECS = {
   velocity = {
     fn = "handle_velocity_mask_change", field = "velocity_mask", setter = "program.set_velocity_mask",
     min = -1, max = 127, inc_from = 100, dec_from = 100, -- line 65
+    inc_from_unset = 0, -- unset counts as -1 (X), so one increment sets 0
     dec_from_unset = -1, -- lines 1111, 1116-1117
     payload = function(s, v) return {step = s, velocity = v} end, -- lines 1086-1089, 1102-1105
     updates_working_pattern = true, -- line 1119
@@ -81,8 +84,10 @@ local SPECS = {
   chord_one = {
     fn = "handle_chord_mask_one_change", field = "chord_one_mask", setter = "program.set_chord_one_mask",
     min = -14, max = 14, inc_from = 3, dec_from = 3, -- line 68
-    -- DIFFERENCE (range): unset -> -1 -> -2, which is above min -14, so it stays -2 (line 1236, 1241-1242)
-    dec_from_unset = -2,
+    -- DIFFERENCE: an unset chord mask starts from X, which is 0 for chords: one increment sets 1
+    -- ("2nd") and one decrement -1 ("-7th") (human decision S26; bugs.json chord-mask-unset-start-x)
+    inc_from_unset = 1,
+    dec_from_unset = -1,
     payload = function(s, v) return {step = s, chord_degrees = {v, nil, nil, nil}} end, -- lines 1213, 1229
     -- DIFFERENCE: no pattern.update_working_pattern on the channel path (lines 1235-1244)
     updates_working_pattern = false,
@@ -92,7 +97,7 @@ local SPECS = {
   chord_two = {
     fn = "handle_chord_mask_two_change", field = "chord_two_mask", setter = "program.set_chord_two_mask",
     min = -14, max = 14, inc_from = 5, dec_from = 5, -- line 69
-    dec_from_unset = -2, -- lines 1286, 1291-1292
+    inc_from_unset = 1, dec_from_unset = -1, -- S26: unset starts from X (0)
     payload = function(s, v) return {step = s, chord_degrees = {nil, v, nil, nil}} end, -- lines 1263, 1279
     updates_working_pattern = false, -- lines 1285-1294
     decrement_sink = "recorder", -- line 1272
@@ -101,7 +106,7 @@ local SPECS = {
   chord_three = {
     fn = "handle_chord_mask_three_change", field = "chord_three_mask", setter = "program.set_chord_three_mask",
     min = -14, max = 14, inc_from = 7, dec_from = 7, -- line 70
-    dec_from_unset = -2, -- lines 1329, 1334-1335
+    inc_from_unset = 1, dec_from_unset = -1, -- S26: unset starts from X (0)
     payload = function(s, v) return {step = s, chord_degrees = {nil, nil, v, nil}} end, -- lines 1313, 1324
     updates_working_pattern = false, -- lines 1328-1337
     -- The held decrement is a recorder portion like every other handler's (bugs.json
@@ -112,7 +117,7 @@ local SPECS = {
   chord_four = {
     fn = "handle_chord_mask_four_change", field = "chord_four_mask", setter = "program.set_chord_four_mask",
     min = -14, max = 14, inc_from = -9, dec_from = -9, -- line 71
-    dec_from_unset = -2, -- lines 1379, 1384-1385
+    inc_from_unset = 1, dec_from_unset = -1, -- S26: unset starts from X (0)
     payload = function(s, v) return {step = s, chord_degrees = {nil, nil, nil, v}} end, -- lines 1356, 1372
     updates_working_pattern = false, -- lines 1378-1387
     decrement_sink = "recorder", -- line 1365
@@ -290,8 +295,9 @@ local function unheld_increment_from_unset(name)
   local spec = SPECS[name]
   isolated(function(env)
     local c = new_channel(SELECTED)
-    -- characterisation: an unset mask counts as -1, so one increment sets 0
-    luaunit.assert_equals(run(env, spec.fn, c, 1, {}), channel_path_calls(spec, c, 0, spec.updates_working_pattern))
+    -- an unset mask starts from its X value (-1, or 0 for chords: S26)
+    luaunit.assert_equals(run(env, spec.fn, c, 1, {}),
+      channel_path_calls(spec, c, spec.inc_from_unset, spec.updates_working_pattern))
   end)
 end
 
@@ -310,7 +316,7 @@ local function unheld_decrement_from_unset(name)
   local spec = SPECS[name]
   isolated(function(env)
     local c = new_channel(SELECTED)
-    -- characterisation: unset counts as -1; the result depends on the selector minimum
+    -- unset starts from X (-1, or 0 for chords: S26); the result depends on the selector minimum
     -- (for min -1 the clamp holds -1, passed as -1: suspected defect "and nil or" never yields nil)
     luaunit.assert_equals(run(env, spec.fn, c, -1, {}),
       channel_path_calls(spec, c, spec.dec_from_unset, spec.updates_working_pattern))
@@ -441,19 +447,21 @@ local function held_row_boundaries(name)
   end)
 end
 
-local function only_first_key_row_checked(name)
+local function held_keys_outside_step_rows_ignored(name)
   local spec = SPECS[name]
   isolated(function(env)
-    -- characterisation: only pressed_keys[1] is range-checked; later keys are recorded as-is
-    -- (row 2 gives step (2 - 4) * 16 + 2 = -30).
+    -- Human decision 2026-09-11 (S27; bugs.json held-mask-extra-key, M-MASK-HELD-EXTRA-001):
+    -- held keys outside rows 4..7 are ignored. A second key on row 2 is not recorded (it was
+    -- step (2 - 4) * 16 + 2 = -30)...
     prime(env, spec, spec.inc_from)
     local c = new_channel(SELECTED)
     luaunit.assert_equals(run(env, spec.fn, c, 1, {{1, 4}, {2, 2}}),
-      held_path_calls(spec, c, {1, -30}, spec.inc_from + 1, "recorder"))
-    -- ...and a first key outside rows 4..7 sends everything to the channel path.
-    local d = new_channel(SELECTED, {[spec.field] = spec.inc_from})
+      held_path_calls(spec, c, {1}, spec.inc_from + 1, "recorder"))
+    -- ...and a first key on row 2 no longer sends a held step to the channel path.
+    prime(env, spec, spec.inc_from)
+    local d = new_channel(SELECTED, {[spec.field] = 11})
     luaunit.assert_equals(run(env, spec.fn, d, 1, {{1, 2}, {2, 5}}),
-      channel_path_calls(spec, d, spec.inc_from + 1, spec.updates_working_pattern))
+      held_path_calls(spec, d, {18}, spec.inc_from + 1, "recorder"))
   end)
 end
 
@@ -650,20 +658,23 @@ function test_mask_handler_length_held_row_boundaries()
   end)
 end
 
-function test_mask_handler_length_only_first_key_row_checked()
+function test_mask_handler_length_held_keys_outside_step_rows_ignored()
+  -- Human decision 2026-09-11 (S27; bugs.json held-mask-extra-key): held keys outside rows
+  -- 4..7 are ignored, whichever key went down first.
   isolated(function(env)
     prime_length(env, 5)
     local c = new_channel(SELECTED)
     luaunit.assert_equals(run(env, LENGTH.fn, c, 1, {{1, 4}, {2, 2}}),
-      held_path_calls(LENGTH, c, {1, -30}, 1/3, "recorder")) -- characterisation
+      held_path_calls(LENGTH, c, {1}, 1/3, "recorder"))
     local zero = new_channel(SELECTED)
     isolated(function(inner)
       luaunit.assert_equals(run(inner, LENGTH.fn, zero, -1, {{1, 4}, {2, 2}}),
-        held_path_calls(LENGTH, zero, {1, -30}, 0, "recorder")) -- characterisation: 0 branch too
+        held_path_calls(LENGTH, zero, {1}, 0, "recorder")) -- the 0 branch too
     end)
+    prime_length(env, 5)
     local d = new_channel(SELECTED, {length_mask = 1/4})
     luaunit.assert_equals(run(env, LENGTH.fn, d, 1, {{1, 2}, {2, 5}}),
-      channel_path_calls(LENGTH, d, 1/3, true)) -- characterisation
+      held_path_calls(LENGTH, d, {18}, 1/3, "recorder"))
   end)
 end
 
@@ -762,7 +773,7 @@ function test_mask_handler_trig_held_decrement_to_minus_one() held_decrement_to_
 function test_mask_handler_trig_held_selector_is_independent() held_selector_is_independent("trig") end
 function test_mask_handler_trig_held_on_unselected_channel() held_on_unselected_channel("trig") end
 function test_mask_handler_trig_held_row_boundaries() held_row_boundaries("trig") end
-function test_mask_handler_trig_only_first_key_row_checked() only_first_key_row_checked("trig") end
+function test_mask_handler_trig_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("trig") end
 function test_mask_handler_trig_velocity_write_precedes_recorder() velocity_write_precedes_recorder("trig") end
 
 -- note
@@ -780,7 +791,7 @@ function test_mask_handler_note_held_decrement_to_minus_one() held_decrement_to_
 function test_mask_handler_note_held_selector_is_independent() held_selector_is_independent("note") end
 function test_mask_handler_note_held_on_unselected_channel() held_on_unselected_channel("note") end
 function test_mask_handler_note_held_row_boundaries() held_row_boundaries("note") end
-function test_mask_handler_note_only_first_key_row_checked() only_first_key_row_checked("note") end
+function test_mask_handler_note_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("note") end
 function test_mask_handler_note_velocity_write_precedes_recorder() velocity_write_precedes_recorder("note") end
 
 -- velocity
@@ -798,7 +809,7 @@ function test_mask_handler_velocity_held_decrement_to_minus_one() held_decrement
 function test_mask_handler_velocity_held_selector_is_independent() held_selector_is_independent("velocity") end
 function test_mask_handler_velocity_held_on_unselected_channel() held_on_unselected_channel("velocity") end
 function test_mask_handler_velocity_held_row_boundaries() held_row_boundaries("velocity") end
-function test_mask_handler_velocity_only_first_key_row_checked() only_first_key_row_checked("velocity") end
+function test_mask_handler_velocity_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("velocity") end
 function test_mask_handler_velocity_velocity_write_precedes_recorder() velocity_write_precedes_recorder("velocity") end
 
 -- chord_one
@@ -816,7 +827,7 @@ function test_mask_handler_chord_one_held_decrement_to_minus_one() held_decremen
 function test_mask_handler_chord_one_held_selector_is_independent() held_selector_is_independent("chord_one") end
 function test_mask_handler_chord_one_held_on_unselected_channel() held_on_unselected_channel("chord_one") end
 function test_mask_handler_chord_one_held_row_boundaries() held_row_boundaries("chord_one") end
-function test_mask_handler_chord_one_only_first_key_row_checked() only_first_key_row_checked("chord_one") end
+function test_mask_handler_chord_one_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("chord_one") end
 function test_mask_handler_chord_one_velocity_write_precedes_recorder() velocity_write_precedes_recorder("chord_one") end
 
 -- chord_two
@@ -834,7 +845,7 @@ function test_mask_handler_chord_two_held_decrement_to_minus_one() held_decremen
 function test_mask_handler_chord_two_held_selector_is_independent() held_selector_is_independent("chord_two") end
 function test_mask_handler_chord_two_held_on_unselected_channel() held_on_unselected_channel("chord_two") end
 function test_mask_handler_chord_two_held_row_boundaries() held_row_boundaries("chord_two") end
-function test_mask_handler_chord_two_only_first_key_row_checked() only_first_key_row_checked("chord_two") end
+function test_mask_handler_chord_two_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("chord_two") end
 function test_mask_handler_chord_two_velocity_write_precedes_recorder() velocity_write_precedes_recorder("chord_two") end
 
 -- chord_three
@@ -852,7 +863,7 @@ function test_mask_handler_chord_three_held_decrement_to_minus_one() held_decrem
 function test_mask_handler_chord_three_held_selector_is_independent() held_selector_is_independent("chord_three") end
 function test_mask_handler_chord_three_held_on_unselected_channel() held_on_unselected_channel("chord_three") end
 function test_mask_handler_chord_three_held_row_boundaries() held_row_boundaries("chord_three") end
-function test_mask_handler_chord_three_only_first_key_row_checked() only_first_key_row_checked("chord_three") end
+function test_mask_handler_chord_three_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("chord_three") end
 function test_mask_handler_chord_three_velocity_write_precedes_recorder() velocity_write_precedes_recorder("chord_three") end
 
 -- chord_four
@@ -870,5 +881,5 @@ function test_mask_handler_chord_four_held_decrement_to_minus_one() held_decreme
 function test_mask_handler_chord_four_held_selector_is_independent() held_selector_is_independent("chord_four") end
 function test_mask_handler_chord_four_held_on_unselected_channel() held_on_unselected_channel("chord_four") end
 function test_mask_handler_chord_four_held_row_boundaries() held_row_boundaries("chord_four") end
-function test_mask_handler_chord_four_only_first_key_row_checked() only_first_key_row_checked("chord_four") end
+function test_mask_handler_chord_four_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("chord_four") end
 function test_mask_handler_chord_four_velocity_write_precedes_recorder() velocity_write_precedes_recorder("chord_four") end

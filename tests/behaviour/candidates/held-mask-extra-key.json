@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "293a66c",
+  "files": [
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "07a77e9919f8001437837d9de35787a64de3ef0a14207d16b3f681da3a27fdcf",
+      "after_sha256": "6ebd279e6aab03b7517e3631841ca73b984ace868fdf062850479124d7b9d7ad"
+    }
+  ],
+  "patch": "0132-held-mask-extra-key.patch",
+  "patch_sha256": "da4754e03f285ccaa3b58c26ab92ad9f6838cd8c1f5cc47b3c4b97124ae7bee0",
+  "regression": "M-MASK-HELD-EXTRA-001",
+  "unit_regression": "test_mask_handler_velocity_held_keys_outside_step_rows_ignored",
+  "baseline": [
+    {
+      "run_id": "93573b4be71f4cb2bcd7d3a8b54571b2",
+      "case": "M-MASK-HELD-EXTRA-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "8521d92061dab88c40538448a19f32ad085fb944957ef1974f1db67780f821ce",
+      "failure": "('Pattern-row key held first: the velocity turn did not lock only step 2', {'expected': [[144, 60, 50], [144, 62, 40], [144, 64, 107], [144, 65, 97]], 'heard': [[144, 60, 50], [144, 62, 40], [144, 64,"
+    },
+    {
+      "run_id": "67649b407e2443d39cde550cf15b0955",
+      "case": "M-MASK-HELD-EXTRA-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "1d24c97d48edbae0159149a7789aa76efd4d4b0bfbc2f9d6d8406959299a2cbf",
+      "failure": "('Pattern-row key held first: the velocity turn did not lock only step 2', {'expected': [[144, 60, 50], [144, 62, 40], [144, 64, 107], [144, 65, 97]], 'heard': [[144, 60, 50], [144, 62, 40], [144, 64,"
+    }
+  ],
+  "rationale": "The eight channel-editor mask handlers (trig, note, velocity, length, chord 1-4) range-checked only the first held grid key: a second held key outside rows 4-7 was treated as a step (row 2 column 2 = step -30, an orphaned recorder portion and, for velocity, a step_velocity_masks[-30] write), and a first held key outside rows 4-7 sent a held step's edit to the channel-wide mask. The -30 manifestation has no user-visible effect found; the reverse order is audible: with (2,2) held before step 2, a velocity turn set the channel velocity for steps 2-4 (baseline heard 50,40,40,40 instead of 50,40,107,97). Each handler now takes its held keys through held_step_keys(), which drops keys outside rows 4-7 (human decision: ignore them). The channel_edit_mask_handler characterisation units that pinned both behaviours (only_first_key_row_checked, 7 generic + length) now pin the decision.",
+  "oracle": "README 595 (hold the step you wish to modify, then input the value as a trig lock) and README 597 (the channel mask is set without holding a step and applies to steps without a lock); human decision 2026-09-11 (S27): ignore held keys outside rows 4-7.",
+  "validation": [
+    {
+      "run_id": "0f483a0ee418419bba8e514628581e9e",
+      "case": "M-MASK-HELD-EXTRA-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "dd12d8a1e3e6790b1196d1f5eb532aab08626e754606a6de8f9bdd27a6623d36",
+      "failure": null
+    },
+    {
+      "run_id": "c18cdb1e197e4cc8a1a9aa6867962ac9",
+      "case": "M-MASK-HELD-EXTRA-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "e621088c3afeee60c8a93ee3afc4ff32ab95b879d3404c457351853137ef12e0",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-3604ada6ff624347a0554524755a255f",
+      "case": "M-MASK-HELD-EXTRA-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "0a5014b8834c980fa6d37c336082671797fb0c13f90706ac7599b5b1fb17c38b",
+      "failure": null,
+      "normalized_sha256": "cf583f4db482a29d556b1d8cb2f6177028e83f703805e8d15bb903f673cabc05"
+    }
+  ],
+  "collateral": "MASK-STEP-ENTRY, MASK-PRECEDENCE and MASK-CLEAR-STEP cases in the controlled lane, all passed: M-MASK-002 5b39a4689cb545f3a23588dfdd36f986, M-MASK-003 10122401262743548878da7bf9e5c5b0, M-MASK-004 40696b1b30a24effa2a239b418ab8fc7, M-MASK-005 64c160ef43be4cdebf6dcd17f6d16757, M-MASK-006 f51dec6c121c4108a381315cee07354c, M-MASK-007 37c54f34037d4369a1cdd7b33afd9153, M-MASK-008 e4a5132c634b43858bd872728b5645fe, M-MASK-009 481086c51fea441db7381e1777ae446b, M-MASK-010 a7df7a4e8237423e90716d7cc2d17c84, M-MASK-011 73898f770eed4d65aa72a6b412069e34, M-MASK-012 d21a5dd2fc2344cf8ab4ec4ff3b34424, M-MASK-013 b19f1f363f074590be435b526fd9ca26, M-MASK-014 e28c0710e105483ca3ea0ca1f4a896a1, M-MASK-015 4935410274604118b6e1bcd37ea1b2d9, M-MASK-016 57a832cf291d42969629291900ed52ce, M-MASK-017 3c7e45dac6a24833a692a2f19029c952, M-MASK-018 2610327f37e54245842d3dbb9681d8a6, M-MASK-024 8dd1a893875e4037b7b673af07e980da, M-MASK-025 0d89a07178cb413fa327cbd7f26a1d05, M-MASK-026 83d9db5358334273808b7c88db29156e, M-MASK-027 a9d6f5f6d8c84ea7a0e46d4aac56c10f, M-MASK-028 2f52d78347f54548a2873f2cb4cd08e3, M-MASK-029 bb333c145c304132826d4d3c029cb3a9, M-MASK-030 d52be70cdcd842b997ef0b366d6b1328, M-MASK-031 42eff1712d974367914d3ebd3e817f6d, M-MERGE-042 c4063d36e6a9453fbd2a55dee4bcb43d. Full Lua units 1465/1465 OK; guards OK.",
+  "upstream_merged": false
+}

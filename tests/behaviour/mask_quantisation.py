@@ -94,7 +94,7 @@ def mask_full_quantisation(c):
 def mask_full_chord_inheritance(c):
     from cases import set_mosaic_options,assign_trig_parameter,assert_durations
     c.configure();set_mosaic_options(c,[('Lock merged to pent.',False),('Quantise note masks',True)])
-    c.enc(1,-4);c.enc(3,61);c.enc(2,3);c.enc(3,3)
+    c.enc(1,-4);c.enc(3,61);c.enc(2,3);c.enc(3,2)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
     c.tap(4,8);c.enc(2,1);c.enc(3,1);c.key(3)
     c.tap(3,8);c.enc(1,1);assign_trig_parameter(c,'Quantise Note Mask')
     def verify(pitches,stage):

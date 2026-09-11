@@ -971,8 +971,20 @@ function channel_edit_page_ui.handle_memory_navigator(c, d)
   pattern.update_working_pattern(c, program.get_selected_song_pattern())
 end
 
+-- Held keys outside the sequencer rows 4-7 are not steps: the mask handlers ignore them
+-- (bugs.json held-mask-extra-key).
+local function held_step_keys()
+  local keys = {}
+  for _, key in ipairs(m_grid.get_pressed_keys()) do
+    if key[2] > 3 and key[2] < 8 then
+      table.insert(keys, key)
+    end
+  end
+  return keys
+end
+
 function channel_edit_page_ui.handle_trig_mask_change(channel, direction)
-  local pressed_keys = m_grid.get_pressed_keys()
+  local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 and channel.number == program.get_selected_channel().number then
@@ -1024,7 +1036,7 @@ end
 
 
 function channel_edit_page_ui.handle_note_mask_change(channel, direction)
-  local pressed_keys = m_grid.get_pressed_keys()
+  local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 and channel.number == program.get_selected_channel().number then
@@ -1075,7 +1087,7 @@ function channel_edit_page_ui.handle_note_mask_change(channel, direction)
 end
 
 function channel_edit_page_ui.handle_velocity_mask_change(channel, direction)
-  local pressed_keys = m_grid.get_pressed_keys()
+  local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 and channel.number == program.get_selected_channel().number then
@@ -1127,7 +1139,7 @@ function channel_edit_page_ui.handle_velocity_mask_change(channel, direction)
 end
 
 function channel_edit_page_ui.handle_length_mask_change(channel, direction)
-  local pressed_keys = m_grid.get_pressed_keys()
+  local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 and channel.number == program.get_selected_channel().number then
@@ -1201,7 +1213,7 @@ function channel_edit_page_ui.handle_length_mask_change(channel, direction)
 end
 
 function channel_edit_page_ui.handle_chord_mask_one_change(channel, direction)
-  local pressed_keys = m_grid.get_pressed_keys()
+  local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 and channel.number == program.get_selected_channel().number then
@@ -1239,7 +1251,8 @@ function channel_edit_page_ui.handle_chord_mask_one_change(channel, direction)
       end
     end
   else
-    mask_selectors.chords[1]:set_value(channel.chord_one_mask or -1)
+    -- An unset chord mask is X (0), as displayed (bugs.json chord-mask-unset-start-x).
+    mask_selectors.chords[1]:set_value(channel.chord_one_mask or 0)
     if direction > 0 then
       mask_selectors.chords[1]:increment()
       program.set_chord_one_mask(channel, mask_selectors.chords[1]:get_value())
@@ -1251,7 +1264,7 @@ function channel_edit_page_ui.handle_chord_mask_one_change(channel, direction)
 end
 
 function channel_edit_page_ui.handle_chord_mask_two_change(channel, direction)
-  local pressed_keys = m_grid.get_pressed_keys()
+  local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 and channel.number == program.get_selected_channel().number then
@@ -1289,7 +1302,7 @@ function channel_edit_page_ui.handle_chord_mask_two_change(channel, direction)
       end
     end
   else
-    mask_selectors.chords[2]:set_value(channel.chord_two_mask or -1)
+    mask_selectors.chords[2]:set_value(channel.chord_two_mask or 0)
     if direction > 0 then
       mask_selectors.chords[2]:increment()
       program.set_chord_two_mask(channel, mask_selectors.chords[2]:get_value())
@@ -1301,7 +1314,7 @@ function channel_edit_page_ui.handle_chord_mask_two_change(channel, direction)
 end
 
 function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction)
-  local pressed_keys = m_grid.get_pressed_keys()
+  local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 and channel.number == program.get_selected_channel().number then
@@ -1339,7 +1352,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction)
       end
     end
   else
-    mask_selectors.chords[3]:set_value(channel.chord_three_mask or -1)
+    mask_selectors.chords[3]:set_value(channel.chord_three_mask or 0)
     if direction > 0 then
       mask_selectors.chords[3]:increment()
       program.set_chord_three_mask(channel, mask_selectors.chords[3]:get_value())
@@ -1351,7 +1364,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction)
 end
 
 function channel_edit_page_ui.handle_chord_mask_four_change(channel, direction)
-  local pressed_keys = m_grid.get_pressed_keys()
+  local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
   if #pressed_keys > 0 and pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8 and channel.number == program.get_selected_channel().number then
@@ -1389,7 +1402,7 @@ function channel_edit_page_ui.handle_chord_mask_four_change(channel, direction)
       end
     end
   else
-    mask_selectors.chords[4]:set_value(channel.chord_four_mask or -1)
+    mask_selectors.chords[4]:set_value(channel.chord_four_mask or 0)
     if direction > 0 then
       mask_selectors.chords[4]:increment()
       program.set_chord_four_mask(channel, mask_selectors.chords[4]:get_value())
