@@ -1,0 +1,24 @@
+diff --git a/lib/m_grid.lua b/lib/m_grid.lua
+index 5e5f94a..2d6d800 100644
+--- a/lib/m_grid.lua
++++ b/lib/m_grid.lua
+@@ -270,6 +270,19 @@ function m_grid.init()
+ 
+ 
+   function g.remove()
++    -- A disconnected grid sends no key-ups: forget its held keys and cancel their long-press
++    -- timers (bugs.json grid-disconnect-held-keys).
++    for _, key in ipairs(pressed_keys) do
++      local x, y = key[1], key[2]
++      if m_grid.counter[x][y] then
++        clock.cancel(m_grid.counter[x][y])
++      end
++      m_grid.long_press_active[x][y] = false
++    end
++    for i = #pressed_keys, 1, -1 do
++      pressed_keys[i] = nil
++    end
++    dual_in_progress = false
+     m_grid.alert_disconnect()
+   end
+ 

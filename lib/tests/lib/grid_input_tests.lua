@@ -714,23 +714,56 @@ end
 -- Disconnect and reconnect
 ---------------------------------------------------------------------------
 
-function test_grid_input_remove_alerts_but_keeps_held_keys_and_timers()
+-- Human decision 2026-09-11 (suspected-defects S29; bugs.json grid-disconnect-held-keys): a
+-- disconnected grid sends no key-ups, so disconnect forgets the held keys and cancels their
+-- long-press timers. Fixed defensively: no behaviour reproduction exists, by decision (an
+-- emulator probe showed no user-visible effect), so these units are the regression.
+function test_grid_input_remove_clears_held_keys_and_cancels_their_timers()
   with_grid({}, function(env, m)
+    local live = m.get_pressed_keys()
     key(env, 3, 2, 1)
     key(env, 5, 2, 1)
     take_log(env)
     env.g.remove()
-    luaunit.assert_equals(take_log(env), {"print(Grid disconnected)"})
-    -- characterisation (suspected defect, gap-scan #8: g.remove never clears
-    -- pressed_keys nor cancels their timers, lib/m_grid.lua:272-274)
-    luaunit.assert_equals(m.get_pressed_keys(), {{3, 2}, {5, 2}})
-    luaunit.assert_nil(env.clock.runs[1].cancelled)
-    fire(env, 1)
-    luaunit.assert_equals(take_log(env), long(TRIG, 3, 2))
-    -- A later single tap is resolved against the stale held key.
+    luaunit.assert_equals(take_log(env), concat(cancel(1), cancel(2), {"print(Grid disconnected)"}))
+    luaunit.assert_equals(m.get_pressed_keys(), {})
+    luaunit.assert_is(m.get_pressed_keys(), live) -- still the live table
+    luaunit.assert_true(env.clock.runs[1].cancelled)
+    luaunit.assert_true(env.clock.runs[2].cancelled)
+    -- A later single tap is a short press, not a two-key gesture with a stale key.
     key(env, 7, 2, 1)
     key(env, 7, 2, 0)
-    luaunit.assert_equals(take_log(env), concat(pressed(TRIG, 7, 2), cancel(3), cancel(1), dual(TRIG, 3, 2, 7, 2), post(TRIG, 7, 2)))
+    luaunit.assert_equals(take_log(env), concat(pressed(TRIG, 7, 2), cancel(3), short(TRIG, 7, 2), post(TRIG, 7, 2)))
+  end)
+end
+
+function test_grid_input_remove_forgets_a_fired_long_press()
+  with_grid({}, function(env, m)
+    key(env, 3, 2, 1)
+    fire(env, 1)
+    take_log(env)
+    env.g.remove()
+    luaunit.assert_equals(take_log(env), concat(cancel(1), {"print(Grid disconnected)"}))
+    luaunit.assert_false(m.long_press_active[3][2])
+    -- The next tap of that key after reconnecting is a short press, not swallowed.
+    key(env, 3, 2, 1)
+    key(env, 3, 2, 0)
+    luaunit.assert_equals(take_log(env), concat(pressed(TRIG, 3, 2), cancel(2), short(TRIG, 3, 2), post(TRIG, 3, 2)))
+  end)
+end
+
+function test_grid_input_remove_ends_a_two_key_gesture_in_progress()
+  with_grid({}, function(env, m)
+    key(env, 5, 2, 1)
+    key(env, 6, 2, 1)
+    key(env, 6, 2, 0) -- two-key gesture; (5, 2) is still held
+    take_log(env)
+    env.g.remove()
+    luaunit.assert_equals(take_log(env), concat(cancel(1), {"print(Grid disconnected)"}))
+    -- The next single tap is a short press, not the tail of the old gesture.
+    key(env, 7, 2, 1)
+    key(env, 7, 2, 0)
+    luaunit.assert_equals(take_log(env), concat(pressed(TRIG, 7, 2), cancel(3), short(TRIG, 7, 2), post(TRIG, 7, 2)))
   end)
 end
 
