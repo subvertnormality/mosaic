@@ -575,6 +575,19 @@ function test_w4c_swing_type_edit_and_mask_page_selection_request_a_redraw()
   end)
 end
 
+function test_w4c_encoder_one_page_changes_leave_a_redraw_requested()
+  isolated(function(env)
+    start(env)
+    env.ui.select_trig_page()
+    -- characterisation: E1 in either direction changes page and leaves the screen marked for redraw
+    for _, d in ipairs({1, -1}) do
+      fn.dirty_screen(false)
+      turn(env, 1, d)
+      luaunit.assert_true(fn.dirty_screen())
+    end
+  end)
+end
+
 ------------------------------------------------------------------------------------------------
 -- set_note_dashboard_values (1710-1726): partial updates as lib/step.lua sends them.
 ------------------------------------------------------------------------------------------------
