@@ -585,7 +585,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
       local note = process_func(note_to_play.note_value, note_to_play.octave_mod, note_to_play.transpose, channel.step_scale_number)
       local release_id = play_arp_note(note, note_container, velocity, arp_division, note_on_func, onset_offset)
       if release_id then table.insert(release_ids, release_id) end
-      table.insert(note_dashboard_values.chords, note)
+      table.insert(note_dashboard_values.chords, note and fn_constrain(0, 127, note)) -- as sent (dashboard-chord-slots)
     end
     arp_note[c] = arp_note[c] % total_notes + 1
     number_of_executions = number_of_executions + 1
@@ -696,7 +696,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
             if not note_dashboard_values.chords then
               note_dashboard_values.chords = {}
             end
-            chord_note_dashboard_values.chords[chord_number] = processed_chord_note
+            -- Show the voice as sent: MIDI clamps it to 0..127 (bugs.json dashboard-chord-slots).
+            chord_note_dashboard_values.chords[chord_number] = fn_constrain(0, 127, processed_chord_note)
 
             if c == program.get().selected_channel then
               channel_edit_page_ui.set_note_dashboard_values(chord_note_dashboard_values)

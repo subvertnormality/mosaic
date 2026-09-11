@@ -2889,7 +2889,8 @@
         "M-MASK-027",
         "M-MASK-028",
         "M-MASK-029",
-        "M-MEMORY-011"
+        "M-MEMORY-011",
+        "M-DASHBOARD-CHORD-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Duplicate Note On without release, multiple held grid steps and comprehensive mask display assertions remain pending.",
@@ -3320,7 +3321,8 @@
         "M-DASHBOARD-006",
         "M-DASHBOARD-007",
         "M-DASHBOARD-008",
-        "M-DASHBOARD-SELECT-001"
+        "M-DASHBOARD-SELECT-001",
+        "M-DASHBOARD-CHORD-001"
       ],
       "status": "partial",
       "domain": "All channels; chords; rests; selection during playback; stale-frame transitions. M-DASHBOARD-SELECT-001 (E and D, 3 fresh D repeats): after a grid channel select the Note Dashboard shows X for Note, Vel and Len, and played values once the channel plays (README 679; the X marker is characterisation). The baseline showed Vel -1 and Len -1.0 (defect dashboard-absent-velocity-length, fixed).",

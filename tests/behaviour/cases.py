@@ -60,6 +60,7 @@ from paint_race import paint_race
 from device_picker_names import device_picker_names
 from syntakt_pedal_params import syntakt_pedal_params
 from dashboard_channel_select import dashboard_channel_select
+from dashboard_chord_slots import dashboard_chord_slots
 from gesture_release_order import gesture_release_order
 from midi_mapping_held_step import midi_mapping_held_step
 from midi_cc_page_return import midi_cc_page_return
@@ -3998,6 +3999,7 @@ CASES={
  'M-ALG-003':dict(run=tresillo_drum_boundary,requirements=['PAT-ALGORITHM','PAT-PAINT'],description='Tresillo drum-bank 64-step boundary: full grid, MIDI spacing and repaint erasure'),
  'M-SETUP-SYNTAKT-PEDALS-001':dict(run=syntakt_pedal_params,requirements=['SETUP-DEVICE-DISCOVERY'],description='Syntakt Sustain and Sostenuto trig parameters change on screen and send CC 64/66 with increasing values; Mute (NRPN) is the control'),
  'M-DASHBOARD-SELECT-001':dict(run=dashboard_channel_select,requirements=['CH-DASHBOARD'],description='After a grid channel select the Note Dashboard shows X for Note, Vel and Len, and played values after the channel plays (README 679)'),
+ 'M-DASHBOARD-CHORD-001':dict(run=dashboard_chord_slots,requirements=['CH-DASHBOARD','MASK-CHORD'],description='Note Dashboard chord slots show the chord voice MIDI received (a voice at note 0, and voices computed below 0 and sent as 0, show C-2) and X for slots that never played, on a fresh dashboard too (README 679; human decision S51)'),
  'M-SETUP-DEVICE-NAMES-001':dict(run=device_picker_names,requirements=['SETUP-DEVICE-DISCOVERY'],description='The device picker lists Digitakt and Digitakt 2 as distinct entries (README 170; user-confirmed)'),
  'M-ALG-PAINT-RACE-001':dict(run=paint_race,requirements=['PAT-PREVIEW','PAT-PAINT'],description='Paint pressed 20 ms after prime paints the full primed exclusive-or on all 64 cells and the preview is not re-shown (README 424-428)'),
  'M-ALG-001':dict(run=euclidean_workflow,requirements=['PAT-ALGORITHM', 'PAT-FADERS', 'PAT-PREVIEW', 'PAT-PAINT', 'PAT-CANCEL', 'PAT-MOVE'],description='Euclidean3-in-8: full-grid two-phase preview, unchanged playback, cancel, shifted XOR paint/repaint, left/reset and dense-fill boundary'),

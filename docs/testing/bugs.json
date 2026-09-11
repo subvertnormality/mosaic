@@ -975,6 +975,15 @@
         "M-PARAM-DIAL-OFF-001"
       ],
       "summary": "Trig Locks dials show X at Off when Off lies below the range (off -1, min 0) and for MIDI device params without off_value (default -1), instead of an empty or half bar and a 0/-1 read-out"
+    },
+    {
+      "id": "dashboard-chord-slots",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "dashboard-chord-slots.json",
+      "cases": [
+        "M-DASHBOARD-CHORD-001"
+      ],
+      "summary": "Note Dashboard chord slots show the chord voices as sent (MIDI 0 and clamped voices below 0 show C-2) and X for slots that never played, instead of keeping the previous name, showing unclamped names, or C-2 on a fresh dashboard"
     }
   ]
 }

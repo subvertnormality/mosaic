@@ -1,0 +1,69 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "af14ea0",
+  "files": [
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "392824517246d979e6f248bc2fb8eca1e1a2b2596ef53e8b8f80fab8d41deb84",
+      "after_sha256": "23e0008a8c41bf0b4bf6e44ed89bfb58b15ae25ce186b194ded606335b9cc421"
+    },
+    {
+      "file": "lib/step.lua",
+      "before_sha256": "55479f9987c8cb844595910c30ca3509a59d4cc77a197c123ace94e7cba12262",
+      "after_sha256": "9ffadc40a2e09c5f3c6971c613f19404c3e0dd98fba081feef79189140ad1e15"
+    }
+  ],
+  "patch": "0171-dashboard-chord-slots.patch",
+  "patch_sha256": "2f64144ef82dd2e3869ba32c394c600248b237f4872f68bc9c3ab5832ab834ee",
+  "regression": "M-DASHBOARD-CHORD-001",
+  "unit_regression": "test_w4c_fresh_dashboard_chord_slots_show_x, test_w4c_dashboard_rounds_length_and_shows_chord_note_zero, test_step_killer_note_dashboard_chord_voices_are_clamped_as_sent, test_step_killer_arp_dashboard_chord_voices_are_clamped_as_sent",
+  "baseline": [
+    {
+      "run_id": "a141e9d4c1194411b572df45173eff8d",
+      "case": "M-DASHBOARD-CHORD-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "56682c3d0ca1158db90fdf34e8e63c271724f5af591f606fc73f5230d44df1fa",
+      "failure": "('Note Dashboard chord slots', [{'label': 'Fresh dashboard chord slots', 'actual': ['C-2', 'C-2', 'C-2', 'C-2'], 'expected': ['X', 'X', 'X', 'X'], 'cite': 'README 679 + human decision S51 (X is charac"
+    },
+    {
+      "run_id": "7961065ee7e0404e84207602948d17b9",
+      "case": "M-DASHBOARD-CHORD-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "4a9e289e879e7cb3e4a93dddf8c6b2eb834275ce753d8057e7121775f1f63a31",
+      "failure": "('Note Dashboard chord slots', [{'label': 'Fresh dashboard chord slots', 'actual': ['C-2', 'C-2', 'C-2', 'C-2'], 'expected': ['X', 'X', 'X', 'X'], 'cite': 'README 679 + human decision S51 (X is charac"
+    }
+  ],
+  "rationale": "Three faults in the Note Dashboard chord slots. (a) set_note_dashboard_values treated a chord voice of MIDI 0 as 'no chord', so the previous name stayed (A-2 after a -oct voice sent as 0). It now accepts any chord value that is present. (b) step.lua fed the dashboard the computed chord voice, but m_midi note_on clamps it to 0..127: a voice computed as -3 showed A-3 and one computed as -1 showed X (the dashboard's no-note marker) while both were sent as MIDI 0. The ordinary and arpeggiated chord feeds now clamp to 0..127 as sent. (c) The chord display selectors started at value 0, so slots that never played showed C-2; they now start at -1 (X), the value a grid channel select already resets them to.",
+  "oracle": "README 679: 'On the Norns first page in the channel mode you can see the last played notes on the currently selected channel.' Human decision 2026-09-11 (S51): chord slots show exactly the notes sent (clamped to 0-127) and X when none has played (X itself is characterisation, as in M-DASHBOARD-SELECT-001).",
+  "validation": [
+    {
+      "run_id": "86135f0d48d546a19234eb102cd60fd3",
+      "case": "M-DASHBOARD-CHORD-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "175f6be8ce9f5bc707a825c4a9c38b683d88488023378e22596cb11a5bed6d88",
+      "failure": null
+    },
+    {
+      "run_id": "495289ce529e4e13b78db96626ee2efc",
+      "case": "M-DASHBOARD-CHORD-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "35407827afec3abd0b09d765f868db8e3ecd940a7ad7961d6291811a27b3455e",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-05b00f6844b041e88640e28eae91dec7",
+      "case": "M-DASHBOARD-CHORD-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "440824910ad9efdd2ba21bcf6b552d86bc0dced4d6216a92a11b70d4ecfa7bd7",
+      "failure": null,
+      "normalized_sha256": "b4a9f8837706e490e45a388befd99d03c186a8e65db94c3333611f1bc03be241"
+    }
+  ],
+  "collateral": "Controlled lane, all passed with the fix: M-DASHBOARD-001..008, M-DASHBOARD-SELECT-001, M-SETUP-001..003, M-SETUP-DEVICE-NAMES-001, M-SETUP-SYNTAKT-PEDALS-001, M-SETUP-UNREADABLE-CONFIG-001, M-ARP-001..014, M-MASK-006, -010, -013..016, -018, -022, -024..029 (MASK-CHORD), M-MEMORY-011. Full Lua units OK (1469); guards OK. Units: test_w4c_dashboard_rounds_length_and_treats_chord_zero_as_empty pinned the old behaviour and is now test_w4c_dashboard_rounds_length_and_shows_chord_note_zero; new test_w4c_fresh_dashboard_chord_slots_show_x, test_step_killer_note_dashboard_chord_voices_are_clamped_as_sent, test_step_killer_arp_dashboard_chord_voices_are_clamped_as_sent (all four fail without the fix).",
+  "upstream_merged": false
+}
