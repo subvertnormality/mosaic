@@ -310,7 +310,8 @@ function m_clock.init()
   master_clock = clock_lattice:new_sprocket {
     action = function(t)
       local selected_song_pattern = program_data.song_patterns[program_data.selected_song_pattern]
-      if params:get("elektron_program_changes") == 2 and program_data.current_step == selected_song_pattern.global_pattern_length - 1 then
+      if params:get("elektron_program_changes") == 2 and selected_song_pattern.global_pattern_length >= 3 and
+        program_data.current_step == selected_song_pattern.global_pattern_length - 1 then
         step.process_elektron_program_change(step.calculate_next_selected_song_pattern())
       end
       if not first_run then
@@ -338,6 +339,29 @@ function m_clock.init()
     shuffle_feel = 0,
     shuffle_amount = 0,
     order = 1,
+    realign = false,
+    enabled = true
+  }
+
+  -- Lengths 1 and 2 leave no room for the two-step lead above: announce the next slot on the
+  -- slot's final step, after that step's notes (arbitrated 2026-09-11, SEM-013
+  -- final-step-short-lengths). The master has already advanced, so current_step is 1 exactly
+  -- when the step that began on this pulse was the last, and the next slot is computed from
+  -- the state the next pulse's song switch will read.
+  clock_lattice:new_sprocket {
+    action = function(t)
+      if params:get("elektron_program_changes") == 2 and program_data.current_step == 1 and
+        program.get_selected_song_pattern().global_pattern_length < 3 then
+        step.process_elektron_program_change(step.calculate_next_selected_song_pattern())
+      end
+    end,
+    division = 1 / 16,
+    swing = 0,
+    swing_or_shuffle = 1,
+    shuffle_basis = 0,
+    shuffle_feel = 0,
+    shuffle_amount = 0,
+    order = 4,
     realign = false,
     enabled = true
   }

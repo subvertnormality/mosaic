@@ -1,0 +1,105 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "2426321",
+  "files": [
+    {
+      "file": "lib/clock/m_clock.lua",
+      "before_sha256": "d7f1f986e394a8ba223b9405f010aab3346c96dd5439729e9906ddb1b8328c7a",
+      "after_sha256": "3ad466a6c74b316ab44dbe5dae9e11cbd782ccfb930c0299ca1c5dfddd656929"
+    }
+  ],
+  "patch": "0102-elektron-short-length-announcement.patch",
+  "patch_sha256": "d5bff15f782a6c15f25cea769c3a3ace102443f578b465de3f023a8f1a88baec",
+  "regression": "M-OPT-ELEK-002",
+  "unit_regression": null,
+  "baseline": [
+    {
+      "run_id": "suite-96d465d/runs/real-time/bacfc902779d4edd9b55150ac2635ce2",
+      "case": "M-OPT-ELEK-002",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "ebb4517bd14475f93d2568c43ebf867c34ea009a2077ef19f8aba6ef4b8f63b8",
+      "failure": "('Play must name the playing slot last', [(209883882109046, 'pc', 1), (209883882938865, 'pc', 2), (209883883313038, 'slot', 1)])"
+    },
+    {
+      "run_id": "suite-96d465d/runs/controlled-experimental/53d59d4d24b547e48760421e58569f18",
+      "case": "M-OPT-ELEK-002",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "6e461563facbe7669fc2557d7535d6ecc2f4b1e7ddf4e33e1d04adcc0102ae4c",
+      "failure": "('Play must name the playing slot last', [(12510000000, 'pc', 1), (12510000000, 'pc', 2), (12510000000, 'slot', 1)])"
+    },
+    {
+      "run_id": "suite-96d465d/runs/real-time/99076361158e49b390394e4e15cdb9d9",
+      "case": "M-OPT-ELEK-003",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "c7fb368324271e864b43c9a390314c5edfbd08be1a4557b4b8f9df806654219f",
+      "failure": "('One program change naming the incoming slot', 2, [])"
+    },
+    {
+      "run_id": "suite-96d465d/runs/controlled-experimental/c809c427980a4e89af3498267ac5263d",
+      "case": "M-OPT-ELEK-003",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "f6c3276ed4f15e58a910bc8322c600ebbd7bfc3ae0b16e0feb608884b3c62010",
+      "failure": "('One program change naming the incoming slot', 2, [])"
+    }
+  ],
+  "rationale": "With Elektron program changes on, the next-slot program change was sent when current_step == global_pattern_length - 1. At length 2 that fired at Play, naming the next slot before slot 1 sounded, and each later announcement coincided with its boundary; at length 1 no transition was ever announced. Arbitrated SEM-013 (final-step-short-lengths, Claude-only, unanimous): lengths of three or more keep the two-step lead; lengths 1 and 2 announce the next slot on the final step, after its notes, from an order-4 sprocket on the master's division, computing the next slot from the state the next pulse's song switch reads.",
+  "oracle": "README Elektron Program Changes (1086): each song pattern change on Mosaic is mirrored by the Elektron devices so both stay in sync; a Digitakt queues a received program change to the end of its current pattern, so the change must precede the boundary.",
+  "validation": [
+    {
+      "run_id": "e7fc7053ff7a45bb9f9f877ea74184a5",
+      "case": "M-OPT-ELEK-002",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "f49c3aeb98d01658b66337b5ef1e9bd4d1890a519335772b4ca6baddc334922c",
+      "failure": null
+    },
+    {
+      "run_id": "baacad95848245fbb348ff2fe233b637",
+      "case": "M-OPT-ELEK-002",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "47ba04abda160c9bb1d162f9278575a8f1a37b0067689dac84ca168d7a9b140e",
+      "failure": null
+    },
+    {
+      "run_id": "876416140eb149a0a82a1edbfc4b202c",
+      "case": "M-OPT-ELEK-003",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "e43971fcdceaf9b2414c0a07e789eb233667e723f78e5419dc7bee6c23fdc1ca",
+      "failure": null
+    },
+    {
+      "run_id": "7f9d02de059f4c5a8d99dc320cd2d400",
+      "case": "M-OPT-ELEK-003",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "3cd67b314be60b659ad6dd34539b06e349554ea5bdfbe0ded3c1c557e045e6c5",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-243b45027b2e47e1be17cf630b1d6422",
+      "case": "M-OPT-ELEK-002",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "5afc393242172d390fe97bac282109394fee91a039fa68f58492e653cedef8dd",
+      "failure": null,
+      "normalized_sha256": "f86c10b575a8457629729985bb216201d18b1eabdbf3c402e2708c709c7b35be"
+    },
+    {
+      "run_id": "repeat-64c5a0e6d19647a5a4bdb323621cf5c9",
+      "case": "M-OPT-ELEK-003",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "a24c40e66ab942012ecea9c862e90932003547d2ab9c48f5153d5ba2197352a1",
+      "failure": null,
+      "normalized_sha256": "933f4b22b2c6f2ea0c258d8e23a2d80f3b7c02e167088a80500b6098ee682ff2"
+    }
+  ],
+  "collateral": "All Lua units pass (556 at the time of the fix; 1217 later); M-OPT-ELEK-001 (length 4, unchanged two-step lead) and M-OPT-ELEK-004 (two ports) pass in both lanes with the fix; ELEK-001 3 fresh controlled repeats agree.",
+  "upstream_merged": false
+}

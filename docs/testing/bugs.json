@@ -573,7 +573,7 @@
     },
     {
       "id": "elektron-short-song-program-changes",
-      "status": "confirmed-open-pending-design-decision",
+      "status": "fixed-on-worktree-with-real-input-regression",
       "cases": [
         "M-OPT-ELEK-002",
         "M-OPT-ELEK-003"
@@ -622,7 +622,8 @@
           "failure": null
         }
       ],
-      "source_observation": "step.process_elektron_program_change sends one change per Elektron-device channel through devices[1].midi_device; multi-port and duplicate behaviour are not yet exercised."
+      "source_observation": "step.process_elektron_program_change sends one change per Elektron-device channel through devices[1].midi_device; multi-port and duplicate behaviour are not yet exercised.",
+      "candidate_manifest": "elektron-short-song-program-changes.json"
     },
     {
       "id": "midi-map-neutral-default",

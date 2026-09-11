@@ -347,7 +347,7 @@ the `nrpn_codec` include added in ff8c27f or stub `cancel_all_spread_actions`;
 load the real modules; the realign contract additionally asserts that slides are
 cancelled exactly on a song-pattern change, and fails when that call is removed.
 
-## SEM-012 — Keyboard white-key default (pending, recommendation recorded)
+## SEM-012 — Keyboard white-key default (decided 2026-09-11, arbitrated Claude-only)
 
 README "MIDI Keyboard Input" (line 195) says the keyboard maps the selected scale
 to the white keys by default. README "Map Scale to White Keys" (MAN-103) says
@@ -357,7 +357,17 @@ and correct line 195. Until decided, the case asserts the code/MAN-103 default;
 changing the README invalidates the inventory manual hash and needs
 reconciliation.
 
-## SEM-013 — Elektron program changes for global lengths 1 and 2 (pending)
+Decision (2026-09-11): `SELECTED: correct-readme-195`, unanimous, Claude-only arbitrate
+(Codex usage limit, as SEM-013): two cold Opus deciders, counterbalanced options. Decisive
+(both): mosaic.lua:427 defaults the param to Off and lib/m_midi.lua:90-92 plays the raw key,
+agreeing with the parameter's own entry (README 1128); line 195 was the odd one out.
+Rejected: changing the fresh-install default (a behaviour change siding with the less
+specific sentence) and leaving the contradiction. Recorded risk: a reader who took line 195
+as the design sees the manual change rather than the behaviour. README line 195 now says
+the keyboard plays the keys pressed by default and points to "Map scale to white keys";
+the inventory manual hash and section MAN-009 were re-reconciled; M-OPT-KEYS-001 unchanged.
+
+## SEM-013 — Elektron program changes for global lengths 1 and 2 (decided 2026-09-11, arbitrated Claude-only)
 
 The manual promises that each song pattern change is mirrored so both systems stay
 in sync. Mosaic announces the next slot at the onset of the outgoing slot's
@@ -372,6 +382,22 @@ first onset — which is a timing decision, not an isolated correction.
 Recommendation: announce at the final step's onset after that step is emitted,
 keep the current two-step lead for lengths of three or more, and never send a
 next-slot change before the first onset after Play.
+
+Decision (2026-09-11): `SELECTED: final-step-short-lengths`, unanimous. The cross-vendor
+arbitrate failed at round 0 (audit `20260911T065024-arbitrate-468932c5`: Codex usage limit
+until 2026-09-16), so as the user authorised it ran Claude-only: two cold Opus deciders,
+identical framing, counterbalanced option order and labels. Both chose to keep the two-step
+lead for lengths of three or more and, for lengths 1 and 2, announce the next slot at the
+final step's onset after its notes, never before the first onset after Play. Decisive: the
+trigger `current_step == global_pattern_length - 1` (lib/clock/m_clock.lua, master
+sprocket) cannot fire usefully below length 3, and a playing Digitakt queues a received
+program change until its current pattern ends
+(https://www.elektronauts.com/t/receiving-midi-program-changes/40834), so a change inside the
+final step is still in time. Recorded risk (both): two timing rules for the refactor to
+keep, and a device whose own pattern is longer than a 1-2 step slot still switches at its
+own pattern end. Rejected: one final-step rule for all lengths (shortens the passing lead of
+M-OPT-ELEK-001) and characterising the current timing (pins a mis-mirror at Play).
+Implemented as an order-4 sprocket on the master's division; M-OPT-ELEK-002/003 unchanged.
 
 ## SEM-014 — Per-sequence tempo (decided 2026-09-10, user)
 
