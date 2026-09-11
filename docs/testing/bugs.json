@@ -956,6 +956,16 @@
         "M-XA-007-NB-SWITCH-SLOTS"
       ],
       "summary": "Switching a channel from a MIDI device to an n.b. device without params (for example Jf Kit) left the old device's parameters in the channel's norns params menu, still sending MIDI; they are now cleared."
+    },
+    {
+      "id": "realign-mid-step-length",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "realign-mid-step-length.json",
+      "cases": [
+        "M-TIME-014",
+        "M-SLIDE-RESET-001"
+      ],
+      "summary": "A reset in the middle of a channel step ran the restarted first step straight/unrounded: swing pairs shifted after a song transition, fractional clocks and their slides off by a pulse (S41, S53)"
     }
   ]
 }

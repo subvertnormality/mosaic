@@ -118,9 +118,11 @@ function test_w4l_reset_keeps_a_swung_note_on_its_original_steps()
   -- and 21.6 pulses, README.md:685 range -50..50). A 3.5-step note from
   -- pulse 1 spans 26.4 + 21.6 + 26.4 + 10.8 = 85.2 pulses of its original
   -- swung steps, whatever the restarted channel does after the reset at 25.
-  -- characterisation: the pulse-rounded release is pulse 87.
+  -- characterisation: the pulse-rounded release is pulse 87. The restarted
+  -- channel repeats its first steps from pulse 25 (27, 21, 27 pulses, as from
+  -- pulse 1; bugs.json realign-mid-step-length, formerly a straight 24 first).
   local log = reset_log({division = 1 / 16, swing = 10}, {2}, {{{len = 3.5}}}, 100)
-  luaunit.assert_equals(log, {"on1", "R25", "on25", "on49", "on71", "off87", "on97"})
+  luaunit.assert_equals(log, {"on1", "R25", "on25", "on52", "on73", "off87", "on100"})
 end
 
 function test_w4l_note_started_on_the_reset_pulse_uses_the_restarted_steps()
@@ -226,18 +228,15 @@ function test_w4l_occurrence_projection_matches_actual_onsets_up_to_64_ahead()
 end
 
 function test_w4l_occurrence_projection_after_a_mid_step_reset_on_a_fractional_clock()
-  -- characterisation (suspected defect: m_lattice.lua:704 leaves the restarted
-  -- step's current_ppqn at the unrounded division * ppqn * 4 while
-  -- shuffle_updated stays set, so project_onset_occurrence (line 642) projects
-  -- a fractional pulse count): a /2.6 channel steps every 62.4 pulses. After a
-  -- reset mid-step on pulse 25, the next onset actually fires 62 pulses later
-  -- but is projected 62.4 pulses later, and every later occurrence keeps the
-  -- extra 0.4 pulse.
+  -- README.md:964/971 as above (bugs.json realign-mid-step-length, S53;
+  -- formerly characterisation of a projection 0.4 pulse late because
+  -- m_lattice.lua:704 left the restarted step at the unrounded 62.4 pulses):
+  -- a /2.6 channel reset mid-step on pulse 25 restarts with the steps it has
+  -- from its first pulse (63, 62, 63), and every projection is whole and
+  -- matches the onset that actually fires.
   local projected, actual = occurrence_case({division = over(2.6), realign = true}, 1, 2, 4, true)
-  luaunit.assert_equals(actual, {0, 62, 125, 187})
-  luaunit.assert_equals(#projected, 4)
-  luaunit.assert_equals(projected[1], 0)
-  for k = 2, 4 do luaunit.assert_almost_equals(projected[k], actual[k] + 0.4, 1e-9, "occurrence " .. k) end
+  luaunit.assert_equals(actual, {0, 63, 125, 188})
+  luaunit.assert_equals(projected, actual)
 end
 
 function test_w4l_occurrence_projection_from_later_callbacks_and_the_channel_action()
@@ -252,12 +251,11 @@ function test_w4l_occurrence_projection_from_later_callbacks_and_the_channel_act
   luaunit.assert_equals(projected, {30, 48, 78, 96, 126, 144, 174, 192})
   -- README.md:964/971 as above, for a reset from a later-order callback after
   -- this channel's onset on that pulse. characterisation: the channel restarts
-  -- on the next pulse (1 pulse away); the restarted first step runs straight
-  -- (24 pulses, the known m_lattice.lua:703-704 behaviour), then swing resumes
-  -- (18, 30).
+  -- on the next pulse (1 pulse away) with its swung steps from step 1 (30, 18,
+  -- 30; bugs.json realign-mid-step-length, formerly a straight 24 first).
   projected, actual = occurrence_case({division = 1 / 16, swing = 25, realign = true}, 3, 3, 4, true)
   luaunit.assert_equals(projected, actual)
-  luaunit.assert_equals(projected, {1, 25, 43, 73})
+  luaunit.assert_equals(projected, {1, 31, 49, 79})
   -- characterisation: inside the channel's own action at onset 2 (pulse 31)
   -- the onset in progress is already counted; the next ones are 18, 48, 66
   -- and 96 pulses away, where they actually fire.

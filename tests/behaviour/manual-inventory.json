@@ -3372,7 +3372,8 @@
         "M-PATCH-032",
         "M-RANGE-GLOBAL-003",
         "M-SYNC-008",
-        "M-SONG-TEMPO-001"
+        "M-SONG-TEMPO-001",
+        "M-SLIDE-RESET-001"
       ],
       "status": "in_progress",
       "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. Confirmed channel clock edits queue to the global pattern boundary while playing; stopped edits apply immediately. M-PATCH-024/026 cover queued rate changes during active slides; full live-edit domain remains incomplete. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected.",
@@ -3403,7 +3404,8 @@
         "M-PATCH-025",
         "M-PATCH-023",
         "M-PATCH-021",
-        "M-PATCH-022"
+        "M-PATCH-022",
+        "M-TIME-014"
       ],
       "status": "in_progress",
       "domain": "All finite values where affordable; extrema/zero; division/tempo and pending note interactions.",
@@ -3439,7 +3441,8 @@
         "M-SHUFFLE-008",
         "M-SHUFFLE-009",
         "M-SHUFFLE-010",
-        "M-SHUFFLE-011"
+        "M-SHUFFLE-011",
+        "M-TIME-015"
       ],
       "status": "partial-domain-coverage",
       "domain": "All legal feel/basis options; differing channels; tempo/division interactions.",
@@ -5621,7 +5624,8 @@
         "M-SONG-TEMPO-001",
         "M-SONG-QUEUE-STOP-001",
         "M-TIME-013",
-        "M-PAT-BOUNDARY-001"
+        "M-PAT-BOUNDARY-001",
+        "M-TIME-014"
       ],
       "status": "in_progress",
       "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed). M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-003 (E and D, 3 fresh D repeats): a note pressed on slot 1 step 4 and released after the transition records on slot 1 step 4, the step and slot active at its first press. The baseline stored it on slot 2 (defect record-slot-at-first-press, fixed). M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected. M-SONG-QUEUE-STOP-001 (E and D, 3 fresh D repeats): a slot or global length queued during playback and interrupted by Stop is discarded (arbitrated SEM-015); the next Play follows song mode from the playing slot; a length set while stopped applies to that slot only. The baseline applied the stale queue at the next Play (defect song-queue-discard-on-stop, fixed). M-TIME-013 (E and D, 3 fresh D repeats): with Reset at Song Sequence Change on, a 3-step note sounding across a song transition keeps its full length (README 805) while the next slot starts its step 1 on time. M-PAT-BOUNDARY-001 (E green at 80 ms; D red at 1 ms, open defect pattern-edit-before-song-boundary deferred to the refactor): a pattern note edited just before a song boundary must be heard at step 1 the next time its slot plays.",
@@ -5822,7 +5826,8 @@
         "M-REC-PARAM-015",
         "M-PATCH-064",
         "M-TRIPLE-004",
-        "M-SLIDE-CAPACITY-001"
+        "M-SLIDE-CAPACITY-001",
+        "M-SLIDE-RESET-001"
       ],
       "status": "in_progress",
       "domain": "All parameters; endpoints equal/up/down; wrap on/off; sequence transition; stopped/play edits. Mixed standard CC/NRPN concurrency is covered. M-TRIPLE-004 (E and D, 3 fresh D repeats), plan stress triple trigless x slide x external-clock change: a global CC slide to a silent trigless lock under a 24 PPQN clock that steps from 100 to 150 BPM mid-slide arrives with the destination lock (README 964) and, as characterisation beyond the manual, stays linear in received clock ordinals; stored-patch recall, exact onsets and balanced gates. A slide timed by seconds at the start tempo is detected. M-SLIDE-CAPACITY-001 (E and D, 3 fresh D repeats): nine channel-1 slides replaced every 1/6 s behind one 31 s channel-2 slide keep passing through intermediate values for 25 s (sample rate and ring size are characterisation). The baseline dropped every slide after 18.8 s (defect slide-ring-compaction, fixed).",
@@ -6138,7 +6143,8 @@
         "M-TIME-005",
         "M-TIME-008",
         "M-TIME-009",
-        "M-TIME-013"
+        "M-TIME-013",
+        "M-TIME-014"
       ],
       "status": "in_progress",
       "domain": "Every channel length/start; coprime divisions; pending notes; scale track. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-TIME-013 (E and D, 3 fresh D repeats): with Reset at Song Sequence Change on, a 3-step note sounding across a song transition keeps its full length (README 805) while the next slot starts its step 1 on time.",
@@ -6172,7 +6178,8 @@
         "M-TIME-010",
         "M-TIME-011",
         "M-TIME-012",
-        "M-ARP-004"
+        "M-ARP-004",
+        "M-SLIDE-RESET-001"
       ],
       "status": "in_progress",
       "domain": "Both sequence/reset option combinations; nonzero starts; wrapped lengths; mute and recording. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required.",
@@ -6706,7 +6713,11 @@
         "M-REC-PARAM-022",
         "M-TRIPLE-002",
         "M-TRIPLE-005",
+<<<<<<< HEAD
         "M-REC-PAGE-KEY-001"
+=======
+        "M-TIME-015"
+>>>>>>> fix/clock
       ],
       "status": "in_progress",
       "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels. M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected.",
@@ -6933,9 +6944,13 @@
         "M-XA-003-JF-OWNERSHIP",
         "M-TRIPLE-003",
         "M-TRIPLE-002",
+<<<<<<< HEAD
         "M-REC-SOURCES-001",
         "M-REC-SOURCES-002",
         "M-REC-PAGE-KEY-001"
+=======
+        "M-TIME-015"
+>>>>>>> fix/clock
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop. M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-003 (E and D, 3 fresh D repeats): a note pressed on slot 1 step 4 and released after the transition records on slot 1 step 4, the step and slot active at its first press. The baseline stored it on slot 2 (defect record-slot-at-first-press, fixed).",

@@ -744,22 +744,26 @@ function test_lattice_mk_realign_restarts_only_opted_in_sprockets()
   luaunit.assert_equals(fixed_log, {1, 97, 193, 289, 385})
 end
 
-function test_lattice_mk_realign_mid_step_runs_one_straight_step()
-  -- characterisation (suspected defect: m_lattice.lua:703-704 overwrite the
-  -- swung length computed by update_shuffle(1) with the straight division and
-  -- leave shuffle_updated set, so the first step after a mid-step realign is
-  -- unswung: 96 pulses instead of 120, shifting the swing pair grid by 24).
+function test_lattice_mk_realign_mid_step_keeps_the_swung_first_step()
+  -- derived (bugs.json realign-mid-step-length, S41; formerly pinned as
+  -- characterisation of m_lattice.lua:703-704): a channel restarted in the
+  -- middle of a step starts again at step 1 with its swung length, as from its
+  -- first pulse. Swing 25 on 1/4: 120 then 72 pulses, so after the realign on
+  -- pulse 49 the onsets are 49, 169, 241, 361, 433 (not a straight 96 first).
   local lattice = new_lattice()
   local _, log = logged_sprocket(lattice, {division = 1 / 4, swing = 25, realign = true})
   run(lattice, 48)
   lattice:realign_eligable_sprockets()
   run(lattice, 500)
-  luaunit.assert_equals(log, {1, 49, 145, 217, 337, 409, 529})
+  luaunit.assert_equals(log, {1, 49, 169, 241, 361, 433})
+  luaunit.assert_equals(intervals(log, 2, 6), {120, 72, 120, 72})
 end
 
 function test_lattice_mk_realign_mid_step_restarts_shuffle_carry()
-  -- characterisation: fractional smooth basis 1 intervals after a mid-step
-  -- realign (the rounding carry restarts from the step-1 state).
+  -- derived (bugs.json realign-mid-step-length, S41/S53): after a mid-step
+  -- realign the rounding carry restarts from the step-1 state, so the
+  -- restarted channel repeats the intervals of a fresh sprocket exactly.
+  -- characterisation: fractional smooth basis 1 intervals 106, 86, 85, 107 ...
   local lattice = new_lattice()
   local args = shuffle_args(2, 1, 100)
   args.realign = true
@@ -767,7 +771,9 @@ function test_lattice_mk_realign_mid_step_restarts_shuffle_carry()
   run(lattice, 50)
   lattice:realign_eligable_sprockets()
   run(lattice, 1000)
-  luaunit.assert_equals(intervals(log, 2, 11), {96, 85, 85, 107, 107, 85, 85, 107, 107})
+  local fresh = onsets(shuffle_args(2, 1, 100), 10)
+  luaunit.assert_equals(intervals(log, 2, 11), intervals(fresh, 1, 10))
+  luaunit.assert_equals(intervals(log, 2, 11), {106, 86, 85, 107, 106, 86, 85, 107, 106})
 end
 
 ---------------------------------------------------------------------------
