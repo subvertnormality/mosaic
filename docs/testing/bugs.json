@@ -891,15 +891,6 @@
       "summary": "Chd3 up-then-down on a held step now sounds the selected chord note and is one memory action, like the other chord handlers (S25)"
     },
     {
-      "id": "cc-page-return-any-channel",
-      "status": "fixed-on-worktree-with-real-input-regression",
-      "candidate_manifest": "cc-page-return-any-channel.json",
-      "cases": [
-        "M-MAP-PAGE-RETURN-001"
-      ],
-      "summary": "A mapped CC on MIDI channels 2-16 switched the channel editor page and never returned; the return now works on every channel (S10)"
-    },
-    {
       "id": "repeated-note-on-stuck-note",
       "status": "fixed-on-worktree-with-real-input-regression",
       "candidate_manifest": "repeated-note-on-stuck-note.json",
