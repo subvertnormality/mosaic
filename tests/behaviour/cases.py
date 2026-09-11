@@ -45,6 +45,7 @@ from memory_truncate_isolation import memory_truncate_isolation
 from memory_held_velocity import memory_held_velocity
 from memory_redo_encoder_lock import memory_redo_encoder_lock
 from memory_step_undo import memory_step_undo
+from memory_chord_three_held import memory_chord_three_held
 from paint_race import paint_race
 from device_picker_names import device_picker_names
 from syntakt_pedal_params import syntakt_pedal_params
@@ -3270,6 +3271,7 @@ CASES={
  'M-MAP-004':dict(run=midi_mapping_held_step,requirements=['MAP-ROUTING','MAP-CONTROL'],description='With a selected-channel step held, a fixed channel-2 velocity map edits channel 2 from its own value and a selected-channel map still edits the held step (arbitrated SEM-017)'),
  'M-GESTURE-ORDER-001':dict(run=gesture_release_order,requirements=['LOCK-SCALE'],description='Channel scale lock by hold step + tap slot applies; releasing the step before the slot sets no lock (release-order characterisation kept by SEM-016)'),
  'M-TIME-013':dict(run=reset_pending_voice,requirements=['OPT-SEQUENCE-RESET','SONG-ADVANCE','MASK-ATTRIBUTES'],description='A 3-step note sounding across a song transition with reset on sequence change keeps its full length (README 805) while the next slot starts on time'),
+ 'M-MEMORY-011':dict(run=memory_chord_three_held,requirements=['MASK-CHORD','MEMORY-RECORD'],description='A held-step Chd3 edit turned up three and back one sounds the finally selected chord note, the same as turning it up two, and is one remembered action like the Chd4 control (README 601, 698-707)'),
  'M-MEMORY-010':dict(run=memory_step_undo,requirements=['MEMORY-NAV','MEMORY-RECORD','MASK-ATTRIBUTES'],description='Stepping memory back one action restores the whole step as it was before that action: a note undo keeps an earlier velocity lock, a note undo keeps an earlier chord (also at K3), and a trig lock undo after a note lock or another slot lock drops only that lock (README 698-707)'),
  'M-MEMORY-009':dict(run=memory_redo_encoder_lock,requirements=['MEMORY-NAV','MASK-ATTRIBUTES'],description='Redo of an encoder-made held-step note or velocity lock returns to the locked state, immediately and after a working-pattern rebuild (README 697-702)'),
  'M-MEMORY-008':dict(run=memory_held_velocity,requirements=['MEMORY-NAV','MASK-ATTRIBUTES'],description='Stepping memory back over a held-step velocity lock restores the previous velocity, also after a working-pattern rebuild; a held-step note lock undo is the control (README 697-702)'),

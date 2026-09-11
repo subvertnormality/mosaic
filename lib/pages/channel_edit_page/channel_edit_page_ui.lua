@@ -1323,10 +1323,17 @@ function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction)
       mask_selectors.chords[3]:decrement()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        memory.record_event(channel.number, "note_mask", {
-          step = s,
-          chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
-        })
+        recorder.add_note_mask_event_portion(
+          channel.number,
+          s,
+          {
+            song_pattern = program.get().selected_song_pattern,
+            data = {
+              step = s,
+              chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
+            }
+          }
+        )
       end
     end
   else

@@ -2882,7 +2882,8 @@
         "M-MASK-026",
         "M-MASK-027",
         "M-MASK-028",
-        "M-MASK-029"
+        "M-MASK-029",
+        "M-MEMORY-011"
       ],
       "status": "partial-domain-coverage",
       "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Duplicate Note On without release, multiple held grid steps and comprehensive mask display assertions remain pending.",
@@ -3503,7 +3504,8 @@
         "M-MEMORY-004",
         "M-MEMORY-005",
         "M-MEMORY-006",
-        "M-MEMORY-010"
+        "M-MEMORY-010",
+        "M-MEMORY-011"
       ],
       "status": "partial-domain-coverage",
       "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-MEMORY-006 (E and D, 3 fresh D repeats), characterisation: two recorded mask actions survive idle autosave and a cold restart; the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions. Skipping memory deserialisation on load is detected.",

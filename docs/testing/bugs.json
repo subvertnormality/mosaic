@@ -880,6 +880,15 @@
         "M-MEMORY-010"
       ],
       "summary": "Stepping memory back now restores the whole prior step state: unrelated fields, earlier chords and other trig-lock parameters no longer leak through an undo (S42-S44)"
+    },
+    {
+      "id": "chord-three-held-decrement-recorder",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "chord-three-held-decrement-recorder.json",
+      "cases": [
+        "M-MEMORY-011"
+      ],
+      "summary": "Chd3 up-then-down on a held step now sounds the selected chord note and is one memory action, like the other chord handlers (S25)"
     }
   ]
 }
