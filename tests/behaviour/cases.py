@@ -71,6 +71,7 @@ from mask_gestures import multiheld_keyboard
 from mask_gestures import held_keyboard_chord
 from mask_gestures import trig_gesture_all_steps
 from held_mask_extra_key import held_mask_extra_key
+from chord_mask_start_x import chord_mask_start_x
 from mask_quantisation import mask_full_chord_inheritance
 from mask_quantisation import mask_full_quantisation
 from mask_quantisation import mask_scale_snap
@@ -1449,7 +1450,7 @@ def strum_reset_continuity(c):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-4);c.enc(2,3);c.enc(3,3)
+    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-4);c.enc(2,3);c.enc(3,2)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
     import base64
     from frame_oracle import render
     expected_chord=render([(0,40,15,'Chd1'),(0,48,15,'3rd')])
@@ -1493,8 +1494,8 @@ def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=
     c.tap(3,8)
     c.enc(1,-4);c.enc(2,2);c.enc(3,15 if fractional_gate else 18);length_mask_display(c,'1.25' if fractional_gate else '2')
     if not (fast or reset):
-        c.enc(2,1);c.enc(3,3)
-        if fractional_gate:c.enc(2,1);c.enc(3,5)
+        c.enc(2,1);c.enc(3,2)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
+        if fractional_gate:c.enc(2,1);c.enc(3,4)
     c.enc(1,3);c.enc(3,0 if fast else -11);c.key(3);c.enc(1,-2)
     assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,1 if fast else 8)
     if reset:set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',True)])
@@ -1559,7 +1560,7 @@ def spread_acceleration_contract(c,arp,acceleration,explicit_off=False):
     c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
     for x in (2,3,4):c.tap(x,4)
     c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
-    for turns in (3,5,6,8):c.enc(2,1);c.enc(3,turns)
+    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
     c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
     assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');c.enc(3,8)
     c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,5)
@@ -1620,7 +1621,12 @@ def arp_rest_slots(c,internal=False):
     c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
     # Explicit Off values preserve real internal/trailing rest slots in the
     # baseline; this does not depend on Lua's length of a sparse table.
-    for turns in (3,1,5 if internal else 1,1):c.enc(2,1);c.enc(3,turns)
+    # Unset chord masks start from X (bugs.json chord-mask-unset-start-x): an explicit Off is
+    # one turn up and back down.
+    for turns in (2,0,4 if internal else 0,0):
+        c.enc(2,1)
+        if turns:c.enc(3,turns)
+        else:c.enc(3,1);c.enc(3,-1)
     c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
     assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
     capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(8);capture.extend(c.snapshot())
@@ -1642,7 +1648,7 @@ def fractional_spread_contract(c):
     c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
     for x in (2,3,4):c.tap(x,4)
     c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
-    for turns in (3,5,6,8):c.enc(2,1);c.enc(3,turns)
+    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
     c.enc(1,3);c.enc(3,7);c.key(3);c.enc(1,-2)
     assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
     c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,5)
@@ -1676,7 +1682,7 @@ def minimum_swung_gap_contract(c,swing):
     c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
     for x in (2,3,4):c.tap(x,4)
     c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
-    for turns in (3,5,6,8):c.enc(2,1);c.enc(3,turns)
+    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
     c.enc(1,3);c.enc(3,7);c.key(3)
     c.enc(2,1);c.enc(3,1);c.key(3)
     c.enc(2,1);c.enc(3,swing+51);c.key(3);c.enc(1,-2)
@@ -2803,7 +2809,7 @@ def muted_sparse_reverse_arp(c,shape):
     c.tap(3,8);c.enc(1,-4)
     c.enc(2,1);c.enc(3,51) # Unset -1 -> velocity50.
     c.enc(2,1);c.enc(3,89);length_mask_display(c,'128')
-    c.enc(2,4);c.enc(3,8) # Only mask4 is populated: octave; others remain unset.
+    c.enc(2,4);c.enc(3,7) # Only mask4 is populated: octave (from X); others remain unset.
     c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
     assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
     c.enc(2,1);assign_trig_parameter(c,'Chord Pattern');c.enc(3,shape)
@@ -2830,7 +2836,7 @@ def arp_rest_live_scale(c,fully_masked=False):
     c.tap(3,8);c.enc(1,-4)
     if fully_masked:c.enc(3,61) # Explicit C4 mask, then use full scale processing.
     c.enc(2,1);c.enc(3,51);c.enc(2,1);c.enc(3,89);length_mask_display(c,'128')
-    c.enc(2,1);c.enc(3,3);c.enc(2,2);c.enc(3,5)
+    c.enc(2,1);c.enc(3,2);c.enc(2,2);c.enc(3,4)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
     c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
     values=[('Chord Note Arpeggio',8),('Chord Spread',5),('Chord Accel Mod',1),('Chord Velocity Mod',10),('Mute Chord Root',1)]
     if fully_masked:values.append(('Quantise Note Mask',2))
@@ -2856,7 +2862,7 @@ def arp_empty_muted_replacement(c):
     from note_schedule import assert_schedule
     c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8);c.tap(4,4);c.tap(3,8)
     c.enc(1,-4);c.enc(2,2);c.enc(3,22);length_mask_display(c,'3')
-    c.enc(2,1);c.enc(3,1) # Global chord1 Off; other masks unset.
+    c.enc(2,1);c.enc(3,1);c.enc(3,-1) # Global chord1 Off (up from X and back); other masks unset.
     for x in (1,3):
         c.action(type='grid',x=x,y=4,state=1)
         try:c.enc(3,2) # Third only for the first and replacement trigger.
@@ -2911,7 +2917,7 @@ def chord_shape_schedule(c,arp,shape,muted,mask_bits=15,velocity=50,modifier=10,
     for x in (2,3,4):c.tap(x,4)
     c.tap(3,8);c.enc(1,-4);c.enc(2,1);c.enc(3,velocity+1)
     c.enc(2,1);c.enc(3,26);length_mask_display(c,'4')
-    for i,turns in enumerate((3,5,6,8)):
+    for i,turns in enumerate((2,4,5,7)):  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
         c.enc(2,1)
         if mask_bits&(1<<i):c.enc(3,turns)
     c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
@@ -3165,7 +3171,7 @@ def panic_pending_chord(c, arp, shape):
     for x in (2,3,4):c.tap(x,4)
     c.tap(3,8);c.enc(1,-4);c.enc(2,1);c.enc(3,51)
     c.enc(2,1);c.enc(3,26);length_mask_display(c,'4')
-    for turns in (3,5,6,8):c.enc(2,1);c.enc(3,turns)
+    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
     c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
     assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');c.enc(3,8)
     c.enc(2,1);assign_trig_parameter(c,'Chord Pattern');c.enc(3,shape)
@@ -3911,6 +3917,7 @@ CASES={
  'M-RANGE-REJECT-001':dict(run=lambda c:rejected_range(c,False),requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageFalse: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
  'M-MASK-031':dict(run=lambda c:multiheld_keyboard(c,False),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstFalse: range2..4, first-held target, remaining-held target and untouched middle step'),
  'M-MASK-HELD-EXTRA-001':dict(run=held_mask_extra_key,requirements=['MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='A held-step velocity turn with a pattern-row key also held locks only the held step, in either press order (README 595-597; human decision S27)'),
+ 'M-MASK-CHORD-X-001':dict(run=chord_mask_start_x,requirements=['MASK-CHORD','MASK-ATTRIBUTES'],description='An unset chord mask starts from X: one turn up shows 2nd, one turn down shows -7th, and every trig sounds root, degree above and degree below (human decision S26)'),
  'M-MASK-030':dict(run=lambda c:multiheld_keyboard(c,True),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstTrue: range2..4, first-held target, remaining-held target and untouched middle step'),
  'M-MASK-029':dict(run=lambda c:held_keyboard_chord(c,True,False,True),requirements=['MASK-STEP-ENTRY','MASK-CHORD','MIDI-RELEASE-001'],description='Root release/repress while other chord voices remain held: balanced preview, preserved chord/velocity and clean replacement; grid-firstTrue release'),
  'M-MASK-028':dict(run=lambda c:held_keyboard_chord(c,False,False,True),requirements=['MASK-STEP-ENTRY','MASK-CHORD','MIDI-RELEASE-001'],description='Root release/repress while other chord voices remain held: balanced preview, preserved chord/velocity and clean replacement; grid-firstFalse release'),

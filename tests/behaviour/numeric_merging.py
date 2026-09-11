@@ -504,7 +504,7 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
             c.tap(16,8);c.tap(16,8);c.led_values([(16,8)],[8])
         finally:c.action(type='key',n=1,state=0)
         if strum:
-            c.enc(1,-4);c.enc(2,3);c.enc(3,3) # First chord mask: degree2, E64.
+            c.enc(1,-4);c.enc(2,3);c.enc(3,2) # First chord mask from X: degree2, E64.
             c.enc(1,1);assign_trig_parameter(c,'Chord Note Strum');c.enc(3,0 if simultaneous else 8)
             if same_pitch:
                 c.enc(2,1);assign_trig_parameter(c,'Fixed Note');c.enc(3,65) # Fixed root E64 equals the chord E64.

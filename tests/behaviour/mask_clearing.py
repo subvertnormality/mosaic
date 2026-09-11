@@ -23,7 +23,7 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_s
         c.tap(1,1);c.enc(2,-10);c.enc(2,1)
     c.enc(1,-4);c.enc(2,selection)
     if defaults:
-        default_turns,turns={"note":(68,[5,7]),"velocity":(51,[40,30]),"length":(18,[-10,-3]),"chord":(3,[2,3]),"trig":(1,[1,1])}[attribute]
+        default_turns,turns={"note":(68,[5,7]),"velocity":(51,[40,30]),"length":(18,[-10,-3]),"chord":(2,[2,3]),"trig":(1,[1,1])}[attribute]  # chord from X: bugs.json chord-mask-unset-start-x
         c.enc(3,default_turns)
     for step,amount in enumerate(turns,1):
         c.action(type='grid',x=step,y=4,state=1)
@@ -96,7 +96,7 @@ def mask_clear_combined_chords(c):
     offsets=[2,4,6,7]
     for slot,offset in enumerate(offsets):
         if slot:c.enc(2,1)
-        c.enc(3,offset+1)
+        c.enc(3,offset)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
         for step,delta in [(1,1),(2,2)]:
             c.action(type='grid',x=step,y=4,state=1)
             try:c.enc(3,delta)

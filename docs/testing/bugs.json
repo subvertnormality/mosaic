@@ -902,6 +902,15 @@
         "test_grid_input_remove_forgets_a_fired_long_press",
         "test_grid_input_remove_ends_a_two_key_gesture_in_progress"
       ]
+    },
+    {
+      "id": "chord-mask-unset-start-x",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "chord-mask-unset-start-x.json",
+      "cases": [
+        "M-MASK-CHORD-X-001"
+      ],
+      "summary": "An unset chord mask turned once showed X (up) or -6th (down); it now starts from X: 2nd up, -7th down (S26)"
     }
   ]
 }
