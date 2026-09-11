@@ -3311,7 +3311,8 @@
         "M-DASHBOARD-005",
         "M-DASHBOARD-006",
         "M-DASHBOARD-007",
-        "M-DASHBOARD-008"
+        "M-DASHBOARD-008",
+        "M-DASHBOARD-SELECT-001"
       ],
       "status": "partial",
       "domain": "All channels; chords; rests; selection during playback; stale-frame transitions.",

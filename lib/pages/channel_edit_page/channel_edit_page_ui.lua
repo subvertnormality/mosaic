@@ -193,7 +193,8 @@ end
 
 -- Configuring selectors
 configure_note_value_selector(note_displays.note)
-configure_mask_length_selector(note_displays.length)
+configure_note_page_velocity_length_value_selector(note_displays.velocity)
+configure_note_page_velocity_length_value_selector(note_displays.length)
 configure_note_value_selector(note_displays.chords[1])
 configure_note_value_selector(note_displays.chords[2])
 configure_note_value_selector(note_displays.chords[3])
