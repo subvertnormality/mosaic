@@ -6695,7 +6695,8 @@
         "M-REC-PARAM-009",
         "M-REC-PARAM-022",
         "M-TRIPLE-002",
-        "M-TRIPLE-005"
+        "M-TRIPLE-005",
+        "M-REC-PAGE-KEY-001"
       ],
       "status": "in_progress",
       "domain": "Stopped/playing; repeated toggles; held MIDI note during disarm; other pages/channels. M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected.",
@@ -6923,7 +6924,8 @@
         "M-TRIPLE-003",
         "M-TRIPLE-002",
         "M-REC-SOURCES-001",
-        "M-REC-SOURCES-002"
+        "M-REC-SOURCES-002",
+        "M-REC-PAGE-KEY-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Before/on/after step boundaries; tempo/source changes while held; repeated pitch; chord release order; wrap and stop. M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-003 (E and D, 3 fresh D repeats): a note pressed on slot 1 step 4 and released after the transition records on slot 1 step 4, the step and slot active at its first press. The baseline stored it on slot 2 (defect record-slot-at-first-press, fixed).",
