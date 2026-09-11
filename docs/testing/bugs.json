@@ -872,6 +872,15 @@
         "M-DASHBOARD-SELECT-001"
       ],
       "summary": "Note Dashboard showed Vel -1 and Len -1.0 after a grid channel select; now X like the Note cell (S50)"
+    },
+    {
+      "id": "editor-page-selected-pattern-flicker",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "editor-page-selected-pattern-flicker.json",
+      "cases": [
+        "M-EDIT-FLICKER-001"
+      ],
+      "summary": "On note/velocity editor step pages 2-4 the chosen pattern's top-row active LED did not flicker; it now does, as on page 1 (S18)"
     }
   ]
 }

@@ -40,6 +40,7 @@ from song_queue_stop import song_queue_stop
 from song_slot_copy import song_slot_copy
 from midi_mapping_targets import midi_mapping_targets
 from pattern_boundary_edit import pattern_boundary_edit
+from editor_pattern_flicker import editor_pattern_flicker
 from reset_pending_voice import reset_pending_voice
 from memory_truncate_isolation import memory_truncate_isolation
 from memory_held_velocity import memory_held_velocity
@@ -658,7 +659,11 @@ def inactive_note_positions(c):
         c.tap(9+page,8)
         selections=[(x,7-((page*16+x-1)%7)) for x in range(1,17)]
         for cell in selections:c.tap(*cell)
-        c.led_values(selections,[12]*16)
+        # README 471: pattern 3's top-row cell flickers around the active level instead
+        # (page 3; bugs.json editor-page-selected-pattern-flicker). Levels are characterisation.
+        steady=[cell for cell in selections if cell!=(3,1)]
+        c.led_values(steady,[12]*len(steady))
+        if (3,1) in selections:c.wait(lambda s:s['grid'][2] in (11,13))
     c.tap(3,8);c.tap(1,2);c.tap(3,2)
     def silence(label):
         c.led_values(cells,[2]*64)
@@ -3965,6 +3970,7 @@ CASES={
  'M-VIEW-001':dict(run=pattern_grid_viewer,requirements=['PAT-VIEWER'],description='Independent screen grid for wide/short channel ranges, all16 E2 selections, clamps and unchanged MIDI/pattern data'),
  'M-EDIT-005':dict(run=editor_hold_boundaries,requirements=['PAT-NOTE-RANGE','PAT-VELOCITY'],description='Note/velocity range holds immediately before/after1s and cancelled by a second grid press; exact MIDI and measured real-time margins'),
  'M-EDIT-004':dict(run=note_pattern_selectors,requirements=['PAT-NOTE-SELECT'],description='K1 and long-hold note-editor pattern selection across all16 slots, edit/playback and retained-pattern isolation'),
+ 'M-EDIT-FLICKER-001':dict(run=editor_pattern_flicker,requirements=['PAT-NOTE-SELECT','PAT-STEP-PAGES','PAT-VELOCITY'],description='The chosen pattern\'s top-row active LED flickers on all four step pages of the note and velocity editors; another column does not (README 471)'),
  'M-EDIT-001':dict(run=editor_note_ranges,requirements=['PAT-NOTE-RANGE'],description='Note range fine steps, held extrema, clamps and center reset'),
  'M-EDIT-002':dict(run=editor_velocity_ranges,requirements=['PAT-VELOCITY'],description='Every displayed velocity value, fine range steps, held extrema and clamps'),
  'M-EDIT-003':dict(run=editor_step_groups,requirements=['PAT-NOTE-SHIFT', 'PAT-STEP-PAGES', 'PAT-VELOCITY'],description='K1 copies note and velocity edits across all four step pages; each page replays exact MIDI'),

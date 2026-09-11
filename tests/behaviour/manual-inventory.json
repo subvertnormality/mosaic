@@ -2211,7 +2211,8 @@
       "statement": "Select each of four16-step pages.",
       "cases": [
         "M-EDIT-003",
-        "M-PAT-006"
+        "M-PAT-006",
+        "M-EDIT-FLICKER-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Every page; first/last columns; edit/switch/revisit; stopped/playing. M-EDIT-003 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required. M-PAT-006 validates all64 inactive note positions, priority use and later activation/removal with complete timing-checked loops in both modes. Settings/interactions remain required.",
@@ -2293,7 +2294,8 @@
       ],
       "statement": "Hold or K1-press top row selects another pattern.",
       "cases": [
-        "M-EDIT-004"
+        "M-EDIT-004",
+        "M-EDIT-FLICKER-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "All16 slots; short tap vs hold threshold; shift release; note page state preservation. M-EDIT-004 validates both selection gestures across all16 slots and retention checks in controlled and real time. Exact hold thresholds, interrupted modifiers and playing-state switches remain required.",
@@ -2321,7 +2323,8 @@
       "cases": [
         "M-EDIT-002",
         "M-EDIT-003",
-        "M-EDIT-005"
+        "M-EDIT-005",
+        "M-EDIT-FLICKER-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "127/68/58/0 and every displayed row; fine increments across page discontinuity; bounds; all step pages. M-EDIT-002 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required. M-EDIT-003 validates literal editor range/page checks in both modes. Threshold boundaries, all columns and playing-state edits remain required. M-EDIT-005 validates one-second boundary and cancelled-hold checks in both modes. Other directions and playing-state/overlap combinations remain required.",
