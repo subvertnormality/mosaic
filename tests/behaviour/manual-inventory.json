@@ -1644,7 +1644,8 @@
         "M-SYNC-018",
         "M-SYNC-017",
         "M-SYNC-016",
-        "M-SYNC-015"
+        "M-SYNC-015",
+        "M-MIDI-REPEAT-001"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -7228,7 +7229,8 @@
       ],
       "statement": "A MIDI keyboard provides note entry and a compatible relative controller provides data entry.",
       "cases": [
-        "M-OPT-KEYS-001"
+        "M-OPT-KEYS-001",
+        "M-MIDI-REPEAT-001"
       ],
       "status": "in_progress",
       "domain": "Ports/channels; note-on velocity zero; overlapping same pitch; disconnect; held notes across selection change; wrong ports. Keyboard note entry through native MIDI input is exercised by M-OPT-KEYS-001 (live monitoring) and existing M-MIDI/M-REC cases; relative-controller data entry remains.",

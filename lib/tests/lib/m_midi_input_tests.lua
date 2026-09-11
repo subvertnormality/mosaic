@@ -668,18 +668,26 @@ function test_midi_input_same_key_from_two_sources_loses_the_chord_length()
   end)
 end
 
--- characterisation (suspected defect): a second Note On for a held key from the
--- same source overwrites its release record (m_midi.lua:110); one Note Off then
--- releases one of the two output onsets and the other stays counted.
-function test_midi_input_repeated_note_on_without_release_strands_one_output_onset()
+-- Human decision 2026-09-11 (bugs.json repeated-note-on-stuck-note, was S8): a
+-- second Note On for a held key from the same source (a merged keyboard) keeps the
+-- first onset's release; each Note Off releases one onset, the latest first, and
+-- no output onset stays counted.
+function test_midi_input_repeated_note_on_keeps_a_release_for_each_output_onset()
   with_midi(function(env, m)
+    env.selected = 3
     press(env, 60, 100, env.dev1)
-    press(env, 60, 100, env.dev1)
+    env.selected = 1
+    press(env, 60, 90, env.dev1)
     release(env, 60, env.dev1)
+    luaunit.assert_equals(env.sent[#env.sent], {1, "note_off", 60, 0, 1})
     release(env, 60, env.dev1)
     luaunit.assert_equals(env.sent, {
-      {1, "note_on", 60, 100, 1}, {1, "note_on", 60, 100, 1}, {1, "note_off", 60, 0, 1}})
-    luaunit.assert_equals(m.note_counts[1][1][60], 1)
+      {2, "note_on", 60, 100, 5}, {1, "note_on", 60, 90, 1},
+      {1, "note_off", 60, 0, 1}, {2, "note_off", 60, 0, 5}})
+    luaunit.assert_equals(m.note_counts, {[1] = {[1] = {}}, [2] = {[5] = {}}})
+    -- Both records are consumed: a further release sends nothing.
+    release(env, 60, env.dev1)
+    luaunit.assert_equals(#env.sent, 4)
   end)
 end
 

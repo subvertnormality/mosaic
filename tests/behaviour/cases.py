@@ -2,6 +2,7 @@ from shuffle_matrix import shuffle_matrix
 from random_note_domains import random_note_domains
 from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
+from keyboard_repeated_note_on import keyboard_repeated_note_on
 from stop_safety import shift_press_to_stop
 from memory_truncate import memory_truncate
 from elektron_program_changes import elektron_program_changes
@@ -4001,6 +4002,7 @@ CASES={
 
  'M-REC-018':dict(run=recorded_chord_release,requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord records complete shared length when root is released last'),
  'M-REC-019':dict(run=lambda c:recorded_chord_release(c,(72,76,79)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarmed held chord records complete shared length when root is released first'),
+ 'M-MIDI-REPEAT-001':dict(run=keyboard_repeated_note_on,requirements=['MIDI-RELEASE-001','SETUP-MIDI-INPUT'],description='Two merged keyboards press the same key on one port and channel (Note On, Note On, two releases, both release forms): both onsets play and each gets a release, leaving no stuck note (human decision S8)'),
  'M-MIDI-003':dict(run=overlapping_keyboard_sources,requirements=['MIDI-RELEASE-001'],description='Two input ports hold the same pitch on different Mosaic channels; both release orders preserve ownership'),
  'M-MIDI-004':dict(run=lambda c:overlapping_keyboard_sources(c,1,16),requirements=['MIDI-RELEASE-001'],description='Two input channels on one port hold the same pitch on different Mosaic channels; both release orders preserve ownership'),
  'M-REC-017':dict(run=lambda c:recorded_note_channel_switch(c,disarm_while_held=True),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Disarm while holding a recorded keyboard note; release commits its full quantised length on the original channel'),

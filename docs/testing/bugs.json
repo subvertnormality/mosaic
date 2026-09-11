@@ -880,6 +880,15 @@
         "M-MAP-PAGE-RETURN-001"
       ],
       "summary": "A mapped CC on MIDI channels 2-16 switched the channel editor page and never returned; the return now works on every channel (S10)"
+    },
+    {
+      "id": "repeated-note-on-stuck-note",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "repeated-note-on-stuck-note.json",
+      "cases": [
+        "M-MIDI-REPEAT-001"
+      ],
+      "summary": "A repeated Note On for a held key (merged keyboards) replaced its release record and left one output note stuck; each onset now keeps its own release (S8)"
     }
   ]
 }
