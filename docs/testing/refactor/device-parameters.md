@@ -76,3 +76,37 @@ Native manifests below are under `/home/andy/projects/mosaic-behaviour-runs/`:
 
 R11 remains in progress: parameter binding/assignment separation, shared output
 handling and stable slot definitions follow this extraction.
+
+## Assignment boundary
+
+Registry binding remains responsible for control creation, ranges, formatting,
+visibility and actions. Lock assignment owns copying descriptors into the ten
+channel slots, mapping stock/native/MIDI parameter IDs and retaining NRPN mode.
+It must compare the previous assignment before cancelling owned slides and clearing
+pending recording: confirming the same assignment deliberately preserves both.
+Default mapping has its own existing cleanup behavior and must not be silently
+rewritten to call the interactive assignment path.
+
+Focused regression coverage for this split reuses M-REC-PARAM-011 (changed
+assignment), M-REC-PARAM-012 (same assignment), M-PATCH-038 (active slide ownership),
+M-SETUP-003 (device defaults), and M-PARAM-036 (stock/None assignment). The existing
+real parameter-manager unit tests cover all ten slots and descriptor aliasing.
+
+### Assignment extraction validation (2026-09-13)
+
+The registry now delegates assignment/default mapping to `param_lock_assignments`.
+`param_slots` names channel count, control/lock counts, slew and fixed-note slots,
+and preserves concatenated control IDs versus formatted assignment IDs.
+All 1,546 Lua tests, 18 standalone slide-ownership checks and ten coverage/syntax
+checks pass. The slide fixture includes the real new modules; assertions unchanged.
+Controlled native runs passed (same evidence root as above):
+
+| Case | Passing run |
+| --- | --- |
+| M-REC-PARAM-011 | e103339f9e584e158ece7d264785a4e1 |
+| M-REC-PARAM-012 | 24a75f5fed4d48668e677d34335697a7 |
+| M-PATCH-038 | 22e2bf5678f041f6aa59e71aa894c8f2 |
+| M-SETUP-003 | 2a4c0e66937b48b5bc56d1a5360f54b7 |
+| M-PARAM-036 | 7376e7aa888f426da6c6db6ec19723a3 |
+
+Protocol serialization and MIDI ingress separation remain outstanding in R11.

@@ -33,7 +33,7 @@
   "inventory_sha256": "440c46051f6d7aa3d071d57beb913854ce55597deab5b6150953887968541a78",
   "counts": {
     "requirements": 140,
-    "production_lua_modules": 83,
+    "production_lua_modules": 85,
     "unit_integration_files": 68,
     "domains": 15
   },
@@ -387,7 +387,9 @@
         "lib/devices/nb_device_param_maps.lua",
         "lib/devices/norns_param_state_handler.lua",
         "lib/devices/nrpn_codec.lua",
-        "lib/devices/param_manager.lua"
+        "lib/devices/param_lock_assignments.lua",
+        "lib/devices/param_manager.lua",
+        "lib/devices/param_slots.lua"
       ],
       "existing_unit_integration_files": [
         "lib/tests/lib/device_map_real_tests.lua",
@@ -2037,7 +2039,9 @@
         "lib/devices/nb_device_param_maps.lua",
         "lib/devices/norns_param_state_handler.lua",
         "lib/devices/nrpn_codec.lua",
+        "lib/devices/param_lock_assignments.lua",
         "lib/devices/param_manager.lua",
+        "lib/devices/param_slots.lua",
         "lib/m_midi.lua"
       ],
       "existing_unit_integration_files": [
@@ -2133,7 +2137,9 @@
         "SIN-SOFTWARE"
       ],
       "production_modules": [
+        "lib/devices/param_lock_assignments.lua",
         "lib/devices/param_manager.lua",
+        "lib/devices/param_slots.lua",
         "lib/nb/lib/nb.lua",
         "lib/nb/lib/player.lua",
         "lib/nb/nb.lua",
@@ -2217,7 +2223,9 @@
         "lib/devices/nb_device_param_maps.lua",
         "lib/devices/norns_param_state_handler.lua",
         "lib/devices/nrpn_codec.lua",
+        "lib/devices/param_lock_assignments.lua",
         "lib/devices/param_manager.lua",
+        "lib/devices/param_slots.lua",
         "lib/draw.lua",
         "lib/grid_abstraction.lua",
         "lib/helpers/drum_ops.lua",
