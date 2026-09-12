@@ -3652,3 +3652,44 @@ function test_memory_wrapped_history_survives_serialisation_in_order()
   luaunit.assert_equals(wrapped_history_notes(state.event_history), {64, 65, 66, 99, 98})
   luaunit.assert_equals(state.current_event_index, 5)
 end
+
+-- Human decision S24 (2026-09-11; bugs.json mask-off-stored-as-minus-one): turning a held
+-- step's trig mask or velocity lock back to X records -1, and -1 clears that lock (nil) exactly
+-- as if it had never been set. Other locks on the step are untouched; undo brings the lock back.
+local function assert_minus_one_clears(field, masks, value)
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  memory.record_event(1, "note_mask", {step = 2, note = 64, [field] = value, song_pattern = 1})
+  luaunit.assert_equals(channel[masks][2], value)
+  memory.record_event(1, "note_mask", {step = 2, [field] = -1, song_pattern = 1})
+  luaunit.assert_equals(memory.get_total_event_count(1), 2)
+  luaunit.assert_nil(channel[masks][2])
+  luaunit.assert_equals(channel.step_note_masks[2], 64)
+  memory.undo(1)
+  luaunit.assert_equals(channel[masks][2], value)
+  memory.redo(1)
+  luaunit.assert_nil(channel[masks][2])
+  memory.undo(1); memory.undo(1)
+  luaunit.assert_nil(channel[masks][2])
+  luaunit.assert_nil(channel.step_note_masks[2])
+end
+
+function test_memory_trig_minus_one_clears_the_step_trig_lock()
+  assert_minus_one_clears("trig", "step_trig_masks", 0)
+end
+
+function test_memory_velocity_minus_one_clears_the_step_velocity_lock()
+  assert_minus_one_clears("velocity", "step_velocity_masks", 50)
+end
+
+function test_memory_minus_one_on_an_unlocked_step_leaves_it_unlocked()
+  for _, pair in ipairs({{"trig", "step_trig_masks"}, {"velocity", "step_velocity_masks"}}) do
+    memory.init()
+    program.init()
+    local channel = program.get_channel(1, 1)
+    memory.record_event(1, "note_mask", {step = 5, [pair[1]] = -1, song_pattern = 1})
+    luaunit.assert_equals(memory.get_total_event_count(1), 1, pair[1])
+    luaunit.assert_nil(channel[pair[2]][5], pair[1])
+  end
+end
