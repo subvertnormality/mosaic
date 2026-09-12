@@ -1,6 +1,7 @@
 local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 local chord_timing = include("mosaic/lib/clock/chord_timing")
 local chord_order = include("mosaic/lib/musical_resolution/chord_order")
+local stock_parameter = include("mosaic/lib/musical_resolution/stock_parameter")
 local quantiser = include("mosaic/lib/quantiser")
 local m_clock = include("mosaic/lib/clock/m_clock")
 
@@ -38,34 +39,28 @@ local fn_constrain = fn.constrain
 
 function step.process_stock_params(c, step, type)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
-  local trig_lock_params = channel.trig_lock_params
-
-  for i = 1, 10 do
-      local param = trig_lock_params[i]
-      if param and param.id == type then
-          local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
-          if step_trig_lock == param.off_value then
-            return nil
-          end
-          if step_trig_lock then
-            return step_trig_lock
-          else
-            return params:get(trig_lock_params[i].param_id) or nil
-          end
+  return stock_parameter.resolve(
+    channel.trig_lock_params,
+    type,
+    function(i)
+      return program.get_step_param_trig_lock(channel, step, i)
+    end,
+    function(param_id)
+      return params:get(param_id)
+    end,
+    function()
+      local stock_param_id = fn.get_param_id_from_stock_id(type, c)
+      if stock_param_id then
+        local param_id = string.format(stock_param_id, c)
+        local param_value = params:get(param_id)
+        local p = params:lookup_param(param_id)
+        return param_value, function()
+          return p.default
+        end
       end
-  end
-
-  local stock_param_id = fn.get_param_id_from_stock_id(type, c)
-  if stock_param_id then
-    local param_id = string.format(stock_param_id, c)
-    local param_value = params:get(param_id)
-    local p = params:lookup_param(param_id)
-    if param_value and param_value ~= p.default then
-      return param_value
+      return nil, nil
     end
-  end
-
-  return nil
+  )
 end
 
 local function should_process_param(param)
