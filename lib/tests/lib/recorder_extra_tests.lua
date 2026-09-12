@@ -357,3 +357,16 @@ function test_recorder_extra_note_mask_commit_target_precedence_and_fallback()
     end)
   end
 end
+
+function test_recorder_extra_live_trig_commit_uses_explicit_playback_song()
+  -- Characterisation, not manual text: the playback callback owns its commit
+  -- target independently of editor selection; existing callers retain fallback.
+  local recorder = fresh(2, 1)
+  with_recorder_globals({}, 2, function(calls, target_calls)
+    recorder.set_trig_lock_dirty(1, 3, 0)
+    recorder.record_trig_event(1, 4, 3, 1)
+    luaunit.assert_equals(calls, {})
+    luaunit.assert_equals(target_calls, {{1, 1, "trig_lock", {parameter = 3, step = 4, value = 0}}})
+    luaunit.assert_equals(recorder.trig_lock_is_dirty(1, 3), 0)
+  end)
+end

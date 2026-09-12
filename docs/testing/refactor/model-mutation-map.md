@@ -78,3 +78,14 @@ Both cases pass three identical controlled repeats; all 1535 Lua tests and six
 guards pass. Existing M-TRIPLE-002/003 remain green in both lanes.
 Next: explicit playback-song ingress for live parameter recording, using existing
 M-TRIPLE-005 as the regression guard; then song-transition extraction.
+
+### Explicit live-parameter playback target
+
+The channel sprocket captures its song once alongside its channel lookup and passes
+that song to `recorder.record_trig_event`. The recorder uses explicit memory ingress
+for that call; legacy callers keep their existing selection-based fallback. This is
+a structural ownership refactor, not a newly reproduced bug or a dispatch-order change.
+M-TRIPLE-005 passes controlled `7cae5124b5fa44e898104c6deaac1a0d` and real-time
+`c90ab6017f4b4fad8ed5e10b4a4d957f`; all 1536 Lua tests and six guards pass.
+Next: R06 item 4, move the cohesive song-transition functions and their queue state
+to a dedicated module with step facades, preserving queue/copy/repeat/Stop policy.

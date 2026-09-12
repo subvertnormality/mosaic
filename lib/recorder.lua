@@ -159,13 +159,18 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
   end
 end
 
-function recorder.record_trig_event(c, step, parameter)
+function recorder.record_trig_event(c, step, parameter, song_pattern)
   if recorder.trig_lock_dirty[c] and recorder.trig_lock_dirty[c][parameter] then
-    memory.record_event(c, "trig_lock", {
-      parameter = parameter, 
+    local data = {
+      parameter = parameter,
       step = step,
       value = recorder.trig_lock_dirty[c][parameter]
-    })
+    }
+    if song_pattern then
+      memory.record_event_for_target(song_pattern, c, "trig_lock", data)
+    else
+      memory.record_event(c, "trig_lock", data)
+    end
   end
 end
 

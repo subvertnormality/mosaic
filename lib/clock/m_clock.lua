@@ -392,7 +392,8 @@ function m_clock.init()
     local div = calculate_divisor(program.get_channel(program.get().selected_song_pattern, channel_number).clock_mods)
 
     local sprocket_action = function(t)
-      local channel = program.get_channel(program.get().selected_song_pattern, channel_number)
+      local song_pattern = program.get().selected_song_pattern
+      local channel = program.get_channel(song_pattern, channel_number)
       local current_step = program.get_current_step_for_channel(channel_number)
       local pattern = channel.working_pattern
       local trig_values = pattern.trig_values
@@ -454,7 +455,7 @@ function m_clock.init()
         if channel.working_pattern.trig_values[current_step] == 1 or params:get("trigless_locks") == 2 then
           if params:get("record") == 2 and program.get_selected_channel() == channel then
             for i = 1, 10 do
-              recorder.record_trig_event(channel_number, current_step, i)
+              recorder.record_trig_event(channel_number, current_step, i, song_pattern)
             end
           end
         end
