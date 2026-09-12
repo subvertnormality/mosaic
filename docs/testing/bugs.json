@@ -976,6 +976,15 @@
         "test_grid_input_remove_forgets_a_fired_long_press",
         "test_grid_input_remove_ends_a_two_key_gesture_in_progress"
       ]
+    },
+    {
+      "id": "redo-all-chord-merge",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "redo-all-chord-merge.json",
+      "cases": [
+        "M-MEMORY-013"
+      ],
+      "summary": "Redo-all (K3) kept only the later chord edit on a step; chord voices now merge per voice (S57)"
     }
   ]
 }

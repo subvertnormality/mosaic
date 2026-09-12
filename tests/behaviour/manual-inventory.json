@@ -2890,7 +2890,8 @@
         "M-MASK-028",
         "M-MASK-029",
         "M-MEMORY-011",
-        "M-DASHBOARD-CHORD-001"
+        "M-DASHBOARD-CHORD-001",
+        "M-MEMORY-013"
       ],
       "status": "partial-domain-coverage",
       "domain": "MASK023 validates all64 shift-grid add/remove/restore gestures with no assigned pattern and explicit note/velocity/length defaults, all-grid feedback, odd/even isolation and exact MIDI timing through wrap in both clocks. Duplicate Note On without release, multiple held grid steps and comprehensive mask display assertions remain pending.",
@@ -3554,7 +3555,8 @@
         "M-MEMORY-007",
         "M-MEMORY-008",
         "M-MEMORY-009",
-        "M-MEMORY-010"
+        "M-MEMORY-010",
+        "M-MEMORY-013"
       ],
       "status": "partial-domain-coverage",
       "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-MEMORY-006 (E and D, 3 fresh D repeats), characterisation: two recorded mask actions survive idle autosave and a cold restart; the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions. Skipping memory deserialisation on load is detected. M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected. M-MEMORY-007 (E and D, 3 fresh D repeats): K1+K3 truncation forgets only its own channel's history (0 of 0) while another channel keeps 1 of 1 and still undoes; both positions and the applied masks survive idle autosave and a cold restart (persistence is characterisation, as M-MEMORY-006). M-MEMORY-008 (E and D): stepping memory back over a held-step velocity lock restores the previous velocity, also after a working-pattern rebuild; suspected defect S15 (velocity written before the release commits) is not reproduced and the case stays as a regression guard. M-MEMORY-009 (E and D, 3 fresh D repeats): redo of an encoder-made held-step note or velocity lock returns to the locked state, immediately and after a working-pattern rebuild (README 697-702). The baseline silenced the step until the next edit (defect memory-redo-working-pattern, fixed).",

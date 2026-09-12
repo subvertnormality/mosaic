@@ -494,9 +494,17 @@ function memory.redo_all(channel_number)
           }
         }
       else
-        -- Merge event data
+        -- Merge event data. Chord degrees merge voice by voice, as apply_event does, so a
+        -- later chord edit on the step does not drop an earlier one (S57).
+        local merged = combined_events[event_key].data.event_data
         for k, v in pairs(event.data.event_data) do
-          combined_events[event_key].data.event_data[k] = v
+          if k == "chord_degrees" and type(v) == "table" and type(merged.chord_degrees) == "table" then
+            for i = 1, 4 do
+              if v[i] ~= nil then merged.chord_degrees[i] = v[i] end
+            end
+          else
+            merged[k] = v
+          end
         end
       end
     end

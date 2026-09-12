@@ -51,6 +51,7 @@ from slide_reset_mid_step import slide_reset_mid_step
 from memory_truncate_isolation import memory_truncate_isolation
 from memory_held_velocity import memory_held_velocity
 from memory_redo_encoder_lock import memory_redo_encoder_lock
+from memory_redo_chord_merge import memory_redo_chord_merge
 from memory_step_undo import memory_step_undo
 from memory_chord_three_held import memory_chord_three_held
 from paint_race import paint_race
@@ -3286,6 +3287,7 @@ CASES={
  'M-TIME-014':dict(run=swing_reset_mid_step,requirements=['CH-SWING','OPT-SEQUENCE-RESET','SONG-ADVANCE'],description='A /2 Swing 25 channel restarted mid-step by each song transition (reset on sequence change) keeps its 60/36-pulse swing pairs from step 1: every slot plays like slot 1 from Play (README 683, 1074)'),
  'M-SLIDE-RESET-001':dict(run=slide_reset_mid_step,requirements=['SLIDE-GLOBAL','OPT-REPEAT-RESET','CH-TEMPO'],description='A /2.6 CC slide from step 1 to step 2 restarted mid-step by Reset at Pattern Repeat: every repeat has the first repeat\'s onsets and slide samples (README 964, 1078)'),
  'M-TIME-015':dict(run=shuffle_first_bar_record,requirements=['CH-SHUFFLE','REC-LIVE-NOTES','REC-ARM'],description='First bar with Smooth basis 1 Shuffle at 100% while recording live: exact shuffled onsets and gates from Play, and a short step-2 note and a note held across the step 3 end replay on their steps (README 683, 239; probe for S40)'),
+ 'M-MEMORY-013':dict(run=memory_redo_chord_merge,requirements=['MEMORY-NAV','MASK-CHORD'],description='K3 (jump to the latest action) after stepping back over two chord edits on one step restores both chord voices (README 698-705; S57)'),
  'M-MEMORY-009':dict(run=memory_redo_encoder_lock,requirements=['MEMORY-NAV','MASK-ATTRIBUTES'],description='Redo of an encoder-made held-step note or velocity lock returns to the locked state, immediately and after a working-pattern rebuild (README 697-702)'),
  'M-MEMORY-008':dict(run=memory_held_velocity,requirements=['MEMORY-NAV','MASK-ATTRIBUTES'],description='Stepping memory back over a held-step velocity lock restores the previous velocity, also after a working-pattern rebuild; a held-step note lock undo is the control (README 697-702)'),
  'M-MEMORY-007':dict(run=memory_truncate_isolation,requirements=['MEMORY-TRUNCATE','MEMORY-NAV','PERSIST-AUTO-001'],description='K1+K3 truncation forgets only its own channel history; the other channel keeps and undoes; both positions and applied masks survive autosave and a cold restart'),
