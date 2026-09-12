@@ -33,3 +33,57 @@ constraint on R07's proposed sort removal, not permission to change musical resu
 Next: benchmark complete merge separately, including priority-source duplicate
 length resolution, then select the smallest measured improvement and run existing
 length/merge behaviour and unit guards.
+
+## Adopted linear resolver
+
+After measuring complete merges, adopted the backward nearest-trig resolver in
+`pattern.lua`. No persistent cache, source revision, merge order, sorted summation,
+mask precedence or output scheduling changes. This bounds the source-length scan
+linearly rather than scanning forward separately for every sustained trig.
+
+The final `benchmarks/full-merge.lua` loads the frozen `e5a16bb` production merge
+and current production merge, compares complete outputs, and measures 400 calls
+per workload. Results are host microbenchmarks, not a Norns latency guarantee.
+Long-note full merges improve by 2-13% in the final sample. Dense-short samples
+range from 0.978x to 1.006x (up to 2.2% slower); accepted as a bounded tradeoff for
+removing the long-note scan cost, not described as a universal speedup.
+
+Final measurement:
+
+```text
+1 dense-short average original=0.039982 candidate=0.039771 speedup=1.005
+1 dense-short pattern_number_1 original=0.027907 candidate=0.028236 speedup=0.988
+1 dense-long average original=0.041748 candidate=0.039875 speedup=1.047
+1 dense-long pattern_number_1 original=0.032648 candidate=0.029235 speedup=1.117
+1 sparse-long average original=0.024803 candidate=0.023616 speedup=1.050
+1 sparse-long pattern_number_1 original=0.039813 candidate=0.038817 speedup=1.026
+4 dense-short average original=0.139211 candidate=0.140317 speedup=0.992
+4 dense-short pattern_number_1 original=0.070905 candidate=0.071968 speedup=0.985
+4 dense-long average original=0.149840 candidate=0.144205 speedup=1.039
+4 dense-long pattern_number_1 original=0.084165 candidate=0.074477 speedup=1.130
+4 sparse-long average original=0.056197 candidate=0.053575 speedup=1.049
+4 sparse-long pattern_number_1 original=0.116303 candidate=0.113644 speedup=1.023
+16 dense-short average original=0.467941 candidate=0.465062 speedup=1.006
+16 dense-short pattern_number_1 original=0.243105 candidate=0.248515 speedup=0.978
+16 dense-long average original=0.497664 candidate=0.470410 speedup=1.058
+16 dense-long pattern_number_1 original=0.285102 candidate=0.255038 speedup=1.118
+16 sparse-long average original=0.182692 candidate=0.173540 speedup=1.053
+16 sparse-long pattern_number_1 original=0.422682 candidate=0.414254 speedup=1.020
+
+```
+
+Validation: all 1537 Lua unit/integration tests pass (29.042 seconds), six
+inventory/name/syntax guards pass, and the independent new unit checks strict
+fractional cutoff, exact equality, subunit lengths and isolated full-cycle notes.
+Sol review independently proved the integer-distance/fractional-cutoff equivalence.
+Existing native recipes/oracles are unchanged:
+
+| Case | Controlled run | Real-time run |
+|---|---|---|
+| M-MERGE-025 | d1a7a4628d47424584720ea4f0145207 | b88eafcd73f741ba8d3196990a7b46b0 |
+| M-MERGE-027 | 71443024c7fe44979aa7e081fb084a9b | 2ec6beaf55d240d29b563229233eb274 |
+| M-MERGE-042 | cc8f8f36138f4c60aca53bac56740481 | 5fc22428b27b44a496f441b452a45350 |
+
+Next: remove duplicate priority-source length resolution within a single merge
+if measurement justifies it; keep any reuse bounded to the rebuild until the
+writer/invalidation map supports longer-lived caching. R07 remains incomplete.

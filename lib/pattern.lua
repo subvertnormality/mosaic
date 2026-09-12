@@ -29,14 +29,27 @@ local default_velocity_values = {100,100,100,100,100,100,100,100,100,100,100,100
 
 local function effective_lengths(source)
   local result = {unpack(source.lengths)}
+  local next_trig
   for s = 1, 64 do
-    if source.trig_values[s] == 1 and result[s] > 1 then
-      for distance = 1, math.min(63, math.ceil(result[s]) - 1) do
-        if source.trig_values[(s + distance - 1) % 64 + 1] == 1 then
-          result[s] = distance
-          break
-        end
+    if source.trig_values[s] == 1 then
+      next_trig = s + 64
+      break
+    end
+  end
+  if not next_trig then return result end
+
+  -- Walking backwards gives every trig its nearest following trig, including
+  -- wraparound, without scanning each sustained note separately.
+  for s = 64, 1, -1 do
+    if source.trig_values[s] == 1 then
+      local length = result[s]
+      if length > 1 then
+        local distance = next_trig - s
+        -- The original search excludes a full-cycle self-interruption and
+        -- cuts only strictly inside the requested (possibly fractional) gate.
+        if distance <= 63 and distance < length then result[s] = distance end
       end
+      next_trig = s
     end
   end
   return result

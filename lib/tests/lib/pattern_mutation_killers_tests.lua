@@ -147,3 +147,24 @@ function test_pattern_killer_minus_one_channel_masks_are_unset_for_trig_and_velo
   luaunit.assert_equals(result.lengths[4], -1)
   luaunit.assert_equals(result.lengths[5], -1)
 end
+
+function test_pattern_effective_lengths_fractional_boundary_and_isolated_cycle()
+  -- README 668: only a following trig inside the source gate interrupts it.
+  -- Characterisation: an isolated trig does not interrupt itself after 64 steps.
+  local song, channel = fresh_channel_one()
+  local p = song.patterns[1]
+  for s = 1, 64 do p.trig_values[s] = 0; p.lengths[s] = 1 end
+  channel.selected_patterns[1] = true
+  set_trig(p, 1, 2.5)
+  set_trig(p, 4, 3.1)
+  set_trig(p, 7, 3)
+  set_trig(p, 10, 0.25)
+  local result = merged(1)
+  luaunit.assert_equals(result.lengths[1], 2.5)
+  luaunit.assert_equals(result.lengths[4], 3)
+  luaunit.assert_equals(result.lengths[7], 3)
+  luaunit.assert_equals(result.lengths[10], 0.25)
+  for s = 1, 64 do p.trig_values[s] = 0 end
+  set_trig(p, 64, 128)
+  luaunit.assert_equals(merged(1).lengths[64], 128)
+end
