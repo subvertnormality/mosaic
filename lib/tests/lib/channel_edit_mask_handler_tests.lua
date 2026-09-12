@@ -47,6 +47,8 @@ local HELD_STEPS = {3, 64}
 -- -1 is passed on as -1, never as nil. The tests pin -1 and label it
 -- `-- characterisation (suspected defect: "and nil or" never yields nil)`; a refactor that
 -- "fixes" it to nil changes behaviour and must do so deliberately.
+-- On the held path -1 is the clear signal for trig and velocity: memory.lua turns a recorded -1
+-- into "no lock" (human decision S24, bugs.json mask-off-stored-as-minus-one; memory_tests.lua).
 local AND_NIL_OR = -1
 local SPECS = {
   trig = {

@@ -1,0 +1,47 @@
+diff --git a/lib/memory.lua b/lib/memory.lua
+index 54b7308..239404a 100644
+--- a/lib/memory.lua
++++ b/lib/memory.lua
+@@ -13,8 +13,12 @@ local function validate_note(note)
+   return note == nil or (type(note) == "number" and note >= 0 and note <= 127)
+ end
+ 
++-- CLEAR (-1) is X on the Masks page: a trig or velocity step lock turned back to X is cleared,
++-- exactly as if it had never been set (human decision S24, bugs.json mask-off-stored-as-minus-one).
++local CLEAR = -1
++
+ local function validate_velocity(velocity) 
+-  return velocity == nil or (type(velocity) == "number" and velocity >= 0 and velocity <= 127)
++  return velocity == nil or velocity == CLEAR or (type(velocity) == "number" and velocity >= 0 and velocity <= 127)
+ end
+ 
+ local function validate_length(length)
+@@ -107,10 +111,13 @@ local event_handlers = {
+     
+     apply_event = function(channel, step, data, apply_type)
+ 
+-      -- Update provided values only
+-      if data.trig ~= nil then channel.step_trig_masks[step] = data.trig end
++      -- Update provided values only; CLEAR removes a trig or velocity lock
++      local trig, velocity = data.trig, data.velocity
++      if trig == CLEAR then trig = nil; channel.step_trig_masks[step] = nil end
++      if velocity == CLEAR then velocity = nil; channel.step_velocity_masks[step] = nil end
++      if trig ~= nil then channel.step_trig_masks[step] = trig end
+       if data.note ~= nil then channel.step_note_masks[step] = data.note end
+-      if data.velocity ~= nil then channel.step_velocity_masks[step] = data.velocity end
++      if velocity ~= nil then channel.step_velocity_masks[step] = velocity end
+       if data.length ~= nil then channel.step_length_masks[step] = data.length end
+ 
+       -- Handle chord degrees with partial updates
+@@ -159,9 +166,9 @@ local event_handlers = {
+       end
+       
+       -- Update working pattern with current values
+-      local working_trig = data.trig or channel.step_trig_masks[step] or 0
++      local working_trig = trig or channel.step_trig_masks[step] or 0
+       local working_note = data.note or channel.step_note_masks[step] or 0
+-      local working_velocity = data.velocity or channel.step_velocity_masks[step] or 100
++      local working_velocity = velocity or channel.step_velocity_masks[step] or 100
+       local working_length = data.length or channel.step_length_masks[step] or 1
+ 
+       program.update_working_pattern_for_step(channel, step, working_trig, working_note, working_velocity, working_length)

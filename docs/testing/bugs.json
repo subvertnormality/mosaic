@@ -1036,7 +1036,7 @@
     },
     {
       "id": "mask-off-stored-as-minus-one",
-      "status": "open-awaiting-human-decision",
+      "status": "fixed-on-worktree-with-real-input-regression",
       "cases": [
         "M-MASK-OFF-001"
       ],
@@ -1058,7 +1058,8 @@
           "manifest_sha256": "980e6260b33c29b39ae9b8c5384d256fca5def3f8130354263bad620b0d37733",
           "failure": "('Mask turned back to X does not play as unset', [('B step 2 trig back to X', {'expected': [(60, 127), (62, 117), (64, 107), (65, 97)], 'heard': [(60, 127), (64, 107), (65, 97)]}), ('C step 3 velocity"
         }
-      ]
+      ],
+      "candidate_manifest": "mask-off-stored-as-minus-one.json"
     }
   ]
 }

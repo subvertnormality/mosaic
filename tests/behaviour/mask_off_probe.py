@@ -1,7 +1,10 @@
-"""Probe (suspected-defects S24): turning a mask back to X ("off") on the Masks page.
+"""Regression (suspected-defects S24): turning a mask back to X ("off") on the Masks page.
 
 S24: the mask handlers store "off" as -1, never nil (`v == -1 and nil or v` always yields v).
-Human decision 2026-09-11: probe first; off, then save/reload and undo. X means no mask lock:
+Human decision 2026-09-11: probe first; off, then save/reload and undo. The probe reproduced
+the defect in both lanes, and the second decision the same day (fix both): a held step's trig
+mask or velocity lock turned back to X clears it, exactly as if never set; chord masks keep -1
+as "-7th" (bugs.json mask-off-stored-as-minus-one). X means no mask lock:
 README 597 "The default mask value will apply to all steps that don't have a specific mask lock
 set", and without a channel mask the pattern values play (README 570: masks override pattern
 values). Channel 1 plays C D E F at velocities 127/117/107/97 on steps 1-4.
