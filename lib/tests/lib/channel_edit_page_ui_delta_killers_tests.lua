@@ -657,3 +657,98 @@ function test_w4c_fresh_dashboard_chord_slots_show_x()
     luaunit.assert_equals({d["0,48"], d["25,48"], d["50,48"], d["75,48"]}, {"X", "A3", "X", "X"})
   end)
 end
+
+-- Characterisation of R09 display coalescing; musical commits remain per release.
+-- Real channel_edit_page.lua + real scheduler; only page collaborators are minimal.
+
+local function r09_restore_globals(saved, names)
+  for _, name in ipairs(names) do rawset(_G, name, saved[name]) end
+end
+
+function test_hardening_channel_step_releases_commit_individually_and_coalesce_only_refresh()
+  local names = {
+    "scheduler", "include", "fader", "button", "sequencer", "press",
+    "channel_edit_page_ui", "program", "recorder", "pattern"
+  }
+  local saved = {}
+  for _, name in ipairs(names) do saved[name] = rawget(_G, name) end
+
+  local ok, err = pcall(function()
+    local refreshes, commits, rebuilds = {}, {}, 0
+    local selected = {number = 1}
+    scheduler = dofile("../../lib/scheduler.lua")
+    include = function(path)
+      luaunit.assert_equals(path, "mosaic/lib/quantiser")
+      return {}
+    end
+
+    local function control()
+      return {is_this = function(_, _, y) return y >= 4 and y <= 7 end}
+    end
+    fader = {new = control}
+    button = {new = control}
+    sequencer = {new = control}
+    _G.press = {
+      post = {},
+      register = function() end,
+      register_long = function() end,
+      register_pre = function() end,
+      register_dual = function() end,
+      register_post = function(_, page, handler)
+        luaunit.assert_equals(page, "channel_edit_page")
+        _G.press.post[#_G.press.post + 1] = handler
+      end,
+    }
+    program = {
+      get_selected_channel = function() return selected end,
+      get = function() return {selected_song_pattern = 1, selected_channel = selected.number} end,
+    }
+    recorder = {
+      record_stored_note_mask_events = function(channel, step)
+        commits[#commits + 1] = {"mask", channel, step}
+      end,
+      record_stored_trig_lock_events = function(channel, step)
+        commits[#commits + 1] = {"trig-lock", channel, step}
+      end,
+    }
+    pattern = {
+      update_working_patterns = function()
+        rebuilds = rebuilds + 1
+      end,
+    }
+    channel_edit_page_ui = {
+      refresh_memory = function() refreshes[#refreshes + 1] = {"memory", selected.number} end,
+      refresh_trig_locks = function() refreshes[#refreshes + 1] = {"trig-locks", selected.number} end,
+      refresh_masks = function() refreshes[#refreshes + 1] = {"masks", selected.number} end,
+    }
+
+    local page = dofile("../../lib/pages/channel_edit_page/channel_edit_page.lua")
+    page.refresh_faders = function()
+      refreshes[#refreshes + 1] = {"faders", selected.number}
+    end
+    page.register_press()
+    luaunit.assert_equals(#_G.press.post, 1)
+
+    -- Each ordinary release records history and asks for musical rebuild before
+    -- the UI scheduler is allowed to run.
+    for step = 1, 3 do _G.press.post[1](step, 4) end
+    luaunit.assert_equals(commits, {
+      {"mask", 1, 1}, {"trig-lock", 1, 1},
+      {"mask", 1, 2}, {"trig-lock", 1, 2},
+      {"mask", 1, 3}, {"trig-lock", 1, 3},
+    })
+    luaunit.assert_equals(rebuilds, 3)
+    luaunit.assert_equals(refreshes, {})
+
+    -- Refresh is display-only and deliberately reads the selection when it runs.
+    selected.number = 16
+    scheduler.update()
+    luaunit.assert_equals(refreshes, {
+      {"memory", 16}, {"trig-locks", 16}, {"masks", 16}, {"faders", 16},
+    })
+    luaunit.assert_equals(scheduler.active_count, 0)
+  end)
+
+  r09_restore_globals(saved, names)
+  luaunit.assert_true(ok, err)
+end

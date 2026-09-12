@@ -1,6 +1,14 @@
 local channel_edit_page = {}
 local pattern_buttons = {}
 
+-- Read current selection at execution time; only display work is coalesced.
+local refresh_after_step_release = scheduler.debounce(function()
+  channel_edit_page_ui.refresh_memory()
+  channel_edit_page_ui.refresh_trig_locks()
+  channel_edit_page_ui.refresh_masks()
+  channel_edit_page.refresh_faders()
+end)
+
 
 local quantiser = include("mosaic/lib/quantiser")
 
@@ -170,12 +178,7 @@ function channel_edit_page.register_press()
       if channel_edit_page_sequencer:is_this(x, y) then
         recorder.record_stored_note_mask_events(program.get_selected_channel().number, fn.calc_grid_count(x, y))
         recorder.record_stored_trig_lock_events(program.get_selected_channel().number, fn.calc_grid_count(x, y))
-        scheduler.debounce(function()
-          channel_edit_page_ui.refresh_memory()
-          channel_edit_page_ui.refresh_trig_locks()
-          channel_edit_page_ui.refresh_masks()
-          channel_edit_page.refresh_faders()
-        end)()    
+        refresh_after_step_release()
         pattern.update_working_patterns()
       end
     end
