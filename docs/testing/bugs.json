@@ -985,6 +985,15 @@
         "M-MEMORY-013"
       ],
       "summary": "Redo-all (K3) kept only the later chord edit on a step; chord voices now merge per voice (S57)"
+    },
+    {
+      "id": "external-clock-stop-preempts-backlog",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "external-clock-stop-preempts-backlog.json",
+      "cases": [
+        "M-SYNC-023"
+      ],
+      "summary": "A severe external-clock callback backlog could replay stale notes after native MIDI Stop; catch-up now yields so queued transport preempts stale musical work."
     }
   ]
 }

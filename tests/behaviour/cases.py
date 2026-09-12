@@ -3276,6 +3276,7 @@ from continue_spp import continue_spp_unsupported
 
 from external_clock_faults import external_clock_fault,external_clock_explicit_recovery
 from external_clock_long import long_external_phase
+from external_clock_backlog import external_clock_runtime_backlog
 
 CASES={
  'M-STARTUP-TRANSPORT-001':dict(run=startup_transport,requirements=['PERSIST-AUTO-001','CLOCK-MIDI-TRANSPORT-001'],description='A fresh start sends no MIDI transport; a start that loads the autosave sends one Stop per connected MIDI port before any input (arbitrated SEM-018)'),
@@ -3343,6 +3344,7 @@ CASES={
  'M-OPT-PENT-ALL-001':dict(run=lock_all_to_pentatonic,requirements=['OPT-PENTATONIC-ALL','SCALE-EDIT'],description='Lock all to pentatonic defaults off, snaps unmodified C major and C minor notes to the documented selections with random/merged switches off, and restores plain pitches when disabled'),
  'M-SYNC-021':dict(run=lambda c:external_clock_fault(c,'burst'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Three2ms bunched external clocks followed by an exactly compensating gap preserve received-pulse phrase phase, including an onset inside the burst, with complete gates and releases'),
  'M-SYNC-022':dict(run=long_external_phase,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Sixteen external-master bars deliver1536 exact24PPQN clocks and256 onsets with absolute first-beat phase, bounded accumulated drift, complete gates and post-Stop silence'),
+ 'M-SYNC-023':dict(run=external_clock_runtime_backlog,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='A one-second Lua event-thread stall under 300 BPM external clock brackets incoming Stop; native deadlines continue and stale reconciled work must not emit a post-Stop note burst (real-time only)'),
  'M-SYNC-020':dict(run=external_clock_explicit_recovery,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='External clock loss freewheels at the acquired tempo; Start followed by the next Clock cancels holdover ownership, releases the held note and reanchors step1 without stale notes'),
  'M-SYNC-019':dict(run=lambda c:external_clock_fault(c,'drift'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Gradual external tempo drift from100 to150BPM preserves pulse-ordinal phrase phase, pitches, velocities and balanced gates'),
  'M-SYNC-018':dict(run=lambda c:external_clock_fault(c,'step'),requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Abrupt external tempo step from100 to150BPM preserves pulse-ordinal phrase phase, pitches, velocities and balanced gates'),

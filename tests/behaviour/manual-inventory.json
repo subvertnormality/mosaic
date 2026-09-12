@@ -1647,7 +1647,8 @@
         "M-SYNC-015",
         "M-MIDI-REPEAT-001",
         "M-REC-SOURCES-001",
-        "M-REC-SOURCES-002"
+        "M-REC-SOURCES-002",
+        "M-SYNC-023"
       ],
       "status": "partial-domain-coverage",
       "domain": "Repeated C at step63 length2 followed by C at step1; other overlap/ports/channels/stop timings remain required.",
@@ -1811,17 +1812,19 @@
         "M-SYNC-020",
         "M-SYNC-021",
         "M-SYNC-022",
+        "M-SYNC-023",
         "M-TRIPLE-004",
         "M-STARTUP-TRANSPORT-001"
       ],
       "status": "partial-domain-coverage",
-      "domain": "Cold20/100/300BPM and warmed startup; repeated Start; release ordering; source handoff; pinned-norns Continue/SPP behavior; two-port input selection; alternating +/-5ms jitter; one missing or extra pulse; abrupt and gradual100-to150BPM changes; and500ms loss with explicit-Start recovery. Three-tick2ms burst with exact phase compensation; sixteen-bar1536-clock/256-onset accumulated phase; larger stochastic jitter, repeated burst corruption, loss without an explicit transport recovery, simultaneous source edits and remaining feature interactions are pending. M-TRIPLE-004 (E and D, 3 fresh D repeats), plan stress triple trigless x slide x external-clock change: a global CC slide to a silent trigless lock under a 24 PPQN clock that steps from 100 to 150 BPM mid-slide arrives with the destination lock (README 964) and, as characterisation beyond the manual, stays linear in received clock ordinals; stored-patch recall, exact onsets and balanced gates. A slide timed by seconds at the start tempo is detected. M-STARTUP-TRANSPORT-001 (E and D, 3 fresh D repeats): before any input a fresh start sends no MIDI transport and a start that loads the autosave sends one Stop to each connected port (README silent; arbitrated SEM-018, characterisation).",
+      "domain": "Cold20/100/300BPM and warmed startup; repeated Start; release ordering; source handoff; pinned-norns Continue/SPP behavior; two-port input selection; alternating +/-5ms jitter; one missing or extra pulse; abrupt and gradual100-to150BPM changes; and500ms loss with explicit-Start recovery. Three-tick2ms burst with exact phase compensation; sixteen-bar1536-clock/256-onset accumulated phase; larger stochastic jitter, repeated burst corruption, loss without an explicit transport recovery, simultaneous source edits and remaining feature interactions are pending. M-TRIPLE-004 (E and D, 3 fresh D repeats), plan stress triple trigless x slide x external-clock change: a global CC slide to a silent trigless lock under a 24 PPQN clock that steps from 100 to 150 BPM mid-slide arrives with the destination lock (README 964) and, as characterisation beyond the manual, stays linear in received clock ordinals; stored-patch recall, exact onsets and balanced gates. A slide timed by seconds at the start tempo is detected. M-STARTUP-TRANSPORT-001 (E and D, 3 fresh D repeats): before any input a fresh start sends no MIDI transport and a start that loads the autosave sends one Stop to each connected port (README silent; arbitrated SEM-018, characterisation). M-SYNC-023 adds a real-time-only one-second Lua event-thread stall at 300 BPM: the native scheduler delivers Clock and Stop on deadline, and no reconciled stale note may sound after Stop (README external MIDI transport; post-Stop burst is characterized).",
       "oracles": [
         "Native CLOCK source and midi-clock-input menus",
         "Received-pulse ordinal phase with independently authored fault timestamps",
         "Literal ordered MIDI pitches and velocities with complete release ownership",
         "Explicit Start followed by the next Clock reanchors step1 after bounded norns holdover; Stop drains all notes",
-        "Internal playback resumes"
+        "Internal playback resumes",
+        "Native runtime-stall acknowledgement brackets on-time external Stop delivery; no note onset is emitted after that delivered Stop"
       ]
     },
     {

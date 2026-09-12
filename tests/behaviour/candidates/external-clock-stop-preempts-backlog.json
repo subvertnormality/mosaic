@@ -1,0 +1,56 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "7a22e91",
+  "files": [
+    {
+      "file": "lib/clock/m_lattice.lua",
+      "before_sha256": "3a741d50e1cfffb21c447d5ecda8a26ca621c223410913c3948a71216f5bb657",
+      "after_sha256": "3cc5f8dd38eb481147ea7054dca77a63c37f745a8cd0f95f4ab73b4a8a992a6a"
+    }
+  ],
+  "patch": "0108-external-clock-stop-preempts-backlog.patch",
+  "patch_sha256": "c7c1c280baa4b503dfb6ca4535c534f93a2a68ae033d9c516a799f9a070d9757",
+  "regression": "M-SYNC-023",
+  "unit_regression": "test_external_lattice_large_backlog_yields_before_and_during_reconciliation",
+  "baseline": [
+    {
+      "run_id": "ccf6ed22bdeb4ac883925661b07071fe",
+      "case": "M-SYNC-023",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "f64e0c090dfe09c3a27ed04bf535793db4fb18ff7ae088f30fabb917e5849166",
+      "failure": "('Stale note burst emitted after external Stop', [{'index': 30, 'device_id': 0, 'port': 1, 'port_name': 'Emulator MIDI', 'monotonic_ns': 283188863704372, 'bytes': [144, 64, 107], 'decoded': [{'type': "
+    }
+  ],
+  "rationale": "After the Lua event thread was blocked, external-clock auto_pulse replayed the full elapsed pulse backlog without yielding. A native Stop already queued behind that reconciliation could not cancel it, so Mosaic emitted 22 stale note onsets after Stop. Severe catch-up now yields once before replay and after each bounded half-quarter-note slice, allowing queued transport to stop and destroy the old lattice before stale musical work runs.",
+  "oracle": "README External MIDI Transport: Mosaic receives MIDI Start and Stop messages when CLOCK source is MIDI. Characterisation beyond the manual: a Stop already delivered by the native input scheduler must not be followed by a burst of stale Mosaic note onsets.",
+  "validation": [
+    {
+      "run_id": "44128b6319114a0986001ecd1bae44cf",
+      "case": "M-SYNC-023",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "e35d7d5685b1c4979877fb771c62c00d81ec0cd0f8ce9ec66990f42652edf718",
+      "failure": null
+    },
+    {
+      "run_id": "5feea12176ba4826b9637be7f07acb0c",
+      "case": "M-SYNC-023",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "79bbd8a40543994f348c45e0c07f5a9a125fe59781533fca293e30356ed93343",
+      "failure": null
+    },
+    {
+      "run_id": "efb5edf787d24f949d6fdaaed8a07479",
+      "case": "M-SYNC-023",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "380408f345a90d49841c41c649aee6eb2045fdd106574fd3eeabfa41812459a4",
+      "failure": null
+    }
+  ],
+  "collateral": "All 1492 Lua units and structural guards pass. M-SYNC-001/007/008/015/021/022 pass in controlled time; the same six pass in real time on the admitted runtime. M-SYNC-023 passes in three fresh real-time processes. The fault injection is real-time only because controlled logical time deliberately has no wall-clock execution cost.",
+  "upstream_merged": false,
+  "runtime": "M-SYNC-023 requires the generic runtime_stall emulator candidate /home/andy/projects/monome-runtime-candidates/runtime-stall-02/installation.json. Its independent native test proves MIDI deadlines continue while the Lua event thread is blocked."
+}

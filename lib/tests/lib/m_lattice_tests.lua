@@ -1039,6 +1039,30 @@ function test_external_lattice_acquisition_reconciles_once()
   external_pulse_trace({0, 0, 4 / 96, 4 / 96, 24 / 96}, {1, 1, 5, 5, 25})
 end
 
+function test_external_lattice_large_backlog_yields_before_and_during_reconciliation()
+  local saved_clock = clock
+  local count = 0
+  local candidate = l:new({ppqn = 96, sync_to_external = true})
+  candidate.enabled = true
+  candidate.pulse = function() count = count + 1 end
+  clock = {
+    get_beats = function() return 2 end,
+    sleep = function(seconds) return coroutine.yield("sleep", seconds) end,
+    sync = function(interval, offset) return coroutine.yield("sync", interval, offset) end
+  }
+  local ok, message = pcall(function()
+    local job = coroutine.create(function() l.auto_pulse(candidate) end)
+    local resumed, kind, seconds = coroutine.resume(job)
+    luaunit.assert_true(resumed)
+    luaunit.assert_equals({kind, seconds, count}, {"sleep", 0, 0})
+    resumed, kind, seconds = coroutine.resume(job)
+    luaunit.assert_true(resumed)
+    luaunit.assert_equals({kind, seconds, count}, {"sleep", 0, 48})
+  end)
+  clock = saved_clock
+  if not ok then error(message) end
+end
+
 
 function test_external_lattice_source_epoch_handoff()
   local saved_clock = clock

@@ -1,0 +1,27 @@
+diff --git a/lib/clock/m_lattice.lua b/lib/clock/m_lattice.lua
+index 792330f..66b8e25 100644
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -166,9 +166,22 @@ function Lattice.auto_pulse(s)
+     local next_pulse = 0
+     while not s.external_clock_active or s.external_clock_active() do
+       local due = math.floor(clock.get_beats() * s.ppqn + 1e-9)
++      -- A blocked Lua event thread can resume after native MIDI has already
++      -- received transport Stop. Give queued input callbacks priority before
++      -- replaying a musically stale pulse backlog, then bound each catch-up
++      -- slice so transport remains responsive throughout reconciliation.
++      local backlog = due - next_pulse + 1
++      if backlog > s.ppqn / 2 then clock.sleep(0) end
++      local reconciled = 0
+       while next_pulse <= due do
+         s:pulse()
+         next_pulse = next_pulse + 1
++        reconciled = reconciled + 1
++        if reconciled >= s.ppqn / 2 and next_pulse <= due then
++          clock.sleep(0)
++          due = math.floor(clock.get_beats() * s.ppqn + 1e-9)
++          reconciled = 0
++        end
+       end
+       clock.sync(interval, 0)
+     end
