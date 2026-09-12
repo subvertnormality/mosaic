@@ -7,6 +7,7 @@ local arp_descriptor = include("mosaic/lib/musical_resolution/arp_descriptor")
 local strum_descriptor = include("mosaic/lib/musical_resolution/strum_descriptor")
 local quantiser = include("mosaic/lib/quantiser")
 local m_clock = include("mosaic/lib/clock/m_clock")
+local play_note, play_arp_note = include("mosaic/lib/clock/voice_lifetime").new(m_clock)
 
 local divisions = include("mosaic/lib/clock/divisions")
 
@@ -444,29 +445,6 @@ function step.calculate_step_transpose(c)
 end
 
 
-
-local function play_note_internal(note, note_container, velocity, division, note_on_func, action_flag, onset_offset)
-  local c = note_container.channel
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
-  
-  note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
-
-  return m_clock.delay_action(c, division + (onset_offset or 0), action_flag, function()
-    note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
-  end, true, onset_offset ~= nil) -- Off-phase arp releases always queue to the parent.
-
-end
-
--- Redefine play_note to use the helper function
-local function play_note(note, note_container, velocity, division, note_on_func)
-  -- Nonpositive ordinary gates release immediately, including nested strum callbacks.
-  play_note_internal(note, note_container, velocity, math.max(0, division), note_on_func, "must_execute")
-end
-
--- Redefine play_arp_note to use the helper function
-local function play_arp_note(note, note_container, velocity, division, note_on_func, onset_offset)
-  return play_note_internal(note, note_container, velocity, division, note_on_func, "execute_at_note_end", onset_offset)
-end
 
 local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_func, process_func)
   local c = note_container.channel

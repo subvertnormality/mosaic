@@ -5,15 +5,6 @@ function include(path)
  if path=='mosaic/lib/quantiser' then return {} end -- Unused by note release.
  return dofile(path:gsub('^mosaic/','')..'.lua')
 end
-local function find_helper(value,seen)
- if type(value)~='function' or seen[value] then return end
- seen[value]=true
- for n=1,100 do
-  local name,child=debug.getupvalue(value,n);if not name then break end
-  if name=='play_arp_note' then return child end
-  local found=find_helper(child,seen);if found then return found end
- end
-end
 local channel={number=1}
 program={get=function() return {selected_song_pattern=1} end,get_channel=function() return channel end,
  get_effective_swing=function() return 0 end,get_effective_swing_shuffle_type=function() return 1 end,
@@ -22,9 +13,7 @@ local Lattice=dofile('lib/clock/m_lattice.lua');local checked=0;local failures=0
 for _,period in ipairs({24,216,408}) do
  for _,division in ipairs({1/24,1/12,1/16,1/8,1/6,1/4,1/3,3/8,1/2,5/8,2/3,3/4,5/6,7/8,1,1.25,1.5,2}) do
   dofile('lib/clock/m_clock.lua');clock_lattice=Lattice:new{auto=false,ppqn=96}
-  local real_step=dofile('lib/step.lua');local play_arp_note
-  for _,value in pairs(real_step) do play_arp_note=find_helper(value,{});if play_arp_note then break end end
-  assert(play_arp_note,'Actual step release helper unavailable')
+  local _, play_arp_note = dofile('lib/clock/voice_lifetime.lua').new(m_clock)
   local now=0;local first=true;local voices={};local release_ids={};local gate=16
   local function note(offset)
    local v={on=now};voices[#voices+1]=v
