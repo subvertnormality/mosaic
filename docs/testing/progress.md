@@ -1708,7 +1708,7 @@ fully-quantised chord voices, so no oracle was invented for either ambiguity.
 The complete integrated Lua unit/integration suite passes 1,509/1,509. No production code changed in these additions.
 
 
-## Pattern-edit boundary fix  2026-09-12
+## Pattern-edit boundary fix — 2026-09-12
 
 M-PAT-BOUNDARY-001 had a qualified baseline at channel 16: three real-time and
 three controlled runs failed after a complete tap 30 ms before the song boundary,
@@ -1728,3 +1728,24 @@ multiple queued edits, same-slot debounce and song isolation. M-SONG-FLOW-001,
 M-TIME-013 and M-SONG-TEMPO-001 pass in both lanes. The idle full Lua suite passes
 1510/1510 and all nine structural guards pass. Candidate evidence is
 `tests/behaviour/candidates/pattern-edit-before-song-boundary.json`.
+
+
+## PERF-008 executable overload/recovery guard — 2026-09-12
+
+Coverage reconciliation selected overload/recovery as the highest-value non-duplicate
+remaining recipe. PERF-002/003 already exercise dense channels and slides, PERF-004
+combines external clock with MIDI and physical input/render pressure, M-ENDURANCE-001
+is the ten-minute mixed run, and persistence/cold-restart behavior has dedicated cases.
+PERF-008 therefore drives a UI-built 16-channel internal-clock pattern under the pinned
+0.5-CPU/768-MiB image and injects 1.5 seconds of competing work inside the same cgroup.
+Its independent oracle checks exact MIDI channel groups, a C/D/E/F timeline fingerprint,
+balanced releases, unchanged 10/50/20 ms recovery timing, one-bar queue recovery, CFS
+throttling, and physical-input propagation to both grid and screen. Seeded self-tests
+reject shifted/rebased phase, missing steps, wrong pitches/releases and either absent
+visual path. The bounded diagnostic in
+`/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-04` produced
+47 complete 16-channel onset groups and 1,506 MIDI messages with balanced ownership;
+15 throttled periods/738 ms throttled time demonstrated overload. Grid, screen, queue,
+service and memory gates passed. Musical phase remained about 45 ms early after a full
+recovery bar (p99 45.287 ms; final 45.147 ms), so the unchanged event-timing gate failed
+and remains a refactor blocker. This constrained x86 result is not physical-norns evidence.

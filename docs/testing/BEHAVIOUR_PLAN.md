@@ -452,3 +452,11 @@ combined musical case. Do not obtain green results by lowering event density,
 dropping redraws, weakening timing or changing expected output. Base-MIDI is the
 current priority; Toolkit/Matrix performance is deferred until the user restores
 that priority.
+
+PERF-008 is the overload/recovery recipe. In the constrained proxy, a physical-UI-built
+16-channel pattern carries a four-step pitch fingerprint while four competing processes
+consume the same cgroup quota for 1.5 seconds. The oracle requires complete per-channel
+MIDI groups and release ownership, timeline-correct pitches after one recovery bar, the
+central 10/50/20 ms phase limits, queue recovery, actual CFS-throttling evidence, and
+post-overload grid and screen changes from physical inputs. Seeded oracle tests must reject
+a phase rebase, a wrong pitch, a missing step/release and either missing visual path.
