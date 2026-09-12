@@ -971,10 +971,10 @@
           "coverage": "negative, zero, positive"
         }
       ],
-      "interaction_strategy": "Exhaust voice/order/mute; partition timing magnitudes; pairwise modifiers and lifecycle triples.",
+      "interaction_strategy": "Exhaust voice/order/mute and velocity axes; partition timing magnitudes; pairwise modifiers plus maximum five-voice overlap, repeated-pitch ownership, Stop and probability-rejection lifecycle triples.",
       "residual_gaps": [
-        "Delayed voice scale change, reassignment and probability rejection.",
-        "Maximum overlap exact releases across all voices and repeated pitches."
+        "Delayed strum/arp voices whose scale changes or device assignment changes before their onset need explicit snapshot-versus-live semantics.",
+        "Maximum-overlap release ownership is unit-covered; representative native timing remains linked to existing chord/arp behavior cases."
       ],
       "requirement_ids": [
         "CHORD-ACCEL",
@@ -1340,7 +1340,7 @@
         "M-TIME-012",
         "M-XA-006-NB-CHORD-ACCEL"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-in-progress"
     },
     {
       "id": "H08",

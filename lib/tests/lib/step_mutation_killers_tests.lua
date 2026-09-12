@@ -1236,3 +1236,57 @@ function test_step_hardening_all_pentatonic_switch_combinations()
     end
   end
 end
+
+-- README.md:801-813 and 939-971: chord/arp voices are independent scheduled
+-- notes. Two consecutive five-voice chords with two-step lengths create ten
+-- simultaneous voice owners; Stop must release every owner, including repeated
+-- pitches, exactly once.
+function test_step_hardening_maximum_chord_overlap_releases_every_repeated_pitch_owner()
+  with_env(function(env)
+    local channel = working_pattern({1, 2}, {
+      lengths = {[1] = 2, [2] = 2}
+    })
+    channel.chord_one_mask = 1
+    channel.chord_two_mask = 2
+    channel.chord_three_mask = 3
+    channel.chord_four_mask = 4
+
+    env.start()
+    pulse(26)
+    local ons = notes_of(note_ons(env))
+    luaunit.assert_equals(ons, {60, 62, 64, 65, 67, 60, 62, 64, 65, 67})
+
+    nb = {stop_all = function() end}
+    clock_of_step:stop()
+    local offs = notes_of(events_of(env, "off"))
+    table.sort(offs)
+    luaunit.assert_equals(offs, {60, 60, 62, 62, 64, 64, 65, 65, 67, 67})
+    luaunit.assert_equals(#events_of(env, "off"), #note_ons(env))
+  end)
+end
+
+-- README.md:777: probability zero means the trig never plays. Rejection happens
+-- before root/chord scheduling, so delayed voices must not leak later.
+function test_step_hardening_probability_zero_rejects_root_and_all_four_delayed_voices()
+  with_env(function(env)
+    local channel = working_pattern({1}, {lengths = {[1] = 4}})
+    channel.chord_one_mask = 1
+    channel.chord_two_mask = 2
+    channel.chord_three_mask = 3
+    channel.chord_four_mask = 4
+    set_stock(env, "trig_probability", 0)
+    set_stock(env, "chord_strum", note_division_index(1 / 4))
+    random = function(low, high)
+      luaunit.assert_equals({low, high}, {0, 99})
+      return 0
+    end
+
+    env.start()
+    pulse(120)
+    nb = {stop_all = function() end}
+    clock_of_step:stop()
+
+    luaunit.assert_equals(note_ons(env), {})
+    luaunit.assert_equals(events_of(env, "off"), {})
+  end)
+end

@@ -5221,21 +5221,16 @@
     "domains": 15,
     "final_validation": "pending",
     "latest_slice": {
-      "domain": "H06",
+      "domain": "H07",
       "tests": [
-        "lib/tests/lib/scale_hardening_tests.lua",
         "lib/tests/lib/step_mutation_killers_tests.lua"
       ],
-      "editable_scale_slots": 16,
-      "production_scale_types": 10,
-      "pentatonic_switch_combinations": 8,
-      "pentatonic_contexts": [
-        "merged-note",
-        "random-offset"
-      ],
+      "simultaneous_voice_owners": 10,
+      "distinct_pitches": 5,
+      "probability_rejected_delayed_voices": 4,
       "lua_suite": {
-        "collected": 1484,
-        "passed": 1484,
+        "collected": 1486,
+        "passed": 1486,
         "failed": 0
       },
       "production_change": false

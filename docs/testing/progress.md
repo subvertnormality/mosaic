@@ -1528,3 +1528,15 @@ step.handle in merged-note and random-offset contexts with exact MIDI assertions
 The complete Lua unit/integration suite passes 1484/1484. No production code
 changed. The characterised set-all scale alias and unsupported in-place mutations
 remain explicit gaps pending native evidence or route-level coverage.
+
+
+## Chord overlap and release hardening  2026-09-12
+
+H07 now creates ten simultaneous owners from two consecutive five-voice chords,
+including two owners for each repeated pitch, then verifies Stop emits exactly ten
+matching releases. A separate probability-zero case proves the root and all four
+delayed strum voices remain silent through subsequent pulses and Stop. The full
+Lua unit/integration suite passes 1486/1486. No production code changed. The
+snapshot-versus-live semantics for delayed voices across scale or device changes
+remain explicit, because choosing that contract requires native observable
+evidence rather than a unit-only assumption.
