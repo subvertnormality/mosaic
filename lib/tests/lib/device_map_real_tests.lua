@@ -1226,7 +1226,7 @@ function test_real_param_manager_norns_slew_slot_is_configured_then_hidden()
   end)
 end
 
-function test_real_param_manager_norns_device_without_params_leaves_slots_16_to_39_as_they_were()
+function test_real_param_manager_norns_device_without_params_clears_slots_16_to_39()
   isolated(function(env)
     local dm = load_device_map(env, nil, {["jf kit"] = nb_player({supports_slew = false})})
     local pm = load_param_manager(env)
@@ -1238,14 +1238,15 @@ function test_real_param_manager_norns_device_without_params_leaves_slots_16_to_
     luaunit.assert_false(env.params.visible[slot_id(2, 40)]) -- characterisation
     luaunit.assert_false(env.params.visible[slot_id(2, 180)]) -- characterisation
     luaunit.assert_equals(env.params.store[slot_id(2, 40)].sets, {}) -- characterisation: no slew set
-    -- characterisation (suspected defect, param_manager.lua:95-167: with no device params and no
-    -- slew, oob_accumulator stays 40, so slots 16-39 keep the previous Digitakt configuration,
-    -- stay visible and still send MIDI from their actions)
-    luaunit.assert_true(env.params.visible[slot_id(2, 16)])
-    luaunit.assert_equals(env.params.store[slot_id(2, 16)].name, "Solo")
+    -- bugs.json nb-device-switch-clears-slots (was suspected defect S4): with no device params,
+    -- the previous Digitakt slots from 16 on are hidden and their actions no longer send MIDI
+    for i = 16, 39 do
+      luaunit.assert_false(env.params.visible[slot_id(2, i)])
+    end
     env.midi = {}
     env.params.actions[slot_id(2, 16)](5)
-    luaunit.assert_equals(env.midi, {{kind = "nrpn", msb = 1, lsb = 102, value = 5, channel = 1, device = 1, mode = "standard", n = 6}})
+    env.params.actions[slot_id(2, 39)](5)
+    luaunit.assert_equals(env.midi, {})
   end)
 end
 

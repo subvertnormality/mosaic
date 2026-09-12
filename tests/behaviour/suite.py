@@ -39,7 +39,7 @@ PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}
 PYTHON_SCRIPT={'test_nrpn_legacy_serializer':'norns-source-and-artifact-directory'}
 # Cases whose code asserts a non-base profile. Base cases are everything else.
 CASE_PROFILE={'M-MOD-001':'midi-modulation','M-MOD-002':'midi-modulation','M-MOD-003':'midi-modulation',
-    'M-MOD-004':'midi-modulation','M-XA-001-JF':'crow-jf','M-XA-002-AUDIO':'nb-audio','M-XA-005-NB-LOCK':'nb-audio','M-XA-006-NB-CHORD-ACCEL':'nb-audio',
+    'M-MOD-004':'midi-modulation','M-XA-001-JF':'crow-jf','M-XA-002-AUDIO':'nb-audio','M-XA-005-NB-LOCK':'nb-audio','M-XA-006-NB-CHORD-ACCEL':'nb-audio','M-XA-007-NB-SWITCH-SLOTS':'crow-jf',
     'M-XA-003-JF-OWNERSHIP':'crow-jf','M-XA-004-JF-OVERLAP':'crow-jf'}
 LANES=('real-time','controlled-experimental')
 
