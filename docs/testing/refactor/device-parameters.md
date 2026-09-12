@@ -110,3 +110,24 @@ Controlled native runs passed (same evidence root as above):
 | M-PARAM-036 | 7376e7aa888f426da6c6db6ec19723a3 |
 
 Protocol serialization and MIDI ingress separation remain outstanding in R11.
+
+## Wire serialization extraction (2026-09-13)
+
+`midi_wire_output` owns CC receiver lookup/byte splitting and NRPN validation and
+ordered 99/98/6/38 emission. The public m_midi methods remain; NRPN resolves the
+owning module's CC method on each call, and device lookup remains dynamic.
+Caller eligibility, route/mode resolution and UI/autosave effects are unchanged.
+
+The exhaustive 16,384-value NRPN reconstruction test and invalid-input/no-partial-
+output checks pass. Panic live-note ownership and ten coverage/syntax checks pass.
+The full Lua run had 1,544 passes and two timing failures (live slide admission
+2.480 ms against 2 ms; massive automation processing above 2 ms). Those same two
+load-sensitive cases passed in isolation, with limits unchanged. This is not a
+claim that the full run was all green or that a performance defect was repaired.
+
+Controlled native passes:
+- M-PATCH-052: `6349dfdb89a04f0c9632927fad955cb4` (both NRPN modes, boundary values,
+  route override, Off and device switching).
+- M-PATCH-038: `66a94a43a1524ef285ad33e0ac4398b9` (CC slide reassignment/output).
+
+MIDI ingress and mapping registration remain to separate in R11.
