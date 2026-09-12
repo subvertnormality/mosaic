@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "status": "planned-hardening-matrix-reconciled",
-  "base_revision": "25c7f428faefb410a8b083b75a7634a49aa86a57",
+  "base_revision": "abdfd75",
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "inventory": "tests/behaviour/manual-inventory.json",
-  "inventory_sha256": "57420e7b5751ad1d78597b8ad25cec408a2c1d531df88ef9942cbf78b1a4f7d8",
+  "inventory_sha256": "0f1b59a63b99cfedff1ae9c69841ea336442c090e5acf5d38d872d595e4c73e1",
   "counts": {
     "requirements": 141,
     "production_lua_modules": 67,
@@ -339,8 +339,8 @@
       ],
       "interaction_strategy": "Exhaust codecs and slots; pairwise device, sentinel, port, channel, recall and reassignment.",
       "residual_gaps": [
-        "All slots crossed with clear, replace, undo, persistence and reassignment.",
-        "S3 EX Braids slot semantics blocked by unavailable EX profile."
+        "S3 EX Braids slot semantics remain blocked by unavailable EX profile.",
+        "All ten assignment slots now cross initial assignment, identical reassignment, CC-to-NRPN replacement, clear, repeated clear, callback retirement and copy isolation on channel 16; all ten definitions, locks and slides round-trip independently on song 96/channel 16. Native cases remain the user-visible assignment oracles."
       ],
       "requirement_ids": [
         "CH-DEVICE",
@@ -512,7 +512,7 @@
         "M-XA-005-NB-LOCK",
         "M-XA-006-NB-CHORD-ACCEL"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-in-progress"
     },
     {
       "id": "H04",
@@ -1371,8 +1371,8 @@
       ],
       "interaction_strategy": "Exact pulse matrices; pairwise division, feel, length and reset; named slide lifecycle triples.",
       "residual_gaps": [
-        "Delayed external callback responsiveness is mandatory.",
-        "Slide replacement, clear, wrap and song boundaries across all slots."
+        "Severe delayed external callback responsiveness is covered by M-SYNC-023 and a coroutine unit: Stop preempts stale catch-up after a one-second Lua stall.",
+        "Slide replacement, clear, wrap, reset, retiming, capacity and all ten slots are covered; the unbounded product of every clock rate, shuffle and slide combination remains partitioned."
       ],
       "requirement_ids": [
         "CH-CLOCK-INHERIT",
@@ -1498,7 +1498,7 @@
         "M-UI-001",
         "M-UI-002"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-complete-partitioned"
     },
     {
       "id": "H09",
@@ -1523,8 +1523,8 @@
       ],
       "interaction_strategy": "Exact controlled pulse ordinals plus real-time bounds and deterministic fault/lifecycle sequences.",
       "residual_gaps": [
-        "Large callback backlog must yield so Stop interrupts without event loss/reorder.",
-        "M-SYNC-006 remains a later-refactor 10 ms phase defect."
+        "M-SYNC-006 remains a recorded later-refactor 10 ms phase defect; its threshold is unchanged.",
+        "Runtime overload is a bounded Lua event-thread stall, not physical-norns performance equivalence."
       ],
       "requirement_ids": [
         "CLOCK-LIVE-HANDOFF-001",
@@ -1597,9 +1597,10 @@
         "M-TRANS-009",
         "M-TRIPLE-004",
         "M-UI-001",
-        "M-UI-002"
+        "M-UI-002",
+        "M-SYNC-023"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-complete-with-known-defect"
     },
     {
       "id": "H10",

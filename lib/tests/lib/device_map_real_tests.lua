@@ -1400,6 +1400,50 @@ function test_real_param_manager_update_param_records_the_stored_nrpn_mode()
   end)
 end
 
+function test_hardening_all_ten_assignment_slots_clear_replace_and_reassign_without_aliasing()
+  isolated(function(env)
+    local dm, pm = update_param_env(env)
+    local digitone = dm.get_device("digitone")
+    local digitakt = dm.get_device("digitakt2")
+    local cc = find_by_id(dm.get_params("digitone"), "fm_parameters_syn_1_ratio_a")
+    local nrpn = find_by_id(dm.get_params("digitakt2"), "source_parameters_source_tune")
+    local channel = {number = 16, trig_lock_params = {}}
+    for slot = 1, 10 do
+      env.cancels, env.dirty_clears = {}, {}
+      pm.update_param(slot, channel, cc, digitone)
+      local assigned = channel.trig_lock_params[slot]
+      luaunit.assert_equals({assigned.id, assigned.param_id, assigned.type},
+        {cc.id, slot_id(16, cc.index), "midi"}, "assign slot " .. slot) -- characterisation
+      luaunit.assert_not_is(assigned, cc, "assignment aliases device cache at slot " .. slot) -- characterisation
+      luaunit.assert_equals({env.cancels, env.dirty_clears}, {{{16, slot}}, {{16, slot}}}) -- characterisation
+
+      env.cancels, env.dirty_clears = {}, {}
+      pm.update_param(slot, channel, cc, digitone)
+      luaunit.assert_equals({env.cancels, env.dirty_clears}, {{}, {}},
+        "same assignment retired live state at slot " .. slot) -- README 241: only changing assignment clears recording
+
+      pm.update_param(slot, channel, nrpn, digitakt)
+      assigned = channel.trig_lock_params[slot]
+      luaunit.assert_equals({assigned.id, assigned.param_id, assigned.nrpn_lsb_mode},
+        {nrpn.id, slot_id(16, nrpn.index), "legacy-half"}, "replace slot " .. slot) -- Digitakt exception is NRPN-only
+      luaunit.assert_equals({env.cancels, env.dirty_clears}, {{{16, slot}}, {{16, slot}}}) -- characterisation
+
+      env.cancels, env.dirty_clears = {}, {}
+      pm.update_param(slot, channel, {id = "none"}, digitakt)
+      luaunit.assert_equals(channel.trig_lock_params[slot], {}, "clear slot " .. slot) -- README 241: X clears the assignment
+      luaunit.assert_equals({env.cancels, env.dirty_clears}, {{{16, slot}}, {{16, slot}}}) -- characterisation
+
+      env.cancels, env.dirty_clears = {}, {}
+      pm.update_param(slot, channel, {id = "none"}, digitakt)
+      luaunit.assert_equals({env.cancels, env.dirty_clears}, {{}, {}},
+        "re-clearing empty slot retired live state at slot " .. slot) -- characterisation
+    end
+    for slot = 1, 10 do
+      luaunit.assert_equals(channel.trig_lock_params[slot], {}, "final isolation slot " .. slot)
+    end
+  end)
+end
+
 -------------------------------------------------------------------------------
 -- param_manager.update_default_params
 -------------------------------------------------------------------------------

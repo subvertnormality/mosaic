@@ -84,3 +84,45 @@ function test_saved_project_restores_locks_masks_scales_and_memory()
   luaunit.assert_nil(channel.step_note_masks[2])
   luaunit.assert_equals(channel.step_note_masks[1], 72)
 end
+
+function test_hardening_all_ten_parameter_assignments_round_trip_on_highest_song_and_channel()
+  program.init()
+  memory.init()
+  local channel = program.get_channel(96, 16)
+  for slot = 1, 10 do
+    channel.trig_lock_params[slot] = {
+      id = "parameter-" .. slot,
+      param_id = "midi_device_params_channel_16_" .. (20 + slot),
+      type = "midi",
+      device_name = "Fixture " .. slot,
+      index = 20 + slot,
+      cc_msb = slot,
+      cc_min_value = 0,
+      cc_max_value = 127,
+      off_value = -1,
+      ui_labels = {"off-" .. slot, "on-" .. slot}
+    }
+    channel.step_trig_lock_banks[slot] = {[slot] = slot * 10}
+    channel.step_trig_lock_slides[slot] = {[slot] = slot % 2 == 0}
+  end
+  local path = os.tmpname()
+  save_and_load(path)
+  os.remove(path)
+  local restored = program.get_channel(96, 16)
+  for slot = 1, 10 do
+    local definition = restored.trig_lock_params[slot]
+    luaunit.assert_equals({definition.id, definition.param_id, definition.type,
+      definition.device_name, definition.index, definition.cc_msb,
+      definition.off_value, definition.ui_labels[2]},
+      {"parameter-" .. slot, "midi_device_params_channel_16_" .. (20 + slot),
+       "midi", "Fixture " .. slot, 20 + slot, slot, -1, "on-" .. slot},
+      "assignment round trip slot " .. slot) -- README 1052-1054: saved projects load again
+    luaunit.assert_equals(restored.step_trig_lock_banks[slot][slot], slot * 10,
+      "lock round trip slot " .. slot)
+    luaunit.assert_equals(restored.step_trig_lock_slides[slot][slot], slot % 2 == 0,
+      "slide round trip slot " .. slot)
+  end
+  restored.trig_lock_params[1].ui_labels[1] = "changed"
+  luaunit.assert_not_equals(restored.trig_lock_params[2].ui_labels[1], "changed",
+    "assignment labels alias across slots") -- characterisation
+end
