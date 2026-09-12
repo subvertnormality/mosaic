@@ -107,6 +107,7 @@ local function install_stubs(env)
     get = function() return env.program_state end,
     get_selected_channel = function() return env.channel end,
     get_channel = function(_, c) return c == SELECTED and env.channel or new_channel(c) end,
+    get_song_pattern = function() return 1 end,
     get_selected_song_pattern = function() return 1 end,
     get_channel_param_slide = function() return false end,
     get_step_param_slide = function(_, s, i) return env.step_slide(s, i) end,
@@ -119,8 +120,8 @@ local function install_stubs(env)
     get_effective_shuffle_amount = recorder_of(env, "program.get_effective_shuffle_amount", 15),
     increment_trig_lock_calculator_id = recorder_of(env, "program.increment_trig_lock_calculator_id"),
     clear_device_trig_locks_for_channel = function() end,
-    clear_masks_for_step = recorder_of(env, "program.clear_masks_for_step"),
-    clear_trig_locks_for_step = recorder_of(env, "program.clear_trig_locks_for_step"),
+    clear_masks_for_step_for_channel = recorder_of(env, "program.clear_masks_for_step_for_channel"),
+    clear_trig_locks_for_step_for_channel = recorder_of(env, "program.clear_trig_locks_for_step_for_channel"),
     toggle_step_param_slide = recorder_of(env, "program.toggle_step_param_slide"),
     toggle_channel_param_slide = recorder_of(env, "program.toggle_channel_param_slide")
   }
@@ -526,14 +527,14 @@ function test_w4c_k2_with_one_held_step_clears_that_steps_locks()
     env.pressed = {{3, 5}} -- step (5 - 4) * 16 + 3 = 19
     press(env, 2)
     -- README.md:607: on the Masks page, hold a step and press K2 to clear its step masks
-    luaunit.assert_equals(calls_named(env, "program.clear_masks_for_step"), {{19}})
+    luaunit.assert_equals(calls_named(env, "program.clear_masks_for_step_for_channel"), {{env.channel, 19}})
     luaunit.assert_equals(calls_named(env, "tooltip.show"), {{"Masks for step 19 cleared"}}) -- characterisation
     turn(env, 1, 1) -- Masks -> Trig Locks
     local mark = #env.calls + 1
     press(env, 2)
     -- README.md:946-947: on the trig lock page, hold the step and press K2
-    luaunit.assert_equals(calls_named(env, "program.clear_trig_locks_for_step", mark), {{19}})
-    luaunit.assert_equals(calls_named(env, "program.clear_masks_for_step", mark), {})
+    luaunit.assert_equals(calls_named(env, "program.clear_trig_locks_for_step_for_channel", mark), {{env.channel, 19}})
+    luaunit.assert_equals(calls_named(env, "program.clear_masks_for_step_for_channel", mark), {})
   end)
 end
 

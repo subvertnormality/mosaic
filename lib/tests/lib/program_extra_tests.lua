@@ -694,6 +694,47 @@ function test_program_extra_clear_masks_for_step_clears_selected_channel_step()
   luaunit.assert_nil(channel.step_chord_masks[40])
 end
 
+function test_program_extra_explicit_step_operations_keep_their_original_target()
+  program.init()
+  program.get().selected_song_pattern = 1
+  program.get().selected_channel = 1
+  local selected = program.get_channel(1, 1)
+  local target = program.get_channel(2, 3)
+  seed_masks(selected, 9)
+  seed_masks(target, 9)
+  seed_locks(selected, 10)
+  seed_locks(target, 10)
+  target.working_pattern.trig_values[11] = 1
+
+  program.clear_masks_for_step_for_channel(target, 9)
+  program.clear_trig_locks_for_step_for_channel(target, 10)
+  program.toggle_step_trig_mask_for_channel(target, 11)
+
+  luaunit.assert_equals(selected.step_note_masks[9], 60)
+  luaunit.assert_equals(selected.step_trig_lock_banks[10], {[1] = 10, [2] = 20})
+  luaunit.assert_nil(target.step_note_masks[9])
+  luaunit.assert_nil(target.step_trig_lock_banks[10])
+  luaunit.assert_equals(target.step_trig_masks[11], 0)
+
+  local selected_scale = program.get_channel(1, 17)
+  local target_scale = program.get_channel(2, 17)
+  seed_locks(selected_scale, 12)
+  seed_locks(target_scale, 12)
+  selected_scale.step_transpose_trig_lock_banks = {[12] = 4}
+  target_scale.step_transpose_trig_lock_banks = {[12] = 7}
+  program.clear_trig_locks_for_step_for_channel(target_scale, 12)
+  luaunit.assert_nil(target_scale.step_scale_trig_lock_banks[12])
+  luaunit.assert_nil(target_scale.step_transpose_trig_lock_banks[12])
+  luaunit.assert_equals(target_scale.step_trig_lock_banks[12], {[1] = 10, [2] = 20})
+  luaunit.assert_equals(target_scale.step_octave_trig_lock_banks[12], 1)
+  luaunit.assert_equals(target_scale.step_trig_lock_slides[12], {[1] = true})
+  luaunit.assert_equals(selected_scale.step_scale_trig_lock_banks[12], 3)
+  luaunit.assert_equals(selected_scale.step_transpose_trig_lock_banks[12], 4)
+
+  luaunit.assert_equals(program.get().selected_song_pattern, 1)
+  luaunit.assert_equals(program.get().selected_channel, 1)
+end
+
 function test_program_extra_clear_single_masks_by_channel_number()
   program.init()
   program.get().selected_song_pattern = 3

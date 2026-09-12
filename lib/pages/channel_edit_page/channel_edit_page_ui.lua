@@ -1582,16 +1582,20 @@ end
 function channel_edit_page_ui.handle_key_two_pressed()
   local pressed_keys = m_grid.get_pressed_keys()
   if #pressed_keys > 0 then
+    local selected = program.get()
+    local song_pattern = selected.selected_song_pattern or 1
+    if not selected.selected_song_pattern then selected.selected_song_pattern = song_pattern end
+    local channel = program.get_channel(song_pattern, selected.selected_channel)
     for _, keys in ipairs(pressed_keys) do
       local s = fn.calc_grid_count(keys[1], keys[2])
       if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
-        program.clear_masks_for_step(s)
+        program.clear_masks_for_step_for_channel(channel, s)
         tooltip:show("Masks for step " .. s .. " cleared")
         channel_edit_page_ui.refresh_masks()
-        pattern.update_working_pattern(program.get_selected_channel().number, program.get_selected_song_pattern())
+        pattern.update_working_pattern(channel.number, program.get_song_pattern(song_pattern))
       end
       if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-        program.clear_trig_locks_for_step(s)
+        program.clear_trig_locks_for_step_for_channel(channel, s)
         tooltip:show("Trig locks for step " .. s .. " cleared")
         channel_edit_page_ui.refresh_trig_locks()
       end

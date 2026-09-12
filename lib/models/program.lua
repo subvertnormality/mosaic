@@ -115,6 +115,18 @@ function program.get_channel(song_pattern, x)
   return program.get_song_pattern(song_pattern).channels[x]
 end
 
+local function get_channel_target_for_selected_song(channel_number)
+  local data = program.get()
+  return program.get_channel(data.selected_song_pattern, channel_number)
+end
+
+local function get_selected_channel_target()
+  local data = program.get()
+  local song_pattern = data.selected_song_pattern or 1
+  if not data.selected_song_pattern then data.selected_song_pattern = song_pattern end
+  return program.get_channel(song_pattern, data.selected_channel)
+end
+
 function program.set(p)
   program_store = model_defaults.migrate(p, device_map and device_map.get_device) or {}
   
@@ -408,21 +420,27 @@ function program.get_trig_lock_calculator_id(channel, parameter)
   return channel.trig_lock_calculator_ids[parameter]
 end
 
-function program.clear_trig_locks_for_step(step)
-  local channel = program.get_selected_channel()
-  program.add_step_scale_trig_lock(step, nil)
+function program.clear_trig_locks_for_step_for_channel(channel, step)
+  channel.step_scale_trig_lock_banks[step] = nil
 
   if channel.number ~= 17 then
     if channel.step_trig_lock_banks and channel.step_trig_lock_banks[step] then
       channel.step_trig_lock_banks[step] = nil
     end
-    program.add_step_octave_trig_lock(step, nil)
+    channel.step_octave_trig_lock_banks[step] = nil
     if channel.step_trig_lock_slides and channel.step_trig_lock_slides[step] then
       channel.step_trig_lock_slides[step] = nil
     end
   else
-    program.add_step_transpose_trig_lock(step, nil)
+    if not channel.step_transpose_trig_lock_banks then
+      channel.step_transpose_trig_lock_banks = {}
+    end
+    channel.step_transpose_trig_lock_banks[step] = nil
   end
+end
+
+function program.clear_trig_locks_for_step(step)
+  program.clear_trig_locks_for_step_for_channel(get_selected_channel_target(), step)
 end
 
 function program.clear_trig_lock_for_step_for_channel(channel, step, parameter)
@@ -459,17 +477,21 @@ function program.clear_device_trig_locks_for_channel(channel)
   channel.step_trig_lock_banks = {}
 end
 
+function program.clear_masks_for_step_for_channel(channel, step)
+  channel.step_trig_masks[step] = nil
+  channel.step_note_masks[step] = nil
+  channel.step_velocity_masks[step] = nil
+  channel.step_length_masks[step] = nil
+  channel.step_micro_time_masks[step] = nil
+  if channel.step_chord_masks and channel.step_chord_masks[step] then
+    for chord_index = 1, 4 do
+      channel.step_chord_masks[step][chord_index] = nil
+    end
+  end
+end
+
 function program.clear_masks_for_step(step)
-  local channel = program.get().selected_channel
-  program.clear_step_trig_mask(channel, step)
-  program.clear_step_note_mask(channel, step)
-  program.clear_step_velocity_mask(channel, step)
-  program.clear_step_length_mask(channel, step)
-  program.clear_step_micro_time_mask(channel, step)
-  program.clear_step_chord_1_mask(channel, step)
-  program.clear_step_chord_2_mask(channel, step)
-  program.clear_step_chord_3_mask(channel, step)
-  program.clear_step_chord_4_mask(channel, step)
+  program.clear_masks_for_step_for_channel(get_selected_channel_target(), step)
 end
 
 
@@ -648,19 +670,29 @@ function program.get_effective_shuffle_amount(channel)
   end
 end
 
-function program.toggle_step_trig_mask(channel, step)
-  ensure_step_masks(channel)
+function program.toggle_step_trig_mask_for_channel(channel, step)
+  if not channel.step_trig_masks then
+    channel.step_trig_masks = {}
+  end
 
-  local trig_values = program.get_channel(program.get().selected_song_pattern, channel).working_pattern.trig_values
+  local trig_values = channel.working_pattern.trig_values
   if trig_values[step] == 0 then
-    program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks[step] = 1
+    channel.step_trig_masks[step] = 1
   elseif trig_values[step] == 1 then
-    program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks[step] = 0
+    channel.step_trig_masks[step] = 0
   end
 end
 
-function program.clear_step_trig_mask(channel, step)
-  program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks[step] = nil
+function program.toggle_step_trig_mask(channel_number, step)
+  program.toggle_step_trig_mask_for_channel(get_channel_target_for_selected_song(channel_number), step)
+end
+
+function program.clear_step_trig_mask_for_channel(channel, step)
+  channel.step_trig_masks[step] = nil
+end
+
+function program.clear_step_trig_mask(channel_number, step)
+  program.clear_step_trig_mask_for_channel(get_channel_target_for_selected_song(channel_number), step)
 end
 
 function program.clear_step_note_mask(channel, step)

@@ -146,7 +146,8 @@ function channel_edit_page.register_press()
       if channel_edit_page_sequencer:is_this(x, y) then
         if is_key1_down then
           channel_edit_page_sequencer:press(x, y)
-          program.toggle_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
+          local channel = program.get_selected_channel()
+          program.toggle_step_trig_mask_for_channel(channel, fn.calc_grid_count(x, y))
         end
       end
     end
@@ -156,7 +157,8 @@ function channel_edit_page.register_press()
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
         if is_key1_down then
-          program.clear_step_trig_mask(program.get().selected_channel, fn.calc_grid_count(x, y))
+          local channel = program.get_selected_channel()
+          program.clear_step_trig_mask_for_channel(channel, fn.calc_grid_count(x, y))
           channel_edit_page_ui.refresh_masks()
         end
       end
