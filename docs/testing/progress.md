@@ -1516,3 +1516,15 @@ unit/integration suite passes 1480/1480. No production code changed. Cross-famil
 assignment UI and probability interactions with random pitch, transitions and
 persistence remain explicit composed/native obligations; the pending S34
 single-lock slide-clear semantics were not altered.
+
+
+## Scale, cache and pentatonic hardening  2026-09-12
+
+H06 now distinguishes 16 editable scale slots from the ten production scale
+types. All 16 slots are exercised through warmed-cache save changes; a copied song
+slot is verified independent of later source edits; type names/numbers are bound;
+and all eight all/merged/random pentatonic setting combinations run through
+step.handle in merged-note and random-offset contexts with exact MIDI assertions.
+The complete Lua unit/integration suite passes 1484/1484. No production code
+changed. The characterised set-all scale alias and unsupported in-place mutations
+remain explicit gaps pending native evidence or route-level coverage.

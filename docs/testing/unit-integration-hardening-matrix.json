@@ -9,7 +9,7 @@
   "counts": {
     "requirements": 141,
     "production_lua_modules": 67,
-    "unit_integration_files": 57,
+    "unit_integration_files": 58,
     "domains": 15
   },
   "coverage_language": {
@@ -840,9 +840,14 @@
       "priority": "critical",
       "finite_axes": [
         {
-          "name": "scale slots",
+          "name": "editable scale slots",
+          "cardinality": 16,
+          "coverage": "exhaustive save/cache invalidation"
+        },
+        {
+          "name": "production scale types",
           "cardinality": 10,
-          "coverage": "exhaustive"
+          "coverage": "exhaustive arithmetic, number and name binding"
         },
         {
           "name": "MIDI pitches",
@@ -860,10 +865,10 @@
           "coverage": "root, degree, rotation, transpose, octave, mask, quantise"
         }
       ],
-      "interaction_strategy": "Exhaust finite switches/pitches per stage; pairwise stages and delayed-voice/recording/merge triples.",
+      "interaction_strategy": "Exhaust finite scale slots, scale types, MIDI pitches and all eight pentatonic switches; pairwise pitch stages plus explicit merged-note/random-offset switch contexts and song-copy cache isolation.",
       "residual_gaps": [
-        "Bind exact scale count and names from production table.",
-        "All edit and song-copy cache invalidation routes."
+        "The set-all-song-patterns scale route aliases one mutable scale table across existing songs; current behavior is characterised and remains a suspected defect pending native reproduction.",
+        "In-place scale mutation outside the supported save route can bypass version-based cache invalidation; production UI routes require composed coverage."
       ],
       "requirement_ids": [
         "CH-GLOBAL-OCTAVE",
@@ -894,6 +899,7 @@
         "lib/tests/lib/integration_tests/scale_and_quantiser_tests.lua",
         "lib/tests/lib/quantiser_mutation_killers_tests.lua",
         "lib/tests/lib/quantiser_tests.lua",
+        "lib/tests/lib/scale_hardening_tests.lua",
         "lib/tests/lib/step_delta_killers_tests.lua",
         "lib/tests/lib/step_mutation_killers_tests.lua",
         "lib/tests/lib/step_test.lua"
@@ -937,7 +943,7 @@
         "M-TRIPLE-001",
         "M-WORKFLOW-001"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-in-progress"
     },
     {
       "id": "H07",

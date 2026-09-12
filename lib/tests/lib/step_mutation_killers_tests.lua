@@ -1187,3 +1187,52 @@ function test_step_killer_sinfonion_sync_alone_ignores_the_scale_lock_on_its_ste
     luaunit.assert_equals({env.sinfonion.root, env.sinfonion.degree, env.sinfonion.mode}, {12, 7, 3})
   end)
 end
+
+-- README.md:789-793 and 1118: the all/merged/random pentatonic switches are
+-- independent. Exhaust all eight settings in contexts that make merged and
+-- nonzero-random conditions observable through emitted MIDI.
+function test_step_hardening_all_pentatonic_switch_combinations()
+  for all_bit = 0, 1 do
+    for merged_bit = 0, 1 do
+      for random_bit = 0, 1 do
+        with_env(function(env)
+          local channel = working_pattern({1}, {
+            note_values = {[1] = 3},
+            lengths = {[1] = 0}
+          })
+          channel.working_pattern.merged_notes[1] = true
+          env.set_param("all_scales_lock_to_pentatonic", all_bit == 1 and 2 or 1)
+          env.set_param("merged_lock_to_pentatonic", merged_bit == 1 and 2 or 1)
+          env.set_param("random_lock_to_pentatonic", random_bit == 1 and 2 or 1)
+
+          step_under_test.handle(1, 1)
+
+          local expected = (all_bit == 1 or merged_bit == 1) and 64 or 65
+          luaunit.assert_equals(notes_of(note_ons(env)), {expected},
+            string.format("merged context %d/%d/%d", all_bit, merged_bit, random_bit))
+        end)
+
+        with_env(function(env)
+          working_pattern({1}, {
+            note_values = {[1] = 2},
+            lengths = {[1] = 0}
+          })
+          set_stock(env, "bipolar_random_note", 1)
+          env.set_param("all_scales_lock_to_pentatonic", all_bit == 1 and 2 or 1)
+          env.set_param("merged_lock_to_pentatonic", merged_bit == 1 and 2 or 1)
+          env.set_param("random_lock_to_pentatonic", random_bit == 1 and 2 or 1)
+          random = function(low, high)
+            luaunit.assert_equals({low, high}, {0, 1})
+            return 1
+          end
+
+          step_under_test.handle(1, 1)
+
+          local expected = (all_bit == 1 or random_bit == 1) and 64 or 65
+          luaunit.assert_equals(notes_of(note_ons(env)), {expected},
+            string.format("random context %d/%d/%d", all_bit, merged_bit, random_bit))
+        end)
+      end
+    end
+  end
+end

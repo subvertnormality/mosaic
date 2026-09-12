@@ -5217,34 +5217,25 @@
     "guard": "tests/behaviour/test_hardening_matrix.py",
     "requirements_owned": 141,
     "production_lua_modules_owned": 67,
-    "unit_integration_files_owned": 57,
+    "unit_integration_files_owned": 58,
     "domains": 15,
     "final_validation": "pending",
     "latest_slice": {
-      "domain": "H04",
+      "domain": "H06",
       "tests": [
-        "lib/tests/lib/program_lock_hardening_tests.lua",
+        "lib/tests/lib/scale_hardening_tests.lua",
         "lib/tests/lib/step_mutation_killers_tests.lua"
       ],
-      "top_level_tests_added": 3,
-      "probability_values": 101,
-      "probability_draws_per_nontrivial_value": 100,
-      "lock_slots": 10,
-      "boundary_song_slots": [
-        1,
-        96
-      ],
-      "boundary_channels": [
-        1,
-        16
-      ],
-      "boundary_steps": [
-        1,
-        64
+      "editable_scale_slots": 16,
+      "production_scale_types": 10,
+      "pentatonic_switch_combinations": 8,
+      "pentatonic_contexts": [
+        "merged-note",
+        "random-offset"
       ],
       "lua_suite": {
-        "collected": 1480,
-        "passed": 1480,
+        "collected": 1484,
+        "passed": 1484,
         "failed": 0
       },
       "production_change": false
