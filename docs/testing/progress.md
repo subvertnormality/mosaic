@@ -1475,10 +1475,15 @@ Third pass: M-STARTUP-TRANSPORT-001 pins both boots from the native export (fres
 no transport; autosave: one Stop per port). M-MAP-004 found that a fixed-channel mask
 map wrote another channel's held-step masks from the selected channel's value
 (fixed, SEM-017). M-TIME-013, M-MEMORY-007 and M-GESTURE-ORDER-001 pass in both
-lanes. M-PAT-BOUNDARY-001 is red at a 1 ms margin (controlled) and green at 10-80 ms:
-an edit that close to a song boundary is heard one pass late; the fix changes
-boundary scheduling, so it is deferred to the refactor. A full suite at 96d465d runs
-with the concurrent scheduler.
+lanes. M-PAT-BOUNDARY-001 now uses channel 16 to expose the late rebuild window. A
+complete note-edit press and final release 31/30 ms before the song boundary reproduced
+the stale-note fault in three controlled and three real-time runs; native callback
+completion timestamps prove both halves completed before every boundary. The next pass
+played C60 instead of the committed G67, while 80 ms controls passed in both lanes.
+This qualifies the defect for an isolated pre-refactor fix. Opus and Sol had converged
+on a controlled-time exception for the former sub-tick case, but the stronger normal
+two-lane baseline makes that exception unnecessary. A full suite at 96d465d runs with
+the concurrent scheduler.
 
 
 ## Independent handover audit and canonical dense performance — 2026-09-12
