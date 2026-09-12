@@ -1,6 +1,17 @@
 {
   "schema_version": 1,
-  "status": "planned-hardening-matrix-reconciled",
+  "status": "minimal-final-hardening-approved",
+  "approved_final_scope": {
+    "frozen_domains": ["H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08", "H09", "H10", "H11", "H12", "H13"],
+    "remaining_work": [
+      "Align the Lua runner to the production revision under test, then run the complete existing Lua suite with nonzero source-bound collection.",
+      "Run tests/behaviour/test_hardening_matrix.py.",
+      "Add one real external-lattice coroutine regression: Stop after the initial backlog yield must prevent stale catch-up work."
+    ],
+    "prohibited_expansion": "Do not add combinatorial, generated, pairwise, profile, reviewer, mutation or native matrices to this pass. New seam tests belong to the refactor card that changes that seam.",
+    "h14": "Profile-dependent and deferred; retain existing software tests and behaviour anchors, but unavailable profile or hardware-oracle gaps do not block this card.",
+    "h15": "Owned by R01 and the performance ledger. Retain m_clock_performance_tests.lua as an existing fast regression, but performance recipes, measurements and real-time failures are outside this card."
+  },
   "base_revision": "7141f50",
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
@@ -24,7 +35,8 @@
     "Tests exercise production modules and mock only external boundaries.",
     "No physical norns equivalence claim.",
     "Digitakt compatibility applies only to NRPN.",
-    "No performance fix or general refactor in this pass."
+    "No performance fix or general refactor in this pass.",
+    "The approved_final_scope overrides any earlier instruction to expand coverage or obtain another review."
   ],
   "domains": [
     {
@@ -2070,10 +2082,11 @@
           "coverage": "exhaustive routing"
         }
       ],
-      "interaction_strategy": "Software routing/state matrices; native profile oracles; no physical-output claim.",
+      "interaction_strategy": "Deferred profile-dependent work. Retain the existing software tests and behaviour anchors without expanding routing/state matrices or requiring a profile oracle.",
       "residual_gaps": [
         "XA-009 through XA-014 remain open.",
-        "S52 Ansible 3/4 pull-up semantics unvalidated."
+        "S52 Ansible 3/4 pull-up semantics unvalidated.",
+        "These profile and hardware-oracle gaps are deferred and do not block the final unit/integration card."
       ],
       "requirement_ids": [
         "MOD-HELD-001",
@@ -2101,7 +2114,7 @@
         "M-MOD-004",
         "M-SIN-001"
       ],
-      "status": "planned-hardening"
+      "status": "profile-dependent-deferred"
     },
     {
       "id": "H15",
@@ -2130,13 +2143,14 @@
           "coverage": "behavior anchors"
         }
       ],
-      "interaction_strategy": "Constrained proxy measurements, exact event accounting and named high-risk triples; load space remains partitioned.",
+      "interaction_strategy": "Performance ownership is R01 and the performance ledger. Retain the existing fast Lua regression only; do not add unit/integration performance matrices here.",
       "residual_gaps": [
         "A deterministic 1,280-admission slide workload crosses the 1,024-entry ring and verifies every final channel/slot owner under a 5 ms host characterisation bound; it passed three integrated repeats. This is not physical-norns equivalence.",
         "PERF-003 16-channel timing fails 2/3 repeats.",
         "Controlled M-ENDURANCE-001 passed three fresh-process 608.29-second logical runs with exact event counts and 1 ns logical error. The real-time ten-minute run failed after a persistent 42\u201343 ms port-1 phase shift began around 126 seconds (p99 43.336 ms, final 42.392 ms). This remains a real-time musical-timing failure and refactor blocker. The retained run has no native clock trace, so direct cause is unproven; generic trace evidence from emulator commit `2223a23` shows the pinned official internal-clock skip-ahead branch can produce an exact 41.6666666667 ms displacement after a two-deadline miss. It neither attributes this endurance shift to that branch nor establishes physical-norns behaviour.",
         "PERF-004 has an executable constrained input-pressure recipe. PERF-008 now has an executable 16-channel overload/recovery recipe with exact MIDI ownership and timeline fingerprints, post-overload grid/frame oracles, CFS-throttling proof and the unchanged 10/50/20 ms timing gates. Its clean-revision diagnostic retained at /home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07 failed p99/maximum/final phase at about 70/70/68 ms while ownership, rendering, service, memory and queue-recovery gates passed. This is a refactor blocker, not a hardware claim. PERF-005 through PERF-007 still need individual executable recipes after duplicate-coverage reconciliation.",
-        "Final full suite waits for held UX verdicts."
+        "Final full suite waits for held UX verdicts.",
+        "These are R01/performance-ledger obligations, not remaining unit/integration hardening work."
       ],
       "requirement_ids": [
         "PERF-MIDI",
@@ -2219,7 +2233,7 @@
         "M-SLIDE-CAPACITY-001",
         "M-WORKFLOW-001"
       ],
-      "status": "hardening-in-progress"
+      "status": "moved-to-r01-performance-ledger"
     }
   ]
 }

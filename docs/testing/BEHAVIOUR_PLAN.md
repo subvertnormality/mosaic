@@ -44,35 +44,34 @@ paths remain required. Do not exclude MIDI timing merely because audio is exclud
 
 ## What complete coverage means
 
-T00 binds README.md AND cheat_sheet.html, full commit and content hashes. The user confirmed on 2026-09-07 that the source-header browser manual is derived from repository documentation. README.md and cheat_sheet.html are the authoritative inventory sources; the browser view adds no independent source obligation. Parse all
-headings and stable anchors, then manually-by-code-review reconcile each section's
-individual normative statements, options, gestures and limits into atomic
-requirements. This is specification review, never manual product acceptance.
-Pure installation prose, examples and future roadmap entries get explicit
-classifications and reasons; no blanket section exclusions. Changes to the manual
-invalidate its coverage reconciliation until new statements are classified.
+T00 binds README.md AND cheat_sheet.html, full commit and content hashes. The user confirmed on 2026-09-07 that the source-header browser manual is derived from repository documentation. README.md and cheat_sheet.html are the authoritative inventory sources; the browser view adds no independent source obligation. Use headings and stable anchors to inventory each user-visible workflow, setting,
+gesture and limit. Record a source disposition for installation prose, examples,
+repeated wording and future roadmap material, but do not turn every sentence into
+a separate requirement. This is specification review, never manual product
+acceptance. Changes to the manual require review of the affected workflow or
+setting, not a wholesale documentation re-audit.
 
-Every requirement records ID, source anchor/line/text hash, intended behaviour,
-preconditions, input recipe IDs, independent expected outputs, domain/boundaries,
-interactions, owning card, required time lanes and implementation/run status.
-Collection fails missing, duplicate or unmapped IDs, zero-case selections, missing
-expected outputs, unsupported required capabilities and skipped/xfail cases.
+Every workflow or setting records ID, source anchor, intended behaviour,
+preconditions, input recipe IDs, independent expected outputs, selected
+domain/boundaries, applicable interactions, required time lanes and run status.
+Collection fails missing or duplicate required workflows, zero-case selections,
+missing expected outputs, unsupported required capabilities and skipped/xfail
+cases. It does not require duplicate prose mappings or a separate case for each
+equivalent rendering of the same workflow.
 Recorded evidence from emulator C08 is migration input, not automatic green status
 for tests moved to another tree or a different Mosaic revision.
 
-Cover every finite selector option and each state transition. Enumerate small
-musical domains exhaustively: 128 grid cells, 16 pattern/channel/scale slots,
-all scales/degrees/rotations, legal clock divisions and documented enum values.
+Use exhaustive tables only for cheap pure functions and small independent domains,
+such as codecs, merge formulas, enum tables and arithmetic boundaries. Exercise
+end-to-end workflows with first/interior/last, wrap, cancellation, failure and
+isolation partitions; do not repeat every UI route for every table value.
 For large numeric domains use min, min+1, zero/sentinel, default/interior, max-1,
-max, below/above-bound attempts and every discontinuity; use full enumeration
-where cheap under controlled time. Record selected domains explicitly.
-For arbitrary-length input sequences, exhaustive means complete declared feature
-coverage plus systematic exploration, not a claim to enumerate infinite histories.
-Maintain a checked interaction matrix: all applicable pairs of behaviour families,
-with named exclusions for meaningless pairs, and selected triples involving timing,
-locks/recording, song changes and lifecycle. Fixed-seed state-machine campaigns
-exercise longer histories and shrink failures to minimal physical-input recipes.
-Coverage breadth must not be purchased by removing specific musical assertions.
+max and every discontinuity. Record selected domains explicitly. For arbitrary
+histories, retain a minimized fixed-seed regression only when it has found a
+specific defect. Do not require universal pairwise matrices, state-machine
+campaigns, or Cartesian products. The named critical interactions below are the
+required cross-feature set. Coverage breadth must not be purchased by removing
+specific musical assertions.
 
 ## Oracles and bug decisions
 
@@ -159,26 +158,27 @@ specified from the intended algorithm before observing a candidate.
 | Family | Required cases and independently observed consequences |
 |---|---|
 | F01 Startup/config/devices | Fresh/saved boot, all supported device types/config fields, absent device, invalid/truncated/duplicate/out-of-range config, assignment commit/cancel, wrong/missing ports, no unintended host writes; visible selection and exact MIDI routing. |
-| F02 Navigation/display | Every grid/norns page, all keys/encoders, press/hold/shift combinations and thresholds, simultaneous holds/releases, tooltips/dashboard values, active/edit-only/empty indicators, live redraw, reconnect/focus loss, page wrap/clamp; test browser rendering against raw frames. |
-| F03 Pattern editing | All16 slots and64 steps, group1/16/17/32/33/48/49/64 boundaries, trig create/remove/XOR/paint/preview/cancel/shift, note/velocity ranges including zero, group copying, length1/64/wrap/next-trig cutoff/reset, no cross-slot corruption. |
+| F02 Navigation/display | Cover each documented page and gesture through boundary partitions, including hold/release, cancellation, visible indicators and isolation. Retain raw frame/grid assertions for display regressions; browser automation is required only for a changed renderer or browser-specific workflow. |
+| F03 Pattern editing | Exercise full pure pattern/step tables where cheap; use end-to-end boundary slots/steps, create/remove/XOR/paint/preview/cancel, length/wrap/cutoff and cross-slot isolation partitions. |
 | F04 Rhythm generators | All five drum banks,128 patterns, tresillo8..64 and A/B asymmetry, every Euclid fill/length1..32 including fill>length and rotation, numeric primes/masks/factors and wrap. Check whole LED pattern, pitch/velocity at hits, silence at rests, paint composition and seeded random controls. |
-| F05 Channels/merges | All16 channels, independent start/end/global17 lengths, empty/single/multiple assignments, two/three-pattern union/intersection/exclusion including triple overlap, all note/velocity/length modes and fixed-pattern override, ties/fractions/negative/clamped results, order independence where promised, mute/unmute while notes overlap. |
-| F06 Harmony | All scale/root/degree/rotation/transpose/octave choices and boundaries,16 scale slots, active versus edit-only, global+local+lock composition, chromatic/raw/snapped/fully quantised masks, all/random/merged pentatonic switches independently and together, scale17 length/locks and held-scale option; exact voiced pitches. |
+| F05 Channels/merges | Exhaust pure merge formulas and modes where cheap. Use boundary partitions for channel/assignment/range state, including two/three-pattern overlap, ties/fractions/clamps, mute ownership and order independence. The critical merge interactions below remain mandatory. |
+| F06 Harmony | Exhaust pure scale and pitch tables where cheap. Use boundary partitions for slots, global/local/lock composition, masks and pentatonic choices with literal resulting pitches. The critical scale/lock interactions below remain mandatory. |
 | F07 Masks/memory | Trig/note/velocity/length and all chord masks, channel defaults versus step overrides, unset versus zero, partial edits, clear-step/clear-all, undo/redo/endpoints/forget branching, record-generated history, isolation between channels/song slots, musical restoration after save/reload. |
-| F08 Clocks/transport | Start/stop/reset and shift-stop, every division/multiplier, inheritance versus override, swing -50/0/+50 and interior, every shuffle feel/basis, live setting change application point, independent coprime channels, internal and external MIDI clock source changes, lost/jittered clock, tempo ramps/steps and pending work. |
+| F08 Clocks/transport | Exhaust legal clock-value tables at the oracle layer; use end-to-end boundary partitions for start/stop/reset, inheritance, swing/shuffle, pending work and source changes. Preserve the explicit internal/external sync, lost/jittered clock and timing regressions. |
 | F09 Trig parameters | Every stock parameter and legal enum/range: probability0/100/intermediate, fixed/quantised/random/twos precedence, positive/negative/zero randomness and pentatonic interaction, fully-quantise override, root mute; seeded distributions plus exact allowed sets/counts. Device parameters: all supported types/CC bounds and malformed maps. |
-| F10 Chord articulation | 0..4 extra voices, duplicate pitches, bounds, each shape/order/velocity rule, strum versus arp precedence, rests, signed spread/acceleration, tiny/long/fractional divisions, scale changes mid-strum, mute/stop/song changes during delayed notes, balanced releases on all channels/ports. |
+| F10 Chord articulation | Exhaust small pure shape/order tables where cheap; use representative boundary voices, rests, delayed-note ownership and signed/fractional timing cases. Test routing ownership on representative channels and ports rather than every equivalent route. |
 | F11 Locks/slides | Global/channel/step precedence for params/masks/scales/transpose/octave, trigless on/off, set/edit/clear/undo, one/no/multiple endpoints, equal values, increasing/decreasing slopes, wrap on/off, step versus global slides, endpoint inclusion/rounding, no slide across song patterns, clock/scale changes mid-slide. |
-| F12 Song | All90 slots, select/queue/copy/clear documented gestures, empty/active/playing indicators, repeats and sequence length bounds, mode on/off, reset-at-repeat/change options, per-sequence tempo, unequal channel lengths, queued switches at boundaries, switches during held input/recording/locks, no double/skipped transition. |
+| F12 Song | Use first/interior/last slot and sequence-boundary partitions for select/queue/copy/clear, indicators, reset modes, tempo and unequal lengths. Retain held-input, recording and lock transition regressions without executing every UI gesture at all slots. |
 | F13 Recording | Arm/disarm, held-step and live notes/chords/CC, correct/wrong port/channel, quantised onset and duration, just-before/on/after boundaries, same-note overlap, note-off after disarm/stop/slot change, velocity-zero, sustain if supported by manual/config, capacity bounds, undo and round-trip playback. |
-| F14 Mapping/protocol | PMAP learn/edit/remove/persistence, absolute/relative binary-offset limits, selected/all-channel routing, white-key mapping and degree/rotation/transpose combinations, all16 MIDI channels, running status/realtime/SysEx/partial packets, no accidental loopback, Elektron program/channel/reset options, Sinfonion software messages. |
+| F14 Mapping/protocol | Cover documented PMAP, routing, mapping, Elektron and Sinfonion workflows. Running-status, SysEx and partial-packet permutations belong to generic MIDI/runtime conformance unless a Mosaic workflow demonstrates a defect. |
 | F15 Persistence | New/save/load/cancel/overwrite, names and file dialogs, PSET/PMAP/project/autosave, fresh/cold/reload continuity, malformed/truncated/unknown-version data, failed writes/permissions/interruption with prior data preserved, isolated worktree data, history semantics; compare reconstructed musical output. |
-| F16 Modulation | Activate the pinned matrix/toolkit mods through native lifecycle and configure each via user controls. Verify both documented integration paths changing Mosaic MIDI device parameters, depth/rate boundaries and competition with manual edits/locks/slides. Use separately sourced mod expectations only for chosen trajectories; attribute a shape defect to the mod and routing/precedence defects to Mosaic. Full third-party mod conformance is not a Mosaic-manual requirement. No direct params:set as the positive user workflow. |
-| F17 Recovery/performance | Panic, all-note-off accounting, interrupted client/backend, capture overflow/drop, reconnect, ten lifecycle cycles, mixed16-channel load with locks/slides/chords/recording, autosave intervals, bounded action/render latency, external clock stability, explicit overload failure without lost evidence. |
-| F18 Composition/refactor | Manual's complete rhythm/harmony/melody/song/modulation recipes spanning several features, pairwise matrix and selected stress triples, reproducible generated histories, before/after restart equivalence and baseline/candidate/refactor semantic comparison. |
+| F16 Modulation | Keep only documented Mosaic routing and precedence smoke workflows. Broad Matrix/Toolkit trajectory, conformance and performance work is deferred until the user restores that priority. No direct params:set is a positive user workflow. |
+| F17 Recovery/performance | Reuse the named panic, lifecycle, endurance and PERF recipes for recovery, timing and resource evidence; do not add a second cross-product lifecycle/performance matrix. |
+| F18 Composition/refactor | Retain representative documented composition workflows, restart equivalence and the named critical stress combinations. Do not require universal pairwise matrices or general state-machine campaigns. |
 
-Any documented parameter not named in this table must still receive its own atomic
-requirement in T00. This table is the minimum family scope, not the final count.
+Any documented parameter not named in this table must be assigned to its owning
+workflow or setting in T00. This table is the minimum family scope, not a mandate
+to manufacture an independent case for repeated prose or equivalent UI paths.
 Audio-only settings get specific scope classification, never blanket exclusion of
 their software routing, selection or persistence behaviour when relevant to MIDI.
 
@@ -195,40 +195,41 @@ create a dedicated branch/worktree from the agreed base without touching existin
 changes. Bind manual/source/runtime identity. Populate atomic F01–F18 requirements
 and domains, classify scope, reconcile prior emulator coverage and known bugs.
 Run unchanged unit baseline and one real startup/edit/MIDI scenario against the
-worktree. Output plan, inventory, bugs ledger and baseline evidence. Done only when
-every manual statement has a disposition and the runtime proves which code loaded.
+worktree. Output plan, workflow/parameter inventory, bugs ledger and baseline
+evidence. Done when every required workflow or setting has a disposition and the
+runtime proves which code loaded.
 
 ### T01 — Mosaic-owned runner and trustworthy observations
 Depends: T00. Port existing recipes/oracles into Mosaic; expose needed generic
 client functionality in emulator. Supply a single command with list/filter/run/
 replay and require-all, stable case IDs and pinned external dependencies. Isolated
 data by default; writes never target the user's live project. Record complete
-inputs/MIDI, bounded snapshots, errors and cleanup. Inject wrong pitch, dropped
-release, swallowed scheduler error, stale evidence and missing inventory; each
-must fail the intended check. Done when baseline cases run from Mosaic with no
+inputs/MIDI, bounded snapshots, errors and cleanup. Keep one reusable fault guard for each oracle class: semantic output, release
+ownership, runtime error and stale/missing evidence. Done when baseline cases run from Mosaic with no
 private fixture-driver dependency and all false-green probes are detected.
 
 ### T02 — Controlled time and temporal reference
 Depends: T01 and generic clock boundary proof. The user authorises bringing
 C16 capability forward alongside real-time work as needed for musical timing.
-Inventory all runtime/mod time sources; implement native clock adapters and exact
+Inventory time sources used by required Mosaic workflows; implement native clock adapters and exact
 advance barriers in emulator, independent of Mosaic. Establish rational-beat
 reference tables, rounding decisions and generic timer/metronome/MIDI probes.
-Run three D repeats and E comparison across resets, tempo changes and cancellation.
-Do the bounded P5 clock review before declaring D admitted. Failed/partial D does
+Repeat native or disputed timing cases three times and use one deterministic D run
+with coherence guards otherwise. Compare E across resets, tempo changes and
+cancellation. Failed/partial D does
 not stall independent E cases, but full campaign completion requires both lanes.
 
 ### T03 — Editing, harmony and existing defect migration
 Depends: T01; add D after T02. Implement F02–F07 positive, negative, boundary and
 interaction cases. Bring across existing native tests with fresh worktree evidence.
-Validate known candidate patches against current source individually and combined;
-record each bug's red/green evidence. Finish unresolved merge/one-step semantics
+Validate unresolved candidate fixes with their minimal red/green evidence. Finish unresolved merge/one-step semantics
 before affected cases can pass. Done when every owned atomic requirement passes
 E and admitted D, including preserved MIDI ordering and complete phrase checks.
 
 ### T04 — Musical scheduling, locks, articulation and songs
 Depends: T03 for editing primitives; T02 for D. Implement F08–F12 with independently
-specified beat/pitch/CC tables, all enum options, edge timing and pair interactions.
+specified beat/pitch/CC tables, finite pure tables where cheap and end-to-end
+boundary partitions.
 Test tempo/phase changes, external sync, positive/negative shuffle/slide offsets,
 record and stop races, pending chord releases and song-repeat boundaries. Diagnose
 musical error separately from dispatch jitter. Inject wrong transition, one-pulse
@@ -236,8 +237,8 @@ duration shift and lost delayed note-off. Done when exact D and bounded E result
 pass and every seeded fault fails; no correction by output-derived timing goldens.
 
 ### T05 — Recording, mapping, devices and modulation
-Depends: T01 and required T03/T04 primitives. Implement F01/F13/F14/F16, both real
-mod profiles and base MIDI profile. Establish event boundary ownership before
+Depends: T01 and required T03/T04 primitives. Implement F01/F13/F14 and the
+documented modulation smoke path; broad Matrix/Toolkit work is deferred. Establish event boundary ownership before
 testing recording exactly on ticks. Verify recorded playback, controller routing,
 all lock/mod parameter interactions and software program messages. Fix emulator
 MIDI stream discrepancies with generic probes. Done when all owned requirements
@@ -245,32 +246,31 @@ pass with real inbound MIDI and exact/referenced resulting output in D/E lanes.
 
 ### T06 — Persistence, lifecycle and realistic compositions
 Depends: T03; integrate T04/T05 as available. Implement F15/F17/F18, cold process
-restarts, autosave, failed writes, corrupted data and isolation. Ten lifecycle
-cycles plus ten-minute real-time mixed endurance meet the unchanged central gates.
+restarts, autosave, failed writes, corrupted data and isolation. Use the named lifecycle and ten-minute mixed-endurance recipes; do not duplicate
+them with a separate composition matrix.
 Complete manual composition walkthroughs as executable recipes. Done when files,
 musical output and visible state round-trip and faults cannot clobber valid data.
 
 ### T07 — Systematic bug hunting and coverage closure
-Depends: T02–T06. Reconcile manual requirements against collected and executed
-cases; fail omissions. Run full enum/domain matrices and seeded state-machine
-histories with bounded lengths increasing from2 to32 to256 actions. Record seed,
-generator version, legal-action model, coverage novelty and shrinking recipe.
-Each family receives all declared pair interactions and timing-sensitive triples.
-Expand specific counterexamples, not indiscriminate full Cartesian products.
-Run scheduled long campaigns separately from the fast development subset; all
-required domains must finish before declaring suite complete. Review the coverage
-and timing oracle boundary with proportionate Paranoia, fix substantive findings.
+Depends: T02–T06. Reconcile required workflows and settings against collected and
+executed cases; fail omissions. Run cheap finite pure tables, boundary partitions,
+the named critical interactions and any minimized regression seed retained from a
+specific defect. Expand a counterexample only where it identifies a new boundary;
+do not require universal pairwise, state-machine or Cartesian campaigns. Run the
+named endurance and performance recipes separately from fast feedback. Review is
+optional when a material oracle or scope dispute remains; it is not a provider or
+approval gate.
 
 ### T08 — Refactor baseline and ongoing use
 Depends: T07 and required emulator reliability gates. Freeze a correct Mosaic
-baseline commit, tests/oracles, emulator lock and documented semantics. Run full
-zero-skip D/E/B/R/F and unchanged unit selection from a fresh worktree. Produce
-manual coverage report, fixed-bug ledger, runtime/profile limitations and commands
-for focused versus full validation. Prove an independently seeded musical and
-control regression is detected without changing test expectations. Refactoring
-starts only after this gate; tests must remain implementation-independent. Later
-refactors compare semantic output to this validated baseline AND independent
-oracles, so matching an old bug is not treated as correctness.
+baseline commit, tests/oracles, emulator lock and documented semantics. The shared
+final qualification runs the complete fast suite, all applicable targeted native
+timing/output cases, and the named endurance/performance recipes once from a frozen
+source tree. It records skipped applicability explicitly and has no silent green
+path. Produce the workflow coverage report, fixed-bug ledger, runtime/profile
+limitations and focused commands. Later refactors compare semantic output to this
+validated baseline and independent oracles, so matching an old bug is not treated
+as correctness.
 
 ## Review and execution mechanics
 
@@ -406,9 +406,9 @@ Complete these before the broad refactor; isolated parameter tests are insuffici
 | Scale changes × delayed voices and recording | Scale-lock hold-until-wrap option, replacement locks and probability-rejected steps; global track17 versus per-channel boundaries. Change merged pattern/scale while chords, strums, arps and keyboard notes are pending. Verify intended pitch application point, unchanged owned releases, recorded/replayed pitch and first-press/final-release duration. |
 | Required stress combinations | Merge + scale lock + random/trig parameter; trigless + slide + external-clock change; recording + lock edit + song transition; manual edit + modulation + lock restoration. Add channel/source/player reassignment with queued work and save/reload of each critical combined state. Audio/JF equivalents use the supported XA-009..014 profiles and their own output oracles; MIDI evidence alone cannot certify them. |
 
-Expand small finite domains fully. Use explicit boundary cases and a reviewed
-pairwise interaction matrix plus the named high-risk triples, avoiding an opaque
-Cartesian explosion. Expected merge formulas, pitch tables, event order and
+Expand small independent pure domains fully where cheap. Use explicit boundary
+cases and the named high-risk triples; do not require a general pairwise matrix.
+Expected merge formulas, pitch tables, event order and
 musical deadlines must be independently specified from the manual/agreed contract.
 Use actual user inputs and full MIDI/grid/screen traces, plus PCM/ii/CV where
 applicable. Controlled timing checks supplement real-time validation. Fault guards
@@ -449,9 +449,8 @@ independently calculated musical deadline; exceeding the deadline is a hard fail
 Every failure is minimized and profiled before optimization. Retain it as a unit,
 integration or behaviour regression at the cheapest faithful layer, then rerun the
 combined musical case. Do not obtain green results by lowering event density,
-dropping redraws, weakening timing or changing expected output. Base-MIDI is the
-current priority; Toolkit/Matrix performance is deferred until the user restores
-that priority.
+dropping redraws, weakening timing or changing expected output. Base-MIDI is the current priority. Toolkit/Matrix performance and broad third-party
+conformance are deferred until the user restores that priority.
 
 PERF-008 is the overload/recovery recipe. In the constrained proxy, a physical-UI-built
 16-channel pattern carries a four-step pitch fingerprint while four competing processes

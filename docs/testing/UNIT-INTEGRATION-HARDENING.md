@@ -1,11 +1,39 @@
 # Final unit and integration hardening pass
 
-Status: in progress; reconciled matrix and drift guard landed 2026-09-12. Test expansion and final validation remain open.
+Status: in progress; reconciled matrix and drift guard landed 2026-09-12. The
+approved minimal final scope below supersedes further test expansion and review
+work for this card.
 
 Run after the planned emulator delivery and Mosaic behaviour campaign and before
 the broad Mosaic refactor. Existing unit/integration tests remain useful during
 delivery; this final pass systematically closes gaps left by the native campaign.
 Do not mark the full goal complete until this card and the existing gates pass.
+
+## Approved minimal final scope
+
+H01 through H13 are frozen as completed evidence. Preserve their tests, stated
+residuals and coverage claims, but do not add axes, samples, generated sequences,
+pairwise arrays or Cartesian products to them. The completed matrices remain
+refactor guards; they are not a standing request for more combinations.
+
+The only remaining unit/integration work is:
+
+1. align the Lua runner with the source revision under test and run the complete
+   existing Lua suite with nonzero, source-bound collection;
+2. run tests/behaviour/test_hardening_matrix.py; and
+3. add one coroutine-level external-clock regression that issues Stop after the
+   initial backlog yield and proves stale catch-up work does not continue.
+
+No further reviewer, Paranoia, mutation, native, profile, performance or
+combinatorial-expansion requirement applies to this final hardening card. Add a
+new test only when a later refactor changes the seam it protects; that work belongs
+to the affected refactor card, not to this baseline pass.
+
+H14 is profile-dependent and deferred. Its retained software tests and behaviour
+anchors remain evidence, but unavailable profile or hardware-oracle gaps do not
+block this unit/integration card. H15 is owned by R01 and the performance ledger;
+keep its existing fast regression test, but do not treat performance recipes,
+measurements or real-time failures as unit/integration hardening work.
 
 ## Scope and choice of test layer
 
@@ -14,14 +42,11 @@ existing unit/integration tests, behaviour cases, and known defect regressions.
 For each domain record legal values, boundaries, invalid inputs where supported,
 state transitions, interacting features, cheapest faithful test layer, and evidence.
 
-Exhaust finite, affordable domains: steps, pattern/channel/song slots, pitch and
-velocity values, length choices, parameter sentinel/bounds, scale and chord
-choices, and meaningful combinations. Calculate matrix cardinality before
-execution. Use unit tests for pure transforms and invariants; use integration
-tests when ownership, state, scheduling, persistence or multiple modules matter.
-For large or unbounded products, record the residual domain and use boundary
-partitions, justified pairwise/higher-order combinations, and deterministic
-generated sequences with retained seeds. Do not call sampled coverage exhaustive.
+The existing finite-domain, partitioned and generated evidence in the frozen rows
+is retained as recorded. Do not extend it during this pass. Use unit tests for pure
+transforms and integration tests when ownership, state, scheduling, persistence or
+multiple modules matter only when the single remaining Stop/backlog regression
+needs that composition.
 
 Prioritise:
 
@@ -54,41 +79,29 @@ Check both results and absence of unintended changes: wrong-channel writes,
 mutation of copied data, leaked clocks/callbacks, missing or duplicate releases,
 and stale state after a failed operation. Use fixed seeds and report failing
 inputs so a generated counterexample can become a minimal permanent regression.
-Keep existing native tests as user-visible integration anchors. A cheap matrix
-can extend their combinatorial depth but cannot substitute for an unimplemented
-documented workflow or establish emulator timing fidelity by itself.
+Keep existing native tests as user-visible integration anchors. They are not a
+requirement to run native work for this final hardening card.
 
 ## Execution and completion
 
-1. Produce `unit-integration-hardening-matrix.json` with owners, domains,
-   cardinalities, selected test layers, existing evidence and unresolved gaps.
-2. Give the matrix one proportionate Codex-only Paranoia pass focused on omitted
-   combinations, circular oracles and mocked-away interactions. Use the local
-   review budget; no per-matrix mutation campaign or dual-vendor review.
-3. Add and run the matrices. Minimise discovered failures, establish a regression,
-   make isolated candidate fixes, and run the affected native anchors when a fix
-   changes observable behaviour. Preserve all previously authorised semantics.
-4. Run the final unit/integration suite with pinned dependencies, nonzero
-   collection, explicit skip handling and source-bound results. Run required
-   native and release checks affected by these changes.
-5. Publish `unit-integration-hardening-validation.json`, the matrix, tests and
-   fixes on the authorised branch. Record full finite-domain coverage separately
-   from partitioned/generated coverage, with every residual explicitly stated.
+1. Confirm the runner uses the intended production revision; fail closed on a
+   missing source module, hidden fetch, skip or zero collection.
+2. Add the single external Stop/backlog coroutine regression, minimising any
+   discovered failure before an isolated repair.
+3. Run the complete existing Lua suite and tests/behaviour/test_hardening_matrix.py.
+4. Publish source-bound results and the existing matrix; do not add review receipts,
+   new coverage matrices or native/performance evidence to this card.
 
-Done only when the matrix is reconciled, all required tests pass, discovered
-defects are resolved, any material review findings are addressed, and the
-original behaviour/emulator gates still pass. This card does not authorise the
-subsequent refactor; it strengthens the prerequisites for that work.
+Done only when the source-bound existing suite, hardening guard and single
+Stop/backlog regression pass. This card does not authorise the subsequent refactor;
+it strengthens the prerequisites for that work.
 
 
 ## External-clock delayed callback responsiveness
 
-Required follow-up from Codex review01a08750-93e8-7213-a7d0-c7607971ab6d.
-The external lattice currently reconciles all elapsed pulse indices in one loop.
-Inject a substantially delayed callback at the coroutine/unit boundary, measure
-work before yielding, and verify that Stop can interrupt backlog processing.
-If a work budget is needed, choose it from the responsiveness measurement and
-yield between bounded batches without losing/duplicating pulse indices or
-reversing release/onset order. Verify the native Stop path too. Cold acquisition
-normally reconciles only four lattice pulses; it is not evidence for large
-backlog responsiveness. This follow-up remains open before full goal closure.
+The sole remaining regression is coroutine-level: inject a substantially delayed
+external callback, issue Stop after the initial backlog yield, and verify stale
+catch-up work does not continue. It must use the real lattice loop and retain
+release/onset ordering. Cold acquisition normally reconciles only four lattice
+pulses and is not evidence for this backlog path. Native Stop verification is
+owned by the existing behaviour/performance gates, not this final hardening card.

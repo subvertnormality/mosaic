@@ -75,9 +75,10 @@ screen parameter and grid edit assertions alongside sounding/wire output.
 
 ## Staged cards and selected regression cases
 
-Every case below is a planned family. Expand the named small finite choices fully;
-use min/min+1/interior/max-1/max and discontinuities for larger domains. Cases list
-the high-value minimum, not an exemption from remaining manual requirements.
+Every case below is a planned representative route. Expand only cheap pure encoding
+tables fully; use min/min+1/interior/max-1/max and discontinuities for end-to-end
+work. The cases preserve required Mosaic workflows without recreating generic
+audio/Crow/player conformance or backend Cartesian products.
 All run real-time; selected logical input recipes additionally retain MIDI D/R
 coverage. Each card records commands, identities, artifacts, failures and gaps.
 
@@ -92,8 +93,8 @@ WAV/CV/ii evidence on success and failure; bounded polling and strict cleanup.
 | Case | Recipe and observable guard | Edges / required negative |
 |---|---|---|
 | XA-001 | Boot current Mosaic with each supported mod profile; select by verified displayed name, author a note, observe its intended output and no other route | Cold/warm load, mod absent/disabled, changed engine/Crow Lua identity, failed engine readiness; no fallback to MIDI or silent success |
-| XA-002 | Capture while grid/key/MIDI actions run; export and independently verify samples, sequence, hashes and terminal job status | Short/long bounds, cancel, backend death, truncation, missing file, nonfinite samples and overflow must fail; emulator contracts reused, one composed Mosaic fault guard |
-| XA-003 | Run two isolated sessions with distinct pitches/ports; stop one and continue the other | No OSC/audio/CV/ii crossover, held input or capture leakage; three fresh restarts; run serially except this bounded isolation case |
+| XA-002 | Capture one Mosaic grid/key/MIDI phrase and independently verify its samples, sequence and terminal status | One composed capture failure must surface; capture API cancellation, overflow and malformed-data matrices remain generic emulator conformance |
+| XA-003 | Run one route-isolation smoke case with distinct pitches/ports | Cross-session service isolation and restart permutations remain generic emulator conformance |
 
 Done: profiles load the current worktree using public APIs; measurement faults fail
 the intended assertion, not an unrelated timeout. Generic app-free controls/grid/
@@ -107,11 +108,11 @@ channel selection, MIDI/n.b. translation, stop/retrigger and scheduled callbacks
 
 | Case | Recipe and observable guard | Edges / required negative |
 |---|---|---|
-| XA-004 | Author full phrases on channels1/16; assign MIDI, DoubleDecker and each supported JF voice mode via controls | Confirm/cancel; assigned unique n.b. player excluded from other channels, freed player becomes selectable again; distinct compatible JF voices/mixed players; route switch stopped/playing; old releases retain ownership |
-| XA-005 | Play distinct pitches and velocities through each supported player | Pitch low/middle/high legal values, octave boundaries; velocity minimum, midpoint, maximum, zero only where UI supports it; no hard-coded shared gain formula |
-| XA-006 | Retrigger same pitch with shorter/equal/longer durations; overlapping chords and repeated notes on two channels | Old release must not cut a newly owned voice; missing release, wrong voice and duplicate onset fault fixtures fail |
-| XA-007 | Stop/restart during held notes, strums and arps; mute/unmute and route changes | Final owned releases, bounded declared effect tail, no ghost restart notes; test MIDI panic separately—manual promises a MIDI sweep, not universal nb.stop_all |
-| XA-008 | Exercise supported mono/poly/kit/MPE/unison JF selections | Independently specified setup, voice allocation, pitch/level packets and final releases; all finite voices, repeated/overlapping notes, allocation exhaustion/stealing, mode switch with pending notes/slew, parameter limits; unsupported functions explicit |
+| XA-004 | Author representative phrases on channels1/16 through one supported audio route and one supported JF route | Confirm/cancel, route switch and old-release ownership; player-mode matrices remain player conformance |
+| XA-005 | Play low/middle/high pitch and boundary velocity through each representative route | No hard-coded shared gain formula; exhaustive player parameter domains remain player conformance |
+| XA-006 | Retrigger the same pitch and overlap a chord on two channels | Old release must not cut a newly owned voice; missing release, wrong voice and duplicate onset fault fixtures fail |
+| XA-007 | Stop/restart during one held/delayed phrase and one route change | Final owned releases and no ghost restart notes; MIDI panic remains a separate MIDI contract |
+| XA-008 | Exercise one supported JF mode and its route/release ownership | Additional mono/poly/kit/MPE/unison allocation domains remain player conformance unless a Mosaic selector defect is found |
 
 JF selectors share a module: distinct player IDs do not prove independent mode
 or release ownership. Inventory mode/setup and all-voice release effects from the
@@ -131,10 +132,10 @@ logic whose correctness on MIDI does not prove correctness through nb dispatch.
 
 | Case | Recipe and observable guard | Edges / required negative |
 |---|---|---|
-| XA-009 | Reuse independent scale/transposition/octave/chord recipes on audio and JF | Signed pitch boundaries, root mute, duplicate pitches, strum/arp order and rests; full phrase, no missing voice hidden by aggregate spectrum |
-| XA-010 | Apply player parameter defaults, locks, trigless locks and slides through controls | Off/zero/bounds; lock→unlocked-trig restoration including original zero, manual edit during lock, device/parameter reassignment with queued slide; non-1 range/wrap/descending chains/song change/stop; no stale target writes or NRPN waiver |
-| XA-011 | Configure each supported matrix/toolkit path to a player parameter, then manual edit and lock it | Depth/rate boundaries, enable/disable, channel switch, competing lock/mod/manual precedence; sound/voltage/wire trajectory and displayed parameter must agree |
-| XA-012 | Change tempo/division/swing while notes or parameter motion remain pending | Duration/phase continuity and ordered releases; no D-only acceptance and no broadened timing tolerance to excuse musical error |
+| XA-009 | Apply one independent scale/chord boundary recipe through each representative route | Signed boundary, order, rest and ownership evidence; do not repeat the full MIDI matrix per backend |
+| XA-010 | Apply one parameter lock/slide boundary through a representative route | Verify restoration and queued-target ownership; exhaustive player parameter combinations remain out of scope |
+| XA-011 | Deferred: broad Matrix/Toolkit modulation and performance work | A documented Mosaic routing smoke may be restored only by explicit user priority |
+| XA-012 | Change one clock setting while a representative note or parameter motion is pending | Preserve duration, phase continuity and ordered releases without duplicating all MIDI timing partitions |
 
 For n.b. locks, declare the original-value restoration contract independently
 before execution: when restoration occurs, whether manual edits update the saved
@@ -152,9 +153,9 @@ first press to final release; disarmed held notes finish, fresh notes do not rec
 
 | Case | Recipe and observable guard | Edges / required negative |
 |---|---|---|
-| XA-013 | Record keyboard notes/chords assigned to audio/JF; replay and inspect grid, duration and output route | Disarmed live audition; held key across selected-channel/device changes; live/sequenced same-pitch overlap with exact release ownership; before/on/after boundary, unequal rates, first-press/final-release, arm/disarm |
-| XA-014 | Save/autosave, fresh-process reload and replay mixed-output song | Mod/player identity, per-channel selection, parameters, locks/slides, song slots and routes preserved; dirty source identity bound per run |
-| XA-015 | Load with missing/disabled player or incompatible capability; cancel then recover with correct profile | Explicit diagnostic, prior project preserved, no silently substituted voice; failed/truncated save and unknown player ID |
+| XA-013 | Record/replay one keyboard phrase on a representative non-MIDI route | Verify first/final release, route and visible edit; broader recording combinations remain F13 coverage |
+| XA-014 | Save, cold-reload and replay one mixed-output song | Verify selected route, lock/slide state and source identity; broader persistence combinations remain F15 coverage |
+| XA-015 | Reject one missing/incompatible player while preserving the prior project | Generic parser and storage fault matrices remain runtime conformance |
 
 Done: reconstructed output and visible edits survive cold restart; failure paths
 preserve valid project data. No WAV/audio recording workflow is invented for Mosaic
@@ -168,10 +169,10 @@ independently; generic Crow support does not itself prove a Mosaic CV voice exis
 
 | Case | Recipe and observable guard | Edges / required negative |
 |---|---|---|
-| XA-016 | Select the supported CV player; author pitch/gate/velocity or slew gestures actually exposed by that player | All supported output mappings, min/max/signed voltages, rests, legato/retrigger, stop/restart; no crosstalk or stale gate; preserve output units |
-| XA-017 | Feed Crow clock pulses via public input and run Mosaic phrase; switch internal→Crow→internal | Missing/extra pulses, tempo change, stopped/started source, source handoff with held note; prove clock lock/origin before measuring onset and release; no fabricated sample-level timing |
-| XA-018 | Feed supported voltage change/stream inputs to an actual documented Mosaic/player consumer | Threshold equality/hysteresis, repeated identical voltage, both inputs, callback burst and stream stop; if no consumer exists, retain generic conformance ownership and explicit not-applicable rationale |
-| XA-019 | Capture JF setup/note/release across pages, simultaneous voices and lifecycle | Exact commands/order/addresses, page boundary256 records, tail drain, no unrelated packets; dropped/reordered/repeated/partial record negative guards |
+| XA-016 | Select one supported CV player and verify its exposed pitch/gate route | CV domain, stream and firmware conformance remain generic unless a documented Mosaic workflow needs them |
+| XA-017 | If Mosaic exposes Crow clock, run one internal→Crow→internal handoff with a held note | Preserve external-sync ownership; generic missing/extra-pulse matrices remain runtime conformance |
+| XA-018 | Not applicable unless a documented Mosaic/player consumer exists | A capability without a Mosaic consumer remains generic conformance, with a recorded rationale |
+| XA-019 | Capture one JF setup/note/release sequence | Packet pagination, malformed-record and all-page matrices remain player/firmware conformance |
 
 Done: application-level pitch/gate/clock/JF behaviour has measured outputs; pinned
 firmware and wire tests independently support encoding. Unsupported Ansible/ii
@@ -185,9 +186,9 @@ player identity, session shutdown×capture, browser disconnect×held input.
 
 | Case | Recipe and observable guard | Edges / required negative |
 |---|---|---|
-| XA-020 | Ten-minute mixed MIDI/audio/JF/CV workload with editing, autosave, chords and clock changes | Complete MIDI/ii trace integrity plus bounded PCM/CV windows around transitions/final release; no stuck voices/gates in observed windows or growing clocks/process leaks; preserve MIDI limits and predeclare audio/Crow measurement limits |
-| XA-021 | Automate browser controls over Mosaic during audio monitoring; compare actual framebuffer/grid and rendered PCM | Focus loss while held, monitor enable/disable, disconnect/reconnect, capture concurrent with monitoring; mute monitor must not stop sequencer or capture |
-| XA-022 | Ten reload/stop/reset cycles including one failed engine/Crow session | Owned cleanup, retained failure evidence, no orphan service or other-session interruption; unexpected exit fails and captures native stack on recurrence |
+| XA-020 | Attach bounded audio/Crow transition windows to the named mixed-endurance workload | MIDI performance owns the ten-minute timing gate; preserve representative output and release evidence without a duplicate mixed-output endurance matrix |
+| XA-021 | Run one composed browser guard when a renderer or monitor path changes | Browser-control and sample/block conversion matrices remain generic browser conformance |
+| XA-022 | Add one engine/Crow failure-cleanup regression to the named lifecycle recipe | Do not require ten reload permutations or duplicate generic service-lifecycle conformance |
 
 The delivered capture APIs allow at most eight jobs of at most30 seconds each
 per session. XA-020 therefore schedules bounded observation windows within that
@@ -207,25 +208,24 @@ steady signal for discontinuity sensitivity and a sparse Mosaic phrase for routi
 
 ### X06 — Refactor admission and economical regression tiers
 
-Depends all applicable X00–X05 and original T00–T08 gates. Every XA family must have
-atomic cases, manual/player contract references, observable oracles, explicit
-domain choices, source-bound real-time evidence and resolved major defects.
-Platform-only/not-applicable rows need concrete source evidence and owner; missing
-capabilities for required behaviours remain blocking, never skip/xfail green.
+Depends applicable representative X00–X05 routes and the shared final
+qualification. Every required Mosaic workflow has an observable oracle, an explicit
+domain partition and source-bound real-time evidence. Platform-only/not-applicable
+rows record a concrete source rationale. Generic emulator, browser, player and
+protocol conformance is owned outside this plan.
 
 Fast development tier: one dry phrase, same-pitch retrigger/release, mixed-route
 ownership, one parameter lock, one JF packet/release, and a cold-load smoke. Target
 under three minutes after build; measure rather than promise. Pull-request tier:
-affected card suites plus shared routing/clock/lifecycle guards. Refactor admission:
-full original campaign and all expansion cases once on the exact baseline; run
-all again on refactor plus changed-boundary negatives. Endurance only at admission
-or after relevant changes/failures. One bounded Codex scope review plus at most one
-focused follow-up, then evidence-based implementation; no per-case review ritual.
+affected card suites plus shared routing/clock/lifecycle guards. The final
+qualification reuses the frozen-source fast, targeted native timing/output and
+named endurance/performance runs from T08. Run changed-boundary negatives after a
+relevant refactor; do not duplicate every baseline and backend suite.
 
-Do not start the refactor while XA families remain planned, unsupported-required,
-failed or indirectly verified. The scope ledger is `audio-crow-scope.json`; it is
-a planning ledger, not executable coverage. Register executable cases in the
-actual runner and wire them into require-all before declaring this gate complete.
+The scope ledger is `audio-crow-scope.json`; it is planning input, not executable
+coverage. Register required representative cases in the actual runner and record
+their applicability. Review is optional for a material implementation or oracle
+dispute; no provider, review or approval ritual is a gate.
 
 ## Scope review disposition
 

@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "2026-09-12: All eight ux/pending-hands-on decisions are emulator-resolved, kept, active and freshly validated at 300e93a (seven in controlled and real-time; the crow-jf n.b. case in its applicable real-time profile). The integrated suite passes 1513/1513 Lua tests. Continue the remaining behavior, timing/performance, unit/integration hardening and general-purpose emulator release gates before refactor.",
+  "next_action": "Run the proportional R00 baseline: source-bind the existing suite, close the single external Stop/backlog unit gap, reproduce known timing/performance reds, and map critical locks/trig/scale/sync/persistence workflows to existing evidence. Do not add Cartesian matrices, duplicate backend campaigns, recurring reviews, or broad Matrix/Toolkit work.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -5460,5 +5460,31 @@
       }
     },
     "scope": "User-like runtime inputs with user-perceived MIDI, grid, screen, parameter-menu, persistence, and lifecycle outputs; no physical-hardware equivalence claim."
+  },
+  "upcoming_scope_reset": {
+    "date": "2026-09-12",
+    "status": "approved",
+    "applies_to": "upcoming work only; completed evidence and tests are preserved",
+    "pre_refactor": [
+      "source-bound existing suite",
+      "critical locks/trig/scale interactions",
+      "external MIDI sync",
+      "persistence",
+      "known timing/performance failures",
+      "one external Stop/backlog unit regression"
+    ],
+    "removed": [
+      "prose atomization",
+      "universal pairwise and state-machine campaigns",
+      "duplicate lifecycle/endurance matrices",
+      "generic protocol/player/browser conformance in Mosaic",
+      "recurring reviewer/provider gates",
+      "per-card receipt bureaucracy"
+    ],
+    "deferred": [
+      "broad Matrix/Toolkit behavior and performance",
+      "optional feature-extension cookbook",
+      "UI test-harness refactor until after code refactor"
+    ]
   }
 }
