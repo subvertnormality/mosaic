@@ -2,15 +2,6 @@
 -- Native behaviour tests separately exercise the complete application/runtime.
 local tab = require("tabutil")
 
-local function find_upvalue(fn, wanted)
-  for i=1,100 do
-    local name,value=debug.getupvalue(fn,i)
-    if not name then break end
-    if name==wanted then return value end
-  end
-  error("Missing entrypoint closure: "..wanted)
-end
-
 local function load_fixture()
   local channels,devices={},{}
   for i=1,17 do channels[i]={start_trig={1,4},end_trig={4,4}} end
@@ -74,17 +65,24 @@ local function load_context()
     ["mosaic/lib/devices/param_manager"]={init=function() count.restore=count.restore+1 end,add_device_params=function() end},
     ["mosaic/lib/devices/device_map"]={get_device=function() return {} end},
     ["mosaic/lib/memory"]={init=function() count.memory_init=count.memory_init+1 end}}
-  env.include=function(name) return modules[name] or {} end
+  local lifecycle
+  env.include=function(name)
+    if name == "mosaic/lib/project_lifecycle" then
+      local module = assert(loadfile("../../lib/project_lifecycle.lua", "t", env))()
+      return {new=function(...)
+        lifecycle = module.new(...)
+        return lifecycle
+      end}
+    end
+    return modules[name] or {}
+  end
   env.require=function(name)
     assert(name=="fileselect" or name=="textentry" or name=="mosaic/lib/nb/lib/nb")
     return {}
   end
   assert(loadfile("../../mosaic.lua","t",env))()
-  local load=find_upvalue(env.init,"load_project")
-  local new=find_upvalue(env.init,"load_new_project")
-  local prime=find_upvalue(env.autosave_reset,"prime_autosave")
-  local autosave=find_upvalue(prime,"do_autosave")
-  local save=find_upvalue(autosave,"save_project")
+  local load, new = lifecycle.load, lifecycle.new
+  local prime, autosave, save = lifecycle.prime_autosave, lifecycle.autosave, lifecycle.save
   local function blocked()
     local before=count.writes;local timers=#state.timers
     env.autosave_reset();prime();autosave()
