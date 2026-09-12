@@ -1173,6 +1173,15 @@
         "M-REC-SONG-LENGTH-002"
       ],
       "summary": "Held notes and chords released after a song transition retain full recorded length in their onset song."
+    },
+    {
+      "id": "held-velocity-undo-prior-state",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "held-velocity-undo-prior-state.json",
+      "cases": [
+        "M-MEMORY-008"
+      ],
+      "summary": "Undo held-step velocity increments restores the previous velocity."
     }
   ]
 }

@@ -1100,7 +1100,6 @@ function channel_edit_page_ui.handle_velocity_mask_change(channel, direction, so
       mask_selectors.velocity:increment()
       for _, keys in ipairs(pressed_keys) do
         local s = fn.calc_grid_count(keys[1], keys[2])
-        channel.step_velocity_masks[s] = mask_selectors.velocity:get_value()
         recorder.add_note_mask_event_portion(
           channel.number, 
           s, 

@@ -372,12 +372,8 @@ local function held_increment(name)
     -- not from the channel mask (11) or any step value; no setter and no working-pattern update.
     luaunit.assert_equals(run(env, spec.fn, c, 1, HELD_ROW_4_AND_7),
       held_path_calls(spec, c, HELD_STEPS, spec.inc_from + 1, "recorder"))
-    if spec.writes_step_velocity_on_increment then
-      -- characterisation (suspected defect: gap-scan #16, see M-MEMORY-008)
-      luaunit.assert_equals(c.step_velocity_masks, {[3] = spec.inc_from + 1, [64] = spec.inc_from + 1})
-    else
-      luaunit.assert_equals(c.step_velocity_masks, {}) -- characterisation
-    end
+    -- README Memory: preserve the prior mask until release records the edit (M-MEMORY-008).
+    luaunit.assert_equals(c.step_velocity_masks, {})
   end)
 end
 
@@ -471,22 +467,14 @@ local function held_keys_outside_step_rows_ignored(name)
   end)
 end
 
-local function velocity_write_precedes_recorder(name)
+local function velocity_preserves_state_before_recorder(name)
   local spec = SPECS[name]
   isolated(function(env)
     prime(env, spec, spec.inc_from)
     local c = new_channel(SELECTED)
     run(env, spec.fn, c, 1, HELD_ROW_4_AND_7)
-    if spec.writes_step_velocity_on_increment then
-      -- characterisation (suspected defect: gap-scan #16, see M-MEMORY-008): the step's
-      -- velocity mask is already written when the recorder portion is added, i.e. before the
-      -- release commits the action to memory.
-      luaunit.assert_equals(env.velocity_snapshots, {
-        {step = 3, value = spec.inc_from + 1}, {step = 64, value = spec.inc_from + 1}
-      })
-    else
-      luaunit.assert_equals(env.velocity_snapshots, {{step = 3}, {step = 64}}) -- characterisation
-    end
+    -- Recorder must observe the prior state, before release commits the edit.
+    luaunit.assert_equals(env.velocity_snapshots, {{step = 3}, {step = 64}})
     -- the decrement never writes it (line 1094-1108 for velocity)
     prime(env, spec, spec.dec_from)
     local d = new_channel(SELECTED)
@@ -780,7 +768,7 @@ function test_mask_handler_trig_held_selector_is_independent() held_selector_is_
 function test_mask_handler_trig_held_on_unselected_channel() held_on_unselected_channel("trig") end
 function test_mask_handler_trig_held_row_boundaries() held_row_boundaries("trig") end
 function test_mask_handler_trig_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("trig") end
-function test_mask_handler_trig_velocity_write_precedes_recorder() velocity_write_precedes_recorder("trig") end
+function test_mask_handler_trig_velocity_preserves_state_before_recorder() velocity_preserves_state_before_recorder("trig") end
 
 -- note
 function test_mask_handler_note_unheld_increment() unheld_increment("note") end
@@ -798,7 +786,7 @@ function test_mask_handler_note_held_selector_is_independent() held_selector_is_
 function test_mask_handler_note_held_on_unselected_channel() held_on_unselected_channel("note") end
 function test_mask_handler_note_held_row_boundaries() held_row_boundaries("note") end
 function test_mask_handler_note_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("note") end
-function test_mask_handler_note_velocity_write_precedes_recorder() velocity_write_precedes_recorder("note") end
+function test_mask_handler_note_velocity_preserves_state_before_recorder() velocity_preserves_state_before_recorder("note") end
 
 -- velocity
 function test_mask_handler_velocity_unheld_increment() unheld_increment("velocity") end
@@ -816,7 +804,7 @@ function test_mask_handler_velocity_held_selector_is_independent() held_selector
 function test_mask_handler_velocity_held_on_unselected_channel() held_on_unselected_channel("velocity") end
 function test_mask_handler_velocity_held_row_boundaries() held_row_boundaries("velocity") end
 function test_mask_handler_velocity_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("velocity") end
-function test_mask_handler_velocity_velocity_write_precedes_recorder() velocity_write_precedes_recorder("velocity") end
+function test_mask_handler_velocity_velocity_preserves_state_before_recorder() velocity_preserves_state_before_recorder("velocity") end
 
 -- chord_one
 function test_mask_handler_chord_one_unheld_increment() unheld_increment("chord_one") end
@@ -834,7 +822,7 @@ function test_mask_handler_chord_one_held_selector_is_independent() held_selecto
 function test_mask_handler_chord_one_held_on_unselected_channel() held_on_unselected_channel("chord_one") end
 function test_mask_handler_chord_one_held_row_boundaries() held_row_boundaries("chord_one") end
 function test_mask_handler_chord_one_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("chord_one") end
-function test_mask_handler_chord_one_velocity_write_precedes_recorder() velocity_write_precedes_recorder("chord_one") end
+function test_mask_handler_chord_one_velocity_preserves_state_before_recorder() velocity_preserves_state_before_recorder("chord_one") end
 
 -- chord_two
 function test_mask_handler_chord_two_unheld_increment() unheld_increment("chord_two") end
@@ -852,7 +840,7 @@ function test_mask_handler_chord_two_held_selector_is_independent() held_selecto
 function test_mask_handler_chord_two_held_on_unselected_channel() held_on_unselected_channel("chord_two") end
 function test_mask_handler_chord_two_held_row_boundaries() held_row_boundaries("chord_two") end
 function test_mask_handler_chord_two_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("chord_two") end
-function test_mask_handler_chord_two_velocity_write_precedes_recorder() velocity_write_precedes_recorder("chord_two") end
+function test_mask_handler_chord_two_velocity_preserves_state_before_recorder() velocity_preserves_state_before_recorder("chord_two") end
 
 -- chord_three
 function test_mask_handler_chord_three_unheld_increment() unheld_increment("chord_three") end
@@ -870,7 +858,7 @@ function test_mask_handler_chord_three_held_selector_is_independent() held_selec
 function test_mask_handler_chord_three_held_on_unselected_channel() held_on_unselected_channel("chord_three") end
 function test_mask_handler_chord_three_held_row_boundaries() held_row_boundaries("chord_three") end
 function test_mask_handler_chord_three_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("chord_three") end
-function test_mask_handler_chord_three_velocity_write_precedes_recorder() velocity_write_precedes_recorder("chord_three") end
+function test_mask_handler_chord_three_velocity_preserves_state_before_recorder() velocity_preserves_state_before_recorder("chord_three") end
 
 -- chord_four
 function test_mask_handler_chord_four_unheld_increment() unheld_increment("chord_four") end
@@ -888,4 +876,4 @@ function test_mask_handler_chord_four_held_selector_is_independent() held_select
 function test_mask_handler_chord_four_held_on_unselected_channel() held_on_unselected_channel("chord_four") end
 function test_mask_handler_chord_four_held_row_boundaries() held_row_boundaries("chord_four") end
 function test_mask_handler_chord_four_held_keys_outside_step_rows_ignored() held_keys_outside_step_rows_ignored("chord_four") end
-function test_mask_handler_chord_four_velocity_write_precedes_recorder() velocity_write_precedes_recorder("chord_four") end
+function test_mask_handler_chord_four_velocity_preserves_state_before_recorder() velocity_preserves_state_before_recorder("chord_four") end
