@@ -981,6 +981,15 @@
       "summary": "The same key held from two MIDI inputs shared one chord slot, so the first release ended the chord early; chord lengths now run to the final release (S9, S38)"
     },
     {
+      "id": "record-with-non-step-key-held",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "record-with-non-step-key-held.json",
+      "cases": [
+        "M-REC-PAGE-KEY-001"
+      ],
+      "summary": "With record armed, holding a page or menu key dropped live-recorded notes and committed a length-only mask; such holds now record normally (S32)"
+    },
+    {
       "id": "unreadable-device-config-skipped",
       "status": "fixed-on-worktree-with-real-input-regression",
       "candidate_manifest": "unreadable-device-config-skipped.json",

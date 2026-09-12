@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "7615434",
+  "files": [
+    {
+      "file": "lib/recorder.lua",
+      "before_sha256": "7c5b7fa1b4fd9761d8f48a08fc4aa7f0c84d765efe98928ccf390afee9b1e9a2",
+      "after_sha256": "0caabbb961047c3ad47450ab930c71f3e7f5f98e0fd60508c05d14057127344b"
+    }
+  ],
+  "patch": "0124-record-with-non-step-key-held.patch",
+  "patch_sha256": "7c6d25d420dc1b326c1425549464ce527a5cf8e8c8e988271f2ed6af72a8d1d6",
+  "regression": "M-REC-PAGE-KEY-001",
+  "unit_regression": "test_recorder_extra_held_non_step_key_records_live_when_armed",
+  "baseline": [
+    {
+      "run_id": "263caf7218cb44819906020d6ee55529",
+      "case": "M-REC-PAGE-KEY-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "7d5e4b2b741098df891c19b91f1c84964c33580de827e1c393484fed1943af8a",
+      "failure": "{'expected': [(1, [144, 72, 90]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 72, 90]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 72, 90]), (1"
+    },
+    {
+      "run_id": "b45f98cc24ba45c1b3daa65c967aaf30",
+      "case": "M-REC-PAGE-KEY-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "bd7691367b31a5db08107d50eae60f3c3a2ec95aec5ba691b91a870d10591c62",
+      "failure": "{'expected': [(1, [144, 72, 90]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 72, 90]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 72, 90]), (1"
+    }
+  ],
+  "rationale": "recorder.handle_note_midi_message treated any held grid key as step entry: a held key outside rows 4-7 (a page or menu key) skipped both the held-step branch and the live-record branch, so with record armed the note was not recorded. m_midi still recorded the release's length at the current step, committing a length-only note mask; memory then rebuilt that step's working pattern with trig 0, so at baseline step 1 went silent instead of playing the recorded 72. The held-step branch now requires the held key to be a step; otherwise the armed live-record branch runs as with no key held.",
+  "oracle": "README 239: with record mode active, notes played on a MIDI keyboard are captured as note masks, including lengths, on the current step of the selected channel. README 316: holding the selected page button is inert (no panic, no page change). Human decision 2026-09-11 for S32: record normally when the held key is not a step.",
+  "validation": [
+    {
+      "run_id": "00cd2d7d47a142899d0acabd764ead45",
+      "case": "M-REC-PAGE-KEY-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "f44566553c8bb8d1ac2809dc8cb60ebdedbedbdc7f37ffdf48356e203bb5b588",
+      "failure": null
+    },
+    {
+      "run_id": "ae3a436cc65d4fd0b20068d3678f5fdd",
+      "case": "M-REC-PAGE-KEY-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "3cab853491bb35916410362e3f0e0498a486a95c93212da599ab5b54f2a2ab30",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-bf84090b099a456aa847db4d653348b7",
+      "case": "M-REC-PAGE-KEY-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "ed1442c7edf5d815aa92aff2fcd55274e8b6b6c47d4954d7d885304e217c4fc4",
+      "failure": null,
+      "normalized_sha256": "c1eec8147c5dc9135ac97dd6037a8d3cef3b873f299bf5c40a8dd60c29ad6ff9"
+    }
+  ],
+  "collateral": "Controlled lane with the fix: M-REC-032 (397b14e2c9c0428ab05c4e1cd55b96dc), M-REC-013 (c326477301a34d2397e81b9eb6e7569b), M-REC-015 (8a4b842f6adf451786d2d06840f6c5ce), M-REC-018 (3b66f8b690e24a8ea4e1faf733f923b4), M-REC-024 (3dcc893f0fee4d75985b1e8318ff818f), M-TRIPLE-002 (978273a632e44e83b295f993b5226fa0), M-MEMORY-001 (88f3b1f69aa349debace19b99f622e4e), M-MEMORY-002 (468dede35e684f8b9a4a11c2df7a1528), M-REC-SOURCES-001 (b670a9e8b8844156917aa98c1c32005f), M-KEYBOARD-STOP-001 (2a9c0b49b3e94a11a2138a3ea0c76b57), M-MASK-018 (65d836e8d0cb4a2998292aca72e7b903), M-MAP-004 (d3e30d72374e4f6aba1dfb1494bdd7e9) all passed; full Lua units 1465/1465 OK; guards OK. The unit that pinned the dropped recording now pins normal recording with a non-step key held (and nothing when disarmed).",
+  "upstream_merged": false
+}
