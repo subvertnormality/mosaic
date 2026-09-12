@@ -46,6 +46,54 @@ def assert_timing_profile(errors):
     assert max(absolute) <= 50_000_000, ('maximum', max(absolute))
     assert abs(errors[-1]) <= 20_000_000, ('final phase', errors[-1])
 
+def correlate_external_clock(timing_errors, delivered, origin, pulse_stride=6,
+                             threshold_ns=10_000_000, residual_limit_ns=10_000_000):
+    """Pair every emitted step with the external pulse that triggered it.
+
+    This uses the scheduler ledger's intended and actual native input times. It
+    does not infer a clock origin from Mosaic output, so a shared late input and
+    late note cannot be mistaken for application drift.
+    """
+    ticks = [row for row in delivered
+             if row['bytes'] == [248] and row['intended_monotonic_ns'] >= origin]
+    pairs = []
+    for index, output_error in enumerate(timing_errors):
+        tick = ticks[index * pulse_stride]
+        expected_deadline = origin + index * pulse_stride * TICK_NS
+        assert tick['intended_monotonic_ns'] == expected_deadline, (
+            'trigger deadline', index, tick['intended_monotonic_ns'], expected_deadline)
+        input_error = tick['actual_monotonic_ns'] - tick['intended_monotonic_ns']
+        pairs.append(dict(step=index, output_error_ns=output_error,
+                          trigger_input_error_ns=input_error,
+                          trigger_intended_monotonic_ns=tick['intended_monotonic_ns'],
+                          trigger_actual_monotonic_ns=tick['actual_monotonic_ns'],
+                          residual_ns=output_error - input_error))
+    late = [row for row in pairs if abs(row['output_error_ns']) > threshold_ns]
+    shared = [row for row in late if abs(row['residual_ns']) <= residual_limit_ns]
+    return dict(pairs=pairs, late_output_count=len(late),
+                shared_late_trigger_count=len(shared),
+                all_late_outputs_follow_late_trigger=len(shared) == len(late))
+
+def correlate_cgroup_throttling(clock_correlation, samples, window_ns=10_000_000):
+    """Match late trigger deliveries to observed cgroup throttle-counter edges."""
+    changes = []
+    for previous, current in zip(samples, samples[1:]):
+        if (current['throttled_periods'] > previous['throttled_periods'] or
+                current['throttled_ns'] > previous['throttled_ns']):
+            changes.append(current['monotonic_ns'])
+    late = [row for row in clock_correlation['pairs']
+            if abs(row['output_error_ns']) > MIDI_TOLERANCE_NS]
+    matches = []
+    for row in late:
+        if changes:
+            distance = min(abs(sample - row['trigger_actual_monotonic_ns']) for sample in changes)
+            if distance <= window_ns:
+                matches.append(dict(step=row['step'], distance_ns=distance))
+    return dict(throttle_counter_edges=len(changes), late_trigger_count=len(late),
+                matched_late_trigger_count=len(matches), matches=matches,
+                all_late_triggers_near_throttle_edge=len(matches) == len(late))
+
+
 def assert_delivery(expected, delivered):
     """Independent input oracle: every accepted packet arrives once, ordered and late."""
     assert len(delivered) == len(expected), (len(delivered), len(expected))
@@ -321,18 +369,24 @@ def run_one(image, output):
         emitted = complete_log(name, ready['session_id'], output)
         timing_errors = assert_external_phrase(emitted, origin, PLAY_TICKS)
         p95_ack = nearest_rank(pressure_latencies, 95)
-        result['p95_input_ack_ns'] = p95_ack
-        assert p95_ack <= ACK_LIMIT_NS, ('p95 acknowledgement', p95_ack)
-        result['timing_errors_ns'] = timing_errors
-        assert_timing_profile(timing_errors)
+        correlation = correlate_external_clock(timing_errors,
+                                                state['midi_input_schedule']['delivered'], origin)
+        throttle_correlation = correlate_cgroup_throttling(correlation, samples)
+        # Persist complete diagnostic evidence before applying any performance
+        # gate. A failed run is the evidence that needs these artifacts most.
         write(output / 'samples.json', dict(recording=recording, status=stopped, samples=samples))
         write(output / 'recipe.json', dict(schedule=events, physical_actions=controls.trace))
-        result.update(passed=True, session_id=ready['session_id'], limits=recording['limits'],
+        result.update(session_id=ready['session_id'], limits=recording['limits'],
                       p95_input_ack_ns=p95_ack, delivery_lateness_ns=delivery_lateness,
-                      timing_errors_ns=timing_errors, frame_revisions=[before['frame_revision'], after_controls['frame_revision']],
+                      timing_errors_ns=timing_errors, external_clock_correlation=correlation,
+                      cgroup_throttle_correlation=throttle_correlation,
+                      frame_revisions=[before['frame_revision'], after_controls['frame_revision']],
                       grid_revisions=[before['grid_revision'], after_controls['grid_revision']],
                       rejected_flood_code=rejected['code'], sample_count=len(samples),
                       midi_messages=len(emitted))
+        assert p95_ack <= ACK_LIMIT_NS, ('p95 acknowledgement', p95_ack)
+        assert_timing_profile(timing_errors)
+        result['passed'] = True
     except Exception as error:
         result['error'] = traceback.format_exc()
     finally:

@@ -49,6 +49,45 @@ a 45.319052 ms stall had a 1.570304 ms maximum port-1 phase error, below the
 unchanged 10 ms musical bound. A Lua event-thread backlog therefore does not
 reproduce the retained persistent phase shift.
 
+## Comparison with PERF-004 input-pressure failures
+
+The similar 40--50 ms magnitudes have different causal boundaries. A
+deterministic trace join pairs each PERF-004 note with the scheduled external
+MIDI clock pulse at the same independently declared deadline. In retained run
+07, its only late note was 49.556 ms late and its trigger was 48.884 ms late
+(0.671 ms residual). In retained run 08, all seven late notes had late triggers;
+the output-minus-trigger residual stayed between -2.888 and 2.366 ms. Run 06
+had no note over 10 ms.
+
+A fresh source-bound run at
+`/home/andy/projects/mosaic-behaviour-runs/timing-spike-isolation-perf-03`
+retained the diagnostic even though the unchanged performance gate failed.
+All three late notes followed late external-clock deliveries within 10 ms and
+all three deliveries were within 2.9 ms of an observed cgroup throttle-counter
+edge. The 0.5-CPU container accumulated 22 throttled periods and the note p99
+was 12.229 ms. An earlier diagnostic run 02 had eight late notes; all eight
+trigger deliveries were within 4.1 ms of throttle-counter edges, while
+Mosaic's residual processing delay stayed within 5.312 ms.
+
+PERF-004 therefore remains a valid constrained end-to-end failure, but its
+retained misses are late external-clock delivery under cgroup pressure rather
+than evidence that Mosaic computed a timely pulse late. The new oracle stores
+the input/output join, cgroup correlation, recorder samples and timing vectors
+before enforcing the gate so future failures cannot discard attribution data.
+
+The endurance discontinuity instead begins in the common port-3 program-change
+batch before the port-1 and port-2 notes. Relative to the first playback batch,
+that stream's first >5 ms error is native index 7085 at 126.291815 s. Its phase
+then remains 41.635--44.521 ms late for every one of the remaining 3,801 steps,
+including after ordinary screen and grid work. The last transport press was
+126.291 seconds before the jump, so the discontinuity is also 6.291 seconds
+after the second 60-second while-playing autosave check; it is not coincident
+with that timer boundary. Together with M-TIM-005, this excludes the observed
+PERF-004 input-throttling mechanism, a generic Lua backlog, and the autosave
+timer as explanations for the persistent shift. It does not yet distinguish a
+host/JACK time discontinuity from the pinned native clock scheduler's sync
+deadline/resume behavior.
+
 ## Next target
 
 Do not change Mosaic from this evidence. Instrument the pinned runtime's
