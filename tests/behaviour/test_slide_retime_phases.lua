@@ -1,15 +1,25 @@
 util={clamp=function(v,a,b)return math.max(a,math.min(b,v))end}
-program={};function include()return {clock_divisions={}}end
-local Lattice=dofile('lib/clock/m_lattice.lua')
-local function up(fn,name)
- for i=1,100 do local key,value=debug.getupvalue(fn,i);if key==name then return value end;if not key then break end end
- error('Missing actual scheduler upvalue '..name)
+program={};local slide_state
+local function include_slide_lifetime(name)
+ if name=='mosaic/lib/clock/slide_lifetime' then
+  return {new=function(...)
+   slide_state=dofile('lib/clock/slide_lifetime.lua').new(...)
+   return slide_state
+  end}
+ end
 end
+function include(name)
+ local slide_lifetime=include_slide_lifetime(name)
+ if slide_lifetime then return slide_lifetime end
+ return {clock_divisions={}}
+end
+local Lattice=dofile('lib/clock/m_lattice.lua')
+
 local count=0
 for _,edit in ipairs({8,12,16,24,32,36,40}) do
  for _,factor in ipairs({0.5,2}) do
-  local mc=dofile('lib/clock/m_clock.lua');up(mc.init,'init_ring_buffer')()
-  local sample=up(mc.init,'process_ring_buffer')
+  local mc=dofile('lib/clock/m_clock.lua');slide_state:reset()
+  local sample=function() return slide_state:process() end
   local l=Lattice:new{auto=false,ppqn=96,pattern_length=4};clock_lattice=l
   local events,onsets={},{};local channel
   local function emit(value,last)if value~=last then events[#events+1]={at=l.transport,value=value}end end

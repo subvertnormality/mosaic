@@ -1,21 +1,25 @@
 -- Actual scheduler functions; dependency stubs only, no timing/workflow claim.
 program = {}
+local slide_state
+local function include_slide_lifetime(name)
+ if name=='mosaic/lib/clock/slide_lifetime' then
+  return {new=function(...)
+   slide_state=dofile('lib/clock/slide_lifetime.lua').new(...)
+   return slide_state
+  end}
+ end
+end
 function include(name)
+  local slide_lifetime=include_slide_lifetime(name)
+  if slide_lifetime then return slide_lifetime end
   if name=='mosaic/lib/devices/nrpn_codec' then return dofile('lib/devices/nrpn_codec.lua') end
   return {clock_divisions={}}
 end
 program.get=function()return {} end
 local clock = dofile('lib/clock/m_clock.lua')
-local function up(fn, name)
-  for i=1,100 do
-    local key,value=debug.getupvalue(fn,i)
-    if key==name then return value end
-    if not key then break end
-  end
-  error('Missing scheduler upvalue '..name)
-end
-local initialise=up(clock.init,'init_ring_buffer')
-local sample=up(clock.init,'process_ring_buffer')
+
+local initialise=function() return slide_state:reset() end
+local sample=function() return slide_state:process() end
 clock_lattice={transport=0}
 local function tick() clock_lattice.transport=clock_lattice.transport+8;sample() end
 initialise()

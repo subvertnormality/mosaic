@@ -47,3 +47,40 @@ and reentrant callback behavior. Full R10 timing/profile acceptance remains owed
 | M-MIDI-001 | real-time | 6df424ca88644e9aa449dd9508f0a5df |
 
 Sol reviewed emission order, capture, scheduling flags, return behavior and allocation shape; no concrete correctness issue found. These results cover the extraction, not full R10 acceptance.
+
+## Owned slide storage, interpolation and retiming
+
+Base 6ace2ce. lib/clock/slide_lifetime.lua owns the 1024-slot ring, channel/slot
+ownership index, compaction, sampling, cancellation, destination handoff, retiming
+and reset realignment. m_clock retains its existing public methods, channel/lattice
+construction, schedule projection and order-5 sampling sprocket. The module factory
+receives the existing clock/program objects and a live lattice getter. Callback-time
+lattice replacement therefore preserves the previous global lookup behavior.
+
+The extraction preserves capacity/full policy, slot-reference ownership through
+compaction, retirement before callbacks, fixed-end cancellation/handoff traversal,
+last-value handling, fractional quantisation and projected endpoint occurrence.
+It changes no clock algorithm, dispatch priority, overflow policy or musical timing.
+
+Six composed contracts now capture the actual module instance through their include
+stub instead of finding private m_clock.init upvalues. Only setup changed; stimuli
+and assertions remain. All passed: cancellation 18/18, reset, live retime, retime
+phases 14, endpoint phases 864/864 and timing type. Six guards pass. Sol's review
+found no concrete semantic/binding issue in the extraction.
+
+The first full Lua run had one failure in
+`test_chord_strum_param_lock_with_four_extra_notes_division`: expected 62, actual64
+at param_tests.lua:1404 (1544/1545 passed, 25.352s). It passed alone (0.007s), then
+the entire 1545-test suite passed (24.679s) with no further production changes.
+Cause is not established; this is not labelled a baseline defect or erased by the
+rerun. Native slide validation below remains scoped to the extraction, and full
+R10/final acceptance remains outstanding.
+
+| Case | Mode | Passing run |
+|---|---|---|
+| M-PATCH-064 | controlled-experimental | c5690c91a95746c58c1b79a39e7fbf5a |
+| M-SLIDE-RESET-001 | controlled-experimental | 8783ee6b1cbb44f39d211542295af3ff |
+| M-PATCH-064 | real-time | b29a56bcc5d64aadbc366de9fcccb2ba |
+| M-SLIDE-RESET-001 | real-time | b121ad16cfa94b1a9a2e52c583f130f2 |
+
+Next structural slice: arp onset lifetime and release-list ownership, retaining separate cancellation of future onsets and cleanup of releases already owed.

@@ -1,14 +1,24 @@
 -- Actual scheduler/lattice; model dependency supplies a literal channel range.
 util={clamp=function(v,a,b)return math.max(a,math.min(b,v))end}
 program={get=function()return {selected_song_pattern=1}end,get_channel=function()return {number=1}end,get_channel_step_bounds=function()return 1,4 end}
-function include()return {clock_divisions={}}end
-local Lattice=dofile('lib/clock/m_lattice.lua')
-local function up(fn,name)
- for i=1,100 do local key,value=debug.getupvalue(fn,i);if key==name then return value end;if not key then break end end
- error('Missing actual scheduler upvalue '..name)
+local slide_state
+local function include_slide_lifetime(name)
+ if name=='mosaic/lib/clock/slide_lifetime' then
+  return {new=function(...)
+   slide_state=dofile('lib/clock/slide_lifetime.lua').new(...)
+   return slide_state
+  end}
+ end
 end
-local mc=dofile('lib/clock/m_clock.lua');up(mc.init,'init_ring_buffer')()
-local sample=up(mc.init,'process_ring_buffer')
+function include(name)
+ local slide_lifetime=include_slide_lifetime(name)
+ if slide_lifetime then return slide_lifetime end
+ return {clock_divisions={}}
+end
+local Lattice=dofile('lib/clock/m_lattice.lua')
+
+local mc=dofile('lib/clock/m_clock.lua');slide_state:reset()
+local sample=function() return slide_state:process() end
 local l=Lattice:new{auto=false,ppqn=96,pattern_length=4};clock_lattice=l
 local events={};local initial=true;local reset=false;local after_reset=0;local destination
 local function emit(value,last)if value~=last then events[#events+1]={at=l.transport,value=value}end end
