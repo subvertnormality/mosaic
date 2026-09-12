@@ -1756,3 +1756,23 @@ visual path. The bounded diagnostic in
 service and memory gates passed. Musical phase remained about 68 ms late after a full
 recovery bar (p99/maximum 69.791 ms; final 67.756 ms), so the unchanged event-timing gate failed
 and remains a refactor blocker. This constrained x86 result is not physical-norns evidence.
+
+
+## Fix-branch consolidation — 2026-09-12
+
+The remaining `fix/grid` line, represented by `ux/pending-hands-on`, is merged
+into `codex/behaviour-validation` at `347d80c`; every local `fix/*` and
+`ux/pending-hands-on` branch is now an ancestor of the validation branch. The
+merge activates the behavior-qualified fixes for editor-page selected-pattern
+flicker, an unset chord mask starting from X, and held-step trig/velocity masks
+cleared back to X while retaining the later hardening work.
+
+At clean revision `0b67a01`, M-EDIT-FLICKER-001, M-MASK-CHORD-X-001 and
+M-MASK-OFF-001 pass independently in controlled and real-time lanes. The
+controlled manifests are `b76fd4cfee7a4082af76f543f5e48d1b`,
+`e5840ddeef3a4f69b3d8a220a7ce11a5` and
+`178242d5ab3a4cd58afb852aaaefd983`; real-time manifests are
+`d38d15e2da2448959aeccd5baca92bf6`, `39da40aec7e34959a49d15e79a066b6a`
+and `4fa40f79c1bc40e7af0022e3d4aedbb5`. The last case includes its
+autosave/restart path. All 1,513 Lua unit/integration tests and all 37
+structural, inventory, routing and oracle tests pass on the consolidated tree.

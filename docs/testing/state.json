@@ -38,6 +38,36 @@
     "M-PAT-001": {
       "path": "../mosaic-behaviour-runs/a1f98a7c965b49458b496a79546775ba/manifest.json",
       "sha256": "1b1121ff3a483b59fe73dbd81e7f4517506871e27734c5810e86579d44856b54"
+    },
+    "M-EDIT-FLICKER-001": {
+      "controlled": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/b76fd4cfee7a4082af76f543f5e48d1b/manifest.json",
+        "sha256": "6b4f35cae7013c259ba95827d09ef7807f1a21ed5e4aec565016fd9a96a2c3dd"
+      },
+      "real_time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/d38d15e2da2448959aeccd5baca92bf6/manifest.json",
+        "sha256": "1805258e7a9fc85f7718676c3c1ac938c58a3d167497b9afb4eeb157df473fe5"
+      }
+    },
+    "M-MASK-CHORD-X-001": {
+      "controlled": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/e5840ddeef3a4f69b3d8a220a7ce11a5/manifest.json",
+        "sha256": "74a2e38512c7ed152c4b979ae02719e1a46a5a9d6f30cfc5afc34a26f8355bbd"
+      },
+      "real_time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/39da40aec7e34959a49d15e79a066b6a/manifest.json",
+        "sha256": "22d65b64c0529b517b6d524908f8705c53edd53b2aeb8fac9fa5cccc9634cd03"
+      }
+    },
+    "M-MASK-OFF-001": {
+      "controlled": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/178242d5ab3a4cd58afb852aaaefd983/manifest.json",
+        "sha256": "f855e853a98dedd41e8b164e8056f963ecacfd822e44b6611e911ae148b895fc"
+      },
+      "real_time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/4fa40f79c1bc40e7af0022e3d4aedbb5/manifest.json",
+        "sha256": "fb814b7e304747d2e2dd4bc28c9b00bcf6a1a99fad9389d5fe7b5b65c191d46b"
+      }
     }
   },
   "experimental_clock_evidence": {
