@@ -44,12 +44,31 @@ local min = math.min
 local max = math.max
 
 local active_spread_actions = {}
-local spread_action_channels = {}
 
 local RING_BUFFER_SIZE = 1024 -- Power of 2 for efficient modulo
 local spread_ring = {}
 local ring_start = 1
 local ring_end = 1
+
+-- The ring owns execution order; this index owns channel/parameter lookup.
+-- Store slot references so compaction can move slots without rebuilding owners.
+local function register_spread_action(action)
+  local owners = active_spread_actions[action.channel]
+  if not owners then
+    owners = {}
+    active_spread_actions[action.channel] = owners
+  end
+  owners[action.trig_lock] = action
+end
+
+local function retire_spread_action(action)
+  action.active = false
+  local owners = active_spread_actions[action.channel]
+  if owners and owners[action.trig_lock] == action then
+    owners[action.trig_lock] = nil
+    if next(owners) == nil then active_spread_actions[action.channel] = nil end
+  end
+end
 
 -- Define quantize_value function first
 function m_clock.quantize_value(value, quant)
@@ -131,6 +150,7 @@ local function ring_push(action)
   slot.quant = action.quant
   slot.func = action.func
   slot.active = true
+  register_spread_action(slot)
   
   ring_end = next_end
   return true
@@ -146,7 +166,7 @@ local function process_ring_buffer()
       local total_pulses = action.total_pulses
       
       if pulse_count >= total_pulses then
-        action.active = false
+        retire_spread_action(action)
         action.func(action.end_value, action.last_value)
         action.last_value = action.end_value
       else
@@ -513,6 +533,7 @@ function m_clock.init()
     order = 5
   }
 
+  active_spread_actions = {}
   init_ring_buffer()
   ring_start = 1
   ring_end = 1
@@ -742,7 +763,7 @@ function m_clock.realign_sprockets()
       local channel = program.get_channel(program.get().selected_song_pattern, action.channel)
       local first, last = program.get_channel_step_bounds(channel)
       if action.end_step < first or action.end_step > last then
-        action.active = false
+        retire_spread_action(action)
       else
         -- Reset makes the next onset the channel's first step. Retain the
         -- destination's step identity, not its old occurrence ordinal.
@@ -761,7 +782,7 @@ end
 function m_clock.cancel_all_spread_actions()
   local i = ring_start
   while i ~= ring_end do
-    spread_ring[i].active = false
+    retire_spread_action(spread_ring[i])
     i = (i % RING_BUFFER_SIZE) + 1
   end
 end
@@ -810,7 +831,7 @@ function m_clock.handoff_spread_lock(channel_number, trig_lock, step_number, val
   while i ~= stop do
     local action = spread_ring[i]
     if action.active and action.channel == channel_number and action.trig_lock == trig_lock then
-      action.active = false
+      retire_spread_action(action)
       if action.end_step == step_number and action.end_value == value and
           clock_lattice.transport >= action.start_pulse + action.total_pulses then
         -- This is the explicit destination lock, not an intermediate sample.
@@ -833,7 +854,7 @@ function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, tri
       if not trig_lock or action.trig_lock == trig_lock then
         -- Replacement is silent. Retire ownership before invoking an explicit
         -- finish callback, which may itself cancel or schedule another action.
-        action.active = false
+        retire_spread_action(action)
         if use_end_value then
           action.func(action.end_value, action.last_value)
           action.last_value = action.end_value
@@ -845,17 +866,9 @@ function m_clock.cancel_spread_actions_for_channel_trig_lock(channel_number, tri
 end
 
 function m_clock.channel_is_sliding(channel, trig_param)
-  local i = ring_start
-  while i ~= ring_end do
-    local action = spread_ring[i]
-    if action.active and 
-       action.channel == channel.number and
-       action.trig_lock == trig_param then
-      return true
-    end
-    i = (i % RING_BUFFER_SIZE) + 1
-  end
-  return false
+  local owners = active_spread_actions[channel.number]
+  local action = owners and owners[trig_param]
+  return action ~= nil and action.active
 end
 
 function m_clock:start(from_external_transport)
