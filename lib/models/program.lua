@@ -3,179 +3,20 @@ local musicutil = require("musicutil")
 local quantiser = include("mosaic/lib/quantiser")
 
 local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
+local model_defaults = include("mosaic/lib/models/model_defaults").new(quantiser, nrpn_codec)
 local program = {}
 local program_store = {}
 
--- Add this function at the top level of the program module
-local function migrate_legacy_data(data)
-  if not data then return end
-  
-  -- Migrate sequencer_patterns to song_patterns if needed
-  if data.sequencer_patterns and not data.song_patterns then
-    data.song_patterns = data.sequencer_patterns
-    data.sequencer_patterns = nil
-  end
-  
-  -- Ensure song_patterns exists
-  if not data.song_patterns then
-    data.song_patterns = {}
-  end
-  
-  -- Migrate any nested data structures if needed
-  for i, pattern in pairs(data.song_patterns) do
-    if pattern.sequencer_patterns then
-      pattern.song_patterns = pattern.sequencer_patterns
-      pattern.sequencer_patterns = nil
-    end
-  end
-  
-  return nrpn_codec.migrate(data, device_map and device_map.get_device)
-end
-
-
-local function initialise_default_channels()
-  local channels = {}
-
-  for i = 1, 17 do
-    channels[i] = {
-      number = i,
-      trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
-      trig_lock_calculator_ids = {},
-      step_trig_lock_banks = {},
-      trig_lock_slides = {false, false, false, false, false, false, false, false, false, false},
-      step_trig_lock_slides = {},
-      step_octave_trig_lock_banks = {},
-      step_scale_trig_lock_banks = {},
-      step_trig_masks = {},
-      step_note_masks = {},
-      step_velocity_masks = {},
-      step_length_masks = {},
-      step_micro_time_masks = {},
-      step_chord_masks = {},
-      working_pattern = {
-        trig_values = program.initialise_64_table(0),
-        lengths = program.initialise_64_table(1),
-        note_values = program.initialise_64_table(0),
-        velocity_values = program.initialise_64_table(100),
-        note_mask_values = {},
-      },
-      start_trig = {1, 4},
-      end_trig = {16, 7},
-      selected_patterns = {},
-      default_scale = 1,
-      step_scale_number = 1,
-      root_note = 0,
-      chord = 1,
-      trig_merge_mode = "skip",
-      note_merge_mode = "average",
-      velocity_merge_mode = "average",
-      length_merge_mode = "average",
-      octave = 0,
-      clock_mods = {name = "/1", value = 1, type = "clock_division"},
-      current_step = 1,
-      mute = false,
-      swing_shuffle_type = nil, -- 1 for Swing, 2 for Shuffle, nil to use global
-      swing = nil,              -- -50 to 50, nil to use global
-      shuffle_feel = nil,       -- 1 to 4, nil to use global
-      shuffle_basis = nil,      -- 1 to 6, nil to use global
-      shuffle_amount = nil
-    }
-  end
-
-  return channels
-end
-
-local function initialise_default_patterns()
-  local patterns = {}
-  for i = 1, 16 do
-    patterns[i] = program.initialise_default_pattern()
-  end
-  return patterns
-end
-
-local function initialise_default_song_pattern()
-  local song_pattern = {}
-  local root_note = 0
-
-  local c_major = quantiser.get_scale(1)
-
-  local function create_scale()
-    return {
-      number = 1,
-      scale = c_major.scale,
-      pentatonic_scale = c_major.pentatonic_scale,
-      root_note = root_note,
-      chord = 1,
-      chord_degree_rotation = 0,
-      version = 1
-    }
-  end
-
-  song_pattern = {
-    active = false,
-    global_pattern_length = 64,
-    scale = 0,
-    repeats = 1,
-    patterns = initialise_default_patterns(),
-    channels = initialise_default_channels(),
-    scales = {}
-  }
-
-  for i = 1, 16 do
-    table.insert(song_pattern.scales, create_scale())
-  end
-
-  return song_pattern
-end
-
-function program.initialise_64_table(d)
-  local table_64 = {}
-  for i = 1, 64 do
-    table_64[i] = d
-  end
-  return table_64
+function program.initialise_64_table(value)
+  return model_defaults.table_64(value)
 end
 
 function program.initialise_default_pattern()
-  return {
-    trig_values = program.initialise_64_table(0),
-    lengths = program.initialise_64_table(1),
-    note_values = program.initialise_64_table(0),
-    note_mask_values = program.initialise_64_table(-1),
-    velocity_values = program.initialise_64_table(100)
-  }
+  return model_defaults.pattern()
 end
 
 function program.init()
-  local root_note = 0
-  program_store = {
-    nrpn_policy_version = 1,
-    nrpn_stored_modes = {},
-    selected_page = pages.pages.channel_edit_page,
-    selected_song_pattern = 1,
-    selected_pattern = 1,
-    selected_channel = 1,
-    selected_scale = 1,
-    root_note = root_note,
-    chord = 1,
-    default_scale = 1,
-    current_step = 1,
-    current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    song_patterns = {},
-    global_step_accumulator = 0,
-    devices = {},
-    blink_state = false,
-    memory = {  -- Initialize memory structure
-      channels = {},
-      current_indices = {},
-      original_states = {},
-      pattern_states = {}
-    }
-  }
-
-  for i = 1, 16 do
-    table.insert(program_store.devices, {midi_channel = 1, midi_device = 1, device_map = "none"})
-  end
+  program_store = model_defaults.program(pages.pages.channel_edit_page)
 end
 
 function program.is_song_pattern_active(p)
@@ -205,7 +46,7 @@ end
 function program.get_song_pattern(p)
   local data = program_store
   if not data.song_patterns[p] then
-    data.song_patterns[p] = initialise_default_song_pattern()
+    data.song_patterns[p] = model_defaults.song_pattern()
   end
   return data.song_patterns[p]
 end
@@ -274,7 +115,7 @@ function program.get_channel(song_pattern, x)
 end
 
 function program.set(p)
-  program_store = migrate_legacy_data(p) or {}
+  program_store = model_defaults.migrate(p, device_map and device_map.get_device) or {}
   
   -- Ensure memory structure exists after loading
   if not program_store.memory then
