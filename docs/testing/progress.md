@@ -1491,3 +1491,16 @@ Canonical constrained measurements are bound in perf-dense-canonical.json. PERF-
 ## Unit/integration hardening matrix — 2026-09-12
 
 The mandatory final hardening pass is active. unit-integration-hardening-matrix.json assigns all 141 manual requirements, 67 production Lua modules and 55 existing unit/integration files to 15 domains, with finite-axis cardinalities, interaction strategies and explicit residual gaps. test_hardening_matrix.py fails if the manual or inventory changes without reconciliation, if any requirement/module/test loses an owner, if a behavior reference goes stale, or if a finite-axis claim lacks a positive cardinality and coverage method. The matrix is a work queue and does not claim its residual gaps complete.
+
+
+## Merge arithmetic hardening  2026-09-12
+
+H05 now includes an independent, README-cited merge matrix. Six top-level Lua tests
+sweep all 17 overlap counts (zero through all 16 sources), all three trig modes,
+all 16 priority identities for note, velocity and length, signed and half-up
+numeric partitions, fractional length outcomes, empty and singleton contributors,
+source insertion orders, source/result immutability and channel/mask isolation.
+The complete Lua unit/integration suite passes 1477/1477. The nine inventory,
+matrix, test-name and Lua-syntax guards also pass. This slice changes no production
+code. MIDI-bound effects and merged-scale cache invalidation remain explicit H05
+gaps requiring native/composed coverage.

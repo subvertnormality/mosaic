@@ -5217,8 +5217,24 @@
     "guard": "tests/behaviour/test_hardening_matrix.py",
     "requirements_owned": 141,
     "production_lua_modules_owned": 67,
-    "unit_integration_files_owned": 55,
+    "unit_integration_files_owned": 56,
     "domains": 15,
-    "final_validation": "pending"
+    "final_validation": "pending",
+    "latest_slice": {
+      "domain": "H05",
+      "test": "lib/tests/lib/pattern_hardening_tests.lua",
+      "top_level_tests": 6,
+      "lua_suite": {
+        "collected": 1477,
+        "passed": 1477,
+        "failed": 0
+      },
+      "structural_guards": {
+        "collected": 9,
+        "passed": 9,
+        "failed": 0
+      },
+      "production_change": false
+    }
   }
 }

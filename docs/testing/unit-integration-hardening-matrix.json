@@ -9,7 +9,7 @@
   "counts": {
     "requirements": 141,
     "production_lua_modules": 67,
-    "unit_integration_files": 55,
+    "unit_integration_files": 56,
     "domains": 15
   },
   "coverage_language": {
@@ -735,12 +735,12 @@
         {
           "name": "numeric merge modes",
           "cardinality": 19,
-          "coverage": "up, down, average, 16 priorities"
+          "coverage": "up, down and average partitions plus all 16 priority identities"
         },
         {
           "name": "source overlap counts",
-          "cardinality": 4,
-          "coverage": "zero through three"
+          "cardinality": 17,
+          "coverage": "exhaustive zero through sixteen"
         },
         {
           "name": "priority sources",
@@ -748,9 +748,9 @@
           "coverage": "exhaustive identity"
         }
       ],
-      "interaction_strategy": "Literal formula matrices plus pairwise source activity, rests, ties, signed/fractional values and assignment order.",
+      "interaction_strategy": "Literal formula matrices cover negative values, half-up ties and fractional lengths; exhaustive source cardinality and priority identity sweeps are combined with order, immutability, result-copy and channel-isolation invariants.",
       "residual_gaps": [
-        "Independent oracle for every numeric mode at negative, fractional, tie and MIDI bounds.",
+        "User-visible MIDI-bound consequences of out-of-range merged values remain owned by native behaviour cases.",
         "Merged-scale cache invalidation across source edits, inactivity, unassignment and copies."
       ],
       "requirement_ids": [
@@ -774,6 +774,7 @@
       "existing_unit_integration_files": [
         "lib/tests/lib/integration_tests/merge_mode_tests.lua",
         "lib/tests/lib/integration_tests/pattern_and_song_tests.lua",
+        "lib/tests/lib/pattern_hardening_tests.lua",
         "lib/tests/lib/pattern_mutation_killers_tests.lua",
         "lib/tests/lib/pattern_tests.lua"
       ],
@@ -830,7 +831,7 @@
         "M-TRIPLE-001",
         "M-WORKFLOW-001"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-in-progress"
     },
     {
       "id": "H06",
