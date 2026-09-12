@@ -202,6 +202,14 @@ class Driver:
                     expected.extend(dict(type='grid',x=held['x'],y=held['y'],state=0) for held in held_grid.values())
                     held_grid.clear()
                 expected.append(action)
+            elif action['type']=='native_input_schedule':
+                for event in action['events']:
+                    event={k:v for k,v in event.items() if k!='at_monotonic_ns'}
+                    expected.append(event)
+                    if event['type']=='grid':
+                        key=(event['x'],event['y'])
+                        if event['state']:held_grid[key]=event
+                        else:held_grid.pop(key,None)
             else:expected.append(action)
         assert native==expected,'Native input trace differs from supplied user recipe'
         from automation.midi_schedule_evidence import verify_midi_schedules
