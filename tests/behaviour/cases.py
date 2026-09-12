@@ -1,6 +1,7 @@
 from shuffle_matrix import shuffle_matrix
 from shuffle_first_bar_record import shuffle_first_bar_record
 from random_note_domains import random_note_domains
+from grid_hot_disconnect import grid_disconnect_two_key_range
 from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
 from keyboard_repeated_note_on import keyboard_repeated_note_on
@@ -3580,6 +3581,7 @@ CASES={
  'M-PANIC-001':dict(run=lambda c:panic_navigation(c,3),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Hold non-selected channel navigation: all notes/channels/ports off and no navigation'),
  'M-PANIC-002':dict(run=lambda c:panic_navigation(c,5),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Hold non-selected pattern navigation: complete per-port panic output and no navigation'),
  'M-NAV-001':dict(run=navigation_matrix,requirements=['NAV-PAGES'],description='All36page transitions, repeated pattern cycles, exact menu LEDs and unchanged MIDI after each transition'),
+ 'M-GRID-001':dict(run=grid_disconnect_two_key_range,requirements=['CH-RANGE','NAV-PAGES'],description='Native virtual-grid disconnect synthesises a held range release; reconnect restores range LEDs, musical eight-step loop, and a clean menu tap'),
  'M-DASHBOARD-005':dict(run=lambda c:chord_shape_schedule(c,False,2,False,velocity=100,modifier=10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
  'M-DASHBOARD-006':dict(run=lambda c:chord_shape_schedule(c,False,2,False,velocity=20,modifier=-10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
  'M-DASHBOARD-007':dict(run=lambda c:chord_shape_schedule(c,False,4,False,velocity=100,modifier=10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),

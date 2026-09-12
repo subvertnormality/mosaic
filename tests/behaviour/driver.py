@@ -172,8 +172,10 @@ class Driver:
         events=[json.loads(line) for line in (self.out/'native/native-events.jsonl').read_text().splitlines()]
         native=[]
         for event in events:
-            if event['kind']!='input' or event['type'] not in (1,2,3,7,8,9,10,11,12,13):continue
+            if event['kind']!='input' or event['type'] not in (1,2,3,6,7,8,9,10,11,12,13):continue
             t=event['type'];a=event['args']
+            if t==6:
+                native.append(dict(type='grid_connection',connected=bool(a[0])));continue
             if t==12:
                 native.append(dict(type='midi_connection',port=a[0],connected=bool(a[1])));continue
             if t==13:
@@ -185,7 +187,23 @@ class Driver:
             if t==8:
                 native.append(dict(type='advance',nanoseconds=a[0]*1000000000+a[1]));continue
             native.append(dict(type='key',n=a[0],state=a[1]) if t==1 else dict(type='enc',n=a[0],delta=a[1]) if t==2 else dict(type='grid',x=a[0]+1,y=a[1]+1,state=a[2]))
-        assert native==[{k:v for k,v in a.items() if k!='at_monotonic_ns'} for a in self.recipe],'Native input trace differs from supplied user recipe'
+        expected=[];held_grid={}
+        for action in self.recipe:
+            action={k:v for k,v in action.items() if k!='at_monotonic_ns'}
+            if action['type']=='grid':
+                key=(action['x'],action['y'])
+                expected.append(action)
+                if action['state']:held_grid[key]=action
+                else:held_grid.pop(key,None)
+            elif action['type']=='grid_connection':
+                # The native grid lifecycle contract releases held cells through
+                # the ordinary input callback before it removes the device.
+                if not action['connected']:
+                    expected.extend(dict(type='grid',x=held['x'],y=held['y'],state=0) for held in held_grid.values())
+                    held_grid.clear()
+                expected.append(action)
+            else:expected.append(action)
+        assert native==expected,'Native input trace differs from supplied user recipe'
         from automation.midi_schedule_evidence import verify_midi_schedules
         actions=[json.loads(line) for line in (self.out/'native/actions.jsonl').read_text().splitlines()]
         verify_midi_schedules(events,actions)
