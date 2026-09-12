@@ -29,6 +29,8 @@ end
 
 -- Reuse this table to avoid allocations
 local sorted_ids = {}
+-- Keep the current map when no entry needs reclaiming.
+local cleanup_pending = false
 
 local function snapshot_active_ids()
   -- Get sorted list of active coroutine IDs
@@ -48,6 +50,7 @@ local function snapshot_active_ids()
 end
 
 local function retire_snapshot_ids(removal_count)
+  if removal_count > 0 then cleanup_pending = true end
   -- Process removals
   for i = 1, removal_count do
     local id = removal_set[i]
@@ -57,7 +60,7 @@ local function retire_snapshot_ids(removal_count)
   scheduler.active_count = scheduler.active_count - removal_count
 
   -- Periodic cleanup of inactive coroutines
-  if scheduler.active_count < scheduler.next_id / 2 then
+  if cleanup_pending and scheduler.active_count < scheduler.next_id / 2 then
     local new_coroutines = {}
     for id, co_data in pairs(scheduler.coroutines) do
       if co_data.active then
@@ -65,6 +68,7 @@ local function retire_snapshot_ids(removal_count)
       end
     end
     scheduler.coroutines = new_coroutines
+    cleanup_pending = false
   end
 end
 
@@ -102,6 +106,7 @@ function scheduler.debounce(func)
   return function(...)
     -- Deactivate existing coroutine if it exists
     if current_co and scheduler.coroutines[current_co] and scheduler.coroutines[current_co].active then
+      cleanup_pending = true
       scheduler.coroutines[current_co].active = false
       scheduler.active_count = scheduler.active_count - 1
     end

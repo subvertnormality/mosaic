@@ -41,3 +41,34 @@ function test_scheduler_removes_a_failing_job_and_keeps_the_others()
   luaunit.assert_equals(s.active_count, 0)
   luaunit.assert_nil(s.start("not a thread"))
 end
+
+-- Characterisation of dispatch boundaries, not manual text.
+function test_scheduler_jobs_created_during_dispatch_wait_for_next_update()
+  local s = real_scheduler()
+  local seen = {}
+  s.start(coroutine.create(function()
+    seen[#seen + 1] = "parent"
+    s.start(coroutine.create(function() seen[#seen + 1] = "child" end))
+  end))
+  s.update()
+  luaunit.assert_equals(seen, {"parent"})
+  luaunit.assert_equals(s.active_count, 1)
+  s.update()
+  luaunit.assert_equals(seen, {"parent", "child"})
+  luaunit.assert_equals(s.active_count, 0)
+end
+
+function test_scheduler_replacing_a_yielded_job_reclaims_it_without_resuming_it()
+  local s = real_scheduler()
+  local seen = {}
+  local job = s.debounce(function(value)
+    seen[#seen + 1] = value .. " start"
+    coroutine.yield()
+    seen[#seen + 1] = value .. " finish"
+  end)
+  job("old"); s.update()
+  job("new"); s.update(); s.update()
+  luaunit.assert_equals(seen, {"old start", "new start", "new finish"})
+  luaunit.assert_equals(s.active_count, 0)
+  luaunit.assert_nil(next(s.coroutines))
+end

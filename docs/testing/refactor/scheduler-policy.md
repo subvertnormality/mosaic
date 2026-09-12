@@ -90,3 +90,50 @@ Existing native regressions on 9b13c0e:
 R09 remains open: reconcile its count contract against the existing defect policy
 and measure cleanup cost before deciding the remaining storage work. Do not add
 an unproven user-visible defect fix or claim full scheduler completion here.
+
+## Measured cleanup optimization
+
+Baseline: 6f13738. A cleanup_pending flag records cancellation/retirement and
+retains the existing compaction threshold. Updates with no reclaimable entries
+keep the current coroutine map. Snapshot order, callback execution, monotonic IDs
+and the pre-existing cancellation/count defect are unchanged. No ordered queue,
+tombstone structure or dispatch budget was added.
+
+External reproducible experiment: /home/andy/projects/mosaic-behaviour-runs/r09-scheduler-cleanup/
+contains frozen baseline.lua, candidate.lua, bench.lua, results.tsv and differential.lua.
+Run `lua bench.lua DIRECTORY` and `lua differential.lua DIRECTORY`.
+Five alternating samples, 10,000 updates each, GC stopped during each measurement
+and restarted afterward. Callback counts and final active counts are asserted.
+Host CPU/allocation measurements, not a physical-norns performance claim:
+
+| Workload | Baseline median seconds | Candidate median seconds | Baseline allocated KiB | Candidate allocated KiB |
+|---|---:|---:|---:|---:|
+| Idle, mature IDs | 0.003448 | 0.002405 | 548.023 | 1.148 |
+| 16 yielding jobs | 0.064014 | 0.050567 | 5550.307 | 3.432 |
+| Three debounce calls per tick | 0.026406 | 0.025280 | 37891.807 | 37891.807 |
+
+The idle and yielding allocation reduction justifies this small change. Churn
+samples vary; no reliable churn speedup is claimed. GC-disabled timing isolates
+allocation and does not establish end-to-end musical latency improvement.
+
+Full Lua suite: 1545 passed, 25.256 seconds; six guards passed. Added focused
+contracts for next-pass job creation and cancellation of a yielded job. External
+differential checks compare same-pass cancellation with and without yielding,
+including traces, counts and retained IDs, against baseline. Sol's scoped review
+found no concrete correctness issue.
+
+Native checks on the changed production source:
+
+| Case | Mode | Passing run |
+|---|---|---|
+| M-ALG-PAINT-RACE-001 | controlled-experimental | f2af67285f7d4074be1db3ce53dbd187 |
+| M-MEMORY-010 | controlled-experimental | c43bbaa6c82d4e91912fef5ddd230b67 |
+| M-ALG-PAINT-RACE-001 | real-time | 0c1c5279276e41bbba7f1b0830e57ad1 |
+| M-MEMORY-010 | real-time | 66106aa56c874602bb8e43d2544ce859 |
+| M-SYNC-023 | real-time | 1533bd079d4d4bf39f14e7689ca9c7a1 |
+
+Remaining cancellation/count repair is explicitly deferred pending a reproduced
+user-visible consequence under the existing defect policy. This does not claim
+R09's correct-count condition is satisfied. Playback ownership extraction can
+proceed while preserving that scheduler behavior; no new scheduler algorithm is
+needed for the next structural slice. Final acceptance remains outstanding.
