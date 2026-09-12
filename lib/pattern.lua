@@ -86,6 +86,11 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
 
   local pattern_channel = selected_song_pattern.channels[channel]
   local patterns = selected_song_pattern.patterns
+  local note_priority = note_merge_mode and extract_pattern_number(note_merge_mode)
+  local velocity_priority = velocity_merge_mode and extract_pattern_number(velocity_merge_mode)
+  local length_priority = length_merge_mode and extract_pattern_number(length_merge_mode)
+  local priority_lengths
+  local merge_step_trig_masks = program.get_step_trig_masks(channel)
 
   for i = 1, 64 do
     notes[i] = {}
@@ -93,8 +98,8 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     velocities[i] = {}
   end
 
-  local function do_moded_merge(pattern_number, is_pattern_trig_one, s, mode, values, merged_values, pushed_values)
-    if mode == "pattern_number_" .. pattern_number then
+  local function do_moded_merge(pattern_number, is_pattern_trig_one, s, mode, priority, values, merged_values, pushed_values)
+    if priority == pattern_number then
       merged_values[s] = values[s]
     elseif mode == "up" or mode == "down" or mode == "average" then
       if is_pattern_trig_one then
@@ -125,6 +130,7 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   for pattern_number, pattern_enabled in pairs(patterns_to_process) do
     local pattern = patterns[pattern_number]
     local source_lengths = effective_lengths(pattern)
+    if pattern_number == length_priority then priority_lengths = source_lengths end
 
     for s = 1, 64 do
       local is_pattern_trig_one = pattern.trig_values[s] == 1
@@ -149,19 +155,19 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
         end
       end
 
-      local is_positive_step_trig_mask = program.get_step_trig_masks(channel) and program.get_step_trig_masks(channel)[s] == 1
-      local should_process_note_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (note_merge_mode and extract_pattern_number(note_merge_mode))
-      local should_process_velocity_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (velocity_merge_mode and extract_pattern_number(velocity_merge_mode))
-      local should_process_length_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (length_merge_mode and extract_pattern_number(length_merge_mode))
+      local is_positive_step_trig_mask = merge_step_trig_masks and merge_step_trig_masks[s] == 1
+      local should_process_note_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or note_priority
+      local should_process_velocity_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or velocity_priority
+      local should_process_length_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or length_priority
 
       if should_process_note_merge_mode then
-        do_moded_merge(pattern_number, pattern_enabled, s, note_merge_mode, pattern.note_values, merged_pattern.note_values, notes)
+        do_moded_merge(pattern_number, pattern_enabled, s, note_merge_mode, note_priority, pattern.note_values, merged_pattern.note_values, notes)
       end
       if should_process_velocity_merge_mode then
-        do_moded_merge(pattern_number, pattern_enabled, s, velocity_merge_mode, pattern.velocity_values, merged_pattern.velocity_values, velocities)
+        do_moded_merge(pattern_number, pattern_enabled, s, velocity_merge_mode, velocity_priority, pattern.velocity_values, merged_pattern.velocity_values, velocities)
       end
       if should_process_length_merge_mode then
-        do_moded_merge(pattern_number, pattern_enabled, s, length_merge_mode, source_lengths, merged_pattern.lengths, lengths)
+        do_moded_merge(pattern_number, pattern_enabled, s, length_merge_mode, length_priority, source_lengths, merged_pattern.lengths, lengths)
       end
     end
   end
@@ -191,10 +197,6 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
 
   -- Trig collection may copy another pattern's values. Apply explicit priorities
   -- after that collection so table iteration order cannot overwrite the choice.
-  local note_priority = note_merge_mode and extract_pattern_number(note_merge_mode)
-  local velocity_priority = velocity_merge_mode and extract_pattern_number(velocity_merge_mode)
-  local length_priority = length_merge_mode and extract_pattern_number(length_merge_mode)
-  local priority_lengths = length_priority and effective_lengths(patterns[length_priority])
 
   local step_trig_masks = pattern_channel.step_trig_masks or {}
   local step_note_masks = pattern_channel.step_note_masks or {}

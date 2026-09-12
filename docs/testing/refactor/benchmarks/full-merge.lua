@@ -1,10 +1,12 @@
 -- Measures the actual production merge body under dependency-only stubs.
-local file=assert(io.popen('git show e5a16bb:lib/pattern.lua'));local source=file:read('*a');assert(file:close())
+local baseline=arg[1] or 'e5a16bb'
+assert(baseline:match('^%x+$') and #baseline>=7 and #baseline<=40, 'Expected commit hash')
+local file=assert(io.popen('git show '..baseline..':lib/pattern.lua'));local source=file:read('*a');assert(file:close())
 include=function() return {} end
 program={initialise_64_table=function(t) for i=1,64 do t[i]=0 end;return t end,
  get_step_trig_masks=function() return nil end}
 fn=dofile('lib/helpers/functions.lua')
-local original=assert(load(source,'baseline-e5a16bb'))()
+local original=assert(load(source,'baseline-'..baseline))()
 local candidate=dofile('lib/pattern.lua')
 local function same(a,b)
  for k,v in pairs(a) do if type(v)=='table' then assert(type(b[k])=='table');same(v,b[k]) else assert(v==b[k],tostring(k)) end end

@@ -87,3 +87,58 @@ Existing native recipes/oracles are unchanged:
 Next: remove duplicate priority-source length resolution within a single merge
 if measurement justifies it; keep any reuse bounded to the rebuild until the
 writer/invalidation map supports longer-lived caching. R07 remains incomplete.
+
+## Invariant merge inputs and within-call reuse
+
+Hoisted priority parsing and the existing ambient step-mask lookup out of the
+source/step loop. Numeric modes retain their sorted accumulation order. A length
+priority reuses its source_lengths computed in the same synchronous call; unassigned
+priority sources still participate without becoming trig assignments. No cache or
+revision state survives the call. Existing selected-song getter semantics are retained.
+
+Reproduce incremental comparison:
+`lua5.3 docs/testing/refactor/benchmarks/full-merge.lua 170d6c1`
+
+Final sample shows 1.18-3.31x full-merge speed ratios, with equal complete outputs in
+all 18 workloads. This exceeds the prior small dense-short overhead and observed
+noise; it remains a host merge benchmark, not a hardware timing claim.
+
+```text
+1 dense-short average original=0.039318 candidate=0.030982 speedup=1.269
+1 dense-short pattern_number_1 original=0.028136 candidate=0.020120 speedup=1.398
+1 dense-long average original=0.039604 candidate=0.031307 speedup=1.265
+1 dense-long pattern_number_1 original=0.029335 candidate=0.020396 speedup=1.438
+1 sparse-long average original=0.023509 candidate=0.017104 speedup=1.374
+1 sparse-long pattern_number_1 original=0.038728 candidate=0.020178 speedup=1.919
+4 dense-short average original=0.139369 candidate=0.108597 speedup=1.283
+4 dense-short pattern_number_1 original=0.071736 candidate=0.042449 speedup=1.690
+4 dense-long average original=0.145125 candidate=0.123407 speedup=1.176
+4 dense-long pattern_number_1 original=0.074006 candidate=0.043708 speedup=1.693
+4 sparse-long average original=0.053462 candidate=0.027979 speedup=1.911
+4 sparse-long pattern_number_1 original=0.119801 candidate=0.042128 speedup=2.844
+16 dense-short average original=0.517164 candidate=0.353268 speedup=1.464
+16 dense-short pattern_number_1 original=0.245409 candidate=0.134729 speedup=1.822
+16 dense-long average original=0.472050 candidate=0.356403 speedup=1.324
+16 dense-long pattern_number_1 original=0.254367 candidate=0.142800 speedup=1.781
+16 sparse-long average original=0.171654 candidate=0.068470 speedup=2.507
+16 sparse-long pattern_number_1 original=0.416887 candidate=0.126156 speedup=3.305
+
+```
+
+All 1537 Lua tests (26.696 seconds) and six guards pass. Existing native cases:
+
+| Case | Controlled run | Real-time run |
+|---|---|---|
+| M-MERGE-007 | fb40538a0f894783a6d293899773d958 | 0541dfcdc9224ede908a4bc386da966b |
+| M-MERGE-010 | e5404b5368e744ecb2707e030897ce2f | 75dbebfeca9e44918c44e10ec167def5 |
+| M-MERGE-015 | c0875db9e4fd44888751c6b3a80133ff | 6a6b2d5caaaa4ba7bdf657db2a2ab260 |
+| M-MERGE-001 | 8bbdf01ce60c449f84877f71db3c5536 | ba34e9b5c69d4d88819c39364ed899a5 |
+
+Sol review found no changed final priority behavior, in-call mutation or yield.
+
+R07 remaining: dirty tracking and source revision checks require shared writer
+seams. Adding a counter only at rebuild requests would duplicate debounce cancellation
+and miss untracked writes. Next migrate the note editor step-note operation to an
+explicit song/pattern target and its captured-song invalidation, then the other
+writer families identified in model-mutation-map.md. Preserve per-channel publish
+then yield. Do not claim source freshness after migrating only one writer family.
