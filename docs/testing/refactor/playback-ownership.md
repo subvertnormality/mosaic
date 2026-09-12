@@ -84,3 +84,57 @@ R10/final acceptance remains outstanding.
 | M-SLIDE-RESET-001 | real-time | b121ad16cfa94b1a9a2e52c583f130f2 |
 
 Next structural slice: arp onset lifetime and release-list ownership, retaining separate cancellation of future onsets and cleanup of releases already owed.
+
+## Arp onset and terminating-release ownership
+
+Base acecaa7. arp_lifetime owns per-channel sprockets, first/following-gap state,
+stop-onsets and finish callbacks, and the release list supplied by the voice path.
+m_clock retains channel construction and public cancel/new-arp aliases. Init still
+destroys old arps before resetting channels 1..16; channel0 behavior is unchanged.
+Finishing clears each release ID and pending action before invoking callbacks;
+merely cancelling future onsets retains releases already owed.
+
+The initial extraction incorrectly captured the global m_clock table. Full units
+reported 29 errors and one load-sensitive dense-slide failure (5.077ms vs5ms),
+with 1515/1545 passing. Isolated
+`test_rests_apply_when_in_last_chord_slots_multiple_slots` reproduced a nil parent
+clock at arp_lifetime.lua:86. A live clock getter preserves the original dynamic
+global accesses and fixes that extraction regression. Inspection identified and
+corrected the same capture difference in the preceding slide realignment slice;
+its quantizer remains captured once as in the original implementation.
+
+The scoped review initially missed this binding difference; unit evidence exposed
+it. Re-review confirmed the scope. This is a refactor correction, not a new Mosaic
+behavior change. A dedicated slide clock-replacement test now verifies that the
+new parent is projected without emitting an extra sample.
+
+After correction: all 1545 then-existing Lua tests passed (24.592s). The added
+clock-replacement test passed separately; six guards pass. All54 arp/parent release
+combinations and the reentrant Stop contract pass. All six slide contracts pass,
+including864 endpoint phases,14 live retiming cases and18 cancellation cases.
+Native receipts below cover the extraction; R10 aggregate acceptance remains owed.
+
+| Case | Mode | Passing run |
+|---|---|---|
+| M-ARP-002 | controlled-experimental | 36157e8974fe4543b941733d02af483e |
+| M-ARP-012 | controlled-experimental | b720b93b8ab44e1788c206cec73f283b |
+| M-SLIDE-RESET-001 | controlled-experimental | 1267e3e8690c44e8b00818c3a4b35c52 |
+| M-ARP-002 | real-time | b5d22786ebc3443fb860f75cadbd5fdf |
+| M-SLIDE-RESET-001 | real-time | dff0a151847a46f1840d75fd1b6b1687 |
+
+M-ARP-012 real-time attempt7252a898ad8d4970b5e025487b4ffbfd was rejected
+by its explicit controlled-only precondition before behavior assertions. It is
+not a real-time pass or a Mosaic regression; absolute live-edit deadline mapping
+is not admitted in that lane.
+
+## Next transport slice
+
+Incoming Start/Continue/SPP decoding belongs to norns; Mosaic's native transport
+callbacks enter m_clock start/stop. Do not invent a second input state machine.
+Extract only the existing playing state, output subscription cancellation and
+start/stop/reset orchestration. Keep first_run, delayed release lists and channel
+construction with their existing owners. Preserve live global clock/lattice
+lookup and Stop release draining. midi_output_transport already owns the native
+F8 boundary, epoch and intermediate deadlines and should remain unchanged.
+
+Final suite including the new clock-replacement regression: 1546/1546 passed (25.730s), after native runs finished.

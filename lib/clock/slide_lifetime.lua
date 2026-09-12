@@ -2,9 +2,9 @@
 -- Preserve slot references and traversal boundaries during reentrant callbacks.
 local slide_lifetime = {}
 
-function slide_lifetime.new(m_clock, program, get_lattice)
+function slide_lifetime.new(get_clock, program, get_lattice)
   local slides = {}
-  local quantize_value = m_clock.quantize_value
+  local quantize_value = get_clock().quantize_value
   local active_spread_actions = {}
 
   local RING_BUFFER_SIZE = 1024 -- Power of 2 for efficient modulo
@@ -161,7 +161,7 @@ function slide_lifetime.new(m_clock, program, get_lattice)
     local i = ring_start
     while i ~= ring_end do
       local action = spread_ring[i]
-      local clock = m_clock["channel_" .. action.channel .. "_clock"]
+      local clock = get_clock()["channel_" .. action.channel .. "_clock"]
       if action.active and clock and clock.realign then
         local channel = program.get_channel(program.get().selected_song_pattern, action.channel)
         local first, last = program.get_channel_step_bounds(channel)
