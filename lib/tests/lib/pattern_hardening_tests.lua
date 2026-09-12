@@ -220,6 +220,46 @@ function test_hardening_merge_is_order_independent_and_does_not_mutate_sources()
   end
 end
 
+
+function test_hardening_working_merge_refreshes_after_source_edit_assignment_and_song_copy()
+  -- README.md:622-630 assigns any subset of the 16 patterns to a channel, and 638-647
+  -- selects the note merge rule. Rebuilding the working pattern must observe subsequent
+  -- source edits and assignment changes without leaking those changes through a song copy.
+  local song = fresh_song()
+  local channel = song.channels[1]
+  channel.trig_merge_mode = "all"
+  channel.note_merge_mode = "average"
+  select_sources(channel, {1, 2})
+  set_source_value(song.patterns[1], "note_values", 0)
+  set_source_value(song.patterns[2], "note_values", 4)
+
+  pattern_hardening.update_working_pattern(1, song)
+  luaunit.assert_equals(channel.working_pattern.note_values[1], 2)
+
+  song.patterns[2].note_values[1] = 8
+  pattern_hardening.update_working_pattern(1, song)
+  luaunit.assert_equals(channel.working_pattern.note_values[1], 4, "edited source")
+
+  channel.selected_patterns[2] = nil
+  pattern_hardening.update_working_pattern(1, song)
+  luaunit.assert_equals(channel.working_pattern.note_values[1], 0, "unassigned source")
+  channel.selected_patterns[2] = true
+  pattern_hardening.update_working_pattern(1, song)
+  luaunit.assert_equals(channel.working_pattern.note_values[1], 4, "reassigned source")
+
+  program.set_song_pattern(1, 96)
+  program.set_selected_song_pattern(96)
+  local copied = program.get_song_pattern(96)
+  copied.patterns[1].note_values[1] = -2
+  pattern_hardening.update_working_pattern(1, copied)
+  luaunit.assert_equals(copied.channels[1].working_pattern.note_values[1], 3, "copied song edit")
+
+  program.set_selected_song_pattern(1)
+  pattern_hardening.update_working_pattern(1, song)
+  luaunit.assert_equals(channel.working_pattern.note_values[1], 4, "source song isolation")
+  luaunit.assert_equals(song.patterns[1].note_values[1], 0)
+end
+
 function test_hardening_merge_masks_and_selected_patterns_are_channel_isolated()
   local song = fresh_song()
   local channel_one = song.channels[1]

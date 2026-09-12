@@ -1564,3 +1564,13 @@ minimized with a capacity-three sequence: after edits 60,61,62,63 leave retained
 events 61,62,63, undoing the retained log restores nil instead of the required
 pre-retention floor 60. It remains unfixed pending the required native behavior
 baseline; full project-file reload remains behavior-owned.
+
+## Scale and merge invalidation hardening — 2026-09-12
+
+H05/H06 now compose the arithmetic matrices with working-pattern and quantiser-cache
+state changes. Source edits, unassignment, reassignment and a highest-slot song copy
+rebuild independently; save-across-song replaces already-warm scale lookups on songs
+1/48/96 and its intended linked rotation is visible from every song. The hardening
+matrix now reflects the user's S35 decision that save-across-song linking is intended.
+These domains are complete with explicit partitions; native cases retain MIDI-bound and
+UI-save ownership. No production code changed.

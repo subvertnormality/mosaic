@@ -59,6 +59,41 @@ function test_hardening_song_copy_has_independent_scale_data_and_cache_keys()
   luaunit.assert_false(rawequal(program.get_song_pattern(1).scales[16], program.get_song_pattern(96).scales[16]))
 end
 
+
+function test_hardening_save_across_song_invalidates_warm_caches_and_keeps_linked_scale()
+  -- README.md:850-856 defines editable scales and K1+K2 save across the song. The user
+  -- confirmed that this route intentionally links the saved scale across existing song
+  -- slots (S35 decision, 2026-09-11). Each slot's already-warm quantiser lookup must use
+  -- the new root, and a supported linked rotation edit must invalidate every slot's key.
+  program.init()
+  quantiser_hardening._scale_cache = {}
+  quantiser_hardening._scale_cache_size = 0
+
+  for _, song_number in ipairs({1, 48, 96}) do
+    program.get_song_pattern(song_number)
+    program.set_selected_song_pattern(song_number)
+    program.set_scale(16, container(1, song_number % 12))
+    quantiser_hardening.process(6, 0, 0, 16, false)
+  end
+
+  program.set_all_song_pattern_scales(16, container(1, 2))
+  local linked = program.get_song_pattern(1).scales[16]
+  for _, song_number in ipairs({1, 48, 96}) do
+    program.set_selected_song_pattern(song_number)
+    luaunit.assert_true(rawequal(program.get_scale(16), linked), "linked song " .. song_number)
+    luaunit.assert_equals(quantiser_hardening.process(0, 0, 0, 16, false), 62,
+      "save-across-song root " .. song_number)
+  end
+
+  program.set_selected_song_pattern(48)
+  program.set_chord_degree_rotation_for_scale(16, 1)
+  for _, song_number in ipairs({1, 48, 96}) do
+    program.set_selected_song_pattern(song_number)
+    luaunit.assert_equals(quantiser_hardening.process(6, 0, 0, 16, false), 61,
+      "linked rotation " .. song_number)
+  end
+end
+
 function test_hardening_production_scale_type_names_and_numbers_are_stable()
   local expected = {
     "Major", "Harmonic Major", "Minor", "Harmonic Minor", "Melodic Minor",

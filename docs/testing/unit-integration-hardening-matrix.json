@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "planned-hardening-matrix-reconciled",
-  "base_revision": "32ff2dc",
+  "base_revision": "bf4e47c",
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "inventory": "tests/behaviour/manual-inventory.json",
@@ -753,7 +753,7 @@
       "interaction_strategy": "Literal formula matrices cover negative values, half-up ties and fractional lengths; exhaustive source cardinality and priority identity sweeps are combined with order, immutability, result-copy and channel-isolation invariants.",
       "residual_gaps": [
         "User-visible MIDI-bound consequences of out-of-range merged values remain owned by native behaviour cases.",
-        "Merged-scale cache invalidation across source edits, inactivity, unassignment and copies."
+        "Working-pattern recomposition now covers source edits, unassignment, reassignment and song-copy isolation; the full Cartesian product of all sixteen source contents remains partitioned by the independently-oracled arithmetic matrices."
       ],
       "requirement_ids": [
         "MERGE-CONTROL",
@@ -833,7 +833,7 @@
         "M-TRIPLE-001",
         "M-WORKFLOW-001"
       ],
-      "status": "hardening-in-progress"
+      "status": "hardening-complete-partitioned"
     },
     {
       "id": "H06",
@@ -868,8 +868,8 @@
       ],
       "interaction_strategy": "Exhaust finite scale slots, scale types, MIDI pitches and all eight pentatonic switches; pairwise pitch stages plus explicit merged-note/random-offset switch contexts and song-copy cache isolation.",
       "residual_gaps": [
-        "The set-all-song-patterns scale route aliases one mutable scale table across existing songs; current behavior is characterised and remains a suspected defect pending native reproduction.",
-        "In-place scale mutation outside the supported save route can bypass version-based cache invalidation; production UI routes require composed coverage."
+        "Save across song intentionally links one scale table across existing song slots (user decision S35, 2026-09-11); warm-cache invalidation and linked rotation are covered on songs 1, 48 and 96.",
+        "Direct in-place mutation outside supported save/rotation routes is characterised by quantiser unit tests and is not a documented product workflow; production UI saves remain anchored by M-SCALE-CACHE-001."
       ],
       "requirement_ids": [
         "CH-GLOBAL-OCTAVE",
@@ -944,7 +944,7 @@
         "M-TRIPLE-001",
         "M-WORKFLOW-001"
       ],
-      "status": "hardening-in-progress"
+      "status": "hardening-complete-partitioned"
     },
     {
       "id": "H07",
