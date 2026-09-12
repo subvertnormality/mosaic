@@ -36,7 +36,12 @@ function recorder.record_stored_note_mask_events(c, step)
       return
     end
 
-    memory.record_event(c, "note_mask", event.data)
+    local song_pattern = event.data.song_pattern or event.song_pattern
+    if song_pattern then
+      memory.record_event_for_target(song_pattern, c, "note_mask", event.data)
+    else
+      memory.record_event(c, "note_mask", event.data)
+    end
     recorder.mask_events[c][step] = nil
 
   end

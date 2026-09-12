@@ -1154,6 +1154,15 @@
         "M-PARAM-047"
       ],
       "summary": "A held parameter-lock edit released after a song transition was committed to the newly selected slot; it now remains with the slot active when the edit was queued (S68)."
+    },
+    {
+      "id": "pending-note-mask-song-target",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "pending-note-mask-song-target.json",
+      "cases": [
+        "M-MASK-032"
+      ],
+      "summary": "Pending held note-mask edits retain their captured song across automatic song transitions."
     }
   ]
 }

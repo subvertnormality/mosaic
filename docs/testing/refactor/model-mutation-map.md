@@ -59,3 +59,12 @@ selection or mutates an escaped model table directly.
    proving grid/encoder/MIDI entry points share target and invalidation behavior.
 4. Add a per-song/channel source revision only after every writer that can affect
    that working pattern increments it. Until then, targeted rebuilds are safer.
+
+### Pending note-mask ownership closure
+
+M-MASK-032 now proves captured-song commit, second-song isolation and undo/redo
+in both timing lanes; candidate `0114-pending-note-mask-song-target.patch`.
+All 1534 Lua tests and six guards pass, with three identical controlled repeats.
+Earlier delta-1 runs were invalid evidence: native encoder sensitivity requires
+two counts per detent. Only the corrected baselines in the candidate record count.
+Next: MIDI held-note/chord release-time length ownership across a song transition.

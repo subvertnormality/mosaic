@@ -156,13 +156,14 @@ end
 
 function test_recorder_extra_commit_hands_memory_the_merged_data()
   local recorder = fresh(1, 1)
-  with_recorder_globals({}, 1, function(calls)
+  with_recorder_globals({}, 1, function(calls, target_calls)
     recorder.add_note_mask_event_portion(6, 7, {song_pattern = 2, data = {song_pattern = 2, step = 7, note = 50}})
     recorder.add_note_mask_event_portion(6, 7, {data = {velocity = 33, chord_degrees = {[2] = 4}}})
     recorder.add_note_mask_event_portion(6, 8, {data = {step = 8, note = 51}})
     recorder.add_note_mask_event_portion(5, 7, {data = {step = 7, note = 52}})
     recorder.record_stored_note_mask_events(6, 7)
-    luaunit.assert_equals(calls, {{6, "note_mask",
+    luaunit.assert_equals(calls, {})
+    luaunit.assert_equals(target_calls, {{2, 6, "note_mask",
       {song_pattern = 2, step = 7, note = 50, velocity = 33, chord_degrees = {[2] = 4}}}})
     -- only that channel and step is cleared
     luaunit.assert_equals(recorder.mask_events, {
@@ -171,7 +172,7 @@ function test_recorder_extra_commit_hands_memory_the_merged_data()
     })
     -- committing again finds nothing
     recorder.record_stored_note_mask_events(6, 7)
-    luaunit.assert_equals(#calls, 1)
+    luaunit.assert_equals(#target_calls, 1)
   end)
 end
 
@@ -179,7 +180,7 @@ function test_recorder_extra_later_portion_overrides_and_is_copied()
   -- The note-off portion (m_midi) replaces the placeholder length stored at note-on.
   local recorder = fresh(2, 1)
   program.set_current_step_for_channel(1, 4)
-  with_recorder_globals({}, 2, function(calls)
+  with_recorder_globals({}, 2, function(calls, target_calls)
     recorder.handle_note_midi_message(60, 100, 1, nil)
     local late = {song_pattern = 2, data = {step = 4, length = 0.25, chord_degrees = {[1] = 2}}}
     recorder.add_note_mask_event_portion(1, 4, late)
@@ -187,14 +188,15 @@ function test_recorder_extra_later_portion_overrides_and_is_copied()
     late.data.length = 8
     late.data.chord_degrees[1] = 9
     recorder.record_stored_note_mask_events(1, 4)
-    luaunit.assert_equals(calls, {{1, "note_mask", {song_pattern = 2, trig = 1, note = 60,
+    luaunit.assert_equals(calls, {})
+    luaunit.assert_equals(target_calls, {{2, 1, "note_mask", {song_pattern = 2, trig = 1, note = 60,
       velocity = 100, length = 0.25, chord_degrees = {[1] = 2}, step = 4}}})
     local lock = {data = {parameter = 2, step = 4, value = 5}}
     recorder.add_trig_lock_event_portion(1, 4, lock)
     recorder.add_trig_lock_event_portion(1, 4, {data = {value = 6}})
     lock.data.parameter = 3
     recorder.record_stored_trig_lock_events(1, 4)
-    luaunit.assert_equals(calls[2], {1, "trig_lock", {parameter = 2, step = 4, value = 6}})
+    luaunit.assert_equals(calls[1], {1, "trig_lock", {parameter = 2, step = 4, value = 6}})
   end)
 end
 
@@ -202,19 +204,20 @@ function test_recorder_extra_commit_without_data_keeps_the_portion()
   -- characterisation: a portion with no data is neither sent nor cleared; later data
   -- merges into it.
   local recorder = fresh(1, 1)
-  with_recorder_globals({}, 1, function(calls)
+  with_recorder_globals({}, 1, function(calls, target_calls)
     recorder.add_note_mask_event_portion(1, 2, {song_pattern = 4})
     recorder.record_stored_note_mask_events(1, 2)
     luaunit.assert_equals(calls, {})
     luaunit.assert_equals(recorder.mask_events, {[1] = {[2] = {song_pattern = 4}}})
     recorder.add_note_mask_event_portion(1, 2, {data = {step = 2, length = 3}})
     recorder.record_stored_note_mask_events(1, 2)
-    luaunit.assert_equals(calls, {{1, "note_mask", {step = 2, length = 3}}})
+    luaunit.assert_equals(calls, {})
+    luaunit.assert_equals(target_calls, {{4, 1, "note_mask", {step = 2, length = 3}}})
     luaunit.assert_equals(recorder.mask_events, {[1] = {}})
 
     recorder.add_trig_lock_event_portion(3, 4, {song_pattern = 4})
     recorder.record_stored_trig_lock_events(3, 4)
-    luaunit.assert_equals(#calls, 1)
+    luaunit.assert_equals(#calls, 0)
     luaunit.assert_equals(recorder.trig_lock_events, {[3] = {[4] = {song_pattern = 4}}})
   end)
 end
@@ -328,4 +331,29 @@ function test_recorder_extra_pending_portions_survive_clear_all_trig_lock_dirty(
   recorder.clear_all_trig_lock_dirty()
   luaunit.assert_equals(recorder.trig_lock_events, {[1] = {[1] = {data = {parameter = 1, step = 1, value = 3}}}})
   luaunit.assert_equals(recorder.mask_events, {[1] = {[1] = {data = {step = 1, note = 3}}}})
+end
+
+function test_recorder_extra_note_mask_commit_target_precedence_and_fallback()
+  -- Characterisation, not manual text: a queued gesture keeps its captured song;
+  -- MIDI data ownership wins over later envelope fragments. Legacy events fall back.
+  local cases = {
+    {portion = {song_pattern = 2, data = {step = 4, note = 0}}, target = 2},
+    {portion = {song_pattern = 3, data = {song_pattern = 2, step = 4, note = 60}}, target = 2},
+    {portion = {data = {step = 4, note = 60}}}
+  }
+  for _, case in ipairs(cases) do
+    local recorder = fresh(1, 1)
+    with_recorder_globals({}, 1, function(calls, target_calls)
+      recorder.add_note_mask_event_portion(1, 4, case.portion)
+      recorder.record_stored_note_mask_events(1, 4)
+      if case.target then
+        luaunit.assert_equals(calls, {})
+        luaunit.assert_equals(target_calls, {{case.target, 1, "note_mask", case.portion.data}})
+      else
+        luaunit.assert_equals(calls, {{1, "note_mask", case.portion.data}})
+        luaunit.assert_equals(target_calls, {})
+      end
+      luaunit.assert_nil(recorder.mask_events[1][4])
+    end)
+  end
 end

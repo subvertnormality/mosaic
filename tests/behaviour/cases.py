@@ -92,6 +92,7 @@ from mask_gestures import trig_gesture_all_steps
 from held_mask_extra_key import held_mask_extra_key
 from chord_mask_start_x import chord_mask_start_x
 from mask_off_probe import mask_off_probe
+from pending_note_mask_song_transition import pending_note_mask_song_transition
 from mask_quantisation import mask_full_chord_inheritance
 from mask_quantisation import mask_full_quantisation
 from mask_quantisation import mask_scale_snap
@@ -3951,6 +3952,7 @@ CASES={
  'M-RANGE-REJECT-002':dict(run=lambda c:rejected_range(c,True),requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageTrue: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
  'M-RANGE-REJECT-001':dict(run=lambda c:rejected_range(c,False),requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageFalse: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
  'M-MASK-031':dict(run=lambda c:multiheld_keyboard(c,False),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstFalse: range2..4, first-held target, remaining-held target and untouched middle step'),
+ 'M-MASK-032':dict(run=pending_note_mask_song_transition,requirements=['MASK-ATTRIBUTES','MASK-STEP-ENTRY','MEMORY-RECORD','SONG-ADVANCE','SONG-SLOTS'],description='Held-step note-mask encoder edit remains in the song selected at gesture press when automatic song mode advances before release; grid/song indicators, screen, MIDI and song-local undo/redo stay isolated'),
  'M-MASK-HELD-EXTRA-001':dict(run=held_mask_extra_key,requirements=['MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='A held-step velocity turn with a pattern-row key also held locks only the held step, in either press order (README 595-597; human decision S27)'),
  'M-MASK-CHORD-X-001':dict(run=chord_mask_start_x,requirements=['MASK-CHORD','MASK-ATTRIBUTES'],description='An unset chord mask starts from X: one turn up shows 2nd, one turn down shows -7th, and every trig sounds root, degree above and degree below (human decision S26)'),
  'M-MASK-OFF-001':dict(run=mask_off_probe,requirements=['MASK-ATTRIBUTES','MASK-PRECEDENCE'],description='S24: channel velocity, held-step trig and held-step velocity masks turned back to X play as unset, also after an autosave restart (README 570, 597)'),
