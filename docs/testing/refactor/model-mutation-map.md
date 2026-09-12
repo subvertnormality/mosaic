@@ -89,3 +89,23 @@ M-TRIPLE-005 passes controlled `7cae5124b5fa44e898104c6deaac1a0d` and real-time
 `c90ab6017f4b4fad8ed5e10b4a4d957f`; all 1536 Lua tests and six guards pass.
 Next: R06 item 4, move the cohesive song-transition functions and their queue state
 to a dedicated module with step facades, preserving queue/copy/repeat/Stop policy.
+
+### Note and velocity editor target capture
+
+Both single-step/repeated-column fader gestures now capture the selected song
+object once, mutate that object's selected source pattern, mark that object active,
+and request `pattern.update_working_patterns(captured_song)`. All-channel rebuilding
+is preserved because a source pattern may feed multiple channels. Tooltip and
+write order remain unchanged. This is explicit target plumbing, not yet a shared
+mutation registry or a proof that source revisions cover every writer.
+
+Combined final validation: all 1537 Lua tests pass (26.136 seconds), six guards pass,
+and M-EDIT-003 passes controlled `0d730b50ec894fc1b82db58a8b37cdc0` and real-time
+`01085ce6c22d4abb8fda5a2a38ddbd2a`. The note-only intermediate change also passed
+M-PAT-BOUNDARY-001 controlled `3d2b8eef429a4ac98e7d8aedac0b6dd1` before the identical
+velocity-target migration; that is not claimed as a final-tree whole-boundary run.
+
+Next: trigger sequencer edits, dual/long-press lengths and paint commit ownership.
+Inspect the asynchronous paint preview separately; capture its intended lifetime
+rather than imposing note-fader assumptions. Channel composition/masks and mapped
+writers still need ownership migration before R07 dirty tracking can be trusted.

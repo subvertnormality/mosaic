@@ -99,14 +99,14 @@ function note_edit_page.register_press()
             return
           end
 
-          local selected_song_pattern = program.get().selected_song_pattern
+          local selected_song_pattern = program.get_selected_song_pattern()
           local selected_pattern = program.get().selected_pattern
           local note = fn.note_from_value(fader:get_value())
-          local seq_pattern = program.get_selected_song_pattern().patterns[selected_pattern]
+          local seq_pattern = selected_song_pattern.patterns[selected_pattern]
           local steps_tip = s .. " "
 
           seq_pattern.note_values[s] = note
-          program.get_selected_song_pattern().active = true
+          selected_song_pattern.active = true
           tooltip:show("Step " .. s .. " note set to " .. note)
 
           if is_key1_down then
@@ -122,7 +122,7 @@ function note_edit_page.register_press()
             tooltip:show("Steps " .. steps_tip .. "set to " .. note)
           end
 
-          pattern.update_working_patterns()
+          pattern.update_working_patterns(selected_song_pattern)
         end
       end
     )
