@@ -3,70 +3,70 @@
   "workload": "PERF-008",
   "status": "retained-failure",
   "interpretation": "The clean constrained x86 proxy run preserved complete MIDI ownership, visual response, service, memory and queue recovery, but failed the unchanged musical phase gate after overload. This is a refactor blocker and is not physical-norns evidence.",
-  "mosaic_revision": "2b00e8acbb045392107b057a91e974ce62b919c6",
-  "runner_sha256": "a5d52abdea6fa55970d560f6c33d973809fea6e85a0cbda1fa1f1e0786af8ec1",
+  "mosaic_revision": "a7bf17cbe0298640c5f5aa53d110d773e540caa1",
+  "runner_sha256": "6e9feba6dd085a6d30419e4484b858e521a3da1a7e8284675e39f62f5471f3da",
   "source_status": [],
   "image": "monome-emulator:perf-recorder-02",
   "image_id": "sha256:38b516ef4a8e7f85355da8d94d8f6f21c007b6a8d47fa829a8fc9039c01eea91",
-  "evidence_directory": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-06",
+  "evidence_directory": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07",
   "artifacts": {
     "report.json": {
-      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-06/report.json",
-      "sha256": "a31270c43eee0d5d620821121254a028f3b7c0fb00a5bd5a9f4de7332b906b15"
+      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07/report.json",
+      "sha256": "151032d1c2068cb29028292c9f7889f66904d216365189602beb016b874ac75f"
     },
     "result.json": {
-      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-06/result.json",
-      "sha256": "8e992dc69e401ca3ccc815e99b47c9525273138edbeadb706b15f67f79557458"
+      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07/result.json",
+      "sha256": "5e7b236aa6b3feac2d058c6075006685e680b34e4eda2c8cf0a0f0e3b5d0b058"
     },
     "samples.json": {
-      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-06/samples.json",
-      "sha256": "ff69e3c720ff0c70330f386651ca9ec6fd285e2f54964e331bcfb56c9aace20e"
+      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07/samples.json",
+      "sha256": "5eb513257255260f3a03f006df61852b694ba7b10c38bd77f6810a8235a5bfba"
     },
     "native-events.jsonl": {
-      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-06/native-events.jsonl",
-      "sha256": "4faef3351d9f604390caf21ebfff5470e7ba60c37af2ff7ee225e239610bfc99"
+      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07/native-events.jsonl",
+      "sha256": "dc70f6752ea2eefedb2a21fddde90dd54b27b2b24b77f0f5ed32500dc7faed3d"
     },
     "container.log": {
-      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-06/container.log",
-      "sha256": "b7f6666b5403496a51a15bfa66189e6e7df687dd9662bef6bea73cb4bd2bf06f"
+      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07/container.log",
+      "sha256": "1ceea3b558060dc65aa1a3ff6168acc104b861e9d4634789b78d52af84b3af08"
     }
   },
   "observations": {
     "onset_groups": 47,
     "midi_messages": 1506,
     "balanced_release_ownership": true,
-    "overload_elapsed_ns": 1720923238,
-    "overload_throttled_periods": 15,
-    "overload_throttled_ns": 746522178,
+    "overload_elapsed_ns": 1767120847,
+    "overload_throttled_periods": 16,
+    "overload_throttled_ns": 794040805,
     "post_recovery_timing": {
-      "p50_ns": 67128705,
-      "p95_ns": 68300570,
-      "p99_ns": 68300570,
-      "maximum_ns": 68300570
+      "p50_ns": 68682490,
+      "p95_ns": 69791435,
+      "p99_ns": 69791435,
+      "maximum_ns": 69791435
     },
-    "final_phase_error_ns": 66707364,
-    "queue_recovery_ns": 2135602,
-    "peak_rss_bytes": 420491264,
+    "final_phase_error_ns": 67756407,
+    "queue_recovery_ns": 7062230,
+    "peak_rss_bytes": 421167104,
     "service": {
-      "p50_ns": 1391817,
-      "p95_ns": 2022219,
-      "p99_ns": 6280215,
-      "maximum_ns": 6280215,
-      "p99_deadline_fraction": 0.03768128992463742,
-      "maximum_deadline_fraction": 0.03768128992463742
+      "p50_ns": 1439446,
+      "p95_ns": 3204848,
+      "p99_ns": 3843932,
+      "maximum_ns": 3843932,
+      "p99_deadline_fraction": 0.023063591953872815,
+      "maximum_deadline_fraction": 0.023063591953872815
     },
     "visual_recovery": {
       "grid_revisions": [
-        170,
-        171
+        172,
+        173
       ],
       "frame_revisions": [
-        447,
-        448
+        456,
+        458
       ],
       "frame_hashes": [
         "a836967aa3502d4388ea10c7bfac403e4f1f1101a77856474783e9e04b62d418",
-        "0f64a11da7dd9727f1acd030f2fd2644e828235d250be580e83562d711206ae2"
+        "c7d55fe207bc32e2373c0724b323ef4b0e0ee46701d502be9bbd7608ff10825b"
       ]
     },
     "gates": {
