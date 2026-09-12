@@ -506,22 +506,24 @@ function m_midi.set_up_midi_mapping_params()
         end
 
         local scaled_d = d * scaling_factor
+        local target_song_number = program.get().selected_song_pattern
+        local target_channel = program.get_channel(target_song_number, program.get().selected_channel)
         if param == 1 then
-          channel_edit_page_ui.handle_trig_mask_change(program.get_selected_channel(), scaled_d)
+          channel_edit_page_ui.handle_trig_mask_change(target_channel, scaled_d, target_song_number)
         elseif param == 2 then
-          channel_edit_page_ui.handle_note_mask_change(program.get_selected_channel(), scaled_d)
+          channel_edit_page_ui.handle_note_mask_change(target_channel, scaled_d, target_song_number)
         elseif param == 3 then
-          channel_edit_page_ui.handle_velocity_mask_change(program.get_selected_channel(), scaled_d)
+          channel_edit_page_ui.handle_velocity_mask_change(target_channel, scaled_d, target_song_number)
         elseif param == 4 then
-          channel_edit_page_ui.handle_length_mask_change(program.get_selected_channel(), scaled_d)
+          channel_edit_page_ui.handle_length_mask_change(target_channel, scaled_d, target_song_number)
         elseif param == 5 then
-          channel_edit_page_ui.handle_chord_mask_one_change(program.get_selected_channel(), scaled_d)
+          channel_edit_page_ui.handle_chord_mask_one_change(target_channel, scaled_d, target_song_number)
         elseif param == 6 then
-          channel_edit_page_ui.handle_chord_mask_two_change(program.get_selected_channel(), scaled_d)
+          channel_edit_page_ui.handle_chord_mask_two_change(target_channel, scaled_d, target_song_number)
         elseif param == 7 then
-          channel_edit_page_ui.handle_chord_mask_three_change(program.get_selected_channel(), scaled_d)
+          channel_edit_page_ui.handle_chord_mask_three_change(target_channel, scaled_d, target_song_number)
         elseif param == 8 then
-          channel_edit_page_ui.handle_chord_mask_four_change(program.get_selected_channel(), scaled_d)
+          channel_edit_page_ui.handle_chord_mask_four_change(target_channel, scaled_d, target_song_number)
         end
         params:set("sel_ch_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "ch1" or param == 6 and "ch2" or param == 7 and "ch3" or param == 8 and "ch4"), 0, true)
 
@@ -561,22 +563,24 @@ function m_midi.set_up_midi_mapping_params()
           end
 
           local scaled_d = d * scaling_factor
+          local target_song_number = program.get().selected_song_pattern
+          local target_channel = program.get_channel(target_song_number, channel)
           if param == 1 then
-            channel_edit_page_ui.handle_trig_mask_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
+            channel_edit_page_ui.handle_trig_mask_change(target_channel, scaled_d, target_song_number)
           elseif param == 2 then
-            channel_edit_page_ui.handle_note_mask_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
+            channel_edit_page_ui.handle_note_mask_change(target_channel, scaled_d, target_song_number)
           elseif param == 3 then
-            channel_edit_page_ui.handle_velocity_mask_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
+            channel_edit_page_ui.handle_velocity_mask_change(target_channel, scaled_d, target_song_number)
           elseif param == 4 then
-            channel_edit_page_ui.handle_length_mask_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
+            channel_edit_page_ui.handle_length_mask_change(target_channel, scaled_d, target_song_number)
           elseif param == 5 then
-            channel_edit_page_ui.handle_chord_mask_one_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
+            channel_edit_page_ui.handle_chord_mask_one_change(target_channel, scaled_d, target_song_number)
           elseif param == 6 then
-            channel_edit_page_ui.handle_chord_mask_two_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
+            channel_edit_page_ui.handle_chord_mask_two_change(target_channel, scaled_d, target_song_number)
           elseif param == 7 then
-            channel_edit_page_ui.handle_chord_mask_three_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
+            channel_edit_page_ui.handle_chord_mask_three_change(target_channel, scaled_d, target_song_number)
           elseif param == 8 then
-            channel_edit_page_ui.handle_chord_mask_four_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
+            channel_edit_page_ui.handle_chord_mask_four_change(target_channel, scaled_d, target_song_number)
           end
           params:set("ch" .. channel .. "_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "chd1" or param == 6 and "chd2" or param == 7 and "chd3" or param == 8 and "chd4"), 0, true)
           

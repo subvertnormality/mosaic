@@ -985,7 +985,8 @@ local function held_step_keys()
   return keys
 end
 
-function channel_edit_page_ui.handle_trig_mask_change(channel, direction)
+function channel_edit_page_ui.handle_trig_mask_change(channel, direction, song_pattern_number)
+  local target_song_number = song_pattern_number or program.get().selected_song_pattern
   local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
@@ -998,7 +999,7 @@ function channel_edit_page_ui.handle_trig_mask_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               trig = mask_selectors.trig:get_value()
@@ -1014,7 +1015,7 @@ function channel_edit_page_ui.handle_trig_mask_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               trig = mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value()
@@ -1032,12 +1033,13 @@ function channel_edit_page_ui.handle_trig_mask_change(channel, direction)
       mask_selectors.trig:decrement()
       program.set_trig_mask(channel, mask_selectors.trig:get_value() == -1 and nil or mask_selectors.trig:get_value())
     end
-    pattern.update_working_pattern(channel.number, program.get_selected_song_pattern())
+    pattern.update_working_pattern(channel.number, program.get_song_pattern(target_song_number))
   end
 end
 
 
-function channel_edit_page_ui.handle_note_mask_change(channel, direction)
+function channel_edit_page_ui.handle_note_mask_change(channel, direction, song_pattern_number)
+  local target_song_number = song_pattern_number or program.get().selected_song_pattern
   local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
@@ -1050,7 +1052,7 @@ function channel_edit_page_ui.handle_note_mask_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               note = mask_selectors.note:get_value()
@@ -1066,7 +1068,7 @@ function channel_edit_page_ui.handle_note_mask_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               note = mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value()
@@ -1084,11 +1086,12 @@ function channel_edit_page_ui.handle_note_mask_change(channel, direction)
       mask_selectors.note:decrement()
       program.set_note_mask(channel, mask_selectors.note:get_value() == -1 and nil or mask_selectors.note:get_value())
     end
-    pattern.update_working_pattern(channel.number, program.get_selected_song_pattern())
+    pattern.update_working_pattern(channel.number, program.get_song_pattern(target_song_number))
   end
 end
 
-function channel_edit_page_ui.handle_velocity_mask_change(channel, direction)
+function channel_edit_page_ui.handle_velocity_mask_change(channel, direction, song_pattern_number)
+  local target_song_number = song_pattern_number or program.get().selected_song_pattern
   local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
@@ -1102,7 +1105,7 @@ function channel_edit_page_ui.handle_velocity_mask_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               velocity = mask_selectors.velocity:get_value()
@@ -1118,7 +1121,7 @@ function channel_edit_page_ui.handle_velocity_mask_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               velocity = mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value()
@@ -1136,11 +1139,12 @@ function channel_edit_page_ui.handle_velocity_mask_change(channel, direction)
       mask_selectors.velocity:decrement()
       program.set_velocity_mask(channel, mask_selectors.velocity:get_value() == -1 and nil or mask_selectors.velocity:get_value())
     end
-    pattern.update_working_pattern(channel.number, program.get_selected_song_pattern())
+    pattern.update_working_pattern(channel.number, program.get_song_pattern(target_song_number))
   end
 end
 
-function channel_edit_page_ui.handle_length_mask_change(channel, direction)
+function channel_edit_page_ui.handle_length_mask_change(channel, direction, song_pattern_number)
+  local target_song_number = song_pattern_number or program.get().selected_song_pattern
   local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
@@ -1153,7 +1157,7 @@ function channel_edit_page_ui.handle_length_mask_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               length = divisions.note_division_values[mask_selectors.length:get_value()]
@@ -1170,7 +1174,7 @@ function channel_edit_page_ui.handle_length_mask_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
                 step = s,
                 length = divisions.note_division_values[mask_selectors.length:get_value()]
@@ -1186,7 +1190,7 @@ function channel_edit_page_ui.handle_length_mask_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
                 step = s,
                 length = 0
@@ -1210,11 +1214,12 @@ function channel_edit_page_ui.handle_length_mask_change(channel, direction)
         program.set_length_mask(channel, nil)
       end
     end
-    pattern.update_working_pattern(channel.number, program.get_selected_song_pattern())
+    pattern.update_working_pattern(channel.number, program.get_song_pattern(target_song_number))
   end
 end
 
-function channel_edit_page_ui.handle_chord_mask_one_change(channel, direction)
+function channel_edit_page_ui.handle_chord_mask_one_change(channel, direction, song_pattern_number)
+  local target_song_number = song_pattern_number or program.get().selected_song_pattern
   local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
@@ -1227,7 +1232,7 @@ function channel_edit_page_ui.handle_chord_mask_one_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               chord_degrees = {mask_selectors.chords[1]:get_value(), nil, nil, nil}
@@ -1243,7 +1248,7 @@ function channel_edit_page_ui.handle_chord_mask_one_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               chord_degrees = {mask_selectors.chords[1]:get_value() == -1 and nil or mask_selectors.chords[1]:get_value(), nil, nil, nil}
@@ -1265,7 +1270,8 @@ function channel_edit_page_ui.handle_chord_mask_one_change(channel, direction)
   end
 end
 
-function channel_edit_page_ui.handle_chord_mask_two_change(channel, direction)
+function channel_edit_page_ui.handle_chord_mask_two_change(channel, direction, song_pattern_number)
+  local target_song_number = song_pattern_number or program.get().selected_song_pattern
   local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
@@ -1278,7 +1284,7 @@ function channel_edit_page_ui.handle_chord_mask_two_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               chord_degrees = {nil, mask_selectors.chords[2]:get_value(), nil, nil}
@@ -1294,7 +1300,7 @@ function channel_edit_page_ui.handle_chord_mask_two_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               chord_degrees = {nil, mask_selectors.chords[2]:get_value() == -1 and nil or mask_selectors.chords[2]:get_value(), nil, nil}
@@ -1315,7 +1321,8 @@ function channel_edit_page_ui.handle_chord_mask_two_change(channel, direction)
   end
 end
 
-function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction)
+function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction, song_pattern_number)
+  local target_song_number = song_pattern_number or program.get().selected_song_pattern
   local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
@@ -1328,7 +1335,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value(), nil}
@@ -1344,7 +1351,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction)
           channel.number,
           s,
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               chord_degrees = {nil, nil, mask_selectors.chords[3]:get_value() == -1 and nil or mask_selectors.chords[3]:get_value(), nil}
@@ -1365,7 +1372,8 @@ function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction)
   end
 end
 
-function channel_edit_page_ui.handle_chord_mask_four_change(channel, direction)
+function channel_edit_page_ui.handle_chord_mask_four_change(channel, direction, song_pattern_number)
+  local target_song_number = song_pattern_number or program.get().selected_song_pattern
   local pressed_keys = held_step_keys()
   -- Held steps belong to the selected channel's page; a fixed map for another channel edits its
   -- channel mask from its own value (arbitrated 2026-09-11, fixed-map-ignores-held-steps).
@@ -1378,7 +1386,7 @@ function channel_edit_page_ui.handle_chord_mask_four_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               chord_degrees = {nil, nil, nil, mask_selectors.chords[4]:get_value()}
@@ -1394,7 +1402,7 @@ function channel_edit_page_ui.handle_chord_mask_four_change(channel, direction)
           channel.number, 
           s, 
           {
-            song_pattern = program.get().selected_song_pattern,
+            song_pattern = target_song_number,
             data = {
               step = s,
               chord_degrees = {nil, nil, nil, mask_selectors.chords[4]:get_value() == -1 and nil or mask_selectors.chords[4]:get_value()}

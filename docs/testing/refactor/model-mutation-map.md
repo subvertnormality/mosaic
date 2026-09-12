@@ -152,3 +152,43 @@ regressions pass with unchanged recipes and expected outputs:
 Next: carry optional explicit song identity through mask handlers and selected-
 and fixed-channel MIDI mappings, preserving held-step arbitration and legacy
 callers. Complete writer coverage before trusting dirty/source revision tracking.
+
+### Mask and MIDI mapping target capture
+
+All eight mask handlers accept an optional song ID. Selected-channel and fixed-
+channel MIDI actions resolve song/channel once and pass the ID through to pending
+recorder events and working-pattern rebuilds. Existing UI callers retain the
+selected-song fallback. Held-step arbitration, velocity's immediate held-step
+write, selector semantics and the chord handlers' lack of rebuild are preserved.
+Unit doubles now expose the real selected-channel field and explicit song lookup;
+the mapping matrix asserts the additional song argument for all eight selected
+mappings and all 128 fixed-channel mappings.
+
+All 1537 Lua tests pass (25.893 seconds), and six guards pass. Terra's scoped
+read-only review found no actionable issues. Unchanged native regressions pass:
+
+| Case | Controlled | Real-time |
+|---|---|---|
+| M-MAP-003 | 01e354756f8f40e29070a05876712a84 | 6d179932f2cd48aeaf690139d55260f9 |
+| M-MAP-004 | 4ae9521cefa441e882063b5ab8e4b9b5 | 6c27ea67aeba4c9fa3a4c970cf9d907c |
+| M-MASK-032 | 1fa14232c1314c9a9bbcb7f019e921e5 | d431a880cfd54786a7fb21dfafa310db |
+
+### Next R07 slice: transient invalidation tracking
+
+Sol's code audit recommends retaining the weak per-song scheduler while adding a
+union of dirty channels and transient per-channel request revisions. These count
+rebuild invalidations, not universal source mutations: no persistent derived cache
+is justified yet. Keep the bulk facade for compound writers and add bounded
+source/channel ingress for the explicit editor targets. Source dependencies must
+include unassigned note/velocity/length priority sources as well as assigned
+patterns. Build/publish each complete channel before yielding; reject publication
+when target identity or that channel's request revision has changed.
+
+Keep memory replay's direct derived-state updates and synchronous rebuild behavior
+intact. Keep broad rebuilds for song transitions, copy/load and remaining compound
+writers; do not require a sprawling migration merely to reduce editor rebuilds.
+Validate pending invalidation union and inactive priority dependencies with focused
+units, retain boundary/live-edit/native merge guards, and measure the gain before
+accepting the added tracking. This narrows the earlier revision prerequisite only
+for transient request tracking; full writer coverage is still required for any
+persistent source cache.

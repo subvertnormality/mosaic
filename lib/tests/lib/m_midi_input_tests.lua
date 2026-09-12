@@ -76,7 +76,7 @@ local function with_midi(body)
 
   local program_stub = {
     get = function()
-      return {selected_song_pattern = env.song_pattern, devices = env.devices}
+      return {selected_song_pattern = env.song_pattern, selected_channel = env.selected, devices = env.devices}
     end,
     get_channel = function(song_pattern, n)
       env.get_channel_calls[#env.get_channel_calls + 1] = {song_pattern, n}
@@ -871,12 +871,12 @@ function test_midi_map_every_action_dispatches_to_its_handler_with_exact_argumen
     local selected = env.channels[5]
     for p = 1, 8 do
       luaunit.assert_equals(run("sel_ch_" .. MASK_SUFFIX[p], -1),
-        {{MASK_HANDLER[p], selected, -1}, {"params_set", "sel_ch_" .. MASK_SUFFIX[p], 0, true}})
+        {{MASK_HANDLER[p], selected, -1, env.song_pattern}, {"params_set", "sel_ch_" .. MASK_SUFFIX[p], 0, true}})
     end
     for c = 1, 16 do
       for p = 1, 8 do
         local id = "ch" .. c .. "_" .. CHANNEL_MASK_SUFFIX[p]
-        luaunit.assert_equals(run(id, 1), {{MASK_HANDLER[p], env.channels[c], 1}, {"params_set", id, 0, true}})
+        luaunit.assert_equals(run(id, 1), {{MASK_HANDLER[p], env.channels[c], 1, env.song_pattern}, {"params_set", id, 0, true}})
       end
     end
     for p = 1, 10 do

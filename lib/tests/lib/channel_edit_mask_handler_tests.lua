@@ -160,7 +160,11 @@ local function install_stubs(env)
   program = {
     get_selected_channel = function() return {number = SELECTED} end,
     get = function() return {selected_song_pattern = RECORDER_SONG_PATTERN} end,
-    get_selected_song_pattern = function() return WORKING_SONG_PATTERN end
+    get_selected_song_pattern = function() return WORKING_SONG_PATTERN end,
+    get_song_pattern = function(id)
+      assert(id == RECORDER_SONG_PATTERN, "unexpected song target")
+      return WORKING_SONG_PATTERN
+    end
   }
   for _, setter in ipairs({"set_trig_mask", "set_note_mask", "set_velocity_mask", "set_length_mask",
                            "set_chord_one_mask", "set_chord_two_mask", "set_chord_three_mask",
