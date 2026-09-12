@@ -237,7 +237,7 @@ local function make_cache_key(root_note, chord_rotation, scale_number, transpose
                (do_pentatonic and 8 or 0)
   
   -- Hash the scale table
-  scale_hash = hash_scale(scale_container.scale)
+  local scale_hash = hash_scale(scale_container.scale)
 
   -- Create a more efficient key using string format
   return string.format("%d:%d:%d:%d:%x:%d:%d:%d",
