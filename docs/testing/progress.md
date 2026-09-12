@@ -1574,3 +1574,12 @@ rebuild independently; save-across-song replaces already-warm scale lookups on s
 matrix now reflects the user's S35 decision that save-across-song linking is intended.
 These domains are complete with explicit partitions; native cases retain MIDI-bound and
 UI-save ownership. No production code changed.
+
+
+## Delayed chord ownership hardening — 2026-09-12
+
+H07 now pins the mixed snapshot/live contract for delayed strum voices. A scale
+change before a delayed onset affects its pitch, while the MIDI device captured by
+the parent chord owns that voice's note-on and note-off after reassignment. Native
+M-ARP-012/013 already cover applied scale edits during a running arp. The domain is
+complete with the documented timing-product partition. No production code changed.

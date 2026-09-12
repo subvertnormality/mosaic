@@ -1820,6 +1820,65 @@ function test_recorded_midi_output_uses_dirty_action_and_preserves_off_slide()
 end
 
 
+
+-- Characterisation, supported by README.md:800-813 scale locks and chord timing. A voice
+-- delayed inside one strum is pitched from the scale active at its own onset, matching the
+-- native live-scale arp cases M-ARP-012/013. Output ownership is captured when the parent
+-- chord starts so device reassignment cannot split a delayed note-on from its release.
+function test_delayed_strum_uses_live_scale_but_parent_output_device()
+  setup()
+  local source = program.initialise_default_pattern()
+  source.note_values[1] = 0
+  source.lengths[1] = 1
+  source.trig_values[1] = 1
+  source.velocity_values[1] = 100
+  program.get_song_pattern(1).patterns[1] = source
+  local channel = program.get_channel(1, 1)
+  fn.add_to_set(channel.selected_patterns, 1)
+  channel.chord_one_mask = 2
+  channel.trig_lock_params[1] = {id = "chord_strum", param_id = "chord_strum_1"}
+  program.add_step_param_trig_lock(1, 1, 8)
+
+  local major = quantiser.get_scales()[1]
+  program.set_scale(1, {number = 1, scale = major.scale, pentatonic_scale = major.pentatonic_scale,
+    chord = 1, root_note = 0, chord_degree_rotation = 0, transpose = 0})
+  program.set_scale(2, {number = 1, scale = major.scale, pentatonic_scale = major.pentatonic_scale,
+    chord = 1, root_note = 2, chord_degree_rotation = 0, transpose = 0})
+  channel.step_scale_number = 1
+  pattern.update_working_patterns()
+
+  local parent_device = {name = "parent"}
+  local reassigned_device = {name = "reassigned"}
+  program.get().devices[1].midi_device = parent_device
+  m_clock.init()
+  m_clock:start()
+
+  local root = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals({root[1], root[2], root[3], root[4]}, {60, 100, 1, parent_device})
+  channel.step_scale_number = 2
+  program.get().devices[1].midi_device = reassigned_device
+
+  local delayed
+  for _ = 1, 96 do
+    m_clock.get_clock_lattice():pulse()
+    if #midi_note_on_events > 0 then delayed = table.remove(midi_note_on_events, 1); break end
+  end
+  luaunit.assert_not_nil(delayed, "delayed strum voice")
+  luaunit.assert_equals({delayed[1], delayed[2], delayed[3], delayed[4]},
+    {66, 100, 1, parent_device})
+
+  local delayed_release
+  for _ = 1, 96 do
+    m_clock.get_clock_lattice():pulse()
+    for i, event in ipairs(midi_note_off_events) do
+      if event[1] == 66 then delayed_release = table.remove(midi_note_off_events, i); break end
+    end
+    if delayed_release then break end
+  end
+  luaunit.assert_not_nil(delayed_release, "delayed strum release")
+  luaunit.assert_equals(delayed_release[4], parent_device)
+end
+
 function test_nonpositive_strum_releases_in_onset_pulse()
   for _, length in ipairs({0, -1}) do
     setup()

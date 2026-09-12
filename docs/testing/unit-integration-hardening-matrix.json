@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "planned-hardening-matrix-reconciled",
-  "base_revision": "bf4e47c",
+  "base_revision": "4e86ee0",
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "inventory": "tests/behaviour/manual-inventory.json",
@@ -974,8 +974,8 @@
       ],
       "interaction_strategy": "Exhaust voice/order/mute and velocity axes; partition timing magnitudes; pairwise modifiers plus maximum five-voice overlap, repeated-pitch ownership, Stop and probability-rejection lifecycle triples.",
       "residual_gaps": [
-        "Delayed strum/arp voices whose scale changes or device assignment changes before their onset need explicit snapshot-versus-live semantics.",
-        "Maximum-overlap release ownership is unit-covered; representative native timing remains linked to existing chord/arp behavior cases."
+        "Delayed strum output ownership is pinned: pitch uses the scale active at the delayed onset while the parent chord's MIDI device owns note-on and release; native M-ARP-012/013 cover applied live-scale edits during a running arp.",
+        "Maximum-overlap release ownership is unit-covered; representative native timing remains linked to existing chord/arp behaviour cases rather than multiplying the complete 259-case chord-shape matrix by every timing magnitude."
       ],
       "requirement_ids": [
         "CHORD-ACCEL",
@@ -1341,7 +1341,7 @@
         "M-TIME-012",
         "M-XA-006-NB-CHORD-ACCEL"
       ],
-      "status": "hardening-in-progress"
+      "status": "hardening-complete-partitioned"
     },
     {
       "id": "H08",
