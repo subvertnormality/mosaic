@@ -2002,8 +2002,12 @@ def reverse_live_clock_handoff(c):
     # Establish100BPM on the internal reference while stopped, then return to
     # MIDI. This isolates phase/source transfer from internal24PPQN tempo
     # publication latency; pending tempo changes remain a separate edge case.
-    c.enc(3,-1);menu_value(c,'internal');c.elapse(.1)
-    c.enc(3,1);menu_value(c,'midi')
+    c.enc(3,-1);menu_value(c,'internal')
+    # Set the reference through the norns clock menu. Waiting for clock.lua's
+    # once-per-second external-tempo publisher makes this setup phase-dependent.
+    c.enc(2,1);menu_label(c,'tempo');c.enc(3,-300);menu_value(c,'1')
+    c.enc(3,99);menu_value(c,'100')
+    c.enc(2,-1);menu_label(c,'source');c.enc(3,1);menu_value(c,'midi')
     controlled=c.clock_mode=='controlled-experimental'
     domain='logical' if controlled else 'monotonic'
     origin=c.logical_ns if controlled else time.monotonic_ns()+500000000
