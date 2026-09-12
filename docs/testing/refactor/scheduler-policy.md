@@ -60,3 +60,33 @@ Native regression receipts (unchanged production source throughout these runs):
 These are scoped regressions, not completion of R09 or final acceptance.
 Cancellation/count semantics and backlog responsiveness remain to reconcile;
 ordered storage is justified only by measurement.
+
+## Cancellation and backlog reconciliation
+
+Source audit at 9b13c0e finds no production reader of active_count outside the
+scheduler. select_scales_quantizer_page queues refresh_quantiser before
+refresh_romans; the first job queues refresh_romans again during dispatch.
+The frozen snapshot still executes the cancelled job, and retirement may count
+it twice. Both Romans callbacks read current selector state, so this demonstrates
+redundant work and a bookkeeping defect, not a reproduced wrong display or MIDI
+output. No cancellation behavior change is included without that evidence.
+The channel refresh wrappers likewise read current selection when executed.
+
+The cleanup threshold compares active_count with the monotonically increasing
+next_id. This can allocate/copy the coroutine map every update, including idle
+updates. Measure before replacing storage or adding ordered queues; the source
+mechanism alone does not establish a meaningful application performance gain.
+
+Existing native regressions on 9b13c0e:
+
+- M-EDIT-FLICKER-001 real-time passed: 6006ea760e0e4a4f9164c1e79b47474c.
+- M-SYNC-023 real-time passed: bd8b3620b2ad4931a92449ae0b36ea51, using
+  MONOME_EMULATOR=/home/andy/projects/monome-emulator-runtime-stall.
+- The first M-SYNC-023 attempt, 98da2593672c4d5fb5ac3f55c33ebb63, used the
+  midi-clock checkout and was rejected at runtime_stall action validation before
+  the musical assertion. It is a failed setup, not a passing test or a Mosaic
+  regression. Controlled mode does not model this wall-clock stall.
+
+R09 remains open: reconcile its count contract against the existing defect policy
+and measure cleanup cost before deciding the remaining storage work. Do not add
+an unproven user-visible defect fix or claim full scheduler completion here.
