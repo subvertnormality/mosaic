@@ -7262,10 +7262,10 @@
       ],
       "statement": "The repository config creator creates, loads and edits device JSON.",
       "cases": [],
-      "status": "unimplemented",
-      "domain": "Round-trip supported fields and boundary values; Unicode names; invalid inputs; import/export; generated config loaded in Mosaic.",
+      "status": "excluded-by-user",
+      "domain": "Excluded from the Mosaic behaviour campaign by user decision on 2026-09-12. This repository-hosted browser utility is not part of the norns/grid runtime or Mosaic script interaction surface. Generated device configurations remain covered at the Mosaic load, picker, MIDI, CC and NRPN boundary by the setup/device cases.",
       "oracles": [
-        "Automated browser export JSON and Mosaic picker/MIDI behaviour agree. External webpage is repository-derived; no manual browser acceptance."
+        "No webpage oracle required by user scope decision; downstream generated-config behavior is owned by the setup/device requirements."
       ],
       "lanes": [
         "E",
@@ -7277,7 +7277,8 @@
         "end_line": 185,
         "text": "You can customise Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device's MIDI specifications. You can create, load and edit midi device config files using the [Mosaic Config Creator](https://subvertnormality.github.io/mosaic/config_creator.html).",
         "sha256": "9054afe032a5e97f370d38e6c23aacaf7b4618ec1087cae9f35a29e6bad6b58e"
-      }
+      },
+      "scope_decision": "Do not automate or count the repository config-creator webpage toward campaign completion."
     },
     {
       "id": "SETUP-MIDI-INPUT",
