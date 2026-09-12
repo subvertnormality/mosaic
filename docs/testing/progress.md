@@ -1669,11 +1669,15 @@ equivalence. Controlled M-ENDURANCE-001 passed three fresh-process 608.29-second
 runs with exact event counts and 1 ns logical error. Its real-time ten-minute
 run failed: a persistent 42–43 ms port-1 phase shift began around 126 seconds
 (p99 43.336 ms, final 42.392 ms), while note bytes, releases and the 50 ms max
-gate remained correct. This is retained failure evidence. PERF-004..008 still
-need individual executable recipes and independent oracles.
+gate remained correct. This is retained failure evidence. PERF-004 now drives
+512 scheduled clock/MIDI events and 216 physical grid/key/encoder actions under
+0.5 CPU and 768 MiB. Its exact input, MIDI, grid, frame and acknowledgement oracles
+passed once and failed the unchanged 10 ms MIDI p99 gate twice (49.556 ms and
+40.448 ms). Evidence is retained under `mosaic-behaviour-runs/perf-004-20260912/`.
+PERF-005..008 still need individual executable recipes.
 
-The integrated Lua unit/integration suite passes 1,506/1,506. No production code
-changed in these three additions.
+The integrated Lua unit/integration suite passes 1,509/1,509. No production code
+changed in these hardening additions.
 
 
 ## Parameter-lock and scale-merge interaction audit — 2026-09-12
