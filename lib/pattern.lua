@@ -58,8 +58,8 @@ local function extract_pattern_number(merge_mode)
   return nil
 end
 
-function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
-  local selected_song_pattern = program.get_selected_song_pattern()
+function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern)
+  local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
   local merged_pattern = {
     trig_values = {unpack(default_trig_values)},
     lengths = {unpack(default_lengths)},
@@ -183,11 +183,11 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   local length_priority = length_merge_mode and extract_pattern_number(length_merge_mode)
   local priority_lengths = length_priority and effective_lengths(patterns[length_priority])
 
-  local step_trig_masks = program.get_step_trig_masks(channel)
-  local step_note_masks = program.get_step_note_masks(channel)
-  local step_velocity_masks = program.get_step_velocity_masks(channel)
-  local step_length_masks = program.get_step_length_masks(channel)
-  local channel_data = program.get_channel(program.get().selected_song_pattern, channel)
+  local step_trig_masks = pattern_channel.step_trig_masks or {}
+  local step_note_masks = pattern_channel.step_note_masks or {}
+  local step_velocity_masks = pattern_channel.step_velocity_masks or {}
+  local step_length_masks = pattern_channel.step_length_masks or {}
+  local channel_data = pattern_channel
 
   for s = 1, 64 do
     do_mode_calculation(note_merge_mode, s, notes, merged_pattern.note_values)
@@ -226,12 +226,22 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   return merged_pattern
 end
 
-pattern.update_working_patterns = scheduler.debounce(function()
-  for c = 1, 16 do
-    pattern.update_working_pattern(c, program.get_selected_song_pattern())
-    coroutine.yield()
+local working_pattern_updates = setmetatable({}, {__mode = "k"})
+
+function pattern.update_working_patterns(song_pattern)
+  local target = song_pattern or program.get_selected_song_pattern()
+  local update = working_pattern_updates[target]
+  if not update then
+    update = scheduler.debounce(function(selected_song_pattern)
+      for c = 1, 16 do
+        pattern.update_working_pattern(c, selected_song_pattern)
+        coroutine.yield()
+      end
+    end, throttle_time)
+    working_pattern_updates[target] = update
   end
-end, throttle_time)
+  update(target)
+end
 
 function pattern.update_working_pattern(c, song_pattern)
 
@@ -241,7 +251,8 @@ function pattern.update_working_pattern(c, song_pattern)
     channel_pattern.trig_merge_mode,
     channel_pattern.note_merge_mode,
     channel_pattern.velocity_merge_mode,
-    channel_pattern.length_merge_mode
+    channel_pattern.length_merge_mode,
+    song_pattern
   )
 end
 

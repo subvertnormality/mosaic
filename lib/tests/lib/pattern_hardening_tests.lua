@@ -296,3 +296,139 @@ function test_hardening_merge_masks_and_selected_patterns_are_channel_isolated()
   luaunit.assert_equals(channel_one.selected_patterns, {[1] = true})
   luaunit.assert_equals(channel_sixteen.selected_patterns, {[16] = true})
 end
+
+
+function test_hardening_song_boundary_does_not_cancel_committed_pattern_rebuild()
+  -- Characterisation, not manual text: the final input release commits the edit.
+  -- README.md:447-465 requires that edit to change the pattern, while 1070-1074
+  -- advances the song. A rebuild for the new slot must not cancel the committed
+  -- rebuild for the old slot. Each slot still debounces repeated requests.
+  local original_scheduler = scheduler
+  local stepped_scheduler = {jobs = {}, next_id = 1}
+
+  function stepped_scheduler.start(co)
+    local id = stepped_scheduler.next_id
+    stepped_scheduler.next_id = id + 1
+    stepped_scheduler.jobs[id] = {co = co, active = true}
+    return id
+  end
+
+  function stepped_scheduler.debounce(func)
+    local current_id = nil
+    return function(...)
+      if current_id and stepped_scheduler.jobs[current_id] then
+        stepped_scheduler.jobs[current_id].active = false
+      end
+      local args = {...}
+      current_id = stepped_scheduler.start(coroutine.create(function()
+        func(table.unpack(args))
+      end))
+    end
+  end
+
+  function stepped_scheduler.tick()
+    local ids = {}
+    for id, job in pairs(stepped_scheduler.jobs) do
+      if job.active then ids[#ids + 1] = id end
+    end
+    table.sort(ids)
+    for _, id in ipairs(ids) do
+      local job = stepped_scheduler.jobs[id]
+      if job.active then
+        local ok, err = coroutine.resume(job.co)
+        assert(ok, err)
+        if coroutine.status(job.co) == "dead" then job.active = false end
+      end
+    end
+  end
+
+  function stepped_scheduler.active_count()
+    local count = 0
+    for _, job in pairs(stepped_scheduler.jobs) do
+      if job.active then count = count + 1 end
+    end
+    return count
+  end
+
+  function stepped_scheduler.run_until_idle()
+    local ticks = 0
+    while stepped_scheduler.active_count() > 0 do
+      stepped_scheduler.tick()
+      ticks = ticks + 1
+      assert(ticks <= 40, "pattern rebuild failed to quiesce")
+    end
+  end
+
+  local observed = {}
+  scheduler = stepped_scheduler
+  local ok, err = pcall(function()
+    local pattern_under_test = include("mosaic/lib/pattern")
+    program.init()
+    local first = program.get_song_pattern(1)
+    local second = program.get_song_pattern(2)
+
+    local function configure(song, note)
+      song.patterns[1].trig_values[1] = 1
+      song.patterns[1].note_values[1] = note
+      for channel = 1, 16 do
+        song.channels[channel].selected_patterns = {[1] = true}
+        song.channels[channel].trig_merge_mode = "all"
+        song.channels[channel].note_merge_mode = "average"
+      end
+    end
+
+    configure(first, 0)
+    configure(second, 12)
+    program.set_selected_song_pattern(1)
+    pattern_under_test.update_working_patterns()
+    stepped_scheduler.run_until_idle()
+    program.set_selected_song_pattern(2)
+    pattern_under_test.update_working_patterns()
+    stepped_scheduler.run_until_idle()
+
+    -- Channel 1 finishes before the boundary; channel 16 is still queued.
+    first.patterns[1].note_values[1] = 7
+    program.set_selected_song_pattern(1)
+    pattern_under_test.update_working_patterns()
+    stepped_scheduler.tick()
+    program.set_selected_song_pattern(2)
+    pattern_under_test.update_working_patterns()
+    observed.cross_song_jobs = stepped_scheduler.active_count()
+    stepped_scheduler.run_until_idle()
+    observed.first_early = first.channels[1].working_pattern.note_values[1]
+    observed.first_late = first.channels[16].working_pattern.note_values[1]
+    observed.second_early = second.channels[1].working_pattern.note_values[1]
+    observed.second_late = second.channels[16].working_pattern.note_values[1]
+
+    -- A newer edit in the same slot replaces its partial sweep, while a rebuild
+    -- for another slot remains independent. All channels must receive the latest.
+    first.patterns[1].note_values[1] = 8
+    program.set_selected_song_pattern(1)
+    pattern_under_test.update_working_patterns()
+    for _ = 1, 8 do stepped_scheduler.tick() end
+    first.patterns[1].note_values[1] = 9
+    pattern_under_test.update_working_patterns()
+    program.set_selected_song_pattern(2)
+    pattern_under_test.update_working_patterns()
+    observed.debounced_jobs = stepped_scheduler.active_count()
+    stepped_scheduler.run_until_idle()
+    observed.latest = {}
+    for channel = 1, 16 do
+      observed.latest[channel] = first.channels[channel].working_pattern.note_values[1]
+    end
+    observed.second_after = second.channels[16].working_pattern.note_values[1]
+  end)
+  scheduler = original_scheduler
+
+  luaunit.assert_true(ok, err)
+  luaunit.assert_equals(observed.cross_song_jobs, 2, "different song slots must retain both sweeps")
+  luaunit.assert_equals(observed.first_early, 7)
+  luaunit.assert_equals(observed.first_late, 7, "boundary cancelled late-channel edit")
+  luaunit.assert_equals(observed.second_early, 12)
+  luaunit.assert_equals(observed.second_late, 12, "new song rebuilt from another slot")
+  luaunit.assert_equals(observed.debounced_jobs, 2, "same-slot requests were not debounced")
+  for channel = 1, 16 do
+    luaunit.assert_equals(observed.latest[channel], 9, "latest edit missing on channel " .. channel)
+  end
+  luaunit.assert_equals(observed.second_after, 12, "queued edit leaked between song slots")
+end

@@ -1,0 +1,112 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "2eba587",
+  "files": [
+    {
+      "file": "lib/pattern.lua",
+      "before_sha256": "dec99616098d46d4d14bc420467eebbe30d61f800ad3f65f0e23d475616c39b7",
+      "after_sha256": "fa045ce80b44350064b68f8d512641d360def8399f4db2e16ea9c28adf8f5669"
+    }
+  ],
+  "patch": "0112-pattern-edit-before-song-boundary.patch",
+  "patch_sha256": "6c367048023604ef80f23dc9a9a3a3c98ba1e198c27230ef53abf9d22673dd18",
+  "regression": "M-PAT-BOUNDARY-001",
+  "unit_regression": "test_hardening_song_boundary_does_not_cancel_committed_pattern_rebuild",
+  "baseline": [
+    {
+      "run_id": "cfd311a1f8b64dfbb3d0d54259cb78ae",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "f6905830d5766accc46f07f16a24fd66f3c6ef5526122ad4459ace5cf9d2e99d",
+      "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+    },
+    {
+      "run_id": "cbf4cd3d5f1a41ad8ece0e99cbd94906",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "38868935960e317d8b4e9e27f38cb1abf47c6bef62dc9b508d3f7209cbfe4d12",
+      "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+    },
+    {
+      "run_id": "abe5311436ab49098db1ba8bfa81b92f",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "723ab68c9a819838ec16218eb06becc1934013197ae3bd4af98f52e557bb51e1",
+      "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+    },
+    {
+      "run_id": "e4fb4ff7551e46e985979c82cfdc5aef",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "40d48edc583f64d509c65fc9183391acd503a110a8480da264874c50e800b87f",
+      "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+    },
+    {
+      "run_id": "65b4ba79c9f84d248a3d67941098a4f2",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "f19e507b964bdb41da818465e278ab9fe6efdbe4d75e0cf67b553f8ac6d04a21",
+      "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+    },
+    {
+      "run_id": "cb9bc8311fec46c1ade317719a88ebdc",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "8b8b9c3b29a9ac5a04572400d08c319878c6da97b91a46668fef4354914e4c98",
+      "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+    }
+  ],
+  "rationale": "Mosaic used one debounced working-pattern sweep for every song slot. A boundary rebuild therefore cancelled a committed edit rebuild still progressing toward channel 16. Keep one debouncer per song-pattern table, snapshot the requested song at invocation, and carry that target through merge and mask reads. Repeated requests for the same slot still replace their predecessor and each sweep still yields after one channel.",
+  "oracle": "README.md lines 447-465 define pattern-note editing and lines 1070-1074 define song advancement. The user confirmed that the final grid release commits the edit; the completed pre-boundary tap must affect the next playback of that slot.",
+  "validation": [
+    {
+      "run_id": "d32d78b49d7f45259faa65d2f846304d",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "f656bec7160541d1d9f9105d5c4b5f45037dd000b16bfd25299de2be7f7fbda4",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-605f1c353df24692be4ddccee7e947a1",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "cbbd4eb8d04deb5aef63edf7bb0d49d5c2f3d2d402a3df5e84c165b38b4af6dc",
+      "failure": null,
+      "normalized_sha256": "100ebab1810b4474710f2a35151b9bf248bc1e730007b3e1ea9fda21c6656ca6"
+    },
+    {
+      "run_id": "0429d610e7b14e75a02b453bf44c8c98",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "268c1d8e7c12d0c98eeb2047a2b427323394c4653fb012fc6169f23e6209ebd7",
+      "failure": null
+    },
+    {
+      "run_id": "0019d702144e47acba88c2da8ec7fd39",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "2ae6493cf9dc3e1edd8538028eb70144ec7b8e145f8fb2caf7f305e168efadb5",
+      "failure": null
+    },
+    {
+      "run_id": "cd6775f2c3d04a559284f47469dcd8c4",
+      "case": "M-PAT-BOUNDARY-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "88df8dc4333c6f28d2c447b3cfb13e5cd273a7d8466f6da1c972e0a1c8780d1c",
+      "failure": null
+    }
+  ],
+  "collateral": "M-SONG-FLOW-001, M-TIME-013 and M-SONG-TEMPO-001 passed in controlled and real-time lanes. The focused unit fails on unfixed 2eba587 and passes with the fix. Full Lua suite passes 1510/1510 on an idle host; nine inventory/name/syntax/matrix guards pass.",
+  "upstream_merged": false
+}

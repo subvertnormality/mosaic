@@ -1706,3 +1706,25 @@ manual does not define whether merged-pentatonic applies to separately generated
 fully-quantised chord voices, so no oracle was invented for either ambiguity.
 
 The complete integrated Lua unit/integration suite passes 1,509/1,509. No production code changed in these additions.
+
+
+## Pattern-edit boundary fix  2026-09-12
+
+M-PAT-BOUNDARY-001 had a qualified baseline at channel 16: three real-time and
+three controlled runs failed after a complete tap 30 ms before the song boundary,
+with both grid callbacks proven complete before that boundary. The shared debounced
+working-pattern sweep let the new slot cancel the committed edit rebuild for the
+previous slot. Working-pattern rebuilds are now debounced per song-pattern table;
+the selected song is captured at request time and used for its pattern and mask
+merge. Repeated rebuilds for one slot still coalesce, and each sweep still yields
+after one channel.
+
+The fixed behavior passes three fresh real-time runs (`0429d610e7b14e75a02b453bf44c8c98`,
+`0019d702144e47acba88c2da8ec7fd39`, `cd6775f2c3d04a559284f47469dcd8c4`)
+and three normalized controlled repeats
+(`repeat-605f1c353df24692be4ddccee7e947a1`). The focused scheduler regression
+fails on unfixed `2eba587` and passes with the candidate, covering channels 1/16,
+multiple queued edits, same-slot debounce and song isolation. M-SONG-FLOW-001,
+M-TIME-013 and M-SONG-TEMPO-001 pass in both lanes. The idle full Lua suite passes
+1510/1510 and all nine structural guards pass. Candidate evidence is
+`tests/behaviour/candidates/pattern-edit-before-song-boundary.json`.

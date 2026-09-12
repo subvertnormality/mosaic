@@ -753,46 +753,104 @@
     },
     {
       "id": "pattern-edit-before-song-boundary",
-      "status": "open-deferred-to-refactor",
+      "status": "fixed",
       "cases": [
         "M-PAT-BOUNDARY-001"
       ],
-      "summary": "A pattern edit made within a few milliseconds of a song boundary (up to ~53 ms for channel 16) is not heard at step 1 the next time its slot plays, only from the pass after: the boundary's working-pattern sweep cancels the edit's debounced sweep and step 1 is processed before the new sweep reaches the channel. Observed with a 1 ms margin (controlled lane); 10 ms and more are heard at once. The fix changes when working patterns are recomputed on the boundary pulse (performance-sensitive scheduling), so it is deferred to the refactor; the case stays red, as SEM-013.",
+      "summary": "A complete pattern-note tap 30 ms before a song boundary was heard one pass late on channel 16 because the next slot rebuild cancelled the committed edit rebuild. Per-song debouncing preserves both slot sweeps while retaining same-slot coalescing.",
       "evidence": [
         {
-          "run_id": "7ad1d88c2ca64dea80f13447fee45df8",
+          "run_id": "cfd311a1f8b64dfbb3d0d54259cb78ae",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "f6905830d5766accc46f07f16a24fd66f3c6ef5526122ad4459ace5cf9d2e99d",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+        },
+        {
+          "run_id": "cbf4cd3d5f1a41ad8ece0e99cbd94906",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "38868935960e317d8b4e9e27f38cb1abf47c6bef62dc9b508d3f7209cbfe4d12",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+        },
+        {
+          "run_id": "abe5311436ab49098db1ba8bfa81b92f",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "723ab68c9a819838ec16218eb06becc1934013197ae3bd4af98f52e557bb51e1",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+        },
+        {
+          "run_id": "e4fb4ff7551e46e985979c82cfdc5aef",
           "case": "M-PAT-BOUNDARY-001",
           "mode": "controlled-experimental",
           "passed": false,
-          "manifest_sha256": "41095508fbb0f17cfb4a1325e82a46e88281696bb0687c93fdaf6f7dd5f063ba",
-          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72]}"
+          "manifest_sha256": "40d48edc583f64d509c65fc9183391acd503a110a8480da264874c50e800b87f",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
         },
         {
-          "run_id": "b55dfbba56fa4de186d1ca2755b00ea8",
+          "run_id": "65b4ba79c9f84d248a3d67941098a4f2",
           "case": "M-PAT-BOUNDARY-001",
           "mode": "controlled-experimental",
           "passed": false,
-          "manifest_sha256": "2f1e763316c1577c6953464b708f1cb2e867b00d1af536141547273aac417ae7",
-          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72]}"
+          "manifest_sha256": "f19e507b964bdb41da818465e278ab9fe6efdbe4d75e0cf67b553f8ac6d04a21",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
         },
         {
-          "run_id": "b3154ba7350048ac9aea79990fc5b9c6",
+          "run_id": "cb9bc8311fec46c1ade317719a88ebdc",
           "case": "M-PAT-BOUNDARY-001",
           "mode": "controlled-experimental",
           "passed": false,
-          "manifest_sha256": "1dbced5c9ce6410c7d9d6a2e2a130f22e53c2787105bf48bb179f66e987cb74f",
-          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72]}"
+          "manifest_sha256": "8b8b9c3b29a9ac5a04572400d08c319878c6da97b91a46668fef4354914e4c98",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
         },
         {
-          "run_id": "3b603c2949904cc9ab2241dbc2950dff",
+          "run_id": "d32d78b49d7f45259faa65d2f846304d",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "manifest_sha256": "f656bec7160541d1d9f9105d5c4b5f45037dd000b16bfd25299de2be7f7fbda4",
+          "failure": null
+        },
+        {
+          "run_id": "repeat-605f1c353df24692be4ddccee7e947a1",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "controlled-repeat",
+          "passed": true,
+          "manifest_sha256": "cbbd4eb8d04deb5aef63edf7bb0d49d5c2f3d2d402a3df5e84c165b38b4af6dc",
+          "failure": null,
+          "normalized_sha256": "100ebab1810b4474710f2a35151b9bf248bc1e730007b3e1ea9fda21c6656ca6"
+        },
+        {
+          "run_id": "0429d610e7b14e75a02b453bf44c8c98",
           "case": "M-PAT-BOUNDARY-001",
           "mode": "real-time",
           "passed": true,
-          "manifest_sha256": "18957f1d7f50930f3cbfc6992a212e9f4b95f5db7d0644fe5ef6b1e448cc27b0",
+          "manifest_sha256": "268c1d8e7c12d0c98eeb2047a2b427323394c4653fb012fc6169f23e6209ebd7",
+          "failure": null
+        },
+        {
+          "run_id": "0019d702144e47acba88c2da8ec7fd39",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": true,
+          "manifest_sha256": "2ae6493cf9dc3e1edd8538028eb70144ec7b8e145f8fb2caf7f305e168efadb5",
+          "failure": null
+        },
+        {
+          "run_id": "cd6775f2c3d04a559284f47469dcd8c4",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": true,
+          "manifest_sha256": "88df8dc4333c6f28d2c447b3cfb13e5cd273a7d8466f6da1c972e0a1c8780d1c",
           "failure": null
         }
       ],
-      "note": "Real time edits 80 ms before the boundary (the ordinary case) and passes. Three controlled passes at the same Mosaic source (13d7a87e, 514b0ccb, c193a7b1) are the margin sweep: their recipes place the edit 80, 30 and 10 ms before the boundary; every run at the 1 ms margin fails."
+      "note": "Qualified baseline: three real-time and three controlled runs failed with both callbacks completed before the boundary. Candidate: three fresh real-time runs and three normalized controlled repeats pass. The focused scheduler unit fails on unfixed 2eba587 and covers early/late channels, repeated same-slot edits, simultaneous other-slot work and song isolation.",
+      "candidate_manifest": "pattern-edit-before-song-boundary.json"
     },
     {
       "id": "fixed-map-held-steps",
