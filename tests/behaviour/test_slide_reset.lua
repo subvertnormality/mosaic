@@ -11,6 +11,7 @@ local function include_slide_lifetime(name)
  end
 end
 function include(name)
+ if name=='mosaic/lib/clock/transport_lifecycle' then return dofile('lib/clock/transport_lifecycle.lua') end
  if name=='mosaic/lib/clock/arp_lifetime' then return dofile('lib/clock/arp_lifetime.lua') end
  local slide_lifetime=include_slide_lifetime(name)
  if slide_lifetime then return slide_lifetime end

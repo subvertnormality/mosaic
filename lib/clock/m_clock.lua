@@ -2,13 +2,10 @@ local midi_patch_recall = include("mosaic/lib/devices/midi_patch_recall")
 local chord_timing = include("mosaic/lib/clock/chord_timing")
 local lattice = include("mosaic/lib/clock/m_lattice")
 local midi_output_transport = include("mosaic/lib/clock/midi_output_transport")
-local cancel_midi_output_transport
-local warned_midi_boundary = false
 
 m_clock = {}
 clock_lattice = {}
 
-local playing = false
 local master_clock
 local midi_clock_init
 local first_run = true
@@ -150,10 +147,29 @@ local function count_active_actions(action)
   return count
 end
 
+local transport = include("mosaic/lib/clock/transport_lifecycle").new {
+  get_clock = function() return m_clock end,
+  get_lattice = function() return clock_lattice end,
+  set_lattice = function(value) clock_lattice = value end,
+  reset_first_run = function() first_run = true end,
+  program = program,
+  midi_patch_recall = midi_patch_recall,
+  midi_output_transport = midi_output_transport,
+  drain_releases = function()
+    for c = 1, 16 do
+      execute_ids(c, delayed_ids_must_execute[c])
+      if execute_at_note_end_ids[c] then
+        execute_ids(c, execute_at_note_end_ids[c])
+        execute_at_note_end_ids[c] = {}
+      end
+    end
+  end,
+}
+
 function m_clock.init()
   -- Stop clears the native subscription before re-entering reset/init, so the
   -- old callbacks cannot retain a replaced lattice or its held voices.
-  if cancel_midi_output_transport then m_clock:stop(); return end
+  if transport.stop_if_subscribed() then return end
   local program_data = program.get()
   clock_lattice = lattice:new({
     enabled = false,
@@ -543,108 +559,11 @@ m_clock.handoff_spread_lock = slides.handoff
 m_clock.cancel_spread_actions_for_channel_trig_lock = slides.cancel
 m_clock.channel_is_sliding = slides.is_active
 
-function m_clock:start(from_external_transport)
-  if playing and not from_external_transport and
-      (clock_lattice.enabled or cancel_midi_output_transport) then return end
-  -- MIDI Start resets position even when playback is already active.
-  -- Reuse cleanup so held voices and pending releases cannot cross epochs.
-  if playing and from_external_transport then self:stop(false) end
-  if not playing then
-    -- Stopped edits can consume fractional preview carry in different orders.
-    -- Build both processors from the final settings before the first onset.
-    -- Preserve step state and leave already-playing clocks untouched.
-    if clock_lattice then clock_lattice:destroy() end
-    self.init()
-  end
-  first_run = true
-  if params:get("elektron_program_changes") == 2 then
-    step.process_elektron_program_change(program.get().selected_song_pattern)
-  end
-  
-  midi_patch_recall.send()
-  m_clock.set_playing()
-  -- Only incoming transport Start defines external beat zero. Local Play
-  -- against an already-running MIDI clock retains its own starting phase.
-  clock_lattice.sync_to_external = from_external_transport == true
-  clock_lattice.external_clock_active = function() return params:get("clock_source") == 2 end
-  local sends_clock = false
-  for port = 1,16 do
-    if params:get("clock_midi_out_" .. port) == 1 then sends_clock = true end
-  end
-  if sends_clock and midi_output_transport.available() then
-    -- Incoming Start establishes source beat zero. Supplying it prevents a late
-    -- first output callback from silently rebasing the forwarded phrase.
-    local source_origin = from_external_transport and 0 or nil
-    cancel_midi_output_transport = midi_output_transport.start(clock_lattice, m_midi.start, function() m_clock:stop() end, source_origin)
-  else
-    if sends_clock and not warned_midi_boundary then
-      print("Mosaic: native MIDI output boundary unavailable; master phase alignment is not guaranteed")
-      warned_midi_boundary = true
-    end
-    m_midi.start()
-    clock_lattice:start()
-  end
-       
-end
-
-function m_clock:stop(send_transport)
-  if cancel_midi_output_transport then
-    cancel_midi_output_transport()
-    cancel_midi_output_transport = nil
-  end
-
-  playing = false
-  first_run = true
-
-  for c = 1, 16 do
-    execute_ids(c, delayed_ids_must_execute[c])
-    if execute_at_note_end_ids[c] then
-      execute_ids(c, execute_at_note_end_ids[c])
-      execute_at_note_end_ids[c] = {}
-    end
-  end
-
-  nb:stop_all()
-  m_midi.stop(send_transport)
-
-  if clock_lattice and clock_lattice.stop then
-    clock_lattice:stop()
-  end
-
-  m_clock.reset()
-
-  collectgarbage("collect")
-end
-
-function m_clock.is_playing()
-  return playing
-end
-
-function m_clock.set_playing()
-  playing = true
-end
-
-function m_clock.reset()
-  -- Stop clears the native subscription before re-entering reset/init, so the
-  -- old callbacks cannot retain a replaced lattice or its held voices.
-  if cancel_midi_output_transport then m_clock:stop(); return end
-  local program_data = program.get()
-  for _, pattern in ipairs(program_data.song_patterns) do
-    for i = 1, 17 do
-      program.set_current_step_for_channel(i, 1)
-    end
-  end
-
-  program_data.current_step = 1
-  step.reset()
-
-  if clock_lattice and clock_lattice.destroy then
-    clock_lattice:destroy()
-    clock_lattice = nil
-  end
-
-  m_clock.init()
-end
+m_clock.start = transport.start
+m_clock.stop = transport.stop
+m_clock.is_playing = transport.is_playing
+m_clock.set_playing = transport.set_playing
+m_clock.reset = transport.reset
 
 function m_clock.panic()
   m_midi.panic()
