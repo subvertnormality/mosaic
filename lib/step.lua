@@ -1,5 +1,6 @@
 local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 local chord_timing = include("mosaic/lib/clock/chord_timing")
+local chord_order = include("mosaic/lib/musical_resolution/chord_order")
 local quantiser = include("mosaic/lib/quantiser")
 local m_clock = include("mosaic/lib/clock/m_clock")
 
@@ -505,24 +506,6 @@ local function play_arp_note(note, note_container, velocity, division, note_on_f
   return play_note_internal(note, note_container, velocity, division, note_on_func, "execute_at_note_end", onset_offset)
 end
 
-local function get_chord_number(i, total_notes, chord_strum_pattern)
-  if chord_strum_pattern == 2 then
-      return total_notes + 1 - i
-  end
-  
-  if chord_strum_pattern == 3 then
-      local half_i = i // 2
-      return i % 2 == 1 and (half_i + 1) or (total_notes - half_i + 1)
-  end
-  
-  if chord_strum_pattern == 4 then
-      local half_i = i // 2
-      return i % 2 == 1 and (total_notes - half_i) or half_i
-  end
-  
-  return i -- Default case (pattern 1 or nil)
-end
-
 local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_func, process_func)
   local c = note_container.channel
   local channel = program.get_channel(program.get().selected_song_pattern, c)
@@ -531,7 +514,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   local sequenced_chord_notes = {}
   local has_mask = false
   for i = 1, 4 do
-    local chord_note = chord_notes[get_chord_number(i, 4, chord_strum_pattern)]
+    local chord_note = chord_notes[chord_order.index(i, 4, chord_strum_pattern)]
     if chord_note and chord_note ~= 0 then
       has_mask = true
       sequenced_chord_notes[i] = {
@@ -668,7 +651,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   chord_note_dashboard_values.chords = {}
 
   for i = 1, 4 do
-    local chord_number = get_chord_number(i, 4, chord_strum_pattern)
+    local chord_number = chord_order.index(i, 4, chord_strum_pattern)
     local chord_note = chord_notes[chord_number]
     local delay_multiplier = (chord_strum_pattern == 2 or chord_strum_pattern == 4) and i - 1 or i
     if chord_note and chord_note ~= 0 then
