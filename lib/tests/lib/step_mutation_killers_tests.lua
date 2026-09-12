@@ -851,22 +851,23 @@ end
 -- equally likely draw, exactly p out of 100 play.
 function test_step_killer_trig_probability_plays_p_of_100_equally_likely_draws()
   with_env(function(env)
-    working_pattern({1})
-    set_stock(env, "trig_probability", 30)
-    local range, k = nil, 0
-    random = function(a, b)
-      range = range or {a, b}
-      local v = a + (k % (b - a + 1))
-      k = k + 1
-      return v
+    working_pattern({1}, {lengths = {[1] = 0}})
+    for probability = 0, 100 do
+      env.events = {}
+      set_stock(env, "trig_probability", probability)
+      local k = 0
+      random = function(a, b)
+        luaunit.assert_equals({a, b}, {0, 99})
+        local v = a + (k % (b - a + 1))
+        k = k + 1
+        return v
+      end
+
+      for _ = 1, 100 do step_under_test.handle(1, 1) end
+
+      luaunit.assert_equals(k, probability == 100 and 0 or 100, "draw count at " .. probability)
+      luaunit.assert_equals(#note_ons(env), probability, "note-ons at " .. probability)
     end
-
-    step_under_test.handle(1, 1)
-    local outcomes = range[2] - range[1] + 1
-    for _ = 2, outcomes do step_under_test.handle(1, 1) end
-
-    luaunit.assert_equals(outcomes, 100)
-    luaunit.assert_equals(#note_ons(env), 30)
   end)
 end
 

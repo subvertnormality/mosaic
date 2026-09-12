@@ -9,7 +9,7 @@
   "counts": {
     "requirements": 141,
     "production_lua_modules": 67,
-    "unit_integration_files": 56,
+    "unit_integration_files": 57,
     "domains": 15
   },
   "coverage_language": {
@@ -544,10 +544,10 @@
           "coverage": "Off, zero, interior, maximum"
         }
       ],
-      "interaction_strategy": "Full axes plus deterministic pairwise matrix and named trigless-slide-clock triples.",
+      "interaction_strategy": "Exhaustive 0-100 probability draws and all ten lock/slide slots, crossed with boundary song, channel and step identities; deterministic pairwise native cases retain trigless-slide-clock and persistence interactions.",
       "residual_gaps": [
-        "Replacement, clear and reassign for every slot and parameter family.",
-        "Probability outcomes crossed with locks, random, song transition and persistence."
+        "Device-definition reassignment and clear/reassign behaviour across MIDI, norns and stock parameter families remains a composed UI/native concern.",
+        "Probability outcomes crossed with locks, random offsets, song transitions and persistence remain partitioned native interactions."
       ],
       "requirement_ids": [
         "LOCK-CLEAR-PAGE",
@@ -586,6 +586,7 @@
         "lib/tests/lib/channel_edit_mask_handler_tests.lua",
         "lib/tests/lib/grid_input_tests.lua",
         "lib/tests/lib/integration_tests/param_tests.lua",
+        "lib/tests/lib/program_lock_hardening_tests.lua",
         "lib/tests/lib/step_delta_killers_tests.lua",
         "lib/tests/lib/step_mutation_killers_tests.lua",
         "lib/tests/lib/step_test.lua"
@@ -720,7 +721,7 @@
         "M-XA-005-NB-LOCK",
         "M-XA-006-NB-CHORD-ACCEL"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-in-progress"
     },
     {
       "id": "H05",

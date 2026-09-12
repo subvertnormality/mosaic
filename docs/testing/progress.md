@@ -1504,3 +1504,15 @@ The complete Lua unit/integration suite passes 1477/1477. The nine inventory,
 matrix, test-name and Lua-syntax guards also pass. This slice changes no production
 code. MIDI-bound effects and merged-scale cache invalidation remain explicit H05
 gaps requiring native/composed coverage.
+
+
+## Parameter-lock and trig-parameter hardening  2026-09-12
+
+H04 now exhausts every probability value from 0 through 100 against the complete
+099 draw domain through step.handle. It also exercises all ten parameter-lock and
+slide slots at song slots 1/96, channels 1/16 and steps 1/64, checking clamp, Off,
+replacement, full-step clear, and song/channel/step isolation. The complete Lua
+unit/integration suite passes 1480/1480. No production code changed. Cross-family
+assignment UI and probability interactions with random pitch, transitions and
+persistence remain explicit composed/native obligations; the pending S34
+single-lock slide-clear semantics were not altered.
