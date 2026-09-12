@@ -224,7 +224,7 @@ local function save_paint_pattern(p)
   end
   selected_song_pattern.patterns[selected_pattern].trig_values = trigs
   selected_song_pattern.patterns[selected_pattern].lengths = lengths
-  pattern.update_working_patterns(selected_song_pattern)
+  pattern.update_source_working_patterns(selected_song_pattern, selected_pattern)
   selected_song_pattern.active = true
 end
 
@@ -246,7 +246,7 @@ function trigger_edit_page.register_press()
         local song = program.get_selected_song_pattern()
         local source = program.get().selected_pattern
         trigger_edit_page_sequencer:press(x, y, song, source)
-        pattern.update_working_patterns(song)
+        pattern.update_source_working_patterns(song, source)
       end
     end
   )
@@ -402,7 +402,7 @@ function trigger_edit_page.register_press()
       local source = program.get().selected_pattern
       trigger_edit_page_sequencer:dual_press(x, y, x2, y2, song, source)
       if trigger_edit_page_sequencer:is_this(x2, y2) then
-        pattern.update_working_patterns(song)
+        pattern.update_source_working_patterns(song, source)
         tooltip:show("Note length set")
       end
     end
@@ -414,7 +414,7 @@ function trigger_edit_page.register_press()
         local song = program.get_selected_song_pattern()
         local source = program.get().selected_pattern
         trigger_edit_page_sequencer:long_press(x, y, song, source)
-        pattern.update_working_patterns(song)
+        pattern.update_source_working_patterns(song, source)
         tooltip:show("Note length reset")
       end
     end

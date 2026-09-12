@@ -122,7 +122,7 @@ function note_edit_page.register_press()
             tooltip:show("Steps " .. steps_tip .. "set to " .. note)
           end
 
-          pattern.update_working_patterns(selected_song_pattern)
+          pattern.update_source_working_patterns(selected_song_pattern, selected_pattern)
         end
       end
     )

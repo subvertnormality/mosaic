@@ -318,7 +318,7 @@ function channel_edit_page.register_press()
             target_song.active = true
             tooltip:show("Pattern " .. x .. " removed from ch. " .. program.get().selected_channel)
           end
-          pattern.update_working_patterns(target_song)
+          pattern.update_working_patterns(target_song, {[target_channel.number] = true})
           target_song.active = true
         end
       end
@@ -354,7 +354,7 @@ function channel_edit_page.register_press()
         end
 
         target_song.active = true
-        pattern.update_working_patterns(target_song)
+        pattern.update_working_patterns(target_song, {[target_channel.number] = true})
 
       end
     end
@@ -393,7 +393,7 @@ function channel_edit_page.register_press()
         end
 
         target_song.active = true
-        pattern.update_working_patterns(target_song)
+        pattern.update_working_patterns(target_song, {[target_channel.number] = true})
 
       end
     end
@@ -431,7 +431,7 @@ function channel_edit_page.register_press()
         end
 
         target_song.active = true
-        pattern.update_working_patterns(target_song)
+        pattern.update_working_patterns(target_song, {[target_channel.number] = true})
 
       end
     end
@@ -470,7 +470,7 @@ function channel_edit_page.register_press()
         end
 
         target_song.active = true
-        pattern.update_working_patterns(target_song)
+        pattern.update_working_patterns(target_song, {[target_channel.number] = true})
       end
     end
   )
@@ -497,7 +497,7 @@ function channel_edit_page.register_press()
           target_channel.note_merge_mode = "pattern_number_" .. x2
           note_merge_mode_button:set_state(4)
           target_song.active = true
-          pattern.update_working_patterns(target_song)
+          pattern.update_working_patterns(target_song, {[target_channel.number] = true})
           tooltip:show(
             "Note merge mode pattern " ..x2
           )
@@ -506,7 +506,7 @@ function channel_edit_page.register_press()
           target_channel.velocity_merge_mode = "pattern_number_" .. x2
           velocity_merge_mode_button:set_state(4)
           target_song.active = true
-          pattern.update_working_patterns(target_song)
+          pattern.update_working_patterns(target_song, {[target_channel.number] = true})
           tooltip:show(
             "Velocity merge mode pattern " ..x2
           )
@@ -515,7 +515,7 @@ function channel_edit_page.register_press()
           target_channel.length_merge_mode = "pattern_number_" .. x2
           length_merge_mode_button:set_state(4)
           target_song.active = true
-          pattern.update_working_patterns(target_song)
+          pattern.update_working_patterns(target_song, {[target_channel.number] = true})
           tooltip:show(
             "Length merge mode pattern " ..x2
           )

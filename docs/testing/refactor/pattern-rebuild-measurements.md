@@ -142,3 +142,49 @@ and miss untracked writes. Next migrate the note editor step-note operation to a
 explicit song/pattern target and its captured-song invalidation, then the other
 writer families identified in model-mutation-map.md. Preserve per-channel publish
 then yield. Do not claim source freshness after migrating only one writer family.
+
+## Targeted rebuild candidate (baseline c7a9bde)
+
+`lua5.3 docs/testing/refactor/benchmarks/targeted-rebuild.lua` runs the actual
+production merge and cooperative scheduler, alternates old/new measurement order
+for five samples per workload, and compares complete final song contents. Each
+sample performs 100 source edits; source 1 feeds 1, 4 or 16 channels.
+
+| Consumers | Baseline CPU seconds (five samples) | Targeted CPU seconds | Speedup range |
+|---|---|---|---|
+| 1 | .085315, .085530, .092098, .088710, .085196 | .006538, .006355, .006176, .006328, .006014 | 13.049–14.912x |
+| 4 | .084807, .084489, .085076, .084309, .086507 | .022139, .022429, .026305, .022510, .022916 | 3.234–3.831x |
+| 16 | .089427, .084609, .085263, .086999, .085807 | .085815, .086459, .088390, .088390, .086878 | .965–1.042x |
+
+Sparse-consumer benefit exceeds sample variation. All-consumer requests retain
+small bookkeeping overhead and show no established benefit. These are host CPU
+measurements with dependency stubs, not emulator acceptance or physical-norns
+performance. Validation for this candidate is recorded below.
+
+Known unchanged limitation: merge eligibility still reads step trig masks through
+the ambient selected-song getter. Explicit rebuild target validation does not
+correct that pre-existing dependency. It needs isolated reproduction before a
+behavior-changing fix; this candidate does not establish R07's full cross-song
+correctness claim by itself.
+
+### Targeted scheduler validation
+
+All 1540 Lua tests pass (25.243 seconds) with no concurrent emulator workload;
+six guards pass. An earlier concurrent run had 1539 successes and the known
+load-sensitive 2 ms live-slide admission failure at 2.351 ms. Its limit was not
+changed. Three new scheduler tests cover pending dirty union (including a source1-
+only late channel), all unassigned priority dependencies and false assignments,
+and stale revision/channel replacement rejection. The trigger-page integration
+stub now checks the targeted song/source arguments.
+
+Unchanged native recipes and oracles pass on the production candidate:
+
+| Case | Controlled | Real-time |
+|---|---|---|
+| M-PAT-BOUNDARY-001 | 3b3b622de14a4ff2ade301410b033e78 | Not run: this recipe requires native_input_schedule in real time |
+| M-EDIT-003 | cb6de6f4f29d443da9999f7d058b24ca | 291cbe22b2ef4bc79e5c346028866c76 |
+| M-MERGE-TRIG-002 | 1a85754ea61944b8a20c4e50f6320726 | c288970a578a4f308121f29e9035e97f |
+
+The final dirty-union test-only strengthening followed native validation; no
+production code changed after these native runs. S71 remains an unvalidated
+pre-existing suspicion, not a fix or an R07 completion claim.

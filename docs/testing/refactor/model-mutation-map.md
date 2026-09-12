@@ -192,3 +192,19 @@ units, retain boundary/live-edit/native merge guards, and measure the gain befor
 accepting the added tracking. This narrows the earlier revision prerequisite only
 for transient request tracking; full writer coverage is still required for any
 persistent source cache.
+
+### Targeted rebuild tracking implemented
+
+`pattern.update_working_patterns(song, affected_channels)` retains the full
+16-channel behavior when the optional set is omitted. Explicit channel composition
+edits pass a one-channel set. Note/velocity/trigger/paint source edits use
+`update_source_working_patterns(song, source)` to include assignments and every
+numeric priority source. Pending sets survive debounce cancellation and each
+channel result validates its request revision and object identity before publish.
+Publication and yields remain per channel; synchronous mask/memory rebuilds remain
+synchronous. No persistent source cache or persisted revision is introduced.
+
+Measured sparse-consumer gains and validation are in
+`pattern-rebuild-measurements.md`; 1540 units, six guards and five native checks
+pass. R07 still needs remaining acceptance reconciliation and S71 investigation;
+this receipt does not mark the entire card or refactor complete.

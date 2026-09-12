@@ -88,6 +88,8 @@ Status values: `unvalidated`, `behaviour-probe-planned`, `behaviour-reproduced`,
 | S69 | `recorder.lua` pending note-mask commit | Captured top-level song is discarded when committing a held mask edit after a song transition | Original song keeps the old note; the edit follows the newly selected song | M-MASK-032 | `fixed` (corrected two-count encoder baselines fail in both lanes; candidate passes both lanes, song isolation and undo/redo, plus 3 deterministic repeats; bugs.json `pending-note-mask-song-target`) |
 | S70 | `m_midi.lua` note-off length ownership | Held MIDI state lacks onset song; release reads and commits the selected song after transition | Original note/chord replays at the default one-step duration instead of the played two steps | M-REC-SONG-LENGTH-001/002 | `fixed` (both cases fail on baseline and pass with onset-song release lookup/commit in both lanes, each with three identical controlled repeats; bugs.json `midi-release-song-ownership`) |
 
+| S71 | `pattern.lua` merge eligibility; `program.get_step_trig_masks` | Explicit-song rebuild reads eligibility masks from the currently selected song | Suspected: a queued rebuild for song A after selection moves to B can use B's positive trig masks when merging A's trigless source values | R07 Sol code audit; no native reproduction yet | `unvalidated` (pre-existing lookup retained; require an isolated user-input/MIDI regression failing in both lanes before a behavior-changing fix) |
+
 Test-suite note: `test_live_slide_admission_all_channel_parameter_slots`
 (`m_clock_performance_tests.lua`) has a 2 ms limit and failed twice while the host was loaded by
 mutation runs; it passed alone and in later full runs. It is a load-sensitive unit, not a

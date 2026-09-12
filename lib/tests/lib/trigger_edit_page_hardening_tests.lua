@@ -36,7 +36,11 @@ local function with_editor(body)
     }
     draw = {register_grid = function() end}
     grid_abstraction = {led = function() end}
-    pattern = {update_working_patterns = function() env.updates = env.updates + 1 end}
+    pattern = {update_source_working_patterns = function(song, source)
+      luaunit.assert_is(song, program.get_selected_song_pattern())
+      luaunit.assert_equals(source, program.get().selected_pattern)
+      env.updates = env.updates + 1
+    end}
     tooltip = {show = function(text) env.tooltips[#env.tooltips + 1] = text end}
     params = {string = function(_, id)
       luaunit.assert_equals(id, "tresillo_amount")

@@ -432,3 +432,174 @@ function test_hardening_song_boundary_does_not_cancel_committed_pattern_rebuild(
   end
   luaunit.assert_equals(observed.second_after, 12, "queued edit leaked between song slots")
 end
+-- R07 scheduler contract: jobs are intentionally stepped so a request can arrive
+-- after one channel publishes but before the current rebuild sweep is complete.
+local function r07_stepped_scheduler()
+  local stepped = {jobs = {}, next_id = 1}
+  function stepped.start(co)
+    local id = stepped.next_id
+    stepped.next_id = id + 1
+    stepped.jobs[id] = {co = co, active = true}
+    return id
+  end
+  function stepped.debounce(func)
+    local current_id = nil
+    return function(...)
+      if current_id and stepped.jobs[current_id] then stepped.jobs[current_id].active = false end
+      local args = {...}
+      current_id = stepped.start(coroutine.create(function() func(table.unpack(args)) end))
+    end
+  end
+  function stepped.tick()
+    local ids = {}
+    for id, job in pairs(stepped.jobs) do if job.active then ids[#ids + 1] = id end end
+    table.sort(ids)
+    for _, id in ipairs(ids) do
+      local job = stepped.jobs[id]
+      if job.active then
+        local ok, err = coroutine.resume(job.co)
+        assert(ok, err)
+        if coroutine.status(job.co) == "dead" then job.active = false end
+      end
+    end
+  end
+  function stepped.run_until_idle()
+    for tick = 1, 80 do
+      local active = false
+      for _, job in pairs(stepped.jobs) do if job.active then active = true end end
+      if not active then return end
+      stepped.tick()
+    end
+    error("R07 rebuild did not quiesce")
+  end
+  return stepped
+end
+
+local function r07_source(song, number, value)
+  song.patterns[number].trig_values[1] = 1
+  song.patterns[number].note_values[1] = value
+end
+
+function test_hardening_r07_unions_source_dirties_after_partial_publish()
+  local original_scheduler = scheduler
+  scheduler = r07_stepped_scheduler()
+  local stepped = scheduler
+  local ok, err = pcall(function()
+    local pattern_under_test = include("mosaic/lib/pattern")
+    program.init()
+    local song = program.get_song_pattern(1)
+    r07_source(song, 1, 1)
+    r07_source(song, 2, 3)
+    song.channels[1].selected_patterns = {[1] = true}
+    song.channels[2].selected_patterns = {[1] = true, [2] = true}
+    song.channels[2].note_merge_mode = "average"
+    song.channels[3].selected_patterns = {[2] = true}
+    song.channels[4].selected_patterns = {[3] = true}
+    song.channels[16].selected_patterns = {[1] = true}
+    pattern_under_test.update_working_patterns(song)
+    stepped.run_until_idle()
+    local untouched = song.channels[4].working_pattern
+
+    song.patterns[1].note_values[1] = 5
+    pattern_under_test.update_source_working_patterns(song, 1)
+    stepped.tick()
+    luaunit.assert_equals(song.channels[1].working_pattern.note_values[1], 5,
+      "complete channel results publish before their yield")
+    luaunit.assert_equals(song.channels[2].working_pattern.note_values[1], 2,
+      "later channels remain pending after the first yield")
+
+    luaunit.assert_equals(song.channels[16].working_pattern.note_values[1], 1)
+    song.patterns[2].note_values[1] = 9
+    pattern_under_test.update_source_working_patterns(song, 2)
+    stepped.run_until_idle()
+    luaunit.assert_equals(song.channels[2].working_pattern.note_values[1], 7,
+      "new source dirties union with a partial prior sweep")
+    luaunit.assert_equals(song.channels[3].working_pattern.note_values[1], 9)
+    luaunit.assert_equals(song.channels[16].working_pattern.note_values[1], 5,
+      "source1-only pending work survives the source2 request")
+    luaunit.assert_true(song.channels[4].working_pattern == untouched,
+      "unrelated channels do not rebuild")
+  end)
+  scheduler = original_scheduler
+  luaunit.assert_true(ok, err)
+end
+
+function test_hardening_r07_source_dependencies_include_unassigned_priorities_only()
+  local original_scheduler = scheduler
+  scheduler = r07_stepped_scheduler()
+  local stepped = scheduler
+  local ok, err = pcall(function()
+    local pattern_under_test = include("mosaic/lib/pattern")
+    program.init()
+    local song = program.get_song_pattern(1)
+    r07_source(song, 4, 6)
+    for c = 1, 5 do song.channels[c].selected_patterns = {[1] = true} end
+    song.channels[1].selected_patterns[4] = true
+    song.channels[5].selected_patterns[4] = false
+    song.channels[2].note_merge_mode = "pattern_number_4"
+    song.channels[3].velocity_merge_mode = "pattern_number_4"
+    song.channels[4].length_merge_mode = "pattern_number_4"
+    pattern_under_test.update_working_patterns(song)
+    stepped.run_until_idle()
+    local nonconsumer = song.channels[5].working_pattern
+
+    song.patterns[4].note_values[1] = 8
+    song.patterns[4].velocity_values[1] = 77
+    song.patterns[4].lengths[1] = 3
+    pattern_under_test.update_source_working_patterns(song, 4)
+    stepped.run_until_idle()
+    luaunit.assert_equals(song.channels[1].working_pattern.note_values[1], 8,
+      "selected sources remain dependencies")
+    luaunit.assert_equals(song.channels[2].working_pattern.note_values[1], 8,
+      "unassigned note priority remains a dependency")
+    luaunit.assert_equals(song.channels[3].working_pattern.velocity_values[1], 77,
+      "unassigned velocity priority remains a dependency")
+    luaunit.assert_equals(song.channels[4].working_pattern.lengths[1], 3,
+      "unassigned length priority remains a dependency")
+    luaunit.assert_true(song.channels[5].working_pattern == nonconsumer,
+      "false assignments do not create consumers")
+  end)
+  scheduler = original_scheduler
+  luaunit.assert_true(ok, err)
+end
+
+function test_hardening_r07_rejects_stale_revision_and_replaced_channel()
+  local original_scheduler = scheduler
+  scheduler = r07_stepped_scheduler()
+  local stepped = scheduler
+  local ok, err = pcall(function()
+    local pattern_under_test = include("mosaic/lib/pattern")
+    program.init()
+    local song = program.get_song_pattern(1)
+    r07_source(song, 1, 2)
+    song.channels[1].selected_patterns = {[1] = true}
+    pattern_under_test.update_working_patterns(song)
+    stepped.run_until_idle()
+
+    local original_merge = pattern_under_test.get_and_merge_patterns
+    local calls = 0
+    pattern_under_test.get_and_merge_patterns = function(...)
+      calls = calls + 1
+      local result = original_merge(...)
+      if calls == 1 then
+        song.patterns[1].note_values[1] = 7
+        pattern_under_test.update_working_patterns(song, {[1] = true})
+      elseif calls == 2 then
+        local replacement = {}
+        for key, value in pairs(song.channels[1]) do replacement[key] = value end
+        song.channels[1] = replacement
+      end
+      return result
+    end
+
+    song.patterns[1].note_values[1] = 5
+    pattern_under_test.update_working_patterns(song, {[1] = true})
+    stepped.run_until_idle()
+    pattern_under_test.get_and_merge_patterns = original_merge
+    luaunit.assert_true(calls >= 3, "revision and identity failures both retry")
+    luaunit.assert_equals(song.channels[1].working_pattern.note_values[1], 7,
+      "only the newest revision on the replacement channel may publish")
+  end)
+  scheduler = original_scheduler
+  luaunit.assert_true(ok, err)
+end

@@ -243,25 +243,8 @@ end
 
 local working_pattern_updates = setmetatable({}, {__mode = "k"})
 
-function pattern.update_working_patterns(song_pattern)
-  local target = song_pattern or program.get_selected_song_pattern()
-  local update = working_pattern_updates[target]
-  if not update then
-    update = scheduler.debounce(function(selected_song_pattern)
-      for c = 1, 16 do
-        pattern.update_working_pattern(c, selected_song_pattern)
-        coroutine.yield()
-      end
-    end, throttle_time)
-    working_pattern_updates[target] = update
-  end
-  update(target)
-end
-
-function pattern.update_working_pattern(c, song_pattern)
-
-  local channel_pattern = song_pattern.channels[c]
-  channel_pattern.working_pattern = pattern.get_and_merge_patterns(
+local function build_working_pattern(c, song_pattern, channel_pattern)
+  return pattern.get_and_merge_patterns(
     c,
     channel_pattern.trig_merge_mode,
     channel_pattern.note_merge_mode,
@@ -269,6 +252,61 @@ function pattern.update_working_pattern(c, song_pattern)
     channel_pattern.length_merge_mode,
     song_pattern
   )
+end
+
+-- Revisions describe pending rebuild requests, not persisted source versions.
+-- Compound writers retain the all-channel facade; targeted requests are unioned
+-- so cancelling a partial sweep cannot discard another channel's pending edit.
+function pattern.update_working_patterns(song_pattern, affected_channels)
+  local target = song_pattern or program.get_selected_song_pattern()
+  local state = working_pattern_updates[target]
+  if not state then
+    state = {dirty = {}, revision = {}}
+    state.update = scheduler.debounce(function()
+      repeat
+        for c = 1, 16 do
+          if state.dirty[c] then
+            local revision = state.revision[c]
+            local channel = target.channels[c]
+            local result = build_working_pattern(c, target, channel)
+            if working_pattern_updates[target] == state
+              and state.revision[c] == revision and target.channels[c] == channel then
+              channel.working_pattern = result
+              state.dirty[c] = nil
+            end
+            coroutine.yield()
+          end
+        end
+      until next(state.dirty) == nil
+    end, throttle_time)
+    working_pattern_updates[target] = state
+  end
+  local requested = false
+  for c = 1, 16 do
+    if not affected_channels or affected_channels[c] then
+      state.dirty[c] = true
+      state.revision[c] = (state.revision[c] or 0) + 1
+      requested = true
+    end
+  end
+  if requested then state.update() end
+end
+
+function pattern.update_source_working_patterns(song_pattern, source_number)
+  local affected = {}
+  for c = 1, 16 do
+    local channel = song_pattern.channels[c]
+    affected[c] = channel.selected_patterns[source_number] == true
+      or (channel.note_merge_mode and extract_pattern_number(channel.note_merge_mode) == source_number)
+      or (channel.velocity_merge_mode and extract_pattern_number(channel.velocity_merge_mode) == source_number)
+      or (channel.length_merge_mode and extract_pattern_number(channel.length_merge_mode) == source_number)
+  end
+  pattern.update_working_patterns(song_pattern, affected)
+end
+
+function pattern.update_working_pattern(c, song_pattern)
+  local channel_pattern = song_pattern.channels[c]
+  channel_pattern.working_pattern = build_working_pattern(c, song_pattern, channel_pattern)
 end
 
 return pattern
