@@ -127,6 +127,58 @@ function test_hardening_memory_all_ten_lock_slots_cross_song_bounds_branch_and_r
   end
 end
 
+-- README.md:749-760 says a channel has up to ten independently lockable trig
+-- parameters, and README.md:698-707 makes each resulting action independently
+-- navigable in Memory. The single-slot loop above covers the outer bounds;
+-- this crosses every slot on one step, where a replay key that omitted the
+-- parameter number would silently merge or overwrite the locks.
+function test_hardening_memory_all_ten_same_step_slots_survive_partial_navigation_reload_and_branch()
+  fresh()
+  local channel_number, song_pattern, step = 16, 96, 64
+  local channel = program.get_channel(song_pattern, channel_number)
+  local function lock(slot, value)
+    hardening_memory.record_event(channel_number, "trig_lock", {
+      step = step, parameter = slot, value = value, song_pattern = song_pattern})
+  end
+  local function values()
+    local actual = {}
+    for slot = 1, 10 do
+      actual[slot] = program.get_step_param_trig_lock(channel, step, slot)
+    end
+    return actual
+  end
+
+  for slot = 1, 10 do lock(slot, slot * 10) end
+  luaunit.assert_equals(values(), {10, 20, 30, 40, 50, 60, 70, 80, 90, 100})
+  luaunit.assert_equals(
+    {hardening_memory.get_event_count(channel_number), hardening_memory.get_total_event_count(channel_number)},
+    {10, 10})
+
+  -- Undo two distinct slots, persist that middle navigation position, then redo both.
+  hardening_memory.undo(channel_number)
+  hardening_memory.undo(channel_number)
+  luaunit.assert_equals(values(), {10, 20, 30, 40, 50, 60, 70, 80, nil, nil})
+  local saved = hardening_memory.serialize_state()
+  hardening_memory.init()
+  hardening_memory.deserialize_state(saved)
+  hardening_memory.redo_all(channel_number)
+  luaunit.assert_equals(values(), {10, 20, 30, 40, 50, 60, 70, 80, 90, 100})
+
+  -- A replacement after partial undo discards only its own slot's redo tail.
+  hardening_memory.undo(channel_number)
+  hardening_memory.undo(channel_number)
+  lock(9, 109)
+  hardening_memory.redo_all(channel_number)
+  luaunit.assert_equals(values(), {10, 20, 30, 40, 50, 60, 70, 80, 109, nil})
+  luaunit.assert_equals(
+    {hardening_memory.get_event_count(channel_number), hardening_memory.get_total_event_count(channel_number)},
+    {9, 9})
+
+  hardening_memory.undo_all(channel_number)
+  luaunit.assert_equals(values(), {})
+  luaunit.assert_nil(program.get_step_param_trig_lock(program.get_channel(1, channel_number), step, 1))
+end
+
 -- README.md:698-705: K2 returns to the beginning of Memory. When bounded history has
 -- wrapped, that beginning is the state immediately before its oldest retained action.
 -- S58's production-capacity behavior baseline is M-MEMORY-014.
