@@ -188,3 +188,65 @@ Unchanged native recipes and oracles pass on the production candidate:
 The final dirty-union test-only strengthening followed native validation; no
 production code changed after these native runs. S71 remains an unvalidated
 pre-existing suspicion, not a fix or an R07 completion claim.
+
+### Additional targeted-rebuild acceptance (production c5f81de)
+
+All16 priority sources, song copy/erase and autosave/fresh-process restore passed
+controlled runs `4cab8f233b454f6b8904dd49bcb24b04`,
+`ddabd563621140b3ab1847f1a306c7be`, `0cde13b1610c41238b49c0595c6e3dda`.
+Real-time copy and save passed `d46b7668ad744712a7716e4a2dce1a74` and
+`329c9ce454d14d6c94537dc761df9c75`. Real-time priorities first failed its 10ms
+interval bound at 10.073ms (`22a75ba1ae424287b1b69dc133929a48`), then passed
+without concurrent benchmarking (`65889a74229e44f3800818cdb76cbe58`); the bound
+and musical oracle were unchanged. This records the timing variability rather
+than treating the initial failure as a pass.
+
+### Per-request effective-length reuse candidate
+
+Independent in-memory candidate experiment and raw samples are preserved under
+`/home/andy/projects/mosaic-behaviour-runs/r07-effective-reuse/` (`benchmark.lua`,
+`results.tsv`). Five alternating samples of 40 full16channel sweeps each compare
+complete outputs with current production and bound the cache to16 source arrays.
+Median speedups for 1/4/16 shared sources: dense-short 1.060/1.061/1.095x;
+sparse-sustained 1.035/1.143/1.293x. The single sparse source was within noise;
+consistent multi-source gains justify implementing conservative request-scoped
+reuse. These are host CPU experiments, not physical-device acceptance.
+
+Candidate implementation resets the per-song cache on every async rebuild request
+(including an empty target set), invalidates it on direct synchronous rebuilds,
+and releases it when the dirty sweep completes. Direct builds remain uncached.
+No source-version claim or persistent cache is introduced. Validation follows.
+
+### Actual request-cache implementation validation
+
+`benchmarks/rebuild-length-reuse.lua` compares the actual implementation with
+pinned `9b17d3f`; raw results are preserved in
+`/home/andy/projects/mosaic-behaviour-runs/r07-effective-reuse/actual-candidate-results.tsv`.
+Median speedups for1/4/16sources: dense-short1.050/1.030/1.078x and
+sparse-sustained1.034/1.117/1.277x. Dense4source samples were noisy (.797–1.126x);
+sustained16source samples consistently ranged1.273–1.287x. All compared outputs
+matched and the source cache stayed within16entries. The earlier exploratory
+script dynamically reads the checkout; its original `results.tsv` is historical
+and must not be regenerated as though it still represented the old baseline.
+
+All1542 Lua tests pass (25.516 seconds), and six guards pass. Focused tests verify
+source-array reuse, direct-build invalidation before late async publication,
+targeted and empty-request invalidation, and separation between songs. Read-only
+review found no introduced cache ownership defect. The optional internal cache
+argument belongs to one song/request; arbitrary external table reuse across songs
+is not a supported API. An idle empty request may retain an empty table, never
+source arrays; weak song ownership remains unchanged.
+
+| Case | Controlled | Real-time |
+|---|---|---|
+| M-PAT-BOUNDARY-001 | cc7a3b9b78d44a21a55df394693bfa1c | Existing runtime limitation, not run |
+| M-PAT-004 | c6b56182e95c4e32b3d08f23d2d3f886 | de4354f3b0954563950e0a48bdd3a6ab |
+| M-MERGE-007 | 364e48c169a044e6b4245a2fc4c4671d | 5c25eaf48bcf4c0da52a22071792399f |
+
+R07 implementation now includes measured effective-length resolution, within-merge
+invariant reuse, request-scoped cross-consumer reuse, and targeted dirty tracking
+with per-channel publication checks. Sorted accumulation remains deliberately
+unchanged where unsorted floating arithmetic would change results. S71 is an
+unvalidated pre-existing suspicion and not fixed by these optimizations. Final
+combined dense/input-pressure acceptance remains part of the continuing refactor;
+no full refactor or physical-device performance completion is claimed here.

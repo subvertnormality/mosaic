@@ -208,3 +208,14 @@ Measured sparse-consumer gains and validation are in
 `pattern-rebuild-measurements.md`; 1540 units, six guards and five native checks
 pass. R07 still needs remaining acceptance reconciliation and S71 investigation;
 this receipt does not mark the entire card or refactor complete.
+
+### Effective-length reuse lifetime
+
+R07 now shares effective-length arrays among consumers within one pending song
+rebuild request. Every async ingress (even an empty target set) and each direct
+synchronous rebuild invalidates that request cache; completed sweeps discard it.
+This does not require persisted source revisions or change memory replay's source
+ownership. Measurements and native/unit receipts are in
+`pattern-rebuild-measurements.md`. Next implementation stage: R08 bounded
+quantisation cache work, preserving source-content keys until all writers can
+support a real revision identity. Final combined refactor acceptance is still owed.

@@ -71,7 +71,7 @@ local function extract_pattern_number(merge_mode)
   return nil
 end
 
-function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern)
+function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache)
   local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
   local merged_pattern = {
     trig_values = {unpack(default_trig_values)},
@@ -129,7 +129,11 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
 
   for pattern_number, pattern_enabled in pairs(patterns_to_process) do
     local pattern = patterns[pattern_number]
-    local source_lengths = effective_lengths(pattern)
+    local source_lengths = effective_lengths_cache and effective_lengths_cache[pattern_number]
+    if not source_lengths then
+      source_lengths = effective_lengths(pattern)
+      if effective_lengths_cache then effective_lengths_cache[pattern_number] = source_lengths end
+    end
     if pattern_number == length_priority then priority_lengths = source_lengths end
 
     for s = 1, 64 do
@@ -243,14 +247,15 @@ end
 
 local working_pattern_updates = setmetatable({}, {__mode = "k"})
 
-local function build_working_pattern(c, song_pattern, channel_pattern)
+local function build_working_pattern(c, song_pattern, channel_pattern, effective_lengths_cache)
   return pattern.get_and_merge_patterns(
     c,
     channel_pattern.trig_merge_mode,
     channel_pattern.note_merge_mode,
     channel_pattern.velocity_merge_mode,
     channel_pattern.length_merge_mode,
-    song_pattern
+    song_pattern,
+    effective_lengths_cache
   )
 end
 
@@ -268,7 +273,7 @@ function pattern.update_working_patterns(song_pattern, affected_channels)
           if state.dirty[c] then
             local revision = state.revision[c]
             local channel = target.channels[c]
-            local result = build_working_pattern(c, target, channel)
+            local result = build_working_pattern(c, target, channel, state.effective_lengths_cache)
             if working_pattern_updates[target] == state
               and state.revision[c] == revision and target.channels[c] == channel then
               channel.working_pattern = result
@@ -278,9 +283,13 @@ function pattern.update_working_patterns(song_pattern, affected_channels)
           end
         end
       until next(state.dirty) == nil
+      state.effective_lengths_cache = nil
     end, throttle_time)
     working_pattern_updates[target] = state
   end
+  -- At most the song's 16 source length arrays live for this request.
+  -- Any request invalidates them, including a no-op or mask-only request.
+  state.effective_lengths_cache = {}
   local requested = false
   for c = 1, 16 do
     if not affected_channels or affected_channels[c] then
@@ -305,6 +314,10 @@ function pattern.update_source_working_patterns(song_pattern, source_number)
 end
 
 function pattern.update_working_pattern(c, song_pattern)
+  -- Legacy synchronous callers may have changed source arrays directly.
+  -- Do not let a pending sweep retain pre-edit lengths after this ingress.
+  local state = working_pattern_updates[song_pattern]
+  if state then state.effective_lengths_cache = {} end
   local channel_pattern = song_pattern.channels[c]
   channel_pattern.working_pattern = build_working_pattern(c, song_pattern, channel_pattern)
 end

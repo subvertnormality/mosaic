@@ -603,3 +603,101 @@ function test_hardening_r07_rejects_stale_revision_and_replaced_channel()
   scheduler = original_scheduler
   luaunit.assert_true(ok, err)
 end
+
+-- R07 cache test draft for appending to lib/tests/lib/pattern_hardening_tests.lua.
+-- Requires r07_stepped_scheduler() and r07_source() already defined above.
+--
+-- Contract: an async song state may reuse source effective-length arrays only
+-- within its current sweep. New targeted requests, synchronous rebuilds and
+-- completed sweeps cannot retain those arrays; states for distinct songs never
+-- share an array.
+
+local function r07_cache_song(length)
+  program.init()
+  local song = program.get_song_pattern(1)
+  song.patterns[1].trig_values[1] = 1
+  song.patterns[1].lengths[1] = length
+  for _, channel_number in ipairs({1, 16}) do
+    local channel = song.channels[channel_number]
+    channel.selected_patterns = {[1] = true}
+    channel.trig_merge_mode = "all"
+    channel.length_merge_mode = "pattern_number_1"
+  end
+  return song
+end
+
+function test_hardening_r07_length_cache_is_reused_only_within_unchanged_merge_inputs()
+  local original_scheduler = scheduler
+  scheduler = r07_stepped_scheduler()
+  local stepped = scheduler
+  local ok, err = pcall(function()
+    local pattern_under_test = include("mosaic/lib/pattern")
+    local song = r07_cache_song(4)
+    local writes = 0
+    local cache = setmetatable({}, {
+      __newindex = function(target, key, value)
+        writes = writes + 1
+        rawset(target, key, value)
+      end,
+    })
+    local first = pattern_under_test.get_and_merge_patterns(
+      1, "all", false, false, "pattern_number_1", song, cache
+    )
+    local cached_lengths = cache[1]
+    local second = pattern_under_test.get_and_merge_patterns(
+      16, "all", false, false, "pattern_number_1", song, cache
+    )
+    luaunit.assert_equals(first.lengths[1], 4)
+    luaunit.assert_equals(second.lengths[1], 4)
+    luaunit.assert_is(cache[1], cached_lengths, "unchanged source array is reused")
+    luaunit.assert_equals(writes, 1,
+      "unchanged consumers must share source 1's effective-length array")
+  end)
+  scheduler = original_scheduler
+  luaunit.assert_true(ok, err)
+end
+
+function test_hardening_r07_async_length_cache_drops_on_sync_rebuild_and_is_song_isolated()
+  local original_scheduler = scheduler
+  scheduler = r07_stepped_scheduler()
+  local stepped = scheduler
+  local ok, err = pcall(function()
+    local pattern_under_test = include("mosaic/lib/pattern")
+    local first = r07_cache_song(2)
+    local second = program.get_song_pattern(2)
+    second.patterns[1].trig_values[1] = 1
+    second.patterns[1].lengths[1] = 7
+    for _, channel_number in ipairs({1, 16}) do
+      local channel = second.channels[channel_number]
+      channel.selected_patterns = {[1] = true}
+      channel.trig_merge_mode = "all"
+      channel.length_merge_mode = "pattern_number_1"
+    end
+    pattern_under_test.update_source_working_patterns(first, 1)
+    stepped.tick() -- first channel populates first song's async cache.
+    first.patterns[1].lengths[1] = 5
+    pattern_under_test.update_working_pattern(16, first)
+    luaunit.assert_equals(first.channels[16].working_pattern.lengths[1], 5,
+      "synchronous rebuild must not consume the pending async cache")
+    pattern_under_test.update_source_working_patterns(second, 1)
+    stepped.run_until_idle()
+    luaunit.assert_equals(first.channels[16].working_pattern.lengths[1], 5,
+      "late async publication must not overwrite the synchronous edit with old lengths")
+    luaunit.assert_equals(second.channels[16].working_pattern.lengths[1], 7,
+      "another song must not read first song's effective-length cache")
+    -- Characterisation of request lifetime: even a no-op ingress invalidates
+    -- derived arrays, while preserving pending work from the earlier sweep.
+    for _, affected in ipairs({{[1] = true}, {}}) do
+      first.patterns[1].lengths[1] = 6
+      pattern_under_test.update_source_working_patterns(first, 1)
+      stepped.tick()
+      first.patterns[1].lengths[1] = 9
+      pattern_under_test.update_working_patterns(first, affected)
+      stepped.run_until_idle()
+      luaunit.assert_equals(first.channels[16].working_pattern.lengths[1], 9,
+        "every request drops stale source lengths without discarding late consumers")
+    end
+  end)
+  scheduler = original_scheduler
+  luaunit.assert_true(ok, err)
+end
