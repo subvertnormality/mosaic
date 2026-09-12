@@ -3,6 +3,7 @@ local chord_timing = include("mosaic/lib/clock/chord_timing")
 local chord_order = include("mosaic/lib/musical_resolution/chord_order")
 local stock_parameter = include("mosaic/lib/musical_resolution/stock_parameter")
 local pitch_resolution = include("mosaic/lib/musical_resolution/pitch_resolution")
+local arp_descriptor = include("mosaic/lib/musical_resolution/arp_descriptor")
 local quantiser = include("mosaic/lib/quantiser")
 local m_clock = include("mosaic/lib/clock/m_clock")
 
@@ -49,6 +50,7 @@ local resolve_pitch = pitch_resolution.new(
     return params:get("quantiser_act_on_note_masks") == 2
   end
 )
+local build_arp_sequence = arp_descriptor.new(chord_order.index)
 
 function step.process_stock_params(c, step, type)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
@@ -519,39 +521,21 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   local channel = program.get_channel(program.get().selected_song_pattern, c)
   local release_ids = {}
   local note_dashboard_values = {chords = {}}
-  local sequenced_chord_notes = {}
-  local has_mask = false
-  for i = 1, 4 do
-    local chord_note = chord_notes[chord_order.index(i, 4, chord_strum_pattern)]
-    if chord_note and chord_note ~= 0 then
-      has_mask = true
-      sequenced_chord_notes[i] = {
-        note_value = unprocessed_note_container.note_value + chord_note + unprocessed_note_container.random_shift,
-        octave_mod = unprocessed_note_container.octave_mod,
-        transpose = unprocessed_note_container.transpose
-      }
-    else
-      sequenced_chord_notes[i] = false
+  local sequenced_chord_notes = build_arp_sequence(
+    chord_notes,
+    chord_strum_pattern,
+    mute_root,
+    unprocessed_note_container.note_value,
+    unprocessed_note_container.octave_mod,
+    unprocessed_note_container.transpose,
+    unprocessed_note_container.random_shift
+  )
+  if not sequenced_chord_notes then
+    m_clock.cancel_arp_onsets(c)
+    if c == program.get().selected_channel then
+      channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
     end
-  end
-  local root = not mute_root and {
-    note_value = unprocessed_note_container.note_value + unprocessed_note_container.random_shift,
-    octave_mod = unprocessed_note_container.octave_mod,
-    transpose = unprocessed_note_container.transpose
-  } or false
-  if not has_mask then
-    if not root then
-      m_clock.cancel_arp_onsets(c)
-      if c == program.get().selected_channel then
-        channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
-      end
-      return
-    end
-    sequenced_chord_notes = {root} -- Documented no-mask ratchet.
-  elseif chord_strum_pattern == 2 or chord_strum_pattern == 4 then
-    table.insert(sequenced_chord_notes, root)
-  else
-    table.insert(sequenced_chord_notes, 1, root)
+    return
   end
   local total_notes = #sequenced_chord_notes
   local initial = sequenced_chord_notes[1]
