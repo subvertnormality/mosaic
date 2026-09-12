@@ -80,6 +80,7 @@ local function with_midi(body)
     end,
     get_channel = function(song_pattern, n)
       env.get_channel_calls[#env.get_channel_calls + 1] = {song_pattern, n}
+      if env.song_channels then return env.song_channels[song_pattern][n] end
       assert(song_pattern == env.song_pattern, "wrong song pattern")
       return env.channels[n]
     end,
@@ -1164,5 +1165,30 @@ function test_midi_input_init_routes_each_port_event_with_its_device_as_source()
     luaunit.assert_equals(env.sent, {{1, "note_on", 60, 100, 1}})
     ports[1].event({0x80, 60, 0})
     luaunit.assert_equals(env.sent[2], {1, "note_off", 60, 0, 1})
+  end)
+end
+
+function test_midi_input_final_release_keeps_onset_song_and_clock_mods()
+  -- README 239: first press to final release gives one shared recorded length.
+  -- Cross-song target ownership is characterisation, not manual text.
+  with_midi(function(env)
+    env.params.record = 2
+    env.steps[1] = 4
+    env.song_channels = {[2] = env.channels, [3] = {make_channel(1)}}
+    env.now = 10
+    press(env, 60, 100, env.dev1)
+    env.now = 10.1
+    press(env, 64, 100, env.dev1)
+    env.song_pattern = 3
+    env.now = 10.2
+    release(env, 60, env.dev1)
+    luaunit.assert_equals(portions(env), {})
+    env.now = 10.5
+    release(env, 64, env.dev1)
+    luaunit.assert_equals(env.get_channel_calls, {{2, 1}, {2, 1}})
+    luaunit.assert_equals(env.divisor_calls, {env.channels[1].clock_mods})
+    luaunit.assert_equals(portions(env), {
+      {"portion", 1, 4, {song_pattern = 2, data = {step = 4, length = 4}}},
+      {"commit", 1, 4}})
   end)
 end

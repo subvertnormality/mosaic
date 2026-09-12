@@ -1163,6 +1163,16 @@
         "M-MASK-032"
       ],
       "summary": "Pending held note-mask edits retain their captured song across automatic song transitions."
+    },
+    {
+      "id": "midi-release-song-ownership",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "midi-release-song-ownership.json",
+      "cases": [
+        "M-REC-SONG-LENGTH-001",
+        "M-REC-SONG-LENGTH-002"
+      ],
+      "summary": "Held notes and chords released after a song transition retain full recorded length in their onset song."
     }
   ]
 }

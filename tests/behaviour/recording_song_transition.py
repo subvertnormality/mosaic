@@ -9,7 +9,7 @@ clock must play each recorded note only in its own slot.
 """
 import time
 
-def recording_song_transition(c,held_across=False):
+def recording_song_transition(c,held_across=False,release_length=False,chord=False):
     from cases import menu_label,menu_value
     c.configure()
     c.tap(5,8)
@@ -28,7 +28,10 @@ def recording_song_transition(c,held_across=False):
     packets+=[(1230000000,[250]),(a_on,[144,72,90]),(a_on+20000000,[128,72,0]),(b_on,[144,79,80]),(b_on+20000000,[128,79,0]),(2805000000,[252])]
     if held_across:
         # Note C pressed on slot 1 step 4 (1.73 s) and released after the 1.85 s transition.
-        packets+=[(1730000000,[144,84,70]),(1900000000,[128,84,0])]
+        packets+=[(1730000000,[144,84,70]),
+                  (1900000000 if chord or not release_length else 2030000000,[128,84,0])]
+        if chord:
+            packets+=[(1750000000,[144,88,70]),(2030000000,[128,88,0])]
     events=[dict(port=1,bytes=data,**{'at_'+domain+'_ns':origin+offset}) for offset,data in sorted(packets,key=lambda pair:pair[0])]
     request=dict(type='midi_schedule',schedule_id=1,events=events)
     if controlled:request['time_domain']='logical'
@@ -42,10 +45,29 @@ def recording_song_transition(c,held_across=False):
     c.tap(6,8);c.tap(1,1);c.tap(3,8)                             # play the chain from slot 1
     # Current-active-step recording (user decision, LIVE_RECORDING_PLACEMENT.md): a note belongs
     # to the step, and so the slot, active at its first press.
-    phrase=[(1,[144,72,90])]+([(1,[144,84,70])] if held_across else [])+[(1,[144,79,80])]
-    spacing=[2,2,4] if held_across else [4,4]                    # song-cycle steps between onsets
+    phrase=[(1,[144,72,90])]+([(1,[144,84,70])] if held_across else [])+([(1,[144,88,70])] if chord else [])+[(1,[144,79,80])]
+    spacing=[2,0,2,4] if chord else ([2,2,4] if held_across else [4,4])                    # song-cycle steps between onsets
     notes=c.playback(phrase,cycles=3)
     field='logical_ns' if controlled else 'monotonic_ns';tolerance=2e-9 if controlled else .01
     gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
     assert all(abs(g-spacing[i%len(spacing)]/6)<=tolerance for i,g in enumerate(gaps)),dict(gaps=gaps,spacing=spacing)
     c.results.append(dict(kind='recording-across-transition-replay',gaps_seconds=gaps,passed=True))
+
+    if release_length:
+        # README 239: shared chord length runs from first press to final release.
+        # 0.300 s at 100 BPM = two sixteenth-note steps. Replay at 90 BPM
+        # must therefore hold each recorded voice for 2/6 seconds.
+        events=c.snapshot()['midi']
+        pitches=(84,88) if chord else (84,)
+        durations=[]
+        for onset in notes:
+            if onset['bytes'][1] not in pitches:continue
+            off=next(event for event in events if event['index']>onset['index']
+                     and event['port']==onset['port']
+                     and event['bytes'][0]==128 and event['bytes'][1]==onset['bytes'][1])
+            duration=(off[field]-onset[field])/1e9
+            durations.append(duration)
+            assert abs(duration-2/6)<=tolerance, dict(pitch=onset['bytes'][1],duration=duration,expected=2/6)
+        assert len(durations)>=3*len(pitches), durations
+        c.results.append(dict(kind='cross-song-final-release-length',chord=chord,
+                              expected_seconds=2/6,durations=durations,passed=True))

@@ -52,7 +52,7 @@ function handle_midi_event_data(data, midi_device)
 
 
   local pending_note = data[1] == 128 and input_notes[data[2]]
-  local channel = pending_note and program.get_channel(program.get().selected_song_pattern, pending_note.channel_number) or program.get_selected_channel()
+  local channel = pending_note and program.get_channel(pending_note.song_pattern, pending_note.channel_number) or program.get_selected_channel()
 
   if channel.number == 17 then 
     return 
@@ -113,6 +113,7 @@ function handle_midi_event_data(data, midi_device)
       start_time = util.time(),
       recording = recording,
       channel_number = channel.number,
+      song_pattern = program.get().selected_song_pattern,
       midi_channel = midi_channel,
       midi_device = device.midi_device,
       player = d.player,
@@ -193,7 +194,7 @@ function handle_midi_event_data(data, midi_device)
             channel.number,
             stored.step,
             {
-              song_pattern = program.get().selected_song_pattern,
+              song_pattern = stored.song_pattern,
               data = {
                 step = stored.step,
                 length = closest_division

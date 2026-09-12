@@ -68,3 +68,13 @@ All 1534 Lua tests and six guards pass, with three identical controlled repeats.
 Earlier delta-1 runs were invalid evidence: native encoder sensitivity requires
 two counts per detent. Only the corrected baselines in the candidate record count.
 Next: MIDI held-note/chord release-time length ownership across a song transition.
+
+### MIDI release ownership closure
+
+Candidate `0115-midi-release-song-ownership.patch` captures each note onset song
+and uses it for release channel timing and length commit. M-REC-SONG-LENGTH-001/002
+fail on baseline and pass fixed in both lanes, including staggered chord release.
+Both cases pass three identical controlled repeats; all 1535 Lua tests and six
+guards pass. Existing M-TRIPLE-002/003 remain green in both lanes.
+Next: explicit playback-song ingress for live parameter recording, using existing
+M-TRIPLE-005 as the regression guard; then song-transition extraction.
