@@ -2,6 +2,7 @@ local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 local chord_timing = include("mosaic/lib/clock/chord_timing")
 local chord_order = include("mosaic/lib/musical_resolution/chord_order")
 local stock_parameter = include("mosaic/lib/musical_resolution/stock_parameter")
+local pitch_resolution = include("mosaic/lib/musical_resolution/pitch_resolution")
 local quantiser = include("mosaic/lib/quantiser")
 local m_clock = include("mosaic/lib/clock/m_clock")
 
@@ -36,6 +37,18 @@ local table = table
 local quantiser_process = quantiser.process
 local quantiser_process_chord_note_for_mask = quantiser.process_chord_note_for_mask
 local fn_constrain = fn.constrain
+
+local resolve_pitch = pitch_resolution.new(
+  quantiser.translate_note_mask_to_relative_scale_position,
+  quantiser.process,
+  quantiser.snap_to_scale,
+  function()
+    return params:get("quantiser_fully_act_on_note_masks") == 2
+  end,
+  function()
+    return params:get("quantiser_act_on_note_masks") == 2
+  end
+)
 
 function step.process_stock_params(c, step, type)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
@@ -779,30 +792,18 @@ function step.handle(c, current_step)
                          (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
                          (params:get("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
 
-    local note
-    local relative_note_mask_value
-    local octave_mod_offset = 0
-
-    local is_mask = false
     local fully_quantise_mask = step.process_stock_params(c, current_step, "fully_quantise_mask")
-
-    if note_mask_value and note_mask_value > -1 then
-      is_mask = true
-      fully_quantise_mask = (params:get("quantiser_fully_act_on_note_masks") == 2 and (fully_quantise_mask == 0 or fully_quantise_mask == -1 or fully_quantise_mask == nil)) or fully_quantise_mask == 2
-      relative_note_mask_value, octave_mod_offset = quantiser.translate_note_mask_to_relative_scale_position(note_mask_value, channel.step_scale_number)
-
-      if fully_quantise_mask then
-        local final_octave = octave_mod + octave_mod_offset
-        note = quantiser.process(relative_note_mask_value + random_shift, final_octave, transpose, channel.step_scale_number, do_pentatonic)
-      elseif params:get("quantiser_act_on_note_masks") == 2 then
-        note = quantiser.snap_to_scale(note_mask_value + octave_mod * 12 + random_shift, channel.step_scale_number, transpose)
-      else
-        note = note_mask_value + random_shift + octave_mod * 12
-      end
-    else
-      local shifted_note_val = note_value + random_shift
-      note = quantiser.process(shifted_note_val, octave_mod, transpose, channel.step_scale_number, do_pentatonic)
-    end
+    local note, relative_note_mask_value, octave_mod_offset, is_mask
+    note, relative_note_mask_value, octave_mod_offset, is_mask, fully_quantise_mask = resolve_pitch(
+      note_value,
+      note_mask_value,
+      octave_mod,
+      transpose,
+      channel.step_scale_number,
+      random_shift,
+      do_pentatonic,
+      fully_quantise_mask
+    )
 
     local velocity_random_shift = fn.transform_random_value(step.process_stock_params(c, current_step, "random_velocity") or 0)
     velocity_value = fn.constrain(0, 127, velocity_value + velocity_random_shift)
