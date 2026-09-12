@@ -1743,9 +1743,9 @@ balanced releases, unchanged 10/50/20 ms recovery timing, one-bar queue recovery
 throttling, and physical-input propagation to both grid and screen. Seeded self-tests
 reject shifted/rebased phase, missing steps, wrong pitches/releases and either absent
 visual path. The bounded diagnostic in
-`/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-04` produced
+`/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-06` at clean revision `2b00e8a` produced
 47 complete 16-channel onset groups and 1,506 MIDI messages with balanced ownership;
-15 throttled periods/738 ms throttled time demonstrated overload. Grid, screen, queue,
-service and memory gates passed. Musical phase remained about 45 ms early after a full
-recovery bar (p99 45.287 ms; final 45.147 ms), so the unchanged event-timing gate failed
+15 throttled periods/747 ms throttled time demonstrated overload. Grid, screen, queue,
+service and memory gates passed. Musical phase remained about 67 ms late after a full
+recovery bar (p99/maximum 68.301 ms; final 66.707 ms), so the unchanged event-timing gate failed
 and remains a refactor blocker. This constrained x86 result is not physical-norns evidence.
