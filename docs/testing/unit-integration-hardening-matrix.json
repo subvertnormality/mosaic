@@ -340,8 +340,8 @@
       ],
       "interaction_strategy": "Exhaust codecs and slots; pairwise device, sentinel, port, channel, recall and reassignment.",
       "residual_gaps": [
-        "S3 EX Braids slot semantics remain blocked by unavailable EX profile.",
-        "All ten assignment slots now cross initial assignment, identical reassignment, CC-to-NRPN replacement, clear, repeated clear, callback retirement and copy isolation on channel 16; all ten definitions, locks and slides round-trip independently on song 96/channel 16. Native cases remain the user-visible assignment oracles."
+        "S3 EX Braids slot semantics remain blocked by an unavailable EX profile and no manual oracle. Current merged-index behavior is unit-characterized; EX Braids indexing is excluded from refactors until a profile-level oracle exists.",
+        "All ten assignment slots cross initial assignment, identical reassignment, CC-to-NRPN replacement, clear, repeated clear, callback retirement and copy isolation on channel 16; all ten definitions, locks and slides round-trip independently on song 96/channel 16. Native cases remain the user-visible assignment oracles."
       ],
       "requirement_ids": [
         "CH-DEVICE",
@@ -513,7 +513,7 @@
         "M-XA-005-NB-LOCK",
         "M-XA-006-NB-CHORD-ACCEL"
       ],
-      "status": "hardening-in-progress"
+      "status": "hardening-complete-with-profile-gap"
     },
     {
       "id": "H04",

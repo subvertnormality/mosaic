@@ -1629,3 +1629,15 @@ a final identity sweep check isolation. This complements the existing exhaustive
 finite-axis and algorithm tests without claiming the unbounded sequence product is
 exhaustive. The focused test passes and the complete Lua suite passes 1,502/1,502.
 No production code changed.
+
+
+## Device/configuration hardening reconciliation — 2026-09-12
+
+H03 is complete for the supported MIDI/configuration domain with one explicit
+profile gap. Finite tests cover all ten assignment slots, all 16 MIDI channels,
+the complete 7-bit and 14-bit codecs, assignment replacement/clearing, callback
+retirement, copy isolation and boundary-song persistence; native cases retain
+the user-visible assignment oracles. S3 remains unvalidated because EX Braids
+has no available profile or manual slot oracle. Its current merged-index behavior
+is unit-characterized, and EX Braids indexing is excluded from refactoring until
+profile-level evidence exists. No production code changed.
