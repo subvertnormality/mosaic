@@ -1552,3 +1552,15 @@ tresillo and numeric generators retain exhaustive input-domain coverage in
 drum_ops_extra_tests.lua. The complete Lua unit/integration suite passes
 1488/1488. No production code changed. Deterministic generated edit sequences
 remain an explicit H01 gap.
+
+
+## Memory history hardening - 2026-09-12
+
+H11 now crosses both production memory event types through all four scalar mask
+fields, all four chord voices, all ten trig-lock slots, song and step boundaries,
+undo, redo-all, branch truncation and serialized redo tails. The complete Lua
+unit/integration suite passes 1491/1491. No production code changed. S58 is
+minimized with a capacity-three sequence: after edits 60,61,62,63 leave retained
+events 61,62,63, undoing the retained log restores nil instead of the required
+pre-retention floor 60. It remains unfixed pending the required native behavior
+baseline; full project-file reload remains behavior-owned.

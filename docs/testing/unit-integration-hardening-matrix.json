@@ -9,7 +9,7 @@
   "counts": {
     "requirements": 141,
     "production_lua_modules": 67,
-    "unit_integration_files": 59,
+    "unit_integration_files": 60,
     "domains": 15
   },
   "coverage_language": {
@@ -1768,8 +1768,8 @@
       ],
       "interaction_strategy": "Deterministic generated edits with retained seeds plus branch, truncation, wrap and persistence partitions.",
       "residual_gaps": [
-        "S58 partial history loss needs a minimized sequence before refactor.",
-        "Every event type crossed with undo, redo-all, branch, wrap and save/reload."
+        "S58 is minimized at capacity 3 with four same-step edits: the retained 61,62,63 log undoes to nil instead of the pre-retention floor 60; a native behavior baseline is still required before a fix.",
+        "The two production event types now cross all mask fields, four chord voices, ten lock slots, boundary songs/steps, undo, redo-all, branch truncation and memory serialization; full project save/reload remains behavior-owned."
       ],
       "requirement_ids": [
         "MEMORY-NAV",
@@ -1781,6 +1781,7 @@
         "lib/models/program.lua"
       ],
       "existing_unit_integration_files": [
+        "lib/tests/lib/memory_hardening_tests.lua",
         "lib/tests/lib/memory_mutation_killers_tests.lua",
         "lib/tests/lib/memory_tests.lua",
         "lib/tests/lib/persistence_round_trip_tests.lua"
@@ -1805,7 +1806,7 @@
         "M-REC-PARAM-026",
         "M-REC-PARAM-027"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-in-progress"
     },
     {
       "id": "H12",
