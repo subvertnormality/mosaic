@@ -1616,3 +1616,16 @@ and three fresh controlled repeats `repeat-b01a4e...`. Each event retains its
 logical prior/post state; legacy histories use the replay fallback. All 1,501 Lua
 tests pass, including corruption recovery, and M-MEMORY-004/006/010/013 pass as
 controlled collateral. Candidate: `memory-retained-floor.json`, patch 0109.
+
+
+## Generated pattern-edit sequence hardening — 2026-09-12
+
+H01 now adds a deterministic state-model layer over the real pattern and channel
+sequencer controls. Three retained Park-Miller seeds drive 4,800 ordered tap,
+length, reset and range actions across boundary songs 1/96 after a deterministic
+prefix touches every pattern, channel and step. Every action checks the selected
+pattern and range against an independent model; periodic opposite-song probes and
+a final identity sweep check isolation. This complements the existing exhaustive
+finite-axis and algorithm tests without claiming the unbounded sequence product is
+exhaustive. The focused test passes and the complete Lua suite passes 1,502/1,502.
+No production code changed.

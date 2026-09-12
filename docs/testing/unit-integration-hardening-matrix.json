@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "planned-hardening-matrix-reconciled",
-  "base_revision": "310e039",
+  "base_revision": "e75ecf9",
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "inventory": "tests/behaviour/manual-inventory.json",
@@ -58,9 +58,9 @@
           "coverage": "exhaustive option table"
         }
       ],
-      "interaction_strategy": "Pairwise pattern, step, algorithm, active state and range; named preview/paint/cancel triples.",
+      "interaction_strategy": "Pairwise pattern, step, algorithm, active state and range; named preview/paint/cancel triples; three retained deterministic seeds drive 4,800 ordered edits through the real sequencer control with full-state checks and cross-identity isolation probes.",
       "residual_gaps": [
-        "Generated edit sequences with retained seeds.",
+        "Generated control sequences cover two boundary songs, all 16 patterns, all 16 channels and all 64 steps, crossing tap, wrapped/equal length, long-reset and accepted/rejected range operations. The unbounded sequence space remains represented by three fixed seeds rather than exhaustively enumerated.",
         "The page integration matrix covers every output position at each algorithm boundary; exhaustive all-fader products remain delegated to independently-oracled drum_ops arithmetic tests."
       ],
       "requirement_ids": [
@@ -107,6 +107,7 @@
         "lib/tests/lib/integration_tests/pattern_and_song_tests.lua",
         "lib/tests/lib/midi_program_sequencer_mutation_killers_tests.lua",
         "lib/tests/lib/misc_mutation_killers_tests.lua",
+        "lib/tests/lib/pattern_edit_generated_hardening_tests.lua",
         "lib/tests/lib/pattern_mutation_killers_tests.lua",
         "lib/tests/lib/pattern_tests.lua",
         "lib/tests/lib/program_extra_tests.lua",
@@ -181,7 +182,7 @@
         "M-SONG-LENGTH-002",
         "M-VIEW-001"
       ],
-      "status": "hardening-in-progress"
+      "status": "hardening-complete-generated"
     },
     {
       "id": "H02",
