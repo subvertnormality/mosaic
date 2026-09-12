@@ -138,3 +138,38 @@ lookup and Stop release draining. midi_output_transport already owns the native
 F8 boundary, epoch and intermediate deadlines and should remain unchanged.
 
 Final suite including the new clock-replacement regression: 1546/1546 passed (25.730s), after native runs finished.
+
+## Transport lifecycle extraction (0b6a63f)
+
+Base2e60f7d. transport_lifecycle owns playing/subscription/warning state and existing
+start/stop/reset orchestration. m_clock retains first_run and release lists via
+callbacks. Dynamic clock/lattice lookups, method self and local dependency captures
+preserve the original bindings. Native F8 adapter and norns input decoding remain
+unchanged. Sol review found no concrete difference. Full1546 Lua tests passed
+25.728s; six guards, reentrant Stop and8 native-output adapter scenarios pass.
+
+Controlled006/010/014 passed respectively80350c6e1d8140cea94e831019115b3e,
+429e86cbe8a34ac9b15ffa8f1a138060,992548fd3c3945fd9a527a873fb06912.
+Real-time comparison against detached baseline2e60f7d shows default runtime failures
+in all three on both revisions. Explicit midi-schedule-capacity-12 installation
+passes010/014 on both and fails006 on both. Bounds and recipes unchanged.
+M-SYNC-006 phase accuracy remains unresolved; this is preservation evidence, not
+full timing acceptance. R10 aggregate quick and affected performance/profile
+validation remain outstanding.
+
+| Runtime | Revision | Case | Passed | Run ID | Failure |
+|---|---|---|---|---|---|
+| default | candidate | M-SYNC-006 | False | 82fe12120ae34b8c8e60255aecaa0232 | ('Onset phase', 4, 0.012853421999999948) |
+| default | candidate | M-SYNC-010 | False | d4e4bfb9a6184b55b39feada620bbd72 | ('Receiver step/clock mismatch', 0, -1) |
+| default | candidate | M-SYNC-014 | False | 0d98e063a4e642aab01f270e907bcccc | ('Onset phase', 0, 0.026652153) |
+| default | baseline | M-SYNC-006 | False | f77fa8a592fa45cdb4b5f23fc10f3e72 | ('Onset phase', 4, 0.021844955000000055) |
+| default | baseline | M-SYNC-010 | False | 4b5e53d4a2bd4ea088f0f30571053086 | ('Receiver step/clock mismatch', 0, -1) |
+| default | baseline | M-SYNC-014 | False | b32262dce5a246cfb2bab6c182aabce2 | ('Onset phase', 0, 0.026745972) |
+| explicit | candidate | M-SYNC-006 | False | fed3410772954474a28893fef7497599 | ('Onset phase', 4, 0.020835495000000037) |
+| explicit | candidate | M-SYNC-010 | True | a6c0400411b04345b023d785b9618c44 |  |
+| explicit | candidate | M-SYNC-014 | True | efb84d4c6e784b6aba7c1ace1220459c |  |
+| explicit | baseline | M-SYNC-006 | False | ec95e97235fe463fba2d18f684549571 | ('Onset phase', 4, 0.010015409999999947) |
+| explicit | baseline | M-SYNC-010 | True | 8c7774f104d64675849698be816f5f8d |  |
+| explicit | baseline | M-SYNC-014 | True | b8fe7220987440ce9086f70755976e4a |  |
+
+Baseline receipts are under /home/andy/projects/mosaic-behaviour-runs/mosaic-behaviour-runs; candidate receipts under /home/andy/projects/mosaic-behaviour-runs.
