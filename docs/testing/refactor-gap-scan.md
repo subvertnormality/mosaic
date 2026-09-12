@@ -36,7 +36,7 @@ Status: `open`, `done` (test landed), `defect` (test found a defect), `decision`
 | G12 | Failed saves and autosave suspension | behaviour | done: M-SAVE-FAIL-001 (README 1054 read in context: a failed save does not end a rejected-load suspension) |
 | G13 | Song slot bound versus validation | check | no conflict: README 884 states 96 slots (six rows of 16), as validation and the song page use; the plan's F12 row says 90 |
 | G14 | `mosaic.lua` load tests reach locals through `debug.getupvalue` | unit seam | refactor-fragile; note only |
-| G15 | PERF-003..008 canonical constrained runs | performance | open (measurement only; no fixes) |
+| G15 | PERF-003..008 canonical constrained runs | performance | partial: PERF-003 canonical complete; 16-channel event timing failed 2/3 repeats while functional MIDI/slide checks passed (measurement only; no fixes). PERF-004..008 remain open. |
 
 ### Second pass (UI state, MIDI input, algorithms, hot loops, shared state)
 

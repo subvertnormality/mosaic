@@ -1479,3 +1479,10 @@ lanes. M-PAT-BOUNDARY-001 is red at a 1 ms margin (controlled) and green at 10-8
 an edit that close to a song boundary is heard one pass late; the fix changes
 boundary scheduling, so it is deferred to the refactor. A full suite at 96d465d runs
 with the concurrent scheduler.
+
+
+## Independent handover audit and canonical dense performance — 2026-09-12
+
+The Opus handover was checked against clean ab3e705. All 51 hashes referenced by state.json resolve and match. Fresh validation passed the six inventory/name/syntax guards, 1471 Lua units, all 24 applicable reruns of the stale 8bd70b5 suite failures, all 40 base-MIDI runs for the post-reference fix regressions across real-time and controlled lanes, and M-XA-006 in its n.b. real-time profile. The historical combined suite remains stale rather than reclassified as green.
+
+Canonical constrained measurements are bound in perf-dense-canonical.json. PERF-002 passed 12/12 at 1, 4, 8 and 16 channels. PERF-003 produced exact notes, balanced releases and complete ordered CC slide curves in all 12 runs, but its event-timing gate failed in 16-channel repeats 2 and 3: p99 10.063 ms and 10.562 ms (10 ms gate), maximum 11.993 ms and 12.483 ms. Repeat 1 passed at 8.268 ms p99. Peak RSS stayed below 422 MB, queue high-water was zero, and workload-window CFS throttling was zero. This is refactor evidence for the norns-class x86 proxy, not physical-norns equivalence; thresholds are unchanged and no performance fix was made.

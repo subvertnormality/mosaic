@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "D23/user 2026-09-10: coverage and the regression suite first; isolated bug fixes only; no performance fixes or refactor. Oracles cite README lines; anything else is labelled characterisation; semantic decisions go to paranoia arbitrate (cross-vendor; Claude-only if Codex quota fails) and are recorded as SEM entries. Full suite suite-8bd70b5 (both lanes) is the regression reference for the gap-scan fixes: when it finishes run suite.py rerun and record the effective result; the 5e0501a baseline is invalid (disk full truncated suite.json). Then idle-host perf_dense.py canonical runs. Open gap items: refactor-gap-scan.md. Pending decisions: SEM-012, SEM-013.",
+  "next_action": "2026-09-12 audit: Opus handover claims independently checked. Current HEAD ab3e705 passed 6 behaviour guards, 1471 Lua units, 24/24 applicable prior-failure reruns, 40/40 base-MIDI post-reference fix regressions, and the n.b. profile regression. Canonical PERF-002 passed 12/12; PERF-003 functional output passed 12/12 but the event-timing gate failed 2/3 16-channel repeats (receipt: perf-dense-canonical.json). No performance fix or general refactor. Eight UX fixes remain on ux/pending-hands-on awaiting verdicts; final full suite follows their disposition. Continue independent unit/integration hardening and eligible defect probes that do not require those verdicts.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -5200,6 +5200,14 @@
       "slides (PERF-003)"
     ],
     "preliminary": "docs/testing/perf-dense-preliminary.json",
-    "canonical": "pending idle host (run after the regression baseline finishes)"
+    "canonical": {
+      "status": "canonical-measurement-complete-with-perf-003-timing-failure",
+      "receipt": "docs/testing/perf-dense-canonical.json",
+      "perf_002_passed": true,
+      "perf_003_passed": false,
+      "perf_003_16_channel_event_timing_failures": 2,
+      "measurement_only": true,
+      "performance_fixes_authorized": false
+    }
   }
 }

@@ -1,0 +1,667 @@
+{
+  "schema_version": 1,
+  "status": "canonical-measurement-complete-with-perf-003-timing-failure",
+  "measured_date": "2026-09-12",
+  "scope": "Norns-class constrained x86 proxy measurement; not physical-norns equivalence",
+  "mosaic_revision": "ab3e705bd19037fca8636df202ed0fe17f489a64",
+  "mosaic_dirty_patch": null,
+  "image": "monome-emulator:perf-recorder-02",
+  "image_id": "sha256:38b516ef4a8e7f85355da8d94d8f6f21c007b6a8d47fa829a8fc9039c01eea91",
+  "limits": {
+    "cpus": 0.5,
+    "memory_bytes": 805306368,
+    "cpuset": "0"
+  },
+  "metric_helper": {
+    "repository": "/home/andy/projects/monome-emulator-performance-integration",
+    "revision": "6c1d17abfa2552183407626b14dcdfe43d8ea134",
+    "path": "src/automation/performance.py",
+    "sha256": "3d1fd8daae54038813a4db1ea7f9371ea81e93b84014523973b86b93fb4f9a83",
+    "tracked_file_clean": true
+  },
+  "interpretation": "PERF-002 passes at every canonical channel count. PERF-003 preserves exact notes, releases and ordered CC slide curves at every count, but its event-timing gate fails in two of three 16-channel repeats. This is refactor performance evidence under the proxy, not a physical-device equivalence claim and not authorization to change a threshold or make a performance fix.",
+  "workloads": {
+    "PERF-002": {
+      "passed": true,
+      "raw_result": "/home/andy/projects/mosaic-behaviour-runs/perf-dense-canonical-ab3e705-20260912-02/result.json",
+      "raw_result_sha256": "18dca401d2d87eae2a4f9f2825f13ae7c6af5b75299819970c163041ff727055",
+      "runs": [
+        {
+          "channels": 1,
+          "repeat": 1,
+          "passed": true,
+          "steps": 49,
+          "messages": 100,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 801301,
+          "timing_maximum_ns": 801301,
+          "service_p99_ns": 0,
+          "peak_rss_bytes": 540483584,
+          "cpu_delta_ns": 749106691,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            0.38,
+            0.7,
+            1.01
+          ],
+          "host_loadavg_after": [
+            0.72,
+            0.75,
+            1.02
+          ]
+        },
+        {
+          "channels": 1,
+          "repeat": 2,
+          "passed": true,
+          "steps": 49,
+          "messages": 100,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 1226768,
+          "timing_maximum_ns": 1226768,
+          "service_p99_ns": 0,
+          "peak_rss_bytes": 392568832,
+          "cpu_delta_ns": 760670390,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            0.72,
+            0.75,
+            1.02
+          ],
+          "host_loadavg_after": [
+            0.8,
+            0.77,
+            1.02
+          ]
+        },
+        {
+          "channels": 1,
+          "repeat": 3,
+          "passed": true,
+          "steps": 49,
+          "messages": 100,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 1326429,
+          "timing_maximum_ns": 1326429,
+          "service_p99_ns": 0,
+          "peak_rss_bytes": 392085504,
+          "cpu_delta_ns": 727247633,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            0.82,
+            0.77,
+            1.02
+          ],
+          "host_loadavg_after": [
+            0.63,
+            0.73,
+            1.0
+          ]
+        },
+        {
+          "channels": 4,
+          "repeat": 1,
+          "passed": true,
+          "steps": 49,
+          "messages": 394,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 2087073,
+          "timing_maximum_ns": 2310176,
+          "service_p99_ns": 1091857,
+          "peak_rss_bytes": 393691136,
+          "cpu_delta_ns": 810285450,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            0.9,
+            0.79,
+            1.02
+          ],
+          "host_loadavg_after": [
+            0.87,
+            0.79,
+            1.01
+          ]
+        },
+        {
+          "channels": 4,
+          "repeat": 2,
+          "passed": true,
+          "steps": 49,
+          "messages": 394,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 2766958,
+          "timing_maximum_ns": 2865290,
+          "service_p99_ns": 1249978,
+          "peak_rss_bytes": 394186752,
+          "cpu_delta_ns": 782910194,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.12,
+            0.84,
+            1.02
+          ],
+          "host_loadavg_after": [
+            1.08,
+            0.85,
+            1.02
+          ]
+        },
+        {
+          "channels": 4,
+          "repeat": 3,
+          "passed": true,
+          "steps": 49,
+          "messages": 394,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 1982729,
+          "timing_maximum_ns": 2041134,
+          "service_p99_ns": 937218,
+          "peak_rss_bytes": 394620928,
+          "cpu_delta_ns": 774360173,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.08,
+            0.85,
+            1.02
+          ],
+          "host_loadavg_after": [
+            1.18,
+            0.9,
+            1.03
+          ]
+        },
+        {
+          "channels": 8,
+          "repeat": 1,
+          "passed": true,
+          "steps": 49,
+          "messages": 786,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 2492643,
+          "timing_maximum_ns": 2726271,
+          "service_p99_ns": 1803439,
+          "peak_rss_bytes": 401965056,
+          "cpu_delta_ns": 878944129,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.18,
+            0.9,
+            1.03
+          ],
+          "host_loadavg_after": [
+            1.35,
+            0.96,
+            1.05
+          ]
+        },
+        {
+          "channels": 8,
+          "repeat": 2,
+          "passed": true,
+          "steps": 49,
+          "messages": 786,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 2033298,
+          "timing_maximum_ns": 2101049,
+          "service_p99_ns": 2033298,
+          "peak_rss_bytes": 402182144,
+          "cpu_delta_ns": 823971138,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.35,
+            0.96,
+            1.05
+          ],
+          "host_loadavg_after": [
+            1.44,
+            1.01,
+            1.06
+          ]
+        },
+        {
+          "channels": 8,
+          "repeat": 3,
+          "passed": true,
+          "steps": 49,
+          "messages": 786,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 2037314,
+          "timing_maximum_ns": 2137006,
+          "service_p99_ns": 2068050,
+          "peak_rss_bytes": 400646144,
+          "cpu_delta_ns": 813401016,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.44,
+            1.01,
+            1.06
+          ],
+          "host_loadavg_after": [
+            1.79,
+            1.14,
+            1.1
+          ]
+        },
+        {
+          "channels": 16,
+          "repeat": 1,
+          "passed": true,
+          "steps": 49,
+          "messages": 1570,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 3458100,
+          "timing_maximum_ns": 4127168,
+          "service_p99_ns": 4127168,
+          "peak_rss_bytes": 411906048,
+          "cpu_delta_ns": 863807960,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.79,
+            1.14,
+            1.1
+          ],
+          "host_loadavg_after": [
+            1.19,
+            1.07,
+            1.08
+          ]
+        },
+        {
+          "channels": 16,
+          "repeat": 2,
+          "passed": true,
+          "steps": 49,
+          "messages": 1570,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 3316579,
+          "timing_maximum_ns": 4209143,
+          "service_p99_ns": 3840808,
+          "peak_rss_bytes": 412069888,
+          "cpu_delta_ns": 879332169,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.19,
+            1.07,
+            1.08
+          ],
+          "host_loadavg_after": [
+            2.74,
+            1.42,
+            1.19
+          ]
+        },
+        {
+          "channels": 16,
+          "repeat": 3,
+          "passed": true,
+          "steps": 49,
+          "messages": 1570,
+          "slide_cycles_checked": null,
+          "timing_p99_ns": 3564508,
+          "timing_maximum_ns": 4638511,
+          "service_p99_ns": 4638511,
+          "peak_rss_bytes": 412217344,
+          "cpu_delta_ns": 875583449,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            2.74,
+            1.42,
+            1.19
+          ],
+          "host_loadavg_after": [
+            2.09,
+            1.41,
+            1.2
+          ]
+        }
+      ]
+    },
+    "PERF-003": {
+      "passed": false,
+      "raw_result": "/home/andy/projects/mosaic-behaviour-runs/perf-slides-canonical-ab3e705-20260912-01/result.json",
+      "raw_result_sha256": "745ab65a8914fffd48c8f17394058fa6500991453735c6b604d87977b0daee38",
+      "runs": [
+        {
+          "channels": 1,
+          "repeat": 1,
+          "passed": true,
+          "steps": 49,
+          "messages": 176,
+          "slide_cycles_checked": 3,
+          "timing_p99_ns": 2063224,
+          "timing_maximum_ns": 2063224,
+          "service_p99_ns": 0,
+          "peak_rss_bytes": 393351168,
+          "cpu_delta_ns": 751131341,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.67,
+            1.38,
+            1.2
+          ],
+          "host_loadavg_after": [
+            1.41,
+            1.35,
+            1.19
+          ]
+        },
+        {
+          "channels": 1,
+          "repeat": 2,
+          "passed": true,
+          "steps": 49,
+          "messages": 176,
+          "slide_cycles_checked": 3,
+          "timing_p99_ns": 1081495,
+          "timing_maximum_ns": 1081495,
+          "service_p99_ns": 0,
+          "peak_rss_bytes": 393207808,
+          "cpu_delta_ns": 742140132,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.41,
+            1.35,
+            1.19
+          ],
+          "host_loadavg_after": [
+            0.96,
+            1.25,
+            1.16
+          ]
+        },
+        {
+          "channels": 1,
+          "repeat": 3,
+          "passed": true,
+          "steps": 49,
+          "messages": 176,
+          "slide_cycles_checked": 3,
+          "timing_p99_ns": 1495943,
+          "timing_maximum_ns": 1495943,
+          "service_p99_ns": 0,
+          "peak_rss_bytes": 393150464,
+          "cpu_delta_ns": 751764543,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            0.96,
+            1.25,
+            1.16
+          ],
+          "host_loadavg_after": [
+            0.64,
+            1.14,
+            1.13
+          ]
+        },
+        {
+          "channels": 4,
+          "repeat": 1,
+          "passed": true,
+          "steps": 49,
+          "messages": 698,
+          "slide_cycles_checked": 12,
+          "timing_p99_ns": 1763935,
+          "timing_maximum_ns": 1772611,
+          "service_p99_ns": 1344820,
+          "peak_rss_bytes": 406290432,
+          "cpu_delta_ns": 800916066,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            0.64,
+            1.14,
+            1.13
+          ],
+          "host_loadavg_after": [
+            0.71,
+            1.01,
+            1.08
+          ]
+        },
+        {
+          "channels": 4,
+          "repeat": 2,
+          "passed": true,
+          "steps": 49,
+          "messages": 698,
+          "slide_cycles_checked": 12,
+          "timing_p99_ns": 1550420,
+          "timing_maximum_ns": 1607757,
+          "service_p99_ns": 1294539,
+          "peak_rss_bytes": 405725184,
+          "cpu_delta_ns": 789041849,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            0.71,
+            1.01,
+            1.08
+          ],
+          "host_loadavg_after": [
+            1.07,
+            1.09,
+            1.1
+          ]
+        },
+        {
+          "channels": 4,
+          "repeat": 3,
+          "passed": true,
+          "steps": 49,
+          "messages": 698,
+          "slide_cycles_checked": 12,
+          "timing_p99_ns": 1624760,
+          "timing_maximum_ns": 1677757,
+          "service_p99_ns": 1455180,
+          "peak_rss_bytes": 406028288,
+          "cpu_delta_ns": 784887935,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            0.99,
+            1.07,
+            1.1
+          ],
+          "host_loadavg_after": [
+            1.28,
+            1.13,
+            1.11
+          ]
+        },
+        {
+          "channels": 8,
+          "repeat": 1,
+          "passed": true,
+          "steps": 49,
+          "messages": 1394,
+          "slide_cycles_checked": 24,
+          "timing_p99_ns": 2499363,
+          "timing_maximum_ns": 3933824,
+          "service_p99_ns": 3933824,
+          "peak_rss_bytes": 414695424,
+          "cpu_delta_ns": 833525580,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.28,
+            1.13,
+            1.11
+          ],
+          "host_loadavg_after": [
+            1.93,
+            1.51,
+            1.26
+          ]
+        },
+        {
+          "channels": 8,
+          "repeat": 2,
+          "passed": true,
+          "steps": 49,
+          "messages": 1394,
+          "slide_cycles_checked": 24,
+          "timing_p99_ns": 2267962,
+          "timing_maximum_ns": 3101094,
+          "service_p99_ns": 3101094,
+          "peak_rss_bytes": 412958720,
+          "cpu_delta_ns": 831686933,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.93,
+            1.51,
+            1.26
+          ],
+          "host_loadavg_after": [
+            2.14,
+            1.74,
+            1.38
+          ]
+        },
+        {
+          "channels": 8,
+          "repeat": 3,
+          "passed": true,
+          "steps": 49,
+          "messages": 1394,
+          "slide_cycles_checked": 24,
+          "timing_p99_ns": 2364642,
+          "timing_maximum_ns": 3154820,
+          "service_p99_ns": 3154820,
+          "peak_rss_bytes": 414896128,
+          "cpu_delta_ns": 792818441,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            2.13,
+            1.74,
+            1.38
+          ],
+          "host_loadavg_after": [
+            1.7,
+            1.77,
+            1.45
+          ]
+        },
+        {
+          "channels": 16,
+          "repeat": 1,
+          "passed": true,
+          "steps": 49,
+          "messages": 2786,
+          "slide_cycles_checked": 48,
+          "timing_p99_ns": 8267615,
+          "timing_maximum_ns": 8650958,
+          "service_p99_ns": 6564527,
+          "peak_rss_bytes": 421384192,
+          "cpu_delta_ns": 918309844,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [],
+          "host_loadavg_before": [
+            1.7,
+            1.77,
+            1.45
+          ],
+          "host_loadavg_after": [
+            1.5,
+            1.5,
+            1.4
+          ]
+        },
+        {
+          "channels": 16,
+          "repeat": 2,
+          "passed": false,
+          "steps": 49,
+          "messages": 2786,
+          "slide_cycles_checked": 48,
+          "timing_p99_ns": 10062602,
+          "timing_maximum_ns": 11993238,
+          "service_p99_ns": 8125261,
+          "peak_rss_bytes": 421425152,
+          "cpu_delta_ns": 947913248,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [
+            "event_timing"
+          ],
+          "host_loadavg_before": [
+            1.5,
+            1.5,
+            1.4
+          ],
+          "host_loadavg_after": [
+            1.17,
+            1.4,
+            1.39
+          ]
+        },
+        {
+          "channels": 16,
+          "repeat": 3,
+          "passed": false,
+          "steps": 49,
+          "messages": 2786,
+          "slide_cycles_checked": 48,
+          "timing_p99_ns": 10562273,
+          "timing_maximum_ns": 12482945,
+          "service_p99_ns": 7063557,
+          "peak_rss_bytes": 420089856,
+          "cpu_delta_ns": 938854305,
+          "throttled_periods": 0,
+          "throttled_ns": 0,
+          "failed_gates": [
+            "event_timing"
+          ],
+          "host_loadavg_before": [
+            1.17,
+            1.4,
+            1.39
+          ],
+          "host_loadavg_after": [
+            1.09,
+            1.19,
+            1.31
+          ]
+        }
+      ]
+    }
+  }
+}
