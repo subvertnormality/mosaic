@@ -767,6 +767,34 @@ function test_grid_input_remove_ends_a_two_key_gesture_in_progress()
   end)
 end
 
+function test_grid_input_reconnect_after_interrupted_dual_starts_a_clean_tap()
+  -- Characterisation of grid.add: reconnecting to the same port reinstates the
+  -- input path. The first tap must be a short press, never the missing release
+  -- from the interrupted two-key gesture.
+  with_grid({real_press = true, on_register_press = function(env, name)
+    if name == "trigger_edit_page" then
+      press:register("trigger_edit_page", function(...) env.record("trig.short", ...) end)
+      press:register_dual("trigger_edit_page", function(...) env.record("trig.dual", ...) end)
+    end
+  end}, function(env, m)
+    key(env, 5, 2, 1)
+    key(env, 6, 2, 1)
+    env.g.remove()
+    take_log(env)
+    grid.add({port = 1})
+    key(env, 7, 2, 1)
+    key(env, 7, 2, 0)
+    local log = take_log(env)
+    luaunit.assert_equals(log, {
+      "grid.connect(1)", "fn.dirty_grid(true)",
+      "fn.dirty_grid(true)", "fn.dirty_screen(true)", "clock.run(long_press,7,2)", "clock.sleep(1)",
+      "clock.cancel(3)", "trig.short(7,2)", "save_confirm.cancel()", "autosave_reset()",
+      "fn.dirty_grid(true)", "fn.dirty_screen(true)", "fn.dirty_grid(true)", "fn.dirty_screen(true)"
+    })
+    luaunit.assert_equals(m.get_pressed_keys(), {})
+  end)
+end
+
 function test_grid_input_grid_add_connects_marks_connected_and_dirty()
   with_grid({}, function(env, m)
     key(env, 3, 2, 1)
