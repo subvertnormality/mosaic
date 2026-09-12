@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "status": "planned-hardening-matrix-reconciled",
-  "base_revision": "e75ecf9",
+  "base_revision": "7141f50",
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "inventory": "tests/behaviour/manual-inventory.json",
-  "inventory_sha256": "650a8305fc824bf7cff9b7f622d4e5ec1c7e630f8b05655c1102b0627e52957d",
+  "inventory_sha256": "732b1f61dd55279658dae22080235b1c5159daf682bb7bd1ddc7c6bc76203a8b",
   "counts": {
     "requirements": 141,
     "production_lua_modules": 67,
-    "unit_integration_files": 60,
+    "unit_integration_files": 62,
     "domains": 15
   },
   "coverage_language": {
@@ -207,8 +207,8 @@
       ],
       "interaction_strategy": "State transitions and pairwise held-key, page, encoder and release-order combinations.",
       "residual_gaps": [
-        "Semantic observable page-state layer for refactor-resistant tests.",
-        "Disconnect/reconnect during every two-key gesture family."
+        "The semantic page-object layer is explicitly deferred. Existing native cases remain the refactor oracle for visible page state.",
+        "The real m_grid/press unit path proves held-state cleanup and a clean first tap through grid.add reconnect. M-GRID-001 characterizes the native emulator lifecycle in both lanes and repeated controlled runs: grid_connection synthesizes held-key releases before g.remove, committing a valid range. It therefore cannot validate the physical no-release disconnect semantics decided for S29."
       ],
       "requirement_ids": [
         "CH-ACTIVE-SCALE-DISPLAY",
@@ -305,7 +305,7 @@
         "M-UI-001",
         "M-UI-002"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-complete-with-native-gap"
     },
     {
       "id": "H03",
@@ -548,7 +548,7 @@
       ],
       "interaction_strategy": "Exhaustive 0-100 probability draws and all ten lock/slide slots, crossed with boundary song, channel and step identities; deterministic pairwise native cases retain trigless-slide-clock and persistence interactions.",
       "residual_gaps": [
-        "All ten slots and boundary song/channel/step identities are unit-covered. MIDI reassignment lifecycle is composed in H03 and native M-PARAM/M-PATCH cases; norns-family ownership is anchored by M-XA-005/006; stock lock arithmetic is covered by step matrices.",
+        "All ten slots and boundary song/channel/step identities are unit-covered. One same-step history guard crosses partial undo, serialization/reload, redo, branch replacement and undo-all across all ten slots. MIDI reassignment lifecycle is composed in H03 and native M-PARAM/M-PATCH cases; norns-family ownership is anchored by M-XA-005/006; stock lock arithmetic is covered by step matrices.",
         "Probability is exhaustive over 0..100 against draws 0..99. Locks, random offsets, song transitions and persistence are retained as deterministic pairwise/triple native interactions rather than their unbounded Cartesian product."
       ],
       "requirement_ids": [
@@ -588,6 +588,7 @@
         "lib/tests/lib/channel_edit_mask_handler_tests.lua",
         "lib/tests/lib/grid_input_tests.lua",
         "lib/tests/lib/integration_tests/param_tests.lua",
+        "lib/tests/lib/memory_hardening_tests.lua",
         "lib/tests/lib/program_lock_hardening_tests.lua",
         "lib/tests/lib/step_delta_killers_tests.lua",
         "lib/tests/lib/step_mutation_killers_tests.lua",
@@ -754,7 +755,7 @@
       "interaction_strategy": "Literal formula matrices cover negative values, half-up ties and fractional lengths; exhaustive source cardinality and priority identity sweeps are combined with order, immutability, result-copy and channel-isolation invariants.",
       "residual_gaps": [
         "User-visible MIDI-bound consequences of out-of-range merged values remain owned by native behaviour cases.",
-        "Working-pattern recomposition now covers source edits, unassignment, reassignment and song-copy isolation; the full Cartesian product of all sixteen source contents remains partitioned by the independently-oracled arithmetic matrices."
+        "Working-pattern recomposition covers source edits, unassignment, reassignment and song-copy isolation. Merge-to-MIDI guards cover duplicate equal sources, the documented lower-tie rule, configured root plus transpose and all ten named pentatonic selections. The full Cartesian product of all sixteen source contents remains partitioned by independently-oracled arithmetic matrices."
       ],
       "requirement_ids": [
         "MERGE-CONTROL",
@@ -778,6 +779,7 @@
         "lib/tests/lib/integration_tests/merge_mode_tests.lua",
         "lib/tests/lib/integration_tests/pattern_and_song_tests.lua",
         "lib/tests/lib/pattern_hardening_tests.lua",
+        "lib/tests/lib/scale_merge_hardening_tests.lua",
         "lib/tests/lib/pattern_mutation_killers_tests.lua",
         "lib/tests/lib/pattern_tests.lua"
       ],
@@ -870,7 +872,7 @@
       "interaction_strategy": "Exhaust finite scale slots, scale types, MIDI pitches and all eight pentatonic switches; pairwise pitch stages plus explicit merged-note/random-offset switch contexts and song-copy cache isolation.",
       "residual_gaps": [
         "Save across song intentionally links one scale table across existing song slots (user decision S35, 2026-09-11); warm-cache invalidation and linked rotation are covered on songs 1, 48 and 96.",
-        "Direct in-place mutation outside supported save/rotation routes is characterised by quantiser unit tests and is not a documented product workflow; production UI saves remain anchored by M-SCALE-CACHE-001."
+        "Direct in-place mutation outside supported save/rotation routes is characterised by quantiser unit tests and is not a documented product workflow; production UI saves remain anchored by M-SCALE-CACHE-001. Merge-to-MIDI integration now covers all ten documented pentatonic selections plus root/transpose/lower-tie composition."
       ],
       "requirement_ids": [
         "CH-GLOBAL-OCTAVE",
@@ -902,6 +904,7 @@
         "lib/tests/lib/quantiser_mutation_killers_tests.lua",
         "lib/tests/lib/quantiser_tests.lua",
         "lib/tests/lib/scale_hardening_tests.lua",
+        "lib/tests/lib/scale_merge_hardening_tests.lua",
         "lib/tests/lib/step_delta_killers_tests.lua",
         "lib/tests/lib/step_mutation_killers_tests.lua",
         "lib/tests/lib/step_test.lua"
@@ -1840,8 +1843,8 @@
       ],
       "interaction_strategy": "Round trips, malformed partitions, every IO stage, lifecycle cleanup and immutable fixtures.",
       "residual_gaps": [
-        "Interrupted-write and partial-file recovery characterisation if supported.",
-        "Add fixtures for future materially distinct released schemas."
+        "Saving is not transactional: a failed write may leave a partial target. Later load rejects unreadable partial data without replacing live state or resuming autosave; automatic reconstruction is not a supported contract.",
+        "Frozen current and 1.2.12 projects pass the pinned tabutil/validation/migration path. Add another immutable fixture when a materially distinct schema ships."
       ],
       "requirement_ids": [
         "PERSIST-AUTO-001",
@@ -1930,7 +1933,7 @@
         "M-TRIPLE-005",
         "M-WORKFLOW-001"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-complete-partitioned"
     },
     {
       "id": "H13",
@@ -2130,8 +2133,10 @@
       ],
       "interaction_strategy": "Constrained proxy measurements, exact event accounting and named high-risk triples; load space remains partitioned.",
       "residual_gaps": [
+        "A deterministic 1,280-admission slide workload crosses the 1,024-entry ring and verifies every final channel/slot owner under a 5 ms host characterisation bound; it passed three integrated repeats. This is not physical-norns equivalence.",
         "PERF-003 16-channel timing fails 2/3 repeats.",
-        "PERF-004 through PERF-008 and ten-minute mixed run remain open.",
+        "Controlled M-ENDURANCE-001 passed three fresh-process 608.29-second logical runs with exact event counts and 1 ns logical error. The real-time ten-minute run failed after a persistent 42-43 ms port-1 phase shift began around 126 seconds (p99 43.336 ms, final 42.392 ms); retain this as an open musical-timing defect.",
+        "PERF-004 through PERF-008 still need individual executable recipes and independent MIDI/grid/frame oracles.",
         "Final full suite waits for held UX verdicts."
       ],
       "requirement_ids": [
@@ -2215,7 +2220,7 @@
         "M-SLIDE-CAPACITY-001",
         "M-WORKFLOW-001"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-in-progress"
     }
   ]
 }

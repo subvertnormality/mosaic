@@ -1641,3 +1641,59 @@ the user-visible assignment oracles. S3 remains unvalidated because EX Braids
 has no available profile or manual slot oracle. Its current merged-index behavior
 is unit-characterized, and EX Braids indexing is excluded from refactoring until
 profile-level evidence exists. No production code changed.
+
+
+## Parallel grid, persistence and performance hardening — 2026-09-12
+
+H02 adds a real `m_grid` -> `press` reconnect regression: after a two-key
+gesture is interrupted by disconnect, `grid.add` reconnects the same port and
+the first tap dispatches exactly one short press with no stale dual state. Two
+proposed disconnect variants were removed as duplicates of existing held-key
+and timer cleanup coverage. M-GRID-001 now covers the native `grid_connection` lifecycle in both lanes
+and three controlled repeats. The emulator deliberately synthesizes held-key
+releases before `g.remove`; the test characterizes the resulting valid range,
+reconnect LEDs, clean next tap and eight-step MIDI phrase. This does not validate
+S29's physical no-release assumption. The semantic page-object layer is deferred.
+
+H12 now covers tabutil serializer-open failure, unreadable interrupted-project
+rejection while retaining live state/playback and autosave suspension, and both
+frozen current/1.2.12 fixtures through pinned tabutil, validation and migration.
+Partial writes are rejected safely on load; transactional save recovery is not a
+supported claim. H12 is complete with that explicit partition.
+
+H15 adds a deterministic 1,280-admission slide replacement workload crossing the
+1,024-entry ring. All 160 final channel/slot owners must remain active and sampled.
+Its separate 5 ms CPU bound passed three integrated repeats; the existing 2 ms
+guards are unchanged. It is a host characterization, not physical-norns
+equivalence. Controlled M-ENDURANCE-001 passed three fresh-process 608.29-second logical
+runs with exact event counts and 1 ns logical error. Its real-time ten-minute
+run failed: a persistent 42–43 ms port-1 phase shift began around 126 seconds
+(p99 43.336 ms, final 42.392 ms), while note bytes, releases and the 50 ms max
+gate remained correct. This is retained failure evidence. PERF-004..008 still
+need individual executable recipes and independent oracles.
+
+The integrated Lua unit/integration suite passes 1,506/1,506. No production code
+changed in these three additions.
+
+
+## Parameter-lock and scale-merge interaction audit — 2026-09-12
+
+The H04 audit found the native suite already covers all ten UI lock slots and
+all 64 steps, Off and overwrite behavior, CC-before-note ordering, live clear
+and replacement, global and step slides, copy, persistence, timing and channel
+isolation. A new integration guard puts all ten slots on the same boundary step,
+partially undoes slots 10 and 9, serializes and reloads that history position,
+redoes, branches slot 9, then undoes all. This closes the per-slot history-key
+interaction without duplicating the expensive native cases. S34 and S65 remain
+explicit refactor items.
+
+The H05/H06 audit likewise found existing physical-input cases for grid merge
+modes, transposition, scale locks, random interaction, masks, chords and all ten
+named scales. New merge-to-MIDI integration guards cover duplicate equal source
+degrees with the documented lower-tie rule, configured root plus combined
+transpose, and each of the ten documented pentatonic selections. Empty or
+single arbitrary scale arrays are not a documented editable state, and the
+manual does not define whether merged-pentatonic applies to separately generated
+fully-quantised chord voices, so no oracle was invented for either ambiguity.
+
+The complete integrated Lua unit/integration suite passes 1,509/1,509. No production code changed in these additions.
