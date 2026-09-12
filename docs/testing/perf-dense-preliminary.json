@@ -7,7 +7,7 @@
   "mosaic_revision": "7cfde6eb5e7ac9ec1a094d4963fa9799d52b979a",
   "image": "monome-emulator:perf-recorder-02",
   "image_id": "sha256:38b516ef4a8e7f85355da8d94d8f6f21c007b6a8d47fa829a8fc9039c01eea91",
-  "note": "Measured while two regression suites ran on the same host (load average 2.8-5.0) and the container shared cpuset 0 with host processes. Not an idle-host qualification; rerun canonically on an idle host. Channels 8 repeat 3 lost two whole steps after a ~333 ms stall with zero CFS throttling (host preemption): p99 = max = 331 ms and every later step two steps late. This matches the stock internal-clock skip-ahead (emulator R19) and is PERF-008 overload evidence for the refactor, not fixed now (D23).",
+  "note": "Measured while two regression suites ran on the same host (load average 2.8-5.0) and the container shared cpuset 0 with host processes. Not an idle-host qualification; rerun canonically on an idle host. Channels 8 repeat 3 lost two whole steps after a ~333 ms stall with zero CFS throttling (host preemption): p99 = max = 331 ms and every later step two steps late. This is consistent with the pinned official internal-clock skip-ahead mechanism, which a later generic trace probe demonstrates under an induced deadline miss; this untraced run does not attribute its own stall to that mechanism and is PERF-008 overload evidence for the refactor, not fixed now (D23).",
   "runs": [
     {
       "channels": 1,

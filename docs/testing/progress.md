@@ -1674,14 +1674,21 @@ equivalence. Controlled M-ENDURANCE-001 passed three fresh-process 608.29-second
 runs with exact event counts and 1 ns logical error. Its real-time ten-minute
 run failed: a persistent 42–43 ms port-1 phase shift began around 126 seconds
 (p99 43.336 ms, final 42.392 ms), while note bytes, releases and the 50 ms max
-gate remained correct. This is retained failure evidence. PERF-004 now drives
+gate remained correct. This is retained failure evidence. A generic opt-in
+native trace built from the pinned official norns source (`monome-emulator`
+`2223a23`, trace runtime `clock-phase-trace-05`) observed one two-deadline
+internal skip at 120 BPM and an exact 41.6666666667 ms resumed-versus-target
+displacement. The M-ENDURANCE capture was not trace-enabled, so this
+demonstrates a compatible runtime mechanism but does not identify its natural
+triggering stall or establish physical-device equivalence. PERF-004 now drives
 512 scheduled clock/MIDI events and 216 physical grid/key/encoder actions under
 0.5 CPU and 768 MiB. Its exact input, MIDI, grid, frame and acknowledgement oracles
 passed once and failed the unchanged 10 ms MIDI p99 gate twice (49.556 ms and
 40.448 ms). Evidence is retained under `mosaic-behaviour-runs/perf-004-20260912/`.
-PERF-005..008 still need individual executable recipes.
+PERF-005..007 still need individual executable recipes after duplicate-coverage
+reconciliation.
 
-The integrated Lua unit/integration suite passes 1,509/1,509. No production code
+The integrated Lua unit/integration suite passes 1,513/1,513 after fix-branch consolidation. No production code
 changed in these hardening additions.
 
 

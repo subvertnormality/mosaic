@@ -82,18 +82,27 @@ then remains 41.635--44.521 ms late for every one of the remaining 3,801 steps,
 including after ordinary screen and grid work. The last transport press was
 126.291 seconds before the jump, so the discontinuity is also 6.291 seconds
 after the second 60-second while-playing autosave check; it is not coincident
-with that timer boundary. Together with M-TIM-005, this excludes the observed
-PERF-004 input-throttling mechanism, a generic Lua backlog, and the autosave
-timer as explanations for the persistent shift. It does not yet distinguish a
-host/JACK time discontinuity from the pinned native clock scheduler's sync
-deadline/resume behavior.
+with that timer boundary. Together with M-TIM-005, this excludes the observed PERF-004 input-throttling
+mechanism, a generic Lua backlog, and the autosave timer as explanations for
+the persistent shift. The retained endurance capture did not enable native
+tracing, so it still does not identify what made the runtime late. A separate
+generic trace probe on the same pinned official norns revision now proves that
+the internal-clock skip-ahead branch advances `next_tick_time` past overdue
+deadlines; at 120 BPM one two-deadline skip produces exactly 41.6666666667 ms
+of resumed-versus-target displacement. That is a runtime mechanism capable of
+the retained shift's scale, not attribution that this branch or any particular
+host/JACK stall caused M-ENDURANCE-001.
 
 ## Next target
 
-Do not change Mosaic from this evidence. Instrument the pinned runtime's
-`EVENT_CLOCK_RESUME` path and the clock scheduler around each sync deadline:
-record scheduled beat/time, scheduler-post time, Lua-resume time, and the next
-rescheduled deadline. Re-run the real-time endurance workload on an otherwise
-idle WSL host. That distinguishes a late scheduler poll, delayed event-loop
-dispatch, and a phase-rebasing bug; only a reproducible runtime finding can
-justify an emulator/runtime candidate change.
+Do not change Mosaic from this evidence. Re-run M-ENDURANCE-001 on an
+otherwise-idle WSL host using the trace-enabled runtime
+`/home/andy/projects/monome-runtime-candidates/clock-phase-trace-05/installation.json`
+(lock `06c4c08c`) and retain the complete schedule/post/dispatch/internal trace.
+Join the first independently-oracled output discontinuity to the preceding
+`internal_publish` and any `internal_skip`, then use scheduler
+schedule/post/dispatch timestamps to classify late internal publication, late
+scheduler posting, or late matron dispatch. If no skip occurs, retain that
+negative result; if it does, the trace still identifies the runtime branch,
+not the cause of the deadline miss. Only a repeatable trace finding can justify
+an emulator/runtime candidate; none justifies a Mosaic change yet.

@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "2026-09-12 audit: Opus handover claims independently checked. Current HEAD ab3e705 passed 6 behaviour guards, 1471 Lua units, 24/24 applicable prior-failure reruns, 40/40 base-MIDI post-reference fix regressions, and the n.b. profile regression. Canonical PERF-002 passed 12/12; PERF-003 functional output passed 12/12 but the event-timing gate failed 2/3 16-channel repeats (receipt: perf-dense-canonical.json). No performance fix or general refactor. Eight UX fixes remain on ux/pending-hands-on awaiting verdicts; final full suite follows their disposition. Continue independent unit/integration hardening and eligible defect probes that do not require those verdicts.",
+  "next_action": "2026-09-12: Current HEAD includes the qualified pattern-boundary fix and PERF-004/008 test-only guards. The idle integrated suite passes 1513/1513 Lua tests after fix-branch consolidation. Canonical PERF-002 passes; PERF-003, PERF-004, M-ENDURANCE-001 and PERF-008 retain constrained real-time musical-timing failures. Generic native trace commit 2223a23 proves the pinned official internal-clock skip-ahead path can emit an exact 41.6666666667 ms displacement after a two-deadline miss; the retained endurance capture was untraced, so source attribution remains open. No performance or general-refactor change. Continue trace-enabled idle-host endurance evidence, eligible nonduplicate PERF-005..007 reconciliation, unit/integration hardening, and defects not awaiting UX verdicts.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
