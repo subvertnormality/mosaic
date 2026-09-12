@@ -4,6 +4,7 @@ local chord_order = include("mosaic/lib/musical_resolution/chord_order")
 local stock_parameter = include("mosaic/lib/musical_resolution/stock_parameter")
 local pitch_resolution = include("mosaic/lib/musical_resolution/pitch_resolution")
 local arp_descriptor = include("mosaic/lib/musical_resolution/arp_descriptor")
+local strum_descriptor = include("mosaic/lib/musical_resolution/strum_descriptor")
 local quantiser = include("mosaic/lib/quantiser")
 local m_clock = include("mosaic/lib/clock/m_clock")
 
@@ -51,6 +52,8 @@ local resolve_pitch = pitch_resolution.new(
   end
 )
 local build_arp_sequence = arp_descriptor.new(chord_order.index)
+local play_strum_root_now, resolve_strum_chord, resolve_strum_root_later =
+  strum_descriptor.new(chord_order.index, chord_timing.delay)
 
 function step.process_stock_params(c, step, type)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
@@ -626,15 +629,13 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local note_dashboard_values = {}
   
   local selected_channel = program.get().selected_channel
-  if not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3 then
-    if not mute_root then -- Only play root note if not muted
-      play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
-      note_dashboard_values.note = note_container.note
-      note_dashboard_values.velocity = note_container.velocity
-      note_dashboard_values.length = note_container.length
-      if c == program.get().selected_channel then
-        channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
-      end
+  if play_strum_root_now(chord_strum_pattern, mute_root) then
+    play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
+    note_dashboard_values.note = note_container.note
+    note_dashboard_values.velocity = note_container.velocity
+    note_dashboard_values.length = note_container.length
+    if c == program.get().selected_channel then
+      channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
     end
   end
 
@@ -643,12 +644,15 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   chord_note_dashboard_values.chords = {}
 
   for i = 1, 4 do
-    local chord_number = chord_order.index(i, 4, chord_strum_pattern)
-    local chord_note = chord_notes[chord_number]
-    local delay_multiplier = (chord_strum_pattern == 2 or chord_strum_pattern == 4) and i - 1 or i
-    if chord_note and chord_note ~= 0 then
-      local delay = chord_timing.delay(chord_division, chord_spread, chord_acceleration, delay_multiplier)
-      if delay ~= nil then
+    local chord_number, delay, delay_multiplier = resolve_strum_chord(
+      i,
+      chord_notes,
+      chord_strum_pattern,
+      chord_division,
+      chord_spread,
+      chord_acceleration
+    )
+    if chord_number then
       m_clock.delay_action(
         c,
         delay,
@@ -681,19 +685,21 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
       )
 
-      end
-
     end
 
   end
 
-  if not mute_root and (chord_strum_pattern == 2 or chord_strum_pattern == 4) then
-
-    local delay = chord_timing.delay(chord_division, chord_spread, chord_acceleration, 4)
-    if delay ~= nil then
+  local delayed_root_delay = resolve_strum_root_later(
+    chord_strum_pattern,
+    mute_root,
+    chord_division,
+    chord_spread,
+    chord_acceleration
+  )
+  if delayed_root_delay ~= nil then
     m_clock.delay_action(
       c,
-      delay,
+      delayed_root_delay,
       false,
       function()
 
@@ -718,11 +724,6 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
       end
     )
-    end
-
-
-
-
   end
 
 end
