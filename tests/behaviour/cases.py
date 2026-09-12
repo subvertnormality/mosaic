@@ -28,7 +28,7 @@ from recorded_same_key_sources import recorded_same_key_sources
 from trigless_slide_clock import trigless_slide_clock
 from recording_lock_song import recording_lock_song
 from song_divisions import song_tempo_divisions
-from memory_wrap import memory_wrap
+from memory_wrap import memory_wrap,memory_retained_floor
 from scale_cache import scale_cache_saves
 from nb_param_lock import nb_param_lock
 from nb_chord_acceleration_lock import nb_chord_acceleration_lock
@@ -3310,6 +3310,7 @@ CASES={
  'M-XA-006-NB-CHORD-ACCEL':dict(run=nb_chord_acceleration_lock,requirements=['LOCK-PARAM-SET','CHORD-ACCEL','CH-DEVICE'],expansion_families=['XA-005'],description='Doubledecker channel, slot 1 replaced by Chord Accel Mod and step 1 locked to +2: playback crosses the locked step without a Lua error (user decision S47)'),
  'M-SCALE-CACHE-001':dict(run=scale_cache_saves,requirements=['SCALE-EDIT','SCALE-SELECT'],description='110 saves of the playing scale while playing (root C/C# alternating): the first onset after each save is the step degree in the new root and no Lua error occurs past the quantiser cache bound'),
  'M-MEMORY-004':dict(run=memory_wrap,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='5003 held-step keyboard actions wrap the 5000-action history; E3 back two, a new step-2 action, then E3 back and forward restore and reapply exactly that action with the counter and phrases matching'),
+ 'M-MEMORY-014':dict(run=memory_retained_floor,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='After 5001 edits of one step wrap the 5000-action history, K2 returns to the retained-history floor (the state immediately before the oldest retained action), with the counter and replayed phrase matching README 698-705 (S58)'),
  'M-SONG-TEMPO-001':dict(run=song_tempo_divisions,requirements=['SONG-ADVANCE','SONG-SLOTS','CH-TEMPO'],description='Per-sequence tempo as clock divisions of the global tempo: slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing; exact pitches, octave fingerprints and onset times over two song cycles'),
  'M-PERSIST-COMBINED-001':dict(run=lambda c:recording_lock_song(c,persist=True),requirements=['SAVE-AUTO','PERSIST-AUTO-001','REC-PARAM-AUTOMATION','SONG-SLOTS'],description='The M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream; tempo is norns system state'),
  'M-TRIPLE-005':dict(run=recording_lock_song,requirements=['REC-PARAM-AUTOMATION','REC-ARM','LOCK-PARAM-SET','SONG-ADVANCE','SONG-SLOTS'],description='A CC lock edit while recording is armed records slot 1 steps 2..4 through the final step and clears at the song transition: the copied slot 2 keeps its own locks and stored-patch recalls across two song cycles'),

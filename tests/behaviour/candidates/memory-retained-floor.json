@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "310e039",
+  "files": [
+    {
+      "file": "lib/memory.lua",
+      "before_sha256": "4771c4a157931690d7acef7d75bb2adae2649395c4ff9da3ed9fe53c01bcecd7",
+      "after_sha256": "ce0bc1c7427ccc456e6e3a7ddb81b56747e015baa3d6e8f1904dc3f57a0f5013"
+    }
+  ],
+  "patch": "0109-memory-retained-floor.patch",
+  "patch_sha256": "1d892e04cd8e4b1b2c53cd52658df9bfcf9bd478f0d684247a60b1093313467c",
+  "regression": "M-MEMORY-014",
+  "unit_regression": "test_hardening_memory_wrap_retains_exact_floor_for_undo_and_undo_all",
+  "baseline": [
+    {
+      "run_id": "9ac66090f8854b568091a6f5576e56c9",
+      "case": "M-MEMORY-014",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "0e716b91b943e6f70dd9eb2a01308977becdf30f6786ba1d16e67e067df42ce4",
+      "failure": "{'expected': [(1, [144, 72, 100]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 72, 100]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 72, 100])]"
+    },
+    {
+      "run_id": "c2e4d612df094d4abc071f12c249f90e",
+      "case": "M-MEMORY-014",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "70d8dc29cb854f94ac08e06200b3421ee460c5cab08e3f3cb7f211e110442888",
+      "failure": "{'expected': [(1, [144, 72, 100]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 72, 100]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97]), (1, [144, 72, 100])]"
+    }
+  ],
+  "rationale": "A bounded history retained only its latest 5000 actions, but every retained event pointed to the state before the first-ever edit of its key. K2 therefore restored state older than the retained history. Each new event now records the logical state immediately before and after itself. Undo restores the immediate prior state, and undo-all restores the state before each key's oldest retained event. Older serialized histories without these fields retain the replay fallback.",
+  "oracle": "README.md 698-705: memory retains mask and trig-lock actions, E3 navigates them, and K2 returns to the beginning of memory. Characterisation at the production bound: after older actions roll out, the beginning is the state immediately before the oldest retained action, not an unavailable older state.",
+  "validation": [
+    {
+      "run_id": "b601eeffd2154df7924f7ccd92bbe719",
+      "case": "M-MEMORY-014",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "5200dbbc49474c7b02f67671dd16a7a816e6dc9e8c315053e73cf79da4e62bbb",
+      "failure": null
+    },
+    {
+      "run_id": "5b01648f44414d5581313023f440b97d",
+      "case": "M-MEMORY-014",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "9584845b214db9394afd2c47bb234f8538e791c708131488f3036310b9819cba",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-b01a4eb0e28b4878a0dc54d3b98dbc89",
+      "case": "M-MEMORY-014",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "a4b853f2ca7f8f0ca9c3057578c43637b80f6f85ae572f32827eff134d021a29",
+      "failure": null,
+      "normalized_sha256": "857c3cda259d5e752cc48128fbd1577d78b05df8cd22112df285079d5d9a712f"
+    }
+  ],
+  "collateral": "All 1501 Lua unit/integration tests pass. Focused coverage includes ordinary undo, undo-all, interleaved keys, branch truncation, wrapped serialization, legacy serialization without prior_state, and error recovery. Controlled native collateral M-MEMORY-004/006/010/013 passes; M-MEMORY-014 passes real time, controlled time, and three fresh controlled repeats.",
+  "upstream_merged": false
+}

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "status": "planned-hardening-matrix-reconciled",
-  "base_revision": "39ccaf4",
+  "base_revision": "310e039",
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "inventory": "tests/behaviour/manual-inventory.json",
-  "inventory_sha256": "0f1b59a63b99cfedff1ae9c69841ea336442c090e5acf5d38d872d595e4c73e1",
+  "inventory_sha256": "650a8305fc824bf7cff9b7f622d4e5ec1c7e630f8b05655c1102b0627e52957d",
   "counts": {
     "requirements": 141,
     "production_lua_modules": 67,
@@ -1770,8 +1770,8 @@
       ],
       "interaction_strategy": "Deterministic generated edits with retained seeds plus branch, truncation, wrap and persistence partitions.",
       "residual_gaps": [
-        "S58 is minimized at capacity 3 with four same-step edits: the retained 61,62,63 log undoes to nil instead of the pre-retention floor 60; a native behavior baseline is still required before a fix.",
-        "The two production event types now cross all mask fields, four chord voices, ten lock slots, boundary songs/steps, undo, redo-all, branch truncation and memory serialization; full project save/reload remains behavior-owned."
+        "S58 is fixed with M-MEMORY-014 at the production 5000-action bound plus minimized undo, undo-all, interleaved-key, serialization, legacy-history and corruption-recovery units.",
+        "The two production event types cross all mask fields, four chord voices, ten lock slots, boundary songs/steps, undo, redo-all, branch truncation and memory serialization; full project save/reload remains behavior-owned by M-MEMORY-006 and combined persistence cases."
       ],
       "requirement_ids": [
         "MEMORY-NAV",
@@ -1802,13 +1802,14 @@
         "M-MEMORY-010",
         "M-MEMORY-011",
         "M-MEMORY-013",
+        "M-MEMORY-014",
         "M-PARAM-034",
         "M-PARAM-035",
         "M-REC-PARAM-025",
         "M-REC-PARAM-026",
         "M-REC-PARAM-027"
       ],
-      "status": "hardening-in-progress"
+      "status": "hardening-complete-partitioned"
     },
     {
       "id": "H12",

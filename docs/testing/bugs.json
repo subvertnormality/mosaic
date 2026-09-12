@@ -994,6 +994,15 @@
         "M-SYNC-023"
       ],
       "summary": "A severe external-clock callback backlog could replay stale notes after native MIDI Stop; catch-up now yields so queued transport preempts stale musical work."
+    },
+    {
+      "id": "memory-retained-floor",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "memory-retained-floor.json",
+      "cases": [
+        "M-MEMORY-014"
+      ],
+      "summary": "Preserve the correct undo floor after bounded memory history wraps."
     }
   ]
 }

@@ -127,8 +127,57 @@ function test_hardening_memory_all_ten_lock_slots_cross_song_bounds_branch_and_r
   end
 end
 
--- S58 minimized counterexample, deliberately diagnostic rather than a green assertion:
--- with max_history_size=3, record notes 60,61,62,63 on one step. The retained log is
--- 61,62,63. Undoing all three currently restores nil, but the correct retained-history
--- floor is 60, the state immediately before the oldest retained edit. Production remains
--- unchanged until the required user-visible behavior baseline exists.
+-- README.md:698-705: K2 returns to the beginning of Memory. When bounded history has
+-- wrapped, that beginning is the state immediately before its oldest retained action.
+-- S58's production-capacity behavior baseline is M-MEMORY-014.
+function test_hardening_memory_wrap_retains_exact_floor_for_undo_and_undo_all()
+  local original_max = hardening_memory.max_history_size
+  hardening_memory.max_history_size = 3
+  fresh()
+  local channel = program.get_channel(1, 1)
+  for note = 60, 63 do
+    hardening_memory.record_event(1, "note_mask", {step = 1, note = note, song_pattern = 1})
+  end
+  hardening_memory.undo(1); luaunit.assert_equals(channel.step_note_masks[1], 62)
+  hardening_memory.undo(1); luaunit.assert_equals(channel.step_note_masks[1], 61)
+  hardening_memory.undo(1); luaunit.assert_equals(channel.step_note_masks[1], 60)
+
+  fresh()
+  for note = 60, 63 do
+    hardening_memory.record_event(1, "note_mask", {step = 1, note = note, song_pattern = 1})
+  end
+  local saved = hardening_memory.serialize_state()
+  hardening_memory.init(); hardening_memory.deserialize_state(saved)
+  hardening_memory.undo_all(1)
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  hardening_memory.max_history_size = original_max
+end
+
+
+function test_hardening_memory_legacy_serialisation_without_prior_state_still_undoes()
+  fresh()
+  local channel = program.get_channel(1, 1)
+  hardening_memory.record_event(1, "note_mask", {step = 1, note = 60, song_pattern = 1})
+  hardening_memory.record_event(1, "note_mask", {step = 1, note = 62, song_pattern = 1})
+  local saved = hardening_memory.serialize_state()
+  for _, event in pairs(saved.channels[1].buffer) do event.data.prior_state = nil end
+  hardening_memory.init(); hardening_memory.deserialize_state(saved)
+  hardening_memory.undo(1)
+  luaunit.assert_equals(channel.step_note_masks[1], 60)
+  hardening_memory.undo(1)
+  luaunit.assert_nil(channel.step_note_masks[1])
+end
+
+function test_hardening_memory_wrap_retains_independent_floors_for_interleaved_keys()
+  local original_max = hardening_memory.max_history_size
+  hardening_memory.max_history_size = 3
+  fresh()
+  local channel = program.get_channel(1, 1)
+  for _, event in ipairs({{1, 60}, {2, 70}, {1, 61}, {2, 71}}) do
+    hardening_memory.record_event(1, "note_mask", {step = event[1], note = event[2], song_pattern = 1})
+  end
+  hardening_memory.undo_all(1)
+  luaunit.assert_equals(channel.step_note_masks[1], 60, "floor of key whose older edit rolled out")
+  luaunit.assert_nil(channel.step_note_masks[2], "floor of key whose first edit is retained")
+  hardening_memory.max_history_size = original_max
+end

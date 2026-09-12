@@ -1604,3 +1604,15 @@ triple-interaction cases retain family/UI behavior. The stale H10 input-channel 
 is closed by M-MIDI-002's 16-channel/two-port matrix plus M-REC-016/024/025: MIDI
 input channel affects message identity while the selected Mosaic channel owns
 recording and output. No production code changed.
+
+
+## Bounded-memory retained-floor fix — 2026-09-12
+
+S58 is behavior-confirmed and fixed. M-MEMORY-014 drives 5,001 held-step keyboard
+edits through the native runtime, then K2 at 0/5000. Both unfixed lanes replayed
+the untouched note 60 instead of retained floor 72 (`9ac660...` controlled,
+`c2e4d...` real). The candidate passes controlled `b601ee...`, real `5b0164...`
+and three fresh controlled repeats `repeat-b01a4e...`. Each event retains its
+logical prior/post state; legacy histories use the replay fallback. All 1,501 Lua
+tests pass, including corruption recovery, and M-MEMORY-004/006/010/013 pass as
+controlled collateral. Candidate: `memory-retained-floor.json`, patch 0109.
