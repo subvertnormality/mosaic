@@ -2,7 +2,21 @@
   "schema_version": 1,
   "status": "minimal-final-hardening-approved",
   "approved_final_scope": {
-    "frozen_domains": ["H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08", "H09", "H10", "H11", "H12", "H13"],
+    "frozen_domains": [
+      "H01",
+      "H02",
+      "H03",
+      "H04",
+      "H05",
+      "H06",
+      "H07",
+      "H08",
+      "H09",
+      "H10",
+      "H11",
+      "H12",
+      "H13"
+    ],
     "remaining_work": [
       "Align the Lua runner to the production revision under test, then run the complete existing Lua suite with nonzero source-bound collection.",
       "Run tests/behaviour/test_hardening_matrix.py.",
@@ -16,11 +30,11 @@
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "inventory": "tests/behaviour/manual-inventory.json",
-  "inventory_sha256": "e02c05d1ccf14d1edf829f027e64c8a63e9d8e66623ca8f601d827f1e7b811a9",
+  "inventory_sha256": "440c46051f6d7aa3d071d57beb913854ce55597deab5b6150953887968541a78",
   "counts": {
     "requirements": 140,
-    "production_lua_modules": 67,
-    "unit_integration_files": 62,
+    "production_lua_modules": 82,
+    "unit_integration_files": 68,
     "domains": 15
   },
   "coverage_language": {
@@ -790,9 +804,9 @@
         "lib/tests/lib/integration_tests/merge_mode_tests.lua",
         "lib/tests/lib/integration_tests/pattern_and_song_tests.lua",
         "lib/tests/lib/pattern_hardening_tests.lua",
-        "lib/tests/lib/scale_merge_hardening_tests.lua",
         "lib/tests/lib/pattern_mutation_killers_tests.lua",
-        "lib/tests/lib/pattern_tests.lua"
+        "lib/tests/lib/pattern_tests.lua",
+        "lib/tests/lib/scale_merge_hardening_tests.lua"
       ],
       "linked_behaviour_cases": [
         "M-ENDURANCE-001",
@@ -905,6 +919,8 @@
       ],
       "production_modules": [
         "lib/models/program.lua",
+        "lib/musical_resolution/pitch_resolution.lua",
+        "lib/musical_resolution/stock_parameter.lua",
         "lib/pages/scale_edit_page/scale_edit_page.lua",
         "lib/pages/scale_edit_page/scale_edit_page_ui.lua",
         "lib/quantiser.lua",
@@ -912,13 +928,15 @@
       ],
       "existing_unit_integration_files": [
         "lib/tests/lib/integration_tests/scale_and_quantiser_tests.lua",
+        "lib/tests/lib/pitch_resolution_tests.lua",
         "lib/tests/lib/quantiser_mutation_killers_tests.lua",
         "lib/tests/lib/quantiser_tests.lua",
         "lib/tests/lib/scale_hardening_tests.lua",
         "lib/tests/lib/scale_merge_hardening_tests.lua",
         "lib/tests/lib/step_delta_killers_tests.lua",
         "lib/tests/lib/step_mutation_killers_tests.lua",
-        "lib/tests/lib/step_test.lua"
+        "lib/tests/lib/step_test.lua",
+        "lib/tests/lib/stock_parameter_tests.lua"
       ],
       "linked_behaviour_cases": [
         "M-MASK-019",
@@ -1002,12 +1020,19 @@
         "CHORD-VELOCITY"
       ],
       "production_modules": [
+        "lib/clock/arp_lifetime.lua",
         "lib/clock/chord_timing.lua",
         "lib/clock/m_clock.lua",
+        "lib/clock/voice_lifetime.lua",
+        "lib/musical_resolution/arp_descriptor.lua",
+        "lib/musical_resolution/chord_order.lua",
+        "lib/musical_resolution/strum_descriptor.lua",
         "lib/recorder.lua",
         "lib/step.lua"
       ],
       "existing_unit_integration_files": [
+        "lib/tests/lib/arp_descriptor_tests.lua",
+        "lib/tests/lib/chord_order_tests.lua",
         "lib/tests/lib/m_clock_delta_killers_tests.lua",
         "lib/tests/lib/m_clock_mutation_killers_tests.lua",
         "lib/tests/lib/m_clock_performance_tests.lua",
@@ -1016,7 +1041,8 @@
         "lib/tests/lib/recorder_tests.lua",
         "lib/tests/lib/step_delta_killers_tests.lua",
         "lib/tests/lib/step_mutation_killers_tests.lua",
-        "lib/tests/lib/step_test.lua"
+        "lib/tests/lib/step_test.lua",
+        "lib/tests/lib/strum_descriptor_tests.lua"
       ],
       "linked_behaviour_cases": [
         "M-ARP-001",
@@ -1409,6 +1435,7 @@
         "lib/clock/m_clock.lua",
         "lib/clock/m_lattice.lua",
         "lib/clock/midi_output_transport.lua",
+        "lib/clock/slide_lifetime.lua",
         "lib/scheduler.lua"
       ],
       "existing_unit_integration_files": [
@@ -1421,7 +1448,8 @@
         "lib/tests/lib/m_lattice_mutation_killers_tests.lua",
         "lib/tests/lib/m_lattice_tests.lua",
         "lib/tests/lib/scheduler_mutation_killers_tests.lua",
-        "lib/tests/lib/scheduler_tests.lua"
+        "lib/tests/lib/scheduler_tests.lua",
+        "lib/tests/lib/slide_lifetime_tests.lua"
       ],
       "linked_behaviour_cases": [
         "M-ARP-001",
@@ -1552,6 +1580,7 @@
       "production_modules": [
         "lib/clock/m_clock.lua",
         "lib/clock/midi_output_transport.lua",
+        "lib/clock/transport_lifecycle.lua",
         "lib/m_midi.lua"
       ],
       "existing_unit_integration_files": [
@@ -1660,6 +1689,7 @@
         "lib/clock/m_clock.lua",
         "lib/m_midi.lua",
         "lib/memory.lua",
+        "lib/memory/event_handlers.lua",
         "lib/recorder.lua"
       ],
       "existing_unit_integration_files": [
@@ -1794,6 +1824,7 @@
         "MEMORY-TRUNCATE"
       ],
       "production_modules": [
+        "lib/history_ring.lua",
         "lib/memory.lua",
         "lib/models/program.lua"
       ],
@@ -1867,12 +1898,16 @@
         "SONG-SLOTS"
       ],
       "production_modules": [
+        "lib/application_parameters.lua",
         "lib/helpers/json.lua",
         "lib/memory.lua",
+        "lib/models/model_defaults.lua",
         "lib/models/program.lua",
         "lib/pages/song_edit_page/song_edit_page.lua",
         "lib/pages/song_edit_page/song_edit_page_ui.lua",
-        "lib/project_validation.lua"
+        "lib/project_lifecycle.lua",
+        "lib/project_validation.lua",
+        "lib/song_transition.lua"
       ],
       "existing_unit_integration_files": [
         "lib/tests/lib/json_tests.lua",
@@ -2157,11 +2192,16 @@
         "WORKFLOW-COMPOSITION"
       ],
       "production_modules": [
+        "lib/application_parameters.lua",
+        "lib/clock/arp_lifetime.lua",
         "lib/clock/chord_timing.lua",
         "lib/clock/divisions.lua",
         "lib/clock/m_clock.lua",
         "lib/clock/m_lattice.lua",
         "lib/clock/midi_output_transport.lua",
+        "lib/clock/slide_lifetime.lua",
+        "lib/clock/transport_lifecycle.lua",
+        "lib/clock/voice_lifetime.lua",
         "lib/controls/button.lua",
         "lib/controls/fade_button.lua",
         "lib/controls/fader.lua",
@@ -2182,10 +2222,18 @@
         "lib/helpers/functions.lua",
         "lib/helpers/json.lua",
         "lib/helpers/profiler.lua",
+        "lib/history_ring.lua",
         "lib/m_grid.lua",
         "lib/m_midi.lua",
         "lib/memory.lua",
+        "lib/memory/event_handlers.lua",
+        "lib/models/model_defaults.lua",
         "lib/models/program.lua",
+        "lib/musical_resolution/arp_descriptor.lua",
+        "lib/musical_resolution/chord_order.lua",
+        "lib/musical_resolution/pitch_resolution.lua",
+        "lib/musical_resolution/stock_parameter.lua",
+        "lib/musical_resolution/strum_descriptor.lua",
         "lib/nb/lib/nb.lua",
         "lib/nb/lib/player.lua",
         "lib/nb/nb.lua",
@@ -2206,11 +2254,13 @@
         "lib/pages/velocity_edit_page/velocity_edit_page_ui.lua",
         "lib/pattern.lua",
         "lib/press.lua",
+        "lib/project_lifecycle.lua",
         "lib/project_validation.lua",
         "lib/quantiser.lua",
         "lib/recorder.lua",
         "lib/scheduler.lua",
         "lib/sinfonion_harmonic_sync.lua",
+        "lib/song_transition.lua",
         "lib/step.lua",
         "lib/ui.lua",
         "lib/ui_components/control_scroll_selector.lua",

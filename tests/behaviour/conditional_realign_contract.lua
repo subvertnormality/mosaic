@@ -27,6 +27,7 @@ for _,point in ipairs({{0,1},{1,1},{64,2},{128,2}}) do
   if path:match('^mosaic/lib/musical_resolution/') or path=='mosaic/lib/song_transition' then return dofile(path:gsub('^mosaic/', '')..'.lua') end
   if path=='mosaic/lib/devices/nrpn_codec' then return dofile('lib/devices/nrpn_codec.lua') end
   if path=='mosaic/lib/clock/chord_timing' then return dofile('lib/clock/chord_timing.lua') end
+  if path=='mosaic/lib/clock/voice_lifetime' then return dofile('lib/clock/voice_lifetime.lua') end
   if path=='mosaic/lib/clock/m_clock' then return clock end
   if path=='mosaic/lib/quantiser' then return {} end
   assert(path=='mosaic/lib/clock/divisions',path);return {note_divisions={}}

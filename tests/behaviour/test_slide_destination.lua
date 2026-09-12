@@ -1,6 +1,9 @@
 -- Actual program lookup with explicit model fixtures, not workflow evidence.
 package.preload.musicutil=function()return {}end
-function include()return {}end
+function include(path)
+ if path=='mosaic/lib/models/model_defaults' then return dofile('lib/models/model_defaults.lua') end
+ return {}
+end
 fn={calc_grid_count=function(x,y)return (y-1)*16+x end}
 local program=dofile('lib/models/program.lua')
 local options,data,song,next_song

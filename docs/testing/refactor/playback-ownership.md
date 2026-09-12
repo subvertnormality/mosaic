@@ -173,3 +173,32 @@ validation remain outstanding.
 | explicit | baseline | M-SYNC-014 | True | b8fe7220987440ce9086f70755976e4a |  |
 
 Baseline receipts are under /home/andy/projects/mosaic-behaviour-runs/mosaic-behaviour-runs; candidate receipts under /home/andy/projects/mosaic-behaviour-runs.
+
+
+## Aggregate controlled regression, 2026-09-13
+
+At 86c94c3, the base-MIDI controlled suite completed 791 native cases: 788
+passed and three failed; source identity stayed stable. Original report:
+`/home/andy/projects/mosaic-behaviour-runs/r10-quick-86c94c3-20260912/suite.json`.
+This is not all-profile or real-time release acceptance. The original report
+remains failed; no assertions or thresholds were relaxed.
+
+M-CHORDSHAPE-201 failed during sclang startup and passed its isolated unchanged
+rerun (`edf7b70e54684260ad2446a09a44719c`). M-MEMORY-008 reproduced velocity 50
+instead of restored 117 after undo (`15fd65ba094342dfa53addc644e43d1f`).
+M-PAT-006 reproduced a note-entry LED assertion failure before inactive-pattern
+playback (`ba2652f41f7c4dfda249ded4155a6b2d`). Both latter failures also occur at
+5ada934, before scheduler/playback extraction, with identical assertion sites
+and, for undo, identical output. Baseline manifests are under
+`/home/andy/projects/mosaic-behaviour-runs/mosaic-behaviour-runs/`:
+`b39aaaa8e7b84dcdaca61815424be9b9` and `f09ac4d3856a47bdb6ade74744f5a463`.
+They remain unresolved; this comparison excludes R09/R10 as their introduction,
+not earlier refactor changes. Next: trace earlier provenance and compare real time.
+
+Four fast-layer failures were test setup/metadata drift. Explicit include routes
+now load extracted production modules in three standalone contracts, preserving
+all assertions. Revalidation passed 64 reset decisions, 16 composed step/lattice
+cases and 9 slide destination cases. The existing hardening inventory was
+reconciled with extracted modules/tests; its unchanged four checks pass. Production
+code is unchanged by these repairs, so the 791-case run is retained rather than
+repeated for fixture-only edits. Full Lua units in the aggregate passed 1546/1546.
