@@ -282,6 +282,7 @@ def run_one(image, output):
             docker('rm', name, check=False)
         shutil.rmtree(data)
         result['temporary_data_removed'] = not data.exists()
+        assert result['temporary_data_removed'], data
         write(output / 'result.json', result)
     return result
 

@@ -77,6 +77,10 @@ class PerfOverloadOracleTests(unittest.TestCase):
         same_grid = dict(changed, state=dict(grid=before['state']['grid'], frame=dict(sha256='b')))
         with self.assertRaisesRegex(AssertionError, 'grid image'):
             assert_visual_recovery(before, same_grid)
+        same_frame = dict(changed, state=dict(grid=changed['state']['grid'],
+                                               frame=dict(sha256=before['state']['frame']['sha256'])))
+        with self.assertRaisesRegex(AssertionError, 'screen image'):
+            assert_visual_recovery(before, same_frame)
 
 
 if __name__ == '__main__':
