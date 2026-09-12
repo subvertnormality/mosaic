@@ -1,5 +1,7 @@
 -- Execute the actual entrypoint closures with explicit IO/transport boundaries.
 -- Native behaviour tests separately exercise the complete application/runtime.
+local tab = require("tabutil")
+
 local function find_upvalue(fn, wanted)
   for i=1,100 do
     local name,value=debug.getupvalue(fn,i)
@@ -28,6 +30,7 @@ local function load_context()
   env.tooltip={show=function(_,message) state.messages[#state.messages+1]=message end}
   env.io={open=function(path,mode)
     if mode=="wb" then
+      if state.table_open_error then return nil,"table open failed" end
       return {write=function() if state.table_write_error then return nil,"table write failed" end;return true end,
         close=function() if state.table_close_error then return nil,"table close failed" end;return true end}
     end
@@ -36,10 +39,12 @@ local function load_context()
   end,
   write=function() if state.write_error then return nil,"write failed" end;if state.write_throw then error("write threw") end;return true end,
   close=function() if state.close_error then return nil,"close failed" end;return true end}
-  env.tab={load=function(path) if state.decode_error then error("bad data") end;return state.files[path] end,
+  env.tab={load=function(path) if state.decode_error==true or state.decode_error==path then error("bad data") end;return state.files[path] end,
     save=function(_,path)
       if state.save_error then return "write failed" end
-      local file=env.io.open(path,"wb");file:write("project");file:close();count.writes=count.writes+1
+      local file,problem=env.io.open(path,"wb")
+      if not file then return problem end -- pinned tabutil open-failure contract
+      file:write("project");file:close();count.writes=count.writes+1
     end}
   env.params={action_write=function() count.hooks=count.hooks+1 end,
     read=function() count.read=count.read+1 end,
@@ -128,9 +133,26 @@ function test_missing_startup_is_normal_but_unreadable_manual_load_is_rejected()
   luaunit.assert_equals(c.count.stop,0);luaunit.assert_is(c.state.store,c.original)
 end
 
+-- README 1054: rejected saved data retains the current project and playback. A
+-- truncated write is not a supported recovery format; it must follow the same
+-- non-destructive rejection path as any unreadable project.
+function test_interrupted_project_file_is_rejected_without_replacing_live_state()
+  local c=load_context()
+  c.state.files["fixture/interrupted.ptn"]={"partial project bytes"}
+  c.state.decode_error="fixture/interrupted.ptn"
+  c.env.autosave_reset()
+  luaunit.assert_false(c.load("fixture/interrupted.ptn"))
+  luaunit.assert_equals(c.state.messages[#c.state.messages],"Invalid project data")
+  luaunit.assert_is(c.state.store,c.original);luaunit.assert_true(c.state.playing)
+  for _,name in ipairs({"stop","reset","init","set","read","restore"}) do
+    luaunit.assert_equals(c.count[name],0)
+  end
+  c.blocked()
+end
+
 
 function test_save_io_failures_and_throwing_hooks_preserve_inhibition_and_restore_io()
-  for _,failure in ipairs({"table_write_error","table_close_error","write_error","close_error","write_throw","hook_throw"}) do
+  for _,failure in ipairs({"table_open_error","table_write_error","table_close_error","write_error","close_error","write_throw","hook_throw"}) do
     local c=load_context();c.state.files["fixture/bad.ptn"]={false};c.load("fixture/bad.ptn")
     local open,write,close=c.env.io.open,c.env.io.write,c.env.io.close
     if failure=="hook_throw" then c.env.params.action_write=function() error("hook threw") end
@@ -141,4 +163,31 @@ function test_save_io_failures_and_throwing_hooks_preserve_inhibition_and_restor
     luaunit.assert_is(c.env.params.action_write,hook)
     c.blocked()
   end
+end
+
+-- The emulator fixture cases exercise these exact frozen projects through a
+-- native Mosaic boot. This cheaply guards the model-level migration boundary
+-- too, with the actual pinned norns tabutil parser rather than a hand-built
+-- table. README 1052-1054 says saved projects load again.
+function test_hardening_released_and_current_project_fixtures_validate_and_migrate()
+  local project_validation=include("mosaic/lib/project_validation")
+  for _,version in ipairs({"release-1.2.12","current"}) do
+    local saved=tab.load("../../tests/behaviour/fixtures/persisted/"..version.."/data/autosave.ptn")
+    luaunit.assert_equals(saved[1],"autosave")
+    luaunit.assert_true(project_validation.check(saved),version.." fixture validation")
+    program.init();memory.init();program.set(saved[2])
+    local data=program.get()
+    luaunit.assert_equals(data.nrpn_policy_version,1,version.." policy migration")
+    luaunit.assert_nil(data.sequencer_patterns,version.." legacy alias leaked")
+    for slot=1,2 do
+      local song=data.song_patterns[slot]
+      luaunit.assert_equals(song.global_pattern_length,4,version.." slot "..slot.." length")
+      luaunit.assert_equals(#song.channels,17,version.." slot "..slot.." channels")
+      luaunit.assert_equals(#song.patterns,16,version.." slot "..slot.." patterns")
+      luaunit.assert_equals(#song.scales,16,version.." slot "..slot.." scales")
+      luaunit.assert_equals(song.channels[1].start_trig,{1,4},version.." slot "..slot.." start")
+      luaunit.assert_equals(song.channels[1].end_trig,{4,4},version.." slot "..slot.." end")
+    end
+  end
+  program.init();memory.init()
 end
