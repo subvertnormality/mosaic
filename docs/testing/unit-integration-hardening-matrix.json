@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "planned-hardening-matrix-reconciled",
-  "base_revision": "abdfd75",
+  "base_revision": "32ff2dc",
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "inventory": "tests/behaviour/manual-inventory.json",
@@ -1630,7 +1630,8 @@
       ],
       "interaction_strategy": "First press to final release state transitions; pairwise source/channel/arm/page and named song-lock-clock triples.",
       "residual_gaps": [
-        "All slot recording with simultaneous edit, modulation, transition and persistence.",
+        "All ten live parameter-recording slots now update together through the composed clock path, remain channel-isolated, and retire at the pattern wrap; all ten definitions, locks and slides independently round-trip at song 96/channel 16.",
+        "The higher-order combination of a live ten-slot edit with modulation and an actual song-slot transition remains partitioned across native triple-interaction cases rather than exhaustively multiplied in Lua.",
         "Non-channel-1 keyboard input semantics remain decision-bound."
       ],
       "requirement_ids": [
@@ -1739,7 +1740,7 @@
         "M-XA-003-JF-OWNERSHIP",
         "M-XA-004-JF-OVERLAP"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-in-progress"
     },
     {
       "id": "H11",

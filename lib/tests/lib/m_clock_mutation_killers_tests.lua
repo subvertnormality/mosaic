@@ -572,6 +572,57 @@ function test_mclk_recording_resends_and_records_values_on_eligible_steps()
   end)
 end
 
+
+-- README 239-241: while recording, edited MIDI parameters are written to every eligible
+-- step. This composed clock-path matrix covers the complete ten-slot recorder bank at
+-- once. Values edited between steps replace the next step independently; another channel
+-- cannot leak into the armed channel; and the pattern wrap retires all dirty values before
+-- the new first step so stale automation is not recorded again. The precise slot order and
+-- dirty-state lifetime are characterisation, not manual text.
+function test_mclk_all_ten_recording_slots_update_isolate_and_retire_at_wrap()
+  with_clock(function()
+    with_recording(function()
+      setup()
+      program.get().selected_channel = 1
+      params:set("record", 2)
+      params:set("trigless_locks", 2)
+      local channel = program.get_channel(1, 1)
+      channel.end_trig = {2, 4}
+      local sent = {}
+      for slot = 1, 10 do
+        local id = "mclk_recorded_matrix_" .. slot
+        channel.trig_lock_params[slot] = {
+          type = "midi", param_id = id, cc_msb = slot - 1, off_value = -1
+        }
+        params:add(id, {action = function(value)
+          sent[#sent + 1] = {step = program.get_current_step_for_channel(1), slot = slot, value = value}
+        end})
+        recorder.set_trig_lock_dirty(1, slot, slot)
+        recorder.set_trig_lock_dirty(2, slot, 100 + slot)
+      end
+
+      start_clock()
+      pulses(1) -- channel 1, step 1
+      for slot = 1, 10 do recorder.set_trig_lock_dirty(1, slot, 50 + slot) end
+      pulses(24) -- channel 1, step 2
+      pulses(24) -- wrap to step 1; clears the armed channel's dirty bank first
+
+      luaunit.assert_equals(#sent, 20)
+      for slot = 1, 10 do
+        luaunit.assert_equals(sent[slot], {step = 1, slot = slot, value = slot})
+        luaunit.assert_equals(sent[10 + slot], {step = 2, slot = slot, value = 50 + slot})
+        luaunit.assert_equals(program.get_step_param_trig_lock(channel, 1, slot), slot)
+        luaunit.assert_equals(program.get_step_param_trig_lock(channel, 2, slot), 50 + slot)
+        luaunit.assert_false(recorder.trig_lock_is_dirty(1, slot), "armed dirty slot " .. slot)
+        luaunit.assert_equals(recorder.trig_lock_is_dirty(2, slot), 100 + slot,
+          "unselected channel dirty slot " .. slot)
+        luaunit.assert_nil(program.get_step_param_trig_lock(program.get_channel(1, 2), 1, slot),
+          "wrong-channel write in slot " .. slot)
+      end
+    end)
+  end)
+end
+
 -- A note recorded during a step is committed when that step ends, i.e. on the next step's
 -- onset, and the memory view is refreshed at every step end of the armed channel. Channel 1
 -- plays steps 1-5 (end_trig {5, 4}); the final step is committed when the channel wraps.
