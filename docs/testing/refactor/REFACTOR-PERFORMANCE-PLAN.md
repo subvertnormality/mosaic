@@ -25,10 +25,10 @@ unchanged.
   a changed branch, a known defect or a material refactor seam. Cheap pure-function
   tables may enumerate finite domains; native tests use representative boundaries
   and named high-risk interactions instead of Cartesian products.
-- R01 may make bounded performance repairs in the existing structure. Current red
-  performance tests are inputs to that work and do not prohibit R00/R01. Broad
-  extraction waits only for known functional failures and for the timing paths in
-  the selected slice to have measured, owned treatment.
+- Performance improvements are part of the refactor. Retained performance reds
+  are measured targets for the relevant R03-R13 slice, never a requirement to
+  optimize the old structure first. Known functional failures need resolution;
+  performance thresholds remain unchanged for final qualification.
 - During development run affected unit/integration tests, affected controlled cases,
   and real-time cases whose timing, lifecycle or native boundary can change. Run one
   complete frozen-candidate qualification at R14.
@@ -121,7 +121,7 @@ historical evidence, not new results for the staged tree. No speedup is claimed.
 
 | Finding | Inspected evidence | Consequence |
 |---|---|---|
-| Refactor prerequisites remain open | `docs/testing/state.json` next action; hardening card says in progress | R00/R01 are admission gates, not optional cleanup |
+| Refactor prerequisites remain open | `docs/testing/state.json` next action; hardening card says in progress | R00/R01 reconcile functional readiness; performance reds belong to refactor slices |
 | Integrated Lua suite reportedly passed 1513/1513 before current staged edits | Current state record | Revalidate; count alone neither proves coverage nor applies to this tree |
 | Dense sequencing PERF-002 has a canonical pass | `perf-dense-canonical.json` | Preserve as a performance and output guard |
 | Dense slide PERF-003 fails at 16 channels in two of three recorded repeats | Same receipt: p99 about 10.06/10.56 ms; functional checks passed | Diagnose before refactor admission; never discard failed repeats |
@@ -325,73 +325,34 @@ deferred by a dated user decision. Add a missing recipe only when it measures a 
 in the selected refactor or a documented release requirement that no existing
 workload covers. Preserve the existing Toolkit/Matrix performance deferral.
 
-### R01 — Close existing blockers before structural refactoring
+### R01 — Confirm functional readiness and assign performance targets
 
-**Depends:** R00. **Change:** minimal isolated repairs in the existing campaign only.
+**Depends:** R00. **Change:** reuse evidence, resolve confirmed functional failures,
+and assign measured performance targets to the selected refactor slices.
 
-1. Verify the consolidated fixes and the critical workflow anchors: locks, trig
-   parameters, scale merging, external sync, persistence and affected output routes.
-2. Diagnose PERF-003/004/008 and endurance with native timestamps: intended deadline,
-   callback start/end, queued input completion, actual emission and overload interval.
-   Correlate clocks through existing mappings; don't rebase expected phase on output.
-3. Use a minimal independent runtime probe to separate host contention, runtime
-   skip-ahead and Mosaic work. The earlier clock probe is not proof about every failure.
-4. Fix confirmed defects in isolated candidates. A runtime change first passes generic
-   app-free conformance, then composed Mosaic cases; record new runtime identity and
-   regenerate the baseline for downstream cards. Do not patch official code in place.
-5. Add only performance recipes whose distinct risk remains uncovered after R00.
-   Retain constrained host limits and real-time error budgets. Use the quick lane and
-   targeted slow evidence; defer the one unfiltered slow sweep to R14.
+1. Verify consolidated fixes and critical workflow anchors: locks, trig parameters,
+   scale merging, external sync, persistence and affected output routes. Reuse valid
+   source-bound evidence instead of repeating completed validation.
+2. Retain PERF-003/004/008 failures with unchanged thresholds. Assign dense slides
+   to slide/parameter work, input pressure to input/refresh work, and phase recovery
+   to clock attribution. Attribution may remain unknown until the relevant slice.
+3. Use a small independent runtime probe only when needed to distinguish runtime
+   or host delay from application work. Do not introduce Mosaic-specific runtime
+   workarounds. Native changes retain separate generic conformance.
+4. Start the selected structural/performance slice once its functional guards and
+   measured baseline are available. Do not require isolated optimizations, a green
+   performance baseline, exhaustive profiling or another endurance run first.
+5. Validate each change with affected units/integration, controlled behaviour and
+   relevant real-time cases. Keep the full final qualification at R14.
 
-**Done:** the complete quick lane and critical workflow anchors pass; no known
-functional failure remains; each red timing/performance result relevant to the first
-selected structural slice has a passing bounded repair or a measured treatment owned
-by that slice. One source-bound baseline exists. Final all-pass qualification remains
-at R14.
-**Recovery:** blocked ownership goes to the
-responsible original card; planning/profiling may continue, broad code edits may not.
-Use the prerequisite repair procedure below; do not wait for a downstream refactor
-card to fix a gate that prevents that card from starting.
-
-**R01 prerequisite performance repair procedure (no R03–R13 dependency):**
-The current historical `performance_fixes_authorized: false` remains true for this
-planning task. A future explicit instruction to execute this performance/refactor
-plan includes these prerequisite repairs; it does not authorize them now. Preserve
-retained red results as repair targets rather than accepting or hiding them.
-
-1. From R00 measurements, assign each failing obligation one owner and a discriminating
-   experiment: PERF-003 to parameter/slide/merge service investigation; PERF-004 to
-   input/scheduler/refresh investigation; PERF-008 and endurance to absolute-phase
-   runtime-versus-application investigation. Assign missing rows to recipe completion.
-   Zero recorded throttling and a high service percentile are leads, not sufficient
-   causal attribution; preserve unknown attribution until an experiment resolves it.
-2. Before any repair write `R01-repair-<workload>.md`: exact failed gate, minimal
-   reproducer, source identities, measured hot function/runtime boundary, proposed
-   edit, unchanged inputs/outputs, focused and full reruns, and rollback. An item is
-   bounded to one causal mechanism. The executor may choose its implementation.
-3. In the existing module/API layout, permit a targeted local repair or equivalent
-   optimization needed to pass the failing gate: for example reducing demonstrated
-   redundant computation in one merge pass, fixing cancellation/count bookkeeping,
-   or reusing a correctly owned refresh callback. It may use an R07–R10 technique
-   without executing or depending on those cards. No module-family relocation, saved
-   format change, new cache invalidation architecture or wholesale clock rewrite in
-   this prerequisite track. Native runtime repairs follow the independent candidate
-   and generic-conformance rule above. Do not add Mosaic-specific runtime behavior.
-4. Compare the isolated repair against its retained failure with unchanged gates and
-   adjacent-source regression runs. Preserve every failed attempt; after two attempts
-   with the same cause, investigate rather than keep retrying. When all prerequisite
-   repairs pass, freeze a new all-green baseline and repeat R02 profiling; remove
-   already-completed techniques from later cards to avoid doing the repair twice.
-5. If evidence shows that passing requires a change outside those bounds, record a
-   precise scope blocker and proposed design. The user decides any amendment to the
-   existing broad-refactor prerequisite; a focused review checks the proposed change
-   but cannot grant that scope. This is an explicit exceptional stop, not a request
-   for routine permission or an automatic relaxation of acceptance.
+**Done:** known functional failures affecting the selected slice are resolved and
+its performance targets have retained measurements and an owner. Performance reds
+remain open work within the refactor; they are not waived or prerequisite repairs.
 
 ### R02 — Measure the selected execution path
 
-**Depends:** the relevant R01 repair or measurement; read-only preparation may
-accompany R01.
+**Depends:** the selected slice's baseline and functional readiness. Measure the
+path needed for that slice; profiling may accompany implementation.
 
 1. Trace init/load -> input -> edit/history -> pattern rebuild -> clock -> parameter
    dispatch -> note -> release -> rendering -> save/cleanup, with real function names.
@@ -763,7 +724,8 @@ change and the appropriate regression; characterize external impact before fixin
 latent behavior. Existing characterization units may change to test the already
 agreed correction, with an explicit contract mapping. Required native/performance
 oracles stay intact. A latent issue explicitly deferred by an existing decision is
-not an invented R01 blocker; a failing required test always is.
+not an invented R01 blocker. Functional failures block affected work; retained
+performance failures are refactor targets and must pass final qualification.
 
 Run in WSL from the selected **immutable tested Mosaic tree**. These are planning
 commands, not results. R00 must resolve actual paths/identities and inspect `--help`.
@@ -958,7 +920,7 @@ cross-project callback and false-green collection, using disposable fixtures.
 | Hardware/runtime issue is disguised as application logic | Minimal generic probes, pinned independent runtime candidates |
 | Complexity increases with no measured benefit | Revert speculative optimization; document declined alternatives |
 
-The executor's first action is R00 reconciliation. The first production refactor
-card is R03, and it remains blocked until R01 admission is green. This ordering is
-intentional: the desired outcome is a faster, simpler, more extensible application
-with preserved behavior, not a large diff whose correctness must be rediscovered.
+The executor starts with R00 reconciliation, then selects the smallest useful
+structural/performance slice from R03-R13 using existing evidence. R03 is needed
+only where a selected change requires new seams. Performance reds are fixed as
+part of this work, with preserved functional behaviour and unchanged final budgets.
