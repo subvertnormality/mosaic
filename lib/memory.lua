@@ -3,6 +3,7 @@ memory.max_history_size = 5000
 
 -- Cache table functions
 local table_move = table.move
+local history_ring = include("mosaic/lib/history_ring")
 
 -- Validation functions
 local function validate_step(step)
@@ -213,80 +214,6 @@ local event_handlers = {
   }
 }
 
-local function create_ring_buffer(max_size)
-  local buffer = {
-    buffer = {},
-    start = 1,
-    size = 0,
-    max_size = max_size,
-    total_size = 0,
-    
-    get_size = function(self)
-      return self.size
-    end,
-    
-    push = function(self, event)
-      local index
-      if self.size < self.max_size then
-        -- The next logical position; after a wrap and truncate it is not the absolute slot size.
-        index = ((self.start + self.size - 1) % self.max_size) + 1
-        self.size = self.size + 1
-      else
-        index = self.start
-        self.start = (self.start % self.max_size) + 1
-      end
-      
-      self.buffer[index] = event
-      self.total_size = self.size
-      return self.size
-    end,
-    
-    get = function(self, position)
-      if not position or position < 1 or position > self.size then
-        return nil
-      end
-      
-      local actual_pos = ((self.start + position - 2) % self.max_size) + 1
-      if actual_pos <= 0 then 
-        actual_pos = actual_pos + self.max_size 
-      end
-      
-      return self.buffer[actual_pos]
-    end,
-    
-    truncate = function(self, position)
-      if position < self.size then
-        self.size = position
-        self.total_size = position
-      end
-    end
-  }
-  return buffer
-end
-
--- Add these serialization functions at the top of the file
-local function serialize_ring_buffer(ring_buffer)
-  -- Only save the essential data, not the functions
-  return {
-    buffer = ring_buffer.buffer,
-    start = ring_buffer.start,
-    size = ring_buffer.size,
-    max_size = ring_buffer.max_size,
-    total_size = ring_buffer.total_size
-  }
-end
-
-local function deserialize_ring_buffer(data)
-  if not data then return create_ring_buffer(memory.max_history_size) end
-  
-  local buffer = create_ring_buffer(data.max_size)
-  buffer.buffer = data.buffer or {}
-  buffer.start = data.start or 1
-  buffer.size = data.size or 0
-  buffer.total_size = data.size or 0
-  return buffer
-end
-
 -- Main state structure
 
 local state
@@ -362,7 +289,7 @@ function memory.record_event(channel_number, event_type, data)
   end
 
   if not state.channels[channel_number] then
-    state.channels[channel_number] = create_ring_buffer(memory.max_history_size)
+    state.channels[channel_number] = history_ring.new(memory.max_history_size)
     state.current_indices[channel_number] = 0
     state.original_states[channel_number] = {}
   end
@@ -557,7 +484,7 @@ end
 function memory.clear(channel_number)
   if not channel_number or not state.channels[channel_number] then return end
   
-  state.channels[channel_number] = create_ring_buffer(memory.max_history_size)
+  state.channels[channel_number] = history_ring.new(memory.max_history_size)
   state.current_indices[channel_number] = 0
   state.original_states[channel_number] = {}
 end
@@ -602,7 +529,7 @@ function memory.get_state(channel_number)
   end
   
   return {
-    event_history = state.channels[channel_number] or create_ring_buffer(memory.max_history_size),
+    event_history = state.channels[channel_number] or history_ring.new(memory.max_history_size),
     current_event_index = state.current_indices[channel_number] or 0,
     pattern_channels = {} -- Kept for backwards compatibility
   }
@@ -619,7 +546,7 @@ function memory.serialize_state()
   
   -- Serialize each channel's ring buffer
   for channel_number, channel_buffer in pairs(state.channels) do
-    serialized.channels[channel_number] = serialize_ring_buffer(channel_buffer)
+    serialized.channels[channel_number] = history_ring.serialize(channel_buffer)
   end
   
   return serialized
@@ -636,7 +563,7 @@ function memory.deserialize_state(saved_state)
   -- Deserialize each channel's ring buffer
   state.channels = {}
   for channel_number, channel_data in pairs(saved_state.channels or {}) do
-    state.channels[channel_number] = deserialize_ring_buffer(channel_data)
+    state.channels[channel_number] = history_ring.deserialize(channel_data, memory.max_history_size)
   end
 end
 
