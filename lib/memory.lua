@@ -277,7 +277,7 @@ local function get_channel_and_state(song_pattern, channel_number)
   return channel, pattern_state
 end
 
-function memory.record_event(channel_number, event_type, data)
+function memory.record_event_for_target(song_pattern, channel_number, event_type, data)
 
   if not channel_number or not event_type or not event_handlers[event_type] then
     return
@@ -294,7 +294,6 @@ function memory.record_event(channel_number, event_type, data)
     state.original_states[channel_number] = {}
   end
 
-  local song_pattern = data.song_pattern or program.get().selected_song_pattern
   local channel = program.get_channel(song_pattern, channel_number)
   
   local state_key
@@ -341,6 +340,18 @@ function memory.record_event(channel_number, event_type, data)
   
   handler.apply_event(channel, data.step, data, "record")
   event.data.result_state = handler.capture_state(channel, data)
+end
+
+function memory.record_event(channel_number, event_type, data)
+  if not channel_number or not event_type or not event_handlers[event_type] then
+    return
+  end
+  if not event_handlers[event_type].validate(data) then
+    return
+  end
+
+  local song_pattern = data.song_pattern or program.get().selected_song_pattern
+  return memory.record_event_for_target(song_pattern, channel_number, event_type, data)
 end
 
 function memory.undo(channel_number)

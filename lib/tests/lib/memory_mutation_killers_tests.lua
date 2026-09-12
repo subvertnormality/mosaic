@@ -67,6 +67,24 @@ function test_memory_killer_chord_degrees_accept_distinct_degrees_within_two_oct
   luaunit.assert_nil(channel.step_note_masks[2])
 end
 
+function test_memory_killer_explicit_record_target_does_not_follow_selection()
+  program.init()
+  mem.init()
+  program.set_selected_song_pattern(1)
+  local selected = program.get_channel(1, 1)
+  local target = program.get_channel(2, 1)
+
+  mem.record_event_for_target(2, 1, "note_mask", {step = 6, note = 73})
+
+  luaunit.assert_nil(selected.step_note_masks[6])
+  luaunit.assert_equals(target.step_note_masks[6], 73)
+  luaunit.assert_equals(program.get().selected_song_pattern, 1)
+  luaunit.assert_equals(mem.get_total_event_count(1), 1)
+  mem.undo(1)
+  luaunit.assert_nil(target.step_note_masks[6])
+  luaunit.assert_equals(program.get().selected_song_pattern, 1)
+end
+
 function test_memory_killer_trig_lock_without_a_parameter_is_not_remembered()
   local channel = fresh_channel()
   mem.record_event(1, "trig_lock", {step = 1, value = 5, song_pattern = 1})
