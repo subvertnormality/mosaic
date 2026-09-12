@@ -1,6 +1,6 @@
 # Final unit and integration hardening pass
 
-Status: planned, mandatory final goal extension requested 2026-09-09.
+Status: in progress; reconciled matrix and drift guard landed 2026-09-12. Test expansion and final validation remain open.
 
 Run after the planned emulator delivery and Mosaic behaviour campaign and before
 the broad Mosaic refactor. Existing unit/integration tests remain useful during

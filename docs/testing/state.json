@@ -5209,5 +5209,16 @@
       "measurement_only": true,
       "performance_fixes_authorized": false
     }
+  },
+  "unit_integration_hardening": {
+    "status": "in-progress",
+    "plan": "docs/testing/UNIT-INTEGRATION-HARDENING.md",
+    "matrix": "docs/testing/unit-integration-hardening-matrix.json",
+    "guard": "tests/behaviour/test_hardening_matrix.py",
+    "requirements_owned": 141,
+    "production_lua_modules_owned": 67,
+    "unit_integration_files_owned": 55,
+    "domains": 15,
+    "final_validation": "pending"
   }
 }
