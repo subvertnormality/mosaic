@@ -85,6 +85,32 @@ function test_saved_project_restores_locks_masks_scales_and_memory()
   luaunit.assert_equals(channel.step_note_masks[1], 72)
 end
 
+function test_project_replacement_rebinds_memory_to_the_new_store()
+  program.init()
+  memory.init()
+  local previous = program.get().memory
+  local replacement = {
+    nrpn_policy_version = 1,
+    song_patterns = {},
+    memory = {
+      serialized = {
+        channels = {},
+        current_indices = {[3] = 0},
+        original_states = {},
+        pattern_states = {}
+      }
+    }
+  }
+
+  program.set(replacement)
+  local bound = memory.get_state()
+  luaunit.assert_false(rawequal(program.get().memory, previous))
+  luaunit.assert_true(rawequal(bound.channels, program.get().memory.channels))
+  luaunit.assert_true(rawequal(bound.current_indices, program.get().memory.current_indices))
+  luaunit.assert_true(rawequal(bound.original_states, program.get().memory.original_states))
+  luaunit.assert_equals(memory.get_event_count(3), 0)
+end
+
 function test_hardening_all_ten_parameter_assignments_round_trip_on_highest_song_and_channel()
   program.init()
   memory.init()

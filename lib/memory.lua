@@ -289,8 +289,17 @@ end
 
 -- Main state structure
 
-local state = program.get().memory
+local state
 
+function memory.bind_project(project_memory)
+  project_memory.channels = project_memory.channels or {}
+  project_memory.current_indices = project_memory.current_indices or {}
+  project_memory.original_states = project_memory.original_states or {}
+  project_memory.pattern_states = project_memory.pattern_states or {}
+  state = project_memory
+end
+
+memory.bind_project(program.get().memory)
 
 function memory.init()
   local mem = program.get().memory
@@ -300,7 +309,7 @@ function memory.init()
   mem.pattern_states = {}
   
   -- Clear any existing state when initializing
-  state = mem
+  memory.bind_project(mem)
 end
 
 if not state.channels and not state.current_indices and not state.original_states then

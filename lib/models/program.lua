@@ -17,6 +17,7 @@ end
 
 function program.init()
   program_store = model_defaults.program(pages.pages.channel_edit_page)
+  if memory and memory.bind_project then memory.bind_project(program_store.memory) end
 end
 
 function program.is_song_pattern_active(p)
@@ -127,6 +128,9 @@ function program.set(p)
     }
   end
   
+  -- Bind history ownership to the replacement project before restoring it.
+  if memory and memory.bind_project then memory.bind_project(program_store.memory) end
+
   -- Deserialize the memory state if it exists
   if program_store.memory.serialized then
     memory.deserialize_state(program_store.memory.serialized)
