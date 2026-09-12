@@ -1594,3 +1594,13 @@ restored mapping, panic and playback. The matrix no longer overclaims all 128
 relative-control bytes: decoding is provided by pinned official norns, while Mosaic
 drives representative documented values through that runtime. H13 is complete with
 the explicit hotplug/note/transport interaction partition. No production code changed.
+
+
+## Lock and recording hardening reconciliation — 2026-09-12
+
+H04 and H10 are complete with explicit interaction partitions. Ten-slot lock and
+recording matrices cover boundary state and lifecycle; native parameter, patch and
+triple-interaction cases retain family/UI behavior. The stale H10 input-channel gap
+is closed by M-MIDI-002's 16-channel/two-port matrix plus M-REC-016/024/025: MIDI
+input channel affects message identity while the selected Mosaic channel owns
+recording and output. No production code changed.

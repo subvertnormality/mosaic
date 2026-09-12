@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "planned-hardening-matrix-reconciled",
-  "base_revision": "0c3943e",
+  "base_revision": "39ccaf4",
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "inventory": "tests/behaviour/manual-inventory.json",
@@ -547,8 +547,8 @@
       ],
       "interaction_strategy": "Exhaustive 0-100 probability draws and all ten lock/slide slots, crossed with boundary song, channel and step identities; deterministic pairwise native cases retain trigless-slide-clock and persistence interactions.",
       "residual_gaps": [
-        "Device-definition reassignment and clear/reassign behaviour across MIDI, norns and stock parameter families remains a composed UI/native concern.",
-        "Probability outcomes crossed with locks, random offsets, song transitions and persistence remain partitioned native interactions."
+        "All ten slots and boundary song/channel/step identities are unit-covered. MIDI reassignment lifecycle is composed in H03 and native M-PARAM/M-PATCH cases; norns-family ownership is anchored by M-XA-005/006; stock lock arithmetic is covered by step matrices.",
+        "Probability is exhaustive over 0..100 against draws 0..99. Locks, random offsets, song transitions and persistence are retained as deterministic pairwise/triple native interactions rather than their unbounded Cartesian product."
       ],
       "requirement_ids": [
         "LOCK-CLEAR-PAGE",
@@ -722,7 +722,7 @@
         "M-XA-005-NB-LOCK",
         "M-XA-006-NB-CHORD-ACCEL"
       ],
-      "status": "hardening-in-progress"
+      "status": "hardening-complete-partitioned"
     },
     {
       "id": "H05",
@@ -1630,9 +1630,9 @@
       ],
       "interaction_strategy": "First press to final release state transitions; pairwise source/channel/arm/page and named song-lock-clock triples.",
       "residual_gaps": [
-        "All ten live parameter-recording slots now update together through the composed clock path, remain channel-isolated, and retire at the pattern wrap; all ten definitions, locks and slides independently round-trip at song 96/channel 16.",
-        "The higher-order combination of a live ten-slot edit with modulation and an actual song-slot transition remains partitioned across native triple-interaction cases rather than exhaustively multiplied in Lua.",
-        "Non-channel-1 keyboard input semantics remain decision-bound."
+        "All ten live parameter-recording slots update together through the composed clock path, remain channel-isolated, and retire at the pattern wrap; all ten definitions, locks and slides independently round-trip at song 96/channel 16.",
+        "Live ten-slot edits with modulation, song transitions and persistence are partitioned across native M-REC-PARAM and M-TRIPLE interactions rather than exhaustively multiplied in Lua.",
+        "Keyboard input-channel semantics are resolved: M-MIDI-002 covers all 16 input channels on two ports and both release forms; M-REC-016 and M-REC-024/025 prove selected-Mosaic-channel recording and overlapping-source ownership."
       ],
       "requirement_ids": [
         "REC-ARM",
@@ -1740,7 +1740,7 @@
         "M-XA-003-JF-OWNERSHIP",
         "M-XA-004-JF-OVERLAP"
       ],
-      "status": "hardening-in-progress"
+      "status": "hardening-complete-partitioned"
     },
     {
       "id": "H11",
