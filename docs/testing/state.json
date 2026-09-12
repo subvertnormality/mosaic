@@ -7,7 +7,7 @@
   "status": "in_progress",
   "plan_review": "completed-with-triage",
   "manual_sections": 113,
-  "next_action": "2026-09-12: Current HEAD includes the qualified pattern-boundary fix and PERF-004/008 test-only guards. The idle integrated suite passes 1513/1513 Lua tests after fix-branch consolidation. Canonical PERF-002 passes; PERF-003, PERF-004, M-ENDURANCE-001 and PERF-008 retain constrained real-time musical-timing failures. Generic native trace commit 2223a23 proves the pinned official internal-clock skip-ahead path can emit an exact 41.6666666667 ms displacement after a two-deadline miss; the retained endurance capture was untraced, so source attribution remains open. No performance or general-refactor change. Continue trace-enabled idle-host endurance evidence, eligible nonduplicate PERF-005..007 reconciliation, unit/integration hardening, and defects not awaiting UX verdicts.",
+  "next_action": "2026-09-12: All eight ux/pending-hands-on decisions are emulator-resolved, kept, active and freshly validated at 300e93a (seven in controlled and real-time; the crow-jf n.b. case in its applicable real-time profile). The integrated suite passes 1513/1513 Lua tests. Continue the remaining behavior, timing/performance, unit/integration hardening and general-purpose emulator release gates before refactor.",
   "stages": {
     "T00": "in_progress",
     "T01": "in_progress",
@@ -41,32 +41,108 @@
     },
     "M-EDIT-FLICKER-001": {
       "controlled": {
-        "path": "/home/andy/projects/mosaic-behaviour-runs/b76fd4cfee7a4082af76f543f5e48d1b/manifest.json",
-        "sha256": "6b4f35cae7013c259ba95827d09ef7807f1a21ed5e4aec565016fd9a96a2c3dd"
+        "path": "/home/andy/projects/mosaic-behaviour-runs/4b13fd78c0cb49da8d4ed3e815644f7c/manifest.json",
+        "sha256": "5b2bf21c2201476042a2ecc9c0943a1ae2987cd5f2facd46fced4ae42590c3e1",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
       },
       "real_time": {
-        "path": "/home/andy/projects/mosaic-behaviour-runs/d38d15e2da2448959aeccd5baca92bf6/manifest.json",
-        "sha256": "1805258e7a9fc85f7718676c3c1ac938c58a3d167497b9afb4eeb157df473fe5"
+        "path": "/home/andy/projects/mosaic-behaviour-runs/f5b5657f48494006a3fa56089c00a54b/manifest.json",
+        "sha256": "9d831ec9c25584c54b4938028d6eb4c4e71f18da78b32cde715fda8c23a4f3c8",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
       }
     },
     "M-MASK-CHORD-X-001": {
       "controlled": {
-        "path": "/home/andy/projects/mosaic-behaviour-runs/e5840ddeef3a4f69b3d8a220a7ce11a5/manifest.json",
-        "sha256": "74a2e38512c7ed152c4b979ae02719e1a46a5a9d6f30cfc5afc34a26f8355bbd"
+        "path": "/home/andy/projects/mosaic-behaviour-runs/cab9745fa7024ccca944087d120701b2/manifest.json",
+        "sha256": "3d440a8a2cade7b4aea6f77a7fd2ec42569676596882574e59b73f21aaeb6687",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
       },
       "real_time": {
-        "path": "/home/andy/projects/mosaic-behaviour-runs/39da40aec7e34959a49d15e79a066b6a/manifest.json",
-        "sha256": "22d65b64c0529b517b6d524908f8705c53edd53b2aeb8fac9fa5cccc9634cd03"
+        "path": "/home/andy/projects/mosaic-behaviour-runs/a5c987a34a3d4b6cbab92584b650aa34/manifest.json",
+        "sha256": "74b7125d901954756c44aba59fe3e669eaa6fa82ab54f1b8c1bbc0bfb31387e0",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
       }
     },
     "M-MASK-OFF-001": {
       "controlled": {
-        "path": "/home/andy/projects/mosaic-behaviour-runs/178242d5ab3a4cd58afb852aaaefd983/manifest.json",
-        "sha256": "f855e853a98dedd41e8b164e8056f963ecacfd822e44b6611e911ae148b895fc"
+        "path": "/home/andy/projects/mosaic-behaviour-runs/62365d112891416f9aed491f6387e222/manifest.json",
+        "sha256": "fda9ff115182c956cdde753fc53299b90d86bcded3bafdef49a8008106233bd9",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
       },
       "real_time": {
-        "path": "/home/andy/projects/mosaic-behaviour-runs/4fa40f79c1bc40e7af0022e3d4aedbb5/manifest.json",
-        "sha256": "fb814b7e304747d2e2dd4bc28c9b00bcf6a1a99fad9389d5fe7b5b65c191d46b"
+        "path": "/home/andy/projects/mosaic-behaviour-runs/65943ec2758c4b8d9288b5981e032323/manifest.json",
+        "sha256": "66c1fa399fbf90fcaafd6d2d1f0ee644d2a38d7bf0cd0cdba1c475c61e17a7cf",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+      }
+    },
+    "M-MAP-PAGE-RETURN-001": {
+      "controlled": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/3df481cf59cc4de0855d981ffb2293ac/manifest.json",
+        "sha256": "a1f3613f54e26a38447edc619b799ca562046bc72e1d263c71a8ef2c713f7eaa",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+      },
+      "real_time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/4850a64c69d748ebbf3e05d836413178/manifest.json",
+        "sha256": "77d1d7ccc110c8fa955536a1b17c10dd5d09c29ad2e96384d550ea7796dcbdd8",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+      }
+    },
+    "M-KEYBOARD-STOP-001": {
+      "controlled": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/6f85e3232e2a47d78bf8bc243e4a55cf/manifest.json",
+        "sha256": "630b0d430689dff65c34026a07d301b93c4c344fe2a30739e8087b07c853b5dc",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+      },
+      "real_time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/b2514683a3bd4a839bfd73f014afd600/manifest.json",
+        "sha256": "6412edeac9a7558aa0a62d08bb031baa21725bef0fb5eb1e22b65ce5d7e8904b",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+      }
+    },
+    "M-REC-PAGE-KEY-001": {
+      "controlled": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/88fac56aa50b4e6a9fc4945b038af587/manifest.json",
+        "sha256": "c5c7688de50ae0fa8dd23318e8b613ffe020677a5d7c814c0bcb14cada873a28",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+      },
+      "real_time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/cc37989c9d044d7c894f53a86f20918c/manifest.json",
+        "sha256": "31edf4d3aabfde3455465c28599a240a330a1126d1627c459d56f284af24b58f",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+      }
+    },
+    "M-MEMORY-012": {
+      "controlled": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/4405750b0f9a48668be36de023ab96e4/manifest.json",
+        "sha256": "ddc2ce7bde021b99682850fc7cbd1d4919db758a037cf60d8a6f600edbcbb630",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+      },
+      "real_time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/839cb88d201e49038fa3e68befbaf1c7/manifest.json",
+        "sha256": "67068e4bc87cab6ae2b96d560173f0067609640a61fb482f0e405612a0458e93",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+      }
+    },
+    "M-XA-007-NB-SWITCH-SLOTS": {
+      "real_time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/58161ce7e0a54275808d2ea4be555229/manifest.json",
+        "sha256": "78f079c9cddf4ddd5e628064e2f9ed08cf8cc2587e3bd8e291c1069bc6e5d3f6",
+        "passed": true,
+        "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
       }
     }
   },
@@ -5265,5 +5341,121 @@
       },
       "production_change": false
     }
+  },
+  "ux_pending_hands_on": {
+    "status": "resolved-by-emulator",
+    "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d",
+    "decisions": 8,
+    "kept": 8,
+    "manual_verdicts_remaining": 0,
+    "evidence": {
+      "M-EDIT-FLICKER-001": {
+        "controlled": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/4b13fd78c0cb49da8d4ed3e815644f7c/manifest.json",
+          "sha256": "5b2bf21c2201476042a2ecc9c0943a1ae2987cd5f2facd46fced4ae42590c3e1",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        },
+        "real_time": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/f5b5657f48494006a3fa56089c00a54b/manifest.json",
+          "sha256": "9d831ec9c25584c54b4938028d6eb4c4e71f18da78b32cde715fda8c23a4f3c8",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        }
+      },
+      "M-MASK-CHORD-X-001": {
+        "controlled": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/cab9745fa7024ccca944087d120701b2/manifest.json",
+          "sha256": "3d440a8a2cade7b4aea6f77a7fd2ec42569676596882574e59b73f21aaeb6687",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        },
+        "real_time": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/a5c987a34a3d4b6cbab92584b650aa34/manifest.json",
+          "sha256": "74b7125d901954756c44aba59fe3e669eaa6fa82ab54f1b8c1bbc0bfb31387e0",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        }
+      },
+      "M-MASK-OFF-001": {
+        "controlled": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/62365d112891416f9aed491f6387e222/manifest.json",
+          "sha256": "fda9ff115182c956cdde753fc53299b90d86bcded3bafdef49a8008106233bd9",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        },
+        "real_time": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/65943ec2758c4b8d9288b5981e032323/manifest.json",
+          "sha256": "66c1fa399fbf90fcaafd6d2d1f0ee644d2a38d7bf0cd0cdba1c475c61e17a7cf",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        }
+      },
+      "M-MAP-PAGE-RETURN-001": {
+        "controlled": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/3df481cf59cc4de0855d981ffb2293ac/manifest.json",
+          "sha256": "a1f3613f54e26a38447edc619b799ca562046bc72e1d263c71a8ef2c713f7eaa",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        },
+        "real_time": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/4850a64c69d748ebbf3e05d836413178/manifest.json",
+          "sha256": "77d1d7ccc110c8fa955536a1b17c10dd5d09c29ad2e96384d550ea7796dcbdd8",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        }
+      },
+      "M-KEYBOARD-STOP-001": {
+        "controlled": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/6f85e3232e2a47d78bf8bc243e4a55cf/manifest.json",
+          "sha256": "630b0d430689dff65c34026a07d301b93c4c344fe2a30739e8087b07c853b5dc",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        },
+        "real_time": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/b2514683a3bd4a839bfd73f014afd600/manifest.json",
+          "sha256": "6412edeac9a7558aa0a62d08bb031baa21725bef0fb5eb1e22b65ce5d7e8904b",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        }
+      },
+      "M-REC-PAGE-KEY-001": {
+        "controlled": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/88fac56aa50b4e6a9fc4945b038af587/manifest.json",
+          "sha256": "c5c7688de50ae0fa8dd23318e8b613ffe020677a5d7c814c0bcb14cada873a28",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        },
+        "real_time": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/cc37989c9d044d7c894f53a86f20918c/manifest.json",
+          "sha256": "31edf4d3aabfde3455465c28599a240a330a1126d1627c459d56f284af24b58f",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        }
+      },
+      "M-MEMORY-012": {
+        "controlled": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/4405750b0f9a48668be36de023ab96e4/manifest.json",
+          "sha256": "ddc2ce7bde021b99682850fc7cbd1d4919db758a037cf60d8a6f600edbcbb630",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        },
+        "real_time": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/839cb88d201e49038fa3e68befbaf1c7/manifest.json",
+          "sha256": "67068e4bc87cab6ae2b96d560173f0067609640a61fb482f0e405612a0458e93",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        }
+      },
+      "M-XA-007-NB-SWITCH-SLOTS": {
+        "real_time": {
+          "path": "/home/andy/projects/mosaic-behaviour-runs/58161ce7e0a54275808d2ea4be555229/manifest.json",
+          "sha256": "78f079c9cddf4ddd5e628064e2f9ed08cf8cc2587e3bd8e291c1069bc6e5d3f6",
+          "passed": true,
+          "revision": "300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d"
+        }
+      }
+    },
+    "scope": "User-like runtime inputs with user-perceived MIDI, grid, screen, parameter-menu, persistence, and lifecycle outputs; no physical-hardware equivalence claim."
   }
 }

@@ -1776,3 +1776,16 @@ controlled manifests are `b76fd4cfee7a4082af76f543f5e48d1b`,
 and `4fa40f79c1bc40e7af0022e3d4aedbb5`. The last case includes its
 autosave/restart path. All 1,513 Lua unit/integration tests and all 37
 structural, inventory, routing and oracle tests pass on the consolidated tree.
+
+## Emulator-arbitrated UX decisions — 2026-09-12
+
+The eight fixes formerly held on `ux/pending-hands-on` are now retained on
+`codex/behaviour-validation`. Automated user-like scenarios provide the decision
+evidence: S10, S14, S18, S24, S26, S32 and S34 pass controlled and real-time;
+S4 passes its applicable real-time `crow-jf` profile. The cases assert observable
+MIDI, grid, screen, parameter-menu, persistence and lifecycle behavior rather
+than internal Mosaic state. All fresh manifests are source-bound to clean revision
+`300e93a85e6a7de41c1f3e9f4c2badb9fa57a13d`; exact run IDs and hashes are recorded
+in `state.json` and `hands-on-checklist.md`. The full Lua unit/integration suite
+passes 1,513/1,513. No manual UX verdict remains, and no physical-hardware
+equivalence is claimed.
