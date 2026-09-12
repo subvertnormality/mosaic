@@ -32,7 +32,8 @@ class HardeningMatrixTests(unittest.TestCase):
         self.assertEqual(digest(INVENTORY_PATH), self.matrix["inventory_sha256"])
 
     def test_every_requirement_module_and_test_file_has_an_owner(self):
-        expected_requirements = {row["id"] for row in self.inventory["requirements"]}
+        expected_requirements = {row["id"] for row in self.inventory["requirements"]
+                                 if row.get("status") != "excluded-by-user"}
         actual_requirements = {value for row in self.matrix["domains"] for value in row["requirement_ids"]}
         self.assertEqual(expected_requirements, actual_requirements)
         expected_modules = {p.relative_to(ROOT).as_posix() for p in (ROOT / "lib").rglob("*.lua")
@@ -45,6 +46,15 @@ class HardeningMatrixTests(unittest.TestCase):
         self.assertEqual(self.matrix["counts"], {"requirements": len(expected_requirements),
             "production_lua_modules": len(expected_modules), "unit_integration_files": len(expected_tests),
             "domains": len(self.matrix["domains"])})
+
+    def test_user_exclusions_have_no_cases_or_test_lanes(self):
+        excluded = [row for row in self.inventory["requirements"]
+                    if row.get("status") == "excluded-by-user"]
+        self.assertTrue(excluded)
+        for row in excluded:
+            self.assertEqual(row["cases"], [], row["id"])
+            self.assertEqual(row["lanes"], [], row["id"])
+            self.assertTrue(row.get("scope_decision", "").strip(), row["id"])
 
     def test_references_and_finite_axis_claims_are_live_and_explicit(self):
         requirement_ids = {row["id"] for row in self.inventory["requirements"]}

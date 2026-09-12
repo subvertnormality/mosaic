@@ -2957,7 +2957,9 @@
     "implemented_cases": 416,
     "requirements": 141,
     "requirements_with_case": 73,
-    "scope": "Bindings only; not full domain or release coverage"
+    "scope": "Bindings only; not full domain or release coverage",
+    "excluded_by_user": 1,
+    "active_requirements": 140
   },
   "note_pattern_selector_validation": {
     "status": "validated",
@@ -5321,7 +5323,7 @@
     "plan": "docs/testing/UNIT-INTEGRATION-HARDENING.md",
     "matrix": "docs/testing/unit-integration-hardening-matrix.json",
     "guard": "tests/behaviour/test_hardening_matrix.py",
-    "requirements_owned": 141,
+    "requirements_owned": 140,
     "production_lua_modules_owned": 67,
     "unit_integration_files_owned": 58,
     "domains": 15,
@@ -5340,7 +5342,8 @@
         "failed": 0
       },
       "production_change": false
-    }
+    },
+    "excluded_requirements": 1
   },
   "ux_pending_hands_on": {
     "status": "resolved-by-emulator",

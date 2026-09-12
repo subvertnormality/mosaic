@@ -7267,10 +7267,7 @@
       "oracles": [
         "No webpage oracle required by user scope decision; downstream generated-config behavior is owned by the setup/device requirements."
       ],
-      "lanes": [
-        "E",
-        "D"
-      ],
+      "lanes": [],
       "source": {
         "path": "README.md",
         "line": 185,
