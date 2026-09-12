@@ -171,14 +171,19 @@ function Lattice.auto_pulse(s)
       -- replaying a musically stale pulse backlog, then bound each catch-up
       -- slice so transport remains responsive throughout reconciliation.
       local backlog = due - next_pulse + 1
-      if backlog > s.ppqn / 2 then clock.sleep(0) end
+      if backlog > s.ppqn / 2 then
+        clock.sleep(0)
+        if not s.enabled then return end
+      end
       local reconciled = 0
       while next_pulse <= due do
         s:pulse()
+        if not s.enabled then return end
         next_pulse = next_pulse + 1
         reconciled = reconciled + 1
         if reconciled >= s.ppqn / 2 and next_pulse <= due then
           clock.sleep(0)
+          if not s.enabled then return end
           due = math.floor(clock.get_beats() * s.ppqn + 1e-9)
           reconciled = 0
         end

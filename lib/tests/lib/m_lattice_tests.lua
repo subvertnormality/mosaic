@@ -1063,6 +1063,41 @@ function test_external_lattice_large_backlog_yields_before_and_during_reconcilia
   if not ok then error(message) end
 end
 
+-- Stop can arrive while the initial yield makes room for queued transport input.
+-- Keep Lattice:pulse real: the wrapper only counts calls into it after Stop.
+function test_external_lattice_stop_after_backlog_yield_preempts_stale_reconciliation()
+  local saved_clock = clock
+  local pulse_calls = 0
+  local candidate = l:new({ppqn = 96, sync_to_external = true,
+    external_clock_active = function() return true end})
+  candidate.enabled = true
+  local real_pulse = candidate.pulse
+  candidate.pulse = function(self)
+    pulse_calls = pulse_calls + 1
+    return real_pulse(self)
+  end
+  clock = {
+    get_beats = function() return 2 end,
+    sleep = function(seconds) return coroutine.yield("sleep", seconds) end,
+    sync = function(interval, offset) return coroutine.yield("sync", interval, offset) end
+  }
+  local ok, message = pcall(function()
+    local job = coroutine.create(function() l.auto_pulse(candidate) end)
+    local resumed, kind, seconds = coroutine.resume(job)
+    luaunit.assert_true(resumed)
+    luaunit.assert_equals({kind, seconds, pulse_calls}, {"sleep", 0, 0})
+
+    candidate:stop()
+    resumed = coroutine.resume(job)
+    luaunit.assert_true(resumed)
+    luaunit.assert_equals(coroutine.status(job), "dead")
+    luaunit.assert_equals(pulse_calls, 0)
+  end)
+  clock = saved_clock
+  if not ok then error(message) end
+end
+
+
 
 function test_external_lattice_source_epoch_handoff()
   local saved_clock = clock
