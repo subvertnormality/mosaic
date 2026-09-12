@@ -561,19 +561,22 @@ function test_gridctl_vertical_fader_horizontal_offset_selects_screen_column()
   luaunit.assert_equals(draw_log(v, state), {{1, 1, 3}, {1, 7, 3}, {1, 1, 12}})
 end
 
-function test_gridctl_vertical_fader_offset_page_top_row_active_led_does_not_flicker()
-  -- characterisation (suspected defect: the background loop compares the
-  -- on-screen column with selected_pattern but the active LED compares the
-  -- absolute step x, so on pages 2-4 the selected pattern's active top-row LED
-  -- never flickers while on page 1 it does).
+function test_gridctl_vertical_fader_offset_page_top_row_active_led_flickers_on_screen_column()
+  -- README.md:471 on every step page: the active LED compares the on-screen
+  -- column with selected_pattern, like the background loop, so on pages 2-4 the
+  -- selected pattern's active top-row LED flickers and the absolute step does
+  -- not (bugs.json editor-page-selected-pattern-flicker, S18; M-EDIT-FLICKER-001).
   local v = new_vertical_fader(20, 1, 1)
   v:set_horizontal_offset(16)
   v:set_value(1)
   luaunit.assert_equals(draw_log(v, {blink = true, selected_pattern = 4}), {
-    {4, 1, 4}, {4, 7, 3}, {4, 1, 12}
+    {4, 1, 4}, {4, 7, 3}, {4, 1, 13}
+  })
+  luaunit.assert_equals(draw_log(v, {blink = false, selected_pattern = 4}), {
+    {4, 1, 2}, {4, 7, 3}, {4, 1, 11}
   })
   luaunit.assert_equals(draw_log(v, {blink = true, selected_pattern = 20}), {
-    {4, 1, 3}, {4, 7, 3}, {4, 1, 13}
+    {4, 1, 3}, {4, 7, 3}, {4, 1, 12}
   })
 end
 

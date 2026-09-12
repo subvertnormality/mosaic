@@ -28,7 +28,8 @@ function test_memory_killer_note_and_velocity_accept_exactly_the_midi_range()
       luaunit.assert_true(accepted, field .. " " .. value)
       luaunit.assert_equals(channel[masks][2], value)
     end
-    for _, value in ipairs({-1, 128, 200}) do
+    -- -1 is refused for a note; for a velocity it clears the lock (human decision S24)
+    for _, value in ipairs(field == "note" and {-1, 128, 200} or {-2, 128, 200}) do
       local accepted, channel = note_mask_accepted({[field] = value})
       luaunit.assert_false(accepted, field .. " " .. value)
       luaunit.assert_nil(channel[masks][2])

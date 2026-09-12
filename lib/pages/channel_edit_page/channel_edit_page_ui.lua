@@ -1251,7 +1251,8 @@ function channel_edit_page_ui.handle_chord_mask_one_change(channel, direction)
       end
     end
   else
-    mask_selectors.chords[1]:set_value(channel.chord_one_mask or -1)
+    -- An unset chord mask is X (0), as displayed (bugs.json chord-mask-unset-start-x).
+    mask_selectors.chords[1]:set_value(channel.chord_one_mask or 0)
     if direction > 0 then
       mask_selectors.chords[1]:increment()
       program.set_chord_one_mask(channel, mask_selectors.chords[1]:get_value())
@@ -1301,7 +1302,7 @@ function channel_edit_page_ui.handle_chord_mask_two_change(channel, direction)
       end
     end
   else
-    mask_selectors.chords[2]:set_value(channel.chord_two_mask or -1)
+    mask_selectors.chords[2]:set_value(channel.chord_two_mask or 0)
     if direction > 0 then
       mask_selectors.chords[2]:increment()
       program.set_chord_two_mask(channel, mask_selectors.chords[2]:get_value())
@@ -1351,7 +1352,7 @@ function channel_edit_page_ui.handle_chord_mask_three_change(channel, direction)
       end
     end
   else
-    mask_selectors.chords[3]:set_value(channel.chord_three_mask or -1)
+    mask_selectors.chords[3]:set_value(channel.chord_three_mask or 0)
     if direction > 0 then
       mask_selectors.chords[3]:increment()
       program.set_chord_three_mask(channel, mask_selectors.chords[3]:get_value())
@@ -1401,7 +1402,7 @@ function channel_edit_page_ui.handle_chord_mask_four_change(channel, direction)
       end
     end
   else
-    mask_selectors.chords[4]:set_value(channel.chord_four_mask or -1)
+    mask_selectors.chords[4]:set_value(channel.chord_four_mask or 0)
     if direction > 0 then
       mask_selectors.chords[4]:increment()
       program.set_chord_four_mask(channel, mask_selectors.chords[4]:get_value())

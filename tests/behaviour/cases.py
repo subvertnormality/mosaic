@@ -47,6 +47,7 @@ from song_queue_stop import song_queue_stop
 from song_slot_copy import song_slot_copy
 from midi_mapping_targets import midi_mapping_targets
 from pattern_boundary_edit import pattern_boundary_edit
+from editor_pattern_flicker import editor_pattern_flicker
 from reset_pending_voice import reset_pending_voice
 from swing_reset_mid_step import swing_reset_mid_step
 from slide_reset_mid_step import slide_reset_mid_step
@@ -84,6 +85,8 @@ from mask_gestures import multiheld_keyboard
 from mask_gestures import held_keyboard_chord
 from mask_gestures import trig_gesture_all_steps
 from held_mask_extra_key import held_mask_extra_key
+from chord_mask_start_x import chord_mask_start_x
+from mask_off_probe import mask_off_probe
 from mask_quantisation import mask_full_chord_inheritance
 from mask_quantisation import mask_full_quantisation
 from mask_quantisation import mask_scale_snap
@@ -3933,6 +3936,8 @@ CASES={
  'M-RANGE-REJECT-001':dict(run=lambda c:rejected_range(c,False),requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageFalse: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
  'M-MASK-031':dict(run=lambda c:multiheld_keyboard(c,False),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstFalse: range2..4, first-held target, remaining-held target and untouched middle step'),
  'M-MASK-HELD-EXTRA-001':dict(run=held_mask_extra_key,requirements=['MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='A held-step velocity turn with a pattern-row key also held locks only the held step, in either press order (README 595-597; human decision S27)'),
+ 'M-MASK-CHORD-X-001':dict(run=chord_mask_start_x,requirements=['MASK-CHORD','MASK-ATTRIBUTES'],description='An unset chord mask starts from X: one turn up shows 2nd, one turn down shows -7th, and every trig sounds root, degree above and degree below (human decision S26)'),
+ 'M-MASK-OFF-001':dict(run=mask_off_probe,requirements=['MASK-ATTRIBUTES','MASK-PRECEDENCE'],description='S24: channel velocity, held-step trig and held-step velocity masks turned back to X play as unset, also after an autosave restart (README 570, 597)'),
  'M-MASK-030':dict(run=lambda c:multiheld_keyboard(c,True),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstTrue: range2..4, first-held target, remaining-held target and untouched middle step'),
  'M-MASK-029':dict(run=lambda c:held_keyboard_chord(c,True,False,True),requirements=['MASK-STEP-ENTRY','MASK-CHORD','MIDI-RELEASE-001'],description='Root release/repress while other chord voices remain held: balanced preview, preserved chord/velocity and clean replacement; grid-firstTrue release'),
  'M-MASK-028':dict(run=lambda c:held_keyboard_chord(c,False,False,True),requirements=['MASK-STEP-ENTRY','MASK-CHORD','MIDI-RELEASE-001'],description='Root release/repress while other chord voices remain held: balanced preview, preserved chord/velocity and clean replacement; grid-firstFalse release'),
@@ -3992,6 +3997,7 @@ CASES={
  'M-MERGE-002':dict(run=inactive_note_priority,requirements=['PAT-INACTIVE-NOTE','MERGE-NOTE-PATTERN'],description='Inactive lower-numbered note source: silence, unassigned/assigned priority, later trig and removal'),
  'M-MERGE-003':dict(run=lambda c:inactive_note_priority(c,3),requirements=['PAT-INACTIVE-NOTE','MERGE-NOTE-PATTERN'],description='Inactive higher-numbered note source: silence, unassigned/assigned priority, later trig and removal'),
  'M-VIEW-001':dict(run=pattern_grid_viewer,requirements=['PAT-VIEWER'],description='Independent screen grid for wide/short channel ranges, all16 E2 selections, clamps and unchanged MIDI/pattern data'),
+ 'M-EDIT-FLICKER-001':dict(run=editor_pattern_flicker,requirements=['PAT-NOTE-SELECT','PAT-STEP-PAGES','PAT-VELOCITY'],description='The chosen pattern\'s top-row active LED flickers on all four step pages of the note and velocity editors; another column does not (README 471)'),
  'M-EDIT-005':dict(run=editor_hold_boundaries,requirements=['PAT-NOTE-RANGE','PAT-VELOCITY'],description='Note/velocity range holds immediately before/after1s and cancelled by a second grid press; exact MIDI and measured real-time margins'),
  'M-EDIT-004':dict(run=note_pattern_selectors,requirements=['PAT-NOTE-SELECT'],description='K1 and long-hold note-editor pattern selection across all16 slots, edit/playback and retained-pattern isolation'),
  'M-EDIT-001':dict(run=editor_note_ranges,requirements=['PAT-NOTE-RANGE'],description='Note range fine steps, held extrema, clamps and center reset'),

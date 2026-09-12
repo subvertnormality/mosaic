@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "c17e8ab",
+  "files": [
+    {
+      "file": "lib/controls/vertical_fader.lua",
+      "before_sha256": "286b5401aaee2951845b1370bf41a265d680417c9fb6200d89b8c0571d57f232",
+      "after_sha256": "6e725bebb2bbd5e98c9b302caf6557e398b71453afbb4ee05eaad2f0b0c26923"
+    }
+  ],
+  "patch": "0131-editor-page-selected-pattern-flicker.patch",
+  "patch_sha256": "5531238676ecc2cfa7c2ee6d1b85791f2668fb10b1535b0296e0e3885b34f035",
+  "regression": "M-EDIT-FLICKER-001",
+  "unit_regression": "test_gridctl_vertical_fader_offset_page_top_row_active_led_flickers_on_screen_column",
+  "baseline": [
+    {
+      "run_id": "0f36f4b2df04465780439bb6e1aa6b29",
+      "case": "M-EDIT-FLICKER-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "d050013ef7c783fb085382dd55e04b76140325ceff2a35a02da95ae2b898da41",
+      "failure": "('Chosen pattern top-row active LED does not flicker', [('note', 'steps 17-32', [12], [12]), ('note', 'steps 33-48', [12], [12]), ('note', 'steps 49-64', [12], [12]), ('velocity', 'steps 17-32', [12],"
+    },
+    {
+      "run_id": "f9246d60bd964cb5805b9b05f0a8d0ae",
+      "case": "M-EDIT-FLICKER-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "70d557c188319fe835dcc39b6645d812d1d302156ea65f8953e5240b64e818e4",
+      "failure": "('Chosen pattern top-row active LED does not flicker', [('note', 'steps 17-32', [12], [12]), ('note', 'steps 33-48', [12], [12]), ('note', 'steps 49-64', [12], [12]), ('velocity', 'steps 17-32', [12],"
+    }
+  ],
+  "rationale": "vertical_fader:draw decided the selected-pattern flicker of the background rows by the on-screen column (x = step - horizontal_offset) but that of the active LED by the absolute step (self.x). On step pages 2-4 of the note and velocity editors the chosen pattern's column therefore showed a steady active LED on the top row (level 12) while page 1 flickered 11/13. The active-LED check now uses the on-screen column, like the row loop. M-PAT-006's page-selection check had pinned the steady level 12 on pattern 3's top-row cell on page 3; it now expects that cell to flicker and keeps the other 15 cells steady.",
+  "oracle": "README 471: 'The gentle flicker on the top row indicates the currently chosen pattern'; README 461: four 16-step pages; README 485: the velocity editor functions similarly to the note page.",
+  "validation": [
+    {
+      "run_id": "fafc8b791310412584b6e9ac8a3cdb48",
+      "case": "M-EDIT-FLICKER-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "40144ecb3ba8b563af93fb7e255c3551922f749fb970c5a6b518af89d97303ac",
+      "failure": null
+    },
+    {
+      "run_id": "8352e0b9838b4dc595ff4a55fa2c2b37",
+      "case": "M-EDIT-FLICKER-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "f27ee6cd581401c7702f6060d95e0160b090b71ca4d41df81d2235c60ac33a88",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-f8d3f53a657d452a816ba262428df484",
+      "case": "M-EDIT-FLICKER-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "06906512980629ea8ea1cb31c88d7e956c87bfd27c70ee5089c273648b898ef0",
+      "failure": null,
+      "normalized_sha256": "1ffeb617f4ff379f38a0ad1f49033b87e9358c5de090f9fb484267dce841ef7e"
+    }
+  ],
+  "collateral": "Controlled lane: M-EDIT-001 ed4d15601b274415b047834d06bff6a4, M-EDIT-002 159b34274eb941a4affd31d710a00719, M-EDIT-003 b46b4e3c7a9740bb8762de5caa08daab, M-EDIT-004 b4b2b8ea84cf48ca882b8aeee2dd1ef9, M-EDIT-005 9f9154fcfd5c4d9f939b39a4bade0b7e, M-PAT-002 1b69f856cbc94228a415e1bc0e882691, M-LEN-003 07ba49d6ec134311b6477ddad472fcd1, M-OCT-003 29e890573c55463f80d96c1a9afa7af5 passed. M-PAT-006 failed with the fix (8a0887d31e8a4407b5362867de2e0fc7: its steady-12 expectation on page 3's (3,1), pattern 3's top-row cell, pinned the defect) and passes with that check updated (df6981fea9a14558a8511ee6696cedc3). Full Lua units 1465/1465 OK (grid_controls characterisation unit updated); guards OK.",
+  "upstream_merged": false
+}
