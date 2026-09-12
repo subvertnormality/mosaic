@@ -3533,7 +3533,8 @@
         "M-PARAM-035",
         "M-REC-PARAM-025",
         "M-REC-PARAM-026",
-        "M-REC-PARAM-027"
+        "M-REC-PARAM-027",
+        "M-MEMORY-012"
       ],
       "status": "partial-domain-coverage",
       "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-MEMORY-006 (E and D, 3 fresh D repeats), characterisation: two recorded mask actions survive idle autosave and a cold restart; the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions. Skipping memory deserialisation on load is detected.",
@@ -3573,7 +3574,8 @@
         "M-MEMORY-013",
         "M-MEMORY-014",
         "M-REC-PARAM-025",
-        "M-REC-PARAM-026"
+        "M-REC-PARAM-026",
+        "M-MEMORY-012"
       ],
       "status": "partial-domain-coverage",
       "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-MEMORY-006 (E and D, 3 fresh D repeats), characterisation: two recorded mask actions survive idle autosave and a cold restart; the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions. Skipping memory deserialisation on load is detected. M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected. M-MEMORY-007 (E and D, 3 fresh D repeats): K1+K3 truncation forgets only its own channel's history (0 of 0) while another channel keeps 1 of 1 and still undoes; both positions and the applied masks survive idle autosave and a cold restart (persistence is characterisation, as M-MEMORY-006). M-MEMORY-008 (E and D): stepping memory back over a held-step velocity lock restores the previous velocity, also after a working-pattern rebuild; suspected defect S15 (velocity written before the release commits) is not reproduced and the case stays as a regression guard. M-MEMORY-009 (E and D, 3 fresh D repeats): redo of an encoder-made held-step note or velocity lock returns to the locked state, immediately and after a working-pattern rebuild (README 697-702). The baseline silenced the step until the next edit (defect memory-redo-working-pattern, fixed).",
@@ -5880,7 +5882,8 @@
         "M-PATCH-033",
         "M-PATCH-034",
         "M-PATCH-064",
-        "M-SLIDE-STEP-001"
+        "M-SLIDE-STEP-001",
+        "M-MEMORY-012"
       ],
       "status": "in_progress",
       "domain": "First/last/wrapped next lock; rest/trigless; global slide mixed; clear/reassign. Mixed local CC plus global NRPN concurrency is covered. M-SLIDE-STEP-001 (E and D, 3 fresh D repeats), CC 1 locks 24/96/48 on steps 1/3/4: a step slide toggled on and off jumps to its destination; a step slide on the last lock has no target with wrap off; with \"Wrap param slides\" on it moves linearly 48->24 across the wrap (40/32/24), arriving with the next step-1 note. Ignoring the wrap option is detected.",

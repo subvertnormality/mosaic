@@ -1027,6 +1027,15 @@
       "summary": "A reset in the middle of a channel step ran the restarted first step straight/unrounded: swing pairs shifted after a song transition, fractional clocks and their slides off by a pulse (S41, S53)"
     },
     {
+      "id": "undo-lock-clears-step-slide",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "undo-lock-clears-step-slide.json",
+      "cases": [
+        "M-MEMORY-012"
+      ],
+      "summary": "Memory undo of a step-slid lock left that parameter's step slide set when another lock remained on the step, so the outline stayed and a later lock there slid without K3 (S34)."
+    },
+    {
       "id": "dial-off-display",
       "status": "fixed-on-worktree-with-real-input-regression",
       "candidate_manifest": "dial-off-display.json",

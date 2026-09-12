@@ -584,18 +584,19 @@ function program.clear_trig_lock_for_step_for_channel(channel, step, parameter)
   if channel.number ~= 17 then
     if channel.step_trig_lock_banks and channel.step_trig_lock_banks[step] and channel.step_trig_lock_banks[step][parameter] then
       channel.step_trig_lock_banks[step][parameter] = nil
-      
+
       -- If step table is empty, remove it
       if next(channel.step_trig_lock_banks[step]) == nil then
         channel.step_trig_lock_banks[step] = nil
-      -- Clear slide params for this step and parameter
-        if channel.step_trig_lock_slides and channel.step_trig_lock_slides[step] then
-          channel.step_trig_lock_slides[step][parameter] = nil
-          
-          -- If step slide table is empty, remove it
-          if next(channel.step_trig_lock_slides[step]) == nil then
-            channel.step_trig_lock_slides[step] = nil
-          end
+      end
+      -- Clear the cleared lock's slide, even while other locks remain on the step
+      -- (bugs.json undo-lock-clears-step-slide)
+      if channel.step_trig_lock_slides and channel.step_trig_lock_slides[step] then
+        channel.step_trig_lock_slides[step][parameter] = nil
+
+        -- If step slide table is empty, remove it
+        if next(channel.step_trig_lock_slides[step]) == nil then
+          channel.step_trig_lock_slides[step] = nil
         end
       end
     end

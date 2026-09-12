@@ -59,6 +59,7 @@ from memory_held_velocity import memory_held_velocity
 from memory_redo_encoder_lock import memory_redo_encoder_lock
 from memory_redo_chord_merge import memory_redo_chord_merge
 from memory_step_undo import memory_step_undo
+from memory_lock_slide_undo import memory_lock_slide_undo
 from memory_chord_three_held import memory_chord_three_held
 from paint_race import paint_race
 from device_picker_names import device_picker_names
@@ -3295,6 +3296,7 @@ CASES={
  'M-TIME-013':dict(run=reset_pending_voice,requirements=['OPT-SEQUENCE-RESET','SONG-ADVANCE','MASK-ATTRIBUTES'],description='A 3-step note sounding across a song transition with reset on sequence change keeps its full length (README 805) while the next slot starts on time'),
  'M-MEMORY-011':dict(run=memory_chord_three_held,requirements=['MASK-CHORD','MEMORY-RECORD'],description='A held-step Chd3 edit turned up three and back one sounds the finally selected chord note, the same as turning it up two, and is one remembered action like the Chd4 control (README 601, 698-707)'),
  'M-MEMORY-010':dict(run=memory_step_undo,requirements=['MEMORY-NAV','MEMORY-RECORD','MASK-ATTRIBUTES'],description='Stepping memory back one action restores the whole step as it was before that action: a note undo keeps an earlier velocity lock, a note undo keeps an earlier chord (also at K3), and a trig lock undo after a note lock or another slot lock drops only that lock (README 698-707)'),
+ 'M-MEMORY-012':dict(run=memory_lock_slide_undo,requirements=['MEMORY-NAV','MEMORY-RECORD','SLIDE-STEP'],description='Stepping memory back over a step-slid trig lock clears that lock\'s step slide while another parameter\'s lock stays on the step: the held step shows no slide outline and a new lock there jumps without K3; hold + K3 on a lock-less step still arms a slide (README 698-703, 964-969)'),
  'M-TIME-014':dict(run=swing_reset_mid_step,requirements=['CH-SWING','OPT-SEQUENCE-RESET','SONG-ADVANCE'],description='A /2 Swing 25 channel restarted mid-step by each song transition (reset on sequence change) keeps its 60/36-pulse swing pairs from step 1: every slot plays like slot 1 from Play (README 683, 1074)'),
  'M-SLIDE-RESET-001':dict(run=slide_reset_mid_step,requirements=['SLIDE-GLOBAL','OPT-REPEAT-RESET','CH-TEMPO'],description='A /2.6 CC slide from step 1 to step 2 restarted mid-step by Reset at Pattern Repeat: every repeat has the first repeat\'s onsets and slide samples (README 964, 1078)'),
  'M-TIME-015':dict(run=shuffle_first_bar_record,requirements=['CH-SHUFFLE','REC-LIVE-NOTES','REC-ARM'],description='First bar with Smooth basis 1 Shuffle at 100% while recording live: exact shuffled onsets and gates from Play, and a short step-2 note and a note held across the step 3 end replay on their steps (README 683, 239; probe for S40)'),
