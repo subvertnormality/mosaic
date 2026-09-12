@@ -4,14 +4,20 @@
 
 local function with_recorder_globals(pressed_keys, record_mode, body)
   local calls = {}
+  local target_calls = {}
   local saved_memory, saved_grid = memory, m_grid
   local saved_record = params:get("record")
-  memory = {record_event = function(c, event_type, data)
-    calls[#calls + 1] = {c, event_type, data}
-  end}
+  memory = {
+    record_event = function(c, event_type, data)
+      calls[#calls + 1] = {c, event_type, data}
+    end,
+    record_event_for_target = function(song_pattern, c, event_type, data)
+      target_calls[#target_calls + 1] = {song_pattern, c, event_type, data}
+    end
+  }
   m_grid = {get_pressed_keys = function() return pressed_keys end}
   params:set("record", record_mode)
-  local ok, err = pcall(body, calls)
+  local ok, err = pcall(body, calls, target_calls)
   memory, m_grid = saved_memory, saved_grid
   params:set("record", saved_record)
   if not ok then error(err, 0) end
@@ -245,6 +251,21 @@ function test_recorder_extra_trig_lock_commit_payload_and_isolation()
     })
     recorder.record_stored_trig_lock_events(4, 5)
     luaunit.assert_equals(calls[2], {4, "trig_lock", {parameter = 1, step = 5, value = 2}})
+  end)
+end
+
+function test_recorder_extra_trig_lock_commit_keeps_the_queued_song_target()
+  local recorder = fresh(1, 1)
+  with_recorder_globals({}, 1, function(calls, target_calls)
+    recorder.add_trig_lock_event_portion(2, 5, {
+      song_pattern = 3,
+      data = {parameter = 4, step = 5, value = 77}
+    })
+    program.set_selected_song_pattern(1)
+    recorder.record_stored_trig_lock_events(2, 5)
+    luaunit.assert_equals(calls, {})
+    luaunit.assert_equals(target_calls, {{3, 2, "trig_lock", {parameter = 4, step = 5, value = 77}}})
+    luaunit.assert_nil(recorder.trig_lock_events[2][5])
   end)
 end
 

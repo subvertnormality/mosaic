@@ -3253,7 +3253,7 @@ from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_p
 
 from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrpn_slide,patch_configured_off_lock
 
-from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording,recording_trigless_toggle
+from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording,recording_trigless_toggle,pending_parameter_lock_song_transition
 
 from shuffle_inheritance import shuffle_type_inheritance,live_shuffle_type_inheritance
 
@@ -3446,6 +3446,7 @@ CASES={
  'M-REC-PARAM-023':dict(run=lambda c:recording_lifetime(c,'mute'),requirements=['REC-PARAM-AUTOMATION','CH-MUTE'],description='Mute spans eligible recording steps: no MIDI during mute, correctly phased resume and distinct-default disarmed lock replay'),
  'M-REC-PARAM-022':dict(run=recording_stop_safety,requirements=['REC-PARAM-AUTOMATION','REC-ARM','NAV-TRANSPORT'],description='Long Stop under Shift press to stop clears pending parameter recording while retaining arm and previously recorded steps'),
  'M-PARAM-046':dict(run=parameter_slot_limit,requirements=['PARAM-SLOTS','LOCK-PARAM-SET'],description='Assign all10 slots through K2, clamp E2 beyond both ends, and prove slot10/slot1 held locks retain exact routes, timing, gates and releases'),
+ 'M-PARAM-047':dict(run=pending_parameter_lock_song_transition,requirements=['PARAM-SLOTS','LOCK-PARAM-SET','MEMORY-RECORD','SONG-ADVANCE','SONG-SLOTS'],description='A held CC lock edit that remains down across a copied-slot song transition belongs to its first-pressed slot: slot1 step2 becomes zero, while octave-fingerprinted slot2 keeps its step2 lock96; independent default65 replays prove exact per-step CC-before-note output'),
  'M-PARAM-045':dict(run=parameter_fine_gesture,requirements=['PARAM-SLOTS','NAV-FINE-K1'],description='Same NRPN E3 detent with K1, neither and K3: exact fine/coarse MIDI values and final patch recall prove K1 fine control while K3 retains coarse adjustment and its slide action'),
  'M-PARAM-044':dict(run=parameter_lock_during_playback,requirements=['PARAM-SLOTS','LOCK-PARAM-SET','PARAM-OFF'],description='Overwrite a future held-step CC lock while step1 sounds; unchanged current four-second gate, new step2 CC before note, and persistent fresh replay'),
  'M-PARAM-043':dict(run=parameter_lock_all_steps_slots,requirements=['PARAM-SLOTS','LOCK-PARAM-SET','PARAM-OFF','OPT-TRIGLESS'],description='Native held-step locks cover every step1..64 distributed across all10 CC slots, first/middle/last overwrite, explicit Off, lock LEDs, exact CC timing and CC-before-note'),

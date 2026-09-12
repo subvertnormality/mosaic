@@ -3534,7 +3534,8 @@
         "M-REC-PARAM-025",
         "M-REC-PARAM-026",
         "M-REC-PARAM-027",
-        "M-MEMORY-012"
+        "M-MEMORY-012",
+        "M-PARAM-047"
       ],
       "status": "partial-domain-coverage",
       "domain": "Each action kind; repeated/equal values; channel isolation; recording bursts. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-MEMORY-006 (E and D, 3 fresh D repeats), characterisation: two recorded mask actions survive idle autosave and a cold restart; the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions. Skipping memory deserialisation on load is detected.",
@@ -3727,6 +3728,7 @@
         "M-SPREAD-004",
         "M-SPREAD-005",
         "M-SPREAD-006",
+        "M-PARAM-047",
         "M-SPREAD-007",
         "M-SPREAD-008",
         "M-SPREAD-009",
@@ -5604,7 +5606,8 @@
         "M-TRIPLE-005",
         "M-PERSIST-COMBINED-001",
         "M-SONG-TEMPO-001",
-        "M-SONG-COPY-001"
+        "M-SONG-COPY-001",
+        "M-PARAM-047"
       ],
       "status": "in_progress",
       "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed). M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-PERSIST-COMBINED-001 (E and D, 3 fresh D repeats): the M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2 locks, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream. Tempo is norns system state (clock_tempo save=false), outside the script autosave. Skipping the pset read on load is detected. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected. M-SONG-COPY-001 (E and D, 3 fresh D repeats): slot copy and erase take the first-pressed slot as the source in either release order (arbitrated SEM-016); source and other slots unchanged. The baseline erased the source when it was released first (defect song-slot-copy-press-order, fixed).",
@@ -5651,7 +5654,8 @@
         "M-SONG-QUEUE-STOP-001",
         "M-TIME-013",
         "M-PAT-BOUNDARY-001",
-        "M-TIME-014"
+        "M-TIME-014",
+        "M-PARAM-047"
       ],
       "status": "in_progress",
       "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed). M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-003 (E and D, 3 fresh D repeats): a note pressed on slot 1 step 4 and released after the transition records on slot 1 step 4, the step and slot active at its first press. The baseline stored it on slot 2 (defect record-slot-at-first-press, fixed). M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected. M-SONG-QUEUE-STOP-001 (E and D, 3 fresh D repeats): a slot or global length queued during playback and interrupted by Stop is discarded (arbitrated SEM-015); the next Play follows song mode from the playing slot; a length set while stopped applies to that slot only. The baseline applied the stale queue at the next Play (defect song-queue-discard-on-stop, fixed). M-TIME-013 (E and D, 3 fresh D repeats): with Reset at Song Sequence Change on, a 3-step note sounding across a song transition keeps its full length (README 805) while the next slot starts its step 1 on time. M-PAT-BOUNDARY-001 (E and D red at a complete channel-16 tap 30 ms before the boundary; E and D green at 80 ms): both grid callbacks finish before the boundary, yet the edit must still be heard the next time its slot plays; open defect pattern-edit-before-song-boundary now has a qualified two-lane baseline for an isolated fix.",
@@ -5756,6 +5760,7 @@
         "M-PARAM-044",
         "M-MOD-004",
         "M-PARAM-046",
+        "M-PARAM-047",
         "M-TRIPLE-005",
         "M-XA-005-NB-LOCK",
         "M-XA-006-NB-CHORD-ACCEL"

@@ -582,3 +582,65 @@ def sparse_editor_domain(c,domain):
         c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
         checked.append(dict(direction=direction,value=value,fine=fine))
     c.results.append(dict(kind='native-sparse-singleton-editor-domain',domain=domain,operations=checked,clamp_and_Off=True,passed=True))
+
+
+def pending_parameter_lock_song_transition(c):
+    """A held parameter edit belongs to the song slot active at first press."""
+    from cases import assign_trig_parameter,menu_value
+    from patch_params import open_patch_control,turn
+    c.configure()
+    open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
+    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    def lock(step,value):
+        c.action(type='grid',x=step,y=4,state=1)
+        try:
+            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
+        finally:c.action(type='grid',x=step,y=4,state=0)
+    lock(2,24)
+    # Slot 2 is a copy with a distinct octave and step-2 lock.
+    c.tap(6,8);c.tap(2,7)
+    for _ in range(7):c.tap(8,7)
+    c.hold_tap((1,1),(2,1));c.tap(2,1);c.led_values([(1,1),(2,1)],[7,15])
+    c.tap(3,8);c.tap(11,8);lock(2,96)
+    c.tap(6,8);c.tap(1,1);c.led_values([(1,1),(2,1)],[15,7])
+    c.tap(3,8);c.screen_header('Ch. 1 Trig Locks',selected=2)
+
+    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    def onsets(state,after=marker):
+        return [e for e in state['midi'] if e['index']>after and e['bytes'][0]==144 and e['bytes'][2]>0]
+    first=c.wait(lambda state:len(onsets(state))>=1,timeout=3)
+    assert onsets(first)[0]['bytes']==[144,60,127]
+    c.action(type='grid',x=2,y=4,state=1)
+    try:
+        c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,1)
+        # Value zero is queued while slot 1 owns the gesture. Keep it held
+        # across the actual boundary, whose octave proves slot 2 is live.
+        crossed=c.wait(lambda state:any(e['bytes']==[144,72,127] for e in onsets(state)),timeout=12)
+        assert any(e['bytes']==[144,72,127] for e in onsets(crossed))
+    finally:c.action(type='grid',x=2,y=4,state=0)
+    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    c.tap(6,8);c.led_values([(1,1),(2,1)],[7,15])
+    c.tap(3,8)
+
+    def select_slot(slot):
+        c.tap(6,8);c.tap(slot,1);c.tap(3,8);c.screen_header('Ch. 1 Trig Locks',selected=2)
+    # A distinct unheld default separates locks from ordinary values in both slots.
+    for slot in (1,2):
+        select_slot(slot)
+        c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,66)
+
+    def replay(slot,pitches,step_two):
+        select_slot(slot);start=c.snapshot()['midi_count'];c.tap(1,8)
+        state=c.wait(lambda current:len(onsets(current,start))>=4,timeout=8)
+        notes=onsets(state,start)[:4];cutoff=notes[-1]['index']
+        cc=[e for e in state['midi'] if start<e['index']<=cutoff and e['bytes'][:2]==[176,1]]
+        expected_notes=[[144,pitch,velocity] for pitch,velocity in zip(pitches,(127,117,107,97))]
+        expected_cc=[[176,1,value] for value in (65,65,step_two,65,65)]
+        assert [e['bytes'] for e in notes]==expected_notes,(slot,notes,expected_notes)
+        assert [e['bytes'] for e in cc]==expected_cc,(slot,cc,expected_cc)
+        for control,note in zip(cc[1:],notes):assert control['index']<note['index']
+        c.tap(1,8);c.wait(lambda current:not current['midi_capture']['outstanding'])
+        return dict(slot=slot,pitches=pitches,controls=expected_cc,passed=True)
+    slot1=replay(1,[60,62,64,65],0)
+    slot2=replay(2,[72,74,76,77],96)
+    c.results.append(dict(kind='pending-parameter-lock-song-transition',slot1=slot1,slot2=slot2,held_value=0,passed=True))

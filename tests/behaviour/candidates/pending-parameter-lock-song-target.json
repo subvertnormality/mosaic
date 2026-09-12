@@ -1,0 +1,58 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "43ee34b",
+  "files": [
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "f47cc8af11c0006a8886a28989a89ed2251d880e477a203235202d30b2db6ee3",
+      "after_sha256": "e14ecc760085897232e2ecc3c1182a8ef7d9fd7d6954fc12caf2f1d3c29d02c6"
+    },
+    {
+      "file": "lib/recorder.lua",
+      "before_sha256": "0caabbb961047c3ad47450ab930c71f3e7f5f98e0fd60508c05d14057127344b",
+      "after_sha256": "06be4394225e2a5043a7d1585389dfe55bef169528bdbdccb39675688b76ffbb"
+    }
+  ],
+  "patch": "0113-pending-parameter-lock-song-target.patch",
+  "patch_sha256": "23e20b70885e3089ebc0cc89983ae7d3fce4122e60c301b6add80a6739bf1d38",
+  "regression": "M-PARAM-047",
+  "unit_regression": "test_recorder_extra_trig_lock_commit_keeps_the_queued_song_target",
+  "baseline": [
+    {
+      "run_id": "8c5b2d2bbaaa4453beb083cf378e8d00",
+      "case": "M-PARAM-047",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "c56217b7c6353763795844ea303fdc1109a0651544f63df00e655d335396d90a",
+      "failure": "Slot 1 step 2 replayed its old CC value 24 instead of the queued value 0; the pending edit followed slot 2 at release."
+    },
+    {
+      "run_id": "8d08e488f5d44249b01c339b0c59f91e",
+      "case": "M-PARAM-047",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "c8ee5c4b473a87e2542f141e4b0aa93680910b82137791859bf0c94bc148a597",
+      "failure": "Slot 1 step 2 replayed its old CC value 24 instead of the queued value 0; the pending edit followed slot 2 at release."
+    }
+  ],
+  "rationale": "A held-step parameter-lock edit was stored without its song identity. If song mode advanced before the step was released, recorder.record_stored_trig_lock_events called memory.record_event, which resolved the song selected at release. The UI now captures the selected song when it queues the edit, and the recorder commits that target through memory.record_event_for_target. Legacy pending portions keep the previous fallback path.",
+  "oracle": "README.md:751 says trig params are unique to a song pattern. README.md:758 says holding a step and turning E3 creates its trig lock. M-PARAM-047 holds that gesture across an octave-fingerprinted song transition, then replays both slots with exact CC-before-note output.",
+  "validation": [
+    {
+      "run_id": "183ab3718b46472ebe87556707921607",
+      "case": "M-PARAM-047",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "623ad1b63f7fff18f6f2c841cd7cd575fa261208e56151e38ed46fcd23364419"
+    },
+    {
+      "run_id": "a91153bec9104d82b10e9c54bd1cdd18",
+      "case": "M-PARAM-047",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "19c5700eb9dbf50cb340d276d57452c17324ca2e05494f5f0c3707746bb09fb8"
+    }
+  ],
+  "collateral": "All 1518 Lua unit/integration tests pass. Controlled native M-MEMORY-010 and M-PARAM-046 pass (51484b7f98d44b798a393c139f7a1181, c934ee5a3f1444188d7872c5dacbe4ad). Inventory/name/syntax guards pass. Terra review approved target capture, release-time commit, fallback compatibility and unchanged serialized event shape.",
+  "upstream_merged": false
+}

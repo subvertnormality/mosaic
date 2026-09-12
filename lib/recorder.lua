@@ -62,7 +62,11 @@ function recorder.record_stored_trig_lock_events(c, step)
       return
     end
 
-    memory.record_event(c, "trig_lock", event.data)
+    if event.song_pattern then
+      memory.record_event_for_target(event.song_pattern, c, "trig_lock", event.data)
+    else
+      memory.record_event(c, "trig_lock", event.data)
+    end
     recorder.trig_lock_events[c][step] = nil
 
   end

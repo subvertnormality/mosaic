@@ -698,6 +698,7 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
   end
 
   if #pressed_keys > 0 and trig_lock_param and trig_lock_param.id then
+    local song_pattern = program.get().selected_song_pattern
     for _, keys in ipairs(pressed_keys) do
 
       local s = fn.calc_grid_count(keys[1], keys[2])
@@ -714,6 +715,7 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
       m_params[dial_index]:set_value(value)
 
       recorder.add_trig_lock_event_portion(channel.number, s, {
+        song_pattern = song_pattern,
         data = {
           parameter = dial_index,
           step = s,

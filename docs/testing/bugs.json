@@ -1145,6 +1145,15 @@
         }
       ],
       "candidate_manifest": "mask-off-stored-as-minus-one.json"
+    },
+    {
+      "id": "pending-parameter-lock-song-target",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "pending-parameter-lock-song-target.json",
+      "cases": [
+        "M-PARAM-047"
+      ],
+      "summary": "A held parameter-lock edit released after a song transition was committed to the newly selected slot; it now remains with the slot active when the edit was queued (S68)."
     }
   ]
 }
