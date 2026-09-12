@@ -1752,14 +1752,16 @@
       "cases": [
         "M-TIM-001",
         "M-UI-001",
-        "M-UI-002"
+        "M-UI-002",
+        "M-TIM-005"
       ],
       "status": "partial-domain-coverage",
-      "domain": "20 phrases at90BPM; other tempos, swing/shuffle, external clocks and tempo/source changes remain required.",
+      "domain": "20 phrases at90BPM; plus a real-time emulator-only 42ms Lua-thread-stall characterisation at120BPM. Other tempos, swing/shuffle, external clocks and tempo/source changes remain required.",
       "oracles": [
         "61 ordered onset times",
         "60 note durations",
-        "Edited grid and screen assertions from setup"
+        "Edited grid and screen assertions from setup",
+        "Characterisation: bounded Lua-thread stall keeps internal-song onset phase within10ms"
       ]
     },
     {

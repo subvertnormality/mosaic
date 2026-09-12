@@ -20,6 +20,7 @@ from trig_note_merge import trig_note_merge_matrix
 from scale_lock_precedence import scale_lock_precedence
 from step_slides import step_slide_variants
 from composition_workflow import composition_workflow
+from internal_clock_stall_phase import internal_clock_stall_phase
 from song_mode_flow import song_mode_flow
 from endurance import endurance_mixed
 from lifecycle_cycles import lifecycle_cycles
@@ -4069,6 +4070,7 @@ CASES={
  'M-TIM-003':dict(run=midi_clock_transport,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Native menu selects MIDI clock; physical MIDI starts/stops playback at100BPM; return to internal clock'),
  'M-TIM-002':dict(run=restart_phase_edges,requirements=['CLOCK-PHASE-EDGE-001'],description='Restart around96PPQN boundaries; preserve full MIDI durations at five start phases'),
  'M-TIM-001':dict(run=phrase_timing,requirements=['CLOCK-PHRASE-001'],description='Restart edited phrase; verify every onset and duration through20 complete phrases at90BPM'),
+ 'M-TIM-005':dict(run=internal_clock_stall_phase,requirements=['CLOCK-PHRASE-001'],description='Characterisation: a bounded42ms Lua event-thread stall during the internal120BPM typical-workflow song preserves port-one onset phase (real-time emulator fault only)'),
  'M-MOD-004':dict(run=modulated_cc_lock_precedence,requirements=['MOD-ROUTING','MOD-ROUTE-001','PARAM-SLOTS','LOCK-PARAM-SET'],description='Route toolkit macro to configured CC1; positive/manual/clear/negative phases preserve exact defaults, explicit step-lock precedence, MIDI trajectories, timing and releases'),
  'M-MOD-003':dict(run=held_macro_rebind,requirements=['MOD-ROUTING','MOD-HELD-001'],description='Rebind an already-held nonzero macro; MIDI must immediately reflect its current value without a new source event'),
  'M-MOD-001':dict(run=macro_route_clear,requirements=['MOD-ROUTING','MOD-ROUTE-001'],description='Route macro through native Matrix menu; assert affected MIDI pitches and restoration after clearing depth'),
