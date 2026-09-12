@@ -208,10 +208,10 @@ local load_paint_pattern = scheduler.debounce(function()
  end, throttle_time)
 
 local function save_paint_pattern(p)
-  local selected_song_pattern = program.get().selected_song_pattern
+  local selected_song_pattern = program.get_selected_song_pattern()
   local selected_pattern = program.get().selected_pattern
-  local trigs = program.get_selected_song_pattern().patterns[selected_pattern].trig_values
-  local lengths = program.get_selected_song_pattern().patterns[selected_pattern].lengths
+  local trigs = selected_song_pattern.patterns[selected_pattern].trig_values
+  local lengths = selected_song_pattern.patterns[selected_pattern].lengths
 
   for x = 1, 64 do
     if (trigs[x] < 1) and p[x] then
@@ -222,10 +222,10 @@ local function save_paint_pattern(p)
       lengths[x] = 0
     end
   end
-  program.get_selected_song_pattern().patterns[selected_pattern].trig_values = trigs
-  program.get_selected_song_pattern().patterns[selected_pattern].lengths = lengths
-  pattern.update_working_patterns()
-  program.get_selected_song_pattern().active = true
+  selected_song_pattern.patterns[selected_pattern].trig_values = trigs
+  selected_song_pattern.patterns[selected_pattern].lengths = lengths
+  pattern.update_working_patterns(selected_song_pattern)
+  selected_song_pattern.active = true
 end
 
 function trigger_edit_page.register_press()
@@ -243,8 +243,10 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_sequencer:is_this(x, y) then
-        trigger_edit_page_sequencer:press(x, y)
-        pattern.update_working_patterns()
+        local song = program.get_selected_song_pattern()
+        local source = program.get().selected_pattern
+        trigger_edit_page_sequencer:press(x, y, song, source)
+        pattern.update_working_patterns(song)
       end
     end
   )
@@ -396,9 +398,11 @@ function trigger_edit_page.register_press()
   press:register_dual(
     "trigger_edit_page",
     function(x, y, x2, y2)
-      trigger_edit_page_sequencer:dual_press(x, y, x2, y2)
+      local song = program.get_selected_song_pattern()
+      local source = program.get().selected_pattern
+      trigger_edit_page_sequencer:dual_press(x, y, x2, y2, song, source)
       if trigger_edit_page_sequencer:is_this(x2, y2) then
-        pattern.update_working_patterns()
+        pattern.update_working_patterns(song)
         tooltip:show("Note length set")
       end
     end
@@ -407,8 +411,10 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_sequencer:is_this(x, y) then
-        trigger_edit_page_sequencer:long_press(x, y)
-        pattern.update_working_patterns()
+        local song = program.get_selected_song_pattern()
+        local source = program.get().selected_pattern
+        trigger_edit_page_sequencer:long_press(x, y, song, source)
+        pattern.update_working_patterns(song)
         tooltip:show("Note length reset")
       end
     end

@@ -157,18 +157,19 @@ function sequencer:draw(channel, draw_func)
   end
 end
 
-function sequencer:press(x, y)
+function sequencer:press(x, y, song_pattern, pattern_number)
   if y >= self.y and y <= self.y + 3 then
     if self.mode == "pattern" then
       local grid_count = fn.calc_grid_count(x, y)
-      local selected_pattern = program.get_selected_pattern()
+      local selected_pattern = song_pattern and song_pattern.patterns[pattern_number] or program.get_selected_pattern()
       selected_pattern.trig_values[grid_count] = 1 - selected_pattern.trig_values[grid_count]
-      program.get_selected_song_pattern().active = true
+      local target_song = song_pattern or program.get_selected_song_pattern()
+      target_song.active = true
     end
   end
 end
 
-function sequencer:dual_press(x, y, x2, y2)
+function sequencer:dual_press(x, y, x2, y2, song_pattern, pattern_number)
   if y >= self.y and y <= self.y + 3 and y2 >= self.y and y2 <= self.y + 3 then
     if self.mode == "channel" then
       -- Channel ranges are ascending and need distinct endpoints. Reject the
@@ -181,24 +182,26 @@ function sequencer:dual_press(x, y, x2, y2)
       return true
     elseif self.mode == "pattern" then
       local grid_count = fn.calc_grid_count(x, y)
-      if program.get_selected_pattern().trig_values[grid_count] == 1 then
+      local selected_pattern = song_pattern and song_pattern.patterns[pattern_number] or program.get_selected_pattern()
+      if selected_pattern.trig_values[grid_count] == 1 then
         local length = fn.calc_grid_count(x2, y2) - grid_count
         if length > 0 then
-          program.get_selected_pattern().lengths[grid_count] = length + 1
+          selected_pattern.lengths[grid_count] = length + 1
         else
-          program.get_selected_pattern().lengths[grid_count] = (64 - grid_count) + fn.calc_grid_count(x2, y2) + 1
+          selected_pattern.lengths[grid_count] = (64 - grid_count) + fn.calc_grid_count(x2, y2) + 1
         end
       end
     end
   end
 end
 
-function sequencer:long_press(x, y)
+function sequencer:long_press(x, y, song_pattern, pattern_number)
   if y >= self.y and y <= self.y + 3 then
     if self.mode == "pattern" then
       local grid_count = fn.calc_grid_count(x, y)
-      if program.get_selected_pattern().trig_values[grid_count] == 1 then
-        program.get_selected_pattern().lengths[grid_count] = 1
+      local selected_pattern = song_pattern and song_pattern.patterns[pattern_number] or program.get_selected_pattern()
+      if selected_pattern.trig_values[grid_count] == 1 then
+        selected_pattern.lengths[grid_count] = 1
       end
     end
   end

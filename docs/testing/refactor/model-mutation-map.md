@@ -109,3 +109,26 @@ Next: trigger sequencer edits, dual/long-press lengths and paint commit ownershi
 Inspect the asynchronous paint preview separately; capture its intended lifetime
 rather than imposing note-fader assumptions. Channel composition/masks and mapped
 writers still need ownership migration before R07 dirty tracking can be trusted.
+
+### Trigger gestures and paint commit targets
+
+Trigger-page press, dual-press length and long-press reset now capture the selected
+song and source pattern once, pass them into the sequencer, and rebuild that same
+song. The control accepts optional targets; existing channel-range behavior and
+legacy calls without targets remain unchanged. Paint commit captures one song
+object for trig/length writes, rebuild and activation. Preview generation remains
+asynchronous and unchanged; pressing Paint still builds/commits synchronously under
+the established paint-before-preview policy.
+
+All 1537 Lua tests pass (24.560 seconds), six guards pass, and existing native cases
+pass with unchanged recipes and expected outputs:
+
+| Case | Controlled | Real-time |
+|---|---|---|
+| M-PAT-004 | ab4d9f246bf140859ca5dae71a59fc8c | db96b043cb2547429c0096c3de91f1f4 |
+| M-ALG-PAINT-RACE-001 | 104f1e02fe0c4cd69bc3fdfdcd04a6a2 | a59ea2d4a64d485192f69558d16e578b |
+
+Next: channel composition/assignment/mask writers and mapped entry points. These
+remain prerequisites for complete source revision coverage; the current change
+makes targets explicit but does not introduce a dirty/revision cache or claim
+all model writes are centralized.
