@@ -1583,3 +1583,14 @@ change before a delayed onset affects its pitch, while the MIDI device captured 
 the parent chord owns that voice's note-on and note-off after reassignment. Native
 M-ARP-012/013 already cover applied scale edits during a running arp. The domain is
 complete with the documented timing-product partition. No production code changed.
+
+
+## MIDI routing and codec hardening reconciliation — 2026-09-12
+
+H13's 14-bit NRPN claim is backed by all 16,384 values. The all-device assignment
+matrix confines Digitakt 2's legacy-half mode to NRPN fields. Native hotplug cases
+M-PANIC-011..014 cover removal/reconnection around a complete sweep and then verify
+restored mapping, panic and playback. The matrix no longer overclaims all 128
+relative-control bytes: decoding is provided by pinned official norns, while Mosaic
+drives representative documented values through that runtime. H13 is complete with
+the explicit hotplug/note/transport interaction partition. No production code changed.

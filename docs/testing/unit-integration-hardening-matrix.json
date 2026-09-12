@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "planned-hardening-matrix-reconciled",
-  "base_revision": "4e86ee0",
+  "base_revision": "0c3943e",
   "manual": "README.md",
   "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
   "inventory": "tests/behaviour/manual-inventory.json",
@@ -1958,13 +1958,14 @@
         {
           "name": "relative delta bytes",
           "cardinality": 128,
-          "coverage": "exhaustive decode"
+          "coverage": "representative 65 up, 63 and 0 down through pinned official norns MIDI-map runtime; decode is upstream-owned"
         }
       ],
       "interaction_strategy": "Exhaust codecs/routes; pairwise mapping range, accumulation, held step, channel, port and page return.",
       "residual_gaps": [
-        "Digitakt exception stays confined to NRPN.",
-        "Hotplug plus mapping with queued notes and transport."
+        "The Digitakt 2 legacy-half exception is confined to NRPN fields by the all-device default-assignment matrix; CC assignments and every other device retain standard or nil mode.",
+        "Native M-PANIC-011..014 cover removal and reconnection before/during the full sweep, then restored keyboard mapping, a fresh sweep and sequenced playback. Queued-note ownership and transport timing are partitioned across H07 and M-SYNC rather than multiplied into every hotplug phase.",
+        "Relative binary-offset byte decoding belongs to the pinned official norns MIDI-map runtime. Mosaic native cases cover the manual's supported route with representative 65, 63 and 0 values; this matrix does not claim all 128 upstream bytes."
       ],
       "requirement_ids": [
         "MAP-CONTROL",
@@ -2013,6 +2014,10 @@
         "M-OPT-ELEK-003",
         "M-OPT-ELEK-004",
         "M-OPT-KEYS-001",
+        "M-PANIC-011",
+        "M-PANIC-012",
+        "M-PANIC-013",
+        "M-PANIC-014",
         "M-PROJECT-LIVE-001",
         "M-PROJECT-LIVE-002",
         "M-PROJECT-LIVE-003",
@@ -2038,7 +2043,7 @@
         "M-XA-003-JF-OWNERSHIP",
         "M-XA-004-JF-OVERLAP"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-complete-partitioned"
     },
     {
       "id": "H14",
