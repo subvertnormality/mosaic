@@ -202,3 +202,24 @@ cases and 9 slide destination cases. The existing hardening inventory was
 reconciled with extracted modules/tests; its unchanged four checks pass. Production
 code is unchanged by these repairs, so the 791-case run is retained rather than
 repeated for fixture-only edits. Full Lua units in the aggregate passed 1546/1546.
+
+
+### Aggregate follow-ups resolved, 2026-09-13
+
+Velocity undo is fixed in e89f02c, with baseline failures in both lanes, undo/redo
+passes in both lanes, three controlled repeats, 1546 Lua tests and six guards.
+Candidate: `tests/behaviour/candidates/held-velocity-undo-prior-state.json`.
+
+M-PAT-006 expected a steady level 12 at every authored note. The selected-pattern
+indicator in vertical_fader.draw intentionally offsets the row-1 selected note
+to 11/13. The test now characterizes that one cell explicitly and retains exact
+level 12 on other selected notes, plus all silence, pitch, duration and spacing
+assertions. No production renderer change. Full controlled workflow passed:
+`70fb7ba082e048eb86bce0894bd1a849`. First real-time attempt
+`a01882a68f2d4c2398b607bb6a092c0d` passed LED checks but failed later durations:
+two of 128 notes had +16.695/-17.325 ms error; others were within 1.173 ms.
+The unchanged real-time rerun `78025c38bf874fc7a64fabf78da1fead` passed the full
+workflow. Retain the first failure as an intermittent timing observation of
+unestablished cause, not proof of a fixed timing defect. Bounds are unchanged.
+The aggregate report remains the original failed report; these focused receipts
+resolve its case follow-ups without falsely claiming all-profile qualification.

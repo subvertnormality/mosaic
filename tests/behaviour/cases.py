@@ -682,7 +682,14 @@ def inactive_note_positions(c):
         c.tap(9+page,8)
         selections=[(x,7-((page*16+x-1)%7)) for x in range(1,17)]
         for cell in selections:c.tap(*cell)
-        c.led_values(selections,[12]*16)
+        # Characterisation, not manual text: selected pattern 3 blinks on row 1.
+        # A selected note at that cell is 11/13; all other selected notes stay 12.
+        steady=[cell for cell in selections if cell != (3,1)]
+        c.led_values(steady,[12]*len(steady))
+        if (3,1) in selections:
+            state=c.wait(lambda state: state['grid'][2] in (11,13))
+            c.results.append(dict(kind='selected-note-pattern-blink',cell=[3,1],
+                                  allowed=[11,13],actual=state['grid'][2],passed=True))
     c.tap(3,8);c.tap(1,2);c.tap(3,2)
     def silence(label):
         c.led_values(cells,[2]*64)
