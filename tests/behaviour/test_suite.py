@@ -103,6 +103,17 @@ class SchedulingTests(unittest.TestCase):
         self.assertEqual(sorted(suite.controlled_only_cases()),
                          ['M-ARP-005','M-ARP-012','M-ARP-013','M-SPREAD-023','M-SPREAD-026','M-SPREAD-027'])
 
+    def test_real_time_only_cases_are_not_applicable_in_controlled_time(self):
+        jobs,not_run=suite.plan_jobs(['A','B'],['real-time','controlled-experimental'],{'base-midi'}, {},
+                                     real_time_only={'B':'requires a wall-clock native fault'})
+        self.assertEqual(jobs,[('A','real-time','base-midi'),('B','real-time','base-midi'),('A','controlled-experimental','base-midi')])
+        self.assertEqual(not_run,[dict(case='B',lane='controlled-experimental',profile='base-midi',
+                                      reason='real-time only: requires a wall-clock native fault',applicable=False)])
+        self.assertFalse(not_run[0].get('applicable',True))
+
+    def test_real_time_only_declarations_match_the_clock_mode_guards(self):
+        self.assertEqual(sorted(suite.real_time_only_cases()),['M-SYNC-023','M-TIM-005'])
+
     def test_real_time_subset_selects_timing_requirements_profiles_and_history(self):
         registry={'T':['CH-SWING'],'P':['CLOCK-PHRASE-001'],'R':['REC-LIVE'],'N':['NAV-PAGES'],'A':['NAV-PAGES'],'H':['CH-RANGE']}
         chosen=suite.real_time_subset(registry,{'A':'crow-jf'},{'H'})

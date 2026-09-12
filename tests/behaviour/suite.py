@@ -12,6 +12,8 @@ and are reported NOT RUN (never passed) unless requested. A suite passes only if
 every selected item ran and passed and the tested sources did not change during
 the run. The emulator checkout and installs are configuration, recorded in the
 report; they are not part of Mosaic's acceptance oracle.
+Cases may explicitly declare that their fault contract requires real time; the
+controlled lane records those as non-applicable rather than running a false failure.
 
 Scheduling: both lanes run at the same time within jack2's limit of 8 servers per host
 (each case session starts one; running jackd processes reduce the budget). Case
@@ -244,6 +246,11 @@ def controlled_only_cases():
     from cases import CASES
     return {name:case['controlled_only'] for name,case in CASES.items() if case.get('controlled_only')}
 
+def real_time_only_cases():
+    sys.path.insert(0,str(BEHAVIOUR))
+    from cases import CASES
+    return {name:case['real_time_only'] for name,case in CASES.items() if case.get('real_time_only')}
+
 # The real-time subset keeps every case whose contract is about time: tempo, swing and shuffle,
 # arp/spread/strum/acceleration, durations, song timeline, clock and transport, slides, panic,
 # performance, modulation and live recording. Everything else runs in the controlled lane only.
@@ -265,10 +272,14 @@ def real_time_subset(registry,case_profiles,history):
             if case in history or case_profiles.get(case,'base-midi')!='base-midi' or
             any(r in REAL_TIME_REQUIREMENTS or r.startswith(REAL_TIME_PREFIXES) for r in requirements)}
 
-def plan_jobs(selected,lanes,profiles,controlled_only,real_time_subset=None):
-    """Split (case, lane) pairs into runnable jobs and recorded not-run rows. Controlled-only
-    fixtures assert on the clock mode, so a real-time run of one proves nothing; it is recorded as
-    not applicable with the case's own reason rather than run and reported as a failure."""
+def plan_jobs(selected,lanes,profiles,controlled_only,real_time_subset=None,real_time_only=None):
+    """Split (case, lane) pairs into runnable jobs and recorded not-run rows.
+
+    Clock-mode-specific fixtures are never substituted for one another: their
+    inapplicable lane is recorded with its case-owned reason and does not make
+    an otherwise full two-lane run incomplete.
+    """
+    real_time_only=real_time_only or {}
     jobs=[];not_run=[]
     for lane in lanes:
         for case in selected:
@@ -278,6 +289,8 @@ def plan_jobs(selected,lanes,profiles,controlled_only,real_time_subset=None):
                 not_run.append(dict(case=case,lane=lane,profile=profile,reason='audio/Crow profiles are real-time only',applicable=False))
             elif lane=='real-time' and case in controlled_only:
                 not_run.append(dict(case=case,lane=lane,profile=profile,reason='controlled only: '+controlled_only[case],applicable=False))
+            elif lane=='controlled-experimental' and case in real_time_only:
+                not_run.append(dict(case=case,lane=lane,profile=profile,reason='real-time only: '+real_time_only[case],applicable=False))
             elif lane=='real-time' and real_time_subset is not None and case not in real_time_subset:
                 # Still required: a subset run is never a complete regression run.
                 not_run.append(dict(case=case,lane=lane,profile=profile,reason='real-time subset: not timing-selected; run in the controlled lane only'))
@@ -314,7 +327,8 @@ def run(args):
         subset=real_time_subset(registry,CASE_PROFILE,real_time_history(history_path))
         report['real_time_subset']=dict(cases=len(subset&set(selected)),of=len(selected),history=history_path,
                                          requirements=sorted(REAL_TIME_REQUIREMENTS),prefixes=list(REAL_TIME_PREFIXES))
-    jobs,not_run=plan_jobs(selected,args.lanes,args.profiles,controlled_only_cases(),subset)
+    jobs,not_run=plan_jobs(selected,args.lanes,args.profiles,controlled_only_cases(),subset,
+                           real_time_only=real_time_only_cases())
     results=[]
     requested={lane:(args.real_time_workers if lane=='real-time' else args.controlled_workers) for lane in args.lanes}
     budget=session_budget(requested,active_jack_servers())
