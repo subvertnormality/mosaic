@@ -306,19 +306,20 @@ function channel_edit_page.register_press()
       "channel_edit_page",
       function(x, y)
         if pattern_buttons["step" .. s .. "_pattern_button"]:is_this(x, y) then
-          local selected_song_pattern = program.get().selected_song_pattern
+          local target_song = program.get_selected_song_pattern()
+          local target_channel = program.get_selected_channel()
           pattern_buttons["step" .. s .. "_pattern_button"]:press(x, y)
           if pattern_buttons["step" .. s .. "_pattern_button"]:get_state() == 2 then
-            fn.add_to_set(program.get_selected_channel().selected_patterns, x)
-            program.get_selected_song_pattern().active = true
+            fn.add_to_set(target_channel.selected_patterns, x)
+            target_song.active = true
             tooltip:show("Pattern " .. x .. " added to ch. " .. program.get().selected_channel)
           else
-            fn.remove_from_set(program.get_selected_channel().selected_patterns, x)
-            program.get_selected_song_pattern().active = true
+            fn.remove_from_set(target_channel.selected_patterns, x)
+            target_song.active = true
             tooltip:show("Pattern " .. x .. " removed from ch. " .. program.get().selected_channel)
           end
-          pattern.update_working_patterns()
-          program.get_selected_song_pattern().active = true
+          pattern.update_working_patterns(target_song)
+          target_song.active = true
         end
       end
     )
@@ -327,31 +328,33 @@ function channel_edit_page.register_press()
     "channel_edit_page",
     function(x, y)
       if trig_merge_mode_button:is_this(x, y) then
+        local target_song = program.get_selected_song_pattern()
+        local target_channel = program.get_selected_channel()
         trig_merge_mode_button:press(x, y)
 
         if trig_merge_mode_button:get_state() == 1 then
 
-          program.get_selected_channel().trig_merge_mode = "skip"
+          target_channel.trig_merge_mode = "skip"
 
           tooltip:show(
             "Skip trig merge mode"
           )
         elseif trig_merge_mode_button:get_state() == 2 then
 
-          program.get_selected_channel().trig_merge_mode = "only"
+          target_channel.trig_merge_mode = "only"
           tooltip:show(
             "Only trig merge mode"
           )
         elseif trig_merge_mode_button:get_state() == 3 then
 
-          program.get_selected_channel().trig_merge_mode = "all"
+          target_channel.trig_merge_mode = "all"
           tooltip:show(
             "All trig merge mode"
           )
         end
 
-        program.get_selected_song_pattern().active = true
-        pattern.update_working_patterns()
+        target_song.active = true
+        pattern.update_working_patterns(target_song)
 
       end
     end
@@ -360,35 +363,37 @@ function channel_edit_page.register_press()
     "channel_edit_page",
     function(x, y)
       if note_merge_mode_button:is_this(x, y) then
+        local target_song = program.get_selected_song_pattern()
+        local target_channel = program.get_selected_channel()
 
         note_merge_mode_button:press(x, y)
 
         if note_merge_mode_button:get_state() == 1 then
-          program.get_selected_channel().note_merge_mode = "average"
+          target_channel.note_merge_mode = "average"
           tooltip:show(
             "Average note merge mode"
           )
         elseif note_merge_mode_button:get_state() == 2 then
-          program.get_selected_channel().note_merge_mode = "up"
+          target_channel.note_merge_mode = "up"
           tooltip:show(
             "Higher note merge mode"
           )
         elseif note_merge_mode_button:get_state() == 3 then
-          program.get_selected_channel().note_merge_mode = "down"
+          target_channel.note_merge_mode = "down"
           tooltip:show(
             "Lower note merge mode"
           )
         elseif note_merge_mode_button:get_state() == 4 then
 
           note_merge_mode_button:set_state(1)
-          program.get_selected_channel().note_merge_mode = "average"
+          target_channel.note_merge_mode = "average"
           tooltip:show(
             "Average note merge mode"
           )
         end
 
-        program.get_selected_song_pattern().active = true
-        pattern.update_working_patterns()
+        target_song.active = true
+        pattern.update_working_patterns(target_song)
 
       end
     end
@@ -397,34 +402,36 @@ function channel_edit_page.register_press()
     "channel_edit_page",
     function(x, y)
       if velocity_merge_mode_button:is_this(x, y) and not is_key1_down then
+        local target_song = program.get_selected_song_pattern()
+        local target_channel = program.get_selected_channel()
 
         velocity_merge_mode_button:press(x, y)
 
         if velocity_merge_mode_button:get_state() == 1 then
-          program.get_selected_channel().velocity_merge_mode = "average"
+          target_channel.velocity_merge_mode = "average"
           tooltip:show(
             "Average velocity merge mode"
           )
         elseif velocity_merge_mode_button:get_state() == 2 then
-          program.get_selected_channel().velocity_merge_mode = "up"
+          target_channel.velocity_merge_mode = "up"
           tooltip:show(
             "Higher velocity merge mode"
           )
         elseif velocity_merge_mode_button:get_state() == 3 then
-          program.get_selected_channel().velocity_merge_mode = "down"
+          target_channel.velocity_merge_mode = "down"
           tooltip:show(
             "Lower velocity merge mode"
           )
         elseif velocity_merge_mode_button:get_state() == 4 then
           velocity_merge_mode_button:set_state(1)
-          program.get_selected_channel().velocity_merge_mode = "average"
+          target_channel.velocity_merge_mode = "average"
           tooltip:show(
             "Average velocity merge mode"
           )
         end
 
-        program.get_selected_song_pattern().active = true
-        pattern.update_working_patterns()
+        target_song.active = true
+        pattern.update_working_patterns(target_song)
 
       end
     end
@@ -434,34 +441,36 @@ function channel_edit_page.register_press()
     "channel_edit_page",
     function(x, y)
       if length_merge_mode_button:is_this(x, y) and is_key1_down then
+        local target_song = program.get_selected_song_pattern()
+        local target_channel = program.get_selected_channel()
 
         length_merge_mode_button:press(x, y)
 
         if length_merge_mode_button:get_state() == 1 then
-          program.get_selected_channel().length_merge_mode = "average"
+          target_channel.length_merge_mode = "average"
           tooltip:show(
             "Average length merge mode"
           )
         elseif length_merge_mode_button:get_state() == 2 then
-          program.get_selected_channel().length_merge_mode = "up"
+          target_channel.length_merge_mode = "up"
           tooltip:show(
             "Longer length merge mode"
           )
         elseif length_merge_mode_button:get_state() == 3 then
-          program.get_selected_channel().length_merge_mode = "down"
+          target_channel.length_merge_mode = "down"
           tooltip:show(
             "Shorter length merge mode"
           )
         elseif length_merge_mode_button:get_state() == 4 then
           length_merge_mode_button:set_state(1)
-          program.get_selected_channel().length_merge_mode = "average"
+          target_channel.length_merge_mode = "average"
           tooltip:show(
             "Average length merge mode"
           )
         end
 
-        program.get_selected_song_pattern().active = true
-        pattern.update_working_patterns()
+        target_song.active = true
+        pattern.update_working_patterns(target_song)
       end
     end
   )
@@ -469,9 +478,11 @@ function channel_edit_page.register_press()
     "channel_edit_page",
     function(x, y)
       if channel_octave_fader:is_this(x, y) then
+        local target_song = program.get_selected_song_pattern()
+        local target_channel = program.get_selected_channel()
         channel_octave_fader:press(x, y)
-        program.get_selected_channel().octave = channel_octave_fader:get_value() - 3
-        program.get_selected_song_pattern().active = true
+        target_channel.octave = channel_octave_fader:get_value() - 3
+        target_song.active = true
         tooltip:show("Ch. " .. program.get().selected_channel .. " octave: " .. channel_octave_fader:get_value() - 3)
       end
     end
@@ -480,29 +491,31 @@ function channel_edit_page.register_press()
     "channel_edit_page",
     function(x, y, x2, y2)
       if pattern_buttons["step" .. x2 .. "_pattern_button"]:is_this(x2, y2) then
+        local target_song = program.get_selected_song_pattern()
+        local target_channel = program.get_selected_channel()
         if note_merge_mode_button:is_this(x, y) then
-          program.get_selected_channel().note_merge_mode = "pattern_number_" .. x2
+          target_channel.note_merge_mode = "pattern_number_" .. x2
           note_merge_mode_button:set_state(4)
-          program.get_selected_song_pattern().active = true
-          pattern.update_working_patterns()
+          target_song.active = true
+          pattern.update_working_patterns(target_song)
           tooltip:show(
             "Note merge mode pattern " ..x2
           )
         end
         if velocity_merge_mode_button:is_this(x, y) and not is_key1_down then
-          program.get_selected_channel().velocity_merge_mode = "pattern_number_" .. x2
+          target_channel.velocity_merge_mode = "pattern_number_" .. x2
           velocity_merge_mode_button:set_state(4)
-          program.get_selected_song_pattern().active = true
-          pattern.update_working_patterns()
+          target_song.active = true
+          pattern.update_working_patterns(target_song)
           tooltip:show(
             "Velocity merge mode pattern " ..x2
           )
         end
         if length_merge_mode_button:is_this(x, y) and is_key1_down then
-          program.get_selected_channel().length_merge_mode = "pattern_number_" .. x2
+          target_channel.length_merge_mode = "pattern_number_" .. x2
           length_merge_mode_button:set_state(4)
-          program.get_selected_song_pattern().active = true
-          pattern.update_working_patterns()
+          target_song.active = true
+          pattern.update_working_patterns(target_song)
           tooltip:show(
             "Length merge mode pattern " ..x2
           )

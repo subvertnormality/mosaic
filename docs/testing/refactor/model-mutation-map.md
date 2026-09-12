@@ -132,3 +132,23 @@ Next: channel composition/assignment/mask writers and mapped entry points. These
 remain prerequisites for complete source revision coverage; the current change
 makes targets explicit but does not introduce a dirty/revision cache or claim
 all model writes are centralized.
+
+### Channel composition target capture
+
+Pattern assignment, merge-mode, priority-source and octave gestures capture their
+song and channel once. Rebuild requests use that captured song; existing mutation
+order, tooltip behavior and all-channel rebuilding remain unchanged. This is
+structural ownership plumbing, not a new defect fix or source-revision cache.
+
+All 1537 Lua tests pass (24.621 seconds), and six guards pass. Existing native
+regressions pass with unchanged recipes and expected outputs:
+
+| Case | Controlled | Real-time |
+|---|---|---|
+| M-MERGE-001 | 8fc32f085dd6496b88a146839dc3c6c6 | 82c6cd89bd4a4c989223eb98070f764d |
+| M-MERGE-007 | f133cbd7206e4f2f8fe92aa7e1740495 | 581bfecaaea24aa08a0c3fac8de158d4 |
+| M-MERGE-010 | 7cd58ad00afc48858ba042d37df416c9 | fa2ceef6e67b461f96de5bb8718b036a |
+
+Next: carry optional explicit song identity through mask handlers and selected-
+and fixed-channel MIDI mappings, preserving held-step arbitration and legacy
+callers. Complete writer coverage before trusting dirty/source revision tracking.
