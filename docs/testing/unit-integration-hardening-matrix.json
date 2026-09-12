@@ -9,7 +9,7 @@
   "counts": {
     "requirements": 141,
     "production_lua_modules": 67,
-    "unit_integration_files": 58,
+    "unit_integration_files": 59,
     "domains": 15
   },
   "coverage_language": {
@@ -60,8 +60,8 @@
       ],
       "interaction_strategy": "Pairwise pattern, step, algorithm, active state and range; named preview/paint/cancel triples.",
       "residual_gaps": [
-        "All algorithms at every position and inactive-tail boundary.",
-        "Generated edit sequences with retained seeds."
+        "Generated edit sequences with retained seeds.",
+        "The page integration matrix covers every output position at each algorithm boundary; exhaustive all-fader products remain delegated to independently-oracled drum_ops arithmetic tests."
       ],
       "requirement_ids": [
         "CH-ASSIGN",
@@ -112,7 +112,8 @@
         "lib/tests/lib/program_extra_tests.lua",
         "lib/tests/lib/program_tests.lua",
         "lib/tests/lib/range_gesture_tests.lua",
-        "lib/tests/lib/sequencer_control_tests.lua"
+        "lib/tests/lib/sequencer_control_tests.lua",
+        "lib/tests/lib/trigger_edit_page_hardening_tests.lua"
       ],
       "linked_behaviour_cases": [
         "M-ALG-001",
@@ -180,7 +181,7 @@
         "M-SONG-LENGTH-002",
         "M-VIEW-001"
       ],
-      "status": "planned-hardening"
+      "status": "hardening-in-progress"
     },
     {
       "id": "H02",

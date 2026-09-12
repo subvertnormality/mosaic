@@ -1540,3 +1540,15 @@ Lua unit/integration suite passes 1486/1486. No production code changed. The
 snapshot-versus-live semantics for delayed voices across scale or device changes
 remain explicit, because choosing that contract requires native observable
 evidence rather than a unit-only assumption.
+
+
+## Pattern algorithm application hardening - 2026-09-12
+
+H01 now drives the real trigger-editor handlers for all four algorithms at their
+maximum legal fader and bank boundaries. Independent arithmetic oracles check all
+64 painted cells, selected-pattern isolation, inactive-song activation, XOR paint,
+length storage, repaint erasure and cancel preservation. The underlying drum,
+tresillo and numeric generators retain exhaustive input-domain coverage in
+drum_ops_extra_tests.lua. The complete Lua unit/integration suite passes
+1488/1488. No production code changed. Deterministic generated edit sequences
+remain an explicit H01 gap.
