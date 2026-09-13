@@ -154,3 +154,34 @@ This is functional persistence/lifecycle evidence; the manifest marks the lane
 diagnostic-only, and this is not constrained storage-performance or real-time
 timing acceptance. PERF-005 rendering-pressure evidence is next, reusing the
 existing dense-slide setup and unchanged musical oracle.
+
+## Rendering-pressure diagnostic
+
+`r13-render-pressure-01` on e61c18b plus retained test-only patch delivered all
+30 UI gestures (54 acknowledged physical events) inside8.0004seconds, alongside
+16-channel slides. The unchanged step-count check failed:45steps versus48
+expected (tolerance2). All720 note-ons had matching releases and correct channel,
+pitch and velocity;32 complete slide cycles passed. Retained MIDI/resource
+analysis reports p99 628.173ms, final624.531ms and870.197ms of playback-window
+CPU throttling. This is a failed constrained run, not hardware evidence.
+
+The recipe also requests60 full snapshots during playback. Their observer cost
+is not yet isolated from Mosaic rendering cost. A same-gesture comparison without
+per-gesture snapshots completed at `r13-render-pressure-no-observer-01`; setup
+and final snapshots remain. Do not attribute the failure to Mosaic alone or
+claim full PERF-005 coverage from this partial rendering-pressure recipe.
+
+The action-only comparison delivered all30 gestures/54 events,49 steps,784
+note-ons with matching releases and48 complete slide cycles. No CPU throttling
+was recorded. P99 timing11.188ms still fails the unchanged10ms bound; maximum
+12.866ms and final8.357ms. CPU was1.422seconds versus2.997seconds with snapshots.
+Host load differed materially (action-only7.03/4.84/2.89 at start versus
+0.81/0.87/1.19), so this is diagnostic separation, not a calibrated performance
+improvement claim. The large collapse did not recur without explicit snapshots.
+
+Source inspection confirms each snapshot builds and serializes full growing MIDI
+history and framebuffer in the same CPU-limited container. The action path also
+builds full state internally before returning only its ACK. Keep these emulator
+costs separate from Mosaic cost. No runtime or Mosaic production fix was made.
+The test-only runner now exposes both observation modes, retains setup/final
+snapshots, and preserves calculated metrics even if the step-count check fails.
