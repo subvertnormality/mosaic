@@ -185,3 +185,21 @@ builds full state internally before returning only its ACK. Keep these emulator
 costs separate from Mosaic cost. No runtime or Mosaic production fix was made.
 The test-only runner now exposes both observation modes, retains setup/final
 snapshots, and preserves calculated metrics even if the step-count check fails.
+
+## Display-only rendering-pressure result
+
+`r13-render-pressure-display-01` uses the isolated generic display endpoint in
+imagefeab2bb7 (full digest and exact patch in `ack-only-candidate/build-display/`).
+Full snapshots remain before/after playback. All30 gestures,54 action ACKs and
+60 display reads completed;49steps,784balanced notes and48complete slide cycles
+passed. No playback CPU throttling. P99 11.377ms still fails10ms; max13.711ms,
+final9.764ms. CPU1.273seconds, peakRSS545792000bytes. Host start load3.34/4.16/5.36.
+The authorized R10 archive-folder removal completed132.8seconds before the timed
+playback began; it did not overlap that window. This is one diagnostic run, not
+a matched speedup claim or passing timing acceptance.
+
+The display endpoint samples already-exported frame/grid without native type5
+Lua diagnostics.118generic contracts and native grid/display checks pass in the
+isolated emulator candidate; default runtime promotion remains separate. The
+runner keeps full-snapshot and no-observation modes to retain the comparison.
+No Mosaic production code or musical oracle changed.

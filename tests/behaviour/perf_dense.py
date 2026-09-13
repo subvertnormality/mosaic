@@ -39,7 +39,11 @@ class Http:
         self.sequence+=1
         return self.request('/action',dict(schema_version=1,session_id=self.id,action_id=uuid.uuid4().hex,sequence=self.sequence,action=value))
     def observe(self):
-        value=self.request('/snapshot')
+        return self.observe_path('/snapshot')
+    def display(self):
+        return self.observe_path('/display')
+    def observe_path(self,path):
+        value=self.request(path)
         if value['errors']:raise RuntimeError('runtime errors: %s'%value['errors'])
         return value
 
@@ -115,7 +119,8 @@ def render_observation(value):
     assert hashlib.sha256(pixels).hexdigest()==state['frame']['sha256'],'Frame hash mismatch'
     return dict(frame_revision=value['frame_revision'],grid_revision=value['grid_revision'],
       frame_sha256=state['frame']['sha256'],grid_sha256=hashlib.sha256(bytes(grid)).hexdigest())
-def run_render_pressure(d,http,seconds,observe_each=True):
+def run_render_pressure(d,http,seconds,observe_each=True,display_only=False):
+    observe=http.display if display_only else http.observe
     assert seconds==8,'Render-pressure recipe requires exactly 8 seconds'
     started_ns=time.monotonic_ns();deadline_ns=started_ns+8_000_000_000;rows=[]
     expected=[x for x in RENDER_PRESSURE_SCHEDULE if started_ns+round(x[0]*1e9)<deadline_ns]
@@ -123,7 +128,7 @@ def run_render_pressure(d,http,seconds,observe_each=True):
         target_ns=started_ns+round(offset*1e9);remaining_ns=target_ns-time.monotonic_ns()
         if remaining_ns>0:time.sleep(remaining_ns/1e9)
         if time.monotonic_ns()>=deadline_ns:break
-        before_start=time.monotonic_ns();before=render_observation(http.observe()) if observe_each else None;before_end=time.monotonic_ns()
+        before_start=time.monotonic_ns();before=render_observation(observe()) if observe_each else None;before_end=time.monotonic_ns()
         if time.monotonic_ns()>=deadline_ns:break
         ack_start=len(d.action_acks);dispatch_start=time.monotonic_ns()
         if gesture[0]=='grid':
@@ -131,7 +136,7 @@ def run_render_pressure(d,http,seconds,observe_each=True):
             d.action(type='grid',x=gesture[1],y=gesture[2],state=0)
         else:d.action(type='enc',n=gesture[1],delta=gesture[2])
         dispatch_end=time.monotonic_ns();observed_start=time.monotonic_ns()
-        after=render_observation(http.observe()) if observe_each else None;observed_end=time.monotonic_ns()
+        after=render_observation(observe()) if observe_each else None;observed_end=time.monotonic_ns()
         rows.append(dict(offset_seconds=offset,label=label,gesture=gesture,
           target_dispatch_ns=target_ns,dispatch_started_ns=dispatch_start,dispatch_ended_ns=dispatch_end,
           dispatch_lateness_ns=dispatch_start-target_ns,acknowledgement_indexes=list(range(ack_start,len(d.action_acks))),
@@ -143,12 +148,12 @@ def run_render_pressure(d,http,seconds,observe_each=True):
     remaining_ns=deadline_ns-time.monotonic_ns()
     if remaining_ns>0:time.sleep(remaining_ns/1e9)
     ended_ns=time.monotonic_ns()
-    return dict(observe_each_gesture=observe_each,schedule=RENDER_PRESSURE_SCHEDULE,window_seconds=8,started_ns=started_ns,ended_ns=ended_ns,
+    return dict(observation_mode=("display" if display_only else "snapshot") if observe_each else "none",observe_each_gesture=observe_each,schedule=RENDER_PRESSURE_SCHEDULE,window_seconds=8,started_ns=started_ns,ended_ns=ended_ns,
       actual_window_ns=ended_ns-started_ns,expected_gestures=len(expected),dispatched_gestures=len(rows),
       complete=len(rows)==len(expected),observations=rows,
       acknowledged_actions=sum(len(x['acknowledgement_indexes']) for x in rows),
       limitation='Partial rendering-pressure evidence: changes are not gesture-attributable; no native per-render/dirty-frame counters, maximum render cadence, full-grid change workload or tooltip pressure.')
-def run_one(image,out,channels,repeat,seconds,workload='dense',render_pressure=False,observe_each=True):
+def run_one(image,out,channels,repeat,seconds,workload='dense',render_pressure=False,observe_each=True,display_only=False):
     out.mkdir(parents=True);data=Path(tempfile.mkdtemp(prefix='perf-dense-data-'))
     name='mosaic-perf-'+uuid.uuid4().hex[:10];started=False;d=None
     code=Path(tempfile.mkdtemp(prefix='perf-dense-code-'))
@@ -176,7 +181,7 @@ def run_one(image,out,channels,repeat,seconds,workload='dense',render_pressure=F
         recording=http.request('/performance/start',dict(period_ms=10,maximum_seconds=int(seconds+15)))
         time.sleep(1.0)                            # recorded settle: build work leaves the quota window
         d.action(type='grid',x=1,y=8,state=1);d.action(type='grid',x=1,y=8,state=0)
-        pressure=run_render_pressure(d,http,seconds,observe_each) if render_pressure else None
+        pressure=run_render_pressure(d,http,seconds,observe_each,display_only) if render_pressure else None
         if not render_pressure:time.sleep(seconds)
         d.action(type='grid',x=1,y=8,state=1);d.action(type='grid',x=1,y=8,state=0)
         time.sleep(1.0)
@@ -231,17 +236,19 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__,formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--workload',choices=('dense','slides'),default='dense')
     parser.add_argument('--render-pressure',action='store_true',help='Drive fixed non-musical UI gestures during timed playback')
-    parser.add_argument('--no-render-observations',action='store_true',help='Diagnostic: keep pressure gestures but omit per-gesture snapshots to measure observer cost')
+    observations=parser.add_mutually_exclusive_group()
+    observations.add_argument('--display-observations',action='store_true',help='Read exported frame/grid only during pressure; requires a runtime with GET /display')
+    observations.add_argument('--no-render-observations',action='store_true',help='Diagnostic: keep pressure gestures but omit per-gesture snapshots to measure observer cost')
     parser.add_argument('--image',default='monome-emulator:perf-recorder-02');parser.add_argument('--output',required=True)
     parser.add_argument('--channels',default='1,4,8,16');parser.add_argument('--repeats',type=int,default=3);parser.add_argument('--seconds',type=float,default=8)
     args=parser.parse_args()
-    if args.no_render_observations and not args.render_pressure:parser.error('--no-render-observations requires --render-pressure')
+    if (args.no_render_observations or args.display_observations) and not args.render_pressure:parser.error('Observation mode requires --render-pressure')
     if args.render_pressure and args.seconds!=8:parser.error('--render-pressure requires --seconds 8')
     root=Path(args.output).resolve();root.mkdir(parents=True,exist_ok=False)
     revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()
     dirty=subprocess.check_output(['git','diff','HEAD'],cwd=REPO)
     image_id=docker('image','inspect',args.image,'--format','{{.Id}}').stdout.strip()
-    rows=[run_one(args.image,root/('channels-%s-%d'%(n,r)),int(n),r,args.seconds,args.workload,args.render_pressure,not args.no_render_observations) for n in args.channels.split(',') for r in range(1,args.repeats+1)]
+    rows=[run_one(args.image,root/('channels-%s-%d'%(n,r)),int(n),r,args.seconds,args.workload,args.render_pressure,not args.no_render_observations,args.display_observations) for n in args.channels.split(',') for r in range(1,args.repeats+1)]
     report=dict(schema_version=1,workload=workload_id(args.workload,args.render_pressure),mosaic_revision=revision,dirty_patch_sha256=hashlib.sha256(dirty).hexdigest() if dirty else None,
                 emulator=str(EMULATOR),image=args.image,image_id=image_id,argv=sys.argv[1:],passed=all(r['passed'] for r in rows),runs=rows)
     driver.write(root/'result.json',report);print(root/'result.json')
