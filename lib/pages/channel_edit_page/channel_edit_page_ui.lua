@@ -23,6 +23,7 @@ local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_p
 local channel_edit_masks = include("mosaic/lib/pages/channel_edit_page/channel_edit_masks")
 local channel_edit_history = include("mosaic/lib/pages/channel_edit_page/channel_edit_history")
 local channel_edit_parameters = include("mosaic/lib/pages/channel_edit_page/channel_edit_parameters")
+local channel_edit_clock_controls = include("mosaic/lib/pages/channel_edit_page/channel_edit_clock_controls")
 
 -- UI components
 local channel_pages = pages:new()
@@ -33,29 +34,30 @@ local shuffle_feel_selector = list_selector:new(0, 40, "Feel", {{name = "X", val
 local shuffle_basis_selector = list_selector:new(40, 40, "Basis", {{name = "X", value = 1}, {name = "9", value = 2}, {name = "7", value = 3}, {name = "5", value = 4}, {name = "6", value = 5}, {name = "8??", value = 6}, {name = "9??", value = 7}})
 local shuffle_amount_selector = value_selector:new(70, 40, "Amount", 0, 100)
 
+local channel_edit_clock_controls_controller
 
 function channel_edit_page_ui.get_swing_shuffle_type_selector_value()
-  return swing_shuffle_type_selector:get_selected().value - 1
+  return channel_edit_clock_controls_controller.get_swing_shuffle_type_selector_value()
 end
 
 function channel_edit_page_ui.get_shuffle_feel_selector_value()
-  return shuffle_feel_selector:get_selected().value - 1
+  return channel_edit_clock_controls_controller.get_shuffle_feel_selector_value()
 end
 
 function channel_edit_page_ui.get_shuffle_basis_selector_value()
-  return shuffle_basis_selector:get_selected().value - 1
+  return channel_edit_clock_controls_controller.get_shuffle_basis_selector_value()
 end
 
 function channel_edit_page_ui.set_swing_shuffle_type_selector_value(value)
-  swing_shuffle_type_selector:set_selected_value(value + 1)
+  return channel_edit_clock_controls_controller.set_swing_shuffle_type_selector_value(value)
 end
 
 function channel_edit_page_ui.set_shuffle_feel_selector_value(value)
-  shuffle_feel_selector:set_selected_value(value + 1)
+  return channel_edit_clock_controls_controller.set_shuffle_feel_selector_value(value)
 end
 
 function channel_edit_page_ui.set_shuffle_basis_selector_value(value)
-  shuffle_basis_selector:set_selected_value(value + 1)
+  return channel_edit_clock_controls_controller.set_shuffle_basis_selector_value(value)
 end
 
 -- Value selectors with initial values
@@ -115,6 +117,19 @@ local channel_edit_parameters_controller = channel_edit_parameters.new(
   channel_edit_page_ui,
   channel_edit_page_ui_refreshers,
   {param_manager = param_manager, midi_value_domain = midi_value_domain}
+)
+
+channel_edit_clock_controls_controller = channel_edit_clock_controls.new(
+  {
+    clock_mod_list_selector = clock_mod_list_selector,
+    swing_shuffle_type_selector = swing_shuffle_type_selector,
+    swing_selector = swing_selector,
+    shuffle_feel_selector = shuffle_feel_selector,
+    shuffle_basis_selector = shuffle_basis_selector,
+    shuffle_amount_selector = shuffle_amount_selector
+  },
+  channel_edit_page_ui,
+  channel_edit_page_ui_refreshers
 )
 
 -- History controls
@@ -232,19 +247,7 @@ end)
 
 
 local clock_mods_page = page:new("Clocks", function()
-  swing_shuffle_type_selector:draw()
-  local value = channel_edit_page_ui.get_swing_shuffle_type_selector_value()
-  if value == 0 then 
-    value = params:get("global_swing_shuffle_type")
-  end
-  if value == 1 then
-    swing_selector:draw()
-  elseif value == 2 then
-    shuffle_feel_selector:draw()
-    shuffle_basis_selector:draw()
-    shuffle_amount_selector:draw()
-  end
-  clock_mod_list_selector:draw()
+  channel_edit_clock_controls_controller.draw()
 end)
 
 local channel_edit_page = page:new("Device Config", function()
@@ -308,7 +311,7 @@ function channel_edit_page_ui.init()
   end
 
 
-  clock_mod_list_selector:set_list(m_clock.get_clock_divisions())
+  channel_edit_clock_controls_controller.initialize_clock_mod_list()
   device_map_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Midi Map", device_map:get_devices())
   channel_edit_parameters_controller.set_device_map_selector(device_map_vertical_scroll_selector)
   channel_edit_parameters_controller.set_trig_lock_page(trig_lock_page)
@@ -356,15 +359,7 @@ function channel_edit_page_ui.init()
   channel_edit_page_ui.select_mask_page()
 
   dials:set_selected_item(1)
-  clock_mod_list_selector:set_selected_value(13)
-  clock_mod_list_selector:select()
-  swing_selector:set_value(0)
-
-  channel_edit_page_ui.set_swing_shuffle_type_selector_value(params:get("global_swing_shuffle_type"))
-  swing_selector:set_value(params:get("global_swing"))
-  channel_edit_page_ui.set_shuffle_feel_selector_value(params:get("global_shuffle_feel"))
-  channel_edit_page_ui.set_shuffle_basis_selector_value(params:get("global_shuffle_basis"))
-  shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
+  channel_edit_clock_controls_controller.initialize_values()
 
   channel_edit_history_controller.initialize()
 
@@ -380,151 +375,49 @@ end
 
 -- Update functions
 function channel_edit_page_ui.update_swing_shuffle_type()
-  local channel = program.get_selected_channel()
-  local value = channel_edit_page_ui.get_swing_shuffle_type_selector_value()
-  channel.swing_shuffle_type = value
-
-  if value == 0 or nil then
-    value = program.get_effective_swing_shuffle_type(channel)
-  end
-
-  if m_clock.is_playing() then
-    step.queue_for_pattern_change(function() 
-      local c = channel.number 
-      local val = value
-      m_clock.set_swing_shuffle_type(c, val) 
-    end)
-  else
-    m_clock.set_swing_shuffle_type(channel.number, value)
-  end
-
+  return channel_edit_clock_controls_controller.update_swing_shuffle_type()
 end
 
 function channel_edit_page_ui.align_global_and_local_swing_shuffle_type_values(c)
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
-  m_clock.set_swing_shuffle_type(channel.number, program.get_effective_swing_shuffle_type(channel))
-
+  return channel_edit_clock_controls_controller.align_global_and_local_swing_shuffle_type_values(c)
 end
 
-
 function channel_edit_page_ui.update_swing()
-  local channel = program.get_selected_channel()
-  local value = swing_selector:get_value()
-  channel.swing = value
-  if value == -51 or nil then
-    value = program.get_effective_swing(channel)
-  end
-  
-  if m_clock.is_playing() then
-    step.queue_for_pattern_change(function() 
-      local c = channel.number 
-      local val = value
-      m_clock.set_channel_swing(c, val) 
-    end)
-  else
-    m_clock.set_channel_swing(channel.number, value)
-  end
+  return channel_edit_clock_controls_controller.update_swing()
 end
 
 function channel_edit_page_ui.align_global_and_local_swing_values(c)
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
-  m_clock.set_channel_swing(channel.number, program.get_effective_swing(channel))
-
+  return channel_edit_clock_controls_controller.align_global_and_local_swing_values(c)
 end
 
 function channel_edit_page_ui.update_shuffle_feel()
-  local channel = program.get_selected_channel()
-  local shuffle_feel = channel_edit_page_ui.get_shuffle_feel_selector_value()
-  channel.shuffle_feel = shuffle_feel
-  if shuffle_feel == 0 or nil then
-    shuffle_feel = program.get_effective_shuffle_feel(channel)
-  end
-
-  if m_clock.is_playing() then
-    step.queue_for_pattern_change(function() 
-      local c = channel.number 
-      local sf = shuffle_feel
-      m_clock.set_channel_shuffle_feel(c, sf) 
-    end)
-  else
-    m_clock.set_channel_shuffle_feel(channel.number, shuffle_feel)
-  end
+  return channel_edit_clock_controls_controller.update_shuffle_feel()
 end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_feel_values(c)
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
-  m_clock.set_channel_shuffle_feel(channel.number, program.get_effective_shuffle_feel(channel))
-
+  return channel_edit_clock_controls_controller.align_global_and_local_shuffle_feel_values(c)
 end
 
 function channel_edit_page_ui.update_shuffle_basis()
-  local channel = program.get_selected_channel()
-
-  local shuffle_basis = channel_edit_page_ui.get_shuffle_basis_selector_value()
-  channel.shuffle_basis = shuffle_basis
-
-  if shuffle_basis == 0 or nil then
-    shuffle_basis = program.get_effective_shuffle_basis(channel)
-  end
-
-  if m_clock.is_playing() then
-    step.queue_for_pattern_change(function() 
-      local c = channel.number 
-      local sb = shuffle_basis
-      m_clock.set_channel_shuffle_basis(c, sb) 
-    end)
-  else
-    m_clock.set_channel_shuffle_basis(channel.number, shuffle_basis)
-  end
+  return channel_edit_clock_controls_controller.update_shuffle_basis()
 end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_basis_values(c)
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
-  m_clock.set_channel_shuffle_basis(channel.number, program.get_effective_shuffle_basis(channel))
+  return channel_edit_clock_controls_controller.align_global_and_local_shuffle_basis_values(c)
 end
 
 function channel_edit_page_ui.update_shuffle_amount()
-  local channel = program.get_selected_channel()
-  local shuffle_amount = shuffle_amount_selector:get_value()
-  channel.shuffle_amount = shuffle_amount
-
-  if shuffle_amount == 0 or nil then
-    shuffle_amount = program.get_effective_shuffle_amount(channel)
-  end
-
-  if m_clock.is_playing() then
-    step.queue_for_pattern_change(function() 
-      local c = channel.number 
-      local sa = shuffle_amount
-      m_clock.set_channel_shuffle_amount(c, sa) 
-    end)
-  else
-    m_clock.set_channel_shuffle_amount(channel.number, shuffle_amount)
-  end
+  return channel_edit_clock_controls_controller.update_shuffle_amount()
 end
 
 function channel_edit_page_ui.align_global_and_local_shuffle_amount_values(c)
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
-  m_clock.set_channel_shuffle_amount(channel.number, program.get_effective_shuffle_amount(channel))
-
+  return channel_edit_clock_controls_controller.align_global_and_local_shuffle_amount_values(c)
 end
 
 function channel_edit_page_ui.update_clock_mods()
-  local channel = program.get_selected_channel()
-  local clock_mods = clock_mod_list_selector:get_selected()
-  channel.clock_mods = clock_mods
-
-  if m_clock.is_playing() then
-    step.queue_for_pattern_change(function() 
-      local c = channel.number 
-      local div = m_clock.calculate_divisor(clock_mods)
-      m_clock.set_channel_division(c, div) 
-    end)
-  else
-    m_clock.set_channel_division(channel.number, m_clock.calculate_divisor(clock_mods))
-  end
-  
+  return channel_edit_clock_controls_controller.update_clock_mods()
 end
+
 function channel_edit_page_ui.update_channel_config()
   return channel_edit_parameters_controller.update_channel_config()
 end
@@ -584,9 +477,9 @@ function channel_edit_page_ui.enc(n, d)
       }
 
       if d > 0 then
-        channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page, channel_edit_parameters_controller)
+        channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page, channel_edit_parameters_controller, channel_edit_clock_controls_controller)
       else
-        channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page, channel_edit_parameters_controller)
+        channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page, channel_edit_parameters_controller, channel_edit_clock_controls_controller)
       end
     end
   elseif n == 1 then
@@ -614,27 +507,27 @@ function channel_edit_page_ui.refresh_masks()
 end
 
 function channel_edit_page_ui.refresh_clock_mods()
-  channel_edit_page_ui_refreshers.refresh_clock_mods(clock_mod_list_selector, swing_selector)
+  return channel_edit_clock_controls_controller.refresh_clock_mods()
 end
 
 function channel_edit_page_ui.refresh_swing()
-  channel_edit_page_ui_refreshers.refresh_swing(swing_selector)
+  return channel_edit_clock_controls_controller.refresh_swing()
 end
 
 function channel_edit_page_ui.refresh_swing_shuffle_type()
-  channel_edit_page_ui_refreshers.refresh_swing_shuffle_type(swing_shuffle_type_selector)
+  return channel_edit_clock_controls_controller.refresh_swing_shuffle_type()
 end
 
 function channel_edit_page_ui.refresh_shuffle_feel()
-  channel_edit_page_ui_refreshers.refresh_shuffle_feel(shuffle_feel_selector)
+  return channel_edit_clock_controls_controller.refresh_shuffle_feel()
 end
 
 function channel_edit_page_ui.refresh_shuffle_basis()
-  channel_edit_page_ui_refreshers.refresh_shuffle_basis(shuffle_basis_selector)
+  return channel_edit_clock_controls_controller.refresh_shuffle_basis()
 end
 
 function channel_edit_page_ui.refresh_shuffle_amount()
-  channel_edit_page_ui_refreshers.refresh_shuffle_amount(shuffle_amount_selector)
+  return channel_edit_clock_controls_controller.refresh_shuffle_amount()
 end
 
 function channel_edit_page_ui.refresh_device_selector()
@@ -710,69 +603,11 @@ function channel_edit_page_ui.handle_memory_page_change(d)
   return channel_edit_history_controller.handle_page_change(d)
 end
 function channel_edit_page_ui.handle_clock_mods_page_increment()
-  if swing_shuffle_type_selector:is_selected() then
-    swing_shuffle_type_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui.update_swing_shuffle_type)
-    save_confirm.set_save(channel_edit_page_ui.update_shuffle_feel)
-    save_confirm.set_save(channel_edit_page_ui.update_shuffle_basis)
-    save_confirm.set_save(channel_edit_page_ui.update_shuffle_amount)
-    save_confirm.set_save(channel_edit_page_ui.update_swing)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_swing_shuffle_type)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_swing)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_feel)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_basis)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_amount)
-    
-    fn.dirty_screen(true)
-  elseif swing_selector:is_selected() then
-    swing_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui.update_swing)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_swing)
-  elseif shuffle_feel_selector:is_selected() then
-    shuffle_feel_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui.update_shuffle_feel)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_feel)
-  elseif shuffle_basis_selector:is_selected() then
-    shuffle_basis_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui.update_shuffle_basis)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_basis)
-  elseif shuffle_amount_selector:is_selected() then
-    shuffle_amount_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui.update_shuffle_amount)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_amount)
-  elseif clock_mod_list_selector:is_selected() then
-    clock_mod_list_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui.update_clock_mods)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_clock_mods)
-  end
+  return channel_edit_clock_controls_controller.handle_increment()
 end
 
 function channel_edit_page_ui.handle_clock_mods_page_decrement()
-  if swing_shuffle_type_selector:is_selected() then
-    swing_shuffle_type_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui.update_swing_shuffle_type)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_swing_shuffle_type)
-  elseif swing_selector:is_selected() then
-    swing_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui.update_swing)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_swing)
-  elseif shuffle_feel_selector:is_selected() then
-    shuffle_feel_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui.update_shuffle_feel)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_feel)
-  elseif shuffle_basis_selector:is_selected() then
-    shuffle_basis_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui.update_shuffle_basis)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_basis)
-  elseif shuffle_amount_selector:is_selected() then
-    shuffle_amount_selector:decrement()
-    save_confirm.set_save(channel_edit_page_ui.update_shuffle_amount)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_shuffle_amount)
-  elseif clock_mod_list_selector:is_selected() then
-    clock_mod_list_selector:increment()
-    save_confirm.set_save(channel_edit_page_ui.update_clock_mods)
-    save_confirm.set_cancel(channel_edit_page_ui.refresh_clock_mods)
-  end
+  return channel_edit_clock_controls_controller.handle_decrement()
 end
 
 function channel_edit_page_ui.handle_midi_config_page_increment()

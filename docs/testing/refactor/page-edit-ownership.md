@@ -162,3 +162,39 @@ coverage/syntax checks pass. Controlled native passes: M-PARAM-036
 R12 still includes clock controls, cross-page navigation and final visual/input
 acceptance. Encoder-two's obsolete dials/page arguments can be removed with the
 navigation cleanup; current production calls remain compatible.
+
+## Clock-controls contract
+
+Clock edits retain original selector construction and facade calls. Stopped edits
+apply immediately; playing edits queue at the existing pattern-change boundary,
+retaining the selected channel object and effective value/clock-mod table captured
+by the current code. Alignment functions still resolve the selected song when
+invoked. Existing X/sentinel behavior and inactive shuffle settings are preserved.
+
+Keep the exact staged save/cancel sequences: incrementing swing type registers
+five save/cancel operations, whereas decrementing registers only the type action.
+Draw/encoder navigation use the existing effective-mode fallback. Refresher jobs
+keep their dynamic global UI setter lookup. Focused native coverage reuses
+M-SHUFFLE-006/007 for live inherited/explicit transitions and M-TIME-001 for ratios;
+existing UI unit tests cover frame layouts, selector traversal and confirmation.
+
+### Clock controller receipt (2026-09-13)
+
+`channel_edit_clock_controls` owns effective-mode draw/navigation, initial values,
+updates/alignment, refresher delegation and staged confirmation for all six clock
+controls. Selectors remain constructed at their original points. Review confirmed
+lexical UI versus dynamic globals, exact init order, captured queued channel/values,
+deferred divisor calculation, fallback logic and asymmetric save/cancel ordering.
+All 1,546 Lua tests and ten coverage/syntax checks pass.
+
+| Case | Lane | Run |
+| --- | --- | --- |
+| M-SHUFFLE-006 | controlled | d5c2e2704c244ba8a7c9d90dc096a98d |
+| M-SHUFFLE-007 | controlled | e6b1b17f269c4111b9232cb0d33aa8a9 |
+| M-TIME-001 | controlled | c26e958088ad483d8776dd428dd0517c |
+| M-SHUFFLE-006 | real-time | 87d2bdd8a93f43b9a9af0eb116c5d204 |
+
+Cross-page navigation/gesture ownership remains. At the final R12 boundary use one
+controlled aggregate for the navigation/page/visual/browser/LED/tooltip/dashboard
+union, checking inclusion rather than separately rerunning included cases. Existing
+PERF-004 constrained-load failure remains R13 optimization work, not a new R12 blocker.

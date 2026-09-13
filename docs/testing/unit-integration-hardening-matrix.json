@@ -33,7 +33,7 @@
   "inventory_sha256": "440c46051f6d7aa3d071d57beb913854ce55597deab5b6150953887968541a78",
   "counts": {
     "requirements": 140,
-    "production_lua_modules": 91,
+    "production_lua_modules": 92,
     "unit_integration_files": 68,
     "domains": 15
   },
@@ -256,6 +256,7 @@
         "lib/draw.lua",
         "lib/grid_abstraction.lua",
         "lib/m_grid.lua",
+        "lib/pages/channel_edit_page/channel_edit_clock_controls.lua",
         "lib/pages/channel_edit_page/channel_edit_history.lua",
         "lib/pages/channel_edit_page/channel_edit_masks.lua",
         "lib/pages/channel_edit_page/channel_edit_page.lua",
@@ -607,6 +608,7 @@
         "PARAM-RANDOM-TWOS"
       ],
       "production_modules": [
+        "lib/pages/channel_edit_page/channel_edit_clock_controls.lua",
         "lib/pages/channel_edit_page/channel_edit_history.lua",
         "lib/pages/channel_edit_page/channel_edit_masks.lua",
         "lib/pages/channel_edit_page/channel_edit_page.lua",
@@ -2266,6 +2268,7 @@
         "lib/nb/lib/nb.lua",
         "lib/nb/lib/player.lua",
         "lib/nb/nb.lua",
+        "lib/pages/channel_edit_page/channel_edit_clock_controls.lua",
         "lib/pages/channel_edit_page/channel_edit_history.lua",
         "lib/pages/channel_edit_page/channel_edit_masks.lua",
         "lib/pages/channel_edit_page/channel_edit_page.lua",

@@ -3,22 +3,16 @@ local channel_edit_page_ui_handlers = {}
 local param_manager = include("mosaic/lib/devices/param_manager")
 local channel_edit_page_ui_refreshers = include("lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 
-function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page, parameter_controller)
+function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page, parameter_controller, clock_controls_controller)
   local channel_pages = pages.channel_pages
   local channel_page_to_index = pages.channel_page_to_index
   local scales_pages = pages.scales_pages
   local scales_page_to_index = pages.scales_page_to_index
 
   local mask_selectors = selectors.mask_selectors
-  local clock_mod_list_selector = selectors.clock_mod_list_selector
   local midi_device_vertical_scroll_selector = selectors.midi_device_vertical_scroll_selector
   local midi_channel_vertical_scroll_selector = selectors.midi_channel_vertical_scroll_selector
   local device_map_vertical_scroll_selector = selectors.device_map_vertical_scroll_selector
-  local swing_shuffle_type_selector = selectors.swing_shuffle_type_selector
-  local swing_selector = selectors.swing_selector
-  local shuffle_feel_selector = selectors.shuffle_feel_selector
-  local shuffle_basis_selector = selectors.shuffle_basis_selector
-  local shuffle_amount_selector = selectors.shuffle_amount_selector
   
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
     if mask_selectors.trig:is_selected() then
@@ -44,41 +38,9 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
       mask_selectors.chords[4]:select()
     end
   elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
-    -- Adjusted navigation for Clock Mods page
-    local function get_visible_clock_mod_selectors()
-      local selectors = {clock_mod_list_selector, swing_shuffle_type_selector}
-      local value = channel_edit_page_ui.get_swing_shuffle_type_selector_value()
-      if value == 0 then 
-        value = params:get("global_swing_shuffle_type")
-      end
-      if value == 1 then
-        table.insert(selectors, swing_selector)
-      elseif value == 2 then
-        table.insert(selectors, shuffle_feel_selector)
-        table.insert(selectors, shuffle_basis_selector)
-        table.insert(selectors, shuffle_amount_selector)
-      end
-      return selectors
-    end
-
-    local selectors = get_visible_clock_mod_selectors()
-    local current_index = nil
-    for idx, selector in ipairs(selectors) do
-      if selector:is_selected() then
-        current_index = idx
-        break
-      end
-    end
-
-    if current_index then
-      if current_index < #selectors then
-        selectors[current_index]:deselect()
-        selectors[current_index + 1]:select()
-      end
-    else
-      -- No selector is currently selected, select the first one
-      selectors[1]:select()
-    end
+    clock_controls_controller.navigate(1, function()
+      return channel_edit_page_ui.get_swing_shuffle_type_selector_value()
+    end)
   elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
     local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
     if midi_channel_vertical_scroll_selector:is_selected() then
@@ -102,22 +64,16 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
   end
 end
 
-function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page, parameter_controller)
+function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page, parameter_controller, clock_controls_controller)
   local channel_pages = pages.channel_pages
   local channel_page_to_index = pages.channel_page_to_index
   local scales_pages = pages.scales_pages
   local scales_page_to_index = pages.scales_page_to_index
 
   local mask_selectors = selectors.mask_selectors
-  local clock_mod_list_selector = selectors.clock_mod_list_selector
   local midi_device_vertical_scroll_selector = selectors.midi_device_vertical_scroll_selector
   local midi_channel_vertical_scroll_selector = selectors.midi_channel_vertical_scroll_selector
   local device_map_vertical_scroll_selector = selectors.device_map_vertical_scroll_selector
-  local swing_shuffle_type_selector = selectors.swing_shuffle_type_selector
-  local swing_selector = selectors.swing_selector
-  local shuffle_feel_selector = selectors.shuffle_feel_selector
-  local shuffle_basis_selector = selectors.shuffle_basis_selector
-  local shuffle_amount_selector = selectors.shuffle_amount_selector
 
   if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
     if mask_selectors.note:is_selected() then
@@ -143,41 +99,9 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
       mask_selectors.chords[3]:select()
     end
   elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
-    -- Adjusted navigation for Clock Mods page
-    local function get_visible_clock_mod_selectors()
-      local selectors = {clock_mod_list_selector, swing_shuffle_type_selector}
-      local value = channel_edit_page_ui.get_swing_shuffle_type_selector_value()
-      if value == 0 then 
-        value = params:get("global_swing_shuffle_type")
-      end
-      if value == 1 then
-        table.insert(selectors, swing_selector)
-      elseif value == 2 then
-        table.insert(selectors, shuffle_feel_selector)
-        table.insert(selectors, shuffle_basis_selector)
-        table.insert(selectors, shuffle_amount_selector)
-      end
-      return selectors
-    end
-
-    local selectors = get_visible_clock_mod_selectors()
-    local current_index = nil
-    for idx, selector in ipairs(selectors) do
-      if selector:is_selected() then
-        current_index = idx
-        break
-      end
-    end
-
-    if current_index then
-      if current_index > 1 then
-        selectors[current_index]:deselect()
-        selectors[current_index - 1]:select()
-      end
-    else
-      -- No selector is currently selected, select the last one
-      selectors[#selectors]:select()
-    end
+    clock_controls_controller.navigate(-1, function()
+      return channel_edit_page_ui.get_swing_shuffle_type_selector_value()
+    end)
   elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
     local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
     if midi_device_vertical_scroll_selector:is_selected() then
