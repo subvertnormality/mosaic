@@ -34,7 +34,7 @@ class Tests(unittest.TestCase):
  def test_nanobus_uses_bus_and_timeouts_and_waits_marker(self):
   nn=NN()
   with patch('real_norns.ctypes.CDLL',return_value=nn.lib()):self.assertIn('answer',Maiden('ws://norns:5555/').eval('print(1)'))
-  self.assertEqual(nn.options,[(0,5),(0,4)]);self.assertIn(b'print(1)',nn.sent)
+  self.assertEqual(nn.options,[(0,5),(0,4)]);self.assertIn(b'print(1)',nn.sent);self.assertTrue(nn.sent.endswith(b'\n\0'))
  def test_backup_is_before_clear_and_tracks_recovery(self):
   events=[];r,s,m=self.r(events);r.backup();r.maiden.eval('norns.script.clear()');self.assertEqual(events[:2],['ssh','maiden']);self.assertIn('cp -a /home/we/dust/data/system.state',s.scripts[0])
  def test_export_head_excludes_untracked(self):

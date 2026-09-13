@@ -33,8 +33,9 @@ class Maiden:
    if nn.nn_setsockopt(fd,0,5,ctypes.byref(timeout),ctypes.sizeof(timeout))<0:raise RuntimeError('nn_setsockopt RCVTIMEO failed')
    if nn.nn_setsockopt(fd,0,4,ctypes.byref(timeout),ctypes.sizeof(timeout))<0:raise RuntimeError('nn_setsockopt SNDTIMEO failed')
    if nn.nn_connect(fd,self.url.encode())<0:raise RuntimeError('nn_connect failed')
+   time.sleep(.25)
    marker='__MOSAIC_HW_'+hashlib.sha256((code+str(time.monotonic_ns())).encode()).hexdigest()[:16]+'__';payload=(code.rstrip()+"; print('"+marker+"')\n").encode();buf=ctypes.create_string_buffer(payload)
-   if nn.nn_send(fd,buf,len(payload),0)!=len(payload):raise RuntimeError('nn_send failed')
+   if nn.nn_send(fd,buf,len(payload)+1,0)!=len(payload)+1:raise RuntimeError('nn_send failed')
    output=[]
    while True:
     received=ctypes.create_string_buffer(65536);size=nn.nn_recv(fd,received,len(received),0)
