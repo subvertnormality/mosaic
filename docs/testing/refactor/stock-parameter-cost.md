@@ -33,7 +33,7 @@ contracts. Six inventory/name/syntax checks passed. Existing M-PARAM-036
 
 A read-only semantic review found no new state lifetime or lazy-default issue.
 
-## Native comparison pending
+## Native comparison completed; timing remains open
 
 Uninstrumented baseline worktree `/home/andy/projects/mosaic-perf-baseline-r13`
 at f3e788d uses the original image
@@ -42,3 +42,25 @@ PERF-003 workload:16channels,8seconds,0.5CPU quota,768MiB,cpuset0. Baseline outp
 `r13-stock-resolver-native-before-01`. Candidate will use the same workload and
 image after baseline completes. Native improvement and timing acceptance remain
 unproven; existing runtime timing findings are separate.
+
+Both sequential pairs completed, with order before/after then after/before.
+Each produced784 note-ons and48 valid slide cycles. CPU is total constrained
+container CPU across the recorded window, not just the Lua resolver.
+
+| Variant | Run | CPU ms | p99 timing ms | Timing pass |
+| --- | --- | --- | --- | --- |
+| Baseline | 01 | 941.283 | 6.001 | yes |
+| Baseline | 02 | 959.415 | 12.454 | no |
+| Candidate | 01 | 926.707 | 11.387 | no |
+| Candidate | 02 | 928.023 | 12.520 | no |
+
+Candidate CPU was lower in both pairs (about2.4% lower mean across these two
+samples). Small sample size and shared-host variation limit that estimate; the
+37.1% isolated bridge result must not be presented as whole-application speedup.
+The unchanged baseline also exhibits the timing failure. This does not establish
+timing equivalence or waive the10ms bound; R13 timing acceptance remains open.
+
+Decision: retain the allocation/CPU optimization based on the measured local
+benefit, passing functional tests and lower observed native CPU. Do not claim it
+fixes PERF-003 timing or external MIDI sync. Comparison evidence:
+`r13-stock-resolver-native-comparison.json`; all four original run reports retained.

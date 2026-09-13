@@ -121,3 +121,13 @@ It is not accepted/merged: the old native S7 fixture depends on the listing bug.
 The active midi-clock runtime lacks the proposed dataset-reopen API, and an
 unverified newer runtime must not be substituted. This fixture dependency must
 be resolved before S55 is merged; it does not block playback profiling.
+
+## Stock parameter allocation optimization
+
+3dc742b reuses resolver callbacks with explicit channel/step context and removes
+redundant ID formatting. All1546 Lua units,6guards and M-PARAM-036 in both lanes
+pass. Five alternating bridge benchmarks show37.1% lower CPU and about280 fewer
+allocated bytes/call. Two native pairs show correct output and lower candidate
+CPU; timing remains red on both candidate runs and one unchanged baseline run.
+Retain as allocation/CPU reduction, not a timing fix. Details and exact evidence:
+`stock-parameter-cost.md`. Full R13/R14 acceptance remains incomplete.
