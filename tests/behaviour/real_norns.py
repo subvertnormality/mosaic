@@ -5,6 +5,7 @@ from pathlib import Path
 from hardware_driver import hardware_applicability,run_hardware_case
 REPO=Path(__file__).resolve().parents[2];ROOT='/home/we/.cache/mosaic-real-norns'
 def write(p,v):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,indent=2)+'\n')
+def maiden_timeout(output):return TimeoutError('Maiden marker not observed; output tail: '+''.join(output)[-2000:])
 def osc_string(value):
  data=value.encode()+b'\0';return data+b'\0'*((-len(data))%4)
 def osc_packet(path,*values):return osc_string(path)+osc_string(','+'i'*len(values))+struct.pack('!'+('i'*len(values)),*values)
@@ -50,7 +51,7 @@ class Maiden:
   marker='__MOSAIC_HW_'+hashlib.sha256((code+str(time.monotonic_ns())).encode()).hexdigest()[:16]+'__';payload=(code.rstrip()+"; print('"+marker+"')\n").encode()+b'\0';self._send(payload);output=[]
   while True:
    received=ctypes.create_string_buffer(65536);size=self.nn.nn_recv(self.fd,received,len(received),0)
-   if size<0:raise TimeoutError('Maiden marker not observed')
+   if size<0:raise maiden_timeout(output)
    chunk=received.raw[:size].decode(errors='replace');output.append(chunk)
    if 'stack traceback:' in chunk and not allow_lua_error:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
    if marker in chunk:return ''.join(output)
@@ -79,7 +80,8 @@ class WebSocketMaiden:
  def eval(self,code,allow_lua_error=False):
   self._connect();marker='__MOSAIC_HW_'+hashlib.sha256((code+str(time.monotonic_ns())).encode()).hexdigest()[:16]+'__';self.ws.send(code.rstrip()+"; print('"+marker+"')\n");output=[]
   while True:
-   chunk=self.ws.recv(timeout=self.timeout)
+   try:chunk=self.ws.recv(timeout=self.timeout)
+   except TimeoutError:raise maiden_timeout(output)
    if isinstance(chunk,bytes):raise RuntimeError('Maiden returned binary data instead of text')
    output.append(chunk)
    if 'stack traceback:' in chunk and not allow_lua_error:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
@@ -225,7 +227,7 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
     try:drain(trace.reset_midi(allow_lua_error=True),'reset-'+label+'-trace')
     except Exception as error:failure=type(error).__name__+': '+str(error)
    if failure is None:
-    code="for i=1,24 do local id=clock.run(function() clock.sleep(0.001); error('cancelled native clock resumed') end); local finish=util.time()+0.008; while util.time()<finish do end; clock.cancel(id) end; local ok=pcall(clock.resume,99999999); assert(not ok,'unknown clock identity was silently ignored'); clock.run(function() clock.sleep(0.05); _norns.midi_send(1,{176,78,1}) end); _norns.midi_send(1,{176,77,1})"
+    code="local probe_midi=midi.connect(1); for i=1,24 do local id=clock.run(function() clock.sleep(0.001); error('cancelled native clock resumed') end); local finish=util.time()+0.008; while util.time()<finish do end; clock.cancel(id) end; local ok=pcall(clock.resume,99999999); assert(not ok,'unknown clock identity was silently ignored'); clock.run(function() clock.sleep(0.05); probe_midi:cc(78,1,1) end); probe_midi:cc(77,1,1)"
     try:drain(self.maiden.eval(code,allow_lua_error=True),'exercise-'+label);time.sleep(.2);drain(self.maiden.eval("print('__CLOCK_CANCEL_SETTLED__')",allow_lua_error=True),'settle-'+label)
     except Exception as error:failure=type(error).__name__+': '+str(error)
    if failure is None:

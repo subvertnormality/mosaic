@@ -25,6 +25,12 @@ class WS:
  def recv(self,timeout=None):
   marker=self.sent[-1].split("print('",1)[1].split("')",1)[0];return 'answer '+marker
  def close(self):self.closed=True
+class TimeoutWS(WS):
+ def __init__(self):super().__init__();self.reads=0
+ def recv(self,timeout=None):
+  self.reads+=1
+  if self.reads==1:return 'discarded-prefix-'+('x'*3000)
+  raise TimeoutError('socket timed out')
 class S:
  def __init__(self,events=None):self.scripts=[];self.synced=[];self.events=events
  def run(self,x):self.scripts.append(x);self.events is not None and self.events.append('ssh');return type('R',(),{'stdout':'client MIDI\n'})()
@@ -76,6 +82,13 @@ class ExecuteThenRaiseM(M):
   if '_MOSAIC_HW_ORIG_MIDI=original_midi' in x:self.wrapped=True;raise RuntimeError('marker response failed after execution')
   if '__TRACE_REMOVED__' in x:self.wrapped=False;return '__TRACE_REMOVED__C'
   return 'ok'
+class PublicMidiM(M):
+ def __init__(self):super().__init__();self.public_midi=False
+ def eval(self,x,**kwargs):
+  self.commands.append(x)
+  if '_norns.midi_send(1,' in x:raise TypeError('stock MIDI binding requires userdata')
+  if 'local probe_midi=midi.connect(1)' in x:self.public_midi=True
+  return 'ok'
 class Tests(unittest.TestCase):
  def r(self,events=None):t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);s=S(events);m=M(events);return Runner(s,m,O(),Path(t.name),'safe-run'),s,m
  def test_osc_packet_padding_and_network_integers(self):
@@ -94,6 +107,10 @@ class Tests(unittest.TestCase):
   ws=WS();ws.recv=lambda timeout=None:'stack traceback: unexpected\n'+ws.sent[-1].split("print('",1)[1].split("')",1)[0]
   m=WebSocketMaiden('ws://norns:5555/',connector=lambda *a,**k:ws)
   with self.assertRaisesRegex(RuntimeError,'Maiden Lua error'):m.eval('print(1)')
+ def test_websocket_timeout_includes_only_bounded_accumulated_output(self):
+  m=WebSocketMaiden('ws://norns:5555/',connector=lambda *a,**k:TimeoutWS())
+  with self.assertRaises(TimeoutError) as caught:m.eval('print(1)')
+  message=str(caught.exception);self.assertIn('output tail:',message);self.assertIn('x'*2000,message);self.assertNotIn('discarded-prefix',message);self.assertLess(len(message),2100)
  def test_nanobus_reuses_one_connection_until_explicit_close(self):
   nn=NN();m=Maiden('ws://norns:5555/')
   with patch('real_norns.ctypes.CDLL',return_value=nn.lib()),patch('real_norns.time.sleep'):m.eval('print(1)');m.eval('print(2)');m.close()
@@ -186,10 +203,10 @@ class Tests(unittest.TestCase):
   with contextlib.redirect_stdout(io.StringIO()) as output:self.assertEqual(main(['applicability']),0)
   report=json.loads(output.getvalue());self.assertEqual(report['schema_version'],1);self.assertEqual(report['capabilities'],HARDWARE_DRIVER_CAPABILITIES)
  def test_clock_cancel_probe_requires_immediate_and_delayed_midi(self):
-  r,_,m=self.r();trace=T();trace.snapshot=lambda **kwargs:({'grid':[0]*128,'raw_grid':[0]*128,'midi':[{'bytes':[176,77,1]},{'bytes':[176,78,1]}]},'ok') if kwargs.get('return_output') else {}
+  r,_,_=self.r();m=PublicMidiM();r.maiden=m;trace=T();trace.snapshot=lambda **kwargs:({'grid':[0]*128,'raw_grid':[0]*128,'midi':[{'bytes':[176,77,1]},{'bytes':[176,78,1]}]},'ok') if kwargs.get('return_output') else {}
   with patch('real_norns.OutputTrace',return_value=trace),patch('real_norns.time.sleep'):
    result=r.clock_cancel_probe('candidate')
-  self.assertTrue(result['passed']);self.assertIn('pcall(clock.resume,99999999)',m.commands[0]);self.assertEqual(trace.removed,1)
+  self.assertTrue(result['passed']);self.assertTrue(m.public_midi);self.assertIn('pcall(clock.resume,99999999)',m.commands[0]);self.assertIn('probe_midi:cc(77,1,1)',m.commands[0]);self.assertNotIn('_norns.midi_send(1,',m.commands[0]);self.assertEqual(trace.removed,1)
  def test_clock_cancel_probe_drains_only_expected_trace_install_and_remove_errors(self):
   r,_,m=self.r();trace=T();stale="bad argument #1 to 'resume' (thread expected, got nil)\nstack traceback:\n";trace.install_output=stale;trace.reset_output=stale;trace.snapshot_output=stale;trace.remove_output=stale
   trace.snapshot=lambda **kwargs:({'midi':[{'bytes':[176,77,1]},{'bytes':[176,78,1]}]},trace.snapshot_output) if kwargs.get('return_output') else {'midi':[]}
