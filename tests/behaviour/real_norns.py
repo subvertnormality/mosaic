@@ -47,7 +47,10 @@ def export_head(repo):
  with tarfile.open(archive) as rows:rows.extractall(tree)
  sub=repo/'lib/nb'
  if subprocess.run(['git','rev-parse','--verify','HEAD:lib/nb'],cwd=repo,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL).returncode==0:
-  commit=subprocess.check_output(['git','rev-parse','HEAD:lib/nb'],cwd=repo,text=True).strip();subarchive=root/'nb.tar';subprocess.run(['git','archive','--format=tar','-o',str(subarchive),commit],cwd=sub,check=True);(tree/'lib/nb').mkdir(parents=True,exist_ok=True)
+  commit=subprocess.check_output(['git','rev-parse','HEAD:lib/nb'],cwd=repo,text=True).strip()
+  if not (sub/'.git').exists() or subprocess.run(['git','cat-file','-e',commit+'^{commit}'],cwd=sub,stderr=subprocess.DEVNULL).returncode:
+   raise RuntimeError('Initialize exact lib/nb gitlink before deployment: git submodule update --init lib/nb')
+  subarchive=root/'nb.tar';subprocess.run(['git','archive','--format=tar','-o',str(subarchive),commit],cwd=sub,check=True);(tree/'lib/nb').mkdir(parents=True,exist_ok=True)
   with tarfile.open(subarchive) as rows:rows.extractall(tree/'lib/nb')
  manifest=[]
  for p in sorted(tree.rglob('*')):
