@@ -143,3 +143,14 @@ show one roughly84ms phase jump at43.084seconds; no subsequent accumulating
 lag of similar size. This is consistent with, but does not attribute the run to,
 the previously identified native clock accounting issue: this run has no native
 clock trace. Timing acceptance remains failed, with thresholds unchanged.
+
+## Repeated lifecycle validation on e61c18b
+
+M-LIFECYCLE-001 passed in the controlled-experimental lane:
+`3432662804724ab185861a00c125a60b/manifest.json`. All manifest artifact hashes
+were verified. Ten edit/autosave/shutdown/restart cycles restored cumulative
+global transpose, with exact MIDI phrases checked before and after every restart.
+This is functional persistence/lifecycle evidence; the manifest marks the lane
+diagnostic-only, and this is not constrained storage-performance or real-time
+timing acceptance. PERF-005 rendering-pressure evidence is next, reusing the
+existing dense-slide setup and unchanged musical oracle.
