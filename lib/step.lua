@@ -55,30 +55,32 @@ local build_arp_sequence = arp_descriptor.new(chord_order.index)
 local play_strum_root_now, resolve_strum_chord, resolve_strum_root_later =
   strum_descriptor.new(chord_order.index, chord_timing.delay)
 
-function step.process_stock_params(c, step, type)
+local function read_stock_step_lock(i, channel, current_step)
+  return program.get_step_param_trig_lock(channel, current_step, i)
+end
+
+local function read_stock_assigned(param_id)
+  return params:get(param_id)
+end
+
+local function read_stock_default(param)
+  return param.default
+end
+
+local function read_stock_fallback(kind, channel)
+  local param_id = fn.get_param_id_from_stock_id(kind, channel.number)
+  if param_id then
+    local value = params:get(param_id)
+    local param = params:lookup_param(param_id)
+    return value, read_stock_default, param
+  end
+  return nil, nil
+end
+
+function step.process_stock_params(c, current_step, kind)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
-  return stock_parameter.resolve(
-    channel.trig_lock_params,
-    type,
-    function(i)
-      return program.get_step_param_trig_lock(channel, step, i)
-    end,
-    function(param_id)
-      return params:get(param_id)
-    end,
-    function()
-      local stock_param_id = fn.get_param_id_from_stock_id(type, c)
-      if stock_param_id then
-        local param_id = string.format(stock_param_id, c)
-        local param_value = params:get(param_id)
-        local p = params:lookup_param(param_id)
-        return param_value, function()
-          return p.default
-        end
-      end
-      return nil, nil
-    end
-  )
+  return stock_parameter.resolve(channel.trig_lock_params, kind,
+    read_stock_step_lock, read_stock_assigned, read_stock_fallback, channel, current_step)
 end
 
 local function should_process_param(param)
