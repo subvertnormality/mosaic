@@ -34,6 +34,51 @@
         }
       ],
       "production_change": "none-required-if-existing-regressions-pass"
+    },
+    {
+      "number": 85,
+      "title": "Scale page trig locks do not appear when channel page is on memory screen",
+      "url": "https://github.com/subvertnormality/mosaic/issues/85",
+      "source": {
+        "scope_basis": "The issue requests visible channel scale-lock indication on the Memory page. The grid marker is characterised because the manual promises retained lock actions and scale locks, but does not specify this page's LED level."
+      },
+      "manual": [
+        "README.md:698-705",
+        "README.md:850-856"
+      ],
+      "routes": [
+        {
+          "id": "memory-page-scale-lock-indicator",
+          "cases": [
+            "M-SCALE-MEMORY-DISPLAY-001"
+          ],
+          "setup": "Create a channel scale lock on step 3 through the held-step plus scale-slot grid gesture, then navigate to Memory.",
+          "oracle": "The locked step blinks at level 12 while an unlocked neighboring trig remains at 15; the Trig Locks page independently confirms that the lock exists."
+        }
+      ],
+      "production_change": "Memory-page indicator predicate includes channel scale locks"
+    },
+    {
+      "number": 93,
+      "title": "nb parameter trig locks crash playback: undefined channel c in step.process_params",
+      "url": "https://github.com/subvertnormality/mosaic/issues/93",
+      "source": {
+        "scope_basis": "The issue identifies the undefined channel variable on the n.b. parameter-lock playback path."
+      },
+      "manual": [
+        "README.md:749-760"
+      ],
+      "routes": [
+        {
+          "id": "nb-parameter-lock-playback",
+          "cases": [
+            "M-XA-005-NB-LOCK"
+          ],
+          "setup": "Assign a Doubledecker n.b. parameter, place a lock on a step through the grid, then play across it in the n.b.-audio runtime profile.",
+          "oracle": "Playback reaches and leaves the locked step without a Lua error; focused integration tests verify application and restoration with independent channel state."
+        }
+      ],
+      "production_change": "step.process_params uses channel.number for norns parameter state"
     }
   ]
 }

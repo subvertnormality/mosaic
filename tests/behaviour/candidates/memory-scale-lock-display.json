@@ -1,0 +1,56 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "fa48e70",
+  "files": [
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "68510d8a295988640b2d3ba55fb171e713ee9c8c18ad4b4c3647107d87de4307",
+      "after_sha256": "769ec31dbcdbecf229be7298b3c2756b710e6f483920298fea235fd54331678b"
+    }
+  ],
+  "patch": "0108-memory-scale-lock-display.patch",
+  "patch_sha256": "38f5cbc80340a3cbc2f4de5957c8b4bc66b7679df2c4c222f71068c2e5861e20",
+  "regression": "M-SCALE-MEMORY-DISPLAY-001",
+  "unit_regression": "channel_edit_page_ui_delta_killers_tests.lua:test_w4c_memory_page_marks_scale_locked_step",
+  "baseline": [
+    {
+      "run_id": "cda5f93294de478985e9342eb6858d7d",
+      "case": "M-SCALE-MEMORY-DISPLAY-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "99f9e901da15b7b107e577769dfa2c73fb297639338ab3a59c0dc00cfb03f0f8",
+      "failure": "Memory-page step 3 remained LED level 15; expected the scale-lock marker level 12."
+    },
+    {
+      "run_id": "1caa296e221843cc99e1fa5baef4a5e0",
+      "case": "M-SCALE-MEMORY-DISPLAY-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "e23d7d838a875edc79e7a756fcfde67173fb8a24b93841f26087671b814d796c",
+      "failure": "After a user grid refresh, Memory-page step 3 remained LED level 15; expected the scale-lock marker level 12."
+    }
+  ],
+  "rationale": "The Memory-page locked-step indicator considered parameter locks and masks but omitted channel scale locks. Including step_scale_has_trig_lock makes a scale-locked step use the established blinking lock marker.",
+  "oracle": "README documents retained lock actions and channel scale locks; the Memory-page LED level is explicit characterisation for issue #85.",
+  "validation": [
+    {
+      "run_id": "d227e470d5e74b16b6ca89b065f1e875",
+      "case": "M-SCALE-MEMORY-DISPLAY-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "d919a8ab00384c0dab81f05e136a44555d8ed61e99899600e3a4562139bbb726",
+      "failure": null
+    },
+    {
+      "run_id": "84c73f55ced34a6ca61322825afbf115",
+      "case": "M-SCALE-MEMORY-DISPLAY-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "e322cb196057f4f5b0e35d70e04e93f3b8d28d27538892da39a185cf36295394",
+      "failure": null
+    }
+  ],
+  "collateral": "Focused Lua predicate test, full Lua suite 1549/1549, behavior guards 5/5, and three controlled repeats passed before the permanent equivalent grid-refresh step; the identical final regression then passed once in each lane.",
+  "upstream_merged": false,
+  "runtime": "Pinned native monome emulator; base-midi profile; real-time and controlled-experimental."
+}

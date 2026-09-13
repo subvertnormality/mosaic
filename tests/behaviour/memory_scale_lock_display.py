@@ -18,6 +18,8 @@ def memory_scale_lock_display(c):
 
     # E1 from Device Config selects Memory. Step 2 remains an unlocked trigger.
     c.enc(1, -2); c.screen_header('Ch. 1 Memory')
+    # A user grid gesture requests the page's current LED frame in controlled time.
+    c.tap(16, 4); c.elapse(.1)
     c.led_values([(3, 4)], [12])
     c.led_values([(2, 4)], [15])
 
