@@ -55,8 +55,8 @@ class Maiden:
    if 'stack traceback:' in chunk and not allow_lua_error:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
    if marker in chunk:return ''.join(output)
  def send(self,code):self._send((code.rstrip()+'\n').encode()+b'\0');time.sleep(.25)
- def load(self,path):
-  self.send("norns.script.load("+repr(path)+")");time.sleep(8);ready=self.eval("print('__MOSAIC_ACTIVE__'..(norns.state.script or ''))")
+ def load(self,path,allow_lua_error=False):
+  self.send("norns.script.load("+repr(path)+")");time.sleep(8);ready=self.eval("print('__MOSAIC_ACTIVE__'..(norns.state.script or ''))",allow_lua_error=allow_lua_error)
   if path not in ready:raise RuntimeError('norns did not activate '+path+': '+ready[-1000:])
   return ready
  def close(self):
@@ -85,8 +85,8 @@ class WebSocketMaiden:
    if 'stack traceback:' in chunk and not allow_lua_error:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
    if marker in chunk:return ''.join(output)
  def send(self,code):self._connect();self.ws.send(code.rstrip()+'\n')
- def load(self,path):
-  self.send("norns.script.load("+repr(path)+")");time.sleep(8);ready=self.eval("print('__MOSAIC_ACTIVE__'..(norns.state.script or ''))")
+ def load(self,path,allow_lua_error=False):
+  self.send("norns.script.load("+repr(path)+")");time.sleep(8);ready=self.eval("print('__MOSAIC_ACTIVE__'..(norns.state.script or ''))",allow_lua_error=allow_lua_error)
   if path not in ready:raise RuntimeError('norns did not activate '+path+': '+ready[-1000:])
   return ready
  def close(self):
@@ -223,22 +223,38 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
    except Exception as error:failure=failure or type(error).__name__+': '+str(error)
   messages=[event['bytes'] for event in (snapshot or {}).get('midi',[])]
   return {'label':label,'passed':failure is None and [176,77,1] in messages and [176,78,1] in messages,'failure':failure,'midi':messages}
+ def clock_control_eval(self,code,label):
+  output=self.maiden.eval(code,allow_lua_error=True);count=output.count('stack traceback:')
+  for match in re.finditer(r'stack traceback:',output):
+   prefix=output[max(0,match.start()-1000):match.start()]
+   if "bad argument #1 to 'resume' (thread expected" not in prefix:
+    raise RuntimeError('Unexpected Lua error while '+label+': '+output[-2000:])
+  if count:self.clock_error_drains.append({'phase':label,'expected_queued_resume_errors':count})
+  return output
+ def clock_control_load(self,path,label):
+  output=self.maiden.load(path,allow_lua_error=True);count=output.count('stack traceback:')
+  for match in re.finditer(r'stack traceback:',output):
+   prefix=output[max(0,match.start()-1000):match.start()]
+   if "bad argument #1 to 'resume' (thread expected" not in prefix:
+    raise RuntimeError('Unexpected Lua error while '+label+': '+output[-2000:])
+  if count:self.clock_error_drains.append({'phase':label,'expected_queued_resume_errors':count})
+  return output
  def clock_cancel_comparison(self,candidate,path='/home/we/norns/lua/core/clock.lua'):
   candidate=Path(candidate).resolve()
   if not candidate.is_file():raise ValueError('Missing clock candidate: '+str(candidate))
   stock=self.out/'stock-clock.lua';stock_hash=self.remote_sha256(path);self.ssh.fetch(path,stock)
   if hashlib.sha256(stock.read_bytes()).hexdigest()!=stock_hash:raise RuntimeError('Fetched stock clock hash mismatch')
   active_output=self.maiden.eval("print('__MOSAIC_ACTIVE__'..(norns.state.script or ''))");match=re.search(r'__MOSAIC_ACTIVE__([^\r\n]*)',active_output);active=match.group(1) if match else ''
-  phases=[];restored_hash=None
+  phases=[];restored_hash=None;self.clock_error_drains=[]
   try:
-   self.maiden.eval('norns.script.clear()');self.maiden.eval('clock=dofile('+repr(path)+')');phases.append(self.clock_cancel_probe('stock-baseline'))
-   candidate_hash=self.install_clock_file(candidate,'candidate',path);self.maiden.eval('clock=dofile('+repr(path)+')');phases.append(self.clock_cancel_probe('temporary-candidate'))
+   self.clock_control_eval('norns.script.clear()','clear-before-stock-baseline');self.clock_control_eval('clock=dofile('+repr(path)+')','load-stock-baseline');phases.append(self.clock_cancel_probe('stock-baseline'))
+   candidate_hash=self.install_clock_file(candidate,'candidate',path);self.clock_control_eval('clock=dofile('+repr(path)+')','load-temporary-candidate');phases.append(self.clock_cancel_probe('temporary-candidate'))
   finally:
    try:
-    restored_hash=self.install_clock_file(stock,'stock-restore',path);self.maiden.eval('clock=dofile('+repr(path)+')')
-    if active:self.maiden.load(active)
+    restored_hash=self.install_clock_file(stock,'stock-restore',path);self.clock_control_eval('clock=dofile('+repr(path)+')','reload-restored-stock')
+    if active:self.clock_control_load(active,'reload-prior-active-script')
    finally:self.ssh.run('rm -f '+self.remote+'-candidate.clock.lua '+self.remote+'-stock-restore.clock.lua')
-  return {'schema_version':1,'kind':'stock-clock-cancel-queued-resume','clock_path':path,'stock_sha256':stock_hash,'candidate_sha256':candidate_hash if 'candidate_hash' in locals() else None,'restored_sha256':restored_hash,'stock_restored':restored_hash==stock_hash,'phases':phases,'no_reboot_or_jack_restart':True,'active_script':active,'active_script_reloaded':bool(active)}
+  return {'schema_version':1,'kind':'stock-clock-cancel-queued-resume','clock_path':path,'stock_sha256':stock_hash,'candidate_sha256':candidate_hash if 'candidate_hash' in locals() else None,'restored_sha256':restored_hash,'stock_restored':restored_hash==stock_hash,'phases':phases,'expected_error_drains':self.clock_error_drains,'no_reboot_or_jack_restart':True,'active_script':active,'active_script_reloaded':bool(active)}
  def logs(self):
   r=self.ssh.run("systemctl --failed --no-legend || true\nfor u in $(systemctl list-units --type=service --all --no-legend | awk '/matron|crone|supercollider|norns|maiden/{print $1}'); do echo --- $u; journalctl -u $u -n 200 --no-pager || true; done\n");(self.out/'runtime.log').write_text(r.stdout)
  def reload_saved(self):

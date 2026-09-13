@@ -36,7 +36,7 @@ class M:
  def eval(self,x,**kwargs):self.commands.append(x);self.events is not None and self.events.append('maiden');return 'ok'
  def close(self):self.closed+=1
  def send(self,x):self.commands.append(x)
- def load(self,x):self.commands.append('load '+x);return 'ok'
+ def load(self,x,**kwargs):self.commands.append('load '+x);return 'ok'
 class O:
  def send(self,*x):return {'args':x}
 class T:
@@ -56,6 +56,17 @@ class ClockSSH:
   return type('R',(),{'stdout':''})()
  def fetch(self,remote,local):local.write_bytes(self.files[remote])
  def push(self,local,remote):self.files[remote]=Path(local).read_bytes()
+class StaleClockM(M):
+ def __init__(self):super().__init__();self.active_reads=0
+ def stale(self):return "lua/core/clock.lua:62: bad argument #1 to 'resume' (thread expected, got nil)\nstack traceback:\n"
+ def eval(self,x,allow_lua_error=False):
+  self.commands.append(x)
+  if '__MOSAIC_ACTIVE__' in x:
+   self.active_reads+=1;return (self.stale() if self.active_reads>1 else '')+'__MOSAIC_ACTIVE__/home/we/dust/code/mosaic/mosaic.lua\n'
+  if x=='norns.script.clear()' or x.startswith('clock=dofile('):return self.stale()+'marker\n'
+  return 'ok'
+ def load(self,x,allow_lua_error=False):
+  self.commands.append('load '+x);return self.eval("print('__MOSAIC_ACTIVE__'..(norns.state.script or ''))",allow_lua_error=allow_lua_error)
 class Tests(unittest.TestCase):
  def r(self,events=None):t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);s=S(events);m=M(events);return Runner(s,m,O(),Path(t.name),'safe-run'),s,m
  def test_osc_packet_padding_and_network_integers(self):
@@ -166,11 +177,21 @@ class Tests(unittest.TestCase):
   self.assertTrue(result['passed']);self.assertIn('pcall(clock.resume,99999999)',m.commands[0]);self.assertEqual(trace.removed,1)
  def test_clock_cancel_comparison_restores_exact_stock_hash_without_service_restart(self):
   temporary=tempfile.TemporaryDirectory();self.addCleanup(temporary.cleanup);out=Path(temporary.name);candidate=out/'candidate-clock.lua';candidate.write_bytes(b'candidate')
-  ssh=ClockSSH(b'stock');m=M();m.eval=lambda code:m.commands.append(code) or '__MOSAIC_ACTIVE__/home/we/dust/code/mosaic/mosaic.lua\n';r=Runner(ssh,m,O(),out,'clock-run')
+  ssh=ClockSSH(b'stock');m=M();m.eval=lambda code,**kwargs:m.commands.append(code) or '__MOSAIC_ACTIVE__/home/we/dust/code/mosaic/mosaic.lua\n';r=Runner(ssh,m,O(),out,'clock-run')
   seen=[]
   def probe(label):seen.append((label,hashlib.sha256(ssh.files[ssh.path]).hexdigest()));return {'label':label,'passed':label=='temporary-candidate','failure':None,'midi':[]}
   with patch.object(r,'clock_cancel_probe',side_effect=probe):evidence=r.clock_cancel_comparison(candidate)
   self.assertEqual([label for label,_ in seen],['stock-baseline','temporary-candidate']);self.assertNotEqual(seen[0][1],seen[1][1])
   self.assertTrue(evidence['stock_restored']);self.assertEqual(ssh.files[ssh.path],b'stock');self.assertTrue(evidence['no_reboot_or_jack_restart'])
   self.assertFalse(any('reboot' in script or 'systemctl restart' in script for script in ssh.scripts));self.assertIn('load /home/we/dust/code/mosaic/mosaic.lua',m.commands[-1])
+ def test_clock_cancel_comparison_drains_stale_stock_errors_during_control_and_reload(self):
+  temporary=tempfile.TemporaryDirectory();self.addCleanup(temporary.cleanup);out=Path(temporary.name);candidate=out/'candidate-clock.lua';candidate.write_bytes(b'candidate')
+  ssh=ClockSSH(b'stock');m=StaleClockM();r=Runner(ssh,m,O(),out,'stale-run')
+  with patch.object(r,'clock_cancel_probe',side_effect=[{'label':'stock-baseline','passed':False},{'label':'temporary-candidate','passed':True}]):evidence=r.clock_cancel_comparison(candidate)
+  self.assertTrue(evidence['stock_restored']);self.assertEqual(ssh.files[ssh.path],b'stock');self.assertTrue(evidence['active_script_reloaded'])
+  self.assertEqual([row['phase'] for row in evidence['expected_error_drains']],['clear-before-stock-baseline','load-stock-baseline','load-temporary-candidate','reload-restored-stock','reload-prior-active-script'])
+ def test_clock_control_rejects_unrelated_lua_errors(self):
+  r,_,m=self.r();m.eval=lambda code,**kwargs:'different failure\nstack traceback:\n'
+  r.clock_error_drains=[]
+  with self.assertRaisesRegex(RuntimeError,'Unexpected Lua error'):r.clock_control_eval('x','test')
 if __name__=='__main__':unittest.main()

@@ -52,7 +52,7 @@ As of 2026-09-13, this case passed on a physical norns at source revision `6f4ac
 
 The hardware mode currently implements `M-PAT-001`, the generic smoke, and a dedicated stock-norns `clock.cancel` queued-resume comparison. Performance/load, musical timing and drift, and MIDI master/slave sync remain focused targets until their hardware adapters and oracles are implemented. The broad functional suite remains emulator coverage; a recipe is never treated as hardware-compatible merely because it happens to call methods present on the adapter.
 
-`clock-cancel` runs the same queued-resume probe against the installed stock `clock.lua`, atomically installs a caller-supplied complete candidate file, reruns the probe, and restores the fetched stock bytes in `finally`. It verifies and records the stock, candidate, and restored SHA-256 values, then reloads the previously active script. The procedure does not reboot norns or restart JACK:
+`clock-cancel` runs the same queued-resume probe against the installed stock `clock.lua`, atomically installs a caller-supplied complete candidate file, reruns the probe, and restores the fetched stock bytes in `finally`. Expected queued stock `thread expected` errors are drained through each Maiden marker during clear, clock reload, and prior-script reload; their phase and count are recorded, while any other Lua error still fails. It verifies and records the stock, candidate, and restored SHA-256 values, then reloads the previously active script. The procedure does not reboot norns or restart JACK:
 
 ```sh
 python3 tests/behaviour/real_norns.py clock-cancel \
