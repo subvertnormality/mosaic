@@ -40,9 +40,9 @@ class M:
 class O:
  def send(self,*x):return {'args':x}
 class T:
- def __init__(self):self.installed=0;self.removed=0
- def install(self):self.installed+=1
- def remove(self):self.removed+=1
+ def __init__(self):self.installed=0;self.removed=0;self.install_output='ok';self.remove_output='ok'
+ def install(self,**kwargs):self.installed+=1;return self.install_output
+ def remove(self,**kwargs):self.removed+=1;return self.remove_output
  def reset_midi(self):pass
  def snapshot(self):return {'grid':[0]*128,'raw_grid':[0]*128,'midi':[]}
 class ClockSSH:
@@ -67,6 +67,13 @@ class StaleClockM(M):
   return 'ok'
  def load(self,x,allow_lua_error=False):
   self.commands.append('load '+x);return self.eval("print('__MOSAIC_ACTIVE__'..(norns.state.script or ''))",allow_lua_error=allow_lua_error)
+class ExecuteThenRaiseM(M):
+ def __init__(self):super().__init__();self.wrapped=False;self.allow=[]
+ def eval(self,x,allow_lua_error=False):
+  self.commands.append(x);self.allow.append(allow_lua_error)
+  if '_MOSAIC_HW_ORIG_MIDI=original_midi' in x:self.wrapped=True;raise RuntimeError('marker response failed after execution')
+  if '__TRACE_REMOVED__' in x:self.wrapped=False;return '__TRACE_REMOVED__C'
+  return 'ok'
 class Tests(unittest.TestCase):
  def r(self,events=None):t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);s=S(events);m=M(events);return Runner(s,m,O(),Path(t.name),'safe-run'),s,m
  def test_osc_packet_padding_and_network_integers(self):
@@ -130,8 +137,14 @@ class Tests(unittest.TestCase):
   m=M();m.eval=lambda code:'__GRID_COUNTS__12,3\n'+rows+'\n__MIDI__1|12.250000000|userdata: 1|table|144,60,127\n'
   value=OutputTrace(m).snapshot();self.assertEqual(value['raw_grid'][112],-4);self.assertEqual(value['grid'][112],12);self.assertEqual(value['midi'][0]['bytes'],[144,60,127])
  def test_output_trace_uses_persistent_globals_and_restores_c_binding(self):
-  m=M();m.eval=lambda code:m.commands.append(code) or ('__TRACE_REMOVED__C' if '__TRACE_REMOVED__' in code else 'ok')
-  trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('_MOSAIC_HW_ORIG_MIDI=_norns.midi_send',m.commands[0]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[1])
+  m=M();m.eval=lambda code,**kwargs:m.commands.append(code) or ('__TRACE_REMOVED__C' if '__TRACE_REMOVED__' in code else 'ok')
+  trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('local original_midi=_norns.midi_send',m.commands[0]);self.assertIn('return original_midi(dev,payload)',m.commands[0]);self.assertIn('grid_state.writes',m.commands[0]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[1])
+ def test_output_trace_reset_mutates_the_table_captured_by_wrappers(self):
+  m=M();trace=OutputTrace(m);trace.reset_midi();self.assertIn('for i=#_MOSAIC_HW_MIDI,1,-1',m.commands[0]);self.assertIn('_MOSAIC_HW_MIDI_REALTIME.count=0',m.commands[0]);self.assertNotIn('_MOSAIC_HW_MIDI={}',m.commands[0])
+ def test_output_trace_install_cleans_up_when_code_executes_then_eval_raises(self):
+  m=ExecuteThenRaiseM();trace=OutputTrace(m)
+  with self.assertRaisesRegex(RuntimeError,'marker response failed'):trace.install(allow_lua_error=True)
+  self.assertFalse(m.wrapped);self.assertFalse(trace.installed);self.assertEqual(len(m.commands),2);self.assertEqual(m.allow,[True,True]);self.assertIn('__TRACE_REMOVED__',m.commands[1])
  def test_device_map_index_is_selected_by_id_not_fixed_offset(self):
   r,_,m=self.r();m.eval=lambda code:m.commands.append(code) or '__MOSAIC_DEVICE_MAP_INDEX__34\nmarker';self.assertEqual(r.device_map_index('emu-test'),34);self.assertIn("d.id=='emu-test'",m.commands[-1])
  def test_hardware_driver_exposes_the_recipe_surface_and_rejects_unknown_actions(self):
@@ -175,6 +188,13 @@ class Tests(unittest.TestCase):
   with patch('real_norns.OutputTrace',return_value=trace),patch('real_norns.time.sleep'):
    result=r.clock_cancel_probe('candidate')
   self.assertTrue(result['passed']);self.assertIn('pcall(clock.resume,99999999)',m.commands[0]);self.assertEqual(trace.removed,1)
+ def test_clock_cancel_probe_drains_only_expected_trace_install_and_remove_errors(self):
+  r,_,_=self.r();trace=T();stale="bad argument #1 to 'resume' (thread expected, got nil)\nstack traceback:\n";trace.install_output=stale;trace.remove_output=stale;trace.snapshot=lambda:{'midi':[{'bytes':[176,77,1]},{'bytes':[176,78,1]}]}
+  with patch('real_norns.OutputTrace',return_value=trace),patch('real_norns.time.sleep'):result=r.clock_cancel_probe('stock-baseline')
+  self.assertTrue(result['passed']);self.assertEqual([row['phase'] for row in r.clock_error_drains],['install-stock-baseline-trace','remove-stock-baseline-trace']);self.assertEqual(trace.removed,1)
+  trace=T();trace.install_output='unrelated failure\nstack traceback:\n'
+  with patch('real_norns.OutputTrace',return_value=trace):result=r.clock_cancel_probe('stock-baseline')
+  self.assertFalse(result['passed']);self.assertIn('Unexpected Lua error',result['failure']);self.assertEqual(trace.removed,1)
  def test_clock_cancel_comparison_restores_exact_stock_hash_without_service_restart(self):
   temporary=tempfile.TemporaryDirectory();self.addCleanup(temporary.cleanup);out=Path(temporary.name);candidate=out/'candidate-clock.lua';candidate.write_bytes(b'candidate')
   ssh=ClockSSH(b'stock');m=M();m.eval=lambda code,**kwargs:m.commands.append(code) or '__MOSAIC_ACTIVE__/home/we/dust/code/mosaic/mosaic.lua\n';r=Runner(ssh,m,O(),out,'clock-run')
