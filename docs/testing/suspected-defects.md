@@ -98,9 +98,11 @@ treat it as flaky.
 
 Real-time reliability (not Mosaic defects, thresholds unchanged): at 96d465d the concurrent
 suite (6 real-time sessions) failed M-RANGE-002, M-SYNC-006, M-TIME-006 and M-TIME-007 on
-timing margins. On an idle host M-TIME-007 passed 3/3; M-SYNC-006 failed 1/3 with an 11-12 ms
-onset-phase error both at 96d465d and at 8bd70b5, so it is a pre-existing intermittent case
-at its 10 ms bound. Whether the bound, the external-clock scheduling or the host is the cause
-needs a human decision; until then an M-SYNC-006 real-time failure is not evidence of a
-regression on its own. Human decision 2026-09-11: treat it as a Mosaic external-clock timing
-defect, to be fixed in the refactor (bound unchanged).
+timing margins. On an idle host M-TIME-007 passed 3/3. M-SYNC-006 subsequently failed four
+serial runs at its unchanged 10 ms bound with sub-0.22 ms input delivery, confirming a Mosaic
+external-Start callback cost. The refactor fix removes full collection from immediate restart
+and replaces redundant lattice reconstruction with delay-preserving in-place preparation.
+Five final real-time runs passed with at most 3.429 ms onset phase, controlled time passed 3/3,
+and sync/timing/shuffle/recording collateral is green. One loaded M-TIME-001 run retained a
+single non-accumulating host phase step and passed alone. See
+`docs/testing/refactor/R14-qualification.md`.

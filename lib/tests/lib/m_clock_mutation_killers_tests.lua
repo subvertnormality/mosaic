@@ -245,6 +245,46 @@ function test_mclk_external_start_while_playing_restarts_at_step_one_without_mid
   end)
 end
 
+-- Repeated external Start is immediately followed by the source's coincident Clock.
+-- Preserve normal Stop collection, but keep a full Lua collection off that deadline.
+function test_mclk_external_restart_defers_full_collection_until_a_normal_stop()
+  with_clock(function()
+    setup()
+    m_clock.init()
+    local collections = 0
+    with_globals({
+      collectgarbage = function(mode)
+        if mode == "collect" then collections = collections + 1 end
+        return 0
+      end,
+    }, function()
+      m_clock:stop()
+      luaunit.assert_equals(collections, 1)
+      m_clock:start(true)
+      collections = 0
+      m_clock:start(true)
+      luaunit.assert_equals(collections, 0)
+      m_clock:stop()
+      luaunit.assert_equals(collections, 1)
+    end)
+  end)
+end
+
+-- Stop/reset already creates a clean lattice. Starting it should normalize its
+-- timing state in place instead of allocating an identical second owner.
+function test_mclk_stopped_start_reuses_the_prepared_lattice()
+  with_clock(function()
+    setup()
+    m_clock.init()
+    m_clock:stop()
+    local prepared = m_clock.get_clock_lattice()
+    m_clock:start(true)
+    luaunit.assert_equals(m_clock.get_clock_lattice(), prepared)
+    luaunit.assert_equals(prepared.transport, 1)
+    m_clock:stop()
+  end)
+end
+
 -- The one-time boundary warning, the playing flag and the native boundary owner are
 -- module state; a fresh module is built for these cases.
 function test_mclk_a_new_module_is_stopped_until_start()

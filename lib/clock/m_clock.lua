@@ -153,6 +153,7 @@ local transport = include("mosaic/lib/clock/transport_lifecycle").new {
   set_lattice = function(value) clock_lattice = value end,
   reset_first_run = function() first_run = true end,
   program = program,
+  prepare_start = function() m_clock.prepare_start() end,
   midi_patch_recall = midi_patch_recall,
   midi_output_transport = midi_output_transport,
   drain_releases = function()
@@ -401,6 +402,16 @@ function m_clock.init()
     order = 5
   }
 
+  slides.reset()
+end
+
+-- Apply the final stopped timing settings to the clean lattice prepared by
+-- init/reset. Realignment resets fractional carry and phase without rebuilding
+-- every sprocket on the MIDI Start callback's first-clock deadline.
+function m_clock.prepare_start()
+  if not clock_lattice then return m_clock.init() end
+  clock_lattice.pattern_length = program.get_selected_song_pattern().global_pattern_length
+  clock_lattice:prepare_for_start()
   slides.reset()
 end
 

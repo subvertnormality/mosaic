@@ -22,20 +22,22 @@ needed for these deletion-only edits before the already planned final sweep.
 
 ## Actual remaining work
 
-1. Freeze this final code candidate and run the existing final qualification once:
-   required behavior lanes/profiles and existing fast checks. Reuse established
-   runners and manifests; no new correctness matrices or reviewer prerequisites.
-2. Triage any failure against retained baselines. Fix only a demonstrated regression;
-   preserve known native timing, profile and host failures as explicit limitations.
-   Do not turn the final cleanup into another optimization campaign.
-3. Publish the refactor handoff with final results and rollback revision. Distinguish
-   completed structural implementation from full runtime/performance acceptance.
-4. Then execute the separately requested UI test abstraction plan under its existing
-   scope. General emulator release/default-runtime promotion remains separate.
+The final base-MIDI sweep and bounded triage are complete. The full sweep at
+`fb780ac` passed 1,560/1,578 lanes; one emulator request-capacity omission was
+restored on emulator main, 15 loaded real-time failures cleared serially, and the
+remaining repeated external-Start cost was fixed without changing its 10 ms bound.
+Focused final evidence includes 1,548 Lua tests, fast guards, five real-time and
+three controlled repeated-Start runs, nearby sync cases, integral timing, shuffle
+and live recording. See [R14 qualification](R14-qualification.md).
+
+No second full sweep is required: the user explicitly judged it disproportionate
+after the completed sweep and focused correction. Publish the refactor handoff and
+then execute the separately requested UI test abstraction plan under its existing
+scope. General emulator release/default-runtime promotion remains separate.
 
 Known limitations have not disappeared: the100ms quota performance profile retains
 failures; the native clock candidate and shorter-period profile are unpromoted;
-full required-profile/lane qualification has not yet run on this candidate.
+separate optional output profiles are not promoted as physical-hardware evidence.
 The previous R12 aggregate had787/791initial passes, with four native SIGXCPU
 failures passing unchanged afterward, and13profile/real-time omissions. It cannot
 substitute for the final qualification. See page-edit-ownership.md and R13-progress.md.

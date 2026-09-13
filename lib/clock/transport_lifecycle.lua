@@ -12,13 +12,13 @@ function transport_lifecycle.new(deps)
         (deps.get_lattice().enabled or cancel_midi_output_transport) then return end
     -- MIDI Start resets position even when playback is already active.
     -- Reuse cleanup so held voices and pending releases cannot cross epochs.
-    if playing and from_external_transport then self:stop(false) end
+    -- The replacement starts in this same callback, so defer the optional full
+    -- collection rather than blocking the coincident first MIDI Clock.
+    if playing and from_external_transport then self:stop(false, true) end
     if not playing then
-      -- Stopped edits can consume fractional preview carry in different orders.
-      -- Build both processors from the final settings before the first onset.
-      -- Preserve step state and leave already-playing clocks untouched.
-      if deps.get_lattice() then deps.get_lattice():destroy() end
-      self.init()
+      -- Reset fractional timing from final stopped settings without allocating a
+      -- second lattice: Stop/reset has already built the clean transport owner.
+      deps.prepare_start()
     end
     deps.reset_first_run()
     if params:get("elektron_program_changes") == 2 then
@@ -51,7 +51,7 @@ function transport_lifecycle.new(deps)
 
   end
 
-  function lifecycle.stop(self, send_transport)
+  function lifecycle.stop(self, send_transport, restarting_immediately)
     if cancel_midi_output_transport then
       cancel_midi_output_transport()
       cancel_midi_output_transport = nil
@@ -71,7 +71,9 @@ function transport_lifecycle.new(deps)
 
     deps.get_clock().reset()
 
-    collectgarbage("collect")
+    if not restarting_immediately then
+      collectgarbage("collect")
+    end
   end
 
   function lifecycle.is_playing()

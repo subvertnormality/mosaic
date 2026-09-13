@@ -728,4 +728,28 @@ function Lattice:realign_eligable_sprockets()
   end
 end
 
+-- Normalize a stopped lattice as freshly constructed, while retaining its
+-- sprockets and callbacks. Unlike an in-song realignment, delayed processors
+-- must keep their constructor offset so they cannot fire at the first onset.
+function Lattice:prepare_for_start()
+  for order = 1, 5 do
+    for _, id in ipairs(self.sprocket_ordering[order]) do
+      local sprocket = self.sprockets[id]
+      if sprocket.realign then
+        local delay = sprocket.delay_new ~= nil and sprocket.delay_new or sprocket.delay
+        sprocket.delay = delay
+        sprocket.delay_new = nil
+        sprocket.ppqn_error = 0.5
+        sprocket.step = 1
+        sprocket.transport = 1
+        sprocket:update_swing()
+        sprocket:update_shuffle(1)
+        sprocket.phase = 1 - (sprocket.current_ppqn * delay)
+        sprocket.shuffle_updated = false
+      end
+    end
+  end
+  self.transport = 1
+end
+
 return Lattice
