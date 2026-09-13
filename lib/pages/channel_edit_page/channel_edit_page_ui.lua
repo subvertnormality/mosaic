@@ -21,6 +21,7 @@ local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_pag
 local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
 local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 local channel_edit_masks = include("mosaic/lib/pages/channel_edit_page/channel_edit_masks")
+local channel_edit_history = include("mosaic/lib/pages/channel_edit_page/channel_edit_history")
 
 -- UI components
 local channel_pages = pages:new()
@@ -31,9 +32,6 @@ local shuffle_feel_selector = list_selector:new(0, 40, "Feel", {{name = "X", val
 local shuffle_basis_selector = list_selector:new(40, 40, "Basis", {{name = "X", value = 1}, {name = "9", value = 2}, {name = "7", value = 3}, {name = "5", value = 4}, {name = "6", value = 5}, {name = "8??", value = 6}, {name = "9??", value = 7}})
 local shuffle_amount_selector = value_selector:new(70, 40, "Amount", 0, 100)
 
-local memory_state = {
-  events = {}
-}
 
 function channel_edit_page_ui.get_swing_shuffle_type_selector_value()
   return swing_shuffle_type_selector:get_selected().value - 1
@@ -104,9 +102,10 @@ for i = 1, 10 do
   table.insert(m_params, dial:new(0 + (i - 1) % 5 * 25, 18 + math.floor((i - 1) / 5) * 22, "Param " .. i, "param_" .. i, "None", "X"))
 end
 
--- Memory controls
+-- History controls
+local channel_edit_history_controller = channel_edit_history.new(memory_history_navigator, channel_edit_page_ui)
 local memory_controls = {
-  navigator = memory_history_navigator:new(0 + (1 - 1) % 5 * 25, 18 + math.floor((3 - 1) / 5) * 22, "History")
+  navigator = channel_edit_history_controller.navigator
 }
 
 -- Page indices
@@ -227,7 +226,7 @@ end)
 
 
 local memory_page = page:new("Memory", function()
-  memory_controls.navigator:draw()
+  channel_edit_history_controller.draw()
 end)
 
 local mask_page = page:new("Note Masks", function()
@@ -378,10 +377,7 @@ function channel_edit_page_ui.init()
   channel_edit_page_ui.set_shuffle_basis_selector_value(params:get("global_shuffle_basis"))
   shuffle_amount_selector:set_value(params:get("global_shuffle_amount"))
 
-  memory_controls.navigator:set_event_state(memory_state)
-  memory_controls.navigator:set_max_index(memory.get_total_event_count(program.get().selected_channel))
-  memory_controls.navigator:set_current_index(memory.get_event_count(program.get().selected_channel))
-  memory_controls.navigator:select()
+  channel_edit_history_controller.initialize()
 
   channel_edit_page_ui.refresh_clock_mods()
 end
@@ -896,10 +892,7 @@ function channel_edit_page_ui.refresh_param_list()
 end
 
 function channel_edit_page_ui.refresh_memory()
-  local c = program.get_selected_channel().number
-  memory_state.events = memory.get_recent_events(c, 25)
-  memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
-  memory_controls.navigator:set_current_index(memory.get_event_count(c))
+  return channel_edit_history_controller.refresh()
 end
 
 channel_edit_page_ui.refresh_channel_config = scheduler.debounce(function()
@@ -952,29 +945,8 @@ function channel_edit_page_ui.refresh()
 end
 
 function channel_edit_page_ui.handle_memory_navigator(c, d)
-  
-  if d > 0 then
-    
-    memory.redo(c)
-    if program.get_selected_channel().number == c then
-      memory_state.events = memory.get_recent_events(c, 25)
-      memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
-      memory_controls.navigator:set_current_index(memory.get_event_count(c))
-    end
-  else
-    memory.undo(c)
-    if program.get_selected_channel().number == c then
-      memory_state.events = memory.get_recent_events(c, 25)
-      memory_controls.navigator:set_max_index(memory.get_total_event_count(c))
-      memory_controls.navigator:set_current_index(memory.get_event_count(c))
-    end
-  end
-  -- Undo and redo re-apply only an event's own fields; rebuild the channel's working pattern
-  -- from its masks, as every edit does (defect memory-redo-working-pattern, M-MEMORY-009).
-  pattern.update_working_pattern(c, program.get_selected_song_pattern())
+  return channel_edit_history_controller.navigate(c, d)
 end
-
--- Held keys outside the sequencer rows 4-7 are not steps: the mask handlers ignore them
 -- (bugs.json held-mask-extra-key).
 local mask_handlers = channel_edit_masks.new(mask_selectors, channel_edit_page_ui, divisions)
 
@@ -1016,11 +988,8 @@ end
 
 
 function channel_edit_page_ui.handle_memory_page_change(d)
-  if memory_controls.navigator:is_selected() then
-    channel_edit_page_ui.handle_memory_navigator(program.get_selected_channel().number, d)
-  end
+  return channel_edit_history_controller.handle_page_change(d)
 end
-
 function channel_edit_page_ui.handle_clock_mods_page_increment()
   if swing_shuffle_type_selector:is_selected() then
     swing_shuffle_type_selector:increment()
