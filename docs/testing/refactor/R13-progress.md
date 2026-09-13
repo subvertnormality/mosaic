@@ -85,3 +85,18 @@ offset shifted11.239ms and CC residual shifted12.031ms. This is diagnostic
 evidence, not passing timing acceptance. The earlier generic run without retained
 trace is incomplete. A global wall-clock replacement is not being promoted: it
 could decouple MIDI timing from audio/softcut.
+
+## Device/parameter lifecycle audit follow-up
+
+At df3e0bf, existing controlled behaviour M-PATCH-047 passed: removing the middle
+assignment during ten active slides stops that CC while preserving nine curves
+and note timing. Manifest: `84cdf35bda2b4b0fa4ce6f66d7668835/manifest.json`.
+This is a focused lifetime regression, not full device-switch qualification.
+
+Review findings must be reconciled with `suspected-defects.md`: S5 (hidden Slew)
+was explicitly rejected as a defect by the user; preserve that decision. S3
+(Braids leading-none slot mismatch) is already recorded as unvalidated, and its
+unit characterisation does not satisfy the two-lane behaviour baseline requirement.
+Do not flip either test merely because an audit calls the current code defective.
+S55 (directory discovery) and S56 (hidden parameter values) are existing approved
+refactor follow-ups; check their implementation and existing coverage next.
