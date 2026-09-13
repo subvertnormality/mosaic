@@ -100,3 +100,24 @@ unit characterisation does not satisfy the two-lane behaviour baseline requireme
 Do not flip either test merely because an audit calls the current code defective.
 S55 (directory discovery) and S56 (hidden parameter values) are existing approved
 refactor follow-ups; check their implementation and existing coverage next.
+
+## Priority correction: Mosaic playback cost attribution
+
+The user clarified that reducing Mosaic load is the performance objective. Native
+clock accounting and residual JACK timing remain separate runtime findings; the
+isolated clock fix is not a physical-norns or external-sync fix. Existing aggregate
+timing measurements do not identify a measured Mosaic function hotspot. Next run
+collects function CPU/call attribution on the dense-slide workload, followed by an
+uninstrumented matched comparison for any selected optimization. Instrumented
+timing is diagnostic only; overlapping inclusive costs must not be summed.
+
+Diagnostic worktree: `/home/andy/projects/mosaic-profile-r13`, branch
+`codex/r13-cost-profile`, based on839762a. No profiler instrumentation belongs in
+production by default.
+
+S55 is retained on local-only `codex/s55-discovery-candidate` at aab67ac, with both
+lane passes, three controlled repeats,1546 units and custom-device collateral.
+It is not accepted/merged: the old native S7 fixture depends on the listing bug.
+The active midi-clock runtime lacks the proposed dataset-reopen API, and an
+unverified newer runtime must not be substituted. This fixture dependency must
+be resolved before S55 is merged; it does not block playback profiling.
