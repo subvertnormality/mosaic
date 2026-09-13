@@ -22,6 +22,7 @@ local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_pag
 local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 local channel_edit_masks = include("mosaic/lib/pages/channel_edit_page/channel_edit_masks")
 local channel_edit_history = include("mosaic/lib/pages/channel_edit_page/channel_edit_history")
+local channel_edit_parameters = include("mosaic/lib/pages/channel_edit_page/channel_edit_parameters")
 
 -- UI components
 local channel_pages = pages:new()
@@ -102,6 +103,20 @@ for i = 1, 10 do
   table.insert(m_params, dial:new(0 + (i - 1) % 5 * 25, 18 + math.floor((i - 1) / 5) * 22, "Param " .. i, "param_" .. i, "None", "X"))
 end
 
+local channel_edit_parameters_controller = channel_edit_parameters.new(
+  {
+    dials = dials,
+    m_params = m_params,
+    midi_device_vertical_scroll_selector = midi_device_vertical_scroll_selector,
+    midi_channel_vertical_scroll_selector = midi_channel_vertical_scroll_selector,
+    param_select_vertical_scroll_selector = param_select_vertical_scroll_selector,
+    device_map_vertical_scroll_selector = device_map_vertical_scroll_selector
+  },
+  channel_edit_page_ui,
+  channel_edit_page_ui_refreshers,
+  {param_manager = param_manager, midi_value_domain = midi_value_domain}
+)
+
 -- History controls
 local channel_edit_history_controller = channel_edit_history.new(memory_history_navigator, channel_edit_page_ui)
 local memory_controls = {
@@ -116,34 +131,6 @@ local index_to_channel_page = {"Masks", "Trig Locks", "Memory", "Clock Mods", "M
 local refresh_timer_id = nil
 local throttle_time = 0.2
 
--- Add this helper function near the top with other helper functions
-local function get_value_using_handler_param(channel, dial_index, p, param_id, p_value, delta)
-  local param_args = {}
-  
-  for key, arg in pairs(p) do
-    param_args[key] = arg
-  end
-
-  local handler_param_id = channel.number .. "_lock_calculator_" .. dial_index .. "_" .. program.get_trig_lock_calculator_id(channel, dial_index)
-
-  param_args.id = handler_param_id
-  param_args.type = fn.get_param_type_from_id(params:t(param_id))
-  param_args.controlspec = p.controlspec
-
-  local handler_param_id_index = params.lookup[handler_param_id]
-
-  if not handler_param_id_index then
-    params:add(param_args)
-    handler_param_id_index = params.lookup[handler_param_id]
-    params:hide(handler_param_id_index)
-    params:set_action(handler_param_id_index, function() end)
-    params:set(handler_param_id_index, p_value, true)
-  end
-
-  params:delta(handler_param_id_index, delta)
-  
-  return params:get(handler_param_id_index)
-end
 
 local function configure_note_value_selector(note_value_selector)
   note_value_selector:set_view_transform_func(function(value)
@@ -323,6 +310,7 @@ function channel_edit_page_ui.init()
 
   clock_mod_list_selector:set_list(m_clock.get_clock_divisions())
   device_map_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Midi Map", device_map:get_devices())
+  channel_edit_parameters_controller.set_device_map_selector(device_map_vertical_scroll_selector)
 
   local function set_sub_name_func(page, func)
     page:set_sub_name_func(func)
@@ -536,232 +524,12 @@ function channel_edit_page_ui.update_clock_mods()
   end
   
 end
-
 function channel_edit_page_ui.update_channel_config()
-  local channel = program.get_selected_channel()
-  local midi_device = midi_device_vertical_scroll_selector:get_selected_item()
-  local midi_channel = midi_channel_vertical_scroll_selector:get_selected_item()
-  local device_m = device_map_vertical_scroll_selector:get_selected_item()
-
-  if not midi_device then
-    if device_m.type == "midi" then
-      tooltip:error("No midi devices connected")
-      return
-    end
-  end
-
-  -- Configuration confirmation rebuilds the parameter bank and its actions.
-  for slot = 1, 10 do
-    recorder.clear_trig_lock_dirty(channel.number, slot)
-  end
-  program.get().devices[channel.number].midi_device = midi_device and midi_device.value or nil
-  program.get().devices[channel.number].midi_channel = midi_channel and midi_channel.value or nil
-  program.get().devices[channel.number].device_map = device_m and device_m.id or nil
-
-  local device = device_map.get_device(program.get().devices[channel.number].device_map)
-  if device.default_midi_channel then
-    program.get().devices[channel.number].midi_channel = device.default_midi_channel
-  end
-
-  if device.default_midi_device then
-    program.get().devices[channel.number].midi_device = device.default_midi_device
-  end
-
-  channel_edit_page_ui.refresh_device_selector()
-
-  if device_m.id == "jf kit" or
-    device_m.id == "jf n 1" or
-    device_m.id == "jf n 2" or
-    device_m.id == "jf poly" or
-    device_m.id == "jf unison" or
-    device_m.id == "jf n 5" or
-    device_m.id == "jf mpe" or
-    device_m.id == "jf n 4" or
-    device_m.id == "jf n 3" or
-    device_m.id == "jf n 6"
-  then
-    crow.ii.pullup(true) 
-    crow.ii.jf.mode(1)
-  end
-
-  if device_m.id == "ansible 1" or
-    device_m.id == "ansible 2"
-  then
-    crow.ii.pullup(true) 
-  end
-
-  param_manager.add_device_params(
-    channel.number,
-    device_m,
-    program.get().devices[channel.number].midi_channel,
-    program.get().devices[channel.number].midi_device,
-    true
-  )
-  for i = 1, 10 do
-    program.increment_trig_lock_calculator_id(channel, i)
-  end
-
-  channel_edit_page_ui.refresh_trig_locks()
-  
+  return channel_edit_parameters_controller.update_channel_config()
 end
 
--- Trig lock functions
 function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
-
-  local pressed_keys = m_grid.get_pressed_keys()
-  local trig_lock_param = channel.trig_lock_params[dial_index]
-
-  if not trig_lock_param then
-    return
-  end
-
-  local param_id = trig_lock_param.param_id
-
-  local p, p_index
-  if param_id then
-    p = params:lookup_param(param_id)
-    p_index = params.lookup[param_id]
-  else
-    return
-  end
-
-  if not p then
-    return
-  end
-
-  local p_value = params:get(param_id)
-
-  local total_range = 0
-  local old_quantum = trig_lock_param.quantum or 1
-
-  if p.controlspec then 
-
-    if p.controlspec.quantum then
-      old_quantum = p.controlspec.quantum
-    end
-
-    total_range = ((p.controlspec.maxval - p.controlspec.minval) / p.controlspec.quantum)
-
-    if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
-      p.controlspec.quantum = midi_value_domain.unit_quantum(trig_lock_param.nrpn_min_value, trig_lock_param.nrpn_max_value, trig_lock_param.off_value)
-      total_range = p.controlspec.maxval - p.controlspec.minval
-    elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.cc_msb then
-      p.controlspec.quantum = midi_value_domain.unit_quantum(trig_lock_param.cc_min_value, trig_lock_param.cc_max_value, trig_lock_param.off_value)
-      total_range = p.controlspec.maxval - p.controlspec.minval
-    elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.type == "midi" then
-      p.controlspec.quantum = midi_value_domain.unit_quantum(trig_lock_param.cc_min_value, trig_lock_param.cc_max_value, trig_lock_param.off_value)
-      total_range = p.controlspec.maxval - p.controlspec.minval
-    end
-  elseif p.count then
-    total_range = p.count
-  elseif p.maxval and p.minval then
-    total_range = p.maxval - p.minval
-  else
-    total_range = 127
-  end
-
-  local d = direction
-
-  if trig_lock_param.type ~= "norns" then
-    if total_range > 126 and is_key1_down == false then
-      if math.abs(direction) > 0 then
-        d = direction * math.floor(total_range / 127) or 1
-      end
-
-      if math.abs(direction) > 2 then
-        d = direction * math.floor(total_range / 64) or 1
-      end
-
-      if math.abs(direction) > 5 then
-        d = direction * math.floor(total_range / 32) or 1
-      end
-
-      if math.abs(direction) > 8 then
-        d = direction * math.floor(total_range / 16) or 1
-      end
-
-      if math.abs(direction) > 10 then
-        d = direction * math.floor(total_range / 8) or 1
-      end
-
-      if math.abs(direction) > 13 then
-        d = direction * math.floor(total_range / 4) or 1
-      end
-
-      if math.abs(direction) > 15 then
-        d = direction * math.floor(total_range / 2) or 1
-      end
-    end
-  end
-
-  if #pressed_keys > 0 and trig_lock_param and trig_lock_param.id then
-    local song_pattern = program.get().selected_song_pattern
-    for _, keys in ipairs(pressed_keys) do
-
-      local s = fn.calc_grid_count(keys[1], keys[2])
-      
-      local value = get_value_using_handler_param(
-        channel,
-        dial_index, 
-        p,
-        param_id,
-        p_value,
-        d
-      )
-
-      m_params[dial_index]:set_value(value)
-
-      recorder.add_trig_lock_event_portion(channel.number, s, {
-        song_pattern = song_pattern,
-        data = {
-          parameter = dial_index,
-          step = s,
-          value = value
-        }
-      })
-    end
-  elseif p_value and trig_lock_param and trig_lock_param.id then
-
-
-    local quant = old_quantum
-    if p.controlspec and p.controlspec.quantum then
-      quant = p.controlspec.quantum
-    end
-  
-    if (norns_param_state_handler.get_original_param_state(channel.number, dial_index).value) then
-      local original_val = norns_param_state_handler.get_original_param_state(channel.number, dial_index).value      
-      
-      local new_val = get_value_using_handler_param(
-        channel,
-        dial_index, 
-        p,
-        param_id,
-        original_val,
-        d
-      )
-      
-      norns_param_state_handler.set_original_param_state(channel.number, dial_index, new_val)
-      
-      m_params[dial_index]:set_value(new_val)
-    else
-
-      if m_clock.channel_is_sliding(channel, dial_index) then
-        p:set_raw(p:get_raw() + (d * quant), true)
-      else
-        p:delta(d)
-      end
-      if params:get("record") == 2 then
-        recorder.set_trig_lock_dirty(channel.number, dial_index, p:get())
-      end
-    end
-
-    channel_edit_page_ui.refresh_trig_lock_value(dial_index)
-  end
-
-  m_params[dial_index]:temp_display_value()
-  if p.controlspec and p.controlspec.quantum then
-    p.controlspec.quantum = old_quantum
-  end
+  return channel_edit_parameters_controller.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
 end
 
 -- Encoder and key handling
@@ -869,28 +637,20 @@ function channel_edit_page_ui.refresh_shuffle_amount()
 end
 
 function channel_edit_page_ui.refresh_device_selector()
-  channel_edit_page_ui_refreshers.refresh_device_selector(device_map_vertical_scroll_selector, param_select_vertical_scroll_selector)
+  return channel_edit_parameters_controller.refresh_device_selector()
 end
-
 function channel_edit_page_ui.refresh_trig_lock_value(i)
-  channel_edit_page_ui_refreshers.refresh_trig_lock_value(i, m_params)
+  return channel_edit_parameters_controller.refresh_trig_lock_value(i)
 end
-
 function channel_edit_page_ui.refresh_trig_lock_values()
-  for i = 1, 10 do
-    channel_edit_page_ui.refresh_trig_lock_value(i)
-  end
+  return channel_edit_parameters_controller.refresh_trig_lock_values()
 end
-
 function channel_edit_page_ui.refresh_trig_locks()
-  channel_edit_page_ui_refreshers.refresh_trig_locks(m_params)
+  return channel_edit_parameters_controller.refresh_trig_locks()
 end
-
 function channel_edit_page_ui.refresh_param_list()
-  local channel = program.get_selected_channel()
-  param_select_vertical_scroll_selector:set_items(device_map.get_available_params_for_channel(program.get().selected_channel, dials:get_selected_index()))
+  return channel_edit_parameters_controller.refresh_param_list()
 end
-
 function channel_edit_page_ui.refresh_memory()
   return channel_edit_history_controller.refresh()
 end

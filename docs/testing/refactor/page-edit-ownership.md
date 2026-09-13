@@ -74,3 +74,43 @@ parameter selection, staged save callbacks, device binding and refresh ordering.
 Clock-mod controls and cross-page navigation remain later R12 responsibilities.
 Existing selector/page objects already provide view state; no additional generic
 view-model framework is justified without a concrete invalidation need.
+
+## Trig-lock/device controller contract
+
+Lock assignment and MIDI configuration share parameter/dial selection and staged
+confirmation, so they move together. Preserve the late device-map selector creation
+after device initialization, all other construction order, debounce yields, and
+existing refresher calls. Lock calculations retain temporary controlspec changes
+and restoration, held-step song targeting and dirty-recording ownership.
+
+Device +/- stages capture channel/device at the encoder action; the confirmation
+still invokes update_channel_config via the public table before clearing that
+captured channel and applying captured defaults. Assignment stages capture channel
+and dial index but read the parameter selector at confirmation. The increment
+cancel callback captures the refresh function, whereas decrement wraps a dynamic
+public lookup; preserve both. Keep module-local dependencies from their original
+owner when moving functions across UI and handler modules.
+
+### Parameter controller first slice (2026-09-13)
+
+The controller owns handler-param calculation, configuration application, lock-value
+edits and device/lock/list refresh operations. UI selectors retain construction
+order and the late device selector is explicitly bound at init. Original local
+domain/param-manager/refresher dependencies are injected. Review corrected bare
+selector references, numeric target selection and bulk-refresh public dispatch
+before native validation.
+
+All 1,546 Lua tests and ten coverage/syntax checks pass. Native receipts:
+
+| Case | Lane | Run |
+| --- | --- | --- |
+| M-PARAM-036 | controlled | 419a4d366b9a490ba008035910a7ba17 |
+| M-PATCH-038 | controlled | 07b15d120fbd468cbe2315329a21960e |
+| M-REC-PARAM-011 | controlled | 6014990d562f4d9c9b79e386ce4f7b47 |
+| M-REC-PARAM-012 | controlled | 32629430378449bcb22a8bd098e034d8 |
+| M-SETUP-003 | controlled | 9d59539557ee451ea3543af31eb746b5 |
+| M-XA-005-NB-LOCK | real-time/nb-audio | 2033b4be4ea64205b7e6783b006a3571 |
+
+The combined controller is not finished: configuration +/- confirmation, debounced
+configuration refresh, assignment subpage/encoder-two navigation and drawing still
+need consolidation. Their original implementations remain active for this slice.
