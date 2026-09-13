@@ -224,3 +224,33 @@ recipe to separate these causes. Controlled logical time does not charge Lua CPU
 cost; do not claim this wall-time stimulus reproduces there or waive the standing
 pre-fix baseline requirement implicitly. Existing M-TIM-005 covers a mid-run
 stall, not this first-registration boundary.
+
+## Native startup trace: not reproduced
+
+`startup-sync-native-trace-02/report.json` on719a247 records serial4second
+1-channel and16-channel slide workloads in existing diagnostic image
+`sha256:acd56af26785db16c5f54e03c7c5a11f5241187e40648afac224e4940d2f5eba`.
+Both pass unchanged timing checks. Sparse:25notes, p990.606ms. Dense:400notes
+with matching releases,16complete slide cycles, p996.614ms, max8.033ms,
+final2.496ms. Both traces have contiguous ordinals and no internal clock skips
+from20ms before first note through the last note. Dense first-group service
+3.011ms is below the6.944ms pulse interval; median later first-onset error
+0.556ms. The startup fault is **not reproduced** in this native diagnostic.
+No Mosaic production correction is justified by this run. The deterministic
+probe remains a mechanism demonstration; earlier rendering/endurance timing
+failures are not cleared. Trace instrumentation and the different native image
+preclude treating this as a matched comparison with the display-pressure run.
+
+Raw exports, input ACKs, recipes, resource samples, image/runtime identity in
+container logs and per-channel startup-analysis.json are retained with
+evidence-hashes.json. Initial trace-01 setup failures were caused by a missing
+host screen-oracle installation manifest; the separate diagnostic traceback
+identified it. A second host choice lacked a performance helper and failed
+before launch. Final wrapper uses performance-integration host helpers and a
+font verified identical to the trace image. No application/runtime substitution
+was made during a running case. Native runner is terminal; no active jobs remain.
+
+Keep startup correction parked pending a causal native reproduction; do not
+spend repeated full UI-setup runs chasing a non-reproduced hypothesis. Next
+resume the remaining R13 performance coverage reconciliation, then the single
+R14 qualification when the candidate is stable.
