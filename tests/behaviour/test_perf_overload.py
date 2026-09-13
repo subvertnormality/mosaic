@@ -63,6 +63,13 @@ class PerfOverloadOracleTests(unittest.TestCase):
         self.assertFalse(diagnostic['passed'])
         self.assertEqual(diagnostic['issues'][0]['kind'], 'timeline-pitch-mismatch')
 
+    def test_recovery_rejects_whole_fingerprint_cycle_lost_during_overload(self):
+        origin = 1_000_000_000
+        groups = note_groups(events(range(44), origin,
+                                    shift_after=(12, len(FINGERPRINT) * STEP_NS)))
+        with self.assertRaisesRegex(AssertionError, 'musical position'):
+            assert_recovery(groups, origin + 10 * STEP_NS, origin + 18 * STEP_NS)
+
     def test_visual_recovery_requires_both_user_perceived_outputs(self):
         before = dict(grid_revision=2, frame_revision=3,
                       state=dict(grid=[0, 1], frame=dict(sha256='a')))

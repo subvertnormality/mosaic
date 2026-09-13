@@ -105,7 +105,7 @@ def assert_recovery(groups, overload_start_ns, overload_end_ns,
     recovered = []
     issues = []
     previous_ordinal = None
-    for group in groups:
+    for emitted_ordinal, group in enumerate(groups):
         onset = at(group)
         if onset < recovery_due:
             continue
@@ -118,6 +118,13 @@ def assert_recovery(groups, overload_start_ns, overload_end_ns,
             if enforce:
                 raise AssertionError(('missing/duplicate post-recovery step',
                                       previous_ordinal, ordinal))
+        # A repeating pitch fingerprint aliases losses of a complete cycle.
+        # Keep emitted position tied to the original timeline as well as pitch.
+        if ordinal != emitted_ordinal:
+            issues.append(dict(kind='musical-position-mismatch',
+                               expected=ordinal, emitted=emitted_ordinal))
+            if enforce:
+                raise AssertionError(('musical position', emitted_ordinal, ordinal))
         expected_note = FINGERPRINT[ordinal % len(FINGERPRINT)]
         actual = channel_one(group)['bytes']
         if actual[1] != expected_note:
