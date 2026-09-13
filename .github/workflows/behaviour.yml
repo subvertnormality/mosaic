@@ -29,11 +29,6 @@ jobs:
       BEHAVIOUR_OUTPUT: /tmp/mosaic-behaviour-smoke
       DEBIAN_FRONTEND: noninteractive
     steps:
-      - name: Check out Mosaic
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
       - name: Install native runtime dependencies
         run: |
           apt-get update
@@ -43,6 +38,11 @@ jobs:
             libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev \
             libsdl2-dev libsndfile1-dev libudev-dev supercollider-language \
             supercollider-server zstd
+
+      - name: Check out Mosaic
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Check out the pinned monome emulator
         run: |
