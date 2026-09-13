@@ -20,6 +20,16 @@ class Tests(unittest.TestCase):
                 'layers':{'python':[{'name':'guard','passed':True}]} if i==0 else {}}
             path=root/f'{i}.json';path.write_text(json.dumps(data));paths.append(path)
         return paths
+    def test_prefers_effective_serial_rerun_report(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);original=root/'suite.json';effective=root/'suite-effective.json'
+            original.write_text(json.dumps({'status':'finished','passed':False}))
+            expected={'status':'finished','passed':True,'marker':'effective'}
+            effective.write_text(json.dumps(expected))
+            selected,data=module.load_report(original)
+            self.assertEqual(effective,selected)
+            self.assertEqual(expected,data)
+
     def test_accepts_exact_complete_union(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);paths=self.reports(root);out=root/'out.json'
