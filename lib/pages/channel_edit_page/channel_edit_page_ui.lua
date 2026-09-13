@@ -24,6 +24,7 @@ local channel_edit_masks = include("mosaic/lib/pages/channel_edit_page/channel_e
 local channel_edit_history = include("mosaic/lib/pages/channel_edit_page/channel_edit_history")
 local channel_edit_parameters = include("mosaic/lib/pages/channel_edit_page/channel_edit_parameters")
 local channel_edit_clock_controls = include("mosaic/lib/pages/channel_edit_page/channel_edit_clock_controls")
+local channel_edit_navigation = include("mosaic/lib/pages/channel_edit_page/channel_edit_navigation")
 
 -- UI components
 local channel_pages = pages:new()
@@ -138,9 +139,32 @@ local memory_controls = {
   navigator = channel_edit_history_controller.navigator
 }
 
+local trig_lock_page
+local channel_page_to_index
+local index_to_channel_page
+
 -- Page indices
-local channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Memory"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6}
-local index_to_channel_page = {"Masks", "Trig Locks", "Memory", "Clock Mods", "Midi Config", "Note Dashboard"}
+channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Memory"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6}
+index_to_channel_page = {"Masks", "Trig Locks", "Memory", "Clock Mods", "Midi Config", "Note Dashboard"}
+
+local channel_edit_navigation_controller = channel_edit_navigation.new(
+  {
+    channel_pages = channel_pages,
+    channel_page_to_index = channel_page_to_index,
+    scales_pages = scales_pages,
+    scales_page_to_index = scales_page_to_index,
+    mask_selectors = mask_selectors,
+    midi_device_vertical_scroll_selector = midi_device_vertical_scroll_selector,
+    midi_channel_vertical_scroll_selector = midi_channel_vertical_scroll_selector,
+    device_map_vertical_scroll_selector = device_map_vertical_scroll_selector,
+    dials = dials,
+    trig_lock_page = trig_lock_page,
+    parameter_controller = channel_edit_parameters_controller,
+    clock_controls_controller = channel_edit_clock_controls_controller
+  },
+  channel_edit_page_ui,
+  channel_edit_page_ui_handlers
+)
 
 -- Helper variables
 local refresh_timer_id = nil
@@ -268,7 +292,7 @@ local channel_edit_page = page:new("Device Config", function()
   device_map_vertical_scroll_selector:draw()
 end)
 
-local trig_lock_page = page:new("Trig Locks", function()
+trig_lock_page = page:new("Trig Locks", function()
   channel_edit_parameters_controller.draw_trig_locks()
 end)
 
@@ -315,6 +339,8 @@ function channel_edit_page_ui.init()
   device_map_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Midi Map", device_map:get_devices())
   channel_edit_parameters_controller.set_device_map_selector(device_map_vertical_scroll_selector)
   channel_edit_parameters_controller.set_trig_lock_page(trig_lock_page)
+  channel_edit_navigation_controller.set_device_map_selector(device_map_vertical_scroll_selector)
+  channel_edit_navigation_controller.set_trig_lock_page(trig_lock_page)
 
   local function set_sub_name_func(page, func)
     page:set_sub_name_func(func)
@@ -428,77 +454,11 @@ end
 
 -- Encoder and key handling
 function channel_edit_page_ui.enc(n, d)
-  local channel = program.get_selected_channel()
-  if n == 3 then
-    for _ = 1, math.abs(d) do
-      if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
-        channel_edit_page_ui.handle_mask_page_change(d)
-      elseif channel_pages:get_selected_page() == channel_page_to_index["Memory"] then
-        channel_edit_page_ui.handle_memory_page_change(d)
-      end
-      if d > 0 then
-        if channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
-          channel_edit_page_ui.handle_clock_mods_page_increment()
-        elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
-          channel_edit_page_ui.handle_midi_config_page_increment()
-        elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-          channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, channel_edit_parameters_controller)
-        end
-      else
-        if channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
-          channel_edit_page_ui.handle_clock_mods_page_decrement()
-        elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
-          channel_edit_page_ui.handle_midi_config_page_decrement()
-        elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-          channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, channel_edit_parameters_controller)
-        end
-      end
-    end
-  elseif n == 2 then
-    for _ = 1, math.abs(d) do
-      
-      local pages = {
-        channel_pages = channel_pages,
-        channel_page_to_index = channel_page_to_index
-      }
-
-      local selectors = {
-        mask_selectors = mask_selectors,
-        clock_mod_list_selector = clock_mod_list_selector,
-        midi_device_vertical_scroll_selector = midi_device_vertical_scroll_selector,
-        midi_channel_vertical_scroll_selector = midi_channel_vertical_scroll_selector,
-        device_map_vertical_scroll_selector = device_map_vertical_scroll_selector,
-        swing_shuffle_type_selector = swing_shuffle_type_selector,
-        swing_selector = swing_selector,
-        shuffle_feel_selector = shuffle_feel_selector,
-        shuffle_basis_selector = shuffle_basis_selector,
-        shuffle_amount_selector = shuffle_amount_selector,
-        memory_controls = memory_controls,
-      }
-
-      if d > 0 then
-        channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page, channel_edit_parameters_controller, channel_edit_clock_controls_controller)
-      else
-        channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page, channel_edit_parameters_controller, channel_edit_clock_controls_controller)
-      end
-    end
-  elseif n == 1 then
-    for _ = 1, math.abs(d) do
-      if d > 0 then
-        channel_edit_page_ui.handle_encoder_one_positive()
-      else
-        channel_edit_page_ui.handle_encoder_one_negative()
-      end
-    end
-  end
+  return channel_edit_navigation_controller.enc(n, d)
 end
 
 function channel_edit_page_ui.key(n, z)
-  if n == 2 and z == 1 then
-    channel_edit_page_ui.handle_key_two_pressed()
-  elseif n == 3 and z == 1 then
-    channel_edit_page_ui.handle_key_three_pressed()
-  end
+  return channel_edit_navigation_controller.key(n, z)
 end
 
 -- Refresh functions
@@ -553,7 +513,7 @@ channel_edit_page_ui.refresh_channel_config = channel_edit_parameters_controller
 
 
 function channel_edit_page_ui.refresh()
-  channel_edit_page_ui.select_channel_page_by_index(channel_pages:get_selected_page() or 1)
+  return channel_edit_navigation_controller.refresh()
 end
 
 function channel_edit_page_ui.handle_memory_navigator(c, d)
@@ -619,165 +579,59 @@ function channel_edit_page_ui.handle_midi_config_page_decrement()
 end
 
 function channel_edit_page_ui.handle_encoder_one_positive()
-
-  channel_edit_page_ui.select_channel_page_by_index((channel_pages:get_selected_page() or 1) + 1)
-  fn.dirty_screen(true)
-  save_confirm.cancel()
+  return channel_edit_navigation_controller.handle_encoder_one_positive()
 end
 
 function channel_edit_page_ui.handle_encoder_one_negative()
-  channel_edit_page_ui.select_channel_page_by_index((channel_pages:get_selected_page() or 1) - 1)
-  fn.dirty_screen(true)
-  save_confirm.cancel()
+  return channel_edit_navigation_controller.handle_encoder_one_negative()
 end
 
 function channel_edit_page_ui.handle_key_two_pressed()
-  local pressed_keys = m_grid.get_pressed_keys()
-  if #pressed_keys > 0 then
-    local selected = program.get()
-    local song_pattern = selected.selected_song_pattern or 1
-    if not selected.selected_song_pattern then selected.selected_song_pattern = song_pattern end
-    local channel = program.get_channel(song_pattern, selected.selected_channel)
-    for _, keys in ipairs(pressed_keys) do
-      local s = fn.calc_grid_count(keys[1], keys[2])
-      if channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
-        program.clear_masks_for_step_for_channel(channel, s)
-        tooltip:show("Masks for step " .. s .. " cleared")
-        channel_edit_page_ui.refresh_masks()
-        pattern.update_working_pattern(channel.number, program.get_song_pattern(song_pattern))
-      end
-      if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-        program.clear_trig_locks_for_step_for_channel(channel, s)
-        tooltip:show("Trig locks for step " .. s .. " cleared")
-        channel_edit_page_ui.refresh_trig_locks()
-      end
-    end
-  else
-    if channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-      if is_key1_down then
-        program.clear_trig_locks_for_channel(program.get_selected_channel())
-        tooltip:show("Trig locks for ch " .. program.get_selected_channel().number .. " cleared")
-        channel_edit_page_ui.refresh_trig_locks()
-      else
-        channel_edit_parameters_controller.toggle_assignment_subpage()
-      end
-    elseif channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
-      if is_key1_down then
-        program.clear_masks_for_channel(program.get_selected_channel())
-        tooltip:show("Masks for ch " .. program.get_selected_channel().number .. " cleared")
-        channel_edit_page_ui.refresh_masks()
-        pattern.update_working_pattern(program.get_selected_channel().number, program.get_selected_song_pattern())
-      end
-    elseif channel_pages:get_selected_page() == channel_page_to_index["Memory"] then
-      if is_key1_down then
-        memory.undo_all(program.get_selected_channel().number)
-        memory.clear(program.get_selected_channel().number)
-        tooltip:show("Memory undone and forgotten")
-      else
-        memory.undo_all(program.get_selected_channel().number)
-        tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory undone")
-      end
-      channel_edit_page_ui.refresh_memory()
-      pattern.update_working_pattern(program.get_selected_channel().number, program.get_selected_song_pattern())
-    end
-    save_confirm.cancel()
-  end
+  return channel_edit_navigation_controller.handle_key_two_pressed()
 end
 
 function channel_edit_page_ui.handle_key_three_pressed()
-  local pressed_keys = m_grid.get_pressed_keys()
-  if channel_pages:get_selected_page() == channel_page_to_index["Memory"] then
-    if is_key1_down then
-      memory.redo_all(program.get_selected_channel().number)
-      memory.clear(program.get_selected_channel().number)
-      tooltip:show("Memory applied and forgotten")
-    else
-      memory.redo_all(program.get_selected_channel().number)
-      tooltip:show("Ch. " .. program.get_selected_channel().number .. " memory applied")
-    end
-    channel_edit_page_ui.refresh_memory()
-    pattern.update_working_pattern(program.get_selected_channel().number, program.get_selected_song_pattern())
-  elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] and not trig_lock_page:is_sub_page_enabled() then
-    local pressed_keys = m_grid.get_pressed_keys()
-    if #pressed_keys > 0 then
-      for _, keys in ipairs(pressed_keys) do
-        local step = fn.calc_grid_count(keys[1], keys[2])
-        program.toggle_step_param_slide(program.get_selected_channel(), step, dials:get_selected_index())
-      end
-    elseif not is_key1_down then
-      program.toggle_channel_param_slide(program.get_selected_channel(), dials:get_selected_index())
-    end
-    fn.dirty_screen(true)
-  elseif #pressed_keys < 1 then
-    save_confirm.confirm()
-  end
+  return channel_edit_navigation_controller.handle_key_three_pressed()
 end
 
-function channel_edit_page_ui.select_page(page) 
-    channel_pages:select_page(page)
-    fn.dirty_screen(true)
+function channel_edit_page_ui.select_page(page)
+  return channel_edit_navigation_controller.select_page(page)
 end
 
-function channel_edit_page_ui.get_selected_page() 
-    return channel_pages:get_selected_page()
+function channel_edit_page_ui.get_selected_page()
+  return channel_edit_navigation_controller.get_selected_page()
 end
 
 function channel_edit_page_ui.select_mask_page()
-  channel_edit_page_ui.refresh_masks()
-  channel_pages:select_page(channel_page_to_index["Masks"])
-  fn.dirty_screen(true)
+  return channel_edit_navigation_controller.select_mask_page()
 end
 
 function channel_edit_page_ui.select_trig_page()
-  channel_edit_page_ui.refresh_trig_locks()
-  channel_pages:select_page(channel_page_to_index["Trig Locks"])
+  return channel_edit_navigation_controller.select_trig_page()
 end
 
 function channel_edit_page_ui.select_memory_page()
-  channel_edit_page_ui.refresh_memory()
-  channel_pages:select_page(channel_page_to_index["Memory"])
+  return channel_edit_navigation_controller.select_memory_page()
 end
 
 function channel_edit_page_ui.select_clock_mods_page()
-  channel_edit_page_ui.refresh_clock_mods()
-  channel_edit_page_ui.refresh_swing()
-  channel_edit_page_ui.refresh_swing_shuffle_type()
-  channel_edit_page_ui.refresh_shuffle_feel()
-  channel_edit_page_ui.refresh_shuffle_basis()
-  channel_edit_page_ui.refresh_shuffle_amount()
-  channel_pages:select_page(channel_page_to_index["Clock Mods"])
+  return channel_edit_navigation_controller.select_clock_mods_page()
 end
 
 function channel_edit_page_ui.select_midi_config_page()
-  channel_edit_page_ui.refresh_channel_config()
-  channel_pages:select_page(channel_page_to_index["Midi Config"])
+  return channel_edit_navigation_controller.select_midi_config_page()
 end
 
 function channel_edit_page_ui.select_note_dashboard_page()
-  channel_pages:select_page(channel_page_to_index["Note Dashboard"])
+  return channel_edit_navigation_controller.select_note_dashboard_page()
 end
 
-
 function channel_edit_page_ui.select_scales_quantizer_page()
-  channel_edit_page_ui.refresh_quantiser()
-  channel_edit_page_ui.refresh_romans()
-  scales_pages:select_page(scales_page_to_index["Quantizer"])
+  return channel_edit_navigation_controller.select_scales_quantizer_page()
 end
 
 function channel_edit_page_ui.select_channel_page_by_index(index)
-  if index == 1 then
-    channel_edit_page_ui.select_mask_page()
-  elseif index == 2 then
-    channel_edit_page_ui.select_trig_page()
-  elseif index == 3 then
-    channel_edit_page_ui.select_memory_page()
-  elseif index == 4 then
-    channel_edit_page_ui.select_clock_mods_page()
-  elseif index == 5 then
-    channel_edit_page_ui.select_midi_config_page()
-  elseif index == 6 then
-    channel_edit_page_ui.select_note_dashboard_page()
-  end
+  return channel_edit_navigation_controller.select_channel_page_by_index(index)
 end
 
 function channel_edit_page_ui.set_note_dashboard_values(values)

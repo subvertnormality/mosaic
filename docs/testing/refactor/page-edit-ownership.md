@@ -198,3 +198,62 @@ Cross-page navigation/gesture ownership remains. At the final R12 boundary use o
 controlled aggregate for the navigation/page/visual/browser/LED/tooltip/dashboard
 union, checking inclusion rather than separately rerunning included cases. Existing
 PERF-004 constrained-load failure remains R13 optimization work, not a new R12 blocker.
+
+## Navigation/gesture contract and final R12 validation
+
+Navigation owns E1/E2/E3 routing, page selection and K2/K3 gesture dispatch. Preserve
+press-only key behavior, held-step song targeting, clear/undo/redo/slide order,
+page-specific confirmation precedence and public UI callback lookup. Reuse stable
+selector/page bundles for encoder navigation with late device-selector binding;
+remove unused raw dial/page handler arguments and per-event clock getter wrappers.
+
+After final review/unit validation, freeze sources for one controlled aggregate:
+base-midi, two workers, the existing midi-schedule-capacity-12 installation and pinned
+norns source `/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/deps/norns`.
+Use the previous R10 report for duration ordering. Confirm included visual, gesture,
+mapping, tooltip and dashboard cases; only supplement profile-specific omissions.
+Do not claim a complete real-time or hardware qualification from this aggregate.
+
+### Navigation extraction pre-aggregate checkpoint (2026-09-13)
+
+Navigation now owns encoder/key routing and page selection with stable E2 bundles;
+handlers reuse the dynamic clock getter and no longer accept obsolete dial/page
+arguments. Late device/page objects are bound explicitly. Review caught a nil
+page-index capture; controller construction moved after index assignment. The
+legacy scales-page entry retains its former dynamic global lookup.
+
+All 1,546 Lua tests and ten coverage/syntax checks pass on the corrected source.
+Combined R12 native validation is pending under
+`/home/andy/projects/mosaic-behaviour-runs/r12-controlled-53aa1c1-20260913-run2/suite.json`.
+Do not treat this pre-aggregate checkpoint as R12 or full refactor completion.
+
+### R12 aggregate and follow-up (2026-09-13)
+
+The frozen controlled/base-MIDI aggregate completed 791 cases: 787 passed and four
+failed with native SIGXCPU exits. All 66 fast-layer items passed, including all
+1,546 Lua units; source identity remained stable. The original suite remains red.
+All four failed cases passed sequentially afterward on unchanged source:
+
+| Case | Passing follow-up manifest directory |
+| --- | --- |
+| M-RANGE-SAVED-005 | 2e605781fbd9456cb11374114acc41ec |
+| M-SYNC-012 | 130e51ab5d3142c0a8783e2d21024d4c |
+| M-CHORDSHAPE-125 | 9f6564a3412e49a9afbccfbf010c3b34 |
+| M-CHORDSHAPE-126 | 45cadb24b661420abaf3fb0b40d8785a |
+
+Evidence root: `/home/andy/projects/mosaic-behaviour-runs/`. The original failures
+span sclang shutdown, crone during capture, matron startup and JACK during execution.
+The signal sender remains unknown; no runtime exit policy or test oracle was relaxed.
+See `r12-sigxcpu-investigation.md` and the aggregate's `failure-triage.md`.
+
+The aggregate includes navigation, gestures, page/mapping, UI/browser, framebuffer,
+LED, tooltip/dashboard, flicker and mask regressions; `coverage-selection.json`
+records selection. Thirteen profile/real-time-specific cases were omitted, so this
+is not whole-refactor acceptance. Earlier R11/R12 profile-specific receipts remain
+applicable to their changes. Existing selector/page objects provide view state;
+no extra view-model framework was introduced. Shared public semantic edit paths
+remain available to encoder and MIDI-map callers.
+
+Navigation extraction is validated for this structural checkpoint. PERF-004 input/
+redraw measurement follows immediately in R13; it remains an outstanding R12
+performance qualification. R14 still owns final full required-profile/lane acceptance.

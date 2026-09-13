@@ -3,7 +3,11 @@ local channel_edit_page_ui_handlers = {}
 local param_manager = include("mosaic/lib/devices/param_manager")
 local channel_edit_page_ui_refreshers = include("lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 
-function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page, parameter_controller, clock_controls_controller)
+local function get_swing_shuffle_type_selector_value()
+  return channel_edit_page_ui.get_swing_shuffle_type_selector_value()
+end
+
+function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, parameter_controller, clock_controls_controller)
   local channel_pages = pages.channel_pages
   local channel_page_to_index = pages.channel_page_to_index
   local scales_pages = pages.scales_pages
@@ -38,9 +42,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
       mask_selectors.chords[4]:select()
     end
   elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
-    clock_controls_controller.navigate(1, function()
-      return channel_edit_page_ui.get_swing_shuffle_type_selector_value()
-    end)
+    clock_controls_controller.navigate(1, get_swing_shuffle_type_selector_value)
   elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
     local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
     if midi_channel_vertical_scroll_selector:is_selected() then
@@ -64,7 +66,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
   end
 end
 
-function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page, parameter_controller, clock_controls_controller)
+function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, parameter_controller, clock_controls_controller)
   local channel_pages = pages.channel_pages
   local channel_page_to_index = pages.channel_page_to_index
   local scales_pages = pages.scales_pages
@@ -99,9 +101,7 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
       mask_selectors.chords[3]:select()
     end
   elseif channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
-    clock_controls_controller.navigate(-1, function()
-      return channel_edit_page_ui.get_swing_shuffle_type_selector_value()
-    end)
+    clock_controls_controller.navigate(-1, get_swing_shuffle_type_selector_value)
   elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
     local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
     if midi_device_vertical_scroll_selector:is_selected() then
