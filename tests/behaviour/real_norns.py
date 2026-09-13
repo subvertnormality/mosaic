@@ -19,8 +19,8 @@ class SSH:
  def run(self,script):return subprocess.run(['ssh',*self.options,self.host,'bash','-s'],input=script,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,check=True)
  def rsync(self,source,dest):
   import shlex;shell=' '.join(shlex.quote(x) for x in ['ssh',*self.options]);subprocess.run(['rsync','-a','--delete','-e',shell,str(source)+'/',self.host+':'+dest+'/'],check=True)
- def fetch(self,remote,local):local.parent.mkdir(parents=True,exist_ok=True);subprocess.run(['scp',*self.options,self.host+':'+remote,str(local)],check=True)
- def push(self,local,remote):subprocess.run(['scp',*self.options,str(local),self.host+':'+remote],check=True)
+ def fetch(self,remote,local):local.parent.mkdir(parents=True,exist_ok=True);local.write_bytes(subprocess.check_output(['ssh',*self.options,self.host,'cat',remote]))
+ def push(self,local,remote):subprocess.run(['ssh',*self.options,self.host,'tee',remote],input=Path(local).read_bytes(),stdout=subprocess.DEVNULL,check=True)
 class Maiden:
  """Scriptable nanomsg BUS client for official Maiden's matron socket."""
  def __init__(self,url,library='libnanomsg.so.5',timeout_ms=15000):self.url=url;self.library=library;self.timeout_ms=timeout_ms

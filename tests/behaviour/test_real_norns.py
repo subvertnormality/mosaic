@@ -1,7 +1,7 @@
 import hashlib,struct,subprocess,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
-from real_norns import Maiden,OSC,Runner,export_head,osc_packet
+from real_norns import Maiden,OSC,Runner,SSH,export_head,osc_packet
 class Fn:
  def __init__(self,call):self.call=call
  def __call__(self,*a):return self.call(*a)
@@ -41,6 +41,10 @@ class Tests(unittest.TestCase):
   t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);root=Path(t.name);subprocess.run(['git','init','-q'],cwd=root);(root/'tracked').write_text('yes');subprocess.run(['git','add','tracked'],cwd=root);subprocess.run(['git','-c','user.name=T','-c','user.email=t@t','commit','-qm','x'],cwd=root);(root/'untracked').write_text('no');hold,tree,manifest,rows=export_head(root);self.addCleanup(hold.cleanup);self.assertTrue((tree/'tracked').exists());self.assertFalse((tree/'untracked').exists());self.assertEqual(rows,[(hashlib.sha256(b'yes').hexdigest(),'tracked')])
  def test_screenshot_exact_dimensions_and_restore_finalize(self):
   r,s,m=self.r();shot=r.screenshot('before');self.assertEqual((shot['width'],shot['height']),(640,384));r.restore();self.assertIn('system.state',s.scripts[-1]);r.finalize();self.assertIn('data-mosaic /home/we/dust/data/mosaic',s.scripts[-1]);self.assertNotIn('rm -rf /home/we/dust/code/mosaic',s.scripts[-1]);self.assertIn('restored_user_data_and_state', (r.out/'finalized.json').read_text())
+ def test_ssh_transfers_keep_ssh_control_options(self):
+  t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);root=Path(t.name);src=root/'in';dst=root/'out';src.write_bytes(b'abc');ssh=SSH('we@norns',['-S','/tmp/control'])
+  with patch('real_norns.subprocess.run') as run:ssh.push(src,'/remote/file');self.assertEqual(run.call_args.args[0][:5],['ssh','-S','/tmp/control','we@norns','tee'])
+  with patch('real_norns.subprocess.check_output',return_value=b'png') as get:ssh.fetch('/remote/shot',dst);self.assertEqual(dst.read_bytes(),b'png');self.assertEqual(get.call_args.args[0][:5],['ssh','-S','/tmp/control','we@norns','cat'])
  def test_grid_is_explicit_synthetic_lua_only(self):
   r,_,m=self.r();r.synthetic_grid(4,3,8,1);self.assertEqual(m.commands[-1],'_norns.grid.key(4,2,7,1)')
 if __name__=='__main__':unittest.main()
