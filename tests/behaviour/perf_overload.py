@@ -183,7 +183,7 @@ def complete_log(name, session_id, output):
     return emitted
 
 
-def run_one(image, output):
+def run_one(image, output, clock_trace=False):
     (_, bracketing_samples, performance_metrics, throttling_deltas,
      ContainerDriver, Http, build_project) = runtime_dependencies()
     output.mkdir(parents=True, exist_ok=False)
@@ -193,14 +193,15 @@ def run_one(image, output):
     assert image_id.startswith('sha256:'), image_id
     result = dict(schema_version=1, workload='PERF-008', passed=False,
                   image=image, image_id=image_id, channels=CHANNELS,
-                  overload_seconds=OVERLOAD_SECONDS)
+                  overload_seconds=OVERLOAD_SECONDS, diagnostic_only=clock_trace)
     started = False
     try:
         docker('run', '-d', '--name', name, '--cpus', '0.5', '--memory', '768m',
                '--memory-swap', '768m', '--cpuset-cpus', '0', '--shm-size', '256m',
                '-p', '127.0.0.1::8765', '--mount', 'type=bind,source=%s,target=/data' % data,
                '--mount', 'type=bind,source=%s,target=/code/mosaic,readonly' % REPO,
-               image_id, '--script', '/code/mosaic/mosaic.lua', '--code-root', '/code')
+               image_id, '--script', '/code/mosaic/mosaic.lua', '--code-root', '/code',
+               *(['--clock-trace'] if clock_trace else []))
         started = True
         deadline = time.monotonic() + 120
         ready = None
@@ -256,6 +257,15 @@ def run_one(image, output):
         emitted = [row for row in complete_log(name, ready['session_id'], output)
                    if row['index'] > marker]
         groups = note_groups(emitted)
+        if clock_trace:
+            trace = [json.loads(line) for line in (output / 'native-events.jsonl').read_text().splitlines()]
+            trace = [row for row in trace if row.get('trace') == 'clock_phase']
+            assert trace, 'Requested clock trace is absent'
+            assert [row['ordinal'] for row in trace] == list(range(
+                trace[0]['ordinal'], trace[-1]['ordinal'] + 1)), 'Clock trace ordinal gap'
+            result['clock_trace'] = dict(records=len(trace),
+                stages=sorted({row['stage'] for row in trace}),
+                skips=[row for row in trace if row['stage'] == 'internal_skip'])
         recovery = assert_recovery(groups, overload_start, overload_end, enforce=False)
         errors = recovery['recovered_errors_ns']
         service = [group[-1]['monotonic_ns'] - group[0]['monotonic_ns'] for group in groups]
@@ -291,18 +301,21 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', default='monome-emulator:perf-recorder-02')
     parser.add_argument('--output', required=True)
+    parser.add_argument('--clock-trace', action='store_true',
+                        help='Diagnostic only: requires a clock-trace image; not performance acceptance')
     args = parser.parse_args()
     output = Path(args.output).resolve()
     revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=REPO, text=True).strip()
     dirty = subprocess.check_output(['git', 'diff', 'HEAD'], cwd=REPO)
-    run = run_one(args.image, output)
+    run = run_one(args.image, output, clock_trace=args.clock_trace)
     report = dict(schema_version=1, workload='PERF-008', mosaic_revision=revision,
                   dirty_patch_sha256=hashlib.sha256(dirty).hexdigest() if dirty else None,
                   runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                   source_status=subprocess.check_output(
                       ['git', 'status', '--porcelain', '--untracked-files=all'], cwd=REPO,
                       text=True).splitlines(),
-                  image=args.image, image_id=run['image_id'], run=run, passed=run['passed'])
+                  image=args.image, image_id=run['image_id'], run=run, passed=run['passed'],
+                  diagnostic_only=args.clock_trace, acceptance_eligible=not args.clock_trace)
     write(output / 'report.json', report)
     print(output / 'report.json')
     return 0 if report['passed'] else 1
