@@ -38,7 +38,7 @@ jobs:
         name: Install native runtime dependencies
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends build-essential ca-certificates cmake git jack2 lua5.3 pkg-config python3 libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
+          apt-get install -y --no-install-recommends build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3 libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
       - &checkout
         uses: actions/checkout@v4
         with:
