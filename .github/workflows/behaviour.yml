@@ -17,7 +17,10 @@ concurrency:
 jobs:
   emulator-behaviour-smoke:
     name: Emulator behaviour smoke
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      options: --shm-size 256m
     timeout-minutes: 180
     env:
       EMULATOR_REVISION: b6728734b1c2201e508b06b98943bc4c88672263
@@ -33,13 +36,13 @@ jobs:
 
       - name: Install native runtime dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
+          apt-get update
+          apt-get install -y --no-install-recommends \
             build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3 \
             libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev \
             libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev \
             libsdl2-dev libsndfile1-dev libudev-dev supercollider-language \
-            supercollider-server
+            supercollider-server zstd
 
       - name: Check out the pinned monome emulator
         run: |
@@ -51,7 +54,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/monome-emulator/.runtime
-          key: monome-emulator-${{ runner.os }}-${{ runner.arch }}-b672873-controlled-v1
+          key: monome-emulator-ubuntu20-amd64-b672873-controlled-v2
 
       - name: Build default and controlled-time runtimes
         run: tests/behaviour/ci/prepare-emulator.sh
