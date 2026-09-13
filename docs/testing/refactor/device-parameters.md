@@ -157,3 +157,23 @@ Native passes under the recorded evidence root:
 | M-XA-003-JF-OWNERSHIP | real-time/crow-jf | ad1e0dcd3272442f9995aa37dba73c94 |
 
 MIDI mapping registration remains to separate before closing R11.
+
+## MIDI mapping registration extraction (2026-09-13)
+
+`midi_mapping_params.setup` owns registration and the shared acceleration state
+created by each setup call. The public m_midi entry point delegates to it. Callback
+bodies match the previous implementation apart from name/whitespace; dynamic
+selection, target resolution and control-reset order are preserved.
+All 1,546 Lua tests and ten coverage/syntax checks pass. Controlled native passes:
+
+| Case | Run |
+| --- | --- |
+| M-MAP-001 | 028519105edd45048a864b94c381c09d |
+| M-MAP-002 | 1b466765ac1e446c90248027989ff42b |
+| M-MAP-003 | 71039b993257479892c4a29a11a2c298 |
+| M-MAP-004 | 8bb87ca700df472ea5f78355cb5d2599 |
+| M-MAP-PAGE-RETURN-001 | 82c07afc6a48425392f67050603664ac |
+
+R11 final inspection found remaining fixed-note/quantised-note slot literals in
+step.lua and generated control IDs in patch recall. Replace those using the
+existing slot definitions before claiming the card complete.
