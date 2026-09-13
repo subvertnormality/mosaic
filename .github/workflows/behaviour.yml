@@ -21,9 +21,9 @@ jobs:
     timeout-minutes: 180
     env:
       EMULATOR_REVISION: b6728734b1c2201e508b06b98943bc4c88672263
-      EMULATOR_ROOT: ${{ runner.temp }}/monome-emulator
-      MONOME_EMULATOR: ${{ runner.temp }}/monome-emulator
-      BEHAVIOUR_OUTPUT: ${{ runner.temp }}/mosaic-behaviour-smoke
+      EMULATOR_ROOT: /tmp/monome-emulator
+      MONOME_EMULATOR: /tmp/monome-emulator
+      BEHAVIOUR_OUTPUT: /tmp/mosaic-behaviour-smoke
       DEBIAN_FRONTEND: noninteractive
     steps:
       - name: Check out Mosaic
@@ -50,14 +50,14 @@ jobs:
       - name: Restore native runtime cache
         uses: actions/cache@v4
         with:
-          path: ${{ runner.temp }}/monome-emulator/.runtime
+          path: /tmp/monome-emulator/.runtime
           key: monome-emulator-${{ runner.os }}-${{ runner.arch }}-b672873-controlled-v1
 
       - name: Build default and controlled-time runtimes
         run: tests/behaviour/ci/prepare-emulator.sh
 
       - name: Verify generic native runtime
-        working-directory: ${{ runner.temp }}/monome-emulator
+        working-directory: /tmp/monome-emulator
         run: python3 tests/native_smoke.py
 
       - name: Run controlled-time musical smoke
@@ -98,6 +98,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mosaic-behaviour-smoke-${{ github.run_id }}
-          path: ${{ runner.temp }}/mosaic-behaviour-smoke-*
+          path: /tmp/mosaic-behaviour-smoke-*
           retention-days: 3
           compression-level: 9
