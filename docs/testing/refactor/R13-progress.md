@@ -254,3 +254,37 @@ Keep startup correction parked pending a causal native reproduction; do not
 spend repeated full UI-setup runs chasing a non-reproduced hypothesis. Next
 resume the remaining R13 performance coverage reconciliation, then the single
 R14 qualification when the candidate is stable.
+
+## Remaining coverage reuse
+
+The R05 `history-ring.md` receipt already binds six wrap/serialization/undo
+checks and native controlled M-MEMORY-004 (038f35a379344a3a8294afdcf5e349c1),
+which exercises5003 user-input edits past the5000-action bound. Preserve that
+functional evidence rather than create another history correctness matrix. It
+does not establish constrained resource behavior for large histories.
+
+For normal-storage PERF-006, reuse `named_save_load` under the existing
+0.5CPU/768MiB container recorder. Its unchanged oracle covers named and typed
+saves, idle autosave preserving named files, cancellation, overwrite, and MIDI
+phrases after reload. This is a partial resource diagnostic; slow/corrupt storage
+and mixed long-run pressure remain separately identified obligations.
+
+## Constrained normal-storage save/load
+
+`r13-storage-normal-01/result.json` passes the unchanged `named_save_load`
+recipe on31f43a9 plus the source-identified new `perf_storage.py` wrapper.
+Imagefeab2bb7 (full ID in the report),0.5CPU,768MiB,cpuset0. All named/typed
+saves, autosave preserving named files, cancellation, overwrite and both loaded
+MIDI phrases pass; no outstanding notes. Recorder covers the98.594second recipe
+with9521 contiguous samples: CPU8.349seconds, peakRSS399216640bytes, CPU
+throttling42.572ms over2periods. These are measurements, not storage-speed or
+hardware-equivalence thresholds. MIDI phrase correctness is checked by the
+existing recipe; this run adds no continuous musical timing oracle.
+
+Full snapshots, recipes, ACKs, observations, native exports and resource samples
+are retained. Before/after source identities match; owned container stop/remove
+both return0. The runtime is the isolated ACK/display candidate, not a promoted
+default. PERF-006 remains partial: this normal bind-mounted storage run does not
+cover slow-storage faults or the complete lifecycle matrix. The existing fault,
+lifecycle and history functional evidence remains separate. Next high-value gap
+is mixed sustained pressure; avoid another save correctness matrix.
