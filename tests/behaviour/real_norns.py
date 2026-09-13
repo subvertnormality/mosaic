@@ -3,6 +3,7 @@
 import argparse,ctypes,hashlib,json,re,socket,struct,subprocess,sys,tarfile,tempfile,time
 from pathlib import Path
 from hardware_driver import hardware_applicability,run_hardware_case
+from hardware_performance import CASES as HARDWARE_PERFORMANCE_CASES,run_hardware_performance
 REPO=Path(__file__).resolve().parents[2];ROOT='/home/we/.cache/mosaic-real-norns'
 def write(p,v):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,indent=2)+'\n')
 def maiden_timeout(output):return TimeoutError('Maiden marker not observed; output tail: '+''.join(output)[-2000:])
@@ -111,6 +112,7 @@ class OutputTrace:
    except Exception as cleanup_error:raise RuntimeError('Hardware trace installation failed and cleanup could not be confirmed: '+str(cleanup_error)) from install_error
    raise
  def reset_midi(self,allow_lua_error=False):return self.maiden.eval('for i=#_MOSAIC_HW_MIDI,1,-1 do _MOSAIC_HW_MIDI[i]=nil end; _MOSAIC_HW_MIDI_REALTIME.count=0',allow_lua_error=allow_lua_error)
+ def reset(self,allow_lua_error=False):return self.maiden.eval('for i=#_MOSAIC_HW_MIDI,1,-1 do _MOSAIC_HW_MIDI[i]=nil end; _MOSAIC_HW_MIDI_REALTIME.count=0; _MOSAIC_HW_GRID.writes=0; _MOSAIC_HW_GRID.refreshes=0; _MOSAIC_HW_GRID.all=0; _MOSAIC_HW_GRID.levels={}',allow_lua_error=allow_lua_error)
  def snapshot(self,allow_lua_error=False,return_output=False):
   code="print('__GRID_COUNTS__'.._MOSAIC_HW_GRID.writes..','.._MOSAIC_HW_GRID.refreshes); for y=1,8 do local row={} for x=1,16 do local value=_MOSAIC_HW_GRID.levels[x..','..y] if value==nil then value=_MOSAIC_HW_GRID.all end row[x]=value end print('__GRID_ROW__'..y..'|'..table.concat(row,',')) end; for i,e in ipairs(_MOSAIC_HW_MIDI) do print(string.format('__MIDI__%d|%.9f|%s|%s|%s',i,e.when,e.device,e.payload_type,table.concat(e.bytes,','))) end"
   output=self.maiden.eval(code,allow_lua_error=allow_lua_error);counts=re.search(r'__GRID_COUNTS__(\d+),(\d+)',output)
@@ -286,7 +288,7 @@ def run_m_pat_001(r,grid_device,device_map_id):
  return run_hardware_case(r,'M-PAT-001',grid_device,device_map_id,OutputTrace(r.maiden))
 def main(argv=None):
  p=argparse.ArgumentParser()
- p.add_argument('command',choices=['applicability','probe','workflow','resume','case','clock-cancel','restore','finalize'])
+ p.add_argument('command',choices=['applicability','probe','workflow','resume','case','performance','clock-cancel','restore','finalize'])
  p.add_argument('--host');p.add_argument('--ssh-option',action='append',default=[])
  p.add_argument('--maiden-url');p.add_argument('--nanomsg-library',default='libnanomsg.so.5')
  p.add_argument('--websocket-wheel',help='path to a pinned websockets wheel; selects official Maiden WebSocket framing')
@@ -296,6 +298,7 @@ def main(argv=None):
  p.add_argument('--source',default=str(REPO));p.add_argument('--artifacts');p.add_argument('--run-id')
  p.add_argument('--synthetic-grid',action='store_true');p.add_argument('--grid-device-id',type=int,default=0,help='stock grid.devices ID; 0 auto-discovers the first connected grid')
  p.add_argument('--case',dest='case_id',choices=['M-PAT-001']);p.add_argument('--config-source');p.add_argument('--device-map-id',default='emu-test')
+ p.add_argument('--performance-case',choices=sorted(HARDWARE_PERFORMANCE_CASES))
  p.add_argument('--clock-cancel-candidate',help='complete temporary replacement for /home/we/norns/lua/core/clock.lua')
  a=p.parse_args(argv)
  if a.command=='applicability':
@@ -307,6 +310,7 @@ def main(argv=None):
  if not a.run_id.replace('-','').isalnum():p.error('unsafe run ID')
  if a.osc_via_ssh and a.maiden_input:p.error('choose only one alternate input transport')
  if a.command=='case' and (not a.case_id or not a.maiden_input or not a.synthetic_grid):p.error('case requires --case, --maiden-input and --synthetic-grid')
+ if a.command=='performance' and (not a.performance_case or not a.config_source or not a.maiden_input or not a.synthetic_grid):p.error('performance requires --performance-case, --config-source, --maiden-input and --synthetic-grid')
  if a.command=='clock-cancel' and not a.clock_cancel_candidate:p.error('clock-cancel requires --clock-cancel-candidate')
  out=Path(a.artifacts).resolve();out.mkdir(parents=True,exist_ok=False)
  ssh=SSH(a.host,a.ssh_option)
@@ -318,13 +322,14 @@ def main(argv=None):
   if a.command=='clock-cancel':
    evidence=r.clock_cancel_comparison(a.clock_cancel_candidate);evidence['capabilities']=caps;write(out/'clock-cancel.json',evidence)
    if not evidence['stock_restored'] or not evidence['phases'][-1]['passed']:raise AssertionError('Clock candidate failed or stock clock was not restored')
-  elif a.command in ('workflow','resume','case'):
-   source_files=len(r.deploy(Path(a.source).resolve())) if a.command=='workflow' else r.resume()
-   if a.command=='case':
+  elif a.command in ('workflow','resume','case','performance'):
+   source_files=len(r.deploy(Path(a.source).resolve())) if a.command in ('workflow','performance') else r.resume()
+   if a.command in ('case','performance'):
     if a.config_source:r.seed_config(a.config_source)
-    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden));r.logs()
+    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden)) if a.command=='case' else run_hardware_performance(r,a.performance_case,r.grid_device(a.grid_device_id),a.device_map_id,a.source)
+    r.logs()
     evidence.update({'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=a.source,text=True).strip(),'source_files':source_files,'resumed_after_interruption':True,'capabilities':caps,'campaign_complete':False})
-    write(out/'evidence.json',evidence)
+    write(out/'performance.json' if a.command=='performance' else out/'evidence.json',evidence)
    else:
     grid_device=None;synthetic=None
     if a.synthetic_grid:grid_device=r.grid_device(a.grid_device_id);r.synthetic_grid(grid_device,3,8,1);r.synthetic_grid(grid_device,3,8,0);time.sleep(.1)
@@ -335,6 +340,6 @@ def main(argv=None):
   elif a.command=='finalize':r.finalize()
   else:write(out/'capabilities.json',caps)
  except Exception as e:failure=type(e).__name__+': '+str(e);raise
- finally:maiden.close();write(out/'run.json',{'run_id':a.run_id,'command':a.command,'case':a.case_id,'failure':failure})
+ finally:maiden.close();write(out/'run.json',{'run_id':a.run_id,'command':a.command,'case':a.case_id,'performance_case':a.performance_case,'failure':failure})
  return 0
 if __name__=='__main__':sys.exit(main())

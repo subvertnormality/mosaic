@@ -3,10 +3,10 @@ import re,time
 
 HARDWARE_PERFORMANCE_RECIPES={
     'perf_dense.py':{
-        'status':'deferred','adaptation':'adapter-ready',
+        'status':'implemented-unverified','hardware_verified':False,'adaptation':'hardware-calibration','cases':['PERF-002-HW-1','PERF-002-HW-16','PERF-003-HW-16'],
         'comparable_metrics':['MIDI event completeness and order','per-step channel grouping','balanced releases','onset lateness/jitter/drift','intra-step service span','grid driver activity'],
         'available_boundaries':['HardwareDriver controls','OutputTrace MIDI timestamps','OutputTrace grid writes','screen screenshots'],
-        'capability_gaps':['on-device resource sampler','repeatable load identity and threshold calibration','frame/grid revision counters for render pressure'],
+        'capability_gaps':['frame revision counters for render pressure','cross-device resource thresholds require repeated physical calibration'],
     },
     'perf_input.py':{
         'status':'deferred','adaptation':'blocked-on-input-boundary',
@@ -28,7 +28,7 @@ HARDWARE_PERFORMANCE_RECIPES={
 
 HARDWARE_QUALIFICATION_TARGETS={
     'representative-smoke':{'status':'implemented','cases':['M-PAT-001']},
-    'performance-load':{'status':'deferred','recipes':HARDWARE_PERFORMANCE_RECIPES},
+    'performance-load':{'status':'partial-unverified','implemented_cases':['PERF-002-HW-1','PERF-002-HW-16','PERF-003-HW-16'],'hardware_verified':False,'recipes':HARDWARE_PERFORMANCE_RECIPES},
     'musical-timing-drift':{'status':'deferred','cases':['M-TIM-001','M-TIM-002','M-SYNC-022']},
     'midi-master-slave-sync':{'status':'deferred','cases':['M-TIM-003','M-TIM-004']+['M-SYNC-%03d'%n for n in range(1,23)]},
     'stock-clock-cancel-queued-resume':{'status':'implemented','mode':'clock-cancel','fixture':'dedicated stock-runtime baseline/candidate/restoration comparison'},
@@ -67,9 +67,9 @@ def hardware_applicability(cases):
 
 class HardwareDriver:
     """Public behavior-driver surface backed by Runner and OutputTrace."""
-    def __init__(self,runner,grid_device,device_map_id,trace):
+    def __init__(self,runner,grid_device,device_map_id,trace,capture_screens=True,artifact_prefix='m-pat-001'):
         self.runner=runner;self.grid_device=grid_device;self.device_map_id=device_map_id;self.trace=trace
-        self.clock_mode='real-time';self.logical_ns=0;self.recipe=[];self.observations=[];self.results=[];self.screens=[];self.finished=False
+        self.clock_mode='real-time';self.logical_ns=0;self.recipe=[];self.observations=[];self.results=[];self.screens=[];self.finished=False;self.capture_screens=capture_screens;self.artifact_prefix=artifact_prefix
         output=runner.maiden.eval("print('__MOSAIC_TEMPO__'..clock.get_tempo())");match=re.search(r'__MOSAIC_TEMPO__([0-9.]+)',output)
         if not match:raise RuntimeError('Could not observe norns clock tempo')
         self.tempo_bpm=float(match.group(1));self.expected_step_seconds=15/self.tempo_bpm;self.trace.install()
@@ -132,7 +132,7 @@ class HardwareDriver:
         self.tap(5,8)
         for x,y in ((1,1),(2,2),(3,3),(4,4)):self.tap(x,y)
         self.tap(3,8);self.tap(1,2);self.hold_tap((1,4),(4,4));self.led_values([(1,2)],[15])
-        self.screens.append(self.runner.screenshot('m-pat-001-authored'))
+        if self.capture_screens:self.screens.append(self.runner.screenshot(self.artifact_prefix+'-authored'))
     def playback(self,expected,cycles=3,timeout=5,settle_seconds=0):
         assert expected and cycles>=2 and settle_seconds>=0
         self.trace.reset_midi();self.tap(1,8)
@@ -156,7 +156,8 @@ class HardwareDriver:
         self.results.append(result);return notes
     def finish(self):
         if self.finished:return
-        try:self.screens.append(self.runner.screenshot('m-pat-001-finished'))
+        try:
+            if self.capture_screens:self.screens.append(self.runner.screenshot(self.artifact_prefix+'-finished'))
         finally:self.trace.remove();self.finished=True
 
 def run_hardware_case(runner,case_id,grid_device,device_map_id,trace):

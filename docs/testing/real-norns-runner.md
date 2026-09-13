@@ -50,7 +50,7 @@ python3 tests/behaviour/real_norns.py case \
 
 As of 2026-09-13, this case passed on a physical norns at source revision `6f4ac36942c5e24c817a71882bc68644d97a24a6`: all 1,061 deployed files matched, both MIDI phrases passed at 122 BPM, and the worst measured sixteenth-note error was 4.53 ms. The successful run used the emulator project's narrow `0011-clock-cancel-queued-resume.patch` against the device's norns runtime. Stock norns reproducibly queued a resume after Mosaic cancelled the corresponding thread and failed at `core/clock.lua:58` with `thread expected` on Stop. The candidate ignores only missing integer IDs that were previously allocated; arbitrary unknown IDs still fail. This is a norns runtime limitation, not a green stock-hardware claim.
 
-The hardware mode currently implements `M-PAT-001`, the generic smoke, and a dedicated stock-norns `clock.cancel` queued-resume comparison. Performance/load, musical timing and drift, and MIDI master/slave sync remain focused targets until their hardware adapters and oracles are implemented. The broad functional suite remains emulator coverage; a recipe is never treated as hardware-compatible merely because it happens to call methods present on the adapter.
+The hardware mode implements `M-PAT-001`, the generic smoke, a dedicated stock-norns `clock.cancel` queued-resume comparison, and three dense-workload calibration cases: `PERF-002-HW-1`, `PERF-002-HW-16`, and `PERF-003-HW-16`. Musical timing and drift beyond these workloads, MIDI master/slave sync, input, overload, and storage remain deferred or excluded as reported by `applicability`. The broad functional suite remains emulator coverage; a recipe is never treated as hardware-compatible merely because it happens to call methods present on the adapter.
 
 `clock-cancel` runs the same queued-resume probe against the installed stock `clock.lua`, atomically installs a caller-supplied complete candidate file, reruns the probe, and restores the fetched stock bytes in `finally`. Expected queued stock `thread expected` errors are drained through each Maiden marker during clear, clock reload, and prior-script reload; their phase and count are recorded, while any other Lua error still fails. It verifies and records the stock, candidate, and restored SHA-256 values, then reloads the previously active script. The procedure does not reboot norns or restart JACK:
 
@@ -70,6 +70,18 @@ python3 tests/behaviour/real_norns.py applicability
 
 Physical grid ingress, external cable transmission, audio output, Crow, n.b., controlled time, and framebuffer text recognition are outside this increment's evidence.
 
-The same report describes the performance adaptation boundary. `perf_dense.py` can reuse the adapter's ordered MIDI/grid observations, but still needs an on-device resource sampler and device threshold calibration. `perf_input.py` additionally needs scheduled external-MIDI ingress with an accepted/delivered ledger and comparable acknowledgement times. `perf_overload.py` needs a bounded on-device load generator, resource samples that bracket it, and a revision-based visual recovery oracle. These execution paths remain deferred so emulator-native scheduler logs and container throttling counters are not relabelled as hardware measurements. `perf_storage.py` remains outside the hardware timing suite because its current recipe defines no storage-speed threshold or musical timing correlation.
+The three performance cases reuse the exact `perf_dense.py` user-level project builder and slide oracle. After setup, the adapter resets its MIDI and grid traces at an explicit start boundary, runs eight seconds of playback, and reports complete ordered notes, balanced releases, slide curves, phase lateness, jitter, drift, skips, per-step service span, and grid activity. A concurrent on-device sampler records matron CPU/RSS, system load, thermal readings and Raspberry Pi throttling flags when available. Evidence binds the Mosaic revision and dirty-patch hash to the norns revision, `clock.lua` hash, boot, matron process identity, and executable. Existing musical timing thresholds remain unchanged; physical resource figures are calibration measurements until repeated device runs justify cross-device gates. These adapters have unit coverage but have not yet been run on hardware, which is reported machine-readably as `hardware_verified: false`.
+
+```sh
+python3 tests/behaviour/real_norns.py performance \
+  --performance-case PERF-002-HW-16 \
+  --config-source tests/behaviour/config --device-map-id emu-test \
+  --host norns.local --maiden-url ws://127.0.0.1:15555/ \
+  --osc-host norns.local --maiden-input --synthetic-grid \
+  --source "$PWD" --run-id perf-002-hw-16-001 \
+  --artifacts ../mosaic-behaviour-runs/perf-002-hw-16-001
+```
+
+`perf_input.py` still needs scheduled external-MIDI ingress with an accepted/delivered ledger and comparable acknowledgement times. `perf_overload.py` still needs a bounded on-device load generator and a revision-based visual recovery oracle. These execution paths remain deferred so emulator-native scheduler logs and container throttling counters are not relabelled as hardware measurements. `perf_storage.py` remains outside the hardware timing suite because its current recipe defines no storage-speed threshold or musical timing correlation.
 
 Running hardware mode interrupts the active script and requires exclusive access to the device. Screenshot file I/O and config seeding occur outside musical timing claims.

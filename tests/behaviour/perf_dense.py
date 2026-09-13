@@ -19,6 +19,7 @@ EMULATOR=Path(os.environ['MONOME_EMULATOR']).resolve()
 sys.path.insert(0,str(EMULATOR/'src'));sys.path.insert(0,str(BEHAVIOUR))
 from automation.performance import performance_metrics,throttling_deltas,bracketing_samples
 import driver
+from dense_workload import build_project,validate_events
 
 STEP=1/6  # default 90 BPM, sixteenth steps
 
@@ -59,41 +60,6 @@ class ContainerDriver(driver.Driver):
     def finish(self):
         driver.write(self.out/'recipe.json',self.recipe);driver.write(self.out/'results.json',self.results)
         driver.write(self.out/'action-acks.json',self.action_acks)
-
-def build_project(d,channels,workload='dense'):
-    d.tap(5,8);d.tap(1,1)                          # trig editor, pattern 1
-    for x in range(1,17):d.tap(x,4)                # all 16 steps active
-    d.tap(3,8);d.enc(1,4)                          # channel page, Device Config
-    for channel in range(1,channels+1):
-        d.tap(channel,1)
-        d.enc(3,1);d.enc(2,1)                      # first device, then its MIDI channel
-        if channel>1:d.enc(3,channel-1)
-        d.key(3);d.tap(1,2);d.hold_tap((1,4),(16,4))
-        if workload=='slides':
-            # PERF-003: CC 1 locked 0 on step 1 and 127 on step 9, global slide on.
-            from cases import assign_trig_parameter
-            d.enc(1,-3);assign_trig_parameter(d,'CC 1')
-            for step,value in ((1,0),(9,127)):
-                d.action(type='grid',x=step,y=4,state=1)
-                try:d.elapse(.05);d.action(type='enc',n=3,delta=-126);d.elapse(.15);d.enc(3,value+1)
-                finally:d.action(type='grid',x=step,y=4,state=0)
-                d.elapse(.1)
-            d.key(3);d.enc(1,3)
-    d.tap(1,1)
-
-def check_slides(emitted,ons,channels):
-    """Each channel's CC 1: 0 with step 1, a rising ramp, 127 with step 9, every cycle."""
-    checked=0
-    for channel in range(channels):
-        cc=[e for e in emitted if e['bytes'][:2]==[176+channel,1]]
-        notes=[e for e in ons if e['bytes'][0]==144+channel]
-        for cycle in range(len(notes)//16):
-            first,ninth=notes[16*cycle],notes[16*cycle+8]
-            ramp=[e['bytes'][2] for e in cc if first['index']-channels*2<e['index']<ninth['index']]
-            assert ramp and ramp[0]==0 and ramp[-1]==127 and ramp==sorted(ramp) and len(set(ramp))>=4,(channel+1,cycle,ramp)
-            checked+=1
-    assert checked>=channels,('No complete slide cycle',checked)
-    return checked
 
 def workload_id(workload,pressure=False):
     base={'dense':'PERF-002','slides':'PERF-003'}[workload]
@@ -198,17 +164,7 @@ def run_one(image,out,channels,repeat,seconds,workload='dense',render_pressure=F
         found=docker('exec',name,'find','/opt/emulator/.runtime/sessions/'+ready['session_id'],'-name','native-events.jsonl').stdout.split()
         docker('cp',name+':'+found[0],str(out/'native-events.jsonl'))
         emitted=[e for e in (json.loads(l) for l in (out/'native-events.jsonl').read_text().splitlines()) if 'index' in e and 'bytes' in e]
-        assert [e['index'] for e in emitted]==list(range(1,len(emitted)+1)),'Non-contiguous native export'
-        ons=[e for e in emitted if e['bytes'][0]&240==144 and e['bytes'][2]>0]
-        offs=[e for e in emitted if e['bytes'][0]&240==128 or (e['bytes'][0]&240==144 and e['bytes'][2]==0)]
-        # Oracle: step k has one Note On per channel 1..N, note 60 velocity 100.
-        assert ons and len(ons)%channels==0,('Incomplete step',len(ons))
-        steps=[ons[i:i+channels] for i in range(0,len(ons),channels)]
-        for index,group in enumerate(steps):
-            assert sorted(e['bytes'][0] for e in group)==[144+c for c in range(channels)],('Channels at step',index,[e['bytes'] for e in group])
-            assert all(e['bytes'][1:]==[60,100] and e['port']==1 for e in group),('Bytes at step',index,[e['bytes'] for e in group])
-        assert len(offs)==len(ons),('Unbalanced releases',len(ons),len(offs))
-        slide_cycles=check_slides(emitted,ons,channels) if workload=='slides' else None
+        validated=validate_events(emitted,channels,workload);ons=validated['ons'];offs=validated['offs'];steps=validated['steps'];slide_cycles=validated['slide_cycles']
         origin=steps[0][0]['monotonic_ns']
         errors=[e['monotonic_ns']-(origin+round(k*STEP*1e9)) for k,group in enumerate(steps) for e in group]
         service=[group[-1]['monotonic_ns']-group[0]['monotonic_ns'] for group in steps]
