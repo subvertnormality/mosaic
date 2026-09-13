@@ -47,4 +47,6 @@ class Tests(unittest.TestCase):
   with patch('real_norns.subprocess.check_output',return_value=b'png') as get:ssh.fetch('/remote/shot',dst);self.assertEqual(dst.read_bytes(),b'png');self.assertEqual(get.call_args.args[0][:5],['ssh','-S','/tmp/control','we@norns','cat'])
  def test_grid_is_explicit_synthetic_lua_only(self):
   r,_,m=self.r();r.synthetic_grid(4,3,8,1);self.assertEqual(m.commands[-1],'_norns.grid.key(4,2,7,1)')
+ def test_grid_device_auto_discovers_runtime_id(self):
+  r,_,m=self.r();m.eval=lambda code:'__MOSAIC_GRID_ID__2\nmarker';self.assertEqual(r.grid_device(),2);self.assertEqual(r.grid_device(7),7)
 if __name__=='__main__':unittest.main()
