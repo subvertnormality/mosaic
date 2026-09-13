@@ -12,7 +12,7 @@ one Note On (note 60, velocity 100) per active channel, in time, and every note
 is released. Resource figures are measurements for the refactor, not gates
 that this runner may relax (PERFORMANCE.md; user direction D23).
 """
-import argparse,hashlib,json,os,subprocess,sys,tempfile,time,urllib.request,uuid
+import argparse,hashlib,json,os,subprocess,sys,tempfile,time,urllib.error,urllib.request,uuid
 from pathlib import Path
 BEHAVIOUR=Path(__file__).resolve().parent;REPO=BEHAVIOUR.parents[1]
 EMULATOR=Path(os.environ['MONOME_EMULATOR']).resolve()
@@ -87,7 +87,7 @@ def check_slides(emitted,ons,channels):
 
 def run_one(image,out,channels,repeat,seconds,workload='dense'):
     out.mkdir(parents=True);data=Path(tempfile.mkdtemp(prefix='perf-dense-data-'))
-    name='mosaic-perf-'+uuid.uuid4().hex[:10];started=False
+    name='mosaic-perf-'+uuid.uuid4().hex[:10];started=False;d=None
     code=Path(tempfile.mkdtemp(prefix='perf-dense-code-'))
     result=dict(schema_version=1,workload={'dense':'PERF-002','slides':'PERF-003'}[workload],channels=channels,repeat=repeat,seconds=seconds,image=image,passed=False)
     result['host_loadavg_before']=os.getloadavg() # shared host: record contention, never correct for it
@@ -108,6 +108,8 @@ def run_one(image,out,channels,repeat,seconds,workload='dense'):
         http=Http(port,ready['token'],ready['session_id'])
         d=ContainerDriver(out,http)
         build_project(d,channels,workload)
+        d.finish()
+        driver.write(out/'setup-snapshot.json',http.observe())
         recording=http.request('/performance/start',dict(period_ms=10,maximum_seconds=int(seconds+15)))
         time.sleep(1.0)                            # recorded settle: build work leaves the quota window
         http.action(dict(type='grid',x=1,y=8,state=1));http.action(dict(type='grid',x=1,y=8,state=0))
@@ -120,6 +122,7 @@ def run_one(image,out,channels,repeat,seconds,workload='dense'):
         while True:
             page=http.request('/performance/read',dict(after=cursor,limit=1000));samples+=page['samples'];cursor=page['cursor']
             if not page['has_more']:break
+        driver.write(out/'samples.json',dict(recording=recording,samples=samples))
         found=docker('exec',name,'find','/opt/emulator/.runtime/sessions/'+ready['session_id'],'-name','native-events.jsonl').stdout.split()
         docker('cp',name+':'+found[0],str(out/'native-events.jsonl'))
         emitted=[e for e in (json.loads(l) for l in (out/'native-events.jsonl').read_text().splitlines()) if 'index' in e and 'bytes' in e]
@@ -141,14 +144,15 @@ def run_one(image,out,channels,repeat,seconds,workload='dense'):
         window=throttling_deltas(bracketing_samples(samples,origin,steps[-1][-1]['monotonic_ns']))
         expected_steps=int(seconds/STEP)
         assert abs(len(steps)-expected_steps)<=2,('Step count',len(steps),expected_steps)
-        driver.write(out/'samples.json',dict(recording=recording,samples=samples))
         result['host_loadavg_after']=os.getloadavg()
         result.update(slide_cycles_checked=slide_cycles,passed=bool(metrics['passed']),session_id=ready['session_id'],limits=recording['limits'],steps=len(steps),
             note_ons=len(ons),messages=len(emitted),metrics=metrics,throttling_workload=window,final_phase_error_ns=errors[-1])
-        d.finish()
     except Exception as error:
         result['error']=repr(error)[:2000]
+        if isinstance(error,urllib.error.HTTPError):
+            result['http_error_body']=error.read().decode('utf-8',errors='replace')[:4000]
     finally:
+        if d is not None:d.finish()
         if started:
             (out/'container.log').write_text(docker('logs',name,check=False).stdout)
             docker('stop','--time','40',name,timeout=60,check=False);docker('rm',name,check=False)
