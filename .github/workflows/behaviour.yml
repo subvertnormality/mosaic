@@ -1,0 +1,103 @@
+name: Behaviour smoke
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: behaviour-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  emulator-behaviour-smoke:
+    name: Emulator behaviour smoke
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    env:
+      EMULATOR_REVISION: b6728734b1c2201e508b06b98943bc4c88672263
+      EMULATOR_ROOT: ${{ runner.temp }}/monome-emulator
+      MONOME_EMULATOR: ${{ runner.temp }}/monome-emulator
+      BEHAVIOUR_OUTPUT: ${{ runner.temp }}/mosaic-behaviour-smoke
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Check out Mosaic
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install native runtime dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3 \
+            libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev \
+            libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev \
+            libsdl2-dev libsndfile1-dev libudev-dev supercollider-language \
+            supercollider-server
+
+      - name: Check out the pinned monome emulator
+        run: |
+          git clone --filter=blob:none https://github.com/subvertnormality/monome-emulator.git "$EMULATOR_ROOT"
+          git -C "$EMULATOR_ROOT" checkout --detach "$EMULATOR_REVISION"
+          test "$(git -C "$EMULATOR_ROOT" rev-parse HEAD)" = "$EMULATOR_REVISION"
+
+      - name: Restore native runtime cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/monome-emulator/.runtime
+          key: monome-emulator-${{ runner.os }}-${{ runner.arch }}-b672873-controlled-v1
+
+      - name: Build default and controlled-time runtimes
+        run: tests/behaviour/ci/prepare-emulator.sh
+
+      - name: Verify generic native runtime
+        working-directory: ${{ runner.temp }}/monome-emulator
+        run: python3 tests/native_smoke.py
+
+      - name: Run controlled-time musical smoke
+        run: |
+          python3 tests/behaviour/suite.py run \
+            --output "$BEHAVIOUR_OUTPUT-controlled" \
+            --emulator "$EMULATOR_ROOT" \
+            --norns-source "$EMULATOR_ROOT/.runtime/deps/norns" \
+            --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json" \
+            --lanes controlled-experimental \
+            --profiles base-midi \
+            --case-pattern '^(M-LEN-001|M-TIME-001|M-SYNC-001)$' \
+            --controlled-workers 1 \
+            --case-timeout 900
+
+      - name: Run default real-time functional smoke
+        run: |
+          python3 tests/behaviour/suite.py run \
+            --output "$BEHAVIOUR_OUTPUT-real-time" \
+            --emulator "$EMULATOR_ROOT" \
+            --norns-source "$EMULATOR_ROOT/.runtime/deps/norns" \
+            --lanes real-time \
+            --profiles base-midi \
+            --case-pattern '^(M-PAT-001|M-SAVE-001|M-MAP-001)$' \
+            --real-time-workers 1 \
+            --case-timeout 900 \
+            --skip-fast-layers
+
+      - name: Verify smoke report
+        if: always()
+        run: |
+          python3 tests/behaviour/ci/verify-smoke.py \
+            "$BEHAVIOUR_OUTPUT-controlled/suite.json" \
+            "$BEHAVIOUR_OUTPUT-real-time/suite.json"
+
+      - name: Upload failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mosaic-behaviour-smoke-${{ github.run_id }}
+          path: ${{ runner.temp }}/mosaic-behaviour-smoke-*
+          retention-days: 3
+          compression-level: 9
