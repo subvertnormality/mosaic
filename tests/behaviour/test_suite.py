@@ -165,6 +165,20 @@ class SchedulingTests(unittest.TestCase):
             self.assertEqual(suite.recorded_durations(str(path)),{('A','real-time'):12.5})
         self.assertEqual(suite.recorded_durations(None),{})
 
+    def test_mod_patches_are_forwarded_only_when_requested(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest=Path(tmp)/'manifest.json'
+            manifest.write_text(json.dumps(dict(passed=True)))
+            result=SimpleNamespace(returncode=0,stdout=json.dumps(dict(case='M-MOD-001',manifest=str(manifest)))+chr(10),stderr='')
+            base=dict(experimental_install=None,mod_code_root={'midi-modulation':'/mods'},case_timeout=1)
+            for enabled in (False,True):
+                args=SimpleNamespace(mod_patches=enabled,**base)
+                with patch.object(suite.subprocess,'run',return_value=result) as launched:
+                    row=suite.run_case('M-MOD-001','real-time','midi-modulation',args,Path(tmp),{})
+                self.assertTrue(row['passed'])
+                command=launched.call_args.args[0]
+                self.assertEqual('--mod-patches' in command,enabled)
+
     def test_lanes_run_concurrently_within_each_lane_budget(self):
         import threading,time
         active={'a':0,'b':0};peak={'a':0,'b':0};both=[False];lock=threading.Lock();seen=[]

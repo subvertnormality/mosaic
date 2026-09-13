@@ -220,6 +220,7 @@ def run_case(case,lane,profile,args,artifacts,env,gate=None):
     command=[sys.executable,str(BEHAVIOUR/'run.py'),'--case',case,'--artifacts',str(artifacts),'--clock-mode',lane]
     if args.experimental_install:command+=['--experimental-install',args.experimental_install]
     if profile!='base-midi':command+=['--profile',profile,'--mod-code-root',args.mod_code_root[profile]]
+    if args.mod_patches:command+=['--mod-patches']
     started=time.monotonic()
     try:
         result=subprocess.run(command,cwd=REPO,env=env,capture_output=True,text=True,timeout=args.case_timeout)
@@ -450,6 +451,7 @@ def main():
     r.add_argument('--lanes',default=','.join(LANES),type=lambda v:[x for x in v.split(',') if x])
     r.add_argument('--profiles',default='base-midi',type=lambda v:set(v.split(',')))
     r.add_argument('--mod-code-root',action='append',default=[],help='PROFILE=PATH for non-base profiles')
+    r.add_argument('--mod-patches',action='store_true',help='Apply the declared SHA-bound modulation fixture patches')
     r.add_argument('--output-mod-root',default=os.environ.get('MOSAIC_OUTPUT_MOD_ROOT'))
     r.add_argument('--case-pattern',help='Regex selection (a partial run is never a complete regression run)')
     # Measured 2026-09-11: real-time work ~10.5 worker-hours (752 cases x ~50 s, mostly wall-clock waiting),
@@ -471,6 +473,7 @@ def main():
     s.add_argument('--emulator',default=os.environ.get('MONOME_EMULATOR'),required='MONOME_EMULATOR' not in os.environ)
     s.add_argument('--experimental-install')
     s.add_argument('--mod-code-root',action='append',default=[])
+    s.add_argument('--mod-patches',action='store_true')
     s.add_argument('--case-timeout',type=int,default=3600)
     args=parser.parse_args()
     if args.command=='compare':return compare(args)
