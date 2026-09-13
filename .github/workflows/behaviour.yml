@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  EMULATOR_REVISION: b6728734b1c2201e508b06b98943bc4c88672263
+  EMULATOR_REVISION: e670ef5c3c13b6089e9f259f4f59fadd65cde4c6
   EMULATOR_ROOT: /tmp/monome-emulator
   MONOME_EMULATOR: /tmp/monome-emulator
   DEBIAN_FRONTEND: noninteractive
@@ -56,7 +56,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/monome-emulator/.runtime
-          key: monome-emulator-ubuntu20-b672873-controlled-v3
+          key: monome-emulator-ubuntu20-e670ef5-controlled-v1
       - &build
         name: Build native runtimes
         run: tests/behaviour/ci/prepare-emulator.sh
@@ -76,6 +76,13 @@ jobs:
           git -C /tmp/mosaic-output-mods/doubledecker checkout --detach 8729b9ceee71d2b07067e89fbef5d8b98d6a0c89
           git clone https://github.com/sixolet/nb_jf.git /tmp/mosaic-output-mods/nb_jf
           git -C /tmp/mosaic-output-mods/nb_jf checkout --detach fc0922feb5f8e91f7732602a3b99716bf7099e78
+      - name: Prepare unprivileged behaviour user
+        run: |
+          useradd --create-home --shell /bin/bash mosaic-ci
+          chown -R mosaic-ci:mosaic-ci "$GITHUB_WORKSPACE" "$EMULATOR_ROOT"
+          if [ -d /tmp/mosaic-output-mods ]; then
+            chown -R mosaic-ci:mosaic-ci /tmp/mosaic-output-mods
+          fi
       - name: Run exhaustive base-MIDI shard
         run: |
           pattern="$(python3 tests/behaviour/ci/select-shard.py --profile base-midi --index ${{ matrix.shard }} --count 8)"
@@ -86,11 +93,11 @@ jobs:
             output_mod="--output-mod-root /tmp/mosaic-output-mods"
           fi
           set +e
-          python3 tests/behaviour/suite.py run             --output "/tmp/mosaic-behaviour-base-${{ matrix.shard }}"             --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json"             --lanes real-time,controlled-experimental --profiles base-midi             --case-pattern "$pattern" --real-time-workers 6 --controlled-workers 2             --case-timeout 3600 $extra $output_mod
+          runuser -u mosaic-ci --preserve-environment -- python3 tests/behaviour/suite.py run             --output "/tmp/mosaic-behaviour-base-${{ matrix.shard }}"             --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json"             --lanes real-time,controlled-experimental --profiles base-midi             --case-pattern "$pattern" --real-time-workers 1 --controlled-workers 1             --case-timeout 3600 $extra $output_mod
           status=$?
           set -e
           if [ $status -ne 0 ]; then
-            python3 tests/behaviour/suite.py rerun "/tmp/mosaic-behaviour-base-${{ matrix.shard }}/suite.json"               --emulator "$EMULATOR_ROOT"               --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json"
+            runuser -u mosaic-ci --preserve-environment -- python3 tests/behaviour/suite.py rerun "/tmp/mosaic-behaviour-base-${{ matrix.shard }}/suite.json"               --emulator "$EMULATOR_ROOT"               --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json"
           fi
       - name: Upload shard report
         if: always()
