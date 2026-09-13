@@ -288,3 +288,34 @@ default. PERF-006 remains partial: this normal bind-mounted storage run does not
 cover slow-storage faults or the complete lifecycle matrix. The existing fault,
 lifecycle and history functional evidence remains separate. Next high-value gap
 is mixed sustained pressure; avoid another save correctness matrix.
+
+## Extended generic clock-domain recovery
+
+`generic-clock-domain-long-03` runs the generic clock-phase fixture extended
+from64 to320CC events, with Mosaic absent, on isolated recovery image2ca1cdab.
+Four CPU workers run1.5seconds inside the existing0.5CPU/768MiB container;
+40seconds of post-load observation follows. All320CC values arrive in exact
+order;14004trace records have contiguous ordinals. This diagnostic completed,
+but it is not a passing musical timing acceptance result.
+
+Relative to the pre-load median, MIDI phase/JACK offset in milliseconds are
+11.890/11.777 during0-5seconds after load,10.393/10.424 during5-10seconds,
+10.645/10.548 during10-20seconds,10.576/10.543 during20-30seconds, and
+10.593/10.546 in the final available30-40second window (56events, not a full
+80-event window). Final event phase10.491ms. The shift persists rather than
+merely decaying slowly. JACK logs29xrun-related lines;16native skip records
+occur during the load interval. No Mosaic change or tolerance relaxation.
+
+The actual image packages JACK1.9.12~dfsg-2ubuntu2. Official v1.9.12
+JackTimedDriver.cpp and JackFrameTimer.cpp are retained in `upstream-jack/`.
+TimedDriver resets its cycle anchor after overdue waits; frame conversion is
+based on the cycle/frame timer. This is a source-supported diagnostic lead,
+not a verified JACK patch. Next isolate dummy-server scheduling from client
+load before considering any emulator clock alteration; never globally replace
+JACK time with wall time while claiming preserved audio/softcut semantics.
+
+Attempts01/02 failed before playback because the probe was directly in the
+code root instead of an application subdirectory;02retains the explicit runtime
+error.03uses `/code/probe/probe.lua`, unchanged musical workload except the
+longer event count. All owned containers are terminal/removed. Native logs,
+source fixture, identities, resource samples and analysis are hash-recorded.
