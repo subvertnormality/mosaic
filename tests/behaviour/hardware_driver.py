@@ -85,9 +85,9 @@ class HardwareDriver:
     def snapshot(self):
         raw=self.trace.snapshot();midi=[];outstanding={}
         for event in raw['midi']:
-            match=re.search(r'(\d+)$',event['device'])
-            if not match:raise RuntimeError('Cannot map traced MIDI device to behavior port: '+event['device'])
-            row={**event,'port':int(match.group(1)),'monotonic_ns':round(event['monotonic_seconds']*1e9)};midi.append(row)
+            port=event.get('port')
+            if not isinstance(port,int) or not 1<=port<=16:raise RuntimeError('Cannot map traced MIDI device to behavior port: '+event['device'])
+            row={**event,'port':port,'monotonic_ns':round(event['monotonic_seconds']*1e9)};midi.append(row)
             b=row['bytes']
             if len(b)<3:continue
             key=(row['port'],b[0]&15,b[1])
@@ -103,7 +103,7 @@ class HardwareDriver:
             time.sleep(.08)
         raise AssertionError('Required observable output did not arrive')
     def tap(self,x,y):
-        self.action(type='grid',x=x,y=y,state=1);self.action(type='grid',x=x,y=y,state=0);self.elapse(.06)
+        self.action(type='grid',x=x,y=y,state=1);self.elapse(.04);self.action(type='grid',x=x,y=y,state=0);self.elapse(.12)
     def key(self,n):
         self.action(type='key',n=n,state=1);self.action(type='key',n=n,state=0);self.elapse(.06)
     def enc(self,n,steps):

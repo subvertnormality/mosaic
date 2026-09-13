@@ -34,6 +34,7 @@ class FakeDriver:
     def key(self,*args):pass
     def enc(self,*args):pass
     def elapse(self,*args):pass
+    def led_values(self,*args):pass
     def snapshot(self):return {'midi':dense_events(1),'grid_writes':4,'grid_refreshes':2}
     def finish(self):self.finished+=1
 
@@ -47,14 +48,20 @@ class Tests(unittest.TestCase):
         self.assertTrue(value['passed']);self.assertEqual((value['steps'],value['note_ons'],value['note_offs']),(4,8,8));self.assertEqual(value['skipped_deadlines'],0);self.assertEqual(value['timing']['maximum_ns'],1000)
         broken=dense_events(2,4);broken[1]['bytes'][0]=144
         with self.assertRaisesRegex(AssertionError,'Channels at step'):dense_oracle(broken,2,1,.25,'dense')
+        tailed=dense_oracle(dense_events(1,6),1,1,.25,'dense');self.assertEqual((tailed['steps'],tailed['captured_steps'],tailed['note_ons']),(4,6,6))
     def test_resource_sampler_and_metrics_report_matron_load_thermal_and_throttle(self):
         sampler=OnDeviceResourceSampler(FakeSSH(),.01,.01);sampler.start();recording=sampler.stop();metrics=resource_metrics(recording)
         self.assertEqual(metrics['sample_count'],2);self.assertEqual(metrics['matron_peak_rss_bytes'],1200);self.assertEqual(metrics['thermal_millicelsius_peak'],42000);self.assertEqual(metrics['throttled_flags_or'],2);self.assertEqual(metrics['threshold_status'],'calibration-only')
     def test_three_calibration_cases_and_trace_start_boundary(self):
         self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-16','PERF-003-HW-16'})
-        trace=FakeTrace();sampler=FakeSampler();runner=type('R',(),{'maiden':object(),'ssh':object()})();source=Path(tempfile.mkdtemp())
+        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
             value=run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)
         build.assert_called_once();self.assertEqual(build.call_args.args[1:3],(1,'dense'));self.assertIs(build.call_args.args[3],select_fixture_parameter);self.assertEqual(trace.resets,1);self.assertEqual((sampler.started,sampler.stopped),(1,1));self.assertTrue(value['passed']);self.assertTrue(value['trace_boundary']['reset_before_sampler_and_play']);self.assertEqual(value['source_identity']['mosaic_revision'],'abc')
+    def test_raw_performance_evidence_survives_oracle_failure(self):
+        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
+        with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project'),patch('hardware_performance.dense_oracle',side_effect=AssertionError('timing oracle failed')),patch('hardware_performance.time.sleep'):
+            with self.assertRaisesRegex(AssertionError,'timing oracle failed'):run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)
+        raw=json.loads((source/'performance-raw.json').read_text());self.assertEqual(len(raw['midi']),64);self.assertEqual((sampler.started,sampler.stopped),(1,1))
 
 if __name__=='__main__':unittest.main()

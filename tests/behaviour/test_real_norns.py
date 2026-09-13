@@ -153,11 +153,11 @@ class Tests(unittest.TestCase):
   r,_,m=self.r();m.eval=lambda code:'__MOSAIC_GRID_ID__2\nmarker';self.assertEqual(r.grid_device(),2);self.assertEqual(r.grid_device(7),7)
  def test_output_trace_preserves_raw_signed_led_and_exposes_physical_nibble(self):
   rows='\n'.join('__GRID_ROW__%d|%s'%(y,','.join(['-4' if y==8 and x==1 else '2' for x in range(1,17)])) for y in range(1,9))
-  m=M();m.eval=lambda code,**kwargs:'__GRID_COUNTS__12,3\n'+rows+'\n__MIDI__1|12.250000000|userdata: 1|table|144,60,127\n'
-  value=OutputTrace(m).snapshot();self.assertEqual(value['raw_grid'][112],-4);self.assertEqual(value['grid'][112],12);self.assertEqual(value['midi'][0]['bytes'],[144,60,127])
+  m=M();m.eval=lambda code,**kwargs:'__GRID_COUNTS__12,3\n'+rows+'\n__MIDI__1|12.250000000|1|userdata: 0xabc|table|144,60,127\n'
+  value=OutputTrace(m).snapshot();self.assertEqual(value['raw_grid'][112],-4);self.assertEqual(value['grid'][112],12);self.assertEqual((value['midi'][0]['port'],value['midi'][0]['bytes']),(1,[144,60,127]))
  def test_output_trace_uses_persistent_globals_and_restores_c_binding(self):
   m=M();m.eval=lambda code,**kwargs:m.commands.append(code) or ('__TRACE_REMOVED__C' if '__TRACE_REMOVED__' in code else 'ok')
-  trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('local original_midi=_norns.midi_send',m.commands[0]);self.assertIn('return original_midi(dev,payload)',m.commands[0]);self.assertIn('grid_state.writes',m.commands[0]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[1])
+  trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('local original_midi=_norns.midi_send',m.commands[0]);self.assertIn('return original_midi(dev,payload)',m.commands[0]);self.assertIn('grid_state.writes',m.commands[0]);self.assertIn('v.device.dev==dev',m.commands[0]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[1])
  def test_output_trace_reset_mutates_the_table_captured_by_wrappers(self):
   m=M();trace=OutputTrace(m);trace.reset_midi();self.assertIn('for i=#_MOSAIC_HW_MIDI,1,-1',m.commands[0]);self.assertIn('_MOSAIC_HW_MIDI_REALTIME.count=0',m.commands[0]);self.assertNotIn('_MOSAIC_HW_MIDI={}',m.commands[0])
  def test_output_trace_install_cleans_up_when_code_executes_then_eval_raises(self):
@@ -174,10 +174,15 @@ class Tests(unittest.TestCase):
   with self.assertRaisesRegex(NotImplementedError,'midi'):driver.action(type='midi',port=1,bytes=[144,60,127])
   driver.finish();self.assertEqual((trace.installed,trace.removed),(1,1))
  def test_hardware_snapshot_normalizes_the_public_state_shape(self):
-  r,_,m=self.r();m.eval=lambda code:"__MOSAIC_TEMPO__120\nmarker";trace=T();trace.snapshot=lambda:{'grid':[0]*128,'raw_grid':[0]*128,'midi':[{'index':1,'monotonic_seconds':12.25,'device':'userdata: 2','payload_type':'table','bytes':[144,60,127]}]}
+  r,_,m=self.r();m.eval=lambda code:"__MOSAIC_TEMPO__120\nmarker";trace=T();trace.snapshot=lambda:{'grid':[0]*128,'raw_grid':[0]*128,'midi':[{'index':1,'monotonic_seconds':12.25,'port':3,'device':'userdata: 0xabc','payload_type':'table','bytes':[144,60,127]}]}
   driver=HardwareDriver(r,2,'emu-test',trace);state=driver.snapshot();driver.finish()
-  self.assertEqual((state['midi_count'],state['midi'][0]['port'],state['midi'][0]['monotonic_ns']),(1,2,12250000000));self.assertTrue(state['midi_capture']['outstanding'])
+  self.assertEqual((state['midi_count'],state['midi'][0]['port'],state['midi'][0]['monotonic_ns']),(1,3,12250000000));self.assertTrue(state['midi_capture']['outstanding'])
   self.assertEqual(driver.observations[0]['source'],'stock-norns-output-trace')
+ def test_hardware_snapshot_rejects_unresolved_userdata_instead_of_parsing_pointer_digits(self):
+  r,_,m=self.r();m.eval=lambda code:"__MOSAIC_TEMPO__120\nmarker";trace=T();trace.snapshot=lambda:{'grid':[0]*128,'raw_grid':[0]*128,'midi':[{'index':1,'monotonic_seconds':12.25,'port':0,'device':'userdata: 0x683c60','payload_type':'table','bytes':[144,60,127]}]}
+  driver=HardwareDriver(r,2,'emu-test',trace)
+  with self.assertRaisesRegex(RuntimeError,'Cannot map traced MIDI device'):driver.snapshot()
+  driver.finish()
  def test_hardware_case_executes_the_registered_recipe(self):
   r,_,m=self.r();m.eval=lambda code:"__MOSAIC_TEMPO__120\nmarker";trace=T();seen=[]
   original=CASES['M-PAT-001']['run'];CASES['M-PAT-001']['run']=lambda driver:(seen.append(driver),driver.results.append({'kind':'selected-pattern-blink-cycle','levels':[4,2]}))

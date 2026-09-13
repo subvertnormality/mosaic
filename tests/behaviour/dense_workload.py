@@ -1,12 +1,14 @@
 """Shared user-level PERF-002/003 workload and slide oracle."""
 
-def build_project(d,channels,workload='dense',select_parameter=None):
+def build_project(d,channels,workload='dense',select_parameter=None,select_device=None):
     d.tap(5,8);d.tap(1,1)
     for x in range(1,17):d.tap(x,4)
     d.tap(3,8);d.enc(1,4)
     for channel in range(1,channels+1):
         d.tap(channel,1)
-        d.enc(3,1);d.enc(2,1)
+        if select_device:select_device(d,channel)
+        else:d.enc(3,1)
+        d.enc(2,1)
         if channel>1:d.enc(3,channel-1)
         d.key(3);d.tap(1,2);d.hold_tap((1,4),(16,4))
         if workload=='slides':
@@ -46,6 +48,6 @@ def validate_events(emitted,channels,workload):
     steps=[ons[i:i+channels] for i in range(0,len(ons),channels)]
     for index,group in enumerate(steps):
         assert sorted(e['bytes'][0] for e in group)==[144+c for c in range(channels)],('Channels at step',index,[e['bytes'] for e in group])
-        assert all(e['bytes'][1:]==[60,100] and e['port']==1 for e in group),('Bytes at step',index,[e['bytes'] for e in group])
+        assert all(e['bytes'][1:]==[60,100] and e['port']==1 for e in group),('Bytes at step',index,[(e['port'],e['bytes']) for e in group])
     assert len(offs)==len(ons),('Unbalanced releases',len(ons),len(offs))
     return {'ons':ons,'offs':offs,'steps':steps,'slide_cycles':check_slides(emitted,ons,channels) if workload=='slides' else None}

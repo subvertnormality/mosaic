@@ -83,14 +83,16 @@ def resource_metrics(recording):
     return {'sample_count':len(samples),'matron_cpu_ticks_delta':cpu_ticks,'matron_cpu_percent':100*cpu_ticks/identity['clock_ticks_per_second']/(elapsed/1e9),'matron_peak_rss_bytes':max(row['matron_rss_bytes'] for row in samples),'load_peak_1m':max(row['load'][0] for row in samples),'thermal_millicelsius_peak':max([row['thermal_millicelsius_max'] for row in samples if row['thermal_millicelsius_max'] is not None] or [None]),'throttling_available':bool(flags),'throttled_flags_or':__import__('functools').reduce(lambda a,b:a|b,flags,0) if flags else None,'threshold_status':'calibration-only'}
 
 def dense_oracle(events,channels,seconds,step_seconds,workload):
-    validated=validate_events(events,channels,workload);ons=validated['ons'];offs=validated['offs'];steps=validated['steps']
-    expected_steps=int(seconds/step_seconds);assert abs(len(steps)-expected_steps)<=2,('Step count',len(steps),expected_steps)
+    validated=validate_events(events,channels,workload);ons=validated['ons'];offs=validated['offs'];captured_steps=validated['steps']
+    measurement_end_ns=captured_steps[0][0]['monotonic_ns']+round(seconds*1e9)
+    steps=[group for group in captured_steps if group[0]['monotonic_ns']<measurement_end_ns]
+    expected_steps=int(seconds/step_seconds);assert abs(len(steps)-expected_steps)<=2,('Step count',len(steps),expected_steps,len(captured_steps))
     slide_cycles=validated['slide_cycles'];origin=steps[0][0]['monotonic_ns'];step_ns=round(step_seconds*1e9)
     errors=[e['monotonic_ns']-(origin+k*step_ns) for k,group in enumerate(steps) for e in group];absolute=[abs(x) for x in errors];service=[group[-1]['monotonic_ns']-group[0]['monotonic_ns'] for group in steps]
     timing={name:percentile(absolute,p) for name,p in (('p50_ns',50),('p95_ns',95),('p99_ns',99),('maximum_ns',100))};service_metrics={name:percentile(service,p) for name,p in (('p50_ns',50),('p95_ns',95),('p99_ns',99),('maximum_ns',100))}
     service_metrics.update(p99_deadline_fraction=service_metrics['p99_ns']/step_ns,maximum_deadline_fraction=service_metrics['maximum_ns']/step_ns)
     intervals=[steps[i+1][0]['monotonic_ns']-steps[i][0]['monotonic_ns'] for i in range(len(steps)-1)];gates={'event_timing':timing['p99_ns']<=TIMING_THRESHOLDS['p99_ns'] and timing['maximum_ns']<=TIMING_THRESHOLDS['maximum_ns'] and abs(errors[-1])<=TIMING_THRESHOLDS['final_phase_ns'],'sustained_service':service_metrics['p99_deadline_fraction']<=TIMING_THRESHOLDS['service_p99_deadline_fraction'],'hard_service':service_metrics['maximum_deadline_fraction']<=TIMING_THRESHOLDS['service_maximum_deadline_fraction']}
-    return {'passed':all(gates.values()),'steps':len(steps),'note_ons':len(ons),'note_offs':len(offs),'messages':len(events),'slide_cycles_checked':slide_cycles,'timing':timing,'final_phase_error_ns':errors[-1],'service':service_metrics,'interval_jitter_ns':[value-step_ns for value in intervals],'skipped_deadlines':sum(value>step_ns*1.5 for value in intervals),'gates':gates,'thresholds':TIMING_THRESHOLDS}
+    return {'passed':all(gates.values()),'steps':len(steps),'captured_steps':len(captured_steps),'note_ons':len(ons),'note_offs':len(offs),'messages':len(events),'slide_cycles_checked':slide_cycles,'timing':timing,'final_phase_error_ns':errors[-1],'service':service_metrics,'interval_jitter_ns':[value-step_ns for value in intervals],'skipped_deadlines':sum(value>step_ns*1.5 for value in intervals),'gates':gates,'thresholds':TIMING_THRESHOLDS}
 
 def select_fixture_parameter(driver,label):
     """Select the first opt-in fixture parameter using only front-panel gestures."""
@@ -101,8 +103,9 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
     spec=CASES[case_id];trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None
     try:
-        build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter);trace.reset();sampler=sampler or OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5);sampler.start();time.sleep(.25)
+        build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1));driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17)],[15]*16);trace.reset();sampler=sampler or OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5);sampler.start();time.sleep(.25)
         started_ns=time.monotonic_ns();driver.tap(1,8);driver.elapse(spec['seconds']);driver.tap(1,8);driver.elapse(.3);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
+        (runner.out/'performance-raw.json').write_text(json.dumps(state,indent=2)+'\n')
         oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload'])
         return {'schema_version':1,'case':case_id,'workload':spec['workload'],'channels':spec['channels'],'requested_window_seconds':spec['seconds'],'host_window_ns':ended_ns-started_ns,'tempo_bpm':driver.tempo_bpm,'trace_boundary':{'reset_before_sampler_and_play':True,'midi_driver_boundary':'stock _norns.midi_send pass-through','grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes']},'oracle':oracle,'resources':resource_metrics(recording),'resource_samples':recording['samples'],'runtime_identity':recording['identity'],'source_identity':source_identity(source),'passed':oracle['passed'],'limitations':['Resource figures are physical-device calibration measurements, not emulator-equivalence gates.','Grid activity is observed at the driver boundary; frame revision diagnostics are emulator-only.']}
     finally:

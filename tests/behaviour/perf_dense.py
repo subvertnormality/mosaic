@@ -119,14 +119,14 @@ def run_render_pressure(d,http,seconds,observe_each=True,display_only=False):
       complete=len(rows)==len(expected),observations=rows,
       acknowledged_actions=sum(len(x['acknowledgement_indexes']) for x in rows),
       limitation='Partial rendering-pressure evidence: changes are not gesture-attributable; no native per-render/dirty-frame counters, maximum render cadence, full-grid change workload or tooltip pressure.')
-def run_one(image,out,channels,repeat,seconds,workload='dense',render_pressure=False,observe_each=True,display_only=False):
+def run_one(image,out,channels,repeat,seconds,workload='dense',render_pressure=False,observe_each=True,display_only=False,cpus=.5):
     out.mkdir(parents=True);data=Path(tempfile.mkdtemp(prefix='perf-dense-data-'))
     name='mosaic-perf-'+uuid.uuid4().hex[:10];started=False;d=None
     code=Path(tempfile.mkdtemp(prefix='perf-dense-code-'))
     result=dict(schema_version=1,workload=workload_id(workload,render_pressure),channels=channels,repeat=repeat,seconds=seconds,image=image,render_pressure=render_pressure,passed=False)
     result['host_loadavg_before']=os.getloadavg() # shared host: record contention, never correct for it
     try:
-        docker('run','-d','--name',name,'--cpus','0.5','--memory','768m','--memory-swap','768m','--cpuset-cpus','0',
+        docker('run','-d','--name',name,'--cpus',str(cpus),'--memory','768m','--memory-swap','768m','--cpuset-cpus','0',
                '--shm-size','256m','-p','127.0.0.1::8765','--mount','type=bind,source=%s,target=/data'%data,
                '--mount','type=bind,source=%s,target=/code/mosaic,readonly'%REPO,
                image,'--script','/code/mosaic/mosaic.lua','--code-root','/code');started=True
@@ -196,15 +196,16 @@ def main():
     observations.add_argument('--display-observations',action='store_true',help='Read exported frame/grid only during pressure; requires a runtime with GET /display')
     observations.add_argument('--no-render-observations',action='store_true',help='Diagnostic: keep pressure gestures but omit per-gesture snapshots to measure observer cost')
     parser.add_argument('--image',default='monome-emulator:perf-recorder-02');parser.add_argument('--output',required=True)
-    parser.add_argument('--channels',default='1,4,8,16');parser.add_argument('--repeats',type=int,default=3);parser.add_argument('--seconds',type=float,default=8)
+    parser.add_argument('--channels',default='1,4,8,16');parser.add_argument('--cpus',type=float,default=.5);parser.add_argument('--repeats',type=int,default=3);parser.add_argument('--seconds',type=float,default=8)
     args=parser.parse_args()
     if (args.no_render_observations or args.display_observations) and not args.render_pressure:parser.error('Observation mode requires --render-pressure')
     if args.render_pressure and args.seconds!=8:parser.error('--render-pressure requires --seconds 8')
+    if args.cpus<=0:parser.error('--cpus must be positive')
     root=Path(args.output).resolve();root.mkdir(parents=True,exist_ok=False)
     revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()
     dirty=subprocess.check_output(['git','diff','HEAD'],cwd=REPO)
     image_id=docker('image','inspect',args.image,'--format','{{.Id}}').stdout.strip()
-    rows=[run_one(args.image,root/('channels-%s-%d'%(n,r)),int(n),r,args.seconds,args.workload,args.render_pressure,not args.no_render_observations,args.display_observations) for n in args.channels.split(',') for r in range(1,args.repeats+1)]
+    rows=[run_one(args.image,root/('channels-%s-%d'%(n,r)),int(n),r,args.seconds,args.workload,args.render_pressure,not args.no_render_observations,args.display_observations,args.cpus) for n in args.channels.split(',') for r in range(1,args.repeats+1)]
     report=dict(schema_version=1,workload=workload_id(args.workload,args.render_pressure),mosaic_revision=revision,dirty_patch_sha256=hashlib.sha256(dirty).hexdigest() if dirty else None,
                 emulator=str(EMULATOR),image=args.image,image_id=image_id,argv=sys.argv[1:],passed=all(r['passed'] for r in rows),runs=rows)
     driver.write(root/'result.json',report);print(root/'result.json')
