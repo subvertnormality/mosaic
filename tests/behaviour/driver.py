@@ -2,9 +2,11 @@
 import hashlib,json,os,sys,time,uuid,subprocess,shutil
 from pathlib import Path
 REPO=Path(__file__).resolve().parents[2]
-EMULATOR_ROOT=Path(os.environ['MONOME_EMULATOR']).resolve()
-sys.path.insert(0,str(EMULATOR_ROOT/'src'))
-from automation.client import Session
+EMULATOR_ROOT=Path(os.environ['MONOME_EMULATOR']).resolve() if os.environ.get('MONOME_EMULATOR') else None
+if EMULATOR_ROOT:
+    sys.path.insert(0,str(EMULATOR_ROOT/'src'))
+    from automation.client import Session
+else:Session=None
 
 def startup_lock(timeout=300):
     import contextlib,fcntl
@@ -28,6 +30,7 @@ def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 class Driver:
     def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None,mod_patches=False):
+        if Session is None:raise RuntimeError('MONOME_EMULATOR is required for the local emulator Driver')
         self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root,mod_patches=mod_patches)
         self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]

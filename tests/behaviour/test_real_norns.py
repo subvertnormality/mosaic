@@ -1,7 +1,10 @@
-import hashlib,struct,subprocess,tempfile,unittest
+import contextlib,hashlib,io,json,struct,subprocess,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
-from real_norns import Maiden,MaidenInput,OSC,OutputTrace,Runner,SSH,SSHOSC,WebSocketMaiden,export_head,osc_packet
+from real_norns import Maiden,MaidenInput,OSC,OutputTrace,Runner,SSH,SSHOSC,WebSocketMaiden,export_head,main,osc_packet
+from hardware_driver import HARDWARE_DRIVER_CAPABILITIES,HARDWARE_PERFORMANCE_RECIPES,HardwareDriver,hardware_applicability,run_hardware_case
+from cases import CASES
+from driver import Driver
 class Fn:
  def __init__(self,call):self.call=call
  def __call__(self,*a):return self.call(*a)
@@ -30,12 +33,29 @@ class S:
  def fetch(self,a,b):b.write_bytes(b'\x89PNG\r\n\x1a\n'+b'0'*8+struct.pack('!II',640,384)+b'x');self.fetched=(a,b)
 class M:
  def __init__(self,events=None):self.commands=[];self.events=events;self.closed=0
- def eval(self,x):self.commands.append(x);self.events is not None and self.events.append('maiden');return 'ok'
+ def eval(self,x,**kwargs):self.commands.append(x);self.events is not None and self.events.append('maiden');return 'ok'
  def close(self):self.closed+=1
  def send(self,x):self.commands.append(x)
  def load(self,x):self.commands.append('load '+x);return 'ok'
 class O:
  def send(self,*x):return {'args':x}
+class T:
+ def __init__(self):self.installed=0;self.removed=0
+ def install(self):self.installed+=1
+ def remove(self):self.removed+=1
+ def reset_midi(self):pass
+ def snapshot(self):return {'grid':[0]*128,'raw_grid':[0]*128,'midi':[]}
+class ClockSSH:
+ def __init__(self,stock):self.path='/home/we/norns/lua/core/clock.lua';self.files={self.path:stock};self.scripts=[]
+ def run(self,script):
+  self.scripts.append(script)
+  if script.startswith('sha256sum -- '):
+   path=script.split('sha256sum -- ',1)[1];value=hashlib.sha256(self.files[path]).hexdigest()+'  '+path+'\n';return type('R',(),{'stdout':value})()
+  if '\nmv ' in script:
+   move=script.split('\nmv ',1)[1].split();self.files[move[1]]=self.files.pop(move[0])
+  return type('R',(),{'stdout':''})()
+ def fetch(self,remote,local):local.write_bytes(self.files[remote])
+ def push(self,local,remote):self.files[remote]=Path(local).read_bytes()
 class Tests(unittest.TestCase):
  def r(self,events=None):t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);s=S(events);m=M(events);return Runner(s,m,O(),Path(t.name),'safe-run'),s,m
  def test_osc_packet_padding_and_network_integers(self):
@@ -48,6 +68,12 @@ class Tests(unittest.TestCase):
   ws=WS();calls=[]
   def connect(*args,**kwargs):calls.append((args,kwargs));return ws
   m=WebSocketMaiden('ws://norns:5555/',connector=connect);self.assertIn('answer',m.eval('print(1)'));m.close();self.assertEqual(calls[0][1]['subprotocols'],['bus.sp.nanomsg.org']);self.assertIsInstance(ws.sent[0],str);self.assertTrue(ws.sent[0].endswith('\n'));self.assertNotIn('\0',ws.sent[0]);self.assertTrue(ws.closed)
+ def test_maiden_can_drain_expected_lua_errors_until_its_marker(self):
+  ws=WS();ws.recv=lambda timeout=None:'stack traceback: expected baseline\n'+ws.sent[-1].split("print('",1)[1].split("')",1)[0]
+  m=WebSocketMaiden('ws://norns:5555/',connector=lambda *a,**k:ws);self.assertIn('stack traceback:',m.eval('print(1)',allow_lua_error=True));m.close()
+  ws=WS();ws.recv=lambda timeout=None:'stack traceback: unexpected\n'+ws.sent[-1].split("print('",1)[1].split("')",1)[0]
+  m=WebSocketMaiden('ws://norns:5555/',connector=lambda *a,**k:ws)
+  with self.assertRaisesRegex(RuntimeError,'Maiden Lua error'):m.eval('print(1)')
  def test_nanobus_reuses_one_connection_until_explicit_close(self):
   nn=NN();m=Maiden('ws://norns:5555/')
   with patch('real_norns.ctypes.CDLL',return_value=nn.lib()),patch('real_norns.time.sleep'):m.eval('print(1)');m.eval('print(2)');m.close()
@@ -97,4 +123,54 @@ class Tests(unittest.TestCase):
   trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('_MOSAIC_HW_ORIG_MIDI=_norns.midi_send',m.commands[0]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[1])
  def test_device_map_index_is_selected_by_id_not_fixed_offset(self):
   r,_,m=self.r();m.eval=lambda code:m.commands.append(code) or '__MOSAIC_DEVICE_MAP_INDEX__34\nmarker';self.assertEqual(r.device_map_index('emu-test'),34);self.assertIn("d.id=='emu-test'",m.commands[-1])
+ def test_hardware_driver_exposes_the_recipe_surface_and_rejects_unknown_actions(self):
+  r,_,m=self.r();m.eval=lambda code:"__MOSAIC_TEMPO__120\nmarker";trace=T();driver=HardwareDriver(r,2,'emu-test',trace)
+  public={name for name,value in Driver.__dict__.items() if not name.startswith('_') and callable(value)}
+  self.assertEqual(public,{'action','elapse','snapshot','wait','tap','key','enc','hold_tap','led_values','screen_header','configure','playback','finish'})
+  self.assertTrue(all(callable(getattr(driver,name,None)) for name in public))
+  with self.assertRaisesRegex(NotImplementedError,'midi'):driver.action(type='midi',port=1,bytes=[144,60,127])
+  driver.finish();self.assertEqual((trace.installed,trace.removed),(1,1))
+ def test_hardware_snapshot_normalizes_the_public_state_shape(self):
+  r,_,m=self.r();m.eval=lambda code:"__MOSAIC_TEMPO__120\nmarker";trace=T();trace.snapshot=lambda:{'grid':[0]*128,'raw_grid':[0]*128,'midi':[{'index':1,'monotonic_seconds':12.25,'device':'userdata: 2','payload_type':'table','bytes':[144,60,127]}]}
+  driver=HardwareDriver(r,2,'emu-test',trace);state=driver.snapshot();driver.finish()
+  self.assertEqual((state['midi_count'],state['midi'][0]['port'],state['midi'][0]['monotonic_ns']),(1,2,12250000000));self.assertTrue(state['midi_capture']['outstanding'])
+  self.assertEqual(driver.observations[0]['source'],'stock-norns-output-trace')
+ def test_hardware_case_executes_the_registered_recipe(self):
+  r,_,m=self.r();m.eval=lambda code:"__MOSAIC_TEMPO__120\nmarker";trace=T();seen=[]
+  original=CASES['M-PAT-001']['run'];CASES['M-PAT-001']['run']=lambda driver:(seen.append(driver),driver.results.append({'kind':'selected-pattern-blink-cycle','levels':[4,2]}))
+  try:evidence=run_hardware_case(r,'M-PAT-001',2,'emu-test',trace)
+  finally:CASES['M-PAT-001']['run']=original
+  self.assertEqual(len(seen),1);self.assertIsInstance(seen[0],HardwareDriver);self.assertEqual(evidence['case'],'M-PAT-001');self.assertEqual(trace.removed,1)
+ def test_applicability_is_fail_closed_and_distinguishes_lane_and_fault_limits(self):
+  report=hardware_applicability(CASES);rows={row['case']:row for row in report['cases']}
+  self.assertEqual(set(rows),set(CASES));self.assertEqual([row['case'] for row in rows.values() if row['applicable']],['M-PAT-001'])
+  self.assertEqual(rows['M-ARP-005']['category'],'controlled-only');self.assertEqual(rows['M-TIM-005']['category'],'emulator-only-fault')
+  self.assertEqual(rows['M-TIM-001']['category'],'targeted-hardware-qualification');self.assertEqual(rows['M-SYNC-009']['qualification_targets'],['midi-master-slave-sync'])
+  self.assertEqual(rows['M-SYNC-022']['qualification_targets'],['musical-timing-drift','midi-master-slave-sync'])
+  self.assertEqual(rows['M-PAT-002']['category'],'broad-functional-emulator-coverage')
+  self.assertEqual(report['capabilities']['broad_functional_suite'],'emulator-coverage')
+  self.assertEqual(report['capabilities']['qualification_targets']['performance-load']['status'],'deferred')
+  self.assertEqual(report['capabilities']['qualification_targets']['stock-clock-cancel-queued-resume']['status'],'implemented')
+  self.assertEqual(report['performance_recipes'],HARDWARE_PERFORMANCE_RECIPES)
+  self.assertEqual(report['performance_recipes']['perf_dense.py']['adaptation'],'adapter-ready')
+  self.assertIn('scheduled external-MIDI ingress',report['performance_recipes']['perf_input.py']['capability_gaps'])
+  self.assertIn('bounded repeatable on-device load generator',report['performance_recipes']['perf_overload.py']['capability_gaps'])
+  self.assertEqual(report['performance_recipes']['perf_storage.py']['status'],'excluded')
+ def test_applicability_command_needs_no_hardware_or_emulator(self):
+  with contextlib.redirect_stdout(io.StringIO()) as output:self.assertEqual(main(['applicability']),0)
+  report=json.loads(output.getvalue());self.assertEqual(report['schema_version'],1);self.assertEqual(report['capabilities'],HARDWARE_DRIVER_CAPABILITIES)
+ def test_clock_cancel_probe_requires_immediate_and_delayed_midi(self):
+  r,_,m=self.r();trace=T();trace.snapshot=lambda:{'grid':[0]*128,'raw_grid':[0]*128,'midi':[{'bytes':[176,77,1]},{'bytes':[176,78,1]}]}
+  with patch('real_norns.OutputTrace',return_value=trace),patch('real_norns.time.sleep'):
+   result=r.clock_cancel_probe('candidate')
+  self.assertTrue(result['passed']);self.assertIn('pcall(clock.resume,99999999)',m.commands[0]);self.assertEqual(trace.removed,1)
+ def test_clock_cancel_comparison_restores_exact_stock_hash_without_service_restart(self):
+  temporary=tempfile.TemporaryDirectory();self.addCleanup(temporary.cleanup);out=Path(temporary.name);candidate=out/'candidate-clock.lua';candidate.write_bytes(b'candidate')
+  ssh=ClockSSH(b'stock');m=M();m.eval=lambda code:m.commands.append(code) or '__MOSAIC_ACTIVE__/home/we/dust/code/mosaic/mosaic.lua\n';r=Runner(ssh,m,O(),out,'clock-run')
+  seen=[]
+  def probe(label):seen.append((label,hashlib.sha256(ssh.files[ssh.path]).hexdigest()));return {'label':label,'passed':label=='temporary-candidate','failure':None,'midi':[]}
+  with patch.object(r,'clock_cancel_probe',side_effect=probe):evidence=r.clock_cancel_comparison(candidate)
+  self.assertEqual([label for label,_ in seen],['stock-baseline','temporary-candidate']);self.assertNotEqual(seen[0][1],seen[1][1])
+  self.assertTrue(evidence['stock_restored']);self.assertEqual(ssh.files[ssh.path],b'stock');self.assertTrue(evidence['no_reboot_or_jack_restart'])
+  self.assertFalse(any('reboot' in script or 'systemctl restart' in script for script in ssh.scripts));self.assertIn('load /home/we/dust/code/mosaic/mosaic.lua',m.commands[-1])
 if __name__=='__main__':unittest.main()

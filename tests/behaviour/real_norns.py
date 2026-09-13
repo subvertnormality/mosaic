@@ -2,6 +2,7 @@
 """Exclusive, reversible stock-norns smoke runner; credentials stay external."""
 import argparse,ctypes,hashlib,json,re,socket,struct,subprocess,sys,tarfile,tempfile,time
 from pathlib import Path
+from hardware_driver import hardware_applicability,run_hardware_case
 REPO=Path(__file__).resolve().parents[2];ROOT='/home/we/.cache/mosaic-real-norns'
 def write(p,v):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,indent=2)+'\n')
 def osc_string(value):
@@ -45,13 +46,13 @@ class Maiden:
  def _send(self,payload):
   self._connect();buf=ctypes.create_string_buffer(payload)
   if self.nn.nn_send(self.fd,buf,len(payload),0)!=len(payload):raise RuntimeError('nn_send failed')
- def eval(self,code):
+ def eval(self,code,allow_lua_error=False):
   marker='__MOSAIC_HW_'+hashlib.sha256((code+str(time.monotonic_ns())).encode()).hexdigest()[:16]+'__';payload=(code.rstrip()+"; print('"+marker+"')\n").encode()+b'\0';self._send(payload);output=[]
   while True:
    received=ctypes.create_string_buffer(65536);size=self.nn.nn_recv(self.fd,received,len(received),0)
    if size<0:raise TimeoutError('Maiden marker not observed')
    chunk=received.raw[:size].decode(errors='replace');output.append(chunk)
-   if 'stack traceback:' in chunk:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
+   if 'stack traceback:' in chunk and not allow_lua_error:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
    if marker in chunk:return ''.join(output)
  def send(self,code):self._send((code.rstrip()+'\n').encode()+b'\0');time.sleep(.25)
  def load(self,path):
@@ -75,13 +76,13 @@ class WebSocketMaiden:
    from websockets.sync.client import connect
    self.connector=connect
   self.ws=self.connector(self.url,subprotocols=['bus.sp.nanomsg.org'],open_timeout=self.timeout,close_timeout=1)
- def eval(self,code):
+ def eval(self,code,allow_lua_error=False):
   self._connect();marker='__MOSAIC_HW_'+hashlib.sha256((code+str(time.monotonic_ns())).encode()).hexdigest()[:16]+'__';self.ws.send(code.rstrip()+"; print('"+marker+"')\n");output=[]
   while True:
    chunk=self.ws.recv(timeout=self.timeout)
    if isinstance(chunk,bytes):raise RuntimeError('Maiden returned binary data instead of text')
    output.append(chunk)
-   if 'stack traceback:' in chunk:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
+   if 'stack traceback:' in chunk and not allow_lua_error:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
    if marker in chunk:return ''.join(output)
  def send(self,code):self._connect();self.ws.send(code.rstrip()+'\n')
  def load(self,path):
@@ -195,6 +196,49 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
   rel='hardware-'+self.run_id+'/'+label;self.maiden.eval("os.execute('mkdir -p '..norns.state.data..'hardware-"+self.run_id+"'); screen.export_screenshot("+repr(rel)+")");local=self.out/(label+'.png');self.ssh.fetch('/home/we/dust/data/mosaic/'+rel+'.png',local);raw=local.read_bytes()
   if raw[:8]!=b'\x89PNG\r\n\x1a\n' or len(raw)<24 or struct.unpack('!II',raw[16:24])!=(640,384):raise AssertionError('Expected 640x384 PNG screenshot')
   return {'path':local.name,'sha256':hashlib.sha256(raw).hexdigest(),'size':len(raw),'width':640,'height':384}
+ def remote_sha256(self,path):
+  result=self.ssh.run('sha256sum -- '+path);match=re.search(r'\b([0-9a-f]{64})\b',result.stdout)
+  if not match:raise RuntimeError('Could not hash remote file: '+path)
+  return match.group(1)
+ def install_clock_file(self,source,label,path='/home/we/norns/lua/core/clock.lua'):
+  if path!='/home/we/norns/lua/core/clock.lua':raise ValueError('Unexpected stock clock path')
+  source=Path(source);wanted=hashlib.sha256(source.read_bytes()).hexdigest();staging=self.remote+'-'+label+'.clock.lua'
+  self.ssh.run('mkdir -p '+ROOT);self.ssh.push(source,staging);self.ssh.run('set -eu\nchmod --reference='+path+' '+staging+'\nmv '+staging+' '+path)
+  actual=self.remote_sha256(path)
+  if actual!=wanted:raise RuntimeError('Remote clock hash mismatch after '+label)
+  return actual
+ def clock_cancel_probe(self,label):
+  trace=OutputTrace(self.maiden);failure=None;snapshot=None;trace.install()
+  try:
+   trace.reset_midi()
+   code="for i=1,24 do local id=clock.run(function() clock.sleep(0.001); error('cancelled native clock resumed') end); local finish=util.time()+0.008; while util.time()<finish do end; clock.cancel(id) end; local ok=pcall(clock.resume,99999999); assert(not ok,'unknown clock identity was silently ignored'); clock.run(function() clock.sleep(0.05); _norns.midi_send(1,{176,78,1}) end); _norns.midi_send(1,{176,77,1})"
+   try:
+    output=self.maiden.eval(code,allow_lua_error=True);time.sleep(.2);output+=self.maiden.eval("print('__CLOCK_CANCEL_SETTLED__')",allow_lua_error=True)
+    if 'stack traceback:' in output:failure='Maiden Lua error: '+output[-2000:]
+   except Exception as error:failure=type(error).__name__+': '+str(error)
+   try:snapshot=trace.snapshot()
+   except Exception as error:failure=failure or type(error).__name__+': '+str(error)
+  finally:
+   try:trace.remove()
+   except Exception as error:failure=failure or type(error).__name__+': '+str(error)
+  messages=[event['bytes'] for event in (snapshot or {}).get('midi',[])]
+  return {'label':label,'passed':failure is None and [176,77,1] in messages and [176,78,1] in messages,'failure':failure,'midi':messages}
+ def clock_cancel_comparison(self,candidate,path='/home/we/norns/lua/core/clock.lua'):
+  candidate=Path(candidate).resolve()
+  if not candidate.is_file():raise ValueError('Missing clock candidate: '+str(candidate))
+  stock=self.out/'stock-clock.lua';stock_hash=self.remote_sha256(path);self.ssh.fetch(path,stock)
+  if hashlib.sha256(stock.read_bytes()).hexdigest()!=stock_hash:raise RuntimeError('Fetched stock clock hash mismatch')
+  active_output=self.maiden.eval("print('__MOSAIC_ACTIVE__'..(norns.state.script or ''))");match=re.search(r'__MOSAIC_ACTIVE__([^\r\n]*)',active_output);active=match.group(1) if match else ''
+  phases=[];restored_hash=None
+  try:
+   self.maiden.eval('norns.script.clear()');self.maiden.eval('clock=dofile('+repr(path)+')');phases.append(self.clock_cancel_probe('stock-baseline'))
+   candidate_hash=self.install_clock_file(candidate,'candidate',path);self.maiden.eval('clock=dofile('+repr(path)+')');phases.append(self.clock_cancel_probe('temporary-candidate'))
+  finally:
+   try:
+    restored_hash=self.install_clock_file(stock,'stock-restore',path);self.maiden.eval('clock=dofile('+repr(path)+')')
+    if active:self.maiden.load(active)
+   finally:self.ssh.run('rm -f '+self.remote+'-candidate.clock.lua '+self.remote+'-stock-restore.clock.lua')
+  return {'schema_version':1,'kind':'stock-clock-cancel-queued-resume','clock_path':path,'stock_sha256':stock_hash,'candidate_sha256':candidate_hash if 'candidate_hash' in locals() else None,'restored_sha256':restored_hash,'stock_restored':restored_hash==stock_hash,'phases':phases,'no_reboot_or_jack_restart':True,'active_script':active,'active_script_reloaded':bool(active)}
  def logs(self):
   r=self.ssh.run("systemctl --failed --no-legend || true\nfor u in $(systemctl list-units --type=service --all --no-legend | awk '/matron|crone|supercollider|norns|maiden/{print $1}'); do echo --- $u; journalctl -u $u -n 200 --no-pager || true; done\n");(self.out/'runtime.log').write_text(r.stdout)
  def reload_saved(self):
@@ -210,93 +254,32 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
   receipt={'run_id':self.run_id,'kept_deployment':True,'restored_user_data_and_state':True,'filesystem_finalized':True,'reload_complete':False};write(self.out/'finalized.json',receipt)
   self.reload_saved();receipt['reload_complete']=True;write(self.out/'finalized.json',receipt)
 def run_m_pat_001(r,grid_device,device_map_id):
- """Real-norns form of the registered four-note user workflow."""
- trace=OutputTrace(r.maiden);actions=[]
- tempo_output=r.maiden.eval("print('__MOSAIC_TEMPO__'..clock.get_tempo())");tempo_match=re.search(r'__MOSAIC_TEMPO__([0-9.]+)',tempo_output)
- if not tempo_match:raise RuntimeError('Could not observe norns clock tempo')
- tempo_bpm=float(tempo_match.group(1));expected_step_seconds=15/tempo_bpm
- def grid(x,y,state):
-  r.synthetic_grid(grid_device,x,y,state);actions.append({'type':'grid','x':x,'y':y,'state':state,'transport':'norns-grid-key-callback'})
- def tap(x,y):grid(x,y,1);grid(x,y,0);time.sleep(.06)
- def hold_tap(first,last):
-  grid(first[0],first[1],1)
-  try:tap(last[0],last[1])
-  finally:grid(first[0],first[1],0)
- def action(kind,n,value):actions.append(r.action(kind,n,value));time.sleep(.05)
- def wait_grid(x,y,expected,timeout=3):
-  deadline=time.monotonic()+timeout;actual=None
-  while time.monotonic()<deadline:
-   actual=trace.snapshot()['grid'][(y-1)*16+(x-1)]
-   if actual==expected:return
-   time.sleep(.08)
-  raise AssertionError({'grid_cell':[x,y],'expected':expected,'actual':actual})
- def play_phrase(expected):
-  trace.reset_midi();tap(1,8);deadline=time.monotonic()+6;snapshot=None
-  while time.monotonic()<deadline:
-   snapshot=trace.snapshot();notes=[e for e in snapshot['midi'] if len(e['bytes'])>=3 and 144<=e['bytes'][0]<=159 and e['bytes'][2]>0]
-   if len(notes)>=13:break
-   time.sleep(.08)
-  else:raise AssertionError('Timed out waiting for three complete four-note phrases')
-  tap(1,8);time.sleep(.3);snapshot=trace.snapshot();notes=[e for e in snapshot['midi'] if len(e['bytes'])>=3 and 144<=e['bytes'][0]<=159 and e['bytes'][2]>0]
-  actual=[e['bytes'] for e in notes];wanted=[expected[i%len(expected)] for i in range(len(actual))]
-  assert len(actual)>=13 and actual==wanted,{'expected':wanted,'actual':actual}
-  intervals=[notes[i+1]['monotonic_seconds']-notes[i]['monotonic_seconds'] for i in range(12)]
-  assert all(abs(value-expected_step_seconds)<=.02 for value in intervals),{'tempo_bpm':tempo_bpm,'expected_seconds':expected_step_seconds,'actual_seconds':intervals}
-  ons={};offs={}
-  for event in snapshot['midi']:
-   b=event['bytes']
-   if len(b)<3:continue
-   key=(b[0]&15,b[1])
-   if 144<=b[0]<=159 and b[2]>0:ons[key]=ons.get(key,0)+1
-   elif 128<=b[0]<=143 or (144<=b[0]<=159 and b[2]==0):offs[key]=offs.get(key,0)+1
-  assert all(offs.get(key,0)>=count for key,count in ons.items()),{'note_ons':ons,'note_offs':offs}
-  return {'expected_cycle':expected,'captured_note_ons':actual,'tempo_bpm':tempo_bpm,'expected_step_seconds':expected_step_seconds,'first_twelve_intervals_seconds':intervals,'trace':snapshot}
- trace.install()
- try:
-  r.maiden.eval("params:set('new',1); fn.dirty_screen(true); fn.dirty_grid(true)");time.sleep(.5)
-  tap(4,8);tap(3,8)
-  subpage=r.channel_subpage()
-  while subpage<5:action('enc',1,1);subpage=r.channel_subpage()
-  while subpage>5:action('enc',1,-1);subpage=r.channel_subpage()
-  assert subpage==5,'Encoder navigation did not select Device Config'
-  for _ in range(r.device_map_index(device_map_id)-1):action('enc',3,1)
-  action('key',3,1);action('key',3,0)
-  tap(5,8)
-  for x in range(1,5):tap(x,4)
-  tap(5,8)
-  for x,y in ((1,7),(2,6),(3,5),(4,4)):tap(x,y)
-  tap(5,8)
-  for x,y in ((1,1),(2,2),(3,3),(4,4)):tap(x,y)
-  tap(3,8);tap(1,2);hold_tap((1,4),(4,4))
-  authored=r.screenshot('m-pat-001-authored');wait_grid(1,2,15)
-  first=play_phrase([[144,60,127],[144,62,117],[144,64,107],[144,65,97]])
-  tap(5,8);tap(5,8);tap(4,3);edited=trace.snapshot()
-  assert edited['grid'][(3-1)*16+(4-1)]==12,'Edited note LED at grid 4,3 was not level 12'
-  second=play_phrase([[144,60,127],[144,62,117],[144,64,107],[144,67,97]])
-  levels=set();deadline=time.monotonic()+3
-  while time.monotonic()<deadline and not {2,4}.issubset(levels):
-   levels.add(trace.snapshot()['grid'][0]);time.sleep(.08)
-  assert {2,4}.issubset(levels),{'selected_pattern_blink_levels':sorted(levels)}
-  finished=r.screenshot('m-pat-001-finished')
-  return {'case':'M-PAT-001','actions':actions,'screens':[authored,finished],'screen_changed':authored['sha256']!=finished['sha256'],'configured_grid_observed':True,'edited_grid_observed':True,'selected_pattern_blink_levels':[2,4],'tempo_bpm':tempo_bpm,'expected_step_seconds':expected_step_seconds,'phrases':[first,second],'physical_grid_driver_commands_observed':True,'physical_grid_led_photons_observed':False,'midi_driver_boundary_observed':True}
- finally:trace.remove()
-
+ """Compatibility entry point; the recipe remains registered only in cases.py."""
+ return run_hardware_case(r,'M-PAT-001',grid_device,device_map_id,OutputTrace(r.maiden))
 def main(argv=None):
  p=argparse.ArgumentParser()
- p.add_argument('command',choices=['probe','workflow','resume','case','restore','finalize'])
- p.add_argument('--host',required=True);p.add_argument('--ssh-option',action='append',default=[])
- p.add_argument('--maiden-url',required=True);p.add_argument('--nanomsg-library',default='libnanomsg.so.5')
+ p.add_argument('command',choices=['applicability','probe','workflow','resume','case','clock-cancel','restore','finalize'])
+ p.add_argument('--host');p.add_argument('--ssh-option',action='append',default=[])
+ p.add_argument('--maiden-url');p.add_argument('--nanomsg-library',default='libnanomsg.so.5')
  p.add_argument('--websocket-wheel',help='path to a pinned websockets wheel; selects official Maiden WebSocket framing')
- p.add_argument('--maiden-timeout',type=float,default=120);p.add_argument('--osc-host',required=True);p.add_argument('--osc-port',type=int,default=10111)
+ p.add_argument('--maiden-timeout',type=float,default=120);p.add_argument('--osc-host');p.add_argument('--osc-port',type=int,default=10111)
  p.add_argument('--osc-via-ssh',action='store_true',help='send stock remote OSC from norns loopback over the existing SSH transport')
  p.add_argument('--maiden-input',action='store_true',help='invoke the script hardware callbacks after stock norns encoder processing')
- p.add_argument('--source',default=str(REPO));p.add_argument('--artifacts',required=True);p.add_argument('--run-id',required=True)
+ p.add_argument('--source',default=str(REPO));p.add_argument('--artifacts');p.add_argument('--run-id')
  p.add_argument('--synthetic-grid',action='store_true');p.add_argument('--grid-device-id',type=int,default=0,help='stock grid.devices ID; 0 auto-discovers the first connected grid')
  p.add_argument('--case',dest='case_id',choices=['M-PAT-001']);p.add_argument('--config-source');p.add_argument('--device-map-id',default='emu-test')
+ p.add_argument('--clock-cancel-candidate',help='complete temporary replacement for /home/we/norns/lua/core/clock.lua')
  a=p.parse_args(argv)
+ if a.command=='applicability':
+  from cases import CASES
+  print(json.dumps(hardware_applicability(CASES),indent=2));return 0
+ required=('host','maiden_url','artifacts','run_id') if a.command=='clock-cancel' else ('host','maiden_url','osc_host','artifacts','run_id')
+ missing=[name for name in required if not getattr(a,name)]
+ if missing:p.error('required for hardware commands: '+', '.join('--'+name.replace('_','-') for name in missing))
  if not a.run_id.replace('-','').isalnum():p.error('unsafe run ID')
  if a.osc_via_ssh and a.maiden_input:p.error('choose only one alternate input transport')
  if a.command=='case' and (not a.case_id or not a.maiden_input or not a.synthetic_grid):p.error('case requires --case, --maiden-input and --synthetic-grid')
+ if a.command=='clock-cancel' and not a.clock_cancel_candidate:p.error('clock-cancel requires --clock-cancel-candidate')
  out=Path(a.artifacts).resolve();out.mkdir(parents=True,exist_ok=False)
  ssh=SSH(a.host,a.ssh_option)
  maiden=WebSocketMaiden(a.maiden_url,a.websocket_wheel,int(a.maiden_timeout*1000)) if a.websocket_wheel else Maiden(a.maiden_url,a.nanomsg_library,int(a.maiden_timeout*1000))
@@ -304,11 +287,14 @@ def main(argv=None):
  r=Runner(ssh,maiden,osc,out,a.run_id);failure=None
  try:
   caps=r.probe()
-  if a.command in ('workflow','resume','case'):
+  if a.command=='clock-cancel':
+   evidence=r.clock_cancel_comparison(a.clock_cancel_candidate);evidence['capabilities']=caps;write(out/'clock-cancel.json',evidence)
+   if not evidence['stock_restored'] or not evidence['phases'][-1]['passed']:raise AssertionError('Clock candidate failed or stock clock was not restored')
+  elif a.command in ('workflow','resume','case'):
    source_files=len(r.deploy(Path(a.source).resolve())) if a.command=='workflow' else r.resume()
    if a.command=='case':
     if a.config_source:r.seed_config(a.config_source)
-    evidence=run_m_pat_001(r,r.grid_device(a.grid_device_id),a.device_map_id);r.logs()
+    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden));r.logs()
     evidence.update({'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=a.source,text=True).strip(),'source_files':source_files,'resumed_after_interruption':True,'capabilities':caps,'campaign_complete':False})
     write(out/'evidence.json',evidence)
    else:
