@@ -55,8 +55,8 @@ hardware equivalence. Comparison: `native-clock-recovery-comparison.json`.
 
 ## Next work
 
-1. Generic-only constrained clock reproduction to isolate the remaining JACK
-   clock-domain shift, using the existing fixture and tracing before adding tools.
+1. Generic-only clock reproduction completed: see findings below. Retain the
+   remaining runtime timing failure; no default clock-domain substitution.
 2. Resolve or precisely isolate the16-channel configuration/output failure with
    retained input/output evidence. No speculative Mosaic fix.
 3. Complete remaining planned R13 performance matrix, endurance, lifecycle and
@@ -67,3 +67,21 @@ hardware equivalence. Comparison: `native-clock-recovery-comparison.json`.
 
 Do not promote the experimental clock candidate or treat these measurements as
 whole-refactor acceptance. Emulator delivery/release obligations remain separate.
+
+## Latest retained diagnostics
+
+`r13-a02fed8-perf003-acks1` completed on the original baseline runtime. All16
+channels,784 note-ons and48 slide cycles passed correctness checks. Timing remains
+red: p99 13.112ms, maximum18.220ms, final phase10.622ms; no workload throttling.
+All3780 recipe inputs have retained action acknowledgements. Acknowledgements
+confirm application, not the selected parameter or device state; this run does
+not establish why the earlier routing failures happened. Two diagnostic runs
+have now failed to reproduce those routing failures. No device fix is justified
+by that evidence alone.
+
+`generic-clock-domain-20260913-061739-a371a515` reproduced the clock-domain
+shift without Mosaic:64 CC messages,2686 native trace records; wall/JACK median
+offset shifted11.239ms and CC residual shifted12.031ms. This is diagnostic
+evidence, not passing timing acceptance. The earlier generic run without retained
+trace is incomplete. A global wall-clock replacement is not being promoted: it
+could decouple MIDI timing from audio/softcut.

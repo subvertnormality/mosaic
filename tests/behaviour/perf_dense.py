@@ -47,8 +47,14 @@ class ContainerDriver(driver.Driver):
     def __init__(self,out,http):
         self.out=out;self.runtime=http;self.clock_mode='real-time';self.logical_ns=0
         self.recipe=[];self.observations=[];self.results=[];self.profile='base-midi';self.launch_options={}
+        self.action_acks=[]
+    def action(self,**value):
+        ack=super().action(**value)
+        self.action_acks.append(dict(recipe_index=len(self.recipe)-1,ack=ack))
+        return ack
     def finish(self):
         driver.write(self.out/'recipe.json',self.recipe);driver.write(self.out/'results.json',self.results)
+        driver.write(self.out/'action-acks.json',self.action_acks)
 
 def build_project(d,channels,workload='dense'):
     d.tap(5,8);d.tap(1,1)                          # trig editor, pattern 1
