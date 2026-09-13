@@ -18,7 +18,6 @@ local musicutil = require("musicutil")
 local param_manager = include("mosaic/lib/devices/param_manager")
 local divisions = include("mosaic/lib/clock/divisions")
 local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
-local channel_edit_page_ui_handlers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers")
 local channel_edit_page_ui_refreshers = include("mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 local channel_edit_masks = include("mosaic/lib/pages/channel_edit_page/channel_edit_masks")
 local channel_edit_history = include("mosaic/lib/pages/channel_edit_page/channel_edit_history")
@@ -138,11 +137,9 @@ local channel_edit_history_controller = channel_edit_history.new(memory_history_
 
 local trig_lock_page
 local channel_page_to_index
-local index_to_channel_page
 
 -- Page indices
 channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Memory"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6}
-index_to_channel_page = {"Masks", "Trig Locks", "Memory", "Clock Mods", "Midi Config", "Note Dashboard"}
 
 local channel_edit_navigation_controller = channel_edit_navigation.new(
   {

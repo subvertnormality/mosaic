@@ -5,9 +5,6 @@ device_map.params_cache = {}
 local descriptors = include("mosaic/lib/devices/device_descriptors")
 
 local device_map_keyed_by_id = {}
-local function get_none_param()
-  return descriptors.get_none_param()
-end
 
 
 
@@ -16,7 +13,7 @@ local devices
 local note_division_labels = include("mosaic/lib/clock/divisions").note_division_labels
 
 local stock_params = {
-  get_none_param(),
+  descriptors.get_none_param(),
   {
     ["id"] = "fixed_note",
     ["name"] = "Fixed Note",
@@ -249,7 +246,7 @@ function device_map.get_params(device_id)
   local device_params = device and device.params or {}
 
   -- Call merge_params and cache the result
-  local merged_params = descriptors.merge_params(device_params, stock_params, get_none_param())
+  local merged_params = descriptors.merge_params(device_params, stock_params, descriptors.get_none_param())
   device_map.params_cache[device_id] = merged_params
 
   return merged_params

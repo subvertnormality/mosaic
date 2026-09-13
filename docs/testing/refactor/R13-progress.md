@@ -319,3 +319,28 @@ code root instead of an application subdirectory;02retains the explicit runtime
 error.03uses `/code/probe/probe.lua`, unchanged musical workload except the
 longer event count. All owned containers are terminal/removed. Native logs,
 source fixture, identities, resource samples and analysis are hash-recorded.
+
+## User priority: finish refactor after current experiment
+
+The shorter-quota experiment is complete. Two generic runs avoid the persistent
+JACK offset; actual5ms/10ms quota verified on repeat02. Existing Mosaic PERF-008
+passes on8c389dd with unchanged oracle and isolated recovery image2ca1cdab:
+51onset groups,1634messages, correct absolute recovery position, post-recovery
+p99/max0.874ms, final0.607ms,785.093ms throttling. Outer diagnostic-report.json
+identifies the alternate profile; it is not default runtime/profile promotion.
+
+See PERFORMANCE-SUMMARY.md for shipped improvements, rejected experiments,
+resource measurements and limitations. User directs us to finish structural
+refactors now: stop adding performance experiments, complete bounded R14 cleanup
+and source-frozen validation, and keep known performance/runtime limitations
+visible rather than treating them as structural implementation remaining.
+
+## Final structural cleanup validated
+
+Current performance experiment finished; see PERFORMANCE-SUMMARY.md. R14 removes
+the duplicate channel-handler include, unused reverse page map and private
+None-descriptor wrapper. All1546Lua unit/integration tests and6guards pass.
+Evidence r14-cleanup-units-01 retains source patch and log. FINALIZATION.md now
+records the short remaining path: frozen final qualification and handoff, no
+additional structural framework or performance campaign. Full acceptance remains
+unproven until that qualification; known runtime/performance failures are retained.
