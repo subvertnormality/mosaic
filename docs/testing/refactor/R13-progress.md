@@ -203,3 +203,24 @@ Lua diagnostics.118generic contracts and native grid/display checks pass in the
 isolated emulator candidate; default runtime promotion remains separate. The
 runner keeps full-snapshot and no-observation modes to retain the comparison.
 No Mosaic production code or musical oracle changed.
+
+## First sync registration diagnostic
+
+On ba46a50, retained `startup-sync-registration-probe/{probe.lua,output.txt,receipt.json}`
+runs actual `Lattice.auto_pulse` against the official scheduler boundary formula.
+With first callback cost0 or0.5pulse intervals, observed pulse positions are0,1,2,3.
+With cost1.073246544intervals they are0,2,3,4; with cost2.1 they are0,3,4,5.
+This confirms an application first-registration mechanism in a deterministic
+model, not a native behaviour reproduction or physical hardware claim. Later
+sync registrations advance from the stored scheduler deadline; this is distinct
+from the native internal-clock deadline-skip issue.
+
+The retained display-pressure run has first-group service7.453101ms, exceeding
+the90BPM/96PPQN interval6.944444ms, and later first-onset median phase error
+7.444077ms. Those MIDI measurements do not measure the entire Lua callback or
+exclude a concurrent native clock-source skip. Production remains unchanged.
+Next: reuse generic opt-in clock-phase tracing with a minimal real-input startup
+recipe to separate these causes. Controlled logical time does not charge Lua CPU
+cost; do not claim this wall-time stimulus reproduces there or waive the standing
+pre-fix baseline requirement implicitly. Existing M-TIM-005 covers a mid-run
+stall, not this first-registration boundary.
