@@ -502,6 +502,26 @@ local function pending_swing_type_edit(env)
   turn(env, 3, 1)
 end
 
+function test_w4c_memory_page_marks_scale_locked_step()
+  isolated(function(env)
+    program.step_has_param_trig_lock = function() return false end
+    program.step_scale_has_trig_lock = function(_, step) return step == 3 end
+    program.step_has_trig_mask = function() return false end
+    program.step_has_note_mask = function() return false end
+    program.step_has_velocity_mask = function() return false end
+    program.step_has_length_mask = function() return false end
+    program.step_has_micro_time_mask = function() return false end
+    program.step_has_chord_1_mask = function() return false end
+    program.step_has_chord_2_mask = function() return false end
+    program.step_has_chord_3_mask = function() return false end
+    program.step_has_chord_4_mask = function() return false end
+    start(env)
+    env.ui.select_memory_page()
+    luaunit.assert_true(env.ui.should_show_step_has_trig_lock(env.channel, 3))
+    luaunit.assert_false(env.ui.should_show_step_has_trig_lock(env.channel, 2))
+  end)
+end
+
 function test_w4c_only_a_k3_press_with_no_step_held_confirms()
   isolated(function(env)
     pending_swing_type_edit(env)

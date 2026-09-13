@@ -690,6 +690,7 @@ function channel_edit_page_ui.should_show_step_has_trig_lock(channel, step)
 
   if is_memory_page then
     return program.step_has_param_trig_lock(channel, step) or
+           program.step_scale_has_trig_lock(channel, step) or
            program.step_has_trig_mask(step) or
            program.step_has_note_mask(step) or
            program.step_has_velocity_mask(step) or

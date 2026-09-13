@@ -12,6 +12,7 @@ from elektron_program_changes import elektron_program_changes
 from autosave_idle import autosave_idle_lifecycle
 from named_save import named_save_load
 from channel_scale_display import channel_active_scale_display
+from memory_scale_lock_display import memory_scale_lock_display
 from tooltips import tooltip_messages
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
@@ -3364,6 +3365,7 @@ CASES={
  'M-SIN-001':dict(run=sinfonion_software,requirements=['SIN-SOFTWARE'],description='Norns2sinfonion port: exact init sequence; no traffic while stopped; channel 1-4 program changes per scale step following the applied root, global transpose and a scale-track lock'),
  'M-TOOLTIP-001':dict(run=tooltip_messages,requirements=['NAV-TOOLTIPS'],description='Bottom-screen tooltips for page changes, channel selection, record, memory apply/undo and transport, with replacement and clearing without input while stopped and playing; exact texts characterised'),
  'M-SCALE-DISPLAY-001':dict(run=channel_active_scale_display,requirements=['CH-ACTIVE-SCALE-DISPLAY','LOCK-SCALE','SCALE-SELECT'],description='Channel page scale row: stopped shows the applied slot; playing follows the active slot including a step-3 scale lock (with its exact phrase); stop restores the applied slot; global off lights only the locked step'),
+ 'M-SCALE-MEMORY-DISPLAY-001':dict(run=memory_scale_lock_display,requirements=["CH-ACTIVE-SCALE-DISPLAY"],description='User-created channel scale lock on step 3 stays represented on the Memory page; its unlocked neighbour and the Trig Locks page are raw-grid controls (issue #85 characterisation)'),
  'M-SAVE-NAMED-001':dict(run=named_save_load,requirements=['SAVE-NAMED','SAVE-AUTO'],description='Default-name and typed-name saves through the native text entry; idle autosave never overwrites them; cancel writes nothing; overwrite replaces only its own name; loading each name restores its exact phrase'),
  'M-SAVE-002':dict(run=autosave_idle_lifecycle,requirements=['SAVE-AUTO','PERSIST-AUTO-001'],description='Idle autosave: none before 60 s, a grid press restarts the period, none while playing for 65 s with an edit, a save 60 s after Stop, and a fresh boot restores the edited phrase'),
  'M-OPT-ELEK-001':dict(run=elektron_program_changes,requirements=['OPT-ELEKTRON','SONG-ADVANCE','SONG-SLOTS','SETUP-DEVICE-DISCOVERY'],description='Global length 4: Elektron program changes default Off sends none; On mirrors stopped slot selection and Play on channel 10, announces each next song slot before its first onset without duplicates, and follows the program-change channel setting'),
