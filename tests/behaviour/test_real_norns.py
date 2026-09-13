@@ -35,6 +35,10 @@ class Tests(unittest.TestCase):
   nn=NN()
   with patch('real_norns.ctypes.CDLL',return_value=nn.lib()):self.assertIn('answer',Maiden('ws://norns:5555/').eval('print(1)'))
   self.assertEqual(nn.options,[(0,5),(0,4)]);self.assertIn(b'print(1)',nn.sent);self.assertTrue(nn.sent.endswith(b'\n\0'))
+ def test_nanobus_fire_and_forget_load_does_not_wait_for_old_context(self):
+  nn=NN();m=Maiden('ws://norns:5555/')
+  with patch('real_norns.ctypes.CDLL',return_value=nn.lib()),patch('real_norns.time.sleep'):m.send("norns.script.load('/x.lua')")
+  self.assertIn(b"norns.script.load('/x.lua')",nn.sent);self.assertTrue(nn.sent.endswith(b'\n\0'))
  def test_backup_is_before_clear_and_tracks_recovery(self):
   events=[];r,s,m=self.r(events);r.backup();r.maiden.eval('norns.script.clear()');self.assertEqual(events[:2],['ssh','maiden']);self.assertIn('cp -a /home/we/dust/data/system.state',s.scripts[0])
  def test_export_head_excludes_untracked(self):

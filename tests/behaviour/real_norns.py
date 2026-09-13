@@ -44,6 +44,22 @@ class Maiden:
     if 'stack traceback:' in chunk:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
     if marker in chunk:return ''.join(output)
   finally:nn.nn_close(fd)
+ def send(self,code):
+  nn=ctypes.CDLL(self.library);nn.nn_socket.argtypes=[ctypes.c_int,ctypes.c_int];nn.nn_connect.argtypes=[ctypes.c_int,ctypes.c_char_p];nn.nn_setsockopt.argtypes=[ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_void_p,ctypes.c_size_t];nn.nn_send.argtypes=[ctypes.c_int,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int];nn.nn_close.argtypes=[ctypes.c_int]
+  fd=nn.nn_socket(1,112)
+  if fd<0:raise RuntimeError('nn_socket failed')
+  try:
+   timeout=ctypes.c_int(self.timeout_ms)
+   if nn.nn_setsockopt(fd,0,4,ctypes.byref(timeout),ctypes.sizeof(timeout))<0:raise RuntimeError('nn_setsockopt SNDTIMEO failed')
+   if nn.nn_connect(fd,self.url.encode())<0:raise RuntimeError('nn_connect failed')
+   time.sleep(.25);payload=(code.rstrip()+'\n').encode();buf=ctypes.create_string_buffer(payload)
+   if nn.nn_send(fd,buf,len(payload)+1,0)!=len(payload)+1:raise RuntimeError('nn_send failed')
+   time.sleep(.25)
+  finally:nn.nn_close(fd)
+ def load(self,path):
+  self.send("norns.script.load("+repr(path)+")");time.sleep(8);ready=self.eval("print('__MOSAIC_ACTIVE__'..(norns.state.script or ''))")
+  if path not in ready:raise RuntimeError('norns did not activate '+path+': '+ready[-1000:])
+  return ready
 def export_head(repo):
  temporary=tempfile.TemporaryDirectory();root=Path(temporary.name);archive=root/'head.tar';tree=root/'tree';tree.mkdir();subprocess.run(['git','archive','--format=tar','-o',str(archive),'HEAD'],cwd=repo,check=True)
  with tarfile.open(archive) as rows:rows.extractall(tree)
@@ -76,7 +92,7 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
 +if test -e /home/we/dust/data/system.state; then cp -a /home/we/dust/data/system.state {r}/system.state; touch {r}/had-state; fi
 +""".replace('\n+','\n'))
  def deploy(self,repo):
-  self.backup();self.maiden.eval('norns.script.clear()');self.ssh.run('rm -rf /home/we/dust/data/mosaic; mkdir -p /home/we/dust/data/mosaic');temp,tree,manifest,rows=export_head(repo);self._export=temp;staging='/home/we/dust/code/.mosaic-'+self.run_id+'.staging';self.ssh.run(f'rm -rf {staging}; mkdir -p {staging}');self.ssh.rsync(tree,staging);self.ssh.push(manifest,self.remote+'/source.sha256');self.ssh.run(f"set -eu; cd {staging}; sha256sum -c {self.remote}/source.sha256; rm -rf /home/we/dust/code/mosaic; mv {staging} /home/we/dust/code/mosaic");(self.out/'source.sha256').write_text(manifest.read_text());(self.out/'load.log').write_text(self.maiden.eval("norns.script.load('/home/we/dust/code/mosaic/mosaic.lua')"));return rows
+  self.backup();self.maiden.eval('norns.script.clear()');self.ssh.run('rm -rf /home/we/dust/data/mosaic; mkdir -p /home/we/dust/data/mosaic');temp,tree,manifest,rows=export_head(repo);self._export=temp;staging='/home/we/dust/code/.mosaic-'+self.run_id+'.staging';self.ssh.run(f'rm -rf {staging}; mkdir -p {staging}');self.ssh.rsync(tree,staging);self.ssh.push(manifest,self.remote+'/source.sha256');self.ssh.run(f"set -eu; cd {staging}; sha256sum -c {self.remote}/source.sha256; rm -rf /home/we/dust/code/mosaic; mv {staging} /home/we/dust/code/mosaic");(self.out/'source.sha256').write_text(manifest.read_text());(self.out/'load.log').write_text(self.maiden.load('/home/we/dust/code/mosaic/mosaic.lua'));return rows
  def action(self,kind,n,value):return self.osc.send(kind,n,value)
  def grid_device(self,requested=0):
   if requested>0:return requested
@@ -90,14 +106,17 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
   return {'path':local.name,'sha256':hashlib.sha256(raw).hexdigest(),'size':len(raw),'width':640,'height':384}
  def logs(self):
   r=self.ssh.run("systemctl --failed --no-legend || true\nfor u in $(systemctl list-units --type=service --all --no-legend | awk '/matron|crone|supercollider|norns|maiden/{print $1}'); do echo --- $u; journalctl -u $u -n 200 --no-pager || true; done\n");(self.out/'runtime.log').write_text(r.stdout)
+ def reload_saved(self):
+  output=self.maiden.eval("local f=io.open('/home/we/dust/data/system.state'); if f then f:close(); dofile('/home/we/dust/data/system.state'); print('__MOSAIC_SAVED__'..(norns.state.script or '')) else print('__MOSAIC_SAVED__') end");match=re.search(r'__MOSAIC_SAVED__(/[^\r\n]*)',output)
+  if match and match.group(1):self.maiden.load(match.group(1))
  def restore(self):
   try:self.maiden.eval('norns.script.clear()')
   except Exception as e:(self.out/'restore-warning.txt').write_text(str(e))
-  r=self.remote;self.ssh.run(f"""set -eu; test "$(cat {ROOT}/active)" = {self.run_id}; test "$(cat {r}/run-id)" = {self.run_id}; rm -rf /home/we/dust/code/mosaic /home/we/dust/data/mosaic; if test -e {r}/had-code; then mv {r}/code-mosaic /home/we/dust/code/mosaic; fi; if test -e {r}/had-data; then mv {r}/data-mosaic /home/we/dust/data/mosaic; fi; if test -e {r}/had-state; then mv {r}/system.state /home/we/dust/data/system.state; else rm -f /home/we/dust/data/system.state; fi; rm -f {ROOT}/active; rm -rf {r}""");self.maiden.eval("local f=io.open('/home/we/dust/data/system.state'); if f then f:close(); dofile('/home/we/dust/data/system.state'); if norns.state.script ~= '' then norns.script.load(norns.state.script) end end")
+  r=self.remote;self.ssh.run(f"""set -eu; test "$(cat {ROOT}/active)" = {self.run_id}; test "$(cat {r}/run-id)" = {self.run_id}; rm -rf /home/we/dust/code/mosaic /home/we/dust/data/mosaic; if test -e {r}/had-code; then mv {r}/code-mosaic /home/we/dust/code/mosaic; fi; if test -e {r}/had-data; then mv {r}/data-mosaic /home/we/dust/data/mosaic; fi; if test -e {r}/had-state; then mv {r}/system.state /home/we/dust/data/system.state; else rm -f /home/we/dust/data/system.state; fi; rm -f {ROOT}/active; rm -rf {r}""");self.reload_saved()
  def finalize(self):
   self.maiden.eval('norns.script.clear()');r=self.remote
   self.ssh.run(f"""set -eu; test "$(cat {ROOT}/active)" = {self.run_id}; test "$(cat {r}/run-id)" = {self.run_id}; rm -rf /home/we/dust/data/mosaic; if test -e {r}/had-data; then mv {r}/data-mosaic /home/we/dust/data/mosaic; fi; if test -e {r}/had-state; then cp -a {r}/system.state /home/we/dust/data/system.state; else rm -f /home/we/dust/data/system.state; fi; rm -f {ROOT}/active; rm -rf {r}""")
-  self.maiden.eval("local f=io.open('/home/we/dust/data/system.state'); if f then f:close(); dofile('/home/we/dust/data/system.state'); if norns.state.script ~= '' then norns.script.load(norns.state.script) end end");write(self.out/'finalized.json',{'run_id':self.run_id,'kept_deployment':True,'restored_user_data_and_state':True})
+  self.reload_saved();write(self.out/'finalized.json',{'run_id':self.run_id,'kept_deployment':True,'restored_user_data_and_state':True})
 def main(argv=None):
  p=argparse.ArgumentParser();p.add_argument('command',choices=['probe','workflow','restore','finalize']);p.add_argument('--host',required=True);p.add_argument('--ssh-option',action='append',default=[]);p.add_argument('--maiden-url',required=True);p.add_argument('--nanomsg-library',default='libnanomsg.so.5');p.add_argument('--maiden-timeout',type=float,default=120);p.add_argument('--osc-host',required=True);p.add_argument('--osc-port',type=int,default=10111);p.add_argument('--source',default=str(REPO));p.add_argument('--artifacts',required=True);p.add_argument('--run-id',required=True);p.add_argument('--synthetic-grid',action='store_true');p.add_argument('--grid-device-id',type=int,default=0,help='stock grid.devices ID; 0 auto-discovers the first connected grid');a=p.parse_args(argv)
  if not a.run_id.replace('-','').isalnum():p.error('unsafe run ID')
