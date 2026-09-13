@@ -131,3 +131,15 @@ allocated bytes/call. Two native pairs show correct output and lower candidate
 CPU; timing remains red on both candidate runs and one unchanged baseline run.
 Retain as allocation/CPU reduction, not a timing fix. Details and exact evidence:
 `stock-parameter-cost.md`. Full R13/R14 acceptance remains incomplete.
+
+## Ten-minute endurance on9b61826
+
+M-ENDURANCE-001 real-time failed: `b68ed9c99b524b329f4233c7ee4d4d6b/manifest.json`.
+Port1 p99=85.372ms, maximum86.813ms, final84.202ms. The original assertion
+stopped reporting at port1; retained-export analysis in the same run's
+`two-port-timing-analysis.json` verifies both sequences and balanced releases
+(4812/4812 and2406/2406). Port2 p99=85.524ms and final83.980ms. Both ports
+show one roughly84ms phase jump at43.084seconds; no subsequent accumulating
+lag of similar size. This is consistent with, but does not attribute the run to,
+the previously identified native clock accounting issue: this run has no native
+clock trace. Timing acceptance remains failed, with thresholds unchanged.
