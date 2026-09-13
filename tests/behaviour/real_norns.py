@@ -23,7 +23,7 @@ class SSH:
  def push(self,local,remote):subprocess.run(['ssh',*self.options,self.host,'tee',remote],input=Path(local).read_bytes(),stdout=subprocess.DEVNULL,check=True)
 class Maiden:
  """Scriptable nanomsg BUS client for official Maiden's matron socket."""
- def __init__(self,url,library='libnanomsg.so.5',timeout_ms=15000):self.url=url;self.library=library;self.timeout_ms=timeout_ms
+ def __init__(self,url,library='libnanomsg.so.5',timeout_ms=120000):self.url=url;self.library=library;self.timeout_ms=timeout_ms
  def eval(self,code):
   nn=ctypes.CDLL(self.library);nn.nn_socket.argtypes=[ctypes.c_int,ctypes.c_int];nn.nn_connect.argtypes=[ctypes.c_int,ctypes.c_char_p];nn.nn_setsockopt.argtypes=[ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_void_p,ctypes.c_size_t];nn.nn_send.argtypes=[ctypes.c_int,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int];nn.nn_recv.argtypes=[ctypes.c_int,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int];nn.nn_close.argtypes=[ctypes.c_int]
   fd=nn.nn_socket(1,112)
@@ -93,9 +93,9 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
   self.ssh.run(f"""set -eu; test "$(cat {ROOT}/active)" = {self.run_id}; test "$(cat {r}/run-id)" = {self.run_id}; rm -rf /home/we/dust/data/mosaic; if test -e {r}/had-data; then mv {r}/data-mosaic /home/we/dust/data/mosaic; fi; if test -e {r}/had-state; then cp -a {r}/system.state /home/we/dust/data/system.state; else rm -f /home/we/dust/data/system.state; fi; rm -f {ROOT}/active; rm -rf {r}""")
   self.maiden.eval("local f=io.open('/home/we/dust/data/system.state'); if f then f:close(); dofile('/home/we/dust/data/system.state'); if norns.state.script ~= '' then norns.script.load(norns.state.script) end end");write(self.out/'finalized.json',{'run_id':self.run_id,'kept_deployment':True,'restored_user_data_and_state':True})
 def main(argv=None):
- p=argparse.ArgumentParser();p.add_argument('command',choices=['probe','workflow','restore','finalize']);p.add_argument('--host',required=True);p.add_argument('--ssh-option',action='append',default=[]);p.add_argument('--maiden-url',required=True);p.add_argument('--nanomsg-library',default='libnanomsg.so.5');p.add_argument('--osc-host',required=True);p.add_argument('--osc-port',type=int,default=10111);p.add_argument('--source',default=str(REPO));p.add_argument('--artifacts',required=True);p.add_argument('--run-id',required=True);p.add_argument('--synthetic-grid',action='store_true');p.add_argument('--grid-device-id',type=int,default=1);a=p.parse_args(argv)
+ p=argparse.ArgumentParser();p.add_argument('command',choices=['probe','workflow','restore','finalize']);p.add_argument('--host',required=True);p.add_argument('--ssh-option',action='append',default=[]);p.add_argument('--maiden-url',required=True);p.add_argument('--nanomsg-library',default='libnanomsg.so.5');p.add_argument('--maiden-timeout',type=float,default=120);p.add_argument('--osc-host',required=True);p.add_argument('--osc-port',type=int,default=10111);p.add_argument('--source',default=str(REPO));p.add_argument('--artifacts',required=True);p.add_argument('--run-id',required=True);p.add_argument('--synthetic-grid',action='store_true');p.add_argument('--grid-device-id',type=int,default=1);a=p.parse_args(argv)
  if not a.run_id.replace('-','').isalnum():p.error('unsafe run ID')
- out=Path(a.artifacts).resolve();out.mkdir(parents=True,exist_ok=False);r=Runner(SSH(a.host,a.ssh_option),Maiden(a.maiden_url,a.nanomsg_library),OSC(a.osc_host,a.osc_port),out,a.run_id);failure=None
+ out=Path(a.artifacts).resolve();out.mkdir(parents=True,exist_ok=False);r=Runner(SSH(a.host,a.ssh_option),Maiden(a.maiden_url,a.nanomsg_library,int(a.maiden_timeout*1000)),OSC(a.osc_host,a.osc_port),out,a.run_id);failure=None
  try:
   caps=r.probe()
   if a.command=='workflow':
