@@ -266,7 +266,7 @@ local channel_edit_page = page:new("Device Config", function()
 end)
 
 local trig_lock_page = page:new("Trig Locks", function()
-  dials:draw()
+  channel_edit_parameters_controller.draw_trig_locks()
 end)
 
 -- Initialization function
@@ -311,6 +311,7 @@ function channel_edit_page_ui.init()
   clock_mod_list_selector:set_list(m_clock.get_clock_divisions())
   device_map_vertical_scroll_selector = vertical_scroll_selector:new(5, 25, "Midi Map", device_map:get_devices())
   channel_edit_parameters_controller.set_device_map_selector(device_map_vertical_scroll_selector)
+  channel_edit_parameters_controller.set_trig_lock_page(trig_lock_page)
 
   local function set_sub_name_func(page, func)
     page:set_sub_name_func(func)
@@ -341,7 +342,7 @@ function channel_edit_page_ui.init()
   end)
 
   trig_lock_page:set_sub_page_draw_func(function()
-    param_select_vertical_scroll_selector:draw()
+    channel_edit_parameters_controller.draw_assignment_subpage()
   end)
 
   channel_pages:add_page(mask_page)
@@ -548,7 +549,7 @@ function channel_edit_page_ui.enc(n, d)
         elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
           channel_edit_page_ui.handle_midi_config_page_increment()
         elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-          channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
+          channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, channel_edit_parameters_controller)
         end
       else
         if channel_pages:get_selected_page() == channel_page_to_index["Clock Mods"] then
@@ -556,7 +557,7 @@ function channel_edit_page_ui.enc(n, d)
         elseif channel_pages:get_selected_page() == channel_page_to_index["Midi Config"] then
           channel_edit_page_ui.handle_midi_config_page_decrement()
         elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-          channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, trig_lock_page, param_select_vertical_scroll_selector, dials)
+          channel_edit_page_ui_handlers.handle_trig_locks_page_change(d, channel_edit_parameters_controller)
         end
       end
     end
@@ -583,9 +584,9 @@ function channel_edit_page_ui.enc(n, d)
       }
 
       if d > 0 then
-        channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page)
+        channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page, channel_edit_parameters_controller)
       else
-        channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page)
+        channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page, channel_edit_parameters_controller)
       end
     end
   elseif n == 1 then
@@ -823,12 +824,7 @@ function channel_edit_page_ui.handle_key_two_pressed()
         tooltip:show("Trig locks for ch " .. program.get_selected_channel().number .. " cleared")
         channel_edit_page_ui.refresh_trig_locks()
       else
-        if not trig_lock_page:is_sub_page_enabled() then
-          channel_edit_page_ui.refresh_device_selector()
-          channel_edit_page_ui.refresh_param_list()
-        end
-        channel_edit_page_ui.refresh_channel_config()
-        trig_lock_page:toggle_sub_page()
+        channel_edit_parameters_controller.toggle_assignment_subpage()
       end
     elseif channel_pages:get_selected_page() == channel_page_to_index["Masks"] then
       if is_key1_down then

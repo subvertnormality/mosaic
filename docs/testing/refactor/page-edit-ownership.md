@@ -132,3 +132,33 @@ connection closed. The unchanged rerun passed; original evidence is retained.
 No shutdown fix or root-cause claim is made here.
 
 Assignment subpage, drawing and encoder-two integration remain outstanding.
+
+### Assignment subpage contract
+
+The controller will own the single shared Trig Locks page's draw and assignment
+subpage flow. K2 prepares device/parameter lists only when opening, then always
+requests configuration refresh before toggling. Encoder-two dial navigation keeps
+its existing selection/refresh order. Assignment scrolling captures channel/dial
+before staging Save, but selection/meta are read when Save executes. The operation
+uses the original handler-local param_manager; callbacks formerly reading global
+channel_edit_page_ui must keep that dynamic lookup rather than capture the UI table.
+Generic mask/clock navigation and cross-page key routing remain separate.
+
+### Assignment/subpage extraction receipt (2026-09-13)
+
+The parameter controller now owns shared page binding, Trig Locks/subpage drawing,
+K2 preparation/toggle, dial navigation and assignment sequencing. The handler passes
+reused adapters preserving its local param_manager table and dynamic global UI
+lookups. These adapters are allocated once, not on each encoder event. Review
+confirmed deferred assignment/selector lookup timing and callback order.
+
+Final full Lua run: 1,544 passes and the two existing 2 ms timing failures (slide
+admission 2.052 ms and massive automation). Both passed isolated unchanged. Ten
+coverage/syntax checks pass. Controlled native passes: M-PARAM-036
+`e7c8709220394135bfc722327a08f822`, M-PATCH-038
+`e0c5b8f78e1441c8b883d978adb7adeb`, M-REC-PARAM-020
+`29276187c5f4407caa59bc1645ea3081`.
+
+R12 still includes clock controls, cross-page navigation and final visual/input
+acceptance. Encoder-two's obsolete dials/page arguments can be removed with the
+navigation cleanup; current production calls remain compatible.

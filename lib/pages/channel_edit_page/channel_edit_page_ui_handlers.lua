@@ -3,7 +3,7 @@ local channel_edit_page_ui_handlers = {}
 local param_manager = include("mosaic/lib/devices/param_manager")
 local channel_edit_page_ui_refreshers = include("lib/pages/channel_edit_page/channel_edit_page_ui_refreshers")
 
-function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page)
+function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, dials, trig_lock_page, parameter_controller)
   local channel_pages = pages.channel_pages
   local channel_page_to_index = pages.channel_page_to_index
   local scales_pages = pages.scales_pages
@@ -98,13 +98,11 @@ function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, select
       end
     end
   elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-    if not trig_lock_page:is_sub_page_enabled() then
-      dials:scroll_next()
-    end
+    parameter_controller.navigate_dial(1)
   end
 end
 
-function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page)
+function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, dials, trig_lock_page, parameter_controller)
   local channel_pages = pages.channel_pages
   local channel_page_to_index = pages.channel_page_to_index
   local scales_pages = pages.scales_pages
@@ -195,34 +193,26 @@ function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, select
       device_map_vertical_scroll_selector:select()
     end
   elseif channel_pages:get_selected_page() == channel_page_to_index["Trig Locks"] then
-    if not trig_lock_page:is_sub_page_enabled() then
-      dials:scroll_previous()
-    end
+    parameter_controller.navigate_dial(-1)
   end
 end
 
 
-function channel_edit_page_ui_handlers.handle_trig_locks_page_change(direction, trig_lock_page, param_select_vertical_scroll_selector, dials)
-  local channel = program.get_selected_channel()
-  local dial_index = dials:get_selected_index()
-
-  if trig_lock_page:is_sub_page_enabled() then
-    param_select_vertical_scroll_selector:scroll(direction)
-    save_confirm.set_save(function()
-      norns_param_state_handler.clear_original_param_state(channel.number, dial_index)
-      param_manager.update_param(
-        dial_index,
-        channel,
-        param_select_vertical_scroll_selector:get_selected_item(),
-        param_select_vertical_scroll_selector:get_meta_item()
-      )
-      channel_edit_page_ui.refresh_trig_locks()
-      program.increment_trig_lock_calculator_id(channel, dial_index)
-    end)
-    save_confirm.set_cancel(function() end)
-  else
+-- Reuse adapters across encoder events while retaining the original lookup lifetimes.
+local function assign_parameter(dial_index, channel, selected_item, meta_item)
+  param_manager.update_param(dial_index, channel, selected_item, meta_item)
+end
+local assignment_callbacks = {
+  refresh_trig_locks = function()
+    channel_edit_page_ui.refresh_trig_locks()
+  end,
+  handle_trig_lock_param_change = function(direction, channel, dial_index)
     channel_edit_page_ui.handle_trig_lock_param_change_by_direction(direction, channel, dial_index)
   end
+}
+
+function channel_edit_page_ui_handlers.handle_trig_locks_page_change(direction, parameter_controller)
+  parameter_controller.handle_assignment_page_change(direction, assign_parameter, assignment_callbacks)
 end
 
 return channel_edit_page_ui_handlers

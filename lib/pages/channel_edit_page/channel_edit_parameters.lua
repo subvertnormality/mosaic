@@ -262,6 +262,61 @@ function channel_edit_parameters.new(controls, public_ui, refreshers, dependenci
     controls.device_map_vertical_scroll_selector = selector
   end
 
+  function controller.set_trig_lock_page(page)
+    controls.trig_lock_page = page
+  end
+
+  function controller.draw_trig_locks()
+    controls.dials:draw()
+  end
+
+  function controller.draw_assignment_subpage()
+    controls.param_select_vertical_scroll_selector:draw()
+  end
+
+  function controller.toggle_assignment_subpage()
+    if not controls.trig_lock_page:is_sub_page_enabled() then
+      public_ui.refresh_device_selector()
+      public_ui.refresh_param_list()
+    end
+
+    public_ui.refresh_channel_config()
+    controls.trig_lock_page:toggle_sub_page()
+  end
+
+  function controller.navigate_dial(direction)
+    if not controls.trig_lock_page:is_sub_page_enabled() then
+      if direction > 0 then
+        controls.dials:scroll_next()
+      else
+        controls.dials:scroll_previous()
+      end
+    end
+  end
+
+  function controller.handle_assignment_page_change(direction, update_param, callbacks)
+    local channel = program.get_selected_channel()
+    local dial_index = controls.dials:get_selected_index()
+
+    if controls.trig_lock_page:is_sub_page_enabled() then
+      controls.param_select_vertical_scroll_selector:scroll(direction)
+      save_confirm.set_save(function()
+        norns_param_state_handler.clear_original_param_state(channel.number, dial_index)
+        update_param(
+          dial_index,
+          channel,
+          controls.param_select_vertical_scroll_selector:get_selected_item(),
+          controls.param_select_vertical_scroll_selector:get_meta_item()
+        )
+        callbacks.refresh_trig_locks()
+        program.increment_trig_lock_calculator_id(channel, dial_index)
+      end)
+      save_confirm.set_cancel(function() end)
+    else
+      callbacks.handle_trig_lock_param_change(direction, channel, dial_index)
+    end
+  end
+
   function controller.refresh_device_selector()
     refreshers.refresh_device_selector(controls.device_map_vertical_scroll_selector, controls.param_select_vertical_scroll_selector)
   end
